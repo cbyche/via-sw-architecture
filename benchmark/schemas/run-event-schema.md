@@ -2,9 +2,9 @@
 
 ## Status
 
-Architecture Context Checkpoint 001 — initial schema contract.
+Architecture Context Checkpoint 001/002 — logical raw experiment schema.
 
-This is a logical event schema for benchmark implementation. It intentionally captures more than QA-01 needs so QA-02~QA-04 and future Secondary Metrics can be derived without rerunning experiments solely because an intermediate observation was discarded.
+This is a logical event schema for benchmark implementation. It intentionally captures more than one QA needs so QA-01~QA-04 and future Secondary Metrics can be derived without rerunning experiments solely because an intermediate observation was discarded.
 
 > **측정하지 않은 값은 나중에 복구할 수 없지만, raw data로 보존한 값은 나중에 다른 metric으로 재해석할 수 있다.**
 
@@ -17,6 +17,8 @@ results/reports/  human-readable summaries and visualizations
 ```
 
 Raw records are append-only/immutable experimental evidence. If instrumentation or schema meaning changes, increment a schema/benchmark version and create new runs rather than rewriting old events.
+
+Derived metrics such as FTOL p95 and AECR must never be the only persisted evidence.
 
 ## Time basis
 
@@ -35,17 +37,21 @@ Recommended unit: integer nanoseconds or microseconds from monotonic origin. The
 | `schema_version` | string | yes | Raw event contract version |
 | `run_id` | string | yes | Globally unique benchmark episode/run identity |
 | `scenario_id` | string | yes | Stable scenario identifier |
-| `scenario_category` | string | yes | e.g. `F1`, `F2`, `F3`, later QA categories |
+| `scenario_category` | string | yes | e.g. QA-01 `F1`/`F2`/`F3`, QA-02 `C1`~`C8` |
+| `scenario_version` | string | recommended | Scenario definition version |
+| `scenario_corpus_version` | string | yes | Frozen scoring-corpus version |
+| `scenario_taxonomy_version` | string/null | recommended | Taxonomy version where applicable |
 | `alternative_id` | string | yes | Architecture alternative under test, e.g. `DP00-A` |
+| `alternative_version` | string/null | recommended | Prototype/architecture implementation version |
 | `benchmark_version` | string | yes | Runner/corpus contract version |
 | `source_git_commit` | string | yes | Source commit being evaluated |
 | `oracle_trace_id` | string/null | yes | Frozen semantic/oracle trace; null only when not applicable |
+| `semantic_trace_class` | string/null | recommended | e.g. correct, ambiguous, wrong-fast, wrong-agent, malformed, timeout |
 | `scoring_version` | string/null | yes | Frozen scoring version used later; may be null at raw-run time |
 | `monotonic_clock_origin` | string/object | yes | Description/identifier of timestamp origin and unit |
 
 Additional recommended provenance:
 
-- scenario corpus version;
 - Agent-stub version;
 - tool-latency profile version;
 - machine profile id;
@@ -90,7 +96,7 @@ Do not fabricate timestamps for paths that do not have the corresponding stage. 
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `success` | boolean | yes | Whether scenario success predicate was reached |
+| `success` | boolean | yes | Whether scenario Product/useful-outcome predicate was reached |
 | `failure_reason` | string/null | yes | Stable failure class when unsuccessful |
 | `useful_outcome_kind` | string/null | recommended | Observable predicate/outcome class reached |
 | `final_execution_owner` | string/null | recommended | Owner at useful outcome/task completion |
@@ -98,24 +104,76 @@ Do not fabricate timestamps for paths that do not have the corresponding stage. 
 | `cancel_confirmed` | boolean/null | recommended | Execution stop was confirmed when relevant |
 | `recovery_path` | string/null | recommended | Restart/retry/fallback path if exercised |
 
-## QA-02 correctness reservation
+`success` is not identical to QA-02 exact conformance. A scenario may accidentally reach a useful external effect while violating a required clarification/task-binding constraint.
 
-QA-02 is not yet formally defined, but the raw contract should reserve fields so correctness can be assessed without redesigning the event format.
+## QA-02 constraint-manifest provenance
 
-Candidate fields:
+The following fields are required for QA-02 Architecture Qualification episodes:
 
-- `expected_outcome` / `expected_outcome_id`;
-- `actual_outcome` / `actual_outcome_id`;
-- `expected_execution_owner` when scenario semantics define one;
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `constraint_manifest_version` | string | Exact Architecture Constraint Manifest version |
+| `required_constraints` | array | Machine-evaluable required constraints or stable ids plus frozen manifest reference |
+| `allowed_constraints` | array | Machine-evaluable allowed constraints or stable ids plus frozen manifest reference |
+| `forbidden_constraints` | array | Machine-evaluable forbidden constraints or stable ids plus frozen manifest reference |
+
+If the raw record stores only ids, the referenced immutable/frozen manifest artifact must be resolvable by version. A final report alone is not sufficient provenance.
+
+## QA-02 canonical actual-decision fields
+
+Every alternative normalizes its implementation-specific state into a Canonical Architecture Decision Trace.
+
+Minimum fields:
+
+- `actual_referent_bindings`;
+- `actual_task_relation`;
+- `actual_task_id`;
 - `actual_execution_owner`;
-- `expected_agent_id`;
-- `actual_agent_id`;
-- `semantic_trace_class`;
-- `correctness_predicate_id`;
-- `correctness_result`;
-- structured mismatch/failure classification.
+- `actual_execution_path`;
+- `actual_delegated_agent`;
+- `actual_clarification_action`;
+- `actual_result_binding`;
+- `actual_observable_effect`;
+- `actual_compound_decomposition` when applicable.
 
-Exact fields and semantics will be frozen when QA-02 is defined. Implementations should prefer extensible structured metadata over an unparseable prose-only result.
+These fields must describe common architecture outcomes, not require internal component names such as `router.selected_agent`.
+
+## QA-02 per-dimension conformance
+
+Raw data must retain per-dimension results, using `null/not_applicable` when the dimension was not constrained in the scenario:
+
+- `referent_conform`;
+- `task_association_conform`;
+- `execution_path_conform`;
+- `routing_conform`;
+- `clarification_conform`;
+- `result_binding_conform`;
+- `compound_decomposition_conform`.
+
+Additional dimensions may be added in later schema versions without deleting historical evidence.
+
+## QA-02 exact-conformance fields
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `episode_exact_conform` | boolean | True only when every applicable Required/Allowed/Forbidden constraint is satisfied |
+| `constraint_results` | array | Per-constraint id, actual value, conform boolean, dimension, severity |
+| `constraint_failure_ids` | array | Stable ids of violated constraints |
+| `constraint_failure_reasons` | array/object | Structured reasons/actual-vs-expected evidence |
+
+Only storing `episode_exact_conform` is prohibited. AECR is calculated later from eligible episodes and must be recomputable from raw evidence.
+
+## QA-02 scenario population fields
+
+Recommended/required fields for population sensitivity and corpus freeze:
+
+- `eligible_for_aecr`;
+- `primary_correctness_category` (`C1`~`C8`);
+- `secondary_correctness_categories`;
+- `critical_slice_ids`;
+- `usage_weight` if a separate production-frequency sensitivity analysis is planned.
+
+`usage_weight` must not silently affect the coverage-balanced Primary AECR unless the frozen scoring version explicitly says so.
 
 ## Event-oriented representation
 
@@ -126,12 +184,17 @@ RunStarted
 AcousticEos
 SemanticRequestStarted
 SemanticResponseReceived
+ArchitectureDecisionObserved
 ExecutionPathSelected
 AgentDispatched
 ToolStarted
 ToolCompleted
+ClarificationRequested
+TaskAssociationObserved
+ResultBound
 UserVisibleResultStarted
 UsefulOutcomeObserved
+ConstraintEvaluated
 TaskCompleted
 RunFinished
 ```
@@ -139,21 +202,30 @@ RunFinished
 Each event should contain:
 
 - `run_id`;
-- monotonic timestamp;
+- monotonic timestamp where meaningful;
 - event type;
 - relevant stable ids;
 - structured attributes.
 
-A derived episode table can then project the first/last timestamp of each event type.
+A derived episode table can then project the first/last timestamp and final canonical decision values.
 
 Benefits:
 
 - multiple Agent/tool invocations are retained rather than flattened;
 - escalation paths can be reconstructed;
 - retries/cancellation/progress can be analyzed later;
+- clarification and follow-up state can span multiple turns;
 - a new derived metric does not require changing old raw records if its source events were captured.
 
 ## Suggested event attributes
+
+### `ArchitectureDecisionObserved`
+
+- decision dimension;
+- canonical actual value;
+- candidate/rejected values if available;
+- validation reason code;
+- associated user turn/task ids.
 
 ### `ExecutionPathSelected`
 
@@ -171,6 +243,30 @@ Benefits:
 - task/work id;
 - parent task/work id;
 - dispatch attempt number.
+
+### `ClarificationRequested`
+
+- ambiguity/constraint id;
+- clarification target/dimension;
+- logical episode id;
+- request/answer turn ids when resolved.
+
+### `ResultBound`
+
+- result/progress id;
+- logical task/work id;
+- user-goal/episode id;
+- source execution owner/Agent.
+
+### `ConstraintEvaluated`
+
+- constraint manifest version;
+- constraint id;
+- dimension;
+- actual value;
+- expected/allowed/forbidden reference;
+- conform boolean;
+- failure reason code.
 
 ### `ToolStarted` / `ToolCompleted`
 
@@ -210,19 +306,21 @@ For future long-running/task-lifecycle QAs, raw event logs should retain progres
 
 Do not reduce progress to only the final count in raw storage.
 
-## Task and session correlation
+## Task, session and episode correlation
 
 Recommended correlation ids where applicable:
 
+- logical evaluation episode id;
 - logical conversation id;
 - user turn id;
 - task/work id;
 - parent task/work id;
 - downstream session/thread id (hashed/redacted if necessary);
 - Agent id;
-- execution-attempt id.
+- execution-attempt id;
+- clarification-chain id.
 
-These identifiers are essential for later QA work on existing-task association, retries, cancellation and recovery.
+These identifiers are essential for QA-02 task association/result binding and later QAs on retries, cancellation and recovery.
 
 ## Privacy / secret handling
 
@@ -247,6 +345,32 @@ Then compute:
 
 Failure episodes remain in the raw population with `success=false` but are not converted into fake high-latency samples.
 
+## Derived QA-02 calculation
+
+For the frozen population of eligible QA-02 episodes:
+
+```text
+AECR = count(episode_exact_conform == true)
+       -------------------------------------- × 100
+       count(eligible_for_aecr == true)
+```
+
+Also derive diagnostic metrics from the same raw records:
+
+- category-specific AECR;
+- Referent Binding Accuracy;
+- Task Association Accuracy;
+- Execution-path Conformance;
+- Agent Routing Conformance;
+- Clarification Correctness;
+- Result Binding Accuracy;
+- Compound Decomposition Accuracy;
+- False Fast-path Rate;
+- Unnecessary Delegation Rate;
+- Constraint-level Macro Average;
+- Critical-slice Exact Conformance;
+- usage-weighted sensitivity results when weights are provided.
+
 ## Validation rules
 
 A benchmark runner should reject or flag a run when:
@@ -256,7 +380,10 @@ A benchmark runner should reject or flag a run when:
 - required identity/version fields are missing;
 - `success=true` but no useful-outcome evidence exists;
 - alternative/scenario/trace identifiers do not match the frozen run plan;
-- a final qualification run uses an unfrozen scoring/benchmark version.
+- a QA-02 eligible episode has no resolvable constraint manifest/version;
+- `episode_exact_conform=true` while any applicable constraint result is false;
+- a constraint failure exists without a stable id/reason/actual evidence;
+- final qualification uses an unfrozen scoring/benchmark/taxonomy/corpus version.
 
 ## Schema evolution
 
@@ -265,3 +392,5 @@ Schema changes are versioned.
 Backward-compatible additions may add optional events/attributes. Semantic changes to existing fields require a new schema version and must not rewrite historical `results/raw/` data.
 
 The implementation format (JSONL, structured JSON, Parquet-derived projection, etc.) remains an implementation decision. The semantic contract above is the checkpoint requirement.
+
+See also `benchmark/schemas/scenario-constraint-schema.md` for QA-02 oracle semantics.

@@ -2,7 +2,7 @@
 
 ## Status
 
-Architecture Context Checkpoint 001 — evaluation rules for vNext DP analysis.
+Architecture Context Checkpoint 001/002 — evaluation rules for vNext DP analysis.
 
 These principles extend the current `evaluation-strategy.md` without replacing it. The existing strategy remains valid; a coherent rebaseline will be prepared after QA-01 through QA-04 are formally defined.
 
@@ -21,14 +21,22 @@ These principles extend the current `evaluation-strategy.md` without replacing i
 11. **Scoring follows a fixed order:** Pilot → threshold calibration → scoring-version freeze → final evaluation.
 12. **Score thresholds are not tuned after seeing the final A/B/C/D outcome.** Post-hoc threshold selection would make the score a presentation device rather than an evaluation rule.
 13. **Changing a Primary Metric requires an explicit reason and a new scoring version.** All alternatives must then be recalculated from the same raw corpus under that version.
+14. **Correctness oracles must be topology-neutral.** When alternatives have different internal components, score canonical architecture outcomes rather than requiring the presence/call sequence of one implementation-specific component.
+15. **Do not encode one valid execution topology as the only expected path.** Where more than one architecture outcome is semantically correct, scenarios use Required/Allowed/Forbidden constraints rather than a single `expected_path`.
+16. **Architecture correctness is evaluated at user-goal episode scope when state spans turns.** Clarification, follow-up, task association and result binding must be tested across the complete logical episode rather than averaged as isolated turn/component successes.
+17. **Scenario taxonomy and corpus composition are part of the metric definition.** A population metric such as AECR changes with scenario mix, so taxonomy/corpus/eligibility/manifest versions are frozen before final scoring.
+18. **Architecture qualification prioritizes architecture-sensitive structural coverage.** Production usage-frequency weighting is useful as a Secondary sensitivity analysis, but must not silently replace a frozen coverage-balanced scoring corpus.
+19. **Exact metrics require diagnostic preservation.** If the Primary Metric is all-or-nothing at episode level, every constraint-level result and failure reason must still be stored so partial improvements and construct-validity problems remain observable.
 
 ## Raw-data principle
 
 > **측정하지 않은 값은 나중에 복구할 수 없지만, raw data로 보존한 값은 나중에 다른 metric으로 재해석할 수 있다.**
 
-This principle drives benchmark instrumentation. Store architecture-relevant event timestamps, ownership decisions, outcomes and invocation counts even when they are not part of today's Primary Metric.
+This principle drives benchmark instrumentation. Store architecture-relevant event timestamps, ownership decisions, canonical correctness outcomes, constraint results and invocation counts even when they are not part of today's Primary Metric.
 
 The cost of retaining a timestamp or categorical event is small; the cost of discovering after an experiment that a needed boundary was never measured can invalidate the run.
+
+For QA-02 specifically, storing only final `episode_exact_conform` or AECR is prohibited. Preserve the manifest version, actual canonical trace, each applicable constraint result, and failure ids/reasons.
 
 ## Metric discipline
 
@@ -42,6 +50,8 @@ A QA should separate:
 - the scoring-version thresholds.
 
 Do not combine independent concerns by arbitrary weighted formulas merely to obtain one number. For example, responsiveness and correctness should remain distinct QAs when a failure can otherwise be hidden as a latency penalty.
+
+Likewise, do not make a component-accuracy average the correctness Primary Metric when one critical error can invalidate the whole user-goal orchestration. Component/slice metrics remain valuable Secondary diagnostics.
 
 ## Architecture isolation
 
@@ -78,6 +88,52 @@ A deterministic corpus should include realistic non-happy-path semantic classes 
 
 The corpus is frozen before final A/B/C/D scoring and replayed equally across alternatives.
 
+For correctness evaluation, replaying the same wrong model output is especially useful: it tests whether validation, clarification, eligibility policy, safe fallback and state ownership differ across architectures without making model quality the independent variable.
+
+## Canonical normalization principle
+
+A/B/C/D may not contain the same internal components. Architecture qualification therefore normalizes observable decisions into a common contract such as:
+
+- referent bindings;
+- task relation/id;
+- execution owner/path;
+- delegated Agent;
+- clarification action;
+- result binding;
+- compound-decomposition relations;
+- observable effect.
+
+Scenario constraints are evaluated against this **Canonical Architecture Decision Trace**, not against fields such as `router.selected_agent` or `intent_refiner.output` that may not exist in every topology.
+
+## Constraint-oracle principle
+
+When one scenario permits several correct implementations, the oracle should express:
+
+```text
+Required   — outcomes/relations that must hold
+Allowed    — acceptable alternatives/sets
+Forbidden  — outcomes/actions that must not occur
+```
+
+This prevents the benchmark from prejudging DP-00 by declaring one architecture's preferred path as the only correct path.
+
+Example: a simple local operation may allow both `VIA_FAST` and `ARGO`; correctness can be equal while QA-01 measures the latency trade-off.
+
+## Corpus composition and sensitivity
+
+Architecture Qualification uses a coverage-balanced corpus that deliberately represents architecture-sensitive failure surfaces. This avoids easy, high-frequency requests overwhelming rare but structurally important cases such as multi-point referents, task follow-up, clarification, concurrent result binding or malformed semantic output.
+
+The following must be versioned/frozen for final qualification:
+
+- taxonomy;
+- corpus composition;
+- eligibility rules;
+- scenario/constraint manifests;
+- semantic replay set;
+- scoring version.
+
+Usage-frequency-weighted results may be derived separately to answer a Product E2E sensitivity question.
+
 ## External-validity track
 
 Actual models and Agents should also be exercised, but their results answer a different question:
@@ -92,7 +148,9 @@ Each benchmark result should identify at least:
 
 - benchmark version;
 - scenario corpus version;
+- scenario taxonomy version where applicable;
 - semantic trace/oracle version;
+- constraint-manifest version where applicable;
 - architecture alternative/version;
 - source Git commit;
 - scoring version;
@@ -104,7 +162,9 @@ A scoring change must not mutate prior raw runs. Recompute derived metrics into 
 
 - `docs/evaluation/evaluation-strategy.md` remains unchanged in this checkpoint.
 - `docs/evaluation/architecture-experiment-methodology.md` explains how these principles are applied.
-- QA-specific documents define Primary/Secondary Metrics and scoring status.
-- `benchmark/schemas/run-event-schema.md` defines the raw event contract.
+- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` defines the responsiveness Primary Metric.
+- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` defines AECR and its episode/constraint semantics.
+- `benchmark/schemas/run-event-schema.md` defines raw run evidence.
+- `benchmark/schemas/scenario-constraint-schema.md` defines topology-neutral correctness manifests.
 
 The QA and DP index will be coherently rebaselined after QA-01~QA-04 are defined.
