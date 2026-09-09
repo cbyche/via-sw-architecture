@@ -12,42 +12,73 @@ This is a proposed top-level Decision Point for the vNext architecture analysis.
 
 > **VIA는 사용자 요청을 어디까지 직접 판단·실행하고, 어디부터 Downstream Agent에 위임할 것인가?**
 
-The Approved Baseline gives VIA responsibility for interaction, context, intent refinement, routing/delegation and task lifecycle while assigning domain reasoning/planning/tool execution to Downstream Agents. It also permits a local fast path for bounded requests.
+The Approved Baseline v1.1 is the starting point for this analysis. It gives VIA responsibility for interaction, context, intent refinement, routing/delegation and task lifecycle while assigning domain reasoning/planning/tool execution to Downstream Agents. It also permits a local fast path for bounded requests.
 
-The unresolved architecture problem is the exact **primary execution boundary** between those responsibilities.
+DP-00 exists because the architecture must test whether that responsibility boundary itself is optimal for the Integrated Product, rather than constraining all alternatives to fit it in advance.
+
+The unresolved architecture problem is therefore the **primary reasoning/execution boundary**: where substantive judgment, planning, tool execution and delegation authority should live for the product as a whole.
 
 ## Why this is architectural
 
 This decision changes system topology and ownership rather than one implementation detail. It determines:
 
 - whether VIA is primarily an interaction/orchestration layer or a substantive execution runtime;
-- whether ARGO is a preferred Agent, a primary reasoning runtime, or a peer Agent;
+- whether ARGO is a downstream peer, a preferred route, or the primary reasoning/execution authority;
 - how deep VIA's Intent Refiner must be;
 - where Agent routing occurs;
 - which operations become VIA-owned Work/Task;
 - when durable workflow semantics are required;
-- how much Context Engine material must remain local vs cross an Agent boundary;
+- how much Context Engine material remains inside VIA vs crosses an execution boundary;
 - how many model/Agent invocations occur on common paths;
 - what cancellation/retry/progress state VIA must own;
 - how easily new Agents can become peers;
-- latency on fast, bounded tasks.
+- latency on fast, bounded tasks;
+- whether the v1.1 responsibility boundary should be preserved, extended, or changed in vNext.
 
-Because these consequences span components, state ownership, trusted execution boundaries, runtime topology and multiple Quality Attributes, the decision must precede lower-level choices such as capability placement, routing and intent refinement.
+Because these consequences span component boundaries, trusted execution boundaries, runtime topology, state ownership and multiple Quality Attributes, this decision precedes lower-level choices such as capability placement, routing and intent refinement.
 
 See `docs/architecture/analysis/AA-001-qa-rebaseline-and-primary-execution-boundary.md` for the reasoning checkpoint.
 
-## Relationship to the Approved Baseline
+## Evaluation Boundary — Integrated Product
 
-This DP must be evaluated without silently changing v1.1.
+DP-00 compares **Integrated Product execution topologies**, not isolated VIA component implementations.
 
-Relevant baseline principles include:
+All alternatives A/B/C/D must satisfy the same user-visible use cases and the same benchmark scenarios. The experiment must not make one alternative solve an easier product problem than another.
+
+The intended controlled comparison is:
+
+```text
+Independent variable
+    = SW placement / ownership of reasoning and execution capability
+
+Held functionally equivalent
+    = user-visible use case
+    = scenario input
+    = expected useful outcome
+    = benchmark dependency behavior
+    = machine/environment controls
+```
+
+Accordingly, the comparison asks where capabilities are placed and who owns execution authority, while evaluating the same Integrated Product outcome.
+
+This matters especially for Alternative B: ARGO-centric execution is not rejected merely because it moves responsibility across the current VIA boundary. Challenging that boundary is the point of including B.
+
+## Relationship to Approved Baseline v1.1
+
+`docs/requirements/requirements-v1.1.md` remains immutable and is the **Approved Baseline at DP-00 start**.
+
+Relevant v1.1 principles include:
 
 - VIA owns Voice/Text interaction, context, intent refinement, Agent routing/delegation, conversation/task lifecycle, consent/policy and result interaction.
 - Downstream Agents own domain reasoning, planning, tool selection/tool execution and domain workflow completion.
 - UC-01 permits allowed direct/local response when no external data/action is required.
 - VIA does not centrally reimplement or approve each Downstream Agent tool call.
 
-The alternatives below explore the practical topology consistent—or potentially in tension—with those principles. Any accepted choice that requires changing requirements must first be recorded in `requirements-vNext.md` and reviewed before a new approved baseline.
+These principles are baseline evidence and constraints at the start of analysis. They are **not used to weaken a structurally distinct DP-00 alternative until all alternatives become baseline-compatible by construction**.
+
+If the final decision preserves the baseline boundary, no responsibility change is required. If a boundary-challenging alternative such as B is selected, only then should `requirements-vNext.md` evaluate the corresponding responsibility/scope change, followed by review as a possible v1.2 baseline candidate.
+
+The Approved Baseline itself is not edited during DP-00 evaluation.
 
 ## Related requirements
 
@@ -117,6 +148,10 @@ VIA determines sufficient semantics to ground, route and safely manage the reque
 - tool selection and execution;
 - domain workflow completion.
 
+**v1.1 Boundary Compatibility**
+
+**Compatible.** This is the strongest expression of the responsibility boundary already described by v1.1.
+
 **Pros**
 
 - Clean Agent-neutral boundary.
@@ -131,44 +166,57 @@ VIA determines sufficient semantics to ground, route and safely manage the reque
 - May create Work/Agent ceremony for tasks that do not need domain reasoning.
 - User-perceived latency can be dominated by the boundary rather than the operation.
 
-### Alternative B — ARGO-first
+### Alternative B — ARGO-centric Primary Execution
+
+**Classification**
+
+> **v1.1 Responsibility Boundary Challenging Alternative**
 
 **Structure**
 
 ```text
-Voice / Text
-     |
-     v
-Thin VIA realtime/context shell
-     |
-     v
-ARGO primary reasoning authority
-     |
-     +------> Specialized Agent when required
+Voice / S2S
+    |
+    v
+thin realtime Context / interaction layer
+    |
+    v
+ARGO — primary ReAct reasoning + tool execution runtime
+    |
+    +------> Specialized / other Agent delegation when required
 ```
 
 **Execution authority**
 
-ARGO receives the user's substantive request first and acts as the primary ReAct reasoning/execution authority. It delegates to another Agent when needed.
+ARGO is the primary substantive reasoning and execution runtime. The front layer supplies voice/realtime interaction and enough context to ground the request, then ARGO performs the first major reasoning step, planning and tool execution. When the request requires another execution specialist, ARGO delegates onward.
+
+This is intentionally stronger than “VIA routes to ARGO first.” The structural distinction is that primary reasoning/execution authority moves into the ARGO-centric path rather than remaining in a VIA-owned Agent-neutral orchestration boundary.
+
+**v1.1 Boundary Compatibility**
+
+**Challenges baseline boundary.** v1.1 assigns routing/delegation and lifecycle authority to VIA while placing domain reasoning/planning/tool execution behind the Downstream Agent boundary. B explicitly tests a topology where ARGO becomes the primary reasoning/execution authority through which other Agents may be reached.
+
+That conflict is not an error in the alternative definition. It is a deliberate hypothesis to evaluate.
 
 **Pros**
 
-- Minimal extra orchestration for work ARGO already handles.
-- Can reuse existing ARGO reasoning/tool capability rather than rebuilding planning in VIA.
-- Potentially reduces duplicate intent/planning stages.
-- May offer a very short preferred first-party path.
+- Shortest structural path for work ARGO can already reason about and execute.
+- Reuses a mature ReAct/tool runtime rather than duplicating equivalent planning capability in VIA.
+- Can reduce duplicate VIA intent/planning layers if ARGO already provides the required semantic authority.
+- May reduce model/orchestration hops for the dominant first-party task set.
 
 **Cons**
 
-- VIA risks becoming primarily a multimodal shell rather than a durable Agent-neutral orchestration layer.
-- Strong coupling to ARGO request semantics, lifecycle and capability model.
-- Other Agents may effectively become ARGO sub-agents rather than peer Downstream Agents.
-- A request best handled by another Agent may first incur an ARGO reasoning/dispatch turn.
-- ARGO replacement may become an architecture rewrite rather than an adapter change.
+- VIA may become primarily a multimodal/realtime context shell rather than a durable Agent-neutral orchestration layer.
+- Strong strategic coupling to ARGO request semantics, lifecycle, tools and failure model.
+- Other Agents may become ARGO-mediated sub-agents rather than peer execution authorities.
+- Non-ARGO tasks may incur an ARGO reasoning/delegation hop before reaching the best specialist.
+- ARGO replacement can become a topology change rather than an adapter replacement.
+- Task ownership, permission mediation, recovery and audit boundaries may have to move or be redefined.
 
-**Important note**
+**Requirement consequence if selected**
 
-Selecting this alternative would require especially careful consistency review against the Approved Baseline statement that VIA selects the appropriate Downstream Agent and that Downstream Agent internals are outside VIA.
+No requirement file is changed during evaluation. If B wins the measured trade-off, `requirements-vNext.md` must explicitly evaluate changes to the VIA/Downstream Agent responsibility and scope boundary. Only after review would those changes become candidates for a future approved v1.2 baseline.
 
 ### Alternative C — Hybrid VIA Fast Path
 
@@ -204,6 +252,10 @@ Eligibility is defined architecturally, not by post-hoc timing or arbitrary invo
 
 “Less than 3 seconds” or “1 LLM + 1 tool” may be useful observed characteristics, but are **not** the definition.
 
+**v1.1 Boundary Compatibility**
+
+**Mostly compatible / extension.** v1.1 already permits a local fast path, but C may broaden or formalize the set of VIA-owned bounded actions and therefore may require vNext clarification depending on the chosen capability set.
+
 **Pros**
 
 - Preserves a clear downstream boundary for substantive work.
@@ -225,7 +277,7 @@ Eligibility is defined architecturally, not by post-hoc timing or arbitrary invo
 ```text
                          +--> VIA Fast Path
                         /
-User turn -> VIA selector ---> ARGO preferred Agent
+User turn -> VIA selector ---> ARGO path
                         \
                          +--> Specialized Downstream Agent
 ```
@@ -234,11 +286,13 @@ User turn -> VIA selector ---> ARGO preferred Agent
 
 Every user turn is classified into one of a small number of execution topologies. The choice is per turn rather than fixed for an entire connection/session.
 
-Possible execution owners:
+Candidate execution owners may include:
 
 - VIA Fast Path;
-- ARGO as a first-party preferred Downstream Agent;
+- ARGO path;
 - a specialized Downstream Agent selected directly.
+
+The exact authority assigned to the ARGO path is itself a design variable inside D. D's defining property is per-turn topology selection and explicit ownership transfer, not a requirement that ARGO always be first.
 
 **Directed escalation principle**
 
@@ -258,12 +312,16 @@ VIA -> ARGO -> VIA -> Agent B -> ARGO
 
 Ownership bouncing makes side-effect deduplication, task identity, context provenance, cancellation, retry, progress and recovery much harder to reason about.
 
+**v1.1 Boundary Compatibility**
+
+**Partially compatible / extension likely.** Direct selection of peer Downstream Agents and a bounded VIA Fast Path can fit v1.1. A D variant that grants ARGO primary reasoning authority for some turns may challenge parts of the current boundary and would need explicit vNext treatment if selected.
+
 **Pros**
 
 - Can choose the lowest-overhead appropriate path per request.
 - Avoids forcing a whole session into a mode that does not match every turn.
-- ARGO can be preferred without making all Agents structurally subordinate to it.
-- Specialized requests can route directly when confidence/capability evidence is sufficient.
+- Can route specialized requests directly when confidence/capability evidence is sufficient.
+- Makes topology choice explicit and measurable per episode.
 
 **Cons**
 
@@ -273,15 +331,22 @@ Ownership bouncing makes side-effect deduplication, task identity, context prove
 - Incorrect path selection can affect both correctness and latency.
 - May introduce extra routing-model invocation unless carefully designed.
 
-## ARGO positioning under evaluation
+## Routing-policy variants are not separate top-level alternatives
 
-A current architectural direction worth testing is:
+A policy such as:
 
-> **ARGO remains outside VIA core as a first-party preferred Downstream Agent, not an internal VIA runtime.**
+> “Keep VIA's existing Thin-VIA responsibility model, but prefer ARGO as the default Downstream Agent whenever it is eligible.”
 
-This is not a decision. It is an evaluation hypothesis because it may preserve peer-Agent architecture while retaining a high-quality first-party path.
+is **not Alternative B**.
 
-The alternatives must measure whether the extra VIA routing boundary is worth the resulting decoupling.
+Structurally, that policy preserves VIA as the component that owns routing and chooses a Downstream Agent before substantive execution. It is therefore much closer to:
+
+- a routing policy variant inside **Alternative A**, or
+- a path-selection/ranking variant inside **Alternative D**.
+
+Promoting “preferred ARGO route” to its own top-level alternative would create alternatives that differ mainly in routing preference rather than in the responsibility boundary DP-00 is meant to test.
+
+Alternative B is retained specifically because it changes where primary reasoning/execution authority sits.
 
 ## Existing Rust Reference Implementation
 
@@ -320,21 +385,22 @@ This must be measured and reasoned about in terms of:
 
 QA numbering is undergoing vNext formalization. Existing Approved Baseline QA IDs remain unchanged until a coherent rebaseline is prepared.
 
-| Quality concern | A Thin VIA | B ARGO-first | C Hybrid Fast Path | D Adaptive Per-turn |
+| Quality concern | A Thin VIA | B ARGO-centric Primary Execution | C Hybrid Fast Path | D Adaptive Per-turn |
 | --- | --- | --- | --- | --- |
-| Fast-task E2E responsiveness | Risk of boundary overhead | Strong for ARGO-suitable tasks; weaker if reroute needed | Potentially strongest for allow-listed fast tasks | Potentially strong if selector overhead is low |
-| Execution correctness | Clear single downstream authority | Depends strongly on ARGO first-hop judgment | Must correctly separate local vs delegated work | Adds path-selection correctness as a new failure mode |
-| Task/lifecycle correctness | Strong central VIA ownership | Needs clear ARGO/VIA task boundary | Central ownership plus local exceptions | Hardest ownership-transfer model |
-| Agent replaceability | Strong | Weakest if ARGO privileged structurally | Strong for downstream side | Strong if selector/contract is Agent-neutral |
-| Architecture complexity | Low/moderate | Low VIA complexity, high strategic coupling | Moderate | Highest |
-| Model invocation efficiency | Can require VIA + Agent hops | Efficient on ARGO path, possible extra hop elsewhere | Efficient for fast path | Depends on selector implementation |
+| Fast-task E2E responsiveness | Risk of boundary overhead | Potentially strong for ARGO-native tasks; reroute cost for specialists | Potentially strongest for allow-listed fast tasks | Potentially strong if selector overhead is low |
+| Execution correctness | Clear downstream authority | ARGO becomes primary semantic/execution authority | Must correctly separate local vs delegated work | Adds path-selection correctness as a new failure mode |
+| Task/lifecycle correctness | Strong central VIA ownership | Requires redesigned VIA/ARGO ownership if baseline boundary moves | Central ownership plus local exceptions | Hardest ownership-transfer model |
+| Agent replaceability | Strong | Weakest if ARGO is structurally central | Strong for downstream side | Strong only if selector/contract remains neutral |
+| Architecture complexity | Low/moderate | Thin VIA, but high strategic coupling | Moderate | Highest |
+| Model invocation efficiency | Can require VIA + Agent hops | Efficient for ARGO-owned path, possible delegation hop elsewhere | Efficient for fast path | Depends on selector implementation |
 | Failure isolation | Strong boundary | ARGO becomes broad blast-radius dependency | Good if Fast Path remains narrow | Requires explicit per-path isolation |
+| v1.1 boundary compatibility | Compatible | **Challenges baseline boundary** | Mostly compatible / extension | Partially compatible / extension likely |
 
 This table is qualitative only. It is not a decision score.
 
 ## Prototype plan
 
-Create functionally equivalent prototype topologies for A/B/C/D with a common request/task/result contract.
+Create functionally equivalent Integrated Product prototype topologies for A/B/C/D with a common request/task/result contract.
 
 At minimum, prototypes should expose raw events sufficient to observe:
 
@@ -354,6 +420,10 @@ Use deterministic semantic traces and Agent/tool doubles for architecture qualif
 
 ## Benchmark plan
 
+### Functional equivalence requirement
+
+A/B/C/D are compared against the same user-visible scenarios and success predicates. The architecture alternative may change which component owns reasoning/execution, but not the expected product behavior.
+
 ### Dataset
 
 Include at least:
@@ -367,6 +437,7 @@ Include at least:
 
 ```text
 Independent variable = SW Architecture Alternative (A/B/C/D)
+                      = reasoning/execution placement and ownership
 ```
 
 Model stochasticity, Agent implementation variance, network variance and uncontrolled machine state must not become hidden independent variables during architecture qualification.
@@ -399,4 +470,6 @@ TBD after measured trade-off analysis.
 
 ## Requirement changes discovered
 
-None committed to vNext by this checkpoint. Potential implications will be accumulated and coherently reviewed after QA-01 through QA-04 are defined.
+None committed to vNext by this checkpoint.
+
+If a final DP-00 decision requires a responsibility/scope change—most clearly if Alternative B is selected—the proposed change is first recorded in `requirements-vNext.md`, reviewed, and only later considered for an approved v1.2 baseline. `requirements-v1.1.md` remains the preserved starting baseline.
