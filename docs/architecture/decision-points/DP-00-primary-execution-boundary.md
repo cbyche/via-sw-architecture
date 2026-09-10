@@ -2,9 +2,14 @@
 
 ## Status
 
-**Alternatives Defined — Evaluation QAs being formalized**
+**Alternatives Defined — Top QA Rebaseline Complete — Base Executable Architecture Specification Defined — Prototype / Pilot Pending**
 
-This is a proposed top-level Decision Point for the vNext architecture analysis. It does not modify or override `docs/requirements/requirements-v1.1.md`.
+This is the top-level Decision Point for the vNext architecture analysis. It does not modify or override `docs/requirements/requirements-v1.1.md`.
+
+Executable Base Architecture specification:
+
+- `docs/architecture/decision-points/DP-00-executable-architecture-spec.md`
+- walkthrough/stress-test: `docs/architecture/analysis/AA-006-dp00-executable-walkthrough.md`
 
 ## Problem
 
@@ -101,7 +106,7 @@ Indicative existing requirements/areas affected:
 - FR-40~FR-43 task/concurrency/Agent integration area
 - FR-44 model/voice runtime abstraction area
 
-Exact traceability will be coherently rebaselined after QA-01~QA-04 definitions are complete.
+Central vNext QA/DP traceability is maintained in `docs/architecture/qa-dp-traceability.md`; the Approved requirement wording remains in `requirements-v1.1.md`.
 
 ## Alternatives
 
@@ -383,7 +388,7 @@ This must be measured and reasoned about in terms of:
 
 ## Expected QA trade-offs
 
-QA numbering is undergoing vNext formalization. Existing Approved Baseline QA IDs remain unchanged until a coherent rebaseline is prepared.
+The central vNext Top QA rebaseline is now complete. The authoritative Top QA definitions are QA-01~04 under `docs/evaluation/quality-attributes/`; the original v1.1 QA-01~11 remain preserved as **Legacy v1.1 Detailed QA** in the Approved Baseline.
 
 | Quality concern | A Thin VIA | B ARGO-centric Primary Execution | C Hybrid Fast Path | D Adaptive Per-turn |
 | --- | --- | --- | --- | --- |
@@ -398,25 +403,48 @@ QA numbering is undergoing vNext formalization. Existing Approved Baseline QA ID
 
 This table is qualitative only. It is not a decision score.
 
+## Executable Base Architecture checkpoint
+
+The conceptual alternatives above are implemented for prototype purposes according to:
+
+`docs/architecture/decision-points/DP-00-executable-architecture-spec.md`
+
+Key checkpoint rules include:
+
+- A/B/C/D satisfy the same Product Capability obligations;
+- Base Architecture evaluation is separated from later Tactic evaluation;
+- differences are responsibility placement and execution topology;
+- component count is not equated with model-call count;
+- state/fact/contract/policy lookup is separated from semantic GenAI reasoning;
+- independent cross-component GenAI fusion is a Tactic, not part of A/C/D Base;
+- D uses existing VIA vocabulary: Context Engine → Intent Refiner → Execution Path Selector;
+- D's Selector chooses both `route_kind` and `executor_id` and is not followed by another top-level Agent Router;
+- clear existing-task follow-up reuses an established route;
+- B uses ARGO-authoritative execution state with VIA user-facing task projection/correlation.
+
+The 20-path S1~S5 structural walkthrough is recorded in `docs/architecture/analysis/AA-006-dp00-executable-walkthrough.md`.
+
 ## Prototype plan
 
-Create functionally equivalent Integrated Product prototype topologies for A/B/C/D with a common request/task/result contract.
+Create functionally equivalent Integrated Product prototypes for A/B/C/D according to the executable Base Architecture specification and a common benchmark contract.
 
-At minimum, prototypes should expose raw events sufficient to observe:
+At minimum, prototypes must expose canonical observations sufficient for:
 
 - acoustic end of speech;
-- semantic processing start/result;
-- execution-path selection;
-- execution owner;
-- Agent dispatch;
-- tool/action start/completion;
+- request-processing start;
+- semantic/model call start/result;
+- clarification and task association;
+- execution route selection;
+- **Execution Route Commit**;
+- execution owner / Agent dispatch / execution start;
+- tool/action start/completion where applicable;
 - first user-visible meaningful result;
 - useful outcome;
 - task completion;
 - success/failure;
-- model invocation count.
+- logical Generative Model Call telemetry.
 
-Use deterministic semantic traces and Agent/tool doubles for architecture qualification.
+Use deterministic semantic traces and Agent/tool doubles for architecture qualification. Optional optimization tactics are not part of the Base comparison.
 
 ## Benchmark plan
 
@@ -426,12 +454,7 @@ A/B/C/D are compared against the same user-visible scenarios and success predica
 
 ### Dataset
 
-Include at least:
-
-- F1 Local / Direct-capable fast tasks;
-- F2 short general-Agent tasks;
-- F3 short specialized-Agent delegation tasks;
-- later QA corpora for correctness, lifecycle/recovery and evolution.
+The final benchmark corpus remains TBD. Current Base specification walkthrough scenarios are architectural feasibility evidence, not the final scoring corpus.
 
 ### Primary architecture experiment rule
 
@@ -440,20 +463,21 @@ Independent variable = SW Architecture Alternative (A/B/C/D)
                       = reasoning/execution placement and ownership
 ```
 
-Model stochasticity, Agent implementation variance, network variance and uncontrolled machine state must not become hidden independent variables during architecture qualification.
+Model stochasticity, Agent implementation variance, network variance, uncontrolled machine state, and optional tactic maturity must not become hidden independent variables during Base Architecture qualification.
 
-### QA-01
+### Top QA set
 
-Use `Fast-task Outcome Latency p95 (FTOL p95)` as defined in:
-
-`docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md`
+- QA-01 — Fast-task Outcome Latency p95 (FTOL p95)
+- QA-02 — Architecture Episode Exact Conformance Rate (AECR)
+- QA-03 — Change Containment Rate (CCR)
+- QA-04 — Average Model Calls to Commit Execution Route
 
 ### Scoring
 
 Do not set or tune 0–5 thresholds after seeing the final comparative result. Follow:
 
 ```text
-Pilot -> threshold calibration -> scoring version freeze -> final evaluation
+Pilot -> calibration -> scoring/gate rule freeze -> final evaluation
 ```
 
 ## Results
@@ -470,6 +494,6 @@ TBD after measured trade-off analysis.
 
 ## Requirement changes discovered
 
-None committed to vNext by this checkpoint.
+No Approved Baseline change is created by this checkpoint.
 
 If a final DP-00 decision requires a responsibility/scope change—most clearly if Alternative B is selected—the proposed change is first recorded in `requirements-vNext.md`, reviewed, and only later considered for an approved v1.2 baseline. `requirements-v1.1.md` remains the preserved starting baseline.
