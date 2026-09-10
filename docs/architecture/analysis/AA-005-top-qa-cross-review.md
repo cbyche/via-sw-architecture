@@ -137,24 +137,90 @@ The four QAs are **independent but trade-off-forming**.
 
 They may correlate on some workloads, but each can produce a different ordering of alternatives because each measures a different architectural property.
 
-# 9.3 DP-00 Sensitivity Review
+# 9.3 DP-00 × QA Sensitivity Matrix
 
-The matrix below is a **structural-impact hypothesis**, not a measured result.
+## Purpose and interpretation
 
-| DP-00 structural change | QA-01 sensitivity hypothesis | QA-02 sensitivity hypothesis | QA-03 sensitivity hypothesis | QA-04 sensitivity hypothesis |
-| --- | --- | --- | --- | --- |
-| More synchronous processing stages | Can increase FTOL | Can improve validation if stages add checks; can also add failure surfaces | Can improve separation or add coupling depending on boundaries | Can increase calls when stages are model-based |
-| Intent/Router split | May add latency | Can make validation/routing explicit | Can isolate routing changes if contracts are stable | May add logical calls vs fused reasoning |
-| ARGO direct coupling | Can shorten dominant path | Correctness depends on ARGO ownership/state semantics | Can increase ARGO-centric coupling | Can reduce calls when decisions are fused |
-| Bounded VIA Fast Path | Can strongly improve local-task FTOL | Creates false-fast eligibility risk | Can expand local boundary and evolution surface | Can be 0-call if eligibility is deterministic |
-| Per-turn path selector | Can optimize path but adds selection overhead | Adds path-selection correctness responsibility | Adds selector/ownership-transfer evolution surface | Adds a call if selector is model-based |
-| Generic Agent abstraction/adapter | Can add dispatch boundary overhead | Can make ownership/contracts explicit | Expected to contain Agent evolution if seam is stable | Usually neutral unless model-based mediation is added |
-| Central task/context ownership | Can add state/serialization work | Can improve follow-up/result binding consistency | Can either stabilize or centralize coupling | Can add calls only if state association uses models |
-| Model-based validation | Adds inference latency | Can recover from bad semantic proposals | Adds model/prompt evolution dependency | Adds ORCHESTRATION call(s) before route commit |
+This matrix records a **Pre-experiment architectural sensitivity hypothesis**: before A/B/C/D results are measured, which Top QA is expected to be most sensitive to each major DP-00 structural design choice?
 
-The purpose of this matrix is to verify **construct sensitivity**: the selected QAs should react when DP-00 changes architecture structure.
+This is report-ready analysis material intended to explain why QA-01~04 were selected as Top Architectural Drivers. It is deliberately recorded before final benchmark results so later scoring cannot be used to retroactively justify the QA set.
 
-It does not predict final scores reliably because actual prototypes may fuse, parallelize, cache or implement deterministic alternatives differently.
+Important interpretation rules:
+
+- The number of `●` symbols does **not** mean good or bad.
+- It indicates expected **sensitivity / strength of architectural influence**.
+- It is **not** an A/B/C/D experiment result.
+- It does **not** predict which alternative will win.
+- Actual effects must be established by controlled benchmark evidence.
+
+Legend:
+
+```text
+○    = 영향이 작거나 간접적
+●    = 영향 있음
+●●   = 중간 수준의 sensitivity
+●●●  = 주요 sensitivity point
+```
+
+| 구조적 차이 | QA-01 Responsiveness | QA-02 Correctness | QA-03 Flexibility | QA-04 Model Call Overhead |
+| --- | :---: | :---: | :---: | :---: |
+| synchronous processing stage 수 | ●●● | ● | ○ | ●●● |
+| Intent/Router 분리 여부 | ●● | ●● | ●● | ●●● |
+| ARGO direct coupling | ●●● | ●● | ●●● | ●●● |
+| bounded Fast Path | ●●● | ●●● | ●● | ●●● |
+| per-turn selector | ●● | ●●● | ●●● | ●●● |
+| Agent abstraction / adapter | ● | ● | ●●● | ● |
+| task / context ownership | ● | ●●● | ●● | ● |
+| model validation layer | ●● | ●●● | ● | ●●● |
+
+## Row rationale
+
+### synchronous processing stage 수
+
+**QA-01 ●●●:** each mandatory synchronous stage can extend the critical path from user input to useful outcome, so responsiveness is highly sensitive to stage count and serialization. **QA-04 ●●●:** when those stages are model-based, decomposition directly increases route-commit model calls. Correctness can be affected by added checks, but stage count alone does not guarantee correctness; Flexibility impact is indirect unless stages imply new coupling boundaries.
+
+### Intent/Router 분리 여부
+
+**QA-04 ●●●:** separating intent and routing into distinct model generations can directly increase the number of logical calls before Execution Route Commit. **QA-01/QA-02/QA-03 ●●:** the split can add latency, make validation/routing responsibilities more explicit, and create a stable boundary for routing changes, but the effect depends on whether stages are deterministic, parallelized, or tightly coupled.
+
+### ARGO direct coupling
+
+**QA-01 ●●●:** direct coupling can remove VIA-side orchestration/dispatch hops on ARGO-native paths. **QA-03 ●●●:** making ARGO structurally central can cause Agent/context/contract evolution to propagate through ARGO-specific integration. **QA-04 ●●●:** fused ARGO reasoning and routing can reduce explicit model stages, while specialist delegation still counts until Execution Route Commit. QA-02 remains materially sensitive because task ownership, clarification, validation, and result binding may move or become fused.
+
+### bounded Fast Path
+
+**QA-01 ●●●:** bypassing normal orchestration/delegation can directly reduce user-visible latency for eligible bounded requests. **QA-02 ●●●:** eligibility mistakes can become false-fast execution, making correctness highly sensitive to the boundary and validator. **QA-04 ●●●:** deterministic eligibility and local selection can reach route commit with zero model calls, while model-based eligibility adds calls. QA-03 is also affected because expanding the fast-path capability set expands the VIA-owned change surface.
+
+### per-turn selector
+
+**QA-02 ●●●:** selecting the wrong topology or owner per turn is itself a new correctness failure mode. **QA-03 ●●●:** selector policy, owner-transfer contracts, and per-path integration create an additional evolution surface. **QA-04 ●●●:** a model-based selector directly adds route-decision calls; a deterministic selector may not. QA-01 remains moderately sensitive because selector overhead can be offset by choosing a faster downstream path.
+
+### Agent abstraction / adapter
+
+**QA-03 ●●●:** the Agent integration seam is a principal extension boundary for adding/replacing Agents, so it directly determines whether evolution stays contained. QA-01, QA-02, and QA-04 usually see weaker direct sensitivity: an abstraction can add small dispatch overhead or make contracts explicit, but by itself does not require extra model generations.
+
+### task / context ownership
+
+**QA-02 ●●●:** ownership strongly influences follow-up association, concurrent result binding, clarification continuity, and stale-context handling. **QA-03 ●●:** central ownership can stabilize shared contracts or create a coupling hub that changes must cross. QA-01/QA-04 usually experience only indirect impact unless ownership logic introduces synchronous/model-based decisions.
+
+### model validation layer
+
+**QA-02 ●●●:** validation can reject wrong Fast Path/Agent/referent proposals and trigger clarification or safe fallback, so correctness is highly sensitive. **QA-04 ●●●:** model-based validation directly adds an ORCHESTRATION generation before Execution Route Commit. **QA-01 ●●:** the same validation can add latency, though parallelization or deterministic checks may reduce that cost. QA-03 impact is generally lower unless validation becomes a broad model/prompt dependency across the architecture.
+
+## Matrix conclusion
+
+The four QAs do not repeatedly measure the same structural characteristic. They create distinct architecture pressures:
+
+```text
+QA-01 -> Latency pressure
+QA-02 -> Correctness pressure
+QA-03 -> Flexibility / containment pressure
+QA-04 -> AI-decision structural overhead pressure
+```
+
+Therefore a topology optimized in one direction does not automatically become best on all four QAs. For example, stage fusion may improve QA-01/QA-04 while weakening QA-03, and added validation may improve QA-02 while increasing QA-01/QA-04 cost.
+
+This is precisely the behavior expected from a useful Top Architectural Driver set: the QAs expose the trade-offs created by DP-00 rather than collapsing them into one preferred architecture pattern.
 
 # 9.4 A/B/C/D Pre-experiment Hypotheses
 
