@@ -2,9 +2,9 @@
 
 ## Status
 
-Architecture Context Checkpoint 001/002/003/004 + Top-QA Cross-review — evaluation rules for vNext DP analysis.
+Architecture Context Checkpoint 001/002/003/004 + Top-QA Cross-review — detailed evaluation rules for the vNext architecture baseline.
 
-These principles extend the current `evaluation-strategy.md` without replacing it. The existing strategy remains valid; a coherent central rebaseline will be prepared separately after QA-01 through QA-04 and the Top-QA cross-review are complete.
+These principles are the detailed rules behind the central `docs/evaluation/evaluation-strategy.md`. The Central vNext Rebaseline now aligns the working requirements, QA↔DP traceability and central evaluation strategy with these rules.
 
 ## Core scoring principles
 
@@ -259,16 +259,21 @@ A scoring or gate change must not mutate prior raw runs. Recompute derived metri
 
 ## Relationship to current repository documents
 
-- `docs/evaluation/evaluation-strategy.md` remains unchanged in this checkpoint.
-- `docs/evaluation/architecture-experiment-methodology.md` explains how these principles are applied.
-- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` defines FTOL p95 and dependency-latency non-dominance controls.
-- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` defines AECR and constraint semantics.
-- `docs/evaluation/quality-attributes/QA-03-change-flexibility.md` defines CCR and Expected Change Area semantics.
-- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md` defines Average Model Calls to Commit Execution Route.
-- `docs/architecture/analysis/AA-005-top-qa-cross-review.md` records the Top-QA independence/neutrality/readiness review.
-- `benchmark/schemas/run-event-schema.md` defines runtime episode evidence.
-- `benchmark/schemas/scenario-constraint-schema.md` defines topology-neutral correctness manifests.
-- `benchmark/schemas/model-call-schema.md` defines QA-04 per-logical-generation evidence.
-- QA-03 uses its dedicated evolution scenario/run schemas.
+Central vNext navigation is now aligned around these artifacts:
 
-Central QA/DP traceability and working-requirement rebaseline is intentionally deferred to a separate checkpoint.
+- `docs/requirements/requirements-vNext.md` — vNext Architecture Evaluation Working Baseline;
+- `docs/architecture/qa-dp-traceability.md` — DP-00 / Top-QA / Legacy-QA mapping;
+- `docs/evaluation/evaluation-strategy.md` — central evaluation pipeline and gate/scoring policy;
+- `docs/evaluation/architecture-experiment-methodology.md` — detailed controlled-experiment methodology;
+- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` — FTOL p95 and dependency-latency non-dominance;
+- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` — AECR and constraint semantics;
+- `docs/evaluation/quality-attributes/QA-03-change-flexibility.md` — CCR and Expected Change Area semantics;
+- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md` — Average Model Calls to Commit Execution Route;
+- `docs/architecture/analysis/AA-005-top-qa-cross-review.md` — Top-QA independence/neutrality/readiness review;
+- `docs/architecture/analysis/final-report-evidence-index.md` — reviewer-question/evidence navigation;
+- `benchmark/schemas/run-event-schema.md` — runtime episode evidence;
+- `benchmark/schemas/scenario-constraint-schema.md` — topology-neutral correctness manifests;
+- `benchmark/schemas/model-call-schema.md` — QA-04 per-logical-generation evidence;
+- `benchmark/schemas/evolution-scenario-schema.md` and `evolution-run-schema.md` — QA-03 evolution evidence.
+
+`requirements-v1.1.md` remains the immutable Approved Baseline; central vNext rebaseline does not change it.
