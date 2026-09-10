@@ -182,3 +182,46 @@ fn malformed_then_retry_consumes_two_logical_attempts_in_order() {
     assert_eq!(audit[0].decision_owner.0, "A.AgentRouter");
     assert_eq!(audit[0].operation_key, "turn.route");
 }
+
+#[test]
+fn mixed_request_uses_explicit_plan_slices_and_ignores_non_applicable_slice() {
+    let adapter = ReplayAdapter::new(
+        context(),
+        ResponsibilityMapping::dp00_base(),
+        [ReplayOperation::new(
+            "turn.intent",
+            SemanticResponsibility::IntentInterpretation,
+            vec![ReplayAttempt {
+                output: "LOCAL_VOLUME".into(),
+                status: ModelStatus::Completed,
+            }],
+        )],
+    );
+    let response = adapter
+        .generate(ModelRequest {
+            decision_owner: DecisionOwner::from("A.IntentRefiner"),
+            semantic_responsibilities: vec![
+                SemanticResponsibility::IntentInterpretation,
+                SemanticResponsibility::ReferentResolution,
+            ],
+            semantic_input: "volume".into(),
+            expected_output_schema: "combined.v0".into(),
+            model_profile: ModelProfile {
+                id: "replay".into(),
+                version: "v0".into(),
+            },
+        })
+        .expect("explicit applicable slice resolves the mixed request");
+    assert_eq!(response.composite_output, "LOCAL_VOLUME");
+    assert_eq!(adapter.audit_snapshot().len(), 1);
+
+    assert_eq!(
+        adapter.generate(request(
+            "A.IntentRefiner",
+            SemanticResponsibility::ReferentResolution
+        )),
+        Err(ReplayError::OperationNotFound(
+            SemanticResponsibility::ReferentResolution
+        ))
+    );
+}

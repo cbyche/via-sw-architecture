@@ -322,6 +322,9 @@ fn position(events: &[CanonicalEvent], predicate: impl Fn(&CanonicalEventKind) -
 fn assert_authority(events: &[CanonicalEvent]) {
     for event in events {
         match event.event() {
+            CanonicalEventKind::AcousticEos => {
+                assert_eq!(event.emitter(), EventEmitter::InteractionFixture)
+            }
             CanonicalEventKind::ModelGenerationStarted
             | CanonicalEventKind::ModelGenerationCompleted => {
                 assert_eq!(event.emitter(), EventEmitter::ModelFixture)

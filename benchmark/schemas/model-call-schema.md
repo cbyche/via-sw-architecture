@@ -8,6 +8,13 @@ This schema defines one record per **logical model generation**. It is the sourc
 
 The concrete serialization format may later be JSON/JSONL/typed events/Parquet projections. The semantic fields and inclusion rules below are the contract.
 
+Pilot-v0 persists these records in `model-calls.jsonl` after the timed window.
+The Rust record includes logical start, optional first output, terminal timestamp
+and status/failure timestamp, attempt, decision owner, semantic responsibilities,
+call classification/inclusion metadata, and the related route-commit event id
+when a commit exists. No-commit P08/P09/P10 evidence is retained without a
+fabricated relation.
+
 ## Core principle
 
 QA-04 counts architecture-required logical generations, not transport requests or stream chunks.

@@ -154,7 +154,12 @@ impl ModelPort for FaultPorts {
             .lock()
             .map_err(|_| "call trace poisoned")?
             .push(LogicalModelCall {
+                schema_version: "model-call-v0".into(),
                 model_call_id: format!("fault-call-{logical_sequence}"),
+                run_id: "fault-run".into(),
+                episode_id: "fault-episode".into(),
+                scenario_id: "fault".into(),
+                alternative_id: "test".into(),
                 logical_sequence,
                 attempt,
                 decision_owner: request.decision_owner,
@@ -163,7 +168,14 @@ impl ModelPort for FaultPorts {
                 route_committed_before_call: false,
                 route_committed_after_call: false,
                 logical_start: MonotonicTimestamp(logical_sequence * 10),
+                first_output: Some(MonotonicTimestamp(logical_sequence * 10 + 1)),
                 completion: MonotonicTimestamp(logical_sequence * 10 + 1),
+                failure: (model_status != ModelStatus::Completed)
+                    .then_some(MonotonicTimestamp(logical_sequence * 10 + 1)),
+                call_class: "ORCHESTRATION".into(),
+                classification_reason: "FAULT_PATH_ROUTE_RESPONSIBILITY".into(),
+                qa04_primary_included: true,
+                route_commit_event_id: None,
             });
         Ok(ModelResponse {
             composite_output,
@@ -220,6 +232,7 @@ impl EvidenceSource for FaultPorts {
         RawEvidence {
             events: self.events(),
             model_calls: self.calls(),
+            fixture_events: Vec::new(),
         }
     }
 }

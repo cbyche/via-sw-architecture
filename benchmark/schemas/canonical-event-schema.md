@@ -167,7 +167,7 @@ Not every event may be self-reported by the AUT for scoring.
 
 | Event | Authoritative producer/source |
 | --- | --- |
-| `interaction.acoustic_eos` | `BENCHMARK` / audio fixture annotation |
+| `interaction.acoustic_eos` | `INTERACTION_FIXTURE`, sourced from the benchmark audio annotation (`BENCHMARK`) |
 | `interaction.input_ready` | `INTERACTION_FIXTURE` or runner |
 | `interaction.processing_started` | AUT instrumentation |
 | model generation events | Model adapter / `MODEL_FIXTURE` plus ModelCall identity |

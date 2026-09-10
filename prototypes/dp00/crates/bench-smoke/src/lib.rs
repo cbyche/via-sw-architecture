@@ -160,7 +160,16 @@ impl ModelPort for SmokePorts {
             .lock()
             .map_err(|_| "model-call trace poisoned")?
             .push(LogicalModelCall {
+                schema_version: "model-call-v0".into(),
                 model_call_id: format!("model-call-{call_number}"),
+                run_id: format!(
+                    "smoke-{}-{}",
+                    self.inner.replay.context().alternative_id,
+                    self.inner.scenario.id()
+                ),
+                episode_id: format!("episode-{}", self.inner.scenario.id()),
+                scenario_id: self.inner.scenario.id().into(),
+                alternative_id: self.inner.replay.context().alternative_id.clone(),
                 logical_sequence,
                 attempt,
                 decision_owner: request.decision_owner,
@@ -169,7 +178,13 @@ impl ModelPort for SmokePorts {
                 route_committed_before_call: false,
                 route_committed_after_call: false,
                 logical_start: MonotonicTimestamp(call_number * 10),
+                first_output: Some(MonotonicTimestamp(call_number * 10 + 1)),
                 completion: MonotonicTimestamp(call_number * 10 + 1),
+                failure: None,
+                call_class: "ORCHESTRATION".into(),
+                classification_reason: "BASE_ARCHITECTURE_ROUTE_RESPONSIBILITY".into(),
+                qa04_primary_included: true,
+                route_commit_event_id: None,
             });
         self.capture(
             EventEmitter::ModelFixture,
@@ -228,6 +243,7 @@ impl EvidenceSource for SmokePorts {
                 .lock()
                 .expect("model-call trace poisoned")
                 .clone(),
+            fixture_events: Vec::new(),
         }
     }
 }

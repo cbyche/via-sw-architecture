@@ -21,6 +21,39 @@ The timed event path records a monotonic timestamp and appends a typed event to 
 in-memory buffer. JSON/JSONL conversion is exposed only through the separate
 post-capture serialization API.
 
+## Pilot runner
+
+`dp00-pilot-runner` executes `scenario × alternative × repetition` sequentially
+in one Rust process. It supports deterministic cyclic A/B/C/D ordering, a
+configurable warm-up population, Profile Z (zero-delay baseline), provisional
+Profile C (1 ms per model/agent/tool dependency invocation), and `capture` or
+`minimal` instrumentation sinks. Profile C is a Pilot calibration parameter,
+not a production latency claim or scoring threshold. Its three per-dependency
+delays can be overridden independently with `--model-delay-micros`,
+`--agent-delay-micros`, and `--tool-delay-micros`; the selected values are
+persisted in provenance and apply equally to every alternative.
+
+Example development dry-run:
+
+```shell
+cargo run -p bench-runner --bin dp00-pilot-runner -- \
+  --corpus pilot-v0 \
+  --scenarios P01 \
+  --alternatives A,B,C,D \
+  --latency-profile Z \
+  --warmup 0 \
+  --repetitions 1 \
+  --instrumentation capture \
+  --output-root /tmp/dp00-pilot-dry-run \
+  --development
+```
+
+Measured raw evidence is persisted only after the timed interval as an immutable
+create-new directory containing `provenance.json`, `canonical-events.jsonl`,
+`model-calls.jsonl`, and diagnostic `fixture-events.jsonl` when present. An
+existing run id is an error. `--official` refuses a dirty Git working tree;
+development runs are always marked non-official in provenance.
+
 ## Base architecture smoke
 
 The `alternative-a`, `alternative-b`, `alternative-c`, and `alternative-d` crates

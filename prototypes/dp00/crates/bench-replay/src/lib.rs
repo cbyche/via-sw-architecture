@@ -197,12 +197,13 @@ impl ModelPort for ReplayAdapter {
         let mut state = self.state.lock().map_err(|_| ReplayError::PoisonedState)?;
         let mut outputs = Vec::with_capacity(request.semantic_responsibilities.len());
         let mut response_status = ModelStatus::Completed;
+        let mut first_unresolved = None;
 
         for responsibility in request.semantic_responsibilities {
-            let operation = self
-                .operations
-                .get(&responsibility)
-                .ok_or(ReplayError::OperationNotFound(responsibility))?;
+            let Some(operation) = self.operations.get(&responsibility) else {
+                first_unresolved.get_or_insert(responsibility);
+                continue;
+            };
             let consumed = state.consumed.entry(responsibility).or_default();
             let attempt = operation
                 .attempts
@@ -221,6 +222,12 @@ impl ModelPort for ReplayAdapter {
                 attempt: attempt_number,
                 status: attempt.status,
             });
+        }
+
+        if outputs.is_empty() {
+            return Err(ReplayError::OperationNotFound(
+                first_unresolved.expect("validated request has at least one responsibility"),
+            ));
         }
 
         Ok(ModelResponse {

@@ -1,0 +1,35 @@
+{
+  "manifest_version": "pilot-v0-golden-expectations-v1",
+  "cases": [
+    {
+      "fixture_path": "valid-runtime-scenario.json",
+      "asset_kind": "RUNTIME_SCENARIO",
+      "expected": "ACCEPT",
+      "reason_category": "VALID"
+    },
+    {
+      "fixture_path": "valid-behavior-plan.json",
+      "asset_kind": "BEHAVIOR_PLAN",
+      "expected": "ACCEPT",
+      "reason_category": "VALID"
+    },
+    {
+      "fixture_path": "invalid-missing-required-field.json",
+      "asset_kind": "RUNTIME_SCENARIO",
+      "expected": "REJECT",
+      "reason_category": "MISSING_REQUIRED_FIELD"
+    },
+    {
+      "fixture_path": "invalid-unknown-field.json",
+      "asset_kind": "RUNTIME_SCENARIO",
+      "expected": "REJECT",
+      "reason_category": "UNKNOWN_FIELD"
+    },
+    {
+      "fixture_path": "invalid-behavior-enum.json",
+      "asset_kind": "BEHAVIOR_PLAN",
+      "expected": "REJECT",
+      "reason_category": "INVALID_ENUM"
+    }
+  ]
+}

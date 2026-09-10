@@ -93,6 +93,48 @@ fn successful_episode_satisfies_canonical_partial_order() {
 }
 
 #[test]
+fn zero_model_call_success_satisfies_canonical_partial_order() {
+    let collector = collector();
+    architecture(&collector, ArchitectureEvent::ProcessingStarted);
+    architecture(
+        &collector,
+        ArchitectureEvent::RouteCommitted {
+            route: route("VIA_LOCAL_VOLUME"),
+        },
+    );
+    benchmark(
+        &collector,
+        EventEmitter::ToolFixture,
+        CanonicalEventKind::ExecutionStarted,
+    );
+    benchmark(
+        &collector,
+        EventEmitter::OutcomeProbe,
+        CanonicalEventKind::UsefulOutcomeObserved,
+    );
+    benchmark(
+        &collector,
+        EventEmitter::Benchmark,
+        CanonicalEventKind::EpisodeCompleted,
+    );
+
+    assert!(validate_episode(&collector.canonical_snapshot()).is_empty());
+}
+
+#[test]
+fn acoustic_eos_is_owned_by_the_interaction_fixture() {
+    let collector = collector();
+    benchmark(
+        &collector,
+        EventEmitter::InteractionFixture,
+        CanonicalEventKind::AcousticEos,
+    );
+    let events = collector.canonical_snapshot();
+    assert_eq!(events[0].event(), &CanonicalEventKind::AcousticEos);
+    assert_eq!(events[0].emitter(), EventEmitter::InteractionFixture);
+}
+
+#[test]
 fn duplicate_initial_commit_is_rejected() {
     let collector = collector();
     architecture(&collector, ArchitectureEvent::ProcessingStarted);

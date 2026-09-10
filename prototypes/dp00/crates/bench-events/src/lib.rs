@@ -1,7 +1,8 @@
 #![forbid(unsafe_code)]
 
-use std::io::Write;
+use std::io::{BufRead, Write};
 use std::sync::Mutex;
+use std::time::Instant;
 
 use bench_core::{
     ArchitectureEvent, ArchitectureObservation, Clock, DecisionOwner, ModelStatus,
@@ -35,6 +36,7 @@ pub enum EventEmitter {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum CanonicalEventKind {
+    AcousticEos,
     Architecture(ArchitectureEvent),
     ModelGenerationStarted,
     ModelGenerationCompleted,
@@ -63,6 +65,11 @@ pub struct CanonicalEvent {
 }
 
 impl CanonicalEvent {
+    #[must_use]
+    pub fn event_id(&self) -> &str {
+        &self.event_id
+    }
+
     #[must_use]
     pub fn sequence_number(&self) -> u64 {
         self.sequence_number
@@ -186,21 +193,28 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
         if authoritative_outcome.is_none() {
             violations.push(ContractViolation::CompletedWithoutAuthoritativeOutcome);
         }
-        let model_started =
-            position(|event| matches!(event, CanonicalEventKind::ModelGenerationStarted));
+        let model_positions: Vec<_> = events
+            .iter()
+            .enumerate()
+            .filter_map(|(position, event)| {
+                matches!(event.event(), CanonicalEventKind::ModelGenerationStarted)
+                    .then_some(position)
+            })
+            .collect();
         let valid_order = processing
-            .zip(model_started)
             .zip(commits.first().map(|(position, _)| *position))
             .zip(execution)
             .zip(authoritative_outcome)
             .zip(completed)
             .is_some_and(
-                |(((((processing, model), commit), execution), outcome), completed)| {
-                    processing < model
-                        && model < commit
+                |((((processing, commit), execution), outcome), completed)| {
+                    processing < commit
                         && commit < execution
                         && execution < outcome
                         && outcome < completed
+                        && model_positions
+                            .iter()
+                            .all(|model| processing < *model && *model < commit)
                 },
             );
         if !valid_order {
@@ -241,7 +255,12 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LogicalModelCall {
+    pub schema_version: String,
     pub model_call_id: String,
+    pub run_id: String,
+    pub episode_id: String,
+    pub scenario_id: String,
+    pub alternative_id: String,
     pub logical_sequence: u64,
     pub attempt: u32,
     pub decision_owner: DecisionOwner,
@@ -250,7 +269,13 @@ pub struct LogicalModelCall {
     pub route_committed_before_call: bool,
     pub route_committed_after_call: bool,
     pub logical_start: MonotonicTimestamp,
+    pub first_output: Option<MonotonicTimestamp>,
     pub completion: MonotonicTimestamp,
+    pub failure: Option<MonotonicTimestamp>,
+    pub call_class: String,
+    pub classification_reason: String,
+    pub qa04_primary_included: bool,
+    pub route_commit_event_id: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -265,26 +290,60 @@ pub struct CapturedObservation {
 #[derive(Debug, Default)]
 struct CaptureBuffer {
     next_sequence: u64,
+    attempted_events: u64,
+    append_cost_nanos: u64,
     observations: Vec<CapturedObservation>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum InstrumentationMode {
+    Capture,
+    Minimal,
 }
 
 pub struct InMemoryObservationCollector<C> {
     context: ObservationContext,
     clock: C,
+    mode: InstrumentationMode,
     buffer: Mutex<CaptureBuffer>,
 }
 
 impl<C: Clock> InMemoryObservationCollector<C> {
     #[must_use]
     pub fn with_capacity(context: ObservationContext, clock: C, capacity: usize) -> Self {
+        Self::with_mode(context, clock, capacity, InstrumentationMode::Capture)
+    }
+
+    #[must_use]
+    pub fn with_mode(
+        context: ObservationContext,
+        clock: C,
+        capacity: usize,
+        mode: InstrumentationMode,
+    ) -> Self {
         Self {
             context,
             clock,
+            mode,
             buffer: Mutex::new(CaptureBuffer {
                 next_sequence: 0,
+                attempted_events: 0,
+                append_cost_nanos: 0,
                 observations: Vec::with_capacity(capacity),
             }),
         }
+    }
+
+    #[must_use]
+    pub fn instrumentation_mode(&self) -> InstrumentationMode {
+        self.mode
+    }
+
+    #[must_use]
+    pub fn capture_diagnostics(&self) -> (u64, u64) {
+        let buffer = self.buffer.lock().expect("event buffer poisoned");
+        (buffer.attempted_events, buffer.append_cost_nanos)
     }
 
     #[must_use]
@@ -336,7 +395,12 @@ impl<C: Clock> InMemoryObservationCollector<C> {
         product_correlation: ProductCorrelation,
     ) {
         let timestamp = self.clock.now();
+        let append_started = Instant::now();
         let mut buffer = self.buffer.lock().expect("event buffer poisoned");
+        buffer.attempted_events += 1;
+        if self.mode == InstrumentationMode::Minimal {
+            return;
+        }
         let sequence_number = buffer.next_sequence;
         buffer.next_sequence += 1;
         buffer.observations.push(CapturedObservation {
@@ -346,6 +410,9 @@ impl<C: Clock> InMemoryObservationCollector<C> {
             product_correlation,
             emitter,
         });
+        buffer.append_cost_nanos = buffer
+            .append_cost_nanos
+            .saturating_add(u64::try_from(append_started.elapsed().as_nanos()).unwrap_or(u64::MAX));
     }
 }
 
@@ -371,5 +438,21 @@ pub mod serialization {
             writer.write_all(b"\n").map_err(serde_json::Error::io)?;
         }
         Ok(())
+    }
+
+    pub fn read_jsonl<T: for<'de> Deserialize<'de>, R: BufRead>(
+        reader: R,
+    ) -> serde_json::Result<Vec<T>> {
+        reader
+            .lines()
+            .filter_map(|line| match line {
+                Ok(line) if line.trim().is_empty() => None,
+                other => Some(other),
+            })
+            .map(|line| {
+                let line = line.map_err(serde_json::Error::io)?;
+                serde_json::from_str(&line)
+            })
+            .collect()
     }
 }

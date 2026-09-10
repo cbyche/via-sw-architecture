@@ -203,3 +203,9 @@ results/reports/  human-readable report material
 Scenario, behavior plan, fixture/profile, schema, architecture and scoring versions are preserved in raw run provenance.
 
 Final corpus weighting, QA-04 aggregation and no-route-commit treatment are frozen only after Pilot/calibration and before final A/B/C/D evaluation.
+
+The Rust Pilot runner writes one create-new directory per measured episode under
+`results/raw/pilot-v0/<run-id>/`. Warm-up episodes exercise the same runtime path
+but are excluded from the measured population and are not persisted by the v0
+runner. JSON serialization, file I/O, Python, reporting, and scoring remain
+outside the timed interval.

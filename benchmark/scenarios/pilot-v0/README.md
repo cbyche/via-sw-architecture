@@ -84,6 +84,8 @@ Golden parity fixtures live under `benchmark/fixtures/pilot-v0/golden/`:
 - `invalid-missing-required-field.json`
 - `invalid-unknown-field.json`
 - `invalid-behavior-enum.json`
+- `validation-expectations.json` — shared machine-readable ACCEPT/REJECT and
+  reason-category manifest for Rust and Session-3 Python parity tests
 
 The same files are intended for the later Python loader tests.
 
