@@ -36,26 +36,28 @@ facts; they do not select the current turn's task.
 
 ## QA eligibility
 
-| Pilot scenario | Catalog class | QA-01 | QA-02 | QA-04 | Route commit expected |
+| Pilot scenario | Catalog class | QA-01 | QA-02 | QA-04 | Route commit expectation |
 | --- | --- | :---: | :---: | :---: | :---: |
-| P01 | R1 | yes | yes | yes | yes |
-| P02 | R2 | yes | yes | yes | yes |
-| P03 | R3 | yes | yes | yes | yes |
-| P04 | R4 | no | yes | yes | yes |
-| P05 | R5 | no | yes | yes | yes |
-| P06 | R6 | no | yes | yes | yes |
-| P07 | R7 | no | yes | yes | yes |
-| P08 | R10 | no | yes | yes | no |
-| P09 | R10 | no | yes | yes | no |
-| P10 | R10 | no | yes | yes | no |
+| P01 | R1 | yes | yes | yes | REQUIRED |
+| P02 | R2 | yes | yes | yes | REQUIRED |
+| P03 | R3 | yes | yes | yes | REQUIRED |
+| P04 | R4 | no | yes | yes | REQUIRED |
+| P05 | R5 | no | yes | yes | REQUIRED |
+| P06 | R6 | no | yes | yes | REQUIRED |
+| P07 | R7 | no | yes | yes | REQUIRED |
+| P08 | R10 | no | yes | yes | FORBIDDEN |
+| P09 | R10 | no | yes | yes | OPTIONAL |
+| P10 | R10 | no | yes | yes | FORBIDDEN |
 
 QA-01 eligibility is fixed by workload semantics, not observed duration. P01,
 P02 and P03 reference controlled Voice fixtures with benchmark-authoritative
 ground-truth acoustic EOS offsets. Runtime VAD is explicitly non-authoritative.
 
 QA-04 eligibility does not decide how terminal no-route-commit episodes enter a
-future aggregate. P08, P09 and P10 preserve this distinction by declaring that
-route commit is not expected under their initial terminal fault condition.
+future aggregate. `REQUIRED` denotes normal route-oriented scenarios,
+`FORBIDDEN` denotes P08/P10 terminal faults before commit, and `OPTIONAL` keeps
+P09 neutral: the architecture may reject the wrong proposal, commit it and fail
+QA-02 conformance, or recover through an existing Base mechanism.
 
 ## Schema and validation policy
 

@@ -118,8 +118,16 @@ pub struct QaFlag {
 #[serde(deny_unknown_fields)]
 pub struct Qa04Flag {
     pub eligible: bool,
-    pub route_commit_expected: bool,
+    pub route_commit_expectation: RouteCommitExpectation,
     pub exclusion_reason: String,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum RouteCommitExpectation {
+    Required,
+    Forbidden,
+    Optional,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -809,6 +817,20 @@ fn validate_pilot_semantics(corpus: &PilotCorpus) -> Result<(), AssetError> {
         .collect();
     if qa01_ids != HashSet::from(["P01", "P02", "P03"]) {
         return invalid("QA-01 Pilot population must be exactly P01, P02 and P03");
+    }
+
+    for scenario in &corpus.scenarios {
+        let expected = match scenario.scenario_id.as_str() {
+            "P08" | "P10" => RouteCommitExpectation::Forbidden,
+            "P09" => RouteCommitExpectation::Optional,
+            _ => RouteCommitExpectation::Required,
+        };
+        if scenario.qa_eligibility.qa04.route_commit_expectation != expected {
+            return invalid(format!(
+                "{} route-commit expectation must be {expected:?}",
+                scenario.scenario_id
+            ));
+        }
     }
 
     let p09_plan = corpus

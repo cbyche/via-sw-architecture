@@ -59,7 +59,7 @@ QA-02
 
 QA-04
   -> representative initial execution-routing episode
-  -> route_commit_expected declared
+  -> route_commit_expectation REQUIRED/FORBIDDEN/OPTIONAL declared
   -> final no-route-commit aggregation treatment TBD
 ```
 

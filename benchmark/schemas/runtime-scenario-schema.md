@@ -84,7 +84,7 @@ qa_eligibility:
     exclusion_reason
   qa04:
     eligible
-    route_commit_expected
+    route_commit_expectation
     exclusion_reason
   mandatory_gate_refs[]
 ```
@@ -109,13 +109,20 @@ Eligibility requires a versioned Architecture Constraint Manifest.
 
 ## QA-04
 
-Scenario definition records whether an initial route commit is expected.
+Scenario definition records the three-state expectation for an initial route
+commit:
+
+```text
+REQUIRED  -> a normal route-oriented scenario expects an initial commit
+FORBIDDEN -> Base semantics expect terminal failure before commit
+OPTIONAL  -> commit/no-commit is an observed correctness fact, not a precondition
+```
 
 Minimum fields:
 
 ```text
 qa04_eligible
-route_commit_expected
+route_commit_expectation
 ```
 
 Runtime records later preserve:
@@ -461,7 +468,7 @@ Reject/flag a scenario when:
 - scenario tags are used as runtime route hints;
 - a QA-01 eligible scenario has no Voice fixture or acoustic EOS annotation;
 - a QA-02 eligible scenario has no resolvable constraint manifest;
-- a QA-04 eligible scenario does not define `route_commit_expected`;
+- a QA-04 eligible scenario does not define `route_commit_expectation`;
 - semantic behavior is specified only by model-call ordinal;
 - final qualification uses unfrozen scenario/catalog/profile versions.
 
