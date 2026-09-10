@@ -1,0 +1,35 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/bench-core",
+    "crates/bench-events",
+    "crates/bench-fixtures",
+    "crates/bench-replay",
+    "crates/bench-runner",
+    "crates/bench-oracle",
+]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.94"
+license = "UNLICENSED"
+publish = false
+
+[workspace.dependencies]
+bench-core = { path = "crates/bench-core" }
+bench-events = { path = "crates/bench-events" }
+bench-fixtures = { path = "crates/bench-fixtures" }
+bench-replay = { path = "crates/bench-replay" }
+bench-oracle = { path = "crates/bench-oracle" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["macros", "rt", "sync", "time"] }
+
+[profile.qualification]
+inherits = "release"
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+debug = false
+incremental = false
+panic = "abort"
