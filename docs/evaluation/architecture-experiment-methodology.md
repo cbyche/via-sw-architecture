@@ -6,6 +6,8 @@ This document defines how VIA compares SW architecture alternatives without allo
 
 It is a project methodology, not a claim that there is a single standardized “LLM architecture replay” method.
 
+The central vNext evaluation flow is summarized in `docs/evaluation/evaluation-strategy.md`; this document preserves the detailed experimental rationale and controls.
+
 ## Experimental model
 
 For DP-00:
@@ -374,7 +376,7 @@ Must-pass gates:
 
 A must-pass violation cannot be compensated by another QA's high score.
 
-The exact executable gate set is traced/frozen in a later central rebaseline/benchmark checkpoint.
+The exact executable gate set is traced/frozen in the central vNext baseline and completed during benchmark/executable-spec work; numeric criteria that are not yet justified remain TBD.
 
 ## Reference machine and environment
 
@@ -446,12 +448,14 @@ Evolution scenarios evaluated against pre-frozen Expected Change Roles and alter
 
 Logical ORCHESTRATION/MIXED model calls from request-processing start through Execution Route Commit; Primary = Average Model Calls to Commit Execution Route.
 
-## Central rebaseline status
+## Central vNext rebaseline integration
 
-This methodology update does not modify:
+The detailed methodology is now linked into the central vNext spine:
 
-- `docs/requirements/requirements-v1.1.md`;
-- central QA↔DP traceability;
-- existing central `evaluation-strategy.md`.
+- `docs/requirements/requirements-vNext.md` — Architecture Evaluation Working Baseline;
+- `docs/architecture/qa-dp-traceability.md` — DP-00 / Top-QA / Legacy-QA traceability;
+- `docs/evaluation/evaluation-strategy.md` — central evaluation pipeline;
+- `docs/evaluation/evaluation-principles.md` — detailed scoring/isolation/neutrality principles;
+- `docs/architecture/analysis/final-report-evidence-index.md` — report/reviewer evidence navigation.
 
-Those are intentionally deferred to a separate central vNext rebaseline checkpoint.
+This integration does not select a DP-00 winner, freeze TBD thresholds, or modify `requirements-v1.1.md`.
