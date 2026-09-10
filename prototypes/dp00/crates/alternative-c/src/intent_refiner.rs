@@ -15,7 +15,7 @@ pub fn refine<M: ModelPort>(model: &M, context: &ContextPackage) -> Result<Norma
 where
     M::Error: std::fmt::Debug,
 {
-    let output = model
+    let response = model
         .generate(ModelRequest {
             decision_owner: DecisionOwner::from("C.IntentRefiner"),
             semantic_responsibilities: vec![
@@ -29,8 +29,10 @@ where
                 version: "v0".into(),
             },
         })
-        .map_err(|error| format!("model error: {error:?}"))?
-        .composite_output;
+        .map_err(|error| format!("model error: {error:?}"))?;
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
     if output.contains("AMBIGUOUS_DOCUMENT") {
         Ok(NormalizedIntent::AmbiguousDocument)
     } else if output.contains("OPEN_RIGHT_DOCUMENT") {

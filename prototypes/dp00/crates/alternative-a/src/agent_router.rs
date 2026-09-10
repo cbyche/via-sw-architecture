@@ -30,14 +30,15 @@ where
         })
         .map_err(|error| format!("model error: {error:?}"))?;
 
-    if response.composite_output.contains("NETWORK_AGENT") {
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
+
+    if output.contains("NETWORK_AGENT") {
         Ok(ExecutorId::from("NetworkAgent"))
-    } else if response.composite_output.contains("ARGO") {
+    } else if output.contains("ARGO") {
         Ok(ExecutorId::from("ARGO"))
     } else {
-        Err(format!(
-            "unsupported executor selection: {}",
-            response.composite_output
-        ))
+        Err(format!("unsupported executor selection: {}", output))
     }
 }

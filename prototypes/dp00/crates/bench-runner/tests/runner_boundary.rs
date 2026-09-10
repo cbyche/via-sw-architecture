@@ -43,6 +43,7 @@ impl EvidenceSource for EmptyEvidence {
 struct RecordingFixtures {
     before_called: bool,
     after_called: bool,
+    failure_called: bool,
 }
 
 impl FixtureLifecycle for RecordingFixtures {
@@ -61,6 +62,56 @@ impl FixtureLifecycle for RecordingFixtures {
         self.after_called = true;
         Ok(())
     }
+
+    fn after_failure(&mut self) -> Result<(), Self::Error> {
+        self.failure_called = true;
+        Ok(())
+    }
+}
+
+#[test]
+fn runner_invokes_terminal_failure_lifecycle_on_architecture_error() {
+    struct FailingAut;
+    impl ArchitectureUnderTest for FailingAut {
+        type Error = &'static str;
+
+        fn setup(&mut self, _state: InitialProductState) -> Result<(), Self::Error> {
+            Ok(())
+        }
+
+        fn handle_user_turn(&mut self, _turn: UserTurn) -> Result<(), Self::Error> {
+            Err("model timeout")
+        }
+
+        fn teardown(&mut self) -> Result<(), Self::Error> {
+            Ok(())
+        }
+    }
+
+    let mut aut = FailingAut;
+    let mut evidence = EmptyEvidence;
+    let mut fixtures = RecordingFixtures::default();
+    let result = Runner.run(
+        &mut aut,
+        &mut evidence,
+        &mut fixtures,
+        ScenarioStimulus {
+            initial_state: InitialProductState::default(),
+            turns: vec![UserTurn {
+                turn_id: "turn-1".into(),
+                modality: bench_core::InputModality::Text,
+                content: "test".into(),
+                context_evidence: Vec::new(),
+            }],
+        },
+    );
+
+    assert!(matches!(
+        result,
+        Err(bench_runner::RunnerError::Architecture("model timeout"))
+    ));
+    assert!(fixtures.failure_called);
+    assert!(!fixtures.after_called);
 }
 
 #[test]

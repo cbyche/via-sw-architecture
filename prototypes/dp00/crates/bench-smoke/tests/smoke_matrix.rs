@@ -7,7 +7,7 @@ use bench_core::{
     ExecutorId, InitialProductState, InitialTaskState, InputModality, ProductFact, TaskId, TurnId,
     UserTurn,
 };
-use bench_events::{CanonicalEvent, CanonicalEventKind, EventEmitter};
+use bench_events::{CanonicalEvent, CanonicalEventKind, EventEmitter, validate_episode};
 use bench_runner::{RawEvidence, Runner, ScenarioStimulus};
 use bench_smoke::{Scenario, SmokePorts};
 
@@ -167,6 +167,7 @@ fn assert_case(alternative: &str, scenario: Scenario, expected_calls: usize) {
     assert_route(alternative, scenario, &result.events);
     assert_event_contract(scenario, &result.events);
     assert_authority(&result.events);
+    assert_eq!(validate_episode(&result.events), Vec::new());
 }
 
 fn expected_owners(alternative: &str, scenario: Scenario) -> Vec<String> {

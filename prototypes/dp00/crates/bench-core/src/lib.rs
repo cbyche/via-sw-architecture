@@ -137,6 +137,7 @@ pub enum ModelStatus {
     Completed,
     Failed,
     TimedOut,
+    NoResponse,
     Malformed,
 }
 
@@ -144,6 +145,19 @@ pub enum ModelStatus {
 pub struct ModelResponse {
     pub composite_output: String,
     pub model_status: ModelStatus,
+}
+
+impl ModelResponse {
+    /// Returns model output only when the logical generation completed normally.
+    /// Architecture code must not interpret timeout/malformed/failure payloads as
+    /// valid semantic decisions.
+    pub fn completed_output(&self) -> Result<&str, ModelStatus> {
+        if self.model_status == ModelStatus::Completed {
+            Ok(&self.composite_output)
+        } else {
+            Err(self.model_status)
+        }
+    }
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
@@ -164,12 +178,22 @@ pub struct ArchitectureObservation {
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ArchitectureEvent {
     ProcessingStarted,
-    ClarificationRequested { prompt: String },
+    ClarificationRequested {
+        prompt: String,
+    },
     ClarificationResolved,
     TaskCreated,
     TaskReused,
-    RouteCandidateObserved { route: ExecutionRoute },
-    RouteCommitted { route: ExecutionRoute },
+    RouteCandidateObserved {
+        route: ExecutionRoute,
+    },
+    RouteCandidateRejected {
+        route: ExecutionRoute,
+        reason: String,
+    },
+    RouteCommitted {
+        route: ExecutionRoute,
+    },
     ResultBound,
     CancelPropagated,
 }
@@ -208,6 +232,10 @@ pub struct ExecutionResult {
 
 pub trait ExecutionPort: Send + Sync {
     type Error;
+
+    fn accept_route(&self, _route: &ExecutionRoute) -> Result<(), Self::Error> {
+        Ok(())
+    }
 
     fn execute(&self, request: ExecutionRequest) -> Result<ExecutionResult, Self::Error>;
 }

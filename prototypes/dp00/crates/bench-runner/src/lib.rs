@@ -34,6 +34,10 @@ pub trait FixtureLifecycle {
     fn before_episode(&mut self) -> Result<(), Self::Error>;
     fn before_user_turn(&mut self, turn_index: usize) -> Result<(), Self::Error>;
     fn after_episode(&mut self) -> Result<(), Self::Error>;
+
+    fn after_failure(&mut self) -> Result<(), Self::Error> {
+        Ok(())
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -59,20 +63,25 @@ impl Runner {
         F: FixtureLifecycle,
     {
         fixtures.before_episode().map_err(RunnerError::Fixture)?;
-        architecture
-            .setup(stimulus.initial_state)
-            .map_err(RunnerError::Architecture)?;
+        if let Err(error) = architecture.setup(stimulus.initial_state) {
+            fixtures.after_failure().map_err(RunnerError::Fixture)?;
+            return Err(RunnerError::Architecture(error));
+        }
 
         for (turn_index, turn) in stimulus.turns.into_iter().enumerate() {
             fixtures
                 .before_user_turn(turn_index)
                 .map_err(RunnerError::Fixture)?;
-            architecture
-                .handle_user_turn(turn)
-                .map_err(RunnerError::Architecture)?;
+            if let Err(error) = architecture.handle_user_turn(turn) {
+                fixtures.after_failure().map_err(RunnerError::Fixture)?;
+                return Err(RunnerError::Architecture(error));
+            }
         }
 
-        architecture.teardown().map_err(RunnerError::Architecture)?;
+        if let Err(error) = architecture.teardown() {
+            fixtures.after_failure().map_err(RunnerError::Fixture)?;
+            return Err(RunnerError::Architecture(error));
+        }
         fixtures.after_episode().map_err(RunnerError::Fixture)?;
         Ok(evidence.take_raw_evidence())
     }

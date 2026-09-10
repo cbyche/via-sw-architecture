@@ -54,6 +54,42 @@ pub struct ResponsibilityMapping {
 }
 
 impl ResponsibilityMapping {
+    #[must_use]
+    pub fn dp00_base() -> Self {
+        use SemanticResponsibility::{
+            AgentSelection, ExecutionRouteSelection, IntentInterpretation, ReferentResolution,
+        };
+
+        Self::default()
+            .allow(
+                "A.IntentRefiner".into(),
+                [IntentInterpretation, ReferentResolution],
+            )
+            .allow("A.AgentRouter".into(), [AgentSelection])
+            .allow(
+                "B.ARGOPrimary".into(),
+                [
+                    IntentInterpretation,
+                    ReferentResolution,
+                    ExecutionRouteSelection,
+                    AgentSelection,
+                ],
+            )
+            .allow(
+                "C.IntentRefiner".into(),
+                [IntentInterpretation, ReferentResolution],
+            )
+            .allow("C.AgentRouter".into(), [AgentSelection])
+            .allow(
+                "D.IntentRefiner".into(),
+                [IntentInterpretation, ReferentResolution],
+            )
+            .allow(
+                "D.ExecutionPathSelector".into(),
+                [ExecutionRouteSelection, AgentSelection],
+            )
+    }
+
     pub fn allow(
         mut self,
         owner: DecisionOwner,
@@ -67,6 +103,9 @@ impl ResponsibilityMapping {
     }
 
     fn validates(&self, request: &ModelRequest) -> bool {
+        if request.semantic_responsibilities.is_empty() {
+            return false;
+        }
         self.allowed
             .get(&request.decision_owner)
             .is_some_and(|allowed| {
@@ -89,6 +128,16 @@ pub enum ReplayError {
 #[derive(Debug, Default)]
 struct ReplayState {
     consumed: HashMap<SemanticResponsibility, usize>,
+    audit: Vec<ReplayAuditEntry>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ReplayAuditEntry {
+    pub decision_owner: DecisionOwner,
+    pub responsibility: SemanticResponsibility,
+    pub operation_key: String,
+    pub attempt: usize,
+    pub status: ModelStatus,
 }
 
 pub struct ReplayAdapter {
@@ -126,6 +175,15 @@ impl ReplayAdapter {
             .get(&responsibility)
             .map(|operation| operation.operation_key.as_str())
     }
+
+    #[must_use]
+    pub fn audit_snapshot(&self) -> Vec<ReplayAuditEntry> {
+        self.state
+            .lock()
+            .expect("replay state poisoned")
+            .audit
+            .clone()
+    }
 }
 
 impl ModelPort for ReplayAdapter {
@@ -151,10 +209,18 @@ impl ModelPort for ReplayAdapter {
                 .get(*consumed)
                 .ok_or(ReplayError::AttemptExhausted(responsibility))?;
             *consumed += 1;
+            let attempt_number = *consumed;
             outputs.push(attempt.output.clone());
             if attempt.status != ModelStatus::Completed {
                 response_status = attempt.status;
             }
+            state.audit.push(ReplayAuditEntry {
+                decision_owner: request.decision_owner.clone(),
+                responsibility,
+                operation_key: operation.operation_key.clone(),
+                attempt: attempt_number,
+                status: attempt.status,
+            });
         }
 
         Ok(ModelResponse {

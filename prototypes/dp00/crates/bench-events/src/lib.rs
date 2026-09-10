@@ -4,8 +4,8 @@ use std::io::Write;
 use std::sync::Mutex;
 
 use bench_core::{
-    ArchitectureEvent, ArchitectureObservation, Clock, DecisionOwner, MonotonicTimestamp,
-    ObservationPort, ProductCorrelation, SemanticResponsibility,
+    ArchitectureEvent, ArchitectureObservation, Clock, DecisionOwner, ModelStatus,
+    MonotonicTimestamp, ObservationPort, ProductCorrelation, SemanticResponsibility,
 };
 use serde::{Deserialize, Serialize};
 
@@ -82,13 +82,173 @@ impl CanonicalEvent {
     pub fn event(&self) -> &CanonicalEventKind {
         &self.event
     }
+
+    #[must_use]
+    pub fn run_id(&self) -> &str {
+        &self.run_id
+    }
+
+    #[must_use]
+    pub fn scenario_id(&self) -> &str {
+        &self.scenario_id
+    }
+
+    #[must_use]
+    pub fn alternative_id(&self) -> &str {
+        &self.alternative_id
+    }
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum ContractViolation {
+    MissingProcessingStart,
+    DuplicateInitialRouteCommit,
+    PrematureRouteCommit,
+    CompletedWithoutRouteCommit,
+    CompletedWithoutExecution,
+    CompletedWithoutAuthoritativeOutcome,
+    OutcomeNotProbeOwned,
+    FailedWithUsefulOutcome,
+    ConflictingTerminalEvents,
+    InvalidSuccessOrder,
+    InvalidClarificationOrder,
+}
+
+/// Checks topology-neutral canonical event invariants. Component-internal event
+/// order is intentionally outside this contract.
+#[must_use]
+pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
+    let mut violations = Vec::new();
+    let position = |predicate: fn(&CanonicalEventKind) -> bool| {
+        events.iter().position(|event| predicate(event.event()))
+    };
+    let processing = position(|event| {
+        matches!(
+            event,
+            CanonicalEventKind::Architecture(ArchitectureEvent::ProcessingStarted)
+        )
+    });
+    if processing.is_none() {
+        violations.push(ContractViolation::MissingProcessingStart);
+    }
+
+    let commits: Vec<_> = events
+        .iter()
+        .enumerate()
+        .filter(|(_, event)| {
+            matches!(
+                event.event(),
+                CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { .. })
+            )
+        })
+        .collect();
+    if commits.len() > 1 {
+        violations.push(ContractViolation::DuplicateInitialRouteCommit);
+    }
+    if let Some((commit_position, _)) = commits.first() {
+        let last_candidate_was_rejected =
+            events[..*commit_position]
+                .iter()
+                .rev()
+                .find_map(|event| match event.event() {
+                    CanonicalEventKind::Architecture(
+                        ArchitectureEvent::RouteCandidateRejected { .. },
+                    ) => Some(true),
+                    CanonicalEventKind::Architecture(
+                        ArchitectureEvent::RouteCandidateObserved { .. },
+                    ) => Some(false),
+                    _ => None,
+                });
+        if processing.is_some_and(|start| start >= *commit_position)
+            || last_candidate_was_rejected == Some(true)
+        {
+            violations.push(ContractViolation::PrematureRouteCommit);
+        }
+    }
+
+    let completed = position(|event| matches!(event, CanonicalEventKind::EpisodeCompleted));
+    let failed = position(|event| matches!(event, CanonicalEventKind::EpisodeFailed));
+    let execution = position(|event| matches!(event, CanonicalEventKind::ExecutionStarted));
+    let authoritative_outcome = events.iter().position(|event| {
+        matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved)
+            && event.emitter() == EventEmitter::OutcomeProbe
+    });
+    if completed.is_some() && failed.is_some() {
+        violations.push(ContractViolation::ConflictingTerminalEvents);
+    }
+    if completed.is_some() {
+        if commits.len() != 1 {
+            violations.push(ContractViolation::CompletedWithoutRouteCommit);
+        }
+        if execution.is_none() {
+            violations.push(ContractViolation::CompletedWithoutExecution);
+        }
+        if authoritative_outcome.is_none() {
+            violations.push(ContractViolation::CompletedWithoutAuthoritativeOutcome);
+        }
+        let model_started =
+            position(|event| matches!(event, CanonicalEventKind::ModelGenerationStarted));
+        let valid_order = processing
+            .zip(model_started)
+            .zip(commits.first().map(|(position, _)| *position))
+            .zip(execution)
+            .zip(authoritative_outcome)
+            .zip(completed)
+            .is_some_and(
+                |(((((processing, model), commit), execution), outcome), completed)| {
+                    processing < model
+                        && model < commit
+                        && commit < execution
+                        && execution < outcome
+                        && outcome < completed
+                },
+            );
+        if !valid_order {
+            violations.push(ContractViolation::InvalidSuccessOrder);
+        }
+    }
+    if failed.is_some()
+        && events
+            .iter()
+            .any(|event| matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved))
+    {
+        violations.push(ContractViolation::FailedWithUsefulOutcome);
+    }
+    if events.iter().any(|event| {
+        matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved)
+            && event.emitter() != EventEmitter::OutcomeProbe
+    }) {
+        violations.push(ContractViolation::OutcomeNotProbeOwned);
+    }
+
+    let requested = position(|event| {
+        matches!(
+            event,
+            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationRequested { .. })
+        )
+    });
+    let resolved = position(|event| {
+        matches!(
+            event,
+            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved)
+        )
+    });
+    if resolved.is_some_and(|resolved| requested.is_none_or(|requested| requested >= resolved)) {
+        violations.push(ContractViolation::InvalidClarificationOrder);
+    }
+    violations
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct LogicalModelCall {
     pub model_call_id: String,
+    pub logical_sequence: u64,
+    pub attempt: u32,
     pub decision_owner: DecisionOwner,
     pub semantic_responsibilities: Vec<SemanticResponsibility>,
+    pub status: ModelStatus,
+    pub route_committed_before_call: bool,
+    pub route_committed_after_call: bool,
     pub logical_start: MonotonicTimestamp,
     pub completion: MonotonicTimestamp,
 }

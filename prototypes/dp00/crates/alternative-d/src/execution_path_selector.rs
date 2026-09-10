@@ -13,7 +13,7 @@ pub fn select<M: ModelPort>(
 where
     M::Error: std::fmt::Debug,
 {
-    let output = model
+    let response = model
         .generate(ModelRequest {
             decision_owner: DecisionOwner::from("D.ExecutionPathSelector"),
             semantic_responsibilities: vec![
@@ -29,8 +29,10 @@ where
                 version: "v0".into(),
             },
         })
-        .map_err(|error| format!("model error: {error:?}"))?
-        .composite_output;
+        .map_err(|error| format!("model error: {error:?}"))?;
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
     let (kind, executor) = if output.contains("LOCAL_VOLUME") {
         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_VOLUME")

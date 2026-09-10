@@ -48,7 +48,9 @@ where
             },
         })
         .map_err(|error| format!("model error: {error:?}"))?;
-    let output = response.composite_output;
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
     if output.contains("AMBIGUOUS_DOCUMENT") {
         Ok(ArgoDecision::Clarify)
@@ -57,11 +59,11 @@ where
     } else if output.contains("NETWORK_AGENT") {
         Ok(ArgoDecision::Delegate {
             executor: ExecutorId::from("NetworkAgent"),
-            action: action(&output),
+            action: action(output),
         })
     } else if output.contains("ARGO_DIRECT") {
         Ok(ArgoDecision::Direct {
-            action: action(&output),
+            action: action(output),
         })
     } else {
         Err(format!("unsupported ARGO primary decision: {output}"))

@@ -33,7 +33,10 @@ where
         })
         .map_err(|error| format!("model error: {error:?}"))?;
 
-    parse(&response.composite_output)
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
+    parse(output)
 }
 
 fn parse(output: &str) -> Result<NormalizedIntent, String> {

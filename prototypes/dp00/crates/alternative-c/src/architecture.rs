@@ -136,6 +136,22 @@ where
         fast: bool,
     ) -> Result<(), String> {
         self.emit(
+            ArchitectureEvent::RouteCandidateObserved {
+                route: route.clone(),
+            },
+            Some(task_id.clone()),
+        );
+        if let Err(error) = self.executor.accept_route(&route) {
+            self.emit(
+                ArchitectureEvent::RouteCandidateRejected {
+                    route: route.clone(),
+                    reason: format!("synchronous dispatch reject: {error:?}"),
+                },
+                Some(task_id),
+            );
+            return Err(format!("executor rejected route: {error:?}"));
+        }
+        self.emit(
             ArchitectureEvent::RouteCommitted {
                 route: route.clone(),
             },

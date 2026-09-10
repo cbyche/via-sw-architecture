@@ -79,12 +79,27 @@ where
             &self.capability_facts,
             &self.policy_facts,
         )?;
-        let route = ExecutionRoute {
+        let mut route = ExecutionRoute {
             route_kind: ExecutionRouteKind::ExecutorDirect,
             initial_executor_id: executor_id.clone(),
             final_executor_id_if_known: Some(executor_id.clone()),
             delegation_chain: vec![executor_id],
         };
+        if self.accept_candidate(&route).is_err() {
+            let fallback = agent_router::select(
+                &self.model,
+                &intent,
+                &self.capability_facts,
+                &self.policy_facts,
+            )?;
+            route = ExecutionRoute {
+                route_kind: ExecutionRouteKind::ExecutorDirect,
+                initial_executor_id: fallback.clone(),
+                final_executor_id_if_known: Some(fallback.clone()),
+                delegation_chain: vec![fallback],
+            };
+            self.accept_candidate(&route)?;
+        }
         let task_id = self.tasks.create(route.clone());
         self.emit(ArchitectureEvent::TaskCreated, Some(task_id.clone()));
         self.commit_and_execute(task_id, route, format!("{intent:?}"))
@@ -108,7 +123,27 @@ where
             .cloned()
             .ok_or_else(|| "T1 route missing".to_owned())?;
         self.emit(ArchitectureEvent::TaskReused, Some(task_id.clone()));
+        self.accept_candidate(&route)?;
         self.commit_and_execute(task_id, route, "ContinueTask".into())
+    }
+
+    fn accept_candidate(&self, route: &ExecutionRoute) -> Result<(), String> {
+        self.emit(
+            ArchitectureEvent::RouteCandidateObserved {
+                route: route.clone(),
+            },
+            None,
+        );
+        self.executor.accept_route(route).map_err(|error| {
+            self.emit(
+                ArchitectureEvent::RouteCandidateRejected {
+                    route: route.clone(),
+                    reason: format!("synchronous dispatch reject: {error:?}"),
+                },
+                None,
+            );
+            format!("executor rejected route: {error:?}")
+        })
     }
 
     fn commit_and_execute(

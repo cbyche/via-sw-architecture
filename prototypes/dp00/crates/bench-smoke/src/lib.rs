@@ -135,11 +135,21 @@ impl ModelPort for SmokePorts {
             EventEmitter::ModelFixture,
             CanonicalEventKind::ModelGenerationStarted,
         );
-        self.inner
-            .requests
-            .lock()
-            .map_err(|_| "request trace poisoned")?
-            .push(request.clone());
+        let (logical_sequence, attempt) = {
+            let mut requests = self
+                .inner
+                .requests
+                .lock()
+                .map_err(|_| "request trace poisoned")?;
+            let sequence = requests.len() as u64 + 1;
+            let attempt = requests
+                .iter()
+                .filter(|prior| prior.decision_owner == request.decision_owner)
+                .count() as u32
+                + 1;
+            requests.push(request.clone());
+            (sequence, attempt)
+        };
         let response = self
             .inner
             .replay
@@ -151,8 +161,13 @@ impl ModelPort for SmokePorts {
             .map_err(|_| "model-call trace poisoned")?
             .push(LogicalModelCall {
                 model_call_id: format!("model-call-{call_number}"),
+                logical_sequence,
+                attempt,
                 decision_owner: request.decision_owner,
                 semantic_responsibilities: request.semantic_responsibilities,
+                status: response.model_status,
+                route_committed_before_call: false,
+                route_committed_after_call: false,
                 logical_start: MonotonicTimestamp(call_number * 10),
                 completion: MonotonicTimestamp(call_number * 10 + 1),
             });
@@ -250,6 +265,11 @@ impl FixtureLifecycle for SmokePorts {
         );
         Ok(())
     }
+
+    fn after_failure(&mut self) -> Result<(), Self::Error> {
+        self.capture(EventEmitter::Benchmark, CanonicalEventKind::EpisodeFailed);
+        Ok(())
+    }
 }
 
 fn observable_outcome(action: &str) -> String {
@@ -269,64 +289,6 @@ fn observable_outcome(action: &str) -> String {
 }
 
 fn replay(alternative: &str, scenario: Scenario) -> ReplayAdapter {
-    let owners = match alternative {
-        "A" => vec![
-            (
-                "A.IntentRefiner",
-                vec![
-                    SemanticResponsibility::IntentInterpretation,
-                    SemanticResponsibility::ReferentResolution,
-                ],
-            ),
-            (
-                "A.AgentRouter",
-                vec![SemanticResponsibility::AgentSelection],
-            ),
-        ],
-        "B" => vec![(
-            "B.ARGOPrimary",
-            vec![
-                SemanticResponsibility::IntentInterpretation,
-                SemanticResponsibility::ReferentResolution,
-                SemanticResponsibility::ExecutionRouteSelection,
-                SemanticResponsibility::AgentSelection,
-            ],
-        )],
-        "C" => vec![
-            (
-                "C.IntentRefiner",
-                vec![
-                    SemanticResponsibility::IntentInterpretation,
-                    SemanticResponsibility::ReferentResolution,
-                ],
-            ),
-            (
-                "C.AgentRouter",
-                vec![SemanticResponsibility::AgentSelection],
-            ),
-        ],
-        "D" => vec![
-            (
-                "D.IntentRefiner",
-                vec![
-                    SemanticResponsibility::IntentInterpretation,
-                    SemanticResponsibility::ReferentResolution,
-                ],
-            ),
-            (
-                "D.ExecutionPathSelector",
-                vec![
-                    SemanticResponsibility::ExecutionRouteSelection,
-                    SemanticResponsibility::AgentSelection,
-                ],
-            ),
-        ],
-        _ => panic!("unknown alternative"),
-    };
-    let mapping = owners.into_iter().fold(
-        ResponsibilityMapping::default(),
-        |mapping, (owner, responsibilities)| mapping.allow(owner.into(), responsibilities),
-    );
     ReplayAdapter::new(
         ReplayContext {
             run_id: format!("smoke-{alternative}-{}", scenario.id()),
@@ -340,7 +302,7 @@ fn replay(alternative: &str, scenario: Scenario) -> ReplayAdapter {
             owner_responsibility_mapping_version: "dp00-base-v0".into(),
             replay_payload_registry_version: "smoke-payload-v0".into(),
         },
-        mapping,
+        ResponsibilityMapping::dp00_base(),
         operations(alternative, scenario),
     )
 }

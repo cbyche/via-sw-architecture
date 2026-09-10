@@ -13,7 +13,7 @@ pub fn select<M: ModelPort>(
 where
     M::Error: std::fmt::Debug,
 {
-    let output = model
+    let response = model
         .generate(ModelRequest {
             decision_owner: DecisionOwner::from("C.AgentRouter"),
             semantic_responsibilities: vec![SemanticResponsibility::AgentSelection],
@@ -26,8 +26,10 @@ where
                 version: "v0".into(),
             },
         })
-        .map_err(|error| format!("model error: {error:?}"))?
-        .composite_output;
+        .map_err(|error| format!("model error: {error:?}"))?;
+    let output = response
+        .completed_output()
+        .map_err(|status| format!("model generation did not complete: {status:?}"))?;
     if output.contains("NETWORK_AGENT") {
         Ok(ExecutorId::from("NetworkAgent"))
     } else if output.contains("ARGO") {
