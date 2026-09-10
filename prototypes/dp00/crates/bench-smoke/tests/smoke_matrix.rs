@@ -272,7 +272,7 @@ fn assert_event_contract(scenario: Scenario, events: &[CanonicalEvent]) {
         matches!(event, CanonicalEventKind::ExecutionStarted)
     });
     let outcome = position(events, |event| {
-        matches!(event, CanonicalEventKind::UsefulOutcomeObserved)
+        matches!(event, CanonicalEventKind::UsefulOutcomeObserved { .. })
     });
     let completed = position(events, |event| {
         matches!(event, CanonicalEventKind::EpisodeCompleted)
@@ -305,7 +305,7 @@ fn assert_event_contract(scenario: Scenario, events: &[CanonicalEvent]) {
         let resolved = position(events, |event| {
             matches!(
                 event,
-                CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved)
+                CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved { .. })
             )
         });
         assert!(requested < resolved);
@@ -329,7 +329,7 @@ fn assert_authority(events: &[CanonicalEvent]) {
             | CanonicalEventKind::ModelGenerationCompleted => {
                 assert_eq!(event.emitter(), EventEmitter::ModelFixture)
             }
-            CanonicalEventKind::UsefulOutcomeObserved => {
+            CanonicalEventKind::UsefulOutcomeObserved { .. } => {
                 assert_eq!(event.emitter(), EventEmitter::OutcomeProbe)
             }
             CanonicalEventKind::EpisodeCompleted => {
@@ -337,7 +337,7 @@ fn assert_authority(events: &[CanonicalEvent]) {
             }
             CanonicalEventKind::Architecture(_)
             | CanonicalEventKind::ExecutionStarted
-            | CanonicalEventKind::EpisodeFailed => {}
+            | CanonicalEventKind::EpisodeFailed { .. } => {}
         }
     }
 }

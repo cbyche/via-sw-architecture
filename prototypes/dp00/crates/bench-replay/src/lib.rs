@@ -127,7 +127,8 @@ pub enum ReplayError {
 
 #[derive(Debug, Default)]
 struct ReplayState {
-    consumed: HashMap<SemanticResponsibility, usize>,
+    current_turn_id: Option<String>,
+    consumed: HashMap<String, usize>,
     audit: Vec<ReplayAuditEntry>,
 }
 
@@ -143,7 +144,7 @@ pub struct ReplayAuditEntry {
 pub struct ReplayAdapter {
     context: ReplayContext,
     mapping: ResponsibilityMapping,
-    operations: HashMap<SemanticResponsibility, ReplayOperation>,
+    operations: HashMap<SemanticResponsibility, Vec<ReplayOperation>>,
     state: Mutex<ReplayState>,
 }
 
@@ -156,10 +157,16 @@ impl ReplayAdapter {
         Self {
             context,
             mapping,
-            operations: operations
-                .into_iter()
-                .map(|operation| (operation.responsibility, operation))
-                .collect(),
+            operations: operations.into_iter().fold(
+                HashMap::<_, Vec<_>>::new(),
+                |mut grouped, operation| {
+                    grouped
+                        .entry(operation.responsibility)
+                        .or_default()
+                        .push(operation);
+                    grouped
+                },
+            ),
             state: Mutex::new(ReplayState::default()),
         }
     }
@@ -173,7 +180,16 @@ impl ReplayAdapter {
     pub fn resolved_operation_key(&self, responsibility: SemanticResponsibility) -> Option<&str> {
         self.operations
             .get(&responsibility)
+            .and_then(|operations| operations.first())
             .map(|operation| operation.operation_key.as_str())
+    }
+
+    pub fn set_current_turn(&self, turn_id: &str) -> Result<(), ReplayError> {
+        self.state
+            .lock()
+            .map_err(|_| ReplayError::PoisonedState)?
+            .current_turn_id = Some(turn_id.to_owned());
+        Ok(())
     }
 
     #[must_use]
@@ -200,15 +216,32 @@ impl ModelPort for ReplayAdapter {
         let mut first_unresolved = None;
 
         for responsibility in request.semantic_responsibilities {
-            let Some(operation) = self.operations.get(&responsibility) else {
+            let Some(operations) = self.operations.get(&responsibility) else {
                 first_unresolved.get_or_insert(responsibility);
                 continue;
             };
-            let consumed = state.consumed.entry(responsibility).or_default();
-            let attempt = operation
-                .attempts
-                .get(*consumed)
-                .ok_or(ReplayError::AttemptExhausted(responsibility))?;
+            let turn_prefix = state
+                .current_turn_id
+                .as_ref()
+                .map(|turn| format!("{}.", turn.to_ascii_lowercase()));
+            let operation = turn_prefix
+                .as_ref()
+                .and_then(|prefix| {
+                    operations
+                        .iter()
+                        .find(|operation| operation.operation_key.starts_with(prefix))
+                })
+                .or_else(|| (operations.len() == 1).then(|| &operations[0]));
+            let Some(operation) = operation else {
+                first_unresolved.get_or_insert(responsibility);
+                continue;
+            };
+            let operation_key = operation.operation_key.clone();
+            let consumed = state.consumed.entry(operation_key.clone()).or_default();
+            let Some(attempt) = operation.attempts.get(*consumed) else {
+                first_unresolved.get_or_insert(responsibility);
+                continue;
+            };
             *consumed += 1;
             let attempt_number = *consumed;
             outputs.push(attempt.output.clone());
@@ -218,7 +251,7 @@ impl ModelPort for ReplayAdapter {
             state.audit.push(ReplayAuditEntry {
                 decision_owner: request.decision_owner.clone(),
                 responsibility,
-                operation_key: operation.operation_key.clone(),
+                operation_key,
                 attempt: attempt_number,
                 status: attempt.status,
             });

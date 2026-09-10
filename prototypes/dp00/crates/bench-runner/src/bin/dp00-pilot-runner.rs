@@ -9,9 +9,10 @@ use bench_events::InstrumentationMode;
 use bench_fixtures::pilot_assets::load_pilot_corpus;
 use bench_runner::pilot_runtime::execute_episode;
 use bench_runner::{
-    ASYNC_RUNTIME, Alternative, ControlledLatencyProfile, PilotRunnerConfig,
-    RUNTIME_WORKER_POLICY_VERSION, RunMode, RunProvenance, build_episode_plan,
-    build_qualification_runtime, command_output, file_identity, guard_run_mode,
+    ASYNC_RUNTIME, Alternative, CampaignConfiguration, CampaignProvenance,
+    ControlledLatencyProfile, PilotCampaignConfig, PilotRunnerConfig,
+    RUNTIME_WORKER_POLICY_VERSION, RunMode, RunProvenance, begin_campaign, begin_campaign_profile,
+    build_episode_plan, build_qualification_runtime, command_output, file_identity, guard_run_mode,
     inspect_source_state, persist_raw_run,
 };
 
@@ -27,7 +28,8 @@ fn main() -> ExitCode {
 
 fn run() -> Result<(), String> {
     let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
-    let config = parse_config(env::args().skip(1), &repository_root)?;
+    let campaign_config = parse_config(env::args().skip(1), &repository_root)?;
+    let config = &campaign_config.runner;
     let source = inspect_source_state(&repository_root).map_err(|error| error.to_string())?;
     guard_run_mode(config.run_mode, &source).map_err(str::to_owned)?;
     let runtime = build_qualification_runtime().map_err(|error| error.to_string())?;
@@ -51,119 +53,159 @@ fn run() -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     let cargo_lock_identity = file_identity(&repository_root.join("prototypes/dp00/Cargo.lock"))
         .map_err(|error| error.to_string())?;
-    std::fs::create_dir_all(&config.raw_output_root).map_err(|error| error.to_string())?;
-    let plan_items = build_episode_plan(&config);
-    let mut persisted = 0_u64;
-
-    for (ordinal, item) in plan_items.into_iter().enumerate() {
-        let scenario = corpus
-            .scenarios
-            .iter()
-            .find(|scenario| scenario.scenario_id == item.scenario_id)
-            .ok_or_else(|| format!("unknown scenario {}", item.scenario_id))?;
-        let behavior_plan = corpus
-            .behavior_plans
-            .plans
-            .iter()
-            .find(|plan| plan.scenario_id == item.scenario_id)
-            .ok_or_else(|| format!("missing behavior plan for {}", item.scenario_id))?;
-        let mode_label = if config.run_mode == RunMode::Official {
-            "official"
-        } else {
-            "dev"
-        };
-        let population_label = if item.measurement_population {
-            "measured"
-        } else {
-            "warmup"
-        };
-        let run_id = format!(
-            "{mode_label}-{population_label}-{invocation_id}-{}-{}-r{}-p{}",
-            item.scenario_id,
-            item.alternative.id(),
-            item.repetition_index,
-            item.sequence_position
-        );
-        let execution = execute_episode(
-            &corpus,
-            scenario,
-            item.alternative,
-            &run_id,
-            &source.source_git_commit,
-            config.instrumentation_mode,
-            config.latency_profile.clone(),
-        )?;
-        if !item.measurement_population {
-            continue;
-        }
-        let provenance = RunProvenance {
-            provenance_schema_version: "dp00-pilot-provenance-v1".into(),
-            run_id,
-            official: config.run_mode == RunMode::Official,
+    let campaign_id = format!("official-{invocation_id}");
+    let campaign_directory = if config.run_mode == RunMode::Official {
+        let provenance = CampaignProvenance {
+            provenance_schema_version: "dp00-pilot-campaign-provenance-v1".into(),
+            campaign_id: campaign_id.clone(),
             source_git_commit: source.source_git_commit.clone(),
-            working_tree_clean: source.working_tree_clean,
+            initial_working_tree_clean: source.working_tree_clean,
             pilot_corpus_id: corpus.index.pilot_corpus_id.clone(),
             pilot_corpus_version: corpus.index.pilot_corpus_version.clone(),
-            alternative: item.alternative,
-            scenario_id: scenario.scenario_id.clone(),
-            scenario_version: scenario.scenario_version.clone(),
-            semantic_behavior_plan_id: behavior_plan.behavior_plan_id.clone(),
-            semantic_behavior_plan_version: behavior_plan.behavior_plan_version.clone(),
-            latency_profile: config.latency_profile.clone(),
-            warmup_count: config.warmup_count,
-            measured_repetition_count: config.measured_repetition_count,
-            measurement_population: item.measurement_population,
-            order_policy: config.order_policy.clone(),
-            order_cycle: item.order_cycle,
-            sequence_position: item.sequence_position,
-            repetition_index: item.repetition_index,
-            instrumentation_mode: config.instrumentation_mode,
-            episode_elapsed_nanos: execution.episode_elapsed_nanos,
-            event_count: execution.attempted_event_count,
-            capture_append_cost_nanos: execution.capture_append_cost_nanos,
-            model_profile: "dp00-base@v0".into(),
-            prompt_profile: behavior_plan.payload_registry_version.clone(),
-            cache_policy: "DISABLED".into(),
-            rust_toolchain: toolchain.trim().into(),
-            rustc_version: rustc.clone(),
-            cargo_version: cargo.clone(),
-            target: target.clone(),
-            build_profile: if cfg!(debug_assertions) {
-                "development"
-            } else {
-                "qualification-or-release"
-            }
-            .into(),
-            tokio_resolved_version: ASYNC_RUNTIME.trim_start_matches("tokio-").into(),
-            runtime_worker_policy: RUNTIME_WORKER_POLICY_VERSION.into(),
-            cargo_lock_identity: cargo_lock_identity.clone(),
-            os: env::consts::OS.into(),
-            machine_architecture: env::consts::ARCH.into(),
-            canonical_event_schema_version: scenario
-                .provenance
-                .canonical_event_schema_version
-                .clone(),
-            model_call_schema_version: "model-call-v0".into(),
+            profile_sequence: campaign_config.profiles.clone(),
+            campaign_configuration: CampaignConfiguration {
+                alternatives: config.alternatives.clone(),
+                scenario_ids: config.scenario_ids.clone(),
+                warmup_count: config.warmup_count,
+                measured_repetition_count: config.measured_repetition_count,
+                order_policy: config.order_policy.clone(),
+                instrumentation_mode: config.instrumentation_mode,
+            },
+            runner_version: env!("CARGO_PKG_VERSION").into(),
         };
-        let directory = persist_raw_run(&config.raw_output_root, &provenance, &execution.evidence)
-            .map_err(|error| format!("raw persistence failed: {error:?}"))?;
-        persisted += 1;
-        println!(
-            "persisted {} ({}/{}, architecture_error={})",
-            directory.display(),
-            ordinal + 1,
-            persisted,
-            execution.architecture_error.as_deref().unwrap_or("NONE")
-        );
+        Some(
+            begin_campaign(&config.raw_output_root, &provenance)
+                .map_err(|error| format!("campaign persistence failed: {error:?}"))?,
+        )
+    } else {
+        std::fs::create_dir_all(&config.raw_output_root).map_err(|error| error.to_string())?;
+        None
+    };
+    let plan_items = build_episode_plan(config);
+    let mut persisted = 0_u64;
+
+    for (profile_index, latency_profile) in campaign_config.profiles.iter().enumerate() {
+        let profile_output_root = if let Some(campaign_directory) = &campaign_directory {
+            begin_campaign_profile(campaign_directory, latency_profile)
+                .map_err(|error| format!("campaign profile persistence failed: {error:?}"))?
+        } else {
+            config.raw_output_root.clone()
+        };
+        for (ordinal, item) in plan_items.iter().enumerate() {
+            let scenario = corpus
+                .scenarios
+                .iter()
+                .find(|scenario| scenario.scenario_id == item.scenario_id)
+                .ok_or_else(|| format!("unknown scenario {}", item.scenario_id))?;
+            let behavior_plan = corpus
+                .behavior_plans
+                .plans
+                .iter()
+                .find(|plan| plan.scenario_id == item.scenario_id)
+                .ok_or_else(|| format!("missing behavior plan for {}", item.scenario_id))?;
+            let mode_label = if config.run_mode == RunMode::Official {
+                "official"
+            } else {
+                "dev"
+            };
+            let population_label = if item.measurement_population {
+                "measured"
+            } else {
+                "warmup"
+            };
+            let run_id = format!(
+                "{mode_label}-{population_label}-{invocation_id}-{}-{}-{}-r{}-p{}",
+                latency_profile.profile_id,
+                item.scenario_id,
+                item.alternative.id(),
+                item.repetition_index,
+                item.sequence_position
+            );
+            let execution = execute_episode(
+                &corpus,
+                scenario,
+                item.alternative,
+                &run_id,
+                &source.source_git_commit,
+                config.instrumentation_mode,
+                latency_profile.clone(),
+            )?;
+            if !item.measurement_population {
+                continue;
+            }
+            let provenance = RunProvenance {
+                provenance_schema_version: "dp00-pilot-provenance-v2".into(),
+                run_id,
+                campaign_id: campaign_directory.as_ref().map(|_| campaign_id.clone()),
+                campaign_profile_sequence_index: campaign_directory
+                    .as_ref()
+                    .map(|_| u32::try_from(profile_index).unwrap_or(u32::MAX)),
+                official: config.run_mode == RunMode::Official,
+                source_git_commit: source.source_git_commit.clone(),
+                working_tree_clean: source.working_tree_clean,
+                pilot_corpus_id: corpus.index.pilot_corpus_id.clone(),
+                pilot_corpus_version: corpus.index.pilot_corpus_version.clone(),
+                alternative: item.alternative,
+                scenario_id: scenario.scenario_id.clone(),
+                scenario_version: scenario.scenario_version.clone(),
+                semantic_behavior_plan_id: behavior_plan.behavior_plan_id.clone(),
+                semantic_behavior_plan_version: behavior_plan.behavior_plan_version.clone(),
+                latency_profile: latency_profile.clone(),
+                warmup_count: config.warmup_count,
+                measured_repetition_count: config.measured_repetition_count,
+                measurement_population: item.measurement_population,
+                order_policy: config.order_policy.clone(),
+                order_cycle: item.order_cycle,
+                sequence_position: item.sequence_position,
+                repetition_index: item.repetition_index,
+                instrumentation_mode: config.instrumentation_mode,
+                episode_elapsed_nanos: execution.episode_elapsed_nanos,
+                event_count: execution.attempted_event_count,
+                capture_append_cost_nanos: execution.capture_append_cost_nanos,
+                model_profile: "dp00-base@v0".into(),
+                prompt_profile: behavior_plan.payload_registry_version.clone(),
+                cache_policy: "DISABLED".into(),
+                rust_toolchain: toolchain.trim().into(),
+                rustc_version: rustc.clone(),
+                cargo_version: cargo.clone(),
+                target: target.clone(),
+                build_profile: if cfg!(debug_assertions) {
+                    "development"
+                } else {
+                    "qualification-or-release"
+                }
+                .into(),
+                tokio_resolved_version: ASYNC_RUNTIME.trim_start_matches("tokio-").into(),
+                runtime_worker_policy: RUNTIME_WORKER_POLICY_VERSION.into(),
+                cargo_lock_identity: cargo_lock_identity.clone(),
+                os: env::consts::OS.into(),
+                machine_architecture: env::consts::ARCH.into(),
+                canonical_event_schema_version: scenario
+                    .provenance
+                    .canonical_event_schema_version
+                    .clone(),
+                model_call_schema_version: "model-call-v1".into(),
+            };
+            let directory = persist_raw_run(&profile_output_root, &provenance, &execution.evidence)
+                .map_err(|error| format!("raw persistence failed: {error:?}"))?;
+            persisted += 1;
+            println!(
+                "persisted {} ({}/{}, architecture_error={})",
+                directory.display(),
+                ordinal + 1,
+                persisted,
+                execution.architecture_error.as_deref().unwrap_or("NONE")
+            );
+        }
     }
-    println!("development/official run complete: {persisted} measured raw directories");
+    println!("campaign/run complete: {persisted} measured raw directories");
     Ok(())
 }
 
 fn parse_config(
     arguments: impl Iterator<Item = String>,
     repository_root: &Path,
-) -> Result<PilotRunnerConfig, String> {
+) -> Result<PilotCampaignConfig, String> {
     let mut corpus = "pilot-v0".to_owned();
     let mut alternatives = Alternative::ALL.to_vec();
     let mut scenario_ids: Vec<String> = (1..=10).map(|number| format!("P{number:02}")).collect();
@@ -176,6 +218,7 @@ fn parse_config(
     let mut instrumentation_mode = InstrumentationMode::Capture;
     let mut raw_output_root = repository_root.join("results/raw/pilot-v0");
     let mut run_mode = RunMode::Development;
+    let mut profiles = Vec::new();
     let arguments = arguments.collect::<Vec<_>>();
     let mut index = 0;
     while index < arguments.len() {
@@ -200,6 +243,7 @@ fn parse_config(
                     other => return Err(format!("unknown latency profile {other}")),
                 }
             }
+            "--profiles" => profiles = parse_profiles(value(&mut index)?)?,
             "--model-delay-micros" => {
                 model_delay_override = Some(parse_u64(value(&mut index)?, argument)?)
             }
@@ -222,7 +266,7 @@ fn parse_config(
             "--official" => run_mode = RunMode::Official,
             "--development" => run_mode = RunMode::Development,
             "--help" | "-h" => {
-                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--output-root PATH] [--official|--development]".into());
+                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C] [--profiles Z,C] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--output-root PATH] [--official|--development]".into());
             }
             other => return Err(format!("unknown option {other}")),
         }
@@ -234,6 +278,13 @@ fn parse_config(
     if alternatives.is_empty() || scenario_ids.is_empty() || repetitions == 0 {
         return Err("alternatives, scenarios, and repetitions must be non-empty".into());
     }
+    if run_mode == RunMode::Official
+        && (model_delay_override.is_some()
+            || agent_delay_override.is_some()
+            || tool_delay_override.is_some())
+    {
+        return Err("official Pilot campaign does not allow per-invocation delay overrides".into());
+    }
     if let Some(delay) = model_delay_override {
         latency_profile.model_delay_micros = delay;
     }
@@ -243,18 +294,51 @@ fn parse_config(
     if let Some(delay) = tool_delay_override {
         latency_profile.tool_delay_micros = delay;
     }
-    Ok(PilotRunnerConfig {
-        pilot_corpus: corpus,
-        alternatives,
-        scenario_ids,
-        latency_profile,
-        warmup_count,
-        measured_repetition_count: repetitions,
-        order_policy: "DETERMINISTIC_CYCLIC_V1".into(),
-        instrumentation_mode,
-        raw_output_root,
-        run_mode,
+    if profiles.is_empty() {
+        profiles = if run_mode == RunMode::Official {
+            vec![
+                ControlledLatencyProfile::profile_z(),
+                ControlledLatencyProfile::profile_c(),
+            ]
+        } else {
+            vec![latency_profile.clone()]
+        };
+    }
+    if run_mode == RunMode::Official
+        && profiles
+            .iter()
+            .map(|profile| profile.profile_id.as_str())
+            .collect::<Vec<_>>()
+            != ["Z", "C"]
+    {
+        return Err("official Pilot campaign requires profile sequence Z,C".into());
+    }
+    Ok(PilotCampaignConfig {
+        runner: PilotRunnerConfig {
+            pilot_corpus: corpus,
+            alternatives,
+            scenario_ids,
+            latency_profile,
+            warmup_count,
+            measured_repetition_count: repetitions,
+            order_policy: "DETERMINISTIC_CYCLIC_V1".into(),
+            instrumentation_mode,
+            raw_output_root,
+            run_mode,
+        },
+        profiles,
     })
+}
+
+fn parse_profiles(value: &str) -> Result<Vec<ControlledLatencyProfile>, String> {
+    value
+        .split(',')
+        .map(|value| match value {
+            "Z" | "z" => Ok(ControlledLatencyProfile::profile_z()),
+            "C" | "c" => Ok(ControlledLatencyProfile::profile_c()),
+            other => Err(format!("unknown latency profile {other}")),
+        })
+        .collect()
 }
 
 fn parse_alternatives(value: &str) -> Result<Vec<Alternative>, String> {
@@ -280,4 +364,58 @@ fn parse_u64(value: &str, option: &str) -> Result<u64, String> {
     value
         .parse()
         .map_err(|_| format!("{option} requires an unsigned integer"))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn official_cli_defaults_to_ordered_z_c_campaign() {
+        let config = parse_config(
+            ["--official".to_owned()].into_iter(),
+            Path::new("/tmp/repository"),
+        )
+        .expect("official config");
+        assert_eq!(config.runner.run_mode, RunMode::Official);
+        assert_eq!(
+            config
+                .profiles
+                .iter()
+                .map(|profile| profile.profile_id.as_str())
+                .collect::<Vec<_>>(),
+            ["Z", "C"]
+        );
+    }
+
+    #[test]
+    fn official_cli_rejects_noncanonical_profile_order() {
+        let error = parse_config(
+            [
+                "--official".to_owned(),
+                "--profiles".to_owned(),
+                "C,Z".to_owned(),
+            ]
+            .into_iter(),
+            Path::new("/tmp/repository"),
+        )
+        .expect_err("noncanonical order rejected");
+        assert!(error.contains("requires profile sequence Z,C"));
+    }
+
+    #[test]
+    fn development_cli_keeps_single_profile_mode() {
+        let config = parse_config(
+            [
+                "--development".to_owned(),
+                "--latency-profile".to_owned(),
+                "C".to_owned(),
+            ]
+            .into_iter(),
+            Path::new("/tmp/repository"),
+        )
+        .expect("development config");
+        assert_eq!(config.profiles.len(), 1);
+        assert_eq!(config.profiles[0].profile_id, "C");
+    }
 }

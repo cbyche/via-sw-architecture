@@ -8,7 +8,9 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use bench_core::{ArchitectureUnderTest, InitialProductState, UserTurn};
-use bench_events::{CanonicalEvent, InstrumentationMode, LogicalModelCall, serialization};
+use bench_events::{
+    CanonicalEvent, InstrumentationMode, LogicalModelCall, ObservableEffect, serialization,
+};
 use serde::{Deserialize, Serialize};
 
 pub const ASYNC_RUNTIME: &str = "tokio-1.53.1";
@@ -43,6 +45,7 @@ pub struct FixtureEvent {
     pub action: String,
     pub subject_id: String,
     pub outcome: String,
+    pub observable_effect: Option<ObservableEffect>,
 }
 
 pub trait EvidenceSource {
@@ -188,6 +191,35 @@ pub struct PilotRunnerConfig {
     pub run_mode: RunMode,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct PilotCampaignConfig {
+    pub runner: PilotRunnerConfig,
+    pub profiles: Vec<ControlledLatencyProfile>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CampaignConfiguration {
+    pub alternatives: Vec<Alternative>,
+    pub scenario_ids: Vec<String>,
+    pub warmup_count: u32,
+    pub measured_repetition_count: u32,
+    pub order_policy: String,
+    pub instrumentation_mode: InstrumentationMode,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CampaignProvenance {
+    pub provenance_schema_version: String,
+    pub campaign_id: String,
+    pub source_git_commit: String,
+    pub initial_working_tree_clean: bool,
+    pub pilot_corpus_id: String,
+    pub pilot_corpus_version: String,
+    pub profile_sequence: Vec<ControlledLatencyProfile>,
+    pub campaign_configuration: CampaignConfiguration,
+    pub runner_version: String,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct EpisodePlan {
     pub alternative: Alternative,
@@ -243,6 +275,8 @@ pub fn build_episode_plan(config: &PilotRunnerConfig) -> Vec<EpisodePlan> {
 pub struct RunProvenance {
     pub provenance_schema_version: String,
     pub run_id: String,
+    pub campaign_id: Option<String>,
+    pub campaign_profile_sequence_index: Option<u32>,
     pub official: bool,
     pub source_git_commit: String,
     pub working_tree_clean: bool,
@@ -287,6 +321,48 @@ pub enum PersistenceError {
     Io(std::io::Error),
     Json(serde_json::Error),
     ExistingRun(PathBuf),
+    ExistingCampaign(PathBuf),
+}
+
+pub fn begin_campaign(
+    output_root: &Path,
+    provenance: &CampaignProvenance,
+) -> Result<PathBuf, PersistenceError> {
+    let campaign_directory = output_root.join(&provenance.campaign_id);
+    match fs::create_dir(&campaign_directory) {
+        Ok(()) => {}
+        Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {
+            return Err(PersistenceError::ExistingCampaign(campaign_directory));
+        }
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+            fs::create_dir_all(output_root)?;
+            fs::create_dir(&campaign_directory)?;
+        }
+        Err(error) => return Err(PersistenceError::Io(error)),
+    }
+    write_json_create_new(
+        campaign_directory.join("campaign-provenance.json"),
+        provenance,
+    )?;
+    Ok(campaign_directory)
+}
+
+pub fn begin_campaign_profile(
+    campaign_directory: &Path,
+    profile: &ControlledLatencyProfile,
+) -> Result<PathBuf, PersistenceError> {
+    let profile_directory = campaign_directory.join(format!(
+        "profile-{}",
+        profile.profile_id.to_ascii_lowercase()
+    ));
+    fs::create_dir(&profile_directory).map_err(|error| {
+        if error.kind() == std::io::ErrorKind::AlreadyExists {
+            PersistenceError::ExistingRun(profile_directory.clone())
+        } else {
+            PersistenceError::Io(error)
+        }
+    })?;
+    Ok(profile_directory)
 }
 
 impl From<std::io::Error> for PersistenceError {
@@ -364,6 +440,12 @@ pub fn reload_events(path: &Path) -> Result<Vec<CanonicalEvent>, PersistenceErro
 }
 
 pub fn reload_model_calls(path: &Path) -> Result<Vec<LogicalModelCall>, PersistenceError> {
+    Ok(serialization::read_jsonl(BufReader::new(File::open(
+        path,
+    )?))?)
+}
+
+pub fn reload_fixture_events(path: &Path) -> Result<Vec<FixtureEvent>, PersistenceError> {
     Ok(serialization::read_jsonl(BufReader::new(File::open(
         path,
     )?))?)

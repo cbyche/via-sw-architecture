@@ -20,6 +20,7 @@ pub struct MaterializedScenario {
     pub initial_state: InitialProductState,
     pub turns: Vec<UserTurn>,
     pub acoustic_eos_offsets_micros: Vec<Option<u64>>,
+    pub clarification_triggered_turns: Vec<bool>,
     pub replay_operations: Vec<ReplayOperation>,
 }
 
@@ -194,30 +195,27 @@ pub fn materialize_scenario(
 
     let context_json = serde_json::to_string(&context_to_value(&context))
         .map_err(|error| AssetError::Invalid(error.to_string()))?;
-    let turns = scenario
-        .stimulus
-        .interaction
-        .iter()
-        .map(|turn| UserTurn {
-            turn_id: TurnId(turn.turn_id.clone()),
-            modality: match turn.modality {
-                Modality::Voice => InputModality::Voice,
-                Modality::Text => InputModality::Text,
-            },
-            content: turn.text_fixture.clone(),
-            context_evidence: vec![ContextEvidence {
-                source: "controlled-interaction-fixture".into(),
-                kind: "raw-context-evidence".into(),
-                value: context_json.clone(),
-                observed_at_product_revision: Some(context.surface_snapshot_generation),
-            }],
-        })
-        .collect();
-    let acoustic_eos_offsets_micros = scenario
-        .stimulus
-        .interaction
-        .iter()
-        .map(|turn| {
+    let make_turn = |turn_id: &str, modality: Modality, content: &str| UserTurn {
+        turn_id: TurnId(turn_id.into()),
+        modality: match modality {
+            Modality::Voice => InputModality::Voice,
+            Modality::Text => InputModality::Text,
+        },
+        content: content.into(),
+        context_evidence: vec![ContextEvidence {
+            source: "controlled-interaction-fixture".into(),
+            kind: "raw-context-evidence".into(),
+            value: context_json.clone(),
+            observed_at_product_revision: Some(context.surface_snapshot_generation),
+        }],
+    };
+    let mut turns = Vec::new();
+    let mut acoustic_eos_offsets_micros = Vec::new();
+    let mut clarification_triggered_turns = Vec::new();
+    for turn in &scenario.stimulus.interaction {
+        turns.push(make_turn(&turn.turn_id, turn.modality, &turn.text_fixture));
+        clarification_triggered_turns.push(false);
+        let acoustic_offset = (|| {
             if turn.acoustic_eos_fixture_ref == "NONE" {
                 return Ok(None);
             }
@@ -236,8 +234,24 @@ pub fn materialize_scenario(
                 audio.audio_content_generation,
             );
             Ok(Some(audio.ground_truth_acoustic_eos_offset_micros))
-        })
-        .collect::<Result<Vec<_>, AssetError>>()?;
+        })()?;
+        acoustic_eos_offsets_micros.push(acoustic_offset);
+        for reply in &turn.deterministic_user_replies {
+            if reply.trigger != "clarification.requested" {
+                return Err(AssetError::Invalid(format!(
+                    "unsupported scripted reply trigger {}",
+                    reply.trigger
+                )));
+            }
+            turns.push(make_turn(
+                &reply.turn_id,
+                reply.modality,
+                &reply.text_fixture,
+            ));
+            acoustic_eos_offsets_micros.push(None);
+            clarification_triggered_turns.push(true);
+        }
+    }
 
     let mut initial_state = materialize_initial_state(initial)?;
     initial_state.capability_facts = capability_facts(capabilities, health);
@@ -302,6 +316,7 @@ pub fn materialize_scenario(
         initial_state,
         turns,
         acoustic_eos_offsets_micros,
+        clarification_triggered_turns,
         replay_operations,
     })
 }
@@ -505,11 +520,21 @@ fn replay_output(data: &Value) -> String {
             "check_wifi_status" => "DIAGNOSE_WIFI",
             "check_dns" => "CONTINUE_T1",
             "open_referred_document" => "OPEN_RIGHT_DOCUMENT",
+            "report_latest_download_name" => "LOOKUP_LATEST_DOWNLOAD",
+            "organize_downloads" => "ORGANIZE_DOWNLOADS",
             _ => "GENERAL_FILE_WORK",
         });
     }
     if object.get("resolution").and_then(Value::as_str) == Some("AMBIGUOUS") {
         tokens.push("AMBIGUOUS_DOCUMENT");
+    }
+    if object
+        .get("referent_binding")
+        .and_then(|binding| binding.get("object_id"))
+        .and_then(Value::as_str)
+        == Some("doc-right")
+    {
+        tokens.push("OPEN_RIGHT_DOCUMENT");
     }
     if let Some(requirement) = object
         .get("semantic_execution_requirement")

@@ -162,11 +162,32 @@ impl ModelResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProductCorrelation {
+    pub turn_id: Option<TurnId>,
     pub task_id: Option<TaskId>,
     pub execution_id: Option<ExecutionId>,
     pub dispatch_id: Option<DispatchId>,
     pub result_id: Option<ResultId>,
     pub clarification_id: Option<ClarificationId>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ReferentRole {
+    Source,
+    Destination,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum TaskRelation {
+    New,
+    FollowUp,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ClarificationReason {
+    AmbiguousReferent,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -178,10 +199,21 @@ pub struct ArchitectureObservation {
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ArchitectureEvent {
     ProcessingStarted,
+    ReferentBound {
+        referent_role: ReferentRole,
+        resolved_referent_id: String,
+    },
+    TaskAssociated {
+        task_relation: TaskRelation,
+    },
     ClarificationRequested {
         prompt: String,
+        reason: ClarificationReason,
     },
-    ClarificationResolved,
+    ClarificationResolved {
+        request_turn_id: TurnId,
+        response_turn_id: TurnId,
+    },
     TaskCreated,
     TaskReused,
     RouteCandidateObserved {
@@ -296,6 +328,7 @@ mod tests {
         let observation = ArchitectureObservation {
             event: ArchitectureEvent::ProcessingStarted,
             product_correlation: ProductCorrelation {
+                turn_id: None,
                 task_id: None,
                 execution_id: None,
                 dispatch_id: None,

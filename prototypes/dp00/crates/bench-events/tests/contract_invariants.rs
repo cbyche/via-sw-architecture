@@ -3,8 +3,9 @@ use bench_core::{
     ObservationPort, ProductCorrelation,
 };
 use bench_events::{
-    CanonicalEventKind, ContractViolation, EventEmitter, InMemoryObservationCollector,
-    ObservationContext, validate_episode,
+    CanonicalEventKind, ContractViolation, EventEmitter, FailureOutcomeReason,
+    InMemoryObservationCollector, ObservableEffect, ObservableEffectType, ObservationContext,
+    validate_episode,
 };
 use bench_fixtures::ControlledClock;
 
@@ -53,6 +54,20 @@ fn benchmark(
     collector.capture_benchmark_event(emitter, event, ProductCorrelation::default());
 }
 
+fn outcome() -> CanonicalEventKind {
+    CanonicalEventKind::UsefulOutcomeObserved {
+        effect: ObservableEffect {
+            effect_type: ObservableEffectType::WifiStatusObserved,
+            subject_id: Some("wifi_connection_1".into()),
+            target_id: None,
+            value: None,
+            state: Some("OBSERVED".into()),
+            executor_id: Some("NetworkAgent".into()),
+            authoritative_source: EventEmitter::OutcomeProbe,
+        },
+    }
+}
+
 #[test]
 fn successful_episode_satisfies_canonical_partial_order() {
     let collector = collector();
@@ -78,11 +93,7 @@ fn successful_episode_satisfies_canonical_partial_order() {
         EventEmitter::AgentFixture,
         CanonicalEventKind::ExecutionStarted,
     );
-    benchmark(
-        &collector,
-        EventEmitter::OutcomeProbe,
-        CanonicalEventKind::UsefulOutcomeObserved,
-    );
+    benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
         &collector,
         EventEmitter::Benchmark,
@@ -107,11 +118,7 @@ fn zero_model_call_success_satisfies_canonical_partial_order() {
         EventEmitter::ToolFixture,
         CanonicalEventKind::ExecutionStarted,
     );
-    benchmark(
-        &collector,
-        EventEmitter::OutcomeProbe,
-        CanonicalEventKind::UsefulOutcomeObserved,
-    );
+    benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
         &collector,
         EventEmitter::Benchmark,
@@ -201,11 +208,7 @@ fn rejected_candidate_can_be_reselected_without_becoming_a_commit() {
         EventEmitter::AgentFixture,
         CanonicalEventKind::ExecutionStarted,
     );
-    benchmark(
-        &collector,
-        EventEmitter::OutcomeProbe,
-        CanonicalEventKind::UsefulOutcomeObserved,
-    );
+    benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
         &collector,
         EventEmitter::Benchmark,
@@ -271,11 +274,7 @@ fn aut_self_report_cannot_be_authoritative_useful_outcome() {
         EventEmitter::AgentFixture,
         CanonicalEventKind::ExecutionStarted,
     );
-    benchmark(
-        &collector,
-        EventEmitter::ArchitectureUnderTest,
-        CanonicalEventKind::UsefulOutcomeObserved,
-    );
+    benchmark(&collector, EventEmitter::ArchitectureUnderTest, outcome());
     benchmark(
         &collector,
         EventEmitter::Benchmark,
@@ -304,7 +303,9 @@ fn failed_episode_has_no_route_or_fabricated_outcome() {
     benchmark(
         &collector,
         EventEmitter::Benchmark,
-        CanonicalEventKind::EpisodeFailed,
+        CanonicalEventKind::EpisodeFailed {
+            reason: FailureOutcomeReason::ModelTimeout,
+        },
     );
 
     assert!(validate_episode(&collector.canonical_snapshot()).is_empty());

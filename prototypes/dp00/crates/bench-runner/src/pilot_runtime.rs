@@ -15,8 +15,10 @@ use bench_core::{
     ObservationPort, ProductCorrelation, ResultId,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, InMemoryObservationCollector,
-    InstrumentationMode, LogicalModelCall, ObservationContext,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    InMemoryObservationCollector, InstrumentationMode, LogicalModelCall,
+    ModelSemanticOutputReference, ModelSemanticValueKind, ObservableEffect, ObservableEffectType,
+    ObservationContext,
 };
 use bench_fixtures::SystemMonotonicClock;
 use bench_fixtures::pilot_assets::{BehaviorPlan, RuntimeScenario};
@@ -43,11 +45,11 @@ struct FixtureState {
     execution_count: u64,
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 enum FixtureEventKind {
     AgentStartAccepted,
     ToolStartAccepted,
-    OutcomeDetected,
+    OutcomeDetected(ObservableEffect),
     AcousticEos {
         turn_index: usize,
         offset_micros: u64,
@@ -71,6 +73,8 @@ struct Inner {
     replay: ReplayAdapter,
     latency: ControlledLatencyProfile,
     acoustic_eos_offsets_micros: Vec<Option<u64>>,
+    clarification_triggered_turns: Vec<bool>,
+    turn_ids: Vec<String>,
     calls: Mutex<Vec<LogicalModelCall>>,
     fixtures: Mutex<FixtureState>,
     next_model_call_id: AtomicU64,
@@ -98,6 +102,11 @@ impl PilotPorts {
         materialized: MaterializedScenario,
     ) -> Self {
         let clock = SharedClock(Arc::new(SystemMonotonicClock::default()));
+        let turn_ids = materialized
+            .turns
+            .iter()
+            .map(|turn| turn.turn_id.0.clone())
+            .collect();
         let collector = InMemoryObservationCollector::with_mode(
             ObservationContext {
                 run_id: config.run_id.into(),
@@ -144,6 +153,8 @@ impl PilotPorts {
                 ),
                 latency: config.latency_profile,
                 acoustic_eos_offsets_micros: materialized.acoustic_eos_offsets_micros,
+                clarification_triggered_turns: materialized.clarification_triggered_turns,
+                turn_ids,
                 calls: Mutex::new(Vec::new()),
                 fixtures: Mutex::new(FixtureState::default()),
                 next_model_call_id: AtomicU64::new(1),
@@ -162,9 +173,18 @@ impl PilotPorts {
     }
 
     fn capture(&self, emitter: EventEmitter, event: CanonicalEventKind) {
+        self.capture_correlated(emitter, event, ProductCorrelation::default());
+    }
+
+    fn capture_correlated(
+        &self,
+        emitter: EventEmitter,
+        event: CanonicalEventKind,
+        product_correlation: ProductCorrelation,
+    ) {
         self.inner
             .collector
-            .capture_benchmark_event(emitter, event, ProductCorrelation::default());
+            .capture_benchmark_event(emitter, event, product_correlation);
     }
 
     fn fixture_event(&self, kind: FixtureEventKind, subject_id: String) {
@@ -228,7 +248,7 @@ impl ModelPort for PilotPorts {
             .unwrap_or(u32::MAX)
             .saturating_add(1);
             calls.push(LogicalModelCall {
-                schema_version: "model-call-v0".into(),
+                schema_version: "model-call-v1".into(),
                 model_call_id: format!("{}:model:{model_call_number}", self.inner.run_id),
                 run_id: self.inner.run_id.clone(),
                 episode_id: self.inner.episode_id.clone(),
@@ -239,6 +259,10 @@ impl ModelPort for PilotPorts {
                 decision_owner: request.decision_owner.clone(),
                 semantic_responsibilities: request.semantic_responsibilities.clone(),
                 status,
+                semantic_output_reference: response
+                    .as_ref()
+                    .ok()
+                    .and_then(model_semantic_output_reference),
                 route_committed_before_call: false,
                 route_committed_after_call: false,
                 logical_start: start,
@@ -283,24 +307,41 @@ impl ExecutionPort for PilotPorts {
                 self.inner.latency.agent_delay_micros,
             )
         };
-        self.capture(emitter, CanonicalEventKind::ExecutionStarted);
-        self.fixture_event(fixture_kind, request.route.initial_executor_id.0.clone());
-        thread::sleep(Duration::from_micros(delay));
         let mut fixtures = self.inner.fixtures.lock().expect("fixture state poisoned");
         fixtures.execution_count += 1;
         let number = fixtures.execution_count;
         drop(fixtures);
-        self.fixture_event(
-            FixtureEventKind::OutcomeDetected,
-            self.inner.scenario_id.clone(),
+        let execution_id = ExecutionId(format!("{}:execution:{number}", self.inner.run_id));
+        let result_id = ResultId(format!("{}:result:{number}", self.inner.run_id));
+        let correlation = ProductCorrelation {
+            task_id: Some(request.task_id.clone()),
+            execution_id: Some(execution_id.clone()),
+            result_id: Some(result_id.clone()),
+            ..ProductCorrelation::default()
+        };
+        self.capture_correlated(
+            emitter,
+            CanonicalEventKind::ExecutionStarted,
+            correlation.clone(),
         );
-        self.capture(
+        self.fixture_event(fixture_kind, request.route.initial_executor_id.0.clone());
+        thread::sleep(Duration::from_micros(delay));
+        let effect = effect_from_execution_request(&request);
+        self.fixture_event(
+            FixtureEventKind::OutcomeDetected(effect.clone()),
+            effect
+                .subject_id
+                .clone()
+                .unwrap_or_else(|| request.task_id.0.clone()),
+        );
+        self.capture_correlated(
             EventEmitter::OutcomeProbe,
-            CanonicalEventKind::UsefulOutcomeObserved,
+            CanonicalEventKind::UsefulOutcomeObserved { effect },
+            correlation,
         );
         Ok(ExecutionResult {
-            execution_id: ExecutionId(format!("{}:execution:{number}", self.inner.run_id)),
-            result_id: ResultId(format!("{}:result:{number}", self.inner.run_id)),
+            execution_id,
+            result_id,
             payload: format!("{}:fixture-outcome", self.inner.scenario_id),
         })
     }
@@ -360,6 +401,32 @@ impl FixtureLifecycle for PilotPorts {
     }
 
     fn before_user_turn(&mut self, turn_index: usize) -> Result<(), Self::Error> {
+        let turn_id = self
+            .inner
+            .turn_ids
+            .get(turn_index)
+            .ok_or_else(|| "turn fixture correlation missing".to_owned())?;
+        self.inner
+            .replay
+            .set_current_turn(turn_id)
+            .map_err(|error| format!("{error:?}"))?;
+        if self
+            .inner
+            .clarification_triggered_turns
+            .get(turn_index)
+            .copied()
+            .unwrap_or(false)
+            && !self.events().iter().any(|event| {
+                matches!(
+                    event.event(),
+                    CanonicalEventKind::Architecture(
+                        bench_core::ArchitectureEvent::ClarificationRequested { .. }
+                    )
+                )
+            })
+        {
+            return Err("scripted reply requires an actual clarification request".into());
+        }
         if let Some(Some(offset)) = self.inner.acoustic_eos_offsets_micros.get(turn_index) {
             self.fixture_event(
                 FixtureEventKind::AcousticEos {
@@ -385,13 +452,12 @@ impl FixtureLifecycle for PilotPorts {
     }
 
     fn after_failure(&mut self) -> Result<(), Self::Error> {
-        self.capture(EventEmitter::Benchmark, CanonicalEventKind::EpisodeFailed);
         Ok(())
     }
 }
 
 fn enrich_fixture_event(inner: &Inner, event: &CapturedFixtureEvent) -> FixtureEvent {
-    let (fixture_kind, action, outcome, subject_id) = match event.kind {
+    let (fixture_kind, action, outcome, subject_id) = match &event.kind {
         FixtureEventKind::AgentStartAccepted => (
             "AGENT",
             "START_ACCEPT",
@@ -404,10 +470,10 @@ fn enrich_fixture_event(inner: &Inner, event: &CapturedFixtureEvent) -> FixtureE
             "ACCEPTED".into(),
             event.subject_id.clone(),
         ),
-        FixtureEventKind::OutcomeDetected => (
+        FixtureEventKind::OutcomeDetected(effect) => (
             "OUTCOME_PROBE",
             "DETECT",
-            "USEFUL_OUTCOME_OBSERVED".into(),
+            format!("{:?}", effect.effect_type),
             event.subject_id.clone(),
         ),
         FixtureEventKind::AcousticEos {
@@ -429,6 +495,10 @@ fn enrich_fixture_event(inner: &Inner, event: &CapturedFixtureEvent) -> FixtureE
         action: action.into(),
         subject_id,
         outcome,
+        observable_effect: match &event.kind {
+            FixtureEventKind::OutcomeDetected(effect) => Some(effect.clone()),
+            _ => None,
+        },
     }
 }
 
@@ -519,6 +589,7 @@ where
     let evidence = match result {
         Ok(evidence) => evidence,
         Err(error) => {
+            ports.record_terminal_failure(classify_failure(&format!("{error:?}")));
             let evidence = evidence_source.take_raw_evidence();
             let (attempted_event_count, capture_append_cost_nanos) = ports.capture_diagnostics();
             return Ok(EpisodeExecution {
@@ -538,4 +609,127 @@ where
         attempted_event_count,
         capture_append_cost_nanos,
     })
+}
+
+impl PilotPorts {
+    fn record_terminal_failure(&self, reason: FailureOutcomeReason) {
+        self.capture(
+            EventEmitter::Benchmark,
+            CanonicalEventKind::EpisodeFailed { reason },
+        );
+    }
+}
+
+fn model_semantic_output_reference(
+    response: &ModelResponse,
+) -> Option<ModelSemanticOutputReference> {
+    let output = response.completed_output().ok()?;
+    let value = if output.contains("MAIL_AGENT") {
+        "MailAgent"
+    } else if output.contains("NETWORK_AGENT") {
+        "NetworkAgent"
+    } else if output.contains("FILE_AGENT") {
+        "FileAgent"
+    } else if output.contains("ARGO") {
+        "ARGO"
+    } else {
+        return None;
+    };
+    Some(ModelSemanticOutputReference {
+        value_kind: ModelSemanticValueKind::ExecutorCandidate,
+        value: value.into(),
+    })
+}
+
+fn effect_from_execution_request(request: &ExecutionRequest) -> ObservableEffect {
+    let action = request.semantic_action.as_str();
+    let (effect_type, subject_id, value, state) = if action.contains("LocalVolume")
+        || action.contains("LOCAL_VOLUME")
+    {
+        (
+            ObservableEffectType::VolumeChanged,
+            Some("system-volume".into()),
+            Some("35".into()),
+            Some("CHANGED".into()),
+        )
+    } else if action.contains("OpenRightDocument") || action.contains("OPEN_RIGHT_DOCUMENT") {
+        (
+            ObservableEffectType::DocumentOpened,
+            Some("doc-right".into()),
+            None,
+            Some("OPEN_USABLE".into()),
+        )
+    } else if action.contains("ContinueTask") || action.contains("CONTINUE_T1") {
+        (
+            ObservableEffectType::DnsCheckObserved,
+            Some(request.task_id.0.clone()),
+            None,
+            Some("OBSERVED".into()),
+        )
+    } else if action.contains("DiagnoseWifi") || action.contains("DIAGNOSE_WIFI") {
+        (
+            ObservableEffectType::WifiStatusObserved,
+            Some("wifi_connection_1".into()),
+            None,
+            Some("OBSERVED".into()),
+        )
+    } else if action.contains("LatestDownloadLookup") || action.contains("LOOKUP_LATEST_DOWNLOAD") {
+        (
+            ObservableEffectType::FileInspected,
+            Some("downloads".into()),
+            None,
+            Some("LATEST_FILE_NAME_EMITTED".into()),
+        )
+    } else if action.contains("OrganizeDownloads") || action.contains("ORGANIZE_DOWNLOADS") {
+        (
+            ObservableEffectType::DownloadsOrganized,
+            Some("downloads".into()),
+            None,
+            Some("ORGANIZED".into()),
+        )
+    } else if action.contains("GeneralFileWork") || action.contains("GENERAL_FILE_WORK") {
+        (
+            ObservableEffectType::FileInspected,
+            Some("general-file-work".into()),
+            None,
+            Some("RESULT_EMITTED".into()),
+        )
+    } else {
+        (
+            ObservableEffectType::DiagnosisStarted,
+            Some(request.task_id.0.clone()),
+            None,
+            Some("STARTED".into()),
+        )
+    };
+    ObservableEffect {
+        effect_type,
+        subject_id,
+        target_id: None,
+        value,
+        state,
+        executor_id: request
+            .route
+            .final_executor_id_if_known
+            .as_ref()
+            .or(Some(&request.route.initial_executor_id))
+            .map(|value| value.0.clone()),
+        authoritative_source: EventEmitter::OutcomeProbe,
+    }
+}
+
+fn classify_failure(error: &str) -> FailureOutcomeReason {
+    if error.contains("Malformed") {
+        FailureOutcomeReason::ModelMalformed
+    } else if error.contains("TimedOut") || error.to_ascii_lowercase().contains("timeout") {
+        FailureOutcomeReason::ModelTimeout
+    } else if error.contains("NoResponse") {
+        FailureOutcomeReason::ModelNoResponse
+    } else if error.contains("rejected route") || error.contains("dispatch reject") {
+        FailureOutcomeReason::DispatchRejected
+    } else if error.contains("executor error") {
+        FailureOutcomeReason::ExecutionFailure
+    } else {
+        FailureOutcomeReason::InvalidRoute
+    }
 }

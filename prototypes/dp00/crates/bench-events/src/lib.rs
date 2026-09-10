@@ -5,8 +5,9 @@ use std::sync::Mutex;
 use std::time::Instant;
 
 use bench_core::{
-    ArchitectureEvent, ArchitectureObservation, Clock, DecisionOwner, ModelStatus,
-    MonotonicTimestamp, ObservationPort, ProductCorrelation, SemanticResponsibility,
+    ArchitectureEvent, ArchitectureObservation, Clock, DecisionOwner, ExecutionRoute, ModelStatus,
+    MonotonicTimestamp, ObservationPort, ProductCorrelation, ReferentRole, SemanticResponsibility,
+    TaskRelation, TurnId,
 };
 use serde::{Deserialize, Serialize};
 
@@ -41,12 +42,48 @@ pub enum CanonicalEventKind {
     ModelGenerationStarted,
     ModelGenerationCompleted,
     ExecutionStarted,
-    UsefulOutcomeObserved,
+    UsefulOutcomeObserved { effect: ObservableEffect },
     EpisodeCompleted,
-    EpisodeFailed,
+    EpisodeFailed { reason: FailureOutcomeReason },
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ObservableEffectType {
+    VolumeChanged,
+    FileInspected,
+    WifiStatusObserved,
+    DocumentOpened,
+    DnsCheckObserved,
+    DownloadsOrganized,
+    DiagnosisStarted,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservableEffect {
+    pub effect_type: ObservableEffectType,
+    pub subject_id: Option<String>,
+    pub target_id: Option<String>,
+    pub value: Option<String>,
+    pub state: Option<String>,
+    pub executor_id: Option<String>,
+    pub authoritative_source: EventEmitter,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum FailureOutcomeReason {
+    ModelMalformed,
+    ModelTimeout,
+    ModelNoResponse,
+    InvalidRoute,
+    DispatchRejected,
+    ExecutionFailure,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct CanonicalEvent {
     schema_version: String,
     event_id: String,
@@ -104,6 +141,11 @@ impl CanonicalEvent {
     pub fn alternative_id(&self) -> &str {
         &self.alternative_id
     }
+
+    #[must_use]
+    pub fn product_correlation(&self) -> &ProductCorrelation {
+        &self.product_correlation
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -115,6 +157,7 @@ pub enum ContractViolation {
     CompletedWithoutExecution,
     CompletedWithoutAuthoritativeOutcome,
     OutcomeNotProbeOwned,
+    OutcomeAuthorityMismatch,
     FailedWithUsefulOutcome,
     ConflictingTerminalEvents,
     InvalidSuccessOrder,
@@ -174,11 +217,13 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
     }
 
     let completed = position(|event| matches!(event, CanonicalEventKind::EpisodeCompleted));
-    let failed = position(|event| matches!(event, CanonicalEventKind::EpisodeFailed));
+    let failed = position(|event| matches!(event, CanonicalEventKind::EpisodeFailed { .. }));
     let execution = position(|event| matches!(event, CanonicalEventKind::ExecutionStarted));
     let authoritative_outcome = events.iter().position(|event| {
-        matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved)
-            && event.emitter() == EventEmitter::OutcomeProbe
+        matches!(
+            event.event(),
+            CanonicalEventKind::UsefulOutcomeObserved { .. }
+        ) && event.emitter() == EventEmitter::OutcomeProbe
     });
     if completed.is_some() && failed.is_some() {
         violations.push(ContractViolation::ConflictingTerminalEvents);
@@ -222,17 +267,31 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
         }
     }
     if failed.is_some()
-        && events
-            .iter()
-            .any(|event| matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved))
+        && events.iter().any(|event| {
+            matches!(
+                event.event(),
+                CanonicalEventKind::UsefulOutcomeObserved { .. }
+            )
+        })
     {
         violations.push(ContractViolation::FailedWithUsefulOutcome);
     }
     if events.iter().any(|event| {
-        matches!(event.event(), CanonicalEventKind::UsefulOutcomeObserved)
-            && event.emitter() != EventEmitter::OutcomeProbe
+        matches!(
+            event.event(),
+            CanonicalEventKind::UsefulOutcomeObserved { .. }
+        ) && event.emitter() != EventEmitter::OutcomeProbe
     }) {
         violations.push(ContractViolation::OutcomeNotProbeOwned);
+    }
+    if events.iter().any(|event| {
+        matches!(
+            event.event(),
+            CanonicalEventKind::UsefulOutcomeObserved { effect }
+                if effect.authoritative_source != event.emitter()
+        )
+    }) {
+        violations.push(ContractViolation::OutcomeAuthorityMismatch);
     }
 
     let requested = position(|event| {
@@ -244,7 +303,7 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
     let resolved = position(|event| {
         matches!(
             event,
-            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved)
+            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved { .. })
         )
     });
     if resolved.is_some_and(|resolved| requested.is_none_or(|requested| requested >= resolved)) {
@@ -266,6 +325,7 @@ pub struct LogicalModelCall {
     pub decision_owner: DecisionOwner,
     pub semantic_responsibilities: Vec<SemanticResponsibility>,
     pub status: ModelStatus,
+    pub semantic_output_reference: Option<ModelSemanticOutputReference>,
     pub route_committed_before_call: bool,
     pub route_committed_after_call: bool,
     pub logical_start: MonotonicTimestamp,
@@ -276,6 +336,147 @@ pub struct LogicalModelCall {
     pub classification_reason: String,
     pub qa04_primary_included: bool,
     pub route_commit_event_id: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ModelSemanticValueKind {
+    ExecutorCandidate,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ModelSemanticOutputReference {
+    pub value_kind: ModelSemanticValueKind,
+    pub value: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ActualReferentBinding {
+    pub referent_role: ReferentRole,
+    pub resolved_referent_id: String,
+    pub turn_id: Option<TurnId>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ActualTaskAssociation {
+    pub task_id: Option<String>,
+    pub task_relation: TaskRelation,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ActualClarificationAction {
+    pub requested: bool,
+    pub resolved: bool,
+    pub request_turn_id: Option<TurnId>,
+    pub response_turn_id: Option<TurnId>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ActualResultBinding {
+    pub result_id: Option<String>,
+    pub task_id: Option<String>,
+    pub execution_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ActualSemanticTrace {
+    pub referent_bindings: Vec<ActualReferentBinding>,
+    pub task_associations: Vec<ActualTaskAssociation>,
+    pub committed_routes: Vec<ExecutionRoute>,
+    pub clarification_actions: Vec<ActualClarificationAction>,
+    pub result_bindings: Vec<ActualResultBinding>,
+    pub observable_effects: Vec<ObservableEffect>,
+    pub failure_outcomes: Vec<FailureOutcomeReason>,
+}
+
+/// Projects only observed raw values. It never accepts scenario or oracle data.
+#[must_use]
+pub fn project_actual_semantic_trace(events: &[CanonicalEvent]) -> ActualSemanticTrace {
+    let mut trace = ActualSemanticTrace::default();
+    let mut pending_clarifications: Vec<ActualClarificationAction> = Vec::new();
+    for event in events {
+        match event.event() {
+            CanonicalEventKind::Architecture(ArchitectureEvent::ReferentBound {
+                referent_role,
+                resolved_referent_id,
+            }) if event.emitter() == EventEmitter::ArchitectureUnderTest => {
+                trace.referent_bindings.push(ActualReferentBinding {
+                    referent_role: *referent_role,
+                    resolved_referent_id: resolved_referent_id.clone(),
+                    turn_id: event.product_correlation().turn_id.clone(),
+                });
+            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::TaskAssociated {
+                task_relation,
+            }) if event.emitter() == EventEmitter::ArchitectureUnderTest => {
+                trace.task_associations.push(ActualTaskAssociation {
+                    task_id: event
+                        .product_correlation()
+                        .task_id
+                        .as_ref()
+                        .map(|value| value.0.clone()),
+                    task_relation: *task_relation,
+                });
+            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { route })
+                if event.emitter() == EventEmitter::ArchitectureUnderTest =>
+            {
+                trace.committed_routes.push(route.clone());
+            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationRequested {
+                ..
+            }) if event.emitter() == EventEmitter::ArchitectureUnderTest => {
+                pending_clarifications.push(ActualClarificationAction {
+                    requested: true,
+                    resolved: false,
+                    request_turn_id: event.product_correlation().turn_id.clone(),
+                    response_turn_id: None,
+                });
+            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationResolved {
+                request_turn_id,
+                response_turn_id,
+            }) if event.emitter() == EventEmitter::ArchitectureUnderTest => {
+                if let Some(action) = pending_clarifications
+                    .iter_mut()
+                    .rev()
+                    .find(|action| !action.resolved)
+                {
+                    action.resolved = true;
+                    action.request_turn_id = Some(request_turn_id.clone());
+                    action.response_turn_id = Some(response_turn_id.clone());
+                }
+            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::ResultBound)
+                if event.emitter() == EventEmitter::ArchitectureUnderTest =>
+            {
+                let correlation = event.product_correlation();
+                trace.result_bindings.push(ActualResultBinding {
+                    result_id: correlation.result_id.as_ref().map(|value| value.0.clone()),
+                    task_id: correlation.task_id.as_ref().map(|value| value.0.clone()),
+                    execution_id: correlation
+                        .execution_id
+                        .as_ref()
+                        .map(|value| value.0.clone()),
+                });
+            }
+            CanonicalEventKind::UsefulOutcomeObserved { effect }
+                if event.emitter() == EventEmitter::OutcomeProbe
+                    && effect.authoritative_source == EventEmitter::OutcomeProbe =>
+            {
+                trace.observable_effects.push(effect.clone());
+            }
+            CanonicalEventKind::EpisodeFailed { reason }
+                if event.emitter() == EventEmitter::Benchmark =>
+            {
+                trace.failure_outcomes.push(*reason);
+            }
+            _ => {}
+        }
+    }
+    trace.clarification_actions = pending_clarifications;
+    trace
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

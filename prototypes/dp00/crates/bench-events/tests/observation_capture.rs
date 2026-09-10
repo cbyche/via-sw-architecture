@@ -16,6 +16,7 @@ impl Clock for ControlledClock {
 
 fn correlation() -> ProductCorrelation {
     ProductCorrelation {
+        turn_id: None,
         task_id: None,
         execution_id: None,
         dispatch_id: None,

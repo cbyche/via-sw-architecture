@@ -24,6 +24,8 @@ pub fn evaluate(
         NormalizedIntent::LocalVolume => Some(FastCapability::Volume),
         NormalizedIntent::OpenRightDocument => Some(FastCapability::DocumentOpen),
         NormalizedIntent::GeneralFileWork
+        | NormalizedIntent::LatestDownloadLookup
+        | NormalizedIntent::OrganizeDownloads
         | NormalizedIntent::DiagnoseWifi
         | NormalizedIntent::ContinueTask
         | NormalizedIntent::AmbiguousDocument => None,

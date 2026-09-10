@@ -13,9 +13,10 @@ use bench_events::{
 use bench_fixtures::pilot_assets::load_pilot_corpus;
 use bench_runner::pilot_runtime::execute_episode;
 use bench_runner::{
-    Alternative, ControlledLatencyProfile, PilotRunnerConfig, RawEvidence, RunMode, RunProvenance,
-    SourceState, build_episode_plan, counterbalanced_order, guard_run_mode, persist_raw_run,
-    reload_events, reload_model_calls,
+    Alternative, CampaignConfiguration, CampaignProvenance, ControlledLatencyProfile,
+    PilotRunnerConfig, RawEvidence, RunMode, RunProvenance, SourceState, begin_campaign,
+    begin_campaign_profile, build_episode_plan, counterbalanced_order, file_identity,
+    guard_run_mode, persist_raw_run, reload_events, reload_model_calls,
 };
 
 struct TickClock(AtomicU64);
@@ -43,8 +44,10 @@ fn config() -> PilotRunnerConfig {
 
 fn provenance(run_id: &str) -> RunProvenance {
     RunProvenance {
-        provenance_schema_version: "dp00-pilot-provenance-v1".into(),
+        provenance_schema_version: "dp00-pilot-provenance-v2".into(),
         run_id: run_id.into(),
+        campaign_id: None,
+        campaign_profile_sequence_index: None,
         official: false,
         source_git_commit: "test-sha".into(),
         working_tree_clean: false,
@@ -80,8 +83,8 @@ fn provenance(run_id: &str) -> RunProvenance {
         cargo_lock_identity: "test-hash".into(),
         os: std::env::consts::OS.into(),
         machine_architecture: std::env::consts::ARCH.into(),
-        canonical_event_schema_version: "canonical-event-v0".into(),
-        model_call_schema_version: "model-call-v0".into(),
+        canonical_event_schema_version: "canonical-event-v1".into(),
+        model_call_schema_version: "model-call-v1".into(),
     }
 }
 
@@ -94,7 +97,7 @@ fn evidence() -> RawEvidence {
             scenario_version: "v0.1".into(),
             alternative_id: "A".into(),
             benchmark_version: "pilot-v0".into(),
-            schema_version: "canonical-event-v0".into(),
+            schema_version: "canonical-event-v1".into(),
             source_git_commit: "test".into(),
         },
         TickClock(AtomicU64::new(0)),
@@ -107,7 +110,7 @@ fn evidence() -> RawEvidence {
     RawEvidence {
         events: collector.canonical_snapshot(),
         model_calls: vec![LogicalModelCall {
-            schema_version: "model-call-v0".into(),
+            schema_version: "model-call-v1".into(),
             model_call_id: "call-1".into(),
             run_id: "raw-roundtrip".into(),
             episode_id: "episode-1".into(),
@@ -118,6 +121,7 @@ fn evidence() -> RawEvidence {
             decision_owner: DecisionOwner::from("A.IntentRefiner"),
             semantic_responsibilities: vec![SemanticResponsibility::IntentInterpretation],
             status: ModelStatus::Completed,
+            semantic_output_reference: None,
             route_committed_before_call: false,
             route_committed_after_call: true,
             logical_start: MonotonicTimestamp(10),
@@ -213,7 +217,7 @@ fn capture_and_minimal_use_the_same_lifecycle_with_different_sinks() {
                 scenario_version: "v0.1".into(),
                 alternative_id: "A".into(),
                 benchmark_version: "pilot-v0".into(),
-                schema_version: "canonical-event-v0".into(),
+                schema_version: "canonical-event-v1".into(),
                 source_git_commit: "test".into(),
             },
             TickClock(AtomicU64::new(0)),
@@ -259,6 +263,111 @@ fn official_mode_rejects_dirty_source_but_development_records_it() {
     };
     assert!(guard_run_mode(RunMode::Official, &dirty).is_err());
     assert!(guard_run_mode(RunMode::Development, &dirty).is_ok());
+}
+
+#[test]
+fn official_campaign_attests_once_and_persists_ordered_z_then_c_without_source_mutation() {
+    let root = std::env::temp_dir().join(format!("dp00-campaign-{}", std::process::id()));
+    if root.exists() {
+        fs::remove_dir_all(&root).expect("remove stale campaign directory");
+    }
+    let repository_root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let architecture_sources = [
+        "prototypes/dp00/crates/alternative-a/src/architecture.rs",
+        "prototypes/dp00/crates/alternative-b/src/architecture.rs",
+        "prototypes/dp00/crates/alternative-c/src/architecture.rs",
+        "prototypes/dp00/crates/alternative-d/src/architecture.rs",
+    ];
+    let before = architecture_sources
+        .iter()
+        .map(|path| file_identity(&repository_root.join(path)).expect("source identity"))
+        .collect::<Vec<_>>();
+    let profiles = vec![
+        ControlledLatencyProfile::profile_z(),
+        ControlledLatencyProfile::profile_c(),
+    ];
+    let campaign = CampaignProvenance {
+        provenance_schema_version: "dp00-pilot-campaign-provenance-v1".into(),
+        campaign_id: "campaign-z-c".into(),
+        source_git_commit: "same-test-sha".into(),
+        initial_working_tree_clean: true,
+        pilot_corpus_id: "dp00-pilot-v0".into(),
+        pilot_corpus_version: "v0.1".into(),
+        profile_sequence: profiles.clone(),
+        campaign_configuration: CampaignConfiguration {
+            alternatives: Alternative::ALL.to_vec(),
+            scenario_ids: vec!["P04".into(), "P05".into(), "P09".into()],
+            warmup_count: 0,
+            measured_repetition_count: 1,
+            order_policy: "DETERMINISTIC_CYCLIC_V1".into(),
+            instrumentation_mode: InstrumentationMode::Capture,
+        },
+        runner_version: "test".into(),
+    };
+    guard_run_mode(
+        RunMode::Official,
+        &SourceState {
+            source_git_commit: campaign.source_git_commit.clone(),
+            working_tree_clean: campaign.initial_working_tree_clean,
+        },
+    )
+    .expect("clean source accepted once");
+    let campaign_directory = begin_campaign(&root, &campaign).expect("campaign begins");
+    assert!(
+        begin_campaign(&root, &campaign).is_err(),
+        "campaign overwrite rejected"
+    );
+
+    for (index, profile) in profiles.iter().enumerate() {
+        let profile_directory =
+            begin_campaign_profile(&campaign_directory, profile).expect("profile begins");
+        let mut run = provenance(&format!("{}-run", profile.profile_id));
+        run.official = true;
+        run.working_tree_clean = true;
+        run.source_git_commit = campaign.source_git_commit.clone();
+        run.pilot_corpus_id = campaign.pilot_corpus_id.clone();
+        run.pilot_corpus_version = campaign.pilot_corpus_version.clone();
+        run.campaign_id = Some(campaign.campaign_id.clone());
+        run.campaign_profile_sequence_index = Some(index as u32);
+        run.latency_profile = profile.clone();
+        persist_raw_run(&profile_directory, &run, &evidence()).expect("profile raw persists");
+    }
+
+    let stored: CampaignProvenance = serde_json::from_slice(
+        &fs::read(campaign_directory.join("campaign-provenance.json"))
+            .expect("campaign provenance"),
+    )
+    .expect("campaign provenance parses");
+    assert_eq!(stored.profile_sequence, profiles);
+    assert_eq!(stored.profile_sequence[0].profile_id, "Z");
+    assert_eq!(stored.profile_sequence[1].profile_id, "C");
+    for profile_id in ["z", "c"] {
+        let run: RunProvenance = serde_json::from_slice(
+            &fs::read(
+                campaign_directory
+                    .join(format!("profile-{profile_id}"))
+                    .join(format!("{}-run", profile_id.to_ascii_uppercase()))
+                    .join("provenance.json"),
+            )
+            .expect("run provenance"),
+        )
+        .expect("run provenance parses");
+        assert_eq!(run.source_git_commit, "same-test-sha");
+        assert_eq!(run.pilot_corpus_version, "v0.1");
+        assert_eq!(
+            run.latency_profile.profile_id.to_ascii_lowercase(),
+            profile_id
+        );
+    }
+    let after = architecture_sources
+        .iter()
+        .map(|path| file_identity(&repository_root.join(path)).expect("source identity"))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        before, after,
+        "campaign support does not mutate A/B/C/D sources"
+    );
+    fs::remove_dir_all(&root).expect("remove campaign directory");
 }
 
 #[test]

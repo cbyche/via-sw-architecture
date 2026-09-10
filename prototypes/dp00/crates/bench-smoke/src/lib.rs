@@ -9,8 +9,9 @@ use bench_core::{
     ProductCorrelation, ResultId, SemanticResponsibility,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, InMemoryObservationCollector,
-    LogicalModelCall, ObservationContext,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    InMemoryObservationCollector, LogicalModelCall, ObservableEffect, ObservableEffectType,
+    ObservationContext,
 };
 use bench_fixtures::ControlledClock;
 use bench_replay::{
@@ -70,7 +71,7 @@ impl SmokePorts {
                 scenario_version: "s1-s5-v0".into(),
                 alternative_id: alternative.into(),
                 benchmark_version: "dp00-smoke-v0".into(),
-                schema_version: "canonical-event-v0".into(),
+                schema_version: "canonical-event-v1".into(),
                 source_git_commit: "working-tree".into(),
             },
             ControlledClock::new(0),
@@ -160,7 +161,7 @@ impl ModelPort for SmokePorts {
             .lock()
             .map_err(|_| "model-call trace poisoned")?
             .push(LogicalModelCall {
-                schema_version: "model-call-v0".into(),
+                schema_version: "model-call-v1".into(),
                 model_call_id: format!("model-call-{call_number}"),
                 run_id: format!(
                     "smoke-{}-{}",
@@ -175,6 +176,7 @@ impl ModelPort for SmokePorts {
                 decision_owner: request.decision_owner,
                 semantic_responsibilities: request.semantic_responsibilities,
                 status: response.model_status,
+                semantic_output_reference: None,
                 route_committed_before_call: false,
                 route_committed_after_call: false,
                 logical_start: MonotonicTimestamp(call_number * 10),
@@ -227,7 +229,9 @@ impl ExecutionPort for SmokePorts {
         drop(world);
         self.capture(
             EventEmitter::OutcomeProbe,
-            CanonicalEventKind::UsefulOutcomeObserved,
+            CanonicalEventKind::UsefulOutcomeObserved {
+                effect: smoke_effect(&result.payload),
+            },
         );
         Ok(result)
     }
@@ -283,8 +287,33 @@ impl FixtureLifecycle for SmokePorts {
     }
 
     fn after_failure(&mut self) -> Result<(), Self::Error> {
-        self.capture(EventEmitter::Benchmark, CanonicalEventKind::EpisodeFailed);
+        self.capture(
+            EventEmitter::Benchmark,
+            CanonicalEventKind::EpisodeFailed {
+                reason: FailureOutcomeReason::ExecutionFailure,
+            },
+        );
         Ok(())
+    }
+}
+
+fn smoke_effect(outcome: &str) -> ObservableEffect {
+    ObservableEffect {
+        effect_type: if outcome == "right_document_opened" {
+            ObservableEffectType::DocumentOpened
+        } else if outcome == "volume_reduced" {
+            ObservableEffectType::VolumeChanged
+        } else if outcome == "downloads_organized" {
+            ObservableEffectType::DownloadsOrganized
+        } else {
+            ObservableEffectType::WifiStatusObserved
+        },
+        subject_id: Some(outcome.into()),
+        target_id: None,
+        value: None,
+        state: Some("OBSERVED".into()),
+        executor_id: None,
+        authoritative_source: EventEmitter::OutcomeProbe,
     }
 }
 

@@ -92,6 +92,8 @@ fn action(output: &str) -> String {
     for value in [
         "LOCAL_VOLUME",
         "GENERAL_FILE_WORK",
+        "LOOKUP_LATEST_DOWNLOAD",
+        "ORGANIZE_DOWNLOADS",
         "DIAGNOSE_WIFI",
         "OPEN_RIGHT_DOCUMENT",
     ] {

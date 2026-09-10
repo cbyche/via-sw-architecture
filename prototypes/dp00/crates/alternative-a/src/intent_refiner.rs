@@ -6,6 +6,8 @@ use crate::context_engine::ContextPackage;
 pub enum NormalizedIntent {
     LocalVolume,
     GeneralFileWork,
+    LatestDownloadLookup,
+    OrganizeDownloads,
     DiagnoseWifi,
     ContinueTask,
     OpenRightDocument,
@@ -48,6 +50,10 @@ fn parse(output: &str) -> Result<NormalizedIntent, String> {
         Ok(NormalizedIntent::ContinueTask)
     } else if output.contains("DIAGNOSE_WIFI") {
         Ok(NormalizedIntent::DiagnoseWifi)
+    } else if output.contains("LOOKUP_LATEST_DOWNLOAD") {
+        Ok(NormalizedIntent::LatestDownloadLookup)
+    } else if output.contains("ORGANIZE_DOWNLOADS") {
+        Ok(NormalizedIntent::OrganizeDownloads)
     } else if output.contains("GENERAL_FILE_WORK") {
         Ok(NormalizedIntent::GeneralFileWork)
     } else if output.contains("LOCAL_VOLUME") {

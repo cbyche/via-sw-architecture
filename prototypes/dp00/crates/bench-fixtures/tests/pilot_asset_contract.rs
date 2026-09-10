@@ -61,13 +61,21 @@ fn every_pilot_scenario_materializes_to_typed_runtime_values() {
     for scenario in &corpus.scenarios {
         let materialized = materialize_scenario(&corpus, scenario)
             .unwrap_or_else(|error| panic!("{} materialization: {error}", scenario.scenario_id));
-        assert_eq!(
-            materialized.turns.len(),
-            scenario.stimulus.interaction.len()
-        );
+        let expected_turns = scenario.stimulus.interaction.len()
+            + scenario
+                .stimulus
+                .interaction
+                .iter()
+                .map(|turn| turn.deterministic_user_replies.len())
+                .sum::<usize>();
+        assert_eq!(materialized.turns.len(), expected_turns);
         assert_eq!(
             materialized.acoustic_eos_offsets_micros.len(),
-            scenario.stimulus.interaction.len()
+            expected_turns
+        );
+        assert_eq!(
+            materialized.clarification_triggered_turns.len(),
+            expected_turns
         );
         assert!(!materialized.replay_operations.is_empty());
     }

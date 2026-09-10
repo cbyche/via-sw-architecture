@@ -11,8 +11,9 @@ use bench_core::{
     ObservationPort, ProductCorrelation, ResultId, SemanticResponsibility, TurnId, UserTurn,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, InMemoryObservationCollector,
-    LogicalModelCall, ObservationContext, validate_episode,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    InMemoryObservationCollector, LogicalModelCall, ObservableEffect, ObservableEffectType,
+    ObservationContext, validate_episode,
 };
 use bench_fixtures::ControlledClock;
 use bench_runner::{EvidenceSource, FixtureLifecycle, RawEvidence, Runner, ScenarioStimulus};
@@ -154,7 +155,7 @@ impl ModelPort for FaultPorts {
             .lock()
             .map_err(|_| "call trace poisoned")?
             .push(LogicalModelCall {
-                schema_version: "model-call-v0".into(),
+                schema_version: "model-call-v1".into(),
                 model_call_id: format!("fault-call-{logical_sequence}"),
                 run_id: "fault-run".into(),
                 episode_id: "fault-episode".into(),
@@ -165,6 +166,7 @@ impl ModelPort for FaultPorts {
                 decision_owner: request.decision_owner,
                 semantic_responsibilities: request.semantic_responsibilities,
                 status: model_status,
+                semantic_output_reference: None,
                 route_committed_before_call: false,
                 route_committed_after_call: false,
                 logical_start: MonotonicTimestamp(logical_sequence * 10),
@@ -216,7 +218,17 @@ impl ExecutionPort for FaultPorts {
         );
         self.0.collector.capture_benchmark_event(
             EventEmitter::OutcomeProbe,
-            CanonicalEventKind::UsefulOutcomeObserved,
+            CanonicalEventKind::UsefulOutcomeObserved {
+                effect: ObservableEffect {
+                    effect_type: ObservableEffectType::DownloadsOrganized,
+                    subject_id: Some("downloads".into()),
+                    target_id: None,
+                    value: None,
+                    state: Some("ORGANIZED".into()),
+                    executor_id: Some("ARGO".into()),
+                    authoritative_source: EventEmitter::OutcomeProbe,
+                },
+            },
             ProductCorrelation::default(),
         );
         Ok(ExecutionResult {
@@ -260,7 +272,19 @@ impl FixtureLifecycle for FaultPorts {
     fn after_failure(&mut self) -> Result<(), Self::Error> {
         self.0.collector.capture_benchmark_event(
             EventEmitter::Benchmark,
-            CanonicalEventKind::EpisodeFailed,
+            CanonicalEventKind::EpisodeFailed {
+                reason: match self.0.behavior {
+                    InjectedBehavior::Malformed => FailureOutcomeReason::ModelMalformed,
+                    InjectedBehavior::Timeout => FailureOutcomeReason::ModelTimeout,
+                    InjectedBehavior::NoResponse => FailureOutcomeReason::ModelNoResponse,
+                    InjectedBehavior::RejectNetworkCandidate => {
+                        FailureOutcomeReason::DispatchRejected
+                    }
+                    InjectedBehavior::Correct | InjectedBehavior::WrongCandidate => {
+                        FailureOutcomeReason::InvalidRoute
+                    }
+                },
+            },
             ProductCorrelation::default(),
         );
         Ok(())
@@ -354,12 +378,12 @@ fn assert_terminal_fault(alternative: &str, behavior: InjectedBehavior, expected
     assert!(
         events
             .iter()
-            .any(|event| matches!(event.event(), CanonicalEventKind::EpisodeFailed))
+            .any(|event| matches!(event.event(), CanonicalEventKind::EpisodeFailed { .. }))
     );
     assert!(!events.iter().any(|event| matches!(
         event.event(),
         CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { .. })
-            | CanonicalEventKind::UsefulOutcomeObserved
+            | CanonicalEventKind::UsefulOutcomeObserved { .. }
     )));
     assert!(validate_episode(&events).is_empty());
 }

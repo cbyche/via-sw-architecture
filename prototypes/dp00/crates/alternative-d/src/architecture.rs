@@ -5,7 +5,8 @@ use crate::{
 use bench_core::{
     ArchitectureEvent, ArchitectureObservation, ArchitectureUnderTest, ExecutionPort,
     ExecutionRequest, ExecutionRoute, ExecutionRouteKind, InitialProductState, ModelPort,
-    ObservationPort, ProductCorrelation, ProductFact, TaskId, UserTurn,
+    ObservationPort, ProductCorrelation, ProductFact, ReferentRole, TaskId, TaskRelation, TurnId,
+    UserTurn,
 };
 
 pub struct AdaptiveVia<M, O, E> {
@@ -15,7 +16,7 @@ pub struct AdaptiveVia<M, O, E> {
     tasks: TaskManager,
     capability_facts: Vec<ProductFact>,
     policy_facts: Vec<ProductFact>,
-    clarification_pending: bool,
+    clarification_pending: Option<TurnId>,
 }
 impl<M, O, E> AdaptiveVia<M, O, E> {
     pub fn new(model: M, observations: O, executor: E) -> Self {
@@ -26,7 +27,7 @@ impl<M, O, E> AdaptiveVia<M, O, E> {
             tasks: TaskManager::default(),
             capability_facts: Vec::new(),
             policy_facts: Vec::new(),
-            clarification_pending: false,
+            clarification_pending: None,
         }
     }
 }
@@ -47,21 +48,37 @@ where
         Ok(())
     }
     fn handle_user_turn(&mut self, turn: UserTurn) -> Result<(), Self::Error> {
-        self.emit(ArchitectureEvent::ProcessingStarted, None);
+        let turn_id = turn.turn_id.clone();
+        self.emit_for_turn(ArchitectureEvent::ProcessingStarted, turn_id.clone());
         let intent = intent_refiner::refine(&self.model, &context_engine::package(turn))?;
+        if intent == intent_refiner::NormalizedIntent::OpenRightDocument {
+            self.emit_for_turn(
+                ArchitectureEvent::ReferentBound {
+                    referent_role: ReferentRole::Source,
+                    resolved_referent_id: "doc-right".into(),
+                },
+                turn_id.clone(),
+            );
+        }
         if intent == intent_refiner::NormalizedIntent::AmbiguousDocument {
-            self.clarification_pending = true;
-            self.emit(
+            self.clarification_pending = Some(turn_id.clone());
+            self.emit_for_turn(
                 ArchitectureEvent::ClarificationRequested {
                     prompt: "Which document?".into(),
+                    reason: bench_core::ClarificationReason::AmbiguousReferent,
                 },
-                None,
+                turn_id,
             );
             return Ok(());
         }
-        if self.clarification_pending {
-            self.clarification_pending = false;
-            self.emit(ArchitectureEvent::ClarificationResolved, None);
+        if let Some(request_turn_id) = self.clarification_pending.take() {
+            self.emit_for_turn(
+                ArchitectureEvent::ClarificationResolved {
+                    request_turn_id,
+                    response_turn_id: turn_id.clone(),
+                },
+                turn_id.clone(),
+            );
         }
         if intent == intent_refiner::NormalizedIntent::ContinueTask {
             let task_id = TaskId::from("T1");
@@ -71,6 +88,12 @@ where
                 .cloned()
                 .ok_or_else(|| "T1 route missing".to_owned())?;
             self.emit(ArchitectureEvent::TaskReused, Some(task_id.clone()));
+            self.emit(
+                ArchitectureEvent::TaskAssociated {
+                    task_relation: TaskRelation::FollowUp,
+                },
+                Some(task_id.clone()),
+            );
             return self.commit_and_execute(task_id, route, "ContinueTask".into());
         }
         let route = execution_path_selector::select(
@@ -81,6 +104,12 @@ where
         )?;
         let task_id = self.tasks.create(route.clone());
         self.emit(ArchitectureEvent::TaskCreated, Some(task_id.clone()));
+        self.emit(
+            ArchitectureEvent::TaskAssociated {
+                task_relation: TaskRelation::New,
+            },
+            Some(task_id.clone()),
+        );
         self.commit_and_execute(task_id, route, format!("{intent:?}"))
     }
     fn teardown(&mut self) -> Result<(), Self::Error> {
@@ -148,6 +177,15 @@ where
             event,
             product_correlation: ProductCorrelation {
                 task_id,
+                ..ProductCorrelation::default()
+            },
+        });
+    }
+    fn emit_for_turn(&self, event: ArchitectureEvent, turn_id: TurnId) {
+        self.observations.emit(ArchitectureObservation {
+            event,
+            product_correlation: ProductCorrelation {
+                turn_id: Some(turn_id),
                 ..ProductCorrelation::default()
             },
         });
