@@ -2,7 +2,7 @@
 
 ## Status
 
-Architecture Context Checkpoint 001/002/003 — evaluation rules for vNext DP analysis.
+Architecture Context Checkpoint 001/002/003/004 — evaluation rules for vNext DP analysis.
 
 These principles extend the current `evaluation-strategy.md` without replacing it. The existing strategy remains valid; a coherent rebaseline will be prepared after QA-01 through QA-04 are formally defined.
 
@@ -29,6 +29,10 @@ These principles extend the current `evaluation-strategy.md` without replacing i
 19. **Exact metrics require diagnostic preservation.** If the Primary Metric is all-or-nothing at episode level, every constraint-level result and failure reason must still be stored so partial improvements and construct-validity problems remain observable.
 20. **Evolution Flexibility evaluation freezes the Expected Change Area and alternative-specific architecture-role mapping before implementation/result observation.** A boundary that can be redefined after the diff is visible cannot serve as a valid containment oracle.
 21. **Development time and LOC are not architecture-only Primary Metrics when human/tool/coding-style variables can dominate them.** They may be preserved as diagnostics, but not used to determine the QA score without a separately justified methodology.
+22. **Every QA Primary Metric must have an explicit measurement boundary that is reconstructable from raw evidence.** Start/end conditions must not depend only on report-time interpretation.
+23. **Model/provider/prompt/cache profiles are controlled experiment inputs.** Freeze their versions/policies before final architecture qualification so implementation tuning does not silently become the independent variable.
+24. **Logical model-call count does not imply physical compute equivalence.** One small-model generation and one large multimodal generation both count as one logical generation for QA-04; measured resource differences remain Secondary telemetry.
+25. **Deterministic replay preserves logical inference topology.** If an architecture requests a model generation, that logical call is recorded/countable even when a replay/model double supplies the output; otherwise replay would erase the architecture property being measured.
 
 ## Raw-data principle
 
@@ -41,6 +45,8 @@ The cost of retaining a timestamp or categorical event is small; the cost of dis
 For QA-02 specifically, storing only final `episode_exact_conform` or AECR is prohibited. Preserve the manifest version, actual canonical trace, each applicable constraint result, and failure ids/reasons.
 
 For QA-03, storing only final CCR or `scenario_change_contained` is likewise prohibited. Preserve the frozen Expected Change Area, role mapping, actual changed roles/files, acceptance/regression results, and unexpected propagation evidence.
+
+For QA-04, storing only the episode-level call count is prohibited. Preserve each logical ModelCall record, call classification/purpose, causal/retry links, model/prompt/cache profiles, execution-boundary evidence, and token/resource telemetry when available.
 
 ## Metric discipline
 
@@ -58,6 +64,8 @@ Do not combine independent concerns by arbitrary weighted formulas merely to obt
 Likewise, do not make a component-accuracy average the correctness Primary Metric when one critical error can invalidate the whole user-goal orchestration. Component/slice metrics remain valuable Secondary diagnostics.
 
 For Flexibility, do not use topology size, component count, LOC or developer time as a substitute for the architecture question of whether a change crossed responsibility boundaries unexpectedly.
+
+For Model Call Overhead, do not subtract a hypothetical “intrinsic task call count,” count all downstream lifetime reasoning, or apply arbitrary small/large-model weights. The Primary Metric is the directly observed count of qualifying logical pre-execution ORCHESTRATION/MIXED generations.
 
 ## Architecture isolation
 
@@ -83,6 +91,19 @@ The comparison should answer: **if the semantic/dependency behavior is held equi
 
 For evolution experiments, the controlled inputs are different but the principle is the same. Freeze the common evolution requirement, architecture-role Expected Change Area, alternative role mappings, acceptance tests and regression suite; then observe how each architecture must actually change.
 
+For QA-04, additionally freeze model profile, prompt profile and cache policy/version. Resource/cost telemetry can then be compared diagnostically without allowing prompt/provider tuning to redefine the architecture experiment.
+
+## Primary measurement-boundary discipline
+
+A Primary Metric that depends on an interval or lifecycle phase must define its start/end semantically and expose raw events that prove those boundaries.
+
+Examples:
+
+- QA-01: ground-truth Acoustic EOS → first useful outcome;
+- QA-04: request-processing start → execution owner confirmed and execution actually started.
+
+Do not infer a favorable boundary after observing an alternative. If a boundary definition changes after pilot, version it and rerun/recompute consistently before final evaluation.
+
 ## Deterministic replay does not mean unrealistic replay
 
 A deterministic corpus should include realistic non-happy-path semantic classes observed from real dependencies, for example:
@@ -97,6 +118,8 @@ A deterministic corpus should include realistic non-happy-path semantic classes 
 The corpus is frozen before final A/B/C/D scoring and replayed equally across alternatives.
 
 For correctness evaluation, replaying the same wrong model output is especially useful: it tests whether validation, clarification, eligibility policy, safe fallback and state ownership differ across architectures without making model quality the independent variable.
+
+For model-call accounting, deterministic replay must preserve the fact that a logical generation was requested. A replayed semantic response is therefore still one logical call when the architecture initiated a generation; a deterministic code branch that requested no model remains zero calls.
 
 ## Canonical normalization principle
 
@@ -141,6 +164,8 @@ The following must be versioned/frozen for final qualification:
 - scoring version.
 
 Usage-frequency-weighted results may be derived separately to answer a Product E2E sensitivity question.
+
+For QA-04, request-class composition also affects an arithmetic mean. Freeze workload taxonomy, class scenario counts and the aggregation rule before final scoring. A usage-frequency-weighted result remains Secondary unless the frozen scoring version explicitly makes it Primary.
 
 ## Evolution-benchmark boundary discipline
 
@@ -191,6 +216,14 @@ Evolution experiments additionally identify:
 - baseline and result Git commits;
 - acceptance/regression suite versions.
 
+Model-call experiments additionally identify:
+
+- model profile/version;
+- prompt profile/version;
+- cache policy/version;
+- model-call schema version;
+- workload taxonomy/aggregation version.
+
 A scoring change must not mutate prior raw runs. Recompute derived metrics into a new version.
 
 ## Relationship to current repository documents
@@ -200,7 +233,9 @@ A scoring change must not mutate prior raw runs. Recompute derived metrics into 
 - `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` defines the responsiveness Primary Metric.
 - `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` defines AECR and its episode/constraint semantics.
 - `docs/evaluation/quality-attributes/QA-03-change-flexibility.md` defines CCR and Expected Change Area semantics.
-- `benchmark/schemas/run-event-schema.md` defines runtime/interaction raw run evidence.
+- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md` defines Average Pre-execution Model Calls per Episode and its execution-start boundary.
+- `benchmark/schemas/run-event-schema.md` defines runtime/interaction episode evidence.
+- `benchmark/schemas/model-call-schema.md` defines per-logical-generation model telemetry and QA-04 inclusion evidence.
 - `benchmark/schemas/scenario-constraint-schema.md` defines topology-neutral correctness manifests.
 - `benchmark/schemas/evolution-scenario-schema.md` defines topology-neutral evolution requirements and Expected Change Areas.
 - `benchmark/schemas/evolution-run-schema.md` defines immutable QA-03 change/test/diff evidence.
