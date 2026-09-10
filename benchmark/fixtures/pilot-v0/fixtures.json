@@ -1,0 +1,870 @@
+{
+  "schema_version": "fixture-registry-pilot-v0",
+  "asset_id": "FIXTURE-REGISTRY-DP00-PILOT-v0",
+  "asset_version": "v0.1",
+  "unknown_field_policy": "REJECT_UNKNOWN_AT_TYPED_BOUNDARIES; DATA_IS_VERSIONED_BY_FIXTURE_KIND",
+  "fixtures": [
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "CTX-NONE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "CONTEXT_EVIDENCE",
+      "description": "No ambient referent evidence.",
+      "data": {
+        "surface_snapshot_generation": 0,
+        "objects": [],
+        "pointer_events": [],
+        "focus_object_id": null
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "STATE-EMPTY-v1",
+      "asset_version": "v1",
+      "fixture_kind": "INITIAL_STATE",
+      "description": "Fresh logical product state.",
+      "data": {
+        "conversation": {
+          "conversation_id": "C-PILOT",
+          "facts": []
+        },
+        "active_tasks": []
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "CAP-DP00-PILOT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "CAPABILITY_PROFILE",
+      "description": "Shared capability registry facts for every alternative.",
+      "data": {
+        "executors": [
+          {
+            "executor_id": "ARGO",
+            "registered": true,
+            "capability_ids": [
+              "general.agent",
+              "downloads.inspect",
+              "downloads.organize",
+              "document.summarize"
+            ]
+          },
+          {
+            "executor_id": "NetworkAgent",
+            "registered": true,
+            "capability_ids": [
+              "network.status",
+              "network.diagnose",
+              "network.dns.check"
+            ]
+          },
+          {
+            "executor_id": "MailAgent",
+            "registered": true,
+            "capability_ids": [
+              "mail.read",
+              "mail.send"
+            ]
+          },
+          {
+            "executor_id": "FileAgent",
+            "registered": true,
+            "capability_ids": [
+              "file.open",
+              "file.inspect"
+            ]
+          },
+          {
+            "executor_id": "VIA_FAST",
+            "registered": true,
+            "capability_ids": [
+              "volume.decrease"
+            ]
+          }
+        ],
+        "bounded_local_capabilities": [
+          "volume.decrease"
+        ],
+        "architecture_specific_route_hint": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "HEALTH-ALL-UP-v1",
+      "asset_version": "v1",
+      "fixture_kind": "HEALTH_PROFILE",
+      "description": "All registered Pilot executors are healthy.",
+      "data": {
+        "statuses": [
+          {
+            "executor_id": "ARGO",
+            "healthy": true
+          },
+          {
+            "executor_id": "NetworkAgent",
+            "healthy": true
+          },
+          {
+            "executor_id": "MailAgent",
+            "healthy": true
+          },
+          {
+            "executor_id": "FileAgent",
+            "healthy": true
+          },
+          {
+            "executor_id": "VIA_FAST",
+            "healthy": true
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "POLICY-BASE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "POLICY_PROFILE",
+      "description": "Common non-privileged Pilot policy facts.",
+      "data": {
+        "consent_state": "NOT_REQUIRED_FOR_FIXTURE",
+        "network_allowed": true,
+        "local_volume_change_allowed": true
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "LAT-PILOT-TBD-v1",
+      "asset_version": "v1",
+      "fixture_kind": "LATENCY_PROFILE",
+      "description": "Session 1 placeholder; concrete Z/C timing belongs to Session 2.",
+      "data": {
+        "status": "PILOT_TBD",
+        "configuration_owner": "SESSION_2",
+        "deterministic_across_alternatives": true
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "FRONTEND-CONTROLLED-v1",
+      "asset_version": "v1",
+      "fixture_kind": "INTERACTION_FRONTEND",
+      "description": "Common controlled Voice/Text front-end; no STT/S2S comparison.",
+      "data": {
+        "normalized_transcript_matches_fixture": true,
+        "pre_eos_semantic_preparation": false,
+        "eos_authority": "BENCHMARK_AUDIO_FIXTURE",
+        "runtime_vad_is_authoritative": false,
+        "same_across_alternatives": true
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AUDIO-P01-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AUDIO",
+      "description": "Controlled Voice fixture for P01.",
+      "data": {
+        "audio_fixture_identity": "synthetic-ko-kr-p01-v1",
+        "transcript": "볼륨 조금 줄여줘.",
+        "sample_rate_hz": 16000,
+        "ground_truth_acoustic_eos_offset_micros": 1180000,
+        "eos_annotation_authority": "BENCHMARK_FIXTURE",
+        "audio_content_generation": "deterministic_synthetic_fixture"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AUDIO-P02-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AUDIO",
+      "description": "Controlled Voice fixture for P02.",
+      "data": {
+        "audio_fixture_identity": "synthetic-ko-kr-p02-v1",
+        "transcript": "다운로드 폴더에서 가장 최근 파일 이름을 알려줘.",
+        "sample_rate_hz": 16000,
+        "ground_truth_acoustic_eos_offset_micros": 2460000,
+        "eos_annotation_authority": "BENCHMARK_FIXTURE",
+        "audio_content_generation": "deterministic_synthetic_fixture"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AUDIO-P03-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AUDIO",
+      "description": "Controlled Voice fixture for P03.",
+      "data": {
+        "audio_fixture_identity": "synthetic-ko-kr-p03-v1",
+        "transcript": "현재 Wi-Fi 연결 상태만 짧게 확인해줘.",
+        "sample_rate_hz": 16000,
+        "ground_truth_acoustic_eos_offset_micros": 2310000,
+        "eos_annotation_authority": "BENCHMARK_FIXTURE",
+        "audio_content_generation": "deterministic_synthetic_fixture"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "CTX-P04-v1",
+      "asset_version": "v1",
+      "fixture_kind": "CONTEXT_EVIDENCE",
+      "description": "Raw pointed-document surface evidence without a resolved referent.",
+      "data": {
+        "surface_snapshot_generation": 17,
+        "objects": [
+          {
+            "object_id": "doc-left",
+            "role": "document",
+            "label": "분기 계획.pdf",
+            "bounds": {
+              "x": 80,
+              "y": 120,
+              "width": 240,
+              "height": 320
+            },
+            "stable_id": "file-41"
+          },
+          {
+            "object_id": "doc-right",
+            "role": "document",
+            "label": "예산 검토.pdf",
+            "bounds": {
+              "x": 380,
+              "y": 120,
+              "width": 240,
+              "height": 320
+            },
+            "stable_id": "file-42"
+          }
+        ],
+        "pointer_events": [
+          {
+            "x": 505,
+            "y": 245,
+            "event": "POINT",
+            "snapshot_generation": 17
+          }
+        ],
+        "focus_object_id": null
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "CTX-P06-v1",
+      "asset_version": "v1",
+      "fixture_kind": "CONTEXT_EVIDENCE",
+      "description": "Two equally plausible documents; no selected referent is exposed.",
+      "data": {
+        "surface_snapshot_generation": 23,
+        "objects": [
+          {
+            "object_id": "doc-left",
+            "role": "document",
+            "label": "계획서.pdf",
+            "bounds": {
+              "x": 80,
+              "y": 120,
+              "width": 240,
+              "height": 320
+            },
+            "stable_id": "file-51"
+          },
+          {
+            "object_id": "doc-right",
+            "role": "document",
+            "label": "계획서.pdf",
+            "bounds": {
+              "x": 380,
+              "y": 120,
+              "width": 240,
+              "height": 320
+            },
+            "stable_id": "file-52"
+          }
+        ],
+        "pointer_events": [],
+        "focus_object_id": null
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "STATE-P05-v1",
+      "asset_version": "v1",
+      "fixture_kind": "INITIAL_STATE",
+      "description": "Two active tasks; current-turn association remains an AUT decision.",
+      "data": {
+        "conversation": {
+          "conversation_id": "C-P05",
+          "facts": [
+            {
+              "key": "last_wifi_exchange",
+              "value": "DNS 확인 여부를 사용자에게 질문함"
+            }
+          ]
+        },
+        "active_tasks": [
+          {
+            "task_id": "T1",
+            "goal": "diagnose_wifi",
+            "executor_id": "NetworkAgent",
+            "status": "WAITING_USER",
+            "execution_id": "EX1",
+            "continuation_ref": "NETWORK-THREAD-1",
+            "prior_route": {
+              "route_kind": "EXECUTOR_DIRECT",
+              "initial_executor_id": "NetworkAgent",
+              "final_executor_id_if_known": "NetworkAgent",
+              "delegation_chain": []
+            }
+          },
+          {
+            "task_id": "T2",
+            "goal": "summarize_document",
+            "executor_id": "ARGO",
+            "status": "RUNNING",
+            "execution_id": "EX2",
+            "continuation_ref": "ARGO-THREAD-2",
+            "prior_route": {
+              "route_kind": "EXECUTOR_DIRECT",
+              "initial_executor_id": "ARGO",
+              "final_executor_id_if_known": "ARGO",
+              "delegation_chain": []
+            }
+          }
+        ],
+        "current_turn_selected_task_id": null
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AGENT-ARGO-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AGENT_SCRIPT",
+      "description": "Deterministic post-route script for ARGO.",
+      "data": {
+        "executor_id": "ARGO",
+        "accepted_capability_ids": [
+          "general.agent",
+          "downloads.inspect",
+          "downloads.organize",
+          "document.summarize"
+        ],
+        "start_behavior": "ACCEPT",
+        "completion_behavior": "deterministic_result",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AGENT-NETWORK-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AGENT_SCRIPT",
+      "description": "Deterministic post-route script for NetworkAgent.",
+      "data": {
+        "executor_id": "NetworkAgent",
+        "accepted_capability_ids": [
+          "network.status",
+          "network.diagnose",
+          "network.dns.check"
+        ],
+        "start_behavior": "ACCEPT",
+        "completion_behavior": "deterministic_network_result",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AGENT-MAIL-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AGENT_SCRIPT",
+      "description": "Deterministic post-route script for MailAgent.",
+      "data": {
+        "executor_id": "MailAgent",
+        "accepted_capability_ids": [
+          "mail.read",
+          "mail.send"
+        ],
+        "start_behavior": "ACCEPT",
+        "completion_behavior": "deterministic_mail_result",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "AGENT-FILE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "AGENT_SCRIPT",
+      "description": "Deterministic post-route script for FileAgent.",
+      "data": {
+        "executor_id": "FileAgent",
+        "accepted_capability_ids": [
+          "file.open",
+          "file.inspect"
+        ],
+        "start_behavior": "ACCEPT",
+        "completion_behavior": "deterministic_file_result",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "TOOL-VOLUME-v1",
+      "asset_version": "v1",
+      "fixture_kind": "TOOL_SCRIPT",
+      "description": "Deterministic tool fixture for volume.decrease.",
+      "data": {
+        "tool_id": "system.volume",
+        "capability_id": "volume.decrease",
+        "input_contract": "typed-fixture-v1",
+        "observable_effect": "volume.level decreases by one controlled step",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "TOOL-FILE-OPEN-v1",
+      "asset_version": "v1",
+      "fixture_kind": "TOOL_SCRIPT",
+      "description": "Deterministic tool fixture for file.open.",
+      "data": {
+        "tool_id": "file.open",
+        "capability_id": "file.open",
+        "input_contract": "typed-fixture-v1",
+        "observable_effect": "requested object enters OPEN_USABLE state",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "TOOL-DOWNLOADS-INSPECT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "TOOL_SCRIPT",
+      "description": "Deterministic tool fixture for downloads.inspect.",
+      "data": {
+        "tool_id": "downloads.inspect",
+        "capability_id": "downloads.inspect",
+        "input_contract": "typed-fixture-v1",
+        "observable_effect": "latest file name is emitted to result sink",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P01-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P01.",
+      "data": {
+        "scenario_id": "P01",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P02-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P02.",
+      "data": {
+        "scenario_id": "P02",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P03-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P03.",
+      "data": {
+        "scenario_id": "P03",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P04-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P04.",
+      "data": {
+        "scenario_id": "P04",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P05-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P05.",
+      "data": {
+        "scenario_id": "P05",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P06-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P06.",
+      "data": {
+        "scenario_id": "P06",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P07-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P07.",
+      "data": {
+        "scenario_id": "P07",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P08-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P08.",
+      "data": {
+        "scenario_id": "P08",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P09-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P09.",
+      "data": {
+        "scenario_id": "P09",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P10-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External outcome probe for P10.",
+      "data": {
+        "scenario_id": "P10",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-VOLUME-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-VOLUME-v1.",
+      "data": {
+        "normalized_goal": "decrease_volume",
+        "requires_domain_planning": false,
+        "bounded_local_capability": "volume.decrease"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-DOWNLOADS-LOOKUP-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-DOWNLOADS-LOOKUP-v1.",
+      "data": {
+        "normalized_goal": "report_latest_download_name",
+        "requires_domain_planning": false,
+        "requires_executor_capability": "downloads.inspect"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-WIFI-STATUS-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-WIFI-STATUS-v1.",
+      "data": {
+        "normalized_goal": "check_wifi_status",
+        "requires_domain_planning": false,
+        "requires_executor_capability": "network.status"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-OPEN-DOCUMENT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-OPEN-DOCUMENT-v1.",
+      "data": {
+        "normalized_goal": "open_referred_document",
+        "requires_domain_planning": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-REFERENT-DOC-RIGHT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-REFERENT-DOC-RIGHT-v1.",
+      "data": {
+        "referent_binding": {
+          "mention": "이 문서",
+          "object_id": "doc-right"
+        }
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-DNS-FOLLOWUP-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-DNS-FOLLOWUP-v1.",
+      "data": {
+        "normalized_goal": "check_dns",
+        "task_relation": "FOLLOW_UP"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-TASK-T1-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-TASK-T1-v1.",
+      "data": {
+        "task_relation": "FOLLOW_UP",
+        "task_id": "T1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-REFERENT-AMBIGUOUS-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-REFERENT-AMBIGUOUS-v1.",
+      "data": {
+        "candidate_object_ids": [
+          "doc-left",
+          "doc-right"
+        ],
+        "resolution": "AMBIGUOUS"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-CLARIFY-DOCUMENT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-CLARIFY-DOCUMENT-v1.",
+      "data": {
+        "action": "REQUEST_CLARIFICATION",
+        "prompt": "왼쪽 문서와 오른쪽 문서 중 어느 문서인가요?"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-REFERENT-P06-RESOLVED-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-REFERENT-P06-RESOLVED-v1.",
+      "data": {
+        "referent_binding": {
+          "mention": "오른쪽에 있는 거",
+          "object_id": "doc-right"
+        }
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-ORGANIZE-DOWNLOADS-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-INTENT-ORGANIZE-DOWNLOADS-v1.",
+      "data": {
+        "normalized_goal": "organize_downloads",
+        "requires_domain_planning": true
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-WRONG-FAST-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-WRONG-FAST-v1.",
+      "data": {
+        "proposed_route": {
+          "route_kind": "LOCAL_DIRECT",
+          "initial_executor_id": "VIA_FAST",
+          "final_executor_id_if_known": "VIA_FAST",
+          "delegation_chain": []
+        },
+        "confidence_milli": 910
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-ROUTE-GENERAL-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-ROUTE-GENERAL-v1.",
+      "data": {
+        "semantic_execution_requirement": "GENERAL_AGENT",
+        "allowed_canonical_routes": [
+          "EXECUTOR_DIRECT:ARGO"
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-AGENT-ARGO-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-AGENT-ARGO-v1.",
+      "data": {
+        "proposed_executor_id": "ARGO"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-ROUTE-NETWORK-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-ROUTE-NETWORK-v1.",
+      "data": {
+        "semantic_execution_requirement": "NETWORK_SPECIALIST",
+        "allowed_canonical_routes": [
+          "EXECUTOR_DIRECT:NetworkAgent",
+          "EXECUTOR_DELEGATED:ARGO->NetworkAgent"
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-AGENT-NETWORK-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-AGENT-NETWORK-v1.",
+      "data": {
+        "proposed_executor_id": "NetworkAgent"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-ROUTE-FILE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-ROUTE-FILE-v1.",
+      "data": {
+        "semantic_execution_requirement": "FILE_OPEN",
+        "allowed_canonical_routes": [
+          "EXECUTOR_DIRECT:FileAgent",
+          "EXECUTOR_DELEGATED:ARGO->FileAgent"
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-AGENT-FILE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-AGENT-FILE-v1.",
+      "data": {
+        "proposed_executor_id": "FileAgent"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-ROUTE-VOLUME-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-ROUTE-VOLUME-v1.",
+      "data": {
+        "semantic_execution_requirement": "VOLUME_DECREASE",
+        "allowed_canonical_routes": [
+          "LOCAL_DIRECT:VIA_FAST",
+          "EXECUTOR_DIRECT:ARGO"
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-MALFORMED-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-MALFORMED-v1.",
+      "data": {
+        "raw_structured_output": "{\"route_kind\":",
+        "schema_validation_expected_to_fail": true
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-WRONG-MAIL-ROUTE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-WRONG-MAIL-ROUTE-v1.",
+      "data": {
+        "proposed_route": {
+          "route_kind": "EXECUTOR_DIRECT",
+          "initial_executor_id": "MailAgent",
+          "final_executor_id_if_known": "MailAgent",
+          "delegation_chain": []
+        },
+        "executor_exists": true,
+        "registered": true,
+        "healthy": true,
+        "request_representation_structurally_valid": true,
+        "scenario_semantics_correct": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-WRONG-MAIL-AGENT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-WRONG-MAIL-AGENT-v1.",
+      "data": {
+        "proposed_executor_id": "MailAgent",
+        "executor_exists": true,
+        "registered": true,
+        "healthy": true,
+        "capability_object_structurally_valid": true,
+        "scenario_semantics_correct": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-RESULT-BIND-T1-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-RESULT-BIND-T1-v1.",
+      "data": {
+        "task_id": "T1",
+        "result_binding": "T1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-RESULT-DEFAULT-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic replay payload PAYLOAD-RESULT-DEFAULT-v1.",
+      "data": {
+        "result_binding": "CURRENT_USER_GOAL"
+      }
+    }
+  ]
+}

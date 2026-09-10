@@ -1,0 +1,795 @@
+{
+  "schema_version": "oracle-registry-pilot-v0",
+  "asset_id": "ORACLE-REGISTRY-DP00-PILOT-v0",
+  "asset_version": "v0.1",
+  "visibility": "EVALUATOR_ONLY",
+  "oracles": [
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P01-v1",
+      "asset_version": "v1",
+      "scenario_id": "P01",
+      "ground_truth": {
+        "requested_capability": "volume.decrease"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P01-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C3_EXECUTION_PATH_ELIGIBILITY",
+        "secondary_categories": [
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P01-v1",
+        "semantic_trace_set_id": "SBP-P01-v1",
+        "constraints": [
+          {
+            "constraint_id": "P01-REQ-EFFECT",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "equals",
+            "expected": {
+              "capability_id": "volume.decrease",
+              "state": "DECREASED"
+            },
+            "severity": "critical",
+            "description": "Controlled volume state must decrease."
+          },
+          {
+            "constraint_id": "P01-ALLOW-ROUTE",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_path",
+            "operator": "in",
+            "expected": [
+              "LOCAL_DIRECT:VIA_FAST",
+              "EXECUTOR_DIRECT:ARGO"
+            ],
+            "severity": "critical",
+            "description": "Both bounded VIA Fast and ARGO tool routes are topology-neutral correct."
+          },
+          {
+            "constraint_id": "P01-FORBID-AGENT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "delegated_agent",
+            "operator": "in",
+            "expected": [
+              "MailAgent",
+              "FileAgent",
+              "NetworkAgent"
+            ],
+            "severity": "critical",
+            "description": "Unrelated specialist execution is forbidden."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P01-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P01-v1",
+        "observable_state_path": "fixture.volume.state",
+        "operator": "equals",
+        "expected": "DECREASED",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P02-v1",
+      "asset_version": "v1",
+      "scenario_id": "P02",
+      "ground_truth": {
+        "required_capability": "downloads.inspect",
+        "fast_task_semantics": true
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P02-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C4_AGENT_ROUTING_DELEGATION",
+        "secondary_categories": [
+          "C3_EXECUTION_PATH_ELIGIBILITY"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P02-v1",
+        "semantic_trace_set_id": "SBP-P02-v1",
+        "constraints": [
+          {
+            "constraint_id": "P02-REQ-RESULT",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "LATEST_DOWNLOAD_NAME_EMITTED",
+            "severity": "critical",
+            "description": "A bounded result must reach the output sink."
+          },
+          {
+            "constraint_id": "P02-ALLOW-OWNER",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_owner",
+            "operator": "in",
+            "expected": [
+              "ARGO"
+            ],
+            "severity": "critical",
+            "description": "The general Agent owns this non-local operation."
+          },
+          {
+            "constraint_id": "P02-FORBID-FAST",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "execution_owner",
+            "operator": "equals",
+            "expected": "VIA_FAST",
+            "severity": "critical",
+            "description": "General Agent work must not be claimed as local Fast execution."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P02-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P02-v1",
+        "observable_state_path": "interaction_output.latest_download_name",
+        "operator": "is_non_empty",
+        "expected": true,
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P03-v1",
+      "asset_version": "v1",
+      "scenario_id": "P03",
+      "ground_truth": {
+        "required_capability": "network.status",
+        "correct_executor": "NetworkAgent"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P03-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C4_AGENT_ROUTING_DELEGATION",
+        "secondary_categories": [
+          "C3_EXECUTION_PATH_ELIGIBILITY"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P03-v1",
+        "semantic_trace_set_id": "SBP-P03-v1",
+        "constraints": [
+          {
+            "constraint_id": "P03-REQ-RESULT",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "NETWORK_STATUS_OBSERVED",
+            "severity": "critical",
+            "description": "Network status must be observable."
+          },
+          {
+            "constraint_id": "P03-ALLOW-ROUTE",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_path",
+            "operator": "in",
+            "expected": [
+              "EXECUTOR_DIRECT:NetworkAgent",
+              "EXECUTOR_DELEGATED:ARGO->NetworkAgent"
+            ],
+            "severity": "critical",
+            "description": "Direct and ARGO-delegated specialist routes are both correct."
+          },
+          {
+            "constraint_id": "P03-FORBID-WRONG",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "delegated_agent",
+            "operator": "in",
+            "expected": [
+              "MailAgent",
+              "FileAgent"
+            ],
+            "severity": "critical",
+            "description": "Unrelated healthy agents remain semantically wrong."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P03-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P03-v1",
+        "observable_state_path": "network_fixture.status_result",
+        "operator": "equals",
+        "expected": "OBSERVED",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P04-v1",
+      "asset_version": "v1",
+      "scenario_id": "P04",
+      "ground_truth": {
+        "correct_referent": "doc-right",
+        "source": "pointer_at_snapshot_generation_17"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P04-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C1_CONTEXT_REFERENT_GROUNDING",
+        "secondary_categories": [
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P04-v1",
+        "semantic_trace_set_id": "SBP-P04-v1",
+        "constraints": [
+          {
+            "constraint_id": "P04-REQ-REFERENT",
+            "constraint_set": "REQUIRED",
+            "dimension": "referent",
+            "operator": "equals",
+            "expected": {
+              "role": "source",
+              "object_id": "doc-right"
+            },
+            "severity": "critical",
+            "description": "Pointer evidence must resolve to the right document."
+          },
+          {
+            "constraint_id": "P04-REQ-OPEN",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "equals",
+            "expected": {
+              "object_id": "doc-right",
+              "state": "OPEN_USABLE"
+            },
+            "severity": "critical",
+            "description": "The referenced document must become usable."
+          },
+          {
+            "constraint_id": "P04-ALLOW-ROUTE",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_path",
+            "operator": "in",
+            "expected": [
+              "EXECUTOR_DIRECT:FileAgent",
+              "EXECUTOR_DELEGATED:ARGO->FileAgent",
+              "EXECUTOR_DIRECT:ARGO"
+            ],
+            "severity": "critical",
+            "description": "Topology-neutral file-capable routes are allowed."
+          },
+          {
+            "constraint_id": "P04-FORBID-LEFT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "referent",
+            "operator": "equals",
+            "expected": {
+              "role": "source",
+              "object_id": "doc-left"
+            },
+            "severity": "critical",
+            "description": "Opening the other document is incorrect."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL",
+        "referent": "doc-right"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P04-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P04-v1",
+        "observable_state_path": "file_fixture.objects.doc-right.state",
+        "operator": "equals",
+        "expected": "OPEN_USABLE",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P05-v1",
+      "asset_version": "v1",
+      "scenario_id": "P05",
+      "ground_truth": {
+        "correct_task_id": "T1",
+        "task_relation": "FOLLOW_UP",
+        "unrelated_active_task_id": "T2"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P05-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C2_TASK_ASSOCIATION_FOLLOWUP",
+        "secondary_categories": [
+          "C6_CONCURRENT_TASK_RESULT_BINDING"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P05-v1",
+        "semantic_trace_set_id": "SBP-P05-v1",
+        "constraints": [
+          {
+            "constraint_id": "P05-REQ-RELATION",
+            "constraint_set": "REQUIRED",
+            "dimension": "task_association",
+            "operator": "equals",
+            "expected": "FOLLOW_UP",
+            "severity": "critical",
+            "description": "The turn continues an existing task."
+          },
+          {
+            "constraint_id": "P05-REQ-TASK",
+            "constraint_set": "REQUIRED",
+            "dimension": "task_association",
+            "operator": "equals",
+            "expected": {
+              "task_id": "T1"
+            },
+            "severity": "critical",
+            "description": "The waiting Wi-Fi task must be selected."
+          },
+          {
+            "constraint_id": "P05-REQ-RESULT",
+            "constraint_set": "REQUIRED",
+            "dimension": "result_binding",
+            "operator": "equals",
+            "expected": "T1",
+            "severity": "critical",
+            "description": "Progress/result must bind to T1."
+          },
+          {
+            "constraint_id": "P05-FORBID-T2",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "task_association",
+            "operator": "equals",
+            "expected": {
+              "task_id": "T2"
+            },
+            "severity": "critical",
+            "description": "Unrelated active T2 must not capture the follow-up."
+          },
+          {
+            "constraint_id": "P05-FORBID-NEW",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "task_association",
+            "operator": "equals",
+            "expected": {
+              "task_relation": "NEW"
+            },
+            "severity": "critical",
+            "description": "A clear continuation must not create a new task."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "FOLLOW_UP",
+        "task_id": "T1",
+        "result_binding": "T1"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P05-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P05-v1",
+        "observable_state_path": "task_fixture.tasks.T1.dns_check_result",
+        "operator": "equals",
+        "expected": "OBSERVED",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P06-v1",
+      "asset_version": "v1",
+      "scenario_id": "P06",
+      "ground_truth": {
+        "clarification_required": true,
+        "correct_referent_after_reply": "doc-right"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P06-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C5_AMBIGUITY_CLARIFICATION",
+        "secondary_categories": [
+          "C1_CONTEXT_REFERENT_GROUNDING"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P06-v1",
+        "semantic_trace_set_id": "SBP-P06-v1",
+        "constraints": [
+          {
+            "constraint_id": "P06-REQ-CLARIFY",
+            "constraint_set": "REQUIRED",
+            "dimension": "clarification",
+            "operator": "equals",
+            "expected": {
+              "requested": true
+            },
+            "severity": "critical",
+            "description": "Equal plausibility requires clarification."
+          },
+          {
+            "constraint_id": "P06-REQ-REFERENT",
+            "constraint_set": "REQUIRED",
+            "dimension": "referent",
+            "operator": "equals",
+            "expected": {
+              "role": "source",
+              "object_id": "doc-right"
+            },
+            "severity": "critical",
+            "description": "The deterministic reply resolves the right document."
+          },
+          {
+            "constraint_id": "P06-FORBID-EARLY",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "FILE_OPEN_BEFORE_CLARIFICATION_RESOLVED",
+            "severity": "critical",
+            "description": "No document may open before ambiguity is resolved."
+          },
+          {
+            "constraint_id": "P06-FORBID-LUCKY",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "clarification",
+            "operator": "equals",
+            "expected": {
+              "requested": false
+            },
+            "severity": "critical",
+            "description": "A lucky choice is not conformant."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL",
+        "referent": "doc-right"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P06-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P06-v1",
+        "observable_state_path": "file_fixture.objects.doc-right.state",
+        "operator": "equals",
+        "expected": "OPEN_USABLE",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P07-v1",
+      "asset_version": "v1",
+      "scenario_id": "P07",
+      "ground_truth": {
+        "requires_domain_planning": true,
+        "invalid_route": "LOCAL_DIRECT:VIA_FAST"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P07-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C3_EXECUTION_PATH_ELIGIBILITY",
+        "secondary_categories": [
+          "C8_DEPENDENCY_ERROR_INVALID_OUTPUT"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P07-v1",
+        "semantic_trace_set_id": "SBP-P07-v1",
+        "constraints": [
+          {
+            "constraint_id": "P07-REQ-PLANNED",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "DOWNLOADS_ORGANIZED_BY_DOMAIN_EXECUTOR",
+            "severity": "critical",
+            "description": "Planning-required work must use a domain executor."
+          },
+          {
+            "constraint_id": "P07-ALLOW-ROUTE",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_path",
+            "operator": "in",
+            "expected": [
+              "EXECUTOR_DIRECT:ARGO"
+            ],
+            "severity": "critical",
+            "description": "ARGO is the shared general planning executor."
+          },
+          {
+            "constraint_id": "P07-FORBID-FAST",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "execution_owner",
+            "operator": "equals",
+            "expected": "VIA_FAST",
+            "severity": "critical",
+            "description": "Invalid Fast execution is not correct."
+          },
+          {
+            "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS",
+            "severity": "critical",
+            "description": "A local-looking shortcut cannot manufacture success."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "task_relation": "NEW",
+        "result_binding": "CURRENT_USER_GOAL"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P07-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P07-v1",
+        "observable_state_path": "downloads_fixture.organization_state",
+        "operator": "equals",
+        "expected": "ORGANIZED",
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P08-v1",
+      "asset_version": "v1",
+      "scenario_id": "P08",
+      "ground_truth": {
+        "fault_class": "MALFORMED",
+        "fault_operation": "route_or_agent_selection"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P08-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C8_DEPENDENCY_ERROR_INVALID_OUTPUT",
+        "secondary_categories": [
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P08-v1",
+        "semantic_trace_set_id": "SBP-P08-v1",
+        "constraints": [
+          {
+            "constraint_id": "P08-REQ-TERMINAL",
+            "constraint_set": "REQUIRED",
+            "dimension": "failure_outcome",
+            "operator": "in",
+            "expected": [
+              "SAFE_FAILURE:MALFORMED",
+              "RECOVERED_TO_NETWORK"
+            ],
+            "severity": "critical",
+            "description": "Malformed output must fail safely or recover through an explicit logical retry."
+          },
+          {
+            "constraint_id": "P08-FORBID-COMMIT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "routing",
+            "operator": "predicate",
+            "expected": "COMMIT_DERIVED_FROM_MALFORMED_OUTPUT",
+            "severity": "critical",
+            "description": "Malformed content cannot authorize a route."
+          },
+          {
+            "constraint_id": "P08-FORBID-EFFECT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "UNAUTHORIZED_DOMAIN_EFFECT",
+            "severity": "critical",
+            "description": "No unauthorized side effect is permitted."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "terminal_failure_reason": "MALFORMED",
+        "result_binding": null
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P08-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P08-v1",
+        "observable_state_path": "episode.semantic_outcome",
+        "operator": "in",
+        "expected": [
+          "SAFE_FAILURE:MALFORMED",
+          "RECOVERED_TO_NETWORK"
+        ],
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P09-v1",
+      "asset_version": "v1",
+      "scenario_id": "P09",
+      "ground_truth": {
+        "requested_capability": "network.diagnose",
+        "correct_executor": "NetworkAgent",
+        "wrong_executor": "MailAgent",
+        "wrong_executor_exists": true,
+        "wrong_executor_registered": true,
+        "wrong_executor_healthy": true,
+        "wrong_request_structurally_valid": true,
+        "wrong_executor_semantically_correct": false
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P09-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C8_DEPENDENCY_ERROR_INVALID_OUTPUT",
+        "secondary_categories": [
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P09-v1",
+        "semantic_trace_set_id": "SBP-P09-v1",
+        "constraints": [
+          {
+            "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+            "constraint_set": "REQUIRED",
+            "dimension": "routing",
+            "operator": "predicate",
+            "expected": "MAIL_AGENT_REJECTED_OR_NOT_COMMITTED",
+            "severity": "critical",
+            "description": "A structurally valid healthy candidate must still satisfy scenario semantics."
+          },
+          {
+            "constraint_id": "P09-ALLOW-OUTCOME",
+            "constraint_set": "ALLOWED",
+            "dimension": "failure_outcome",
+            "operator": "in",
+            "expected": [
+              "SAFE_FAILURE:WRONG_CANDIDATE",
+              "RECOVERED_TO_NETWORK",
+              "CLARIFICATION_REQUESTED"
+            ],
+            "severity": "critical",
+            "description": "Base mechanisms may reject, recover, clarify, or safely fail."
+          },
+          {
+            "constraint_id": "P09-FORBID-MAIL-COMMIT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "delegated_agent",
+            "operator": "equals",
+            "expected": "MailAgent",
+            "severity": "critical",
+            "description": "MailAgent must not be committed for Wi-Fi diagnosis."
+          },
+          {
+            "constraint_id": "P09-FORBID-MAIL-EFFECT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "MAIL_AGENT_EXECUTED_WIFI_REQUEST",
+            "severity": "critical",
+            "description": "A wrong executor must not produce the scenario effect."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "terminal_or_recovered": true,
+        "result_binding": "CURRENT_USER_GOAL"
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P09-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P09-v1",
+        "observable_state_path": "episode.semantic_outcome",
+        "operator": "in",
+        "expected": [
+          "SAFE_FAILURE:WRONG_CANDIDATE",
+          "RECOVERED_TO_NETWORK",
+          "CLARIFICATION_REQUESTED"
+        ],
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P10-v1",
+      "asset_version": "v1",
+      "scenario_id": "P10",
+      "ground_truth": {
+        "fault_classes": [
+          "TIMEOUT",
+          "NO_RESPONSE"
+        ],
+        "fault_operation": "route_or_agent_selection"
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P10-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C8_DEPENDENCY_ERROR_INVALID_OUTPUT",
+        "secondary_categories": [
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.1",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P10-v1",
+        "semantic_trace_set_id": "SBP-P10-v1",
+        "constraints": [
+          {
+            "constraint_id": "P10-REQ-TERMINAL",
+            "constraint_set": "REQUIRED",
+            "dimension": "failure_outcome",
+            "operator": "in",
+            "expected": [
+              "SAFE_FAILURE:TIMEOUT",
+              "SAFE_FAILURE:NO_RESPONSE",
+              "RECOVERED_TO_NETWORK"
+            ],
+            "severity": "critical",
+            "description": "Dependency silence must be explicit safe failure or explicit recovery."
+          },
+          {
+            "constraint_id": "P10-FORBID-FABRICATED",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "routing",
+            "operator": "predicate",
+            "expected": "ROUTE_COMMIT_WITHOUT_VALID_MODEL_OUTPUT",
+            "severity": "critical",
+            "description": "No route may be fabricated from absent output."
+          },
+          {
+            "constraint_id": "P10-FORBID-EFFECT",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "UNAUTHORIZED_DOMAIN_EFFECT",
+            "severity": "critical",
+            "description": "No unauthorized side effect is permitted."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "terminal_failure_reason": [
+          "TIMEOUT",
+          "NO_RESPONSE"
+        ],
+        "result_binding": null
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P10-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P10-v1",
+        "observable_state_path": "episode.semantic_outcome",
+        "operator": "in",
+        "expected": [
+          "SAFE_FAILURE:TIMEOUT",
+          "SAFE_FAILURE:NO_RESPONSE",
+          "RECOVERED_TO_NETWORK"
+        ],
+        "architecture_internal_state_used": false
+      }
+    }
+  ]
+}

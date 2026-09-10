@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 
+pub mod pilot_assets;
+
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 

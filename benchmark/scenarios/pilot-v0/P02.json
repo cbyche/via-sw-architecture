@@ -1,0 +1,126 @@
+{
+  "schema_version": "runtime-scenario-pilot-v0",
+  "asset_id": "P02",
+  "asset_version": "v0.1",
+  "scenario_id": "P02",
+  "scenario_version": "v0.1",
+  "catalog_scenario_ref": "R2-002",
+  "catalog_version": "runtime-scenario-catalog-pre-pilot",
+  "title": "Short general-Agent lookup",
+  "scenario_class": "R2",
+  "architecture_sensitivity_tags": [
+    "ARGO_PRIMARY"
+  ],
+  "description": "Bounded short general-Agent lookup with a deterministic useful result.",
+  "qa_eligibility": {
+    "qa01": {
+      "eligible": true,
+      "exclusion_reason": "NOT_APPLICABLE"
+    },
+    "qa02": {
+      "eligible": true,
+      "exclusion_reason": "NOT_APPLICABLE"
+    },
+    "qa04": {
+      "eligible": true,
+      "route_commit_expected": true,
+      "exclusion_reason": "NOT_APPLICABLE"
+    },
+    "mandatory_gate_refs": []
+  },
+  "stimulus": {
+    "interaction": [
+      {
+        "turn_id": "U1",
+        "modality": "VOICE",
+        "text_fixture": "다운로드 폴더에서 가장 최근 파일 이름을 알려줘.",
+        "audio_fixture_ref": "AUDIO-P02-v1",
+        "acoustic_eos_fixture_ref": "AUDIO-P02-v1",
+        "input_available_offset_micros": 0,
+        "deterministic_user_replies": [],
+        "fixture_version": "v1"
+      }
+    ],
+    "context_evidence_ref": {
+      "asset_id": "CTX-NONE-v1",
+      "asset_version": "v1"
+    },
+    "initial_state_ref": {
+      "asset_id": "STATE-EMPTY-v1",
+      "asset_version": "v1"
+    },
+    "capability_profile_ref": {
+      "asset_id": "CAP-DP00-PILOT-v1",
+      "asset_version": "v1"
+    },
+    "health_profile_ref": {
+      "asset_id": "HEALTH-ALL-UP-v1",
+      "asset_version": "v1"
+    },
+    "policy_profile_ref": {
+      "asset_id": "POLICY-BASE-v1",
+      "asset_version": "v1"
+    }
+  },
+  "semantic_behavior_plan_ref": {
+    "asset_id": "SBP-P02-v1",
+    "asset_version": "v1"
+  },
+  "dependency_fixture_refs": {
+    "agent_scripts": [
+      {
+        "asset_id": "AGENT-ARGO-v1",
+        "asset_version": "v1"
+      }
+    ],
+    "tool_scripts": [
+      {
+        "asset_id": "TOOL-DOWNLOADS-INSPECT-v1",
+        "asset_version": "v1"
+      }
+    ],
+    "latency_profile_ref": {
+      "asset_id": "LAT-PILOT-TBD-v1",
+      "asset_version": "v1"
+    },
+    "interaction_frontend_profile_ref": {
+      "asset_id": "FRONTEND-CONTROLLED-v1",
+      "asset_version": "v1"
+    },
+    "outcome_probe_profile_ref": {
+      "asset_id": "PROBE-P02-v1",
+      "asset_version": "v1"
+    }
+  },
+  "evaluator_oracle_ref": {
+    "asset_id": "ORACLE-P02-v1",
+    "asset_version": "v1"
+  },
+  "evaluator_oracle_refs": {
+    "constraint_manifest_ref": "CONSTRAINT-P02-v1",
+    "success_predicate_ref": "OUTCOME-P02-v1",
+    "expected_result_binding_ref": "RESULT-BINDING-P02-v1",
+    "ground_truth_refs": [
+      "GROUND-TRUTH-P02-v1"
+    ]
+  },
+  "termination": {
+    "success_condition_ref": "OUTCOME-P02-v1",
+    "failure_condition_refs": [
+      "TERMINAL_AUT_ERROR",
+      "PROHIBITED_SIDE_EFFECT",
+      "DEPENDENCY_TERMINAL_FAILURE",
+      "EPISODE_TIMEOUT"
+    ],
+    "timeout_policy": "PILOT_TBD_SESSION_2"
+  },
+  "provenance": {
+    "scenario_schema_version": "runtime-scenario-pilot-v0",
+    "semantic_behavior_plan_version": "v1",
+    "constraint_manifest_version": "v1",
+    "success_predicate_version": "v1",
+    "fixture_registry_version": "v0.1",
+    "canonical_event_schema_version": "canonical-event-v0",
+    "benchmark_version": "dp00-runtime-pilot-v0"
+  }
+}

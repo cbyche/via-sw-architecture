@@ -1,0 +1,62 @@
+{
+  "schema_version": "semantic-behavior-plan-pilot-v0",
+  "asset_id": "SBP-P09-v1",
+  "asset_version": "v1",
+  "behavior_plan_id": "SBP-P09-v1",
+  "behavior_plan_version": "v1",
+  "scenario_id": "P09",
+  "scenario_version": "v0.1",
+  "semantic_schema_version": "semantic-responsibility-v1",
+  "payload_registry_version": "pilot-v0-payload-v1",
+  "allowed_owner_mapping_version": "dp00-base-v0",
+  "operations": [
+    {
+      "operation_key": "u1.intent",
+      "turn_id": "U1",
+      "responsibility": "INTENT_INTERPRETATION",
+      "input_contract_id": "AUT_MODEL_REQUEST_V1",
+      "output_schema_id": "INTENT_INTERPRETATION_OUTPUT_V1",
+      "operation_group": "U1.decision",
+      "attempts": [
+        {
+          "attempt": 1,
+          "behavior_class": "CORRECT",
+          "payload_ref": "PAYLOAD-INTENT-WIFI-STATUS-v1",
+          "failure_behavior": "NONE"
+        }
+      ]
+    },
+    {
+      "operation_key": "u1.route",
+      "turn_id": "U1",
+      "responsibility": "EXECUTION_ROUTE_SELECTION",
+      "input_contract_id": "AUT_MODEL_REQUEST_V1",
+      "output_schema_id": "EXECUTION_ROUTE_SELECTION_OUTPUT_V1",
+      "operation_group": "U1.decision",
+      "attempts": [
+        {
+          "attempt": 1,
+          "behavior_class": "WRONG_CANDIDATE",
+          "payload_ref": "PAYLOAD-WRONG-MAIL-ROUTE-v1",
+          "failure_behavior": "NONE"
+        }
+      ]
+    },
+    {
+      "operation_key": "u1.agent",
+      "turn_id": "U1",
+      "responsibility": "AGENT_SELECTION",
+      "input_contract_id": "AUT_MODEL_REQUEST_V1",
+      "output_schema_id": "AGENT_SELECTION_OUTPUT_V1",
+      "operation_group": "U1.decision",
+      "attempts": [
+        {
+          "attempt": 1,
+          "behavior_class": "WRONG_CANDIDATE",
+          "payload_ref": "PAYLOAD-WRONG-MAIL-AGENT-v1",
+          "failure_behavior": "NONE"
+        }
+      ]
+    }
+  ]
+}
