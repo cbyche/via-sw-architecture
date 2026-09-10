@@ -101,6 +101,12 @@ pub enum SemanticResponsibility {
 #[serde(transparent)]
 pub struct DecisionOwner(pub String);
 
+impl From<&str> for DecisionOwner {
+    fn from(value: &str) -> Self {
+        Self(value.to_owned())
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum DecisionMechanism {
@@ -140,7 +146,7 @@ pub struct ModelResponse {
     pub model_status: ModelStatus,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProductCorrelation {
     pub task_id: Option<TaskId>,
     pub execution_id: Option<ExecutionId>,
@@ -184,6 +190,26 @@ pub trait ModelPort: Send + Sync {
     type Error;
 
     fn generate(&self, request: ModelRequest) -> Result<ModelResponse, Self::Error>;
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ExecutionRequest {
+    pub route: ExecutionRoute,
+    pub task_id: TaskId,
+    pub semantic_action: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ExecutionResult {
+    pub execution_id: ExecutionId,
+    pub result_id: ResultId,
+    pub payload: String,
+}
+
+pub trait ExecutionPort: Send + Sync {
+    type Error;
+
+    fn execute(&self, request: ExecutionRequest) -> Result<ExecutionResult, Self::Error>;
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

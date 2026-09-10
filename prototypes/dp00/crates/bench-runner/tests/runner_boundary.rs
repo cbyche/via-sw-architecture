@@ -53,6 +53,10 @@ impl FixtureLifecycle for RecordingFixtures {
         Ok(())
     }
 
+    fn before_user_turn(&mut self, _turn_index: usize) -> Result<(), Self::Error> {
+        Ok(())
+    }
+
     fn after_episode(&mut self) -> Result<(), Self::Error> {
         self.after_called = true;
         Ok(())

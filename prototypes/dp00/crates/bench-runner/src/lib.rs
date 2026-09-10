@@ -32,6 +32,7 @@ pub trait FixtureLifecycle {
     type Error;
 
     fn before_episode(&mut self) -> Result<(), Self::Error>;
+    fn before_user_turn(&mut self, turn_index: usize) -> Result<(), Self::Error>;
     fn after_episode(&mut self) -> Result<(), Self::Error>;
 }
 
@@ -62,7 +63,10 @@ impl Runner {
             .setup(stimulus.initial_state)
             .map_err(RunnerError::Architecture)?;
 
-        for turn in stimulus.turns {
+        for (turn_index, turn) in stimulus.turns.into_iter().enumerate() {
+            fixtures
+                .before_user_turn(turn_index)
+                .map_err(RunnerError::Fixture)?;
             architecture
                 .handle_user_turn(turn)
                 .map_err(RunnerError::Architecture)?;

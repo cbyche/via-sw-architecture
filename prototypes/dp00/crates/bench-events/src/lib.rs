@@ -34,6 +34,17 @@ pub enum EventEmitter {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum CanonicalEventKind {
+    Architecture(ArchitectureEvent),
+    ModelGenerationStarted,
+    ModelGenerationCompleted,
+    ExecutionStarted,
+    UsefulOutcomeObserved,
+    EpisodeCompleted,
+    EpisodeFailed,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CanonicalEvent {
     schema_version: String,
     event_id: String,
@@ -48,7 +59,7 @@ pub struct CanonicalEvent {
     monotonic_timestamp: MonotonicTimestamp,
     emitter: EventEmitter,
     product_correlation: ProductCorrelation,
-    event: ArchitectureEvent,
+    event: CanonicalEventKind,
 }
 
 impl CanonicalEvent {
@@ -60,6 +71,16 @@ impl CanonicalEvent {
     #[must_use]
     pub fn monotonic_timestamp(&self) -> MonotonicTimestamp {
         self.monotonic_timestamp
+    }
+
+    #[must_use]
+    pub fn emitter(&self) -> EventEmitter {
+        self.emitter
+    }
+
+    #[must_use]
+    pub fn event(&self) -> &CanonicalEventKind {
+        &self.event
     }
 }
 
@@ -76,7 +97,9 @@ pub struct LogicalModelCall {
 pub struct CapturedObservation {
     sequence_number: u64,
     monotonic_timestamp: MonotonicTimestamp,
-    observation: ArchitectureObservation,
+    event: CanonicalEventKind,
+    product_correlation: ProductCorrelation,
+    emitter: EventEmitter,
 }
 
 #[derive(Debug, Default)]
@@ -130,16 +153,28 @@ impl<C: Clock> InMemoryObservationCollector<C> {
                 source_git_commit: self.context.source_git_commit.clone(),
                 sequence_number: captured.sequence_number,
                 monotonic_timestamp: captured.monotonic_timestamp,
-                emitter: EventEmitter::ArchitectureUnderTest,
-                product_correlation: captured.observation.product_correlation,
-                event: captured.observation.event,
+                emitter: captured.emitter,
+                product_correlation: captured.product_correlation,
+                event: captured.event,
             })
             .collect()
     }
-}
 
-impl<C: Clock> ObservationPort for InMemoryObservationCollector<C> {
-    fn emit(&self, observation: ArchitectureObservation) {
+    pub fn capture_benchmark_event(
+        &self,
+        emitter: EventEmitter,
+        event: CanonicalEventKind,
+        product_correlation: ProductCorrelation,
+    ) {
+        self.capture(emitter, event, product_correlation);
+    }
+
+    fn capture(
+        &self,
+        emitter: EventEmitter,
+        event: CanonicalEventKind,
+        product_correlation: ProductCorrelation,
+    ) {
         let timestamp = self.clock.now();
         let mut buffer = self.buffer.lock().expect("event buffer poisoned");
         let sequence_number = buffer.next_sequence;
@@ -147,8 +182,20 @@ impl<C: Clock> ObservationPort for InMemoryObservationCollector<C> {
         buffer.observations.push(CapturedObservation {
             sequence_number,
             monotonic_timestamp: timestamp,
-            observation,
+            event,
+            product_correlation,
+            emitter,
         });
+    }
+}
+
+impl<C: Clock> ObservationPort for InMemoryObservationCollector<C> {
+    fn emit(&self, observation: ArchitectureObservation) {
+        self.capture(
+            EventEmitter::ArchitectureUnderTest,
+            CanonicalEventKind::Architecture(observation.event),
+            observation.product_correlation,
+        );
     }
 }
 

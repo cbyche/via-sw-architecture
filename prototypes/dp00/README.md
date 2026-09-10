@@ -20,3 +20,16 @@ absent.
 The timed event path records a monotonic timestamp and appends a typed event to an
 in-memory buffer. JSON/JSONL conversion is exposed only through the separate
 post-capture serialization API.
+
+## Base architecture smoke
+
+The `alternative-a`, `alternative-b`, `alternative-c`, and `alternative-d` crates
+contain independent Base Architecture implementations. `bench-smoke` supplies
+responsibility-keyed replay, controlled fixtures, external outcome evidence, and
+the S1-S5 assertion matrix without exposing its scenario/oracle context to an AUT.
+
+Run the 20 paths separately with:
+
+```shell
+cargo test -p bench-smoke --test smoke_matrix
+```
