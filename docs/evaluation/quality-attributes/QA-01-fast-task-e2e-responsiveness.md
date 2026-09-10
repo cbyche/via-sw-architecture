@@ -30,7 +30,7 @@ For successful Fast-task episode `i`:
 
 ```text
 FTOL_i = useful_outcome_timestamp_i
-         - acoustic_end_of_speech_timestamp_i
+         - ground_truth_acoustic_end_of_speech_timestamp_i
 ```
 
 Then:
@@ -128,10 +128,63 @@ The intended separation is:
 
 ```text
 QA-01 = when the architecture succeeds, how responsive is the useful outcome?
-QA-02 = how correctly/reliably does it reach the expected outcome?
+QA-02 = does the architecture correctly satisfy the interaction/orchestration constraints?
 ```
 
 The final report must always show the success population/count beside QA-01 so a very small successful subset cannot be misread as good overall system quality.
+
+## Architecture Qualification controls
+
+Final architecture scoring uses controlled qualification runs with:
+
+- deterministic semantic replay;
+- deterministic Downstream Agent stubs;
+- deterministic/replayed tool and external-service behavior;
+- fixed Reference Development Machine;
+- fixed power/background condition;
+- identical scenario corpus;
+- identical semantic/oracle trace per comparable episode;
+- consistent warm/cold-state rules.
+
+The architecture alternative must be the intended independent variable.
+
+### Dependency-latency equality and non-dominance
+
+Architecture Qualification must control not only **variance** in external/downstream latency, but also prevent the fixture itself from dominating the overall p95.
+
+A problematic fixture design would be:
+
+```text
+F1 Local fixture             50 ms
+F2 General Agent fixture    200 ms
+F3 Specialist fixture       800 ms
+```
+
+If those fixed dependency latencies are much larger than the architecture overhead being compared, the overall FTOL p95 can be determined mainly by the slowest scenario class even when A/B/C/D have nearly identical SW overhead. In that case the benchmark would be measuring fixture class latency more than architecture responsiveness.
+
+Therefore Architecture Qualification requires two properties:
+
+```text
+Equality:
+  comparable alternatives receive the same controlled dependency behavior.
+
+Non-dominance:
+  fixture/external latency is calibrated so it does not overwhelm the
+  architecture-induced latency differences that QA-01 is intended to measure.
+```
+
+The exact controlled latency values are **TBD** and must be selected during Pilot. The calibration goal is not to make all dependency latency zero or identical across every scenario; it is to keep the external fixture realistic enough to exercise the path while ensuring that a single dependency class does not mechanically determine FTOL p95.
+
+Pilot should inspect:
+
+- class-specific FTOL distributions;
+- architecture-overhead magnitude relative to controlled dependency latency;
+- whether one class monopolizes the p95 tail;
+- whether alternative ranking changes only because fixture latency constants are changed within reasonable controlled ranges.
+
+If the fixture dominates, recalibrate the qualification profile and freeze a new benchmark version **before** final A/B/C/D scoring.
+
+Actual Agent/network/tool latency differences belong in the separate real-stack/fidelity validation track, where Product E2E behavior can be reported without claiming architecture isolation.
 
 ## Secondary Metrics
 
@@ -145,11 +198,12 @@ The following do not determine the QA-01 0–5 score, but raw data should make t
 - execution-path selection → dispatch latency;
 - semantic/model wait time;
 - Downstream Agent wait time;
-- tool/action duration;
+- controlled external/tool/action duration;
 - first user-visible response latency;
 - full task-completion latency;
 - model invocation count;
-- execution-owner/path distribution.
+- execution-owner/path distribution;
+- sensitivity of overall FTOL p95 to controlled dependency-latency profile.
 
 These metrics diagnose why FTOL moved and may become candidates for future QA definitions.
 
@@ -173,26 +227,13 @@ Acoustic EOS
 
 Not every path emits every intermediate event. Missing/not-applicable events should remain explicitly absent rather than fabricated.
 
-## Architecture Qualification controls
+## Actual-model / real-stack validation
 
-Final architecture scoring uses controlled qualification runs with:
-
-- deterministic semantic replay;
-- deterministic Downstream Agent stubs;
-- deterministic/replayed tool latency;
-- fixed Reference Development Machine;
-- fixed power/background condition;
-- identical scenario corpus;
-- identical semantic/oracle trace per comparable episode;
-- consistent warm/cold-state rules.
-
-The architecture alternative must be the intended independent variable.
-
-## Actual-model validation
-
-Real GPT/Qwen/local-model/Agent runs are used separately for trace generation and fidelity/external-validity checks.
+Real GPT/Qwen/local-model/Agent/network/tool runs are used separately for trace generation and fidelity/external-validity checks.
 
 They are not mixed into the architecture-only FTOL score unless a future QA/scoring version explicitly changes this methodology.
+
+This track is where actual provider, Agent, network and tool latency differences should be observed. Architecture Qualification intentionally controls those dependencies so the DP-00 SW topology remains the dominant intended cause of measured differences.
 
 ## Scoring
 
@@ -204,13 +245,13 @@ Required process:
 
 ```text
 Pilot
-  -> inspect FTOL distributions and instrumentation
-  -> threshold calibration
-  -> scoring-v1 freeze
+  -> inspect FTOL distributions, class-tail dominance and instrumentation
+  -> calibrate controlled dependency profile and score thresholds
+  -> freeze benchmark/scoring-v1
   -> final A/B/C/D evaluation
 ```
 
-Thresholds must not be changed after inspecting final alternative results merely to favor a preferred topology.
+Thresholds or dependency-latency profiles must not be changed after inspecting final alternative results merely to favor a preferred topology.
 
 A threshold or Primary-Metric change requires a new scoring version and equal recomputation for all alternatives.
 
@@ -225,9 +266,10 @@ At minimum, QA-01 requires reliable capture of:
 - run/scenario/alternative identity;
 - benchmark/source version;
 - monotonic time origin;
-- acoustic EOS;
+- ground-truth acoustic EOS;
 - execution path and owner;
 - relevant semantic/dispatch/tool/Agent timestamps;
+- controlled dependency/tool latency profile id and version;
 - first user-visible result;
 - useful outcome;
 - task completion;
@@ -237,10 +279,11 @@ At minimum, QA-01 requires reliable capture of:
 ## Interpretation cautions
 
 - Faster acknowledgment is not necessarily faster useful outcome.
-- A p95 improvement cannot compensate for incorrect results; correctness belongs to another QA.
+- A p95 improvement cannot compensate for incorrect results; correctness belongs to QA-02.
 - A Fast-task corpus dominated by F1 can hide Agent-routing overhead; category distributions must be reported.
+- A fixture profile dominated by one slow external class can hide architecture overhead; qualification dependency behavior must satisfy equality and non-dominance controls.
 - Live-network/provider measurements are useful Product E2E observations but are not substitutes for controlled architecture qualification.
-- Model invocation count is diagnostic; fewer calls are not automatically better if correctness/lifecycle quality degrades.
+- Model invocation count is diagnostic here; fewer calls are not automatically better if correctness/lifecycle quality degrades.
 
 ## Related Decision Points
 
@@ -257,4 +300,4 @@ Exact QA↔DP numbering will be updated coherently after QA-01~QA-04 formalizati
 
 ## Scoring thresholds
 
-TBD — to be calibrated in pilot and frozen as `scoring-v1` before final comparative evaluation.
+TBD — to be calibrated in Pilot and frozen as `scoring-v1` before final comparative evaluation.
