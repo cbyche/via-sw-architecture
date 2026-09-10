@@ -602,3 +602,30 @@ Reject/flag benchmark evidence when:
 Canonical event semantics are versioned.
 
 Changing the meaning of a scoring-relevant event such as `execution.route_committed` or `useful_outcome.observed` requires a new schema/benchmark version and must not rewrite historical raw events.
+
+## 19.1 `canonical-event-v1` semantic evidence payloads
+
+`canonical-event-v1` adds actual-value evidence needed to project a QA-02 Canonical Architecture Decision Trace without consulting a scenario, behavior plan, filename, ordering convention, or oracle:
+
+| Canonical event | Required actual value | Authority |
+| --- | --- | --- |
+| `referent.bound` | `referent_role`, `resolved_referent_id`, product `turn_id` correlation | `ARCHITECTURE_UNDER_TEST` |
+| `task.associated` | `task_relation`, correlated `task_id` | `ARCHITECTURE_UNDER_TEST` task boundary |
+| `execution.route_committed` | `route_kind`, `initial_executor_id`, `final_executor_id_if_known`, `delegation_chain[]` | `ARCHITECTURE_UNDER_TEST` route-commit boundary |
+| `clarification.requested` | architecture-owned reason plus request-turn correlation | `ARCHITECTURE_UNDER_TEST` |
+| `clarification.resolved` | `request_turn_id`, `response_turn_id` | `ARCHITECTURE_UNDER_TEST` |
+| `result.bound` | correlated `result_id`, `task_id`, `execution_id` | `ARCHITECTURE_UNDER_TEST` product binding boundary |
+| `useful_outcome.observed` | typed effect subject/target/value/state/executor and `authoritative_source` | `OUTCOME_PROBE` |
+| `episode.failed` | topology-neutral `failure_reason` | benchmark runtime lifecycle |
+
+The failure vocabulary is `MODEL_MALFORMED`, `MODEL_TIMEOUT`, `MODEL_NO_RESPONSE`, `INVALID_ROUTE`, `DISPATCH_REJECTED`, and `EXECUTION_FAILURE`.
+
+The outcome payload describes the controlled sink reached by the actual execution request. It is not populated from `success_predicate` or another expected value.
+
+```text
+canonical-event-v1 raw actual trace
+  compared offline with
+evaluator-only constraint/oracle expected truth
+```
+
+`canonical-event-v1` must never carry required referents, expected task/executor/effect values, constraint pass/fail, or any other oracle truth.

@@ -15,6 +15,8 @@ call classification/inclusion metadata, and the related route-commit event id
 when a commit exists. No-commit P08/P09/P10 evidence is retained without a
 fabricated relation.
 
+`model-call-v1` may additionally preserve a compact typed `semantic_output_reference` derived from the response actually returned by the Model Fixture. Pilot-v0 uses `EXECUTOR_CANDIDATE` plus the observed executor id so a no-commit wrong-candidate path (for example, an actual `MailAgent` proposal) remains reconstructable. This field is not an oracle value, expected executor, or permission to treat the model proposal as a committed architecture route. Full generative response bodies remain unnecessary.
+
 ## Core principle
 
 QA-04 counts architecture-required logical generations, not transport requests or stream chunks.

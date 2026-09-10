@@ -418,3 +418,18 @@ Derived micro/macro averages, QA scores and sensitivity analyses belong under `r
 - this file — immutable run-level provenance tying those contracts together.
 
 The implementation may serialize these fields into one run header plus references rather than duplicate them on every event.
+
+## 16. Official multi-profile campaign provenance
+
+An official Pilot campaign performs one source-state attestation before any output is written, then runs its ordered latency profiles under that same committed source and corpus identity.
+
+```text
+results/raw/pilot-v0/<campaign-id>/
+├─ campaign-provenance.json
+├─ profile-z/<run-id>/...
+└─ profile-c/<run-id>/...
+```
+
+Campaign provenance records `campaign_id`, `source_git_commit`, `initial_working_tree_clean`, Pilot corpus id/version, the ordered full profile configurations, runner version, and the common alternatives/scenarios/repetition/order/instrumentation configuration. Each run retains its own provenance and adds campaign id and profile-sequence index.
+
+Profile Z output created after attestation is designated campaign output, not a reason to re-run the clean-tree guard before Profile C. An existing campaign, profile, or run directory is never overwritten. Development mode may continue to use one profile and the legacy per-run layout.

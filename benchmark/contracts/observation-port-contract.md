@@ -288,3 +288,21 @@ Benchmark-hidden
 ```
 
 and is required before S1~S5 smoke qualification.
+
+## QA-02 actual semantic observation extension
+
+The AUT-visible payload may contain product semantics the architecture has actually committed:
+
+```text
+ReferentBound(referent_role, resolved_referent_id)
+TaskAssociated(task_relation) + product task_id correlation
+RouteCommitted(ExecutionRoute)
+ClarificationRequested(reason) / ClarificationResolved(request_turn_id, response_turn_id)
+ResultBound + product task_id/execution_id/result_id correlation
+```
+
+Product turn/task/execution/result/dispatch/clarification identifiers are allowed when naturally owned by product state. They are not benchmark operation keys.
+
+The collector still owns `run_id`, `scenario_id`, `alternative_id`, canonical sequence number, authoritative monotonic timestamp, emitter provenance, and all oracle/constraint expected values.
+
+External effects are emitted by `OUTCOME_PROBE`, `TOOL_FIXTURE`, or `AGENT_FIXTURE`, not through the AUT `ObservationPort`. Terminal failure classification is emitted by the canonical runtime lifecycle. AUT decisions, fixture observations, and evaluator truth therefore remain distinct evidence authorities.

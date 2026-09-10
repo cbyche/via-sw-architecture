@@ -22,6 +22,20 @@ Raw records are append-only/immutable experimental evidence. If instrumentation 
 
 Derived metrics such as FTOL p95, AECR and QA-04 Average Model Calls to Commit Execution Route must never be the only persisted evidence.
 
+### QA-02 raw-only reconstruction rule (`canonical-event-v1`)
+
+| Constraint dimension | Actual raw evidence source | Oracle expected source |
+| --- | --- | --- |
+| `referent` / `referent_binding` | AUT `referent.bound` payload | oracle required/forbidden referent constraint |
+| `task_association` | AUT `task.associated` plus product task correlation | oracle task-relation/task-id constraint |
+| `execution_path`, `execution_owner`, `delegated_agent`, `routing` | AUT `execution.route_committed`; actual model semantic reference and terminal reason for no-commit cases | Required/Allowed/Forbidden route constraints |
+| `clarification` | AUT requested/resolved events and request/response turn correlation | oracle clarification constraint |
+| `result_binding` | AUT `result.bound` product result/task/execution correlation | oracle expected-result-binding constraint |
+| `observable_effect` | `OUTCOME_PROBE` typed effect payload | success predicate and observable-effect constraint |
+| `failure_outcome` | canonical `episode.failed.failure_reason` | oracle allowed/required failure outcome |
+
+An evaluator must not reconstruct missing actuals from a behavior plan, scenario definition, scenario id, path name, run order, or oracle. A missing applicable raw actual is a contract insufficiency/error.
+
 ## Time basis
 
 Latency metrics must use a **monotonic clock**.
