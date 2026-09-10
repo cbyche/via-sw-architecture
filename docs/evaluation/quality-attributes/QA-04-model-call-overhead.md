@@ -16,39 +16,40 @@ This document is part of the QA rebaseline work. It does not replace the Approve
 
 ## 핵심 질문
 
-> **사용자 요청을 처리할 실행 주체를 결정하고 실제 실행을 시작시키기까지, SW 구조가 몇 번의 AI 모델 호출을 요구하는가?**
+> **사용자 요청의 최종 실행 경로를 확정하기까지, SW 구조가 몇 번의 AI 모델 호출을 요구하는가?**
 
-This QA evaluates AI inference generations required by the architecture's execution-decision topology before substantive execution begins.
+This QA evaluates AI inference generations required by the architecture to commit the request to its final domain execution route.
 
-It does **not** evaluate how many reasoning calls a Downstream Agent later needs to complete the domain task.
+It does **not** evaluate how many reasoning calls the final execution owner later needs to complete the domain task.
 
 ## Primary Metric
 
-### 평균 실행 전 모델 호출 수 — Average Pre-execution Model Calls per Episode
+### 평균 실행경로 결정 모델 호출 수 — Average Model Calls to Commit Execution Route
 
 Plain-text definition for one evaluation episode:
 
 ```text
-실행 전 모델 호출 수 =
-  사용자 요청 처리 시작부터
-  해당 요청의 execution owner가 확정되고 실제 실행이 시작될 때까지 발생한
+실행경로 결정 모델 호출 수 =
+  사용자 요청 처리를 시작한 시점부터
+  Execution Route Commit 시점까지 발생한
   ORCHESTRATION 또는 MIXED logical model call 수
 ```
 
 Overall QA-04 Primary Metric:
 
 ```text
-QA-04 = 평가 대상 episode들의 실행 전 모델 호출 수 평균
+QA-04 = 평가 대상 episode들의 실행경로 결정 모델 호출 수 평균
 ```
 
 Equivalent English definition:
 
 ```text
-Average Pre-execution Model Calls per Episode =
+Average Model Calls to Commit Execution Route =
   mean(count of ORCHESTRATION or MIXED logical model generations
        attributable to each eligible episode
        from request-processing start
-       through confirmed execution start)
+       through the Execution Route Commit,
+       including the generation that causes the commit)
 ```
 
 - Unit: **model calls / episode**
@@ -66,78 +67,150 @@ request_processing_start_ts
 
 This is the benchmark-designated point when the architecture begins processing the user goal for execution-decision purposes.
 
-For voice scenarios this is not automatically identical to Acoustic End-of-Speech. If an alternative intentionally begins semantic processing from partial/streaming input, those causally attributable model generations remain inside QA-04 rather than disappearing because they happened before EOS.
+For voice scenarios this is not automatically identical to Acoustic End-of-Speech. If an alternative intentionally begins semantic processing from partial/streaming input, causally attributable model generations remain inside QA-04 rather than disappearing because they happened before EOS.
 
 For text scenarios it normally corresponds to the submitted request becoming available to the architecture.
 
-## Measurement end boundary
+Raw data keeps the QA-01 `acoustic_eos_ts` so pre-EOS inference can be correlated with responsiveness without redefining QA-04's start boundary.
 
-QA-04 does **not** count model calls across the whole task lifetime.
+## Measurement end boundary — Execution Route Commit
 
-The measurement ends when:
+The authoritative QA-04 end boundary is **실행 경로 확정 (Execution Route Commit)**.
+
+Definition:
+
+> **실제 domain 작업을 수행할 최종 실행 경로가 결정되어, 이후에는 해당 user request에 대해 추가적인 execution-owner 선택이나 delegation 판단 없이 domain execution을 계속할 수 있게 된 최초 시점.**
+
+Plain English:
+
+> The earliest point at which the final domain execution route is operationally committed, such that no further execution-owner selection or delegation decision is required for that request before domain execution can continue.
+
+Raw authoritative timestamp:
 
 ```text
-1. execution owner is confirmed
-AND
-2. that owner has actually started or accepted execution
+execution_route_commit_ts
 ```
 
-Raw timestamps:
+Related route fields:
+
+```text
+execution_route
+final_execution_owner
+delegated_agent_if_any
+```
+
+Existing timestamps remain preserved for diagnostics:
 
 ```text
 execution_owner_confirmed_ts
 execution_started_ts
 ```
 
-The episode boundary closes at `execution_started_ts` once ownership has been confirmed.
+They are no longer the authoritative QA-04 end boundary.
 
-### Downstream Agent delegation
+### Why owner confirmation / execution start was insufficient
+
+An intermediate runtime may temporarily become the current owner and only later decide whether to delegate the request.
+
+Example:
 
 ```text
-request
-  -> orchestration/routing
-  -> Downstream Agent selected
-  -> dispatch/accept
-  -> Agent execution starts   <-- QA-04 end
+User
+  -> ARGO execution begins
+  -> ARGO model inference: "delegate to NetworkAgent"
+  -> NetworkAgent accepts
 ```
 
-After this point, the Agent's domain planning, ReAct loops, tool interpretation and retries are excluded from the Primary Metric.
+If QA-04 stopped when ARGO first started, the delegation inference would disappear from the metric even though it performs the same architectural responsibility as an explicit Router inference in another topology.
+
+Execution Route Commit normalizes this responsibility independent of where it is placed.
+
+## Route-commit examples
+
+### Thin VIA
+
+```text
+Intent
+  -> Router
+  -> NetworkAgent selected
+  -> NetworkAgent accepts
+                     ^ Execution Route Commit
+```
+
+All ORCHESTRATION/MIXED logical generations required to reach that accepted final route are included.
+
+### ARGO-centric — ARGO executes directly
+
+```text
+ARGO inference
+  -> "I will execute this task directly"
+       ^ Execution Route Commit
+```
+
+If that same generation also performs substantive domain reasoning, classify it as `MIXED` and count it once.
+
+### ARGO-centric — specialist delegation
+
+```text
+ARGO starts processing
+  -> ARGO inference decides NetworkAgent delegation
+  -> NetworkAgent accepts
+                     ^ Execution Route Commit
+```
+
+The ARGO delegation-decision generation is inside QA-04 and must be counted as ORCHESTRATION or MIXED according to its content.
 
 ### VIA Fast Path
 
 ```text
-request
-  -> eligibility/decision
-  -> VIA local capability selected
-  -> local action starts      <-- QA-04 end
+deterministic eligibility
+  -> local capability selected
+  -> local execution starts
+                    ^ Execution Route Commit
 ```
 
-### ARGO-centric topology
+If no model generation is required, QA-04 call count can be `0`.
+
+## Primary inclusion rule
+
+Every logical model call is classified as:
 
 ```text
-request
-  -> thin realtime/context path
-  -> ARGO becomes execution owner
-  -> ARGO task execution starts   <-- QA-04 end
+ORCHESTRATION
+DOMAIN
+MIXED
 ```
 
-If ARGO's generation itself combines task understanding with the ownership/delegation decision before execution begins, that generation is classified as `MIXED` and counted once.
+A call is included in QA-04 Primary when:
+
+```text
+call_class in {ORCHESTRATION, MIXED}
+AND
+(
+  the call occurs before Execution Route Commit
+  OR the call is the generation whose output causes Execution Route Commit
+)
+```
+
+A DOMAIN-only call is excluded from Primary.
+
+An ORCHESTRATION/MIXED call after route commit is also excluded because the route has already been finalized for the measured request.
 
 ## Why Fast-task restriction is not used
 
 An earlier candidate was “average model-call overhead per Fast-task.” That restriction is removed.
 
-Once downstream DOMAIN reasoning is excluded and measurement ends at execution start, task duration itself no longer dominates the metric.
+Once downstream DOMAIN reasoning is excluded and measurement ends at Execution Route Commit, task duration itself no longer dominates the metric.
 
 Example:
 
 ```text
 Short Task
-User -> Intent -> Router -> ARGO dispatch
+User -> Intent -> Router -> ARGO final route
 QA-04 = 2 calls
 
 Long Task
-User -> Intent -> Router -> ARGO dispatch
+User -> Intent -> Router -> ARGO final route
 QA-04 = 2 calls
 
 ARGO performs 30 later ReAct generations
@@ -168,25 +241,9 @@ A retry counts only when it starts a genuinely new logical generation.
 
 ## Model Call Classification
 
-Every logical model call is classified as exactly one of:
-
-```text
-ORCHESTRATION
-DOMAIN
-MIXED
-```
-
-Primary inclusion rule:
-
-```text
-ORCHESTRATION -> included when inside the pre-execution boundary
-MIXED         -> included once when inside the pre-execution boundary
-DOMAIN        -> excluded from QA-04 Primary
-```
-
 ### ORCHESTRATION
 
-Architecture-level inference used to connect the request to an execution owner.
+Architecture-level inference used to establish or commit the final execution route.
 
 Examples:
 
@@ -196,13 +253,14 @@ Examples:
 - Agent routing;
 - model-based validation;
 - clarification decision;
-- task/result association;
+- task/result association when needed to choose the route;
 - execution-owner selection;
+- delegation decision;
 - architecture-level retry/fallback decision.
 
 ### DOMAIN
 
-Substantive reasoning for task execution after ownership is established.
+Substantive reasoning for task execution after the final route is committed.
 
 Examples:
 
@@ -211,11 +269,11 @@ Examples:
 - report-generation reasoning;
 - Downstream Agent domain planning;
 - Agent ReAct loop;
-- tool-result interpretation/replanning.
+- tool-result interpretation/replanning after route commit.
 
 ### MIXED
 
-One generation performs both architecture-level ownership/delegation decision and substantive domain reasoning.
+One generation performs both architecture-level route/owner/delegation decision and substantive domain reasoning.
 
 Example:
 
@@ -225,6 +283,8 @@ whether ARGO executes it or delegates to another Agent.
 ```
 
 This is counted once, not split into artificial sub-calls.
+
+If its output commits the route, it is included even if part of the generation contains domain reasoning.
 
 ## Pure Voice / S2S model calls
 
@@ -236,22 +296,13 @@ Example:
 S2S generation used only to produce spoken output -> excluded
 ```
 
-However, when the same inference also performs any of the following:
+However, when the same inference also performs intent interpretation, execution-path decision, routing, validation, delegation or owner selection, it is classified as `MIXED` and included when it is before or causes Execution Route Commit.
 
-- intent interpretation;
-- execution-path decision;
-- routing;
-- validation;
-- delegation;
-- execution-owner selection;
-
-it is classified as `MIXED` and included once.
-
-The metric intentionally removes a common voice-generation baseline and focuses on **model inference required by execution-decision topology**.
+The metric intentionally removes a common voice-generation baseline and focuses on **model inference required by execution-route topology**.
 
 ## Architecture Qualification with deterministic replay
 
-The architecture score continues to use controlled semantic replay/test doubles where needed.
+Architecture scoring continues to use controlled semantic replay/test doubles where needed.
 
 A critical accounting rule is:
 
@@ -259,11 +310,14 @@ A critical accounting rule is:
 
 The replay controls the output; it does not erase the architecture's requirement for an inference generation.
 
-Therefore:
-
 ```text
-architecture requests model generation -> logical call event recorded -> count according to class/boundary
-architecture uses deterministic code only -> no model call event -> count 0
+architecture requests model generation
+  -> logical ModelCall recorded
+  -> frozen output replayed
+  -> inclusion decided by class + Execution Route Commit boundary
+
+architecture uses deterministic code only
+  -> no logical model call
 ```
 
 This lets QA-04 measure architecture-required inference stages while keeping stochastic model behavior controlled.
@@ -288,7 +342,7 @@ The same request can use:
 
 The baseline itself would encode an architecture/model-design preference.
 
-QA-04 therefore measures actual logical pre-execution decision calls and performs no hypothetical subtraction.
+QA-04 therefore measures observed route-commit decision calls directly and performs no hypothetical subtraction.
 
 ## Why total model calls over the task lifetime are not used
 
@@ -375,7 +429,7 @@ Requires or allows specialized Agent delegation/routing.
 
 ### W4 — Existing-task follow-up request
 
-Requires execution-state/task continuation logic before ownership is confirmed.
+Requires execution-state/task continuation logic before the final route is committed.
 
 Exact taxonomy and class proportions are **TBD**.
 
@@ -389,19 +443,19 @@ Because an arithmetic mean is sensitive to scenario mix, final benchmark qualifi
 - model/prompt/cache profiles;
 - scoring version.
 
-If pilot evidence shows that one request class dominates the overall mean, a class-level macro-average remains a candidate aggregation rule. Any such change must be selected and frozen before final A/B/C/D evaluation.
+If Pilot evidence shows that one request class dominates the overall mean, a class-level macro-average remains a candidate aggregation rule. Any such change must be selected and frozen before final A/B/C/D evaluation.
 
 Usage-frequency-weighted results may be calculated as Secondary sensitivity analysis.
 
 ## Episode eligibility and correctness
 
-QA-04 should not reward an architecture for failing before execution and therefore producing zero calls.
+QA-04 should not reward an architecture for failing before committing a valid route and therefore producing an artificially low count.
 
-A complete Primary observation requires a valid measurement end boundary: execution ownership was confirmed and execution actually started.
+A complete Primary observation requires a valid `execution_route_commit_ts` and route evidence.
 
-Episodes that never reach execution start are retained as raw failure/non-completion evidence and reported beside the QA-04 population, but are not converted into an arbitrary model-call penalty.
+Episodes that never reach Execution Route Commit remain raw failure/non-completion evidence and are reported beside the QA-04 population, but are not converted into an arbitrary model-call penalty.
 
-Correctness is evaluated separately in QA-02. A low call count does not compensate for a wrong execution owner.
+Correctness is evaluated separately in QA-02. A low call count does not compensate for a wrong route.
 
 A useful Secondary slice is:
 
@@ -414,10 +468,10 @@ Calls per exact-conform episode
 The agreed rules produce the intended results for the following cases:
 
 ```text
-1. Short/Long tasks with identical routing topology
+1. Short/Long tasks with identical route-decision topology
    -> same QA-04 Primary count
 
-2. Long task with 30–40 downstream ReAct calls
+2. Long task with 30–40 downstream ReAct calls after route commit
    -> later DOMAIN calls excluded
 
 3. Deterministic selector vs LLM selector
@@ -432,17 +486,20 @@ The agreed rules produce the intended results for the following cases:
 6. Common pure voice generation
    -> excluded
 
-7. Specialized Agent internal reasoning after ownership
+7. Specialized Agent internal reasoning after route commit
    -> excluded
 
-8. New logical retry generation before execution
+8. New logical retry generation before route commit
    -> +1
 
 9. Different physical model costs
    -> raw resource telemetry retained, no arbitrary Primary weight
+
+10. ARGO starts, then later uses a model call to choose a specialist
+    -> delegation call remains inside QA-04 until final route commit
 ```
 
-These cases demonstrate that the metric observes architecture topology rather than downstream workload size.
+These cases demonstrate that the metric observes architecture topology rather than downstream workload size or the physical location of routing logic.
 
 ## Quality Attribute Scenario
 
@@ -452,8 +509,8 @@ These cases demonstrate that the metric observes architecture topology rather th
 | **Stimulus** | VIA가 처리해야 하는 representative user request |
 | **Environment** | 동일 scenario, frozen semantic replay / scripted dependency, fixed model/prompt/cache profiles |
 | **Artifact** | DP-00 Alternative의 VIA Integrated Product SW architecture |
-| **Response** | 요청을 해석하고 적절한 execution owner를 결정하여 실행을 시작 |
-| **Response Measure** | **평균 실행 전 모델 호출 수 (Average Pre-execution Model Calls per Episode)** |
+| **Response** | 요청을 해석하고 추가 owner/delegation 판단이 필요 없는 최종 execution route를 commit |
+| **Response Measure** | **평균 실행경로 결정 모델 호출 수 (Average Model Calls to Commit Execution Route)** |
 
 ## Secondary / Backup Metrics
 
@@ -480,7 +537,9 @@ The following do not determine the QA-04 score but must remain recomputable from
 - provider monetary cost if available;
 - Calls per exact-conform episode;
 - request-class call distributions/means;
-- usage-frequency-weighted sensitivity result.
+- usage-frequency-weighted sensitivity result;
+- time from intermediate owner confirmation/start to final Execution Route Commit;
+- number of owner/delegation decisions after intermediate execution start.
 
 Backup Primary candidates, if future evidence requires a new scoring methodology:
 
@@ -497,8 +556,6 @@ QA-04 uses six score bands: **0, 1, 2, 3, 4, 5**.
 
 Threshold values are currently **TBD**. Lower is better.
 
-Plain-text scoring contract:
-
 ```text
 Metric <= I5        -> 5점
 I5 < x <= I4        -> 4점
@@ -513,7 +570,7 @@ Required process:
 ```text
 Pilot
  -> metric behavior 확인
- -> threshold calibration
+ -> threshold / aggregation calibration
  -> scoring-v1 freeze
  -> final A/B/C/D evaluation
 ```
@@ -534,13 +591,19 @@ At minimum, raw evidence must allow reconstruction of:
 
 ```text
 request_processing_start_ts
-execution_owner
+acoustic_eos_ts
+
+execution_route_commit_ts
+execution_route
+final_execution_owner
+delegated_agent_if_any
+
 execution_owner_confirmed_ts
 execution_started_ts
 
-pre_execution_orchestration_call_count
-pre_execution_mixed_call_count
-pre_execution_total_primary_call_count
+route_commit_orchestration_call_count
+route_commit_mixed_call_count
+route_commit_total_primary_call_count
 
 total_orchestration_call_count
 total_domain_call_count
@@ -550,19 +613,21 @@ total_model_call_count
 exact_conformance
 ```
 
-Per-call model events are the source of truth. Episode-level counts should be derived/projection fields where possible rather than the only evidence.
+Existing owner-confirmation/execution-start timestamps remain useful diagnostics. They no longer define QA-04's authoritative end boundary.
+
+Per-call ModelCall events are the source of truth. Episode-level counts should be derived/projection fields where possible rather than the only evidence.
 
 ## Relationship to other QAs and DP-00
 
 ### QA-01
 
-QA-01 measures **user-visible useful-outcome latency** for Fast tasks. QA-04 measures **how many architecture decision generations occur before execution starts** across representative request classes.
+QA-01 measures **observed user-visible useful-outcome latency** for Fast tasks. QA-04 measures **structural AI decision dependency count required to commit the final execution route**.
 
-A topology can use fewer calls yet still have poor latency because one call is expensive, or use more calls but run them cheaply/parallel. The two QAs are related but not equivalent.
+A topology can use fewer calls yet have poor latency because one call is expensive, or use more calls but run them cheaply/parallel. The two QAs are related but not equivalent.
 
 ### QA-02
 
-QA-02 evaluates interaction/orchestration correctness. QA-04 must not reward an incorrect zero/low-call path as architecturally desirable. The trade-off is read across separate scores and diagnostic slices.
+QA-02 evaluates interaction/orchestration correctness. QA-04 must not reward an incorrect zero/low-call route as architecturally desirable. The trade-off is read across separate scores and diagnostic slices.
 
 ### QA-03
 
@@ -570,11 +635,11 @@ QA-03 evaluates change containment. A fused low-call architecture may reduce QA-
 
 ### DP-00
 
-DP-00 alternatives differ directly in pre-execution AI decision topology:
+DP-00 alternatives differ directly in route-commit AI decision topology:
 
-- Thin VIA can introduce explicit intent/routing stages before Agent execution;
-- ARGO-centric execution can fuse first substantive reasoning and owner/delegation choice;
-- Hybrid Fast Path can use deterministic or model-based eligibility before local/Agent execution;
+- Thin VIA can introduce explicit intent/routing stages before specialist route commit;
+- ARGO-centric execution can fuse first substantive reasoning and owner/delegation choice, but any later specialist-delegation inference still counts until route commit;
+- Hybrid Fast Path can use deterministic or model-based eligibility before local/Agent route commit;
 - Adaptive Per-turn execution can add a selector but may avoid later hops.
 
 QA-04 therefore measures one architecture consequence of execution-capability placement without assuming which topology should win.
@@ -583,8 +648,8 @@ QA-04 therefore measures one architecture consequence of execution-capability pl
 
 - `I1`~`I5` score thresholds;
 - final W1~W4 taxonomy and scenario counts;
-- final episode aggregation rule if macro-average is selected after pilot;
-- exact eligibility handling for rare aborted/non-started episodes beyond retaining them outside complete Primary observations;
+- final episode aggregation rule if macro-average is selected after Pilot;
+- exact eligibility handling for rare aborted/non-committed episodes beyond retaining them outside complete Primary observations;
 - concrete serialization format for model-call telemetry;
 - final model/prompt/cache profile set for controlled qualification;
 - final QA numbering/rebaseline after QA-01~QA-04 integration.

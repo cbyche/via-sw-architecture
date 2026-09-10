@@ -2,9 +2,9 @@
 
 ## Status
 
-Architecture Context Checkpoint 001/002/004 — logical runtime experiment schema.
+Architecture Context Checkpoint 001/002/004 + Top-QA Cross-review — logical runtime experiment schema.
 
-This is a logical event schema for benchmark implementation. It intentionally captures more than one QA needs so QA-01, QA-02, QA-04 and future Secondary Metrics can be derived without rerunning experiments solely because an intermediate observation was discarded.
+This is a logical event schema for benchmark implementation. It captures enough raw evidence so QA-01, QA-02, QA-04 and future Secondary Metrics can be recomputed without rerunning experiments solely because an intermediate observation was discarded.
 
 QA-03 evolution experiments remain intentionally separated into dedicated evolution schemas because their evidence is source-change/test oriented rather than runtime-event oriented.
 
@@ -20,7 +20,7 @@ results/reports/  human-readable summaries and visualizations
 
 Raw records are append-only/immutable experimental evidence. If instrumentation or schema meaning changes, increment a schema/benchmark version and create new runs rather than rewriting old events.
 
-Derived metrics such as FTOL p95, AECR and QA-04 average pre-execution model calls must never be the only persisted evidence.
+Derived metrics such as FTOL p95, AECR and QA-04 Average Model Calls to Commit Execution Route must never be the only persisted evidence.
 
 ## Time basis
 
@@ -30,33 +30,33 @@ Wall-clock time may additionally be logged for operational correlation, but must
 
 Each run records a monotonic origin and all event timestamps use the same origin/unit.
 
-Recommended unit: integer nanoseconds or microseconds from monotonic origin. The concrete serialization format will be finalized with benchmark implementation.
+Recommended unit: integer nanoseconds or microseconds from monotonic origin. Concrete serialization remains an implementation decision.
 
 ## Minimum run identity fields
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
 | `schema_version` | string | yes | Raw event contract version |
-| `run_id` | string | yes | Globally unique benchmark episode/run identity |
+| `run_id` | string | yes | Globally unique benchmark run identity |
 | `episode_id` | string | recommended | Logical user-goal episode; may equal `run_id` in one-episode-per-run harnesses |
 | `scenario_id` | string | yes | Stable scenario identifier |
-| `scenario_category` | string | yes | e.g. QA-01 `F1`/`F2`/`F3`, QA-02 `C1`~`C8`, QA-04 `W1`~`W4` |
+| `scenario_category` | string | yes | e.g. QA-01 `F1`/`F2`/`F3`, QA-02 `C1`~`C8`, QA-04 workload class |
 | `scenario_version` | string | recommended | Scenario definition version |
 | `scenario_corpus_version` | string | yes | Frozen scoring-corpus version |
 | `scenario_taxonomy_version` | string/null | recommended | Taxonomy version where applicable |
-| `alternative_id` | string | yes | Architecture alternative under test, e.g. `DP00-A` |
+| `alternative_id` | string | yes | Architecture alternative, e.g. `DP00-A` |
 | `alternative_version` | string/null | recommended | Prototype/architecture implementation version |
-| `benchmark_version` | string | yes | Runner/corpus contract version |
+| `benchmark_version` | string | yes | Benchmark runner/corpus contract version |
 | `source_git_commit` | string | yes | Source commit being evaluated |
 | `oracle_trace_id` | string/null | yes | Frozen semantic/oracle trace; null only when not applicable |
 | `semantic_trace_class` | string/null | recommended | e.g. correct, ambiguous, wrong-fast, wrong-agent, malformed, timeout |
-| `scoring_version` | string/null | yes | Frozen scoring version used later; may be null at raw-run time |
-| `monotonic_clock_origin` | string/object | yes | Description/identifier of timestamp origin and unit |
+| `scoring_version` | string/null | yes | Frozen scoring version; may be null during Pilot |
+| `monotonic_clock_origin` | string/object | yes | Timestamp origin and unit |
 
 Additional recommended provenance:
 
 - Agent-stub version;
-- tool-latency profile version;
+- tool/external dependency latency profile id/version;
 - machine profile id;
 - OS/build;
 - power profile;
@@ -68,49 +68,78 @@ Additional recommended provenance:
 
 ## Runtime boundary timestamps
 
-All timestamps are monotonic offsets from the run origin and are nullable when not applicable.
+All timestamps are monotonic offsets from the same run origin and are nullable when not applicable.
 
 | Field | Meaning |
 | --- | --- |
-| `acoustic_eos_ts` | Ground-truth Acoustic End-of-Speech mapped from fixture annotation into run time. QA-01 FTOL start. |
-| `request_processing_start_ts` | Architecture begins processing the user goal for execution-decision purposes. QA-04 start boundary. May precede EOS when partial/streaming semantic processing is intentionally used. |
-| `semantic_request_start_ts` | Architecture requests semantic interpretation/replay result. |
-| `semantic_response_ts` | Semantic dependency result becomes available to architecture. |
-| `execution_path_selected_ts` | Architecture commits to an execution path/candidate owner. This does not by itself prove execution has started. |
-| `execution_owner_confirmed_ts` | Execution owner is confirmed for the goal. |
+| `acoustic_eos_ts` | Ground-truth Acoustic End-of-Speech. QA-01 FTOL start. |
+| `request_processing_start_ts` | Architecture begins processing the user goal for execution-decision purposes. QA-04 start boundary; may precede EOS for intentional partial/streaming semantics. |
+| `semantic_request_start_ts` | Architecture requests semantic interpretation/replay output. |
+| `semantic_response_ts` | Semantic dependency output becomes available. |
+| `execution_path_selected_ts` | Architecture chooses an execution-path candidate. Candidate selection is not necessarily final route commitment. |
+| `execution_owner_confirmed_ts` | Some execution owner is confirmed. Preserved diagnostic; may be intermediate. |
 | `agent_dispatch_ts` | Request crosses a Downstream Agent dispatch boundary. |
-| `execution_started_ts` | Confirmed execution owner actually starts/accepts execution. QA-04 end boundary. |
+| `execution_started_ts` | Confirmed/intermediate owner starts or accepts execution. Preserved diagnostic; not QA-04 authoritative end after cross-review. |
+| `execution_route_commit_ts` | **QA-04 authoritative end boundary**: final domain execution route is operationally committed and no further owner/delegation decision is required before domain execution continues. |
 | `tool_start_ts` | Controlled local/Agent action begins, when observable at benchmark seam. |
-| `tool_complete_ts` | Controlled action reaches its completion state. |
-| `first_user_visible_result_ts` | First meaningful user-visible result delivery begins. Not a generic acknowledgment unless it satisfies the scenario oracle. |
+| `tool_complete_ts` | Controlled action reaches completion. |
+| `first_user_visible_result_ts` | First meaningful user-visible result delivery begins. |
 | `useful_outcome_ts` | First observable state satisfying the scenario success predicate. QA-01 FTOL endpoint. |
-| `task_complete_ts` | Architecture marks the logical task/workflow complete. May differ from useful outcome. |
+| `task_complete_ts` | Logical task/workflow completes. |
 
-Do not fabricate timestamps for paths that do not have the corresponding stage. A direct local path may have no `agent_dispatch_ts`; an answer-only path may have no `tool_start_ts`.
+Do not fabricate timestamps for paths that do not have the corresponding stage.
 
-For QA-04, `execution_path_selected_ts` is not sufficient as the end boundary. The end requires both execution-owner confirmation and actual execution start/acceptance.
+### QA-04 boundary rule
+
+`execution_path_selected_ts`, `execution_owner_confirmed_ts`, and `execution_started_ts` do **not** independently close QA-04.
+
+QA-04 closes at `execution_route_commit_ts`.
+
+This matters when an intermediate runtime such as ARGO starts and only later decides to delegate to a specialist.
 
 ## Execution topology fields
 
 | Field | Type | Meaning |
 | --- | --- | --- |
-| `execution_owner` | string | Authority selected for substantive execution, e.g. `via_fast_path`, `argo`, `specialized_agent:<id>` |
-| `execution_path` | array/string | Ordered ownership/handoff path, e.g. `via_fast_path`, `via->argo`, `via->argo->agent_x` |
-| `handoff_count` | integer | Number of ownership-boundary crossings |
-| `model_invocation_count` | integer | Legacy/general projection of logical model invocations observable in the run; QA-04 uses the more precise ModelCall records and classified projections below |
+| `execution_owner` | string | Current/selected substantive execution authority where useful |
+| `execution_path` | array/string | Observed ownership/handoff path |
+| `execution_route` | array/string | Final route committed for QA-04, e.g. `via_fast_path`, `argo`, `argo->network_agent`, `via->file_agent` |
+| `final_execution_owner` | string/null | Final domain execution owner after route commit |
+| `delegated_agent_if_any` | string/null | Final delegated Agent when route commitment includes delegation |
+| `handoff_count` | integer | Ownership-boundary crossings |
+| `model_invocation_count` | integer | Legacy/general logical model invocation projection; QA-04 uses ModelCall records instead |
 | `agent_invocation_count` | integer | Downstream Agent prompt/turn invocations if separately measurable |
-| `tool_invocation_count` | integer | Controlled tool/action invocations if applicable |
+| `tool_invocation_count` | integer | Controlled tool/action invocations |
 
-Streaming tokens/events inside one model response are not separate model invocations. Detailed call identity/classification/resource telemetry is defined in `benchmark/schemas/model-call-schema.md`.
+Streaming token/audio chunks are not separate model invocations. Detailed logical-call telemetry is defined in `benchmark/schemas/model-call-schema.md`.
+
+## QA-01 controlled dependency fields
+
+Architecture Qualification must preserve the dependency profile used for the episode so equality/non-dominance can be audited.
+
+Recommended fields:
+
+```text
+dependency_latency_profile_id
+dependency_latency_profile_version
+controlled_agent_latency_ms
+controlled_tool_latency_ms
+controlled_service_latency_ms
+qa01_dependency_profile_frozen
+```
+
+Do not infer these values only from final FTOL. The run must identify the frozen profile that generated the controlled dependency behavior.
+
+Class-specific and overall FTOL can then be checked for fixture-tail dominance during Pilot/calibration.
 
 ## QA-04 episode model-call projections
 
-Per-call ModelCall records are the source of truth. The episode/run record may cache or derive the following projections:
+Per-call `ModelCall` records are the source of truth. Episode/run records may cache or derive:
 
 ```text
-pre_execution_orchestration_call_count
-pre_execution_mixed_call_count
-pre_execution_total_primary_call_count
+route_commit_orchestration_call_count
+route_commit_mixed_call_count
+route_commit_total_primary_call_count
 
 total_orchestration_call_count
 total_domain_call_count
@@ -121,14 +150,24 @@ total_model_call_count
 Required relation:
 
 ```text
-pre_execution_total_primary_call_count
-  = pre_execution_orchestration_call_count
-  + pre_execution_mixed_call_count
+route_commit_total_primary_call_count
+  = route_commit_orchestration_call_count
+  + route_commit_mixed_call_count
 ```
 
-The QA-04 Primary Metric is computed from `pre_execution_total_primary_call_count`, not from unclassified `total_model_call_count`.
+QA-04 Primary is computed from `route_commit_total_primary_call_count`, not unclassified total model calls.
 
-Recommended population/provenance fields:
+For backward-compatible diagnostics, old-schema projections such as:
+
+```text
+pre_execution_orchestration_call_count
+pre_execution_mixed_call_count
+pre_execution_total_primary_call_count
+```
+
+may be retained, but they are no longer authoritative after the Execution Route Commit amendment.
+
+Recommended QA-04 population/provenance fields:
 
 ```text
 qa04_primary_observation_complete
@@ -142,40 +181,41 @@ cache_policy_version
 usage_weight
 ```
 
-A complete QA-04 Primary observation requires a valid request-processing start and a confirmed execution-start boundary. Episodes that never start execution remain raw evidence but are not assigned a fabricated call-count penalty.
+A complete QA-04 Primary observation requires a valid `request_processing_start_ts` and `execution_route_commit_ts` plus reconstructable route evidence.
 
-`episode_exact_conform` from QA-02 can be used to derive the Secondary slice `Calls per exact-conform episode`.
+Episodes that never commit a valid final route remain raw failure evidence and are not assigned an arbitrary high model-call penalty.
+
+`episode_exact_conform` from QA-02 supports the Secondary slice `Calls per exact-conform episode`.
 
 ## Outcome fields
 
 | Field | Type | Required | Meaning |
 | --- | --- | --- | --- |
-| `success` | boolean | yes | Whether scenario Product/useful-outcome predicate was reached |
+| `success` | boolean | yes | Whether Product/useful-outcome predicate was reached |
 | `failure_reason` | string/null | yes | Stable failure class when unsuccessful |
 | `useful_outcome_kind` | string/null | recommended | Observable predicate/outcome class reached |
-| `final_execution_owner` | string/null | recommended | Owner at useful outcome/task completion |
-| `cancel_requested` | boolean | recommended | Cancellation was requested in this episode |
-| `cancel_confirmed` | boolean/null | recommended | Execution stop was confirmed when relevant |
+| `cancel_requested` | boolean | recommended | Cancellation requested |
+| `cancel_confirmed` | boolean/null | recommended | Execution stop confirmed when relevant |
 | `recovery_path` | string/null | recommended | Restart/retry/fallback path if exercised |
 
-`success` is not identical to QA-02 exact conformance. A scenario may accidentally reach a useful external effect while violating a required clarification/task-binding constraint.
+`success` is not identical to QA-02 exact conformance. A scenario may reach an external effect while violating a required clarification/task-binding constraint.
 
 ## QA-02 constraint-manifest provenance
 
-The following fields are required for QA-02 Architecture Qualification episodes:
+Required for QA-02 Architecture Qualification episodes:
 
 | Field | Type | Meaning |
 | --- | --- | --- |
 | `constraint_manifest_version` | string | Exact Architecture Constraint Manifest version |
-| `required_constraints` | array | Machine-evaluable required constraints or stable ids plus frozen manifest reference |
-| `allowed_constraints` | array | Machine-evaluable allowed constraints or stable ids plus frozen manifest reference |
-| `forbidden_constraints` | array | Machine-evaluable forbidden constraints or stable ids plus frozen manifest reference |
+| `required_constraints` | array | Machine-evaluable required constraints or immutable references |
+| `allowed_constraints` | array | Machine-evaluable allowed constraints or immutable references |
+| `forbidden_constraints` | array | Machine-evaluable forbidden constraints or immutable references |
 
-If the raw record stores only ids, the referenced immutable/frozen manifest artifact must be resolvable by version. A final report alone is not sufficient provenance.
+If only ids are stored, the referenced frozen manifest must remain resolvable.
 
 ## QA-02 canonical actual-decision fields
 
-Every alternative normalizes its implementation-specific state into a Canonical Architecture Decision Trace.
+Every alternative normalizes implementation-specific state into a Canonical Architecture Decision Trace.
 
 Minimum fields:
 
@@ -190,11 +230,11 @@ Minimum fields:
 - `actual_observable_effect`;
 - `actual_compound_decomposition` when applicable.
 
-These fields must describe common architecture outcomes, not require internal component names such as `router.selected_agent`.
+These fields describe architecture outcomes, not component names.
 
-## QA-02 per-dimension conformance
+## QA-02 per-dimension and exact conformance
 
-Raw data must retain per-dimension results, using `null/not_applicable` when the dimension was not constrained in the scenario:
+Raw data retains per-dimension results using `null/not_applicable` where unconstrained:
 
 - `referent_conform`;
 - `task_association_conform`;
@@ -204,34 +244,28 @@ Raw data must retain per-dimension results, using `null/not_applicable` when the
 - `result_binding_conform`;
 - `compound_decomposition_conform`.
 
-Additional dimensions may be added in later schema versions without deleting historical evidence.
-
-## QA-02 exact-conformance fields
+Required exact-conformance fields:
 
 | Field | Type | Meaning |
 | --- | --- | --- |
 | `episode_exact_conform` | boolean | True only when every applicable Required/Allowed/Forbidden constraint is satisfied |
-| `constraint_results` | array | Per-constraint id, actual value, conform boolean, dimension, severity |
-| `constraint_failure_ids` | array | Stable ids of violated constraints |
-| `constraint_failure_reasons` | array/object | Structured reasons/actual-vs-expected evidence |
+| `constraint_results` | array | Per-constraint id, actual value, conformance, dimension, severity |
+| `constraint_failure_ids` | array | Stable violated-constraint ids |
+| `constraint_failure_reasons` | array/object | Structured failure evidence |
 
-Only storing `episode_exact_conform` is prohibited. AECR is calculated later from eligible episodes and must be recomputable from raw evidence.
+Only storing `episode_exact_conform` is prohibited.
 
-## QA-02 scenario population fields
-
-Recommended/required fields for population sensitivity and corpus freeze:
+Recommended population fields:
 
 - `eligible_for_aecr`;
-- `primary_correctness_category` (`C1`~`C8`);
+- `primary_correctness_category`;
 - `secondary_correctness_categories`;
 - `critical_slice_ids`;
-- `usage_weight` if a separate production-frequency sensitivity analysis is planned.
-
-`usage_weight` must not silently affect the coverage-balanced Primary AECR unless the frozen scoring version explicitly says so.
+- `usage_weight` for Secondary sensitivity only unless a frozen scoring version says otherwise.
 
 ## Event-oriented representation
 
-The minimum fields above can be stored as one episode record, but the implementation should strongly consider an event log as the authoritative raw representation:
+The authoritative raw representation should preserve ordered events such as:
 
 ```text
 RunStarted
@@ -246,6 +280,7 @@ ExecutionPathSelected
 ExecutionOwnerConfirmed
 AgentDispatched
 ExecutionStarted
+ExecutionRouteCommitted
 ToolStarted
 ToolCompleted
 ClarificationRequested
@@ -260,24 +295,22 @@ RunFinished
 
 Each event should contain:
 
-- `run_id`;
+- `run_id` and `episode_id`;
 - monotonic timestamp where meaningful;
 - event type;
 - relevant stable ids;
 - structured attributes.
 
-A derived episode table can then project the first/last timestamp and final canonical decision values.
-
 Benefits:
 
-- multiple Agent/tool/model invocations are retained rather than flattened;
-- escalation paths can be reconstructed;
+- multiple Agent/tool/model invocations remain reconstructable;
+- escalation and hidden-routing paths can be reconstructed;
 - retries/cancellation/progress can be analyzed later;
-- clarification and follow-up state can span multiple turns;
-- QA-04 measurement boundaries can be independently audited;
-- a new derived metric does not require changing old raw records if its source events were captured.
+- clarification and follow-up state can span turns;
+- QA-04 route-commit boundary can be independently audited;
+- later derived metrics can be recomputed from immutable evidence.
 
-Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`; the runtime event stream may reference `model_call_id` rather than duplicate all telemetry.
+Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`; runtime events may reference `model_call_id` rather than duplicate telemetry.
 
 ## Suggested event attributes
 
@@ -286,7 +319,7 @@ Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`
 - episode/user-goal id;
 - user turn id;
 - input modality;
-- whether processing begins from partial or finalized input;
+- whether processing begins from partial/finalized input;
 - semantic trace/run-plan reference.
 
 ### `ModelCallStarted` / `ModelCallCompleted`
@@ -296,7 +329,7 @@ Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`
 - purpose;
 - call class;
 - retry/parent references;
-- QA-04 inclusion flag;
+- route-commit state/inclusion flag;
 - model/profile version references.
 
 ### `ArchitectureDecisionObserved`
@@ -309,119 +342,123 @@ Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`
 
 ### `ExecutionPathSelected`
 
-- path id;
-- selected owner;
-- candidate owners if available;
-- selection reason code;
-- confidence/ambiguity class from frozen semantic trace;
-- whether this is initial selection or directed escalation.
+- path/candidate owner;
+- selection reason;
+- confidence/ambiguity class;
+- initial vs escalation.
 
 ### `ExecutionOwnerConfirmed`
 
-- execution owner;
-- confirmation mechanism/reason;
+- owner;
+- confirmation mechanism;
 - task/work/execution-attempt id;
-- related model/dispatch call id when applicable.
+- related model/dispatch call id.
 
 ### `AgentDispatched`
 
 - Agent id;
 - harness/adapter type;
 - task/work id;
-- parent task/work id;
-- dispatch attempt number.
+- parent id;
+- dispatch attempt.
 
 ### `ExecutionStarted`
 
-- confirmed execution owner;
+- current owner;
 - execution-attempt id;
-- local/Agent/ARGO start or accept evidence;
-- dispatch/accept correlation id.
+- local/Agent/ARGO start evidence;
+- dispatch/accept correlation.
+
+### `ExecutionRouteCommitted`
+
+- `execution_route`;
+- `final_execution_owner`;
+- `delegated_agent_if_any`;
+- route-commit reason/mechanism;
+- call/dispatch id that caused commitment;
+- whether an intermediate owner had already started.
 
 ### `ClarificationRequested`
 
 - ambiguity/constraint id;
-- clarification target/dimension;
+- clarification dimension;
 - logical episode id;
-- request/answer turn ids when resolved.
+- request/answer turn ids.
 
 ### `ResultBound`
 
 - result/progress id;
 - logical task/work id;
-- user-goal/episode id;
+- episode id;
 - source execution owner/Agent.
 
 ### `ConstraintEvaluated`
 
-- constraint manifest version;
-- constraint id;
-- dimension;
+- manifest version;
+- constraint id/dimension;
 - actual value;
-- expected/allowed/forbidden reference;
+- required/allowed/forbidden reference;
 - conform boolean;
-- failure reason code.
+- failure reason.
 
 ### `ToolStarted` / `ToolCompleted`
 
 - action/tool class;
 - controlled latency profile id;
 - execution owner;
-- side-effect/oracle target id;
+- side-effect/oracle target;
 - result/failure class.
 
 ### `UsefulOutcomeObserved`
 
 - success predicate id;
-- observed state identifier;
-- channel/surface if delivery is part of the predicate.
+- observed state;
+- delivery channel/surface when relevant.
 
 ## Acknowledgment vs useful result
 
-If the product speaks or renders an acknowledgment before completing the task, record it separately rather than overloading `first_user_visible_result_ts` or `useful_outcome_ts`.
-
-Recommended optional events/fields:
+If the product acknowledges before useful completion, record acknowledgment separately:
 
 - `acknowledgement_started_ts`;
 - `acknowledgement_completed_ts`.
 
-A generic “working on it” response is diagnostic interaction latency, not QA-01 completion.
+A generic “working on it” is diagnostic interaction latency, not QA-01 completion.
 
 ## Progress events
 
-For future long-running/task-lifecycle QAs, raw event logs should retain progress events with:
+For future task-lifecycle QAs, retain progress with:
 
 - task/work id;
 - timestamp;
 - source owner/Agent;
 - progress kind/status;
 - delivery channel;
-- whether progress was generated, queued, delivered and acknowledged.
+- generated/queued/delivered/acknowledged state.
 
-Do not reduce progress to only the final count in raw storage.
+Do not reduce progress to only a final count in raw storage.
 
 ## Task, session and episode correlation
 
-Recommended correlation ids where applicable:
+Recommended ids:
 
-- logical evaluation episode id;
-- logical conversation id;
+- evaluation episode id;
+- conversation id;
 - user turn id;
 - task/work id;
 - parent task/work id;
-- downstream session/thread id (hashed/redacted if necessary);
+- downstream session/thread id (hashed/redacted if needed);
 - Agent id;
 - execution-attempt id;
 - clarification-chain id;
-- model-call id;
+- model-call id.
 
-These identifiers are essential for QA-02 task association/result binding, QA-04 causal call inclusion and later QAs on retries, cancellation and recovery.
+These support QA-02 task/result binding, QA-04 causal inclusion and later recovery/cancellation analysis.
 
 ## Privacy / secret handling
 
 Raw benchmark data must not contain credentials, API keys, auth cookies or unrelated personal information.
 
-Prefer stable scenario identifiers and synthetic benchmark fixtures. If real-model fidelity traces contain sensitive content, normalize/redact them before turning them into the frozen qualification corpus.
+Prefer synthetic fixtures/stable ids. Normalize/redact sensitive fidelity traces before freezing them for qualification.
 
 ## Derived QA-01 calculation
 
@@ -436,13 +473,14 @@ Then compute:
 - FTOL p50;
 - **FTOL p95 — QA-01 Primary Metric**;
 - FTOL p99;
-- category-specific F1/F2/F3 distributions.
+- F1/F2/F3 distributions;
+- sensitivity to controlled dependency-latency profile.
 
-Failure episodes remain in the raw population with `success=false` but are not converted into fake high-latency samples.
+Failure episodes remain raw evidence but are not transformed into fake high latency.
 
 ## Derived QA-02 calculation
 
-For the frozen population of eligible QA-02 episodes:
+For the frozen eligible QA-02 population:
 
 ```text
 AECR = count(episode_exact_conform == true)
@@ -450,58 +488,44 @@ AECR = count(episode_exact_conform == true)
        count(eligible_for_aecr == true)
 ```
 
-Also derive diagnostic metrics from the same raw records:
-
-- category-specific AECR;
-- Referent Binding Accuracy;
-- Task Association Accuracy;
-- Execution-path Conformance;
-- Agent Routing Conformance;
-- Clarification Correctness;
-- Result Binding Accuracy;
-- Compound Decomposition Accuracy;
-- False Fast-path Rate;
-- Unnecessary Delegation Rate;
-- Constraint-level Macro Average;
-- Critical-slice Exact Conformance;
-- usage-weighted sensitivity results when weights are provided.
+Also derive category/slice correctness diagnostics from the same raw records.
 
 ## Derived QA-04 calculation
 
-For each complete/eligible QA-04 episode:
+For each complete/eligible QA-04 episode `i`:
 
 ```text
-PreExecutionPrimaryCalls_i =
+RouteCommitPrimaryCalls_i =
   count(ModelCall where
         included_in_qa04_primary == true
         AND episode_id == i)
 ```
 
-Equivalent classified projection:
+Equivalent projection:
 
 ```text
-PreExecutionPrimaryCalls_i =
-  pre_execution_orchestration_call_count
-  + pre_execution_mixed_call_count
+RouteCommitPrimaryCalls_i =
+  route_commit_orchestration_call_count
+  + route_commit_mixed_call_count
 ```
 
 Then:
 
 ```text
-QA-04 = mean(PreExecutionPrimaryCalls_i)
-        over the frozen eligible/completed QA-04 episode population
+QA-04 = mean(RouteCommitPrimaryCalls_i)
+        over the frozen eligible/completed QA-04 population
 ```
 
 Also derive:
 
-- total model calls per episode;
+- total model calls;
 - ORCHESTRATION/MIXED/DOMAIN counts;
 - critical-path calls;
 - retry count;
 - calls by purpose;
 - request-class distributions;
 - Calls per exact-conform episode;
-- token/cache/context/resource/cost diagnostics from ModelCall telemetry.
+- token/cache/context/resource/cost diagnostics.
 
 ## Validation rules
 
@@ -512,23 +536,23 @@ A benchmark runner should reject or flag a run when:
 - required identity/version fields are missing;
 - `success=true` but no useful-outcome evidence exists;
 - alternative/scenario/trace identifiers do not match the frozen run plan;
-- a QA-02 eligible episode has no resolvable constraint manifest/version;
-- `episode_exact_conform=true` while any applicable constraint result is false;
-- a constraint failure exists without a stable id/reason/actual evidence;
-- a QA-04 complete Primary observation lacks `request_processing_start_ts`, `execution_owner_confirmed_ts` or `execution_started_ts`;
-- `execution_started_ts < request_processing_start_ts`;
-- `execution_owner_confirmed_ts > execution_started_ts` without an explicit versioned asynchronous-boundary interpretation;
+- a QA-02 eligible episode lacks a resolvable constraint manifest/version;
+- `episode_exact_conform=true` while an applicable constraint is false;
+- constraint failure lacks stable id/reason/actual evidence;
+- QA-01 qualification references an unfrozen/unknown dependency-latency profile;
+- a QA-04 complete Primary observation lacks `request_processing_start_ts` or `execution_route_commit_ts`;
+- `execution_route_commit_ts < request_processing_start_ts`;
+- final route/owner evidence is inconsistent with `ExecutionRouteCommitted` events;
 - episode-level QA-04 counts cannot be reproduced from ModelCall records;
+- an ORCHESTRATION/MIXED specialist-delegation call is excluded only because an intermediate `execution_started_ts` occurred earlier;
 - model/prompt/cache profile versions do not match the frozen QA-04 run plan;
-- final qualification uses an unfrozen scoring/benchmark/taxonomy/corpus version.
+- final qualification uses unfrozen scoring/benchmark/taxonomy/corpus versions.
 
 ## Schema evolution
 
 Schema changes are versioned.
 
 Backward-compatible additions may add optional events/attributes. Semantic changes to existing fields require a new schema version and must not rewrite historical `results/raw/` data.
-
-The implementation format (JSONL, structured JSON, Parquet-derived projection, etc.) remains an implementation decision. The semantic contract above is the checkpoint requirement.
 
 See also:
 
