@@ -2,9 +2,9 @@
 
 ## Status
 
-Architecture Context Checkpoint 001/002/003/004 — evaluation rules for vNext DP analysis.
+Architecture Context Checkpoint 001/002/003/004 + Top-QA Cross-review — evaluation rules for vNext DP analysis.
 
-These principles extend the current `evaluation-strategy.md` without replacing it. The existing strategy remains valid; a coherent rebaseline will be prepared after QA-01 through QA-04 are formally defined.
+These principles extend the current `evaluation-strategy.md` without replacing it. The existing strategy remains valid; a coherent central rebaseline will be prepared separately after QA-01 through QA-04 and the Top-QA cross-review are complete.
 
 ## Core scoring principles
 
@@ -17,7 +17,7 @@ These principles extend the current `evaluation-strategy.md` without replacing i
 7. **Confounding dependencies are controlled.** Stochastic LLM behavior, Agent variability, live-network variability and uncontrolled machine/background state must not dominate an architecture comparison.
 8. **Architecture qualification uses deterministic semantic replay and test doubles.** Model/Agent/tool behavior is injected through controlled traces/stubs so each architecture sees equivalent semantic conditions.
 9. **Replay corpora must remain realistic.** Frozen semantic traces are derived from behavior classes observed in repeated runs of real models/Agents rather than invented only from idealized happy paths.
-10. **Actual-model validation is separated from the Architecture score.** Real GPT/Qwen/local-model runs provide fidelity/external-validity evidence; they do not silently reintroduce stochasticity into the architecture-only comparison.
+10. **Actual-model validation is separated from the Architecture score.** Real GPT/Qwen/local-model/Agent runs provide fidelity/external-validity evidence; they do not silently reintroduce stochasticity into the architecture-only comparison.
 11. **Scoring follows a fixed order:** Pilot → threshold calibration → scoring-version freeze → final evaluation.
 12. **Score thresholds are not tuned after seeing the final A/B/C/D outcome.** Post-hoc threshold selection would make the score a presentation device rather than an evaluation rule.
 13. **Changing a Primary Metric requires an explicit reason and a new scoring version.** All alternatives must then be recalculated from the same raw corpus under that version.
@@ -29,24 +29,24 @@ These principles extend the current `evaluation-strategy.md` without replacing i
 19. **Exact metrics require diagnostic preservation.** If the Primary Metric is all-or-nothing at episode level, every constraint-level result and failure reason must still be stored so partial improvements and construct-validity problems remain observable.
 20. **Evolution Flexibility evaluation freezes the Expected Change Area and alternative-specific architecture-role mapping before implementation/result observation.** A boundary that can be redefined after the diff is visible cannot serve as a valid containment oracle.
 21. **Development time and LOC are not architecture-only Primary Metrics when human/tool/coding-style variables can dominate them.** They may be preserved as diagnostics, but not used to determine the QA score without a separately justified methodology.
-22. **Every QA Primary Metric must have an explicit measurement boundary that is reconstructable from raw evidence.** Start/end conditions must not depend only on report-time interpretation.
-23. **Model/provider/prompt/cache profiles are controlled experiment inputs.** Freeze their versions/policies before final architecture qualification so implementation tuning does not silently become the independent variable.
-24. **Logical model-call count does not imply physical compute equivalence.** One small-model generation and one large multimodal generation both count as one logical generation for QA-04; measured resource differences remain Secondary telemetry.
-25. **Deterministic replay preserves logical inference topology.** If an architecture requests a model generation, that logical call is recorded/countable even when a replay/model double supplies the output; otherwise replay would erase the architecture property being measured.
+22. **A Primary Metric's measurement boundary must follow the same architectural responsibility across topology locations.** Moving routing/delegation logic behind an intermediate component start event must not remove it from measurement. QA-04 therefore uses Execution Route Commit rather than intermediate execution start.
+23. **Controlled benchmark fixtures must not become the dominant cause of a Primary Metric.** Equality across alternatives is necessary but not sufficient; external/downstream fixture behavior must also be calibrated so it does not overwhelm the architecture effect under study.
+24. **QA-02 constraints must not be derived from the evaluated topology.** Required/Allowed/Forbidden rules come from functional requirements, policy, capability contracts and scenario semantics—not from the fact that one alternative happens to contain a Fast Path, Router or ARGO-first path.
+25. **Model/provider/prompt/cache profiles used for architecture qualification are versioned and frozen.** Logical model-call count does not claim physical compute equivalence; token/cache/resource/cost telemetry is retained for later derived analysis.
+26. **Scored QAs and mandatory qualification gates may be separated.** A security/privacy/recovery/trusted-boundary requirement that is non-compensable should be a must-pass condition rather than another trade-off star score.
+27. **Any minimum correctness qualification gate is calibrated and frozen before final alternative results are known.** Do not hide correctness as a penalty inside latency or model-call formulas; use a separate gate when final selection requires minimum acceptable AECR.
 
 ## Raw-data principle
 
 > **측정하지 않은 값은 나중에 복구할 수 없지만, raw data로 보존한 값은 나중에 다른 metric으로 재해석할 수 있다.**
 
-This principle drives benchmark instrumentation. Store architecture-relevant event timestamps, ownership decisions, canonical correctness outcomes, constraint results and invocation counts even when they are not part of today's Primary Metric.
+This principle drives benchmark instrumentation. Store architecture-relevant event timestamps, ownership decisions, canonical correctness outcomes, constraint results, model-call events, profile/version metadata and resource telemetry even when they are not part of today's Primary Metric.
 
-The cost of retaining a timestamp or categorical event is small; the cost of discovering after an experiment that a needed boundary was never measured can invalidate the run.
+For QA-02, storing only final `episode_exact_conform` or AECR is prohibited. Preserve the manifest version, actual canonical trace, each applicable constraint result and failure ids/reasons.
 
-For QA-02 specifically, storing only final `episode_exact_conform` or AECR is prohibited. Preserve the manifest version, actual canonical trace, each applicable constraint result, and failure ids/reasons.
+For QA-03, storing only final CCR or `scenario_change_contained` is prohibited. Preserve the frozen Expected Change Area, role mapping, actual changed roles/files, acceptance/regression results and unexpected propagation evidence.
 
-For QA-03, storing only final CCR or `scenario_change_contained` is likewise prohibited. Preserve the frozen Expected Change Area, role mapping, actual changed roles/files, acceptance/regression results, and unexpected propagation evidence.
-
-For QA-04, storing only the episode-level call count is prohibited. Preserve each logical ModelCall record, call classification/purpose, causal/retry links, model/prompt/cache profiles, execution-boundary evidence, and token/resource telemetry when available.
+For QA-04, storing only an episode call count is prohibited. Preserve per-logical-generation ModelCall evidence, call class, route-commit state, model/prompt/cache profile metadata and resource/token diagnostics.
 
 ## Metric discipline
 
@@ -56,20 +56,22 @@ A QA should separate:
 - the **Primary Metric** that determines the architecture score;
 - **Secondary Metrics** used for diagnosis;
 - the **scenario population** over which the metric is valid;
+- the **measurement start/end boundary** where applicable;
 - benchmark controls and exclusions;
 - the scoring-version thresholds.
 
-Do not combine independent concerns by arbitrary weighted formulas merely to obtain one number. For example, responsiveness and correctness should remain distinct QAs when a failure can otherwise be hidden as a latency penalty.
+Do not combine independent concerns by arbitrary weighted formulas merely to obtain one number.
 
-Likewise, do not make a component-accuracy average the correctness Primary Metric when one critical error can invalidate the whole user-goal orchestration. Component/slice metrics remain valuable Secondary diagnostics.
+Examples:
 
-For Flexibility, do not use topology size, component count, LOC or developer time as a substitute for the architecture question of whether a change crossed responsibility boundaries unexpectedly.
-
-For Model Call Overhead, do not subtract a hypothetical “intrinsic task call count,” count all downstream lifetime reasoning, or apply arbitrary small/large-model weights. The Primary Metric is the directly observed count of qualifying logical pre-execution ORCHESTRATION/MIXED generations.
+- responsiveness and correctness remain separate; failed tasks are not converted into fabricated large latency values;
+- component-accuracy averages are not the correctness Primary when one critical error invalidates the user-goal episode;
+- topology size, component count, LOC and developer time do not replace the Flexibility question of unexpected change propagation;
+- logical model-call count does not replace measured latency or physical compute cost.
 
 ## Architecture isolation
 
-During architecture qualification:
+During runtime Architecture Qualification:
 
 ```text
 Independent variable
@@ -81,28 +83,35 @@ Dependent variables
 Controlled / confounding variables
     = model semantic behavior
     = Agent behavior
-    = tool/service latency
+    = tool/service behavior and latency
     = network behavior where possible
     = machine / power / background state
     = scenario corpus
+    = model / prompt / cache profiles where relevant
 ```
 
-The comparison should answer: **if the semantic/dependency behavior is held equivalent, what effect does the architecture topology itself create?**
+The comparison should answer: **if the semantic/dependency behavior is held equivalent and non-dominant, what effect does the architecture topology itself create?**
 
-For evolution experiments, the controlled inputs are different but the principle is the same. Freeze the common evolution requirement, architecture-role Expected Change Area, alternative role mappings, acceptance tests and regression suite; then observe how each architecture must actually change.
+For evolution experiments, freeze the common evolution requirement, architecture-role Expected Change Area, alternative role mappings, acceptance tests and regression suite; then observe how each architecture must actually change.
 
-For QA-04, additionally freeze model profile, prompt profile and cache policy/version. Resource/cost telemetry can then be compared diagnostically without allowing prompt/provider tuning to redefine the architecture experiment.
+## Dependency-fixture non-dominance
 
-## Primary measurement-boundary discipline
+For latency QAs, deterministic dependency latency can still confound the result if its fixed magnitude dominates architecture overhead.
 
-A Primary Metric that depends on an interval or lifecycle phase must define its start/end semantically and expose raw events that prove those boundaries.
+Architecture Qualification therefore requires:
 
-Examples:
+```text
+Equality:
+  comparable alternatives receive the same dependency behavior.
 
-- QA-01: ground-truth Acoustic EOS → first useful outcome;
-- QA-04: request-processing start → execution owner confirmed and execution actually started.
+Non-dominance:
+  controlled dependency behavior is calibrated so the fixture does not
+  mechanically determine the Primary Metric instead of the architecture.
+```
 
-Do not infer a favorable boundary after observing an alternative. If a boundary definition changes after pilot, version it and rerun/recompute consistently before final evaluation.
+Exact controlled latency values are selected during Pilot and frozen before final evaluation.
+
+Actual production dependency latency belongs in the separate fidelity/real-stack track.
 
 ## Deterministic replay does not mean unrealistic replay
 
@@ -118,8 +127,6 @@ A deterministic corpus should include realistic non-happy-path semantic classes 
 The corpus is frozen before final A/B/C/D scoring and replayed equally across alternatives.
 
 For correctness evaluation, replaying the same wrong model output is especially useful: it tests whether validation, clarification, eligibility policy, safe fallback and state ownership differ across architectures without making model quality the independent variable.
-
-For model-call accounting, deterministic replay must preserve the fact that a logical generation was requested. A replayed semantic response is therefore still one logical call when the architecture initiated a generation; a deterministic code branch that requested no model remains zero calls.
 
 ## Canonical normalization principle
 
@@ -138,7 +145,7 @@ Scenario constraints are evaluated against this **Canonical Architecture Decisio
 
 ## Constraint-oracle principle
 
-When one scenario permits several correct implementations, the oracle should express:
+When one scenario permits several correct implementations, the oracle expresses:
 
 ```text
 Required   — outcomes/relations that must hold
@@ -146,32 +153,33 @@ Allowed    — acceptable alternatives/sets
 Forbidden  — outcomes/actions that must not occur
 ```
 
-This prevents the benchmark from prejudging DP-00 by declaring one architecture's preferred path as the only correct path.
+Constraint sources must be architecture-neutral evidence such as functional requirements, policy, capability contracts and scenario semantics.
 
-Example: a simple local operation may allow both `VIA_FAST` and `ARGO`; correctness can be equal while QA-01 measures the latency trade-off.
+A topology-derived claim such as “D has a Fast Path, therefore FAST is correct” is invalid.
 
 ## Corpus composition and sensitivity
 
-Architecture Qualification uses a coverage-balanced corpus that deliberately represents architecture-sensitive failure surfaces. This avoids easy, high-frequency requests overwhelming rare but structurally important cases such as multi-point referents, task follow-up, clarification, concurrent result binding or malformed semantic output.
+Architecture Qualification uses coverage-balanced corpora that deliberately represent architecture-sensitive failure surfaces.
 
-The following must be versioned/frozen for final qualification:
+The following must be versioned/frozen where applicable:
 
 - taxonomy;
 - corpus composition;
 - eligibility rules;
 - scenario/constraint manifests;
 - semantic replay set;
-- scoring version.
+- dependency-latency profile;
+- model/prompt/cache profiles;
+- scoring version;
+- qualification-gate version.
 
-Usage-frequency-weighted results may be derived separately to answer a Product E2E sensitivity question.
-
-For QA-04, request-class composition also affects an arithmetic mean. Freeze workload taxonomy, class scenario counts and the aggregation rule before final scoring. A usage-frequency-weighted result remains Secondary unless the frozen scoring version explicitly makes it Primary.
+Usage-frequency-weighted results may be derived separately as Secondary sensitivity analysis.
 
 ## Evolution-benchmark boundary discipline
 
 Flexibility experiments compare semantically equivalent change requirements across structurally different alternatives.
 
-Do not define the Expected Change Area with one topology's filenames. Define common **architecture roles**, then map those roles to each alternative's actual components/files before implementation.
+Do not define Expected Change Area with one topology's filenames. Define common **architecture roles**, then map those roles to each alternative's actual components/files before implementation.
 
 Required order:
 
@@ -184,60 +192,83 @@ Common Evolution Requirement
   -> diff + acceptance/regression evaluation
 ```
 
-If the Expected Change Area or role mapping is changed after the result is visible, create a new scenario/benchmark version. Do not retroactively relabel unexpected propagation as expected change.
+If Expected Change Area or role mapping is changed after the result is visible, create a new scenario/benchmark version. Do not retroactively relabel unexpected propagation as expected change.
+
+## Execution-route measurement discipline
+
+For QA-04, the boundary is **Execution Route Commit**:
+
+> final domain execution route is operationally committed and no further owner/delegation decision is needed before domain execution continues.
+
+This prevents an alternative from hiding routing/delegation calls merely by starting an intermediate runtime earlier.
+
+Preserve intermediate `execution_owner_confirmed_ts` and `execution_started_ts` as diagnostics, but do not use them as the authoritative QA-04 end boundary.
+
+## Scored QAs and mandatory gates
+
+A final architecture decision may use both:
+
+```text
+Scored Architectural Drivers
+  QA-01
+  QA-02
+  QA-03
+  QA-04
+
+Must-pass Architecture Constraints / Gates
+  security
+  privacy/context-sharing policy
+  cancellation semantics
+  task-state integrity
+  failure containment
+  mandatory recovery
+  trusted-boundary requirements
+```
+
+Non-compensable constraints are not made less important by keeping them outside the Top-4 star score.
+
+A minimum QA-02 correctness gate may also be used for final DP-00 eligibility. Its numeric threshold remains TBD until Pilot/calibration and must be frozen before final results.
 
 ## External-validity track
 
-Actual models and Agents should also be exercised, but their results answer a different question:
+Actual models, Agents, networks and tools are exercised separately to ask:
 
-> Does the frozen qualification corpus still represent behavior seen with current real dependencies?
+> Does the frozen qualification setup still represent behavior seen with real dependencies?
 
-This track can detect replay drift, missing behavior classes and provider-specific surprises. It should not be conflated with the controlled architecture score.
+This track detects replay drift, missing behavior classes, provider-specific surprises and real-stack latency/resource effects. It should not be conflated with the controlled architecture score.
 
 ## Versioning
 
 Each benchmark result should identify at least:
 
 - benchmark version;
-- scenario corpus version;
-- scenario taxonomy version where applicable;
+- scenario corpus/taxonomy version;
 - semantic trace/oracle version;
 - constraint-manifest version where applicable;
 - architecture alternative/version;
 - source Git commit;
 - scoring version;
-- machine/environment profile.
+- qualification-gate version where applicable;
+- machine/environment profile;
+- dependency-latency profile where applicable;
+- model/prompt/cache profiles where applicable.
 
-Evolution experiments additionally identify:
+Evolution experiments additionally identify Expected Change Area/role mapping, baseline/result commits, and acceptance/regression suite versions.
 
-- evolution scenario/taxonomy version;
-- Expected Change Area role-set version;
-- alternative role-mapping version;
-- baseline and result Git commits;
-- acceptance/regression suite versions.
-
-Model-call experiments additionally identify:
-
-- model profile/version;
-- prompt profile/version;
-- cache policy/version;
-- model-call schema version;
-- workload taxonomy/aggregation version.
-
-A scoring change must not mutate prior raw runs. Recompute derived metrics into a new version.
+A scoring or gate change must not mutate prior raw runs. Recompute derived metrics into a new version.
 
 ## Relationship to current repository documents
 
 - `docs/evaluation/evaluation-strategy.md` remains unchanged in this checkpoint.
 - `docs/evaluation/architecture-experiment-methodology.md` explains how these principles are applied.
-- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` defines the responsiveness Primary Metric.
-- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` defines AECR and its episode/constraint semantics.
+- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md` defines FTOL p95 and dependency-latency non-dominance controls.
+- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md` defines AECR and constraint semantics.
 - `docs/evaluation/quality-attributes/QA-03-change-flexibility.md` defines CCR and Expected Change Area semantics.
-- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md` defines Average Pre-execution Model Calls per Episode and its execution-start boundary.
-- `benchmark/schemas/run-event-schema.md` defines runtime/interaction episode evidence.
-- `benchmark/schemas/model-call-schema.md` defines per-logical-generation model telemetry and QA-04 inclusion evidence.
+- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md` defines Average Model Calls to Commit Execution Route.
+- `docs/architecture/analysis/AA-005-top-qa-cross-review.md` records the Top-QA independence/neutrality/readiness review.
+- `benchmark/schemas/run-event-schema.md` defines runtime episode evidence.
 - `benchmark/schemas/scenario-constraint-schema.md` defines topology-neutral correctness manifests.
-- `benchmark/schemas/evolution-scenario-schema.md` defines topology-neutral evolution requirements and Expected Change Areas.
-- `benchmark/schemas/evolution-run-schema.md` defines immutable QA-03 change/test/diff evidence.
+- `benchmark/schemas/model-call-schema.md` defines QA-04 per-logical-generation evidence.
+- QA-03 uses its dedicated evolution scenario/run schemas.
 
-The QA and DP index will be coherently rebaselined after QA-01~QA-04 are defined.
+Central QA/DP traceability and working-requirement rebaseline is intentionally deferred to a separate checkpoint.

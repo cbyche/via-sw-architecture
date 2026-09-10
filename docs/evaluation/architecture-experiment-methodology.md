@@ -2,13 +2,13 @@
 
 ## Purpose
 
-This document defines how VIA compares SW architecture alternatives without allowing stochastic AI/dependency behavior to dominate the conclusion.
+This document defines how VIA compares SW architecture alternatives without allowing stochastic AI/dependency behavior, benchmark-fixture artifacts or topology-specific measurement boundaries to dominate the conclusion.
 
 It is a project methodology, not a claim that there is a single standardized “LLM architecture replay” method.
 
 ## Experimental model
 
-For an architecture Decision Point such as DP-00:
+For DP-00:
 
 ```text
 Independent variable = SW Architecture Alternative
@@ -18,11 +18,13 @@ Confounding variables = stochastic LLM output
                         network/service variability
                         machine/background/power state
                         scenario sampling differences
+                        model/prompt/cache profile differences
+                        uncontrolled fixture latency
 ```
 
-The experiment is useful only when the observed metric difference can reasonably be attributed to the architecture alternative.
+The comparison boundary is the **Integrated Product**. A/B/C/D must satisfy the same user-visible scenarios; the architectural independent variable is the SW placement/ownership of reasoning, execution, routing and orchestration capability.
 
-For DP-00 specifically, the comparison boundary is the **Integrated Product**. A/B/C/D must satisfy the same user-visible scenarios; the architectural independent variable is the SW placement/ownership of reasoning, execution, routing and orchestration capability.
+The experiment is useful only when metric differences can reasonably be attributed to architecture.
 
 ## Architecture Qualification
 
@@ -33,125 +35,118 @@ Use:
 - the same frozen scenario corpus;
 - deterministic semantic replay;
 - deterministic Downstream Agent stubs;
-- deterministic or replayed tool/service latency;
+- deterministic/replayed tool/service behavior;
 - fixed Reference Development Machine;
 - fixed power/background conditions;
-- the same semantic trace for each comparable episode across A/B/C/D.
+- the same semantic trace for each comparable episode across A/B/C/D;
+- frozen model/prompt/cache profiles where model-call behavior is evaluated;
+- calibrated dependency-latency profiles where latency is evaluated.
 
-This intentionally removes model creativity/quality as a source of experimental variance. The architecture still has to react correctly to the semantic input it receives.
+This intentionally removes dependency creativity/variance as the dominant cause while preserving the architecture's real decision structure.
 
-### Semantic replay boundary
+## Semantic replay boundary
 
-The replay should occur at an architecture seam that represents the dependency's semantic output, not by bypassing the architecture mechanism under evaluation.
+Replay must occur at an architecture seam that represents dependency semantic output without bypassing the architecture component being evaluated.
 
 Examples:
 
-- If evaluating intent/routing topology, replay the model semantic result but still execute the alternative's real validation/routing/task/dispatch code.
-- If evaluating Agent integration/lifecycle, replay Agent progress/result/failure events through the real Harness/Task boundary.
-- If evaluating tool/action latency, use a controlled fake adapter that emits the same observable action completion timing.
+- If evaluating intent/routing topology, replay model semantic output but still execute the alternative's real validation/routing/task/dispatch path.
+- If evaluating Agent lifecycle/integration, replay Agent progress/result/failure events through the real Harness/Task seam.
+- If evaluating tool/action latency, use a controlled fake adapter that emits the frozen behavior profile.
+- If QA-04 counts a model generation, deterministic replay still emits one logical ModelCall record when the architecture requested that generation.
 
-A replay that replaces the architecture component being measured is invalid.
+A replay that replaces the architecture mechanism being measured is invalid.
 
 ## Actual-model trace generation and fidelity
 
-Real models/Agents are used separately to obtain realistic behavior classes and validate that the replay corpus remains representative.
+Real models/Agents are used separately to obtain realistic behavior classes and validate that frozen traces remain representative.
 
-Repeated runs may use GPT, Qwen, local models or relevant first-party Agents. The purpose is not to score architecture directly but to observe semantic behavior such as:
+Repeated runs may use GPT, Qwen, local models or first-party Agents to observe:
 
-- correct semantic result;
-- ambiguous / low-confidence result;
+- correct semantic output;
+- ambiguous/low-confidence output;
 - partially wrong referent/candidate;
 - wrong execution-path recommendation;
 - wrong Agent recommendation;
-- malformed structured output/schema;
-- timeout / no response;
-- provider-specific edge behavior that affects an architecture seam.
+- malformed structured output;
+- timeout/no response;
+- provider-specific edge behavior.
 
 These observations are normalized into a **frozen semantic trace corpus**.
 
-### Replay errors intentionally
-
-The qualification corpus must not contain only ideal answers.
-
-A useful architecture may distinguish itself by detecting or recovering from the same wrong semantic output better than another architecture. Therefore realistic incorrect traces are frozen and replayed identically to A/B/C/D.
-
-Example:
-
-```text
-semantic replay says: VIA_FAST candidate
-scenario semantics say: planning + durable Agent state required
-```
-
-The model error is controlled and equal. The measured difference is whether the architecture validates eligibility, escalates safely, asks for clarification, or blindly executes the invalid proposal.
+Architecture Qualification intentionally replays both correct and erroneous traces. The question is not whether the model made the error; the error is held equal. The question is whether one architecture validates/recovers better than another.
 
 ## Trace corpus size
 
 Do not claim an arbitrary fixed `N` as a universal standard.
 
-Use a pilot collection and inspect **semantic behavior-class saturation**: continue sampling while meaningful new behavior classes or materially different failure shapes are still appearing. Record the collection policy and final corpus composition.
+Use Pilot collection and inspect semantic behavior-class saturation: continue while meaningful new classes/failure shapes are still appearing. Record the collection policy and final corpus composition.
 
-This is a pragmatic experimental design rule, not a statistical theorem that saturation alone establishes completeness.
+This is a pragmatic design rule, not a theorem that saturation proves completeness.
 
 ## Two-track evaluation
 
 ### Track A — Architecture Qualification
 
-Purpose: isolate architecture-only effects.
+Purpose: isolate architecture effects.
 
 ```text
 Frozen semantic traces
 + deterministic Agent/tool behavior
-+ controlled environment
++ controlled and calibrated dependency profiles
++ frozen model/prompt/cache profiles
++ controlled machine state
         |
         v
-A / B / C / D alternatives
+A / B / C / D
         |
         v
 QA Primary + Secondary Metrics
 ```
 
-Only this track feeds the architecture score unless a QA explicitly defines otherwise.
+Only this track feeds architecture scoring unless a QA explicitly defines otherwise.
 
-### Track B — Actual-model Validation
+### Track B — Actual-model / Real-stack Validation
 
-Purpose: check external validity/fidelity.
+Purpose: external validity/fidelity.
 
 Questions include:
 
-- Do real dependencies still exhibit the semantic classes represented in the frozen corpus?
-- Are important classes missing?
-- Do provider/model upgrades materially change behavior distributions?
-- Does an architecture assumption rely on behavior that is not stable in real systems?
+- Do real dependencies still exhibit the behavior classes represented in frozen traces?
+- Are important behavior classes missing?
+- Do provider/model upgrades change distributions materially?
+- What are the real Agent/network/tool latency differences?
+- Are prompt/cache/resource assumptions stable on the intended deployment?
 
-These results are reported separately from architecture qualification scores.
+These results are reported separately from controlled architecture scores.
 
-## Pilot and scoring freeze
+## Pilot and freeze sequence
 
-The required sequence is:
+Required sequence:
 
 ```text
 1. Pilot
-2. Inspect distributions, strictness and instrumentation
-3. Calibrate thresholds / scenario composition
-4. Freeze scoring-v1 and benchmark versions
+2. Inspect distributions, strictness, instrumentation and confounders
+3. Calibrate thresholds, populations, dependency profiles and gates
+4. Freeze scoring/gate/benchmark versions
 5. Run final A/B/C/D evaluation
-6. Derive scores without changing thresholds
+6. Derive results without changing the frozen rules
 ```
 
-Thresholds may be changed after a pilot if the calibration rationale is recorded. They must not be changed to favor an alternative after the final comparative result is visible.
-
-If a Primary Metric must later change:
+If a Primary Metric or gate later changes:
 
 1. record why;
-2. define a new scoring version;
-3. recompute all alternatives from preserved raw data where possible;
-4. rerun only if the required raw observation was not captured.
+2. define a new version;
+3. recompute all alternatives equally from preserved raw evidence where possible;
+4. rerun only when required observations were not captured.
+
+Final ranking must not drive post-hoc rule changes.
 
 ## Raw, derived and report separation
 
 ```text
 results/raw/
-    immutable event records
+    immutable experiment evidence
 
 results/derived/
     metrics recomputed from raw data
@@ -160,79 +155,82 @@ results/reports/
     human-readable summaries, charts and decisions
 ```
 
-Derived and report artifacts can be regenerated. Raw events are the experimental evidence.
+Raw evidence is the source of truth.
 
 ## Controlled dependency patterns
 
 ### Deterministic semantic model double
 
-Input: scenario/trace identifier.
+Input: scenario/trace id.
 
-Output: predefined semantic result, confidence/ambiguity class, candidate path/Agent, optional delay/failure shape.
+Output: frozen semantic result, ambiguity/confidence class, candidate path/Agent, optional failure/delay shape.
 
 ### Deterministic Agent stub
 
-Expose the same Harness/Agent contract as the prototype alternative and reproduce selected behavior:
+Expose the same Agent/Harness contract and reproduce selected behavior:
 
 - fixed result delay;
 - progress sequence;
 - permission request;
-- cancellation acknowledgment/confirmation;
-- timeout;
-- failure;
-- restart/recovery behavior where applicable.
+- cancellation request/confirmation;
+- timeout/failure;
+- restart/recovery where relevant.
 
 ### Controlled tool/service adapter
 
-Produce a machine-observable outcome using a fixed/replayed latency profile. Avoid live cloud/API variance in architecture qualification unless the external service itself is the architecture variable.
+Produce the machine-observable effect using a frozen latency/behavior profile. Avoid live cloud variance during Architecture Qualification unless that dependency itself is the architecture variable.
+
+## QA-01 dependency-latency control
+
+Equality of dependency behavior across A/B/C/D is necessary but not sufficient for QA-01.
+
+A fixed fixture can still dominate FTOL p95 if one class is much slower than the architecture overhead.
+
+Example risk:
+
+```text
+F1 controlled dependency       50 ms
+F2 controlled dependency      200 ms
+F3 controlled dependency      800 ms
+```
+
+Even if all alternatives have the same SW overhead, F3 can mechanically dominate the overall p95.
+
+Architecture Qualification therefore requires:
+
+```text
+Equality:
+  comparable alternatives receive the same controlled dependency behavior.
+
+Non-dominance:
+  dependency profile is calibrated so a fixture class does not overwhelm
+  the architecture-induced FTOL difference being measured.
+```
+
+Pilot must inspect class-specific distributions, p95 tail composition and sensitivity to reasonable controlled latency profiles.
+
+Exact dependency-latency numbers are TBD until calibration and are frozen before final scoring.
+
+Actual production dependency latency remains a Track-B result.
 
 ## Topology-neutral correctness normalization
 
-A/B/C/D may have different internal component graphs. A correctness benchmark must therefore not use component presence/call sequence as the common oracle.
+A/B/C/D may have different internal component graphs. QA-02 therefore does not use component presence/call sequence as the common oracle.
 
-Each alternative projects its architecture-relevant outcome into a **Canonical Architecture Decision Trace** containing common semantic fields such as:
+Each alternative emits a **Canonical Architecture Decision Trace** containing common outcomes such as:
 
 - referent bindings;
-- task relation and logical task id;
+- task relation/id;
 - execution owner/path;
 - delegated Agent;
 - clarification action;
 - result binding;
 - observable effect;
-- compound-request decomposition.
+- compound decomposition.
 
-The implementation may internally use an Intent Refiner, an Agent Router, ARGO-first reasoning, a local Fast Path, or per-turn adaptive selection. The evaluator sees the normalized architecture outcome.
+The evaluator applies a versioned Required/Allowed/Forbidden Architecture Constraint Manifest.
 
-This is the key mechanism for comparing structurally different alternatives without making one component architecture the oracle.
-
-## Constraint-based scenario oracle
-
-QA-02 scenarios use a versioned **Architecture Constraint Manifest** rather than one `expected_path`.
-
-The manifest contains:
-
-- **Required** constraints — must hold;
-- **Allowed** constraints — sets/alternatives that are all valid;
-- **Forbidden** constraints — must not occur.
-
-Example:
-
-```text
-Required:
-  task_relation = FOLLOW_UP
-  task_id = T1
-  result_binding = T1
-
-Allowed:
-  execution_owner in {ARGO, FILE_AGENT}
-
-Forbidden:
-  execution_owner = VIA_FAST
-```
-
-A single expected execution path would bias the benchmark toward a particular DP-00 topology. Constraint sets preserve topology neutrality while still detecting incorrect grounding, task ownership, routing, clarification and result binding.
-
-The manifest contract is defined in `benchmark/schemas/scenario-constraint-schema.md`.
+Constraint evidence must come from requirement/policy/capability/scenario semantics, not from the topology under test.
 
 ## QA-02 qualification pipeline
 
@@ -246,7 +244,7 @@ Frozen Semantic Replay
 Architecture A / B / C / D
        |
        v
-Deterministic Agent Stub / Controlled Tool
+Deterministic Agent / Controlled Tool
        |
        v
 Canonical Architecture Decision Trace
@@ -256,117 +254,204 @@ Constraint Evaluator
        |
        +--> per-constraint evidence
        +--> episode_exact_conform
-       |
-       v
-AECR derived over frozen eligible corpus
 ```
 
-The replay may be correct, ambiguous, partially wrong, wrong-path, wrong-Agent, malformed or timed out. Every alternative receives the same comparable trace.
-
-## Episode-level correctness
-
-Correctness often spans more than one turn. Clarification and follow-up are examples where turn-local scoring can miss whether state is carried correctly across the logical user goal.
-
-QA-02 therefore uses one **user-goal episode** as the unit. The episode may contain clarification turns, task continuation, execution handoff and result binding.
-
-The Primary Metric is exact at the episode level; component/dimension metrics are Secondary diagnostics.
+The Primary Metric is AECR; per-constraint/dimension metrics are mandatory diagnostics.
 
 ## Scenario taxonomy and coverage balance
 
-QA-02 requires architecture-sensitive structural coverage across at least:
+Architecture-scoring corpora prioritize architecture-sensitive coverage over blindly reproducing production frequency.
 
-- C1 Context / Referent Grounding;
-- C2 Task Association / Follow-up;
-- C3 Execution-path Eligibility;
-- C4 Agent Routing / Delegation;
-- C5 Ambiguity / Clarification;
-- C6 Concurrent Task / Result Binding;
-- C7 Compound Request Decomposition;
-- C8 Dependency-error / Invalid-model-output Handling.
+Freeze/version applicable taxonomy, category mix, eligibility, manifests, trace mix and aggregation rules before final evaluation.
 
-The final qualification corpus should be **coverage-balanced**, not merely proportional to observed usage frequency. Otherwise high-frequency simple requests can hide structural failures in lower-frequency but architecture-critical scenarios.
+Usage-frequency-weighted results may be computed as Secondary sensitivity analysis.
 
-Because AECR depends on scenario population, freeze and version:
+## Evolution Flexibility methodology
 
-- taxonomy;
-- category composition;
-- scenario eligibility;
-- scenario/constraint manifests;
-- semantic trace mix;
-- scoring version.
+QA-03 evaluates code/configuration evolution rather than runtime events.
 
-A production-frequency-weighted result can be computed as a Secondary sensitivity analysis.
+Fair comparison sequence:
 
-## Strict Primary Metrics and diagnostic evidence
+```text
+Common Evolution Requirement
+  -> Common Expected Change Roles
+  -> alternative-specific role mapping
+  -> freeze
+  -> implementation
+  -> diff + acceptance/regression evaluation
+```
 
-An all-or-nothing episode metric such as AECR has a known trade-off: it protects against severe errors being averaged away, but may compress alternatives toward low values as constraint count increases.
+Expected Change Area is defined by architecture role, not one alternative's filenames/components. Mapping and role boundaries cannot be enlarged after observing the diff.
 
-Therefore raw qualification data must retain:
+QA-03 uses dedicated evolution scenario/run schemas.
 
-- actual canonical trace;
-- every applicable constraint result;
-- dimension-level conformance;
-- failure ids/reasons;
-- category and critical-slice identifiers.
+## QA-04 measurement boundary normalization
 
-If pilot evidence shows AECR has poor construct validity or discrimination, any replacement must use a new scoring version and be applied equally to all alternatives. Final rankings must not trigger ad-hoc metric changes.
+QA-04 counts architecture-required logical ORCHESTRATION/MIXED generations from:
+
+```text
+request_processing_start_ts
+```
+
+to:
+
+```text
+execution_route_commit_ts
+```
+
+**Execution Route Commit** is the earliest point at which the final domain execution route is operationally committed and no further owner/delegation decision is required before domain execution can continue.
+
+This boundary is chosen because component-local events such as `execution_started_ts` are topology-dependent.
+
+### Hidden-routing example
+
+```text
+A: Intent Model -> Router Model -> Specialist accept
+B: ARGO starts -> ARGO Model chooses Specialist -> Specialist accept
+```
+
+Stopping at intermediate execution start can make B's routing call disappear. Execution Route Commit keeps equivalent owner/delegation responsibility inside measurement regardless of component placement.
+
+The rule is normalization, not a penalty against B.
+
+### QA-04 call inclusion
+
+```text
+Primary include when:
+  call_class in {ORCHESTRATION, MIXED}
+  AND call is before route commit or causes route commit
+```
+
+Pure DOMAIN reasoning after route commit is excluded.
+
+Pure voice-output generation is excluded unless the same logical generation also performs route/owner/delegation decision, in which case it is MIXED.
+
+Logical model-call count does not claim physical compute equivalence. Model/prompt/cache profiles are frozen and token/cache/latency/CPU/GPU/NPU/memory/energy/cost telemetry is retained.
+
+## Correctness qualification gate
+
+The Top QA set intentionally keeps correctness independent from latency, flexibility and model-call overhead.
+
+However, final DP-00 selection should not allow an incorrect architecture to win because it is fast or uses few calls.
+
+Recommended selection rule:
+
+```text
+if QA-02 AECR < frozen minimum acceptable threshold:
+    alternative is ineligible for final selection
+```
+
+The numeric threshold is TBD and follows:
+
+```text
+Pilot -> calibration -> gate-rule freeze -> final evaluation
+```
+
+Do not fold this gate into QA-01/QA-04 formulas as an arbitrary penalty.
+
+## Scored QAs vs must-pass constraints
+
+Not every important requirement belongs in a compensable 0–5 score.
+
+Final evaluation may separate:
+
+```text
+Scored drivers:
+  QA-01 responsiveness
+  QA-02 correctness
+  QA-03 flexibility
+  QA-04 model-call overhead
+
+Must-pass gates:
+  security
+  privacy/context-sharing policy
+  cancellation semantics
+  task-state integrity
+  failure containment
+  mandatory recovery
+  trusted-boundary requirements
+```
+
+A must-pass violation cannot be compensated by another QA's high score.
+
+The exact executable gate set is traced/frozen in a later central rebaseline/benchmark checkpoint.
 
 ## Reference machine and environment
 
-Record enough metadata to reproduce time/resource measurements, including:
+Record enough metadata to reproduce time/resource measurements:
 
 - hardware profile;
 - OS/build;
 - power mode;
-- benchmark process priority if controlled;
-- relevant background-load policy;
+- process priority where controlled;
+- background-load policy;
 - source commit;
-- benchmark and trace versions.
+- benchmark/trace versions;
+- dependency-latency profile;
+- model/prompt/cache profiles.
 
-Warm/cold state must be defined by the QA/benchmark rather than left incidental.
+Warm/cold state must be defined rather than incidental.
 
 ## Methodological grounding
 
-The methodology draws on established ideas rather than claiming a new formal standard:
+The methodology draws on established ideas without claiming a new formal standard.
 
 ### SEI ATAM
 
-ATAM motivates scenario-based analysis of quality-attribute trade-offs and identifying architecture-sensitive decisions. VIA's DP/QA/scenario structure follows that spirit, while numeric benchmark scoring is a project-specific extension.
+ATAM motivates scenario-based quality-attribute trade-off analysis and identifying architecture-sensitive decisions. VIA's numeric scoring is project-specific.
 
 ### Controlled experiments
 
-The independent-variable/confounding-variable discipline is conventional experimental design: hold non-target causes stable enough that measured differences can be attributed to the architecture alternative.
+Hold non-target causes stable enough that measured differences can be attributed to the architecture alternative.
 
 ### Test doubles
 
-Fakes/stubs allow deterministic control of dependencies and failure modes while exercising the real architecture seam.
+Fakes/stubs provide deterministic dependency and failure behavior while exercising real architecture seams.
 
 ### Record/replay testing
 
-Captured/normalized behavior can be replayed deterministically to reproduce realistic dependency interaction without requiring the original live service on every architecture run.
+Captured/normalized dependency behavior can be replayed deterministically to reproduce realistic interaction without requiring live services for every run.
 
-No claim is made that one of these sources defines a standardized LLM architecture replay benchmark.
+No claim is made that these sources define a standardized LLM architecture replay benchmark.
 
 ## Validity threats to report
 
 Every final evaluation should discuss at least:
 
-- **construct validity** — does the Primary Metric measure the intended QA?
-- **internal validity** — were model/network/machine confounders controlled?
-- **external validity** — do frozen traces still resemble real model/Agent behavior?
-- **implementation fidelity** — are A/B/C/D prototypes comparably mature and using equivalent shared infrastructure?
-- **instrumentation effect** — could tracing itself materially change latency/resource results?
-- **oracle neutrality** — do constraints permit all semantically valid topologies rather than encode a preferred alternative?
-- **population sensitivity** — how dependent is AECR on the frozen category/scenario mix?
+- **construct validity** — does each Primary Metric measure its intended QA?
+- **internal validity** — are model/network/machine/fixture confounders controlled?
+- **external validity** — do frozen traces/profiles still resemble real systems?
+- **implementation fidelity** — are A/B/C/D prototypes comparably mature?
+- **instrumentation effect** — does tracing change measured behavior materially?
+- **oracle neutrality** — do QA-02 constraints permit all valid topologies?
+- **population sensitivity** — how dependent are AECR/QA-04 mean on corpus mix?
+- **fixture dominance** — does controlled external latency dominate QA-01?
+- **boundary gaming** — can equivalent responsibility move outside a metric boundary because of topology placement?
 
-## QA-01 application
+## QA applications
 
-For Fast-task End-to-End Responsiveness, Architecture Qualification uses ground-truth acoustic EOS as the start timestamp and scenario-defined useful outcome as the endpoint. Semantic replay and deterministic Agent/tool behavior ensure that A/B/C/D latency differences primarily represent architecture path selection, dispatch and ownership topology.
+### QA-01
 
-## QA-02 application
+Ground-truth acoustic EOS to useful outcome; successful Fast-task episodes only; dependency behavior controlled for equality and non-dominance.
 
-For VIA Interaction-Orchestration Correctness, Architecture Qualification evaluates a Canonical Architecture Decision Trace against a versioned Required/Allowed/Forbidden constraint manifest over a frozen coverage-balanced corpus.
+### QA-02
 
-The Primary Metric is **Architecture Episode Exact Conformance Rate (AECR)**. Per-dimension and per-constraint metrics remain Secondary evidence.
+Canonical Architecture Decision Trace evaluated against Required/Allowed/Forbidden constraints; Primary = AECR.
 
-The raw event schema is defined in `benchmark/schemas/run-event-schema.md` and the scenario oracle contract in `benchmark/schemas/scenario-constraint-schema.md`.
+### QA-03
+
+Evolution scenarios evaluated against pre-frozen Expected Change Roles and alternative role mappings; Primary = CCR.
+
+### QA-04
+
+Logical ORCHESTRATION/MIXED model calls from request-processing start through Execution Route Commit; Primary = Average Model Calls to Commit Execution Route.
+
+## Central rebaseline status
+
+This methodology update does not modify:
+
+- `docs/requirements/requirements-v1.1.md`;
+- central QA↔DP traceability;
+- existing central `evaluation-strategy.md`.
+
+Those are intentionally deferred to a separate central vNext rebaseline checkpoint.
