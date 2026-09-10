@@ -4,25 +4,84 @@
 
 Living index for final SW Architecture review/report assembly.
 
-This document does **not** create a new architecture decision, QA definition, or benchmark rule. Its purpose is to make existing reasoning, methodology, benchmark contracts, and future results easy to locate from reviewer-facing questions.
+This document does **not** create a new architecture decision, QA definition, requirement, or benchmark rule. It maps reviewer questions to the authoritative architecture/evaluation artifacts and, later, to raw/derived result evidence.
 
-`docs/requirements/requirements-v1.1.md` remains the Approved Baseline and is not modified by this index.
+`docs/requirements/requirements-v1.1.md` remains the Approved Baseline.
 
 ## How to use this index
 
-The intended report assembly flow is:
+The target report-assembly chain is:
 
 ```text
-Reviewer question
-    -> architecture reasoning / QA definition
-    -> benchmark contract / control
-    -> raw evidence
-    -> derived metric
-    -> QA score / trade-off
-    -> architecture decision / ADR
+Reviewer Question
+    ↓
+Central vNext Baseline / Architecture Reasoning
+    ↓
+Decision Point / QA Definition
+    ↓
+Benchmark Contract / Evaluation Control
+    ↓
+Raw Evidence
+    ↓
+Derived Metric / Score / Gate
+    ↓
+Trade-off
+    ↓
+Architecture Decision / ADR
 ```
 
-When future experiments/results are added, update this index with links/paths rather than duplicating the full content here.
+Use links/paths from this index instead of copying full reasoning into multiple documents.
+
+# 0. Central vNext Rebaseline Spine
+
+## Reviewer questions
+
+- 현재 architecture evaluation의 중앙 기준 문서는 무엇인가?
+- v1.1과 vNext의 관계는 무엇인가?
+- DP-00, Top QA, benchmark methodology가 어디에서 한 흐름으로 연결되는가?
+
+## Primary evidence
+
+- `docs/requirements/requirements-vNext.md`
+  - v1.1 = Approved starting baseline
+  - vNext = Architecture Evaluation Working Baseline
+  - DP-00 boundary status
+  - Top QA set
+  - Legacy v1.1 QA reclassification
+  - Scored QA vs Mandatory Qualification Gates
+- `docs/architecture/qa-dp-traceability.md`
+  - DP-00 top-level placement
+  - DP-00 ↔ QA-01~04 mapping
+  - DP-01~12 dependency relationship
+  - Legacy QA disambiguation
+  - raw/benchmark traceability
+- `docs/evaluation/evaluation-strategy.md`
+  - central controlled-evaluation pipeline
+  - Architecture Qualification vs Actual-model/Real-stack Validation
+  - Pilot/calibration/freeze discipline
+  - QA-specific anti-gaming controls
+  - Score vs Eligibility
+  - Raw → Derived → Decision chain
+
+## Report-ready central narrative
+
+```text
+Product / Architecture Concern
+    ↓
+DP-00 VIA Primary Execution Boundary
+    ↓
+A / B / C / D
+    ↓
+Top Architectural Drivers QA-01 ~ QA-04
+    ↓
+Controlled Architecture Qualification
+    ↓
+Pilot / Calibration / Rule Freeze
+    ↓
+Final Evaluation / Trade-off
+    ↓
+ADR
+```
 
 # 1. Problem / Architectural Concern
 
@@ -36,60 +95,41 @@ When future experiments/results are added, update this index with links/paths ra
 ## Primary evidence
 
 - `docs/architecture/analysis/AA-001-qa-rebaseline-and-primary-execution-boundary.md`
-  - DP-00이 상위 Decision Point로 승격된 reasoning
-  - Approved Baseline을 시작점으로 유지하면서 responsibility boundary 자체를 검증하는 이유
-  - Alternative B를 baseline-compatible variant로 약화시키지 않은 이유
-  - Integrated Product를 비교 boundary로 잡은 이유
+  - DP-00이 상위 Decision Point가 된 reasoning
+  - v1.1을 시작 baseline으로 유지하면서 boundary 자체를 검증하는 이유
+  - Alternative B를 baseline-compatible routing variant로 약화시키지 않은 이유
+  - Integrated Product comparison boundary
 - `docs/architecture/decision-points/DP-00-primary-execution-boundary.md`
   - 공식 DP 정의
-  - A/B/C/D 구조
-  - responsibility ownership
+  - A/B/C/D 구조와 responsibility placement
   - v1.1 boundary compatibility
-  - expected QA trade-offs
-
-## Report-ready material
-
-- AA-001: “왜 기존 Interaction Context DP보다 DP-00이 먼저인가” reasoning
-- DP-00: A/B/C/D 구조 및 boundary compatibility 비교
+- `docs/requirements/requirements-vNext.md`
+  - central working-baseline treatment of the boundary
 
 # 2. DP-00 Alternatives
 
 ## Reviewer questions
 
 - 왜 A/B/C/D인가?
-- 각 대안은 실제로 무엇이 다른가?
-- ARGO를 preferred default Agent로 두는 것과 ARGO-centric execution은 왜 다른가?
+- 각 대안의 구조적 차이는 무엇인가?
+- ARGO preferred route와 ARGO-centric Primary Execution은 왜 다른가?
 
-## Primary evidence
+## Authoritative evidence
 
-`docs/architecture/decision-points/DP-00-primary-execution-boundary.md`
+- `docs/architecture/decision-points/DP-00-primary-execution-boundary.md`
+- `docs/requirements/requirements-vNext.md` §4
+- `docs/architecture/qa-dp-traceability.md` — DP-00 alternatives summary
 
-Report extraction points:
+## Report-ready extraction
 
-### A — Thin VIA
+| Alternative | Responsibility / topology summary | v1.1 compatibility |
+| --- | --- | --- |
+| **A — Thin VIA** | VIA interaction/context/intent/routing/task orchestration → Downstream Agent substantive execution | **Compatible** |
+| **B — ARGO-centric Primary Execution** | Voice/S2S → thin realtime context → ARGO primary ReAct/tool runtime → specialist delegation | **Challenges baseline boundary** |
+| **C — Hybrid VIA Fast Path** | bounded/local-safe capability in VIA; substantive work delegated | **Mostly compatible / extension** |
+| **D — Adaptive Per-turn** | per-turn Fast / ARGO / Specialized Agent execution-topology selection | **Partially compatible / extension likely** |
 
-- 구조: VIA가 interaction/context/intent/routing/task lifecycle을 소유하고 substantive execution은 Downstream Agent에 위임
-- 핵심 책임 배치: VIA orchestration / Agent domain execution
-- v1.1 compatibility: **Compatible**
-
-### B — ARGO-centric Primary Execution
-
-- 구조: Voice/S2S → thin realtime context → ARGO primary ReAct reasoning/tool execution → optional specialist delegation
-- 핵심 책임 배치: ARGO가 primary execution authority
-- v1.1 compatibility: **Challenges baseline boundary**
-- 중요: “ARGO를 preferred/default Downstream Agent로 route”하는 것은 top-level B가 아니라 A/D routing-policy variant
-
-### C — Hybrid VIA Fast Path
-
-- 구조: bounded/local-safe capability는 VIA Fast Path, 나머지는 Agent
-- 핵심 책임 배치: explicit bounded local execution + downstream substantive execution
-- v1.1 compatibility: **Mostly compatible / extension**
-
-### D — Adaptive Per-turn Execution
-
-- 구조: turn별로 VIA Fast / ARGO / Specialized Agent topology 선택
-- 핵심 책임 배치: per-turn selection + explicit ownership transfer
-- v1.1 compatibility: **Partially compatible / extension likely**
+Important defense point: “ARGO as preferred/default Downstream Agent” is an A/D routing-policy variant, **not** top-level Alternative B.
 
 # 3. Top Architectural Drivers
 
@@ -109,10 +149,9 @@ Report extraction points:
 - `docs/evaluation/quality-attributes/QA-03-change-flexibility.md`
 - `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md`
 - `docs/architecture/analysis/AA-005-top-qa-cross-review.md`
+- central summary: `docs/requirements/requirements-vNext.md` and `docs/architecture/qa-dp-traceability.md`
 
-## Why these four belong together
-
-Use AA-005 §9.2 and §9.3 for the explanation that the four QAs are **independent but trade-off-forming**, not duplicate measurements.
+Use AA-005 for the conclusion that the four QAs are **independent but trade-off-forming**.
 
 # 4. DP-00 × QA Sensitivity Matrix
 
@@ -125,30 +164,26 @@ Use AA-005 §9.2 and §9.3 for the explanation that the four QAs are **independe
 ## Primary evidence
 
 - `docs/architecture/analysis/AA-005-top-qa-cross-review.md`
-  - Section **9.3 DP-00 × QA Sensitivity Matrix**
-  - `●` sensitivity matrix
+  - §9.3 **DP-00 × QA Sensitivity Matrix**
+  - `●` sensitivity table
   - row-by-row rationale
-  - matrix conclusion
 
 ## Report-use note
 
-This is a **Pre-experiment architectural sensitivity hypothesis**, not an A/B/C/D result.
-
-The matrix was recorded before final benchmark results and should be presented as evidence that QA selection was tied to structural hypotheses in advance.
+This is a **Pre-experiment architectural sensitivity hypothesis** recorded before final A/B/C/D benchmark results. The `●` count means sensitivity strength, not goodness/badness or measured score.
 
 # 5. Pre-experiment A/B/C/D Hypothesis Material
 
 ## Reviewer questions
 
-- 실험 전에 각 Alternative가 어떤 QA에서 유리/불리할 것으로 예상했는가?
+- 실험 전에 각 Alternative가 어느 QA에서 유리/불리할 것으로 예상했는가?
 - 결과를 본 뒤 narrative를 바꾼 것은 아닌가?
 
 ## Primary evidence
 
-- `docs/architecture/analysis/AA-005-top-qa-cross-review.md`
-  - Section **9.4 A/B/C/D Pre-experiment Hypotheses**
+- `docs/architecture/analysis/AA-005-top-qa-cross-review.md` §9.4
 
-Every hypothesis there is explicitly labeled:
+Every tendency is explicitly:
 
 ```text
 Hypothesis
@@ -156,9 +191,7 @@ Expected tendency
 Not a measured result
 ```
 
-## Report-use note
-
-Keep this material separate from final result tables. It is useful for showing where actual results confirmed or contradicted pre-experiment architectural expectations.
+Keep this separate from final result tables so the report can compare **prediction vs observation** without rewriting history.
 
 # 6. Evaluation Methodology
 
@@ -167,29 +200,40 @@ Keep this material separate from final result tables. It is useful for showing w
 - LLM randomness를 어떻게 통제했는가?
 - architecture 외 변수가 결과를 지배하지 않는가?
 - score threshold를 결과에 맞춰 정한 것은 아닌가?
-- 실제 model behavior와 deterministic replay의 관계는 무엇인가?
+- deterministic replay와 actual-model validation은 어떻게 구분되는가?
 
 ## Primary evidence
 
-- `docs/evaluation/evaluation-principles.md`
-- `docs/evaluation/architecture-experiment-methodology.md`
+- central: `docs/evaluation/evaluation-strategy.md`
+- detailed principles: `docs/evaluation/evaluation-principles.md`
+- detailed method: `docs/evaluation/architecture-experiment-methodology.md`
 
-Key report-ready principles:
+## Report-ready principles
 
 ```text
 Independent variable = SW Architecture Alternative
 Dependent variables  = QA Primary Metrics
 ```
 
-- deterministic semantic replay for architecture qualification
-- deterministic Agent/tool stubs
-- realistic semantic-error classes derived from actual-model runs
-- actual-model/real-stack validation separated from architecture scoring
-- raw-data immutability
-- raw / derived / report separation
-- Pilot → calibration → scoring/gate rule freeze → final evaluation
-- final A/B/C/D results must not be used to retune thresholds
-- Primary Metric changes require explicit rationale/version and equal recomputation
+Controlled/frozen as applicable:
+
+- scenario/corpus semantics
+- deterministic semantic replay
+- deterministic Agent/tool behavior
+- model/prompt/cache profiles
+- machine/environment
+- controlled dependency latency
+
+Method discipline:
+
+```text
+Pilot
+  -> Calibration
+  -> Scoring/Gate/Benchmark Freeze
+  -> Final A/B/C/D Evaluation
+```
+
+Final results must not be used to retune thresholds or redefine the metric boundary.
 
 # 7. Benchmark Neutrality / Anti-gaming Controls
 
@@ -197,36 +241,35 @@ Dependent variables  = QA Primary Metrics
 
 - 평가가 특정 Alternative에 편향되지 않았는가?
 
-## QA-01 — dependency-latency domination control
+### QA-01 — dependency-latency domination
 
 Evidence:
 
-- `docs/evaluation/quality-attributes/QA-01-fast-task-e2e-responsiveness.md`
-- `docs/architecture/analysis/AA-005-top-qa-cross-review.md` §9.7
-- `docs/evaluation/evaluation-principles.md`
-- `docs/evaluation/architecture-experiment-methodology.md`
+- `QA-01-fast-task-e2e-responsiveness.md`
+- AA-005 §9.7
+- central `evaluation-strategy.md`
 
 Controls:
 
 ```text
 Equality:
-  comparable alternatives receive the same deterministic dependency behavior
+  same controlled dependency behavior across comparable alternatives
 
 Non-dominance:
-  fixture latency is calibrated so external/downstream delay does not dominate FTOL p95
+  fixture latency does not mechanically dominate FTOL p95
 ```
 
-Also: failed episodes are not converted into arbitrary huge-latency penalties.
+Failed episodes do not receive arbitrary huge-latency penalties.
 
-## QA-02 — topology-neutral correctness oracle
+### QA-02 — topology-neutral correctness oracle
 
 Evidence:
 
-- `docs/evaluation/quality-attributes/QA-02-via-interaction-orchestration-correctness.md`
-- `docs/architecture/analysis/AA-002-qa02-correctness-measurement-rationale.md`
+- `QA-02-via-interaction-orchestration-correctness.md`
+- `AA-002-qa02-correctness-measurement-rationale.md`
 - `benchmark/schemas/scenario-constraint-schema.md`
 
-Controls:
+Oracle:
 
 ```text
 Required
@@ -234,14 +277,14 @@ Allowed
 Forbidden
 ```
 
-Constraints must derive from functional requirements, policy, capability contract, scenario semantics, or task/context truth — not from one alternative's topology.
+Constraint sources: functional requirement, policy/security rule, capability contract, scenario semantics and task/context truth — **not evaluated topology**.
 
-## QA-03 — Expected Change Area gaming prevention
+### QA-03 — Expected Change Area gaming prevention
 
 Evidence:
 
-- `docs/evaluation/quality-attributes/QA-03-change-flexibility.md`
-- `docs/architecture/analysis/AA-003-qa03-flexibility-measurement-rationale.md`
+- `QA-03-change-flexibility.md`
+- `AA-003-qa03-flexibility-measurement-rationale.md`
 - `benchmark/schemas/evolution-scenario-schema.md`
 - `benchmark/schemas/evolution-run-schema.md`
 
@@ -256,33 +299,55 @@ Evolution Scenario
     -> Git diff / acceptance / regression result
 ```
 
-Expected Change Area is not defined from post-hoc filenames/components.
-
-## QA-04 — hidden-routing gaming prevention
+### QA-04 — hidden-routing gaming prevention
 
 Evidence:
 
-- `docs/evaluation/quality-attributes/QA-04-model-call-overhead.md`
-- `docs/architecture/analysis/AA-004-qa04-model-call-overhead-rationale.md`
+- `QA-04-model-call-overhead.md`
+- `AA-004-qa04-model-call-overhead-rationale.md`
 - `benchmark/schemas/model-call-schema.md`
 - `benchmark/schemas/run-event-schema.md`
 
-Control:
+Control: **Execution Route Commit** is the authoritative end boundary. Routing/delegation inference remains measured even if it moves inside ARGO after an intermediate owner/start event.
 
-**Execution Route Commit** is the authoritative end boundary, so a delegation/routing inference cannot escape the metric merely by moving inside ARGO after an intermediate execution-start event.
+Model/prompt/cache profiles are frozen so they do not silently become independent variables.
 
-Also freeze model/prompt/cache profiles for qualification so those variables do not silently become independent variables.
+# 8. Legacy v1.1 QA Reclassification
 
-# 8. Scored QA vs Must-pass Gates
+## Reviewer questions
+
+- 기존 QA-01~11은 왜 사라졌는가?
+- 보안/복구/동시성은 누락된 것인가?
+
+They did **not** disappear. vNext central navigation calls them **Legacy v1.1 Detailed QA** and reclassifies their roles.
+
+Primary evidence:
+
+- `docs/requirements/requirements-vNext.md` §6
+- `docs/architecture/qa-dp-traceability.md` — Legacy QA mapping table
+- authoritative original definitions: `docs/requirements/requirements-v1.1.md`
+
+Report-use summary:
+
+- Legacy QA-01 → Top QA-01 diagnostic
+- Legacy QA-05 → Top QA-03 detail
+- Legacy QA-07 → Top QA-04 resource/cost diagnostics
+- Legacy QA-09/10/11 → Top QA-02 correctness slices
+- Legacy QA-03/04/06 → reliability/privacy/security gate candidates
+- Legacy QA-02/08 → detailed operational/cross-cutting supporting concerns
+
+# 9. Scored QA vs Must-pass Gates
 
 ## Reviewer question
 
-- 보안/신뢰성/복구는 왜 Top 4에 없는가?
+- 보안/신뢰성/복구는 왜 Top 4 점수에 없는가?
 
 ## Primary evidence
 
 - `docs/architecture/analysis/AA-005-top-qa-cross-review.md` §9.8–9.9
-- `docs/evaluation/evaluation-principles.md`
+- `docs/requirements/requirements-vNext.md` §7–8
+- `docs/architecture/qa-dp-traceability.md`
+- `docs/evaluation/evaluation-strategy.md`
 
 Report-ready separation:
 
@@ -293,164 +358,156 @@ Scored Architectural Drivers
   QA-03
   QA-04
 
-Mandatory Qualification Gates / Constraints
+Mandatory Qualification Gates
   Security
-  Privacy / context-sharing policy
+  Privacy / Context-sharing policy
+  Trusted boundary requirements
   Required task-state integrity
   Required cancellation semantics
   Failure containment
   Mandatory recovery behavior
-  Trusted boundary requirements
 ```
 
-Rationale:
+Rationale: security/trust/recovery are not considered less important. Selected obligations are **non-compensable conditions**, so they should not be traded away through a higher star score elsewhere.
 
-Security/trust/recovery are **not omitted because they are unimportant**. Selected obligations are treated as mandatory qualification conditions rather than compensable score dimensions.
+Also preserve the separate QA-02 minimum correctness eligibility gate. Numeric threshold: **TBD until Pilot/calibration**.
 
-The cross-review also recommends a minimum acceptable QA-02 correctness gate before an alternative remains eligible for final DP-00 selection. The numeric threshold is still TBD and must be frozen before final results.
-
-# 9. Raw Data → Derived Metrics Traceability
+# 10. Raw Data → Derived Metrics → Decision Traceability
 
 ## Reviewer questions
 
 - 최종 별점은 어떤 raw evidence에서 계산되었는가?
-- metric을 나중에 다시 계산할 수 있는가?
+- metric을 재계산할 수 있는가?
+- raw 결과가 어떻게 architecture decision까지 연결되는가?
 
-## Report-ready traceability chain
+## Report-ready chain
 
 ```text
 Raw Evidence
     ↓
 Derived Metric
     ↓
-QA Score
+QA Primary Metric
+    ↓
+0–5 Score / Qualification Gate
     ↓
 DP-00 Trade-off Analysis
     ↓
 Architecture Decision / ADR
 ```
 
-## QA-01 / QA-02 / QA-04 runtime evidence
+Primary central evidence:
 
-Raw schema:
+- `docs/evaluation/evaluation-strategy.md` §9
+- `docs/architecture/qa-dp-traceability.md` — Evaluation and benchmark traceability
+
+Runtime schemas:
 
 - `benchmark/schemas/run-event-schema.md`
-
-Additional QA-02 oracle/schema:
-
 - `benchmark/schemas/scenario-constraint-schema.md`
-
-Additional QA-04 per-call source of truth:
-
 - `benchmark/schemas/model-call-schema.md`
 
-Derived targets:
-
-- FTOL p95
-- AECR
-- Average Model Calls to Commit Execution Route
-- diagnostic latency/correctness/model-call/resource slices
-
-## QA-03 evolution evidence
+Evolution schemas:
 
 - `benchmark/schemas/evolution-scenario-schema.md`
 - `benchmark/schemas/evolution-run-schema.md`
 
-Derived target:
+Derived primary targets:
 
-- CCR
-- Unexpected Changed Architecture Areas Count and other propagation diagnostics
+- QA-01 FTOL p95
+- QA-02 AECR
+- QA-03 CCR
+- QA-04 Average Model Calls to Commit Execution Route
 
-## Storage policy
+Storage policy:
 
 ```text
 results/raw/      immutable source evidence
-results/derived/  recomputable metrics
-results/reports/  human-readable summaries/visualizations
+results/derived/  recomputable metric / score inputs
+results/reports/  human-readable results and visualizations
 ```
 
-Do not use final QA score tables as the sole source of truth.
+# 11. Threats to Validity
 
-# 10. Threats to Validity
+This remains a living checklist for the final report.
 
-This section is a living checklist for the final report.
-
-| Threat | Why it matters | Existing control/evidence |
+| Threat | Why it matters | Existing control / evidence |
 | --- | --- | --- |
-| Replay fidelity | Frozen traces may stop representing current real models | `architecture-experiment-methodology.md`: separate actual-model fidelity track and behavior-class refresh |
-| Stub vs real Agent behavior | Deterministic stubs simplify real scheduling/failure behavior | deterministic qualification + separate real-stack/Agent validation |
-| Scenario representativeness | A narrow corpus can hide architecture failure surfaces | coverage-balanced QA-02 taxonomy; balanced QA-03 evolution taxonomy; versioned corpora |
-| Workload weighting | Overall mean/p95 can be dominated by scenario mix | freeze corpus composition; report class slices; usage-weighted sensitivity separately |
-| Model-profile dependency | QA-04/latency may shift with model choice | freeze model-profile versions; retain model-call telemetry |
-| Hardware dependency | latency/resource values depend on machine/runtime | fixed Reference Development Machine for qualification; record environment metadata |
-| Prompt/cache optimization dependency | token/latency/cost can shift without topology change | freeze prompt/cache profiles; record cache/token telemetry |
-| External dependency latency | fixture delay can dominate QA-01 | equality + non-dominance calibration |
-| Prototype fidelity | simplified A/B/C/D prototypes may not reflect production-quality architecture | report implementation-fidelity threat; use equivalent shared infrastructure; validate critical seams against reference/production behavior |
-| Oracle neutrality | correctness oracle can accidentally encode preferred topology | Required/Allowed/Forbidden constraints based on semantics/requirements, not topology |
-| Evolution-boundary gaming | broad post-hoc Expected Change Area can inflate CCR | common role-level boundary + pre-frozen mapping |
-| Hidden-routing gaming | routing moved after intermediate owner/start event can escape QA-04 | Execution Route Commit boundary |
-| Threshold hindsight | score bands can be tuned to favor observed winner | Pilot → calibration → freeze → final evaluation |
+| Replay fidelity | Frozen traces may stop representing real model behavior | separate Actual-model/Real-stack validation; behavior-class refresh |
+| Stub vs real Agent behavior | deterministic stubs simplify real execution semantics | scripted qualification + separate real Agent validation |
+| Scenario representativeness | narrow corpus can hide failure surfaces | coverage-balanced/versioned corpora and class/category slices |
+| Workload weighting | p95/mean/rate can change with mix | freeze population/aggregation; usage-weighted sensitivity separately |
+| Model-profile dependency | QA-04 and latency may shift by model | freeze profile/version; preserve model-call telemetry |
+| Hardware dependency | runtime values depend on deployment | fixed/reference machine and environment metadata |
+| Prompt/cache optimization | token/latency/resource values can change without topology change | freeze prompt/cache profiles; preserve telemetry |
+| External dependency latency | fixture can dominate QA-01 | equality + non-dominance calibration |
+| Prototype fidelity | simplified prototypes may misrepresent final product structure | comparable maturity/shared infrastructure + fidelity discussion |
+| Oracle neutrality | correctness oracle may encode preferred topology | Required/Allowed/Forbidden from semantics/requirements |
+| Evolution-boundary gaming | broad post-hoc Expected Change Area inflates CCR | common role-level boundary + pre-frozen mapping |
+| Hidden-routing gaming | internal routing can escape old measurement boundary | Execution Route Commit |
+| Threshold hindsight | scores can be tuned after results | Pilot → calibration → freeze → final |
 
-Future result/report work should add actual sensitivity analyses and residual limitations rather than claiming these controls eliminate all validity threats.
+Controls reduce threats; they do not prove external validity. Residual limitations and sensitivity results must be reported.
 
-# 11. Final Trade-off / Decision Material
+# 12. Final Trade-off / Decision Material
 
-No final A/B/C/D benchmark result exists in this index yet.
+No final A/B/C/D benchmark result exists yet.
 
-Reserve/update this section as evidence becomes available.
+Future links/placeholders:
 
-## Future result artifacts
-
+- executable A/B/C/D specifications: **TBD**
+- prototypes: **TBD**
 - A/B/C/D raw results: `results/raw/` — **TBD**
 - derived QA metrics: `results/derived/` — **TBD**
-- final QA 0~5 score table: **TBD**
+- QA 0~5 score table: **TBD**
+- correctness / mandatory-gate results: **TBD**
 - visualization source data: **TBD**
-- radar/spider chart or other trade-off visualization: **TBD**
+- radar/spider or other trade-off visualization: **TBD**
 - class/category sensitivity analysis: **TBD**
-- actual-model/real-stack fidelity validation: **TBD**
-- must-pass gate results: **TBD**
+- Actual-model/Real-stack validation: **TBD**
 - selected Alternative: **TBD**
 - rejected Alternative rationale: **TBD**
 - final DP-00 trade-off analysis: **TBD**
 - ADR: `docs/adr/` — **TBD**
 
-## Decision traceability target
-
-The final report should make the following chain auditable:
+Target decision chain:
 
 ```text
-Pre-experiment architecture hypothesis
-    -> frozen benchmark/scoring rules
+Pre-experiment hypothesis
+    -> frozen benchmark/scoring/gate rules
     -> immutable raw data
     -> derived QA metrics
     -> QA score + mandatory gates
     -> trade-off interpretation
     -> selected/rejected alternative rationale
     -> ADR
-    -> requirements-vNext / future approved baseline impact
+    -> requirements-vNext impact
+    -> possible future Approved Baseline
 ```
 
 # Reviewer Question → Evidence Map
 
 | Reviewer question | Primary evidence |
 | --- | --- |
-| 왜 DP-00이 중요한가? | AA-001, DP-00 |
-| 왜 A/B/C/D인가? | DP-00 alternatives + AA-001 boundary reasoning |
-| 왜 이 4개 QA인가? | AA-005 §9.1–9.3 |
-| 왜 이 Primary Metric인가? | QA-01~04 definitions + AA-002/003/004 metric rationale records |
-| 평가가 특정 Alternative에 편향되지 않았는가? | AA-005 §9.5–9.7 + QA-02 constraint schema + QA-03 evolution schemas + QA-04 route-commit telemetry |
-| LLM randomness를 어떻게 통제했는가? | evaluation-principles + architecture-experiment-methodology |
-| 점수 기준을 결과에 맞춰 정한 것은 아닌가? | evaluation-principles + methodology Pilot/calibration/freeze rule |
-| 보안/신뢰성은 왜 Top 4에 없는가? | AA-005 §9.8–9.9 |
-| 실험 결과가 실제 제품에도 유효한가? | methodology external-validity track + Threats to Validity section + future real-stack validation |
-| 최종 Alternative 선택의 trade-off 근거는 무엇인가? | future results/derived scores + AA-005 pre-experiment hypotheses + DP-00 + future ADR |
+| 왜 DP-00이 중요한가? | AA-001 + DP-00 + requirements-vNext §3–4 |
+| 왜 A/B/C/D인가? | DP-00 + requirements-vNext §4 + central traceability |
+| 왜 이 4개 QA인가? | AA-005 §9.1–9.3 + central Top-QA tables |
+| 왜 이 Primary Metric인가? | QA-01~04 + AA-002/003/004 rationale records |
+| 기존 QA-01~11은 어떻게 되었는가? | requirements-vNext §6 + qa-dp-traceability Legacy mapping |
+| 평가가 특정 Alternative에 편향되지 않았는가? | AA-005 §9.5–9.7 + evaluation-strategy §6 + schemas |
+| LLM randomness를 어떻게 통제했는가? | evaluation-strategy §5 + evaluation-principles + methodology |
+| 점수 기준을 결과에 맞춰 정한 것은 아닌가? | evaluation-strategy §8 + versioning principles |
+| 보안/신뢰성은 왜 Top 4에 없는가? | AA-005 §9.8–9.9 + requirements-vNext §7 + evaluation-strategy §7 |
+| 실험 결과가 실제 제품에도 유효한가? | evaluation-strategy §11 + methodology validity threats + future real-stack validation |
+| raw data가 score로 어떻게 연결되는가? | evaluation-strategy §9 + qa-dp-traceability + benchmark schemas |
+| 최종 Alternative 선택의 trade-off 근거는 무엇인가? | future raw/derived/gates + AA-005 hypotheses + DP-00 + future ADR |
 
 ## Maintenance rule
 
-Update this file when a new artifact becomes report-relevant, but keep the original artifact as the authoritative source.
+Update this file whenever a new artifact becomes report-relevant, but keep the original artifact authoritative.
 
 The index should answer:
 
 > **어떤 심사 질문을 어떤 근거 문서와 실험 데이터가 뒷받침하는가?**
 
-It should not become a second copy of every analysis document.
+It must remain an index, not a duplicate architecture report.
