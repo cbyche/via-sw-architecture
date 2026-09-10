@@ -251,6 +251,31 @@ Primary evidence:
 - `docs/evaluation/dp00-experimental-boundary.md`
 - `docs/architecture/analysis/AA-007-benchmark-contract-neutrality-review.md`
 
+## Phase 3/4 executable qualification evidence
+
+Primary evidence:
+
+- `docs/architecture/analysis/AA-010-dp00-prototype-conformance-review.md`
+- `prototypes/dp00/crates/bench-runner/tests/dependency_guard.rs`
+- `prototypes/dp00/crates/bench-replay/tests/hidden_context.rs`
+- `prototypes/dp00/crates/bench-events/tests/contract_invariants.rs`
+- `prototypes/dp00/crates/bench-smoke/tests/fault_paths.rs`
+- `prototypes/dp00/crates/bench-smoke/tests/smoke_matrix.rs`
+
+PPT/report candidates:
+
+- 20-path Positive Smoke PASS and specification ModelCall matrix;
+- N1~N9 Negative Anti-gaming Test Matrix;
+- MALFORMED/TIMEOUT/NO_RESPONSE/WRONG_CANDIDATE fault injection flow;
+- NetworkAgent rejection → AgentRouter retry → ARGO acceptance → one route commit;
+- Specification → Rust Prototype formal conformance matrix;
+- Oracle isolation, route-commit boundary, external Outcome Probe and provenance safeguards;
+- Pilot Readiness Gate.
+
+Reviewer-facing evidence statement:
+
+> 평가 공정성 원칙을 단순 문서 규칙이 아니라 executable contract tests로 검증했다.
+
 Report-ready three-layer boundary:
 
 ```text
