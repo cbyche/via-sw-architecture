@@ -4,7 +4,7 @@
 
 Architecture Analysis Record — Top Architectural Driver Cross-review Checkpoint
 
-This record cross-reviews QA-01 through QA-04 as the proposed scored Top Architectural Driver set for DP-00.
+This record cross-reviews QA-01 through QA-04 as the scored Top Architectural Driver set for DP-00.
 
 It is an **evaluation-design readiness review**, not an experiment result, not an ADR, and not a requirements-baseline change.
 
@@ -12,7 +12,7 @@ It is an **evaluation-design readiness review**, not an experiment result, not a
 
 ## Purpose
 
-QA-01~04 were initially defined one by one. Before central vNext rebaseline, they must also be reviewed as a set.
+QA-01~04 were initially defined one by one and then cross-reviewed as a set before the Central vNext Rebaseline. The central rebaseline is now complete; this record remains the authoritative pre-experiment rationale for why these four QAs form a coherent DP-00 driver set.
 
 The cross-review asks:
 
@@ -23,12 +23,16 @@ The cross-review asks:
 - Can stochastic model/Agent behavior and fixture behavior be controlled well enough to isolate architecture effects?
 - Are important security/reliability obligations accidentally being treated as optional because they are not in the scored Top 4?
 
-Two amendments were required by this review:
+Two amendments were required by the initial review:
 
 1. QA-01 Architecture Qualification must control external/dependency latency for both **equality and non-dominance**.
 2. QA-04 must end at **Execution Route Commit**, not merely at intermediate owner confirmation/execution start.
 
-With those controls, the Top QA set is considered ready for Pilot/calibration work.
+The later executable-architecture checkpoint adds one further interpretation rule without changing the sensitivity levels:
+
+> **Component/stage separation is not model-call count. QA-04 is sensitive only when the structural responsibility requires additional logical Generative AI generations before Execution Route Commit.**
+
+With these controls, the Top QA set is considered ready for executable Base Architecture and Pilot preparation.
 
 # 9.1 Final Top QA Set
 
@@ -53,7 +57,7 @@ These are intentionally different views of the same DP-00 alternatives:
 - observed response time;
 - architectural correctness;
 - change containment;
-- structural dependency on AI decision stages.
+- structural dependency on Generative AI decision stages.
 
 No single score is intended to replace the others.
 
@@ -86,7 +90,7 @@ The dimensions are therefore distinct:
 
 ```text
 QA-01 = observed user-perceived time to useful outcome
-QA-04 = structural AI decision dependency count to commit execution route
+QA-04 = structural Generative AI decision dependency count to commit execution route
 ```
 
 QA-04 intentionally does not claim that one logical model call has the same physical cost as another. Physical latency/compute remains Secondary telemetry.
@@ -127,7 +131,7 @@ Therefore QA-04 is not interpreted without QA-02.
 
 ## QA-03 vs QA-04
 
-Fusing decision stages can reduce logical calls while increasing coupling; decomposing responsibilities behind stable contracts can improve change containment while increasing route-decision stages.
+Fusing decision stages can reduce logical calls while increasing coupling; decomposing responsibilities behind stable contracts can improve change containment while increasing route-decision stages **only when those stages actually require separate Generative AI decisions**.
 
 This is another intended trade-off rather than metric duplication.
 
@@ -143,7 +147,7 @@ They may correlate on some workloads, but each can produce a different ordering 
 
 This matrix records a **Pre-experiment architectural sensitivity hypothesis**: before A/B/C/D results are measured, which Top QA is expected to be most sensitive to each major DP-00 structural design choice?
 
-This is report-ready analysis material intended to explain why QA-01~04 were selected as Top Architectural Drivers. It is deliberately recorded before final benchmark results so later scoring cannot be used to retroactively justify the QA set.
+This is report-ready analysis material intended to explain why QA-01~04 were selected as Top Architectural Drivers. It was deliberately recorded before final benchmark results so later scoring cannot be used to retroactively justify the QA set.
 
 Important interpretation rules:
 
@@ -151,6 +155,7 @@ Important interpretation rules:
 - It indicates expected **sensitivity / strength of architectural influence**.
 - It is **not** an A/B/C/D experiment result.
 - It does **not** predict which alternative will win.
+- Component count or stage count is **not** automatically Model Call count.
 - Actual effects must be established by controlled benchmark evidence.
 
 Legend:
@@ -177,35 +182,35 @@ Legend:
 
 ### synchronous processing stage 수
 
-**QA-01 ●●●:** each mandatory synchronous stage can extend the critical path from user input to useful outcome, so responsiveness is highly sensitive to stage count and serialization. **QA-04 ●●●:** when those stages are model-based, decomposition directly increases route-commit model calls. Correctness can be affected by added checks, but stage count alone does not guarantee correctness; Flexibility impact is indirect unless stages imply new coupling boundaries.
+**QA-01 ●●●:** each mandatory synchronous stage can extend the critical path from user input to useful outcome, so responsiveness is highly sensitive to stage count and serialization. **QA-04 ●●●:** sensitivity is high when additional architectural stages introduce additional logical **Generative AI inference dependencies** before Execution Route Commit. A deterministic state/contract/policy stage can increase code-path length without increasing QA-04 at all. Therefore the `●●●` rating reflects the risk of model-based sequential decision staging, not a claim that every component or synchronous software stage equals one Model Call. Correctness can be affected by added checks, but stage count alone does not guarantee correctness; Flexibility impact is indirect unless stages imply new coupling boundaries.
 
 ### Intent/Router 분리 여부
 
-**QA-04 ●●●:** separating intent and routing into distinct model generations can directly increase the number of logical calls before Execution Route Commit. **QA-01/QA-02/QA-03 ●●:** the split can add latency, make validation/routing responsibilities more explicit, and create a stable boundary for routing changes, but the effect depends on whether stages are deterministic, parallelized, or tightly coupled.
+**QA-04 ●●●:** separating intent and routing into independent semantic responsibilities has high sensitivity **when each responsibility requires its own sequential Generative AI decision** before Execution Route Commit. Simple component/code separation does not itself increase Model Calls. For example, `Intent Refiner = GENAI_DEDICATED` plus `Agent Router = deterministic capability/contract lookup` can still produce only one Generative Model Call. **QA-01/QA-02/QA-03 ●●:** the responsibility split can add latency, make validation/routing boundaries explicit, and isolate routing changes, but the observed effect depends on decision mechanisms and coupling. Cross-component intent+routing GenAI fusion is treated as an optimization tactic in the executable Base experiment rather than silently changing this architectural sensitivity hypothesis.
 
 ### ARGO direct coupling
 
-**QA-01 ●●●:** direct coupling can remove VIA-side orchestration/dispatch hops on ARGO-native paths. **QA-03 ●●●:** making ARGO structurally central can cause Agent/context/contract evolution to propagate through ARGO-specific integration. **QA-04 ●●●:** fused ARGO reasoning and routing can reduce explicit model stages, while specialist delegation still counts until Execution Route Commit. QA-02 remains materially sensitive because task ownership, clarification, validation, and result binding may move or become fused.
+**QA-01 ●●●:** direct coupling can remove VIA-side orchestration/dispatch hops on ARGO-native paths. **QA-03 ●●●:** making ARGO structurally central can cause Agent/context/contract evolution to propagate through ARGO-specific integration. **QA-04 ●●●:** ARGO may structurally co-locate request interpretation and self-vs-specialist initial routing in one primary runtime generation, while specialist delegation still counts until Execution Route Commit. QA-02 remains materially sensitive because task ownership, clarification, validation, and result binding may move or become fused.
 
 ### bounded Fast Path
 
-**QA-01 ●●●:** bypassing normal orchestration/delegation can directly reduce user-visible latency for eligible bounded requests. **QA-02 ●●●:** eligibility mistakes can become false-fast execution, making correctness highly sensitive to the boundary and validator. **QA-04 ●●●:** deterministic eligibility and local selection can reach route commit with zero model calls, while model-based eligibility adds calls. QA-03 is also affected because expanding the fast-path capability set expands the VIA-owned change surface.
+**QA-01 ●●●:** bypassing normal orchestration/delegation can directly reduce user-visible latency for eligible bounded requests. **QA-02 ●●●:** eligibility mistakes can become false-fast execution, making correctness highly sensitive to the boundary and validator. **QA-04 ●●●:** deterministic eligibility and local selection can reach route commit with zero additional Generative Model Calls, while semantic/model-based eligibility can add calls. QA-03 is also affected because expanding the fast-path capability set expands the VIA-owned change surface.
 
 ### per-turn selector
 
-**QA-02 ●●●:** selecting the wrong topology or owner per turn is itself a new correctness failure mode. **QA-03 ●●●:** selector policy, owner-transfer contracts, and per-path integration create an additional evolution surface. **QA-04 ●●●:** a model-based selector directly adds route-decision calls; a deterministic selector may not. QA-01 remains moderately sensitive because selector overhead can be offset by choosing a faster downstream path.
+**QA-02 ●●●:** selecting the wrong topology or owner per turn is itself a new correctness failure mode. **QA-03 ●●●:** selector policy, owner-transfer contracts, and per-path integration create an additional evolution surface. **QA-04 ●●●:** a GenAI-based selector directly adds a route-decision generation; a deterministic selector would not. QA-01 remains moderately sensitive because selector overhead can be offset by choosing a faster downstream path.
 
 ### Agent abstraction / adapter
 
-**QA-03 ●●●:** the Agent integration seam is a principal extension boundary for adding/replacing Agents, so it directly determines whether evolution stays contained. QA-01, QA-02, and QA-04 usually see weaker direct sensitivity: an abstraction can add small dispatch overhead or make contracts explicit, but by itself does not require extra model generations.
+**QA-03 ●●●:** the Agent integration seam is a principal extension boundary for adding/replacing Agents, so it directly determines whether evolution stays contained. QA-01, QA-02, and QA-04 usually see weaker direct sensitivity: an abstraction can add small dispatch overhead or make contracts explicit, but by itself does not require extra Generative Model Calls.
 
 ### task / context ownership
 
-**QA-02 ●●●:** ownership strongly influences follow-up association, concurrent result binding, clarification continuity, and stale-context handling. **QA-03 ●●:** central ownership can stabilize shared contracts or create a coupling hub that changes must cross. QA-01/QA-04 usually experience only indirect impact unless ownership logic introduces synchronous/model-based decisions.
+**QA-02 ●●●:** ownership strongly influences follow-up association, concurrent result binding, clarification continuity, and stale-context handling. **QA-03 ●●:** central ownership can stabilize shared contracts or create a coupling hub that changes must cross. QA-01/QA-04 usually experience only indirect impact unless ownership logic introduces synchronous Generative AI decisions.
 
 ### model validation layer
 
-**QA-02 ●●●:** validation can reject wrong Fast Path/Agent/referent proposals and trigger clarification or safe fallback, so correctness is highly sensitive. **QA-04 ●●●:** model-based validation directly adds an ORCHESTRATION generation before Execution Route Commit. **QA-01 ●●:** the same validation can add latency, though parallelization or deterministic checks may reduce that cost. QA-03 impact is generally lower unless validation becomes a broad model/prompt dependency across the architecture.
+**QA-02 ●●●:** validation can reject wrong Fast Path/Agent/referent proposals and trigger clarification or safe fallback, so correctness is highly sensitive. **QA-04 ●●●:** a **GenAI-based** validation layer directly adds an ORCHESTRATION generation before Execution Route Commit; deterministic contract/schema validation does not. **QA-01 ●●:** the same validation can add latency, though deterministic checks, parallelization, or later tactics may reduce that cost. QA-03 impact is generally lower unless validation becomes a broad model/prompt dependency across the architecture.
 
 ## Matrix conclusion
 
@@ -215,10 +220,10 @@ The four QAs do not repeatedly measure the same structural characteristic. They 
 QA-01 -> Latency pressure
 QA-02 -> Correctness pressure
 QA-03 -> Flexibility / containment pressure
-QA-04 -> AI-decision structural overhead pressure
+QA-04 -> Generative-AI-decision structural overhead pressure
 ```
 
-Therefore a topology optimized in one direction does not automatically become best on all four QAs. For example, stage fusion may improve QA-01/QA-04 while weakening QA-03, and added validation may improve QA-02 while increasing QA-01/QA-04 cost.
+Therefore a topology optimized in one direction does not automatically become best on all four QAs. For example, semantic-stage fusion may improve QA-01/QA-04 while weakening QA-03, and added model-based validation may improve QA-02 while increasing QA-01/QA-04 cost.
 
 This is precisely the behavior expected from a useful Top Architectural Driver set: the QAs expose the trade-offs created by DP-00 rather than collapsing them into one preferred architecture pattern.
 
@@ -239,7 +244,7 @@ No alternative is considered the winner before implementation and controlled eva
 - QA-01: may be disadvantaged by extra intent/routing/dispatch stages.
 - QA-02: may benefit from explicit validation, task-state and Agent boundary ownership.
 - QA-03: may benefit from adapter/common-contract containment.
-- QA-04: may be disadvantaged if intent, routing and validation are separate model generations.
+- QA-04: may be disadvantaged **if** intent, routing and validation require separate Generative AI generations; deterministic stages do not add calls merely because they are separate components.
 
 Counterexamples are possible: deterministic routing can reduce QA-04; parallel processing can reduce QA-01; an unstable common contract can hurt QA-03.
 
@@ -250,7 +255,7 @@ Counterexamples are possible: deterministic routing can reduce QA-04; parallel p
 - QA-01: may benefit from a shorter dominant ARGO-native path.
 - QA-02: may carry risk if fused ownership/state semantics make validation, follow-up or result binding less explicit.
 - QA-03: may be disadvantaged if ARGO becomes a strongly coupled architectural center.
-- QA-04: may benefit from fused reasoning/route decisions.
+- QA-04: may benefit because request interpretation and initial self-vs-specialist execution choice are structurally co-located in ARGO.
 
 The QA-04 Execution Route Commit amendment ensures that specialist-delegation inference inside ARGO is still counted; B is not given free credit for hiding routing after an intermediate start event.
 
@@ -263,7 +268,7 @@ The QA-04 Execution Route Commit amendment ensures that specialist-delegation in
 - QA-03: fast-path capability growth may expand VIA's change surface and boundary complexity.
 - QA-04: may perform well when eligibility/local selection is deterministic.
 
-The fast-path allow-list/eligibility semantics must be governed so C does not simply move more and more domain logic into VIA.
+The fast-path capability contract/eligibility semantics must be governed so C does not simply move more and more domain logic into VIA.
 
 ## D — Adaptive Per-turn Execution
 
@@ -272,7 +277,7 @@ The fast-path allow-list/eligibility semantics must be governed so C does not si
 - QA-01: may optimize routes per request but pays selector overhead.
 - QA-02: execution-path selection correctness is a primary risk.
 - QA-03: selector and ownership-transfer complexity may reduce change containment.
-- QA-04: a model-based selector can add call overhead; deterministic selection can avoid it.
+- QA-04: a Generative-AI-based selector can add call overhead; component existence alone is not a call.
 
 D's flexibility in runtime routing does not imply QA-03 Flexibility automatically; runtime adaptiveness and code-change containment are different properties.
 
@@ -328,7 +333,9 @@ A/B/C/D are compared at the Integrated Product user-goal boundary. Internal comp
 
 QA-02 normalizes runtime architecture outcomes into a Canonical Architecture Decision Trace. QA-03 normalizes evolution boundaries into common architecture roles. QA-04 normalizes routing/delegation accounting with Execution Route Commit.
 
-These three normalization mechanisms serve the same fairness goal without forcing internal structural equivalence.
+The executable Base Architecture checkpoint additionally separates architecture responsibility placement from optional optimization tactics so one alternative is not benchmarked with hidden fusion/classifier/speculation advantages.
+
+These normalization mechanisms serve the same fairness goal without forcing internal structural equivalence.
 
 # 9.6 QA-03 Gaming Prevention
 
@@ -433,7 +440,7 @@ This is a **qualification gate**, not a hidden correctness penalty inside QA-01 
 The separation preserves QA independence:
 
 - QA-01 still means responsiveness;
-- QA-04 still means route-decision model-call dependency;
+- QA-04 still means route-decision Generative Model Call dependency;
 - QA-02 decides whether the alternative is correct enough to remain eligible.
 
 The gate must be frozen before final comparative results are known.
@@ -469,7 +476,7 @@ The rationale is:
 
 > Security/trust/recovery concerns are not excluded because they are less important. They are separated because selected requirements may be **mandatory qualification conditions rather than trade-off attributes**.
 
-The exact must-pass constraint set and executable gates remain to be traced from the Approved Baseline during central vNext rebaseline/benchmark design.
+The exact must-pass constraint set and executable gates remain to be traced/frozen during benchmark-contract and Pilot preparation.
 
 # 9.10 Final Cross-review Verdict
 
@@ -479,19 +486,21 @@ The exact must-pass constraint set and executable gates remain to be traced from
 | Primary Metric Singularity | **PASS** | Each QA has one Primary Metric for 0–5 scoring. |
 | QA Independence | **PASS** | Metrics are distinct although intentionally trade-off-forming. |
 | DP-00 Structural Sensitivity | **PASS** | Each metric is expected to react to meaningful execution-topology changes. |
-| Benchmark Neutrality | **PASS with controls** | Requires topology-neutral QA-02 constraints, role-normalized QA-03, route-normalized QA-04. |
+| Benchmark Neutrality | **PASS with controls** | Requires topology-neutral QA-02 constraints, role-normalized QA-03, route-normalized QA-04, and Base-vs-Tactic separation. |
 | Architecture Isolation | **PASS with controlled replay/stubs/profiles** | Confounders must remain frozen/controlled. |
 | Testability | **PASS** | Required observations have explicit schemas/boundaries and can be instrumented. |
-| Reviewer Defensibility | **PASS after QA-01 and QA-04 amendments** | Dependency-latency non-dominance and Execution Route Commit close the two identified design gaps. |
+| Reviewer Defensibility | **PASS after QA-01/QA-04 and executable-Base clarifications** | Dependency-latency non-dominance, Execution Route Commit, and component-vs-model-call clarification close identified design gaps. |
 
 These PASS judgments mean **evaluation-design readiness**, not that any architecture alternative has passed its future benchmark.
 
-No A/B/C/D result has been measured in this checkpoint.
+No A/B/C/D benchmark result has been measured in this checkpoint.
 
 ## Cross-review controls to carry forward
 
 Before final DP-00 evaluation, freeze/version at least:
 
+- DP-00 executable Base Architecture version;
+- common-vs-variable experimental boundary;
 - QA-01 deterministic dependency-latency profile and non-dominance calibration;
 - QA-01 score thresholds;
 - QA-02 taxonomy/corpus/constraint manifests;
@@ -508,23 +517,27 @@ Before final DP-00 evaluation, freeze/version at least:
 Required sequence remains:
 
 ```text
-Pilot
+Executable Base Specification
+  -> Canonical Benchmark Contract
+  -> Prototype
+  -> Pilot
   -> calibration
   -> scoring/gate/benchmark rule freeze
   -> final A/B/C/D evaluation
 ```
 
-## Relationship to central rebaseline
+## Relationship to central rebaseline and executable specification
 
-This cross-review intentionally does not perform the central QA numbering/traceability/requirements migration.
+The Central vNext Rebaseline is complete and is reflected in:
 
-After this checkpoint, a separate central vNext rebaseline can align:
+- `docs/requirements/requirements-vNext.md`;
+- `docs/architecture/qa-dp-traceability.md`;
+- `docs/evaluation/evaluation-strategy.md`.
 
-- DP-00;
-- QA-01~04 definitions;
-- QA↔DP traceability;
-- evaluation strategy;
-- working requirements;
-- must-pass architecture constraints.
+The DP-00 executable Base definition is maintained in:
+
+- `docs/architecture/decision-points/DP-00-executable-architecture-spec.md`;
+- `docs/architecture/analysis/AA-006-dp00-executable-walkthrough.md`;
+- `docs/evaluation/base-architecture-vs-tactic-evaluation.md`.
 
 `requirements-v1.1.md` remains unchanged as the Approved Baseline.
