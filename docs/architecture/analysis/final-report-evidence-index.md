@@ -1014,6 +1014,50 @@ Future placeholders:
 
 ---
 
+# 28. Official Runtime Pilot v0 / Calibration Freeze Readiness
+
+Primary report-ready analysis:
+
+- `docs/architecture/analysis/AA-014-dp00-runtime-pilot-v0-calibration-review.md`
+
+Authoritative evidence:
+
+- valid Official raw campaign: `results/raw/pilot-v0/official-1789090497263081000/`;
+- original committed `dp00-analysis-v1`: `results/derived/pilot-v0/official-1789090497263081000/analysis-summary.json`;
+- deterministic semantic-equivalent `dp00-analysis-v2`: `results/derived/pilot-v0/official-1789090497263081000/dp00-analysis-v2/analysis-summary.json`;
+- reproducible report tables: `results/reports/pilot-v0/calibration-review-data.json`;
+- invalidated forensic campaign: `official-1789087890289040000` plus its external invalidation/inventory records;
+- path-aware gate: `benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json` (`dp00-path-aware-evidence-v1`).
+
+Report-ready assets in AA-014:
+
+| Asset | Evidence preserved |
+| --- | --- |
+| Official Pilot Configuration Table | source/campaign/corpus/runtime/profile/order/instrumentation/schema identities |
+| Validity Gate Table | 80 episodes; Z 40/C 40; missing/duplicate 0; MISSING/UNEVALUABLE 0; 144/144 |
+| QA-01 tables | Profile × Alternative descriptive statistics and estimator sensitivity |
+| QA-02 tables | AECR, constraint status, non-conformance, P04/P06/P07/P09 detail |
+| QA-04 tables | overall/macro, no-route rates, class shares and contributions |
+| Methodology timeline | invalidated attempt → forensic preservation → predicate-gap fix → valid Official Pilot |
+| Calibration Decision Table | explicit `FREEZE` / `DEFER` / `REJECT` decisions without architecture selection |
+| Threats to Validity | small-N/order/profile/instrumentation/coverage/gate/no-route/aggregation limitations |
+| Freeze Readiness Table | independent `benchmark-v1`, `aggregation-v1`, `scoring-v1`, `gate-v1` readiness |
+| Pre-experiment traceability | sensitivity hypotheses compared with observed Pilot behavior, never used as winner logic |
+
+Current measurement-system conclusion:
+
+```text
+Official evidence integrity       PASS
+Derived byte determinism          PASS (`dp00-analysis-v2`)
+Metric semantic preservation      PASS (QA-01/02/04)
+Final benchmark freeze            NOT READY
+Required path                     targeted calibration → version freeze → Final Evaluation
+```
+
+No Best Architecture, winner, recommendation, final DP-00 decision or 0–5 score is established by this evidence.
+
+---
+
 # Reviewer Question → Evidence Map
 
 | Reviewer question | Primary evidence |
@@ -1039,6 +1083,13 @@ Future placeholders:
 | Rust prototype FTOL이 production latency인가? | **NO** — controlled relative comparison; AA-008 |
 | 어떤 Rust runtime/toolchain을 쓰는가? | reference convention + implementation freeze; AA-008/provenance |
 | instrumentation이 latency를 왜곡하지 않는가? | in-memory telemetry + Pilot overhead check |
+| Official Pilot evidence는 완전한가? | AA-014 Validity Gates + valid campaign v2 derived evidence |
+| 실패한 Official attempt를 어떻게 처리했는가? | AA-013 + AA-014 invalidated→valid methodology timeline |
+| 동일 raw의 derived JSON이 byte-stable한가? | AA-014 determinism gate + `dp00-analysis-v2` |
+| QA-01 estimator/repetition/profile을 고정할 수 있는가? | AA-014 QA-01 calibration + decision table |
+| QA-02 threshold를 Pilot 점수로 정했는가? | **NO** — AA-014 numeric gate `DEFER` |
+| QA-04 cheap failure를 어떻게 방지하는가? | AA-014 no-route candidate analysis; final policy `DEFER` |
+| benchmark/aggregation/scoring/gate version이 freeze-ready인가? | AA-014 Freeze Readiness Table |
 | S1~S5 implementation gate는 무엇인가? | prototype harness spec |
 | anti-gaming 원칙을 executable test로 만들었는가? | prototype harness spec negative tests |
 | QA-03에서 benchmark code change가 섞이지 않는가? | EVALUATION_SUPPORT vs ARCHITECTURE_UNDER_TEST source roles |

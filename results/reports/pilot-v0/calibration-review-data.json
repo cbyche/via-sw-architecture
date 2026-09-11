@@ -1,0 +1,2452 @@
+{
+  "configuration": {
+    "analysis_version": "dp00-analysis-v2",
+    "build_profile": "qualification-or-release",
+    "cargo_version": "cargo 1.94.0 (85eff7c80 2026-01-15)",
+    "corpus_id": "DP00-RUNTIME-PILOT-V0",
+    "corpus_version": "v0.1",
+    "coverage_manifest": "dp00-path-aware-evidence-v1",
+    "instrumentation_mode": "CAPTURE",
+    "measured_repetition_count": 1,
+    "order_policy": "DETERMINISTIC_CYCLIC_V1",
+    "position_map": {
+      "A": [
+        0
+      ],
+      "B": [
+        1
+      ],
+      "C": [
+        2
+      ],
+      "D": [
+        3
+      ]
+    },
+    "profiles": [
+      {
+        "agent_delay_micros": 0,
+        "calibration_status": "MINIMAL_DETERMINISTIC_BASELINE",
+        "model_delay_micros": 0,
+        "profile_id": "Z",
+        "tool_delay_micros": 0,
+        "version": "pilot-z-v0"
+      },
+      {
+        "agent_delay_micros": 1000,
+        "calibration_status": "PILOT_CALIBRATION_PARAMETER_NOT_PRODUCTION_OR_SCORING",
+        "model_delay_micros": 1000,
+        "profile_id": "C",
+        "tool_delay_micros": 1000,
+        "version": "pilot-c-provisional-v0"
+      }
+    ],
+    "runtime_worker_policy": "tokio-current-thread-v0",
+    "rustc_version": "rustc 1.94.0 (4a4ef493e 2026-03-02)",
+    "schema_versions": {
+      "campaign": "dp00-pilot-campaign-provenance-v1",
+      "canonical_event": "canonical-event-v2",
+      "model_call": "model-call-v1",
+      "run": "dp00-pilot-provenance-v2"
+    },
+    "source_git_commit": "573ac6894bf7e8fba66580bf1fb771ececfe76b2",
+    "target": "aarch64-apple-darwin",
+    "tokio_version": "1.53.1",
+    "warmup_count": 1
+  },
+  "coverage": {
+    "covered_classes": [
+      "R1",
+      "R2",
+      "R3",
+      "R4",
+      "R5",
+      "R6",
+      "R7",
+      "R10"
+    ],
+    "not_covered_classes": [
+      "R8",
+      "R9"
+    ]
+  },
+  "instrumentation": [
+    {
+      "append_cost_nanos": {
+        "max": 461,
+        "mean": 266.825,
+        "min": 42
+      },
+      "episode_count": 40,
+      "event_count": {
+        "max": 19,
+        "mean": 9.95,
+        "min": 4
+      },
+      "profile": "Z"
+    },
+    {
+      "append_cost_nanos": {
+        "max": 2087,
+        "mean": 1188.65,
+        "min": 374
+      },
+      "episode_count": 40,
+      "event_count": {
+        "max": 19,
+        "mean": 9.95,
+        "min": 4
+      },
+      "profile": "C"
+    }
+  ],
+  "qa01": [
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-c:A",
+      "linear_ms": {
+        "p50": 4.608667,
+        "p95": 4.6174798,
+        "p99": 4.618263160000001
+      },
+      "max_ms": 4.618459,
+      "mean_ms": 4.599069666666667,
+      "min_ms": 4.570083,
+      "nearest_rank_ms": {
+        "p50": 4.608667,
+        "p95": 4.618459,
+        "p99": 4.618459
+      },
+      "p95_absolute_delta_ms": 0.0009792000000001862,
+      "p95_relative_delta": 0.00021201877076318883,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-c:B",
+      "linear_ms": {
+        "p50": 3.110125,
+        "p95": 3.1127502999999996,
+        "p99": 3.1129836600000003
+      },
+      "max_ms": 3.113042,
+      "mean_ms": 3.095875,
+      "min_ms": 3.064458,
+      "nearest_rank_ms": {
+        "p50": 3.110125,
+        "p95": 3.113042,
+        "p99": 3.113042
+      },
+      "p95_absolute_delta_ms": 0.00029170000000018625,
+      "p95_relative_delta": 9.37025584621686e-05,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-c:C",
+      "linear_ms": {
+        "p50": 4.626541,
+        "p95": 4.6512919,
+        "p99": 4.65349198
+      },
+      "max_ms": 4.654042,
+      "mean_ms": 4.630597,
+      "min_ms": 4.611208,
+      "nearest_rank_ms": {
+        "p50": 4.626541,
+        "p95": 4.654042,
+        "p99": 4.654042
+      },
+      "p95_absolute_delta_ms": 0.0027500999999996276,
+      "p95_relative_delta": 0.0005909057116372451,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-c:D",
+      "linear_ms": {
+        "p50": 4.600542,
+        "p95": 4.6295292,
+        "p99": 4.6321058399999995
+      },
+      "max_ms": 4.63275,
+      "mean_ms": 4.556277666666667,
+      "min_ms": 4.435541,
+      "nearest_rank_ms": {
+        "p50": 4.600542,
+        "p95": 4.63275,
+        "p99": 4.63275
+      },
+      "p95_absolute_delta_ms": 0.0032207999999998137,
+      "p95_relative_delta": 0.0006952242188764371,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-z:A",
+      "linear_ms": {
+        "p50": 0.006792,
+        "p95": 0.008291399999999999,
+        "p99": 0.00842468
+      },
+      "max_ms": 0.008458,
+      "mean_ms": 0.007263666666666667,
+      "min_ms": 0.006541,
+      "nearest_rank_ms": {
+        "p50": 0.006792,
+        "p95": 0.008458,
+        "p99": 0.008458
+      },
+      "p95_absolute_delta_ms": 0.00016660000000000036,
+      "p95_relative_delta": 0.01969732797351624,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-z:B",
+      "linear_ms": {
+        "p50": 0.007958,
+        "p95": 0.0087077,
+        "p99": 0.00877434
+      },
+      "max_ms": 0.008791,
+      "mean_ms": 0.007930333333333333,
+      "min_ms": 0.007042,
+      "nearest_rank_ms": {
+        "p50": 0.007958,
+        "p95": 0.008791,
+        "p99": 0.008791
+      },
+      "p95_absolute_delta_ms": 8.329999999999927e-05,
+      "p95_relative_delta": 0.009475600045500998,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-z:C",
+      "linear_ms": {
+        "p50": 0.006625,
+        "p95": 0.0078247,
+        "p99": 0.00793134
+      },
+      "max_ms": 0.007958,
+      "mean_ms": 0.007055666666666667,
+      "min_ms": 0.006584,
+      "nearest_rank_ms": {
+        "p50": 0.006625,
+        "p95": 0.007958,
+        "p99": 0.007958
+      },
+      "p95_absolute_delta_ms": 0.00013330000000000018,
+      "p95_relative_delta": 0.016750439808997257,
+      "success": 3
+    },
+    {
+      "eligible": 3,
+      "failure": 0,
+      "group": "profile-z:D",
+      "linear_ms": {
+        "p50": 0.007083,
+        "p95": 0.008620200000000001,
+        "p99": 0.00875684
+      },
+      "max_ms": 0.008791,
+      "mean_ms": 0.007610666666666667,
+      "min_ms": 0.006958,
+      "nearest_rank_ms": {
+        "p50": 0.007083,
+        "p95": 0.008791,
+        "p99": 0.008791
+      },
+      "p95_absolute_delta_ms": 0.00017079999999999927,
+      "p95_relative_delta": 0.019428961437834066,
+      "success": 3
+    }
+  ],
+  "qa02": [
+    {
+      "constraint_fail": 2,
+      "constraint_pass": 34,
+      "denominator": 10,
+      "group": "profile-c:A",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04"
+      ],
+      "numerator": 9,
+      "percentage": 90.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 6,
+      "constraint_pass": 30,
+      "denominator": 10,
+      "group": "profile-c:B",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "numerator": 7,
+      "percentage": 70.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 2,
+      "constraint_pass": 34,
+      "denominator": 10,
+      "group": "profile-c:C",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04"
+      ],
+      "numerator": 9,
+      "percentage": 90.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 5,
+      "constraint_pass": 31,
+      "denominator": 10,
+      "group": "profile-c:D",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04",
+        "P07"
+      ],
+      "numerator": 8,
+      "percentage": 80.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 2,
+      "constraint_pass": 34,
+      "denominator": 10,
+      "group": "profile-z:A",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04"
+      ],
+      "numerator": 9,
+      "percentage": 90.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 6,
+      "constraint_pass": 30,
+      "denominator": 10,
+      "group": "profile-z:B",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04",
+        "P06",
+        "P07"
+      ],
+      "numerator": 7,
+      "percentage": 70.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 2,
+      "constraint_pass": 34,
+      "denominator": 10,
+      "group": "profile-z:C",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04"
+      ],
+      "numerator": 9,
+      "percentage": 90.0,
+      "unevaluable": 0
+    },
+    {
+      "constraint_fail": 5,
+      "constraint_pass": 31,
+      "denominator": 10,
+      "group": "profile-z:D",
+      "missing": 0,
+      "non_conformant_scenarios": [
+        "P04",
+        "P07"
+      ],
+      "numerator": 8,
+      "percentage": 80.0,
+      "unevaluable": 0
+    }
+  ],
+  "qa02_discriminating_scenarios": [
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-c:A",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "referent"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-c:B",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-c:C",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            "LOCAL_DIRECT:VIA_FAST"
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-c:D",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-z:A",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "referent"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-z:B",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-z:C",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            "LOCAL_DIRECT:VIA_FAST"
+          ],
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-z:D",
+      "scenario": "P04"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:A",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "referent"
+        }
+      ],
+      "group": "profile-c:B",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:C",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:D",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:A",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "referent"
+        }
+      ],
+      "group": "profile-z:B",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:C",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:D",
+      "scenario": "P06"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:A",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-c:B",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:C",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "capability_id": "downloads.organize",
+              "state": "ORGANIZED"
+            },
+            {
+              "object_id": "downloads",
+              "state": "ORGANIZED"
+            },
+            "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS"
+          ],
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            "LOCAL_DIRECT:VIA_FAST"
+          ],
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "execution_path"
+        },
+        {
+          "actual": [
+            "VIA_FAST"
+          ],
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "dimension": "execution_owner"
+        },
+        {
+          "actual": [
+            {
+              "capability_id": "downloads.organize",
+              "state": "ORGANIZED"
+            },
+            {
+              "object_id": "downloads",
+              "state": "ORGANIZED"
+            },
+            "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS"
+          ],
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "dimension": "observable_effect"
+        }
+      ],
+      "group": "profile-c:D",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:A",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            {
+              "terminal_failure": "INVALID_ROUTE"
+            }
+          ],
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "dimension": "execution_path"
+        }
+      ],
+      "group": "profile-z:B",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:C",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": false,
+      "failed_constraints": [
+        {
+          "actual": [
+            {
+              "capability_id": "downloads.organize",
+              "state": "ORGANIZED"
+            },
+            {
+              "object_id": "downloads",
+              "state": "ORGANIZED"
+            },
+            "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS"
+          ],
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "observable_effect"
+        },
+        {
+          "actual": [
+            "LOCAL_DIRECT:VIA_FAST"
+          ],
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "dimension": "execution_path"
+        },
+        {
+          "actual": [
+            "VIA_FAST"
+          ],
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "dimension": "execution_owner"
+        },
+        {
+          "actual": [
+            {
+              "capability_id": "downloads.organize",
+              "state": "ORGANIZED"
+            },
+            {
+              "object_id": "downloads",
+              "state": "ORGANIZED"
+            },
+            "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS"
+          ],
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "dimension": "observable_effect"
+        }
+      ],
+      "group": "profile-z:D",
+      "scenario": "P07"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:A",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:B",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:C",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-c:D",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:A",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:B",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:C",
+      "scenario": "P09"
+    },
+    {
+      "exact_conformant": true,
+      "failed_constraints": [],
+      "group": "profile-z:D",
+      "scenario": "P09"
+    }
+  ],
+  "qa04": [
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-c:A",
+      "included_route_committed_episodes": 5,
+      "macro_average": 1.8,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 2,
+          "eligible": 7,
+          "rate": 0.2857142857142857
+        }
+      },
+      "no_route_count": 5,
+      "no_route_rate": 0.5,
+      "overall_mean": 1.8,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.2,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-c:B",
+      "included_route_committed_episodes": 4,
+      "macro_average": 1.0,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 3,
+          "eligible": 7,
+          "rate": 0.42857142857142855
+        }
+      },
+      "no_route_count": 6,
+      "no_route_rate": 0.6,
+      "overall_mean": 1.0,
+      "per_class": {
+        "R1": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-c:C",
+      "included_route_committed_episodes": 5,
+      "macro_average": 1.8,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 2,
+          "eligible": 7,
+          "rate": 0.2857142857142857
+        }
+      },
+      "no_route_count": 5,
+      "no_route_rate": 0.5,
+      "overall_mean": 1.8,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.2,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-c:D",
+      "included_route_committed_episodes": 7,
+      "macro_average": 2.0,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 0,
+          "eligible": 7,
+          "rate": 0.0
+        }
+      },
+      "no_route_count": 3,
+      "no_route_rate": 0.3,
+      "overall_mean": 2.0,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R4": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.14285714285714285,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R6": {
+          "class_mean": 3.0,
+          "overall_contribution": 0.42857142857142855,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-z:A",
+      "included_route_committed_episodes": 5,
+      "macro_average": 1.8,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 2,
+          "eligible": 7,
+          "rate": 0.2857142857142857
+        }
+      },
+      "no_route_count": 5,
+      "no_route_rate": 0.5,
+      "overall_mean": 1.8,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.2,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-z:B",
+      "included_route_committed_episodes": 4,
+      "macro_average": 1.0,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 3,
+          "eligible": 7,
+          "rate": 0.42857142857142855
+        }
+      },
+      "no_route_count": 6,
+      "no_route_rate": 0.6,
+      "overall_mean": 1.0,
+      "per_class": {
+        "R1": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.25,
+          "population_share": 0.25,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-z:C",
+      "included_route_committed_episodes": 5,
+      "macro_average": 1.8,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 2,
+          "eligible": 7,
+          "rate": 0.2857142857142857
+        }
+      },
+      "no_route_count": 5,
+      "no_route_rate": 0.5,
+      "overall_mean": 1.8,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.2,
+          "population_share": 0.2,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.4,
+          "population_share": 0.2,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    },
+    {
+      "absolute_difference": 0.0,
+      "eligible_episodes": 10,
+      "group": "profile-z:D",
+      "included_route_committed_episodes": 7,
+      "macro_average": 2.0,
+      "no_route_by_expectation": {
+        "FORBIDDEN": {
+          "count": 2,
+          "eligible": 2,
+          "rate": 1.0
+        },
+        "OPTIONAL": {
+          "count": 1,
+          "eligible": 1,
+          "rate": 1.0
+        },
+        "REQUIRED": {
+          "count": 0,
+          "eligible": 7,
+          "rate": 0.0
+        }
+      },
+      "no_route_count": 3,
+      "no_route_rate": 0.3,
+      "overall_mean": 2.0,
+      "per_class": {
+        "R1": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R2": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R3": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R4": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R5": {
+          "class_mean": 1.0,
+          "overall_contribution": 0.14285714285714285,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R6": {
+          "class_mean": 3.0,
+          "overall_contribution": 0.42857142857142855,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        },
+        "R7": {
+          "class_mean": 2.0,
+          "overall_contribution": 0.2857142857142857,
+          "population_share": 0.14285714285714285,
+          "sample_count": 1
+        }
+      },
+      "relative_difference": 0.0
+    }
+  ],
+  "report_data_schema_version": "dp00-calibration-report-data-v1",
+  "semantic_identity_gate": {
+    "qa01_equal": true,
+    "qa02_equal": true,
+    "qa04_equal": true
+  },
+  "source": {
+    "campaign_id": "official-1789090497263081000",
+    "raw_path": "results/raw/pilot-v0/official-1789090497263081000",
+    "v1_summary_path": "results/derived/pilot-v0/official-1789090497263081000/analysis-summary.json",
+    "v1_summary_sha256": "547bb22595c134698263df551a00a2aca5281af7a5ca641a907c6864f0b8c7e1",
+    "v2_summary_path": "results/derived/pilot-v0/official-1789090497263081000/dp00-analysis-v2/analysis-summary.json",
+    "v2_summary_sha256": "0b9693850470e32f8e85b60883d7b0523c200f024a314ddad429052fd7bc8385"
+  },
+  "validity": {
+    "coverage_gate": {
+      "alternatives": 4,
+      "cells": [
+        {
+          "alternative": "A",
+          "constraint_id": "P01-REQ-EFFECT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P01-REQ-EFFECT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P01-REQ-EFFECT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P01-REQ-EFFECT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P01-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P01-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P01-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P01-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P01-FORBID-AGENT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P01-FORBID-AGENT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P01-FORBID-AGENT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P01-FORBID-AGENT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P01",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P02-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P02-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P02-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P02-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P02-ALLOW-OWNER",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P02-ALLOW-OWNER",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P02-ALLOW-OWNER",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P02-ALLOW-OWNER",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P02-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P02-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P02-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P02-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P02",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P03-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P03-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P03-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P03-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P03-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P03-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P03-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P03-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P03-FORBID-WRONG",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P03-FORBID-WRONG",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P03-FORBID-WRONG",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P03-FORBID-WRONG",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P03",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P04-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P04-REQ-OPEN",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P04-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P04",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P04-FORBID-LEFT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P04-FORBID-LEFT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P04-FORBID-LEFT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P04-FORBID-LEFT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P04",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P05-REQ-RELATION",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P05-REQ-RELATION",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P05-REQ-RELATION",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P05-REQ-RELATION",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P05-REQ-TASK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P05-REQ-TASK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P05-REQ-TASK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P05-REQ-TASK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P05-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P05-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P05-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P05-REQ-RESULT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P05-FORBID-T2",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P05-FORBID-T2",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P05-FORBID-T2",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P05-FORBID-T2",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P05-FORBID-NEW",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P05-FORBID-NEW",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P05-FORBID-NEW",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P05-FORBID-NEW",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P05",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P06-REQ-CLARIFY",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P06-REQ-CLARIFY",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P06-REQ-CLARIFY",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P06-REQ-CLARIFY",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P06",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P06-REQ-REFERENT",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P06-FORBID-EARLY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P06-FORBID-EARLY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P06-FORBID-EARLY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P06-FORBID-EARLY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P06-FORBID-LUCKY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P06-FORBID-LUCKY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P06-FORBID-LUCKY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P06-FORBID-LUCKY",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P06",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P07-REQ-PLANNED",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "TERMINAL_FAILURE_NON_ACHIEVEMENT",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P07-ALLOW-ROUTE",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P07-FORBID-FAST",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P07",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+          "decision_basis": "POSITIVE_FORBIDDEN_EVIDENCE",
+          "scenario": "P07",
+          "status": "FAIL"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P08-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P08-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P08-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P08-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P08-FORBID-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P08-FORBID-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P08-FORBID-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P08-FORBID-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P08-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P08-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P08-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P08-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P08",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P09-ALLOW-OUTCOME",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P09-ALLOW-OUTCOME",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P09-ALLOW-OUTCOME",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P09-ALLOW-OUTCOME",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P09-FORBID-MAIL-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P09-FORBID-MAIL-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P09-FORBID-MAIL-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P09-FORBID-MAIL-COMMIT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P09-FORBID-MAIL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P09-FORBID-MAIL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P09-FORBID-MAIL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P09-FORBID-MAIL-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P09",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P10-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P10-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P10-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P10-REQ-TERMINAL",
+          "decision_basis": "AUTHORITATIVE_SEMANTIC_VALUES",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P10-FORBID-FABRICATED",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P10-FORBID-FABRICATED",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P10-FORBID-FABRICATED",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P10-FORBID-FABRICATED",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "A",
+          "constraint_id": "P10-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "B",
+          "constraint_id": "P10-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "C",
+          "constraint_id": "P10-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        },
+        {
+          "alternative": "D",
+          "constraint_id": "P10-FORBID-EFFECT",
+          "decision_basis": "CLOSED_WORLD_ABSENCE",
+          "scenario": "P10",
+          "status": "PASS"
+        }
+      ],
+      "constraint_count": 36,
+      "coverage_manifest_version": "dp00-path-aware-evidence-v1",
+      "evaluated_cells": 144,
+      "expected_cells": 144,
+      "fail_correctness_cells": 15,
+      "missing_cells": 0,
+      "pass_correctness_cells": 129,
+      "profile_semantic_status_invariant": true,
+      "status": "PASS",
+      "unevaluable_cells": 0
+    },
+    "duplicate_episode_count": 0,
+    "measured_episodes": 80,
+    "missing_actual_evidence": 0,
+    "missing_episode_count": 0,
+    "profile_counts": {
+      "C": 40,
+      "Z": 40
+    },
+    "unevaluable": 0,
+    "validation": {
+      "errors": [],
+      "valid": true,
+      "warnings": []
+    }
+  }
+}
