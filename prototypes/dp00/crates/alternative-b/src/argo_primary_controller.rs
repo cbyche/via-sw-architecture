@@ -109,6 +109,13 @@ fn action(output: &str) -> String {
     "UNKNOWN".into()
 }
 
+#[allow(dead_code, reason = "QA03 diagnostic metadata must not affect routing")]
+pub fn resource_class_for_diagnostics(
+    descriptor: &bench_core::DownstreamCapabilityDescriptor,
+) -> Option<bench_core::ResourceClass> {
+    descriptor.resource_class
+}
+
 #[cfg(test)]
 mod qa03_e5_acceptance {
     use super::*;
