@@ -1,0 +1,20 @@
+{
+  "fixture_set_version": "dp00-analysis-synthetic-v0",
+  "official_result": false,
+  "cases": [
+    {"id": "T01", "purpose": "QA-01 successful known FTOL", "expected": "1000000 ns"},
+    {"id": "T02", "purpose": "QA-01 failed episode", "expected": "excluded from FTOL"},
+    {"id": "T03", "purpose": "QA-02 all constraints", "expected": "PASS"},
+    {"id": "T04", "purpose": "QA-02 forbidden violation", "expected": "FAIL"},
+    {"id": "T05", "purpose": "wrong-but-valid executor", "expected": "diagnosed from actual proposal"},
+    {"id": "T06", "purpose": "wrong referent", "expected": "FAIL"},
+    {"id": "T07", "purpose": "wrong result binding", "expected": "FAIL"},
+    {"id": "T08", "purpose": "two pre-commit calls", "expected": 2},
+    {"id": "T09", "purpose": "post-commit call exclusion", "expected": 2},
+    {"id": "T10", "purpose": "no-route-commit failure", "expected": null},
+    {"id": "T11", "purpose": "retry two logical generations", "expected": 2},
+    {"id": "T12", "purpose": "zero-model-call success", "expected": 0},
+    {"id": "T13", "purpose": "P01 50 to 35", "expected": "DECREASED"},
+    {"id": "T14", "purpose": "P01 20 to 35", "expected": "NOT_DECREASED"}
+  ]
+}
