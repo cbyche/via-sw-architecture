@@ -1,0 +1,622 @@
+{
+  "schema_version": "pilot-v0-constraint-evidence-map-v1",
+  "scope": "QA-02",
+  "mapping_semantics": "Paths and derivation rules only; no actual or expected values are copied into this manifest.",
+  "rows": [
+    {
+      "scenario_id": "P01",
+      "constraint_id": "P01-REQ-EFFECT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P01-REQ-EFFECT",
+      "actual_raw_source": "canonical UsefulOutcomeObserved.effect",
+      "actual_fields": [
+        "effect.capability_id",
+        "effect.before_value",
+        "effect.after_value"
+      ],
+      "authority": "OUTCOME_PROBE",
+      "derivation_rule": "capability is observed; DECREASED iff after_value < before_value",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P01",
+      "constraint_id": "P01-ALLOW-ROUTE",
+      "dimension": "execution_path",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P01-ALLOW-ROUTE",
+      "actual_raw_source": "Architecture.RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.*",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + TOOL_FIXTURE/AGENT_FIXTURE",
+      "derivation_rule": "compare committed semantic path and accepted executor",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P01",
+      "constraint_id": "P01-FORBID-AGENT",
+      "dimension": "delegated_agent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P01-FORBID-AGENT",
+      "actual_raw_source": "Architecture.RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.delegation_chain",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + EXECUTION_FIXTURE",
+      "derivation_rule": "forbidden iff any actual route/invocation names forbidden agent",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P02",
+      "constraint_id": "P02-REQ-RESULT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P02-REQ-RESULT",
+      "actual_raw_source": "UsefulOutcomeObserved.effect + ResultBound",
+      "actual_fields": [
+        "effect.*",
+        "product_correlation.*"
+      ],
+      "authority": "OUTCOME_PROBE + PRODUCT_CORRELATION",
+      "derivation_rule": "effect state and bound result are present",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P02",
+      "constraint_id": "P02-ALLOW-OWNER",
+      "dimension": "execution_owner",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P02-ALLOW-OWNER",
+      "actual_raw_source": "ExecutionStarted",
+      "actual_fields": [
+        "invocation.executor_id"
+      ],
+      "authority": "AGENT_FIXTURE",
+      "derivation_rule": "actual accepted executor determines owner",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P02",
+      "constraint_id": "P02-FORBID-FAST",
+      "dimension": "execution_owner",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P02-FORBID-FAST",
+      "actual_raw_source": "ExecutionStarted",
+      "actual_fields": [
+        "invocation.executor_id"
+      ],
+      "authority": "AGENT_FIXTURE",
+      "derivation_rule": "forbidden iff actual accepted executor is VIA_FAST",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P03",
+      "constraint_id": "P03-REQ-RESULT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P03-REQ-RESULT",
+      "actual_raw_source": "UsefulOutcomeObserved.effect",
+      "actual_fields": [
+        "effect.capability_id",
+        "effect.subject_id",
+        "effect.state"
+      ],
+      "authority": "OUTCOME_PROBE",
+      "derivation_rule": "NETWORK_STATUS_OBSERVED from observed network.status effect",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P03",
+      "constraint_id": "P03-ALLOW-ROUTE",
+      "dimension": "execution_path",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P03-ALLOW-ROUTE",
+      "actual_raw_source": "RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.*",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + AGENT_FIXTURE",
+      "derivation_rule": "derive direct/delegated path from route and accepted executor",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P03",
+      "constraint_id": "P03-FORBID-WRONG",
+      "dimension": "delegated_agent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P03-FORBID-WRONG",
+      "actual_raw_source": "RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.delegation_chain",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + AGENT_FIXTURE",
+      "derivation_rule": "forbidden iff wrong agent appears in committed/accepted execution",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P04",
+      "constraint_id": "P04-REQ-REFERENT",
+      "dimension": "referent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P04-REQ-REFERENT",
+      "actual_raw_source": "Architecture.ReferentBound",
+      "actual_fields": [
+        "resolved_referent_id",
+        "referent_role"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "compare actual bound object and role",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P04",
+      "constraint_id": "P04-REQ-OPEN",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P04-REQ-OPEN",
+      "actual_raw_source": "UsefulOutcomeObserved.effect",
+      "actual_fields": [
+        "effect.subject_id",
+        "effect.state",
+        "effect.capability_id"
+      ],
+      "authority": "OUTCOME_PROBE",
+      "derivation_rule": "document.open on subject with OPEN_USABLE",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P04",
+      "constraint_id": "P04-ALLOW-ROUTE",
+      "dimension": "execution_path",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P04-ALLOW-ROUTE",
+      "actual_raw_source": "RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.*",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + EXECUTION_FIXTURE",
+      "derivation_rule": "derive committed path and accepted executor",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P04",
+      "constraint_id": "P04-FORBID-LEFT",
+      "dimension": "referent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P04-FORBID-LEFT",
+      "actual_raw_source": "Architecture.ReferentBound",
+      "actual_fields": [
+        "resolved_referent_id",
+        "referent_role"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "forbidden iff actual source binding is doc-left",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P05",
+      "constraint_id": "P05-REQ-RELATION",
+      "dimension": "task_association",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P05-REQ-RELATION",
+      "actual_raw_source": "Architecture.TaskAssociated",
+      "actual_fields": [
+        "task_relation"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "actual task relation equals FOLLOW_UP",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P05",
+      "constraint_id": "P05-REQ-TASK",
+      "dimension": "task_association",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P05-REQ-TASK",
+      "actual_raw_source": "TaskAssociated product correlation",
+      "actual_fields": [
+        "product_correlation.task_id"
+      ],
+      "authority": "PRODUCT_CORRELATION",
+      "derivation_rule": "actual associated task identity",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P05",
+      "constraint_id": "P05-REQ-RESULT",
+      "dimension": "result_binding",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P05-REQ-RESULT",
+      "actual_raw_source": "Architecture.ResultBound correlation",
+      "actual_fields": [
+        "task_id",
+        "result_id",
+        "execution_id"
+      ],
+      "authority": "PRODUCT_CORRELATION",
+      "derivation_rule": "actual result association identifies task",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P05",
+      "constraint_id": "P05-FORBID-T2",
+      "dimension": "task_association",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P05-FORBID-T2",
+      "actual_raw_source": "TaskAssociated product correlation",
+      "actual_fields": [
+        "product_correlation.task_id"
+      ],
+      "authority": "PRODUCT_CORRELATION",
+      "derivation_rule": "forbidden iff actual associated task is T2",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P05",
+      "constraint_id": "P05-FORBID-NEW",
+      "dimension": "task_association",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P05-FORBID-NEW",
+      "actual_raw_source": "Architecture.TaskAssociated",
+      "actual_fields": [
+        "task_relation"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "forbidden iff actual relation is NEW",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P06",
+      "constraint_id": "P06-REQ-CLARIFY",
+      "dimension": "clarification",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P06-REQ-CLARIFY",
+      "actual_raw_source": "ClarificationRequested/Resolved",
+      "actual_fields": [
+        "event order",
+        "turn correlations"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "requested and resolved actions reconstructed by sequence",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P06",
+      "constraint_id": "P06-REQ-REFERENT",
+      "dimension": "referent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P06-REQ-REFERENT",
+      "actual_raw_source": "Architecture.ReferentBound",
+      "actual_fields": [
+        "resolved_referent_id",
+        "referent_role"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "actual resolved source identity",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P06",
+      "constraint_id": "P06-FORBID-EARLY",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P06-FORBID-EARLY",
+      "actual_raw_source": "ClarificationResolved + UsefulOutcomeObserved",
+      "actual_fields": [
+        "sequence_number",
+        "effect.capability_id"
+      ],
+      "authority": "AUT + OUTCOME_PROBE",
+      "derivation_rule": "forbidden iff document effect precedes resolution",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P06",
+      "constraint_id": "P06-FORBID-LUCKY",
+      "dimension": "clarification",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P06-FORBID-LUCKY",
+      "actual_raw_source": "ClarificationRequested",
+      "actual_fields": [
+        "presence",
+        "sequence_number"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "forbidden iff terminal trace lacks request",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P07",
+      "constraint_id": "P07-REQ-PLANNED",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P07-REQ-PLANNED",
+      "actual_raw_source": "ExecutionStarted + UsefulOutcomeObserved",
+      "actual_fields": [
+        "invocation.executor_id",
+        "effect.executor_id",
+        "effect.state"
+      ],
+      "authority": "EXECUTION_FIXTURE + OUTCOME_PROBE",
+      "derivation_rule": "domain executor and organized effect jointly establish predicate",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P07",
+      "constraint_id": "P07-ALLOW-ROUTE",
+      "dimension": "execution_path",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P07-ALLOW-ROUTE",
+      "actual_raw_source": "RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.*",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + AGENT_FIXTURE",
+      "derivation_rule": "actual path must be accepted ARGO execution",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P07",
+      "constraint_id": "P07-FORBID-FAST",
+      "dimension": "execution_owner",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P07-FORBID-FAST",
+      "actual_raw_source": "ExecutionStarted",
+      "actual_fields": [
+        "invocation.executor_id"
+      ],
+      "authority": "EXECUTION_FIXTURE",
+      "derivation_rule": "forbidden iff accepted executor is VIA fast/local",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P07",
+      "constraint_id": "P07-FORBID-LOCAL-EFFECT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P07-FORBID-LOCAL-EFFECT",
+      "actual_raw_source": "ExecutionStarted + UsefulOutcomeObserved",
+      "actual_fields": [
+        "invocation.executor_id",
+        "effect.executor_id",
+        "effect.state"
+      ],
+      "authority": "EXECUTION_FIXTURE + OUTCOME_PROBE",
+      "derivation_rule": "detect local executor claiming organized domain effect",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P08",
+      "constraint_id": "P08-REQ-TERMINAL",
+      "dimension": "failure_outcome",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P08-REQ-TERMINAL",
+      "actual_raw_source": "model-call + EpisodeFailed",
+      "actual_fields": [
+        "status",
+        "failure",
+        "reason"
+      ],
+      "authority": "MODEL_FIXTURE + BENCHMARK_TERMINAL",
+      "derivation_rule": "fault status and typed terminal reason jointly derive outcome",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P08",
+      "constraint_id": "P08-FORBID-COMMIT",
+      "dimension": "routing",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P08-FORBID-COMMIT",
+      "actual_raw_source": "RouteCommitted over terminal trace",
+      "actual_fields": [
+        "event presence",
+        "sequence_number"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "forbidden iff any commit follows malformed model evidence",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P08",
+      "constraint_id": "P08-FORBID-EFFECT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P08-FORBID-EFFECT",
+      "actual_raw_source": "UsefulOutcomeObserved over terminal trace",
+      "actual_fields": [
+        "event presence",
+        "effect.*"
+      ],
+      "authority": "OUTCOME_PROBE",
+      "derivation_rule": "forbidden iff any unauthorized effect exists",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P09",
+      "constraint_id": "P09-REQ-SEMANTIC-CHECK",
+      "dimension": "routing",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P09-REQ-SEMANTIC-CHECK",
+      "actual_raw_source": "model semantic candidate + route events",
+      "actual_fields": [
+        "semantic_output_reference",
+        "RouteCandidateRejected",
+        "RouteCommitted"
+      ],
+      "authority": "MODEL_FIXTURE + AUT_COMMITTED_DECISION",
+      "derivation_rule": "MailAgent candidate must be rejected or absent from commit",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P09",
+      "constraint_id": "P09-ALLOW-OUTCOME",
+      "dimension": "failure_outcome",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P09-ALLOW-OUTCOME",
+      "actual_raw_source": "EpisodeFailed/route/clarification events",
+      "actual_fields": [
+        "reason",
+        "route.*",
+        "clarification sequence"
+      ],
+      "authority": "BENCHMARK_TERMINAL + AUT",
+      "derivation_rule": "derive actual safe failure/recovery/clarification",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P09",
+      "constraint_id": "P09-FORBID-MAIL-COMMIT",
+      "dimension": "delegated_agent",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P09-FORBID-MAIL-COMMIT",
+      "actual_raw_source": "RouteCommitted + ExecutionStarted",
+      "actual_fields": [
+        "route.*",
+        "invocation.executor_id"
+      ],
+      "authority": "AUT + EXECUTION_FIXTURE",
+      "derivation_rule": "forbidden iff MailAgent committed or accepted",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P09",
+      "constraint_id": "P09-FORBID-MAIL-EFFECT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P09-FORBID-MAIL-EFFECT",
+      "actual_raw_source": "ExecutionStarted + UsefulOutcomeObserved",
+      "actual_fields": [
+        "invocation.*",
+        "effect.*"
+      ],
+      "authority": "EXECUTION_FIXTURE + OUTCOME_PROBE",
+      "derivation_rule": "detect MailAgent execution/effect for Wi-Fi request",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P10",
+      "constraint_id": "P10-REQ-TERMINAL",
+      "dimension": "failure_outcome",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P10-REQ-TERMINAL",
+      "actual_raw_source": "model-call + EpisodeFailed",
+      "actual_fields": [
+        "status",
+        "failure",
+        "reason"
+      ],
+      "authority": "MODEL_FIXTURE + BENCHMARK_TERMINAL",
+      "derivation_rule": "fault status and typed terminal reason jointly derive outcome",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P10",
+      "constraint_id": "P10-FORBID-FABRICATED",
+      "dimension": "routing",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P10-FORBID-FABRICATED",
+      "actual_raw_source": "RouteCommitted over terminal trace",
+      "actual_fields": [
+        "event presence",
+        "sequence_number"
+      ],
+      "authority": "AUT_COMMITTED_DECISION",
+      "derivation_rule": "forbidden iff commit exists without completed model output",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    },
+    {
+      "scenario_id": "P10",
+      "constraint_id": "P10-FORBID-EFFECT",
+      "dimension": "observable_effect",
+      "expected_source": "benchmark/oracles/pilot-v0/oracles.json#P10-FORBID-EFFECT",
+      "actual_raw_source": "UsefulOutcomeObserved over terminal trace",
+      "actual_fields": [
+        "event presence",
+        "effect.*"
+      ],
+      "authority": "OUTCOME_PROBE",
+      "derivation_rule": "forbidden iff any unauthorized effect exists",
+      "independently_derivable": true,
+      "gap_type": "NONE",
+      "action": "USE_MAPPING",
+      "status": "PASS"
+    }
+  ]
+}

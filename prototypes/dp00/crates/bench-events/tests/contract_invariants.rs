@@ -3,7 +3,7 @@ use bench_core::{
     ObservationPort, ProductCorrelation,
 };
 use bench_events::{
-    CanonicalEventKind, ContractViolation, EventEmitter, FailureOutcomeReason,
+    CanonicalEventKind, ContractViolation, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
     InMemoryObservationCollector, ObservableEffect, ObservableEffectType, ObservationContext,
     validate_episode,
 };
@@ -58,12 +58,24 @@ fn outcome() -> CanonicalEventKind {
     CanonicalEventKind::UsefulOutcomeObserved {
         effect: ObservableEffect {
             effect_type: ObservableEffectType::WifiStatusObserved,
+            capability_id: Some("network.status".into()),
             subject_id: Some("wifi_connection_1".into()),
             target_id: None,
             value: None,
+            before_value: None,
+            after_value: None,
             state: Some("OBSERVED".into()),
             executor_id: Some("NetworkAgent".into()),
             authoritative_source: EventEmitter::OutcomeProbe,
+        },
+    }
+}
+
+fn execution_started(executor_id: &str) -> CanonicalEventKind {
+    CanonicalEventKind::ExecutionStarted {
+        invocation: ExecutionInvocation {
+            capability_id: "network.status".into(),
+            executor_id: executor_id.into(),
         },
     }
 }
@@ -91,7 +103,7 @@ fn successful_episode_satisfies_canonical_partial_order() {
     benchmark(
         &collector,
         EventEmitter::AgentFixture,
-        CanonicalEventKind::ExecutionStarted,
+        execution_started("ARGO"),
     );
     benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
@@ -116,7 +128,7 @@ fn zero_model_call_success_satisfies_canonical_partial_order() {
     benchmark(
         &collector,
         EventEmitter::ToolFixture,
-        CanonicalEventKind::ExecutionStarted,
+        execution_started("VIA_LOCAL_VOLUME"),
     );
     benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
@@ -206,7 +218,7 @@ fn rejected_candidate_can_be_reselected_without_becoming_a_commit() {
     benchmark(
         &collector,
         EventEmitter::AgentFixture,
-        CanonicalEventKind::ExecutionStarted,
+        execution_started("ARGO"),
     );
     benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
     benchmark(
@@ -272,7 +284,7 @@ fn aut_self_report_cannot_be_authoritative_useful_outcome() {
     benchmark(
         &collector,
         EventEmitter::AgentFixture,
-        CanonicalEventKind::ExecutionStarted,
+        execution_started("ARGO"),
     );
     benchmark(&collector, EventEmitter::ArchitectureUnderTest, outcome());
     benchmark(

@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::PathBuf;
 
-use bench_events::CanonicalEvent;
+use bench_events::{CanonicalEvent, validate_semantic_payload};
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -27,12 +27,15 @@ fn rust_enforces_shared_semantic_event_golden_expectations() {
     .expect("expectations parse");
     assert_eq!(
         expectations.schema_version,
-        "canonical-event-golden-expectations-v1"
+        "canonical-event-golden-expectations-v2"
     );
     for case in expectations.cases {
         let result = serde_json::from_slice::<CanonicalEvent>(
             &fs::read(root.join(&case.file)).expect("raw event fixture"),
         );
-        assert_eq!(result.is_ok(), case.valid, "golden case {}", case.file);
+        let accepted = result
+            .as_ref()
+            .is_ok_and(|event| validate_semantic_payload(event).is_empty());
+        assert_eq!(accepted, case.valid, "golden case {}", case.file);
     }
 }

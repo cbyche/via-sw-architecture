@@ -9,7 +9,7 @@ use bench_core::{
     ProductCorrelation, ResultId, SemanticResponsibility,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
     InMemoryObservationCollector, LogicalModelCall, ObservableEffect, ObservableEffectType,
     ObservationContext,
 };
@@ -211,7 +211,15 @@ impl ExecutionPort for SmokePorts {
         } else {
             EventEmitter::AgentFixture
         };
-        self.capture(emitter, CanonicalEventKind::ExecutionStarted);
+        self.capture(
+            emitter,
+            CanonicalEventKind::ExecutionStarted {
+                invocation: ExecutionInvocation {
+                    capability_id: "smoke.capability".into(),
+                    executor_id: request.route.initial_executor_id.0.clone(),
+                },
+            },
+        );
         let id = self.inner.next_id.fetch_add(1, Ordering::Relaxed);
         let outcome = observable_outcome(&request.semantic_action);
         let result = ExecutionResult {
@@ -298,6 +306,7 @@ impl FixtureLifecycle for SmokePorts {
 }
 
 fn smoke_effect(outcome: &str) -> ObservableEffect {
+    let volume_changed = outcome == "volume_reduced";
     ObservableEffect {
         effect_type: if outcome == "right_document_opened" {
             ObservableEffectType::DocumentOpened
@@ -308,9 +317,12 @@ fn smoke_effect(outcome: &str) -> ObservableEffect {
         } else {
             ObservableEffectType::WifiStatusObserved
         },
+        capability_id: Some("smoke.capability".into()),
         subject_id: Some(outcome.into()),
         target_id: None,
         value: None,
+        before_value: volume_changed.then_some(50),
+        after_value: volume_changed.then_some(35),
         state: Some("OBSERVED".into()),
         executor_id: None,
         authoritative_source: EventEmitter::OutcomeProbe,

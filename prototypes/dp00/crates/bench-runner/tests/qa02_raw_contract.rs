@@ -1,18 +1,63 @@
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use bench_core::{ArchitectureEvent, ModelStatus, TaskRelation};
 use bench_events::{
-    CanonicalEventKind, FailureOutcomeReason, InstrumentationMode, ModelSemanticValueKind,
-    ObservableEffectType, project_actual_semantic_trace,
+    CanonicalEvent, CanonicalEventKind, FailureOutcomeReason, InstrumentationMode,
+    ModelSemanticValueKind, ObservableEffectType, project_actual_semantic_trace,
 };
-use bench_fixtures::pilot_assets::{PilotCorpus, RuntimeScenario, load_pilot_corpus};
+use bench_fixtures::pilot_assets::{
+    BehaviorPlanRegistry, FixtureRegistry, OracleRegistry, PilotCorpus, PilotCorpusIndex,
+    RuntimeScenario, load_pilot_corpus,
+};
 use bench_runner::pilot_runtime::{EpisodeExecution, execute_episode};
 use bench_runner::{Alternative, ControlledLatencyProfile, reload_events, reload_model_calls};
 
 fn corpus() -> PilotCorpus {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     load_pilot_corpus(&root).expect("Pilot corpus")
+}
+
+fn runtime_corpus_without_oracles() -> PilotCorpus {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let index: PilotCorpusIndex = serde_json::from_slice(
+        &fs::read(root.join("benchmark/scenarios/pilot-v0/index.json")).expect("index"),
+    )
+    .expect("index parse");
+    let scenarios = index
+        .scenarios
+        .iter()
+        .map(|entry| {
+            serde_json::from_slice(&fs::read(root.join(&entry.path)).expect("scenario"))
+                .expect("scenario parse")
+        })
+        .collect();
+    let behavior_plans: BehaviorPlanRegistry = serde_json::from_slice(
+        &fs::read(root.join(&index.behavior_plan_registry_path)).expect("behavior plans"),
+    )
+    .expect("behavior plans parse");
+    let fixtures: FixtureRegistry = serde_json::from_slice(
+        &fs::read(root.join(&index.fixture_registry_path)).expect("fixtures"),
+    )
+    .expect("fixtures parse");
+    PilotCorpus {
+        index,
+        scenarios,
+        behavior_plans,
+        fixtures,
+        oracles: OracleRegistry {
+            schema_version: "oracle-registry-pilot-v0".into(),
+            asset_id: "NOT_LOADED".into(),
+            asset_version: "NOT_LOADED".into(),
+            visibility: "EVALUATOR_ONLY".into(),
+            oracles: Vec::new(),
+        },
+    }
+}
+
+fn is_decreased(before: Option<i64>, after: Option<i64>) -> bool {
+    matches!((before, after), (Some(before), Some(after)) if after < before)
 }
 
 fn scenario<'a>(corpus: &'a PilotCorpus, id: &str) -> &'a RuntimeScenario {
@@ -234,5 +279,221 @@ fn distinct_pilot_effects_and_wrong_local_claim_remain_observable() {
     assert_eq!(
         p07.observable_effects[0].executor_id.as_deref(),
         Some("VIA_LOCAL_VOLUME")
+    );
+}
+
+#[test]
+fn coverage_manifest_matches_every_pilot_qa02_constraint() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let oracle: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("benchmark/oracles/pilot-v0/oracles.json")).expect("oracle registry"),
+    )
+    .expect("oracle parse");
+    let map: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("benchmark/contracts/pilot-v0-constraint-evidence-map.json"))
+            .expect("coverage map"),
+    )
+    .expect("coverage map parse");
+    let expected: HashSet<_> = oracle["oracles"]
+        .as_array()
+        .expect("oracles")
+        .iter()
+        .flat_map(|oracle| {
+            oracle["constraint_manifest"]["constraints"]
+                .as_array()
+                .unwrap()
+        })
+        .map(|constraint| constraint["constraint_id"].as_str().unwrap())
+        .collect();
+    let expected_metadata: HashMap<_, _> = oracle["oracles"]
+        .as_array()
+        .expect("oracles")
+        .iter()
+        .flat_map(|oracle| {
+            let scenario_id = oracle["scenario_id"].as_str().unwrap();
+            oracle["constraint_manifest"]["constraints"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(move |constraint| {
+                    (
+                        constraint["constraint_id"].as_str().unwrap(),
+                        (scenario_id, constraint["dimension"].as_str().unwrap()),
+                    )
+                })
+        })
+        .collect();
+    let rows = map["rows"].as_array().expect("coverage rows");
+    let actual: HashSet<_> = rows
+        .iter()
+        .map(|row| row["constraint_id"].as_str().unwrap())
+        .collect();
+    assert_eq!(rows.len(), 36);
+    assert_eq!(actual.len(), rows.len(), "duplicate coverage row");
+    assert_eq!(actual, expected);
+    for row in rows {
+        assert_eq!(
+            expected_metadata[row["constraint_id"].as_str().unwrap()],
+            (
+                row["scenario_id"].as_str().unwrap(),
+                row["dimension"].as_str().unwrap()
+            )
+        );
+        assert_eq!(row["independently_derivable"], true);
+        assert_eq!(row["gap_type"], "NONE");
+        assert_eq!(row["status"], "PASS");
+        assert!(!row["authority"].as_str().unwrap().is_empty());
+        assert!(!row["derivation_rule"].as_str().unwrap().is_empty());
+        assert!(
+            row["actual_fields"]
+                .as_array()
+                .is_some_and(|fields| !fields.is_empty())
+        );
+    }
+}
+
+#[test]
+fn p01_transition_is_raw_directional_and_preserves_wrong_actual() {
+    let corpus = runtime_corpus_without_oracles();
+    let trace =
+        project_actual_semantic_trace(&execute(&corpus, "P01", Alternative::C).evidence.events);
+    assert_eq!(
+        trace.execution_invocations[0].capability_id,
+        "volume.decrease"
+    );
+    let effect = &trace.observable_effects[0];
+    assert_eq!(effect.capability_id.as_deref(), Some("volume.decrease"));
+    assert_eq!(
+        (effect.before_value, effect.after_value),
+        (Some(50), Some(35))
+    );
+    assert!(is_decreased(effect.before_value, effect.after_value));
+
+    let fixture = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../../..")
+        .join("benchmark/fixtures/pilot-v0/golden/raw-events/valid-observable-effect-event.json");
+    let mut wrong: serde_json::Value =
+        serde_json::from_slice(&fs::read(fixture).expect("effect fixture")).expect("effect parse");
+    wrong["event"]["UsefulOutcomeObserved"]["effect"]["before_value"] = 20.into();
+    let raw: CanonicalEvent =
+        serde_json::from_value(wrong).expect("wrong actual remains valid raw");
+    let wrong_trace = project_actual_semantic_trace(&[raw]);
+    let wrong_effect = &wrong_trace.observable_effects[0];
+    assert_eq!(
+        (wrong_effect.before_value, wrong_effect.after_value),
+        (Some(20), Some(35))
+    );
+    assert!(!is_decreased(
+        wrong_effect.before_value,
+        wrong_effect.after_value
+    ));
+}
+
+#[test]
+fn p01_through_p10_actuals_reconstruct_without_loading_oracles() {
+    let corpus = runtime_corpus_without_oracles();
+
+    let p01 =
+        project_actual_semantic_trace(&execute(&corpus, "P01", Alternative::C).evidence.events);
+    assert_eq!(
+        p01.execution_invocations[0].capability_id,
+        "volume.decrease"
+    );
+    assert!(is_decreased(
+        p01.observable_effects[0].before_value,
+        p01.observable_effects[0].after_value
+    ));
+
+    let p02 =
+        project_actual_semantic_trace(&execute(&corpus, "P02", Alternative::A).evidence.events);
+    assert_eq!(
+        p02.execution_invocations[0].capability_id,
+        "downloads.inspect"
+    );
+    assert!(!p02.result_bindings.is_empty());
+    assert_eq!(
+        p02.observable_effects[0].effect_type,
+        ObservableEffectType::FileInspected
+    );
+
+    let p03 =
+        project_actual_semantic_trace(&execute(&corpus, "P03", Alternative::A).evidence.events);
+    assert_eq!(p03.execution_invocations[0].executor_id, "NetworkAgent");
+    assert_eq!(
+        p03.observable_effects[0].effect_type,
+        ObservableEffectType::WifiStatusObserved
+    );
+
+    let p04 =
+        project_actual_semantic_trace(&execute(&corpus, "P04", Alternative::D).evidence.events);
+    assert_eq!(p04.referent_bindings[0].resolved_referent_id, "doc-right");
+    assert_eq!(
+        p04.observable_effects[0].effect_type,
+        ObservableEffectType::DocumentOpened
+    );
+
+    let p05 =
+        project_actual_semantic_trace(&execute(&corpus, "P05", Alternative::A).evidence.events);
+    assert_eq!(
+        p05.task_associations[0].task_relation,
+        TaskRelation::FollowUp
+    );
+    assert_eq!(p05.result_bindings[0].task_id.as_deref(), Some("T1"));
+    assert_eq!(
+        p05.observable_effects[0].effect_type,
+        ObservableEffectType::DnsCheckObserved
+    );
+
+    let p06 =
+        project_actual_semantic_trace(&execute(&corpus, "P06", Alternative::D).evidence.events);
+    assert!(p06.clarification_actions[0].requested && p06.clarification_actions[0].resolved);
+    assert_eq!(p06.referent_bindings[0].resolved_referent_id, "doc-right");
+    assert_eq!(
+        p06.observable_effects[0].effect_type,
+        ObservableEffectType::DocumentOpened
+    );
+
+    let p07 =
+        project_actual_semantic_trace(&execute(&corpus, "P07", Alternative::A).evidence.events);
+    assert_eq!(p07.execution_invocations[0].executor_id, "ARGO");
+    assert_eq!(
+        p07.observable_effects[0].effect_type,
+        ObservableEffectType::DownloadsOrganized
+    );
+
+    let p08_execution = execute(&corpus, "P08", Alternative::A);
+    let p08 = project_actual_semantic_trace(&p08_execution.evidence.events);
+    assert_eq!(p08.failure_outcomes, [FailureOutcomeReason::ModelMalformed]);
+    assert!(
+        p08_execution
+            .evidence
+            .model_calls
+            .iter()
+            .any(|call| call.status == ModelStatus::Malformed)
+    );
+
+    let p09_execution = execute(&corpus, "P09", Alternative::A);
+    let p09 = project_actual_semantic_trace(&p09_execution.evidence.events);
+    assert!(p09.committed_routes.is_empty() && p09.execution_invocations.is_empty());
+    assert!(p09.observable_effects.is_empty());
+    assert_eq!(p09.failure_outcomes, [FailureOutcomeReason::InvalidRoute]);
+    assert!(p09_execution.evidence.model_calls.iter().any(|call| {
+        call.semantic_output_reference
+            .as_ref()
+            .is_some_and(|value| value.value == "MailAgent")
+    }));
+
+    let p10_execution = execute(&corpus, "P10", Alternative::A);
+    let p10 = project_actual_semantic_trace(&p10_execution.evidence.events);
+    assert_eq!(
+        p10.failure_outcomes,
+        [FailureOutcomeReason::ModelNoResponse]
+    );
+    assert!(
+        p10_execution
+            .evidence
+            .model_calls
+            .iter()
+            .any(|call| call.status == ModelStatus::NoResponse)
     );
 }

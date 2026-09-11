@@ -41,10 +41,17 @@ pub enum CanonicalEventKind {
     Architecture(ArchitectureEvent),
     ModelGenerationStarted,
     ModelGenerationCompleted,
-    ExecutionStarted,
+    ExecutionStarted { invocation: ExecutionInvocation },
     UsefulOutcomeObserved { effect: ObservableEffect },
     EpisodeCompleted,
     EpisodeFailed { reason: FailureOutcomeReason },
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ExecutionInvocation {
+    pub capability_id: String,
+    pub executor_id: String,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -63,9 +70,12 @@ pub enum ObservableEffectType {
 #[serde(deny_unknown_fields)]
 pub struct ObservableEffect {
     pub effect_type: ObservableEffectType,
+    pub capability_id: Option<String>,
     pub subject_id: Option<String>,
     pub target_id: Option<String>,
     pub value: Option<String>,
+    pub before_value: Option<i64>,
+    pub after_value: Option<i64>,
     pub state: Option<String>,
     pub executor_id: Option<String>,
     pub authoritative_source: EventEmitter,
@@ -99,6 +109,41 @@ pub struct CanonicalEvent {
     emitter: EventEmitter,
     product_correlation: ProductCorrelation,
     event: CanonicalEventKind,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum SemanticPayloadViolation {
+    MissingCapabilityIdentity,
+    MissingStateTransitionBoundary,
+    EmptyExecutionIdentity,
+}
+
+/// Validates cross-field requirements that strict serde shape validation cannot express.
+#[must_use]
+pub fn validate_semantic_payload(event: &CanonicalEvent) -> Vec<SemanticPayloadViolation> {
+    let mut violations = Vec::new();
+    match event.event() {
+        CanonicalEventKind::ExecutionStarted { invocation } => {
+            if invocation.capability_id.is_empty() {
+                violations.push(SemanticPayloadViolation::MissingCapabilityIdentity);
+            }
+            if invocation.executor_id.is_empty() {
+                violations.push(SemanticPayloadViolation::EmptyExecutionIdentity);
+            }
+        }
+        CanonicalEventKind::UsefulOutcomeObserved { effect } => {
+            if effect.capability_id.as_deref().is_none_or(str::is_empty) {
+                violations.push(SemanticPayloadViolation::MissingCapabilityIdentity);
+            }
+            if effect.effect_type == ObservableEffectType::VolumeChanged
+                && (effect.before_value.is_none() || effect.after_value.is_none())
+            {
+                violations.push(SemanticPayloadViolation::MissingStateTransitionBoundary);
+            }
+        }
+        _ => {}
+    }
+    violations
 }
 
 impl CanonicalEvent {
@@ -162,6 +207,7 @@ pub enum ContractViolation {
     ConflictingTerminalEvents,
     InvalidSuccessOrder,
     InvalidClarificationOrder,
+    InvalidSemanticPayload,
 }
 
 /// Checks topology-neutral canonical event invariants. Component-internal event
@@ -169,6 +215,12 @@ pub enum ContractViolation {
 #[must_use]
 pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
     let mut violations = Vec::new();
+    if events
+        .iter()
+        .any(|event| !validate_semantic_payload(event).is_empty())
+    {
+        violations.push(ContractViolation::InvalidSemanticPayload);
+    }
     let position = |predicate: fn(&CanonicalEventKind) -> bool| {
         events.iter().position(|event| predicate(event.event()))
     };
@@ -218,7 +270,7 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
 
     let completed = position(|event| matches!(event, CanonicalEventKind::EpisodeCompleted));
     let failed = position(|event| matches!(event, CanonicalEventKind::EpisodeFailed { .. }));
-    let execution = position(|event| matches!(event, CanonicalEventKind::ExecutionStarted));
+    let execution = position(|event| matches!(event, CanonicalEventKind::ExecutionStarted { .. }));
     let authoritative_outcome = events.iter().position(|event| {
         matches!(
             event.event(),
@@ -384,6 +436,7 @@ pub struct ActualSemanticTrace {
     pub referent_bindings: Vec<ActualReferentBinding>,
     pub task_associations: Vec<ActualTaskAssociation>,
     pub committed_routes: Vec<ExecutionRoute>,
+    pub execution_invocations: Vec<ExecutionInvocation>,
     pub clarification_actions: Vec<ActualClarificationAction>,
     pub result_bindings: Vec<ActualResultBinding>,
     pub observable_effects: Vec<ObservableEffect>,
@@ -423,6 +476,14 @@ pub fn project_actual_semantic_trace(events: &[CanonicalEvent]) -> ActualSemanti
                 if event.emitter() == EventEmitter::ArchitectureUnderTest =>
             {
                 trace.committed_routes.push(route.clone());
+            }
+            CanonicalEventKind::ExecutionStarted { invocation }
+                if matches!(
+                    event.emitter(),
+                    EventEmitter::ToolFixture | EventEmitter::AgentFixture
+                ) =>
+            {
+                trace.execution_invocations.push(invocation.clone());
             }
             CanonicalEventKind::Architecture(ArchitectureEvent::ClarificationRequested {
                 ..

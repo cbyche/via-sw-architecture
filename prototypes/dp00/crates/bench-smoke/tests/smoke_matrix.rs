@@ -269,7 +269,7 @@ fn assert_event_contract(scenario: Scenario, events: &[CanonicalEvent]) {
         )
     });
     let execution = position(events, |event| {
-        matches!(event, CanonicalEventKind::ExecutionStarted)
+        matches!(event, CanonicalEventKind::ExecutionStarted { .. })
     });
     let outcome = position(events, |event| {
         matches!(event, CanonicalEventKind::UsefulOutcomeObserved { .. })
@@ -336,7 +336,7 @@ fn assert_authority(events: &[CanonicalEvent]) {
                 assert_eq!(event.emitter(), EventEmitter::Benchmark)
             }
             CanonicalEventKind::Architecture(_)
-            | CanonicalEventKind::ExecutionStarted
+            | CanonicalEventKind::ExecutionStarted { .. }
             | CanonicalEventKind::EpisodeFailed { .. } => {}
         }
     }

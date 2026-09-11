@@ -11,7 +11,7 @@ use bench_core::{
     ObservationPort, ProductCorrelation, ResultId, SemanticResponsibility, TurnId, UserTurn,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
     InMemoryObservationCollector, LogicalModelCall, ObservableEffect, ObservableEffectType,
     ObservationContext, validate_episode,
 };
@@ -206,6 +206,7 @@ impl ExecutionPort for FaultPorts {
     }
 
     fn execute(&self, request: ExecutionRequest) -> Result<ExecutionResult, Self::Error> {
+        let executor_id = request.route.initial_executor_id.0.clone();
         self.0
             .executions
             .lock()
@@ -213,7 +214,12 @@ impl ExecutionPort for FaultPorts {
             .push(request);
         self.0.collector.capture_benchmark_event(
             EventEmitter::AgentFixture,
-            CanonicalEventKind::ExecutionStarted,
+            CanonicalEventKind::ExecutionStarted {
+                invocation: ExecutionInvocation {
+                    capability_id: "downloads.organize".into(),
+                    executor_id,
+                },
+            },
             ProductCorrelation::default(),
         );
         self.0.collector.capture_benchmark_event(
@@ -221,9 +227,12 @@ impl ExecutionPort for FaultPorts {
             CanonicalEventKind::UsefulOutcomeObserved {
                 effect: ObservableEffect {
                     effect_type: ObservableEffectType::DownloadsOrganized,
+                    capability_id: Some("downloads.organize".into()),
                     subject_id: Some("downloads".into()),
                     target_id: None,
                     value: None,
+                    before_value: None,
+                    after_value: None,
                     state: Some("ORGANIZED".into()),
                     executor_id: Some("ARGO".into()),
                     authoritative_source: EventEmitter::OutcomeProbe,

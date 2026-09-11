@@ -274,6 +274,7 @@ synthetic.network.diagnosis_result
 - change observable fixture state;
 - produce deterministic success/failure states;
 - expose state to an external Outcome Probe.
+- record the capability and accepting executor from the actual invocation at `execution.started`.
 
 ## Non-responsibilities
 
@@ -301,7 +302,7 @@ Examples:
 ```text
 Tool Fixture state changes
     ↓
-Outcome Probe observes requested volume
+Outcome Probe observes numeric volume before and after the actual change
     ↓
 useful_outcome.observed
 ```
@@ -329,6 +330,8 @@ Outcome Probe marks useful result start
 For QA-01, use the Outcome Probe timestamp whenever the useful outcome can be independently observed.
 
 An AUT event saying `completed=true` is diagnostic and does not replace the probe.
+
+The probe records actual capability/subject/target/state facts. For directional state constraints it records the observed boundaries, rather than copying a derived Oracle label. In particular, volume decrease is derived offline as `after_value < before_value`.
 
 ---
 

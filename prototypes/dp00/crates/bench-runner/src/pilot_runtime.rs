@@ -15,7 +15,7 @@ use bench_core::{
     ObservationPort, ProductCorrelation, ResultId,
 };
 use bench_events::{
-    CanonicalEvent, CanonicalEventKind, EventEmitter, FailureOutcomeReason,
+    CanonicalEvent, CanonicalEventKind, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
     InMemoryObservationCollector, InstrumentationMode, LogicalModelCall,
     ModelSemanticOutputReference, ModelSemanticValueKind, ObservableEffect, ObservableEffectType,
     ObservationContext,
@@ -39,10 +39,21 @@ impl Clock for SharedClock {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 struct FixtureState {
     events: Vec<CapturedFixtureEvent>,
     execution_count: u64,
+    volume: i64,
+}
+
+impl Default for FixtureState {
+    fn default() -> Self {
+        Self {
+            events: Vec::new(),
+            execution_count: 0,
+            volume: 50,
+        }
+    }
 }
 
 #[derive(Clone, Debug)]
@@ -319,14 +330,34 @@ impl ExecutionPort for PilotPorts {
             result_id: Some(result_id.clone()),
             ..ProductCorrelation::default()
         };
+        let capability_id = capability_from_action(&request.semantic_action).to_owned();
         self.capture_correlated(
             emitter,
-            CanonicalEventKind::ExecutionStarted,
+            CanonicalEventKind::ExecutionStarted {
+                invocation: ExecutionInvocation {
+                    capability_id: capability_id.clone(),
+                    executor_id: request
+                        .route
+                        .final_executor_id_if_known
+                        .as_ref()
+                        .unwrap_or(&request.route.initial_executor_id)
+                        .0
+                        .clone(),
+                },
+            },
             correlation.clone(),
         );
         self.fixture_event(fixture_kind, request.route.initial_executor_id.0.clone());
         thread::sleep(Duration::from_micros(delay));
-        let effect = effect_from_execution_request(&request);
+        let (before_volume, after_volume) = {
+            let mut fixtures = self.inner.fixtures.lock().expect("fixture state poisoned");
+            let before = fixtures.volume;
+            if capability_id == "volume.decrease" {
+                fixtures.volume = 35;
+            }
+            (before, fixtures.volume)
+        };
+        let effect = effect_from_execution_request(&request, before_volume, after_volume);
         self.fixture_event(
             FixtureEventKind::OutcomeDetected(effect.clone()),
             effect
@@ -641,7 +672,11 @@ fn model_semantic_output_reference(
     })
 }
 
-fn effect_from_execution_request(request: &ExecutionRequest) -> ObservableEffect {
+fn effect_from_execution_request(
+    request: &ExecutionRequest,
+    before_volume: i64,
+    after_volume: i64,
+) -> ObservableEffect {
     let action = request.semantic_action.as_str();
     let (effect_type, subject_id, value, state) = if action.contains("LocalVolume")
         || action.contains("LOCAL_VOLUME")
@@ -704,9 +739,12 @@ fn effect_from_execution_request(request: &ExecutionRequest) -> ObservableEffect
     };
     ObservableEffect {
         effect_type,
+        capability_id: Some(capability_from_action(action).into()),
         subject_id,
         target_id: None,
         value,
+        before_value: (effect_type == ObservableEffectType::VolumeChanged).then_some(before_volume),
+        after_value: (effect_type == ObservableEffectType::VolumeChanged).then_some(after_volume),
         state,
         executor_id: request
             .route
@@ -715,6 +753,24 @@ fn effect_from_execution_request(request: &ExecutionRequest) -> ObservableEffect
             .or(Some(&request.route.initial_executor_id))
             .map(|value| value.0.clone()),
         authoritative_source: EventEmitter::OutcomeProbe,
+    }
+}
+
+fn capability_from_action(action: &str) -> &'static str {
+    if action.contains("LocalVolume") || action.contains("LOCAL_VOLUME") {
+        "volume.decrease"
+    } else if action.contains("OpenRightDocument") || action.contains("OPEN_RIGHT_DOCUMENT") {
+        "document.open"
+    } else if action.contains("ContinueTask") || action.contains("CONTINUE_T1") {
+        "network.dns_check"
+    } else if action.contains("DiagnoseWifi") || action.contains("DIAGNOSE_WIFI") {
+        "network.status"
+    } else if action.contains("LatestDownloadLookup") || action.contains("LOOKUP_LATEST_DOWNLOAD") {
+        "downloads.inspect"
+    } else if action.contains("OrganizeDownloads") || action.contains("ORGANIZE_DOWNLOADS") {
+        "downloads.organize"
+    } else {
+        "files.general"
     }
 }
 

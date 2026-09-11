@@ -629,3 +629,16 @@ evaluator-only constraint/oracle expected truth
 ```
 
 `canonical-event-v1` must never carry required referents, expected task/executor/effect values, constraint pass/fail, or any other oracle truth.
+
+## 19.2 `canonical-event-v2` execution and transition evidence
+
+`canonical-event-v2` retains the v1 semantic payloads and makes two raw facts explicit:
+
+| Canonical event | Required actual value | Authority |
+| --- | --- | --- |
+| `execution.started` | non-empty `invocation.capability_id`, non-empty `invocation.executor_id` | accepting `TOOL_FIXTURE` or `AGENT_FIXTURE` |
+| `useful_outcome.observed` | non-empty `effect.capability_id`; `before_value` and `after_value` for `VOLUME_CHANGED` | `OUTCOME_PROBE` |
+
+For volume direction, the evaluator derives `DECREASED` exactly when `after_value < before_value`. `VOLUME_CHANGED`, the requested action, the scenario id, and the Oracle state are not substitutes for this comparison. A raw `20 -> 35` observation remains an increase even when an Oracle expects a decrease.
+
+The payload remains compact and typed. It does not include prompts, full model output, Oracle values, or constraint verdicts. Cross-field validation rejects a volume transition missing either boundary and an execution invocation missing capability or executor identity.
