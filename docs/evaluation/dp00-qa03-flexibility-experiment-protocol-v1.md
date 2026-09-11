@@ -2,7 +2,7 @@
 
 ## Status and identity
 
-**Prospectively frozen experiment contract; measured campaign not executed.**
+**Finalized prospective experiment contract; measured campaign not executed.**
 
 | Item | Frozen value |
 | --- | --- |
@@ -15,7 +15,7 @@
 | Baseline signature | `dp00-qa03-baseline-regression-v1` |
 | Manifest schema | `dp00-qa03-execution-manifest-v1` |
 
-Once this contract is committed, a measured v1 campaign must use it unchanged. A discovered contract defect is preserved, documented, and corrected prospectively as v2. Measured evidence is never reinterpreted by rewriting v1.
+The initial local QA03-1 freeze was clarified before push and before any measured run; the five scenarios, Expected Change Areas, and role map did not change, so the clarification finalizes v1 rather than creating a new catalog or map. After this clarification commit, a measured v1 campaign must use the contract unchanged. A later contract defect is preserved, documented, and corrected prospectively as v2. Measured evidence is never reinterpreted by rewriting v1.
 
 This track is independent from the Session 7.x runtime campaign. Runtime latency, Profile Z, and R1-R4 timings are not QA-03 evidence. The Session 7.1 profiles remain unchanged and serve only as regression-protected repository contracts.
 
@@ -35,7 +35,13 @@ CCR (%) = CONTAINED valid evaluated scenarios
           * 100
 ```
 
-CCR is calculated separately for A, B, C, and D. Every eligible scenario has weight 1. Category results are diagnostic. There is no combined architecture score, owner-approved weighting, or F1-F5 mapping in the repository; therefore **QA-03 numeric grading thresholds remain unfrozen; this experiment reports CCR directly.**
+CCR is calculated separately for A, B, C, and D over one common comparative set, `S_primary`. A scenario enters `S_primary` only when A/B/C/D each have exactly one valid, complete, comparable result (`CONTAINED` or `NOT_CONTAINED`). Thus:
+
+```text
+CCR_alt = CONTAINED cells for alt within S_primary / |S_primary| * 100
+```
+
+A/B/C/D always have the same denominator. Every eligible scenario has weight 1. Category results are diagnostic. There is no combined architecture score, owner-approved weighting, or F1-F5 mapping in the repository; therefore **QA-03 numeric grading thresholds remain unfrozen; this experiment reports CCR directly.**
 
 ## Frozen taxonomy and coverage
 
@@ -86,7 +92,9 @@ Voice Runtime is outside all four executable prototype crates and is a held-comm
 
 ## Prospective Expected Change Areas
 
-Expected Change Areas are scenario-level role sets, frozen in the catalog before any measured implementation. They are resolved through the frozen A/B/C/D map. The E4 request is intentionally strict: A/B must not be converted into C/D merely to pass. If no architecture-consistent local-placement extension exists, acceptance or containment fails and the architecture impact is recorded.
+Expected Change Areas are scenario-level role sets, frozen in the catalog before any measured implementation. They are resolved through the frozen A/B/C/D map.
+
+E4 evaluates flexibility of the capability-placement boundary; it does not require every alternative to become Hybrid VIA Fast Path. If an alternative implements the bounded placement evolution without redefinition, inside the Expected Change Area, with acceptance and regression passing, the cell is `CONTAINED`. If the request remains meaningful but requires out-of-area propagation, regression degradation, or architecture-boundary change beyond the scenario's allowance, the valid cell is `NOT_CONTAINED`. Thin VIA or another resistant boundary is not by itself experiment invalidity. E4 is `INVALID_EXPERIMENT` only when comparative semantics/applicability or experiment-contract integrity is broken. An implementer who silently converts A/B into C/D to conduct or pass E4 creates an invalid experiment; an unchanged A/B definition that cannot contain the valid evolution produces architecture evidence.
 
 No implementation result may broaden an Expected Change Area. A legitimate correction requires v2 and a complete rerun for all alternatives.
 
@@ -134,17 +142,23 @@ All of the following are true:
 
 ### `NOT_CONTAINED`
 
-The experiment is valid and evidence is complete, but at least one of acceptance, regression, or propagation fails. There is no partial Primary credit.
+The scenario is a valid, architecture-neutral expected evolution, is meaningful for the alternative, and ran against the correct frozen contract, but at least one of acceptance, regression, or containment fails. This includes architecture resistance: if supporting a valid evolution requires changes outside the Expected Change Area or an impermissible boundary change, the result is `NOT_CONTAINED`. There is no partial Primary credit.
 
 ### `INVALID_EXPERIMENT`
 
-The attempt cannot enter the denominator because a protocol precondition was violated: wrong baseline/version, changed prospective contract, contaminated workspace, alternative definition rewrite, unequal request/acceptance semantics, non-independent execution, or evaluator/role-map drift. The reason must be retained. An unfavorable valid outcome may never be relabeled invalid.
+The attempt cannot enter the denominator because experiment validity failed: wrong baseline/version, changed prospective contract, contaminated workspace, unequal scenario semantics, silent alternative redefinition, non-independent execution, source/provenance violation, evaluator/role-map drift, or a scenario that is not meaningfully applicable under the frozen comparative definition. The reason must be retained. "Alternative redefinition" means the evaluator or implementer silently changed the frozen alternative to conduct or pass the scenario; it does not mean that a valid evolution merely pressures the alternative's boundary. An unfavorable valid outcome may never be relabeled invalid.
 
 ### `INCONCLUSIVE`
 
-The protocol was not shown invalid, but required evidence is unavailable or ambiguous—for example interrupted tests, incomplete diff, or unresolved multi-role classification. It is neither success nor failure and is excluded with a reason. Resolve and rerun all affected peers; do not selectively drop it.
+The protocol was not shown invalid, but required evidence is unavailable or ambiguous—for example interrupted tests, incomplete diff, or unresolved multi-role classification. First attempt resolution without changing production implementation, Expected Change Area, scenario semantics, baseline, acceptance, or regression criteria. It is neither success nor failure and cannot create an asymmetric denominator.
 
-Only `CONTAINED` and `NOT_CONTAINED` are valid evaluated scenarios in the CCR denominator. A campaign report must show all exclusions and cannot publish a comparative CCR unless all 20 Alternative x Scenario cells are valid or a symmetric, prospectively justified rerun/exclusion decision is recorded.
+Only `CONTAINED` and `NOT_CONTAINED` are valid evaluated cells. If one cell is `INVALID_EXPERIMENT` or remains `INCONCLUSIVE`, the entire scenario is excluded across A/B/C/D from `S_primary`; alternatively, stop and correct a protocol defect prospectively under a new version. Never retain the other three cells only for Primary CCR. The report retains every attempted cell, identifies invalid/inconclusive cells and reasons, records scenario-wide exclusion, and states the resulting common denominator. Secondary per-cell/category diagnostics retain the full history.
+
+The preferred matrix is 5 scenarios x 4 alternatives = 20 valid cells and a common denominator of 5. Because v1 has exactly one scenario in each E1-E5 category, removing any scenario loses a taxonomy category and normally requires:
+
+`QA-03 COMPARATIVE CAMPAIGN INCOMPLETE — TAXONOMY COVERAGE LOST`
+
+The campaign must not claim unconditional completion unless all five categories remain validly comparable. A replacement requires a prospectively approved new protocol/catalog version and consistent rerun; it is not patched into measured v1 evidence.
 
 ## Acceptance and regression protocol
 
@@ -170,11 +184,11 @@ A scenario regression passes when its required failure signature is not worse th
 
 ## Isolation and execution protocol
 
-The measured campaign must not run on this contract-freeze branch. It uses one disposable Git worktree and one unique branch per Alternative x Scenario, each created directly from source SHA `d4059e...` with a collision-checked name such as `exp/qa03-v1/<scenario-id>/<alternative>`.
+The measured campaign must not run on this contract-freeze branch. It uses a dedicated Git worktree not shared with the Session 7.2 runtime campaign, another Codex session, or a main working directory actively switched by another process. Each Alternative x Scenario uses one disposable worktree and unique branch created directly from source SHA `d4059e...`, with a collision-checked name such as `exp/qa03-v1/<scenario-id>/<alternative>`. A checkout in another worktree must not be able to change QA03-2's checked-out source.
 
 For every one of the 20 cells:
 
-1. verify source SHA and clean worktree;
+1. verify and record dedicated worktree path, branch, exact HEAD SHA, and clean status before every campaign stage;
 2. create a new branch/worktree from the exact source SHA—never from another scenario result;
 3. copy/reference the committed frozen v1 contract without modifying it;
 4. materialize the frozen acceptance test first;
@@ -211,6 +225,9 @@ Synthetic tests—not measured scenario implementations—must prove:
 8. wrong baseline/isolation -> `INVALID_EXPERIMENT`;
 9. incomplete/ambiguous evidence -> `INCONCLUSIVE`;
 10. repeated classification and CCR calculation are deterministic.
+11. one invalid/inconclusive cell excludes its scenario symmetrically and preserves one denominator;
+12. losing one v1 scenario blocks completion because E1-E5 coverage is lost;
+13. a normal 20-cell matrix yields denominator 5 for A/B/C/D.
 
 ## Limitations
 
@@ -220,7 +237,7 @@ QA-03 measures containment for five expected evolution requests against the curr
 
 When all protocol qualification checks pass, the disposition is:
 
-`QA-03 EXPERIMENT CONTRACT FROZEN — READY FOR FLEXIBILITY CAMPAIGN`
+`QA-03 EXPERIMENT CONTRACT FINALIZED — READY FOR FLEXIBILITY CAMPAIGN`
 
 This record prepares evidence only. DP-00 remains:
 

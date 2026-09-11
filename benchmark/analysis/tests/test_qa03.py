@@ -2,7 +2,14 @@ import copy
 import json
 from pathlib import Path
 
-from dp00_analysis.qa03 import calculate_ccr, classify_run, main, roles_for_path, validate_contracts
+from dp00_analysis.qa03 import (
+    calculate_ccr,
+    calculate_comparative_ccr,
+    classify_run,
+    main,
+    roles_for_path,
+    validate_contracts,
+)
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -57,6 +64,19 @@ def manifest(category="E1", alternative="A"):
     }
 
 
+def full_comparative_matrix(classification="CONTAINED"):
+    catalog, _ = contracts()
+    return [
+        {
+            "scenario_id": item["id"],
+            "alternative": alternative,
+            "classification": classification,
+        }
+        for item in catalog["scenarios"]
+        for alternative in "ABCD"
+    ]
+
+
 def test_frozen_contracts_are_complete_and_cover_e1_to_e5():
     catalog, role_map = contracts()
     validate_contracts(catalog, role_map)
@@ -99,6 +119,19 @@ def test_deliberate_out_of_area_change_is_not_contained():
     result = classify_run(run, scenario(), role_map)
     assert result["classification"] == "NOT_CONTAINED"
     assert result["unexpected_changed_roles"] == ["CONTEXT_HANDLING"]
+
+
+def test_e4_valid_architecture_boundary_pressure_is_not_contained_not_invalid():
+    _, role_map = contracts()
+    run = manifest("E4", "A")
+    run["changes"] = [{
+        "path": "prototypes/dp00/crates/alternative-a/src/architecture.rs",
+        "change_type": "MODIFIED",
+        "change_class": "PRODUCTION_SOURCE",
+    }]
+    result = classify_run(run, scenario("E4"), role_map)
+    assert result["classification"] == "NOT_CONTAINED"
+    assert result["reasons"] == ["out_of_area_propagation"]
 
 
 def test_unmapped_architecture_change_is_out_of_area():
@@ -167,6 +200,15 @@ def test_wrong_baseline_or_isolation_is_invalid():
     assert result["classification"] == "INVALID_EXPERIMENT"
 
 
+def test_silent_alternative_redefinition_is_invalid():
+    _, role_map = contracts()
+    run = manifest("E4", "A")
+    run["alternative_definition_preserved"] = False
+    result = classify_run(run, scenario("E4"), role_map)
+    assert result["classification"] == "INVALID_EXPERIMENT"
+    assert "alternative_definition_changed" in result["reasons"]
+
+
 def test_incomplete_or_ambiguous_evidence_is_inconclusive():
     _, role_map = contracts()
     run = manifest()
@@ -185,6 +227,47 @@ def test_classification_and_ccr_are_deterministic():
     assert first == second
     results = [first, {**first, "classification": "NOT_CONTAINED"}, {**first, "classification": "INCONCLUSIVE"}]
     assert calculate_ccr(results) == {"contained": 1, "valid_evaluated": 2, "excluded": 1, "ccr_percent": 50.0}
+
+
+def test_equal_denominator_when_one_cell_is_invalid():
+    catalog, _ = contracts()
+    cells = full_comparative_matrix()
+    cells[0]["classification"] = "INVALID_EXPERIMENT"
+    comparison = calculate_comparative_ccr(cells, catalog)
+    assert {value["denominator"] for value in comparison["alternatives"].values()} == {4}
+    assert comparison["common_denominator"] == 4
+
+
+def test_invalid_or_inconclusive_cell_excludes_scenario_for_all_alternatives():
+    catalog, _ = contracts()
+    for classification in ["INVALID_EXPERIMENT", "INCONCLUSIVE"]:
+        cells = full_comparative_matrix()
+        excluded_id = cells[6]["scenario_id"]
+        cells[6]["classification"] = classification
+        comparison = calculate_comparative_ccr(cells, catalog)
+        assert excluded_id not in comparison["s_primary"]
+        exclusion = next(item for item in comparison["excluded_scenarios"] if item["scenario_id"] == excluded_id)
+        assert exclusion["excluded_for_all_alternatives"] is True
+
+
+def test_losing_one_single_category_scenario_prevents_complete_disposition():
+    catalog, _ = contracts()
+    cells = full_comparative_matrix()
+    cells[0]["classification"] = "INCONCLUSIVE"
+    comparison = calculate_comparative_ccr(cells, catalog)
+    assert comparison["taxonomy_complete"] is False
+    assert comparison["campaign_status"] == "QA-03 COMPARATIVE CAMPAIGN INCOMPLETE — TAXONOMY COVERAGE LOST"
+    assert comparison["campaign_status"] != "QA-03 EVALUATION COMPLETE"
+
+
+def test_normal_twenty_cell_matrix_uses_denominator_five_for_every_alternative():
+    catalog, _ = contracts()
+    cells = full_comparative_matrix()
+    cells[1]["classification"] = "NOT_CONTAINED"
+    comparison = calculate_comparative_ccr(cells, catalog)
+    assert comparison["common_denominator"] == 5
+    assert {value["denominator"] for value in comparison["alternatives"].values()} == {5}
+    assert comparison["campaign_status"] == "QA-03 EVALUATION COMPLETE"
 
 
 def test_execution_manifest_schema_and_template_versions_are_aligned():

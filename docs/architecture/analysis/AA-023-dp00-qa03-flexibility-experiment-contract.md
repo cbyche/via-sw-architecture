@@ -2,7 +2,7 @@
 
 ## Status
 
-Architecture Analysis Record — QA03-1 prospective experiment freeze.
+Architecture Analysis Record — QA03-1 finalized prospective experiment contract, including the pre-campaign comparative-validity clarification.
 
 This record freezes the experiment contract; it does not report the final scored A/B/C/D experiment, change the approved requirements baseline, select a DP-00 winner, or merge any Session 7.2 runtime work.
 
@@ -44,10 +44,13 @@ CONTAINED = acceptance PASS
 The Primary Metric is unweighted Change Containment Ratio:
 
 ```text
-CCR = CONTAINED / (CONTAINED + NOT_CONTAINED) * 100
+S_primary = scenarios with exactly one valid, complete, comparable cell
+            for each of A/B/C/D
+
+CCR_alt = CONTAINED cells for alt within S_primary / |S_primary| * 100
 ```
 
-It is reported independently for A/B/C/D. Invalid and inconclusive attempts are disclosed but excluded from the denominator. No measured CCR is produced by this freeze session.
+It is reported independently for A/B/C/D using the same `S_primary` denominator. An invalid/inconclusive cell excludes that scenario symmetrically rather than removing one alternative's cell. No measured CCR is produced by this freeze session.
 
 ## Evolution taxonomy and scenario catalog
 
@@ -61,7 +64,7 @@ The authoritative E1-E5 taxonomy is preserved.
 | `QA03-E4-CAPABILITY-PLACEMENT-001` | E4 Placement | Make bounded document-open VIA-local when allowed/registered, with non-local fallback. | capability registration; execution-policy/control plane; local capability execution |
 | `QA03-E5-CONTRACT-METADATA-001` | E5 Contract | Add optional resource-class metadata while retaining v1 descriptor and routing behavior. | downstream capability contract; capability registration; Agent delegation adapter |
 
-The catalog freezes complete rationale, alternative-neutral semantics, acceptance test IDs, regression criteria, forbidden roles, and evidence requirements. E4 does not grant permission to turn A into C or B into D; inability to implement the request through a natural extension mechanism is observable architecture evidence.
+The catalog freezes complete rationale, alternative-neutral semantics, acceptance test IDs, regression criteria, forbidden roles, and evidence requirements. E4 does not grant permission to turn A into C or B into D. It tests whether the bounded placement evolution can be absorbed through intended change mechanisms. A meaningful valid request that requires out-of-area propagation, regression degradation, or impermissible boundary change is `NOT_CONTAINED`, including for a Thin VIA boundary. Only unequal/non-applicable comparative semantics or contract-integrity failure makes E4 invalid. Silently converting an alternative to pass is invalid; pressure on its unchanged boundary is flexibility evidence.
 
 ## Expected Change Areas and role normalization
 
@@ -94,24 +97,26 @@ Regression includes all existing unit/integration tests, DP-00 behavior, QA-02, 
 
 Production source, contract/schema, runtime configuration, registration, and generator-source changes count. Tests, evidence, documentation, true fixture-only data, true formatting-only edits, and generated outputs do not independently count. A fixture that defines runtime registration/policy/contract behavior is classified by that function and counts. A mixed semantic/formatting edit counts.
 
-`CONTAINED` and `NOT_CONTAINED` are valid Primary outcomes. `INVALID_EXPERIMENT` covers violated preconditions or contract drift; `INCONCLUSIVE` covers missing or ambiguous evidence. Neither excluded class is silently counted. Unfavorable valid outcomes cannot be selectively excluded.
+`CONTAINED` and `NOT_CONTAINED` are valid Primary outcomes. Architecture resistance to a valid evolution is `NOT_CONTAINED`, not a reason for invalidation. `INVALID_EXPERIMENT` is limited to experiment-contract failure: wrong provenance/version, contamination, unequal semantics, silent alternative redefinition, post-freeze mutation, mapping/evaluator drift, or genuine non-applicability. `INCONCLUSIVE` covers unresolved missing or ambiguous evidence after non-mutating recovery is attempted. Unfavorable valid outcomes cannot be selectively excluded.
+
+One invalid/inconclusive cell removes its entire scenario across A/B/C/D from Primary `S_primary`; all attempted cells remain in Secondary diagnostics. The report identifies the scenario, affected cells/reasons, symmetric exclusion, and resulting common denominator. With one v1 scenario per E1-E5 category, losing any scenario normally requires `QA-03 COMPARATIVE CAMPAIGN INCOMPLETE — TAXONOMY COVERAGE LOST`. A replacement requires a new prospective protocol/catalog and consistent rerun. The desired matrix remains 20 valid cells with denominator 5 for every alternative.
 
 CCR alone is Primary. Roles/files/components/LOC/contracts/propagation depth are Secondary diagnostics. **QA-03 numeric grading thresholds remain unfrozen; this experiment reports CCR directly.** No category weights or overall architecture score are created.
 
 ## Isolation model
 
-Every Alternative x Scenario cell starts in a unique disposable worktree/branch at the exact source SHA. No result branch is the parent of another. Acceptance tests are materialized before production work. Codex receives the identical frozen request and is instructed to make the minimum architecture-consistent change through the natural extension mechanism—not to optimize the diff for CCR.
+Every Alternative x Scenario cell starts in a unique disposable worktree/branch at the exact source SHA. QA03-2's dedicated worktree cannot be shared with Session 7.2, another Codex session, or an actively switched main working directory. Path, branch, HEAD, and clean status are recorded before every campaign stage, and another worktree's checkout cannot change QA03-2's source. No result branch is the parent of another. Acceptance tests are materialized before production work. Codex receives the identical frozen request and is instructed to make the minimum architecture-consistent change through the natural extension mechanism—not to optimize the diff for CCR.
 
 The 20 cells preserve baseline/result SHAs and raw manifests. A worktree is discarded only after evidence is committed/archived. No reset, rebase, merge, or branch reuse is part of the protocol. Alternative order should rotate to reduce familiarity bias.
 
 ## Evaluator qualification
 
-Synthetic qualification covers in-area success, explicit and unmapped out-of-area propagation, acceptance failure, new/worsened regression, unchanged baseline failures, non-scoring test changes, A/B/C/D role resolution, invalid isolation/baseline, incomplete/ambiguous evidence, schema/version alignment, CCR denominator semantics, and deterministic reruns. These fixtures do not implement or consume the five measured evolution scenarios.
+Synthetic qualification covers in-area success, valid E4 boundary pressure as `NOT_CONTAINED`, silent redefinition as invalid, explicit and unmapped out-of-area propagation, acceptance failure, new/worsened regression, unchanged baseline failures, non-scoring test changes, A/B/C/D role resolution, invalid isolation/baseline, incomplete/ambiguous evidence, schema/version alignment, equal denominators, scenario-wide exclusion, taxonomy-loss blocking, a normal 20-cell matrix, and deterministic reruns. These fixtures do not implement or consume the five measured evolution scenarios.
 
 Validation at the freeze commit passed:
 
-- QA-03 evaluator qualification: 14/14;
-- full Python suite: 109/109;
+- QA-03 evaluator qualification: 20/20;
+- full Python suite: 115/115;
 - Rust workspace/all-target check: PASS;
 - Rust format check: PASS;
 - Rust clippy with warnings denied: PASS;
@@ -129,7 +134,7 @@ The scenario catalog, role map, Expected Change Areas, binary classifications, b
 
 With the validation results above, the disposition is:
 
-`QA-03 EXPERIMENT CONTRACT FROZEN — READY FOR FLEXIBILITY CAMPAIGN`
+`QA-03 EXPERIMENT CONTRACT FINALIZED — READY FOR FLEXIBILITY CAMPAIGN`
 
 The overall decision state remains:
 

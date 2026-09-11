@@ -2,6 +2,9 @@
 
 The evaluator consumes frozen scenario, role-map, and execution-manifest JSON.
 It deliberately does not infer architecture semantics from line counts.
+Architecture resistance to a valid request is NOT_CONTAINED; only experiment
+contract failure is INVALID_EXPERIMENT. Comparative CCR uses one scenario-wide
+denominator for A/B/C/D.
 """
 
 from __future__ import annotations
@@ -14,6 +17,8 @@ from typing import Any
 
 
 FINAL_CLASSES = {"CONTAINED", "NOT_CONTAINED", "INVALID_EXPERIMENT", "INCONCLUSIVE"}
+ALTERNATIVES = ("A", "B", "C", "D")
+VALID_PRIMARY_CLASSES = {"CONTAINED", "NOT_CONTAINED"}
 NON_SCORING_CHANGE_CLASSES = {
     "TEST",
     "DOCUMENTATION",
@@ -177,7 +182,11 @@ def classify_run(
 
 
 def calculate_ccr(results: list[dict[str, Any]]) -> dict[str, Any]:
-    """Calculate unweighted CCR over valid evaluated scenarios only."""
+    """Calculate a single-alternative diagnostic CCR.
+
+    Primary comparative reporting must use ``calculate_comparative_ccr`` so
+    A/B/C/D cannot acquire asymmetric denominators.
+    """
     valid = [r for r in results if r["classification"] in {"CONTAINED", "NOT_CONTAINED"}]
     contained = sum(r["classification"] == "CONTAINED" for r in valid)
     return {
@@ -185,6 +194,92 @@ def calculate_ccr(results: list[dict[str, Any]]) -> dict[str, Any]:
         "valid_evaluated": len(valid),
         "excluded": len(results) - len(valid),
         "ccr_percent": None if not valid else contained / len(valid) * 100.0,
+    }
+
+
+def calculate_comparative_ccr(
+    cells: list[dict[str, Any]], catalog: dict[str, Any]
+) -> dict[str, Any]:
+    """Calculate A/B/C/D CCR using one scenario-wide primary denominator.
+
+    A scenario enters S_primary only when exactly one complete, valid result is
+    present for every alternative. One INVALID_EXPERIMENT, INCONCLUSIVE,
+    missing, or duplicate cell excludes that scenario symmetrically.
+    """
+    scenarios = {item["id"]: item for item in catalog["scenarios"]}
+    grouped: dict[str, dict[str, list[dict[str, Any]]]] = {
+        scenario_id: {alternative: [] for alternative in ALTERNATIVES}
+        for scenario_id in scenarios
+    }
+    unknown_cells: list[dict[str, Any]] = []
+    for cell in cells:
+        scenario_id = cell.get("scenario_id")
+        alternative = cell.get("alternative")
+        if scenario_id not in grouped or alternative not in ALTERNATIVES:
+            unknown_cells.append(cell)
+            continue
+        grouped[scenario_id][alternative].append(cell)
+
+    primary: list[str] = []
+    exclusions: list[dict[str, Any]] = []
+    for scenario_id, by_alternative in grouped.items():
+        invalid_cells: list[dict[str, str]] = []
+        for alternative in ALTERNATIVES:
+            attempts = by_alternative[alternative]
+            if len(attempts) != 1:
+                invalid_cells.append({
+                    "alternative": alternative,
+                    "classification": "MISSING" if not attempts else "DUPLICATE",
+                })
+                continue
+            classification = attempts[0].get("classification")
+            if classification not in VALID_PRIMARY_CLASSES:
+                invalid_cells.append({
+                    "alternative": alternative,
+                    "classification": str(classification),
+                })
+        if invalid_cells:
+            exclusions.append({
+                "scenario_id": scenario_id,
+                "excluded_for_all_alternatives": True,
+                "cells": invalid_cells,
+            })
+        else:
+            primary.append(scenario_id)
+
+    denominator = len(primary)
+    by_alternative_result: dict[str, dict[str, Any]] = {}
+    for alternative in ALTERNATIVES:
+        contained = sum(
+            grouped[scenario_id][alternative][0]["classification"] == "CONTAINED"
+            for scenario_id in primary
+        )
+        by_alternative_result[alternative] = {
+            "contained": contained,
+            "denominator": denominator,
+            "ccr_percent": None if denominator == 0 else contained / denominator * 100.0,
+        }
+
+    covered_categories = sorted({scenarios[scenario_id]["category"] for scenario_id in primary})
+    required_categories = ["E1", "E2", "E3", "E4", "E5"]
+    taxonomy_complete = set(covered_categories) == set(required_categories)
+    full_matrix = denominator == len(scenarios) == 5 and len(cells) == 20 and not unknown_cells
+    if full_matrix and taxonomy_complete and not exclusions:
+        campaign_status = "QA-03 EVALUATION COMPLETE"
+    elif not taxonomy_complete:
+        campaign_status = "QA-03 COMPARATIVE CAMPAIGN INCOMPLETE — TAXONOMY COVERAGE LOST"
+    else:
+        campaign_status = "QA-03 COMPARATIVE CAMPAIGN INCOMPLETE"
+
+    return {
+        "s_primary": primary,
+        "common_denominator": denominator,
+        "alternatives": by_alternative_result,
+        "excluded_scenarios": exclusions,
+        "covered_categories": covered_categories,
+        "taxonomy_complete": taxonomy_complete,
+        "unknown_cells": unknown_cells,
+        "campaign_status": campaign_status,
     }
 
 
