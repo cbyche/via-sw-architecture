@@ -58,6 +58,7 @@ pub struct ExecutionInvocation {
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum ObservableEffectType {
     VolumeChanged,
+    MediaPaused,
     FileInspected,
     WifiStatusObserved,
     DocumentOpened,
@@ -116,6 +117,8 @@ pub enum SemanticPayloadViolation {
     MissingCapabilityIdentity,
     MissingStateTransitionBoundary,
     EmptyExecutionIdentity,
+    MissingCompoundRouteCorrelation,
+    MismatchedSubgoalCorrelation,
 }
 
 /// Validates cross-field requirements that strict serde shape validation cannot express.
@@ -123,6 +126,21 @@ pub enum SemanticPayloadViolation {
 pub fn validate_semantic_payload(event: &CanonicalEvent) -> Vec<SemanticPayloadViolation> {
     let mut violations = Vec::new();
     match event.event() {
+        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+            subgoal_id: Some(subgoal_id),
+            ..
+        }) => {
+            let correlation = event.product_correlation();
+            if correlation.parent_task_id.is_none()
+                || correlation.child_task_id.is_none()
+                || correlation.task_id != correlation.child_task_id
+            {
+                violations.push(SemanticPayloadViolation::MissingCompoundRouteCorrelation);
+            }
+            if correlation.subgoal_id.as_ref() != Some(subgoal_id) {
+                violations.push(SemanticPayloadViolation::MismatchedSubgoalCorrelation);
+            }
+        }
         CanonicalEventKind::ExecutionStarted { invocation } => {
             if invocation.capability_id.is_empty() {
                 violations.push(SemanticPayloadViolation::MissingCapabilityIdentity);
@@ -197,6 +215,7 @@ impl CanonicalEvent {
 pub enum ContractViolation {
     MissingProcessingStart,
     DuplicateInitialRouteCommit,
+    ExecutionBeforeInitialRoutePlanBarrier,
     PrematureRouteCommit,
     CompletedWithoutRouteCommit,
     CompletedWithoutExecution,
@@ -244,7 +263,23 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
             )
         })
         .collect();
-    if commits.len() > 1 {
+    let mut committed_subgoals = std::collections::HashSet::new();
+    let mut root_commit_count = 0_usize;
+    let duplicate_commit = commits.iter().any(|(_, event)| match event.event() {
+        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+            subgoal_id: Some(subgoal_id),
+            ..
+        }) => !committed_subgoals.insert(subgoal_id.clone()),
+        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+            subgoal_id: None,
+            ..
+        }) => {
+            root_commit_count += 1;
+            root_commit_count > 1
+        }
+        _ => false,
+    });
+    if duplicate_commit || (root_commit_count > 0 && !committed_subgoals.is_empty()) {
         violations.push(ContractViolation::DuplicateInitialRouteCommit);
     }
     if let Some((commit_position, _)) = commits.first() {
@@ -271,6 +306,15 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
     let completed = position(|event| matches!(event, CanonicalEventKind::EpisodeCompleted));
     let failed = position(|event| matches!(event, CanonicalEventKind::EpisodeFailed { .. }));
     let execution = position(|event| matches!(event, CanonicalEventKind::ExecutionStarted { .. }));
+    if committed_subgoals.len() > 1
+        && execution.is_some_and(|execution_position| {
+            commits.last().is_some_and(|(last_commit_position, _)| {
+                execution_position <= *last_commit_position
+            })
+        })
+    {
+        violations.push(ContractViolation::ExecutionBeforeInitialRoutePlanBarrier);
+    }
     let authoritative_outcome = events.iter().position(|event| {
         matches!(
             event.event(),
@@ -281,7 +325,7 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
         violations.push(ContractViolation::ConflictingTerminalEvents);
     }
     if completed.is_some() {
-        if commits.len() != 1 {
+        if commits.is_empty() {
             violations.push(ContractViolation::CompletedWithoutRouteCommit);
         }
         if execution.is_none() {
@@ -299,7 +343,7 @@ pub fn validate_episode(events: &[CanonicalEvent]) -> Vec<ContractViolation> {
             })
             .collect();
         let valid_order = processing
-            .zip(commits.first().map(|(position, _)| *position))
+            .zip(commits.last().map(|(position, _)| *position))
             .zip(execution)
             .zip(authoritative_outcome)
             .zip(completed)
@@ -472,9 +516,9 @@ pub fn project_actual_semantic_trace(events: &[CanonicalEvent]) -> ActualSemanti
                     task_relation: *task_relation,
                 });
             }
-            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { route })
-                if event.emitter() == EventEmitter::ArchitectureUnderTest =>
-            {
+            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                route, ..
+            }) if event.emitter() == EventEmitter::ArchitectureUnderTest => {
                 trace.committed_routes.push(route.clone());
             }
             CanonicalEventKind::ExecutionStarted { invocation }

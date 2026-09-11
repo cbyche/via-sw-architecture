@@ -23,6 +23,7 @@ string_id!(ExecutorId);
 string_id!(DispatchId);
 string_id!(ResultId);
 string_id!(ClarificationId);
+string_id!(SubgoalId);
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
@@ -164,6 +165,12 @@ impl ModelResponse {
 pub struct ProductCorrelation {
     pub turn_id: Option<TurnId>,
     pub task_id: Option<TaskId>,
+    #[serde(default)]
+    pub parent_task_id: Option<TaskId>,
+    #[serde(default)]
+    pub child_task_id: Option<TaskId>,
+    #[serde(default)]
+    pub subgoal_id: Option<SubgoalId>,
     pub execution_id: Option<ExecutionId>,
     pub dispatch_id: Option<DispatchId>,
     pub result_id: Option<ResultId>,
@@ -225,6 +232,8 @@ pub enum ArchitectureEvent {
     },
     RouteCommitted {
         route: ExecutionRoute,
+        #[serde(default)]
+        subgoal_id: Option<SubgoalId>,
     },
     ResultBound,
     CancelPropagated,
@@ -252,6 +261,8 @@ pub trait ModelPort: Send + Sync {
 pub struct ExecutionRequest {
     pub route: ExecutionRoute,
     pub task_id: TaskId,
+    pub parent_task_id: Option<TaskId>,
+    pub subgoal_id: Option<SubgoalId>,
     pub semantic_action: String,
 }
 
@@ -334,6 +345,7 @@ mod tests {
                 dispatch_id: None,
                 result_id: None,
                 clarification_id: None,
+                ..ProductCorrelation::default()
             },
         };
         let json = serde_json::to_string(&observation).expect("observation serializes");

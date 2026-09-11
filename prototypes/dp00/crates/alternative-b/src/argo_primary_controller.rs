@@ -16,6 +16,7 @@ pub enum ArgoDecision {
     },
     ContinueT1,
     Clarify,
+    CompoundMediaDownloads,
 }
 
 pub fn decide<M>(
@@ -52,7 +53,9 @@ where
         .completed_output()
         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
-    if output.contains("AMBIGUOUS_DOCUMENT") {
+    if output.contains("COMPOUND_MEDIA_DOWNLOADS") {
+        Ok(ArgoDecision::CompoundMediaDownloads)
+    } else if output.contains("AMBIGUOUS_DOCUMENT") {
         Ok(ArgoDecision::Clarify)
     } else if output.contains("CONTINUE_T1") {
         Ok(ArgoDecision::ContinueT1)
@@ -84,7 +87,9 @@ pub fn route(decision: &ArgoDecision) -> Option<ExecutionRoute> {
             final_executor_id_if_known: Some(executor.clone()),
             delegation_chain: vec![ExecutorId::from("ARGO"), executor.clone()],
         }),
-        ArgoDecision::ContinueT1 | ArgoDecision::Clarify => None,
+        ArgoDecision::ContinueT1 | ArgoDecision::Clarify | ArgoDecision::CompoundMediaDownloads => {
+            None
+        }
     }
 }
 

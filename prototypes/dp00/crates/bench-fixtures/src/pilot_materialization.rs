@@ -522,6 +522,7 @@ fn replay_output(data: &Value) -> String {
             "open_referred_document" => "OPEN_RIGHT_DOCUMENT",
             "report_latest_download_name" => "LOOKUP_LATEST_DOWNLOAD",
             "organize_downloads" => "ORGANIZE_DOWNLOADS",
+            "pause_media_and_organize_downloads" => "COMPOUND_MEDIA_DOWNLOADS",
             _ => "GENERAL_FILE_WORK",
         });
     }
@@ -544,6 +545,7 @@ fn replay_output(data: &Value) -> String {
             "VOLUME_DECREASE" => "LOCAL_VOLUME",
             "NETWORK_SPECIALIST" => "NETWORK_AGENT",
             "FILE_OPEN" => "LOCAL_DOCUMENT",
+            "COMPOUND_LOCAL_AND_GENERAL" => "COMPOUND_LOCAL_AND_GENERAL",
             _ => "ARGO",
         });
     }

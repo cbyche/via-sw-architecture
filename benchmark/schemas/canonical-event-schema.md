@@ -642,3 +642,32 @@ evaluator-only constraint/oracle expected truth
 For volume direction, the evaluator derives `DECREASED` exactly when `after_value < before_value`. `VOLUME_CHANGED`, the requested action, the scenario id, and the Oracle state are not substitutes for this comparison. A raw `20 -> 35` observation remains an increase even when an Oracle expects a decrease.
 
 The payload remains compact and typed. It does not include prompts, full model output, Oracle values, or constraint verdicts. Cross-field validation rejects a volume transition missing either boundary and an execution invocation missing capability or executor identity.
+
+## 19.3 `canonical-event-v3` compound-route evidence
+
+`canonical-event-v3` retains v2 evidence and extends product correlation with
+nullable `parent_task_id`, `child_task_id`, and `subgoal_id`. A compound
+`Architecture.RouteCommitted` carries both its `route` and non-null
+`subgoal_id`; its correlation preserves the episode, parent task, child task,
+and the same subgoal identity. The canonical envelope timestamp is the route
+commit timestamp.
+
+For P12, the provisional initial route-plan contract is:
+
+```text
+commit required S1 route
+commit required S2 route
+derive final boundary = latest required commit timestamp
+begin S1/S2 domain execution
+```
+
+The two commits may use different route identities and are not duplicates.
+Repeating a commit for the same `subgoal_id` is a duplicate. Mixing an
+unscoped/root commit with scoped subgoal commits is invalid. There is no
+parent-level route-commit event and no `final_required_boundary` field.
+
+The evaluator obtains the required subgoal set from the predeclared scenario
+contract. Full set coverage is required before it derives the QA-04 boundary;
+partial coverage produces no final boundary and is classified
+`ROUTE_REQUIRED_NOT_COMMITTED`. The first required subgoal commit cannot close
+QA-04 when another required initial subgoal remains uncommitted.

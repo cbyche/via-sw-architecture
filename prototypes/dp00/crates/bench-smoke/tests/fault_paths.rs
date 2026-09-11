@@ -459,9 +459,9 @@ fn network_rejection_reselects_argo_before_commit_with_one_retry_generation() {
     let commits: Vec<_> = events
         .iter()
         .filter_map(|event| match event.event() {
-            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { route }) => {
-                Some(route)
-            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                route, ..
+            }) => Some(route),
             _ => None,
         })
         .collect();

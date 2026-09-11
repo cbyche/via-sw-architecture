@@ -23,4 +23,8 @@ impl TaskManager {
         self.routes.insert(id.clone(), route);
         id
     }
+    pub fn create_parent(&mut self) -> TaskId {
+        self.next_task += 1;
+        TaskId(format!("C-T{}", self.next_task))
+    }
 }

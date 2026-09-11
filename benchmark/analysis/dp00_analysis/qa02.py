@@ -7,7 +7,7 @@ from typing import Any, Iterable
 
 from .models import ActualSemanticFacts, EpisodeEvidence
 from .semantics import event_variant
-from .validation import CANONICAL_EVENT_VERSION
+from .validation import SUPPORTED_CANONICAL_EVENT_VERSIONS
 
 
 def _deduplicate(values: list[Any]) -> list[Any]:
@@ -250,7 +250,7 @@ def _closed_world_conditions(
         ]
         == "CAPTURE"
         and episode.provenance["canonical_event_schema_version"]
-        == CANONICAL_EVENT_VERSION,
+        in SUPPORTED_CANONICAL_EVENT_VERSIONS,
         "RELEVANT_BOUNDARY_DECLARED": bool(absence.get("relevant_stream")),
         "NO_EPISODE_INTEGRITY_ERROR": not episode.integrity_issues,
     }

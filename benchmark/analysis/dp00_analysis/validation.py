@@ -6,7 +6,8 @@ from typing import Any, Iterable
 
 from .models import ValidationIssue
 
-CANONICAL_EVENT_VERSION = "canonical-event-v2"
+CANONICAL_EVENT_VERSION = "canonical-event-v3"
+SUPPORTED_CANONICAL_EVENT_VERSIONS = {"canonical-event-v2", CANONICAL_EVENT_VERSION}
 MODEL_CALL_VERSION = "model-call-v1"
 RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v2"
 CAMPAIGN_PROVENANCE_VERSION = "dp00-pilot-campaign-provenance-v1"
@@ -26,13 +27,17 @@ RESPONSIBILITIES = {
 ROUTE_KINDS = {"LOCAL_DIRECT", "EXECUTOR_DIRECT", "EXECUTOR_DELEGATED"}
 EFFECT_TYPES = {
     "VOLUME_CHANGED", "FILE_INSPECTED", "WIFI_STATUS_OBSERVED", "DOCUMENT_OPENED",
-    "DNS_CHECK_OBSERVED", "DOWNLOADS_ORGANIZED", "DIAGNOSIS_STARTED",
+    "DNS_CHECK_OBSERVED", "DOWNLOADS_ORGANIZED", "MEDIA_PAUSED", "DIAGNOSIS_STARTED",
 }
 FAILURE_REASONS = {
     "MODEL_MALFORMED", "MODEL_TIMEOUT", "MODEL_NO_RESPONSE", "INVALID_ROUTE",
     "DISPATCH_REJECTED", "EXECUTION_FAILURE",
 }
 CORRELATION_KEYS = {
+    "turn_id", "task_id", "parent_task_id", "child_task_id", "subgoal_id",
+    "execution_id", "dispatch_id", "result_id", "clarification_id"
+}
+LEGACY_CORRELATION_KEYS = {
     "turn_id", "task_id", "execution_id", "dispatch_id", "result_id", "clarification_id"
 }
 EVENT_KEYS = {
@@ -108,6 +113,14 @@ def validate_runtime_scenario(value: Any) -> dict[str, Any]:
         {"REQUIRED", "OPTIONAL", "FORBIDDEN"},
         "runtime scenario.qa_eligibility.qa04.route_commit_expectation",
     )
+    required_subgoals = qa04.get("required_subgoal_ids")
+    if not isinstance(required_subgoals, list) or not all(
+        isinstance(value, str) and value for value in required_subgoals
+    ) or len(required_subgoals) != len(set(required_subgoals)):
+        raise StrictValidationError(
+            "runtime scenario.qa_eligibility.qa04.required_subgoal_ids: "
+            "expected unique non-empty string array"
+        )
     return obj
 
 
@@ -210,7 +223,7 @@ def _effect(value: Any, where: str) -> None:
 def validate_canonical_event(value: Any) -> dict[str, Any]:
     obj = _object(value, "canonical event")
     _exact(obj, EVENT_KEYS, "canonical event")
-    if obj["schema_version"] != CANONICAL_EVENT_VERSION:
+    if obj["schema_version"] not in SUPPORTED_CANONICAL_EVENT_VERSIONS:
         raise StrictValidationError(f"canonical event: unsupported schema version {obj['schema_version']!r}")
     for key in ("event_id", "run_id", "episode_id", "scenario_id", "scenario_version", "alternative_id", "benchmark_version", "source_git_commit"):
         _nonempty(obj[key], f"canonical event.{key}")
@@ -219,7 +232,13 @@ def validate_canonical_event(value: Any) -> dict[str, Any]:
     if not isinstance(obj["sequence_number"], int) or not isinstance(obj["monotonic_timestamp"], int) or obj["sequence_number"] < 0 or obj["monotonic_timestamp"] < 0:
         raise StrictValidationError("canonical event: sequence/timestamp must be non-negative integers")
     correlation = _object(obj["product_correlation"], "product_correlation")
-    _exact(correlation, CORRELATION_KEYS, "product_correlation")
+    _exact(
+        correlation,
+        CORRELATION_KEYS
+        if obj["schema_version"] == CANONICAL_EVENT_VERSION
+        else LEGACY_CORRELATION_KEYS,
+        "product_correlation",
+    )
     event = obj["event"]
     if isinstance(event, str):
         if event not in {"AcousticEos", "ModelGenerationStarted", "ModelGenerationCompleted", "EpisodeCompleted"}:
@@ -230,7 +249,26 @@ def validate_canonical_event(value: Any) -> dict[str, Any]:
         raise StrictValidationError("canonical event.event: expected one variant")
     variant, payload = next(iter(event.items()))
     if variant == "Architecture":
-        _validate_architecture(payload)
+        _validate_architecture(payload, obj["schema_version"])
+        if (
+            obj["schema_version"] == CANONICAL_EVENT_VERSION
+            and isinstance(payload, dict)
+            and "RouteCommitted" in payload
+        ):
+            committed_subgoal = payload["RouteCommitted"]["subgoal_id"]
+            if committed_subgoal is not None:
+                if (
+                    correlation["parent_task_id"] is None
+                    or correlation["child_task_id"] is None
+                    or correlation["task_id"] != correlation["child_task_id"]
+                ):
+                    raise StrictValidationError(
+                        "Architecture.RouteCommitted: incomplete compound task correlation"
+                    )
+                if correlation["subgoal_id"] != committed_subgoal:
+                    raise StrictValidationError(
+                        "Architecture.RouteCommitted: subgoal payload/correlation mismatch"
+                    )
     elif variant == "ExecutionStarted":
         payload = _object(payload, "ExecutionStarted")
         _exact(payload, {"invocation"}, "ExecutionStarted")
@@ -251,7 +289,7 @@ def validate_canonical_event(value: Any) -> dict[str, Any]:
     return obj
 
 
-def _validate_architecture(value: Any) -> None:
+def _validate_architecture(value: Any, schema_version: str) -> None:
     if isinstance(value, str):
         if value not in {"ProcessingStarted", "TaskCreated", "TaskReused", "ResultBound", "CancelPropagated"}:
             raise StrictValidationError(f"Architecture: invalid variant {value!r}")
@@ -267,7 +305,11 @@ def _validate_architecture(value: Any) -> None:
         "ClarificationResolved": {"request_turn_id", "response_turn_id"},
         "RouteCandidateObserved": {"route"},
         "RouteCandidateRejected": {"route", "reason"},
-        "RouteCommitted": {"route"},
+        "RouteCommitted": (
+            {"route", "subgoal_id"}
+            if schema_version == CANONICAL_EVENT_VERSION
+            else {"route"}
+        ),
     }
     if variant not in fields:
         raise StrictValidationError(f"Architecture: invalid variant {variant!r}")
@@ -286,6 +328,9 @@ def _validate_architecture(value: Any) -> None:
         _nonempty(payload["response_turn_id"], f"Architecture.{variant}.response_turn_id")
     elif "route" in payload:
         _route(payload["route"], f"Architecture.{variant}.route")
+        if variant == "RouteCommitted" and schema_version == CANONICAL_EVENT_VERSION:
+            if payload["subgoal_id"] is not None:
+                _nonempty(payload["subgoal_id"], f"Architecture.{variant}.subgoal_id")
         if variant == "RouteCandidateRejected":
             _nonempty(payload["reason"], f"Architecture.{variant}.reason")
 
@@ -338,7 +383,7 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
     _exact(obj, RUN_KEYS, "run provenance")
     if obj["provenance_schema_version"] != RUN_PROVENANCE_VERSION:
         raise StrictValidationError("run provenance: unsupported schema version")
-    if obj["canonical_event_schema_version"] != CANONICAL_EVENT_VERSION or obj["model_call_schema_version"] != MODEL_CALL_VERSION:
+    if obj["canonical_event_schema_version"] not in SUPPORTED_CANONICAL_EVENT_VERSIONS or obj["model_call_schema_version"] != MODEL_CALL_VERSION:
         raise StrictValidationError("run provenance: stream schema version mismatch")
     _enum(obj["alternative"], ALTERNATIVES, "run provenance.alternative")
     for key in ("run_id", "source_git_commit", "pilot_corpus_id", "pilot_corpus_version", "scenario_id", "scenario_version", "semantic_behavior_plan_id", "semantic_behavior_plan_version", "rust_toolchain", "target", "build_profile", "runtime_worker_policy", "cargo_lock_identity"):
@@ -402,15 +447,30 @@ def cross_stream_issues(provenance: dict[str, Any], events: Iterable[dict[str, A
     if timestamps != sorted(timestamps):
         issues.append(ValidationIssue("TIMESTAMP_REVERSAL", "canonical timestamps reverse"))
     variants = [_variant(e["event"]) for e in events]
-    if sum(v == "RouteCommitted" for v in variants) > 1:
-        issues.append(ValidationIssue("MULTIPLE_INITIAL_ROUTE_COMMITS", "multiple route commits"))
+    route_events = [e for e in events if _variant(e["event"]) == "RouteCommitted"]
+    route_subgoals = [
+        e["event"]["Architecture"]["RouteCommitted"].get("subgoal_id")
+        for e in route_events
+    ]
+    non_null_subgoals = [value for value in route_subgoals if value is not None]
+    if (
+        len(non_null_subgoals) != len(set(non_null_subgoals))
+        or (non_null_subgoals and len(non_null_subgoals) != len(route_subgoals))
+        or (not non_null_subgoals and len(route_events) > 1)
+    ):
+        issues.append(ValidationIssue("DUPLICATE_INITIAL_ROUTE_COMMIT", "duplicate root or subgoal route commit"))
     terminals = [v for v in variants if v in {"EpisodeCompleted", "EpisodeFailed"}]
     if len(terminals) != 1:
         issues.append(ValidationIssue("MISSING_OR_CONFLICTING_TERMINAL", f"terminal count {len(terminals)}"))
     elif variants[-1] not in {"EpisodeCompleted", "EpisodeFailed"}:
         issues.append(ValidationIssue("TERMINAL_NOT_FINAL", "terminal event is not final"))
-    if "EpisodeCompleted" in terminals and sum(v == "RouteCommitted" for v in variants) != 1:
-        issues.append(ValidationIssue("COMPLETED_WITHOUT_ROUTE_COMMIT", "completed episode requires one route commit"))
+    if "EpisodeCompleted" in terminals and not route_events:
+        issues.append(ValidationIssue("COMPLETED_WITHOUT_ROUTE_COMMIT", "completed episode requires a route commit"))
+    if len(non_null_subgoals) > 1:
+        last_commit = max(i for i, value in enumerate(variants) if value == "RouteCommitted")
+        first_execution = next((i for i, value in enumerate(variants) if value == "ExecutionStarted"), None)
+        if first_execution is not None and first_execution <= last_commit:
+            issues.append(ValidationIssue("EXECUTION_BEFORE_INITIAL_ROUTE_PLAN_BARRIER", "compound execution started before all observed subgoal commits"))
     outcome_pos = next((i for i, v in enumerate(variants) if v == "UsefulOutcomeObserved"), None)
     execution_pos = next((i for i, v in enumerate(variants) if v == "ExecutionStarted"), None)
     if outcome_pos is not None and (execution_pos is None or outcome_pos < execution_pos):

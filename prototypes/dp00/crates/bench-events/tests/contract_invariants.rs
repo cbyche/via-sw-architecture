@@ -1,6 +1,6 @@
 use bench_core::{
     ArchitectureEvent, ArchitectureObservation, ExecutionRoute, ExecutionRouteKind, ExecutorId,
-    ObservationPort, ProductCorrelation,
+    ObservationPort, ProductCorrelation, SubgoalId, TaskId,
 };
 use bench_events::{
     CanonicalEventKind, ContractViolation, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
@@ -43,6 +43,26 @@ fn architecture(
     collector.emit(ArchitectureObservation {
         event,
         product_correlation: ProductCorrelation::default(),
+    });
+}
+
+fn compound_commit(
+    collector: &InMemoryObservationCollector<ControlledClock>,
+    subgoal: &str,
+    child: &str,
+) {
+    collector.emit(ArchitectureObservation {
+        event: ArchitectureEvent::RouteCommitted {
+            route: route("ARGO"),
+            subgoal_id: Some(SubgoalId::from(subgoal)),
+        },
+        product_correlation: ProductCorrelation {
+            task_id: Some(TaskId::from(child)),
+            parent_task_id: Some(TaskId::from("parent")),
+            child_task_id: Some(TaskId::from(child)),
+            subgoal_id: Some(SubgoalId::from(subgoal)),
+            ..ProductCorrelation::default()
+        },
     });
 }
 
@@ -98,6 +118,7 @@ fn successful_episode_satisfies_canonical_partial_order() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("ARGO"),
+            subgoal_id: None,
         },
     );
     benchmark(
@@ -123,6 +144,7 @@ fn zero_model_call_success_satisfies_canonical_partial_order() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("VIA_LOCAL_VOLUME"),
+            subgoal_id: None,
         },
     );
     benchmark(
@@ -161,18 +183,85 @@ fn duplicate_initial_commit_is_rejected() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("ARGO"),
+            subgoal_id: None,
         },
     );
     architecture(
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("NetworkAgent"),
+            subgoal_id: None,
         },
     );
 
     assert!(
         validate_episode(&collector.canonical_snapshot())
             .contains(&ContractViolation::DuplicateInitialRouteCommit)
+    );
+}
+
+#[test]
+fn distinct_subgoal_commits_form_a_valid_initial_route_plan_barrier() {
+    let collector = collector();
+    architecture(&collector, ArchitectureEvent::ProcessingStarted);
+    compound_commit(&collector, "S1", "child-1");
+    compound_commit(&collector, "S2", "child-2");
+    benchmark(
+        &collector,
+        EventEmitter::AgentFixture,
+        execution_started("ARGO"),
+    );
+    benchmark(&collector, EventEmitter::OutcomeProbe, outcome());
+    benchmark(
+        &collector,
+        EventEmitter::Benchmark,
+        CanonicalEventKind::EpisodeCompleted,
+    );
+
+    assert!(validate_episode(&collector.canonical_snapshot()).is_empty());
+}
+
+#[test]
+fn duplicate_subgoal_commit_and_execution_before_barrier_are_rejected() {
+    let duplicate = collector();
+    architecture(&duplicate, ArchitectureEvent::ProcessingStarted);
+    compound_commit(&duplicate, "S1", "child-1");
+    compound_commit(&duplicate, "S1", "child-1");
+    assert!(
+        validate_episode(&duplicate.canonical_snapshot())
+            .contains(&ContractViolation::DuplicateInitialRouteCommit)
+    );
+
+    let premature = collector();
+    architecture(&premature, ArchitectureEvent::ProcessingStarted);
+    compound_commit(&premature, "S1", "child-1");
+    benchmark(
+        &premature,
+        EventEmitter::AgentFixture,
+        execution_started("ARGO"),
+    );
+    compound_commit(&premature, "S2", "child-2");
+    assert!(
+        validate_episode(&premature.canonical_snapshot())
+            .contains(&ContractViolation::ExecutionBeforeInitialRoutePlanBarrier)
+    );
+}
+
+#[test]
+fn compound_route_commit_requires_matching_parent_child_subgoal_correlation() {
+    let collector = collector();
+    architecture(&collector, ArchitectureEvent::ProcessingStarted);
+    architecture(
+        &collector,
+        ArchitectureEvent::RouteCommitted {
+            route: route("ARGO"),
+            subgoal_id: Some(SubgoalId::from("S1")),
+        },
+    );
+
+    assert!(
+        validate_episode(&collector.canonical_snapshot())
+            .contains(&ContractViolation::InvalidSemanticPayload)
     );
 }
 
@@ -213,6 +302,7 @@ fn rejected_candidate_can_be_reselected_without_becoming_a_commit() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("ARGO"),
+            subgoal_id: None,
         },
     );
     benchmark(
@@ -262,6 +352,7 @@ fn synchronously_rejected_candidate_cannot_be_committed() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("NetworkAgent"),
+            subgoal_id: None,
         },
     );
 
@@ -279,6 +370,7 @@ fn aut_self_report_cannot_be_authoritative_useful_outcome() {
         &collector,
         ArchitectureEvent::RouteCommitted {
             route: route("ARGO"),
+            subgoal_id: None,
         },
     );
     benchmark(

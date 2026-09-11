@@ -1,8 +1,8 @@
 use bench_core::{
     ArchitectureEvent, ArchitectureObservation, ArchitectureUnderTest, ExecutionPort,
     ExecutionRequest, ExecutionRoute, ExecutionRouteKind, InitialProductState, ModelPort,
-    ObservationPort, ProductCorrelation, ProductFact, ReferentRole, TaskId, TaskRelation, TurnId,
-    UserTurn,
+    ObservationPort, ProductCorrelation, ProductFact, ReferentRole, SubgoalId, TaskId,
+    TaskRelation, TurnId, UserTurn,
 };
 
 use crate::{
@@ -91,6 +91,10 @@ where
             return self.continue_task(TaskId::from("T1"));
         }
 
+        if intent == intent_refiner::NormalizedIntent::CompoundMediaDownloads {
+            return self.handle_compound(intent);
+        }
+
         let executor_id = agent_router::select(
             &self.model,
             &intent,
@@ -136,6 +140,8 @@ where
 
 impl<M, O, E> ThinVia<M, O, E>
 where
+    M: ModelPort,
+    M::Error: std::fmt::Debug,
     O: ObservationPort,
     E: ExecutionPort,
     E::Error: std::fmt::Debug,
@@ -155,6 +161,98 @@ where
         );
         self.accept_candidate(&route)?;
         self.commit_and_execute(task_id, route, "ContinueTask".into())
+    }
+
+    fn handle_compound(&mut self, intent: intent_refiner::NormalizedIntent) -> Result<(), String> {
+        let executor_id = agent_router::select(
+            &self.model,
+            &intent,
+            &self.capability_facts,
+            &self.policy_facts,
+        )?;
+        let route = ExecutionRoute {
+            route_kind: ExecutionRouteKind::ExecutorDirect,
+            initial_executor_id: executor_id.clone(),
+            final_executor_id_if_known: Some(executor_id.clone()),
+            delegation_chain: vec![executor_id],
+        };
+        let parent = self.tasks.create_parent();
+        let s1_task = self.tasks.create(route.clone());
+        let s2_task = self.tasks.create(route.clone());
+        self.emit_compound(ArchitectureEvent::TaskCreated, &parent, None, None);
+        for (task, subgoal) in [(&s1_task, "S1"), (&s2_task, "S2")] {
+            self.emit_compound(
+                ArchitectureEvent::TaskCreated,
+                &parent,
+                Some(task),
+                Some(subgoal),
+            );
+            self.emit_compound(
+                ArchitectureEvent::TaskAssociated {
+                    task_relation: TaskRelation::New,
+                },
+                &parent,
+                Some(task),
+                Some(subgoal),
+            );
+            self.emit_compound(
+                ArchitectureEvent::RouteCandidateObserved {
+                    route: route.clone(),
+                },
+                &parent,
+                Some(task),
+                Some(subgoal),
+            );
+            self.executor
+                .accept_route(&route)
+                .map_err(|error| format!("executor rejected compound route: {error:?}"))?;
+        }
+        for (task, subgoal) in [(&s1_task, "S1"), (&s2_task, "S2")] {
+            self.emit_compound(
+                ArchitectureEvent::RouteCommitted {
+                    route: route.clone(),
+                    subgoal_id: Some(SubgoalId::from(subgoal)),
+                },
+                &parent,
+                Some(task),
+                Some(subgoal),
+            );
+        }
+        self.execute_compound_child(&parent, s1_task, "S1", route.clone(), "PAUSE_MEDIA")?;
+        self.execute_compound_child(&parent, s2_task, "S2", route, "ORGANIZE_DOWNLOADS")
+    }
+
+    fn execute_compound_child(
+        &self,
+        parent: &TaskId,
+        child: TaskId,
+        subgoal: &str,
+        route: ExecutionRoute,
+        action: &str,
+    ) -> Result<(), String> {
+        let result = agent_harness::execute(
+            &self.executor,
+            ExecutionRequest {
+                route,
+                task_id: child.clone(),
+                parent_task_id: Some(parent.clone()),
+                subgoal_id: Some(SubgoalId::from(subgoal)),
+                semantic_action: action.into(),
+            },
+        )?;
+        self.observations.emit(ArchitectureObservation {
+            event: ArchitectureEvent::ResultBound,
+            product_correlation: ProductCorrelation {
+                task_id: Some(child.clone()),
+                parent_task_id: Some(parent.clone()),
+                child_task_id: Some(child),
+                subgoal_id: Some(SubgoalId::from(subgoal)),
+                execution_id: Some(result.execution_id),
+                result_id: Some(result.result_id),
+                ..ProductCorrelation::default()
+            },
+        });
+        Ok(())
     }
 
     fn accept_candidate(&self, route: &ExecutionRoute) -> Result<(), String> {
@@ -185,6 +283,7 @@ where
         self.emit(
             ArchitectureEvent::RouteCommitted {
                 route: route.clone(),
+                subgoal_id: None,
             },
             Some(task_id.clone()),
         );
@@ -193,6 +292,8 @@ where
             ExecutionRequest {
                 route,
                 task_id: task_id.clone(),
+                parent_task_id: None,
+                subgoal_id: None,
                 semantic_action,
             },
         )?;
@@ -223,6 +324,25 @@ where
             event,
             product_correlation: ProductCorrelation {
                 turn_id: Some(turn_id),
+                ..ProductCorrelation::default()
+            },
+        });
+    }
+
+    fn emit_compound(
+        &self,
+        event: ArchitectureEvent,
+        parent: &TaskId,
+        child: Option<&TaskId>,
+        subgoal: Option<&str>,
+    ) {
+        self.observations.emit(ArchitectureObservation {
+            event,
+            product_correlation: ProductCorrelation {
+                task_id: Some(child.unwrap_or(parent).clone()),
+                parent_task_id: Some(parent.clone()),
+                child_task_id: child.cloned(),
+                subgoal_id: subgoal.map(SubgoalId::from),
                 ..ProductCorrelation::default()
             },
         });

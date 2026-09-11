@@ -9,10 +9,24 @@ from typing import Iterable
 from .models import EpisodeEvidence
 
 
+def final_required_route_commit(episode: EpisodeEvidence) -> dict | None:
+    routes = list(episode.actual.execution_routes)
+    required = episode.scenario["qa_eligibility"]["qa04"]["required_subgoal_ids"]
+    if not required:
+        root_routes = [route for route in routes if route.get("subgoal_id") is None]
+        return root_routes[0] if len(root_routes) == 1 else None
+    scoped_routes = [route for route in routes if route.get("subgoal_id") is not None]
+    by_subgoal = {route["subgoal_id"]: route for route in scoped_routes}
+    if len(scoped_routes) != len(required) or set(by_subgoal) != set(required):
+        return None
+    return max(by_subgoal.values(), key=lambda route: route["timestamp"])
+
+
 def episode_calls_to_commit(episode: EpisodeEvidence) -> dict:
     routes = episode.actual.execution_routes
-    route_observed = bool(routes)
-    commit_ts = max(route["timestamp"] for route in routes) if route_observed else None
+    final_commit = final_required_route_commit(episode)
+    route_observed = final_commit is not None
+    commit_ts = final_commit["timestamp"] if final_commit else None
     included = []
     mismatches = []
     for call in episode.model_calls:
@@ -38,6 +52,10 @@ def episode_calls_to_commit(episode: EpisodeEvidence) -> dict:
         "scenario_class": episode.scenario["scenario_class"], "alternative": episode.provenance["alternative"],
         "latency_profile": episode.provenance["latency_profile"]["profile_id"],
         "route_commit_observed": route_observed, "no_route_commit": not route_observed,
+        "observed_subgoal_route_commits": sorted(
+            route["subgoal_id"] for route in routes if route.get("subgoal_id") is not None
+        ),
+        "final_route_commit_event_id": final_commit["event_id"] if final_commit else None,
         "calls_to_route_commit": len(included) if route_observed else None, "included_model_call_ids": included,
         "raw_derived_inclusion_mismatches": mismatches,
         "model_calls_before_terminal_failure": len(episode.model_calls) if not route_observed else None,

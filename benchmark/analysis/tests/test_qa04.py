@@ -78,6 +78,7 @@ def test_forbidden_and_optional_no_route_statuses_are_distinct(raw_run):
                 "qa04": {
                     "eligible": True,
                     "route_commit_expectation": "FORBIDDEN",
+                    "required_subgoal_ids": [],
                     "exclusion_reason": "NOT_APPLICABLE",
                 },
             },
@@ -92,6 +93,7 @@ def test_forbidden_and_optional_no_route_statuses_are_distinct(raw_run):
                 "qa04": {
                     "eligible": True,
                     "route_commit_expectation": "OPTIONAL",
+                    "required_subgoal_ids": [],
                     "exclusion_reason": "NOT_APPLICABLE",
                 },
             },
@@ -99,3 +101,65 @@ def test_forbidden_and_optional_no_route_statuses_are_distinct(raw_run):
     )
     assert episode_calls_to_commit(forbidden)["route_contract_status"] == "ROUTE_FORBIDDEN_NOT_COMMITTED"
     assert episode_calls_to_commit(optional)["route_contract_status"] == "ROUTE_OPTIONAL_NOT_COMMITTED"
+
+
+def test_compound_boundary_requires_full_coverage_and_uses_final_commit(raw_run):
+    episode = load_evidence(raw_run).episodes[0]
+    compound_scenario = {
+        **episode.scenario,
+        "scenario_id": "P12",
+        "qa_eligibility": {
+            **episode.scenario["qa_eligibility"],
+            "qa04": {
+                **episode.scenario["qa_eligibility"]["qa04"],
+                "route_commit_expectation": "REQUIRED",
+                "required_subgoal_ids": ["S1", "S2"],
+            },
+        },
+    }
+    base_route = episode.actual.execution_routes[0]
+    s1 = {
+        **base_route,
+        "event_id": "E-S1",
+        "timestamp": 1_250_000,
+        "subgoal_id": "S1",
+        "parent_task_id": "PARENT",
+        "child_task_id": "C1",
+    }
+    partial = replace(
+        episode,
+        scenario=compound_scenario,
+        actual=replace(episode.actual, execution_routes=(s1,)),
+    )
+    partial_item = episode_calls_to_commit(partial)
+    assert partial_item["route_commit_observed"] is False
+    assert partial_item["calls_to_route_commit"] is None
+    assert partial_item["route_contract_status"] == "ROUTE_REQUIRED_NOT_COMMITTED"
+
+    s2 = {
+        **base_route,
+        "event_id": "E-S2",
+        "timestamp": 1_300_000,
+        "subgoal_id": "S2",
+        "parent_task_id": "PARENT",
+        "child_task_id": "C2",
+    }
+    complete = replace(
+        partial,
+        actual=replace(episode.actual, execution_routes=(s1, s2)),
+        model_calls=(
+            model_call(1, start=1_150_000),
+            model_call(2, start=1_260_000),
+        ),
+    )
+    item = episode_calls_to_commit(complete)
+    assert item["route_commit_observed"] is True
+    assert item["final_route_commit_event_id"] == "E-S2"
+    assert item["observed_subgoal_route_commits"] == ["S1", "S2"]
+    assert item["included_model_call_ids"] == ["M1", "M2"]
+
+    duplicate = replace(
+        complete,
+        actual=replace(episode.actual, execution_routes=(s1, s1, s2)),
+    )
+    assert episode_calls_to_commit(duplicate)["route_contract_status"] == "ROUTE_REQUIRED_NOT_COMMITTED"

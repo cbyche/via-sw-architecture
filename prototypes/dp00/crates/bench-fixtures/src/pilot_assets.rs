@@ -119,6 +119,7 @@ pub struct QaFlag {
 pub struct Qa04Flag {
     pub eligible: bool,
     pub route_commit_expectation: RouteCommitExpectation,
+    pub required_subgoal_ids: Vec<String>,
     pub exclusion_reason: String,
 }
 
@@ -832,6 +833,22 @@ fn validate_pilot_semantics(corpus: &PilotCorpus) -> Result<(), AssetError> {
         if scenario.qa_eligibility.qa04.route_commit_expectation != expected {
             return invalid(format!(
                 "{} route-commit expectation must be {expected:?}",
+                scenario.scenario_id
+            ));
+        }
+        let expected_subgoals: &[&str] = if scenario.scenario_id == "P12" {
+            &["S1", "S2"]
+        } else {
+            &[]
+        };
+        if scenario.qa_eligibility.qa04.required_subgoal_ids
+            != expected_subgoals
+                .iter()
+                .map(|value| (*value).to_owned())
+                .collect::<Vec<_>>()
+        {
+            return invalid(format!(
+                "{} required QA-04 subgoal set is invalid",
                 scenario.scenario_id
             ));
         }

@@ -22,6 +22,7 @@ fn correlation() -> ProductCorrelation {
         dispatch_id: None,
         result_id: None,
         clarification_id: None,
+        ..ProductCorrelation::default()
     }
 }
 

@@ -264,7 +264,8 @@ At minimum:
 4. authoritative Outcome Probe timestamp cannot be replaced by AUT self-report;
 5. Acoustic EOS timestamp cannot be emitted as AUT-authoritative evidence;
 6. route commit without coherent subsequent route evidence is rejected/flagged;
-7. duplicate initial route commits are rejected unless an explicitly versioned recovery transition permits them.
+7. duplicate initial route commits are keyed by subgoal identity: a repeated commit for the same subgoal is rejected, while distinct required subgoal commits in one compound episode are valid;
+8. compound domain execution cannot begin until every observed required initial subgoal route has committed.
 
 ---
 
@@ -296,12 +297,18 @@ The AUT-visible payload may contain product semantics the architecture has actua
 ```text
 ReferentBound(referent_role, resolved_referent_id)
 TaskAssociated(task_relation) + product task_id correlation
-RouteCommitted(ExecutionRoute)
+RouteCommitted(ExecutionRoute, optional subgoal_id)
 ClarificationRequested(reason) / ClarificationResolved(request_turn_id, response_turn_id)
 ResultBound + product task_id/execution_id/result_id correlation
 ```
 
 Product turn/task/execution/result/dispatch/clarification identifiers are allowed when naturally owned by product state. They are not benchmark operation keys.
+
+For a compound request, correlation additionally carries `parent_task_id`,
+`child_task_id`, and `subgoal_id`. The parent identifies the aggregate user-goal;
+each atomic subgoal has a distinct child task. The event payload and correlation
+must agree on `subgoal_id`. The collector does not invent a parent-level route
+commit or a final-boundary flag.
 
 The collector still owns `run_id`, `scenario_id`, `alternative_id`, canonical sequence number, authoritative monotonic timestamp, emitter provenance, and all oracle/constraint expected values.
 

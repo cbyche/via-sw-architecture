@@ -12,12 +12,16 @@ sys.path.insert(0, str(ANALYSIS_ROOT))
 
 
 def correlation(turn="U1", task="T1", execution=None, result=None, clarification=None):
-    return {"turn_id": turn, "task_id": task, "execution_id": execution, "dispatch_id": None, "result_id": result, "clarification_id": clarification}
+    return {
+        "turn_id": turn, "task_id": task, "parent_task_id": None,
+        "child_task_id": None, "subgoal_id": None, "execution_id": execution,
+        "dispatch_id": None, "result_id": result, "clarification_id": clarification,
+    }
 
 
 def event(seq, value, *, emitter="ARCHITECTURE_UNDER_TEST", timestamp=None, scenario="P01", alternative="A", corr=None):
     return {
-        "schema_version": "canonical-event-v2", "event_id": f"E{seq}", "run_id": "run-1",
+        "schema_version": "canonical-event-v3", "event_id": f"E{seq}", "run_id": "run-1",
         "episode_id": "episode-1", "scenario_id": scenario, "scenario_version": "v0.1",
         "alternative_id": alternative, "benchmark_version": "dp00-runtime-pilot-v0",
         "source_git_commit": "test-sha", "sequence_number": seq,
@@ -39,7 +43,7 @@ def success_events(*, scenario="P01", alternative="A", before=50, after=35):
         event(1, "AcousticEos", emitter="INTERACTION_FIXTURE", timestamp=1_000_000, scenario=scenario, alternative=alternative),
         event(2, {"Architecture": "ProcessingStarted"}, timestamp=1_100_000, scenario=scenario, alternative=alternative),
         event(3, {"Architecture": {"TaskAssociated": {"task_relation": "NEW"}}}, timestamp=1_200_000, scenario=scenario, alternative=alternative),
-        event(4, {"Architecture": {"RouteCommitted": {"route": route()}}}, timestamp=1_300_000, scenario=scenario, alternative=alternative),
+        event(4, {"Architecture": {"RouteCommitted": {"route": route(), "subgoal_id": None}}}, timestamp=1_300_000, scenario=scenario, alternative=alternative),
         event(5, {"ExecutionStarted": {"invocation": {"capability_id": "volume.decrease", "executor_id": "ARGO"}}}, emitter="TOOL_FIXTURE", timestamp=1_400_000, scenario=scenario, alternative=alternative, corr=correlation(execution="X1")),
         event(6, {"Architecture": "ResultBound"}, timestamp=1_500_000, scenario=scenario, alternative=alternative, corr=correlation(execution="X1", result="R1")),
         event(7, {"UsefulOutcomeObserved": {"effect": effect(before=before, after=after)}}, emitter="OUTCOME_PROBE", timestamp=2_000_000, scenario=scenario, alternative=alternative, corr=correlation(execution="X1", result="R1")),
@@ -76,7 +80,7 @@ def provenance(*, scenario="P01", alternative="A", profile="Z", official=False, 
         "rust_toolchain": "1.89.0", "rustc_version": "rustc test", "cargo_version": "cargo test", "target": "test-target",
         "build_profile": "qualification-or-release", "tokio_resolved_version": "1.53.1", "runtime_worker_policy": "tokio-current-thread-v0",
         "cargo_lock_identity": "fnv1a64-v1:test", "os": "macos", "machine_architecture": "aarch64",
-        "canonical_event_schema_version": "canonical-event-v2", "model_call_schema_version": "model-call-v1",
+        "canonical_event_schema_version": "canonical-event-v3", "model_call_schema_version": "model-call-v1",
     }
 
 

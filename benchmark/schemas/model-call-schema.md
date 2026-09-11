@@ -279,6 +279,13 @@ The concrete critical-path reconstruction algorithm must be versioned if used fo
 
 QA-04's authoritative end boundary is **Execution Route Commit**.
 
+For a compound request, this means the final commit among the complete
+predeclared set of required initial subgoal routes. A first subgoal commit does
+not close QA-04 while another required initial subgoal is uncommitted. The
+evaluator derives this boundary from subgoal-correlated canonical events; it is
+not represented by a synthetic parent commit or boundary flag. Partial required
+coverage has no numeric boundary and is `ROUTE_REQUIRED_NOT_COMMITTED`.
+
 The ModelCall record must preserve whether that route had already been committed before the call and whether the call caused or crossed that boundary:
 
 ```text

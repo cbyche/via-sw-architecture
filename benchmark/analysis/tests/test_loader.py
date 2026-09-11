@@ -13,7 +13,7 @@ def test_strict_loader_reads_correlated_run(raw_run):
 
 def test_loader_rejects_unsupported_schema(raw_run):
     path = raw_run / "canonical-events.jsonl"
-    path.write_text(path.read_text().replace("canonical-event-v2", "canonical-event-v1", 1))
+    path.write_text(path.read_text().replace("canonical-event-v3", "canonical-event-v1", 1))
     evidence = load_evidence(raw_run)
     assert not evidence.validation.valid
     assert "unsupported schema version" in evidence.validation.errors[0].message

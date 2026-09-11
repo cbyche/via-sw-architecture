@@ -11,6 +11,7 @@ pub enum NormalizedIntent {
     ContinueTask,
     OpenRightDocument,
     AmbiguousDocument,
+    CompoundMediaDownloads,
 }
 pub fn refine<M: ModelPort>(model: &M, context: &ContextPackage) -> Result<NormalizedIntent, String>
 where
@@ -34,7 +35,9 @@ where
     let output = response
         .completed_output()
         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
-    if output.contains("AMBIGUOUS_DOCUMENT") {
+    if output.contains("COMPOUND_MEDIA_DOWNLOADS") {
+        Ok(NormalizedIntent::CompoundMediaDownloads)
+    } else if output.contains("AMBIGUOUS_DOCUMENT") {
         Ok(NormalizedIntent::AmbiguousDocument)
     } else if output.contains("OPEN_RIGHT_DOCUMENT") {
         Ok(NormalizedIntent::OpenRightDocument)

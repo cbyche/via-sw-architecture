@@ -109,7 +109,10 @@ Do not fabricate timestamps for paths that do not have the corresponding stage.
 
 `execution_path_selected_ts`, `execution_owner_confirmed_ts`, and `execution_started_ts` do **not** independently close QA-04.
 
-QA-04 closes at `execution_route_commit_ts`.
+QA-04 closes at `execution_route_commit_ts`. For a compound request this value
+is derived only after all predeclared required initial subgoal routes are
+committed and equals the latest required commit timestamp. A first subgoal
+commit is insufficient; partial coverage leaves the boundary absent.
 
 This matters when an intermediate runtime such as ARGO starts and only later decides to delegate to a specialist.
 
@@ -388,11 +391,17 @@ Detailed ModelCall attributes belong to `benchmark/schemas/model-call-schema.md`
 ### `ExecutionRouteCommitted`
 
 - `execution_route`;
+- parent task/group, child task, and subgoal correlation for compound requests;
 - `final_execution_owner`;
 - `delegated_agent_if_any`;
 - route-commit reason/mechanism;
 - call/dispatch id that caused commitment;
 - whether an intermediate owner had already started.
+
+Distinct subgoal commits in the same episode are not duplicates. A repeated
+commit for the same subgoal is a duplicate. Compound execution begins only
+after the initial route-plan barrier; no parent-level commit or final-boundary
+flag is emitted.
 
 ### `ClarificationRequested`
 

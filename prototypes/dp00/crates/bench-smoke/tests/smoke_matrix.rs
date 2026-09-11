@@ -208,9 +208,9 @@ fn committed_route(events: &[CanonicalEvent]) -> &ExecutionRoute {
     events
         .iter()
         .find_map(|event| match event.event() {
-            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { route }) => {
-                Some(route)
-            }
+            CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                route, ..
+            }) => Some(route),
             _ => None,
         })
         .expect("route committed")

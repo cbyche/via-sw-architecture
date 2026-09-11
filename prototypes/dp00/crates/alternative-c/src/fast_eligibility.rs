@@ -28,7 +28,8 @@ pub fn evaluate(
         | NormalizedIntent::OrganizeDownloads
         | NormalizedIntent::DiagnoseWifi
         | NormalizedIntent::ContinueTask
-        | NormalizedIntent::AmbiguousDocument => None,
+        | NormalizedIntent::AmbiguousDocument
+        | NormalizedIntent::CompoundMediaDownloads => None,
     }?;
     let required_capability = match candidate {
         FastCapability::Volume => "local_volume",

@@ -98,7 +98,11 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
             if provenance["semantic_behavior_plan_version"] != plan["behavior_plan_version"] or plan["scenario_id"] != provenance["scenario_id"]:
                 raise StrictValidationError("run/behavior-plan asset version/ref mismatch")
             if scenario["provenance"]["canonical_event_schema_version"] != provenance["canonical_event_schema_version"]:
-                raise StrictValidationError("scenario/run canonical schema mismatch")
+                if not (
+                    provenance["pilot_corpus_version"] == "v0.1"
+                    and provenance["canonical_event_schema_version"] == "canonical-event-v2"
+                ):
+                    raise StrictValidationError("scenario/run canonical schema mismatch")
             events = _jsonl(directory / "canonical-events.jsonl", validate_canonical_event)
             calls = _jsonl(directory / "model-calls.jsonl", validate_model_call)
             fixture_path = directory / "fixture-events.jsonl"

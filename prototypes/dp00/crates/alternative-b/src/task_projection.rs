@@ -40,4 +40,9 @@ impl TaskProjection {
         self.argo_routes.insert(task_id.clone(), route);
         task_id
     }
+
+    pub fn create_parent(&mut self) -> TaskId {
+        self.next_task += 1;
+        TaskId(format!("B-T{}", self.next_task))
+    }
 }

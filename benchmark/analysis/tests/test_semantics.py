@@ -20,7 +20,14 @@ def test_p04_p05_p06_actual_reconstruction_needs_no_oracle():
     actual = reconstruct_actual(events)
     assert actual.referent_bindings[0]["object_id"] == "doc-right"
     assert actual.task_associations[0]["task_relation"] == "FOLLOW_UP"
-    assert actual.result_bindings[0] == {"result_id": "R1", "task_id": "T1", "execution_id": "X1"}
+    assert actual.result_bindings[0] == {
+        "result_id": "R1",
+        "task_id": "T1",
+        "parent_task_id": None,
+        "child_task_id": None,
+        "subgoal_id": None,
+        "execution_id": "X1",
+    }
     assert actual.clarifications[0]["request_turn_id"] == "U1"
     assert actual.clarifications[0]["response_turn_id"] == "U2"
 
@@ -37,7 +44,7 @@ def test_p09_wrong_candidate_and_p08_p10_failures():
 
 def test_p07_false_fast_uses_actual_route_invocation_and_effect():
     events = [
-        event(1, {"Architecture": {"RouteCommitted": {"route": route("LOCAL_DIRECT", "VIA_LOCAL_VOLUME", "VIA_LOCAL_VOLUME")}}}),
+        event(1, {"Architecture": {"RouteCommitted": {"route": route("LOCAL_DIRECT", "VIA_LOCAL_VOLUME", "VIA_LOCAL_VOLUME"), "subgoal_id": None}}}),
         event(2, {"ExecutionStarted": {"invocation": {"capability_id":"downloads.organize", "executor_id":"VIA_LOCAL_VOLUME"}}}, emitter="TOOL_FIXTURE", corr={"turn_id":"U1","task_id":"T1","execution_id":"X1","dispatch_id":None,"result_id":None,"clarification_id":None}),
         event(3, {"UsefulOutcomeObserved": {"effect": effect("DOWNLOADS_ORGANIZED", "downloads.organize", None, None, "ORGANIZED", "VIA_LOCAL_VOLUME", "downloads")}}, emitter="OUTCOME_PROBE"),
     ]
@@ -45,3 +52,21 @@ def test_p07_false_fast_uses_actual_route_invocation_and_effect():
     assert actual.execution_routes[0]["identity"] == "LOCAL_DIRECT:VIA_FAST"
     assert actual.execution_invocations[0]["executor_id"] == "VIA_LOCAL_VOLUME"
     assert "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS" in actual.derived_predicates
+
+
+def test_local_media_subgoal_does_not_claim_argo_downloads_effect():
+    events = [
+        event(
+            1,
+            {"ExecutionStarted": {"invocation": {"capability_id": "media.pause", "executor_id": "VIA_LOCAL_MEDIA"}}},
+            emitter="TOOL_FIXTURE",
+            corr={"turn_id": "U1", "task_id": "C1", "execution_id": "X1", "dispatch_id": None, "result_id": None, "clarification_id": None},
+        ),
+        event(
+            2,
+            {"UsefulOutcomeObserved": {"effect": effect("DOWNLOADS_ORGANIZED", "downloads.organize", None, None, "ORGANIZED", "ARGO", "downloads")}},
+            emitter="OUTCOME_PROBE",
+        ),
+    ]
+    actual = reconstruct_actual(events)
+    assert "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS" not in actual.derived_predicates

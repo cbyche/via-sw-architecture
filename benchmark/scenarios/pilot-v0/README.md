@@ -58,7 +58,9 @@ ground-truth acoustic EOS offsets. Runtime VAD is explicitly non-authoritative.
 QA-04 route contracts are interpreted by
 `benchmark/contracts/qa04-route-contract-policy-v1.json`. P11 is FORBIDDEN
 because already-produced result delivery authorizes no new domain route. P12 is
-REQUIRED because both domain-execution subgoals need committed routes. OPTIONAL
+REQUIRED with `required_subgoal_ids = [S1, S2]`: both child-task routes must be
+committed before either child begins domain execution. Its QA-04 boundary is
+derived from the later of those required commits, not the first commit. OPTIONAL
 P09 remains a separate diagnostic stratum pending a final comparison rule.
 
 ## Schema and validation policy

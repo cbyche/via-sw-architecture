@@ -849,3 +849,35 @@ Pilot
 ```
 
 No prototype or benchmark result is created by this checkpoint.
+
+---
+
+# 19. Provisional compound-request execution semantics (Session 6.2R)
+
+Status: **provisional architecture decision**, approved for DP-00/P12 runtime
+remediation. This section does not modify an approved requirements baseline.
+
+P12 remains one compound user goal represented by a parent task/group. Its two
+atomic required subgoals, S1 media pause and S2 Downloads organization, are
+distinct child tasks. The parent is aggregate/workflow identity only; domain
+execution belongs to the child tasks.
+
+All required initial child routes must commit before any child begins domain
+execution. This is the **initial route-plan barrier**. Interleaved
+routing/execution is outside the current DP-00/P12 contract and may be studied
+later as a separate architecture alternative if QA-01 latency evidence warrants
+it.
+
+Each route commit preserves episode, parent task, child task, subgoal, route,
+and timestamp identity. Distinct subgoal commits are valid; recommitting the
+same subgoal is a duplicate. No synthetic parent-level commit or final-boundary
+flag is emitted. The QA-04 evaluator checks the predeclared required subgoal set
+and derives the final boundary from the last required commit timestamp. Partial
+coverage yields `ROUTE_REQUIRED_NOT_COMMITTED` and no correctness-qualified
+QA-04 observation.
+
+This decision constrains common product semantics without prescribing one
+shared decomposition component. A/B/C/D retain their existing responsibility
+owners: A's VIA orchestration, B's ARGO-primary control, C's bounded local plus
+Agent-routed hybrid, and D's execution-path selector each materialize the same
+parent/child and barrier obligations through their native control flow.

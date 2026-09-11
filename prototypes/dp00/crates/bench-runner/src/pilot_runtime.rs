@@ -12,7 +12,7 @@ use alternative_d::AdaptiveVia;
 use bench_core::{
     ArchitectureObservation, ArchitectureUnderTest, Clock, ExecutionId, ExecutionPort,
     ExecutionRequest, ExecutionResult, ModelPort, ModelRequest, ModelResponse, MonotonicTimestamp,
-    ObservationPort, ProductCorrelation, ResultId,
+    ObservationPort, ProductCorrelation, ResultId, SubgoalId,
 };
 use bench_events::{
     CanonicalEvent, CanonicalEventKind, EventEmitter, ExecutionInvocation, FailureOutcomeReason,
@@ -89,6 +89,7 @@ struct Inner {
     calls: Mutex<Vec<LogicalModelCall>>,
     fixtures: Mutex<FixtureState>,
     next_model_call_id: AtomicU64,
+    required_subgoal_ids: Vec<SubgoalId>,
 }
 
 #[derive(Clone)]
@@ -169,6 +170,13 @@ impl PilotPorts {
                 calls: Mutex::new(Vec::new()),
                 fixtures: Mutex::new(FixtureState::default()),
                 next_model_call_id: AtomicU64::new(1),
+                required_subgoal_ids: scenario
+                    .qa_eligibility
+                    .qa04
+                    .required_subgoal_ids
+                    .iter()
+                    .map(|value| SubgoalId(value.clone()))
+                    .collect(),
             }),
         }
     }
@@ -326,6 +334,9 @@ impl ExecutionPort for PilotPorts {
         let result_id = ResultId(format!("{}:result:{number}", self.inner.run_id));
         let correlation = ProductCorrelation {
             task_id: Some(request.task_id.clone()),
+            parent_task_id: request.parent_task_id.clone(),
+            child_task_id: request.subgoal_id.as_ref().map(|_| request.task_id.clone()),
+            subgoal_id: request.subgoal_id.clone(),
             execution_id: Some(execution_id.clone()),
             result_id: Some(result_id.clone()),
             ..ProductCorrelation::default()
@@ -381,14 +392,38 @@ impl ExecutionPort for PilotPorts {
 impl EvidenceSource for PilotPorts {
     fn take_raw_evidence(&mut self) -> RawEvidence {
         let events = self.events();
-        let route_commit = events.iter().find(|event| {
-            matches!(
-                event.event(),
-                CanonicalEventKind::Architecture(
-                    bench_core::ArchitectureEvent::RouteCommitted { .. }
+        let commits = events
+            .iter()
+            .filter(|event| {
+                matches!(
+                    event.event(),
+                    CanonicalEventKind::Architecture(
+                        bench_core::ArchitectureEvent::RouteCommitted { .. }
+                    )
                 )
-            )
-        });
+            })
+            .collect::<Vec<_>>();
+        let route_commit = if self.inner.required_subgoal_ids.is_empty() {
+            (commits.len() == 1).then(|| commits[0])
+        } else {
+            let committed = commits
+                .iter()
+                .filter_map(|event| match event.event() {
+                    CanonicalEventKind::Architecture(
+                        bench_core::ArchitectureEvent::RouteCommitted { subgoal_id, .. },
+                    ) => subgoal_id.as_ref(),
+                    _ => None,
+                })
+                .collect::<std::collections::HashSet<_>>();
+            (commits.len() == self.inner.required_subgoal_ids.len()
+                && committed.len() == self.inner.required_subgoal_ids.len()
+                && self
+                    .inner
+                    .required_subgoal_ids
+                    .iter()
+                    .all(|required| committed.contains(required)))
+            .then(|| *commits.last().expect("complete subgoal set has commits"))
+        };
         let mut calls = self
             .inner
             .calls
@@ -687,6 +722,13 @@ fn effect_from_execution_request(
             Some("35".into()),
             Some("CHANGED".into()),
         )
+    } else if action.contains("PauseMedia") || action.contains("PAUSE_MEDIA") {
+        (
+            ObservableEffectType::MediaPaused,
+            Some("media-playback".into()),
+            None,
+            Some("PAUSED".into()),
+        )
     } else if action.contains("OpenRightDocument") || action.contains("OPEN_RIGHT_DOCUMENT") {
         (
             ObservableEffectType::DocumentOpened,
@@ -759,6 +801,8 @@ fn effect_from_execution_request(
 fn capability_from_action(action: &str) -> &'static str {
     if action.contains("LocalVolume") || action.contains("LOCAL_VOLUME") {
         "volume.decrease"
+    } else if action.contains("PauseMedia") || action.contains("PAUSE_MEDIA") {
+        "media.pause"
     } else if action.contains("OpenRightDocument") || action.contains("OPEN_RIGHT_DOCUMENT") {
         "document.open"
     } else if action.contains("ContinueTask") || action.contains("CONTINUE_T1") {

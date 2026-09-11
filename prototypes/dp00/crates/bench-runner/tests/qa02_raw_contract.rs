@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 use bench_core::{ArchitectureEvent, ModelStatus, TaskRelation};
 use bench_events::{
     CanonicalEvent, CanonicalEventKind, FailureOutcomeReason, InstrumentationMode,
-    ModelSemanticValueKind, ObservableEffectType, project_actual_semantic_trace,
+    ModelSemanticValueKind, ObservableEffectType, project_actual_semantic_trace, validate_episode,
 };
 use bench_fixtures::pilot_assets::{
     BehaviorPlanRegistry, FixtureRegistry, OracleRegistry, PilotCorpus, PilotCorpusIndex,
@@ -280,6 +280,117 @@ fn distinct_pilot_effects_and_wrong_local_claim_remain_observable() {
         p07.observable_effects[0].executor_id.as_deref(),
         Some("VIA_LOCAL_VOLUME")
     );
+}
+
+#[test]
+fn p12_compound_routes_cross_the_plan_barrier_and_qualify_qa02_qa04() {
+    let corpus = corpus();
+    for alternative in Alternative::ALL {
+        let execution = execute(&corpus, "P12", alternative);
+        assert_eq!(execution.architecture_error, None, "{}", alternative.id());
+        assert!(
+            validate_episode(&execution.evidence.events).is_empty(),
+            "{} canonical contract violations: {:?}",
+            alternative.id(),
+            validate_episode(&execution.evidence.events)
+        );
+
+        let commits = execution
+            .evidence
+            .events
+            .iter()
+            .enumerate()
+            .filter_map(|(position, event)| match event.event() {
+                CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                    subgoal_id: Some(subgoal_id),
+                    route,
+                }) => Some((position, event, subgoal_id.0.as_str(), route)),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            commits.iter().map(|commit| commit.2).collect::<Vec<_>>(),
+            ["S1", "S2"],
+            "{} commit order",
+            alternative.id()
+        );
+        let parent_ids = commits
+            .iter()
+            .map(|commit| {
+                commit
+                    .1
+                    .product_correlation()
+                    .parent_task_id
+                    .as_ref()
+                    .expect("parent task")
+                    .0
+                    .as_str()
+            })
+            .collect::<HashSet<_>>();
+        let child_ids = commits
+            .iter()
+            .map(|commit| {
+                commit
+                    .1
+                    .product_correlation()
+                    .child_task_id
+                    .as_ref()
+                    .expect("child task")
+                    .0
+                    .as_str()
+            })
+            .collect::<HashSet<_>>();
+        assert_eq!(parent_ids.len(), 1, "{} parent group", alternative.id());
+        assert_eq!(child_ids.len(), 2, "{} child tasks", alternative.id());
+        assert_ne!(commits[0].1.event_id(), commits[1].1.event_id());
+
+        let execution_positions = execution
+            .evidence
+            .events
+            .iter()
+            .enumerate()
+            .filter_map(|(position, event)| {
+                matches!(event.event(), CanonicalEventKind::ExecutionStarted { .. })
+                    .then_some(position)
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(execution_positions.len(), 2);
+        assert!(
+            execution_positions[0] > commits[1].0,
+            "{} execution crossed the route-plan barrier early",
+            alternative.id()
+        );
+
+        let trace = project_actual_semantic_trace(&execution.evidence.events);
+        assert_eq!(trace.committed_routes.len(), 2);
+        assert!(trace.committed_routes.iter().all(|route| {
+            route.initial_executor_id.0 == "ARGO"
+                || (route.route_kind == bench_core::ExecutionRouteKind::LocalDirect
+                    && route.initial_executor_id.0.starts_with("VIA_LOCAL"))
+        }));
+        assert_eq!(trace.result_bindings.len(), 2);
+        assert!(trace.execution_invocations.iter().all(|invocation| {
+            invocation.capability_id != "downloads.organize" || invocation.executor_id == "ARGO"
+        }));
+        assert_eq!(trace.observable_effects.len(), 2);
+        assert!(trace.observable_effects.iter().any(|effect| {
+            effect.effect_type == ObservableEffectType::MediaPaused
+                && effect.capability_id.as_deref() == Some("media.pause")
+                && effect.state.as_deref() == Some("PAUSED")
+        }));
+        assert!(trace.observable_effects.iter().any(|effect| {
+            effect.effect_type == ObservableEffectType::DownloadsOrganized
+                && effect.capability_id.as_deref() == Some("downloads.organize")
+                && effect.executor_id.as_deref() == Some("ARGO")
+        }));
+
+        let final_boundary = commits[1].1.event_id();
+        assert!(!execution.evidence.model_calls.is_empty());
+        assert!(execution.evidence.model_calls.iter().all(|call| {
+            call.qa04_primary_included
+                && call.route_commit_event_id.as_deref() == Some(final_boundary)
+        }));
+    }
 }
 
 #[test]

@@ -77,6 +77,8 @@ fn p11_and_p12_complete_r8_r9_with_predeclared_route_contracts() {
         p12.qa_eligibility.qa04.route_commit_expectation,
         RouteCommitExpectation::Required
     );
+    assert!(p11.qa_eligibility.qa04.required_subgoal_ids.is_empty());
+    assert_eq!(p12.qa_eligibility.qa04.required_subgoal_ids, ["S1", "S2"]);
     assert_eq!(format!("{:?}", p11.scenario_class), "R8");
     assert_eq!(format!("{:?}", p12.scenario_class), "R9");
 }

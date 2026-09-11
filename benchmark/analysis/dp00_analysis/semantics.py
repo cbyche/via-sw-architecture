@@ -52,7 +52,12 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
         if variant == "ReferentBound" and event["emitter"] == "ARCHITECTURE_UNDER_TEST":
             referents.append({"role": payload["referent_role"].lower(), "object_id": payload["resolved_referent_id"], "turn_id": corr["turn_id"]})
         elif variant == "TaskAssociated" and event["emitter"] == "ARCHITECTURE_UNDER_TEST":
-            tasks.append({"task_relation": payload["task_relation"], "task_id": corr["task_id"], "turn_id": corr["turn_id"]})
+            tasks.append({
+                "task_relation": payload["task_relation"], "task_id": corr["task_id"],
+                "parent_task_id": corr.get("parent_task_id"),
+                "child_task_id": corr.get("child_task_id"),
+                "subgoal_id": corr.get("subgoal_id"), "turn_id": corr["turn_id"],
+            })
         elif variant == "RouteCandidateObserved":
             candidates.append(payload["route"])
         elif variant == "RouteCandidateRejected":
@@ -62,10 +67,17 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
             route["identity"] = route_identity(route)
             route["event_id"] = event["event_id"]
             route["timestamp"] = event["monotonic_timestamp"]
+            route["subgoal_id"] = payload.get("subgoal_id")
+            route["parent_task_id"] = corr.get("parent_task_id")
+            route["child_task_id"] = corr.get("child_task_id")
             routes.append(route)
         elif variant == "ExecutionStarted":
             item = dict(payload["invocation"])
-            item.update({"task_id": corr["task_id"], "execution_id": corr["execution_id"], "timestamp": event["monotonic_timestamp"]})
+            item.update({
+                "task_id": corr["task_id"], "parent_task_id": corr.get("parent_task_id"),
+                "child_task_id": corr.get("child_task_id"), "subgoal_id": corr.get("subgoal_id"),
+                "execution_id": corr["execution_id"], "timestamp": event["monotonic_timestamp"],
+            })
             invocations.append(item)
         elif variant == "ClarificationRequested":
             item = {"requested": True, "resolved": False, "request_turn_id": corr["turn_id"], "response_turn_id": None, "reason": payload["reason"], "request_timestamp": event["monotonic_timestamp"], "resolve_timestamp": None}
@@ -75,7 +87,12 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
             item = pending[-1] if pending else {"requested": False}
             item.update({"resolved": True, "request_turn_id": payload["request_turn_id"], "response_turn_id": payload["response_turn_id"], "resolve_timestamp": event["monotonic_timestamp"]})
         elif variant == "ResultBound":
-            results.append({"result_id": corr["result_id"], "task_id": corr["task_id"], "execution_id": corr["execution_id"]})
+            results.append({
+                "result_id": corr["result_id"], "task_id": corr["task_id"],
+                "parent_task_id": corr.get("parent_task_id"),
+                "child_task_id": corr.get("child_task_id"), "subgoal_id": corr.get("subgoal_id"),
+                "execution_id": corr["execution_id"],
+            })
         elif variant == "UsefulOutcomeObserved" and event["emitter"] == "OUTCOME_PROBE":
             effect = dict(payload["effect"])
             effect["timestamp"] = event["monotonic_timestamp"]
@@ -114,7 +131,11 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
         predicates.add("RECOVERED_TO_NETWORK")
     if "MailAgent" in executed and any(e["effect_type"] in {"WIFI_STATUS_OBSERVED", "DIAGNOSIS_STARTED"} for e in effects):
         predicates.add("MAIL_AGENT_EXECUTED_WIFI_REQUEST")
-    if any(i["executor_id"].startswith("VIA_LOCAL") for i in invocations) and any(e["effect_type"] == "DOWNLOADS_ORGANIZED" for e in effects):
+    if any(
+        e["effect_type"] == "DOWNLOADS_ORGANIZED"
+        and (e.get("executor_id") or "").startswith("VIA_LOCAL")
+        for e in effects
+    ):
         predicates.add("LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS")
     if any(
         e.get("capability_id") == "media.pause" and e.get("state") == "PAUSED"
@@ -122,7 +143,21 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
     ):
         predicates.add("MEDIA_PAUSED")
     capabilities = {e.get("capability_id") for e in effects}
-    if {"media.pause", "downloads.organize"} <= capabilities and len(routes) >= 2:
+    committed_subgoals = {
+        route.get("subgoal_id") for route in routes if route.get("subgoal_id") is not None
+    }
+    child_tasks = {
+        route.get("child_task_id") for route in routes if route.get("child_task_id") is not None
+    }
+    parent_tasks = {
+        route.get("parent_task_id") for route in routes if route.get("parent_task_id") is not None
+    }
+    if (
+        {"media.pause", "downloads.organize"} <= capabilities
+        and len(committed_subgoals) >= 2
+        and len(child_tasks) >= 2
+        and len(parent_tasks) == 1
+    ):
         predicates.add("COMPOUND_SUBGOALS_DECOMPOSED")
     if len(routes) == 1 and len(results) == 1 and capabilities == {"files.general"}:
         predicates.add("COMPOUND_COLLAPSED_TO_SINGLE_GENERIC_TASK")
