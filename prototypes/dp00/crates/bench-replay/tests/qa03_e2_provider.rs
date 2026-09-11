@@ -55,7 +55,10 @@ fn replay_model_v2_is_selected_and_preserves_semantics_and_provenance() {
     let response = provider.generate(request()).expect("generation");
     assert_eq!(response.composite_output, "GENERAL_FILE_WORK");
     assert_eq!(response.model_status, ModelStatus::Completed);
-    assert_eq!(provider.audit_snapshot()[0].decision_owner.0, "A.IntentRefiner");
+    assert_eq!(
+        provider.audit_snapshot()[0].decision_owner.0,
+        "A.IntentRefiner"
+    );
 }
 
 #[test]
@@ -67,4 +70,3 @@ fn existing_replay_provider_remains_selectable_and_unchanged() {
         "GENERAL_FILE_WORK"
     );
 }
-
