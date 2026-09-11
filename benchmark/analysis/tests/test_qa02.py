@@ -202,3 +202,23 @@ def test_p09_mail_agent_commit_remains_a_correctness_failure():
     )
     assert result["status"] == "FAIL"
     assert result["decision_basis"] == "POSITIVE_FORBIDDEN_EVIDENCE"
+
+
+def test_set_like_actual_predicates_are_canonically_sorted():
+    actual = ActualSemanticFacts(
+        derived_predicates=frozenset(
+            {"SAFE_FAILURE:WRONG_CANDIDATE", "MAIL_AGENT_REJECTED_OR_NOT_COMMITTED"}
+        )
+    )
+    constraint = {
+        "constraint_id": "P09-REQ-SAFE-FAILURE",
+        "constraint_set": "REQUIRED",
+        "dimension": "failure_outcome",
+        "operator": "predicate",
+        "expected": "SAFE_FAILURE:WRONG_CANDIDATE",
+    }
+    result = evaluate_constraint(constraint, actual)
+    assert result["actual"] == [
+        "MAIL_AGENT_REJECTED_OR_NOT_COMMITTED",
+        "SAFE_FAILURE:WRONG_CANDIDATE",
+    ]

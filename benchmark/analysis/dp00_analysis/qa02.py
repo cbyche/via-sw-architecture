@@ -110,13 +110,13 @@ def _actual_values(actual: ActualSemanticFacts, dimension: str) -> tuple[list[An
             values.append(
                 {"object_id": effect["subject_id"], "state": effect["state"]}
             )
-        values.extend(actual.derived_predicates)
+        values.extend(sorted(actual.derived_predicates))
         return values, bool(values)
     if dimension == "failure_outcome":
-        values = list(actual.derived_predicates)
+        values = sorted(actual.derived_predicates)
         return _deduplicate(values), bool(values)
     if dimension == "routing":
-        values = list(actual.derived_predicates)
+        values = sorted(actual.derived_predicates)
         values.extend(route["identity"] for route in actual.execution_routes)
         return _deduplicate(values), bool(values)
     return [], False
