@@ -119,6 +119,7 @@ impl ResponsibilityMapping {
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum ReplayError {
+    UnknownProvider(String),
     ResponsibilityViolation,
     OperationNotFound(SemanticResponsibility),
     AttemptExhausted(SemanticResponsibility),
@@ -146,6 +147,59 @@ pub struct ReplayAdapter {
     mapping: ResponsibilityMapping,
     operations: HashMap<SemanticResponsibility, Vec<ReplayOperation>>,
     state: Mutex<ReplayState>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum ReplayProviderId {
+    ReplayModelV1,
+    ReplayModelV2,
+}
+
+pub struct ConfiguredReplayProvider {
+    provider_id: ReplayProviderId,
+    adapter: ReplayAdapter,
+}
+
+impl ConfiguredReplayProvider {
+    pub fn new(
+        selection: &str,
+        context: ReplayContext,
+        mapping: ResponsibilityMapping,
+        operations: impl IntoIterator<Item = ReplayOperation>,
+    ) -> Result<Self, ReplayError> {
+        let provider_id = match selection {
+            "REPLAY_MODEL_V1" => ReplayProviderId::ReplayModelV1,
+            "REPLAY_MODEL_V2" => ReplayProviderId::ReplayModelV2,
+            value => return Err(ReplayError::UnknownProvider(value.to_owned())),
+        };
+        Ok(Self {
+            provider_id,
+            adapter: ReplayAdapter::new(context, mapping, operations),
+        })
+    }
+
+    #[must_use]
+    pub fn provider_id(&self) -> ReplayProviderId {
+        self.provider_id
+    }
+
+    #[must_use]
+    pub fn context(&self) -> &ReplayContext {
+        self.adapter.context()
+    }
+
+    #[must_use]
+    pub fn audit_snapshot(&self) -> Vec<ReplayAuditEntry> {
+        self.adapter.audit_snapshot()
+    }
+}
+
+impl ModelPort for ConfiguredReplayProvider {
+    type Error = ReplayError;
+
+    fn generate(&self, request: ModelRequest) -> Result<ModelResponse, Self::Error> {
+        self.adapter.generate(request)
+    }
 }
 
 impl ReplayAdapter {
