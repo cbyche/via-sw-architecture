@@ -13,6 +13,13 @@ pub fn select<M: ModelPort>(
 where
     M::Error: std::fmt::Debug,
 {
+    let local_document_allowed = matches!(intent, NormalizedIntent::OpenRightDocument)
+        && policies
+            .iter()
+            .any(|fact| fact.key == "local_execution" && fact.value == "allowed")
+        && capabilities
+            .iter()
+            .any(|fact| fact.key == "fast_capability" && fact.value == "local_document_open");
     let response = model
         .generate(ModelRequest {
             decision_owner: DecisionOwner::from("D.ExecutionPathSelector"),
@@ -34,7 +41,9 @@ where
         .completed_output()
         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
-    let (kind, executor) = if output.contains("LOCAL_VOLUME") {
+    let (kind, executor) = if local_document_allowed {
+        (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_DOCUMENT")
+    } else if output.contains("LOCAL_VOLUME") {
         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_VOLUME")
     } else if output.contains("LOCAL_DOCUMENT") {
         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_DOCUMENT")

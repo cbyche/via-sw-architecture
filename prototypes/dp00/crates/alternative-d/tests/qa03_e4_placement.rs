@@ -14,7 +14,10 @@ struct Model(Arc<Mutex<VecDeque<String>>>);
 impl Model {
     fn scripted() -> Self {
         Self(Arc::new(Mutex::new(
-            ["OPEN_RIGHT_DOCUMENT", "ARGO"].into_iter().map(str::to_owned).collect(),
+            ["OPEN_RIGHT_DOCUMENT", "ARGO"]
+                .into_iter()
+                .map(str::to_owned)
+                .collect(),
         )))
     }
 }
@@ -90,4 +93,3 @@ fn permitted_document_open_is_local_and_disabled_request_keeps_fallback() {
     let fallback = run(false);
     assert_ne!(fallback.route.route_kind, ExecutionRouteKind::LocalDirect);
 }
-
