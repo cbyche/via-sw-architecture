@@ -353,6 +353,88 @@ fn coverage_manifest_matches_every_pilot_qa02_constraint() {
 }
 
 #[test]
+fn path_aware_coverage_manifest_has_all_144_constraint_alternative_cells() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let oracle: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("benchmark/oracles/pilot-v0/oracles.json")).expect("oracle registry"),
+    )
+    .expect("oracle parse");
+    let map: serde_json::Value = serde_json::from_slice(
+        &fs::read(
+            root.join("benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json"),
+        )
+        .expect("path-aware coverage map"),
+    )
+    .expect("path-aware coverage map parse");
+    let expected: HashMap<_, _> = oracle["oracles"]
+        .as_array()
+        .expect("oracles")
+        .iter()
+        .flat_map(|oracle| {
+            let scenario_id = oracle["scenario_id"].as_str().unwrap();
+            oracle["constraint_manifest"]["constraints"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(move |constraint| {
+                    (
+                        constraint["constraint_id"].as_str().unwrap(),
+                        (
+                            scenario_id,
+                            constraint["dimension"].as_str().unwrap(),
+                            constraint["constraint_set"].as_str().unwrap(),
+                        ),
+                    )
+                })
+        })
+        .collect();
+    let cells = map["cells"].as_array().expect("coverage cells");
+    let identities: HashSet<_> = cells
+        .iter()
+        .map(|cell| {
+            (
+                cell["constraint_id"].as_str().unwrap(),
+                cell["alternative"].as_str().unwrap(),
+            )
+        })
+        .collect();
+    assert_eq!(map["actual_values_included"], false);
+    assert_eq!(map["constraint_count"], 36);
+    assert_eq!(map["expected_coverage_cells"], 144);
+    assert_eq!(cells.len(), 144);
+    assert_eq!(identities.len(), 144, "duplicate path-aware coverage cell");
+    for constraint_id in expected.keys() {
+        for alternative in ["A", "B", "C", "D"] {
+            assert!(identities.contains(&(*constraint_id, alternative)));
+        }
+    }
+    for cell in cells {
+        let constraint_id = cell["constraint_id"].as_str().unwrap();
+        let (scenario, dimension, constraint_set) = expected[constraint_id];
+        assert_eq!(cell["scenario_id"], scenario);
+        assert_eq!(cell["dimension"], dimension);
+        assert!(!cell["derivation_rule_id"].as_str().unwrap().is_empty());
+        assert!(
+            cell["actual_evidence_strategies"]
+                .as_array()
+                .is_some_and(|strategies| !strategies.is_empty())
+        );
+        let absence = &cell["absence_semantics"];
+        assert_eq!(absence["allowed"], constraint_set == "FORBIDDEN");
+        if constraint_set == "FORBIDDEN" {
+            assert_eq!(absence["rule_id"], "CLOSED_WORLD_ABSENCE");
+            assert_eq!(
+                absence["completeness_conditions"]
+                    .as_array()
+                    .expect("closed-world conditions")
+                    .len(),
+                5
+            );
+        }
+    }
+}
+
+#[test]
 fn p01_transition_is_raw_directional_and_preserves_wrong_actual() {
     let corpus = runtime_corpus_without_oracles();
     let trace =

@@ -841,6 +841,28 @@ ADR
 
 Changing Python derivation/scoring logic does not rewrite raw Rust evidence.
 
+Session 4.1 diagnostic evidence:
+
+- `AA-013-dp00-path-aware-evidence-readiness-review.md`;
+- `benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json`;
+- `results/reports/pilot-v0/official-1789087890289040000-invalidation.json`;
+- `results/reports/pilot-v0/official-1789087890289040000-sha256-inventory.json`.
+
+Report-ready narrative:
+
+```text
+Static constraint-level audit
+        ↓
+Official Pilot exposed topology-specific evidence gap
+        ↓
+constraint × alternative coverage gate introduced
+        ↓
+missing evidence prevented from becoming silent correctness score
+```
+
+The invalidated campaign's metric values are diagnostic only and must not be
+indexed as architecture results.
+
 ---
 
 # 24. Scored QA vs Mandatory Gates

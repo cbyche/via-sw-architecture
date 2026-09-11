@@ -91,3 +91,11 @@ The added timed-path work is limited to compact strings/integers in typed values
 | Python Session 3 Readiness | PASS, subject to the full repository regression recorded with the implementing commits |
 
 AA-011 remains unchanged as historical evidence of the earlier methodology. This amendment records the counterexample, exhaustive replacement audit, and revised basis for readiness.
+
+## Subsequent limitation discovered by Official Pilot
+
+Session 4 later demonstrated that a constraint-only 36-row audit does not prove
+decidability on each architecture path. See AA-013 for the preserved invalidated
+campaign, the 16-case forensic analysis, closed-world absence semantics, and the
+replacement 36×4 coverage gate. This section records the limitation without
+rewriting the historical Session 2.6 verdict.
