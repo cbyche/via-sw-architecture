@@ -1058,6 +1058,37 @@ No Best Architecture, winner, recommendation, final DP-00 decision or 0–5 scor
 
 ---
 
+# 29. DP-00 Targeted Calibration Follow-up — R8/R9 and QA-04 Contract
+
+Primary methodology evidence:
+
+- `docs/architecture/analysis/AA-015-dp00-r8-r9-and-qa04-contract-policy.md`;
+- corpus v0.2 P11/R8 and P12/R9 assets under `benchmark/`;
+- `benchmark/contracts/pilot-v0.2-constraint-alternative-evidence-map.json` (`dp00-path-aware-evidence-v2`);
+- `benchmark/contracts/qa04-route-contract-policy-v1.json`;
+- `dp00-analysis-v3` candidate-only `qa04_contract_diagnostics`.
+
+The Pilot exposed incomplete R1–R10 coverage and large no-route populations.
+This follow-up adds R8/R9 from the pre-existing taxonomy, makes route contracts
+explicit, rejects arbitrary no-route penalties, and introduces a contract-aware
+comparability qualification so cheap required-route failure cannot look
+efficient. This is methodology evidence, not an A/B/C/D ranking. Existing
+Official v0.1 raw and derived evidence remains unchanged and continues to use
+the 36×4 v1 manifest.
+
+Current conclusion:
+
+```text
+R1–R10 coverage                  PASS
+v0.2 path-aware gate             PASS (188/188; MISSING 0; UNEVALUABLE 0)
+QA-04 contract taxonomy          FREEZE
+arbitrary no-route penalty       REJECT
+OPTIONAL and overall vs macro    DEFER
+Final benchmark/version freeze   NOT READY
+```
+
+---
+
 # Reviewer Question → Evidence Map
 
 | Reviewer question | Primary evidence |

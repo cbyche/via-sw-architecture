@@ -653,3 +653,23 @@ QA-04 therefore measures one architecture consequence of execution-capability pl
 - concrete serialization format for model-call telemetry;
 - final model/prompt/cache profile set for controlled qualification;
 - final QA numbering/rebaseline after QA-01~QA-04 integration.
+
+## DP-00 calibration contract overlay
+
+AA-015 and `benchmark/contracts/qa04-route-contract-policy-v1.json` refine the
+episode-eligibility candidate without renaming or numerically redefining this
+Primary Metric. Scenario contracts are predeclared as REQUIRED, OPTIONAL, or
+FORBIDDEN and are kept distinct from observed route behavior.
+
+The frozen candidate core is:
+
+- REQUIRED no-route remains non-numeric and fails the group-level primary
+  comparability qualification;
+- FORBIDDEN is excluded from the Primary population and retains pre-terminal
+  model calls as diagnostics; a commit is a contract violation;
+- arbitrary numeric no-route penalties are rejected;
+- QA-02 conformance is a separate qualification input, and QA-02 PASS alone
+  never proves that a required route was committed.
+
+OPTIONAL within-stratum comparison and overall-versus-macro aggregation remain
+TBD before final freeze.
