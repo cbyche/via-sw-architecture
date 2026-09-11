@@ -19,4 +19,3 @@ fn optional_resource_class_is_backward_compatible_and_round_trips() {
         descriptor
     );
 }
-
