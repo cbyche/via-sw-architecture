@@ -191,6 +191,15 @@ def derive_paired_calibration(
             if not (semantic_match and qa02_match and qa04_match):
                 semantic_mismatches.append(pair_id)
             item.update({
+                "cycle": capture.provenance["order_cycle"],
+                "scenario": capture.provenance["scenario_id"],
+                "alternative": capture.provenance["alternative"],
+                "position": capture.provenance["order_slot"],
+                "first_mode": (
+                    capture.provenance["instrumentation_mode"]
+                    if capture.provenance["mode_order_slot"] == 0
+                    else minimal.provenance["instrumentation_mode"]
+                ),
                 "provenance_match": provenance_match,
                 "semantic_match": semantic_match,
                 "qa02_match": qa02_match,

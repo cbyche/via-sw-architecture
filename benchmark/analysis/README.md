@@ -2,7 +2,7 @@
 
 This package performs deterministic post-run analysis of immutable Rust raw evidence. Python is not an AUT dependency, never enters the Rust timed execution path, makes no architecture decision, and never rewrites `results/raw/**`. Derived files belong under `results/derived/**`.
 
-`dp00-analysis-v6` validates the current `canonical-event-v3`, `model-call-v1`, `dp00-pilot-provenance-v4`, `dp00-calibration-manifest-v1`, and `dp00-pilot-campaign-provenance-v1` contracts while retaining read support for immutable v2/v3 provenance/event evidence. Required fields, unknown fields, invalid enums, absent/unsupported versions, and asset reference/version mismatches are errors; no implicit defaults or migrations are applied. v6 retains v5 QA and paired semantics and adds strict counterbalanced calibration schedule validation.
+`dp00-analysis-v7` validates the current `canonical-event-v3`, `model-call-v1`, `dp00-pilot-provenance-v4`, `dp00-calibration-manifest-v1`, and `dp00-pilot-campaign-provenance-v1` contracts while retaining read support for immutable v2/v3 provenance/event evidence. Required fields, unknown fields, invalid enums, absent/unsupported versions, and asset reference/version mismatches are errors; no implicit defaults or migrations are applied. v7 retains v6 schedule semantics and adds the prospective `dp00-calibration-acceptance-v1` stability gate and paired bootstrap diagnostics.
 
 QA-01 derives exact integer nanosecond FTOL as authoritative Outcome Probe useful-outcome time minus Interaction Fixture acoustic EOS time, only for manifest-eligible successful episodes. Human-facing milliseconds are derived afterward. Both explicit nearest-rank and `(n-1)` linear-interpolated p50/p95/p99 candidates and small-N sensitivity are emitted; the final percentile estimator remains TBD.
 
@@ -28,3 +28,14 @@ PYTHONPATH=benchmark/analysis .venv/bin/python -m dp00_analysis summary <derived
 ```
 
 `analysis-summary.json` contains `analysis_version`, validation errors/warnings, QA-01 counts/estimators/per-scenario diagnostics, QA-02 AECR/constraint/dimension/coverage diagnostics, QA-04 per-episode/overall/macro/class/no-route diagnostics, paired-calibration completeness/invariance diagnostics, counterbalanced-schedule diagnostics, and analysis provenance. Identical raw evidence, analysis version, and method configuration produce byte-deterministic sorted JSON output apart from the explicitly recorded interpreter/environment provenance.
+
+For a complete v1 calibration manifest, `calibration_acceptance` uses only complete,
+semantically/provenance-matched, QA-01 exact-correctness-qualified pairs. Its frozen
+baseline `M` is the pooled MINIMAL linear-interpolated p50 and every gate uses the
+absolute `0.05 × M` margin. CAPTURE and MINIMAL independently require both the
+cycles 8–15 minus cycles 0–7 p50 shift and the Theil–Sen cycle-0-to-15 predicted
+shift to be within that margin. Mode-order interaction is the absolute difference
+between median paired deltas for CAPTURE-first and MINIMAL-first populations.
+Bootstrap intervals use 10,000 pair-preserving, half/first-mode-stratified draws
+with seed `20260911`; they are diagnostic only and never affect a gate. The
+machine-readable source is `benchmark/contracts/dp00-calibration-acceptance-v1.json`.

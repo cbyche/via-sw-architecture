@@ -13,11 +13,13 @@ from .qa02 import derive_qa02
 from .qa04 import derive_qa04
 from .paired import derive_paired_calibration
 from .calibration import calibration_schedule_diagnostics
+from .acceptance import derive_calibration_acceptance
 
 
 def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
     qa02 = derive_qa02(evidence.episodes, evidence.coverage_map)
     qa04 = derive_qa04(evidence.episodes, qa02)
+    paired = derive_paired_calibration(evidence.episodes, qa02)
     return {
         "analysis_version": ANALYSIS_VERSION,
         "validation": {
@@ -28,9 +30,14 @@ def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
         "qa01": derive_qa01(evidence.episodes),
         "qa02": qa02,
         "qa04": qa04,
-        "paired_calibration": derive_paired_calibration(evidence.episodes, qa02),
+        "paired_calibration": paired,
         "calibration_schedule": calibration_schedule_diagnostics(
             evidence.calibration_manifest, evidence.episodes
+        ),
+        "calibration_acceptance": derive_calibration_acceptance(
+            paired,
+            evidence.calibration_manifest,
+            schedule_valid=evidence.validation.valid,
         ),
         "provenance": {
             "analysis_language": "python", "python_interpreter_version": platform.python_version(),
@@ -41,6 +48,7 @@ def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
                 "percentiles": ["nearest-rank", "linear-interpolated-(n-1)"],
                 "qa04_aggregates": ["overall-episode-mean", "scenario-class-macro-average"],
                 "qa04_contract_policy": "qa04-route-contract-policy-v1",
+                "calibration_acceptance": "dp00-calibration-acceptance-v1",
             },
         },
     }
