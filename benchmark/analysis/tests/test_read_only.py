@@ -14,5 +14,5 @@ def test_validate_derive_summary_do_not_modify_raw(raw_run, tmp_path):
     evidence = load_evidence(raw_run)
     output = write_summary(tmp_path / "derived", derive_summary(evidence))
     assert output.name == "analysis-summary.json"
-    assert read_summary(output.parent)["analysis_version"] == "dp00-analysis-v0"
+    assert read_summary(output.parent)["analysis_version"] == "dp00-analysis-v1"
     assert hashes(raw_run) == before

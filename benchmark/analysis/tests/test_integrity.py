@@ -20,6 +20,15 @@ def test_multiple_commit_missing_terminal_and_outcome_order_detected():
     assert "MULTIPLE_INITIAL_ROUTE_COMMITS" in codes(events)
     no_terminal = success_events()[:-1]
     assert "MISSING_OR_CONFLICTING_TERMINAL" in codes(no_terminal)
+
+
+def test_terminal_must_be_final_for_closed_world_evidence():
+    events = success_events()
+    events[-1], events[-2] = events[-2], events[-1]
+    for index, event in enumerate(events):
+        event["sequence_number"] = index
+        event["monotonic_timestamp"] = index
+    assert "TERMINAL_NOT_FINAL" in codes(events)
     bad = success_events()
     bad[6]["monotonic_timestamp"] = bad[4]["monotonic_timestamp"] - 1
     bad.sort(key=lambda x: x["monotonic_timestamp"])

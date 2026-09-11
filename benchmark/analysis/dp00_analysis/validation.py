@@ -375,6 +375,8 @@ def cross_stream_issues(provenance: dict[str, Any], events: Iterable[dict[str, A
     terminals = [v for v in variants if v in {"EpisodeCompleted", "EpisodeFailed"}]
     if len(terminals) != 1:
         issues.append(ValidationIssue("MISSING_OR_CONFLICTING_TERMINAL", f"terminal count {len(terminals)}"))
+    elif variants[-1] not in {"EpisodeCompleted", "EpisodeFailed"}:
+        issues.append(ValidationIssue("TERMINAL_NOT_FINAL", "terminal event is not final"))
     if "EpisodeCompleted" in terminals and sum(v == "RouteCommitted" for v in variants) != 1:
         issues.append(ValidationIssue("COMPLETED_WITHOUT_ROUTE_COMMIT", "completed episode requires one route commit"))
     outcome_pos = next((i for i, v in enumerate(variants) if v == "UsefulOutcomeObserved"), None)

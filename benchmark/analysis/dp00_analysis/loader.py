@@ -53,7 +53,10 @@ def _catalog(root: Path, include_oracles: bool) -> tuple[dict[str, dict[str, Any
         oracles = {o["scenario_id"]: o for o in oracles_registry["oracles"]}
     else:
         oracles = {}
-    coverage = _json(root / "benchmark/contracts/pilot-v0-constraint-evidence-map.json")
+    coverage = _json(
+        root
+        / "benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json"
+    )
     return scenarios, plans, {"oracles": oracles, "coverage": coverage}
 
 
