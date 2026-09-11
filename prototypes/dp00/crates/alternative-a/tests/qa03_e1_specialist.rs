@@ -85,15 +85,22 @@ fn document_summary_agent_is_discoverable_routes_executes_and_binds_result() {
     let requests = executor.0.lock().unwrap();
     assert_eq!(requests.len(), 1);
     assert_eq!(
-        requests[0].route.final_executor_id_if_known.as_ref().unwrap().0,
+        requests[0]
+            .route
+            .final_executor_id_if_known
+            .as_ref()
+            .unwrap()
+            .0,
         "DocumentSummaryAgent"
     );
-    assert!(observations
-        .0
-        .lock()
-        .unwrap()
-        .iter()
-        .any(|item| item.event == ArchitectureEvent::ResultBound));
+    assert!(
+        observations
+            .0
+            .lock()
+            .unwrap()
+            .iter()
+            .any(|item| item.event == ArchitectureEvent::ResultBound)
+    );
 }
 
 #[test]

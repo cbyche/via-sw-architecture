@@ -34,7 +34,13 @@ where
         .completed_output()
         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
-    if output.contains("NETWORK_AGENT") {
+    if output.contains("DOCUMENT_SUMMARY_AGENT")
+        && capabilities
+            .iter()
+            .any(|fact| fact.key == "executor" && fact.value == "DocumentSummaryAgent")
+    {
+        Ok(ExecutorId::from("DocumentSummaryAgent"))
+    } else if output.contains("NETWORK_AGENT") {
         Ok(ExecutorId::from("NetworkAgent"))
     } else if output.contains("ARGO") {
         Ok(ExecutorId::from("ARGO"))
