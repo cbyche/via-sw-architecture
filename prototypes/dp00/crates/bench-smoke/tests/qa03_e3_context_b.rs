@@ -91,4 +91,3 @@ fn active_window_title_maps_once_with_provenance_and_is_consumed_by_context_seam
     assert!(semantic_input.contains("Architecture.md"));
     assert!(semantic_input.contains("ACTIVE_WINDOW_TITLE"));
 }
-
