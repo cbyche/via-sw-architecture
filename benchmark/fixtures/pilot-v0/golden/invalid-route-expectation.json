@@ -1,0 +1,126 @@
+{
+  "schema_version": "runtime-scenario-pilot-v0",
+  "asset_id": "P11",
+  "asset_version": "v0.2",
+  "scenario_id": "P11",
+  "scenario_version": "v0.2",
+  "catalog_scenario_ref": "R8-001",
+  "catalog_version": "runtime-scenario-catalog-pre-pilot",
+  "title": "Interleaved T1/T2 results retain task identity",
+  "scenario_class": "R8",
+  "architecture_sensitivity_tags": [
+    "CONCURRENCY",
+    "RESULT_BINDING"
+  ],
+  "description": "Deliver two already-produced task results in interleaved arrival order while preserving T1/T2 identity; no new domain execution route is semantically authorized.",
+  "qa_eligibility": {
+    "qa01": {
+      "eligible": false,
+      "exclusion_reason": "CONCURRENT_RESULT_DELIVERY_NOT_FAST_TASK_POPULATION"
+    },
+    "qa02": {
+      "eligible": true,
+      "exclusion_reason": "NOT_APPLICABLE"
+    },
+    "qa04": {
+      "eligible": true,
+      "route_commit_expectation": "WHEN_CONVENIENT",
+      "exclusion_reason": "NOT_APPLICABLE"
+    },
+    "mandatory_gate_refs": []
+  },
+  "stimulus": {
+    "interaction": [
+      {
+        "turn_id": "U1",
+        "modality": "TEXT",
+        "text_fixture": "먼저 끝난 문서 요약 결과와 이어서 도착한 Wi-Fi 진단 결과를 각각 해당 작업에 연결해서 알려줘.",
+        "audio_fixture_ref": "NONE",
+        "acoustic_eos_fixture_ref": "NONE",
+        "input_available_offset_micros": 0,
+        "deterministic_user_replies": [],
+        "fixture_version": "v1"
+      }
+    ],
+    "context_evidence_ref": {
+      "asset_id": "CTX-NONE-v1",
+      "asset_version": "v1"
+    },
+    "initial_state_ref": {
+      "asset_id": "STATE-P11-v1",
+      "asset_version": "v1"
+    },
+    "capability_profile_ref": {
+      "asset_id": "CAP-DP00-PILOT-v1",
+      "asset_version": "v1"
+    },
+    "health_profile_ref": {
+      "asset_id": "HEALTH-ALL-UP-v1",
+      "asset_version": "v1"
+    },
+    "policy_profile_ref": {
+      "asset_id": "POLICY-BASE-v1",
+      "asset_version": "v1"
+    }
+  },
+  "semantic_behavior_plan_ref": {
+    "asset_id": "SBP-P11-v1",
+    "asset_version": "v1"
+  },
+  "dependency_fixture_refs": {
+    "agent_scripts": [
+      {
+        "asset_id": "AGENT-ARGO-v1",
+        "asset_version": "v1"
+      },
+      {
+        "asset_id": "AGENT-NETWORK-v1",
+        "asset_version": "v1"
+      }
+    ],
+    "tool_scripts": [],
+    "latency_profile_ref": {
+      "asset_id": "LAT-PILOT-TBD-v1",
+      "asset_version": "v1"
+    },
+    "interaction_frontend_profile_ref": {
+      "asset_id": "FRONTEND-CONTROLLED-v1",
+      "asset_version": "v1"
+    },
+    "outcome_probe_profile_ref": {
+      "asset_id": "PROBE-P11-v1",
+      "asset_version": "v1"
+    }
+  },
+  "evaluator_oracle_ref": {
+    "asset_id": "ORACLE-P11-v1",
+    "asset_version": "v1"
+  },
+  "evaluator_oracle_refs": {
+    "constraint_manifest_ref": "CONSTRAINT-P11-v1",
+    "success_predicate_ref": "OUTCOME-P11-v1",
+    "expected_result_binding_ref": "RESULT-BINDING-P11-v1",
+    "ground_truth_refs": [
+      "GROUND-TRUTH-P11-v1"
+    ]
+  },
+  "termination": {
+    "success_condition_ref": "OUTCOME-P11-v1",
+    "failure_condition_refs": [
+      "TERMINAL_AUT_ERROR",
+      "PROHIBITED_SIDE_EFFECT",
+      "DEPENDENCY_TERMINAL_FAILURE",
+      "EPISODE_TIMEOUT"
+    ],
+    "timeout_policy": "PILOT_TBD_SESSION_2"
+  },
+  "provenance": {
+    "scenario_schema_version": "runtime-scenario-pilot-v0",
+    "semantic_behavior_plan_version": "v1",
+    "constraint_manifest_version": "v1",
+    "success_predicate_version": "v1",
+    "fixture_registry_version": "v0.2",
+    "canonical_event_schema_version": "canonical-event-v2",
+    "benchmark_version": "dp00-runtime-pilot-v0.2"
+  }
+}

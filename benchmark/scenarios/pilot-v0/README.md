@@ -4,8 +4,8 @@
 
 **Pilot calibration input — not a final evaluation corpus or score.**
 
-This directory freezes the ten Session-1 input scenarios used to prepare the
-DP-00 Runtime Pilot. It does not freeze repetition count, run order, dependency
+This directory contains the twelve v0.2 calibration scenarios: the ten
+Session-1 inputs plus P11/R8 and P12/R9. It does not freeze repetition count, run order, dependency
 latency, percentile estimator, QA-04 aggregation, scoring thresholds, or a
 winning architecture.
 
@@ -48,16 +48,18 @@ facts; they do not select the current turn's task.
 | P08 | R10 | no | yes | yes | FORBIDDEN |
 | P09 | R10 | no | yes | yes | OPTIONAL |
 | P10 | R10 | no | yes | yes | FORBIDDEN |
+| P11 | R8 | no | yes | yes | FORBIDDEN |
+| P12 | R9 | no | yes | yes | REQUIRED |
 
 QA-01 eligibility is fixed by workload semantics, not observed duration. P01,
 P02 and P03 reference controlled Voice fixtures with benchmark-authoritative
 ground-truth acoustic EOS offsets. Runtime VAD is explicitly non-authoritative.
 
-QA-04 eligibility does not decide how terminal no-route-commit episodes enter a
-future aggregate. `REQUIRED` denotes normal route-oriented scenarios,
-`FORBIDDEN` denotes P08/P10 terminal faults before commit, and `OPTIONAL` keeps
-P09 neutral: the architecture may reject the wrong proposal, commit it and fail
-QA-02 conformance, or recover through an existing Base mechanism.
+QA-04 route contracts are interpreted by
+`benchmark/contracts/qa04-route-contract-policy-v1.json`. P11 is FORBIDDEN
+because already-produced result delivery authorizes no new domain route. P12 is
+REQUIRED because both domain-execution subgoals need committed routes. OPTIONAL
+P09 remains a separate diagnostic stratum pending a final comparison rule.
 
 ## Schema and validation policy
 
@@ -81,9 +83,11 @@ Golden parity fixtures live under `benchmark/fixtures/pilot-v0/golden/`:
 
 - `valid-runtime-scenario.json`
 - `valid-behavior-plan.json`
+- `valid-oracle.json`
 - `invalid-missing-required-field.json`
 - `invalid-unknown-field.json`
 - `invalid-behavior-enum.json`
+- `invalid-route-expectation.json`
 - `validation-expectations.json` — shared machine-readable ACCEPT/REJECT and
   reason-category manifest for Rust and Session-3 Python parity tests
 
@@ -104,14 +108,13 @@ The same files are intended for the later Python loader tests.
 Semantic replay keys use stable turn/responsibility operations. Global model
 call number is not part of any replay key.
 
-## Coverage gaps
+## Coverage completion
 
-The machine-readable corpus index records:
+The v0.2 machine-readable corpus index records no runtime-class gap:
 
 ```text
-R8 Concurrent Task / Result = NOT_COVERED
-R9 Compound Request         = NOT_COVERED
+R1 through R10 = COVERED
 ```
 
-Both must be added before final benchmark-v1 freeze. Existing catalog entries
-remain unchanged.
+This is coverage readiness, not a claim that every architecture conforms or
+that benchmark-v1 is frozen. Existing catalog definitions remain unchanged.

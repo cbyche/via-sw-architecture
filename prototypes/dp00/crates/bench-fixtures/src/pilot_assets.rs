@@ -452,6 +452,10 @@ pub fn load_behavior_plan(path: &Path) -> Result<BehaviorPlan, AssetError> {
     load_json(path)
 }
 
+pub fn load_oracle(path: &Path) -> Result<OracleAsset, AssetError> {
+    load_json(path)
+}
+
 pub fn load_pilot_corpus(repository_root: &Path) -> Result<PilotCorpus, AssetError> {
     let index_path = repository_root.join("benchmark/scenarios/pilot-v0/index.json");
     let index: PilotCorpusIndex = load_json(&index_path)?;
@@ -498,8 +502,8 @@ pub fn validate_pilot_corpus(corpus: &PilotCorpus) -> Result<(), AssetError> {
     if corpus.index.final_evaluation {
         return invalid("Pilot-v0 index must not identify itself as final evaluation");
     }
-    if corpus.scenarios.len() != 10 || corpus.index.scenarios.len() != 10 {
-        return invalid("Pilot-v0 must contain exactly P01 through P10");
+    if corpus.scenarios.len() != 12 || corpus.index.scenarios.len() != 12 {
+        return invalid("Pilot-v0.2 corpus must contain exactly P01 through P12");
     }
 
     let fixtures = unique_map(
@@ -531,9 +535,9 @@ pub fn validate_pilot_corpus(corpus: &PilotCorpus) -> Result<(), AssetError> {
         .iter()
         .map(|s| s.scenario_id.as_str())
         .collect();
-    let expected_ids: HashSet<_> = (1..=10).map(|number| format!("P{number:02}")).collect();
+    let expected_ids: HashSet<_> = (1..=12).map(|number| format!("P{number:02}")).collect();
     if scenario_ids != expected_ids.iter().map(String::as_str).collect() {
-        return invalid("scenario ids must be exactly P01 through P10");
+        return invalid("scenario ids must be exactly P01 through P12");
     }
 
     let indexed: HashMap<_, _> = corpus
@@ -542,7 +546,7 @@ pub fn validate_pilot_corpus(corpus: &PilotCorpus) -> Result<(), AssetError> {
         .iter()
         .map(|entry| (entry.scenario_id.as_str(), entry))
         .collect();
-    if indexed.len() != 10 {
+    if indexed.len() != 12 {
         return invalid("Pilot-v0 index has duplicate scenario ids");
     }
     for scenario in &corpus.scenarios {
@@ -575,8 +579,8 @@ pub fn validate_pilot_corpus(corpus: &PilotCorpus) -> Result<(), AssetError> {
         .iter()
         .map(|gap| gap.scenario_class)
         .collect();
-    if gaps != HashSet::from([ScenarioClass::R8, ScenarioClass::R9]) {
-        return invalid("coverage gaps must explicitly contain R8 and R9");
+    if !gaps.is_empty() {
+        return invalid("the completed Pilot-v0.2 corpus must not declare coverage gaps");
     }
     Ok(())
 }
@@ -821,7 +825,7 @@ fn validate_pilot_semantics(corpus: &PilotCorpus) -> Result<(), AssetError> {
 
     for scenario in &corpus.scenarios {
         let expected = match scenario.scenario_id.as_str() {
-            "P08" | "P10" => RouteCommitExpectation::Forbidden,
+            "P08" | "P10" | "P11" => RouteCommitExpectation::Forbidden,
             "P09" => RouteCommitExpectation::Optional,
             _ => RouteCommitExpectation::Required,
         };

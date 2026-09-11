@@ -1,7 +1,7 @@
 {
   "schema_version": "oracle-registry-pilot-v0",
   "asset_id": "ORACLE-REGISTRY-DP00-PILOT-v0",
-  "asset_version": "v0.1",
+  "asset_version": "v0.2",
   "visibility": "EVALUATOR_ONLY",
   "oracles": [
     {
@@ -788,6 +788,225 @@
           "SAFE_FAILURE:NO_RESPONSE",
           "RECOVERED_TO_NETWORK"
         ],
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P11-v1",
+      "asset_version": "v1",
+      "scenario_id": "P11",
+      "ground_truth": {
+        "result_arrival_order": [
+          "R2:T2",
+          "R1:T1"
+        ],
+        "new_execution_route_authorized": false
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P11-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C6_CONCURRENT_TASK_RESULT_BINDING",
+        "secondary_categories": [
+          "C2_TASK_ASSOCIATION_FOLLOWUP"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.2",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P11-v1",
+        "semantic_trace_set_id": "SBP-P11-v1",
+        "constraints": [
+          {
+            "constraint_id": "P11-REQ-T1-RESULT",
+            "constraint_set": "REQUIRED",
+            "dimension": "result_binding",
+            "operator": "equals",
+            "expected": "T1",
+            "severity": "critical",
+            "description": "The Wi-Fi result must remain bound to T1 despite arriving second."
+          },
+          {
+            "constraint_id": "P11-REQ-T2-RESULT",
+            "constraint_set": "REQUIRED",
+            "dimension": "result_binding",
+            "operator": "equals",
+            "expected": "T2",
+            "severity": "critical",
+            "description": "The document result must remain bound to T2 despite completing first."
+          },
+          {
+            "constraint_id": "P11-ALLOW-BINDINGS",
+            "constraint_set": "ALLOWED",
+            "dimension": "result_binding",
+            "operator": "in",
+            "expected": [
+              "T1",
+              "T2"
+            ],
+            "severity": "critical",
+            "description": "Every delivered result may bind only to one of the two source tasks."
+          },
+          {
+            "constraint_id": "P11-FORBID-NEW-ROUTE",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "route_commit",
+            "operator": "equals",
+            "expected": "ROUTE_COMMITTED",
+            "severity": "critical",
+            "description": "Delivering already-produced results must not authorize a new domain execution route."
+          },
+          {
+            "constraint_id": "P11-FORBID-UNBOUND",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "result_binding",
+            "operator": "equals",
+            "expected": "UNBOUND",
+            "severity": "critical",
+            "description": "No delivered result may lack a task identity."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "bindings": [
+          {
+            "result_id": "R2",
+            "task_id": "T2"
+          },
+          {
+            "result_id": "R1",
+            "task_id": "T1"
+          }
+        ],
+        "arrival_order": [
+          "R2",
+          "R1"
+        ]
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P11-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P11-v1",
+        "observable_state_path": "episode.result_bindings",
+        "operator": "equals",
+        "expected": [
+          {
+            "result_id": "R2",
+            "task_id": "T2"
+          },
+          {
+            "result_id": "R1",
+            "task_id": "T1"
+          }
+        ],
+        "architecture_internal_state_used": false
+      }
+    },
+    {
+      "schema_version": "oracle-asset-pilot-v0",
+      "asset_id": "ORACLE-P12-v1",
+      "asset_version": "v1",
+      "scenario_id": "P12",
+      "ground_truth": {
+        "subgoals": [
+          {
+            "subgoal_id": "S1",
+            "capability_id": "media.pause",
+            "requires_domain_planning": false
+          },
+          {
+            "subgoal_id": "S2",
+            "capability_id": "downloads.organize",
+            "requires_domain_planning": true
+          }
+        ]
+      },
+      "constraint_manifest": {
+        "constraint_manifest_id": "CONSTRAINT-P12-v1",
+        "constraint_manifest_version": "v1",
+        "taxonomy_version": "qa02-c1-c8-v1",
+        "primary_category": "C7_COMPOUND_DECOMPOSITION",
+        "secondary_categories": [
+          "C3_EXECUTION_PATH_ELIGIBILITY",
+          "C4_AGENT_ROUTING_DELEGATION"
+        ],
+        "corpus_version": "dp00-runtime-pilot-v0.2",
+        "eligible_for_aecr": true,
+        "fixture_id": "FIXTURE-SET-P12-v1",
+        "semantic_trace_set_id": "SBP-P12-v1",
+        "constraints": [
+          {
+            "constraint_id": "P12-REQ-DECOMPOSE",
+            "constraint_set": "REQUIRED",
+            "dimension": "routing",
+            "operator": "predicate",
+            "expected": "COMPOUND_SUBGOALS_DECOMPOSED",
+            "severity": "critical",
+            "description": "The one user goal must preserve two independently executable semantic subgoals."
+          },
+          {
+            "constraint_id": "P12-REQ-MEDIA",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "MEDIA_PAUSED",
+            "severity": "critical",
+            "description": "The bounded media subgoal must produce an observed paused state."
+          },
+          {
+            "constraint_id": "P12-REQ-DOWNLOADS",
+            "constraint_set": "REQUIRED",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "DOWNLOADS_ORGANIZED_BY_DOMAIN_EXECUTOR",
+            "severity": "critical",
+            "description": "The planning-required Downloads subgoal must be completed by a domain executor."
+          },
+          {
+            "constraint_id": "P12-ALLOW-ROUTES",
+            "constraint_set": "ALLOWED",
+            "dimension": "execution_path",
+            "operator": "in",
+            "expected": [
+              "LOCAL_DIRECT:VIA_FAST",
+              "EXECUTOR_DIRECT:ARGO"
+            ],
+            "severity": "critical",
+            "description": "The local subgoal may use local or ARGO execution; the planning subgoal uses the common ARGO executor."
+          },
+          {
+            "constraint_id": "P12-FORBID-FAST-DOMAIN",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "observable_effect",
+            "operator": "predicate",
+            "expected": "LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS",
+            "severity": "critical",
+            "description": "A bounded local executor cannot claim the planning-required Downloads effect."
+          },
+          {
+            "constraint_id": "P12-FORBID-COLLAPSE",
+            "constraint_set": "FORBIDDEN",
+            "dimension": "routing",
+            "operator": "predicate",
+            "expected": "COMPOUND_COLLAPSED_TO_SINGLE_GENERIC_TASK",
+            "severity": "critical",
+            "description": "The compound goal must not be silently collapsed into one unrelated generic task."
+          }
+        ]
+      },
+      "expected_result_binding": {
+        "result_binding": "CURRENT_USER_GOAL",
+        "required_subgoal_ids": [
+          "S1",
+          "S2"
+        ]
+      },
+      "success_predicate": {
+        "success_predicate_id": "OUTCOME-P12-v1",
+        "success_predicate_version": "v1",
+        "probe_fixture_ref": "PROBE-P12-v1",
+        "observable_state_path": "episode.semantic_outcome",
+        "operator": "equals",
+        "expected": "MEDIA_PAUSED_AND_DOWNLOADS_ORGANIZED",
         "architecture_internal_state_used": false
       }
     }

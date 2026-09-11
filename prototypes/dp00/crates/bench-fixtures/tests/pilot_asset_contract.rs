@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use bench_fixtures::pilot_assets::{
-    ConstraintSet, RouteCommitExpectation, load_behavior_plan, load_pilot_corpus,
+    ConstraintSet, RouteCommitExpectation, load_behavior_plan, load_oracle, load_pilot_corpus,
     load_runtime_scenario,
 };
 use bench_fixtures::pilot_materialization::materialize_scenario;
@@ -13,9 +13,9 @@ fn repository_root() -> PathBuf {
 #[test]
 fn pilot_v0_corpus_is_complete_and_cross_referenced() {
     let corpus = load_pilot_corpus(&repository_root()).expect("Pilot-v0 corpus must validate");
-    assert_eq!(corpus.scenarios.len(), 10);
-    assert_eq!(corpus.behavior_plans.plans.len(), 10);
-    assert_eq!(corpus.oracles.oracles.len(), 10);
+    assert_eq!(corpus.scenarios.len(), 12);
+    assert_eq!(corpus.behavior_plans.plans.len(), 12);
+    assert_eq!(corpus.oracles.oracles.len(), 12);
 }
 
 #[test]
@@ -53,6 +53,32 @@ fn p09_keeps_route_commit_optional_and_semantic_oracle_authoritative() {
             .and_then(serde_json::Value::as_str),
         Some("NetworkAgent")
     );
+}
+
+#[test]
+fn p11_and_p12_complete_r8_r9_with_predeclared_route_contracts() {
+    let corpus = load_pilot_corpus(&repository_root()).expect("Pilot-v0 corpus must validate");
+    assert!(corpus.index.coverage_gaps.is_empty());
+    let p11 = corpus
+        .scenarios
+        .iter()
+        .find(|scenario| scenario.scenario_id == "P11")
+        .expect("P11 scenario");
+    let p12 = corpus
+        .scenarios
+        .iter()
+        .find(|scenario| scenario.scenario_id == "P12")
+        .expect("P12 scenario");
+    assert_eq!(
+        p11.qa_eligibility.qa04.route_commit_expectation,
+        RouteCommitExpectation::Forbidden
+    );
+    assert_eq!(
+        p12.qa_eligibility.qa04.route_commit_expectation,
+        RouteCommitExpectation::Required
+    );
+    assert_eq!(format!("{:?}", p11.scenario_class), "R8");
+    assert_eq!(format!("{:?}", p12.scenario_class), "R9");
 }
 
 #[test]
@@ -145,6 +171,7 @@ fn machine_readable_golden_expectation_manifest_matches_rust_validation() {
         let accepted = match case["asset_kind"].as_str().expect("asset kind") {
             "RUNTIME_SCENARIO" => load_runtime_scenario(&path).is_ok(),
             "BEHAVIOR_PLAN" => load_behavior_plan(&path).is_ok(),
+            "ORACLE" => load_oracle(&path).is_ok(),
             other => panic!("unsupported golden asset kind {other}"),
         };
         assert_eq!(

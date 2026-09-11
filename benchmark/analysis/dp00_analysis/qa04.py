@@ -11,8 +11,8 @@ from .models import EpisodeEvidence
 
 def episode_calls_to_commit(episode: EpisodeEvidence) -> dict:
     routes = episode.actual.execution_routes
-    route_observed = len(routes) == 1
-    commit_ts = routes[0]["timestamp"] if route_observed else None
+    route_observed = bool(routes)
+    commit_ts = max(route["timestamp"] for route in routes) if route_observed else None
     included = []
     mismatches = []
     for call in episode.model_calls:
@@ -22,6 +22,17 @@ def episode_calls_to_commit(episode: EpisodeEvidence) -> dict:
         if derived != call["qa04_primary_included"]:
             mismatches.append(call["model_call_id"])
     failures = list(episode.actual.failure_outcomes)
+    expectation = episode.scenario["qa_eligibility"]["qa04"][
+        "route_commit_expectation"
+    ]
+    contract_status = {
+        ("REQUIRED", True): "ROUTE_COMMITTED",
+        ("REQUIRED", False): "ROUTE_REQUIRED_NOT_COMMITTED",
+        ("OPTIONAL", True): "ROUTE_COMMITTED",
+        ("OPTIONAL", False): "ROUTE_OPTIONAL_NOT_COMMITTED",
+        ("FORBIDDEN", True): "ROUTE_FORBIDDEN_BUT_COMMITTED",
+        ("FORBIDDEN", False): "ROUTE_FORBIDDEN_NOT_COMMITTED",
+    }[(expectation, route_observed)]
     return {
         "run_id": episode.provenance["run_id"], "scenario": episode.provenance["scenario_id"],
         "scenario_class": episode.scenario["scenario_class"], "alternative": episode.provenance["alternative"],
@@ -30,9 +41,77 @@ def episode_calls_to_commit(episode: EpisodeEvidence) -> dict:
         "calls_to_route_commit": len(included) if route_observed else None, "included_model_call_ids": included,
         "raw_derived_inclusion_mismatches": mismatches,
         "model_calls_before_terminal_failure": len(episode.model_calls) if not route_observed else None,
+        "model_calls_before_terminal_resolution": len(episode.model_calls),
         "terminal_failure_reason": failures[0] if failures else None,
-        "route_commit_expectation": episode.scenario["qa_eligibility"]["qa04"]["route_commit_expectation"],
+        "route_commit_expectation": expectation,
+        "route_contract_status": contract_status,
     }
+
+
+def _contract_candidate(per_episode: list[dict]) -> dict:
+    grouped: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for item in per_episode:
+        grouped[(item["latency_profile"], item["alternative"])].append(item)
+
+    results = {}
+    for key, group in sorted(grouped.items()):
+        breakdown = {}
+        for expectation in ("REQUIRED", "OPTIONAL", "FORBIDDEN"):
+            rows = [
+                item
+                for item in group
+                if item["route_commit_expectation"] == expectation
+            ]
+            breakdown[expectation] = {
+                "total": len(rows),
+                "committed": sum(item["route_commit_observed"] for item in rows),
+                "not_committed": sum(not item["route_commit_observed"] for item in rows),
+            }
+
+        required = [
+            item for item in group if item["route_commit_expectation"] == "REQUIRED"
+        ]
+        primary = [
+            item
+            for item in required
+            if item["route_contract_status"] == "ROUTE_COMMITTED"
+            and item["qa02_conformance"] is True
+            and item["calls_to_route_commit"] is not None
+        ]
+        qualification_pass = bool(required) and len(primary) == len(required)
+        values = [item["calls_to_route_commit"] for item in primary]
+        results[f"profile-{key[0].lower()}:{key[1]}"] = {
+            "policy_version": "qa04-route-contract-policy-v1",
+            "contract_breakdown": breakdown,
+            "required_population": len(required),
+            "qualified_primary_observations": len(primary),
+            "primary_comparability_qualification": (
+                "PASS" if qualification_pass else "FAIL"
+            ),
+            "qualified_primary_mean": fmean(values) if qualification_pass else None,
+            "required_route_not_committed": sum(
+                item["route_contract_status"]
+                == "ROUTE_REQUIRED_NOT_COMMITTED"
+                for item in required
+            ),
+            "required_qa02_nonconformant": sum(
+                item["qa02_conformance"] is not True for item in required
+            ),
+            "optional_stratum": [
+                {
+                    "run_id": item["run_id"],
+                    "status": item["route_contract_status"],
+                    "calls_to_route_commit": item["calls_to_route_commit"],
+                }
+                for item in group
+                if item["route_commit_expectation"] == "OPTIONAL"
+            ],
+            "forbidden_route_violations": sum(
+                item["route_contract_status"] == "ROUTE_FORBIDDEN_BUT_COMMITTED"
+                for item in group
+            ),
+        }
+    return results
 
 
 def derive_qa04(episodes: Iterable[EpisodeEvidence], qa02: dict | None = None) -> dict:
@@ -73,4 +152,9 @@ def derive_qa04(episodes: Iterable[EpisodeEvidence], qa02: dict | None = None) -
             "relative_difference": None if overall == 0 else abs(overall - macro) / abs(overall),
             "per_class": per_class,
         }
-    return {"per_episode": per_episode, "aggregates": aggregates, "no_route_commit": [x for x in per_episode if x["no_route_commit"]]}
+    return {
+        "per_episode": per_episode,
+        "aggregates": aggregates,
+        "no_route_commit": [x for x in per_episode if x["no_route_commit"]],
+        "qa04_contract_diagnostics": _contract_candidate(per_episode),
+    }

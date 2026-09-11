@@ -1,7 +1,7 @@
 {
   "schema_version": "pilot-corpus-index-v0",
   "pilot_corpus_id": "DP00-RUNTIME-PILOT-V0",
-  "pilot_corpus_version": "v0.1",
+  "pilot_corpus_version": "v0.2",
   "status": "EXPLORATORY_CALIBRATION_INPUTS",
   "final_evaluation": false,
   "behavior_plan_registry_path": "benchmark/behavior-plans/pilot-v0/plans.json",
@@ -737,18 +737,149 @@
         "asset_id": "ORACLE-P10-v1",
         "asset_version": "v1"
       }
-    }
-  ],
-  "coverage_gaps": [
-    {
-      "scenario_class": "R8",
-      "status": "NOT_COVERED",
-      "required_before": "FINAL_BENCHMARK_V1_FREEZE"
     },
     {
+      "scenario_id": "P11",
+      "path": "benchmark/scenarios/pilot-v0/P11.json",
+      "scenario_class": "R8",
+      "qa_eligibility": {
+        "qa01": {
+          "eligible": false,
+          "exclusion_reason": "CONCURRENT_RESULT_DELIVERY_NOT_FAST_TASK_POPULATION"
+        },
+        "qa02": {
+          "eligible": true,
+          "exclusion_reason": "NOT_APPLICABLE"
+        },
+        "qa04": {
+          "eligible": true,
+          "route_commit_expectation": "FORBIDDEN",
+          "exclusion_reason": "NOT_APPLICABLE"
+        },
+        "mandatory_gate_refs": []
+      },
+      "behavior_plan_ref": {
+        "asset_id": "SBP-P11-v1",
+        "asset_version": "v1"
+      },
+      "fixture_refs": [
+        {
+          "asset_id": "CTX-NONE-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "STATE-P11-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "CAP-DP00-PILOT-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "HEALTH-ALL-UP-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "POLICY-BASE-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "LAT-PILOT-TBD-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "FRONTEND-CONTROLLED-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "PROBE-P11-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "AGENT-ARGO-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "AGENT-NETWORK-v1",
+          "asset_version": "v1"
+        }
+      ],
+      "oracle_ref": {
+        "asset_id": "ORACLE-P11-v1",
+        "asset_version": "v1"
+      }
+    },
+    {
+      "scenario_id": "P12",
+      "path": "benchmark/scenarios/pilot-v0/P12.json",
       "scenario_class": "R9",
-      "status": "NOT_COVERED",
-      "required_before": "FINAL_BENCHMARK_V1_FREEZE"
+      "qa_eligibility": {
+        "qa01": {
+          "eligible": false,
+          "exclusion_reason": "COMPOUND_EPISODE_EXCLUDED_FROM_FAST_PRIMARY"
+        },
+        "qa02": {
+          "eligible": true,
+          "exclusion_reason": "NOT_APPLICABLE"
+        },
+        "qa04": {
+          "eligible": true,
+          "route_commit_expectation": "REQUIRED",
+          "exclusion_reason": "NOT_APPLICABLE"
+        },
+        "mandatory_gate_refs": []
+      },
+      "behavior_plan_ref": {
+        "asset_id": "SBP-P12-v1",
+        "asset_version": "v1"
+      },
+      "fixture_refs": [
+        {
+          "asset_id": "CTX-NONE-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "STATE-EMPTY-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "CAP-P12-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "HEALTH-ALL-UP-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "POLICY-BASE-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "LAT-PILOT-TBD-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "FRONTEND-CONTROLLED-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "PROBE-P12-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "AGENT-ARGO-v1",
+          "asset_version": "v1"
+        },
+        {
+          "asset_id": "TOOL-MEDIA-PAUSE-v1",
+          "asset_version": "v1"
+        }
+      ],
+      "oracle_ref": {
+        "asset_id": "ORACLE-P12-v1",
+        "asset_version": "v1"
+      }
     }
-  ]
+  ],
+  "coverage_gaps": []
 }

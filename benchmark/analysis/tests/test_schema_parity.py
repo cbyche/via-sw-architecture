@@ -1,7 +1,7 @@
 import json
 
 from conftest import REPO_ROOT
-from dp00_analysis.validation import StrictValidationError, validate_behavior_plan, validate_canonical_event, validate_runtime_scenario
+from dp00_analysis.validation import StrictValidationError, validate_behavior_plan, validate_canonical_event, validate_oracle, validate_runtime_scenario
 
 
 def test_asset_golden_expectations_are_not_duplicated():
@@ -10,7 +10,11 @@ def test_asset_golden_expectations_are_not_duplicated():
     observed = []
     for case in manifest["cases"]:
         value = json.loads((root / case["fixture_path"]).read_text())
-        validator = validate_runtime_scenario if case["asset_kind"] == "RUNTIME_SCENARIO" else validate_behavior_plan
+        validator = {
+            "RUNTIME_SCENARIO": validate_runtime_scenario,
+            "BEHAVIOR_PLAN": validate_behavior_plan,
+            "ORACLE": validate_oracle,
+        }[case["asset_kind"]]
         try:
             validator(value)
             result = "ACCEPT"
@@ -18,7 +22,9 @@ def test_asset_golden_expectations_are_not_duplicated():
             result = "REJECT"
         observed.append(result)
         assert result == case["expected"]
-    assert observed == ["ACCEPT", "ACCEPT", "REJECT", "REJECT", "REJECT"]
+    assert observed == [
+        "ACCEPT", "ACCEPT", "REJECT", "REJECT", "REJECT", "ACCEPT", "REJECT"
+    ]
 
 
 def test_canonical_event_golden_expectations_match_rust_manifest():

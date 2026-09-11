@@ -298,6 +298,7 @@ fn coverage_manifest_matches_every_pilot_qa02_constraint() {
         .as_array()
         .expect("oracles")
         .iter()
+        .filter(|oracle| oracle["scenario_id"].as_str().unwrap() <= "P10")
         .flat_map(|oracle| {
             oracle["constraint_manifest"]["constraints"]
                 .as_array()
@@ -309,6 +310,7 @@ fn coverage_manifest_matches_every_pilot_qa02_constraint() {
         .as_array()
         .expect("oracles")
         .iter()
+        .filter(|oracle| oracle["scenario_id"].as_str().unwrap() <= "P10")
         .flat_map(|oracle| {
             let scenario_id = oracle["scenario_id"].as_str().unwrap();
             oracle["constraint_manifest"]["constraints"]
@@ -370,6 +372,7 @@ fn path_aware_coverage_manifest_has_all_144_constraint_alternative_cells() {
         .as_array()
         .expect("oracles")
         .iter()
+        .filter(|oracle| oracle["scenario_id"].as_str().unwrap() <= "P10")
         .flat_map(|oracle| {
             let scenario_id = oracle["scenario_id"].as_str().unwrap();
             oracle["constraint_manifest"]["constraints"]
@@ -430,6 +433,56 @@ fn path_aware_coverage_manifest_has_all_144_constraint_alternative_cells() {
                     .len(),
                 5
             );
+        }
+    }
+}
+
+#[test]
+fn v02_path_aware_manifest_has_all_188_constraint_alternative_cells() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let oracle: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("benchmark/oracles/pilot-v0/oracles.json")).expect("oracle registry"),
+    )
+    .expect("oracle parse");
+    let map: serde_json::Value = serde_json::from_slice(
+        &fs::read(
+            root.join("benchmark/contracts/pilot-v0.2-constraint-alternative-evidence-map.json"),
+        )
+        .expect("v0.2 path-aware coverage map"),
+    )
+    .expect("v0.2 path-aware coverage map parse");
+    let constraint_ids: HashSet<_> = oracle["oracles"]
+        .as_array()
+        .expect("oracles")
+        .iter()
+        .flat_map(|oracle| {
+            oracle["constraint_manifest"]["constraints"]
+                .as_array()
+                .unwrap()
+        })
+        .map(|constraint| constraint["constraint_id"].as_str().unwrap())
+        .collect();
+    let identities: HashSet<_> = map["cells"]
+        .as_array()
+        .expect("coverage cells")
+        .iter()
+        .map(|cell| {
+            (
+                cell["constraint_id"].as_str().unwrap(),
+                cell["alternative"].as_str().unwrap(),
+            )
+        })
+        .collect();
+    assert_eq!(
+        map["coverage_manifest_version"],
+        "dp00-path-aware-evidence-v2"
+    );
+    assert_eq!(map["constraint_count"], 47);
+    assert_eq!(map["expected_coverage_cells"], 188);
+    assert_eq!(identities.len(), 188);
+    for constraint_id in constraint_ids {
+        for alternative in ["A", "B", "C", "D"] {
+            assert!(identities.contains(&(constraint_id, alternative)));
         }
     }
 }

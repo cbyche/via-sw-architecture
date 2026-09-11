@@ -30,6 +30,10 @@ def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
             "analysis_version": ANALYSIS_VERSION, "raw_root": str(evidence.raw_root),
             "campaign_id": evidence.campaign_provenance.get("campaign_id") if evidence.campaign_provenance else None,
             "result_identity": "OFFICIAL_CAMPAIGN" if evidence.campaign_provenance else "DEVELOPMENT_OR_SYNTHETIC",
-            "method_config": {"percentiles": ["nearest-rank", "linear-interpolated-(n-1)"], "qa04_aggregates": ["overall-episode-mean", "scenario-class-macro-average"]},
+            "method_config": {
+                "percentiles": ["nearest-rank", "linear-interpolated-(n-1)"],
+                "qa04_aggregates": ["overall-episode-mean", "scenario-class-macro-average"],
+                "qa04_contract_policy": "qa04-route-contract-policy-v1",
+            },
         },
     }

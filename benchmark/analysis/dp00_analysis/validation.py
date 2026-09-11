@@ -82,6 +82,10 @@ BEHAVIOR_PLAN_KEYS = {
     "scenario_id", "scenario_version", "semantic_schema_version", "payload_registry_version",
     "allowed_owner_mapping_version", "operations",
 }
+ORACLE_KEYS = {
+    "schema_version", "asset_id", "asset_version", "scenario_id", "ground_truth",
+    "constraint_manifest", "expected_result_binding", "success_predicate",
+}
 
 
 class StrictValidationError(ValueError):
@@ -97,6 +101,13 @@ def validate_runtime_scenario(value: Any) -> dict[str, Any]:
         _nonempty(obj[key], f"runtime scenario.{key}")
     if obj["scenario_class"] not in {f"R{i}" for i in range(1, 11)}:
         raise StrictValidationError("runtime scenario: invalid scenario_class")
+    qa = _object(obj["qa_eligibility"], "runtime scenario.qa_eligibility")
+    qa04 = _object(qa.get("qa04"), "runtime scenario.qa_eligibility.qa04")
+    _enum(
+        qa04.get("route_commit_expectation"),
+        {"REQUIRED", "OPTIONAL", "FORBIDDEN"},
+        "runtime scenario.qa_eligibility.qa04.route_commit_expectation",
+    )
     return obj
 
 
@@ -119,6 +130,27 @@ def validate_behavior_plan(value: Any) -> dict[str, Any]:
             attempt = _object(attempt, "behavior plan attempt")
             _exact(attempt, attempt_keys, "behavior plan attempt")
             _enum(attempt["behavior_class"], {"CORRECT", "AMBIGUOUS", "WRONG_CANDIDATE", "MALFORMED", "TIMEOUT", "NO_RESPONSE"}, "behavior plan attempt.behavior_class")
+    return obj
+
+
+def validate_oracle(value: Any) -> dict[str, Any]:
+    obj = _object(value, "oracle")
+    _exact(obj, ORACLE_KEYS, "oracle")
+    if obj["schema_version"] != "oracle-asset-pilot-v0":
+        raise StrictValidationError("oracle: unsupported schema version")
+    for key in ("asset_id", "asset_version", "scenario_id"):
+        _nonempty(obj[key], f"oracle.{key}")
+    manifest = _object(obj["constraint_manifest"], "oracle.constraint_manifest")
+    constraints = manifest.get("constraints")
+    if not isinstance(constraints, list) or not constraints:
+        raise StrictValidationError("oracle.constraint_manifest.constraints: expected non-empty array")
+    for constraint in constraints:
+        constraint = _object(constraint, "oracle constraint")
+        _enum(
+            constraint.get("constraint_set"),
+            {"REQUIRED", "ALLOWED", "FORBIDDEN"},
+            "oracle constraint.constraint_set",
+        )
     return obj
 
 

@@ -1,5 +1,5 @@
 {
-  "manifest_version": "pilot-v0-golden-expectations-v1",
+  "manifest_version": "pilot-v0-golden-expectations-v2",
   "cases": [
     {
       "fixture_path": "valid-runtime-scenario.json",
@@ -30,6 +30,18 @@
       "asset_kind": "BEHAVIOR_PLAN",
       "expected": "REJECT",
       "reason_category": "INVALID_ENUM"
+    },
+    {
+      "fixture_path": "valid-oracle.json",
+      "asset_kind": "ORACLE",
+      "expected": "ACCEPT",
+      "reason_category": "VALID"
+    },
+    {
+      "fixture_path": "invalid-route-expectation.json",
+      "asset_kind": "RUNTIME_SCENARIO",
+      "expected": "REJECT",
+      "reason_category": "INVALID_ROUTE_EXPECTATION"
     }
   ]
 }

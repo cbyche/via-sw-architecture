@@ -1,0 +1,110 @@
+{
+  "schema_version": "oracle-asset-pilot-v0",
+  "asset_id": "ORACLE-P11-v1",
+  "asset_version": "v1",
+  "scenario_id": "P11",
+  "ground_truth": {
+    "result_arrival_order": [
+      "R2:T2",
+      "R1:T1"
+    ],
+    "new_execution_route_authorized": false
+  },
+  "constraint_manifest": {
+    "constraint_manifest_id": "CONSTRAINT-P11-v1",
+    "constraint_manifest_version": "v1",
+    "taxonomy_version": "qa02-c1-c8-v1",
+    "primary_category": "C6_CONCURRENT_TASK_RESULT_BINDING",
+    "secondary_categories": [
+      "C2_TASK_ASSOCIATION_FOLLOWUP"
+    ],
+    "corpus_version": "dp00-runtime-pilot-v0.2",
+    "eligible_for_aecr": true,
+    "fixture_id": "FIXTURE-SET-P11-v1",
+    "semantic_trace_set_id": "SBP-P11-v1",
+    "constraints": [
+      {
+        "constraint_id": "P11-REQ-T1-RESULT",
+        "constraint_set": "REQUIRED",
+        "dimension": "result_binding",
+        "operator": "equals",
+        "expected": "T1",
+        "severity": "critical",
+        "description": "The Wi-Fi result must remain bound to T1 despite arriving second."
+      },
+      {
+        "constraint_id": "P11-REQ-T2-RESULT",
+        "constraint_set": "REQUIRED",
+        "dimension": "result_binding",
+        "operator": "equals",
+        "expected": "T2",
+        "severity": "critical",
+        "description": "The document result must remain bound to T2 despite completing first."
+      },
+      {
+        "constraint_id": "P11-ALLOW-BINDINGS",
+        "constraint_set": "ALLOWED",
+        "dimension": "result_binding",
+        "operator": "in",
+        "expected": [
+          "T1",
+          "T2"
+        ],
+        "severity": "critical",
+        "description": "Every delivered result may bind only to one of the two source tasks."
+      },
+      {
+        "constraint_id": "P11-FORBID-NEW-ROUTE",
+        "constraint_set": "FORBIDDEN",
+        "dimension": "route_commit",
+        "operator": "equals",
+        "expected": "ROUTE_COMMITTED",
+        "severity": "critical",
+        "description": "Delivering already-produced results must not authorize a new domain execution route."
+      },
+      {
+        "constraint_id": "P11-FORBID-UNBOUND",
+        "constraint_set": "FORBIDDEN",
+        "dimension": "result_binding",
+        "operator": "equals",
+        "expected": "UNBOUND",
+        "severity": "critical",
+        "description": "No delivered result may lack a task identity."
+      }
+    ]
+  },
+  "expected_result_binding": {
+    "bindings": [
+      {
+        "result_id": "R2",
+        "task_id": "T2"
+      },
+      {
+        "result_id": "R1",
+        "task_id": "T1"
+      }
+    ],
+    "arrival_order": [
+      "R2",
+      "R1"
+    ]
+  },
+  "success_predicate": {
+    "success_predicate_id": "OUTCOME-P11-v1",
+    "success_predicate_version": "v1",
+    "probe_fixture_ref": "PROBE-P11-v1",
+    "observable_state_path": "episode.result_bindings",
+    "operator": "equals",
+    "expected": [
+      {
+        "result_id": "R2",
+        "task_id": "T2"
+      },
+      {
+        "result_id": "R1",
+        "task_id": "T1"
+      }
+    ],
+    "architecture_internal_state_used": false
+  }
+}

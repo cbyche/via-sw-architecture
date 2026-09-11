@@ -116,6 +116,16 @@ def reconstruct_actual(events: list[dict[str, Any]], model_calls: list[dict[str,
         predicates.add("MAIL_AGENT_EXECUTED_WIFI_REQUEST")
     if any(i["executor_id"].startswith("VIA_LOCAL") for i in invocations) and any(e["effect_type"] == "DOWNLOADS_ORGANIZED" for e in effects):
         predicates.add("LOCAL_FAST_CLAIMED_DOMAIN_PLANNING_SUCCESS")
+    if any(
+        e.get("capability_id") == "media.pause" and e.get("state") == "PAUSED"
+        for e in effects
+    ):
+        predicates.add("MEDIA_PAUSED")
+    capabilities = {e.get("capability_id") for e in effects}
+    if {"media.pause", "downloads.organize"} <= capabilities and len(routes) >= 2:
+        predicates.add("COMPOUND_SUBGOALS_DECOMPOSED")
+    if len(routes) == 1 and len(results) == 1 and capabilities == {"files.general"}:
+        predicates.add("COMPOUND_COLLAPSED_TO_SINGLE_GENERIC_TASK")
     if any(e["effect_type"] == "DOCUMENT_OPENED" for e in effects):
         resolved_at = max((c.get("resolve_timestamp") or -1 for c in clarifications), default=-1)
         if any(e["timestamp"] < resolved_at for e in effects if e["effect_type"] == "DOCUMENT_OPENED"):

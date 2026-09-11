@@ -44,9 +44,13 @@ def _actual_values(actual: ActualSemanticFacts, dimension: str) -> tuple[list[An
             )
         return values, bool(actual.task_associations)
     if dimension == "result_binding":
-        return [item["task_id"] for item in actual.result_bindings], bool(
-            actual.result_bindings
-        )
+        return [
+            item["task_id"] if item["task_id"] is not None else "UNBOUND"
+            for item in actual.result_bindings
+        ], bool(actual.result_bindings)
+    if dimension == "route_commit":
+        values = ["ROUTE_COMMITTED"] if actual.execution_routes else []
+        return values, bool(values)
     if dimension == "clarification":
         values = [
             {

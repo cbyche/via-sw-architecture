@@ -1,7 +1,7 @@
 {
   "schema_version": "fixture-registry-pilot-v0",
   "asset_id": "FIXTURE-REGISTRY-DP00-PILOT-v0",
-  "asset_version": "v0.1",
+  "asset_version": "v0.2",
   "unknown_field_policy": "REJECT_UNKNOWN_AT_TYPED_BOUNDARIES; DATA_IS_VERSIONED_BY_FIXTURE_KIND",
   "fixtures": [
     {
@@ -864,6 +864,251 @@
       "description": "Frozen semantic replay payload PAYLOAD-RESULT-DEFAULT-v1.",
       "data": {
         "result_binding": "CURRENT_USER_GOAL"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "STATE-P11-v1",
+      "asset_version": "v1",
+      "fixture_kind": "INITIAL_STATE",
+      "description": "Two completed tasks whose results arrived in T2-then-T1 order; no current-task selection is supplied.",
+      "data": {
+        "conversation": {
+          "conversation_id": "C-P11",
+          "facts": [
+            {
+              "key": "result_arrival_1",
+              "value": "R2 belongs to T2"
+            },
+            {
+              "key": "result_arrival_2",
+              "value": "R1 belongs to T1"
+            }
+          ]
+        },
+        "active_tasks": [
+          {
+            "task_id": "T1",
+            "goal": "diagnose_wifi",
+            "executor_id": "NetworkAgent",
+            "status": "COMPLETED",
+            "execution_id": "EX1",
+            "continuation_ref": "NETWORK-THREAD-1",
+            "prior_route": {
+              "route_kind": "EXECUTOR_DIRECT",
+              "initial_executor_id": "NetworkAgent",
+              "final_executor_id_if_known": "NetworkAgent",
+              "delegation_chain": []
+            }
+          },
+          {
+            "task_id": "T2",
+            "goal": "summarize_document",
+            "executor_id": "ARGO",
+            "status": "COMPLETED",
+            "execution_id": "EX2",
+            "continuation_ref": "ARGO-THREAD-2",
+            "prior_route": {
+              "route_kind": "EXECUTOR_DIRECT",
+              "initial_executor_id": "ARGO",
+              "final_executor_id_if_known": "ARGO",
+              "delegation_chain": []
+            }
+          }
+        ],
+        "current_turn_selected_task_id": null
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "CAP-P12-v1",
+      "asset_version": "v1",
+      "fixture_kind": "CAPABILITY_PROFILE",
+      "description": "Shared P12 capabilities expose media.pause locally and Downloads planning through ARGO without architecture hints.",
+      "data": {
+        "executors": [
+          {
+            "executor_id": "ARGO",
+            "registered": true,
+            "capability_ids": [
+              "general.agent",
+              "downloads.organize",
+              "media.pause"
+            ]
+          },
+          {
+            "executor_id": "NetworkAgent",
+            "registered": true,
+            "capability_ids": [
+              "network.status",
+              "network.diagnose",
+              "network.dns.check"
+            ]
+          },
+          {
+            "executor_id": "MailAgent",
+            "registered": true,
+            "capability_ids": [
+              "mail.read",
+              "mail.send"
+            ]
+          },
+          {
+            "executor_id": "FileAgent",
+            "registered": true,
+            "capability_ids": [
+              "file.open",
+              "file.inspect"
+            ]
+          },
+          {
+            "executor_id": "VIA_FAST",
+            "registered": true,
+            "capability_ids": [
+              "volume.decrease",
+              "media.pause"
+            ]
+          }
+        ],
+        "bounded_local_capabilities": [
+          "volume.decrease",
+          "media.pause"
+        ],
+        "architecture_specific_route_hint": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "TOOL-MEDIA-PAUSE-v1",
+      "asset_version": "v1",
+      "fixture_kind": "TOOL_SCRIPT",
+      "description": "Deterministic media.pause fixture for the bounded P12 subgoal.",
+      "data": {
+        "tool_id": "media.pause",
+        "capability_id": "media.pause",
+        "input_contract": "typed-fixture-v1",
+        "observable_effect": "media playback enters PAUSED state",
+        "latency_profile_ref": "LAT-PILOT-TBD-v1"
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P11-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External task/result-correlation probe for P11.",
+      "data": {
+        "scenario_id": "P11",
+        "authority": "PRODUCT_CORRELATION",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PROBE-P12-v1",
+      "asset_version": "v1",
+      "fixture_kind": "OUTCOME_PROBE",
+      "description": "External effect probe for both P12 subgoals.",
+      "data": {
+        "scenario_id": "P12",
+        "authority": "OUTCOME_PROBE",
+        "reads_architecture_internal_state": false
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-INTERLEAVED-RESULTS-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen semantic statement that T2 then T1 results require identity-preserving delivery without new execution.",
+      "data": {
+        "normalized_goal": "deliver_interleaved_existing_results",
+        "requires_domain_planning": false,
+        "requires_new_execution": false,
+        "result_arrival_order": [
+          "T2",
+          "T1"
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-RESULTS-T1-T2-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen result-binding payload retaining both task identities.",
+      "data": {
+        "result_bindings": [
+          {
+            "result_id": "R2",
+            "task_id": "T2"
+          },
+          {
+            "result_id": "R1",
+            "task_id": "T1"
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-INTENT-COMPOUND-MEDIA-DOWNLOADS-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen compound intent with bounded media and planning-required Downloads subgoals.",
+      "data": {
+        "normalized_goal": "pause_media_and_organize_downloads",
+        "compound_subgoals": [
+          {
+            "subgoal_id": "S1",
+            "capability_id": "media.pause",
+            "requires_domain_planning": false
+          },
+          {
+            "subgoal_id": "S2",
+            "capability_id": "downloads.organize",
+            "requires_domain_planning": true
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-ROUTE-COMPOUND-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen architecture-neutral allowed route sets for each compound subgoal.",
+      "data": {
+        "semantic_execution_requirement": "COMPOUND_LOCAL_AND_GENERAL",
+        "subgoal_route_contracts": [
+          {
+            "subgoal_id": "S1",
+            "allowed_canonical_routes": [
+              "LOCAL_DIRECT:VIA_FAST",
+              "EXECUTOR_DIRECT:ARGO"
+            ]
+          },
+          {
+            "subgoal_id": "S2",
+            "allowed_canonical_routes": [
+              "EXECUTOR_DIRECT:ARGO"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "schema_version": "fixture-asset-pilot-v0",
+      "asset_id": "PAYLOAD-RESULT-COMPOUND-v1",
+      "asset_version": "v1",
+      "fixture_kind": "REPLAY_PAYLOAD",
+      "description": "Frozen compound result contract preserving both subgoal effects.",
+      "data": {
+        "result_binding": "CURRENT_USER_GOAL",
+        "required_subgoal_ids": [
+          "S1",
+          "S2"
+        ]
       }
     }
   ]

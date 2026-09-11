@@ -208,7 +208,7 @@ fn parse_config(
 ) -> Result<PilotCampaignConfig, String> {
     let mut corpus = "pilot-v0".to_owned();
     let mut alternatives = Alternative::ALL.to_vec();
-    let mut scenario_ids: Vec<String> = (1..=10).map(|number| format!("P{number:02}")).collect();
+    let mut scenario_ids: Vec<String> = (1..=12).map(|number| format!("P{number:02}")).collect();
     let mut latency_profile = ControlledLatencyProfile::profile_z();
     let mut model_delay_override = None;
     let mut agent_delay_override = None;

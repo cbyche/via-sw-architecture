@@ -41,7 +41,7 @@ def test_coverage_map_is_exactly_36_unique_oracle_constraints():
     coverage = json.loads((REPO_ROOT / "benchmark/contracts/pilot-v0-constraint-evidence-map.json").read_text())
     oracle = json.loads((REPO_ROOT / "benchmark/oracles/pilot-v0/oracles.json").read_text())
     rows = {row["constraint_id"] for row in coverage["rows"]}
-    constraints = {c["constraint_id"] for o in oracle["oracles"] for c in o["constraint_manifest"]["constraints"]}
+    constraints = {c["constraint_id"] for o in oracle["oracles"] if o["scenario_id"] <= "P10" for c in o["constraint_manifest"]["constraints"]}
     assert len(coverage["rows"]) == len(rows) == 36
     assert rows == constraints
     assert all(row["independently_derivable"] and row["status"] == "PASS" for row in coverage["rows"])
@@ -50,7 +50,11 @@ def test_coverage_map_is_exactly_36_unique_oracle_constraints():
 def test_all_coverage_rows_are_executable_against_synthetic_actuals(raw_run):
     base = load_evidence(raw_run)
     oracle_registry = json.loads((REPO_ROOT / "benchmark/oracles/pilot-v0/oracles.json").read_text())
-    scenarios = {o["scenario_id"]: o for o in oracle_registry["oracles"]}
+    scenarios = {
+        o["scenario_id"]: o
+        for o in oracle_registry["oracles"]
+        if o["scenario_id"] <= "P10"
+    }
     observed = []
     common_route = ({"identity":"EXECUTOR_DIRECT:ARGO", "initial_executor_id":"ARGO", "final_executor_id_if_known":"ARGO", "delegation_chain":[]},)
     actuals = {
@@ -88,6 +92,7 @@ def test_path_aware_manifest_is_exactly_36_by_4_without_actual_values():
     constraint_ids = {
         constraint["constraint_id"]
         for item in oracle["oracles"]
+        if item["scenario_id"] <= "P10"
         for constraint in item["constraint_manifest"]["constraints"]
     }
     cells = {
@@ -97,6 +102,39 @@ def test_path_aware_manifest_is_exactly_36_by_4_without_actual_values():
     assert manifest["actual_values_included"] is False
     assert manifest["constraint_count"] == len(constraint_ids) == 36
     assert manifest["expected_coverage_cells"] == len(cells) == 144
+    assert cells == {
+        (constraint_id, alternative)
+        for constraint_id in constraint_ids
+        for alternative in "ABCD"
+    }
+    assert all(cell["actual_evidence_strategies"] for cell in manifest["cells"])
+    assert all(cell["derivation_rule_id"] for cell in manifest["cells"])
+    assert all(cell["status"] == "READY" for cell in manifest["cells"])
+
+
+def test_v02_path_aware_manifest_is_exactly_47_by_4_without_actual_values():
+    manifest = json.loads(
+        (
+            REPO_ROOT
+            / "benchmark/contracts/pilot-v0.2-constraint-alternative-evidence-map.json"
+        ).read_text()
+    )
+    oracle = json.loads(
+        (REPO_ROOT / "benchmark/oracles/pilot-v0/oracles.json").read_text()
+    )
+    constraint_ids = {
+        constraint["constraint_id"]
+        for item in oracle["oracles"]
+        for constraint in item["constraint_manifest"]["constraints"]
+    }
+    cells = {
+        (cell["constraint_id"], cell["alternative"])
+        for cell in manifest["cells"]
+    }
+    assert manifest["actual_values_included"] is False
+    assert manifest["coverage_manifest_version"] == "dp00-path-aware-evidence-v2"
+    assert manifest["constraint_count"] == len(constraint_ids) == 47
+    assert manifest["expected_coverage_cells"] == len(cells) == 188
     assert cells == {
         (constraint_id, alternative)
         for constraint_id in constraint_ids

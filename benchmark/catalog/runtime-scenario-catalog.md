@@ -457,6 +457,11 @@ QA-02 = yes
 QA-04 = optional for the request that initiates/continues a route
 ```
 
+Pilot-v0.2 realization P11 is a result-delivery-only episode: both results
+already exist, so a new domain route is not authorized and its predeclared
+route contract is `FORBIDDEN`. This is distinct from an R8 request that starts
+or continues execution, for which QA-04 may be `OPTIONAL`.
+
 ### R8-002 — Out-of-order completion
 
 T2 completes before T1 despite being initiated later; results must remain bound to correct task/user goal.
@@ -505,6 +510,11 @@ QA-01 = no for overall episode Primary
 QA-02 = yes
 QA-04 = yes under the future frozen compound-route accounting rule
 ```
+
+Pilot-v0.2 realization P12 declares `REQUIRED`: every domain-execution subgoal
+must have a committed route, and the QA-04 boundary is the final required
+subgoal route commit. Correctness-qualified comparability is defined separately
+by `qa04-route-contract-policy-v1`.
 
 ### R9-002 — Multi-domain compound request
 

@@ -53,10 +53,16 @@ def _catalog(root: Path, include_oracles: bool) -> tuple[dict[str, dict[str, Any
         oracles = {o["scenario_id"]: o for o in oracles_registry["oracles"]}
     else:
         oracles = {}
-    coverage = _json(
-        root
-        / "benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json"
-    )
+    coverage = {
+        "v0.1": _json(
+            root
+            / "benchmark/contracts/pilot-v0-constraint-alternative-evidence-map.json"
+        ),
+        "v0.2": _json(
+            root
+            / "benchmark/contracts/pilot-v0.2-constraint-alternative-evidence-map.json"
+        ),
+    }
     return scenarios, plans, {"oracles": oracles, "coverage": coverage}
 
 
@@ -79,7 +85,7 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
             if not run_dirs:
                 raise StrictValidationError(f"no raw runs found under {raw_root}")
     except (OSError, json.JSONDecodeError, StrictValidationError) as error:
-        return EvidenceSet(raw_root, campaign, (), ValidationReport((ValidationIssue("LOAD_ERROR", str(error), str(raw_root)),), ()), evaluator["coverage"])
+        return EvidenceSet(raw_root, campaign, (), ValidationReport((ValidationIssue("LOAD_ERROR", str(error), str(raw_root)),), ()), evaluator["coverage"]["v0.1"])
 
     episodes = []
     for directory in run_dirs:
@@ -130,4 +136,21 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
         identities = {tuple(e.provenance[field] for field in runtime_fields) for e in episodes}
         if len(identities) != 1:
             errors.append(ValidationIssue("CAMPAIGN_RUNTIME_IDENTITY_MISMATCH", "official Z/C runtime identity differs"))
-    return EvidenceSet(raw_root, campaign, tuple(episodes), ValidationReport(tuple(errors), tuple(warnings)), evaluator["coverage"])
+    corpus_versions = {
+        episode.provenance["pilot_corpus_version"] for episode in episodes
+    }
+    coverage_version = (
+        next(iter(corpus_versions))
+        if len(corpus_versions) == 1
+        else (campaign or {}).get("pilot_corpus_version", "v0.1")
+    )
+    coverage = evaluator["coverage"].get(coverage_version)
+    if coverage is None:
+        errors.append(
+            ValidationIssue(
+                "COVERAGE_MANIFEST_VERSION_MISSING",
+                f"no path-aware manifest for corpus {coverage_version}",
+            )
+        )
+        coverage = evaluator["coverage"]["v0.1"]
+    return EvidenceSet(raw_root, campaign, tuple(episodes), ValidationReport(tuple(errors), tuple(warnings)), coverage)

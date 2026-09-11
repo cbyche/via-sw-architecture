@@ -1,0 +1,64 @@
+{
+  "schema_version": "qa04-route-contract-policy-schema-v1",
+  "policy_version": "qa04-route-contract-policy-v1",
+  "status": "CALIBRATION_CANDIDATE_WITH_FROZEN_CORE",
+  "metric_identity": "Average Model Calls to Commit Execution Route",
+  "metric_identity_changed": false,
+  "contract_is_predeclared_scenario_property": true,
+  "observed_behavior_is_separate": true,
+  "route_contract_classes": {
+    "REQUIRED": "A successful conformant episode requires every domain-execution subgoal route to be operationally committed.",
+    "OPTIONAL": "The scenario contract permits either a valid route commit or a safe terminal resolution without a route.",
+    "FORBIDDEN": "No domain-execution route is authorized; a commit is a contract violation."
+  },
+  "derived_status_rules": [
+    {"status": "ROUTE_COMMITTED", "contract": ["REQUIRED", "OPTIONAL"], "observed_route_commit": true},
+    {"status": "ROUTE_REQUIRED_NOT_COMMITTED", "contract": ["REQUIRED"], "observed_route_commit": false},
+    {"status": "ROUTE_OPTIONAL_NOT_COMMITTED", "contract": ["OPTIONAL"], "observed_route_commit": false},
+    {"status": "ROUTE_FORBIDDEN_NOT_COMMITTED", "contract": ["FORBIDDEN"], "observed_route_commit": false},
+    {"status": "ROUTE_FORBIDDEN_BUT_COMMITTED", "contract": ["FORBIDDEN"], "observed_route_commit": true}
+  ],
+  "primary_observation_rule": {
+    "contract": "REQUIRED",
+    "requires_observed_route_commit": true,
+    "requires_route_contract_satisfaction": true,
+    "requires_qa02_exact_conformance": true,
+    "calls_to_route_commit": "Count ORCHESTRATION or MIXED logical generations from request-processing start through the final required route commit.",
+    "no_route_numeric_value": null
+  },
+  "primary_comparability_qualification": {
+    "population": "all predeclared QA-04-eligible ROUTE_REQUIRED episodes in the comparison stratum",
+    "pass_rule": "Every required episode has ROUTE_COMMITTED status, a numeric observation, and QA-02 exact conformance.",
+    "failure_effect": "Do not produce or compare a qualified primary aggregate for that alternative/stratum; retain numeric observations only as diagnostics.",
+    "independent_route_contract_input_required": true,
+    "qa02_pass_alone_is_sufficient": false
+  },
+  "optional_handling": {
+    "primary_population": "SEPARATE_STRATUM_NOT_COMBINED_WITH_REQUIRED",
+    "committed_numeric": "retain calls_to_route_commit as a diagnostic",
+    "not_committed_numeric": null,
+    "comparison_rule_status": "DEFER"
+  },
+  "forbidden_handling": {
+    "primary_population": "EXCLUDED_BY_PREDECLARED_CONTRACT",
+    "not_committed": "contract-satisfying status; retain model_calls_before_terminal_resolution diagnostic",
+    "committed": "ROUTE_FORBIDDEN_BUT_COMMITTED contract violation; never a primary resource observation"
+  },
+  "secondary_diagnostics": [
+    "model_calls_before_terminal_resolution",
+    "contract_status_counts",
+    "route_committed_diagnostic_calls",
+    "qa02_exact_conformance"
+  ],
+  "arbitrary_numeric_penalty": {
+    "allowed": false,
+    "status": "REJECT",
+    "reason": "An invented call count changes resource units and mixes correctness into QA-04."
+  },
+  "aggregation": {
+    "overall_episode_mean": "DEFER",
+    "scenario_class_macro_average": "DEFER",
+    "usage_frequency_weights_without_authoritative_basis": "REJECT"
+  },
+  "actual_architecture_results_included": false
+}
