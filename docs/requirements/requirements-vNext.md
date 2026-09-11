@@ -23,6 +23,10 @@ Evaluation hypotheses / working rules
 
 No DP-00 winner, v1.2 requirement change, score, or threshold is declared here.
 
+Current downstream structural scopes are maintained in
+`docs/architecture/decision-points/catalog.md`; the catalog review is
+`docs/architecture/analysis/AA-027-structural-decision-catalog-review.md`.
+
 ## 2. Central vNext storyline
 
 The vNext architecture evaluation follows this chain:
@@ -205,23 +209,17 @@ The `DP-00 × QA Sensitivity Matrix` in AA-005 is a **pre-experiment architectur
 
 The v1.1 QA set is preserved as historical Approved Baseline content. In vNext central navigation, those IDs are referred to as **Legacy v1.1 Detailed QA** to avoid collision with the new Top QA-01~04 IDs.
 
-They are not deleted; their concerns are reclassified under Top Drivers, Secondary/Diagnostic concerns, or Mandatory Qualification Constraints.
+They are not deleted. Current navigation separates retained mandatory/supporting
+obligations from diagnostic and correctness-slice mappings. The authoritative
+four-bucket mapping, preservation rules, and source locations are in
+`docs/architecture/qa-legacy-migration.md`.
 
-| Legacy v1.1 Detailed QA | vNext role |
-| --- | --- |
-| **Legacy QA-01 — VIA software processing latency** | Supporting/Secondary diagnostic under **Top QA-01**; VIA-owned software overhead remains useful decomposition evidence. |
-| **Legacy QA-02 — concurrent-task capacity & PC co-existence** | Detailed operational architecture QA / constraint; relevant to capacity, scheduling and foreground co-existence rather than one of the DP-00 Top-4 score dimensions. |
-| **Legacy QA-03 — conversation/task recovery** | Reliability concern; expected to contribute to **Mandatory Qualification / recovery gates** and detailed lifecycle evaluation. |
-| **Legacy QA-04 — dependency failure containment** | Reliability/Fault-Tolerance concern; expected to contribute to **Mandatory Qualification / failure-containment gates**. |
-| **Legacy QA-05 — changeability & integration** | Detailed/Secondary evidence under **Top QA-03 Flexibility**. |
-| **Legacy QA-06 — external-context minimization** | Privacy/Security supporting QA and likely **Mandatory Qualification** evidence. |
-| **Legacy QA-07 — model/token cost efficiency** | Secondary/derived resource/cost evidence under **Top QA-04**; cost/token telemetry must not replace the architecture-only Primary Metric. |
-| **Legacy QA-08 — observability & audit overhead** | Cross-cutting supporting QA for analysability/accountability and instrumentation overhead. |
-| **Legacy QA-09 — screen/pointer referent-binding accuracy** | Secondary correctness slice under **Top QA-02**. |
-| **Legacy QA-10 — user-request / existing-new task association correctness** | Secondary correctness slice under **Top QA-02**. |
-| **Legacy QA-11 — Downstream Agent routing correctness** | Secondary correctness slice under **Top QA-02**. |
-
-The authoritative wording and approved targets of these legacy QAs remain in `requirements-v1.1.md`.
+In particular, recovery, failure containment, privacy/context minimization,
+capacity/resource co-existence, observability/audit, cancellation, task-state
+integrity, and the trusted Agent boundary remain live requirements. Legacy
+QA-01/05/07/09/10/11 also retain their approved targets even when used as
+secondary evidence or Top-QA correctness slices. Only future executable vNext
+gate encoding remains TBD; the Approved Baseline obligation is not optional.
 
 ## 7. Scored drivers vs Mandatory Qualification Constraints
 

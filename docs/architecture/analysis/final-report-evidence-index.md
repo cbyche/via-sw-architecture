@@ -8,6 +8,12 @@ DP-00 comparative characterization is complete. Final A/B/C/D selection is
 intentionally deferred pending downstream architecture evidence; AA-026 is the
 authoritative conditional synthesis.
 
+The downstream DP catalog was structurally reviewed after AA-026. Use
+`docs/architecture/decision-points/catalog.md` for current DP scopes and
+`docs/architecture/analysis/AA-027-structural-decision-catalog-review.md` for
+before/after mapping, six-question coverage, and the revised conditional
+roadmap. AA-026 remains unchanged historical synthesis.
+
 This document does **not** create a new architecture decision, QA definition, requirement, benchmark result, or score. It maps reviewer questions to authoritative architecture/evaluation artifacts and, later, to raw/derived result evidence.
 
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline.
@@ -42,6 +48,9 @@ Primary evidence:
 
 - `docs/requirements/requirements-vNext.md`
 - `docs/architecture/qa-dp-traceability.md`
+- `docs/architecture/decision-points/catalog.md`
+- `docs/architecture/qa-legacy-migration.md`
+- `docs/architecture/analysis/AA-027-structural-decision-catalog-review.md`
 - `docs/evaluation/evaluation-strategy.md`
 - `docs/evaluation/evaluation-principles.md`
 - `docs/evaluation/architecture-experiment-methodology.md`
@@ -1031,7 +1040,8 @@ Remaining future work:
 
 - tactic experiment results — **TBD**;
 - Real-stack validation — **TBD**;
-- DP-03 and other discriminating downstream architecture evidence — **TBD**;
+- DP-13 all-family state/recovery investigation, reframed DP-03 conditional
+  hosting/isolation, and other discriminating downstream evidence — **TBD**;
 - final conditional trigger resolution and A/B/C/D commitment — **TBD**;
 - ADR — **TBD**.
 

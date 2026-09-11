@@ -12,6 +12,11 @@ pending downstream architecture evidence. See
 `docs/architecture/decision-points/DP-00-primary-execution-boundary.md` and
 `docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`.
 
+The downstream structural-decision catalog was subsequently reviewed in
+`docs/architecture/analysis/AA-027-structural-decision-catalog-review.md`.
+Current scopes, before/after redirects, and conditional applicability are
+authoritative in `docs/architecture/decision-points/catalog.md`.
+
 ## v1.1 Approved starting responsibility boundary
 
 The Approved Baseline currently describes approximately this topology:
@@ -138,6 +143,8 @@ Central navigation:
 
 - `docs/requirements/requirements-vNext.md`
 - `docs/architecture/qa-dp-traceability.md`
+- `docs/architecture/decision-points/catalog.md`
+- `docs/architecture/qa-legacy-migration.md`
 - `docs/evaluation/evaluation-strategy.md`
 
 ## vNext Top Architectural Drivers
@@ -149,7 +156,9 @@ Central navigation:
 | **QA-03** | 변경이 잘 격리되는가? | Change Containment Rate (CCR) |
 | **QA-04** | 실행 경로를 정하기 위해 AI 판단을 얼마나 요구하는가? | Average Model Calls to Commit Execution Route |
 
-The older QA-01~11 inside v1.1 are preserved as **Legacy v1.1 Detailed QA** and are reclassified in central traceability; they are not deleted.
+The older QA-01~11 inside v1.1 are preserved as **Legacy v1.1 Detailed QA**.
+Their retained obligations, diagnostics, and identifier history are mapped in
+`docs/architecture/qa-legacy-migration.md`; they are not deleted.
 
 ## Scored drivers and mandatory conditions
 
@@ -205,8 +214,34 @@ The presence of a role does not imply that every alternative must implement it a
 ## Not yet decided
 
 - final DP-00 A/B/C/D topology commitment
-- final responsibility placement
-- final Intent Refiner / Agent Router / Task Manager placement
+- within-family responsibility decomposition not already constrained by DP-00
+- within-family Intent Refiner, route-decision, task-state/recovery, and
+  lifecycle-control structure under DP-09/10/11/13/14
 - exact Fast Path capability set
 - minimum QA-02 correctness gate
 - production Model/Agent/Tool latency values
+
+## Current downstream structural boundaries
+
+The catalog keeps these axes separate:
+
+```text
+logical execution ownership       = DP-00
+VIA-local process/runtime hosting = DP-03, conditional on C/D
+execution-interface commonality   = DP-04
+capability registration authority = DP-12
+task/execution state + recovery   = DP-13
+lifecycle commands + cancellation = DP-14
+failure containment               = DP-15
+request-time route selection      = DP-11
+```
+
+VIA ownership does not imply same-process hosting. A common execution contract
+does not imply a shared implementation or runtime. User-facing task projection,
+executor-authoritative domain state, and persistence/recovery are not one
+undifferentiated “state.”
+
+The next recommended all-family investigation is DP-13 Execution State and
+Recovery Authority. DP-03 Local Execution Hosting and Isolation is the next
+conditional C/D investigation. Neither recommendation selects a structural
+alternative or changes DP-00's deferred state.

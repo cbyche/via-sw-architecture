@@ -7,6 +7,10 @@ comparative experimentation and trade-space characterization are complete;
 final A/B/C/D selection is intentionally deferred pending discriminating
 downstream architecture evidence.
 
+The reviewed downstream catalog is authoritative in
+`docs/architecture/decision-points/catalog.md`; its before/after rationale is
+`docs/architecture/analysis/AA-027-structural-decision-catalog-review.md`.
+
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline. This file does not rewrite that baseline; it reclassifies architecture-analysis navigation around DP-00 and the vNext Top Architectural Drivers.
 
 ## Terminology: Top QA vs Legacy v1.1 Detailed QA
@@ -22,6 +26,9 @@ Legacy v1.1 QA-11
 ```
 
 This disambiguation is mandatory when both generations are discussed in the same document.
+
+The detailed generation mapping and preservation rules are maintained once in
+`docs/architecture/qa-legacy-migration.md`.
 
 ## Central traceability storyline
 
@@ -140,55 +147,59 @@ The numeric gate remains **TBD** until Pilot/calibration and must be frozen befo
 
 ## Legacy v1.1 Detailed QA → vNext classification
 
-The legacy QA set remains authoritative as part of v1.1. The following table describes its role in vNext evaluation/navigation; it does not change the approved legacy definitions or targets.
+The legacy QA set and its approved targets remain authoritative in v1.1.
+Current navigation separates:
 
-| Legacy v1.1 Detailed QA | vNext classification | Relationship |
-| --- | --- | --- |
-| **Legacy QA-01 — VIA software processing latency** | **Top QA-01 Secondary / diagnostic** | VIA-owned software overhead decomposes FTOL and helps explain architecture-induced latency. |
-| **Legacy QA-02 — concurrent-task capacity & PC co-existence** | **Detailed operational architecture QA / supporting constraint** | Capacity, resource arbitration and foreground co-existence remain important but are not one of DP-00's four scored top drivers. |
-| **Legacy QA-03 — conversation/task recovery** | **Reliability / Mandatory Qualification candidate** | Recovery obligations are non-compensable where required by the baseline. |
-| **Legacy QA-04 — dependency failure containment** | **Reliability / Mandatory Qualification candidate** | Failure isolation/containment should be a gate where violation makes an alternative unacceptable. |
-| **Legacy QA-05 — changeability & integration** | **Top QA-03 detailed / Secondary evidence** | Existing modifiability/replaceability/interoperability concerns contribute to Flexibility diagnosis. |
-| **Legacy QA-06 — external Context minimization** | **Privacy/Security supporting QA / Mandatory Qualification candidate** | Context minimization and egress policy are privacy/trusted-boundary obligations. |
-| **Legacy QA-07 — Model/Token cost efficiency** | **Top QA-04 Secondary / derived resource metric** | Token/cache/provider cost remains diagnostic; logical route-decision call count is the Top QA Primary. |
-| **Legacy QA-08 — observability & audit overhead** | **Cross-cutting supporting QA** | Analysability/accountability and instrumentation overhead support all evaluation tracks. |
-| **Legacy QA-09 — screen/pointer referent-binding accuracy** | **Top QA-02 Secondary correctness slice** | Referent binding is one canonical correctness dimension. |
-| **Legacy QA-10 — user-request / existing-new task association correctness** | **Top QA-02 Secondary correctness slice** | Task relation/id and follow-up association are canonical correctness dimensions. |
-| **Legacy QA-11 — Downstream Agent routing correctness** | **Top QA-02 Secondary correctness slice** | Agent/execution-owner routing conformance is a canonical correctness dimension. |
+1. the four scored Top QAs;
+2. retained mandatory/supporting obligations, including recovery, failure
+   containment, privacy, cancellation, task-state integrity, resource
+   co-existence, and audit;
+3. retained diagnostics/correctness slices whose approved targets are not
+   erased by Top-QA classification; and
+4. historical identifier explanation and superseded duplicate prose.
+
+Only a future executable vNext gate encoding can remain TBD; the Approved
+Baseline obligation is not optional. See
+`docs/architecture/qa-legacy-migration.md` for the complete mapping.
 
 ## Decision Point hierarchy
 
-DP-00 does **not** delete or invalidate DP-01~DP-12. It is the higher-order responsibility/placement decision that constrains or reshapes their alternatives and interpretation.
+DP-00 is the parent responsibility/ownership decision. The catalog review did
+not preserve every preliminary row automatically: it kept, reframed, split,
+absorbed, or demoted each item using an explicit structural test.
 
-Examples:
-
-- Intent Refiner existence/depth depends on how much semantic authority remains in VIA.
-- Agent Router placement/importance depends on whether routing occurs in VIA, ARGO, or an adaptive selector.
-- Fast Path scope depends on the selected responsibility boundary.
-- ARGO may be a peer Agent, preferred route, per-turn owner, or primary runtime depending on DP-00.
-- Task/context ownership and handoff semantics depend on where primary execution authority resides.
-
-The existing lower-level DP documents remain open unless separately decided.
+Logical ownership, process/runtime hosting, common execution interface, state
+and recovery authority, registration authority, request-time routing, lifecycle
+control, and failure containment are separate axes. See the authoritative
+catalog and AA-027 for exact mappings and conditional applicability.
 
 ## DP ↔ Top-QA working map
 
-`Related Legacy QA` refers to the v1.1 QA IDs as originally used by the older central traceability. `Top QA` is the vNext driver mapping.
+Legacy and mandatory/supporting mappings are maintained in
+`docs/architecture/qa-legacy-migration.md`. `Top QA` below is the current driver
+mapping.
 
-| DP | Problem | Relationship to DP-00 | Related FR | Top QA | Related Legacy v1.1 QA | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| **DP-00** | **VIA Primary Execution Boundary** | **Top-level** | UC-01/04/05/07/10/11/12/13/16; FR-06~11/27/35/37/40~44 areas | **QA-01, QA-02, QA-03, QA-04** | QA-01/03/05/06/07/09/10/11 and supporting QA-02/04/08 | **Trade space characterized; final A/B/C/D selection deferred pending downstream evidence** |
-| DP-01 | Partial / streaming input processing | constrained by owner/semantic-placement choice | FR-01, FR-03, FR-04 | QA-01, QA-02, QA-04 | QA-01, QA-09, QA-10 | Open |
-| DP-02 | Interaction context representation | context consumer/authority depends on DP-00 | FR-03, FR-04 | QA-01, QA-02, QA-03 | QA-01, QA-09 | Open |
-| DP-03 | Capability placement boundary | directly refined/subsumed by DP-00 placement decision | FR-11, FR-42 | QA-01, QA-02, QA-03, QA-04 | QA-01, QA-05, QA-07 | Open; alternatives may need reshaping after DP-00 |
-| DP-04 | Generic vs specialized Downstream Agent integration | Agent boundary changes with DP-00 owner model | FR-11, FR-43 | QA-02, QA-03, QA-04 | QA-01, QA-05, QA-07 | Open |
-| DP-05 | Concurrent task resource arbitration | task/execution ownership constrains scheduler authority | FR-40, FR-41 | QA-01, QA-02 | QA-02, QA-03 | Open |
-| DP-06 | Voice runtime composition & ASR side channel | semantic work placement/early processing depends on DP-00 | FR-01, FR-03, FR-44 | QA-01, QA-02, QA-03, QA-04 | QA-01, QA-05, QA-09 | Open |
-| DP-07 | Model gateway selection policy | model stages/profiles depend on owner topology | FR-44 | QA-01, QA-03, QA-04 | QA-01, QA-05, QA-07 | Open |
-| DP-08 | Voice/Text interaction unification boundary | common turn/control-plane ownership depends on DP-00 | FR-37, FR-39 | QA-01, QA-02, QA-03 | QA-03, QA-05, QA-10 | Open |
-| DP-09 | Existing-task vs new-task association | association authority/state owner depends on DP-00 | FR-27, FR-37, FR-43 | QA-02, QA-04 | QA-03, QA-10 | Open |
-| DP-10 | Intent refinement architecture | existence/depth/placement directly constrained by DP-00 | FR-06~10 | QA-01, QA-02, QA-03, QA-04 | QA-01, QA-07, QA-09, QA-10 | Open |
-| DP-11 | Downstream Agent routing architecture | router may live in VIA, ARGO or adaptive selector | FR-11, FR-35 | QA-01, QA-02, QA-03, QA-04 | QA-01, QA-05, QA-11 | Open |
-| DP-12 | Downstream Agent capability contract | contract role varies with route/owner topology | FR-11, FR-35, FR-43 | QA-02, QA-03 | QA-04, QA-05, QA-11 | Open |
+| DP | Current structural scope | Relationship to DP-00 | Top QA | Status |
+| --- | --- | --- | --- | --- |
+| **DP-00** | **Primary execution ownership/topology** | **Parent A/B/C/D** | **01/02/03/04** | **Characterized; selection deferred** |
+| DP-01 | Speculative input artifact ownership and commit/cancel | owner varies by family | 01/02/04 | Open |
+| DP-02 | Interaction-evidence authority and transfer | all families | 01/02/03 | Open |
+| DP-03 | VIA-local executor hosting/isolation | C/D conditional | 01/03 | Open; next C/D-specific investigation |
+| DP-04 | Execution-contract unification boundary | C/D primarily; Agent commonality A/B | 01/02/03 | Open |
+| DP-05 | Cross-task resource arbitration authority | where conflicting concurrency exists | 01/02/03 | Open |
+| DP-06 | Voice runtime composition boundary | all families | 01/02/03/04 | Open |
+| DP-08 | Voice/Text canonical-turn boundary | all families | 01/02/03 | Open |
+| DP-09 | Existing-task association authority | all; strongest for D | 02/04 | Open |
+| DP-10 | Intent-refinement responsibility decomposition | family-constrained | 01/02/03/04 | Open |
+| DP-11 | Eligibility/semantic selection/route-commit split | owner fixed by DP-00 | 01/02/03/04 | Open |
+| DP-12 | Capability catalog/registration authority | all families | 02/03 | Open |
+| DP-13 | Task projection/executor state reconciliation and recovery | all; strongest for B/D | 02/03 | Open; recommended next investigation |
+| DP-14 | Lifecycle command/cancellation authority | all families | 01/02/03 | Open |
+| DP-15 | Failure containment/resilience authority | all families | 02/03 | Open |
+
+DP-07 is `POLICY_OR_CONFIGURATION_NOT_STANDALONE_DP`. Model/provider choice,
+timeout, retry count/backoff/profile, and ranking values remain governed by FR-44/AP-02 unless a
+future structural policy-authority proposal passes the admission test.
 
 ## Evaluation and benchmark traceability
 
@@ -234,8 +245,11 @@ Architecture Decision / ADR when priorities are explicit
 - DP-00 trade-space characterization: **complete** in AA-026.
 - Final A/B/C/D selection: **intentionally deferred pending downstream
   architecture evidence**.
-- Highest-information-gain next investigation: **DP-03 Capability placement
-  boundary**.
+- AA-026's historical next step was old-scope DP-03 Capability Placement. The
+  catalog review found that ownership question absorbed by DP-00.
+- Current all-family next investigation: **DP-13 Execution State and Recovery
+  Authority**. Current C/D-specific next investigation: **reframed DP-03 Local
+  Execution Hosting and Isolation**.
 - QA-02 minimum correctness eligibility and executable mandatory qualification
   gates remain unresolved; no post-result threshold is invented.
 - Production Model/Agent/Tool latency values remain unresolved and will refine

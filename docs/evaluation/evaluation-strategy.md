@@ -458,10 +458,13 @@ Controls reduce these threats; they do not prove that the threats disappear.
 
 The v1.1 QA definitions and approved targets remain unchanged inside `requirements-v1.1.md`.
 
-Central vNext navigation reclassifies them as supporting/diagnostic concerns or Mandatory Qualification candidates. See:
+Central vNext navigation classifies them as retained supporting/diagnostic
+concerns or retained mandatory obligations. The obligations remain approved;
+only a future executable vNext gate encoding may be TBD. See:
 
 - `docs/requirements/requirements-vNext.md`
 - `docs/architecture/qa-dp-traceability.md`
+- `docs/architecture/qa-legacy-migration.md`
 
 When referring to an old ID in vNext evaluation documents, use `Legacy v1.1 QA-xx` where ambiguity is possible.
 
