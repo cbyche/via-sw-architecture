@@ -1,4 +1,4 @@
-# DP-03 — Local Execution Hosting and Isolation Boundary
+# DP-16 — Local Execution Hosting and Isolation Boundary
 
 ## Status
 
@@ -59,12 +59,12 @@ Examples, not selections:
 
 These alternatives must not be mixed with “one common execution interface” as
 if they were mutually exclusive. Hosting and interface unification are
-composable DP-03 and DP-04 axes.
+composable DP-16 and DP-04 axes.
 
 ## Dependencies and evidence plan
 
 - DP-12 supplies capability identity/trust/resource facts.
-- DP-03 assumes only a minimal host seam; its hosting constraints inform later
+- DP-16 assumes only a minimal host seam; its hosting constraints inform later
   coordinated DP-04 execution-contract work.
 - DP-13 defines state/recovery authority.
 - DP-14 defines lifecycle and cancellation authority.
@@ -78,10 +78,11 @@ failure models before any prototype or benchmark campaign is authorized.
 
 ## Catalog history
 
-The old DP-03 Capability Placement question compared Thin/Hybrid/Rich VIA
-ownership. AA-027 classifies that meaning as absorbed by DP-00 and explicitly
-reframes this ID to the residual hosting/isolation axis. Historical references
-retain their old meaning; current work must use this full title.
+This question was initially drafted under a reused DP-03 identifier in commit
+`7eb83eae`. The governance correction moved it to DP-16 before any alternative
+was investigated or selected. DP-03 permanently retains its historical
+Capability Placement meaning and is inactive because that question is absorbed
+into DP-00.
 
 ## Decision
 

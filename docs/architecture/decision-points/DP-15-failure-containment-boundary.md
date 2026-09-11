@@ -34,7 +34,7 @@ Out of scope:
 - retry counts, backoff durations, or route ranking values;
 - replacement-route selection and commit, which belong to DP-11 after DP-15
   authorizes recovery routing;
-- local-executor process hosting, which is DP-03 input;
+- local-executor process hosting, which is DP-16 input;
 - cancellation command/race ownership, which is DP-14;
 - persistence/reconciliation mechanism, which is DP-13;
 - reimplementing an Agent's internal tool security or recovery in VIA.
@@ -45,7 +45,7 @@ All DP-00 families must satisfy the same containment obligations. A/C mediate
 Agent failures at the VIA boundary; B must preserve ARGO domain authority while
 preventing primary-runtime failure from corrupting unrelated VIA tasks; D must
 contain failures per committed route and make any alternate-route transition
-explicit. C/D additionally consume DP-03 local-host isolation outcomes.
+explicit. C/D additionally consume DP-16 local-host isolation outcomes.
 
 ## Structural alternatives to investigate
 
@@ -58,7 +58,7 @@ Examples, not selections:
 ## QA and dependencies
 
 Direct: Top QA-02/03 and Legacy v1.1 QA-04. Qualification: failure containment,
-task-state integrity, recovery, trust/privacy, and audit. DP-15 consumes DP-03
+task-state integrity, recovery, trust/privacy, and audit. DP-15 consumes DP-16
 hosting and DP-04 event contracts, informs DP-13 state, requests lifecycle
 transitions through DP-14, and delegates replacement-route selection/commit to
 DP-11 when recovery routing is allowed.

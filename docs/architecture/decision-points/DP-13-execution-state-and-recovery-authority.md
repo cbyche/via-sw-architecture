@@ -41,7 +41,7 @@ Out of scope:
 - capability registration/health authority (DP-12);
 - storage product/schema tuning;
 - lifecycle command ownership and cancel races (DP-14);
-- process hosting (DP-03);
+- process hosting (DP-16);
 - user-facing task-association decision (DP-09).
 
 ## Parent constraints and applicability
@@ -68,7 +68,7 @@ Examples, not selections:
 
 Direct: Top QA-02/03. Qualification: required task-state integrity, recovery,
 privacy/trust, failure containment, and audit. DP-13 consumes DP-00 authority,
-coordinates with DP-03/04/12/14, and supplies the state index used by DP-09.
+coordinates with DP-16/04/12/14, and supplies the state index used by DP-09.
 
 ## Decision
 

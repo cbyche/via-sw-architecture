@@ -1040,7 +1040,7 @@ Remaining future work:
 
 - tactic experiment results — **TBD**;
 - Real-stack validation — **TBD**;
-- DP-13 all-family state/recovery investigation, reframed DP-03 conditional
+- DP-13 all-family state/recovery investigation, DP-16 conditional
   hosting/isolation, and other discriminating downstream evidence — **TBD**;
 - final conditional trigger resolution and A/B/C/D commitment — **TBD**;
 - ADR — **TBD**.

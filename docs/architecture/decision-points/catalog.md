@@ -2,7 +2,8 @@
 
 ## Status and authority
 
-**Authoritative catalog for open vNext structural Decision Points.**
+**Authoritative catalog for vNext structural decision identities, dispositions,
+and open Decision Points.**
 
 This catalog supersedes the preliminary `ADP-01`~`ADP-12` candidate table in
 `docs/requirements/requirements-v1.1.md` for current architecture-work
@@ -50,14 +51,14 @@ execution-state authority, registration ownership, request-time routing, and
 cancellation are separate axes. Some parent families make an axis inapplicable;
 they do not make the axes synonymous.
 
-## Active catalog summary
+## Catalog disposition summary
 
 | ID | Structural decision question | Disposition | Applies under DP-00 | Authoritative detail |
 | --- | --- | --- | --- | --- |
 | DP-00 | Where does primary substantive reasoning/execution authority sit? | KEEP; characterized, selection deferred | A/B/C/D | `DP-00-primary-execution-boundary.md` and executable spec |
 | DP-01 | Which pre-commit input-processing stages may create speculative artifacts, and who validates, cancels, or commits them? | REFRAME | A/B/C/D | This catalog until a dedicated DP is needed |
 | DP-02 | Which component owns the immutable interaction-evidence timeline and exposes time-correlated referents across execution boundaries? | REFRAME | A/B/C/D | This catalog until a dedicated DP is needed |
-| DP-03 | When a VIA-owned local executor exists, is it hosted in the VIA process or behind a separately supervised local runtime boundary? | REFRAME | C/D; conditional variants only where VIA owns execution | `DP-03-local-execution-hosting-boundary.md` |
+| DP-03 | Should substantive work be delegated or may VIA execute local-safe capabilities? | ABSORBED INTO DP-00 / INACTIVE | Historical A/B/C/D ownership input | `DP-03-capability-placement-boundary.md` |
 | DP-04 | Across the executors applicable to a DP-00 family, what common execution-contract core and specialization boundary should exist? | REFRAME | C/D local-versus-Agent; A/B Agent-to-Agent/ARGO-to-Specialist | This catalog until a dedicated DP is needed |
 | DP-05 | Which component owns cross-task admission and exclusive-resource arbitration? | KEEP | A/B/C/D where concurrent conflicting work exists | This catalog until a dedicated DP is needed |
 | DP-06 | Is the voice runtime an integrated S2S boundary or a composition of replaceable media/ASR/reasoning/TTS stages? | SPLIT/REFRAME | A/B/C/D | This catalog until a dedicated DP is needed |
@@ -69,13 +70,14 @@ they do not make the axes synonymous.
 | DP-13 | How are VIA's user-facing task projection and executor-authoritative execution state reconciled and recovered? | NEW | A/B/C/D; strongest discriminator for B/D | `DP-13-execution-state-and-recovery-authority.md` |
 | DP-14 | Which component owns execution lifecycle commands and terminal-event arbitration across the execution boundary? | NEW | A/B/C/D | `DP-14-execution-lifecycle-control-boundary.md` |
 | DP-15 | Which component detects/contains failures, coordinates retry/degrade, authorizes recovery routing, and chooses controlled failure? | NEW | A/B/C/D | `DP-15-failure-containment-boundary.md` |
+| DP-16 | When a VIA-owned local executor exists, is it hosted in the VIA process or behind a separately supervised local runtime boundary? | NEW ID for previously drafted hosting question | C/D; conditional variants only where VIA owns execution | `DP-16-local-execution-hosting-boundary.md` |
 
 DP-07 is not active as a standalone DP. Model choice, timeout, retry count/
 backoff/profile values, cost weight, and default binding remain versioned policy/configuration under FR-44
 and AP-02. A future proposal may reopen a structural DP only if it demonstrates
 a material change to policy ownership/enforcement or the Model Gateway boundary.
 
-## Active DP cards
+## Catalog DP cards
 
 ### DP-01 — Speculative Input Processing Boundary
 
@@ -125,19 +127,16 @@ a material change to policy ownership/enforcement or the Model Gateway boundary.
 - **Dependencies / condition:** feeds DP-01, DP-08, and DP-10; all A/B/C/D.
 - **Status / authority:** Open; catalog-level definition is sufficient.
 
-### DP-03 — Local Execution Hosting and Isolation Boundary
+### DP-03 — Capability Placement Boundary
 
-- **Decision question:** When VIA logically owns a local executor, is it hosted
-  in the VIA process or behind a separately supervised local runtime boundary?
-- **Need / risk:** local execution can affect FTOL while process isolation,
-  credential/trust boundaries, restart independence, and blast radius affect
-  Top QA-01/03 and mandatory failure/recovery constraints.
-- **In scope / out of scope / dependencies:** authoritative detail is in
-  `DP-03-local-execution-hosting-boundary.md`. The capability allow-list and
-  whether VIA owns local execution at all are out of scope because DP-00 already
-  owns that question.
-- **Status / authority:** Open and conditional; dedicated DP required because it
-  is the next structural investigation.
+- **Historical question:** Should substantive work be delegated to a
+  Downstream Agent, or may VIA directly execute bounded or broader local-safe
+  capabilities?
+- **Disposition:** **ABSORBED INTO DP-00 / INACTIVE.** DP-00 owns the logical
+  execution-placement alternatives. Historical DP-03 references permanently
+  retain this meaning.
+- **Redirect:** `DP-03-capability-placement-boundary.md`. Physical hosting and
+  isolation of a VIA-owned local executor is the distinct DP-16.
 
 ### DP-04 — Execution Contract Unification Boundary
 
@@ -152,7 +151,7 @@ a material change to policy ownership/enforcement or the Model Gateway boundary.
   cancellation, task integrity, trusted-boundary, and audit semantics must survive.
 - **In scope:** execute/progress/status/result/error/cancel contract topology,
   extension points, adapters, and version compatibility.
-- **Out of scope:** same-process versus service hosting (DP-03), capability
+- **Out of scope:** same-process versus service hosting (DP-16), capability
   metadata registration (DP-12), route ranking (DP-11), and timeout values.
 - **Parent constraint:** A exposes Agent-to-Agent port commonality, B exposes
   ARGO-to-Specialist integration, and C/D add the local-versus-Agent question.
@@ -160,7 +159,7 @@ a material change to policy ownership/enforcement or the Model Gateway boundary.
 - **Open structure / change surface:** one port, common core plus extensions, or
   distinct ports changes Orchestrator/Task Manager, local executor, Agent
   harness adapters, event schema, and compatibility testing.
-- **Dependencies / condition:** DP-03 may first assume a minimal host seam and
+- **Dependencies / condition:** DP-16 may first assume a minimal host seam and
   feed hosting constraints into coordinated DP-04 work; DP-04 also coordinates
   with DP-12 and DP-14. Open; catalog-level definition is sufficient until
   interface work.
@@ -354,12 +353,25 @@ a material change to policy ownership/enforcement or the Model Gateway boundary.
 - **Status / authority:** Open; dedicated DP required because cross-system
   blast radius is broader than local hosting and is not equivalent to cancel.
 
+### DP-16 — Local Execution Hosting and Isolation Boundary
+
+- **Decision question:** When VIA logically owns a local executor, is it hosted
+  in the VIA process or behind a separately supervised local runtime boundary?
+- **Need / risk:** local execution can affect FTOL while process isolation,
+  credential/trust boundaries, restart independence, and blast radius affect
+  Top QA-01/03 and mandatory failure/recovery constraints.
+- **In scope / out of scope / dependencies:** authoritative detail is in
+  `DP-16-local-execution-hosting-boundary.md`. The capability allow-list and
+  whether VIA owns local execution at all are out of scope because DP-00 already
+  owns that question.
+- **Status / authority:** Open and conditional for C/D; no alternative selected.
+
 ## Non-standalone policy/configuration register
 
 | Concern | Structural owner | Why it is not currently a standalone DP |
 | --- | --- | --- |
 | Model/provider selection, timeout, retry count/backoff/profile values, token budget | FR-44 Model Invocation Profile and AP-02 adapter boundary | Values/selection rules do not yet demonstrate a distinct component or authority boundary. DP-15 separately asks who coordinates retry/degrade after failure. |
-| Fast-capability allow-list contents | DP-00 parent plus governance inside the selected family | Which capabilities qualify is policy; whether VIA owns local execution is DP-00 and where it is hosted is DP-03. |
+| Fast-capability allow-list contents | DP-00 parent plus governance inside the selected family | Which capabilities qualify is policy; whether VIA owns local execution is DP-00 and where it is hosted is DP-16. |
 | Default/preferred Agent | DP-11 route policy | A ranking preference does not relocate routing or execution responsibility. |
 | Queue length, priority number, lease duration | DP-05 arbitration policy | Values configure the selected arbitration structure. |
 | Confidence/clarification thresholds | DP-09/10 policy | Values do not define association/refinement ownership. |

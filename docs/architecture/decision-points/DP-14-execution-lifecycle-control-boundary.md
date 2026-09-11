@@ -34,7 +34,7 @@ Out of scope:
 - cancellation timeout values or retry counts;
 - capability registration lifecycle (DP-12);
 - durable state/recovery mechanism (DP-13);
-- process crash containment and hosting (DP-03);
+- process crash containment and hosting (DP-16);
 - failure detection/classification and retry/degrade/controlled-failure strategy
   (DP-15);
 - internal Agent tool-step lifecycle prohibited by CON-04/AP-05.
@@ -56,7 +56,7 @@ Examples, not selections:
 - split command authority with a formally defined terminal-event arbiter.
 
 Failure containment and cancellation are related but not identical. Local
-process blast radius and restart isolation are DP-03 inputs; cross-system
+process blast radius and restart isolation are DP-16 inputs; cross-system
 containment belongs to DP-15; command propagation and race resolution belong
 here. All must satisfy the same mandatory constraints.
 

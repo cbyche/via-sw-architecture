@@ -184,7 +184,7 @@ mapping.
 | **DP-00** | **Primary execution ownership/topology** | **Parent A/B/C/D** | **01/02/03/04** | **Characterized; selection deferred** |
 | DP-01 | Speculative input artifact ownership and commit/cancel | owner varies by family | 01/02/04 | Open |
 | DP-02 | Interaction-evidence authority and transfer | all families | 01/02/03 | Open |
-| DP-03 | VIA-local executor hosting/isolation | C/D conditional | 01/03 | Open; next C/D-specific investigation |
+| DP-03 | Capability Placement Boundary | Ownership question absorbed into DP-00 | 01/02/03/04 | **Inactive; historical identity preserved** |
 | DP-04 | Execution-contract unification boundary | C/D primarily; Agent commonality A/B | 01/02/03 | Open |
 | DP-05 | Cross-task resource arbitration authority | where conflicting concurrency exists | 01/02/03 | Open |
 | DP-06 | Voice runtime composition boundary | all families | 01/02/03/04 | Open |
@@ -196,6 +196,7 @@ mapping.
 | DP-13 | Task projection/executor state reconciliation and recovery | all; strongest for B/D | 02/03 | Open; recommended next investigation |
 | DP-14 | Lifecycle command/cancellation authority | all families | 01/02/03 | Open |
 | DP-15 | Failure containment/resilience authority | all families | 02/03 | Open |
+| DP-16 | VIA-local executor hosting/isolation | C/D conditional | 01/03 | Open; next C/D-specific investigation |
 
 DP-07 is `POLICY_OR_CONFIGURATION_NOT_STANDALONE_DP`. Model/provider choice,
 timeout, retry count/backoff/profile, and ranking values remain governed by FR-44/AP-02 unless a
@@ -248,7 +249,7 @@ Architecture Decision / ADR when priorities are explicit
 - AA-026's historical next step was old-scope DP-03 Capability Placement. The
   catalog review found that ownership question absorbed by DP-00.
 - Current all-family next investigation: **DP-13 Execution State and Recovery
-  Authority**. Current C/D-specific next investigation: **reframed DP-03 Local
+  Authority**. Current C/D-specific next investigation: **DP-16 Local
   Execution Hosting and Isolation**.
 - QA-02 minimum correctness eligibility and executable mandatory qualification
   gates remain unresolved; no post-result threshold is invented.

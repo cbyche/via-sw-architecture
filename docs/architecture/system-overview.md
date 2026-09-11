@@ -227,7 +227,8 @@ The catalog keeps these axes separate:
 
 ```text
 logical execution ownership       = DP-00
-VIA-local process/runtime hosting = DP-03, conditional on C/D
+historical capability placement   = DP-03, absorbed into DP-00 / inactive
+VIA-local process/runtime hosting = DP-16, conditional on C/D
 execution-interface commonality   = DP-04
 capability registration authority = DP-12
 task/execution state + recovery   = DP-13
@@ -242,6 +243,6 @@ executor-authoritative domain state, and persistence/recovery are not one
 undifferentiated “state.”
 
 The next recommended all-family investigation is DP-13 Execution State and
-Recovery Authority. DP-03 Local Execution Hosting and Isolation is the next
+Recovery Authority. DP-16 Local Execution Hosting and Isolation is the next
 conditional C/D investigation. Neither recommendation selects a structural
 alternative or changes DP-00's deferred state.

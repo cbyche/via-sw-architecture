@@ -14,9 +14,14 @@
 | Work branch | `arch/decision-catalog-review` |
 | Dedicated worktree | `/private/tmp/via-sw-architecture-dp-catalog-review` |
 | Review date | 2026-09-11 |
+| Identifier-governance correction | 2026-09-12; DP-03 preserved, hosting/isolation assigned DP-16 |
 
 The base matched the user-provided checkpoint. Existing DP-00 experiment
 worktrees were not reused or modified.
+
+The governance correction changes identifiers and traceability only. It does
+not change any structural question, applicability, dependency, QA relationship,
+or recommendation established by the review.
 
 Working checklist:
 
@@ -91,7 +96,7 @@ DP unless failure, deployment, trust, recovery, or change impact is material.
 | DP-00 Primary Execution Boundary | KEEP | Unchanged authoritative DP; A/B/C/D and deferred selection preserved. |
 | DP-01 partial/streaming processing | REFRAME | DP-01 Speculative Input Processing Boundary; policy/tactic values excluded. |
 | DP-02 context representation | REFRAME | DP-02 Interaction Evidence Authority; snapshot-vs-timeline choice closed by FR-03/04. |
-| DP-03 Thin/Hybrid/Rich capability placement | MERGE / ABSORBED, then ID explicitly REFRAMED | Ownership question redirects to DP-00. New DP-03 is conditional local execution hosting/isolation, an orthogonal residual. |
+| DP-03 Thin/Hybrid/Rich capability placement | MERGE / ABSORBED INTO DP-00; ID INACTIVE | Ownership question redirects to DP-00. DP-03 permanently retains its historical Capability Placement meaning. |
 | DP-04 generic vs specialized Agent integration | REFRAME | DP-04 Execution Contract Unification Boundary, including local-versus-Agent ports where applicable. |
 | DP-05 concurrent resource arbitration | KEEP | Structural when it decides resource/admission authority; numeric policy excluded. |
 | DP-06 voice composition and ASR side-channel | SPLIT | DP-06 retains voice runtime composition; partial/delta use moves to DP-01 and evidence authority to DP-02. |
@@ -104,21 +109,23 @@ DP unless failure, deployment, trust, recovery, or change impact is material.
 | No explicit owner for task projection/executor state reconciliation | ADD DP-13 | Execution State and Recovery Authority. |
 | No explicit owner for lifecycle control/cancel races | ADD DP-14 | Execution Lifecycle Control Boundary. |
 | No explicit cross-system dependency-failure boundary | ADD DP-15 | Failure Containment and Resilience Boundary. |
+| No explicit VIA-local hosting/isolation boundary | ADD DP-16 | Local Execution Hosting and Isolation Boundary, conditional for C/D. |
 
-This mapping is intentionally explicit because DP-03 now has a different but
-related meaning. Historical documents keep their original DP-03 meaning; new
-work must cite the new title or this mapping.
+DP-03 was briefly reused for the hosting question in commit `7eb83eae`. The
+follow-up governance correction assigns that question to DP-16. DP-03 is
+inactive and permanently retains Capability Placement identity; historical
+references are not rewritten.
 
 ## Six-question coverage matrix
 
 | Candidate question | Ambiguity / DP-00 scope | Remaining structural decision | Placement | DP-00 applicability / relationships |
 | --- | --- | --- | --- | --- |
-| Q1. Put an execution runtime “inside VIA”? | “Inside” mixes logical ownership, product deployment, and process hosting. DP-00 already fixes logical primary/local execution ownership. | None at ownership level; hosting remains. | Ownership ABSORBED by DP-00; hosting redirects to DP-03. | A: no VIA local executor; B: ARGO authority is not automatically VIA; C/D: VIA-local path exists. |
-| Q2. Local capability in VIA process or separate runtime/service? | “Local” must mean VIA-owned/on-device, and runtime/service differ in supervision/deployment. | IPC, isolation, privilege, crash/restart, upgrade boundary. | DP-03. | C/D direct; A/B N/A. A local ARGO hosting question would require separate admission because ARGO is not VIA-owned. Orthogonal to DP-04. |
-| Q3. Same execution abstraction for VIA-local and Agent execution? | Common outer lifecycle contract is not identical implementation or shared runtime type. | One port, common core plus extensions, or distinct ports/adapters. | DP-04. | C/D strongest; A Agent commonality; B ARGO-to-specialist. Hosting remains DP-03. |
+| Q1. Put an execution runtime “inside VIA”? | “Inside” mixes logical ownership, product deployment, and process hosting. DP-00 already fixes logical primary/local execution ownership. | None at ownership level; hosting remains. | Ownership ABSORBED by DP-00; hosting redirects to DP-16. DP-03 remains the inactive historical Capability Placement ID. | A: no VIA local executor; B: ARGO authority is not automatically VIA; C/D: VIA-local path exists. |
+| Q2. Local capability in VIA process or separate runtime/service? | “Local” must mean VIA-owned/on-device, and runtime/service differ in supervision/deployment. | IPC, isolation, privilege, crash/restart, upgrade boundary. | DP-16. | C/D direct; A/B N/A. A local ARGO hosting question would require separate admission because ARGO is not VIA-owned. Orthogonal to DP-04. |
+| Q3. Same execution abstraction for VIA-local and Agent execution? | Common outer lifecycle contract is not identical implementation or shared runtime type. | One port, common core plus extensions, or distinct ports/adapters. | DP-04. | C/D strongest; A Agent commonality; B ARGO-to-specialist. Hosting remains DP-16. |
 | Q4. Should VIA or executor own capability/execution state? | Conflates catalog/health, VIA task projection, domain execution truth, and persistence/recovery. DP-00 already constrains projection/domain authority by family. | Persistence, checkpoint, reconciliation, idempotency, and recovery authority. | Catalog state DP-12; task/execution reconciliation DP-13. | All; B/D most discriminating. DP-13 supplies DP-09 state. |
 | Q5. Who owns capability registration and execution lifecycle? | These are two lifecycles. DP-00 fixes route/owner families, not publisher/validator or command authority. | Registration/withdrawal/health/version; separately start/follow-up/pause/resume/cancel/terminal arbitration. | Registration DP-12; execution lifecycle DP-14. | Registration and lifecycle apply to all; local publication is C/D conditional. |
-| Q6. Where is the failure/cancellation boundary? | Conflates process blast radius, dependency failure propagation, domain cancellation, and realtime audio interruption. | Hosting isolation; cross-system detection/isolation/degrade/retry; task cancel acknowledgement and terminal race. | Local hosting input DP-03; cancellation DP-14; cross-system containment DP-15; voice barge-in remains DP-01/06/08 concern. | All; C/D local isolation, B/D cross-owner control are strongest. |
+| Q6. Where is the failure/cancellation boundary? | Conflates process blast radius, dependency failure propagation, domain cancellation, and realtime audio interruption. | Hosting isolation; cross-system detection/isolation/degrade/retry; task cancel acknowledgement and terminal race. | Local hosting input DP-16; cancellation DP-14; cross-system containment DP-15; voice barge-in remains DP-01/06/08 concern. | All; C/D local isolation, B/D cross-owner control are strongest. |
 
 ### Evidence anchors for the matrix
 
@@ -151,7 +158,7 @@ DP-00 — logical execution ownership/topology family (selection deferred)
   ├─ DP-15 failure containment ─────────────┬─ DP-13 recovery facts
   │                                        ├─ DP-14 lifecycle transition
   │                                        └─ DP-11 replacement-route commit
-  └─ [C/D] DP-03 local hosting/isolation ───┬─ DP-04 execution contract
+  └─ [C/D] DP-16 local hosting/isolation ───┬─ DP-04 execution contract
                                            └─ DP-15 local blast radius
 
 DP-06 voice composition → DP-01 partial artifacts + DP-02 evidence events
@@ -163,7 +170,7 @@ Sequencing is conditional, not a mandate to evaluate every combination:
   DP-14 lifecycle/cancellation semantics, then DP-15 containment strategy;
   reconcile feedback explicitly rather than treating the graph as acyclic;
 - capability foundation: DP-12 facts before DP-11/05 consumers;
-- C/D local-execution branch: DP-03 assumes a minimal host seam, then feeds
+- C/D local-execution branch: DP-16 assumes a minimal host seam, then feeds
   hosting constraints into coordinated DP-04 and DP-15 work;
 - semantic chain: DP-02/01/08 → DP-10 → DP-09 → DP-11;
 - concurrency: DP-12 resource declaration + DP-13/14 lifecycle → DP-05;
@@ -185,7 +192,7 @@ Recovery Authority**:
 
 It applies to A/B/C/D, tests B's VIA-projection/ARGO-authority split and D's
 ownership transfer directly, and connects mandatory recovery/task-integrity
-requirements before another experiment is designed. Reframed DP-03 is the next
+requirements before another experiment is designed. DP-16 is the next
 conditional C/D investigation; this review does not run either investigation.
 
 ## QA preservation result
