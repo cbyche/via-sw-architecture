@@ -59,6 +59,15 @@ where
         Ok(ArgoDecision::Clarify)
     } else if output.contains("CONTINUE_T1") {
         Ok(ArgoDecision::ContinueT1)
+    } else if output.contains("DOCUMENT_SUMMARY_AGENT")
+        && capabilities
+            .iter()
+            .any(|fact| fact.key == "executor" && fact.value == "DocumentSummaryAgent")
+    {
+        Ok(ArgoDecision::Delegate {
+            executor: ExecutorId::from("DocumentSummaryAgent"),
+            action: action(output),
+        })
     } else if output.contains("NETWORK_AGENT") {
         Ok(ArgoDecision::Delegate {
             executor: ExecutorId::from("NetworkAgent"),
