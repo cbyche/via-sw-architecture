@@ -7,7 +7,28 @@ from typing import Any, Iterable
 
 from .models import ActualSemanticFacts, EpisodeEvidence
 from .semantics import event_variant
-from .validation import SUPPORTED_CANONICAL_EVENT_VERSIONS
+from .validation import (
+    PAIRED_RUN_PROVENANCE_VERSION,
+    RUN_PROVENANCE_VERSION,
+    SUPPORTED_CANONICAL_EVENT_VERSIONS,
+)
+
+
+LEGACY_RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v2"
+
+
+def supports_measurement_spine(
+    provenance_version: str, instrumentation_mode: str
+) -> bool:
+    """Return explicit provenance/mode support; never infer it from stored events."""
+    if provenance_version == LEGACY_RUN_PROVENANCE_VERSION:
+        return instrumentation_mode == "CAPTURE"
+    if provenance_version in {
+        PAIRED_RUN_PROVENANCE_VERSION,
+        RUN_PROVENANCE_VERSION,
+    }:
+        return instrumentation_mode in {"CAPTURE", "MINIMAL"}
+    return False
 
 
 def _deduplicate(values: list[Any]) -> list[Any]:
@@ -243,25 +264,18 @@ def _closed_world_conditions(
         variant not in {"ModelGenerationStarted", "ModelGenerationCompleted"}
         for variant in variants
     )
-    provenance_v3 = (
-        episode.provenance["provenance_schema_version"]
-        == "dp00-pilot-provenance-v3"
-    )
     measurement_spine_recognized = (
         episode.provenance["canonical_event_schema_version"]
         in SUPPORTED_CANONICAL_EVENT_VERSIONS
+        and supports_measurement_spine(
+            episode.provenance["provenance_schema_version"],
+            episode.provenance["instrumentation_mode"],
+        )
         and (
-            (
-                provenance_v3
-                and episode.provenance["instrumentation_mode"]
-                in {"CAPTURE", "MINIMAL"}
-                and episode.provenance["measurement_spine_event_count"]
-                == measurement_spine_count
-            )
-            or (
-                not provenance_v3
-                and episode.provenance["instrumentation_mode"] == "CAPTURE"
-            )
+            episode.provenance["provenance_schema_version"]
+            == LEGACY_RUN_PROVENANCE_VERSION
+            or episode.provenance["measurement_spine_event_count"]
+            == measurement_spine_count
         )
     )
     return {
@@ -271,7 +285,7 @@ def _closed_world_conditions(
         "EVENT_COUNT_MATCHES_CAPTURED_STREAM": episode.provenance["event_count"]
         == len(episode.canonical_events),
         # Historical key retained for v0.2 coverage-map compatibility. In
-        # provenance-v3 it means a validated CAPTURE or MINIMAL Measurement Spine.
+        # provenance-v3/v4 it means a validated CAPTURE or MINIMAL Measurement Spine.
         "CAPTURE_MODE_AND_SCHEMA_RECOGNIZED": measurement_spine_recognized,
         "RELEVANT_BOUNDARY_DECLARED": bool(absence.get("relevant_stream")),
         "NO_EPISODE_INTEGRITY_ERROR": not episode.integrity_issues,

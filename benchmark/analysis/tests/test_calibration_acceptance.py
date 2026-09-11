@@ -46,10 +46,12 @@ def paired(*, capture=lambda cycle, scenario, alternative: 1_000.0,
                 })
     return {
         "pairs": rows,
-        "missing_pairs": [],
-        "duplicate_pairs": [],
-        "semantic_mismatches": [],
-        "provenance_mismatches": [],
+        "incomplete_pairs": [],
+        "duplicate_mode_pairs": [],
+        "semantic_mismatch_pairs": [],
+        "qa02_mismatch_pairs": [],
+        "qa04_mismatch_pairs": [],
+        "provenance_mismatch_pairs": [],
     }
 
 
@@ -146,7 +148,15 @@ def test_identical_pair_requires_eight_eight_mode_order_balance():
 
 
 @pytest.mark.parametrize(
-    "key", ["missing_pairs", "duplicate_pairs", "semantic_mismatches", "provenance_mismatches"]
+    "key",
+    [
+        "incomplete_pairs",
+        "duplicate_mode_pairs",
+        "semantic_mismatch_pairs",
+        "qa02_mismatch_pairs",
+        "qa04_mismatch_pairs",
+        "provenance_mismatch_pairs",
+    ],
 )
 def test_malformed_pair_is_rejected(key):
     value = paired()

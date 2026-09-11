@@ -2,7 +2,7 @@
 
 This package performs deterministic post-run analysis of immutable Rust raw evidence. Python is not an AUT dependency, never enters the Rust timed execution path, makes no architecture decision, and never rewrites `results/raw/**`. Derived files belong under `results/derived/**`.
 
-`dp00-analysis-v7` validates the current `canonical-event-v3`, `model-call-v1`, `dp00-pilot-provenance-v4`, `dp00-calibration-manifest-v1`, and `dp00-pilot-campaign-provenance-v1` contracts while retaining read support for immutable v2/v3 provenance/event evidence. Required fields, unknown fields, invalid enums, absent/unsupported versions, and asset reference/version mismatches are errors; no implicit defaults or migrations are applied. v7 retains v6 schedule semantics and adds the prospective `dp00-calibration-acceptance-v1` stability gate and paired bootstrap diagnostics.
+`dp00-analysis-v8` validates the current `canonical-event-v3`, `model-call-v1`, `dp00-pilot-provenance-v4`, `dp00-calibration-manifest-v1`, and `dp00-pilot-campaign-provenance-v1` contracts while retaining read support for immutable v2/v3 provenance/event evidence. Required fields, unknown fields, invalid enums, absent/unsupported versions, and asset reference/version mismatches are errors; no implicit defaults or migrations are applied. v8 retains the v7 acceptance formulas unchanged, explicitly recognizes v3/v4 CAPTURE and MINIMAL Measurement Spines during QA-02 closed-world qualification, and separates paired rejection diagnostics by cause.
 
 QA-01 derives exact integer nanosecond FTOL as authoritative Outcome Probe useful-outcome time minus Interaction Fixture acoustic EOS time, only for manifest-eligible successful episodes. Human-facing milliseconds are derived afterward. Both explicit nearest-rank and `(n-1)` linear-interpolated p50/p95/p99 candidates and small-N sensitivity are emitted; the final percentile estimator remains TBD.
 
@@ -28,6 +28,12 @@ PYTHONPATH=benchmark/analysis .venv/bin/python -m dp00_analysis summary <derived
 ```
 
 `analysis-summary.json` contains `analysis_version`, validation errors/warnings, QA-01 counts/estimators/per-scenario diagnostics, QA-02 AECR/constraint/dimension/coverage diagnostics, QA-04 per-episode/overall/macro/class/no-route diagnostics, paired-calibration completeness/invariance diagnostics, counterbalanced-schedule diagnostics, and analysis provenance. Identical raw evidence, analysis version, and method configuration produce byte-deterministic sorted JSON output apart from the explicitly recorded interpreter/environment provenance.
+
+In v8, `paired_calibration` exposes `incomplete_pairs`,
+`duplicate_mode_pairs`, `semantic_mismatch_pairs`, `qa02_mismatch_pairs`,
+`qa04_mismatch_pairs`, and `provenance_mismatch_pairs` independently. It also
+provides a sorted `rejected_pairs` union and `rejection_reasons_by_pair`; the
+semantic field contains only actual normalized-semantic signature mismatches.
 
 For a complete v1 calibration manifest, `calibration_acceptance` uses only complete,
 semantically/provenance-matched, QA-01 exact-correctness-qualified pairs. Its frozen

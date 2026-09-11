@@ -123,20 +123,26 @@ def derive_paired_calibration(
         for row in qa02["scenario_diagnostics"]
     }
     pairs = []
-    missing_pairs = []
-    duplicate_pairs = []
-    semantic_mismatches = []
-    provenance_mismatches = []
+    incomplete_pairs = []
+    duplicate_mode_pairs = []
+    semantic_mismatch_pairs = []
+    qa02_mismatch_pairs = []
+    qa04_mismatch_pairs = []
+    provenance_mismatch_pairs = []
+    rejection_reasons_by_pair: dict[str, list[str]] = {}
     for pair_id, rows in sorted(grouped.items()):
         by_mode: dict[str, list[EpisodeEvidence]] = defaultdict(list)
         for row in rows:
             by_mode[row.provenance["instrumentation_mode"]].append(row)
         missing_modes = sorted({"CAPTURE", "MINIMAL"} - set(by_mode))
         duplicate_modes = sorted(mode for mode, items in by_mode.items() if len(items) != 1)
+        rejection_reasons = []
         if missing_modes:
-            missing_pairs.append({"pair_id": pair_id, "missing_modes": missing_modes})
+            incomplete_pairs.append({"pair_id": pair_id, "missing_modes": missing_modes})
+            rejection_reasons.append("INCOMPLETE_PAIR")
         if duplicate_modes:
-            duplicate_pairs.append({"pair_id": pair_id, "duplicate_modes": duplicate_modes})
+            duplicate_mode_pairs.append({"pair_id": pair_id, "duplicate_modes": duplicate_modes})
+            rejection_reasons.append("DUPLICATE_MODE")
         complete = not missing_modes and not duplicate_modes and len(rows) == 2
         item: dict[str, Any] = {
             "pair_id": pair_id,
@@ -187,9 +193,23 @@ def derive_paired_calibration(
                 and not minimal.scenario["qa_eligibility"]["qa01"]["eligible"]
             )
             if not provenance_match:
-                provenance_mismatches.append(pair_id)
-            if not (semantic_match and qa02_match and qa04_match):
-                semantic_mismatches.append(pair_id)
+                provenance_mismatch_pairs.append(pair_id)
+                rejection_reasons.append("PROVENANCE_MISMATCH")
+            if not semantic_match:
+                semantic_mismatch_pairs.append(pair_id)
+                rejection_reasons.append("SEMANTIC_MISMATCH")
+            if not qa02_match:
+                qa02_mismatch_pairs.append(pair_id)
+                rejection_reasons.append("QA02_MISMATCH")
+            if not qa04_match:
+                qa04_mismatch_pairs.append(pair_id)
+                rejection_reasons.append("QA04_MISMATCH")
+            if not qa04_qualified:
+                rejection_reasons.append("QA04_NOT_QUALIFIED")
+            if not ftol_boundaries_present:
+                rejection_reasons.append("FTOL_BOUNDARY_MISSING")
+            if qa02_by_run.get(capture.provenance["run_id"]) is not True:
+                rejection_reasons.append("QA02_NOT_CONFORMANT")
             item.update({
                 "cycle": capture.provenance["order_cycle"],
                 "scenario": capture.provenance["scenario_id"],
@@ -224,16 +244,26 @@ def derive_paired_calibration(
                     and ftol_boundaries_present
                     and qa02_by_run.get(capture.provenance["run_id"]) is True
                 ),
+                "rejection_reasons": sorted(rejection_reasons),
             })
+        if rejection_reasons:
+            rejection_reasons_by_pair[pair_id] = sorted(rejection_reasons)
         pairs.append(item)
     return {
         "measured_execution_count": len(calibration),
         "observed_pair_count": len(grouped),
         "complete_pair_count": sum(item["complete"] for item in pairs),
         "qualified_pair_count": sum(item.get("qualified", False) for item in pairs),
-        "missing_pairs": missing_pairs,
-        "duplicate_pairs": duplicate_pairs,
-        "provenance_mismatches": provenance_mismatches,
-        "semantic_mismatches": semantic_mismatches,
+        "incomplete_pairs": incomplete_pairs,
+        "duplicate_mode_pairs": duplicate_mode_pairs,
+        "semantic_mismatch_pairs": semantic_mismatch_pairs,
+        "qa02_mismatch_pairs": qa02_mismatch_pairs,
+        "qa04_mismatch_pairs": qa04_mismatch_pairs,
+        "provenance_mismatch_pairs": provenance_mismatch_pairs,
+        "rejected_pairs": sorted(rejection_reasons_by_pair),
+        "rejection_reasons_by_pair": {
+            key: rejection_reasons_by_pair[key]
+            for key in sorted(rejection_reasons_by_pair)
+        },
         "pairs": pairs,
     }

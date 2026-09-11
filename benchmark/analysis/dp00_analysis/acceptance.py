@@ -129,7 +129,14 @@ def derive_calibration_acceptance(
     rejection_reasons = []
     if manifest.get("measured_cycle_count") != MEASURED_CYCLES:
         rejection_reasons.append("EXACTLY_16_MEASURED_CYCLES_REQUIRED")
-    for key in ("missing_pairs", "duplicate_pairs", "semantic_mismatches", "provenance_mismatches"):
+    for key in (
+        "incomplete_pairs",
+        "duplicate_mode_pairs",
+        "semantic_mismatch_pairs",
+        "qa02_mismatch_pairs",
+        "qa04_mismatch_pairs",
+        "provenance_mismatch_pairs",
+    ):
         if paired.get(key):
             rejection_reasons.append(f"MALFORMED_PAIR_{key.upper()}")
     if not schedule_valid:

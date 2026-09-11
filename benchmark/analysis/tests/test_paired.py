@@ -1,6 +1,11 @@
+import json
+from dataclasses import replace
+
 from conftest import model_call, provenance, success_events, write_run
 from dp00_analysis.diagnostics import derive_summary
 from dp00_analysis.loader import load_evidence
+from dp00_analysis.paired import derive_paired_calibration
+from dp00_analysis.qa02 import derive_qa02
 from dp00_analysis.validation import StrictValidationError, validate_run_provenance
 
 
@@ -54,7 +59,10 @@ def test_explicit_capture_minimal_pair_is_complete_and_semantically_qualified(tm
             "qa04_qualified", "ftol_boundaries_present", "qualified",
         )
     }
-    assert result["semantic_mismatches"] == []
+    assert result["semantic_mismatch_pairs"] == []
+    assert result["qa02_mismatch_pairs"] == []
+    assert result["qa04_mismatch_pairs"] == []
+    assert result["provenance_mismatch_pairs"] == []
     assert result["pairs"][0]["ftol_boundaries_present"] is True
     assert result["pairs"][0]["capture_ftol_nanos"] == 1_000_000
     assert result["pairs"][0]["minimal_ftol_nanos"] == 1_000_000
@@ -64,12 +72,13 @@ def test_explicit_capture_minimal_pair_is_complete_and_semantically_qualified(tm
 def test_missing_mode_and_semantic_mismatch_are_detected(tmp_path):
     missing = derive_summary(load_evidence(paired_root(tmp_path / "missing", minimal=False)))["paired_calibration"]
     assert missing["complete_pair_count"] == 0
-    assert missing["missing_pairs"][0]["missing_modes"] == ["MINIMAL"]
+    assert missing["incomplete_pairs"][0]["missing_modes"] == ["MINIMAL"]
 
     mismatch = derive_summary(load_evidence(paired_root(tmp_path / "mismatch", mismatch=True)))["paired_calibration"]
     assert mismatch["complete_pair_count"] == 1
     assert mismatch["qualified_pair_count"] == 0
-    assert mismatch["semantic_mismatches"]
+    assert mismatch["semantic_mismatch_pairs"]
+    assert mismatch["qa02_mismatch_pairs"] == []
 
 
 def test_duplicate_mode_is_detected(tmp_path):
@@ -88,7 +97,7 @@ def test_duplicate_mode_is_detected(tmp_path):
 
     result = derive_summary(load_evidence(root))["paired_calibration"]
     assert result["complete_pair_count"] == 0
-    assert result["duplicate_pairs"][0] == {
+    assert result["duplicate_mode_pairs"][0] == {
         "pair_id": "calibration-1:cycle-1:rotation-1:P01:A",
         "duplicate_modes": ["CAPTURE"],
     }
@@ -104,3 +113,104 @@ def test_source_sha_and_paired_provenance_are_strict():
         assert "source_sha/source_git_commit mismatch" in str(error)
     else:
         raise AssertionError("source mismatch accepted")
+
+
+def _derive_modified_pair(tmp_path, mutate):
+    evidence = load_evidence(paired_root(tmp_path))
+    capture, minimal = sorted(
+        evidence.episodes,
+        key=lambda item: item.provenance["instrumentation_mode"],
+    )
+    assert capture.provenance["instrumentation_mode"] == "CAPTURE"
+    minimal = mutate(minimal)
+    episodes = (capture, minimal)
+    qa02 = derive_qa02(episodes, evidence.coverage_map)
+    return derive_paired_calibration(episodes, qa02)
+
+
+def test_actual_semantic_mismatch_is_classified_only_as_semantic(tmp_path):
+    def mutate(episode):
+        association = dict(episode.actual.task_associations[0], task_relation="FOLLOW_UP")
+        return replace(
+            episode,
+            actual=replace(episode.actual, task_associations=(association,)),
+        )
+
+    result = _derive_modified_pair(tmp_path, mutate)
+    assert result["semantic_mismatch_pairs"]
+    assert result["qa02_mismatch_pairs"] == []
+    assert result["qa04_mismatch_pairs"] == []
+    assert result["provenance_mismatch_pairs"] == []
+
+
+def test_qa02_only_mismatch_is_classified_only_as_qa02(tmp_path):
+    result = _derive_modified_pair(
+        tmp_path,
+        lambda episode: replace(
+            episode,
+            provenance=dict(episode.provenance, measurement_spine_event_count=7),
+        ),
+    )
+    assert result["semantic_mismatch_pairs"] == []
+    assert result["qa02_mismatch_pairs"]
+    assert result["qa04_mismatch_pairs"] == []
+    assert result["provenance_mismatch_pairs"] == []
+
+
+def test_qa04_only_mismatch_is_classified_only_as_qa04(tmp_path):
+    def mutate(episode):
+        route = dict(episode.actual.execution_routes[0], timestamp=1_000_000)
+        return replace(
+            episode,
+            actual=replace(episode.actual, execution_routes=(route,)),
+        )
+
+    result = _derive_modified_pair(tmp_path, mutate)
+    assert result["semantic_mismatch_pairs"] == []
+    assert result["qa02_mismatch_pairs"] == []
+    assert result["qa04_mismatch_pairs"]
+    assert result["provenance_mismatch_pairs"] == []
+
+
+def test_provenance_only_mismatch_is_classified_only_as_provenance(tmp_path):
+    result = _derive_modified_pair(
+        tmp_path,
+        lambda episode: replace(
+            episode,
+            provenance=dict(episode.provenance, source_sha="different-source"),
+        ),
+    )
+    assert result["semantic_mismatch_pairs"] == []
+    assert result["qa02_mismatch_pairs"] == []
+    assert result["qa04_mismatch_pairs"] == []
+    assert result["provenance_mismatch_pairs"]
+
+
+def test_multi_cause_rejection_preserves_every_reason_and_is_deterministic(tmp_path):
+    def mutate(episode):
+        association = dict(episode.actual.task_associations[0], task_relation="FOLLOW_UP")
+        route = dict(episode.actual.execution_routes[0], timestamp=1_000_000)
+        return replace(
+            episode,
+            provenance=dict(
+                episode.provenance,
+                source_sha="different-source",
+                measurement_spine_event_count=7,
+            ),
+            actual=replace(
+                episode.actual,
+                task_associations=(association,),
+                execution_routes=(route,),
+            ),
+        )
+
+    result = _derive_modified_pair(tmp_path, mutate)
+    pair_id = result["rejected_pairs"][0]
+    assert {
+        "PROVENANCE_MISMATCH",
+        "SEMANTIC_MISMATCH",
+        "QA02_MISMATCH",
+        "QA04_MISMATCH",
+    } <= set(result["rejection_reasons_by_pair"][pair_id])
+    repeated = _derive_modified_pair(tmp_path / "repeated", mutate)
+    assert json.dumps(result, sort_keys=True) == json.dumps(repeated, sort_keys=True)
