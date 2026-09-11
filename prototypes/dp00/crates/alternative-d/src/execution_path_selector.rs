@@ -34,7 +34,13 @@ where
         .completed_output()
         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
 
-    let (kind, executor) = if output.contains("LOCAL_VOLUME") {
+    let (kind, executor) = if output.contains("DOCUMENT_SUMMARY_AGENT")
+        && capabilities
+            .iter()
+            .any(|fact| fact.key == "executor" && fact.value == "DocumentSummaryAgent")
+    {
+        (ExecutionRouteKind::ExecutorDirect, "DocumentSummaryAgent")
+    } else if output.contains("LOCAL_VOLUME") {
         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_VOLUME")
     } else if output.contains("LOCAL_DOCUMENT") {
         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_DOCUMENT")
