@@ -1,4 +1,4 @@
-# AA-023 — DP-00 R1–R4 Comparative Architecture Campaign Clean Rerun
+# AA-025 — DP-00 R1–R4 Comparative Architecture Campaign Clean Rerun
 
 ## Disposition
 
