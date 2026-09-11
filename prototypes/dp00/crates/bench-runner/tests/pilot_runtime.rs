@@ -75,6 +75,8 @@ fn provenance(run_id: &str) -> RunProvenance {
         order_slot: None,
         mode_order_slot: None,
         repetition_id: None,
+        calibration_protocol_version: None,
+        calibration_execution_ordinal: None,
         episode_elapsed_nanos: 100,
         event_count: 1,
         attempted_event_count: 1,
@@ -381,12 +383,15 @@ fn official_campaign_attests_once_and_persists_ordered_z_then_c_without_source_m
 #[test]
 fn provenance_serialization_contains_required_reconstruction_fields() {
     let mut original = provenance("provenance-fields");
+    original.provenance_schema_version = "dp00-pilot-provenance-v4".into();
     original.calibration_id = Some("calibration-1".into());
     original.cycle_id = Some("cycle-1".into());
     original.pair_id = Some("calibration-1:cycle-1:rotation-1:P01:A".into());
     original.order_slot = Some(0);
     original.mode_order_slot = Some(1);
     original.repetition_id = Some("rotation-1".into());
+    original.calibration_protocol_version = Some("dp00-calibration-protocol-v1".into());
+    original.calibration_execution_ordinal = Some(1);
     let value = serde_json::to_value(&original).expect("serialize");
     for field in [
         "source_git_commit",
@@ -403,6 +408,8 @@ fn provenance_serialization_contains_required_reconstruction_fields() {
         "order_slot",
         "mode_order_slot",
         "repetition_id",
+        "calibration_protocol_version",
+        "calibration_execution_ordinal",
         "attempted_event_count",
         "measurement_spine_event_count",
         "rustc_version",
@@ -423,6 +430,14 @@ fn provenance_serialization_contains_required_reconstruction_fields() {
     assert_eq!(round_trip.order_slot, original.order_slot);
     assert_eq!(round_trip.mode_order_slot, original.mode_order_slot);
     assert_eq!(round_trip.repetition_id, original.repetition_id);
+    assert_eq!(
+        round_trip.calibration_protocol_version,
+        original.calibration_protocol_version
+    );
+    assert_eq!(
+        round_trip.calibration_execution_ordinal,
+        original.calibration_execution_ordinal
+    );
     assert_eq!(round_trip.source_sha, original.source_git_commit);
 }
 

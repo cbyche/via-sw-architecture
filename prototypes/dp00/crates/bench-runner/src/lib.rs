@@ -15,6 +15,14 @@ use serde::{Deserialize, Serialize};
 
 pub const ASYNC_RUNTIME: &str = "tokio-1.53.1";
 pub const RUNTIME_WORKER_POLICY_VERSION: &str = "tokio-current-thread-v0";
+pub const CALIBRATION_PROTOCOL_VERSION: &str = "dp00-calibration-protocol-v1";
+pub const CALIBRATION_MANIFEST_VERSION: &str = "dp00-calibration-manifest-v1";
+pub const CALIBRATION_RUN_PROVENANCE_VERSION: &str = "dp00-pilot-provenance-v4";
+pub const MODE_ORDER_POLICY_VERSION: &str = "SCENARIO_ALTERNATIVE_PARITY_INVERT_V1";
+pub const ALTERNATIVE_ROTATION_POLICY_VERSION: &str = "DETERMINISTIC_CYCLIC_V1";
+pub const FIXED_REPETITION_POLICY_VERSION: &str = "FIXED_16_MEASURED_CYCLES_V1";
+pub const FULL_PREWARM_CYCLES: u32 = 2;
+pub const MEASURED_CALIBRATION_CYCLES: u32 = 16;
 
 pub fn build_qualification_runtime() -> std::io::Result<tokio::runtime::Runtime> {
     tokio::runtime::Builder::new_current_thread()
@@ -132,6 +140,16 @@ impl Alternative {
             Self::D => "D",
         }
     }
+
+    #[must_use]
+    pub const fn ordinal(self) -> u32 {
+        match self {
+            Self::A => 0,
+            Self::B => 1,
+            Self::C => 2,
+            Self::D => 3,
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -199,6 +217,194 @@ pub struct CalibrationInvocationIdentity {
     pub order_cycle: u32,
     pub repetition_id: String,
     pub mode_order_slot: u32,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum CalibrationPopulation {
+    FullPrewarm,
+    InvocationWarmup,
+    Measured,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CalibrationExecutionPlan {
+    pub population: CalibrationPopulation,
+    pub cycle_id: String,
+    pub cycle_index: u32,
+    pub repetition_id: String,
+    pub scenario_id: String,
+    pub scenario_ordinal: u32,
+    pub alternative: Alternative,
+    pub alternative_ordinal: u32,
+    pub order_slot: u32,
+    pub pair_id: String,
+    pub mode_order_slot: u32,
+    pub instrumentation_mode: InstrumentationMode,
+    pub measured_execution_ordinal: Option<u32>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PrewarmCycleCompletion {
+    pub cycle_id: String,
+    pub completed: bool,
+    pub expected_path_count: u32,
+    pub completed_path_count: u32,
+    pub covered_paths: Vec<PrewarmPathIdentity>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct PrewarmPathIdentity {
+    pub scenario_id: String,
+    pub alternative: String,
+    pub instrumentation_mode: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CalibrationManifest {
+    pub provenance_schema_version: String,
+    pub calibration_protocol_version: String,
+    pub calibration_id: String,
+    pub source_sha: String,
+    pub full_prewarm_cycle_count: u32,
+    pub completed_full_prewarm_cycle_count: u32,
+    pub prewarm_cycles: Vec<PrewarmCycleCompletion>,
+    pub invocation_warmup_count: u32,
+    pub measured_cycle_count: u32,
+    pub mode_order_policy: String,
+    pub alternative_rotation_policy: String,
+    pub repetition_policy: String,
+    pub adaptive_stopping: bool,
+    pub expected_measured_execution_count: u32,
+    pub completed_measured_execution_count: u32,
+    pub expected_pair_count: u32,
+    pub completed_pair_count: u32,
+    pub expected_qa01_pair_count: u32,
+    pub measured_run_ids: Vec<String>,
+}
+
+#[must_use]
+pub const fn calibration_mode_order(
+    scenario_ordinal: u32,
+    alternative: Alternative,
+    cycle_index: u32,
+) -> [InstrumentationMode; 2] {
+    let capture_first = (scenario_ordinal + alternative.ordinal() + cycle_index).is_multiple_of(2);
+    if capture_first {
+        [InstrumentationMode::Capture, InstrumentationMode::Minimal]
+    } else {
+        [InstrumentationMode::Minimal, InstrumentationMode::Capture]
+    }
+}
+
+struct CalibrationCycle<'a> {
+    population: CalibrationPopulation,
+    cycle_id: &'a str,
+    cycle_index: u32,
+}
+
+fn append_calibration_cycle(
+    plan: &mut Vec<CalibrationExecutionPlan>,
+    calibration_id: &str,
+    scenario_ids: &[String],
+    alternatives: &[Alternative],
+    cycle: CalibrationCycle<'_>,
+    measured_ordinal: &mut u32,
+) {
+    let order = counterbalanced_order(alternatives, cycle.cycle_index);
+    for (scenario_ordinal, scenario_id) in scenario_ids.iter().enumerate() {
+        for (order_slot, alternative) in order.iter().copied().enumerate() {
+            let pair_id = format!(
+                "{calibration_id}:{}:repetition-{}:{scenario_id}:{}",
+                cycle.cycle_id,
+                cycle.cycle_index,
+                alternative.id()
+            );
+            let modes = calibration_mode_order(
+                u32::try_from(scenario_ordinal).unwrap_or(u32::MAX),
+                alternative,
+                cycle.cycle_index,
+            );
+            for (mode_order_slot, instrumentation_mode) in modes.into_iter().enumerate() {
+                let execution_ordinal = if cycle.population == CalibrationPopulation::Measured {
+                    let value = *measured_ordinal;
+                    *measured_ordinal = measured_ordinal.saturating_add(1);
+                    Some(value)
+                } else {
+                    None
+                };
+                plan.push(CalibrationExecutionPlan {
+                    population: cycle.population,
+                    cycle_id: cycle.cycle_id.into(),
+                    cycle_index: cycle.cycle_index,
+                    repetition_id: format!("repetition-{}", cycle.cycle_index),
+                    scenario_id: scenario_id.clone(),
+                    scenario_ordinal: u32::try_from(scenario_ordinal).unwrap_or(u32::MAX),
+                    alternative,
+                    alternative_ordinal: alternative.ordinal(),
+                    order_slot: u32::try_from(order_slot).unwrap_or(u32::MAX),
+                    pair_id: pair_id.clone(),
+                    mode_order_slot: u32::try_from(mode_order_slot).unwrap_or(u32::MAX),
+                    instrumentation_mode,
+                    measured_execution_ordinal: execution_ordinal,
+                });
+            }
+        }
+    }
+}
+
+#[must_use]
+pub fn build_counterbalanced_calibration_schedule(
+    calibration_id: &str,
+    scenario_ids: &[String],
+    alternatives: &[Alternative],
+    invocation_warmup_count: u32,
+) -> Vec<CalibrationExecutionPlan> {
+    let mut plan = Vec::new();
+    let mut measured_ordinal = 0;
+    for cycle in 0..FULL_PREWARM_CYCLES {
+        append_calibration_cycle(
+            &mut plan,
+            calibration_id,
+            scenario_ids,
+            alternatives,
+            CalibrationCycle {
+                population: CalibrationPopulation::FullPrewarm,
+                cycle_id: &format!("W{cycle}"),
+                cycle_index: cycle,
+            },
+            &mut measured_ordinal,
+        );
+    }
+    for cycle in 0..MEASURED_CALIBRATION_CYCLES {
+        for warmup in 0..invocation_warmup_count {
+            append_calibration_cycle(
+                &mut plan,
+                calibration_id,
+                scenario_ids,
+                alternatives,
+                CalibrationCycle {
+                    population: CalibrationPopulation::InvocationWarmup,
+                    cycle_id: &format!("cycle-{cycle}-warmup-{warmup}"),
+                    cycle_index: cycle,
+                },
+                &mut measured_ordinal,
+            );
+        }
+        append_calibration_cycle(
+            &mut plan,
+            calibration_id,
+            scenario_ids,
+            alternatives,
+            CalibrationCycle {
+                population: CalibrationPopulation::Measured,
+                cycle_id: &format!("cycle-{cycle}"),
+                cycle_index: cycle,
+            },
+            &mut measured_ordinal,
+        );
+    }
+    plan
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -323,6 +529,10 @@ pub struct RunProvenance {
     pub order_slot: Option<u32>,
     pub mode_order_slot: Option<u32>,
     pub repetition_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub calibration_protocol_version: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub calibration_execution_ordinal: Option<u32>,
     pub episode_elapsed_nanos: u64,
     pub event_count: u64,
     pub attempted_event_count: u64,
@@ -351,6 +561,16 @@ pub enum PersistenceError {
     Json(serde_json::Error),
     ExistingRun(PathBuf),
     ExistingCampaign(PathBuf),
+}
+
+pub fn persist_calibration_manifest(
+    output_root: &Path,
+    manifest: &CalibrationManifest,
+) -> Result<PathBuf, PersistenceError> {
+    fs::create_dir_all(output_root)?;
+    let path = output_root.join("calibration-manifest.json");
+    write_json_create_new(path.clone(), manifest)?;
+    Ok(path)
 }
 
 pub fn begin_campaign(

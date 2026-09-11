@@ -9,9 +9,15 @@ from .models import ValidationIssue
 CANONICAL_EVENT_VERSION = "canonical-event-v3"
 SUPPORTED_CANONICAL_EVENT_VERSIONS = {"canonical-event-v2", CANONICAL_EVENT_VERSION}
 MODEL_CALL_VERSION = "model-call-v1"
-RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v3"
-SUPPORTED_RUN_PROVENANCE_VERSIONS = {"dp00-pilot-provenance-v2", RUN_PROVENANCE_VERSION}
+RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v4"
+PAIRED_RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v3"
+SUPPORTED_RUN_PROVENANCE_VERSIONS = {
+    "dp00-pilot-provenance-v2", PAIRED_RUN_PROVENANCE_VERSION,
+    RUN_PROVENANCE_VERSION,
+}
 CAMPAIGN_PROVENANCE_VERSION = "dp00-pilot-campaign-provenance-v1"
+CALIBRATION_MANIFEST_VERSION = "dp00-calibration-manifest-v1"
+CALIBRATION_PROTOCOL_VERSION = "dp00-calibration-protocol-v1"
 
 EMITTERS = {
     "BENCHMARK", "ARCHITECTURE_UNDER_TEST", "MODEL_FIXTURE", "AGENT_FIXTURE",
@@ -71,16 +77,33 @@ LEGACY_RUN_KEYS = {
     "cargo_lock_identity", "os", "machine_architecture", "canonical_event_schema_version",
     "model_call_schema_version",
 }
-RUN_KEYS = LEGACY_RUN_KEYS | {
+PAIRED_RUN_KEYS = LEGACY_RUN_KEYS | {
     "source_sha", "calibration_id", "cycle_id", "pair_id", "order_slot",
     "mode_order_slot", "repetition_id", "attempted_event_count",
     "measurement_spine_event_count",
+}
+RUN_KEYS = PAIRED_RUN_KEYS | {
+    "calibration_protocol_version", "calibration_execution_ordinal",
 }
 CAMPAIGN_KEYS = {
     "provenance_schema_version", "campaign_id", "source_git_commit",
     "initial_working_tree_clean", "pilot_corpus_id", "pilot_corpus_version",
     "profile_sequence", "campaign_configuration", "runner_version",
 }
+CALIBRATION_MANIFEST_KEYS = {
+    "provenance_schema_version", "calibration_protocol_version", "calibration_id",
+    "source_sha", "full_prewarm_cycle_count", "completed_full_prewarm_cycle_count",
+    "prewarm_cycles", "invocation_warmup_count", "measured_cycle_count",
+    "mode_order_policy", "alternative_rotation_policy", "repetition_policy",
+    "adaptive_stopping", "expected_measured_execution_count",
+    "completed_measured_execution_count", "expected_pair_count",
+    "completed_pair_count", "expected_qa01_pair_count", "measured_run_ids",
+}
+PREWARM_CYCLE_KEYS = {
+    "cycle_id", "completed", "expected_path_count", "completed_path_count",
+    "covered_paths",
+}
+PREWARM_PATH_KEYS = {"scenario_id", "alternative", "instrumentation_mode"}
 RUNTIME_SCENARIO_KEYS = {
     "schema_version", "asset_id", "asset_version", "scenario_id", "scenario_version", "title",
     "description", "catalog_scenario_ref", "catalog_version", "scenario_class",
@@ -391,7 +414,11 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
         raise StrictValidationError("run provenance: unsupported schema version")
     _exact(
         obj,
-        RUN_KEYS if version == RUN_PROVENANCE_VERSION else LEGACY_RUN_KEYS,
+        (
+            RUN_KEYS if version == RUN_PROVENANCE_VERSION
+            else PAIRED_RUN_KEYS if version == PAIRED_RUN_PROVENANCE_VERSION
+            else LEGACY_RUN_KEYS
+        ),
         "run provenance",
     )
     if obj["canonical_event_schema_version"] not in SUPPORTED_CANONICAL_EVENT_VERSIONS or obj["model_call_schema_version"] != MODEL_CALL_VERSION:
@@ -409,7 +436,7 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
         raise StrictValidationError("run provenance: official evidence has dirty source")
     if obj["official"] and (not obj["campaign_id"] or not isinstance(obj["campaign_profile_sequence_index"], int)):
         raise StrictValidationError("run provenance: official evidence lacks campaign correlation")
-    if version == RUN_PROVENANCE_VERSION:
+    if version in {PAIRED_RUN_PROVENANCE_VERSION, RUN_PROVENANCE_VERSION}:
         if obj["source_sha"] != obj["source_git_commit"]:
             raise StrictValidationError("run provenance: source_sha/source_git_commit mismatch")
         calibration_keys = (
@@ -429,6 +456,83 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
         for key in ("calibration_id", "cycle_id", "pair_id", "repetition_id"):
             if obj[key] is not None:
                 _nonempty(obj[key], f"run provenance.{key}")
+        if version == RUN_PROVENANCE_VERSION:
+            if obj["calibration_protocol_version"] != CALIBRATION_PROTOCOL_VERSION:
+                raise StrictValidationError(
+                    "run provenance: unsupported calibration protocol version"
+                )
+            ordinal = obj["calibration_execution_ordinal"]
+            if not isinstance(ordinal, int) or isinstance(ordinal, bool) or ordinal < 0:
+                raise StrictValidationError(
+                    "run provenance.calibration_execution_ordinal: "
+                    "expected non-negative integer"
+                )
+    return obj
+
+
+def validate_calibration_manifest(value: Any) -> dict[str, Any]:
+    obj = _object(value, "calibration manifest")
+    _exact(obj, CALIBRATION_MANIFEST_KEYS, "calibration manifest")
+    if obj["provenance_schema_version"] != CALIBRATION_MANIFEST_VERSION:
+        raise StrictValidationError("calibration manifest: unsupported schema version")
+    if obj["calibration_protocol_version"] != CALIBRATION_PROTOCOL_VERSION:
+        raise StrictValidationError("calibration manifest: unsupported protocol version")
+    for key in (
+        "calibration_id", "source_sha", "mode_order_policy",
+        "alternative_rotation_policy", "repetition_policy",
+    ):
+        _nonempty(obj[key], f"calibration manifest.{key}")
+    for key in (
+        "full_prewarm_cycle_count", "completed_full_prewarm_cycle_count",
+        "invocation_warmup_count", "measured_cycle_count",
+        "expected_measured_execution_count", "completed_measured_execution_count",
+        "expected_pair_count", "completed_pair_count", "expected_qa01_pair_count",
+    ):
+        if not isinstance(obj[key], int) or isinstance(obj[key], bool) or obj[key] < 0:
+            raise StrictValidationError(
+                f"calibration manifest.{key}: expected non-negative integer"
+            )
+    if not isinstance(obj["adaptive_stopping"], bool):
+        raise StrictValidationError("calibration manifest.adaptive_stopping: expected boolean")
+    prewarm = obj["prewarm_cycles"]
+    if not isinstance(prewarm, list):
+        raise StrictValidationError("calibration manifest.prewarm_cycles: expected array")
+    for index, cycle in enumerate(prewarm):
+        cycle = _object(cycle, f"calibration manifest.prewarm_cycles[{index}]")
+        _exact(
+            cycle,
+            PREWARM_CYCLE_KEYS,
+            f"calibration manifest.prewarm_cycles[{index}]",
+        )
+        _nonempty(cycle["cycle_id"], f"calibration manifest.prewarm_cycles[{index}].cycle_id")
+        if not isinstance(cycle["completed"], bool):
+            raise StrictValidationError("calibration manifest prewarm completed: expected boolean")
+        for key in ("expected_path_count", "completed_path_count"):
+            if not isinstance(cycle[key], int) or isinstance(cycle[key], bool) or cycle[key] < 0:
+                raise StrictValidationError(
+                    f"calibration manifest prewarm {key}: expected non-negative integer"
+                )
+        covered_paths = cycle["covered_paths"]
+        if not isinstance(covered_paths, list):
+            raise StrictValidationError(
+                "calibration manifest prewarm covered_paths: expected array"
+            )
+        for path_index, path in enumerate(covered_paths):
+            path = _object(
+                path,
+                f"calibration manifest.prewarm_cycles[{index}].covered_paths[{path_index}]",
+            )
+            _exact(path, PREWARM_PATH_KEYS, "calibration manifest prewarm path")
+            _nonempty(path["scenario_id"], "calibration manifest prewarm path.scenario_id")
+            _enum(path["alternative"], ALTERNATIVES, "calibration manifest prewarm path.alternative")
+            _enum(
+                path["instrumentation_mode"],
+                {"CAPTURE", "MINIMAL"},
+                "calibration manifest prewarm path.instrumentation_mode",
+            )
+    run_ids = obj["measured_run_ids"]
+    if not isinstance(run_ids, list) or not all(isinstance(value, str) and value for value in run_ids):
+        raise StrictValidationError("calibration manifest.measured_run_ids: expected string array")
     return obj
 
 

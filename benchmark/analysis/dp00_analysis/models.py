@@ -61,3 +61,4 @@ class EvidenceSet:
     validation: ValidationReport
     coverage_map: dict[str, Any]
     method_config: dict[str, Any] = field(default_factory=dict)
+    calibration_manifest: dict[str, Any] | None = None

@@ -11,6 +11,7 @@ from .models import EvidenceSet, ValidationIssue, ValidationReport
 from .validation import (
     StrictValidationError,
     validate_campaign_provenance,
+    validate_calibration_manifest,
     validate_canonical_event,
     validate_fixture_event,
     validate_model_call,
@@ -73,8 +74,12 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
     errors: list[ValidationIssue] = []
     warnings: list[ValidationIssue] = []
     campaign: dict[str, Any] | None = None
+    calibration_manifest: dict[str, Any] | None = None
     campaign_path = raw_root / "campaign-provenance.json"
+    calibration_path = raw_root / "calibration-manifest.json"
     try:
+        if calibration_path.is_file():
+            calibration_manifest = validate_calibration_manifest(_json(calibration_path))
         if campaign_path.is_file():
             campaign = validate_campaign_provenance(_json(campaign_path))
             run_dirs = sorted(p for profile in (raw_root / "profile-z", raw_root / "profile-c") if profile.is_dir() for p in profile.iterdir() if p.is_dir())
@@ -85,7 +90,12 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
             if not run_dirs:
                 raise StrictValidationError(f"no raw runs found under {raw_root}")
     except (OSError, json.JSONDecodeError, StrictValidationError) as error:
-        return EvidenceSet(raw_root, campaign, (), ValidationReport((ValidationIssue("LOAD_ERROR", str(error), str(raw_root)),), ()), evaluator["coverage"]["v0.1"])
+        return EvidenceSet(
+            raw_root, campaign, (),
+            ValidationReport((ValidationIssue("LOAD_ERROR", str(error), str(raw_root)),), ()),
+            evaluator["coverage"]["v0.1"],
+            calibration_manifest=calibration_manifest,
+        )
 
     episodes = []
     for directory in run_dirs:
@@ -157,4 +167,11 @@ def load_evidence(raw_root: str | Path, *, include_oracles: bool = True) -> Evid
             )
         )
         coverage = evaluator["coverage"]["v0.1"]
-    return EvidenceSet(raw_root, campaign, tuple(episodes), ValidationReport(tuple(errors), tuple(warnings)), coverage)
+    from .calibration import validate_calibration_schedule
+
+    errors.extend(validate_calibration_schedule(calibration_manifest, episodes))
+    return EvidenceSet(
+        raw_root, campaign, tuple(episodes),
+        ValidationReport(tuple(errors), tuple(warnings)), coverage,
+        calibration_manifest=calibration_manifest,
+    )

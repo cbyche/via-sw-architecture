@@ -71,6 +71,7 @@ def _shared_provenance(episode: EpisodeEvidence) -> dict[str, Any]:
         "pair_id": provenance["pair_id"],
         "order_slot": provenance["order_slot"],
         "repetition_id": provenance["repetition_id"],
+        "calibration_protocol_version": provenance.get("calibration_protocol_version"),
         "alternative": provenance["alternative"],
         "scenario_id": provenance["scenario_id"],
         "scenario_version": provenance["scenario_version"],

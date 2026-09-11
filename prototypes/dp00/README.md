@@ -54,6 +54,23 @@ create-new directory containing `provenance.json`, `canonical-events.jsonl`,
 existing run id is an error. `--official` refuses a dirty Git working tree;
 development runs are always marked non-official in provenance.
 
+## Counterbalanced calibration runner
+
+`dp00-calibration-runner` implements `dp00-calibration-protocol-v1` for the next
+approved frozen-source calibration. It retains one invocation-level warm-up per
+measured cycle and adds two full pre-warm cycles, W0 and W1, that cover all
+P01–P12 × A–D × CAPTURE/MINIMAL paths. Pre-warm timing is discarded; explicit
+coverage and completion are retained only in `calibration-manifest.json`.
+
+The measured population is fixed at 16 cycles, 768 adjacent mode pairs, and
+1,536 executions; adaptive stopping is disabled. Within each cycle mode order is
+selected by the parity of zero-based scenario ordinal + alternative ordinal +
+cycle. The same pair therefore inverts in the next cycle. Alternative position
+independently rotates ABCD/BCDA/CDAB/DABC four times. The runner persists only
+measured raw evidence with `dp00-pilot-provenance-v4` and an explicit contiguous
+execution ordinal. This runner must be invoked only after its exact source SHA is
+approved for calibration.
+
 ## Base architecture smoke
 
 The `alternative-a`, `alternative-b`, `alternative-c`, and `alternative-d` crates

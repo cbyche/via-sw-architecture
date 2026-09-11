@@ -12,6 +12,7 @@ from .qa01 import derive_qa01
 from .qa02 import derive_qa02
 from .qa04 import derive_qa04
 from .paired import derive_paired_calibration
+from .calibration import calibration_schedule_diagnostics
 
 
 def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
@@ -28,6 +29,9 @@ def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
         "qa02": qa02,
         "qa04": qa04,
         "paired_calibration": derive_paired_calibration(evidence.episodes, qa02),
+        "calibration_schedule": calibration_schedule_diagnostics(
+            evidence.calibration_manifest, evidence.episodes
+        ),
         "provenance": {
             "analysis_language": "python", "python_interpreter_version": platform.python_version(),
             "analysis_version": ANALYSIS_VERSION, "raw_root": str(evidence.raw_root),

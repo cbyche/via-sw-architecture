@@ -454,6 +454,27 @@ from a name or directory layout.
 `event_count > measurement_spine_event_count`; MINIMAL must persist the spine
 itself. `attempted_event_count >= event_count` in both modes.
 
+## `dp00-pilot-provenance-v4` counterbalanced calibration extension
+
+Version 4 retains v3 and adds two required fields:
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `calibration_protocol_version` | string | Exact protocol identity; `dp00-calibration-protocol-v1`. |
+| `calibration_execution_ordinal` | non-negative integer | Explicit global order in the measured population; contiguous `0..1535`. |
+
+Version 4 is reserved for measured executions produced under the corresponding
+calibration manifest. Pre-warm and invocation-warm-up timing is not serialized
+as measured run evidence. Pair adjacency and schedule order are checked from the
+explicit ordinal and pair/mode-order identities, never filenames or directories.
+
+The root `calibration-manifest.json` uses
+`dp00-calibration-manifest-v1`. It records source/calibration/protocol identity;
+W0/W1 completion and explicit scenario/alternative/mode path inventories; the
+fixed invocation warm-up and 16-cycle repetition policies; mode-order and
+alternative-rotation policy versions; adaptive stopping disabled; expected and
+completed execution/pair/QA-01 counts; and measured run IDs in ordinal order.
+
 ## 16. Official multi-profile campaign provenance
 
 An official Pilot campaign performs one source-state attestation before any output is written, then runs its ordered latency profiles under that same committed source and corpus identity.

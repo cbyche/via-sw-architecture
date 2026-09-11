@@ -190,6 +190,8 @@ fn run() -> Result<(), String> {
                     .calibration_identity
                     .as_ref()
                     .map(|identity| identity.repetition_id.clone()),
+                calibration_protocol_version: None,
+                calibration_execution_ordinal: None,
                 episode_elapsed_nanos: execution.episode_elapsed_nanos,
                 event_count: u64::try_from(execution.evidence.events.len()).unwrap_or(u64::MAX),
                 attempted_event_count: execution.attempted_event_count,
