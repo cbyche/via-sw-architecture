@@ -213,6 +213,174 @@ fn latency_profiles_are_common_per_dependency_and_z_is_zero() {
         assert_eq!(c.tool_delay_micros, 1_000);
     }
     assert!(c.calibration_status.contains("NOT_PRODUCTION_OR_SCORING"));
+
+    let expected = [
+        ("R1", 50_000, 50_000, 50_000),
+        ("R2", 100_000, 20_000, 20_000),
+        ("R3", 20_000, 100_000, 20_000),
+        ("R4", 20_000, 20_000, 100_000),
+    ];
+    for (profile, expected) in ControlledLatencyProfile::frozen_realistic_profiles()
+        .iter()
+        .zip(expected)
+    {
+        assert_eq!(
+            (
+                profile.profile_id.as_str(),
+                profile.model_delay_micros,
+                profile.agent_delay_micros,
+                profile.tool_delay_micros,
+            ),
+            expected
+        );
+        assert_eq!(profile.version, "dp00-realistic-sensitivity-v1");
+        assert!(
+            profile
+                .calibration_status
+                .contains("NOT_PRODUCTION_MEASUREMENT")
+        );
+    }
+}
+
+#[test]
+fn dependency_delay_budget_is_additive_and_architecture_neutral() {
+    let profile = ControlledLatencyProfile::profile_r2();
+    assert_eq!(
+        profile.configured_delay_budget_micros(2, 3, 4),
+        2 * 100_000 + 3 * 20_000 + 4 * 20_000
+    );
+    for _alternative in Alternative::ALL {
+        assert_eq!(
+            profile.configured_delay_budget_micros(2, 3, 4),
+            340_000,
+            "cost depends only on semantic event counts"
+        );
+    }
+}
+
+#[test]
+fn machine_readable_profile_contract_matches_runner_constants() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let contract: serde_json::Value = serde_json::from_slice(
+        &fs::read(root.join("benchmark/contracts/dp00-realistic-execution-profiles-v1.json"))
+            .expect("profile contract"),
+    )
+    .expect("valid profile contract JSON");
+    assert_eq!(contract["contract_version"], "v1");
+    assert_eq!(contract["status"], "PROSPECTIVELY_FROZEN");
+    let configured = contract["profiles"].as_array().expect("profile array");
+    for (record, profile) in configured
+        .iter()
+        .zip(ControlledLatencyProfile::frozen_realistic_profiles())
+    {
+        assert_eq!(record["profile_id"], profile.profile_id);
+        assert_eq!(record["version"], profile.version);
+        assert_eq!(record["model_delay_micros"], profile.model_delay_micros);
+        assert_eq!(record["agent_delay_micros"], profile.agent_delay_micros);
+        assert_eq!(record["tool_delay_micros"], profile.tool_delay_micros);
+    }
+}
+
+#[test]
+fn realistic_delay_changes_timing_but_not_routing_or_correctness_semantics() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let corpus = load_pilot_corpus(&root).expect("Pilot corpus");
+    for scenario_id in ["P01", "P12"] {
+        let scenario = corpus
+            .scenarios
+            .iter()
+            .find(|scenario| scenario.scenario_id == scenario_id)
+            .expect("scenario");
+        for alternative in Alternative::ALL {
+            let run_id = format!("profile-semantics-{scenario_id}-{}", alternative.id());
+            let zero = execute_episode(
+                &corpus,
+                scenario,
+                alternative,
+                &run_id,
+                "test",
+                InstrumentationMode::Capture,
+                ControlledLatencyProfile::profile_z(),
+            )
+            .expect("Profile Z episode");
+            let realistic = execute_episode(
+                &corpus,
+                scenario,
+                alternative,
+                &run_id,
+                "test",
+                InstrumentationMode::Capture,
+                ControlledLatencyProfile::profile_r1(),
+            )
+            .expect("Profile R1 episode");
+
+            assert_eq!(zero.architecture_error, realistic.architecture_error);
+            assert_eq!(
+                project_actual_semantic_trace(&zero.evidence.events),
+                project_actual_semantic_trace(&realistic.evidence.events),
+                "{} {scenario_id} semantic trace",
+                alternative.id()
+            );
+            assert_eq!(
+                zero.evidence.model_calls.len(),
+                realistic.evidence.model_calls.len()
+            );
+
+            let agent_starts = realistic
+                .evidence
+                .fixture_events
+                .iter()
+                .filter(|event| event.fixture_kind == "AGENT" && event.action == "START_ACCEPT")
+                .count() as u64;
+            let tool_starts = realistic
+                .evidence
+                .fixture_events
+                .iter()
+                .filter(|event| event.fixture_kind == "TOOL" && event.action == "START_ACCEPT")
+                .count() as u64;
+            let expected_budget = ControlledLatencyProfile::profile_r1()
+                .configured_delay_budget_micros(
+                    realistic.evidence.model_calls.len() as u64,
+                    agent_starts,
+                    tool_starts,
+                );
+            assert!(
+                realistic.episode_elapsed_nanos >= expected_budget * 1_000,
+                "{} {scenario_id} did not incur every configured semantic charge",
+                alternative.id()
+            );
+
+            if scenario_id == "P12" {
+                let commits = realistic
+                    .evidence
+                    .events
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(position, event)| match event.event() {
+                        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                            subgoal_id: Some(subgoal_id),
+                            ..
+                        }) => Some((position, subgoal_id.0.as_str())),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>();
+                let first_execution = realistic
+                    .evidence
+                    .events
+                    .iter()
+                    .position(|event| {
+                        matches!(event.event(), CanonicalEventKind::ExecutionStarted { .. })
+                    })
+                    .expect("P12 execution");
+                assert_eq!(
+                    commits.iter().map(|item| item.1).collect::<Vec<_>>(),
+                    ["S1", "S2"]
+                );
+                assert!(first_execution > commits[1].0);
+                assert_eq!(agent_starts + tool_starts, 2);
+            }
+        }
+    }
 }
 
 #[test]

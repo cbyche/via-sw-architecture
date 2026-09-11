@@ -18,6 +18,14 @@ SUPPORTED_RUN_PROVENANCE_VERSIONS = {
 CAMPAIGN_PROVENANCE_VERSION = "dp00-pilot-campaign-provenance-v1"
 CALIBRATION_MANIFEST_VERSION = "dp00-calibration-manifest-v1"
 CALIBRATION_PROTOCOL_VERSION = "dp00-calibration-protocol-v1"
+FROZEN_REALISTIC_PROFILES = {
+    "R1": (50_000, 50_000, 50_000),
+    "R2": (100_000, 20_000, 20_000),
+    "R3": (20_000, 100_000, 20_000),
+    "R4": (20_000, 20_000, 100_000),
+}
+REALISTIC_PROFILE_VERSION = "dp00-realistic-sensitivity-v1"
+REALISTIC_PROFILE_STATUS = "FROZEN_SYNTHETIC_SENSITIVITY_NOT_PRODUCTION_MEASUREMENT"
 
 EMITTERS = {
     "BENCHMARK", "ARCHITECTURE_UNDER_TEST", "MODEL_FIXTURE", "AGENT_FIXTURE",
@@ -428,10 +436,31 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
         _nonempty(obj[key], f"run provenance.{key}")
     profile = _object(obj["latency_profile"], "run provenance.latency_profile")
     _exact(profile, {"profile_id", "version", "model_delay_micros", "agent_delay_micros", "tool_delay_micros", "calibration_status"}, "run provenance.latency_profile")
-    _enum(profile["profile_id"], {"Z", "C"}, "run provenance.latency_profile.profile_id")
+    _enum(
+        profile["profile_id"],
+        {"Z", "C", "R1", "R2", "R3", "R4"},
+        "run provenance.latency_profile.profile_id",
+    )
     for key in ("model_delay_micros", "agent_delay_micros", "tool_delay_micros"):
         if not isinstance(profile[key], int) or isinstance(profile[key], bool) or profile[key] < 0:
             raise StrictValidationError(f"run provenance.latency_profile.{key}: expected non-negative integer")
+    if profile["profile_id"] in FROZEN_REALISTIC_PROFILES:
+        expected = (
+            REALISTIC_PROFILE_VERSION,
+            *FROZEN_REALISTIC_PROFILES[profile["profile_id"]],
+            REALISTIC_PROFILE_STATUS,
+        )
+        actual = (
+            profile["version"],
+            profile["model_delay_micros"],
+            profile["agent_delay_micros"],
+            profile["tool_delay_micros"],
+            profile["calibration_status"],
+        )
+        if actual != expected:
+            raise StrictValidationError(
+                "run provenance.latency_profile: frozen realistic profile mismatch"
+            )
     if obj["official"] and not obj["working_tree_clean"]:
         raise StrictValidationError("run provenance: official evidence has dirty source")
     if obj["official"] and (not obj["campaign_id"] or not isinstance(obj["campaign_profile_sequence_index"], int)):

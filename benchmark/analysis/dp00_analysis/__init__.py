@@ -1,6 +1,6 @@
 """DP-00 immutable raw-evidence analysis."""
 
-ANALYSIS_VERSION = "dp00-analysis-v8"
+ANALYSIS_VERSION = "dp00-analysis-v9"
 
 from .loader import load_evidence
 from .diagnostics import derive_summary

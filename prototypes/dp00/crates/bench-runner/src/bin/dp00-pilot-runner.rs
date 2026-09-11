@@ -277,11 +277,9 @@ fn parse_config(
                 scenario_ids = value(&mut index)?.split(',').map(str::to_owned).collect()
             }
             "--latency-profile" => {
-                latency_profile = match value(&mut index)? {
-                    "Z" | "z" => ControlledLatencyProfile::profile_z(),
-                    "C" | "c" => ControlledLatencyProfile::profile_c(),
-                    other => return Err(format!("unknown latency profile {other}")),
-                }
+                let profile_id = value(&mut index)?;
+                latency_profile = ControlledLatencyProfile::from_id(profile_id)
+                    .ok_or_else(|| format!("unknown latency profile {profile_id}"))?;
             }
             "--profiles" => profiles = parse_profiles(value(&mut index)?)?,
             "--model-delay-micros" => {
@@ -311,7 +309,7 @@ fn parse_config(
             "--official" => run_mode = RunMode::Official,
             "--development" => run_mode = RunMode::Development,
             "--help" | "-h" => {
-                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C] [--profiles Z,C] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--calibration-id ID --cycle-id ID --order-cycle N --repetition-id ID --mode-order-slot 0|1] [--output-root PATH] [--official|--development]".into());
+                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C|R1|R2|R3|R4] [--profiles Z,C|R1,R2,R3,R4] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--calibration-id ID --cycle-id ID --order-cycle N --repetition-id ID --mode-order-slot 0|1] [--output-root PATH] [--official|--development]".into());
             }
             other => return Err(format!("unknown option {other}")),
         }
@@ -377,14 +375,14 @@ fn parse_config(
             vec![latency_profile.clone()]
         };
     }
-    if run_mode == RunMode::Official
-        && profiles
+    if run_mode == RunMode::Official {
+        let profile_ids = profiles
             .iter()
             .map(|profile| profile.profile_id.as_str())
-            .collect::<Vec<_>>()
-            != ["Z", "C"]
-    {
-        return Err("official Pilot campaign requires profile sequence Z,C".into());
+            .collect::<Vec<_>>();
+        if profile_ids != ["Z", "C"] {
+            return Err("official Pilot campaign requires profile sequence Z,C".into());
+        }
     }
     Ok(PilotCampaignConfig {
         runner: PilotRunnerConfig {
@@ -407,10 +405,9 @@ fn parse_config(
 fn parse_profiles(value: &str) -> Result<Vec<ControlledLatencyProfile>, String> {
     value
         .split(',')
-        .map(|value| match value {
-            "Z" | "z" => Ok(ControlledLatencyProfile::profile_z()),
-            "C" | "c" => Ok(ControlledLatencyProfile::profile_c()),
-            other => Err(format!("unknown latency profile {other}")),
+        .map(|profile_id| {
+            ControlledLatencyProfile::from_id(profile_id)
+                .ok_or_else(|| format!("unknown latency profile {profile_id}"))
         })
         .collect()
 }

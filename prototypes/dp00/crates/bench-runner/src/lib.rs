@@ -193,6 +193,77 @@ impl ControlledLatencyProfile {
             calibration_status: "PILOT_CALIBRATION_PARAMETER_NOT_PRODUCTION_OR_SCORING".into(),
         }
     }
+
+    /// Frozen synthetic sensitivity profiles for the post-Session-7.1 campaign.
+    ///
+    /// Values are constant per semantic dependency invocation. They are
+    /// engineering sensitivity inputs, not production measurements.
+    #[must_use]
+    pub fn profile_r1() -> Self {
+        Self::realistic("R1", 50_000, 50_000, 50_000)
+    }
+
+    #[must_use]
+    pub fn profile_r2() -> Self {
+        Self::realistic("R2", 100_000, 20_000, 20_000)
+    }
+
+    #[must_use]
+    pub fn profile_r3() -> Self {
+        Self::realistic("R3", 20_000, 100_000, 20_000)
+    }
+
+    #[must_use]
+    pub fn profile_r4() -> Self {
+        Self::realistic("R4", 20_000, 20_000, 100_000)
+    }
+
+    #[must_use]
+    pub fn frozen_realistic_profiles() -> Vec<Self> {
+        vec![
+            Self::profile_r1(),
+            Self::profile_r2(),
+            Self::profile_r3(),
+            Self::profile_r4(),
+        ]
+    }
+
+    #[must_use]
+    pub fn from_id(profile_id: &str) -> Option<Self> {
+        match profile_id.to_ascii_uppercase().as_str() {
+            "Z" => Some(Self::profile_z()),
+            "C" => Some(Self::profile_c()),
+            "R1" => Some(Self::profile_r1()),
+            "R2" => Some(Self::profile_r2()),
+            "R3" => Some(Self::profile_r3()),
+            "R4" => Some(Self::profile_r4()),
+            _ => None,
+        }
+    }
+
+    #[must_use]
+    pub const fn configured_delay_budget_micros(
+        &self,
+        model_invocations: u64,
+        agent_delegations: u64,
+        tool_executions: u64,
+    ) -> u64 {
+        model_invocations
+            .saturating_mul(self.model_delay_micros)
+            .saturating_add(agent_delegations.saturating_mul(self.agent_delay_micros))
+            .saturating_add(tool_executions.saturating_mul(self.tool_delay_micros))
+    }
+
+    fn realistic(profile_id: &str, model: u64, agent: u64, tool: u64) -> Self {
+        Self {
+            profile_id: profile_id.into(),
+            version: "dp00-realistic-sensitivity-v1".into(),
+            model_delay_micros: model,
+            agent_delay_micros: agent,
+            tool_delay_micros: tool,
+            calibration_status: "FROZEN_SYNTHETIC_SENSITIVITY_NOT_PRODUCTION_MEASUREMENT".into(),
+        }
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]

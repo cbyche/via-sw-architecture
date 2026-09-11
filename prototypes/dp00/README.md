@@ -54,6 +54,15 @@ create-new directory containing `provenance.json`, `canonical-events.jsonl`,
 existing run id is an error. `--official` refuses a dirty Git working tree;
 development runs are always marked non-official in provenance.
 
+Session 7.1 adds the prospectively frozen synthetic sensitivity matrix
+`dp00-realistic-sensitivity-v1`: R1 balanced (50/50/50 ms), R2 model-dominant
+(100/20/20 ms), R3 Agent/delegation-dominant (20/100/20 ms), and R4
+tool-dominant (20/20/100 ms). Values are model/Agent/tool constant charges per
+semantic invocation. They are sensitivity-analysis inputs, not empirical
+production latency. The authoritative contract is
+`benchmark/contracts/dp00-realistic-execution-profiles-v1.json`. Profile Z and
+provisional Profile C are unchanged.
+
 ## Counterbalanced calibration runner
 
 `dp00-calibration-runner` implements `dp00-calibration-protocol-v1` for the next
@@ -69,7 +78,10 @@ cycle. The same pair therefore inverts in the next cycle. Alternative position
 independently rotates ABCD/BCDA/CDAB/DABC four times. The runner persists only
 measured raw evidence with `dp00-pilot-provenance-v4` and an explicit contiguous
 execution ordinal. This runner must be invoked only after its exact source SHA is
-approved for calibration.
+approved for calibration. It defaults to Profile Z and accepts one explicit
+frozen qualification profile with `--latency-profile Z|R1|R2|R3|R4`; Profile C
+is deliberately rejected by this qualification path because it remains a
+provisional calibration parameter.
 
 ## Base architecture smoke
 

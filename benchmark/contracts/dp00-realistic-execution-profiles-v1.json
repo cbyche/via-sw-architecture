@@ -1,0 +1,62 @@
+{
+  "contract_id": "dp00-realistic-execution-profiles",
+  "contract_version": "v1",
+  "status": "PROSPECTIVELY_FROZEN",
+  "strategy": "SMALL_SENSITIVITY_MATRIX",
+  "distribution": {
+    "family": "CONSTANT_PER_SEMANTIC_EVENT",
+    "seed_policy": "NO_RANDOM_SAMPLING",
+    "unit": "microseconds"
+  },
+  "profiles": [
+    {
+      "profile_id": "R1",
+      "version": "dp00-realistic-sensitivity-v1",
+      "regime": "BALANCED",
+      "model_delay_micros": 50000,
+      "agent_delay_micros": 50000,
+      "tool_delay_micros": 50000
+    },
+    {
+      "profile_id": "R2",
+      "version": "dp00-realistic-sensitivity-v1",
+      "regime": "MODEL_DOMINANT",
+      "model_delay_micros": 100000,
+      "agent_delay_micros": 20000,
+      "tool_delay_micros": 20000
+    },
+    {
+      "profile_id": "R3",
+      "version": "dp00-realistic-sensitivity-v1",
+      "regime": "AGENT_DELEGATION_DOMINANT",
+      "model_delay_micros": 20000,
+      "agent_delay_micros": 100000,
+      "tool_delay_micros": 20000
+    },
+    {
+      "profile_id": "R4",
+      "version": "dp00-realistic-sensitivity-v1",
+      "regime": "TOOL_DOMINANT",
+      "model_delay_micros": 20000,
+      "agent_delay_micros": 20000,
+      "tool_delay_micros": 100000
+    }
+  ],
+  "numeric_provenance": {
+    "classification": "sensitivity-analysis value",
+    "basis": "Simple synthetic 20/50/100 ms constants chosen prospectively to expose balanced and one-class-dominant crossover behavior.",
+    "empirical_production_measurement": false
+  },
+  "application": {
+    "model": "Once for every ModelPort.generate invocation, after ModelGenerationStarted and before replay response/completion.",
+    "agent_delegation": "Once for every non-LOCAL_DIRECT ExecutionPort.execute invocation, after ExecutionStarted/start acceptance and before outcome effect observation.",
+    "tool": "Once for every LOCAL_DIRECT ExecutionPort.execute invocation, after ExecutionStarted/start acceptance and before outcome effect observation."
+  },
+  "immutable_reference_profile": {
+    "profile_id": "Z",
+    "version": "pilot-z-v0",
+    "model_delay_micros": 0,
+    "agent_delay_micros": 0,
+    "tool_delay_micros": 0
+  }
+}

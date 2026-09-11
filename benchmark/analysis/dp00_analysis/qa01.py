@@ -65,6 +65,18 @@ def _stats(samples: list[int]) -> dict:
     return result
 
 
+def _count_stats(samples: list[int]) -> dict:
+    if not samples:
+        return {"sample_count": 0, "unit": "semantic invocations"}
+    return {
+        "sample_count": len(samples),
+        "unit": "semantic invocations",
+        "min": min(samples),
+        "max": max(samples),
+        "mean": fmean(samples),
+    }
+
+
 def derive_qa01(episodes: Iterable[EpisodeEvidence]) -> dict:
     groups: dict[tuple[str, str], list[EpisodeEvidence]] = defaultdict(list)
     for episode in episodes:
@@ -76,16 +88,58 @@ def derive_qa01(episodes: Iterable[EpisodeEvidence]) -> dict:
     for (profile, alternative), group in sorted(groups.items()):
         eligible = [e for e in group if e.scenario["qa_eligibility"]["qa01"]["eligible"]]
         values, per_scenario = [], defaultdict(list)
+        model_counts, agent_counts, tool_counts = [], [], []
+        model_budgets, agent_budgets, tool_budgets, total_budgets, residuals = (
+            [], [], [], [], []
+        )
         for episode in eligible:
             value = episode_ftol_nanos(episode)
             if value is not None:
                 values.append(value)
                 per_scenario[episode.provenance["scenario_id"]].append(value)
+                model_count = len(episode.model_calls)
+                agent_count = sum(
+                    1
+                    for event in episode.canonical_events
+                    if event_variant(event)[0] == "ExecutionStarted"
+                    and event["emitter"] == "AGENT_FIXTURE"
+                )
+                tool_count = sum(
+                    1
+                    for event in episode.canonical_events
+                    if event_variant(event)[0] == "ExecutionStarted"
+                    and event["emitter"] == "TOOL_FIXTURE"
+                )
+                profile_config = episode.provenance["latency_profile"]
+                model_budget = model_count * profile_config["model_delay_micros"] * 1_000
+                agent_budget = agent_count * profile_config["agent_delay_micros"] * 1_000
+                tool_budget = tool_count * profile_config["tool_delay_micros"] * 1_000
+                total_budget = model_budget + agent_budget + tool_budget
+                model_counts.append(model_count)
+                agent_counts.append(agent_count)
+                tool_counts.append(tool_count)
+                model_budgets.append(model_budget)
+                agent_budgets.append(agent_budget)
+                tool_budgets.append(tool_budget)
+                total_budgets.append(total_budget)
+                residuals.append(value - total_budget)
         key = f"profile-{profile.lower()}:{alternative}"
         output[key] = {
             "counts": {"eligible_count": len(eligible), "successful_count": len(values), "failed_count": len(eligible) - len(values)},
             "statistics": _stats(values),
             "percentile_methods": ["nearest-rank", "linear-interpolated-(n-1)"],
             "per_scenario": {s: _stats(v) for s, v in sorted(per_scenario.items())},
+            "dependency_decomposition": {
+                "budget_unit": "nanoseconds",
+                "model_invocations": _count_stats(model_counts),
+                "agent_delegations": _count_stats(agent_counts),
+                "tool_executions": _count_stats(tool_counts),
+                "configured_model_budget": _stats(model_budgets),
+                "configured_agent_budget": _stats(agent_budgets),
+                "configured_tool_budget": _stats(tool_budgets),
+                "configured_total_dependency_budget": _stats(total_budgets),
+                "observed_framework_timer_residual": _stats(residuals),
+                "residual_interpretation": "FTOL minus configured constant dependency budget; includes framework/runtime and timer/scheduler effects",
+            },
         }
     return output

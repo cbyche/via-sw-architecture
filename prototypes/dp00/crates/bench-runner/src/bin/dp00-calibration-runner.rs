@@ -30,7 +30,7 @@ fn main() -> ExitCode {
 
 fn run() -> Result<(), String> {
     let repository_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
-    let (calibration_id, output_root) = parse_args(env::args().skip(1))?;
+    let (calibration_id, output_root, latency_profile) = parse_args(env::args().skip(1))?;
     let source = inspect_source_state(&repository_root).map_err(|error| error.to_string())?;
     if !source.working_tree_clean {
         return Err("counterbalanced calibration requires a clean frozen source".into());
@@ -75,7 +75,6 @@ fn run() -> Result<(), String> {
             .map_err(|error| error.to_string())?;
     let cargo_lock_identity = file_identity(&repository_root.join("prototypes/dp00/Cargo.lock"))
         .map_err(|error| error.to_string())?;
-    let latency_profile = ControlledLatencyProfile::profile_z();
     let mut prewarm_completed: BTreeMap<String, Vec<PrewarmPathIdentity>> = BTreeMap::new();
     let mut measured_run_ids = Vec::new();
 
@@ -255,17 +254,20 @@ fn run() -> Result<(), String> {
     Ok(())
 }
 
-fn parse_args(arguments: impl Iterator<Item = String>) -> Result<(String, PathBuf), String> {
+fn parse_args(
+    arguments: impl Iterator<Item = String>,
+) -> Result<(String, PathBuf, ControlledLatencyProfile), String> {
     let arguments = arguments.collect::<Vec<_>>();
     let mut calibration_id = None;
     let mut output_root = None;
+    let mut latency_profile = ControlledLatencyProfile::profile_z();
     let mut index = 0;
     while index < arguments.len() {
         let argument = &arguments[index];
         index += 1;
         if matches!(argument.as_str(), "--help" | "-h") {
             return Err(
-                "usage: dp00-calibration-runner --calibration-id ID --output-root PATH".into(),
+                "usage: dp00-calibration-runner --calibration-id ID --output-root PATH [--latency-profile Z|R1|R2|R3|R4]".into(),
             );
         }
         let value = arguments
@@ -274,6 +276,11 @@ fn parse_args(arguments: impl Iterator<Item = String>) -> Result<(String, PathBu
         match argument.as_str() {
             "--calibration-id" => calibration_id = Some(value.clone()),
             "--output-root" => output_root = Some(PathBuf::from(value)),
+            "--latency-profile" => {
+                latency_profile = ControlledLatencyProfile::from_id(value)
+                    .filter(|profile| profile.profile_id != "C")
+                    .ok_or_else(|| format!("unsupported qualification latency profile {value}"))?;
+            }
             other => return Err(format!("unknown option {other}")),
         }
         index += 1;
@@ -283,5 +290,46 @@ fn parse_args(arguments: impl Iterator<Item = String>) -> Result<(String, PathBu
         return Err("--calibration-id must not be empty".into());
     }
     let output_root = output_root.ok_or("--output-root is required")?;
-    Ok((calibration_id, output_root))
+    Ok((calibration_id, output_root, latency_profile))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn qualification_profile_is_explicit_and_frozen() {
+        let (_, _, profile) = parse_args(
+            [
+                "--calibration-id",
+                "qualification-r3",
+                "--output-root",
+                "/tmp/qualification-r3",
+                "--latency-profile",
+                "R3",
+            ]
+            .into_iter()
+            .map(str::to_owned),
+        )
+        .expect("frozen realistic profile");
+        assert_eq!(profile, ControlledLatencyProfile::profile_r3());
+    }
+
+    #[test]
+    fn provisional_profile_c_is_not_a_qualification_profile() {
+        let error = parse_args(
+            [
+                "--calibration-id",
+                "qualification-c",
+                "--output-root",
+                "/tmp/qualification-c",
+                "--latency-profile",
+                "C",
+            ]
+            .into_iter()
+            .map(str::to_owned),
+        )
+        .expect_err("Profile C must remain provisional");
+        assert!(error.contains("unsupported qualification latency profile C"));
+    }
 }

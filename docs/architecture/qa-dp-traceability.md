@@ -212,7 +212,7 @@ Architecture Decision / ADR
 - DP-00 winner: **TBD**
 - QA-01~04 scoring thresholds: **TBD**
 - QA-02 minimum correctness gate: **TBD**
-- QA-01 deterministic dependency-latency profile: **TBD**
+- QA-01 deterministic dependency-latency profile: **frozen for the next comparative campaign** as `dp00-realistic-execution-profiles-v1` (R1–R4 synthetic sensitivity matrix); measurement remains pending
 - QA-03 final evolution corpus/role vocabulary: **TBD**
 - QA-04 final workload taxonomy and aggregation rule: **TBD**
 - final benchmark corpora: **TBD**
