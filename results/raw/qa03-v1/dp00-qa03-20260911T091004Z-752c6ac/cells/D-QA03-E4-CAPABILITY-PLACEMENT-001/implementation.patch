@@ -1,0 +1,130 @@
+diff --git a/prototypes/dp00/crates/alternative-d/src/execution_path_selector.rs b/prototypes/dp00/crates/alternative-d/src/execution_path_selector.rs
+index 0b4a48f4c0e55f937cc722efff6aa02b2e0b91af..0cb35b582c1ad1a7b2600b6ed1b29937fa24cae6 100644
+--- a/prototypes/dp00/crates/alternative-d/src/execution_path_selector.rs
++++ b/prototypes/dp00/crates/alternative-d/src/execution_path_selector.rs
+@@ -13,6 +13,13 @@ pub fn select<M: ModelPort>(
+ where
+     M::Error: std::fmt::Debug,
+ {
++    let local_document_allowed = matches!(intent, NormalizedIntent::OpenRightDocument)
++        && policies
++            .iter()
++            .any(|fact| fact.key == "local_execution" && fact.value == "allowed")
++        && capabilities
++            .iter()
++            .any(|fact| fact.key == "fast_capability" && fact.value == "local_document_open");
+     let response = model
+         .generate(ModelRequest {
+             decision_owner: DecisionOwner::from("D.ExecutionPathSelector"),
+@@ -34,7 +41,9 @@ where
+         .completed_output()
+         .map_err(|status| format!("model generation did not complete: {status:?}"))?;
+
+-    let (kind, executor) = if output.contains("LOCAL_VOLUME") {
++    let (kind, executor) = if local_document_allowed {
++        (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_DOCUMENT")
++    } else if output.contains("LOCAL_VOLUME") {
+         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_VOLUME")
+     } else if output.contains("LOCAL_DOCUMENT") {
+         (ExecutionRouteKind::LocalDirect, "VIA_LOCAL_DOCUMENT")
+diff --git a/prototypes/dp00/crates/alternative-d/tests/qa03_e4_placement.rs b/prototypes/dp00/crates/alternative-d/tests/qa03_e4_placement.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..34b1c2170614ba3f15950248362c5636336779dd
+--- /dev/null
++++ b/prototypes/dp00/crates/alternative-d/tests/qa03_e4_placement.rs
+@@ -0,0 +1,95 @@
++use std::collections::VecDeque;
++use std::sync::{Arc, Mutex};
++
++use alternative_d::AdaptiveVia;
++use bench_core::{
++    ArchitectureObservation, ArchitectureUnderTest, ExecutionId, ExecutionPort, ExecutionRequest,
++    ExecutionResult, ExecutionRouteKind, InitialProductState, InputModality, ModelPort,
++    ModelRequest, ModelResponse, ModelStatus, ObservationPort, ProductFact, ResultId, TurnId,
++    UserTurn,
++};
++
++#[derive(Clone)]
++struct Model(Arc<Mutex<VecDeque<String>>>);
++impl Model {
++    fn scripted() -> Self {
++        Self(Arc::new(Mutex::new(
++            ["OPEN_RIGHT_DOCUMENT", "ARGO"]
++                .into_iter()
++                .map(str::to_owned)
++                .collect(),
++        )))
++    }
++}
++impl ModelPort for Model {
++    type Error = String;
++    fn generate(&self, _request: ModelRequest) -> Result<ModelResponse, Self::Error> {
++        Ok(ModelResponse {
++            composite_output: self.0.lock().unwrap().pop_front().unwrap(),
++            model_status: ModelStatus::Completed,
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Executor(Arc<Mutex<Vec<ExecutionRequest>>>);
++impl ExecutionPort for Executor {
++    type Error = String;
++    fn execute(&self, request: ExecutionRequest) -> Result<ExecutionResult, Self::Error> {
++        self.0.lock().unwrap().push(request);
++        Ok(ExecutionResult {
++            execution_id: ExecutionId::from("e-document"),
++            result_id: ResultId::from("r-document"),
++            payload: "opened".into(),
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Observations;
++impl ObservationPort for Observations {
++    fn emit(&self, _observation: ArchitectureObservation) {}
++}
++
++fn run(enabled: bool) -> ExecutionRequest {
++    let executor = Executor::default();
++    let mut architecture = AdaptiveVia::new(Model::scripted(), Observations, executor.clone());
++    architecture
++        .setup(InitialProductState {
++            capability_facts: enabled
++                .then(|| ProductFact {
++                    key: "fast_capability".into(),
++                    value: "local_document_open".into(),
++                })
++                .into_iter()
++                .collect(),
++            policy_facts: enabled
++                .then(|| ProductFact {
++                    key: "local_execution".into(),
++                    value: "allowed".into(),
++                })
++                .into_iter()
++                .collect(),
++            ..InitialProductState::default()
++        })
++        .unwrap();
++    architecture
++        .handle_user_turn(UserTurn {
++            turn_id: TurnId::from("turn-document"),
++            modality: InputModality::Text,
++            content: "OPEN_RIGHT_DOCUMENT".into(),
++            context_evidence: Vec::new(),
++        })
++        .unwrap();
++    executor.0.lock().unwrap()[0].clone()
++}
++
++#[test]
++fn permitted_document_open_is_local_and_disabled_request_keeps_fallback() {
++    let local = run(true);
++    assert_eq!(local.route.route_kind, ExecutionRouteKind::LocalDirect);
++    assert_eq!(local.route.initial_executor_id.0, "VIA_LOCAL_DOCUMENT");
++
++    let fallback = run(false);
++    assert_ne!(fallback.route.route_kind, ExecutionRouteKind::LocalDirect);
++}

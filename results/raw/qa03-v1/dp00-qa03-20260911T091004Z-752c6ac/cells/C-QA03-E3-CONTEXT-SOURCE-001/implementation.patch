@@ -1,0 +1,161 @@
+diff --git a/prototypes/dp00/crates/alternative-c/src/context_engine.rs b/prototypes/dp00/crates/alternative-c/src/context_engine.rs
+index 323c8ace236f2cf5cfc2fa871e229ce9ca77d759..2edd6fe6f3bdefd3c79d2cb089bf26dad9675977 100644
+--- a/prototypes/dp00/crates/alternative-c/src/context_engine.rs
++++ b/prototypes/dp00/crates/alternative-c/src/context_engine.rs
+@@ -4,6 +4,20 @@ pub struct ContextPackage {
+     pub turn: UserTurn,
+ }
+
+-pub fn package(turn: UserTurn) -> ContextPackage {
++pub fn package(mut turn: UserTurn) -> ContextPackage {
++    if !turn.context_evidence.is_empty() {
++        let normalized = turn
++            .context_evidence
++            .iter()
++            .map(|item| {
++                format!(
++                    "source={};kind={};value={};revision={:?}",
++                    item.source, item.kind, item.value, item.observed_at_product_revision
++                )
++            })
++            .collect::<Vec<_>>()
++            .join("|");
++        turn.content = format!("{};context=[{}]", turn.content, normalized);
++    }
+     ContextPackage { turn }
+ }
+diff --git a/prototypes/dp00/crates/bench-fixtures/src/context_sources/active_window_title.rs b/prototypes/dp00/crates/bench-fixtures/src/context_sources/active_window_title.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..19af8706dfe9c6ed3bc2ac5efe3d9a49d5d26a72
+--- /dev/null
++++ b/prototypes/dp00/crates/bench-fixtures/src/context_sources/active_window_title.rs
+@@ -0,0 +1,11 @@
++use bench_core::ContextEvidence;
++
++#[must_use]
++pub fn map(title: &str, product_revision: u64) -> Vec<ContextEvidence> {
++    vec![ContextEvidence {
++        source: "ACTIVE_WINDOW_TITLE".into(),
++        kind: "WINDOW_TITLE".into(),
++        value: title.into(),
++        observed_at_product_revision: Some(product_revision),
++    }]
++}
+diff --git a/prototypes/dp00/crates/bench-fixtures/src/context_sources/mod.rs b/prototypes/dp00/crates/bench-fixtures/src/context_sources/mod.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..e7f9cea360d6f453653cbacae8f8378534ac1bad
+--- /dev/null
++++ b/prototypes/dp00/crates/bench-fixtures/src/context_sources/mod.rs
+@@ -0,0 +1 @@
++pub mod active_window_title;
+diff --git a/prototypes/dp00/crates/bench-fixtures/src/lib.rs b/prototypes/dp00/crates/bench-fixtures/src/lib.rs
+index 991d680ef7674c1af472c3b7380a1ab33b6fe913..a9d8101c46c862a6180e744f3292a1a41b449ff5 100644
+--- a/prototypes/dp00/crates/bench-fixtures/src/lib.rs
++++ b/prototypes/dp00/crates/bench-fixtures/src/lib.rs
+@@ -1,5 +1,7 @@
+ #![forbid(unsafe_code)]
+
++pub mod context_sources;
++
+ pub mod pilot_assets;
+ pub mod pilot_materialization;
+
+diff --git a/prototypes/dp00/crates/bench-smoke/tests/qa03_e3_context_c.rs b/prototypes/dp00/crates/bench-smoke/tests/qa03_e3_context_c.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..357ed53e7902397798454454ca296df7f6b39f62
+--- /dev/null
++++ b/prototypes/dp00/crates/bench-smoke/tests/qa03_e3_context_c.rs
+@@ -0,0 +1,93 @@
++use std::collections::VecDeque;
++use std::sync::{Arc, Mutex};
++
++use alternative_c::HybridVia;
++use bench_core::{
++    ArchitectureObservation, ArchitectureUnderTest, ExecutionId, ExecutionPort, ExecutionRequest,
++    ExecutionResult, InitialProductState, InputModality, ModelPort, ModelRequest, ModelResponse,
++    ModelStatus, ObservationPort, ResultId, TurnId, UserTurn,
++};
++use bench_fixtures::context_sources::active_window_title;
++
++#[derive(Clone)]
++struct Model {
++    outputs: Arc<Mutex<VecDeque<String>>>,
++    requests: Arc<Mutex<Vec<ModelRequest>>>,
++}
++
++impl Model {
++    fn scripted(outputs: &[&str]) -> Self {
++        Self {
++            outputs: Arc::new(Mutex::new(
++                outputs.iter().map(|value| (*value).to_owned()).collect(),
++            )),
++            requests: Arc::new(Mutex::new(Vec::new())),
++        }
++    }
++}
++
++impl ModelPort for Model {
++    type Error = String;
++
++    fn generate(&self, request: ModelRequest) -> Result<ModelResponse, Self::Error> {
++        self.requests.lock().unwrap().push(request);
++        Ok(ModelResponse {
++            composite_output: self.outputs.lock().unwrap().pop_front().unwrap(),
++            model_status: ModelStatus::Completed,
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Executor;
++impl ExecutionPort for Executor {
++    type Error = String;
++    fn execute(&self, _request: ExecutionRequest) -> Result<ExecutionResult, Self::Error> {
++        Ok(ExecutionResult {
++            execution_id: ExecutionId::from("e-context"),
++            result_id: ResultId::from("r-context"),
++            payload: "ok".into(),
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Observations;
++impl ObservationPort for Observations {
++    fn emit(&self, _observation: ArchitectureObservation) {}
++}
++
++#[test]
++fn active_window_title_maps_once_with_provenance_and_is_consumed_by_context_seam() {
++    let mut evidence = vec![bench_core::ContextEvidence {
++        source: "existing".into(),
++        kind: "existing-kind".into(),
++        value: "existing-value".into(),
++        observed_at_product_revision: Some(40),
++    }];
++    evidence.extend(active_window_title::map("Architecture.md", 41));
++    assert_eq!(evidence.len(), 2);
++    assert_eq!(evidence[0].value, "existing-value");
++    assert_eq!(evidence[1].source, "ACTIVE_WINDOW_TITLE");
++    assert_eq!(evidence[1].kind, "WINDOW_TITLE");
++    assert_eq!(evidence[1].value, "Architecture.md");
++    assert_eq!(evidence[1].observed_at_product_revision, Some(41));
++
++    let model = Model::scripted(&["GENERAL_FILE_WORK", "ARGO"]);
++    let requests = model.requests.clone();
++    let mut architecture = HybridVia::new(model, Observations, Executor);
++    architecture.setup(InitialProductState::default()).unwrap();
++    architecture
++        .handle_user_turn(UserTurn {
++            turn_id: TurnId::from("turn-context"),
++            modality: InputModality::Text,
++            content: "organize files".into(),
++            context_evidence: evidence,
++        })
++        .unwrap();
++
++    let semantic_input = requests.lock().unwrap()[0].semantic_input.clone();
++    assert!(semantic_input.contains("existing-value"));
++    assert!(semantic_input.contains("Architecture.md"));
++    assert!(semantic_input.contains("ACTIVE_WINDOW_TITLE"));
++}

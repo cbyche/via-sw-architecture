@@ -1,0 +1,85 @@
+{
+  "schema_version": "dp00-qa03-execution-manifest-v1",
+  "protocol_version": "dp00-qa03-flexibility-protocol-v1",
+  "catalog_version": "dp00-qa03-evolution-catalog-v1",
+  "role_map_version": "dp00-qa03-role-map-v1",
+  "analyzer_version": "dp00-qa03-analyzer-v1",
+  "run_id": "dp00-qa03-20260911T091004Z-752c6ac-A-QA03-E1-SPECIALIST-AGENT-001",
+  "scenario_id": "QA03-E1-SPECIALIST-AGENT-001",
+  "alternative": "A",
+  "baseline_git_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "result_git_commit": "0a6a8ad2a0e5fc9a81d296883c1ddc839fb29d59",
+  "worktree_path": "/private/tmp/qa03-e1-a",
+  "implementation_agent": "Codex; minimum architecture-consistent change",
+  "isolated_from_baseline": true,
+  "frozen_before_implementation": true,
+  "contract_artifact_hashes_match": true,
+  "contract_hashes": {
+    "catalog_git_blob": "d4de658fbcf096d0a9aa3269f751bdf4796ae316",
+    "role_map_git_blob": "ecc77066c3540191d74c707bdc7e6bb5dc3f4e9f",
+    "baseline_regression_git_blob": "ac8dabf096ca14326061f10e003fe1dfdcc3946d"
+  },
+  "equal_scenario_semantics": true,
+  "alternative_definition_preserved": true,
+  "evidence_complete": true,
+  "acceptance": {
+    "pass": true,
+    "executed_ids": [
+      "ACC-E1-DISCOVER",
+      "ACC-E1-ROUTE",
+      "ACC-E1-RESULT"
+    ],
+    "failed_ids": []
+  },
+  "baseline_regression": {
+    "failed_required_ids": [
+      "qa02:P04",
+      "qa02:P11",
+      "qa04:P04_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P06_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P11_FORBIDDEN_ROUTE_COMMITTED"
+    ]
+  },
+  "observed_regression": {
+    "failed_required_ids": [
+      "qa02:P04",
+      "qa02:P11",
+      "qa04:P04_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P06_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P11_FORBIDDEN_ROUTE_COMMITTED"
+    ],
+    "previously_passing_failed_ids": [],
+    "worsened_required_ids": []
+  },
+  "changes": [
+    {
+      "path": "prototypes/dp00/crates/alternative-a/src/agent_router.rs",
+      "change_type": "MODIFIED",
+      "change_class": "REGISTRATION",
+      "lines_added": 7,
+      "lines_deleted": 1,
+      "asserted_roles": [
+        "CAPABILITY_REGISTRATION"
+      ],
+      "review_evidence": "New registered executor-selection hunk only; no intent, context, task, or orchestration change."
+    },
+    {
+      "path": "prototypes/dp00/crates/alternative-a/tests/qa03_e1_specialist.rs",
+      "change_type": "ADDED",
+      "change_class": "TEST",
+      "lines_added": 109,
+      "lines_deleted": 0
+    }
+  ],
+  "notes": [
+    "campaign_id=dp00-qa03-20260911T091004Z-752c6ac",
+    "contract_source_git_commit=752c6ac66fd0a77d7d6efac00d46ad7277bc5247",
+    "pre_change_head=d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+    "pre_change_status=clean",
+    "acceptance_oracle_commit=5831fb7074dddb7c0e319369d398c9f84b4d42ec",
+    "Python baseline regression: 95/95 PASS at architecture baseline plus unchanged analysis sources.",
+    "Rust baseline regression, all-target check, fmt, clippy -D warnings: PASS.",
+    "P12 and QA-02/QA-04 failure signatures: baseline-equivalent.",
+    "No unresolved implementation-integrity issue."
+  ]
+}
