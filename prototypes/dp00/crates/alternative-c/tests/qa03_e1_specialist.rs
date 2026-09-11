@@ -107,4 +107,3 @@ fn document_summary_agent_is_discoverable_routes_executes_and_binds_result() {
 fn document_summary_agent_is_not_discoverable_without_capability_fact() {
     assert!(run(false).is_err());
 }
-
