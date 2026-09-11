@@ -9,7 +9,8 @@ from .models import ValidationIssue
 CANONICAL_EVENT_VERSION = "canonical-event-v3"
 SUPPORTED_CANONICAL_EVENT_VERSIONS = {"canonical-event-v2", CANONICAL_EVENT_VERSION}
 MODEL_CALL_VERSION = "model-call-v1"
-RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v2"
+RUN_PROVENANCE_VERSION = "dp00-pilot-provenance-v3"
+SUPPORTED_RUN_PROVENANCE_VERSIONS = {"dp00-pilot-provenance-v2", RUN_PROVENANCE_VERSION}
 CAMPAIGN_PROVENANCE_VERSION = "dp00-pilot-campaign-provenance-v1"
 
 EMITTERS = {
@@ -57,7 +58,7 @@ FIXTURE_EVENT_KEYS = {
     "run_id", "episode_id", "sequence_number", "monotonic_timestamp_nanos",
     "fixture_kind", "action", "subject_id", "outcome", "observable_effect",
 }
-RUN_KEYS = {
+LEGACY_RUN_KEYS = {
     "provenance_schema_version", "run_id", "campaign_id", "campaign_profile_sequence_index",
     "official", "source_git_commit", "working_tree_clean", "pilot_corpus_id",
     "pilot_corpus_version", "alternative", "scenario_id", "scenario_version",
@@ -69,6 +70,11 @@ RUN_KEYS = {
     "target", "build_profile", "tokio_resolved_version", "runtime_worker_policy",
     "cargo_lock_identity", "os", "machine_architecture", "canonical_event_schema_version",
     "model_call_schema_version",
+}
+RUN_KEYS = LEGACY_RUN_KEYS | {
+    "source_sha", "calibration_id", "cycle_id", "pair_id", "order_slot",
+    "mode_order_slot", "repetition_id", "attempted_event_count",
+    "measurement_spine_event_count",
 }
 CAMPAIGN_KEYS = {
     "provenance_schema_version", "campaign_id", "source_git_commit",
@@ -380,9 +386,14 @@ def validate_fixture_event(value: Any) -> dict[str, Any]:
 
 def validate_run_provenance(value: Any) -> dict[str, Any]:
     obj = _object(value, "run provenance")
-    _exact(obj, RUN_KEYS, "run provenance")
-    if obj["provenance_schema_version"] != RUN_PROVENANCE_VERSION:
+    version = obj.get("provenance_schema_version")
+    if version not in SUPPORTED_RUN_PROVENANCE_VERSIONS:
         raise StrictValidationError("run provenance: unsupported schema version")
+    _exact(
+        obj,
+        RUN_KEYS if version == RUN_PROVENANCE_VERSION else LEGACY_RUN_KEYS,
+        "run provenance",
+    )
     if obj["canonical_event_schema_version"] not in SUPPORTED_CANONICAL_EVENT_VERSIONS or obj["model_call_schema_version"] != MODEL_CALL_VERSION:
         raise StrictValidationError("run provenance: stream schema version mismatch")
     _enum(obj["alternative"], ALTERNATIVES, "run provenance.alternative")
@@ -398,6 +409,26 @@ def validate_run_provenance(value: Any) -> dict[str, Any]:
         raise StrictValidationError("run provenance: official evidence has dirty source")
     if obj["official"] and (not obj["campaign_id"] or not isinstance(obj["campaign_profile_sequence_index"], int)):
         raise StrictValidationError("run provenance: official evidence lacks campaign correlation")
+    if version == RUN_PROVENANCE_VERSION:
+        if obj["source_sha"] != obj["source_git_commit"]:
+            raise StrictValidationError("run provenance: source_sha/source_git_commit mismatch")
+        calibration_keys = (
+            "calibration_id", "cycle_id", "pair_id", "order_slot",
+            "mode_order_slot", "repetition_id",
+        )
+        present = [obj[key] is not None for key in calibration_keys]
+        if any(present) and not all(present):
+            raise StrictValidationError("run provenance: incomplete paired calibration identity")
+        for key in ("event_count", "attempted_event_count", "measurement_spine_event_count"):
+            if not isinstance(obj[key], int) or isinstance(obj[key], bool) or obj[key] < 0:
+                raise StrictValidationError(f"run provenance.{key}: expected non-negative integer")
+        if obj["event_count"] < obj["measurement_spine_event_count"] or obj["attempted_event_count"] < obj["event_count"]:
+            raise StrictValidationError("run provenance: invalid event retention counts")
+        if obj["mode_order_slot"] is not None and obj["mode_order_slot"] not in {0, 1}:
+            raise StrictValidationError("run provenance.mode_order_slot: expected 0 or 1")
+        for key in ("calibration_id", "cycle_id", "pair_id", "repetition_id"):
+            if obj[key] is not None:
+                _nonempty(obj[key], f"run provenance.{key}")
     return obj
 
 

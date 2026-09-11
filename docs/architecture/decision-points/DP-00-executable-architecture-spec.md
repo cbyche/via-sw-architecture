@@ -881,3 +881,23 @@ shared decomposition component. A/B/C/D retain their existing responsibility
 owners: A's VIA orchestration, B's ARGO-primary control, C's bounded local plus
 Agent-routed hybrid, and D's execution-path selector each materialize the same
 parent/child and barrier obligations through their native control flow.
+
+---
+
+# 20. Provisional calibration Measurement Spine (Session 6.3R)
+
+CAPTURE and MINIMAL share one authoritative Measurement Spine. It contains the
+actual QA-01 boundary events, QA-02 semantic evidence, QA-04 logical calls and
+route commits, terminal state, and full product correlation. CAPTURE adds
+diagnostic model-generation canonical events and fixture detail; MINIMAL omits
+only those additions.
+
+The instrumentation choice cannot change FTOL semantics, P12 route-plan
+barrier semantics, or correctness qualification. A paired calibration member
+is usable only when its explicit provenance matches and QA-02 result,
+observable effects, routes/order, parent/child/subgoal correlation, logical
+model calls, and QA-04 boundary semantics are invariant. The measured FTOL
+difference remains a diagnostic rather than a semantic mismatch.
+
+This is a provisional benchmark measurement contract. It does not modify A/B/C/D
+decision logic or the approved requirements baseline.

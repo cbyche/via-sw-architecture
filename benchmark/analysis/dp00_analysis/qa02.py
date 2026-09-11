@@ -239,18 +239,40 @@ def _closed_world_conditions(
         if variant in {"EpisodeCompleted", "EpisodeFailed"}
     ]
     absence = cell["absence_semantics"]
+    measurement_spine_count = sum(
+        variant not in {"ModelGenerationStarted", "ModelGenerationCompleted"}
+        for variant in variants
+    )
+    provenance_v3 = (
+        episode.provenance["provenance_schema_version"]
+        == "dp00-pilot-provenance-v3"
+    )
+    measurement_spine_recognized = (
+        episode.provenance["canonical_event_schema_version"]
+        in SUPPORTED_CANONICAL_EVENT_VERSIONS
+        and (
+            (
+                provenance_v3
+                and episode.provenance["instrumentation_mode"]
+                in {"CAPTURE", "MINIMAL"}
+                and episode.provenance["measurement_spine_event_count"]
+                == measurement_spine_count
+            )
+            or (
+                not provenance_v3
+                and episode.provenance["instrumentation_mode"] == "CAPTURE"
+            )
+        )
+    )
     return {
         "TERMINAL_EVENT_UNIQUE_AND_FINAL": len(terminals) == 1
         and bool(variants)
         and variants[-1] in {"EpisodeCompleted", "EpisodeFailed"},
         "EVENT_COUNT_MATCHES_CAPTURED_STREAM": episode.provenance["event_count"]
         == len(episode.canonical_events),
-        "CAPTURE_MODE_AND_SCHEMA_RECOGNIZED": episode.provenance[
-            "instrumentation_mode"
-        ]
-        == "CAPTURE"
-        and episode.provenance["canonical_event_schema_version"]
-        in SUPPORTED_CANONICAL_EVENT_VERSIONS,
+        # Historical key retained for v0.2 coverage-map compatibility. In
+        # provenance-v3 it means a validated CAPTURE or MINIMAL Measurement Spine.
+        "CAPTURE_MODE_AND_SCHEMA_RECOGNIZED": measurement_spine_recognized,
         "RELEVANT_BOUNDARY_DECLARED": bool(absence.get("relevant_stream")),
         "NO_EPISODE_INTEGRITY_ERROR": not episode.integrity_issues,
     }

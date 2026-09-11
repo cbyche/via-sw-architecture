@@ -187,8 +187,18 @@ pub struct PilotRunnerConfig {
     pub measured_repetition_count: u32,
     pub order_policy: String,
     pub instrumentation_mode: InstrumentationMode,
+    pub calibration_identity: Option<CalibrationInvocationIdentity>,
     pub raw_output_root: PathBuf,
     pub run_mode: RunMode,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct CalibrationInvocationIdentity {
+    pub calibration_id: String,
+    pub cycle_id: String,
+    pub order_cycle: u32,
+    pub repetition_id: String,
+    pub mode_order_slot: u32,
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -253,13 +263,23 @@ pub fn build_episode_plan(config: &PilotRunnerConfig) -> Vec<EpisodePlan> {
         (true, config.measured_repetition_count),
     ] {
         for repetition_index in 0..repetitions {
-            let order = counterbalanced_order(&config.alternatives, repetition_index);
+            let order_cycle = if measurement_population {
+                config
+                    .calibration_identity
+                    .as_ref()
+                    .map_or(repetition_index, |identity| {
+                        identity.order_cycle.saturating_add(repetition_index)
+                    })
+            } else {
+                repetition_index
+            };
+            let order = counterbalanced_order(&config.alternatives, order_cycle);
             for scenario_id in &config.scenario_ids {
                 for (sequence_position, alternative) in order.iter().enumerate() {
                     plan.push(EpisodePlan {
                         alternative: *alternative,
                         scenario_id: scenario_id.clone(),
-                        order_cycle: repetition_index,
+                        order_cycle,
                         sequence_position: u32::try_from(sequence_position).unwrap_or(u32::MAX),
                         repetition_index,
                         measurement_population,
@@ -279,6 +299,7 @@ pub struct RunProvenance {
     pub campaign_profile_sequence_index: Option<u32>,
     pub official: bool,
     pub source_git_commit: String,
+    pub source_sha: String,
     pub working_tree_clean: bool,
     pub pilot_corpus_id: String,
     pub pilot_corpus_version: String,
@@ -296,8 +317,16 @@ pub struct RunProvenance {
     pub sequence_position: u32,
     pub repetition_index: u32,
     pub instrumentation_mode: InstrumentationMode,
+    pub calibration_id: Option<String>,
+    pub cycle_id: Option<String>,
+    pub pair_id: Option<String>,
+    pub order_slot: Option<u32>,
+    pub mode_order_slot: Option<u32>,
+    pub repetition_id: Option<String>,
     pub episode_elapsed_nanos: u64,
     pub event_count: u64,
+    pub attempted_event_count: u64,
+    pub measurement_spine_event_count: u64,
     pub capture_append_cost_nanos: u64,
     pub model_profile: String,
     pub prompt_profile: String,

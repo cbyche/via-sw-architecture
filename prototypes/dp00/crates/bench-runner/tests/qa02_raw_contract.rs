@@ -69,13 +69,22 @@ fn scenario<'a>(corpus: &'a PilotCorpus, id: &str) -> &'a RuntimeScenario {
 }
 
 fn execute(corpus: &PilotCorpus, id: &str, alternative: Alternative) -> EpisodeExecution {
+    execute_mode(corpus, id, alternative, InstrumentationMode::Capture)
+}
+
+fn execute_mode(
+    corpus: &PilotCorpus,
+    id: &str,
+    alternative: Alternative,
+    mode: InstrumentationMode,
+) -> EpisodeExecution {
     execute_episode(
         corpus,
         scenario(corpus, id),
         alternative,
         &format!("raw-contract-{id}-{}", alternative.id()),
         "test-sha",
-        InstrumentationMode::Capture,
+        mode,
         ControlledLatencyProfile::profile_z(),
     )
     .expect("episode executes")
@@ -389,6 +398,49 @@ fn p12_compound_routes_cross_the_plan_barrier_and_qualify_qa02_qa04() {
         assert!(execution.evidence.model_calls.iter().all(|call| {
             call.qa04_primary_included
                 && call.route_commit_event_id.as_deref() == Some(final_boundary)
+        }));
+    }
+}
+
+#[test]
+fn p12_minimal_spine_preserves_correctness_and_final_required_boundary() {
+    let corpus = corpus();
+    for alternative in Alternative::ALL {
+        let execution = execute_mode(&corpus, "P12", alternative, InstrumentationMode::Minimal);
+        assert_eq!(execution.architecture_error, None, "{}", alternative.id());
+        assert!(validate_episode(&execution.evidence.events).is_empty());
+        let commits = execution
+            .evidence
+            .events
+            .iter()
+            .filter_map(|event| match event.event() {
+                CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                    subgoal_id: Some(subgoal_id),
+                    ..
+                }) => Some((event, subgoal_id.0.as_str())),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(
+            commits.iter().map(|item| item.1).collect::<Vec<_>>(),
+            ["S1", "S2"]
+        );
+        assert_ne!(commits[0].0.event_id(), commits[1].0.event_id());
+        let final_boundary = commits[1].0.event_id();
+        assert!(execution.evidence.model_calls.iter().all(|call| {
+            call.qa04_primary_included
+                && call.route_commit_event_id.as_deref() == Some(final_boundary)
+        }));
+        let trace = project_actual_semantic_trace(&execution.evidence.events);
+        assert_eq!(trace.committed_routes.len(), 2);
+        assert_eq!(trace.result_bindings.len(), 2);
+        assert!(trace.observable_effects.iter().any(|effect| {
+            effect.effect_type == ObservableEffectType::MediaPaused
+                && effect.state.as_deref() == Some("PAUSED")
+        }));
+        assert!(trace.observable_effects.iter().any(|effect| {
+            effect.effect_type == ObservableEffectType::DownloadsOrganized
+                && effect.executor_id.as_deref() == Some("ARGO")
         }));
     }
 }

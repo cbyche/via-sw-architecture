@@ -68,14 +68,18 @@ def model_call(seq=1, *, start=1_150_000, included=True, status="COMPLETED", can
 
 def provenance(*, scenario="P01", alternative="A", profile="Z", official=False, event_count=8):
     return {
-        "provenance_schema_version": "dp00-pilot-provenance-v2", "run_id": "run-1", "campaign_id": "campaign-1" if official else None,
+        "provenance_schema_version": "dp00-pilot-provenance-v3", "run_id": "run-1", "campaign_id": "campaign-1" if official else None,
         "campaign_profile_sequence_index": 0 if official else None, "official": official, "source_git_commit": "test-sha", "working_tree_clean": True,
-        "pilot_corpus_id": "DP00-PILOT-V0", "pilot_corpus_version": "v0.1", "alternative": alternative,
+        "source_sha": "test-sha", "pilot_corpus_id": "DP00-PILOT-V0", "pilot_corpus_version": "v0.1", "alternative": alternative,
         "scenario_id": scenario, "scenario_version": "v0.1", "semantic_behavior_plan_id": f"SBP-{scenario}-v1", "semantic_behavior_plan_version": "v1",
         "latency_profile": {"profile_id": profile, "version": f"pilot-{profile.lower()}-v0", "model_delay_micros": 0, "agent_delay_micros": 0, "tool_delay_micros": 0, "calibration_status": "PILOT_TBD"},
         "warmup_count": 0, "measured_repetition_count": 1, "measurement_population": True, "order_policy": "COUNTERBALANCED_ROTATION_V1",
         "order_cycle": 0, "sequence_position": 0, "repetition_index": 0, "instrumentation_mode": "CAPTURE",
-        "episode_elapsed_nanos": 2_100_000, "event_count": event_count, "capture_append_cost_nanos": 1,
+        "calibration_id": None, "cycle_id": None, "pair_id": None, "order_slot": None,
+        "mode_order_slot": None, "repetition_id": None,
+        "episode_elapsed_nanos": 2_100_000, "event_count": event_count,
+        "attempted_event_count": event_count, "measurement_spine_event_count": event_count,
+        "capture_append_cost_nanos": 1,
         "model_profile": "dp00-base@v0", "prompt_profile": "pilot-v0-payload-v1", "cache_policy": "DISABLED",
         "rust_toolchain": "1.89.0", "rustc_version": "rustc test", "cargo_version": "cargo test", "target": "test-target",
         "build_profile": "qualification-or-release", "tokio_resolved_version": "1.53.1", "runtime_worker_policy": "tokio-current-thread-v0",

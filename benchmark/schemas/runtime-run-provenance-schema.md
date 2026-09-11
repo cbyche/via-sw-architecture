@@ -419,6 +419,41 @@ Derived micro/macro averages, QA scores and sensitivity analyses belong under `r
 
 The implementation may serialize these fields into one run header plus references rather than duplicate them on every event.
 
+---
+
+## `dp00-pilot-provenance-v3` paired calibration extension
+
+Version 3 retains all v2 fields and adds the following required run-header
+fields. Non-calibration runs serialize the nullable pairing fields as null.
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `source_sha` | string | Exact source commit; must equal `source_git_commit`. |
+| `calibration_id` | string/null | Explicit calibration population identity. |
+| `cycle_id` | string/null | Explicit measured cycle identity. |
+| `pair_id` | string/null | Shared CAPTURE/MINIMAL experimental-unit identity. |
+| `order_slot` | integer/null | Alternative position within the declared cycle. |
+| `mode_order_slot` | 0/1/null | Actual first/second instrumentation execution order. |
+| `repetition_id` | string/null | Explicit repetition/rotation-block identity. |
+| `attempted_event_count` | integer | All canonical observations attempted by the lifecycle. |
+| `measurement_spine_event_count` | integer | Authoritative events belonging to the common spine. |
+
+The six nullable calibration identity fields are all-or-none. Pair identity is
+read from provenance; analyzers must not derive it from a filename, directory,
+timestamp, or iteration order. Two members of a pair must agree on calibration,
+cycle, pair, order slot, repetition, alternative, scenario, semantic plan,
+latency profile, corpus, and source SHA. Their `mode_order_slot` values must be
+exactly `{0, 1}`.
+
+Calibration CLI invocations declare the existing `order_cycle` field explicitly
+and contain exactly one measured cycle. This lets separate CAPTURE and MINIMAL
+invocations reproduce the same rotated order without deriving cycle position
+from a name or directory layout.
+
+`event_count` is the number of persisted canonical events. CAPTURE may have
+`event_count > measurement_spine_event_count`; MINIMAL must persist the spine
+itself. `attempted_event_count >= event_count` in both modes.
+
 ## 16. Official multi-profile campaign provenance
 
 An official Pilot campaign performs one source-state attestation before any output is written, then runs its ordered latency profiles under that same committed source and corpus identity.

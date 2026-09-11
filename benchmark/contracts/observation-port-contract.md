@@ -313,3 +313,16 @@ commit or a final-boundary flag.
 The collector still owns `run_id`, `scenario_id`, `alternative_id`, canonical sequence number, authoritative monotonic timestamp, emitter provenance, and all oracle/constraint expected values.
 
 External effects are emitted by `OUTCOME_PROBE`, `TOOL_FIXTURE`, or `AGENT_FIXTURE`, not through the AUT `ObservationPort`. Terminal failure classification is emitted by the canonical runtime lifecycle. AUT decisions, fixture observations, and evaluator truth therefore remain distinct evidence authorities.
+
+## Calibration Measurement Spine
+
+Both instrumentation modes preserve the same authoritative semantic spine:
+Acoustic EOS, processing/task/route/clarification/result lifecycle events,
+execution starts, useful outcomes, terminal status, product correlations, and
+the logical model-call stream. This evidence is sufficient to recompute QA-01,
+QA-02, and QA-04 without borrowing data from the paired mode.
+
+`CAPTURE` stores the Measurement Spine plus model-generation diagnostic events
+and full fixture-event detail. `MINIMAL` stores the Measurement Spine only. It
+must not discard or reconstruct authoritative boundaries. In particular, FTOL
+remains `UsefulOutcomeObserved.timestamp - AcousticEos.timestamp`.

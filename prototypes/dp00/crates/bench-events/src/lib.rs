@@ -597,6 +597,7 @@ pub struct CapturedObservation {
 struct CaptureBuffer {
     next_sequence: u64,
     attempted_events: u64,
+    measurement_spine_events: u64,
     append_cost_nanos: u64,
     observations: Vec<CapturedObservation>,
 }
@@ -635,6 +636,7 @@ impl<C: Clock> InMemoryObservationCollector<C> {
             buffer: Mutex::new(CaptureBuffer {
                 next_sequence: 0,
                 attempted_events: 0,
+                measurement_spine_events: 0,
                 append_cost_nanos: 0,
                 observations: Vec::with_capacity(capacity),
             }),
@@ -647,9 +649,13 @@ impl<C: Clock> InMemoryObservationCollector<C> {
     }
 
     #[must_use]
-    pub fn capture_diagnostics(&self) -> (u64, u64) {
+    pub fn capture_diagnostics(&self) -> (u64, u64, u64) {
         let buffer = self.buffer.lock().expect("event buffer poisoned");
-        (buffer.attempted_events, buffer.append_cost_nanos)
+        (
+            buffer.attempted_events,
+            buffer.measurement_spine_events,
+            buffer.append_cost_nanos,
+        )
     }
 
     #[must_use]
@@ -704,7 +710,15 @@ impl<C: Clock> InMemoryObservationCollector<C> {
         let append_started = Instant::now();
         let mut buffer = self.buffer.lock().expect("event buffer poisoned");
         buffer.attempted_events += 1;
-        if self.mode == InstrumentationMode::Minimal {
+        let measurement_spine = !matches!(
+            event,
+            CanonicalEventKind::ModelGenerationStarted
+                | CanonicalEventKind::ModelGenerationCompleted
+        );
+        if measurement_spine {
+            buffer.measurement_spine_events += 1;
+        }
+        if self.mode == InstrumentationMode::Minimal && !measurement_spine {
             return;
         }
         let sequence_number = buffer.next_sequence;

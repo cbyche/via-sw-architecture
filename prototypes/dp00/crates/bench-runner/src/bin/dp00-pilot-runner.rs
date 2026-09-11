@@ -9,8 +9,8 @@ use bench_events::InstrumentationMode;
 use bench_fixtures::pilot_assets::load_pilot_corpus;
 use bench_runner::pilot_runtime::execute_episode;
 use bench_runner::{
-    ASYNC_RUNTIME, Alternative, CampaignConfiguration, CampaignProvenance,
-    ControlledLatencyProfile, PilotCampaignConfig, PilotRunnerConfig,
+    ASYNC_RUNTIME, Alternative, CalibrationInvocationIdentity, CampaignConfiguration,
+    CampaignProvenance, ControlledLatencyProfile, PilotCampaignConfig, PilotRunnerConfig,
     RUNTIME_WORKER_POLICY_VERSION, RunMode, RunProvenance, begin_campaign, begin_campaign_profile,
     build_episode_plan, build_qualification_runtime, command_output, file_identity, guard_run_mode,
     inspect_source_state, persist_raw_run,
@@ -134,7 +134,7 @@ fn run() -> Result<(), String> {
                 continue;
             }
             let provenance = RunProvenance {
-                provenance_schema_version: "dp00-pilot-provenance-v2".into(),
+                provenance_schema_version: "dp00-pilot-provenance-v3".into(),
                 run_id,
                 campaign_id: campaign_directory.as_ref().map(|_| campaign_id.clone()),
                 campaign_profile_sequence_index: campaign_directory
@@ -142,6 +142,7 @@ fn run() -> Result<(), String> {
                     .map(|_| u32::try_from(profile_index).unwrap_or(u32::MAX)),
                 official: config.run_mode == RunMode::Official,
                 source_git_commit: source.source_git_commit.clone(),
+                source_sha: source.source_git_commit.clone(),
                 working_tree_clean: source.working_tree_clean,
                 pilot_corpus_id: corpus.index.pilot_corpus_id.clone(),
                 pilot_corpus_version: corpus.index.pilot_corpus_version.clone(),
@@ -159,8 +160,40 @@ fn run() -> Result<(), String> {
                 sequence_position: item.sequence_position,
                 repetition_index: item.repetition_index,
                 instrumentation_mode: config.instrumentation_mode,
+                calibration_id: config
+                    .calibration_identity
+                    .as_ref()
+                    .map(|identity| identity.calibration_id.clone()),
+                cycle_id: config
+                    .calibration_identity
+                    .as_ref()
+                    .map(|identity| identity.cycle_id.clone()),
+                pair_id: config.calibration_identity.as_ref().map(|identity| {
+                    format!(
+                        "{}:{}:{}:{}:{}",
+                        identity.calibration_id,
+                        identity.cycle_id,
+                        identity.repetition_id,
+                        scenario.scenario_id,
+                        item.alternative.id()
+                    )
+                }),
+                order_slot: config
+                    .calibration_identity
+                    .as_ref()
+                    .map(|_| item.sequence_position),
+                mode_order_slot: config
+                    .calibration_identity
+                    .as_ref()
+                    .map(|identity| identity.mode_order_slot),
+                repetition_id: config
+                    .calibration_identity
+                    .as_ref()
+                    .map(|identity| identity.repetition_id.clone()),
                 episode_elapsed_nanos: execution.episode_elapsed_nanos,
-                event_count: execution.attempted_event_count,
+                event_count: u64::try_from(execution.evidence.events.len()).unwrap_or(u64::MAX),
+                attempted_event_count: execution.attempted_event_count,
+                measurement_spine_event_count: execution.measurement_spine_event_count,
                 capture_append_cost_nanos: execution.capture_append_cost_nanos,
                 model_profile: "dp00-base@v0".into(),
                 prompt_profile: behavior_plan.payload_registry_version.clone(),
@@ -216,6 +249,11 @@ fn parse_config(
     let mut warmup_count = 1;
     let mut repetitions = 1;
     let mut instrumentation_mode = InstrumentationMode::Capture;
+    let mut calibration_id = None;
+    let mut cycle_id = None;
+    let mut order_cycle = None;
+    let mut repetition_id = None;
+    let mut mode_order_slot = None;
     let mut raw_output_root = repository_root.join("results/raw/pilot-v0");
     let mut run_mode = RunMode::Development;
     let mut profiles = Vec::new();
@@ -262,11 +300,16 @@ fn parse_config(
                     other => return Err(format!("unknown instrumentation mode {other}")),
                 }
             }
+            "--calibration-id" => calibration_id = Some(value(&mut index)?.to_owned()),
+            "--cycle-id" => cycle_id = Some(value(&mut index)?.to_owned()),
+            "--order-cycle" => order_cycle = Some(parse_u32(value(&mut index)?, argument)?),
+            "--repetition-id" => repetition_id = Some(value(&mut index)?.to_owned()),
+            "--mode-order-slot" => mode_order_slot = Some(parse_u32(value(&mut index)?, argument)?),
             "--output-root" => raw_output_root = PathBuf::from(value(&mut index)?),
             "--official" => run_mode = RunMode::Official,
             "--development" => run_mode = RunMode::Development,
             "--help" | "-h" => {
-                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C] [--profiles Z,C] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--output-root PATH] [--official|--development]".into());
+                return Err("usage: dp00-pilot-runner [--corpus pilot-v0] [--alternatives A,B,C,D] [--scenarios P01,...] [--latency-profile Z|C] [--profiles Z,C] [--model-delay-micros N] [--agent-delay-micros N] [--tool-delay-micros N] [--warmup N] [--repetitions N] [--instrumentation capture|minimal] [--calibration-id ID --cycle-id ID --order-cycle N --repetition-id ID --mode-order-slot 0|1] [--output-root PATH] [--official|--development]".into());
             }
             other => return Err(format!("unknown option {other}")),
         }
@@ -277,6 +320,34 @@ fn parse_config(
     }
     if alternatives.is_empty() || scenario_ids.is_empty() || repetitions == 0 {
         return Err("alternatives, scenarios, and repetitions must be non-empty".into());
+    }
+    let calibration_fields_present = [
+        calibration_id.is_some(),
+        cycle_id.is_some(),
+        order_cycle.is_some(),
+        repetition_id.is_some(),
+        mode_order_slot.is_some(),
+    ];
+    if calibration_fields_present.iter().any(|present| *present)
+        && !calibration_fields_present.iter().all(|present| *present)
+    {
+        return Err("calibration provenance flags must be supplied together".into());
+    }
+    if mode_order_slot.is_some_and(|slot| slot > 1) {
+        return Err("mode-order-slot must be 0 or 1".into());
+    }
+    let calibration_identity = calibration_id.map(|calibration_id| CalibrationInvocationIdentity {
+        calibration_id,
+        cycle_id: cycle_id.expect("all calibration fields validated"),
+        order_cycle: order_cycle.expect("all calibration fields validated"),
+        repetition_id: repetition_id.expect("all calibration fields validated"),
+        mode_order_slot: mode_order_slot.expect("all calibration fields validated"),
+    });
+    if run_mode == RunMode::Official && calibration_identity.is_some() {
+        return Err("calibration provenance is separate from Official mode".into());
+    }
+    if calibration_identity.is_some() && repetitions != 1 {
+        return Err("a calibration invocation must contain exactly one measured cycle".into());
     }
     if run_mode == RunMode::Official
         && (model_delay_override.is_some()
@@ -323,6 +394,7 @@ fn parse_config(
             measured_repetition_count: repetitions,
             order_policy: "DETERMINISTIC_CYCLIC_V1".into(),
             instrumentation_mode,
+            calibration_identity,
             raw_output_root,
             run_mode,
         },
@@ -417,5 +489,70 @@ mod tests {
         .expect("development config");
         assert_eq!(config.profiles.len(), 1);
         assert_eq!(config.profiles[0].profile_id, "C");
+    }
+
+    #[test]
+    fn calibration_cli_requires_complete_explicit_pairing_identity() {
+        let config = parse_config(
+            [
+                "--development",
+                "--calibration-id",
+                "calibration-1",
+                "--cycle-id",
+                "cycle-1",
+                "--order-cycle",
+                "1",
+                "--repetition-id",
+                "rotation-1",
+                "--mode-order-slot",
+                "1",
+                "--instrumentation",
+                "minimal",
+            ]
+            .into_iter()
+            .map(str::to_owned),
+            Path::new("/tmp/repository"),
+        )
+        .expect("calibration config");
+        assert_eq!(
+            config.runner.calibration_identity,
+            Some(CalibrationInvocationIdentity {
+                calibration_id: "calibration-1".into(),
+                cycle_id: "cycle-1".into(),
+                order_cycle: 1,
+                repetition_id: "rotation-1".into(),
+                mode_order_slot: 1,
+            })
+        );
+        assert_eq!(
+            config.runner.instrumentation_mode,
+            InstrumentationMode::Minimal
+        );
+        let measured = build_episode_plan(&config.runner)
+            .into_iter()
+            .filter(|item| item.measurement_population)
+            .collect::<Vec<_>>();
+        assert!(measured.chunks_exact(4).all(|items| {
+            items
+                .iter()
+                .map(|item| item.alternative)
+                .collect::<Vec<_>>()
+                == vec![
+                    Alternative::B,
+                    Alternative::C,
+                    Alternative::D,
+                    Alternative::A,
+                ]
+        }));
+        assert!(measured.iter().all(|item| item.order_cycle == 1));
+
+        let error = parse_config(
+            ["--calibration-id", "calibration-1"]
+                .into_iter()
+                .map(str::to_owned),
+            Path::new("/tmp/repository"),
+        )
+        .expect_err("partial identity rejected");
+        assert!(error.contains("must be supplied together"));
     }
 }

@@ -187,7 +187,7 @@ impl PilotPorts {
     }
 
     #[must_use]
-    pub fn capture_diagnostics(&self) -> (u64, u64) {
+    pub fn capture_diagnostics(&self) -> (u64, u64, u64) {
         self.inner.collector.capture_diagnostics()
     }
 
@@ -251,53 +251,51 @@ impl ModelPort for PilotPorts {
             .map_or(bench_core::ModelStatus::Failed, |response| {
                 response.model_status
             });
-        if self.inner.collector.instrumentation_mode() == InstrumentationMode::Capture {
-            let mut calls = self
-                .inner
-                .calls
-                .lock()
-                .map_err(|_| "model call trace poisoned")?;
-            let logical_sequence = u64::try_from(calls.len()).unwrap_or(u64::MAX) + 1;
-            let attempt = u32::try_from(
-                calls
-                    .iter()
-                    .filter(|call| call.decision_owner == request.decision_owner)
-                    .count(),
-            )
-            .unwrap_or(u32::MAX)
-            .saturating_add(1);
-            calls.push(LogicalModelCall {
-                schema_version: "model-call-v1".into(),
-                model_call_id: format!("{}:model:{model_call_number}", self.inner.run_id),
-                run_id: self.inner.run_id.clone(),
-                episode_id: self.inner.episode_id.clone(),
-                scenario_id: self.inner.scenario_id.clone(),
-                alternative_id: self.inner.replay.context().alternative_id.clone(),
-                logical_sequence,
-                attempt,
-                decision_owner: request.decision_owner.clone(),
-                semantic_responsibilities: request.semantic_responsibilities.clone(),
-                status,
-                semantic_output_reference: response
-                    .as_ref()
-                    .ok()
-                    .and_then(model_semantic_output_reference),
-                route_committed_before_call: false,
-                route_committed_after_call: false,
-                logical_start: start,
-                first_output: (status == bench_core::ModelStatus::Completed).then_some(completion),
-                completion,
-                failure: (status != bench_core::ModelStatus::Completed).then_some(completion),
-                call_class: if request.decision_owner.0 == "B.ARGOPrimary" {
-                    "MIXED".into()
-                } else {
-                    "ORCHESTRATION".into()
-                },
-                classification_reason: "BASE_ARCHITECTURE_PRE_ROUTE_SEMANTIC_RESPONSIBILITY".into(),
-                qa04_primary_included: false,
-                route_commit_event_id: None,
-            });
-        }
+        let mut calls = self
+            .inner
+            .calls
+            .lock()
+            .map_err(|_| "model call trace poisoned")?;
+        let logical_sequence = u64::try_from(calls.len()).unwrap_or(u64::MAX) + 1;
+        let attempt = u32::try_from(
+            calls
+                .iter()
+                .filter(|call| call.decision_owner == request.decision_owner)
+                .count(),
+        )
+        .unwrap_or(u32::MAX)
+        .saturating_add(1);
+        calls.push(LogicalModelCall {
+            schema_version: "model-call-v1".into(),
+            model_call_id: format!("{}:model:{model_call_number}", self.inner.run_id),
+            run_id: self.inner.run_id.clone(),
+            episode_id: self.inner.episode_id.clone(),
+            scenario_id: self.inner.scenario_id.clone(),
+            alternative_id: self.inner.replay.context().alternative_id.clone(),
+            logical_sequence,
+            attempt,
+            decision_owner: request.decision_owner.clone(),
+            semantic_responsibilities: request.semantic_responsibilities.clone(),
+            status,
+            semantic_output_reference: response
+                .as_ref()
+                .ok()
+                .and_then(model_semantic_output_reference),
+            route_committed_before_call: false,
+            route_committed_after_call: false,
+            logical_start: start,
+            first_output: (status == bench_core::ModelStatus::Completed).then_some(completion),
+            completion,
+            failure: (status != bench_core::ModelStatus::Completed).then_some(completion),
+            call_class: if request.decision_owner.0 == "B.ARGOPrimary" {
+                "MIXED".into()
+            } else {
+                "ORCHESTRATION".into()
+            },
+            classification_reason: "BASE_ARCHITECTURE_PRE_ROUTE_SEMANTIC_RESPONSIBILITY".into(),
+            qa04_primary_included: false,
+            route_commit_event_id: None,
+        });
         response
     }
 }
@@ -574,6 +572,7 @@ pub struct EpisodeExecution {
     pub architecture_error: Option<String>,
     pub episode_elapsed_nanos: u64,
     pub attempted_event_count: u64,
+    pub measurement_spine_event_count: u64,
     pub capture_append_cost_nanos: u64,
 }
 
@@ -657,22 +656,26 @@ where
         Err(error) => {
             ports.record_terminal_failure(classify_failure(&format!("{error:?}")));
             let evidence = evidence_source.take_raw_evidence();
-            let (attempted_event_count, capture_append_cost_nanos) = ports.capture_diagnostics();
+            let (attempted_event_count, measurement_spine_event_count, capture_append_cost_nanos) =
+                ports.capture_diagnostics();
             return Ok(EpisodeExecution {
                 evidence,
                 architecture_error: Some(format!("{error:?}")),
                 episode_elapsed_nanos: elapsed,
                 attempted_event_count,
+                measurement_spine_event_count,
                 capture_append_cost_nanos,
             });
         }
     };
-    let (attempted_event_count, capture_append_cost_nanos) = ports.capture_diagnostics();
+    let (attempted_event_count, measurement_spine_event_count, capture_append_cost_nanos) =
+        ports.capture_diagnostics();
     Ok(EpisodeExecution {
         evidence,
         architecture_error: None,
         episode_elapsed_nanos: elapsed,
         attempted_event_count,
+        measurement_spine_event_count,
         capture_append_cost_nanos,
     })
 }

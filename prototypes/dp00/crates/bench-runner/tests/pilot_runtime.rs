@@ -8,7 +8,7 @@ use bench_core::{
 };
 use bench_events::{
     CanonicalEventKind, EventEmitter, InMemoryObservationCollector, InstrumentationMode,
-    LogicalModelCall, ObservationContext, validate_episode,
+    LogicalModelCall, ObservationContext, project_actual_semantic_trace, validate_episode,
 };
 use bench_fixtures::pilot_assets::load_pilot_corpus;
 use bench_runner::pilot_runtime::execute_episode;
@@ -37,6 +37,7 @@ fn config() -> PilotRunnerConfig {
         measured_repetition_count: 2,
         order_policy: "DETERMINISTIC_CYCLIC_V1".into(),
         instrumentation_mode: InstrumentationMode::Capture,
+        calibration_identity: None,
         raw_output_root: PathBuf::from("results/raw/pilot-v0"),
         run_mode: RunMode::Development,
     }
@@ -44,12 +45,13 @@ fn config() -> PilotRunnerConfig {
 
 fn provenance(run_id: &str) -> RunProvenance {
     RunProvenance {
-        provenance_schema_version: "dp00-pilot-provenance-v2".into(),
+        provenance_schema_version: "dp00-pilot-provenance-v3".into(),
         run_id: run_id.into(),
         campaign_id: None,
         campaign_profile_sequence_index: None,
         official: false,
         source_git_commit: "test-sha".into(),
+        source_sha: "test-sha".into(),
         working_tree_clean: false,
         pilot_corpus_id: "dp00-pilot-v0".into(),
         pilot_corpus_version: "v0.1".into(),
@@ -67,8 +69,16 @@ fn provenance(run_id: &str) -> RunProvenance {
         sequence_position: 0,
         repetition_index: 0,
         instrumentation_mode: InstrumentationMode::Capture,
+        calibration_id: None,
+        cycle_id: None,
+        pair_id: None,
+        order_slot: None,
+        mode_order_slot: None,
+        repetition_id: None,
         episode_elapsed_nanos: 100,
         event_count: 1,
+        attempted_event_count: 1,
+        measurement_spine_event_count: 1,
         capture_append_cost_nanos: 5,
         model_profile: "dp00-base@v0".into(),
         prompt_profile: "pilot-v0-payload-v1".into(),
@@ -205,10 +215,7 @@ fn latency_profiles_are_common_per_dependency_and_z_is_zero() {
 
 #[test]
 fn capture_and_minimal_use_the_same_lifecycle_with_different_sinks() {
-    for (mode, expected_stored) in [
-        (InstrumentationMode::Capture, 1),
-        (InstrumentationMode::Minimal, 0),
-    ] {
+    for mode in [InstrumentationMode::Capture, InstrumentationMode::Minimal] {
         let collector = InMemoryObservationCollector::with_mode(
             ObservationContext {
                 run_id: "mode".into(),
@@ -229,7 +236,8 @@ fn capture_and_minimal_use_the_same_lifecycle_with_different_sinks() {
             product_correlation: ProductCorrelation::default(),
         });
         assert_eq!(collector.capture_diagnostics().0, 1);
-        assert_eq!(collector.canonical_snapshot().len(), expected_stored);
+        assert_eq!(collector.capture_diagnostics().1, 1);
+        assert_eq!(collector.canonical_snapshot().len(), 1);
     }
 }
 
@@ -372,15 +380,31 @@ fn official_campaign_attests_once_and_persists_ordered_z_then_c_without_source_m
 
 #[test]
 fn provenance_serialization_contains_required_reconstruction_fields() {
-    let value = serde_json::to_value(provenance("provenance-fields")).expect("serialize");
+    let mut original = provenance("provenance-fields");
+    original.calibration_id = Some("calibration-1".into());
+    original.cycle_id = Some("cycle-1".into());
+    original.pair_id = Some("calibration-1:cycle-1:rotation-1:P01:A".into());
+    original.order_slot = Some(0);
+    original.mode_order_slot = Some(1);
+    original.repetition_id = Some("rotation-1".into());
+    let value = serde_json::to_value(&original).expect("serialize");
     for field in [
         "source_git_commit",
+        "source_sha",
         "working_tree_clean",
         "pilot_corpus_id",
         "semantic_behavior_plan_version",
         "latency_profile",
         "sequence_position",
         "instrumentation_mode",
+        "calibration_id",
+        "cycle_id",
+        "pair_id",
+        "order_slot",
+        "mode_order_slot",
+        "repetition_id",
+        "attempted_event_count",
+        "measurement_spine_event_count",
         "rustc_version",
         "cargo_version",
         "target",
@@ -392,6 +416,14 @@ fn provenance_serialization_contains_required_reconstruction_fields() {
     ] {
         assert!(value.get(field).is_some(), "missing {field}");
     }
+    let round_trip: RunProvenance = serde_json::from_value(value).expect("round trip");
+    assert_eq!(round_trip.calibration_id, original.calibration_id);
+    assert_eq!(round_trip.cycle_id, original.cycle_id);
+    assert_eq!(round_trip.pair_id, original.pair_id);
+    assert_eq!(round_trip.order_slot, original.order_slot);
+    assert_eq!(round_trip.mode_order_slot, original.mode_order_slot);
+    assert_eq!(round_trip.repetition_id, original.repetition_id);
+    assert_eq!(round_trip.source_sha, original.source_git_commit);
 }
 
 #[test]
@@ -512,7 +544,7 @@ fn p01_all_alternatives_complete_without_runner_scoring_or_parallelism() {
 }
 
 #[test]
-fn minimal_sink_preserves_architecture_lifecycle_and_execute_does_not_persist() {
+fn minimal_sink_persists_measurement_spine_in_memory_without_implicit_io() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let corpus = load_pilot_corpus(&root).expect("Pilot corpus");
     let scenario = corpus
@@ -533,11 +565,112 @@ fn minimal_sink_preserves_architecture_lifecycle_and_execute_does_not_persist() 
     )
     .expect("episode");
     assert_eq!(execution.architecture_error, None);
-    assert!(execution.evidence.events.is_empty());
-    assert!(execution.evidence.model_calls.is_empty());
+    assert!(
+        execution
+            .evidence
+            .events
+            .iter()
+            .any(|event| matches!(event.event(), CanonicalEventKind::AcousticEos))
+    );
+    assert!(execution.evidence.events.iter().any(|event| matches!(
+        event.event(),
+        CanonicalEventKind::UsefulOutcomeObserved { .. }
+    )));
+    assert!(execution.evidence.events.iter().any(|event| matches!(
+        event.event(),
+        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted { .. })
+    )));
+    assert!(!execution.evidence.model_calls.is_empty());
     assert!(execution.evidence.fixture_events.is_empty());
+    assert_eq!(
+        execution.measurement_spine_event_count,
+        execution.evidence.events.len() as u64
+    );
+    assert!(execution.attempted_event_count > execution.measurement_spine_event_count);
     assert!(
         !output.exists(),
         "timed execution must not create raw files"
     );
+}
+
+#[test]
+fn capture_and_minimal_spines_preserve_ftol_and_compound_semantics() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let corpus = load_pilot_corpus(&root).expect("Pilot corpus");
+    for scenario_id in ["P01", "P12"] {
+        let scenario = corpus
+            .scenarios
+            .iter()
+            .find(|scenario| scenario.scenario_id == scenario_id)
+            .expect("scenario");
+        let executions = [InstrumentationMode::Capture, InstrumentationMode::Minimal].map(|mode| {
+            execute_episode(
+                &corpus,
+                scenario,
+                Alternative::A,
+                &format!("paired-{scenario_id}"),
+                "test",
+                mode,
+                ControlledLatencyProfile::profile_z(),
+            )
+            .expect("paired episode")
+        });
+        assert_eq!(
+            project_actual_semantic_trace(&executions[0].evidence.events),
+            project_actual_semantic_trace(&executions[1].evidence.events)
+        );
+        assert_eq!(
+            executions[0].evidence.model_calls.len(),
+            executions[1].evidence.model_calls.len()
+        );
+        if scenario_id == "P01" {
+            for execution in &executions {
+                let eos = execution
+                    .evidence
+                    .events
+                    .iter()
+                    .find(|event| matches!(event.event(), CanonicalEventKind::AcousticEos))
+                    .expect("authoritative EOS")
+                    .monotonic_timestamp()
+                    .0;
+                let outcome = execution
+                    .evidence
+                    .events
+                    .iter()
+                    .find(|event| {
+                        matches!(
+                            event.event(),
+                            CanonicalEventKind::UsefulOutcomeObserved { .. }
+                        )
+                    })
+                    .expect("authoritative outcome")
+                    .monotonic_timestamp()
+                    .0;
+                assert!(
+                    outcome >= eos,
+                    "FTOL uses authoritative boundary timestamps"
+                );
+            }
+        } else {
+            let correlations = executions.each_ref().map(|execution| {
+                execution
+                    .evidence
+                    .events
+                    .iter()
+                    .filter_map(|event| match event.event() {
+                        CanonicalEventKind::Architecture(ArchitectureEvent::RouteCommitted {
+                            subgoal_id: Some(subgoal_id),
+                            ..
+                        }) => Some((
+                            event.product_correlation().parent_task_id.clone(),
+                            event.product_correlation().child_task_id.clone(),
+                            subgoal_id.clone(),
+                        )),
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>()
+            });
+            assert_eq!(correlations[0], correlations[1]);
+        }
+    }
 }

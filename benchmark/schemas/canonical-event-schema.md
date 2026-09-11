@@ -671,3 +671,21 @@ contract. Full set coverage is required before it derives the QA-04 boundary;
 partial coverage produces no final boundary and is classified
 `ROUTE_REQUIRED_NOT_COMMITTED`. The first required subgoal commit cannot close
 QA-04 when another required initial subgoal remains uncommitted.
+
+## 19.4 Instrumentation retention contract
+
+The Measurement Spine is a retention profile over `canonical-event-v3`, not a
+new event payload schema. Both CAPTURE and MINIMAL retain authoritative Acoustic
+EOS, architecture lifecycle and semantic events, execution starts, useful
+outcomes, terminal events, and their complete product correlations. Both modes
+also retain the independent logical model-call stream.
+
+CAPTURE additionally retains canonical `ModelGenerationStarted` and
+`ModelGenerationCompleted` diagnostics and detailed fixture events. MINIMAL may
+omit only those additional diagnostics. It cannot omit an event required for
+QA-01 boundary derivation, QA-02 exact conformance, QA-04 route-boundary
+derivation, or CAPTURE/MINIMAL semantic invariance.
+
+Because the event envelope and payload shapes are unchanged, the canonical
+schema remains `canonical-event-v3`. Run provenance is versioned separately to
+describe the retained population and pairing identity.

@@ -11,10 +11,12 @@ from .models import EvidenceSet
 from .qa01 import derive_qa01
 from .qa02 import derive_qa02
 from .qa04 import derive_qa04
+from .paired import derive_paired_calibration
 
 
 def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
     qa02 = derive_qa02(evidence.episodes, evidence.coverage_map)
+    qa04 = derive_qa04(evidence.episodes, qa02)
     return {
         "analysis_version": ANALYSIS_VERSION,
         "validation": {
@@ -24,7 +26,8 @@ def derive_summary(evidence: EvidenceSet) -> dict[str, Any]:
         },
         "qa01": derive_qa01(evidence.episodes),
         "qa02": qa02,
-        "qa04": derive_qa04(evidence.episodes, qa02),
+        "qa04": qa04,
+        "paired_calibration": derive_paired_calibration(evidence.episodes, qa02),
         "provenance": {
             "analysis_language": "python", "python_interpreter_version": platform.python_version(),
             "analysis_version": ANALYSIS_VERSION, "raw_root": str(evidence.raw_root),
