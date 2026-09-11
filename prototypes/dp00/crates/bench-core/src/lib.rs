@@ -62,6 +62,20 @@ pub struct ProductFact {
     pub value: String,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
+pub enum ResourceClass {
+    IoBound,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DownstreamCapabilityDescriptor {
+    pub executor_id: String,
+    pub capability_id: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub resource_class: Option<ResourceClass>,
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct InitialTaskState {
     pub task_id: TaskId,
