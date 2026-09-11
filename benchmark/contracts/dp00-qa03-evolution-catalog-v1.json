@@ -1,0 +1,108 @@
+{
+  "protocol_version": "dp00-qa03-flexibility-protocol-v1",
+  "catalog_version": "dp00-qa03-evolution-catalog-v1",
+  "taxonomy_version": "qa03-e1-e5-v1",
+  "role_map_version": "dp00-qa03-role-map-v1",
+  "source_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "eligible_population": "All five scenarios are primary CCR scenarios. No weights apply.",
+  "freeze_rule": "Scenario text, acceptance, regression, and Expected Change Areas are immutable for measured v1 runs.",
+  "scenarios": [
+    {
+      "id": "QA03-E1-SPECIALIST-AGENT-001",
+      "category": "E1",
+      "title": "Add a document-summary specialist Agent",
+      "rationale": "Tests whether a new peer/specialist is absorbed at the capability and Agent integration seams.",
+      "change_request": "Add a DocumentSummaryAgent capability for the frozen SUMMARIZE_DOCUMENT request. It must be discoverable through capability metadata, selected through the alternative's natural routing/delegation mechanism, receive the request, and return the same canonical result semantics as other downstream execution.",
+      "alternative_neutral_semantics": "Every alternative adds the same downstream specialist and user-visible result. ARGO mediation in B and direct selection in other alternatives remain architecture-defined; no alternative's ownership model is rewritten.",
+      "expected_change_roles": ["CAPABILITY_REGISTRATION", "AGENT_DELEGATION_ADAPTER"],
+      "forbidden_change_roles": ["VOICE_RUNTIME", "CONTEXT_HANDLING", "CONTEXT_REPRESENTATION_CONTRACT", "MODEL_GATEWAY_CONTRACT", "MODEL_GATEWAY_PROVIDER", "TASK_ORCHESTRATION_STATE", "LOCAL_CAPABILITY_EXECUTION", "ALTERNATIVE_ORCHESTRATION_CORE"],
+      "acceptance_tests": [
+        {"id": "ACC-E1-DISCOVER", "criterion": "DocumentSummaryAgent is discoverable only when the frozen capability fact is present."},
+        {"id": "ACC-E1-ROUTE", "criterion": "SUMMARIZE_DOCUMENT reaches DocumentSummaryAgent through the alternative's intended route and emits a committed route."},
+        {"id": "ACC-E1-RESULT", "criterion": "The specialist's deterministic result is bound to the originating task."}
+      ],
+      "regression_tests": [
+        {"id": "REG-E1-EXISTING-AGENTS", "criterion": "Existing ARGO and NetworkAgent routes and results retain the frozen baseline signature."},
+        {"id": "REG-E1-DP00", "criterion": "Full DP-00 qualification regression bundle introduces no new or worsened failure."}
+      ],
+      "evidence": ["git diff with symbol/hunk role classification", "capability registration evidence", "route and executor observations", "acceptance output", "baseline-relative regression output"]
+    },
+    {
+      "id": "QA03-E2-MODEL-PROVIDER-001",
+      "category": "E2",
+      "title": "Add a replacement Model Gateway provider",
+      "rationale": "Tests provider substitution behind the existing ModelPort/Model Gateway boundary without using latency as evidence.",
+      "change_request": "Add deterministic provider REPLAY_MODEL_V2 behind the intended Model Gateway abstraction and select it by provider configuration while preserving existing model-facing semantic request and response behavior.",
+      "alternative_neutral_semantics": "All alternatives receive identical semantic model outputs through the same provider contract; their existing number and ownership of model decisions remain unchanged.",
+      "expected_change_roles": ["MODEL_GATEWAY_PROVIDER", "MODEL_PROVIDER_CONFIGURATION"],
+      "forbidden_change_roles": ["INTENT_REFINEMENT", "ROUTE_DECISION", "EXECUTION_POLICY_CONTROL_PLANE", "AGENT_DELEGATION_ADAPTER", "LOCAL_CAPABILITY_EXECUTION", "TASK_ORCHESTRATION_STATE", "CONTEXT_HANDLING", "ALTERNATIVE_ORCHESTRATION_CORE"],
+      "acceptance_tests": [
+        {"id": "ACC-E2-SELECT", "criterion": "Provider configuration selects REPLAY_MODEL_V2 through ModelPort without alternative-specific bypasses."},
+        {"id": "ACC-E2-SEMANTICS", "criterion": "A frozen model request returns the specified semantic response and retains decision-owner/profile provenance."}
+      ],
+      "regression_tests": [
+        {"id": "REG-E2-DEFAULT", "criterion": "The existing provider remains selectable and behaviorally unchanged."},
+        {"id": "REG-E2-DP00", "criterion": "Full DP-00 qualification regression bundle introduces no new or worsened failure."}
+      ],
+      "evidence": ["provider/config diff", "ModelPort conformance test", "model request/response provenance", "baseline-relative regression output"]
+    },
+    {
+      "id": "QA03-E3-CONTEXT-SOURCE-001",
+      "category": "E3",
+      "title": "Add an active-window-title Context Source",
+      "rationale": "Tests whether a new input evidence producer remains behind the context representation boundary.",
+      "change_request": "Add ACTIVE_WINDOW_TITLE as a Context Source that maps a deterministic window-title observation into existing context evidence with source, kind, value, and product revision provenance. Existing sources and interaction behavior must remain unchanged.",
+      "alternative_neutral_semantics": "Every alternative receives the same normalized ContextEvidence; no alternative is given additional semantic truth or a topology-specific input.",
+      "expected_change_roles": ["CONTEXT_SOURCE_ADAPTER", "CONTEXT_HANDLING"],
+      "forbidden_change_roles": ["INTENT_REFINEMENT", "ROUTE_DECISION", "MODEL_GATEWAY_PROVIDER", "MODEL_GATEWAY_CONTRACT", "AGENT_DELEGATION_ADAPTER", "LOCAL_CAPABILITY_EXECUTION", "TASK_ORCHESTRATION_STATE", "VOICE_RUNTIME", "ALTERNATIVE_ORCHESTRATION_CORE"],
+      "acceptance_tests": [
+        {"id": "ACC-E3-MAP", "criterion": "A frozen active-window observation becomes exactly one provenance-preserving ContextEvidence item."},
+        {"id": "ACC-E3-CONSUME", "criterion": "A/B/C/D consume the normalized evidence through their existing context-handling seam."}
+      ],
+      "regression_tests": [
+        {"id": "REG-E3-SOURCES", "criterion": "Existing context evidence ordering, values, and hidden-context protections remain unchanged."},
+        {"id": "REG-E3-DP00", "criterion": "Full DP-00 qualification regression bundle introduces no new or worsened failure."}
+      ],
+      "evidence": ["adapter and mapping diff", "normalized evidence assertion", "hidden-context tests", "baseline-relative regression output"]
+    },
+    {
+      "id": "QA03-E4-CAPABILITY-PLACEMENT-001",
+      "category": "E4",
+      "title": "Relocate bounded document-open execution to VIA-local ownership",
+      "rationale": "Directly tests DP-00's capability-placement extension mechanism without changing the definition of any alternative after results are seen.",
+      "change_request": "For the frozen OPEN_RIGHT_DOCUMENT capability, make VIA-local execution the configured owner when local_execution=allowed and local_document_open is registered; retain the existing delegated owner when policy or capability facts do not permit local execution.",
+      "alternative_neutral_semantics": "The product behavior, policy inputs, and fallback requirement are identical. If an alternative has no architecture-consistent local placement mechanism, that architectural impact is recorded; the alternative must not be silently redefined.",
+      "expected_change_roles": ["CAPABILITY_REGISTRATION", "EXECUTION_POLICY_CONTROL_PLANE", "LOCAL_CAPABILITY_EXECUTION"],
+      "forbidden_change_roles": ["VOICE_RUNTIME", "CONTEXT_HANDLING", "INTENT_REFINEMENT", "MODEL_GATEWAY_CONTRACT", "MODEL_GATEWAY_PROVIDER", "AGENT_DELEGATION_ADAPTER", "TASK_ORCHESTRATION_STATE", "ALTERNATIVE_ORCHESTRATION_CORE"],
+      "acceptance_tests": [
+        {"id": "ACC-E4-LOCAL", "criterion": "With both policy and capability facts present, OPEN_RIGHT_DOCUMENT commits LOCAL_DIRECT and produces the required document-open effect."},
+        {"id": "ACC-E4-FALLBACK", "criterion": "Without either enabling fact, the same request follows the alternative's pre-existing non-local route."}
+      ],
+      "regression_tests": [
+        {"id": "REG-E4-BOUNDARY", "criterion": "No non-bounded or domain-planning capability becomes locally eligible."},
+        {"id": "REG-E4-P12", "criterion": "P12 route-plan barrier and compound child ownership remain at the frozen baseline signature."},
+        {"id": "REG-E4-DP00", "criterion": "Full DP-00 qualification regression bundle introduces no new or worsened failure."}
+      ],
+      "evidence": ["capability and policy registration", "placement-decision trace", "local and fallback effects", "A/B/C/D definition review", "baseline-relative regression output"]
+    },
+    {
+      "id": "QA03-E5-CONTRACT-METADATA-001",
+      "category": "E5",
+      "title": "Extend the downstream capability contract with optional resource metadata",
+      "rationale": "Tests a backwards-compatible common-contract extension and whether unrelated consumers are forced to change.",
+      "change_request": "Add optional resource_class metadata to the downstream Agent capability contract. Existing descriptors that omit it must deserialize and behave exactly as before; one new specialist descriptor must expose resource_class=IO_BOUND to routing diagnostics without changing route selection semantics.",
+      "alternative_neutral_semantics": "All alternatives share the same optional field and compatibility behavior. The field is diagnostic and must not alter execution ownership or route choice.",
+      "expected_change_roles": ["DOWNSTREAM_AGENT_CAPABILITY_CONTRACT", "CAPABILITY_REGISTRATION", "AGENT_DELEGATION_ADAPTER"],
+      "forbidden_change_roles": ["VOICE_RUNTIME", "CONTEXT_HANDLING", "INTENT_REFINEMENT", "MODEL_GATEWAY_CONTRACT", "MODEL_GATEWAY_PROVIDER", "EXECUTION_POLICY_CONTROL_PLANE", "LOCAL_CAPABILITY_EXECUTION", "TASK_ORCHESTRATION_STATE", "ALTERNATIVE_ORCHESTRATION_CORE"],
+      "acceptance_tests": [
+        {"id": "ACC-E5-COMPAT", "criterion": "A v1 descriptor without resource_class remains valid and retains existing behavior."},
+        {"id": "ACC-E5-METADATA", "criterion": "A descriptor with resource_class=IO_BOUND round-trips and is visible in diagnostic capability evidence."}
+      ],
+      "regression_tests": [
+        {"id": "REG-E5-ROUTES", "criterion": "Identical frozen inputs produce the same route commits and execution effects as baseline."},
+        {"id": "REG-E5-DP00", "criterion": "Full DP-00 qualification regression bundle introduces no new or worsened failure."}
+      ],
+      "evidence": ["contract/schema diff", "old/new descriptor compatibility tests", "route trace comparison", "consumer diff review", "baseline-relative regression output"]
+    }
+  ]
+}

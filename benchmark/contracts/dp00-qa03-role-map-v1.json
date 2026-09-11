@@ -1,0 +1,113 @@
+{
+  "role_map_version": "dp00-qa03-role-map-v1",
+  "source_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "freeze_rule": "Immutable for measured v1 runs; corrections require a prospective v2 and rerun.",
+  "role_vocabulary": [
+    "INTERACTION_INGRESS",
+    "CONTEXT_HANDLING",
+    "CONTEXT_SOURCE_ADAPTER",
+    "CONTEXT_REPRESENTATION_CONTRACT",
+    "INTENT_REFINEMENT",
+    "ROUTE_DECISION",
+    "EXECUTION_POLICY_CONTROL_PLANE",
+    "LOCAL_CAPABILITY_EXECUTION",
+    "MODEL_GATEWAY_CONTRACT",
+    "MODEL_GATEWAY_PROVIDER",
+    "MODEL_PROVIDER_CONFIGURATION",
+    "AGENT_DELEGATION_ADAPTER",
+    "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT",
+    "CAPABILITY_REGISTRATION",
+    "TASK_ORCHESTRATION_STATE",
+    "VOICE_RUNTIME",
+    "ALTERNATIVE_ORCHESTRATION_CORE",
+    "OBSERVABILITY_EVALUATION"
+  ],
+  "classification_policy": {
+    "path_matches": "All matching entries contribute candidate roles. A production diff with no match is UNMAPPED_ARCHITECTURE_CHANGE.",
+    "multi_role_files": "Classify changed symbols/hunks against the listed candidate roles during reviewed evidence capture; do not broaden the map after viewing outcomes.",
+    "new_files": "New files must match a prospectively declared wildcard. Otherwise they are unmapped and out of area.",
+    "renames": "Classify both old and new paths; deletion/addition semantics remain visible.",
+    "generated": "Generated output is non-scoring, but its generator source is architecture-affecting and counts.",
+    "unmapped": "Any architecture-affecting unmapped path is outside the Expected Change Area."
+  },
+  "shared": [
+    {
+      "patterns": ["prototypes/dp00/crates/bench-core/src/lib.rs"],
+      "roles": ["INTERACTION_INGRESS", "CONTEXT_REPRESENTATION_CONTRACT", "MODEL_GATEWAY_CONTRACT", "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT", "TASK_ORCHESTRATION_STATE"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-core/src/contracts/model/**"],
+      "roles": ["MODEL_GATEWAY_CONTRACT"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-core/src/contracts/agent/**"],
+      "roles": ["DOWNSTREAM_AGENT_CAPABILITY_CONTRACT"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-core/src/contracts/context/**"],
+      "roles": ["CONTEXT_REPRESENTATION_CONTRACT"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-replay/src/lib.rs", "prototypes/dp00/crates/bench-replay/src/model_providers/**"],
+      "roles": ["MODEL_GATEWAY_PROVIDER"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-runner/src/pilot_runtime.rs", "prototypes/dp00/crates/bench-runner/src/model_configuration/**"],
+      "roles": ["MODEL_PROVIDER_CONFIGURATION", "OBSERVABILITY_EVALUATION"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-fixtures/src/context_sources/**"],
+      "roles": ["CONTEXT_SOURCE_ADAPTER"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-fixtures/src/pilot_materialization.rs", "benchmark/fixtures/pilot-v0/fixtures.json"],
+      "roles": ["CAPABILITY_REGISTRATION", "OBSERVABILITY_EVALUATION"]
+    },
+    {
+      "patterns": ["prototypes/dp00/crates/bench-events/src/**", "prototypes/dp00/crates/bench-oracle/src/**", "benchmark/analysis/**"],
+      "roles": ["OBSERVABILITY_EVALUATION"]
+    }
+  ],
+  "alternatives": {
+    "A": [
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/context_engine.rs"], "roles": ["CONTEXT_HANDLING"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/intent_refiner.rs"], "roles": ["INTENT_REFINEMENT"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/agent_router.rs"], "roles": ["ROUTE_DECISION", "CAPABILITY_REGISTRATION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/agent_harness.rs", "prototypes/dp00/crates/alternative-a/src/agents/**"], "roles": ["AGENT_DELEGATION_ADAPTER"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/task_manager.rs"], "roles": ["TASK_ORCHESTRATION_STATE"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-a/src/architecture.rs"], "roles": ["ALTERNATIVE_ORCHESTRATION_CORE"]}
+    ],
+    "B": [
+      {"patterns": ["prototypes/dp00/crates/alternative-b/src/thin_context_packager.rs"], "roles": ["CONTEXT_HANDLING"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-b/src/argo_primary_controller.rs"], "roles": ["INTENT_REFINEMENT", "ROUTE_DECISION", "EXECUTION_POLICY_CONTROL_PLANE", "AGENT_DELEGATION_ADAPTER", "CAPABILITY_REGISTRATION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-b/src/agents/**"], "roles": ["AGENT_DELEGATION_ADAPTER"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-b/src/task_projection.rs"], "roles": ["TASK_ORCHESTRATION_STATE"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-b/src/architecture.rs"], "roles": ["ALTERNATIVE_ORCHESTRATION_CORE"]}
+    ],
+    "C": [
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/context_engine.rs"], "roles": ["CONTEXT_HANDLING"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/intent_refiner.rs"], "roles": ["INTENT_REFINEMENT"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/agent_router.rs"], "roles": ["ROUTE_DECISION", "CAPABILITY_REGISTRATION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/agent_harness.rs", "prototypes/dp00/crates/alternative-c/src/agents/**"], "roles": ["AGENT_DELEGATION_ADAPTER"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/fast_eligibility.rs"], "roles": ["EXECUTION_POLICY_CONTROL_PLANE", "CAPABILITY_REGISTRATION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/fast_executor.rs", "prototypes/dp00/crates/alternative-c/src/local_capabilities/**"], "roles": ["LOCAL_CAPABILITY_EXECUTION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/task_manager.rs"], "roles": ["TASK_ORCHESTRATION_STATE"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-c/src/architecture.rs"], "roles": ["ALTERNATIVE_ORCHESTRATION_CORE"]}
+    ],
+    "D": [
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/context_engine.rs"], "roles": ["CONTEXT_HANDLING"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/intent_refiner.rs"], "roles": ["INTENT_REFINEMENT"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/execution_path_selector.rs"], "roles": ["ROUTE_DECISION", "EXECUTION_POLICY_CONTROL_PLANE", "CAPABILITY_REGISTRATION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/agent_client.rs", "prototypes/dp00/crates/alternative-d/src/agents/**"], "roles": ["AGENT_DELEGATION_ADAPTER"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/fast_executor.rs", "prototypes/dp00/crates/alternative-d/src/local_capabilities/**"], "roles": ["LOCAL_CAPABILITY_EXECUTION"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/task_manager.rs"], "roles": ["TASK_ORCHESTRATION_STATE"]},
+      {"patterns": ["prototypes/dp00/crates/alternative-d/src/architecture.rs"], "roles": ["ALTERNATIVE_ORCHESTRATION_CORE"]}
+    ]
+  },
+  "absent_or_external_roles": {
+    "A": {"VOICE_RUNTIME": "Outside the executable prototype; held as common ingress dependency.", "LOCAL_CAPABILITY_EXECUTION": "Absent by Thin VIA definition.", "EXECUTION_POLICY_CONTROL_PLANE": "Agent route selection is represented separately; no local placement policy."},
+    "B": {"VOICE_RUNTIME": "Outside the executable prototype; held as common ingress dependency.", "LOCAL_CAPABILITY_EXECUTION": "Absent by ARGO-primary definition."},
+    "C": {"VOICE_RUNTIME": "Outside the executable prototype; held as common ingress dependency."},
+    "D": {"VOICE_RUNTIME": "Outside the executable prototype; held as common ingress dependency."}
+  }
+}

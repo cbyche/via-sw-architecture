@@ -1,0 +1,150 @@
+diff --git a/prototypes/dp00/crates/bench-replay/src/lib.rs b/prototypes/dp00/crates/bench-replay/src/lib.rs
+index fbde4e2a73b427dc8fc9338a4702a88c982cf3f8..d53fac5160418723cc223078bbb1e477be452eba 100644
+--- a/prototypes/dp00/crates/bench-replay/src/lib.rs
++++ b/prototypes/dp00/crates/bench-replay/src/lib.rs
+@@ -119,6 +119,7 @@ impl ResponsibilityMapping {
+
+ #[derive(Debug, PartialEq, Eq)]
+ pub enum ReplayError {
++    UnknownProvider(String),
+     ResponsibilityViolation,
+     OperationNotFound(SemanticResponsibility),
+     AttemptExhausted(SemanticResponsibility),
+@@ -148,6 +149,59 @@ pub struct ReplayAdapter {
+     state: Mutex<ReplayState>,
+ }
+
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum ReplayProviderId {
++    ReplayModelV1,
++    ReplayModelV2,
++}
++
++pub struct ConfiguredReplayProvider {
++    provider_id: ReplayProviderId,
++    adapter: ReplayAdapter,
++}
++
++impl ConfiguredReplayProvider {
++    pub fn new(
++        selection: &str,
++        context: ReplayContext,
++        mapping: ResponsibilityMapping,
++        operations: impl IntoIterator<Item = ReplayOperation>,
++    ) -> Result<Self, ReplayError> {
++        let provider_id = match selection {
++            "REPLAY_MODEL_V1" => ReplayProviderId::ReplayModelV1,
++            "REPLAY_MODEL_V2" => ReplayProviderId::ReplayModelV2,
++            value => return Err(ReplayError::UnknownProvider(value.to_owned())),
++        };
++        Ok(Self {
++            provider_id,
++            adapter: ReplayAdapter::new(context, mapping, operations),
++        })
++    }
++
++    #[must_use]
++    pub fn provider_id(&self) -> ReplayProviderId {
++        self.provider_id
++    }
++
++    #[must_use]
++    pub fn context(&self) -> &ReplayContext {
++        self.adapter.context()
++    }
++
++    #[must_use]
++    pub fn audit_snapshot(&self) -> Vec<ReplayAuditEntry> {
++        self.adapter.audit_snapshot()
++    }
++}
++
++impl ModelPort for ConfiguredReplayProvider {
++    type Error = ReplayError;
++
++    fn generate(&self, request: ModelRequest) -> Result<ModelResponse, Self::Error> {
++        self.adapter.generate(request)
++    }
++}
++
+ impl ReplayAdapter {
+     pub fn new(
+         context: ReplayContext,
+diff --git a/prototypes/dp00/crates/bench-replay/tests/qa03_e2_provider.rs b/prototypes/dp00/crates/bench-replay/tests/qa03_e2_provider.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..7f932a58d4554c012f78d1e016b02dec4aa66634
+--- /dev/null
++++ b/prototypes/dp00/crates/bench-replay/tests/qa03_e2_provider.rs
+@@ -0,0 +1,72 @@
++use bench_core::{
++    DecisionOwner, ModelPort, ModelProfile, ModelRequest, ModelStatus, SemanticResponsibility,
++};
++use bench_replay::{
++    ConfiguredReplayProvider, ReplayAttempt, ReplayContext, ReplayOperation, ReplayProviderId,
++    ResponsibilityMapping,
++};
++
++fn provider(selection: &str) -> ConfiguredReplayProvider {
++    ConfiguredReplayProvider::new(
++        selection,
++        ReplayContext {
++            run_id: "qa03-e2".into(),
++            episode_id: "cell".into(),
++            scenario_id: "QA03-E2-MODEL-PROVIDER-001".into(),
++            scenario_version: "v1".into(),
++            alternative_id: "TEST".into(),
++            current_turn_fixture: "turn".into(),
++            semantic_behavior_plan_id: "plan".into(),
++            semantic_behavior_plan_version: "v1".into(),
++            owner_responsibility_mapping_version: "v1".into(),
++            replay_payload_registry_version: "v1".into(),
++        },
++        ResponsibilityMapping::dp00_base(),
++        [ReplayOperation::new(
++            "intent",
++            SemanticResponsibility::IntentInterpretation,
++            vec![ReplayAttempt {
++                output: "GENERAL_FILE_WORK".into(),
++                status: ModelStatus::Completed,
++            }],
++        )],
++    )
++    .expect("configured provider")
++}
++
++fn request() -> ModelRequest {
++    ModelRequest {
++        decision_owner: DecisionOwner::from("A.IntentRefiner"),
++        semantic_responsibilities: vec![SemanticResponsibility::IntentInterpretation],
++        semantic_input: "request".into(),
++        expected_output_schema: "intent.v1".into(),
++        model_profile: ModelProfile {
++            id: "qualification".into(),
++            version: "v1".into(),
++        },
++    }
++}
++
++#[test]
++fn replay_model_v2_is_selected_and_preserves_semantics_and_provenance() {
++    let provider = provider("REPLAY_MODEL_V2");
++    assert_eq!(provider.provider_id(), ReplayProviderId::ReplayModelV2);
++    assert_eq!(provider.context().run_id, "qa03-e2");
++    let response = provider.generate(request()).expect("generation");
++    assert_eq!(response.composite_output, "GENERAL_FILE_WORK");
++    assert_eq!(response.model_status, ModelStatus::Completed);
++    assert_eq!(
++        provider.audit_snapshot()[0].decision_owner.0,
++        "A.IntentRefiner"
++    );
++}
++
++#[test]
++fn existing_replay_provider_remains_selectable_and_unchanged() {
++    let provider = provider("REPLAY_MODEL_V1");
++    assert_eq!(provider.provider_id(), ReplayProviderId::ReplayModelV1);
++    assert_eq!(
++        provider.generate(request()).unwrap().composite_output,
++        "GENERAL_FILE_WORK"
++    );
++}

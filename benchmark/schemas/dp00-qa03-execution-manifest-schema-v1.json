@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dp00-qa03-execution-manifest-schema-v1",
+  "title": "DP-00 QA-03 Alternative x Scenario execution manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "protocol_version", "catalog_version", "role_map_version",
+    "run_id", "scenario_id", "alternative", "baseline_git_commit",
+    "isolated_from_baseline", "frozen_before_implementation", "contract_artifact_hashes_match", "contract_hashes",
+    "equal_scenario_semantics", "alternative_definition_preserved", "evidence_complete",
+    "acceptance", "baseline_regression", "observed_regression", "changes"
+  ],
+  "properties": {
+    "schema_version": {"const": "dp00-qa03-execution-manifest-v1"},
+    "protocol_version": {"const": "dp00-qa03-flexibility-protocol-v1"},
+    "catalog_version": {"const": "dp00-qa03-evolution-catalog-v1"},
+    "role_map_version": {"const": "dp00-qa03-role-map-v1"},
+    "analyzer_version": {"const": "dp00-qa03-analyzer-v1"},
+    "run_id": {"type": "string", "minLength": 1},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "alternative": {"enum": ["A", "B", "C", "D"]},
+    "baseline_git_commit": {"const": "d4059eccd2883b3029b1e8c94fc86d092a5041f8"},
+    "result_git_commit": {"type": ["string", "null"]},
+    "worktree_path": {"type": "string"},
+    "implementation_agent": {"type": "string"},
+    "isolated_from_baseline": {"type": "boolean"},
+    "frozen_before_implementation": {"type": "boolean"},
+    "contract_artifact_hashes_match": {"type": "boolean"},
+    "contract_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["catalog_git_blob", "role_map_git_blob", "baseline_regression_git_blob"],
+      "properties": {
+        "catalog_git_blob": {"const": "d4de658fbcf096d0a9aa3269f751bdf4796ae316"},
+        "role_map_git_blob": {"const": "ecc77066c3540191d74c707bdc7e6bb5dc3f4e9f"},
+        "baseline_regression_git_blob": {"const": "ac8dabf096ca14326061f10e003fe1dfdcc3946d"}
+      }
+    },
+    "equal_scenario_semantics": {"type": "boolean"},
+    "alternative_definition_preserved": {"type": "boolean"},
+    "evidence_complete": {"type": "boolean"},
+    "acceptance": {"$ref": "#/$defs/testResult"},
+    "baseline_regression": {"$ref": "#/$defs/regressionResult"},
+    "observed_regression": {"$ref": "#/$defs/regressionResult"},
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "change_type", "change_class"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "change_type": {"enum": ["ADDED", "MODIFIED", "DELETED", "RENAMED"]},
+          "change_class": {"enum": ["PRODUCTION_SOURCE", "CONTRACT_SCHEMA", "CONFIGURATION", "REGISTRATION", "GENERATOR_SOURCE", "TEST", "DOCUMENTATION", "EVIDENCE", "FIXTURE_ONLY", "FORMATTING_ONLY", "GENERATED_OUTPUT", "AMBIGUOUS"]},
+          "asserted_roles": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "review_evidence": {"type": "string"},
+          "lines_added": {"type": "integer", "minimum": 0},
+          "lines_deleted": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "testResult": {
+      "type": "object",
+      "required": ["pass", "executed_ids", "failed_ids"],
+      "properties": {
+        "pass": {"type": "boolean"},
+        "executed_ids": {"type": "array", "items": {"type": "string"}},
+        "failed_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "regressionResult": {
+      "type": "object",
+      "required": ["failed_required_ids"],
+      "properties": {
+        "failed_required_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "previously_passing_failed_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "worsened_required_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    }
+  }
+}

@@ -1,0 +1,85 @@
+diff --git a/prototypes/dp00/crates/alternative-c/src/agent_harness.rs b/prototypes/dp00/crates/alternative-c/src/agent_harness.rs
+index ac408b1c8ac65e8bac1599bed174399a56f7c219..134ffaa18567e50872a708a1371e708925caee30 100644
+--- a/prototypes/dp00/crates/alternative-c/src/agent_harness.rs
++++ b/prototypes/dp00/crates/alternative-c/src/agent_harness.rs
+@@ -10,3 +10,28 @@ where
+         .execute(request)
+         .map_err(|error| format!("agent executor error: {error:?}"))
+ }
++
++#[allow(dead_code, reason = "QA03 diagnostic metadata must not affect routing")]
++pub fn resource_class_for_diagnostics(
++    descriptor: &bench_core::DownstreamCapabilityDescriptor,
++) -> Option<bench_core::ResourceClass> {
++    descriptor.resource_class
++}
++
++#[cfg(test)]
++mod qa03_e5_acceptance {
++    use super::*;
++
++    #[test]
++    fn io_bound_metadata_is_visible_to_delegation_diagnostics() {
++        let descriptor = bench_core::DownstreamCapabilityDescriptor {
++            executor_id: "DocumentSummaryAgent".into(),
++            capability_id: "document.summarize".into(),
++            resource_class: Some(bench_core::ResourceClass::IoBound),
++        };
++        assert_eq!(
++            resource_class_for_diagnostics(&descriptor),
++            Some(bench_core::ResourceClass::IoBound)
++        );
++    }
++}
+diff --git a/prototypes/dp00/crates/bench-core/src/lib.rs b/prototypes/dp00/crates/bench-core/src/lib.rs
+index cdcf789e4d89cb9224a53f07f1d7dce07d05f572..e7c158a3365ac79497b236fd38cea8cd328b85bc 100644
+--- a/prototypes/dp00/crates/bench-core/src/lib.rs
++++ b/prototypes/dp00/crates/bench-core/src/lib.rs
+@@ -62,6 +62,20 @@ pub struct ProductFact {
+     pub value: String,
+ }
+
++#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "SCREAMING_SNAKE_CASE")]
++pub enum ResourceClass {
++    IoBound,
++}
++
++#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
++pub struct DownstreamCapabilityDescriptor {
++    pub executor_id: String,
++    pub capability_id: String,
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub resource_class: Option<ResourceClass>,
++}
++
+ #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+ pub struct InitialTaskState {
+     pub task_id: TaskId,
+diff --git a/prototypes/dp00/crates/bench-core/tests/qa03_e5_contract.rs b/prototypes/dp00/crates/bench-core/tests/qa03_e5_contract.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..21f7ffe222f1e0d79087dc57423d7d0b98e13110
+--- /dev/null
++++ b/prototypes/dp00/crates/bench-core/tests/qa03_e5_contract.rs
+@@ -0,0 +1,21 @@
++use bench_core::{DownstreamCapabilityDescriptor, ResourceClass};
++
++#[test]
++fn optional_resource_class_is_backward_compatible_and_round_trips() {
++    let old = r#"{"executor_id":"ARGO","capability_id":"file.open"}"#;
++    let old_descriptor: DownstreamCapabilityDescriptor =
++        serde_json::from_str(old).expect("v1 descriptor remains valid");
++    assert_eq!(old_descriptor.resource_class, None);
++
++    let descriptor = DownstreamCapabilityDescriptor {
++        executor_id: "DocumentSummaryAgent".into(),
++        capability_id: "document.summarize".into(),
++        resource_class: Some(ResourceClass::IoBound),
++    };
++    let json = serde_json::to_string(&descriptor).expect("serialize");
++    assert!(json.contains(r#""resource_class":"IO_BOUND""#));
++    assert_eq!(
++        serde_json::from_str::<DownstreamCapabilityDescriptor>(&json).unwrap(),
++        descriptor
++    );
++}

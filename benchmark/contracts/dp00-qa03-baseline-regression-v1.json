@@ -1,0 +1,53 @@
+{
+  "version": "dp00-qa03-baseline-regression-v1",
+  "baseline_git_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "source_evidence": "docs/architecture/analysis/AA-021-dp00-comparative-architecture-campaign.md",
+  "comparison_rule": "A scenario regression passes when it introduces no required failure, changes no previously passing required behavior to fail, and does not contractually worsen a listed baseline failure. Baseline failures remain visible and are never treated as passes.",
+  "common_required_regression": [
+    "full Python pytest suite",
+    "Rust workspace all-target check",
+    "Rust fmt check",
+    "Rust clippy with warnings denied",
+    "Rust full test suite",
+    "DP-00 P01-P12 canonical behavior comparison",
+    "QA-02 Required/Allowed/Forbidden conformance comparison",
+    "QA-04 route-contract comparison",
+    "P12 compound route-plan barrier",
+    "A/B/C/D executable architecture definition review",
+    "Profile Z and R1-R4 contract byte/content invariance"
+  ],
+  "alternatives": {
+    "A": {
+      "qa02_pre_existing_failed_scenarios": ["P04", "P11"],
+      "qa04_pre_existing_failure_signature": ["P04_REQUIRED_ROUTE_NOT_COMMITTED", "P06_REQUIRED_ROUTE_NOT_COMMITTED", "P11_FORBIDDEN_ROUTE_COMMITTED"],
+      "p12": "PASS",
+      "unit_integration_suite": "PASS"
+    },
+    "B": {
+      "qa02_pre_existing_failed_scenarios": ["P04", "P06", "P07", "P11"],
+      "qa04_pre_existing_failure_signature": ["P04_REQUIRED_ROUTE_NOT_COMMITTED", "P06_REQUIRED_ROUTE_NOT_COMMITTED", "P07_REQUIRED_ROUTE_NOT_COMMITTED", "P11_FORBIDDEN_ROUTE_COMMITTED"],
+      "p12": "PASS",
+      "unit_integration_suite": "PASS"
+    },
+    "C": {
+      "qa02_pre_existing_failed_scenarios": ["P04", "P11"],
+      "qa04_pre_existing_failure_signature": ["P04_REQUIRED_ROUTE_NOT_COMMITTED", "P06_REQUIRED_ROUTE_NOT_COMMITTED", "P11_FORBIDDEN_ROUTE_COMMITTED"],
+      "p12": "PASS",
+      "unit_integration_suite": "PASS"
+    },
+    "D": {
+      "qa02_pre_existing_failed_scenarios": ["P04", "P07", "P11"],
+      "qa04_pre_existing_failure_signature": ["P04_QA02_EXCLUDED", "P07_QA02_EXCLUDED", "P11_FORBIDDEN_ROUTE_COMMITTED"],
+      "p12": "PASS",
+      "unit_integration_suite": "PASS"
+    }
+  },
+  "non_improvement_rule": "Evolution scenarios are not required to repair these defects. A disappearance is recorded diagnostically and reviewed for semantic drift; it cannot excuse a new failure elsewhere.",
+  "worsening_examples": [
+    "a new scenario ID fails",
+    "a previously passing constraint becomes nonconformant",
+    "a pre-existing failure gains a new forbidden effect or loses additional required evidence",
+    "P12 barrier or child correlation changes from PASS",
+    "a required QA-04 observation becomes newly unqualified"
+  ]
+}

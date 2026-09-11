@@ -1,0 +1,519 @@
+{
+  "campaign_id": "dp00-qa03-20260911T091004Z-752c6ac",
+  "contract_source_git_commit": "752c6ac66fd0a77d7d6efac00d46ad7277bc5247",
+  "baseline_git_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "protocol_version": "dp00-qa03-flexibility-protocol-v1",
+  "catalog_version": "dp00-qa03-evolution-catalog-v1",
+  "role_map_version": "dp00-qa03-role-map-v1",
+  "analyzer_version": "dp00-qa03-analyzer-v1",
+  "execution_order": [
+    "E1:A",
+    "E1:B",
+    "E1:C",
+    "E1:D",
+    "E2:B",
+    "E2:C",
+    "E2:D",
+    "E2:A",
+    "E3:C",
+    "E3:D",
+    "E3:A",
+    "E3:B",
+    "E4:D",
+    "E4:A",
+    "E4:B",
+    "E4:C",
+    "E5:A",
+    "E5:B",
+    "E5:C",
+    "E5:D"
+  ],
+  "integrity": {
+    "expected_cells": 20,
+    "attempted": 20,
+    "valid": 20,
+    "not_contained": 6,
+    "invalid_experiment": 0,
+    "inconclusive": 0,
+    "common_denominator": 5,
+    "deterministic_analysis": "40/40 cell evaluations; paired runs byte-identical"
+  },
+  "ccr": {
+    "A": {
+      "contained": 3,
+      "denominator": 5,
+      "percent": 60
+    },
+    "B": {
+      "contained": 3,
+      "denominator": 5,
+      "percent": 60
+    },
+    "C": {
+      "contained": 4,
+      "denominator": 5,
+      "percent": 80
+    },
+    "D": {
+      "contained": 4,
+      "denominator": 5,
+      "percent": 80
+    }
+  },
+  "cells": [
+    {
+      "cell_id": "A-QA03-E1-SPECIALIST-AGENT-001",
+      "alternative": "A",
+      "scenario_id": "QA03-E1-SPECIALIST-AGENT-001",
+      "result_git_commit": "0a6a8ad2a0e5fc9a81d296883c1ddc839fb29d59",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E1-DISCOVER",
+          "ACC-E1-ROUTE",
+          "ACC-E1-RESULT"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CAPABILITY_REGISTRATION"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "A-QA03-E2-MODEL-PROVIDER-001",
+      "alternative": "A",
+      "scenario_id": "QA03-E2-MODEL-PROVIDER-001",
+      "result_git_commit": "14624ae601978bc398ccb085841fb258af2ee196",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E2-SELECT",
+          "ACC-E2-SEMANTICS"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "MODEL_GATEWAY_PROVIDER"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "A-QA03-E3-CONTEXT-SOURCE-001",
+      "alternative": "A",
+      "scenario_id": "QA03-E3-CONTEXT-SOURCE-001",
+      "result_git_commit": "fb042b69a1057689cab28ca4df9a43ccad224c64",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E3-MAP",
+          "ACC-E3-CONSUME"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CONTEXT_HANDLING",
+        "CONTEXT_SOURCE_ADAPTER"
+      ],
+      "unexpected_changed_roles": [
+        "UNMAPPED_ARCHITECTURE_CHANGE"
+      ],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "out_of_area_propagation"
+      ]
+    },
+    {
+      "cell_id": "A-QA03-E4-CAPABILITY-PLACEMENT-001",
+      "alternative": "A",
+      "scenario_id": "QA03-E4-CAPABILITY-PLACEMENT-001",
+      "result_git_commit": "9c06e97e5e6280d880d6491400c9ba0c40ea6d58",
+      "acceptance": {
+        "pass": false,
+        "executed_ids": [
+          "ACC-E4-LOCAL",
+          "ACC-E4-FALLBACK"
+        ],
+        "failed_ids": [
+          "ACC-E4-LOCAL"
+        ]
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [],
+      "unexpected_changed_roles": [],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "acceptance_failed"
+      ]
+    },
+    {
+      "cell_id": "A-QA03-E5-CONTRACT-METADATA-001",
+      "alternative": "A",
+      "scenario_id": "QA03-E5-CONTRACT-METADATA-001",
+      "result_git_commit": "b1099377e3d4169997a8632eeb50ea3fd6fc8071",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E5-COMPAT",
+          "ACC-E5-METADATA"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "AGENT_DELEGATION_ADAPTER",
+        "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "B-QA03-E1-SPECIALIST-AGENT-001",
+      "alternative": "B",
+      "scenario_id": "QA03-E1-SPECIALIST-AGENT-001",
+      "result_git_commit": "04c9461091339f37a0034afaa7cd4f4fc2adc691",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E1-DISCOVER",
+          "ACC-E1-ROUTE",
+          "ACC-E1-RESULT"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "AGENT_DELEGATION_ADAPTER",
+        "CAPABILITY_REGISTRATION"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "B-QA03-E2-MODEL-PROVIDER-001",
+      "alternative": "B",
+      "scenario_id": "QA03-E2-MODEL-PROVIDER-001",
+      "result_git_commit": "639062acd2da0dfad6c12ecb8c7d6eee032f453e",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E2-SELECT",
+          "ACC-E2-SEMANTICS"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "MODEL_GATEWAY_PROVIDER"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "B-QA03-E3-CONTEXT-SOURCE-001",
+      "alternative": "B",
+      "scenario_id": "QA03-E3-CONTEXT-SOURCE-001",
+      "result_git_commit": "d0816dd31fedc7ab5f24e70aef2dd4f290aadcab",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E3-MAP",
+          "ACC-E3-CONSUME"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CONTEXT_HANDLING",
+        "CONTEXT_SOURCE_ADAPTER"
+      ],
+      "unexpected_changed_roles": [
+        "UNMAPPED_ARCHITECTURE_CHANGE"
+      ],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "out_of_area_propagation"
+      ]
+    },
+    {
+      "cell_id": "B-QA03-E4-CAPABILITY-PLACEMENT-001",
+      "alternative": "B",
+      "scenario_id": "QA03-E4-CAPABILITY-PLACEMENT-001",
+      "result_git_commit": "36e43db12acfbcad2fb0e26d27c5f260d69e8415",
+      "acceptance": {
+        "pass": false,
+        "executed_ids": [
+          "ACC-E4-LOCAL",
+          "ACC-E4-FALLBACK"
+        ],
+        "failed_ids": [
+          "ACC-E4-LOCAL"
+        ]
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [],
+      "unexpected_changed_roles": [],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "acceptance_failed"
+      ]
+    },
+    {
+      "cell_id": "B-QA03-E5-CONTRACT-METADATA-001",
+      "alternative": "B",
+      "scenario_id": "QA03-E5-CONTRACT-METADATA-001",
+      "result_git_commit": "ff306547601931c1df5fbf4fb3f2b46bad372ec7",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E5-COMPAT",
+          "ACC-E5-METADATA"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "AGENT_DELEGATION_ADAPTER",
+        "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "C-QA03-E1-SPECIALIST-AGENT-001",
+      "alternative": "C",
+      "scenario_id": "QA03-E1-SPECIALIST-AGENT-001",
+      "result_git_commit": "a3b0403facaca981d94578168375aab8e33e237e",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E1-DISCOVER",
+          "ACC-E1-ROUTE",
+          "ACC-E1-RESULT"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CAPABILITY_REGISTRATION"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "C-QA03-E2-MODEL-PROVIDER-001",
+      "alternative": "C",
+      "scenario_id": "QA03-E2-MODEL-PROVIDER-001",
+      "result_git_commit": "8e9eb487bfd460cf6ed2c1856f81b5f8e5e6fbb5",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E2-SELECT",
+          "ACC-E2-SEMANTICS"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "MODEL_GATEWAY_PROVIDER"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "C-QA03-E3-CONTEXT-SOURCE-001",
+      "alternative": "C",
+      "scenario_id": "QA03-E3-CONTEXT-SOURCE-001",
+      "result_git_commit": "2b5dd3ba0ea86d1a7234c773029a527b38f31acf",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E3-MAP",
+          "ACC-E3-CONSUME"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CONTEXT_HANDLING",
+        "CONTEXT_SOURCE_ADAPTER"
+      ],
+      "unexpected_changed_roles": [
+        "UNMAPPED_ARCHITECTURE_CHANGE"
+      ],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "out_of_area_propagation"
+      ]
+    },
+    {
+      "cell_id": "C-QA03-E4-CAPABILITY-PLACEMENT-001",
+      "alternative": "C",
+      "scenario_id": "QA03-E4-CAPABILITY-PLACEMENT-001",
+      "result_git_commit": "aab6090662f990faee430344956dcfb4e7691e3b",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E4-LOCAL",
+          "ACC-E4-FALLBACK"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "C-QA03-E5-CONTRACT-METADATA-001",
+      "alternative": "C",
+      "scenario_id": "QA03-E5-CONTRACT-METADATA-001",
+      "result_git_commit": "e988d240339e67a2cc17323ce13320be3aa597d6",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E5-COMPAT",
+          "ACC-E5-METADATA"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "AGENT_DELEGATION_ADAPTER",
+        "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "D-QA03-E1-SPECIALIST-AGENT-001",
+      "alternative": "D",
+      "scenario_id": "QA03-E1-SPECIALIST-AGENT-001",
+      "result_git_commit": "7a53c2672138a65f42f81a13553d82b52192aee5",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E1-DISCOVER",
+          "ACC-E1-ROUTE",
+          "ACC-E1-RESULT"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CAPABILITY_REGISTRATION"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "D-QA03-E2-MODEL-PROVIDER-001",
+      "alternative": "D",
+      "scenario_id": "QA03-E2-MODEL-PROVIDER-001",
+      "result_git_commit": "d2b5fb0c41f5e8f5bbe780320bbeeaad9abf8138",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E2-SELECT",
+          "ACC-E2-SEMANTICS"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "MODEL_GATEWAY_PROVIDER"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "D-QA03-E3-CONTEXT-SOURCE-001",
+      "alternative": "D",
+      "scenario_id": "QA03-E3-CONTEXT-SOURCE-001",
+      "result_git_commit": "803b86a4234308deba87c66e58c0f5ef4aa459f0",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E3-MAP",
+          "ACC-E3-CONSUME"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CONTEXT_HANDLING",
+        "CONTEXT_SOURCE_ADAPTER"
+      ],
+      "unexpected_changed_roles": [
+        "UNMAPPED_ARCHITECTURE_CHANGE"
+      ],
+      "classification": "NOT_CONTAINED",
+      "reasons": [
+        "out_of_area_propagation"
+      ]
+    },
+    {
+      "cell_id": "D-QA03-E4-CAPABILITY-PLACEMENT-001",
+      "alternative": "D",
+      "scenario_id": "QA03-E4-CAPABILITY-PLACEMENT-001",
+      "result_git_commit": "ba9f823edc859beee920a854d5f9c3e3ab1a02fd",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E4-LOCAL",
+          "ACC-E4-FALLBACK"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "CAPABILITY_REGISTRATION",
+        "EXECUTION_POLICY_CONTROL_PLANE"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    },
+    {
+      "cell_id": "D-QA03-E5-CONTRACT-METADATA-001",
+      "alternative": "D",
+      "scenario_id": "QA03-E5-CONTRACT-METADATA-001",
+      "result_git_commit": "37a40ff60db48628bb448cac74b1ac49564589da",
+      "acceptance": {
+        "pass": true,
+        "executed_ids": [
+          "ACC-E5-COMPAT",
+          "ACC-E5-METADATA"
+        ],
+        "failed_ids": []
+      },
+      "regression_pass": true,
+      "changed_architecture_roles": [
+        "AGENT_DELEGATION_ADAPTER",
+        "DOWNSTREAM_AGENT_CAPABILITY_CONTRACT"
+      ],
+      "unexpected_changed_roles": [],
+      "classification": "CONTAINED",
+      "reasons": []
+    }
+  ],
+  "disposition": "QA-03 FLEXIBILITY CAMPAIGN COMPLETE",
+  "dp00_disposition": "NOT READY FOR ARCHITECTURE DECISION"
+}

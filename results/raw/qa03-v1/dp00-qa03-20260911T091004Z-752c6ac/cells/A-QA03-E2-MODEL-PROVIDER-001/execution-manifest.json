@@ -1,0 +1,84 @@
+{
+  "schema_version": "dp00-qa03-execution-manifest-v1",
+  "protocol_version": "dp00-qa03-flexibility-protocol-v1",
+  "catalog_version": "dp00-qa03-evolution-catalog-v1",
+  "role_map_version": "dp00-qa03-role-map-v1",
+  "analyzer_version": "dp00-qa03-analyzer-v1",
+  "run_id": "dp00-qa03-20260911T091004Z-752c6ac-A-QA03-E2-MODEL-PROVIDER-001",
+  "scenario_id": "QA03-E2-MODEL-PROVIDER-001",
+  "alternative": "A",
+  "baseline_git_commit": "d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+  "result_git_commit": "14624ae601978bc398ccb085841fb258af2ee196",
+  "worktree_path": "/private/tmp/qa03-e2-a",
+  "implementation_agent": "Codex; minimum architecture-consistent change",
+  "isolated_from_baseline": true,
+  "frozen_before_implementation": true,
+  "contract_artifact_hashes_match": true,
+  "contract_hashes": {
+    "catalog_git_blob": "d4de658fbcf096d0a9aa3269f751bdf4796ae316",
+    "role_map_git_blob": "ecc77066c3540191d74c707bdc7e6bb5dc3f4e9f",
+    "baseline_regression_git_blob": "ac8dabf096ca14326061f10e003fe1dfdcc3946d"
+  },
+  "equal_scenario_semantics": true,
+  "alternative_definition_preserved": true,
+  "evidence_complete": true,
+  "acceptance": {
+    "pass": true,
+    "executed_ids": [
+      "ACC-E2-SELECT",
+      "ACC-E2-SEMANTICS"
+    ],
+    "failed_ids": []
+  },
+  "baseline_regression": {
+    "failed_required_ids": [
+      "qa02:P04",
+      "qa02:P11",
+      "qa04:P04_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P06_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P11_FORBIDDEN_ROUTE_COMMITTED"
+    ]
+  },
+  "observed_regression": {
+    "failed_required_ids": [
+      "qa02:P04",
+      "qa02:P11",
+      "qa04:P04_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P06_REQUIRED_ROUTE_NOT_COMMITTED",
+      "qa04:P11_FORBIDDEN_ROUTE_COMMITTED"
+    ],
+    "previously_passing_failed_ids": [],
+    "worsened_required_ids": []
+  },
+  "changes": [
+    {
+      "path": "prototypes/dp00/crates/bench-replay/src/lib.rs",
+      "change_type": "ADDED",
+      "change_class": "PRODUCTION_SOURCE",
+      "lines_added": 54,
+      "lines_deleted": 0,
+      "asserted_roles": [
+        "MODEL_GATEWAY_PROVIDER"
+      ],
+      "review_evidence": "Configured provider wrapper and ModelPort delegation in frozen provider path."
+    },
+    {
+      "path": "prototypes/dp00/crates/bench-replay/tests/qa03_e2_provider.rs",
+      "change_type": "ADDED",
+      "change_class": "TEST",
+      "lines_added": 72,
+      "lines_deleted": 0
+    }
+  ],
+  "notes": [
+    "campaign_id=dp00-qa03-20260911T091004Z-752c6ac",
+    "contract_source_git_commit=752c6ac66fd0a77d7d6efac00d46ad7277bc5247",
+    "pre_change_head=d4059eccd2883b3029b1e8c94fc86d092a5041f8",
+    "pre_change_status=clean",
+    "acceptance_oracle_commit=45f27981376b1e4900e1b3f450c0c442b8cdd56a",
+    "Python baseline regression: 95/95 PASS at architecture baseline plus unchanged analysis sources.",
+    "Rust baseline regression, all-target check, fmt, clippy -D warnings: PASS.",
+    "P12 and QA-02/QA-04 failure signatures: baseline-equivalent.",
+    "No unresolved implementation-integrity issue."
+  ]
+}

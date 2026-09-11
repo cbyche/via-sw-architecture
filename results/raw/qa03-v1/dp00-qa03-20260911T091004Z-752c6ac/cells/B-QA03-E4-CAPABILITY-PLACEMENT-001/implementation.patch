@@ -1,0 +1,99 @@
+diff --git a/prototypes/dp00/crates/alternative-b/tests/qa03_e4_placement.rs b/prototypes/dp00/crates/alternative-b/tests/qa03_e4_placement.rs
+new file mode 100644
+index 0000000000000000000000000000000000000000..174c5d72629d852dbf03829f03b4a8899d2427f8
+--- /dev/null
++++ b/prototypes/dp00/crates/alternative-b/tests/qa03_e4_placement.rs
+@@ -0,0 +1,93 @@
++use std::collections::VecDeque;
++use std::sync::{Arc, Mutex};
++
++use alternative_b::ArgoCentric;
++use bench_core::{
++    ArchitectureObservation, ArchitectureUnderTest, ExecutionId, ExecutionPort, ExecutionRequest,
++    ExecutionResult, ExecutionRouteKind, InitialProductState, InputModality, ModelPort,
++    ModelRequest, ModelResponse, ModelStatus, ObservationPort, ProductFact, ResultId, TurnId,
++    UserTurn,
++};
++
++#[derive(Clone)]
++struct Model(Arc<Mutex<VecDeque<String>>>);
++impl Model {
++    fn scripted() -> Self {
++        Self(Arc::new(Mutex::new(
++            ["ARGO_DIRECT OPEN_RIGHT_DOCUMENT"].into_iter().map(str::to_owned).collect(),
++        )))
++    }
++}
++impl ModelPort for Model {
++    type Error = String;
++    fn generate(&self, _request: ModelRequest) -> Result<ModelResponse, Self::Error> {
++        Ok(ModelResponse {
++            composite_output: self.0.lock().unwrap().pop_front().unwrap(),
++            model_status: ModelStatus::Completed,
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Executor(Arc<Mutex<Vec<ExecutionRequest>>>);
++impl ExecutionPort for Executor {
++    type Error = String;
++    fn execute(&self, request: ExecutionRequest) -> Result<ExecutionResult, Self::Error> {
++        self.0.lock().unwrap().push(request);
++        Ok(ExecutionResult {
++            execution_id: ExecutionId::from("e-document"),
++            result_id: ResultId::from("r-document"),
++            payload: "opened".into(),
++        })
++    }
++}
++
++#[derive(Clone, Default)]
++struct Observations;
++impl ObservationPort for Observations {
++    fn emit(&self, _observation: ArchitectureObservation) {}
++}
++
++fn run(enabled: bool) -> ExecutionRequest {
++    let executor = Executor::default();
++    let mut architecture = ArgoCentric::new(Model::scripted(), Observations, executor.clone());
++    architecture
++        .setup(InitialProductState {
++            capability_facts: enabled
++                .then(|| ProductFact {
++                    key: "fast_capability".into(),
++                    value: "local_document_open".into(),
++                })
++                .into_iter()
++                .collect(),
++            policy_facts: enabled
++                .then(|| ProductFact {
++                    key: "local_execution".into(),
++                    value: "allowed".into(),
++                })
++                .into_iter()
++                .collect(),
++            ..InitialProductState::default()
++        })
++        .unwrap();
++    architecture
++        .handle_user_turn(UserTurn {
++            turn_id: TurnId::from("turn-document"),
++            modality: InputModality::Text,
++            content: "OPEN_RIGHT_DOCUMENT".into(),
++            context_evidence: Vec::new(),
++        })
++        .unwrap();
++    executor.0.lock().unwrap()[0].clone()
++}
++
++#[test]
++fn permitted_document_open_is_local_and_disabled_request_keeps_fallback() {
++    let local = run(true);
++    assert_eq!(local.route.route_kind, ExecutionRouteKind::LocalDirect);
++    assert_eq!(local.route.initial_executor_id.0, "VIA_LOCAL_DOCUMENT");
++
++    let fallback = run(false);
++    assert_ne!(fallback.route.route_kind, ExecutionRouteKind::LocalDirect);
++}
++
