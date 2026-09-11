@@ -2,7 +2,10 @@
 
 ## Status
 
-Central architecture navigation for the **vNext working baseline**.
+Central architecture navigation for the **vNext working baseline**. DP-00
+comparative experimentation and trade-space characterization are complete;
+final A/B/C/D selection is intentionally deferred pending discriminating
+downstream architecture evidence.
 
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline. This file does not rewrite that baseline; it reclassifies architecture-analysis navigation around DP-00 and the vNext Top Architectural Drivers.
 
@@ -37,9 +40,11 @@ Controlled Architecture Qualification
     ↓
 Pilot / Calibration / Scoring & Gate Freeze
     ↓
-Final A/B/C/D Evaluation
+Completed A/B/C/D Comparative Evaluation
     ↓
-Trade-off / ADR
+Conditional Trade-space / Downstream DP Evidence
+    ↓
+Final Commitment / ADR when decision conditions are concrete
 ```
 
 ## DP-00 — top-level Decision Point
@@ -54,6 +59,16 @@ Authoritative definition:
 
 - `docs/architecture/decision-points/DP-00-primary-execution-boundary.md`
 - rationale: `docs/architecture/analysis/AA-001-qa-rebaseline-and-primary-execution-boundary.md`
+- final comparative synthesis: `docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`
+
+Precise state:
+
+> **DP-00 TRADE SPACE CHARACTERIZED — FINAL SELECTION DEFERRED PENDING DOWNSTREAM ARCHITECTURE EVIDENCE**
+
+QA-01 and QA-02 comparative evaluation, QA-03 flexibility measurement, and
+QA-04 comparative evaluation are complete. Deterministic QA-02 defects and
+universal QA-04 qualification failures remain explicit remediation work; they
+do not make the comparative evidence incomplete.
 
 ### DP-00 alternatives
 
@@ -161,7 +176,7 @@ The existing lower-level DP documents remain open unless separately decided.
 
 | DP | Problem | Relationship to DP-00 | Related FR | Top QA | Related Legacy v1.1 QA | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| **DP-00** | **VIA Primary Execution Boundary** | **Top-level** | UC-01/04/05/07/10/11/12/13/16; FR-06~11/27/35/37/40~44 areas | **QA-01, QA-02, QA-03, QA-04** | QA-01/03/05/06/07/09/10/11 and supporting QA-02/04/08 | Alternatives Defined; evaluation QAs formalized; Pilot TBD |
+| **DP-00** | **VIA Primary Execution Boundary** | **Top-level** | UC-01/04/05/07/10/11/12/13/16; FR-06~11/27/35/37/40~44 areas | **QA-01, QA-02, QA-03, QA-04** | QA-01/03/05/06/07/09/10/11 and supporting QA-02/04/08 | **Trade space characterized; final A/B/C/D selection deferred pending downstream evidence** |
 | DP-01 | Partial / streaming input processing | constrained by owner/semantic-placement choice | FR-01, FR-03, FR-04 | QA-01, QA-02, QA-04 | QA-01, QA-09, QA-10 | Open |
 | DP-02 | Interaction context representation | context consumer/authority depends on DP-00 | FR-03, FR-04 | QA-01, QA-02, QA-03 | QA-01, QA-09 | Open |
 | DP-03 | Capability placement boundary | directly refined/subsumed by DP-00 placement decision | FR-11, FR-42 | QA-01, QA-02, QA-03, QA-04 | QA-01, QA-05, QA-07 | Open; alternatives may need reshaping after DP-00 |
@@ -189,15 +204,15 @@ Common derivation chain:
 ```text
 Raw Evidence
     ↓
-Derived Metric
+Derived QA Metric / Qualification Result
     ↓
-QA Primary Metric
+Unweighted Comparative Vector
     ↓
-0–5 Score / Qualification Gate
+Conditional DP-00 Trade-space
     ↓
-DP-00 Trade-off
+Discriminating Downstream DP Evidence
     ↓
-Architecture Decision / ADR
+Architecture Decision / ADR when priorities are explicit
 ```
 
 ## Report-ready evidence
@@ -207,14 +222,21 @@ Architecture Decision / ADR
 - evaluation methodology: `docs/evaluation/architecture-experiment-methodology.md`
 - central evaluation pipeline: `docs/evaluation/evaluation-strategy.md`
 
-## Current unresolved items
+## Current DP-00 state and unresolved items
 
-- DP-00 winner: **TBD**
-- QA-01~04 scoring thresholds: **TBD**
-- QA-02 minimum correctness gate: **TBD**
-- QA-01 deterministic dependency-latency profile: **frozen for the next comparative campaign** as `dp00-realistic-execution-profiles-v1` (R1–R4 synthetic sensitivity matrix); measurement remains pending
-- QA-03 final evolution corpus/role vocabulary: **TBD**
-- QA-04 final workload taxonomy and aggregation rule: **TBD**
-- final benchmark corpora: **TBD**
-- executable mandatory qualification gates: **TBD**
-- A/B/C/D executable architecture specifications/prototypes: **TBD**
+- QA-01 comparative evaluation: **complete**; R1–R4 establish synthetic
+  topology sensitivity, not production latency.
+- QA-02 comparative evaluation: **complete**; deterministic candidate defects
+  remain.
+- QA-03 flexibility campaign: **complete**; official CCR is A/B 60%, C/D 80%.
+- QA-04 comparative evaluation: **complete**; every candidate fails frozen
+  qualification and requires remediation.
+- DP-00 trade-space characterization: **complete** in AA-026.
+- Final A/B/C/D selection: **intentionally deferred pending downstream
+  architecture evidence**.
+- Highest-information-gain next investigation: **DP-03 Capability placement
+  boundary**.
+- QA-02 minimum correctness eligibility and executable mandatory qualification
+  gates remain unresolved; no post-result threshold is invented.
+- Production Model/Agent/Tool latency values remain unresolved and will refine
+  conditional preference rather than invalidate the sensitivity campaign.

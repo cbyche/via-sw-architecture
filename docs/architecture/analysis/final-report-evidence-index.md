@@ -4,6 +4,10 @@
 
 Living index for final SW Architecture review/report assembly.
 
+DP-00 comparative characterization is complete. Final A/B/C/D selection is
+intentionally deferred pending downstream architecture evidence; AA-026 is the
+authoritative conditional synthesis.
+
 This document does **not** create a new architecture decision, QA definition, requirement, benchmark result, or score. It maps reviewer questions to authoritative architecture/evaluation artifacts and, later, to raw/derived result evidence.
 
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline.
@@ -21,11 +25,11 @@ Benchmark / Prototype-Harness Contract
     ↓
 Immutable Raw Evidence
     ↓
-Python-derived Metric / Score / Gate
+Python-derived Metric / Qualification Result
     ↓
-Trade-off
+Unweighted Conditional Trade-space
     ↓
-Architecture Decision / ADR
+Downstream Evidence → Architecture Decision / ADR
 ```
 
 Use paths from this index instead of copying full reasoning into multiple documents.
@@ -59,12 +63,33 @@ Prototype / Smoke / Conformance Review
     ↓
 Pilot / Calibration / Rule Freeze
     ↓
-Final Evaluation / Trade-off
+Final Comparative Evaluation
     ↓
-Optional Tactic Mitigation
+Conditional Trade-space / Downstream DP Evidence
     ↓
-ADR
+Final Commitment / ADR
 ```
+
+## 0.1 Completed DP-00 evidence chain
+
+| Stage | Authoritative record | Evidence role |
+| --- | --- | --- |
+| Profile Z / Session 7.0 | retained runtime evidence referenced by AA-025 | framework/software-path overhead only |
+| R1–R4 profile freeze | `docs/architecture/analysis/AA-022-dp00-realistic-execution-profile-freeze.md` | synthetic Model/Agent/Tool sensitivity contract |
+| QA-03 contract | `docs/architecture/analysis/AA-023-dp00-qa03-flexibility-experiment-contract.md` | prospective evolution scenarios and role mapping |
+| QA-03 campaign | `docs/architecture/analysis/AA-024-dp00-qa03-flexibility-measured-campaign.md` | official CCR: A/B 60%, C/D 80% |
+| 7.2R clean rerun | `docs/architecture/analysis/AA-025-dp00-r1-r4-comparative-architecture-campaign-clean-rerun.md` | complete QA-01/02/04, structure, and P12 evidence |
+| Trade-space synthesis | `docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md` | conditional guidance; final selection deferred |
+
+Evidence identities: runtime branch head
+`760679b5d542827de6aa307b87256e8a03afaed6`, runtime evidence commit
+`83cc4070decdd8a4305317cbe0bca6b0f86543dd`, QA-03 measured branch head
+`5e6eb627401a2e0e18736d1377ed835f9f050aed`, and QA-03 contract head
+`752c6ac66fd0a77d7d6efac00d46ad7277bc5247`.
+
+The evidence chain supports an unweighted conditional trade-space, not an
+overall winner ranking. QA-02 defects and QA-04 universal qualification failure
+remain visible remediation evidence.
 
 ---
 
@@ -964,9 +989,10 @@ Rust Prototype / Harness
 
 # 27. Final Trade-off / Decision Material
 
-No final A/B/C/D benchmark result exists yet.
+The comparative A/B/C/D evidence and conditional trade-space synthesis now
+exist. No final topology has been selected.
 
-Current pre-result report assets include:
+Completed report assets include:
 
 - DP-00 problem statement;
 - A/B/C/D conceptual + executable topology;
@@ -975,7 +1001,11 @@ Current pre-result report assets include:
 - State Ownership Matrix;
 - Top QA + Primary Metric table;
 - DP-00 × QA Sensitivity Matrix;
-- Pre-experiment A/B/C/D hypotheses;
+- measured R1–R4 QA-01 sensitivity and structural topology totals;
+- deterministic QA-02 conformance and remediation patterns;
+- measured QA-03 CCR and scenario-level containment evidence;
+- comparative QA-04 qualification behavior with universal `FAIL` preserved;
+- P12 common-invariant evidence;
 - Base Architecture vs Tactic distinction;
 - S1~S5 20-path walkthrough + expected ModelCall trace;
 - Runtime/Evolution/Mandatory Gate three-track diagram;
@@ -989,27 +1019,20 @@ Current pre-result report assets include:
 - Python-only vs hybrid language rationale table;
 - QA-01 Timed Path boundary;
 - Rust workspace/crate boundary;
-- S1~S5 Smoke → Conformance Review flow;
+- S1~S5 and P01–P12 executable conformance evidence;
 - negative anti-gaming contract-test table;
-- Raw → Python Analysis → QA Score → Decision pipeline;
+- Raw → Python Analysis → unweighted QA vector → conditional decision pipeline;
 - Architecture Qualification vs Real-stack validity distinction;
 - Threats-to-Validity checklist;
-- Specification Branch Readiness verdict.
+- Specification Branch Readiness verdict;
+- AA-026 conditional recommendation matrix and downstream DP roadmap.
 
-Future placeholders:
+Remaining future work:
 
-- Base A/B/C/D Rust prototypes — **TBD**;
-- S1~S5 executable smoke results — **TBD**;
-- Prototype Conformance Review result — **TBD**;
-- final R1~R10 scoring corpus — **TBD**;
-- actual-model behavior corpus — **TBD**;
-- raw results — `results/raw/` **TBD**;
-- derived QA metrics — `results/derived/` **TBD**;
-- final QA score/gate table — **TBD**;
 - tactic experiment results — **TBD**;
-- sensitivity analysis — **TBD**;
 - Real-stack validation — **TBD**;
-- selected/rejected Alternative rationale — **TBD**;
+- DP-03 and other discriminating downstream architecture evidence — **TBD**;
+- final conditional trigger resolution and A/B/C/D commitment — **TBD**;
 - ADR — **TBD**.
 
 ---

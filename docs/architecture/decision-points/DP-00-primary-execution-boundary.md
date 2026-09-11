@@ -2,7 +2,7 @@
 
 ## Status
 
-**Alternatives Defined — Top QA Rebaseline Complete — Base Executable Architecture Specification Defined — Prototype / Pilot Pending**
+**TRADE SPACE CHARACTERIZED — FINAL SELECTION DEFERRED PENDING DOWNSTREAM ARCHITECTURE EVIDENCE**
 
 This is the top-level Decision Point for the vNext architecture analysis. It does not modify or override `docs/requirements/requirements-v1.1.md`.
 
@@ -10,6 +10,20 @@ Executable Base Architecture specification:
 
 - `docs/architecture/decision-points/DP-00-executable-architecture-spec.md`
 - walkthrough/stress-test: `docs/architecture/analysis/AA-006-dp00-executable-walkthrough.md`
+
+Comparative experimentation and synthesis are complete. The conditional
+recommendation framework is authoritative in:
+
+- `docs/architecture/analysis/AA-023-dp00-qa03-flexibility-experiment-contract.md`
+- `docs/architecture/analysis/AA-024-dp00-qa03-flexibility-measured-campaign.md`
+- `docs/architecture/analysis/AA-025-dp00-r1-r4-comparative-architecture-campaign-clean-rerun.md`
+- `docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`
+
+Authoritative integration identities are runtime branch head
+`760679b5d542827de6aa307b87256e8a03afaed6`, runtime evidence commit
+`83cc4070decdd8a4305317cbe0bca6b0f86543dd`, QA-03 measured branch head
+`5e6eb627401a2e0e18736d1377ed835f9f050aed`, and QA-03 contract head
+`752c6ac66fd0a77d7d6efac00d46ad7277bc5247`.
 
 ## Problem
 
@@ -482,15 +496,43 @@ Pilot -> calibration -> scoring/gate rule freeze -> final evaluation
 
 ## Results
 
-TBD.
+Comparative characterization is complete for all four Top QAs:
+
+- QA-01: R1–R4 synthetic sensitivity measured; B has the lowest measured
+  p50/p95 and one fewer logical Model generation on the evaluated paths.
+- QA-02: A/C 83.333%, D 75.000%, B 66.667%; all failures are deterministic and
+  remain candidate-specific remediation obligations.
+- QA-03: A/B 60%, C/D 80%; E4 capability placement is the principal
+  differentiator, while E3 is a common infrastructure penalty.
+- QA-04: comparative behavior is complete and every alternative remains
+  `FAIL`; qualification remediation is unresolved.
+- P12: 512/512 executions and 256/256 pairs pass all compound-request and
+  route-plan barrier invariants.
+
+AA-026 preserves the evidence as an unweighted conditional trade-space. The
+R1–R4 profiles are sensitivity evidence, not production-latency claims.
 
 ## Decision
 
-TBD. No alternative is selected in this checkpoint.
+**DP-00 TRADE SPACE CHARACTERIZED — FINAL SELECTION DEFERRED PENDING DOWNSTREAM ARCHITECTURE EVIDENCE**
+
+No A/B/C/D alternative is selected merely to close DP-00. The comparative
+evidence is complete, legitimate trade-offs remain, and owner/product priorities
+needed to choose among them are intentionally unresolved. Downstream DPs may
+proceed under the conditional assumptions and revisit triggers in AA-026.
 
 ## Consequences
 
-TBD after measured trade-off analysis.
+- A/B/C/D remain the validated primary topology families.
+- Capability placement, routing, intent refinement, and task association may be
+  investigated conditionally without changing the Approved Baseline.
+- DP-03 Capability placement boundary is the highest-information-gain next
+  investigation because it directly tests the measured A/B versus C/D E4 split
+  and the C versus D control model.
+- QA-02 and QA-04 remediation stays visible and separate from topology
+  preference.
+- Final topology commitment returns to DP-00 when downstream evidence or
+  explicit strategy makes the selection conditions concrete.
 
 ## Requirement changes discovered
 

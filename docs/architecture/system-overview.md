@@ -2,9 +2,15 @@
 
 ## Status
 
-This overview distinguishes the **v1.1 Approved starting responsibility boundary** from the **vNext architecture boundary currently under evaluation by DP-00**.
+This overview distinguishes the **v1.1 Approved starting responsibility boundary** from the **vNext architecture boundary characterized by DP-00**.
 
 It does not modify `docs/requirements/requirements-v1.1.md` and does not select a DP-00 winner.
+
+DP-00 comparative experimentation is complete. The vNext primary execution
+topology remains conditionally open among A/B/C/D, with final selection deferred
+pending downstream architecture evidence. See
+`docs/architecture/decision-points/DP-00-primary-execution-boundary.md` and
+`docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`.
 
 ## v1.1 Approved starting responsibility boundary
 
@@ -121,9 +127,11 @@ Controlled Architecture Qualification
     ↓
 Pilot / Calibration / Rule Freeze
     ↓
-Final Evaluation / Trade-off
+Completed Comparative Evaluation
     ↓
-ADR
+Conditional Trade-space / Downstream DP Evidence
+    ↓
+Final Commitment / ADR
 ```
 
 Central navigation:
@@ -196,11 +204,9 @@ The presence of a role does not imply that every alternative must implement it a
 
 ## Not yet decided
 
-- DP-00 winning topology
+- final DP-00 A/B/C/D topology commitment
 - final responsibility placement
 - final Intent Refiner / Agent Router / Task Manager placement
 - exact Fast Path capability set
-- QA score thresholds
 - minimum QA-02 correctness gate
-- final benchmark corpora / QA-04 aggregation rule
-- executable A/B/C/D architecture specifications and prototypes
+- production Model/Agent/Tool latency values
