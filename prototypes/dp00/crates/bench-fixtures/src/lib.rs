@@ -1,5 +1,7 @@
 #![forbid(unsafe_code)]
 
+pub mod context_sources;
+
 pub mod pilot_assets;
 pub mod pilot_materialization;
 
