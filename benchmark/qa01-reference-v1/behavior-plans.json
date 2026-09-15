@@ -1,0 +1,24 @@
+{
+  "behavior_plan_contract_id": "DP00-QA01-REFERENCE-BEHAVIOR-PLANS-V1",
+  "purpose": "Architecture-neutral semantic workload plans. Candidate responsibility placement and primitive counts are defined only by traces.json.",
+  "templates": {
+    "F1": {
+      "semantic_requirements": ["interpret bounded request and context", "check explicit capability/policy/state facts", "perform one bounded useful effect", "observe and bind earliest useful outcome"],
+      "fast_capability_contract": ["bounded execution", "no domain planning", "no durable workflow", "no external Agent state", "simple recovery", "local-safe capability"],
+      "prohibited": ["open-ended planning", "architecture name embedded in semantic decision", "acknowledgement used as outcome"]
+    },
+    "F2": {
+      "semantic_requirements": ["interpret short request and context", "select a general executor under candidate ownership", "perform short executor reasoning", "perform one useful query/effect", "observe and bind earliest useful outcome"],
+      "prohibited": ["long workflow", "specialist-only capability", "acknowledgement used as outcome"]
+    },
+    "F3": {
+      "semantic_requirements": ["interpret short specialist request and context", "select or delegate to the capability-owning specialist under candidate ownership", "perform short specialist reasoning", "perform one useful query/effect", "observe and bind earliest useful outcome"],
+      "prohibited": ["wrong specialist capability", "long workflow", "oracle-forced common topology", "acknowledgement used as outcome"]
+    }
+  },
+  "scenario_bindings": {
+    "F1": ["QF1-01","QF1-02","QF1-03","QF1-04","QF1-05","QF1-06","QF1-07","QF1-08","QF1-09","QF1-10","QF1-11","QF1-12"],
+    "F2": ["QF2-01","QF2-02","QF2-03","QF2-04","QF2-05","QF2-06","QF2-07","QF2-08","QF2-09","QF2-10","QF2-11","QF2-12"],
+    "F3": ["QF3-01","QF3-02","QF3-03","QF3-04","QF3-05","QF3-06","QF3-07","QF3-08","QF3-09","QF3-10","QF3-11","QF3-12"]
+  }
+}

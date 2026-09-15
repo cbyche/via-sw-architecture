@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa-v1-population-plan.schema.json",
+  "title": "QA-v1 Population Foundation Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "population_id", "qa_id", "status", "official_target_size", "semantic_families", "variation_dimensions", "legacy_seed_sources", "generation_rules", "frozen_instance_count", "results_exist"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "qa-v1-population-plan-v1"},
+    "population_id": {"type": "string", "pattern": "^qa(0[1-9]|1[0-2])-[a-z0-9-]+-v1$"},
+    "qa_id": {"type": "string", "pattern": "^QA-(0[1-9]|1[0-2])$"},
+    "status": {"enum": ["planned", "frozen"]},
+    "official_target_size": {"type": ["integer", "null"], "minimum": 1},
+    "semantic_families": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "variation_dimensions": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "legacy_seed_sources": {"type": "array", "items": {"$ref": "#/$defs/seed"}},
+    "generation_rules": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "frozen_instance_count": {"type": ["integer", "null"], "minimum": 0},
+    "results_exist": {"const": false},
+    "population_manifest": {"type": "string", "minLength": 1},
+    "workload_timeline": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}
+  },
+  "$defs": {
+    "seed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "concept_count", "reuse_status"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "concept_count": {"type": "integer", "minimum": 0},
+        "reuse_status": {"const": "concept_only_requires_adaptation_and_rerun"}
+      }
+    }
+  }
+}

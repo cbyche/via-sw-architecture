@@ -1,15 +1,17 @@
 # QA Generations and Legacy v1.1 Traceability
 
+> **SUPERSEDED MIGRATION RECORD.** This record predates QA Evaluation Contract v1 and its statements about “current Top QAs” are historical. The active migration ledger is `docs/evaluation/qa-contracts/v1/MIGRATION.md`.
+
 ## Status and purpose
 
-This is the authoritative navigation for QA identifier generations. It moves
+This was the authoritative navigation for earlier QA identifier generations. It moved
 duplicated migration explanation out of the current DP catalog without changing
 any requirement, metric, denominator, boundary, aggregation rule,
 qualification, evaluator, threshold status, or historical record.
 
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline.
 
-## 1. Current scored Top QAs
+## 1. Former scored Top QAs
 
 | Current ID | Current name | Primary metric | Authoritative definition |
 | --- | --- | --- | --- |
@@ -64,7 +66,7 @@ set or a not-yet-frozen vNext threshold is TBD; this review does not invent one.
 
 ## 3. Retained diagnostic and correctness-slice mapping
 
-| Approved v1.1 source | Relationship to current Top QAs | Preservation rule |
+| Approved v1.1 source | Historical relationship to former Top QAs | Preservation rule |
 | --- | --- | --- |
 | Legacy v1.1 QA-01 — VIA software processing latency (`requirements-v1.1.md:424-436`) | Secondary FTOL decomposition under Top QA-01 | The approved VIA-overhead target is not replaced by FTOL p95. |
 | Legacy v1.1 QA-05 — changeability and integration (`requirements-v1.1.md:480-492`) | Secondary/contract evidence under Top QA-03 | CPR/contract compatibility targets are not replaced by CCR. |
@@ -78,7 +80,7 @@ or renumber Approved Baseline targets.
 
 ## 4. Historical identifier rule
 
-In current documents, use `QA-01`~`QA-04` for the current Top QAs. When both
+Within pre-QA-Contract-v1 documents, `QA-01`~`QA-04` meant the former Top QAs. When both
 generations appear, spell older identifiers as `Legacy v1.1 QA-xx`.
 
 Do not mass-replace identifiers in requirements-v1.1, historical AA records,

@@ -1,5 +1,7 @@
 # AA-006 — DP-00 Executable Architecture Walkthrough
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status
 
 **Architecture Analysis Record — Executable Structure Stress-test — Pre-Prototype / Pre-Pilot**

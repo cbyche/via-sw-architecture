@@ -1,5 +1,9 @@
 # DP-00 — VIA Primary Execution Boundary
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** This A/B/C/D record and its scores remain preserved under their original identities. Current DP-00 is R1 versus R3, with R1+@ evaluated only as a tactic: [`vnext/DP-00-primary-reasoning-execution-boundary.md`](vnext/DP-00-primary-reasoning-execution-boundary.md).
+
+> **QA SEMANTICS NOTICE.** This DP's alternatives and historical comparison remain unchanged. Its `Top QA-01~04` evidence uses legacy meanings. Any future evaluation must bind to `docs/evaluation/qa-contracts/v1/README.md`; this DP may nominate Primary QAs but cannot redefine them.
+
 ## Status
 
 **TRADE SPACE CHARACTERIZED — FINAL SELECTION DEFERRED PENDING DOWNSTREAM ARCHITECTURE EVIDENCE**
@@ -18,6 +22,21 @@ recommendation framework is authoritative in:
 - `docs/architecture/analysis/AA-024-dp00-qa03-flexibility-measured-campaign.md`
 - `docs/architecture/analysis/AA-025-dp00-r1-r4-comparative-architecture-campaign-clean-rerun.md`
 - `docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`
+
+QA-01 design-time evidence is subsequently reframed by
+`docs/architecture/analysis/AA-028-dp00-qa01-evaluation-methodology-redesign.md`
+into two analysis stages without changing the four frozen implementations:
+
+1. **Primary Execution Boundary:** A0 (existing A evidence) versus B0 (existing
+   B evidence).
+2. **Bounded Fast-capability Accommodation:** C versus B1 (existing B evidence
+   interpreted with bounded execution inside ARGO authority) versus D1
+   (existing D with VIA Fast).
+
+D with `VIA_FAST` removed is not retained as D0: under the current
+responsibility/state specification its architecture-level distinction from A0
+collapses for the Stage-1 trade-space purpose. The pooled A/B/C/D latency view
+remains a secondary cross-stage diagnostic, not an overall ranking.
 
 Authoritative integration identities are runtime branch head
 `760679b5d542827de6aa307b87256e8a03afaed6`, runtime evidence commit
@@ -402,7 +421,7 @@ This must be measured and reasoned about in terms of:
 
 ## Expected QA trade-offs
 
-The central vNext Top QA rebaseline is now complete. The authoritative Top QA definitions are QA-01~04 under `docs/evaluation/quality-attributes/`; the original v1.1 QA-01~11 remain preserved as **Legacy v1.1 Detailed QA** in the Approved Baseline.
+At the time of the legacy DP-00 campaign, the central vNext Top QA rebaseline was treated as complete under QA-01~04. Those definitions are now archived; QA Evaluation Contract v1 is the only active authority for future comparisons. The original v1.1 QA-01~11 remain preserved as **Legacy v1.1 Detailed QA** in the Approved Baseline.
 
 | Quality concern | A Thin VIA | B ARGO-centric Primary Execution | C Hybrid Fast Path | D Adaptive Per-turn |
 | --- | --- | --- | --- | --- |

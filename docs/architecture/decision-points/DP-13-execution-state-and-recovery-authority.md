@@ -1,5 +1,9 @@
 # DP-13 — Execution State and Recovery Authority
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** Its concerns are absorbed into active DP-05 and DP-06; this identifier and evidence remain historical.
+
+> **QA SEMANTICS NOTICE.** References to `Top QA-01~04` retain their legacy planning meaning. Before evaluation, this open DP must nominate valid Primary QAs from QA Evaluation Contract v1 without defining local metrics, targets, populations, or scores.
+
 ## Status
 
 **OPEN — NO ALTERNATIVE SELECTED**

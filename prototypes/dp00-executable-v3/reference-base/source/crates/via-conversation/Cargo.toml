@@ -1,0 +1,85 @@
+[package]
+name = "via-conversation"
+description = "VIA's conversation surface: the two Markdown memory documents and their behavioural-authority split, the flat `memory` and `notes` tools, the frontend context blocks the realtime model is given, and the session-end memory extractor."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `memory_scopes` (the two documents, their aliases and the directive/data
+# split), `paths` (owner sharding, the file names), `config` (every bound and
+# every extractor setting) and `runtime::write_file`. None of it is restated.
+via-core = { workspace = true }
+# Every user-facing sentence: the nine memory failure codes, the six notes
+# failure codes, the extractor system prompt, the store warnings.
+via-i18n = { workspace = true }
+# Atomic + versioned + quarantined JSON for `frontend-notes.json`, and
+# `with_file_transaction` — the mkdir lock a Node Gateway on the other side of
+# the same profile directory also takes.
+via-store = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order`: every tool result here is serialized straight into the
+# realtime model's function output and its field order is catalogued.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+# Notes are ordered by insertion three times over: the file's key order, the
+# tie-break of a `lists` result, and the capped candidate list. A sorted map
+# would rewrite all three.
+indexmap = { workspace = true }
+
+# Document revisions (`sha256(...)[..16]`), note item ids
+# (`item_<sha256(text)[..12]>`) and the notes file's content hash.
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+# The audit line's `at`, and the extractor's clock.
+chrono = { workspace = true }
+# `time_zone` is a client-supplied IANA id; converting an instant into it needs
+# the zone database.
+chrono-tz = { workspace = true }
+# The host's own zone name — upstream's fallback when the client's is unusable.
+iana-time-zone = { workspace = true }
+
+# The sensitive-content gates and the two document-boundary classifiers are
+# upstream regexes, reproduced pattern for pattern.
+regex = { workspace = true }
+once_cell = { workspace = true }
+
+# `ConversationSync` is an owning task (`docs/architecture.md` §11), and the
+# extractor's LLM call carries a timeout.
+tokio = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# The extractor's one HTTP call. Optional so a build that injects its own
+# `ExtractorLlm` pays for nothing.
+reqwest = { workspace = true, optional = true }
+
+# `memory.extract_failed` / `memory.extract_completed`, folded into the
+# `via.log/v1` record by `via_log::ViaLayer`.
+tracing = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[features]
+# `testing` is on by default so this crate's own integration tests reach the
+# doubles under a bare `cargo test -p via-conversation`, and so a sibling can
+# depend on `via-conversation` without restating the feature. A build that
+# wants neither takes `default-features = false`.
+default = ["http", "testing"]
+# The production `ExtractorLlm`: one `POST {base_url}/chat/completions`.
+http = ["dep:reqwest"]
+# `ScriptedLlm` and `VecTranscripts`.
+testing = []
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

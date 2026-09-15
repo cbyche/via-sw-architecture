@@ -1,5 +1,7 @@
 # AA-012 — QA-02 Constraint-to-Raw-Evidence Coverage Audit
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status
 
 **Architecture Analysis Amendment — DP-00 Runtime Pilot v0 Session 2.6**

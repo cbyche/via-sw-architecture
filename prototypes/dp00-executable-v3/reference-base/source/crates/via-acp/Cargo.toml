@@ -1,0 +1,73 @@
+[package]
+name = "via-acp"
+description = "The generic Agent Client Protocol client: process transport, content conversion, the durable session registry, and the credential boundary every ACP backend is spawned behind."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+via-catalog = { workspace = true }
+via-core = { workspace = true }
+via-downstream = { workspace = true }
+via-i18n = { workspace = true }
+via-store = { workspace = true }
+
+# Zed's official ACP SDK. It owns the JSON-RPC framing, the NDJSON stdio
+# transport, request/response correlation and the `session/update` stream, so
+# none of that is hand-rolled here. Targeting stable v1 (`docs/architecture.md`
+# §12); protocol v2 is draft.
+agent-client-protocol = { workspace = true }
+
+# Child containment. The SDK's own teardown goes straight to SIGKILL after a
+# fixed 1 s grace and kills only the immediate child; backends launch through
+# package-runner wrappers, so that orphans the real agent. `process-wrap` gives
+# the SIGTERM → wait → SIGKILL ladder over a whole process group.
+process-wrap = { workspace = true }
+
+async-trait = { workspace = true }
+base64 = { workspace = true }
+futures = { workspace = true }
+# One pattern: the fenced-code-block unwrap in `parseCoordinatorPayload`, whose
+# exact non-greedy `/```(?:json)?\s*([\s\S]*?)```/i` semantics decide which
+# malformed backend answers are accepted. Approximating it with string search
+# would change that set.
+once_cell = { workspace = true }
+regex = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+[target.'cfg(unix)'.dependencies]
+# `SIGTERM` as a named constant rather than the integer 15. The teardown ladder
+# is the one place a wrong signal number is silently survivable in testing and
+# catastrophic in production.
+nix = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+
+# The scripted fake ACP agent the client is exercised against: a real process
+# speaking NDJSON on stdio, so the transport, the framing, the credential
+# boundary and the teardown ladder are all under test rather than mocked away.
+#
+# It is a `[[bin]]` rather than a test file because `CARGO_BIN_EXE_<name>` is
+# the only mechanism Cargo offers an integration test for locating a companion
+# executable by path, and it lives under `tests/bin/` so Cargo's integration
+# test auto-discovery does not also claim it. It is a fixture, not a product
+# artifact: it speaks the script it is given and does nothing else.
+[[bin]]
+name = "via-acp-fake-agent"
+path = "tests/bin/fake_agent.rs"
+test = false
+doc = false
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

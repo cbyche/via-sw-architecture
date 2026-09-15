@@ -1,0 +1,47 @@
+{
+  "environment_id": "via-reference-environment-v1",
+  "version": "1.0.0",
+  "status": "ACTIVE_NORMATIVE",
+  "qa_contract_id": "qa-evaluation-contract-v1",
+  "scoring_mode": "EVIDENCE_ANCHORED_SYNTHETIC_ON_DEVICE",
+  "official_scoring_profile": {
+    "profile_id": "QWEN3_MEDIUM_REFERENCE",
+    "model": "Qwen3-8B",
+    "source_contract": "benchmark/contracts/dp00-qa01-design-reference-latency-v1.json",
+    "source_profile_pointer": "/models/1",
+    "role": "official architecture-scoring latency profile",
+    "evidence_limit": "Synthetic design reference derived from published Qwen throughput plus explicit engineering assumptions; it is not target-device measurement or production latency."
+  },
+  "sensitivity_profiles": [
+    {
+      "profile_id": "QWEN3_SMALL_REFERENCE",
+      "source_contract": "benchmark/contracts/dp00-qa01-design-reference-latency-v1.json",
+      "source_profile_pointer": "/models/0",
+      "role": "sensitivity_analysis_only"
+    },
+    {
+      "profile_id": "QWEN3_30B_A3B_REFERENCE",
+      "source_contract": "benchmark/contracts/dp00-qa01-design-reference-latency-v1.json",
+      "source_profile_pointer": "/models/2",
+      "role": "sensitivity_analysis_only"
+    }
+  ],
+  "semantic_generation": {
+    "permitted_modes": ["FROZEN_SEMANTIC_REPLAY", "OPTIONAL_CLOUD_API_GENERATION"],
+    "architecture_scoring_uses_cloud_wall_clock_latency": false,
+    "cloud_capture_required_fields": ["model", "model_version", "input", "output", "prompt_schema_hash", "input_token_count", "output_token_count"],
+    "cloud_network_provider_latency_treatment": "record as Track-B diagnostic if observed; exclude from architecture score"
+  },
+  "timing": {
+    "profile_type": "evidence-anchored synthetic on-device reference latency profile",
+    "official_profile_id": "QWEN3_MEDIUM_REFERENCE",
+    "common_candidate_policy": "Every compared alternative consumes the same frozen semantic result and reference latency sample for a comparable operation.",
+    "hardware_calibration_status": "DESIGN_REFERENCE_PENDING_REAL_TARGET_HARDWARE"
+  },
+  "memory": {
+    "denominator_definition": "One unavoidable minimum physical instance of the frozen required AI stack for the same workload.",
+    "physical_accounting": "Shared physical pages count once; true replicas count separately; required memory in another process remains included.",
+    "calibration_status": "PLANNED_BEFORE_QA07_QUALIFICATION"
+  },
+  "replacement_policy": "When real target hardware becomes available, create a new Reference Environment version and replace latency/memory calibration sources. Hardware recalibration alone does not redefine QA targets, populations, or score bands."
+}

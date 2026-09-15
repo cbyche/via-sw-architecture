@@ -1,0 +1,40 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 400,
+  "generation_rules": [
+    "Freeze every required relation per episode",
+    "Generate only meaningful lifecycle/event interleavings",
+    "Do not treat physical barge-in latency as a continuity relation",
+    "Require exact relation success for the episode"
+  ],
+  "legacy_seed_sources": [
+    {
+      "concept_count": 5,
+      "path": "benchmark/scenarios/pilot-v0",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    }
+  ],
+  "official_target_size": 400,
+  "population_id": "qa03-continuity-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa03-continuity-v1/manifest.json",
+  "qa_id": "QA-03",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "new and follow-up task binding",
+    "concurrent/interleaved results",
+    "approval binding",
+    "cancel/complete race",
+    "correction/revision",
+    "response version and cross-channel delivery"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "event ordering",
+    "task cardinality",
+    "executor cardinality",
+    "approval principal",
+    "reconnect/retry",
+    "Voice/Text delivery order"
+  ]
+}

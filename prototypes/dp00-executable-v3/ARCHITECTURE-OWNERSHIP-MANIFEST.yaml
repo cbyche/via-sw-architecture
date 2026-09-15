@@ -1,0 +1,24 @@
+manifest_id: dp00-executable-v3-ownership-1
+rule: "Module ownership is frozen independently of QA-04/05 observations."
+modules:
+  src/bin/r1-via.rs: {architecture_owner: R1_VIA_CONTROL_PLANE, integration_area: "Agent adapter", semantic_concern_zones: [Z2, Z3, Z5, Z6]}
+  src/bin/r1-via-fastpath.rs: {architecture_owner: R1_VIA_CONTROL_PLANE, integration_area: "approved Agent-integration seam", semantic_concern_zones: [Z3, Z6]}
+  src/bin/general-agent.rs: {architecture_owner: R1_SELECTED_AGENT, integration_area: "Agent adapter", semantic_concern_zones: [Z4, Z5]}
+  src/bin/r3-shell.rs: {architecture_owner: R3_VIA_SHELL, integration_area: "protocol mapping", semantic_concern_zones: [Z1, Z2, Z6]}
+  src/bin/r3-primary-runtime.rs: {architecture_owner: R3_PRIMARY_RUNTIME, integration_area: "approved Agent-integration seam", semantic_concern_zones: [Z3, Z4, Z5, Z7]}
+  src/bin/specialist-agent.rs: {architecture_owner: SPECIALIST_AGENT, integration_area: "Agent adapter", semantic_concern_zones: [Z4, Z5]}
+  src/bin/semantic-model.rs: {architecture_owner: COMMON_SEMANTIC_STUB, integration_area: "protocol mapping", semantic_concern_zones: [Z3, Z7]}
+  src/bin/policy-engine.rs: {architecture_owner: COMMON_POLICY_STUB, integration_area: "protocol mapping", semantic_concern_zones: [Z2, Z4]}
+  src/lib.rs: {architecture_owner: COMMON_RUNTIME, integration_area: "protocol mapping", semantic_concern_zones: [Z4, Z5, Z7]}
+  src/ownership/z1_interaction.rs: {architecture_owner: COMMON_VIA, integration_area: "interaction provider", semantic_concern_zones: [Z1]}
+  src/ownership/z2_context.rs: {architecture_owner: COMMON_VIA, integration_area: "context boundary", semantic_concern_zones: [Z2]}
+  src/ownership/z3_semantics.rs: {architecture_owner: ARCHITECTURE_COMPOSITION, integration_area: "semantic contract", semantic_concern_zones: [Z3]}
+  src/ownership/z4_agent_contract.rs: {architecture_owner: AGENT_INTEGRATION, integration_area: "protocol mapping", semantic_concern_zones: [Z4]}
+  src/ownership/z5_task_lifecycle.rs: {architecture_owner: ARCHITECTURE_COMPOSITION, integration_area: "task lifecycle", semantic_concern_zones: [Z5]}
+  src/ownership/z6_delivery.rs: {architecture_owner: COMMON_VIA, integration_area: "delivery", semantic_concern_zones: [Z6]}
+  src/ownership/z7_runtime_resource.rs: {architecture_owner: RUNTIME, integration_area: "runtime resource", semantic_concern_zones: [Z7]}
+  src/ownership/z8_device.rs: {architecture_owner: DEVICE_CONTRACT, integration_area: "device contract", semantic_concern_zones: [Z8]}
+  src/ownership/r1_agent_adapter.rs: {architecture_owner: R1_SELECTED_AGENT_INTEGRATION, integration_area: "Agent adapter", semantic_concern_zones: [Z4]}
+  src/ownership/r3_primary_extensions.rs: {architecture_owner: R3_PRIMARY_RUNTIME, integration_area: "approved Agent-integration seam", semantic_concern_zones: [Z4]}
+  src/ownership/device_adapters.rs: {architecture_owner: DEVICE_ADAPTERS, integration_area: "device adapter", semantic_concern_zones: [Z8]}
+

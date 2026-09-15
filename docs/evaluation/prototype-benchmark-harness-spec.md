@@ -1,5 +1,9 @@
 # DP-00 Prototype / Benchmark Harness Specification
 
+> **LEGACY / HISTORICAL DP-00 HARNESS SPECIFICATION.** This file preserves the A/B/C/D campaign contract and does not specify active R1/R3 candidates. Use `../../benchmark/contracts/dp-vnext/` for the next evaluation task.
+
+> **HISTORICAL EVIDENCE — LEGACY QA SEMANTICS.** This specification remains reproducibility evidence for the DP-00 campaign. Its QA fields and scoring contracts do not override QA Evaluation Contract v1 for future work.
+
 ## Status
 
 **Prototype/Harness Specification — Pre-Implementation / Pre-Pilot**

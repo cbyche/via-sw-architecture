@@ -1,0 +1,47 @@
+[package]
+name = "via-realtime"
+description = "VIA's realtime transport seam: the provider and protocol traits, the provider registry, and one WebSocket session to one realtime provider."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+via-catalog = { workspace = true }
+via-i18n = { workspace = true }
+via-protocol = { workspace = true }
+
+# `preserve_order` carries from the workspace table and is load-bearing twice
+# over here: `session.update` payloads and `response.create` bodies go on the
+# wire in the order a provider inserted them, and `describe_active_realtime`'s
+# descriptor is published on `/api/health` with a field order clients read.
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# The registry preserves registration order: `list()` and the
+# unsupported-provider message both expose it.
+indexmap = { workspace = true }
+
+# The session is an owning task pair over a WebSocket.
+futures = { workspace = true }
+tokio = { workspace = true }
+tokio-tungstenite = { workspace = true }
+uuid = { workspace = true }
+
+# `ReconnectBackoff`'s default jitter source. Upstream injects `Math.random`;
+# `getrandom` is the equivalent that is already in the graph (via `uuid`), and
+# the injection seam is kept so tests stay deterministic.
+getrandom = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serial_test = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

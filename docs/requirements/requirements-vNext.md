@@ -1,5 +1,9 @@
 # VIA Architecture Requirements — vNext Working Baseline
 
+> **DP CATALOG SUPERSESSION NOTICE.** Requirement statements in this working document remain inputs, but its A/B/C/D DP-00 catalog and related evaluation roadmap are a **LEGACY / HISTORICAL DECISION RECORD**. They are not the active vNext trade space. Current DP-00 is R1 versus R3, with R1+@ only as a tactic realization; see [`../architecture/decision-points/catalog.md`](../architecture/decision-points/catalog.md). This notice does not modify the approved `requirements-v1.1.md` baseline.
+
+> **QA SEMANTICS NOTICE.** The QA rebaseline section in this working vNext document records the pre-QA-Contract-v1 `Top QA-01~04` scheme. It is not current evaluation authority. QA Evaluation Contract v1 governs future architecture comparisons and does not modify the approved requirements-v1.1 baseline.
+
 > Status: **Architecture Evaluation Working Baseline — not an Approved Baseline**
 >
 > `docs/requirements/requirements-v1.1.md` remains the **Approved starting baseline** and must not be edited by this vNext work.

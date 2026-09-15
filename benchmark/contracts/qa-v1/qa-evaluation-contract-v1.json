@@ -1,0 +1,293 @@
+{
+  "$schema": "../../schemas/qa-evaluation-contract-v1.schema.json",
+  "contract_id": "qa-evaluation-contract-v1",
+  "contract_version": "1.0.0",
+  "status": "ACTIVE_NORMATIVE",
+  "normative_entry_point": "docs/evaluation/qa-contracts/v1/README.md",
+  "immutability_rule": "A Decision Point may nominate Primary QAs but may not redefine a QA metric, formula, denominator, evaluation population, target, score bands, measurement boundary, missing/failure treatment, or official reference environment. Any such change requires a new QA contract version and re-evaluation of affected alternatives.",
+  "reference_environment_id": "via-reference-environment-v1",
+  "corpus_manifest_id": "qa-v1-corpus-manifest-v1",
+  "decision_point_policy": {
+    "may_nominate_primary_qa_ids": true,
+    "may_define_custom_metric": false,
+    "may_define_custom_target": false,
+    "may_define_custom_score_bands": false,
+    "may_define_custom_population": false,
+    "required_binding_schema": "#/$defs/decisionPointEvaluationBinding"
+  },
+  "quality_attributes": [
+    {
+      "qa_id": "QA-01",
+      "name": "User-Experienced Responsiveness",
+      "official_scalar_metric": "Fast Useful Outcome Latency p95",
+      "unit": "seconds",
+      "direction": "lower_is_better",
+      "formula": "p95(end_timestamp - start_timestamp), with a 30-second penalty for a wrong or missing useful outcome",
+      "measurement_boundary": {
+        "start": "Voice: ground-truth acoustic EOS. Text: explicit input commit.",
+        "end": "The later of required voice facts actually audibly delivered and required text-detail fields from the same result version available.",
+        "excluded_substitutes": ["ACK", "first token", "internal Agent result", "TTS-generation completion"]
+      },
+      "population_id": "qa01-fast-v1",
+      "planned_population": "150 unique semantic goal instances",
+      "failure_missing_treatment": "Wrong or missing useful outcome at 30 seconds receives a 30-second latency penalty.",
+      "target": {"operator": "<=", "value": 3.0, "display": "p95 <= 3.0 seconds"},
+      "score_bands": [
+        {"score": 0, "min": 6.0, "min_inclusive": false, "max": null, "max_inclusive": false},
+        {"score": 1, "min": 4.5, "min_inclusive": false, "max": 6.0, "max_inclusive": true},
+        {"score": 2, "min": 3.0, "min_inclusive": false, "max": 4.5, "max_inclusive": true},
+        {"score": 3, "min": 2.0, "min_inclusive": false, "max": 3.0, "max_inclusive": true},
+        {"score": 4, "min": 1.5, "min_inclusive": false, "max": 2.0, "max_inclusive": true},
+        {"score": 5, "min": 0.0, "min_inclusive": true, "max": 1.5, "max_inclusive": true}
+      ],
+      "diagnostics": ["latency by stratum", "endpoint decomposition", "useful-outcome failure count"]
+    },
+    {
+      "qa_id": "QA-02",
+      "name": "Task Completion Effectiveness",
+      "official_scalar_metric": "Constraint-Conformant Goal Completion Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * successful unique goal instances / all eligible frozen goal instances; success requires every declared condition to pass",
+      "measurement_boundary": {"start": "Scenario-defined user goal stimulus.", "end": "Scenario deadline after all required goal, binding, consent, result, and Voice/Text consistency checks."},
+      "population_id": "qa02-goals-v1",
+      "planned_population": "600 unique goal instances across at least 60 semantic families",
+      "failure_missing_treatment": "Any missing or failed required condition makes the goal instance unsuccessful in the denominator.",
+      "target": {"operator": ">=", "value": 95.0, "display": ">=95%"},
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 70.0, "max_inclusive": false},
+        {"score": 1, "min": 70.0, "min_inclusive": true, "max": 85.0, "max_inclusive": false},
+        {"score": 2, "min": 85.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 3, "min": 95.0, "min_inclusive": true, "max": 98.0, "max_inclusive": false},
+        {"score": 4, "min": 98.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["condition failure rates", "stratum completion rates", "semantic-family coverage"]
+    },
+    {
+      "qa_id": "QA-03",
+      "name": "Interaction & Task Continuity",
+      "official_scalar_metric": "Continuity Episode Exact Success Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * episodes with every required lifecycle and event-interleaving relation correct / 400 frozen episodes",
+      "measurement_boundary": {"start": "First event in the frozen lifecycle/interleaving episode.", "end": "Completion of all required relation checks for the episode.", "required_relations": ["Turn to Task", "Task to Execution", "Execution to Result", "Result to Response", "Response to Delivery", "approval/cancel/follow-up relationships"]},
+      "population_id": "qa03-continuity-v1",
+      "planned_population": "400 fixed lifecycle/event-interleaving episodes",
+      "failure_missing_treatment": "A missing or incorrect required relation makes the entire episode fail.",
+      "target": {"operator": ">=", "value": 99.0, "display": ">=99%"},
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 90.0, "max_inclusive": false},
+        {"score": 1, "min": 90.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 2, "min": 95.0, "min_inclusive": true, "max": 99.0, "max_inclusive": false},
+        {"score": 3, "min": 99.0, "min_inclusive": true, "max": 99.5, "max_inclusive": false},
+        {"score": 4, "min": 99.5, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["relation-specific failures", "interleaving-class rates"]
+    },
+    {
+      "qa_id": "QA-04",
+      "name": "Agent Ecosystem Evolution Containment",
+      "official_scalar_metric": "Agent Evolution Containment Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * passing Agent evolution cases / 60 frozen Agent evolution cases",
+      "measurement_boundary": {"start": "Frozen change request and predeclared ownership area.", "end": "Requested change complete and common regression contracts evaluated.", "allowed_ownership": ["Agent adapter", "protocol mapping", "capability manifest/extension", "approved Agent-integration seam"]},
+      "population_id": "qa04-agent-evolution-v1",
+      "planned_population": "60 frozen Agent evolution cases",
+      "failure_missing_treatment": "Incomplete changes, common-regression failure, or change to unrelated Core semantic responsibility makes the case not contained.",
+      "target": {"operator": ">=", "value": 95.0, "display": ">=95%"},
+      "score_mapping_id": "success95",
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 70.0, "max_inclusive": false},
+        {"score": 1, "min": 70.0, "min_inclusive": true, "max": 85.0, "max_inclusive": false},
+        {"score": 2, "min": 85.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 3, "min": 95.0, "min_inclusive": true, "max": 98.0, "max_inclusive": false},
+        {"score": 4, "min": 98.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["changed concern zones", "common-regression failures", "change-type rates"]
+    },
+    {
+      "qa_id": "QA-05",
+      "name": "Evolution Change Containment",
+      "official_scalar_metric": "Change Containment Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * passing standard evolution changes / 60 frozen changes; LOC and file count are not the metric",
+      "measurement_boundary": {"start": "Frozen change request with predeclared expected ownership zones and approved extension seams.", "end": "Requested function and common regressions complete, followed by semantic-dependency review.", "semantic_concern_zones": ["Z1 Voice / Turn", "Z2 Temporal Context / Evidence", "Z3 Semantic Decision", "Z4 Agent Integration", "Z5 User Task / Execution Lifecycle", "Z6 Response / Delivery", "Z7 Runtime / Resource", "Z8 Device / Platform"]},
+      "population_id": "qa05-product-evolution-v1",
+      "planned_population": "60 frozen standard evolution changes",
+      "failure_missing_treatment": "A case fails if function is incomplete, regressions fail, semantic changes leave pre-authorized zones, or a semantic dependency leaks into an unrelated zone.",
+      "target": {"operator": ">=", "value": 90.0, "display": ">=90%"},
+      "score_mapping_id": "containment90",
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 50.0, "max_inclusive": false},
+        {"score": 1, "min": 50.0, "min_inclusive": true, "max": 70.0, "max_inclusive": false},
+        {"score": 2, "min": 70.0, "min_inclusive": true, "max": 90.0, "max_inclusive": false},
+        {"score": 3, "min": 90.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 4, "min": 95.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["zone transitions", "extension-seam use", "regression failures", "LOC and file-count observations"]
+    },
+    {
+      "qa_id": "QA-06",
+      "name": "Cross-Device Adaptability",
+      "official_scalar_metric": "Core-Preserving Device Adaptation Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * delivered requirement cells requiring no semantic modification of platform-independent VIA Core contracts / 60 frozen device requirement cells",
+      "measurement_boundary": {"start": "Frozen Mobile, TV, or Robot requirement cell.", "end": "Required function delivered and Core-contract semantic-change review complete.", "allowed_changes": ["device-specific adapters", "device-specific providers"]},
+      "population_id": "qa06-device-adaptation-v1",
+      "planned_population": "60 requirement cells: 20 Mobile, 20 TV, 20 Robot",
+      "failure_missing_treatment": "Omission of a device requirement or semantic modification of platform-independent VIA Core contracts makes the cell fail.",
+      "target": {"operator": ">=", "value": 90.0, "display": ">=90%"},
+      "score_mapping_id": "containment90",
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 50.0, "max_inclusive": false},
+        {"score": 1, "min": 50.0, "min_inclusive": true, "max": 70.0, "max_inclusive": false},
+        {"score": 2, "min": 70.0, "min_inclusive": true, "max": 90.0, "max_inclusive": false},
+        {"score": 3, "min": 90.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 4, "min": 95.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["device-family rates", "adapter/provider changes", "Core-contract review findings"]
+    },
+    {
+      "qa_id": "QA-07",
+      "name": "On-device Resource Amplification",
+      "official_scalar_metric": "Peak Memory Amplification Ratio",
+      "unit": "x",
+      "direction": "lower_is_better",
+      "formula": "candidate peak physically resident required AI-stack memory / frozen minimum mandatory AI-stack memory for the same workload",
+      "measurement_boundary": {"start": "Start of the frozen reference workload's required AI-stack residency interval.", "end": "End of that workload; take peak physical residency during the interval.", "included_memory": ["model weights", "true replicas", "KV/cache state", "S2S/ASR/TTS", "required Agent runtime", "context/evidence/provisional state", "Task state", "response/delivery/audio buffers"], "counting_rules": ["shared physical pages count once", "true replicas count separately", "cross-process memory remains included"]},
+      "population_id": "qa07-resource-v1",
+      "planned_population": "Frozen required AI-stack workload set; case count to be supplied before qualification without fabricating instances",
+      "failure_missing_treatment": "Missing required resident-memory observations make the case ineligible for a score and fail evidence completeness; they are never imputed as low memory.",
+      "target": {"operator": "<=", "value": 1.5, "display": "<=1.5x"},
+      "score_bands": [
+        {"score": 0, "min": 2.0, "min_inclusive": false, "max": null, "max_inclusive": false},
+        {"score": 1, "min": 1.75, "min_inclusive": false, "max": 2.0, "max_inclusive": true},
+        {"score": 2, "min": 1.5, "min_inclusive": false, "max": 1.75, "max_inclusive": true},
+        {"score": 3, "min": 1.25, "min_inclusive": false, "max": 1.5, "max_inclusive": true},
+        {"score": 4, "min": 1.1, "min_inclusive": false, "max": 1.25, "max_inclusive": true},
+        {"score": 5, "min": 0.0, "min_inclusive": true, "max": 1.1, "max_inclusive": true}
+      ],
+      "diagnostics": ["memory by included class", "replica count", "absolute device-fit observations", "energy observations"]
+    },
+    {
+      "qa_id": "QA-08",
+      "name": "Safe Task Recoverability",
+      "official_scalar_metric": "Safe Task Recovery Time p95",
+      "unit": "seconds",
+      "direction": "lower_is_better",
+      "formula": "p95(end_timestamp - ground-truth fault onset), with a 60-second penalty when safe recovery is not reached by 60 seconds",
+      "measurement_boundary": {"start": "Ground-truth fault onset.", "end": "All conditions hold: same logical UserTask retained; executor state reconciled; no duplicate or unsafe side effect; continuation-ready safe state; user-visible task state restored."},
+      "population_id": "qa08-recovery-v1",
+      "planned_population": "200 frozen recoverable transient-fault episodes",
+      "failure_missing_treatment": "Failure to reach safe recovery by 60 seconds receives a 60-second latency penalty. Unsafe or incorrect recovery independently fails architecture qualification.",
+      "target": {"operator": "<=", "value": 10.0, "display": "p95 <=10 seconds"},
+      "score_bands": [
+        {"score": 0, "min": 40.0, "min_inclusive": false, "max": null, "max_inclusive": false},
+        {"score": 1, "min": 20.0, "min_inclusive": false, "max": 40.0, "max_inclusive": true},
+        {"score": 2, "min": 10.0, "min_inclusive": false, "max": 20.0, "max_inclusive": true},
+        {"score": 3, "min": 5.0, "min_inclusive": false, "max": 10.0, "max_inclusive": true},
+        {"score": 4, "min": 2.0, "min_inclusive": false, "max": 5.0, "max_inclusive": true},
+        {"score": 5, "min": 0.0, "min_inclusive": true, "max": 2.0, "max_inclusive": true}
+      ],
+      "hard_eligibility_gates": [{"gate_id": "QA08-SAFE-RECOVERY", "rule": "Any unsafe or incorrect recovery fails architecture qualification.", "offsettable": false}],
+      "diagnostics": ["recovery phase latency", "fault-class rates", "reconciliation outcomes"]
+    },
+    {
+      "qa_id": "QA-09",
+      "name": "Least-Privilege Boundary Quality",
+      "official_scalar_metric": "Least-Privilege Scope F1",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "Micro-averaged F1 = 2PR / (P + R), where precision and recall compare actually granted/exposed sensitive scope with exact ground-truth required scope",
+      "measurement_boundary": {"start": "Scenario sensitive-scope requirement and principal are fixed.", "end": "All granted or exposed sensitive scopes and any state-changing action are observed."},
+      "population_id": "qa09-sensitive-scope-v1",
+      "planned_population": "300 frozen sensitive-scope scenarios",
+      "failure_missing_treatment": "Missing grant/exposure evidence fails evidence completeness. Empty P+R is resolved only by a frozen scenario oracle, never by candidate-specific convention.",
+      "target": {"operator": ">=", "value": 98.0, "display": ">=98%"},
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 90.0, "max_inclusive": false},
+        {"score": 1, "min": 90.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 2, "min": 95.0, "min_inclusive": true, "max": 98.0, "max_inclusive": false},
+        {"score": 3, "min": 98.0, "min_inclusive": true, "max": 99.0, "max_inclusive": false},
+        {"score": 4, "min": 99.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "hard_eligibility_gates": [{"gate_id": "QA09-SECURITY", "triggers": ["explicitly forbidden disclosure", "unauthorized state-changing action", "wrong-principal approval use"], "rule": "Any confirmed trigger makes the candidate fail security qualification.", "offsettable": false}],
+      "diagnostics": ["micro precision", "micro recall", "scope-class errors", "gate incidents"]
+    },
+    {
+      "qa_id": "QA-10",
+      "name": "Trace Reconstructability for Diagnosis & Improvement",
+      "official_scalar_metric": "End-to-End Decision Trace Reconstruction Rate",
+      "unit": "percent",
+      "direction": "higher_is_better",
+      "formula": "100 * traces whose complete required causal chain an external evaluator reconstructs using candidate telemetry only / 200 frozen traces",
+      "measurement_boundary": {"start": "User input or revision represented in candidate telemetry.", "end": "Voice/Text delivery plus relevant latency/resource attribution reconstructed.", "required_chain": ["User input / revision", "temporal evidence / provenance", "semantic/model decision", "Agent selection", "Agent session / execution mapping", "UserTask lifecycle", "approval / progress / result", "response facts/version", "Voice/Text delivery", "relevant latency/resource attribution"], "oracle_isolation": "Hidden oracle and fault labels must not be exposed in candidate telemetry."},
+      "population_id": "qa10-trace-v1",
+      "planned_population": "200 traces: 100 successful execution and 100 controlled fault/edge",
+      "failure_missing_treatment": "Any missing required causal-chain element makes the trace fail reconstruction.",
+      "target": {"operator": ">=", "value": 98.0, "display": ">=98%"},
+      "score_bands": [
+        {"score": 0, "min": 0.0, "min_inclusive": true, "max": 90.0, "max_inclusive": false},
+        {"score": 1, "min": 90.0, "min_inclusive": true, "max": 95.0, "max_inclusive": false},
+        {"score": 2, "min": 95.0, "min_inclusive": true, "max": 98.0, "max_inclusive": false},
+        {"score": 3, "min": 98.0, "min_inclusive": true, "max": 99.0, "max_inclusive": false},
+        {"score": 4, "min": 99.0, "min_inclusive": true, "max": 100.0, "max_inclusive": false},
+        {"score": 5, "min": 100.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["chain-element reconstruction rates", "successful versus fault/edge trace rates"]
+    },
+    {
+      "qa_id": "QA-11",
+      "name": "Long-running Task Feedback Freshness",
+      "official_scalar_metric": "Task Event-to-Useful-Feedback Latency p95",
+      "unit": "seconds",
+      "direction": "lower_is_better",
+      "formula": "p95(user receipt timestamp - VIA-boundary availability timestamp), with a 30-second penalty for missing feedback",
+      "measurement_boundary": {"start": "The truthful/reportable event becomes available at the VIA boundary.", "end": "The user actually receives meaningful feedback through the scenario-required channel.", "not_useful": ["generic ACK", "fabricated progress", "stale repetition"]},
+      "population_id": "qa11-feedback-v1",
+      "planned_population": "200 events: 40 accepted/queued, 40 meaningful progress, 40 approval-needed, 40 completion, 40 blocked/failure",
+      "failure_missing_treatment": "Missing useful feedback receives a 30-second latency penalty.",
+      "target": {"operator": "<=", "value": 1.5, "display": "p95 <=1.5 seconds"},
+      "score_bands": [
+        {"score": 0, "min": 3.0, "min_inclusive": false, "max": null, "max_inclusive": false},
+        {"score": 1, "min": 2.25, "min_inclusive": false, "max": 3.0, "max_inclusive": true},
+        {"score": 2, "min": 1.5, "min_inclusive": false, "max": 2.25, "max_inclusive": true},
+        {"score": 3, "min": 1.0, "min_inclusive": false, "max": 1.5, "max_inclusive": true},
+        {"score": 4, "min": 0.75, "min_inclusive": false, "max": 1.0, "max_inclusive": true},
+        {"score": 5, "min": 0.0, "min_inclusive": true, "max": 0.75, "max_inclusive": true}
+      ],
+      "diagnostics": ["event-class latency", "channel-specific latency", "missing/stale/fabricated feedback counts"]
+    },
+    {
+      "qa_id": "QA-12",
+      "name": "Barge-in Responsiveness",
+      "official_scalar_metric": "Barge-in Audible Stop Latency p95",
+      "unit": "milliseconds",
+      "direction": "lower_is_better",
+      "formula": "p95(t_last_audible_sample_of_previous_response - t_ground_truth_user_speech_onset), with a 2000 ms penalty when audible output does not stop within 2 seconds",
+      "measurement_boundary": {"start": "Ground-truth user speech onset.", "end": "Last audible sample of the previous response.", "excluded_substitutes": ["cancel API completion", "inference stop", "TTS-generation stop"]},
+      "population_id": "qa12-barge-in-v1",
+      "planned_population": "200 frozen positive barge-in episodes",
+      "failure_missing_treatment": "Failure to stop within 2 seconds receives a 2000 ms penalty.",
+      "target": {"operator": "<=", "value": 200.0, "display": "p95 <=200 ms"},
+      "score_bands": [
+        {"score": 0, "min": 400.0, "min_inclusive": false, "max": null, "max_inclusive": false},
+        {"score": 1, "min": 300.0, "min_inclusive": false, "max": 400.0, "max_inclusive": true},
+        {"score": 2, "min": 200.0, "min_inclusive": false, "max": 300.0, "max_inclusive": true},
+        {"score": 3, "min": 133.0, "min_inclusive": false, "max": 200.0, "max_inclusive": true},
+        {"score": 4, "min": 100.0, "min_inclusive": false, "max": 133.0, "max_inclusive": true},
+        {"score": 5, "min": 0.0, "min_inclusive": true, "max": 100.0, "max_inclusive": true}
+      ],
+      "diagnostics": ["audible-stop distribution", "cancellation correctness", "delivery/history continuity"]
+    }
+  ]
+}

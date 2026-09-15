@@ -1,0 +1,56 @@
+[package]
+name = "via-process"
+description = "Supervision of Gateway-owned backend child processes: ownership resolution, loopback address allocation, the child environment trust boundary, and the SIGTERM->wait->SIGKILL ladder."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `via-backends` is deliberately absent, and `via-arch-test` asserts it stays
+# absent: this crate is the generic managed-subprocess core and may not know
+# that any named backend exists. Backend-specific launch data arrives as a
+# `BackendRuntimeDriver` value built by the caller.
+via-catalog = { workspace = true }
+via-core = { workspace = true }
+via-i18n = { workspace = true }
+via-log = { workspace = true }
+
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+
+tokio = { workspace = true }
+
+# Backends launch through `npx`/`uvx` wrappers, so killing only the immediate
+# child orphans the real agent. `ProcessGroup::leader()` on unix and
+# `JobObject` on windows is what makes teardown actually tear down; upstream
+# gets the unix half with `detached: true` plus `process.kill(-pid)`
+# (`server/src/process/managed-backend.mjs:131-166`) and has no Windows answer
+# at all.
+process-wrap = { workspace = true }
+
+# A launch command is a bare name (`npx`, `uvx`, a backend's own binary) that
+# has to be found on the child's composed PATH — the whole point of
+# `shared/path-environment.mjs` being a module. `which` is that lookup, with
+# the PATHEXT handling Windows needs.
+which = { workspace = true }
+
+# `normalizeServiceEndpoint` / `serviceEndpointPort` / `isLocalBackend` are all
+# WHATWG `new URL(...)` semantics: origin serialization with default-port
+# stripping, `hostname` in IPv6 bracket form, and the special-scheme table that
+# decides `ws:`/`wss:` default ports. `url` is that algorithm.
+url = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

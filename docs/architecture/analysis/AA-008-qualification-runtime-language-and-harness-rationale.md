@@ -1,5 +1,7 @@
 # AA-008 — Qualification Runtime Language and Harness Rationale
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status
 
 **Architecture Analysis Record — Prototype/Harness Specification Checkpoint — Pre-Implementation / Pre-Pilot**

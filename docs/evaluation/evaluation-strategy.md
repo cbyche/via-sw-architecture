@@ -1,16 +1,22 @@
 # Evaluation Strategy — vNext Central Architecture Evaluation
 
+> **LEGACY / HISTORICAL A/B/C/D STRATEGY RECORD.** Its frozen evidence remains reproducible, but it is not the active DP-00 roadmap. Current R1/R3 evaluation is governed by QA Evaluation Contract v1 and `dp00-vnext-evaluation-protocol-v1.md`; R1+@ is only an R1 tactic realization.
+
+## QA Contract v1 authority
+
+The dependency order for future work is Product Mission/Scope → QA Evaluation Contract v1 → Reference Environment and frozen populations → DP alternatives → benchmark/analysis → decision. `docs/evaluation/qa-contracts/v1/README.md` is the only active QA authority. Legacy QA-specific flow below documents DP-00 history and cannot define a future score.
+
 ## Status
 
 Central vNext evaluation strategy for `DP-00 — VIA Primary Execution Boundary` and the Top Architectural Driver QA set.
 
 `docs/requirements/requirements-v1.1.md` remains the Approved Baseline. This strategy defines how architecture alternatives are evaluated; it does not select a winner or change approved requirements.
 
-Detailed rules are authoritative in:
+Reusable detailed methods are maintained in:
 
 - `docs/evaluation/evaluation-principles.md`
 - `docs/evaluation/architecture-experiment-methodology.md`
-- QA-specific documents under `docs/evaluation/quality-attributes/`
+- the active QA contract under `docs/evaluation/qa-contracts/v1/`
 - benchmark semantic schemas under `benchmark/schemas/`
 
 ## 1. Evaluation storyline

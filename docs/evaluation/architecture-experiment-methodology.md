@@ -1,5 +1,11 @@
 # Architecture Experiment Methodology
 
+> **LEGACY A/B/C/D APPLICATION NOTICE.** Reusable experimental controls remain useful where consistent with QA Evaluation Contract v1, but A/B/C/D examples are historical. Active DP-00 is R1 versus R3, with R1+@ evaluated only as an R1 tactic realization.
+
+## QA Contract v1 authority
+
+This reusable methodology consumes QA Evaluation Contract v1. It may control experiments and report diagnostics, but it may not redefine a QA metric, formula, denominator, population, target, score band, boundary, failure treatment, or reference environment. DP-00 QA-01~04 examples below retain their historical meanings only.
+
 ## Purpose
 
 This document defines how VIA compares SW architecture alternatives without allowing stochastic AI/dependency behavior, benchmark-fixture artifacts or topology-specific measurement boundaries to dominate the conclusion.

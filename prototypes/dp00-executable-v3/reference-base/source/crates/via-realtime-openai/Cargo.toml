@@ -1,0 +1,77 @@
+[package]
+name = "via-realtime-openai"
+description = "VIA's OpenAI / Azure / litellm realtime provider, ported from ARGO's openai_live.rs: the dialect, the GA and pre-GA session schemas, and the candidate walk with its first-frame probe."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The provider and protocol traits, the session machine, `Transport`,
+# `RealtimeError`, `ErrorClass`, both wire dialects and the shared inactivity
+# closure. Not one of those is restated here — this crate owns the dialect and
+# the connect walk, and nothing else.
+via-realtime = { workspace = true }
+
+# The `openai` provider row (key, label, aliases, default endpoint, identity
+# shape) and the configuration-signature hash. The table is the catalog's.
+via-catalog = { workspace = true }
+
+# `Config` / `RealtimeFrontend` — the environment reading this provider is
+# configured from — and `Secret`, so a provider's `Debug` cannot print a key.
+via-core = { workspace = true }
+
+# Every sentence a person or the model reads.
+via-i18n = { workspace = true }
+
+# `SampleRate::HZ_24000` is the rate both halves of the OpenAI Realtime audio
+# contract run at, and `via-audio` already owns the constant.
+via-audio = { workspace = true }
+
+# `preserve_order` carries from the workspace table and is load-bearing twice:
+# the `session.update` body goes on the wire in the order ARGO's payload builder
+# declares it, and the GA/pre-GA repair must be a byte-identical resend.
+serde_json = { workspace = true }
+
+# The candidate walk owns its own socket, because it needs the three things
+# `Transport::connect` deliberately discards: the `tungstenite::Error::Http`
+# discriminant (retry only on an HTTP rejection), the rejected handshake's body
+# and `x-ms-error-code` (the diagnosis), and the raw frames of the first-frame
+# probe.
+tokio-tungstenite = { workspace = true }
+
+# `timeout_at` for the probe deadline, `Instant` for the connect budget, and the
+# writer / reader tasks the in-session schema repair needs a way back into.
+tokio = { workspace = true }
+
+# `Sink` / `Stream` adapters: the wrapped transport counts outbound
+# `response.create`s on the way out and repairs, filters and normalises frames
+# on the way in.
+futures = { workspace = true }
+
+# ARGO's `[live]` log markers, kept verbatim so the same one-glance diagnostics
+# work against VIA.
+tracing = { workspace = true }
+
+# Query-value encoding that leaves RFC 3986 unreserved characters literal. See
+# the workspace manifest for why `%2D` inside `api-version=` is not worth the
+# risk.
+percent-encoding = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+# `tests/common` deserializes `docs/reference/contracts.json` into a typed
+# record so no contract value is ever retyped into a test.
+serde = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+futures = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+tokio-tungstenite = { workspace = true }
+via-realtime = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

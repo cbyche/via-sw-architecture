@@ -1,5 +1,7 @@
 # AA-026 — DP-00 Trade-space Synthesis and Conditional Architecture Guidance
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## 1. Status
 
 **Architecture Analysis Record — final DP-00 comparative synthesis.**
@@ -81,6 +83,16 @@ remaining correctness and qualification work is explicit remediation evidence,
 not missing comparative evidence.
 
 ## 5. QA-01 synthesis
+
+> Historical-evidence note (AA-028): this section remains the authoritative
+> interpretation of the frozen R1–R4 campaign. `DP00-QA01-REFERENCE-V1` is the
+> newer primary design-time methodology and directly covers C's Fast Path. It
+> does not retroactively change the values or claims below, and it does not
+> change this document's deferred-selection disposition.
+> AA-028 reports that evidence in two architecture views: A0/B0 for primary
+> execution-boundary placement, and C/B1/D1 for bounded capability
+> accommodation. The historical four-candidate table below remains a
+> cross-stage diagnostic.
 
 R1–R4 are synthetic Model/Agent/Tool sensitivity profiles. They establish how
 the frozen topologies react to dependency-cost regimes; they do not establish

@@ -1,0 +1,22 @@
+[package]
+name = "via-arch-test"
+description = "The crate-graph gate: docs/architecture.md §9's layer bands asserted against real cargo metadata edges."
+# Never published. This crate exists to fail CI, not to be depended on.
+publish = false
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The whole point of this crate over upstream's regex: real resolver edges.
+cargo_metadata = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+# `tests/metadata_reader.rs` builds a throwaway workspace on disk and reads it
+# back, so the reader is proved against cargo rather than against a mock.
+tempfile = { workspace = true }

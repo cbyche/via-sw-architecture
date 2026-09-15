@@ -1,0 +1,43 @@
+[package]
+name = "via-context"
+description = "VIA's Context Engine: the typed ContextPack, the referent registry, ordered deixis over an injected screen source, and provenance-driven fencing."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `SessionMode` — `interface` is the mode this crate makes real, and the mode
+# is a protocol type rather than a runtime flag.
+via-protocol = { workspace = true }
+# The blocks this crate wraps rather than re-derives: `user_preferences_section`,
+# `memory_section`, `runtime_context_section`, `build_recent_conversation_context`,
+# plus the string primitives (`clean`, `trim`, `bounded_code_points`) and the
+# resolution caps (`MAX_RESULT_CANDIDATES`, `MAX_ITEM_CHARS`) the notes ladder
+# already fixed. Reimplementing any of them would be a second copy of a working
+# implementation.
+via-conversation = { workspace = true }
+# The two model-facing sentences this crate composes: the fence's framing line
+# and the fenced-block truncation marker.
+via-i18n = { workspace = true }
+
+# The pack, the registry and the deixis view are all serialized — into
+# `via.log/v1` records, into a host frame, and into test snapshots.
+serde = { workspace = true }
+# Insertion order is observable three times over: the order sections render in,
+# the order referents are reported as candidates in, and the eviction order of
+# the bounded registry (oldest binding first). A sorted map would answer all
+# three differently.
+indexmap = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

@@ -1,5 +1,11 @@
 # Base Architecture vs Tactic Evaluation
 
+> **LEGACY / HISTORICAL DP-00 METHODOLOGY RECORD.** A/B/C/D references below retain their original campaign meaning. For active R1/R3 candidates and the R1+@ tactic boundary, use `../architecture/decision-points/vnext/DP-00-primary-reasoning-execution-boundary.md` and `dp00-vnext-evaluation-protocol-v1.md`.
+
+## QA Contract v1 authority
+
+The architecture-versus-tactic separation remains reusable. The QA-01~04 names and model-call scoring examples below are legacy DP-00 context, not current QA definitions. Every future comparison consumes `docs/evaluation/qa-contracts/v1/README.md` without DP-local targets or score tables.
+
 ## Status
 
 **DP-00 Evaluation Methodology — Pre-Prototype / Pre-Pilot**

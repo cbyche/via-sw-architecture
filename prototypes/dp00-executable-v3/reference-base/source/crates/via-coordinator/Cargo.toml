@@ -1,0 +1,96 @@
+[package]
+name = "via-coordinator"
+description = "The delegation envelope VIA hands a backend agent, the exact algorithm that reads its reply back, the permission broker in front of it, and the two guards that keep one owner's coordinator session serial."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `WorkStatus` — a delegation's status and the Work vocabulary are one
+# vocabulary, and `via-work` already spells it. Nothing is restated.
+via-protocol = { workspace = true }
+# `Config`: the request timeout, the permission mode and the locale, read once
+# at composition through `CoordinatorProfile::configured`.
+via-core = { workspace = true }
+# Every sentence a model or an operator reads. This crate holds exactly one
+# model-visible literal of its own — `BACKEND_AGENT_INSTRUCTIONS`, which
+# upstream does not localize either — and every other string comes from here.
+via-i18n = { workspace = true }
+# The seam this crate drives: `DownstreamAgent` / `HarnessSession` /
+# `SessionKey::coordinator` / `CancelScope` / `CancelOutcome`, plus
+# `text::{clean, bounded}`.
+via-downstream = { workspace = true }
+# `parse_coordinator_payload`, `native_tool_output`,
+# `normalize_coordinator_content`, `coordinator_presentation` and the
+# `session/request_permission` option-kind mapping. Upstream keeps all five in
+# `acp-backend-session-utils.mjs` / `permission-broker.mjs`; `via-acp` shipped
+# them, so this crate calls them rather than owning a second copy of a
+# catalogued algorithm.
+via-acp = { workspace = true }
+# `PendingPermission` (the catalogued permission payload), `Presentation` /
+# `InlineBlock` / `InlineFormat`, `CancellationFact` / `ReconciliationLedger`,
+# `NewWork` and `coordinator_lane`.
+via-work = { workspace = true }
+# `is_session_tool` — the permission broker's auto-approve allow-list and its
+# three matcher shapes. Imported, never restated: `docs/architecture.md` §13
+# calls a partial rename here one of the two renames in the port that wedge the
+# coordinator. Also `SessionToolContext`, which this crate implements.
+via-mcp-tools = { workspace = true }
+# `MemoryDocument` and `Message` are the exact shapes upstream's
+# `buildCoordinatorPrompt` reads `userMemories` and `conversationContext` in.
+via-conversation = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order`: the coordination envelope's field order and the decision
+# schema's property order are both model-visible contracts, and a
+# `BTreeMap`-backed map would sort them.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# The two owning tasks (`docs/architecture.md` §11): the keyed serial executor
+# and the permission broker.
+tokio = { workspace = true }
+# `TaskTracker` for the delegation runners, so nothing is orphaned at shutdown.
+tokio-util = { workspace = true }
+async-trait = { workspace = true }
+
+# `<protocol>_run_<uuid>` and `prompt_<uuid>`.
+uuid = { workspace = true }
+# The envelope's `timestamp` and the reconciliation fact's `confirmed_at`.
+chrono = { workspace = true }
+# The delegation registry is iterated in creation order, and the native
+# tool-call merge map is upstream's insertion-ordered `Map`.
+indexmap = { workspace = true }
+# `/sessions_(spawn|send)/`, matched against a third-party tool name.
+regex = { workspace = true }
+once_cell = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+# The scripted harness the delegation ladder is driven against.
+via-downstream = { workspace = true, features = ["testing"] }
+# `backend_definition` — the test double declares itself as a *catalogued*
+# backend chosen by property, so `HarnessDescriptor::declare` validates it the
+# way a real one is validated.
+via-catalog = { workspace = true }
+# The empty event stream the test harness's sessions return.
+futures = { workspace = true }
+# `start_paused = true`, so the serialization and cancellation ladders run in
+# microseconds and deterministically.
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"
+
+[features]
+# `testing` is on by default so this crate's own integration tests reach the
+# doubles under a bare `cargo test -p via-coordinator`, mirroring
+# `via-downstream`, `via-work` and `via-mcp-tools`.
+default = ["testing"]
+testing = []

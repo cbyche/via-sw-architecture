@@ -1,5 +1,7 @@
 # AA-025 — DP-00 R1–R4 Comparative Architecture Campaign Clean Rerun
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Disposition
 
 `COMPARATIVE CAMPAIGN COMPLETE — READY FOR DP-00 DECISION SYNTHESIS`

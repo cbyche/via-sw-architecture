@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/qa-v1-population-manifest.schema.json",
+  "title": "VIA QA-v1 materialized population manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "population_id",
+    "qa_id",
+    "status",
+    "population_kind",
+    "actual_size",
+    "semantic_family_count",
+    "generation_rule_version",
+    "family_manifest_hash",
+    "materialized_instance_hash",
+    "oracle_hash",
+    "reference_fixture_hash",
+    "artifacts"
+  ],
+  "properties": {
+    "population_id": {"type": "string", "minLength": 1},
+    "qa_id": {"type": "string", "pattern": "^QA-(0[1-9]|1[0-2])$"},
+    "status": {"const": "frozen"},
+    "population_kind": {"enum": ["materialized_cases", "fixed_workload_timeline"]},
+    "actual_size": {"type": ["integer", "null"], "minimum": 1},
+    "workload_identity": {"type": "string", "minLength": 1},
+    "semantic_family_count": {"type": "integer", "minimum": 1},
+    "generation_rule_version": {"type": "string", "minLength": 1},
+    "family_manifest_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "materialized_instance_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "oracle_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "reference_fixture_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["families", "instances", "oracles"],
+      "properties": {
+        "families": {"type": "string", "minLength": 1},
+        "instances": {"type": "string", "minLength": 1},
+        "oracles": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"population_kind": {"const": "fixed_workload_timeline"}}},
+      "then": {
+        "required": ["workload_identity"],
+        "properties": {"actual_size": {"type": "null"}}
+      },
+      "else": {"properties": {"actual_size": {"type": "integer", "minimum": 1}}}
+    }
+  ]
+}

@@ -1,5 +1,9 @@
 # DP-00 Experimental Boundary
 
+> **LEGACY / HISTORICAL A/B/C/D EXPERIMENT BOUNDARY.** Preserve this file for campaign provenance; do not use it as the active R1/R3 boundary. The next-task boundary is `dp00-vnext-evaluation-protocol-v1.md`.
+
+> **HISTORICAL EVIDENCE — LEGACY QA SEMANTICS.** This frozen DP-00 artifact predates QA Evaluation Contract v1. Its QA identifiers, populations, and scoring rules remain valid only for its original campaign and are not current global QA authority. Do not relabel its results as QA-v1 evidence.
+
 ## Status
 
 **Canonical Benchmark Contract Checkpoint — Pre-Prototype / Pre-Pilot**

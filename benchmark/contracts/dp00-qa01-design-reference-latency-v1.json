@@ -1,0 +1,40 @@
+{
+  "contract_id": "dp00-qa01-design-reference-latency-v1",
+  "status": "DESIGN_TIME_REFERENCE_NOT_PRODUCTION_MEASUREMENT",
+  "as_of_date": "2026-09-14",
+  "random_seed": 20260914,
+  "latency_realizations_per_scenario_alternative_profile": 1000,
+  "model_formula": "TTFT + (output_tokens - 1) * TPOT",
+  "model_fairness": "Within one profile every semantic generation in A/B/C/D uses the same TTFT/TPOT distribution. Model placement policy is not varied.",
+  "operations": {
+    "SEMANTIC_INTERPRETATION":{"output_tokens":24,"provenance":"P3_ENGINEERING_ASSUMPTION"},
+    "EXECUTION_ROUTE_DECISION":{"output_tokens":16,"provenance":"P3_ENGINEERING_ASSUMPTION"},
+    "SHORT_EXECUTOR_REASONING":{"output_tokens":32,"provenance":"P3_ENGINEERING_ASSUMPTION"},
+    "COMBINED_EXECUTION_DECISION":{"output_tokens":48,"provenance":"P3_ENGINEERING_ASSUMPTION"}
+  },
+  "models": [
+    {"profile_id":"QWEN3_SMALL_REFERENCE","model":"Qwen3-1.7B","architecture":"dense","evidence_type":"P1 throughput plus P3 distribution assumptions","evidence_version":"Qwen3 speed_benchmark.md accessed 2026-09-14","official_sglang_bf16_tokens_per_second":227.80,"tpot_p50_ms":4.3898,"tpot_p95_ms":5.4873,"ttft_p50_ms":35,"ttft_p95_ms":70,"published_or_assumed":"throughput published; TTFT and distribution spread assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000},
+    {"profile_id":"QWEN3_MEDIUM_REFERENCE","model":"Qwen3-8B","architecture":"dense","evidence_type":"P1 throughput plus P3 distribution assumptions","evidence_version":"Qwen3 speed_benchmark.md accessed 2026-09-14","official_sglang_bf16_tokens_per_second":81.73,"tpot_p50_ms":12.2354,"tpot_p95_ms":15.2942,"ttft_p50_ms":70,"ttft_p95_ms":140,"published_or_assumed":"throughput published; TTFT and distribution spread assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000},
+    {"profile_id":"QWEN3_30B_A3B_REFERENCE","model":"Qwen3-30B-A3B","architecture":"mixture-of-experts","evidence_type":"P1 throughput plus P3 distribution assumptions","evidence_version":"Qwen3 speed_benchmark.md accessed 2026-09-14","official_sglang_bf16_tokens_per_second":137.18,"tpot_p50_ms":7.2897,"tpot_p95_ms":9.1121,"ttft_p50_ms":50,"ttft_p95_ms":100,"published_or_assumed":"throughput published; TTFT and distribution spread assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000}
+  ],
+  "model_evidence": {
+    "provenance":"P1_PUBLISHED_REFERENCE",
+    "source":"QwenLM/Qwen3 speed_benchmark.md",
+    "url":"https://github.com/QwenLM/Qwen3/blob/main/docs/source/getting_started/speed_benchmark.md",
+    "conditions":"SGLang 0.4.6.post1, BF16, batch 1, minimum GPU count, NVIDIA H20 96GB; input length 1; 2048 generated tokens; tokenizer initialization skipped",
+    "published_metric_caution":"Qwen defines speed as (prompt tokens + generated tokens) / elapsed time. With input length 1 and 2048 generated tokens it is used only as a first-order TPOT approximation, not as a measured TPOT trace.",
+    "transformation":"TPOT p50 = 1000 / published tokens_per_second; TPOT p95 = 1.25 * p50. The 1.25 variability factor is P3.",
+    "ttft_provenance":"P3_ENGINEERING_ASSUMPTION because no matching official TTFT percentile set was found for all three profiles under the same benchmark conditions",
+    "distribution_fit":"Independent log-normal TTFT and TPOT distributions fit exactly from each stated p50 and p95; sigma = ln(p95/p50)/1.6448536269514722, mu = ln(p50)."
+  },
+  "common_primitives": {
+    "V":{"reference_ms":500,"distribution":"CONSTANT","distribution_parameters":{"value_ms":500},"provenance":"P1_PUBLIC_API_DEFAULT_CONFIGURATION","source":"OpenAI Realtime API server_vad silence_duration_ms default","evidence_version":"API reference accessed 2026-09-14","url":"https://platform.openai.com/docs/api-reference/realtime-server-events/conversation/item/input_audio_transcription/completed","published_or_assumed":"published default configuration","random_seed":"not applicable to constant","sample_count_per_scenario_alternative":1000,"claim_boundary":"Design-time Acoustic-EOS/end-of-speech detection reference; not a measured OpenAI latency."},
+    "H":{"reference_ms":5,"distribution":"CONSTANT","distribution_parameters":{"value_ms":5},"provenance":"P3_ENGINEERING_ASSUMPTION","source":"engineering assumption — deployment mechanism not frozen","evidence_version":"v1 as of 2026-09-14","published_or_assumed":"assumed","random_seed":"not applicable to constant","sample_count_per_scenario_alternative":1000,"sensitivity_ms":[1,5,20]},
+    "X1":{"reference_ms":20,"distribution":"LOGNORMAL_P50_P95","p50_ms":20,"p95_ms":30,"distribution_parameters":{"mu":"ln(20)","sigma":"ln(30/20)/1.6448536269514722"},"provenance":"P3_ENGINEERING_ASSUMPTION","source":"immediate/local control effect assumption","evidence_version":"v1 as of 2026-09-14","published_or_assumed":"assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000},
+    "X2":{"reference_ms":50,"distribution":"LOGNORMAL_P50_P95","p50_ms":50,"p95_ms":75,"distribution_parameters":{"mu":"ln(50)","sigma":"ln(75/50)/1.6448536269514722"},"provenance":"P3_ENGINEERING_ASSUMPTION","source":"lightweight local query/read assumption","evidence_version":"v1 as of 2026-09-14","published_or_assumed":"assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000},
+    "X3":{"reference_ms":100,"distribution":"LOGNORMAL_P50_P95","p50_ms":100,"p95_ms":150,"distribution_parameters":{"mu":"ln(100)","sigma":"ln(150/100)/1.6448536269514722"},"provenance":"P3_ENGINEERING_ASSUMPTION","source":"lightweight status/specialist operation assumption","evidence_version":"v1 as of 2026-09-14","published_or_assumed":"assumed","fitting_method":"log-normal fit from stated p50/p95","random_seed":20260914,"sample_count_per_scenario_alternative":1000}
+  },
+  "effect_sensitivity_multipliers":[0.5,1.0,2.0],
+  "sampling":"Synthetic latency realizations generated deterministically from keyed SHA-256-derived seeds; no generated value is a measured trace.",
+  "provenance_levels":{"P1":"published/public reference evidence","P2":"repository-derived structural fact","P3":"explicit engineering assumption"}
+}

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "qa-v1-result-envelope.schema.json",
+  "title": "VIA QA-v1 Evaluation Result Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["qa_id", "population_id", "population_manifest_hash", "official_scalar_metric", "raw_metric", "unit", "direction", "score", "target_met", "eligibility_status", "qualification_status", "failed_gates", "diagnostics", "provenance"],
+  "properties": {
+    "qa_id": {"type": "string", "pattern": "^QA-(0[1-9]|1[0-2])$"},
+    "population_id": {"type": "string", "pattern": "^qa(0[1-9]|1[0-2])-[a-z0-9-]+-v1$"},
+    "population_manifest_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "official_scalar_metric": {"type": "string", "minLength": 1},
+    "raw_metric": {"type": ["number", "null"]},
+    "unit": {"enum": ["seconds", "milliseconds", "percent", "x"]},
+    "direction": {"enum": ["lower_is_better", "higher_is_better"]},
+    "score": {"type": ["integer", "null"], "minimum": 0, "maximum": 5},
+    "target_met": {"type": ["boolean", "null"]},
+    "eligibility_status": {"enum": ["ELIGIBLE", "INCOMPLETE_POPULATION"]},
+    "qualification_status": {"enum": ["QUALIFIED", "DISQUALIFIED", "NOT_EVALUATED"]},
+    "failed_gates": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "diagnostics": {"type": "object"},
+    "provenance": {"$ref": "#/$defs/provenance"}
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["qa_contract_id", "qa_contract_hash", "reference_environment_id", "reference_environment_hash", "corpus_manifest_id", "corpus_manifest_hash", "architecture_commit", "dp_id", "alternative_id", "tactic_package", "run_id", "evidence_mode"],
+      "properties": {
+        "qa_contract_id": {"const": "qa-evaluation-contract-v1"},
+        "qa_contract_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "reference_environment_id": {"const": "via-reference-environment-v1"},
+        "reference_environment_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "corpus_manifest_id": {"const": "qa-v1-corpus-manifest-v1"},
+        "corpus_manifest_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "architecture_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "dp_id": {"type": "string", "pattern": "^DP-[0-9]{2,}$"},
+        "alternative_id": {"type": "string", "minLength": 1},
+        "tactic_package": {"type": ["string", "null"]},
+        "run_id": {"type": "string", "minLength": 1},
+        "evidence_mode": {"enum": ["executed", "semantic_replay", "design_time_simulation", "structural_analysis"]}
+      }
+    }
+  }
+}

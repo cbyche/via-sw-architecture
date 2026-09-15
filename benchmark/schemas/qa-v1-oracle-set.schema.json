@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/qa-v1-oracle-set.schema.json",
+  "title": "VIA QA-v1 population oracle set",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["population_id", "oracles"],
+  "properties": {
+    "population_id": {"type": "string", "pattern": "^qa(0[1-9]|1[0-2])-[a-z0-9-]+-v1$"},
+    "oracles": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "oneOf": [
+          {"type": "object", "minProperties": 1},
+          {"type": "string", "minLength": 1}
+        ]
+      }
+    }
+  }
+}

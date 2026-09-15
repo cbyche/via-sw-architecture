@@ -1,0 +1,34 @@
+[package]
+name = "via-i18n"
+description = "VIA's trilingual message catalog: en (default), zh (upstream's own text) and ko."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+# `assets/i18n/*.json` is the source of truth for the catalog and `build.rs`
+# reads it, so it must travel with a published crate.
+include = ["src/**/*.rs", "build.rs", "assets/i18n/*.json"]
+
+# via-i18n is what every other crate localizes through, so it takes no VIA
+# dependency and no runtime dependency at all. The catalog is compiled in.
+[dependencies]
+
+[build-dependencies]
+# Only to parse `assets/i18n/*.json` at build time. `preserve_order` keeps the
+# authored key order stable, which keeps the generated file byte-stable across
+# rebuilds.
+serde_json = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+# Tests re-read the catalog assets and `docs/reference/contracts.json` so a
+# contract value is compared against the catalogue rather than a retyped copy.
+serde_json = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

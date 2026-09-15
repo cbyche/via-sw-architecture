@@ -1,0 +1,59 @@
+[package]
+name = "via-downstream"
+description = "VIA's Layer 3 extension point: the DownstreamAgent / HarnessSession seam, the seven-flag backend capability contract and its registration-time validation, the adapter-normalised session event vocabulary, and confirmed cancellation."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The backend table. A harness id is data that must resolve through the twelve
+# catalogued definitions, so registration validates against this crate rather
+# than against a second list of its own.
+via-catalog = { workspace = true }
+# Configuration failures a driver hits while opening a session (`ACP_COMMAND`
+# unset for the generic ACP backend, an unsupported permission mode) travel
+# through `HarnessError` without being flattened into a string.
+via-core = { workspace = true }
+# Every user-facing sentence. The ten driver-validation refusals are upstream's
+# own text, reproduced in the `backend.*` keys.
+via-i18n = { workspace = true }
+# `WorkState` — the Work vocabulary a cancellation outcome projects into.
+via-protocol = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order` matters here: `SessionEvent` serializes to the catalogued
+# `backend.activity` payload, whose field order is observable, and
+# `categoryForTool` hashes `JSON.stringify(rawInput)` whose key order is JS
+# insertion order.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# The two traits are async and used as `dyn` objects.
+async-trait = { workspace = true }
+# `HarnessSession::events` yields a `BoxStream`.
+futures = { workspace = true }
+
+# Registration order is the order harnesses were declared, and `ids()` reports
+# it. A `HashMap` would make that order arbitrary per process.
+indexmap = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+
+[features]
+# `testing` is on by default so that this crate's own integration tests reach
+# the double under a bare `cargo test -p via-downstream`, and so a sibling can
+# depend on `via-downstream` without restating the feature. A build that wants
+# none of it takes `default-features = false`.
+default = ["testing"]
+testing = []
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

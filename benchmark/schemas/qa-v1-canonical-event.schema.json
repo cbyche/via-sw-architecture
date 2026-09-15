@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/qa-v1-canonical-event.schema.json",
+  "title": "VIA QA-v1 DP-neutral canonical event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "event_type", "timestamp", "run_id", "payload"],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "event_type": {
+      "enum": [
+        "UserSpeechOnset",
+        "AcousticEOS",
+        "ExplicitInputCommitted",
+        "CanonicalTurnCommitted",
+        "EvidenceVersionObserved",
+        "SemanticDecisionCommitted",
+        "AgentSelected",
+        "AgentSessionMapped",
+        "ExecutionMapped",
+        "UserTaskStateChanged",
+        "ApprovalStateChanged",
+        "TaskEventAvailable",
+        "AgentProgressObserved",
+        "AgentResultObserved",
+        "ResponseFactCommitted",
+        "ResponseVersionCommitted",
+        "TextDetailVisible",
+        "AudioSegmentPlaybackStarted",
+        "AudioFactDelivered",
+        "AudioPlaybackStopped",
+        "SensitiveScopeGranted",
+        "SensitiveScopeExposed",
+        "ForbiddenDisclosureConfirmed",
+        "UnauthorizedStateChangeConfirmed",
+        "WrongPrincipalApprovalConfirmed",
+        "MemoryResidencyChanged",
+        "FaultOnset",
+        "RecoveryStateChanged",
+        "TraceCausalLink"
+      ]
+    },
+    "timestamp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["clock_id", "value", "unit"],
+      "properties": {
+        "clock_id": {"type": "string", "minLength": 1},
+        "value": {"type": "number", "minimum": 0},
+        "unit": {"enum": ["seconds", "milliseconds"]}
+      }
+    },
+    "run_id": {"type": "string", "minLength": 1},
+    "turn_id": {"type": ["string", "null"]},
+    "task_id": {"type": ["string", "null"]},
+    "execution_id": {"type": ["string", "null"]},
+    "response_id": {"type": ["string", "null"]},
+    "delivery_id": {"type": ["string", "null"]},
+    "principal_id": {"type": ["string", "null"]},
+    "payload": {"type": "object"},
+    "causal_parent_event_ids": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  }
+}

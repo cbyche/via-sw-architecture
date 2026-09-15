@@ -1,0 +1,10 @@
+{
+  "oracle_contract_id": "DP00-QA01-REFERENCE-ORACLES-V1",
+  "applies_to": "DP00-QA01-REFERENCE-V1",
+  "architecture_neutrality": "Correctness is the common useful outcome and absence of prohibited effects. Candidate topology conformance is evaluated against the separately frozen trace contract; the outcome oracle never requires every candidate to use VIA Fast, ARGO, or a Specialist.",
+  "common_rules": {
+    "success": ["exact scenario outcome predicate is observed", "result/effect is bound to the scenario episode", "earliest satisfying observation is Useful Outcome"],
+    "prohibited": ["wrong capability effect", "wrong subject or target", "extra state-changing effect", "generic acknowledgement counted as Useful Outcome"]
+  },
+  "scenario_oracles": "Each scenarios.json entry supplies capability, context fixture, and outcome predicate. F3 specialist is a capability fact, not a universal route mandate: B reaches it through ARGO delegation while A/C and D may route directly under their frozen definitions."
+}

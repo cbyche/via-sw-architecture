@@ -1,0 +1,99 @@
+[package]
+name = "via-voice"
+description = "VIA's voice session layer: the nine frontend tools, the tool-call handler, the Injection Gate, turn correlation, response guards, input arbitration, the sleep controller and session-mode dispatch."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The 52 wire event names, `SessionMode`, `WorkStatus` and its transition graph.
+# Nothing in this crate re-declares an event name or a status.
+via-protocol = { workspace = true }
+# Every sentence a person or the model reads: the nine tool descriptions, the
+# tool failure messages, the response instructions, the announcement envelope.
+via-i18n = { workspace = true }
+# `Config` (every announcement, sleep and wake-word bound), `memory_scopes`
+# (the two documents and their aliases), `is_allowed_origin`.
+via-core = { workspace = true }
+# `PlaybackCursor` — the Injection Gate's drain predicate — plus the PCM16
+# conventions the audio frames on this socket use.
+via-audio = { workspace = true }
+# The Work record, the manager, the admission scheduler and the notification
+# claim/renew/release lease the announcement manager holds.
+via-work = { workspace = true }
+# `Coordinator` for delegation, `PermissionBroker`'s decision vocabulary, and
+# `coordinator_session_lane`.
+via-coordinator = { workspace = true }
+# The memory and notes tool *implementations*, `ConversationSync`, and the
+# `<user_preferences>` / `<user_memory>` / `<runtime_context>` /
+# `<recent_conversation>` context blocks. This crate owns their schemas and
+# descriptions and calls into that crate for the behaviour.
+via-conversation = { workspace = true }
+# The detector seam, `WakeWordSettings`'s per-locale resolution, and the
+# scripted double this crate's own tests drive it through. Only the
+# **default** build's pipeline half is reachable here — `sleep.rs` never
+# names `--features sherpa`, so enabling it stays a composition-root decision
+# (`docs/adr/0001-placement.md`).
+via-wake-word = { workspace = true }
+# `audio.append`'s payload is base64 on the wire; the wake-word detector
+# boundary is where it is decoded, mirroring upstream's own `accept(audio,
+# sampleRate)` (`sherpa-detector.mjs:69`, `pcm16Base64ToFloat32`).
+base64 = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order`: every tool output here is serialized straight into the
+# realtime model's function output, and its field order is catalogued.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+# The response-context map, the announcement's pending map and the input asset
+# registry are all insertion-ordered: eviction is oldest-first by insertion,
+# and a sorted map would evict the wrong entry.
+indexmap = { workspace = true }
+
+# Turn ids (`voice-<epoch>-<generation>` / `text_<uuid>`), the notification
+# claimant id, and the response correlation request id.
+uuid = { workspace = true }
+# `completed_at` in the announcement block, `execute_at` parsing, and the
+# `get_current_time` snapshot.
+chrono = { workspace = true }
+chrono-tz = { workspace = true }
+# Input-asset fingerprints: `sha256(mime \0 url)`.
+sha2 = { workspace = true }
+hex = { workspace = true }
+# The action-promise guard's three regexes and the data-URL parser.
+regex = { workspace = true }
+once_cell = { workspace = true }
+# Attachment URL protocol allow-listing.
+url = { workspace = true }
+
+# Three of the four concurrency invariants in this crate get an owning task
+# (`docs/architecture.md` §11): the announcement manager, the input
+# arbitration and the turn transcripts.
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+async-trait = { workspace = true }
+futures = { workspace = true }
+
+# `voice_client.connected`, `realtime.blocked`, `input.suspended`, folded into
+# the `via.log/v1` record by `via_log::ViaLayer`.
+tracing = { workspace = true }
+
+[dev-dependencies]
+# Tests only, and only for one assertion: `tests/context_pack.rs` proves that
+# `via_context::ContextPack::instructions()` is byte-for-byte what
+# `assemble_frontend_instructions` produces. `docs/architecture.md` §9 lets
+# Layer 1 depend on Layer 2 and not the reverse, so this crate is the only one
+# that can see both sides of that equality. Nothing that ships is added.
+via-context = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+serial_test = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

@@ -1,5 +1,7 @@
 # Evolution Exercise Suite
 
+> **HISTORICAL DP-00 QA-03 LINEAGE.** The QA-03 flexibility meaning below predates QA Contract v1. Preserve its contracts and evidence under that identity; future general evolution containment uses QA-05 and a new frozen population.
+
 The prospectively frozen DP-00 QA-03 v1 contract is defined by:
 
 - `docs/evaluation/dp00-qa03-flexibility-experiment-protocol-v1.md`

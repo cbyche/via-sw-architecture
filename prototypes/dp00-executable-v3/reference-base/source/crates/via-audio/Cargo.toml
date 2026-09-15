@@ -1,0 +1,30 @@
+[package]
+name = "via-audio"
+description = "Audio primitives for VIA: PCM16/f32 conversion, resampling, WAV, frame buffering and duration accounting."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[features]
+# Both optional halves are on by default: every local realtime provider needs
+# resampling and the `mock` provider needs WAV. A consumer that wants neither
+# (a wire-only build that just moves base64 PCM16 around) can take
+# `default-features = false` and keep the crate dependency-free.
+default = ["resample", "wav"]
+resample = ["dep:rubato"]
+wav = ["dep:hound"]
+
+[dependencies]
+thiserror = { workspace = true }
+rubato = { workspace = true, optional = true }
+hound = { workspace = true, optional = true }
+
+[dev-dependencies]
+tempfile = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DP-00 typed causal event v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "event_type", "logical_timestamp_ms", "owning_component", "authority", "user_task_id", "execution_id", "result_id", "result_version", "causal_parent_event_ids", "interface_boundary_crossed", "data"],
+  "properties": {
+    "event_id": {"type": "string"}, "event_type": {"type": "string"},
+    "logical_timestamp_ms": {"type": "number"}, "owning_component": {"type": "string"},
+    "authority": {"type": "string"}, "user_task_id": {"type": "string"},
+    "execution_id": {"type": ["string", "null"]}, "result_id": {"type": ["string", "null"]},
+    "result_version": {"type": ["integer", "null"]}, "causal_parent_event_ids": {"type": "array", "items": {"type": "string"}},
+    "interface_boundary_crossed": {"type": ["string", "null"]}, "data": {"type": "object"}
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/qa-v1-canonical-observation.schema.json",
+  "title": "VIA QA-v1 canonical case observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "observation_id",
+    "qa_id",
+    "population_id",
+    "evidence_mode",
+    "measurement"
+  ],
+  "properties": {
+    "observation_id": {"type": "string", "minLength": 1},
+    "qa_id": {"type": "string", "pattern": "^QA-(0[1-9]|1[0-2])$"},
+    "population_id": {"type": "string", "pattern": "^qa(0[1-9]|1[0-2])-[a-z0-9-]+-v1$"},
+    "evidence_mode": {
+      "enum": [
+        "executed",
+        "semantic_replay",
+        "design_time_simulation",
+        "structural_analysis"
+      ]
+    },
+    "measurement": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "events": {
+      "type": "array",
+      "items": {"$ref": "qa-v1-canonical-event.schema.json"}
+    }
+  }
+}

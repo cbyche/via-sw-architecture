@@ -26,6 +26,15 @@ later. A process split or policy value alone is not sufficient.
 - QA:
 - Mandatory / supporting constraints:
 
+## QA Evaluation Contract v1 binding
+
+- QA contract: `qa-evaluation-contract-v1`
+- Reference environment: `via-reference-environment-v1`
+- Corpus manifest: `qa-v1-corpus-manifest-v1`
+- Primary QAs from QA Contract v1: <valid QA-v1 IDs>
+
+This DP may nominate Primary QAs. It must not define or override a QA metric, formula, denominator, evaluation population, target, score bands, measurement boundary, failure/missing-data treatment, or official reference environment.
+
 ## Parent constraints and residual choice
 
 - What a higher DP or approved requirement already fixes:
@@ -107,9 +116,9 @@ later. A process split or policy value alone is not sufficient.
 ## Benchmark plan
 
 - Dataset:
-- Metrics:
+- Contract QA evidence to collect (no DP-local metric or score definition):
 - Runs:
-- Environment:
+- Reference Environment v1 controls:
 
 ## Results
 

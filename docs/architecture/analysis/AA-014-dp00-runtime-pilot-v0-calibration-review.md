@@ -1,5 +1,7 @@
 # AA-014 — DP-00 Runtime Pilot v0 Calibration Review
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## 1. Purpose and Scope
 
 This record reviews measurement-system calibration after DP-00 Runtime Pilot v0. It does not select an A/B/C/D winner, produce a 0–5 architecture score, change an architecture, scenario, Oracle, eligibility rule, raw-schema meaning, or approved requirement baseline. Insufficient evidence is intentionally classified `DEFER`.

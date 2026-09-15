@@ -1,0 +1,28 @@
+[package]
+name = "via-lock"
+description = "Single-instance Gateway lease held in <configDir>/gateway.lock."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+chrono = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+uuid = { workspace = true }
+
+# The liveness probe is `kill(pid, 0)`. There is no portable std equivalent, and
+# the EPERM/ESRCH distinction is the whole point of the check — see
+# `SignalOutcome`. Windows has no counterpart in the Phase 0 dependency table;
+# see the module docs on `probe`.
+[target.'cfg(unix)'.dependencies]
+nix = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }

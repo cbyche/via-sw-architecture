@@ -1,0 +1,117 @@
+{
+  "runtime.config_header": {
+    "en": "# VIA user configuration",
+    "zh": "# VIA 用户配置",
+    "ko": "# VIA 사용자 설정"
+  },
+  "runtime.config_comment_speech_to_speech": {
+    "en": "# Hugging Face speech-to-speech: change the line above to speech-to-speech and set the service address",
+    "zh": "# Hugging Face speech-to-speech：将上一行改为 speech-to-speech，并设置服务地址",
+    "ko": "# Hugging Face speech-to-speech: 위 줄을 speech-to-speech로 바꾸고 서비스 주소를 설정하세요"
+  },
+  "runtime.config_comment_agent_protocol": {
+    "en": "# Optional: choose a backend Agent; leave empty for realtime voice chat only",
+    "zh": "# 可选：选择后台 Agent；留空时仅使用前台实时语音聊天",
+    "ko": "# 선택: 백엔드 Agent를 고릅니다. 비워 두면 실시간 음성 대화만 사용합니다"
+  },
+  "runtime.config_comment_agent_choices": {
+    "en": "# Available: openclaw, opencode, qoder, qwen, kimi, hermes, codebuddy, codex, claude, deepseek, pi, acp, or none",
+    "zh": "# 可选 openclaw、opencode、qoder、qwen、kimi、hermes、codebuddy、codex、claude、deepseek、pi、acp 或 none",
+    "ko": "# 선택 가능: openclaw, opencode, qoder, qwen, kimi, hermes, codebuddy, codex, claude, deepseek, pi, acp 또는 none"
+  },
+  "runtime.config_comment_permission_mode": {
+    "en": "# Permission mode: native (the backend asks for itself) or full (highest permission; only backends with a safe mapping)",
+    "zh": "# 权限模式：native（后台自行询问）或 full（最高权限；仅支持安全映射的后端）",
+    "ko": "# 권한 모드: native(백엔드가 직접 확인) 또는 full(최고 권한. 안전하게 매핑되는 백엔드만)"
+  },
+  "runtime.config_comment_pi_permission": {
+    "en": "# Pi has no permission-approval mechanism, so full is always in force whatever is configured",
+    "zh": "# Pi 没有权限审批机制，无论配置什么都始终生效 full",
+    "ko": "# Pi에는 권한 승인 절차가 없어 무엇을 설정하든 항상 full이 적용됩니다"
+  },
+  "runtime.config_comment_backend_model": {
+    "en": "# Optional: override the backend model explicitly; leave empty to use the Agent's own model",
+    "zh": "# 可选：显式覆盖后台模型；留空时使用 Agent 原有模型",
+    "ko": "# 선택: 백엔드 모델을 명시적으로 덮어씁니다. 비워 두면 Agent의 기존 모델을 사용합니다"
+  },
+  "runtime.config_comment_backend_agent": {
+    "en": "# Optional: VIA_BACKEND_AGENT=<coordinator Agent ID>",
+    "zh": "# 可选：VIA_BACKEND_AGENT=协调 Agent ID",
+    "ko": "# 선택: VIA_BACKEND_AGENT=<조율 Agent ID>"
+  },
+  "runtime.config_comment_kimi": {
+    "en": "# Kimi Code can reuse its own sign-in, or take the official KIMI_MODEL_* temporary model variables",
+    "zh": "# Kimi Code 可复用原生登录，或设置官方 KIMI_MODEL_* 临时模型变量",
+    "ko": "# Kimi Code는 자체 로그인을 재사용하거나 공식 KIMI_MODEL_* 임시 모델 변수를 설정할 수 있습니다"
+  },
+  "runtime.config_comment_generic_acp": {
+    "en": "# Generic ACP: ACP_COMMAND=your-agent, ACP_ARGS=[\"--acp\"]",
+    "zh": "# 通用 ACP：ACP_COMMAND=your-agent，ACP_ARGS=[\"--acp\"]",
+    "ko": "# 일반 ACP: ACP_COMMAND=your-agent, ACP_ARGS=[\"--acp\"]"
+  },
+  "runtime.config_comment_generic_acp_env": {
+    "en": "# Generic ACP, when it needs extra environment variables: VIA_ACP_FORWARD_ENV=NAME_A,NAME_B",
+    "zh": "# 通用 ACP 如需额外环境变量：VIA_ACP_FORWARD_ENV=NAME_A,NAME_B",
+    "ko": "# 일반 ACP에 추가 환경 변수가 필요하면: VIA_ACP_FORWARD_ENV=NAME_A,NAME_B"
+  },
+  "runtime.config_comment_logging": {
+    "en": "# Optional logging settings: info by default, 10 MiB per file, 5 files kept",
+    "zh": "# 可选日志设置：默认 info、单文件 10 MiB、保留 5 份",
+    "ko": "# 선택 로그 설정: 기본 info, 파일당 10 MiB, 5개 보관"
+  },
+  "runtime.user_md_guidance_1": {
+    "en": "This is the current user's long-term personalization override for the assistant. Record only what the user has explicitly set: how they are addressed, the relationship, expression preferences and default ways of doing things.",
+    "zh": "这是当前用户对助手的长期个性化覆盖。只填写用户明确设定的称呼、关系、表达偏好和默认做法。",
+    "ko": "현재 사용자가 어시스턴트에 적용하는 장기 개인화 설정입니다. 사용자가 분명히 정한 호칭, 관계, 표현 선호, 기본 처리 방식만 적으세요."
+  },
+  "runtime.user_md_guidance_2": {
+    "en": "It can override the default persona in ASSISTANT.md, but it cannot override the operating rules in PROMPT.md.",
+    "zh": "它可以覆盖 ASSISTANT.md 的默认人设，但不能覆盖 PROMPT.md 的运行规则。",
+    "ko": "ASSISTANT.md의 기본 페르소나는 덮어쓸 수 있지만 PROMPT.md의 운영 규칙은 덮어쓸 수 없습니다."
+  },
+  "runtime.user_md_guidance_3": {
+    "en": "Facts that only help understand the user, and should not drive behaviour directly, belong in MEMORY.md.",
+    "zh": "仅用于理解用户、不应直接支配行为的事实请写入 MEMORY.md。",
+    "ko": "사용자를 이해하는 데만 쓰이고 행동을 직접 좌우해서는 안 되는 사실은 MEMORY.md에 적으세요."
+  },
+  "runtime.user_md_guidance_4": {
+    "en": "Do not keep passwords, API keys, verification codes or tokens here.",
+    "zh": "不要在这里保存密码、API Key、验证码或令牌。",
+    "ko": "비밀번호, API Key, 인증번호, 토큰은 여기에 저장하지 마세요."
+  },
+  "runtime.user_md_heading_address": {
+    "en": "## Address and relationship",
+    "zh": "## 称呼与关系",
+    "ko": "## 호칭과 관계"
+  },
+  "runtime.user_md_heading_interaction": {
+    "en": "## Interaction preferences",
+    "zh": "## 交互偏好",
+    "ko": "## 상호작용 선호"
+  },
+  "runtime.memory_md_guidance_1": {
+    "en": "This holds the long-term background the voice assistant has confirmed from conversation. Use plain Markdown.",
+    "zh": "这里保存语音助手从对话中确认的长期背景信息。内容使用普通 Markdown。",
+    "ko": "음성 어시스턴트가 대화에서 확인한 장기 배경 정보를 담습니다. 일반 Markdown을 사용하세요."
+  },
+  "runtime.memory_md_guidance_2": {
+    "en": "Address and interaction preferences belong in USER.md; do not keep passwords, API keys, verification codes or tokens.",
+    "zh": "称呼和交互偏好请写入 USER.md；不要保存密码、API Key、验证码或令牌。",
+    "ko": "호칭과 상호작용 선호는 USER.md에 적으세요. 비밀번호, API Key, 인증번호, 토큰은 저장하지 마세요."
+  },
+  "runtime.user_md_example_address_user": {
+    "en": "<!-- for example: - the assistant addresses the user as: boss -->",
+    "zh": "<!-- 例如：- 助手称呼用户：老大 -->",
+    "ko": "<!-- 예: - 어시스턴트가 사용자를 부르는 호칭: 대장 -->"
+  },
+  "runtime.user_md_example_address_assistant": {
+    "en": "<!-- for example: - the current user addresses the assistant as: Skiff -->",
+    "zh": "<!-- 例如：- 当前用户称呼助手：小舟 -->",
+    "ko": "<!-- 예: - 현재 사용자가 어시스턴트를 부르는 호칭: 쪽배 -->"
+  },
+  "runtime.user_md_example_preference": {
+    "en": "<!-- for example: - answer briefly and naturally by default -->",
+    "zh": "<!-- 例如：- 默认使用简短、自然的中文回答 -->",
+    "ko": "<!-- 예: - 기본적으로 짧고 자연스럽게 답하기 -->"
+  }
+}

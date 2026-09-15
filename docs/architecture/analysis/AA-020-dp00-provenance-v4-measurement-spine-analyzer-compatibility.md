@@ -1,5 +1,7 @@
 # AA-020 — DP-00 Provenance-v4 Measurement Spine Analyzer Compatibility
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status and scope
 
 **PROSPECTIVE REMEDIATION APPROVED.** Session 6.5 calibration

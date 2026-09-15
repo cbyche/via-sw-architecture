@@ -1,0 +1,111 @@
+[package]
+name = "via-realtime-local"
+description = "VIA's on-device realtime providers: the componentized 100% Rust pipeline (VAD → streaming ASR → reasoning → TTS) presented as one realtime session, and a thin client for a local OpenAI-Realtime server. The native engines ship behind `--features sherpa` and `--features llama`."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[features]
+# The default build has no native dependency, no C toolchain, no model weights
+# and no network. It carries the session machine, the four stage traits, both
+# providers, the configuration surface and a deterministic double for every
+# stage — which is the whole of what CI can ever run. See the crate docs for
+# where the line is drawn and `docs/adr/0001-placement.md` for why.
+default = []
+
+# The real VAD, streaming ASR and TTS stages. Pulls `sherpa-onnx`, whose `-sys`
+# build script fetches prebuilt native libraries, so this is what a build lane
+# opts into rather than what it inherits — the same rule `via-wake-word` keeps.
+sherpa = ["dep:sherpa-onnx"]
+
+# The real reasoning stage: `llama-cpp-2` over a Qwen3 GGUF. Same rule, same
+# reason: a native C++ tree stays out of the default lane.
+llama = ["dep:llama-cpp-2"]
+
+[dependencies]
+# The provider and protocol traits, `RealtimeSession`, `Transport`,
+# `SessionEvent`, `RealtimeError`, `ErrorClass`, the GA dialect and its
+# correlation key, the response-activity table and the busy-retry ladder. Not
+# one of them is restated here.
+via-realtime = { workspace = true }
+
+# `local-omni:endpoint` **is** this crate's OpenAI-Realtime client: the dialect,
+# the candidate walk, the first-frame probe, the GA/pre-GA schema repair and the
+# error corpus all already exist there. This crate configures that provider for
+# a local endpoint and adds the local-endpoint policy; it does not fork it.
+# `via-realtime-openai` is in the same `layer1` band, so the edge is legal.
+via-realtime-openai = { workspace = true }
+
+# The `local-omni` provider row (key, label, identity shape, "no default
+# endpoint"), the `local`-family model profile with its **real** capability
+# flags, and the configuration-signature hash.
+via-catalog = { workspace = true }
+
+# `Config` — the install paths this crate resolves its model root against, the
+# resolved realtime frontend, and the locale — plus `Secret`, so a provider's
+# `Debug` cannot print a bearer token.
+via-core = { workspace = true }
+
+# `SessionMode`: `dictation` mounts no model turn, and the pipeline machine has
+# to know that before it auto-creates a response.
+via-protocol = { workspace = true }
+
+# Every sentence a person reads.
+via-i18n = { workspace = true }
+
+# `SampleRate`, `ChannelCount`, `PlaybackCursor`, `FrameBuffer`, `Resampler` and
+# every PCM16 ↔ `f32` conversion. The pipeline moves audio between three rates
+# (capture 16 k, engine 16 k, speech 24 k) and none of that arithmetic is
+# rewritten here.
+via-audio = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order` carries from the workspace table and is load-bearing: the
+# frames this crate emits go to the session machine in the key order they are
+# built in, and the tests compare them as written.
+serde_json = { workspace = true }
+
+# Realtime audio frames are base64 PCM16 on the wire, in both directions.
+base64 = { workspace = true }
+
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+
+# The pipeline is one owning task over an in-process transport
+# (`docs/architecture.md` §11): a bounded `mpsc` of commands with `oneshot`
+# replies, never a mutex over the turn state.
+tokio = { workspace = true }
+futures = { workspace = true }
+# `Transport` is a sink and a stream of `tungstenite::Message`, so the in-process
+# transport speaks the same frame type a socket does.
+tokio-tungstenite = { workspace = true }
+
+# The `[local]` log markers, beside `via-realtime-openai`'s `[live]` ones.
+tracing = { workspace = true }
+
+# `--features sherpa` only: Silero VAD, the streaming zipformer ASR and the
+# Kokoro/Piper TTS, all behind one maintained interface.
+sherpa-onnx = { workspace = true, optional = true }
+
+# `--features llama` only: the reasoning turn over a Qwen3 GGUF.
+llama-cpp-2 = { workspace = true, optional = true }
+
+[dev-dependencies]
+# `tests/common` deserializes `docs/reference/contracts.json` into a typed record
+# so no catalogued value is ever retyped into a test.
+serde = { workspace = true }
+serde_json = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+futures = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+tokio-tungstenite = { workspace = true }
+via-realtime = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

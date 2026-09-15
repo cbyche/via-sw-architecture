@@ -1,0 +1,152 @@
+---
+source: crates/via-core/tests/config_snapshot.rs
+expression: config
+---
+{
+  "root": "/opt/via",
+  "paths": {
+    "configDirectory": "/home/via/.config/via",
+    "dataDirectory": "/home/via/.config/via"
+  },
+  "host": "127.0.0.1",
+  "port": 3101,
+  "realtime": {
+    "provider": "dashscope",
+    "label": "DashScope",
+    "configured": false,
+    "signature": "930efcc3c446a3d5c8edde015050d9de84e10c7c3e50aac79efcc87aca67f854",
+    "dashscopeApiKey": "",
+    "dashscopeRealtimeUrl": "wss://dashscope.aliyuncs.com/api-ws/v1/realtime",
+    "dashscopeModel": "qwen-audio-3.0-realtime-plus",
+    "dashscopeVoice": "",
+    "speechToSpeechRealtimeUrl": "ws://127.0.0.1:8765/v1/realtime",
+    "speechToSpeechAuthToken": "",
+    "speechToSpeechConfigured": false
+  },
+  "allowedOrigins": [],
+  "authSecret": "",
+  "identityMode": "personal",
+  "personalOwnerId": "user_personal",
+  "agentProtocol": "",
+  "backendOwnership": "owned",
+  "backendPermissionMode": "native",
+  "agentTimeoutMs": 300000,
+  "backends": {
+    "opencode": {
+      "baseUrl": "http://127.0.0.1:4096",
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "coordinatorAgent": ""
+    },
+    "openclaw": {
+      "baseUrl": "http://127.0.0.1:18789",
+      "token": "",
+      "tokenFile": "/home/via/.config/via/backends/openclaw/state/gateway-token",
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": "",
+      "coordinatorAgent": ""
+    },
+    "qoder": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": "",
+      "configDirectory": ""
+    },
+    "qwen": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "kimi": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "hermes": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "codebuddy": {
+      "model": "",
+      "modelUrl": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "codex": {
+      "model": "",
+      "modelUrl": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "claude": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": "",
+      "claudeExecutable": "",
+      "configDirectory": ""
+    },
+    "deepseek": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": "",
+      "sessionRoot": "/home/via/.config/via/backends/deepseek-harness/sessions"
+    },
+    "pi": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": ""
+    },
+    "acp": {
+      "model": "",
+      "directory": "/home/via/.config/via/workspace",
+      "cliPath": "",
+      "args": [],
+      "label": "ACP Agent",
+      "coordinatorAgent": ""
+    }
+  },
+  "announceIntoContext": true,
+  "resultContextMaxChars": 6000,
+  "announcementBatchMs": 120,
+  "announcementMaxBatchItems": 8,
+  "announcementQuietMs": 350,
+  "announcementAcknowledgementTimeoutMs": 120000,
+  "announcementMaxRetryAttempts": 8,
+  "frontendPromptDir": "/opt/via/config/frontend-agent",
+  "assistantProfilePath": "/home/via/.config/via/ASSISTANT.md",
+  "frontendMemoryPath": "/home/via/.config/via/MEMORY.md",
+  "frontendNotesPath": "/home/via/.config/via/frontend-notes.json",
+  "userModelPath": "/home/via/.config/via/USER.md",
+  "taskStatePath": "/home/via/.config/via/tasks.json",
+  "backendSessionStatePath": "/home/via/.config/via/state/acp-sessions.json",
+  "taskTerminalTtlMs": 86400000,
+  "taskPendingNotificationTtlMs": 604800000,
+  "taskNotificationClaimTtlMs": 60000,
+  "maxTerminalTasksPerOwner": 100,
+  "taskMaxConcurrent": 4,
+  "taskMaxConcurrentPerOwner": 2,
+  "conversationSessionTtlMs": 21600000,
+  "maxConversationSessions": 500,
+  "frontendMemoryOwnerTtlMs": 0,
+  "maxFrontendMemoryOwners": 1000,
+  "memoryAutoEnabled": true,
+  "memoryModel": "qwen-flash",
+  "memoryBaseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "memoryApiKey": "",
+  "memoryAuditPath": "/home/via/.config/via/memory-audit.jsonl",
+  "reminderSchedulerEnabled": true,
+  "reminderMaxPerOwner": 50,
+  "scheduledTaskTimeoutMs": 1800000,
+  "backgroundTaskProgressCheckMs": 300000,
+  "offlineNotificationDelayMs": 5000,
+  "reminderStaggerMs": 30000,
+  "sleepTimeoutMs": 0,
+  "wakeWordEnabled": false,
+  "wakeWord": "",
+  "wakeWordModelDirectory": "/home/via/.config/via/models/wake-word",
+  "computerUse": true,
+  "gatewayOwner": "",
+  "locale": "en"
+}

@@ -1,5 +1,7 @@
 # AA-011 — DP-00 Session 2.5 Raw Evidence and Campaign Readiness Review
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status
 
 Implementation review for DP-00 Runtime Pilot v0 Session 2.5. This document does not calculate AECR/FTOL, set thresholds, or run an Official Pilot.

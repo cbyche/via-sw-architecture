@@ -1,0 +1,40 @@
+{
+  "contract_id": "dp00-r1-candidate-v1",
+  "contract_type": "architecture_candidate",
+  "dp_id": "DP-00",
+  "candidate_id": "R1",
+  "candidate_name": "Agent-neutral Control Plane",
+  "evaluation_status": "NOT_EVALUATED",
+  "all_qas_evaluated": true,
+  "architecture_identity": "VIA owns interaction-facing grounding, agent-neutral initial delegation, and user-facing lifecycle; a selected downstream Agent owns domain reasoning and execution.",
+  "via_owns": [
+    "user interaction",
+    "interaction-facing input handling without committed logical UserTurn authority",
+    "context and temporal grounding",
+    "grounded user-goal representation",
+    "agent-neutral initial routing and delegation",
+    "user-facing task lifecycle",
+    "consent interaction",
+    "result and response binding"
+  ],
+  "selected_agent_owns": [
+    "domain reasoning",
+    "planning",
+    "arbitrary tool selection and execution",
+    "domain execution state and workflow"
+  ],
+  "invariants": [
+    "VIA is not a general-purpose Agent runtime.",
+    "DP-00 does not select committed logical UserTurn authority; that authority remains unresolved until DP-01.",
+    "The candidate does not prescribe exactly two model calls or any other call count.",
+    "Initial delegation remains agent-neutral.",
+    "All state-changing domain work crosses into the selected Agent boundary."
+  ],
+  "qa_v1_binding": {
+    "dp_id": "DP-00",
+    "qa_contract_id": "qa-evaluation-contract-v1",
+    "reference_environment_id": "via-reference-environment-v1",
+    "corpus_manifest_id": "qa-v1-corpus-manifest-v1",
+    "primary_qa_ids": ["QA-01", "QA-02", "QA-04", "QA-05"]
+  }
+}

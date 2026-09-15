@@ -1,5 +1,7 @@
 # AA-015 — DP-00 R8/R9 Completion and QA-04 Route-contract Policy
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## 1. Scope and motivation
 
 AA-014 left two explicit calibration gaps: Runtime classes R8/R9 were not covered, and QA-04's committed-only numeric population could reward an architecture that fails cheaply before a required route commit. This follow-up completes the taxonomy coverage and specifies a result-independent route contract. It does not run an Official campaign, alter A/B/C/D, select a winner, set a QA-02 gate, or freeze QA-04 overall versus macro aggregation.

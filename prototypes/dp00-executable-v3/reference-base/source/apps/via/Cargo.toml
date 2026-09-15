@@ -1,0 +1,127 @@
+# The `via` binary — VIA's command surface (docs/architecture.md §10).
+#
+# The package carries a library target as well as the binary. The library is
+# where the command surface, the `config.env` rewriter and the argument
+# contracts live, so the integration tests can drive them both ways: through
+# `CARGO_BIN_EXE_via` (which is what a user actually runs, and the only way to
+# assert an exit code and a stream) and directly, for the cases where spawning
+# a process would only obscure what is being asserted.
+[package]
+name = "via"
+description = "The VIA gateway binary: gateway, chat, config, backend, mcp-serve and service."
+publish = false
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# Core band — the configuration resolver, the install-path map, the setup gate.
+via-core = { workspace = true }
+via-i18n = { workspace = true }
+
+# Leaf band. `via-catalog` supplies the Realtime model table `via config show`
+# prints and `config set` validates against; `via-lock` the single-instance
+# lease `via gateway` takes before anything else; `via-log` the `cli.log`
+# component; `via-protocol` the error codes a script branches on; `via-store`
+# the cross-process file transaction and the atomic replace the `config.env`
+# rewrite runs inside. None of these is reimplemented here.
+via-catalog = { workspace = true }
+via-lock = { workspace = true }
+via-log = { workspace = true }
+via-protocol = { workspace = true }
+via-store = { workspace = true }
+
+# `derive` for the command surface and `env` so `#[arg(env = "VIA_…")]` puts
+# the environment surface into `--help` instead of into prose.
+clap = { workspace = true }
+
+# `--url` and `--backend-url` are normalised to a WHATWG *origin*, exactly as
+# upstream's `new URL(value).origin` does. `via-core` uses the same crate for
+# the origin allow-list; approximating it with string splitting is how a
+# `--url https://host:443/path` stops matching a lease origin.
+url = { workspace = true }
+
+# Log record fields only (`via_log::fields`).
+serde_json = { workspace = true }
+
+# The generated voice session id, `voice-<32 hex>`.
+uuid = { workspace = true }
+
+thiserror = { workspace = true }
+
+# ── phase 5: the Gateway runtime and the text client ────────────────────────
+# `via-app` is the composition root and the server; this binary is the process
+# around it — the lease, the heartbeat, the signals and the exit code.
+via-app = { workspace = true }
+
+# Layer 1. `via-realtime` supplies the provider registry and the session this
+# binary binds onto `via_app::VoiceEngine`; `via-voice` the decisions that
+# binding makes — the tool-call handler, the announcement manager and the
+# Injection Gate. Neither is reimplemented here.
+via-realtime = { workspace = true }
+# The provider qwen's realtime gateway was written against.
+# `docs/architecture.md` §15 moved it into phase 5 for exactly that reason:
+# *"qwen's realtime gateway is meaningless without the provider it was written
+# against, so following that implementation means shipping them together."*
+via-realtime-dashscope = { workspace = true }
+# The litellm/Azure candidate walk (phase 6) and the on-device pipeline and
+# endpoint providers (phase 8). Both register into the same composition root
+# `via-realtime-dashscope`'s two do — see `gateway/compose.rs`. `via-realtime-local`
+# is pulled in at its **default** features only: no `sherpa`, no `llama` — see
+# that crate's own docs for why a native C toolchain must stay opt-in.
+via-realtime-openai = { workspace = true }
+via-realtime-local = { workspace = true }
+via-voice = { workspace = true }
+
+# Layer 2. `via-work` is the Work queue the delegation runner submits into;
+# `via-coordinator` the one conversation VIA has with a backend about it;
+# `via-conversation` the memory and notes tool surfaces the handler needs.
+via-work = { workspace = true }
+via-coordinator = { workspace = true }
+via-conversation = { workspace = true }
+
+# Layer 3, as a trait plus the two things that build one: `via-backends`
+# resolves a catalogued backend id to a launch spec, `via-acp` holds the
+# session index that spec is opened against.
+via-downstream = { workspace = true }
+via-backends = { workspace = true }
+via-process = { workspace = true }
+via-acp = { workspace = true }
+
+# The Gateway runs a reactor; `signal` is `via gateway`'s SIGINT/SIGTERM, and
+# `io-std` is `via chat`'s stdin.
+tokio = { workspace = true, features = ["io-std"] }
+tokio-util = { workspace = true }
+futures = { workspace = true }
+async-trait = { workspace = true }
+
+# `via chat` is an HTTP client for `/api/health` and `/api/tasks`, and a
+# WebSocket client for `/api/realtime`. Both are the same crates the Gateway
+# serves with, so there is one TLS stack in the graph.
+reqwest = { workspace = true }
+tokio-tungstenite = { workspace = true }
+
+serde = { workspace = true }
+chrono = { workspace = true }
+# The host's own IANA zone name, which `via chat` reports on `connect` —
+# upstream's `Intl.DateTimeFormat().resolvedOptions().timeZone`.
+iana-time-zone = { workspace = true }
+
+[dev-dependencies]
+insta = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+# The phase-5 milestone: `via chat` end to end with no audio hardware and no
+# model weights. The mock is a script rather than a service, so it is a test
+# dependency — a Gateway a user runs never opens one.
+via-realtime-mock = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

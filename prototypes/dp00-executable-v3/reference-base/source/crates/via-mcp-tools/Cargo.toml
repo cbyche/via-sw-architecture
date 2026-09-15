@@ -1,0 +1,80 @@
+[package]
+name = "via-mcp-tools"
+description = "The five coordination tools VIA serves to backend agents over loopback MCP, the baseline computer-use MCP descriptor injected into every backend session, and the single source of truth for the permission broker's internal-tool allow-list."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `HarnessError` is what a tool handler fails with, `CancelOutcome` already
+# serialises the catalogued `session_cancel` result, and `text::clean` /
+# `text::bounded` are the two string primitives every Layer-3 crate shares.
+# None of them is restated here.
+via-downstream = { workspace = true }
+# The locale a tool-error envelope renders its sentence in. This crate owns no
+# prose of its own: the model-facing tool text is a pinned English contract and
+# every operator-facing sentence comes from a `HarnessError`.
+via-i18n = { workspace = true }
+# `EnvMap` — the builtin-MCP feature toggle is read from an environment map the
+# caller sampled, never from the process environment.
+via-core = { workspace = true }
+# `WorkStatus` — the delegation status vocabulary `via_session_status` reports
+# is a projection of the Work vocabulary, not a second spelling of it.
+via-protocol = { workspace = true }
+
+# `McpServer` / `McpServerHttp` / `McpServerStdio` / `HttpHeader` /
+# `EnvVariable` — the exact `session/new` `mcpServers` descriptor shapes,
+# including the array-of-`{name,value}` header and environment encodings that
+# the catalogue warns are easy to get wrong in Rust.
+agent-client-protocol = { workspace = true }
+
+# The loopback transport. `docs/architecture.md` §12: upstream's `POST /mcp` on
+# `127.0.0.1:0` behind a `Bearer` token, 404 on anything else.
+axum = { workspace = true }
+tokio = { workspace = true }
+
+async-trait = { workspace = true }
+serde = { workspace = true }
+# `preserve_order` is load-bearing twice over: a tool result is a *compact JSON
+# string the model parses*, and the `inputSchema` property order the model sees
+# is the order upstream declared its zod fields in.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+# `randomUUID()` — the bearer token, one per registration.
+uuid = { workspace = true }
+
+# The default computer-use locator is a PATH walk, the same one `via-backends`
+# uses to find a backend executable, `PATHEXT` handling included.
+which = { workspace = true }
+
+[target.'cfg(unix)'.dependencies]
+# `process.kill(pid, 'SIGTERM')` over a pid this process did not spawn, so
+# `process-wrap`'s child ladder does not apply. Named constants rather than the
+# integers 15 and 9.
+nix = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+# `test-util` is what makes the app-agent discovery ladder — a 500 ms window
+# polled every 50 ms, then a 100 ms SIGTERM grace — run in microseconds and
+# deterministically under `#[tokio::test(start_paused = true)]`.
+tokio = { workspace = true, features = ["test-util"] }
+
+[features]
+# `testing` is on by default so this crate's own integration tests reach the
+# recording double under a bare `cargo test -p via-mcp-tools`, and so the
+# coordinator can depend on this crate without restating the feature. Mirrors
+# `via-downstream`.
+default = ["testing"]
+testing = []
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

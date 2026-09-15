@@ -1,0 +1,162 @@
+{
+  "case_count": null,
+  "claim_limit": "Evidence-anchored deterministic workload definition; it contains no measured device memory.",
+  "generation_rule_version": "qa-v1-materializer-1.0.0",
+  "measurement_obligation": {
+    "cross_process_memory": "included",
+    "denominator": "frozen minimum mandatory AI-stack memory for the same workload",
+    "numerator": "candidate peak physically resident required AI-stack memory across all phases",
+    "shared_physical_pages": "count once",
+    "true_replicas": "count separately"
+  },
+  "phases": [
+    {
+      "active_user_tasks": 0,
+      "candidate_may_report_provisional_state": false,
+      "end_ms": 1000,
+      "name": "idle baseline",
+      "phase_id": "P0",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model"
+      ],
+      "start_ms": 0,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    },
+    {
+      "active_user_tasks": 0,
+      "candidate_may_report_provisional_state": false,
+      "end_ms": 2000,
+      "name": "active Voice interaction",
+      "phase_id": "P1",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model",
+        "response-delivery-buffers"
+      ],
+      "start_ms": 1000,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    },
+    {
+      "active_user_tasks": 0,
+      "candidate_may_report_provisional_state": false,
+      "end_ms": 3000,
+      "name": "Voice plus semantic request processing",
+      "phase_id": "P2",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model",
+        "semantic-model",
+        "context-evidence",
+        "response-delivery-buffers"
+      ],
+      "start_ms": 2000,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    },
+    {
+      "active_user_tasks": 1,
+      "candidate_may_report_provisional_state": false,
+      "end_ms": 4000,
+      "name": "Voice plus one active Agent Task",
+      "phase_id": "P3",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model",
+        "semantic-model",
+        "agent-runtime",
+        "context-evidence",
+        "user-task-state",
+        "response-delivery-buffers"
+      ],
+      "start_ms": 3000,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    },
+    {
+      "active_user_tasks": 3,
+      "candidate_may_report_provisional_state": false,
+      "end_ms": 5000,
+      "name": "Voice plus three active UserTasks and progress/result",
+      "phase_id": "P4",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model",
+        "semantic-model",
+        "agent-runtime",
+        "context-evidence",
+        "user-task-state",
+        "response-delivery-buffers"
+      ],
+      "start_ms": 4000,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    },
+    {
+      "active_user_tasks": 3,
+      "candidate_may_report_provisional_state": true,
+      "end_ms": 6000,
+      "name": "response generation plus context/evidence overlap and optional provisional state",
+      "phase_id": "P5",
+      "required_resident_components": [
+        "voice-input-model",
+        "voice-output-model",
+        "semantic-model",
+        "agent-runtime",
+        "context-evidence",
+        "user-task-state",
+        "response-delivery-buffers",
+        "provisional-state"
+      ],
+      "start_ms": 5000,
+      "use_case_tags": [
+        "UC-01",
+        "UC-07",
+        "UC-10",
+        "UC-16"
+      ]
+    }
+  ],
+  "population_id": "qa07-resource-v1",
+  "population_kind": "fixed_workload_timeline",
+  "timebase_ms": 100,
+  "use_case_provenance": {
+    "architecture_assumptions_removed": [
+      "local Fast Path or mandatory delegation route",
+      "named Context Engine, Intent Refiner, or Agent Router placement",
+      "specific Agent product or internal tool-call orchestration"
+    ],
+    "derivation_note": "Concurrent required-stack workload derived from product activity; it does not prescribe candidate process topology.",
+    "historical_source_path": "docs/requirements/requirements-v1.1.md",
+    "source_use_case": "UC-01"
+  },
+  "use_case_tags": [
+    "UC-01",
+    "UC-07",
+    "UC-10",
+    "UC-16"
+  ],
+  "workload_id": "qa07-resource-workload-v1"
+}
