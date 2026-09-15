@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from benchmark.dp_executable_v3.campaign import event_script, goal_maps, goal_request, reconstruct_trace, scope_request
+from benchmark.dp_executable_v3.campaign import event_script, goal_maps, goal_request, modality_consistent, reconstruct_trace, scope_request
 from benchmark.dp_executable_v3.evolution import EvolutionInput, ZONE_TERMS, classify_change_request, derive_dependency_evidence, derive_extension_seam, parse_manifest
 from benchmark.dp_executable_v3.preflight import check_reference_hashes, static_gates
 from benchmark.dp_executable_v3.runtime import ExecutableTopology, PROTOTYPE, normalized_behavior
@@ -81,6 +81,15 @@ def test_external_label_swap_does_not_change_behavior() -> None:
     semantic,agent,_=goal_maps(); request=goal_request("GOAL-001-01",semantic["GOAL-001-01"],agent["GOAL-001-01"])
     with ExecutableTopology("R1",executable_override="r1-via") as a, ExecutableTopology("R3",executable_override="r1-via") as b:
         assert normalized_behavior(a.execute(request))==normalized_behavior(b.execute(request))
+
+
+def test_voice_text_consistency_is_derived_from_two_executions() -> None:
+    semantic,agent,_=goal_maps(); primary_semantic=dict(semantic["GOAL-001-01"]); alternate_semantic=dict(primary_semantic)
+    alternate_semantic["modality"]="text" if primary_semantic["modality"]=="voice" else "voice"
+    with ExecutableTopology("R1") as topology:
+        primary=topology.execute(goal_request("GOAL-001-01",primary_semantic,agent["GOAL-001-01"]))
+        alternate=topology.execute(goal_request("GOAL-001-01",alternate_semantic,agent["GOAL-001-01"]))
+    assert modality_consistent(primary,alternate)
 
 
 def test_r1_fastpath_rejects_general_work() -> None:

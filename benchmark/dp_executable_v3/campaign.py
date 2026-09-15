@@ -114,6 +114,15 @@ def extract_agent_result(output: dict[str, Any]) -> dict[str, Any]:
     return output["primary_runtime"]["execution"]["result"]
 
 
+def modality_consistent(primary: dict[str, Any], alternate: dict[str, Any]) -> bool:
+    comparable=("goal","referent","constraints","consent_required","ambiguity_status","capability")
+    return (
+        all(primary["semantic"].get(key)==alternate["semantic"].get(key) for key in comparable)
+        and extract_agent_result(primary)==extract_agent_result(alternate)
+        and primary["case_id"]==alternate["case_id"]
+    )
+
+
 def evaluate_goal(output: dict[str, Any], expected: dict[str, Any]) -> dict[str, bool]:
     semantic = output["semantic"]
     agent = extract_agent_result(output)
@@ -168,18 +177,26 @@ def run_qa01(commit: str, contracts: ContractRepository) -> tuple[dict[str, Any]
     case_ids = [item["goal_id"] for item in qa_cases]
     repetitions: dict[str, dict[str, list[dict[str, Any]]]] = {r:{case_id:[] for case_id in case_ids} for r in REALIZATIONS}
     raw: dict[str, list[dict[str, Any]]] = {r:[] for r in REALIZATIONS}
+    modality_checks: dict[str, dict[str, bool]] = {r:{} for r in REALIZATIONS}
     memory: dict[str, Any] = {}
     topologies = {r:ExecutableTopology(r) for r in REALIZATIONS}
     try:
         for realization, topology in topologies.items():
             for warmup in range(5):
                 topology.execute(goal_request(case_ids[warmup], semantic[case_ids[warmup]], agent[case_ids[warmup]], timing=True))
+            for case_id in case_ids:
+                primary=topology.execute(goal_request(case_id,semantic[case_id],agent[case_id]))
+                alternate_semantic=dict(semantic[case_id])
+                alternate_semantic["modality"]="text" if semantic[case_id]["modality"]=="voice" else "voice"
+                alternate=topology.execute(goal_request(case_id,alternate_semantic,agent[case_id]))
+                modality_checks[realization][case_id]=modality_consistent(primary,alternate)
             memory[realization] = topology.memory_snapshot()
         for repetition in range(7):
             for index, case_id in enumerate(case_ids):
                 order = REALIZATIONS[(index + repetition) % 3:] + REALIZATIONS[:(index + repetition) % 3]
                 for realization in order:
                     output = topologies[realization].execute(goal_request(case_id, semantic[case_id], agent[case_id], timing=True))
+                    output["voice_text_consistency"]=modality_checks[realization][case_id]
                     record = {"repetition":repetition,"run_order":list(order),"stratum":semantic[case_id]["semantic_family"],**output}
                     repetitions[realization][case_id].append(record)
                     raw[realization].append(record)
@@ -227,12 +244,7 @@ def run_goal_qa(qa_id: str, realization: str, topology: ExecutableTopology, comm
         alternate_semantic=dict(semantic[case_id])
         alternate_semantic["modality"]="text" if semantic[case_id]["modality"]=="voice" else "voice"
         alternate=topology.execute(goal_request(case_id,alternate_semantic,agent[case_id]))
-        comparable=("goal","referent","constraints","consent_required","ambiguity_status","capability")
-        output["voice_text_consistency"]=(
-            all(output["semantic"].get(key)==alternate["semantic"].get(key) for key in comparable)
-            and extract_agent_result(output)==extract_agent_result(alternate)
-            and output["case_id"]==alternate["case_id"]
-        )
+        output["voice_text_consistency"]=modality_consistent(output,alternate)
         output["alternate_modality_probe"]={"modality":alternate_semantic["modality"],"consistent":output["voice_text_consistency"],"topology":alternate["topology"]}
         outputs.append(output)
         observations.append(observation(qa_id,population["population_id"],case_id,{"required_conditions":evaluate_goal(output,catalog[case_id]["goal_oracle"])}))
@@ -475,9 +487,18 @@ def run(commit: str) -> dict[str,Any]:
         "QA-08":{"owners":sorted({item["fault_owner"] for r in REALIZATIONS for item in raw[r]["QA-08"]})},
         "QA-09":{"boundaries":sorted({cross["boundary"] for r in REALIZATIONS for item in raw[r]["QA-09"] for cross in item["scope_crossings"]})},
     }
-    campaign_valid=all(structural.values()) and coverage["QA-01"]["bounded"]>0 and coverage["QA-01"]["general"]>0 and coverage["QA-01"]["specialist"]>0
+    quality_checks={
+        f"{r}:{qa_id}":(
+            results[r][qa_id]["raw_metric"] is None
+            if qa_id=="QA-07"
+            else results[r][qa_id]["target_met"] is True and not results[r][qa_id]["failed_gates"]
+        )
+        for r in REALIZATIONS for qa_id in [f"QA-{n:02d}" for n in range(1,13)]
+    }
+    campaign_valid=all(structural.values()) and all(quality_checks.values()) and coverage["QA-01"]["bounded"]>0 and coverage["QA-01"]["general"]>0 and coverage["QA-01"]["specialist"]>0
     decision="FULL QUALIFICATION BLOCKED ONLY BY QA-07" if campaign_valid else "EVALUATION STILL INVALID"
-    summary={"campaign_id":CAMPAIGN_ID,"preregistration_commit":commit,"evidence_status":"VALID EXECUTABLE QA-v1 EVIDENCE; official QA-07 remains unevaluable.","results":results,"targets":targets,"coverage_gate":{"pass":campaign_valid,"details":coverage},"structural_sensitivity_gate":{"pass":all(structural.values()),"checks":structural},"decision":decision,"interpretation":"R1 and R3 are not selected while QA-07 lacks the approved physical-memory denominator. R1+@ is evaluated as an R1 tactic; any latency improvement is reported without treating it as a third base architecture."}
+    common_provenance=results["R1"]["QA-01"]["provenance"]
+    summary={"campaign_id":CAMPAIGN_ID,"preregistration_commit":commit,"provenance":{key:common_provenance[key] for key in ("qa_contract_id","qa_contract_hash","reference_environment_id","reference_environment_hash","corpus_manifest_id","corpus_manifest_hash","evidence_mode")},"evidence_status":"VALID EXECUTABLE QA-v1 EVIDENCE; official QA-07 remains unevaluable.","results":results,"targets":targets,"coverage_gate":{"pass":campaign_valid,"details":coverage,"quality_checks":quality_checks},"structural_sensitivity_gate":{"pass":all(structural.values()),"checks":structural},"decision":decision,"interpretation":"R1 and R3 are not selected while QA-07 lacks the approved physical-memory denominator. R1+@ is evaluated as an R1 tactic; any latency improvement is reported without treating it as a third base architecture."}
     for r in REALIZATIONS:
         for qa_id in [f"QA-{n:02d}" for n in range(1,13)]:
             write_jsonl(RESULT_ROOT/"raw"/r/qa_id/"executions.jsonl",raw[r][qa_id])

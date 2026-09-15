@@ -44,6 +44,8 @@ def static_gates() -> dict[str,bool]:
         )),
         "evolution_runner_has_no_evaluator_oracle_fields":all(field not in evolution_source for field in ("approved_extension_seams", "expected_ownership_zones", "forbidden_core_semantic_zones", "allowed_agent_integration_ownership_areas")),
         "evolution_uses_behavioral_acceptance":"acceptance_tests_pass\": acceptance_pass" in evolution_source and "_append_compile_marker" not in evolution_source,
+        "qa01_runs_paired_modality_probe":"modality_checks[realization][case_id]=modality_consistent(primary,alternate)" in campaign_source,
+        "campaign_valid_requires_all_qa_targets":"all(quality_checks.values())" in campaign_source,
     }
 
 

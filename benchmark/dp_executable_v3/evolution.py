@@ -122,6 +122,18 @@ def acceptance_succeeded(process: subprocess.CompletedProcess[str]) -> bool:
     return process.returncode == 0 and re.search(r"\b1 passed; 0 failed\b", process.stdout) is not None
 
 
+def full_suite_acceptance_succeeded(process: subprocess.CompletedProcess[str], acceptance_name: str) -> bool:
+    return process.returncode == 0 and re.search(rf"test .*{re.escape(acceptance_name)} \.\.\. ok", process.stdout) is not None
+
+
+def common_regressions_succeeded(process: subprocess.CompletedProcess[str]) -> bool:
+    required = (
+        "policy_denies_unrelated_principal", "policy_limits_resource_object", "event_order_drives_state",
+        "tactic_is_read_only_and_non_durable", "ownership_surfaces_are_linked",
+    )
+    return process.returncode == 0 and all(re.search(rf"test .*{name} \.\.\. ok", process.stdout) for name in required)
+
+
 def derive_dependency_evidence(
     prototype_root: Path, relative_modules: list[str], manifest: dict[str, dict[str, Any]]
 ) -> tuple[list[dict[str, str]], list[str]]:
@@ -144,8 +156,16 @@ def run_evolution_case(commit: str, realization: str, qa_id: str, item: Evolutio
     manifest = parse_manifest(ROOT / PROTOTYPE_REL / "ARCHITECTURE-OWNERSHIP-MANIFEST.yaml")
     with tempfile.TemporaryDirectory(prefix="via-v3-evolution-") as temp:
         checkout = Path(temp) / "worktree"
-        subprocess.run(["git", "worktree", "add", "--detach", str(checkout), commit], cwd=ROOT, check=True, capture_output=True, text=True)
+        subprocess.run(["git", "worktree", "add", "--detach", "--no-checkout", str(checkout), commit], cwd=ROOT, check=True, capture_output=True, text=True)
         try:
+            subprocess.run(["git", "sparse-checkout", "init", "--no-cone"], cwd=checkout, check=True, capture_output=True, text=True)
+            subprocess.run([
+                "git", "sparse-checkout", "set", "--no-cone",
+                "/prototypes/dp00-executable-v3/Cargo.toml",
+                "/prototypes/dp00-executable-v3/Cargo.lock",
+                "/prototypes/dp00-executable-v3/src/",
+            ], cwd=checkout, check=True, capture_output=True, text=True)
+            subprocess.run(["git", "checkout", "--force", commit], cwd=checkout, check=True, capture_output=True, text=True)
             if qa_id == "QA-04":
                 module = "src/ownership/r3_primary_extensions.rs" if realization == "R3" else "src/ownership/r1_agent_adapter.rs"
             elif qa_id == "QA-05":
@@ -160,18 +180,8 @@ def run_evolution_case(commit: str, realization: str, qa_id: str, item: Evolutio
                 raise ValueError(qa_id)
             path = checkout / PROTOTYPE_REL / module
             acceptance_name, generated_seam = _append_evolution_implementation(path, qa_id, item)
-            build = subprocess.run(
-                ["cargo", "test", "--lib", "--offline", "--quiet", "--no-run"], cwd=checkout / PROTOTYPE_REL,
-                env={**__import__("os").environ, "CARGO_TARGET_DIR": str(target_dir)},
-                capture_output=True, text=True,
-            )
-            acceptance = subprocess.run(
-                ["cargo", "test", "--lib", "--offline", "--quiet", acceptance_name], cwd=checkout / PROTOTYPE_REL,
-                env={**__import__("os").environ, "CARGO_TARGET_DIR": str(target_dir)},
-                capture_output=True, text=True,
-            )
-            regressions = subprocess.run(
-                ["cargo", "test", "--lib", "--offline", "--quiet"], cwd=checkout / PROTOTYPE_REL,
+            test = subprocess.run(
+                ["cargo", "test", "--lib", "--offline"], cwd=checkout / PROTOTYPE_REL,
                 env={**__import__("os").environ, "CARGO_TARGET_DIR": str(target_dir)},
                 capture_output=True, text=True,
             )
@@ -185,7 +195,8 @@ def run_evolution_case(commit: str, realization: str, qa_id: str, item: Evolutio
             dependency_edges, dependency_leaks = derive_dependency_evidence(checkout / PROTOTYPE_REL, relative_modules, manifest)
             source_text = "\n".join((checkout / PROTOTYPE_REL / changed).read_text(encoding="utf-8") for changed in relative_modules)
             observed_seams = sorted(set(re.findall(r"evolution-seam:([^|\"]+)", source_text)))
-            acceptance_pass = acceptance_succeeded(acceptance)
+            acceptance_pass = full_suite_acceptance_succeeded(test, acceptance_name)
+            regression_pass = common_regressions_succeeded(test)
             return {
                 "case_id": item.case_id, "realization": realization, "qa_id": qa_id,
                 "change_request": item.change_request or item.requirement,
@@ -195,15 +206,15 @@ def run_evolution_case(commit: str, realization: str, qa_id: str, item: Evolutio
                 "actual_semantic_ownership_changes": areas,
                 "actual_extension_seams": observed_seams,
                 "generated_extension_seam": generated_seam,
-                "build_pass": build.returncode == 0,
+                "build_pass": test.returncode == 0,
                 "acceptance_test_name": acceptance_name,
                 "acceptance_tests_pass": acceptance_pass,
-                "common_regressions_pass": regressions.returncode == 0,
+                "common_regressions_pass": regression_pass,
                 "git_diff_stat": diff,
                 "git_diff_patch": diff_patch,
-                "compiler_stdout": build.stdout[-1000:], "compiler_stderr": build.stderr[-1000:],
-                "acceptance_stdout": acceptance.stdout[-1000:], "acceptance_stderr": acceptance.stderr[-1000:],
-                "regression_stdout": regressions.stdout[-1000:], "regression_stderr": regressions.stderr[-1000:],
+                "compiler_stdout": test.stdout[-2000:], "compiler_stderr": test.stderr[-2000:],
+                "acceptance_stdout": test.stdout[-2000:], "acceptance_stderr": test.stderr[-2000:],
+                "regression_stdout": test.stdout[-2000:], "regression_stderr": test.stderr[-2000:],
                 "dependency_edges": dependency_edges,
                 "semantic_dependency_leaks": dependency_leaks,
             }
