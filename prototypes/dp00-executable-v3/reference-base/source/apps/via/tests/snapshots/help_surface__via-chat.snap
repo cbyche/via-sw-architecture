@@ -1,0 +1,28 @@
+---
+source: apps/via/tests/help_surface.rs
+expression: "long_help(&[\"chat\"])"
+---
+Text client: drive a running Gateway with no audio and no model weights
+
+Usage: via chat [OPTIONS]
+
+Options:
+      --url <URL>
+          Gateway address (http or https; normalised to its origin)
+          
+          [env: VIA_URL]
+          [default: http://127.0.0.1:3101]
+
+      --session <ID>
+          Voice session to join (default: a fresh voice-<32 hex> id)
+          
+          [env: VIA_SESSION_ID]
+
+      --takeover
+          Take voice control from whichever client currently holds it
+
+      --no-autostart
+          Refuse rather than start a Gateway when none is running
+
+  -h, --help
+          Print help (see a summary with '-h')

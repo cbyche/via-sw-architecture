@@ -1,0 +1,54 @@
+[package]
+name = "via-realtime-dashscope"
+description = "VIA's two OpenAI-Realtime-dialect providers: DashScope (Qwen Audio / Qwen3.5 Omni realtime) and the user-run huggingface/speech-to-speech service."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The provider and protocol traits, the registry, `ErrorClass`, and the
+# inactivity closure both providers classify against.
+via-realtime = { workspace = true }
+
+# The four model profiles, the provider keys/aliases/labels, the endpoint
+# defaults, `realtime_url`, and the configuration-signature identity. Not one of
+# those tables is restated here.
+via-catalog = { workspace = true }
+
+# `Config`/`RealtimeFrontend` — the environment reading these providers are
+# configured from — and `Secret`, so a provider's `Debug` cannot print a key.
+via-core = { workspace = true }
+
+# Every sentence a person or the model reads.
+via-i18n = { workspace = true }
+
+# `SampleRate::HZ_16000` / `HZ_24000` are the catalogued `audio sample rates`
+# contract, and via-audio already owns them.
+via-audio = { workspace = true }
+
+# `preserve_order` carries from the workspace table and is load-bearing: the
+# `session.update` and `response.create` bodies go on the wire in the order
+# upstream's object literals declare them.
+serde_json = { workspace = true }
+
+# The DashScope `fatal` corpus is four alternation patterns with a word
+# boundary, an optional-separator class and a `.*` span. Upstream's four
+# `RegExp`s are the contract; transcribing them by hand into string scans is how
+# an expired credential stops being recognised.
+regex = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+# `tests/common` deserializes `docs/reference/contracts.json` into a typed
+# record so no contract value is ever retyped into a test.
+serde = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

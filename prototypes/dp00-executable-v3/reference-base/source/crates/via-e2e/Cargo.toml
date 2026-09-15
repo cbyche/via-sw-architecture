@@ -1,0 +1,128 @@
+# The end-to-end suite — phase 9.
+#
+# `apps/via` already tests the client and the composition root *from inside the
+# package*: `tests/milestone.rs` boots a Gateway in-process through
+# `via::gateway::boot`, and `tests/chat_client.rs` drives the binary's REPL.
+# This crate tests the **product**: real processes, real sockets, real files on
+# disk, and exactly two substitutions — the realtime provider and the backend
+# harness, each at the seam its own crate publishes.
+#
+# It ships nothing. `publish = false`, an empty library, one test-only binary,
+# and seven integration tests.
+[package]
+name = "via-e2e"
+description = "The end-to-end suite: the built `via` binary driven the way a consumer drives it."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+# `src/harness_gateway.rs` rather than `src/main.rs` or `src/bin/`, for two
+# reasons. The name says what the binary is — a Gateway with two seams swapped,
+# not "the e2e crate" — and a file directly under `src/` adds no new directory,
+# so `scripts/risky_unwrap.py`'s `SUBSYSTEM_DIRS` / `KNOWN_NON_ADVERSARIAL_DIRS`
+# tables need no entry. The bin target's own code is held to the production
+# panic budget all the same: no `unwrap`, no `expect`, no `panic!`.
+[[bin]]
+name = "via-gateway-e2e"
+path = "src/harness_gateway.rs"
+
+[dependencies]
+# The product. The harness Gateway calls `via::gateway::serve` — the *same*
+# function `via gateway` calls — so what it boots is the composition root, the
+# lease, the heartbeat, the banner, the signal handlers and the close sequence,
+# with `Composition`'s two seams filled differently. Nothing about the Gateway
+# is re-derived here.
+#
+# A plain path dependency rather than a `[workspace.dependencies]` entry: the
+# root manifest has no `via` row, and `docs/architecture.md` §9 puts `via` in
+# the App band where only this crate needs to reach it.
+via = { path = "../../apps/via" }
+
+# The two seams, and nothing else.
+via-downstream = { workspace = true }
+via-realtime = { workspace = true }
+via-realtime-mock = { workspace = true }
+
+# The environment sample, the setup gate, the logger and the locale — all read
+# exactly as `via gateway` reads them, so the harness Gateway differs from the
+# product in the two seams and in nothing else.
+via-core = { workspace = true }
+via-i18n = { workspace = true }
+via-log = { workspace = true }
+
+async-trait = { workspace = true }
+# `BoxStream`, for the one method the held session forwards verbatim.
+futures = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+
+[dev-dependencies]
+# The catalogue reader. `via-conformance` already compiles
+# `docs/reference/contracts.json` in and answers `expect_contract(kind, name)`;
+# `via-arch-test` names this edge by name — *"a test crate must be able to
+# depend on another test crate — `via-e2e` on `via-conformance`"*. A second
+# reader here would only assert that two copies of a value agree.
+#
+# A path dependency for the same reason as `via` above: the root manifest has
+# no `via-conformance` row, and adding one would put a test-band crate into the
+# table every shipping crate inherits from.
+via-conformance = { path = "../via-conformance" }
+
+# The values the assertions compare against, each read from the crate that owns
+# it rather than retyped: the lease document and its error code and its liveness
+# probe (`via-lock`), the Work status and event vocabulary (`via-protocol`), the
+# coalescing delay the file waits derive their budget from (`via-work`), every
+# localized sentence (`via-i18n`), the install-path map and its two modes
+# (`via-core`), the log schema (`via-log`), and the route table, the
+# `X-Request-Id` header and the SSE snapshot frame `via-app` publishes for
+# exactly this crate.
+via-app = { workspace = true }
+via-core = { workspace = true }
+via-i18n = { workspace = true }
+via-lock = { workspace = true }
+via-log = { workspace = true }
+via-protocol = { workspace = true }
+via-work = { workspace = true }
+
+# Authoring the fixtures the harness Gateway reads: a `Script` written in Rust
+# and serialized to the JSON file the process loads.
+via-realtime-mock = { workspace = true }
+
+# A consumer's client. The same two crates the Gateway serves with, used from
+# the other side — which is the point: `reqwest` for the HTTP surface (with
+# hand-set `Origin` and `Cookie` headers, which is what the security cases
+# need) and `tokio-tungstenite` for `/api/realtime`.
+reqwest = { workspace = true }
+tokio-tungstenite = { workspace = true }
+futures = { workspace = true }
+
+# `kill(2)` with a real signal number. The stale-lease case is specifically the
+# *unclean* death — SIGKILL, no close sequence, no lease release — so
+# `Child::kill` is not enough on its own and the signal has to be nameable.
+nix = { workspace = true }
+
+# The forged cookie: `<owner>.<base64url(HMAC-SHA256(secret, owner))>` composed
+# independently of `via-core`, so "a forged one is refused" is not asserted with
+# the same code that mints the real one.
+base64 = { workspace = true }
+hmac = { workspace = true }
+sha2 = { workspace = true }
+
+chrono = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+# No `test-util`, deliberately. Every wait in this suite is against a **real**
+# clock, because the thing being waited on is in another process: pausing time
+# here would pause nothing there. `#[tokio::test(start_paused = true)]` belongs
+# to the crates whose timers are in-process.
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

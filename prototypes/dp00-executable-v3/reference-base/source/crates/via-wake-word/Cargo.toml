@@ -1,0 +1,91 @@
+[package]
+name = "via-wake-word"
+description = "VIA's on-device wake word: the verified model installer, the keyword configuration, the detector seam and its streaming PCM front end. The sherpa-onnx engine ships behind `--features sherpa`."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[features]
+# The default build has no native dependency, no C toolchain and no network.
+# It carries the model manager, the keyword configuration, the detector trait,
+# the streaming front end and `ScriptedDetector`. See the crate docs for the
+# line between the two halves and `docs/adr/0001-placement.md` for why the line
+# is drawn there.
+default = []
+
+# The real engine. Pulls `sherpa-onnx`, whose `-sys` build script fetches
+# prebuilt native libraries, so this feature is what a build lane opts into
+# rather than what it inherits.
+sherpa = ["dep:sherpa-onnx"]
+
+# The production `ModelFetch`: one `reqwest` GET. Not default, because the
+# trait is the seam and a Gateway that already owns an HTTP client should be
+# able to hand its own in without linking a second one.
+http = ["dep:reqwest"]
+
+[dependencies]
+# `SampleRate::HZ_16000` is the catalogued `audio sample rates` contract and is
+# *the* feature-extractor rate; `Resampler`, `FrameBuffer` and the PCM16 codecs
+# are the whole front end. Nothing about a sample is restated here.
+via-audio = { workspace = true }
+
+# `Config` — `wake_word_enabled`, `wake_word`, `wake_word_model_directory`,
+# `locale` — is the configuration this crate reads. It does not parse an
+# environment of its own.
+via-core = { workspace = true }
+
+# Every sentence a person reads, and `Locale`, which is the key the keyword
+# table is indexed by.
+via-i18n = { workspace = true }
+
+# `write_atomic` + `FILE_MODE` + `LOCK_DIR_MODE`. The keyword file is rewritten
+# on every install, so it needs the same crash-atomic replace every other VIA
+# file gets, and there is no reason for a second copy of it.
+via-store = { workspace = true }
+
+# The supply-chain check: SHA-256 over the archive bytes, rendered as the hex
+# the release page publishes.
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+# The archive is one `.tar.bz2`. `bzip2`'s pure-Rust backend keeps the default
+# build toolchain-free; see the workspace table.
+bzip2 = { workspace = true }
+tar = { workspace = true }
+
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+
+# `spawn_blocking` for the extract-and-hash, and `sync::Mutex` for the
+# per-target single flight. The install is CPU- and disk-bound for a couple of
+# seconds over ~33 MB; doing that on a runtime thread stalls every other task
+# the Gateway is running.
+tokio = { workspace = true }
+
+# `--features sherpa` only.
+sherpa-onnx = { workspace = true, optional = true }
+
+# `--features http` only.
+reqwest = { workspace = true, optional = true }
+
+[dev-dependencies]
+# `tests/common` deserializes `docs/reference/contracts.json` so no catalogued
+# value is retyped into a test. It also builds the fixture `.tar.bz2` archives
+# the installer is fed — through `tar` and `bzip2` above, which tests link
+# alongside the crate's own dependencies — because a checked-in archive is a
+# binary blob a reviewer cannot read, and the cases that matter (a `../..`
+# member, a symlink wearing a member's name, a truncated stream) are ones no
+# real archive contains.
+serde = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

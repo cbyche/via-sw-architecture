@@ -1,0 +1,189 @@
+[workspace]
+resolver = "3"
+members = ["crates/*", "apps/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+license = "Apache-2.0"
+repository = "https://github.com/sanghn-kim/VIA"
+authors = ["VIA contributors"]
+
+[workspace.dependencies]
+# ── internal ────────────────────────────────────────────────────────────────
+via-protocol = { path = "crates/via-protocol" }
+via-catalog = { path = "crates/via-catalog" }
+via-log = { path = "crates/via-log" }
+via-store = { path = "crates/via-store" }
+via-lock = { path = "crates/via-lock" }
+via-audio = { path = "crates/via-audio" }
+via-i18n = { path = "crates/via-i18n" }
+via-core = { path = "crates/via-core" }
+via-downstream = { path = "crates/via-downstream" }
+via-acp = { path = "crates/via-acp" }
+via-backends = { path = "crates/via-backends" }
+via-process = { path = "crates/via-process" }
+via-work = { path = "crates/via-work" }
+via-coordinator = { path = "crates/via-coordinator" }
+via-mcp-tools = { path = "crates/via-mcp-tools" }
+via-conversation = { path = "crates/via-conversation" }
+via-realtime = { path = "crates/via-realtime" }
+via-realtime-mock = { path = "crates/via-realtime-mock" }
+via-realtime-dashscope = { path = "crates/via-realtime-dashscope" }
+via-voice = { path = "crates/via-voice" }
+via-app = { path = "crates/via-app" }
+via-realtime-openai = { path = "crates/via-realtime-openai" }
+via-wake-word = { path = "crates/via-wake-word" }
+via-context = { path = "crates/via-context" }
+via-realtime-local = { path = "crates/via-realtime-local" }
+via-e2e = { path = "crates/via-e2e" }
+
+# ── serialization ───────────────────────────────────────────────────────────
+# `preserve_order` is NOT optional. Two external contracts depend on JSON map
+# insertion order: the `/api/health` payload's field order, and the SHA-256
+# configuration signature, which upstream computes over `JSON.stringify` of an
+# object literal. A BTreeMap-backed Map reorders both and breaks them silently.
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+indexmap = { version = "2", features = ["serde"] }
+
+# ── errors / logging ────────────────────────────────────────────────────────
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# ── time / ids / hashing ────────────────────────────────────────────────────
+chrono = { version = "0.4", features = ["serde"] }
+# The IANA zone database. `chrono` alone can name the host zone but cannot
+# convert an instant into an arbitrary `time_zone` a client sent, which is what
+# `get_current_time` and `<runtime_context>` both require.
+chrono-tz = "0.10"
+# The host's own IANA zone name, which `chrono` resolves internally but does
+# not re-export. It is the documented fallback when a client sends an unusable
+# `time_zone`. Already in the graph as one of `chrono`'s own dependencies.
+iana-time-zone = "0.1"
+uuid = { version = "1", features = ["v4", "serde"] }
+sha2 = "0.10"
+hex = "0.4"
+base64 = "0.22"
+hmac = "0.12"
+getrandom = "0.4"
+
+# ── filesystem / process ────────────────────────────────────────────────────
+tempfile = "3"
+dirs = "6"
+nix = { version = "0.30", features = ["signal", "process"] }
+
+# ── text ────────────────────────────────────────────────────────────────────
+regex = "1"
+once_cell = "1"
+url = "2"
+# Query-value percent-encoding for `via-realtime-openai`. ARGO's realtime URL
+# builder leaves RFC 3986 unreserved characters (`-._~`) literal because API
+# gateways have been observed routing on the raw query string, so
+# `api-version=2025-08-28` must not become `api%2Dversion=…`; that is an
+# `AsciiSet` this crate expresses and `url` does not expose. Already in the
+# graph underneath `url` and `reqwest`; naming it here pins one copy.
+percent-encoding = "2"
+
+# ── cli ─────────────────────────────────────────────────────────────────────
+clap = { version = "4", features = ["derive", "env"] }
+
+# ── async runtime ───────────────────────────────────────────────────────────
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "process", "signal", "time", "sync", "fs", "io-util"] }
+tokio-util = { version = "0.7", features = ["rt", "codec"] }
+tokio-stream = { version = "0.1", features = ["sync"] }
+futures = "0.3"
+async-trait = "0.1"
+
+# ── agent protocols ─────────────────────────────────────────────────────────
+# ACP: Zed's official SDK. Targeting stable v1 — protocol v2 is still draft.
+agent-client-protocol = "2"
+# Child-process containment. Backends launch through npx/uvx wrappers, so
+# killing only the immediate child orphans the real agent; ProcessGroup on unix
+# and JobObject on windows is what makes teardown actually tear down.
+process-wrap = { version = "9", features = ["tokio1"] }
+which = "8"
+shell-words = "1"
+
+# ── http / server ───────────────────────────────────────────────────────────
+# axum 0.8's `ws` feature pins tokio-tungstenite 0.29; matching it here keeps a
+# single copy of tungstenite in the graph. Verify with `cargo tree -d`.
+axum = { version = "0.8", features = ["ws", "http1", "json", "tokio", "macros", "tracing"] }
+tower = "0.5"
+tower-http = { version = "0.6", features = ["fs", "trace", "cors", "set-header", "limit"] }
+tokio-tungstenite = { version = "0.29", default-features = false, features = ["connect", "handshake", "rustls-tls-webpki-roots"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "stream", "rustls-tls", "charset", "http2"] }
+schemars = { version = "1", features = ["preserve_order"] }
+backon = "1"
+# `via-app` owns the accept loop rather than `axum::serve`, because one
+# catalogued contract cannot be expressed as a response: a WebSocket upgrade to
+# any path other than `/api/realtime` is `socket.destroy()`'d with **no HTTP
+# response at all** (`docs/reference/contracts.json`, ws-route
+# `/api/realtime`). Reproducing that needs the connection future itself, which
+# is hyper's. Both crates are already in the graph underneath axum; naming them
+# here pins one copy.
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["server", "tokio", "service"] }
+
+
+# ── on-device (feature-gated) ───────────────────────────────────────────────
+# sherpa-onnx is a native C++ tree. It is deliberately NOT in the default
+# build: ADR-0001 records that VIA's native dependencies are exactly what keeps
+# it out of ARGO's workspace, and putting a C toolchain in every CI lane for a
+# feature most builds do not use is the same mistake at a smaller scale.
+# `via-wake-word` ships the model manager and the detector seam by default and
+# the sherpa implementation behind `--features sherpa`.
+sherpa-onnx = "1.13"   # made `optional` by the consuming crate, not here
+# llama.cpp bindings for the local reasoning turn. Same rule as sherpa-onnx:
+# a native C++ tree, so the consuming crate marks it optional and the default
+# build never sees a C toolchain.
+llama-cpp-2 = "0.1"
+
+
+# ── archives ────────────────────────────────────────────────────────────────
+# The wake-word keyword model is published as a single `.tar.bz2` on the
+# k2-fsa/sherpa-onnx release page, so installing it needs both halves. Both are
+# in the **default** build of `via-wake-word` on purpose: the model manager and
+# its integrity check are what stays behind when `--features sherpa` is off, and
+# a verified download that cannot open the archive it verified is not a model
+# manager.
+#
+# `bzip2`'s default backend is `libbz2-rs-sys` — pure Rust. The `bzip2-sys`
+# feature (the C libbz2) is deliberately NOT enabled: turning it on would put a
+# C toolchain back into the lane this crate exists to keep clear.
+bzip2 = "0.6"
+# `default-features = false` drops `xattr`. The four archive members are
+# extracted by name and written with an explicit mode; nothing reads or
+# reproduces an extended attribute.
+tar = { version = "0.4", default-features = false }
+
+
+# ── audio ───────────────────────────────────────────────────────────────────
+rubato = "0.16"
+hound = "3.5"
+
+# ── dev ─────────────────────────────────────────────────────────────────────
+insta = { version = "1", features = ["json", "redactions"] }
+rstest = "0.26"
+pretty_assertions = "1"
+cargo_metadata = "0.23"
+serial_test = "3"
+
+[profile.dev]
+# Debug info dominates target/ size. Line tables keep panic backtraces useful at
+# a fraction of the cost.
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false
+
+[profile.release]
+# Optimized for size, not speed. The Gateway spends its life blocked on sockets,
+# subprocesses and file I/O, and the binary ships to every machine that runs it.
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+strip = "symbols"

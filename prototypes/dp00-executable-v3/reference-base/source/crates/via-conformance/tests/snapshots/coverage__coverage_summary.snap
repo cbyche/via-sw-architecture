@@ -1,0 +1,53 @@
+---
+source: crates/via-conformance/tests/coverage.rs
+expression: "via_conformance::summary::coverage_summary().to_string()"
+---
+VIA external contract coverage
+==============================
+
+catalogue          docs/reference/contracts.json
+catalogue records  707
+registry rows      682
+
+status                    records     rows
+  asserted                   113      110
+  divergent                   46       43
+  partial                     25       25
+  behavioural                492      473
+  pending                     31       31
+  --------------------------------------
+  locked                     159      153   asserted + divergent
+
+exactValue shape (heuristic; reported, never gated)
+  literal-shaped             404
+  prose-shaped               303
+
+owning crate               records  asserted  divergent   partial  behav.   pending
+  via-protocol           *      19        15          4         0       0         0
+  via-catalog            *      35        21          7         7       0         0
+  via-log                *      12         3          7         2       0         0
+  via-store              *       5         4          0         1       0         0
+  via-lock               *      15         4          9         2       0         0
+  via-audio              *       0         0          0         0       0         0
+  via-core               *      94        44          6        11      33         0
+  via-i18n               *       6         0          0         0       6         0
+  via-realtime           *      28         4          0         0      24         0
+  via-realtime-openai    *       3         0          0         0       3         0
+  via-realtime-dashscope *      12         0          0         0      12         0
+  via-realtime-local     *       0         0          0         0       0         0
+  via-realtime-mock      *       0         0          0         0       0         0
+  via-wake-word          *       8         0          0         0       8         0
+  via-voice              *     154        16          1         2     128         7
+  via-work               *      19         0          0         0      19         0
+  via-coordinator        *       8         0          0         0       8         0
+  via-context            *       0         0          0         0       0         0
+  via-conversation       *      31         0          0         0      31         0
+  via-downstream         *       0         0          0         0       0         0
+  via-acp                *      67         0          1         0      61         5
+  via-backends           *      63         0          2         0      52         9
+  via-process            *       1         0          0         0       1         0
+  via-mcp-tools          *      35         0          0         0      35         0
+  via-app                *      36         1          1         0      30         4
+  apps/via               *      56         1          8         0      41         6
+
+  * = crate exists in the tree today

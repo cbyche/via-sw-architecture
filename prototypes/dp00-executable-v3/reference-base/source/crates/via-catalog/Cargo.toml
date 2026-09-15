@@ -1,0 +1,27 @@
+[package]
+name = "via-catalog"
+description = "VIA's static tables: realtime model profiles, realtime provider registry, the configuration signature, and the backend agent catalog."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `serde_json` carries the `preserve_order` feature from the workspace table.
+# The configuration signature depends on it: the hash is computed over a JSON
+# object whose key order is JS insertion order, and a BTreeMap-backed Map would
+# silently reorder it. `tests/signature.rs` locks that behaviour.
+serde = { workspace = true }
+serde_json = { workspace = true }
+sha2 = { workspace = true }
+hex = { workspace = true }
+thiserror = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

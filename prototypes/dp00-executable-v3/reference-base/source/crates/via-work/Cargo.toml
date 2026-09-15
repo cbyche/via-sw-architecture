@@ -1,0 +1,72 @@
+[package]
+name = "via-work"
+description = "VIA's Work subsystem: one record and four kinds, the admission scheduler with its coordinator lane, durable task state, restart recovery, confirmed cancellation, retention and the never-polling reminder scheduler."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# `WorkStatus` / `WorkState` / `WorkKind` and the 17-edge `can_transition_to`
+# graph. The lifecycle vocabulary is wire data, so it is `via-protocol`'s; this
+# crate is the machine that walks it.
+via-protocol = { workspace = true }
+# `SessionEvent` — the adapter-normalised progress vocabulary the activity ring
+# holds — plus `CancelOutcome` / `CancelRoute` / `CancelTarget`, which are what
+# "cancellation is confirmed, not optimistic" is spelled in, and `text::clean`.
+via-downstream = { workspace = true }
+# Every user-facing sentence: the two restart force-fail strings, the
+# scheduled-task timeout pair, the cancellation strings and the progress-check
+# template with its verb table.
+via-i18n = { workspace = true }
+# `tasks.json`: atomic write, schema version, quarantine-on-corrupt and the
+# generation-tagged coalesced write. None of it is re-implemented here.
+via-store = { workspace = true }
+# The operator-facing configuration surface — the caps, the TTLs and the state
+# path — read once at composition through `WorkManagerBuilder::configured`.
+via-core = { workspace = true }
+# The info/debug split over the sixteen event names is a catalogued contract.
+via-log = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order`: the persisted record's field order is `publicTask`'s, and a
+# `BTreeMap`-backed map would sort it.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# The owning task, its bounded command channel and its timers.
+tokio = { workspace = true }
+# `TaskTracker`, so every spawned timer and runner is joined at shutdown.
+tokio-util = { workspace = true }
+# The runner and canceler seams are `dyn` async traits.
+async-trait = { workspace = true }
+
+# `work_<uuidv4>`.
+uuid = { workspace = true }
+# `confirmed_at` is an ISO-8601 instant on the reconciliation fact.
+chrono = { workspace = true }
+# Work is held in creation order, which is the order `drain()` breaks ties in
+# and the order `tasks.json` is written in. A `HashMap` would make both
+# arbitrary per process.
+indexmap = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+# `start_paused = true` — the timer ladders run in microseconds, deterministically.
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"
+
+[features]
+# `testing` is on by default so the crate's own tests reach the doubles under a
+# bare `cargo test -p via-work`, and so `via-coordinator` can depend on
+# `via-work` without restating the feature.
+default = ["testing"]
+testing = []

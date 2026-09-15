@@ -1,0 +1,157 @@
+---
+source: crates/via-core/tests/config_snapshot.rs
+expression: config
+---
+{
+  "root": "/opt/via",
+  "paths": {
+    "configDirectory": "/run/via",
+    "dataDirectory": "/assets/via"
+  },
+  "host": "0.0.0.0",
+  "port": 8080,
+  "realtime": {
+    "provider": "dashscope",
+    "label": "DashScope",
+    "configured": true,
+    "signature": "4639bd43419d2ca915d329114b70032d1c31a7a4292ea7e93062a85ecbec8833",
+    "dashscopeApiKey": "[REDACTED]",
+    "dashscopeRealtimeUrl": "wss://ws-42.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
+    "dashscopeModel": "qwen3.5-omni-plus-realtime",
+    "dashscopeVoice": "Ethan-custom",
+    "speechToSpeechRealtimeUrl": "ws://127.0.0.1:8765/v1/realtime",
+    "speechToSpeechAuthToken": "",
+    "speechToSpeechConfigured": false
+  },
+  "allowedOrigins": [
+    "https://voice.example.com"
+  ],
+  "authSecret": "",
+  "identityMode": "browser",
+  "personalOwnerId": "user_shared",
+  "agentProtocol": "openclaw",
+  "backendOwnership": "external",
+  "backendPermissionMode": "full",
+  "agentTimeoutMs": 300000,
+  "backends": {
+    "opencode": {
+      "baseUrl": "http://127.0.0.1:4096",
+      "model": "alibaba-cn/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "coordinatorAgent": ""
+    },
+    "openclaw": {
+      "baseUrl": "wss://openclaw.example.com",
+      "token": "",
+      "tokenFile": "/run/via/backends/openclaw/state/gateway-token",
+      "model": "bailian/qwen3.7-max",
+      "directory": "/opt/via/work/openclaw",
+      "cliPath": "",
+      "coordinatorAgent": "via-backend"
+    },
+    "qoder": {
+      "model": "qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": "",
+      "configDirectory": ""
+    },
+    "qwen": {
+      "model": "qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "kimi": {
+      "model": "bailian/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "hermes": {
+      "model": "bailian/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "codebuddy": {
+      "model": "qwen3.7-max",
+      "modelUrl": "https://ws-42.cn-beijing.maas.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "codex": {
+      "model": "qwen3.7-max",
+      "modelUrl": "https://ws-42.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "claude": {
+      "model": "bailian/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": "",
+      "claudeExecutable": "",
+      "configDirectory": ""
+    },
+    "deepseek": {
+      "model": "",
+      "directory": "/assets/via/workspace",
+      "cliPath": "",
+      "sessionRoot": "/run/via/backends/deepseek-harness/sessions"
+    },
+    "pi": {
+      "model": "bailian/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": ""
+    },
+    "acp": {
+      "model": "bailian/qwen3.7-max",
+      "directory": "/assets/via/workspace",
+      "cliPath": "",
+      "args": [
+        "--acp",
+        "--verbose"
+      ],
+      "label": "ACP Agent",
+      "coordinatorAgent": ""
+    }
+  },
+  "announceIntoContext": true,
+  "resultContextMaxChars": 6000,
+  "announcementBatchMs": 120,
+  "announcementMaxBatchItems": 8,
+  "announcementQuietMs": 350,
+  "announcementAcknowledgementTimeoutMs": 120000,
+  "announcementMaxRetryAttempts": 8,
+  "frontendPromptDir": "/opt/via/config/frontend-agent",
+  "assistantProfilePath": "/assets/via/ASSISTANT.md",
+  "frontendMemoryPath": "/opt/via/profiles/MEMORY.md",
+  "frontendNotesPath": "/assets/via/frontend-notes.json",
+  "userModelPath": "/opt/via/profiles/USER.md",
+  "taskStatePath": "/run/via/tasks.json",
+  "backendSessionStatePath": "/run/via/state/acp-sessions.json",
+  "taskTerminalTtlMs": 86400000,
+  "taskPendingNotificationTtlMs": 604800000,
+  "taskNotificationClaimTtlMs": 60000,
+  "maxTerminalTasksPerOwner": 100,
+  "taskMaxConcurrent": 4,
+  "taskMaxConcurrentPerOwner": 2,
+  "conversationSessionTtlMs": 21600000,
+  "maxConversationSessions": 500,
+  "frontendMemoryOwnerTtlMs": 0,
+  "maxFrontendMemoryOwners": 1000,
+  "memoryAutoEnabled": true,
+  "memoryModel": "qwen-flash",
+  "memoryBaseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "memoryApiKey": "[REDACTED]",
+  "memoryAuditPath": "/run/via/memory-audit.jsonl",
+  "reminderSchedulerEnabled": true,
+  "reminderMaxPerOwner": 50,
+  "scheduledTaskTimeoutMs": 1800000,
+  "backgroundTaskProgressCheckMs": 300000,
+  "offlineNotificationDelayMs": 5000,
+  "reminderStaggerMs": 30000,
+  "sleepTimeoutMs": 90000,
+  "wakeWordEnabled": true,
+  "wakeWord": "hey via",
+  "wakeWordModelDirectory": "/run/via/models/wake-word",
+  "computerUse": false,
+  "gatewayOwner": "",
+  "locale": "ko"
+}

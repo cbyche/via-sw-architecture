@@ -1,0 +1,72 @@
+[package]
+name = "via-app"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+via-protocol.workspace = true
+via-catalog.workspace = true
+via-log.workspace = true
+via-store.workspace = true
+via-lock.workspace = true
+via-audio.workspace = true
+via-i18n.workspace = true
+via-core.workspace = true
+via-realtime.workspace = true
+via-voice.workspace = true
+via-work.workspace = true
+via-coordinator.workspace = true
+via-conversation.workspace = true
+via-downstream.workspace = true
+
+async-trait.workspace = true
+axum.workspace = true
+chrono.workspace = true
+futures.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tokio-util.workspace = true
+tower.workspace = true
+uuid.workspace = true
+
+[features]
+# `testing` is on by default so this crate's own integration tests reach the
+# doubles under a bare `cargo test -p via-app`, mirroring `via-downstream`,
+# `via-work`, `via-coordinator` and `via-mcp-tools`. A build that wants none of
+# it takes `default-features = false`. (`via-realtime` needs no flag: its
+# provider double is compiled unconditionally.)
+default = ["testing"]
+testing = ["via-downstream/testing", "via-work/testing"]
+
+[dev-dependencies]
+pretty_assertions.workspace = true
+tempfile.workspace = true
+# `test-util` is what makes `#[tokio::test(start_paused = true)]` work, and the
+# two timers this crate owns — the offline-notification delay and the 2000 ms
+# exit timeout — are both asserted through it rather than by sleeping.
+tokio = { workspace = true, features = ["test-util"] }
+# The integration tests speak to a real socket, because half of what this crate
+# owns is only observable there: the field order of a served payload, a 302 that
+# is not a 307, and a WebSocket upgrade that is answered with silence.
+reqwest = { workspace = true, features = ["cookies"] }
+tokio-tungstenite.workspace = true
+via-core.workspace = true
+via-conversation.workspace = true
+via-log.workspace = true
+via-protocol.workspace = true
+via-work.workspace = true
+# The wake-word integration test drives a real detector through the socket —
+# a scripted opener over `ScriptedDetector`, never the real engine (this
+# crate never takes `--features sherpa`).
+via-wake-word.workspace = true
+# `encode_audio` — the same base64 PCM16 codec a realtime socket uses, reused
+# here for `audio.append` rather than re-implemented in the test.
+via-realtime-mock.workspace = true

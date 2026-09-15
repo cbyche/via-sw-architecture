@@ -1,0 +1,57 @@
+[package]
+name = "via-core"
+description = "VIA's Core band: the layered configuration resolver, the install-path map, the signed owner identity, the origin allow-list and the Gateway setup gate."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+via-catalog = { workspace = true }
+via-i18n = { workspace = true }
+via-log = { workspace = true }
+via-protocol = { workspace = true }
+via-store = { workspace = true }
+
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# The owner cookie is `user_<uuid>.<base64url(HMAC-SHA256(secret, ownerId))>`
+# (`server/src/core/identity.mjs:46-48`). `hmac` is RustCrypto's RFC 2104
+# implementation over the `sha2` already in the workspace table; hand-rolling
+# the ipad/opad construction inside a security boundary is the wrong trade.
+hmac = { workspace = true }
+sha2 = { workspace = true }
+base64 = { workspace = true }
+uuid = { workspace = true }
+
+# `state.env` holds `randomBytes(32).toString('hex')`
+# (`shared/runtime-environment.mjs:132`). There is no CSPRNG in the workspace
+# table, and deriving 32 bytes from UUIDs would be a worse answer inside a
+# security boundary. `getrandom` is already in the graph via `uuid`.
+getrandom = { workspace = true }
+
+# `dirs` supplies the OS home directory for the *impure* entry points only
+# (`Overrides::from_process`). `resolve` itself never calls it.
+dirs = { workspace = true }
+
+# The origin allow-list is a DNS-rebinding boundary that upstream expresses
+# entirely in terms of WHATWG `new URL(...)`: default-port stripping in origin
+# serialization, IPv4 shorthand normalization (`127.1` → `127.0.0.1`), IPv6
+# bracket form, and host-vs-hostname. `url` is that algorithm; approximating it
+# with string splitting is exactly the wrong place to approximate.
+url = { workspace = true }
+
+[dev-dependencies]
+insta = { workspace = true }
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

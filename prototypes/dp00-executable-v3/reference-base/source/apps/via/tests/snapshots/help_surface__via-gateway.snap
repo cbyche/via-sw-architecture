@@ -1,0 +1,37 @@
+---
+source: apps/via/tests/help_surface.rs
+expression: "long_help(&[\"gateway\"])"
+---
+Run the Gateway in the foreground.
+
+Resolves the configuration, refuses to start unconfigured, and takes the single-instance lease before anything else happens.
+
+Usage: via gateway [OPTIONS]
+
+Options:
+      --url <URL>
+          Gateway address (http or https; normalised to its origin)
+          
+          [env: VIA_URL]
+          [default: http://127.0.0.1:3101]
+
+      --backend <NAME>
+          Backend agent id, or `none` for voice chat only
+          
+          [env: AGENT_PROTOCOL]
+
+      --backend-permission-mode <MODE>
+          native (default) or full (the Gateway's unified highest permission)
+          
+          [env: VIA_BACKEND_PERMISSION_MODE]
+
+      --backend-url <URL>
+          Address of an already-running backend server; passing it makes the backend external
+
+      --backend-agent <ID>
+          Coordinator agent id forwarded to the backend
+          
+          [env: VIA_BACKEND_AGENT]
+
+  -h, --help
+          Print help (see a summary with '-h')

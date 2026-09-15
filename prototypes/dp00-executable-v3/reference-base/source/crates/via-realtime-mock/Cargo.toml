@@ -1,0 +1,53 @@
+[package]
+name = "via-realtime-mock"
+description = "VIA's deterministic realtime provider: a scripted in-process replacement for a realtime service, so the whole Gateway is testable with no weights, no GPU, no network and no audio hardware."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# The two traits this crate implements, the session it opens, the two shipped
+# dialects it speaks, and the response-activity table its stamper reads.
+via-realtime = { workspace = true }
+# The `mock` provider row — key, label, identity shape — and the model profile
+# and configuration-signature hash. None of it is restated here.
+via-catalog = { workspace = true }
+# The two sentences a mock provider composes for a person.
+via-i18n = { workspace = true }
+# `SessionMode`: a `dictation` script opens a `dictation` session.
+via-protocol = { workspace = true }
+# Canned PCM: `SampleRate`, `WavAudio` and the PCM16 conventions, so the audio
+# the mock streams has real sample counts a `PlaybackCursor` can drain.
+via-audio = { workspace = true }
+
+serde = { workspace = true }
+# `preserve_order` carries from the workspace table and matters here twice: a
+# script fixture round-trips through this crate byte-stable, and a stamped
+# inbound event keeps the key order the script wrote.
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+
+# Realtime audio frames are base64 PCM16 on the wire, in both directions.
+base64 = { workspace = true }
+
+# The script server is one owning task over an in-process transport
+# (`docs/architecture.md` §11): a bounded `mpsc` of commands with `oneshot`
+# replies, never a mutex over the transcript.
+tokio = { workspace = true }
+futures = { workspace = true }
+# `Transport` is a sink and a stream of `tungstenite::Message`, so the
+# in-process transport speaks the same frame type a socket does.
+tokio-tungstenite = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

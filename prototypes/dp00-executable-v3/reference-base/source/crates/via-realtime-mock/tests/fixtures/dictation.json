@@ -1,0 +1,21 @@
+{
+  "kind": "dictation",
+  "steps": [
+    {
+      "on": "audioCommit",
+      "repeat": "always",
+      "emit": [
+        { "event": { "type": "input_audio_buffer.committed" } },
+        { "afterMs": 10, "event": { "type": "conversation.item.input_audio_transcription.delta", "delta": "open " } },
+        { "afterMs": 10, "event": { "type": "conversation.item.input_audio_transcription.delta", "delta": "the door" } },
+        {
+          "afterMs": 10,
+          "event": {
+            "type": "conversation.item.input_audio_transcription.completed",
+            "transcript": "open the door"
+          }
+        }
+      ]
+    }
+  ]
+}

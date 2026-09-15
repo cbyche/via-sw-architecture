@@ -1,0 +1,30 @@
+{
+  "kind": "conversation",
+  "steps": [
+    {
+      "on": "responseCreate",
+      "emit": [
+        { "event": { "type": "response.created" } },
+        {
+          "afterMs": 40,
+          "event": {
+            "type": "response.function_call_arguments.done",
+            "call_id": "call_fixture_1",
+            "name": "spawn_thinking",
+            "arguments": "{\"objective\":\"summarise the log\"}"
+          }
+        },
+        { "event": { "type": "response.done", "response": { "status": "completed" } } }
+      ]
+    },
+    {
+      "on": "responseCreate",
+      "emit": [
+        { "event": { "type": "response.created" } },
+        { "afterMs": 20, "event": { "type": "response.text.delta", "delta": "I have started on that." } },
+        { "event": { "type": "response.text.done", "text": "I have started on that." } },
+        { "event": { "type": "response.done", "response": { "status": "completed" } } }
+      ]
+    }
+  ]
+}

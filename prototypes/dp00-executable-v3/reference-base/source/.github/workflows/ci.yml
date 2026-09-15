@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build · test · clippy
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v5
+
+      # rust-toolchain.toml pins the channel; this action honours it.
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: fmt
+        run: cargo fmt --all --check
+
+      - name: clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: test
+        run: cargo test --workspace
+
+  gates:
+    name: architecture · identity · panic budget
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+
+      # The crate-graph rule. Upstream enforced its layering with a regex over
+      # import statements; here it is asserted against real cargo metadata
+      # edges, so it cannot be fooled. See docs/architecture.md §9.
+      - name: crate graph
+        run: cargo test -p via-arch-test
+
+      # The 707 external contracts. Every one is either asserted or explicitly
+      # PENDING with an owning crate — an unclassified contract fails here.
+      - name: contract conformance
+        run: cargo test -p via-conformance
+
+      # Identity, both directions: no un-renamed qwen string survives the port,
+      # and no argo/tini string leaks in from the other upstream.
+      - name: brand leak
+        run: python3 scripts/brand_leak.py
+
+      # Ported verbatim from ARGO (standalone Python, no coupling). These
+      # enumerate production panic sites; the baseline ratchets down, never up.
+      - name: panic budget
+        run: |
+          python3 scripts/panic_filter.py
+          python3 scripts/unreachable_filter.py
+          python3 scripts/risky_unwrap.py
+
+  # The on-device path (sherpa-onnx, llama-cpp-2, cpal) is native C/C++ and is
+  # deliberately NOT in the default build — see docs/adr/0001-placement.md for
+  # why that constraint is what keeps VIA out of ARGO's workspace. When
+  # via-realtime-local lands, this job builds it on its own runners rather than
+  # putting a C toolchain in every lane above.
+  #
+  # local-models:
+  #   name: on-device providers
+  #   ...

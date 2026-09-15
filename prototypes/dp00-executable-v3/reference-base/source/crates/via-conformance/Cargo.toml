@@ -1,0 +1,88 @@
+[package]
+name = "via-conformance"
+description = "The byte-equality gate: VIA's 707 external contracts, each either asserted against a shipped crate or explicitly pending on the crate that will own it."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+# Nothing outside this workspace has any use for the coverage registry, and the
+# crate `include_str!`s a file from `docs/`, which is not part of any package.
+publish = false
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+# The crates whose contracts this gate asserts *itself*. They are
+# `[dependencies]` rather than `[dev-dependencies]` so the crate graph records
+# what is covered: this edge set is the machine-readable form of "these are the
+# crates a byte comparison in `tests/` reaches into".
+#
+# Sixteen more crates have shipped since phase 1, and this gate does **not**
+# grow an edge to each of them: where a shipped crate already compares a
+# catalogued value against its own code, the registry row is
+# `Coverage::Behavioural` naming that crate's test, and duplicating the
+# comparison here would only mean two places to update. An edge is added only
+# when this crate performs the comparison, which is why `via-voice` and
+# `via-i18n` are here — see `tests/frontend_prompt.rs`,
+# `tests/voice_constants.rs` and `tests/localized_leaf_messages.rs`.
+#
+# `via-audio` is absent on purpose — it owns no catalogued contract (see the
+# coverage summary), so an edge to it would claim coverage that does not exist.
+via-protocol = { workspace = true }
+via-catalog = { workspace = true }
+via-log = { workspace = true }
+via-store = { workspace = true }
+via-lock = { workspace = true }
+via-core = { workspace = true }
+via-i18n = { workspace = true }
+via-voice = { workspace = true }
+# via-voice's own wire-frame payloads (voice.ready, voice.ownership,
+# voice.deactivated, the input control plane) are actually built one band up,
+# in via-app's realtime socket codec — `docs/deviations/phase-5-via-app.md`
+# splits upstream's `realtime-gateway.mjs` so "the socket plumbing is
+# via-app's, the decisions it makes are via-voice's". `tests/voice_wire.rs`
+# is the one place that can see both halves of that split.
+via-app = { workspace = true }
+# The "backend ACP launch specs" row is an excerpt spanning ten backend-
+# specific launch specs, each built by a different `via-backends` driver, with
+# no single existing test in that crate asserting the whole excerpt at once —
+# `tests/acp_wire.rs` builds every named backend's real profile and compares
+# it against the catalogue directly rather than duplicating one driver's worth
+# of construction logic per assertion.
+via-backends = { workspace = true }
+# `describeActiveRealtime`'s capability flag sets, the input-part `_meta`
+# reference key, and the `spawn_thinking` / frontend tool-set rows this crate
+# owns are asserted through the real registry and tool-catalog paths rather
+# than by retyping `via-catalog`'s or `via-voice`'s structs —
+# `tests/realtime_providers.rs`.
+via-realtime = { workspace = true }
+# `service_endpoint_port` / `normalize_service_endpoint` is the scheme-to-port
+# table `default-value/service endpoint port resolution` names
+# (`tests/app_http.rs`); via-app does not re-export it, so this crate reaches
+# via-process directly for the one comparison it makes.
+via-process = { workspace = true }
+# The `via` binary's own contracts — `binary-name`, the npm-packaging
+# divergences, and the CLI-side prompt text — are asserted directly against
+# the crate rather than retyped, in `tests/apps_via_packaging.rs`. Path rather
+# than `workspace = true`: `apps/via` is not a `[workspace.dependencies]`
+# member, matching `via-e2e`'s own dependency on it.
+via = { path = "../../apps/via" }
+
+[dev-dependencies]
+insta = { workspace = true }
+pretty_assertions = { workspace = true }
+# Several contracts are on-disk artifacts — file names, modes, byte-exact
+# document bodies — so they are asserted by writing them and reading back.
+tempfile = { workspace = true }
+chrono = { workspace = true }
+# Used to re-derive the configuration signature independently of the
+# implementation under test, so `tests/realtime_catalog.rs` is not circular.
+sha2 = { workspace = true }
+hex = { workspace = true }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

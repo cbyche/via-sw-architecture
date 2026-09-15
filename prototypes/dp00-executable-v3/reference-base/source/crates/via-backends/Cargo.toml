@@ -1,0 +1,64 @@
+[package]
+name = "via-backends"
+description = "The twelve named backend agents: capability declarations, launch specs, availability probing, detection, install and onboarding, and the OpenClaw Gateway bridge."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+# This is the one crate where backend names are allowed. It is the reason
+# `via-acp` and `via-process` stay generic: everything they need arrives from
+# here as data.
+via-acp = { workspace = true }
+via-catalog = { workspace = true }
+via-core = { workspace = true }
+via-downstream = { workspace = true }
+via-i18n = { workspace = true }
+via-process = { workspace = true }
+
+async-trait = { workspace = true }
+futures = { workspace = true }
+# The OpenClaw Gateway transport token: 32 CSPRNG bytes as hex. Deliberately not
+# `via_core::runtime::generate_auth_secret` — upstream keeps the two secrets
+# apart on purpose.
+getrandom = { workspace = true }
+# `CODEX_CONFIG` is an inline JSON blob whose key order the Codex adapter reads
+# back; `preserve_order` is what keeps it reproducible.
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+# The three `STATUS_PARSERS` and the DeepSeek credential matcher are literal
+# upstream regexes whose accepted set decides whether a user is told to log in
+# again. Approximating them with string search would change that set.
+once_cell = { workspace = true }
+regex = { workspace = true }
+
+# `findExecutable` is `shared/backend-setup.mjs`'s own PATH walk, including the
+# PATHEXT handling Windows needs.
+which = { workspace = true }
+
+# The OpenClaw dashboard and bridge URLs are WHATWG `new URL(...)` manipulations
+# — scheme swap, path reset, fragment write — and `url` is that algorithm.
+url = { workspace = true }
+
+# `npm install -g` forks: killing only the immediate child on a timeout leaves
+# `node` and every lifecycle script running. Same reason `via-acp` and
+# `via-process` use it.
+process-wrap = { workspace = true }
+
+[dev-dependencies]
+pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+serde_json = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["test-util"] }
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "forbid"

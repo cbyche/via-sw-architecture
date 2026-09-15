@@ -1,0 +1,29 @@
+{
+  "kind": "conversation",
+  "provider": {
+    "key": "mock",
+    "label": "Mock Realtime",
+    "dialect": "ga",
+    "capabilities": {
+      "acknowledgesSessionUpdate": false,
+      "singleResponseSlot": true,
+      "responseMetadataCorrelation": true,
+      "perResponseInstructions": true,
+      "conversationItemIdEcho": false
+    },
+    "inputSampleRate": 16000,
+    "outputSampleRate": 24000,
+    "responseStartTimeoutMs": 60000,
+    "endpoint": "mock://in-process"
+  },
+  "steps": [
+    {
+      "on": "responseCreate",
+      "emit": [
+        { "event": { "type": "response.created" } },
+        { "event": { "type": "response.output_text.delta", "delta": "ga hello" } },
+        { "event": { "type": "response.done", "response": { "status": "completed" } } }
+      ]
+    }
+  ]
+}
