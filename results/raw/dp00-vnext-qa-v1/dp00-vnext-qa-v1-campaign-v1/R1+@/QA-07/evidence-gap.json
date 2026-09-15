@@ -1,0 +1,18 @@
+{
+  "evidence_status_id": "dp00-vnext-qa07-evidence-status-v1",
+  "missing_evidence_treatment": "Emit an incomplete QA-v1 result envelope with no raw metric or score and block final DP-00 selection.",
+  "official_score_allowed": false,
+  "prohibited_shortcuts": [
+    "invent byte values",
+    "reuse evaluator self-test bytes",
+    "change metric or denominator",
+    "change QA-07 workload",
+    "infer a denominator from model parameter count"
+  ],
+  "qa_id": "QA-07",
+  "reference_environment_status": "PLANNED_BEFORE_QA07_QUALIFICATION",
+  "repository_audit_finding": "No approved or frozen numeric minimum-mandatory-memory calibration exists. Numeric bytes found in evaluator self-tests are test vectors and are not calibration evidence.",
+  "status": "BLOCKED_MISSING_FROZEN_MEMORY_CALIBRATION",
+  "workload": "benchmark/fixtures/qa-v1/resource/qa07-resource-workload-v1.json",
+  "workload_claim_limit": "Evidence-anchored deterministic workload definition; it contains no measured device memory."
+}

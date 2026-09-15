@@ -16,7 +16,13 @@ Active vNext Decision Point catalog: `../architecture/decision-points/catalog.md
 
 DP-00 R1/R3 candidate contracts: `../../benchmark/contracts/dp-vnext/`
 
-DP-00 next-task protocol (no results): `dp00-vnext-evaluation-protocol-v1.md`
+DP-00 frozen protocol: `dp00-vnext-evaluation-protocol-v1.md`
+
+DP-00 pre-registration and controls: `../../benchmark/contracts/dp-vnext/evaluation/`
+
+First offline QA-v1 campaign report: `../../results/reports/dp00-vnext-qa-v1/dp00-vnext-qa-v1-campaign-v1/comparative-report.md`
+
+The campaign produced complete preliminary results for QA-01 through QA-06 and QA-08 through QA-12. QA-07 remains unscored because the active Reference Environment has no evidence-anchored frozen memory denominator, so no final DP-00 winner or ADR is claimed.
 
 ## LEGACY QA DEFINITIONS
 
