@@ -12,7 +12,7 @@ VIA is Voice-first and Text-capable, owns a stable user-facing Task identity, en
 
 ```text
 R1 — Agent-neutral Control Plane
-User → VIA interaction/turn/grounding/goal/initial delegation/task UX
+User → VIA interaction-facing input/grounding/goal/initial delegation/task UX
      → selected Agent: domain reasoning/planning/arbitrary tools/workflow state
 
 R3 — Primary General-purpose Agent Runtime
@@ -22,6 +22,8 @@ User → VIA interaction/task correlation/permission boundary/result delivery
 ```
 
 R3 is vendor-neutral; ARGO is only a possible realization. R1 does not make VIA a general-purpose Agent runtime.
+
+DP-00 does not select committed logical UserTurn authority for either family; that authority remains unresolved until DP-01.
 
 R1+@ preserves R1 ownership and adds only bounded deterministic read-only local execution. Speech-stop and provisional-work cancellation are interaction controls. Any state-changing action, arbitrary tool selection, planning loop, durable workflow, or independent Agent execution state requires architectural reclassification.
 

@@ -1,0 +1,37 @@
+{
+  "control_id": "dp00-vnext-frozen-controls-v1",
+  "status": "FROZEN_BEFORE_COMPARATIVE_EXECUTION",
+  "qa_contract": "benchmark/contracts/qa-v1/qa-evaluation-contract-v1.json",
+  "reference_environment": "benchmark/contracts/qa-v1/reference-environment-v1.json",
+  "corpus_manifest": "benchmark/contracts/qa-v1/corpus-manifest-v1.json",
+  "latency_reference": "benchmark/contracts/dp00-qa01-design-reference-latency-v1.json",
+  "agent_capability_envelopes": "benchmark/agent-stubs/qa-v1/capability-profiles-v1.json",
+  "common_candidate_inputs": {
+    "DP-01": "Committed turn/input fixture supplied by the campaign boundary; no candidate receives committed-turn authority.",
+    "DP-02": "One common frozen semantic replay result per comparable substantive operation; authority placement does not create extra inference.",
+    "DP-03": "Identical temporal evidence and versions from frozen context fixtures.",
+    "DP-04": "Identical context availability and scoped fixture payloads.",
+    "DP-05": "Identical UserTask identities and follow-up correlations.",
+    "DP-06": "Identical task lifecycle events and fault schedules at a typed fixture boundary.",
+    "DP-07": "Identical validated result facts/version and Voice/Text obligations.",
+    "DP-08": "Identical device/resource workload and work-conserving fixture scheduling; no resource topology is selected by DP-00 scoring code.",
+    "DP-09": "Identical device-family capability/context projections from the frozen QA-06 population."
+  },
+  "candidate_visible_rule": "Candidate code receives sanitized scenario input only. Keys containing oracle, ground_truth, expected_graph, or injected fault labels are evaluator-only.",
+  "oracle_boundary": "Oracle files are loaded only by post-execution conformance adapters and never passed to candidate runtime code.",
+  "timing_rules": {
+    "semantic_operation": "COMBINED_EXECUTION_DECISION",
+    "model_call_count_policy": "Exactly one frozen substantive semantic sample is used when the path needs semantic inference; authority/component count does not add samples.",
+    "candidate_neutral_sample_key": "profile_id + semantic_signature + semantic_operation",
+    "boundary_hop_primitive": "H",
+    "bounded_read_primitive": "X2",
+    "general_or_specialist_primitive": "X3",
+    "response_delivery_hops": 1
+  },
+  "determinism": {
+    "seed_source": "SHA-256 of candidate-neutral semantic or case identity",
+    "candidate_specific_random_failure_probability": false,
+    "network_or_cloud_dependency": false
+  },
+  "qa07_evidence_status": "benchmark/contracts/dp-vnext/evaluation/qa07-evidence-status-v1.json"
+}

@@ -83,6 +83,17 @@ def test_exactly_one_active_dp00_has_r1_r3_base_families_and_r1_at_tactic():
     assert "D" not in base_ids
 
 
+def test_dp00_candidates_do_not_preselect_dp01_turn_authority():
+    invariant = "DP-00 does not select committed logical UserTurn authority; that authority remains unresolved until DP-01."
+    r1 = _load(CANDIDATE_PATHS[0])
+    r3 = _load(CANDIDATE_PATHS[1])
+    assert invariant in r1["invariants"]
+    assert invariant in r3["invariants"]
+    assert "canonical input and turn handling" not in r1["via_owns"]
+    active_dp00 = (ROOT / "docs/architecture/decision-points/vnext/DP-00-primary-reasoning-execution-boundary.md").read_text(encoding="utf-8")
+    assert invariant in active_dp00
+
+
 def test_all_active_dps_resolve_primary_qas_and_evaluate_all_twelve():
     catalog = _catalog()
     valid = _qa_ids()

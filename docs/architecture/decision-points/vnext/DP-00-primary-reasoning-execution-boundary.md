@@ -12,13 +12,15 @@ Where does primary substantive reasoning, planning, execution workflow, and spec
 
 ### R1 — Agent-neutral Control Plane
 
-VIA owns user interaction; canonical input/turn handling; context and temporal grounding; grounded user-goal representation; agent-neutral initial routing/delegation; user-facing task lifecycle; consent interaction; and result/response binding.
+VIA owns user interaction and interaction-facing input handling; context and temporal grounding; grounded user-goal representation; agent-neutral initial routing/delegation; user-facing task lifecycle; consent interaction; and result/response binding. DP-00 does not select which boundary owns the authoritative committed logical `UserTurn`.
 
 The selected downstream Agent owns domain reasoning, planning, arbitrary tool selection/execution, and domain execution state/workflow. R1 does not make VIA a general-purpose Agent runtime and does not prescribe a number of model calls.
 
 ### R3 — Primary General-purpose Agent Runtime
 
 One vendor-neutral general-purpose Agent Runtime is structurally primary for substantive semantic interpretation, planning, tool/runtime execution, execution state/workflow, and downstream specialist delegation. VIA retains Voice/Text interaction, user-facing Task correlation, context/permission boundary interaction, and result delivery. ARGO can realize R3 but is not the architecture definition.
+
+For both R1 and R3: **DP-00 does not select committed logical UserTurn authority; that authority remains unresolved until DP-01.**
 
 ## Evaluated tactic realization
 

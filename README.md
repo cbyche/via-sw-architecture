@@ -15,7 +15,7 @@ Engineering source of truth for Samsung PC-first, cross-device-capable Voice Int
 
 **DP-00 — Primary Reasoning & Execution Boundary** asks whether primary substantive reasoning and execution authority resides in:
 
-- **R1 — Agent-neutral Control Plane:** VIA owns interaction, canonical turns, grounding, grounded goals, agent-neutral initial delegation, user-facing task lifecycle, consent interaction, and result binding. The selected Agent owns domain reasoning, planning, arbitrary tools, and domain workflow/execution state.
+- **R1 — Agent-neutral Control Plane:** VIA owns interaction-facing input handling, grounding, grounded goals, agent-neutral initial delegation, user-facing task lifecycle, consent interaction, and result binding. The selected Agent owns domain reasoning, planning, arbitrary tools, and domain workflow/execution state. Committed logical UserTurn authority remains open until DP-01.
 - **R3 — Primary General-purpose Agent Runtime:** one vendor-neutral general-purpose Agent Runtime owns substantive interpretation, planning, tools/runtime, workflow state, and specialist delegation. VIA retains interaction, user-facing Task correlation, permission/context-boundary interaction, and result delivery.
 
 **R1+@ is not a third base family.** It is R1 plus bounded deterministic read-only local execution, with no state-changing domain action, arbitrary tools, open-ended planning, durable workflow, or Agent execution state.

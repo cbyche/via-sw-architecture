@@ -9,7 +9,7 @@
   "architecture_identity": "VIA owns interaction-facing grounding, agent-neutral initial delegation, and user-facing lifecycle; a selected downstream Agent owns domain reasoning and execution.",
   "via_owns": [
     "user interaction",
-    "canonical input and turn handling",
+    "interaction-facing input handling without committed logical UserTurn authority",
     "context and temporal grounding",
     "grounded user-goal representation",
     "agent-neutral initial routing and delegation",
@@ -25,6 +25,7 @@
   ],
   "invariants": [
     "VIA is not a general-purpose Agent runtime.",
+    "DP-00 does not select committed logical UserTurn authority; that authority remains unresolved until DP-01.",
     "The candidate does not prescribe exactly two model calls or any other call count.",
     "Initial delegation remains agent-neutral.",
     "All state-changing domain work crosses into the selected Agent boundary."

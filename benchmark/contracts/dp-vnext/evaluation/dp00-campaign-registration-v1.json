@@ -1,0 +1,18 @@
+{
+  "registration_id": "dp00-vnext-qa-v1-campaign-registration-v1",
+  "status": "FROZEN_BEFORE_COMPARATIVE_EXECUTION",
+  "dp_id": "DP-00",
+  "candidate_set_complete": true,
+  "candidates": [
+    {"candidate_id": "R1", "classification": "base_family", "contract": "benchmark/contracts/dp-vnext/dp00-r1-candidate-v1.json"},
+    {"candidate_id": "R3", "classification": "base_family", "contract": "benchmark/contracts/dp-vnext/dp00-r3-candidate-v1.json"},
+    {"candidate_id": "R1+@", "classification": "tactic_realization", "inherits": "R1", "contract": "benchmark/contracts/dp-vnext/dp00-r1-readonly-fastpath-tactic-v1.json"}
+  ],
+  "common_controls": "benchmark/contracts/dp-vnext/evaluation/dp00-frozen-controls-v1.json",
+  "official_profile": "QWEN3_MEDIUM_REFERENCE",
+  "sensitivity_profiles": ["QWEN3_SMALL_REFERENCE", "QWEN3_30B_A3B_REFERENCE"],
+  "all_candidates_run_together": true,
+  "post_result_tuning_forbidden": true,
+  "qa07_policy": "No official QA-07 scalar is allowed until the Reference Environment provides evidence-anchored frozen minimum-mandatory-memory calibration.",
+  "cloud_or_model_api_calls": "FORBIDDEN"
+}
