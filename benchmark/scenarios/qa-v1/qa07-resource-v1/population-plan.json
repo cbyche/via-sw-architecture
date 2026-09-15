@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": null,
+  "generation_rules": [
+    "Treat the workload as one frozen event timeline rather than inventing a scenario count",
+    "Measure physically resident memory across process boundaries",
+    "Use one frozen minimum mandatory stack denominator for the same timeline",
+    "Record shared pages once and true replicas separately"
+  ],
+  "legacy_seed_sources": [],
+  "official_target_size": null,
+  "population_id": "qa07-resource-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa07-resource-v1/manifest.json",
+  "qa_id": "QA-07",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "frozen concurrent required AI-stack workload timeline"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "architecture process topology",
+    "physical-page sharing",
+    "true model replicas",
+    "KV/cache ownership",
+    "Agent runtime placement",
+    "task/context/buffer residency"
+  ],
+  "workload_timeline": [
+    "voice interaction active with input/output audio buffers",
+    "current semantic processing and required model state resident",
+    "selected downstream Agent runtime active",
+    "multiple active UserTasks and lifecycle state resident where required",
+    "context, evidence, and provisional state resident",
+    "response/Text/Voice delivery buffers resident",
+    "sample process and shared-page physical residency through the concurrent peak"
+  ]
+}

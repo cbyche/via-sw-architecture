@@ -1,5 +1,7 @@
 # VIA Architecture Requirements — vNext Working Baseline
 
+> **QA SEMANTICS NOTICE.** The QA rebaseline section in this working vNext document records the pre-QA-Contract-v1 `Top QA-01~04` scheme. It is not current evaluation authority. QA Evaluation Contract v1 governs future architecture comparisons and does not modify the approved requirements-v1.1 baseline.
+
 > Status: **Architecture Evaluation Working Baseline — not an Approved Baseline**
 >
 > `docs/requirements/requirements-v1.1.md` remains the **Approved starting baseline** and must not be edited by this vNext work.

@@ -1,5 +1,7 @@
 # DP-16 — Local Execution Hosting and Isolation Boundary
 
+> **QA SEMANTICS NOTICE.** References to `Top QA-01~04` and v1.1 QAs retain their stated legacy meanings. Before evaluation, this open DP must nominate valid Primary QAs from QA Evaluation Contract v1 without defining local metrics, targets, populations, or scores.
+
 ## Status
 
 **OPEN — CONDITIONAL STRUCTURAL INVESTIGATION; NO ALTERNATIVE SELECTED**

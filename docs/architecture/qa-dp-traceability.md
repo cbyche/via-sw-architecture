@@ -1,8 +1,10 @@
 # QA ↔ Decision Point Traceability — vNext Working
 
+> **SUPERSEDED NORMATIVE MAPPING / HISTORICAL DP-00 TRACEABILITY.** The `Top QA-01~04` meanings in this document are not current QA definitions. Use `docs/evaluation/qa-contracts/v1/README.md` for every future evaluation. This file remains evidence of the pre-v1 mapping and is not silently rewritten into QA-v1 traceability.
+
 ## Status
 
-Central architecture navigation for the **vNext working baseline**. DP-00
+Historical architecture navigation for the pre-QA-Contract-v1 **vNext working baseline**. DP-00
 comparative experimentation and trade-space characterization are complete;
 final A/B/C/D selection is intentionally deferred pending discriminating
 downstream architecture evidence.
@@ -15,7 +17,7 @@ The reviewed downstream catalog is authoritative in
 
 ## Terminology: Top QA vs Legacy v1.1 Detailed QA
 
-The IDs `QA-01`~`QA-04` now refer to the **vNext Top Architectural Driver QAs** in central vNext architecture work.
+Within this historical document only, the IDs `QA-01`~`QA-04` refer to the former **vNext Top Architectural Driver QAs**.
 
 The QA IDs embedded in `requirements-v1.1.md` remain valid historical Approved Baseline IDs and are referred to here as:
 

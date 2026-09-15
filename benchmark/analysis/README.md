@@ -1,5 +1,9 @@
 # DP-00 Runtime Pilot v0 Offline Analysis
 
+> **HISTORICAL ANALYZER — LEGACY QA SEMANTICS.** This package reproduces the DP-00 campaign under its original contracts. It does not compute QA Contract v1 scores. The QA-v1 validation test is additive and does not reinterpret old evidence.
+
+The current common engine for future Decision Points is `benchmark/analysis/qa_v1/`.
+
 This package performs deterministic post-run analysis of immutable Rust raw evidence. Python is not an AUT dependency, never enters the Rust timed execution path, makes no architecture decision, and never rewrites `results/raw/**`. Derived files belong under `results/derived/**`.
 
 `dp00-analysis-v9` validates the current `canonical-event-v3`, `model-call-v1`, `dp00-pilot-provenance-v4`, `dp00-calibration-manifest-v1`, and `dp00-pilot-campaign-provenance-v1` contracts while retaining read support for immutable v2/v3 provenance/event evidence. Required fields, unknown fields, invalid enums, absent/unsupported versions, and asset reference/version mismatches are errors; no implicit defaults or migrations are applied. v9 retains the v8 acceptance formulas and paired semantics unchanged, adds strict R1–R4 profile-id compatibility, and reports configured Model/Agent/Tool budgets plus the observed framework/timer residual for QA-01.

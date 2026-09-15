@@ -1,5 +1,7 @@
 # DP-00 Runtime Pilot v0 Corpus
 
+> **HISTORICAL CORPUS — LEGACY QA SEMANTICS.** P01–P12 remain reproducibility evidence for their original campaign. They are not any QA Contract v1 frozen population.
+
 ## Status
 
 **Pilot calibration input — not a final evaluation corpus or score.**

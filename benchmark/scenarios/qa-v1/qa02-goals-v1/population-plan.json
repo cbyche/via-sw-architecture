@@ -1,0 +1,46 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 600,
+  "generation_rules": [
+    "Freeze at least 60 distinct semantic families",
+    "Variations must change a real constraint, fixture, context, device, or Agent obligation",
+    "Every required success condition and deadline is fixed before execution",
+    "No cloned wording-only cases and no result-driven selection"
+  ],
+  "legacy_seed_sources": [
+    {
+      "concept_count": 12,
+      "path": "benchmark/scenarios/pilot-v0",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    },
+    {
+      "concept_count": 36,
+      "path": "benchmark/qa01-reference-v1/scenarios.json",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    }
+  ],
+  "official_target_size": 600,
+  "population_id": "qa02-goals-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa02-goals-v1/manifest.json",
+  "qa_id": "QA-02",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "Fast/bounded",
+    "short general-Agent",
+    "specialist-Agent",
+    "temporal grounding/referent/correction",
+    "multi-turn/concurrent/approval",
+    "compound/longer Agent task"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "goal and constraint combinations",
+    "referent ambiguity",
+    "consent requirement",
+    "task/result binding",
+    "Voice/Text fact set",
+    "deadline class",
+    "device/context/Agent fixture"
+  ]
+}

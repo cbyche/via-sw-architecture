@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 200,
+  "generation_rules": [
+    "Create 40 meaningful events per required class",
+    "Freeze truthful/reportable boundary and required delivery channel",
+    "Reject generic ACK, fabricated progress, and stale repetition",
+    "Preserve task/result/version identity"
+  ],
+  "legacy_seed_sources": [
+    {
+      "concept_count": 1,
+      "path": "benchmark/scenarios/pilot-v0/P11.json",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    }
+  ],
+  "official_target_size": 200,
+  "population_id": "qa11-feedback-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa11-feedback-v1/manifest.json",
+  "qa_id": "QA-11",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "accepted/queued",
+    "meaningful progress",
+    "approval-needed",
+    "completion",
+    "blocked/failure"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "required channel",
+    "task duration",
+    "event burst/coalescing",
+    "reconnect",
+    "concurrent tasks",
+    "feedback fact/version"
+  ]
+}

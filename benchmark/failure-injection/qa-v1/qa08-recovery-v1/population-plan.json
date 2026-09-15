@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 200,
+  "generation_rules": [
+    "Freeze recoverability and ground-truth fault onset",
+    "Require same UserTask, reconciled executor state, no duplicate/unsafe side effect, continuation readiness, and restored user state",
+    "Record the independent unsafe/incorrect recovery gate",
+    "Do not count non-recoverable faults"
+  ],
+  "legacy_seed_sources": [
+    {
+      "concept_count": 8,
+      "path": "benchmark/failure-injection/README.md",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    }
+  ],
+  "official_target_size": 200,
+  "population_id": "qa08-recovery-v1",
+  "population_manifest": "benchmark/failure-injection/qa-v1/qa08-recovery-v1/manifest.json",
+  "qa_id": "QA-08",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "voice connection disconnect",
+    "Task Manager restart",
+    "Agent timeout/disconnect",
+    "model endpoint unavailable",
+    "duplicate event/side-effect risk",
+    "cancel/completion race",
+    "Context Connector failure",
+    "exclusive-resource conflict"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "fault onset phase",
+    "task side-effect class",
+    "executor authority",
+    "checkpoint age",
+    "reconnect state",
+    "concurrent task pressure"
+  ]
+}

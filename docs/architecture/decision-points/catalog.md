@@ -1,5 +1,7 @@
 # VIA Structural Decision Catalog
 
+> **QA SEMANTICS NOTICE.** `Top QA-01~04` annotations in this catalog predate QA Evaluation Contract v1 and are retained as historical planning context. Future DP evaluations nominate Primary QAs only from `docs/evaluation/qa-contracts/v1/` and cannot redefine their semantics.
+
 ## Status and authority
 
 **Authoritative catalog for vNext structural decision identities, dispositions,

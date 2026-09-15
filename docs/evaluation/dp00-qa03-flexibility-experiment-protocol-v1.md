@@ -1,5 +1,7 @@
 # DP-00 QA-03 Flexibility Experiment Protocol v1
 
+> **HISTORICAL EVIDENCE — LEGACY QA-03.** This protocol uses the pre-QA-Contract-v1 flexibility meaning of QA-03. Current QA-03 is Interaction & Task Continuity; future general change containment is QA-05. Preserve this protocol and its results under their original identity.
+
 ## Status and identity
 
 **Finalized prospective experiment contract; measured campaign not executed.**

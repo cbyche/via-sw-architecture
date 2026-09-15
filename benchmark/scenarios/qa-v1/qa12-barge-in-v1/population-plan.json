@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 200,
+  "generation_rules": [
+    "Freeze positive user-speech onset truth",
+    "Measure the last audible sample rather than internal cancel/TTS/inference completion",
+    "Vary real playback and buffering conditions meaningfully",
+    "Keep task cancellation and history continuity as QA-03 diagnostics"
+  ],
+  "legacy_seed_sources": [],
+  "official_target_size": 200,
+  "population_id": "qa12-barge-in-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa12-barge-in-v1/manifest.json",
+  "qa_id": "QA-12",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "positive barge-in during response playback"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "speech onset phase",
+    "audio buffer depth",
+    "TTS chunk boundary",
+    "media route",
+    "device output path",
+    "concurrent task state"
+  ]
+}

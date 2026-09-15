@@ -1,5 +1,7 @@
 # AA-016 — DP-00 P12 Compound-route Remediation
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## 1. Scope
 
 Session 6.2R repairs the P12 runtime correctness gap before any rotated

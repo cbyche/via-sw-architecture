@@ -1,5 +1,7 @@
 # DP-13 — Execution State and Recovery Authority
 
+> **QA SEMANTICS NOTICE.** References to `Top QA-01~04` retain their legacy planning meaning. Before evaluation, this open DP must nominate valid Primary QAs from QA Evaluation Contract v1 without defining local metrics, targets, populations, or scores.
+
 ## Status
 
 **OPEN — NO ALTERNATIVE SELECTED**

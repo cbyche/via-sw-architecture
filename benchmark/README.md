@@ -1,5 +1,11 @@
 # VIA Architecture Benchmark
 
+## Active QA-v1 authority
+
+Future architecture evaluation consumes `contracts/qa-v1/qa-evaluation-contract-v1.json`, `reference-environment-v1.json`, and `corpus-manifest-v1.json`. The DP-00 benchmark families documented below are preserved historical infrastructure with legacy QA meanings; they do not define current QA metrics or scores.
+
+The shared DP-neutral implementation is `analysis/qa_v1/`. Historical reuse classifications are in `contracts/qa-v1/historical-evidence-registry-v1.json`. Population foundation plans live at each ownership directory named by the corpus manifest.
+
 ## Status
 
 Central benchmark navigation for the DP-00 Base Architecture evaluation work.

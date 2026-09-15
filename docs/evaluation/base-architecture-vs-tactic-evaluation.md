@@ -1,5 +1,9 @@
 # Base Architecture vs Tactic Evaluation
 
+## QA Contract v1 authority
+
+The architecture-versus-tactic separation remains reusable. The QA-01~04 names and model-call scoring examples below are legacy DP-00 context, not current QA definitions. Every future comparison consumes `docs/evaluation/qa-contracts/v1/README.md` without DP-local targets or score tables.
+
 ## Status
 
 **DP-00 Evaluation Methodology — Pre-Prototype / Pre-Pilot**

@@ -55,62 +55,55 @@ Alternative B is intentionally a responsibility-boundary challenge. It is not eq
 
 Authoritative definition: [`docs/architecture/decision-points/DP-00-primary-execution-boundary.md`](docs/architecture/decision-points/DP-00-primary-execution-boundary.md).
 
-## vNext Top Architectural Drivers
+## Active QA Evaluation Contract v1
 
-| QA | Reviewer-facing question | Primary Metric |
+| QA | Official scalar metric | Target |
 | --- | --- | --- |
-| **QA-01 Fast-task End-to-End Responsiveness** | 빠른가? | **Fast-task Outcome Latency p95 (FTOL p95)** |
-| **QA-02 VIA Interaction-Orchestration Correctness** | 정확한가? | **Architecture Episode Exact Conformance Rate (AECR)** |
-| **QA-03 Flexibility** | 변경이 잘 격리되는가? | **Change Containment Rate (CCR)** |
-| **QA-04 Model Call Overhead** | 실행 경로를 정하기 위해 AI 판단을 얼마나 요구하는가? | **Average Model Calls to Commit Execution Route** |
+| QA-01 | Fast Useful Outcome Latency p95 | ≤ 3.0 s |
+| QA-02 | Constraint-Conformant Goal Completion Rate | ≥ 95% |
+| QA-03 | Continuity Episode Exact Success Rate | ≥ 99% |
+| QA-04 | Agent Evolution Containment Rate | ≥ 95% |
+| QA-05 | Change Containment Rate | ≥ 90% |
+| QA-06 | Core-Preserving Device Adaptation Rate | ≥ 90% |
+| QA-07 | Peak Memory Amplification Ratio | ≤ 1.5x |
+| QA-08 | Safe Task Recovery Time p95 | ≤ 10 s |
+| QA-09 | Least-Privilege Scope F1 | ≥ 98% + hard gate |
+| QA-10 | End-to-End Decision Trace Reconstruction Rate | ≥ 98% |
+| QA-11 | Task Event-to-Useful-Feedback Latency p95 | ≤ 1.5 s |
+| QA-12 | Barge-in Audible Stop Latency p95 | ≤ 200 ms |
 
-Detailed QA definitions are under `docs/evaluation/quality-attributes/`.
+The only active normative QA definitions are under `docs/evaluation/qa-contracts/v1/`. Stable paths under `docs/evaluation/quality-attributes/` are legacy supersession redirects.
 
-The older QA-01~11 inside `requirements-v1.1.md` are preserved as **Legacy v1.1 Detailed QA**. They are reclassified in the central traceability as Secondary/Diagnostic concerns, operational QAs, or Mandatory Qualification candidates; they are not deleted.
+Older QA generations—including the DP-00 Top QA-01~04 set and QA-01~11 inside `requirements-v1.1.md`—remain preserved as historical/approved-baseline context. They are not current scoring authority.
 
-## Scored drivers vs mandatory gates
+## Scores and non-offsettable gates
 
 ```text
-Scored Architectural Drivers
-  QA-01
-  QA-02
-  QA-03
-  QA-04
+Scored QA dimensions
+  QA-01 through QA-12
 
-Mandatory Qualification Gates / Constraints
-  Security
-  Privacy / context-sharing policy
-  Trusted boundary requirements
-  Required cancellation semantics
-  Required task-state integrity
-  Failure containment
-  Mandatory recovery behavior
+Non-offsettable qualification gates
+  QA-08 unsafe or incorrect recovery
+  QA-09 forbidden disclosure, unauthorized state-changing action,
+        or wrong-principal approval use
 ```
 
-Security/reliability concerns are not omitted because they are less important. Non-compensable obligations are separated from trade-off scoring so another QA's high score cannot offset a mandatory violation.
-
-A minimum QA-02 correctness eligibility gate is also planned; its numeric threshold remains TBD until Pilot/calibration.
+Other approved security, privacy, cancellation, integrity, and containment obligations remain mandatory even where they are not a contract score.
 
 ## Central evaluation pipeline
 
 ```text
-Architecture Concern
+Product Mission / Scope
     ↓
-DP-00 A/B/C/D
+QA Evaluation Contract v1
     ↓
-QA / Primary Metric
+Reference Environment + Frozen Populations
     ↓
-Controlled Architecture Qualification
+Decision Point Alternatives
     ↓
-Pilot / Calibration
+Benchmark / Analysis
     ↓
-Scoring & Gate Rule Freeze
-    ↓
-Final A/B/C/D Evaluation
-    ↓
-Sensitivity / Threats to Validity
-    ↓
-Trade-off / ADR
+Architecture Decision
 ```
 
 Architecture Qualification keeps the **SW Architecture Alternative** as the independent variable and controls/fixes scenario semantics, semantic replay, Agent/tool behavior, model/prompt/cache profiles, machine/environment, and dependency latency as applicable.

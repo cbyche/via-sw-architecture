@@ -1,5 +1,7 @@
 # DP-00 Prototype / Benchmark Harness Specification
 
+> **HISTORICAL EVIDENCE — LEGACY QA SEMANTICS.** This specification remains reproducibility evidence for the DP-00 campaign. Its QA fields and scoring contracts do not override QA Evaluation Contract v1 for future work.
+
 ## Status
 
 **Prototype/Harness Specification — Pre-Implementation / Pre-Pilot**

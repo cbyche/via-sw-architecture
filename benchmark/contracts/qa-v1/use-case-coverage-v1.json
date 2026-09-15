@@ -1,0 +1,1895 @@
+{
+  "architecture_neutrality_policy": {
+    "forbidden_oracle_requirements": [
+      "R1",
+      "R3",
+      "R1+@",
+      "Fast Path",
+      "Agent Router",
+      "named Agent product"
+    ],
+    "use_cases_are": "product scenario and coverage inputs",
+    "use_cases_are_not": "architecture answers"
+  },
+  "corpus_manifest_id": "qa-v1-corpus-manifest-v1",
+  "coverage_id": "via-uc01-uc16-qa-v1-coverage",
+  "coverage_version": "1.0.0",
+  "qa_contract_id": "qa-evaluation-contract-v1",
+  "source_requirements": "docs/requirements/requirements-v1.1.md",
+  "use_cases": {
+    "UC-01": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 165,
+      "important_variation_dimensions": [
+        "voice/text modality",
+        "bounded result obligations",
+        "delivery endpoint",
+        "runtime contention"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 50,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-002-current-time-read",
+            "GF-003-battery-state-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-008-cached-weather-read",
+            "GF-009-task-status-read",
+            "GF-010-screen-selection-read"
+          ]
+        },
+        {
+          "frozen_instance_count": 100,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-002-current-time-read",
+            "GF-003-battery-state-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-008-cached-weather-read",
+            "GF-009-task-status-read",
+            "GF-010-screen-selection-read"
+          ]
+        },
+        {
+          "frozen_instance_count": 15,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z1",
+            "QA05-Z7"
+          ]
+        },
+        {
+          "frozen_instance_count": null,
+          "population_id": "qa07-resource-v1",
+          "qa_id": "QA-07",
+          "semantic_family_ids": [
+            "QA07-FIXED-TIMELINE"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1",
+        "qa07-resource-v1"
+      ],
+      "semantic_family_count": 13,
+      "semantic_family_ids": [
+        "GF-001-device-status-read",
+        "GF-002-current-time-read",
+        "GF-003-battery-state-read",
+        "GF-004-network-status-read",
+        "GF-005-media-state-read",
+        "GF-006-calendar-next-event-read",
+        "GF-007-file-metadata-read",
+        "GF-008-cached-weather-read",
+        "GF-009-task-status-read",
+        "GF-010-screen-selection-read",
+        "QA05-Z1",
+        "QA05-Z7",
+        "QA07-FIXED-TIMELINE"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Real-time Voice Interaction"
+    },
+    "UC-02": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 108,
+      "important_variation_dimensions": [
+        "multiple referents",
+        "pointer movement",
+        "selection/focus/window change",
+        "transcript revision",
+        "content version",
+        "correction"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 100,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-031-pointer-source-destination",
+            "GF-032-pointer-group-destination",
+            "GF-033-pointer-movement",
+            "GF-034-selection-focus-change",
+            "GF-035-active-window-change",
+            "GF-036-transcript-revision-pointer",
+            "GF-037-source-content-update",
+            "GF-038-ambiguous-source-destination",
+            "GF-039-explicit-pointer-correction",
+            "GF-040-multi-referent-timeline"
+          ]
+        },
+        {
+          "frozen_instance_count": 8,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z2"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1"
+      ],
+      "semantic_family_count": 11,
+      "semantic_family_ids": [
+        "GF-031-pointer-source-destination",
+        "GF-032-pointer-group-destination",
+        "GF-033-pointer-movement",
+        "GF-034-selection-focus-change",
+        "GF-035-active-window-change",
+        "GF-036-transcript-revision-pointer",
+        "GF-037-source-content-update",
+        "GF-038-ambiguous-source-destination",
+        "GF-039-explicit-pointer-correction",
+        "GF-040-multi-referent-timeline",
+        "QA05-Z2"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Screen-pointing Context Interaction"
+    },
+    "UC-03": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 563,
+      "important_variation_dimensions": [
+        "file/mail/calendar/browser source",
+        "scope",
+        "principal",
+        "context version"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 85,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-010-screen-selection-read",
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent",
+            "GF-018-browser-context-use",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-030-photo-metadata"
+          ]
+        },
+        {
+          "frozen_instance_count": 170,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-010-screen-selection-read",
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent",
+            "GF-018-browser-context-use",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-030-photo-metadata"
+          ]
+        },
+        {
+          "frozen_instance_count": 8,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z2"
+          ]
+        },
+        {
+          "frozen_instance_count": 300,
+          "population_id": "qa09-sensitive-scope-v1",
+          "qa_id": "QA-09",
+          "semantic_family_ids": [
+            "QA09-F01",
+            "QA09-F02",
+            "QA09-F03",
+            "QA09-F04",
+            "QA09-F05",
+            "QA09-F06",
+            "QA09-F07",
+            "QA09-F08",
+            "QA09-F09",
+            "QA09-F10",
+            "QA09-F11",
+            "QA09-F12",
+            "QA09-F13",
+            "QA09-F14",
+            "QA09-F15"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1",
+        "qa09-sensitive-scope-v1"
+      ],
+      "semantic_family_count": 33,
+      "semantic_family_ids": [
+        "GF-006-calendar-next-event-read",
+        "GF-007-file-metadata-read",
+        "GF-010-screen-selection-read",
+        "GF-011-memory-store",
+        "GF-012-memory-retrieve-and-use",
+        "GF-013-memory-modify",
+        "GF-014-memory-delete",
+        "GF-015-expired-memory-not-used",
+        "GF-016-conflicting-memory-resolution",
+        "GF-017-memory-provenance-consent",
+        "GF-018-browser-context-use",
+        "GF-022-mail-search",
+        "GF-023-file-search",
+        "GF-024-calendar-lookup",
+        "GF-026-document-summary",
+        "GF-027-contacts-lookup",
+        "GF-030-photo-metadata",
+        "QA05-Z2",
+        "QA09-F01",
+        "QA09-F02",
+        "QA09-F03",
+        "QA09-F04",
+        "QA09-F05",
+        "QA09-F06",
+        "QA09-F07",
+        "QA09-F08",
+        "QA09-F09",
+        "QA09-F10",
+        "QA09-F11",
+        "QA09-F12",
+        "QA09-F13",
+        "QA09-F14",
+        "QA09-F15"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Personal Context-aware Request"
+    },
+    "UC-04": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 326,
+      "important_variation_dimensions": [
+        "capability profile",
+        "health/session contract",
+        "protocol evolution",
+        "multi-capability goal"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 50,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata"
+          ]
+        },
+        {
+          "frozen_instance_count": 200,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata",
+            "GF-051-independent-subgoals",
+            "GF-052-sequential-subgoals",
+            "GF-053-data-dependent-subgoals",
+            "GF-054-conditional-subgoals",
+            "GF-055-navigation-open",
+            "GF-056-search-candidate-selection",
+            "GF-057-communication-send",
+            "GF-058-external-transaction-constraints",
+            "GF-059-document-transformation",
+            "GF-060-creative-ui-automation"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa04-agent-evolution-v1",
+          "qa_id": "QA-04",
+          "semantic_family_ids": [
+            "QA04-F01",
+            "QA04-F02",
+            "QA04-F03",
+            "QA04-F04",
+            "QA04-F05",
+            "QA04-F06",
+            "QA04-F07",
+            "QA04-F08",
+            "QA04-F09",
+            "QA04-F10"
+          ]
+        },
+        {
+          "frozen_instance_count": 16,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z3",
+            "QA05-Z4"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa04-agent-evolution-v1",
+        "qa05-product-evolution-v1"
+      ],
+      "semantic_family_count": 32,
+      "semantic_family_ids": [
+        "GF-021-network-diagnosis",
+        "GF-022-mail-search",
+        "GF-023-file-search",
+        "GF-024-calendar-lookup",
+        "GF-025-media-catalog",
+        "GF-026-document-summary",
+        "GF-027-contacts-lookup",
+        "GF-028-device-inventory",
+        "GF-029-task-history-lookup",
+        "GF-030-photo-metadata",
+        "GF-051-independent-subgoals",
+        "GF-052-sequential-subgoals",
+        "GF-053-data-dependent-subgoals",
+        "GF-054-conditional-subgoals",
+        "GF-055-navigation-open",
+        "GF-056-search-candidate-selection",
+        "GF-057-communication-send",
+        "GF-058-external-transaction-constraints",
+        "GF-059-document-transformation",
+        "GF-060-creative-ui-automation",
+        "QA04-F01",
+        "QA04-F02",
+        "QA04-F03",
+        "QA04-F04",
+        "QA04-F05",
+        "QA04-F06",
+        "QA04-F07",
+        "QA04-F08",
+        "QA04-F09",
+        "QA04-F10",
+        "QA05-Z3",
+        "QA05-Z4"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Downstream Agent Delegation"
+    },
+    "UC-05": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 430,
+      "important_variation_dimensions": [
+        "navigation",
+        "search/selection",
+        "file/content",
+        "communication",
+        "media/system",
+        "transaction",
+        "transformation",
+        "creative UI"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 65,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata"
+          ]
+        },
+        {
+          "frozen_instance_count": 230,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata",
+            "GF-051-independent-subgoals",
+            "GF-052-sequential-subgoals",
+            "GF-053-data-dependent-subgoals",
+            "GF-054-conditional-subgoals",
+            "GF-055-navigation-open",
+            "GF-056-search-candidate-selection",
+            "GF-057-communication-send",
+            "GF-058-external-transaction-constraints",
+            "GF-059-document-transformation",
+            "GF-060-creative-ui-automation"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa04-agent-evolution-v1",
+          "qa_id": "QA-04",
+          "semantic_family_ids": [
+            "QA04-F01",
+            "QA04-F02",
+            "QA04-F03",
+            "QA04-F04",
+            "QA04-F05",
+            "QA04-F06",
+            "QA04-F07",
+            "QA04-F08",
+            "QA04-F09",
+            "QA04-F10"
+          ]
+        },
+        {
+          "frozen_instance_count": 15,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z4",
+            "QA05-Z8"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa06-device-adaptation-v1",
+          "qa_id": "QA-06",
+          "semantic_family_ids": [
+            "QA06-MOBILE",
+            "QA06-ROBOT",
+            "QA06-TV"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa04-agent-evolution-v1",
+        "qa05-product-evolution-v1",
+        "qa06-device-adaptation-v1"
+      ],
+      "semantic_family_count": 38,
+      "semantic_family_ids": [
+        "GF-001-device-status-read",
+        "GF-004-network-status-read",
+        "GF-005-media-state-read",
+        "GF-021-network-diagnosis",
+        "GF-022-mail-search",
+        "GF-023-file-search",
+        "GF-024-calendar-lookup",
+        "GF-025-media-catalog",
+        "GF-026-document-summary",
+        "GF-027-contacts-lookup",
+        "GF-028-device-inventory",
+        "GF-029-task-history-lookup",
+        "GF-030-photo-metadata",
+        "GF-051-independent-subgoals",
+        "GF-052-sequential-subgoals",
+        "GF-053-data-dependent-subgoals",
+        "GF-054-conditional-subgoals",
+        "GF-055-navigation-open",
+        "GF-056-search-candidate-selection",
+        "GF-057-communication-send",
+        "GF-058-external-transaction-constraints",
+        "GF-059-document-transformation",
+        "GF-060-creative-ui-automation",
+        "QA04-F01",
+        "QA04-F02",
+        "QA04-F03",
+        "QA04-F04",
+        "QA04-F05",
+        "QA04-F06",
+        "QA04-F07",
+        "QA04-F08",
+        "QA04-F09",
+        "QA04-F10",
+        "QA05-Z4",
+        "QA05-Z8",
+        "QA06-MOBILE",
+        "QA06-ROBOT",
+        "QA06-TV"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "PC/Application/Service Action Request"
+    },
+    "UC-06": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 435,
+      "important_variation_dimensions": [
+        "purpose",
+        "scope",
+        "principal",
+        "approval timing",
+        "consent",
+        "forbidden disclosure"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 5,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-017-memory-provenance-consent"
+          ]
+        },
+        {
+          "frozen_instance_count": 50,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-017-memory-provenance-consent",
+            "GF-047-approval-required",
+            "GF-048-wrong-principal-defense",
+            "GF-057-communication-send",
+            "GF-058-external-transaction-constraints"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F05",
+            "Q03-F14"
+          ]
+        },
+        {
+          "frozen_instance_count": 300,
+          "population_id": "qa09-sensitive-scope-v1",
+          "qa_id": "QA-09",
+          "semantic_family_ids": [
+            "QA09-F01",
+            "QA09-F02",
+            "QA09-F03",
+            "QA09-F04",
+            "QA09-F05",
+            "QA09-F06",
+            "QA09-F07",
+            "QA09-F08",
+            "QA09-F09",
+            "QA09-F10",
+            "QA09-F11",
+            "QA09-F12",
+            "QA09-F13",
+            "QA09-F14",
+            "QA09-F15"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa11-feedback-v1",
+          "qa_id": "QA-11",
+          "semantic_family_ids": [
+            "QA11-F03"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa09-sensitive-scope-v1",
+        "qa11-feedback-v1"
+      ],
+      "semantic_family_count": 23,
+      "semantic_family_ids": [
+        "GF-017-memory-provenance-consent",
+        "GF-047-approval-required",
+        "GF-048-wrong-principal-defense",
+        "GF-057-communication-send",
+        "GF-058-external-transaction-constraints",
+        "Q03-F05",
+        "Q03-F14",
+        "QA09-F01",
+        "QA09-F02",
+        "QA09-F03",
+        "QA09-F04",
+        "QA09-F05",
+        "QA09-F06",
+        "QA09-F07",
+        "QA09-F08",
+        "QA09-F09",
+        "QA09-F10",
+        "QA09-F11",
+        "QA09-F12",
+        "QA09-F13",
+        "QA09-F14",
+        "QA09-F15",
+        "QA11-F03"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Sensitive Data/Action Approval"
+    },
+    "UC-07": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 294,
+      "important_variation_dimensions": [
+        "lifecycle phase",
+        "progress",
+        "waiting/approval",
+        "resume",
+        "fault timing"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 100,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-051-independent-subgoals",
+            "GF-052-sequential-subgoals",
+            "GF-053-data-dependent-subgoals",
+            "GF-054-conditional-subgoals",
+            "GF-055-navigation-open",
+            "GF-056-search-candidate-selection",
+            "GF-057-communication-send",
+            "GF-058-external-transaction-constraints",
+            "GF-059-document-transformation",
+            "GF-060-creative-ui-automation"
+          ]
+        },
+        {
+          "frozen_instance_count": 14,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z5",
+            "QA05-Z7"
+          ]
+        },
+        {
+          "frozen_instance_count": null,
+          "population_id": "qa07-resource-v1",
+          "qa_id": "QA-07",
+          "semantic_family_ids": [
+            "QA07-FIXED-TIMELINE"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa08-recovery-v1",
+          "qa_id": "QA-08",
+          "semantic_family_ids": [
+            "QA08-F05",
+            "QA08-F06",
+            "QA08-F07"
+          ]
+        },
+        {
+          "frozen_instance_count": 120,
+          "population_id": "qa11-feedback-v1",
+          "qa_id": "QA-11",
+          "semantic_family_ids": [
+            "QA11-F02",
+            "QA11-F04",
+            "QA11-F05"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1",
+        "qa07-resource-v1",
+        "qa08-recovery-v1",
+        "qa11-feedback-v1"
+      ],
+      "semantic_family_count": 19,
+      "semantic_family_ids": [
+        "GF-051-independent-subgoals",
+        "GF-052-sequential-subgoals",
+        "GF-053-data-dependent-subgoals",
+        "GF-054-conditional-subgoals",
+        "GF-055-navigation-open",
+        "GF-056-search-candidate-selection",
+        "GF-057-communication-send",
+        "GF-058-external-transaction-constraints",
+        "GF-059-document-transformation",
+        "GF-060-creative-ui-automation",
+        "QA05-Z5",
+        "QA05-Z7",
+        "QA07-FIXED-TIMELINE",
+        "QA08-F05",
+        "QA08-F06",
+        "QA08-F07",
+        "QA11-F02",
+        "QA11-F04",
+        "QA11-F05"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Stateful / Long-running Task"
+    },
+    "UC-08": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 338,
+      "important_variation_dimensions": [
+        "physical audio interruption",
+        "semantic correction",
+        "cancel timing",
+        "continuation modality"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 50,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-036-transcript-revision-pointer",
+            "GF-039-explicit-pointer-correction",
+            "GF-041-voice-to-text-correction",
+            "GF-044-voice-interruption-text-continuation",
+            "GF-049-cancel-inflight"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F03",
+            "Q03-F06",
+            "Q03-F07"
+          ]
+        },
+        {
+          "frozen_instance_count": 8,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z1"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa08-recovery-v1",
+          "qa_id": "QA-08",
+          "semantic_family_ids": [
+            "QA08-F10"
+          ]
+        },
+        {
+          "frozen_instance_count": 200,
+          "population_id": "qa12-barge-in-v1",
+          "qa_id": "QA-12",
+          "semantic_family_ids": [
+            "QA12-F01",
+            "QA12-F02",
+            "QA12-F03",
+            "QA12-F04",
+            "QA12-F05",
+            "QA12-F06",
+            "QA12-F07",
+            "QA12-F08",
+            "QA12-F09",
+            "QA12-F10"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa08-recovery-v1",
+        "qa12-barge-in-v1"
+      ],
+      "semantic_family_count": 20,
+      "semantic_family_ids": [
+        "GF-036-transcript-revision-pointer",
+        "GF-039-explicit-pointer-correction",
+        "GF-041-voice-to-text-correction",
+        "GF-044-voice-interruption-text-continuation",
+        "GF-049-cancel-inflight",
+        "Q03-F03",
+        "Q03-F06",
+        "Q03-F07",
+        "QA05-Z1",
+        "QA08-F10",
+        "QA12-F01",
+        "QA12-F02",
+        "QA12-F03",
+        "QA12-F04",
+        "QA12-F05",
+        "QA12-F06",
+        "QA12-F07",
+        "QA12-F08",
+        "QA12-F09",
+        "QA12-F10"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Immediate Interrupt / Cancel / Correction"
+    },
+    "UC-09": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 307,
+      "important_variation_dimensions": [
+        "fault type",
+        "lifecycle timing",
+        "reconnect",
+        "projection recovery",
+        "duplicate/late event"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 10,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-045-existing-task-followup"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F10",
+            "Q03-F12"
+          ]
+        },
+        {
+          "frozen_instance_count": 7,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z5"
+          ]
+        },
+        {
+          "frozen_instance_count": 200,
+          "population_id": "qa08-recovery-v1",
+          "qa_id": "QA-08",
+          "semantic_family_ids": [
+            "QA08-F01",
+            "QA08-F02",
+            "QA08-F03",
+            "QA08-F04",
+            "QA08-F05",
+            "QA08-F06",
+            "QA08-F07",
+            "QA08-F08",
+            "QA08-F09",
+            "QA08-F10"
+          ]
+        },
+        {
+          "frozen_instance_count": 50,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F08",
+            "QA10-F11",
+            "QA10-F12",
+            "QA10-F17",
+            "QA10-F18"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa08-recovery-v1",
+        "qa10-trace-v1"
+      ],
+      "semantic_family_count": 19,
+      "semantic_family_ids": [
+        "GF-045-existing-task-followup",
+        "Q03-F10",
+        "Q03-F12",
+        "QA05-Z5",
+        "QA08-F01",
+        "QA08-F02",
+        "QA08-F03",
+        "QA08-F04",
+        "QA08-F05",
+        "QA08-F06",
+        "QA08-F07",
+        "QA08-F08",
+        "QA08-F09",
+        "QA08-F10",
+        "QA10-F08",
+        "QA10-F11",
+        "QA10-F12",
+        "QA10-F17",
+        "QA10-F18"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Session / Task Recovery"
+    },
+    "UC-10": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 1404,
+      "important_variation_dimensions": [
+        "Voice summary",
+        "Text detail",
+        "card/notification channel",
+        "event class",
+        "inactive delivery"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 150,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-002-current-time-read",
+            "GF-003-battery-state-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-008-cached-weather-read",
+            "GF-009-task-status-read",
+            "GF-010-screen-selection-read",
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent",
+            "GF-018-browser-context-use",
+            "GF-019-context-resolvable-request",
+            "GF-020-clarification-required-request",
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata"
+          ]
+        },
+        {
+          "frozen_instance_count": 600,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-001-device-status-read",
+            "GF-002-current-time-read",
+            "GF-003-battery-state-read",
+            "GF-004-network-status-read",
+            "GF-005-media-state-read",
+            "GF-006-calendar-next-event-read",
+            "GF-007-file-metadata-read",
+            "GF-008-cached-weather-read",
+            "GF-009-task-status-read",
+            "GF-010-screen-selection-read",
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent",
+            "GF-018-browser-context-use",
+            "GF-019-context-resolvable-request",
+            "GF-020-clarification-required-request",
+            "GF-021-network-diagnosis",
+            "GF-022-mail-search",
+            "GF-023-file-search",
+            "GF-024-calendar-lookup",
+            "GF-025-media-catalog",
+            "GF-026-document-summary",
+            "GF-027-contacts-lookup",
+            "GF-028-device-inventory",
+            "GF-029-task-history-lookup",
+            "GF-030-photo-metadata",
+            "GF-031-pointer-source-destination",
+            "GF-032-pointer-group-destination",
+            "GF-033-pointer-movement",
+            "GF-034-selection-focus-change",
+            "GF-035-active-window-change",
+            "GF-036-transcript-revision-pointer",
+            "GF-037-source-content-update",
+            "GF-038-ambiguous-source-destination",
+            "GF-039-explicit-pointer-correction",
+            "GF-040-multi-referent-timeline",
+            "GF-041-voice-to-text-correction",
+            "GF-042-text-to-voice-followup",
+            "GF-043-voice-result-text-followup",
+            "GF-044-voice-interruption-text-continuation",
+            "GF-045-existing-task-followup",
+            "GF-046-concurrent-results",
+            "GF-047-approval-required",
+            "GF-048-wrong-principal-defense",
+            "GF-049-cancel-inflight",
+            "GF-050-exclusive-resource-conflict",
+            "GF-051-independent-subgoals",
+            "GF-052-sequential-subgoals",
+            "GF-053-data-dependent-subgoals",
+            "GF-054-conditional-subgoals",
+            "GF-055-navigation-open",
+            "GF-056-search-candidate-selection",
+            "GF-057-communication-send",
+            "GF-058-external-transaction-constraints",
+            "GF-059-document-transformation",
+            "GF-060-creative-ui-automation"
+          ]
+        },
+        {
+          "frozen_instance_count": 160,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F04",
+            "Q03-F07",
+            "Q03-F08",
+            "Q03-F09",
+            "Q03-F11",
+            "Q03-F12",
+            "Q03-F19",
+            "Q03-F20"
+          ]
+        },
+        {
+          "frozen_instance_count": 14,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z6",
+            "QA05-Z8"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa06-device-adaptation-v1",
+          "qa_id": "QA-06",
+          "semantic_family_ids": [
+            "QA06-MOBILE",
+            "QA06-ROBOT",
+            "QA06-TV"
+          ]
+        },
+        {
+          "frozen_instance_count": null,
+          "population_id": "qa07-resource-v1",
+          "qa_id": "QA-07",
+          "semantic_family_ids": [
+            "QA07-FIXED-TIMELINE"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa08-recovery-v1",
+          "qa_id": "QA-08",
+          "semantic_family_ids": [
+            "QA08-F10"
+          ]
+        },
+        {
+          "frozen_instance_count": 200,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F01",
+            "QA10-F02",
+            "QA10-F03",
+            "QA10-F04",
+            "QA10-F05",
+            "QA10-F06",
+            "QA10-F07",
+            "QA10-F08",
+            "QA10-F09",
+            "QA10-F10",
+            "QA10-F11",
+            "QA10-F12",
+            "QA10-F13",
+            "QA10-F14",
+            "QA10-F15",
+            "QA10-F16",
+            "QA10-F17",
+            "QA10-F18",
+            "QA10-F19",
+            "QA10-F20"
+          ]
+        },
+        {
+          "frozen_instance_count": 200,
+          "population_id": "qa11-feedback-v1",
+          "qa_id": "QA-11",
+          "semantic_family_ids": [
+            "QA11-F01",
+            "QA11-F02",
+            "QA11-F03",
+            "QA11-F04",
+            "QA11-F05"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa06-device-adaptation-v1",
+        "qa07-resource-v1",
+        "qa08-recovery-v1",
+        "qa10-trace-v1",
+        "qa11-feedback-v1"
+      ],
+      "semantic_family_count": 100,
+      "semantic_family_ids": [
+        "GF-001-device-status-read",
+        "GF-002-current-time-read",
+        "GF-003-battery-state-read",
+        "GF-004-network-status-read",
+        "GF-005-media-state-read",
+        "GF-006-calendar-next-event-read",
+        "GF-007-file-metadata-read",
+        "GF-008-cached-weather-read",
+        "GF-009-task-status-read",
+        "GF-010-screen-selection-read",
+        "GF-011-memory-store",
+        "GF-012-memory-retrieve-and-use",
+        "GF-013-memory-modify",
+        "GF-014-memory-delete",
+        "GF-015-expired-memory-not-used",
+        "GF-016-conflicting-memory-resolution",
+        "GF-017-memory-provenance-consent",
+        "GF-018-browser-context-use",
+        "GF-019-context-resolvable-request",
+        "GF-020-clarification-required-request",
+        "GF-021-network-diagnosis",
+        "GF-022-mail-search",
+        "GF-023-file-search",
+        "GF-024-calendar-lookup",
+        "GF-025-media-catalog",
+        "GF-026-document-summary",
+        "GF-027-contacts-lookup",
+        "GF-028-device-inventory",
+        "GF-029-task-history-lookup",
+        "GF-030-photo-metadata",
+        "GF-031-pointer-source-destination",
+        "GF-032-pointer-group-destination",
+        "GF-033-pointer-movement",
+        "GF-034-selection-focus-change",
+        "GF-035-active-window-change",
+        "GF-036-transcript-revision-pointer",
+        "GF-037-source-content-update",
+        "GF-038-ambiguous-source-destination",
+        "GF-039-explicit-pointer-correction",
+        "GF-040-multi-referent-timeline",
+        "GF-041-voice-to-text-correction",
+        "GF-042-text-to-voice-followup",
+        "GF-043-voice-result-text-followup",
+        "GF-044-voice-interruption-text-continuation",
+        "GF-045-existing-task-followup",
+        "GF-046-concurrent-results",
+        "GF-047-approval-required",
+        "GF-048-wrong-principal-defense",
+        "GF-049-cancel-inflight",
+        "GF-050-exclusive-resource-conflict",
+        "GF-051-independent-subgoals",
+        "GF-052-sequential-subgoals",
+        "GF-053-data-dependent-subgoals",
+        "GF-054-conditional-subgoals",
+        "GF-055-navigation-open",
+        "GF-056-search-candidate-selection",
+        "GF-057-communication-send",
+        "GF-058-external-transaction-constraints",
+        "GF-059-document-transformation",
+        "GF-060-creative-ui-automation",
+        "Q03-F04",
+        "Q03-F07",
+        "Q03-F08",
+        "Q03-F09",
+        "Q03-F11",
+        "Q03-F12",
+        "Q03-F19",
+        "Q03-F20",
+        "QA05-Z6",
+        "QA05-Z8",
+        "QA06-MOBILE",
+        "QA06-ROBOT",
+        "QA06-TV",
+        "QA07-FIXED-TIMELINE",
+        "QA08-F10",
+        "QA10-F01",
+        "QA10-F02",
+        "QA10-F03",
+        "QA10-F04",
+        "QA10-F05",
+        "QA10-F06",
+        "QA10-F07",
+        "QA10-F08",
+        "QA10-F09",
+        "QA10-F10",
+        "QA10-F11",
+        "QA10-F12",
+        "QA10-F13",
+        "QA10-F14",
+        "QA10-F15",
+        "QA10-F16",
+        "QA10-F17",
+        "QA10-F18",
+        "QA10-F19",
+        "QA10-F20",
+        "QA11-F01",
+        "QA11-F02",
+        "QA11-F03",
+        "QA11-F04",
+        "QA11-F05"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Result / Progress Delivery"
+    },
+    "UC-11": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 48,
+      "important_variation_dimensions": [
+        "independent",
+        "sequential",
+        "data-dependent",
+        "conditional",
+        "result binding"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-051-independent-subgoals",
+            "GF-052-sequential-subgoals",
+            "GF-053-data-dependent-subgoals",
+            "GF-054-conditional-subgoals"
+          ]
+        },
+        {
+          "frozen_instance_count": 8,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z3"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1"
+      ],
+      "semantic_family_count": 5,
+      "semantic_family_ids": [
+        "GF-051-independent-subgoals",
+        "GF-052-sequential-subgoals",
+        "GF-053-data-dependent-subgoals",
+        "GF-054-conditional-subgoals",
+        "QA05-Z3"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Compound Utterance Handling"
+    },
+    "UC-12": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 161,
+      "important_variation_dimensions": [
+        "omitted source",
+        "omitted target",
+        "omitted parameter",
+        "ambiguity",
+        "sufficient/insufficient context"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 15,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-018-browser-context-use",
+            "GF-019-context-resolvable-request",
+            "GF-020-clarification-required-request"
+          ]
+        },
+        {
+          "frozen_instance_count": 130,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-018-browser-context-use",
+            "GF-019-context-resolvable-request",
+            "GF-020-clarification-required-request",
+            "GF-031-pointer-source-destination",
+            "GF-032-pointer-group-destination",
+            "GF-033-pointer-movement",
+            "GF-034-selection-focus-change",
+            "GF-035-active-window-change",
+            "GF-036-transcript-revision-pointer",
+            "GF-037-source-content-update",
+            "GF-038-ambiguous-source-destination",
+            "GF-039-explicit-pointer-correction",
+            "GF-040-multi-referent-timeline"
+          ]
+        },
+        {
+          "frozen_instance_count": 16,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z2",
+            "QA05-Z3"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa05-product-evolution-v1"
+      ],
+      "semantic_family_count": 15,
+      "semantic_family_ids": [
+        "GF-018-browser-context-use",
+        "GF-019-context-resolvable-request",
+        "GF-020-clarification-required-request",
+        "GF-031-pointer-source-destination",
+        "GF-032-pointer-group-destination",
+        "GF-033-pointer-movement",
+        "GF-034-selection-focus-change",
+        "GF-035-active-window-change",
+        "GF-036-transcript-revision-pointer",
+        "GF-037-source-content-update",
+        "GF-038-ambiguous-source-destination",
+        "GF-039-explicit-pointer-correction",
+        "GF-040-multi-referent-timeline",
+        "QA05-Z2",
+        "QA05-Z3"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Underspecified / Contextual Resolution"
+    },
+    "UC-13": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 567,
+      "important_variation_dimensions": [
+        "follow-up timing",
+        "task focus",
+        "cancel/resume",
+        "same/new task",
+        "result arrival"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 100,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-041-voice-to-text-correction",
+            "GF-042-text-to-voice-followup",
+            "GF-043-voice-result-text-followup",
+            "GF-044-voice-interruption-text-continuation",
+            "GF-045-existing-task-followup",
+            "GF-046-concurrent-results",
+            "GF-047-approval-required",
+            "GF-048-wrong-principal-defense",
+            "GF-049-cancel-inflight",
+            "GF-050-exclusive-resource-conflict"
+          ]
+        },
+        {
+          "frozen_instance_count": 400,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F01",
+            "Q03-F02",
+            "Q03-F03",
+            "Q03-F04",
+            "Q03-F05",
+            "Q03-F06",
+            "Q03-F07",
+            "Q03-F08",
+            "Q03-F09",
+            "Q03-F10",
+            "Q03-F11",
+            "Q03-F12",
+            "Q03-F13",
+            "Q03-F14",
+            "Q03-F15",
+            "Q03-F16",
+            "Q03-F17",
+            "Q03-F18",
+            "Q03-F19",
+            "Q03-F20"
+          ]
+        },
+        {
+          "frozen_instance_count": 7,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z5"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa09-sensitive-scope-v1",
+          "qa_id": "QA-09",
+          "semantic_family_ids": [
+            "QA09-F05",
+            "QA09-F15"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F05",
+            "QA10-F07"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa09-sensitive-scope-v1",
+        "qa10-trace-v1"
+      ],
+      "semantic_family_count": 35,
+      "semantic_family_ids": [
+        "GF-041-voice-to-text-correction",
+        "GF-042-text-to-voice-followup",
+        "GF-043-voice-result-text-followup",
+        "GF-044-voice-interruption-text-continuation",
+        "GF-045-existing-task-followup",
+        "GF-046-concurrent-results",
+        "GF-047-approval-required",
+        "GF-048-wrong-principal-defense",
+        "GF-049-cancel-inflight",
+        "GF-050-exclusive-resource-conflict",
+        "Q03-F01",
+        "Q03-F02",
+        "Q03-F03",
+        "Q03-F04",
+        "Q03-F05",
+        "Q03-F06",
+        "Q03-F07",
+        "Q03-F08",
+        "Q03-F09",
+        "Q03-F10",
+        "Q03-F11",
+        "Q03-F12",
+        "Q03-F13",
+        "Q03-F14",
+        "Q03-F15",
+        "Q03-F16",
+        "Q03-F17",
+        "Q03-F18",
+        "Q03-F19",
+        "Q03-F20",
+        "QA05-Z5",
+        "QA09-F05",
+        "QA09-F15",
+        "QA10-F05",
+        "QA10-F07"
+      ],
+      "strengthened_coverage_gate": false,
+      "title": "Task Continuation & Follow-up"
+    },
+    "UC-14": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 175,
+      "important_variation_dimensions": [
+        "store",
+        "retrieve/use",
+        "modify",
+        "delete",
+        "expiry",
+        "conflict",
+        "principal/task isolation",
+        "consent/provenance"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 35,
+          "population_id": "qa01-fast-v1",
+          "qa_id": "QA-01",
+          "semantic_family_ids": [
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent"
+          ]
+        },
+        {
+          "frozen_instance_count": 70,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-011-memory-store",
+            "GF-012-memory-retrieve-and-use",
+            "GF-013-memory-modify",
+            "GF-014-memory-delete",
+            "GF-015-expired-memory-not-used",
+            "GF-016-conflicting-memory-resolution",
+            "GF-017-memory-provenance-consent"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F17"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa09-sensitive-scope-v1",
+          "qa_id": "QA-09",
+          "semantic_family_ids": [
+            "QA09-F04",
+            "QA09-F08"
+          ]
+        },
+        {
+          "frozen_instance_count": 10,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F09"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa01-fast-v1",
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa09-sensitive-scope-v1",
+        "qa10-trace-v1"
+      ],
+      "semantic_family_count": 11,
+      "semantic_family_ids": [
+        "GF-011-memory-store",
+        "GF-012-memory-retrieve-and-use",
+        "GF-013-memory-modify",
+        "GF-014-memory-delete",
+        "GF-015-expired-memory-not-used",
+        "GF-016-conflicting-memory-resolution",
+        "GF-017-memory-provenance-consent",
+        "Q03-F17",
+        "QA09-F04",
+        "QA09-F08",
+        "QA10-F09"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Personalization & Memory Control"
+    },
+    "UC-15": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 202,
+      "important_variation_dimensions": [
+        "Voice→Text correction",
+        "Text→Voice follow-up",
+        "Voice result→Text follow-up",
+        "interruption→Text continuation"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-041-voice-to-text-correction",
+            "GF-042-text-to-voice-followup",
+            "GF-043-voice-result-text-followup",
+            "GF-044-voice-interruption-text-continuation"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F03",
+            "Q03-F11",
+            "Q03-F19"
+          ]
+        },
+        {
+          "frozen_instance_count": 22,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z1",
+            "QA05-Z6",
+            "QA05-Z8"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa06-device-adaptation-v1",
+          "qa_id": "QA-06",
+          "semantic_family_ids": [
+            "QA06-MOBILE",
+            "QA06-ROBOT",
+            "QA06-TV"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F05",
+            "QA10-F07"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa06-device-adaptation-v1",
+        "qa10-trace-v1"
+      ],
+      "semantic_family_count": 15,
+      "semantic_family_ids": [
+        "GF-041-voice-to-text-correction",
+        "GF-042-text-to-voice-followup",
+        "GF-043-voice-result-text-followup",
+        "GF-044-voice-interruption-text-continuation",
+        "Q03-F03",
+        "Q03-F11",
+        "Q03-F19",
+        "QA05-Z1",
+        "QA05-Z6",
+        "QA05-Z8",
+        "QA06-MOBILE",
+        "QA06-ROBOT",
+        "QA06-TV",
+        "QA10-F05",
+        "QA10-F07"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Mixed-Modality Conversation"
+    },
+    "UC-16": {
+      "coverage_status": "required_covered",
+      "frozen_instance_count": 164,
+      "important_variation_dimensions": [
+        "exclusive/shared/no resource",
+        "three active tasks",
+        "cancel isolation",
+        "unblocked read-only task",
+        "binding under contention"
+      ],
+      "known_limitations": [
+        "Qualification corpus coverage is synthetic/replayed and is not a production-frequency estimate.",
+        "Use-case tags carry no candidate routing or component-placement requirement."
+      ],
+      "population_coverage": [
+        {
+          "frozen_instance_count": 30,
+          "population_id": "qa02-goals-v1",
+          "qa_id": "QA-02",
+          "semantic_family_ids": [
+            "GF-046-concurrent-results",
+            "GF-049-cancel-inflight",
+            "GF-050-exclusive-resource-conflict"
+          ]
+        },
+        {
+          "frozen_instance_count": 60,
+          "population_id": "qa03-continuity-v1",
+          "qa_id": "QA-03",
+          "semantic_family_ids": [
+            "Q03-F02",
+            "Q03-F06",
+            "Q03-F16"
+          ]
+        },
+        {
+          "frozen_instance_count": 14,
+          "population_id": "qa05-product-evolution-v1",
+          "qa_id": "QA-05",
+          "semantic_family_ids": [
+            "QA05-Z5",
+            "QA05-Z7"
+          ]
+        },
+        {
+          "frozen_instance_count": null,
+          "population_id": "qa07-resource-v1",
+          "qa_id": "QA-07",
+          "semantic_family_ids": [
+            "QA07-FIXED-TIMELINE"
+          ]
+        },
+        {
+          "frozen_instance_count": 40,
+          "population_id": "qa09-sensitive-scope-v1",
+          "qa_id": "QA-09",
+          "semantic_family_ids": [
+            "QA09-F05",
+            "QA09-F15"
+          ]
+        },
+        {
+          "frozen_instance_count": 20,
+          "population_id": "qa10-trace-v1",
+          "qa_id": "QA-10",
+          "semantic_family_ids": [
+            "QA10-F06",
+            "QA10-F19"
+          ]
+        }
+      ],
+      "qa_populations": [
+        "qa02-goals-v1",
+        "qa03-continuity-v1",
+        "qa05-product-evolution-v1",
+        "qa07-resource-v1",
+        "qa09-sensitive-scope-v1",
+        "qa10-trace-v1"
+      ],
+      "semantic_family_count": 13,
+      "semantic_family_ids": [
+        "GF-046-concurrent-results",
+        "GF-049-cancel-inflight",
+        "GF-050-exclusive-resource-conflict",
+        "Q03-F02",
+        "Q03-F06",
+        "Q03-F16",
+        "QA05-Z5",
+        "QA05-Z7",
+        "QA07-FIXED-TIMELINE",
+        "QA09-F05",
+        "QA09-F15",
+        "QA10-F06",
+        "QA10-F19"
+      ],
+      "strengthened_coverage_gate": true,
+      "title": "Concurrent Task Handling"
+    }
+  }
+}

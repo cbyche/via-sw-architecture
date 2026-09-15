@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schemas/qa-v1-population-plan.schema.json",
+  "frozen_instance_count": 150,
+  "generation_rules": [
+    "Every instance must be a unique semantic goal, not a timing repetition",
+    "Bounded seeds must be deterministic and read-only",
+    "Freeze required audible facts and text-detail fields from one result version before execution",
+    "Do not select seeds using historical candidate outcomes"
+  ],
+  "legacy_seed_sources": [
+    {
+      "concept_count": 36,
+      "path": "benchmark/qa01-reference-v1/scenarios.json",
+      "reuse_status": "concept_only_requires_adaptation_and_rerun"
+    }
+  ],
+  "official_target_size": 150,
+  "population_id": "qa01-fast-v1",
+  "population_manifest": "benchmark/scenarios/qa-v1/qa01-fast-v1/manifest.json",
+  "qa_id": "QA-01",
+  "results_exist": false,
+  "schema_version": "qa-v1-population-plan-v1",
+  "semantic_families": [
+    "bounded read-only status/query",
+    "short general-Agent result",
+    "short specialist-Agent result"
+  ],
+  "status": "frozen",
+  "variation_dimensions": [
+    "Voice versus Text start",
+    "context/referent requirement",
+    "result fact cardinality",
+    "Voice/Text delivery ordering",
+    "Agent and capability family"
+  ]
+}

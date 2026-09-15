@@ -1,5 +1,7 @@
 # AA-005 — Top QA Cross-review
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Status
 
 Architecture Analysis Record — Top Architectural Driver Cross-review Checkpoint

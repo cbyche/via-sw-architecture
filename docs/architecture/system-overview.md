@@ -1,5 +1,7 @@
 # VIA System Overview — vNext Working View
 
+> **QA SEMANTICS NOTICE.** Architecture descriptions remain useful, but `Top QA-01~04` references in this document use the pre-QA-Contract-v1 meanings. Current evaluation authority is `docs/evaluation/qa-contracts/v1/README.md`.
+
 ## Status
 
 This overview distinguishes the **v1.1 Approved starting responsibility boundary** from the **vNext architecture boundary characterized by DP-00**.

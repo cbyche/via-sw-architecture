@@ -1,5 +1,7 @@
 # DP-00 — Executable Architecture Specification
 
+> **QA SEMANTICS NOTICE.** The A/B/C/D specifications remain active architecture inputs, but their QA-01~04 references describe the legacy DP-00 campaign. Future evaluation consumes QA Evaluation Contract v1 and does not inherit the old metrics or score rules.
+
 ## Status
 
 **Base Architecture Specification — Pre-Prototype / Pre-Pilot**
@@ -15,7 +17,7 @@ Authoritative context:
 - `docs/evaluation/evaluation-strategy.md`
 - `docs/evaluation/evaluation-principles.md`
 - `docs/evaluation/architecture-experiment-methodology.md`
-- QA-01~04 authoritative definitions under `docs/evaluation/quality-attributes/`
+- QA Evaluation Contract v1 under `docs/evaluation/qa-contracts/v1/` for future comparisons; legacy QA-01~04 definitions are archived for historical reproduction
 
 The next implementation stage should be able to derive prototype modules, canonical benchmark events, replay seams, Agent/tool stubs, and route-commit instrumentation from this specification without redefining the alternatives.
 

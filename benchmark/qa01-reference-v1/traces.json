@@ -1,0 +1,27 @@
+{
+  "trace_contract_id": "DP00-QA01-REFERENCE-TRACES-V1",
+  "architecture_source": "docs/architecture/decision-points/DP-00-executable-architecture-spec.md",
+  "primitive_vocabulary": ["V", "M:SEMANTIC_INTERPRETATION", "M:EXECUTION_ROUTE_DECISION", "M:SHORT_EXECUTOR_REASONING", "M:COMBINED_EXECUTION_DECISION", "H", "X"],
+  "deterministic_unmetered_steps": ["context capture", "capability and policy lookup", "C Fast eligibility", "task creation and result binding"],
+  "category_traces": {
+    "F1": {
+      "A": {"path":"GENERAL_AGENT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "B": {"path":"ARGO_PRIMARY","trace":["V","H","M:COMBINED_EXECUTION_DECISION","X"]},
+      "C": {"path":"VIA_FAST","trace":["V","M:SEMANTIC_INTERPRETATION","X"]},
+      "D": {"path":"VIA_FAST","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","X"]}
+    },
+    "F2": {
+      "A": {"path":"GENERAL_AGENT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "B": {"path":"ARGO_PRIMARY","trace":["V","H","M:COMBINED_EXECUTION_DECISION","X"]},
+      "C": {"path":"GENERAL_AGENT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "D": {"path":"ARGO_PRIMARY","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]}
+    },
+    "F3": {
+      "A": {"path":"SPECIALIST_DIRECT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "B": {"path":"ARGO_TO_SPECIALIST","trace":["V","H","M:COMBINED_EXECUTION_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "C": {"path":"SPECIALIST_DIRECT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]},
+      "D": {"path":"SPECIALIST_DIRECT","trace":["V","M:SEMANTIC_INTERPRETATION","M:EXECUTION_ROUTE_DECISION","H","M:SHORT_EXECUTOR_REASONING","X"]}
+    }
+  },
+  "coverage_gates": {"C:VIA_FAST":8,"D:VIA_FAST":8,"A:GENERAL_AGENT":4,"A:SPECIALIST_DIRECT":4,"B:ARGO_PRIMARY":4,"B:ARGO_TO_SPECIALIST":4,"C:GENERAL_AGENT":4,"C:SPECIALIST_DIRECT":4,"D:ARGO_PRIMARY":4,"D:SPECIALIST_DIRECT":4}
+}

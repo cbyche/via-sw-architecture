@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/use-case-coverage-v1.schema.json",
+  "title": "VIA UC-01 through UC-16 QA-v1 coverage",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "coverage_id",
+    "coverage_version",
+    "qa_contract_id",
+    "corpus_manifest_id",
+    "source_requirements",
+    "architecture_neutrality_policy",
+    "use_cases"
+  ],
+  "properties": {
+    "coverage_id": {"const": "via-uc01-uc16-qa-v1-coverage"},
+    "coverage_version": {"const": "1.0.0"},
+    "qa_contract_id": {"const": "qa-evaluation-contract-v1"},
+    "corpus_manifest_id": {"const": "qa-v1-corpus-manifest-v1"},
+    "source_requirements": {"const": "docs/requirements/requirements-v1.1.md"},
+    "architecture_neutrality_policy": {
+      "type": "object",
+      "required": ["use_cases_are", "use_cases_are_not", "forbidden_oracle_requirements"]
+    },
+    "use_cases": {
+      "type": "object",
+      "minProperties": 16,
+      "maxProperties": 16,
+      "additionalProperties": {"$ref": "#/$defs/useCaseCoverage"}
+    }
+  },
+  "$defs": {
+    "useCaseCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "qa_populations",
+        "population_coverage",
+        "semantic_family_ids",
+        "semantic_family_count",
+        "frozen_instance_count",
+        "important_variation_dimensions",
+        "coverage_status",
+        "strengthened_coverage_gate",
+        "known_limitations"
+      ],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "qa_populations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "population_coverage": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/populationCoverage"}
+        },
+        "semantic_family_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "semantic_family_count": {"type": "integer", "minimum": 1},
+        "frozen_instance_count": {"type": "integer", "minimum": 1},
+        "important_variation_dimensions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "coverage_status": {"enum": ["required_covered", "excluded_with_reason"]},
+        "strengthened_coverage_gate": {"type": "boolean"},
+        "known_limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "populationCoverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qa_id",
+        "population_id",
+        "semantic_family_ids",
+        "frozen_instance_count"
+      ],
+      "properties": {
+        "qa_id": {"type": "string", "pattern": "^QA-(0[1-9]|1[0-2])$"},
+        "population_id": {"type": "string", "minLength": 1},
+        "semantic_family_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string"}
+        },
+        "frozen_instance_count": {"type": ["integer", "null"], "minimum": 1}
+      }
+    }
+  }
+}

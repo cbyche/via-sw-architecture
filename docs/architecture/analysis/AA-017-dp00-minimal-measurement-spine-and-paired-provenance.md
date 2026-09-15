@@ -1,5 +1,7 @@
 # AA-017 — DP-00 MINIMAL Measurement Spine and Paired Provenance
 
+> **HISTORICAL ANALYSIS — LEGACY QA SEMANTICS.** QA identifiers, metrics, populations, targets, and scores in this record belong to the pre-QA-Contract-v1 DP-00 work. Preserve them for provenance; use `docs/evaluation/qa-contracts/v1/` for every future evaluation.
+
 ## Purpose
 
 Session 6.3 stopped before execution because MINIMAL discarded the raw evidence

@@ -1,5 +1,7 @@
 # Final Report Evidence Index
 
+> **HISTORICAL EVIDENCE INDEX.** DP-00 QA references in the indexed analysis use the legacy contract under which the evidence was produced. The only active normative QA definitions for future evaluation are in `docs/evaluation/qa-contracts/v1/`.
+
 ## Status
 
 Living index for final SW Architecture review/report assembly.

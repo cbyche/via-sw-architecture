@@ -1,0 +1,55 @@
+{
+  "claim_limit": "Deterministic contract profiles; they are not claims about named products.",
+  "profile_set_id": "qa-v1-agent-capability-profiles-v1",
+  "profiles": [
+    {
+      "capabilities": [
+        "bounded-read",
+        "planning",
+        "drafting"
+      ],
+      "profile_id": "general-v1",
+      "progress_contract": "standard",
+      "result_contract": "standard",
+      "session": "resumable"
+    },
+    {
+      "capabilities": [
+        "specialist-query",
+        "specialist-result"
+      ],
+      "profile_id": "specialist-v1",
+      "progress_contract": "standard",
+      "result_contract": "typed",
+      "session": "resumable"
+    },
+    {
+      "capabilities": [
+        "bounded-read"
+      ],
+      "profile_id": "limited-session-v1",
+      "progress_contract": "none",
+      "result_contract": "standard",
+      "session": "single-turn"
+    },
+    {
+      "capabilities": [
+        "planning",
+        "state-changing-with-approval"
+      ],
+      "profile_id": "no-resume-v1",
+      "progress_contract": "standard",
+      "result_contract": "standard",
+      "session": "no-resume"
+    },
+    {
+      "capabilities": [
+        "specialist-query"
+      ],
+      "profile_id": "alternate-contract-v1",
+      "progress_contract": "delta-v2",
+      "result_contract": "typed-v2",
+      "session": "reconnectable"
+    }
+  ]
+}
