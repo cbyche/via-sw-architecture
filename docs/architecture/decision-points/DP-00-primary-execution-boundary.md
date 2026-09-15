@@ -1,5 +1,7 @@
 # DP-00 — VIA Primary Execution Boundary
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** This A/B/C/D record and its scores remain preserved under their original identities. Current DP-00 is R1 versus R3, with R1+@ evaluated only as a tactic: [`vnext/DP-00-primary-reasoning-execution-boundary.md`](vnext/DP-00-primary-reasoning-execution-boundary.md).
+
 > **QA SEMANTICS NOTICE.** This DP's alternatives and historical comparison remain unchanged. Its `Top QA-01~04` evidence uses legacy meanings. Any future evaluation must bind to `docs/evaluation/qa-contracts/v1/README.md`; this DP may nominate Primary QAs but cannot redefine them.
 
 ## Status

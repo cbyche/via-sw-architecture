@@ -1,250 +1,54 @@
-# VIA System Overview — vNext Working View
-
-> **QA SEMANTICS NOTICE.** Architecture descriptions remain useful, but `Top QA-01~04` references in this document use the pre-QA-Contract-v1 meanings. Current evaluation authority is `docs/evaluation/qa-contracts/v1/README.md`.
+# VIA System Overview — Active vNext Working View
 
 ## Status
 
-This overview distinguishes the **v1.1 Approved starting responsibility boundary** from the **vNext architecture boundary characterized by DP-00**.
+This view does not modify the approved v1.1 baseline and does not select an architecture winner. The active DP catalog is `decision-points/vnext/`; older A/B/C/D documents are historical records.
 
-It does not modify `docs/requirements/requirements-v1.1.md` and does not select a DP-00 winner.
+## Product boundary common to candidates
 
-DP-00 comparative experimentation is complete. The vNext primary execution
-topology remains conditionally open among A/B/C/D, with final selection deferred
-pending downstream architecture evidence. See
-`docs/architecture/decision-points/DP-00-primary-execution-boundary.md` and
-`docs/architecture/analysis/AA-026-dp00-tradespace-synthesis.md`.
+VIA is Voice-first and Text-capable, owns a stable user-facing Task identity, enforces context/permission boundary interaction, preserves correlation and provenance, and delivers validated results. Domain action remains subject to consent, least privilege, cancellation, recovery, and audit obligations.
 
-The downstream structural-decision catalog was subsequently reviewed in
-`docs/architecture/analysis/AA-027-structural-decision-catalog-review.md`.
-Current scopes, before/after redirects, and conditional applicability are
-authoritative in `docs/architecture/decision-points/catalog.md`.
-
-## v1.1 Approved starting responsibility boundary
-
-The Approved Baseline currently describes approximately this topology:
+## DP-00 responsibility alternatives
 
 ```text
-User
-  ↓
-Voice / Text Interaction
-  ↓
-VIA
-  ├─ Context grounding
-  ├─ Intent refinement
-  ├─ Downstream Agent routing / delegation
-  ├─ Context sharing / consent interaction
-  ├─ Conversation / Task lifecycle
-  ├─ Progress / status / cancel / follow-up
-  └─ Result interaction
-        ↓
-Downstream Agent
-  ├─ Domain reasoning
-  ├─ Planning
-  ├─ Tool selection
-  ├─ Tool execution
-  └─ Domain result
-        ↓
-OS / App / Web / External Service
+R1 — Agent-neutral Control Plane
+User → VIA interaction/turn/grounding/goal/initial delegation/task UX
+     → selected Agent: domain reasoning/planning/arbitrary tools/workflow state
+
+R3 — Primary General-purpose Agent Runtime
+User → VIA interaction/task correlation/permission boundary/result delivery
+     → primary Agent Runtime: substantive interpretation/planning/tools/workflow
+       → specialist Agent delegation
 ```
 
-This remains the **Approved Baseline at DP-00 start**.
+R3 is vendor-neutral; ARGO is only a possible realization. R1 does not make VIA a general-purpose Agent runtime.
 
-## vNext architectural question
+R1+@ preserves R1 ownership and adds only bounded deterministic read-only local execution. Speech-stop and provisional-work cancellation are interaction controls. Any state-changing action, arbitrary tool selection, planning loop, durable workflow, or independent Agent execution state requires architectural reclassification.
 
-The responsibility split above is no longer treated as an unchallengeable vNext invariant.
+## Remaining active structural decisions
 
-DP-00 asks:
+| DP | Boundary |
+| --- | --- |
+| DP-01 | committed canonical UserTurn authority |
+| DP-02 | separate versus unified R1 grounded-goal/routing authority |
+| DP-03 | temporal historical-evidence retention authority |
+| DP-04 | pre-admission versus lifecycle context materialization |
+| DP-05 | shared versus task-scoped native Agent session state |
+| DP-06 | co-hosted versus detached durable Task supervision |
+| DP-07 | single versus channel-owned response semantics |
+| DP-08 | shared versus enforceably realtime-isolated inference resources |
+| DP-09 | Core-neutral versus device-family-owned capability semantics |
 
-> **VIA는 사용자 요청을 어디까지 직접 판단·실행하고, 어디부터 Downstream Agent에 위임할 것인가?**
+The choices are related but independently structural. For example, R1/R3 does not decide native session sharing, Task Supervisor deployment, response publication authority, or inference resource isolation.
 
-The comparison boundary is the **Integrated Product** and the principal independent variable is the SW placement/ownership of reasoning, execution, routing and orchestration capability.
+## Evaluation invariants
 
-Authoritative DP:
+- No family is preferred before measurement.
+- Every DP uses all twelve frozen QA-v1 definitions and populations.
+- DP-00 compares QA-01 and QA-02 first without an arbitrary weighted sum.
+- QA-09 remains a non-offsettable security hard gate.
+- The same semantic capability, Agent profiles, Voice/Text obligations, events/faults, and device/resource workloads apply to integrated candidates.
+- Historical A/B/C/D scores retain their identities and do not become QA-v1 results.
+- No Cloud/model API is required for the prepared evaluation.
 
-- `docs/architecture/decision-points/DP-00-primary-execution-boundary.md`
-
-## DP-00 candidate execution topologies
-
-### A — Thin VIA / Agent-neutral Orchestration
-
-```text
-Voice / Text / Context
-        ↓
-VIA interaction + intent + routing + task orchestration
-        ↓
-Downstream Agent
-        ↓
-Domain reasoning / planning / tools
-```
-
-v1.1 compatibility: **Compatible**.
-
-### B — ARGO-centric Primary Execution
-
-```text
-Voice / S2S
-    ↓
-thin realtime context / interaction layer
-    ↓
-ARGO primary ReAct reasoning + tool execution
-    ↓
-Specialized Agent delegation when required
-```
-
-v1.1 compatibility: **Challenges baseline boundary**.
-
-B is intentionally a responsibility-boundary challenge. It is not the same as keeping Thin VIA and merely preferring ARGO as the default downstream route.
-
-### C — Hybrid VIA Fast Path
-
-```text
-                     ┌─ bounded VIA Fast Path
-User → VIA eligibility
-                     └─ Downstream Agent
-```
-
-v1.1 compatibility: **Mostly compatible / extension**.
-
-Fast Path eligibility is semantic, not an arbitrary `<3 seconds` or `1 LLM + 1 tool` rule.
-
-### D — Adaptive Per-turn Execution
-
-```text
-                     ┌─ VIA Fast Path
-User turn → selector ├─ ARGO path
-                     └─ Specialized Agent
-```
-
-v1.1 compatibility: **Partially compatible / extension likely**.
-
-The intended concept is directed per-turn selection/ownership transfer, not unrestricted owner bouncing.
-
-## Current central architecture storyline
-
-```text
-Product / Architecture Concern
-    ↓
-DP-00 Primary Execution Boundary
-    ↓
-A / B / C / D
-    ↓
-Top QA-01 ~ QA-04
-    ↓
-Controlled Architecture Qualification
-    ↓
-Pilot / Calibration / Rule Freeze
-    ↓
-Completed Comparative Evaluation
-    ↓
-Conditional Trade-space / Downstream DP Evidence
-    ↓
-Final Commitment / ADR
-```
-
-Central navigation:
-
-- `docs/requirements/requirements-vNext.md`
-- `docs/architecture/qa-dp-traceability.md`
-- `docs/architecture/decision-points/catalog.md`
-- `docs/architecture/qa-legacy-migration.md`
-- `docs/evaluation/evaluation-strategy.md`
-
-## vNext Top Architectural Drivers
-
-| QA | Core question | Primary Metric |
-| --- | --- | --- |
-| **QA-01** | 빠른가? | Fast-task Outcome Latency p95 (FTOL p95) |
-| **QA-02** | 정확한가? | Architecture Episode Exact Conformance Rate (AECR) |
-| **QA-03** | 변경이 잘 격리되는가? | Change Containment Rate (CCR) |
-| **QA-04** | 실행 경로를 정하기 위해 AI 판단을 얼마나 요구하는가? | Average Model Calls to Commit Execution Route |
-
-The older QA-01~11 inside v1.1 are preserved as **Legacy v1.1 Detailed QA**.
-Their retained obligations, diagnostics, and identifier history are mapped in
-`docs/architecture/qa-legacy-migration.md`; they are not deleted.
-
-## Scored drivers and mandatory conditions
-
-```text
-Scored Architectural Drivers
-  QA-01
-  QA-02
-  QA-03
-  QA-04
-
-Mandatory Qualification Gates / Constraints
-  Security
-  Privacy / Context-sharing policy
-  Trusted boundary requirements
-  Required cancellation semantics
-  Required task-state integrity
-  Failure containment
-  Mandatory recovery behavior
-```
-
-A mandatory violation cannot be compensated by another QA's score.
-
-## Cross-cutting services / roles under evaluation
-
-The following remain relevant architecture roles, but their exact placement/depth can vary by DP-00 alternative:
-
-- Voice / Text interaction
-- Context Engine / interaction evidence
-- Intent refinement / semantic normalization
-- Execution-path / Agent routing
-- Session & Conversation State
-- Task / Workflow lifecycle
-- Agent Harness / integration contract
-- Policy / Consent / Identity
-- Model Gateway
-- Agent Registry / capability metadata
-- Memory
-- Observability / Audit / Evaluation
-- Notification / progress / result interaction
-
-The presence of a role does not imply that every alternative must implement it as the same named component.
-
-## Working invariants that do not prejudge DP-00
-
-- VIA is Voice-first, not Voice-only.
-- Approved v1.1 remains immutable while vNext architecture evaluation proceeds.
-- A/B/C/D are compared at the same Integrated Product functional boundary.
-- User/context sharing remains subject to privacy/consent/trusted-boundary requirements.
-- Conversation/task identity and required cancellation/recovery semantics must satisfy mandatory requirements regardless of topology.
-- Provider/model/runtime details should be versioned and controlled in architecture qualification.
-- Raw benchmark evidence must remain sufficient to recompute derived metrics.
-
-## Not yet decided
-
-- final DP-00 A/B/C/D topology commitment
-- within-family responsibility decomposition not already constrained by DP-00
-- within-family Intent Refiner, route-decision, task-state/recovery, and
-  lifecycle-control structure under DP-09/10/11/13/14
-- exact Fast Path capability set
-- minimum QA-02 correctness gate
-- production Model/Agent/Tool latency values
-
-## Current downstream structural boundaries
-
-The catalog keeps these axes separate:
-
-```text
-logical execution ownership       = DP-00
-historical capability placement   = DP-03, absorbed into DP-00 / inactive
-VIA-local process/runtime hosting = DP-16, conditional on C/D
-execution-interface commonality   = DP-04
-capability registration authority = DP-12
-task/execution state + recovery   = DP-13
-lifecycle commands + cancellation = DP-14
-failure containment               = DP-15
-request-time route selection      = DP-11
-```
-
-VIA ownership does not imply same-process hosting. A common execution contract
-does not imply a shared implementation or runtime. User-facing task projection,
-executor-authoritative domain state, and persistence/recovery are not one
-undifferentiated “state.”
-
-The next recommended all-family investigation is DP-13 Execution State and
-Recovery Authority. DP-16 Local Execution Hosting and Isolation is the next
-conditional C/D investigation. Neither recommendation selects a structural
-alternative or changes DP-00's deferred state.
+See [`decision-points/catalog.md`](decision-points/catalog.md), [`qa-dp-traceability.md`](qa-dp-traceability.md), and the [`DP-00 protocol`](../evaluation/dp00-vnext-evaluation-protocol-v1.md).

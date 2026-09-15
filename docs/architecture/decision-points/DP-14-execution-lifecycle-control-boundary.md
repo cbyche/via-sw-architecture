@@ -1,5 +1,7 @@
 # DP-14 — Execution Lifecycle Control Boundary
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** Its concerns are absorbed into active DP-06 and common interaction-control obligations.
+
 > **QA SEMANTICS NOTICE.** References to `Top QA-01~04` retain their legacy planning meaning. Before evaluation, this open DP must nominate valid Primary QAs from QA Evaluation Contract v1 without defining local metrics, targets, populations, or scores.
 
 ## Status

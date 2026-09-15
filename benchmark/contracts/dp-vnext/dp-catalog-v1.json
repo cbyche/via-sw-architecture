@@ -1,0 +1,101 @@
+{
+  "$schema": "../../schemas/dp-vnext-catalog-v1.schema.json",
+  "catalog_id": "via-dp-vnext-catalog-v1",
+  "status": "ACTIVE",
+  "qa_contract": "benchmark/contracts/qa-v1/qa-evaluation-contract-v1.json",
+  "reference_environment": "benchmark/contracts/qa-v1/reference-environment-v1.json",
+  "corpus_manifest": "benchmark/contracts/qa-v1/corpus-manifest-v1.json",
+  "all_qa_ids": ["QA-01", "QA-02", "QA-03", "QA-04", "QA-05", "QA-06", "QA-07", "QA-08", "QA-09", "QA-10", "QA-11", "QA-12"],
+  "selection_policy": "No base architecture family is preselected. DP-00 selection will be driven first by measured QA-01 and QA-02 results under QA Evaluation Contract v1, with the remaining QAs used for trade-off, regression, hard-gate, and mitigation analysis.",
+  "decision_points": [
+    {
+      "dp_id": "DP-00",
+      "title": "Primary Reasoning & Execution Boundary",
+      "decision_question": "Does primary substantive reasoning and execution authority reside in an agent-neutral VIA Control Plane or a primary general-purpose Agent Runtime?",
+      "status": "active",
+      "alternatives": [
+        {"alternative_id": "R1", "name": "Agent-neutral Control Plane", "classification": "base_family"},
+        {"alternative_id": "R3", "name": "Primary General-purpose Agent Runtime", "classification": "base_family"},
+        {"alternative_id": "R1+@", "name": "R1 with bounded deterministic read-only local tactic", "classification": "tactic_realization", "inherits": "R1"}
+      ],
+      "primary_qas": ["QA-01", "QA-02", "QA-04", "QA-05"],
+      "all_qas_evaluated": true,
+      "dependencies": ["QA Evaluation Contract v1", "Reference Environment v1", "approved product obligations"],
+      "structural_discriminator": "Ownership of substantive semantic interpretation, domain planning, arbitrary tool execution, workflow state, and specialist delegation across the VIA-to-Agent boundary.",
+      "excluded_mechanisms": ["model provider", "model size", "prompt layout", "model-call count", "confidence threshold", "ARGO product identity"],
+      "legacy_mapping": ["Historical A is structurally informative for R1 without score transfer.", "Historical B is structurally informative for R3 without score transfer.", "Historical C supplies local-execution lessons only and is not automatically R1+@.", "Historical D is adaptive-routing evidence and is not an active base family."]
+    },
+    {
+      "dp_id": "DP-01", "title": "Canonical User-Turn Authority",
+      "decision_question": "When Voice/S2S, streaming ASR, Text, and interaction events coexist, which boundary owns the committed logical UserTurn?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Native/S2S turn authority with VIA identity/state mapping", "classification": "base_alternative"}, {"alternative_id": "B", "name": "VIA canonical-turn authority using Voice/ASR/Text/UI evidence", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-03", "QA-05"], "all_qas_evaluated": true, "dependencies": ["DP-00"],
+      "structural_discriminator": "Authoritative UserTurn identity, commit/revision state, reconciliation, and interface direction when streams disagree.",
+      "excluded_mechanisms": ["S2S versus ASR", "ASR provider", "confidence threshold", "speculation toggle"], "legacy_mapping": ["Migrates legacy DP-08 modality authority and part of legacy DP-02 current-turn evidence authority."]
+    },
+    {
+      "dp_id": "DP-02", "title": "VIA Semantic Decision Responsibility Topology",
+      "decision_question": "Within R1, are grounded-goal construction and initial Agent routing separate authoritative responsibilities or one unified VIA decision aggregate?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Separate GroundedRequest and AgentDecision authorities", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Unified RequestDecision authority", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-04", "QA-05"], "all_qas_evaluated": true, "dependencies": ["DP-00/R1"],
+      "structural_discriminator": "Authority, artifact ownership, dependency direction, and version lifecycle for grounded goal and initial routing.",
+      "excluded_mechanisms": ["one model call versus two", "prompt fusion", "classifier versus LLM", "model provider"], "legacy_mapping": ["Migrates legacy DP-10 and absorbs structural authority from legacy DP-11."]
+    },
+    {
+      "dp_id": "DP-03", "title": "Temporal Evidence Retention Authority",
+      "decision_question": "Who remains authoritative for historical interaction evidence after its source or current state changes?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "VIA-owned materialized historical evidence", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Source-owned versioned/pinnable history plus VIA time/reference broker", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-05", "QA-07"], "all_qas_evaluated": true, "dependencies": ["DP-00"],
+      "structural_discriminator": "Persistent historical-evidence ownership, pin/version authority, retrieval dependency, and post-mutation availability boundary.",
+      "excluded_mechanisms": ["retention duration", "cache size", "index algorithm", "storage vendor"], "legacy_mapping": ["Migrates the temporal-retention part of legacy DP-02; legacy capability-placement DP-03 retains historical identity only."]
+    },
+    {
+      "dp_id": "DP-04", "title": "Agent Request Context Materialization Boundary",
+      "decision_question": "Must required context be materialized before Agent admission, or may execution retain scoped context-resolution capability?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Pre-admission self-contained request package", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Grounded request plus versioned/scoped context handles and lifecycle broker", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-04", "QA-05"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-03"],
+      "structural_discriminator": "Whether context resolution ends at admission or remains a scoped, authorized lifecycle dependency.",
+      "excluded_mechanisms": ["package size", "cache policy", "serialization format", "prefetch threshold"], "legacy_mapping": ["Supersedes the old DP-04 number; legacy execution-contract work is a supporting decision."]
+    },
+    {
+      "dp_id": "DP-05", "title": "UserTask to Native Agent Session Binding",
+      "decision_question": "Do independent UserTasks share a native Agent session or receive isolated native execution state?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Shared long-lived Agent session", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Task-scoped native Agent session", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-03", "QA-04"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-04"],
+      "structural_discriminator": "Native conversational/execution state ownership, isolation, correlation, persistence, and cleanup across UserTasks.",
+      "excluded_mechanisms": ["transport pooling", "cache size", "session timeout", "shared model weights"], "legacy_mapping": ["Absorbs state-isolation portions of legacy DP-09 and DP-13."]
+    },
+    {
+      "dp_id": "DP-06", "title": "Interaction Frontend to Task Supervisor Runtime Boundary",
+      "decision_question": "Does authoritative UserTask supervision share the frontend runtime lifecycle or live in an independently running durable Task Service?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Co-hosted interaction and task-supervision runtime", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Detached durable Task Service with typed command/event boundary", "classification": "base_alternative"}],
+      "primary_qas": ["QA-03", "QA-05", "QA-08", "QA-11"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-05"],
+      "structural_discriminator": "Runtime, deployment, supervision, failure, IPC, and recovery boundaries around authoritative durable Task state.",
+      "excluded_mechanisms": ["process name", "retry count", "heartbeat interval", "queue priority"], "legacy_mapping": ["Absorbs legacy DP-13, DP-14, and the task-supervision portion of DP-15."]
+    },
+    {
+      "dp_id": "DP-07", "title": "Voice/Text Semantic Response Authority",
+      "decision_question": "Who owns the semantic meaning of user-facing Voice summary and Text detail?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Single semantic Response Author and versioned ResponsePlan", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Channel-owned semantic authors plus fact/version reconciliation", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-02", "QA-03", "QA-05"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-01", "TaskResult contract"],
+      "structural_discriminator": "Semantic publication authority, response-state ownership, reconciliation direction, and version lifecycle.",
+      "excluded_mechanisms": ["sentence count", "atomic versus incremental rendering", "TTS provider", "voice style"], "legacy_mapping": ["Reuses a formerly inactive number; historical legacy DP-07 model/provider policy remains policy."]
+    },
+    {
+      "dp_id": "DP-08", "title": "On-device Inference Resource Topology",
+      "decision_question": "Do Voice-critical and background semantic workloads share an inference execution domain or is realtime capacity independently protected?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Work-conserving shared inference pool", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Realtime-isolated inference domain with enforceable boundaries", "classification": "base_alternative"}],
+      "primary_qas": ["QA-01", "QA-07", "QA-11", "QA-12"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-06"],
+      "structural_discriminator": "Enforceable resource admission, capacity, failure, scheduling, and deployment boundaries for realtime inference.",
+      "excluded_mechanisms": ["process naming", "queue priority number", "worker count", "model size", "cache size"], "legacy_mapping": ["Supersedes the old DP-08 number; legacy modality-unification authority migrates to DP-01."]
+    },
+    {
+      "dp_id": "DP-09", "title": "Device Capability Abstraction Boundary",
+      "decision_question": "Where are device-specific interaction, context, and capability semantics normalized?", "status": "active",
+      "alternatives": [{"alternative_id": "A", "name": "Device-neutral VIA Core model plus thin adapters/providers", "classification": "base_alternative"}, {"alternative_id": "B", "name": "Device-family runtime owns rich semantics and projects a smaller Core contract", "classification": "base_alternative"}],
+      "primary_qas": ["QA-06", "QA-05", "QA-02", "QA-03"], "all_qas_evaluated": true, "dependencies": ["DP-00", "DP-01", "DP-03", "DP-04"],
+      "structural_discriminator": "Authority for rich device semantics, Core/device interface direction, and ownership of device-family state and evolution.",
+      "excluded_mechanisms": ["adapter language", "device allow-list", "payload format", "feature flags"], "legacy_mapping": ["New admitted DP; the legacy task-association DP-09 is absorbed into DP-05/06 and remains historical."]
+    }
+  ]
+}

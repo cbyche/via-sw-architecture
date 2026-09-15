@@ -1,5 +1,7 @@
 # Architecture Evaluation Principles
 
+> **LEGACY A/B/C/D APPLICATION NOTICE.** General neutrality principles remain reusable where consistent with QA Evaluation Contract v1, but A/B/C/D examples below are historical and do not define the active DP-00 candidates. Active DP-00 is R1 versus R3; R1+@ is a tactic realization.
+
 ## QA Contract v1 authority
 
 For every future architecture comparison, QA metrics, targets, scoring, populations, boundaries, and failure treatment come only from `docs/evaluation/qa-contracts/v1/README.md` and its executable contracts. Legacy QA examples later in this document are historical illustrations and do not override QA Contract v1.

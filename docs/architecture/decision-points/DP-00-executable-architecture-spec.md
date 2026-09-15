@@ -1,5 +1,7 @@
 # DP-00 — Executable Architecture Specification
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** This specification preserves the historical A/B/C/D experiment identities and is not an R1/R3 candidate contract. See [`vnext/DP-00-primary-reasoning-execution-boundary.md`](vnext/DP-00-primary-reasoning-execution-boundary.md).
+
 > **QA SEMANTICS NOTICE.** The A/B/C/D specifications remain active architecture inputs, but their QA-01~04 references describe the legacy DP-00 campaign. Future evaluation consumes QA Evaluation Contract v1 and does not inherit the old metrics or score rules.
 
 ## Status

@@ -12,6 +12,12 @@ Corpus gaps: `docs/evaluation/qa-contracts/v1/CORPUS-GAP-REPORT.md`
 
 Shared evaluator: `benchmark/analysis/qa_v1/`
 
+Active vNext Decision Point catalog: `../architecture/decision-points/catalog.md`
+
+DP-00 R1/R3 candidate contracts: `../../benchmark/contracts/dp-vnext/`
+
+DP-00 next-task protocol (no results): `dp00-vnext-evaluation-protocol-v1.md`
+
 ## LEGACY QA DEFINITIONS
 
 → `docs/archive/legacy-evaluation/pre-qa-contract-v1/`
@@ -20,7 +26,7 @@ The stable files under `docs/evaluation/quality-attributes/` are supersession re
 
 ## HISTORICAL EXPERIMENTS
 
-DP-00 protocols, contracts, analysis, and `results/` remain preserved for provenance and reproducibility. They retain the identifiers, populations, measurements, and scores of the legacy contract under which they were produced. They are not current scoring authority and must not be relabeled as QA-v1 evidence without a new evaluation.
+Historical A/B/C/D DP-00 protocols, contracts, analysis, and `results/` remain preserved for provenance and reproducibility. They retain the identifiers, populations, measurements, and scores of the legacy contract under which they were produced. They are not R1/R3 QA-v1 scores and must not be relabeled as current evidence without a new evaluation. The active base families are R1 and R3; R1+@ is an R1 tactic realization.
 
 ## Dependency direction
 

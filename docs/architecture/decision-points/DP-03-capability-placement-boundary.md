@@ -1,5 +1,7 @@
 # DP-03 — Capability Placement Boundary
 
+> **LEGACY / HISTORICAL DECISION RECORD — Not part of the active vNext DP catalog.** The active DP-03 is Temporal Evidence Retention Authority. Historical local-execution material here must not be relabeled as the strict read-only R1+@ tactic.
+
 ## Status
 
 **ABSORBED INTO DP-00 / INACTIVE**

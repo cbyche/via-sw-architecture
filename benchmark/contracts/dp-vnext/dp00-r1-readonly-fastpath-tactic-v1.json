@@ -1,0 +1,34 @@
+{
+  "contract_id": "dp00-r1-readonly-fastpath-tactic-v1",
+  "contract_type": "tactic_realization",
+  "dp_id": "DP-00",
+  "candidate_id": "R1+@",
+  "inherits_candidate": "R1",
+  "evaluation_status": "NOT_EVALUATED",
+  "all_qas_evaluated": true,
+  "architecture_identity": "R1 plus a bounded deterministic read-only local tactic; it is not a base architecture family.",
+  "adds_only": [
+    "bounded local execution",
+    "deterministic behavior",
+    "read-only access"
+  ],
+  "allowed_interaction_control": [
+    "stop VIA speech playback",
+    "cancel provisional work"
+  ],
+  "must_reject": [
+    "state-changing user or domain action",
+    "arbitrary tool selection",
+    "open-ended planning or planning loop",
+    "durable workflow",
+    "independent Agent execution state"
+  ],
+  "reclassification_rule": "If the tactic exceeds any bound or gains state-changing action, arbitrary tools, planning, durable workflow, or Agent execution state, stop and create an explicit architecture decision before evaluation.",
+  "qa_v1_binding": {
+    "dp_id": "DP-00",
+    "qa_contract_id": "qa-evaluation-contract-v1",
+    "reference_environment_id": "via-reference-environment-v1",
+    "corpus_manifest_id": "qa-v1-corpus-manifest-v1",
+    "primary_qa_ids": ["QA-01", "QA-02", "QA-04", "QA-05"]
+  }
+}
