@@ -14,7 +14,7 @@ import time
 from typing import Any
 
 from benchmark.analysis.qa_v1 import ContractRepository, EvidenceMode, FrozenCorpus, evaluate_canonical_observations
-from .evolution import run_evolution_case
+from .evolution import EvolutionInput, run_evolution_case
 from .runtime import ExecutableTopology, PlaybackProbe, ROOT
 
 CAMPAIGN_ID = "dp00-executable-reference-v3-qa-v1"
@@ -124,7 +124,7 @@ def evaluate_goal(output: dict[str, Any], expected: dict[str, Any]) -> dict[str,
         "consent": semantic["consent_required"] == expected["required_consent"],
         "result_facts": set(agent["facts"]) == set(expected["required_result_facts"]),
         "task_result_binding": output["case_id"] == expected["task_result_binding"].removeprefix("task:"),
-        "voice_text_consistency": True,
+        "voice_text_consistency": output.get("voice_text_consistency") is True,
     }
 
 
@@ -224,6 +224,16 @@ def run_goal_qa(qa_id: str, realization: str, topology: ExecutableTopology, comm
     for case in cases(qa_id):
         case_id=case["goal_id"]
         output=topology.execute(goal_request(case_id,semantic[case_id],agent[case_id]))
+        alternate_semantic=dict(semantic[case_id])
+        alternate_semantic["modality"]="text" if semantic[case_id]["modality"]=="voice" else "voice"
+        alternate=topology.execute(goal_request(case_id,alternate_semantic,agent[case_id]))
+        comparable=("goal","referent","constraints","consent_required","ambiguity_status","capability")
+        output["voice_text_consistency"]=(
+            all(output["semantic"].get(key)==alternate["semantic"].get(key) for key in comparable)
+            and extract_agent_result(output)==extract_agent_result(alternate)
+            and output["case_id"]==alternate["case_id"]
+        )
+        output["alternate_modality_probe"]={"modality":alternate_semantic["modality"],"consistent":output["voice_text_consistency"],"topology":alternate["topology"]}
         outputs.append(output)
         observations.append(observation(qa_id,population["population_id"],case_id,{"required_conditions":evaluate_goal(output,catalog[case_id]["goal_oracle"])}))
     result=evaluate_canonical_observations(qa_id,population,observations,provenance(contracts,commit,realization,qa_id),contracts).to_dict()
@@ -254,13 +264,20 @@ def run_qa03(realization: str, topology: ExecutableTopology, commit: str, contra
 def run_evolution_qa(qa_id: str, realization: str, commit: str, contracts: ContractRepository, target_dir: Path):
     population=FrozenCorpus(contracts).population(qa_id); outputs=[]; observations=[]
     for case in cases(qa_id):
-        output=run_evolution_case(commit,realization,qa_id,case,target_dir); outputs.append(output)
+        candidate_input=EvolutionInput(
+            case_id=case["case_id"],
+            change_request=case.get("change_request"),
+            requirement=case.get("requirement"),
+            required_functionality=case.get("required_functionality"),
+            device_family=case.get("device_family"),
+        )
+        output=run_evolution_case(commit,realization,qa_id,candidate_input,target_dir); outputs.append(output)
         if qa_id=="QA-04":
             measurement={"requested_change_completed":output["acceptance_tests_pass"],"common_regressions_pass":output["common_regressions_pass"],"actual_semantic_ownership_changes":output["actual_semantic_ownership_changes"],"allowed_agent_integration_ownership_areas":case["allowed_agent_integration_ownership_areas"],"actual_extension_seams":output["actual_extension_seams"],"approved_extension_seams":case["approved_extension_seams"],"actual_core_semantic_zone_changes":output["actual_changed_semantic_zones"],"forbidden_core_semantic_zones":case["forbidden_core_semantic_zones"]}
         elif qa_id=="QA-05":
             measurement={"requested_functionality_completed":output["acceptance_tests_pass"],"common_regressions_pass":output["common_regressions_pass"],"actual_changed_semantic_zones":output["actual_changed_semantic_zones"],"expected_ownership_zones":case["expected_ownership_zones"],"actual_extension_seams":output["actual_extension_seams"],"approved_extension_seams":case["approved_extension_seams"],"semantic_dependency_leaks":output["semantic_dependency_leaks"]}
         else:
-            measurement={"required_functionality_delivered":output["acceptance_tests_pass"],"actual_core_semantic_changes":[],"device_family":case["device_family"]}
+            measurement={"required_functionality_delivered":output["acceptance_tests_pass"],"actual_core_semantic_changes":output["actual_core_semantic_changes"],"device_family":case["device_family"]}
         observations.append(observation(qa_id,population["population_id"],case["case_id"],measurement))
     result=evaluate_canonical_observations(qa_id,population,observations,provenance(contracts,commit,realization,qa_id),contracts).to_dict()
     return result,outputs,observations
@@ -280,11 +297,36 @@ def run_qa08(realization: str, topology: ExecutableTopology, commit: str, contra
     for case in cases(qa_id):
         target,owner=fault_target(realization,case)
         capability="specialist-query" if target=="specialist-agent" else "planning"
-        events=[{"type":"TASK_START","task_id":f"task:{case['case_id']}"},{"type":"FAULT","task_id":f"task:{case['case_id']}"},{"type":"RECOVERY","task_id":f"task:{case['case_id']}"},{"type":"AGENT_RESULT","task_id":f"task:{case['case_id']}"}]
+        task_id=f"task:{case['case_id']}"
+        events=[{"type":"TASK_START","task_id":task_id},{"type":"AGENT_PROGRESS","task_id":task_id},{"type":"FAULT","task_id":task_id}]
+        if case["fault_type"]=="duplicate-event":
+            duplicate={"type":"AGENT_PROGRESS","task_id":task_id,"event_id":f"progress:{case['case_id']}"}
+            events.extend([duplicate,dict(duplicate)])
+        if case["fault_type"]=="late-event":
+            events.extend([{"type":"CANCEL","task_id":task_id},{"type":"LATE_AGENT_RESULT","task_id":task_id},{"type":"RECOVERY","task_id":task_id}])
+        elif case["fault_type"]=="delivery-interruption":
+            events.extend([{"type":"AGENT_RESULT","task_id":task_id},{"type":"RECOVERY","task_id":task_id},{"type":"FOLLOW_UP","task_id":task_id}])
+        else:
+            events.extend([{"type":"RECOVERY","task_id":task_id},{"type":"AGENT_RESULT","task_id":task_id}])
         request=generic_request(case["case_id"],capability=capability,events=events); request["fault_target"]=target
         output=topology.execute(request); output["fault_owner"]=owner; outputs.append(output)
+        lifecycle=output.get("via_state",output.get("shell_state"))["event_state" if "via_state" in output else "correlation_log"]
+        task=lifecycle[f"task:{case['case_id']}"]
+        event_kinds=[event["type"] for event in task["events"]]
+        component_recovered=(target is None or output["recovery"]["component_restarted"] is True)
+        task_identity=(output["case_id"]==case["case_id"] and output.get("via_state",output.get("shell_state"))["user_task"]==f"task:{case['case_id']}")
+        result_binding=output.get("via_state",output.get("shell_state"))["result_binding"]
+        if case["fault_type"]=="late-event":
+            version_matches=task["result_version"]==0 and task.get("late_result_rejected") is True and result_binding is False
+            single_result=event_kinds.count("AGENT_RESULT")==0
+        else:
+            version_matches=extract_agent_result(output)["result_version"]==1 and task["result_version"]==1 and result_binding is True
+            single_result=event_kinds.count("AGENT_RESULT")==1
+        safe=(component_recovered and task_identity and version_matches and event_kinds.count("FAULT")==1 and event_kinds.count("RECOVERY")==1 and single_result)
+        output["recovery"]["derived_checks"]={"component_recovered":component_recovered,"task_identity":task_identity,"result_version_matches":version_matches,"single_result_commit":single_result,"fault_and_recovery_observed":event_kinds.count("FAULT")==1 and event_kinds.count("RECOVERY")==1}
+        output["recovery"]["safe_continuation"]=safe
         seconds=output["recovery"]["recovery_ns"]/1e9
-        observations.append(observation(qa_id,population["population_id"],case["case_id"],{"safe_recovery_reached":output["recovery"]["safe_continuation"],"safe_recovery_seconds":seconds,"unsafe_or_incorrect_recovery":False}))
+        observations.append(observation(qa_id,population["population_id"],case["case_id"],{"safe_recovery_reached":safe,"safe_recovery_seconds":seconds,"unsafe_or_incorrect_recovery":not safe}))
     result=evaluate_canonical_observations(qa_id,population,observations,provenance(contracts,commit,realization,qa_id),contracts).to_dict()
     owners=defaultdict(list)
     for item in outputs: owners[item["fault_owner"]].append(item["recovery"]["recovery_ns"]/1e6)
@@ -338,7 +380,9 @@ def run_qa10(realization: str, topology: ExecutableTopology, commit: str, contra
         output=topology.execute(generic_request(case["case_id"],capability=capability)); graph,chain=reconstruct_trace(output)
         output["reconstructed_graph"]=graph; outputs.append(output)
         expected=oracle[case["case_id"]]
-        observations.append(observation(qa_id,population["population_id"],case["case_id"],{"required_chain":{node:chain.get(node,False) for node in expected["required_chain"]},"expected_causal_graph":expected["expected_graph"],"reconstructed_causal_graph":graph,"hidden_oracle_or_fault_labels_exposed":False}))
+        serialized_output=json.dumps(output,sort_keys=True).lower()
+        oracle_exposed=any(marker in serialized_output for marker in ("expected_graph","required_chain","ground_truth_trace","oracle"))
+        observations.append(observation(qa_id,population["population_id"],case["case_id"],{"required_chain":{node:chain.get(node,False) for node in expected["required_chain"]},"expected_causal_graph":expected["expected_graph"],"reconstructed_causal_graph":graph,"hidden_oracle_or_fault_labels_exposed":oracle_exposed}))
     result=evaluate_canonical_observations(qa_id,population,observations,provenance(contracts,commit,realization,qa_id),contracts).to_dict()
     return result,outputs,observations
 

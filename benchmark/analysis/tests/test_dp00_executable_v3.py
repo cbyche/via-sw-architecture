@@ -9,7 +9,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 from benchmark.dp_executable_v3.campaign import event_script, goal_maps, goal_request, reconstruct_trace, scope_request
-from benchmark.dp_executable_v3.evolution import ZONE_TERMS, classify_change_request, parse_manifest
+from benchmark.dp_executable_v3.evolution import EvolutionInput, ZONE_TERMS, classify_change_request, derive_dependency_evidence, derive_extension_seam, parse_manifest
 from benchmark.dp_executable_v3.preflight import check_reference_hashes, static_gates
 from benchmark.dp_executable_v3.runtime import ExecutableTopology, PROTOTYPE, normalized_behavior
 
@@ -27,6 +27,22 @@ def test_ownership_manifest_maps_all_evolution_zones() -> None:
 @pytest.mark.parametrize(("change_text","zone"),[("ASR revision event","Z1"),("referent ranking policy","Z2"),("semantic decision schema","Z3"),("Agent protocol change","Z4"),("Task persistence evolution","Z5"),("voice summary policy","Z6"),("buffer allocator","Z7"),("robot sensor adapter","Z8")])
 def test_change_request_routes_by_semantics(change_text: str, zone: str) -> None:
     assert classify_change_request(change_text)==zone
+
+
+def test_evolution_seams_are_derived_without_evaluator_fields() -> None:
+    assert derive_extension_seam("QA-04",EvolutionInput(case_id="c",change_request="agent-onboarding variation 1 with contract profile cp-01"))=="agent-integration:agent-onboarding"
+    assert derive_extension_seam("QA-05",EvolutionInput(case_id="c",change_request="ASR revision event"))=="z1:asr-revision-event"
+    assert derive_extension_seam("QA-06",EvolutionInput(case_id="c",requirement="camera context",device_family="MOBILE"))=="mobile-context-provider"
+
+
+def test_dependency_leak_is_derived_from_rust_source(tmp_path: Path) -> None:
+    prototype=tmp_path/"prototype"; module=prototype/"src/ownership/r1_agent_adapter.rs"
+    module.parent.mkdir(parents=True)
+    module.write_text("use crate::ownership::z3_semantics;\npub const VERSION: usize = z3_semantics::VERSION;\n")
+    manifest=parse_manifest(PROTOTYPE/"ARCHITECTURE-OWNERSHIP-MANIFEST.yaml")
+    edges,leaks=derive_dependency_evidence(prototype,["src/ownership/r1_agent_adapter.rs"],manifest)
+    assert edges==[{"source":"src/ownership/r1_agent_adapter.rs","target":"src/ownership/z3_semantics.rs"}]
+    assert leaks==["Z3"]
 
 
 def test_event_script_is_chronological_and_executable() -> None:

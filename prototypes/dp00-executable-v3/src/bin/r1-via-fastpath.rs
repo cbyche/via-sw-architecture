@@ -14,16 +14,23 @@ fn main() -> io::Result<()> {
     serve(move |request| {
         let start = Instant::now();
         let recovery_target = request.get("fault_target").and_then(Value::as_str);
+        let mut recovery_pids = None;
         match recovery_target {
-            Some("general-agent") => general
-                .restart("general-agent", "r1-general-agent")
-                .expect("restart general agent"),
-            Some("specialist-agent") => specialist
-                .restart("specialist-agent", "specialist-agent")
-                .expect("restart specialist"),
-            Some("context") => semantic
-                .restart("semantic-model", "semantic-model")
-                .expect("restart semantic model"),
+            Some("general-agent") => {
+                let old = general.pid();
+                general.restart("general-agent", "r1-general-agent").expect("restart general agent");
+                recovery_pids = Some((old, general.pid()));
+            }
+            Some("specialist-agent") => {
+                let old = specialist.pid();
+                specialist.restart("specialist-agent", "specialist-agent").expect("restart specialist");
+                recovery_pids = Some((old, specialist.pid()));
+            }
+            Some("context") => {
+                let old = semantic.pid();
+                semantic.restart("semantic-model", "semantic-model").expect("restart semantic model");
+                recovery_pids = Some((old, semantic.pid()));
+            }
             _ => {}
         }
         let (sem, sem_tx, sem_rx) = semantic.request(&request).expect("semantic IPC");
@@ -59,6 +66,9 @@ fn main() -> io::Result<()> {
         };
         let feedback_emitted_offset_ns =
             dispatch_offset_ns + agent["elapsed_ns"].as_u64().unwrap_or(0) as u128;
+        let event_state = process_events(&request);
+        let task_key = request.get("task_id").and_then(Value::as_str).unwrap_or("task:unknown");
+        let result_binding = event_state[task_key]["status"].as_str() != Some("cancelled");
         let mut result = json!({
             "case_id":request.get("case_id").cloned().unwrap_or(Value::Null),
             "entry_component":"r1-via-control-plane-with-bounded-read-tactic",
@@ -70,7 +80,7 @@ fn main() -> io::Result<()> {
                 {"role":"specialist-agent","pid":specialist.pid(),"parent_pid":parent}
             ],"selected_path":["scenario-driver","r1-via-control-plane-with-bounded-read-tactic",selected_role]},
             "state_owner":selected_role,
-            "via_state":{"user_task":request.get("task_id"),"result_binding":true,"workflow_truth":local,"bounded_read_only":local,"event_state":process_events(&request)},
+            "via_state":{"user_task":request.get("task_id"),"result_binding":result_binding,"workflow_truth":local,"bounded_read_only":local,"event_state":event_state},
             "agent":agent,
             "semantic":sem["semantic"],
             "policy":grant,
@@ -79,7 +89,7 @@ fn main() -> io::Result<()> {
             "ipc_count":ipc_count,
             "process_hop_count":hops,
             "serialization_bytes":sem_tx+sem_rx+pol_tx+pol_rx+agent_tx+agent_rx,
-            "recovery":{"fault_target":recovery_target,"safe_continuation":true,"recovery_ns":monotonic_ns(start)},
+            "recovery":{"fault_target":recovery_target,"old_pid":recovery_pids.map(|p|p.0),"new_pid":recovery_pids.map(|p|p.1),"component_restarted":recovery_pids.is_some_and(|p|p.0!=p.1),"recovery_ns":monotonic_ns(start)},
             "feedback":{"emitted_offset_ns":feedback_emitted_offset_ns,"delivered_offset_ns":monotonic_ns(start)},
             "trace":[
                 {"span":"interaction","parent":null,"component":"r1-via-control-plane-with-bounded-read-tactic"},

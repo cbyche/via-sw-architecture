@@ -9,7 +9,7 @@ import tempfile
 from typing import Any
 
 from .campaign import FIXTURES, PROTOTYPE, evaluate_goal, goal_maps, goal_request, reconstruct_trace, scope_request
-from .evolution import classify_change_request, parse_manifest
+from .evolution import EvolutionInput, acceptance_succeeded, classify_change_request, derive_dependency_evidence, parse_manifest, run_evolution_case
 from .materialize import materialize
 from .runtime import ExecutableTopology, ROOT, normalized_behavior
 
@@ -26,6 +26,8 @@ def static_gates() -> dict[str,bool]:
     agent=json.loads((FIXTURES/"agent-replay-v3.json").read_text(encoding="utf-8"))
     visible_text=json.dumps({"semantic":semantic,"agent":agent})
     forbidden=("expected_graph","required_result_facts","correct_goal","qa_pass","family_id")
+    evolution_source=(ROOT/"benchmark/dp_executable_v3/evolution.py").read_text(encoding="utf-8")
+    campaign_source=(ROOT/"benchmark/dp_executable_v3/campaign.py").read_text(encoding="utf-8")
     return {
         "reference_base_immutable":check_reference_hashes(),
         "runtime_has_no_candidate_id_branch":"candidate_id" not in runtime_sources and "CandidateId" not in runtime_sources,
@@ -35,7 +37,13 @@ def static_gates() -> dict[str,bool]:
         "no_random_error_probability":"rand" not in runtime_sources.lower() and "probability" not in runtime_sources.lower(),
         "separate_executables":all((PROTOTYPE/"src/bin"/name).exists() for name in ("r1-via.rs","r3-shell.rs","r3-primary-runtime.rs","r1-via-fastpath.rs")),
         "no_family_to_zone_mapping":"family_id" not in (ROOT/"benchmark/dp_executable_v3/evolution.py").read_text(encoding="utf-8"),
-        "no_hardcoded_official_success":"requested_change_completed\": True" not in (ROOT/"benchmark/dp_executable_v3/campaign.py").read_text(encoding="utf-8"),
+        "no_hardcoded_official_success":all(pattern not in campaign_source for pattern in (
+            '"requested_change_completed":True', '"requested_functionality_completed":True',
+            '"required_functionality_delivered":True', '"unsafe_or_incorrect_recovery":False',
+            '"hidden_oracle_or_fault_labels_exposed":False', '"actual_core_semantic_changes":[]',
+        )),
+        "evolution_runner_has_no_evaluator_oracle_fields":all(field not in evolution_source for field in ("approved_extension_seams", "expected_ownership_zones", "forbidden_core_semantic_zones", "allowed_agent_integration_ownership_areas")),
+        "evolution_uses_behavioral_acceptance":"acceptance_tests_pass\": acceptance_pass" in evolution_source and "_append_compile_marker" not in evolution_source,
     }
 
 
@@ -105,12 +113,32 @@ def mutation_checks() -> dict[str,bool]:
         with ExecutableTopology("R1",bin_dir=bin_dir) as topology: output=topology.execute(request)
         results["result_correlation_defect_detected"]=output["case_id"]!="GOAL-001-01"
     finally: temp.cleanup()
+    temp,bin_dir=_mutated_tree({"src/ownership/r1_agent_adapter.rs":(
+        "pub const VERSION: usize = 1;",
+        "pub const VERSION: usize = 1;\npub const COMPILE_ONLY_MARKER: &str = \"not an implementation\";",
+    )})
+    try:
+        tree=Path(temp.name)/"prototype"
+        compile_only=subprocess.run(
+            ["cargo","test","--lib","--offline","--quiet","acceptance_missing_case"],
+            cwd=tree,env={**os.environ,"CARGO_TARGET_DIR":str(Path(tempfile.gettempdir())/"via-v3-mutation-target")},
+            capture_output=True,text=True,
+        )
+        results["compile_only_evolution_rejected"]=compile_only.returncode==0 and not acceptance_succeeded(compile_only)
+    finally: temp.cleanup()
     manifest=parse_manifest(PROTOTYPE/"ARCHITECTURE-OWNERSHIP-MANIFEST.yaml")
-    leaked=[manifest["src/ownership/r1_agent_adapter.rs"],manifest["src/ownership/z3_semantics.rs"]]
-    zones={zone for item in leaked for zone in item["semantic_concern_zones"]}
-    results["real_dependency_zone_leak_detected"]=zones!={"Z4"}
-    forbidden={"Z1","Z2","Z3","Z5","Z6","Z7","Z8"}
-    results["agent_evolution_core_edit_detected"]=bool(zones&forbidden)
+    temp,bin_dir=_mutated_tree({"src/ownership/r1_agent_adapter.rs":(
+        "pub const VERSION: usize = 1;",
+        "use crate::ownership::z3_semantics;\npub const VERSION: usize = z3_semantics::VERSION;",
+    )})
+    try:
+        tree=Path(temp.name)/"prototype"
+        edges,leaks=derive_dependency_evidence(tree,["src/ownership/r1_agent_adapter.rs"],manifest)
+        results["real_dependency_zone_leak_detected"]=bool(edges) and leaks==["Z3"]
+        changed=[manifest["src/ownership/r1_agent_adapter.rs"],manifest["src/ownership/z3_semantics.rs"]]
+        zones={zone for item in changed for zone in item["semantic_concern_zones"]}
+        results["agent_evolution_core_edit_detected"]=bool(zones&{"Z1","Z2","Z3","Z5","Z6","Z7","Z8"})
+    finally: temp.cleanup()
     temp,bin_dir=_mutated_tree({"src/bin/playback-probe.rs":('map(|_| 10).unwrap_or(0)','map(|_| 250).unwrap_or(0)')})
     try:
         process=subprocess.Popen([str(bin_dir/"playback-probe")],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
@@ -120,14 +148,32 @@ def mutation_checks() -> dict[str,bool]:
     return results
 
 
+def evolution_behavioral_checks() -> dict[str,bool]:
+    commit=subprocess.run(["git","rev-parse","HEAD"],cwd=ROOT,check=True,capture_output=True,text=True).stdout.strip()
+    target=Path(tempfile.gettempdir())/"via-v3-preflight-evolution-target"
+    checks={}
+    samples=(
+        ("QA-04",EvolutionInput("PREFLIGHT-QA04",change_request="agent-onboarding variation 1 with contract profile cp-01")),
+        ("QA-05",EvolutionInput("PREFLIGHT-QA05",change_request="ASR revision event")),
+        ("QA-06",EvolutionInput("PREFLIGHT-QA06",requirement="camera context",required_functionality="Deliver camera context through the platform-independent VIA task/result contract",device_family="MOBILE")),
+    )
+    for qa_id,item in samples:
+        output=run_evolution_case(commit,"R1",qa_id,item,target)
+        checks[qa_id]=bool(
+            output["build_pass"] and output["acceptance_tests_pass"] and output["common_regressions_pass"]
+            and output["actual_extension_seams"] and output["git_diff_patch"]
+        )
+    return checks
+
+
 def run() -> dict[str,Any]:
     materialize()
     subprocess.run(["cargo","test","--all-targets","--offline"],cwd=PROTOTYPE,check=True)
     subprocess.run(["cargo","build","--release","--all-targets","--offline"],cwd=PROTOTYPE,check=True)
-    static=static_gates(); topology=topology_checks(); mutations=mutation_checks(); label=label_swap_check()
+    static=static_gates(); topology=topology_checks(); mutations=mutation_checks(); label=label_swap_check(); evolution=evolution_behavioral_checks()
     qa05=[case["change_request"] for case in json.loads((ROOT/"benchmark/evolution/qa-v1/qa05-product-evolution-v1/instances.json").read_text())["instances"]]
     routing=all(classify_change_request(change) for change in qa05)
-    result={"status":"PASS" if all(static.values()) and all(topology.values()) and all(mutations.values()) and label and routing else "FAIL","static_gates":static,"runtime_topology_gates":topology,"label_swap_invariance":label,"real_mutation_sensitivity":mutations,"natural_change_request_routing":routing,"comparative_results_included":False}
+    result={"status":"PASS" if all(static.values()) and all(topology.values()) and all(mutations.values()) and all(evolution.values()) and label and routing else "FAIL","static_gates":static,"runtime_topology_gates":topology,"label_swap_invariance":label,"real_mutation_sensitivity":mutations,"evolution_behavioral_acceptance":evolution,"natural_change_request_routing":routing,"comparative_results_included":False}
     (PROTOTYPE/"PREFLIGHT-VALIDITY.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n",encoding="utf-8")
     if result["status"]!="PASS": raise SystemExit(json.dumps(result,indent=2))
     print(json.dumps(result,indent=2,sort_keys=True)); return result

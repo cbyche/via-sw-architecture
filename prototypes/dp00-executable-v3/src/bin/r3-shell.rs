@@ -14,13 +14,18 @@ fn main() -> io::Result<()> {
             .get("fault_target")
             .and_then(Value::as_str)
             .map(str::to_owned);
+        let mut recovery_pids = None;
         match recovery_target.as_deref() {
-            Some("primary-runtime") | Some("specialist-agent") => primary
-                .restart("r3-primary-runtime", "r3-primary-runtime")
-                .expect("restart primary topology"),
-            Some("context") => semantic
-                .restart("semantic-model", "semantic-model")
-                .expect("restart semantic model"),
+            Some("primary-runtime") | Some("specialist-agent") => {
+                let old = primary.pid();
+                primary.restart("r3-primary-runtime", "r3-primary-runtime").expect("restart primary topology");
+                recovery_pids = Some((old, primary.pid()));
+            }
+            Some("context") => {
+                let old = semantic.pid();
+                semantic.restart("semantic-model", "semantic-model").expect("restart semantic model");
+                recovery_pids = Some((old, semantic.pid()));
+            }
             _ => {}
         }
         let (sem, sem_tx, sem_rx) = semantic.request(&request).expect("semantic IPC");
@@ -58,12 +63,15 @@ fn main() -> io::Result<()> {
         if specialist_selected {
             scope_crossings.push(json!({"boundary":"R3 Primary Runtime -> Specialist","principal":request.get("principal"),"purpose":request.get("purpose"),"task":request.get("task_id"),"approval_version":request.pointer("/policy_context/approval_version"),"scopes":grant["granted"]}));
         }
+        let correlation_log = process_events(&request);
+        let task_key = request.get("task_id").and_then(Value::as_str).unwrap_or("task:unknown");
+        let result_binding = correlation_log[task_key]["status"].as_str() != Some("cancelled");
         let mut result = json!({
             "case_id":request.get("case_id").cloned().unwrap_or(Value::Null),
             "entry_component":"r3-via-shell",
             "topology":{"root_pid":parent,"processes":processes,"selected_path":selected_path},
             "state_owner":"r3-primary-runtime",
-            "shell_state":{"user_task":request.get("task_id"),"result_binding":true,"workflow_truth":false,"correlation_log":process_events(&request)},
+            "shell_state":{"user_task":request.get("task_id"),"result_binding":result_binding,"workflow_truth":false,"correlation_log":correlation_log},
             "primary_runtime":runtime,
             "semantic":sem["semantic"],
             "policy":grant,
@@ -72,7 +80,7 @@ fn main() -> io::Result<()> {
             "ipc_count":3+runtime["ipc_count"].as_u64().unwrap_or(0),
             "process_hop_count":2+runtime["process_hop_count"].as_u64().unwrap_or(0),
             "serialization_bytes":sem_tx+sem_rx+pol_tx+pol_rx+run_tx+run_rx+runtime["serialization_bytes"].as_u64().unwrap_or(0) as usize,
-            "recovery":{"fault_target":recovery_target,"safe_continuation":true,"recovery_ns":monotonic_ns(start)},
+            "recovery":{"fault_target":recovery_target,"old_pid":recovery_pids.map(|p|p.0),"new_pid":recovery_pids.map(|p|p.1),"component_restarted":recovery_pids.is_some_and(|p|p.0!=p.1),"recovery_ns":monotonic_ns(start)},
             "feedback":{"emitted_offset_ns":feedback_emitted_offset_ns,"delivered_offset_ns":monotonic_ns(start)},
             "trace":[
                 {"span":"interaction","parent":null,"component":"r3-via-shell"},
