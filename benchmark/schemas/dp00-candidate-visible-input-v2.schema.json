@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CandidateVisibleInput v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["qa_id", "case_id", "modality", "committed_representation", "temporal_evidence", "capabilities", "consent_state", "principal", "task_id", "operation", "parameters", "input_hash"],
+  "properties": {
+    "qa_id": {"type": "string"}, "case_id": {"type": "string"}, "modality": {"type": ["string", "null"]},
+    "committed_representation": {"type": ["string", "null"]}, "temporal_evidence": {"type": "array", "items": {"type": "object"}},
+    "capabilities": {"type": "array", "items": {"type": "string"}}, "consent_state": {"enum": ["required", "not-required"]},
+    "principal": {"type": ["string", "null"]}, "task_id": {"type": "string"}, "operation": {"type": "string"},
+    "parameters": {"type": "object"}, "input_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
