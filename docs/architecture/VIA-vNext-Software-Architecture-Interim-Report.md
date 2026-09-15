@@ -10,13 +10,13 @@
 
 | Field | Value |
 | --- | --- |
-| Document version | 0.3.0 |
+| Document version | 0.4.0 |
 | Status | **INTERIM / WORKING** |
 | Requirements baseline | `requirements-v1.1.md` — Approved Baseline |
 | vNext requirements | Working input; legacy DP/QA sections are superseded |
 | Active DP catalog | vNext DP-00 ~ DP-09 |
 | QA authority | QA Evaluation Contract v1 |
-| Evidence cutoff | v3 preregistration `d56c09ab29254b2e35db64188a2dbc7dca1e2223`; campaign `dp00-executable-reference-v3-qa-v1` |
+| Evidence cutoff | final valid v3 preregistration `1e4b868842dc5188eb9be41042364341efa44155`; campaign `dp00-executable-reference-v3-qa-v1` |
 | DP-00 status | **EXECUTABLE QUALIFICATION COMPLETE EXCEPT QA-07; NO PREFERENCE** |
 | Final architecture | **NOT YET SELECTED** |
 | Current evaluation direction | Physical-memory calibration for QA-07, then frozen integrated rerun |
@@ -1317,6 +1317,55 @@ Local non-scoring structural memory diagnostic은 R1 5 processes / 8,592 KiB RSS
 
 ---
 
+# Part VIII — DP-00 Executable Reference v3 Final Valid Campaign
+
+## 32. Evidence cutoff and invalidation history
+
+The final valid preregistration is `1e4b868842dc5188eb9be41042364341efa44155`. Two earlier v3 attempts are deliberately retained but excluded from the evidence base:
+
+| Attempt | Preregistration | Disposition |
+| --- | --- | --- |
+| 1 | `d56c09ab29254b2e35db64188a2dbc7dca1e2223` | invalidated: compile-only QA-04/05/06 changes and approved-seam leakage |
+| 2 | `8ce72bf0e18430bfea7d34b16c3ae7b8eccacc25` | invalidated: missing QA-01 modality probe and inadequate aggregate validity gate |
+| 3 | `1e4b868842dc5188eb9be41042364341efa44155` | **valid executable QA-v1 evidence; QA-07 remains unevaluable** |
+
+Campaign v1 remains **preliminary pipeline/replay evidence**. Campaign v2 remains **MODEL-BASED ARCHITECTURE SIMULATION — NOT SUFFICIENT DP-00 SELECTION EVIDENCE**. Only v3 attempt 3 is admissible executable DP-00 evidence.
+
+## 33. Final measured results
+
+| QA | R1 | R3 | R1+@ | Outcome |
+| --- | ---: | ---: | ---: | --- |
+| QA-01 | 0.101122 s / 5 | 0.106199 s / 5 | 0.101047 s / 5 | all meet p95 ≤3.0 s |
+| QA-02 | 100% / 5 | 100% / 5 | 100% / 5 | 600/600; all 60 family IDs 10/10 |
+| QA-03 | 100% / 5 | 100% / 5 | 100% / 5 | 400/400 real event interleavings |
+| QA-04 | 100% / 5 | 100% / 5 | 100% / 5 | 180 behaviorally accepted source evolutions |
+| QA-05 | 100% / 5 | 100% / 5 | 100% / 5 | 180 contained Z1–Z8 source changes |
+| QA-06 | 100% / 5 | 100% / 5 | 100% / 5 | 180 device-adapter changes; no Core change |
+| QA-07 | UNEVALUABLE | UNEVALUABLE | UNEVALUABLE | approved physical denominator absent |
+| QA-08 | 0.007019 s / 5 | 0.013583 s / 5 | 0.008032 s / 5 | 200/200 safe continuations each |
+| QA-09 | 100% / 5 | 100% / 5 | 100% / 5 | 0 FP/FN/hard violations |
+| QA-10 | 100% / 5 | 100% / 5 | 100% / 5 | 200/200 normal traces reconstructed |
+| QA-11 | 0.098166 ms / 5 | 0.139459 ms / 5 | 0.091792 ms / 5 | all event classes qualified |
+| QA-12 | 10 ms / 5 | 10 ms / 5 | 10 ms / 5 | actual 10 ms frame cancellation |
+
+QA-01 structural evidence explains why equal scores are not architecture equivalence. R1 p95 topology was 3 IPC / 2 hops / 4,435 serialized bytes; R3 was 4 / 3 / 7,594. R3’s Primary boundary also appears in QA-08 recovery and QA-11 feedback latency. R1+@ bounded-read p95 was 95.392 ms versus R1 101.163 ms, but the official global improvement was only 0.075 ms and is not material under the frozen primary metric.
+
+QA-04 changed `r1_agent_adapter.rs` for R1/R1+@ and `r3_primary_extensions.rs` for R3. QA-05 used those different Z4 surfaces while the remaining Z1–Z8 modules followed the common ownership manifest. Every evolution patch contained a requested behavior handler and one named acceptance test; all 540 acceptance and 2,700 common regression executions passed.
+
+QA-08 replaced real process PIDs in 100/200 cases per realization and derived safety from PID replacement, event order, Task identity, result version, single-result behavior, cancellation binding, and late-result rejection. QA-09 observed R1 VIA→Agent 300 times versus R3 Shell→Primary 300 and Primary→Specialist 60. QA-10 reconstructed ordinary telemetry with the executable graph. These satisfy the structural-sensitivity gate.
+
+The non-scoring local structural memory diagnostic recorded five processes each and aggregate RSS of 9,680 KiB (R1), 10,064 KiB (R3), and 9,776 KiB (R1+@). It is not official QA-07 evidence because target calibration and `minimum_mandatory_bytes` are unavailable.
+
+## 34. DP-00 status
+
+**Decision: FULL QUALIFICATION BLOCKED ONLY BY QA-07.**
+
+Valid measured evidence does not select R1 or R3. The frozen QAs observe genuine topology, ownership, fault, privilege, and trace differences, but those differences do not create a qualifying score separation. R1+@ is retained as a bounded R1 tactic diagnostic and not promoted to a third base architecture. No DP-00 ADR is created.
+
+The remaining action is to approve and freeze physical-memory calibration for QA-07, then evaluate that non-offsettable gate without changing the v3 candidate identities or historical evidence.
+
+---
+
 ## Maintenance Rule for This Report
 
 이 파일은 living review artifact다. 다음 architecture checkpoint에서 같은 파일을 갱신하되:
@@ -1337,6 +1386,8 @@ Interim Report 0.2
 Interim Report 0.3
   → Campaign v3 attempt 1 invalidated during critical self-review
 Interim Report 0.4
+  → Campaign v3 valid executable qualification; blocked only by QA-07
+Interim Report 0.5
   → QA-07 physical calibration and DP-00 decision review
 Final Architecture Report
   → Integrated architecture re-evaluation + accepted ADR set
