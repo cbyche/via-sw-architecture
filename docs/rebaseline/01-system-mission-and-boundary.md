@@ -14,7 +14,7 @@ VIA의 핵심 역할은 다음과 같다.
 
 2. **실시간 Voice interaction 처리**
    - Voice 처리 영역은 VIA Architecture 범위에 포함한다.
-   - VIA는 S2S(Speech-to-Speech) Model을 기본 Voice Model로 사용하는 Voice Runtime을 포함한다.
+   - VIA는 Voice Runtime을 포함하며, Voice Runtime은 S2S(Speech-to-Speech) Model을 기본 Voice Model dependency로 사용한다. S2S Model의 실행 위치는 local 또는 remote일 수 있다.
    - Voice interaction의 시작, 종료, 중단, 재개를 VIA가 관리한다.
    - S2S Model이 자체 지식으로 바로 답하는 경우에도 해당 사용자 발화와 응답은 VIA가 관리하는 conversation state에 포함한다.
 
@@ -50,7 +50,7 @@ VIA의 핵심 역할은 다음과 같다.
 
 요약하면 다음과 같다.
 
-> **VIA는 사용자 Interaction과 Agent Orchestration을 담당하고, Downstream Agent는 실제 업무의 Reasoning, Planning, Execution을 담당한다.**
+> **VIA는 사용자 Interaction과 Orchestration을 담당하고, Downstream Agent는 실제 업무의 Reasoning, Planning, Execution을 담당한다.**
 
 ---
 
@@ -66,10 +66,10 @@ VIA와 Downstream Agent의 기본 책임 경계는 다음과 같다.
 flowchart LR
     U["사용자"]
 
-    VIA["VIA 시스템<br/>사용자 PC에서 실행<br/><br/>Voice / Text Interaction<br/>Context 이해<br/>Direct Response<br/>Agent Orchestration<br/>Conversation / 작업 상태 관리<br/>Voice / Text 응답"]
+    VIA["VIA Local Software<br/>사용자 PC에서 실행<br/><br/>Voice Runtime / Text Interaction<br/>Context 이해<br/>Direct Response<br/>Request + Agent Orchestration<br/>Conversation / 작업 상태 관리<br/>Voice / Text 응답"]
 
     CTX["Context Source<br/>OS / App / File / Mail / Calendar / Browser / Public Web"]
-    MODEL["AI Model Runtime<br/>S2S 및 VIA Semantic Inference용<br/>Local 또는 Remote"]
+    MODEL["AI Model Runtime<br/>S2S / VIA Semantic Inference용<br/>Local 또는 Remote dependency"]
     AGENT["Downstream Agent<br/>Reasoning / Planning / Tool Execution"]
     TARGET["실제 작업 대상<br/>OS / Application / Web / External Service"]
 
@@ -86,7 +86,7 @@ flowchart LR
     TARGET -->|"실행 결과"| AGENT
 ```
 
-> **경계 해석:** Context Source와 AI Model Runtime은 VIA가 사용할 수 있는 dependency이지만 실제 업무 수행 주체는 아니다. 실제 상태를 변경하는 업무 실행은 Downstream Agent가 담당한다.
+> **경계 해석:** Voice Runtime 자체는 VIA Local Software 안에 있다. S2S 및 VIA Semantic Inference에 사용하는 AI Model Runtime은 local 또는 remote에 배치될 수 있는 dependency이며, **Model을 호출·연결·교체하는 구조는 VIA Architecture 범위에 포함하지만 Model 내부 구현과 학습은 포함하지 않는다.** Context Source 역시 VIA가 사용하는 read-only dependency이다. 실제 상태를 변경하는 업무 실행은 Downstream Agent가 담당한다.
 
 ### VIA가 직접 수행할 수 있는 범위
 
@@ -139,12 +139,14 @@ Read-only 정보 조회만으로 답할 수 있는 경우에는 Downstream Agent
 
 VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구분한다.
 
-### 1. Voice S2S Model — VIA Architecture 범위 안
+### 1. Voice S2S Model 사용 및 Integration — VIA Architecture 범위 안
 
-- VIA Voice Runtime은 S2S Model을 기본 Voice AI Model로 사용한다.
+- Voice Runtime 자체는 VIA Local Software 안에 있으며 S2S Model을 기본 Voice AI Model dependency로 사용한다.
+- S2S Model Runtime은 사용자 PC에 local로 배치되거나 remote/cloud에 배치될 수 있다.
 - S2S Model은 실시간 Voice interaction을 처리하고 자체 지식으로 답할 수 있는 간단한 요청에 직접 응답할 수 있다.
 - S2S Model을 통한 User Turn과 Response도 모두 VIA conversation state에서 관리한다.
-- Voice Runtime의 interface, state 처리, 다른 VIA 요소와의 연결 방식은 VIA Architecture 설계 범위에 포함한다.
+- Voice Runtime의 interface, streaming event, state 처리, S2S Model invocation, deployment binding, 다른 VIA 요소와의 연결 방식은 VIA Architecture 설계 범위에 포함한다.
+- S2S Model 자체의 내부 구조와 학습 방법은 VIA Architecture 설계 범위에 포함하지 않는다.
 - 별도의 ASR, VAD, TTS 또는 helper model을 추가할 수 있으나, 이는 명시적인 Architecture 설계로 결정해야 하며 S2S Model은 기본 Voice Model로 유지한다.
 
 ### 2. VIA Semantic Inference — VIA Architecture 범위 안
@@ -176,7 +178,7 @@ Downstream Agent가 domain reasoning, planning, tool selection 또는 tool execu
 
 본 과제에서는 다음 원칙을 고정한다.
 
-1. **VIA는 사용자 Interaction과 Agent Orchestration을 담당한다.**
+1. **VIA는 사용자 Interaction과 Orchestration을 담당한다. Orchestration은 VIA 내부 요청 흐름을 연결하는 Request Orchestration과 Downstream Agent 실행을 연결하는 Agent Orchestration을 포함한다.**
 2. **Downstream Agent는 실제 업무의 Reasoning, Planning, Execution을 담당한다.**
 3. **VIA 자체는 사용자의 PC에서 실행되며, VIA가 사용하는 외부 dependency는 local 또는 remote일 수 있다.**
 4. **Voice Runtime은 VIA의 일부이며 S2S Model을 기본 Voice Model로 사용한다.**
