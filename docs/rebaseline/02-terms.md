@@ -560,8 +560,8 @@ flowchart TD
 
 | 용어 | 정의 |
 | --- | --- |
-| **Voice Runtime** | VIA 내부에서 실시간 Voice input/output을 처리하는 실행 영역. S2S Model을 기본 Voice Model로 사용하며 Voice Connection과 VIA의 나머지 처리 영역을 연결한다. |
-| **S2S Model** | Speech input을 실시간으로 이해하고 Speech output을 생성하는 Speech-to-Speech Generative Model. 자체 지식으로 완료할 수 있는 요청에는 Model-only Direct Response를 생성할 수 있다. |
+| **Voice Runtime** | 사용자 PC에서 실행되는 VIA Local Software 내부의 Voice 처리 영역. S2S Model을 기본 Voice Model dependency로 사용하며 Voice Connection과 VIA의 나머지 처리 영역을 연결한다. S2S Model Runtime 자체는 local 또는 remote에 배치될 수 있다. |
+| **S2S Model** | Speech input을 실시간으로 이해하고 Speech output을 생성하는 Speech-to-Speech Generative Model. Voice Runtime이 사용하는 AI dependency이며 local 또는 remote에서 실행될 수 있다. 자체 지식으로 완료할 수 있는 요청에는 Model-only Direct Response를 생성할 수 있다. |
 | **VIA Semantic Inference** | Request Refinement, Referent Resolution, Task Association, 처리 경로 결정, Agent Selection, Response 구성 등 VIA 자신의 책임을 수행하기 위해 필요한 의미 기반 판단을 총칭한다. |
 | **Downstream Agent Model** | Downstream Agent가 내부 reasoning, planning, tool selection 또는 tool execution에 사용하는 AI Model. VIA Architecture의 직접 평가 범위에는 포함하지 않는다. |
 
