@@ -46,8 +46,9 @@ Downstream Agent는 여러 종류가 존재할 수 있으며, VIA는 사용자 �
 flowchart LR
     U["사용자<br/>Voice / Text / 화면 Interaction"]
 
-    subgraph VIA["VIA — 사용자 PC에서 실행"]
-        VI["Voice / Text Interaction"]
+    subgraph VIA["VIA Local Software — 사용자 PC에서 실행"]
+        VR["Voice Runtime<br/>S2S Model 연결"]
+        TI["Text Interaction"]
         CS["Conversation / Request / Task State"]
         CX["Context Access & Referent Resolution"]
         SI["Request Understanding / Semantic Inference"]
@@ -58,7 +59,7 @@ flowchart LR
         POL["Policy / Consent / Audit"]
     end
 
-    MODEL["AI Model Runtime<br/>S2S + VIA Semantic Inference<br/>Local 또는 Remote"]
+    MODEL["AI Model Runtime<br/>S2S / VIA Semantic Inference용<br/>Local 또는 Remote dependency"]
     CTX["Context Source<br/>Screen / OS / File / Mail / Calendar / Browser / Public Web / Memory"]
 
     A1["Downstream Agent A"]
@@ -67,8 +68,10 @@ flowchart LR
 
     TARGET["실제 업무 대상<br/>OS / App / Web / External Service"]
 
-    U --> VI
-    VI --> RO
+    U --> VR
+    U --> TI
+    VR --> RO
+    TI --> RO
 
     RO <--> CS
     RO <--> CX
@@ -77,7 +80,7 @@ flowchart LR
     RO --> AO
 
     CX <--> CTX
-    VI <--> MODEL
+    VR <--> MODEL
     SI <--> MODEL
 
     POL -. "허용 범위 제어" .-> CX
@@ -100,7 +103,9 @@ flowchart LR
     RESP --> U
 ```
 
-이 그림의 박스는 최종 Component 구성을 의미하지 않는다.
+이 그림에서 **VIA Local Software 박스는 사용자 PC에서 실행되는 VIA 자체의 runtime boundary**를 의미한다. AI Model Runtime은 local 또는 remote에 배치될 수 있는 dependency이므로 박스 밖에 표현한다. 다만 **Model invocation interface, streaming/event contract, deployment binding, provider 교체 구조는 VIA Architecture 설계 범위에 포함**하며 Model 내부 구현과 학습은 포함하지 않는다.
+
+이 그림의 각 내부 박스는 최종 Component 구성을 의미하지 않는다.
 
 현재 단계에서 고정하는 것은 **책임 영역과 책임 방향**이며, 각 책임을 하나의 Component로 둘지 여러 Component로 나눌지는 이후 Architecture Decision에서 결정한다.
 
@@ -246,7 +251,7 @@ VIA Task를 생성하며, 다음 조건을 모두 만족해야 한다.
 다음 중 하나라도 필요한 경우 Downstream Agent에 위임한다.
 
 - 외부 상태 변경
-- Tool 실행
+- 실제 업무 수행을 위한 Tool 실행
 - open-ended domain reasoning
 - multi-step planning
 - domain workflow 수행
@@ -353,4 +358,4 @@ R1은 최상위 책임 경계만 고정한다.
 
 ## 3.10 R1 한 문장 요약
 
-> **VIA는 사용자와 여러 Agent 사이의 일관된 Interaction/Orchestration 계층으로 동작하며, 읽고 이해하고 연결하는 일은 VIA가, 실제 업무를 계획하고 실행하여 외부 상태를 바꾸는 일은 Downstream Agent가 담당한다.**
+> **VIA는 사용자와 여러 Agent 사이의 일관된 Interaction/Orchestration 계층으로 동작한다. 사용자 요청을 읽고 이해하고 연결하며 처리 경로를 관리하는 일은 VIA가 담당하고, 실제 업무를 계획하고 실행하여 외부 상태를 바꾸는 일은 Downstream Agent가 담당한다.**
