@@ -99,6 +99,36 @@ Downstream Agent
 OS / Application / Web / External Service
 ```
 
+### System Context Diagram
+
+아래 그림은 VIA를 하나의 시스템으로 보고, 사용자 및 외부 시스템과의 관계를 나타낸다. 실행 위치가 local인지 remote인지와 관계없이 **VIA가 책임을 갖고 설계하는 영역과 외부 책임 영역을 구분하는 것**이 목적이다.
+
+```mermaid
+flowchart LR
+    U["사용자"]
+
+    VIA["VIA 시스템<br/>사용자 PC에서 실행<br/><br/>Voice / Text Interaction<br/>Context 이해<br/>Direct Response<br/>Agent Orchestration<br/>Conversation / 작업 상태 관리<br/>Voice / Text 응답"]
+
+    CTX["Context Source<br/>OS / App / File / Mail / Calendar / Browser"]
+    MODEL["AI Model Runtime<br/>S2S 및 VIA Semantic Inference용<br/>Local 또는 Remote"]
+    AGENT["Downstream Agent<br/>Reasoning / Planning / Tool Execution"]
+    TARGET["실제 작업 대상<br/>OS / Application / Web / External Service"]
+
+    U -->|"Voice / Text / 화면 interaction"| VIA
+    VIA -->|"Voice / Text 응답"| U
+
+    VIA <-->|"정책상 허용된 Read-only Context"| CTX
+    VIA <-->|"Inference 요청 / 결과"| MODEL
+
+    VIA -->|"작업 요청 + 필요한 Context"| AGENT
+    AGENT -->|"Progress / Clarification / Result"| VIA
+
+    AGENT -->|"실제 상태 변경 Action"| TARGET
+    TARGET -->|"실행 결과"| AGENT
+```
+
+> **경계 해석:** Context Source와 AI Model Runtime은 VIA가 사용할 수 있는 dependency이지만 실제 업무 수행 주체는 아니다. 실제 상태를 변경하는 업무 실행은 Downstream Agent가 담당한다.
+
 ### VIA가 직접 수행할 수 있는 범위
 
 - Voice 및 Text interaction 처리
