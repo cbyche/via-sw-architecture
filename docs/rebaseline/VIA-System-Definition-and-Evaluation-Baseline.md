@@ -15,7 +15,7 @@
 | --- | --- | --- |
 | 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | 작성 완료 |
 | 2 | [Terms](./02-terms.md) | 작성 완료 |
-| 3 | [Fixed Architecture Scope — R1](./03-fixed-architecture-scope-r1.md) | 작성 완료 |
+| 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 작성 완료 |
 | 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | 작성 완료 |
 | 5 | Representative Use Cases | 예정 |
 | 6 | Fixed Assumptions | 예정 |
