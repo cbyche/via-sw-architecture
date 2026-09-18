@@ -59,7 +59,8 @@ flowchart LR
         POL["Policy / Consent / Audit"]
     end
 
-    MODEL["AI Model Runtime<br/>S2S / VIA Semantic Inference용<br/>Local 또는 Remote dependency"]
+    S2S["S2S Model Runtime<br/>Voice Runtime용<br/>Local 또는 Remote dependency"]
+    SEM["Semantic Model Runtime<br/>VIA Semantic Inference용<br/>Local 또는 Remote dependency"]
     CTX["Context Source<br/>Screen / OS / File / Mail / Calendar / Browser / Public Web / Memory"]
 
     A1["Downstream Agent A"]
@@ -80,8 +81,8 @@ flowchart LR
     RO --> AO
 
     CX <--> CTX
-    VR <--> MODEL
-    SI <--> MODEL
+    VR <--> S2S
+    SI <--> SEM
 
     POL -. "허용 범위 제어" .-> CX
     POL -. "Context 제공 / 승인 제어" .-> AO
@@ -103,7 +104,7 @@ flowchart LR
     RESP --> U
 ```
 
-이 그림에서 **VIA Local Software 박스는 사용자 PC에서 실행되는 VIA 자체의 runtime boundary**를 의미한다. AI Model Runtime은 local 또는 remote에 배치될 수 있는 dependency이므로 박스 밖에 표현한다. 다만 **Model invocation interface, streaming/event contract, deployment binding, provider 교체 구조는 VIA Architecture 설계 범위에 포함**하며 Model 내부 구현과 학습은 포함하지 않는다.
+이 그림에서 **VIA Local Software 박스는 사용자 PC에서 실행되는 VIA 자체의 runtime boundary**를 의미한다. Voice Runtime은 이 박스 안에 있지만, Voice Runtime이 사용하는 **S2S Model Runtime**과 VIA semantic 판단에 사용하는 **Semantic Model Runtime**은 서로 다른 dependency로 구분하며 각각 local 또는 remote에 배치될 수 있다. 따라서 두 Model Runtime은 박스 밖에 표현한다. 다만 **Model invocation interface, streaming/event contract, deployment binding, provider 교체 구조는 VIA Architecture 설계 범위에 포함**하며 Model 내부 구현과 학습은 포함하지 않는다.
 
 이 그림의 각 내부 박스는 최종 Component 구성을 의미하지 않는다.
 
