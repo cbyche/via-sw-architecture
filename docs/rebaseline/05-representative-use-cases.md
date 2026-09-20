@@ -1,6 +1,6 @@
 # 5. Representative Use Cases — 대표 사용자 시나리오
 
-> 상태: 작성 완료 · 사용자 검토본
+> 상태: 검토 완료 · 기준선 확정
 > 적용 범위: 본 기준선의 [01 시스템 정의](./01-system-mission-and-boundary.md), [02 용어](./02-terms.md), [03 설계 범위](./03-fixed-architecture-scope.md), [04 공통 처리 흐름](./04-canonical-interaction-flow.md)
 
 ## 5.1 이 문서에서 결정하는 것
@@ -523,3 +523,27 @@ Policy State는 모든 접근·전달·승인에 적용되지만 의미를 추�
 현재 기준선에서 합의하지 않은 카메라/시선 입력, 다사용자 공동 조작, 다기기 업무 이동, 무인 예약 업무 실행을 새로운 필수 UC로 추가하지 않는다. Target device의 상세 사양, 동시 업무 최대 수, 언어·파일 형식별 테스트 조합은 06·07·11의 평가 조건으로 명시한다.
 
 이 문서의 검토 완료는 **사용자 행동과 완료 조건의 범위를 정했다는 뜻**이다. 전체 구현 완료, Test Case 실행 완료, ASR 점수 확정 또는 Architecture 선택 완료를 의미하지 않는다.
+
+---
+
+## 5.10 06으로 넘어가기 전 확정한 제품 범위
+
+05 검토 과정에서 다음을 **필수 제품 기능 또는 허용 capability**로 확정한다. 이 결정은 해당 항목을 반드시 주요 Architecture Decision Point로 선정한다는 뜻은 아니다. DP 우선순위는 이후 ASR과 변화 시나리오를 기준으로 결정한다.
+
+| 항목 | 05에서 확정한 내용 | 이후 Architecture에서 판단할 것 |
+| --- | --- | --- |
+| **Bounded Context Processing** | VIA는 파일·메일·일정·Browser·Public Web 등 범위가 명확한 read-only 정보를 직접 조회·이해할 **수 있다**. | VIA Core에서 직접 처리할지 Agent에 위임할지, 어떤 범위까지 적용할지, 이 tactic이 중요한 QA를 얼마나 개선하는지 |
+| **Compound Request** | 독립·순차·데이터 의존·조건 관계를 가진 복합 요청은 VIA가 지원해야 한다. | decomposition/refinement 구조, 관계 표현, 실행 연결 방식 |
+| **Async + Multiple Tasks** | 여러 장기 업무의 상태를 유지하고, 결과가 비동기로 도착해도 올바른 Task에 연결하며, 여러 active Task를 구분해야 한다. | Task state 구조, event routing, durability, concurrency 관리 방식 |
+| **Voice/Text Continuity** | Voice Connection의 종료·재연결 및 Voice/Text 전환과 Conversation/VIA Task의 수명을 분리해야 한다. | state ownership, persistence, reconnect protocol |
+| **User Memory** | Conversation을 넘어 유지되는 허용된 사용자 preference/routine/stable fact를 지원하며, 사용자가 확인·변경·삭제할 수 있어야 한다. | 저장 위치, lifecycle, privacy boundary, 주요 DP 여부 |
+| **Restart Recovery** | VIA process가 재시작되어도 확인 가능한 Conversation/Task/Agent Execution 관계를 사용해 진행 중 업무를 재연결해야 한다. 상태 확인 없이 변경 업무를 중복 시작하지 않는다. | durability 범위, recovery protocol, authoritative state, 주요 DP 여부 |
+
+### 해석 원칙
+
+- **필수 기능**과 **주요 Decision Point**는 다르다. 제품에 필요한 기능이어도 후보 Architecture 간 차이를 크게 만들지 않으면 주요 DP가 아닐 수 있다.
+- **VIA가 할 수 있다**와 **VIA가 항상 직접 해야 한다**도 다르다. 특히 bounded read/search는 VIA 직접 처리 capability를 허용하지만, 실제 Architecture에서는 QA trade-off에 따라 Agent delegation을 선택할 수 있다.
+- 05에서 고정한 것은 사용자 행동과 완료 조건이다. 성능 목표, resource 한계, persistence 기간, 최대 동시 Task 수와 같은 평가 조건은 06~11에서 정한다.
+
+이 결정으로 Representative Use Case 범위는 닫는다. 이후 새로운 UC를 추가하려면 01~04의 시스템 정의나 제품 범위에 실제 누락이 발견된 경우에만 추가하고, 특정 Architecture 후보를 유리하게 만들기 위해 UC를 변경하지 않는다.
+
