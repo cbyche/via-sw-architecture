@@ -17,7 +17,7 @@
 | 2 | [Terms](./02-terms.md) | 작성 완료 · 05와 정합성 보완 |
 | 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 작성 완료 · 05와 정합성 보완 |
 | 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | 작성 완료 · 흐름과 제어 의미 보완 |
-| 5 | [Representative Use Cases](./05-representative-use-cases.md) | 작성 완료 · 사용자 검토본 |
+| 5 | [Representative Use Cases](./05-representative-use-cases.md) | 검토 완료 · 기준선 확정 |
 | 6 | Fixed Assumptions | 예정 |
 | 7 | Intentional Variables | 예정 |
 | 8 | Architecture Significant Requirements | 예정 |
@@ -28,7 +28,7 @@
 
 ## 05 검토 안내
 
-05는 대표 UC 18개에 사용자 목표, 시작 상황, VIA의 책임, 성공 완료 조건, 필수 변형, 실패·보류 행동을 정리한다.
+05는 대표 UC 18개에 사용자 목표, 시작 상황, VIA의 책임, 성공 완료 조건, 필수 변형, 실패·보류 행동을 정리하고 사용자 검토를 통해 제품 범위를 확정했다.
 
 먼저 전체 UC 목록을 읽고 다음을 확인한다.
 
