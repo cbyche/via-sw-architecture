@@ -46,7 +46,7 @@ flowchart TD
     REQ["VIA Request 생성<br/>Compound Request면 분해 + 관계 보존"]
 
     CORE["VIA Core Request Processing<br/>Context 확보 / Refinement / Referent Resolution"]
-    TASK["Task Relation 판단<br/>No Tracked / New / Existing"]
+    TASK["Task Association<br/>→ Task Relation<br/>No Tracked / New / Existing"]
     CLR{"충분히 이해했는가?"}
     CLAR["Clarification"]
 
@@ -244,9 +244,9 @@ Context 접근은 Policy State와 Consent 조건을 따라야 한다.
 
 ---
 
-## 4.7 Task Relation
+## 4.7 Task Association과 Task Relation
 
-각 VIA Request는 지속적으로 추적되는 VIA Task와의 관계를 가진다.
+각 VIA Request에 대해 VIA는 **Task Association**을 수행하여 지속적으로 추적되는 VIA Task와의 관계를 판단한다. 그 결과가 **Task Relation**이다.
 
 ### No Tracked Task
 
@@ -520,7 +520,7 @@ VIA가 말하는 도중 사용자가 다시 말하면 현재 Voice Response를 �
 - 모든 의미 있는 요청은 VIA Request로 관리한다.
 - Compound Request는 decomposition하고 Request 관계를 보존한다.
 - 모든 Direct Response도 Conversation history에 남는다.
-- Task Relation은 No Tracked / New / Existing으로 구분한다.
+- Task Association 결과인 Task Relation은 No Tracked / New / Existing으로 구분한다.
 - Task Relation과 Request Handling은 독립된 두 축이다.
 - Request Handling은 S2S Direct / VIA Core Direct / Downstream Agent Handling으로 구분한다.
 - Open-ended research / domain planning / state-changing work는 Downstream Agent에 위임한다.
@@ -532,7 +532,7 @@ VIA가 말하는 도중 사용자가 다시 말하면 현재 Voice Response를 �
 
 - S2S Direct Response와 VIA Core 처리 사이의 정확한 boundary
 - streaming transcript / semantic event contract
-- Request Refinement, Referent Resolution, Task Relation의 실제 실행 순서
+- Request Refinement, Referent Resolution, Task Association의 실제 실행 순서
 - semantic inference Model의 종류와 호출 위치
 - Context capture / materialization / storage 구조
 - speculative processing 여부
