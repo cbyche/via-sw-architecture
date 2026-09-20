@@ -17,7 +17,7 @@
 | **VIA Request** | User Request를 VIA가 실제로 처리할 수 있도록 구분·정리한 하나의 논리적 처리 단위. 하나의 User Turn은 하나 이상의 VIA Request로 나뉠 수 있다. |
 | **Conversation** | 사용자와 VIA 사이에 이어지는 논리적인 대화 기록. User Turn, VIA Request, VIA Response 및 대화 해석에 필요한 정보를 포함하며 Voice와 Text를 함께 사용할 수 있다. |
 | **Voice Connection** | 사용자와 VIA Voice Runtime 사이에서 실시간 Voice 입력과 출력이 가능한 연결 구간. 연결은 끊어지고 다시 만들어질 수 있으며 Voice Connection의 종료는 Conversation이나 VIA Task의 종료를 의미하지 않는다. |
-| **VIA Task** | 하나 이상의 VIA Requestに 걸쳐 상태를 지속적으로 추적해야 하는 사용자의 업무 목표. VIA는 Task identity, 상태, 관련 VIA Request, 선택된 Downstream Agent 및 Agent Execution과의 관계를 관리한다. |
+| **VIA Task** | 하나 이상의 VIA Request에 걸쳐 상태를 지속적으로 추적해야 하는 사용자의 업무 목표. VIA는 Task identity, 상태, 관련 VIA Request, 선택된 Downstream Agent 및 Agent Execution과의 관계를 관리한다. |
 | **Agent Execution** | Downstream Agent가 실제 업무를 수행하는 하나의 실행 단위. 해당 실행의 run ID 또는 이에 준하는 식별 정보로 구분한다. Agent의 thread/session이 여러 실행을 포함할 수 있으므로 thread/session ID만을 하나의 실행과 동일시하지 않는다. |
 | **VIA Response** | VIA가 사용자에게 전달하는 모든 사용자-facing 응답. 질문에 대한 답변뿐 아니라 progress, clarification, approval 요청, completion, failure 등도 포함한다. |
 | **VIA Core** | Voice Runtime을 제외한 VIA의 요청 해석·Context·대화/업무 관리·Agent 연계·응답 처리 책임을 묶어 부르는 표현. 하나의 Component나 별도 프로세스를 미리 뜻하지 않는다. |
@@ -48,7 +48,7 @@ flowchart LR
 - **Conversation**: 지금까지 사용자와 VIA가 무슨 이야기를 했는가
 - **VIA Request**: 지금 VIA가 무엇을 처리해야 하는가
 - **VIA Task**: 계속 상태를 추적해야 하는 사용자 업무가 무엇인가
-- **Agent Execution**: 해당 업무를 Downstream Agent에서 실제로 어떤 실행으로 처리하고 있는가
+- **Agent Execution**: 해당 업무를 Downstream Agent에서 실제로 어떤 실행으로 처리되고 있는가
 
 ```mermaid
 flowchart TB
