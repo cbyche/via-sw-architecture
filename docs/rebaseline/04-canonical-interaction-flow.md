@@ -2,19 +2,22 @@
 
 ## 4.1 목적
 
-Canonical Interaction Flow는 VIA가 어떤 Architecture로 구현되더라도 **모든 사용자 요청이 논리적으로 거쳐야 하는 공통 처리 흐름**을 정의한다.
+Canonical Interaction Flow는 VIA가 어떤 세부 Architecture로 구현되더라도 **사용자 요청을 처리하기 위해 반드시 성립해야 하는 논리적 흐름**을 정의한다.
 
-이 문서는 구현 pipeline의 정확한 순서를 고정하지 않는다.
+이 문서는 실제 pipeline의 고정 실행 순서를 의미하지 않는다.
 
-예를 들어 다음 활동은 Architecture에 따라 순차, 병렬, 반복 또는 일부 생략될 수 있다.
+다음 활동은 Architecture에 따라 순차, 병렬, 반복 또는 일부 fast path로 처리될 수 있다.
 
+- S2S streaming 처리
 - Context 확보
+- Compound Request decomposition
 - Request Refinement
 - Referent Resolution
-- Task Association
+- Task Relation 판단
 - Semantic Inference
+- Request Handling 결정
 
-따라서 아래 흐름은 **논리적 책임 관계와 필수 결과**를 나타내며, 최종 Component 구성이나 호출 순서를 의미하지 않는다.
+따라서 본 문서는 **필수 책임과 정보 흐름**을 고정하고, 책임의 Component 배치와 실제 실행 순서는 이후 Architecture Decision에서 결정한다.
 
 ---
 
@@ -24,153 +27,189 @@ Canonical Interaction Flow는 VIA가 어떤 Architecture로 구현되더라도 *
 flowchart TD
     U["사용자"]
 
-    I["Voice / Text 입력"]
-    TURN["User Turn 생성"]
-    REQ["VIA Request 생성<br/>필요 시 여러 Request로 분리"]
+    subgraph VOICE["Voice 입력 경로"]
+        VIN["Voice Input"]
+        VR["Voice Runtime"]
+        S2S["S2S Model Runtime"]
+        SD{"S2S에서<br/>직접 응답 가능한가?"}
+        SR["S2S Direct Response"]
+        EVT["Streaming Transcript / Semantic Event"]
+        VIN --> VR
+        VR <--> S2S
+        S2S --> SD
+        SD -->|"예"| SR
+        SD -->|"VIA Core 처리 필요"| EVT
+    end
 
-    SEM["요청 해석<br/>Request Refinement<br/>Referent Resolution<br/>Task Association"]
-    CTX["필요한 Context 확보<br/>Interaction / Conversation / Task<br/>Personal / Public / Memory"]
-    POL["Policy / Consent 확인"]
+    TXT["Text Input"]
+    TURN["User Turn / Conversation 기록"]
+    REQ["VIA Request 생성<br/>Compound Request면 분해 + 관계 보존"]
 
-    CLR{"요청을 충분히<br/>이해했는가?"}
-    CLAR["Clarification 요청"]
+    CORE["VIA Core Request Processing<br/>Context 확보 / Refinement / Referent Resolution"]
+    TASK["Task Relation 판단<br/>No Tracked / New / Existing"]
+    CLR{"충분히 이해했는가?"}
+    CLAR["Clarification"]
 
-    PATH{"처리 경로 결정"}
+    HANDLE{"Request Handling"}
 
-    DR["VIA Direct Response<br/>Model-only 또는 Context-assisted"]
+    VDR["VIA Core Direct Response"]
+    AG["Downstream Agent Handling"]
+    AT["VIA Task 생성 또는 Existing Task 연결"]
+    AE["Agent Execution"]
 
-    TASK1["VIA Task 생성 / 연결"]
-    LOCAL["VIA Local Execution<br/>Read-only / bounded"]
-
-    TASK2["VIA Task 생성 / 연결"]
-    AGENT["Downstream Agent 선택 및 위임"]
-    EXEC["Agent Execution"]
-
-    LOOP["Progress / Clarification / Approval<br/>Follow-up / Correction / Cancel"]
+    CTRL["Status / Progress / Clarification / Approval<br/>Follow-up / Correction / Cancel"]
     RESULT["Result / Failure"]
 
-    RESP["VIA Response 구성<br/>Text + 필요 시 짧은 Voice"]
+    RESP["VIA Response<br/>Text + 필요 시 짧은 Voice"]
     STATE["Conversation / Task State 갱신"]
 
-    U --> I
-    I --> TURN
+    U --> VIN
+    U --> TXT
+
+    SR --> TURN
+    SR --> RESP
+
+    EVT --> TURN
+    TXT --> TURN
     TURN --> REQ
-
-    REQ --> SEM
-    CTX --> SEM
-    SEM --> CTX
-    POL -. "허용 범위" .-> CTX
-
-    SEM --> CLR
+    REQ --> CORE
+    CORE --> TASK
+    TASK --> CLR
 
     CLR -->|"아니오"| CLAR
-    CLAR --> U
-    U --> I
+    CLAR --> RESP
+    RESP --> U
 
-    CLR -->|"예"| PATH
+    CLR -->|"예"| HANDLE
 
-    PATH -->|"즉시 완료 가능"| DR
-    DR --> RESP
+    HANDLE -->|"VIA Core에서 완료 가능"| VDR
+    VDR --> RESP
 
-    PATH -->|"상태 추적 필요<br/>VIA 내부 처리"| TASK1
-    TASK1 --> LOCAL
-    LOCAL --> RESP
-
-    PATH -->|"실제 업무 수행 필요"| TASK2
-    TASK2 --> AGENT
-    AGENT --> EXEC
-
-    EXEC --> LOOP
-    LOOP -->|"계속 실행"| EXEC
-    LOOP -->|"사용자 interaction"| RESP
-    EXEC --> RESULT
+    HANDLE -->|"Agent 필요"| AT
+    AT --> AG
+    AG --> AE
+    AE --> CTRL
+    CTRL -->|"계속 실행"| AE
+    CTRL -->|"사용자 interaction"| RESP
+    AE --> RESULT
     RESULT --> RESP
 
     RESP --> STATE
     STATE --> U
 ```
 
----
+### 이 그림에서 중요한 두 축
 
-## 4.3 입력 처리와 User Turn
+**Task Relation**과 **Request Handling**은 서로 독립된 판단이다.
 
-VIA는 Voice와 Text를 모두 사용자 입력으로 받는다.
-
-### Voice 입력
-
-- Voice Connection을 통해 실시간 입력을 받는다.
-- Voice Runtime과 S2S Model을 사용한다.
-- 하나의 사용자 발화를 User Turn으로 관리한다.
-- 사용자가 VIA의 Voice Response 도중 다시 말하면 현재 음성 출력을 중단하고 새로운 User Turn을 처리할 수 있어야 한다.
-
-### Text 입력
-
-- Chat UI에서 전송된 하나의 메시지를 User Turn으로 관리한다.
-
-Voice와 Text는 입력 방식은 다르지만 이후에는 동일한 Conversation 안에서 처리한다.
-
-```mermaid
-flowchart LR
-    V["Voice Input"] --> VR["Voice Runtime"] --> T["User Turn"]
-    X["Text Input"] --> T
-    T --> C["Conversation"]
-    C --> R["VIA Request"]
-```
-
----
-
-## 4.4 User Turn에서 VIA Request 생성
-
-하나의 User Turn은 하나 이상의 VIA Request로 변환될 수 있다.
-
-예:
-
-> "김대리 메일 확인하고 오늘 일정도 알려줘."
-
-```text
-User Turn
- ├─ VIA Request 1: 김대리 메일 확인
- └─ VIA Request 2: 오늘 일정 확인
-```
-
-여러 VIA Request 사이에는 다음 관계가 있을 수 있다.
-
-- 서로 독립적
-- 순차적으로 수행
-- 앞 Request의 결과가 뒤 Request의 입력이 됨
-- 특정 조건에 따라 뒤 Request를 수행
-
-이 관계는 User Turn을 VIA Request로 변환할 때 보존해야 한다.
-
----
-
-## 4.5 요청 해석
-
-각 VIA Request에 대해 VIA는 요청을 처리하는 데 필요한 의미를 확보한다.
-
-논리적으로 다음 활동을 포함한다.
-
-### Request Refinement
-
-자연스럽고 불완전한 표현을 처리 가능한 요청으로 정리한다.
-
-### Referent Resolution
-
-"이거", "그 파일", "아까 그거"와 같은 표현이 실제 어떤 대상을 뜻하는지 결정한다.
-
-### Task Association
-
-현재 VIA Request가 다음 중 어디에 해당하는지 결정한다.
-
-- No Task
+Task Relation:
+- No Tracked Task
 - New Task
 - Existing Task
 
-Existing Task인 경우 정확한 VIA Task를 식별한다.
+Request Handling:
+- S2S Direct Response
+- VIA Core Direct Response
+- Downstream Agent Handling
 
-### Context 확보
+예를 들어 Existing Task에 대한 상태 질문이라도 Agent에 새 일을 위임하지 않고 VIA가 이미 보유한 상태로 응답할 수 있다. 반대로 최신 상태 확인이 필요하면 Agent와 status interaction을 수행할 수 있다.
 
-요청 이해에 필요한 범위에서 다음 Context를 사용할 수 있다.
+---
+
+## 4.3 Voice Runtime 및 S2S Flow
+
+Voice 입력은 단순히 ASR 결과를 만드는 경로가 아니다.
+
+Voice Runtime의 S2S Model은 동시에 다음 두 역할을 할 수 있다.
+
+1. **VIA Core가 사용할 수 있는 streaming transcript 또는 semantic event 제공**
+2. **자체 지식과 제공된 Conversation만으로 충분한 경우 S2S Direct Response 생성**
+
+```mermaid
+flowchart LR
+    U["사용자 Voice"]
+    VR["Voice Runtime"]
+    S["S2S Model"]
+
+    T["Streaming Transcript / Event<br/>→ VIA Core"]
+    D["S2S Direct Response<br/>→ 사용자"]
+
+    U --> VR
+    VR <--> S
+    S --> T
+    S --> D
+```
+
+S2S Direct Response가 발생해도 VIA는 해당 interaction을 시스템 밖의 독립 대화로 취급하지 않는다.
+
+최소한 다음 정보는 Conversation에 연결해야 한다.
+
+- User Turn
+- transcript 또는 의미상 동등한 입력 기록
+- VIA Request
+- S2S Response
+- 시간 및 순서
+
+따라서 S2S Direct Response 뒤에도 사용자는 자연스럽게 관련 후속 질문을 할 수 있다.
+
+---
+
+## 4.4 Text Flow
+
+Text 입력은 Chat UI에서 하나의 User Turn으로 들어오며 Voice와 동일한 Conversation과 VIA Request 처리 체계에 연결한다.
+
+```mermaid
+flowchart LR
+    V["Voice<br/>S2S transcript/event"] --> C["Conversation"]
+    T["Text Input"] --> C
+    C --> R["VIA Request"]
+```
+
+Voice와 Text는 입력 방식은 다르지만 이후의 Conversation, Context, Task Relation 및 Agent interaction을 공유한다.
+
+---
+
+## 4.5 Compound Request Decomposition
+
+Compound Request는 본 과제의 핵심 Use Case이며 VIA가 처리해야 한다.
+
+예:
+
+> "메일 확인하고, 중요한 내용이면 답장 초안을 만들고, 오늘 일정도 확인해줘."
+
+하나의 User Turn을 단순히 여러 VIA Request로 나누는 것만으로는 충분하지 않다.
+
+VIA는 Request 사이 관계도 함께 보존해야 한다.
+
+```mermaid
+flowchart LR
+    U["하나의 User Turn"]
+
+    A["R1: 메일 확인"]
+    B["R2: 답장 초안 만들기"]
+    C["R3: 오늘 일정 확인"]
+
+    U --> A
+    U --> C
+    A -->|"중요한 내용이면<br/>conditional"| B
+```
+
+지원해야 하는 관계는 다음과 같다.
+
+- **Independent**: 서로 독립적으로 처리 가능
+- **Sequential**: 순서대로 처리
+- **Data-dependent**: 앞 Request 결과를 뒤 Request가 사용
+- **Conditional**: 앞 결과 또는 조건에 따라 뒤 Request 수행
+
+Compound Request decomposition은 Request Refinement의 주요 책임 중 하나이다.
+
+---
+
+## 4.6 Context, Request Refinement, Referent Resolution
+
+각 VIA Request에 대해 VIA는 처리에 필요한 의미와 Context를 확보해야 한다.
+
+사용할 수 있는 Context:
 
 - Interaction Context
 - Conversation Context
@@ -179,240 +218,327 @@ Existing Task인 경우 정확한 VIA Task를 식별한다.
 - Public Information Context
 - User Memory Context
 
-Context 접근은 Policy State와 사용자 Consent 조건을 따라야 한다.
+논리적으로 다음 활동을 포함한다.
+
+### Request Refinement
+
+불완전하고 자연스러운 표현을 처리 가능한 Request 의미로 정리한다.
+
+### Referent Resolution
+
+"이거", "그 파일", "아까 그거" 등 사용자가 지칭한 실제 대상을 결정한다.
+
+### Interaction Grounding
+
+Referent Resolution 중 현재 화면 interaction evidence를 이용하는 경우이다.
+
+- pointing
+- pointer trajectory
+- hover / click
+- drag
+- selection
+- focus / caret
+- screen / viewport / UI object
+
+Context 접근은 Policy State와 Consent 조건을 따라야 한다.
 
 ---
 
-## 4.6 Clarification
+## 4.7 Task Relation
 
-현재 정보만으로 요청을 안전하고 정확하게 처리할 수 없는 경우 VIA는 사용자에게 Clarification을 요청한다.
+각 VIA Request는 지속적으로 추적되는 VIA Task와의 관계를 가진다.
 
-Clarification 후의 사용자 응답은 새로운 User Turn으로 처리하지만, 이미 확보된 다음 정보는 유지한다.
+### No Tracked Task
 
-- 원래 User Request
-- 이미 확정된 Referent
-- 확보한 Context
-- 관련 Conversation
-- 관련 VIA Task
-- Clarification이 필요했던 항목
+별도의 지속 Task identity 없이 현재 Request를 처리할 수 있다.
 
-따라서 사용자가 전체 요청을 처음부터 다시 설명할 필요가 없어야 한다.
+중요:
+
+> **No Tracked Task여도 Conversation history는 유지된다.**
+
+예:
+
+> "TCP와 UDP 차이가 뭐야?"
+
+### New Task
+
+새로운 지속 업무를 시작해야 한다.
+
+예:
+
+> "이 자료로 PPT 만들어줘."
+
+### Existing Task
+
+기존 VIA Task의 상태 조회, follow-up, correction, cancel 또는 연속 업무이다.
+
+예:
+
+> "아까 PPT 어디까지 됐어?"
+
+> "거기에 시장 전망 한 장 더 추가해줘."
+
+Existing Task의 경우 정확한 VIA Task ID를 식별해야 한다.
 
 ---
 
-## 4.7 처리 경로 결정
+## 4.8 Request Handling
 
-요청 해석이 완료되면 VIA는 각 VIA Request의 처리 경로를 결정한다.
+Task Relation을 판단한 뒤에도 **이번 Request를 실제로 어디에서 처리할 것인지**는 별도로 결정한다.
 
-### Path A — VIA Direct Response
+### A. S2S Direct Response
 
-즉시 완료할 수 있고 별도의 Task 상태 추적이 필요하지 않은 경우이다.
+Voice 입력에서 S2S Model이 자체 지식과 Conversation만으로 바로 답할 수 있는 경우이다.
 
-두 종류가 있다.
+예:
 
-- Model-only Direct Response
-- Context-assisted Direct Response
+> "TCP랑 UDP 차이가 뭐야?"
 
-결과는 Conversation에 기록한다.
+### B. VIA Core Direct Response
 
-### Path B — VIA Local Execution
+VIA Core가 bounded Context Processing과 VIA semantic processing으로 답할 수 있는 경우이다.
 
-Downstream Agent는 필요하지 않지만 상태 추적이 필요한 bounded/read-only 처리이다.
+예:
 
-- VIA Task를 생성하거나 기존 VIA Task에 연결한다.
-- 외부 상태 변경 Action은 수행하지 않는다.
-- open-ended domain planning은 수행하지 않는다.
+> 현재 PDF를 보며 "이 문서 핵심이 뭐야?"
 
-### Path C — Agent-delegated Execution
+> "오늘 원달러 환율 얼마야?"
 
-실제 업무 수행이 필요한 경우이다.
+단, Public Web Search를 사용한다는 이유만으로 무조건 VIA Core Direct Response가 되는 것은 아니다.
 
-- VIA Task를 생성하거나 기존 VIA Task에 연결한다.
-- 적절한 Downstream Agent를 선택한다.
-- 필요한 Request와 Context를 전달한다.
-- Agent Execution을 VIA Task와 연결한다.
+### C. Downstream Agent Handling
 
-다음 중 하나라도 필요하면 이 경로를 사용한다.
+다음과 같은 요청은 Downstream Agent에 위임한다.
 
-- 외부 상태 변경
-- 실제 업무 수행을 위한 Tool 실행
-- open-ended domain reasoning
+- open-ended research
+- 여러 Source 탐색·비교·종합
+- domain reasoning
 - multi-step planning
 - domain workflow
+- 외부 상태 변경 Action
+- 실제 업무 수행을 위한 Tool 실행
+
+예:
+
+> "최근 AI Agent 시장 자료를 여러 사이트에서 조사해서 비교 보고서로 만들어줘."
+
+이는 read-only Source를 사용하더라도 open-ended research이므로 Downstream Agent Handling이다.
 
 ---
 
-## 4.8 Existing Task Follow-up Flow
+## 4.9 Task Relation과 Request Handling 조합
 
-기존 업무에 대한 후속 요청은 새로운 Agent Execution을 무조건 생성하지 않는다.
+두 축은 1:1로 고정되지 않는다.
 
-먼저 기존 VIA Task와 현재 Agent Execution 상태를 확인한 뒤 요청 종류에 맞게 처리한다.
+| 사용자 요청 | Task Relation | 대표 Handling |
+| --- | --- | --- |
+| "TCP랑 UDP 차이가 뭐야?" | No Tracked Task | S2S Direct Response |
+| 현재 PDF: "이 문서 핵심 뭐야?" | No Tracked Task | VIA Core Direct Response |
+| "이 내용으로 PPT 만들어줘." | New Task | Downstream Agent Handling |
+| "아까 PPT 어디까지 됐어?" | Existing Task | VIA 상태 조회 또는 Agent status interaction |
+| "PPT에 한 장 더 추가해줘." | Existing Task | Downstream Agent Handling |
+
+따라서 **Task Relation을 처리 위치로 해석해서는 안 된다.**
+
+---
+
+## 4.10 Existing Task Control Flow
+
+기존 VIA Task에 대한 Request는 유형에 따라 처리한다.
 
 ```mermaid
 flowchart TD
-    R["새 VIA Request"]
-    A["Task Association"]
-    T["Existing VIA Task"]
+    R["VIA Request"]
+    A["Existing VIA Task 식별"]
     Q{"요청 종류"}
 
-    S["상태 조회"]
-    F["Follow-up / 추가 지시"]
+    S["Status Query"]
+    F["Follow-up"]
     C["Correction"]
     X["Cancel"]
-    RSP["VIA Response"]
 
-    R --> A --> T --> Q
+    LOCAL["VIA가 보유한 Task State로 응답"]
+    AQ["Agent Status Interaction"]
+    AG["기존 Agent Execution에 전달"]
 
-    Q -->|"진행 상태 질문"| S --> RSP
-    Q -->|"추가 지시"| F
-    Q -->|"수정"| C
-    Q -->|"취소"| X
+    RESP["VIA Response"]
 
-    F -->|"필요 시 기존 Agent Execution에 전달"| RSP
-    C -->|"필요 시 기존 Agent Execution에 전달"| RSP
-    X -->|"Cancel 전달 / 상태 갱신"| RSP
+    R --> A --> Q
+
+    Q -->|"상태 확인"| S
+    S -->|"현재 정보 충분"| LOCAL --> RESP
+    S -->|"최신 Agent 상태 필요"| AQ --> RESP
+
+    Q -->|"추가 지시"| F --> AG
+    Q -->|"수정"| C --> AG
+    Q -->|"취소"| X --> AG
+
+    AG --> RESP
 ```
 
-VIA Task identity는 Agent Execution identity와 독립적으로 유지한다.
+VIA Task identity와 Agent Execution identity는 분리한다.
 
-따라서 기존 Agent Execution이 종료되거나 다른 Agent로 재위임되더라도 사용자 관점의 VIA Task는 동일하게 유지될 수 있다.
+Agent가 교체되거나 재실행되어도 사용자가 보는 VIA Task는 동일하게 유지될 수 있다.
 
 ---
 
-## 4.9 Agent Execution 중 사용자 Interaction
+## 4.11 Clarification
 
-Agent Execution이 시작된 뒤에도 VIA는 사용자와 Agent 사이의 interaction을 계속 관리한다.
+현재 정보만으로 Request를 충분히 이해할 수 없으면 VIA는 Clarification을 요청한다.
 
-다음 event를 처리한다.
+Clarification Response는 새로운 User Turn이지만 다음 정보는 유지한다.
 
-- progress
+- 원래 VIA Request
+- 이미 확정된 Referent
+- 확보한 Context
+- Conversation
+- 관련 VIA Task 후보
+- 부족했던 정보
+
+따라서 사용자가 전체 요청을 처음부터 반복할 필요가 없어야 한다.
+
+---
+
+## 4.12 Downstream Agent Interaction
+
+Downstream Agent Handling이 시작된 뒤에도 **모든 user-facing interaction의 창구는 VIA**이다.
+
+Agent가 다음을 요청하거나 전달할 수 있다.
+
+- progress / status
 - clarification
 - action approval
-- consent
-- follow-up
-- correction
-- cancel
+- consent가 필요한 추가 Context 요청
 - completion
 - failure
 
-Downstream Agent가 사용자 입력을 필요로 하는 경우 Agent가 사용자와 직접 별도 대화를 시작하는 것이 아니라, VIA를 통해 요청하고 VIA가 사용자 응답을 해당 Agent Execution에 다시 연결한다.
+사용자는 VIA를 통해:
+
+- follow-up
+- correction
+- cancel
+- approval
+- clarification response
+
+를 전달한다.
+
+Downstream Agent가 사용자와 별도의 독립 UI flow를 만드는 것을 기본 동작으로 하지 않는다.
 
 ---
 
-## 4.10 Response Flow
+## 4.13 Response Flow
 
-모든 사용자-facing 결과는 VIA Response로 전달한다.
+모든 user-facing 결과는 VIA Response로 전달한다.
 
 ### Text Response
 
-- 모든 사용자-visible 응답을 Chat UI에 기록한다.
+- 모든 user-visible Response를 Chat UI에 기록한다.
 - 상세 결과, 근거, 상태 및 추가 정보를 포함할 수 있다.
 
 ### Voice Response
 
-Voice interaction이 활성화되어 있는 경우:
+Voice interaction이 활성화된 경우:
 
-- 사용자가 즉시 알아야 하는 핵심 내용을 짧게 전달한다.
+- 즉시 알아야 하는 핵심 내용을 짧게 말한다.
 - Text Response 전체를 그대로 읽는 것을 기본으로 하지 않는다.
 
 ### Notification
 
-장시간 Task가 완료되거나 사용자의 확인이 필요한 경우, 사용자가 현재 VIA를 보고 있지 않다면 UI 또는 OS Notification을 사용할 수 있다.
+장시간 VIA Task의 완료, 실패 또는 사용자 확인이 필요한 경우 UI/OS Notification을 사용할 수 있다.
 
 ---
 
-## 4.11 Conversation 및 State 갱신 원칙
+## 4.14 Conversation 및 State 갱신
 
-처리 경로와 관계없이 모든 interaction은 Conversation continuity를 유지해야 한다.
+### 모든 Request 공통
 
-### Direct Response
-
-다음을 Conversation에 남긴다.
+다음을 Conversation에 기록한다.
 
 - User Turn
 - VIA Request
-- 사용한 주요 Context / Referent
+- Request 간 관계
+- 주요 Context / Referent
+- Request Handling
 - VIA Response
 
-### VIA Task
+### VIA Task가 있는 경우
 
 추가로 다음을 관리한다.
 
-- VIA Task identity
+- VIA Task ID
 - Task 상태
 - 관련 VIA Request
-- 처리 경로
-- Local 또는 Agent Execution 상태
+- 선택된 Downstream Agent
+- Agent Execution 관계
 - progress / result / failure
+- follow-up / correction / cancel 상태
 
-따라서 다음과 같은 경로 변경도 하나의 사용자 interaction 흐름으로 이어질 수 있어야 한다.
+즉 Direct Response가 반복되다가 이후 Agent 작업으로 이어져도 이전 대화는 유지된다.
 
 ```text
-Direct Response
+S2S Direct Response
     ↓
-Direct Response
+VIA Core Direct Response
     ↓
 New VIA Task
     ↓
 Agent Execution
     ↓
-후속 User Turn
-    ↓
-Existing VIA Task
-    ↓
-다시 Direct Response
+Existing Task Follow-up
 ```
 
 ---
 
-## 4.12 비동기 Control Flow
-
-사용자의 다음 interaction은 정상 request flow와 별개로 언제든 발생할 수 있다.
+## 4.15 비동기 Control Flow
 
 ### Voice Interrupt
 
-VIA가 말하는 도중 사용자가 다시 말하면 Voice Response를 즉시 중단하고 새로운 User Turn을 처리한다.
+VIA가 말하는 도중 사용자가 다시 말하면 현재 Voice Response를 중단하고 새로운 User Turn을 처리한다.
 
 ### Cancel
 
-사용자가 진행 중인 VIA Task 취소를 요청하면:
+진행 중 VIA Task 취소 시:
 
-1. 정확한 VIA Task를 식별한다.
-2. VIA Task 상태를 취소 진행 상태로 변경한다.
-3. Agent Execution이 존재하면 cancel을 전달한다.
-4. 최종 상태를 사용자에게 알린다.
+1. 정확한 VIA Task 식별
+2. Task 상태 갱신
+3. 관련 Agent Execution이 있으면 cancel 전달
+4. 최종 상태를 VIA Response로 사용자에게 전달
 
 ### Correction
 
-사용자가 방금 요청을 바로잡는 경우 새 User Turn으로 처리하되, 직전 Request/Task와의 관계를 유지하여 수정한다.
+직전 Request를 수정하는 User Turn은 기존 Conversation / VIA Request / VIA Task 관계를 유지하여 처리한다.
 
 ---
 
-## 4.13 Canonical Flow에서 고정하는 것과 고정하지 않는 것
+## 4.16 Canonical Flow에서 고정하는 것과 고정하지 않는 것
 
 ### 고정하는 것
 
-- Voice와 Text가 동일한 Conversation으로 연결된다.
-- User Turn은 하나 이상의 VIA Request가 될 수 있다.
-- VIA Request는 필요한 Context와 의미를 확보해야 한다.
-- Task Association 결과를 관리한다.
-- 처리 경로는 Direct Response / VIA Local Execution / Agent-delegated Execution으로 구분한다.
-- 상태 추적이 필요한 업무는 VIA Task를 사용한다.
-- Agent Execution은 VIA Task와 분리된 identity를 가진다.
-- 모든 사용자-facing interaction은 VIA를 통해 전달된다.
-- Text Response는 항상 기록되며 Voice Response는 핵심 내용을 제공한다.
+- Voice Runtime과 S2S Model은 Voice 입력의 핵심 경로이다.
+- S2S는 transcript/event 제공과 S2S Direct Response를 모두 수행할 수 있다.
+- Voice와 Text는 동일한 Conversation에 연결된다.
+- 모든 의미 있는 요청은 VIA Request로 관리한다.
+- Compound Request는 decomposition하고 Request 관계를 보존한다.
+- 모든 Direct Response도 Conversation history에 남는다.
+- Task Relation은 No Tracked / New / Existing으로 구분한다.
+- Task Relation과 Request Handling은 독립된 두 축이다.
+- Request Handling은 S2S Direct / VIA Core Direct / Downstream Agent Handling으로 구분한다.
+- Open-ended research / domain planning / state-changing work는 Downstream Agent에 위임한다.
+- VIA Task와 Agent Execution identity는 분리한다.
+- 모든 user-facing interaction은 VIA를 통해 전달한다.
+- Text Response는 항상 기록하고 Voice Response는 핵심 내용을 제공한다.
 
-### 고정하지 않는 것
+### Architecture Decision에서 결정하는 것
 
-다음은 이후 Architecture Decision에서 결정한다.
-
-- Request Refinement, Referent Resolution, Task Association의 정확한 실행 순서
-- 각 단계의 Component 배치
-- semantic inference에 사용하는 Model 종류와 호출 위치
-- Context의 capture / materialization / storage 구조
+- S2S Direct Response와 VIA Core 처리 사이의 정확한 boundary
+- streaming transcript / semantic event contract
+- Request Refinement, Referent Resolution, Task Relation의 실제 실행 순서
+- semantic inference Model의 종류와 호출 위치
+- Context capture / materialization / storage 구조
 - speculative processing 여부
-- local/remote Model deployment
+- **별도의 stateful VIA-local execution path를 둘 것인지**
+- local/remote Model deployment 구조
 - Agent protocol 및 adapter 구조
-- Task/Execution state의 실제 저장 기술
+- Task/Execution state의 저장 및 recovery 구조
 
-즉, Canonical Interaction Flow는 **사용자가 경험해야 하는 논리적 흐름을 고정하고, 그 흐름을 어떤 SW 구조로 구현할지는 이후 Architecture 설계에 남긴다.**
+Canonical Interaction Flow는 **사용자가 경험해야 하는 논리적 흐름을 고정하고, 그 흐름을 어떤 SW 구조로 구현할지는 Architecture Decision에서 결정한다.**
