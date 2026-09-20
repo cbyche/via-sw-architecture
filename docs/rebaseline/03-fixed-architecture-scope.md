@@ -45,7 +45,7 @@ flowchart LR
         CX["Context Access & Referent Resolution"]
         SI["Request Understanding / Semantic Inference"]
         RO["Request Orchestration"]
-        DR["S2S / VIA Core Direct Response"]
+        DR["VIA Core Direct Response"]
         AO["Agent Selection & Agent Orchestration"]
         RESP["Voice / Text Response"]
         POL["Policy / Consent / Audit"]
@@ -66,6 +66,7 @@ flowchart LR
     VR <--> S2S
 
     VR --> RO
+    VR -->|"S2S Direct Response"| RESP
     TI --> RO
 
     RO <--> CS
@@ -149,7 +150,7 @@ Model 자체의 내부 구조와 학습 방법은 VIA Architecture 설계 범위
 - Compound Request decomposition과 request 간 관계 보존
 - Request Refinement
 - Referent Resolution
-- Task Relation 결정
+- Task Association 및 Task Relation 결정
 - Request Handling 결정
 - Downstream Agent 선택
 
@@ -298,7 +299,7 @@ VIA가 직접 다음과 같은 상태 변경 업무를 수행하는 구조도 �
 - Context를 언제 수집하고 어디에서 보관할 것인가
 - Referent Resolution을 어떤 책임 구조로 나눌 것인가
 - Request Refinement를 어떤 단계와 책임으로 구성할 것인가
-- Task Relation 판단의 책임과 authoritative state를 어디에 둘 것인가
+- Task Association의 책임과 authoritative state를 어디에 둘 것인가
 - Request Handling 결정을 어디에서 수행할 것인가
 - **Downstream Agent 없이 상태를 추적하는 별도의 VIA-local execution path가 필요한가**
 - 여러 Model provider와 local/cloud deployment를 어떤 abstraction으로 흡수할 것인가
