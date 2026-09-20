@@ -32,7 +32,8 @@ VIA의 핵심 역할은 다음과 같다.
 
 6. **VIA Direct Response 제공**
    - Downstream Agent의 실제 업무 실행이 필요하지 않은 요청은 VIA 내부에서 직접 처리할 수 있다.
-   - 예를 들어 VIA가 사용하는 Model의 지식만으로 답할 수 있는 질문이나, VIA의 read-only Context 조회만으로 답할 수 있는 정보성 요청이 이에 해당한다.
+   - **S2S Direct Response**는 Voice Runtime의 S2S Model이 자체 지식과 Conversation만으로 바로 응답하는 경우이다.
+   - **VIA Core Direct Response**는 VIA가 범위가 명확한 read-only Context를 조회하고 필요한 semantic processing을 수행한 뒤 응답하는 경우이다.
    - Direct Response도 다른 interaction과 동일하게 VIA conversation history에 기록하며 이후 follow-up에서 참조할 수 있다.
 
 7. **Downstream Agent 선택 및 작업 위임**
@@ -94,7 +95,7 @@ flowchart LR
 - Voice S2S 처리 및 Direct Response
 - Conversation state 관리
 - 화면 및 사용자 interaction Context 수집
-- 정책상 허용된 local file, mail, calendar, browser, public web 등의 read-only 검색 및 조회
+- 정책상 허용된 local file, mail, calendar, browser, public web 등에 대한 **범위가 명확한(bounded) read-only 검색 및 조회**
 - 사용자 표현과 화면/interaction Context의 연결
 - 사용자 요청 이해 및 refinement
 - 새로운 작업과 기존 작업의 association
@@ -105,9 +106,10 @@ flowchart LR
 ### Downstream Agent가 담당하는 범위
 
 - 실제 업무 수행에 필요한 domain-specific reasoning
+- 여러 Source를 탐색·비교·종합하는 open-ended research / analysis
 - 업무 수행 방법의 planning
 - 사용할 Tool 선택
-- Tool 실행
+- 실제 업무 수행을 위한 Tool 실행
 - OS, Application, Web, External Service의 실제 상태를 변경하는 작업
 - Agent 내부 workflow 및 sub-task 관리
 
@@ -115,8 +117,8 @@ flowchart LR
 
 책임 경계는 다음 원칙으로 고정한다.
 
-> **사용자 interaction을 위해 필요한 정보를 Read, Search, Understand 하는 것은 VIA가 수행할 수 있다.**  
-> **실제 업무 완료를 위해 외부 상태를 변경하는 Action은 Downstream Agent가 수행한다.**
+> **범위가 명확한 Context를 Read / Search / Understand 하는 것은 VIA가 수행할 수 있다.**  
+> **Open-ended Research / Domain Reasoning / Planning 또는 외부 상태를 변경하는 Action은 Downstream Agent가 수행한다.**
 
 | 동작 | 담당 |
 | --- | --- |
@@ -124,14 +126,15 @@ flowchart LR
 | pointer / selection / focused window 확인 | VIA |
 | 정책상 허용된 파일명 검색 및 파일 metadata/content 조회 | VIA |
 | 정책상 허용된 mail/calendar/browser 정보 검색 및 읽기 | VIA |
-| 공개 Web 정보 검색 및 읽기 | VIA |
+| 범위가 명확한 공개 Web 정보 검색 및 읽기 | VIA |
+| 여러 Web Source를 탐색·비교·종합하는 open-ended research | Downstream Agent |
 | 파일 이동 또는 삭제 | Downstream Agent |
 | 이메일 발송 | Downstream Agent |
 | Calendar 일정 생성 또는 변경 | Downstream Agent |
 | 사용자의 업무 수행을 위한 Application 조작 | Downstream Agent |
 | Web transaction 실행 | Downstream Agent |
 
-Read-only 정보 조회만으로 답할 수 있는 경우에는 Downstream Agent에 위임하지 않고 VIA Direct Response로 완료할 수 있다.
+Read-only라는 이유만으로 항상 VIA가 직접 처리하는 것은 아니다. **대상과 범위가 명확한 조회·이해는 VIA Direct Response로 처리할 수 있지만, 여러 Source를 탐색하고 비교·종합해야 하는 open-ended research나 domain analysis는 Downstream Agent에 위임한다.**
 
 ---
 
@@ -182,7 +185,7 @@ Downstream Agent가 domain reasoning, planning, tool selection 또는 tool execu
 2. **Downstream Agent는 실제 업무의 Reasoning, Planning, Execution을 담당한다.**
 3. **VIA 자체는 사용자의 PC에서 실행되며, VIA가 사용하는 외부 dependency는 local 또는 remote일 수 있다.**
 4. **Voice Runtime은 VIA의 일부이며 S2S Model을 기본 Voice Model로 사용한다.**
-5. **VIA는 사용자 요청을 이해하거나 직접 답하기 위해 필요한 정책상 허용된 read-only Context access를 수행할 수 있다.**
+5. **VIA는 사용자 요청을 이해하거나 직접 답하기 위해 필요한 정책상 허용된 bounded read-only Context access를 수행할 수 있다. Open-ended research나 domain analysis는 Downstream Agent에 위임한다.**
 6. **외부 상태를 변경하는 실제 업무 Action은 Downstream Agent에 위임한다.**
 7. **Downstream Agent의 업무 실행이 필요하지 않은 요청은 VIA 내부에서 직접 응답할 수 있다.**
 8. **Direct Response와 Agent-delegated Response는 동일한 VIA conversation state 안에서 관리한다.**
