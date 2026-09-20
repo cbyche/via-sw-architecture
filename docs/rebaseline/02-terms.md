@@ -74,9 +74,11 @@ flowchart TB
 
 ---
 
-## 2.3 Task Relation
+## 2.3 Task Association과 Task Relation
 
-**Task Relation**은 현재 VIA Request가 지속적으로 추적되는 VIA Task와 어떤 관계를 가지는지를 나타낸다.
+**Task Association**은 현재 VIA Request가 지속적으로 추적되는 VIA Task와 어떤 관계인지 판단하고, 기존 Task와 관련된 경우 정확한 VIA Task를 식별하는 과정이다.
+
+**Task Relation**은 Task Association의 결과를 나타낸다.
 
 결과는 다음 세 가지이다.
 
@@ -506,7 +508,8 @@ Pointing에만 한정하지 않고 다음을 포함한다.
 | **Conversation** | 지금까지 무슨 이야기를 했는가 |
 | **User Turn** | 사용자가 한 번 말하거나 입력한 것 |
 | **VIA Request** | VIA가 지금 처리해야 하는 하나의 요청 |
-| **Task Relation** | 이 요청이 지속 Task와 어떤 관계인가 |
+| **Task Association** | 새 요청인지 기존 업무의 연속인지 판단하는 과정 |
+| **Task Relation** | Task Association의 결과: No Tracked / New / Existing |
 | **VIA Task** | 계속 상태를 추적해야 하는 사용자의 업무 |
 | **Agent Execution** | 해당 업무가 Agent에서 실제로 돌고 있는 실행 |
 | **Request Handling** | 이번 요청을 어디서 어떻게 처리하는가 |
