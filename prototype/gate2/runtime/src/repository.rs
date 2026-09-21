@@ -138,7 +138,8 @@ fn apply_blocking(
            result=excluded.result",
         params![
             next.task_id,
-            i64::try_from(next.revision).map_err(|_| ApplyError::Storage("revision overflow".into()))?,
+            i64::try_from(next.revision)
+                .map_err(|_| ApplyError::Storage("revision overflow".into()))?,
             state_json,
             next.run_id,
             next.result
