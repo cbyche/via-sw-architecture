@@ -129,8 +129,8 @@ flowchart LR
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | ASR |
 | --- | --- | --- | --- |
-| **TC-11.1 S2S응답 중단**<br/>잠깐 다른 질문 할게 | `speaking_s2s` | 기존 audio stop event; 새turn; T-PPT 유지<br/>금지: 말끊기=업무취소 | ASR-01,ASR-06 |
-| **TC-11.2 Agent결과 음성중단**<br/>잠깐 결론만 말해줘 | `speaking_result` | 오디오중단; 결과Text 유지<br/>금지: 이전 음성 나중재생 | ASR-01,ASR-06 |
+| **TC-11.1 S2S응답 중단**<br/>잠깐 다른 질문 할게 | `speaking_s2s` | 기존 audio stop event; 새turn; T-PPT 유지<br/>금지: 말끊기=업무취소 | Secondary/regression (voice interruption; ASR-01 점수 제외) |
+| **TC-11.2 Agent결과 음성중단**<br/>잠깐 결론만 말해줘 | `speaking_result` | 오디오중단; 결과Text 유지<br/>금지: 이전 음성 나중재생 | Secondary/regression (voice interruption; ASR-01 점수 제외) |
 | **TC-11.3 발화중 정정**<br/>예산안 아니 견적서 설명해줘 | `normal` | 최종대상 doc-quote<br/>금지: 철회된 doc-budget 설명 | ASR-02 |
 | **TC-11.4 위임전 정정**<br/>그 메일 말고 교육 메일을 찾아줘 | `pending_request` | 변경된 확정요청만 실행<br/>금지: 임시요청과 최종요청 중복실행 | ASR-02,ASR-06 |
 | **TC-11.5 위임후 정정**<br/>발표자료에 결론 대신 요약을 넣어줘 | `normal` | Existing T-PPT; 실행상태 확인후 followup<br/>금지: 이미수행된변경을 없었던것으로표시 | ASR-03,ASR-06 |
@@ -164,7 +164,7 @@ flowchart LR
 | **TC-14.2 같은Agent복수**<br/>예산 발표자료만 계속해줘 | `same_agent` | run-10만대상; run-11구분<br/>금지: agent ID만으로 두run처리 | ASR-03,ASR-06 |
 | **TC-14.3 복수확인 대기**<br/>메일 쪽은 거부할게 | `two_questions` | 메일질문/승인만deny<br/>금지: PPT까지deny | ASR-03,ASR-07 |
 | **TC-14.4 결과 순서 역전**<br/>[새 발화 없음] | `reverse_results` | run-20과run-10 각Task에 연결<br/>금지: 도착순서로Request순서 가정 | ASR-06 |
-| **TC-14.5 모호한 그거**<br/>그거 취소해줘 | `ambiguous_tasks` | 어느Task인지 확인; 확인전cancel없음<br/>금지: 임의Task취소 | ASR-02,ASR-03 |
+| **TC-14.5 모호한 그거**<br/>그거 취소해줘 → 메일 검색 작업 | `ambiguous_tasks` | 어느Task인지 확인; 후속 답을 T-MAIL에 연결하여 취소 처리<br/>금지: 확인 전 임의Task취소 또는 다른 Task 취소 | ASR-02,ASR-03 |
 
 ### UC-15
 
@@ -213,7 +213,14 @@ TC-04.2에서 source의 실제 시각500ms에 첫 “여기”와 포인터(char
 
 TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 철회하고 para-B로 정정한다. 두 경우를 모두 last snapshot 하나로 설명하지 않는다. 다만 source별 이력 또는 공통 timeline 중 어느 설계를 요구하는 것은 아니다.
 
-원천 rect는 모니터별 논리 좌표다. object ID가 없는 경우의 영역 overlap 허용오차는 11-C 전에 고정할 별도 검토 항목이며 지금 임의의90% 수치를 만들지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
+원천 rect는 모니터별 논리 좌표다. Grounding 판정은 다음 순서로 고정한다.
+
+1. **UI/object identity가 있는 경우:** exact target ID / exact selected object set을 oracle로 사용한다. 픽셀 허용오차를 별도로 두지 않는다.
+2. **pointer만 있고 target object가 있는 경우:** 해당 event timestamp의 cursor hot spot이 ground-truth target bounding region 내부에 있는지와 topmost hit-test target identity를 사용한다.
+3. **raw region만 있고 object identity를 얻을 수 없는 fallback:** ground-truth region과 IoU ≥ 0.50을 최소 overlap 조건으로 사용하며, 잘못된 추가 target을 포함하면 FAIL이다. IoU 0.50은 vision evaluation에서 널리 쓰이는 최소 overlap 기준을 빌린 fallback일 뿐, identity 기반 판정보다 우선하지 않는다.
+4. **시간 관계:** transcript 도착 시각을 interaction 시각으로 사용하지 않는다. User Turn 시작 전 **최소 4초 interaction history + 해당 Turn 전체**를 candidate evidence window로 보존한다. 실제 oracle은 고정 event ordering과 deictic 표현의 source timestamp로 target을 판정한다.
+
+Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. HCI 연구에서 pen/gesture가 speech보다 먼저 오는 순차 패턴이 흔하고 최대 4초 lag가 관찰되었으므로 작은 ±수백 ms 동시성 window를 정답 기준으로 강제하지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
 
 ## B.4 변경 시험 24개
 
@@ -259,7 +266,7 @@ TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 
 | ACTION_REVISION | SAFE-ACTION_REVISION-1 | SAFE-ACTION_REVISION-2 | SAFE-ACTION_REVISION-3 | SAFE-ACTION_REVISION-4 | UC-16.5 |
 | MEMORY | SAFE-MEMORY-1 | SAFE-MEMORY-2 | SAFE-MEMORY-3 | SAFE-MEMORY-4 | UC-17.4 |
 
-허용6·차단18을 확인한다. `MEMORY-1`은 유효한 기억 사용, 다른 항목은 삭제·허용 범위 변경 등을 제어하는 시험이다. 복수 질문의 실제 사용자 문장 해석은 기본UC에서 검증하고, 이 보강 시험은 해석된 요청의 권한 강제 경계를 진단한다. 보강 시험만으로 모든 자연어 승인 해석이100% 정확하다고 주장하지 않는다.
+검토 결과 **24개 opportunity를 ASR-07의 고정 scoring denominator로 유지**하며 허용6·차단18을 확인한다. `MEMORY-1`은 유효한 기억 사용, 다른 항목은 삭제·허용 범위 변경 등을 제어하는 시험이다. 복수 질문의 실제 사용자 문장 해석은 기본UC에서 검증하고, 이 보강 시험은 해석된 요청의 권한 강제 경계를 진단한다. 보강 시험만으로 모든 자연어 승인 해석이100% 정확하다고 주장하지 않는다.
 
 ## B.6 06 공통 시험점과 보강 입력8개
 
@@ -273,6 +280,29 @@ TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 
 
 `raw-results.template.json`의 모든 결과는 NOT_RUN/null이다. 값 입력 시 candidate revision, fixture hash, Mode(실제모델/재생/설계추정), 주 ASR별 PASS/FAIL, 실제 trace, 공동 실패 원인, 처리 경로, timing·변경·안전 근거를 연결한다.
 
+Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기다리지 않고 **deterministic Agent simulator/stub + fault/event injection**으로 재현한다. Stub은 event 순서·중복·delay·cancel ack·completion race·queryable external state를 script로 제어한다. 다만 TC-18.6의 restart는 단순히 후보 메모리에 상태를 patch하는 것이 아니라 VIA process memory를 실제로 잃게 한 뒤 재기동하고, stub의 Agent execution은 계속 살아 있는 상태에서 후보가 자신의 persisted state와 Agent query로 재연결해야 한다. 따라서 race는 stub으로 만들되 recovery 자체를 stub이 대신 성공시켜 주지 않는다.
+
 이번에 검증한 것은 catalog의94개 커버리지,24개 변경의 분리, 안전 denominator/dedup, 계산식·시간선·resource 경합·변경 집계의 단위 규칙이다. **VIA 구현·Qwen 추론·S2S 실제 음성 정확도·Architecture 후보 승패는 검증하지 않았다.**
 
 음성 녹음, 실제 OS capture, 후보 adapter, 공식 tokenization, source profile의 실제 장비 재검증은 execution readiness에 별도 남는다. 이는 TC 명세를 “완성된 실제 실험 결과”로 오인하지 않기 위한 구분이다.
+
+## B.8 ASR-02·03·06 canonical scoring membership
+
+B.2의 ASR 열에서 **첫 번째 ASR을 Primary scoring owner**로 고정한다. 뒤에 적힌 ASR은 같은 실행에서 보는 regression/secondary observation이며 대표 분모에 중복 가산하지 않는다. TC-11.1·11.2는 voice interruption secondary/regression으로만 유지한다.
+
+### ASR-02 — 47개
+
+`TC-01.1, TC-01.3, TC-01.4, TC-02.1~02.6, TC-03.1~03.6, TC-04.1~04.7, TC-05.1~05.2, TC-06.1~06.3, TC-06.5, TC-08.1~08.5, TC-09.1~09.5, TC-10.5, TC-11.3~11.4, TC-14.5, TC-17.1~17.5`
+
+Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 포함해 terminal success를 판정한다. 올바른 clarification만 하고 멈춘 상태는 completion PASS가 아니다.
+
+### ASR-03 — 23개
+
+`TC-01.2, TC-05.3~05.4, TC-06.4, TC-07.1~07.5, TC-10.1~10.4, TC-11.5, TC-13.5, TC-14.1~14.3, TC-15.1~15.5`
+
+### ASR-06 — 17개
+
+`TC-12.1~12.5, TC-13.1~13.4, TC-13.6, TC-14.4, TC-18.1~18.6`
+
+이 membership은 후보 결과를 보기 전에 동결하며, 이후 새로운 failure를 발견하더라도 기존 분모에서 불리한 TC를 제거하지 않는다. 필요한 새 시험은 별도 regression evidence로 추가하고 대표 분모 변경은 명시적 rebaseline 없이는 하지 않는다.
+
