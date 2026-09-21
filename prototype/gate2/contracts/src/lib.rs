@@ -36,9 +36,31 @@ pub struct TaskCommand {
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum TaskOp {
     Create { goal: String },
+    PrepareHandoff { submission_key: String, goal: String },
+    ConfirmHandoff {
+        submission_key: String,
+        run_id: String,
+        context_id: Option<String>,
+    },
     AcceptExecution { run_id: String },
     ApplyObservation { observation: AgentObservation },
     Cancel,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct PendingHandoff {
+    pub task_id: String,
+    pub submission_key: String,
+    pub goal: String,
+    pub prepared_revision: u64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct ExecutionLink {
+    pub task_id: String,
+    pub submission_key: String,
+    pub run_id: String,
+    pub context_id: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
