@@ -8,8 +8,8 @@
 | ASR | 무엇을 관찰하는가 | 원자료 | 현재 산출 수준 |
 | --- | --- | --- | --- |
 | 01 Responsiveness | 일반 Request의 VIA 직접 모델·Context·연결·출력 비용을 포함하고 Agent의 open-ended domain 업무 시간만 제외한 지연 | 시작/완료 event, prompt·생성 token 수, 모델 profile, resource와 호출 의존 관계 | request class별 p95와 Macro-p95(ms), 공개 자료 기반 계산은 ESTIMATED로 구분 |
-| 02 Completion | 고정 입력의 목표·대상·제약·업무 관계가 맞고 VIA 완료 조건을 충족했는가 | 정답·실제 요청/응답·위임 기록 | TC별 PASS/FAIL, 적절한 보류 별도 |
-| 03 Continuity | 채널·대화·실행 전환 뒤에도 앞 맥락과 업무 identity를 사용할 수 있는가 | 전환 전 기록, 실제 전환 event, 이후 참조 결과 | TC별 PASS/FAIL |
+| 02 Completion | 고정 입력의 목표·대상·제약·업무 관계와 완료 조건을 얼마나 보존했는가 | ASR-tagged atomic obligation 결과, 실제 요청/응답·위임 기록 | TC별 obligation satisfaction %, strict PASS/FAIL secondary |
+| 03 Continuity | 채널·대화·실행 전환 뒤 앞 맥락·identity·correlation을 얼마나 보존했는가 | ASR-tagged continuity obligation, 전환 전후 trace | TC별 preservation %, strict PASS/FAIL secondary |
 | 04 Agent 변경 | A-01~09별 수정·추가·제거 요소 | 변경 전후 설계 ID, 이유, 회귀 검증 | 9개 원장; 실제 후보 설계 전 값은 null |
 | 05 비Agent 변경 | M-01~09·C-01~06별 수정·추가·제거 요소 | 동일한 10의 집계법 | 15개 원장; 실제 후보 설계 전 값은 null |
 | 06 Reliability/Recovery | 비동기·취소·실패·재시작에 실제로 올바르게 대응했는가 | event time, 후보의 저장 상태, Agent의 외부 상태 | TC별 PASS/FAIL; 복구 가능과 확인 불가 구분 |
@@ -114,29 +114,105 @@ Model load, KV cache 유무·재사용 prefix, Context 조회·serialization, IP
 
 한 TC의 평균속도 계산 결과를 runtime p95라고 부르지 않는다. 같은 조건에서 측정한 반복 표본의 p95와, 고정 TC별 추정값 분포의 95백분위는 서로 다른 결과이다. 원장에는 `MEASURED`, `ESTIMATED_MODEL_ONLY`, `SYNTHETIC_REPLAY`, `NOT_RUN`을 반드시 남긴다. 집계 혼합을 코드가 거부한다.
 
-## A.3 ASR-02·03·06 — 성공/실패 원장
+## A.3 ASR-02·03·06 — degree metric과 strict evidence
 
-TC마다 주 검증 ASR, 기대 결과, 실제 결과, 위반한 조건, 공동 원인을 남긴다. 하나라도 필수 조건이 틀리면 그 TC의 해당 ASR 결과는 FAIL이다. 실제 추론을 하지 않고 정답을 돌려주는 Model fixture로 semantic 정확도를 측정했다고 주장하지 않는다.
+ASR-02·03은 “한 TC를 완전히 했는가/못했는가”만 보지 않는다. 각 TC의 architecture-relevant condition을 **atomic obligation**으로 사전 등록하고, 만족한 정도를 대표 Metric으로 사용한다. ASR-06은 duplicate Action, 잘못된 terminal state 같은 reliability invariant에 부분 성공을 부여하기 어렵기 때문에 strict scenario PASS/FAIL 대표 Metric을 유지한다.
 
-| 구분 | 성공 조건 | 혼동하지 않을 것 |
-| --- | --- | --- |
-| ASR-02 | 현재 요청의 의미·대상·제약을 보존하고 고정 외부 결과를 올바르게 사용자에게 연결 | Agent 자체의 보고서·조사 능력, 대답이 길다는 이유 |
-| ASR-03 | 실제 채널/대화 전환 뒤 앞 자료·업무 관계가 유지됨 | 정답 history를 시험기가 뒤늦게 주입한 진단 시험 |
-| ASR-06 | 순서 역전·중복·실패·취소·실제 process memory 손실 뒤 맞는 상태와 재연결 | 잠깐 멈춘 것을 crash로 간주, 취소 요청을 완료로 간주 |
+### Atomic obligation 규칙
 
-FA-14에서 Agent 실행이 살아 있고 query 가능한 재시작은 실제 재연결을 요구한다. Agent도 상태를 잃은 시험에서 불확실성을 알린 성공으로 이를 대체하지 않는다. 02/03/06을 한 번에 깨뜨린 같은 원인을 세 개의 독립 증거로 과장하지 않는다.
+각 obligation은 독립적으로 확인 가능한 한 가지 요구이다.
 
-집계용 canonical membership은 **11-B 각 TC에 명시된 ASR tag 전체**로 고정한다. 하나의 통합 TC가 ASR-02와 ASR-03처럼 서로 다른 품질 조건을 실제로 검증하면 같은 실행 trace에서 ASR별 assertion을 각각 판정할 수 있다. 이를 독립 실행 두 건으로 복제하지 않으며 공동 실패 원인도 함께 기록한다.
+- `REQUIRED_PRESENT`: 반드시 관찰되어야 하는 조건
+- `FORBIDDEN_ABSENT`: 발생하지 않아야 하는 조건
 
-- **ASR-02:** 48개 TC
-- **ASR-03:** 30개 TC
-- **ASR-06:** 27개 TC
+하나의 문장을 자의적으로 여러 조각으로 쪼개 점수를 부풀리지 않는다. 후보를 보기 전에 obligation ID, 의미, ASR tag를 고정한다. multi-ASR TC에서는 같은 실행 trace를 재사용하되 **각 obligation을 실제로 관련된 ASR에만 tag**한다.
 
-즉 분모는 서로 겹칠 수 있지만 실행을 부풀리지 않는다. 정확한 TC ID 목록은 11-B §B.8을 따른다. 이 세 집합은 후보 결과를 본 뒤 변경하지 않는다.
+### ASR-02 Task Completion Obligation Satisfaction Rate
 
-ASR-02에서 clarification이 필요한 TC는 **고정된 후속 사용자 답변까지 포함한 scripted dialogue**로 실행한다. 확인 질문을 올바르게 했다는 사실만으로 PASS가 아니며, 후속 답변을 올바른 원래 Request에 연결하여 terminal success condition까지 충족해야 PASS이다. 사용자가 실제로 답하지 않은 상태의 적절한 HOLD는 진단 상태로 기록하되 completion success로 세지 않는다.
+TC (i)의 ASR-02 obligation 집합을 (O_{i,02})라 할 때:
 
-집계는 우선 TC 전체의 원자료를 보존한다. macro 평균·단순 평균·scenario 비중은 지금 바꾸지 않는다. 11-C의 고정 집합과 반복 규칙 승인 전에 최종 대표 점수를 만들지 않는다.
+```text
+TC02_i = satisfied(O_i,02) / |O_i,02|
+
+ASR-02
+= 100 × mean(TC02_i),  i ∈ canonical ASR-02 TC 48개
+```
+
+각 TC가 동일 가중치다. obligation이 많은 복잡한 TC가 전체 QA를 과도하게 지배하지 않는다.
+
+대표 obligation category:
+
+- goal / request meaning
+- referent / source binding
+- constraint preservation
+- compound decomposition / relation preservation
+- Task association
+- handling / Agent selection
+- clarification answer binding
+- terminal outcome / result binding
+
+예를 들어 compound TC에서 5개 obligation 중 4개를 만족하면 해당 TC의 effectiveness는 80%다. 모든 obligation을 만족해야 strict TC PASS다.
+
+### ASR-03 Continuity Obligation Preservation Rate
+
+TC (i)의 ASR-03 obligation 집합을 (O_{i,03})라 할 때:
+
+```text
+TC03_i = preserved(O_i,03) / |O_i,03|
+
+ASR-03
+= 100 × mean(TC03_i),  i ∈ canonical ASR-03 TC 30개
+```
+
+대표 continuity obligation category:
+
+- Conversation/reference history
+- VIA Task identity
+- Agent execution/run correlation
+- artifact/result relation
+- pending question/approval relation
+- modality / Voice Connection transition
+- multiple-Task isolation / switching
+
+strict scenario PASS는 해당 TC의 ASR-03 obligation을 전부 보존한 경우다.
+
+### ASR-06 Reliability & Recoverability
+
+ASR-06은 기존 **Reliability/recovery scenario pass rate (%)**를 유지한다.
+
+순서 역전, duplicate event, cancel/result race, restart 이후 중복 state-changing Action 같은 조건은 일부 상태만 맞았다고 “70% reliable”로 해석하기 어렵다. canonical 27개 TC에서 scenario invariant를 모두 만족해야 PASS다.
+
+### 공통 원자료와 clarification
+
+각 TC에는 다음을 함께 남긴다.
+
+- obligation별 0/1 결과와 근거 trace
+- TC degree %
+- strict PASS/FAIL
+- 공동 실패 원인
+- 실제 모델 / replay / 설계 추정의 evidence level
+
+ASR-02 clarification TC는 고정 scripted follow-up까지 실행한다. 확인 질문만 올바르게 하고 멈추면 terminal-outcome obligation을 만족하지 못하므로 100%가 아니며 strict PASS도 아니다.
+
+### 후보 사이 차이가 없을 때
+
+ASR-02·03을 degree metric으로 바꾸는 목적은 억지로 후보 사이 점수 차이를 만드는 것이 아니다. 같은 Model과 같은 evidence가 실제 판단 경계까지 전달되고 필요한 state/correlation을 모두 유지하는 두 구조라면 **둘 다 100%가 나오는 것이 정상**이다.
+
+따라서 DP에서 ASR-02 또는 ASR-03을 Primary QA로 사용하려면 다음 causal chain이 있어야 한다.
+
+```text
+구조 책임/상태/계약 차이
+→ 판단 시 이용 가능한 evidence 또는 유지 가능한 identity/correlation 차이
+→ 동일 TC obligation 결과 차이
+```
+
+정상적으로 설계한 모든 후보가 동일 obligation을 보존한다면 그 DP에서 해당 QA는 변별력이 없는 것이므로 regression/secondary observation으로 내려야 한다. 차이를 만들기 위해 일부러 history, state, adapter를 빼는 약한 후보를 만들지 않는다.
+
+canonical membership은 11-B §B.8을 유지한다.
+
+- ASR-02: 48개 TC
+- ASR-03: 30개 TC
+- ASR-06: 27개 TC
 
 ## A.4 ASR-04·05 — 변경 원장
 
@@ -177,6 +253,6 @@ A-01~09는 ASR-04, M-01~09+C-01~06은 ASR-05이다. 0개는 같은 기능을 유
 
 ## A.7 11-A 리뷰 종료와 11-C 경계
 
-사용자 리뷰를 통해 ASR-01의 6개 request class Macro-p95, ASR-02/03/06 canonical membership, Grounding oracle, ASR-04/05 target rationale, ASR-07 fixed denominator, Qwen3-8B Semantic Model profile과 Qwen3-Omni S2S planning profile을 승인했다.
+사용자 리뷰를 통해 ASR-01의 6개 request class Macro-p95, ASR-02/03의 obligation degree metric, ASR-06 strict pass-rate, canonical membership, Grounding oracle, ASR-04/05 target rationale, ASR-07 fixed denominator, Qwen3-8B Semantic Model profile과 Qwen3-Omni S2S planning profile을 승인했다.
 
 11-A는 여기서 리뷰 완료로 닫는다. **반복 수·통계 규칙, 최종 workload, 제품 target, 0~5점 경계와 가중치는 아직 11-C 항목이며 여기서 선행 결정하지 않는다.**
