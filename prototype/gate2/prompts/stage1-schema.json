@@ -1,10 +1,131 @@
 {
-  "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "type":"object",
-  "required":["status","request_revision","requests"],
-  "properties":{
-    "status":{"enum":["READY","NEED_CONTEXT","CLARIFY","REJECT"]},
-    "request_revision":{"type":"integer","minimum":0},
-    "requests":{"type":"array"}
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "referent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "version",
+        "target_id"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "target_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "type",
+        "condition"
+      ],
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "independent",
+            "sequential",
+            "data_dependent",
+            "conditional"
+          ]
+        },
+        "condition": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "request_revision",
+    "requests",
+    "relations",
+    "clarification"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "READY",
+        "NEED_CONTEXT",
+        "CLARIFY",
+        "REJECT"
+      ]
+    },
+    "request_revision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "requests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text",
+          "referents",
+          "constraints"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "referents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/referent"
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      }
+    },
+    "clarification": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }
