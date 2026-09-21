@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$ROOT/prototype/gate2"
-cargo build -p gate2-worker -p gate2-bench
+cargo build -p gate2-worker -p gate2-host -p gate2-bench
 cargo test --workspace
 cargo run -q -p gate2-bench -- smoke
 cargo run -q -p gate2-bench -- exec-smoke --worker "$ROOT/prototype/gate2/target/debug/gate2-worker"
