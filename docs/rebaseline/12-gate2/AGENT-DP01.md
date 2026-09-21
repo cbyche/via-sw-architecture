@@ -90,4 +90,4 @@ COMMON의 NativeClients, Registry와 ExecutionLink/Pending 상태를 재사용�
 
 A는 Core의 수명 의미를 단순화하고 provider 적응을 국소화하기 쉽지만 adapter에 기능 해석 책임이 모인다. B는 capability 차이를 명시적으로 조합하기 쉽지만 Core가 그 variation의 변경을 따라가야 할 수 있다. 두 안 모두 기능 보존을 전제로 하고, 바뀌는 모든 C/I/S/D와 회귀 UC를 원장에 남긴다.
 
-AGENT A/B × TASK-DP02 A/B를 교차 확인한다. 정규화 경계의 차이와 query/event 선택의 차이를 같은 개선으로 중복 계상하지 않는다.
+Agent state delivery는 공통 `TASK-T01 Event-first + Query Reconciliation` tactic으로 고정한다. 따라서 AGENT A/B에서 보이는 차이는 query/event 방식 자체의 차이로 설명하지 않는다. 결론을 뒤집을 가능성이 있는 경우에만 IR-DP01 × AGENT-DP01의 제한된 교차 확인을 수행한다.
