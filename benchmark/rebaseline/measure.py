@@ -117,7 +117,7 @@ def audit() -> dict[str,Any]:
     ps=json.loads((root/'prompts.json').read_text(encoding='utf-8'));assert len(ps)==8
     # Positive/negative controls validate only the measurement helpers, not VIA.
     rejected=0
-    for args in [(0,60),(4090,60)]:
+    for args in [(0,60),(int(profile['context_limit'])-10,60)]:
         try:llm_seconds(*args,profile)
         except ValueError:rejected+=1
     assert rejected==2
