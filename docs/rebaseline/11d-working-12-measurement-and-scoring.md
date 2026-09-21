@@ -139,19 +139,56 @@ A-01~09 전체의 평균 / M-01~09+C-01~06 전체의 평균. `|modified ∪ adde
 
 ### W-09 Recovery Timeliness & Recoverability
 
-**running/queryable와 completed/queryable × active Task 1/4개 = 4 strata**. 각각 100회 반복한 p95를 동일가중 평균한다. fault 시점은 VIA process 종료, 공통 시험기가 500ms 뒤 재시작을 시작한다. 저장 매체는 정상, Agent 실행/결과 조회는 생존한다. 정상/완료 history 크기도 trial 간 동일하게 고정한다.
+대표값은 **서로 다른 두 recovery fault family의 strata p95를 동일가중 평균**한다.
 
-종료는 'VIA 창이 떴다'가 아니라 해당 strata의 모든 active Task에 대해 **올바른 identity/state/result 및 허용된 사용자 제어가 다시 가능함**이 확인된 시점이다. 복구 완료 선언 이후의 상태 조회 probe로 확인한다. Lazy recovery도 같은 Task 집합이 실제 사용 가능해질 때까지 기다린다. 시험기는 사라진 state/history를 재주입하지 않는다.
+#### A. Whole-VIA restart — 기존 4 strata
 
-상태 확인 불가 조건은 latency 분모에 넣지 않고 기존 strict 회귀로 유지한다. 복구 가능한 경우에도 '다시 요청하세요'로 끝내면 빠른 복구 성공이 아니다. **목표 5s**는 일시 장애 후 업무 제어를 돌려주는 제안 예산이다. 본 연구가 이를 사용자 임계값으로 입증했다는 뜻은 아니다. 기존 27 correctness TC의 결과는 별도로 보존한다.
+- running/queryable × active Task 1/4개
+- completed/queryable × active Task 1/4개
+
+각 strata를 100회 반복한다. fault 시점은 VIA process 종료이며 공통 시험기가 500ms 뒤 재시작을 시작한다. 저장 매체는 정상이고 Agent execution/result는 생존·조회 가능하다.
+
+#### B. Integration-host fatal fault — 추가 2 strata
+
+- running/queryable × active Task 1개
+- running/queryable × active Task 4개
+
+동일한 deterministic integration adapter fixture가 **자신을 host하는 runtime을 fatal 종료**시키는 fault를 발생시킨다. 논리 fault injection 지점은 모든 후보에서 동일하다. Single-process 후보에서는 VIA process 전체가 종료될 수 있고, process-isolated 후보에서는 integration worker만 종료될 수 있는데, 바로 이 blast-radius 차이가 Architecture 효과다. Agent execution은 계속 생존·조회 가능하다.
+
+각 strata의 종료는 해당 Task들에 대해 **올바른 identity/state/result 및 허용된 사용자 제어가 다시 가능함**이 확인된 시점이다. 단순 process 재기동, worker 재기동, UI 표시만으로 종료하지 않는다. 시험기는 사라진 state/history를 재주입하지 않는다.
+
+```text
+W09 = mean(
+  p95(whole_restart_running_1),
+  p95(whole_restart_running_4),
+  p95(whole_restart_completed_1),
+  p95(whole_restart_completed_4),
+  p95(integration_fatal_running_1),
+  p95(integration_fatal_running_4)
+)
+```
+
+복구 불가능/상태 확인 불가 조건은 latency를 작은 값으로 처리하지 않고 strict correctness regression에 남긴다. **목표 5s**는 일시 장애 후 업무 제어를 돌려주는 제안 예산으로 유지한다. 기존 27 correctness TC 결과도 별도로 보존한다.
 
 ### W-10 Failure Containment & Graceful Degradation
 
-`baseline.json`의 **6개 실패 dependency × 4개 본질적으로 무관한 기능 = 24 cells**. 각 cell은 connection-refused와 no-reply 두 모드로 각각 5회 반복한다. fault는 30초 유지, 2/10/20초에 기능을 요청한다. 같은 trial의 세 probe가 모두 기존 의미의 정답을 5초 이내 제공해야 그 trial PASS다. cell별 pass ratio를 동일가중 평균한다.
+대표 suite는 후보 결과를 보기 전에 다음 **28 cells**로 고정한다.
 
-분모는 후보의 dependency graph가 아니라 **사용자 기능의 본질적 dependency**로 사전 고정한다. 불필요하게 결합시킨 후보가 '이 기능도 장애 서비스에 의존한다'며 빼지 못한다. 실패 서비스의 고유 업무를 성공하라고 요구하지 않는다. 현재 상태를 정직하게 알리는 것과 무관한 기능 전체를 제공하는 것은 다르다. Text-only degraded mode가 허용된 cell은 그 완료조건을 사전 명시한다.
+#### A. External dependency failure — 24 cells
 
-**목표 100%**. 현재 fault set이 정상 후보들을 모두 통과시키면 W-10은 동점/회귀다. 새 극단 장애를 사후 추가하여 점수 차이를 만들지 않는다.
+기존 **6개 실패 dependency × 4개 본질적으로 무관한 기능 = 24 cells**를 유지한다. 각 cell은 connection-refused와 no-reply 두 모드로 각각 5회 반복한다. fault는 30초 유지하고 2/10/20초에 기능을 요청한다. 같은 trial의 세 probe가 모두 기존 의미의 정답을 5초 이내 제공해야 trial PASS다.
+
+#### B. Integration execution fatal fault — 4 cells
+
+고정 integration adapter fixture가 자신을 host하는 runtime을 fatal 종료시키는 logical fault 1종 × 그 integration에 본질적으로 의존하지 않는 기능 4개 = **4 cells**를 추가한다. 각 cell을 5회 반복한다. Single-process 후보에서는 같은 process의 Core까지 영향을 받을 수 있고, process-isolated 후보에서는 integration worker만 영향을 받을 수 있다. fault injection API와 adapter code는 후보 간 동일하다.
+
+```text
+W10 = 100 × passed_cells / 28
+```
+
+분모는 후보의 dependency/process graph가 아니라 **사용자 기능의 본질적 dependency**로 사전 고정한다. 후보가 구조적으로 결합시킨 기능을 “원래 의존한다”며 분모에서 뺄 수 없다. 반대로 실패 dependency 자체의 고유 기능을 성공하라고 요구하지 않는다.
+
+Text-only degraded mode가 허용된 cell은 완료조건을 사전 명시한다. external timeout/circuit breaker와 process isolation은 서로 다른 tactic/structure이므로 둘 다 정상적으로 구현할 수 있다. **목표 100%**를 유지한다. 이 28-cell suite에서 모든 정상 후보가 100%면 W-10은 non-discriminating regression으로 기록하고, 결과를 가르기 위해 새로운 극단 fault를 사후 추가하지 않는다.
 
 ### W-11 Privacy Exposure Minimization
 

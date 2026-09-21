@@ -29,7 +29,7 @@ E9는 직접 수행했다고 보고한 공개 사례이지만 세부 runtime bui
 | W-05/06 | 기존 95% 검토값 계승 | TC 동일가중 만족도의 허용 잔여 미달 5 percentage points. 실제 전체 성공확률/19 of20 단순 총계와 다름. |
 | W-07/08 | **사용자 승인 2/3** | 변경 국소화의 제품 예산. 특정 adapter 구조가 정답이라는 뜻 아님. |
 | W-09 | **신규 제품 제안 5s** | 일시 종료 후 업무 제어의 빠른 회복. 무조건 더 낮은 시간을 위해 correctness를 희생하지 않음. |
-| W-10 | fixed unaffected suite의 100% 목표 | 관련 없는 capability는 계속 제공해야 한다는 제품 요구의 운영화. 실제 가용성 확률 아님. |
+| W-10 | fixed **28-cell** unaffected suite의 100% 목표 | 24 external-dependency cells + 4 integration-host fatal-fault cells. 관련 없는 capability는 계속 제공해야 한다는 제품 요구의 운영화이며 실제 가용성 확률 아님. |
 | W-11 | **신규 제한공유 예산 25%=5/20** | 전체 허용 corpus를 그대로 외부로 보내지 않고 제한된 scope로 처리할 목표. 정보단위/필요량의 타당성은 Gate 1/2 검토 대상. |
 | W-12 | 기존 0/24 | 알려진 안전 기회에서 위반을 허용하지 않는 목표. score-only 비교이며 출시 인증 아님. |
 
@@ -44,11 +44,13 @@ E9는 직접 수행했다고 보고한 공개 사례이지만 세부 runtime bui
 5. **결과 후 Primary 선정 편향:** 규칙을 사전 작성해도 사후 축 선택의 탐색성이 사라지지는 않는다. 전수 결과·prior relevance를 유지하고 별도 확인 반복/원장 교차 검토를 한다.
 6. **Privacy bytes/단위 임의화:** compressed payload와 remote-readable handle을 0 노출로 취급하지 않는다. unit corpus와 의미 annotation을 잠근다.
 7. **Coupled DP:** 서로 결합된 DP들의 개별 승자를 합친다고 최종 최적이 되는 것은 아니다. Gate 2에 교차 확인 계획을 포함한다.
+8. **On-device baseline과 Privacy 인과:** CTX-DP02의 Model-facing context 크기는 on-device Model 기준에서 그 자체로 remote exposure가 아니다. 따라서 W-11을 primary causal hypothesis에서 내리고 외부 Agent egress 재사용 시 regression으로만 확인한다.
+9. **Process-isolation DP와 fault stimulus:** external connection-refused/no-reply와 whole-VIA restart만으로는 EXEC-DP01의 process fault boundary 차이를 충분히 자극하지 못한다. 후보 결과 전에 integration-host fatal fault를 W-09/W-10 공통 fixture에 추가한다.
 
 ## 4. 이 시점의 증거 완성도
 
-완료: repository 최신 HEAD 검증, 12개 평가 계약의 작성, 10개 DP/25개 주제 분류, 18UC·24change·18RC 연결, 신규 계산도우미 unit test.
+완료: repository 최신 HEAD 검증, Gate 1 **9개 DP/25개 주제 최종 분류**, 18UC·24change·18RC 연결, 12개 평가 계약의 작성. 기존 계산도우미는 7-ASR 기준선 자산이며 Working-12 machine-readable fixture는 Gate 2 실행자산으로 별도 materialize해야 한다.
 
 미수행: 실제 VIA/Agent adapter 실행, Qwen 모델 inference, candidate별 exact prompt tokenization, 실제 Windows 음성·화면 계측, 후보 latency/accuracy/승자 산출. 기존 generator/실험의 전체 regression을 이번 환경에서 다시 실행했다고 주장하지 않는다.
 
-현재 실행환경에 사용자 로컬 `~/Workspace/via-sw-architecture`는 연결되어 있지 않고 외부 git clone의 DNS도 실패했다. 문서 원문/branch HEAD는 GitHub connector로 읽었고 새 산출물은 분리된 작업 복사본에서 검증한다. 사용자 로컬 worktree를 수정했다고 주장하지 않는다.
+현재 기준선 변경은 GitHub connector를 통해 `architecture-rebaseline-20260918` branch에 직접 반영한다. Working-12의 machine-readable fault fixtures와 candidate adapter는 아직 실행 자산으로 생성하지 않았으며 Gate 2에서 후보/E-ID와 함께 동결한다.

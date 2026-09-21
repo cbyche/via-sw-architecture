@@ -1,7 +1,8 @@
-# VIA SW Architecture — Gate 1 Review
+# VIA SW Architecture — Gate 1 Final
 
 > **리뷰 목적: 비교할 구조 질문과 그 상호배타적 대안의 방향을 승인하는 것. 후보 점수나 승자를 고르는 단계가 아닙니다.**
-> W12-G1-v1.2 / Working ASR 12개 전수 유지 / UC18·variation94·Change24 유지.
+> **상태: Gate 1 최종 기준선 — 사용자 피드백 반영 완료.**
+> W12-G1-FINAL / Working ASR 12개 전수 유지 / UC18·variation94·Change24 유지.
 
 ## 0. DP 선정 원칙
 
@@ -21,11 +22,11 @@
 | **INT-DP01 Interaction Routing & Fast-Path Ownership** | User Turn의 direct/semantic/task 경로를 누가 authoritative하게 결정하는가 | **Voice-owned Turn Router** / **Core-owned Turn Router** | W-01, W-02, W-08 |
 | **CTX-DP01 Context Materialization Ownership** | Source reference를 소비 가능한 Context로 만드는 canonical 책임이 어디에 있는가 | **Central Materialization Authority** / **Consumer-owned Resolution** | W-01, W-05, W-08, W-11 |
 | **IR-DP01 Semantic Decision Ownership** | Referent·Request·Task·Handling·Agent 판단을 하나의 semantic authority가 결정하는가, 단계별 authority가 결정하는가 | **Integrated Semantic Authority** / **Staged Semantic Authorities** | W-01, W-02, W-05, W-08 |
-| **CTX-DP02 Model-facing Context State Architecture** | 매 inference의 Model-visible history를 매번 재구성하는가, 지속 working set으로 유지하는가 | **Request-reconstructed Context** / **Incremental Working Context** | W-01, W-06, W-08, W-11 |
+| **CTX-DP02 Model-facing Context State Architecture** | 매 inference의 Model-visible history를 매번 재구성하는가, 지속 working set으로 유지하는가 | **Request-reconstructed Context** / **Incremental Working Context** | W-01, W-06, W-08 |
 | **TASK-DP01 Task State Authority & Supervision** | VIA Task 상태 전이의 authoritative owner가 하나의 공유 service인가, Task별 supervisor인가 | **Central Task Authority** / **Per-Task Authority** | W-02, W-04, W-08, W-09 |
 | **AGENT-DP01 Agent Integration Contract Boundary** | Agent별 차이를 integration edge에서 숨길지, Core 계약에 typed variation으로 노출할지 | **Edge-normalized Canonical Contract** / **Core-visible Typed Contracts** | W-02, W-03, W-07, W-08 |
 | **TASK-DP02 Agent State Synchronization Architecture** | Agent 실행 상태를 query가 authoritative하게 갱신하는가, revisioned event가 authoritative하게 갱신하는가 | **Pull-authoritative Reconciliation** / **Event-authoritative Streaming** | W-03, W-04, W-07, W-09 |
-| **SEC-DP01 Policy Enforcement Hot-path Architecture** | 민감 Context/Action 사용 때 중앙 online authorization을 매번 거칠지, 사전 발급한 revocable capability를 local 검증할지 | **Online Reference Monitor** / **Revocable Scoped Capability** | W-02, W-08, W-11, W-12 |
+| **SEC-DP01 Policy Enforcement Hot-path Architecture** | 민감 Context/Action 사용 때 중앙 online authorization을 매번 거칠지, 사전 발급한 revocable capability를 local 검증할지 | **Online Reference Monitor** / **Revocable Scoped Capability** | W-02, W-08 *(W-11/12 regression)* |
 | **EXEC-DP01 Runtime Fault-Isolation Boundary** | integration workload를 Core와 같은 process fault domain에 둘지, 별도 process fault domain에 둘지 | **Single-process Partitioned Runtime** / **Process-isolated Integration Runtime** | W-01, W-04, W-09, W-10 |
 
 ## 2. 이번 정제에서 제외한 것
@@ -40,14 +41,33 @@
 - **TASK-DP01 vs TASK-DP02 vs EXEC-DP01**: Task state authority / Agent state synchronization authority / process fault-domain 배치.
 - **INT-DP01 vs IR-DP01**: 어느 subsystem이 turn의 routing authority를 갖는가 / semantic 판단 자체를 하나로 할지 단계로 할지.
 
-## 4. 발표 관점의 1차 기대
+## 4. Gate 1 최종 분류
+
+**Core DP 6개** — 구조 질문이 크고 상호배타성이 명확하며 responsiveness 계열과 다른 중요 품질의 trade-off를 동시에 만들 가능성이 높다.
+
+- INT-DP01
+- IR-DP01
+- TASK-DP01
+- AGENT-DP01
+- TASK-DP02
+- EXEC-DP01
+
+**Supporting DP 3개** — Architecture significance는 있으나 hybrid 가능성, measurement sensitivity 또는 우선 ASR leverage가 상대적으로 약해 Master Catalog에는 유지하되 발표 본문 우선순위는 낮다.
+
+- CTX-DP01
+- CTX-DP02
+- SEC-DP01
+
+Core/Supporting은 중요도 점수가 아니라 **Gate 2에서 먼저 상세화·측정할 우선순위**다. Supporting DP도 결과가 강하면 발표 본문에 올라갈 수 있고, Core DP도 결과가 평평하면 appendix로 내려갈 수 있다.
+
+## 5. 발표 관점의 1차 기대
 
 현재 후보 중 responsiveness 계열과 함께 다른 구조 품질을 동시에 건드릴 가능성이 높은 축은 **INT-DP01, IR-DP01, TASK-DP01, AGENT-DP01, TASK-DP02, EXEC-DP01**이다. 이는 발표 채택 확정이 아니라 Gate 2/3에서 실제 수치 sensitivity를 우선 확인할 묶음이다.
 
 CTX-DP01/02와 SEC-DP01도 master catalog에는 유지하되, 실제 결과가 평평하거나 우선 ASR leverage가 약하면 발표 본문 대신 appendix decision으로 남길 수 있다.
 
-## 5. 결과 상태
+## 6. 결과 상태
 
-**후보 선택 없음. 후보 성능값 없음.** Gate 1에서 승인할 것은 9개 구조 질문과 상호배타적 대안 family다. Gate 2에서 각 대안을 C/I/S/D, 공통 tactic, runtime/API까지 채워 “잘 만든 A vs 잘 만든 B”로 동결한 뒤 점수 산출을 시작한다.
+**후보 선택 없음. 후보 성능값 없음.** Gate 1에서 9개 구조 질문과 상호배타적 대안 family를 최종 확정한다. Gate 2에서 각 대안을 C/I/S/D, 공통 tactic, runtime/API까지 채워 “잘 만든 A vs 잘 만든 B”로 동결한 뒤 점수 산출을 시작한다.
 
 상세: [Master Catalog](./12-01-dp-master-catalog.md) · [Coverage](./12-01a-scope-and-coverage-ledger.md) · [12개 평가 계약](./11d-working-12-measurement-and-scoring.md).

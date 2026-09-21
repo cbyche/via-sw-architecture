@@ -1,7 +1,7 @@
 # 11-A/B 진행 및 근거 재검토 기록
 
 > 검토일: 2026-09-21
-> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. Reserve QA 정식 재평가 완료 / ASR rebaseline 사용자 결정 대기. 11-C 초안은 보류, 12는 미진행.**
+> 상태: **09/10 및 11-A/B 승인 완료. Working ASR 12개 유지. 12 Gate 1 DP catalog 최종 확정, Gate 2 상세 candidate 설계는 미진행.**
 
 ## 1. 현재 준비 상태
 
@@ -154,3 +154,20 @@ Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결
 - 신규 ASR 비권고: Compute Efficiency, Diagnosability, Task State Freshness, Deployment Flexibility
 
 사용자 승인 전에는 08/09/11의 확정 catalog를 변경하지 않는다.
+
+
+## 11. 12 Gate 1 최종 확정
+
+사용자 피드백을 반영해 2026-09-21 Gate 1을 최종 확정했다.
+
+- **Core DP 6개:** INT-DP01, IR-DP01, TASK-DP01, AGENT-DP01, TASK-DP02, EXEC-DP01
+- **Supporting DP 3개:** CTX-DP01, CTX-DP02, SEC-DP01
+- MODEL-DP01은 on-device 기본 범위를 유지하기 위해 추가하지 않음.
+- STATE-DP01은 별도 DP로 승격하지 않고 TASK-DP01 persistence tactic으로 유지.
+- ORCH-DP01은 Core/Agent 혼합이 자연스러워 상호배타적 architecture decision이 아니므로 독립 DP에서 제거.
+- 각 DP 대안은 authoritative owner / canonical contract / primary state path / process fault boundary 중 하나를 서로 다르게 정해야 한다.
+- CTX-DP02→W-11은 on-device baseline에서 primary 인과가 아니므로 regression으로 내림.
+- SEC-DP01의 W-11/W-12도 주요 discriminator가 아니라 secondary/regression/constraint로 처리.
+- EXEC-DP01의 process-isolation 차이를 실제로 자극하도록 W-09/W-10에 integration-host fatal fault를 후보 결과 전에 추가.
+
+다음 단계는 Gate 2이며 Core 6개부터 “잘 만든 A vs 잘 만든 B”의 C/I/S/D 및 공통 tactic을 동결한다.

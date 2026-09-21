@@ -1,6 +1,6 @@
 # 12-01. DP Master Catalog — Gate 1
 
-> 버전: **W12-G1-v1.2 / 첫 번째 사용자 리뷰 — mutual-exclusivity 정제**.
+> 버전: **W12-G1-FINAL / Gate 1 최종 기준선 — 사용자 피드백 반영 완료**.
 > 범위: **25개 구조·설계 주제 분류 → 주요 비교 질문 9개**. 강한 candidate family 18개는 상세설계 전 탐색 범위이며, 확정 후보·승자·점수가 아니다.
 > 원천: 03 §3.9의 열린 구조 질문, 04의 논리 흐름, 05 UC 18개, 06 공통 조건, 07 변화 24개, 10 RC-01~18.
 
@@ -48,12 +48,28 @@ MODEL placement는 이번 Gate의 독립 DP가 아니다. Persistence representa
 | **INT-DP01 Interaction Routing & Fast-Path Ownership** | User Turn의 direct/semantic/task 경로를 누가 authoritative하게 결정하는가? | A. Voice-owned Turn Router<br/>B. Core-owned Turn Router | W-01, W-02, W-08 |
 | **CTX-DP01 Context Materialization Ownership** | Source reference를 소비 가능한 Context로 만드는 canonical 책임이 어디에 있는가? | A. Central Materialization Authority<br/>B. Consumer-owned Resolution | W-01, W-05, W-08, W-11 |
 | **IR-DP01 Semantic Decision Ownership** | Referent·Request·Task·Handling·Agent 판단을 하나의 semantic authority가 결정하는가, 단계별 authority가 결정하는가? | A. Integrated Semantic Authority<br/>B. Staged Semantic Authorities | W-01, W-02, W-05, W-08 |
-| **CTX-DP02 Model-facing Context State Architecture** | Model-visible Conversation/Task context를 요청마다 재구성하는가, 지속 working set으로 유지하는가? | A. Request-reconstructed Context<br/>B. Incremental Working Context | W-01, W-06, W-08, W-11 |
+| **CTX-DP02 Model-facing Context State Architecture** | Model-visible Conversation/Task context를 요청마다 재구성하는가, 지속 working set으로 유지하는가? | A. Request-reconstructed Context<br/>B. Incremental Working Context | W-01, W-06, W-08 |
 | **TASK-DP01 Task State Authority & Supervision** | VIA Task 상태 전이의 authoritative owner가 하나의 공유 service인가, Task별 supervisor인가? | A. Central Task Authority<br/>B. Per-Task Authority | W-02, W-04, W-08, W-09 |
 | **AGENT-DP01 Agent Integration Contract Boundary** | Agent별 차이를 integration edge에서 숨길지, Core 계약에 typed variation으로 노출할지? | A. Edge-normalized Canonical Contract<br/>B. Core-visible Typed Contracts | W-02, W-03, W-07, W-08 |
 | **TASK-DP02 Agent State Synchronization Architecture** | Agent 실행 상태를 query가 authoritative하게 갱신하는가, revisioned event가 authoritative하게 갱신하는가? | A. Pull-authoritative Reconciliation<br/>B. Event-authoritative Streaming | W-03, W-04, W-07, W-09 |
-| **SEC-DP01 Policy Enforcement Hot-path Architecture** | sensitive use 때 중앙 authorization을 매번 거칠지, 사전 발급한 revocable capability를 local 검증할지? | A. Online Reference Monitor<br/>B. Revocable Scoped Capability | W-02, W-08, W-11, W-12 |
+| **SEC-DP01 Policy Enforcement Hot-path Architecture** | sensitive use 때 중앙 authorization을 매번 거칠지, 사전 발급한 revocable capability를 local 검증할지? | A. Online Reference Monitor<br/>B. Revocable Scoped Capability | W-02, W-08 *(W-11/12 regression)* |
 | **EXEC-DP01 Runtime Fault-Isolation Boundary** | integration workload를 Core와 같은 process fault domain에 둘지, 별도 process fault domain에 둘지? | A. Single-process Partitioned Runtime<br/>B. Process-isolated Integration Runtime | W-01, W-04, W-09, W-10 |
+
+### Gate 1 최종 분류
+
+| 분류 | DP | 이유 |
+|---|---|---|
+| **Core** | INT-DP01 | Voice fast path와 unified routing의 ownership trade-off가 직관적이며 W-01/W-02/W-08에 직접 영향 |
+| **Core** | IR-DP01 | semantic authority topology가 latency/completion/evolvability를 동시에 바꿈 |
+| **Core** | TASK-DP01 | Task state single-writer 구조가 handoff/concurrency/recovery/evolvability를 바꿈 |
+| **Core** | AGENT-DP01 | Agent-neutral product의 핵심 contract boundary이며 W-02/03/07/08과 직접 연결 |
+| **Core** | TASK-DP02 | Agent state truth source가 feedback/concurrency/interoperability/recovery를 바꿈 |
+| **Core** | EXEC-DP01 | in-process fast path와 process fault isolation의 trade-off가 명확함 |
+| **Supporting** | CTX-DP01 | 중요하지만 context type별 tactic/hybrid가 자연스러워 발표 핵심축으로는 상대적으로 약함 |
+| **Supporting** | CTX-DP02 | Architecture 차이는 있으나 on-device Model 기준에서 privacy 직접 인과가 약하고 continuity도 동점 가능 |
+| **Supporting** | SEC-DP01 | Architecture 의미는 크지만 정상 후보의 privacy/safety 점수가 동점일 가능성이 높음 |
+
+Core/Supporting은 최종 중요도 서열이 아니라 Gate 2 상세화 우선순위다. 12-A 전수 sweep에서는 9개 모두 동일 기준으로 평가한다.
 
 ## 3. 경계 그림
 
@@ -162,7 +178,7 @@ SEC-DP01 / EXEC-DP01은 cross-cutting이지만 각각 **authorization hot path /
 
 **왜 둘을 동시에 채택할 수 없는가:** 정상 inference의 model-visible state source가 **request-time reconstruction**인지 **long-lived incremental working set**인지 하나가 primary다. B가 restart 시 rebuild하는 것은 fallback이고 A가 cache를 쓰는 것은 optimization이라 authority를 바꾸지 않는다.
 
-**주요 인과:** W-01 prompt assembly/prefill, W-06 long-turn continuity, W-08 history/model contract change ripple, W-11 model-visible sensitive history 범위.
+**주요 인과:** W-01 prompt assembly/prefill, W-06 long-turn continuity, W-08 history/model contract change ripple. **현재 Model Runtime은 on-device 기본이므로 model-facing history 크기 자체를 W-11 remote exposure의 직접 인과로 보지 않는다.** 동일 context가 외부 Agent egress에 재사용되는 경우에만 W-11을 regression으로 확인한다.
 
 **연결:** UC-01, UC-05, UC-06, UC-07, UC-10, UC-14, UC-15, UC-17 / RC-07, RC-12, RC-16 / M-03, M-09, C-04, C-06.
 
@@ -232,7 +248,7 @@ SEC-DP01 / EXEC-DP01은 cross-cutting이지만 각각 **authorization hot path /
 
 **왜 둘을 동시에 채택할 수 없는가:** protected use의 hot-path authorization이 **central online decision**인지 **locally verifiable delegated authority**인지 하나가 primary다. capability 발급 authority가 중앙에 있는 것은 B와 모순이 아니다.
 
-**주요 인과:** W-02 use-time authorization latency, W-08 policy/connector change ripple, W-11 capability scope/egress minimization, W-12 safety regression.
+**주요 인과:** W-02 use-time authorization latency와 W-08 policy/connector change ripple을 우선 본다. W-11은 두 구조가 동일한 최소 scope를 enforce하면 동점일 수 있고, W-12는 정상 후보가 모두 0/24를 만족해야 하는 regression/constraint로 본다.
 
 **연결:** UC-02, UC-08, UC-09, UC-14, UC-16, UC-17, UC-18 / RC-04, RC-09, RC-11, RC-15, RC-16 / A-07, A-08, C-01, C-04, C-05, M-04, M-06.
 
@@ -291,8 +307,8 @@ Gate 2 상세화 우선순위는 **발표 채택 순위가 아니라 실제 trad
 
 9개는 설계 누락을 막기 위한 **master 질문 목록**이다. 발표 본문을 9개의 긴 DP로 채우겠다는 뜻은 아니다. Gate 3 이후 실제 인과 근거와 trade-off가 명확한 묶음을 본문 4~6개로 구성하고 나머지 결정·동점·필수 기능 처리는 appendix coverage에 남길 수 있다. 중요도를 사후 바꾸거나 불리한 결과를 숨기지는 않는다.
 
-## 8. Gate 1 승인 범위
+## 8. Gate 1 최종 확정 범위
 
-승인 요청은 구조 질문 9개와 그 boundary/상호배타성 원칙이다. 두 대안 family는 비교 가능성을 보여주기 위한 범위이므로 상세 후보의 승인이나 특정 설계 선택을 뜻하지 않는다. [Coverage 원장](./12-01a-scope-and-coverage-ledger.md)에는 25개 주제의 처리, RC/UC/Change 누락 점검, ASR별 가설 표를 보존했다.
+구조 질문 9개와 그 boundary/상호배타성 원칙을 Gate 1 최종 기준선으로 확정한다. 두 대안 family는 비교 가능성을 보여주기 위한 범위이므로 상세 후보의 승인이나 특정 설계 선택을 뜻하지 않는다. [Coverage 원장](./12-01a-scope-and-coverage-ledger.md)에는 25개 주제의 처리, RC/UC/Change 누락 점검, ASR별 가설 표를 보존했다.
 
-**현재: 후보별 요소 수·latency·accuracy·score·winner 모두 미산출.** 다음 Gate 2에서 정상 후보와 측정 계약을 검토한다.
+**현재: 후보별 요소 수·latency·accuracy·score·winner 모두 미산출.** 다음 Gate 2에서는 Core 6개를 먼저 상세 candidate/C·I·S·D 수준으로 만들고, Supporting 3개는 그 뒤 동일 원칙으로 상세화한다.

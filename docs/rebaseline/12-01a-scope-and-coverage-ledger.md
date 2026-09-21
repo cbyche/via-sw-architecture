@@ -1,6 +1,6 @@
 # 12-01A. Scope & Coverage Ledger
 
-> W12-G1-v1.2. **설계 책임의 연결 확인이지 구현/시험 통과 증거가 아니다.**
+> W12-G1-FINAL. **Gate 1 최종 coverage 원장. 설계 책임의 연결 확인이지 구현/시험 통과 증거가 아니다.**
 > `H`는 관찰 우선 인과 가설, `R`은 전수 점검/회귀 또는 공통 배경이다. R을 무관/N/A라고 단정하지 않는다.
 
 ## 1. 25개 원래 주제의 처리
@@ -63,11 +63,11 @@
 | INT-DP01 | H | H | R | R | R | R | R | H | R | R | R | R |
 | CTX-DP01 | H | R | R | R | H | R | R | H | R | R | H | R |
 | IR-DP01 | H | H | R | R | H | R | R | H | R | R | R | R |
-| CTX-DP02 | H | R | R | R | R | H | R | H | R | R | H | R |
+| CTX-DP02 | H | R | R | R | R | H | R | H | R | R | R | R |
 | TASK-DP01 | R | H | R | H | R | R | R | H | H | R | R | R |
 | AGENT-DP01 | R | H | H | R | R | R | H | H | R | R | R | R |
 | TASK-DP02 | R | R | H | H | R | R | H | R | H | R | R | R |
-| SEC-DP01 | R | H | R | R | R | R | R | H | R | R | H | H |
+| SEC-DP01 | R | H | R | R | R | R | R | H | R | R | R | R |
 | EXEC-DP01 | H | R | R | H | R | R | R | R | H | H | R | R |
 
 H가 있어도 실제 수치 차이가 입증된 것은 아니다. 특히 W-05/06은 모델 실행, W-10/12는 정상 후보의 동점 가능성을 유지한다. 모든 12개를 확인하며 최종 Primary와 발표 확대 축은 후속 evidence로 정한다.
@@ -90,7 +90,7 @@ H가 있어도 실제 수치 차이가 입증된 것은 아니다. 특히 W-05/0
 | CTX-DP02 Model-facing Context State Architecture | W-01 Conversational Reaction Responsiveness | 이력 조회·요약·prompt prefill의 비용 |
 | CTX-DP02 Model-facing Context State Architecture | W-06 Interaction & Task Continuity | 짧은 후속 지시·대화 전환에서 필요한 과거 정보의 보존 정도 |
 | CTX-DP02 Model-facing Context State Architecture | W-08 Evolvability & Maintainability | 모델 이력 계약/저장 기록 변경의 소비자 영향 |
-| CTX-DP02 Model-facing Context State Architecture | W-11 Privacy Exposure Minimization | 요약·선택 전달로 줄거나 새로 생기는 민감 정보 노출 |
+| CTX-DP02 Model-facing Context State Architecture | W-11 Privacy Exposure Minimization | **Regression only:** on-device Model baseline에서는 model-facing history 자체가 remote exposure를 만들지 않음. 외부 Agent egress에 같은 package를 재사용할 때만 확인. |
 | TASK-DP01 Task State Authority & Supervision | W-02 Task Handoff Responsiveness | Agent 접수와 재연결 정보 보존까지의 조정 비용 |
 | TASK-DP01 Task State Authority & Supervision | W-04 Concurrent Task Performance Isolation | 동시 Task의 state contention과 작업별 진행 독립성 |
 | TASK-DP01 Task State Authority & Supervision | W-09 Recovery Timeliness & Recoverability | 올바른 상태·제어가 다시 가능해지는 복구 critical path |
@@ -105,8 +105,8 @@ H가 있어도 실제 수치 차이가 입증된 것은 아니다. 특히 W-05/0
 | TASK-DP02 Agent State Synchronization Architecture | W-09 Recovery Timeliness & Recoverability | 재연결 후 현재 상태/결과를 확보하는 시간 |
 | SEC-DP01 Policy Enforcement Hot-path Architecture | W-02 Task Handoff Responsiveness | 승인 binding과 use-time enforcement의 인계 지연 |
 | SEC-DP01 Policy Enforcement Hot-path Architecture | W-08 Evolvability & Maintainability | 공통/분산 enforcement의 정책·connector 변화 파급 |
-| SEC-DP01 Policy Enforcement Hot-path Architecture | W-11 Privacy Exposure Minimization | 허용된 범위 안에서도 과도한 context를 줄이는 mediation 지점 |
-| SEC-DP01 Policy Enforcement Hot-path Architecture | W-12 Action & Access Safety | 동일 24개 기회의 안전성 회귀. 모두 0이면 비변별 |
+| SEC-DP01 Policy Enforcement Hot-path Architecture | W-11 Privacy Exposure Minimization | **Regression/secondary:** 두 대안 모두 동일한 최소 scope를 enforce할 수 있어 자연스러운 점수 차이를 보장하지 않음. |
+| SEC-DP01 Policy Enforcement Hot-path Architecture | W-12 Action & Access Safety | **Constraint/regression:** 동일 24개 기회에서 정상 후보 모두 0/24가 기대되며 차이를 만들기 위한 fault를 추가하지 않음. |
 | EXEC-DP01 Runtime Fault-Isolation Boundary | W-01 Conversational Reaction Responsiveness | IPC/queue handoff와 전경 실행 경로의 비용 |
 | EXEC-DP01 Runtime Fault-Isolation Boundary | W-04 Concurrent Task Performance Isolation | 공유 자원에서 1→4 Task 간섭이 증가하는 정도 |
 | EXEC-DP01 Runtime Fault-Isolation Boundary | W-10 Dependency Failure Containment & Graceful Degradation | 한 endpoint failure가 무관 기능까지 전파되는 범위 |
