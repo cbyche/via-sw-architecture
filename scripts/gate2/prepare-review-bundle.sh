@@ -18,6 +18,7 @@ fi
 PY="$ROOT/.venv/bin/python"
 "$PY" -c 'import sys; assert sys.version_info >= (3,11), "Python 3.11+ required"'
 "$PY" -m unittest discover -s benchmark/rebaseline/readiness -p 'test_*.py' -v 2>&1 | tee "$OUT/readiness-tests.txt"
+"$PY" benchmark/rebaseline/readiness/canonical_adapter.py --output "$OUT/canonical-adapter-plan.json" --check | tee "$OUT/canonical-adapter-check.txt"
 if [ "${2:-}" = "--with-rust-smoke" ]; then
   command -v cargo >/dev/null || { echo 'Rust is not installed; review bootstrap instructions first.' >&2; exit 2; }
   # The existing runner tests correctness only and may resolve a local Cargo.lock.
