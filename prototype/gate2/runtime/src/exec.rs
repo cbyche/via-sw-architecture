@@ -1,6 +1,8 @@
 use anyhow::{Context, anyhow};
 use async_trait::async_trait;
-use gate2_contracts::{AgentBackend, NativeReply, SubmitRequest, WorkerRequest, WorkerResponse};
+use gate2_contracts::{
+    AgentBackend, NativeEvent, NativeReply, SubmitRequest, WorkerRequest, WorkerResponse,
+};
 use std::{path::Path, sync::Arc};
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, Lines},
@@ -12,6 +14,13 @@ use tokio::{
 pub trait IntegrationBridge: Send + Sync {
     async fn submit(&self, request: SubmitRequest) -> anyhow::Result<NativeReply>;
     async fn query(&self, run_id: &str) -> anyhow::Result<NativeReply>;
+    async fn follow_up(&self, run_id: &str, text: String) -> anyhow::Result<NativeReply>;
+    async fn cancel(&self, run_id: &str) -> anyhow::Result<NativeReply>;
+    async fn events_since(
+        &self,
+        run_id: &str,
+        after_revision: u64,
+    ) -> anyhow::Result<Vec<NativeEvent>>;
 }
 
 pub struct LocalBridge {
@@ -32,6 +41,25 @@ impl IntegrationBridge for LocalBridge {
 
     async fn query(&self, run_id: &str) -> anyhow::Result<NativeReply> {
         self.backend.query(run_id).await.map_err(Into::into)
+    }
+
+    async fn follow_up(&self, run_id: &str, text: String) -> anyhow::Result<NativeReply> {
+        self.backend.follow_up(run_id, text).await.map_err(Into::into)
+    }
+
+    async fn cancel(&self, run_id: &str) -> anyhow::Result<NativeReply> {
+        self.backend.cancel(run_id).await.map_err(Into::into)
+    }
+
+    async fn events_since(
+        &self,
+        run_id: &str,
+        after_revision: u64,
+    ) -> anyhow::Result<Vec<NativeEvent>> {
+        self.backend
+            .events_since(run_id, after_revision)
+            .await
+            .map_err(Into::into)
     }
 }
 
@@ -104,6 +132,51 @@ impl IntegrationBridge for ProcessBridge {
             .await?
         {
             WorkerResponse::Reply { reply } => Ok(reply),
+            WorkerResponse::Error { message } => Err(anyhow!(message)),
+            other => Err(anyhow!("unexpected worker response: {other:?}")),
+        }
+    }
+
+    async fn follow_up(&self, run_id: &str, text: String) -> anyhow::Result<NativeReply> {
+        match self
+            .request(WorkerRequest::FollowUp {
+                run_id: run_id.to_owned(),
+                text,
+            })
+            .await?
+        {
+            WorkerResponse::Reply { reply } => Ok(reply),
+            WorkerResponse::Error { message } => Err(anyhow!(message)),
+            other => Err(anyhow!("unexpected worker response: {other:?}")),
+        }
+    }
+
+    async fn cancel(&self, run_id: &str) -> anyhow::Result<NativeReply> {
+        match self
+            .request(WorkerRequest::Cancel {
+                run_id: run_id.to_owned(),
+            })
+            .await?
+        {
+            WorkerResponse::Reply { reply } => Ok(reply),
+            WorkerResponse::Error { message } => Err(anyhow!(message)),
+            other => Err(anyhow!("unexpected worker response: {other:?}")),
+        }
+    }
+
+    async fn events_since(
+        &self,
+        run_id: &str,
+        after_revision: u64,
+    ) -> anyhow::Result<Vec<NativeEvent>> {
+        match self
+            .request(WorkerRequest::EventsSince {
+                run_id: run_id.to_owned(),
+                after_revision,
+            })
+            .await?
+        {
+            WorkerResponse::Events { events } => Ok(events),
             WorkerResponse::Error { message } => Err(anyhow!(message)),
             other => Err(anyhow!("unexpected worker response: {other:?}")),
         }
