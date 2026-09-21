@@ -43,7 +43,7 @@ jobs:
         if: always()
         run: |
           git diff --binary > review-format.patch
-          tar --exclude=target --exclude='*.db*' --exclude='__pycache__' -czf review-source.tar.gz prototype/gate2 benchmark/rebaseline/gate2
+          tar --exclude=target --exclude='*.db*' --exclude='__pycache__' -czf review-source.tar.gz prototype/gate2 benchmark/rebaseline/gate2 benchmark/rebaseline/readiness
           printf '%s\n' '${{ github.sha }}' > review-source-sha.txt
       - uses: actions/upload-artifact@v4
         if: always()
