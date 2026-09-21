@@ -7,6 +7,7 @@
 - `timing_contract.py`: W-01 대화 반응성 / W-02 Task 인계 반응성 / W-03 Feedback 반응성의 단일 raw sample endpoint 검증. S2S 지연 이중 합산, 다른 process clock 차감, 로컬 enqueue를 Agent 접수로 대체하는 오류를 거부한다.
 - `freeze.py`: 실제 host OS/메모리/검출된 chip 및 source/fixture/schema digest를 기록한다. 비교 승인이 없거나 코드가 바뀌면 실행 허가 검증이 실패한다. 승인 객체는 인간 승인에 대한 명시적 assertion이지 전자서명·인증체계는 아니다.
 - `ir_contract.py`: 실제 모델을 부르지 않고 통합/단계형 semantic 요청 body를 작성한다. 세 TaskRelation과 별도의 pending interaction을 유지하고, 단계 결과를 손실 없이 최종 Decision으로 합친다.
+- `canonical_adapter.py`: 승인된 94개 canonical TC를 하나도 누락하지 않고 IR/Task/Agent/EXEC/Voice/UI/Policy/Memory 등 필요한 executable slice에 매핑한다. 현재 prototype이 실제 구현한 경계와 fixture-only/미구현 경계를 구분하며 candidate observation이나 score를 만들지 않는다.
 - `test_*.py`: 위 도구를 테스트한다. 테스트의 hand-written output은 테스트용 정답이며 후보 모델에 전달하지 않는다.
 
 ## 실행
