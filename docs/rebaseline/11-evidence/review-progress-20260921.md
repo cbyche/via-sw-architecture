@@ -185,3 +185,15 @@ Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결
 - AGENT-DP01은 wire protocol 선택과 분리된 semantic contract-boundary decision으로 명시.
 - EXEC-DP01은 Rust/Tokio single-process async와 child process + Windows named-pipe IPC 모두 구현 가능하되 실제 isolation은 OS process boundary임을 명시.
 - Gate 2 review guide에 W-01~W-12 전체 ASR 이름과 짧은 의미를 병기.
+
+
+## 13. Gate 2 승인
+
+2026-09-22 사용자가 Gate 2 구조를 승인했다.
+
+- **승인된 비교 DP 4개:** IR-DP01, TASK-DP01, AGENT-DP01, EXEC-DP01
+- **고정 원칙:** FP-INT01 S2S Direct Fast Path
+- **공통 tactic:** TASK-T01 Event-first + Query Reconciliation
+- CTX-DP01/CTX-DP02/SEC-DP01은 Supporting DP로 보존하되 현재 구현 우선순위에서는 제외.
+- 다음 단계는 executable prototype/fixture와 측정 자산을 만들고 12-A sensitivity sweep을 수행하는 것.
+- 후보 결과를 보기 전에 Gate 2 C/I/S/D, common contract, Working-ASR metric/target/score 계약을 유지한다.
