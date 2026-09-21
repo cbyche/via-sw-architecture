@@ -6,6 +6,7 @@ on:
     paths:
       - 'prototype/gate2/**'
       - 'benchmark/rebaseline/gate2/**'
+      - 'benchmark/rebaseline/readiness/**'
       - 'scripts/gate2/**'
       - '.github/workflows/gate2-prototype-ci.yml'
   workflow_dispatch:
@@ -51,7 +52,8 @@ jobs:
           python3 -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v
       - name: Python pre-measurement checks
         run: |
-          python3 -m py_compile benchmark/rebaseline/gate2/*.py
+          python3 -m py_compile benchmark/rebaseline/gate2/*.py benchmark/rebaseline/readiness/*.py
+          python3 -m unittest discover -s benchmark/rebaseline/readiness -p 'test_*.py' -v
           python3 benchmark/rebaseline/build_assets.py
           python3 benchmark/rebaseline/gate2/make_trial_order.py --output /tmp/trial-order.json
           python3 benchmark/rebaseline/gate2/ir_model_runner.py --output /tmp/ir-dry-run.json
