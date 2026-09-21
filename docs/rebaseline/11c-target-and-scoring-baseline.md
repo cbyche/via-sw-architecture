@@ -1,6 +1,6 @@
 # 11-C. Target & Scoring Baseline — 제품 목표와 0~5 평가 기준
 
-> 상태: **사용자 리뷰용 초안**. Architecture 후보 결과를 보기 전에 작성.
+> 상태: **사용자 리뷰용 초안 / Reserve QA 재평가로 ASR rebaseline 여부 검토 중**. Architecture 후보 결과를 보기 전에 작성.
 > 입력: 08 확정 ASR, 09 mapping, 10 Architecture Element 기준, 사용자 승인 완료 11-A/B.
 > 원칙: 같은 ASR은 모든 DP에서 동일 metric / target / score boundary를 사용한다.
 
@@ -367,4 +367,4 @@ opaque ID, random nonce, hidden mapping 등 후보 간 차이를 만들기 위�
 
 현재 ASR-02/03/06/07에 대한 natural sensitivity hypothesis와 예상 역할은 [Natural Architecture Sensitivity Hypotheses](./11-evidence/natural-architecture-sensitivity-hypotheses.md)에 정리한다.
 
-기존 ASR의 변별력이 부족할 경우를 대비한 예비 품질 후보는 [08-A Reserve QA / Architecture Driver Candidates](./08a-reserve-qa-architecture-driver-candidates.md)에 별도로 관리한다. 이 후보들은 현재 11-C scoring table에 포함되지 않으며 08의 H/H 선정 규칙을 다시 통과해야 승격된다.
+기존 ASR의 변별력이 부족할 경우를 대비한 예비 품질 후보는 [08-A Reserve QA / Architecture Driver Candidates](./08a-reserve-qa-architecture-driver-candidates.md)에 별도로 관리한다. 정식 H/H 재평가 결과는 [08-B Reserve QA Formal Reassessment](./08b-reserve-qa-formal-reassessment.md)에 있다. 현재 11-C scoring table에는 아직 반영하지 않았으며, 사용자 승인 후 08→09→11 순서로 rebaseline한다.
