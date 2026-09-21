@@ -41,6 +41,30 @@ impl<B: AgentBoundary> AgentSynchronizer<B> {
             .await
     }
 
+    pub async fn consume_events_since(
+        &self,
+        authority: &dyn TaskAuthority,
+        mut current: TaskView,
+        after_revision: u64,
+    ) -> Result<(TaskView, u64), anyhow::Error> {
+        let Some(run_id) = current.run_id.clone() else {
+            return Ok((current, after_revision));
+        };
+        let observations = self.boundary.events_since(&run_id, after_revision).await?;
+        let mut watermark = after_revision;
+        for observation in observations {
+            if observation.run_id != run_id {
+                anyhow::bail!("Agent event stream crossed execution identity");
+            }
+            if observation.source_revision <= watermark {
+                anyhow::bail!("Agent event stream is not strictly revision ordered");
+            }
+            watermark = observation.source_revision;
+            current = self.ingest_event(authority, current, observation).await?;
+        }
+        Ok((current, watermark))
+    }
+
     pub async fn reconcile_query(
         &self,
         authority: &dyn TaskAuthority,
@@ -102,6 +126,58 @@ mod tests {
     use gate2_contracts::{AgentBackend, SubmitRequest, TaskOp};
     use gate2_fixture::{AgentShape, DeterministicAgent};
     use tempfile::NamedTempFile;
+
+    #[tokio::test]
+    async fn event_first_consumes_provider_specific_stream_through_boundary() {
+        for shape in [AgentShape::P, AgentShape::Q] {
+            let file = NamedTempFile::new().unwrap();
+            let repo = Repository::open(file.path()).unwrap();
+            let authority = SharedTaskService::new(repo);
+            let agent = DeterministicAgent::new(shape);
+            let accepted = match agent
+                .submit(SubmitRequest {
+                    task_id: "T1".into(),
+                    submission_key: "K1".into(),
+                    goal: "demo".into(),
+                })
+                .await
+                .unwrap()
+            {
+                gate2_contracts::NativeReply::P(gate2_contracts::PReply::Accepted { run_id }) => run_id,
+                gate2_contracts::NativeReply::Q(gate2_contracts::QReply::Accepted { run_id, .. }) => run_id,
+                _ => panic!("accepted expected"),
+            };
+            let created = authority
+                .apply(TaskCommand {
+                    command_id: "create".into(),
+                    task_id: "T1".into(),
+                    expected_revision: 0,
+                    op: TaskOp::Create { goal: "demo".into() },
+                })
+                .await
+                .unwrap();
+            let running = authority
+                .apply(TaskCommand {
+                    command_id: "accept".into(),
+                    task_id: "T1".into(),
+                    expected_revision: created.revision,
+                    op: TaskOp::AcceptExecution {
+                        run_id: accepted.clone(),
+                    },
+                })
+                .await
+                .unwrap();
+
+            agent.emit_progress(&accepted, 40).unwrap();
+            let sync = AgentSynchronizer::new(EdgeNormalized::new(agent));
+            let (updated, watermark) = sync
+                .consume_events_since(&authority, running, 1)
+                .await
+                .unwrap();
+            assert_eq!(updated.state, TaskState::Running);
+            assert_eq!(watermark, 2);
+        }
+    }
 
     #[tokio::test]
     async fn event_then_query_reconciliation_does_not_create_a_second_truth() {
