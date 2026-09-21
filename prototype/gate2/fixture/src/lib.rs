@@ -794,6 +794,26 @@ mod tests {
     }
 
     #[tokio::test]
+    async fn persistent_fixture_reopens_after_integration_memory_loss() {
+        let dir = tempfile::tempdir().unwrap();
+        let path = dir.path().join("agent-state.json");
+        let first = DeterministicAgent::persistent(AgentShape::Q, &path).unwrap();
+        let run_id = accepted_run(first.submit(request()).await.unwrap());
+        first.emit_progress(&run_id, 40).unwrap();
+        drop(first);
+
+        let reopened = DeterministicAgent::persistent(AgentShape::Q, &path).unwrap();
+        let NativeReply::Q(QReply::Snapshot { state, revision, .. }) =
+            reopened.query(&run_id).await.unwrap()
+        else {
+            panic!("Q snapshot expected");
+        };
+        assert_eq!(state, "running");
+        assert_eq!(revision, 2);
+        assert_eq!(reopened.run_count().unwrap(), 1);
+    }
+
+    #[tokio::test]
     async fn cloned_fixture_preserves_external_execution_state() {
         let agent = DeterministicAgent::new(AgentShape::P);
         let peer = agent.clone();
