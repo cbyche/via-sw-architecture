@@ -111,9 +111,11 @@ RTX 4060 planning profile의 공개 관측률을 그대로 사용하면:
 R_prompt = 2103.19 token/s
 R_gen    = 40.58 token/s
 
-T_first_model_hat ≈ Nin / R_prompt
-T_complete_model_hat ≈ Nin / R_prompt + max(Nout - 1, 0) / R_gen
+T_response_start_model_hat ≈ Nin / R_prompt + 1 / R_gen
+T_complete_model_hat ≈ Nin / R_prompt + Nout / R_gen
 ```
+
+공개 자료가 prompt-eval과 generation을 별도 throughput으로 보고하므로 첫 token을 prompt rate에 포함시키지 않는다. 첫 유효 output의 근사치는 prompt processing + 약 1 generation token이며, structured output 완료는 Nout 전체 generation을 포함한다.
 
 이는 **model inference subtotal**이다. 다음은 별도 span으로 추가한다.
 
