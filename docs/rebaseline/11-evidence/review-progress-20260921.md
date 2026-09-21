@@ -12,7 +12,7 @@
 | ASR-01 latency boundary | VIA 직접 Model/Context/orchestration/delivery 포함. Agent open-ended domain research/reasoning/planning/tool execution만 제외 |
 | ASR-01 representative metric | 서로 다른 TC raw sample의 pooled p95 폐기. 6개 request class별 p95의 동일가중 Macro-p95로 보정 |
 | Voice interruption | audio-stop latency는 secondary/regression observation. ASR-01 대표 score 제외 |
-| ASR-02/03/06 scoring membership | multi-ASR TC는 한 번 실행하고 ASR별 assertion을 각각 판정. ASR-02 48 / ASR-03 30 / ASR-06 27 TC 고정 |
+| ASR-02/03/06 scoring | ASR-02/03은 ASR-tagged atomic obligation degree metric으로 보정. ASR-02 48 / ASR-03 30 TC. strict PASS는 secondary. ASR-06은 27 TC strict pass-rate 유지 |
 | Clarification | scripted follow-up을 거쳐 terminal success까지 완료해야 ASR-02 PASS. 질문만 맞게 한 HOLD는 completion PASS 아님 |
 | Grounding oracle | identity/hit-test 우선, raw region fallback IoU≥0.50. 고정 temporal tolerance/4초 requirement 제거; source event timestamp/order로 판정 |
 | Restart/race/recovery | deterministic Agent simulator + fault/event injection. restart는 실제 VIA process memory loss 후 persisted state와 살아 있는 Agent query로 복구 |
@@ -121,7 +121,8 @@ S2S Model은 **Qwen3-Omni-30B-A3B-Instruct**로 고정한다. 공식 Technical R
 사용자가 다음 세 항목을 모두 승인했다.
 
 1. ASR-01의 6개 latency request class와 Macro-p95 방식
-2. ASR-04 target 2.0 및 ASR-05 target 3.0 elements/change
-3. 11-A/B measurement/test definition의 review-complete 처리
+2. ASR-02 Task Completion Obligation Satisfaction Rate / ASR-03 Continuity Obligation Preservation Rate
+3. ASR-04 target 2.0 및 ASR-05 target 3.0 elements/change
+4. 11-A/B measurement/test definition의 review-complete 처리
 
 따라서 11-A/B는 종료한다. 다음 단계는 11-C이지만 아직 시작하지 않았다.
