@@ -26,6 +26,18 @@
 - 나머지는 regression / constraint / secondary evidence로 유지
 - Primary set 고정 후 final decision narrative와 weakness/tactic evaluation 수행
 
+## 1-A. Candidate Mutual-Exclusivity Gate
+
+Gate 2에서 상세 후보를 만들기 전에 각 DP의 대안은 다음을 만족해야 한다.
+
+1. 두 대안 모두 필수 기능을 충족하는 정상 Architecture다.
+2. 같은 authoritative owner / canonical contract / primary state path / process fault boundary를 서로 다르게 결정한다.
+3. A+B를 단순 결합하면 decision이 사라지는 경우 두 안을 독립 Architecture alternative로 인정하지 않는다.
+4. 공통 tactic은 허용하지만 authority를 바꾸면 candidate identity 변경으로 처리한다.
+5. Hybrid는 단순 장점 결합이 아니라 새로운 authority split과 독립적인 비용/변경면을 가질 때만 별도 family로 인정한다.
+
+이 Gate를 통과하지 못한 비교는 ASR sensitivity가 크게 보여도 발표용 Architecture Decision으로 사용하지 않는다.
+
 ## 2. 사후 논리 만들기와 허용되는 해석의 경계
 
 허용:
