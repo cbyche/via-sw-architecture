@@ -1,81 +1,118 @@
 # 11-A/B 진행 및 근거 재검토 기록
 
 > 검토일: 2026-09-21
-> 검토한 저장소 기준: `dd1fe95dcfa36251a33ac489e7b036ad50c8d3cd`
-> 상태: 문서·합성 시험 명세는 리뷰 가능. 실제 모델/VIA 후보 시험과 정확 token 산정은 완료되지 않음.
+> 상태: **09/10 승인 정합화 완료 / 11-A·11-B 사용자 리뷰 반영 중. 11-C·12는 미진행.**
 
 ## 1. 현재 준비 상태
 
-| 항목 | 확인한 산출물 | 상태 |
-| --- | --- | --- |
-| 08 측정 정의 보정 | 7개 ASR 유지, VIA 직접 LLM/S2S 비용 포함, Safety의 V/N 원자료 정의 | 반영 확인 |
-| 11-A 측정 기준 | 시간 경계, TTFT/생성 길이, 자원 경합, 변경 요소, 성공/실패·안전 집계 규칙 | 검토본 |
-| 11-B 시험 목록 | 18개 UC의 94개 명시 변형에 대응하는 시험 명세 | 검토본. 실제 녹음·장비 실행 완료가 아님 |
-| 변경 분석 | A 9개, M/C 15개로 나눈 24개 계약 변경 | 명세. 후보별 변경 개수는 미측정 |
-| 안전 시험 | 24개 판단 기회, 허용 6개/차단 18개 | 설계된 시험 분모. 실제 위반 결과가 아님 |
-| Prompt | 8개 목적의 prompt·schema·Context·예시 출력 | 초안. 정확 token 수와 실제 생성 token 수는 미산정 |
-| 참고 발표자료 | Word 가이드, Excel 카탈로그, ZIP의 README·manifest·대표 사진 | 검토 |
-| 11-C | 목표·0~5점·최종 집계/반복 | 미진행 |
-| 12 | DP 선택·후보 비교·결정 | 미진행 |
+| 항목 | 현재 상태 |
+| --- | --- |
+| 09 ASR↔UC/Change mapping | 사용자 승인 완료 상태로 metadata 정합화 |
+| 10 Architecture Element counting | 사용자 승인 완료 상태로 metadata 정합화 |
+| ASR-01 latency boundary | VIA 직접 Model/Context/orchestration/delivery 포함. Agent open-ended domain research/reasoning/planning/tool execution만 제외 |
+| ASR-01 representative metric | 서로 다른 TC raw sample의 pooled p95 폐기. 6개 request class별 p95의 동일가중 Macro-p95로 보정 |
+| Voice interruption | audio-stop latency는 secondary/regression observation. ASR-01 대표 score 제외 |
+| ASR-02/03/06 scoring membership | Primary owner 기준으로 ASR-02 47 / ASR-03 23 / ASR-06 17 TC 고정 |
+| Clarification | scripted follow-up을 거쳐 terminal success까지 완료해야 ASR-02 PASS. 질문만 맞게 한 HOLD는 completion PASS 아님 |
+| Grounding oracle | identity/hit-test 우선, raw region fallback IoU≥0.50, 최소 4초 pre-turn interaction history 보존 |
+| Restart/race/recovery | deterministic Agent simulator + fault/event injection. restart는 실제 VIA process memory loss 후 persisted state와 살아 있는 Agent query로 복구 |
+| Safety | 24 fixed opportunities 유지. wrong-scope를 destination/pending Action identity mismatch까지 강화. 11-C에서 score로 평가 |
+| ASR-04/05 rationale | change-locality 원칙과 VIA boundary로 target proposal ASR-04≤2.0 / ASR-05≤3.0 elements/change 작성. 아직 11-C 승인 전 |
+| Qwen planning evidence | Qualcomm을 주 profile에서 제외. Windows 11 + RTX 4060 + Qwen3-8B Q4_K_M 공개 관측으로 교체 |
+| 공식 tokenizer/model snapshot | Qwen3-8B tokenizer/template/GGUF revision·hash 기록. 실제 prompt tokenization은 아직 NOT_RUN |
+| 실제 VIA/model benchmark | NOT_RUN |
+| 11-C | target·0~5점·반복 수·최종 집계 미진행 |
+| 12 | DP 도출·후보 비교·결정 미진행 |
 
-상세 내용: [11 검토 안내](../11-test-case-catalog.md), [11-A](../11a-measurement-baseline.md), [11-B](../11b-test-case-catalog.md).
+## 2. ASR-01 Windows Consumer PC reference
 
-## 2. 참고 발표자료의 적용
+주 planning source는 Windows 11 + NVIDIA RTX 4060 8GB에서 Qwen3-8B Q4_K_M을 full GPU offload한 공개 관측이다.
 
-사용자가 제공한 NEO-Operation pack에는 52장 사진과 Word/Excel/manifest가 있다. 이번 재검토에서는 원본 사진 p9·15·19·32·40·42를 확인했다. 모든 사진의 세부 숫자를 검증한 것으로 주장하지 않는다.
+- prompt: 2,957 tokens
+- output: 1,225 tokens
+- prompt processing: 2,103.19 token/s
+- generation: 40.58 token/s
+- 약 7.2 GB VRAM / 16k context setting
 
-다음 발표 구성을 VIA에 적용한다.
+Intel Core Ultra 9 185H + RTX 4070 Laptop / Ollama CUDA의 별도 5-run 공개 benchmark도 512/128 token에서 평균 TTFT 약 0.19s, prefill 약 2,614 token/s, decode 약 44.92 token/s를 보여 sanity check로 사용한다.
 
-- 본문: 제품 문제 → 요구와 대표 지표 → 구조 후보 → 같은 기준의 비교 → 선택 → 남은 약점과 보완.
-- 검증: 처음 제시한 지표로 선택안과 보완안의 결과를 다시 제시.
-- 부록: 측정 환경·출처·계산식·원자료·실측/추정의 한계를 보존.
-
-참고자료의 개발 MM, 서버 처리시간, 보안 control 점수나 선정 기준은 다른 과제의 값이다. VIA의 승인된 7개 ASR, 목표, 평가 척도를 그 숫자로 대체하지 않는다. 원본 이미지·Word·Excel을 공개 GitHub 저장소에 복사하지 않는다.
-
-## 3. Qwen 공개 자료 재조회에서 발견한 점
-
-출처: [Qualcomm Qwen3-8B model card](https://huggingface.co/qualcomm/Qwen3-8B), Performance Summary의 `GENIEX_QAIRT / w4a16 / Snapdragon X Elite / context 4096` 행.
-
-| 항목 | 기존 근거 문서 기록 | 이번 웹 조회 표시값 |
-| --- | ---: | ---: |
-| 첫 token 이후 생성률 | 12.949668 token/s | 13.586086 token/s |
-| 짧은 prompt의 TTFT | 0.1555 s | 0.156323 s |
-| 전체 context TTFT | 4.976 s | 5.002336 s |
-
-기존 값과 이번 조회값이 일치하지 않는다. 원문 업데이트와 웹 캐시 중 어느 요인인지 확인하지 못했으므로 **둘을 같은 실측 행으로 합치거나 평균하지 않는다.** 이번 기록은 별도 조회 결과이며 기존 계산 profile을 조용히 덮어쓰지 않는다. 최종 profile을 동결할 때 원문 버전 또는 날짜가 확인되는 원자료 사본을 함께 고정해야 한다.
-
-공식 설명에 따르면 생성률은 짧은 prompt와 긴 thinking 응답에서 측정했으며 긴 context에서 느려질 수 있다. 따라서 한국어 비사고 structured JSON의 실측률이라고 부르지 않는다. TTFT 하한은 최대 128 token prompt, 상한은 4096 token 입력에 대응하는 길이 범위이지 신뢰구간 또는 p95가 아니다.
-
-### 같은 검산 입력으로 식만 확인
-
-기존 문서와 같은 `Nin=1200, Nout=60`을 임의의 함수 검산 입력으로 사용한다.
+이 값은 VIA 실측 p95가 아니다. frozen prompt token count와 Architecture candidate의 call graph를 이용한 `ESTIMATED_MODEL_ONLY` planning subtotal에만 사용한다.
 
 ```text
-T_hat = ceil(Nin/128) × TTFT_short + (Nout−1)/generation_rate
-
-기존 기록값 사용: 6.1111 s
-이번 조회값 사용: 5.9059 s
+T_model_complete_hat
+= Nin / 2103.19
++ Nout / 40.58
 ```
 
-두 값 모두 **실제 prompt token을 세어 얻은 VIA 성능값이 아니다.** 길이에 따른 TTFT를 구간 비례로 근사한 모델 소계이며, 부하·모델 로드·Context·IPC·출력 비용과 실제 분포는 포함하지 않는다. 128/TTFT를 계산한 입력률도 순수 prefill 실측값이 아니다.
+Model load, Context access, queue, serialization, IPC/RPC, validation, Voice/Text delivery는 실제 구조에 맞게 별도 span으로 추가한다.
 
-이전 대화의 `500/30 token/s`는 확인 가능한 동일 조건의 1차 근거가 부족하므로 계속 기준값에서 제외한다.
+상세: [ASR-01 Qwen evidence](./asr01-qwen-evidence.md).
 
-## 4. 아직 완료되지 않은 검증
+## 3. Grounding review
 
-공식 Qwen tokenizer 메타데이터와 chat template는 확인했다.
+작은 ±100/500ms synchronization tolerance를 임의로 두지 않는다. Interaction evidence는 source timestamp와 ordering을 보존하고 object identity/hit-test로 판정한다.
 
-- [tokenizer 메타데이터](https://huggingface.co/Qwen/Qwen3-8B/blob/main/tokenizer.json)
-- [공식 chat template](https://huggingface.co/Qwen/Qwen3-8B/resolve/main/tokenizer_config.json)
-- tokenizer SHA256: `aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4`
+Oviatt et al.의 multimodal interaction 연구에서 sequential pen→speech lag는 평균 1.4초, 관측치 전체가 4초 이내였으므로 **User Turn 시작 전 최소 4초 interaction history를 보존**한다. 4초는 matching tolerance가 아니라 evidence retention minimum이다.
 
-그러나 현재 실행 환경의 외부 다운로드 제한으로 tokenizer 원본을 가져오지 못했다. 따라서 정확한 입력 token 수를 글자 수 비례 추정으로 바꿔 채우지 않는다. 모델 가중치 실행·S2S 음성 계측·VIA 후보 시험도 수행하지 않았다.
+Object identity가 없는 raw region만의 fallback에는 IoU≥0.50을 사용한다. 이는 computer-vision localization의 최소 overlap 관행을 빌린 fallback이며 UI identity 기반 판정보다 우선하지 않는다.
 
-검토 가능한 것은 측정 계약, prompt 원문, 시험 입력/정답 명세와 계산 보조 코드이다. 실제 수치가 필요한 원장에는 `NOT_RUN/null`을 유지한다. 문서 작성 완료와 실제 시험 완료를 구분한다.
+상세: [Grounding Oracle evidence](./grounding-oracle-evidence.md).
 
-## 5. 리뷰 순서
+## 4. Safety review
 
-1. 11-A에서 ASR별 측정 경계와 미측정/추정 표시를 확인한다.
-2. 11-B에서 화면 지칭·복합 요청·후속 업무·재시작·승인 시험의 입력과 정답을 확인한다.
-3. Qwen 근거 원장에서 최종 profile 선택, tokenizer 산정 및 실측 보완 범위를 확인한다.
-4. 그 다음에만 11-C의 목표·점수·집계·반복을 동결한다. 후보 결과를 보고 유리한 기준으로 수정하지 않는다.
+24 opportunities는 다음 6개 enforcement boundary를 고정 분모로 유지한다.
+
+- READ
+- EGRESS
+- APPROVAL
+- REVOCATION
+- ACTION_REVISION
+- MEMORY
+
+각각 valid allow / deny / stale / wrong scope 조건을 갖는다. wrong scope는 target이 존재하는 경우 다른 remote destination 또는 다른 pending Action identity를 직접 사용하도록 보완했다.
+
+대표 raw data는 `V/24`이며 retry/guard/log 개수로 분모를 변경하지 않는다. 현재 사용자 결정에 따라 별도 hard gate는 두지 않고 11-C에서 0~5 score를 정의한다.
+
+상세: [ASR-07 safety review](./asr07-safety-opportunity-review.md).
+
+## 5. ASR-04/05 target rationale
+
+외부 standard/report는 숫자 cutoff를 제공하지 않는다. SEI modifiability tactics 등의 핵심 원칙인 **change localization / ripple-effect control**을 근거로 하고, 숫자는 VIA의 product boundary에서 제안한다.
+
+- ASR-04 proposal: Agent change당 평균 changed architecture elements ≤ **2.0**
+  - Agent-specific adapter/binding + 필요 시 공통 registry/contract 한 곳까지
+  - 3개 이상이 반복되면 Agent change가 orchestration core로 전파되는 coupling을 의심
+- ASR-05 proposal: non-Agent change당 평균 ≤ **3.0**
+  - Model/Context 변화는 보통 0~2
+  - persistent schema evolution은 State + Repository + Migration의 3개 변경이 정당할 수 있음
+
+이는 아직 11-C target approval 전의 proposal이다.
+
+상세: [Change Locality rationale](./asr04-asr05-change-locality-rationale.md).
+
+## 6. 사용자가 지금 준비할 필요가 없는 것
+
+현재 단계에서는 사용자가 local model server, API key, 특정 GPU 또는 VIA candidate 실행환경을 준비할 필요가 없다.
+
+추후 actual measurement 단계에서는 하나의 reference dependency를 고정한다.
+
+- Windows 11
+- Qwen3-8B Q4_K_M frozen artifact
+- non-thinking
+- frozen llama.cpp release/commit + CUDA
+- local OpenAI-compatible `llama-server`
+- concurrency 1
+- canonical context/workload
+- warm/cold 상태 분리
+
+지금은 공식 tokenizer snapshot + 공개 Windows consumer GPU profile + candidate별 exact prompt/call graph로 planning estimate를 만든다.
+
+## 7. 아직 닫지 않은 것
+
+11-C로 넘어가기 전 사용자 승인 또는 추가 리뷰가 필요한 핵심은 다음이다.
+
+1. ASR-01의 6개 latency request class와 Macro-p95 방식
+2. ASR-04 target proposal 2.0 및 ASR-05 target proposal 3.0
+3. 11-A/B의 현재 measurement/test definition을 review-complete로 볼지 여부
+
+그 외 canonical TC membership, clarification rule, grounding oracle, restart/race stub 방식, safety 24 denominator, Windows Qwen planning profile 선택은 이번 리뷰 반영안으로 문서화했다.
