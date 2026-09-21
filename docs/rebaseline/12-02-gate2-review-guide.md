@@ -1,63 +1,97 @@
-# 12-02. Gate 2 — Core 6개 DP의 후보 구조 리뷰
+# 12-02. Gate 2 — Core Architecture Candidate Review
 
-> **G2-DESIGN-v1 / 2026-09-22 / Gate 2 리뷰본 작성 완료·사용자 승인 전**
-> Git source snapshot: `cf21c7361d392b30ad95cd8ec48a7d97d847a19b`.
-> Gate 1의 Core 6 / Supporting 3, Working ASR 12개, UC18·variation94·Change24 유지.
-> **목적: 합리적인 두 구조의 trade-off를 검증할 수 있는 후보를 동결하는 것. 아직 점수·승자·최종 Architecture 없음.**
+> **G2-DESIGN-v1.1 / 2026-09-22 / 자체 리뷰 및 사용자 지적 반영본 · 사용자 승인 전**
+> Source snapshot: `e9646d4a074afb7a3cf4e85f5ca48c939a697fbf`.
+> 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 아직 점수·승자·최종 Architecture 없음.
 
-## 1. 무엇을 검토하는가
+## Working ASR 빠른 참조
 
-이제 family 이름만 비교하지 않는다. 각 DP에 대해 **실제 책임 위치, 소비 계약, 상태 writer, 정상/오류/재시작 경로, C/I/S/D ID, 공통 보완책, 측정 지점, 동점 가능성**을 작성했다. Candidate pair의 비교 범위를 한정하되, 실무에서 hybrid가 존재한다는 이유로 무조건 금지하지 않는다.
+| ID | ASR / QA 의미 |
+|---|---|
+| **W-01** | **Conversational Reaction Responsiveness** — 사용자가 말한 뒤 의미 있는 첫 응답이 얼마나 빨리 시작되는가 |
+| **W-02** | **Task Handoff Responsiveness** — 사용자 요청이 실제 Agent 접수+복구 가능한 연결까지 얼마나 빨리 도달하는가 |
+| **W-03** | **Task Feedback Responsiveness** — Agent 상태·질문·결과가 준비된 뒤 사용자에게 얼마나 빨리 보이는가 |
+| **W-04** | **Concurrent Task Performance Isolation** — 여러 Task가 동시에 있을 때 foreground 반응성이 얼마나 덜 저하되는가 |
+| **W-05** | **Task Completion Effectiveness** — referent·요청·Task·Agent 연결 의무를 얼마나 정확히 만족하는가 |
+| **W-06** | **Interaction & Task Continuity** — modality/connection/Task 전환에도 맥락·identity를 얼마나 보존하는가 |
+| **W-07** | **Agent Ecosystem Interoperability & Substitutability** — Agent 추가·교체 시 VIA 변경이 얼마나 국소적인가 |
+| **W-08** | **Evolvability & Maintainability** — Model/Context/Storage 변화가 VIA 구조에 얼마나 적게 퍼지는가 |
+| **W-09** | **Recovery Timeliness & Recoverability** — 장애·재시작 뒤 올바른 Task control을 얼마나 빨리 회복하는가 |
+| **W-10** | **Dependency Failure Containment & Graceful Degradation** — 한 dependency 장애가 무관 기능까지 얼마나 덜 전파되는가 |
+| **W-11** | **Privacy Exposure Minimization** — 민감 Context를 외부 dependency에 얼마나 최소 범위로 노출하는가 |
+| **W-12** | **Action & Access Safety** — 잘못된 접근·반출·승인 연결을 정확히 차단하는가 |
 
-| DP 상세 문서 | A | B | 점수 전에 확인할 핵심 |
+## 1. 자체 리뷰 후 Gate 2 비교 대상 — 4개
+
+처음 상세화한 6개 중 두 개를 다시 탈락시켰다. **INT-DP01은 S2S Direct Fast Path를 고정 원칙으로, TASK-DP02는 event+query 혼합 동기화 tactic으로 내린다.** 둘 다 유효한 설계 관심사지만 현재 요구에서는 강한 상호배타적 Architecture 대안이 아니다.
+
+| Gate 2 DP | A | B | 중요하게 보는 ASR |
 |---|---|---|---|
-| [INT-DP01](./12-gate2/INT-DP01.md) | Voice가 음성 direct release | Core가 Voice/Text release 통합 | B에 불필요한 LLM/IPC를 강제하지 않았는가 |
-| [IR-DP01](./12-gate2/IR-DP01.md) | 통합 semantic output | 3개 독립 semantic stage | B도 원문·provenance·수정 경로를 갖는가 |
-| [TASK-DP01](./12-gate2/TASK-DP01.md) | stateless transaction handlers | durable Task별 writer/mailbox | A도 Task별 병렬 준비, B도 같은 DB 비용을 갖는가 |
-| [AGENT-DP01](./12-gate2/AGENT-DP01.md) | edge가 수명 차이를 정규화 | Core typed handler가 해석 | 두 안 모두 동일 기능 보존·미지원 보고를 하는가 |
-| [TASK-DP02](./12-gate2/TASK-DP02.md) | query 완료가 정상 갱신 trigger | event가 정상 갱신 trigger | 같은 Agent truth와 조회 보완을 사용하는가 |
-| [EXEC-DP01](./12-gate2/EXEC-DP01.md) | 동일 process 내 논리 격리 | integration worker process 격리 | 같은 adapter code·fault·총 resource budget인가 |
+| [IR-DP01](./12-gate2/IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | W-01 대화 반응성, W-02 인계 반응성, W-05 요청 처리 충실도, W-08 변경 용이성 |
+| [TASK-DP01](./12-gate2/TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | W-02 인계, W-04 동시 Task 격리, W-08 변경 용이성, W-09 복구 |
+| [AGENT-DP01](./12-gate2/AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | W-02 인계, W-03 feedback, W-07 Agent 교체성, W-08 변경 용이성 |
+| [EXEC-DP01](./12-gate2/EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | W-01 대화 반응성, W-04 동시성, W-09 복구, W-10 장애 격리 |
 
-전체 후보는 [공통 계약과 Element 원장](./12-gate2/common-contract.md)과 각 DP 선택의 합집합이다. 다른 DP의 참조 선택은 시험을 위한 좌표일 뿐 최종 승자가 아니다. **12개 pair-labelled 후보는 7개 고유 configuration**으로 조립되며 동일 reference 실행을 중복 실적으로 세지 않는다.
+이 네 개는 각각 **semantic authority topology / Task single-writer model / Agent contract boundary / OS process fault boundary**라는 서로 다른 Architecture 축을 결정한다. Supporting DP인 CTX-DP01/02, SEC-DP01은 Master Catalog에 유지하되 본 Gate 2의 우선 비교에서 제외한다.
 
-## 2. 이 단계에서 강화한 부분
+## 2. DP에서 내린 두 주제
 
-### 실제 비교 경로
+### FP-INT01 — S2S Direct Fast Path를 고정 원칙으로 둔다
 
-INT는 'Core box를 하나 지나면 느림'을 가정하지 않는다. IR은 단순 stage 수가 아니라 실제 prompt/출력·재조회·critical path를 비교한다. TASK는 중앙 서비스와 actor에 서로 다른 저장소를 주지 않는다. AGENT는 A의 capability를 공통분모로 잘라 B의 기능을 유리하게 만들지 않는다.
+Voice 입력은 Voice Runtime과 S2S Model을 거친다. S2S가 **자체 지식+Conversation만으로 직접 응답 가능하다고 유효하게 판단한 경우**, Core에 “허락”을 받으러 갔다 돌아오는 B 구조는 현재 요구에서 추가적인 제품 가치를 증명하지 못한다. 따라서 S2S Direct Response는 Voice Runtime이 release하고, Core는 필요한 요청만 escalation받으며 Conversation 기록·Task 연계는 공통 계약으로 보장한다.
 
-TASK-DP02에서 query/event는 진실의 서로 다른 소유자가 아니다. Agent가 실행 사실을 소유하며, 두 후보는 그 사실을 VIA에 반영하는 정상 경로가 다르다. EXEC는 같은 연동 코드가 어디서 실행되는지를 바꾸고 실제 local abort의 host 경계를 관찰한다.
+상세 rationale은 [INT-DP01 note](./12-gate2/INT-DP01.md)에 보존한다. 이것은 W-01을 무조건 좋게 만들기 위한 선택이 아니라 **비교 가치가 약한 dominated candidate를 제거한 것**이다.
 
-### 유지한 제품 경계
+### TASK-T01 — Event-first + Query Reconciliation을 공통 tactic으로 둔다
 
-Voice Connection/Conversation/Request/Task/Agent Execution은 계속 구분한다. S2S Direct Response도 기록하며, 기존 Task로 이어지는 follow-up과 compound 네 관계를 유지한다. User Memory·restart·승인은 후보가 직접 담당하고 시험기가 정답 state를 보충하지 않는다.
+실제 Agent protocol은 query와 event/stream을 함께 제공할 수 있다. A2A도 polling, streaming, push를 **complementary mechanisms**로 설명한다. 따라서 “query만 vs event만”을 Architecture family처럼 비교하지 않는다.
 
-MODEL/STATE/ORCH를 새 주요 DP로 만들지 않는다. Supporting 3개는 공통 참조 구현으로 유지하고, 이 선택에 결과가 민감하면 후속 교차 확인 대상으로 남긴다. 원천 요구·metric/target·0~5 band를 바꾸지 않는다.
+VIA의 기본 tactic은 **stream/event를 지원하면 low-latency update에 사용하고, query를 reconnect/gap/current-state reconciliation 및 지원 제한 Agent의 fallback으로 사용**한다. 지원 여부·polling cadence·cursor/reconnect는 Agent profile에 남긴다. 상세 rationale은 [TASK-DP02 note](./12-gate2/TASK-DP02.md)에 보존한다.
 
-## 3. 예상 trade-off와 반증 조건
+## 3. 네 DP에 대한 자체 리뷰 결과
 
-| DP | 우선 확인할 W-ASR | 확인하려는 trade-off | 동점/반대 결과도 인정 |
-|---|---|---|---|
-| INT | W-01 대화 / W-02 인계 / W-08 변경 | 직접 release 경로와 공통 route 관리 범위 | Core inline 경유면 지연 차이가 작을 수 있음 |
-| IR | W-01 / W-02 / W-05 충실도 / W-08 | joint evidence·호출 경로와 단계별 변경·수정 | 통합 prompt/repair가 더 비싸질 수도 있음 |
-| TASK-01 | W-02 / W-04 동시성 / W-08 / W-09 복구 | transaction coordination과 Task별 ownership | 같은 DB 병목이면 동시성 동점 가능 |
-| AGENT | W-02 / W-03 피드백 / W-07 교체 / W-08 | edge 적응 책임과 Core capability 해석 | 공통 native client만 바뀌면 변경량 동점 가능 |
-| TASK-02 | W-03 / W-04 / W-07 / W-09 | query 대기·부하와 stream 복구·순서 계약 | 짧은 polling/동일 reconciliation이면 차이가 작음 |
-| EXEC | W-01 / W-04 / W-09 / W-10 격리 | 직접 호출 비용과 fatal fault 영향 범위 | 빠른 재시작이면 W-10도 둘 다 100% 가능 |
+### IR-DP01 — 유지, 단 W-05는 Model 의존적이다
 
-이 표는 Primary 선정이나 성능 결과가 아니라 **사전 가설**이다. 12개 전수 raw metric을 보존하고 평균·모델 성능을 p95 실측처럼 표시하지 않는다. 발표 문구는 실제 trace/변경 원장이 뒷받침할 때 확정한다.
+같은 Qwen reference Model이라도 한 번에 joint decision을 내릴 때와 3개 stage로 나눌 때 실제 정확도는 달라질 수 있다. **그 방향은 Architecture만으로 예측할 수 없고 Model의 structured reasoning 능력에 상당 부분 의존한다.** 따라서 W-05를 “stage형이 더 정확하다/부정확하다”는 논리로 쓰지 않고 실제 동일 Model·동일 corpus 결과로만 평가한다.
 
-## 4. 상태와 실행 가능성
+Architecture 자체가 직접 바꾸는 것은 prompt/call critical path와 semantic contract의 변경 국소성이다. 따라서 W-01/W-02/W-08은 강한 구조 인과, W-05는 **model-dependent empirical discriminator**로 취급한다.
 
-**설계 리뷰 가능과 실제 benchmark 실행 가능은 다르다.** 이번에 준비한 것은 6개 pair의 상세 구조, 전수 Element 조립, 12개 W와 24 change의 빈 원장, 문서·구조 검증 도구다. 실제 Rust 후보, Windows 계측, 모델 inference는 아직 수행하지 않았다.
+### TASK-DP01 — 유지, 단 ‘Agent harness의 두 표준 형태’라고 말하지 않는다
 
-특히 base repository에는 11-D가 참조하는 `working12/baseline.json`이 없고, 실제 S2S 입력 전사/시각 API와 모델 실행 digest도 미확인이다. 이런 공백을 0점이나 성공으로 채우지 않았다. 상세 [근거·실행 준비 원장](./12-gate2/evidence-and-readiness.md)에 담당 작업과 확인 조건을 남겼다.
+A는 일반적인 shared service+durable store에 가깝고, B는 workflow/actor 계열의 **per-execution durable owner**에 가깝다. LangGraph는 thread/checkpointer 기반 shared state를 제공하고, Temporal은 Workflow Execution별 durable Event History와 복구 가능한 실행 단위를 제공한다. 이는 두 구조 family가 실무적으로 존재한다는 참고이지, “모든 Agent harness가 A/B 중 하나”라는 표준 분류는 아니다.
 
-검증 도구: `python benchmark/rebaseline/gate2/catalog_check.py --output results/gate2-review`.
-이 명령은 설계 ID/조합/coverage와 빈 원장을 검증·생성하며 candidate 성능을 측정하지 않는다.
+VIA는 여러 async Task, cancel/race, restart reconnect를 직접 소유하므로 이 선택이 실제 Task supervision Architecture에 의미가 있다. 두 안 모두 같은 DB/persistence 조건으로 비교한다.
 
-## 5. 사용자 Gate 2 리뷰 포인트
+### AGENT-DP01 — 유지, protocol 선택과 별개다
 
-**① 두 안 모두 실제 채택할 만하게 설계됐는가, ② 결정 범위와 공통 보완책이 공정한가, ③ 중요 ASR에 대한 구조 인과가 납득되는가**를 확인한다. Component 이름 변경만 있는 비교나 손쉽게 동일해지는 두 안은 이 단계에서 고친다.
+질문은 “A2A냐 custom protocol이냐”가 아니다. **어떤 wire protocol을 쓰더라도 Agent별 capability/lifecycle 차이를 어디에서 semantic하게 흡수할 것인가**다. 같은 A2A에서도 polling/streaming/push capability와 Message/Task lifecycle 차이가 존재할 수 있다.
 
-승인 전에는 점수를 산출하지 않는다. 승인 후에는 먼저 실행 준비 공백을 닫고 고정된 후보/자산 revision으로 12-A 전수 sensitivity sweep을 수행한다. 최종 선택·weakness·tactic은 그 결과 이후다.
+따라서 protocol binding은 외부 interface의 한 입력이고, 이 DP는 VIA Core가 provider variation을 보게 할지 integration edge에서 canonicalize할지를 결정한다. 모든 Agent가 동일한 엄격한 lifecycle profile을 보장한다면 이 DP의 trade-off는 작아질 수 있으며 그 경우 결과도 동점으로 인정한다.
+
+### EXEC-DP01 — 유지, Rust/Tokio에서 실현 가능하다
+
+Rust라고 단일 process여야 하는 것은 아니다. Tokio는 child process를 비동기 관리할 수 있고 Windows named pipe용 async API도 제공한다. 따라서 A는 **한 process 안의 Tokio task/queue 격리**, B는 **Core process + integration worker process를 Tokio로 supervise하고 named pipe 등 IPC로 연결**하는 현실적인 비교다.
+
+Tokio가 process isolation 자체를 제공하는 것은 아니다. **격리는 Windows OS process boundary이고 Tokio는 child lifecycle과 async IPC를 관리하는 실행 도구**다. B의 IPC/serialization/restart 비용을 숨기지 않는다.
+
+## 4. 공정한 비교 기준
+
+공통 계약과 전체 C/I/S/D는 [common-contract](./12-gate2/common-contract.md)를 따른다. 한 DP 비교에서는 해당 축만 바꾸며 Model/Agent fixture, Context·Policy 조건, DB와 worker budget을 동일하게 유지한다.
+
+- IR: 같은 Model/corpus. A에 작은 prompt, B에 일부러 많은 call을 강제하지 않음.
+- TASK: A에 전역 mutex를 넣지 않고 B에 별도 DB를 주지 않음.
+- AGENT: 두 안이 동일 required capability를 보존.
+- EXEC: 같은 integration code/fault를 host 경계만 다르게 실행.
+
+4 pair는 **5개 고유 configuration**(공통 reference + 각 DP의 B variant)으로 조립한다. 다음 단계에서 결론을 뒤집을 수 있는 IR×AGENT, TASK×EXEC 같은 작은 교차 확인만 추가한다.
+
+## 5. 결과 상태와 사용자 리뷰 포인트
+
+Gate 2에서 아직 필요한 리뷰는 네 가지다.
+
+1. IR의 1회 통합 판단 vs 단계별 판단이 실제 VIA semantic responsibility를 잘 나타내는가.
+2. TASK의 shared writer vs per-Task durable writer가 지나치게 특수하거나 불공정하지 않은가.
+3. AGENT의 normalization boundary가 protocol 선택과 명확히 분리되는가.
+4. EXEC의 same-process vs separate-process가 Windows/Rust 구현에서 현실적인가.
+
+이 네 구조가 납득되면 C/I/S/D와 metric ledger를 Gate 2 승인본으로 freeze하고 12-A sensitivity 측정 준비로 넘어간다.
