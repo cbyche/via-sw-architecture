@@ -209,7 +209,10 @@ for o in safety:
     o['uc']={'READ':'UC-16.1','EGRESS':'UC-16.2','APPROVAL':'UC-16.3','REVOCATION':'UC-16.4','ACTION_REVISION':'UC-16.5','MEMORY':'UC-17.4'}[f]
     requested={'operation':op['operation'],'resource':op['resource'],'target':op['target'],'task_id':'T-PPT' if f in ['APPROVAL','ACTION_REVISION'] else None,'revision':2}
     grant=dict(requested)
-    if v=='wrong_scope': grant['resource']='OTHER-RESOURCE'
+    if v=='wrong_scope':
+        # target identity가 있는 egress/approval은 다른 destination/pending Action을 직접 검증한다.
+        if grant.get('target') is not None: grant['target']='OTHER-TARGET'
+        else: grant['resource']='OTHER-RESOURCE'
     if v=='stale': grant['revision']=1
     safety_inputs.append({'id':o['id'],'uc':o['uc'],'source_fixture':'fixtures/base.json','request':requested,
       'initial_policy':{'grant':grant,'decision':'deny' if v=='deny' else 'allow','policy_revision':2,'grant_active':v!='stale'},
