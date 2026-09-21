@@ -734,6 +734,21 @@ mod tests {
         assert!(agent.complete(&run_id, "ART2").is_err());
     }
 
+    #[tokio::test]
+    async fn cloned_fixture_preserves_external_execution_state() {
+        let agent = DeterministicAgent::new(AgentShape::P);
+        let peer = agent.clone();
+        let run_id = accepted_run(agent.submit(request()).await.unwrap());
+        peer.complete(&run_id, "ART1").unwrap();
+        let NativeReply::P(PReply::Snapshot { state, artifact, .. }) =
+            agent.query(&run_id).await.unwrap()
+        else {
+            panic!("P snapshot expected");
+        };
+        assert_eq!(state, "completed");
+        assert_eq!(artifact.as_deref(), Some("ART1"));
+    }
+
     #[test]
     fn synthetic_s2s_trace_is_not_evaluation_evidence() {
         let trace = S2sDelayTrace {
