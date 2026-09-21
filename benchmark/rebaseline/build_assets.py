@@ -159,6 +159,7 @@ def auto_category(cid,asr,text):
  return 'GENERAL'
 
 def make_obligations(cid,required,forbidden,asrs):
+ if not asrs: return []
  specs=multi_obligation_specs.get(cid)
  if specs is None:
   if len(asrs)>1: raise ValueError('Missing multi-ASR obligation mapping: '+cid)
@@ -233,7 +234,7 @@ dump(B/'fixtures/patches.json',patches)
 cases=[]; oracles={};results=[]; obligation_catalog=[]
 for s,title,utterance,patch,required,forbidden,asrs in rows:
  uc='UC-'+s;cid='TC-'+s
- a=[f'ASR-{int(n):02d}' for n in asrs.split(',')]
+ a=[f'ASR-{int(n):02d}' for n in asrs.split(',') if n]
  obligations=make_obligations(cid,required,forbidden,a)
  obligation_catalog.extend([{'tc':cid,**o} for o in obligations])
  cases.append({'id':cid,'uc':uc,'title':title,'primary_asrs':a,'modality':'text' if 'text' in patch or patch=='text' else 'voice_or_event',
