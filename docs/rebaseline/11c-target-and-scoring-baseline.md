@@ -149,8 +149,10 @@ Strict pass 원자료를 함께 공개하여 95% 평균이 일부 심각한 TC �
 ### Execution protocol
 
 - ASR-02와 동일한 5-repeat semantic execution rule
+- fixed counterfactual sensitivity variant가 있는 TC는 base/variant degree를 먼저 평균하여 하나의 TC degree로 사용
 - modality/connection/task/run/artifact/pending-interaction의 identity를 trace에서 확인
 - 같은 TC가 ASR-02와 겹치더라도 실행은 한 번, obligation은 ASR tag에 따라 별도 판정
+- opaque nonce/run/artifact mapping으로 강한 LLM의 semantic recovery를 차단
 - strict continuity PASS를 secondary evidence로 보존
 
 ### Target rationale
