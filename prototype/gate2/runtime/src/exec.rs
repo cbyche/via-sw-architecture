@@ -75,12 +75,29 @@ pub struct ProcessBridge {
 
 impl ProcessBridge {
     pub async fn spawn(worker: impl AsRef<Path>) -> anyhow::Result<Self> {
-        let mut child = Command::new(worker.as_ref())
+        let command = Command::new(worker.as_ref());
+        Self::spawn_command(command, worker.as_ref()).await
+    }
+
+    pub async fn spawn_with_state_file(
+        worker: impl AsRef<Path>,
+        state_file: impl AsRef<Path>,
+    ) -> anyhow::Result<Self> {
+        let mut command = Command::new(worker.as_ref());
+        command.arg("--state-file").arg(state_file.as_ref());
+        Self::spawn_command(command, worker.as_ref()).await
+    }
+
+    async fn spawn_command(
+        mut command: Command,
+        worker: &Path,
+    ) -> anyhow::Result<Self> {
+        let mut child = command
             .stdin(std::process::Stdio::piped())
             .stdout(std::process::Stdio::piped())
             .kill_on_drop(true)
             .spawn()
-            .with_context(|| format!("spawn integration worker {}", worker.as_ref().display()))?;
+            .with_context(|| format!("spawn integration worker {}", worker.display()))?;
         let stdin = child.stdin.take().context("worker stdin")?;
         let stdout = child.stdout.take().context("worker stdout")?;
         Ok(Self {
