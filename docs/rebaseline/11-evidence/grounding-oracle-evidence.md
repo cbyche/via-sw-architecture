@@ -39,32 +39,43 @@ Interaction Grounding은 가능한 경우 픽셀 근사보다 **UI/object identi
 - COCO object detection evaluation은 IoU 0.50, 0.75 및 0.50:0.95 범위를 사용한다.
 - https://cocodataset.org/#detection-eval
 
-## 3. Timing — 작은 동시성 window를 강제하지 않는다
+## 3. Timing — 고정 시간 tolerance를 두지 않는다
 
-Speech와 pointing/gesture는 정확히 동시에 발생하지 않는다. Multimodal HCI 연구에서는 gesture/pen 입력이 speech보다 먼저 발생하는 sequential pattern이 흔하다.
+Speech와 pointing/gesture는 관련되어 있지만 정확히 동시에 발생한다고 가정할 수 없다.
 
-Oviatt et al., CHI 1997의 multimodal temporal study에서는 sequential pen/speech input의 lag가 평균 약 1.4초였고, 70%가 2초 이내, 88%가 3초 이내, 관측된 100%가 4초 이내였다.
+1997년 Oviatt 연구는 multimodal HCI의 중요한 초기 근거이지만 pen+speech 및 당시 click-to-speak interface의 관찰값이므로, 그 연구에서 나온 최대 lag를 **현재 VIA의 4초 requirement로 직접 사용하는 것은 부적절하다.**
 
-따라서 VIA 시험에서는 임의의 ±100ms/±500ms를 정답 기준으로 두지 않는다.
+최근 연구도 핵심 방향은 재확인한다.
 
-고정 규칙:
-
-```text
-candidate evidence window
-= [User Turn 시작 - 4초, User Turn 종료]
-
-oracle
-= fixture의 실제 source event timestamp/order
-  + deictic expression의 source timestamp
-  + target identity
-```
-
-즉 4초는 "4초 안이면 모두 같은 지칭"이라는 matching tolerance가 아니라, **필요한 interaction evidence를 버리지 않기 위한 최소 history retention window**이다. 최종 target 판정은 event ordering과 identity로 한다.
+- 2023 JSLHR 연구는 referential/deictic gesture를 포함한 gesture stroke가 speech의 의미·prosodic prominence와 긴밀하게 정렬되는 경향을 보고한다.
+- 2024 Frontiers 실험은 gesture stroke가 관련 speech와 **동시 또는 선행**하는 패턴이 일반적이며, 원래 위치보다 500ms 선행시킨 조건은 synchronized 조건과 유의한 차이가 없었던 반면 500ms 지연 조건은 처리에 불리할 수 있음을 보였다.
 
 근거:
-- Oviatt et al., CHI 1997, Integration and Synchronization of Input Modes during Multimodal Human-Computer Interaction
-- https://dl.acm.org/doi/10.1145/258549.258821
-- 최근 gesture/speech timing 연구도 gesture onset/stroke가 lexical affiliate보다 선행하는 경향을 보고한다.
+- Florit-Pons et al., 2023: https://doi.org/10.1044/2022_JSLHR-22-00451
+- Nirme et al., 2024: https://doi.org/10.3389/fpsyg.2024.1345906
+- Oviatt et al., 1997은 historical background로만 유지: https://dl.acm.org/doi/10.1145/258549.258821
+
+하지만 이 최근 연구들도 desktop pointer/selection + speech 시스템에 적용할 **보편적인 ±N ms 또는 N초 threshold**를 제시하지 않는다.
+
+따라서 VIA scoring에서는 시간 허용오차를 만들지 않는다.
+
+    oracle
+    = fixture의 source event timestamp/order
+    + deictic expression의 source timestamp/order
+    + target identity / hit-test result
+
+Candidate는 제공된 timestamped interaction timeline에서 올바른 target을 찾아야 한다. transcript가 늦게 도착했다는 이유로 transcript-arrival 시각의 pointer snapshot을 정답으로 사용하면 FAIL이다.
+
+### Interaction history retention
+
+Retention horizon은 correctness threshold와 분리한다.
+
+- 현재 canonical fixture의 pre-turn interaction은 최대 약 600ms 전에 발생한다.
+- Test Case는 필요한 source event를 모두 candidate input timeline에 제공한다.
+- 실제 제품의 ring-buffer retention 길이는 Architecture/implementation parameter이며 **이번 ASR score의 고정 4초 requirement가 아니다.**
+- 이후 더 긴 select-then-speak 간격을 robustness variant로 추가하려면 candidate 결과를 보기 전에 별도 rebaseline으로 고정한다.
+
+즉 이번 평가가 검증하는 것은 “4초를 저장하는가”가 아니라 **필요한 timestamped evidence를 잃지 않고 올바른 speech/deictic event와 연계하는가**이다.
 
 ## 4. VIA Test Case에 적용
 
@@ -76,6 +87,6 @@ oracle
 
 ## 5. 한계
 
-- 4초 값은 자연스러운 모든 사용자 행동의 상한을 보장하는 제품 SLA가 아니다.
-- 실제 Windows 사용자 연구가 확보되면 history length sensitivity를 재검증할 수 있다.
+- 현재 연구 문헌에서 VIA에 그대로 적용할 수 있는 보편적인 temporal threshold는 확인하지 못했다.
+- retention horizon과 referent matching correctness를 같은 숫자로 취급하지 않는다.
 - IoU 0.50은 object identity를 얻을 수 없는 synthetic fallback의 최소 criterion이다. 실제 UI Accessibility tree/object handle이 있으면 identity가 우선한다.
