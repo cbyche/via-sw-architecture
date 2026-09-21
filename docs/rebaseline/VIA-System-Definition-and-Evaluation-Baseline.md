@@ -18,28 +18,43 @@
 | 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 작성 완료 · 05와 정합성 보완 |
 | 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | 작성 완료 · 흐름과 제어 의미 보완 |
 | 5 | [Representative Use Cases](./05-representative-use-cases.md) | 검토 완료 · 기준선 확정 |
-| 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 작성 완료 · 06/07 공동 검토본 |
-| 7 | [Intentional Variables](./07-intentional-variables.md) | 작성 완료 · 06/07 공동 검토본 |
-| 8 | Architecture Significant Requirements | 예정 |
+| 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 검토 완료 · 공통 비교 조건 확정 |
+| 7 | [Intentional Variables](./07-intentional-variables.md) | 검토 완료 · 24개 변경 집합 확정 |
+| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 작성 완료 · 사용자 검토본 |
 | 9 | ASR ↔ UC / Evolution Scenario Mapping | 예정 |
 | 10 | Architecture Element Definition | 예정 |
 | 11 | Test Case Catalog | 이후 작성 |
 | 12 | Architecture Decision Points | 이후 작성 |
 
-## 06·07 공동 검토 안내
+## 08 검토 안내
 
-**06은 같은 비교에서 고정할 조건, 07은 Architecture가 대응해야 할 변화이다.** 제품 요구와 내부 설계 선택은 두 문서에서 임의로 바꾸지 않는다.
+08은 01~07에서 품질 후보를 도출하고 중요도와 SW 구조적 난이도를 각각 판단한다. 특정 후보 Architecture나 기존 QA 목록을 정답으로 놓지 않는다.
 
 | 읽을 부분 | 확인할 내용 |
 | --- | --- |
-| 06 §6.2~6.3 | 고정/변화 짝 비교표, Windows·언어·사용자·작업량 등의 평가 제안 |
+| 08 §8.2~8.4 | 제품 관심사, 중요도/난이도 기준, 전체 QA 후보의 선정 이유 |
+| 08 §8.5 | 정량 비교 5개와 대표 지표 요약 |
+| 08 §8.6~8.9 | 지연·화면/업무 정확도·모델/Agent 변경 요소의 채점 범위와 공정성 |
+| 08 §8.10 | 복합 요청·연속성·복구·권한·상태 정합성의 필수 설계 요구 |
+| 08 §8.11~8.12 | 사고실험의 반례와 한계, 09~12의 평가 준비 및 동결 순서 |
+
+**08은 선정·측정 정의의 검토본이다.** Architecture별 점수, 후보 승패, 제품 목표 수치 또는 Test Case 실행 완료를 선언하지 않는다. ASR이 모두 점수표 항목인 것은 아니며, 필수 설계 요구도 책임과 검증 근거로 다룬다.
+
+## 06·07 확정 내용
+
+**06은 같은 비교에서 고정할 조건, 07은 Architecture가 대응해야 할 변화이다.** 제품 요구와 내부 설계 선택은 두 문서에서 임의로 바꾸지 않는다.
+
+| 읽을 부분 | 내용 |
+| --- | --- |
+| 06 §6.2~6.3 | 고정/변화 짝 비교표, Windows·언어·사용자·작업량 등의 평가 기준 |
 | 06 §6.5~6.7 | 모델의 공정한 비교, VIA-only 지연의 한계, Agent 기능과 재시작 조건 |
-| 07 §7.3~7.4 | 채택·제외한 변화와 모델 8개 / Agent 7개 / Context·Memory 4개 변경 시나리오 |
+| 07 §7.3~7.4 | 모델 9개 / Agent 9개 / Context·저장 정보 6개 — 전체 24개 변경 시나리오 |
 | 07 §7.5~7.6 | 전체 집합 적용, 0개·적용 없음·처리 불가 구분, 변경 후 기능 유지 |
+| 07 §7.9 | M-09, A-08·09, C-05·06 추가 및 M-07·A-06 보완 기록 |
 
-06·07은 검토본이며 아직 사용자 승인이나 실험 완료를 뜻하지 않는다. 숫자가 있는 시험 조건은 제품의 성능 목표·사용 통계·최대 용량이 아니다. 실제 장비·모델 속도·녹음·정답 파일을 확보했다고 가정하지 않는다.
+06·07의 범위와 비교 규칙은 사용자 검토 및 보완 진행 승인에 따라 확정했다. 숫자가 있는 시험 조건은 제품의 성능 목표·사용 통계·최대 용량이 아니다. 실제 장비·모델 속도·녹음·정답 파일을 확보했다고 가정하지 않는다.
 
-이번 작성에서는 01~05를 다시 대조했으며 제품 범위를 바꿀 필요가 없어 해당 파일은 수정하지 않았다. 기존 ASR이나 주요 DP도 미리 확정하지 않았다.
+이번 07 보완 및 08 작성에서는 01~05의 제품 범위를 바꾸지 않았다. 변경 집합 24개는 새 DP 24개를 뜻하지 않으며, 기존 설계 질문에서 주요 DP를 선정하는 원칙을 유지한다.
 
 ## 05 검토 안내
 
