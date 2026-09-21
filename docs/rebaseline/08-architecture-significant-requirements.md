@@ -156,62 +156,82 @@ ASR-14는 **정보 접근·전달 권한**, ASR-15는 **특정 Action 승인 응
 
 ## E. Model Ecosystem Evolvability
 
-07의 Model change 9개를 하나의 “Model 변경 대응성” 숫자로 합치지 않는다. 변화 종류가 다른 Architecture 결합을 건드리기 때문이다.
+Model 관련 변화도 “모델 변경 대응성” 하나로 묶지 않는다. **교체 대상과 외부 contract가 달라지면 별도 ASR**로 둔다.
 
 | ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
 | --- | --- | --- | --- |
-| **ASR-16 Model Runtime Substitutability** | 같은 역할·배치 조건에서 S2S 또는 Semantic Model Runtime 제공자를 교체해도 기존 기능을 유지하면서 구조 변경 범위를 제한한다. | **changed architecture elements / model substitution (개)** | M-01·M-02 |
-| **ASR-17 Model Deployment Portability** | 같은 역할의 Model Runtime을 Cloud / Private Cloud / user PC 사이에서 이동해도 기존 기능을 유지하면서 구조 변경 범위를 제한한다. | **average changed architecture elements / deployment move (개)** | M-04~06 |
-| **ASR-18 Model Interaction Contract Adaptability** | S2S event 또는 semantic-model response lifecycle 계약이 바뀌어도 기존 기능을 유지하면서 영향 범위를 제한한다. | **average changed architecture elements / contract change (개)** | M-07~09 |
+| **ASR-16 S2S Runtime Substitutability** | 같은 배치·역할에서 S2S Runtime 제공자를 교체해도 Voice 기능을 유지하면서 구조 변경 범위를 제한한다. | **changed architecture elements for M-01 (개)** | M-01 |
+| **ASR-17 S2S Event Contract Adaptability** | S2S가 제공하는 transcript/time/correction event contract가 바뀌어도 Voice/grounding 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-07 (개)** | M-07 |
+| **ASR-18 Semantic Model Runtime Substitutability** | 같은 배치·책임에서 Semantic Model Runtime 제공자를 교체해도 Core semantic 기능을 유지하면서 구조 변경 범위를 제한한다. | **changed architecture elements for M-02 (개)** | M-02 |
+| **ASR-19 Semantic Response Contract Adaptability** | Semantic Model의 final/streaming/error/cancel response lifecycle contract가 바뀌어도 semantic 처리 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-08 (개)** | M-08 |
+| **ASR-20 Model Conversation Contract Adaptability** | Model에 대화 이력을 전달하는 방식이 explicit history 전달에서 provider conversation ID 방식 등으로 바뀌어도 VIA Conversation authority를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-09 (개)** | M-09 |
+| **ASR-21 Model Deployment Portability** | 같은 역할의 Model Runtime을 Cloud / Private Cloud / user PC 사이에서 이동해도 기능을 유지하면서 배치 관련 변경 범위를 제한한다. | **average changed architecture elements / deployment move (개)** | M-04~06 |
 
-M-03의 모델 크기·입력 한도·프로필 변화는 **regression change scenario**로 계속 평가하지만 독립 ASR로 두지 않는다. 기능 적합성 자체가 달라질 수 있고, “작은 모델일수록 좋은 Architecture” 같은 잘못된 결론을 만들 수 있기 때문이다.
+M-04~06은 변화 방향만 다르고 **같은 concern인 Model deployment location portability**를 검증하므로 ASR-21 하나로 둔다.
+
+M-03 모델 크기·입력 한도·실행 profile 변화는 change regression으로 계속 평가하지만 독립 ASR로 두지 않는다. 역할 적합성 자체가 달라질 수 있어 Architecture change impact와 Model capability 차이를 분리하기 어렵기 때문이다.
 
 ---
 
 ## F. Agent Ecosystem Evolvability
 
+Agent 변경도 add / replace / protocol / status / execution identity / user-reply / result contract를 각각 분리한다.
+
 | ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
 | --- | --- | --- | --- |
-| **ASR-19 Agent Add/Replace Impact** | 기존 protocol 계열에서 새 Agent를 추가하거나 동일 업무 Agent를 교체할 때 기존 사용자 기능을 유지하면서 구조 변경 범위를 제한한다. | **average changed architecture elements / add-or-replace (개)** | A-01·02 |
-| **ASR-20 Agent Protocol Adaptability** | 기존 protocol과 다른 protocol의 Agent를 추가하여 공존시킬 때 VIA 핵심 책임의 변경 범위를 제한한다. | **changed architecture elements for A-03 (개)** | A-03 |
-| **ASR-21 Agent Lifecycle Contract Adaptability** | 상태 제공, 실행 identity, 질문/승인 응답, 결과 전달 lifecycle 계약이 변경되어도 Task continuity와 user-facing interaction을 유지하면서 영향 범위를 제한한다. | **average changed architecture elements / lifecycle-contract change (개)** | A-04·05·08·09 |
+| **ASR-22 Agent Addability** | 기존 Agent를 유지한 채 같은 protocol 계열의 새로운 업무 Agent를 추가할 때 기존 VIA 책임의 변경 범위를 제한한다. | **changed architecture elements for A-01 (개)** | A-01 |
+| **ASR-23 Agent Substitutability** | 같은 사용자 목표를 수행하는 Agent A를 Agent B로 교체할 때 VIA Task identity와 사용자 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-02 (개)** | A-02 |
+| **ASR-24 Agent Protocol Extensibility** | 기존 protocol을 유지하면서 다른 protocol의 Agent를 추가해 공존시킬 때 VIA 핵심 책임의 변경 범위를 제한한다. | **changed architecture elements for A-03 (개)** | A-03 |
+| **ASR-25 Agent Status Contract Adaptability** | Agent 상태 제공 방식이 push event에서 query 방식 등으로 바뀌어도 Task status 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-04 (개)** | A-04 |
+| **ASR-26 Agent Execution Identity Contract Adaptability** | Agent 실행 식별 구조가 단일 handle에서 thread/run 분리 구조 등으로 바뀌어도 VIA Task↔Execution 관계를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-05 (개)** | A-05 |
+| **ASR-27 Agent Interaction Reply Contract Adaptability** | Agent clarification/approval에 사용자 답변을 반환하는 계약이 바뀌어도 해당 질문과 답변 binding을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-08 (개)** | A-08 |
+| **ASR-28 Agent Result Contract Adaptability** | Agent result가 inline result에서 artifact/reference 기반 결과 contract 등으로 바뀌어도 사용자 결과 전달과 follow-up reference를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-09 (개)** | A-09 |
 
-A-06 capability schema 확장과 A-07 authentication contract 변경은 전체 change catalog에서 계속 평가한다. 현재는 각각 capability metadata evolution과 인증 integration이라는 좁은 변화로, 별도 system-level ASR보다는 ASR-07·14 및 Agent regression analysis의 근거로 유지한다.
+A-06 capability schema 확장과 A-07 authentication contract 변경은 전체 change catalog에서 계속 평가하지만 현재는 독립 system-level ASR로 승격하지 않는다. A-06은 ASR-07 Agent Selection의 regression, A-07은 ASR-14 Context Authorization과 Agent integration regression으로 확인한다.
 
 ---
 
 ## G. Context / Persistent-State Evolvability
 
+Context provider, Interaction Context contract, persistent schema도 서로 다른 변화로 분리한다.
+
 | ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
 | --- | --- | --- | --- |
-| **ASR-22 Context Connector Adaptability** | 기존 Context 종류의 제공자를 교체·추가하거나 화면 integration contract가 바뀌어도 Context 의미와 Referent 기능을 유지하면서 변경 범위를 제한한다. | **average changed architecture elements / connector change (개)** | C-01·03·05 |
-| **ASR-23 Persistent-State Schema Evolvability** | User Memory 또는 Conversation/Task persistent record schema가 바뀌어도 기존 데이터 의미·삭제 상태·Task recovery 관계를 유지하면서 변경 범위를 제한한다. | **average changed architecture elements / state-schema change (개)** | C-04·06 |
+| **ASR-29 Context Provider Substitutability** | 같은 Context 종류에서 Provider A를 B로 교체해도 Context 의미와 사용자 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-01 (개)** | C-01 |
+| **ASR-30 Interaction Context Contract Adaptability** | 화면/앱 연동 API의 object handle·좌표·selection 표현 contract가 바뀌어도 Interaction Grounding 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-03 (개)** | C-03 |
+| **ASR-31 Context Provider Addability** | 기존 Context Provider를 유지하면서 같은 Context 종류의 새 Provider를 추가할 때 기존 기능과 identity 구분을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-05 (개)** | C-05 |
+| **ASR-32 User Memory Schema Evolvability** | 저장된 User Memory schema가 바뀌어도 기존 기억의 의미·수정·삭제 상태를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-04 (개)** | C-04 |
+| **ASR-33 Conversation/Task State Schema Evolvability** | persistent Conversation/Request/Task record schema가 바뀌어도 대화 연속성과 Task recovery 관계를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-06 (개)** | C-06 |
 
-C-02 문서 형식 추가는 계속 change catalog에서 회귀 평가하지만, 현재는 parser/format extension 성격이 더 커 별도 system-level ASR로 승격하지 않는다.
+C-02 문서 형식 추가는 Context regression으로 계속 평가하지만 현재는 parser/format extension 성격이 커 독립 system-level ASR로 승격하지 않는다.
 
 ---
 
-# 8.5 왜 23개가 너무 많은 ASR이 아닌가
+# 8.5 왜 33개가 너무 많은 ASR이 아닌가
 
-23개는 **23개의 최종 Architecture Decision**이나 **23개의 점수 가중치**를 뜻하지 않는다.
+33개는 **33개의 최종 Architecture Decision**이나 **33개의 가중 점수**를 뜻하지 않는다.
 
-ASR catalog는 시스템에 Architecture significance가 있는 atomic concern의 목록이다.
+ASR catalog는 system-wide Architecture significance가 있는 **atomic concern 목록**이다. 이름을 줄이기 위해 서로 다른 failure mode를 다시 합치지 않는다.
 
 ~~~text
-ASR Catalog 23개
+System-wide ASR Catalog 33개
         ↓
 09: UC / Change와 trace
         ↓
-12의 각 DP
+12의 각 Architecture Decision Point
         ↓
-그 DP가 실제로 크게 바꾸는 Primary ASR 3~4개 선택
+그 DP가 실제로 크게 바꾸는 Primary ASR 약 3~4개
         ↓
 나머지는 regression constraint / secondary observation
 ~~~
 
-예를 들어 Agent integration DP라면 ASR-19~21, ASR-09~11 중 일부가 Primary가 될 수 있고, Interaction Grounding DP라면 ASR-03, ASR-01, ASR-18 등이 Primary가 될 수 있다.
+예:
 
-모든 DP에 23개를 동시에 점수화하지 않는다.
+- Interaction Grounding 구조 DP라면 ASR-03, ASR-01, ASR-17, ASR-30 등이 후보 driver가 될 수 있다.
+- Task state 구조 DP라면 ASR-09~13, ASR-26, ASR-33 중 실제 인과관계가 큰 3~4개를 Primary로 선택한다.
+- Agent integration DP라면 ASR-07, ASR-22~28 중 해당 DP가 실제로 구분하는 항목만 Primary로 선택한다.
+
+모든 DP에 33개를 동시에 점수화하지 않는다.
 
 ---
 
@@ -225,12 +245,12 @@ pass rate
 ~~~
 
 - 한 시험 안에서 해당 ASR의 정답 조건을 하나라도 틀리면 fail이다.
-- 본질적으로 모호하여 clarification이 정답인 시험은 “정확히 하나를 추측”하는 것을 성공으로 세지 않는다.
+- 본질적으로 모호하여 clarification이 정답인 시험은 하나를 임의 추측하는 것을 성공으로 세지 않는다.
 - 후보 결과를 본 뒤 허용 정답을 늘리지 않는다.
 - 다른 ASR의 실패를 중복 계산하지 않도록 Test Case에서 주 채점 ASR을 지정한다.
-- 통합 UC에서는 여러 ASR을 동시에 관찰할 수 있으나, 어느 failure가 어느 ASR에 속하는지 기록한다.
+- 통합 UC에서는 여러 ASR을 동시에 관찰할 수 있으나 어느 failure가 어느 ASR에 속하는지 기록한다.
 
-ASR-03·04·05·06·07은 semantic Model의 영향을 받을 수 있다. 같은 정보와 같은 모델을 사용하면 후보가 동점일 수 있으며 **동점은 정상 결과**이다. Architecture가 정확도를 바꾼다고 주장하려면 evidence availability, identity/state access 또는 inference responsibility의 차이를 설명해야 한다.
+ASR-03~07은 semantic Model의 영향을 받을 수 있다. 같은 정보와 같은 모델을 사용하면 후보가 동점일 수 있으며 **동점은 정상 결과**이다. Architecture가 정확도를 바꾼다고 주장하려면 evidence availability, identity/state access 또는 inference responsibility의 차이를 설명해야 한다.
 
 ---
 
@@ -241,10 +261,11 @@ ASR-08~13은 단순 자연어 답변 정확도와 구분한다.
 예:
 
 - ASR-10: Agent result event의 Task binding이 맞는가?
-- ASR-12: 완료 event를 아직 받지 않았는데 “완료되었습니다”라고 말했는가?
+- ASR-11: cancel이 의도한 Task/Execution에만 전달되었는가?
+- ASR-12: 완료 event를 아직 받지 않았는데 완료라고 말했는가?
 - ASR-13: restart 뒤 동일한 외부 실행을 새 Task로 중복 시작했는가?
 
-이 영역은 **state identity, authoritative state, event correlation, persistence/recovery contract**의 Architecture 영향을 직접 확인한다.
+이 영역은 state identity, authoritative state, event correlation, persistence/recovery contract의 Architecture 영향을 직접 확인한다.
 
 고정된 Agent fixture와 event timeline을 사용하며 Agent 자체 업무 품질은 평가하지 않는다.
 
@@ -259,13 +280,13 @@ ASR-14·15는 다른 QA 장점으로 상쇄하지 않는다.
 - 거부·철회·만료·여러 pending approval을 포함한 고정 scenario를 사용한다.
 - 시험기가 미리 승인된 Context나 Action ID를 후보에게 몰래 제공하지 않는다.
 
-최종 0~5점 환산을 하더라도 **안전 위반을 허용하는 목표값을 임의로 만들지 않는다.** 목표/점수 규칙은 11에서 별도 승인한다.
+최종 0~5점 환산을 하더라도 안전 위반을 허용하는 목표값을 임의로 만들지 않는다. 목표/점수 규칙은 11에서 별도 승인한다.
 
 ---
 
 # 8.9 Evolvability ASR의 변경 요소 측정 규칙
 
-ASR-16~23은 06 FA-16의 동일 element catalog를 사용한다.
+ASR-16~33은 06 FA-16의 동일 element catalog를 사용한다.
 
 ~~~text
 한 change scenario의 변경 요소 수
@@ -282,29 +303,29 @@ Architecture element 유형은 10에서 고정한다.
 다음을 지킨다.
 
 - source file, function, crate 수를 세지 않는다.
-- 새 adapter 추가를 “기존 수정 없음”이라는 이유로 0으로 세지 않는다.
+- 새 adapter 추가를 기존 수정 없음이라는 이유로 0으로 세지 않는다.
 - 단순 endpoint/config 값 변경으로 기능이 유지되면 0개가 가능하다.
 - 기능 유지가 불가능하면 작은 변경값으로 성공 처리하지 않는다.
 - 각 change는 동일한 baseline Architecture에서 독립적으로 적용한다.
 - 변경 요소 수는 development M/M이 아니다.
 
-ASR-16~23을 하나의 “Evolvability 총점”으로 합치지 않는다. 필요하면 해당 DP가 실제로 영향을 주는 ASR만 Primary Driver로 사용한다.
+ASR-16~33을 하나의 Evolvability 총점으로 합치지 않는다. 필요하면 해당 DP가 실제로 영향을 주는 ASR만 Primary Driver로 사용한다.
 
 ---
 
-# 8.10 H/H이지만 별도 ASR로 만들지 않은 항목
+# 8.10 Change Catalog에는 남기지만 독립 ASR로 승격하지 않은 변화
 
-| Concern | 처리 |
+| Change / Concern | 처리 |
 | --- | --- |
-| Model profile/size/input limit M-03 | 기능 적합성이 먼저 달라질 수 있으므로 change regression으로 유지 |
-| Agent capability schema A-06 | Agent Selection ASR-07과 Agent change regression에서 확인 |
-| Agent authentication contract A-07 | Context Authorization ASR-14와 Agent change regression에서 확인 |
-| Document format addition C-02 | Context regression으로 유지. 현재 Architecture 전반을 좌우하는 독립 driver로는 부족 |
-| User Memory 내용 자체의 “지능적 정확도” | 저장·확인·수정·삭제는 필수 UC로 검증. 별도 memory reasoning 연구 ASR로 확대하지 않음 |
+| M-03 Model profile/size/input limit | 기능 적합성이 먼저 달라질 수 있으므로 change regression으로 유지 |
+| A-06 Agent capability schema | ASR-07 Agent Selection의 regression과 A change analysis에서 확인 |
+| A-07 Agent authentication contract | ASR-14 Context Authorization 및 Agent integration regression에서 확인 |
+| C-02 Document format addition | Context regression으로 유지. 현재 Architecture 전반을 좌우하는 독립 driver로는 부족 |
+| User Memory 내용 자체의 지능적 추론 정확도 | 저장·확인·수정·삭제는 필수 UC로 검증. 별도 memory reasoning 연구 ASR로 확대하지 않음 |
 | Resource / cost / max throughput | target hardware·budget·capacity 목표가 아직 제품 제약으로 고정되지 않아 Core ASR로 승격하지 않음 |
 | Diagnosability / operability | 모든 후보의 trace/evidence requirement로 유지하되 현재 독립 ASR을 만들 실측 운영 조건이 부족 |
 
-이들은 누락이 아니라 **ASR 선정 기준에서 의도적으로 제외한 항목**이다.
+이들은 누락이 아니라 선정 기준에 따라 **regression / supporting requirement로 유지하는 항목**이다.
 
 ---
 
@@ -325,7 +346,7 @@ ASR 하나가 너무 많은 unrelated UC를 참조하면 definition이 다시 �
 
 ## 10 — Architecture Element Definition
 
-ASR-16~23의 변경 요소 수를 공정하게 세기 위해 element granularity를 고정한다.
+ASR-16~33의 변경 요소 수를 공정하게 세기 위해 element granularity를 고정한다.
 
 또한 ASR-08~13의 state ownership과 correlation boundary를 설명할 수 있는 수준으로 element 책임을 정의한다.
 
@@ -362,10 +383,10 @@ DP마다 유리한 ASR 정의나 metric으로 바꾸지 않는다.
 
 # 8.12 이번 리뷰에서 확인할 핵심
 
-1. **ASR-01~23 각각이 한 concern만 다루는가?**
-2. 기존에 한 덩어리였던 continuity / state / safety / evolvability가 충분히 분리되었는가?
-3. H/H가 아닌 항목을 억지로 ASR로 올리거나, H/H를 측정 편의 때문에 제외하지 않았는가?
-4. 각 metric이 그 ASR의 failure만 측정하고 다른 ASR의 실패를 몰래 합산하지 않는가?
-5. 이후 DP가 이 catalog에서 실제 Primary ASR 3~4개만 선택할 수 있을 정도로 정의가 명확한가?
+1. **ASR-01~33 각각이 하나의 failure mode 또는 하나의 change type만 다루는가?**
+2. continuity / state / safety / evolvability를 이름 하나로 다시 뭉치지 않았는가?
+3. Change Scenario 하나를 ASR로 승격한 이유가 H/H 기준에 맞는가?
+4. 각 metric이 해당 ASR의 failure만 측정하고 다른 ASR 결과를 몰래 합산하지 않는가?
+5. 이후 DP에서 실제 관련 ASR 3~4개만 Primary Driver로 고를 수 있을 정도로 정의가 명확한가?
 
-현재 문서는 **ASR catalog와 metric 방향을 확정하기 위한 검토본**이다. 목표값과 0~5점 경계는 아직 정하지 않았으며 11에서 근거와 함께 동결한다.
+현재 문서는 ASR catalog와 representative metric 방향을 확정하기 위한 검토본이다. 목표값과 0~5점 경계는 아직 정하지 않았으며 11에서 근거와 함께 동결한다.
