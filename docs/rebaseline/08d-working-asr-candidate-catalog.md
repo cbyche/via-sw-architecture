@@ -1,7 +1,7 @@
 # 08-D. Working ASR Candidate Catalog
 
 > 작성일: 2026-09-21
-> 상태: **Working candidate set — 정식 rebaseline 전**
+> 상태: **Working candidate set — 12-A Architecture Sensitivity Sweep에 12개 전수 반입. 정식 rebaseline/최종 ASR 선정 전**
 > 원칙: 최종 확정 시 각 QA/ASR은 대표 Metric 하나만 사용하고 모든 DP에서 동일 target/score rule을 적용한다.
 
 ## 1. Working candidate set
@@ -91,3 +91,17 @@ Recovery와 Privacy도 같은 원칙을 적용한다.
 4. 09 UC/change mapping 재작성
 5. 11-A/B/C metric/TC/target/score rule 재동결
 6. 그 이후 12 DP 도출
+
+
+## 6. 12-A에서의 사용 방식
+
+이 12개 후보는 모두 12-A의 Architecture Sensitivity Sweep에 가져간다. 목적은 후보 결과에 맞춰 ASR을 사후 발명하는 것이 아니라, **동일한 사전 정의 Metric으로 합리적 Architecture 대안의 구조 민감성을 전수 관찰**하는 것이다.
+
+- 12개 모두 후보별 raw Metric과 0~5 score를 산출할 수 있도록 12 진입 전에 Metric/Target/Score Boundary를 동결한다.
+- 12-A에서는 12개 점수를 단일 weighted total로 합치지 않는다.
+- 각 DP에서 구조적으로 적용되지 않는 후보는 억지 숫자를 만들지 않고 `N/A — no causal applicability`로 기록한다.
+- 결과가 모두 동일한 QA는 숨기지 않는다. 해당 DP에서 non-discriminating임을 명시한다.
+- 결과를 본 뒤 특정 후보에 유리한 target/score boundary를 수정하지 않는다.
+- 어떤 ASR을 최종 DP Primary Driver로 인정할지는 사전에 고정한 Differentiation Gate를 따른다.
+
+상세 절차는 [12-00 Evaluation Method](./12-00-evaluation-method.md)를 따른다.
