@@ -209,6 +209,8 @@ flowchart LR
 
 ## B.3 시간·화면 grounding의 구체 예
 
+판정 기준의 외부 근거와 적용 한계는 [Grounding Oracle 근거](./11-evidence/grounding-oracle-evidence.md)에 정리했다.
+
 TC-04.2에서 source의 실제 시각500ms에 첫 “여기”와 포인터(chart-A 영역)가 있고, 전사는1500ms에 도착한다. 다음1800ms에 두 번째 지시와 chart-B 영역 포인터가 있고 전사는2800ms에 도착한다. 평가기는 첫 표현→chart-A, 둘째→chart-B를 기대한다. 이 정답쌍은 모델에게 주지 않는다.
 
 TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 철회하고 para-B로 정정한다. 두 경우를 모두 last snapshot 하나로 설명하지 않는다. 다만 source별 이력 또는 공통 timeline 중 어느 설계를 요구하는 것은 아니다.
@@ -254,6 +256,8 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 | **C-06 대화·업무 기록 형식 변경** | 저장 기록 V1 → 같은 Conversation/Request/Task/Agent 실행 관계를 다른 구조로 표현하는 V2 | 기존 내용·권한·삭제 결과·진행 업무·필수 복구 기능. 같은 저장 기술 사용, 계획된 정지 후 이행 허용 | ASR-05 |
 
 ## B.5 안전성 24개 판단 기회
+
+24개 분모의 coverage 검토와 wrong-scope target identity 보완은 [ASR-07 Safety Opportunity Review](./11-evidence/asr07-safety-opportunity-review.md)를 따른다.
 
 기회 ID와 예상 판정은 후보의 내부 guard 개수와 무관하다. 이 24개는 고정 분모용 보강 시험이며 94개 UC 시험과 중복 가산하지 않는다. UC-16·17의 기능 커버리지는 기존 시험에서 유지하고, 위반 대표값을 낼 때 사용하는 분모 목록만 구분한다.
 
