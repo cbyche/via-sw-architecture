@@ -118,7 +118,7 @@ for s,title,utterance,patch,required,forbidden,asrs in rows:
   'execution_status':'NOT_RUN'})
  oracles[cid]={'required_observations':required.split(';'),'forbidden_observations':forbidden.split(';'),
   'oracle_level':'structured_semantic_assertions_for_review','rule':'all required + zero forbidden; semantic content may need reviewed judgment; no string-only success',
-  'expected_disposition':'HOLD_OR_FAILURE_HANDLING' if s in ['06.2','06.3','06.4','06.5','12.4','12.5','14.5','16.5'] or s.startswith('18.') else 'GOAL_COMPLETED'}
+  'expected_disposition':'HOLD_OR_FAILURE_HANDLING' if s in ['12.4','12.5','16.5'] or s.startswith('18.') else 'GOAL_COMPLETED'}
  results.append({'case_id':cid,'candidate_id':None,'run_id':None,'asr_results':{x:None for x in a},'execution':'NOT_RUN','evidence_type':None,'observation_path':None,'duration_ms':None,'reason':None})
 dump(B/'cases.json',cases);dump(B/'oracle/expected.json',oracles);dump(B/'raw-results.template.json',results)
 # Independent scope opportunity tests; no candidate-chosen retry/check denominator.
