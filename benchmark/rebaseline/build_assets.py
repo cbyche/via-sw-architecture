@@ -157,15 +157,23 @@ with (B/'test-catalog.csv').open('w',newline='',encoding='utf-8-sig') as f:
  w=csv.writer(f);w.writerow(['TC','UC','제목','입력','초기상태/이벤트 fixture','주 ASR','필수 관찰','금지 관찰','실행상태'])
  for s,t,u,p,r,b,a in rows:w.writerow(['TC-'+s,'UC-'+s,t,u,p,a,r,b,'NOT_RUN'])
 # actual source identification for external evidence, distilled not copied pages
-profile={'id':'QC-XELITE-GENIEX-W4A16-20260921-readback','source_url':'https://huggingface.co/qualcomm/Qwen3-8B','source_locator':'Performance Summary / Snapdragon X Elite / GENIEX_QAIRT',
- 'retrieved_date':'2026-09-21','model':'Qwen3-8B','chipset':'Snapdragon X Elite','runtime':'GENIEX_QAIRT','precision':'w4a16','context_limit':4096,
- 'generation_tps':12.949668,'ttft_min_s':0.1555,'ttft_max_s':4.976,'prompt_chunk':128,
- 'input_tps_measured':None,'input_equivalent_tps_derived':128/0.1555,
- 'source_thinking_mode':'with thinking','application_thinking_mode':'non-thinking; approximation not a measured match',
- 'source_commit':'NOT_AVAILABLE','os_build':'NOT_REPORTED','cold_load_included':'NOT_REPORTED',
- 'evidence_type':'PUBLIC_BENCHMARK_NOT_VIA_MEASUREMENT','estimator':'ceil(input/128)*ttft_min+(output-1)/generation_tps',
- 'limits':['No S2S/vision inference estimate','No p95 variance from this table','No extrapolation past4096','Shared accelerator concurrency requires measured scheduler model','Source changed during retrieval: capture this row; do not combine rates across snapshots'],
- 'rejected_prior_profile':{'prompt_tps':500,'generation_tps':30,'reason':'claimed cited discussion did not establish Qwen3-8B row; withdrawn as evidence'}}
+profile={'id':'WIN11-RTX4060-QWEN3-8B-Q4KM-20260921',
+ 'source_url':'https://localllm.in/blog/ollama-vram-requirements-for-local-llms',
+ 'source_locator':'Practical VRAM Test: Ollama Performance Benchmark on RTX 4060',
+ 'retrieved_date':'2026-09-21','model':'Qwen3-8B','os':'Windows 11','gpu':'NVIDIA RTX 4060 8GB',
+ 'runtime':'Ollama / CUDA full GPU offload; exact Ollama version not reported','quantization':'Q4_K_M','context_limit':16384,
+ 'observed_input_tokens':2957,'observed_output_tokens':1225,'prompt_tps_measured':2103.19,'generation_tps':40.58,
+ 'load_duration_s':3.4705931,'prompt_eval_duration_s':1.4059591,'generation_duration_s':30.1853166,'vram_gb_approx':7.2,
+ 'source_cpu':'NOT_REPORTED','application_thinking_mode':'non-thinking reference; source benchmark thinking mode not explicitly reported',
+ 'official_model':'Qwen/Qwen3-8B','official_gguf':'Qwen/Qwen3-8B-GGUF:Q4_K_M',
+ 'gguf_revision':'6a569868d07d3bd59e8b97fb001bf8c0b254bb20',
+ 'gguf_sha256':'d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785',
+ 'tokenizer_sha256':'aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4',
+ 'tokenizer_config_revision':'895c8d171bc03c30e113cd7a28c02494b5e068b7',
+ 'evidence_type':'PUBLIC_WINDOWS_CONSUMER_GPU_BENCHMARK_NOT_VIA_MEASUREMENT',
+ 'estimator':'input/prompt_tps_measured + output/generation_tps',
+ 'limits':['No S2S/vision inference estimate','No runtime p95 from a single published run','Context-length scaling not established by this one run','Model load/queue/IPC/context/output delivery are separate spans','Shared accelerator concurrency requires measured scheduler model'],
+ 'corroboration':{'source':'https://github.com/SearchSavior/OpenArc/issues/43','hardware':'Intel Core Ultra 9 185H + RTX 4070 Laptop','runtime':'Ollama 0.12.6 CUDA','input_tokens':512,'output_tokens':128,'runs':5,'avg_ttft_s':0.19,'avg_prompt_tps':2614.20,'avg_decode_tps':44.92}}
 dump(B/'qwen-reference-profile.json',profile)
 # prompts deliberately include exact output schema in input; output is an illustrative shape, not actual inference.
 purposes=[
