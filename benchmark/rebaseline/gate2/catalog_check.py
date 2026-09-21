@@ -12,12 +12,12 @@ import re
 from pathlib import Path
 from typing import Any
 
-CORE = ("INT-DP01", "IR-DP01", "TASK-DP01", "AGENT-DP01", "TASK-DP02", "EXEC-DP01")
+CORE = ("IR-DP01", "TASK-DP01", "AGENT-DP01", "EXEC-DP01")
 WORKING = tuple(f"W-{i:02d}" for i in range(1, 13))
 CHANGES = tuple(f"{p}-{i:02d}" for p, n in (("M", 9), ("A", 9), ("C", 6)) for i in range(1, n + 1))
 ID_RE = re.compile(r"G2-([CISD])-[A-Z0-9-]+")
 META_RE = re.compile(r"<!-- gate2: (.+?) -->")
-SOURCE_SHA = "cf21c7361d392b30ad95cd8ec48a7d97d847a19b"
+SOURCE_SHA = "3f8ca1fbc76ac6c2c0e24464b76db32c441cdf76"
 
 
 def elements(text: str, source: str) -> dict[str, dict[str, str]]:
@@ -99,11 +99,10 @@ def compose(catalog: dict[str, Any], vector: dict[str, str]) -> list[str]:
 def bindings(vector: dict[str, str]) -> dict[str, Any]:
     task_writer = "G2-C-TASKSERVICE" if vector["TASK-DP01"] == "A" else "G2-C-TASKACTOR"
     return {
-        "voice_release_owner": "G2-C-VROUTE" if vector["INT-DP01"] == "A" else "G2-C-UROUTE",
-        "text_release_owner": "G2-C-TEXTROUTE" if vector["INT-DP01"] == "A" else "G2-C-UROUTE",
+        "voice_direct_release_owner": "G2-C-VOICE",
         "task_state_writer": task_writer,
         "execution_link_writer": task_writer,
-        "normal_sync_owner": "G2-C-PULLSYNC" if vector["TASK-DP02"] == "A" else "G2-C-EVENTSYNC",
+        "normal_sync_owner": "G2-C-AGENTSYNC",
         "agent_semantics_owner": "G2-C-EDGESEM" if vector["AGENT-DP01"] == "A" else "G2-C-TYPEDHANDLER",
         "integration_host": "G2-D-VIA" if vector["EXEC-DP01"] == "A" else "G2-D-INTEGRATION",
         "task_host": "G2-D-VIA",
@@ -140,9 +139,9 @@ def make_report(catalog: dict[str, Any]) -> dict[str, Any]:
                 change_ledger.append({"candidate_id": cid, "configuration_id": key, "change_id": change,
                                       "modified": None, "added": None, "removed": None,
                                       "unique_count": None, "functional_preservation": None, "evidence": "NOT_ANALYZED"})
-    if len(configs) != 7 or len(pair_records) != 12 or len(metric_ledger) != 144 or len(change_ledger) != 288:
+    if len(configs) != 5 or len(pair_records) != 8 or len(metric_ledger) != 96 or len(change_ledger) != 192:
         raise ValueError("Unexpected complete-configuration or ledger cardinality")
-    return {"version": "G2-DESIGN-v1", "source_revision": SOURCE_SHA,
+    return {"version": "G2-DESIGN-v1.1", "source_revision": SOURCE_SHA,
             "status": "DESIGN_REVIEW_ONLY", "reference_choices": reference,
             "source_hashes": catalog["source_hashes"], "elements": catalog["elements"],
             "configurations": configs, "pair_candidates": pair_records,

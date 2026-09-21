@@ -171,3 +171,17 @@ Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결
 - EXEC-DP01의 process-isolation 차이를 실제로 자극하도록 W-09/W-10에 integration-host fatal fault를 후보 결과 전에 추가.
 
 다음 단계는 Gate 2이며 Core 6개부터 “잘 만든 A vs 잘 만든 B”의 C/I/S/D 및 공통 tactic을 동결한다.
+
+
+## 12. Gate 2 자체 리뷰 보정
+
+2026-09-22 Gate 2 상세화 후 사용자 지적과 외부 protocol/runtime 근거를 바탕으로 Core DP를 다시 검토했다. **후보 실행·score 산출 전 보정**이다.
+
+- INT-DP01은 S2S Direct Response의 자연스러운 제품 흐름에서 Core 재허가 B가 강한 독립 이점을 갖지 못해 **FP-INT01 S2S Direct Fast Path 고정 원칙**으로 내림.
+- TASK-DP02는 polling/streaming/query가 실제 protocol에서 보완적으로 공존하므로 **TASK-T01 Event-first + Query Reconciliation tactic**으로 내림.
+- Gate 2 score pair는 **IR-DP01, TASK-DP01, AGENT-DP01, EXEC-DP01 4개**로 압축.
+- IR-DP01의 W-05 Completion 차이는 Model-dependent empirical evidence로만 인정.
+- TASK-DP01은 Agent harness의 표준 이분법이라고 주장하지 않고 shared-state service vs per-execution durable owner라는 일반 SW architecture family로 설명.
+- AGENT-DP01은 wire protocol 선택과 분리된 semantic contract-boundary decision으로 명시.
+- EXEC-DP01은 Rust/Tokio single-process async와 child process + Windows named-pipe IPC 모두 구현 가능하되 실제 isolation은 OS process boundary임을 명시.
+- Gate 2 review guide에 W-01~W-12 전체 ASR 이름과 짧은 의미를 병기.

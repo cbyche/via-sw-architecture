@@ -1,6 +1,6 @@
 # Gate 2 — 근거, 제약, 실행 준비 상태
 
-> 2026-09-22 / G2-DESIGN-v1. 설계 근거와 실제 후보 측정 결과를 구분한다.
+> 2026-09-22 / G2-DESIGN-v1.1. 자체 리뷰 반영. 설계 근거와 실제 후보 측정 결과를 구분한다.
 
 ## 1. 외부 1차 근거
 
@@ -13,6 +13,9 @@
 | E5 | llama.cpp server README, https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md | chat-completion·schema-constrained JSON·cache/parallel 설정을 제공한다. | 선택 Qwen artifact·실행 build가 본 작업에서 실제 검증됐다는 주장 |
 | E6 | Qwen3-Omni official README, https://github.com/QwenLM/Qwen3-Omni | text/audio 등 입력과 streaming text/speech 출력 모델임을 확인했다. | 입력 단어별 timestamp, VIA 전용 routing event, 지정 PC에서의 p95를 제공한다는 주장 |
 | E7 | Microsoft Orleans request scheduling, https://learn.microsoft.com/en-us/dotnet/orleans/grains/request-scheduling | actor별 serial execution과 async 대기/reentrancy를 구분하는 참고 사례다. | VIA가 Orleans/.NET으로 구현된다는 주장. VIA prototype은 Rust 조건 유지 |
+| E8 | LangGraph Thinking in LangGraph, https://docs.langchain.com/oss/javascript/langgraph/thinking-in-langgraph | thread state/checkpointer 기반 persistent shared state와 node-boundary durable execution 사례 | LangGraph가 VIA의 A 후보와 동일하다는 주장 |
+| E9 | Temporal Workflow Execution/Event History, https://github.com/temporalio/documentation/blob/main/docs/encyclopedia/workflow/workflow-execution/workflow-execution.mdx | Workflow Execution별 durable/recoverable execution과 Event History가 per-execution durable-owner family의 실재를 보여줌 | Temporal 자체를 VIA에 도입하거나 B 후보가 Temporal 구현이라는 주장 |
+| E10 | Tokio process / Windows named pipes, https://docs.rs/tokio/latest/tokio/process/ , https://docs.rs/tokio/latest/tokio/net/windows/named_pipe/ | Rust/Tokio에서 child process 관리와 Windows async named-pipe IPC가 가능 | Tokio가 OS process isolation을 대신하거나 IPC가 무료라는 주장 |
 
 E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기준 설계 근거이며 binary/runtime 성능 profile이 아니다. 구현 실행 때 필요한 digest는 별도 manifest에서 잠근다. 논문·표준이 VIA의 후보 수·score band를 정해줬다고 설명하지 않는다.
 
@@ -29,6 +32,8 @@ E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기
 **On-device-first와 검증 완료는 다르다.** MODEL-DP를 재개하지 않는다. Qwen3-Omni를 임의 GPU에 올렸다고 가정하거나 remote 예외를 사용자 승인 없이 최종 deployment로 확정하지 않는다. 같은 고정 S2S binding을 사용할 수 있을 때만 실제 latency 비교를 진행한다.
 
 **Privacy 관련 Gate 1 문구의 적용 한계.** 배치가 고정됐다는 이유만으로 W-11이 반드시 같아지는 것은 아니다. 실제 외부 전달 scope가 다르면 차이를 기록하되, local model context 차이를 remote exposure로 세지는 않는다. 이 명확화는 W-11 metric/target 변경이 아니다.
+
+**INT-DP01/TASK-DP02 탈락:** Gate 2 자체 리뷰에서 S2S direct fast path는 현재 제품 흐름상 자연스러운 fixed principle이고, Agent status는 query+event가 보완적으로 공존하는 것이 현실적이므로 두 축을 A/B score 대상에서 제외한다. 이는 결과를 보고 불리한 DP를 삭제한 것이 아니라 후보 실행·score 산출 전 design review 결과다.
 
 ## 3. Gate 2 산출물 상태
 

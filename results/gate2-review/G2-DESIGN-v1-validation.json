@@ -1,48 +1,15 @@
 {
-  "version": "G2-DESIGN-v1",
-  "validation_date": "2026-09-22",
-  "source_revision": "cf21c7361d392b30ad95cd8ec48a7d97d847a19b",
-  "runtime": {
-    "python": "3.13.5",
-    "purpose": "Review validator only; not the VIA prototype toolchain"
+  "version": "G2-DESIGN-v1.1",
+  "status": "STALE_AFTER_GATE2_SELF_REVIEW",
+  "previous_validation_commit": "e9646d4a074afb7a3cf4e85f5ca48c939a697fbf",
+  "reason": "Gate 2 self-review demoted INT-DP01 and TASK-DP02 from scored DP pairs. The previous 6-DP static validation no longer describes the current design.",
+  "current_expected_shape": {
+    "dp_pairs": 4,
+    "pair_candidates": 8,
+    "unique_configurations": 5,
+    "unmeasured_metric_rows": 96,
+    "unanalyzed_change_rows": 192
   },
-  "commands": [
-    "python benchmark/rebaseline/gate2/catalog_check.py --output results/gate2-review",
-    "python -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v"
-  ],
-  "unit_tests": {
-    "run": 18,
-    "failures": 0,
-    "errors": 0
-  },
-  "static_validation": {
-    "status": "PASS_STATIC_DESIGN_CHECKS",
-    "dp_pairs": 6,
-    "pair_candidates": 12,
-    "unique_configurations": 7,
-    "registered_elements": 77,
-    "unmeasured_metric_rows": 144,
-    "unanalyzed_change_rows": 288,
-    "candidate_execution": "NOT_RUN"
-  },
-  "verified_file_git_blobs": {
-    "docs/rebaseline/12-02-gate2-review-guide.md": "b5be8dc10bbcc21830c26261a254345d974821d4",
-    "docs/rebaseline/12-gate2/common-contract.md": "91a195fa4c205a3e2059bac910d52cbbb44fc2e5",
-    "docs/rebaseline/12-gate2/INT-DP01.md": "f6c8c77fc46227ab3d92ed55a8371fa8d4de52b5",
-    "docs/rebaseline/12-gate2/IR-DP01.md": "7d65388f05672fe26b2a212add6185c903720a0b",
-    "docs/rebaseline/12-gate2/TASK-DP01.md": "0a539a118202c616f8706bbe9ed2f8342b050ae8",
-    "docs/rebaseline/12-gate2/AGENT-DP01.md": "8dfb25b260313a1ed336e401dabae02a2ea0098c",
-    "docs/rebaseline/12-gate2/TASK-DP02.md": "d0b78ae1ee028a083416b996bf73d051a5879571",
-    "docs/rebaseline/12-gate2/EXEC-DP01.md": "2fb8071611498dbb08bd49ac68ecedfdaabc1d0c",
-    "docs/rebaseline/12-gate2/evidence-and-readiness.md": "116e6f80b0f12ba3da31aae7e8ede4001c22594f",
-    "benchmark/rebaseline/gate2/catalog_check.py": "948c639d22e54e01e9e9e5dc115f25a2bcbf08d9",
-    "benchmark/rebaseline/gate2/test_catalog_check.py": "e852342f5115222229c06453048ac140f0d30128",
-    "benchmark/rebaseline/gate2/README.md": "f7a9a246929c0d93cc9c854bbc376bc736734584"
-  },
-  "limitations": [
-    "No VIA candidate execution",
-    "No actual model inference or exact candidate tokenization",
-    "No measured latency, accuracy, score or architecture winner",
-    "Mermaid fences checked; diagrams not rendered by a Mermaid engine"
-  ]
+  "candidate_execution": "NOT_RUN",
+  "note": "Re-run catalog_check.py and its unit tests after this revision is materialized in an executable worktree. Do not cite the prior PASS as validation of v1.1."
 }
