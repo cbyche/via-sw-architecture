@@ -1,5 +1,6 @@
 # 12-01. DP Master Catalog — Gate 1
 
+> **Post-Gate-1 note (2026-09-22):** Gate 2 상세 리뷰에서 INT-DP01은 `FP-INT01 S2S Direct Fast Path` 고정 원칙으로, TASK-DP02는 `TASK-T01 Event-first + Query Reconciliation` tactic으로 내리는 안을 제안했다. 후보 실행·점수 산출 전 보정이며, 현재 Gate 2 리뷰본은 [12-02](./12-02-gate2-review-guide.md)를 우선한다.
 > 버전: **W12-G1-FINAL / Gate 1 최종 기준선 — 사용자 피드백 반영 완료**.
 > 범위: **25개 구조·설계 주제 분류 → 주요 비교 질문 9개**. 강한 candidate family 18개는 상세설계 전 탐색 범위이며, 확정 후보·승자·점수가 아니다.
 > 원천: 03 §3.9의 열린 구조 질문, 04의 논리 흐름, 05 UC 18개, 06 공통 조건, 07 변화 24개, 10 RC-01~18.
