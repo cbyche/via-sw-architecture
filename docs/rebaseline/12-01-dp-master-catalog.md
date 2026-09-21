@@ -13,7 +13,6 @@ DP ID는 전역 순번이 아니라 **설계 concern을 드러내는 semantic pr
 | `INT` | Interaction / Voice–Core mediation |
 | `CTX` | Context access & provisioning |
 | `IR` | Interpretation & Refinement |
-| `ORCH` | Request handling / orchestration |
 | `TASK` | Task lifecycle, supervision & feedback |
 | `AGENT` | Agent integration contract |
 | `SEC` | Policy, consent, privacy/security enforcement |
@@ -290,10 +289,10 @@ Gate 2 상세화 우선순위는 **발표 채택 순위가 아니라 실제 trad
 
 ## 7. 발표 본문 범위
 
-9개는 설계 누락을 막기 위한 **master 질문 목록**이다. 발표 본문을 10개의 긴 DP로 채우겠다는 뜻은 아니다. Gate 3 이후 실제 인과 근거와 trade-off가 명확한 묶음을 본문 4~6개로 구성하고 나머지 결정·동점·필수 기능 처리는 appendix coverage에 남길 수 있다. 중요도를 사후 바꾸거나 불리한 결과를 숨기지는 않는다.
+9개는 설계 누락을 막기 위한 **master 질문 목록**이다. 발표 본문을 9개의 긴 DP로 채우겠다는 뜻은 아니다. Gate 3 이후 실제 인과 근거와 trade-off가 명확한 묶음을 본문 4~6개로 구성하고 나머지 결정·동점·필수 기능 처리는 appendix coverage에 남길 수 있다. 중요도를 사후 바꾸거나 불리한 결과를 숨기지는 않는다.
 
 ## 8. Gate 1 승인 범위
 
-승인 요청은 구조 질문 9개와 그 boundary/상호배타성 원칙이다. 가족 A/B/C는 비교 가능성을 보여주기 위한 범위이므로 상세 후보의 승인이나 특정 설계 선택을 뜻하지 않는다. [Coverage 원장](./12-01a-scope-and-coverage-ledger.md)에는 25개 주제의 처리, RC/UC/Change 누락 점검, ASR별 가설 표를 보존했다.
+승인 요청은 구조 질문 9개와 그 boundary/상호배타성 원칙이다. 두 대안 family는 비교 가능성을 보여주기 위한 범위이므로 상세 후보의 승인이나 특정 설계 선택을 뜻하지 않는다. [Coverage 원장](./12-01a-scope-and-coverage-ledger.md)에는 25개 주제의 처리, RC/UC/Change 누락 점검, ASR별 가설 표를 보존했다.
 
 **현재: 후보별 요소 수·latency·accuracy·score·winner 모두 미산출.** 다음 Gate 2에서 정상 후보와 측정 계약을 검토한다.
