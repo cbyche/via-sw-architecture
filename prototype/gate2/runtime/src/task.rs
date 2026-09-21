@@ -2,7 +2,7 @@ use crate::repository::{ApplyError, Repository};
 use async_trait::async_trait;
 use gate2_contracts::{TaskCommand, TaskView};
 use std::{collections::HashMap, sync::Arc};
-use tokio::sync::{Mutex, mpsc, oneshot};
+use tokio::sync::{mpsc, oneshot, Mutex};
 
 #[async_trait]
 pub trait TaskAuthority: Send + Sync {
@@ -46,36 +46,71 @@ impl PerTaskSupervisors {
         }
     }
 
-    async fn sender_for(&self, task_id: &str) -> mpsc::Sender<Envelope> {
-        let mut senders = self.senders.lock().await;
-        if let Some(sender) = senders.get(task_id) {
-            return sender.clone();
-        }
-
+    async fn create_sender(&self, task_id: &str) -> Result<mpsc::Sender<Envelope>, ApplyError> {
+        let epoch = self.repository.activate(task_id).await?;
         let (tx, mut rx) = mpsc::channel::<Envelope>(64);
         let repo = self.repository.clone();
         tokio::spawn(async move {
             while let Some(envelope) = rx.recv().await {
-                let result = repo.apply(envelope.command).await;
+                let result = repo.apply_with_epoch(envelope.command, Some(epoch)).await;
                 let _ = envelope.reply.send(result);
             }
         });
-        senders.insert(task_id.to_owned(), tx.clone());
-        tx
+        Ok(tx)
+    }
+
+    async fn sender_for(&self, task_id: &str) -> Result<mpsc::Sender<Envelope>, ApplyError> {
+        {
+            let senders = self.senders.lock().await;
+            if let Some(sender) = senders.get(task_id) {
+                if !sender.is_closed() {
+                    return Ok(sender.clone());
+                }
+            }
+        }
+
+        // Do not hold the directory mutex across SQLite activation I/O.
+        let candidate = self.create_sender(task_id).await?;
+        let mut senders = self.senders.lock().await;
+        if let Some(existing) = senders.get(task_id) {
+            if !existing.is_closed() {
+                // A concurrent activation won the directory race. Its later epoch fences this
+                // candidate, so only the directory winner is returned for new commands.
+                return Ok(existing.clone());
+            }
+        }
+        senders.insert(task_id.to_owned(), candidate.clone());
+        Ok(candidate)
     }
 }
 
 #[async_trait]
 impl TaskAuthority for PerTaskSupervisors {
     async fn apply(&self, command: TaskCommand) -> Result<TaskView, ApplyError> {
-        let sender = self.sender_for(&command.task_id).await;
+        let task_id = command.task_id.clone();
+        let sender = self.sender_for(&task_id).await?;
         let (tx, rx) = oneshot::channel();
-        sender
-            .send(Envelope { command, reply: tx })
-            .await
-            .map_err(|_| ApplyError::Storage("task supervisor stopped".into()))?;
-        rx.await
-            .map_err(|_| ApplyError::Storage("task supervisor dropped response".into()))?
+        match sender.send(Envelope { command, reply: tx }).await {
+            Ok(()) => rx
+                .await
+                .map_err(|_| ApplyError::Storage("task supervisor dropped response".into()))?,
+            Err(error) => {
+                // Remove only the closed sender observed for this task. A retry creates a new
+                // activation epoch; stale actors are fenced by Repository::apply_with_epoch.
+                self.senders.lock().await.remove(&task_id);
+                let sender = self.sender_for(&task_id).await?;
+                let (tx, rx) = oneshot::channel();
+                sender
+                    .send(Envelope {
+                        command: error.0.command,
+                        reply: tx,
+                    })
+                    .await
+                    .map_err(|_| ApplyError::Storage("task supervisor stopped twice".into()))?;
+                rx.await
+                    .map_err(|_| ApplyError::Storage("task supervisor dropped retry response".into()))?
+            }
+        }
     }
 }
 
@@ -85,18 +120,15 @@ mod tests {
     use gate2_contracts::{TaskCommand, TaskOp};
     use tempfile::NamedTempFile;
 
-    async fn create(authority: &dyn TaskAuthority) -> TaskView {
-        authority
-            .apply(TaskCommand {
-                command_id: "c1".into(),
-                task_id: "T1".into(),
-                expected_revision: 0,
-                op: TaskOp::Create {
-                    goal: "demo".into(),
-                },
-            })
-            .await
-            .unwrap()
+    fn create_command(id: &str) -> TaskCommand {
+        TaskCommand {
+            command_id: id.into(),
+            task_id: "T1".into(),
+            expected_revision: 0,
+            op: TaskOp::Create {
+                goal: "demo".into(),
+            },
+        }
     }
 
     #[tokio::test]
@@ -105,6 +137,30 @@ mod tests {
         let b_file = NamedTempFile::new().unwrap();
         let a = SharedTaskService::new(Repository::open(a_file.path()).unwrap());
         let b = PerTaskSupervisors::new(Repository::open(b_file.path()).unwrap());
-        assert_eq!(create(&a).await, create(&b).await);
+        let av = a.apply(create_command("a-create")).await.unwrap();
+        let bv = b.apply(create_command("b-create")).await.unwrap();
+        assert_eq!(av.task_id, bv.task_id);
+        assert_eq!(av.revision, bv.revision);
+        assert_eq!(av.state, bv.state);
+    }
+
+    #[tokio::test]
+    async fn reactivation_fences_an_older_writer_epoch() {
+        let file = NamedTempFile::new().unwrap();
+        let repo = Repository::open(file.path()).unwrap();
+        let epoch1 = repo.activate("T1").await.unwrap();
+        let epoch2 = repo.activate("T1").await.unwrap();
+        assert!(epoch2 > epoch1);
+
+        let stale = repo
+            .apply_with_epoch(create_command("stale"), Some(epoch1))
+            .await;
+        assert!(stale.is_err());
+
+        let current = repo
+            .apply_with_epoch(create_command("current"), Some(epoch2))
+            .await
+            .unwrap();
+        assert_eq!(current.revision, 1);
     }
 }
