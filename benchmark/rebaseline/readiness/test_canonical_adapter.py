@@ -42,19 +42,21 @@ class CanonicalAdapterTests(unittest.TestCase):
         self.assertIn("PRESENTATION", row["runtime_blockers"])
         self.assertEqual(row["adapter_readiness"], "BLOCKED_RUNTIME_GAP")
 
-    def test_actual_model_cases_are_dependency_pending_not_measured(self):
+    def test_actual_model_cases_keep_external_dependency_explicit(self):
         rows = [
             row
             for row in self.plan["cases"]
             if "IR_MODEL" in row["responsibilities"]
-            and not row["runtime_blockers"]
         ]
         self.assertTrue(rows)
         self.assertTrue(
             all(
-                row["adapter_readiness"] == "EXECUTION_DEPENDENCY_PENDING"
+                "IR_MODEL" in row["external_execution_dependencies"]
                 for row in rows
             )
+        )
+        self.assertTrue(
+            all(row["candidate_observation"] == "NOT_RUN" for row in rows)
         )
 
 
