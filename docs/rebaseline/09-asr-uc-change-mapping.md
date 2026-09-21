@@ -41,14 +41,16 @@ flowchart LR
 | ASR / Parent QA | 전체 명칭 | 대표 지표 | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
 | **ASR-01 / QA-01** | **User-Experienced Responsiveness** | Macro-averaged request-class p95 User-Experienced Response Latency (VIA 모델 포함·Agent open-ended 업무시간 제외) | 입력 처리·직접 응답·위임 전후·Agent 결과 전달의 VIA 대기 구간 |
-| **ASR-02 / QA-02** | **Task Completion Effectiveness** | Task completion success rate (%) | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
-| **ASR-03 / QA-03** | **Interaction & Task Continuity** | Continuity scenario pass rate (%) | 대화·채널·직접/위임 경로·업무 전환 후 기존 맥락과 identity가 이어지는가 |
+| **ASR-02 / QA-02** | **Task Completion Effectiveness** | Task Completion Obligation Satisfaction Rate (%) | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
+| **ASR-03 / QA-03** | **Interaction & Task Continuity** | Continuity Obligation Preservation Rate (%) | 대화·채널·직접/위임 경로·업무 전환 후 기존 맥락과 identity가 이어지는가 |
 | **ASR-04 / QA-04** | **Agent Ecosystem Interoperability & Substitutability** | Average changed architecture elements per Agent change (count/change) | **A-01~09 전체 9개** |
 | **ASR-05 / QA-05** | **Evolvability & Maintainability** | Average changed architecture elements per non-Agent change (count/change) | **M-01~09 + C-01~06 전체 15개** |
 | **ASR-06 / QA-08** | **Reliability & Recoverability** | Reliability/recovery scenario pass rate (%) | 비동기 이벤트·취소·부분 실패·재시작 및 상태 미확인의 올바른 처리 |
 | **ASR-07 / QA-09** | **Privacy, Security & Action Safety** | Safety violation rate V/N (원자료 V건/N개) | 현재 권한·동의에 맞는 접근/전달, 올바른 업무 승인 |
 
 ASR-02의 이름이 Task Completion이라고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
+
+ASR-02·03은 한 TC를 단순 PASS/FAIL 하나로만 압축하지 않는다. TC별로 사전 등록한 atomic obligation의 충족/보존 정도를 측정하고, strict TC PASS는 모든 해당 obligation이 충족되었는지를 보여주는 secondary evidence로 보존한다.
 
 ## 9.3 연결표를 읽는 규칙
 
