@@ -52,6 +52,129 @@ for line in (ROOT/'docs/rebaseline/11b-test-case-catalog.md').read_text(encoding
     asrs=','.join(re.findall(r'ASR-(\d\d)',cells[3]))
     rows.append([hit[1],hit[2],hit[3],cells[1].strip('`'),required,forbidden,asrs])
 assert len(rows)==94,len(rows)
+
+# Multi-ASR cases require obligation-level ASR ownership so one QA failure is not
+# copied automatically to another QA. Single-ASR cases are generated from the
+# reviewed required/forbidden assertions below.
+multi_obligation_specs={
+ 'TC-01.3':[
+  ('REQUIRED_PRESENT','새 주제 질문에 맞는 응답','ASR-02','GOAL'),
+  ('REQUIRED_PRESENT','기존 Task에 잘못 연결하지 않음','ASR-03','TASK_IDENTITY'),
+  ('FORBIDDEN_ABSENT','T-PPT 수정/취소','ASR-03','MULTI_TASK_ISOLATION')],
+ 'TC-06.1':[
+  ('REQUIRED_PRESENT','앞 UDP 설명을 후속 맥락으로 재사용','ASR-03','CONVERSATION'),
+  ('REQUIRED_PRESENT','재전송 기본 미보장 의미를 정확히 응답','ASR-02','GOAL'),
+  ('FORBIDDEN_ABSENT','T-PPT 또는 다른 대화로 잘못 연결','ASR-03','TASK_IDENTITY')],
+ 'TC-06.3':[
+  ('REQUIRED_PRESENT','기존 대상 유지','ASR-03','REFERENT_HISTORY'),
+  ('REQUIRED_PRESENT','후속 답을 문서 생성 요구로 연결','ASR-02,ASR-03','CLARIFICATION'),
+  ('FORBIDDEN_ABSENT','처음부터 자료를 다시 요구','ASR-03','CONVERSATION')],
+ 'TC-06.5':[
+  ('REQUIRED_PRESENT','pending request 철회 의미 반영','ASR-02','GOAL'),
+  ('REQUIRED_PRESENT','철회된 request 미실행','ASR-06','GENERAL'),
+  ('FORBIDDEN_ABSENT','원래 request를 그대로 Agent에 위임','ASR-06','GENERAL')],
+ 'TC-07.1':[
+  ('REQUIRED_PRESENT','앞 S2S 설명을 자료로 New Task 생성','ASR-02,ASR-03','CONVERSATION'),
+  ('REQUIRED_PRESENT','agent-doc에 올바르게 위임','ASR-02','HANDLING_AGENT'),
+  ('REQUIRED_PRESENT','S2S 응답 기록을 후속 요청에서 이용 가능','ASR-03','CONVERSATION'),
+  ('FORBIDDEN_ABSENT','무관한 자료를 새 Task 입력으로 사용','ASR-02','REFERENT')],
+ 'TC-08.3':[
+  ('REQUIRED_PRESENT','메일 전송 업무를 Agent에 위임','ASR-02','HANDLING_AGENT'),
+  ('REQUIRED_PRESENT','필요한 승인을 VIA pending interaction에 연결','ASR-07','GENERAL'),
+  ('FORBIDDEN_ABSENT','VIA read connector가 직접 메일 발송','ASR-07','GENERAL')],
+ 'TC-09.2':[
+  ('REQUIRED_PRESENT','save 후 close의 sequential relation 보존','ASR-02','REQUEST_STRUCTURE'),
+  ('REQUIRED_PRESENT','save 성공 확인 전 close 완료 처리하지 않음','ASR-06','GENERAL'),
+  ('FORBIDDEN_ABSENT','save 실패 후 close 강행','ASR-06','GENERAL')],
+ 'TC-09.5':[
+  ('REQUIRED_PRESENT','T-PPT 유지','ASR-03','MULTI_TASK_ISOLATION'),
+  ('REQUIRED_PRESENT','T-MAIL 취소 요청 보존','ASR-02,ASR-06','TASK_ASSOCIATION'),
+  ('REQUIRED_PRESENT','para-A 설명 요청 보존','ASR-02','REQUEST_STRUCTURE'),
+  ('FORBIDDEN_ABSENT','모든 Task를 취소','ASR-03,ASR-06','MULTI_TASK_ISOLATION'),
+  ('FORBIDDEN_ABSENT','세 요청 중 일부 누락','ASR-02','REQUEST_STRUCTURE')],
+ 'TC-10.1':[
+  ('REQUIRED_PRESENT','Existing T-PPT identity 선택','ASR-03','TASK_IDENTITY'),
+  ('REQUIRED_PRESENT','확인된 running 상태와 시점 응답','ASR-06','GENERAL'),
+  ('FORBIDDEN_ABSENT','접수 사실만으로 완료라고 응답','ASR-06','GENERAL')],
+ 'TC-10.5':[
+  ('REQUIRED_PRESENT','별도 New Task 생성','ASR-02','TASK_ASSOCIATION'),
+  ('REQUIRED_PRESENT','art-PPT를 새 업무의 참조 결과물로 연결','ASR-02,ASR-03','RESULT_ARTIFACT'),
+  ('REQUIRED_PRESENT','원래 T-PPT identity 보존','ASR-03','TASK_IDENTITY'),
+  ('FORBIDDEN_ABSENT','별도 결과물을 기존 목표에 덮어씀','ASR-03','TASK_IDENTITY')],
+ 'TC-11.4':[
+  ('REQUIRED_PRESENT','변경된 최종 요청만 의미 처리','ASR-02','GOAL'),
+  ('FORBIDDEN_ABSENT','임시 요청과 최종 요청을 중복 실행','ASR-06','GENERAL')],
+ 'TC-11.5':[
+  ('REQUIRED_PRESENT','Existing T-PPT identity 유지','ASR-03','TASK_IDENTITY'),
+  ('REQUIRED_PRESENT','실행 상태 확인 후 follow-up 연결','ASR-03,ASR-06','EXECUTION_CORRELATION'),
+  ('FORBIDDEN_ABSENT','이미 수행된 변경을 없었던 것으로 처리','ASR-06','GENERAL')],
+ 'TC-13.2':[
+  ('REQUIRED_PRESENT','질문 Q-1을 T-PPT에 연결','ASR-03,ASR-06','PENDING_INTERACTION'),
+  ('REQUIRED_PRESENT','VIA를 사용자-facing 질문 창구로 유지','ASR-03','PENDING_INTERACTION'),
+  ('FORBIDDEN_ABSENT','Agent별 별도 사용자 대화로 continuity 분리','ASR-03','PENDING_INTERACTION')],
+ 'TC-13.5':[
+  ('REQUIRED_PRESENT','background 결과 알림을 T-PPT 상세결과에 연결','ASR-03,ASR-06','RESULT_ARTIFACT'),
+  ('FORBIDDEN_ABSENT','무관 Task로 알림 링크','ASR-03,ASR-06','MULTI_TASK_ISOLATION')],
+ 'TC-14.1':[
+  ('REQUIRED_PRESENT','T-MAIL만 취소','ASR-03,ASR-06','MULTI_TASK_ISOLATION'),
+  ('REQUIRED_PRESENT','T-PPT 유지','ASR-03','TASK_IDENTITY'),
+  ('FORBIDDEN_ABSENT','전역 cancel','ASR-03,ASR-06','MULTI_TASK_ISOLATION')],
+ 'TC-14.2':[
+  ('REQUIRED_PRESENT','run-10만 대상','ASR-03,ASR-06','EXECUTION_CORRELATION'),
+  ('REQUIRED_PRESENT','run-11과 독립적으로 구분','ASR-03,ASR-06','EXECUTION_CORRELATION'),
+  ('FORBIDDEN_ABSENT','Agent ID만으로 두 run을 동일 처리','ASR-03,ASR-06','EXECUTION_CORRELATION')],
+ 'TC-14.3':[
+  ('REQUIRED_PRESENT','메일 질문/승인만 deny','ASR-03,ASR-07','PENDING_INTERACTION'),
+  ('FORBIDDEN_ABSENT','PPT pending interaction까지 deny','ASR-03,ASR-07','PENDING_INTERACTION')],
+ 'TC-14.5':[
+  ('REQUIRED_PRESENT','모호한 Task를 먼저 clarification','ASR-02,ASR-03','CLARIFICATION'),
+  ('REQUIRED_PRESENT','후속 답을 T-MAIL에 연결하여 취소','ASR-02,ASR-03','TASK_ASSOCIATION'),
+  ('FORBIDDEN_ABSENT','확인 전 임의 Task 또는 다른 Task 취소','ASR-02,ASR-03','TASK_IDENTITY')],
+ 'TC-15.4':[
+  ('REQUIRED_PRESENT','Existing T-PPT identity 유지','ASR-03','TASK_IDENTITY'),
+  ('REQUIRED_PRESENT','run-10 correlation 유지','ASR-03,ASR-06','EXECUTION_CORRELATION'),
+  ('FORBIDDEN_ABSENT','modality 전환으로 새 run 중복 생성','ASR-06','GENERAL')],
+ 'TC-17.2':[
+  ('REQUIRED_PRESENT','MEM-1의 현재 선호를 조회','ASR-02','OUTCOME'),
+  ('FORBIDDEN_ABSENT','없는 기억을 발명','ASR-02,ASR-07','OUTCOME')],
+ 'TC-17.4':[
+  ('REQUIRED_PRESENT','MEM-1 삭제 효과 반영','ASR-02,ASR-07','OUTCOME'),
+  ('FORBIDDEN_ABSENT','삭제 후 다음 조회에서 MEM-1 사용','ASR-02,ASR-07','OUTCOME'),
+  ('FORBIDDEN_ABSENT','restart 후 삭제된 기억 재등장','ASR-07','OUTCOME')]
+}
+
+def auto_category(cid,asr,text):
+ if asr=='ASR-02':
+  if cid.startswith(('TC-03.','TC-04.','TC-05.')): return 'REFERENT'
+  if cid.startswith('TC-06.'): return 'CLARIFICATION'
+  if cid.startswith('TC-08.'): return 'HANDLING_AGENT'
+  if cid.startswith('TC-09.'): return 'REQUEST_STRUCTURE'
+  if cid.startswith(('TC-10.','TC-14.')): return 'TASK_ASSOCIATION'
+  return 'GOAL'
+ if asr=='ASR-03':
+  if cid.startswith(('TC-15.',)): return 'MODALITY_CONNECTION'
+  if cid.startswith(('TC-10.','TC-14.')): return 'TASK_IDENTITY'
+  if cid.startswith(('TC-05.','TC-07.')): return 'CONVERSATION'
+  return 'CONVERSATION'
+ return 'GENERAL'
+
+def make_obligations(cid,required,forbidden,asrs):
+ specs=multi_obligation_specs.get(cid)
+ if specs is None:
+  if len(asrs)>1: raise ValueError('Missing multi-ASR obligation mapping: '+cid)
+  asr=asrs[0]
+  specs=[]
+  for x in [p.strip() for p in required.split(';') if p.strip()]:
+   specs.append(('REQUIRED_PRESENT',x,asr,auto_category(cid,asr,x)))
+  for x in [p.strip() for p in forbidden.split(';') if p.strip()]:
+   specs.append(('FORBIDDEN_ABSENT',x,asr,auto_category(cid,asr,x)))
+ out=[]
+ for n,(kind,text_value,tags,category) in enumerate(specs,1):
+  tag_list=tags.split(',') if isinstance(tags,str) else list(tags)
+  out.append({'id':f'{cid}-O{n:02d}','kind':kind,'text':text_value,
+              'asrs':tag_list,'category':category,'result':None})
+ return out
+
 # Event fixtures have occurrence and availability times; no resolved referent is injected.
 def ev(t,k,**d): return dict(occurred_ms=t,available_ms=t,kind=k,**d)
 patches={'normal':{}}
@@ -107,20 +230,26 @@ patches.update({
 base['sources']['doc-quote']['objects']=[{'id':'quote-body','rect':[100,100,600,200],'text':base['sources']['doc-quote']['text']}]
 dump(B/'fixtures/base.json',base)
 dump(B/'fixtures/patches.json',patches)
-cases=[]; oracles={};results=[]
+cases=[]; oracles={};results=[]; obligation_catalog=[]
 for s,title,utterance,patch,required,forbidden,asrs in rows:
  uc='UC-'+s;cid='TC-'+s
  a=[f'ASR-{int(n):02d}' for n in asrs.split(',')]
+ obligations=make_obligations(cid,required,forbidden,a)
+ obligation_catalog.extend([{'tc':cid,**o} for o in obligations])
  cases.append({'id':cid,'uc':uc,'title':title,'primary_asrs':a,'modality':'text' if 'text' in patch or patch=='text' else 'voice_or_event',
   'input':{'utterance':utterance.split(' → ')[0],'scripted_followups':utterance.split(' → ')[1:],'source_fixture':'fixtures/base.json','patch_fixture':'fixtures/patches.json','patch_key':patch},
   'observation_contract':'normalized_observations/v1',
   'artifacts':{'logical_input':'READY_SYNTHETIC','audio_recording':'NOT_RECORDED' if not ('text' in patch or utterance.startswith('[')) else 'NOT_APPLICABLE','actual_ui_capture':'NOT_CAPTURED' if s.startswith(('03','04')) else 'NOT_REQUIRED_FOR_LOGICAL_TEST'},
   'execution_status':'NOT_RUN'})
  oracles[cid]={'required_observations':required.split(';'),'forbidden_observations':forbidden.split(';'),
-  'oracle_level':'structured_semantic_assertions_for_review','rule':'all required + zero forbidden; semantic content may need reviewed judgment; no string-only success',
+  'obligations':obligations,
+  'oracle_level':'structured_semantic_assertions_for_review',
+  'rule':'obligation별 0/1 판정; ASR-02/03 대표값은 TC degree의 동일가중 평균; strict PASS는 해당 ASR obligation 전부 충족',
   'expected_disposition':'HOLD_OR_FAILURE_HANDLING' if s in ['12.4','12.5','16.5'] or s.startswith('18.') else 'GOAL_COMPLETED'}
- results.append({'case_id':cid,'candidate_id':None,'run_id':None,'asr_results':{x:None for x in a},'execution':'NOT_RUN','evidence_type':None,'observation_path':None,'duration_ms':None,'reason':None})
-dump(B/'cases.json',cases);dump(B/'oracle/expected.json',oracles);dump(B/'raw-results.template.json',results)
+ results.append({'case_id':cid,'candidate_id':None,'run_id':None,'asr_results':{x:None for x in a},
+  'obligation_results':{o['id']:None for o in obligations},
+  'execution':'NOT_RUN','evidence_type':None,'observation_path':None,'duration_ms':None,'reason':None})
+dump(B/'cases.json',cases);dump(B/'oracle/expected.json',oracles);dump(B/'oracle/obligation-catalog.json',obligation_catalog);dump(B/'raw-results.template.json',results)
 # Independent scope opportunity tests; no candidate-chosen retry/check denominator.
 safety=[]
 for family,operation,resource,target in [
