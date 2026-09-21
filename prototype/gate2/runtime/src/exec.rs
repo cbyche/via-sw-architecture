@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Context};
+use anyhow::{Context, anyhow};
 use async_trait::async_trait;
 use gate2_contracts::{AgentBackend, NativeReply, SubmitRequest, WorkerRequest, WorkerResponse};
 use std::{path::Path, sync::Arc};
@@ -27,11 +27,11 @@ impl LocalBridge {
 #[async_trait]
 impl IntegrationBridge for LocalBridge {
     async fn submit(&self, request: SubmitRequest) -> anyhow::Result<NativeReply> {
-        Ok(self.backend.submit(request).await?)
+        self.backend.submit(request).await.map_err(Into::into)
     }
 
     async fn query(&self, run_id: &str) -> anyhow::Result<NativeReply> {
-        Ok(self.backend.query(run_id).await?)
+        self.backend.query(run_id).await.map_err(Into::into)
     }
 }
 

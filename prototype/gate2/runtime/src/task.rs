@@ -2,7 +2,7 @@ use crate::repository::{ApplyError, Repository};
 use async_trait::async_trait;
 use gate2_contracts::{TaskCommand, TaskView};
 use std::{collections::HashMap, sync::Arc};
-use tokio::sync::{mpsc, oneshot, Mutex};
+use tokio::sync::{Mutex, mpsc, oneshot};
 
 #[async_trait]
 pub trait TaskAuthority: Send + Sync {

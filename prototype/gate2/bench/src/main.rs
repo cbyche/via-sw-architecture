@@ -77,10 +77,7 @@ async fn task_smoke() -> anyhow::Result<()> {
                 },
             })
             .await?;
-        anyhow::ensure!(matches!(
-            running.state,
-            gate2_contracts::TaskState::Running
-        ));
+        anyhow::ensure!(matches!(running.state, gate2_contracts::TaskState::Running));
     }
     Ok(())
 }

@@ -7,8 +7,8 @@ use std::{
     collections::HashMap,
     path::Path,
     sync::{
-        atomic::{AtomicU64, Ordering},
         Mutex,
+        atomic::{AtomicU64, Ordering},
     },
     time::Duration,
 };
@@ -133,7 +133,10 @@ impl S2sDelayTrace {
     pub fn from_path(path: impl AsRef<Path>) -> anyhow::Result<Self> {
         let bytes = std::fs::read(path)?;
         let trace: Self = serde_json::from_slice(&bytes)?;
-        anyhow::ensure!(!trace.samples_ms.is_empty(), "S2S delay trace must contain samples");
+        anyhow::ensure!(
+            !trace.samples_ms.is_empty(),
+            "S2S delay trace must contain samples"
+        );
         Ok(trace)
     }
 

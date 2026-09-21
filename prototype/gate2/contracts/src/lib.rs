@@ -88,7 +88,9 @@ pub enum NativeReply {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum PReply {
-    Accepted { run_id: String },
+    Accepted {
+        run_id: String,
+    },
     Snapshot {
         run_id: String,
         revision: u64,
@@ -100,7 +102,10 @@ pub enum PReply {
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum QReply {
-    Accepted { context_id: String, run_id: String },
+    Accepted {
+        context_id: String,
+        run_id: String,
+    },
     Snapshot {
         context_id: String,
         run_id: String,

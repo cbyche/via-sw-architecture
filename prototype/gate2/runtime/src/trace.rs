@@ -31,15 +31,12 @@ impl TraceCollector {
     {
         let start = Instant::now();
         let output = future.await;
-        self.records
-            .lock()
-            .expect("trace lock")
-            .push(TraceRecord {
-                candidate: candidate.to_owned(),
-                span: span.to_owned(),
-                duration_ns: start.elapsed().as_nanos(),
-                attributes,
-            });
+        self.records.lock().expect("trace lock").push(TraceRecord {
+            candidate: candidate.to_owned(),
+            span: span.to_owned(),
+            duration_ns: start.elapsed().as_nanos(),
+            attributes,
+        });
         output
     }
 
