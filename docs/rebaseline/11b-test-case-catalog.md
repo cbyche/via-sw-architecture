@@ -292,21 +292,23 @@ Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기�
 
 ## B.8 ASR-02·03·06 canonical scoring membership
 
-B.2의 ASR 열에서 **첫 번째 ASR을 Primary scoring owner**로 고정한다. 뒤에 적힌 ASR은 같은 실행에서 보는 regression/secondary observation이며 대표 분모에 중복 가산하지 않는다. TC-11.1·11.2는 voice interruption secondary/regression으로만 유지한다.
+B.2의 각 TC에 명시된 ASR tag를 해당 QA의 canonical scoring membership으로 고정한다. **한 TC가 여러 ASR을 실제로 검증하면 membership은 겹칠 수 있다.** 단, 같은 TC를 여러 번 실행해 독립 evidence처럼 부풀리지 않고 한 실행 trace에서 ASR별 required/forbidden assertion을 각각 판정하며 공동 실패 원인을 기록한다.
 
-### ASR-02 — 47개
+TC-11.1·11.2는 voice interruption secondary/regression으로만 유지하며 ASR-01 대표 score에 포함하지 않는다.
 
-`TC-01.1, TC-01.3, TC-01.4, TC-02.1~02.6, TC-03.1~03.6, TC-04.1~04.7, TC-05.1~05.2, TC-06.1~06.3, TC-06.5, TC-08.1~08.5, TC-09.1~09.5, TC-10.5, TC-11.3~11.4, TC-14.5, TC-17.1~17.5`
+### ASR-02 — 48개
+
+`TC-01.1, TC-01.3, TC-01.4, TC-02.1~02.6, TC-03.1~03.6, TC-04.1~04.7, TC-05.1~05.2, TC-06.1~06.3, TC-06.5, TC-07.1, TC-08.1~08.5, TC-09.1~09.5, TC-10.5, TC-11.3~11.4, TC-14.5, TC-17.1~17.5`
 
 Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 포함해 terminal success를 판정한다. 올바른 clarification만 하고 멈춘 상태는 completion PASS가 아니다.
 
-### ASR-03 — 23개
+### ASR-03 — 30개
 
-`TC-01.2, TC-05.3~05.4, TC-06.4, TC-07.1~07.5, TC-10.1~10.4, TC-11.5, TC-13.5, TC-14.1~14.3, TC-15.1~15.5`
+`TC-01.2~01.3, TC-05.3~05.4, TC-06.1, TC-06.3~06.4, TC-07.1~07.5, TC-09.5, TC-10.1~10.5, TC-11.5, TC-13.2, TC-13.5, TC-14.1~14.3, TC-14.5, TC-15.1~15.5`
 
-### ASR-06 — 17개
+### ASR-06 — 27개
 
-`TC-12.1~12.5, TC-13.1~13.4, TC-13.6, TC-14.4, TC-18.1~18.6`
+`TC-06.5, TC-09.2, TC-09.5, TC-10.1, TC-11.4~11.5, TC-12.1~12.5, TC-13.1~13.6, TC-14.1~14.2, TC-14.4, TC-15.4, TC-18.1~18.6`
 
 이 membership은 후보 결과를 보기 전에 동결하며, 이후 새로운 failure를 발견하더라도 기존 분모에서 불리한 TC를 제거하지 않는다. 필요한 새 시험은 별도 regression evidence로 추가하고 대표 분모 변경은 명시적 rebaseline 없이는 하지 않는다.
 
