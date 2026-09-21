@@ -87,8 +87,8 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 | ASR | Parent QA | 정의 | 대표 Metric | 방향 |
 | --- | --- | --- | --- | --- |
 | **ASR-01 User-Experienced Responsiveness** | QA-01 | 사용자의 Voice/Text 요청, interruption, Agent 결과 전달에서 VIA가 추가하는 대기 시간을 최소화한다. | **Macro-averaged request-class p95 User-Experienced Response Latency (ms; VIA 모델 포함·Agent open-ended 업무시간 제외)** | 낮을수록 좋음 |
-| **ASR-02 Task Completion Effectiveness** | QA-02 | VIA가 사용자 요청을 올바른 대상·요청 구조·Task·Agent에 연결하여 사용자가 의도한 처리 결과까지 도달하게 한다. | **Task completion success rate (%)** | 높을수록 좋음 |
-| **ASR-03 Interaction & Task Continuity** | QA-03 | modality/connection 변화, Direct↔Agent 전환, multiple task 상황에서도 Conversation과 VIA Task의 의미와 identity를 연속적으로 유지한다. | **Continuity scenario pass rate (%)** | 높을수록 좋음 |
+| **ASR-02 Task Completion Effectiveness** | QA-02 | VIA가 사용자 요청을 올바른 대상·요청 구조·Task·Agent에 연결하여 사용자가 의도한 처리 결과까지 도달하게 한다. | **Task Completion Obligation Satisfaction Rate (%)** | 높을수록 좋음 |
+| **ASR-03 Interaction & Task Continuity** | QA-03 | modality/connection 변화, Direct↔Agent 전환, multiple task 상황에서도 Conversation과 VIA Task의 의미와 identity를 연속적으로 유지한다. | **Continuity Obligation Preservation Rate (%)** | 높을수록 좋음 |
 | **ASR-04 Agent Ecosystem Interoperability & Substitutability** | QA-04 | 서로 다른 Agent 구현·protocol·lifecycle 계약을 VIA 핵심 책임의 최소 변경으로 추가·교체·공존시킨다. | **Average changed architecture elements per Agent change (count/change)** | 낮을수록 좋음 |
 | **ASR-05 Evolvability & Maintainability** | QA-05 | Model, Context integration, persistent-state schema 및 deployment 변화에 기존 기능을 유지하면서 제한된 구조 변경으로 대응한다. | **Average changed architecture elements per non-Agent change (count/change)** | 낮을수록 좋음 |
 | **ASR-06 Reliability & Recoverability** | QA-08 | 비동기 event·실패·취소·process restart 상황에서도 Task state를 일관되게 유지하고 복구 가능한 업무를 중복 실행 없이 재연결한다. | **Reliability/recovery scenario pass rate (%)** | 높을수록 좋음 |
@@ -125,9 +125,11 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 - Clarification이 필요한 경우 올바르게 보류/확인
 - Direct Response 또는 Agent Handling 경로에서 요구 결과에 도달
 
-대표 Metric은 **Task completion success rate**이다.
+대표 Metric은 **Task Completion Obligation Satisfaction Rate (%)**이다.
 
-여기서 success는 Downstream Agent의 domain 품질을 뜻하지 않는다. 고정 Agent fixture를 사용하고 VIA가 **올바른 요청·대상·제약·Task·Agent에 연결하여 05의 완료 조건을 충족했는지**를 평가한다.
+각 canonical TC에서 사전에 고정한 architecture-relevant obligation(예: 올바른 referent, Request relation, Task association, Agent/handling 선택, clarification binding, terminal outcome)을 0/1로 판정하고, TC별 충족률을 구한 뒤 모든 TC를 동일 가중으로 평균한다. strict end-to-end PASS/FAIL도 원자료로 보존하지만 대표 Metric은 obligation satisfaction의 정도이다.
+
+여기서 obligation은 Downstream Agent의 domain 품질을 뜻하지 않는다. 고정 Agent fixture를 사용하고 VIA가 **올바른 요청·대상·제약·Task·Agent에 연결하여 05의 완료 조건을 얼마나 보존했는지**를 평가한다.
 
 ## ASR-03 Interaction & Task Continuity
 
@@ -140,7 +142,9 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 - multiple active Task 전환
 - Agent run/thread가 달라도 동일 VIA Task identity 유지
 
-대표 Metric은 **Continuity scenario pass rate**이다.
+대표 Metric은 **Continuity Obligation Preservation Rate (%)**이다.
+
+각 canonical TC에서 Conversation/reference/Task identity/Agent execution correlation/pending interaction/modality·connection/multiple-Task isolation 등 사전에 고정한 continuity obligation을 0/1로 판정하고, TC별 보존률을 동일 가중 평균한다. strict scenario PASS/FAIL은 secondary raw evidence로 유지한다.
 
 process restart는 ASR-06으로 분리한다.
 
@@ -298,6 +302,6 @@ QA scoring이 바뀌면 ASR 목록도 바뀐다. 따라서 08은 이 다섯 항�
 
 ## 8.11 측정 보정과 11-A/B 연결
 
-사용자 합의에 따라 모델 비용을 실제로 수치화하는 ASR-01 근거 원장과 ASR-07의 고정 분모를 보완한다. ASR-02·03·06은 우선 전체 raw pass/fail을 보존하며 macro/단순 평균을 지금 바꾸지 않는다. ASR-04·05는 10의 변경 요소 집계와 9/15개 전체 변경을 유지한다.
+사용자 합의에 따라 모델 비용을 실제로 수치화하는 ASR-01 근거 원장과 ASR-07의 고정 분모를 보완한다. ASR-02·03은 atomic obligation 기반의 degree metric으로 보정하고 strict PASS/FAIL을 secondary raw evidence로 보존한다. ASR-06은 reliability invariant의 성격 때문에 scenario PASS/FAIL 대표 Metric을 유지한다. ASR-04·05는 10의 변경 요소 집계와 9/15개 전체 변경을 유지한다.
 
 [11-A 측정 기준](./11a-measurement-baseline.md), [11-B 시험 목록](./11b-test-case-catalog.md), [Qwen 근거](./11-evidence/asr01-qwen-evidence.md)를 검토한다. QA 점수와 7개 ASR 선정은 다시 변경하지 않는다. 목표·0~5점·가중치·대표 표본 집합은 11-C에서 별도 승인한다.
