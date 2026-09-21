@@ -40,7 +40,7 @@ flowchart LR
 
 | ASR / Parent QA | 전체 명칭 | 대표 지표 | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **ASR-01 / QA-01** | **User-Experienced Responsiveness** | User-Experienced Response Latency p95 (VIA 모델 포함·Agent 업무시간 제외) | 입력 처리·직접 응답·위임 전후·음성 중단의 VIA 대기 구간 |
+| **ASR-01 / QA-01** | **User-Experienced Responsiveness** | Macro-averaged request-class p95 User-Experienced Response Latency (VIA 모델 포함·Agent open-ended 업무시간 제외) | 입력 처리·직접 응답·위임 전후·Agent 결과 전달의 VIA 대기 구간 |
 | **ASR-02 / QA-02** | **Task Completion Effectiveness** | Task completion success rate (%) | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
 | **ASR-03 / QA-03** | **Interaction & Task Continuity** | Continuity scenario pass rate (%) | 대화·채널·직접/위임 경로·업무 전환 후 기존 맥락과 identity가 이어지는가 |
 | **ASR-04 / QA-04** | **Agent Ecosystem Interoperability & Substitutability** | Average changed architecture elements per Agent change (count/change) | **A-01~09 전체 9개** |
@@ -76,7 +76,7 @@ ASR-02의 이름이 Task Completion이라고 해서 Agent의 보고서 작성 �
 | **UC-08 / .1~.5** | 새 업무를 Agent에 위임 | **ASR-02:** 목표·제약·capability·결과 연결 | ASR-01 VIA 구간; ASR-06 접수/완료 구분; ASR-07 허용 범위 |
 | **UC-09 / .1~.5** | 복합 요청 | **ASR-02:** 누락 없는 요청과 독립·순차·의존·조건 관계 | ASR-03 기존 업무 혼합; ASR-06 부분 실패; ASR-07 변경 업무 승인 |
 | **UC-10 / .1~.5** | 기존 업무 조회·추가·수정 | **ASR-03:** 동일 목표·결과물의 연결. **ASR-02:** 현재 지시의 의미 | ASR-06 근거 있는 상태·실행 연결; ASR-01 응답 지연 |
-| **UC-11 / .1~.5** | 음성 중단과 정정 | **ASR-01:** 실제 재생 중단 시점. **ASR-02:** 정정된 요청 해석 | ASR-03 이전 맥락; ASR-06 중단한 음성 재출력·업무 자동 취소 방지 |
+| **UC-11 / .1~.5** | 음성 중단과 정정 | **ASR-02:** 정정된 요청 해석 | ASR-03 이전 맥락; ASR-06 중단한 음성 재출력·업무 자동 취소 방지; audio-stop latency는 secondary/regression observation이며 ASR-01 대표값에서 제외 |
 | **UC-12 / .1~.5** | 특정 업무 취소 | **ASR-06:** 취소 접수·종료·이미 완료·미확인 구분 | ASR-02 의도한 대상; ASR-03 Task 유지; ASR-01 VIA의 제어 전달 구간 |
 | **UC-13 / .1~.6** | 비동기 진행·결과·알림 | **ASR-06:** 이벤트의 업무 연결과 확인된 상태. **ASR-03:** 대화가 바뀌어도 결과 연결 | ASR-01 결과 전달; ASR-02 결과 의미·Voice/Text 일치; ASR-07 질문/승인 |
 | **UC-14 / .1~.5** | 여러 업무 번갈아 관리 | **ASR-03:** 업무 전환 후 맥락. **ASR-06:** 교차 이벤트·대기·독립 업무 처리 | ASR-02 복합 지시 대상; ASR-01 간섭; ASR-07 여러 대기 승인 |
@@ -103,9 +103,11 @@ ASR-04·05가 이 표의 주 검증에 없는 것은 누락이 아니다. **두 
 
 ### ASR-01의 시간선
 
-직접 응답, 위임 전후, 음성 중단은 08에 포함된 **하나의 ASR 아래 서로 다른 시나리오 유형**이다. 각 유형의 시작·종료 이벤트를 따로 보존한다. 위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent 업무 시간과 사용자 확인 대기를 따로 기록한다. 중단 시험은 새 발화 시작부터 실제 오디오 재생 중단까지이다.
+ASR-01 대표값은 일반 사용자 Request의 Direct Response, bounded Context 처리, Agent delegation 전/후, Existing Task 응답, Agent result delivery를 대상으로 한다. **서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다.** 11-A에서 고정한 request class별 반복 표본의 p95를 먼저 구한 뒤, class별 p95를 동일 가중으로 평균한 Macro-p95를 대표값으로 사용한다.
 
-요청/결과 전달과 음성 중단의 표본을 임의 비중으로 섞으면 p95의 의미가 바뀐다. 11에서 공통 표본 구성과 집계 규칙을 승인하기 전에는 종합 p95를 만들지 않는다. **대표 지표는 유지하며, 여기서 새로운 latency ASR이나 별도 점수 축을 만들지 않는다.**
+위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent의 open-ended domain research/planning/tool execution과 사용자 확인 대기를 따로 기록한다. 단, bounded Read/Search/Understand 작업을 Architecture 선택으로 Agent에 옮긴 경우에는 단순히 프로세스 위치가 Agent라는 이유로 그 시간을 제외하지 않는다.
+
+Voice interruption의 새 발화 시작→audio stop은 UC-11의 secondary/regression observation으로 raw latency를 보존하지만 ASR-01 대표 모집단과 점수에는 포함하지 않는다.
 
 VIA가 쓰는 모델·Context 조회는 원격이어도 VIA 의존 구간이다. 같은 설명 작업을 Agent로 옮겨 그 시간을 제외했다고 사용자 전체 대기가 줄었다고 주장하지 않는다. 06 FA-12의 경계와 별도 전체 경로 분석 규칙을 유지한다.
 
