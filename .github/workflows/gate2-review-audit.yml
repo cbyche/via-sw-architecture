@@ -1,0 +1,58 @@
+name: gate2-review-audit
+on:
+  push:
+    branches: [architecture-rebaseline-20260918]
+    paths:
+      - 'prototype/gate2/**'
+      - 'benchmark/rebaseline/readiness/**'
+      - '.github/workflows/gate2-review-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  invariant-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fixed toolchain
+        run: |
+          rustup toolchain install 1.98.1 --profile minimal --component rustfmt,clippy
+          cd prototype/gate2
+          rustup override set 1.98.1
+      - name: Normalize formatting in audit worktree only
+        working-directory: prototype/gate2
+        run: cargo fmt --all
+      - name: Run correctness guards without benchmark
+        working-directory: prototype/gate2
+        run: |
+          set -o pipefail
+          ulimit -c 0
+          cargo test --workspace --all-targets -- --test-threads=2 2>&1 | tee audit-test-output.txt
+      - name: Lint
+        working-directory: prototype/gate2
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Python readiness guards
+        run: |
+          if [ -d benchmark/rebaseline/readiness ]; then
+            python3 -m unittest discover -s benchmark/rebaseline/readiness -p 'test_*.py' -v
+          fi
+      - name: Package exact audited source and lock
+        if: always()
+        run: |
+          git diff --binary > review-format.patch
+          tar --exclude=target --exclude='*.db*' --exclude='__pycache__' -czf review-source.tar.gz prototype/gate2 benchmark/rebaseline/gate2
+          printf '%s\n' '${{ github.sha }}' > review-source-sha.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gate2-review-audit-${{ github.sha }}
+          path: |
+            review-source.tar.gz
+            review-source-sha.txt
+            review-format.patch
+            prototype/gate2/Cargo.lock
+            prototype/gate2/audit-test-output.txt
+          retention-days: 7
