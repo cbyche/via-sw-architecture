@@ -1,6 +1,6 @@
 # 8. Architecture Significant Requirements — QA 도출과 ASR 선정
 
-> 상태: **재작성 검토본 — QA 점수와 7개 ASR 검토 필요**  
+> 상태: **검토 완료 · QA 점수와 7개 ASR 기준선 확정**  
 > 근거: [01 시스템 정의](./01-system-mission-and-boundary.md) · [02 용어](./02-terms.md) · [03 설계 범위](./03-fixed-architecture-scope.md) · [04 공통 흐름](./04-canonical-interaction-flow.md) · [05 UC](./05-representative-use-cases.md) · [06 비교 조건](./06-fixed-assumptions.md) · [07 변경 집합](./07-intentional-variables.md)
 
 ## 8.1 도출 절차
@@ -290,3 +290,9 @@ ASR-04·05의 changed architecture element metric을 공정하게 계산할 elem
 5. 세부 scenario family에 빠진 핵심 UC가 없는지
 
 QA scoring이 바뀌면 ASR 목록도 바뀐다. 따라서 08은 이 다섯 항목이 승인된 뒤 닫는다.
+
+## 8.10 기준선 확정 기록
+
+사용자 승인에 따라 QA 10개의 점수, H/H QA 7개와 ASR-01~07의 일대일 대응, 정의 및 대표 지표를 확정한다. 세부 시나리오는 추가 ASR이 아니다. 이번 확정은 11의 실제 시험 입력·표본 구성·반복·목표값·0~5점 구간까지 승인한 것이 아니다.
+
+다음 검토 범위는 [09 연결표](./09-asr-uc-change-mapping.md)와 [10 설계 요소·집계 기준](./10-architecture-element-definition.md)이다. 두 문서의 공동 리뷰 전에는 11·12를 진행하지 않는다.
