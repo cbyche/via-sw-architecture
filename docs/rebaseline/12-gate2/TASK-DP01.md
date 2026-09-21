@@ -43,7 +43,7 @@ flowchart LR
   O -->|완료 메시지| D
 ```
 
-Task마다 activation epoch를 가진 소유자 하나가 command를 처리한다. mailbox의 전달 완료와 durable 처리는 다르므로 inbox/command dedup을 저장하고 commit 이후에 처리 완료를 알린다. activation 교체 시 stale epoch writer를 repository가 거부한다.
+Task마다 persistent activation epoch를 가진 소유자 하나가 command를 처리한다. **Tokio mailbox 자체는 in-memory channel이며 durable queue라고 부르지 않는다.** command identity/payload dedup과 Task state/result는 공통 Repository에 저장하고, commit 이후에만 처리 완료를 반환한다. caller는 실패 시 같은 command identity로 재시도할 수 있고 activation 교체 시 stale epoch writer를 Repository가 거부한다.
 
 Agent를 기다리며 mailbox를 막지 않는다. `SUBMIT_PENDING`을 저장하고 외부 호출 완료는 후속 command로 처리해 cancel/status를 계속 수용한다. directory/read index는 발견·조회용이고 Task state를 직접 수정하지 않는다. compound group의 coordination은 공통 RelationScheduler가 command를 발행하고, 최종 각 Task의 writer는 해당 supervisor다.
 
@@ -69,14 +69,14 @@ W-09 복구는 UI 창이나 actor activation만 띄운 시점이 아니다. 해�
 | G2-I-TXNTRANSITION | read-revision/conditional transition/duplicate-result | TaskService↔Repository | conflict·commit 완료 의미 변화 |
 | G2-C-TASKACTOR | Task 단일 writer와 command 처리 | Core Task activation / dispatcher·UI / activation | Task 전이·mailbox 처리 행위 변화 |
 | G2-C-ACTIVATION | Task activation 발견·재활성화·fencing | Core / 모든 Task command / service | 소유자 배정·교체 행위 변화 |
-| G2-I-MAILBOX | durable command submission·completion | directory→supervisor | at-least-once·중복·완료 의미 변화 |
+| G2-I-MAILBOX | per-Task command delivery·commit completion | directory→supervisor | channel delivery와 durable commit 완료, retry/dedup 의미 변화 |
 | G2-S-ACTIVATION | Task owner epoch·activation lease | Directory writer / Repository reader / 재활성화 간 영속 | ownership 교체·fencing schema 변화 |
 
 `G2-S-TASK/LINK/PENDING/DELIVERY`는 공통 ID를 유지하되 writer binding이 A=TaskService, B=TaskActor로 바뀐다. B를 event-sourced 저장, A를 snapshot 저장으로 만들어 저장 tactic까지 묶어 비교하지 않는다.
 
 ## 6. 예상 trade-off와 관측
 
-A는 여러 Task의 관계 조회·transaction 제어가 직접적이지만 conflict 재처리와 공유 저장소의 비용을 부담할 수 있다. B는 Task별 ordering과 activation scope가 명확하지만 mailbox·fencing·cross-Task command 조정이 추가된다. **중앙형=동시성 불가, actor=빠른 복구라는 결론은 허용하지 않는다.**
+A는 여러 Task의 관계 조회·transaction 제어가 직접적이지만 conflict 재처리와 공유 저장소의 비용을 부담할 수 있다. B는 Task별 ordering과 activation scope가 명확하지만 in-memory mailbox routing·persistent fencing·cross-Task command 조정이 추가된다. **중앙형=동시성 불가, actor=빠른 복구라는 결론은 허용하지 않는다.**
 
 W-02는 접수+Link commit, W-04는 1/4 Task에서 foreground ratio와 절대 latency, W-09는 6 recovery strata, W-08은 C-04/06 등을 포함한 전체 15 change의 수정 ID를 본다. 진단 span은 command 대기, conflict retry, transaction wait/commit, activation, external reconciliation이다.
 
