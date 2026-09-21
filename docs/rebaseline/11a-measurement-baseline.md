@@ -76,17 +76,20 @@ Agent 시간 제외는 **실행 위치가 아니라 업무 의미**로 판정한
 
 ### 추정 모델 호출 시간
 
-상세 수치·제약은 [공개 근거 원장](./11-evidence/asr01-qwen-evidence.md)에 있다.
+상세 수치·제약은 [Windows consumer PC 기반 공개 근거 원장](./11-evidence/asr01-qwen-evidence.md)에 있다. 주 planning profile은 Qualcomm/NPU가 아니라 **Windows 11 + RTX 4060 8GB + Qwen3-8B Q4_K_M full GPU offload** 공개 관측을 사용한다.
 
 ```text
-B = ceil(직렬화된 전체 입력 token / 128)
-추정 TTFT = B × 0.1555초
-추정 모델 응답 완료 = 추정 TTFT + (생성 token - 1) / 12.949668
+R_prompt = 2103.19 token/s
+R_gen    = 40.58 token/s
+
+추정 model processing subtotal
+= 입력 token / R_prompt
++ 생성 token / R_gen
 ```
 
-이는 **Qualcomm의 X Elite / GENIEX_QAIRT / w4a16 / 4096 context 행에 맞춘 근사식**이다. TTFT가 첫 token 생성까지 포함하므로 또 입력/prefill 시간을 더하거나 모든 출력 token을 중복 더하지 않는다. 출력 1개일 때는 TTFT만 남는다.
+이 값은 공개 source의 실제 prompt-eval/generation throughput을 같은 모델·quantization의 planning profile로 사용하는 **ESTIMATED_MODEL_ONLY** 값이다. 실제 VIA p95가 아니며 model load, queue, Context access, serialization, IPC/RPC, validation, response delivery는 별도 span으로 측정·추정한다.
 
-구조화된 결과는 전체 출력, 사용자용 streaming 설명은 유효 내용이 생기기까지의 실제 token prefix를 사용한다. format example의 token 수는 실제 Model의 생성 길이와 다르므로 raw generation도 별도 수집한다. 오류·재시도·추가 검증 호출도 후보의 호출 원장에 포함한다.
+Streaming 사용자 응답의 response-start를 추정할 때는 prompt processing 뒤 첫 유효 output token/prefix까지의 generation 비용을 사용하고, structured output을 의사결정에 쓰는 호출은 전체 출력의 생성·검증 완료까지 사용한다. format example token 수는 실제 Model 생성 길이와 같다고 가정하지 않는다. 오류·재시도·추가 검증 호출도 후보의 실제 call graph에 포함한다.
 
 ### 입력을 세는 방법
 
@@ -134,6 +137,8 @@ ASR-02에서 clarification이 필요한 TC는 **고정된 후속 사용자 답�
 집계는 우선 TC 전체의 원자료를 보존한다. macro 평균·단순 평균·scenario 비중은 지금 바꾸지 않는다. 11-C의 고정 집합과 반복 규칙 승인 전에 최종 대표 점수를 만들지 않는다.
 
 ## A.4 ASR-04·05 — 변경 원장
+
+Target 숫자의 제품 근거 초안은 [Change Locality 근거](./11-evidence/asr04-asr05-change-locality-rationale.md)에 분리했다. 외부 표준은 변경 국소화 원칙의 근거로만 사용하고, VIA용 숫자 target은 Agent-neutral boundary와 24개 intentional change의 실제 성격에서 도출한다.
 
 07의 전후 계약을 24개 그대로 사용한다. 후보마다 같은 출발 버전에서 각각 독립 변경을 적용한다.
 
