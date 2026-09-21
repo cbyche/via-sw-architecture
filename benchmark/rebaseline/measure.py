@@ -91,6 +91,24 @@ def obligation_macro_score(tc_rows: list[dict[str,Any]]) -> dict[str,Any]:
     return {'tc_count':len(degrees),'macro_degree_pct':sum(degrees)/len(degrees),
             'strict_pass_rate_pct':100.0*sum(bool(r['strict_pass']) for r in tc_rows)/len(tc_rows)}
 
+def asr_score(value: float, spec: dict[str,Any]) -> int:
+    """11-C fixed bands. NOT_RUN/BLOCKED는 caller가 이 함수에 넣지 않는다."""
+    if value is None or isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(float(value)):
+        raise ValueError('numeric measured/estimated value required')
+    direction=spec['direction']
+    for band in spec['bands']:
+        if direction=='lower':
+            maxv=band.get('max')
+            if maxv is None or value <= float(maxv):
+                return int(band['score'])
+        elif direction=='higher':
+            minv=band.get('min')
+            if minv is None or value >= float(minv):
+                return int(band['score'])
+        else:
+            raise ValueError('unknown scoring direction')
+    raise ValueError('unreachable scoring configuration')
+
 def changed_elements(modified: list[str], added: list[str], removed: list[str],
                      baseline_ids: set[str], regression_ok: bool) -> int:
     m,a,r=map(set,(modified,added,removed))
@@ -123,7 +141,7 @@ def safety_summary(opportunities: list[dict[str,Any]], observations: list[dict[s
 def audit() -> dict[str,Any]:
     root=Path(__file__).parent
     cases=json.loads((root/'cases.json').read_text(encoding='utf-8'));changes=json.loads((root/'change-cases.json').read_text(encoding='utf-8'))
-    safety=json.loads((root/'oracle/safety-opportunities.json').read_text(encoding='utf-8'));profile=json.loads((root/'qwen-reference-profile.json').read_text(encoding='utf-8'))
+    safety=json.loads((root/'oracle/safety-opportunities.json').read_text(encoding='utf-8'));profile=json.loads((root/'qwen-reference-profile.json').read_text(encoding='utf-8'));scoring=json.loads((root/'scoring-baseline.json').read_text(encoding='utf-8'))
     expected_counts=[4,6,6,7,4,5,5,5,5,5,5,5,6,5,5,5,5,6]
     expected_uc={f'UC-{i:02d}.{j}' for i,n in enumerate(expected_counts,1) for j in range(1,n+1)}
     assert {c['uc'] for c in cases}==expected_uc and len(cases)==94
@@ -144,6 +162,15 @@ def audit() -> dict[str,Any]:
     assert len(json.loads((root/'environment-inputs.json').read_text(encoding='utf-8')))==8
     ps=json.loads((root/'prompts.json').read_text(encoding='utf-8'));assert len(ps)==8
     # Positive/negative controls validate only the measurement helpers, not VIA.
+    assert asr_score(2.0,scoring['asrs']['ASR-01'])==3
+    assert asr_score(0.9,scoring['asrs']['ASR-01'])==5
+    assert asr_score(4.1,scoring['asrs']['ASR-01'])==0
+    assert asr_score(95.0,scoring['asrs']['ASR-02'])==3
+    assert asr_score(99.0,scoring['asrs']['ASR-02'])==5
+    assert asr_score(100.0,scoring['asrs']['ASR-06'])==5
+    assert asr_score(26/27*100,scoring['asrs']['ASR-06'])==4
+    assert asr_score(0.0,scoring['asrs']['ASR-07'])==5
+    assert asr_score(100/24,scoring['asrs']['ASR-07'])==4
     demo_obs=[
       {'id':'O1','asrs':['ASR-02']},{'id':'O2','asrs':['ASR-02']},
       {'id':'O3','asrs':['ASR-03']}]
