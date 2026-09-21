@@ -1,4 +1,6 @@
-use gate2_contracts::{ObservationKind, TaskCommand, TaskOp, TaskState, TaskView};
+use gate2_contracts::{
+    ExecutionLink, ObservationKind, PendingHandoff, TaskCommand, TaskOp, TaskState, TaskView,
+};
 use rusqlite::{Connection, OptionalExtension, params};
 use std::{
     path::Path,
@@ -48,6 +50,19 @@ impl Repository {
              );
              CREATE TABLE IF NOT EXISTS task_owners (
                 task_id TEXT PRIMARY KEY, epoch INTEGER NOT NULL
+             );
+             CREATE TABLE IF NOT EXISTS handoff_outbox (
+                submission_key TEXT PRIMARY KEY,
+                task_id TEXT NOT NULL,
+                goal TEXT NOT NULL,
+                prepared_revision INTEGER NOT NULL,
+                status TEXT NOT NULL
+             );
+             CREATE TABLE IF NOT EXISTS execution_links (
+                task_id TEXT PRIMARY KEY,
+                submission_key TEXT NOT NULL UNIQUE,
+                run_id TEXT NOT NULL,
+                context_id TEXT
              );"
         ).map_err(storage)?;
         Ok(Self { connection: Arc::new(Mutex::new(connection)) })
@@ -82,6 +97,50 @@ impl Repository {
         tokio::task::spawn_blocking(move || {
             let conn = connection.lock().map_err(|_| ApplyError::Storage("poisoned DB lock".into()))?;
             load_task(&conn, &task_id)?.ok_or(ApplyError::NotFound(task_id))
+        }).await.map_err(|e| ApplyError::Storage(format!("join error: {e}")))?
+    }
+
+    pub async fn pending_handoffs(&self) -> Result<Vec<PendingHandoff>, ApplyError> {
+        let connection = self.connection.clone();
+        tokio::task::spawn_blocking(move || {
+            let conn = connection.lock().map_err(|_| ApplyError::Storage("poisoned DB lock".into()))?;
+            let mut stmt = conn.prepare(
+                "SELECT task_id,submission_key,goal,prepared_revision
+                 FROM handoff_outbox WHERE status='pending' ORDER BY task_id"
+            ).map_err(storage)?;
+            let rows = stmt.query_map([], |row| {
+                let raw: i64 = row.get(3)?;
+                let prepared_revision = u64::try_from(raw).map_err(|e| {
+                    rusqlite::Error::FromSqlConversionFailure(
+                        3, rusqlite::types::Type::Integer, Box::new(e)
+                    )
+                })?;
+                Ok(PendingHandoff {
+                    task_id: row.get(0)?,
+                    submission_key: row.get(1)?,
+                    goal: row.get(2)?,
+                    prepared_revision,
+                })
+            }).map_err(storage)?;
+            rows.collect::<Result<Vec<_>, _>>().map_err(storage)
+        }).await.map_err(|e| ApplyError::Storage(format!("join error: {e}")))?
+    }
+
+    pub async fn execution_link(&self, task_id: &str) -> Result<Option<ExecutionLink>, ApplyError> {
+        let connection = self.connection.clone();
+        let task_id = task_id.to_owned();
+        tokio::task::spawn_blocking(move || {
+            let conn = connection.lock().map_err(|_| ApplyError::Storage("poisoned DB lock".into()))?;
+            conn.query_row(
+                "SELECT submission_key,run_id,context_id FROM execution_links WHERE task_id=?1",
+                [&task_id],
+                |row| Ok(ExecutionLink {
+                    task_id: task_id.clone(),
+                    submission_key: row.get(0)?,
+                    run_id: row.get(1)?,
+                    context_id: row.get(2)?,
+                }),
+            ).optional().map_err(storage)
         }).await.map_err(|e| ApplyError::Storage(format!("join error: {e}")))?
     }
 }
@@ -128,6 +187,85 @@ fn apply_blocking(connection: Arc<Mutex<Connection>>, command: TaskCommand, epoc
             let mut next = current.clone();
             let mut mutate = true;
             match op {
+                TaskOp::PrepareHandoff { submission_key, goal } => {
+                    if terminal(&current.state) {
+                        return Err(invalid("cannot prepare handoff for terminal Task"));
+                    }
+                    if submission_key.is_empty() || goal.trim().is_empty() {
+                        return Err(invalid("handoff submission key/goal missing"));
+                    }
+                    let prior: Option<(String, String, String)> = tx.query_row(
+                        "SELECT task_id,goal,status FROM handoff_outbox WHERE submission_key=?1",
+                        [submission_key],
+                        |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+                    ).optional().map_err(storage)?;
+                    if let Some((task_id, prior_goal, status)) = prior {
+                        if task_id != command.task_id || prior_goal != *goal {
+                            return Err(invalid("submission key reused for different handoff"));
+                        }
+                        if status != "pending" {
+                            return Err(invalid("handoff already confirmed"));
+                        }
+                        mutate = false;
+                    } else {
+                        let prepared_revision = current.revision.checked_add(1)
+                            .ok_or_else(|| invalid("revision overflow"))?;
+                        let prepared_revision = i64::try_from(prepared_revision)
+                            .map_err(|_| invalid("revision overflow"))?;
+                        tx.execute(
+                            "INSERT INTO handoff_outbox(submission_key,task_id,goal,prepared_revision,status)
+                             VALUES(?1,?2,?3,?4,'pending')",
+                            params![submission_key, command.task_id, goal, prepared_revision],
+                        ).map_err(storage)?;
+                    }
+                }
+                TaskOp::ConfirmHandoff { submission_key, run_id, context_id } => {
+                    if run_id.is_empty() || submission_key.is_empty() {
+                        return Err(invalid("handoff confirmation identity missing"));
+                    }
+                    let pending: Option<(String, String)> = tx.query_row(
+                        "SELECT task_id,status FROM handoff_outbox WHERE submission_key=?1",
+                        [submission_key],
+                        |r| Ok((r.get(0)?, r.get(1)?)),
+                    ).optional().map_err(storage)?;
+                    match pending {
+                        Some((task_id, status)) if task_id == command.task_id && status == "pending" => {}
+                        Some(_) => return Err(invalid("handoff confirmation does not match pending outbox")),
+                        None => {
+                            let existing: Option<(String, String, Option<String>)> = tx.query_row(
+                                "SELECT submission_key,run_id,context_id FROM execution_links WHERE task_id=?1",
+                                [&command.task_id],
+                                |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?)),
+                            ).optional().map_err(storage)?;
+                            if existing.as_ref() == Some(&(submission_key.clone(), run_id.clone(), context_id.clone())) {
+                                mutate = false;
+                            } else {
+                                return Err(invalid("handoff confirmation missing pending outbox"));
+                            }
+                        }
+                    }
+                    if mutate {
+                        if let Some(existing) = &current.run_id {
+                            if existing != run_id {
+                                return Err(invalid("execution rebind needs a new explicit lifecycle command"));
+                            }
+                        } else {
+                            next.run_id = Some(run_id.clone());
+                        }
+                        if current.state != TaskState::CancelRequested {
+                            next.state = TaskState::Running;
+                        }
+                        tx.execute(
+                            "INSERT INTO execution_links(task_id,submission_key,run_id,context_id)
+                             VALUES(?1,?2,?3,?4)",
+                            params![command.task_id, submission_key, run_id, context_id],
+                        ).map_err(storage)?;
+                        tx.execute(
+                            "UPDATE handoff_outbox SET status='confirmed' WHERE submission_key=?1",
+                            [submission_key],
+                        ).map_err(storage)?;
+                    }
+                }
                 TaskOp::AcceptExecution { run_id } => {
                     if run_id.is_empty() { return Err(invalid("empty execution ID")); }
                     if let Some(existing) = &current.run_id {
