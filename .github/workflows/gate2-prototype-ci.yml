@@ -10,6 +10,10 @@ on:
       - '.github/workflows/gate2-prototype-ci.yml'
   workflow_dispatch:
 
+concurrency:
+  group: gate2-prototype-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   compile-test:
     strategy:
@@ -44,3 +48,18 @@ jobs:
         run: |
           python3 benchmark/rebaseline/gate2/catalog_check.py --output /tmp/gate2-review
           python3 -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v
+      - name: Python pre-measurement checks
+        run: |
+          python3 -m py_compile benchmark/rebaseline/gate2/*.py
+          python3 benchmark/rebaseline/build_assets.py
+          python3 benchmark/rebaseline/gate2/make_trial_order.py --output /tmp/trial-order.json
+          python3 benchmark/rebaseline/gate2/ir_model_runner.py --output /tmp/ir-dry-run.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          order=json.loads(Path('/tmp/trial-order.json').read_text())
+          assert order['warmup'].count('A')==10 and order['warmup'].count('B')==10
+          assert order['scored'].count('A')==100 and order['scored'].count('B')==100
+          ir=json.loads(Path('/tmp/ir-dry-run.json').read_text())
+          assert ir['status']=='DRY_RUN_MODEL_NOT_CALLED' and ir['scoring']=='NOT_RUN'
+          PY
