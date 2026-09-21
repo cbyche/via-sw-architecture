@@ -149,10 +149,8 @@ Strict pass 원자료를 함께 공개하여 95% 평균이 일부 심각한 TC �
 ### Execution protocol
 
 - ASR-02와 동일한 5-repeat semantic execution rule
-- fixed counterfactual sensitivity variant가 있는 TC는 base/variant degree를 먼저 평균하여 하나의 TC degree로 사용
 - modality/connection/task/run/artifact/pending-interaction의 identity를 trace에서 확인
 - 같은 TC가 ASR-02와 겹치더라도 실행은 한 번, obligation은 ASR tag에 따라 별도 판정
-- opaque nonce/run/artifact mapping으로 강한 LLM의 semantic recovery를 차단
 - strict continuity PASS를 secondary evidence로 보존
 
 ### Target rationale
@@ -325,68 +323,44 @@ Model/Context provider 변화는 주로 0~2 elements에 국소화될 수 있지�
 
 각 DP는 이 중 실제 구조 인과관계가 큰 Primary ASR 약 3~4개만 선택한다. 모든 후보가 같은 QA에서 같은 값을 얻으면 그 QA는 해당 DP의 변별 driver가 아니며 억지 failure를 만들지 않는다.
 
-## C.12 Primary ASR Qualification — Architecture Sensitivity Gate
+## C.12 Primary ASR Qualification — Natural Architecture Sensitivity
 
-System-level ASR이 중요하다는 사실만으로 모든 DP의 Primary ASR이 되는 것은 아니다. 12에서 각 DP의 후보를 비교하기 전에 **DP × ASR sensitivity hypothesis**를 작성하고 다음 네 조건을 모두 만족할 때만 Primary ASR로 사용한다.
+System-level ASR이 중요하다는 사실과 특정 DP의 후보를 가르는 지표라는 사실은 다르다.
 
-1. **Structural Difference** — 후보 사이에 책임 배치, state authority, contract, persistence/enforcement boundary, call graph 중 실제 구조 차이가 있다.
-2. **Causal Mechanism** — 그 구조 차이가 해당 QA의 response measure에 영향을 주는 인과 경로를 설명할 수 있다.
-3. **Architecture-sensitive Probe** — 동일 Model/Agent/fixture를 고정한 상태에서 그 경로를 자극하는 scenario를 만들 수 있다.
-4. **Non-oracle Evidence** — 시험기가 candidate에게 정답 state/history/identity를 주입하지 않아도 관찰 차이를 판정할 수 있다.
+12에서 Primary ASR로 사용하려면 **정상적으로 기능 요구를 충족하도록 설계한 합리적인 구조 대안들 사이에서**, 동일한 현실적 제약과 동일 Model/Agent 조건 아래 대표 Metric이 자연스럽게 달라질 이유가 있어야 한다.
 
-하나라도 충족하지 않으면 그 ASR은 해당 DP에서 **regression constraint / secondary observation**으로 내린다. 후보 사이에 차이를 만들기 위해 기능을 고의로 제거한 약한 후보를 만들지 않는다.
+다음 네 조건을 모두 만족할 때만 해당 DP의 Primary ASR로 사용한다.
 
-이는 ATAM의 sensitivity-point 관점과 같다. 특정 architecture parameter가 measurable quality response에 민감하게 연결될 때만 실제 architecture trade-off의 근거가 된다.
+1. **Real Structural Difference** — 책임 배치, call graph, state authority, contract, materialization, persistence/enforcement boundary가 실제로 다르다.
+2. **Natural Causal Effect** — 그 차이가 별도의 고의적 기능 누락 없이 Metric에 영향을 줄 수 있다.
+3. **Same Realistic Constraints** — latency/token/context/resource/failure 조건을 후보에 동일하게 적용한다.
+4. **Representative Scenario** — 05의 실제 UC/11-B canonical TC에서 차이가 관찰되거나 합리적으로 예측 가능하다.
 
-### LLM이 구조 결함을 추론으로 가리는 것을 막는 Probe 원칙
+opaque ID, random nonce, hidden mapping 등 후보 간 차이를 만들기 위한 인위적인 scoring fixture는 Primary ASR 선정 근거로 사용하지 않는다.
 
-ASR-02/03의 구조 효과를 볼 때는 세계지식이나 의미 추론만으로 답을 복원할 수 없는 input을 사용한다.
+### ASR별 예상 역할
 
-- **Opaque identity:** Task/run/artifact/object/policy ID에 의미 있는 이름 대신 random/opaque ID를 사용한다.
-- **Counterfactual pair:** 같은 자연어 input에 대해 fixture의 hidden mapping만 바꾼 paired case를 만든다. 구조가 authoritative state를 전달하지 못하면 semantic guess로 두 case를 동시에 맞힐 수 없다.
-- **Authoritative-state dependency:** 정답이 Conversation/Task correlation, timestamped interaction, persisted state, policy revision처럼 Architecture가 보존·전달해야 하는 정보에 의존하게 한다.
-- **No semantic shortcut:** Task title, 최근 문장, Agent name만으로 정답을 유추할 수 없게 fixture를 구성한다.
-- **Fixed intelligence:** 후보 간 동일 Model artifact/runtime/decoding을 사용한다. 더 강한 LLM을 특정 후보에만 주지 않는다.
-- **No oracle repair:** candidate가 잃은 history/state를 test harness가 뒤늦게 prompt에 넣어주지 않는다.
+| ASR | DP discriminator로서의 기본 판단 |
+| --- | --- |
+| ASR-01 | **강함** — call graph/materialization/IPC/delegation 구조가 자연스럽게 latency에 반영 |
+| ASR-02 | **조건부** — semantic pipeline 분할, Context provisioning, lossy intermediate representation 등 정상 구조 자체가 completion 정도를 바꾸는 DP에서만 Primary |
+| ASR-03 | **조건부** — Conversation/Task context provisioning 또는 state authority 선택이 실제 continuation information availability를 바꾸는 DP에서만 Primary |
+| ASR-04 | **강함** — Agent 변화의 structural ripple을 직접 측정 |
+| ASR-05 | **강함** — Model/Context/state 변화의 structural ripple을 직접 측정 |
+| ASR-06 | **주로 constraint** — 정상 대안이 모두 recovery invariant를 만족하면 점수는 동점. recovery mechanism의 비용은 ASR-01/05 등에 나타남 |
+| ASR-07 | **주로 constraint** — 정상 대안이 모두 0 violation이면 점수는 동점. enforcement 비용/변경 ripple은 다른 ASR에 나타남 |
 
-이 원칙의 목적은 LLM 성능을 낮추는 것이 아니라 **구조가 제공하지 않은 authoritative information은 아무리 강한 LLM도 확실하게 복원할 수 없도록** 시험을 구성하는 것이다.
+### DP × ASR 판정 기록
 
-### ASR별 구조 민감성 기대
-
-| ASR | 구조적으로 값이 달라질 수 있는 대표 mechanism | DP에서 값이 같다면 |
-| --- | --- | --- |
-| ASR-01 | LLM call graph, Context materialization, IPC/RPC, direct/delegated path | latency trade-off 없음 |
-| ASR-02 | evidence 전달 경계, referent timeline, request/task/agent binding 정보 | 해당 DP에서는 secondary로 내림 |
-| ASR-03 | Conversation/Task/run/artifact identity authority와 correlation persistence | 해당 DP에서는 secondary로 내림 |
-| ASR-04 | Agent-specific dependency localization | 본질적으로 구조 변별 지표 |
-| ASR-05 | Model/Context/state change ripple | 본질적으로 구조 변별 지표 |
-| ASR-06 | durable state authority, atomic handoff, idempotency, event correlation, recovery protocol | 모두 invariant를 만족하면 동점; 보완 비용은 ASR-05/01 등에 나타남 |
-| ASR-07 | policy enforcement placement, egress mediation, approval authority, revision/TOCTOU handling | 모두 0 violation이면 동점; 해당 DP에서는 constraint로 유지 |
-
-### Reliability/Safety가 모두 100%여도 되는 이유
-
-ASR-06/07은 제품적으로 반드시 지켜야 하는 invariant 성격이 강하다. 두 Architecture가 서로 다른 tactic을 사용하더라도 모두 invariant를 만족한다면 **둘 다 100%/0 violation이 맞다.**
-
-이 경우 구조 판단은 다음처럼 이동한다.
-
-- 같은 reliability를 얻기 위해 더 많은 state/contract/component가 필요한가 → ASR-05
-- 추가 persistence/coordination 때문에 latency가 늘어나는가 → ASR-01
-- Agent 변경 때 reliability adapter가 여러 Core 요소로 전파되는가 → ASR-04
-- safety enforcement가 정상 기능 completion을 방해하는가 → ASR-02 regression
-
-즉 QA를 억지로 실패시키지 않고 **동일 품질을 달성하는 구조적 비용과 trade-off를 다른 승인된 ASR에서 관찰**한다.
-
-### 12에서 반드시 작성할 DP × ASR Sensitivity Record
-
-각 Primary ASR에 대해 다음 필드를 후보 결과 전에 작성한다.
+각 Primary ASR은 후보 결과 전에 다음을 적는다.
 
     DP ID
     ASR ID
-    candidate structural difference
-    sensitivity mechanism
-    fixed intelligence/dependencies
-    architecture-sensitive probe
-    expected observable if mechanism matters
-    falsification condition
+    reasonable candidate structural difference
+    realistic fixed constraints
+    natural causal path to metric
+    representative UC/TC
+    expected reason values may differ
+    condition under which the ASR should be demoted to regression
 
-`falsification condition`은 예를 들어 '두 후보가 필요한 information/state/contract를 모두 제공하면 동일 점수가 나와 Primary QA 가설이 반증된다'처럼 작성한다.
+두 합리적 후보가 기능을 완전히 구현했을 때 같은 값이 예상된다면 해당 ASR을 Primary에서 내리는 것이 원칙이다.
