@@ -129,11 +129,26 @@ async fn exec_smoke(worker: PathBuf) -> anyhow::Result<serde_json::Value> {
     let process_run = run_id(&process_reply)?;
     let _ = local.query(&local_run).await?;
     let _ = process.query(&process_run).await?;
+    let local_events = local.events_since(&local_run, 0).await?;
+    let process_events = process.events_since(&process_run, 0).await?;
+    anyhow::ensure!(!local_events.is_empty() && !process_events.is_empty());
+
+    let local_follow = local.follow_up(&local_run, "continue".into()).await?;
+    let process_follow = process.follow_up(&process_run, "continue".into()).await?;
+    anyhow::ensure!(reply_shape(&local_follow) == reply_shape(&process_follow));
+
+    let local_cancel = local.cancel(&local_run).await?;
+    let process_cancel = process.cancel(&process_run).await?;
+    anyhow::ensure!(reply_shape(&local_cancel) == reply_shape(&process_cancel));
+
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"exec bridge semantic equivalence smoke",
+        "scope":"exec bridge full-lifecycle semantic transport smoke",
         "local_shape":reply_shape(&local_reply),
         "process_shape":reply_shape(&process_reply),
+        "events_transported":true,
+        "follow_up_transported":true,
+        "cancel_transported":true,
         "benchmark":"NOT_RUN"
     }))
 }
