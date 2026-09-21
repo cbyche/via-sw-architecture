@@ -1,8 +1,25 @@
 # 12-01. DP Master Catalog — Gate 1
 
-> 버전: **W12-G1-v1 / 첫 번째 사용자 리뷰**.
+> 버전: **W12-G1-v1.1 / 첫 번째 사용자 리뷰 — semantic DP ID 적용**.
 > 범위: **25개 구조·설계 주제 분류 → 주요 비교 질문 10개**. Candidate family 26개는 상세설계 전 탐색 범위이며, 확정 후보·승자·점수가 아니다.
 > 원천: 03 §3.9의 열린 구조 질문, 04의 논리 흐름, 05 UC 18개, 06 공통 조건, 07 변화 24개, 10 RC-01~18.
+
+## 0. DP ID 체계
+
+DP ID는 전역 순번이 아니라 **설계 concern을 드러내는 semantic prefix**를 사용한다.
+
+| Prefix | Concern |
+|---|---|
+| `INT` | Interaction / Voice–Core mediation |
+| `CTX` | Context access & provisioning |
+| `IR` | Interpretation & Refinement |
+| `ORCH` | Request handling / orchestration |
+| `TASK` | Task lifecycle, supervision & feedback |
+| `AGENT` | Agent integration contract |
+| `SEC` | Policy, consent, privacy/security enforcement |
+| `EXEC` | Execution runtime, scheduling & isolation |
+
+따라서 `CTX-DP01`과 `CTX-DP02`는 같은 Context concern의 서로 다른 결정점이고, `TASK-DP01`과 `TASK-DP02`도 같은 Task-lifecycle concern 안에서 구분된다. 반면 `SEC-DP01`과 `EXEC-DP01`의 `01`은 서로의 선후·우선순위를 뜻하지 않는다.
 
 ## 1. 이번 리뷰에서 결정할 것
 
@@ -16,16 +33,16 @@ VIA는 PC 기반 Agent-neutral Interaction & Orchestration이다. 외부 domain 
 
 | DP | 구조 질문 | 합리적 family 범위 | 관찰 우선 W-ASR 가설 |
 |---|---|---|---|
-| **DP-01 음성·Core 처리 중계** | S2S의 직접 응답과 VIA Core 처리를 어느 중계 구조에서 조정할 것인가? | A. Voice-led mediation<br/>B. Core-led mediation | W-01, W-02, W-08 |
-| **DP-02 Context 조회·구체화** | Context Source의 실제 내용을 누가, 언제 읽어 어떤 표현으로 소비자에게 제공할 것인가? | A. Broker-materialized context<br/>B. Handle-led demand resolution<br/>C. Typed hybrid | W-01, W-05, W-08, W-11 |
-| **DP-03 요청 해석 단계 구성** | Referent·Request·Task·처리 경로·Agent 판단을 어떻게 묶거나 나눌 것인가? | A. Joint interpretation<br/>B. Staged revisable pipeline<br/>C. Grouped interpretation | W-01, W-02, W-05, W-08 |
-| **DP-04 과거 대화·업무 맥락 제공** | 보존한 Conversation/Task 기록 중 무엇을 현재 Model 입력으로 구성할 것인가? | A. Canonical context reconstruction<br/>B. Indexed retrieval with provenance<br/>C. Summary plus selective replay | W-01, W-06, W-08, W-11 |
-| **DP-05 제한된 정보 요청 처리 위치** | VIA가 직접 처리해도 되는 Read/Search/Understand를 Core와 Agent 중 어디에 배치할 것인가? | A. Core bounded service<br/>B. Downstream bounded delegation | W-01, W-07, W-08, W-11 |
-| **DP-06 업무 상태 관리·재시작 복구** | VIA Task의 상태와 실행 연결을 어느 단위가 관리하고, 재시작 때 어떻게 복원할 것인가? | A. Shared transactional supervision<br/>B. Durable per-task supervision | W-02, W-04, W-09, W-08 |
-| **DP-07 Agent 계약 통합** | 서로 다른 Agent의 capability·실행·질문·결과 계약을 어디서 어떻게 정규화할 것인가? | A. Capability-specific integration gateways<br/>B. Canonical agent port with adapters<br/>C. Stable kernel with typed extensions | W-07, W-02, W-03, W-08 |
-| **DP-08 업무 이벤트 수집·전달** | Agent 상태·질문·결과를 언제 수집하고 사용자 전달까지 어떤 event 경로를 둘 것인가? | A. Scheduled reconciliation<br/>B. Streaming intake with reconciliation | W-03, W-04, W-07, W-09 |
-| **DP-09 권한·동의·정보 반출 통제** | 접근/반출 허용과 pending Action 승인을 실제 사용 경계에 어떻게 연결할 것인가? | A. Central mediation gateway<br/>B. Distributed boundary guards<br/>C. Scoped capability enforcement | W-02, W-08, W-11, W-12 |
-| **DP-10 실행 스케줄링·장애 격리** | Voice/Core/연동 작업을 어떤 queue·worker·process 경계에 배치해 간섭과 장애 전파를 제한할 것인가? | A. Single-process partitioned async runtime<br/>B. Interaction/core and integration workers<br/>C. Per-provider fault domains | W-01, W-04, W-10, W-09 |
+| **INT-DP01 음성·Core 처리 중계** | S2S의 직접 응답과 VIA Core 처리를 어느 중계 구조에서 조정할 것인가? | A. Voice-led mediation<br/>B. Core-led mediation | W-01, W-02, W-08 |
+| **CTX-DP01 Context 조회·구체화** | Context Source의 실제 내용을 누가, 언제 읽어 어떤 표현으로 소비자에게 제공할 것인가? | A. Broker-materialized context<br/>B. Handle-led demand resolution<br/>C. Typed hybrid | W-01, W-05, W-08, W-11 |
+| **IR-DP01 요청 해석 단계 구성** | Referent·Request·Task·처리 경로·Agent 판단을 어떻게 묶거나 나눌 것인가? | A. Joint interpretation<br/>B. Staged revisable pipeline<br/>C. Grouped interpretation | W-01, W-02, W-05, W-08 |
+| **CTX-DP02 과거 대화·업무 맥락 제공** | 보존한 Conversation/Task 기록 중 무엇을 현재 Model 입력으로 구성할 것인가? | A. Canonical context reconstruction<br/>B. Indexed retrieval with provenance<br/>C. Summary plus selective replay | W-01, W-06, W-08, W-11 |
+| **ORCH-DP01 제한된 정보 요청 처리 위치** | VIA가 직접 처리해도 되는 Read/Search/Understand를 Core와 Agent 중 어디에 배치할 것인가? | A. Core bounded service<br/>B. Downstream bounded delegation | W-01, W-07, W-08, W-11 |
+| **TASK-DP01 업무 상태 관리·재시작 복구** | VIA Task의 상태와 실행 연결을 어느 단위가 관리하고, 재시작 때 어떻게 복원할 것인가? | A. Shared transactional supervision<br/>B. Durable per-task supervision | W-02, W-04, W-09, W-08 |
+| **AGENT-DP01 Agent 계약 통합** | 서로 다른 Agent의 capability·실행·질문·결과 계약을 어디서 어떻게 정규화할 것인가? | A. Capability-specific integration gateways<br/>B. Canonical agent port with adapters<br/>C. Stable kernel with typed extensions | W-07, W-02, W-03, W-08 |
+| **TASK-DP02 업무 이벤트 수집·전달** | Agent 상태·질문·결과를 언제 수집하고 사용자 전달까지 어떤 event 경로를 둘 것인가? | A. Scheduled reconciliation<br/>B. Streaming intake with reconciliation | W-03, W-04, W-07, W-09 |
+| **SEC-DP01 권한·동의·정보 반출 통제** | 접근/반출 허용과 pending Action 승인을 실제 사용 경계에 어떻게 연결할 것인가? | A. Central mediation gateway<br/>B. Distributed boundary guards<br/>C. Scoped capability enforcement | W-02, W-08, W-11, W-12 |
+| **EXEC-DP01 실행 스케줄링·장애 격리** | Voice/Core/연동 작업을 어떤 queue·worker·process 경계에 배치해 간섭과 장애 전파를 제한할 것인가? | A. Single-process partitioned async runtime<br/>B. Interaction/core and integration workers<br/>C. Per-provider fault domains | W-01, W-04, W-10, W-09 |
 
 ## 3. 경계 그림
 
@@ -34,16 +51,16 @@ VIA는 PC 기반 Agent-neutral Interaction & Orchestration이다. 외부 domain 
 ```mermaid
 flowchart TB
     USER["사용자 Voice / Text / 화면 interaction"]
-    V["DP-01 Voice–Core 중계"]
-    S["DP-03 Semantic pipeline"]
-    C["DP-02 Source Context materialization"]
-    H["DP-04 Conversation/Task context provisioning"]
-    P["DP-05 Bounded 처리 위치"]
-    T["DP-06 Task supervision & recovery"]
-    A["DP-07 Agent 계약 통합"]
-    E["DP-08 Feedback 수집·전달"]
-    SEC["DP-09 Policy / Consent / Egress"]
-    RT["DP-10 Runtime scheduling & isolation"]
+    V["INT-DP01 Voice–Core 중계"]
+    S["IR-DP01 Semantic pipeline"]
+    C["CTX-DP01 Source Context materialization"]
+    H["CTX-DP02 Conversation/Task context provisioning"]
+    P["ORCH-DP01 Bounded 처리 위치"]
+    T["TASK-DP01 Task supervision & recovery"]
+    A["AGENT-DP01 Agent 계약 통합"]
+    E["TASK-DP02 Feedback 수집·전달"]
+    SEC["SEC-DP01 Policy / Consent / Egress"]
+    RT["EXEC-DP01 Runtime scheduling & isolation"]
     DOWN["Downstream Agents: domain reasoning / planning / execution"]
     USER --> V
     V --> S
@@ -69,11 +86,11 @@ flowchart TB
     RT -. "실행 배치와 공유 자원" .-> T
 ```
 
-DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자원 배치**라는 독립 질문을 소유한다. 모든 arrow가 별도 IPC/LLM 호출을 뜻하지 않는다.
+SEC-DP01 / EXEC-DP01은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자원 배치**라는 독립 질문을 소유한다. 모든 arrow가 별도 IPC/LLM 호출을 뜻하지 않는다.
 
 ## 4. DP 상세 카드
 
-### DP-01 — Voice–Core Interaction Mediation
+### INT-DP01 — Voice–Core Interaction Mediation
 
 **질문:** S2S의 직접 응답과 VIA Core 처리를 어느 중계 구조에서 조정할 것인가?
 
@@ -94,13 +111,13 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **연결:** UC-01, UC-04, UC-07, UC-11, UC-15 / RC-01, RC-08, RC-09, RC-12, RC-14 / M-01, M-07, M-09.
 
-**Highlight / 공정성 조건:** S2S Direct Response와 그 Conversation 기록은 모든 후보 필수. provider history만 있는 약한 후보는 제외. Qwen3-Omni의 단어 시각·tool/event 계약을 확인하지 않고 지원된다고 가정하지 않음. 필요한 helper의 비용은 해당 후보에 포함. 물리적 프로세스 격리는 DP-10; Semantic 판단의 단계 구성은 DP-03.
+**Highlight / 공정성 조건:** S2S Direct Response와 그 Conversation 기록은 모든 후보 필수. provider history만 있는 약한 후보는 제외. Qwen3-Omni의 단어 시각·tool/event 계약을 확인하지 않고 지원된다고 가정하지 않음. 필요한 helper의 비용은 해당 후보에 포함. 물리적 프로세스 격리는 EXEC-DP01; Semantic 판단의 단계 구성은 IR-DP01.
 
-### DP-02 — Context Access & Materialization
+### CTX-DP01 — Context Access & Materialization
 
 **질문:** Context Source의 실제 내용을 누가, 언제 읽어 어떤 표현으로 소비자에게 제공할 것인가?
 
-**Scope / boundary:** Source→VIA 소비자 경계. interaction 시점 evidence, 자료 버전, source handle, materialization 수명. 과거 대화 선택은 DP-04, 허용 판정은 DP-09.
+**Scope / boundary:** Source→VIA 소비자 경계. interaction 시점 evidence, 자료 버전, source handle, materialization 수명. 과거 대화 선택은 CTX-DP02, 허용 판정은 SEC-DP01.
 
 | Family | 채택 가능한 구조 방향 |
 |---|---|
@@ -121,7 +138,7 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** Eager는 모든 개인자료를 무차별 읽는다는 뜻이 아님. 세 후보 모두 필요 범위와 허용조건을 준수. Handle 자체의 bytes가 아니라 실제 열어주는 범위를 W-11에서 셈. 과거 IR/CE 이름을 재사용해 같은 경계를 이중 DP로 만들지 않음.
 
-### DP-03 — Semantic Interpretation Pipeline
+### IR-DP01 — Semantic Interpretation Pipeline
 
 **질문:** Referent·Request·Task·처리 경로·Agent 판단을 어떻게 묶거나 나눌 것인가?
 
@@ -146,11 +163,11 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** Staged 후보의 source/provenance를 고의로 삭제하지 않음. 실제 사용한 재조회·수정의 비용도 기록. 같은 역할은 같은 모델; 프롬프트 문자열/호출 수를 동일하게 강제하지 않음. W-05의 수치 차이는 실제 모델 실행 전에는 가설이며, 임의 오류율로 만들지 않음.
 
-### DP-04 — Conversation & Task Context Provisioning
+### CTX-DP02 — Conversation & Task Context Provisioning
 
 **질문:** 보존한 Conversation/Task 기록 중 무엇을 현재 Model 입력으로 구성할 것인가?
 
-**Scope / boundary:** VIA 기준 기록→S2S/Semantic Model 입력 경계. 영구 state authority/복구는 DP-06과 구분.
+**Scope / boundary:** VIA 기준 기록→S2S/Semantic Model 입력 경계. 영구 state authority/복구는 TASK-DP01과 구분.
 
 | Family | 채택 가능한 구조 방향 |
 |---|---|
@@ -171,7 +188,7 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** 모든 후보가 원문 Conversation과 Task identity를 보존. 요약만 저장해서 원문을 잃는 대안은 아님. 현재 짧은 canonical TC만으로 장기대화의 성능 차이를 입증할 수 없다는 위험을 명시. 추가 장기 workload는 진단용으로만 두며 점수에 몰래 추가하지 않음. Provider conversation cache는 세 후보에 적용 가능한 tactic이며 기준 기록의 대체물이 아님.
 
-### DP-05 — Bounded Request Execution Placement
+### ORCH-DP01 — Bounded Request Execution Placement
 
 **질문:** VIA가 직접 처리해도 되는 Read/Search/Understand를 Core와 Agent 중 어디에 배치할 것인가?
 
@@ -195,7 +212,7 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** Agent로 옮긴 bounded 처리시간도 W-01에는 포함. 프로세스 이름만 바꾸어 제외시간을 늘리지 않음. 고정 Agent fixture의 업무 능력은 동일. 실제 Agent 지능 차이를 구조의 W-05 이익으로 주장하지 않음. 선택적 로컬 fast path와 별도 local tracked-task 필요 여부는 이 DP의 후보 상세에서 검토하며 기본 요구로 강제하지 않음.
 
-### DP-06 — Task Supervision & Durable Recovery
+### TASK-DP01 — Task Supervision & Durable Recovery
 
 **질문:** VIA Task의 상태와 실행 연결을 어느 단위가 관리하고, 재시작 때 어떻게 복원할 것인가?
 
@@ -219,11 +236,11 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** 두 후보 모두 원자적 저장·중복방지·취소 race·재연결을 구현. in-memory-only 후보는 제외. Event journal vs snapshot은 별도 직교 tactic이다. 중앙/분산 ownership과 한 후보에 임의로 묶지 않고 Gate 2에서 교차 영향을 확인. W-08은 추가된 기본 요소 수가 아니라 15개 변화에 따른 변경 ID 수만 측정.
 
-### DP-07 — Agent Contract Integration
+### AGENT-DP01 — Agent Contract Integration
 
 **질문:** 서로 다른 Agent의 capability·실행·질문·결과 계약을 어디서 어떻게 정규화할 것인가?
 
-**Scope / boundary:** VIA orchestration→Agent integration 경계. 공통 task identity는 유지. event 운반 방식은 DP-08.
+**Scope / boundary:** VIA orchestration→Agent integration 경계. 공통 task identity는 유지. event 운반 방식은 TASK-DP02.
 
 | Family | 채택 가능한 구조 방향 |
 |---|---|
@@ -244,11 +261,11 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** Native API를 Core 전체에 무차별 노출하는 안은 fixed Agent-neutral 경계에 맞지 않음. A도 integration 경계를 둠. Adapter를 무료 1개로 가정하지 않고 registry, auth, schema 등 실제 변경만 계산. API 지원 기능을 동일화하고 unsupported 기능을 구현했다고 가정하지 않음.
 
-### DP-08 — Task Feedback Acquisition & Delivery
+### TASK-DP02 — Task Feedback Acquisition & Delivery
 
 **질문:** Agent 상태·질문·결과를 언제 수집하고 사용자 전달까지 어떤 event 경로를 둘 것인가?
 
-**Scope / boundary:** Agent 상태 원천→VIA state 적용→Text/Voice/알림. 상태의 의미·owner는 DP-06, 추상 계약은 DP-07.
+**Scope / boundary:** Agent 상태 원천→VIA state 적용→Text/Voice/알림. 상태의 의미·owner는 TASK-DP01, 추상 계약은 AGENT-DP01.
 
 | Family | 채택 가능한 구조 방향 |
 |---|---|
@@ -268,7 +285,7 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **Highlight / 공정성 조건:** 기본 비교 Agent는 조회와 streaming 양쪽을 지원. 서로 다른 기능의 Agent를 배정해 승패를 만들지 않음. 짧은 polling 간격도 합리적 후보에 허용하며 호출·부하 비용을 함께 기록. 개인 PC의 inbound webhook 접근성을 가정하지 않음. outbound stream 또는 현실적 relay가 필요한 경우 그 배치 비용을 포함.
 
-### DP-09 — Policy, Consent & Context Egress Enforcement
+### SEC-DP01 — Policy, Consent & Context Egress Enforcement
 
 **질문:** 접근/반출 허용과 pending Action 승인을 실제 사용 경계에 어떻게 연결할 것인가?
 
@@ -291,9 +308,9 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 **연결:** UC-02, UC-08, UC-09, UC-14, UC-16, UC-17, UC-18 / RC-04, RC-09, RC-11, RC-15, RC-16 / A-07, A-08, C-01, C-04, C-05, M-04, M-06.
 
-**Highlight / 공정성 조건:** W-12는 점수와 목표 충족을 공개하되 별도 hard gate를 새로 도입하지 않음. Capability 발행만으로 철회가 해결된다고 가정하지 않음. 세 후보 모두 사용 시점 current policy를 만족. 자료의 선택/구체화 정책은 DP-02이며 여기서 별도 selective retrieval 후보를 중복 생성하지 않음.
+**Highlight / 공정성 조건:** W-12는 점수와 목표 충족을 공개하되 별도 hard gate를 새로 도입하지 않음. Capability 발행만으로 철회가 해결된다고 가정하지 않음. 세 후보 모두 사용 시점 current policy를 만족. 자료의 선택/구체화 정책은 CTX-DP01이며 여기서 별도 selective retrieval 후보를 중복 생성하지 않음.
 
-### DP-10 — Runtime Scheduling & Fault-Isolation Boundary
+### EXEC-DP01 — Runtime Scheduling & Fault-Isolation Boundary
 
 **질문:** Voice/Core/연동 작업을 어떤 queue·worker·process 경계에 배치해 간섭과 장애 전파를 제한할 것인가?
 
@@ -322,17 +339,17 @@ DP-09/10은 cross-cutting이지만, 각각 **권한 강제 위치 / 실행·자�
 
 | 혼동하기 쉬운 DP | 경계의 차이 | 합치거나 나눌 때의 원칙 |
 |---|---|---|
-| DP-02 / DP-04 | 외부 source 내용을 확보·표현하는가 / 보존된 대화·Task를 현재 모델 입력으로 선택하는가 | 공통 cache/index는 공유해도 결정 질문은 다름. 동일 구현 선택으로 항상 묶이면 Gate 2에서 병합 검토. |
-| DP-02 / DP-09 | 어떤 내용을 언제 구체화하는가 / 읽거나 보내도 되는지 어디서 강제하는가 | 선택적 자료 제공을 양쪽 후보의 별도 이익으로 중복 산정하지 않음. |
-| DP-06 / DP-08 / DP-10 | 상태 전이 authority / 이벤트 수집·전달 경로 / worker·process·resource 배치 | actor=프로세스, event log=event bus처럼 같은 것으로 취급하지 않음. |
+| CTX-DP01 / CTX-DP02 | 외부 source 내용을 확보·표현하는가 / 보존된 대화·Task를 현재 모델 입력으로 선택하는가 | 공통 cache/index는 공유해도 결정 질문은 다름. 동일 구현 선택으로 항상 묶이면 Gate 2에서 병합 검토. |
+| CTX-DP01 / SEC-DP01 | 어떤 내용을 언제 구체화하는가 / 읽거나 보내도 되는지 어디서 강제하는가 | 선택적 자료 제공을 양쪽 후보의 별도 이익으로 중복 산정하지 않음. |
+| TASK-DP01 / TASK-DP02 / EXEC-DP01 | 상태 전이 authority / 이벤트 수집·전달 경로 / worker·process·resource 배치 | actor=프로세스, event log=event bus처럼 같은 것으로 취급하지 않음. |
 
 ## 6. 의존·결합과 진행 우선순위
 
-우선 상세화할 묶음은 **DP-02/03/04(정보·해석)**, 다음은 **DP-06/07/08(업무·Agent·event)**이다. DP-01/05/09/10은 이에 필요한 경계 계약을 함께 작성한다. 이 순서는 후보 작성 순서일 뿐 앞 DP의 승자를 뒤 DP의 전제로 고정하는 순서가 아니다.
+우선 상세화할 묶음은 **CTX-DP01 / IR-DP01 / CTX-DP02(정보·해석)**, 다음은 **TASK-DP01 / AGENT-DP01 / TASK-DP02(업무·Agent·event)**이다. INT-DP01 / ORCH-DP01 / SEC-DP01 / EXEC-DP01은 이에 필요한 경계 계약을 함께 작성한다. 이 순서는 후보 작성 순서일 뿐 앞 DP의 승자를 뒤 DP의 전제로 고정하는 순서가 아니다.
 
-- **DP-02 × DP-03 × DP-04**: materialization·semantic split·history provisioning. Gate 2 계획: 주효과를 고립한 비교 뒤 대표 2x2 또는 2x2x2 조합 검증.
-- **DP-05 × DP-07 × DP-09**: bounded 배치·Agent 계약·반출 scope. Gate 2 계획: 같은 허용 policy와 Agent 기능을 고정한 배치/연동 교차검증.
-- **DP-06 × DP-08 × DP-10**: state owner·event intake·runtime scheduling. Gate 2 계획: 공유 작업량에서 소유권과 배치를 동시에 바꾸지 않는 짝 비교 후 조합 확인.
+- **CTX-DP01 × IR-DP01 × CTX-DP02**: materialization·semantic split·history provisioning. Gate 2 계획: 주효과를 고립한 비교 뒤 대표 2x2 또는 2x2x2 조합 검증.
+- **ORCH-DP01 × AGENT-DP01 × SEC-DP01**: bounded 배치·Agent 계약·반출 scope. Gate 2 계획: 같은 허용 policy와 Agent 기능을 고정한 배치/연동 교차검증.
+- **TASK-DP01 × TASK-DP02 × EXEC-DP01**: state owner·event intake·runtime scheduling. Gate 2 계획: 공유 작업량에서 소유권과 배치를 동시에 바꾸지 않는 짝 비교 후 조합 확인.
 
 게이트별 전체 조합을 전수 실행한다는 뜻은 아니다. 주효과를 고립한 비교를 먼저 하며, 결론을 뒤집을 수 있는 결합만 작은 교차 실험으로 확인한다.
 
