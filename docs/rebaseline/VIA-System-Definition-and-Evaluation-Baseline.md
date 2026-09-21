@@ -20,25 +20,38 @@
 | 5 | [Representative Use Cases](./05-representative-use-cases.md) | 검토 완료 · 기준선 확정 |
 | 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 검토 완료 · 공통 비교 조건 확정 |
 | 7 | [Intentional Variables](./07-intentional-variables.md) | 검토 완료 · 24개 변경 집합 확정 |
-| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 재작성 검토본 · QA scoring 검토 필요 |
-| 9 | ASR ↔ UC / Evolution Scenario Mapping | 예정 |
-| 10 | Architecture Element Definition | 예정 |
+| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 검토 완료 · 7개 ASR 기준선 확정 |
+| 9 | [ASR ↔ UC / Evolution Scenario Mapping](./09-asr-uc-change-mapping.md) | 작성 완료 · 09/10 공동 검토본 |
+| 10 | [Architecture Element Definition](./10-architecture-element-definition.md) | 작성 완료 · 09/10 공동 검토본 |
 | 11 | Test Case Catalog | 이후 작성 |
 | 12 | Architecture Decision Points | 이후 작성 |
 
-## 08 검토 안내
+## 현재 리뷰 지점 — 09와 10
 
-08은 01~07에서 품질 후보를 도출하고 중요도와 SW 구조적 난이도를 각각 판단한다. 특정 후보 Architecture나 기존 QA 목록을 정답으로 놓지 않는다.
+**08은 사용자 승인에 따라 닫았다.** QA 10개의 중요도/구조 난이도 점수, H/H 7개 QA와 ASR-01~07의 일대일 대응, 정의와 대표 지표를 유지한다. 개별 시나리오를 새로운 ASR로 승격하지 않는다. 실제 시험·목표·0~5점 구간은 아직 확정하지 않았다.
 
 | 읽을 부분 | 확인할 내용 |
 | --- | --- |
-| 08 §8.2~8.4 | 제품 관심사, 중요도/난이도 기준, 전체 QA 후보의 선정 이유 |
-| 08 §8.5 | 정량 비교 5개와 대표 지표 요약 |
-| 08 §8.6~8.9 | 지연·화면/업무 정확도·모델/Agent 변경 요소의 채점 범위와 공정성 |
-| 08 §8.10 | 복합 요청·연속성·복구·권한·상태 정합성의 필수 설계 요구 |
-| 08 §8.11~8.12 | 사고실험의 반례와 한계, 09~12의 평가 준비 및 동결 순서 |
+| 09 §9.2·9.4 | 7개 ASR과 UC 18개/94개 명시 변형의 연결 |
+| 09 §9.5 | 요청 완료·연속성·신뢰성 구분, 시간선과 중복 평가 주의 |
+| 09 §9.6 | 변경 24개 전체: ASR-04의 Agent 9개 / ASR-05의 비Agent 15개 |
+| 10 §10.2~10.5 | 무엇이 1개 요소인가, 책임·계약·상태·배치의 검사 범위 |
+| 10 §10.6~10.8 | 후보별 전수 목록, 수정·추가·제거 규칙과 계산 예시 |
+| 10 §10.9~10.10 | Rust crate와 요소의 차이, 0·비적용·처리 불가·미검증 구분 |
 
-**08은 선정·측정 정의의 검토본이다.** Architecture별 점수, 후보 승패, 제품 목표 수치 또는 Test Case 실행 완료를 선언하지 않는다. ASR이 모두 점수표 항목인 것은 아니며, 필수 설계 요구도 책임과 검증 근거로 다룬다.
+09·10은 **공동 검토본**이다. 후보별 실제 요소 수나 Architecture 승패를 산출한 문서가 아니다. 승인된 01~07과 08의 품질 내용은 변경하지 않았다.
+
+### 이후 순서
+
+```text
+08 확정 → 09 + 10 → 사용자 리뷰
+                       ↓ 승인 후
+                11 시험·목표·채점 정의 → 별도 사용자 리뷰
+                       ↓ 승인 후
+                12 Architecture 대안·DP 비교
+```
+
+**이번 작업에서는 11·12를 진행하지 않는다.** 10의 공통 셈법을 먼저 검토하고, 후보별 실제 요소 전수 목록은 각 대안 명세와 함께 작성해 변경량 계산 전에 동결한다.
 
 ## 06·07 확정 내용
 
