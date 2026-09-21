@@ -227,7 +227,8 @@ def stage_input(stage: str, clean: dict[str, Any]) -> dict[str, Any]:
 
 def prepare(stage: str, case: dict[str, Any], model: str,
             prior: dict[str, dict[str, Any]] | None = None,
-            controller_feedback: str | None = None) -> dict[str, Any]:
+            controller_feedback: str | None = None,
+            seed: int = 42) -> dict[str, Any]:
     if stage not in STAGES or not model:
         raise ValueError('stage/model required')
     clean = clean_input(case)
@@ -242,12 +243,16 @@ def prepare(stage: str, case: dict[str, Any], model: str,
             raise ValueError('cannot advance a held/rejected/correction stage')
     if controller_feedback is not None and not controller_feedback.strip():
         raise ValueError('empty controller feedback is not meaningful')
+    if type(seed) is not int:
+        raise ValueError('seed must be an integer')
     user_payload = {
         'input': stage_input(stage, clean),
         'prior': prior,
         'controller_feedback': controller_feedback,
     }
-    body = {'model': model, 'stream': False, 'temperature': 0,
+    body = {'model': model, 'stream': False,
+            'temperature': 0.7, 'top_p': 0.8, 'top_k': 20, 'min_p': 0.0,
+            'presence_penalty': 1.5, 'seed': seed,
             'chat_template_kwargs': {'enable_thinking': False},
             'messages': [
                 {'role': 'system', 'content': BASE_PROMPT + '\n' + PURPOSES[stage]},
