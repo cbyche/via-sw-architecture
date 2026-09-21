@@ -197,3 +197,14 @@ Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결
 - CTX-DP01/CTX-DP02/SEC-DP01은 Supporting DP로 보존하되 현재 구현 우선순위에서는 제외.
 - 다음 단계는 executable prototype/fixture와 측정 자산을 만들고 12-A sensitivity sweep을 수행하는 것.
 - 후보 결과를 보기 전에 Gate 2 C/I/S/D, common contract, Working-ASR metric/target/score 계약을 유지한다.
+
+
+## 13. Gate 2 v1.1 승인
+
+2026-09-22 사용자가 자체 리뷰 후 Gate 2 구조를 승인했다.
+
+- **승인된 score DP 4개:** IR-DP01, TASK-DP01, AGENT-DP01, EXEC-DP01
+- **고정 Interaction 원칙:** FP-INT01 S2S Direct Fast Path
+- **공통 synchronization tactic:** TASK-T01 Event-first + Query Reconciliation
+- 다음 단계는 [12-03 Implementation & Test Readiness Plan](../12-03-implementation-and-test-readiness.md)에 따라 deterministic structural harness → non-semantic DP prototype → IR actual-model 실험 순으로 진행.
+- 실제 후보 결과를 보기 전에 Gate 2 candidate structure와 Working-ASR metric/target/score 계약을 유지.
