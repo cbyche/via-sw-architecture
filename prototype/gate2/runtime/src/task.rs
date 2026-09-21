@@ -64,10 +64,10 @@ impl PerTaskSupervisors {
         // Serialize activation-directory mutation so a later epoch can never fence the sender
         // that the directory returns. Scored trials pre-activate Tasks before timed probes.
         let mut senders = self.senders.lock().await;
-        if let Some(sender) = senders.get(task_id) {
-            if !sender.is_closed() {
-                return Ok(sender.clone());
-            }
+        if let Some(sender) = senders.get(task_id)
+            && !sender.is_closed()
+        {
+            return Ok(sender.clone());
         }
 
         let candidate = self.create_sender(task_id).await?;
