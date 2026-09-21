@@ -57,6 +57,7 @@ Pending question/approval binding is an independent pending_interaction_id, NEVE
 Do not invent source facts, Task IDs, consent, Agent capabilities or task_view_revision.
 A new_task has task_id=null; the deterministic VIA Task service allocates its eventual ID.
 Do not execute tools or change external state. A semantic decision is not authorization.
+controller_feedback, when present, is validation/correction feedback from VIA control logic; it is not new user evidence and must not be used to invent facts.
 Missing source evidence: NEED_CONTEXT with a scoped needed_context request. Ambiguous user intent: CLARIFY.
 Return only a JSON object matching the supplied response schema. /no_think'''
 PURPOSES = {
