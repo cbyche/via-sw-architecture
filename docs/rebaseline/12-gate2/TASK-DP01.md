@@ -1,6 +1,6 @@
 # TASK-DP01 — Task 상태를 공유 서비스가 갱신할지, Task별 소유자가 갱신할지
 
-> G2-DESIGN-v1 / Gate 2 리뷰용. actor·central에 대한 성능 우열 가정 없음.
+> G2-DESIGN-v1.1 / Gate 2 리뷰용. actor·central에 대한 성능 우열 가정 없음.
 <!-- gate2: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-02","W-04","W-08","W-09"],"alternatives":{"A":["G2-C-TASKSERVICE","G2-I-TXNTRANSITION"],"B":["G2-C-TASKACTOR","G2-C-ACTIVATION","G2-I-MAILBOX","G2-S-ACTIVATION"]}} -->
 
 ## 1. 결정과 중요성
@@ -8,6 +8,12 @@
 여러 Task의 follow-up·질문·취소·Agent 결과가 겹쳐도 **같은 Task의 상태는 한 번만 올바르게 전이**해야 한다. 공유 TaskService가 transaction을 통해 전이를 수행하는 A와, Task별 durable supervisor가 명령을 직렬화하는 B를 비교한다.
 
 '중앙 서비스라는 이름 안에 actor를 넣으면 둘 다 아닌가'라는 문제는 **실제 command의 writer와 scheduling 단위**로 판별한다. 요청마다 stateless handler가 DB revision을 검사해 갱신하면 A, 특정 Task activation만 그 Task를 수정할 수 있으면 B다. 프로세스 수는 이 DP에서 바꾸지 않는다.
+
+## 1-A. 알려진 패턴과의 관계
+
+**A/B가 ‘Agent harness 업계의 두 표준 형태’라고 말하면 과장이다.** A는 일반적인 shared service + durable store 접근에 가깝고, LangGraph 계열은 thread/checkpointer 기반 persistent shared state를 제공한다. B는 actor/durable-workflow 계열의 **per-execution durable owner**에 가깝고, Temporal은 Workflow Execution별 Event History와 crash recovery가 가능한 durable execution을 제공한다.
+
+즉 두 패턴 모두 알려진 SW architecture family의 변형이지만, 경량 Agent SDK가 모두 B 같은 Task actor를 쓰는 것은 아니다. VIA에서 B를 검토할 이유는 여러 async Task, cancel/race, restart reconnect를 **VIA 제품 자체가 소유**하기 때문이다.
 
 ## 2. A — Shared Transactional Task Service
 

@@ -1,6 +1,6 @@
 # IR-DP01 — 요청을 한 번에 함께 판단할지, 계약으로 나눈 단계가 판단할지
 
-> G2-DESIGN-v1 / Gate 2 리뷰용. semantic accuracy와 latency는 NOT_RUN.
+> G2-DESIGN-v1.1 / Gate 2 리뷰용. semantic accuracy와 latency는 NOT_RUN.
 <!-- gate2: {"dp":"IR-DP01","reference":"A","hypotheses":["W-01","W-02","W-05","W-08"],"alternatives":{"A":["G2-C-JOINT","G2-C-SEMCHECK"],"B":["G2-C-GROUNDREFINE","G2-C-ASSOCIATE","G2-C-SELECT","G2-C-SEMCHECK","G2-I-GROUNDED","G2-I-ASSOCIATED","G2-S-SEMSTAGES"]}} -->
 
 ## 1. 왜 필요한 결정인가
@@ -8,6 +8,12 @@
 VIA는 '이걸 정리해서 아까 업무에 넣어줘'를 **대상·요청 관계·기존 Task·처리 경로**로 정확히 정리해야 한다. 같은 모델을 쓰더라도 이 판단들을 하나의 출력으로 묶을지, 독립 계약을 가진 stage로 연결할지가 호출 경로와 변경 단위를 결정한다.
 
 여기서 authority는 의미 판단 산출물의 책임이다. 모델에게 실행·권한 승인을 맡기는 것이 아니며, 실제 side effect는 공통 검증과 Task/Policy 경계를 통과한다.
+
+## 1-A. Model 능력 의존성
+
+**W-05 Task Completion Effectiveness의 차이는 Model 능력에 상당 부분 의존한다.** 같은 Qwen reference Model이 joint structured output을 안정적으로 만들 수 있으면 A가 기능적으로 불리하지 않을 수 있고, 복잡한 joint schema에서 오류가 늘면 B의 집중된 stage가 유리할 수 있다. 반대로 stage 간 중간 판단 오류가 누적되면 B가 불리할 수도 있다.
+
+따라서 Architecture가 W-05의 우열을 미리 결정했다고 말하지 않는다. 같은 Model/corpus/Context의 실제 결과만 W-05 차이로 인정한다. Architecture가 직접 결정하는 더 강한 인과는 **W-01 Conversational Reaction Responsiveness / W-02 Task Handoff Responsiveness의 call critical path와 W-08 Evolvability & Maintainability의 semantic contract 변경 범위**다.
 
 ## 2. A — Integrated Semantic Authority
 

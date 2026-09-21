@@ -1,6 +1,6 @@
 # AGENT-DP01 — Agent 차이를 경계에서 해석할지, Core의 typed handler가 해석할지
 
-> G2-DESIGN-v1 / Gate 2 리뷰용. Agent 중립성은 양 후보 공통 요구다.
+> G2-DESIGN-v1.1 / Gate 2 리뷰용. Agent 중립성은 양 후보 공통 요구다.
 <!-- gate2: {"dp":"AGENT-DP01","reference":"A","hypotheses":["W-02","W-03","W-07","W-08"],"alternatives":{"A":["G2-C-EDGESEM","G2-I-CANONAGENT"],"B":["G2-C-TYPEDHANDLER","G2-I-TYPEDAGENT"]}} -->
 
 ## 1. 질문을 정확하게 한정하기
@@ -8,6 +8,12 @@
 이질적인 Agent는 접수·follow-up·취소·질문·result의 표현과 수명이 다르다. **그 차이를 VIA 외곽의 adapter가 해석해 Core에는 정규화된 계약을 주는 A와, 중립적인 typed variation을 Core의 전용 handler가 해석하는 B**를 비교한다.
 
 A도 capability 차이와 미지원 기능을 숨기지 않는다. B도 provider 제품명이나 native JSON을 Core 전체에 노출하지 않는다. 비교점은 '기능을 잃는 공통분모 vs 모든 기능'이 아니라 **변형된 수명 의미를 해석하는 책임의 경계**다.
+
+## 1-A. Protocol 선택과의 관계
+
+**이 DP는 A2A/MCP/custom 중 어떤 wire protocol을 고르는 문제와 분리한다.** 동일 protocol을 써도 Agent마다 streaming, polling, push, follow-up, cancel, artifact, pending-input capability와 lifecycle profile이 다를 수 있다. 반대로 protocol이 달라도 integration edge가 그 차이를 canonicalize하면 Core는 provider variation을 거의 보지 않을 수 있다.
+
+따라서 protocol은 NativeClient/transport의 입력이고, 이 DP는 **그 protocol·provider variation의 의미를 VIA 어디까지 노출할지**를 결정한다. 실제 downstream Agent가 모두 하나의 엄격한 lifecycle profile을 보장하면 A/B 차이는 작아질 수 있으며 그때는 W-07 Agent Interoperability와 W-08 Evolvability도 동점으로 인정한다.
 
 ## 2. A — Edge-normalized Canonical Contract
 

@@ -1,6 +1,6 @@
 # EXEC-DP01 — 연동 코드의 장애를 Core와 같은 process에서 받을지, 밖에서 격리할지
 
-> G2-DESIGN-v1 / Gate 2 리뷰용. 동일 코드·동일 논리 fault point 비교.
+> G2-DESIGN-v1.1 / Gate 2 리뷰용. 동일 코드·동일 논리 fault point 비교.
 <!-- gate2: {"dp":"EXEC-DP01","reference":"A","hypotheses":["W-01","W-04","W-09","W-10"],"alternatives":{"A":["G2-C-LOCALBRIDGE","G2-I-BRIDGE","G2-D-VIA"],"B":["G2-C-REMOTEBRIDGE","G2-C-WORKERLIFE","G2-I-BRIDGE","G2-I-IPC","G2-S-IPC","G2-D-VIA","G2-D-INTEGRATION"]}} -->
 
 ## 1. 결정과 경계
@@ -8,6 +8,15 @@
 VIA는 Agent/파일·메일 등 여러 연동 코드와 상호작용한다. **그 연동 코드를 Core와 같은 process에서 실행하는 A와 별도 worker process에서 실행하는 B**를 비교하여 정상 호출 비용과 fatal fault의 영향 범위를 확인한다.
 
 격리 대상은 Agent/Source NativeClients와 그 연동 경계 code다. Core의 semantic decision, Task writer, policy authority와 canonical DB는 두 후보에서 그대로 유지한다. Model Runtime도 별도 고정 dependency이며 이 DP에서 갑자기 모델 가중치를 다른 host로 옮기지 않는다.
+
+## 1-A. Rust/Tokio 구현 가능성
+
+Rust VIA에서도 두 안 모두 현실적이다.
+
+- A: 한 OS process의 Tokio runtime에서 async task, channel/queue, semaphore, timeout/cancellation으로 논리 격리한다.
+- B: Core가 `tokio::process::Command` 등으로 integration worker child process를 시작·관찰하고, Windows에서는 Tokio의 async named-pipe API 같은 IPC를 사용할 수 있다.
+
+**Tokio 자체가 process isolation을 제공하는 것은 아니다.** B의 실제 격리 경계는 Windows OS process이고 Tokio는 child lifecycle과 비동기 IPC를 관리한다. 구현 선택은 prototype 시점에 고정하고 IPC serialization/copy/restart 비용을 측정에 포함한다.
 
 ## 2. A — Single-process Partitioned Runtime
 
