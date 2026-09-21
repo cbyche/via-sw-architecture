@@ -89,6 +89,25 @@ GPU는 TASK/AGENT/EXEC 구조 시험 자체에는 필수가 아니다. hosted CI
 - 실제 production downstream Agent: AGENT/TASK 비교는 먼저 deterministic P/Q fixture로 수행한다.
 - cloud API key: 초기 구조 비교에 사용하지 않는다.
 
+## 2-A. S2S mock 시간 처리 원칙
+
+S2S mock은 **0ms stub이 아니다.** Voice TC에서는 `user_input_end` 이후 S2S가 route/direct-response event를 내기까지의 지연을 frozen trace로 재생하고, 그 시간은 end-to-end W-01/W-02 raw latency에 포함한다.
+
+동시에 결과에는 두 값을 분리해 보존한다.
+
+```text
+VIA_added_latency = VIA 내부 실제 측정 span
+SIMULATED_E2E_latency = frozen_S2S_delay + VIA 실제 span + 실제 고정 network/dependency span
+```
+
+- Text TC에는 S2S 지연을 넣지 않는다.
+- A/B 후보에는 **동일 trial의 동일 S2S delay sample**을 사용한다.
+- 초기 synthetic trace는 `SIMULATED_E2E` evidence이며 실제 S2S p95나 최종 system p95라고 부르지 않는다.
+- 추후 실제 S2S API 또는 승인된 S2S runtime에서 raw delay trace를 얻으면 candidate code를 바꾸지 않고 동일 replay interface에 교체한다.
+- final score에 synthetic S2S absolute latency를 사용하려면 별도 명시적 승인 없이 하지 않는다. 구조 비교 delta와 실제/재생 dependency 시간을 모두 보존한다.
+- mock은 transcript/route event와 timing을 제공할 뿐 semantic 정답이나 Task state를 주입하지 않는다.
+
+이렇게 하면 S2S 시간이 전체 사용자 경험에서 사라지지 않으면서도, 임의의 synthetic 숫자가 Architecture 승자를 만드는 것을 막는다.
 ## 3. 실제 PC 실측을 ChatGPT와 연결하는 방법
 
 현재 이 채팅 환경은 사용자의 로컬 Windows PC에서 직접 명령을 실행하지 않는다. 따라서 repository에 **one-command runner와 result bundle**을 만든 뒤 사용자가 로컬에서 실행하고 결과 JSON/trace를 GitHub branch에 commit하거나 이 대화에 업로드하는 방식이 가장 재현 가능하다.
@@ -127,3 +146,22 @@ GPU는 TASK/AGENT/EXEC 구조 시험 자체에는 필수가 아니다. hosted CI
 8. actual measurement 전 GitHub revision/tag를 고정.
 
 이 단계까지는 사용자 환경을 요구하지 않고 진행할 수 있다.
+
+## 6. 다음 사용자 리뷰 checkpoint — Measurement Freeze Review
+
+다음 리뷰는 **Phase 0/1 구현과 IR prompt/schema 준비까지 완료하되, A/B comparative benchmark·score를 보기 전**에 받는다.
+
+그때 제출할 산출물:
+
+1. Rust workspace와 4 DP A/B의 실제 code-to-C/I/S/D mapping
+2. deterministic Agent P/Q, Context/Policy, S2S timing mock 계약
+3. candidate fairness matrix — 무엇이 같고 무엇만 다른지
+4. unit/integration/restart/fault smoke test 결과
+5. trace schema와 W-01~W-12 metric endpoint mapping
+6. IR Integrated/Staged 실제 prompt·JSON schema·bypass/repair 규칙
+7. Mac bootstrap/run script와 environment manifest
+8. S2S synthetic/replay timing trace와 `VIA_added` vs `SIMULATED_E2E` 분리
+9. 실제 benchmark 실행 명령, 반복/순서/randomization/cooldown 규칙
+10. 아직 BLOCKED/UNVERIFIED인 항목
+
+이 리뷰가 승인되기 전에는 **candidate별 p95, W-05 모델 정확도, 0~5 score, winner를 산출하지 않는다.** 승인 후 frozen Git revision에서 12-A sensitivity sweep을 시작한다.
