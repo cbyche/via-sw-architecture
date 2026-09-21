@@ -1,6 +1,6 @@
 use crate::{
     agent::AgentBoundary,
-    repository::{ApplyError, Repository},
+    repository::Repository,
     task::TaskAuthority,
 };
 use gate2_contracts::{
@@ -118,11 +118,6 @@ impl<B: AgentBoundary> HandoffCoordinator<B> {
     }
 }
 
-impl From<ApplyError> for anyhow::Error {
-    fn from(value: ApplyError) -> Self {
-        anyhow::anyhow!(value)
-    }
-}
 
 #[cfg(test)]
 mod tests {
@@ -131,7 +126,7 @@ mod tests {
         agent::EdgeNormalized,
         task::{PerTaskSupervisors, SharedTaskService},
     };
-    use gate2_contracts::{AgentBackend, NativeReply, PReply, TaskOp};
+    use gate2_contracts::{NativeReply, PReply, TaskOp};
     use gate2_fixture::{AgentShape, DeterministicAgent};
     use tempfile::NamedTempFile;
 
