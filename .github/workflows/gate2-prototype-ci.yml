@@ -1,0 +1,46 @@
+name: gate2-prototype-ci
+
+on:
+  push:
+    branches: [architecture-rebaseline-20260918]
+    paths:
+      - 'prototype/gate2/**'
+      - 'benchmark/rebaseline/gate2/**'
+      - 'scripts/gate2/**'
+      - '.github/workflows/gate2-prototype-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  compile-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install frozen Rust toolchain
+        run: |
+          rustup toolchain install 1.98.1 --profile minimal --component rustfmt,clippy
+          cd prototype/gate2
+          rustup override set 1.98.1
+      - name: Format
+        working-directory: prototype/gate2
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        working-directory: prototype/gate2
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Unit tests
+        working-directory: prototype/gate2
+        run: cargo test --workspace
+      - name: Structural smoke
+        working-directory: prototype/gate2
+        run: |
+          cargo build -p gate2-worker -p gate2-bench
+          cargo run -q -p gate2-bench -- smoke
+          cargo run -q -p gate2-bench -- exec-smoke --worker target/debug/gate2-worker
+          cargo run -q -p gate2-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
+      - name: Gate2 catalog static check
+        run: |
+          python3 benchmark/rebaseline/gate2/catalog_check.py --output /tmp/gate2-review
+          python3 -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v

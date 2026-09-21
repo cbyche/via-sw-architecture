@@ -1,0 +1,39 @@
+use gate2_contracts::{AgentBackend, WorkerRequest, WorkerResponse};
+use gate2_fixture::{AgentShape, DeterministicAgent};
+use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let agent = DeterministicAgent::new(AgentShape::Q);
+    let mut lines = BufReader::new(tokio::io::stdin()).lines();
+    let mut stdout = tokio::io::stdout();
+
+    while let Some(line) = lines.next_line().await? {
+        let request: WorkerRequest = serde_json::from_str(&line)?;
+        if matches!(request, WorkerRequest::AbortHost) {
+            std::process::abort();
+        }
+        let response = match request {
+            WorkerRequest::Submit { request } => match agent.submit(request).await {
+                Ok(reply) => WorkerResponse::Reply { reply },
+                Err(error) => WorkerResponse::Error {
+                    message: error.to_string(),
+                },
+            },
+            WorkerRequest::Query { run_id } => match agent.query(&run_id).await {
+                Ok(reply) => WorkerResponse::Reply { reply },
+                Err(error) => WorkerResponse::Error {
+                    message: error.to_string(),
+                },
+            },
+            WorkerRequest::Ping => WorkerResponse::Pong,
+            WorkerRequest::AbortHost => unreachable!(),
+        };
+        stdout
+            .write_all(serde_json::to_string(&response)?.as_bytes())
+            .await?;
+        stdout.write_all(b"\n").await?;
+        stdout.flush().await?;
+    }
+    Ok(())
+}

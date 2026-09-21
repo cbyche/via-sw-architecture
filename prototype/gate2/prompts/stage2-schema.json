@@ -1,0 +1,10 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "type":"object",
+  "required":["status","request_revision","associations"],
+  "properties":{
+    "status":{"enum":["READY","CORRECT_STAGE1","CLARIFY","REJECT"]},
+    "request_revision":{"type":"integer","minimum":0},
+    "associations":{"type":"array"}
+  }
+}
