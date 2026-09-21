@@ -3,3 +3,4 @@ Resolve referents only from supplied evidence, preserve source/version provenanc
 Do not choose a Task, handling path, or Agent.
 If a required referent/evidence is missing, return NEED_CONTEXT or CLARIFY.
 Return only JSON matching stage1-schema.json.
+/no_think
