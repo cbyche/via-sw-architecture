@@ -102,6 +102,54 @@ pub struct CanonicalAccepted {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct CancelOutcome {
+    pub run_id: String,
+    pub requested: bool,
+    pub confirmed: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub enum NativeEvent {
+    P(PEvent),
+    Q(QEvent),
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct PEvent {
+    pub run_id: String,
+    pub revision: u64,
+    pub kind: PEventKind,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum PEventKind {
+    Progress { percent: u8 },
+    Question { question_id: String, text: String },
+    Result { artifact: String },
+    Cancelled,
+    Failed { reason: String },
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+pub struct QEvent {
+    pub context_id: String,
+    pub run_id: String,
+    pub revision: u64,
+    pub kind: QEventKind,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum QEventKind {
+    Running { progress_percent: Option<u8> },
+    InputRequired { request_id: String, prompt: String },
+    ArtifactReady { artifact_id: String },
+    Cancelled,
+    Failure { message: String },
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub enum NativeReply {
     P(PReply),
     Q(QReply),
@@ -112,6 +160,14 @@ pub enum NativeReply {
 pub enum PReply {
     Accepted {
         run_id: String,
+    },
+    FollowUpAccepted {
+        run_id: String,
+        revision: u64,
+    },
+    CancelConfirmed {
+        run_id: String,
+        revision: u64,
     },
     Snapshot {
         run_id: String,
@@ -128,6 +184,16 @@ pub enum QReply {
         context_id: String,
         run_id: String,
     },
+    ContinuationAccepted {
+        context_id: String,
+        previous_run_id: String,
+        run_id: String,
+    },
+    CancelRequested {
+        context_id: String,
+        run_id: String,
+        revision: u64,
+    },
     Snapshot {
         context_id: String,
         run_id: String,
@@ -142,6 +208,9 @@ pub enum QReply {
 pub enum WorkerRequest {
     Submit { request: SubmitRequest },
     Query { run_id: String },
+    FollowUp { run_id: String, text: String },
+    Cancel { run_id: String },
+    EventsSince { run_id: String, after_revision: u64 },
     AbortHost,
     Ping,
 }
@@ -150,6 +219,7 @@ pub enum WorkerRequest {
 #[serde(tag = "status", rename_all = "snake_case")]
 pub enum WorkerResponse {
     Reply { reply: NativeReply },
+    Events { events: Vec<NativeEvent> },
     Pong,
     Error { message: String },
 }
@@ -169,4 +239,11 @@ pub trait AgentBackend: Send + Sync {
     fn capabilities(&self) -> CapabilityProfile;
     async fn submit(&self, request: SubmitRequest) -> Result<NativeReply, AgentError>;
     async fn query(&self, run_id: &str) -> Result<NativeReply, AgentError>;
+    async fn follow_up(&self, run_id: &str, text: String) -> Result<NativeReply, AgentError>;
+    async fn cancel(&self, run_id: &str) -> Result<NativeReply, AgentError>;
+    async fn events_since(
+        &self,
+        run_id: &str,
+        after_revision: u64,
+    ) -> Result<Vec<NativeEvent>, AgentError>;
 }
