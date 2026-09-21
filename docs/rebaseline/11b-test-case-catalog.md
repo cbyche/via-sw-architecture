@@ -1,6 +1,6 @@
 # 11-B. Test Case Catalog — 입력·정답 검토본
 
-> 상태: **명세·합성 논리 입력 작성 / 후보 실행 NOT_RUN**. 11-C의 최종 표본 배합·반복·점수 미동결.
+> 상태: **사용자 리뷰 승인 완료 / 후보 실행 NOT_RUN**. 11-C의 최종 반복·점수는 미동결.
 > 원문 UC는 [05](./05-representative-use-cases.md), 변경 전후 원문은 [07](./07-intentional-variables.md)이다.
 
 ## B.1 원자료 구성
@@ -220,9 +220,9 @@ TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 
 1. **UI/object identity가 있는 경우:** exact target ID / exact selected object set을 oracle로 사용한다. 픽셀 허용오차를 별도로 두지 않는다.
 2. **pointer만 있고 target object가 있는 경우:** 해당 event timestamp의 cursor hot spot이 ground-truth target bounding region 내부에 있는지와 topmost hit-test target identity를 사용한다.
 3. **raw region만 있고 object identity를 얻을 수 없는 fallback:** ground-truth region과 IoU ≥ 0.50을 최소 overlap 조건으로 사용하며, 잘못된 추가 target을 포함하면 FAIL이다. IoU 0.50은 vision evaluation에서 널리 쓰이는 최소 overlap 기준을 빌린 fallback일 뿐, identity 기반 판정보다 우선하지 않는다.
-4. **시간 관계:** transcript 도착 시각을 interaction 시각으로 사용하지 않는다. User Turn 시작 전 **최소 4초 interaction history + 해당 Turn 전체**를 candidate evidence window로 보존한다. 실제 oracle은 고정 event ordering과 deictic 표현의 source timestamp로 target을 판정한다.
+4. **시간 관계:** transcript 도착 시각을 interaction 시각으로 사용하지 않는다. 고정 ±N ms 또는 N초 matching tolerance를 두지 않고 fixture의 source event timestamp/order와 deictic expression의 source timestamp/order로 판정한다. 현재 canonical fixture는 필요한 pre-turn event를 입력 timeline에 포함한다.
 
-Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. HCI 연구에서 pen/gesture가 speech보다 먼저 오는 순차 패턴이 흔하고 최대 4초 lag가 관찰되었으므로 작은 ±수백 ms 동시성 window를 정답 기준으로 강제하지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
+Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. 최근 speech-gesture 연구는 gesture가 관련 speech와 동시 또는 선행하는 경향을 재확인하지만 VIA에 그대로 적용할 보편적인 시간 threshold를 제시하지 않는다. 따라서 과거 1997 HCI 연구의 4초 관찰값은 historical background로만 두고 scoring requirement로 사용하지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
 
 ## B.4 변경 시험 24개
 
@@ -312,3 +312,6 @@ Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 �
 
 이 membership은 후보 결과를 보기 전에 동결하며, 이후 새로운 failure를 발견하더라도 기존 분모에서 불리한 TC를 제거하지 않는다. 필요한 새 시험은 별도 regression evidence로 추가하고 대표 분모 변경은 명시적 rebaseline 없이는 하지 않는다.
 
+## B.9 11-B 리뷰 종료
+
+사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03/06 scoring membership을 승인했다. 11-B는 리뷰 완료로 닫으며 실제 candidate 결과는 계속 `NOT_RUN`이다.
