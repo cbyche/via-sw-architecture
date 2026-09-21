@@ -7,6 +7,7 @@
 - fixtures/patches.json: 기본 상태 override와 occurrence/availability 시간. process restart 이후에는 초기화 자료를 다시 적재하지 않는다.
 - oracle/expected.json: 평가기 전용 의미상 필수/금지 관찰과 ASR-tagged atomic obligation. 후보에 제공하지 않는다. 일부 의미 판정은 사람이 검토한다.
 - oracle/obligation-catalog.json: ASR-02/03 degree metric용 obligation ID/kind/ASR tag 원장. 후보 결과 전에 고정한다.
+- oracle/architecture-sensitivity-variants.json: ASR-02/03의 fixed counterfactual pair. opaque mapping으로 LLM semantic shortcut을 차단하며 base TC membership/weight는 바꾸지 않는다.
 - safety-inputs.json / oracle/safety-opportunities.json: 후보 입력/평가 정답 분리.
 - change-cases.json: 24개 원문 변경 명세와 null 원장.
 - prompts.json: 8목적의 실제 문자열과 output 예시; 출력예시는 Model 입력에 넣지 않는다.
