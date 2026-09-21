@@ -1,6 +1,6 @@
 # 12-02. Gate 2 — Core Architecture Candidate Review
 
-> **G2-DESIGN-v1.1 / 2026-09-22 / 자체 리뷰 및 사용자 지적 반영본 · 사용자 승인 전**
+> **G2-DESIGN-v1.1 / 2026-09-22 / 사용자 승인 완료 — 구현·측정 준비로 전환**
 > Source snapshot: `e9646d4a074afb7a3cf4e85f5ca48c939a697fbf`.
 > 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 아직 점수·승자·최종 Architecture 없음.
 
@@ -85,13 +85,13 @@ Tokio가 process isolation 자체를 제공하는 것은 아니다. **격리는 
 
 4 pair는 **5개 고유 configuration**(공통 reference + 각 DP의 B variant)으로 조립한다. 다음 단계에서 결론을 뒤집을 수 있는 IR×AGENT, TASK×EXEC 같은 작은 교차 확인만 추가한다.
 
-## 5. 결과 상태와 사용자 리뷰 포인트
+## 5. 결과 상태와 다음 단계
 
-Gate 2에서 아직 필요한 리뷰는 네 가지다.
+Gate 2 구조는 사용자 승인 완료했다. 다음 구현·측정 단계에서는 아래 네 구조를 그대로 동결해 실행 자산을 만든다.
 
 1. IR의 1회 통합 판단 vs 단계별 판단이 실제 VIA semantic responsibility를 잘 나타내는가.
 2. TASK의 shared writer vs per-Task durable writer가 지나치게 특수하거나 불공정하지 않은가.
 3. AGENT의 normalization boundary가 protocol 선택과 명확히 분리되는가.
 4. EXEC의 same-process vs separate-process가 Windows/Rust 구현에서 현실적인가.
 
-이 네 구조가 납득되면 C/I/S/D와 metric ledger를 Gate 2 승인본으로 freeze하고 12-A sensitivity 측정 준비로 넘어간다.
+이 네 구조의 C/I/S/D와 metric ledger를 Gate 2 승인본으로 freeze하고, 12-A sensitivity 측정 준비로 넘어간다.
