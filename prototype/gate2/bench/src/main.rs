@@ -1,3 +1,5 @@
+mod recovery;
+
 use clap::{Parser, Subcommand};
 use gate2_contracts::{
     NativeReply, PReply, QReply, SubmitRequest, TaskCommand, TaskOp, WorkerRequest, WorkerResponse,
@@ -44,6 +46,7 @@ enum Command {
         trace: PathBuf,
     },
     W04LoadSmoke,
+    W09WholeRestartSmoke,
 }
 
 #[tokio::main]
@@ -56,6 +59,7 @@ async fn main() -> anyhow::Result<()> {
         Command::ExecBlastSmoke { host, worker } => exec_blast_smoke(host, worker).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
         Command::W04LoadSmoke => w04_load_smoke().await?,
+        Command::W09WholeRestartSmoke => recovery::whole_restart_smoke().await?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())
