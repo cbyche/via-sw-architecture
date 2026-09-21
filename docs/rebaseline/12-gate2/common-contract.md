@@ -74,6 +74,15 @@ Agent accepted 뒤 4 이전 crash는 외부 Agent의 submission-key 조회/중�
 
 Gate 2에서 SKU나 runtime hash가 없는데 임의의 수치로 채우지 않는다. **설계 리뷰 가능과 실측 실행 가능은 별도 상태**다. supporting model binding이 확인되지 않은 경로는 actual-model 평가를 BLOCKED로 표시하되 구조 원장·static 분석은 진행한다.
 
+### 3.1 EXEC IPC transport
+
+EXEC-DP01의 Architecture decision은 **OS process fault boundary**다. IPC 종류를 동시에 비교변수로 만들지 않는다.
+
+- smoke prototype: portable child stdin/stdout pipe로 semantic equivalence와 worker-fatal survival만 검증.
+- macOS measured prototype: Measurement Freeze Review에서 하나의 local IPC transport를 고정한 뒤 A/B 전체 trial에서 유지.
+- Windows target realization: named pipe 등 Windows-native local IPC를 별도 confirmatory implementation으로 둘 수 있다.
+- macOS에서 얻은 IPC 절대 latency를 Windows named-pipe latency라고 표기하지 않는다.
+
 ## 4. 공통 Architecture Element 원장
 
 아래 ID는 10의 같은 granularity를 적용한다. 내부 helper/메서드, 그림의 상위 VIA 박스, Task 인스턴스 수는 추가 집계하지 않는다. 한 표의 각 행은 독립 책임·계약·상태·배치이고, 상세 필드는 §2와 각 DP 문서에서 정의한다. 후보 전수 요소는 공통 원장 + 6개 선택된 alternative의 원장의 합집합이다.
