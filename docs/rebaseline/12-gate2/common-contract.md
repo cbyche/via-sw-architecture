@@ -85,7 +85,7 @@ EXEC-DP01의 Architecture decision은 **OS process fault boundary**다. IPC 종�
 
 ## 4. 공통 Architecture Element 원장
 
-아래 ID는 10의 같은 granularity를 적용한다. 내부 helper/메서드, 그림의 상위 VIA 박스, Task 인스턴스 수는 추가 집계하지 않는다. 한 표의 각 행은 독립 책임·계약·상태·배치이고, 상세 필드는 §2와 각 DP 문서에서 정의한다. 후보 전수 요소는 공통 원장 + 6개 선택된 alternative의 원장의 합집합이다.
+아래 ID는 10의 같은 granularity를 적용한다. 내부 helper/메서드, 그림의 상위 VIA 박스, Task 인스턴스 수는 추가 집계하지 않는다. 한 표의 각 행은 독립 책임·계약·상태·배치이고, 상세 필드는 §2와 각 DP 문서에서 정의한다. 후보 전수 요소는 공통 원장 + 4개 Core DP에서 선택한 alternative 원장의 합집합이다.
 
 ### COMMON
 
