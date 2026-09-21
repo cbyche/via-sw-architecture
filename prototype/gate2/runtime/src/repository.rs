@@ -138,7 +138,7 @@ fn apply_blocking(
            result=excluded.result",
         params![
             next.task_id,
-            next.revision,
+            i64::try_from(next.revision).map_err(|_| ApplyError::Storage("revision overflow".into()))?,
             state_json,
             next.run_id,
             next.result
@@ -188,7 +188,14 @@ fn load_task(conn: &Connection, task_id: &str) -> Result<Option<TaskView>, Apply
         "SELECT revision,state_json,run_id,result FROM tasks WHERE task_id=?1",
         params![task_id],
         |row| {
-            let revision: u64 = row.get(0)?;
+            let revision_i64: i64 = row.get(0)?;
+            let revision = u64::try_from(revision_i64).map_err(|e| {
+                rusqlite::Error::FromSqlConversionFailure(
+                    0,
+                    rusqlite::types::Type::Integer,
+                    Box::new(e),
+                )
+            })?;
             let state_json: String = row.get(1)?;
             let state: TaskState = serde_json::from_str(&state_json).map_err(|e| {
                 rusqlite::Error::FromSqlConversionFailure(
