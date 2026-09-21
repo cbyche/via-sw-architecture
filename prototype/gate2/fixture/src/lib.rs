@@ -6,7 +6,8 @@ use gate2_contracts::{
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
-    path::Path,
+    io::Write,
+    path::{Path, PathBuf},
     sync::{Arc, Mutex},
     time::{Duration, Instant},
 };
@@ -17,7 +18,7 @@ pub enum AgentShape {
     Q,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 struct Run {
     context_id: Option<String>,
     revision: u64,
@@ -26,7 +27,7 @@ struct Run {
     events: Vec<NativeEvent>,
 }
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize)]
 struct FixtureState {
     runs: HashMap<String, Run>,
     submissions: HashMap<String, (SubmitRequest, String)>,
@@ -38,6 +39,7 @@ struct FixtureState {
 pub struct DeterministicAgent {
     shape: AgentShape,
     state: Arc<Mutex<FixtureState>>,
+    state_path: Option<Arc<PathBuf>>,
 }
 
 impl DeterministicAgent {
@@ -45,7 +47,53 @@ impl DeterministicAgent {
         Self {
             shape,
             state: Arc::new(Mutex::new(FixtureState::default())),
+            state_path: None,
         }
+    }
+
+    /// Persistent fixture mode keeps downstream Agent execution state outside a
+    /// VIA integration worker's volatile memory. It is test infrastructure, not a
+    /// production Agent persistence design.
+    pub fn persistent(shape: AgentShape, path: impl AsRef<Path>) -> anyhow::Result<Self> {
+        let path = path.as_ref().to_path_buf();
+        let state = if path.exists() {
+            serde_json::from_slice(&std::fs::read(&path)?)?
+        } else {
+            FixtureState::default()
+        };
+        let agent = Self {
+            shape,
+            state: Arc::new(Mutex::new(state)),
+            state_path: Some(Arc::new(path)),
+        };
+        {
+            let state = agent
+                .state
+                .lock()
+                .map_err(|_| anyhow::anyhow!("poisoned fixture lock"))?;
+            agent
+                .persist_locked(&state)
+                .map_err(|error| anyhow::anyhow!(error.to_string()))?;
+        }
+        Ok(agent)
+    }
+
+    fn persist_locked(&self, state: &FixtureState) -> Result<(), AgentError> {
+        let Some(path) = &self.state_path else {
+            return Ok(());
+        };
+        if let Some(parent) = path.parent() {
+            std::fs::create_dir_all(parent)
+                .map_err(|error| AgentError::Backend(error.to_string()))?;
+        }
+        let bytes = serde_json::to_vec(state)
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        let mut file = std::fs::File::create(path.as_ref())
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        file.write_all(&bytes)
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        file.sync_all()
+            .map_err(|error| AgentError::Backend(error.to_string()))
     }
 
     fn accepted(&self, run_id: String, context_id: Option<String>) -> NativeReply {
