@@ -65,6 +65,28 @@ class IrContractTests(unittest.TestCase):
         self.assertEqual(payload['input']['original_request'],self.case['original_request'])
         self.assertEqual(payload['prior']['grounding'],self.g)
 
+
+    def test_grounding_input_excludes_task_and_agent_evidence(self):
+        payload=json.loads(prepare('grounding',self.case,'m')['request']['messages'][1]['content'])
+        self.assertEqual(set(payload['input']), {'case_id','request_revision','original_request','interaction_events','visible_context','conversation'})
+        self.assertNotIn('task_views',payload['input'])
+        self.assertNotIn('capabilities',payload['input'])
+
+    def test_association_input_excludes_raw_visible_context_and_capabilities(self):
+        payload=json.loads(prepare('association',self.case,'m',{'grounding':self.g})['request']['messages'][1]['content'])
+        self.assertEqual(set(payload['input']), {'case_id','request_revision','original_request','conversation','task_views','pending_interactions'})
+        self.assertEqual(payload['prior']['grounding'],self.g)
+
+    def test_handling_input_exposes_capabilities_policy_not_raw_source(self):
+        payload=json.loads(prepare('handling',self.case,'m',{'grounding':self.g,'association':self.a})['request']['messages'][1]['content'])
+        self.assertEqual(set(payload['input']), {'case_id','request_revision','original_request','capabilities','policy_constraints'})
+        self.assertNotIn('visible_context',payload['input'])
+
+    def test_controller_feedback_is_explicit_and_not_part_of_initial_case(self):
+        payload=json.loads(prepare('grounding',self.case,'m',controller_feedback='referent version mismatch')['request']['messages'][1]['content'])
+        self.assertEqual(payload['controller_feedback'],'referent version mismatch')
+        self.assertNotIn('controller_feedback',payload['input'])
+
     def test_invented_pending_task_relation_rejected(self):
         self.a['associations'][0]['task_relation']='pending_interaction'
         with self.assertRaises(ValueError): validate_result('association',self.a,self.case,{'grounding':self.g})
