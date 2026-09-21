@@ -11,3 +11,4 @@ Do not invent missing source facts, task identities, approvals, or agent capabil
 If required evidence is missing, return NEED_CONTEXT or CLARIFY rather than guessing.
 Preserve the user's constraints and original request revision.
 Return only JSON matching integrated-schema.json.
+/no_think
