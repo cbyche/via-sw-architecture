@@ -3,3 +3,4 @@ Given the original request, provenance-preserving Stage 1/2 outputs, allowed VIA
 Do not perform downstream domain planning, tool selection, or external actions.
 Do not invent unsupported capabilities. If the request is not safely or sufficiently specified, return CLARIFY or REJECT.
 Return only JSON matching stage3-schema.json.
+/no_think
