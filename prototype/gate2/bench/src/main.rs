@@ -1,5 +1,7 @@
 use clap::{Parser, Subcommand};
-use gate2_contracts::{NativeReply, PReply, QReply, SubmitRequest, TaskCommand, TaskOp};
+use gate2_contracts::{
+    NativeReply, PReply, QReply, SubmitRequest, TaskCommand, TaskOp, WorkerRequest, WorkerResponse,
+};
 use gate2_fixture::{AgentShape, DeterministicAgent, S2sDelayTrace};
 use gate2_runtime::{
     agent::{AgentBoundary, CoreVisibleTyped, EdgeNormalized},
@@ -8,6 +10,10 @@ use gate2_runtime::{
     task::{PerTaskSupervisors, SharedTaskService, TaskAuthority},
 };
 use std::{path::PathBuf, sync::Arc};
+use tokio::{
+    io::{AsyncBufReadExt, AsyncWriteExt, BufReader, Lines},
+    process::{Child, ChildStdin, ChildStdout, Command as TokioCommand},
+};
 
 #[derive(Parser)]
 struct Cli {
@@ -26,6 +32,12 @@ enum Command {
         #[arg(long)]
         worker: PathBuf,
     },
+    ExecBlastSmoke {
+        #[arg(long)]
+        host: PathBuf,
+        #[arg(long)]
+        worker: PathBuf,
+    },
     S2sSmoke {
         #[arg(long)]
         trace: PathBuf,
@@ -39,6 +51,7 @@ async fn main() -> anyhow::Result<()> {
         Command::Smoke => smoke().await?,
         Command::ExecSmoke { worker } => exec_smoke(worker).await?,
         Command::ExecAbortSmoke { worker } => exec_abort_smoke(worker).await?,
+        Command::ExecBlastSmoke { host, worker } => exec_blast_smoke(host, worker).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
@@ -153,6 +166,109 @@ async fn exec_abort_smoke(worker: PathBuf) -> anyhow::Result<serde_json::Value> 
         "first_run":run,
         "restart_reply_shape":reply_shape(&after),
         "parent_process_survived":true,
+        "benchmark":"NOT_RUN"
+    }))
+}
+
+
+struct HostSession {
+    child: Child,
+    stdin: ChildStdin,
+    stdout: Lines<BufReader<ChildStdout>>,
+}
+
+impl HostSession {
+    async fn spawn(
+        host: &PathBuf,
+        mode: &str,
+        worker: Option<&PathBuf>,
+    ) -> anyhow::Result<Self> {
+        let mut command = TokioCommand::new(host);
+        command
+            .arg("--mode")
+            .arg(mode)
+            .stdin(std::process::Stdio::piped())
+            .stdout(std::process::Stdio::piped())
+            .kill_on_drop(true);
+        if let Some(worker) = worker {
+            command.arg("--worker").arg(worker);
+        }
+        let mut child = command.spawn()?;
+        let stdin = child
+            .stdin
+            .take()
+            .ok_or_else(|| anyhow::anyhow!("candidate host stdin missing"))?;
+        let stdout = child
+            .stdout
+            .take()
+            .ok_or_else(|| anyhow::anyhow!("candidate host stdout missing"))?;
+        Ok(Self {
+            child,
+            stdin,
+            stdout: BufReader::new(stdout).lines(),
+        })
+    }
+
+    async fn request(
+        &mut self,
+        request: WorkerRequest,
+    ) -> anyhow::Result<Option<WorkerResponse>> {
+        self.stdin
+            .write_all(serde_json::to_string(&request)?.as_bytes())
+            .await?;
+        self.stdin.write_all(b"\n").await?;
+        self.stdin.flush().await?;
+        match self.stdout.next_line().await? {
+            Some(line) => Ok(Some(serde_json::from_str(&line)?)),
+            None => Ok(None),
+        }
+    }
+}
+
+async fn exec_blast_smoke(
+    host: PathBuf,
+    worker: PathBuf,
+) -> anyhow::Result<serde_json::Value> {
+    let mut shared = HostSession::spawn(&host, "shared", None).await?;
+    anyhow::ensure!(
+        matches!(shared.request(WorkerRequest::Ping).await?, Some(WorkerResponse::Pong)),
+        "shared host did not start"
+    );
+    let shared_abort_reply = shared.request(WorkerRequest::AbortHost).await?;
+    anyhow::ensure!(
+        shared_abort_reply.is_none(),
+        "shared-process fatal fault unexpectedly returned a normal response"
+    );
+    let shared_status = shared.child.wait().await?;
+
+    let mut isolated = HostSession::spawn(&host, "isolated", Some(&worker)).await?;
+    anyhow::ensure!(
+        matches!(isolated.request(WorkerRequest::Ping).await?, Some(WorkerResponse::Pong)),
+        "isolated host did not start"
+    );
+    anyhow::ensure!(
+        matches!(
+            isolated.request(WorkerRequest::AbortHost).await?,
+            Some(WorkerResponse::Pong)
+        ),
+        "isolated host did not survive worker abort/restart"
+    );
+    anyhow::ensure!(
+        matches!(isolated.request(WorkerRequest::Ping).await?, Some(WorkerResponse::Pong)),
+        "isolated host not usable after worker restart"
+    );
+    anyhow::ensure!(
+        isolated.child.try_wait()?.is_none(),
+        "isolated Core host exited after integration worker fatal fault"
+    );
+
+    Ok(serde_json::json!({
+        "status":"PASS",
+        "scope":"symmetric EXEC fatal-fault blast-radius smoke",
+        "shared_host_exited":true,
+        "shared_exit_success":shared_status.success(),
+        "isolated_core_host_survived":true,
+        "isolated_worker_restarted":true,
         "benchmark":"NOT_RUN"
     }))
 }
