@@ -12,6 +12,7 @@
 - prompts.json: 8목적의 실제 문자열과 output 예시; 출력예시는 Model 입력에 넣지 않는다.
 - qwen-reference-profile.json: 공개 행과 파생 가정.
 - raw-results.template.json: 초기 결과 없음.
+- scoring-baseline.json: 11-C의 ASR별 target과 0~5 score boundary. 후보 결과를 보고 수정하지 않는다.
 
 ## 실행
 
@@ -25,6 +26,6 @@ python benchmark/rebaseline/token_count.py --tokenizer-dir /path/to/qwen-tokeniz
 
 두 번째 명령은 검사 함수만 실행하고, 세 번째 명령은 주어진 token 수의 모델 소계 추정이다. 실제 prompt 측정 또는 후보 p95가 아니다. tokenizer 스크립트는 tokenizer.json과 tokenizer_config.json을 요구하며 공식 tokenizer hash를 검사한다. 라이브러리는 tokenizers와 jinja2만 필요하며 실제 버전이 원장에 기록된다.
 
-measure.py는 지연계산·DAG resource경합·ASR-02/03 obligation degree 집계·변경ID집계·안전분모 및 코드의 양/음성 단위 검사를 제공한다. 후보 구현을 호출하는 adapter나 의미 정확도 자동 평가기는 아니다. 실제 후보 연결 후 trace를 수집하고 리뷰된 oracle로 판정해야 한다.
+measure.py는 지연계산·DAG resource경합·ASR-02/03 obligation degree 집계·변경ID집계·안전분모·11-C 고정 score lookup 및 코드의 양/음성 단위 검사를 제공한다. 후보 구현을 호출하는 adapter나 의미 정확도 자동 평가기는 아니다. 실제 후보 연결 후 trace를 수집하고 리뷰된 oracle로 판정해야 한다.
 
 `build_assets.py`는 승인된07의 변경 표와 11-B의 TC 표를 읽어 명세를 재생성한다. GitHub에는 원문 생성기/측정 코드, 검토 ZIP에는 JSON/CSV/HTML 생성 결과를 함께 제공한다. generator 재실행은 NOT_RUN 템플릿만 다시 만들므로 실제 결과 파일은 별도 results 경로에 보관한다.
