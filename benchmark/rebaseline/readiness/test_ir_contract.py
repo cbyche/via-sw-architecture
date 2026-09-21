@@ -87,6 +87,25 @@ class IrContractTests(unittest.TestCase):
         self.assertEqual(payload['controller_feedback'],'referent version mismatch')
         self.assertNotIn('controller_feedback',payload['input'])
 
+
+    def test_sampling_contract_and_seed_are_explicit(self):
+        request=prepare('integrated',self.case,'m',seed=123)['request']
+        self.assertEqual(request['temperature'],0.7)
+        self.assertEqual(request['top_p'],0.8)
+        self.assertEqual(request['top_k'],20)
+        self.assertEqual(request['min_p'],0.0)
+        self.assertEqual(request['presence_penalty'],1.5)
+        self.assertEqual(request['seed'],123)
+        self.assertFalse(request['chat_template_kwargs']['enable_thinking'])
+
+    def test_seed_changes_request_fingerprint_without_changing_input(self):
+        a=prepare('integrated',self.case,'m',seed=1)
+        b=prepare('integrated',self.case,'m',seed=2)
+        self.assertNotEqual(a['request_sha256'],b['request_sha256'])
+        pa=json.loads(a['request']['messages'][1]['content'])
+        pb=json.loads(b['request']['messages'][1]['content'])
+        self.assertEqual(pa['input'],pb['input'])
+
     def test_invented_pending_task_relation_rejected(self):
         self.a['associations'][0]['task_relation']='pending_interaction'
         with self.assertRaises(ValueError): validate_result('association',self.a,self.case,{'grounding':self.g})
