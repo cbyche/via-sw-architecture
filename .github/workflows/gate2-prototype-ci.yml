@@ -47,6 +47,7 @@ jobs:
           cargo run -q -p gate2-bench -- exec-abort-smoke --worker target/debug/gate2-worker
           cargo run -q -p gate2-bench -- exec-blast-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
           cargo run -q -p gate2-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
+          cargo run -q -p gate2-bench -- w04-load-smoke
       - name: Gate2 catalog static check
         run: |
           python3 benchmark/rebaseline/gate2/catalog_check.py --output /tmp/gate2-review
