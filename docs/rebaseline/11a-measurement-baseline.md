@@ -124,13 +124,13 @@ TC마다 주 검증 ASR, 기대 결과, 실제 결과, 위반한 조건, 공동 
 
 FA-14에서 Agent 실행이 살아 있고 query 가능한 재시작은 실제 재연결을 요구한다. Agent도 상태를 잃은 시험에서 불확실성을 알린 성공으로 이를 대체하지 않는다. 02/03/06을 한 번에 깨뜨린 같은 원인을 세 개의 독립 증거로 과장하지 않는다.
 
-집계용 canonical membership은 **11-B 표의 첫 번째 ASR(Primary ASR)** 로 고정한다. 같은 TC에 뒤따라 적힌 ASR은 regression/secondary observation이며 해당 ASR의 대표 분모에 중복 가산하지 않는다.
+집계용 canonical membership은 **11-B 각 TC에 명시된 ASR tag 전체**로 고정한다. 하나의 통합 TC가 ASR-02와 ASR-03처럼 서로 다른 품질 조건을 실제로 검증하면 같은 실행 trace에서 ASR별 assertion을 각각 판정할 수 있다. 이를 독립 실행 두 건으로 복제하지 않으며 공동 실패 원인도 함께 기록한다.
 
-- **ASR-02:** 47개 Primary TC
-- **ASR-03:** 23개 Primary TC
-- **ASR-06:** 17개 Primary TC
+- **ASR-02:** 48개 TC
+- **ASR-03:** 30개 TC
+- **ASR-06:** 27개 TC
 
-정확한 TC ID 목록은 11-B §B.8을 따른다. 이 세 집합은 후보 결과를 본 뒤 변경하지 않는다.
+즉 분모는 서로 겹칠 수 있지만 실행을 부풀리지 않는다. 정확한 TC ID 목록은 11-B §B.8을 따른다. 이 세 집합은 후보 결과를 본 뒤 변경하지 않는다.
 
 ASR-02에서 clarification이 필요한 TC는 **고정된 후속 사용자 답변까지 포함한 scripted dialogue**로 실행한다. 확인 질문을 올바르게 했다는 사실만으로 PASS가 아니며, 후속 답변을 올바른 원래 Request에 연결하여 terminal success condition까지 충족해야 PASS이다. 사용자가 실제로 답하지 않은 상태의 적절한 HOLD는 진단 상태로 기록하되 completion success로 세지 않는다.
 
