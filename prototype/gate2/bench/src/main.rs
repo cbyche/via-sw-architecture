@@ -8,8 +8,9 @@ use gate2_runtime::{
     exec::{IntegrationBridge, LocalBridge, ProcessBridge},
     repository::Repository,
     task::{PerTaskSupervisors, SharedTaskService, TaskAuthority},
+    workload::{BackgroundLoadConfig, run_background_load},
 };
-use std::{path::PathBuf, sync::Arc};
+use std::{path::PathBuf, sync::Arc, time::Duration};
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader, Lines},
     process::{Child, ChildStdin, ChildStdout, Command as TokioCommand},
@@ -42,6 +43,7 @@ enum Command {
         #[arg(long)]
         trace: PathBuf,
     },
+    W04LoadSmoke,
 }
 
 #[tokio::main]
@@ -53,6 +55,7 @@ async fn main() -> anyhow::Result<()> {
         Command::ExecAbortSmoke { worker } => exec_abort_smoke(worker).await?,
         Command::ExecBlastSmoke { host, worker } => exec_blast_smoke(host, worker).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
+        Command::W04LoadSmoke => w04_load_smoke().await?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())
@@ -284,6 +287,51 @@ async fn exec_blast_smoke(
         "shared_exit_success":shared_status.success(),
         "isolated_core_host_survived":true,
         "isolated_worker_restarted":true,
+        "benchmark":"NOT_RUN"
+    }))
+}
+
+async fn w04_load_smoke() -> anyhow::Result<serde_json::Value> {
+    let mut runs = Vec::new();
+    for candidate in ["shared", "per_task"] {
+        for active_tasks in [1usize, 4usize] {
+            let file = tempfile::NamedTempFile::new()?;
+            let repository = Repository::open(file.path())?;
+            let authority: Arc<dyn TaskAuthority> = if candidate == "shared" {
+                Arc::new(SharedTaskService::new(repository))
+            } else {
+                Arc::new(PerTaskSupervisors::new(repository))
+            };
+            let report = run_background_load(
+                authority,
+                BackgroundLoadConfig {
+                    active_tasks,
+                    update_period: Duration::from_millis(2),
+                    rounds: 3,
+                },
+            )
+            .await?;
+            anyhow::ensure!(
+                report.updates_applied == active_tasks * 3,
+                "W-04 workload smoke dropped background updates"
+            );
+            runs.push(serde_json::json!({
+                "candidate": candidate,
+                "active_tasks": active_tasks,
+                "updates_applied": report.updates_applied,
+                "elapsed_ms": report.elapsed_ms,
+                "w04_metric_eligible": report.w04_metric_eligible
+            }));
+        }
+    }
+
+    Ok(serde_json::json!({
+        "status":"PASS",
+        "scope":"W-04 fixed 1-vs-4 active background Task load-shape smoke",
+        "fixed_shape":"1 update per Task per cadence; production cadence remains 1000ms up to 30s",
+        "runs":runs,
+        "w04_representative_metric":"NOT_RUN",
+        "note":"Final W-04 requires the six W-01 foreground probes while this load is active.",
         "benchmark":"NOT_RUN"
     }))
 }
