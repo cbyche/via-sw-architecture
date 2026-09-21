@@ -339,6 +339,37 @@ fn normalize_submit(reply: NativeReply) -> Result<CanonicalAccepted, AgentError>
     }
 }
 
+fn normalize_snapshot(reply: NativeReply) -> Result<CanonicalSnapshot, AgentError> {
+    match reply {
+        NativeReply::P(PReply::Snapshot {
+            run_id,
+            revision,
+            state,
+            artifact,
+        }) => Ok(CanonicalSnapshot {
+            run_id,
+            source_revision: revision,
+            state,
+            artifact,
+        }),
+        NativeReply::Q(QReply::Snapshot {
+            context_id: _,
+            run_id,
+            revision,
+            state,
+            artifact,
+        }) => Ok(CanonicalSnapshot {
+            run_id,
+            source_revision: revision,
+            state,
+            artifact,
+        }),
+        _ => Err(AgentError::Backend(
+            "query returned non-snapshot native reply".into(),
+        )),
+    }
+}
+
 fn normalize_follow_up(reply: NativeReply) -> Result<CanonicalAccepted, AgentError> {
     match reply {
         NativeReply::P(PReply::FollowUpAccepted {
