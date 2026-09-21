@@ -118,6 +118,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Durable handoff / ExecutionLink | runtime/handoff.rs, SQLite outbox/link | IMPLEMENTED |
 | Agent P/Q source | fixture/src/lib.rs | FIXTURE |
 | Event-first + Query Reconciliation | runtime/sync.rs | IMPLEMENTED_TACTIC |
+| W-04 fixed background load | runtime/workload.rs + bench w04-load-smoke | IMPLEMENTED_DRIVER / final W-01 foreground measurement pending |
 | Trace primitive | runtime/trace.rs + Python timing contract | PARTIAL |
 | S2S elapsed-time replay | S2sDelayTrace, timing contract | CONTRACT_READY / measured trace missing |
 | Model semantic path | Python IR harness + frozen prompts/schema | HARNESS_READY / actual model missing |
@@ -151,7 +152,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Mac 실제 environment manifest | 실제 measurement host 식별 | 사용자 Mac에서 1회 실행 |
 | Qwen artifact/runtime/tokenizer hash | IR A/B 동일 dependency 증명 | 사용자 Mac setup 후 자동 capture |
 | measured S2S delay trace 또는 synthetic 사용 범위 승인 | simulated E2E provenance | 리뷰 시 결정. TEST_ONLY trace는 score 금지 |
-| full W-04 workload driver | 1 vs 4 active Task steady-state ratio | 구현 필요 |
+| W-04 background workload driver | 1 vs 4 active Task, 동일 cadence의 실제 state update 부하 | IMPLEMENTED / CI_SMOKE_GREEN; 최종 ratio는 W-01 foreground adapter 필요 |
 | full W-09 6-strata controller | recovery representative metric | 구현 필요 |
 | full W-10 28-cell controller | containment representative metric | 구현 필요 |
 | 94 TC→prototype end-to-end observation adapter | W-05/06와 회귀 전수 | 구현 필요 |
