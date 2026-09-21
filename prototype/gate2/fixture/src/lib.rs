@@ -185,6 +185,7 @@ impl DeterministicAgent {
             }),
         };
         run.events.push(event);
+        self.persist_locked(&state)?;
         Ok(())
     }
 
@@ -225,6 +226,7 @@ impl DeterministicAgent {
             }),
         };
         run.events.push(event);
+        self.persist_locked(&state)?;
         Ok(())
     }
 
@@ -272,6 +274,7 @@ impl DeterministicAgent {
             }),
         };
         run.events.push(event);
+        self.persist_locked(&state)?;
         Ok(())
     }
 
@@ -303,6 +306,7 @@ impl DeterministicAgent {
             }),
         };
         run.events.push(event);
+        self.persist_locked(&state)?;
         Ok(())
     }
 
@@ -336,6 +340,7 @@ impl DeterministicAgent {
             }),
         };
         run.events.push(event);
+        self.persist_locked(&state)?;
         Ok(())
     }
 }
@@ -396,6 +401,7 @@ impl AgentBackend for DeterministicAgent {
         state
             .submissions
             .insert(request.submission_key.clone(), (request, run_id.clone()));
+        self.persist_locked(&state)?;
         Ok(self.accepted(run_id, context_id))
     }
 
@@ -454,6 +460,7 @@ impl AgentBackend for DeterministicAgent {
                     kind: PEventKind::Progress { percent: 0 },
                 });
                 run.events.push(event);
+                self.persist_locked(&state)?;
                 Ok(NativeReply::P(PReply::FollowUpAccepted {
                     run_id: run_id.into(),
                     revision,
@@ -483,6 +490,7 @@ impl AgentBackend for DeterministicAgent {
                     },
                 }));
                 state.runs.insert(next_id.clone(), next);
+                self.persist_locked(&state)?;
                 Ok(NativeReply::Q(QReply::ContinuationAccepted {
                     context_id,
                     previous_run_id: run_id.into(),
@@ -524,10 +532,13 @@ impl AgentBackend for DeterministicAgent {
                     ));
                 }
                 run.revision += 1;
+                let context_id = run.context_id.clone().expect("Q context");
+                let revision = run.revision;
+                self.persist_locked(&state)?;
                 Ok(NativeReply::Q(QReply::CancelRequested {
-                    context_id: run.context_id.clone().expect("Q context"),
+                    context_id,
                     run_id: run_id.into(),
-                    revision: run.revision,
+                    revision,
                 }))
             }
         }
