@@ -1,7 +1,7 @@
 # 11-A/B 진행 및 근거 재검토 기록
 
 > 검토일: 2026-09-21
-> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. 11-C·12는 미진행.**
+> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. 11-C 초안 작성·리뷰 대기. 12는 미진행.**
 
 ## 1. 현재 준비 상태
 
@@ -22,7 +22,7 @@
 | S2S Model evidence | Qwen3-Omni-30B-A3B-Instruct. concurrency=1 official theoretical audio first-packet 234ms, Thinker 75 tok/s, Talker 140 tok/s, RTF 0.47. remote/high-memory dependency reference |
 | 공식 tokenizer/model snapshot | Qwen3-8B tokenizer/template/GGUF revision·hash 기록. 실제 prompt tokenization은 아직 NOT_RUN |
 | 실제 VIA/model benchmark | NOT_RUN |
-| 11-C | target·0~5점·반복 수·최종 집계 미진행 |
+| 11-C | 7개 ASR target·0~5점·반복·집계 초안 작성. 사용자 리뷰 대기 |
 | 12 | DP 도출·후보 비교·결정 미진행 |
 
 ## 2. ASR-01 Windows Consumer PC reference
@@ -125,4 +125,19 @@ S2S Model은 **Qwen3-Omni-30B-A3B-Instruct**로 고정한다. 공식 Technical R
 3. ASR-04 target 2.0 및 ASR-05 target 3.0 elements/change
 4. 11-A/B measurement/test definition의 review-complete 처리
 
-따라서 11-A/B는 종료한다. 다음 단계는 11-C이지만 아직 시작하지 않았다.
+따라서 11-A/B는 종료했다. 11-C 초안을 작성했으며 사용자 승인 전에는 12로 넘어가지 않는다.
+
+
+## 9. 11-C 초안
+
+[11-C Target & Scoring Baseline](../11c-target-and-scoring-baseline.md)에 다음 초안을 작성했다.
+
+- ASR-01 target ≤2.0s, score 5≤1.0s … score 0>4.0s
+- ASR-02/03 target ≥95%, obligation degree score
+- ASR-04 target ≤2.0 elements/change
+- ASR-05 target ≤3.0 elements/change
+- ASR-06 target 100% deterministic scenario pass
+- ASR-07 target 0/24 safety violation
+- measured/estimated/replay/design-analysis evidence level 분리
+
+Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결했다.
