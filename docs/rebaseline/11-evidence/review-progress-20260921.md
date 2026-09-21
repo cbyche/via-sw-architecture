@@ -1,7 +1,7 @@
 # 11-A/B 진행 및 근거 재검토 기록
 
 > 검토일: 2026-09-21
-> 상태: **09/10 승인 정합화 완료 / 11-A·11-B 사용자 리뷰 반영 중. 11-C·12는 미진행.**
+> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. 11-C·12는 미진행.**
 
 ## 1. 현재 준비 상태
 
@@ -14,11 +14,12 @@
 | Voice interruption | audio-stop latency는 secondary/regression observation. ASR-01 대표 score 제외 |
 | ASR-02/03/06 scoring membership | multi-ASR TC는 한 번 실행하고 ASR별 assertion을 각각 판정. ASR-02 48 / ASR-03 30 / ASR-06 27 TC 고정 |
 | Clarification | scripted follow-up을 거쳐 terminal success까지 완료해야 ASR-02 PASS. 질문만 맞게 한 HOLD는 completion PASS 아님 |
-| Grounding oracle | identity/hit-test 우선, raw region fallback IoU≥0.50, 최소 4초 pre-turn interaction history 보존 |
+| Grounding oracle | identity/hit-test 우선, raw region fallback IoU≥0.50. 고정 temporal tolerance/4초 requirement 제거; source event timestamp/order로 판정 |
 | Restart/race/recovery | deterministic Agent simulator + fault/event injection. restart는 실제 VIA process memory loss 후 persisted state와 살아 있는 Agent query로 복구 |
 | Safety | 24 fixed opportunities 유지. wrong-scope를 destination/pending Action identity mismatch까지 강화. 11-C에서 score로 평가 |
-| ASR-04/05 rationale | change-locality 원칙과 VIA boundary로 target proposal ASR-04≤2.0 / ASR-05≤3.0 elements/change 작성. 아직 11-C 승인 전 |
-| Qwen planning evidence | Qualcomm을 주 profile에서 제외. Windows 11 + RTX 4060 + Qwen3-8B Q4_K_M 공개 관측으로 교체 |
+| ASR-04/05 target | 사용자 승인: ASR-04≤2.0 / ASR-05≤3.0 elements/change. 11-C의 score-band 입력으로 사용 |
+| Semantic Model evidence | Qwen3-8B Q4_K_M / Windows RTX 4060 planning profile 승인 |
+| S2S Model evidence | Qwen3-Omni-30B-A3B-Instruct. concurrency=1 official theoretical audio first-packet 234ms, Thinker 75 tok/s, Talker 140 tok/s, RTF 0.47. remote/high-memory dependency reference |
 | 공식 tokenizer/model snapshot | Qwen3-8B tokenizer/template/GGUF revision·hash 기록. 실제 prompt tokenization은 아직 NOT_RUN |
 | 실제 VIA/model benchmark | NOT_RUN |
 | 11-C | target·0~5점·반복 수·최종 집계 미진행 |
@@ -52,7 +53,9 @@ Model load, Context access, queue, serialization, IPC/RPC, validation, Voice/Tex
 
 작은 ±100/500ms synchronization tolerance를 임의로 두지 않는다. Interaction evidence는 source timestamp와 ordering을 보존하고 object identity/hit-test로 판정한다.
 
-Oviatt et al.의 multimodal interaction 연구에서 sequential pen→speech lag는 평균 1.4초, 관측치 전체가 4초 이내였으므로 **User Turn 시작 전 최소 4초 interaction history를 보존**한다. 4초는 matching tolerance가 아니라 evidence retention minimum이다.
+1997년 Oviatt 연구는 historical background로만 유지한다. 당시 pen+speech/click-to-speak interface의 최대 lag 관찰값을 VIA의 4초 requirement로 직접 쓰지 않는다. 2023·2024의 최근 speech-gesture 연구는 referential gesture가 speech와 긴밀하게 정렬되고 대체로 동시 또는 선행한다는 방향을 재확인하지만, desktop pointer/selection system에 적용할 보편적인 시간 threshold를 제공하지 않는다.
+
+따라서 **고정 temporal threshold는 없음**으로 결정한다. canonical fixture의 source event timestamp/order 자체가 oracle이며, current test에 필요한 pre-turn event는 fixture timeline에 명시적으로 포함한다.
 
 Object identity가 없는 raw region만의 fallback에는 IoU≥0.50을 사용한다. 이는 computer-vision localization의 최소 overlap 관행을 빌린 fallback이며 UI identity 기반 판정보다 우선하지 않는다.
 
@@ -90,7 +93,13 @@ Object identity가 없는 raw region만의 fallback에는 IoU≥0.50을 사용�
 
 상세: [Change Locality rationale](./asr04-asr05-change-locality-rationale.md).
 
-## 6. 사용자가 지금 준비할 필요가 없는 것
+## 6. 승인된 S2S reference
+
+S2S Model은 **Qwen3-Omni-30B-A3B-Instruct**로 고정한다. 공식 Technical Report의 concurrency=1 theoretical audio first-packet 234ms, Thinker 75 tok/s, Talker 140 tok/s, Generation RTF 0.47을 planning evidence로 사용한다. 공식 weight는 약 70.5GB이며 BF16 Instruct deployment memory도 일반 단일 consumer GPU 범위를 넘으므로, 현재 baseline은 S2S를 remote/high-memory GPU dependency로 보는 것을 허용한다. 원격이면 network/transport도 ASR-01에 포함한다.
+
+상세: [Qwen3-Omni S2S evidence](./asr01-qwen3-omni-s2s-evidence.md).
+
+## 7. 사용자가 지금 준비할 필요가 없는 것
 
 현재 단계에서는 사용자가 local model server, API key, 특정 GPU 또는 VIA candidate 실행환경을 준비할 필요가 없다.
 
@@ -107,12 +116,12 @@ Object identity가 없는 raw region만의 fallback에는 IoU≥0.50을 사용�
 
 지금은 공식 tokenizer snapshot + 공개 Windows consumer GPU profile + candidate별 exact prompt/call graph로 planning estimate를 만든다.
 
-## 7. 아직 닫지 않은 것
+## 8. 리뷰 종료
 
-11-C로 넘어가기 전 사용자 승인 또는 추가 리뷰가 필요한 핵심은 다음이다.
+사용자가 다음 세 항목을 모두 승인했다.
 
 1. ASR-01의 6개 latency request class와 Macro-p95 방식
-2. ASR-04 target proposal 2.0 및 ASR-05 target proposal 3.0
-3. 11-A/B의 현재 measurement/test definition을 review-complete로 볼지 여부
+2. ASR-04 target 2.0 및 ASR-05 target 3.0 elements/change
+3. 11-A/B measurement/test definition의 review-complete 처리
 
-그 외 canonical TC membership, clarification rule, grounding oracle, restart/race stub 방식, safety 24 denominator, Windows Qwen planning profile 선택은 이번 리뷰 반영안으로 문서화했다.
+따라서 11-A/B는 종료한다. 다음 단계는 11-C이지만 아직 시작하지 않았다.
