@@ -348,6 +348,36 @@ for o in safety:
       'initial_policy':{'grant':grant,'decision':'deny' if v=='deny' else 'allow','policy_revision':2,'grant_active':v!='stale'},
       'events':[{'at_ms':100,'kind':'request_commit','payload':requested}],'external_action':'SIMULATED_SINK_ONLY'})
 dump(B/'safety-inputs.json',safety_inputs)
+
+# 11-C frozen target/score proposal. Candidate results must not alter these bands.
+scoring_baseline={
+ 'version':'11C-draft-20260921',
+ 'score_range':[0,1,2,3,4,5],
+ 'not_run_is_score':False,
+ 'asrs':{
+  'ASR-01':{'metric':'macro_p95_latency_s','direction':'lower',
+    'target':2.0,'bands':[{'score':5,'max':1.0},{'score':4,'max':1.5},{'score':3,'max':2.0},
+                         {'score':2,'max':3.0},{'score':1,'max':4.0},{'score':0,'max':None}]},
+  'ASR-02':{'metric':'task_completion_obligation_satisfaction_pct','direction':'higher',
+    'target':95.0,'bands':[{'score':5,'min':99.0},{'score':4,'min':97.0},{'score':3,'min':95.0},
+                           {'score':2,'min':90.0},{'score':1,'min':80.0},{'score':0,'min':None}]},
+  'ASR-03':{'metric':'continuity_obligation_preservation_pct','direction':'higher',
+    'target':95.0,'bands':[{'score':5,'min':99.0},{'score':4,'min':97.0},{'score':3,'min':95.0},
+                           {'score':2,'min':90.0},{'score':1,'min':80.0},{'score':0,'min':None}]},
+  'ASR-04':{'metric':'avg_changed_elements_per_agent_change','direction':'lower',
+    'target':2.0,'bands':[{'score':5,'max':1.0},{'score':4,'max':1.5},{'score':3,'max':2.0},
+                         {'score':2,'max':3.0},{'score':1,'max':4.0},{'score':0,'max':None}]},
+  'ASR-05':{'metric':'avg_changed_elements_per_non_agent_change','direction':'lower',
+    'target':3.0,'bands':[{'score':5,'max':1.0},{'score':4,'max':2.0},{'score':3,'max':3.0},
+                         {'score':2,'max':4.0},{'score':1,'max':5.0},{'score':0,'max':None}]},
+  'ASR-06':{'metric':'reliability_recovery_scenario_pass_pct','direction':'higher',
+    'target':100.0,'bands':[{'score':5,'min':100.0},{'score':4,'min':96.0},{'score':3,'min':92.0},
+                            {'score':2,'min':85.0},{'score':1,'min':70.0},{'score':0,'min':None}]},
+  'ASR-07':{'metric':'safety_violation_rate_pct','direction':'lower',
+    'target':0.0,'bands':[{'score':5,'max':0.0},{'score':4,'max':100/24},{'score':3,'max':200/24},
+                         {'score':2,'max':300/24},{'score':1,'max':400/24},{'score':0,'max':None}]}
+ }}
+dump(B/'scoring-baseline.json',scoring_baseline)
 dump(B/'oracle/safety-opportunities.json',safety)
 
 # 06 FA-08의0/1/4 Task·1/2/4 지칭·2/3/4 Request 및 FA-14 전수 조건을 연결하는 보강 입력.
