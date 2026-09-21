@@ -292,7 +292,7 @@ Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기�
 
 ## B.8 ASR-02·03·06 canonical scoring membership
 
-B.2의 각 TC에 명시된 ASR tag를 해당 QA의 canonical scoring membership으로 고정한다. **한 TC가 여러 ASR을 실제로 검증하면 membership은 겹칠 수 있다.** 단, 같은 TC를 여러 번 실행해 독립 evidence처럼 부풀리지 않고 한 실행 trace에서 ASR별 required/forbidden assertion을 각각 판정하며 공동 실패 원인을 기록한다.
+B.2의 각 TC에 명시된 ASR tag를 해당 QA의 canonical scoring membership으로 고정한다. **한 TC가 여러 ASR을 실제로 검증하면 membership은 겹칠 수 있다.** 단, 같은 TC를 여러 번 실행해 독립 evidence처럼 부풀리지 않고 한 실행 trace에서 ASR-tagged atomic obligation을 각각 판정하며 공동 실패 원인을 기록한다.
 
 TC-11.1·11.2는 voice interruption secondary/regression으로만 유지하며 ASR-01 대표 score에 포함하지 않는다.
 
@@ -300,7 +300,7 @@ TC-11.1·11.2는 voice interruption secondary/regression으로만 유지하며 A
 
 `TC-01.1, TC-01.3, TC-01.4, TC-02.1~02.6, TC-03.1~03.6, TC-04.1~04.7, TC-05.1~05.2, TC-06.1~06.3, TC-06.5, TC-07.1, TC-08.1~08.5, TC-09.1~09.5, TC-10.5, TC-11.3~11.4, TC-14.5, TC-17.1~17.5`
 
-Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 포함해 terminal success를 판정한다. 올바른 clarification만 하고 멈춘 상태는 completion PASS가 아니다.
+Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 포함한다. clarification 자체, follow-up binding, terminal outcome을 서로 다른 obligation으로 사전 등록하며 terminal outcome을 충족하지 못하면 해당 TC의 effectiveness는 100%가 아니고 strict PASS도 아니다.
 
 ### ASR-03 — 30개
 
@@ -312,6 +312,41 @@ Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 �
 
 이 membership은 후보 결과를 보기 전에 동결하며, 이후 새로운 failure를 발견하더라도 기존 분모에서 불리한 TC를 제거하지 않는다. 필요한 새 시험은 별도 regression evidence로 추가하고 대표 분모 변경은 명시적 rebaseline 없이는 하지 않는다.
 
-## B.9 11-B 리뷰 종료
+## B.9 ASR-02/03 atomic obligation scoring
 
-사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03/06 scoring membership을 승인했다. 11-B는 리뷰 완료로 닫으며 실제 candidate 결과는 계속 `NOT_RUN`이다.
+ASR-02와 ASR-03의 대표값은 단순한 strict pass rate가 아니라 **TC 내부 obligation의 충족/보존 정도**다.
+
+### 등록 단위
+
+각 obligation은 다음 형식으로 candidate 실행 전에 고정한다.
+
+| 필드 | 의미 |
+| --- | --- |
+| obligation ID | TC 안에서 유일한 ID |
+| kind | `REQUIRED_PRESENT` 또는 `FORBIDDEN_ABSENT` |
+| text | 독립적으로 검증 가능한 요구 한 가지 |
+| ASR tag | ASR-02, ASR-03 또는 둘 다 |
+| evidence locator | 실제 trace에서 무엇으로 판정하는가 |
+
+한 문장을 후보 결과를 본 뒤 여러 조각으로 쪼개 점수를 높이지 않는다. 반대로 서로 독립적인 referent, relation, Task identity를 하나의 거대한 조건으로 합쳐 차이를 숨기지도 않는다.
+
+### TC별 계산
+
+```text
+TC degree for ASR-q
+= satisfied ASR-q obligations / applicable ASR-q obligations
+```
+
+ASR-02와 ASR-03은 각 canonical TC의 degree를 **동일 가중 평균**한다. 따라서 obligation이 많은 복잡한 TC가 전체 점수에서 더 큰 비중을 얻지 않는다.
+
+strict TC PASS는 해당 ASR의 모든 obligation이 충족된 경우이며 secondary evidence로 함께 보존한다.
+
+### multi-ASR TC
+
+예를 들어 TC-01.3의 "새 주제에 답한다"는 ASR-02 obligation이고, "기존 T-PPT에 잘못 붙이지 않는다"는 ASR-03 obligation이다. 같은 trace에서 두 결과를 따로 판정한다. 한쪽 실패를 다른 QA의 실패로 자동 복사하지 않는다.
+
+구체 obligation 원장과 집계 규칙은 [ASR-02/03 Obligation Scoring](./11-evidence/asr02-asr03-obligation-scoring.md)을 따른다.
+
+## B.10 11-B 리뷰 종료
+
+사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03 obligation degree metric과 ASR-06 scoring membership을 승인했다. 11-B는 리뷰 완료로 닫으며 실제 candidate 결과는 계속 `NOT_RUN`이다.
