@@ -1,9 +1,77 @@
 {
-  "$schema":"https://json-schema.org/draft/2020-12/schema",
-  "type":"object",
-  "required":["status","decisions"],
-  "properties":{
-    "status":{"enum":["READY","CORRECT_PRIOR_STAGE","CLARIFY","REJECT"]},
-    "decisions":{"type":"array"}
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "decisions",
+    "correction_stage",
+    "correction_reason",
+    "clarification"
+  ],
+  "properties": {
+    "status": {
+      "enum": [
+        "READY",
+        "CORRECT_PRIOR_STAGE",
+        "CLARIFY",
+        "REJECT"
+      ]
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "request_id",
+          "handling",
+          "required_capability"
+        ],
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "handling": {
+            "enum": [
+              "direct_s2s_eligible",
+              "bounded_core",
+              "downstream_agent",
+              "clarify",
+              "reject"
+            ]
+          },
+          "required_capability": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "correction_stage": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "enum": [
+        null,
+        1,
+        2
+      ]
+    },
+    "correction_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "clarification": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
   }
 }
