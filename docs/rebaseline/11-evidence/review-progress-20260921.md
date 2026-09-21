@@ -1,7 +1,7 @@
 # 11-A/B 진행 및 근거 재검토 기록
 
 > 검토일: 2026-09-21
-> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. 11-C 초안 작성·리뷰 대기. 12는 미진행.**
+> 상태: **09/10 및 11-A/B 사용자 리뷰 승인 완료. Reserve QA 정식 재평가 완료 / ASR rebaseline 사용자 결정 대기. 11-C 초안은 보류, 12는 미진행.**
 
 ## 1. 현재 준비 상태
 
@@ -141,3 +141,16 @@ S2S Model은 **Qwen3-Omni-30B-A3B-Instruct**로 고정한다. 공식 Technical R
 - measured/estimated/replay/design-analysis evidence level 분리
 
 Machine-readable scoring baseline과 helper도 `benchmark/rebaseline/`에 연결했다.
+
+
+## 10. Reserve QA 정식 재평가
+
+[08-B Reserve QA Formal Reassessment](../08b-reserve-qa-formal-reassessment.md)에서 기존 방법론으로 재평가했다.
+
+- H/H 신규 승격 권고: Concurrent Task Scalability & Performance Isolation
+- H/H metric 교체 권고: ASR-06 → Recovery Timeliness (strict recovery pass는 regression 유지)
+- H/H 신규 승격 권고: Privacy Exposure Minimization
+- H/H 신규 승격 권고: Dependency Failure Containment & Graceful Degradation
+- 신규 ASR 비권고: Compute Efficiency, Diagnosability, Task State Freshness, Deployment Flexibility
+
+사용자 승인 전에는 08/09/11의 확정 catalog를 변경하지 않는다.
