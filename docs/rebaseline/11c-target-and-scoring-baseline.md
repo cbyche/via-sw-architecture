@@ -364,3 +364,5 @@ opaque ID, random nonce, hidden mapping 등 후보 간 차이를 만들기 위�
     condition under which the ASR should be demoted to regression
 
 두 합리적 후보가 기능을 완전히 구현했을 때 같은 값이 예상된다면 해당 ASR을 Primary에서 내리는 것이 원칙이다.
+
+현재 ASR-02/03/06/07에 대한 natural sensitivity hypothesis와 예상 역할은 [Natural Architecture Sensitivity Hypotheses](./11-evidence/natural-architecture-sensitivity-hypotheses.md)에 정리한다.
