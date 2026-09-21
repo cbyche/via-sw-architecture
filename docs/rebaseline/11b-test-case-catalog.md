@@ -347,34 +347,16 @@ strict TC PASS는 해당 ASR의 모든 obligation이 충족된 경우이며 seco
 
 구체 obligation 원장과 집계 규칙은 [ASR-02/03 Obligation Scoring](./11-evidence/asr02-asr03-obligation-scoring.md)을 따른다.
 
-## B.10 Architecture-sensitive counterfactual variants
+## B.10 Architecture sensitivity와 Test Case의 경계
 
-ASR-02/03에서 강한 LLM이 semantic hint만으로 구조적 state/evidence 손실을 보완하는 것을 막기 위해, 아래 fixed counterfactual variants를 canonical TC 내부 변형으로 추가한다. **TC membership 수(ASR-02 48 / ASR-03 30)는 바꾸지 않는다.**
+ASR-02/03의 canonical Test Case는 실제 Representative Use Case에서 도출한 입력을 유지한다. **후보 사이 점수 차이를 만들기 위해 opaque ID, random nonce, hidden counterfactual mapping을 대표 scoring fixture에 추가하지 않는다.**
 
-| Variant | Base TC | 고정 변화 | 구조적으로 필요한 정보 | 주 ASR |
-| --- | --- | --- | --- | --- |
-| **SV-02-GROUNDING-SWAP** | TC-04.2 | 동일 문장/화면에서 두 pointer target의 source-event order만 swap | timestamped interaction timeline | ASR-02 |
-| **SV-02-TASK-OPAQUE** | TC-14.5 | 두 Task/run ID를 random opaque ID로 만들고 semantic title clue 제거 | authoritative Task association state | ASR-02 |
-| **SV-03-S2S-NONCE** | TC-07.1 | S2S Direct Response에 run별 random nonce를 포함하고 후속 요청에서는 nonce를 재진술하지 않음 | VIA Conversation에 실제 S2S response 기록 | ASR-03 |
-| **SV-03-RUN-ARTIFACT-SWAP** | TC-10.3 | 동일 Agent 두 run의 opaque run↔artifact mapping을 pair A/B에서 swap | VIA Task↔run↔artifact correlation | ASR-03 |
+Architecture sensitivity는 Test Case를 인위적으로 어렵게 만드는 방식이 아니라, 12에서 각 DP의 정상적인 구조 대안이 동일한 현실적 조건 아래 실제로 다른 information/state availability 또는 semantic pipeline behavior를 만드는지 분석하여 판단한다.
 
-Variant pair의 자연어 요구는 동일하게 유지하고 authoritative hidden mapping만 바꾼다. candidate가 해당 state/evidence를 보존하지 못하면 세계지식이나 더 강한 LLM으로 두 pair를 동시에 정확히 맞힐 수 없도록 한다.
+두 정상 대안이 canonical TC에서 동일 결과를 내는 것이 예상되면 ASR-02/03은 그 DP의 Primary QA가 아니며 regression/secondary observation으로 유지한다.
 
-### Variant 집계
-
-Base TC와 fixed sensitivity variant는 별도 TC로 분모를 늘리지 않는다.
-
-```text
-TC degree
-= mean(base run degree, fixed variant degree(s))
-```
-
-따라서 여전히 ASR-02는 48개 TC, ASR-03은 30개 TC를 동일 가중한다. 특정 구조 축의 variant가 있다고 그 TC 자체의 전체 QA weight를 늘리지 않는다.
-
-Variant는 후보 결과를 보기 전에 fixture와 oracle을 고정한다. random/opaque value는 reproducible seed로 생성하고 candidate에 oracle mapping을 제공하지 않는다.
-
-상세 원칙은 [Architecture-Sensitive Probe Design](./11-evidence/architecture-sensitive-probes.md)을 따른다.
+진단 목적으로 counterfactual/opaque probe를 사용할 수는 있으나 대표 ASR score에는 포함하지 않고 구조 원인 분석용 evidence로만 취급한다.
 
 ## B.11 11-B 리뷰 종료
 
-사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03 obligation degree metric과 architecture-sensitive counterfactual variant 원칙, ASR-06 scoring membership을 승인했다. 실제 candidate 결과는 계속 `NOT_RUN`이다.
+사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03 obligation degree metric과 ASR-06 scoring membership을 승인했다. Architecture 차이를 만들기 위한 인위적 scoring fixture는 추가하지 않는다. 실제 candidate 결과는 계속 `NOT_RUN`이다.
