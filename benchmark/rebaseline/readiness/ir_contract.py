@@ -193,8 +193,41 @@ def validate_result(stage: str, result: dict[str, Any], case: dict[str, Any],
             raise ValueError('unsupported or missing Agent capability')
 
 
+def stage_input(stage: str, clean: dict[str, Any]) -> dict[str, Any]:
+    """Return only the evidence owned by the stage's normal responsibility."""
+    common = {
+        'case_id': clean['case_id'],
+        'request_revision': clean['request_revision'],
+        'original_request': clean['original_request'],
+    }
+    if stage == 'integrated':
+        return copy.deepcopy(clean)
+    if stage == 'grounding':
+        return {
+            **common,
+            'interaction_events': copy.deepcopy(clean['interaction_events']),
+            'visible_context': copy.deepcopy(clean['visible_context']),
+            'conversation': copy.deepcopy(clean['conversation']),
+        }
+    if stage == 'association':
+        return {
+            **common,
+            'conversation': copy.deepcopy(clean['conversation']),
+            'task_views': copy.deepcopy(clean['task_views']),
+            'pending_interactions': copy.deepcopy(clean['pending_interactions']),
+        }
+    if stage == 'handling':
+        return {
+            **common,
+            'capabilities': copy.deepcopy(clean['capabilities']),
+            'policy_constraints': copy.deepcopy(clean['policy_constraints']),
+        }
+    raise ValueError('unknown stage')
+
+
 def prepare(stage: str, case: dict[str, Any], model: str,
-            prior: dict[str, dict[str, Any]] | None = None) -> dict[str, Any]:
+            prior: dict[str, dict[str, Any]] | None = None,
+            controller_feedback: str | None = None) -> dict[str, Any]:
     if stage not in STAGES or not model:
         raise ValueError('stage/model required')
     clean = clean_input(case)
@@ -207,11 +240,18 @@ def prepare(stage: str, case: dict[str, Any], model: str,
         validate_result(key, value, clean, prior)
         if value['status'] != 'READY':
             raise ValueError('cannot advance a held/rejected/correction stage')
+    if controller_feedback is not None and not controller_feedback.strip():
+        raise ValueError('empty controller feedback is not meaningful')
+    user_payload = {
+        'input': stage_input(stage, clean),
+        'prior': prior,
+        'controller_feedback': controller_feedback,
+    }
     body = {'model': model, 'stream': False, 'temperature': 0,
             'chat_template_kwargs': {'enable_thinking': False},
             'messages': [
                 {'role': 'system', 'content': BASE_PROMPT + '\n' + PURPOSES[stage]},
-                {'role': 'user', 'content': json.dumps({'input': clean, 'prior': prior}, ensure_ascii=False, sort_keys=True)}],
+                {'role': 'user', 'content': json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}],
             'response_format': {'type': 'json_schema', 'json_schema': {'name': 'via_' + stage, 'strict': True, 'schema': schemas()[stage]}}}
     wire = json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()
     return {'request': body, 'request_sha256': hashlib.sha256(wire).hexdigest(), 'input_tokens': None,
