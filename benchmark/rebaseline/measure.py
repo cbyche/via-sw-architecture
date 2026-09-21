@@ -69,6 +69,28 @@ def p95_same_group(rows: list[dict[str,Any]]) -> float:
     values=sorted(latency_sample(r) for r in rows)
     return values[math.ceil(.95*len(values))-1]
 
+def obligation_tc_score(obligations: list[dict[str,Any]], results: dict[str,bool], asr: str) -> dict[str,Any]:
+    """한 TC에서 해당 ASR에 tag된 obligation의 degree와 strict 결과를 계산."""
+    relevant=[o for o in obligations if asr in o.get('asrs',[])]
+    if not relevant: raise ValueError('no applicable obligations')
+    values=[]
+    for o in relevant:
+        if o['id'] not in results or not isinstance(results[o['id']],bool):
+            raise ValueError('missing/non-bool obligation result')
+        values.append(results[o['id']])
+    degree=100.0*sum(values)/len(values)
+    return {'asr':asr,'obligations':len(values),'satisfied':sum(values),
+            'degree_pct':degree,'strict_pass':all(values)}
+
+def obligation_macro_score(tc_rows: list[dict[str,Any]]) -> dict[str,Any]:
+    """TC를 동일 가중한다. obligation 개수가 많은 TC에 더 큰 QA weight를 주지 않는다."""
+    if not tc_rows: raise ValueError('no TC degree rows')
+    degrees=[float(r['degree_pct']) for r in tc_rows]
+    if any((not math.isfinite(v) or v<0 or v>100) for v in degrees):
+        raise ValueError('invalid degree')
+    return {'tc_count':len(degrees),'macro_degree_pct':sum(degrees)/len(degrees),
+            'strict_pass_rate_pct':100.0*sum(bool(r['strict_pass']) for r in tc_rows)/len(tc_rows)}
+
 def changed_elements(modified: list[str], added: list[str], removed: list[str],
                      baseline_ids: set[str], regression_ok: bool) -> int:
     m,a,r=map(set,(modified,added,removed))
@@ -110,12 +132,28 @@ def audit() -> dict[str,Any]:
     assert {c['id'] for c in cases}==set(oracle)
     assert all(c['input']['patch_key'] in patches for c in cases)
     assert all('expected' not in c['input'] and 'required_observations' not in c['input'] for c in cases)
+    obligation_catalog=json.loads((root/'oracle/obligation-catalog.json').read_text(encoding='utf-8'))
+    assert obligation_catalog and len({o['id'] for o in obligation_catalog})==len(obligation_catalog)
+    assert all(o['kind'] in {'REQUIRED_PRESENT','FORBIDDEN_ABSENT'} for o in obligation_catalog)
+    # Canonical degree-metric membership is fixed before candidates.
+    assert len({o['tc'] for o in obligation_catalog if 'ASR-02' in o['asrs']})==48
+    assert len({o['tc'] for o in obligation_catalog if 'ASR-03' in o['asrs']})==30
     assert {c['id'] for c in changes}=={f'{p}-{i:02d}' for p,n in [('M',9),('A',9),('C',6)] for i in range(1,n+1)}
     assert all(c['count'] is None for c in changes)
     assert all(c['execution_status']=='NOT_RUN' for c in cases)
     assert len(json.loads((root/'environment-inputs.json').read_text(encoding='utf-8')))==8
     ps=json.loads((root/'prompts.json').read_text(encoding='utf-8'));assert len(ps)==8
     # Positive/negative controls validate only the measurement helpers, not VIA.
+    demo_obs=[
+      {'id':'O1','asrs':['ASR-02']},{'id':'O2','asrs':['ASR-02']},
+      {'id':'O3','asrs':['ASR-03']}]
+    d02=obligation_tc_score(demo_obs,{'O1':True,'O2':False,'O3':True},'ASR-02')
+    d03=obligation_tc_score(demo_obs,{'O1':True,'O2':False,'O3':True},'ASR-03')
+    assert d02['degree_pct']==50 and not d02['strict_pass']
+    assert d03['degree_pct']==100 and d03['strict_pass']
+    macro=obligation_macro_score([
+      {'degree_pct':50,'strict_pass':False},{'degree_pct':100,'strict_pass':True}])
+    assert macro['macro_degree_pct']==75 and macro['strict_pass_rate_pct']==50
     rejected=0
     for args in [(0,60),(int(profile['context_limit'])-10,60)]:
         try:llm_seconds(*args,profile)
