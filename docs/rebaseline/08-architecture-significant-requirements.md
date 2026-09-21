@@ -1,392 +1,406 @@
-# 8. Architecture Significant Requirements — Atomic ASR Catalog
+# 8. Architecture Significant Requirements — QA 도출과 ASR 선정
 
-> 상태: **재작성 검토본 — ASR 정의와 선정 근거 검토 필요**  
-> 근거: [01 시스템 정의](./01-system-mission-and-boundary.md) · [02 용어](./02-terms.md) · [03 설계 범위](./03-fixed-architecture-scope.md) · [04 공통 흐름](./04-canonical-interaction-flow.md) · [05 UC](./05-representative-use-cases.md) · [06 비교 조건](./06-fixed-assumptions.md) · [07 변경 집합](./07-intentional-variables.md)  
-> 07 변경 집합: M-01~09, A-01~09, C-01~06 — 총 24개
+> 상태: **재작성 검토본 — QA 점수 및 ASR 후보 검토 필요**  
+> 근거: [01 시스템 정의](./01-system-mission-and-boundary.md) · [02 용어](./02-terms.md) · [03 설계 범위](./03-fixed-architecture-scope.md) · [04 공통 흐름](./04-canonical-interaction-flow.md) · [05 UC](./05-representative-use-cases.md) · [06 비교 조건](./06-fixed-assumptions.md) · [07 변경 집합](./07-intentional-variables.md)
 
-## 8.1 재작성 원칙
+## 8.1 도출 절차
 
-ASR은 “중요해 보이는 QA 이름”이 아니라 **Architecture 구조를 실제로 좌우하는 구체적인 품질 요구**이다.
+08은 다음 순서로 진행한다.
 
-이번 재작성에서는 다음 원칙을 고정한다.
+```mermaid
+flowchart LR
+    A["01~05\n제품 목표·UC"]
+    B["06~07\n공통 조건·변화"]
+    C["Quality Attribute 후보 도출"]
+    D["Importance 1~10"]
+    E["Architecture Difficulty 1~10"]
+    F["L / M / H 변환"]
+    G{"Importance=H\nand Difficulty=H?"}
+    H["ASR Candidate QA"]
+    I["구체적인 QA Scenario / ASR 정의"]
+    J["09~12\n추적·시험·DP 비교"]
 
-1. **하나의 ASR에는 하나의 주요 품질 concern만 둔다.**
-2. **하나의 ASR에는 하나의 stimulus class와 하나의 observable response를 둔다.**
-3. **하나의 ASR에는 representative metric 하나만 둔다.**
-4. 서로 다른 failure mode를 “연속성”, “정합성”, “안전성” 같은 넓은 이름 아래 묶지 않는다.
-5. 필수 기능이라는 이유만으로 모두 ASR로 올리지 않고, **중요도 H + Architecture 난이도 H**인 항목을 선정한다.
-6. 측정하기 쉽다는 이유로 ASR이 되는 것도 금지한다.
-7. ASR 전체 개수를 작게 맞추지 않는다. 대신 **각 Architecture Decision Point에서는 실제 인과관계가 큰 ASR 약 3~4개만 Primary Driver로 선택**한다.
+    A --> C
+    B --> C
+    C --> D --> F
+    C --> E --> F
+    F --> G
+    G -->|"Yes"| H --> I --> J
+    G -->|"No"| J
+```
 
-### Atomicity Check
+**Quality Attribute와 ASR은 같은 것이 아니다.**
 
-다음 질문 중 하나라도 두 가지 이상의 서로 다른 답을 가지면 ASR을 분리한다.
+- **Quality Attribute(QA)**: 시스템 품질을 바라보는 상위 관점이다.
+- **ASR Candidate QA**: 중요도와 Architecture 난이도가 모두 H인 QA이다.
+- **ASR**: 해당 QA를 Architecture 관점에서 검증할 수 있도록 stimulus, context, response, measure가 구체화된 요구이다.
 
-- 무엇이 발생했을 때 평가하는가?
-- 시스템이 무엇을 해야 하는가?
-- 무엇이 틀리면 실패인가?
-- 대표 숫자는 무엇인가?
-- 어떤 Architecture 책임을 바꾸는가?
+따라서 H/H QA 하나에서 여러 개의 서로 다른 ASR이 나올 수 있다. 반대로 한 QA가 H/H가 아니면 이번 Architecture 핵심 driver로는 선정하지 않되, 제품 요구와 regression 검증에서는 계속 유지한다.
 
-예를 들어 기존의 **“제어·상태·결과 정합성”**은 하나의 ASR이 아니다.
+### Methodology Note
 
-- 사용자 cancel이 올바른 Task로 갔는가?
-- Agent progress/result가 올바른 Task로 들어왔는가?
-- 사용자에게 실제보다 앞선 상태를 말하지 않았는가?
+SEI의 QAW는 business/mission driver에서 중요한 Quality Attribute와 scenario를 식별하고 stakeholder가 scenario를 우선순위화·구체화하는 방법을 제공한다. 본 과제의 **1~10 Importance / Difficulty 점수와 L/M/H 구간은 QAW 자체의 표준 점수법이 아니라, VIA에서 판단 기준을 고정하기 위해 채택한 프로젝트 평가 규칙**이다.
 
-는 서로 다른 failure mode이므로 별도 ASR로 분리한다.
+- CMU/SEI, *Quality Attribute Workshops (QAWs), Third Edition*
+- CMU/SEI, *Quality Attribute Workshop Collection*
 
 ---
 
-## 8.2 기존 8.4 H/H 후보를 다시 분해한 결과
+## 8.2 점수 기준
 
-기존 8.4에서 H/H였던 11개 덩어리를 그대로 ASR로 쓰지 않는다.
+### Importance — 제품 성공에 얼마나 중요한가
 
-| 기존 concern | 재검토 결과 |
+| 점수 | 판단 기준 |
+| ---: | --- |
+| **1–2** | 현재 제품 Mission/UC와 직접 관계가 거의 없다. 실패해도 핵심 사용자 흐름에 영향이 없다. |
+| **3–4** | 있으면 좋거나 미래 범위에는 의미가 있으나, 현재 승인된 제품 범위에서 영향이 제한적이다. |
+| **5–7** | 여러 UC 또는 운영에 의미 있는 영향을 주지만, 실패해도 VIA의 핵심 제품 정체성이 전체적으로 무너지지는 않는다. |
+| **8–9** | 핵심 UC 여러 개 또는 전략적 제품 방향을 직접 좌우한다. 실패하면 주요 사용자 흐름이나 생태계 전략이 깨진다. |
+| **10** | VIA의 Mission 또는 사용자 신뢰를 정의하는 수준이다. 실패하면 제품의 존재 이유 또는 안전한 사용 자체가 성립하지 않는다. |
+
+### Architecture Difficulty — SW 구조로 해결하기 얼마나 어려운가
+
+| 점수 | 판단 기준 |
+| ---: | --- |
+| **1–2** | 설정값, 단일 함수, 국소 구현 변경으로 해결 가능하다. |
+| **3–4** | 하나의 Component/Module 내부 설계가 중심이며 외부 state/lifecycle 영향이 작다. |
+| **5–7** | 여러 Component/Interface를 연결해야 하지만 책임·state 범위가 비교적 한정되어 있다. |
+| **8–9** | 여러 lifecycle, state authority, runtime 또는 외부 contract가 교차하며 Architecture 책임 배치가 결과를 좌우한다. |
+| **10** | 시스템의 근간이 되는 identity/state/orchestration 구조와 여러 QA trade-off를 동시에 좌우하며 국소 수정으로 해결할 수 없다. |
+
+### L / M / H 변환
+
+- **1–4 = L**
+- **5–7 = M**
+- **8–10 = H**
+
+Importance와 Difficulty는 각각 독립적으로 평가한다. 점수를 곱해 하나의 숫자로 만들지 않는다.
+
+---
+
+# 8.3 VIA Quality Attribute Catalog — 한눈에 보기
+
+01~07을 다시 기준으로 도출한 QA Catalog는 다음 10개이다.
+
+| QA | Quality Attribute | Importance | Level | Difficulty | Level | ASR Candidate? | 핵심 근거 |
+| --- | --- | ---: | :---: | ---: | :---: | :---: | --- |
+| **QA-01** | **User-Experienced Responsiveness** | **9** | H | **9** | H | **Yes** | Voice/S2S, Direct Response, Agent 결과·interrupt까지 사용자가 느끼는 반응성이 핵심. local/remote model, Context, streaming, orchestration 경계가 지연에 영향 |
+| **QA-02** | **Task Completion Effectiveness** | **10** | H | **9** | H | **Yes** | grounding, request refinement, compound request, task association, Agent selection이 틀리면 사용자가 원하는 일을 수행할 수 없음 |
+| **QA-03** | **Interaction & Task Continuity** | **10** | H | **10** | H | **Yes** | Direct↔Agent, Voice↔Text, Conversation↔Task, multiple task의 identity/lifecycle 연속성이 VIA 제품 핵심 |
+| **QA-04** | **Agent Ecosystem Interoperability & Substitutability** | **9** | H | **9** | H | **Yes** | Agent-neutral이 고정 Architecture Scope. heterogeneous Agent, protocol, lifecycle 계약 변화 대응 필요 |
+| **QA-05** | **Evolvability & Maintainability** | **9** | H | **9** | H | **Yes** | Model, Context connector, persistent schema, deployment 변화가 07의 핵심 intentional variable이며 변경 전파를 구조적으로 제어해야 함 |
+| **QA-06** | **Cross-Device Portability & Adaptability** | **3** | L | **8** | H | No | 다른 OS/device 이식은 어렵지만 현재 제품 범위는 사용자 PC/Windows reference이며 Mobile/TV/Robot은 명시적으로 제외 |
+| **QA-07** | **Compute & Energy Efficiency** | **4** | L | **7** | M | No | Local model/resource는 의미 있으나 target CPU/GPU/RAM, battery, power budget이 아직 제품 constraint로 고정되지 않음 |
+| **QA-08** | **Reliability & Recoverability** | **9** | H | **9** | H | **Yes** | async result, cancel, multiple task, failure, process restart 후 재연결이 필수 UC. state authority와 recovery contract 필요 |
+| **QA-09** | **Privacy, Security & Action Safety** | **10** | H | **9** | H | **Yes** | 개인 Context, 외부 Model/Agent 전달, Consent, Action Approval이 제품 신뢰와 직접 연결 |
+| **QA-10** | **Diagnosability & Operability** | **6** | M | **7** | M | No | trace/evidence는 평가와 문제 분석에 중요하지만 운영조직/SLO/MTTR 목표가 아직 제품 driver로 확정되지 않음 |
+
+### H/H QA — ASR Candidate
+
+따라서 현재 ASR Candidate QA는 **7개**이다.
+
+1. **QA-01 User-Experienced Responsiveness**
+2. **QA-02 Task Completion Effectiveness**
+3. **QA-03 Interaction & Task Continuity**
+4. **QA-04 Agent Ecosystem Interoperability & Substitutability**
+5. **QA-05 Evolvability & Maintainability**
+6. **QA-08 Reliability & Recoverability**
+7. **QA-09 Privacy, Security & Action Safety**
+
+이 일곱 QA 전체를 하나의 ASR로 각각 뭉뚱그리지 않는다. 아래에서 Architecture-driving scenario를 구체적인 ASR로 정의한다.
+
+---
+
+# 8.4 H/H QA에서 도출한 ASR Catalog — 한눈에 보기
+
+| ASR | Parent QA | 구체적인 Architecture Requirement | Representative Measure |
+| --- | --- | --- | --- |
+| **ASR-01** | QA-01 | VIA가 책임지는 요청/응답 구간의 지연을 낮춘다. | **VIA-added response latency p95 (ms)** |
+| **ASR-02** | QA-01 | 사용자가 말로 끼어들면 재생 중 Voice Response를 빠르게 중단한다. | **interrupt-to-audio-stop p95 (ms)** |
+| **ASR-03** | QA-02 | 현재 화면 interaction으로 지칭한 대상을 정확하게 resolve한다. | **interaction-grounding exact-match (%)** |
+| **ASR-04** | QA-02 | 현재 Request를 No Tracked/New/정확한 Existing Task에 연결한다. | **task-association exact-match (%)** |
+| **ASR-05** | QA-02 | 하나의 User Turn에서 의미상 Request 집합을 정확하게 분해한다. | **request-set exact-match (%)** |
+| **ASR-06** | QA-02 | Compound Request 사이의 사용자 명시 관계를 정확하게 보존한다. | **request-relation exact-match (%)** |
+| **ASR-07** | QA-02 | 위임이 필요한 요청에 요구 capability/policy를 만족하는 Agent를 선택한다. | **valid-agent-selection rate (%)** |
+| **ASR-08** | QA-03 | modality/voice connection 전환 후에도 후속 발화가 의도한 이전 Conversation 의미를 이어간다. | **conversation-continuity scenario pass rate (%)** |
+| **ASR-09** | QA-03 | follow-up/status/correction에서 Agent run 변화와 무관하게 동일 사용자 업무 identity를 유지한다. | **task-identity continuity pass rate (%)** |
+| **ASR-10** | QA-04 | 동일 업무 Agent를 다른 구현체로 교체해도 사용자 Task 의미를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-02 (count)** |
+| **ASR-11** | QA-04 | 기존 Agent를 유지하면서 다른 protocol의 Agent를 추가해 공존시킨다. | **changed architecture elements for A-03 (count)** |
+| **ASR-12** | QA-05 | S2S Model Runtime을 같은 역할의 다른 제공자로 교체할 때 변경 범위를 제한한다. | **changed architecture elements for M-01 (count)** |
+| **ASR-13** | QA-05 | Semantic Model Runtime을 같은 역할의 다른 제공자로 교체할 때 변경 범위를 제한한다. | **changed architecture elements for M-02 (count)** |
+| **ASR-14** | QA-05 | 같은 Context 종류의 provider contract가 바뀌어도 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-01 (count)** |
+| **ASR-15** | QA-05 | Conversation/Task persistent state schema가 진화해도 의미와 recovery 관계를 유지한다. | **changed architecture elements for C-06 (count)** |
+| **ASR-16** | QA-08 | 비동기 Agent event를 정확한 VIA Task/Execution에 연결한다. | **async-event binding exact-match (%)** |
+| **ASR-17** | QA-08 | VIA process restart 후 복구 가능한 Task를 중복 실행 없이 재연결한다. | **restart-recovery scenario pass rate (%)** |
+| **ASR-18** | QA-08 | 접수·진행·완료·취소·실패 상태를 확인된 사실보다 앞서거나 다르게 보고하지 않는다. | **truthful-state reporting pass rate (%)** |
+| **ASR-19** | QA-09 | Context read/egress가 현재 유효한 policy/consent 범위를 벗어나지 않는다. | **unauthorized access/egress count** |
+| **ASR-20** | QA-09 | approval/denial을 정확한 pending Action에만 적용한다. | **approval misbinding count** |
+
+**20개는 20개의 DP나 20개의 가중치가 아니다.** H/H QA에서 나온 구체적인 Architecture scenario catalog이다. 12에서는 각 DP가 실제로 크게 영향을 주는 **Primary ASR 약 3~4개**만 선택한다.
+
+---
+
+# 8.5 ASR 정의 상세
+
+## ASR-01 — VIA-added Response Latency
+
+- **Parent QA:** QA-01 Responsiveness
+- **Stimulus:** 사용자가 Voice/Text Request를 완료하거나, Agent 결과가 VIA에 준비된다.
+- **Environment:** 06의 고정 network/model/fixture 조건.
+- **Response:** VIA가 해당 Request/Result의 유효한 사용자 응답을 시작한다.
+- **Measure:** **VIA-added response latency p95 (ms)**.
+- **포함:** VIA가 직접 사용하는 S2S/Semantic Model, Context access, orchestration, result binding, response delivery.
+- **제외:** Downstream Agent 내부의 실제 research/planning/tool execution 시간.
+- **주의:** 업무를 Agent 쪽으로 옮겨 excluded time을 키운 것을 responsiveness 개선으로 간주하지 않는다. FA-12를 적용한다.
+
+## ASR-02 — Voice Interruption Stop Latency
+
+- **Parent QA:** QA-01
+- **Stimulus:** Voice Response 재생 중 사용자가 새로운 발화를 시작한다.
+- **Response:** 기존 Voice Response 출력이 중단된다.
+- **Measure:** **interrupt onset → audio stop p95 (ms)**.
+- **제외:** 새로운 발화의 semantic 처리 완료 시간, 진행 중 Agent Task 취소 시간.
+
+## ASR-03 — Interaction Grounding Accuracy
+
+- **Parent QA:** QA-02 Task Completion Effectiveness
+- **Stimulus:** 사용자가 selection/pointer/drag/focus와 함께 on-screen 대상 지칭 표현을 사용한다.
+- **Response:** VIA가 표현을 실제 대상·집합·영역에 resolve한다.
+- **Measure:** **interaction-grounding exact-match test pass rate (%)**.
+- **제외:** open-but-not-visible file 검색, Conversation/Task referent, Agent가 대상에 실제 Action을 성공했는지 여부.
+
+## ASR-04 — Task Association Accuracy
+
+- **Parent QA:** QA-02
+- **Stimulus:** 새 VIA Request가 현재 Conversation/Task context 안에 들어온다.
+- **Response:** VIA가 No Tracked / New / Existing을 판단하고 Existing이면 정확한 VIA Task를 선택한다.
+- **Measure:** **task-association exact-match pass rate (%)**.
+- **제외:** Agent에게 실제 control command가 성공적으로 전달되었는지 여부.
+
+## ASR-05 — Compound Request Decomposition Accuracy
+
+- **Parent QA:** QA-02
+- **Stimulus:** 하나의 User Turn에 둘 이상의 의미상 사용자 Request가 포함된다.
+- **Response:** VIA가 의미상 Request 집합을 누락·중복·불필요 분할 없이 식별한다.
+- **Measure:** **request-set exact-match pass rate (%)**.
+- **제외:** Request 사이 관계의 종류와 Agent workflow planning.
+
+## ASR-06 — Compound Request Relation Accuracy
+
+- **Parent QA:** QA-02
+- **Stimulus:** Compound Request에 independent / sequential / data-dependent / conditional 관계가 명시된다.
+- **Response:** VIA가 분해된 Request 사이 관계를 사용자 의도대로 표현·보존한다.
+- **Measure:** **request-relation exact-match pass rate (%)**.
+- **제외:** Request node 자체의 누락 여부(ASR-05), Agent 내부 plan.
+
+## ASR-07 — Agent Selection Correctness
+
+- **Parent QA:** QA-02
+- **Stimulus:** Downstream Agent 업무가 필요한 VIA Task와 사용 가능한 Agent capability/policy 목록이 주어진다.
+- **Response:** VIA가 요구 capability와 현재 정책 조건을 만족하는 Agent를 선택한다.
+- **Measure:** **valid-agent-selection pass rate (%)**.
+- **제외:** 선택된 Agent의 domain task quality.
+
+## ASR-08 — Conversation Continuity Correctness
+
+- **Parent QA:** QA-03 Interaction & Task Continuity
+- **Stimulus:** Direct Response 후 follow-up, Voice↔Text 전환 또는 Voice Connection 재연결이 발생한다.
+- **Response:** 후속 User Turn이 의도한 이전 Conversation content/referent를 계속 참조한다.
+- **Measure:** **conversation-continuity scenario pass rate (%)**.
+- **제외:** VIA Task identity 유지(ASR-09), process restart recovery(ASR-17).
+
+## ASR-09 — Task Identity Continuity Correctness
+
+- **Parent QA:** QA-03
+- **Stimulus:** 기존 업무에 status/follow-up/correction이 발생하거나 Agent 내부 run이 바뀐다.
+- **Response:** VIA가 같은 사용자 업무 목표를 동일 VIA Task identity로 유지·연결한다.
+- **Measure:** **task-identity continuity scenario pass rate (%)**.
+- **제외:** Agent event 자체의 binding 정확도(ASR-16), process restart(ASR-17).
+
+## ASR-10 — Agent Substitutability
+
+- **Parent QA:** QA-04 Agent Ecosystem Interoperability & Substitutability
+- **Stimulus:** 같은 사용자 업무 capability를 제공하는 Agent A를 Agent B로 교체한다(A-02).
+- **Response:** 기존 VIA Task semantics와 사용자-facing 기능을 유지하도록 Architecture를 변경한다.
+- **Measure:** **changed architecture elements for A-02 (count)**.
+- **제외:** 새로운 protocol 계열 추가(ASR-11).
+
+## ASR-11 — Agent Protocol Extensibility
+
+- **Parent QA:** QA-04
+- **Stimulus:** 기존 Agent protocol은 유지한 채 다른 protocol의 Agent를 추가한다(A-03).
+- **Response:** 두 protocol을 동시에 지원하면서 기존 사용자 기능을 유지한다.
+- **Measure:** **changed architecture elements for A-03 (count)**.
+- **제외:** 같은 protocol 안에서 provider만 교체하는 상황(ASR-10).
+
+## ASR-12 — S2S Runtime Substitutability
+
+- **Parent QA:** QA-05 Evolvability & Maintainability
+- **Stimulus:** 동일 역할/배치에서 S2S Model Runtime 제공자를 A→B로 교체한다(M-01).
+- **Response:** Voice 기능과 Conversation 연계를 유지하도록 필요한 Architecture 변경만 수행한다.
+- **Measure:** **changed architecture elements for M-01 (count)**.
+- **제외:** event contract 자체가 달라지는 M-07, deployment 이동 M-04~06.
+
+## ASR-13 — Semantic Model Runtime Substitutability
+
+- **Parent QA:** QA-05
+- **Stimulus:** 동일 semantic responsibility/배치에서 Semantic Model Runtime 제공자를 A→B로 교체한다(M-02).
+- **Response:** Request refinement/grounding/task association 등 해당 책임 기능을 유지한다.
+- **Measure:** **changed architecture elements for M-02 (count)**.
+- **제외:** model responsibility 자체 변경, deployment 이동.
+
+## ASR-14 — Context Provider Substitutability
+
+- **Parent QA:** QA-05
+- **Stimulus:** 같은 Context 종류의 Provider A를 Provider B로 교체한다(C-01).
+- **Response:** Context 의미와 기존 사용자 기능을 유지한다.
+- **Measure:** **changed architecture elements for C-01 (count)**.
+- **제외:** 새로운 Context 종류 추가, 문서 format parser 확장.
+
+## ASR-15 — Persistent Task-State Schema Evolvability
+
+- **Parent QA:** QA-05
+- **Stimulus:** persistent Conversation/Request/Task state schema가 V1→V2로 변경된다(C-06).
+- **Response:** 기존 대화 의미, Task identity, recovery 관계를 보존하며 migration한다.
+- **Measure:** **changed architecture elements for C-06 (count)**.
+- **제외:** User Memory schema(C-04), storage product 교체 자체.
+
+## ASR-16 — Async Agent Event Binding Correctness
+
+- **Parent QA:** QA-08 Reliability & Recoverability
+- **Stimulus:** 여러 active Task 중 Agent progress/clarification/result/failure event가 비동기로 도착한다.
+- **Response:** VIA가 event를 정확한 VIA Task와 Agent Execution에 연결한다.
+- **Measure:** **async-event binding exact-match pass rate (%)**.
+- **제외:** event 내용의 domain correctness, 사용자 control direction.
+
+## ASR-17 — Restart Recovery Correctness
+
+- **Parent QA:** QA-08
+- **Stimulus:** VIA process memory가 사라진 뒤 process가 재시작된다.
+- **Response:** 외부 실행을 확인할 수 있으면 기존 Conversation/Task/Execution 관계를 재연결하고, 확인 불가하면 중복 state-changing Action 없이 불확실성을 알린다.
+- **Measure:** **FA-14 restart-recovery scenario pass rate (%)**.
+- **제외:** 정상 실행 중 network reconnect만의 처리.
+
+## ASR-18 — User-visible Task State Truthfulness
+
+- **Parent QA:** QA-08
+- **Stimulus:** Agent의 접수/진행/완료/취소/실패 event가 도착하거나 상태가 아직 확인되지 않았다.
+- **Response:** VIA가 확인된 state보다 앞서거나 다르게 사용자에게 보고하지 않는다.
+- **Measure:** **truthful-state reporting scenario pass rate (%)**.
+- **제외:** 올바른 Task에 event를 binding했는지 여부(ASR-16).
+
+## ASR-19 — Context Authorization Enforcement
+
+- **Parent QA:** QA-09 Privacy, Security & Action Safety
+- **Stimulus:** VIA가 개인 Context를 read하거나 외부 Model/Agent에 전달하려 한다.
+- **Response:** 현재 유효한 policy/consent 범위 안에서만 접근·전달한다.
+- **Measure:** **unauthorized context access/egress count**.
+- **제외:** Action 승인 binding(ASR-20).
+
+## ASR-20 — Action Approval Binding Correctness
+
+- **Parent QA:** QA-09
+- **Stimulus:** 하나 이상의 pending state-changing Action approval이 존재하고 사용자가 approve/deny 응답을 한다.
+- **Response:** 응답을 정확한 pending Action/VIA Task에만 적용한다.
+- **Measure:** **approval misbinding count**.
+- **제외:** Agent 내부 authorization enforcement 또는 Action execution success.
+
+---
+
+# 8.6 H/H가 아닌 QA의 처리
+
+H/H가 아니라고 해서 무시하지 않는다.
+
+| QA | 처리 |
 | --- | --- |
-| VIA 처리 지연 | **ASR-01**로 유지 |
-| 화면 지칭 정확도 | **ASR-03**으로 유지 |
-| 업무 연결 정확도 | **ASR-04**로 유지 |
-| 모델 변경 대응성 | 제공자 교체 / 배치 이동 / interaction contract 변경이 다른 변화이므로 **ASR-16~18로 분리** |
-| Agent 변경 대응성 | Agent 추가·교체 / protocol 변화 / lifecycle contract 변화가 다르므로 **ASR-19~21로 분리** |
-| 복합 요청 의미와 관계 보존 | Request 분해와 Request 간 관계 보존은 다른 오류이므로 **ASR-05·06으로 분리** |
-| 대화·업무 연속성 | Conversation continuity와 Task identity continuity는 lifecycle이 다르므로 **ASR-08·09로 분리** |
-| 재시작 복구 | **ASR-13**으로 유지 |
-| 권한·Context 전달·승인 안전성 | Context authorization과 Action approval binding은 다른 안전 문제이므로 **ASR-14·15로 분리** |
-| 제어·상태·결과 정합성 | Agent event binding / 사용자 control binding / user-visible state truthfulness로 **ASR-10~12 분리** |
-| 음성 중단 반응성 | **ASR-02**로 독립 |
-
-또한 기존 표에서 다른 concern과 섞여 중요도가 낮아 보였던 항목도 다시 본다.
-
-| 기존 처리 | 재평가 |
-| --- | --- |
-| “의도 정리·Agent 선택”을 하나의 H/M 항목으로 둠 | Intent refinement 모델 품질과 Agent selection architecture를 분리. **Agent Selection은 Agent-neutral 핵심 책임이므로 H/H → ASR-07** |
-| “Context·저장 기록 변경 대응성”을 M/H로 묶음 | Context connector 변경과 persistent-state schema 변경은 영향 대상과 복구 방식이 다름. 05의 Context/Memory/Recovery 핵심 기능과 직접 연결되므로 **각각 H/H → ASR-22·23** |
-
-즉 이전처럼 다섯 개 ASR만 먼저 정하고 나머지를 필수 요구로 밀어내지 않는다.
+| **QA-06 Cross-Device Portability** | 현재 제품 범위가 PC/Windows이므로 Core ASR에서는 제외. 향후 scope 변경 시 재평가 |
+| **QA-07 Compute & Energy Efficiency** | local resource·memory·energy 자료를 secondary observation으로 기록. 목표 HW/전력 constraint가 정해지면 재평가 |
+| **QA-10 Diagnosability & Operability** | 모든 후보가 correlation ID, trace, test evidence를 제공하도록 supporting requirement로 유지. 현재 독립 score/ASR은 만들지 않음 |
 
 ---
 
-## 8.3 ASR 선정 기준
+# 8.7 07 Closed Change Catalog와 ASR 관계
 
-### Importance = H
+07의 24개 change scenario 모두를 ASR로 만들지 않는다.
 
-다음 중 하나 이상이면 H로 판단한다.
-
-- 실패 시 05의 핵심 UC가 직접 깨진다.
-- 잘못된 대상·업무·승인·상태를 사용자에게 적용하여 신뢰 또는 안전 문제가 발생한다.
-- 07에서 의도적으로 지원하기로 한 생태계 변화의 핵심 목적이 무너진다.
-
-### Architecture Difficulty = H
-
-다음 중 하나 이상이면 H로 판단한다.
-
-- 두 개 이상의 lifecycle 또는 identity 경계를 함께 다뤄야 한다.
-- Component 하나의 local logic만이 아니라 책임·interface·state ownership·runtime boundary를 정해야 한다.
-- 재시작·비동기 event·외부 protocol 변화처럼 시간적으로 분리된 상태를 다시 연결해야 한다.
-- 후보 Architecture의 책임 배치에 따라 변경 영향이나 검증 결과가 달라질 수 있다.
-
-모델 자체의 지능이 어렵다는 이유만으로 H를 주지 않는다. 반대로 semantic model이 영향을 준다고 해서 evidence/state/interface 구조의 Architecture 난이도를 무시하지 않는다.
-
----
-
-# 8.4 Final ASR Catalog
-
-## A. Responsiveness
-
-| ID | 정확한 요구 | Representative Metric | 주요 근거 |
-| --- | --- | --- | --- |
-| **ASR-01 VIA Response Latency** | 사용자 입력이 끝난 뒤, Agent 내부 업무 시간을 제외한 VIA 책임 구간에서 유효한 사용자 응답이 시작될 때까지의 지연을 낮춘다. | **VIA response latency p95 (ms)** | UC-01~15, FA-12 |
-| **ASR-02 Voice Interruption Stop Latency** | 사용자가 VIA 음성을 끊는 새 발화를 시작하면 진행 중 Voice Response 재생을 빠르게 중단한다. | **interrupt onset → audio stop p95 (ms)** | UC-11 |
-
-ASR-01은 일반 요청/결과 응답 지연이고, ASR-02는 **이미 재생 중인 음성을 멈추는 latency**이다. 두 값을 합치지 않는다.
-
----
-
-## B. Semantic Binding Correctness
-
-| ID | 정확한 요구 | Representative Metric | 주요 근거 |
-| --- | --- | --- | --- |
-| **ASR-03 Interaction Grounding Accuracy** | 현재 화면 interaction을 이용한 지칭 표현을 사용자가 지정한 실제 on-screen 대상·집합·영역에 연결한다. | **grounding exact-match test pass rate (%)** | UC-03·04 |
-| **ASR-04 Task Association Accuracy** | 현재 VIA Request가 No Tracked / New / Existing 중 무엇인지 판단하고, Existing이면 의도한 VIA Task를 식별한다. | **task-association exact-match pass rate (%)** | UC-07·10·14·15 |
-| **ASR-05 Compound Request Decomposition Accuracy** | 하나의 User Turn에 포함된 의미상 VIA Request를 누락·중복·불필요한 분할 없이 식별한다. | **request-set exact-match pass rate (%)** | UC-09·14 |
-| **ASR-06 Compound Request Relation Accuracy** | 분해된 VIA Request 사이의 independent / sequential / data-dependent / conditional 관계를 사용자 의도대로 보존한다. | **request-relation graph exact-match pass rate (%)** | UC-09 |
-| **ASR-07 Agent Selection Correctness** | Agent 위임이 필요한 VIA Task에 대해 요구 capability·lifecycle·policy 조건을 만족하는 Downstream Agent를 선택한다. | **valid-agent-selection pass rate (%)** | UC-08~10·14·16 |
-
-### 경계
-
-- ASR-03은 **화면상의 Referent**만 다룬다. 파일 검색이나 과거 대화 Referent 전체를 하나의 grounding 정확도에 넣지 않는다.
-- ASR-04는 **Task relation/identity**만 다룬다. cancel이 실제로 성공했는지는 포함하지 않는다.
-- ASR-05는 “몇 개 Request인가”, ASR-06은 “그 Request들이 어떻게 연결되는가”이다.
-- ASR-07은 Agent의 업무 결과 품질을 평가하지 않는다. **선택 시점의 declared capability/contract가 요구를 만족하는지**를 평가한다.
-
----
-
-## C. Conversation / Task Continuity and Correlation
-
-| ID | 정확한 요구 | Representative Metric | 주요 근거 |
-| --- | --- | --- | --- |
-| **ASR-08 Conversation Continuity Correctness** | Direct Response, Voice/Text 전환, Voice 재연결 뒤에도 후속 User Turn이 의도한 이전 대화 내용·Referent를 계속 참조할 수 있다. | **conversation-continuity scenario pass rate (%)** | UC-01·05~07·15 |
-| **ASR-09 Task Identity Continuity Correctness** | 같은 사용자 업무 목표에 대한 follow-up·status·correction에서 Agent run/thread 변화와 무관하게 동일 VIA Task identity를 유지한다. | **task-identity continuity scenario pass rate (%)** | UC-10·13~15 |
-| **ASR-10 Async Agent Event Binding Correctness** | Agent의 progress / clarification / result / failure event를 정확한 VIA Task와 Agent Execution에 연결한다. | **agent-event binding exact-match pass rate (%)** | UC-13·14·18 |
-| **ASR-11 User Control Binding Correctness** | follow-up / correction / cancel 등 사용자 control 요청을 의도한 VIA Task와 Agent Execution에 전달하고 다른 업무에는 적용하지 않는다. | **control binding exact-match pass rate (%)** | UC-10~12·14 |
-| **ASR-12 User-visible Task State Truthfulness** | Agent의 접수·진행·완료·취소·실패 상태를 확인된 사실보다 앞서거나 다르게 사용자에게 보고하지 않는다. | **truthful-state reporting pass rate (%)** | UC-10·12~14·18 |
-| **ASR-13 Restart Recovery Correctness** | VIA process restart 후 복구 가능한 조건에서는 Conversation/Task/Agent Execution 관계를 재연결하고, 상태 불명 조건에서는 중복 state-changing Action 없이 불확실성을 알린다. | **FA-14 recovery scenario pass rate (%)** | UC-18, FA-14 |
-
-### 경계
-
-- ASR-08은 **대화 의미 continuity**, ASR-09는 **업무 identity continuity**이다.
-- ASR-10은 Agent → VIA 방향의 event correlation이다.
-- ASR-11은 사용자 → Agent 방향의 control correlation이다.
-- ASR-12는 correlation이 맞더라도 상태를 과장해 보고하는 별도 failure mode를 잡는다.
-- ASR-13은 정상 실행 중 continuity가 아니라 **process memory가 사라진 뒤 복구**를 다룬다.
-
----
-
-## D. Safety / Authorization
-
-| ID | 정확한 요구 | Representative Metric | 주요 근거 |
-| --- | --- | --- | --- |
-| **ASR-14 Context Authorization Enforcement** | Context read 또는 외부 Model/Agent로의 Context 전달은 현재 유효한 policy/consent 범위 안에서만 수행한다. | **unauthorized context access/egress count (건)** — 목표 방향 0 | UC-16, FA-15 |
-| **ASR-15 Action Approval Binding Correctness** | 사용자의 approval/denial 응답을 정확한 pending Action과 VIA Task에 연결하며 다른 Action에 재사용하지 않는다. | **approval misbinding count (건)** — 목표 방향 0 | UC-16, A-08 |
-
-ASR-14는 **정보 접근·전달 권한**, ASR-15는 **특정 Action 승인 응답의 binding**이다. 한 “Safety” 점수로 합치지 않는다.
-
----
-
-## E. Model Ecosystem Evolvability
-
-Model 관련 변화도 “모델 변경 대응성” 하나로 묶지 않는다. **교체 대상과 외부 contract가 달라지면 별도 ASR**로 둔다.
-
-| ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
-| --- | --- | --- | --- |
-| **ASR-16 S2S Runtime Substitutability** | 같은 배치·역할에서 S2S Runtime 제공자를 교체해도 Voice 기능을 유지하면서 구조 변경 범위를 제한한다. | **changed architecture elements for M-01 (개)** | M-01 |
-| **ASR-17 S2S Event Contract Adaptability** | S2S가 제공하는 transcript/time/correction event contract가 바뀌어도 Voice/grounding 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-07 (개)** | M-07 |
-| **ASR-18 Semantic Model Runtime Substitutability** | 같은 배치·책임에서 Semantic Model Runtime 제공자를 교체해도 Core semantic 기능을 유지하면서 구조 변경 범위를 제한한다. | **changed architecture elements for M-02 (개)** | M-02 |
-| **ASR-19 Semantic Response Contract Adaptability** | Semantic Model의 final/streaming/error/cancel response lifecycle contract가 바뀌어도 semantic 처리 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-08 (개)** | M-08 |
-| **ASR-20 Model Conversation Contract Adaptability** | Model에 대화 이력을 전달하는 방식이 explicit history 전달에서 provider conversation ID 방식 등으로 바뀌어도 VIA Conversation authority를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for M-09 (개)** | M-09 |
-| **ASR-21 Model Deployment Portability** | 같은 역할의 Model Runtime을 Cloud / Private Cloud / user PC 사이에서 이동해도 기능을 유지하면서 배치 관련 변경 범위를 제한한다. | **average changed architecture elements / deployment move (개)** | M-04~06 |
-
-M-04~06은 변화 방향만 다르고 **같은 concern인 Model deployment location portability**를 검증하므로 ASR-21 하나로 둔다.
-
-M-03 모델 크기·입력 한도·실행 profile 변화는 change regression으로 계속 평가하지만 독립 ASR로 두지 않는다. 역할 적합성 자체가 달라질 수 있어 Architecture change impact와 Model capability 차이를 분리하기 어렵기 때문이다.
-
----
-
-## F. Agent Ecosystem Evolvability
-
-Agent 변경도 add / replace / protocol / status / execution identity / user-reply / result contract를 각각 분리한다.
-
-| ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
-| --- | --- | --- | --- |
-| **ASR-22 Agent Addability** | 기존 Agent를 유지한 채 같은 protocol 계열의 새로운 업무 Agent를 추가할 때 기존 VIA 책임의 변경 범위를 제한한다. | **changed architecture elements for A-01 (개)** | A-01 |
-| **ASR-23 Agent Substitutability** | 같은 사용자 목표를 수행하는 Agent A를 Agent B로 교체할 때 VIA Task identity와 사용자 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-02 (개)** | A-02 |
-| **ASR-24 Agent Protocol Extensibility** | 기존 protocol을 유지하면서 다른 protocol의 Agent를 추가해 공존시킬 때 VIA 핵심 책임의 변경 범위를 제한한다. | **changed architecture elements for A-03 (개)** | A-03 |
-| **ASR-25 Agent Status Contract Adaptability** | Agent 상태 제공 방식이 push event에서 query 방식 등으로 바뀌어도 Task status 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-04 (개)** | A-04 |
-| **ASR-26 Agent Execution Identity Contract Adaptability** | Agent 실행 식별 구조가 단일 handle에서 thread/run 분리 구조 등으로 바뀌어도 VIA Task↔Execution 관계를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-05 (개)** | A-05 |
-| **ASR-27 Agent Interaction Reply Contract Adaptability** | Agent clarification/approval에 사용자 답변을 반환하는 계약이 바뀌어도 해당 질문과 답변 binding을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-08 (개)** | A-08 |
-| **ASR-28 Agent Result Contract Adaptability** | Agent result가 inline result에서 artifact/reference 기반 결과 contract 등으로 바뀌어도 사용자 결과 전달과 follow-up reference를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for A-09 (개)** | A-09 |
-
-A-06 capability schema 확장과 A-07 authentication contract 변경은 전체 change catalog에서 계속 평가하지만 현재는 독립 system-level ASR로 승격하지 않는다. A-06은 ASR-07 Agent Selection의 regression, A-07은 ASR-14 Context Authorization과 Agent integration regression으로 확인한다.
-
----
-
-## G. Context / Persistent-State Evolvability
-
-Context provider, Interaction Context contract, persistent schema도 서로 다른 변화로 분리한다.
-
-| ID | 정확한 변화 요구 | Representative Metric | 적용 Change |
-| --- | --- | --- | --- |
-| **ASR-29 Context Provider Substitutability** | 같은 Context 종류에서 Provider A를 B로 교체해도 Context 의미와 사용자 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-01 (개)** | C-01 |
-| **ASR-30 Interaction Context Contract Adaptability** | 화면/앱 연동 API의 object handle·좌표·selection 표현 contract가 바뀌어도 Interaction Grounding 기능을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-03 (개)** | C-03 |
-| **ASR-31 Context Provider Addability** | 기존 Context Provider를 유지하면서 같은 Context 종류의 새 Provider를 추가할 때 기존 기능과 identity 구분을 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-05 (개)** | C-05 |
-| **ASR-32 User Memory Schema Evolvability** | 저장된 User Memory schema가 바뀌어도 기존 기억의 의미·수정·삭제 상태를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-04 (개)** | C-04 |
-| **ASR-33 Conversation/Task State Schema Evolvability** | persistent Conversation/Request/Task record schema가 바뀌어도 대화 연속성과 Task recovery 관계를 유지하면서 변경 범위를 제한한다. | **changed architecture elements for C-06 (개)** | C-06 |
-
-C-02 문서 형식 추가는 Context regression으로 계속 평가하지만 현재는 parser/format extension 성격이 커 독립 system-level ASR로 승격하지 않는다.
-
----
-
-# 8.5 왜 33개가 너무 많은 ASR이 아닌가
-
-33개는 **33개의 최종 Architecture Decision**이나 **33개의 가중 점수**를 뜻하지 않는다.
-
-ASR catalog는 system-wide Architecture significance가 있는 **atomic concern 목록**이다. 이름을 줄이기 위해 서로 다른 failure mode를 다시 합치지 않는다.
-
-~~~text
-System-wide ASR Catalog 33개
-        ↓
-09: UC / Change와 trace
-        ↓
-12의 각 Architecture Decision Point
-        ↓
-그 DP가 실제로 크게 바꾸는 Primary ASR 약 3~4개
-        ↓
-나머지는 regression constraint / secondary observation
-~~~
+- **ASR은 Architecture Driver를 대표하는 좁고 명확한 scenario**이다.
+- 나머지 change는 regression/change analysis에서 계속 적용한다.
 
 예:
 
-- Interaction Grounding 구조 DP라면 ASR-03, ASR-01, ASR-17, ASR-30 등이 후보 driver가 될 수 있다.
-- Task state 구조 DP라면 ASR-09~13, ASR-26, ASR-33 중 실제 인과관계가 큰 3~4개를 Primary로 선택한다.
-- Agent integration DP라면 ASR-07, ASR-22~28 중 해당 DP가 실제로 구분하는 항목만 Primary로 선택한다.
-
-모든 DP에 33개를 동시에 점수화하지 않는다.
-
----
-
-# 8.6 공통 Correctness Metric 규칙
-
-ASR-03~13 중 correctness/pass-rate 계열은 **각 ASR마다 다른 ground truth를 사용하되 동일한 집계 원칙**을 적용한다.
-
-~~~text
-pass rate
-= 100 × 모든 필수 조건을 만족한 시험 수 / 고정된 해당 ASR 시험 수
-~~~
-
-- 한 시험 안에서 해당 ASR의 정답 조건을 하나라도 틀리면 fail이다.
-- 본질적으로 모호하여 clarification이 정답인 시험은 하나를 임의 추측하는 것을 성공으로 세지 않는다.
-- 후보 결과를 본 뒤 허용 정답을 늘리지 않는다.
-- 다른 ASR의 실패를 중복 계산하지 않도록 Test Case에서 주 채점 ASR을 지정한다.
-- 통합 UC에서는 여러 ASR을 동시에 관찰할 수 있으나 어느 failure가 어느 ASR에 속하는지 기록한다.
-
-ASR-03~07은 semantic Model의 영향을 받을 수 있다. 같은 정보와 같은 모델을 사용하면 후보가 동점일 수 있으며 **동점은 정상 결과**이다. Architecture가 정확도를 바꾼다고 주장하려면 evidence availability, identity/state access 또는 inference responsibility의 차이를 설명해야 한다.
-
----
-
-# 8.7 Continuity / Correlation ASR 검증 규칙
-
-ASR-08~13은 단순 자연어 답변 정확도와 구분한다.
-
-예:
-
-- ASR-10: Agent result event의 Task binding이 맞는가?
-- ASR-11: cancel이 의도한 Task/Execution에만 전달되었는가?
-- ASR-12: 완료 event를 아직 받지 않았는데 완료라고 말했는가?
-- ASR-13: restart 뒤 동일한 외부 실행을 새 Task로 중복 시작했는가?
-
-이 영역은 state identity, authoritative state, event correlation, persistence/recovery contract의 Architecture 영향을 직접 확인한다.
-
-고정된 Agent fixture와 event timeline을 사용하며 Agent 자체 업무 품질은 평가하지 않는다.
-
----
-
-# 8.8 Safety ASR 검증 규칙
-
-ASR-14·15는 다른 QA 장점으로 상쇄하지 않는다.
-
-- unauthorized access/egress 1건을 낮은 latency로 보상하지 않는다.
-- approval misbinding 1건을 높은 grounding accuracy로 보상하지 않는다.
-- 거부·철회·만료·여러 pending approval을 포함한 고정 scenario를 사용한다.
-- 시험기가 미리 승인된 Context나 Action ID를 후보에게 몰래 제공하지 않는다.
-
-최종 0~5점 환산을 하더라도 안전 위반을 허용하는 목표값을 임의로 만들지 않는다. 목표/점수 규칙은 11에서 별도 승인한다.
-
----
-
-# 8.9 Evolvability ASR의 변경 요소 측정 규칙
-
-ASR-16~33은 06 FA-16의 동일 element catalog를 사용한다.
-
-~~~text
-한 change scenario의 변경 요소 수
-= 수정 ∪ 추가 ∪ 제거 architecture element ID의 중복 없는 개수
-~~~
-
-Architecture element 유형은 10에서 고정한다.
-
-- Component / Responsibility
-- Interface / Contract
-- State / Data Schema
-- Runtime / Deployment Unit
-
-다음을 지킨다.
-
-- source file, function, crate 수를 세지 않는다.
-- 새 adapter 추가를 기존 수정 없음이라는 이유로 0으로 세지 않는다.
-- 단순 endpoint/config 값 변경으로 기능이 유지되면 0개가 가능하다.
-- 기능 유지가 불가능하면 작은 변경값으로 성공 처리하지 않는다.
-- 각 change는 동일한 baseline Architecture에서 독립적으로 적용한다.
-- 변경 요소 수는 development M/M이 아니다.
-
-ASR-16~33을 하나의 Evolvability 총점으로 합치지 않는다. 필요하면 해당 DP가 실제로 영향을 주는 ASR만 Primary Driver로 사용한다.
-
----
-
-# 8.10 Change Catalog에는 남기지만 독립 ASR로 승격하지 않은 변화
-
-| Change / Concern | 처리 |
+| Change | 처리 |
 | --- | --- |
-| M-03 Model profile/size/input limit | 기능 적합성이 먼저 달라질 수 있으므로 change regression으로 유지 |
-| A-06 Agent capability schema | ASR-07 Agent Selection의 regression과 A change analysis에서 확인 |
-| A-07 Agent authentication contract | ASR-14 Context Authorization 및 Agent integration regression에서 확인 |
-| C-02 Document format addition | Context regression으로 유지. 현재 Architecture 전반을 좌우하는 독립 driver로는 부족 |
-| User Memory 내용 자체의 지능적 추론 정확도 | 저장·확인·수정·삭제는 필수 UC로 검증. 별도 memory reasoning 연구 ASR로 확대하지 않음 |
-| Resource / cost / max throughput | target hardware·budget·capacity 목표가 아직 제품 제약으로 고정되지 않아 Core ASR로 승격하지 않음 |
-| Diagnosability / operability | 모든 후보의 trace/evidence requirement로 유지하되 현재 독립 ASR을 만들 실측 운영 조건이 부족 |
+| M-01 | ASR-12의 primary scenario |
+| M-02 | ASR-13의 primary scenario |
+| M-03 | QA-05 regression — model capability 차이와 architecture 영향 분리 |
+| M-04~09 | QA-05 regression/change analysis |
+| A-02 | ASR-10 primary |
+| A-03 | ASR-11 primary |
+| A-01, A-04~09 | QA-04 regression/change analysis |
+| C-01 | ASR-14 primary |
+| C-06 | ASR-15 primary |
+| C-02~05 | QA-05 regression/change analysis |
 
-이들은 누락이 아니라 선정 기준에 따라 **regression / supporting requirement로 유지하는 항목**이다.
+따라서 변화 목록의 개수가 ASR 개수를 결정하지 않는다.
 
 ---
 
-# 8.11 09~12로 넘길 것
+# 8.8 Representative Metric 원칙
 
-## 09 — ASR Traceability
+- 각 **ASR에는 대표 metric 하나**를 둔다.
+- 동일 ASR metric은 어느 DP에서 사용하든 바꾸지 않는다.
+- QA 수준의 종합 점수를 만들 경우에도 ASR raw metric을 임의로 섞지 않고, 11에서 승인한 공통 scoring rule을 사용한다.
+- 목표값과 0~5 score boundary는 **후보 최종 결과를 보기 전에 11에서 동결**한다.
+- ASR-19·20처럼 safety violation count를 쓰는 경우, 다른 QA의 높은 점수로 위반을 보상하지 않는다.
 
-각 ASR에 대해:
+---
 
-- Primary UC
-- Regression UC
-- 07 Change Scenario
+# 8.9 09~12로 넘길 것
+
+## 09 — QA/ASR Traceability
+
+- QA → ASR
+- ASR → Primary UC / Regression UC
+- ASR → 07 Change Scenario
 - 실패 시 사용자 영향
 
-을 연결한다.
-
-ASR 하나가 너무 많은 unrelated UC를 참조하면 definition이 다시 넓어졌는지 확인한다.
+을 한 표에서 연결한다.
 
 ## 10 — Architecture Element Definition
 
-ASR-16~33의 변경 요소 수를 공정하게 세기 위해 element granularity를 고정한다.
+ASR-10~15의 change impact를 동일하게 세기 위해 Architecture Element granularity를 확정한다.
 
-또한 ASR-08~13의 state ownership과 correlation boundary를 설명할 수 있는 수준으로 element 책임을 정의한다.
+## 11 — Test Case & Metric Freeze
 
-## 11 — Test Case Catalog / Metric Freeze
-
-각 ASR마다:
+각 QA/ASR별로:
 
 - exact test input
 - ground truth
 - 반복 횟수
 - metric 계산법
-- 목표값
-- 0~5 score boundary
+- **QA 대표 metric의 target**
+- **0~5 score boundary**
 
-를 **후보 최종 결과를 보기 전에** 동결한다.
+를 후보 결과 전에 동결한다.
 
-한 ASR의 metric은 모든 DP에서 동일하게 사용한다.
+같은 QA에는 모든 DP에서 같은 metric/target/scoring 기준을 사용한다.
 
 ## 12 — Architecture Decision Points
 
-각 DP마다:
+각 DP마다 전체 QA/ASR 목록에서 **실제 인과관계가 큰 Primary QA 약 3~4개**를 선택한다.
 
-- 후보 구조
-- **Primary ASR 약 3~4개**
-- regression ASR
-- UC/Change evidence
-- trade-off
-
-를 비교한다.
-
-DP마다 유리한 ASR 정의나 metric으로 바꾸지 않는다.
+그 QA에 연결된 ASR scenario와 Test Case로 trade-off를 비교한다. 후보에게 유리하도록 QA 정의나 metric을 바꾸지 않는다.
 
 ---
 
-# 8.12 이번 리뷰에서 확인할 핵심
+# 8.10 이번 리뷰에서 확인할 것
 
-1. **ASR-01~33 각각이 하나의 failure mode 또는 하나의 change type만 다루는가?**
-2. continuity / state / safety / evolvability를 이름 하나로 다시 뭉치지 않았는가?
-3. Change Scenario 하나를 ASR로 승격한 이유가 H/H 기준에 맞는가?
-4. 각 metric이 해당 ASR의 failure만 측정하고 다른 ASR 결과를 몰래 합산하지 않는가?
-5. 이후 DP에서 실제 관련 ASR 3~4개만 Primary Driver로 고를 수 있을 정도로 정의가 명확한가?
+가장 먼저 **8.3의 QA 10개와 점수**를 검토한다.
 
-현재 문서는 ASR catalog와 representative metric 방향을 확정하기 위한 검토본이다. 목표값과 0~5점 경계는 아직 정하지 않았으며 11에서 근거와 함께 동결한다.
+1. QA 후보 자체에 빠진 품질이 있는가?
+2. Importance 1~10의 판단이 제품 관점에서 납득되는가?
+3. Difficulty 1~10의 판단이 실제 Architecture 문제 크기와 맞는가?
+4. 따라서 H/H로 선정된 7개 QA가 맞는가?
+5. 그 다음에만 8.4~8.5의 ASR이 각 QA를 너무 넓지 않게 구체화했는지 검토한다.
+
+**QA 점수가 잘못되면 ASR 목록도 다시 바뀌어야 한다. 따라서 08은 QA scoring 승인 전에는 닫지 않는다.**
