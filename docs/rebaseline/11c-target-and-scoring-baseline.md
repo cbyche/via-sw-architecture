@@ -322,3 +322,69 @@ Model/Context provider 변화는 주로 0~2 elements에 국소화될 수 있지�
 - Model/S2S reference profile
 
 각 DP는 이 중 실제 구조 인과관계가 큰 Primary ASR 약 3~4개만 선택한다. 모든 후보가 같은 QA에서 같은 값을 얻으면 그 QA는 해당 DP의 변별 driver가 아니며 억지 failure를 만들지 않는다.
+
+## C.12 Primary ASR Qualification — Architecture Sensitivity Gate
+
+System-level ASR이 중요하다는 사실만으로 모든 DP의 Primary ASR이 되는 것은 아니다. 12에서 각 DP의 후보를 비교하기 전에 **DP × ASR sensitivity hypothesis**를 작성하고 다음 네 조건을 모두 만족할 때만 Primary ASR로 사용한다.
+
+1. **Structural Difference** — 후보 사이에 책임 배치, state authority, contract, persistence/enforcement boundary, call graph 중 실제 구조 차이가 있다.
+2. **Causal Mechanism** — 그 구조 차이가 해당 QA의 response measure에 영향을 주는 인과 경로를 설명할 수 있다.
+3. **Architecture-sensitive Probe** — 동일 Model/Agent/fixture를 고정한 상태에서 그 경로를 자극하는 scenario를 만들 수 있다.
+4. **Non-oracle Evidence** — 시험기가 candidate에게 정답 state/history/identity를 주입하지 않아도 관찰 차이를 판정할 수 있다.
+
+하나라도 충족하지 않으면 그 ASR은 해당 DP에서 **regression constraint / secondary observation**으로 내린다. 후보 사이에 차이를 만들기 위해 기능을 고의로 제거한 약한 후보를 만들지 않는다.
+
+이는 ATAM의 sensitivity-point 관점과 같다. 특정 architecture parameter가 measurable quality response에 민감하게 연결될 때만 실제 architecture trade-off의 근거가 된다.
+
+### LLM이 구조 결함을 추론으로 가리는 것을 막는 Probe 원칙
+
+ASR-02/03의 구조 효과를 볼 때는 세계지식이나 의미 추론만으로 답을 복원할 수 없는 input을 사용한다.
+
+- **Opaque identity:** Task/run/artifact/object/policy ID에 의미 있는 이름 대신 random/opaque ID를 사용한다.
+- **Counterfactual pair:** 같은 자연어 input에 대해 fixture의 hidden mapping만 바꾼 paired case를 만든다. 구조가 authoritative state를 전달하지 못하면 semantic guess로 두 case를 동시에 맞힐 수 없다.
+- **Authoritative-state dependency:** 정답이 Conversation/Task correlation, timestamped interaction, persisted state, policy revision처럼 Architecture가 보존·전달해야 하는 정보에 의존하게 한다.
+- **No semantic shortcut:** Task title, 최근 문장, Agent name만으로 정답을 유추할 수 없게 fixture를 구성한다.
+- **Fixed intelligence:** 후보 간 동일 Model artifact/runtime/decoding을 사용한다. 더 강한 LLM을 특정 후보에만 주지 않는다.
+- **No oracle repair:** candidate가 잃은 history/state를 test harness가 뒤늦게 prompt에 넣어주지 않는다.
+
+이 원칙의 목적은 LLM 성능을 낮추는 것이 아니라 **구조가 제공하지 않은 authoritative information은 아무리 강한 LLM도 확실하게 복원할 수 없도록** 시험을 구성하는 것이다.
+
+### ASR별 구조 민감성 기대
+
+| ASR | 구조적으로 값이 달라질 수 있는 대표 mechanism | DP에서 값이 같다면 |
+| --- | --- | --- |
+| ASR-01 | LLM call graph, Context materialization, IPC/RPC, direct/delegated path | latency trade-off 없음 |
+| ASR-02 | evidence 전달 경계, referent timeline, request/task/agent binding 정보 | 해당 DP에서는 secondary로 내림 |
+| ASR-03 | Conversation/Task/run/artifact identity authority와 correlation persistence | 해당 DP에서는 secondary로 내림 |
+| ASR-04 | Agent-specific dependency localization | 본질적으로 구조 변별 지표 |
+| ASR-05 | Model/Context/state change ripple | 본질적으로 구조 변별 지표 |
+| ASR-06 | durable state authority, atomic handoff, idempotency, event correlation, recovery protocol | 모두 invariant를 만족하면 동점; 보완 비용은 ASR-05/01 등에 나타남 |
+| ASR-07 | policy enforcement placement, egress mediation, approval authority, revision/TOCTOU handling | 모두 0 violation이면 동점; 해당 DP에서는 constraint로 유지 |
+
+### Reliability/Safety가 모두 100%여도 되는 이유
+
+ASR-06/07은 제품적으로 반드시 지켜야 하는 invariant 성격이 강하다. 두 Architecture가 서로 다른 tactic을 사용하더라도 모두 invariant를 만족한다면 **둘 다 100%/0 violation이 맞다.**
+
+이 경우 구조 판단은 다음처럼 이동한다.
+
+- 같은 reliability를 얻기 위해 더 많은 state/contract/component가 필요한가 → ASR-05
+- 추가 persistence/coordination 때문에 latency가 늘어나는가 → ASR-01
+- Agent 변경 때 reliability adapter가 여러 Core 요소로 전파되는가 → ASR-04
+- safety enforcement가 정상 기능 completion을 방해하는가 → ASR-02 regression
+
+즉 QA를 억지로 실패시키지 않고 **동일 품질을 달성하는 구조적 비용과 trade-off를 다른 승인된 ASR에서 관찰**한다.
+
+### 12에서 반드시 작성할 DP × ASR Sensitivity Record
+
+각 Primary ASR에 대해 다음 필드를 후보 결과 전에 작성한다.
+
+    DP ID
+    ASR ID
+    candidate structural difference
+    sensitivity mechanism
+    fixed intelligence/dependencies
+    architecture-sensitive probe
+    expected observable if mechanism matters
+    falsification condition
+
+`falsification condition`은 예를 들어 '두 후보가 필요한 information/state/contract를 모두 제공하면 동일 점수가 나와 Primary QA 가설이 반증된다'처럼 작성한다.
