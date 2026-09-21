@@ -19,16 +19,18 @@ struct Args {
     mode: Mode,
     #[arg(long)]
     worker: Option<PathBuf>,
+    #[arg(long)]
+    agent_state_file: Option<PathBuf>,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     match args.mode {
-        Mode::Shared => run_shared().await?,
+        Mode::Shared => run_shared(args.agent_state_file).await?,
         Mode::Isolated => {
             let worker = args.worker.ok_or("--worker is required for isolated mode")?;
-            run_isolated(worker).await?;
+            run_isolated(worker, args.agent_state_file).await?;
         }
     }
     Ok(())
@@ -46,8 +48,13 @@ async fn write_response(
     Ok(())
 }
 
-async fn run_shared() -> Result<(), Box<dyn std::error::Error>> {
-    let agent = DeterministicAgent::new(AgentShape::Q);
+async fn run_shared(
+    agent_state_file: Option<PathBuf>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let agent = match agent_state_file {
+        Some(path) => DeterministicAgent::persistent(AgentShape::Q, path)?,
+        None => DeterministicAgent::new(AgentShape::Q),
+    };
     let mut lines = BufReader::new(tokio::io::stdin()).lines();
     let mut stdout = tokio::io::stdout();
 
@@ -100,8 +107,14 @@ async fn run_shared() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn run_isolated(worker: PathBuf) -> Result<(), Box<dyn std::error::Error>> {
-    let mut bridge = ProcessBridge::spawn(&worker).await?;
+async fn run_isolated(
+    worker: PathBuf,
+    agent_state_file: Option<PathBuf>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let mut bridge = match &agent_state_file {
+        Some(path) => ProcessBridge::spawn_with_state_file(&worker, path).await?,
+        None => ProcessBridge::spawn(&worker).await?,
+    };
     let mut lines = BufReader::new(tokio::io::stdin()).lines();
     let mut stdout = tokio::io::stdout();
 
@@ -146,7 +159,10 @@ async fn run_isolated(worker: PathBuf) -> Result<(), Box<dyn std::error::Error>>
             WorkerRequest::Ping => WorkerResponse::Pong,
             WorkerRequest::AbortHost => {
                 bridge.abort_host().await?;
-                bridge = ProcessBridge::spawn(&worker).await?;
+                bridge = match &agent_state_file {
+                    Some(path) => ProcessBridge::spawn_with_state_file(&worker, path).await?,
+                    None => ProcessBridge::spawn(&worker).await?,
+                };
                 WorkerResponse::Pong
             }
         };
