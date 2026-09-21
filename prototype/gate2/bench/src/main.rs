@@ -22,6 +22,10 @@ enum Command {
         #[arg(long)]
         worker: PathBuf,
     },
+    ExecAbortSmoke {
+        #[arg(long)]
+        worker: PathBuf,
+    },
     S2sSmoke {
         #[arg(long)]
         trace: PathBuf,
@@ -34,6 +38,7 @@ async fn main() -> anyhow::Result<()> {
     let result = match cli.command {
         Command::Smoke => smoke().await?,
         Command::ExecSmoke { worker } => exec_smoke(worker).await?,
+        Command::ExecAbortSmoke { worker } => exec_abort_smoke(worker).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
@@ -116,6 +121,38 @@ async fn exec_smoke(worker: PathBuf) -> anyhow::Result<serde_json::Value> {
         "scope":"exec bridge semantic equivalence smoke",
         "local_shape":reply_shape(&local_reply),
         "process_shape":reply_shape(&process_reply),
+        "benchmark":"NOT_RUN"
+    }))
+}
+
+async fn exec_abort_smoke(worker: PathBuf) -> anyhow::Result<serde_json::Value> {
+    let first = ProcessBridge::spawn(&worker).await?;
+    let request = SubmitRequest {
+        task_id: "T-abort".into(),
+        submission_key: "K-abort-1".into(),
+        goal: "before abort".into(),
+    };
+    let accepted = first.submit(request).await?;
+    let run = run_id(&accepted)?;
+    let _ = first.query(&run).await?;
+    first.abort_host().await?;
+
+    // Reaching this line proves the Core/controller process was not the worker host.
+    // Spawn a fresh worker and prove the integration boundary is usable again.
+    let restarted = ProcessBridge::spawn(&worker).await?;
+    let after = restarted
+        .submit(SubmitRequest {
+            task_id: "T-after".into(),
+            submission_key: "K-after-1".into(),
+            goal: "after worker restart".into(),
+        })
+        .await?;
+    Ok(serde_json::json!({
+        "status":"PASS",
+        "scope":"process-isolated worker fatal + restart correctness smoke",
+        "first_run":run,
+        "restart_reply_shape":reply_shape(&after),
+        "parent_process_survived":true,
         "benchmark":"NOT_RUN"
     }))
 }
