@@ -40,13 +40,13 @@ flowchart LR
 
 | ASR / Parent QA | 전체 명칭 | 대표 지표 | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **ASR-01 / QA-01** | **User-Experienced Responsiveness** | User-experienced VIA response latency p95 (ms) | 입력 처리·직접 응답·위임 전후·음성 중단의 VIA 대기 구간 |
+| **ASR-01 / QA-01** | **User-Experienced Responsiveness** | User-Experienced Response Latency p95 (VIA 모델 포함·Agent 업무시간 제외) | 입력 처리·직접 응답·위임 전후·음성 중단의 VIA 대기 구간 |
 | **ASR-02 / QA-02** | **Task Completion Effectiveness** | Task completion success rate (%) | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
 | **ASR-03 / QA-03** | **Interaction & Task Continuity** | Continuity scenario pass rate (%) | 대화·채널·직접/위임 경로·업무 전환 후 기존 맥락과 identity가 이어지는가 |
 | **ASR-04 / QA-04** | **Agent Ecosystem Interoperability & Substitutability** | Average changed architecture elements per Agent change (count/change) | **A-01~09 전체 9개** |
 | **ASR-05 / QA-05** | **Evolvability & Maintainability** | Average changed architecture elements per non-Agent change (count/change) | **M-01~09 + C-01~06 전체 15개** |
 | **ASR-06 / QA-08** | **Reliability & Recoverability** | Reliability/recovery scenario pass rate (%) | 비동기 이벤트·취소·부분 실패·재시작 및 상태 미확인의 올바른 처리 |
-| **ASR-07 / QA-09** | **Privacy, Security & Action Safety** | Safety violation count (count) | 현재 권한·동의에 맞는 접근/전달, 올바른 업무 승인 |
+| **ASR-07 / QA-09** | **Privacy, Security & Action Safety** | Safety violation rate V/N (원자료 V건/N개) | 현재 권한·동의에 맞는 접근/전달, 올바른 업무 승인 |
 
 ASR-02의 이름이 Task Completion이라고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
 
@@ -183,3 +183,7 @@ ASR-07의 위반은 다른 ASR의 높은 점수로 상쇄하지 않는다. 모�
 | 실제 점수까지 확정했는가? | 아니오. 11의 표본·정답·집계·목표·점수는 별도 리뷰 |
 
 **다음 단계는 09와 10의 공동 리뷰이다.** 승인 전에는 11 시험 집합·목표·채점표나 12의 후보·DP 우열을 확정하지 않는다.
+
+## 9.9 측정 자료 연결
+
+이 연결표의 UC·변경 소유권은 유지한다. 사용자 승인에 따른 08 측정 보정은 [11-A](./11a-measurement-baseline.md),94개 변형과24개 변경의 구체 명세는 [11-B](./11b-test-case-catalog.md)에 연결한다. 표본 배합과 최종 점수는 아직 동결하지 않았다.

@@ -1,6 +1,6 @@
 # 8. Architecture Significant Requirements — QA 도출과 ASR 선정
 
-> 상태: **검토 완료 · QA 점수와 7개 ASR 기준선 확정**  
+> 상태: **QA 점수·7개 ASR 유지 / 사용자 합의에 따른 측정 정의 보정 · 11-A/B 검토 연결**
 > 근거: [01 시스템 정의](./01-system-mission-and-boundary.md) · [02 용어](./02-terms.md) · [03 설계 범위](./03-fixed-architecture-scope.md) · [04 공통 흐름](./04-canonical-interaction-flow.md) · [05 UC](./05-representative-use-cases.md) · [06 비교 조건](./06-fixed-assumptions.md) · [07 변경 집합](./07-intentional-variables.md)
 
 ## 8.1 도출 절차
@@ -86,13 +86,13 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 
 | ASR | Parent QA | 정의 | 대표 Metric | 방향 |
 | --- | --- | --- | --- | --- |
-| **ASR-01 User-Experienced Responsiveness** | QA-01 | 사용자의 Voice/Text 요청, interruption, Agent 결과 전달에서 VIA가 추가하는 대기 시간을 최소화한다. | **User-experienced VIA response latency p95 (ms)** | 낮을수록 좋음 |
+| **ASR-01 User-Experienced Responsiveness** | QA-01 | 사용자의 Voice/Text 요청, interruption, Agent 결과 전달에서 VIA가 추가하는 대기 시간을 최소화한다. | **User-Experienced Response Latency p95 (ms; VIA 모델 포함·Agent 업무시간 제외)** | 낮을수록 좋음 |
 | **ASR-02 Task Completion Effectiveness** | QA-02 | VIA가 사용자 요청을 올바른 대상·요청 구조·Task·Agent에 연결하여 사용자가 의도한 처리 결과까지 도달하게 한다. | **Task completion success rate (%)** | 높을수록 좋음 |
 | **ASR-03 Interaction & Task Continuity** | QA-03 | modality/connection 변화, Direct↔Agent 전환, multiple task 상황에서도 Conversation과 VIA Task의 의미와 identity를 연속적으로 유지한다. | **Continuity scenario pass rate (%)** | 높을수록 좋음 |
 | **ASR-04 Agent Ecosystem Interoperability & Substitutability** | QA-04 | 서로 다른 Agent 구현·protocol·lifecycle 계약을 VIA 핵심 책임의 최소 변경으로 추가·교체·공존시킨다. | **Average changed architecture elements per Agent change (count/change)** | 낮을수록 좋음 |
 | **ASR-05 Evolvability & Maintainability** | QA-05 | Model, Context integration, persistent-state schema 및 deployment 변화에 기존 기능을 유지하면서 제한된 구조 변경으로 대응한다. | **Average changed architecture elements per non-Agent change (count/change)** | 낮을수록 좋음 |
 | **ASR-06 Reliability & Recoverability** | QA-08 | 비동기 event·실패·취소·process restart 상황에서도 Task state를 일관되게 유지하고 복구 가능한 업무를 중복 실행 없이 재연결한다. | **Reliability/recovery scenario pass rate (%)** | 높을수록 좋음 |
-| **ASR-07 Privacy, Security & Action Safety** | QA-09 | Context 접근·외부 전달과 state-changing Action approval을 현재 policy/consent 및 올바른 pending Action에만 적용한다. | **Safety violation count (count)** | 낮을수록 좋음; 목표 방향 0 |
+| **ASR-07 Privacy, Security & Action Safety** | QA-09 | Context 접근·외부 전달과 state-changing Action approval을 현재 policy/consent 및 올바른 pending Action에만 적용한다. | **Safety violation rate = 100×V/N (%); V건/N개 원자료 유지** | 낮을수록 좋음; 목표 방향 0 |
 
 ---
 
@@ -110,7 +110,7 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 - Agent result 준비 후 사용자 전달 latency
 - Voice interruption stop latency
 
-대표 Metric은 하나인 **User-experienced VIA response latency p95**로 유지한다. 세부 scenario별 raw latency도 기록하지만 별도 ASR로 승격하지 않는다.
+대표 Metric은 **User-Experienced Response Latency p95 (VIA 모델 포함·Agent 업무시간 제외)**이다. 원격을 포함한 VIA 직접 LLM·S2S·Context·연결·출력 시간은 포함한다. 공개 profile와 실제 prompt token 기반 계산은 추정치로 기록한다. 음성 중단은 유형별 raw latency로 유지하고 일반 응답과 임의 혼합하지 않는다. 상세 측정 계약은 11-A를 따른다.
 
 ## ASR-02 Task Completion Effectiveness
 
@@ -192,7 +192,7 @@ Agent 변화는 ASR-04에서 별도로 평가하므로 중복하지 않는다.
 - approval/denial의 올바른 Action binding
 - 이전 대화의 “응”을 다른 승인으로 재사용하지 않음
 
-대표 Metric은 **Safety violation count**이다.
+대표 Metric은 **Safety violation rate = 100×V/N**이며 위반 V건과 사전에 고정한 판단 기회 N개를 함께 보존한다. 내부 검사나 재시도로 분모를 늘리지 않는다. 모든 요청을 차단한 후보는 안전성을 충족한 정상 제품으로 인정하지 않는다.
 
 다른 QA 점수로 safety violation을 상쇄하지 않는다.
 
@@ -296,3 +296,9 @@ QA scoring이 바뀌면 ASR 목록도 바뀐다. 따라서 08은 이 다섯 항�
 사용자 승인에 따라 QA 10개의 점수, H/H QA 7개와 ASR-01~07의 일대일 대응, 정의 및 대표 지표를 확정한다. 세부 시나리오는 추가 ASR이 아니다. 이번 확정은 11의 실제 시험 입력·표본 구성·반복·목표값·0~5점 구간까지 승인한 것이 아니다.
 
 다음 검토 범위는 [09 연결표](./09-asr-uc-change-mapping.md)와 [10 설계 요소·집계 기준](./10-architecture-element-definition.md)이다. 두 문서의 공동 리뷰 전에는 11·12를 진행하지 않는다.
+
+## 8.11 측정 보정과 11-A/B 연결
+
+사용자 합의에 따라 모델 비용을 실제로 수치화하는 ASR-01 근거 원장과 ASR-07의 고정 분모를 보완한다. ASR-02·03·06은 우선 전체 raw pass/fail을 보존하며 macro/단순 평균을 지금 바꾸지 않는다. ASR-04·05는 10의 변경 요소 집계와 9/15개 전체 변경을 유지한다.
+
+[11-A 측정 기준](./11a-measurement-baseline.md), [11-B 시험 목록](./11b-test-case-catalog.md), [Qwen 근거](./11-evidence/asr01-qwen-evidence.md)를 검토한다. QA 점수와 7개 ASR 선정은 다시 변경하지 않는다. 목표·0~5점·가중치·대표 표본 집합은 11-C에서 별도 승인한다.

@@ -23,35 +23,23 @@
 | 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 검토 완료 · 7개 ASR 기준선 확정 |
 | 9 | [ASR ↔ UC / Evolution Scenario Mapping](./09-asr-uc-change-mapping.md) | 작성 완료 · 09/10 공동 검토본 |
 | 10 | [Architecture Element Definition](./10-architecture-element-definition.md) | 작성 완료 · 09/10 공동 검토본 |
-| 11 | Test Case Catalog | 이후 작성 |
+| 11 | [Test Case & Measurement](./11-test-case-catalog.md) | 11-A/B 공동 검토본 · 11-C 미진행 |
 | 12 | Architecture Decision Points | 이후 작성 |
 
-## 현재 리뷰 지점 — 09와 10
+## 현재 리뷰 지점 — 11-A와 11-B
 
-**08은 사용자 승인에 따라 닫았다.** QA 10개의 중요도/구조 난이도 점수, H/H 7개 QA와 ASR-01~07의 일대일 대응, 정의와 대표 지표를 유지한다. 개별 시나리오를 새로운 ASR로 승격하지 않는다. 실제 시험·목표·0~5점 구간은 아직 확정하지 않았다.
+08의7개 ASR과09/10의 연결·집계 원칙을 유지한다. ASR-01은 VIA 모델 비용의 근거·계산을 구체화하고, ASR-07은 고정 분모를 보완했다. 11-A/B는 검토본이며 11-C 목표/0~5점과12의 후보 비교는 진행하지 않았다.
 
-| 읽을 부분 | 확인할 내용 |
+| 읽을 문서 | 확인할 것 |
 | --- | --- |
-| 09 §9.2·9.4 | 7개 ASR과 UC 18개/94개 명시 변형의 연결 |
-| 09 §9.5 | 요청 완료·연속성·신뢰성 구분, 시간선과 중복 평가 주의 |
-| 09 §9.6 | 변경 24개 전체: ASR-04의 Agent 9개 / ASR-05의 비Agent 15개 |
-| 10 §10.2~10.5 | 무엇이 1개 요소인가, 책임·계약·상태·배치의 검사 범위 |
-| 10 §10.6~10.8 | 후보별 전수 목록, 수정·추가·제거 규칙과 계산 예시 |
-| 10 §10.9~10.10 | Rust crate와 요소의 차이, 0·비적용·처리 불가·미검증 구분 |
+| [11-A 측정 계약](./11a-measurement-baseline.md) | 모델 포함 시간·pass/fail·변경량·안전 분모 |
+| [Qwen 근거](./11-evidence/asr01-qwen-evidence.md) | 확인한 공개값과 계산 가정, tokenization 미실행 구분 |
+| [11-B 시험 목록](./11b-test-case-catalog.md) | 94개 UC·24개 변경·24개 안전 판단 기회 |
+| [참조자료 적용](./11-evidence/reference-presentation-application.md) | 본문 비교와 부록 증거의 연결 |
 
-09·10은 **공동 검토본**이다. 후보별 실제 요소 수나 Architecture 승패를 산출한 문서가 아니다. 승인된 01~07과 08의 품질 내용은 변경하지 않았다.
+공식 tokenizer 실행·실제 모델 추론·녹음·실제 VIA 후보 측정은 아직 수행되지 않았다. 계산 보조 코드와 catalog 자체를 검증한 것을 제품 성능 실측으로 부르지 않는다.
 
-### 이후 순서
-
-```text
-08 확정 → 09 + 10 → 사용자 리뷰
-                       ↓ 승인 후
-                11 시험·목표·채점 정의 → 별도 사용자 리뷰
-                       ↓ 승인 후
-                12 Architecture 대안·DP 비교
-```
-
-**이번 작업에서는 11·12를 진행하지 않는다.** 10의 공통 셈법을 먼저 검토하고, 후보별 실제 요소 전수 목록은 각 대안 명세와 함께 작성해 변경량 계산 전에 동결한다.
+**다음 순서: 11-A/B 리뷰 → 11-C 목표·점수·표본 동결 → 12 DP 비교.**
 
 ## 06·07 확정 내용
 
