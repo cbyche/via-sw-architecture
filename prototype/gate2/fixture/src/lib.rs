@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
     path::Path,
-    sync::Mutex,
+    sync::{Arc, Mutex},
     time::{Duration, Instant},
 };
 
@@ -34,16 +34,17 @@ struct FixtureState {
 
 /// Deterministic full-capability Agent fixture. P and Q provide the same user-visible
 /// capability set but deliberately expose different native lifecycle shapes.
+#[derive(Clone)]
 pub struct DeterministicAgent {
     shape: AgentShape,
-    state: Mutex<FixtureState>,
+    state: Arc<Mutex<FixtureState>>,
 }
 
 impl DeterministicAgent {
     pub fn new(shape: AgentShape) -> Self {
         Self {
             shape,
-            state: Mutex::new(FixtureState::default()),
+            state: Arc::new(Mutex::new(FixtureState::default())),
         }
     }
 
