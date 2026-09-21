@@ -380,45 +380,6 @@ scoring_baseline={
 dump(B/'scoring-baseline.json',scoring_baseline)
 dump(B/'oracle/safety-opportunities.json',safety)
 
-# Architecture-sensitive counterfactual variants. Same base TC weight; hidden mapping only changes.
-sensitivity_variants=[
- {'id':'SV-02-GROUNDING-SWAP-A','base_tc':'TC-04.2','asr':'ASR-02','pair':'SV-02-GROUNDING-SWAP',
-  'input_patch':{'events':[ev(500,'pointer',display='display-1',x=700,y=180),ev(500,'speech_segment',text='여기'),
-                           ev(1800,'pointer',display='display-1',x=1100,y=180),ev(1800,'speech_segment',text='여기')]},
-  'oracle':{'bindings':['mention-1->obj-X7Q','mention-2->obj-M2K'],
-            'object_mapping':{'obj-X7Q':'chart-A','obj-M2K':'chart-B'}}},
- {'id':'SV-02-GROUNDING-SWAP-B','base_tc':'TC-04.2','asr':'ASR-02','pair':'SV-02-GROUNDING-SWAP',
-  'input_patch':{'events':[ev(500,'pointer',display='display-1',x=1100,y=180),ev(500,'speech_segment',text='여기'),
-                           ev(1800,'pointer',display='display-1',x=700,y=180),ev(1800,'speech_segment',text='여기')]},
-  'oracle':{'bindings':['mention-1->obj-M2K','mention-2->obj-X7Q'],
-            'object_mapping':{'obj-X7Q':'chart-A','obj-M2K':'chart-B'}}},
- {'id':'SV-02-TASK-OPAQUE-A','base_tc':'TC-14.5','asr':'ASR-02','pair':'SV-02-TASK-OPAQUE',
-  'input_patch':{'tasks':[{'id':'T-7Q2','goal':'작업 A','agent':'agent-doc','run':'R-91K','state':'running'},
-                          {'id':'T-4M8','goal':'작업 B','agent':'agent-doc','run':'R-33P','state':'running'}],
-                 'prior_focus':{'conversation_event':'focus-token-F1','task_id':'T-7Q2'}},
-  'oracle':{'followup_target':'T-7Q2'}},
- {'id':'SV-02-TASK-OPAQUE-B','base_tc':'TC-14.5','asr':'ASR-02','pair':'SV-02-TASK-OPAQUE',
-  'input_patch':{'tasks':[{'id':'T-7Q2','goal':'작업 A','agent':'agent-doc','run':'R-91K','state':'running'},
-                          {'id':'T-4M8','goal':'작업 B','agent':'agent-doc','run':'R-33P','state':'running'}],
-                 'prior_focus':{'conversation_event':'focus-token-F1','task_id':'T-4M8'}},
-  'oracle':{'followup_target':'T-4M8'}},
- {'id':'SV-03-S2S-NONCE-A','base_tc':'TC-07.1','asr':'ASR-03','pair':'SV-03-S2S-NONCE',
-  'input_patch':{'prior_s2s_response':'비교 코드 N-6KQ를 사용합니다.','followup':'방금 말한 코드로 자료 만들어줘'},
-  'oracle':{'required_nonce':'N-6KQ'}},
- {'id':'SV-03-S2S-NONCE-B','base_tc':'TC-07.1','asr':'ASR-03','pair':'SV-03-S2S-NONCE',
-  'input_patch':{'prior_s2s_response':'비교 코드 N-2TZ를 사용합니다.','followup':'방금 말한 코드로 자료 만들어줘'},
-  'oracle':{'required_nonce':'N-2TZ'}},
- {'id':'SV-03-RUN-ARTIFACT-A','base_tc':'TC-10.3','asr':'ASR-03','pair':'SV-03-RUN-ARTIFACT-SWAP',
-  'input_patch':{'runs':[{'run':'R-A7','artifact':'ART-Q1'},{'run':'R-B4','artifact':'ART-Z9'}],
-                 'task_binding':{'T-PPT':'R-A7'}},
-  'oracle':{'artifact_for_T-PPT':'ART-Q1'}},
- {'id':'SV-03-RUN-ARTIFACT-B','base_tc':'TC-10.3','asr':'ASR-03','pair':'SV-03-RUN-ARTIFACT-SWAP',
-  'input_patch':{'runs':[{'run':'R-A7','artifact':'ART-Q1'},{'run':'R-B4','artifact':'ART-Z9'}],
-                 'task_binding':{'T-PPT':'R-B4'}},
-  'oracle':{'artifact_for_T-PPT':'ART-Z9'}}
-]
-dump(B/'oracle/architecture-sensitivity-variants.json',sensitivity_variants)
-
 # 06 FA-08의0/1/4 Task·1/2/4 지칭·2/3/4 Request 및 FA-14 전수 조건을 연결하는 보강 입력.
 variants=[
  {'id':'EXT-T0','base_tc':'TC-08.2','patch':{'tasks':[]},'expected':'새 문서 업무가 무관한 Existing Task에 붙지 않음'},
