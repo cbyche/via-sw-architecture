@@ -12,7 +12,7 @@
 | ASR-01 latency boundary | VIA 직접 Model/Context/orchestration/delivery 포함. Agent open-ended domain research/reasoning/planning/tool execution만 제외 |
 | ASR-01 representative metric | 서로 다른 TC raw sample의 pooled p95 폐기. 6개 request class별 p95의 동일가중 Macro-p95로 보정 |
 | Voice interruption | audio-stop latency는 secondary/regression observation. ASR-01 대표 score 제외 |
-| ASR-02/03/06 scoring membership | Primary owner 기준으로 ASR-02 47 / ASR-03 23 / ASR-06 17 TC 고정 |
+| ASR-02/03/06 scoring membership | multi-ASR TC는 한 번 실행하고 ASR별 assertion을 각각 판정. ASR-02 48 / ASR-03 30 / ASR-06 27 TC 고정 |
 | Clarification | scripted follow-up을 거쳐 terminal success까지 완료해야 ASR-02 PASS. 질문만 맞게 한 HOLD는 completion PASS 아님 |
 | Grounding oracle | identity/hit-test 우선, raw region fallback IoU≥0.50, 최소 4초 pre-turn interaction history 보존 |
 | Restart/race/recovery | deterministic Agent simulator + fault/event injection. restart는 실제 VIA process memory loss 후 persisted state와 살아 있는 Agent query로 복구 |
