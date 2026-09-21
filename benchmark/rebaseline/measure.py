@@ -9,18 +9,22 @@ def positive_int(value: int, name: str) -> None:
         raise ValueError(f'{name}: positive integer required')
 
 def llm_seconds(input_tokens: int, output_tokens: int, profile: dict[str, Any]) -> dict[str, Any]:
-    """공개 TTFT 범위에 맞춘 block-linear 근사. 실측 prefill/s 또는 p95가 아니다."""
+    """공개 Windows consumer-GPU의 prompt/decode throughput을 이용한 model-only planning subtotal."""
     positive_int(input_tokens, 'input_tokens'); positive_int(output_tokens, 'output_tokens')
     if input_tokens + output_tokens > profile['context_limit']:
-        raise ValueError('reference context limit exceeded; no extrapolation')
-    rate = float(profile['generation_tps']); block = int(profile['prompt_chunk'])
-    if rate <= 0 or block <= 0 or profile['ttft_min_s'] <= 0:
+        raise ValueError('reference context setting exceeded; no extrapolation')
+    prompt_rate = float(profile['prompt_tps_measured'])
+    generation_rate = float(profile['generation_tps'])
+    if prompt_rate <= 0 or generation_rate <= 0:
         raise ValueError('invalid profile')
-    first = math.ceil(input_tokens / block) * float(profile['ttft_min_s'])
-    after_first = (output_tokens - 1) / rate
+    prompt_s = input_tokens / prompt_rate
+    first_output_s = prompt_s + 1.0 / generation_rate
+    generation_s = output_tokens / generation_rate
     return {'input_tokens': input_tokens, 'output_tokens': output_tokens,
-            'estimated_ttft_s': first, 'estimated_after_first_s': after_first,
-            'estimated_model_s': first + after_first,
+            'estimated_prompt_s': prompt_s,
+            'estimated_response_start_model_s': first_output_s,
+            'estimated_generation_s': generation_s,
+            'estimated_model_s': prompt_s + generation_s,
             'type': 'ESTIMATED_MODEL_ONLY', 'profile': profile['id']}
 
 def schedule(nodes: list[dict[str, Any]]) -> dict[str, Any]:
