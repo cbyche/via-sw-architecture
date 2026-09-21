@@ -99,7 +99,7 @@ mod tests {
         repository::Repository,
         task::SharedTaskService,
     };
-    use gate2_contracts::{SubmitRequest, TaskOp};
+    use gate2_contracts::{AgentBackend, SubmitRequest, TaskOp};
     use gate2_fixture::{AgentShape, DeterministicAgent};
     use tempfile::NamedTempFile;
 
