@@ -1,6 +1,6 @@
 # Gate 2 — 공통 구조·계약·비교 기준
 
-> G2-DESIGN-v1 / 2026-09-22 / 사용자 리뷰 대기. 후보 결과·승자 없음.
+> G2-DESIGN-v1.1 / 2026-09-22 / 자체 리뷰 반영 · 사용자 리뷰 대기. 후보 결과·승자 없음.
 > 원천 snapshot: `cf21c7361d392b30ad95cd8ec48a7d97d847a19b`.
 > 01~07 제품 조건, 10 요소 집계, 11-D metric/target/score를 대체하지 않는다.
 
@@ -10,16 +10,14 @@ Gate 2는 **구현 가능한 두 구조의 책임·계약·상태·배치**를 �
 
 | 비교 변수 | 참조값 | 변경하는 단위 |
 |---|---|---|
-| INT-DP01 | B | 음성 직접 응답 release/route 소유자 |
 | IR-DP01 | A | 의미 판단 단위와 중간 계약 |
 | TASK-DP01 | A | Task 전이 writer와 command scheduling |
 | AGENT-DP01 | A | Agent capability variation을 해석하는 위치 |
-| TASK-DP02 | A | 평상시 관측 갱신 경로 |
 | EXEC-DP01 | A | 동일 integration code의 process 경계 |
 
-각 A/B 비교에서는 해당 행만 바꾼다. 따라서 **12개 pair-labelled 후보지만 기본 조합은 7개 고유 configuration**이며, 같은 reference 실행을 독립 증거 여러 건으로 부풀리지 않는다. 6개 DP의 승자를 따로 고른 뒤 자동 합성하지 않고, INT×IR, AGENT×TASK-DP02, TASK-DP01×EXEC의 2×2 결합을 확인한다.
+각 A/B 비교에서는 해당 행만 바꾼다. 따라서 **8개 pair-labelled 후보지만 기본 조합은 5개 고유 configuration**이며, 같은 reference 실행을 독립 증거 여러 건으로 부풀리지 않는다. 4개 DP의 승자를 따로 고른 뒤 자동 합성하지 않고, IR×AGENT와 TASK-DP01×EXEC의 2×2 결합을 확인한다.
 
-Supporting 참조: CTX-DP01은 versioned/scoped Context Broker, CTX-DP02는 원문 기록에서 요청별 package 재구성, SEC-DP01은 같은 PC의 policy service를 통한 use-time 확인이다. 모두 같은 허용 범위·정보 원천을 갖는다. Supporting 선택에 민감한 결론은 해당 축을 교차 확인하기 전 일반화하지 않는다.
+Supporting 참조: CTX-DP01은 versioned/scoped Context Broker, CTX-DP02는 원문 기록에서 요청별 package 재구성, SEC-DP01은 같은 PC의 policy service를 통한 use-time 확인이다. **Interaction은 FP-INT01의 S2S Direct Fast Path로 고정하고, Agent state update는 TASK-T01의 Event-first + Query Reconciliation을 공통 tactic으로 적용한다.** 모두 같은 허용 범위·정보 원천을 갖는다. Supporting 선택에 민감한 결론은 해당 축을 교차 확인하기 전 일반화하지 않는다.
 
 **MODEL-DP01/STATE-DP01/ORCH-DP01을 재개하지 않는다.** Model placement는 후보 간 동일한 dependency 조건이다. 기본 방향은 on-device-first이며 Qwen3-Omni가 일반 소비자 GPU에서 검증됐다고 가정하지 않는다. Core의 bounded Read/Search/Understand와 Agent 위임은 공통 허용 정책이며 외부 상태 변경은 Agent만 수행한다.
 
@@ -101,6 +99,7 @@ Gate 2에서 SKU나 runtime hash가 없는데 임의의 수치로 채우지 않�
 | G2-C-STORE | transaction·CAS·snapshot·inbox/outbox 저장 | Repository / state owners / 영속 | 읽기·쓰기·migration 행위 변화 |
 | G2-C-TRACE | correlation·span·error 증거 수집 | Telemetry / evaluator / 실행 수명 | 관측 의미·수집 행위 변화 |
 | G2-C-NATIVE | P/Q Agent와 Source transport 호출 | NativeClients / integration / 연결 수명 | native method·인증·transport 행위 변화 |
+| G2-C-AGENTSYNC | Event-first 수집 + query reconciliation·fallback | AgentSync / TaskOwner / active execution | stream/query 지원·gap/reconnect·cadence 행위 변화 |
 | G2-C-COMPOUND | 사용자 명시 Request edge의 readiness 확인·command 제출 | RelationScheduler / TaskOwner / 복합 요청 수명 | 의존·조건 집행 행위 변화. domain planning 아님 |
 | G2-I-TURN | TurnEnvelope·revisioned input | ingress→router | 입력/정정/끝 의미 변화 |
 | G2-I-CONTEXT | versioned scoped source/context 접근 | ContextBroker→consumer | version/scope/error 계약 변화 |
@@ -116,6 +115,7 @@ Gate 2에서 SKU나 runtime hash가 없는데 임의의 수치로 채우지 않�
 | G2-I-TEXTMODEL | 텍스트/structured 모델 호출·취소 | SemanticAdapter→IR | partial/final/token/error 의미 변화 |
 | G2-I-S2S | S2S 입력/응답·지원 기능 선언 | S2SAdapter→Voice | 오디오·전사·control 제공 의미 변화 |
 | G2-I-HISTORY | 대화·Task·Memory 참조 선택 | HistoryProvider→models | 이력/삭제/provenance 계약 변화 |
+| G2-I-SYNC | observation·snapshot·cursor/reconcile 제출 | AgentSync↔AgentBoundary·TaskOwner | freshness·gap·완료 의미 변화 |
 | G2-S-CONV | 실제 대화·전달 상태·reference 기록 | Recorder writer / history reader / 영속 | 독립 보관·삭제·schema 이행 변화 |
 | G2-S-TASK | 목표·Request graph·local revision·사용자 상태 | 선택 TaskOwner writer / UI·scheduler reader / 영속 | Task 상태와 관계의 schema 이행 변화 |
 | G2-S-LINK | Task↔Agent context/run/submission 상관 | TaskOwner writer / effect·sync reader / 영속 | 실행 재연결·대체 run schema 변화 |
@@ -125,6 +125,7 @@ Gate 2에서 SKU나 runtime hash가 없는데 임의의 수치로 채우지 않�
 | G2-S-MEMORY | 기억 내용·소유·삭제 tombstone | MemoryService / history / 영속 | Memory 저장 이행 변화 |
 | G2-S-ROUTE | request generation·출력/dispatch lease | 선택 router / Voice·Core / 현재 요청 | 중복·정정 조정 state 변화 |
 | G2-S-CAP | capability snapshot와 provider binding | Registry / IR·integration / 연결·설정 수명 | capability 저장/갱신 schema 변화 |
+| G2-S-SYNC | source watermark·subscription/query checkpoint | AgentSync / TaskOwner·recovery / execution 수명 | cursor·관측 완전성·복구 schema 변화 |
 | G2-D-SEMANTIC | Text Model dependency의 시작·연결·복구 배치 | 모델 adapter 소비 / VIA와 논리 분리 | local/remote 호출 결합·배치 변화 |
 | G2-D-S2S | S2S dependency의 시작·연결·복구 배치 | Voice adapter 소비 / VIA와 논리 분리 | 음성 모델 dependency 배치 변화 |
 
