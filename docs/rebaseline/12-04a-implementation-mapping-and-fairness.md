@@ -149,13 +149,14 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Blocker | 왜 필요한가 | 상태/담당 |
 |---|---|---|
 | 최신 full-lifecycle 코드의 macOS+Ubuntu CI green | 현재 source revision 검증 | 자동 CI |
+| tracked Cargo.lock | dependency graph를 Measurement Freeze fingerprint에 포함 | **MISSING_IN_REPO** — CI audit artifact에는 생성되지만 source에는 아직 미고정 |
 | Mac 실제 environment manifest | 실제 measurement host 식별 | 사용자 Mac에서 1회 실행 |
 | Qwen artifact/runtime/tokenizer hash | IR A/B 동일 dependency 증명 | 사용자 Mac setup 후 자동 capture |
 | measured S2S delay trace 또는 synthetic 사용 범위 승인 | simulated E2E provenance | 리뷰 시 결정. TEST_ONLY trace는 score 금지 |
 | W-04 background workload driver | 1 vs 4 active Task, 동일 cadence의 실제 state update 부하 | IMPLEMENTED / CI_SMOKE_GREEN; 최종 ratio는 W-01 foreground adapter 필요 |
 | full W-09 6-strata controller | recovery representative metric | 구현 필요 |
 | full W-10 28-cell controller | containment representative metric | 구현 필요 |
-| 94 TC→prototype end-to-end observation adapter | W-05/06와 회귀 전수 | 구현 필요 |
+| 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
 | W-07/08 24 change raw analysis | change locality | freeze 후 동일 source revision에서 실행 |
 | actual Qwen run | W-05/IR latency | freeze 승인 후 사용자 Mac |
 
