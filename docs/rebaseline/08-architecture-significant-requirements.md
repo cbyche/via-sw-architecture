@@ -86,7 +86,7 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 
 | ASR | Parent QA | 정의 | 대표 Metric | 방향 |
 | --- | --- | --- | --- | --- |
-| **ASR-01 User-Experienced Responsiveness** | QA-01 | 사용자의 Voice/Text 요청, interruption, Agent 결과 전달에서 VIA가 추가하는 대기 시간을 최소화한다. | **User-Experienced Response Latency p95 (ms; VIA 모델 포함·Agent 업무시간 제외)** | 낮을수록 좋음 |
+| **ASR-01 User-Experienced Responsiveness** | QA-01 | 사용자의 Voice/Text 요청, interruption, Agent 결과 전달에서 VIA가 추가하는 대기 시간을 최소화한다. | **Macro-averaged request-class p95 User-Experienced Response Latency (ms; VIA 모델 포함·Agent open-ended 업무시간 제외)** | 낮을수록 좋음 |
 | **ASR-02 Task Completion Effectiveness** | QA-02 | VIA가 사용자 요청을 올바른 대상·요청 구조·Task·Agent에 연결하여 사용자가 의도한 처리 결과까지 도달하게 한다. | **Task completion success rate (%)** | 높을수록 좋음 |
 | **ASR-03 Interaction & Task Continuity** | QA-03 | modality/connection 변화, Direct↔Agent 전환, multiple task 상황에서도 Conversation과 VIA Task의 의미와 identity를 연속적으로 유지한다. | **Continuity scenario pass rate (%)** | 높을수록 좋음 |
 | **ASR-04 Agent Ecosystem Interoperability & Substitutability** | QA-04 | 서로 다른 Agent 구현·protocol·lifecycle 계약을 VIA 핵심 책임의 최소 변경으로 추가·교체·공존시킨다. | **Average changed architecture elements per Agent change (count/change)** | 낮을수록 좋음 |
@@ -108,9 +108,8 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 - VIA Core Direct Response latency
 - Agent delegation 전 VIA overhead
 - Agent result 준비 후 사용자 전달 latency
-- Voice interruption stop latency
 
-대표 Metric은 **User-Experienced Response Latency p95 (VIA 모델 포함·Agent 업무시간 제외)**이다. 원격을 포함한 VIA 직접 LLM·S2S·Context·연결·출력 시간은 포함한다. 공개 profile와 실제 prompt token 기반 계산은 추정치로 기록한다. 음성 중단은 유형별 raw latency로 유지하고 일반 응답과 임의 혼합하지 않는다. 상세 측정 계약은 11-A를 따른다.
+대표 Metric은 **request class별 p95를 동일 가중으로 평균한 Macro-p95 User-Experienced Response Latency**이다. 원격을 포함한 VIA 직접 LLM·S2S·Context·연결·출력 시간은 포함한다. 서로 난이도가 다른 TC 전체를 한 모집단으로 합쳐 p95를 만들지 않는다. 공개 profile와 실제 prompt token 기반 계산은 추정치로 기록한다. Voice interruption의 audio-stop latency는 UC-11의 secondary/regression observation으로 보존하되 ASR-01 대표값에는 포함하지 않는다. 상세 측정 계약은 11-A를 따른다.
 
 ## ASR-02 Task Completion Effectiveness
 
