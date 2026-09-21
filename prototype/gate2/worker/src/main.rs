@@ -26,6 +26,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     message: error.to_string(),
                 },
             },
+            WorkerRequest::FollowUp { run_id, text } => {
+                match agent.follow_up(&run_id, text).await {
+                    Ok(reply) => WorkerResponse::Reply { reply },
+                    Err(error) => WorkerResponse::Error {
+                        message: error.to_string(),
+                    },
+                }
+            }
+            WorkerRequest::Cancel { run_id } => match agent.cancel(&run_id).await {
+                Ok(reply) => WorkerResponse::Reply { reply },
+                Err(error) => WorkerResponse::Error {
+                    message: error.to_string(),
+                },
+            },
+            WorkerRequest::EventsSince {
+                run_id,
+                after_revision,
+            } => match agent.events_since(&run_id, after_revision).await {
+                Ok(events) => WorkerResponse::Events { events },
+                Err(error) => WorkerResponse::Error {
+                    message: error.to_string(),
+                },
+            },
             WorkerRequest::Ping => WorkerResponse::Pong,
             WorkerRequest::AbortHost => unreachable!(),
         };
