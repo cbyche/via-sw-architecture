@@ -3,3 +3,4 @@ Given the original request, Stage 1 output, and current Task/PendingInteraction 
 Preserve Stage 1 provenance and request constraints. You may reject an inconsistent Stage 1 binding and request correction; do not silently replace it.
 Do not choose an Agent or perform domain planning.
 Return only JSON matching stage2-schema.json.
+/no_think
