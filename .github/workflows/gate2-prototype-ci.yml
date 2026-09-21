@@ -41,10 +41,11 @@ jobs:
       - name: Structural smoke
         working-directory: prototype/gate2
         run: |
-          cargo build -p gate2-worker -p gate2-bench
+          cargo build -p gate2-worker -p gate2-host -p gate2-bench
           cargo run -q -p gate2-bench -- smoke
           cargo run -q -p gate2-bench -- exec-smoke --worker target/debug/gate2-worker
           cargo run -q -p gate2-bench -- exec-abort-smoke --worker target/debug/gate2-worker
+          cargo run -q -p gate2-bench -- exec-blast-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
           cargo run -q -p gate2-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
       - name: Gate2 catalog static check
         run: |
