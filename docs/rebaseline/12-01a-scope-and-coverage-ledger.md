@@ -90,7 +90,7 @@ H가 있어도 실제 수치 차이가 입증된 것은 아니다. 특히 W-05/0
 | CTX-DP02 Model-facing Context State Architecture | W-01 Conversational Reaction Responsiveness | 이력 조회·요약·prompt prefill의 비용 |
 | CTX-DP02 Model-facing Context State Architecture | W-06 Interaction & Task Continuity | 짧은 후속 지시·대화 전환에서 필요한 과거 정보의 보존 정도 |
 | CTX-DP02 Model-facing Context State Architecture | W-08 Evolvability & Maintainability | 모델 이력 계약/저장 기록 변경의 소비자 영향 |
-| CTX-DP02 Model-facing Context State Architecture | W-11 Privacy Exposure Minimization | **Regression only:** on-device Model baseline에서는 model-facing history 자체가 remote exposure를 만들지 않음. 외부 Agent egress에 같은 package를 재사용할 때만 확인. |
+| CTX-DP02 Model-facing Context State Architecture | W-11 Privacy Exposure Minimization | **Regression only:** Model placement는 후보 간 고정하므로 model-facing history 크기 자체를 W-11 구조 차이로 계산하지 않음. 외부 Agent/remote dependency egress에 같은 package를 실제 재사용할 때만 확인. |
 | TASK-DP01 Task State Authority & Supervision | W-02 Task Handoff Responsiveness | Agent 접수와 재연결 정보 보존까지의 조정 비용 |
 | TASK-DP01 Task State Authority & Supervision | W-04 Concurrent Task Performance Isolation | 동시 Task의 state contention과 작업별 진행 독립성 |
 | TASK-DP01 Task State Authority & Supervision | W-09 Recovery Timeliness & Recoverability | 올바른 상태·제어가 다시 가능해지는 복구 critical path |

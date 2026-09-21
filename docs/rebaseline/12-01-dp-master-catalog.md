@@ -37,7 +37,7 @@ DP는 다음 네 조건을 순서대로 만족해야 한다.
 
 ### 고정 경계
 
-VIA는 PC 기반 Agent-neutral Interaction & Orchestration이다. 외부 domain reasoning/planning/tool execution과 상태 변경은 Downstream Agent 책임이다. Voice Runtime은 VIA 내부이고 현재 Model Runtime 배치는 **on-device 기본**으로 고정한다. S2S 직접 응답의 기록, User Memory 관리, 재시작 재연결, compound 네 관계를 모든 후보가 지원한다. 필요 기능을 구현하지 않은 안은 후보로 비교하지 않는다.
+VIA는 PC 기반 Agent-neutral Interaction & Orchestration이다. 외부 domain reasoning/planning/tool execution과 상태 변경은 Downstream Agent 책임이다. Voice Runtime은 VIA 내부다. **Model placement는 이번 Architecture Decision 축에서 제외하고, 각 reference Model의 deployment assumption을 후보 간 동일하게 고정한다. 제품 방향은 on-device-first로 두되 S2S 등 현재 reference feasibility에 필요한 dependency 배치는 별도 고정조건으로 취급한다.** S2S 직접 응답의 기록, User Memory 관리, 재시작 재연결, compound 네 관계를 모든 후보가 지원한다. 필요 기능을 구현하지 않은 안은 후보로 비교하지 않는다.
 
 MODEL placement는 이번 Gate의 독립 DP가 아니다. Persistence representation(journal/snapshot)은 우선 TASK-DP01을 구현하는 tactic으로 유지한다. bounded Core/Agent handling은 혼합이 자연스러워 독립 DP로 두지 않는다.
 
@@ -178,7 +178,7 @@ SEC-DP01 / EXEC-DP01은 cross-cutting이지만 각각 **authorization hot path /
 
 **왜 둘을 동시에 채택할 수 없는가:** 정상 inference의 model-visible state source가 **request-time reconstruction**인지 **long-lived incremental working set**인지 하나가 primary다. B가 restart 시 rebuild하는 것은 fallback이고 A가 cache를 쓰는 것은 optimization이라 authority를 바꾸지 않는다.
 
-**주요 인과:** W-01 prompt assembly/prefill, W-06 long-turn continuity, W-08 history/model contract change ripple. **현재 Model Runtime은 on-device 기본이므로 model-facing history 크기 자체를 W-11 remote exposure의 직접 인과로 보지 않는다.** 동일 context가 외부 Agent egress에 재사용되는 경우에만 W-11을 regression으로 확인한다.
+**주요 인과:** W-01 prompt assembly/prefill, W-06 long-turn continuity, W-08 history/model contract change ripple. **Model placement는 후보 간 고정하므로 model-facing history 크기 자체를 W-11의 구조 차이로 계산하지 않는다.** 동일 context가 외부 Agent/remote dependency egress에 실제 재사용되는 경우에만 W-11을 regression으로 확인한다.
 
 **연결:** UC-01, UC-05, UC-06, UC-07, UC-10, UC-14, UC-15, UC-17 / RC-07, RC-12, RC-16 / M-03, M-09, C-04, C-06.
 

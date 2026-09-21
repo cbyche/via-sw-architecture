@@ -44,7 +44,7 @@ E9는 직접 수행했다고 보고한 공개 사례이지만 세부 runtime bui
 5. **결과 후 Primary 선정 편향:** 규칙을 사전 작성해도 사후 축 선택의 탐색성이 사라지지는 않는다. 전수 결과·prior relevance를 유지하고 별도 확인 반복/원장 교차 검토를 한다.
 6. **Privacy bytes/단위 임의화:** compressed payload와 remote-readable handle을 0 노출로 취급하지 않는다. unit corpus와 의미 annotation을 잠근다.
 7. **Coupled DP:** 서로 결합된 DP들의 개별 승자를 합친다고 최종 최적이 되는 것은 아니다. Gate 2에 교차 확인 계획을 포함한다.
-8. **On-device baseline과 Privacy 인과:** CTX-DP02의 Model-facing context 크기는 on-device Model 기준에서 그 자체로 remote exposure가 아니다. 따라서 W-11을 primary causal hypothesis에서 내리고 외부 Agent egress 재사용 시 regression으로만 확인한다.
+8. **고정 Model placement와 Privacy 인과:** CTX-DP02 비교에서는 Model placement를 후보 간 바꾸지 않는다. 따라서 model-facing context 크기 자체를 W-11 구조 차이로 세지 않고, 같은 context가 실제 외부 Agent/remote dependency egress에 재사용될 때만 regression으로 확인한다.
 9. **Process-isolation DP와 fault stimulus:** external connection-refused/no-reply와 whole-VIA restart만으로는 EXEC-DP01의 process fault boundary 차이를 충분히 자극하지 못한다. 후보 결과 전에 integration-host fatal fault를 W-09/W-10 공통 fixture에 추가한다.
 
 ## 4. 이 시점의 증거 완성도
