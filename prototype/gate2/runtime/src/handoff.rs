@@ -126,7 +126,7 @@ mod tests {
         agent::EdgeNormalized,
         task::{PerTaskSupervisors, SharedTaskService},
     };
-    use gate2_contracts::{NativeReply, PReply, TaskOp};
+    use gate2_contracts::TaskOp;
     use gate2_fixture::{AgentShape, DeterministicAgent};
     use tempfile::NamedTempFile;
 
@@ -234,7 +234,7 @@ mod tests {
         assert!(reopened.pending_handoffs().await.unwrap().is_empty());
 
         // Agent fixture is idempotent by submission key: retry must return the same run.
-        let NativeReply::P(PReply::Accepted { run_id }) = coordinator
+        let retried = coordinator
             .boundary
             .submit(SubmitRequest {
                 task_id: "T1".into(),
@@ -242,10 +242,7 @@ mod tests {
                 goal: "demo".into(),
             })
             .await
-            .unwrap()
-        else {
-            panic!("expected P accepted");
-        };
-        assert_eq!(run_id, first_run);
+            .unwrap();
+        assert_eq!(retried.run_id, first_run);
     }
 }
