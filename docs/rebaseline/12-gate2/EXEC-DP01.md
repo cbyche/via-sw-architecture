@@ -14,7 +14,7 @@ VIA는 Agent/파일·메일 등 여러 연동 코드와 상호작용한다. **�
 Rust VIA에서도 두 안 모두 현실적이다.
 
 - A: 한 OS process의 Tokio runtime에서 async task, channel/queue, semaphore, timeout/cancellation으로 논리 격리한다.
-- B: Core가 `tokio::process::Command` 등으로 integration worker child process를 시작·관찰하고, Windows에서는 Tokio의 async named-pipe API 같은 IPC를 사용할 수 있다.
+- B: Core가 `tokio::process::Command` 등으로 integration worker child process를 시작·관찰한다. IPC transport는 measurement OS에서 하나로 고정하며, Windows target realization에서는 Tokio의 async named-pipe API를 사용할 수 있다.
 
 **Tokio 자체가 process isolation을 제공하는 것은 아니다.** B의 실제 격리 경계는 Windows OS process이고 Tokio는 child lifecycle과 비동기 IPC를 관리한다. 구현 선택은 prototype 시점에 고정하고 IPC serialization/copy/restart 비용을 측정에 포함한다.
 
@@ -50,7 +50,7 @@ flowchart LR
   N --> E[동일 외부 Agent / Source]
 ```
 
-Windows named pipe의 length-prefixed UTF-8 frames로 같은 logical operation/result를 전달한다. Frame은 `protocol_version, operation_id, request_revision, deadline, type, payload_length, payload`를 갖고 oversize/unsupported version은 명시적으로 거부한다. 사용자 권한 범위의 pipe 접근 제한과 민감 payload 비기록을 공통 정책에 연결한다.
+Core와 worker는 **versioned local IPC frame**으로 같은 logical operation/result를 전달한다. Gate 2 smoke prototype은 child stdin/stdout pipe를 쓰며, macOS 성능 측정 transport는 별도 freeze에서 Unix local IPC로 고정하고 Windows target realization은 named pipe를 사용한다. 서로 다른 OS의 IPC 절대 지연을 같은 수치로 간주하지 않는다. Frame은 `protocol_version, operation_id, request_revision, deadline, type, payload_length, payload`를 갖고 oversize/unsupported version을 거부하며 민감 payload를 로그에 남기지 않는다.
 
 worker에는 canonical DB write 권한을 주지 않는다. 연결 끊김은 아직 접수되지 않은 요청과 이미 remote accepted 여부가 불확실한 요청을 분리해 Core에 보고한다. in-flight IPC state를 잃어도 Core의 durable outbox/ExecutionLink로 같은 제출을 조정한다.
 
