@@ -73,8 +73,13 @@ def payload(model: str, system: str, user: dict[str, Any], schema: dict[str, Any
             {"role": "system", "content": system},
             {"role": "user", "content": json.dumps(user, ensure_ascii=False, separators=(",", ":"))},
         ],
-        "temperature": 0,
-        "response_format": {"type": "json_schema", "json_schema": {"name": "via_ir", "schema": schema}},
+        "temperature": 0.7,
+        "top_p": 0.8,
+        "top_k": 20,
+        "min_p": 0.0,
+        "presence_penalty": 1.5,
+        "response_format": {"type": "json_object"},
+        "json_schema": schema,
     }
 
 
