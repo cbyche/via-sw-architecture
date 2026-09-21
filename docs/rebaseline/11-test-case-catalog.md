@@ -1,15 +1,16 @@
 # 11. 측정 기준과 Test Case — 공동 검토본
 
-> 상태: **11-A·11-B 작성 / 검토 대기. 11-C 목표·0~5점·가중치 및 12 DP 평가 미진행**
+> 상태: **11-A·11-B 사용자 리뷰 승인 완료. 11-C의 최종 target/0~5점/반복·집계와 12 DP 평가는 미진행**
 > 기준 브랜치: `architecture-rebaseline-20260918` / 입력 기준 커밋: `60422f108cb5c282ad6ece1a62d9c1c92ad40b4d`
 
-## 11.1 이번에 리뷰할 것
+## 11.1 리뷰 완료 항목
 
 | 문서 | 검토 질문 |
 | --- | --- |
 | [11-A 측정 기준](./11a-measurement-baseline.md) | 같은 구조 조건에서 무엇을 재며, 모델과 Agent 영향을 어떻게 구분하는가? |
 | [11-B 시험 목록](./11b-test-case-catalog.md) | 입력·초기 상태·외부 이벤트·정답·실패 규칙이 실제 사용자 요구와 맞는가? |
-| [ASR-01 공개 근거와 계산](./11-evidence/asr01-qwen-evidence.md) | 출처의 실측값과 우리의 계산 가정이 구분되어 있는가? |
+| [ASR-01 Semantic Model 근거](./11-evidence/asr01-qwen-evidence.md) | Qwen3-8B Windows consumer-GPU planning profile과 VIA 실제 측정을 구분 |
+| [ASR-01 S2S Model 근거](./11-evidence/asr01-qwen3-omni-s2s-evidence.md) | Qwen3-Omni-30B-A3B-Instruct의 official theoretical first-packet과 VIA 실제 latency를 구분 |
 | [참조 발표자료 적용](./11-evidence/reference-presentation-application.md) | 최종 발표에서 어떤 주장과 근거를 연결할 것인가? |
 
 **ASR은 기존 7개 그대로이다.** 이번 작업은 측정 계약과 시험 입력의 검토이며, 후보 Architecture의 성능·정확도·승패를 산출한 작업이 아니다.
@@ -36,6 +37,6 @@
 
 `cases.json`과 CSV는 94개 전체 목록, `change-cases.json`은 24개 변경 원장, `raw-results.template.json`은 **모두 NOT_RUN/null**로 시작하는 결과 원장이다. 생성 원문은 GitHub에 보관하고 JSON/CSV/HTML은 `build_assets.py`로 재생성한다. 검토 ZIP에는 생성 결과도 동봉했다. candidate의 입력/출력을 연결하는 adapter는 후보 구현에서 작성한다.
 
-## 11.4 다음 리뷰 게이트
+## 11.4 다음 게이트
 
-이번에는 지표의 의미, 비교 경계, 시험 입력/정답, 빠진 변형을 검토한다. 11-C에서는 이 자료를 바탕으로 표본 구성·반복·대표값 집계·제품 목표·0~5점 구간을 승인한 뒤 동결한다. 지표의 단위가 같아도 음성 중단과 일반 응답 지연을 임의로 섞지 않는다. 12에서는 그 동일한 기준으로 후보를 비교한다.
+11-A/B의 지표 의미, 비교 경계, 시험 입력/정답은 사용자 리뷰 승인 완료다. 11-C에서는 승인된 입력을 바탕으로 반복 수·통계 규칙·최종 workload·제품 target·0~5점 구간을 문서화하고 동결한다. ASR-04 target ≤2.0, ASR-05 target ≤3.0 elements/change는 사용자 승인된 11-C 입력이다. 12에서는 그 동일한 기준으로 후보를 비교한다.
