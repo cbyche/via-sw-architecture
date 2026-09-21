@@ -60,25 +60,17 @@ impl PerTaskSupervisors {
     }
 
     async fn sender_for(&self, task_id: &str) -> Result<mpsc::Sender<Envelope>, ApplyError> {
-        {
-            let senders = self.senders.lock().await;
-            if let Some(sender) = senders.get(task_id) {
-                if !sender.is_closed() {
-                    return Ok(sender.clone());
-                }
+        // Activation is rare (first use or restart), while command delivery is steady-state.
+        // Serialize activation-directory mutation so a later epoch can never fence the sender
+        // that the directory returns. Scored trials pre-activate Tasks before timed probes.
+        let mut senders = self.senders.lock().await;
+        if let Some(sender) = senders.get(task_id) {
+            if !sender.is_closed() {
+                return Ok(sender.clone());
             }
         }
 
-        // Do not hold the directory mutex across SQLite activation I/O.
         let candidate = self.create_sender(task_id).await?;
-        let mut senders = self.senders.lock().await;
-        if let Some(existing) = senders.get(task_id) {
-            if !existing.is_closed() {
-                // A concurrent activation won the directory race. Its later epoch fences this
-                // candidate, so only the directory winner is returned for new commands.
-                return Ok(existing.clone());
-            }
-        }
         senders.insert(task_id.to_owned(), candidate.clone());
         Ok(candidate)
     }
