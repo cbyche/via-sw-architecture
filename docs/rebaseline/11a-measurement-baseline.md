@@ -1,6 +1,6 @@
 # 11-A. Measurement Baseline — 측정 계약
 
-> 상태: **검토본**. ASR 7개 유지 / 실제 후보 측정값과 0~5점 없음.
+> 상태: **사용자 리뷰 승인 완료**. ASR 7개 유지 / 실제 후보 측정값과 0~5점은 11-C 이후.
 > 근거: [06](./06-fixed-assumptions.md), [08](./08-architecture-significant-requirements.md), [09](./09-asr-uc-change-mapping.md), [10](./10-architecture-element-definition.md)
 
 ## A.1 전체 측정 계약
@@ -76,7 +76,9 @@ Agent 시간 제외는 **실행 위치가 아니라 업무 의미**로 판정한
 
 ### 추정 모델 호출 시간
 
-상세 수치·제약은 [Windows consumer PC 기반 공개 근거 원장](./11-evidence/asr01-qwen-evidence.md)에 있다. 주 planning profile은 Qualcomm/NPU가 아니라 **Windows 11 + RTX 4060 8GB + Qwen3-8B Q4_K_M full GPU offload** 공개 관측을 사용한다.
+Semantic Model의 상세 수치·제약은 [Windows consumer PC 기반 Qwen3-8B 근거 원장](./11-evidence/asr01-qwen-evidence.md)에 있다. 주 planning profile은 **Windows 11 + RTX 4060 8GB + Qwen3-8B Q4_K_M full GPU offload** 공개 관측을 사용한다.
+
+S2S Direct Response는 별도 profile을 사용한다. [Qwen3-Omni-30B-A3B-Instruct S2S 근거](./11-evidence/asr01-qwen3-omni-s2s-evidence.md)의 concurrency=1 공식 theoretical audio first-packet **234ms**, Thinker 75 tok/s, Talker 140 tok/s, Generation RTF 0.47을 planning input으로 사용한다. S2S profile은 Semantic Model의 token-throughput 식과 합치지 않는다.
 
 ```text
 R_prompt = 2103.19 token/s
@@ -87,7 +89,7 @@ R_gen    = 40.58 token/s
 + 생성 token / R_gen
 ```
 
-이 값은 공개 source의 실제 prompt-eval/generation throughput을 같은 모델·quantization의 planning profile로 사용하는 **ESTIMATED_MODEL_ONLY** 값이다. 실제 VIA p95가 아니며 model load, queue, Context access, serialization, IPC/RPC, validation, response delivery는 별도 span으로 측정·추정한다.
+Semantic Model 식은 공개 source의 실제 prompt-eval/generation throughput을 같은 모델·quantization의 planning profile로 사용하는 **ESTIMATED_MODEL_ONLY** 값이다. S2S의 234ms는 **OFFICIAL_THEORETICAL_REFERENCE**로 별도 분류한다. 둘 다 실제 VIA p95가 아니며 model load, queue, Context access, serialization, IPC/RPC, network/transport, validation, response delivery는 해당 경로의 별도 span으로 측정·추정한다.
 
 Streaming 사용자 응답의 response-start를 추정할 때는 prompt processing 뒤 첫 유효 output token/prefix까지의 generation 비용을 사용하고, structured output을 의사결정에 쓰는 호출은 전체 출력의 생성·검증 완료까지 사용한다. format example token 수는 실제 Model 생성 길이와 같다고 가정하지 않는다. 오류·재시도·추가 검증 호출도 후보의 실제 call graph에 포함한다.
 
@@ -173,6 +175,8 @@ A-01~09는 ASR-04, M-01~09+C-01~06은 ASR-05이다. 0개는 같은 기능을 유
 
 차이가 없으면 억지로 failure를 만들지 않는다. 실제 후보의 경계 → 필요한 정보/상태 차이 → 동일 시험의 관측 차이가 연결될 때만 구조 효과라고 부른다.
 
-## A.7 11-C까지 남겨 둔 승인
+## A.7 11-A 리뷰 종료와 11-C 경계
 
-시나리오 배합, 반복 수·통계 규칙, 최종 workload, 제품 목표, 0~5점 경계와 가중치는 이번에 동결하지 않았다. 측정 계약의 의미와 TC의 현실성을 먼저 리뷰한다. 참조 발표자료의 숫자·가중치·허용 실패량을 그대로 가져오지 않는다.
+사용자 리뷰를 통해 ASR-01의 6개 request class Macro-p95, ASR-02/03/06 canonical membership, Grounding oracle, ASR-04/05 target rationale, ASR-07 fixed denominator, Qwen3-8B Semantic Model profile과 Qwen3-Omni S2S planning profile을 승인했다.
+
+11-A는 여기서 리뷰 완료로 닫는다. **반복 수·통계 규칙, 최종 workload, 제품 target, 0~5점 경계와 가중치는 아직 11-C 항목이며 여기서 선행 결정하지 않는다.**
