@@ -20,7 +20,7 @@
 | 5 | [Representative Use Cases](./05-representative-use-cases.md) | 검토 완료 · 기준선 확정 |
 | 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 검토 완료 · 공통 비교 조건 확정 |
 | 7 | [Intentional Variables](./07-intentional-variables.md) | 검토 완료 · 24개 변경 집합 확정 |
-| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 작성 완료 · 사용자 검토본 |
+| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 재작성 검토본 · QA scoring 검토 필요 |
 | 9 | ASR ↔ UC / Evolution Scenario Mapping | 예정 |
 | 10 | Architecture Element Definition | 예정 |
 | 11 | Test Case Catalog | 이후 작성 |
