@@ -71,7 +71,7 @@ impl Repository {
             let conn = connection
                 .lock()
                 .map_err(|_| ApplyError::Storage("poisoned DB lock".into()))?;
-            load_task(&conn, &task_id)?.ok_or_else(|| ApplyError::NotFound(task_id))
+            load_task(&conn, &task_id)?.ok_or(ApplyError::NotFound(task_id))
         })
         .await
         .map_err(|e| ApplyError::Storage(format!("join error: {e}")))?
