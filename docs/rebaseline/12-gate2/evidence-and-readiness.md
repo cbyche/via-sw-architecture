@@ -47,7 +47,8 @@ E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기
 | 실제 Qwen prompt token ledger·inference | NOT_RUN | prompt/schema 계약은 정의, 실제 직렬화·모델 실행은 미완료 |
 | S2S input transcript/word timing·control binding | UNVERIFIED | native 제공과 helper 필요 여부의 실제 계약 확인 필요 |
 | runtime/OS/hardware/artifact digest | NOT_CAPTURED | 같은 장비로 실제 trial 시작할 때 기록 |
-| W-10 28 cells의 구체 대상 / W-11 20 protected-unit corpus | ASSET_GAP | GitHub의 기존 11-D가 참조하는 working12/baseline.json은 base snapshot에 없음 |
+| W-10 28 cells의 구체 대상 | MATERIALIZED / STRUCTURAL_SMOKE | `benchmark/rebaseline/gate2/w10-containment-cells.json`에 6×4 external + 4 integration-fatal cell을 materialize. frozen contract를 controller가 검증하지만 대표 metric은 NOT_RUN |
+| W-11 20 protected-unit corpus | ASSET_GAP | 기존 11-D가 요구하는 20-unit oracle은 아직 machine-readable asset으로 materialize되지 않음 |
 | 기존 94 TC obligation의 terminal-outcome 완전성 | AUDIT_REQUIRED | 예: clarification 질문만으로 completion을 만점 처리하면 안 됨 |
 | measured score·winner | NOT_RUN | Gate 3 전 없음 |
 
@@ -59,8 +60,8 @@ E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기
 2. 실제 schema와 prompt를 직렬화하여 공식 tokenizer로 세고 runtime/template/model digest를 남긴다. IR B의 실제 stage/bypass/repair도 같은 ledger에 기록한다.
 3. S2S의 input transcript, final/partial, timestamps, output cancel 기능을 실제로 확인한다. 필요한 helper를 양 후보 동일하게 넣고 call graph·지연·resource를 갱신한다.
 4. Agent 기능 profile을 baseline/full-capability/limited로 분리한다. AF-v1의 revision/idempotency 보장과 실제 native 보장을 혼동하지 않는다.
-5. 누락된 W-10 cell 명세와 W-11 protected-unit oracle을 기존 11-D 의미로 materialize하고 모든 후보에 똑같이 동결한다. 요구 의미가 달라지면 조용히 메우지 않고 별도 rebaseline한다.
-6. W-09의 whole/fatal fault, W-10의 strict passed-cell 정의·반복·controller 동작을 구현하며 transient fatal과 지속 external failure를 구분한다. 11-D의 28-cell 분모·deadline은 임의 변경하지 않는다.
+5. W-10 cell 명세는 `benchmark/rebaseline/gate2/w10-containment-cells.json`으로 materialize했다. W-11 protected-unit oracle은 아직 남아 있다. 요구 의미가 달라지면 조용히 메우지 않고 별도 rebaseline한다.
+6. W-09 whole/fatal controller와 W-10 strict 28-cell controller를 구현했다. W-10 smoke는 transient integration fatal과 persistent external connection-refused/no-reply를 구분하고 frozen 28-cell 분모·반복·deadline을 검증한다. 단, external capability probe가 아직 deterministic fixture이므로 대표 W-10 metric은 NOT_RUN이며 실제 candidate endpoint adapter 연결 후에만 measurement-eligible하다.
 7. actual-model, deterministic structural replay, design-analysis 결과를 분리한다. W-07/08 설계 변경량은 실행 환경 없이도 별도 근거 원장을 작성할 수 있지만 그 경우 DESIGN_ANALYSIS로 표시한다.
 
 이들은 사용자가 모델 서버/API를 지금 준비하라는 요청이 아니다. 사용자 리뷰는 후보의 공정성·경계·업무상 타당성에 집중하고, 이 기술적 준비는 다음 구현/검증 산출물의 명시적 완료 조건으로 관리한다.
