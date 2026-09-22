@@ -5,6 +5,8 @@
 ```bash
 python benchmark/rebaseline/gate2/catalog_check.py --output results/gate2-review
 python -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v
+python benchmark/rebaseline/build_assets.py
+python benchmark/rebaseline/gate2/terminal_outcome_audit.py --root .
 python benchmark/rebaseline/gate2/w12_safety.py \
   --oracle benchmark/rebaseline/gate2/w12-safety-opportunities.json \
   --validate-only
