@@ -1,0 +1,358 @@
+{
+  "version": "G2-SENSITIVITY-v1",
+  "freeze_fingerprint": "9b8cf4bf8633e10b10c05b91f05bb5c31fc67bf29e4ae3bb07ae3d0b4ff7084d",
+  "weighted_total": null,
+  "global_winner": null,
+  "missing_values_imputed": false,
+  "coverage": {
+    "W-01": {
+      "status": "BLOCKED_NOT_RUN",
+      "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless timing is ineligible by the approved freeze policy."
+    },
+    "W-02": {
+      "status": "NOT_RUN",
+      "reason": "No representative Agent-acceptance trace was captured under this freeze."
+    },
+    "W-03": {
+      "status": "NOT_RUN",
+      "reason": "No representative event-to-visible delivery trace was captured under this freeze."
+    },
+    "W-04": {
+      "status": "BLOCKED_NOT_RUN",
+      "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless foreground timing is ineligible by the approved freeze policy."
+    },
+    "W-05": {
+      "status": "BLOCKED_NOT_RUN",
+      "reason": "The frozen OpenRouter runner is ready, but OPENROUTER_API_KEY was not available in the measurement environment."
+    },
+    "W-06": {
+      "status": "NOT_RUN",
+      "reason": "No representative continuity obligation trace was captured under this freeze."
+    },
+    "W-07": {
+      "status": "MEASURED",
+      "reason": "Frozen 9-change Agent DESIGN_ANALYSIS aggregate."
+    },
+    "W-08": {
+      "status": "MEASURED",
+      "reason": "Frozen 15-change non-Agent DESIGN_ANALYSIS aggregate."
+    },
+    "W-09": {
+      "status": "MEASURED",
+      "reason": "Representative 4 whole-process plus 2 integration-fatal recovery strata."
+    },
+    "W-10": {
+      "status": "MEASURED",
+      "reason": "Representative 28-cell containment matrix for shared and isolated execution."
+    },
+    "W-11": {
+      "status": "NOT_RUN",
+      "reason": "The exposure oracle is validated, but no representative protected-unit trace was captured under this freeze."
+    },
+    "W-12": {
+      "status": "NOT_RUN",
+      "reason": "The safety oracle is validated, but no representative action-opportunity trace was captured under this freeze."
+    }
+  },
+  "decisions": {
+    "IR-DP01": {
+      "metrics": [
+        {
+          "working_asr": "W-01",
+          "measurement_status": "BLOCKED_NOT_RUN",
+          "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless timing is ineligible by the approved freeze policy.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-02",
+          "measurement_status": "NOT_RUN",
+          "reason": "No representative Agent-acceptance trace was captured under this freeze.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-05",
+          "measurement_status": "BLOCKED_NOT_RUN",
+          "reason": "The frozen OpenRouter runner is ready, but OPENROUTER_API_KEY was not available in the measurement environment.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-08",
+          "measurement_status": "MEASURED",
+          "reason": "Frozen 15-change non-Agent DESIGN_ANALYSIS aggregate.",
+          "candidates": {
+            "A": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        }
+      ],
+      "differentiation_gate": {
+        "primary_metrics": [],
+        "passed": false,
+        "g1_product_relevance": "PASS",
+        "g2_natural_structural_causality": "PASS",
+        "g3_observable_sensitivity": "FAIL",
+        "g4_non_redundancy": "NOT_APPLICABLE",
+        "g5_evidence_traceability": "NOT_APPLICABLE"
+      },
+      "decision_status": "DEFERRED_INSUFFICIENT_DIFFERENTIATION",
+      "selected_candidate": null
+    },
+    "TASK-DP01": {
+      "metrics": [
+        {
+          "working_asr": "W-02",
+          "measurement_status": "NOT_RUN",
+          "reason": "No representative Agent-acceptance trace was captured under this freeze.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-04",
+          "measurement_status": "BLOCKED_NOT_RUN",
+          "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless foreground timing is ineligible by the approved freeze policy.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-08",
+          "measurement_status": "MEASURED",
+          "reason": "Frozen 15-change non-Agent DESIGN_ANALYSIS aggregate.",
+          "candidates": {
+            "A": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-09",
+          "measurement_status": "MEASURED",
+          "reason": "Representative 4 whole-process plus 2 integration-fatal recovery strata.",
+          "candidates": {
+            "A": {
+              "metric_value": 550.8333333333334,
+              "score": 5,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 551.1666666666666,
+              "score": 5,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        }
+      ],
+      "differentiation_gate": {
+        "primary_metrics": [],
+        "passed": false,
+        "g1_product_relevance": "PASS",
+        "g2_natural_structural_causality": "PASS",
+        "g3_observable_sensitivity": "FAIL",
+        "g4_non_redundancy": "NOT_APPLICABLE",
+        "g5_evidence_traceability": "NOT_APPLICABLE"
+      },
+      "decision_status": "DEFERRED_INSUFFICIENT_DIFFERENTIATION",
+      "selected_candidate": null
+    },
+    "AGENT-DP01": {
+      "metrics": [
+        {
+          "working_asr": "W-02",
+          "measurement_status": "NOT_RUN",
+          "reason": "No representative Agent-acceptance trace was captured under this freeze.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-03",
+          "measurement_status": "NOT_RUN",
+          "reason": "No representative event-to-visible delivery trace was captured under this freeze.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-07",
+          "measurement_status": "MEASURED",
+          "reason": "Frozen 9-change Agent DESIGN_ANALYSIS aggregate.",
+          "candidates": {
+            "A": {
+              "metric_value": 1.4444444444444444,
+              "score": 4,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 1.7777777777777777,
+              "score": 3,
+              "target_pass": true
+            }
+          },
+          "score_band_split": true,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": true
+        },
+        {
+          "working_asr": "W-08",
+          "measurement_status": "MEASURED",
+          "reason": "Frozen 15-change non-Agent DESIGN_ANALYSIS aggregate.",
+          "candidates": {
+            "A": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 1.9333333333333333,
+              "score": 4,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        }
+      ],
+      "differentiation_gate": {
+        "primary_metrics": [
+          "W-07"
+        ],
+        "passed": true,
+        "g1_product_relevance": "PASS",
+        "g2_natural_structural_causality": "PASS",
+        "g3_observable_sensitivity": "PASS",
+        "g4_non_redundancy": "PASS",
+        "g5_evidence_traceability": "PASS"
+      },
+      "decision_status": "ACCEPTED",
+      "selected_candidate": "A"
+    },
+    "EXEC-DP01": {
+      "metrics": [
+        {
+          "working_asr": "W-01",
+          "measurement_status": "BLOCKED_NOT_RUN",
+          "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless timing is ineligible by the approved freeze policy.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-04",
+          "measurement_status": "BLOCKED_NOT_RUN",
+          "reason": "ACTUAL_USER_DELIVERY endpoint is absent; headless foreground timing is ineligible by the approved freeze policy.",
+          "candidates": null,
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-09",
+          "measurement_status": "MEASURED",
+          "reason": "Representative 4 whole-process plus 2 integration-fatal recovery strata.",
+          "candidates": {
+            "A": {
+              "metric_value": 550.8333333333334,
+              "score": 5,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 374.6666666666667,
+              "score": 5,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        },
+        {
+          "working_asr": "W-10",
+          "measurement_status": "MEASURED",
+          "reason": "Representative 28-cell containment matrix for shared and isolated execution.",
+          "candidates": {
+            "A": {
+              "metric_value": 100.0,
+              "score": 5,
+              "target_pass": true
+            },
+            "B": {
+              "metric_value": 100.0,
+              "score": 5,
+              "target_pass": true
+            }
+          },
+          "score_band_split": false,
+          "target_pass_split": false,
+          "opposite_direction_tradeoff": false,
+          "g3_observable_sensitivity": false
+        }
+      ],
+      "differentiation_gate": {
+        "primary_metrics": [],
+        "passed": false,
+        "g1_product_relevance": "PASS",
+        "g2_natural_structural_causality": "PASS",
+        "g3_observable_sensitivity": "FAIL",
+        "g4_non_redundancy": "NOT_APPLICABLE",
+        "g5_evidence_traceability": "NOT_APPLICABLE"
+      },
+      "decision_status": "DEFERRED_INSUFFICIENT_DIFFERENTIATION",
+      "selected_candidate": null
+    }
+  }
+}
