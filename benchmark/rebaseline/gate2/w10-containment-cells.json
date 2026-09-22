@@ -33,11 +33,12 @@
   "smoke_profile": {
     "evidence_level": "CI_SMOKE_ONLY",
     "metric_eligible": false,
+    "note": "Smoke timing is intentionally relaxed for candidate-process IPC/Agent probes and is not used for the W-10 representative metric.",
     "external": {
       "repeats_per_mode": 1,
-      "fault_hold_ms": 50,
-      "probe_offsets_ms": [2, 10, 20],
-      "capability_deadline_ms": 5
+      "fault_hold_ms": 200,
+      "probe_offsets_ms": [5, 25, 50],
+      "capability_deadline_ms": 500
     },
     "integration_fatal": {
       "repeats": 1,

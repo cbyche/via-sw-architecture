@@ -7,7 +7,7 @@ use std::{
 };
 use tokio::{
     io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader, Lines},
-    net::{TcpListener, TcpStream},
+    net::TcpListener,
     process::{Child, ChildStdin, ChildStdout, Command},
     time::{Instant, sleep, sleep_until, timeout},
 };
@@ -30,13 +30,13 @@ impl Profile {
             "smoke" => Ok(Self {
                 name: "smoke",
                 external_repeats: 1,
-                fault_hold: Duration::from_millis(50),
+                fault_hold: Duration::from_millis(200),
                 probe_offsets: [
-                    Duration::from_millis(2),
-                    Duration::from_millis(10),
-                    Duration::from_millis(20),
+                    Duration::from_millis(5),
+                    Duration::from_millis(25),
+                    Duration::from_millis(50),
                 ],
-                capability_deadline: Duration::from_millis(5),
+                capability_deadline: Duration::from_millis(500),
                 fatal_repeats: 1,
                 fatal_deadline: Duration::from_millis(2000),
                 metric_eligible: false,
@@ -125,6 +125,24 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     anyhow::ensure!(
         frozen["integration_fatal"]["repeats"] == 5,
         "W-10 fatal repeat count changed"
+    );
+
+    let smoke = &spec["smoke_profile"];
+    anyhow::ensure!(matches!(smoke["metric_eligible"].as_bool(), Some(false)), "W-10 smoke must remain metric-ineligible");
+    anyhow::ensure!(smoke["external"]["repeats_per_mode"] == 1, "W-10 smoke repeat count changed");
+    anyhow::ensure!(smoke["external"]["fault_hold_ms"] == 200, "W-10 smoke fault hold changed");
+    anyhow::ensure!(
+        smoke["external"]["probe_offsets_ms"] == json!([5, 25, 50]),
+        "W-10 smoke probe offsets changed"
+    );
+    anyhow::ensure!(
+        smoke["external"]["capability_deadline_ms"] == 500,
+        "W-10 smoke capability deadline changed"
+    );
+    anyhow::ensure!(smoke["integration_fatal"]["repeats"] == 1, "W-10 smoke fatal repeat count changed");
+    anyhow::ensure!(
+        smoke["integration_fatal"]["capability_deadline_ms"] == 2000,
+        "W-10 smoke fatal deadline changed"
     );
 
     let capabilities = spec["capabilities"]
@@ -216,39 +234,20 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     Ok(())
 }
 
-async fn fixture_capability(capability: &str) -> anyhow::Result<&'static str> {
-    Ok(match capability {
-        "CAP-TEXT-INTERACTION" => "text:ready",
-        "CAP-S2S-DIRECT" => "s2s:direct-ready",
-        "CAP-SEMANTIC-TEXT" => "semantic:ready",
-        "CAP-BOUNDED-DOC-READ" => "doc-budget:education-budget",
-        "CAP-BOUNDED-MAIL-READ" => "mail:education-schedule",
-        "CAP-AGENT-DOC-TASK" => "agent-doc:T-PPT:running",
-        "CAP-AGENT-MAIL-TASK" => "agent-mail:T-MAIL:running",
-        "CAP-LOCAL-MEMORY-READ" => "memory:table-first",
-        "CAP-LOCAL-TASK-CARD-READ" => "task:T-PPT:running",
-        other => anyhow::bail!("no deterministic W-10 fixture for {other}"),
-    })
-}
-
-async fn run_external_trial(
+async fn start_external_fault_fixture(
     mode: &str,
-    capability: &str,
-    expected: &str,
-    profile: Profile,
-) -> anyhow::Result<bool> {
-    let mut no_reply: Option<(TcpStream, tokio::task::JoinHandle<()>)> = None;
-    let fault_observed = match mode {
+    hold: Duration,
+) -> anyhow::Result<(String, Option<tokio::task::JoinHandle<()>>)> {
+    match mode {
         "connection_refused" => {
             let listener = TcpListener::bind("127.0.0.1:0").await?;
             let address = listener.local_addr()?;
             drop(listener);
-            TcpStream::connect(address).await.is_err()
+            Ok((address.to_string(), None))
         }
         "no_reply" => {
             let listener = TcpListener::bind("127.0.0.1:0").await?;
             let address = listener.local_addr()?;
-            let hold = profile.fault_hold;
             let server = tokio::spawn(async move {
                 if let Ok((mut socket, _)) = listener.accept().await {
                     let mut request = [0_u8; 16];
@@ -256,28 +255,79 @@ async fn run_external_trial(
                     sleep(hold).await;
                 }
             });
-            let mut stream = TcpStream::connect(address).await?;
-            stream.write_all(b"w10").await?;
-            no_reply = Some((stream, server));
-            true
+            Ok((address.to_string(), Some(server)))
         }
         other => anyhow::bail!("unknown external W-10 fault mode {other}"),
-    };
+    }
+}
+
+async fn run_external_trial(
+    host: &Path,
+    worker: &Path,
+    candidate_mode: &str,
+    fault_mode: &str,
+    failed_dependency: &str,
+    capability: &str,
+    expected: &str,
+    profile: Profile,
+) -> anyhow::Result<bool> {
+    let isolated = candidate_mode == "isolated";
+    let mut session = HostSession::spawn(host, candidate_mode, isolated.then_some(worker)).await?;
+    let ping = timeout(
+        profile.capability_deadline,
+        session.request(json!({"op":"ping"})),
+    )
+    .await??;
+    anyhow::ensure!(
+        matches!(ping, Some(value) if value["status"] == "pong"),
+        "W-10 candidate host did not start"
+    );
+
+    let (address, fault_server) =
+        start_external_fault_fixture(fault_mode, profile.fault_hold).await?;
+    let fault = timeout(
+        profile.capability_deadline,
+        session.request(json!({
+            "op":"w10_begin_external_fault",
+            "mode":fault_mode,
+            "failed_dependency":failed_dependency,
+            "address":address
+        })),
+    )
+    .await??;
+    let fault_observed = matches!(
+        fault,
+        Some(value)
+            if value["status"] == "w10_fault_started"
+                && value["mode"] == fault_mode
+                && value["fault_observed"] == true
+    );
 
     let start = Instant::now();
     let mut probes_ok = fault_observed;
     for offset in profile.probe_offsets {
         sleep_until(start + offset).await;
-        let observed = timeout(profile.capability_deadline, fixture_capability(capability)).await;
-        probes_ok &= matches!(observed, Ok(Ok(value)) if value == expected);
+        let observed = timeout(
+            profile.capability_deadline,
+            session.request(json!({
+                "op":"w10_capability_probe",
+                "capability":capability
+            })),
+        )
+        .await??;
+        probes_ok &= matches!(
+            observed,
+            Some(value)
+                if value["status"] == "w10_capability_probe"
+                    && value["capability"] == capability
+                    && value["value"] == expected
+        );
     }
 
-    if let Some((mut stream, server)) = no_reply {
-        let mut byte = [0_u8; 1];
-        let still_no_reply = timeout(profile.capability_deadline, stream.read(&mut byte))
-            .await
-            .is_err();
-        probes_ok &= still_no_reply;
+    if fault_mode == "no_reply" {
+        sleep_until(start + profile.fault_hold).await;
+    }
+    if let Some(server) = fault_server {
         server.abort();
     }
     Ok(probes_ok)
@@ -330,6 +380,29 @@ impl HostSession {
     }
 }
 
+async fn probe_core_after_fault(
+    session: &mut HostSession,
+    capability: &str,
+    expected: &str,
+    deadline: Duration,
+) -> anyhow::Result<bool> {
+    if deadline.is_zero() {
+        return Ok(false);
+    }
+    let probe = timeout(
+        deadline,
+        session.request(json!({"op":"core_probe","capability":capability})),
+    )
+    .await;
+    Ok(matches!(
+        probe,
+        Ok(Ok(Some(value)))
+            if value["status"] == "core_probe"
+                && value["capability"] == capability
+                && value["value"] == expected
+    ))
+}
+
 async fn integration_trial(
     host: &Path,
     worker: &Path,
@@ -346,6 +419,7 @@ async fn integration_trial(
         "W-10 candidate host did not start"
     );
 
+    let start = Instant::now();
     let abort = timeout(
         deadline,
         session.request(serde_json::to_value(WorkerRequest::AbortHost)?),
@@ -359,7 +433,12 @@ async fn integration_trial(
             "shared-process fatal fault unexpectedly returned normally"
         );
         let _ = session.child.wait().await?;
-        return Ok(false);
+        let remaining = deadline.saturating_sub(start.elapsed());
+        if remaining.is_zero() {
+            return Ok(false);
+        }
+        let mut restarted = HostSession::spawn(host, "shared", None).await?;
+        return probe_core_after_fault(&mut restarted, capability, expected, remaining).await;
     }
 
     let reply = abort??;
@@ -371,19 +450,8 @@ async fn integration_trial(
         session.child.try_wait()?.is_none(),
         "isolated Core process exited after integration worker fatal fault"
     );
-
-    let probe = timeout(
-        deadline,
-        session.request(json!({"op":"core_probe","capability":capability})),
-    )
-    .await??;
-    Ok(matches!(
-        probe,
-        Some(value)
-            if value["status"] == "core_probe"
-                && value["capability"] == capability
-                && value["value"] == expected
-    ))
+    let remaining = deadline.saturating_sub(start.elapsed());
+    probe_core_after_fault(&mut session, capability, expected, remaining).await
 }
 
 pub async fn run(
@@ -397,44 +465,54 @@ pub async fn run(
     let expected = expected_capabilities(&spec)?;
     let profile = Profile::from_name(&profile_name)?;
 
-    let mut external_results = Vec::new();
-    for cell in spec["external_cells"]
-        .as_array()
-        .ok_or_else(|| anyhow::anyhow!("external_cells missing"))?
-    {
-        let cell_id = cell["id"].as_str().unwrap();
-        let capability = cell["unaffected_capability"].as_str().unwrap();
-        let expected_token = expected
-            .get(capability)
-            .ok_or_else(|| anyhow::anyhow!("missing expected token for {capability}"))?;
-        let mut trials = Vec::new();
-        for mode in ["connection_refused", "no_reply"] {
-            for repeat in 0..profile.external_repeats {
-                let pass = run_external_trial(mode, capability, expected_token, profile).await?;
-                trials.push(json!({
-                    "mode": mode,
-                    "repeat": repeat + 1,
-                    "pass": pass
-                }));
-            }
-        }
-        let pass = trials.iter().all(|trial| trial["pass"] == true);
-        external_results.push(json!({
-            "cell_id": cell_id,
-            "failed_dependency": cell["failed_dependency"],
-            "unaffected_capability": capability,
-            "pass": pass,
-            "trials": trials
-        }));
-    }
-
-    let external_passed = external_results
-        .iter()
-        .filter(|cell| cell["pass"] == true)
-        .count();
-
     let mut candidate_results = Vec::new();
-    for mode in ["shared", "isolated"] {
+    for candidate_mode in ["shared", "isolated"] {
+        let mut external_results = Vec::new();
+        for cell in spec["external_cells"]
+            .as_array()
+            .ok_or_else(|| anyhow::anyhow!("external_cells missing"))?
+        {
+            let cell_id = cell["id"].as_str().unwrap();
+            let failed_dependency = cell["failed_dependency"].as_str().unwrap();
+            let capability = cell["unaffected_capability"].as_str().unwrap();
+            let expected_token = expected
+                .get(capability)
+                .ok_or_else(|| anyhow::anyhow!("missing expected token for {capability}"))?;
+            let mut trials = Vec::new();
+            for fault_mode in ["connection_refused", "no_reply"] {
+                for repeat in 0..profile.external_repeats {
+                    let pass = run_external_trial(
+                        &host,
+                        &worker,
+                        candidate_mode,
+                        fault_mode,
+                        failed_dependency,
+                        capability,
+                        expected_token,
+                        profile,
+                    )
+                    .await?;
+                    trials.push(json!({
+                        "mode": fault_mode,
+                        "repeat": repeat + 1,
+                        "pass": pass
+                    }));
+                }
+            }
+            let pass = trials.iter().all(|trial| trial["pass"] == true);
+            external_results.push(json!({
+                "cell_id": cell_id,
+                "failed_dependency": failed_dependency,
+                "unaffected_capability": capability,
+                "pass": pass,
+                "trials": trials
+            }));
+        }
+        let external_passed = external_results
+            .iter()
+            .filter(|cell| cell["pass"] == true)
+            .count();
+
         let mut fatal_results = Vec::new();
         for cell in spec["integration_fatal_cells"]
             .as_array()
@@ -450,7 +528,7 @@ pub async fn run(
                 let pass = integration_trial(
                     &host,
                     &worker,
-                    mode,
+                    candidate_mode,
                     capability,
                     expected_token,
                     profile.fatal_deadline,
@@ -466,34 +544,38 @@ pub async fn run(
                 "trials":trials
             }));
         }
+
         let fatal_passed = fatal_results
             .iter()
             .filter(|cell| cell["pass"] == true)
             .count();
         let passed_cells = external_passed + fatal_passed;
         candidate_results.push(json!({
-            "exec_candidate":mode,
+            "exec_candidate":candidate_mode,
             "external_cells_passed":external_passed,
             "integration_fatal_cells_passed":fatal_passed,
             "passed_cells":passed_cells,
-            "structural_smoke_retention_pct":100.0 * passed_cells as f64 / 28.0,
+            "controller_retention_pct":100.0 * passed_cells as f64 / 28.0,
+            "external_cells":external_results,
             "fatal_cells":fatal_results
         }));
     }
 
     Ok(json!({
         "status":"PASS",
-        "scope":"W-10 28-cell containment controller structural smoke",
+        "scope":"W-10 28-cell containment controller candidate-endpoint smoke",
         "spec":spec_path,
         "spec_version":spec["version"],
         "profile":profile.name,
         "frozen_contract_validated":true,
-        "external_cells":external_results,
         "candidates":candidate_results,
         "w10_representative_metric":"NOT_RUN",
         "w10_metric_eligible":profile.metric_eligible,
-        "external_capability_evidence":"DETERMINISTIC_FIXTURE",
-        "integration_fatal_evidence":"ACTUAL_SHARED_VS_ISOLATED_PROCESS_BOUNDARY",
-        "note":"Smoke validates the frozen 28-cell controller shape and process-fatal containment. Final W-10 requires all frozen repeats/timing and candidate endpoint adapters; smoke percentages are not the representative metric."
+        "candidate_endpoint_adapter_ready":true,
+        "measurement_freeze_required":true,
+        "external_capability_evidence":"ACTUAL_CANDIDATE_HOST_PROBE_SURFACE_WITH_DETERMINISTIC_DEPENDENCY_FIXTURES",
+        "external_fault_evidence":"CANDIDATE_INITIATED_SOCKET_CONNECTION_REFUSED_OR_NO_REPLY",
+        "integration_fatal_evidence":"ACTUAL_SHARED_HOST_RESTART_VS_ISOLATED_WORKER_RESTART_WITH_COMMON_DEADLINE",
+        "note":"Smoke now routes external-fault probes through each candidate host and gives shared-process containment the same deadline via whole-host restart. Final W-10 representative measurement remains NOT_RUN until Measurement Freeze approval and the frozen repeats/timing are executed."
     }))
 }
