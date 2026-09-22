@@ -29,13 +29,13 @@
 
 ### IR fairness
 
-**같게 고정:** Qwen3-8B Q4_K_M artifact, llama.cpp build, tokenizer/template, non-thinking, sampling contract, 같은 run seed, canonical TC, ContextProvider source corpus, scripted clarification, validator repair limit 2, Context acquisition limit 2.
+**같게 고정:** OpenRouter `qwen/qwen3-8b`, provider `alibaba`, fallback disabled, non-thinking, sampling contract, 같은 run seed, canonical TC, ContextProvider source corpus, scripted clarification, validator repair limit 2, Context acquisition limit 2. Hosted latency는 target-PC/local absolute latency로 해석하지 않는다.
 
 **다른 것:** A는 joint decision 1개 topology, B는 Grounding→Association→Handling의 독립 contract topology다. B의 Stage 2/3에 raw source 전체를 반복 전달하지 않고 이전 stage의 provenance-preserving output과 해당 stage가 소유한 evidence만 전달한다.
 
 B의 cross-stage correction과 추가 model call은 B의 구조 비용이다. 반대로 A의 큰 joint prompt/schema와 joint repair도 실제 비용으로 남긴다.
 
-**아직 없음:** actual Qwen execution, exact token ledger, W-05 5-run/case 결과. 실제 모델 실행은 Measurement Freeze 승인 fingerprint가 없으면 runner가 거부한다.
+**아직 없음:** representative hosted Qwen execution과 W-05 5-run/case 결과. runner는 Measurement Freeze 승인 fingerprint와 frozen hosted model profile이 없으면 실제 호출을 거부한다.
 
 ## 3. TASK-DP01 — Task State Authority & Supervision
 
@@ -125,7 +125,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | W-10 candidate endpoint containment | bench/containment.rs + gate2-host W-10 probe surface | IMPLEMENTED_CONTROLLER / candidate-initiated socket faults, shared/isolated endpoint probes, metric-ineligible CI smoke |
 | Trace primitive | runtime/trace.rs + Python timing contract | PARTIAL |
 | S2S elapsed-time replay | S2sDelayTrace, timing contract | CONTRACT_READY / measured trace missing |
-| Model semantic path | Python IR harness + frozen prompts/schema | HARNESS_READY / actual model missing |
+| Model semantic path | Python IR harness + frozen prompts/schema + OpenRouter hosted reference adapter | HARNESS_READY / representative hosted run NOT_RUN |
 | Voice/UI actual delivery | 없음 | NOT_IMPLEMENTED |
 | OS Context capture / production Context Broker | canonical fixture | FIXTURE_ONLY |
 | Policy/Consent/Memory production service | safety/context fixture | FIXTURE_ONLY |
@@ -160,13 +160,13 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | 최신 full-lifecycle 코드의 macOS+Ubuntu CI green | 현재 source revision 검증 | 자동 CI |
 | tracked Cargo.lock | dependency graph를 Measurement Freeze fingerprint에 포함 | **IMPLEMENTED** — source에 고정하고 local/CI/audit를 `--locked`로 강제 |
 | Mac 실제 environment manifest | 실제 measurement host 식별 | 사용자 Mac에서 1회 실행 |
-| Qwen artifact/runtime/tokenizer hash | IR A/B 동일 dependency 증명 | 사용자 Mac setup 후 자동 capture |
+| Hosted Qwen model/provider/request profile | IR A/B 동일 dependency 증명 | **IMPLEMENTED CONTRACT** — `qwen/qwen3-8b`, provider `alibaba`, fallback off; prompt/schema/sampling은 freeze fingerprint에 포함 |
 | measured S2S delay trace 또는 synthetic 사용 범위 승인 | simulated E2E provenance | 리뷰 시 결정. TEST_ONLY trace는 score 금지 |
 | W-04 foreground/background measurement adapter | 1 vs 4 active Task에서 동일한 6개 W-01 foreground strata·endpoint·trial count를 유지 | **BACKGROUND_DRIVER_IMPLEMENTED / FOREGROUND_CONTRACT_READY / OBSERVATION_ADAPTER_READY / ACTUAL_DELIVERY_SOURCE_PENDING** — `w01_observation_adapter.py`가 candidate가 임의의 `first_meaningful_output`을 선언하지 못하게 하고 raw `user_input_end`, `valid_text_start`, `valid_audio_start`에서 endpoint를 파생한다. Voice는 Text/audio max, Text-only는 valid Text, TC-06.2는 clarification kind를 강제하며 correctness 실패는 latency에서 censor한다. CI smoke/headless sample은 항상 representative metric·p95·score 비자격이며 실제 Text/audio/user-visible event source wiring은 아직 필요 |
 | W-09 6-strata recovery correctness controller | whole-VIA process-abort 4 strata + integration-host fatal 2 strata의 identity/state/control 복구 | **IMPLEMENTED / CI_SMOKE_GREEN**; 최종 metric용 500ms restart delay·100 scored trials/stratum·p95 aggregation은 freeze 후 runner에서 실행 필요 |
 | W-10 28-cell containment controller + endpoint adapters | containment representative metric | **CONTROLLER+ENDPOINT_ADAPTER_IMPLEMENTED / FROZEN_RUN_PENDING** — candidate host가 external socket fault를 실제 시작하고 같은 host의 unaffected capability를 probe한다. Agent probes는 shared backend/isolated worker를 경유하고 integration-fatal은 shared whole-host restart와 isolated worker restart에 같은 deadline을 적용한다. CI smoke는 별도 relaxed timing의 `metric_eligible=false` profile이며, frozen 30s·5회·2/10/20s·5s profile과 대표값 산출은 Measurement Freeze 이후에만 실행 |
 | 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
 | W-07/08 24 change raw analysis | change locality | **RAW_DESIGN_ANALYSIS_READY / FREEZE_AGGREGATION_PENDING** — `w07-w08-change-rules.json`에 M 9 / A 9 / C 6의 M/A/R 근거를 고정하고 `change_analysis.py`가 현재 Git HEAD+`catalog_fingerprint` 기준으로 192 raw row를 검증한다. 기능 유지는 DESIGN_ARGUMENT_ONLY이며 W-07/W-08 평균·score는 Measurement Freeze 승인 후 frozen revision에서만 계산 |
-| actual Qwen run | W-05/IR latency | freeze 승인 후 사용자 Mac |
+| hosted Qwen reference run | W-05/IR model-call comparison | **FROZEN_RUN_PENDING** — freeze 승인 후 동일 OpenRouter profile로 실행; target-PC/local absolute latency 주장 금지 |
 
 따라서 현재 상태는 **Architecture candidate implementation이 상당 부분 executable해진 상태**지만, 아직 MEASUREMENT_READY라고 선언하지 않는다. blocker를 닫거나 리뷰에서 명시적 범위를 승인한 뒤 measurement revision을 freeze한다.

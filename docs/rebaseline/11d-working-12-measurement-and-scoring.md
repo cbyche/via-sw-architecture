@@ -57,7 +57,7 @@ W-01~09·11은 3점 이상이면 제안 target 충족, W-10/12는 5점만 무결
 
 한 PC·한 활성 사용자·한국어 Voice/Text, 모니터 1/2개, 같은 원천 자료/권한/Agent 계약을 사용한다(06 FA-01~16). 05의 18 UC·94 variation, 07의 24 변화, 10의 요소 정의는 유지한다. 원천 관측과 평가 oracle은 분리한다. 이전에 철회한 nonce/opaque counterfactual scoring fixture는 추가하지 않는다.
 
-Semantic reference는 Qwen3-8B Q4_K_M non-thinking, S2S reference는 Qwen3-Omni-30B-A3B-Instruct다. 실제 실행에서는 동일 역할에 같은 artifact/runtime/decoding을 적용한다. structured output prompt와 호출 topology는 후보에 따라 달라질 수 있고 tuning 기회는 동일하게 준다. `deterministic 설정`이 실행 결과의 완전 결정성을 보장한다는 주장도 하지 않는다.
+Semantic reference는 **Qwen3-8B non-thinking**이며 final comparative semantic execution은 frozen OpenRouter hosted profile(`qwen/qwen3-8b`, provider `alibaba`, fallback disabled)을 사용한다. 이는 빠른 재현을 위한 **MEASURED_MODEL_REFERENCE**이며 local Q4_K_M 또는 target Windows PC absolute model latency로 주장하지 않는다. A/B 모두 같은 model/provider/sampling profile을 사용한다. provider-side JSON-schema enforcement를 전제로 하지 않고 JSON object를 받아 VIA validator/repair가 동일 schema를 강제한다. S2S reference는 Qwen3-Omni-30B-A3B-Instruct다. structured output prompt와 호출 topology는 후보에 따라 달라질 수 있고 tuning 기회는 동일하게 준다. `deterministic 설정`이 실행 결과의 완전 결정성을 보장한다는 주장도 하지 않는다.
 
 비교 환경의 원격 RTT는 FA-11의 50ms, sensitivity는 0/150ms다. **100Mbps 직렬화 대역폭은 추가 합성 시험 가정**이며 실제 네트워크 측정값이 아니다. 실제 payload 크기와 transmission/encoding span이 없는 추정은 RTT 소계까지만 표시한다. streaming 중 이미 전송·처리된 입력을 발화 종료 이후 비용으로 이중 계산하지 않는다. Local IPC 비용도 0이라고 가정하지 않는다.
 

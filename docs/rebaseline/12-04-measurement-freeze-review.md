@@ -1,62 +1,88 @@
-# 12-04. Measurement Freeze Review — Draft
+# 12-04. Measurement Freeze Review — Readiness Gate
 
-> 상태: **PRE-BENCHMARK DRAFT**. 이 문서의 사용자 승인 전 candidate별 p95, W-05 실제 모델 점수, 0~5 score, winner를 산출하지 않는다.
+> 상태: **PRE-BENCHMARK REVIEW INPUT**. 이 문서의 승인 전 candidate별 representative metric, 0~5 score, ranking/winner를 산출하지 않는다.
+> 기준 branch: `architecture-rebaseline-20260918`.
 
-## 1. 리뷰 대상
+## 1. Freeze 판정 체계
 
-| 항목 | Freeze 시 확인할 내용 | 현재 상태 |
+| 상태 | 의미 |
+|---|---|
+| **READY** | 비교 계약/구현이 freeze 입력으로 충분함 |
+| **READY_WITH_LIMITATION** | 비교는 가능하지만 주장 범위를 제한해야 함 |
+| **REVIEW_DECISION_REQUIRED** | 실행 전에 범위/증거 사용 여부를 명시적으로 결정해야 함 |
+| **POST_FREEZE_EXECUTION** | 구현/계약은 준비됐고 representative run만 freeze 뒤 수행 |
+| **BLOCKED** | freeze 전에 반드시 닫아야 함 |
+
+## 2. 현재 readiness
+
+| 항목 | 현재 상태 | Freeze 판단 |
 |---|---|---|
-| 4 DP 실제 코드 | IR / TASK / AGENT / EXEC가 Gate 2 C/I/S/D와 일치 | IN_PROGRESS |
-| 공통 fixed rule | FP-INT01 S2S Direct Fast Path | DOCUMENTED |
-| 공통 tactic | TASK-T01 Event-first + Query Reconciliation | DOCUMENTED |
-| Agent fixture | P/Q가 동일 능력, 다른 lifecycle shape만 제공 | INITIAL_IMPLEMENTATION |
-| Repository | TASK A/B 동일 SQLite/WAL/FULL와 command dedup | INITIAL_IMPLEMENTATION |
-| EXEC | same-process vs child-process boundary | INITIAL_IMPLEMENTATION |
-| S2S timing | 0ms 금지, paired frozen trace, VIA-added와 simulated E2E 분리 | CONTRACT_DEFINED |
-| W-01/W-04 observation | 6개 frozen foreground strata, raw endpoint derivation, correctness censoring, headless score 금지 | ADAPTER_READY / ACTUAL_DELIVERY_SOURCE_PENDING |
-| IR prompts/schema | Integrated + Stage1/2/3 frozen input contract | DRAFT_IMPLEMENTED |
-| IR actual model | Qwen3-8B Q4_K_M 동일 artifact/runtime | NOT_RUN |
-| Mac environment | hardware/OS/toolchain manifest | USER_RUN_REQUIRED |
-| candidate order | 10 warmup + 100 scored, ABBA/BAAB balanced blocks | DRAFT_DEFINED |
-| 12-ASR raw ledger | null/NOT_RUN 유지 | NOT_RUN |
-| W-07/W-08 24-change raw ledger | M/A/R C/I/S/D count와 설계 유지 근거; 평균·score는 아직 금지 | DESIGN_ANALYSIS_READY / AGGREGATION_NOT_RUN |
-| score/winner | 산출 금지 | NOT_RUN |
+| 4 Core DP code-to-C/I/S/D mapping | `12-04a`에 실제 구현 mapping 존재 | **READY** |
+| TASK-DP01 A/B | 동일 SQLite/WAL/FULL + shared service vs per-Task supervisor | **READY** |
+| AGENT-DP01 A/B | 동일 P/Q capability + edge normalized vs Core-visible typed | **READY** |
+| EXEC-DP01 A/B | same-process vs child-process boundary | **READY_WITH_LIMITATION** — prototype IPC의 절대 Windows 성능을 주장하지 않음 |
+| IR-DP01 A/B prompt/schema/controller | integrated vs staged contract + client validation/repair | **READY** |
+| Semantic reference execution | OpenRouter `qwen/qwen3-8b`, provider `alibaba`, fallback off | **READY_WITH_LIMITATION** — `MEASURED_MODEL_REFERENCE`; local/target-PC absolute latency가 아님 |
+| Working-12 machine scoring contract | `benchmark/rebaseline/working12/baseline.json` | **READY** |
+| W-07/W-08 24-change raw ledger | 192 DESIGN_ANALYSIS rows; aggregation pre-freeze 금지 | **READY / POST_FREEZE_EXECUTION** |
+| W-09 recovery controller | 6-strata controller smoke complete | **POST_FREEZE_EXECUTION** |
+| W-10 containment controller | 28-cell candidate endpoint controller smoke complete | **POST_FREEZE_EXECUTION** |
+| W-11 protected-unit oracle | 20 unit corpus/evaluator | **READY** |
+| W-12 safety oracle | 24 opportunity corpus/evaluator | **READY** |
+| 94 TC executable-slice mapping / terminal outcome audit | CI guard 존재 | **READY** |
+| S2S final evidence | TEST_ONLY trace는 score 불가 | **REVIEW_DECISION_REQUIRED** |
+| W-01/W-04 actual user-visible delivery source | raw adapter는 준비, 실제 source wiring은 미완료 | **REVIEW_DECISION_REQUIRED** |
+| representative metric/score ledger | null / NOT_RUN | **READY — 반드시 이 상태로 freeze review에 진입** |
 
-## 2. S2S 시간
+## 3. Hosted Qwen reference의 정확한 의미
 
-Voice path에서는 `user_input_end → S2S route/direct event available` 시간을 별도 dependency trace로 재생한다. 동일 paired trial의 A/B는 동일 sample을 사용한다.
+IR A/B는 동일한 hosted Qwen3-8B profile을 controlled dependency로 사용한다.
 
-- `VIA_added_latency`: VIA prototype에서 실제 계측.
-- `SIMULATED_E2E_latency`: frozen S2S replay + VIA actual spans.
-- TEST_ONLY trace는 smoke 전용이며 0~5 score에 사용할 수 없다.
-- 실제 measured S2S trace를 나중에 넣을 때 candidate code·trial order를 바꾸지 않는다.
+- model: `qwen/qwen3-8b`
+- OpenRouter provider: `alibaba`
+- provider fallback: disabled
+- non-thinking: `/no_think` + frozen sampling
+- structured response: JSON object + VIA client-side schema validation/repair
+- API key: environment variable only; repository/evidence에 저장 금지
 
-## 3. Mac 측정과 thermal drift
+이 실행에서 얻은 W-05 semantic result와 model-call critical-path latency는 **동일 hosted reference condition의 Architecture A/B 비교 근거**로 사용할 수 있다. 그러나 이를 local Q4_K_M 또는 target Windows PC의 absolute model latency라고 기술하지 않는다.
 
-Target product platform과 measurement platform을 분리한다. 사용자의 Mac은 동일 A/B 비교의 measurement host이며 Windows에서 측정했다고 표기하지 않는다.
+## 4. Freeze 시 반드시 잠그는 것
 
-MacBook Air는 fanless이므로 A를 몰아 실행한 뒤 B를 몰아 실행하지 않는다. 각 stratum에서 `ABBA`, `BAAB` block을 교대로 사용하고 pre/post `pmset -g therm` 및 전체 elapsed time을 manifest에 남긴다. 절대 온도 sensor가 없다는 이유로 임의 temperature threshold를 만들지 않는다.
+1. exact Git source fingerprint
+2. Working-12 metric/target/0~5 boundary
+3. four DP A/B element inventory와 fairness rules
+4. 94 TC / W-10 / W-11 / W-12 oracle
+5. W-07/W-08 raw change rules
+6. IR prompt/schema/validation/repair limit
+7. hosted model id/provider/fallback/non-thinking/sampling contract
+8. trial count/order 및 timeout/censoring rules
+9. S2S와 actual-delivery evidence scope decision
 
-## 4. Qwen3-8B 실행 조건
+`freeze.py` fingerprint와 approval fingerprint가 달라지면 comparative execution/scoring을 거부한다.
 
-- official `Qwen/Qwen3-8B-GGUF` revision `6a569868d07d3bd59e8b97fb001bf8c0b254bb20`.
-- `Qwen3-8B-Q4_K_M.gguf` SHA256 `d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785`.
-- 16K context, parallel 1, non-thinking.
-- Qwen 권고 non-thinking sampling을 사용하고 동일 seed schedule을 A/B에 적용한다.
-- llama.cpp runtime binary/version/hash는 실제 실행 전에 capture하고 고정한다.
-- structured JSON은 client-side parse/schema smoke까지 확인한다. HTTP 200 자체를 schema 준수 증거로 보지 않는다.
+## 5. Freeze 전 남은 review decision
 
-## 5. 다음 리뷰에서 반드시 보여줄 것
+### D-1. S2S
+실측 S2S trace가 없으면 synthetic replay는 `SIMULATED_E2E`로만 유지한다. final absolute product latency score에 사용할지 여부를 승인 전에 결정한다.
 
-1. CI green commit과 macOS/Ubuntu smoke 결과.
-2. 실제 C/I/S/D ↔ source file mapping.
-3. Candidate fairness matrix.
-4. fault/restart smoke 결과와 아직 미구현인 fault.
-5. IR prompt/schema와 model runner dry-run output 구조.
-6. Mac bootstrap/environment capture command.
-7. S2S TEST_ONLY trace와 measured-trace schema.
-8. trial-order generator output.
-9. 모든 BLOCKED/UNVERIFIED 항목.
-10. **아직 비어 있는 candidate metric/score ledger.**
+### D-2. W-01/W-04 delivery source
+실제 Text/audio/user-visible endpoint가 준비되지 않으면 해당 representative metric은 `BLOCKED/NOT_RUN`으로 남기고 headless smoke를 score로 승격하지 않는다.
 
-이 리뷰 뒤 frozen Git revision에서만 comparative benchmark를 시작한다.
+### D-3. Target-PC external validity
+Hosted Qwen과 macOS/Linux process prototype 결과는 Architecture 비교 근거이며 target Windows PC absolute performance를 증명하지 않는다.
+
+## 6. Freeze 승인 후 순서
+
+```text
+approved source fingerprint
+  → representative raw execution
+  → W-01..W-12 metric materialization
+  → Working-12 fixed scoring
+  → 12-A sensitivity sweep
+  → Differentiation Gate
+  → DP decision / weakness / tactic
+  → ADR
+```
+
+W-07/W-08 평균과 모든 0~5 score는 이 승인 이후 frozen revision에서만 계산한다.

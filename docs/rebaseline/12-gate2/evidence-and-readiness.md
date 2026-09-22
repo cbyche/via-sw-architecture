@@ -44,7 +44,7 @@ E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기
 | 12개 전수 metric 및 24 change raw template | GENERATABLE | `catalog_check.py --output`으로 생성. metric은 null/NOT_RUN, template change row는 분석 입력용 |
 | C/I/S/D·조합·분모 static 검사 | RUN_BY_REVIEW_TOOL | 구조 명세 검사이며 VIA 기능/성능 시험이 아님 |
 | Rust structural A/B prototype / Windows integration | **PARTIAL / WINDOWS_NOT_IMPLEMENTED** | TASK/AGENT/EXEC deterministic prototype과 IR dry-run/structural harness, W-04/W-09/W-10 smoke는 구현됨. Windows-native target integration, 전체 candidate system, 제품 성능 실측은 아직 미완료 |
-| 실제 Qwen prompt token ledger·inference | NOT_RUN | prompt/schema 계약은 정의, 실제 직렬화·모델 실행은 미완료 |
+| Hosted Qwen3-8B reference inference | RUNNER_READY / NOT_RUN | OpenRouter `qwen/qwen3-8b`, provider `alibaba`, fallback off. JSON object + client schema validation/repair. target-PC/local absolute latency 주장은 금지 |
 | S2S input transcript/word timing·control binding | UNVERIFIED | native 제공과 helper 필요 여부의 실제 계약 확인 필요 |
 | runtime/OS/hardware/artifact digest | NOT_CAPTURED | 같은 장비로 실제 trial 시작할 때 기록 |
 | W-10 28 cells의 구체 대상 | **MATERIALIZED / CANDIDATE-ENDPOINT_SMOKE** | `benchmark/rebaseline/gate2/w10-containment-cells.json`의 6×4 external + 4 integration-fatal cell을 유지한다. external fault는 candidate host가 connection-refused/no-reply socket call을 실제 시작한 상태에서 같은 host의 unaffected capability를 probe하고, Agent capability는 shared backend 또는 isolated worker를 실제 경유한다. integration-fatal은 shared whole-host restart와 isolated worker restart를 같은 deadline으로 비교한다. smoke는 metric-ineligible이며 frozen 대표값은 NOT_RUN |
@@ -59,7 +59,7 @@ E1은 고정 공개 버전이다. 나머지 live 문서는 2026-09-22 열람 기
 ## 4. 실행 전 통과 조건 — 작업 담당은 설계/구현 측
 
 1. 각 후보의 full element 목록·구성·문서 hash를 Gate 2 승인본으로 고정한다. 본문/표/JSON mismatch는 수정하고 원장 버전을 올린다.
-2. 실제 schema와 prompt를 직렬화하여 공식 tokenizer로 세고 runtime/template/model digest를 남긴다. IR B의 실제 stage/bypass/repair도 같은 ledger에 기록한다.
+2. 실제 schema/prompt/request body를 직렬화하고 hosted model id/provider/sampling/profile과 request digest를 남긴다. IR B의 실제 stage/bypass/repair도 같은 ledger에 기록한다.
 3. S2S의 input transcript, final/partial, timestamps, output cancel 기능을 실제로 확인한다. 필요한 helper를 양 후보 동일하게 넣고 call graph·지연·resource를 갱신한다.
 4. Agent 기능 profile을 baseline/full-capability/limited로 분리한다. AF-v1의 revision/idempotency 보장과 실제 native 보장을 혼동하지 않는다.
 5. W-10 cell 명세는 `benchmark/rebaseline/gate2/w10-containment-cells.json`, W-11 protected-unit oracle은 `benchmark/rebaseline/gate2/w11-protected-units.json`, W-12 safety opportunity oracle은 `benchmark/rebaseline/gate2/w12-safety-opportunities.json`으로 materialize했다. W-11은 8개 frozen workload의 기능 성공을 전제로 remote endpoint에 직접 전달되거나 handle로 reachable한 20 unit의 whole-workload union을 센다. W-12는 reviewed 6 family×4 condition의 24개 opportunity를 정확히 한 번씩 기록하고, expected BLOCK인데 ALLOW된 opportunity만 V에 포함하며 valid allow 6개 차단은 positive-control failure로 별도 공개한다. W-11/W-12 모두 대표 candidate 측정값은 아직 NOT_RUN이고, 요구 의미가 달라지면 조용히 메우지 않고 별도 rebaseline한다.

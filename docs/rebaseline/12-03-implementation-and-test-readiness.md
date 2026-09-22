@@ -75,13 +75,12 @@ GPU는 TASK/AGENT/EXEC 구조 시험 자체에는 필수가 아니다. hosted CI
 
 ### IR-DP01 실제 Model 시험 전에 추가로 필요한 것
 
-1. NVIDIA GPU가 있는 reference Windows PC
-2. frozen Qwen3-8B Q4_K_M artifact
-3. frozen tokenizer/template
-4. frozen llama.cpp/llama-server build
-5. local model server 실행 권한
+1. OpenRouter API access
+2. 환경변수 `OPENROUTER_API_KEY`
+3. frozen hosted profile: `qwen/qwen3-8b`, provider `alibaba`, fallback disabled
+4. frozen prompt/schema/sampling/non-thinking contract
 
-현재 planning evidence는 RTX 4060급 consumer GPU profile이지만, **사용자 장비가 반드시 RTX 4060이어야 한다는 뜻은 아니다.** 실제 평가 장비를 한 번 정하면 A/B 모두 동일 장비·artifact·runtime을 사용하고 manifest에 기록한다.
+이 hosted run은 **MEASURED_MODEL_REFERENCE**다. local Q4_K_M 또는 target Windows PC absolute latency 측정이라고 주장하지 않는다. 두 Architecture 후보가 동일 endpoint profile을 교차 순서로 사용하므로 semantic effectiveness와 model-call topology의 비교 근거로 사용한다.
 
 ### 지금 필요하지 않은 것
 
@@ -142,8 +141,8 @@ SIMULATED_E2E_latency = frozen_S2S_delay + VIA 실제 span + 실제 고정 netwo
 4. Windows process worker + named-pipe IPC prototype.
 5. fault/restart/concurrency driver 작성.
 6. IR integrated/staged prompt/schema를 candidate 결과 전에 freeze.
-7. one-command PowerShell runner와 result manifest 작성.
-8. actual measurement 전 GitHub revision/tag를 고정.
+7. hosted Qwen reference runner와 result manifest 작성.
+8. actual measurement 전 GitHub revision/fingerprint를 고정.
 
 이 단계까지는 사용자 환경을 요구하지 않고 진행할 수 있다.
 
@@ -159,7 +158,7 @@ SIMULATED_E2E_latency = frozen_S2S_delay + VIA 실제 span + 실제 고정 netwo
 4. unit/integration/restart/fault smoke test 결과
 5. trace schema와 W-01~W-12 metric endpoint mapping
 6. IR Integrated/Staged 실제 prompt·JSON schema·bypass/repair 규칙
-7. Mac bootstrap/run script와 environment manifest
+7. hosted Qwen/OpenRouter execution profile과 environment/result manifest
 8. S2S synthetic/replay timing trace와 `VIA_added` vs `SIMULATED_E2E` 분리
 9. 실제 benchmark 실행 명령, 반복/순서/randomization/cooldown 규칙
 10. 아직 BLOCKED/UNVERIFIED인 항목
