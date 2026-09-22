@@ -1,0 +1,149 @@
+{
+  "version": "W11-G2-v1",
+  "status": "MATERIALIZED_BEFORE_W11_MEASUREMENT",
+  "provenance": {
+    "source_contract": "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-11",
+    "source_fixture_generator": "benchmark/rebaseline/build_assets.py",
+    "note": "The historical baseline.json referenced by 11-D is absent. This corpus materializes 20 semantic fact/relationship units from the checked-in synthetic generator and frozen W-11 workloads; it is not recovered historical data and is not a measurement result."
+  },
+  "metric": {
+    "id": "W-11",
+    "name": "Privacy Exposure Minimization",
+    "representative_metric": "remote_sensitive_context_exposure_pct",
+    "formula": "100 * whole_workload_union_exposed_units / 20",
+    "denominator": 20,
+    "target_pct": 25.0,
+    "direction": "lower",
+    "score_bands": [
+      {"score":5,"max_pct":0.0},
+      {"score":4,"max_pct":10.0},
+      {"score":3,"max_pct":25.0},
+      {"score":2,"max_pct":50.0},
+      {"score":1,"max_pct":75.0},
+      {"score":0,"max_pct":null}
+    ]
+  },
+  "workloads": [
+    "TC-02.1","TC-02.2","TC-02.3","TC-05.1",
+    "TC-07.2","TC-10.1","TC-16.4","TC-17.2"
+  ],
+  "annotation_contract": {
+    "count_as_exposed_when": [
+      "a remote endpoint outside the user PC receives the semantic unit directly",
+      "a remote endpoint outside the user PC can read the semantic unit through a supplied handle or capability",
+      "a summary, compressed form, encoding, or transformed representation conveys the same semantic fact/relationship"
+    ],
+    "deduplication": "whole-workload union by protected unit id; retransmission and recipient count do not increase the numerator",
+    "public_information": "excluded from denominator",
+    "local_processing": "does not count as remote exposure for W-11",
+    "functional_guard": "all eight frozen workloads must retain their required functionality; blocking requests to obtain zero exposure is not a valid comparison value",
+    "semantic_annotation": "candidate traces record reviewed unit ids; the evaluator does not guess semantic equivalence from raw bytes"
+  },
+  "protected_units": [
+    {
+      "id":"W11-P01","source":"doc-budget","kind":"fact","semantic_unit":"document title is 예산안",
+      "evidence_literals":["'doc-budget'","'title':'예산안'"],
+      "relevant_workloads":["TC-02.1","TC-07.2"]
+    },
+    {
+      "id":"W11-P02","source":"doc-budget","kind":"fact","semantic_unit":"2026 교육 예산 is 120백만원",
+      "evidence_literals":["2026년 교육 예산은 120백만원이다."],
+      "relevant_workloads":["TC-02.1","TC-07.2"]
+    },
+    {
+      "id":"W11-P03","source":"doc-budget","kind":"fact","semantic_unit":"2025 교육 예산 is 100백만원",
+      "evidence_literals":["2025년 100백만원"],
+      "relevant_workloads":["TC-02.1","TC-07.2"]
+    },
+    {
+      "id":"W11-P04","source":"doc-budget","kind":"relationship","semantic_unit":"2026 교육 예산 is 20백만원 higher than 2025",
+      "evidence_literals":["20백만원 늘었다."],
+      "relevant_workloads":["TC-02.1","TC-07.2"]
+    },
+    {
+      "id":"W11-P05","source":"doc-budget","kind":"fact","semantic_unit":"budget conclusion is 교육 과정을 확대한다",
+      "evidence_literals":["결론: 교육 과정을 확대한다."],
+      "relevant_workloads":["TC-02.1","TC-07.2"]
+    },
+
+    {
+      "id":"W11-P06","source":"mail-17","kind":"fact","semantic_unit":"mail sender is 김대리",
+      "evidence_literals":["'sender':'김대리'"],
+      "relevant_workloads":["TC-02.2","TC-16.4"]
+    },
+    {
+      "id":"W11-P07","source":"mail-17","kind":"fact","semantic_unit":"mail subject is 교육 일정",
+      "evidence_literals":["'subject':'교육 일정'"],
+      "relevant_workloads":["TC-02.2","TC-16.4"]
+    },
+    {
+      "id":"W11-P08","source":"mail-17","kind":"fact","semantic_unit":"mail date is 2026-09-18",
+      "evidence_literals":["'date':'2026-09-18'"],
+      "relevant_workloads":["TC-02.2","TC-16.4"]
+    },
+    {
+      "id":"W11-P09","source":"mail-17","kind":"fact","semantic_unit":"education schedule in mail is 2026-09-23 14:00",
+      "evidence_literals":["교육은 9월 23일 오후 2시에 진행합니다."],
+      "relevant_workloads":["TC-02.2","TC-16.4"]
+    },
+
+    {
+      "id":"W11-P10","source":"cal-1","kind":"fact","semantic_unit":"calendar event title is 팀 회의",
+      "evidence_literals":["'title':'팀 회의'"],
+      "relevant_workloads":["TC-02.3"]
+    },
+    {
+      "id":"W11-P11","source":"cal-1","kind":"fact","semantic_unit":"calendar event starts 2026-09-21T16:00:00+09:00",
+      "evidence_literals":["'start':'2026-09-21T16:00:00+09:00'"],
+      "relevant_workloads":["TC-02.3"]
+    },
+    {
+      "id":"W11-P12","source":"cal-1","kind":"fact","semantic_unit":"calendar event ends 2026-09-21T17:00:00+09:00",
+      "evidence_literals":["'end':'2026-09-21T17:00:00+09:00'"],
+      "relevant_workloads":["TC-02.3"]
+    },
+
+    {
+      "id":"W11-P13","source":"doc-quote","kind":"fact","semantic_unit":"document title is 견적서",
+      "evidence_literals":["'doc-quote'","'title':'견적서'"],
+      "relevant_workloads":["TC-05.1"]
+    },
+    {
+      "id":"W11-P14","source":"doc-quote","kind":"fact","semantic_unit":"quote amount is 500만원",
+      "evidence_literals":["견적 금액은 500만원"],
+      "relevant_workloads":["TC-05.1"]
+    },
+    {
+      "id":"W11-P15","source":"doc-quote","kind":"fact","semantic_unit":"quote valid until 2026-09-30",
+      "evidence_literals":["유효 기간은 2026년 9월 30일까지이다."],
+      "relevant_workloads":["TC-05.1"]
+    },
+
+    {
+      "id":"W11-P16","source":"task:T-PPT","kind":"fact","semantic_unit":"T-PPT goal is 예산 발표자료 작성",
+      "evidence_literals":["'id':'T-PPT'","'goal':'예산 발표자료 작성'"],
+      "relevant_workloads":["TC-10.1"]
+    },
+    {
+      "id":"W11-P17","source":"task:T-PPT","kind":"relationship","semantic_unit":"T-PPT is assigned to agent-doc",
+      "evidence_literals":["'agent':'agent-doc'"],
+      "relevant_workloads":["TC-10.1"]
+    },
+    {
+      "id":"W11-P18","source":"task:T-PPT","kind":"relationship","semantic_unit":"T-PPT is correlated with run-10 in running state",
+      "evidence_literals":["'run':'run-10'","'state':'running'"],
+      "relevant_workloads":["TC-10.1"]
+    },
+
+    {
+      "id":"W11-P19","source":"memory:MEM-1","kind":"fact","semantic_unit":"remembered response_format preference is 표 우선",
+      "evidence_literals":["'key':'response_format'","'value':'표 우선'"],
+      "relevant_workloads":["TC-17.2"]
+    },
+    {
+      "id":"W11-P20","source":"memory:MEM-1","kind":"relationship","semantic_unit":"MEM-1 preference was stored with explicit permission",
+      "evidence_literals":["'permission':'explicit'"],
+      "relevant_workloads":["TC-17.2"]
+    }
+  ]
+}
