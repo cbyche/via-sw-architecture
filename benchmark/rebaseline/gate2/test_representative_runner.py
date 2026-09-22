@@ -30,9 +30,11 @@ class RepresentativeRunnerTests(unittest.TestCase):
             ],
         }
         rows = {row["configuration_id"]: row for row in assemble_w09(whole, fatal, self.baseline)["rows"]}
+        self.assertEqual(16, len(rows))
         self.assertEqual(800, rows["AAAA"]["metric_value"])
         self.assertEqual(1000, rows["ABAA"]["metric_value"])
         self.assertEqual(500, rows["AAAB"]["metric_value"])
+        self.assertEqual(700, rows["ABAB"]["metric_value"])
 
     def test_w10_maps_exec_choice_to_all_configurations(self):
         cells = [{"pass": True}] * 24
@@ -49,6 +51,7 @@ class RepresentativeRunnerTests(unittest.TestCase):
             ],
         }
         rows = {row["configuration_id"]: row for row in assemble_w10(payload, self.baseline)["rows"]}
+        self.assertEqual(16, len(rows))
         self.assertEqual(27, rows["AAAA"]["passed_cells"])
         self.assertEqual(28, rows["AAAB"]["passed_cells"])
         self.assertEqual(5, rows["AAAB"]["score"])

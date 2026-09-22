@@ -50,7 +50,7 @@ deterministic Agent fixture로 기능·recovery·concurrency·failure-isolation�
 - IR × AGENT
 - TASK × EXEC
 
-전체 2^4 조합을 무조건 실행하지 않는다.
+Reference 및 representative 결합 campaign은 전체 `2^4` 조합을 실행한다. Metric에 인과적으로 관여하지 않는 축은 `applicable_axes`에서 제외하고 반복 행을 독립 증거로 세지 않는다.
 
 ## 2. 사용자 준비물 — 지금 필요한 것 / 나중에 필요한 것
 

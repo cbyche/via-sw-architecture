@@ -15,7 +15,7 @@ Gate 2는 **구현 가능한 두 구조의 책임·계약·상태·배치**를 �
 | AGENT-DP01 | A | Agent capability variation을 해석하는 위치 |
 | EXEC-DP01 | A | 동일 integration code의 process 경계 |
 
-각 A/B 비교에서는 해당 행만 바꾼다. 따라서 **8개 pair-labelled 후보지만 기본 조합은 5개 고유 configuration**이며, 같은 reference 실행을 독립 증거 여러 건으로 부풀리지 않는다. 4개 DP의 승자를 따로 고른 뒤 자동 합성하지 않고, IR×AGENT와 TASK-DP01×EXEC의 2×2 결합을 확인한다.
+Pair-level change analysis는 해당 행만 바꾼 8개 A/B label을 유지한다. Runtime/reference campaign은 **IR/TASK/AGENT/EXEC의 16개 `2^4` complete configuration**을 모두 실행한다. 같은 축이 metric에 인과적으로 관여하지 않으면 반복값을 독립 증거로 부풀리지 않고 `applicable_axes`로 표시한다. 최종 판단은 main effect만이 아니라 matched-context contrast와 pairwise interaction을 함께 확인한다.
 
 Supporting 참조: CTX-DP01은 versioned/scoped Context Broker, CTX-DP02는 원문 기록에서 요청별 package 재구성, SEC-DP01은 같은 PC의 policy service를 통한 use-time 확인이다. **Interaction은 FP-INT01의 S2S Direct Fast Path로 고정하고, Agent state update는 TASK-T01의 Event-first + Query Reconciliation을 공통 tactic으로 적용한다.** 모두 같은 허용 범위·정보 원천을 갖는다. Supporting 선택에 민감한 결론은 해당 축을 교차 확인하기 전 일반화하지 않는다.
 

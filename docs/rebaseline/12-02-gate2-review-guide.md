@@ -83,7 +83,7 @@ Tokio가 process isolation 자체를 제공하는 것은 아니다. **격리는 
 - AGENT: 두 안이 동일 required capability를 보존.
 - EXEC: 같은 integration code/fault를 host 경계만 다르게 실행.
 
-4 pair는 **5개 고유 configuration**(공통 reference + 각 DP의 B variant)으로 조립한다. 다음 단계에서 결론을 뒤집을 수 있는 IR×AGENT, TASK×EXEC 같은 작은 교차 확인만 추가한다.
+4 pair의 change ledger는 공통 reference + 각 DP의 B variant라는 one-factor contrast를 유지한다. Runtime/reference 평가는 **16개 `2^4` complete configuration**으로 조립해 IR×TASK, TASK×AGENT, TASK×EXEC 등 결합 효과를 함께 확인한다.
 
 ## 5. 결과 상태와 다음 단계
 

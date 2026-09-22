@@ -17,13 +17,14 @@ sys.path.insert(0, str(WORKING12))
 
 from freeze import authorize_run  # noqa: E402
 from score import load_baseline, score_value  # noqa: E402
+from catalog_check import factorial_vectors  # noqa: E402
 
 CONFIGURATIONS = {
-    "AAAA": {"task": "shared", "exec": "shared"},
-    "BAAA": {"task": "shared", "exec": "shared"},
-    "ABAA": {"task": "per_task", "exec": "shared"},
-    "AABA": {"task": "shared", "exec": "shared"},
-    "AAAB": {"task": "shared", "exec": "isolated"},
+    config_id: {
+        "task": "shared" if vector["TASK-DP01"] == "A" else "per_task",
+        "exec": "shared" if vector["EXEC-DP01"] == "A" else "isolated",
+    }
+    for config_id, vector in factorial_vectors()
 }
 
 
@@ -92,6 +93,7 @@ def assemble_w09(
                 "stratum_p95_recovery_ms": p95_values,
                 "metric_value": metric,
                 "score": score_value(metric, baseline["metrics"]["W-09"]),
+                "factorial_axes_exercised": ["TASK-DP01", "EXEC-DP01"],
                 "evidence": "MEASURED_STRUCTURAL",
             }
         )
@@ -118,6 +120,7 @@ def assemble_w10(payload: dict[str, Any], baseline: dict[str, Any]) -> dict[str,
                 "passed_cells": int(candidate["passed_cells"]),
                 "metric_value": metric,
                 "score": score_value(metric, baseline["metrics"]["W-10"]),
+                "factorial_axes_exercised": ["EXEC-DP01"],
                 "evidence": "MEASURED_STRUCTURAL",
             }
         )

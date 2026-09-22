@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from catalog_check import (CORE, CHANGES, WORKING, bindings, catalog_fingerprint, compose,
-                           current_revision, elements, load, make_report)
+                           current_revision, elements, factorial_vectors, load, make_report)
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -20,15 +20,19 @@ class ReviewContractTests(unittest.TestCase):
         self.assertEqual(set(self.catalog["cards"]), set(CORE))
         self.assertEqual(set(CORE), {"IR-DP01", "TASK-DP01", "AGENT-DP01", "EXEC-DP01"})
 
-    def test_one_factor_only(self):
+    def test_pair_candidates_remain_one_factor_contrasts(self):
         for pair in self.report["pair_candidates"]:
             dp = pair["candidate_id"].split("/")[0]
             vector = self.report["configurations"][pair["configuration_id"]]["choices"]
             self.assertTrue(all(vector[k] == self.reference[k] for k in CORE if k != dp))
 
-    def test_shared_reference_not_independent_evidence(self):
-        self.assertEqual(len(self.report["configurations"]), 5)
+    def test_complete_factorial_and_pair_contrasts_are_both_present(self):
+        self.assertEqual(len(self.report["configurations"]), 16)
         self.assertEqual(len(self.report["pair_candidates"]), 8)
+        self.assertEqual(
+            [configuration_id for configuration_id, _ in factorial_vectors()],
+            list(self.report["configurations"]),
+        )
 
     def test_all_working_asrs_present(self):
         for pair in self.report["pair_candidates"]:

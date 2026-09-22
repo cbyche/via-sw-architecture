@@ -11,6 +11,7 @@ import json
 import os
 import re
 import subprocess
+from itertools import product
 from pathlib import Path
 from typing import Any
 
@@ -150,24 +151,46 @@ def bindings(vector: dict[str, str]) -> dict[str, Any]:
     }
 
 
+def factorial_vectors() -> list[tuple[str, dict[str, str]]]:
+    """Return the complete 2^4 design in the canonical IR/TASK/AGENT/EXEC order."""
+    return [
+        ("".join(choices), dict(zip(CORE, choices, strict=True)))
+        for choices in product("AB", repeat=len(CORE))
+    ]
+
+
 def make_report(catalog: dict[str, Any]) -> dict[str, Any]:
     reference = {dp: catalog["cards"][dp]["reference"] for dp in CORE}
     configs: dict[str, dict[str, Any]] = {}
     pair_records = []
     metric_ledger = []
     change_ledger = []
+
+    for key, vector in factorial_vectors():
+        active = compose(catalog, vector)
+        owner_bindings = bindings(vector)
+        if not {
+            value
+            for value in owner_bindings.values()
+            if isinstance(value, str) and value.startswith("G2-")
+        } <= set(active):
+            raise ValueError(f"Binding to inactive element: {key}")
+        configs[key] = {
+            "id": key,
+            "choices": vector,
+            "element_ids": active,
+            "bindings": owner_bindings,
+            "element_type_counts": {
+                kind: sum(catalog["elements"][eid]["type"] == kind for eid in active)
+                for kind in "CISD"
+            },
+        }
+
     for dp in CORE:
         for alt in ("A", "B"):
             vector = dict(reference)
             vector[dp] = alt
             key = "".join(vector[k] for k in CORE)
-            active = compose(catalog, vector)
-            owner_bindings = bindings(vector)
-            if not {v for v in owner_bindings.values() if isinstance(v, str) and v.startswith("G2-")} <= set(active):
-                raise ValueError(f"Binding to inactive element: {dp}/{alt}")
-            configs[key] = {"id": key, "choices": vector, "element_ids": active,
-                            "bindings": owner_bindings,
-                            "element_type_counts": {t: sum(catalog["elements"][i]["type"] == t for i in active) for t in "CISD"}}
             cid = f"{dp}/{alt}"
             pair_records.append({"candidate_id": cid, "configuration_id": key, "hypotheses": catalog["cards"][dp]["hypotheses"]})
             for w in WORKING:
@@ -178,9 +201,9 @@ def make_report(catalog: dict[str, Any]) -> dict[str, Any]:
                 change_ledger.append({"candidate_id": cid, "configuration_id": key, "change_id": change,
                                       "modified": None, "added": None, "removed": None,
                                       "unique_count": None, "functional_preservation": None, "evidence": "NOT_ANALYZED"})
-    if len(configs) != 5 or len(pair_records) != 8 or len(metric_ledger) != 96 or len(change_ledger) != 192:
+    if len(configs) != 16 or len(pair_records) != 8 or len(metric_ledger) != 96 or len(change_ledger) != 192:
         raise ValueError("Unexpected complete-configuration or ledger cardinality")
-    return {"version": "G2-DESIGN-v1.1",
+    return {"version": "G2-DESIGN-v1.2",
             "source_revision": current_revision(Path(catalog["root"])),
             "catalog_fingerprint": catalog_fingerprint(catalog),
             "status": "DESIGN_REVIEW_ONLY", "reference_choices": reference,

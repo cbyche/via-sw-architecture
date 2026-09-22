@@ -6,7 +6,30 @@
 
 ## Candidate mapping
 
-`AAAA`를 기준으로 IR/TASK/AGENT/EXEC 한 축만 B로 바꾼 `BAAA/ABAA/AABA/AAAB` 5개 configuration을 사용한다.
+Configuration ID는 `IR / TASK / AGENT / EXEC` 순서다. 다음 16개 `2^4` complete configuration을 모두 사용한다.
+
+```text
+AAAA AAAB AABA AABB ABAA ABAB ABBA ABBB
+BAAA BAAB BABA BABB BBAA BBAB BBBA BBBB
+```
+
+기존 `AAAA/BAAA/ABAA/AABA/AAAB` one-factor 결과는 역사적 OFAT evidence로 보존하되, 최종 결합 판단에는 16개 campaign의 context별 A/B contrast를 사용한다.
+
+## Frozen integrated execution order
+
+각 configuration은 단순 행 복제가 아니라 동일한 reference request가 다음 결합 trace를 통과한다.
+
+```text
+Task view/revision read
+→ IR semantic decision
+→ TASK submit-pending/outbox commit
+→ EXEC integration dispatch
+→ AGENT acceptance/normalization
+→ TASK feedback + durable ExecutionLink commit
+→ reference delivery
+```
+
+모든 trace는 revision `7 → 8 → 9`, 정확히 한 Task writer, 선택된 Agent contract owner와 integration host를 기록한다. 이 trace는 구조적 결합과 선후관계를 검증하지만 production stack wall-clock 실행이라고 주장하지 않는다.
 
 ## Frozen logical timing model
 
@@ -14,6 +37,19 @@
 - W-02: acceptance stub `40ms` + IR A/B `10/25ms` + TASK A/B `6/9ms` + AGENT A/B `5/8ms` + p95 envelope `9ms`. 종료점은 acceptance와 durable link 모두다.
 - W-03: reference render `8ms` + AGENT A/B event normalization `12/15ms` + p95 envelope `9ms`.
 - W-04: same-candidate 4-to-1 ratio `1.04 + TASK-A 0.01 + EXEC-A 0.01`.
+
+결과 확인 전에 다음 결합 비용을 고정한다.
+
+| Metric | 교차항 | 값 | 구조적 이유 |
+|---|---|---:|---|
+| W-01 | IR-B × EXEC-B | +6ms | staged semantic envelope가 isolated bridge frame을 통과하는 reference 비용 |
+| W-02 | IR-B × TASK-B | +4ms | AssociatedRequest revision을 activation command로 넘기는 비용 |
+| W-02 | TASK-B × AGENT-B | +3ms | typed lifecycle result를 supervisor command로 바꾸는 비용 |
+| W-02 | AGENT-B × EXEC-B | +4ms | worker에서 온 typed variant를 Core handler가 해석하는 추가 boundary |
+| W-03 | AGENT-B × EXEC-B | +4ms | typed feedback payload가 IPC 뒤 Core normalization을 거치는 비용 |
+| W-04 | TASK-B × EXEC-B | -0.01 ratio | per-Task queue와 isolated integration queue의 공유 간섭 제거 |
+
+위 값은 상호작용이 0이라고 가정해 OFAT 결과를 복제하지 않기 위한 **사전 동결 reference-model 항**이다. 실측 성능 수치가 아니다. 그 외 pair/higher-order interaction은 이 reference model에서 0으로 고정한다.
 
 이 상수는 실제 component 성능을 주장하는 값이 아니라 사전 고정된 mockup 비용 모델이다. Architecture sensitivity와 scoring-path 실행을 확인하며, 실제 제품 acceptance에는 사용할 수 없다.
 
@@ -24,6 +60,10 @@
 - W-12: 6 family × allow/deny/stale/wrong-scope 24개를 모두 실행한다. allow 6개는 통과, block 18개는 차단하는 공통 policy fixture를 사용한다.
 
 후보를 가르기 위해 사후 상수, 노출 unit, policy outcome을 바꾸지 않는다.
+
+## Factorial analysis
+
+각 metric에 대해 B-minus-A marginal main effect와 모든 applicable 2-way difference-of-differences를 산출한다. 또한 한 DP를 바꾸는 8개 matched context의 raw preference와 score-band split 수를 보존한다. Weighted total과 global winner는 만들지 않으며 W-05 누락을 대입하지 않는다.
 
 ## W-07~W-10 DP applicability
 
