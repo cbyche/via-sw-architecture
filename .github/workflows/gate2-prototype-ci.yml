@@ -73,6 +73,17 @@ jobs:
           python3 benchmark/rebaseline/build_assets.py
           python3 benchmark/rebaseline/gate2/terminal_outcome_audit.py --root .
           python3 benchmark/rebaseline/gate2/w04_foreground_contract.py --contract benchmark/rebaseline/gate2/w01-foreground-strata.json --validate-only
+          python3 benchmark/rebaseline/gate2/w01_observation_adapter.py --contract benchmark/rebaseline/gate2/w01-foreground-strata.json --trace benchmark/rebaseline/gate2/w01-observation-smoke.json --output /tmp/w01-observation-smoke.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          sample=json.loads(Path('/tmp/w01-observation-smoke.json').read_text())
+          assert sample['candidate_observed_latency_ns']==1_000_000
+          assert sample['representative_metric_eligible'] is False
+          assert sample['representative_metric_value_ns'] is None
+          assert sample['score'] is None and sample['p95'] is None
+          assert sample['evidence']=='RAW_ENDPOINT_OBSERVATION_HEADLESS'
+          PY
           python3 benchmark/rebaseline/gate2/make_trial_order.py --output /tmp/trial-order.json
           python3 benchmark/rebaseline/gate2/ir_model_runner.py --output /tmp/ir-dry-run.json
           python3 - <<'PY'

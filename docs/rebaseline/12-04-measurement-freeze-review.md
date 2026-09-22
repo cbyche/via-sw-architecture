@@ -13,6 +13,7 @@
 | Repository | TASK A/B 동일 SQLite/WAL/FULL와 command dedup | INITIAL_IMPLEMENTATION |
 | EXEC | same-process vs child-process boundary | INITIAL_IMPLEMENTATION |
 | S2S timing | 0ms 금지, paired frozen trace, VIA-added와 simulated E2E 분리 | CONTRACT_DEFINED |
+| W-01/W-04 observation | 6개 frozen foreground strata, raw endpoint derivation, correctness censoring, headless score 금지 | ADAPTER_READY / ACTUAL_DELIVERY_SOURCE_PENDING |
 | IR prompts/schema | Integrated + Stage1/2/3 frozen input contract | DRAFT_IMPLEMENTED |
 | IR actual model | Qwen3-8B Q4_K_M 동일 artifact/runtime | NOT_RUN |
 | Mac environment | hardware/OS/toolchain manifest | USER_RUN_REQUIRED |

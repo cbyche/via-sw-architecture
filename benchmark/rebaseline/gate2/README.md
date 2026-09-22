@@ -10,6 +10,9 @@ python benchmark/rebaseline/gate2/terminal_outcome_audit.py --root .
 python benchmark/rebaseline/gate2/w04_foreground_contract.py \
   --contract benchmark/rebaseline/gate2/w01-foreground-strata.json \
   --validate-only
+python benchmark/rebaseline/gate2/w01_observation_adapter.py \
+  --contract benchmark/rebaseline/gate2/w01-foreground-strata.json \
+  --trace benchmark/rebaseline/gate2/w01-observation-smoke.json
 python benchmark/rebaseline/gate2/w12_safety.py \
   --oracle benchmark/rebaseline/gate2/w12-safety-opportunities.json \
   --validate-only
