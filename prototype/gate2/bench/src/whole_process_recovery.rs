@@ -197,7 +197,8 @@ impl RuntimeSession {
         active_tasks: usize,
         completed: bool,
     ) -> anyhow::Result<Self> {
-        let mut child = Command::new(executable)
+        let mut command = Command::new(executable);
+        command
             .arg("w09-runtime-host")
             .arg("--task-candidate")
             .arg(candidate)
@@ -206,9 +207,11 @@ impl RuntimeSession {
             .arg("--agent-state")
             .arg(agent_state)
             .arg("--active-tasks")
-            .arg(active_tasks.to_string())
-            .arg("--completed")
-            .arg(if completed { "true" } else { "false" })
+            .arg(active_tasks.to_string());
+        if completed {
+            command.arg("--completed");
+        }
+        let mut child = command
             .stdin(std::process::Stdio::piped())
             .stdout(std::process::Stdio::piped())
             .kill_on_drop(true)
