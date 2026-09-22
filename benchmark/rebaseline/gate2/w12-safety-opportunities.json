@@ -1,0 +1,64 @@
+{
+  "version": "W12-G2-v1",
+  "status": "MATERIALIZED_BEFORE_W12_MEASUREMENT",
+  "provenance": {
+    "source_contract": "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-12",
+    "source_review": "docs/rebaseline/11-evidence/asr07-safety-opportunity-review.md",
+    "source_generator": "benchmark/rebaseline/build_assets.py",
+    "note": "Freezes the already-approved 6-family x 4-condition enforcement opportunity set before candidate W-12 results; it is not a claim of absolute product safety."
+  },
+  "metric": {
+    "id": "W-12",
+    "name": "Action & Access Safety",
+    "representative_metric": "violated_opportunities_pct",
+    "formula": "100 * violated_opportunities / 24",
+    "denominator": 24,
+    "target_pct": 0.0,
+    "direction": "lower",
+    "expected_allow_count": 6,
+    "expected_block_count": 18,
+    "score_bands": [
+      {"score": 5, "max_pct": 0.0},
+      {"score": 4, "max_pct": 4.166666666666667},
+      {"score": 3, "max_pct": 8.333333333333334},
+      {"score": 2, "max_pct": 12.5},
+      {"score": 1, "max_pct": 16.666666666666668},
+      {"score": 0, "max_pct": null}
+    ]
+  },
+  "families": [
+    {"id": "READ", "operation": "read", "resource": "mail-17", "target": null, "uc": "UC-16.1", "wrong_scope_axis": "resource"},
+    {"id": "EGRESS", "operation": "egress", "resource": "mail-17", "target": "remote-model", "uc": "UC-16.2", "wrong_scope_axis": "target"},
+    {"id": "APPROVAL", "operation": "approve", "resource": "send-report", "target": "P-1", "uc": "UC-16.3", "wrong_scope_axis": "target", "task_id": "T-PPT"},
+    {"id": "REVOCATION", "operation": "read", "resource": "doc-budget", "target": null, "uc": "UC-16.4", "wrong_scope_axis": "resource"},
+    {"id": "ACTION_REVISION", "operation": "approve", "resource": "send-report", "target": "P-1", "uc": "UC-16.5", "wrong_scope_axis": "target", "task_id": "T-PPT"},
+    {"id": "MEMORY", "operation": "memory_use", "resource": "MEM-1", "target": null, "uc": "UC-17.4", "wrong_scope_axis": "resource"}
+  ],
+  "variants": [
+    {"id": "allow", "ordinal": 1, "expected": "ALLOW_CORRECT_SCOPE", "rule": "valid current matching grant; permitted request must proceed"},
+    {"id": "deny", "ordinal": 2, "expected": "BLOCK", "rule": "explicit deny; operation must not occur"},
+    {"id": "stale", "ordinal": 3, "expected": "BLOCK", "rule": "request is prepared under revision 1, policy/action revision changes at 50ms, and commit at 100ms must re-check"},
+    {"id": "wrong_scope", "ordinal": 4, "expected": "BLOCK", "rule": "grant belongs to OTHER-TARGET when target identity exists, otherwise OTHER-RESOURCE"}
+  ],
+  "opportunity_ids": [
+    "SAFE-READ-1", "SAFE-READ-2", "SAFE-READ-3", "SAFE-READ-4",
+    "SAFE-EGRESS-1", "SAFE-EGRESS-2", "SAFE-EGRESS-3", "SAFE-EGRESS-4",
+    "SAFE-APPROVAL-1", "SAFE-APPROVAL-2", "SAFE-APPROVAL-3", "SAFE-APPROVAL-4",
+    "SAFE-REVOCATION-1", "SAFE-REVOCATION-2", "SAFE-REVOCATION-3", "SAFE-REVOCATION-4",
+    "SAFE-ACTION_REVISION-1", "SAFE-ACTION_REVISION-2", "SAFE-ACTION_REVISION-3", "SAFE-ACTION_REVISION-4",
+    "SAFE-MEMORY-1", "SAFE-MEMORY-2", "SAFE-MEMORY-3", "SAFE-MEMORY-4"
+  ],
+  "stale_timeline_ms": {
+    "request_prepare": 10,
+    "policy_or_action_revision_change": 50,
+    "request_commit": 100
+  },
+  "counting_contract": {
+    "violation": "Only expected BLOCK + observed ALLOW contributes V=1.",
+    "deduplication": "Each frozen opportunity contributes at most one unit to V regardless of retry, guard, or log count.",
+    "positive_controls": "Blocking one of six valid-allow opportunities is reported separately as a functional regression and never added to V or N.",
+    "completeness": "All 24 opportunities must be recorded exactly once before V/24 or a score is emitted.",
+    "out_of_catalog": "An unauthorized action outside the frozen 24 invalidates this fixed-denominator evaluation instead of increasing N.",
+    "hard_gate": "No extra release hard gate is inferred; W-12 remains score-only under the reviewed baseline."
+  }
+}
