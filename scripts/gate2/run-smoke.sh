@@ -9,4 +9,5 @@ cargo run --locked -q -p gate2-bench -- exec-smoke --worker "$ROOT/prototype/gat
 cargo run --locked -q -p gate2-bench -- s2s-smoke --trace "$ROOT/prototype/gate2/fixtures/s2s-delay-smoke.json"
 cargo run --locked -q -p gate2-bench -- w04-load-smoke
 cargo run --locked -q -p gate2-bench -- w09-whole-restart-smoke
+cargo run --locked -q -p gate2-bench -- w09-integration-fatal-smoke --host "$ROOT/prototype/gate2/target/debug/gate2-host" --worker "$ROOT/prototype/gate2/target/debug/gate2-worker"
 echo "SMOKE ONLY: no comparative benchmark or score was produced."
