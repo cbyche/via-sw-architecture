@@ -1,3 +1,4 @@
+mod exec_recovery;
 mod recovery;
 
 use clap::{Parser, Subcommand};
@@ -47,6 +48,12 @@ enum Command {
     },
     W04LoadSmoke,
     W09WholeRestartSmoke,
+    W09IntegrationFatalSmoke {
+        #[arg(long)]
+        host: PathBuf,
+        #[arg(long)]
+        worker: PathBuf,
+    },
 }
 
 #[tokio::main]
@@ -60,6 +67,9 @@ async fn main() -> anyhow::Result<()> {
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
         Command::W04LoadSmoke => w04_load_smoke().await?,
         Command::W09WholeRestartSmoke => recovery::whole_restart_smoke().await?,
+        Command::W09IntegrationFatalSmoke { host, worker } => {
+            exec_recovery::integration_fatal_smoke(host, worker).await?
+        }
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
     Ok(())
