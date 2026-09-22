@@ -1,6 +1,6 @@
 {
-  "version": "G2-MEASUREMENT-FREEZE-DRAFT-v2",
-  "status": "PRE_BENCHMARK_REVIEW_REQUIRED",
+  "version": "G2-MEASUREMENT-FREEZE-v3",
+  "status": "REVIEW_DECISIONS_RESOLVED_PENDING_APPROVAL",
   "scored_dp_pairs": [
     "IR-DP01",
     "TASK-DP01",
@@ -35,9 +35,31 @@
     "SIMULATED_E2E",
     "ESTIMATED_MODEL_ONLY"
   ],
+  "evidence_scope_policy": {
+    "s2s_synthetic_replay": {
+      "allowed_use": [
+        "STRUCTURAL_CORRECTNESS",
+        "CONTRACT_VALIDATION",
+        "SIMULATED_E2E_SENSITIVITY"
+      ],
+      "representative_score_eligible": false,
+      "final_absolute_product_latency_claim": false,
+      "required_evidence_for_representative_score": "LIVE_MEASURED_S2S"
+    },
+    "w01_w04_delivery": {
+      "required_sink": "ACTUAL_USER_DELIVERY",
+      "when_missing": "BLOCKED_NOT_RUN",
+      "headless_score_eligible": false,
+      "not_run_is_zero": false,
+      "imputation_allowed": false
+    }
+  },
   "prohibitions": [
     "No score/winner before Freeze approval",
     "No hosted model latency labeled local or target-PC latency",
-    "No asymmetric post-result optimization"
+    "No asymmetric post-result optimization",
+    "No synthetic or replayed S2S evidence in representative scoring",
+    "No headless W-01/W-04 observation promoted to representative score",
+    "No missing W-01/W-04 metric imputed as zero or an estimate"
   ]
 }

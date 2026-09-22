@@ -1,6 +1,6 @@
 # 12-04. Measurement Freeze Review — Readiness Gate
 
-> 상태: **PRE-BENCHMARK REVIEW INPUT**. 이 문서의 승인 전 candidate별 representative metric, 0~5 score, ranking/winner를 산출하지 않는다.
+> 상태: **REVIEW DECISIONS RESOLVED / APPROVAL INPUT**. 이 문서의 승인 전 candidate별 representative metric, 0~5 score, ranking/winner를 산출하지 않는다.
 > 기준 branch: `architecture-rebaseline-20260918`.
 
 ## 1. Freeze 판정 체계
@@ -30,8 +30,8 @@
 | W-11 protected-unit oracle | 20 unit corpus/evaluator | **READY** |
 | W-12 safety oracle | 24 opportunity corpus/evaluator | **READY** |
 | 94 TC executable-slice mapping / terminal outcome audit | CI guard 존재 | **READY** |
-| S2S final evidence | TEST_ONLY trace는 score 불가 | **REVIEW_DECISION_REQUIRED** |
-| W-01/W-04 actual user-visible delivery source | raw adapter는 준비, 실제 source wiring은 미완료 | **REVIEW_DECISION_REQUIRED** |
+| S2S final evidence | TEST_ONLY/synthetic/replay trace는 보조 분석만 가능 | **READY_WITH_LIMITATION** — representative score 불가 |
+| W-01/W-04 actual user-visible delivery source | raw adapter는 준비, 실제 source wiring은 미완료 | **READY_WITH_LIMITATION** — endpoint가 없으면 BLOCKED/NOT_RUN |
 | representative metric/score ledger | null / NOT_RUN | **READY — 반드시 이 상태로 freeze review에 진입** |
 
 ## 3. Hosted Qwen reference의 정확한 의미
@@ -57,17 +57,17 @@ IR A/B는 동일한 hosted Qwen3-8B profile을 controlled dependency로 사용�
 6. IR prompt/schema/validation/repair limit
 7. hosted model id/provider/fallback/non-thinking/sampling contract
 8. trial count/order 및 timeout/censoring rules
-9. S2S와 actual-delivery evidence scope decision
+9. 아래 D-1/D-2의 S2S와 actual-delivery evidence scope decision
 
 `freeze.py` fingerprint와 approval fingerprint가 달라지면 comparative execution/scoring을 거부한다.
 
-## 5. Freeze 전 남은 review decision
+## 5. Freeze Review 확정 결정
 
 ### D-1. S2S
-실측 S2S trace가 없으면 synthetic replay는 `SIMULATED_E2E`로만 유지한다. final absolute product latency score에 사용할지 여부를 승인 전에 결정한다.
+실측 S2S trace가 없으면 synthetic/replay는 `SIMULATED_E2E`로만 유지한다. 구조 correctness, 계약 검증, sensitivity 보조 분석에는 사용할 수 있지만 **representative metric/0~5 score와 final absolute product latency 주장에는 사용하지 않는다.** Representative score에는 `LIVE_MEASURED_S2S`가 필요하다.
 
 ### D-2. W-01/W-04 delivery source
-실제 Text/audio/user-visible endpoint가 준비되지 않으면 해당 representative metric은 `BLOCKED/NOT_RUN`으로 남기고 headless smoke를 score로 승격하지 않는다.
+대표값은 `ACTUAL_USER_DELIVERY` sink의 실제 Text/audio/user-visible endpoint만 허용한다. 준비되지 않으면 해당 representative metric은 **`BLOCKED/NOT_RUN`**으로 남긴다. Headless smoke를 score로 승격하거나, 0점·추정값으로 대체하거나, 후보별로 다른 proxy를 적용하지 않는다. 가용 metric 기반 결론에는 evidence coverage를 함께 표시한다.
 
 ### D-3. Target-PC external validity
 Hosted Qwen과 macOS/Linux process prototype 결과는 Architecture 비교 근거이며 target Windows PC absolute performance를 증명하지 않는다.
@@ -85,4 +85,4 @@ approved source fingerprint
   → ADR
 ```
 
-W-07/W-08 평균과 모든 0~5 score는 이 승인 이후 frozen revision에서만 계산한다.
+W-07/W-08 평균과 모든 0~5 score는 이 승인 이후 frozen revision에서만 계산한다. W-01/W-04는 실제 delivery source가 추가되지 않는 한 승인 후에도 `BLOCKED/NOT_RUN`이며 전체 점수에 대입하지 않는다.

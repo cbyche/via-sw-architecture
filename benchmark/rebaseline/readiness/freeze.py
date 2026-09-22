@@ -14,6 +14,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[3]
 SUFFIXES = {".rs", ".toml", ".lock", ".py", ".json", ".md", ".sh"}
 EXCLUDED = {"target", ".git", ".venv", "__pycache__", "results", "node_modules"}
+EVIDENCE_POLICY_PATH = Path("benchmark/rebaseline/gate2/measurement-freeze.json")
 
 
 def digest(path: Path) -> str:
@@ -91,13 +92,41 @@ def fingerprint(files: dict[str, str]) -> str:
     return hashlib.sha256(json.dumps(files, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+def evidence_scope_policy(root: Path) -> dict[str, Any]:
+    path = root / EVIDENCE_POLICY_PATH
+    try:
+        contract = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"invalid measurement freeze contract: {path}") from exc
+    policy = contract.get("evidence_scope_policy")
+    if not isinstance(policy, dict):
+        raise ValueError("measurement freeze contract lacks evidence_scope_policy")
+    s2s = policy.get("s2s_synthetic_replay")
+    delivery = policy.get("w01_w04_delivery")
+    if not isinstance(s2s, dict) or not isinstance(delivery, dict):
+        raise ValueError("evidence scope policy must cover S2S and W-01/W-04")
+    if s2s.get("representative_score_eligible") is not False:
+        raise ValueError("synthetic/replayed S2S must be ineligible for representative score")
+    if s2s.get("final_absolute_product_latency_claim") is not False:
+        raise ValueError("synthetic/replayed S2S cannot support absolute product latency")
+    if delivery.get("required_sink") != "ACTUAL_USER_DELIVERY":
+        raise ValueError("W-01/W-04 representative evidence requires actual user delivery")
+    if delivery.get("when_missing") != "BLOCKED_NOT_RUN":
+        raise ValueError("missing W-01/W-04 delivery must remain BLOCKED/NOT_RUN")
+    for key in ("headless_score_eligible", "not_run_is_zero", "imputation_allowed"):
+        if delivery.get(key) is not False:
+            raise ValueError(f"W-01/W-04 evidence policy requires {key}=false")
+    return policy
+
+
 def candidate_manifest(root: Path) -> dict[str, Any]:
     files = inventory(root)
     if not files:
         raise ValueError("empty source inventory")
     lock = "prototype/gate2/Cargo.lock"
-    return {"schema_version": 1, "purpose": "MEASUREMENT_FREEZE_REVIEW", "files": files,
+    return {"schema_version": 2, "purpose": "MEASUREMENT_FREEZE_REVIEW", "files": files,
             "fingerprint": fingerprint(files), "cargo_lock_present": lock in files,
+            "evidence_scope_policy": evidence_scope_policy(root),
             "comparative_measurement_approved": False, "scores": None}
 
 
@@ -107,6 +136,8 @@ def authorize_run(manifest: dict[str, Any], approval: dict[str, Any], root: Path
         raise PermissionError("Measurement Freeze Review has not approved comparison")
     if approval.get("fingerprint") != manifest.get("fingerprint"):
         raise PermissionError("approval is for a different manifest")
+    if approval.get("evidence_scope_decisions") != manifest.get("evidence_scope_policy"):
+        raise PermissionError("approval does not accept the frozen evidence scope decisions")
     current = inventory(root)
     if current != manifest.get("files") or fingerprint(current) != manifest.get("fingerprint"):
         raise PermissionError("source, fixture or measurement contract changed after freeze")

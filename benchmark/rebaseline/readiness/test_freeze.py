@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +15,19 @@ class FreezeTests(unittest.TestCase):
         self.source.parent.mkdir(parents=True)
         self.source.write_text("// frozen source\n", encoding="utf-8")
         (self.root / "prototype/gate2/Cargo.lock").write_text("# frozen dependencies\n", encoding="utf-8")
+        contract = self.root / "benchmark/rebaseline/gate2/measurement-freeze.json"
+        contract.parent.mkdir(parents=True)
+        contract.write_text(json.dumps({"evidence_scope_policy": {
+            "s2s_synthetic_replay": {"representative_score_eligible": False,
+                "final_absolute_product_latency_claim": False},
+            "w01_w04_delivery": {"required_sink": "ACTUAL_USER_DELIVERY",
+                "when_missing": "BLOCKED_NOT_RUN", "headless_score_eligible": False,
+                "not_run_is_zero": False, "imputation_allowed": False}}}), encoding="utf-8")
+
+    def approval(self, manifest):
+        return {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT",
+                "fingerprint": manifest["fingerprint"],
+                "evidence_scope_decisions": manifest["evidence_scope_policy"]}
 
     def test_consistent_fingerprint(self):
         self.assertEqual(candidate_manifest(self.root), candidate_manifest(self.root))
@@ -23,7 +37,7 @@ class FreezeTests(unittest.TestCase):
 
     def test_exact_approved_manifest_is_allowed(self):
         manifest = candidate_manifest(self.root)
-        authorize_run(manifest, {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"]}, self.root)
+        authorize_run(manifest, self.approval(manifest), self.root)
 
     def test_no_approval_no_benchmark(self):
         with self.assertRaises(PermissionError):
@@ -33,19 +47,34 @@ class FreezeTests(unittest.TestCase):
         manifest = candidate_manifest(self.root)
         self.source.write_text("// optimized A only\n", encoding="utf-8")
         with self.assertRaises(PermissionError):
-            authorize_run(manifest, {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"]}, self.root)
+            authorize_run(manifest, self.approval(manifest), self.root)
 
     def test_new_source_invalidates_approval(self):
         manifest = candidate_manifest(self.root)
         self.source.with_name("new.rs").write_text("// changed structure\n", encoding="utf-8")
         with self.assertRaises(PermissionError):
-            authorize_run(manifest, {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"]}, self.root)
+            authorize_run(manifest, self.approval(manifest), self.root)
 
     def test_dependency_lock_required(self):
         (self.root / "prototype/gate2/Cargo.lock").unlink()
         manifest = candidate_manifest(self.root)
         with self.assertRaises(PermissionError):
-            authorize_run(manifest, {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"]}, self.root)
+            authorize_run(manifest, self.approval(manifest), self.root)
+
+    def test_evidence_scope_decisions_are_required(self):
+        manifest = candidate_manifest(self.root)
+        approval = self.approval(manifest)
+        del approval["evidence_scope_decisions"]
+        with self.assertRaises(PermissionError):
+            authorize_run(manifest, approval, self.root)
+
+    def test_weakened_delivery_scope_is_rejected(self):
+        manifest = candidate_manifest(self.root)
+        approval = self.approval(manifest)
+        approval["evidence_scope_decisions"] = json.loads(json.dumps(approval["evidence_scope_decisions"]))
+        approval["evidence_scope_decisions"]["w01_w04_delivery"]["headless_score_eligible"] = True
+        with self.assertRaises(PermissionError):
+            authorize_run(manifest, approval, self.root)
 
     def test_generated_output_not_source(self):
         base = inventory(self.root)
@@ -56,13 +85,13 @@ class FreezeTests(unittest.TestCase):
 
     def test_model_identity_required(self):
         manifest = candidate_manifest(self.root)
-        approval = {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"]}
+        approval = self.approval(manifest)
         with self.assertRaises(PermissionError):
             authorize_run(manifest, approval, self.root, real_model=True)
 
     def test_hosted_reference_profile_is_allowed(self):
         manifest = candidate_manifest(self.root)
-        approval = {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"],
+        approval = {**self.approval(manifest),
                     "model_execution_profile": {"kind":"OPENROUTER_HOSTED_REFERENCE","model_id":"qwen/qwen3-8b",
                     "base_url":"https://openrouter.ai/api","provider":"alibaba","allow_fallbacks":False,
                     "target_pc_absolute_latency_claim":False}}
@@ -70,7 +99,7 @@ class FreezeTests(unittest.TestCase):
 
     def test_hosted_reference_fallback_is_rejected(self):
         manifest = candidate_manifest(self.root)
-        approval = {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"],
+        approval = {**self.approval(manifest),
                     "model_execution_profile": {"kind":"OPENROUTER_HOSTED_REFERENCE","model_id":"qwen/qwen3-8b",
                     "base_url":"https://openrouter.ai/api","provider":"alibaba","allow_fallbacks":True,
                     "target_pc_absolute_latency_claim":False}}

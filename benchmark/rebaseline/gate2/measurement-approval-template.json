@@ -1,5 +1,5 @@
 {
-  "version": "G2-MEASUREMENT-APPROVAL-TEMPLATE-v2",
+  "version": "G2-MEASUREMENT-APPROVAL-TEMPLATE-v3",
   "approved": false,
   "purpose": "COMPARATIVE_MEASUREMENT",
   "fingerprint": "FILL_FROM_SOURCE_MANIFEST",
@@ -11,6 +11,25 @@
     "allow_fallbacks": false,
     "evidence": "MEASURED_MODEL_REFERENCE",
     "target_pc_absolute_latency_claim": false
+  },
+  "evidence_scope_decisions": {
+    "s2s_synthetic_replay": {
+      "allowed_use": [
+        "STRUCTURAL_CORRECTNESS",
+        "CONTRACT_VALIDATION",
+        "SIMULATED_E2E_SENSITIVITY"
+      ],
+      "representative_score_eligible": false,
+      "final_absolute_product_latency_claim": false,
+      "required_evidence_for_representative_score": "LIVE_MEASURED_S2S"
+    },
+    "w01_w04_delivery": {
+      "required_sink": "ACTUAL_USER_DELIVERY",
+      "when_missing": "BLOCKED_NOT_RUN",
+      "headless_score_eligible": false,
+      "not_run_is_zero": false,
+      "imputation_allowed": false
+    }
   },
   "note": "OPENROUTER_API_KEY is environment-only and is never recorded."
 }
