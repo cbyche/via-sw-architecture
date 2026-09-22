@@ -135,6 +135,8 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 
 현재 source revision은 다음을 CI에서 검증해야 Measurement Freeze 입력으로 인정한다.
 
+- W-07/W-08 change-locality는 `w07-w08-change-rules.json`의 24개 reviewed rule을 현재 `catalog_fingerprint`에 적용해 8 pair-label × 24 = 192 raw M/A/R row로 확장한다. 같은 complete configuration을 공유하는 pair-label은 동일해야 하며, 이 단계에서는 대표 평균·0~5 score·winner를 계산하지 않는다.
+
 - Task command dedup/revision/race/terminal invariants.
 - stale/wrong-run Agent event rejection.
 - Per-Task activation fencing.
@@ -147,7 +149,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 - W-10 structural smoke에서 external 24 cells의 fault를 candidate host 내부 dependency call로 시작하고, unaffected capability를 같은 shared/isolated candidate host endpoint로 probe한다. Agent Task probe는 실제 shared backend/isolated worker path를 지나며, shared integration-fatal은 whole-host restart 후 동일 deadline 안의 Core capability 복구를 판정한다. 이 smoke 출력은 `w10_metric_eligible=false`이며 대표 W-10 점수가 아님.
 - W-01 raw observation adapter가 Text/Voice raw endpoint를 frozen contract에 맞게 정규화하고 correctness failure를 censor한다. CI smoke는 headless evidence이며 representative metric·p95·score를 만들지 않음.
 - S2S TEST_ONLY replay가 scoring evidence로 승격되지 않음.
-- 4 DP catalog, 5 unique configuration, raw metric/change ledger가 모두 미측정 상태.
+- 4 DP catalog와 5 unique configuration의 metric ledger는 미측정 상태이며, W-07/W-08의 24-change raw M/A/R ledger만 `DESIGN_ANALYSIS`로 materialize한다. representative metric/score는 계속 NOT_RUN이다.
 
 이것들은 **product p95, W-05 accuracy, W-09 6-strata 대표값, W-10 28-cell 대표값을 증명하지 않는다.**
 
@@ -164,7 +166,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | W-09 6-strata recovery correctness controller | whole-VIA process-abort 4 strata + integration-host fatal 2 strata의 identity/state/control 복구 | **IMPLEMENTED / CI_SMOKE_GREEN**; 최종 metric용 500ms restart delay·100 scored trials/stratum·p95 aggregation은 freeze 후 runner에서 실행 필요 |
 | W-10 28-cell containment controller + endpoint adapters | containment representative metric | **CONTROLLER+ENDPOINT_ADAPTER_IMPLEMENTED / FROZEN_RUN_PENDING** — candidate host가 external socket fault를 실제 시작하고 같은 host의 unaffected capability를 probe한다. Agent probes는 shared backend/isolated worker를 경유하고 integration-fatal은 shared whole-host restart와 isolated worker restart에 같은 deadline을 적용한다. CI smoke는 별도 relaxed timing의 `metric_eligible=false` profile이며, frozen 30s·5회·2/10/20s·5s profile과 대표값 산출은 Measurement Freeze 이후에만 실행 |
 | 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
-| W-07/08 24 change raw analysis | change locality | **BASELINE_PROVENANCE_READY / ANALYSIS_PENDING** — catalog tooling이 실행 checkout의 실제 Git HEAD와 C/I/S/D+alternative `catalog_fingerprint`를 함께 기록한다. 24-change M/A/R ledger는 이 동일 fingerprint를 출발점으로 `DESIGN_ANALYSIS` 후 freeze 시 잠근다 |
+| W-07/08 24 change raw analysis | change locality | **RAW_DESIGN_ANALYSIS_READY / FREEZE_AGGREGATION_PENDING** — `w07-w08-change-rules.json`에 M 9 / A 9 / C 6의 M/A/R 근거를 고정하고 `change_analysis.py`가 현재 Git HEAD+`catalog_fingerprint` 기준으로 192 raw row를 검증한다. 기능 유지는 DESIGN_ARGUMENT_ONLY이며 W-07/W-08 평균·score는 Measurement Freeze 승인 후 frozen revision에서만 계산 |
 | actual Qwen run | W-05/IR latency | freeze 승인 후 사용자 Mac |
 
 따라서 현재 상태는 **Architecture candidate implementation이 상당 부분 executable해진 상태**지만, 아직 MEASUREMENT_READY라고 선언하지 않는다. blocker를 닫거나 리뷰에서 명시적 범위를 승인한 뒤 measurement revision을 freeze한다.

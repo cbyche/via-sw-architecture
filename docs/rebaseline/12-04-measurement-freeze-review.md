@@ -19,6 +19,7 @@
 | Mac environment | hardware/OS/toolchain manifest | USER_RUN_REQUIRED |
 | candidate order | 10 warmup + 100 scored, ABBA/BAAB balanced blocks | DRAFT_DEFINED |
 | 12-ASR raw ledger | null/NOT_RUN 유지 | NOT_RUN |
+| W-07/W-08 24-change raw ledger | M/A/R C/I/S/D count와 설계 유지 근거; 평균·score는 아직 금지 | DESIGN_ANALYSIS_READY / AGGREGATION_NOT_RUN |
 | score/winner | 산출 금지 | NOT_RUN |
 
 ## 2. S2S 시간

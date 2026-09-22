@@ -72,6 +72,18 @@ jobs:
           PY
           python3 benchmark/rebaseline/build_assets.py
           python3 benchmark/rebaseline/gate2/terminal_outcome_audit.py --root .
+          python3 benchmark/rebaseline/gate2/change_analysis.py --output /tmp/w07-w08-change-analysis
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('/tmp/w07-w08-change-analysis/w07-w08-validation-summary.json').read_text())
+          assert summary['raw_rows']==192
+          assert summary['pair_candidates']==8 and summary['unique_configurations']==5
+          assert summary['W-07']=='NOT_COMPUTED_PRE_MEASUREMENT_FREEZE'
+          assert summary['W-08']=='NOT_COMPUTED_PRE_MEASUREMENT_FREEZE'
+          assert summary['scores'] is None and summary['winner'] is None
+          assert summary['candidate_execution']=='NOT_RUN'
+          PY
           python3 benchmark/rebaseline/gate2/w04_foreground_contract.py --contract benchmark/rebaseline/gate2/w01-foreground-strata.json --validate-only
           python3 benchmark/rebaseline/gate2/w01_observation_adapter.py --contract benchmark/rebaseline/gate2/w01-foreground-strata.json --trace benchmark/rebaseline/gate2/w01-observation-smoke.json --output /tmp/w01-observation-smoke.json
           python3 - <<'PY'

@@ -7,6 +7,7 @@ python benchmark/rebaseline/gate2/catalog_check.py --output results/gate2-review
 python -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v
 python benchmark/rebaseline/build_assets.py
 python benchmark/rebaseline/gate2/terminal_outcome_audit.py --root .
+python benchmark/rebaseline/gate2/change_analysis.py --output results/gate2-change-analysis
 python benchmark/rebaseline/gate2/w04_foreground_contract.py \
   --contract benchmark/rebaseline/gate2/w01-foreground-strata.json \
   --validate-only
@@ -18,6 +19,6 @@ python benchmark/rebaseline/gate2/w12_safety.py \
   --validate-only
 ```
 
-산출물에는 5개 고유 configuration, 8개 pair-labelled 후보, W-01~W-12의 미측정 96개 row, 24개 change의 미분석 192개 row가 들어간다. null은 0점/0개가 아니라 NOT_RUN/NOT_ANALYZED다. `source_revision`은 실행 checkout의 실제 Git HEAD를 기록하고, `catalog_fingerprint`는 C/I/S/D 요소 정의와 Core alternative metadata를 해시하여 change-locality 분석의 구조 baseline을 재현 가능하게 고정한다.
+`catalog_check.py` 산출물에는 5개 고유 configuration, 8개 pair-labelled 후보, W-01~W-12의 미측정 96개 metric row와 24개 change용 192개 raw template row가 들어간다. null은 0점/0개가 아니라 NOT_RUN/NOT_ANALYZED다. `source_revision`은 실행 checkout의 실제 Git HEAD를 기록하고, `catalog_fingerprint`는 C/I/S/D 요소 정의와 Core alternative metadata를 해시한다. `change_analysis.py`는 별도의 reviewed 24-change rule을 이 동일 fingerprint에 적용해 192개 M/A/R raw row를 `DESIGN_ANALYSIS`로 확장하지만 Measurement Freeze 전에는 W-07/W-08 평균·score·winner를 계산하지 않는다.
 
 이 도구는 설계 ID·조합·전수 ledger의 정합성만 검사한다. W-10 CI smoke는 candidate endpoint wiring과 fault-containment controller correctness만 검증하며 대표 metric으로 승격하지 않는다. W-11/W-12의 checked-in oracle과 evaluator도 평가 계약의 분모·집계·guard를 고정하고 검증할 뿐이며, reviewed complete candidate trace가 없으면 대표 metric은 계속 NOT_RUN이다. VIA 전체 구현, Model accuracy, p95, Architecture winner를 증명하지 않는다. 사람용 문서에서는 W-ID만 쓰지 않고 전체 ASR 명칭/설명을 병기한다.
