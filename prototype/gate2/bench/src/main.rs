@@ -1,6 +1,7 @@
 mod exec_recovery;
 mod recovery;
 mod whole_process_recovery;
+mod containment;
 
 use clap::{Parser, Subcommand};
 use gate2_contracts::{
@@ -56,6 +57,16 @@ enum Command {
         worker: PathBuf,
     },
     W09WholeProcessSmoke,
+    W10Containment {
+        #[arg(long)]
+        spec: PathBuf,
+        #[arg(long)]
+        host: PathBuf,
+        #[arg(long)]
+        worker: PathBuf,
+        #[arg(long, default_value = "smoke")]
+        profile: String,
+    },
     W09RuntimeHost {
         #[arg(long)]
         task_candidate: String,
@@ -85,6 +96,12 @@ async fn main() -> anyhow::Result<()> {
             exec_recovery::integration_fatal_smoke(host, worker).await?
         }
         Command::W09WholeProcessSmoke => whole_process_recovery::whole_process_smoke().await?,
+        Command::W10Containment {
+            spec,
+            host,
+            worker,
+            profile,
+        } => containment::run(spec, host, worker, profile).await?,
         Command::W09RuntimeHost {
             task_candidate,
             db,

@@ -48,6 +48,46 @@ async fn write_response(
     Ok(())
 }
 
+
+async fn write_value(
+    stdout: &mut tokio::io::Stdout,
+    response: &serde_json::Value,
+) -> Result<(), Box<dyn std::error::Error>> {
+    stdout
+        .write_all(serde_json::to_string(response)?.as_bytes())
+        .await?;
+    stdout.write_all(b"\n").await?;
+    stdout.flush().await?;
+    Ok(())
+}
+
+fn core_probe_response(request: &serde_json::Value) -> Option<serde_json::Value> {
+    if request.get("op").and_then(serde_json::Value::as_str) != Some("core_probe") {
+        return None;
+    }
+    let capability = request
+        .get("capability")
+        .and_then(serde_json::Value::as_str)
+        .unwrap_or("");
+    let value = match capability {
+        "CAP-TEXT-INTERACTION" => "text:ready",
+        "CAP-BOUNDED-DOC-READ" => "doc-budget:education-budget",
+        "CAP-LOCAL-MEMORY-READ" => "memory:table-first",
+        "CAP-LOCAL-TASK-CARD-READ" => "task:T-PPT:running",
+        _ => {
+            return Some(serde_json::json!({
+                "status":"error",
+                "message":format!("unknown W-10 core probe capability: {capability}")
+            }));
+        }
+    };
+    Some(serde_json::json!({
+        "status":"core_probe",
+        "capability":capability,
+        "value":value
+    }))
+}
+
 async fn run_shared(
     agent_state_file: Option<PathBuf>,
 ) -> Result<(), Box<dyn std::error::Error>> {
@@ -59,7 +99,12 @@ async fn run_shared(
     let mut stdout = tokio::io::stdout();
 
     while let Some(line) = lines.next_line().await? {
-        let request: WorkerRequest = serde_json::from_str(&line)?;
+        let raw: serde_json::Value = serde_json::from_str(&line)?;
+        if let Some(response) = core_probe_response(&raw) {
+            write_value(&mut stdout, &response).await?;
+            continue;
+        }
+        let request: WorkerRequest = serde_json::from_value(raw)?;
         if matches!(request, WorkerRequest::AbortHost) {
             std::process::abort();
         }
@@ -119,7 +164,12 @@ async fn run_isolated(
     let mut stdout = tokio::io::stdout();
 
     while let Some(line) = lines.next_line().await? {
-        let request: WorkerRequest = serde_json::from_str(&line)?;
+        let raw: serde_json::Value = serde_json::from_str(&line)?;
+        if let Some(response) = core_probe_response(&raw) {
+            write_value(&mut stdout, &response).await?;
+            continue;
+        }
+        let request: WorkerRequest = serde_json::from_value(raw)?;
         let response = match request {
             WorkerRequest::Submit { request } => match bridge.submit(request).await {
                 Ok(reply) => WorkerResponse::Reply { reply },

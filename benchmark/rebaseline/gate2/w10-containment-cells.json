@@ -1,0 +1,103 @@
+{
+  "version": "W10-G2-v1",
+  "status": "FROZEN_BEFORE_CANDIDATE_RESULTS",
+  "provenance": {
+    "source_contract": "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-10",
+    "materialization_basis": [
+      "docs/rebaseline/08b-reserve-qa-formal-reassessment.md#RQA-04",
+      "benchmark/rebaseline/fixtures/base.json"
+    ],
+    "note": "Materializes the previously missing 6x4 matrix without changing the frozen 28-cell denominator, fault modes, repeats, probe times, or deadline."
+  },
+  "metric": {
+    "id": "W-10",
+    "name": "Dependency Failure Containment & Graceful Degradation",
+    "representative_metric": "unaffected_capability_retention_pct",
+    "formula": "100 * passed_cells / 28",
+    "target_pct": 100.0,
+    "cell_pass_rule": "STRICT_ALL_TRIALS_PASS"
+  },
+  "frozen_profile": {
+    "external": {
+      "failure_modes": ["connection_refused", "no_reply"],
+      "repeats_per_mode": 5,
+      "fault_hold_ms": 30000,
+      "probe_offsets_ms": [2000, 10000, 20000],
+      "capability_deadline_ms": 5000
+    },
+    "integration_fatal": {
+      "repeats": 5,
+      "capability_deadline_ms": 5000
+    }
+  },
+  "smoke_profile": {
+    "evidence_level": "CI_SMOKE_ONLY",
+    "metric_eligible": false,
+    "external": {
+      "repeats_per_mode": 1,
+      "fault_hold_ms": 50,
+      "probe_offsets_ms": [2, 10, 20],
+      "capability_deadline_ms": 5
+    },
+    "integration_fatal": {
+      "repeats": 1,
+      "capability_deadline_ms": 2000
+    }
+  },
+  "dependencies": [
+    {"id":"D-S2S-MODEL","kind":"model","fixture":"S2S model endpoint"},
+    {"id":"D-TEXT-MODEL","kind":"model","fixture":"VIA semantic text model endpoint"},
+    {"id":"D-DOC-SOURCE","kind":"context_source","fixture":"doc-budget source endpoint"},
+    {"id":"D-MAIL-SOURCE","kind":"context_source","fixture":"mail-17 source endpoint"},
+    {"id":"D-AGENT-DOC","kind":"agent","fixture":"agent-doc endpoint"},
+    {"id":"D-AGENT-MAIL","kind":"agent","fixture":"agent-mail endpoint"}
+  ],
+  "capabilities": [
+    {"id":"CAP-TEXT-INTERACTION","meaning":"Text turn is accepted and conversation interaction remains usable.","intrinsic_dependencies":[],"expected_token":"text:ready"},
+    {"id":"CAP-S2S-DIRECT","meaning":"S2S direct response remains usable when S2S itself is not the failed dependency.","intrinsic_dependencies":["D-S2S-MODEL"],"expected_token":"s2s:direct-ready"},
+    {"id":"CAP-SEMANTIC-TEXT","meaning":"Semantic text response remains usable when the text model itself is not failed.","intrinsic_dependencies":["D-TEXT-MODEL"],"expected_token":"semantic:ready"},
+    {"id":"CAP-BOUNDED-DOC-READ","meaning":"Bounded read of doc-budget from a different healthy source.","intrinsic_dependencies":["D-DOC-SOURCE"],"expected_token":"doc-budget:education-budget"},
+    {"id":"CAP-BOUNDED-MAIL-READ","meaning":"Bounded read of mail-17 from a different healthy source.","intrinsic_dependencies":["D-MAIL-SOURCE"],"expected_token":"mail:education-schedule"},
+    {"id":"CAP-AGENT-DOC-TASK","meaning":"Unrelated agent-doc Task status/control path remains usable.","intrinsic_dependencies":["D-AGENT-DOC"],"expected_token":"agent-doc:T-PPT:running"},
+    {"id":"CAP-AGENT-MAIL-TASK","meaning":"Unrelated agent-mail Task status/control path remains usable.","intrinsic_dependencies":["D-AGENT-MAIL"],"expected_token":"agent-mail:T-MAIL:running"},
+    {"id":"CAP-LOCAL-MEMORY-READ","meaning":"Locally stored permitted User Memory remains readable.","intrinsic_dependencies":[],"expected_token":"memory:table-first"},
+    {"id":"CAP-LOCAL-TASK-CARD-READ","meaning":"Locally durable Task card remains readable.","intrinsic_dependencies":[],"expected_token":"task:T-PPT:running"}
+  ],
+  "external_cells": [
+    {"id":"W10-E01","failed_dependency":"D-S2S-MODEL","unaffected_capability":"CAP-TEXT-INTERACTION"},
+    {"id":"W10-E02","failed_dependency":"D-S2S-MODEL","unaffected_capability":"CAP-BOUNDED-DOC-READ"},
+    {"id":"W10-E03","failed_dependency":"D-S2S-MODEL","unaffected_capability":"CAP-AGENT-MAIL-TASK"},
+    {"id":"W10-E04","failed_dependency":"D-S2S-MODEL","unaffected_capability":"CAP-LOCAL-MEMORY-READ"},
+
+    {"id":"W10-E05","failed_dependency":"D-TEXT-MODEL","unaffected_capability":"CAP-S2S-DIRECT"},
+    {"id":"W10-E06","failed_dependency":"D-TEXT-MODEL","unaffected_capability":"CAP-BOUNDED-DOC-READ"},
+    {"id":"W10-E07","failed_dependency":"D-TEXT-MODEL","unaffected_capability":"CAP-AGENT-MAIL-TASK"},
+    {"id":"W10-E08","failed_dependency":"D-TEXT-MODEL","unaffected_capability":"CAP-LOCAL-TASK-CARD-READ"},
+
+    {"id":"W10-E09","failed_dependency":"D-DOC-SOURCE","unaffected_capability":"CAP-S2S-DIRECT"},
+    {"id":"W10-E10","failed_dependency":"D-DOC-SOURCE","unaffected_capability":"CAP-BOUNDED-MAIL-READ"},
+    {"id":"W10-E11","failed_dependency":"D-DOC-SOURCE","unaffected_capability":"CAP-AGENT-MAIL-TASK"},
+    {"id":"W10-E12","failed_dependency":"D-DOC-SOURCE","unaffected_capability":"CAP-TEXT-INTERACTION"},
+
+    {"id":"W10-E13","failed_dependency":"D-MAIL-SOURCE","unaffected_capability":"CAP-S2S-DIRECT"},
+    {"id":"W10-E14","failed_dependency":"D-MAIL-SOURCE","unaffected_capability":"CAP-BOUNDED-DOC-READ"},
+    {"id":"W10-E15","failed_dependency":"D-MAIL-SOURCE","unaffected_capability":"CAP-AGENT-DOC-TASK"},
+    {"id":"W10-E16","failed_dependency":"D-MAIL-SOURCE","unaffected_capability":"CAP-TEXT-INTERACTION"},
+
+    {"id":"W10-E17","failed_dependency":"D-AGENT-DOC","unaffected_capability":"CAP-S2S-DIRECT"},
+    {"id":"W10-E18","failed_dependency":"D-AGENT-DOC","unaffected_capability":"CAP-BOUNDED-MAIL-READ"},
+    {"id":"W10-E19","failed_dependency":"D-AGENT-DOC","unaffected_capability":"CAP-AGENT-MAIL-TASK"},
+    {"id":"W10-E20","failed_dependency":"D-AGENT-DOC","unaffected_capability":"CAP-TEXT-INTERACTION"},
+
+    {"id":"W10-E21","failed_dependency":"D-AGENT-MAIL","unaffected_capability":"CAP-S2S-DIRECT"},
+    {"id":"W10-E22","failed_dependency":"D-AGENT-MAIL","unaffected_capability":"CAP-BOUNDED-DOC-READ"},
+    {"id":"W10-E23","failed_dependency":"D-AGENT-MAIL","unaffected_capability":"CAP-AGENT-DOC-TASK"},
+    {"id":"W10-E24","failed_dependency":"D-AGENT-MAIL","unaffected_capability":"CAP-TEXT-INTERACTION"}
+  ],
+  "integration_fatal_cells": [
+    {"id":"W10-F01","fault":"integration_host_fatal","unaffected_capability":"CAP-TEXT-INTERACTION"},
+    {"id":"W10-F02","fault":"integration_host_fatal","unaffected_capability":"CAP-BOUNDED-DOC-READ"},
+    {"id":"W10-F03","fault":"integration_host_fatal","unaffected_capability":"CAP-LOCAL-MEMORY-READ"},
+    {"id":"W10-F04","fault":"integration_host_fatal","unaffected_capability":"CAP-LOCAL-TASK-CARD-READ"}
+  ]
+}

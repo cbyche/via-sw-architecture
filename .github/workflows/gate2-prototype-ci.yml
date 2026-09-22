@@ -51,6 +51,7 @@ jobs:
           cargo run --locked -q -p gate2-bench -- w09-whole-restart-smoke
           cargo run --locked -q -p gate2-bench -- w09-whole-process-smoke
           cargo run --locked -q -p gate2-bench -- w09-integration-fatal-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
+          cargo run --locked -q -p gate2-bench -- w10-containment --spec ../../benchmark/rebaseline/gate2/w10-containment-cells.json --host target/debug/gate2-host --worker target/debug/gate2-worker --profile smoke
       - name: Gate2 catalog static check
         run: |
           python3 benchmark/rebaseline/gate2/catalog_check.py --output /tmp/gate2-review
