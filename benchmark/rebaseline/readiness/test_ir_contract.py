@@ -98,6 +98,13 @@ class IrContractTests(unittest.TestCase):
         self.assertEqual(request['seed'],123)
         self.assertFalse(request['chat_template_kwargs']['enable_thinking'])
 
+    def test_openrouter_profile_uses_json_mode_and_client_validation(self):
+        request=prepare('integrated',self.case,'qwen/qwen3-8b',execution_profile='OPENROUTER_JSON')['request']
+        self.assertEqual(request['response_format'], {'type':'json_object'})
+        self.assertEqual(request['provider'], {'only':['alibaba'],'allow_fallbacks':False})
+        self.assertNotIn('chat_template_kwargs',request)
+        self.assertIn('/no_think',request['messages'][0]['content'])
+
     def test_seed_changes_request_fingerprint_without_changing_input(self):
         a=prepare('integrated',self.case,'m',seed=1)
         b=prepare('integrated',self.case,'m',seed=2)

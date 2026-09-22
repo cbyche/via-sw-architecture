@@ -1,15 +1,17 @@
 {
-  "version": "G2-QWEN-v1",
-  "model_repo": "Qwen/Qwen3-8B-GGUF",
-  "revision": "6a569868d07d3bd59e8b97fb001bf8c0b254bb20",
-  "filename": "Qwen3-8B-Q4_K_M.gguf",
-  "quantization": "Q4_K_M",
-  "sha256": "d98cdcbd03e17ce47681435b5150e34c1417f50b5c0019dd560e4882c5745785",
-  "expected_size_bytes": 5030000000,
-  "runtime": "llama.cpp",
-  "context_size": 16384,
-  "parallel": 1,
+  "version": "G2-QWEN-HOSTED-REFERENCE-v2",
+  "execution_profile": "OPENROUTER_HOSTED_REFERENCE",
+  "model_family": "Qwen3-8B",
+  "model_id": "qwen/qwen3-8b",
+  "base_url": "https://openrouter.ai/api",
+  "provider": "alibaba",
+  "allow_fallbacks": false,
   "thinking": false,
+  "non_thinking_control": "/no_think in system instruction",
+  "structured_output": {
+    "request_mode": "json_object",
+    "schema_enforcement": "VIA_CLIENT_VALIDATE_AND_REPAIR"
+  },
   "sampling": {
     "temperature": 0.7,
     "top_p": 0.8,
@@ -17,5 +19,10 @@
     "min_p": 0,
     "presence_penalty": 1.5
   },
-  "evidence": "MODEL_ARTIFACT_CONTRACT_NOT_LOCAL_MEASUREMENT"
+  "api_key_source": "OPENROUTER_API_KEY environment variable only",
+  "evidence": "MEASURED_MODEL_REFERENCE",
+  "claim_limits": [
+    "Not local Q4_K_M measurement",
+    "Not target-PC absolute model latency"
+  ]
 }

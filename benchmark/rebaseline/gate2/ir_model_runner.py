@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import copy
 import json
+import os
 import subprocess
 import sys
 import time
@@ -29,6 +30,7 @@ from ir_contract import merge_stages, prepare, validate_result  # noqa: E402
 MAX_CONTEXT_ROUNDS = 2
 MAX_CORRECTION_ROUNDS = 2
 MAX_VALIDATION_REPAIRS = 2
+OPENROUTER_PREFIX = "https://openrouter.ai/"
 DEFAULT_CASES = ["TC-04.2", "TC-06.2", "TC-09.3", "TC-09.4", "TC-14.5"]
 
 
@@ -194,14 +196,19 @@ def response_content(response: dict[str, Any]) -> dict[str, Any]:
     return json.loads(raw)
 
 
+def execution_profile_for_endpoint(endpoint: str) -> str:
+    return "OPENROUTER_JSON" if endpoint.startswith(OPENROUTER_PREFIX) else "LOCAL_JSON_SCHEMA"
+
+
 def post_json(url: str, body: dict[str, Any]) -> tuple[int, dict[str, Any]]:
     data = json.dumps(body, ensure_ascii=False).encode()
-    request = urllib.request.Request(
-        url,
-        data=data,
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+    headers = {"Content-Type": "application/json"}
+    if url.startswith(OPENROUTER_PREFIX):
+        api_key = os.environ.get("OPENROUTER_API_KEY")
+        if not api_key:
+            raise SemanticRunError("OPENROUTER_API_KEY is required for hosted model execution")
+        headers["Authorization"] = f"Bearer {api_key}"
+    request = urllib.request.Request(url, data=data, headers=headers, method="POST")
     start = time.perf_counter_ns()
     with urllib.request.urlopen(request, timeout=180) as response:
         parsed = json.loads(response.read())
@@ -228,6 +235,7 @@ def call_stage(
             prior,
             controller_feedback=feedback,
             seed=seed,
+            execution_profile=execution_profile_for_endpoint(endpoint),
         )
         latency_ns, raw = post_json(endpoint, prepared["request"])
         try:
@@ -568,18 +576,20 @@ def run_staged(
         continue
 
 
-def dry_run(case_ids: list[str], model: str, seed: int) -> dict[str, Any]:
+def dry_run(case_ids: list[str], model: str, seed: int, server: str) -> dict[str, Any]:
     rows = load_cases(case_ids)
+    profile = execution_profile_for_endpoint(server)
     output: dict[str, Any] = {
         "status": "DRY_RUN_MODEL_NOT_CALLED",
         "scoring": "NOT_RUN",
         "model": model,
+        "execution_profile": profile,
         "seed": seed,
         "cases": [],
     }
     for case, _sources, _followups in rows:
-        integrated = prepare("integrated", case, model, seed=seed)
-        grounding = prepare("grounding", case, model, seed=seed)
+        integrated = prepare("integrated", case, model, seed=seed, execution_profile=profile)
+        grounding = prepare("grounding", case, model, seed=seed, execution_profile=profile)
         output["cases"].append(
             {
                 "case_id": case["case_id"],
@@ -605,6 +615,9 @@ def execute(
         "status": "MODEL_CALLS_EXECUTED_RAW_ONLY",
         "scoring": "NOT_RUN",
         "model": model,
+        "execution_profile": execution_profile_for_endpoint(endpoint),
+        "evidence": "MEASURED_MODEL_REFERENCE" if endpoint.startswith(OPENROUTER_PREFIX) else "MEASURED_MODEL_LOCAL",
+        "target_pc_absolute_latency_claim": False if endpoint.startswith(OPENROUTER_PREFIX) else None,
         "seed": seed,
         "cases": [],
     }
@@ -626,8 +639,8 @@ def execute(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--execute", action="store_true")
-    parser.add_argument("--server", default="http://127.0.0.1:8080")
-    parser.add_argument("--model", default="Qwen3-8B-Q4_K_M")
+    parser.add_argument("--server", default="https://openrouter.ai/api")
+    parser.add_argument("--model", default="qwen/qwen3-8b")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--case", action="append", dest="cases")
     parser.add_argument("--manifest", type=Path)
@@ -646,10 +659,14 @@ def main() -> None:
         manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
         approval = json.loads(args.approval.read_text(encoding="utf-8"))
         authorize_run(manifest, approval, ROOT, real_model=True)
+        profile = approval["model_execution_profile"]
+        if profile["kind"] == "OPENROUTER_HOSTED_REFERENCE":
+            if args.model != profile["model_id"] or args.server.rstrip("/") != profile["base_url"].rstrip("/"):
+                parser.error("--model/--server must match the frozen hosted model profile")
         result = execute(case_ids, args.model, args.seed, args.server)
         result["freeze_fingerprint"] = manifest["fingerprint"]
     else:
-        result = dry_run(case_ids, args.model, args.seed)
+        result = dry_run(case_ids, args.model, args.seed, args.server)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(

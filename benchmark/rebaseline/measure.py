@@ -1,4 +1,4 @@
-"""11-A 측정 보조 함수. 실제 VIA 결과를 생성하거나 0~5 점수를 산정하지 않는다."""
+"""Legacy 11-A/11-C helper. Working-12 final scoring uses benchmark/rebaseline/working12/score.py."""
 from __future__ import annotations
 import argparse, hashlib, json, math
 from pathlib import Path

@@ -7,6 +7,11 @@ on:
       - 'prototype/gate2/**'
       - 'benchmark/rebaseline/gate2/**'
       - 'benchmark/rebaseline/readiness/**'
+      - 'benchmark/rebaseline/working12/**'
+      - 'docs/rebaseline/11d-working-12-measurement-and-scoring.md'
+      - 'docs/rebaseline/12-04-measurement-freeze-review.md'
+      - 'docs/rebaseline/12-04a-implementation-mapping-and-fairness.md'
+      - 'docs/rebaseline/12-gate2/**'
       - 'scripts/gate2/**'
       - '.github/workflows/gate2-prototype-ci.yml'
   workflow_dispatch:
@@ -58,8 +63,10 @@ jobs:
           python3 -m unittest discover -s benchmark/rebaseline/gate2 -p 'test_*.py' -v
       - name: Python pre-measurement checks
         run: |
-          python3 -m py_compile benchmark/rebaseline/gate2/*.py benchmark/rebaseline/readiness/*.py
+          python3 -m py_compile benchmark/rebaseline/gate2/*.py benchmark/rebaseline/readiness/*.py benchmark/rebaseline/working12/*.py
           python3 -m unittest discover -s benchmark/rebaseline/readiness -p 'test_*.py' -v
+          python3 -m unittest discover -s benchmark/rebaseline/working12 -p 'test_*.py' -v
+          python3 benchmark/rebaseline/working12/score.py --validate-only
           python3 benchmark/rebaseline/readiness/canonical_adapter.py --check
           python3 benchmark/rebaseline/readiness/freeze.py --out /tmp/gate2-freeze-review
           python3 - <<'PY'
@@ -106,4 +113,9 @@ jobs:
           assert order['scored'].count('A')==100 and order['scored'].count('B')==100
           ir=json.loads(Path('/tmp/ir-dry-run.json').read_text())
           assert ir['status']=='DRY_RUN_MODEL_NOT_CALLED' and ir['scoring']=='NOT_RUN'
+          assert ir['execution_profile']=='OPENROUTER_JSON'
+          first=ir['cases'][0]['integrated']['request']
+          assert first['response_format']=={'type':'json_object'}
+          assert first['provider']=={'only':['alibaba'],'allow_fallbacks':False}
+          assert 'Authorization' not in str(ir)
           PY

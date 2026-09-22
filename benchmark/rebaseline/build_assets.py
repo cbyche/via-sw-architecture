@@ -1,5 +1,6 @@
 from pathlib import Path
 import json,csv,re,hashlib,copy
+# Legacy 7-ASR generated assets remain for compatibility; Working-12 scoring is authoritative in benchmark/rebaseline/working12/.
 ROOT=Path(__file__).resolve().parents[2]
 B=ROOT/'benchmark/rebaseline'; B.mkdir(parents=True,exist_ok=True)
 def dump(p,x):

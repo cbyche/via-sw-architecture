@@ -229,7 +229,8 @@ def stage_input(stage: str, clean: dict[str, Any]) -> dict[str, Any]:
 def prepare(stage: str, case: dict[str, Any], model: str,
             prior: dict[str, dict[str, Any]] | None = None,
             controller_feedback: str | None = None,
-            seed: int = 42) -> dict[str, Any]:
+            seed: int = 42,
+            execution_profile: str = 'LOCAL_JSON_SCHEMA') -> dict[str, Any]:
     if stage not in STAGES or not model:
         raise ValueError('stage/model required')
     clean = clean_input(case)
@@ -246,23 +247,28 @@ def prepare(stage: str, case: dict[str, Any], model: str,
         raise ValueError('empty controller feedback is not meaningful')
     if type(seed) is not int:
         raise ValueError('seed must be an integer')
-    user_payload = {
-        'input': stage_input(stage, clean),
-        'prior': prior,
-        'controller_feedback': controller_feedback,
-    }
+    user_payload = {'input': stage_input(stage, clean), 'prior': prior, 'controller_feedback': controller_feedback}
     body = {'model': model, 'stream': False,
             'temperature': 0.7, 'top_p': 0.8, 'top_k': 20, 'min_p': 0.0,
             'presence_penalty': 1.5, 'seed': seed,
-            'chat_template_kwargs': {'enable_thinking': False},
             'messages': [
                 {'role': 'system', 'content': BASE_PROMPT + '\n' + PURPOSES[stage]},
-                {'role': 'user', 'content': json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}],
-            'response_format': {'type': 'json_schema', 'json_schema': {'name': 'via_' + stage, 'strict': True, 'schema': schemas()[stage]}}}
+                {'role': 'user', 'content': json.dumps(user_payload, ensure_ascii=False, sort_keys=True)}]}
+    if execution_profile == 'LOCAL_JSON_SCHEMA':
+        body['chat_template_kwargs'] = {'enable_thinking': False}
+        body['response_format'] = {'type': 'json_schema', 'json_schema': {
+            'name': 'via_' + stage, 'strict': True, 'schema': schemas()[stage]}}
+    elif execution_profile == 'OPENROUTER_JSON':
+        body['messages'][0]['content'] += '\nReturn only a valid JSON object matching the requested contract. /no_think'
+        body['response_format'] = {'type': 'json_object'}
+        body['provider'] = {'only': ['alibaba'], 'allow_fallbacks': False}
+    else:
+        raise ValueError('unsupported execution profile')
     wire = json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode()
     return {'request': body, 'request_sha256': hashlib.sha256(wire).hexdigest(), 'input_tokens': None,
             'model_execution': 'NOT_RUN', 'tokenizer_execution': 'NOT_RUN',
-            'note': 'Prepared API payload only; exact model chat-template tokenization remains required.'}
+            'execution_profile': execution_profile,
+            'note': 'Prepared API payload only; exact provider/runtime tokenization remains execution evidence.'}
 
 
 def merge_stages(case: dict[str, Any], grounding: dict[str, Any], association: dict[str, Any],
