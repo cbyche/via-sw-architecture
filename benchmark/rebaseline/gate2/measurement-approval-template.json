@@ -1,5 +1,5 @@
 {
-  "version": "G2-MEASUREMENT-APPROVAL-TEMPLATE-v3",
+  "version": "G2-MEASUREMENT-APPROVAL-TEMPLATE-v4",
   "approved": false,
   "purpose": "COMPARATIVE_MEASUREMENT",
   "fingerprint": "FILL_FROM_SOURCE_MANIFEST",
@@ -19,14 +19,16 @@
         "CONTRACT_VALIDATION",
         "SIMULATED_E2E_SENSITIVITY"
       ],
-      "representative_score_eligible": false,
+      "representative_score_eligible": true,
       "final_absolute_product_latency_claim": false,
-      "required_evidence_for_representative_score": "LIVE_MEASURED_S2S"
+      "required_evidence_for_representative_score": "FROZEN_MODEL_SPEC_REFERENCE",
+      "score_claim_scope": "SIMULATED_REFERENCE_ONLY"
     },
     "w01_w04_delivery": {
-      "required_sink": "ACTUAL_USER_DELIVERY",
+      "required_sink": "INSTRUMENTED_REFERENCE_DELIVERY",
       "when_missing": "BLOCKED_NOT_RUN",
-      "headless_score_eligible": false,
+      "headless_score_eligible": true,
+      "score_claim_scope": "REFERENCE_HARNESS_ONLY",
       "not_run_is_zero": false,
       "imputation_allowed": false
     }

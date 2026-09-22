@@ -22,6 +22,8 @@ python benchmark/rebaseline/gate2/w12_safety.py \
 
 Measurement Freeze 승인 뒤 W-09/W-10 대표 실행은 raw Rust CLI를 직접 발표 근거로 사용하지 않고 approval-gated orchestrator를 통한다.
 
+W-01/02/03/04/06/11/12 reference campaign은 `reference_campaign.py`를 사용한다. 생성 WAV와 instrumented reference delivery, acceptance stub, frozen functional fixtures를 사용하며 `docs/rebaseline/12-gate2/reference-campaign-contract.md`의 사전 고정 logical timing model을 따른다. 이 score는 Architecture mockup/reference evidence이고 production latency가 아니다.
+
 ```bash
 cargo +1.98.1 build --locked --manifest-path prototype/gate2/Cargo.toml \
   -p gate2-bench -p gate2-host -p gate2-worker

@@ -105,15 +105,21 @@ def evidence_scope_policy(root: Path) -> dict[str, Any]:
     delivery = policy.get("w01_w04_delivery")
     if not isinstance(s2s, dict) or not isinstance(delivery, dict):
         raise ValueError("evidence scope policy must cover S2S and W-01/W-04")
-    if s2s.get("representative_score_eligible") is not False:
-        raise ValueError("synthetic/replayed S2S must be ineligible for representative score")
+    if s2s.get("representative_score_eligible") is not True:
+        raise ValueError("frozen S2S reference must be eligible for simulated-reference scoring")
     if s2s.get("final_absolute_product_latency_claim") is not False:
         raise ValueError("synthetic/replayed S2S cannot support absolute product latency")
-    if delivery.get("required_sink") != "ACTUAL_USER_DELIVERY":
-        raise ValueError("W-01/W-04 representative evidence requires actual user delivery")
+    if s2s.get("score_claim_scope") != "SIMULATED_REFERENCE_ONLY":
+        raise ValueError("S2S reference score must remain simulated-reference only")
+    if delivery.get("required_sink") != "INSTRUMENTED_REFERENCE_DELIVERY":
+        raise ValueError("W-01/W-04 require the instrumented reference delivery sink")
     if delivery.get("when_missing") != "BLOCKED_NOT_RUN":
         raise ValueError("missing W-01/W-04 delivery must remain BLOCKED/NOT_RUN")
-    for key in ("headless_score_eligible", "not_run_is_zero", "imputation_allowed"):
+    if delivery.get("headless_score_eligible") is not True:
+        raise ValueError("instrumented reference delivery must be score eligible")
+    if delivery.get("score_claim_scope") != "REFERENCE_HARNESS_ONLY":
+        raise ValueError("delivery score claim must remain reference-harness only")
+    for key in ("not_run_is_zero", "imputation_allowed"):
         if delivery.get(key) is not False:
             raise ValueError(f"W-01/W-04 evidence policy requires {key}=false")
     return policy

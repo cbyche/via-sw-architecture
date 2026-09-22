@@ -21,7 +21,7 @@ from timing_contract import Event, endpoint_sample
 from w04_foreground_contract import EXPECTED_CASES, validate_contract
 
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
-VALID_SINKS = {"HEADLESS_TEST_ONLY", "ACTUAL_USER_DELIVERY"}
+VALID_SINKS = {"HEADLESS_TEST_ONLY", "ACTUAL_USER_DELIVERY", "INSTRUMENTED_REFERENCE_DELIVERY"}
 
 
 def load_json(path):
@@ -127,7 +127,7 @@ def adapt_trace(contract, trace):
     sink = trace.get("sink")
     if sink not in VALID_SINKS:
         raise ValueError(
-            "W-01 sink must be HEADLESS_TEST_ONLY or ACTUAL_USER_DELIVERY"
+            "W-01 sink must be HEADLESS_TEST_ONLY, ACTUAL_USER_DELIVERY, or INSTRUMENTED_REFERENCE_DELIVERY"
         )
 
     events = raw_events(trace)
@@ -170,6 +170,7 @@ def adapt_trace(contract, trace):
             ),
             "candidate_observed_latency_ns": observed if correct else None,
             "actual_user_delivery_observed": sink == "ACTUAL_USER_DELIVERY",
+            "instrumented_reference_delivery_observed": sink == "INSTRUMENTED_REFERENCE_DELIVERY",
             "representative_metric_eligible": False,
             "representative_metric_value_ns": None,
             "p95": None,

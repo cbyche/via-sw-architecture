@@ -18,10 +18,12 @@ class FreezeTests(unittest.TestCase):
         contract = self.root / "benchmark/rebaseline/gate2/measurement-freeze.json"
         contract.parent.mkdir(parents=True)
         contract.write_text(json.dumps({"evidence_scope_policy": {
-            "s2s_synthetic_replay": {"representative_score_eligible": False,
-                "final_absolute_product_latency_claim": False},
-            "w01_w04_delivery": {"required_sink": "ACTUAL_USER_DELIVERY",
-                "when_missing": "BLOCKED_NOT_RUN", "headless_score_eligible": False,
+            "s2s_synthetic_replay": {"representative_score_eligible": True,
+                "final_absolute_product_latency_claim": False,
+                "score_claim_scope": "SIMULATED_REFERENCE_ONLY"},
+            "w01_w04_delivery": {"required_sink": "INSTRUMENTED_REFERENCE_DELIVERY",
+                "when_missing": "BLOCKED_NOT_RUN", "headless_score_eligible": True,
+                "score_claim_scope": "REFERENCE_HARNESS_ONLY",
                 "not_run_is_zero": False, "imputation_allowed": False}}}), encoding="utf-8")
 
     def approval(self, manifest):
@@ -72,7 +74,7 @@ class FreezeTests(unittest.TestCase):
         manifest = candidate_manifest(self.root)
         approval = self.approval(manifest)
         approval["evidence_scope_decisions"] = json.loads(json.dumps(approval["evidence_scope_decisions"]))
-        approval["evidence_scope_decisions"]["w01_w04_delivery"]["headless_score_eligible"] = True
+        approval["evidence_scope_decisions"]["w01_w04_delivery"]["headless_score_eligible"] = False
         with self.assertRaises(PermissionError):
             authorize_run(manifest, approval, self.root)
 
