@@ -53,7 +53,7 @@ impl Profile {
                 capability_deadline: Duration::from_secs(5),
                 fatal_repeats: 5,
                 fatal_deadline: Duration::from_secs(5),
-                metric_eligible: false,
+                metric_eligible: true,
             }),
             other => anyhow::bail!("unknown W-10 profile: {other}; use smoke or frozen"),
         }
@@ -468,11 +468,21 @@ pub async fn run(
     host: PathBuf,
     worker: PathBuf,
     profile_name: String,
+    freeze_fingerprint: Option<String>,
 ) -> anyhow::Result<Value> {
     let spec: Value = serde_json::from_slice(&std::fs::read(&spec_path)?)?;
     validate_spec(&spec)?;
     let expected = expected_capabilities(&spec)?;
     let profile = Profile::from_name(&profile_name)?;
+    if profile.metric_eligible {
+        let fingerprint = freeze_fingerprint
+            .as_deref()
+            .ok_or_else(|| anyhow::anyhow!("frozen W-10 requires --freeze-fingerprint"))?;
+        anyhow::ensure!(
+            fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
+            "invalid W-10 freeze fingerprint"
+        );
+    }
 
     let mut candidate_results = Vec::new();
     for candidate_mode in ["shared", "isolated"] {
@@ -571,19 +581,31 @@ pub async fn run(
 
     Ok(json!({
         "status":"PASS",
-        "scope":"W-10 28-cell containment controller candidate-endpoint smoke",
+        "scope":"W-10 28-cell containment controller candidate-endpoint trials",
         "spec":spec_path,
         "spec_version":spec["version"],
         "profile":profile.name,
+        "freeze_fingerprint":freeze_fingerprint,
         "frozen_contract_validated":true,
         "candidates":candidate_results,
-        "w10_representative_metric":"NOT_RUN",
+        "w10_representative_metric":if profile.metric_eligible {
+            json!(candidate_results.iter().map(|candidate| json!({
+                "exec_candidate":candidate["exec_candidate"],
+                "unaffected_capability_retention_pct":candidate["controller_retention_pct"]
+            })).collect::<Vec<_>>())
+        } else {
+            json!("NOT_RUN")
+        },
         "w10_metric_eligible":profile.metric_eligible,
         "candidate_endpoint_adapter_ready":true,
-        "measurement_freeze_required":true,
+        "measurement_freeze_required":!profile.metric_eligible,
         "external_capability_evidence":"ACTUAL_CANDIDATE_HOST_PROBE_SURFACE_WITH_DETERMINISTIC_DEPENDENCY_FIXTURES",
         "external_fault_evidence":"CANDIDATE_INITIATED_SOCKET_CONNECTION_REFUSED_OR_NO_REPLY",
         "integration_fatal_evidence":"ACTUAL_SHARED_HOST_RESTART_VS_ISOLATED_WORKER_RESTART_WITH_COMMON_DEADLINE",
-        "note":"Smoke now routes external-fault probes through each candidate host and gives shared-process containment the same deadline via whole-host restart. Final W-10 representative measurement remains NOT_RUN until Measurement Freeze approval and the frozen repeats/timing are executed."
+        "note":if profile.metric_eligible {
+            "Frozen repeats/timing executed; publish only through the approval-gated representative runner."
+        } else {
+            "Smoke routes probes through each candidate host but is not representative metric evidence."
+        }
     }))
 }

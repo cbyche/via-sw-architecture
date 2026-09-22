@@ -57,6 +57,22 @@ enum Command {
         worker: PathBuf,
     },
     W09WholeProcessSmoke,
+    W09IntegrationFatal {
+        #[arg(long)]
+        host: PathBuf,
+        #[arg(long)]
+        worker: PathBuf,
+        #[arg(long, default_value = "smoke")]
+        profile: String,
+        #[arg(long)]
+        freeze_fingerprint: Option<String>,
+    },
+    W09WholeProcess {
+        #[arg(long, default_value = "smoke")]
+        profile: String,
+        #[arg(long)]
+        freeze_fingerprint: Option<String>,
+    },
     W10Containment {
         #[arg(long)]
         spec: PathBuf,
@@ -66,6 +82,8 @@ enum Command {
         worker: PathBuf,
         #[arg(long, default_value = "smoke")]
         profile: String,
+        #[arg(long)]
+        freeze_fingerprint: Option<String>,
     },
     W09RuntimeHost {
         #[arg(long)]
@@ -96,12 +114,33 @@ async fn main() -> anyhow::Result<()> {
             exec_recovery::integration_fatal_smoke(host, worker).await?
         }
         Command::W09WholeProcessSmoke => whole_process_recovery::whole_process_smoke().await?,
+        Command::W09IntegrationFatal {
+            host,
+            worker,
+            profile,
+            freeze_fingerprint,
+        } => {
+            exec_recovery::integration_fatal(
+                host,
+                worker,
+                &profile,
+                freeze_fingerprint.as_deref(),
+            )
+            .await?
+        }
+        Command::W09WholeProcess {
+            profile,
+            freeze_fingerprint,
+        } => {
+            whole_process_recovery::whole_process(&profile, freeze_fingerprint.as_deref()).await?
+        }
         Command::W10Containment {
             spec,
             host,
             worker,
             profile,
-        } => containment::run(spec, host, worker, profile).await?,
+            freeze_fingerprint,
+        } => containment::run(spec, host, worker, profile, freeze_fingerprint).await?,
         Command::W09RuntimeHost {
             task_candidate,
             db,

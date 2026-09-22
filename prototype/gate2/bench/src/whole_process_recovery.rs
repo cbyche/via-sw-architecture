@@ -303,32 +303,87 @@ async fn one_stratum(
 }
 
 pub async fn whole_process_smoke() -> anyhow::Result<serde_json::Value> {
+    whole_process("smoke", None).await
+}
+
+fn nearest_rank_p95(values: &[u64]) -> anyhow::Result<u64> {
+    anyhow::ensure!(!values.is_empty(), "p95 requires at least one W-09 trial");
+    let mut sorted = values.to_vec();
+    sorted.sort_unstable();
+    let rank = (95 * sorted.len()).div_ceil(100);
+    Ok(sorted[rank - 1])
+}
+
+pub async fn whole_process(
+    profile: &str,
+    freeze_fingerprint: Option<&str>,
+) -> anyhow::Result<serde_json::Value> {
+    let (trials_per_stratum, restart_delay, metric_eligible) = match profile {
+        "smoke" => (1usize, Duration::from_millis(2), false),
+        "frozen" => (100usize, Duration::from_millis(500), true),
+        other => anyhow::bail!("unknown W-09 profile: {other}; use smoke or frozen"),
+    };
+    if metric_eligible {
+        let fingerprint = freeze_fingerprint
+            .ok_or_else(|| anyhow::anyhow!("frozen W-09 requires --freeze-fingerprint"))?;
+        anyhow::ensure!(
+            fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
+            "invalid W-09 freeze fingerprint"
+        );
+    }
     let executable = std::env::current_exe()?;
-    let mut strata = Vec::new();
+    let mut candidates = Vec::new();
     for candidate in ["shared", "per_task"] {
+        let mut strata = Vec::new();
         for completed in [false, true] {
             for active_tasks in [1usize, 4usize] {
-                strata.push(
-                    one_stratum(
+                let mut trials = Vec::with_capacity(trials_per_stratum);
+                for trial in 0..trials_per_stratum {
+                    let mut value = one_stratum(
                         &executable,
                         candidate,
                         active_tasks,
                         completed,
-                        Duration::from_millis(2),
+                        restart_delay,
                     )
-                    .await?,
-                );
+                    .await?;
+                    value["trial"] = serde_json::json!(trial + 1);
+                    trials.push(value);
+                }
+                let elapsed = trials
+                    .iter()
+                    .map(|value| value["recovery_elapsed_ms"].as_u64().unwrap())
+                    .collect::<Vec<_>>();
+                strata.push(serde_json::json!({
+                    "state":if completed {"completed_queryable"} else {"running_queryable"},
+                    "active_tasks":active_tasks,
+                    "trials":trials,
+                    "p95_recovery_ms":nearest_rank_p95(&elapsed)?
+                }));
             }
         }
+        let p95_values = strata
+            .iter()
+            .map(|value| value["p95_recovery_ms"].as_f64().unwrap())
+            .collect::<Vec<_>>();
+        candidates.push(serde_json::json!({
+            "task_candidate":candidate,
+            "strata":strata,
+            "four_strata_mean_p95_ms":p95_values.iter().sum::<f64>() / p95_values.len() as f64
+        }));
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"W-09 whole-VIA process-abort four-strata correctness smoke",
-        "strata":strata,
+        "scope":"W-09 whole-VIA process-abort four-strata trials",
+        "profile":profile,
+        "freeze_fingerprint":freeze_fingerprint,
+        "trials_per_stratum":trials_per_stratum,
+        "restart_delay_ms":restart_delay.as_millis(),
+        "candidates":candidates,
         "external_agent_fixture":"persistent state outside VIA runtime process",
         "durable_via_state":"SQLite reopened after process loss",
-        "w09_representative_metric":"NOT_RUN",
-        "w09_metric_eligible":false,
-        "note":"Final W-09 requires the frozen 500ms controller delay and 100 scored trials per stratum."
+        "w09_representative_metric":"REQUIRES_TWO_INTEGRATION_FATAL_STRATA",
+        "w09_strata_metric_eligible":metric_eligible,
+        "note":"The final six-strata W-09 metric is assembled with the matching EXEC integration-fatal result."
     }))
 }

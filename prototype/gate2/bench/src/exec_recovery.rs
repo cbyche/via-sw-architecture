@@ -194,6 +194,7 @@ async fn one_stratum(
     worker_binary: &Path,
     mode: &str,
     active_tasks: usize,
+    shared_restart_delay: Duration,
 ) -> anyhow::Result<serde_json::Value> {
     let dir = tempdir()?;
     let db_path = dir.path().join("via-task.db");
@@ -213,7 +214,7 @@ async fn one_stratum(
             "shared-process fatal fault unexpectedly returned normally"
         );
         let _ = host.child.wait().await?;
-        sleep(Duration::from_millis(2)).await;
+        sleep(shared_restart_delay).await;
         host = CandidateHost::spawn(host_binary, mode, None, &agent_state).await?;
         host.ping().await?;
         true
@@ -289,22 +290,86 @@ pub async fn integration_fatal_smoke(
     host_binary: PathBuf,
     worker_binary: PathBuf,
 ) -> anyhow::Result<serde_json::Value> {
-    let mut strata = Vec::new();
+    integration_fatal(host_binary, worker_binary, "smoke", None).await
+}
+
+fn nearest_rank_p95(values: &[u64]) -> anyhow::Result<u64> {
+    anyhow::ensure!(!values.is_empty(), "p95 requires at least one W-09 trial");
+    let mut sorted = values.to_vec();
+    sorted.sort_unstable();
+    let rank = (95 * sorted.len()).div_ceil(100);
+    Ok(sorted[rank - 1])
+}
+
+pub async fn integration_fatal(
+    host_binary: PathBuf,
+    worker_binary: PathBuf,
+    profile: &str,
+    freeze_fingerprint: Option<&str>,
+) -> anyhow::Result<serde_json::Value> {
+    let (trials_per_stratum, shared_restart_delay, metric_eligible) = match profile {
+        "smoke" => (1usize, Duration::from_millis(2), false),
+        "frozen" => (100usize, Duration::from_millis(500), true),
+        other => anyhow::bail!("unknown W-09 profile: {other}; use smoke or frozen"),
+    };
+    if metric_eligible {
+        let fingerprint = freeze_fingerprint
+            .ok_or_else(|| anyhow::anyhow!("frozen W-09 requires --freeze-fingerprint"))?;
+        anyhow::ensure!(
+            fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
+            "invalid W-09 freeze fingerprint"
+        );
+    }
+    let mut candidates = Vec::new();
     for mode in ["shared", "isolated"] {
+        let mut strata = Vec::new();
         for active_tasks in [1usize, 4usize] {
-            strata.push(
-                one_stratum(&host_binary, &worker_binary, mode, active_tasks).await?,
-            );
+            let mut trials = Vec::with_capacity(trials_per_stratum);
+            for trial in 0..trials_per_stratum {
+                let mut value = one_stratum(
+                    &host_binary,
+                    &worker_binary,
+                    mode,
+                    active_tasks,
+                    shared_restart_delay,
+                )
+                .await?;
+                value["trial"] = serde_json::json!(trial + 1);
+                trials.push(value);
+            }
+            let elapsed = trials
+                .iter()
+                .map(|value| value["recovery_elapsed_ms"].as_u64().unwrap())
+                .collect::<Vec<_>>();
+            strata.push(serde_json::json!({
+                "state":"running_queryable",
+                "active_tasks":active_tasks,
+                "trials":trials,
+                "p95_recovery_ms":nearest_rank_p95(&elapsed)?
+            }));
         }
+        let p95_values = strata
+            .iter()
+            .map(|value| value["p95_recovery_ms"].as_f64().unwrap())
+            .collect::<Vec<_>>();
+        candidates.push(serde_json::json!({
+            "exec_candidate":mode,
+            "strata":strata,
+            "two_strata_mean_p95_ms":p95_values.iter().sum::<f64>() / p95_values.len() as f64
+        }));
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"W-09 integration-host fatal running/queryable × 1/4 Task correctness smoke",
+        "scope":"W-09 integration-host fatal running/queryable × 1/4 Task trials",
+        "profile":profile,
+        "freeze_fingerprint":freeze_fingerprint,
+        "trials_per_stratum":trials_per_stratum,
+        "shared_restart_delay_ms":shared_restart_delay.as_millis(),
         "task_architecture_fixed":"SharedTaskService for both EXEC candidates",
         "external_agent_fixture":"persistent state outside integration worker volatile memory",
-        "strata":strata,
-        "w09_representative_metric":"NOT_RUN",
-        "w09_metric_eligible":false,
-        "note":"Final W-09 still requires frozen 500ms restart controller timing and 100 scored trials per stratum."
+        "candidates":candidates,
+        "w09_representative_metric":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
+        "w09_strata_metric_eligible":metric_eligible,
+        "note":"The final six-strata W-09 metric is assembled with the matching whole-process result."
     }))
 }
