@@ -3,7 +3,8 @@ import copy
 import unittest
 from pathlib import Path
 
-from catalog_check import CORE, CHANGES, WORKING, bindings, compose, elements, load, make_report
+from catalog_check import (CORE, CHANGES, WORKING, bindings, catalog_fingerprint, compose,
+                           current_revision, elements, load, make_report)
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -38,6 +39,18 @@ class ReviewContractTests(unittest.TestCase):
         for pair in self.report["pair_candidates"]:
             actual = {r["change_id"] for r in self.report["changes"] if r["candidate_id"] == pair["candidate_id"]}
             self.assertEqual(actual, set(CHANGES))
+
+    def test_source_revision_tracks_current_checkout(self):
+        self.assertEqual(self.report["source_revision"], current_revision(ROOT))
+        self.assertNotEqual(self.report["source_revision"], "UNAVAILABLE")
+
+    def test_catalog_fingerprint_is_structural_and_mutation_sensitive(self):
+        self.assertEqual(self.report["catalog_fingerprint"], catalog_fingerprint(self.catalog))
+        self.assertEqual(len(self.report["catalog_fingerprint"]), 64)
+        mutated = copy.deepcopy(self.catalog)
+        eid = next(iter(mutated["elements"]))
+        mutated["elements"][eid]["responsibility"] += " changed"
+        self.assertNotEqual(catalog_fingerprint(mutated), self.report["catalog_fingerprint"])
 
     def test_unmeasured_is_not_zero(self):
         self.assertTrue(all(r["score"] is None and r["metric_value"] is None and r["evidence"] == "NOT_RUN" for r in self.report["metrics"]))

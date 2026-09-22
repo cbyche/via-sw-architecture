@@ -8,7 +8,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -17,8 +19,6 @@ WORKING = tuple(f"W-{i:02d}" for i in range(1, 13))
 CHANGES = tuple(f"{p}-{i:02d}" for p, n in (("M", 9), ("A", 9), ("C", 6)) for i in range(1, n + 1))
 ID_RE = re.compile(r"G2-([CISD])-[A-Z0-9-]+")
 META_RE = re.compile(r"<!-- gate2: (.+?) -->")
-SOURCE_SHA = "3f8ca1fbc76ac6c2c0e24464b76db32c441cdf76"
-
 
 def elements(text: str, source: str) -> dict[str, dict[str, str]]:
     """Read the normative element table, not IDs mentioned in prose."""
@@ -38,6 +38,45 @@ def elements(text: str, source: str) -> dict[str, dict[str, str]]:
     if not found:
         raise ValueError(f"No element definitions: {source}")
     return found
+
+
+def current_revision(root: Path) -> str:
+    env_sha = os.environ.get("GITHUB_SHA", "").strip().lower()
+    if re.fullmatch(r"[0-9a-f]{40}", env_sha):
+        return env_sha
+    try:
+        value = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=root,
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip().lower()
+    except (OSError, subprocess.CalledProcessError):
+        return "UNAVAILABLE"
+    return value if re.fullmatch(r"[0-9a-f]{40}", value) else "UNAVAILABLE"
+
+
+def catalog_fingerprint(catalog: dict[str, Any]) -> str:
+    structural = {
+        "common": catalog["common"],
+        "elements": catalog["elements"],
+        "cards": {
+            dp: {
+                "reference": card["reference"],
+                "alternatives": card["alternatives"],
+                "hypotheses": card["hypotheses"],
+            }
+            for dp, card in sorted(catalog["cards"].items())
+        },
+    }
+    payload = json.dumps(
+        structural,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode()
+    return hashlib.sha256(payload).hexdigest()
 
 
 def load(root: Path) -> dict[str, Any]:
@@ -141,7 +180,9 @@ def make_report(catalog: dict[str, Any]) -> dict[str, Any]:
                                       "unique_count": None, "functional_preservation": None, "evidence": "NOT_ANALYZED"})
     if len(configs) != 5 or len(pair_records) != 8 or len(metric_ledger) != 96 or len(change_ledger) != 192:
         raise ValueError("Unexpected complete-configuration or ledger cardinality")
-    return {"version": "G2-DESIGN-v1.1", "source_revision": SOURCE_SHA,
+    return {"version": "G2-DESIGN-v1.1",
+            "source_revision": current_revision(Path(catalog["root"])),
+            "catalog_fingerprint": catalog_fingerprint(catalog),
             "status": "DESIGN_REVIEW_ONLY", "reference_choices": reference,
             "source_hashes": catalog["source_hashes"], "elements": catalog["elements"],
             "configurations": configs, "pair_candidates": pair_records,
