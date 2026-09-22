@@ -164,7 +164,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | W-09 6-strata recovery correctness controller | whole-VIA process-abort 4 strata + integration-host fatal 2 strata의 identity/state/control 복구 | **IMPLEMENTED / CI_SMOKE_GREEN**; 최종 metric용 500ms restart delay·100 scored trials/stratum·p95 aggregation은 freeze 후 runner에서 실행 필요 |
 | W-10 28-cell containment controller + endpoint adapters | containment representative metric | **CONTROLLER+ENDPOINT_ADAPTER_IMPLEMENTED / FROZEN_RUN_PENDING** — candidate host가 external socket fault를 실제 시작하고 같은 host의 unaffected capability를 probe한다. Agent probes는 shared backend/isolated worker를 경유하고 integration-fatal은 shared whole-host restart와 isolated worker restart에 같은 deadline을 적용한다. CI smoke는 별도 relaxed timing의 `metric_eligible=false` profile이며, frozen 30s·5회·2/10/20s·5s profile과 대표값 산출은 Measurement Freeze 이후에만 실행 |
 | 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
-| W-07/08 24 change raw analysis | change locality | freeze 후 동일 source revision에서 실행 |
+| W-07/08 24 change raw analysis | change locality | **BASELINE_PROVENANCE_READY / ANALYSIS_PENDING** — catalog tooling이 실행 checkout의 실제 Git HEAD와 C/I/S/D+alternative `catalog_fingerprint`를 함께 기록한다. 24-change M/A/R ledger는 이 동일 fingerprint를 출발점으로 `DESIGN_ANALYSIS` 후 freeze 시 잠근다 |
 | actual Qwen run | W-05/IR latency | freeze 승인 후 사용자 Mac |
 
 따라서 현재 상태는 **Architecture candidate implementation이 상당 부분 executable해진 상태**지만, 아직 MEASUREMENT_READY라고 선언하지 않는다. blocker를 닫거나 리뷰에서 명시적 범위를 승인한 뒤 measurement revision을 freeze한다.
