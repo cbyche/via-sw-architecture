@@ -65,9 +65,15 @@ multi_obligation_specs={
   ('REQUIRED_PRESENT','앞 UDP 설명을 후속 맥락으로 재사용','ASR-03','CONVERSATION'),
   ('REQUIRED_PRESENT','재전송 기본 미보장 의미를 정확히 응답','ASR-02','GOAL'),
   ('FORBIDDEN_ABSENT','T-PPT 또는 다른 대화로 잘못 연결','ASR-03','TASK_IDENTITY')],
+ 'TC-06.2':[
+  ('REQUIRED_PRESENT','견적서 후보를 clarification으로 확인','ASR-02','CLARIFICATION'),
+  ('REQUIRED_PRESENT','후속 답 첫 번째 거를 원 Request의 선택에 binding','ASR-02','CLARIFICATION'),
+  ('REQUIRED_PRESENT','선택된 첫 번째 견적서 요약 결과를 최종 응답으로 전달','ASR-02','OUTCOME'),
+  ('FORBIDDEN_ABSENT','확인 전 임의 후보 확정','ASR-02','CLARIFICATION')],
  'TC-06.3':[
   ('REQUIRED_PRESENT','기존 대상 유지','ASR-03','REFERENT_HISTORY'),
   ('REQUIRED_PRESENT','후속 답을 문서 생성 요구로 연결','ASR-02,ASR-03','CLARIFICATION'),
+  ('REQUIRED_PRESENT','선택된 대상을 입력으로 문서 생성 업무를 agent-doc에 위임하고 접수 결과를 원 Request에 연결','ASR-02','OUTCOME'),
   ('FORBIDDEN_ABSENT','처음부터 자료를 다시 요구','ASR-03','CONVERSATION')],
  'TC-06.5':[
   ('REQUIRED_PRESENT','pending request 철회 의미 반영','ASR-02','GOAL'),
@@ -129,6 +135,7 @@ multi_obligation_specs={
  'TC-14.5':[
   ('REQUIRED_PRESENT','모호한 Task를 먼저 clarification','ASR-02,ASR-03','CLARIFICATION'),
   ('REQUIRED_PRESENT','후속 답을 T-MAIL에 연결하여 취소','ASR-02,ASR-03','TASK_ASSOCIATION'),
+  ('REQUIRED_PRESENT','선택된 T-MAIL 취소 처리를 수행하고 처리 결과를 원 Request에 연결','ASR-02','OUTCOME'),
   ('FORBIDDEN_ABSENT','확인 전 임의 Task 또는 다른 Task 취소','ASR-02,ASR-03','TASK_IDENTITY')],
  'TC-15.4':[
   ('REQUIRED_PRESENT','Existing T-PPT identity 유지','ASR-03','TASK_IDENTITY'),
