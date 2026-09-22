@@ -1,0 +1,76 @@
+{
+  "version": "W01-FG-G2-v1",
+  "status": "FROZEN_ADAPTER_CONTRACT_BEFORE_MEASUREMENT",
+  "provenance": {
+    "source_contract": "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-01",
+    "w04_source_contract": "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-04",
+    "note": "Freezes the six W-01 foreground strata and the 1-vs-4 W-04 load comparison before candidate latency results. This contract is not a measurement result."
+  },
+  "w01": {
+    "representative_metric": "mean_of_case_p95_response_start_ms",
+    "endpoint_start": "user_input_end",
+    "endpoint_end": "first_meaningful_output",
+    "warmup_trials_per_stratum": 10,
+    "scored_trials_per_stratum": 100,
+    "p95": "nearest-rank",
+    "macro_aggregation": "equal_weight_mean_of_six_case_p95",
+    "timeout_ms": 30000,
+    "cases": [
+      {
+        "case_id": "TC-01.1",
+        "class": "voice_general_question",
+        "modality": "voice",
+        "output_contract": "first_meaningful_output is max(valid_text_start, valid_audio_start)"
+      },
+      {
+        "case_id": "TC-01.4",
+        "class": "text_general_question",
+        "modality": "text",
+        "output_contract": "first_meaningful_output is valid_text_start"
+      },
+      {
+        "case_id": "TC-02.1",
+        "class": "bounded_document_read",
+        "modality": "voice",
+        "output_contract": "first_meaningful_output is max(valid_text_start, valid_audio_start)"
+      },
+      {
+        "case_id": "TC-04.2",
+        "class": "dynamic_multi_referent",
+        "modality": "voice",
+        "output_contract": "first_meaningful_output is max(valid_text_start, valid_audio_start)"
+      },
+      {
+        "case_id": "TC-06.2",
+        "class": "required_clarification",
+        "modality": "voice",
+        "output_contract": "first_meaningful_output is the first appropriate clarification question; W-05 separately requires scripted follow-up and terminal outcome"
+      },
+      {
+        "case_id": "TC-10.1",
+        "class": "existing_task_status",
+        "modality": "voice",
+        "output_contract": "first_meaningful_output is max(valid_text_start, valid_audio_start)"
+      }
+    ]
+  },
+  "w04": {
+    "representative_metric": "foreground_macro_p95_ratio_4_to_1",
+    "formula": "W01_macro_p95_ms(active_background_tasks=4) / W01_macro_p95_ms(active_background_tasks=1)",
+    "background_task_counts": [1, 4],
+    "background_update_period_ms": 1000,
+    "background_window_max_ms": 30000,
+    "background_event": "one progress/state update per active Task per cadence",
+    "pairing_rule": "same candidate, same W-01 case, same workload/configuration/input schedule; only active background Task count changes",
+    "absolute_values_required": ["L1_macro_p95_ms", "L4_macro_p95_ms", "ratio"],
+    "metric_eligible_in_hosted_ci": false
+  },
+  "prohibitions": [
+    "Do not pool all W-01 samples into one p95.",
+    "Do not use a different foreground case set for 1-Task and 4-Task load.",
+    "Do not pad the 1-Task baseline with unrelated work.",
+    "Do not drop or cancel background updates in the 4-Task condition.",
+    "Do not convert hosted CI smoke latency into the representative W-01 or W-04 metric.",
+    "Do not score before Measurement Freeze approval."
+  ]
+}
