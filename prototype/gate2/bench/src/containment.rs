@@ -400,15 +400,15 @@ async fn probe_core_after_fault(
     }
     let probe = timeout(
         deadline,
-        session.request(json!({"op":"core_probe","capability":context.capability})),
+        session.request(json!({"op":"core_probe","capability":capability})),
     )
     .await;
     Ok(matches!(
         probe,
         Ok(Ok(Some(value)))
             if value["status"] == "core_probe"
-                && value["capability"] == context.capability
-                && value["value"] == context.expected
+                && value["capability"] == capability
+                && value["value"] == expected
     ))
 }
 
