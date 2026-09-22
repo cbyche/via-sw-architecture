@@ -261,20 +261,29 @@ async fn start_external_fault_fixture(
     }
 }
 
-async fn run_external_trial(
-    host: &Path,
-    worker: &Path,
-    candidate_mode: &str,
-    fault_mode: &str,
-    failed_dependency: &str,
-    capability: &str,
-    expected: &str,
+struct ExternalTrialContext<'a> {
+    host: &'a Path,
+    worker: &'a Path,
+    candidate_mode: &'a str,
+    failed_dependency: &'a str,
+    capability: &'a str,
+    expected: &'a str,
     profile: Profile,
+}
+
+async fn run_external_trial(
+    context: &ExternalTrialContext<'_>,
+    fault_mode: &str,
 ) -> anyhow::Result<bool> {
-    let isolated = candidate_mode == "isolated";
-    let mut session = HostSession::spawn(host, candidate_mode, isolated.then_some(worker)).await?;
+    let isolated = context.candidate_mode == "isolated";
+    let mut session = HostSession::spawn(
+        context.host,
+        context.candidate_mode,
+        isolated.then_some(context.worker),
+    )
+    .await?;
     let ping = timeout(
-        profile.capability_deadline,
+        context.profile.capability_deadline,
         session.request(json!({"op":"ping"})),
     )
     .await??;
@@ -284,13 +293,13 @@ async fn run_external_trial(
     );
 
     let (address, fault_server) =
-        start_external_fault_fixture(fault_mode, profile.fault_hold).await?;
+        start_external_fault_fixture(fault_mode, context.profile.fault_hold).await?;
     let fault = timeout(
-        profile.capability_deadline,
+        context.profile.capability_deadline,
         session.request(json!({
             "op":"w10_begin_external_fault",
             "mode":fault_mode,
-            "failed_dependency":failed_dependency,
+            "failed_dependency":context.failed_dependency,
             "address":address
         })),
     )
@@ -305,13 +314,13 @@ async fn run_external_trial(
 
     let start = Instant::now();
     let mut probes_ok = fault_observed;
-    for offset in profile.probe_offsets {
+    for offset in context.profile.probe_offsets {
         sleep_until(start + offset).await;
         let observed = timeout(
-            profile.capability_deadline,
+            context.profile.capability_deadline,
             session.request(json!({
                 "op":"w10_capability_probe",
-                "capability":capability
+                "capability":context.capability
             })),
         )
         .await??;
@@ -319,13 +328,13 @@ async fn run_external_trial(
             observed,
             Some(value)
                 if value["status"] == "w10_capability_probe"
-                    && value["capability"] == capability
-                    && value["value"] == expected
+                    && value["capability"] == context.capability
+                    && value["value"] == context.expected
         );
     }
 
     if fault_mode == "no_reply" {
-        sleep_until(start + profile.fault_hold).await;
+        sleep_until(start + context.profile.fault_hold).await;
     }
     if let Some(server) = fault_server {
         server.abort();
@@ -391,15 +400,15 @@ async fn probe_core_after_fault(
     }
     let probe = timeout(
         deadline,
-        session.request(json!({"op":"core_probe","capability":capability})),
+        session.request(json!({"op":"core_probe","capability":context.capability})),
     )
     .await;
     Ok(matches!(
         probe,
         Ok(Ok(Some(value)))
             if value["status"] == "core_probe"
-                && value["capability"] == capability
-                && value["value"] == expected
+                && value["capability"] == context.capability
+                && value["value"] == context.expected
     ))
 }
 
@@ -481,17 +490,16 @@ pub async fn run(
             let mut trials = Vec::new();
             for fault_mode in ["connection_refused", "no_reply"] {
                 for repeat in 0..profile.external_repeats {
-                    let pass = run_external_trial(
-                        &host,
-                        &worker,
+                    let context = ExternalTrialContext {
+                        host: &host,
+                        worker: &worker,
                         candidate_mode,
-                        fault_mode,
                         failed_dependency,
                         capability,
-                        expected_token,
+                        expected: expected_token,
                         profile,
-                    )
-                    .await?;
+                    };
+                    let pass = run_external_trial(&context, fault_mode).await?;
                     trials.push(json!({
                         "mode": fault_mode,
                         "repeat": repeat + 1,
