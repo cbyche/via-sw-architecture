@@ -49,6 +49,7 @@ jobs:
           cargo run --locked -q -p gate2-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
           cargo run --locked -q -p gate2-bench -- w04-load-smoke
           cargo run --locked -q -p gate2-bench -- w09-whole-restart-smoke
+          cargo run --locked -q -p gate2-bench -- w09-whole-process-smoke
           cargo run --locked -q -p gate2-bench -- w09-integration-fatal-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
       - name: Gate2 catalog static check
         run: |
