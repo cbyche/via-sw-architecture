@@ -1,0 +1,625 @@
+{
+  "version": "G2-CHANGE-ANALYSIS-v1",
+  "status": "FROZEN_RAW_DESIGN_ANALYSIS_RULES_PRE_MEASUREMENT",
+  "source_contracts": [
+    "docs/rebaseline/07-intentional-variables.md#7.4",
+    "docs/rebaseline/10-architecture-element-definition.md#10.7",
+    "docs/rebaseline/11d-working-12-measurement-and-scoring.md#W-07-W-08"
+  ],
+  "policy": {
+    "evidence": "DESIGN_ANALYSIS",
+    "aggregate_metric": "NOT_COMPUTED_PRE_MEASUREMENT_FREEZE",
+    "score": "NOT_RUN",
+    "winner": "NOT_RUN",
+    "count_formula": "|modified ∪ added ∪ removed|",
+    "baseline_rule": "Each change is independently applied to the same candidate configuration and catalog_fingerprint.",
+    "zero_rule": "Zero is allowed only when the reviewed change is configuration/data-only within an already explicit architecture contract.",
+    "added_rule": "Added IDs are proposed post-change Architecture Elements at the same C/I/S/D granularity; they are not baseline IDs.",
+    "functional_preservation": "DESIGN_ARGUMENT_ONLY; execution/replay is not claimed by this ledger."
+  },
+  "new_element_types": {
+    "G2-I-NATIVE-R": "I"
+  },
+  "changes": [
+    {
+      "id": "M-01",
+      "family": "M",
+      "title": "S2S provider replacement",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-S2SCLIENT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Provider-specific S2S connection/message wrapping changes inside the S2S adapter while the canonical G2-I-S2S meaning and Voice contract remain stable.",
+      "preservation": "Keep voice I/O, direct response, transcript/response recording, interruption and reconnection semantics.",
+      "regression": "UC-01, UC-03~04, UC-11, UC-15"
+    },
+    {
+      "id": "M-02",
+      "family": "M",
+      "title": "Semantic model replacement",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-SEMCLIENT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Provider API/response wrapping changes in the SemanticAdapter. IR candidates continue to consume the same canonical text-model contract.",
+      "preservation": "Keep the same semantic responsibility, Context sources, Task meaning and structured decision semantics.",
+      "regression": "UC-02~10, UC-14"
+    },
+    {
+      "id": "M-03",
+      "family": "M",
+      "title": "Model execution profile change",
+      "classification": "CONFIGURATION_ONLY",
+      "modified": {
+        "common": [],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "The reviewed scenario requires an otherwise suitable model/profile with the same execution location and API contract. Model size, limits and generation settings are configuration values; if they force a contract/behavior change this row must be rebaselined rather than silently counted as zero.",
+      "preservation": "The selected profile must still satisfy the existing input/output contract and product functions.",
+      "regression": "UC-01~10"
+    },
+    {
+      "id": "M-04",
+      "family": "M",
+      "title": "External Cloud to Private Cloud",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-D-SEMANTIC"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "The logical model contract remains the same but the managed remote deployment/connection environment changes, so the model dependency deployment element changes. Endpoint/auth values alone are not counted separately.",
+      "preservation": "Keep model role/data meaning and all existing functions. The equivalent S2S-target instantiation changes G2-D-S2S instead and has the same count.",
+      "regression": "UC-01~10, UC-15~16",
+      "scope_equivalence": [
+        "G2-D-SEMANTIC ↔ G2-D-S2S when the moved model role is S2S; raw count remains 1."
+      ]
+    },
+    {
+      "id": "M-05",
+      "family": "M",
+      "title": "Remote model to user PC",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-SEMCLIENT",
+          "G2-D-SEMANTIC"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Moving a model runtime onto the PC changes dependency lifecycle/deployment and the adapter's connect/start/stop/recovery behavior while preserving the model-facing semantic contract.",
+      "preservation": "Keep the same model role and product functions. The equivalent S2S-target instantiation changes G2-C-S2SCLIENT + G2-D-S2S and has the same count.",
+      "regression": "UC-01~10, UC-15, UC-18",
+      "scope_equivalence": [
+        "Semantic target {G2-C-SEMCLIENT,G2-D-SEMANTIC} ↔ S2S target {G2-C-S2SCLIENT,G2-D-S2S}; raw count remains 2."
+      ]
+    },
+    {
+      "id": "M-06",
+      "family": "M",
+      "title": "User PC model to Remote",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-SEMCLIENT",
+          "G2-D-SEMANTIC"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Remote placement changes adapter connection/failure handling and dependency deployment. Existing G2-C-POLICY/G2-I-AUTH already own egress authorization, so merely exercising them is not an additional architecture modification.",
+      "preservation": "Keep the same model role; allowed Context transfer and disconnection behavior must remain correct. Equivalent S2S-target instantiation has the same count.",
+      "regression": "UC-01~10, UC-15~16, UC-18",
+      "scope_equivalence": [
+        "Semantic target {G2-C-SEMCLIENT,G2-D-SEMANTIC} ↔ S2S target {G2-C-S2SCLIENT,G2-D-S2S}; raw count remains 2."
+      ]
+    },
+    {
+      "id": "M-07",
+      "family": "M",
+      "title": "S2S event information contract change",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-S2SCLIENT",
+          "G2-I-S2S",
+          "G2-C-VOICE"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Word-timed transcript input becomes segment timing plus revision events. The S2S adapter, canonical S2S event contract and VoiceRuntime transcript/timing binding must adapt; screen capture itself does not change.",
+      "preservation": "Preserve raw audio access, timing basis, correction semantics, pointing/referent binding, interruption and reconnect behavior.",
+      "regression": "UC-03~04, UC-11, UC-15"
+    },
+    {
+      "id": "M-08",
+      "family": "M",
+      "title": "Semantic response final-to-streaming contract",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-SEMCLIENT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "The common SemanticAdapter already owns stream-to-final/error/cancel normalization, so the external lifecycle change is localized there. G2-I-TEXTMODEL and IR stage contracts remain unchanged in this baseline.",
+      "preservation": "Partial output must not be treated as final; completion/error/cancel semantics remain equivalent.",
+      "regression": "UC-06, UC-09~13"
+    },
+    {
+      "id": "M-09",
+      "family": "M",
+      "title": "Model conversation-history delivery contract",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-HISTORY",
+          "G2-C-SEMCLIENT",
+          "G2-S-CONV"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Switching from replayed history to provider conversation identity changes history reconstruction/binding, the selected model adapter session behavior and persisted Conversation mapping; canonical Conversation remains VIA-owned.",
+      "preservation": "Provider conversation identity cannot replace VIA Conversation truth and reconnect/history reconstruction must preserve prior semantics. Equivalent S2S-target instantiation swaps G2-C-SEMCLIENT for G2-C-S2SCLIENT with the same count.",
+      "regression": "UC-01, UC-07, UC-15, UC-18",
+      "scope_equivalence": [
+        "G2-C-SEMCLIENT ↔ G2-C-S2SCLIENT for the changed model role; G2-C-HISTORY and G2-S-CONV remain modified; raw count remains 3."
+      ]
+    },
+    {
+      "id": "A-01",
+      "family": "A",
+      "title": "Add Agent using existing protocol",
+      "classification": "CONFIGURATION_ONLY",
+      "modified": {
+        "common": [],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "A new Agent/capability record using an already supported protocol is registry/provider data. G2-C-REGISTRY and G2-S-CAP already model dynamic capability/provider bindings; adding an instance does not change their architecture definitions.",
+      "preservation": "New capability selection/delegation/status/result must work without regressing existing Agents.",
+      "regression": "UC-08~10, UC-13~14"
+    },
+    {
+      "id": "A-02",
+      "family": "A",
+      "title": "Replace Agent implementation within protocol",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Provider-specific endpoint/field mapping changes in NativeClients while the protocol family and lifecycle meaning remain inside existing Agent boundary contracts.",
+      "preservation": "Keep Task identity, goals, follow-up and result semantics independent of provider identity.",
+      "regression": "UC-07~10, UC-13~15"
+    },
+    {
+      "id": "A-03",
+      "family": "A",
+      "title": "Support additional Agent protocol",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE"
+        ],
+        "by_choice": {
+          "AGENT-DP01:A": [
+            "G2-C-EDGESEM"
+          ],
+          "AGENT-DP01:B": [
+            "G2-C-TYPEDHANDLER",
+            "G2-I-TYPEDAGENT"
+          ]
+        }
+      },
+      "added": {
+        "common": [
+          "G2-I-NATIVE-R"
+        ],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "A genuinely new wire/lifecycle protocol adds one native boundary contract and changes NativeClients. Edge-normalized A adapts the new native meaning at the edge; typed B also extends the typed union consumed by the Core handler.",
+      "preservation": "The new protocol must coexist with existing protocols and preserve equivalent lifecycle capabilities and VIA user functions.",
+      "regression": "UC-08, UC-10, UC-12~16"
+    },
+    {
+      "id": "A-04",
+      "family": "A",
+      "title": "Push status to query status",
+      "classification": "CONFIGURATION_ONLY",
+      "modified": {
+        "common": [],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "TASK-T01 already freezes Event-first + Query Reconciliation with provider capability profiles. Switching an Agent from push to query-only selects an existing path/cadence profile rather than changing C/I/S/D definitions.",
+      "preservation": "Task correlation, timestamp honesty and completion visibility must remain correct under query fallback.",
+      "regression": "UC-10, UC-13~14, UC-18"
+    },
+    {
+      "id": "A-05",
+      "family": "A",
+      "title": "Execution identity and follow-up contract change",
+      "classification": "CONFIGURATION_ONLY",
+      "modified": {
+        "common": [],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "The baseline intentionally contains both P-style single-run and Q-style context+run/new-run continuation native contracts. This reviewed change is already inside the frozen variation envelope; provider binding selects the existing shape.",
+      "preservation": "Maintain VIA Task identity, exact run correlation, follow-up continuity and duplicate-execution prevention.",
+      "regression": "UC-10, UC-12, UC-14~15, UC-18"
+    },
+    {
+      "id": "A-06",
+      "family": "A",
+      "title": "Capability contract restructuring",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-REGISTRY",
+          "G2-S-CAP"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Splitting capabilities and changing required-field/version/lifecycle declaration changes registry interpretation and the capability snapshot schema. Semantic selection still consumes capability data generically.",
+      "preservation": "Existing document work must map to the correct new capability/inputs while old/new declarations can coexist during the scenario.",
+      "regression": "UC-08~10, UC-12, UC-14, UC-18"
+    },
+    {
+      "id": "A-07",
+      "family": "A",
+      "title": "Agent authentication contract change",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE",
+          "G2-C-POLICY",
+          "G2-I-AUTH"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Moving from fixed credentials to user-scoped expiring/refreshable authorization changes native auth behavior and the policy decision contract that intersects current Agent authorization with user scope. Token values themselves are not separate elements.",
+      "preservation": "Refresh, expiry and denial must remain bound to the correct user, Task, Context scope and consent.",
+      "regression": "UC-08, UC-15~16, UC-18"
+    },
+    {
+      "id": "A-08",
+      "family": "A",
+      "title": "Question/approval response lifecycle change",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE"
+        ],
+        "by_choice": {
+          "AGENT-DP01:A": [
+            "G2-C-EDGESEM"
+          ],
+          "AGENT-DP01:B": [
+            "G2-C-TYPEDHANDLER",
+            "G2-I-TYPEDAGENT"
+          ]
+        }
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Question-ID-specific answer submission/resume changes native lifecycle semantics. A absorbs it in edge normalization; B extends the typed variation and Core handler. Existing G2-S-PENDING already stores question/approval identity and answer state.",
+      "preservation": "Answers must bind to the correct pending question, submission confirmation and resume state without replaying completed answers.",
+      "regression": "UC-06, UC-13~16, UC-18"
+    },
+    {
+      "id": "A-09",
+      "family": "A",
+      "title": "Result artifact delivery contract change",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE"
+        ],
+        "by_choice": {
+          "AGENT-DP01:A": [
+            "G2-C-EDGESEM"
+          ],
+          "AGENT-DP01:B": [
+            "G2-C-TYPEDHANDLER",
+            "G2-I-TYPEDAGENT"
+          ]
+        }
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Result-list/reference representation changes native lifecycle meaning. A normalizes the representation at the edge; B exposes the typed artifact variant to its Core handler. User-facing result composition remains on the existing canonical result path.",
+      "preservation": "Preserve actual result artifacts, Voice/Text result delivery and later result references; arrival is not confused with detail retrieval.",
+      "regression": "UC-07~10, UC-13~15"
+    },
+    {
+      "id": "C-01",
+      "family": "C",
+      "title": "Context Source provider replacement",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE",
+          "G2-C-CONTEXT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Calendar provider native API/identity/field mapping changes transport plus ContextBroker provider adaptation while the canonical scoped Context contract remains stable.",
+      "preservation": "Preserve event time, participant/source identity, access scope and referent binding.",
+      "regression": "UC-02, UC-05~06, UC-09, UC-16"
+    },
+    {
+      "id": "C-02",
+      "family": "C",
+      "title": "Add document format",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-CONTEXT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "DOCX body/table extraction extends ContextBroker source-format handling. It does not introduce a new product responsibility or change the canonical Context contract.",
+      "preservation": "Keep existing formats and read-only semantics while preserving document/object identity for the new format.",
+      "regression": "UC-02~05, UC-07"
+    },
+    {
+      "id": "C-03",
+      "family": "C",
+      "title": "Screen integration contract change",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-CAPTURE"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Windows screen/object-handle/coordinate/selection API variation is adapted by Capture; downstream Turn/Context semantics remain stable.",
+      "preservation": "Preserve screen/document/location identity for Select-then-Speak, Speak-while-Pointing and correction.",
+      "regression": "UC-03~05, UC-11"
+    },
+    {
+      "id": "C-04",
+      "family": "C",
+      "title": "Memory record format expansion",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-MEMORY",
+          "G2-S-MEMORY",
+          "G2-C-STORE"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Adding record version, modification time and user-registration provenance changes the Memory state schema, MemoryService read/write/migration behavior and repository migration handling.",
+      "preservation": "Existing memory content, consent boundary, correction/deletion and tombstone effects must survive migration.",
+      "regression": "UC-17~18"
+    },
+    {
+      "id": "C-05",
+      "family": "C",
+      "title": "Add same-kind Context Source",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-NATIVE",
+          "G2-C-CONTEXT"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "Keeping source A while adding source B requires provider-specific native connection support and ContextBroker source-identity/scope selection. No new Context product responsibility is introduced.",
+      "preservation": "Distinguish source identity and permissions while preserving existing source A behavior; no new cross-provider merge feature is assumed.",
+      "regression": "UC-02, UC-05~06, UC-09, UC-16"
+    },
+    {
+      "id": "C-06",
+      "family": "C",
+      "title": "Conversation and Task record format migration",
+      "classification": "DESIGN_CHANGE",
+      "modified": {
+        "common": [
+          "G2-C-STORE",
+          "G2-S-CONV",
+          "G2-S-TASK",
+          "G2-S-LINK",
+          "G2-S-PENDING",
+          "G2-S-DELIVERY"
+        ],
+        "by_choice": {}
+      },
+      "added": {
+        "common": [],
+        "by_choice": {}
+      },
+      "removed": {
+        "common": [],
+        "by_choice": {}
+      },
+      "rationale": "The reviewed V1→V2 storage change explicitly covers Conversation/Request/Task/Agent-execution relationships. Their persistent schemas and repository migration behavior change; Task-writer or Agent-boundary behavior does not change when the Repository contract remains stable.",
+      "preservation": "Preserve relationships, deletion effects, running work, recovery and duplicate-action prevention after planned migration; failure must leave the old records recoverable.",
+      "regression": "UC-07, UC-10, UC-13~15, UC-18"
+    }
+  ]
+}
