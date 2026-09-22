@@ -33,7 +33,7 @@ cargo +1.98.1 build --locked --manifest-path prototype/gate2/Cargo.toml \
   --suite all
 ```
 
-W-09는 frozen 500ms whole/shared restart controller와 100회/stratum을 실행하고 4개 whole-process + 2개 integration-fatal p95의 평균을 configuration별로 산출한다. W-10은 frozen 30초 fault, 2/10/20초 probe, mode별 5회와 fatal 5회를 실행한다. 두 결과는 deterministic dependency/Agent fixture를 사용한 `MEASURED_STRUCTURAL`이며 Windows absolute performance가 아니다.
+W-09는 frozen 500ms whole/shared restart controller와 100회/stratum을 실행하고 4개 whole-process + 2개 integration-fatal p95의 평균을 configuration별로 산출한다. W-10은 frozen 30초 fault, 2/10/20초 probe, mode별 5회와 fatal 5회를 실행한다. W-10 wall time을 줄이되 cell 간 간섭을 피하기 위해 같은 cell의 독립 10 trials만 병렬 실행하며 이 parallelism도 freeze fingerprint에 포함한다. 두 결과는 deterministic dependency/Agent fixture를 사용한 `MEASURED_STRUCTURAL`이며 Windows absolute performance가 아니다.
 
 `catalog_check.py` 산출물에는 5개 고유 configuration, 8개 pair-labelled 후보, W-01~W-12의 미측정 96개 metric row와 24개 change용 192개 raw template row가 들어간다. null은 0점/0개가 아니라 NOT_RUN/NOT_ANALYZED다. `source_revision`은 실행 checkout의 실제 Git HEAD를 기록하고, `catalog_fingerprint`는 C/I/S/D 요소 정의와 Core alternative metadata를 해시한다. `change_analysis.py`는 별도의 reviewed 24-change rule을 이 동일 fingerprint에 적용해 192개 M/A/R raw row를 `DESIGN_ANALYSIS`로 확장하지만 Measurement Freeze 전에는 W-07/W-08 평균·score·winner를 계산하지 않는다.
 

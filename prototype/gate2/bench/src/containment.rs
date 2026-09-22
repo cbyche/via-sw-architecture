@@ -3,12 +3,14 @@ use serde_json::{Value, json};
 use std::{
     collections::{HashMap, HashSet},
     path::{Path, PathBuf},
+    sync::Arc,
     time::Duration,
 };
 use tokio::{
     io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader, Lines},
     net::TcpListener,
     process::{Child, ChildStdin, ChildStdout, Command},
+    sync::Semaphore,
     time::{Instant, sleep, sleep_until, timeout},
 };
 
@@ -16,6 +18,7 @@ use tokio::{
 struct Profile {
     name: &'static str,
     external_repeats: usize,
+    external_parallelism: usize,
     fault_hold: Duration,
     probe_offsets: [Duration; 3],
     capability_deadline: Duration,
@@ -30,6 +33,7 @@ impl Profile {
             "smoke" => Ok(Self {
                 name: "smoke",
                 external_repeats: 1,
+                external_parallelism: 1,
                 fault_hold: Duration::from_millis(200),
                 probe_offsets: [
                     Duration::from_millis(5),
@@ -44,6 +48,7 @@ impl Profile {
             "frozen" => Ok(Self {
                 name: "frozen",
                 external_repeats: 5,
+                external_parallelism: 10,
                 fault_hold: Duration::from_secs(30),
                 probe_offsets: [
                     Duration::from_secs(2),
@@ -111,6 +116,10 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         "W-10 external repeat count changed"
     );
     anyhow::ensure!(
+        frozen["external"]["trial_parallelism_within_cell"] == 10,
+        "W-10 frozen within-cell parallelism changed"
+    );
+    anyhow::ensure!(
         frozen["external"]["fault_hold_ms"] == 30000,
         "W-10 fault hold changed"
     );
@@ -130,6 +139,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     let smoke = &spec["smoke_profile"];
     anyhow::ensure!(matches!(smoke["metric_eligible"].as_bool(), Some(false)), "W-10 smoke must remain metric-ineligible");
     anyhow::ensure!(smoke["external"]["repeats_per_mode"] == 1, "W-10 smoke repeat count changed");
+    anyhow::ensure!(smoke["external"]["trial_parallelism_within_cell"] == 1, "W-10 smoke within-cell parallelism changed");
     anyhow::ensure!(smoke["external"]["fault_hold_ms"] == 200, "W-10 smoke fault hold changed");
     anyhow::ensure!(
         smoke["external"]["probe_offsets_ms"] == json!([5, 25, 50]),
@@ -498,25 +508,49 @@ pub async fn run(
                 .get(capability)
                 .ok_or_else(|| anyhow::anyhow!("missing expected token for {capability}"))?;
             let mut trials = Vec::new();
+            let semaphore = Arc::new(Semaphore::new(profile.external_parallelism));
+            let mut trial_tasks = tokio::task::JoinSet::new();
             for fault_mode in ["connection_refused", "no_reply"] {
                 for repeat in 0..profile.external_repeats {
-                    let context = ExternalTrialContext {
-                        host: &host,
-                        worker: &worker,
-                        candidate_mode,
-                        failed_dependency,
-                        capability,
-                        expected: expected_token,
-                        profile,
-                    };
-                    let pass = run_external_trial(&context, fault_mode).await?;
-                    trials.push(json!({
-                        "mode": fault_mode,
-                        "repeat": repeat + 1,
-                        "pass": pass
-                    }));
+                    let permit = semaphore.clone().acquire_owned().await?;
+                    let host = host.clone();
+                    let worker = worker.clone();
+                    let candidate_mode = candidate_mode.to_string();
+                    let failed_dependency = failed_dependency.to_string();
+                    let capability = capability.to_string();
+                    let expected_token = expected_token.to_string();
+                    let fault_mode = fault_mode.to_string();
+                    trial_tasks.spawn(async move {
+                        let _permit = permit;
+                        let context = ExternalTrialContext {
+                            host: &host,
+                            worker: &worker,
+                            candidate_mode: &candidate_mode,
+                            failed_dependency: &failed_dependency,
+                            capability: &capability,
+                            expected: &expected_token,
+                            profile,
+                        };
+                        let pass = run_external_trial(&context, &fault_mode).await?;
+                        Ok::<Value, anyhow::Error>(json!({
+                            "mode": fault_mode,
+                            "repeat": repeat + 1,
+                            "pass": pass
+                        }))
+                    });
                 }
             }
+            while let Some(result) = trial_tasks.join_next().await {
+                trials.push(result??);
+            }
+            trials.sort_by_key(|trial| {
+                let mode = if trial["mode"] == "connection_refused" {
+                    0
+                } else {
+                    1
+                };
+                (mode, trial["repeat"].as_u64().unwrap())
+            });
             let pass = trials.iter().all(|trial| trial["pass"] == true);
             external_results.push(json!({
                 "cell_id": cell_id,
@@ -585,6 +619,7 @@ pub async fn run(
         "spec":spec_path,
         "spec_version":spec["version"],
         "profile":profile.name,
+        "external_trial_parallelism_within_cell":profile.external_parallelism,
         "freeze_fingerprint":freeze_fingerprint,
         "frozen_contract_validated":true,
         "candidates":candidate_results,
