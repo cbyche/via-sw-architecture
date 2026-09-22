@@ -119,6 +119,8 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Agent P/Q source | fixture/src/lib.rs | FIXTURE |
 | Event-first + Query Reconciliation | runtime/sync.rs | IMPLEMENTED_TACTIC |
 | W-04 fixed background load | runtime/workload.rs + bench w04-load-smoke | IMPLEMENTED_DRIVER / final W-01 foreground measurement pending |
+| W-09 whole-process recovery | bench/whole_process_recovery.rs | IMPLEMENTED_CORRECTNESS_CONTROLLER / actual process abort·SQLite reopen·surviving Agent query |
+| W-09 integration-fatal recovery | bench/exec_recovery.rs + persistent Agent fixture | IMPLEMENTED_CORRECTNESS_CONTROLLER / shared Core restart vs isolated worker restart |
 | Trace primitive | runtime/trace.rs + Python timing contract | PARTIAL |
 | S2S elapsed-time replay | S2sDelayTrace, timing contract | CONTRACT_READY / measured trace missing |
 | Model semantic path | Python IR harness + frozen prompts/schema | HARNESS_READY / actual model missing |
@@ -149,12 +151,12 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Blocker | 왜 필요한가 | 상태/담당 |
 |---|---|---|
 | 최신 full-lifecycle 코드의 macOS+Ubuntu CI green | 현재 source revision 검증 | 자동 CI |
-| tracked Cargo.lock | dependency graph를 Measurement Freeze fingerprint에 포함 | **MISSING_IN_REPO** — CI audit artifact에는 생성되지만 source에는 아직 미고정 |
+| tracked Cargo.lock | dependency graph를 Measurement Freeze fingerprint에 포함 | **IMPLEMENTED** — source에 고정하고 local/CI/audit를 `--locked`로 강제 |
 | Mac 실제 environment manifest | 실제 measurement host 식별 | 사용자 Mac에서 1회 실행 |
 | Qwen artifact/runtime/tokenizer hash | IR A/B 동일 dependency 증명 | 사용자 Mac setup 후 자동 capture |
 | measured S2S delay trace 또는 synthetic 사용 범위 승인 | simulated E2E provenance | 리뷰 시 결정. TEST_ONLY trace는 score 금지 |
 | W-04 background workload driver | 1 vs 4 active Task, 동일 cadence의 실제 state update 부하 | IMPLEMENTED / CI_SMOKE_GREEN; 최종 ratio는 W-01 foreground adapter 필요 |
-| full W-09 6-strata controller | recovery representative metric | 구현 필요 |
+| W-09 6-strata recovery correctness controller | whole-VIA process-abort 4 strata + integration-host fatal 2 strata의 identity/state/control 복구 | **IMPLEMENTED / CI_SMOKE_GREEN**; 최종 metric용 500ms restart delay·100 scored trials/stratum·p95 aggregation은 freeze 후 runner에서 실행 필요 |
 | full W-10 28-cell controller | containment representative metric | 구현 필요 |
 | 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
 | W-07/08 24 change raw analysis | change locality | freeze 후 동일 source revision에서 실행 |
