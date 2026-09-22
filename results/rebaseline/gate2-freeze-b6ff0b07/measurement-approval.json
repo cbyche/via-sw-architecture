@@ -1,0 +1,37 @@
+{
+  "version": "G2-MEASUREMENT-APPROVAL-v3",
+  "approved": true,
+  "approved_at_utc": "2026-09-22T08:22:37Z",
+  "approval_basis": "OWNER_DIRECTIVE_IN_ACTIVE_CODEX_SESSION",
+  "purpose": "COMPARATIVE_MEASUREMENT",
+  "fingerprint": "9b8cf4bf8633e10b10c05b91f05bb5c31fc67bf29e4ae3bb07ae3d0b4ff7084d",
+  "model_execution_profile": {
+    "kind": "OPENROUTER_HOSTED_REFERENCE",
+    "model_id": "qwen/qwen3-8b",
+    "base_url": "https://openrouter.ai/api",
+    "provider": "alibaba",
+    "allow_fallbacks": false,
+    "evidence": "MEASURED_MODEL_REFERENCE",
+    "target_pc_absolute_latency_claim": false
+  },
+  "evidence_scope_decisions": {
+    "s2s_synthetic_replay": {
+      "allowed_use": [
+        "STRUCTURAL_CORRECTNESS",
+        "CONTRACT_VALIDATION",
+        "SIMULATED_E2E_SENSITIVITY"
+      ],
+      "representative_score_eligible": false,
+      "final_absolute_product_latency_claim": false,
+      "required_evidence_for_representative_score": "LIVE_MEASURED_S2S"
+    },
+    "w01_w04_delivery": {
+      "required_sink": "ACTUAL_USER_DELIVERY",
+      "when_missing": "BLOCKED_NOT_RUN",
+      "headless_score_eligible": false,
+      "not_run_is_zero": false,
+      "imputation_allowed": false
+    }
+  },
+  "note": "OPENROUTER_API_KEY is environment-only and is never recorded."
+}
