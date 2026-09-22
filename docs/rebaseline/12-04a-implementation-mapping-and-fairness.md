@@ -118,7 +118,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Durable handoff / ExecutionLink | runtime/handoff.rs, SQLite outbox/link | IMPLEMENTED |
 | Agent P/Q source | fixture/src/lib.rs | FIXTURE |
 | Event-first + Query Reconciliation | runtime/sync.rs | IMPLEMENTED_TACTIC |
-| W-04 fixed background load | runtime/workload.rs + bench w04-load-smoke | IMPLEMENTED_DRIVER / final W-01 foreground measurement pending |
+| W-04 fixed background load | runtime/workload.rs + bench w04-load-smoke + gate2/w01-foreground-strata.json | IMPLEMENTED_DRIVER + FOREGROUND_CONTRACT_READY / actual W-01 observation adapter pending |
 | W-09 whole-process recovery | bench/whole_process_recovery.rs | IMPLEMENTED_CORRECTNESS_CONTROLLER / actual process abort·SQLite reopen·surviving Agent query |
 | W-09 integration-fatal recovery | bench/exec_recovery.rs + persistent Agent fixture | IMPLEMENTED_CORRECTNESS_CONTROLLER / shared Core restart vs isolated worker restart |
 | W-10 candidate endpoint containment | bench/containment.rs + gate2-host W-10 probe surface | IMPLEMENTED_CONTROLLER / candidate-initiated socket faults, shared/isolated endpoint probes, metric-ineligible CI smoke |
@@ -158,7 +158,7 @@ Unsupported native 기능을 한 후보에만 emulation으로 공짜 제공하�
 | Mac 실제 environment manifest | 실제 measurement host 식별 | 사용자 Mac에서 1회 실행 |
 | Qwen artifact/runtime/tokenizer hash | IR A/B 동일 dependency 증명 | 사용자 Mac setup 후 자동 capture |
 | measured S2S delay trace 또는 synthetic 사용 범위 승인 | simulated E2E provenance | 리뷰 시 결정. TEST_ONLY trace는 score 금지 |
-| W-04 background workload driver | 1 vs 4 active Task, 동일 cadence의 실제 state update 부하 | IMPLEMENTED / CI_SMOKE_GREEN; 최종 ratio는 W-01 foreground adapter 필요 |
+| W-04 foreground/background measurement adapter | 1 vs 4 active Task에서 동일한 6개 W-01 foreground strata·endpoint·trial count를 유지 | **BACKGROUND_DRIVER_IMPLEMENTED / FOREGROUND_CONTRACT_READY / OBSERVATION_ADAPTER_PENDING** — `w01-foreground-strata.json`과 `w04_foreground_contract.py`가 TC-01.1/01.4/02.1/04.2/06.2/10.1, 10 warmup+100 scored, nearest-rank p95, 1s cadence, 1-vs-4 비교, L1/L4/ratio 보존과 hosted-CI score 금지를 고정한다. 실제 Text/audio/user-visible endpoint observation 연결은 Measurement Freeze 전 추가 필요 |
 | W-09 6-strata recovery correctness controller | whole-VIA process-abort 4 strata + integration-host fatal 2 strata의 identity/state/control 복구 | **IMPLEMENTED / CI_SMOKE_GREEN**; 최종 metric용 500ms restart delay·100 scored trials/stratum·p95 aggregation은 freeze 후 runner에서 실행 필요 |
 | W-10 28-cell containment controller + endpoint adapters | containment representative metric | **CONTROLLER+ENDPOINT_ADAPTER_IMPLEMENTED / FROZEN_RUN_PENDING** — candidate host가 external socket fault를 실제 시작하고 같은 host의 unaffected capability를 probe한다. Agent probes는 shared backend/isolated worker를 경유하고 integration-fatal은 shared whole-host restart와 isolated worker restart에 같은 deadline을 적용한다. CI smoke는 별도 relaxed timing의 `metric_eligible=false` profile이며, frozen 30s·5회·2/10/20s·5s profile과 대표값 산출은 Measurement Freeze 이후에만 실행 |
 | 94 TC→prototype adapter plan | 94개 전부를 필요한 executable slice와 blocker에 매핑, 누락 방지 | IMPLEMENTED / CI guard; 실제 end-to-end observation endpoint 연결은 계속 필요 |
