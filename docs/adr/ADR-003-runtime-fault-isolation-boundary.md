@@ -1,6 +1,6 @@
-# ADR-003 — Defer Runtime Fault-Isolation Boundary Selection
+# ADR-003 — Isolate Integration Workloads in Supervised Processes
 
-- Status: Deferred
+- Status: Accepted
 - Date: 2026-09-22
 - Related DP: EXEC-DP01
 
@@ -10,7 +10,7 @@ Gate 2 compared integration code in the VIA process with the same code in a supe
 
 ## Decision
 
-Do not declare an architecture winner under the current frozen score contract. Retain candidate A, Single-process Partitioned Runtime, as the interim reference. Keep candidate B, Process-isolated Integration Runtime, as the preferred re-evaluation candidate because it has strong raw recovery evidence.
+Adopt candidate B, Process-isolated Integration Runtime, for integration workloads. Core owns a supervised worker lifecycle and versioned local IPC; canonical Task state and policy remain in Core.
 
 ## Alternatives considered
 
@@ -23,17 +23,15 @@ Candidate B adds versioned IPC, worker lifecycle supervision, and an independent
 | W-09 | A 550.833ms vs B 374.667ms; both score 5 and pass target |
 | W-10 | A/B both 28/28, 100%, score 5 |
 | W-01 | BLOCKED_NOT_RUN without actual user delivery |
-| W-04 | BLOCKED_NOT_RUN without actual user delivery |
+| W-04 | A 1.06/score 4 vs B 1.05/score 5 in the frozen reference harness |
 
-Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/563ms. This demonstrates process-boundary causality but does not meet the pre-result G3 rule because the aggregate score band and target outcome do not split.
+Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/563ms. W-09 alone did not split a band, but the later pre-frozen W-04 reference campaign does; both independent observations point toward B.
 
-## Interim tactics
+## Tactics and weakness
 
-Use bounded workers, timeout, backpressure, cancellation, and process-wide restart supervision for the A reference. Do not describe these tactics as equivalent to OS process isolation.
+The weakness is IPC serialization, uncertain in-flight calls, deployment, and worker lifecycle complexity. Use versioned frames, idempotent submission keys, bounded queues, health supervision, generation fencing, and reconciliation after reconnect.
 
-## Revisit condition
-
-Measure W-01/W-04 at actual delivery endpoints, or approve a new pre-result score contract that captures the product value of integration-only recovery before rerunning the campaign.
+Revalidate IPC and delivery latency on the Windows named-pipe realization before making an absolute product-performance claim.
 
 ## Requirement changes
 

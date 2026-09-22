@@ -1,6 +1,6 @@
-# ADR-002 — Defer Task State Authority Selection
+# ADR-002 — Use Per-Task Durable Supervisors
 
-- Status: Deferred
+- Status: Accepted
 - Date: 2026-09-22
 - Related DP: TASK-DP01
 
@@ -10,7 +10,7 @@ Gate 2 compared a shared transactional Task service with per-Task durable superv
 
 ## Decision
 
-Do not declare an architecture winner. Retain candidate A, Shared Transactional Task Service, as the interim reference until representative W-02/W-04 evidence is available. This retention is continuity, not evidence of superiority.
+Adopt candidate B, Per-Task Durable Supervisors. Each Task has one fenced writer and mailbox while durable command identity, state, and effects remain in the common repository.
 
 ## Alternatives considered
 
@@ -23,17 +23,15 @@ Candidate B assigns each Task to a durable single-writer supervisor with activat
 | W-08 | A/B both 1.933, score 4 |
 | W-09 | A 550.833ms vs B 551.167ms, both score 5 |
 | W-02 | NOT_RUN |
-| W-04 | BLOCKED_NOT_RUN without actual user delivery |
+| W-04 | A 1.06/score 4 vs B 1.05/score 5 in the frozen reference harness |
 
-No metric passed G3 Observable Sensitivity.
+W-04 passes G3 in the explicitly simulated-reference campaign. This is an Architecture mockup decision, not a production throughput claim.
 
-## Interim tactics
+## Tactics and weakness
 
-Keep transactions short, enforce expected revision/CAS, persist outbox/inbox identities, and perform external calls outside database locks. These tactics reduce conflict and duplicate effects without changing the interim authority topology.
+The weakness is activation, fencing, and cross-Task coordination complexity. Persist command/outbox identities, fence stale epochs, keep external calls outside the mailbox critical section, and use a common RelationScheduler for cross-Task commands.
 
-## Revisit condition
-
-Capture frozen representative Agent-acceptance and actual user-visible foreground traces, then issue a new Measurement Freeze.
+Revalidate on the Windows product runtime before treating the reference ratio as an absolute performance result.
 
 ## Requirement changes
 
