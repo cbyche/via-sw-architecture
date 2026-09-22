@@ -6,7 +6,7 @@
 
 ## Context
 
-VIA must support Agents whose submit, follow-up, cancel, question, observation, and artifact lifecycles differ. Gate 2 compared edge-normalized canonical semantics with Core-visible typed variations under the same native fixtures and Task-state authority.
+VIA must support Agents whose submit, follow-up, cancel, question, observation, and artifact lifecycles differ. Gate 2 compared edge-normalized canonical semantics with Core-visible typed variations under the same native fixtures and Task-state authority. The later `2^4` campaign checked this choice in all eight contexts formed by IR, TASK, and EXEC alternatives.
 
 ## Decision
 
@@ -24,15 +24,16 @@ Candidate B exposed provider-neutral typed lifecycle variations to Core capabili
 |---|---|
 | W-07 Interoperability & Substitutability | 1.444 changed elements/change, score 4; B was 1.778, score 3 |
 | W-08 Evolvability & Maintainability | 1.933, score 4 for both; no general maintainability advantage claimed |
-| W-02/W-03 responsiveness | Not measured; no latency advantage claimed |
+| W-02/W-03 responsiveness | A had lower reference raw values; all configurations remained score 5 |
 
-W-07 passed the frozen Differentiation Gate with a one-band split and direct change-ledger traceability.
+W-07 passed the frozen Differentiation Gate with a one-band split and direct change-ledger traceability. The full-factorial projection preserved that split in all 8/8 matched contexts: A remained score 4 and B score 3.
 
 ## Evidence
 
 - Prototype: `prototype/gate2/runtime/src/agent.rs`
 - Benchmark: `benchmark/rebaseline/gate2/change_analysis.py`
 - Results: `results/rebaseline/gate2-freeze-b6ff0b07/w07-w08-scores.json`
+- Full-factorial results: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`
 
 ## Consequences
 

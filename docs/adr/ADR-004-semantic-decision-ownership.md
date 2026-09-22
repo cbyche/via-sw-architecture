@@ -6,7 +6,7 @@
 
 ## Context
 
-Gate 2 compares an integrated semantic authority with staged grounding, Task association, and handling authorities using the same hosted Qwen3-8B reference profile.
+Gate 2 compares an integrated semantic authority with staged grounding, Task association, and handling authorities using the same hosted Qwen3-8B reference profile. The `2^4` reference campaign evaluated IR A/B in all eight TASK/AGENT/EXEC contexts, but the hosted W-05 run remains blocked on the OpenRouter credential.
 
 ## Decision
 
@@ -22,10 +22,10 @@ Candidate B creates independent stage contracts and provenance, allowing correct
 |---|---|
 | W-08 | A/B both 1.933, score 4 |
 | W-05 | BLOCKED_NOT_RUN because the OpenRouter credential was absent |
-| W-01 | BLOCKED_NOT_RUN without actual user delivery |
-| W-02 | NOT_RUN |
+| W-01 | A raw reference latency lower in 8/8 contexts; all score 5 |
+| W-02 | A raw reference handoff lower in 8/8 contexts; all score 5 |
 
-No measured metric differentiated the candidates.
+The reference model consistently favors A on raw W-01/W-02 values, including the frozen IR×TASK and IR×EXEC terms, but no score band splits. This is not enough to replace W-05 task-effectiveness evidence, so A remains the interim reference rather than an accepted winner.
 
 ## Interim tactics
 
@@ -33,7 +33,7 @@ Use a versioned output schema, client-side validation, bounded repair cycles, so
 
 ## Revisit condition
 
-Run the frozen `qwen/qwen3-8b` OpenRouter profile with provider `alibaba`, fallback disabled, then add actual delivery evidence under a new freeze where required.
+Run the frozen `qwen/qwen3-8b` OpenRouter profile with provider `alibaba`, fallback disabled. Full-factorial evidence: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
 
 ## Requirement changes
 

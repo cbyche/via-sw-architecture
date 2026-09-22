@@ -1,5 +1,7 @@
 # 12-06. Reference Campaign Results
 
+> 이 문서는 최초 5개 OFAT campaign의 역사적 결과다. 16개 full-factorial 후속 결과와 현재 통합 판단은 `12-07-full-factorial-results.md`를 기준으로 한다.
+
 > 상태: W-01~W-12 중 W-05 제외 측정 완료
 >
 > reference freeze: `9653bf2eea667b9d36627e51c812c6198b789c238da4cf48e5363dd7355fbab8`

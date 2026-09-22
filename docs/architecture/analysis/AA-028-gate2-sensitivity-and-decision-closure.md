@@ -1,5 +1,7 @@
 # AA-028 — Gate 2 Sensitivity and Decision Closure
 
+> Historical note: this analysis predates the 16-configuration campaign. Current combined evidence and decisions are documented in `docs/rebaseline/12-07-full-factorial-results.md` and ADR-001 through ADR-004.
+
 - Status: Complete
 - Date: 2026-09-22
 - Scope: IR-DP01, TASK-DP01, AGENT-DP01, EXEC-DP01

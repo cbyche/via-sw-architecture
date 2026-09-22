@@ -6,7 +6,7 @@
 
 ## Context
 
-Gate 2 compared integration code in the VIA process with the same code in a supervised child process. The comparison included whole-process recovery, integration-host fatal faults, and a fixed containment matrix.
+Gate 2 compared integration code in the VIA process with the same code in a supervised child process. The comparison included whole-process recovery, integration-host fatal faults, and a fixed containment matrix. The `2^4` follow-up evaluated EXEC A/B in all eight contexts formed by IR, TASK, and AGENT choices.
 
 ## Decision
 
@@ -20,18 +20,20 @@ Candidate B adds versioned IPC, worker lifecycle supervision, and an independent
 
 | QA | Result |
 |---|---|
-| W-09 | A 550.833ms vs B 374.667ms; both score 5 and pass target |
+| W-09 | B was about 176.33ms lower in all 8/8 contexts; both score 5 and pass target |
 | W-10 | A/B both 28/28, 100%, score 5 |
-| W-01 | BLOCKED_NOT_RUN without actual user delivery |
-| W-04 | A 1.06/score 4 vs B 1.05/score 5 in the frozen reference harness |
+| W-01 | A was 5–11ms lower depending on IR; all score 5 in the reference harness |
+| W-04 | B raw ratio was lower in 8/8 contexts; score split in 4/8 contexts |
 
-Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/563ms. W-09 alone did not split a band, but the later pre-frozen W-04 reference campaign does; both independent observations point toward B.
+Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/564ms in the full-factorial run. W-09 did not split a band, but its raw recovery improvement and the separately frozen W-04 mock both point toward B. The W-01/W-02/W-03 reference cost remains an explicit trade-off.
 
 ## Tactics and weakness
 
 The weakness is IPC serialization, uncertain in-flight calls, deployment, and worker lifecycle complexity. Use versioned frames, idempotent submission keys, bounded queues, health supervision, generation fencing, and reconciliation after reconnect.
 
 Revalidate IPC and delivery latency on the Windows named-pipe realization before making an absolute product-performance claim.
+
+Full-factorial evidence: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
 
 ## Requirement changes
 

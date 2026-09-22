@@ -1,6 +1,6 @@
 # 12-05. Gate 2 Measurement Results and Decision Closure
 
-> 후속 reference campaign과 갱신된 결정은 `12-06-reference-campaign-results.md`를 따른다. 이 문서는 최초 structural campaign의 역사적 결과다.
+> 후속 16-configuration campaign과 갱신된 결정은 `12-07-full-factorial-results.md`를 따른다. 이 문서는 최초 structural campaign의 역사적 결과다.
 
 > 상태: **MEASUREMENT COMPLETE / 12-A COVERAGE CLOSED / ONE DECISION ACCEPTED / THREE DEFERRED**
 >
