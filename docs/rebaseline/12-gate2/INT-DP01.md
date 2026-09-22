@@ -1,5 +1,7 @@
 # FP-INT01 — S2S Direct Fast Path
 
+> W12-G2: W-01~W-03이 delegated result, direct Voice response, Agent progress Voice feedback으로 재정의되었다. 이 문서의 기존 latency 연결은 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)에 맞춰 구현 전에 재검토한다.
+
 > **Gate 2 자체 리뷰에서 INT-DP01을 독립 DP에서 내리고 고정 Interaction 원칙으로 전환하는 제안.** 사용자 승인 전.
 
 ## 결론
@@ -33,7 +35,7 @@ flowchart LR
 
 ## 관련 Working ASR
 
-- **W-01 Conversational Reaction Responsiveness** — S2S direct path의 실제 첫 응답 latency.
+- **W-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 W-01 delegation 경로의 관련성은 별도 재검토한다.
 - **W-08 Evolvability & Maintainability** — S2S event/control 계약 변경은 regression으로 추적.
 - Voice barge-in/jitter — secondary observation.
 

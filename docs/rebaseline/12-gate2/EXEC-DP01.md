@@ -1,6 +1,7 @@
 # EXEC-DP01 — 연동 코드의 장애를 Core와 같은 process에서 받을지, 밖에서 격리할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. 동일 코드·동일 논리 fault point 비교.
+> W12-G2: 이 문서의 W-01~W-03 latency 가설은 이전 endpoint의 historical mapping이다. 새 Voice 경로의 applicability와 IPC span은 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
 <!-- gate2: {"dp":"EXEC-DP01","reference":"A","hypotheses":["W-01","W-04","W-09","W-10"],"alternatives":{"A":["G2-C-LOCALBRIDGE","G2-I-BRIDGE","G2-D-VIA"],"B":["G2-C-REMOTEBRIDGE","G2-C-WORKERLIFE","G2-I-BRIDGE","G2-I-IPC","G2-S-IPC","G2-D-VIA","G2-D-INTEGRATION"]}} -->
 
 ## 1. 결정과 경계

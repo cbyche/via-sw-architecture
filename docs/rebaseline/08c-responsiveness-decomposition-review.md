@@ -1,5 +1,7 @@
 # 08-C. Responsiveness Decomposition Review
 
+> **W12-G2 historical notice:** 이 문서의 P-ASR-01~03 분해는 초기 탐색 기록이다. 현재 W-01~W-03 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따른다.
+
 > 작성일: 2026-09-21
 > 상태: **방법론 검토 초안 — 기존 QA/ASR catalog를 아직 변경하지 않음**
 > 목적: VIA의 interface/orchestration product identity에 맞게 Responsiveness를 여러 architecture-significant performance scenario로 분해할 타당성을 검토한다.

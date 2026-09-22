@@ -1,6 +1,8 @@
 # Gate 1 — 근거 원장과 방법론 보정
 
 > 조회·검토일: 2026-09-21. 이 문서는 외부 사실과 VIA의 제품 예산/분석 제안을 분리한다.
+>
+> **W12-G2 historical notice:** 아래 W-01~W-03 목표·분모는 이전 Gate 1 계약이다. 현재 Voice 중심 정의는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 따르며, 새 목표와 score band는 재동결 전까지 미정이다. 외부 근거 E7~E9 자체는 provenance 기록으로 유지한다.
 
 ## 1. 직접 확인한 외부 근거
 

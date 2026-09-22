@@ -1,6 +1,7 @@
 # AGENT-DP01 — Agent 차이를 경계에서 해석할지, Core의 typed handler가 해석할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. Agent 중립성은 양 후보 공통 요구다.
+> W12-G2: 아래 W-02/W-03 responsiveness 가설은 이전 endpoint의 historical mapping이다. 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
 <!-- gate2: {"dp":"AGENT-DP01","reference":"A","hypotheses":["W-02","W-03","W-07","W-08"],"alternatives":{"A":["G2-C-EDGESEM","G2-I-CANONAGENT"],"B":["G2-C-TYPEDHANDLER","G2-I-TYPEDAGENT"]}} -->
 
 ## 1. 질문을 정확하게 한정하기
@@ -86,7 +87,7 @@ COMMON의 NativeClients, Registry와 ExecutionLink/Pending 상태를 재사용�
 |---|---|---|
 | W-07 Agent Ecosystem Interoperability & Substitutability | A-01~09가 adapter·typed handler·소비 계약까지 바꾸는지 | 두 안 모두 edge/client만 고치면 동점 |
 | W-08 Evolvability & Maintainability | M/C 변화가 integration 소비자와 공유 계약을 바꾸는지 | Agent change를 W-08에 중복 계산하지 않음 |
-| W-02 Task Handoff Responsiveness / W-03 Task Feedback Responsiveness | native→중립 계약 변환·검증·필요한 protocol 조합 | 같은 변환량이면 latency 차이가 거의 없을 수 있음 |
+| W-01 Delegated Task Result Responsiveness / W-03 Agent Progress Voice Feedback Responsiveness | native→중립 계약 변환·검증·필요한 protocol 조합 | 새 endpoint에 대한 applicability와 latency는 재동결 필요 |
 
 A는 Core의 수명 의미를 단순화하고 provider 적응을 국소화하기 쉽지만 adapter에 기능 해석 책임이 모인다. B는 capability 차이를 명시적으로 조합하기 쉽지만 Core가 그 variation의 변경을 따라가야 할 수 있다. 두 안 모두 기능 보존을 전제로 하고, 바뀌는 모든 C/I/S/D와 회귀 UC를 원장에 남긴다.
 

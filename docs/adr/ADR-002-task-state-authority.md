@@ -4,6 +4,8 @@
 - Date: 2026-09-22
 - Related DP: TASK-DP01
 
+> W12-G2 impact: 이전 W-02 responsiveness와 W-01 기반 W-04 reference evidence는 superseded/review-required다. 이 ADR의 선택은 유지하되 새 W-01/W-03과 재정의된 W-04로 재검증해야 한다.
+
 ## Context
 
 Gate 2 compared a shared transactional Task service with per-Task durable supervisors. Both used the same repository, WAL/FULL persistence, idempotency, and recovery endpoints. The `2^4` follow-up evaluated TASK A/B in all eight contexts formed by IR, AGENT, and EXEC choices.
@@ -22,10 +24,10 @@ Candidate B assigns each Task to a durable single-writer supervisor with activat
 |---|---|
 | W-08 | A/B both 1.933, score 4 |
 | W-09 | B was about 0.17ms lower on this run; both score 5 and effectively tied |
-| W-02 | A raw value was lower in 8/8 contexts; all score 5 |
-| W-04 | B raw ratio was lower in 8/8 contexts; score split in 4/8 contexts |
+| W-02 (historical) | Superseded handoff endpoint; not current evidence |
+| W-04 (historical) | Depends on the superseded W-01 foreground contract; review required |
 
-W-04 supports B in the explicitly simulated-reference campaign, including a frozen TASK×EXEC interaction of `-0.01`. The score split is context-conditional rather than universal, so this remains an Architecture reference decision, not a production throughput claim.
+At the time of the 2026-09-22 decision, the explicitly simulated-reference W-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded W-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current W12-G2 performance evidence until revalidation.
 
 ## Tactics and weakness
 

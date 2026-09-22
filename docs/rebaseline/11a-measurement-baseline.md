@@ -2,6 +2,8 @@
 
 > 상태: **사용자 리뷰 승인 완료**. ASR 7개 유지 / 실제 후보 측정값과 0~5점은 11-C 이후.
 > 근거: [06](./06-fixed-assumptions.md), [08](./08-architecture-significant-requirements.md), [09](./09-asr-uc-change-mapping.md), [10](./10-architecture-element-definition.md)
+>
+> **W12-G2 historical notice:** 이 문서의 단일 ASR-01 모집단과 Text/Voice endpoint는 W-01~W-03에 대해 대체되었다. 현재 Voice 측정 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따른다. 그 외 기능·정확성 원칙은 후속 Working-12 계약의 provenance로 유지한다.
 
 ## A.1 전체 측정 계약
 

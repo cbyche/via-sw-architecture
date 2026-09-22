@@ -1,5 +1,6 @@
 # 12-02. Gate 2 — Core Architecture Candidate Review
 
+> **W12-G2 notice:** 이 리뷰의 W-01~W-03 명칭·가설은 이전 측정 정의를 사용한다. 새 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 관련 latency 근거와 DP applicability는 재동결 전까지 미확정이다.
 > **G2-DESIGN-v1.1 / 2026-09-22 / 사용자 승인 완료 — 구현·측정 준비로 전환**
 > Source snapshot: `e9646d4a074afb7a3cf4e85f5ca48c939a697fbf`.
 > 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 아직 점수·승자·최종 Architecture 없음.
@@ -8,9 +9,9 @@
 
 | ID | ASR / QA 의미 |
 |---|---|
-| **W-01** | **Conversational Reaction Responsiveness** — 사용자가 말한 뒤 의미 있는 첫 응답이 얼마나 빨리 시작되는가 |
-| **W-02** | **Task Handoff Responsiveness** — 사용자 요청이 실제 Agent 접수+복구 가능한 연결까지 얼마나 빨리 도달하는가 |
-| **W-03** | **Task Feedback Responsiveness** — Agent 상태·질문·결과가 준비된 뒤 사용자에게 얼마나 빨리 보이는가 |
+| **W-01** | **Delegated Task Result Responsiveness** — Agent 외부 대기를 제외한 VIA 위임 전·결과 후 Voice 처리시간 |
+| **W-02** | **VIA Direct Voice Response Responsiveness** — downstream Agent 없는 직접 Voice 응답이 실제로 들리기까지의 시간 |
+| **W-03** | **Agent Progress Voice Feedback Responsiveness** — Agent status가 준비된 뒤 상태 안내 Voice가 실제로 들리기까지의 시간 |
 | **W-04** | **Concurrent Task Performance Isolation** — 여러 Task가 동시에 있을 때 foreground 반응성이 얼마나 덜 저하되는가 |
 | **W-05** | **Task Completion Effectiveness** — referent·요청·Task·Agent 연결 의무를 얼마나 정확히 만족하는가 |
 | **W-06** | **Interaction & Task Continuity** — modality/connection/Task 전환에도 맥락·identity를 얼마나 보존하는가 |
@@ -40,7 +41,7 @@
 
 Voice 입력은 Voice Runtime과 S2S Model을 거친다. S2S가 **자체 지식+Conversation만으로 직접 응답 가능하다고 유효하게 판단한 경우**, Core에 “허락”을 받으러 갔다 돌아오는 B 구조는 현재 요구에서 추가적인 제품 가치를 증명하지 못한다. 따라서 S2S Direct Response는 Voice Runtime이 release하고, Core는 필요한 요청만 escalation받으며 Conversation 기록·Task 연계는 공통 계약으로 보장한다.
 
-상세 rationale은 [INT-DP01 note](./12-gate2/INT-DP01.md)에 보존한다. 이것은 W-01을 무조건 좋게 만들기 위한 선택이 아니라 **비교 가치가 약한 dominated candidate를 제거한 것**이다.
+상세 rationale은 [INT-DP01 note](./12-gate2/INT-DP01.md)에 보존한다. 새 정의에서는 이 원칙이 주로 W-02 direct Voice response에 연결된다. 이것은 특정 W 점수를 무조건 좋게 만들기 위한 선택이 아니라 **비교 가치가 약한 dominated candidate를 제거한 것**이다.
 
 ### TASK-T01 — Event-first + Query Reconciliation을 공통 tactic으로 둔다
 

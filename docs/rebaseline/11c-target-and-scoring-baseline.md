@@ -3,6 +3,8 @@
 > 상태: **사용자 리뷰용 초안 / Reserve QA 재평가로 ASR rebaseline 여부 검토 중**. Architecture 후보 결과를 보기 전에 작성.
 > 입력: 08 확정 ASR, 09 mapping, 10 Architecture Element 기준, 사용자 승인 완료 11-A/B.
 > 원칙: 같은 ASR은 모든 DP에서 동일 metric / target / score boundary를 사용한다.
+>
+> **W12-G2 historical notice:** 이 7-ASR 초안의 ASR-01 target·score·6-class 집계는 새 W-01~W-03에 이관하지 않는다. 현재 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 세 지표의 target과 score band는 미정이다.
 
 ## C.1 목적
 

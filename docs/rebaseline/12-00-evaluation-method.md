@@ -3,6 +3,7 @@
 > 작성일: 2026-09-21
 > 상태: **12 Architecture Decision 평가 방법 초안 — 실제 DP 후보 점수 산출 전**
 > 목적: Working ASR 12개를 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
+> W12-G2: W-01~W-03의 명칭·endpoint는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
 
 ## 1. 핵심 원칙
 
@@ -58,9 +59,9 @@ Gate 2에서 상세 후보를 만들기 전에 각 DP의 대안은 다음을 만
 
 | ID | Working ASR | Sweep role |
 | --- | --- | --- |
-| W-01 | Conversational Reaction Responsiveness | strong candidate |
-| W-02 | Task Handoff Responsiveness | strong candidate |
-| W-03 | Task Feedback Responsiveness | strong candidate |
+| W-01 | Delegated Task Result Responsiveness | strong candidate / target pending |
+| W-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
+| W-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
 | W-04 | Concurrent Task Performance Isolation | strong candidate |
 | W-05 | Task Completion Effectiveness | conditional |
 | W-06 | Interaction & Task Continuity | conditional |

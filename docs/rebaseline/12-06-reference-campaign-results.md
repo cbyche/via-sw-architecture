@@ -2,6 +2,8 @@
 
 > 이 문서는 최초 5개 OFAT campaign의 역사적 결과다. 16개 full-factorial 후속 결과와 현재 통합 판단은 `12-07-full-factorial-results.md`를 기준으로 한다.
 
+> **W12-G2 notice:** 이 문서의 W-01~W-03은 이전 endpoint와 수식 기반 reference model의 historical/superseded 결과다. 새 Voice 중심 정의는 [`11e-voice-responsiveness-measurement-redefinition.md`](./11e-voice-responsiveness-measurement-redefinition.md)를 따른다.
+
 > 상태: W-01~W-12 중 W-05 제외 측정 완료
 >
 > reference freeze: `9653bf2eea667b9d36627e51c812c6198b789c238da4cf48e5363dd7355fbab8`

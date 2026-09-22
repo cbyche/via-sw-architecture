@@ -2,6 +2,8 @@
 
 > 상태: PRE-RESULT FROZEN REFERENCE CONTRACT
 
+> **Historical notice (W12-G2 draft):** 이 contract의 W-01~W-03 정의와 수식은 [`11e-voice-responsiveness-measurement-redefinition.md`](../11e-voice-responsiveness-measurement-redefinition.md)에 의해 superseded되었다. 기존 값은 삭제하지 않지만 새 Voice W-01~W-03 결과나 DP별 A/B 판단에 사용하지 않는다. 측정 코드는 아직 변경되지 않았다.
+
 이 campaign은 제품 실측이 아니라 Architecture 비교용 deterministic reference harness다. Qwen3-Omni 공개 first-packet reference 234ms, 생성 WAV, instrumented text/audio sink, Agent P/Q acceptance stub, frozen continuity/privacy/safety fixture를 사용한다. 결과는 `SIMULATED_REFERENCE` 또는 `MEASURED_*_FIXTURE`이며 production UI, live S2S, target Windows absolute latency 주장을 금지한다.
 
 ## Candidate mapping

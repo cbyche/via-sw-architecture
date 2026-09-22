@@ -1,5 +1,6 @@
 # 12-04A. Gate 2 Implementation Mapping & Candidate Fairness
 
+> **W12-G2 notice:** 이 문서의 W-01~W-03 adapter/readiness 설명은 이전 contract의 historical mapping이다. 새 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 기존 adapter를 재사용 가능한 것으로 간주하지 않는다.
 > 상태: **PRE-MEASUREMENT REVIEW INPUT** / comparative benchmark, score, winner는 아직 NOT_RUN.
 > 이 문서는 Gate 2의 4개 Core DP가 실제 executable comparison slice에 어떻게 대응되는지와 A/B 공정성 조건을 추적한다.
 

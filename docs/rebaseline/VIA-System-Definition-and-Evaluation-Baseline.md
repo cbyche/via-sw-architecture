@@ -23,15 +23,18 @@
 | 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 검토 완료 · 7개 ASR 기준선 확정 |
 | 9 | [ASR ↔ UC / Evolution Scenario Mapping](./09-asr-uc-change-mapping.md) | 작성 완료 · 09/10 공동 검토본 |
 | 10 | [Architecture Element Definition](./10-architecture-element-definition.md) | 작성 완료 · 09/10 공동 검토본 |
-| 11 | [Test Case & Measurement](./11-test-case-catalog.md) | 11-A/B 공동 검토본 · 11-C 미진행 |
+| 11 | [Test Case & Measurement](./11-test-case-catalog.md) | W-01~W-03 Voice 정의 재작성 · 구현/target/score 재동결 전 |
 | 12 | Architecture Decision Points | 이후 작성 |
 
-## 현재 리뷰 지점 — 11-A와 11-B
+## 현재 리뷰 지점 — W-01~W-03 Voice 측정 재정의
+
+> W12-G2에서 W-01~W-03은 각각 Agent delegation 결과, VIA direct Voice response, Agent progress Voice feedback으로 재정의됐다. 현재 source of truth는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)이며 측정 코드는 아직 변경하지 않았다. 아래 11-A/B 안내는 이전 7-ASR 기준선의 historical context다.
 
 08의7개 ASR과09/10의 연결·집계 원칙을 유지한다. ASR-01은 VIA 모델 비용의 근거·계산을 구체화하고, ASR-07은 고정 분모를 보완했다. 11-A/B는 검토본이며 11-C 목표/0~5점과12의 후보 비교는 진행하지 않았다.
 
 | 읽을 문서 | 확인할 것 |
 | --- | --- |
+| [11-E Voice 반응성 재정의](./11e-voice-responsiveness-measurement-redefinition.md) | 새 W-01~W-03 경계·Voice endpoint·LLM/S2S evidence 사용 규칙 |
 | [11-A 측정 계약](./11a-measurement-baseline.md) | 모델 포함 시간·pass/fail·변경량·안전 분모 |
 | [Qwen 근거](./11-evidence/asr01-qwen-evidence.md) | 확인한 공개값과 계산 가정, tokenization 미실행 구분 |
 | [11-B 시험 목록](./11b-test-case-catalog.md) | 94개 UC·24개 변경·24개 안전 판단 기회 |
@@ -39,7 +42,7 @@
 
 공식 tokenizer 실행·실제 모델 추론·녹음·실제 VIA 후보 측정은 아직 수행되지 않았다. 계산 보조 코드와 catalog 자체를 검증한 것을 제품 성능 실측으로 부르지 않는다.
 
-**다음 순서: 11-A/B 리뷰 → 11-C 목표·점수·표본 동결 → 12 DP 비교.**
+**다음 순서: 11-E 검토 → DP×W applicability와 fixture 확정 → target·score·machine contract 재동결 → 측정 코드 변경.**
 
 ## 06·07 확정 내용
 

@@ -1,6 +1,7 @@
 # TASK-DP01 — Task 상태를 공유 서비스가 갱신할지, Task별 소유자가 갱신할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. actor·central에 대한 성능 우열 가정 없음.
+> W12-G2: 이 문서의 W-02 latency 가설은 이전 handoff endpoint의 historical mapping이다. 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
 <!-- gate2: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-02","W-04","W-08","W-09"],"alternatives":{"A":["G2-C-TASKSERVICE","G2-I-TXNTRANSITION"],"B":["G2-C-TASKACTOR","G2-C-ACTIVATION","G2-I-MAILBOX","G2-S-ACTIVATION"]}} -->
 
 ## 1. 결정과 중요성

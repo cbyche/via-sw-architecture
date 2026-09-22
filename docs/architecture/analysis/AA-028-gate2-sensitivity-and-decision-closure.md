@@ -1,6 +1,8 @@
 # AA-028 — Gate 2 Sensitivity and Decision Closure
 
 > Historical note: this analysis predates the 16-configuration campaign. Current combined evidence and decisions are documented in `docs/rebaseline/12-07-full-factorial-results.md` and ADR-001 through ADR-004.
+>
+> W12-G2 note: the W-01/W-02 names, endpoints, and availability statements below are historical. The current pre-implementation Voice definitions are in `docs/rebaseline/11e-voice-responsiveness-measurement-redefinition.md`; they have not yet been measured.
 
 - Status: Complete
 - Date: 2026-09-22

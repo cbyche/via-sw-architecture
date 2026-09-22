@@ -1,6 +1,6 @@
 # 11. 측정 기준과 Test Case — 공동 검토본
 
-> 상태: **11-A·11-B 사용자 리뷰 승인 완료 / 11-C target·0~5점·반복·집계 초안 작성 / 사용자 리뷰 대기. 12 DP 평가는 미진행**
+> 상태: **11-A·11-B historical baseline 승인 완료 / W-01~W-03은 11-E에서 W12-G2 Voice 중심으로 재정의 / 측정 구현·target·score 재동결 전**
 > 기준 브랜치: `architecture-rebaseline-20260918` / 입력 기준 커밋: `60422f108cb5c282ad6ece1a62d9c1c92ad40b4d`
 
 ## 11.1 리뷰 완료 항목
@@ -9,6 +9,7 @@
 | --- | --- |
 | [11-A 측정 기준](./11a-measurement-baseline.md) | 같은 구조 조건에서 무엇을 재며, 모델과 Agent 영향을 어떻게 구분하는가? |
 | [11-B 시험 목록](./11b-test-case-catalog.md) | 입력·초기 상태·외부 이벤트·정답·실패 규칙이 실제 사용자 요구와 맞는가? |
+| [11-E Voice 반응성 재정의](./11e-voice-responsiveness-measurement-redefinition.md) | Agent delegation 결과, VIA direct response, Agent progress를 어떤 Voice endpoint로 분리해 재는가? |
 | [ASR-01 Semantic Model 근거](./11-evidence/asr01-qwen-evidence.md) | Qwen3-8B Windows consumer-GPU planning profile과 VIA 실제 측정을 구분 |
 | [ASR-01 S2S Model 근거](./11-evidence/asr01-qwen3-omni-s2s-evidence.md) | Qwen3-Omni-30B-A3B-Instruct의 official theoretical first-packet과 VIA 실제 latency를 구분 |
 | [참조 발표자료 적용](./11-evidence/reference-presentation-application.md) | 최종 발표에서 어떤 주장과 근거를 연결할 것인가? |

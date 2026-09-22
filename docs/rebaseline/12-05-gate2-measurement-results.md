@@ -1,5 +1,6 @@
 # 12-05. Gate 2 Measurement Results and Decision Closure
 
+> **W12-G2 notice:** 이 문서의 W-01~W-03 상태와 판단은 이전 endpoint의 historical evidence다. 새 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 아직 측정되지 않았다.
 > 후속 16-configuration campaign과 갱신된 결정은 `12-07-full-factorial-results.md`를 따른다. 이 문서는 최초 structural campaign의 역사적 결과다.
 
 > 상태: **MEASUREMENT COMPLETE / 12-A COVERAGE CLOSED / ONE DECISION ACCEPTED / THREE DEFERRED**

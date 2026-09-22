@@ -2,6 +2,8 @@
 
 > 검토일: 2026-09-21
 > 상태: **09/10 및 11-A/B 승인 완료. Working ASR 12개 유지. 12 Gate 1 DP catalog 최종 확정, Gate 2 상세 candidate 설계는 미진행.**
+>
+> **W12-G2 historical notice:** 이 진행 기록의 ASR-01 및 초기 W-01~W-03 전제는 후속 논의에서 대체되었다. 현재 Voice 측정 정의는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 따르며 아직 구현·측정되지 않았다.
 
 ## 1. 현재 준비 상태
 

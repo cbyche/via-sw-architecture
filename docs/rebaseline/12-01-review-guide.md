@@ -1,5 +1,6 @@
 # VIA SW Architecture — Gate 1 Final
 
+> **W12-G2 notice:** 아래 W-01~W-03 DP 연결은 이전 정의의 historical hypothesis다. 새 Voice endpoint와 명칭은 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며, 새 측정 전 DP×W mapping을 다시 동결한다.
 > **Post-Gate-1 note (2026-09-22):** Gate 2 상세 리뷰에서 INT-DP01은 `FP-INT01 S2S Direct Fast Path` 고정 원칙으로, TASK-DP02는 `TASK-T01 Event-first + Query Reconciliation` tactic으로 내리는 안을 제안했다. 후보 실행·점수 산출 전 보정이며, 현재 Gate 2 리뷰본은 [12-02](./12-02-gate2-review-guide.md)를 우선한다.
 > **리뷰 목적: 비교할 구조 질문과 그 상호배타적 대안의 방향을 승인하는 것. 후보 점수나 승자를 고르는 단계가 아닙니다.**
 > **상태: Gate 1 최종 기준선 — 사용자 피드백 반영 완료.**

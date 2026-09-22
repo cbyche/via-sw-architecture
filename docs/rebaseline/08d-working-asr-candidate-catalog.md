@@ -1,5 +1,7 @@
 # 08-D. Working ASR Candidate Catalog
 
+> **W12-G2 historical notice:** 이 문서의 responsiveness 후보 명칭과 endpoint는 초기 탐색 기록이다. 현재 W-01~W-03 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따른다.
+
 > 작성일: 2026-09-21
 > 상태: **Working candidate set — 12-A Architecture Sensitivity Sweep에 12개 전수 반입. 정식 rebaseline/최종 ASR 선정 전**
 > 원칙: 최종 확정 시 각 QA/ASR은 대표 Metric 하나만 사용하고 모든 DP에서 동일 target/score rule을 적용한다.

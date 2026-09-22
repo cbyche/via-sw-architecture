@@ -1,5 +1,6 @@
 # 12-03. Implementation & Test Readiness Plan
 
+> **W12-G2 notice:** W-01~W-03 readiness와 adapter 설명은 이전 endpoint의 historical 상태다. 새 Voice 측정 계약은 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 구현은 아직 시작하지 않았다.
 > 2026-09-22 / Gate 2 승인 후 실행 계획.
 > 대상: IR-DP01, TASK-DP01, AGENT-DP01, EXEC-DP01.
 > 고정 원칙: FP-INT01 S2S Direct Fast Path, TASK-T01 Event-first + Query Reconciliation.

@@ -1,6 +1,7 @@
 # TASK-T01 — Agent State Update Delivery Strategy
 
 > **Gate 2 자체 리뷰에서 TASK-DP02를 독립 DP에서 내리고 공통 Task/Agent integration tactic으로 전환하는 제안.** 사용자 승인 전.
+> W12-G2: 새 W-03은 Agent status source event부터 audible Voice feedback까지 측정한다. 아래 기존 feedback 가설은 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)에 맞춰 구현 전에 재동결한다.
 
 ## 결론
 
@@ -26,7 +27,7 @@ A2A는 polling, streaming, push를 보완적인 update mechanism으로 설명하
 
 ## 관련 Working ASR
 
-- **W-03 Task Feedback Responsiveness** — event path가 실제 사용자 feedback을 얼마나 빨리 전달하는가.
+- **W-03 Agent Progress Voice Feedback Responsiveness** — source status event가 실제 audible Voice feedback으로 얼마나 빨리 전달되는가.
 - **W-04 Concurrent Task Performance Isolation** — event fan-in/query workload가 foreground에 주는 영향.
 - **W-07 Agent Ecosystem Interoperability & Substitutability** — 지원 mechanism 차이를 integration layer가 얼마나 국소화하는가.
 - **W-09 Recovery Timeliness & Recoverability** — reconnect 후 query/reconciliation으로 current state를 얼마나 빨리 회복하는가.

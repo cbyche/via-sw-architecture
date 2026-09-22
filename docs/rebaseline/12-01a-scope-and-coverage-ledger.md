@@ -1,5 +1,6 @@
 # 12-01A. Scope & Coverage Ledger
 
+> **W12-G2 notice:** 이 원장의 W-01~W-03 `H/R` 표와 인과 설명은 W12-G1 historical mapping이다. [11-E](./11e-voice-responsiveness-measurement-redefinition.md)의 새 정의에 대한 DP별 applicability는 아직 `PENDING_REMAP`이며 기존 H/R을 측정 코드나 최종 A/B 판단에 사용하지 않는다.
 > W12-G1-FINAL. **Gate 1 최종 coverage 원장. 설계 책임의 연결 확인이지 구현/시험 통과 증거가 아니다.**
 > `H`는 관찰 우선 인과 가설, `R`은 전수 점검/회귀 또는 공통 배경이다. R을 무관/N/A라고 단정하지 않는다.
 

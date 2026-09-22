@@ -1,5 +1,6 @@
 # 12-04. Measurement Freeze Review — Readiness Gate
 
+> **W12-G2 notice:** 이 freeze review의 W-01~W-03 판단은 W12-G1 endpoint에만 유효하다. [11-E](./11e-voice-responsiveness-measurement-redefinition.md)의 새 Voice 계약은 새 source fingerprint·approval·freeze가 필요하며 현재 `NOT_IMPLEMENTED/NOT_RUN`이다.
 > 상태: **REVIEW DECISIONS RESOLVED / APPROVAL INPUT**. 이 문서의 승인 전 candidate별 representative metric, 0~5 score, ranking/winner를 산출하지 않는다.
 > 기준 branch: `architecture-rebaseline-20260918`.
 

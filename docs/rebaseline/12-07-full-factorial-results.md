@@ -1,5 +1,7 @@
 # 12-07. Gate 2 Full-Factorial Results
 
+> **W12-G2 notice:** 이 문서의 W-01~W-03 값·score·contrast는 이전 정의의 historical/superseded evidence다. 새 Voice 중심 정의는 [`11e-voice-responsiveness-measurement-redefinition.md`](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 아직 측정되지 않았다. 따라서 아래 `ABAB` 권고의 W-01~W-03 근거는 새 정의에 이관되지 않는다.
+
 > 상태: 16개 `2^4` configuration 평가 완료, W-05만 `BLOCKED_OPENROUTER_KEY`
 >
 > source commit: `c8869c884102d848b1b1c43d6d6de966062a591e`
