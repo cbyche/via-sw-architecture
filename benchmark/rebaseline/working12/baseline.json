@@ -1,0 +1,414 @@
+{
+  "version": "W12-G1-v1",
+  "status": "PRE_RESULT_FROZEN_CONTRACT",
+  "source_document": "docs/rebaseline/11d-working-12-measurement-and-scoring.md",
+  "score_range": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "not_run_is_score": false,
+  "metrics": {
+    "W-01": {
+      "name": "Conversational Reaction Responsiveness",
+      "metric": "mean_of_case_p95_response_start_ms",
+      "direction": "lower",
+      "unit": "ms",
+      "target": 2000,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1000
+        },
+        {
+          "score": 4,
+          "max": 1500
+        },
+        {
+          "score": 3,
+          "max": 2000
+        },
+        {
+          "score": 2,
+          "max": 3000
+        },
+        {
+          "score": 1,
+          "max": 4000
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-02": {
+      "name": "Task Handoff Responsiveness",
+      "metric": "mean_of_case_p95_agent_acceptance_ms",
+      "direction": "lower",
+      "unit": "ms",
+      "target": 3000,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1000
+        },
+        {
+          "score": 4,
+          "max": 2000
+        },
+        {
+          "score": 3,
+          "max": 3000
+        },
+        {
+          "score": 2,
+          "max": 4500
+        },
+        {
+          "score": 1,
+          "max": 6000
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-03": {
+      "name": "Task Feedback Responsiveness",
+      "metric": "mean_of_case_p95_event_to_visible_ms",
+      "direction": "lower",
+      "unit": "ms",
+      "target": 1000,
+      "bands": [
+        {
+          "score": 5,
+          "max": 200
+        },
+        {
+          "score": 4,
+          "max": 500
+        },
+        {
+          "score": 3,
+          "max": 1000
+        },
+        {
+          "score": 2,
+          "max": 2000
+        },
+        {
+          "score": 1,
+          "max": 4000
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-04": {
+      "name": "Concurrent Task Performance Isolation",
+      "metric": "foreground_macro_p95_ratio_4_to_1",
+      "direction": "lower",
+      "unit": "ratio",
+      "target": 1.25,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1.05
+        },
+        {
+          "score": 4,
+          "max": 1.1
+        },
+        {
+          "score": 3,
+          "max": 1.25
+        },
+        {
+          "score": 2,
+          "max": 1.5
+        },
+        {
+          "score": 1,
+          "max": 2
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-05": {
+      "name": "Task Completion Effectiveness",
+      "metric": "macro_completion_obligation_satisfaction_pct",
+      "direction": "higher",
+      "unit": "percent",
+      "target": 95,
+      "bands": [
+        {
+          "score": 5,
+          "min": 99
+        },
+        {
+          "score": 4,
+          "min": 97
+        },
+        {
+          "score": 3,
+          "min": 95
+        },
+        {
+          "score": 2,
+          "min": 90
+        },
+        {
+          "score": 1,
+          "min": 80
+        },
+        {
+          "score": 0,
+          "min": null
+        }
+      ]
+    },
+    "W-06": {
+      "name": "Interaction & Task Continuity",
+      "metric": "macro_continuity_obligation_preservation_pct",
+      "direction": "higher",
+      "unit": "percent",
+      "target": 95,
+      "bands": [
+        {
+          "score": 5,
+          "min": 99
+        },
+        {
+          "score": 4,
+          "min": 97
+        },
+        {
+          "score": 3,
+          "min": 95
+        },
+        {
+          "score": 2,
+          "min": 90
+        },
+        {
+          "score": 1,
+          "min": 80
+        },
+        {
+          "score": 0,
+          "min": null
+        }
+      ]
+    },
+    "W-07": {
+      "name": "Agent Ecosystem Interoperability & Substitutability",
+      "metric": "mean_changed_elements_per_agent_change",
+      "direction": "lower",
+      "unit": "count/change",
+      "target": 2,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1
+        },
+        {
+          "score": 4,
+          "max": 1.5
+        },
+        {
+          "score": 3,
+          "max": 2
+        },
+        {
+          "score": 2,
+          "max": 3
+        },
+        {
+          "score": 1,
+          "max": 4
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ],
+      "evidence": "DESIGN_ANALYSIS"
+    },
+    "W-08": {
+      "name": "Evolvability & Maintainability",
+      "metric": "mean_changed_elements_per_non_agent_change",
+      "direction": "lower",
+      "unit": "count/change",
+      "target": 3,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1
+        },
+        {
+          "score": 4,
+          "max": 2
+        },
+        {
+          "score": 3,
+          "max": 3
+        },
+        {
+          "score": 2,
+          "max": 4
+        },
+        {
+          "score": 1,
+          "max": 5
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ],
+      "evidence": "DESIGN_ANALYSIS"
+    },
+    "W-09": {
+      "name": "Recovery Timeliness & Recoverability",
+      "metric": "mean_of_recoverable_stratum_p95_recovery_ms",
+      "direction": "lower",
+      "unit": "ms",
+      "target": 5000,
+      "bands": [
+        {
+          "score": 5,
+          "max": 1000
+        },
+        {
+          "score": 4,
+          "max": 2500
+        },
+        {
+          "score": 3,
+          "max": 5000
+        },
+        {
+          "score": 2,
+          "max": 10000
+        },
+        {
+          "score": 1,
+          "max": 20000
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-10": {
+      "name": "Dependency Failure Containment & Graceful Degradation",
+      "metric": "unaffected_capability_retention_pct",
+      "direction": "higher",
+      "unit": "percent",
+      "target": 100,
+      "bands": [
+        {
+          "score": 5,
+          "min": 100
+        },
+        {
+          "score": 4,
+          "min": 95
+        },
+        {
+          "score": 3,
+          "min": 90
+        },
+        {
+          "score": 2,
+          "min": 80
+        },
+        {
+          "score": 1,
+          "min": 60
+        },
+        {
+          "score": 0,
+          "min": null
+        }
+      ]
+    },
+    "W-11": {
+      "name": "Privacy Exposure Minimization",
+      "metric": "remote_sensitive_context_exposure_pct",
+      "direction": "lower",
+      "unit": "percent",
+      "target": 25,
+      "bands": [
+        {
+          "score": 5,
+          "max": 0
+        },
+        {
+          "score": 4,
+          "max": 10
+        },
+        {
+          "score": 3,
+          "max": 25
+        },
+        {
+          "score": 2,
+          "max": 50
+        },
+        {
+          "score": 1,
+          "max": 75
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    },
+    "W-12": {
+      "name": "Action & Access Safety",
+      "metric": "violated_opportunities_pct",
+      "direction": "lower",
+      "unit": "percent",
+      "target": 0,
+      "bands": [
+        {
+          "score": 5,
+          "max": 0
+        },
+        {
+          "score": 4,
+          "max": 4.166666666666667
+        },
+        {
+          "score": 3,
+          "max": 8.333333333333334
+        },
+        {
+          "score": 2,
+          "max": 12.5
+        },
+        {
+          "score": 1,
+          "max": 16.666666666666668
+        },
+        {
+          "score": 0,
+          "max": null
+        }
+      ]
+    }
+  }
+}

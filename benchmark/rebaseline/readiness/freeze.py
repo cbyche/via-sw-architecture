@@ -68,7 +68,11 @@ def host_manifest(root: Path) -> dict[str, Any]:
 
 def inventory(root: Path) -> dict[str, str]:
     paths = ["prototype/gate2", "benchmark/rebaseline/readiness", "benchmark/rebaseline/gate2",
-             "docs/rebaseline/12-gate2", "docs/rebaseline/11d-working-12-measurement-and-scoring.md",
+             "benchmark/rebaseline/working12", "docs/rebaseline/12-gate2",
+             "docs/rebaseline/11d-working-12-measurement-and-scoring.md",
+             "docs/rebaseline/12-00-evaluation-method.md",
+             "docs/rebaseline/12-04-measurement-freeze-review.md",
+             "docs/rebaseline/12-04a-implementation-mapping-and-fairness.md",
              "docs/rebaseline/11b-test-case-catalog.md", "scripts/gate2"]
     result = {}
     for name in paths:
@@ -108,8 +112,23 @@ def authorize_run(manifest: dict[str, Any], approval: dict[str, Any], root: Path
         raise PermissionError("source, fixture or measurement contract changed after freeze")
     if not manifest.get("cargo_lock_present") or "prototype/gate2/Cargo.lock" not in current:
         raise PermissionError("Cargo.lock must be included before comparable execution")
-    if real_model and any(not approval.get(key) for key in ("model_sha256", "tokenizer_sha256", "runtime_build_id")):
-        raise PermissionError("real-model execution needs frozen model/tokenizer/runtime identities")
+    if real_model:
+        profile = approval.get("model_execution_profile")
+        if not isinstance(profile, dict):
+            raise PermissionError("real-model execution needs a frozen model_execution_profile")
+        kind = profile.get("kind")
+        if kind == "OPENROUTER_HOSTED_REFERENCE":
+            if any(not profile.get(key) for key in ("model_id", "base_url", "provider")):
+                raise PermissionError("hosted model profile is incomplete")
+            if profile.get("allow_fallbacks") is not False:
+                raise PermissionError("hosted comparative measurement must disable provider fallbacks")
+            if profile.get("target_pc_absolute_latency_claim") is not False:
+                raise PermissionError("hosted reference latency cannot be target-PC absolute latency")
+        elif kind == "LOCAL_GGUF":
+            if any(not profile.get(key) for key in ("model_sha256", "tokenizer_sha256", "runtime_build_id")):
+                raise PermissionError("local model execution needs frozen identities")
+        else:
+            raise PermissionError("unsupported model execution profile")
 
 
 def main() -> None:

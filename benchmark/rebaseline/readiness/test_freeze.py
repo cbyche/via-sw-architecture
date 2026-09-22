@@ -60,6 +60,23 @@ class FreezeTests(unittest.TestCase):
         with self.assertRaises(PermissionError):
             authorize_run(manifest, approval, self.root, real_model=True)
 
+    def test_hosted_reference_profile_is_allowed(self):
+        manifest = candidate_manifest(self.root)
+        approval = {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"],
+                    "model_execution_profile": {"kind":"OPENROUTER_HOSTED_REFERENCE","model_id":"qwen/qwen3-8b",
+                    "base_url":"https://openrouter.ai/api","provider":"alibaba","allow_fallbacks":False,
+                    "target_pc_absolute_latency_claim":False}}
+        authorize_run(manifest, approval, self.root, real_model=True)
+
+    def test_hosted_reference_fallback_is_rejected(self):
+        manifest = candidate_manifest(self.root)
+        approval = {"approved": True, "purpose": "COMPARATIVE_MEASUREMENT", "fingerprint": manifest["fingerprint"],
+                    "model_execution_profile": {"kind":"OPENROUTER_HOSTED_REFERENCE","model_id":"qwen/qwen3-8b",
+                    "base_url":"https://openrouter.ai/api","provider":"alibaba","allow_fallbacks":True,
+                    "target_pc_absolute_latency_claim":False}}
+        with self.assertRaises(PermissionError):
+            authorize_run(manifest, approval, self.root, real_model=True)
+
     def test_inventory_sort_order_does_not_change_hash(self):
         self.assertEqual(fingerprint({"a":"1", "b":"2"}), fingerprint({"b":"2", "a":"1"}))
 

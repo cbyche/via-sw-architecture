@@ -1,5 +1,5 @@
 {
-  "version": "G2-MEASUREMENT-FREEZE-DRAFT-v1",
+  "version": "G2-MEASUREMENT-FREEZE-DRAFT-v2",
   "status": "PRE_BENCHMARK_REVIEW_REQUIRED",
   "scored_dp_pairs": [
     "IR-DP01",
@@ -13,61 +13,31 @@
   "fixed_tactics": [
     "TASK-T01:EVENT_FIRST_PLUS_QUERY_RECONCILIATION"
   ],
-  "latency_sampling": {
-    "warmup_per_stratum_per_candidate": 10,
-    "scored_per_stratum_per_candidate": 100,
-    "p95": "nearest-rank",
-    "paired_order": {
-      "method": "balanced_blocks",
-      "block_patterns": [
-        "ABBA",
-        "BAAB"
-      ],
-      "repeat_alternating": true,
-      "note": "Each four-trial block contains two A and two B; alternate patterns to reduce monotonic thermal/time drift."
-    }
-  },
-  "mac_thermal_control": {
-    "fanless_expected": true,
-    "capture_pmset_therm_before_after": true,
-    "candidate_order_interleaved": true,
-    "cooldown_trigger": "PRE_FREEZE_REVIEW; no temperature threshold invented",
-    "absolute_temperature_required": false
-  },
-  "s2s_mock": {
-    "zero_delay_forbidden": true,
-    "same_sample_for_paired_candidates": true,
-    "reported_fields": [
-      "via_added_latency",
-      "simulated_e2e_latency"
-    ],
-    "test_only_trace_eligible_for_final_score": false,
-    "measured_replay_trace_eligible_after_review": true
-  },
   "ir_model": {
     "actual_model_required_for_W05": true,
-    "model_family": "Qwen3-8B",
-    "quantization": "Q4_K_M",
+    "execution_profile": "OPENROUTER_HOSTED_REFERENCE",
+    "model_id": "qwen/qwen3-8b",
+    "provider": "alibaba",
+    "provider_allow_fallbacks": false,
     "thinking": false,
-    "runtime": "llama.cpp server compatible",
-    "server_base_url": "http://127.0.0.1:8080",
+    "response_format": "json_object",
+    "schema_enforcement": "VIA_CLIENT_VALIDATE_AND_REPAIR",
+    "server_base_url": "https://openrouter.ai/api",
     "candidate_order_interleaved": true,
-    "model_artifact_sha256": "CAPTURE_BEFORE_EXECUTION",
-    "runtime_revision": "CAPTURE_BEFORE_EXECUTION",
-    "tokenizer_revision": "CAPTURE_BEFORE_EXECUTION"
+    "evidence": "MEASURED_MODEL_REFERENCE",
+    "target_pc_absolute_latency_claim": false
   },
   "evidence_separation": [
     "DESIGN_ANALYSIS",
     "MEASURED_STRUCTURAL",
-    "MEASURED_MODEL",
+    "MEASURED_MODEL_REFERENCE",
     "MEASURED_SYSTEM",
     "SIMULATED_E2E",
     "ESTIMATED_MODEL_ONLY"
   ],
   "prohibitions": [
-    "No candidate score or winner before Measurement Freeze Review approval",
-    "No hosted CI latency used as product performance evidence",
-    "No synthetic S2S delay described as measured S2S latency",
-    "No asymmetric candidate optimization after results are visible"
+    "No score/winner before Freeze approval",
+    "No hosted model latency labeled local or target-PC latency",
+    "No asymmetric post-result optimization"
   ]
 }
