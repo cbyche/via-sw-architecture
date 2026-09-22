@@ -1,5 +1,6 @@
 mod exec_recovery;
 mod recovery;
+mod whole_process_recovery;
 
 use clap::{Parser, Subcommand};
 use gate2_contracts::{
@@ -54,6 +55,19 @@ enum Command {
         #[arg(long)]
         worker: PathBuf,
     },
+    W09WholeProcessSmoke,
+    W09RuntimeHost {
+        #[arg(long)]
+        task_candidate: String,
+        #[arg(long)]
+        db: PathBuf,
+        #[arg(long)]
+        agent_state: PathBuf,
+        #[arg(long)]
+        active_tasks: usize,
+        #[arg(long)]
+        completed: bool,
+    },
 }
 
 #[tokio::main]
@@ -69,6 +83,24 @@ async fn main() -> anyhow::Result<()> {
         Command::W09WholeRestartSmoke => recovery::whole_restart_smoke().await?,
         Command::W09IntegrationFatalSmoke { host, worker } => {
             exec_recovery::integration_fatal_smoke(host, worker).await?
+        }
+        Command::W09WholeProcessSmoke => whole_process_recovery::whole_process_smoke().await?,
+        Command::W09RuntimeHost {
+            task_candidate,
+            db,
+            agent_state,
+            active_tasks,
+            completed,
+        } => {
+            whole_process_recovery::runtime_host(
+                task_candidate,
+                db,
+                agent_state,
+                active_tasks,
+                completed,
+            )
+            .await?;
+            return Ok(());
         }
     };
     println!("{}", serde_json::to_string_pretty(&result)?);
