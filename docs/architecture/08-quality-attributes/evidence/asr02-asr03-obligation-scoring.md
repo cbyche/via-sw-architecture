@@ -1,7 +1,7 @@
 # ASR-02 / ASR-03 Obligation Scoring — 정도 기반 평가 기준
 
 > 작성일: 2026-09-21
-> 상태: **사용자 승인된 11-A/B 측정 보정**. 실제 Architecture 후보 결과는 NOT_RUN.
+> 상태: **사용자 승인된 measurement/oracle 보정**. 실제 Architecture 후보 결과는 NOT_RUN.
 > 목적: Task Completion과 Continuity를 단순 "했다/못했다"가 아니라 architecture-relevant obligation을 얼마나 보존했는지로 측정한다.
 
 ## 1. 대표 Metric

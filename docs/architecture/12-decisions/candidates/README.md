@@ -1,11 +1,10 @@
-# 12-02. Architecture Candidates
+# Architecture Candidates
 
 > **Current measurement contract notice:** W-01~W-03은 [Voice responsiveness 정의](../../08-quality-attributes/voice-responsiveness.md)를 따른다. 아래 네 DP의 새 Voice applicability는 아직 재동결 전이며, 기존 mapping은 [historical archive](../../../archive/w12-g1/12-01a-scope-and-coverage-ledger.md)에만 보존한다.
-> **VIA-DESIGN-v1.1 / 2026-09-22 / 후보 구조 승인 유지 — measurement mapping 재검토 중**
-> Source snapshot: `e9646d4a074afb7a3cf4e85f5ca48c939a697fbf`.
+> **상태: 후보 구조 승인 유지 / measurement mapping 재검토 중**
 > 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 기존 결정 상태는 ADR을 따르며 새 W-01~W-03 결과는 아직 없다.
 
-## Working ASR 빠른 참조
+## Working-12 metric 빠른 참조
 
 | ID | ASR / QA 의미 |
 |---|---|
@@ -22,9 +21,9 @@
 | **W-11** | **Privacy Exposure Minimization** — 민감 Context를 외부 dependency에 얼마나 최소 범위로 노출하는가 |
 | **W-12** | **Action & Access Safety** — 잘못된 접근·반출·승인 연결을 정확히 차단하는가 |
 
-## 1. 자체 리뷰 후 비교 대상 — 4개
+## 1. 비교 대상 — 4개
 
-처음 상세화한 6개 중 두 개를 다시 탈락시켰다. **INT-DP01은 S2S Direct Fast Path를 고정 원칙으로, TASK-DP02는 event+query 혼합 동기화 tactic으로 내린다.** 둘 다 유효한 설계 관심사지만 현재 요구에서는 강한 상호배타적 Architecture 대안이 아니다.
+처음 검토한 6개 축 중 두 개는 독립 DP에서 제외했다. **S2S Direct Fast Path는 고정 원칙으로, event+query 혼합 동기화는 공통 tactic으로 둔다.** 둘 다 유효한 설계 관심사지만 현재 요구에서는 강한 상호배타적 Architecture 대안이 아니다.
 
 | Candidate DP | A | B | 현재 확정된 비교축 / 새 Voice 상태 |
 |---|---|---|---|
@@ -41,15 +40,15 @@
 
 Voice 입력은 Voice Runtime과 S2S Model을 거친다. S2S가 **자체 지식+Conversation만으로 직접 응답 가능하다고 유효하게 판단한 경우**, Core에 “허락”을 받으러 갔다 돌아오는 B 구조는 현재 요구에서 추가적인 제품 가치를 증명하지 못한다. 따라서 S2S Direct Response는 Voice Runtime이 release하고, Core는 필요한 요청만 escalation받으며 Conversation 기록·Task 연계는 공통 계약으로 보장한다.
 
-상세 rationale은 [INT-DP01 note](./INT-DP01.md)에 보존한다. 새 정의에서는 이 원칙이 주로 W-02 direct Voice response에 연결된다. 이것은 특정 W 점수를 무조건 좋게 만들기 위한 선택이 아니라 **비교 가치가 약한 dominated candidate를 제거한 것**이다.
+상세 rationale은 [S2S Direct Fast Path](./s2s-direct-fast-path.md)에 보존한다. 새 정의에서는 이 원칙이 주로 W-02 direct Voice response에 연결된다. 이것은 특정 W 점수를 무조건 좋게 만들기 위한 선택이 아니라 **비교 가치가 약한 dominated candidate를 제거한 것**이다.
 
 ### TASK-T01 — Event-first + Query Reconciliation을 공통 tactic으로 둔다
 
 실제 Agent protocol은 query와 event/stream을 함께 제공할 수 있다. A2A도 polling, streaming, push를 **complementary mechanisms**로 설명한다. 따라서 “query만 vs event만”을 Architecture family처럼 비교하지 않는다.
 
-VIA의 기본 tactic은 **stream/event를 지원하면 low-latency update에 사용하고, query를 reconnect/gap/current-state reconciliation 및 지원 제한 Agent의 fallback으로 사용**한다. 지원 여부·polling cadence·cursor/reconnect는 Agent profile에 남긴다. 상세 rationale은 [TASK-DP02 note](./TASK-DP02.md)에 보존한다.
+VIA의 기본 tactic은 **stream/event를 지원하면 low-latency update에 사용하고, query를 reconnect/gap/current-state reconciliation 및 지원 제한 Agent의 fallback으로 사용**한다. 지원 여부·polling cadence·cursor/reconnect는 Agent profile에 남긴다. 상세 rationale은 [Agent State Update Tactic](./agent-state-update-tactic.md)에 보존한다.
 
-## 3. 네 DP에 대한 자체 리뷰 결과
+## 3. 네 DP 검토 결과
 
 ### IR-DP01 — 유지, 단 W-05는 Model 의존적이다
 

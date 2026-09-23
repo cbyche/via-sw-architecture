@@ -25,7 +25,7 @@ flowchart LR
     T["09 연결표<br/>무엇을 왜 확인하는가"]
     E["10 설계 요소·변경 원장"]
     R["09/10 사용자 승인 완료"]
-    NEXT["11-A/B 측정·시험 정의<br/>11-C 승인 후 12 구조 비교"]
+    NEXT["Measurement Contract Definition<br/>승인 후 Candidate A/B 비교"]
     Q --> T
     U --> T
     X --> T
@@ -105,7 +105,7 @@ ASR-04·05가 이 표의 주 검증에 없는 것은 누락이 아니다. **두 
 
 ### ASR-01의 시간선
 
-ASR-01 대표값은 일반 사용자 Request의 Direct Response, bounded Context 처리, Agent delegation 전/후, Existing Task 응답, Agent result delivery를 대상으로 한다. **서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다.** 11-A에서 고정한 request class별 반복 표본의 p95를 먼저 구한 뒤, class별 p95를 동일 가중으로 평균한 Macro-p95를 대표값으로 사용한다.
+ASR-01 대표값은 일반 사용자 Request의 Direct Response, bounded Context 처리, Agent delegation 전/후, Existing Task 응답, Agent result delivery를 대상으로 한다. **서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다.** [Measurement Contract](./11-measurement/README.md)에서 고정한 request class별 반복 표본의 p95를 먼저 구한 뒤, class별 p95를 동일 가중으로 평균한 Macro-p95를 대표값으로 사용한다.
 
 위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent의 open-ended domain research/planning/tool execution과 사용자 확인 대기를 따로 기록한다. 단, bounded Read/Search/Understand 작업을 Architecture 선택으로 Agent에 옮긴 경우에는 단순히 프로세스 위치가 Agent라는 이유로 그 시간을 제외하지 않는다.
 
@@ -186,7 +186,7 @@ ASR-07의 위반은 다른 ASR의 높은 점수로 상쇄하지 않는다. 모�
 | 02/03/06의 평가 관점이 구분되는가? | 현재 요청의 완료 / 전환 후 맥락 / 이벤트·장애 처리로 구분 |
 | 실제 점수까지 확정했는가? | 아니오. 11의 표본·정답·집계·목표·점수는 별도 리뷰 |
 
-**09와 10의 공동 리뷰는 사용자 승인으로 종료되었다.** 현재는 11-A/B의 측정 계약과 시험 명세를 검토하며, 11-C의 표본·목표·채점표 승인 전에는 12의 후보·DP 우열을 확정하지 않는다.
+**09와 10의 공동 리뷰는 사용자 승인으로 종료되었다.** 현재는 Measurement Contract Definition 단계이며, 표본·목표·채점표 승인 전에는 후보·DP 우열을 확정하지 않는다.
 
 ## 9.9 측정 자료 연결
 

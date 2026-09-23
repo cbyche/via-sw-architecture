@@ -1,7 +1,7 @@
 # IR-DP01 — 요청을 한 번에 함께 판단할지, 계약으로 나눈 단계가 판단할지
 
-> VIA-DESIGN-v1.1 / Candidate review. semantic accuracy와 latency는 NOT_RUN.
-> Current measurement contract: 새 delegated/direct Voice call graph는 [11-E](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-05/W-08만 active hypothesis로 유지한다.
+> 상태: Candidate definition current. semantic accuracy와 latency는 NOT_RUN.
+> Current measurement contract: 새 delegated/direct Voice call graph는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-05/W-08만 active hypothesis로 유지한다.
 <!-- candidate: {"dp":"IR-DP01","reference":"A","hypotheses":["W-05","W-08"],"alternatives":{"A":["VIA-C-JOINT","VIA-C-SEMCHECK"],"B":["VIA-C-GROUNDREFINE","VIA-C-ASSOCIATE","VIA-C-SELECT","VIA-C-SEMCHECK","VIA-I-GROUNDED","VIA-I-ASSOCIATED","VIA-S-SEMSTAGES"]}} -->
 
 ## 1. 왜 필요한 결정인가

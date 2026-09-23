@@ -1,7 +1,7 @@
 # AGENT-DP01 — Agent 차이를 경계에서 해석할지, Core의 typed handler가 해석할지
 
-> VIA-DESIGN-v1.1 / Candidate review. Agent 중립성은 양 후보 공통 요구다.
-> Current measurement contract: 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-07/W-08만 active hypothesis로 유지한다.
+> 상태: Candidate definition current. Agent 중립성은 양 후보 공통 요구다.
+> Current measurement contract: 새 W-01/W-03 Voice 경로의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-07/W-08만 active hypothesis로 유지한다.
 <!-- candidate: {"dp":"AGENT-DP01","reference":"A","hypotheses":["W-07","W-08"],"alternatives":{"A":["VIA-C-EDGESEM","VIA-I-CANONAGENT"],"B":["VIA-C-TYPEDHANDLER","VIA-I-TYPEDAGENT"]}} -->
 
 ## 1. 질문을 정확하게 한정하기
@@ -66,9 +66,9 @@ AF-v1은 실제 업무를 수행하지 않는 **설계·시험용 외부 계약*
 
 A2A v0.3.0은 native compatibility 검증용 참고 계약이지 AF-v1의 보장을 자동 제공하는 구현이 아니다. 특히 재구독의 과거 event backfill, 일관된 source revision, submit idempotency는 개별 Agent에서 확인해야 한다. [E1](../../../archive/w12-g1/evidence-and-readiness.md)
 
-### TASK-DP02와 겹치지 않는 것
+### Agent state update 공통 tactic과 겹치지 않는 것
 
-이 DP는 **수명/형식 의미를 어디서 해석하는가**다. polling interval·stream 재연결·gap reconciliation의 trigger는 TASK-DP02가 결정한다. A의 adapter에만 숨은 polling service를 넣거나 B Core에만 추가 query를 강제하지 않는다.
+이 DP는 **수명/형식 의미를 어디서 해석하는가**다. polling interval·stream 재연결·gap reconciliation의 trigger는 공통 Agent state update tactic이 결정한다. A의 adapter에만 숨은 polling service를 넣거나 B Core에만 추가 query를 강제하지 않는다.
 
 ## 5. ELEMENTS
 

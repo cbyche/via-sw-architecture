@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reject superseded W-01..W-03 terminology in active architecture documents."""
+"""Reject superseded metric and lifecycle terminology in active documents."""
 
 from pathlib import Path
 
@@ -13,6 +13,14 @@ FORBIDDEN = (
     "mean_of_case_p95_response_start_ms",
     "mean_of_case_p95_agent_acceptance_ms",
     "mean_of_case_p95_event_to_visible_ms",
+    "11-A",
+    "11-B",
+    "11-C",
+    "11-D",
+    "11-E",
+    "12-A",
+    "12-B",
+    "VIA-DESIGN",
 )
 
 
@@ -25,11 +33,11 @@ def main() -> int:
                     violations.append(f"{path.relative_to(ROOT)}:{line_number}: {term}")
 
     if violations:
-        print("Superseded W-01..W-03 terminology found in active documents:")
+        print("Superseded terminology found in active documents:")
         print("\n".join(violations))
         return 1
 
-    print("PASS: superseded W-01..W-03 terminology is absent from active architecture documents")
+    print("PASS: superseded terminology is absent from active architecture documents")
     return 0
 
 

@@ -2,6 +2,8 @@
 
 이 디렉터리는 W-01~W-03 Voice 재정의 이전의 측정 계약, DP mapping, freeze, readiness와 결과 문서를 보존한다.
 
+`08-reserve-driver-candidates.md`와 `08-reserve-formal-reassessment.md`는 현재 Working-12가 정리되기 전의 QA 후보 선정 기록이다. 현재 QA/measurement source of truth로 사용하지 않는다.
+
 - 이 자료는 provenance와 과거 판단 추적에만 사용한다.
 - 현재 측정 정의, target, score 또는 DP별 A/B 근거로 사용하지 않는다.
 - 현재 W-01~W-03 source of truth는 [`../../architecture/08-quality-attributes/voice-responsiveness.md`](../../architecture/08-quality-attributes/voice-responsiveness.md)다.

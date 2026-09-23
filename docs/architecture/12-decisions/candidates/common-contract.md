@@ -1,10 +1,9 @@
 # Candidate Architecture — 공통 구조·계약·비교 기준
 
-> **Current measurement contract notice:** W-01~W-03 endpoint는 [11-E](../../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 이 문서의 기존 metric 연결은 historical이며 새 DP×W execution mapping이 동결될 때까지 측정 근거로 사용하지 않는다.
+> **Current measurement contract notice:** W-01~W-03 endpoint는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 이 문서의 기존 metric 연결은 historical이며 새 DP×W execution mapping이 동결될 때까지 측정 근거로 사용하지 않는다.
 > 공통 metric event와 software boundary의 의미는 [Event & Boundary Contract](../../11-measurement/event-boundary-contract.md)를 따른다.
-> VIA-DESIGN-v1.1 / 2026-09-22 / 자체 리뷰 반영 · 사용자 리뷰 대기. 후보 결과·승자 없음.
-> 원천 snapshot: `cf21c7361d392b30ad95cd8ec48a7d97d847a19b`.
-> 01~07 제품 조건, 10 요소 집계, 11-D metric/target/score를 대체하지 않는다.
+> 상태: Candidate definition current / measurement mapping pending. 후보 결과·승자 없음.
+> 01~07 제품 조건, 10 요소 집계와 [Measurement & Scoring Contract](../../11-measurement/scoring-contract.md)를 대체하지 않는다.
 
 ## 1. 무엇을 고정하고 무엇을 바꾸는가
 
@@ -144,7 +143,7 @@ State는 wire DTO를 이름만 바꾼 중복이 아니다. 표에 별도 보관�
 
 ## 5. 전수 sweep과 후보 교차 영향
 
-각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. W-01~W-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 W-01/02/03은 11-E의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
+각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. W-01~W-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 W-01/02/03은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
 
 W-09는 whole restart 4 + integration fatal 2 strata, W-10은 external 24 + host-fatal 4 cells를 유지한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 재시작이 충분히 빠르면 두 안 모두 W-10 100%일 수 있다. 그때 interruption duration만 secondary로 남기며 deadline/분모를 바꿔 차이를 만들지 않는다.
 

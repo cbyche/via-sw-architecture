@@ -1,7 +1,7 @@
 # ASR-04/05 Target Rationale — Change Locality
 
 > 작성일: 2026-09-21
-> 상태: **11-C target proposal의 근거**. 아직 0~5 score band나 Architecture 후보 결과를 보지 않고 작성한다.
+> 상태: **Target proposal의 근거**. 아직 0~5 score band나 Architecture 후보 결과를 보지 않고 작성한다.
 
 ## 1. 외부 근거가 말해 주는 것과 말해 주지 않는 것
 
@@ -26,7 +26,7 @@ Agent change A-01~09에서 정상적인 구조의 기대는 다음과 같다.
 2. VIA의 Conversation/Request/Task/Policy/Core orchestration semantics까지 반복적으로 수정하지 않는다.
 3. 기능 유지가 전제다. 변경 요소가 적어도 기능을 잃으면 유효한 값이 아니다.
 
-### 11-C target proposal
+### Target proposal
 
 ```text
 ASR-04 target:
@@ -56,7 +56,7 @@ ASR-05의 M-01~09 + C-01~06은 Agent 변화보다 이질적이다.
 2. Repository/loader-writer 책임 수정
 3. Migration responsibility 추가
 
-### 11-C target proposal
+### Target proposal
 
 ```text
 ASR-05 target:
@@ -75,7 +75,7 @@ ASR-04보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 *
 
 위 2.0 / 3.0은 Architecture 후보의 변경량을 계산하기 전에 제안한다.
 
-11-C에서 target을 승인하면:
+Measurement Contract Definition에서 target을 승인하면:
 
 - A-01~09 모두 같은 ASR-04 target/score rule을 사용한다.
 - M-01~09+C-01~06 모두 같은 ASR-05 target/score rule을 사용한다.
@@ -84,7 +84,7 @@ ASR-04보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 *
 
 평균 하나만으로 hotspot을 숨기지 않도록 per-change raw maximum과 change ledger도 secondary evidence로 표시하지만 대표 metric은 08에서 확정한 average changed elements를 유지한다.
 
-## 5. 아직 11-C에서 결정할 것
+## 5. 아직 Measurement Contract Definition에서 결정할 것
 
 - 위 proposed target 2.0 / 3.0 승인 여부
 - target을 기준으로 한 0~5 score boundary의 폭

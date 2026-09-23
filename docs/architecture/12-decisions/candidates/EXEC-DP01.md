@@ -1,7 +1,7 @@
 # EXEC-DP01 — 연동 코드의 장애를 Core와 같은 process에서 받을지, 밖에서 격리할지
 
-> VIA-DESIGN-v1.1 / Candidate review. 동일 코드·동일 논리 fault point 비교.
-> Current measurement contract: 새 Voice 경로와 W-04의 applicability 및 IPC span은 [11-E](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-09/W-10만 active hypothesis로 유지한다.
+> 상태: Candidate definition current. 동일 코드·동일 논리 fault point 비교.
+> Current measurement contract: 새 Voice 경로와 W-04의 applicability 및 IPC span은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-09/W-10만 active hypothesis로 유지한다.
 <!-- candidate: {"dp":"EXEC-DP01","reference":"A","hypotheses":["W-09","W-10"],"alternatives":{"A":["VIA-C-LOCALBRIDGE","VIA-I-BRIDGE","VIA-D-VIA"],"B":["VIA-C-REMOTEBRIDGE","VIA-C-WORKERLIFE","VIA-I-BRIDGE","VIA-I-IPC","VIA-S-IPC","VIA-D-VIA","VIA-D-INTEGRATION"]}} -->
 
 ## 1. 결정과 경계

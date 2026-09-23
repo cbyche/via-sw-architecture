@@ -1,8 +1,8 @@
 # FP-INT01 — S2S Direct Fast Path
 
-> Current measurement contract: W-01~W-03이 delegated result, direct Voice response, Agent progress Voice feedback으로 재정의되었다. 이 문서의 기존 latency 연결은 [11-E](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재검토한다.
+> Current measurement contract: W-01~W-03이 delegated result, direct Voice response, Agent progress Voice feedback으로 재정의되었다. 이 문서의 기존 latency 연결은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재검토한다.
 
-> **Candidate 자체 리뷰에서 INT-DP01을 독립 DP에서 내리고 고정 Interaction 원칙으로 전환하는 제안.** 사용자 승인 전.
+> **상태: 공통 원칙으로 확정.** S2S Direct Fast Path는 독립 DP가 아니며 모든 후보의 공통 조건으로 사용한다.
 
 ## 결론
 
@@ -29,11 +29,11 @@ flowchart LR
 
 ## 왜 기존 B를 탈락시키는가
 
-이전 B는 S2S가 direct answer candidate를 만든 뒤 Unified Core Router가 release를 다시 허가했다. Core에서 policy/Task/context 때문에 **새 판단이 실제로 필요하다면** S2S가 애초에 direct path가 아닌 Core path로 escalation해야 한다. 반대로 새 판단이 필요 없다면 B는 사실상 forwarding gate다.
+이전 B는 S2S가 direct answer candidate를 만든 뒤 Unified Core Router가 release를 다시 허가했다. Core에서 policy/Task/context 때문에 **새 판단이 실제로 필요하다면** S2S가 애초에 direct path가 아닌 Core path로 escalation해야 한다. 반대로 새 판단이 필요 없다면 B는 사실상 단순 전달 단계다.
 
 따라서 A와 B 사이에 충분히 강한 제품 trade-off가 없고 A가 자연스러운 구조로 지배할 가능성이 높다. 발표 목적상 이런 candidate를 억지로 유지하지 않는다.
 
-## 관련 Working ASR
+## 관련 W metric
 
 - **W-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 W-01 delegation 경로의 관련성은 별도 재검토한다.
 - **W-08 Evolvability & Maintainability** — S2S event/control 계약 변경은 regression으로 추적.

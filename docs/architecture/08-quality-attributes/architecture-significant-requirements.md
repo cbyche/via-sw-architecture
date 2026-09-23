@@ -1,6 +1,8 @@
 # 8. Architecture Significant Requirements — QA 도출과 ASR 선정
 
-> 상태: **QA 점수·7개 ASR 유지 / 사용자 합의에 따른 측정 정의 보정 · 11-A/B 검토 연결**
+> 상태: **상위 품질 요구 7개 확정 / Working-12 측정 계약 정의 중**
+>
+> 관계: ASR-01~07은 제품의 상위 품질 요구이고, W-01~W-12는 후보 구조 비교를 위한 측정·평가 ID다. W가 12개라고 해서 ASR을 12개로 다시 선정한 것은 아니다.
 > 근거: [01 시스템 정의](../01-system-mission-and-boundary.md) · [02 용어](../02-terms.md) · [03 설계 범위](../03-fixed-architecture-scope.md) · [04 공통 흐름](../04-canonical-interaction-flow.md) · [05 UC](../05-representative-use-cases.md) · [06 비교 조건](../06-fixed-assumptions.md) · [07 변경 집합](../07-intentional-variables.md)
 
 ## 8.1 도출 절차
@@ -109,7 +111,7 @@ Importance와 Difficulty는 독립적으로 판단하며 점수를 곱하지 않
 - Agent delegation 전 VIA overhead
 - Agent result 준비 후 사용자 전달 latency
 
-대표 Metric은 **request class별 p95를 동일 가중으로 평균한 Macro-p95 User-Experienced Response Latency**이다. 원격을 포함한 VIA 직접 LLM·S2S·Context·연결·출력 시간은 포함한다. 서로 난이도가 다른 TC 전체를 한 모집단으로 합쳐 p95를 만들지 않는다. 공개 profile와 실제 prompt token 기반 계산은 추정치로 기록한다. Voice interruption의 audio-stop latency는 UC-11의 secondary/regression observation으로 보존하되 ASR-01 대표값에는 포함하지 않는다. 상세 측정 계약은 11-A를 따른다.
+대표 Metric은 **request class별 p95를 동일 가중으로 평균한 Macro-p95 User-Experienced Response Latency**이다. 원격을 포함한 VIA 직접 LLM·S2S·Context·연결·출력 시간은 포함한다. 서로 난이도가 다른 TC 전체를 한 모집단에 합쳐 p95를 만들지 않는다. 공개 profile와 실제 prompt token 기반 계산은 추정치로 기록한다. Voice interruption의 audio-stop latency는 UC-11의 secondary/regression observation으로 보존하되 ASR-01 대표값에는 포함하지 않는다. 현재 상세 기준은 [Measurement Guide](../11-measurement/README.md)와 [Voice Responsiveness](./voice-responsiveness.md)를 따른다.
 
 ## ASR-02 Task Completion Effectiveness
 
@@ -300,7 +302,7 @@ QA scoring이 바뀌면 ASR 목록도 바뀐다. 따라서 08은 이 다섯 항�
 
 다음 검토 범위는 [09 연결표](../09-traceability.md)와 [10 설계 요소·집계 기준](../10-element-definition.md)이다. 두 문서의 공동 리뷰 전에는 11·12를 진행하지 않는다.
 
-## 8.11 측정 보정과 11-A/B 연결
+## 8.11 측정 계약 연결
 
 사용자 합의에 따라 모델 비용을 실제로 수치화하는 ASR-01 근거 원장과 ASR-07의 고정 분모를 보완한다. ASR-02·03은 atomic obligation 기반의 degree metric으로 보정하고 strict PASS/FAIL을 secondary raw evidence로 보존한다. ASR-06은 reliability invariant의 성격 때문에 scenario PASS/FAIL 대표 Metric을 유지한다. ASR-04·05는 10의 변경 요소 집계와 9/15개 전체 변경을 유지한다.
 

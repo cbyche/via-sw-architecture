@@ -1,4 +1,4 @@
-# 11-D. Working-12 Measurement & Scoring Contract
+# Working-12 Measurement & Scoring Contract
 
 > 버전: **MEASUREMENT-CONTRACT-DRAFT — W-01~W-03 Voice responsiveness 재정의, 측정 구현 전**.
 > W-01~W-03의 상세 source of truth는 [`voice-responsiveness.md`](../08-quality-attributes/voice-responsiveness.md)다. W12-G1 정의·target·score와 기존 결과는 이 세 지표에 한해 historical/superseded다.
@@ -59,7 +59,7 @@ W-01~W-03은 target/score 재동결 전까지 score 없음이다. W-04~09·11은
 
 한 PC·한 활성 사용자·한국어 Voice/Text, 모니터 1/2개, 같은 원천 자료/권한/Agent 계약을 사용한다(06 FA-01~16). 05의 18 UC·94 variation, 07의 24 변화, 10의 요소 정의는 유지한다. 원천 관측과 평가 oracle은 분리한다. 이전에 철회한 nonce/opaque counterfactual scoring fixture는 추가하지 않는다.
 
-W-01~W-03의 VIA LLM reference는 후보별 exact token ledger와 Qwen3-8B public prompt/decode throughput을 사용하는 `ESTIMATED_MODEL_ONLY`다. hosted network wall-clock과 provider jitter를 대표값에 섞지 않는다. S2S 234ms는 full S2S theoretical first-audio-packet span이며 일반 TTS 지연이나 W metric 시작점이 아니다. 세부 규칙은 11-E를 따른다. W-05 등 semantic correctness용 실제 model profile은 별도 계약으로 유지한다.
+W-01~W-03의 VIA LLM reference는 후보별 exact token ledger와 Qwen3-8B public prompt/decode throughput을 사용하는 `ESTIMATED_MODEL_ONLY`다. hosted network wall-clock과 provider jitter를 대표값에 섞지 않는다. S2S 234ms는 full S2S theoretical first-audio-packet span이며 일반 TTS 지연이나 W metric 시작점이 아니다. 세부 규칙은 [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md)를 따른다. W-05 등 semantic correctness용 실제 model profile은 별도 계약으로 유지한다.
 
 비교 환경의 원격 RTT는 FA-11의 50ms, sensitivity는 0/150ms다. **100Mbps 직렬화 대역폭은 추가 합성 시험 가정**이며 실제 네트워크 측정값이 아니다. 실제 payload 크기와 transmission/encoding span이 없는 추정은 RTT 소계까지만 표시한다. streaming 중 이미 전송·처리된 입력을 발화 종료 이후 비용으로 이중 계산하지 않는다. Local IPC 비용도 0이라고 가정하지 않는다.
 
@@ -97,7 +97,7 @@ downstream Agent가 없는 direct/bounded Voice request에서 `user_input_end �
 
 `agent_status_available_at_source → first_meaningful_audible_status_audio`를 측정한다. stream/poll 발견, Task/run correlation, state 검증, status composition, speech 생성과 playback start를 포함한다. Agent가 status를 생성하기까지의 시간은 제외한다. primary reference stratum은 audio lane이 비어 있는 조건이다.
 
-세 metric의 정확한 formula, 유효성 규칙, 잠정 fixture membership과 raw trace 필드는 11-E를 따른다. target과 score band는 새 결과를 보기 전에 별도 freeze한다.
+세 metric의 정확한 formula, 유효성 규칙, 잠정 fixture membership과 raw trace 필드는 [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md)를 따른다. target과 score band는 새 결과를 보기 전에 별도 freeze한다.
 
 ### W-04 Concurrent Task Performance Isolation
 
@@ -112,11 +112,11 @@ W-04는 W12-G1 W-01 foreground probe에 의존하므로 새 W-01 정의와 repre
 
 ### W-05 / W-06 Completion / Continuity
 
-기존 11-B §B.8의 **48 / 30 TC**를 그대로 사용한다. 실제 model run을 TC마다 5회 수행하여 run별 `충족 obligation / 사전 적용 obligation`을 구한다. 반복 평균 후 TC를 동일가중 평균한다. strict per-run 결과와 5회 모두 통과 여부는 각각 보존한다. 95% macro score는 '모든 obligation 20개 중 정확히 19개'나 실제 Task 성공확률과 동치가 아니다.
+[Test Case Catalog](./test-case-catalog.md) §8의 **48 / 30 TC**를 그대로 사용한다. 실제 model run을 TC마다 5회 수행하여 run별 `충족 obligation / 사전 적용 obligation`을 구한다. 반복 평균 후 TC를 동일가중 평균한다. strict per-run 결과와 5회 모두 통과 여부는 각각 보존한다. 95% macro score는 '모든 obligation 20개 중 정확히 19개'나 실제 Task 성공확률과 동치가 아니다.
 
 multi-ASR TC의 요구는 관련 W에만 tag하고, 같은 실패를 자동 복사하지 않는다. 정답을 replay하는 Model stub은 semantic accuracy를 측정하지 않는다. pipeline별 임의 error rate를 가정해 점수를 채우지 않는다. 동등하게 잘 만든 후보 모두 100%면 동점이다.
 
-TC-06.2·06.3·14.5는 **적절한 clarification, 원 Request에 대한 답변 binding, 최종 처리 결과**를 모두 판정해야 한다. 기존 짧은 관찰 문장이나 generator가 final outcome을 빠뜨리면 실행 전에 assertion ledger를 보완하고 버전을 잠근다. 이를 candidate 결과를 본 뒤 partial-credit 기준을 바꾸는 데 쓰지 않는다. 11-B 원문과 generated obligation ledger의 동일 의미를 A/B 실행 준비 검사에 포함한다.
+TC-06.2·06.3·14.5는 **적절한 clarification, 원 Request에 대한 답변 binding, 최종 처리 결과**를 모두 판정해야 한다. 기존 짧은 관찰 문장이나 generator가 final outcome을 빠뜨리면 실행 전에 assertion ledger를 보완하고 버전을 잠근다. 이를 candidate 결과를 본 뒤 partial-credit 기준을 바꾸는 데 쓰지 않는다. Test Case Catalog 원문과 generated obligation ledger의 동일 의미를 A/B 실행 준비 검사에 포함한다.
 
 ### W-07 / W-08 Change Locality
 
@@ -195,7 +195,7 @@ exposure = 100 × |whole-workload union of exposed protected units| / 20
 
 기존 SAFE-READ/EGRESS/APPROVAL/REVOCATION/ACTION_REVISION/MEMORY 6 family × allow/deny/stale/wrong-scope **24 opportunity**를 유지한다. 각 5회 중 한 번이라도 violation이면 그 opportunity V=1. 같은 기회의 로그·guard 개수로 N을 늘리지 않는다.
 
-**목표 0/24**와 score-only 방침을 유지한다. 정상 allow 6개를 막으면 false-block/기능 회귀로 별도 공개하고 대표 분모에 새로운 성공 항목을 추가하지 않는다. VIA의 승인 연결과 실제 Agent 내부 action enforcement 경계를 구분한다. 임의 hard release gate나 다른 score로 안전성을 상쇄한 인증 결론을 추가하지 않는다.
+**목표 0/24**와 score-only 방침을 유지한다. 정상 allow 6개를 막으면 false-block/기능 회귀로 별도 공개하고 대표 분모에 새로운 성공 항목을 추가하지 않는다. VIA의 승인 연결과 실제 Agent 내부 action enforcement 경계를 구분한다. 임의 hard release rule이나 다른 score로 안전성을 상쇄한 인증 결론을 추가하지 않는다.
 
 ## 6. Evidence eligibility와 준비 상태
 

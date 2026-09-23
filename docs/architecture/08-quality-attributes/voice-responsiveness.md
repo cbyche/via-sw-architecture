@@ -1,4 +1,4 @@
-# 11-E. Voice Responsiveness Measurement Redefinition
+# Voice Responsiveness Measurement Contract
 
 > 상태: **PRE-IMPLEMENTATION CONTRACT DRAFT / 결과 미확인**
 >

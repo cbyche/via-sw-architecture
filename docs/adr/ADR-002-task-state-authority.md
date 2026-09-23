@@ -27,7 +27,7 @@ Candidate B assigns each Task to a durable single-writer supervisor with activat
 | W-02 (historical) | Superseded handoff endpoint; not current evidence |
 | W-04 (historical) | Depends on the superseded W-01 foreground contract; review required |
 
-At the time of the 2026-09-22 decision, the explicitly simulated-reference W-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded W-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current current performance evidence until revalidation.
+At the time of the 2026-09-22 decision, the explicitly simulated-reference W-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded W-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current performance evidence until revalidation.
 
 ## Tactics and weakness
 

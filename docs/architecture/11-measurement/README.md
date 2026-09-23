@@ -14,7 +14,7 @@
 | [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | W-01~W-03 semantic boundary and raw trace requirements |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [Working-12 Scoring Contract](./scoring-contract.md) | W-04~W-12와 재동결 전 상태 |
-| [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation gate |
+| [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
 외부 model 근거는 [Quality Attribute evidence](../08-quality-attributes/evidence/)에 둔다. 그 자료는 입력 profile이나 estimate를 정당화할 수 있지만 실행하지 않은 모델을 measured evidence로 만들지는 않는다.
 

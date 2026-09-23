@@ -1,18 +1,13 @@
-name: architecture-review-audit
+name: candidate-review-bundle
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'prototypes/candidates/**'
-      - '.github/workflows/architecture-review-audit.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  invariant-audit:
+  build-review-bundle:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
@@ -44,7 +39,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: architecture-review-audit-${{ github.sha }}
+          name: candidate-review-bundle-${{ github.sha }}
           path: |
             review-source.tar.gz
             review-source-sha.txt

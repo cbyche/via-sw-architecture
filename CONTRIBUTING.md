@@ -20,7 +20,7 @@ Use the explicit lifecycle names **Measurement Contract Definition → Candidate
 ## Checks
 
 ```bash
-.venv/bin/python scripts/architecture/check_active_w_metric_terms.py
+.venv/bin/python scripts/architecture/check_active_terminology.py
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 cd prototypes/candidates
 cargo +1.98.1 fmt --all -- --check

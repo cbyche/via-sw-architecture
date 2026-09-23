@@ -1,7 +1,7 @@
 # ASR-01 근거 원장 — Qwen3-Omni-30B-A3B-Instruct S2S profile
 
 > 작성일: 2026-09-21
-> 상태: **11-A approved planning evidence**. VIA 실제 측정값 또는 11-C target/score가 아니다.
+> 상태: **Approved measurement planning evidence**. VIA 실제 측정값 또는 target/score가 아니다.
 > 목적: VIA Voice Runtime이 사용하는 S2S Model Runtime의 reference latency profile을 고정한다.
 
 ## 1. Reference model
@@ -93,4 +93,4 @@ VIA는 한 사용자의 foreground interaction latency를 대표 측정한다. �
 | VIA + network + Voice Runtime latency | `NOT_RUN` |
 | 실제 user-experienced p95 | `NOT_RUN` |
 
-가장 중요한 한계는 공식 234 ms table의 상세 GPU SKU가 공개되지 않았다는 점이다. 따라서 11-C target을 234 ms 자체로 정하지 않고 S2S model subtotal의 planning input으로만 사용한다.
+가장 중요한 한계는 공식 234 ms table의 상세 GPU SKU가 공개되지 않았다는 점이다. 따라서 target을 234 ms 자체로 정하지 않고 S2S model subtotal의 planning input으로만 사용한다.

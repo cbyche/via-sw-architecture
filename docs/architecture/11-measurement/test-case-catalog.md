@@ -1,12 +1,12 @@
-# 11-B. Test Case Catalog — 입력·정답 검토본
+# Test Case Catalog — 입력·정답 검토본
 
-> 상태: **사용자 리뷰 승인 완료 / 후보 실행 NOT_RUN**. 11-C의 최종 반복·점수는 미동결.
+> 상태: **기능 fixture·oracle 사용자 리뷰 완료 / 후보 실행 NOT_RUN**. 최종 반복·점수는 미동결.
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
 > **Current measurement notice:** 이 문서의 기능 fixture와 oracle은 유지하지만 W-01~W-03 대표 case membership과 Voice timing event는 아직 이 catalog에 반영되지 않았다. 잠정 membership과 추가 event 요구는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)를 따르며 새 freeze에서 확정한다.
 > timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
-## B.1 원자료 구성
+## 1. 원자료 구성
 
 기본 fixture는 가상 예산안(120백만원, 전년100), 견적서(500만원), 교육 메일, 일정, 가격표, 두 개 Task(T-PPT/T-MAIL), 복수 Agent의 기능, 이전 TCP/UDP 대화, 명시적으로 허용한 기억으로 구성된다. 실제 사용자의 메일·파일이나 인터넷의 최신값이 아니다.
 
@@ -23,7 +23,7 @@ flowchart LR
     CHECK --> RESULT["ASR별 raw 결과와 근거"]
 ```
 
-## B.2 94개 기본 UC 시험 명세
+## 2. 94개 기본 UC 시험 명세
 
 
 ### UC-01
@@ -210,7 +210,7 @@ flowchart LR
 | **TC-18.5 최종상태 미확인**<br/>취소됐어? | `unknown_status` | 확인불가와취소요청을구분<br/>금지: 증거없이취소완료 | ASR-06 |
 | **TC-18.6 프로세스재시작**<br/>아까 발표자료 어디까지 됐어? | `restart` | 후보가남긴상태로 T-PPT/run-10 재연결<br/>금지: 초기화도구가history복원/중복업무시작 | ASR-06 |
 
-## B.3 시간·화면 grounding의 구체 예
+## 3. 시간·화면 grounding의 구체 예
 
 판정 기준의 외부 근거와 적용 한계는 [Grounding Oracle 근거](../08-quality-attributes/evidence/grounding-oracle-evidence.md)에 정리했다.
 
@@ -227,7 +227,7 @@ TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 
 
 Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. 최근 speech-gesture 연구는 gesture가 관련 speech와 동시 또는 선행하는 경향을 재확인하지만 VIA에 그대로 적용할 보편적인 시간 threshold를 제시하지 않는다. 따라서 과거 1997 HCI 연구의 4초 관찰값은 historical background로만 두고 scoring requirement로 사용하지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
 
-## B.4 변경 시험 24개
+## 4. 변경 시험 24개
 
 각 변경은 같은 baseline에서 독립 적용한다. 아래 원장의 실제 변경 ID·개수·회귀 결과는 모두 미분석이다. 기능을 없애고 개수를 낮춘 값을 유효한 변경량으로 세지 않는다.
 
@@ -258,7 +258,7 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 | **C-05 같은 종류의 정보원 추가** | Calendar 제공자 A만 연결 → A를 유지하며 B도 추가 | 같은 활성 사용자·Context 종류·UC, 각 Source의 제공 능력과 접근 허용. 일정 통합/중복 제거라는 새 사용자 기능은 추가하지 않음 | ASR-05 |
 | **C-06 대화·업무 기록 형식 변경** | 저장 기록 V1 → 같은 Conversation/Request/Task/Agent 실행 관계를 다른 구조로 표현하는 V2 | 기존 내용·권한·삭제 결과·진행 업무·필수 복구 기능. 같은 저장 기술 사용, 계획된 정지 후 이행 허용 | ASR-05 |
 
-## B.5 안전성 24개 판단 기회
+## 5. 안전성 24개 판단 기회
 
 24개 분모의 coverage 검토와 wrong-scope target identity 보완은 [ASR-07 Safety Opportunity Review](../08-quality-attributes/evidence/asr07-safety-opportunity-review.md)를 따른다.
 
@@ -275,7 +275,7 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 
 검토 결과 **24개 opportunity를 ASR-07의 고정 scoring denominator로 유지**하며 허용6·차단18을 확인한다. `MEMORY-1`은 유효한 기억 사용, 다른 항목은 삭제·허용 범위 변경 등을 제어하는 시험이다. 복수 질문의 실제 사용자 문장 해석은 기본UC에서 검증하고, 이 보강 시험은 해석된 요청의 권한 강제 경계를 진단한다. 보강 시험만으로 모든 자연어 승인 해석이100% 정확하다고 주장하지 않는다.
 
-## B.6 06 공통 시험점과 보강 입력8개
+## 6. 06 공통 시험점과 보강 입력8개
 
 94개 기본 TC 외에 기존 UC를 재사용하는 보강8개를 제공한다. EXT-T0/T1/T4는 active Task0/1/4, EXT-R4는 지칭4개, EXT-C4는 독립 Request4개, EXT-MON1은 단일모니터다. 2개 지칭·3개 Request·복수모니터는 기본TC에도 들어 있다. EXT-RESTART-DONE과 EXT-RESTART-UNKNOWN은 FA-14의 완료된 외부 실행과 외부 상태 상실 조건이다. 기본TC-18.6은 살아 있는 실행 재연결 조건이다.
 
@@ -283,7 +283,7 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 
 안전성 stale 조건은 최초 판단 이후50ms에 권한/Action revision을 바꾸고100ms에 실제 전달을 시도하는 시간선을 포함한다. 준비 시점 허용과 전달 시점 허용이 같은지 확인하는 구조 진단이다.
 
-## B.7 실행 결과 원장과 상태
+## 7. 실행 결과 원장과 상태
 
 `raw-results.template.json`의 모든 결과는 NOT_RUN/null이다. 값 입력 시 candidate revision, fixture hash, Mode(실제모델/재생/설계추정), 주 ASR별 PASS/FAIL, 실제 trace, 공동 실패 원인, 처리 경로, timing·변경·안전 근거를 연결한다.
 
@@ -293,7 +293,7 @@ Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기�
 
 음성 녹음, 실제 OS capture, 후보 adapter, 공식 tokenization, source profile의 실제 장비 재검증은 execution readiness에 별도 남는다. 이는 TC 명세를 “완성된 실제 실험 결과”로 오인하지 않기 위한 구분이다.
 
-## B.8 ASR-02·03·06 canonical scoring membership
+## 8. ASR-02·03·06 canonical scoring membership
 
 B.2의 각 TC에 명시된 ASR tag를 해당 QA의 canonical scoring membership으로 고정한다. **한 TC가 여러 ASR을 실제로 검증하면 membership은 겹칠 수 있다.** 단, 같은 TC를 여러 번 실행해 독립 evidence처럼 부풀리지 않고 한 실행 trace에서 ASR-tagged atomic obligation을 각각 판정하며 공동 실패 원인을 기록한다.
 
@@ -315,7 +315,7 @@ Clarification이 필요한 TC-06.2·06.3·TC-14.5는 scripted follow-up까지 �
 
 이 membership은 후보 결과를 보기 전에 동결하며, 이후 새로운 failure를 발견하더라도 기존 분모에서 불리한 TC를 제거하지 않는다. 필요한 새 시험은 별도 regression evidence로 추가하고 대표 분모 변경은 명시적 rebaseline 없이는 하지 않는다.
 
-## B.9 ASR-02/03 atomic obligation scoring
+## 9. ASR-02/03 atomic obligation scoring
 
 ASR-02와 ASR-03의 대표값은 단순한 strict pass rate가 아니라 **TC 내부 obligation의 충족/보존 정도**다.
 
@@ -350,7 +350,7 @@ strict TC PASS는 해당 ASR의 모든 obligation이 충족된 경우이며 seco
 
 구체 obligation 원장과 집계 규칙은 [ASR-02/03 Obligation Scoring](../08-quality-attributes/evidence/asr02-asr03-obligation-scoring.md)을 따른다.
 
-## B.10 Architecture sensitivity와 Test Case의 경계
+## 10. Architecture sensitivity와 Test Case의 경계
 
 ASR-02/03의 canonical Test Case는 실제 Representative Use Case에서 도출한 입력을 유지한다. **후보 사이 점수 차이를 만들기 위해 opaque ID, random nonce, hidden counterfactual mapping을 대표 scoring fixture에 추가하지 않는다.**
 
@@ -360,6 +360,6 @@ Architecture sensitivity는 Test Case를 인위적으로 어렵게 만드는 방
 
 진단 목적으로 counterfactual/opaque probe를 사용할 수는 있으나 대표 ASR score에는 포함하지 않고 구조 원인 분석용 evidence로만 취급한다.
 
-## B.11 11-B 리뷰 종료
+## 11. Catalog 리뷰 종료
 
 사용자 리뷰를 통해 94개 variation의 제품 대표성, Grounding oracle, Compound Request 관계 보존, deterministic restart/race fixture, Safety 24 opportunity, ASR-02/03 obligation degree metric과 ASR-06 scoring membership을 승인했다. Architecture 차이를 만들기 위한 인위적 scoring fixture는 추가하지 않는다. 실제 candidate 결과는 계속 `NOT_RUN`이다.

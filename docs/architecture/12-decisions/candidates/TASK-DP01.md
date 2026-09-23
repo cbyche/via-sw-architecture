@@ -1,7 +1,7 @@
 # TASK-DP01 — Task 상태를 공유 서비스가 갱신할지, Task별 소유자가 갱신할지
 
-> VIA-DESIGN-v1.1 / Candidate review. actor·central에 대한 성능 우열 가정 없음.
-> Current measurement contract: 새 W-01/W-03 Voice 경로와 W-04의 applicability는 [11-E](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-08/W-09만 active hypothesis로 유지한다.
+> 상태: Candidate definition current. actor·central에 대한 성능 우열 가정 없음.
+> Current measurement contract: 새 W-01/W-03 Voice 경로와 W-04의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-08/W-09만 active hypothesis로 유지한다.
 <!-- candidate: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-08","W-09"],"alternatives":{"A":["VIA-C-TASKSERVICE","VIA-I-TXNTRANSITION"],"B":["VIA-C-TASKACTOR","VIA-C-ACTIVATION","VIA-I-MAILBOX","VIA-S-ACTIVATION"]}} -->
 
 ## 1. 결정과 중요성

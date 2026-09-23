@@ -35,7 +35,7 @@
 | Item | Status |
 | --- | --- |
 | System boundary, representative use cases, change scenarios | Defined |
-| Working-12 quality attributes | Defined; W-01~W-03 Voice definition updated |
+| Working-12 measurement dimensions | Defined; W-01~W-03 Voice definition updated |
 | W-01~W-03 event and software-boundary contract | Draft defined; machine freeze pending |
 | W-01~W-03 machine-readable contract and harness | **Not implemented** |
 | W-01~W-03 current results | **Not run** |
@@ -89,9 +89,11 @@
 
 ## Development
 
+`architecture-ci`는 `main` 변경마다 active 문서 정합성과 candidate prototype을 검사한다. `candidate-review-bundle`은 외부 리뷰용 source·lock·test output 묶음이 필요할 때만 수동 실행한다. 두 workflow 모두 W 측정 campaign이나 Architecture 승자 결정을 수행하지 않는다.
+
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
-.venv/bin/python scripts/architecture/check_active_w_metric_terms.py
+.venv/bin/python scripts/architecture/check_active_terminology.py
 cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
 cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
 ```

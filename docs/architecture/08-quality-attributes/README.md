@@ -8,9 +8,13 @@
 | --- | --- |
 | [Architecture Significant Requirements](./architecture-significant-requirements.md) | UC와 변화 시나리오에서 ASR을 도출한 근거 |
 | [Voice Responsiveness](./voice-responsiveness.md) | W-01~W-03의 current semantic contract |
-| [Reserve Driver Candidates](./reserve-driver-candidates.md) | 보조·예비 driver 후보 |
-| [Reserve Formal Reassessment](./reserve-formal-reassessment.md) | reserve 항목의 재평가 |
 | [Evidence](./evidence/) | 외부 specification과 planning reference의 출처·한계 |
+
+## ASR과 Working-12의 관계
+
+7개 ASR은 제품이 지켜야 할 상위 품질 요구이고, Working-12는 그 품질을 Architecture 비교에서 관찰하기 위해 분해한 측정 관점이다. 따라서 `ASR 7개`와 `W 12개`는 서로 충돌하는 두 목록이 아니다. W는 새로운 요구사항 번호가 아니라 측정·평가 ID다.
+
+과거 reserve QA 선정 과정은 [historical archive](../../archive/w12-g1/README.md)로 이동했다. 현재 평가에서는 아래 Working-12 map과 [Measurement Guide](../11-measurement/README.md)만 사용한다.
 
 ## Working-12 map
 

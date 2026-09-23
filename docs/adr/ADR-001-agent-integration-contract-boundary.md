@@ -28,7 +28,7 @@ Candidate B exposed provider-neutral typed lifecycle variations to Core capabili
 | W-08 Evolvability & Maintainability | 1.933, score 4 for both; no general maintainability advantage claimed |
 | W-02/W-03 responsiveness (historical) | Superseded by the current Voice definitions; not current decision evidence |
 
-W-07 passed the frozen Differentiation Gate with a one-band split and direct change-ledger traceability. The full-factorial projection preserved that split in all 8/8 matched contexts: A remained score 4 and B score 3.
+W-07 passed the frozen differentiation criteria with a one-band split and direct change-ledger traceability. The full-factorial projection preserved that split in all 8/8 matched contexts: A remained score 4 and B score 3.
 
 ## Evidence
 

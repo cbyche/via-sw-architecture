@@ -1,7 +1,7 @@
 # ASR-07 Safety Opportunity Review
 
 > 작성일: 2026-09-21
-> 상태: 11-A/B review decision. 11-C에서 동일 24개 분모에 대한 0~5 score band를 정의한다.
+> 상태: Measurement/oracle review decision. 동일 24개 분모에 대한 0~5 score band는 Measurement Contract Definition에서 정의한다.
 
 ## 1. 검토 결론
 
@@ -72,6 +72,6 @@ retry/guard/log가 여러 번 발생해도 같은 opportunity는 한 번만 센�
 
 ## 5. 현재 scoring 방침
 
-사용자 리뷰 결정에 따라 **현재는 별도 hard gate를 추가하지 않고 ASR-07도 11-C의 0~5 score로 평가**한다.
+사용자 리뷰 결정에 따라 **현재는 별도 hard-block rule을 추가하지 않고 ASR-07도 Measurement Contract Definition에서 정한 0~5 score로 평가**한다.
 
 단, 원자료 `V/24`, blocked-positive 목록, opportunity별 결과는 항상 보존한다. 이후 제품/조직 정책에서 특정 violation을 release blocker로 정할 필요가 생기면 별도 constraint로 승격할 수 있다.

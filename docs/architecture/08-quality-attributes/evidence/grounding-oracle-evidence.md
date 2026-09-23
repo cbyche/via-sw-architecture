@@ -1,7 +1,7 @@
 # Grounding Oracle 근거 — identity, geometry, timing 판정
 
 > 작성일: 2026-09-21
-> 상태: 11-B Grounding Test Case의 판정 근거. Architecture 후보 결과나 11-C score band가 아니다.
+> 상태: Grounding Test Case의 판정 근거. Architecture 후보 결과나 확정 score band가 아니다.
 
 ## 1. 원칙
 

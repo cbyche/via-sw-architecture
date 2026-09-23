@@ -1,7 +1,7 @@
 # ASR-01 근거 원장 — Windows Consumer PC / Qwen3-8B reference profile
 
 > 재정리일: 2026-09-21
-> 상태: **11-A planning evidence**. 실제 VIA 후보의 measured latency가 아니며 11-C target/score도 아직 아니다.
+> 상태: **Measurement planning evidence**. 실제 VIA 후보의 measured latency가 아니며 target/score도 아직 아니다.
 > 목적: VIA Semantic Model을 사용자가 일반적인 Windows PC에서 local inference한다고 가정할 때 사용할 수 있는 근거 있는 reference profile을 고정한다.
 
 ## 1. 왜 Qualcomm profile을 대표 근거에서 제외하는가
@@ -150,7 +150,7 @@ Runtime     : llama.cpp frozen release/commit + CUDA
 Server      : llama-server
 API         : local OpenAI-compatible HTTP endpoint
 Concurrency : 1
-Context     : 11-C에서 canonical workload와 함께 고정
+Context     : Measurement Contract Definition에서 canonical workload와 함께 고정
 Warm/cold   : 구분 측정
 ```
 

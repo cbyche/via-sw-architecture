@@ -127,7 +127,7 @@ Minimum documentation checks:
 
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
-.venv/bin/python scripts/architecture/check_active_w_metric_terms.py
+.venv/bin/python scripts/architecture/check_active_terminology.py
 ```
 
 Candidate Rust checks when `prototypes/candidates/` changes:

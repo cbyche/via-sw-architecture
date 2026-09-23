@@ -2,7 +2,7 @@
 
 > 상태: **W-01~W-03 EVENT CONTRACT DRAFT / machine freeze 전**
 >
-> 목적: 모든 Working ASR의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
+> 목적: 모든 W metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
 >
 > 범위: 이 문서는 공통 event 의미와 관측 원칙의 source of truth다. W별 모집단·집계·target·score는 `scoring-contract.md`, 기능 fixture와 oracle은 `test-case-catalog.md`에서 관리한다.
 
