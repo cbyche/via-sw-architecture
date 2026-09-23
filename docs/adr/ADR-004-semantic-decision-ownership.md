@@ -35,7 +35,7 @@ Use a versioned output schema, client-side validation, bounded repair cycles, so
 
 ## Revisit condition
 
-Run the frozen `qwen/qwen3-8b` OpenRouter profile with provider `alibaba`, fallback disabled. Full-factorial evidence: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
+Run the frozen `qwen/qwen3-8b` OpenRouter profile with provider `alibaba`, fallback disabled. Full-factorial evidence: `results/gate2/archive/w12-g1/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
 
 ## Requirement changes
 

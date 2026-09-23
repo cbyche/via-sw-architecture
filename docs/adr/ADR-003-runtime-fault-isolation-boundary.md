@@ -35,7 +35,7 @@ The weakness is IPC serialization, uncertain in-flight calls, deployment, and wo
 
 Revalidate IPC and delivery latency on the Windows named-pipe realization before making an absolute product-performance claim.
 
-Full-factorial evidence: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
+Full-factorial evidence: `results/gate2/archive/w12-g1/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
 
 ## Requirement changes
 

@@ -1,21 +1,29 @@
-# Contribution / Working Rules
+# Contributing
 
-## Approved baselines
+## Choose the correct generation
 
-Do not edit approved requirement baseline files in place.
+- Current Architecture documents: `docs/architecture/`
+- Accepted decisions: `docs/adr/`
+- Current measurement implementation: `benchmark/architecture/`
+- Current candidate prototypes: `prototypes/gate2/`
+- Current results: `results/gate2/current/`
+- Historical material: paths named `archive/`
 
-## Decision workflow
+Do not update an archived artifact to express a current decision. Create or edit the corresponding current artifact and link historical evidence explicitly when needed.
 
-1. Define DP.
-2. Define alternatives.
-3. Implement prototype.
-4. Run common benchmark.
-5. Compare QA.
-6. Record ADR.
-7. Update vNext requirements if needed.
+## Measurement changes
 
-## File naming
+Freeze definitions, fixtures, evidence labels, repetition and aggregation rules before viewing comparative results. Compare each Decision Point's A/B alternatives directly while holding other DP conditions fixed. Never present calculated, mock, reference, or archived values as actual model or product measurements.
 
-- Decision Point: `DP-XX-short-title.md`
-- ADR: `ADR-XXX-short-title.md`
-- Experiment: `EXP-XXX-short-title.md`
+## Checks
+
+```bash
+.venv/bin/python scripts/gate2/check_active_w_metric_terms.py
+.venv/bin/python scripts/gate2/check_active_markdown_links.py
+cd prototypes/gate2
+cargo +1.98.1 fmt --all -- --check
+cargo +1.98.1 clippy --locked --workspace --all-targets -- -D warnings
+cargo +1.98.1 test --locked --workspace --all-targets
+```
+
+Follow the Git and secret-handling rules in [`AGENTS.md`](AGENTS.md).

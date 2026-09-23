@@ -6,10 +6,11 @@
 
 ## Architecture
 - Do not modify an approved requirements baseline unless explicitly requested.
-- Record architecture decisions under docs/architecture/ and docs/adr/.
-- Store prototypes under prototypes/.
-- Store benchmark implementation under benchmark/.
-- Store experiment results under results/.
+- Treat `docs/architecture/` as the current architecture source of truth.
+- Treat `docs/archive/`, `benchmark/archive/`, and archived results as historical evidence, never as current requirements, measurement contracts, or product claims.
+- Record current architecture decisions under `docs/architecture/` and accepted decisions under `docs/adr/`.
+- Store current prototypes under `prototypes/`, benchmark implementation under `benchmark/architecture/`, and experiment results under `results/gate2/current/`.
+- When a measurement definition changes, archive the superseded contract, implementation, and results together before publishing new evidence.
 
 ## Development
 - Inspect git status before modifying files.

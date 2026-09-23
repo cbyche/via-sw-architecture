@@ -1,189 +1,46 @@
 # VIA Software Architecture
 
-Samsung PC용 **Voice Interaction Agent (VIA)** 의 SW Architecture 설계와 검증을 위한 engineering repository입니다.
+Samsung PC용 Voice Interaction Agent(VIA)의 소프트웨어 아키텍처를 정의하고, Decision Point별 대안을 검증하기 위한 저장소다.
 
-이 repository는 다음 흐름을 추적합니다.
+## Current source of truth
 
-```text
-Approved Requirements / vNext Working Baseline
-        ↓
-Architectural Decision Point
-        ↓
-Alternatives
-        ↓
-Quality Attributes / Evaluation Rules
-        ↓
-Executable Specification / Prototype / Experiment
-        ↓
-Measured QA Trade-off + Qualification Gates
-        ↓
-Architecture Decision Record (ADR)
-        ↓
-requirements-vNext / future Approved Baseline update
-```
-
-## Current baseline and working state
-
-- Approved requirements: [`docs/requirements/requirements-v1.1.md`](docs/requirements/requirements-v1.1.md) — **v1.1 Approved Baseline, immutable**
-- vNext working baseline: [`docs/requirements/requirements-vNext.md`](docs/requirements/requirements-vNext.md)
-- Central QA↔DP navigation: [`docs/architecture/qa-dp-traceability.md`](docs/architecture/qa-dp-traceability.md)
-- Central evaluation strategy: [`docs/evaluation/evaluation-strategy.md`](docs/evaluation/evaluation-strategy.md)
-- Final-report evidence index: [`docs/architecture/analysis/final-report-evidence-index.md`](docs/architecture/analysis/final-report-evidence-index.md)
-
-The current top-level architecture question is:
-
-> **DP-00 — VIA Primary Execution Boundary**
->
-> VIA는 사용자 요청을 어디까지 직접 판단·실행하고, 어디부터 Downstream Agent에 위임할 것인가?
-
-`requirements-v1.1.md` defines the approved **starting** responsibility boundary. vNext does not assume that boundary is already the optimal final answer; DP-00 explicitly evaluates it.
-
-## Responsibility boundary: approved baseline vs vNext evaluation
-
-The v1.1 Approved Baseline places interaction/context/intent/routing/task-lifecycle responsibilities primarily in VIA and domain reasoning/planning/tool execution in Downstream Agents.
-
-DP-00 compares four Integrated Product execution topologies:
-
-| Alternative | Summary | v1.1 compatibility |
-| --- | --- | --- |
-| **A — Thin VIA** | Agent-neutral VIA orchestration → Downstream Agent execution | **Compatible** |
-| **B — ARGO-centric Primary Execution** | thin realtime context → ARGO primary ReAct/tool runtime → optional specialist delegation | **Challenges baseline boundary** |
-| **C — Hybrid VIA Fast Path** | bounded/local-safe VIA execution + Agent delegation | **Mostly compatible / extension** |
-| **D — Adaptive Per-turn** | per-turn Fast / ARGO / Specialized-Agent topology selection | **Partially compatible / extension likely** |
-
-Alternative B is intentionally a responsibility-boundary challenge. It is not equivalent to merely preferring ARGO as the default Downstream Agent.
-
-Authoritative definition: [`docs/architecture/decision-points/DP-00-primary-execution-boundary.md`](docs/architecture/decision-points/DP-00-primary-execution-boundary.md).
-
-## vNext Top Architectural Drivers
-
-| QA | Reviewer-facing question | Primary Metric |
-| --- | --- | --- |
-| **QA-01 Fast-task End-to-End Responsiveness** | 빠른가? | **Fast-task Outcome Latency p95 (FTOL p95)** |
-| **QA-02 VIA Interaction-Orchestration Correctness** | 정확한가? | **Architecture Episode Exact Conformance Rate (AECR)** |
-| **QA-03 Flexibility** | 변경이 잘 격리되는가? | **Change Containment Rate (CCR)** |
-| **QA-04 Model Call Overhead** | 실행 경로를 정하기 위해 AI 판단을 얼마나 요구하는가? | **Average Model Calls to Commit Execution Route** |
-
-Detailed QA definitions are under `docs/evaluation/quality-attributes/`.
-
-The older QA-01~11 inside `requirements-v1.1.md` are preserved as **Legacy v1.1 Detailed QA**. They are reclassified in the central traceability as Secondary/Diagnostic concerns, operational QAs, or Mandatory Qualification candidates; they are not deleted.
-
-## Scored drivers vs mandatory gates
+현재 기준선은 [`docs/architecture/`](docs/architecture/README.md)다. 시스템 범위, 대표 Use Case, 품질 속성, 측정 계약, Decision Point를 이 순서로 관리한다.
 
 ```text
-Scored Architectural Drivers
-  QA-01
-  QA-02
-  QA-03
-  QA-04
-
-Mandatory Qualification Gates / Constraints
-  Security
-  Privacy / context-sharing policy
-  Trusted boundary requirements
-  Required cancellation semantics
-  Required task-state integrity
-  Failure containment
-  Mandatory recovery behavior
+System definition and use cases
+    -> quality attributes and measurement contracts
+    -> Decision Point A/B alternatives
+    -> controlled prototype and benchmark
+    -> evidence
+    -> ADR
 ```
 
-Security/reliability concerns are not omitted because they are less important. Non-compensable obligations are separated from trade-off scoring so another QA's high score cannot offset a mandatory violation.
+현재 Voice responsiveness 정의는 다음 세 지표로 분리한다.
 
-A minimum QA-02 correctness eligibility gate is also planned; its numeric threshold remains TBD until Pilot/calibration.
+- W-01: Agent delegation 결과를 사용자에게 Voice로 전달하기까지의 VIA 책임시간
+- W-02: VIA direct Voice response의 전체 반응시간
+- W-03: Agent progress/status가 제공 가능해진 뒤 Voice feedback이 들리기까지의 반응시간
 
-## Central evaluation pipeline
+정확한 endpoint와 포함·제외 구간은 [`voice-responsiveness.md`](docs/architecture/08-quality-attributes/voice-responsiveness.md)가 유일한 active source of truth다. 새 정의에 맞는 측정 코드는 아직 구현하지 않았으며, 기존 W12-G1 수치와 harness는 historical evidence다.
 
-```text
-Architecture Concern
-    ↓
-DP-00 A/B/C/D
-    ↓
-QA / Primary Metric
-    ↓
-Controlled Architecture Qualification
-    ↓
-Pilot / Calibration
-    ↓
-Scoring & Gate Rule Freeze
-    ↓
-Final A/B/C/D Evaluation
-    ↓
-Sensitivity / Threats to Validity
-    ↓
-Trade-off / ADR
-```
+## Repository map
 
-Architecture Qualification keeps the **SW Architecture Alternative** as the independent variable and controls/fixes scenario semantics, semantic replay, Agent/tool behavior, model/prompt/cache profiles, machine/environment, and dependency latency as applicable.
+| 경로 | 역할 |
+| --- | --- |
+| [`docs/architecture/`](docs/architecture/README.md) | 현재 Architecture 기준선 |
+| [`docs/adr/`](docs/adr/) | 채택된 Architecture Decision Record |
+| [`docs/references/`](docs/references/) | 외부·내부 참조자료 |
+| [`docs/archive/`](docs/archive/README.md) | v1.1, vNext/DP-00, W12-G1 과거 세대 |
+| [`benchmark/architecture/`](benchmark/architecture/README.md) | 다음 측정 구현의 active 위치 |
+| [`benchmark/archive/`](benchmark/archive/README.md) | 과거 benchmark 구현 |
+| [`prototypes/gate2/`](prototypes/gate2/README.md) | 현재 Gate 2 후보 구현 |
+| [`results/gate2/`](results/gate2/README.md) | 현재 및 과거 Gate 2 evidence |
+| [`scripts/gate2/`](scripts/gate2/README.md) | 현재 검증 도구 |
 
-Actual-model / real-stack validation is a separate external-validity track.
+## Historical generations
 
-## Repository structure
+`requirements-v1.1`, `requirements-vNext`와 기존 DP-00/QA 실험은 삭제하지 않았다. active namespace에서 분리해 [`docs/archive/`](docs/archive/README.md)와 Git `archive/*` 태그로 보존한다. 과거 문서는 provenance와 참고용이며 현재 요구사항·지표·결과로 인용하지 않는다.
 
-```text
-docs/
-  requirements/             Approved and working requirements
-  architecture/             System views and QA↔DP traceability
-  architecture/analysis/    Architecture reasoning / review checkpoints
-  architecture/decision-points/
-                            Decision Point definitions and alternatives
-  adr/                      Accepted Architecture Decision Records
-  experiments/              Experiment definitions
-  evaluation/               QA definitions and evaluation methodology
+## Development
 
-benchmark/
-  requests/                 Architecture request suite
-  utterances/               Natural spoken evaluation set
-  agent-stubs/              Deterministic downstream-agent stubs
-  failure-injection/        Failure scenarios
-  evolution/                Replaceability/extensibility exercises
-  schemas/                  Raw/semantic benchmark contracts
-  runners/                  Benchmark code
-
-prototypes/                 DP alternative implementations
-results/
-  raw/                       Immutable experiment evidence
-  derived/                   Recomputable metrics
-  reports/                   Human-readable reports / visualizations
-scripts/                    Utility scripts
-```
-
-## Working model
-
-1. `requirements-v1.1.md` is immutable.
-2. Architecture changes and unresolved responsibility questions are recorded in `requirements-vNext.md` and Decision Point artifacts without pretending they are already approved.
-3. DP alternatives are specified/implemented under a common Integrated Product comparison boundary.
-4. The same frozen benchmark conditions are applied across alternatives.
-5. Raw evidence is retained so metrics can be recomputed.
-6. Scores/gates are frozen before final comparative results.
-7. The accepted decision is recorded as an ADR.
-8. Requirement/scope changes justified by the decision are proposed in vNext before any future approved baseline.
-
-## Decision Point lifecycle
-
-```text
-Open
-→ Alternatives Defined
-→ Evaluation QAs / Rules Defined
-→ Executable Architecture Specification
-→ Prototype Ready
-→ Benchmark Complete
-→ Decision Proposed
-→ Accepted
-→ ADR
-```
-
-Current DP-00 state: **Alternatives Defined + Top-QA/evaluation rebaseline complete; executable specification/Pilot TBD.**
-
-## Baseline policy
-
-Approved requirements are never edited in place.
-
-```text
-v1.1 Approved
-     ↓
-vNext Working / Architecture Evaluation
-     ↓
-measured decision + review
-     ↓
-possible v1.2 Approved candidate
-```
+저장소 작업 규칙은 [`AGENTS.md`](AGENTS.md)와 [`CONTRIBUTING.md`](CONTRIBUTING.md)를 따른다. Python 검증은 `.venv`를 사용하고, Rust 후보 구현은 `prototypes/gate2`에서 검증한다.

@@ -35,7 +35,7 @@ The weakness is activation, fencing, and cross-Task coordination complexity. Per
 
 Revalidate on the Windows product runtime before treating the reference ratio as an absolute performance result.
 
-Full-factorial evidence: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
+Full-factorial evidence: `results/gate2/archive/w12-g1/rebaseline/gate2-factorial-c8869c88/full-factorial.json`.
 
 ## Requirement changes
 

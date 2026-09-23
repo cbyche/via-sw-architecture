@@ -32,10 +32,10 @@ W-07 passed the frozen Differentiation Gate with a one-band split and direct cha
 
 ## Evidence
 
-- Prototype: `prototype/gate2/runtime/src/agent.rs`
-- Benchmark: `benchmark/rebaseline/gate2/change_analysis.py`
-- Results: `results/rebaseline/gate2-freeze-b6ff0b07/w07-w08-scores.json`
-- Full-factorial results: `results/rebaseline/gate2-factorial-c8869c88/full-factorial.json`
+- Prototype: `prototypes/gate2/runtime/src/agent.rs`
+- Benchmark: `benchmark/archive/w12-g1/gate2/change_analysis.py`
+- Results: `results/gate2/archive/w12-g1/rebaseline/gate2-freeze-b6ff0b07/w07-w08-scores.json`
+- Full-factorial results: `results/gate2/archive/w12-g1/rebaseline/gate2-factorial-c8869c88/full-factorial.json`
 
 ## Consequences
 

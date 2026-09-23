@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DOC_ROOT = ROOT / "docs" / "rebaseline"
+DOC_ROOT = ROOT / "docs" / "architecture"
 FORBIDDEN = (
     "Conversational Reaction Responsiveness",
     "Task Handoff Responsiveness",
@@ -19,8 +19,6 @@ FORBIDDEN = (
 def main() -> int:
     violations: list[str] = []
     for path in sorted(DOC_ROOT.rglob("*.md")):
-        if "archive" in path.relative_to(DOC_ROOT).parts:
-            continue
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             for term in FORBIDDEN:
                 if term in line:
@@ -31,7 +29,7 @@ def main() -> int:
         print("\n".join(violations))
         return 1
 
-    print("PASS: superseded W-01..W-03 terminology is confined to archive/w12-g1")
+    print("PASS: superseded W-01..W-03 terminology is absent from active architecture documents")
     return 0
 
 
