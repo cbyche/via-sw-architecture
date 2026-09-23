@@ -4,7 +4,7 @@
 - Date: 2026-09-22
 - Related DP: TASK-DP01
 
-> Current measurement-contract impact: 이전 QA-02 responsiveness와 QA-01 기반 QA-04 reference evidence는 superseded다. QA-04는 현행 독립 QA가 아니며 동시성은 QA-01/03 등의 workload condition으로 이동했다. 이 ADR의 선택은 유지하되 새 Voice와 QA-09 contract로 재검증해야 한다.
+> Current measurement-contract impact: 이전 QA-02 responsiveness와 previous-generation QA-04 concurrency evidence는 superseded다. 현재 QA-04는 Voice Interruption Responsiveness라는 다른 정의이며 동시성은 workload condition이다. 이 ADR의 선택은 유지하되 새 Voice와 QA-13~15/31/32 contract로 재검증해야 한다.
 
 ## Context
 
@@ -22,10 +22,10 @@ Candidate B assigns each Task to a durable single-writer supervisor with activat
 
 | QA | Result |
 |---|---|
-| QA-08 | A/B both 1.933, score 4 |
-| QA-09 | B was about 0.17ms lower on this run; both score 5 and effectively tied |
+| previous-generation QA-08 (current concern: QA-22) | A/B both 1.933, score 4 |
+| previous-generation QA-09 (current concern: QA-31) | B was about 0.17ms lower on this run; both score 5 and effectively tied |
 | QA-02 (historical) | Superseded handoff endpoint; not current evidence |
-| QA-04 (historical, retired draft) | Depends on the superseded QA-01 foreground contract; not a current QA |
+| previous-generation QA-04 concurrency | Depends on the superseded QA-01 foreground contract; unrelated to current QA-04 |
 
 At the time of the 2026-09-22 decision, the explicitly simulated-reference QA-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded QA-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current performance evidence until revalidation.
 

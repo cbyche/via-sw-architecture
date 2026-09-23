@@ -1,6 +1,6 @@
 # 10. Architecture Element Definition — 설계 요소와 변경량 집계 기준
 
-> 상태: **공통 Element 정의·집계 규칙 승인 유지 / QA-07·QA-08 적용과 score는 사용자 검토 초안**
+> 상태: **공통 Element 정의·집계 규칙 승인 유지 / QA-21·QA-22 적용과 score는 사용자 검토 초안**
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
 > 입력: [02 용어](./02-terms.md), [03 설계 범위](./03-fixed-architecture-scope.md), [04 공통 흐름](./04-canonical-interaction-flow.md), [06 FA-16](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [09 품질과 평가 근거의 연결](./09-traceability.md)
@@ -9,7 +9,7 @@
 
 **Architecture Element는 설계에서 책임·계약·상태·배치를 독립적으로 설명하고, 변경 전후를 확인할 수 있는 단위이다.** 단순히 그림에 그린 박스나 소스 파일 수가 아니다.
 
-QA-07·QA-08에서 세는 것은 **같은 변경을 받아들이기 위해 수정·추가·제거해야 하는 설계 요소의 수**이다. 개발 시간, M/M, 코드 줄 수, 컴파일 대상 수가 아니다.
+QA-21·QA-22에서 세는 것은 **같은 변경을 받아들이기 위해 수정·추가·제거해야 하는 설계 요소의 수**이다. 개발 시간, M/M, 코드 줄 수, 컴파일 대상 수가 아니다.
 
 | 지금 확정할 기준 | 대안 명세를 작성할 때 채워야 하는 내용 |
 | --- | --- |
@@ -173,8 +173,8 @@ Model 가중치, Agent 내부 planner/Tool, 외부 Calendar 서버의 내부 코
 전부 적용 가능하고 기능 유지 근거를 갖춘 경우:
 
 ```text
-QA-07 = [N(A-01) + ... + N(A-09)] / 9
-QA-08 = [N(M-01) + ... + N(M-09) + N(C-01) + ... + N(C-06)] / 15
+QA-21 = [N(A-01) + ... + N(A-09)] / 9
+QA-22 = [N(M-01) + ... + N(M-09) + N(C-01) + ... + N(C-06)] / 15
 ```
 
 각 변경은 같은 후보의 원래 baseline에서 **독립 적용**한다. 다음 변경이 앞 변경의 이점을 물려받게 하지 않는다. M/C별 내역은 보존하되 08이 정한 비Agent 15개 대표값을 임의의 가중 평균으로 바꾸지 않는다.

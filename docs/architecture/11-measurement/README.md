@@ -1,6 +1,6 @@
 # Measurement Guide
 
-> **Current state:** QA-01~QA-03 semantic definitions exist; machine contract, target, score bands, harness, and current results do not.
+> **Current state:** active QA의 category와 single-metric semantic definitions가 있으며, machine contract, 일부 target/score band, harness와 current results는 없다.
 >
 > **Current phase: Measurement Contract Definition.** 현재는 사용자 검토 중인 QA catalog와 각 QA의 경계·조건·채점 방식을 확정하는 단계다. 후보 구현이나 A/B 실행 단계가 아니다.
 
@@ -11,7 +11,9 @@
 | Document | Role |
 | --- | --- |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
-| [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-03 semantic boundary and raw trace requirements |
+| [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-04 semantic boundary and raw trace requirements |
+| [Correctness & Continuity](../08-quality-attributes/correctness-and-continuity.md) | QA-11~QA-15 predicate ownership and non-additive reporting |
+| [Reliability & Resource](../08-quality-attributes/reliability-and-resource.md) | QA-31/32/41 boundary and accounting rules |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
@@ -42,7 +44,7 @@
 
 `Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
 
-현재 QA-01~QA-03은 위 `Required sequence`의 1~3에 해당하는 semantic/event-boundary draft까지만 진행됐다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+현재 active QA는 위 `Required sequence`의 1~3에 해당하는 semantic draft까지만 진행됐고 일부 target/score는 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 
@@ -57,7 +59,7 @@
 
 Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or `TARGET_WINDOWS_LATENCY`. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
 
-## QA-01~QA-03 implementation prerequisites
+## QA-01~QA-04 implementation prerequisites
 
 Before implementation, freeze at least:
 
@@ -67,11 +69,20 @@ Before implementation, freeze at least:
 - QA-01 included VIA segments and excluded Agent interval
 - QA-02 direct-only route rule
 - QA-03 valid, correlated, non-stale status rule
+- QA-04 actual acoustic barge-in onset and last audible interrupted-response sample
 - IR/TASK/AGENT/EXEC applicability and fixed paired context
 - prompt/token ledger and sequential/parallel model-call graph
 - mock S2S meaning, scheduled delay profile, and playback profile
 - warm-up/scored count, run order, timeout, failed-trial handling, percentile algorithm
 - raw trace schema, summary schema, evidence label, source/fixture fingerprints
+
+Correctness, reliability와 resource QA는 추가로 다음을 동결한다.
+
+- QA-11 integrated corpus와 QA-12~15 driver corpus/predicate ownership
+- QA-11과 QA-12~15 non-additive reporting rule
+- QA-31 fault/recovery strata와 QA-32 necessary dependency closure 및 user-visible unit registry
+- QA-41 target PC, process/local-model accounting boundary와 memory sampler
+- mandatory action/access zero-violation gate fixture
 
 Qwen3-Omni 234 ms may be used only as a clearly labeled scheduled reference span for a matching full-S2S first-packet dependency. It is not a metric start point, generic TTS cost, network cost, or actual model execution.
 

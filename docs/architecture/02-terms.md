@@ -564,7 +564,7 @@ Action의 실제 실행과 권한 강제는 Downstream Agent 책임이다. VIA�
 | 용어 | 정의 |
 | --- | --- |
 | **Quality Concern (QC)** | ISO/IEC 25010 관점과 VIA 제품 문맥에서 도출한 상위 품질 관심사. coverage를 조직하지만 직접 점수를 만들지 않는다. |
-| **Quality Attribute (QA)** | stimulus, response와 measure를 정의하여 Architecture 후보를 비교할 수 있게 만든 품질 속성. Catalog는 아직 사용자 검토 초안이며 활성 초안 ID는 QA-01/02/03/05/07/08/09/11이다. 번호 공백은 퇴역 초안의 이력을 보존한다. |
+| **Quality Attribute (QA)** | stimulus, response와 하나의 대표 metric을 정의하여 Architecture 후보를 비교할 수 있게 만든 품질 속성. Catalog는 category range로 구성된 사용자 검토 초안이며 범위 안 번호 공백은 의도적으로 보존한다. |
 | **Architecture Significant Requirement (ASR)** | QA 중 책임 배치, interface, state authority, process/deployment boundary 또는 중요한 구조 trade-off에 중대한 영향을 주는 것으로 판정된 항목. 별도 번호를 만들지 않고 기존 QA ID에 분류를 표시한다. 현재 확정된 ASR은 없다. |
 | **Measurement Contract Definition** | QA별 stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정하는 현재 단계. |
 | **Candidate Implementation** | 확정된 계약에 맞춰 DP별 A/B 구조와 측정 가능한 실행 경로를 구현하는 단계. |

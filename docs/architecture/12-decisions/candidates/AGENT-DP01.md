@@ -1,8 +1,8 @@
 # AGENT-DP01 — Agent 차이를 경계에서 해석할지, Core의 typed handler가 해석할지
 
 > 상태: Candidate definition current. Agent 중립성은 양 후보 공통 요구다.
-> Current measurement contract: 새 QA-01/QA-03 Voice 경로의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 QA-07/QA-08만 active hypothesis로 유지한다.
-<!-- candidate: {"dp":"AGENT-DP01","reference":"A","hypotheses":["QA-07","QA-08"],"alternatives":{"A":["VIA-C-EDGESEM","VIA-I-CANONAGENT"],"B":["VIA-C-TYPEDHANDLER","VIA-I-TYPEDAGENT"]}} -->
+> Current measurement contract: 새 QA-01/QA-03 Voice 경로의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. QA-13/14/21/22는 구조 sensitivity hypothesis다.
+<!-- candidate: {"dp":"AGENT-DP01","reference":"A","hypotheses":["QA-13","QA-14","QA-21","QA-22"],"alternatives":{"A":["VIA-C-EDGESEM","VIA-I-CANONAGENT"],"B":["VIA-C-TYPEDHANDLER","VIA-I-TYPEDAGENT"]}} -->
 
 ## 1. 질문을 정확하게 한정하기
 
@@ -14,7 +14,7 @@ A도 capability 차이와 미지원 기능을 숨기지 않는다. B도 provider
 
 **이 DP는 A2A/MCP/custom 중 어떤 wire protocol을 고르는 문제와 분리한다.** 동일 protocol을 써도 Agent마다 streaming, polling, push, follow-up, cancel, artifact, pending-input capability와 lifecycle profile이 다를 수 있다. 반대로 protocol이 달라도 integration edge가 그 차이를 canonicalize하면 Core는 provider variation을 거의 보지 않을 수 있다.
 
-따라서 protocol은 NativeClient/transport의 입력이고, 이 DP는 **그 protocol·provider variation의 의미를 VIA 어디까지 노출할지**를 결정한다. 실제 downstream Agent가 모두 하나의 엄격한 lifecycle profile을 보장하면 A/B 차이는 작아질 수 있으며 그때는 QA-07 Agent Interoperability와 QA-08 Evolvability도 동점으로 인정한다.
+따라서 protocol은 NativeClient/transport의 입력이고, 이 DP는 **그 protocol·provider variation의 의미를 VIA 어디까지 노출할지**를 결정한다. 실제 downstream Agent가 모두 하나의 엄격한 lifecycle profile을 보장하면 A/B 차이는 작아질 수 있으며 그때는 QA-21 Agent Interoperability와 QA-22 Evolvability도 동점으로 인정한다.
 
 ## 2. A — Edge-normalized Canonical Contract
 
@@ -85,8 +85,8 @@ COMMON의 NativeClients, Registry와 ExecutionLink/Pending 상태를 재사용�
 
 | 사전 가설 | 검증할 구조 경로 | 반증/주의 |
 |---|---|---|
-| QA-07 Agent Change Locality | A-01~09가 adapter·typed handler·소비 계약까지 바꾸는지 | 두 안 모두 edge/client만 고치면 동점 |
-| QA-08 Model & Context Change Locality | M/C 변화가 integration 소비자와 공유 계약을 바꾸는지 | Agent change를 QA-08에 중복 계산하지 않음 |
+| QA-21 Agent Change Locality | A-01~09가 adapter·typed handler·소비 계약까지 바꾸는지 | 두 안 모두 edge/client만 고치면 동점 |
+| QA-22 Model & Context Change Locality | M/C 변화가 integration 소비자와 공유 계약을 바꾸는지 | Agent change를 QA-22에 중복 계산하지 않음 |
 | QA-01 Delegated Path VIA Responsiveness / QA-03 Agent Progress Voice Feedback Responsiveness | native→중립 계약 변환·검증·필요한 protocol 조합 | 새 endpoint에 대한 applicability와 latency는 재동결 필요 |
 
 A는 Core의 수명 의미를 단순화하고 provider 적응을 국소화하기 쉽지만 adapter에 기능 해석 책임이 모인다. B는 capability 차이를 명시적으로 조합하기 쉽지만 Core가 그 variation의 변경을 따라가야 할 수 있다. 두 안 모두 기능 보존을 전제로 하고, 바뀌는 모든 C/I/S/D와 회귀 UC를 원장에 남긴다.

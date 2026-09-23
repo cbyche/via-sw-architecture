@@ -1,12 +1,30 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
+  "catalog_generation": "CATEGORY_RANGES_V2",
   "status": "USER_REVIEW_DRAFT",
   "asr_selection": "NONE_UNASSESSED",
-  "renumbering_policy": "PRESERVE_GAPS_UNTIL_CATALOG_APPROVAL",
-  "active_qa_ids": ["QA-01", "QA-02", "QA-03", "QA-05", "QA-07", "QA-08", "QA-09", "QA-11"],
+  "renumbering_policy": "ONE_TIME_CATEGORY_RENUMBERING_COMPLETE_PRESERVE_GAPS",
+  "category_ranges": {
+    "QA-01..QA-09": "Responsiveness",
+    "QA-11..QA-19": "Correctness & Continuity",
+    "QA-21..QA-29": "Modifiability",
+    "QA-31..QA-39": "Reliability & Availability",
+    "QA-41..QA-49": "Resource Efficiency",
+    "QA-51..QA-59": "Privacy & Security",
+    "QA-61..QA-69": "Observability (reserved)"
+  },
+  "active_qa_ids": [
+    "QA-01", "QA-02", "QA-03", "QA-04",
+    "QA-11", "QA-12", "QA-13", "QA-14", "QA-15",
+    "QA-21", "QA-22",
+    "QA-31", "QA-32",
+    "QA-41",
+    "QA-51"
+  ],
   "quality_attributes": [
     {
       "id": "QA-01",
+      "category": "Responsiveness",
       "name": "Delegated Path VIA Responsiveness",
       "qc": ["QC-01"],
       "metric": "worst_case_case_p95_delegated_via_active_time_ms",
@@ -14,6 +32,7 @@
     },
     {
       "id": "QA-02",
+      "category": "Responsiveness",
       "name": "VIA Direct Voice Response Responsiveness",
       "qc": ["QC-01"],
       "metric": "worst_case_case_p95_direct_voice_response_ms",
@@ -21,20 +40,68 @@
     },
     {
       "id": "QA-03",
+      "category": "Responsiveness",
       "name": "Agent Progress Voice Feedback Responsiveness",
       "qc": ["QC-01"],
       "metric": "worst_case_case_p95_status_to_voice_ms",
       "draft_target": {"operator": "<=", "value": 1000, "unit": "ms"}
     },
     {
-      "id": "QA-05",
+      "id": "QA-04",
+      "category": "Responsiveness",
+      "name": "Voice Interruption Responsiveness",
+      "qc": ["QC-01"],
+      "metric": "worst_case_case_p95_barge_in_to_audio_stop_ms",
+      "draft_target": null
+    },
+    {
+      "id": "QA-11",
+      "category": "Correctness & Continuity",
       "name": "VIA Request Handling Correctness",
       "qc": ["QC-02", "QC-03"],
       "metric": "correct_machine_oracle_runs_pct",
-      "draft_target": {"operator": ">=", "value": 95, "unit": "percent"}
+      "draft_target": {"operator": ">=", "value": 95, "unit": "percent"},
+      "relationship": "INTEGRATED_OUTCOME_NOT_ADDITIVE_WITH_QA_12_TO_QA_15"
     },
     {
-      "id": "QA-07",
+      "id": "QA-12",
+      "category": "Correctness & Continuity",
+      "name": "Request Semantic Resolution Correctness",
+      "qc": ["QC-02"],
+      "metric": "strict_semantic_resolution_pass_rate_pct",
+      "draft_target": null,
+      "diagnostic_of": "QA-11"
+    },
+    {
+      "id": "QA-13",
+      "category": "Correctness & Continuity",
+      "name": "Task & Interaction Binding Correctness",
+      "qc": ["QC-02", "QC-03"],
+      "metric": "strict_interaction_binding_pass_rate_pct",
+      "draft_target": null,
+      "diagnostic_of": "QA-11"
+    },
+    {
+      "id": "QA-14",
+      "category": "Correctness & Continuity",
+      "name": "Async Task State Convergence Correctness",
+      "qc": ["QC-03", "QC-08"],
+      "metric": "strict_async_state_convergence_pass_rate_pct",
+      "draft_target": null,
+      "diagnostic_of": "QA-11"
+    },
+    {
+      "id": "QA-15",
+      "category": "Correctness & Continuity",
+      "name": "Interaction & Task Continuity Correctness",
+      "qc": ["QC-03"],
+      "metric": "strict_continuity_scenario_pass_rate_pct",
+      "draft_target": null,
+      "diagnostic_of": "QA-11"
+    },
+    {
+      "id": "QA-21",
+      "category": "Modifiability",
       "name": "Agent Change Locality",
       "qc": ["QC-04"],
       "metric": "mean_changed_architecture_elements_per_agent_change",
@@ -42,7 +109,8 @@
       "draft_target": {"operator": "<=", "value": 2, "unit": "architecture_elements"}
     },
     {
-      "id": "QA-08",
+      "id": "QA-22",
+      "category": "Modifiability",
       "name": "Model & Context Change Locality",
       "qc": ["QC-05"],
       "metric": "mean_changed_architecture_elements_per_non_agent_change",
@@ -50,24 +118,49 @@
       "draft_target": {"operator": "<=", "value": 3, "unit": "architecture_elements"}
     },
     {
-      "id": "QA-09",
+      "id": "QA-31",
+      "category": "Reliability & Availability",
       "name": "Correct Task Recovery Time",
       "qc": ["QC-03", "QC-08"],
       "metric": "worst_fault_stratum_p95_full_task_recovery_ms",
       "draft_target": {"operator": "<=", "value": 5000, "unit": "ms"}
     },
     {
-      "id": "QA-11",
+      "id": "QA-32",
+      "category": "Reliability & Availability",
+      "name": "Fault Blast Radius",
+      "qc": ["QC-08"],
+      "metric": "worst_fault_excess_affected_user_visible_units",
+      "draft_target": null
+    },
+    {
+      "id": "QA-41",
+      "category": "Resource Efficiency",
+      "name": "Target Device Memory Footprint",
+      "qc": ["QC-06"],
+      "metric": "worst_workload_stratum_p95_peak_committed_memory_bytes",
+      "draft_target": null
+    },
+    {
+      "id": "QA-51",
+      "category": "Privacy & Security",
       "name": "Protected Data Exposure Minimization",
       "qc": ["QC-09"],
       "metric": "whole_workload_union_excess_exposed_protected_units",
       "draft_target": {"operator": "=", "value": 0, "unit": "protected_information_units"}
     }
   ],
-  "retired_draft_ids": [
-    {"id": "QA-04", "disposition": "WORKLOAD_CONDITION", "current_location": ["QA-01", "QA-02", "QA-03", "QA-05", "QA-09"]},
-    {"id": "QA-06", "disposition": "MERGED", "current_location": ["QA-05", "QA-09"]},
-    {"id": "QA-10", "disposition": "MERGED_AS_SECONDARY_TRACE", "current_location": ["QA-09"]},
-    {"id": "QA-12", "disposition": "MANDATORY_REGRESSION", "current_location": ["QC-09"]}
+  "legacy_id_migration": [
+    {"old_id": "QA-05", "new_id": "QA-11", "meaning": "VIA request handling integrated outcome"},
+    {"old_id": "QA-07", "new_id": "QA-21", "meaning": "Agent change locality"},
+    {"old_id": "QA-08", "new_id": "QA-22", "meaning": "Model & Context change locality"},
+    {"old_id": "QA-09", "new_id": "QA-31", "meaning": "Correct Task recovery time"},
+    {"old_id": "QA-11", "new_id": "QA-51", "meaning": "Protected data exposure minimization"}
+  ],
+  "legacy_retired_definitions": [
+    {"old_id": "QA-04", "meaning": "Concurrent Task Performance Isolation", "disposition": "WORKLOAD_CONDITION"},
+    {"old_id": "QA-06", "meaning": "Interaction & Task Continuity", "disposition": "REPLACED_BY_NEW_QA_15_AND_QA_31"},
+    {"old_id": "QA-10", "meaning": "Dependency Failure Containment", "disposition": "REPLACED_BY_NEW_QA_32"},
+    {"old_id": "QA-12", "meaning": "Action & Access Safety", "disposition": "MANDATORY_ZERO_VIOLATION_GATE"}
   ]
 }

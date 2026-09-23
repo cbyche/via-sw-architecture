@@ -1,6 +1,6 @@
 # Measurement Event & Boundary Contract
 
-> 상태: **QA-01~QA-03 EVENT CONTRACT DRAFT / machine freeze 전**
+> 상태: **QA-01~QA-04 EVENT CONTRACT DRAFT / machine freeze 전**
 >
 > 목적: 모든 QA metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
 >
@@ -73,7 +73,23 @@ downstream Agent를 사용하지 않는 유효한 direct response의 의미 있�
 
 유효한 Agent status의 의미 있는 첫 audio sample이 실제 재생되기 시작한 시점이다. primary reference stratum은 사용자가 발화 중이지 않고 audio lane이 비어 있는 조건을 고정한다. 사용자 발화·우선순위 정책 때문에 의도적으로 보류된 시간은 별도 policy stratum으로 기록한다.
 
-## 3. QA-01~QA-03 formula
+### `barge_in_speech_onset`
+
+VIA가 Voice Response를 재생하는 동안 사용자의 새 발화가 microphone capture timeline에서 실제 시작된 acoustic 시점이다.
+
+- VAD/activity detector가 speech를 선언한 시각이 아니다.
+- 새 발화의 transcript 또는 semantic intent가 확정된 시각이 아니다.
+- fixture audio에는 onset frame을 사전 annotation하고 capture monotonic clock에 연결한다.
+
+### `interrupted_response_last_audible_sample`
+
+중단 대상 Voice Response의 마지막 audio sample이 사용자의 실제 출력 경로에서 재생된 시점이다.
+
+- cancellation API return, generation stream close, queue clear 또는 renderer callback만으로 대체하지 않는다.
+- 제품 evidence는 audio loopback에서 중단 대상 waveform의 끝을 관측한다.
+- reference harness proxy를 사용하면 실제 speaker stop이라고 주장하지 않는다.
+
+## 3. QA-01~QA-04 formula
 
 ### QA-01 — Delegated Path VIA Responsiveness
 
@@ -112,26 +128,37 @@ QA-03 sample = t1 - t0
 
 Agent가 status를 만들기 전 시간은 제외한다. source availability 이후 VIA가 이를 발견하고 사용자에게 들려주기까지의 모든 비용은 포함한다.
 
+### QA-04 — Voice Interruption Responsiveness
+
+```text
+t0 = barge_in_speech_onset
+t1 = interrupted_response_last_audible_sample
+
+QA-04 sample = t1 - t0
+```
+
+activity detection, interruption routing, generation cancellation, playback queue/buffer 폐기와 device stop을 포함한다. 새 User Turn의 semantic 처리와 새 응답 생성은 종료점 뒤의 별도 경로다. Voice interruption을 Agent Task cancel 완료로 해석하지 않는다.
+
 ## 4. Component participation
 
-| 경로 | QA-01 | QA-02 | QA-03 |
-|---|---|---|---|
-| acoustic input end 이후 VAD/turn detection | 포함 | 포함 | 해당 없음 |
-| Speech recognition/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 |
-| Conversation/Context materialization | 실제 경로면 포함 | 실제 경로면 포함 | status composition에 필요하면 포함 |
-| IR/VIA LLM | 위임·결과 composition에 필요하면 포함 | 실제 direct route에 필요하면 포함 | status composition에 필요하면 포함 |
-| Task state/correlation | 포함 | 실제 direct route에 필요할 때만 포함 | 포함 |
-| Agent contract normalization | outbound와 inbound 모두 포함 | Agent가 없으므로 원칙상 해당 없음 | inbound 포함 |
-| EXEC queue/IPC/RPC/network | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 |
-| downstream Agent 내부 실행 | 제외 | 해당 없음 | status 생성 전은 제외 |
-| validation/policy/repair | 포함 | 포함 | 포함 |
-| speech generation/playback/device | 포함 | 포함 | 포함 |
+| 경로 | QA-01 | QA-02 | QA-03 | QA-04 |
+|---|---|---|---|---|
+| acoustic input end 이후 VAD/turn detection | 포함 | 포함 | 해당 없음 | barge-in activity detection 포함 |
+| Speech recognition/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 | 새 응답 의미 확정은 제외 |
+| Conversation/Context materialization | 실제 경로면 포함 | 실제 경로면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 |
+| IR/VIA LLM | 위임·결과 composition에 필요하면 포함 | 실제 direct route에 필요하면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 |
+| Task state/correlation | 포함 | 실제 direct route에 필요할 때만 포함 | 포함 | Agent Task cancel은 해당 없음 |
+| Agent contract normalization | outbound와 inbound 모두 포함 | Agent가 없으므로 원칙상 해당 없음 | inbound 포함 | 해당 없음 |
+| EXEC queue/IPC/RPC/network | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | interruption signal 경로면 포함 |
+| downstream Agent 내부 실행 | 제외 | 해당 없음 | status 생성 전은 제외 | 해당 없음 |
+| validation/policy/repair | 포함 | 포함 | 포함 | interruption policy가 critical path면 포함 |
+| speech generation/playback/device | 포함 | 포함 | 포함 | generation cancel과 playback/device stop 포함 |
 
 DP applicability는 DP 이름만으로 정하지 않고 이 실제 component path를 기준으로 고정한다. 어떤 case에서 DP 후보 A/B가 같은 경로를 실행하면 동점 또는 non-applicable로 기록하며 임의 지연을 추가하지 않는다.
 
 ## 5. 모든 QA가 갖춰야 할 measurement card
 
-QA-05/07/08/09/11을 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
+QA-11~15/21/22/31/32/41/51을 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
 
 1. 사용자·외부 source·fault 등 실제 stimulus event
 2. 사용자 또는 system 관점의 terminal observable

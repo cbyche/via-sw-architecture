@@ -2,6 +2,8 @@
 
 이 디렉터리는 VIA의 구조 질문을 Decision Point로 만들고, 각 DP의 합리적인 A/B 대안을 직접 비교해 선택과 약점을 설명한다.
 
+새로운 Decision Point를 처음부터 도출할 때 사용할 시스템 이해 검토 기록은 [VIA System Understanding Review](./system-understanding-review.md)에 있다. 이 기록은 비규범 분석 입력이며 기존 DP나 ADR을 정답으로 전제하지 않는다.
+
 ## Decision method
 
 1. 하나의 DP가 바꾸는 authority, state ownership, contract, call graph 또는 fault boundary를 명시한다.
@@ -25,4 +27,4 @@
 
 ## What is not current evidence
 
-이전 full-factorial result와 W12-G1 mapping은 [archive](../../archive/w12-g1/README.md)에 있다. 새 QA-01~QA-03 endpoint에 맞춘 직접 A/B 결과가 아니므로 현재 Voice 근거로 재사용하지 않는다. 새 결과가 없으면 `NOT_RUN`으로 남긴다.
+이전 full-factorial result와 W12-G1 mapping은 [archive](../../archive/w12-g1/README.md)에 있다. 현행 QA catalog에 맞춘 직접 A/B 결과가 아니므로 현재 근거로 재사용하지 않는다. 새 결과가 없으면 `NOT_RUN`으로 남긴다.

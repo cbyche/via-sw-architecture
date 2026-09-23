@@ -42,11 +42,11 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 - The active Architecture baseline is `docs/architecture/`.
 - Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
-- QC-01~QC-10 are top-level quality concerns. The QA catalog is an unapproved user-review draft; its active draft IDs are QA-01/02/03/05/07/08/09/11. Do not fill the gaps, renumber them, or describe the catalog as final.
-- QA-04/06/10/12 are retired draft definitions preserved in `docs/archive/qa-catalog-draft-v1/`, not current measurable attributes. Their concerns are either folded into another QA, treated as a workload/diagnostic condition, or retained as a mandatory regression.
+- QC-01~QC-10 are top-level quality concerns. The QA catalog is a user-review draft organized by category ranges. Active draft IDs are QA-01/02/03/04, QA-11/12/13/14/15, QA-21/22, QA-31/32, QA-41, and QA-51. The one-time category renumbering is complete; preserve gaps and do not describe the catalog as final.
+- The previous-generation QA-04/06/10/12 definitions are preserved only in `docs/archive/qa-catalog-draft-v1/`. Current QA-04 and QA-12 are new category-range definitions. Never mix the archived meanings with the active IDs.
 - No ASR is confirmed yet. ASR is a classification applied to an existing QA after architectural impact is established, not a separate numbered series.
-- QA-01, QA-02, and QA-03 are Voice-in/Voice-out draft metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
-- QA-05 uses pre-approved machine-readable semantic oracles, not per-run human free-text scoring. QA-07/08 count frozen Architecture Elements. QA-09 measures correct recovery time. QA-11 counts excess protected-information exposure.
+- QA-01~QA-04 are Voice responsiveness drafts defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
+- QA-11 is the integrated request-handling outcome; QA-12~QA-15 are non-additive correctness/continuity drivers using pre-approved machine-readable predicates. QA-21/22 count frozen Architecture Elements. QA-31 measures correct recovery time, QA-32 measures excess fault blast radius, QA-41 measures target-device peak committed memory, and QA-51 counts excess protected-information exposure.
 - Their semantic and event-boundary document drafts exist, but the machine-readable contract, harness, target, score bands, and current results are not yet implemented or run.
 - Existing predecessor implementation and results under the `w12-g1` archive are historical/superseded. `Gate 1` and `Gate 2` are not active lifecycle names.
 - Current accepted decisions have caveats: AGENT-DP01=A, TASK-DP01=B, EXEC-DP01=B; IR-DP01 is deferred with A only as an interim reference. Read the ADRs before describing them.
@@ -92,13 +92,14 @@ Use exact evidence labels and state limitations near the claim.
 
 Do not call mock/reference evidence `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or target-device production latency.
 
-For QA-01~QA-03 specifically:
+For QA-01~QA-04 specifically:
 
 - Use Voice input and audible Voice output as the primary path.
 - The endpoint is first meaningful audible audio onset, not payload delivery to an instrumented sink; silence, earcons, filler, and generic acknowledgements do not end the metric.
 - QA-01 excludes Downstream Agent queue/execution/completion time but preserves full user wall-clock as secondary evidence.
 - QA-02 contains no Downstream Agent execution.
 - QA-03 starts when a valid Agent status is available at its source.
+- QA-04 starts at actual acoustic barge-in onset and ends at the interrupted response's last audible sample. It is not Agent Task cancellation latency.
 - Qwen3-Omni 234 ms is a theoretical first-audio-packet reference under published conditions. It is not a QA start point, generic TTS latency, or actual VIA measurement. Use it only as a frozen scheduled dependency span when the contract permits.
 - VIA LLM token-rate planning must freeze serialized prompts, tokenizer, input/output token counts, dependency graph, and rate profile. Label the result as an estimate, not measured wall-clock.
 - Keep network, IPC, validation, Context access, speech generation, playback queue, audio buffer, and device onset as separate spans rather than hiding them in model time.

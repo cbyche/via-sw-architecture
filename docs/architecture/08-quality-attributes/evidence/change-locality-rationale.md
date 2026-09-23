@@ -1,11 +1,11 @@
-# QA-07/QA-08 Change Locality Contract Rationale
+# QA-21/QA-22 Change Locality Contract Rationale
 
 > 작성일: 2026-09-23
 > 상태: **USER REVIEW DRAFT** — target, score band, change pack 모두 결과 전 승인 대상이다.
 
 ## 1. 왜 이 두 QA를 유지하는가
 
-Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-07/08은 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.
+Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-21/22는 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.
 
 ISO/IEC 25010의 modularity/modifiability와 SEI의 modifiability tactics는 변경 국소화와 ripple-effect 제한의 중요성을 뒷받침하지만, VIA용 숫자 target을 제공하지는 않는다. 따라서 `2개`와 `3개`는 표준값이 아니라 아래 고정 change pack과 VIA 책임 경계에서 도출한 초안 budget이다.
 
@@ -25,9 +25,9 @@ Architecture Element는 파일·클래스·함수·diagram box가 아니다. 다
 
 후보별 전수 element ledger를 결과 전에 동결한다. 같은 의미를 파일 여러 개로 나눠도 하나이고, 부모 요약과 자식을 중복 계산하지 않는다. 설정값·rename·rebuild만 바뀌면 0개다. 상세 등록·중복 금지·수정/추가/제거 규칙은 [Architecture Element Definition](../../10-element-definition.md)이 유일한 기준이다.
 
-## 3. QA-07 Agent change pack
+## 3. QA-21 Agent change pack
 
-QA-07은 다음 **9개를 모두** 같은 후보 baseline에 독립 적용한다.
+QA-21은 다음 **9개를 모두** 같은 후보 baseline에 독립 적용한다.
 
 | ID | 변화 |
 | --- | --- |
@@ -42,15 +42,15 @@ QA-07은 다음 **9개를 모두** 같은 후보 baseline에 독립 적용한다
 | A-09 | 결과물 전달 계약 변경 |
 
 ```text
-QA-07 = mean N(A-01...A-09)
+QA-21 = mean N(A-01...A-09)
 draft target = 평균 2.0개 이하
 ```
 
 0은 기존 계약 안의 configuration/registration, 1은 한 adapter/binding에 국소화, 2는 adapter와 실제로 필요한 공통 contract/registry 한 요소의 변화로 해석할 수 있다. 3개 이상이 반복되면 Agent 변화가 integration seam을 넘어 Core responsibility/state로 퍼지는지 검토한다.
 
-## 4. QA-08 Model·Context·state change pack
+## 4. QA-22 Model·Context·state change pack
 
-QA-08은 다음 **15개를 모두** 같은 후보 baseline에 독립 적용한다.
+QA-22는 다음 **15개를 모두** 같은 후보 baseline에 독립 적용한다.
 
 | ID | 변화 | ID | 변화 |
 | --- | --- | --- | --- |
@@ -64,17 +64,17 @@ QA-08은 다음 **15개를 모두** 같은 후보 baseline에 독립 적용한�
 | C-06 | 대화·업무 기록 형식 변경 |  |  |
 
 ```text
-QA-08 = mean N(M-01...M-09, C-01...C-06)
+QA-22 = mean N(M-01...M-09, C-01...C-06)
 draft target = 평균 3.0개 이하
 ```
 
-일반 provider 변화는 0~2개에 국소화할 수 있지만 persistent-state evolution은 schema, repository behavior와 migration responsibility를 정당하게 함께 바꿀 수 있다. 따라서 QA-08의 draft budget이 QA-07보다 한 요소 넓다.
+일반 provider 변화는 0~2개에 국소화할 수 있지만 persistent-state evolution은 schema, repository behavior와 migration responsibility를 정당하게 함께 바꿀 수 있다. 따라서 QA-22의 draft budget이 QA-21보다 한 요소 넓다.
 
 각 change의 정확한 before/after, 동일 조건과 완료 확인은 [Intentional Variables](../../07-intentional-variables.md)가 기준이다. 제목만 보고 fixture를 축약하지 않는다.
 
 ## 5. DP별 applicability 판정
 
-QA-07/08을 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완성된 뒤 각 `DP × change`에 대해 아래 중 하나를 **결과 전에** 기록한다.
+QA-21/22를 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완성된 뒤 각 `DP × change`에 대해 아래 중 하나를 **결과 전에** 기록한다.
 
 | 값 | 의미 |
 | --- | --- |
@@ -83,7 +83,7 @@ QA-07/08을 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완�
 | `NOT_APPLICABLE` | 변화 대상 자체가 후보에 없으며 이유를 설명할 수 있음. 0으로 평균에 넣지 않음 |
 | `UNRESOLVED` | 필수 기능을 유지할 변경 설계를 만들지 못함. 0으로 처리하지 않음 |
 
-Primary expectation은 Agent boundary를 바꾸는 DP에 QA-07, semantic/model/context/state boundary를 바꾸는 DP에 QA-08이지만, 이름만으로 결정하지 않고 실제 responsibility·contract·state·deployment 차이를 확인한다.
+Primary expectation은 Agent boundary를 바꾸는 DP에 QA-21, semantic/model/context/state boundary를 바꾸는 DP에 QA-22이지만, 이름만으로 결정하지 않고 실제 responsibility·contract·state·deployment 차이를 확인한다.
 
 ## 6. 결과가 나오기 전에 잠글 것
 

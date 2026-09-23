@@ -15,7 +15,7 @@
 | 주 검증 목적, 함께 유지할 품질, 필요한 증거 | 실제 녹음·화면·정답 제작, 반복 횟수·배합·목표·0~5점 구간 동결 |
 | QC 사이의 겹침을 구분하는 판정 관점 | Architecture 후보 설계·우열·주요 DP 선정 |
 
-**아래 7개 QC는 현재 QA catalog의 상위 coverage 분류다.** 표의 연결 수는 중요도 점수나 평가 가중치가 아니다. 이 문서만으로 특정 DP가 해당 QA를 개선하거나 해당 QA가 ASR이라고 주장하지 않는다.
+**아래 10개 QC는 현재 QA catalog의 상위 coverage 분류다.** 표의 연결 수는 중요도 점수나 평가 가중치가 아니다. 이 문서만으로 특정 DP가 해당 QA를 개선하거나 해당 QA가 ASR이라고 주장하지 않는다.
 
 ```mermaid
 flowchart LR
@@ -38,20 +38,20 @@ flowchart LR
 
 | QC | 상위 품질 관심사 | 구체화된 현재 QA | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-03; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행의 Voice 반응성과 동시 업무 조건 |
-| **QC-02** | **Task Completion Effectiveness** | QA-05 | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
-| **QC-03** | **Interaction & Task Continuity** | 정상 조건은 QA-05 assertion; 장애 후는 QA-09 | 대화·채널·직접/위임 경로·업무 전환 후 맥락과 identity가 이어지는가 |
-| **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | QA-07 | **A-01~09 전체 9개** |
-| **QC-05** | **Evolvability & Maintainability** | QA-08 | **M-01~09 + C-01~06 전체 15개** |
-| **QC-06** | **Resource & Deployment Efficiency** | 독립 QA 없음 | 고정 환경·제약 및 secondary resource trace |
-| **QC-07** | **Concurrency & Capacity** | 독립 QA 없음 | QA-01~03·05·09의 workload stratum |
-| **QC-08** | **Reliability & Recoverability** | QA-09 | 비동기 이벤트·취소·부분 실패·재시작 뒤 정확한 복구 시간; blast radius는 secondary trace |
-| **QC-09** | **Privacy, Security & Action Safety** | QA-11 + 필수 action/access 회귀 | 최소 필요 범위를 넘은 보호정보 노출과 승인·접근 위반 0건 |
+| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-04; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행·Voice 중단의 반응성과 동시 업무 조건 |
+| **QC-02** | **Task Completion Effectiveness** | QA-11~QA-13 | 통합 요청 처리, 의미 해석, 올바른 Task·Interaction 연결 |
+| **QC-03** | **Interaction & Task Continuity** | QA-14/15; 장애 후는 QA-31 | 비동기 상태 수렴과 정상 전환·재연결 뒤 continuity |
+| **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | QA-21 | **A-01~09 전체 9개** |
+| **QC-05** | **Evolvability & Maintainability** | QA-22 | **M-01~09 + C-01~06 전체 15개** |
+| **QC-06** | **Resource & Deployment Efficiency** | QA-41 | target-device peak committed memory; deployment 조건은 고정 workload/context |
+| **QC-07** | **Concurrency & Capacity** | 독립 QA 없음 | applicable QA의 workload stratum |
+| **QC-08** | **Reliability & Recoverability** | QA-31/32 | 정확한 복구 시간과 초과 영향 user-visible unit 수 |
+| **QC-09** | **Privacy, Security & Action Safety** | QA-51 + 필수 action/access 회귀 | 최소 필요 범위를 넘은 보호정보 노출과 승인·접근 위반 0건 |
 | **QC-10** | **Observability & Evidence Integrity** | 독립 QA 없음 | 모든 QA trace의 필수 증거 조건 |
 
-QC-02에서 구체화된 QA-05가 Task Completion이라고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
+QC-02에서 구체화된 QA-11~13이 Task Completion과 관련된다고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
 
-QC-02·QC-03의 정상 동작은 QA-05에서 함께 다룬다. 실행 중 사람이 자연어 답을 점수화하지 않고, TC별로 사전 승인한 exact/set/relation/proposition/clarification/binding predicate를 자동 판정한다. strict TC PASS는 모든 해당 predicate가 충족되었는지를 보여주는 secondary evidence다.
+QA-11은 전체 요청 처리의 integrated outcome이고 QA-12~15는 semantic, binding, async convergence, normal continuity를 각각 한 metric으로 분리한 driver다. 실행 중 사람이 자연어 답을 점수화하지 않고, TC별로 사전 승인한 machine-readable predicate를 자동 판정한다. 이 다섯 QA를 weighted total에 독립 표처럼 중복 가중하지 않는다.
 
 ## 9.3 연결표를 읽는 규칙
 
@@ -79,7 +79,7 @@ QC-02·QC-03의 정상 동작은 QA-05에서 함께 다룬다. 실행 중 사람
 | **UC-08 / .1~.5** | 새 업무를 Agent에 위임 | **QC-02:** 목표·제약·capability·결과 연결 | QC-01 VIA 구간; QC-08 접수/완료 구분; QC-09 허용 범위 |
 | **UC-09 / .1~.5** | 복합 요청 | **QC-02:** 누락 없는 요청과 독립·순차·의존·조건 관계 | QC-03 기존 업무 혼합; QC-08 부분 실패; QC-09 변경 업무 승인 |
 | **UC-10 / .1~.5** | 기존 업무 조회·추가·수정 | **QC-03:** 동일 목표·결과물의 연결. **QC-02:** 현재 지시의 의미 | QC-08 근거 있는 상태·실행 연결; QC-01 응답 지연 |
-| **UC-11 / .1~.5** | 음성 중단과 정정 | **QC-02:** 정정된 요청 해석 | QC-03 이전 맥락; QC-08 중단한 음성 재출력·업무 자동 취소 방지; audio-stop latency는 secondary/regression observation이며 QA-01~QA-03 대표값에서 제외 |
+| **UC-11 / .1~.5** | 음성 중단과 정정 | **QC-01:** 사용자 barge-in 뒤 출력 음성 정지. **QC-02:** 정정된 요청 해석 | QA-04는 acoustic onset→last audible sample; QC-03 이전 맥락; QC-08 업무 자동 취소 방지 |
 | **UC-12 / .1~.5** | 특정 업무 취소 | **QC-08:** 취소 접수·종료·이미 완료·미확인 구분 | QC-02 의도한 대상; QC-03 Task 유지; QC-01 VIA의 제어 전달 구간 |
 | **UC-13 / .1~.6** | 비동기 진행·결과·알림 | **QC-08:** 이벤트의 업무 연결과 확인된 상태. **QC-03:** 대화가 바뀌어도 결과 연결 | QC-01 결과 전달; QC-02 결과 의미·Voice/Text 일치; QC-09 질문/승인 |
 | **UC-14 / .1~.5** | 여러 업무 번갈아 관리 | **QC-03:** 업무 전환 후 맥락. **QC-08:** 교차 이벤트·대기·독립 업무 처리 | QC-02 복합 지시 대상; QC-01 간섭; QC-09 여러 대기 승인 |
@@ -104,21 +104,21 @@ QC-04·QC-05가 이 표의 주 검증에 없는 것은 누락이 아니다. **�
 
 기능 분리 진단에서 고정 입력을 제공했다면 그 입력과 목적을 명시한다. 시험기가 정답 Task ID나 사라진 history를 제공한 진단 결과를 실제 의미 정확도·복구 성공률로 대체하지 않는다.
 
-### QA-01~QA-03의 시간선
+### QA-01~QA-04의 시간선
 
-QC-01의 responsiveness concern은 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback으로 분리한다. 세 QA를 서로 평균내지 않으며 각 QA 안에서도 서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다. 세부 경계와 집계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md)를 따른다.
+QC-01의 responsiveness concern은 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback, QA-04 Voice interruption으로 분리한다. 네 QA를 서로 평균내지 않으며 각 QA 안에서도 서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다. 세부 경계와 집계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md)를 따른다.
 
 위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent의 open-ended domain research/planning/tool execution과 사용자 확인 대기를 따로 기록한다. 단, bounded Read/Search/Understand 작업을 Architecture 선택으로 Agent에 옮긴 경우에는 단순히 프로세스 위치가 Agent라는 이유로 그 시간을 제외하지 않는다.
 
-Voice interruption의 새 발화 시작→audio stop은 UC-11의 secondary/regression observation으로 raw latency를 보존하지만 QA-01~QA-03 대표 모집단과 점수에는 포함하지 않는다.
+Voice interruption은 QA-04의 독립 metric이다. 실제 barge-in acoustic onset부터 중단 대상의 마지막 meaningful audible sample까지 측정하며 QA-01~03 모집단과 합치지 않는다.
 
 VIA가 쓰는 모델·Context 조회는 원격이어도 VIA 의존 구간이다. 같은 설명 작업을 Agent로 옮겨 그 시간을 제외했다고 사용자 전체 대기가 줄었다고 주장하지 않는다. 06 FA-12의 경계와 별도 전체 경로 분석 규칙을 유지한다.
 
 ### 성공·보류·안전성
 
-QA-05에서는 올바른 확인 질문을 했다는 사실만으로 원래 업무를 성공 완료로 세지 않는다. 고정 대화에서 필요한 확인을 마치고 완료 조건을 충족했는지와, 확인이 계속 필요한 적절한 보류를 구분한다. 실패·미응답을 분모에서 사후 삭제하지 않는다.
+QA-11에서는 올바른 확인 질문을 했다는 사실만으로 원래 업무를 성공 완료로 세지 않는다. 고정 대화에서 필요한 확인을 마치고 완료 조건을 충족했는지와, 확인이 계속 필요한 적절한 보류를 구분한다. 실패·미응답을 분모에서 사후 삭제하지 않는다.
 
-QC-08의 “외부 상태 확인 불가를 정직하게 알림”은 그 실패 조건의 올바른 처리이다. **복구 가능한 조건에서 실제 업무를 재연결해야 한다는 FA-14 요구와 QA-09 recovery 판정을 대신하지 않는다.**
+QC-08의 “외부 상태 확인 불가를 정직하게 알림”은 그 실패 조건의 올바른 처리이다. **복구 가능한 조건에서 실제 업무를 재연결해야 한다는 FA-14 요구와 QA-31 recovery 판정을 대신하지 않는다.**
 
 Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는다. 모든 요청을 차단한 구조도 사용자 UC를 충족하지 못하므로 적합한 후보가 아니다. 이 회귀는 독립 QA 점수가 아니라 stale/wrong-target/revoked approval 위반 0건이라는 공통 적합성 조건이다.
 
@@ -155,11 +155,11 @@ Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는
 
 ### 집계 소유권과 중복 방지
 
-- A-01~09의 변경 요소 수는 **QA-07에 한 번** 반영한다. 인증·상태 변경이라는 이유로 QA-08에도 가산하지 않는다.
-- M-01~09와 C-01~06은 **QA-08의 15개 집합 전체**이다. M-03·C-02 등을 대표값에서 임의로 제외하지 않는다. M/C별 상세 결과는 원인 설명을 위해 함께 보존한다.
+- A-01~09의 변경 요소 수는 **QA-21에 한 번** 반영한다. 인증·상태 변경이라는 이유로 QA-22에도 가산하지 않는다.
+- M-01~09와 C-01~06은 **QA-22의 15개 집합 전체**이다. M-03·C-02 등을 대표값에서 임의로 제외하지 않는다. M/C별 상세 결과는 원인 설명을 위해 함께 보존한다.
 - 한 변경으로 여러 요소가 바뀌어도 10의 동일 ID 집계 규칙을 적용한다. 다른 변경에서 같은 요소를 다시 수정하면 그 별도 변경에도 셀 수 있다. 변경별 독립 시나리오이기 때문이다.
 - 적용 없음·처리 불가·미측정은 0이 아니다. 모든 24개 항목에 답하되, 비교 가능한 분모와 전체 집합의 충족 여부를 함께 공개한다. 실패한 변경을 빼서 성공한 변경만의 평균으로 전체 우승을 주장하지 않는다.
-- 07은 분야별 원장을 유지하고, QA-07은 Agent 9개, QA-08은 비Agent 15개의 대표 집계를 사용한다. 두 집합을 하나의 평균으로 합치지 않는다.
+- 07은 분야별 원장을 유지하고, QA-21은 Agent 9개, QA-22는 비Agent 15개의 대표 집계를 사용한다. 두 집합을 하나의 평균으로 합치지 않는다.
 
 ## 9.7 이후 평가 기록에 반드시 남길 정보
 
@@ -181,9 +181,9 @@ Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는
 
 | 리뷰 질문 | 승인 결과 |
 | --- | --- |
-| 평가 관련 QC coverage를 유지했는가? | QC 7개와 UC·변경 연결을 유지. 세부 측정은 QA catalog에서 관리 |
+| 평가 관련 QC coverage를 유지했는가? | QC 10개와 UC·변경 연결을 유지. 세부 측정은 QA catalog에서 관리 |
 | UC가 빠졌는가? | 18개와 94개 명시 변형 범위를 연결; 경계 조건은 05에서 상속 |
-| 변경이 빠졌거나 두 대표값에 중복됐는가? | 24개 모두 한 QA에 배정: QA-07 Agent 9 / QA-08 비Agent 15 |
+| 변경이 빠졌거나 두 대표값에 중복됐는가? | 24개 모두 한 QA에 배정: QA-21 Agent 9 / QA-22 비Agent 15 |
 | QC-02/QC-03/QC-08의 관점이 구분되는가? | 현재 요청의 완료 / 전환 후 맥락 / 이벤트·장애 처리로 구분 |
 | 실제 점수까지 확정했는가? | 아니오. 11의 표본·정답·집계·목표·점수는 별도 리뷰 |
 

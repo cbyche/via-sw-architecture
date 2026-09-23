@@ -3,7 +3,7 @@
 > 상태: **USER REVIEW DRAFT / 후보 실행 NOT_RUN**. 기존 기능 fixture를 보존하되 활성 QA의 scoring membership·oracle·반복 수는 재동결 전이다.
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
-> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 새 QA-05 분모가 아니다. QA-01~03 대표 case와 Voice timing event도 아직 이 catalog에 반영되지 않았다. [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)와 [QA-05 oracle](../08-quality-attributes/evidence/qa05-request-handling-oracle.md)을 따라 새 freeze에서 확정한다.
+> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. QA-01~04 대표 case와 Voice timing event도 아직 이 catalog에 반영되지 않았다. [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 새 freeze에서 확정한다.
 > timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
 ## 1. 원자료 구성
@@ -30,113 +30,113 @@ flowchart LR
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-01.1 일반 질문**<br/>TCP와 UDP 차이가 뭐야? | `normal` | TCP/UDP 차이에 대한 응답 1회;  Conversation에 입력·응답 연결<br/>금지: 같은 요청에 S2S/Core 중복 응답 | QA-05 |
-| **TC-01.2 앞 응답 일부**<br/>방금 두 번째 방식은 언제 써? | `normal` | 앞 UDP 설명을 후속 맥락으로 참조<br/>금지: 새 주제로 오인하거나 TCP를 두 번째 설명으로 선택 | QA-05 |
-| **TC-01.3 새 주제**<br/>새 질문인데 피타고라스 정리를 설명해줘 | `normal` | 새 주제 답변;  기존 Task에 잘못 붙이지 않음<br/>금지: T-PPT 수정/취소 | QA-05 |
-| **TC-01.4 Text 일반 질문**<br/>TCP와 UDP 차이가 뭐야? | `text` | Text 답변과 대화 기록;  음성 경로 강제하지 않음<br/>금지: voice inactive인데 새 음성 연결 필수 | QA-05 |
+| **TC-01.1 일반 질문**<br/>TCP와 UDP 차이가 뭐야? | `normal` | TCP/UDP 차이에 대한 응답 1회;  Conversation에 입력·응답 연결<br/>금지: 같은 요청에 S2S/Core 중복 응답 | QA-11 |
+| **TC-01.2 앞 응답 일부**<br/>방금 두 번째 방식은 언제 써? | `normal` | 앞 UDP 설명을 후속 맥락으로 참조<br/>금지: 새 주제로 오인하거나 TCP를 두 번째 설명으로 선택 | QA-11 |
+| **TC-01.3 새 주제**<br/>새 질문인데 피타고라스 정리를 설명해줘 | `normal` | 새 주제 답변;  기존 Task에 잘못 붙이지 않음<br/>금지: T-PPT 수정/취소 | QA-11 |
+| **TC-01.4 Text 일반 질문**<br/>TCP와 UDP 차이가 뭐야? | `text` | Text 답변과 대화 기록;  음성 경로 강제하지 않음<br/>금지: voice inactive인데 새 음성 연결 필수 | QA-11 |
 
 ### UC-02
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-02.1 파일/폴더**<br/>예산안 문서의 결론만 알려줘 | `normal` | doc-budget 결론을 근거로 답변<br/>금지: doc-quote 금액을 결론으로 보고 | QA-05 |
-| **TC-02.2 메일**<br/>지난주 김대리 메일에서 교육 시간을 알려줘 | `normal` | mail-17의 9월23일14시를 식별<br/>금지: 시험 clock 대신 오늘 실제 메일 조회 | QA-05 |
-| **TC-02.3 일정**<br/>오늘 오후 일정을 알려줘 | `normal` | cal-1 팀 회의16~17시;  날짜/시간대 유지<br/>금지: 다른 날짜 일정 혼합 | QA-05 |
-| **TC-02.4 페이지**<br/>이 가격표에 얼마라고 나와? | `page` | page-price 25000원과 기준일 참조<br/>금지: 현재 실제 판매가라고 주장 | QA-05 |
-| **TC-02.5 공개 정보**<br/>지정 환율 자료의 기준 환율 알려줘 | `normal` | public-rate 시험값1300과 출처/시점 전달<br/>금지: 실제 시장 환율로 주장 | QA-05 |
-| **TC-02.6 브라우저 기록**<br/>북마크에 저장한 제품 가격표 찾아줘 | `normal` | bookmark-1의 page-price로 연결<br/>금지: 다른 자료 URL 생성 | QA-05 |
+| **TC-02.1 파일/폴더**<br/>예산안 문서의 결론만 알려줘 | `normal` | doc-budget 결론을 근거로 답변<br/>금지: doc-quote 금액을 결론으로 보고 | QA-11 |
+| **TC-02.2 메일**<br/>지난주 김대리 메일에서 교육 시간을 알려줘 | `normal` | mail-17의 9월23일14시를 식별<br/>금지: 시험 clock 대신 오늘 실제 메일 조회 | QA-11 |
+| **TC-02.3 일정**<br/>오늘 오후 일정을 알려줘 | `normal` | cal-1 팀 회의16~17시;  날짜/시간대 유지<br/>금지: 다른 날짜 일정 혼합 | QA-11 |
+| **TC-02.4 페이지**<br/>이 가격표에 얼마라고 나와? | `page` | page-price 25000원과 기준일 참조<br/>금지: 현재 실제 판매가라고 주장 | QA-11 |
+| **TC-02.5 공개 정보**<br/>지정 환율 자료의 기준 환율 알려줘 | `normal` | public-rate 시험값1300과 출처/시점 전달<br/>금지: 실제 시장 환율로 주장 | QA-11 |
+| **TC-02.6 브라우저 기록**<br/>북마크에 저장한 제품 가격표 찾아줘 | `normal` | bookmark-1의 page-price로 연결<br/>금지: 다른 자료 URL 생성 | QA-11 |
 
 ### UC-03
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-03.1 단일 사전 선택**<br/>이 부분만 설명해줘 | `select_one` | refs={이 부분:para-A@doc-budget}<br/>금지: para-B 선택 | QA-05 |
-| **TC-03.2 복수 사전 선택**<br/>이것들 차이를 정리해줘 | `select_many` | refs={이것들:[chart-A,chart-B]@doc-budget}<br/>금지: 집합 누락/추가 | QA-05 |
-| **TC-03.3 영역 사전 지정**<br/>여기만 요약해줘 | `select_region` | region=[100,100,600,340]@doc-budget,p1<br/>금지: 전체 문서를 맞힌 것으로 처리 | QA-05 |
-| **TC-03.4 분리 영역**<br/>이 둘을 비교해줘 | `select_disjoint` | refs=[para-A,para-B]@doc-budget 각각 유지<br/>금지: 합친 bounding box만 정답 주장 | QA-05 |
-| **TC-03.5 사전 포인터**<br/>여기 표시된 수치 읽어줘 | `point_one` | refs=chart-A@doc-budget; 값100<br/>금지: 이후 포인터의 chart-B 사용 | QA-05 |
-| **TC-03.6 focus/caret**<br/>이 칸에 들어갈 문구를 제안해줘 | `focus` | 입력 대상 edit-title;  제안만 응답<br/>금지: VIA가 앱 입력을 직접 수행 | QA-05 |
+| **TC-03.1 단일 사전 선택**<br/>이 부분만 설명해줘 | `select_one` | refs={이 부분:para-A@doc-budget}<br/>금지: para-B 선택 | QA-11 |
+| **TC-03.2 복수 사전 선택**<br/>이것들 차이를 정리해줘 | `select_many` | refs={이것들:[chart-A,chart-B]@doc-budget}<br/>금지: 집합 누락/추가 | QA-11 |
+| **TC-03.3 영역 사전 지정**<br/>여기만 요약해줘 | `select_region` | region=[100,100,600,340]@doc-budget,p1<br/>금지: 전체 문서를 맞힌 것으로 처리 | QA-11 |
+| **TC-03.4 분리 영역**<br/>이 둘을 비교해줘 | `select_disjoint` | refs=[para-A,para-B]@doc-budget 각각 유지<br/>금지: 합친 bounding box만 정답 주장 | QA-11 |
+| **TC-03.5 사전 포인터**<br/>여기 표시된 수치 읽어줘 | `point_one` | refs=chart-A@doc-budget; 값100<br/>금지: 이후 포인터의 chart-B 사용 | QA-11 |
+| **TC-03.6 focus/caret**<br/>이 칸에 들어갈 문구를 제안해줘 | `focus` | 입력 대상 edit-title;  제안만 응답<br/>금지: VIA가 앱 입력을 직접 수행 | QA-11 |
 
 ### UC-04
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-04.1 단일 실시간 지시**<br/>여기 표시된 값 읽어줘 | `speak_one` | refs=chart-A@doc-budget<br/>금지: 전사 도착 당시 chart-B 채택 | QA-05 |
-| **TC-04.2 복수 순차 지시**<br/>여기와 여기의 차이를 설명해줘 | `speak_two` | 첫 여기=chart-A; 두 번째 여기=chart-B<br/>금지: 두 지칭 모두 마지막 포인터 | QA-05 |
-| **TC-04.3 원형 표시**<br/>이것들 공통점 알려줘 | `circle` | refs={table-A,table-B} 집합<br/>금지: 우연한 이전 이동 경로를 그룹으로 추가 | QA-05 |
-| **TC-04.4 말하며 drag**<br/>이 문장들만 요약해줘 | `drag` | selection=para-A 범위<br/>금지: drag 시작점만 대상 처리 | QA-05 |
-| **TC-04.5 집합+단일**<br/>이 표들은 두고 이 문단만 고쳐줘 | `mixed` | 보존={table-A,table-B}; 수정=para-B<br/>금지: 보존대상도 수정 | QA-05 |
-| **TC-04.6 대상 정정**<br/>이 부분 아니 여기만 설명해줘 | `correct_point` | 철회=para-A; 유효=para-B<br/>금지: 철회대상으로 최종 업무 | QA-05 |
-| **TC-04.7 창 전환**<br/>이 부분과 저 문서의 이 부분 비교해줘 | `two_windows` | 첫=para-A@doc-budget; 둘째=quote-body@doc-quote<br/>금지: 동일 좌표를 동일 문서로 합침 | QA-05 |
+| **TC-04.1 단일 실시간 지시**<br/>여기 표시된 값 읽어줘 | `speak_one` | refs=chart-A@doc-budget<br/>금지: 전사 도착 당시 chart-B 채택 | QA-11 |
+| **TC-04.2 복수 순차 지시**<br/>여기와 여기의 차이를 설명해줘 | `speak_two` | 첫 여기=chart-A; 두 번째 여기=chart-B<br/>금지: 두 지칭 모두 마지막 포인터 | QA-11 |
+| **TC-04.3 원형 표시**<br/>이것들 공통점 알려줘 | `circle` | refs={table-A,table-B} 집합<br/>금지: 우연한 이전 이동 경로를 그룹으로 추가 | QA-11 |
+| **TC-04.4 말하며 drag**<br/>이 문장들만 요약해줘 | `drag` | selection=para-A 범위<br/>금지: drag 시작점만 대상 처리 | QA-11 |
+| **TC-04.5 집합+단일**<br/>이 표들은 두고 이 문단만 고쳐줘 | `mixed` | 보존={table-A,table-B}; 수정=para-B<br/>금지: 보존대상도 수정 | QA-11 |
+| **TC-04.6 대상 정정**<br/>이 부분 아니 여기만 설명해줘 | `correct_point` | 철회=para-A; 유효=para-B<br/>금지: 철회대상으로 최종 업무 | QA-11 |
+| **TC-04.7 창 전환**<br/>이 부분과 저 문서의 이 부분 비교해줘 | `two_windows` | 첫=para-A@doc-budget; 둘째=quote-body@doc-quote<br/>금지: 동일 좌표를 동일 문서로 합침 | QA-11 |
 
 ### UC-05
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-05.1 background**<br/>다른 창에 열어둔 견적서 핵심 알려줘 | `normal` | doc-quote 금액500만원/유효기간 참조<br/>금지: doc-budget로 대체 | QA-05 |
-| **TC-05.2 닫힌 자료**<br/>지난주 김대리 교육 메일 찾아줘 | `normal` | 검색으로 mail-17 식별<br/>금지: foreground에 보였다고 주장 | QA-05 |
-| **TC-05.3 과거 설명**<br/>아까 설명한 두 번째 방식을 다시 알려줘 | `normal` | 이전 UDP 응답 맥락 참조<br/>금지: 사라진 history를 시험기가 주입 | QA-05 |
-| **TC-05.4 업무 결과물**<br/>아까 만든 발표자료 보여줘 | `completed` | T-PPT의 art-PPT 참조를 반환<br/>금지: 미생성 URL 발명 | QA-05 |
+| **TC-05.1 background**<br/>다른 창에 열어둔 견적서 핵심 알려줘 | `normal` | doc-quote 금액500만원/유효기간 참조<br/>금지: doc-budget로 대체 | QA-11 |
+| **TC-05.2 닫힌 자료**<br/>지난주 김대리 교육 메일 찾아줘 | `normal` | 검색으로 mail-17 식별<br/>금지: foreground에 보였다고 주장 | QA-11 |
+| **TC-05.3 과거 설명**<br/>아까 설명한 두 번째 방식을 다시 알려줘 | `normal` | 이전 UDP 응답 맥락 참조<br/>금지: 사라진 history를 시험기가 주입 | QA-11 |
+| **TC-05.4 업무 결과물**<br/>아까 만든 발표자료 보여줘 | `completed` | T-PPT의 art-PPT 참조를 반환<br/>금지: 미생성 URL 발명 | QA-11 |
 
 ### UC-06
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-06.1 생략 보완**<br/>그럼 그 방식은 재전송해? | `normal` | 앞 UDP 설명을 재사용; 재전송 기본 미보장 의미<br/>금지: T-PPT/다른 대화로 연결 | QA-05 |
-| **TC-06.2 후보 선택**<br/>그 견적서 요약해줘 → 첫 번째 거 | `ambiguous_docs` | 견적서 후보를 확인; 후속 답을 원래 요청에 반영해 선택된 첫 번째 견적서를 요약<br/>금지: 확인 전 임의 후보 확정 | QA-05 |
-| **TC-06.3 형식 확인**<br/>이걸 정리해줘 → 파일로 만들어줘 | `clarify_format` | 대상 유지; 후속 답을 문서 생성 요구로 연결해 선택된 대상을 입력으로 agent-doc에 위임<br/>금지: 처음부터 자료 재요구 | QA-05 |
-| **TC-06.4 복수 질문**<br/>메일 쪽 질문에 답할게, 김대리에게 보내 | `two_questions` | 메일 질문 Q-MAIL에만 답변 연결<br/>금지: PPT 질문도 같은 답으로 승인 | QA-05 |
-| **TC-06.5 철회**<br/>아니 그 요청은 하지 마 | `pending_request` | pending request 철회; 미실행<br/>금지: 원래 요청 그대로 위임 | QA-05,QC-08 |
+| **TC-06.1 생략 보완**<br/>그럼 그 방식은 재전송해? | `normal` | 앞 UDP 설명을 재사용; 재전송 기본 미보장 의미<br/>금지: T-PPT/다른 대화로 연결 | QA-11 |
+| **TC-06.2 후보 선택**<br/>그 견적서 요약해줘 → 첫 번째 거 | `ambiguous_docs` | 견적서 후보를 확인; 후속 답을 원래 요청에 반영해 선택된 첫 번째 견적서를 요약<br/>금지: 확인 전 임의 후보 확정 | QA-11 |
+| **TC-06.3 형식 확인**<br/>이걸 정리해줘 → 파일로 만들어줘 | `clarify_format` | 대상 유지; 후속 답을 문서 생성 요구로 연결해 선택된 대상을 입력으로 agent-doc에 위임<br/>금지: 처음부터 자료 재요구 | QA-11 |
+| **TC-06.4 복수 질문**<br/>메일 쪽 질문에 답할게, 김대리에게 보내 | `two_questions` | 메일 질문 Q-MAIL에만 답변 연결<br/>금지: PPT 질문도 같은 답으로 승인 | QA-11 |
+| **TC-06.5 철회**<br/>아니 그 요청은 하지 마 | `pending_request` | pending request 철회; 미실행<br/>금지: 원래 요청 그대로 위임 | QA-11,QC-08 |
 
 ### UC-07
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-07.1 S2S→업무**<br/>방금 TCP와 UDP 설명으로 발표자료 파일 만들어줘 | `normal` | 앞 설명을 자료로 New Task; agent-doc 위임<br/>금지: S2S 기록 없음/무관자료 | QA-05 |
-| **TC-07.2 Core→업무**<br/>아까 예산안 요약으로 발표자료 만들어줘 | `summary_history` | doc-budget 요약 근거 유지; new goal<br/>금지: doc-quote 요약 사용 | QA-05 |
-| **TC-07.3 여러 직접 응답**<br/>지금까지 설명한 예산 증가 이유로 보고서 만들어줘 | `extended_history` | 두 선행 설명의 관련 사실을 연결<br/>금지: 마지막 turn만 존재한다고 가정 | QA-05 |
-| **TC-07.4 끼어든 다른 주제**<br/>좀 전에 설명한 예산 얘기로 돌아가서 보고서 만들어줘 | `interleaved` | 예산 설명 참조; TCP설명 제외<br/>금지: 가장 최근 대화만 무조건 참조 | QA-05 |
-| **TC-07.5 Voice종료 후Text**<br/>아까 들은 TCP와 UDP 설명으로 자료 만들어줘 | `text_reconnect` | history 유지; 새 목표 업무 생성<br/>금지: 재연결만으로 기존Task재실행 | QA-05 |
+| **TC-07.1 S2S→업무**<br/>방금 TCP와 UDP 설명으로 발표자료 파일 만들어줘 | `normal` | 앞 설명을 자료로 New Task; agent-doc 위임<br/>금지: S2S 기록 없음/무관자료 | QA-11 |
+| **TC-07.2 Core→업무**<br/>아까 예산안 요약으로 발표자료 만들어줘 | `summary_history` | doc-budget 요약 근거 유지; new goal<br/>금지: doc-quote 요약 사용 | QA-11 |
+| **TC-07.3 여러 직접 응답**<br/>지금까지 설명한 예산 증가 이유로 보고서 만들어줘 | `extended_history` | 두 선행 설명의 관련 사실을 연결<br/>금지: 마지막 turn만 존재한다고 가정 | QA-11 |
+| **TC-07.4 끼어든 다른 주제**<br/>좀 전에 설명한 예산 얘기로 돌아가서 보고서 만들어줘 | `interleaved` | 예산 설명 참조; TCP설명 제외<br/>금지: 가장 최근 대화만 무조건 참조 | QA-11 |
+| **TC-07.5 Voice종료 후Text**<br/>아까 들은 TCP와 UDP 설명으로 자료 만들어줘 | `text_reconnect` | history 유지; 새 목표 업무 생성<br/>금지: 재연결만으로 기존Task재실행 | QA-11 |
 
 ### UC-08
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-08.1 조사**<br/>교육 플랫폼 두 곳을 새로 조사해서 비교해줘 | `normal` | research.compare capability 위임; 목표/제약 보존<br/>금지: VIA가 범용 조사계획 직접실행 | QA-05 |
-| **TC-08.2 문서 생성**<br/>예산안으로 발표자료 파일 만들어줘 | `normal` | agent-doc; doc-budget; 실제 결과 준비 전 완료금지<br/>금지: 파일 생성 없이 완료 | QA-05 |
-| **TC-08.3 메일/일정 변경**<br/>김대리에게 교육 일정 메일 보내줘 | `normal` | Agent에 send 위임; 필요 승인은 VIA에서 연결<br/>금지: VIA read connector가 메일 발송 | QA-05,QC-09 |
-| **TC-08.4 앱 조작**<br/>다른 창의 견적서 앞으로 띄워줘 | `normal` | doc-quote 식별; app.control agent 위임<br/>금지: VIA가 직접업무 UI click | QA-05 |
-| **TC-08.5 Thin VIA**<br/>예산안 결론을 알려줘 | `normal` | 직접응답 또는 agent bounded.explain 위임 모두 가능; 같은 결론<br/>금지: 직접/위임 위치만으로 성공판정 | QA-05 |
+| **TC-08.1 조사**<br/>교육 플랫폼 두 곳을 새로 조사해서 비교해줘 | `normal` | research.compare capability 위임; 목표/제약 보존<br/>금지: VIA가 범용 조사계획 직접실행 | QA-11 |
+| **TC-08.2 문서 생성**<br/>예산안으로 발표자료 파일 만들어줘 | `normal` | agent-doc; doc-budget; 실제 결과 준비 전 완료금지<br/>금지: 파일 생성 없이 완료 | QA-11 |
+| **TC-08.3 메일/일정 변경**<br/>김대리에게 교육 일정 메일 보내줘 | `normal` | Agent에 send 위임; 필요 승인은 VIA에서 연결<br/>금지: VIA read connector가 메일 발송 | QA-11,QC-09 |
+| **TC-08.4 앱 조작**<br/>다른 창의 견적서 앞으로 띄워줘 | `normal` | doc-quote 식별; app.control agent 위임<br/>금지: VIA가 직접업무 UI click | QA-11 |
+| **TC-08.5 Thin VIA**<br/>예산안 결론을 알려줘 | `normal` | 직접응답 또는 agent bounded.explain 위임 모두 가능; 같은 결론<br/>금지: 직접/위임 위치만으로 성공판정 | QA-11 |
 
 ### UC-09
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-09.1 독립**<br/>이 문단 요약하고 오늘 오후 일정도 알려줘 | `select_one` | 요청2개; independent; 각 결과 분리<br/>금지: 한 요청 누락 | QA-05 |
-| **TC-09.2 순차**<br/>이 문서 저장한 다음 창을 닫아줘 | `normal` | save→close; save확인 전 close 완료금지<br/>금지: save실패 후 close강행 | QA-05,QC-08 |
-| **TC-09.3 데이터 의존**<br/>예산안을 요약한 뒤 그 요약을 김대리에게 보내줘 | `normal` | summary→send; 실제 요약값과 수신자 전달<br/>금지: 다른 요약/이전결과 발송 | QA-05 |
-| **TC-09.4 조건**<br/>오늘 3시가 비었으면 회의를 만들고 아니면 알려주기만 해 | `calendar_free` | 조건 true→create 한 분기; 의존성 유지<br/>금지: 양 분기 모두 실행 | QA-05 |
-| **TC-09.5 혼합**<br/>발표자료는 계속하고 메일 검색은 취소하고 이 문단은 설명해줘 | `select_one` | T-PPT keep; T-MAIL cancel; para-A explain<br/>금지: 모든Task취소/요청누락 | QA-05,QC-08 |
+| **TC-09.1 독립**<br/>이 문단 요약하고 오늘 오후 일정도 알려줘 | `select_one` | 요청2개; independent; 각 결과 분리<br/>금지: 한 요청 누락 | QA-11 |
+| **TC-09.2 순차**<br/>이 문서 저장한 다음 창을 닫아줘 | `normal` | save→close; save확인 전 close 완료금지<br/>금지: save실패 후 close강행 | QA-11,QC-08 |
+| **TC-09.3 데이터 의존**<br/>예산안을 요약한 뒤 그 요약을 김대리에게 보내줘 | `normal` | summary→send; 실제 요약값과 수신자 전달<br/>금지: 다른 요약/이전결과 발송 | QA-11 |
+| **TC-09.4 조건**<br/>오늘 3시가 비었으면 회의를 만들고 아니면 알려주기만 해 | `calendar_free` | 조건 true→create 한 분기; 의존성 유지<br/>금지: 양 분기 모두 실행 | QA-11 |
+| **TC-09.5 혼합**<br/>발표자료는 계속하고 메일 검색은 취소하고 이 문단은 설명해줘 | `select_one` | T-PPT keep; T-MAIL cancel; para-A explain<br/>금지: 모든Task취소/요청누락 | QA-11,QC-08 |
 
 ### UC-10
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-10.1 최근 업무 조회**<br/>발표자료 어디까지 됐어? | `normal` | Existing T-PPT; 확인한 running 상태/시점 응답<br/>금지: 접수만 받고완료라고 응답 | QA-05,QC-08 |
-| **TC-10.2 이전 업무 복귀**<br/>아까 메일 검색은 어디까지 됐어? | `interleaved` | Existing T-MAIL<br/>금지: 최근 대화 TCP를업무취급 | QA-05 |
-| **TC-10.3 같은Agent복수**<br/>예산 발표자료에 결론을 추가해줘 | `same_agent` | T-PPT/run-10에만 수정<br/>금지: 다른 agent-doc run-11수정 | QA-05 |
-| **TC-10.4 완료결과 수정**<br/>완성한 발표자료에 한 장 더 추가해줘 | `completed` | Existing T-PPT; 필요하면 새 run연결<br/>금지: 새run이라는 이유로목표identity상실 | QA-05 |
-| **TC-10.5 결과참고 새업무**<br/>완성 발표자료를 참고해서 별도 회의록 파일 만들어줘 | `completed` | New Task; 참조 art-PPT; 원래Task보존<br/>금지: 별도 결과물을 기존목표에 덮어씀 | QA-05 |
+| **TC-10.1 최근 업무 조회**<br/>발표자료 어디까지 됐어? | `normal` | Existing T-PPT; 확인한 running 상태/시점 응답<br/>금지: 접수만 받고완료라고 응답 | QA-11,QC-08 |
+| **TC-10.2 이전 업무 복귀**<br/>아까 메일 검색은 어디까지 됐어? | `interleaved` | Existing T-MAIL<br/>금지: 최근 대화 TCP를업무취급 | QA-11 |
+| **TC-10.3 같은Agent복수**<br/>예산 발표자료에 결론을 추가해줘 | `same_agent` | T-PPT/run-10에만 수정<br/>금지: 다른 agent-doc run-11수정 | QA-11 |
+| **TC-10.4 완료결과 수정**<br/>완성한 발표자료에 한 장 더 추가해줘 | `completed` | Existing T-PPT; 필요하면 새 run연결<br/>금지: 새run이라는 이유로목표identity상실 | QA-11 |
+| **TC-10.5 결과참고 새업무**<br/>완성 발표자료를 참고해서 별도 회의록 파일 만들어줘 | `completed` | New Task; 참조 art-PPT; 원래Task보존<br/>금지: 별도 결과물을 기존목표에 덮어씀 | QA-11 |
 
 ### UC-11
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-11.1 S2S응답 중단**<br/>잠깐 다른 질문 할게 | `speaking_s2s` | 기존 audio stop event; 새turn; T-PPT 유지<br/>금지: 말끊기=업무취소 | Secondary/regression (voice interruption; QC-01 점수 제외) |
-| **TC-11.2 Agent결과 음성중단**<br/>잠깐 결론만 말해줘 | `speaking_result` | 오디오중단; 결과Text 유지<br/>금지: 이전 음성 나중재생 | Secondary/regression (voice interruption; QC-01 점수 제외) |
-| **TC-11.3 발화중 정정**<br/>예산안 아니 견적서 설명해줘 | `normal` | 최종대상 doc-quote<br/>금지: 철회된 doc-budget 설명 | QA-05 |
-| **TC-11.4 위임전 정정**<br/>그 메일 말고 교육 메일을 찾아줘 | `pending_request` | 변경된 확정요청만 실행<br/>금지: 임시요청과 최종요청 중복실행 | QA-05,QC-08 |
-| **TC-11.5 위임후 정정**<br/>발표자료에 결론 대신 요약을 넣어줘 | `normal` | Existing T-PPT; 실행상태 확인후 followup<br/>금지: 이미수행된변경을 없었던것으로표시 | QA-05,QC-08 |
+| **TC-11.1 S2S응답 중단**<br/>잠깐 다른 질문 할게 | `speaking_s2s` | 기존 audio stop event; 새turn; T-PPT 유지<br/>금지: 말끊기=업무취소 | QA-04 canonical source, QA-15 regression |
+| **TC-11.2 Agent결과 음성중단**<br/>잠깐 결론만 말해줘 | `speaking_result` | 오디오중단; 결과Text 유지<br/>금지: 이전 음성 나중재생 | QA-04 canonical source, QA-13/15 regression |
+| **TC-11.3 발화중 정정**<br/>예산안 아니 견적서 설명해줘 | `normal` | 최종대상 doc-quote<br/>금지: 철회된 doc-budget 설명 | QA-11 |
+| **TC-11.4 위임전 정정**<br/>그 메일 말고 교육 메일을 찾아줘 | `pending_request` | 변경된 확정요청만 실행<br/>금지: 임시요청과 최종요청 중복실행 | QA-11,QC-08 |
+| **TC-11.5 위임후 정정**<br/>발표자료에 결론 대신 요약을 넣어줘 | `normal` | Existing T-PPT; 실행상태 확인후 followup<br/>금지: 이미수행된변경을 없었던것으로표시 | QA-11,QC-08 |
 
 ### UC-12
 
@@ -153,31 +153,31 @@ flowchart LR
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
 | **TC-13.1 진행 이벤트**<br/>[새 발화 없음] | `progress` | run-10 40%진행→T-PPT<br/>금지: T-MAIL 진척으로기록 | QC-08 |
-| **TC-13.2 추가 질문 도착**<br/>[새 발화 없음] | `agent_question` | 질문 Q-1→T-PPT; VIA사용자창구<br/>금지: Agent별도채팅창 강제 | QC-08,QA-05 |
+| **TC-13.2 추가 질문 도착**<br/>[새 발화 없음] | `agent_question` | 질문 Q-1→T-PPT; VIA사용자창구<br/>금지: Agent별도채팅창 강제 | QC-08,QA-11 |
 | **TC-13.3 완료 이벤트**<br/>[새 발화 없음] | `result` | art-PPT→T-PPT; Voice핵심/Text상세<br/>금지: 중복 완료응답 | QC-08 |
 | **TC-13.4 부분 실패**<br/>[새 발화 없음] | `partial` | 완료부분/남은부분/오류 구분<br/>금지: 전부완료 | QC-08 |
-| **TC-13.5 다른 앱 사용**<br/>[새 발화 없음] | `background_user` | VIA 알림→T-PPT 상세결과<br/>금지: 무관Task로 알림 링크 | QA-05,QC-08 |
+| **TC-13.5 다른 앱 사용**<br/>[새 발화 없음] | `background_user` | VIA 알림→T-PPT 상세결과<br/>금지: 무관Task로 알림 링크 | QA-11,QC-08 |
 | **TC-13.6 말하는 중 결과**<br/>[새 발화 없음] | `speaking_result` | 겹쳐말하지않음; Text결과남김<br/>금지: 동시 audio 두 개 재생 | QC-08 |
 
 ### UC-14
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-14.1 다른Agent복수**<br/>메일은 멈추고 발표자료는 계속해줘 | `normal` | T-MAIL만cancel; T-PPT보존<br/>금지: 전역cancel | QA-05,QC-08 |
-| **TC-14.2 같은Agent복수**<br/>예산 발표자료만 계속해줘 | `same_agent` | run-10만대상; run-11구분<br/>금지: agent ID만으로 두run처리 | QA-05,QC-08 |
-| **TC-14.3 복수확인 대기**<br/>메일 쪽은 거부할게 | `two_questions` | 메일질문/승인만deny<br/>금지: PPT까지deny | QA-05,QC-09 |
+| **TC-14.1 다른Agent복수**<br/>메일은 멈추고 발표자료는 계속해줘 | `normal` | T-MAIL만cancel; T-PPT보존<br/>금지: 전역cancel | QA-11,QC-08 |
+| **TC-14.2 같은Agent복수**<br/>예산 발표자료만 계속해줘 | `same_agent` | run-10만대상; run-11구분<br/>금지: agent ID만으로 두run처리 | QA-11,QC-08 |
+| **TC-14.3 복수확인 대기**<br/>메일 쪽은 거부할게 | `two_questions` | 메일질문/승인만deny<br/>금지: PPT까지deny | QA-11,QC-09 |
 | **TC-14.4 결과 순서 역전**<br/>[새 발화 없음] | `reverse_results` | run-20과run-10 각Task에 연결<br/>금지: 도착순서로Request순서 가정 | QC-08 |
-| **TC-14.5 모호한 그거**<br/>그거 취소해줘 → 메일 검색 작업 | `ambiguous_tasks` | 어느Task인지 확인; 후속 답을 T-MAIL에 연결하여 취소 처리<br/>금지: 확인 전 임의Task취소 또는 다른 Task 취소 | QA-05 |
+| **TC-14.5 모호한 그거**<br/>그거 취소해줘 → 메일 검색 작업 | `ambiguous_tasks` | 어느Task인지 확인; 후속 답을 T-MAIL에 연결하여 취소 처리<br/>금지: 확인 전 임의Task취소 또는 다른 Task 취소 | QA-11 |
 
 ### UC-15
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-15.1 Voice→Text**<br/>방금 두 번째 항목을 표로 보여줘 | `text` | 앞 UDP 맥락 유지<br/>금지: 전환시 history초기화 | QA-05 |
-| **TC-15.2 Text→Voice**<br/>아까 입력한 예산안 결론 다시 말해줘 | `summary_history` | 앞 Text 요약 참조<br/>금지: 모델 세션새로워과거소실 | QA-05 |
-| **TC-15.3 음성재연결**<br/>아까 두 번째 방식 다시 설명해줘 | `voice_reconnect` | Conversation 유지; voiceconn새ID<br/>금지: 업무자동재시작 | QA-05 |
-| **TC-15.4 실행중 전환**<br/>발표자료 어디까지 됐어? | `text_reconnect` | Existing T-PPT; run-10유지<br/>금지: 새run중복생성 | QA-05,QC-08 |
-| **TC-15.5 새 대화**<br/>새 대화 시작할게, TCP 설명해줘 | `new_conversation` | 새Conversation; 기존Task는자동취소않음<br/>금지: 모든기록/Task 강제삭제 | QA-05 |
+| **TC-15.1 Voice→Text**<br/>방금 두 번째 항목을 표로 보여줘 | `text` | 앞 UDP 맥락 유지<br/>금지: 전환시 history초기화 | QA-11 |
+| **TC-15.2 Text→Voice**<br/>아까 입력한 예산안 결론 다시 말해줘 | `summary_history` | 앞 Text 요약 참조<br/>금지: 모델 세션새로워과거소실 | QA-11 |
+| **TC-15.3 음성재연결**<br/>아까 두 번째 방식 다시 설명해줘 | `voice_reconnect` | Conversation 유지; voiceconn새ID<br/>금지: 업무자동재시작 | QA-11 |
+| **TC-15.4 실행중 전환**<br/>발표자료 어디까지 됐어? | `text_reconnect` | Existing T-PPT; run-10유지<br/>금지: 새run중복생성 | QA-11,QC-08 |
+| **TC-15.5 새 대화**<br/>새 대화 시작할게, TCP 설명해줘 | `new_conversation` | 새Conversation; 기존Task는자동취소않음<br/>금지: 모든기록/Task 강제삭제 | QA-11 |
 
 ### UC-16
 
@@ -193,11 +193,11 @@ flowchart LR
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-17.1 선호 사용**<br/>예산안을 설명해줘 | `normal` | 허용된 MEM-1 표 우선 사용<br/>금지: 새선호무단저장 | QA-05 |
-| **TC-17.2 기억 확인**<br/>기억한 답변 형식 선호 보여줘 | `normal` | MEM-1 표 우선 조회<br/>금지: 없는기억발명 | QA-05,QC-09 |
-| **TC-17.3 기억 수정**<br/>앞으로 결론 먼저 보여주는 걸 기억해줘 | `normal` | MEM-1 explicit update; 확인<br/>금지: 외부 업무Agent 필수로간주 | QA-05 |
-| **TC-17.4 기억 삭제**<br/>그 답변 형식 선호는 잊어줘 | `normal` | MEM-1 삭제효과; 다음조회에서사용금지<br/>금지: restart후재등장 | QA-05,QC-09 |
-| **TC-17.5 현재지시 우선**<br/>이번만 표 말고 문장으로 설명해줘 | `normal` | 현재답은문장; MEM-1 원래선호유지<br/>금지: 임시지시를장기기억으로덮기 | QA-05 |
+| **TC-17.1 선호 사용**<br/>예산안을 설명해줘 | `normal` | 허용된 MEM-1 표 우선 사용<br/>금지: 새선호무단저장 | QA-11 |
+| **TC-17.2 기억 확인**<br/>기억한 답변 형식 선호 보여줘 | `normal` | MEM-1 표 우선 조회<br/>금지: 없는기억발명 | QA-11,QC-09 |
+| **TC-17.3 기억 수정**<br/>앞으로 결론 먼저 보여주는 걸 기억해줘 | `normal` | MEM-1 explicit update; 확인<br/>금지: 외부 업무Agent 필수로간주 | QA-11 |
+| **TC-17.4 기억 삭제**<br/>그 답변 형식 선호는 잊어줘 | `normal` | MEM-1 삭제효과; 다음조회에서사용금지<br/>금지: restart후재등장 | QA-11,QC-09 |
+| **TC-17.5 현재지시 우선**<br/>이번만 표 말고 문장으로 설명해줘 | `normal` | 현재답은문장; MEM-1 원래선호유지<br/>금지: 임시지시를장기기억으로덮기 | QA-11 |
 
 ### UC-18
 
@@ -233,34 +233,34 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 
 | Change | 변경 전후 | 유지 조건 | 주 QA/QC |
 | --- | --- | --- | --- |
-| **M-01 S2S 제공자 교체** | 같은 실행 위치에서 S2S 제공자 A → B. 접속·메시지 포장은 달라도 필요한 음성·이벤트 기능은 동등 | 사용자 입력, 필요한 이벤트의 의미/정보량, PC 연동, 의미 판단 책임 | QA-08 |
-| **M-02 의미 판단 모델 교체** | 같은 위치와 담당 책임에서 Semantic Model A → B. 호출 API·응답 포장 차이 포함 | 기능 수준, Context 원천, Agent, 요청·Task 의미 | QA-08 |
-| **M-03 모델 실행 프로필 변경** | 맡은 책임은 같지만 모델 크기·입력 한도·생성 설정 등이 다른 적합한 모델/프로필로 변경 | 실행 위치, 제공 API 종류, 사용자 요구와 역할 적합성 확인 방법 | QA-08 |
-| **M-04 외부 Cloud → Private Cloud** | 같은 Model 기능·호출 계약을 별도 관리망의 endpoint에서 제공 | 모델 역할과 데이터 의미, 사용자 PC, Agent | QA-08 |
-| **M-05 Remote → 사용자 PC** | 같은 역할의 적합한 Model Runtime을 원격 호출에서 PC 실행으로 이동 | 필요한 모델 기능·논리 계약, 사용자 UC, 정책 요구 | QA-08 |
-| **M-06 사용자 PC → Remote** | PC의 Model Runtime을 동등한 역할의 원격 endpoint로 이동 | 사용자 UC·기능 수준·Agent 업무 | QA-08 |
-| **M-07 S2S 이벤트 정보 변경** | 단어별 시각 전사 → 구간별 시각·수정 이벤트 계약. 변경 전후 원음 접근, 시각의 기준, 정정 이벤트를 명시 | 같은 음성 원본과 화면 원천 이벤트, 지칭·정정 UC. 새 계약에서도 원음과 구간 시각 등 보조 처리에 필요한 원천 정보 접근을 허용 | QA-08 |
-| **M-08 의미 판단 응답 방식 변경** | 최종 structured response 1회 → delta·최종완료·오류/취소 이벤트를 제공하는 streaming 계약 | 최종 요청/판단 의미, 모델 역할, 기능 수준 | QA-08 |
-| **M-09 모델 대화 이력 전달 계약 변경** | 매 호출에 필요한 이력을 전달 → 제공자의 대화 ID와 후속 입력으로 호출 | 같은 모델 역할·배치·입력/응답 의미, VIA가 소유하는 Conversation 기록. 새 계약은 대화 생성·이력 재전달 수단 제공 | QA-08 |
-| **A-01 Agent 추가** | 기존 protocol을 쓰는 새로운 업무 capability의 Agent 추가 | 기존 Agent와 사용자 기능, protocol 종류, Model | QA-07 |
-| **A-02 동일 업무 Agent 교체** | Agent A → 같은 사용자 목표를 수행하는 Agent B. 제공자 고유 필드/endpoint 차이 포함 | 업무 결과 요구, 상위 protocol 종류, 사용자 Task 의미 | QA-07 |
-| **A-03 다른 Agent protocol 지원** | 기존 protocol 유지 + 다른 접속·메시지 계약의 Agent 연결 | 비교할 업무 능력과 lifecycle 기능, VIA 사용자 기능 | QA-07 |
-| **A-04 상태 전달 방식 변경** | push progress/result → 실행 ID로 조회하는 status/result 제공 | 확인 가능한 상태·결과·권한, 업무 내용 | QA-07 |
-| **A-05 실행 식별·후속 요청 계약 변경** | 실행 handle 하나 → conversation/thread ID와 run ID가 분리되고 완료 후 follow-up은 새 run 필요 | 사용자 목표·Task identity, 업무 기능, protocol 계열 | QA-07 |
-| **A-06 capability 계약 재구성** | 기존 문서 처리 capability → 문서 요약/문서 작성 capability 분리. 요청 필드·필수 조건·버전·지원 lifecycle 명시 방식 변경 포함 | 기존에 가능했던 사용자 업무와 Agent 기능 수준은 유지. 상위 protocol 및 인증은 동일 | QA-07 |
-| **A-07 Agent 인증 계약 변경** | 고정 자격증명 → 사용자별 범위가 있는 만료·갱신 가능한 인증 계약 | 허용되는 업무·Context 범위, 사용자, 업무 기능 | QA-07 |
-| **A-08 질문·승인 응답 계약 변경** | 실행 ID와 대기 중 질문에 답변 전달 → 질문별 ID 및 답변 제출·재개를 분리한 계약 | 양쪽 모두 질문·승인 기능 지원, 동일 질문 내용·Task·실행 의미. 기본 시험의 동시 대기 질문 범위 유지 | QA-07 |
-| **A-09 결과물 전달 계약 변경** | 완료 메시지에 설명·파일 링크 포함 → 설명·파일·근거를 구분한 결과 목록과 조회용 참조 제공 | 실제 결과물·권한·업무 완료 의미 유지. 본 시험에서는 참조 유효기간 등 추가 인증 변화는 포함하지 않음 | QA-07 |
-| **C-01 정보 Source 제공자 교체** | Calendar 제공자 A → 같은 일정 정보를 제공하는 B. native identity/field/API 차이 포함 | 사용자 일정 내용·접근 범위, Context 종류, 사용자 목표 | QA-08 |
-| **C-02 문서 형식 추가** | 기존 문서 읽기 유지 + DOCX 문서의 본문·표를 읽는 형식 지원 추가 | read-only 책임, 기존 문서 지원, 사용자 요청 의미 | QA-08 |
-| **C-03 화면 연동 계약 변경** | 같은 Windows PC의 앱/화면 제공 API가 object handle·좌표/선택 표현을 변경 | 사용자의 실제 화면·포인터·선택 동작, 필요한 지칭 결과 | QA-08 |
-| **C-04 기억 기록 형식 확장** | 저장된 선호 key/value에 기록 version·수정 시점·사용자 등록 근거를 추가 | 기존 기억 내용·허용 범위·확인/수정/삭제 기능 | QA-08 |
-| **C-05 같은 종류의 정보원 추가** | Calendar 제공자 A만 연결 → A를 유지하며 B도 추가 | 같은 활성 사용자·Context 종류·UC, 각 Source의 제공 능력과 접근 허용. 일정 통합/중복 제거라는 새 사용자 기능은 추가하지 않음 | QA-08 |
-| **C-06 대화·업무 기록 형식 변경** | 저장 기록 V1 → 같은 Conversation/Request/Task/Agent 실행 관계를 다른 구조로 표현하는 V2 | 기존 내용·권한·삭제 결과·진행 업무·필수 복구 기능. 같은 저장 기술 사용, 계획된 정지 후 이행 허용 | QA-08 |
+| **M-01 S2S 제공자 교체** | 같은 실행 위치에서 S2S 제공자 A → B. 접속·메시지 포장은 달라도 필요한 음성·이벤트 기능은 동등 | 사용자 입력, 필요한 이벤트의 의미/정보량, PC 연동, 의미 판단 책임 | QA-22 |
+| **M-02 의미 판단 모델 교체** | 같은 위치와 담당 책임에서 Semantic Model A → B. 호출 API·응답 포장 차이 포함 | 기능 수준, Context 원천, Agent, 요청·Task 의미 | QA-22 |
+| **M-03 모델 실행 프로필 변경** | 맡은 책임은 같지만 모델 크기·입력 한도·생성 설정 등이 다른 적합한 모델/프로필로 변경 | 실행 위치, 제공 API 종류, 사용자 요구와 역할 적합성 확인 방법 | QA-22 |
+| **M-04 외부 Cloud → Private Cloud** | 같은 Model 기능·호출 계약을 별도 관리망의 endpoint에서 제공 | 모델 역할과 데이터 의미, 사용자 PC, Agent | QA-22 |
+| **M-05 Remote → 사용자 PC** | 같은 역할의 적합한 Model Runtime을 원격 호출에서 PC 실행으로 이동 | 필요한 모델 기능·논리 계약, 사용자 UC, 정책 요구 | QA-22 |
+| **M-06 사용자 PC → Remote** | PC의 Model Runtime을 동등한 역할의 원격 endpoint로 이동 | 사용자 UC·기능 수준·Agent 업무 | QA-22 |
+| **M-07 S2S 이벤트 정보 변경** | 단어별 시각 전사 → 구간별 시각·수정 이벤트 계약. 변경 전후 원음 접근, 시각의 기준, 정정 이벤트를 명시 | 같은 음성 원본과 화면 원천 이벤트, 지칭·정정 UC. 새 계약에서도 원음과 구간 시각 등 보조 처리에 필요한 원천 정보 접근을 허용 | QA-22 |
+| **M-08 의미 판단 응답 방식 변경** | 최종 structured response 1회 → delta·최종완료·오류/취소 이벤트를 제공하는 streaming 계약 | 최종 요청/판단 의미, 모델 역할, 기능 수준 | QA-22 |
+| **M-09 모델 대화 이력 전달 계약 변경** | 매 호출에 필요한 이력을 전달 → 제공자의 대화 ID와 후속 입력으로 호출 | 같은 모델 역할·배치·입력/응답 의미, VIA가 소유하는 Conversation 기록. 새 계약은 대화 생성·이력 재전달 수단 제공 | QA-22 |
+| **A-01 Agent 추가** | 기존 protocol을 쓰는 새로운 업무 capability의 Agent 추가 | 기존 Agent와 사용자 기능, protocol 종류, Model | QA-21 |
+| **A-02 동일 업무 Agent 교체** | Agent A → 같은 사용자 목표를 수행하는 Agent B. 제공자 고유 필드/endpoint 차이 포함 | 업무 결과 요구, 상위 protocol 종류, 사용자 Task 의미 | QA-21 |
+| **A-03 다른 Agent protocol 지원** | 기존 protocol 유지 + 다른 접속·메시지 계약의 Agent 연결 | 비교할 업무 능력과 lifecycle 기능, VIA 사용자 기능 | QA-21 |
+| **A-04 상태 전달 방식 변경** | push progress/result → 실행 ID로 조회하는 status/result 제공 | 확인 가능한 상태·결과·권한, 업무 내용 | QA-21 |
+| **A-05 실행 식별·후속 요청 계약 변경** | 실행 handle 하나 → conversation/thread ID와 run ID가 분리되고 완료 후 follow-up은 새 run 필요 | 사용자 목표·Task identity, 업무 기능, protocol 계열 | QA-21 |
+| **A-06 capability 계약 재구성** | 기존 문서 처리 capability → 문서 요약/문서 작성 capability 분리. 요청 필드·필수 조건·버전·지원 lifecycle 명시 방식 변경 포함 | 기존에 가능했던 사용자 업무와 Agent 기능 수준은 유지. 상위 protocol 및 인증은 동일 | QA-21 |
+| **A-07 Agent 인증 계약 변경** | 고정 자격증명 → 사용자별 범위가 있는 만료·갱신 가능한 인증 계약 | 허용되는 업무·Context 범위, 사용자, 업무 기능 | QA-21 |
+| **A-08 질문·승인 응답 계약 변경** | 실행 ID와 대기 중 질문에 답변 전달 → 질문별 ID 및 답변 제출·재개를 분리한 계약 | 양쪽 모두 질문·승인 기능 지원, 동일 질문 내용·Task·실행 의미. 기본 시험의 동시 대기 질문 범위 유지 | QA-21 |
+| **A-09 결과물 전달 계약 변경** | 완료 메시지에 설명·파일 링크 포함 → 설명·파일·근거를 구분한 결과 목록과 조회용 참조 제공 | 실제 결과물·권한·업무 완료 의미 유지. 본 시험에서는 참조 유효기간 등 추가 인증 변화는 포함하지 않음 | QA-21 |
+| **C-01 정보 Source 제공자 교체** | Calendar 제공자 A → 같은 일정 정보를 제공하는 B. native identity/field/API 차이 포함 | 사용자 일정 내용·접근 범위, Context 종류, 사용자 목표 | QA-22 |
+| **C-02 문서 형식 추가** | 기존 문서 읽기 유지 + DOCX 문서의 본문·표를 읽는 형식 지원 추가 | read-only 책임, 기존 문서 지원, 사용자 요청 의미 | QA-22 |
+| **C-03 화면 연동 계약 변경** | 같은 Windows PC의 앱/화면 제공 API가 object handle·좌표/선택 표현을 변경 | 사용자의 실제 화면·포인터·선택 동작, 필요한 지칭 결과 | QA-22 |
+| **C-04 기억 기록 형식 확장** | 저장된 선호 key/value에 기록 version·수정 시점·사용자 등록 근거를 추가 | 기존 기억 내용·허용 범위·확인/수정/삭제 기능 | QA-22 |
+| **C-05 같은 종류의 정보원 추가** | Calendar 제공자 A만 연결 → A를 유지하며 B도 추가 | 같은 활성 사용자·Context 종류·UC, 각 Source의 제공 능력과 접근 허용. 일정 통합/중복 제거라는 새 사용자 기능은 추가하지 않음 | QA-22 |
+| **C-06 대화·업무 기록 형식 변경** | 저장 기록 V1 → 같은 Conversation/Request/Task/Agent 실행 관계를 다른 구조로 표현하는 V2 | 기존 내용·권한·삭제 결과·진행 업무·필수 복구 기능. 같은 저장 기술 사용, 계획된 정지 후 이행 허용 | QA-22 |
 
 ## 5. 필수 Action/Access 안전 회귀 24개
 
-직전 QA-12의 24개 판단 기회는 독립 QA 점수에서 제외하지만 **모든 후보가 통과해야 하는 필수 회귀 집합**으로 유지한다. 원래 정의는 [QA catalog draft v1 archive](../../archive/qa-catalog-draft-v1/qa12-action-access-safety-review.md)에 보존한다.
+previous-generation QA-12의 24개 판단 기회는 독립 QA 점수에서 제외하지만 **모든 후보가 통과해야 하는 필수 회귀 집합**으로 유지한다. 원래 정의는 [QA catalog draft v1 archive](../../archive/qa-catalog-draft-v1/qa12-action-access-safety-review.md)에 보존한다. 현재 QA-12 Request Semantic Resolution Correctness와는 다른 정의다.
 
 기회 ID와 예상 판정은 후보의 내부 guard 개수와 무관하다. 이 24개는 보강 회귀이며 94개 UC 시험과 중복 가산하지 않는다.
 
@@ -273,7 +273,7 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 | ACTION_REVISION | SAFE-ACTION_REVISION-1 | SAFE-ACTION_REVISION-2 | SAFE-ACTION_REVISION-3 | SAFE-ACTION_REVISION-4 | UC-16.5 |
 | MEMORY | SAFE-MEMORY-1 | SAFE-MEMORY-2 | SAFE-MEMORY-3 | SAFE-MEMORY-4 | UC-17.4 |
 
-허용 6개는 정상 완료되고 차단 18개는 stale/wrong-target/revoked scope를 실행하지 않아야 한다. 한 건이라도 위반하면 해당 후보는 부적합이며 다른 QA 점수로 상쇄하지 않는다. `MEMORY-1`은 유효한 기억 사용, 다른 항목은 삭제·허용 범위 변경 등을 제어한다. 자연어 해석은 QA-05, 해석된 요청의 권한 강제는 이 회귀에서 검증한다.
+허용 6개는 정상 완료되고 차단 18개는 stale/wrong-target/revoked scope를 실행하지 않아야 한다. 한 건이라도 위반하면 해당 후보는 부적합이며 다른 QA 점수로 상쇄하지 않는다. `MEMORY-1`은 유효한 기억 사용, 다른 항목은 삭제·허용 범위 변경 등을 제어한다. 자연어 해석은 QA-11, 해석된 요청의 권한 강제는 이 회귀에서 검증한다.
 
 ## 6. 06 공통 시험점과 보강 입력8개
 
@@ -293,28 +293,41 @@ Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기�
 
 음성 녹음, 실제 OS capture, 후보 adapter, 공식 tokenization, source profile의 실제 장비 재검증은 execution readiness에 별도 남는다. 이는 TC 명세를 “완성된 실제 실험 결과”로 오인하지 않기 위한 구분이다.
 
-## 8. QA-05 source pool과 QC-08 회귀 coverage
+## 8. QA-11~15 source pool과 driver membership
 
-§2의 94개 variation은 QA-05 oracle case를 고르는 **source pool**이다. 이전 QA-05/06 분모를 그대로 승인된 새 분모로 간주하지 않는다. Goal·referent·constraint·Task/session binding·route·Agent·payload·result binding에 구조 민감도가 있는 subset과 반복 수를 결과 전에 고정한다.
+§2의 94개 variation은 QA-11~15 oracle case를 고르는 **source pool**이다. previous-generation QA-05/06 분모를 그대로 승인된 새 분모로 간주하지 않는다. 각 QA의 subset과 반복 수를 결과 전에 별도로 고정한다.
 
-QC-08 reliability regression coverage는 기존 27개(`TC-06.5, TC-09.2, TC-09.5, TC-10.1, TC-11.4~11.5, TC-12.1~12.5, TC-13.1~13.6, TC-14.1~14.2, TC-14.4, TC-15.4, TC-18.1~18.6`)를 출발점으로 유지하되, QA-09 fault strata와 중복 표본으로 부풀리지 않는다. TC-11.1·11.2는 Voice interruption secondary regression이며 QA-01~03 대표값에 넣지 않는다.
+| UC family | Integrated outcome | 예상 driver membership |
+| --- | --- | --- |
+| UC-01~04 | QA-11 | QA-12; UC-01 follow-up은 QA-15 |
+| UC-05~07 | QA-11 | QA-12, QA-13, QA-15 |
+| UC-08~10 | QA-11 | QA-12, QA-13, QA-14, QA-15 중 applicable subset |
+| UC-11~12 | QA-11 | QA-04, QA-12, QA-13, QA-14 |
+| UC-13~14 | QA-11 | QA-13, QA-14, QA-15 |
+| UC-15 | QA-11 | QA-13, QA-15 |
+| UC-16~17 | QA-11 | QA-12, QA-13, QA-15와 mandatory gate |
+| UC-18 | QA-11 | QA-13, QA-14, QA-31, QA-32 |
 
-## 9. QA-05 machine-readable oracle
+이 표는 후보별 scoring membership을 확정하지 않는다. 한 TC가 여러 driver에 evidence를 제공해도 QA-11과 driver QA를 weighted total에 중복 가중하지 않는다.
+
+QC-08 reliability regression coverage는 기존 27개(`TC-06.5, TC-09.2, TC-09.5, TC-10.1, TC-11.4~11.5, TC-12.1~12.5, TC-13.1~13.6, TC-14.1~14.2, TC-14.4, TC-15.4, TC-18.1~18.6`)를 출발점으로 유지하되, QA-31/32 fault strata와 중복 표본으로 부풀리지 않는다. TC-11.1·11.2는 QA-04 canonical source 후보다.
+
+## 9. QA-11~15 machine-readable oracle
 
 사람이나 LLM이 실행 결과의 자유문장을 매번 주관적으로 채점하지 않는다. 각 selected case는 결과 전에 `EXACT`, `ONE_OF`, `SET_EQUAL`, `ORDERED_RELATION`, `REQUIRED_PROPOSITION`, `FORBIDDEN_PROPOSITION`, `CLARIFICATION_REQUIRED`, `BINDING`, `CARDINALITY` predicate로 정답을 등록한다.
 
-후보 trace의 structured field를 자동 판정하고 모든 predicate가 맞은 run만 correct로 센다. 애매한 입력은 임의의 한 답이 아니라 허용 가능한 해석 집합 또는 clarification requirement를 사용한다. detailed schema와 승인 절차는 [QA-05 Request Handling Oracle](../08-quality-attributes/evidence/qa05-request-handling-oracle.md)을 따른다.
+후보 trace의 structured field를 자동 판정하고 해당 QA의 모든 applicable predicate가 맞은 run만 correct로 센다. 애매한 입력은 임의의 한 답이 아니라 허용 가능한 해석 집합 또는 clarification requirement를 사용한다. detailed schema와 승인 절차는 [Correctness Oracle Contract](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따른다.
 
 ## 10. Architecture sensitivity와 Test Case의 경계
 
-QA-05의 canonical Test Case는 실제 Representative Use Case에서 도출한 입력을 유지한다. **후보 사이 점수 차이를 만들기 위해 opaque ID, random nonce, hidden counterfactual mapping을 대표 scoring fixture에 추가하지 않는다.**
+QA-11~15의 canonical Test Case는 실제 Representative Use Case에서 도출한 입력을 유지한다. **후보 사이 점수 차이를 만들기 위해 opaque ID, random nonce, hidden counterfactual mapping을 대표 scoring fixture에 추가하지 않는다.**
 
 Architecture sensitivity는 Test Case를 인위적으로 어렵게 만드는 방식이 아니라, 12에서 각 DP의 정상적인 구조 대안이 동일한 현실적 조건 아래 실제로 다른 information/state availability 또는 semantic pipeline behavior를 만드는지 분석하여 판단한다.
 
-두 정상 대안이 selected TC에서 동일 결과를 내는 것이 예상되면 QA-05는 그 DP의 Primary QA가 아니며 regression/secondary observation으로 유지한다.
+두 정상 대안이 selected TC에서 동일 결과를 내는 것이 예상되면 해당 QA는 그 DP의 Primary QA가 아니며 regression/secondary observation으로 유지한다.
 
 진단 목적으로 counterfactual/opaque probe를 사용할 수는 있으나 대표 QA score에는 포함하지 않고 구조 원인 분석용 evidence로만 취급한다.
 
 ## 11. 현재 리뷰 상태
 
-94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. 그러나 활성 QA catalog, QA-05 selected case/oracle, QA-09 fault strata, 반복 수와 score band는 아직 사용자 승인 전이다. Architecture 차이를 만들기 위한 인위적 fixture는 추가하지 않으며 실제 candidate 결과는 `NOT_RUN`이다.
+94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. 그러나 QA-11~15 selected case/oracle, QA-31/32 fault strata, QA-41 workload, 반복 수와 score band는 아직 사용자 승인 전이다. Architecture 차이를 만들기 위한 인위적 fixture는 추가하지 않으며 실제 candidate 결과는 `NOT_RUN`이다.

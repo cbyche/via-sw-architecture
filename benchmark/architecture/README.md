@@ -1,15 +1,17 @@
 # Current Architecture Measurement Harness
 
-> **Status: QA-01~QA-03 `NOT_IMPLEMENTED / NOT_RUN`**
+> **Status: active QA machine contract and harness `NOT_IMPLEMENTED / NOT_RUN`**
 
 이 디렉터리는 현재 Architecture baseline에 맞는 machine-readable contract, fixture, executable harness, raw-trace validator, aggregation code를 구현할 active 위치다.
 
 구현은 다음 source를 순서대로 따라야 한다.
 
 1. [Voice Responsiveness](../../docs/architecture/08-quality-attributes/voice-responsiveness.md)
-2. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
-3. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
-4. 결과 전에 승인된 machine contract와 Measurement Freeze
+2. [Correctness & Continuity](../../docs/architecture/08-quality-attributes/correctness-and-continuity.md)
+3. [Reliability & Resource](../../docs/architecture/08-quality-attributes/reliability-and-resource.md)
+4. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
+5. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
+6. 결과 전에 승인된 machine contract와 Measurement Freeze
 
 ## Expected layout
 

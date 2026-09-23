@@ -145,8 +145,8 @@ State는 wire DTO를 이름만 바꾼 중복이 아니다. 표에 별도 보관�
 
 각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. QA-01~QA-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 QA-01/QA-02/QA-03은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
 
-QA-09 fault strata·repeat·deadline은 새 contract 승인 때 고정한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 모든 영향 Task가 정확히 복구되는 endpoint를 점수화하고 blast radius·blackout·무관 기능 영향은 secondary trace로 남긴다. 기존 QA-10 external/host-fatal cell 성공률은 현행 점수가 아니다.
+QA-31/32 fault strata·repeat·deadline·necessary dependency closure는 새 contract 승인 때 고정한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 모든 영향 Task의 정확한 복구 시간은 QA-31, 불필요하게 함께 손상된 user-visible unit 수는 QA-32로 분리한다. Blackout detail은 diagnostic trace이며 previous-generation QA-10 cell 성공률은 현행 점수가 아니다.
 
-QA-11은 외부 endpoint가 실제 얻는 정보의 union이다. 배치가 같더라도 외부로 전달한 정보가 다르면 노출은 달라질 수 있다. 반대로 on-device working context만 다르면 그 자체는 remote 노출이 아니다. Supporting의 QA-11을 강한 driver로 사전 승격하지 않는다.
+QA-51은 외부 endpoint가 실제 얻는 정보의 union이다. 배치가 같더라도 외부로 전달한 정보가 다르면 노출은 달라질 수 있다. 반대로 on-device working context만 다르면 그 자체는 remote 노출이 아니다. Supporting의 QA-51을 강한 driver로 사전 승격하지 않는다.
 
 평가 자산 상태와 사전 확인 조건은 [evidence-and-readiness](../../../archive/w12-g1/evidence-and-readiness.md)를 따른다.

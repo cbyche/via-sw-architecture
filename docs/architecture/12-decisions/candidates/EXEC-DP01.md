@@ -1,8 +1,8 @@
 # EXEC-DP01 — 연동 코드의 장애를 Core와 같은 process에서 받을지, 밖에서 격리할지
 
 > 상태: Candidate definition current. 동일 코드·동일 논리 fault point 비교.
-> Current measurement contract: QA catalog와 새 Voice 경로, 동시 workload 및 IPC span은 재검토 중이다. QA-09만 active hypothesis이며 fault blast radius는 secondary trace다.
-<!-- candidate: {"dp":"EXEC-DP01","reference":"A","hypotheses":["QA-09"],"alternatives":{"A":["VIA-C-LOCALBRIDGE","VIA-I-BRIDGE","VIA-D-VIA"],"B":["VIA-C-REMOTEBRIDGE","VIA-C-WORKERLIFE","VIA-I-BRIDGE","VIA-I-IPC","VIA-S-IPC","VIA-D-VIA","VIA-D-INTEGRATION"]}} -->
+> Current measurement contract: QA catalog와 새 Voice 경로, 동시 workload 및 IPC span은 재검토 중이다. QA-31/32/41은 구조 sensitivity hypothesis다.
+<!-- candidate: {"dp":"EXEC-DP01","reference":"A","hypotheses":["QA-31","QA-32","QA-41"],"alternatives":{"A":["VIA-C-LOCALBRIDGE","VIA-I-BRIDGE","VIA-D-VIA"],"B":["VIA-C-REMOTEBRIDGE","VIA-C-WORKERLIFE","VIA-I-BRIDGE","VIA-I-IPC","VIA-S-IPC","VIA-D-VIA","VIA-D-INTEGRATION"]}} -->
 
 ## 1. 결정과 경계
 
@@ -62,13 +62,13 @@ worker에는 canonical DB write 권한을 주지 않는다. 연결 끊김은 아
 | 시험 | 두 후보의 동일 logical stimulus | 관측 |
 |---|---|---|
 | 정상 QA-01/QA-02/QA-03 + 동시 workload | 동일 Source/Agent 동작 | IPC/queue/copy·remote roundtrip·foreground 간섭 |
-| QA-09 whole-VIA restart strata | application 전체 메모리 손실, 같은 relaunch policy | 모든 영향 Task의 정확한 identity·state·result·control 복귀 시간 |
-| QA-09 integration fatal strata | adapter 진입점의 동일 `host_abort` | A는 공유 host, B는 worker가 종료; 같은 recovery policy |
-| QA-09 secondary external fault trace | 같은 refused/no-reply | blackout과 무관 기능 영향 범위; 점수는 full recovery endpoint로 계산 |
+| QA-31 whole-VIA restart strata | application 전체 메모리 손실, 같은 relaunch policy | 모든 영향 Task의 정확한 identity·state·result·control 복귀 시간 |
+| QA-31 integration fatal strata | adapter 진입점의 동일 `host_abort` | A는 공유 host, B는 worker가 종료; 같은 recovery policy |
+| QA-32 fault-containment strata | 같은 local/external fault | 허용 범위를 넘겨 영향받은 user-visible unit 수 |
 
 fatal fixture는 특정 candidate ID를 보고 PID를 고르지 않는다. **같은 adapter가 자기 host를 종료**하게 하고 시험 controller는 결과를 관찰한다. recoverable exception과 fatal termination은 별도 종류이며, crash를 반복 주입해 Single-process가 계속 실패하도록 만들지 않는다.
 
-기존 controller의 500ms 재시작과 cell 수는 새 QA-09의 승인값이 아니다. 양 후보에 같은 recovery policy를 적용하고, 결과 전 fault strata·repeat·deadline을 재동결한다. blackout duration과 blast radius는 secondary로 보존한다.
+기존 controller의 500ms 재시작과 cell 수는 새 QA-31/32의 승인값이 아니다. 양 후보에 같은 recovery policy를 적용하고, 결과 전 fault strata·repeat·deadline·허용 영향 범위를 재동결한다. blackout duration은 진단 trace로 보존한다.
 
 ## 5. ELEMENTS
 
@@ -89,6 +89,6 @@ fatal fixture는 특정 candidate ID를 보고 PID를 고르지 않는다. **같
 
 A는 IPC를 피하고 메모리 내 참조 전달을 활용하지만 process-fatal 장애가 Core까지 닿을 수 있다. B는 연동 장애의 종료 범위를 줄이고 worker만 복원할 수 있지만 프레임 전송·copy·운영 lifecycle이 추가된다. [E4](../../../archive/w12-g1/evidence-and-readiness.md)
 
-QA-01~03의 정상 경로 차이가 모델 inference에 비해 작다면 별도 큰 score 차이를 주장하지 않는다. QA-09는 모든 영향 Task의 정확한 recovery endpoint까지 측정한다. 기존 containment cell 성공률은 현행 점수가 아니며, 외부 장애와 local abort를 임의 빈도로 섞어 제품 가용성 확률처럼 발표하지 않는다.
+QA-01~03의 정상 경로 차이가 모델 inference에 비해 작다면 별도 큰 score 차이를 주장하지 않는다. QA-31은 모든 영향 Task의 정확한 recovery endpoint까지 측정하고 QA-32는 초과 영향 user-visible unit 수를 별도로 센다. QA-41은 고정 workload에서 process 분리에 따른 memory footprint를 관찰한다. 기존 containment cell 성공률은 현행 점수가 아니며, 외부 장애와 local abort를 임의 빈도로 섞어 제품 가용성 확률처럼 발표하지 않는다.
 
 EXEC A/B × TASK-DP01 A/B의 교차 확인으로 저장·소유권 효과와 process 격리 효과를 분리한다. AGENT variant의 edge normalizer가 어느 host에서 수행되는지도 complete configuration에 기록한다. 일부 연동만 process 밖으로 보내는 제3 설계는 adapter별 deployment mapping과 비용을 별도 명세해야 하며, 이번 A/B의 승자를 먼저 가정하지 않는다.

@@ -1,50 +1,62 @@
 # QA Catalog Review Plan and Decision Log
 
-> 상태: **ONGOING USER REVIEW**
-> 목적: 이번 대화에서 합의한 방향과 아직 합의하지 않은 일을 분리하여 다음 세션에서도 같은 지점에서 검토를 계속한다.
+> 상태: **ONGOING USER REVIEW — category와 single-metric 구조 합의**
+> 목적: 합의한 QA 구조와 아직 승인하지 않은 measurement 작업을 분리한다.
 
-## 1. 2026-09-23까지 합의한 방향
+## 1. 2026-09-23 합의 사항
 
-| 항목 | 현재 방향 | 아직 확정 아님 |
-| --- | --- | --- |
-| QA-01~03 | Voice 사용자 관점 responsiveness를 유지 | case, model profile, workload, target·band |
-| 이전 QA-04 | 독립 QA에서 제외하고 concurrency workload condition으로 이동 | 대표 동시 Task 수와 load shape |
-| QA-05 | Downstream Agent 품질이 아닌 VIA request handling correctness | selected corpus, predicate JSON, 반복 수, critical-failure cap |
-| 이전 QA-06 | 정상 continuity는 QA-05, 장애 후 continuity는 QA-09에 병합 | 각 selected case의 binding predicate |
-| QA-07/08 | change당 변경 Architecture Element 평균 수 | 후보별 element ledger, applicability, target·band 최종 승인 |
-| QA-09 | 모든 영향 Task의 정확한 복구 시간 | fault strata, workload, repeat, timeout·percentile |
-| 이전 QA-10 | 독립 점수를 없애고 QA-09 blast-radius secondary trace로 이동 | QA-09 원인 분석 trace의 최소 필드 |
-| QA-11 | 정상 기능의 최소 필요량을 넘겨 외부에 노출한 보호정보 단위 수 | protected unit inventory, recipient/purpose별 최소 집합, band |
-| 이전 QA-12 | 독립 QA에서 제외하되 action/access 위반 0건 필수 회귀 유지 | 회귀 fixture 최종 범위 |
+1. QA ID를 품질 계열별 번호 범위로 한 번 재구성한다.
+2. 하나의 QA는 하나의 대표 metric만 가진다.
+3. 기존 request handling QA는 통합 outcome인 QA-11로 유지한다.
+4. semantic resolution, interaction binding, async state convergence, normal continuity를 QA-12~15로 분리한다.
+5. QA-11과 QA-12~15는 함께 보고하되 weighted total에 중복 가중하지 않는다.
+6. recovery time과 fault blast radius를 QA-31과 QA-32로 분리한다.
+7. Voice interruption을 QA-04로 추가한다.
+8. target device resource는 우선 peak committed memory인 QA-41로 측정한다.
+9. Privacy는 QA-51의 단일 exposure metric만 유지한다.
+10. QA-21/22는 평균 changed Architecture Element count를 대표 metric으로 유지한다.
+11. Action/access safety는 scored QA가 아니라 zero-violation qualification gate로 유지한다.
 
-QA catalog 자체는 승인되지 않았다. 위 표는 이후 검토의 출발점이지 변경 금지 baseline이 아니다.
+## 2. 아직 승인하지 않은 것
 
-## 2. 다음 검토 순서
+| QA | 남은 결정 |
+| --- | --- |
+| QA-01~04 | canonical case, Voice fixture, workload, target와 score band |
+| QA-11~15 | selected corpus, predicate schema, isolation fixture, 반복 수, target와 score band |
+| QA-21/22 | 후보별 element ledger, applicability, target와 score band 최종 승인 |
+| QA-31/32 | fault strata, affected-unit registry, 반복·timeout·target·score band |
+| QA-41 | target PC, process/model accounting boundary, sampling과 target·score band |
+| QA-51 | protected unit inventory, recipient/purpose별 최소 집합과 score band |
 
-1. 각 active QA가 정말 Architecture 대안을 가르는지 DP별 구조 인과를 검토한다.
-2. metric이 심사위원에게 한 문장으로 설명되는지 확인한다.
+새 QA의 target은 근거 없이 기존 QA에서 복사하지 않는다. 현재 결과는 모두 `NOT_RUN`이다.
+
+## 3. 다음 검토 순서
+
+1. 각 active QA가 정상적인 Architecture 대안을 가르는 구조 인과를 검토한다.
+2. metric의 stimulus, terminal observable과 단위를 확정한다.
 3. canonical case/change/fault/workload와 machine-readable oracle을 고정한다.
 4. 근거가 있는 target과 0~5 band를 승인한다.
 5. QA별 `APPLICABLE / REGRESSION_ONLY / NOT_APPLICABLE` DP mapping을 고정한다.
-6. 그 뒤에만 machine measurement contract와 harness를 수정한다.
+6. 그 뒤에만 machine measurement contract와 harness를 구현한다.
 
-## 3. 변경 관리
+## 4. 변경 관리
 
 QA를 바꿀 때는 다음을 한 변경으로 처리한다.
 
 - [Quality Model](./quality-model.md)과 [machine-readable registry](./qa-catalog-draft.json) 갱신
 - [Scoring Contract](../11-measurement/scoring-contract.md), traceability와 candidate mapping 갱신
-- superseded 문서·implementation·result가 있으면 같은 세대로 archive
-- `check_qa_catalog.py`, link, terminology 검사를 통과
+- superseded 문서·implementation·result가 있으면 generation과 evidence 상태를 명확히 표시
+- QA catalog, link와 terminology 검사를 통과
 - 아직 승인하지 않은 target이나 결과를 current evidence로 표현하지 않음
 
-ID 공백은 review 중 이력을 보존하기 위한 것이다. Catalog 전체 승인 뒤 필요하면 한 번만 재번호화한다.
+이번 category-range 재번호화 이후에는 QA가 추가·제거돼도 기존 ID를 당겨 붙이지 않는다. Archive의 historical ID는 변경하지 않는다.
 
-## 4. Catalog 승인 완료 조건
+## 5. Catalog 승인 완료 조건
 
-- 각 QA의 중요성·구조 인과·직관적 metric에 사용자 동의
+- 각 QA의 중요성·구조 인과·단일 metric에 사용자 동의
 - canonical workload와 oracle이 결과 전에 고정됨
 - target과 0~5 band의 근거가 문서화됨
 - DP별 applicability가 실제 responsibility/contract/state/deployment 차이로 설명됨
-- 필수 회귀와 scored QA가 구분됨
+- integrated outcome과 driver QA의 중복 가중이 방지됨
+- 필수 qualification gate와 scored QA가 구분됨
 - ASR은 그 다음 별도 판정이며 catalog 승인만으로 자동 선정되지 않음

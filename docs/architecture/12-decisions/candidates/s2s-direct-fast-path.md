@@ -36,7 +36,7 @@ flowchart LR
 ## 관련 QA metric
 
 - **QA-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 QA-01 delegation 경로의 관련성은 별도 재검토한다.
-- **QA-08 Model & Context Change Locality** — S2S event/control 계약 변경은 regression으로 추적.
-- Voice barge-in/jitter — secondary observation.
+- **QA-22 Model & Context Change Locality** — S2S event/control 계약 변경은 regression으로 추적.
+- **QA-04 Voice Interruption Responsiveness** — direct path의 barge-in audio stop은 독립 회귀로 확인한다. Jitter는 diagnostic observation이다.
 
 이 문서는 Architecture Decision score 대상이 아니다.

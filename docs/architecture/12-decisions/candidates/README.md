@@ -2,7 +2,7 @@
 
 > **Current measurement contract notice:** 전체 QA catalog가 사용자 검토 중이다. 아래 mapping은 hypothesis이며 결과·ASR이 아니다. 기존 mapping은 [historical archive](../../../archive/w12-g1/12-01a-scope-and-coverage-ledger.md)에만 보존한다.
 > **상태: 후보 구조 승인 유지 / QA applicability 재검토 중**
-> 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 기존 결정 상태는 ADR을 따르며 새 QA-01~QA-03 결과는 아직 없다.
+> 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 기존 결정 상태는 ADR을 따르며 category-range QA에 대한 새 결과는 아직 없다.
 
 ## QA catalog 빠른 참조
 
@@ -11,11 +11,18 @@
 | **QA-01** | **Delegated Path VIA Responsiveness** — Agent 외부 대기를 제외한 VIA 위임 전·결과 후 Voice 처리시간 |
 | **QA-02** | **VIA Direct Voice Response Responsiveness** — downstream Agent 없는 직접 Voice 응답이 실제로 들리기까지의 시간 |
 | **QA-03** | **Agent Progress Voice Feedback Responsiveness** — Agent status가 준비된 뒤 상태 안내 Voice가 실제로 들리기까지의 시간 |
-| **QA-05** | **VIA Request Handling Correctness** — 의도·대상·Task·경로·Agent·결과를 얼마나 정확히 연결하는가 |
-| **QA-07** | **Agent Change Locality** — Agent 변화 시 바뀌는 Architecture Element의 평균 수 |
-| **QA-08** | **Model & Context Change Locality** — Model/Context/State 변화 시 바뀌는 Architecture Element의 평균 수 |
-| **QA-09** | **Correct Task Recovery Time** — 장애 뒤 모든 영향 Task의 올바른 상태·결과·제어를 회복하는 시간 |
-| **QA-11** | **Protected Data Exposure Minimization** — 정상 업무의 최소 필요량을 넘겨 외부에 노출한 보호정보 단위 수 |
+| **QA-04** | **Voice Interruption Responsiveness** — barge-in acoustic onset 뒤 중단 대상 음성이 멈추기까지의 시간 |
+| **QA-11** | **VIA Request Handling Correctness** — previous QA-05의 machine-oracle run 정확도 |
+| **QA-12** | **Request Semantic Resolution Correctness** — 요청 의미를 정확히 해석한 비율 |
+| **QA-13** | **Task & Interaction Binding Correctness** — 요청·응답·제어·event를 올바른 identity에 연결한 비율 |
+| **QA-14** | **Async State Convergence Correctness** — 정상 비동기 sequence가 정답 상태로 수렴한 비율 |
+| **QA-15** | **Interaction & Task Continuity Correctness** — 정상 전환·재연결 뒤 관계가 유지된 비율 |
+| **QA-21** | **Agent Change Locality** — Agent 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-22** | **Model & Context Change Locality** — Model/Context/State 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-31** | **Correct Task Recovery Time** — 장애 뒤 모든 영향 Task의 올바른 상태·결과·제어를 회복하는 시간 |
+| **QA-32** | **Fault Blast Radius** — fault allowance를 넘어 영향받은 user-visible unit 수 |
+| **QA-41** | **Target-device Memory Footprint** — workload stratum별 peak committed memory의 worst p95 |
+| **QA-51** | **Protected Data Exposure Minimization** — 정상 업무의 최소 필요량을 넘겨 외부에 노출한 보호정보 단위 수 |
 
 ## 1. 비교 대상 — 4개
 
@@ -23,10 +30,10 @@
 
 | Candidate DP | A | B | 현재 확정된 비교축 / 새 Voice 상태 |
 |---|---|---|---|
-| [IR-DP01](./IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | QA-05, QA-08 / QA-01·QA-02 applicability 재동결 전 |
-| [TASK-DP01](./TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | QA-08, QA-09 / QA-01·QA-03 및 동시 workload 재검토 |
-| [AGENT-DP01](./AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | QA-07, QA-08 / QA-01·QA-03 applicability 재동결 전 |
-| [EXEC-DP01](./EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | QA-09 / QA-01~QA-03 및 동시 workload 재검토; blast radius는 secondary |
+| [IR-DP01](./IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | QA-12/22 중심 hypothesis; QA-11·Voice applicability 재동결 전 |
+| [TASK-DP01](./TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | QA-13/14/15/31/32 중심 hypothesis; workload 재검토 |
+| [AGENT-DP01](./AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | QA-13/14/21/22 중심 hypothesis; Voice applicability 재동결 전 |
+| [EXEC-DP01](./EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | QA-31/32/41 중심 hypothesis; Voice와 동시 workload 재검토 |
 
 이 네 개는 각각 **semantic authority topology / Task single-writer model / Agent contract boundary / OS process fault boundary**라는 서로 다른 Architecture 축을 결정한다. Supporting DP인 CTX-DP01/02, SEC-DP01은 Master Catalog에 유지하되 현재 우선 비교에서 제외한다.
 
@@ -46,11 +53,11 @@ VIA의 기본 tactic은 **stream/event를 지원하면 low-latency update에 사
 
 ## 3. 네 DP 검토 결과
 
-### IR-DP01 — 유지, 단 QA-05는 Model 의존적이다
+### IR-DP01 — 유지, 단 QA-12는 Model 의존적이다
 
-같은 Qwen reference Model이라도 한 번에 joint decision을 내릴 때와 3개 stage로 나눌 때 실제 정확도는 달라질 수 있다. **그 방향은 Architecture만으로 예측할 수 없고 Model의 structured reasoning 능력에 상당 부분 의존한다.** 따라서 QA-05를 “stage형이 더 정확하다/부정확하다”는 논리로 쓰지 않고 실제 동일 Model·동일 corpus 결과로만 평가한다.
+같은 Qwen reference Model이라도 한 번에 joint decision을 내릴 때와 3개 stage로 나눌 때 semantic 정확도는 달라질 수 있다. **그 방향은 Architecture만으로 예측할 수 없고 Model의 structured reasoning 능력에 상당 부분 의존한다.** 따라서 QA-12를 “stage형이 더 정확하다/부정확하다”는 논리로 쓰지 않고 실제 동일 Model·동일 corpus 결과로만 평가한다.
 
-Architecture 자체가 직접 바꾸는 것은 prompt/call critical path와 semantic contract의 변경 국소성이다. QA-05는 **model-dependent empirical discriminator**로 유지하고 QA-08은 active hypothesis로 둔다. QA-01/QA-02는 새 call graph가 동결된 뒤 applicability를 확정한다.
+Architecture 자체가 직접 바꾸는 것은 prompt/call critical path와 semantic contract의 변경 국소성이다. QA-12는 **model-dependent empirical discriminator**로 유지하고 QA-22를 active hypothesis로 둔다. QA-11은 integrated outcome으로 함께 관찰하되 QA-12와 중복 가중하지 않는다. QA-01/QA-02는 새 call graph가 동결된 뒤 applicability를 확정한다.
 
 ### TASK-DP01 — 유지, 단 ‘Agent harness의 두 표준 형태’라고 말하지 않는다
 
@@ -83,7 +90,7 @@ Tokio가 process isolation 자체를 제공하는 것은 아니다. **격리는 
 
 ## 5. 현재 상태와 다음 단계
 
-네 DP의 후보 구조 자체는 승인 상태를 유지한다. 다만 새 QA-01~QA-03에 대해서는 다음을 결과와 코드보다 먼저 고정한다.
+네 DP의 후보 구조 자체는 승인 상태를 유지한다. 다만 현행 QA catalog에 대해서는 다음을 결과와 코드보다 먼저 고정한다.
 
 1. 각 DP가 실제로 바꾸는 Voice call graph와 applicable W를 지정한다.
 2. 다른 DP 조건을 고정한 A/B paired comparison과 공통 payload를 정의한다.

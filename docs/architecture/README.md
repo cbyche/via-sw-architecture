@@ -15,9 +15,9 @@
 - Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
 - Architecture 선택은 IR, TASK, AGENT, EXEC DP별 A/B 직접 비교로 수행한다.
-- QC-01~QC-10은 상위 품질 관심사다. QA catalog는 사용자 검토 중인 초안이며 현재 활성 초안 ID는 QA-01/02/03/05/07/08/09/11이다.
+- QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙으로 재구성된 사용자 검토 초안이며 active ID는 15개다.
 - ASR은 아직 선정하지 않았으며 Architecture 영향이 확인된 QA에 별도 번호 없이 표시한다.
-- QA-01~QA-03은 Voice 중심으로 재정의됐으나 새 harness와 결과는 아직 없다.
+- QA-01~QA-04는 Voice responsiveness, QA-11~15는 correctness/continuity, QA-21/22는 modifiability, QA-31/32는 reliability/availability, QA-41은 resource, QA-51은 privacy를 다룬다. 새 harness와 결과는 아직 없다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
@@ -47,12 +47,12 @@
 | Mission, boundary, common scope | Current | 후보가 바꿀 수 없는 출발점 |
 | Representative Use Cases and change scenarios | Current | 평가 모집단과 변화 범위 |
 | QC taxonomy | Current | QC-01~QC-10 상위 관심사 |
-| QA catalog | User-review draft | 활성 초안 QA-01/02/03/05/07/08/09/11; 번호 공백은 의도적 |
+| QA catalog | User-review draft | category range와 15개 active single-metric QA; 범위 안 번호 공백은 의도적 |
 | ASR classification | Pending | QA별 Architecture 영향 검토 전 |
-| QA-01~QA-03 semantic definitions | Current draft for implementation | endpoint와 포함·제외 구간은 정의됨 |
-| QA-01~QA-03 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
-| QA-01~QA-03 machine contract, targets, harness | Pending | 구현·실행 금지라는 뜻이 아니라 먼저 동결해야 함 |
-| QA-01~QA-03 current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
+| QA semantic definitions | Current draft | active QA별 단일 metric과 의미 경계 정의됨 |
+| QA-01~QA-04 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
+| Machine contract, pending targets, harness | Pending | 구현·실행 전에 먼저 동결해야 함 |
+| Current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
 | DP inventory | Current | IR/TASK/AGENT/EXEC A/B alternatives |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
