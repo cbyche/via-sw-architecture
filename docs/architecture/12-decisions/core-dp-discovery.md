@@ -1,324 +1,534 @@
-# Core Decision Point Discovery
+# VIA 핵심 Architecture Decision 후보
 
-> 상태: **USER REVIEW DRAFT / 후보 도출만 수행 / 기존 ADR 변경 없음 / 구현·측정 NOT_RUN**
+> 상태: **USER REVIEW DRAFT**
 >
-> 목적: 기존 DP 목록을 출발점으로 삼지 않고 VIA의 고정 책임, 구조적 난제와 active QA에서 전체 Core DP 후보를 도출한다. 이 문서의 A/B 방향은 trade-off hypothesis이며 승자 예측이나 ASR 판정이 아니다.
+> 이 문서는 VIA 전체를 관통하는 Architecture Decision Point 후보를 처음부터 도출한 결과다. 아직 최종 DP 목록, Architecture Decision, 구현 계획 또는 측정 결과가 아니다. 기존 ADR도 이 문서만으로 변경되지 않는다.
 
-## 1. Core DP 승격 기준
+## 1. 이 문서가 답하려는 질문
 
-설계 관심사를 Core DP 후보로 남기려면 다음 조건을 모두 만족해야 한다.
+VIA는 Voice·Text·화면 interaction을 하나의 대화로 이어가고, 직접 답하거나 Downstream Agent에 업무를 맡긴 뒤 진행 상황과 결과를 다시 사용자에게 연결한다.
 
-1. 책임, authority, state ownership, contract, dependency direction 또는 process/deployment boundary를 바꾼다.
-2. 고정 Scope와 같은 사용자 기능을 만족하는 정상적인 A/B가 존재한다.
-3. A/B에 따라 둘 이상의 Architecture Element 종류(`C/I/S/D`)가 달라진다.
-4. 둘 이상의 QA에 직접적인 구조 인과가 있다.
-5. A와 B 각각에 유리할 수 있는 QA pressure가 있어 한쪽이 정의상 지배하지 않는다.
-6. 나중에 반대안으로 이동하면 여러 Component·Interface·State·Deployment를 함께 바꿔야 한다.
-7. Model·Agent·DB 제품 선택, timeout, buffer 크기나 단순 tuning이 아니다.
+이 시스템을 설계할 때 먼저 답해야 하는 질문은 다음과 같다.
 
-여기서 “A/B에 trade-off가 있다”는 것은 결과를 미리 정한다는 뜻이 아니다. 결과가 동점이거나 예상과 반대일 수 있다. 필요한 것은 **각 대안의 장점이 생기는 구조 경로를 결과 전에 설명할 수 있는가**이다.
+> VIA가 직접 책임질 범위는 어디까지인가?
+>
+> 대화와 업무 상태의 진실은 누가 소유하는가?
+>
+> Voice Runtime, Model, Agent와 Core 사이의 권한과 계약은 어디에 두는가?
+>
+> 장애 후 무엇을 근거로 복구하고, 실행 결과를 어떻게 다시 검증할 수 있는가?
 
-## 2. 백지 도출 결과
+이 질문을 서로 독립적으로 비교할 수 있는 구조 축으로 나눈 결과가 이 문서의 12개 후보다.
 
-시스템 설명을 들은 Architecture 심사위원이 자연스럽게 물을 질문을 책임 축으로 분리하면 다음 12개가 Core DP 후보가 된다.
+문서는 다음 순서로 읽으면 된다.
 
-| Code | Decision Point | A | B | 바뀌는 구조 | 상태 |
-| --- | --- | --- | --- | --- | --- |
-| DH | VIA Direct-Handling Boundary | Rich VIA Core | Thin Interaction Core | bounded 처리 책임, dependency, 처리 경로 | Core candidate |
-| LA | Lifecycle State Authority Topology | Unified Lifecycle Authority | Federated Lifecycle Authorities | Conversation/Request/Task/Pending/ExecutionLink writer | Core candidate |
-| VC | Voice Processing Composition | S2S-native Voice Runtime | S2S-centered Hybrid Voice Runtime | speech dependency, streaming contract, call graph | Core candidate |
-| TA | Voice–Core Turn Authority | Core-gated Turn Commit | Voice-owned Direct Turn Commit | response release authority, route lease, reconciliation | Core candidate |
-| CX | Context Materialization & Release | Immutable Context Package | Scoped Context Broker | capture/materialization, release contract, provenance state | Core candidate |
-| SA | Semantic Authority Topology | Integrated Semantic Authority | Staged Semantic Authorities | semantic responsibility, intermediate contracts, call graph | Core candidate |
-| OG | Compound Delegation Granularity | VIA-coordinated Request Graph | Agent-owned Composite Delegation | request-edge scheduling, execution cardinality, result binding | Core candidate; common-capability fixture required |
-| PR | Durable State & Recovery Record | Current State + Outbox/Inbox | Event Journal + Projections | durable truth, migration, replay, recovery | Core candidate |
-| AI | Agent Integration Semantics Boundary | Edge-normalized Canonical Contract | Core-visible Typed Contracts | Agent variation 해석 책임과 계약 | Core candidate |
-| MI | Model Runtime Integration Boundary | Component-owned Model Integration | Shared Model Gateway/Runtime Manager | model invocation, scheduling, placement binding, failure boundary | Core candidate |
-| FI | Runtime Fault-Isolation Boundary | Single-process Partitioned Runtime | Supervised Process-isolated Runtime | OS fault boundary, IPC, supervision, deployment | Core candidate |
-| EV | Observability & Evidence Ownership | Component-owned Trace + Offline Join | Shared Evidence Plane | correlation, trace schema, collector, immutable evidence | Core candidate |
+1. 용어와 후보 선정 기준을 이해한다.
+2. 12개 후보의 전체 지도를 본다.
+3. 각 후보의 질문과 A/B trade-off를 순서대로 읽는다.
+4. 마지막에 QA가 빠짐없이 연결되는지, 후보가 서로 중복되지 않는지, 기존 DP와 어떤 관계인지 확인한다.
 
-12라는 숫자가 목표는 아니다. A/B를 구체화하는 과정에서 독립성이 사라지거나 한 대안이 정상 구현으로 성립하지 않으면 합치거나 제외한다.
+## 2. 이 문서에서 사용하는 용어
 
-## 3. 후보별 A/B와 QA trade-off pressure
+### VIA 시스템 용어
 
-아래의 “A pressure”와 “B pressure”는 해당 대안이 유리해질 수 있는 구조적 이유다. 실제 우열은 동결된 A/B 측정 전에는 확정하지 않는다.
+이 문서만 읽어도 후보를 이해할 수 있도록 꼭 필요한 시스템 용어만 먼저 정리한다.
 
-### DH — VIA Direct-Handling Boundary
-
-- **A — Rich VIA Core:** bounded read/search/understand와 해당 Direct Response capability를 VIA가 소유한다.
-- **B — Thin Interaction Core:** VIA는 interaction·semantic routing·Task orchestration을 소유하고, bounded 정보 처리도 원칙적으로 Agent execution으로 위임한다. S2S Direct Response와 VIA가 이미 보유한 Task 상태 응답은 유지한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
+| 용어 | 뜻 |
 | --- | --- |
-| Agent round trip이 없는 QA-02, Agent 변화가 direct path에 덜 퍼지는 QA-21, local 처리로 외부 노출을 줄일 수 있는 QA-51 | VIA-local dependency와 memory를 줄이는 QA-41, bounded 처리 구현·Model/Context 변화를 Core 밖에 둘 수 있는 QA-22 |
+| **VIA Core** | Voice Runtime을 제외한 VIA의 요청 이해, Context 사용, 대화·업무 상태와 Agent orchestration 책임 영역. 하나의 Component나 Process를 미리 뜻하지 않는다. |
+| **Voice Runtime** | 음성 입력·출력, Voice Connection, 음성 중단과 S2S 연결을 관리하는 VIA 내부 책임 영역 |
+| **S2S Model** | 음성을 입력받아 음성으로 응답할 수 있는 기본 Voice Model dependency |
+| **Model Runtime** | Model 실행, stream, 연결 수명, health와 local 자원을 관리하는 실행 환경 |
+| **Context** | 화면·선택·pointer, 대화 기록, Task 상태, 파일·메일·일정, 공개 정보와 허용된 User Memory 등 요청 이해에 필요한 정보 |
+| **VIA Request** | 한 User Turn에서 분리한 하나의 논리적 처리 단위 |
+| **VIA Task** | 여러 Request에 걸쳐 계속 상태를 추적해야 하는 사용자 업무 목표 |
+| **Agent Execution** | Downstream Agent가 실제 업무를 수행하는 한 번의 실행 |
+| **Downstream Agent** | 업무 reasoning, planning, Tool 선택·실행과 외부 상태 변경을 담당하는 VIA 외부 실행 주체 |
+| **범위가 정해진 정보 처리** | 대상과 자료가 미리 정해진 조회·검색·내용 이해. 스스로 조사 범위나 업무 계획을 만들지 않는다. |
 
-이 DP에서 업무를 Agent 시간으로 이동시킨 효과를 VIA-only latency 개선으로 주장하지 않는다. 전체 사용자 wall-clock과 QA-11을 함께 보존한다.
+### Decision Point와 대안
 
-### LA — Lifecycle State Authority Topology
+- **Decision Point(DP)**: 책임, 권한, 상태 소유권, 계약 또는 Process 경계를 어디에 둘지 결정하는 Architecture 질문이다.
+- **대안 A/B**: 같은 사용자 기능을 제공하지만 내부 구조가 다른 두 가지 정상적인 설계다.
+- **QA trade-off**: A와 B 중 어느 한쪽이 모든 면에서 항상 좋은 것이 아니라, 서로 다른 Quality Attribute에서 장단점이 생기는 관계다.
 
-- **A — Unified Lifecycle Authority:** 하나의 transactional authority가 Conversation, Request, Task, Pending Interaction과 ExecutionLink 관계를 소유한다.
-- **B — Federated Lifecycle Authorities:** Conversation/Request interaction owner와 Task owner가 각각 single writer이며 versioned link/event 계약으로 관계를 연결한다.
+### 후보 ID
 
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 관계를 한 transaction에서 검증하는 QA-13/14/15, 전체 실행 연결을 한 authority에서 추적하는 QA-61 | 상태 종류별 변경 국소화 QA-22, owner/fault 분리 QA-32, 필요 owner만 활성화하는 QA-41 |
+이 문서에서는 `VIA-DP-01`부터 `VIA-DP-12`까지의 임시 ID를 사용한다.
 
-기존 TASK-DP01의 shared Task service와 per-Task supervisor는 이보다 좁은 Task-writer 질문이다. LA 후보를 승인할 때 TASK-DP01을 독립 DP로 유지할지 LA의 alternative refinement로 흡수할지 결정한다.
+- `VIA-DP`는 **VIA 전체에 영향을 주는 Architecture Decision Point**라는 뜻이다.
+- 번호는 이 문서에서 논의할 순서다.
+- 문서 전체가 검토 초안이므로, 이 ID 역시 아직 승인된 최종 ID가 아니다.
+- 최종 후보가 합쳐지거나 제외되어도 검토 이력을 이해할 수 있도록 이 문서 안에서는 번호를 유지한다.
 
-### VC — Voice Processing Composition
+### Architecture가 달라진다는 의미
 
-- **A — S2S-native Voice Runtime:** S2S가 speech understanding, generation과 direct response의 주 dependency이고 deterministic audio I/O 외 별도 speech model을 최소화한다.
-- **B — S2S-centered Hybrid Voice Runtime:** S2S를 기본으로 유지하되 VAD/ASR/time-alignment/TTS 또는 helper model의 명시적 계약을 조합한다.
+후보 검토에서는 다음 네 종류 중 무엇이 달라지는지 확인한다.
 
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 적은 model call과 boundary의 QA-02, 적은 local runtime의 QA-41, speech dependency 변경 요소가 적을 수 있는 QA-22 | 명시적 speech timing/control의 QA-03/04, 안정된 transcript·revision의 QA-12, 세부 event provenance의 QA-61 |
-
-특정 helper 제품 선택은 이 DP가 아니다. A/B는 같은 Voice 기능과 같은 S2S 기본 dependency를 유지한다.
-
-### TA — Voice–Core Turn Authority
-
-- **A — Core-gated Turn Commit:** S2S가 stream을 만들 수 있지만 Core가 direct/escalated route와 policy를 확정한 뒤 meaningful response를 release한다.
-- **B — Voice-owned Direct Turn Commit:** 허용된 direct turn은 Voice Runtime이 response를 commit하고 Core에는 중복 방지·기록·escalation 계약으로 연결한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 동일 semantic/policy authority를 통과하는 QA-11/12/15, release 전 Context filtering의 QA-51 | Core round trip을 피하는 QA-02, Voice lane이 직접 interruption을 소유하는 QA-04, 적은 foreground state hop의 QA-41 |
-
-VC는 어떤 speech dependency를 조합하는지, TA는 누가 turn과 response를 최종 commit하는지의 결정이므로 서로 독립이다.
-
-### CX — Context Materialization & Release
-
-- **A — Immutable Context Package:** Request revision마다 필요한 Context를 수집·필터링하여 불변 package와 provenance로 확정한다.
-- **B — Scoped Context Broker:** Request에는 scoped handle/capability를 연결하고 소비자가 필요한 시점에 정책이 허용한 항목을 조회한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 반복 조회가 적은 QA-01/02, 동일 evidence snapshot을 쓰는 QA-12/61/62 | 최신 원천을 읽을 수 있는 QA-12, 필요한 항목만 materialize하는 QA-41/51, Source 변화가 broker에 국소화될 수 있는 QA-22 |
-
-Policy rule은 양쪽에서 동일하게 고정한다. enforcement 위치 자체가 Context 방식과 독립적인 A/B를 만들면 후속 DP로 분리한다.
-사용자가 대상을 지정한 시점이 중요한 Interaction Context는 B에서도 해당 source version/time에 고정된 handle을 사용한다. “on demand”를 현재 화면으로 임의 치환하지 않는다.
-
-### SA — Semantic Authority Topology
-
-- **A — Integrated Semantic Authority:** referent, Request graph, Task relation, handling과 capability requirement를 하나의 authority가 함께 산출한다.
-- **B — Staged Semantic Authorities:** grounding/refinement, Task association, handling/selection이 독립 계약과 correction boundary를 가진다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 적은 call/boundary의 QA-01/02와 QA-41, joint evidence가 필요한 QA-12 | 단계별 변경 국소화 QA-22, stage provenance QA-61, 집중된 schema가 Model에 적합한 경우 QA-12 |
-
-QA-12 방향은 Model-dependent empirical question이다. B가 항상 정확하고 A가 항상 빠르다고 가정하지 않는다.
-
-### OG — Compound Delegation Granularity
-
-- **A — VIA-coordinated Request Graph:** VIA가 사용자가 명시한 independent/sequential/data-dependent/conditional edge를 실행 readiness로 관리하고 request node별 Agent execution을 연결한다.
-- **B — Agent-owned Composite Delegation:** VIA는 사용자 graph를 보존하지만 연결된 subgraph를 이를 처리할 capability가 있는 Agent에 하나의 composite execution으로 위임한다. Agent 내부 domain plan은 계속 Agent 책임이다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| node별 control/binding의 QA-05/13, 부분 상태와 edge 수렴의 QA-14/15, 실행 관계가 보이는 QA-61 | VIA handoff·상태 수를 줄일 수 있는 QA-01/41, graph orchestration 변경을 Agent 내부에 둘 수 있는 QA-22 |
-
-B가 정상 대안이 되려면 같은 composite 기능을 실제로 지원하는 Agent fixture가 있어야 한다. 한쪽만 기능이 부족한 비교는 만들지 않는다.
-B의 composite execution도 UC가 요구하는 request-node correlation, 부분 결과와 대상별 control을 제공해야 하며, VIA가 내부 domain plan을 대신 만들지는 않는다.
-
-### PR — Durable State & Recovery Record
-
-- **A — Current State + Transactional Outbox/Inbox:** authoritative current state와 effect identity를 transactionally 저장하고 외부 query로 조정한다.
-- **B — Event Journal + Projections:** append-only lifecycle event가 durable truth이며 current view와 evaluator input을 projection으로 만든다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 직접 current read와 적은 replay의 QA-05/31, 적은 runtime state의 QA-41, 단순 current-schema 변경이면 QA-22 | event 순서·correction을 재생하는 QA-14/15, 원시 history가 남는 QA-61/62 |
-
-LA의 writer topology와 PR의 durable representation은 독립적으로 비교한다. 특정 DB 제품은 고정 조건이다.
-
-### AI — Agent Integration Semantics Boundary
-
-- **A — Edge-normalized Canonical Contract:** provider lifecycle 차이를 integration edge가 versioned canonical operation/observation으로 정규화한다.
-- **B — Core-visible Typed Contracts:** provider-neutral typed variation을 Core capability handler가 해석한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| Agent 추가·교체를 edge에 국소화하는 QA-21/22, Core binding 규칙의 일관성 QA-13 | native capability 의미를 명시적으로 보존하는 QA-05/11/14, provider mode가 trace에 직접 드러나는 QA-61 |
-
-A가 capability를 소실하지 않고 B가 native payload를 Core 전체에 누출하지 않는 잘 만든 후보를 비교한다. B의 이점이 단지 “더 많은 분기”뿐이라면 이 DP는 재승격하지 않는다.
-
-### MI — Model Runtime Integration Boundary
-
-- **A — Component-owned Model Integration:** Voice/semantic component가 각 역할에 필요한 Model adapter, stream과 lifecycle을 직접 소유한다.
-- **B — Shared Model Gateway/Runtime Manager:** 공통 gateway가 invocation, stream normalization, scheduling, placement binding, health와 resource sharing을 소유한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| 추가 hop 없는 QA-01/02/04, 한 gateway fault가 여러 기능으로 퍼지지 않는 QA-32 | provider/deployment 변경 국소화 QA-22, model instance/resource 공유 QA-41, 공통 health/filter/trace의 QA-31/51/61 |
-
-local/cloud 위치나 특정 Model 선택은 변화 시나리오와 배치 조건이며 이 DP의 A/B가 아니다.
-
-### FI — Runtime Fault-Isolation Boundary
-
-- **A — Single-process Partitioned Runtime:** Core와 외부 Agent/Context integration code를 한 OS process에 두고 queue·task·timeout으로 논리 격리한다.
-- **B — Supervised Process-isolated Runtime:** 동일한 외부 Agent/Context integration code를 별도 worker process에 두고 versioned IPC와 lifecycle supervision을 사용한다. Core state와 policy authority는 Core process에 유지한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| IPC/copy가 없는 QA-01~05, process/runtime 중복이 적은 QA-41 | fatal fault 격리 QA-32, 부분 재시작 QA-31, process별 trace와 provenance를 분리할 수 있는 QA-61 |
-
-IPC 종류나 worker 수는 DP가 아니라 후보 구현 시 고정할 조건이다.
-
-### EV — Observability & Evidence Ownership
-
-- **A — Component-owned Trace + Offline Join:** 각 Component가 versioned local trace를 소유하고 evaluator/exporter가 correlation identity로 사후 결합한다.
-- **B — Shared Evidence Plane:** 공통 event envelope, collector/spool과 immutable evidence store가 end-to-end trace를 구성한다.
-
-| A에 유리한 pressure | B에 유리한 pressure |
-| --- | --- |
-| collector dependency와 공통 buffering이 적은 QA-41, evidence plane fault의 blast radius를 줄일 수 있는 QA-32, 중앙 전송을 줄일 수 있는 QA-51 | instrumentation 변경을 공통 plane에 국소화하는 QA-23, 실행 trace 완전성 QA-61, evidence 재현성 QA-62 |
-
-양 후보 모두 모든 QA가 요구하는 최소 trace를 제공해야 한다. 로그가 부족한 A를 만들어 B가 이기게 해서는 안 된다.
-
-## 4. Structural strength check
-
-| DP | 변경 element 종류 | 여러 QA 직접 인과 | A/B opposing pressure | 변경 비용 | Gate |
-| --- | --- | --- | --- | --- | --- |
-| DH | C/I/D | QA-02/11/21/22/41/51 | 있음 | Core capability와 dependency 재배치 | PASS |
-| LA | C/I/S | QA-05/13/14/15/22/31/32/41/61 | 있음 | lifecycle writer와 관계 contract 이행 | PASS |
-| VC | C/I/D | QA-02/03/04/12/22/41/61 | 있음 | audio/model call graph와 runtime 교체 | PASS |
-| TA | C/I/S | QA-02/04/11/12/15/41/51/61 | 있음 | response commit protocol과 route state 이행 | PASS |
-| CX | C/I/S/D | QA-01/02/12/22/41/51/61/62 | 있음 | Context contract·provenance·consumer 변경 | PASS |
-| SA | C/I/S | QA-01/02/11/12/22/41/61 | 있음 | semantic contract와 prompt/call graph 이행 | PASS |
-| OG | C/I/S | QA-01/05/13/14/15/22/41/61 | 있음 | Task/execution cardinality와 edge state 이행 | PASS* |
-| PR | C/I/S/D | QA-05/14/15/22/31/41/61/62 | 있음 | durable data와 recovery migration | PASS |
-| AI | C/I/S | QA-05/11/13/14/21/22/61 | 있음 | Agent contract와 소비자 책임 이동 | PASS* |
-| MI | C/I/S/D | QA-01/02/04/22/31/32/41/51/61 | 있음 | 모든 model consumer와 deployment binding 변경 | PASS |
-| FI | C/I/S/D | QA-01~05/31/32/41/61 | 있음 | IPC, supervision, packaging과 recovery 변경 | PASS |
-| EV | C/I/S/D | QA-23/32/41/51/61/62 | 있음 | 모든 producer와 evidence pipeline schema 변경 | PASS |
-
-`PASS*`는 정상적인 B 이점을 candidate contract에서 증명해야 한다는 조건이다. OG는 같은 composite capability, AI는 capability 비손실 조건을 먼저 고정한다.
-
-## 5. 구조적 난제 coverage sweep
-
-System Understanding Review의 10개 구조적 난제가 후보 집합에서 빠지지 않았는지 확인한다.
-
-| 구조적 난제 | 주로 다루는 DP |
-| --- | --- |
-| 음성·전사·pointer·화면의 서로 다른 시간축 결합 | VC, CX, SA |
-| 빠른 Voice path와 하나의 사용자 의미 양립 | VC, TA, SA, LA |
-| VIA Task와 Agent Execution identity 분리 | LA, OG, AI, PR |
-| 비동기 상태의 권위와 진실성 | LA, OG, PR, AI |
-| 재시작 복구와 중복 Action 방지 | PR, FI, AI |
-| 충분한 Context와 최소 노출 | DH, CX, MI |
-| Compound Request 관계와 Agent planning 경계 | DH, SA, OG |
-| 실시간 Voice와 비동기 결과 중재 | TA, LA, FI |
-| Model·Agent·Context·evidence 생태계 변화 격리 | CX, AI, MI, EV |
-| 측정 가능한 Architecture 인과관계 | EV, PR, LA |
-
-현재 후보 단계에서 coverage 공백은 없다. 그러나 하나의 난제에 여러 DP가 연결된다는 이유로 모두 Primary QA를 받는 것은 아니다.
-
-## 6. QA coverage sweep
-
-표의 DP code는 해당 QA가 Primary가 될 가능성이 있는 hypothesis다. 실제 `Primary / Regression / N/A`는 A/B element와 physical path를 확정한 뒤 결과 전에 결정한다.
-
-| QA | DP hypothesis |
-| --- | --- |
-| QA-01 | DH, CX, SA, OG, AI, MI, FI |
-| QA-02 | DH, VC, TA, CX, SA, MI, FI |
-| QA-03 | LA, VC, AI, MI, FI |
-| QA-04 | VC, TA, MI, FI |
-| QA-05 | LA, OG, PR, AI, FI |
-| QA-11 | DH, TA, CX, SA, OG, AI |
-| QA-12 | VC, TA, CX, SA, MI |
-| QA-13 | LA, OG, PR, AI |
-| QA-14 | LA, OG, PR, AI |
-| QA-15 | LA, TA, CX, OG, PR |
-| QA-21 | DH, OG, AI |
-| QA-22 | DH, LA, VC, TA, CX, SA, OG, PR, AI, MI |
-| QA-23 | EV |
-| QA-31 | LA, PR, AI, MI, FI |
-| QA-32 | LA, MI, FI, EV |
-| QA-41 | DH, LA, VC, TA, CX, SA, OG, PR, MI, FI, EV |
-| QA-51 | DH, TA, CX, MI, EV |
-| QA-61 | LA, VC, TA, CX, SA, OG, PR, AI, MI, FI, EV |
-| QA-62 | CX, PR, EV |
-
-이 표는 QA마다 DP를 억지로 붙이는 용도가 아니다. 한 DP의 A/B가 해당 metric의 physical path나 element를 실제로 바꾸지 않으면 그 QA는 regression 또는 `N/A`로 내려간다.
-
-## 7. Independence rules and required cross-checks
-
-| DP | 비교할 때 반드시 고정할 다른 축 | 강한 interaction이 있어 제한 교차 확인할 축 |
+| 종류 | 이 문서에서의 의미 | 예 |
 | --- | --- | --- |
-| DH | 같은 user goal, source와 Agent capability | CX, SA, OG |
-| LA | 같은 durable representation과 process boundary | PR, OG, FI |
-| VC | 같은 turn authority와 S2S profile | TA, MI |
-| TA | 같은 Voice composition과 semantic topology | VC, SA |
-| CX | 같은 source, policy rule과 semantic responsibility | DH, SA, MI |
-| SA | 같은 Model profile, Context contract와 handling scope | TA, CX, MI |
-| OG | 같은 Request graph, Agent capability와 Task semantics | LA, AI |
-| PR | 같은 lifecycle writer topology와 DB conditions | LA, FI, EV |
-| AI | 같은 Agent fixture, Task owner와 process placement | OG, FI |
-| MI | 같은 semantic/Voice responsibility와 Model profile | VC, SA, FI |
-| FI | 같은 code, worker budget, persistence와 logical fault | LA, PR, AI, MI, EV |
-| EV | 같은 required event semantics와 privacy rule | PR, FI |
+| **Component** | 독립된 책임과 변경 이유를 가진 실행 단위 | Context Broker, Task State Owner |
+| **Interface** | Component 또는 외부 dependency 사이의 계약 | Agent Observation, Context Package |
+| **State** | 별도 수명·복구·갱신 규칙을 가진 정보 | Task revision, pending approval |
+| **Deployment** | Process, device 또는 local/remote 실행 경계 | Core process, integration worker |
 
-강한 interaction은 두 DP를 하나로 합쳐야 한다는 뜻이 아니다. 한 축만 바꿀 수 있지만 선택의 방향이 다른 축에서 뒤집힐 가능성이 있을 때만 작은 교차 확인을 한다. 전체 조합을 primary winner selection으로 사용하지 않는다.
+단순히 함수나 class 이름이 달라지는 것은 Architecture 차이로 세지 않는다.
 
-## 8. Core DP에서 제외하거나 흡수한 항목
+### 후보 설명에 나오는 기술어
+
+| 표현 | 이 문서에서의 뜻 |
+| --- | --- |
+| **단일 변경 권한자(single writer)** | 특정 상태를 최종적으로 바꿀 수 있는 주체가 하나뿐이라는 뜻 |
+| **일관성 경계** | 여러 상태 변경을 전부 성공시키거나 전부 취소할 수 있는 범위 |
+| **불변(immutable) 기록** | 만든 뒤 내용을 덮어쓰지 않고, 변경이 필요하면 새 version을 만드는 기록 |
+| **출처 정보(provenance)** | 어떤 정보가 어디에서 언제 어떤 version으로 왔는지를 나타내는 정보 |
+| **이벤트 이력(event journal)** | 상태를 직접 덮어쓰는 대신, 상태를 바꾼 사건을 순서대로 계속 추가한 기록 |
+| **현재 상태 보기(projection)** | 이벤트 이력을 읽어 현재 상태 형태로 계산한 결과 |
+| **outbox/inbox** | 외부 요청이나 응답을 잃거나 중복 처리하지 않도록 저장해 두는 송·수신 기록 |
+| **멱등 식별자(idempotency identity)** | 같은 요청을 재시도해도 외부 동작이 한 번만 일어나게 하는 요청 식별자 |
+| **Gateway** | 여러 Component가 외부 dependency를 같은 계약으로 사용하게 만드는 공통 연결 지점 |
+| **평가 근거 영역(Evidence Plane)** | 실행 기록과 평가 근거를 수집·연결·보관하는 공통 책임 영역 |
+
+## 3. Core DP 후보를 남기는 기준
+
+후보는 다음 조건을 모두 만족해야 한다.
+
+1. 책임, 권한, 상태 소유권, 계약, dependency 방향 또는 Process/Deployment 경계를 바꾼다.
+2. A와 B가 같은 사용자 기능을 제공할 수 있다.
+3. Component·Interface·State·Deployment 중 둘 이상이 달라진다.
+4. 둘 이상의 QA에 직접 영향을 줄 수 있다.
+5. A와 B 각각에 유리할 수 있는 QA가 있어 한쪽이 정의상 지배하지 않는다.
+6. 나중에 반대안으로 바꾸려면 여러 Architecture Element와 데이터·계약을 함께 바꿔야 한다.
+7. 특정 Model·Agent·DB 제품 선택이나 timeout, retry, buffer 크기 같은 tuning 문제가 아니다.
+
+“A가 이 QA에서 유리할 수 있다”는 표현은 승자를 미리 정한다는 뜻이 아니다. 실제 결과는 반대이거나 동점일 수 있다. 중요한 것은 **왜 차이가 생길 수 있는지를 구조로 설명할 수 있는가**이다.
+
+## 4. 12개 후보의 전체 지도
+
+후보는 앞 결정이 뒤 결정의 범위를 정의하는 순서로 배치했다.
+
+```text
+VIA의 책임 범위와 상태의 주인
+  VIA-DP-01 직접 처리 범위
+  VIA-DP-02 대화·요청·업무 상태 소유 구조
+
+Voice와 의미 이해 경로
+  VIA-DP-03 음성 처리 구성
+  VIA-DP-04 음성 응답 확정 권한
+  VIA-DP-05 Context 전달 방식
+  VIA-DP-06 의미 판단 구조
+
+업무 위임과 복구
+  VIA-DP-07 복합 요청 실행 조정 책임
+  VIA-DP-08 상태 저장 및 복구 기준
+
+외부 dependency와 실행 경계
+  VIA-DP-09 Agent 차이 흡수 위치
+  VIA-DP-10 Model Runtime 연결 구조
+  VIA-DP-11 연동 코드 Process 격리
+
+연구와 검증 기반
+  VIA-DP-12 실행 기록과 평가 근거 소유 구조
+```
+
+| ID | 한 문장 질문 | 대안 A | 대안 B |
+| --- | --- | --- | --- |
+| VIA-DP-01 | 범위가 정해진 정보 처리를 VIA와 Agent 중 누가 맡는가? | VIA가 직접 처리 | Agent에 위임 |
+| VIA-DP-02 | 대화·요청·업무 관계의 상태를 누가 확정하는가? | 하나의 통합 상태 소유자 | 수명별로 분리된 상태 소유자 |
+| VIA-DP-03 | S2S만으로 Voice Runtime을 구성할 것인가? | S2S 중심 단일 구성 | S2S와 보조 음성 Component 조합 |
+| VIA-DP-04 | S2S 직접 응답을 누가 최종 확정하는가? | Core 승인 후 응답 | Voice Runtime이 직접 확정 |
+| VIA-DP-05 | 필요한 Context를 언제 어떤 형태로 전달하는가? | 요청 시점의 불변 Context 묶음 | 필요할 때 범위가 제한된 Context 조회 |
+| VIA-DP-06 | 요청 의미를 한 번에 판단할 것인가? | 하나의 통합 의미 판단 | 계약으로 분리된 단계별 판단 |
+| VIA-DP-07 | 복합 요청의 실행 관계를 누가 조정하는가? | VIA가 요청 관계를 조정 | Agent가 복합 업무를 조정 |
+| VIA-DP-08 | 재시작 후 무엇을 복구의 기준 기록으로 삼는가? | 현재 상태 저장 | 이벤트 이력 저장 |
+| VIA-DP-09 | Agent별 기능과 수명 차이를 어디서 해석하는가? | Agent 경계에서 공통 형식으로 변환 | Core가 유형별 차이를 해석 |
+| VIA-DP-10 | 여러 Model Runtime을 각 Component가 직접 연결하는가? | Component별 직접 연결 | 공통 Model 연결부 사용 |
+| VIA-DP-11 | 외부 연동 코드의 치명적 장애를 어디까지 격리하는가? | Core와 같은 Process | 별도 연동 Process |
+| VIA-DP-12 | 실행 기록과 평가 근거를 누가 소유하는가? | 각 Component가 기록 | 공통 평가 근거 영역이 기록 |
+
+12라는 숫자 자체가 목표는 아니다. 상세 검토에서 대안 하나가 정상적으로 성립하지 않거나 다른 후보와 독립적이지 않으면 합치거나 제외한다.
+
+현재 `VIA-DP-07`과 `VIA-DP-09`는 특히 엄격한 확인이 필요하다. VIA-DP-07은 양쪽 Agent가 같은 복합 업무 기능을 제공해야 하고, VIA-DP-09는 공통 계약이 Agent 기능을 잃지 않는 상태에서도 두 대안의 독립적인 장점이 남아야 한다.
+
+## 5. 후보별 설명과 QA trade-off
+
+### VIA-DP-01 — VIA 직접 처리 범위
+
+**질문:** 대상과 범위가 명확한 read/search/understand 요청을 VIA가 직접 처리할 것인가, Downstream Agent에 맡길 것인가?
+
+이 결정은 요청별 routing 규칙 하나를 고르는 문제가 아니다. VIA 안에 범위가 정해진 정보를 읽고 답하는 기능을 둘지, VIA를 interaction과 orchestration 중심의 얇은 시스템으로 만들지를 결정한다.
+
+#### 대안 A — VIA 직접 처리형
+
+VIA가 지정된 문서·메일·일정·웹 정보의 제한된 조회, 발췌, 요약과 단순 비교를 직접 수행한다. Downstream Agent의 planning이나 Tool 실행이 필요한 업무만 위임한다.
+
+#### 대안 B — Agent 위임형
+
+VIA는 사용자 요청 이해, Context 연결, Task 관리와 Agent 선택을 담당한다. 범위가 정해진 정보 처리도 원칙적으로 Agent execution으로 위임한다. S2S 직접 응답과 VIA가 이미 보유한 Task 상태 응답은 유지한다.
+
+**달라지는 구조:** 범위가 정해진 정보에 답하는 Component의 존재, Context와 Model dependency 방향, 직접 응답과 Agent execution 경로, Task 생성 범위가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-21 Agent 변화 영향 범위:** Agent 변화가 VIA 직접 처리 경로에 덜 퍼질 수 있음. **QA-51 불필요한 보호정보 노출:** PC 내부 처리로 외부 제공 정보를 줄일 수 있음. | **QA-41 target PC 메모리:** VIA의 PC 내부 실행 요소를 줄일 수 있음. **QA-22 Model·Context·State 변화 영향 범위:** 범위가 정해진 정보 처리 구현과 관련 변화를 Core 밖에 둘 수 있음. |
+
+이 DP에서는 A가 QA-02 Direct 경로, B가 QA-01 Delegated 경로를 사용할 수 있으므로 두 responsiveness QA를 서로 맞대어 승패를 내지 않는다. Agent 실행시간을 측정 구간 밖으로 옮긴 것만으로 B가 더 빠르다고 결론내리지 않고 사용자 전체 대기시간과 **QA-11 전체 요청 처리 정확도**를 함께 본다.
+
+### VIA-DP-02 — 대화·요청·업무 상태 소유 구조
+
+**질문:** Conversation, VIA Request, VIA Task, Pending Interaction과 Agent Execution 연결 관계를 하나의 상태 소유자가 확정할 것인가, 수명이 다른 상태 소유자들이 나누어 확정할 것인가?
+
+#### 대안 A — 통합 상태 소유자
+
+하나의 상태 소유자가 대화, 요청, 업무, 대기 질문·승인과 외부 실행 연결 관계를 함께 소유한다. 관계 변경을 가능한 한 하나의 일관성 경계에서 검사한다.
+
+#### 대안 B — 분리된 상태 소유자
+
+대화·요청 상태 소유자와 Task 상태 소유자가 각각 자기 상태의 단일 변경 권한자가 된다. 두 상태는 version과 identity가 명시된 계약과 event로 연결한다.
+
+**달라지는 구조:** 상태를 쓸 수 있는 Component, 상태 전이 Interface, 관계를 저장하는 State, 장애가 전파되는 범위가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-13 올바른 Task·Interaction 연결, QA-14 비동기 상태 수렴, QA-15 대화·Task 연속성:** 관계를 한 일관성 경계에서 검사할 수 있음. **QA-61 실행 trace 완전성:** 전체 실행을 한 authority에서 연결할 수 있음. | **QA-22 State 변화 영향 범위:** 상태 종류별 변경을 국소화할 수 있음. **QA-31 복구시간과 QA-32 장애 영향 범위:** 영향받은 owner만 복구·격리할 수 있음. |
+
+기존 TASK-DP01은 Task를 최종 변경할 주체만 비교한다. 이 후보는 그보다 먼저 Conversation·Request·Task 전체의 소유 구조를 묻는다.
+
+### VIA-DP-03 — 음성 처리 구성
+
+**질문:** S2S Model이 제공하는 기능을 중심으로 Voice Runtime을 단순하게 구성할 것인가, 명시적인 VAD·ASR·시간 정렬·TTS 또는 helper model을 함께 구성할 것인가?
+
+두 대안 모두 S2S를 기본 Voice Model로 사용한다. 특정 helper 제품을 고르는 문제는 이 DP에 포함하지 않는다.
+
+#### 대안 A — S2S 중심 단일 구성
+
+S2S가 speech understanding, generation과 허용된 direct response의 주 dependency다. 별도 speech model과 중간 계약을 최소화한다.
+
+#### 대안 B — S2S와 보조 음성 Component 조합
+
+S2S를 유지하면서 제품에 필요한 turn detection, transcript revision, word timing, interruption control 또는 Core 응답 재생을 명시적인 보조 Component와 계약으로 제공한다.
+
+**달라지는 구조:** Voice Runtime 내부 Component, streaming event Interface, 음성 관련 State, Model Runtime dependency와 call graph가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-02 직접 Voice 응답시간:** Model 호출과 경계가 적을 수 있음. **QA-41 target PC 메모리:** PC 내부 실행 요소가 적을 수 있음. **QA-22 변화 영향 범위:** 음성 dependency 변경 요소가 적을 수 있음. | **QA-03 Agent 상태 Voice 전달시간과 QA-04 음성 중단시간:** 명시적인 시간·제어 신호를 사용할 수 있음. **QA-12 의미 해석 정확도:** 안정된 전사문 version을 사용할 수 있음. **QA-61 실행 trace 완전성:** 세부 음성 event의 출처 정보를 남길 수 있음. |
+
+### VIA-DP-04 — 음성 응답 확정 권한
+
+**질문:** S2S가 직접 답할 수 있는 요청에서도 Core가 응답을 승인해야 하는가, Voice Runtime이 직접 응답을 확정할 수 있는가?
+
+이 결정은 단순 latency 최적화가 아니다. 같은 User Turn을 누가 완료로 선언하고, Core의 중복 처리와 정정·중단을 어떻게 막는지 결정한다.
+
+#### 대안 A — Core 승인 후 응답
+
+S2S가 streaming 결과를 만들 수 있지만 Core가 direct/escalated route와 policy를 확정한 뒤 meaningful response를 사용자에게 내보낸다.
+
+#### 대안 B — Voice Runtime이 직접 응답 확정
+
+허용된 direct request는 Voice Runtime이 response를 확정한다. Core에는 같은 Request의 중복 실행을 막고 Conversation에 기록하기 위한 명시적인 commit·escalation event를 전달한다.
+
+**달라지는 구조:** response release authority, route/response State, Voice–Core Interface와 foreground call graph가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-11 전체 요청 처리, QA-12 의미 해석, QA-15 연속성:** 동일한 semantic/policy 경계를 통과함. **QA-51 불필요한 보호정보 노출:** 응답 전에 Context 제공 범위를 확인할 수 있음. | **QA-02 직접 Voice 응답시간:** Core 왕복을 피할 수 있음. **QA-41 target PC 메모리:** foreground route State와 처리 hop을 줄일 수 있음. |
+
+VIA-DP-03은 어떤 음성 dependency를 조합하는지, VIA-DP-04는 누가 응답을 확정하는지를 결정하므로 서로 다른 DP다.
+
+### VIA-DP-05 — Context 전달 방식
+
+**질문:** 요청 처리에 필요한 화면·선택·대화·Task Context를 요청 초기에 하나의 묶음으로 확정할 것인가, 각 소비자가 필요한 시점에 제한된 범위만 조회할 것인가?
+
+#### 대안 A — 요청 시점의 불변 Context 묶음
+
+Request version마다 필요한 Context를 수집하고 허용 범위를 적용한 뒤, 값과 출처 정보가 포함된 불변 묶음을 만든다. 각 Model·Core·Agent에는 그 소비자에게 허용된 묶음만 전달한다.
+
+#### 대안 B — 필요할 때 범위가 제한된 Context 조회
+
+Request에는 범위와 version이 명시된 handle/capability를 연결한다. 각 소비자는 Context Broker를 통해 필요한 항목만 허용된 시점에 조회한다.
+
+사용자가 대상을 지정한 시점이 중요한 화면 Context는 B에서도 당시 source version/time에 고정한다. on-demand 조회를 현재 화면으로 임의 치환하지 않는다.
+
+**달라지는 구조:** Context 묶음을 만드는 Component, Context 전달 Interface, 출처·cache State, 외부 제공 dependency 방향이 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-01 위임 경로 VIA 처리시간과 QA-02 직접 Voice 응답시간:** 반복 조회를 줄일 수 있음. **QA-12 의미 해석, QA-61 trace 완전성, QA-62 평가 재현성:** 동일한 Context 묶음을 사용할 수 있음. | **QA-41 target PC 메모리와 QA-51 불필요한 보호정보 노출:** 필요한 정보만 실제 값으로 가져올 수 있음. **QA-12 의미 해석:** 최신 상태가 필요한 요청에서 새 값을 읽을 수 있음. **QA-22 변화 영향 범위:** 정보 출처의 변화를 Broker에 국소화할 수 있음. |
+
+양쪽의 접근·제공 policy는 동일하게 고정한다. Policy enforcement 위치가 Context 방식과 독립적인 A/B를 만들 때만 별도 DP로 분리한다.
+
+### VIA-DP-06 — 의미 판단 구조
+
+**질문:** referent, 복합 Request 관계, 기존 Task 연결, direct/delegated 처리와 Agent capability 요구를 하나의 판단이 함께 결정할 것인가, 독립된 단계가 계약을 주고받으며 결정할 것인가?
+
+#### 대안 A — 하나의 통합 의미 판단
+
+하나의 semantic authority가 필요한 Context와 Task view를 받아 최종 Semantic Decision을 함께 생성한다.
+
+#### 대안 B — 계약으로 분리된 단계별 판단
+
+grounding/refinement, Task association, handling/Agent selection을 독립된 responsibility와 intermediate contract로 나눈다. 앞 단계의 오류를 수정할 수 있는 correction contract를 둔다.
+
+**달라지는 구조:** semantic Component 수와 책임, 중간 Interface와 State, Model 호출 순서와 correction call graph가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-01 위임 경로 VIA 처리시간, QA-02 직접 Voice 응답시간, QA-41 target PC 메모리:** 호출과 경계를 줄일 수 있음. **QA-12 의미 해석 정확도:** 전체 판단 근거를 한 번에 함께 볼 수 있음. | **QA-22 변화 영향 범위:** 단계별 변경을 국소화할 수 있음. **QA-61 실행 trace 완전성:** 단계별 판단 근거와 출처가 명확함. **QA-12 의미 해석 정확도:** 한 가지 판단에 집중된 입력 형식이 Model에 더 적합할 수 있음. |
+
+QA-12의 방향은 Model 능력과 실제 corpus에 따라 달라질 수 있다. 단계가 많으면 항상 정확하거나 통합 판단이면 항상 빠르다고 가정하지 않는다.
+
+### VIA-DP-07 — 복합 요청 실행 조정 책임
+
+**질문:** 사용자가 여러 요청을 독립 실행, 순차 실행, 앞선 결과를 이용한 실행 또는 조건부 실행으로 연결했을 때, VIA가 각 실행을 조정할 것인가, 하나의 복합 업무로 Agent에 맡길 것인가?
+
+두 대안 모두 사용자가 말한 Request 관계를 보존한다. VIA가 Agent 내부 domain plan을 만드는 구조는 허용하지 않는다.
+
+#### 대안 A — VIA가 요청 관계 조정
+
+VIA가 각 Request node의 readiness와 결과 관계를 관리하고 node별 Agent execution을 연결한다.
+
+#### 대안 B — Agent가 복합 업무 조정
+
+VIA는 사용자 요청 관계를 기록하지만, 서로 연결된 요청들은 이를 처리할 수 있는 Agent에 하나의 복합 실행으로 위임한다.
+
+B도 사용자가 특정 부분만 조회·정정·취소할 수 있도록 request-node correlation, 부분 결과와 control capability를 제공해야 한다.
+
+**달라지는 구조:** Request graph scheduler Component, Task–Execution cardinality, node control Interface와 부분 결과 State가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-05 Task 제어 응답시간과 QA-13 binding 정확도:** node별 control과 binding을 직접 관리함. **QA-14 상태 수렴과 QA-15 연속성:** 부분 상태를 명시적으로 추적함. **QA-61 trace 완전성:** node와 execution 관계가 VIA trace에 드러남. | **QA-01 위임 경로 VIA 처리시간과 QA-41 target PC 메모리:** VIA의 handoff와 상태 수를 줄일 수 있음. **QA-22 변화 영향 범위:** graph orchestration 변경을 Agent 내부에 둘 수 있음. |
+
+B를 시험할 때 복합 업무 기능이 없는 Agent를 제공해 의도적으로 실패시키지 않는다. 같은 사용자 기능을 지원하는 Agent 시험 조건이 먼저 필요하다.
+
+### VIA-DP-08 — 상태 저장 및 복구 기준
+
+**질문:** 재시작 후 현재 상태를 직접 읽어 복구할 것인가, 발생한 이벤트 이력을 재생해 현재 상태를 다시 만들 것인가?
+
+이 결정은 VIA-DP-02의 상태 소유자와 독립적이다. 통합 상태 소유자도 이벤트 이력을 사용할 수 있고, 분리된 상태 소유자도 현재 상태 저장소를 사용할 수 있다.
+
+#### 대안 A — 현재 상태 저장
+
+권위 있는 현재 상태, version, 대기 중 동작과 outbox/inbox를 저장한다. 외부 실행은 Agent 조회와 멱등 식별자로 맞춘다.
+
+#### 대안 B — 이벤트 이력 저장
+
+상태를 바꾼 사건을 순서대로 추가한 이벤트 이력을 복구의 기준 기록으로 저장한다. 현재 Task 보기, 복구 상태와 평가 입력은 그 이력으로부터 다시 만든다.
+
+**달라지는 구조:** 저장 Interface, durable State 형식, migration과 replay Component, recovery call graph가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-05 Task 제어 응답시간과 QA-31 복구시간:** current state를 바로 읽을 수 있음. **QA-41 target PC 메모리:** replay State를 줄일 수 있음. **QA-22 변화 영향 범위:** 단순 current-schema 변경이면 수정 범위가 작을 수 있음. | **QA-14 상태 수렴과 QA-15 연속성:** event 순서와 correction을 재생할 수 있음. **QA-61 trace 완전성과 QA-62 평가 재현성:** 원시 실행 이력을 보존할 수 있음. |
+
+특정 DB 제품은 이 DP와 분리하여 비교 조건으로 고정한다.
+
+### VIA-DP-09 — Agent 차이 흡수 위치
+
+**질문:** Agent마다 다른 submit, follow-up, cancel, question, status와 result 의미를 Agent 경계에서 공통 형식으로 바꿀 것인가, Core가 유형별 차이를 직접 해석할 것인가?
+
+#### 대안 A — Agent 경계에서 공통 형식으로 변환
+
+integration adapter가 provider lifecycle 차이를 versioned canonical operation과 observation으로 바꾼다. Core는 공통 계약만 사용한다.
+
+#### 대안 B — Core가 Agent 유형 차이를 해석
+
+integration boundary는 provider-neutral typed variation을 전달한다. Core의 capability handler가 follow-up, cancel, status, artifact mode의 차이를 해석한다.
+
+**달라지는 구조:** Agent semantic adapter와 Core handler 책임, Agent Interface, capability와 execution-mode State가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-21 Agent 변화와 QA-22 관련 계약 변화 영향 범위:** 추가·교체를 integration edge에 국소화할 수 있음. **QA-13 binding 정확도:** Core가 한 가지 binding rule을 사용함. | **QA-05 Task 제어, QA-11 전체 요청 처리, QA-14 상태 수렴:** Agent capability 차이를 Core가 명시적으로 볼 수 있음. **QA-61 trace 완전성:** provider mode가 trace에 직접 나타남. |
+
+A가 Agent capability를 잃거나 B가 native payload를 Core 전체에 누출하는 나쁜 후보를 만들지 않는다. B의 유일한 차이가 Core 분기 증가뿐이라면 이 후보는 Core DP에서 제외한다.
+
+### VIA-DP-10 — Model Runtime 연결 구조
+
+**질문:** Voice와 semantic Component가 각자 Model Runtime을 직접 연결하고 관리할 것인가, 하나의 공통 Model Gateway가 연결·배치·자원을 관리할 것인가?
+
+#### 대안 A — Component별 Model 직접 연결
+
+각 Component가 자기 역할에 맞는 Model adapter, stream, cancellation과 health 처리를 소유한다.
+
+#### 대안 B — 공통 Model 연결부 사용
+
+공통 Model Gateway/Runtime Manager가 Model 호출, stream 형식 통일, 실행 순서, PC 내부·외부 배치 연결, health와 자원 공유를 소유한다.
+
+**달라지는 구조:** Model adapter와 gateway Component, invocation Interface, scheduling/health State, local/remote Deployment binding이 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-01/02 responsiveness와 QA-04 음성 중단시간:** 추가 gateway hop이 없음. **QA-32 장애 영향 범위:** 하나의 gateway fault가 여러 기능으로 퍼지지 않음. | **QA-22 변화 영향 범위:** provider·deployment 변경을 국소화할 수 있음. **QA-41 target PC 메모리:** Model instance를 공유할 수 있음. **QA-31 복구, QA-51 정보 노출, QA-61 trace 완전성:** 공통 health·filter·trace를 적용할 수 있음. |
+
+특정 Model이나 local/cloud 위치를 하나 고르는 것은 이 DP가 아니다. Architecture가 그러한 변화를 어디에서 흡수하는지가 질문이다.
+
+### VIA-DP-11 — 연동 코드 Process 격리
+
+**질문:** 외부 Agent와 Context Source를 연결하는 코드에서 치명적 장애가 발생할 때 Core와 함께 종료되도록 둘 것인가, 별도 Process 안에서 격리할 것인가?
+
+#### 대안 A — Core와 같은 Process
+
+Core와 외부 연동 코드를 하나의 OS process에 둔다. 크기 제한 queue, 비동기 작업, timeout과 cancellation으로 논리적으로 격리한다.
+
+#### 대안 B — 별도 연동 Process
+
+동일한 외부 연동 코드를 supervised worker process에 둔다. Core state와 policy authority는 Core process에 유지하고 versioned IPC로 연결한다.
+
+**달라지는 구조:** Process Deployment, local bridge/IPC Interface, in-flight operation State, worker supervision Component가 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-01 위임 경로, QA-03 Agent 상태 전달, QA-05 Task 제어 응답시간과 실제 Context 연동을 사용하는 QA-02 경로:** Process 간 통신과 데이터 복사를 피할 수 있음. **QA-41 target PC 메모리:** 중복 Process 실행 요소가 적음. | **QA-32 장애 영향 범위:** 치명적 장애를 worker에 가둘 수 있음. **QA-31 복구시간:** worker만 재시작할 수 있음. **QA-61 trace 완전성:** Process별 기록 출처가 명확해질 수 있음. |
+
+IPC 종류, worker 수와 queue 크기는 이 DP의 대안이 아니라 후보 구현 전에 고정할 조건이다.
+
+### VIA-DP-12 — 실행 기록과 평가 근거 소유 구조
+
+**질문:** 각 Component가 자신의 trace를 독립적으로 남기고 나중에 결합할 것인가, 공통 Evidence Plane이 실행 중에 end-to-end trace와 평가 근거를 구성할 것인가?
+
+양쪽 모두 QA 측정에 필요한 최소 event와 correlation identity를 제공해야 한다. 로그가 부족한 A를 만들어 B가 이기게 해서는 안 된다.
+
+#### 대안 A — 각 Component가 기록
+
+각 Component가 versioned local trace를 소유한다. evaluator와 exporter가 공통 identity를 사용해 실행 후 trace를 결합한다.
+
+#### 대안 B — 공통 평가 근거 영역이 기록
+
+공통 event 형식, 수집·임시 저장 Component와 불변 근거 저장소가 실행 중에 처음부터 끝까지 이어진 trace를 구성한다.
+
+**달라지는 구조:** trace producer Interface, correlation State, collector와 evidence store Component, evidence Deployment와 dependency 방향이 달라진다.
+
+| A가 유리할 수 있는 QA | B가 유리할 수 있는 QA |
+| --- | --- |
+| **QA-41 target PC 메모리:** 공통 수집 Component와 buffer가 적음. **QA-32 장애 영향 범위:** 기록 수집 장애가 실행 경로에 퍼지지 않게 만들기 쉬움. **QA-51 불필요한 보호정보 노출:** 중앙 전송을 줄일 수 있음. | **QA-23 실험·로그 변경 영향 범위:** 계측 변경을 공통 영역에 모을 수 있음. **QA-61 실행 trace 완전성과 QA-62 평가 재현성:** 공통 기록 형식과 불변 근거를 사용할 수 있음. |
+
+## 6. 전체 문제 영역이 빠짐없이 연결되는가
+
+시스템 이해 과정에서 확인한 구조적 난제와 이를 주로 다루는 후보를 연결했다.
+
+| 구조적 난제 | 관련 후보 |
+| --- | --- |
+| 음성·전사·pointer·화면의 서로 다른 시간축 결합 | VIA-DP-03 음성 처리, VIA-DP-05 Context 전달, VIA-DP-06 의미 판단 |
+| 빠른 Voice 경로와 하나의 사용자 의미 양립 | VIA-DP-03 음성 처리, VIA-DP-04 응답 확정, VIA-DP-06 의미 판단, VIA-DP-02 상태 소유 |
+| VIA Task와 Agent Execution 식별자 분리 | VIA-DP-02 상태 소유, VIA-DP-07 복합 요청 조정, VIA-DP-09 Agent 계약, VIA-DP-08 상태 저장 |
+| 비동기 상태의 권위와 진실성 | VIA-DP-02 상태 소유, VIA-DP-07 복합 요청 조정, VIA-DP-08 상태 저장, VIA-DP-09 Agent 계약 |
+| 재시작 복구와 외부 동작 중복 방지 | VIA-DP-08 상태 저장, VIA-DP-11 Process 격리, VIA-DP-09 Agent 계약 |
+| 충분한 Context와 최소 노출 | VIA-DP-01 직접 처리, VIA-DP-05 Context 전달, VIA-DP-10 Model 연결 |
+| 복합 요청 관계와 Agent planning 경계 | VIA-DP-01 직접 처리, VIA-DP-06 의미 판단, VIA-DP-07 복합 요청 조정 |
+| 실시간 Voice와 비동기 결과 중재 | VIA-DP-04 응답 확정, VIA-DP-02 상태 소유, VIA-DP-11 Process 격리 |
+| Model·Agent·Context 생태계 변화 격리 | VIA-DP-05 Context 전달, VIA-DP-09 Agent 계약, VIA-DP-10 Model 연결 |
+| 측정 가능한 Architecture 인과관계 | VIA-DP-12 평가 근거 소유, VIA-DP-08 상태 저장, VIA-DP-02 상태 소유 |
+
+현재 후보 단계에서는 위 구조적 문제가 빠짐없이 적어도 하나의 후보와 연결된다. 이것이 12개 모두를 자동으로 최종 DP로 승인한다는 뜻은 아니다.
+
+## 7. QA 전체를 빠짐없이 검토했는가
+
+아래 표는 각 QA가 두 대안을 직접 구분할 가능성이 있는 후보를 보여준다.
+
+- **주 비교 지표:** A와 B의 구조 차이가 이 QA에 직접 영향을 주므로 승패 평가에 사용한다.
+- **회귀 확인 지표:** 두 대안 모두 반드시 지켜야 하지만, 이 DP의 승패를 가르는 지표로 사용하지 않는다.
+- **해당 없음:** 그 QA가 측정하는 처리 경로가 이 DP에 존재하지 않거나 구조적으로 달라지지 않는다.
+
+후보를 상세화한 뒤 실제 처리 경로나 Architecture Element가 바뀌지 않으면, 아래에 연결했더라도 회귀 확인 지표 또는 해당 없음으로 내린다.
+
+| QA | 구조 인과가 있을 수 있는 후보 |
+| --- | --- |
+| QA-01 위임 경로 VIA 처리시간 | VIA-DP-05 Context, VIA-DP-06 의미 판단, VIA-DP-07 복합 요청, VIA-DP-09 Agent 계약, VIA-DP-10 Model 연결, VIA-DP-11 Process 격리 |
+| QA-02 직접 Voice 응답시간 | VIA-DP-03 음성 처리, VIA-DP-04 응답 확정, VIA-DP-05 Context, VIA-DP-06 의미 판단, VIA-DP-10 Model 연결, VIA-DP-11 Process 격리 중 실제 Context 연동 경로 |
+| QA-03 Agent 상태 Voice 전달시간 | VIA-DP-02 상태 소유, VIA-DP-03 음성 처리, VIA-DP-09 Agent 계약, VIA-DP-10 Model 연결, VIA-DP-11 Process 격리 |
+| QA-04 음성 중단시간 | VIA-DP-03 음성 처리, VIA-DP-10 Model 연결 중 실제 음성 중단 전달 경로 |
+| QA-05 Task 제어 응답시간 | VIA-DP-02 상태 소유, VIA-DP-07 복합 요청, VIA-DP-08 상태 저장, VIA-DP-09 Agent 계약, VIA-DP-11 Process 격리 |
+| QA-11 전체 요청 처리 정확도 | VIA-DP-01 직접 처리, VIA-DP-04 응답 확정, VIA-DP-05 Context, VIA-DP-06 의미 판단, VIA-DP-07 복합 요청, VIA-DP-09 Agent 계약 |
+| QA-12 의미 해석 정확도 | VIA-DP-03 음성 처리, VIA-DP-04 응답 확정, VIA-DP-05 Context, VIA-DP-06 의미 판단, VIA-DP-10 Model 연결 |
+| QA-13 Task·Interaction 연결 정확도 | VIA-DP-02 상태 소유, VIA-DP-07 복합 요청, VIA-DP-08 상태 저장, VIA-DP-09 Agent 계약 |
+| QA-14 비동기 상태 수렴 정확도 | VIA-DP-02 상태 소유, VIA-DP-07 복합 요청, VIA-DP-08 상태 저장, VIA-DP-09 Agent 계약 |
+| QA-15 대화·Task 연속성 | VIA-DP-02 상태 소유, VIA-DP-04 응답 확정, VIA-DP-05 Context, VIA-DP-07 복합 요청, VIA-DP-08 상태 저장 |
+| QA-21 Agent 변화 영향 범위 | VIA-DP-01 직접 처리, VIA-DP-07 복합 요청, VIA-DP-09 Agent 계약 |
+| QA-22 Model·Context·State 변화 영향 범위 | VIA-DP-01~10 중 실제 변경의 영향을 받는 후보 |
+| QA-23 실험·로그 변화 영향 범위 | VIA-DP-12 평가 근거 소유 |
+| QA-31 올바른 Task 복구시간 | VIA-DP-02 상태 소유, VIA-DP-08 상태 저장, VIA-DP-09 Agent 계약, VIA-DP-10 Model 연결, VIA-DP-11 Process 격리 |
+| QA-32 장애 영향 범위 | VIA-DP-02 상태 소유, VIA-DP-10 Model 연결, VIA-DP-11 Process 격리, VIA-DP-12 평가 근거 소유 |
+| QA-41 target PC 메모리 | VIA-DP-01~12 중 target PC의 Component·Process·buffer가 실제로 달라지는 후보 |
+| QA-51 불필요한 보호정보 노출 | VIA-DP-01 직접 처리, VIA-DP-04 응답 확정, VIA-DP-05 Context, VIA-DP-10 Model 연결, VIA-DP-12 평가 근거 소유 |
+| QA-61 실행 trace 완전성 | VIA-DP-02~12 중 기록을 만드는 주체·식별자·Process가 실제로 달라지는 후보 |
+| QA-62 평가 재현성 | VIA-DP-05 Context, VIA-DP-08 상태 저장, VIA-DP-12 평가 근거 소유 |
+
+한 QA가 여러 후보에 등장해도 같은 점수를 여러 번 가산하지 않는다. 이 표는 DP별 QA applicability를 결정하기 위한 사전 sweep이다.
+
+## 8. 후보들이 서로 같은 결정을 중복하고 있지 않은가
+
+각 후보를 비교할 때 다음 항목은 다른 DP의 선택으로 고정한다.
+
+| 후보 | 이 후보가 결정하지 않는 것 |
+| --- | --- |
+| VIA-DP-01 직접 처리 범위 | Context 전달 방식, 의미 판단 단계 수, Agent 계약 형식 |
+| VIA-DP-02 상태 소유 구조 | 상태를 현재 값 또는 이벤트 이력으로 저장하는 방식, Process 배치 |
+| VIA-DP-03 음성 처리 구성 | S2S 직접 응답의 최종 승인 권한 |
+| VIA-DP-04 음성 응답 확정 권한 | VAD·ASR·TTS·보조 Model 구성과 의미 판단 단계 수 |
+| VIA-DP-05 Context 전달 방식 | Context 접근 허용 범위와 의미 판단 책임 |
+| VIA-DP-06 의미 판단 구조 | 사용할 Model 제공자, Context 전달 방식, 직접 처리 범위 |
+| VIA-DP-07 복합 요청 조정 책임 | Agent 고유 통신 형식과 Task 상태 저장 방식 |
+| VIA-DP-08 상태 저장·복구 기준 | 상태 변경 권한자의 위치와 DB 제품 |
+| VIA-DP-09 Agent 차이 흡수 위치 | Agent 기능 수준, Task 소유자와 Process 배치 |
+| VIA-DP-10 Model Runtime 연결 | 의미 판단 책임과 실제 Model 실행 조건 |
+| VIA-DP-11 Process 격리 | 내부 업무 로직, 저장 방식과 전체 worker 자원 한도 |
+| VIA-DP-12 평가 근거 소유 | 각 QA가 요구하는 최소 event 의미와 보호정보 처리 규칙 |
+
+다음 조합은 서로 다른 결정이지만 interaction이 강하므로, 한 DP의 결론이 다른 DP 선택에 따라 뒤집힐 가능성이 있을 때만 제한된 교차 확인을 한다.
+
+- VIA-DP-02 상태 소유 × VIA-DP-08 상태 저장
+- VIA-DP-03 음성 처리 × VIA-DP-04 응답 확정
+- VIA-DP-04 응답 확정 × VIA-DP-06 의미 판단
+- VIA-DP-05 Context 전달 × VIA-DP-06 의미 판단
+- VIA-DP-07 복합 요청 조정 × VIA-DP-09 Agent 계약
+- VIA-DP-09 Agent 계약 × VIA-DP-11 Process 격리
+- VIA-DP-10 Model 연결 × VIA-DP-11 Process 격리
+- VIA-DP-08 상태 저장 × VIA-DP-12 평가 근거 소유
+
+모든 12개 DP의 전체 조합을 실행해 하나의 전체 우승 구성을 고르는 방식은 사용하지 않는다.
+
+## 9. Core DP로 만들지 않은 항목
 
 | 항목 | 처리 | 이유 |
 | --- | --- | --- |
-| 특정 Model/Agent/DB/IPC 제품 | 제외 | dependency 또는 구현 선택이며 구조 축이 아님 |
-| polling vs event | 공통 tactic | low-latency event와 gap/reconnect query는 상호 보완적 |
-| timeout/retry/buffer/worker 수 | tuning/freeze 조건 | 책임·상태 소유권을 바꾸지 않음 |
-| local vs cloud Model 위치 자체 | MI의 deployment scenario | Architecture는 위치 변화를 흡수해야 하며 한 provider 위치를 영구 정답으로 두지 않음 |
-| Policy enforcement boundary | CX에 우선 흡수 | Context release와 분리된 정상 A/B가 확인되면 별도 승격 |
-| response/audio scheduling | TA/VC tactic | 별도 authority·state owner가 필요한지 후보 상세화에서 재검토 |
-| Agent state event vs query | AI/LA 공통 tactic | delivery mechanism 선택만으로는 강한 상호배타 DP가 아님 |
+| 특정 Model·Agent·DB·IPC 제품 | 제외 | dependency 또는 구현 선택이며 구조 축이 아님 |
+| polling과 event 중 하나 선택 | 공통 tactic | 빠른 update와 reconnect/gap query는 상호 보완적 |
+| timeout, retry, buffer, worker 수 | 측정 전 고정할 tuning 값 | 책임이나 상태 소유권을 바꾸지 않음 |
+| PC 내부 또는 cloud Model 하나 선택 | VIA-DP-10의 배치 조건 | Architecture는 위치 변화를 흡수해야 함 |
+| Context 허용 범위를 검사하는 위치 | VIA-DP-05에 우선 포함 | Context 방식과 독립적인 정상 A/B가 확인되면 분리 |
+| 음성 출력 순서 조정 알고리즘 | VIA-DP-03/04의 구현 전술 | 별도 권한·State 소유자가 필요할 때만 재검토 |
+| Agent state event 또는 query | 공통 tactic | 둘은 보완 관계이며 delivery mechanism만으로는 Core DP가 아님 |
 
-## 9. 기존 DP와의 관계
+## 10. 기존 DP와 비교하면 무엇이 달라지는가
 
-기존 DP는 이 도출의 출발점이 아니며 다음처럼 사후 대조한다.
+기존 DP는 이번 도출의 출발점이 아니라 결과를 확인한 뒤 비교한 참고자료다.
 
-| 기존 항목 | 백지 도출 후보와의 관계 | 후속 처리 제안 |
+| 기존 항목 | 새 후보와의 관계 | 제안 |
 | --- | --- | --- |
-| IR-DP01 | SA와 거의 동일 | SA 후보 상세화 때 기존 정의를 참고하되 새 QA로 trade-off 재검토 |
-| TASK-DP01 | LA의 Task-writer 부분집합 | LA 범위를 먼저 확정하고 독립 DP 유지 또는 alternative refinement 여부 결정 |
-| AGENT-DP01 | AI와 거의 동일 | capability 비손실 상태에서 B의 독립 장점을 명확히 한 뒤 유지 |
-| EXEC-DP01 | FI의 integration-worker 구체화 | fault boundary 범위가 충분한지 확인하고 기존 A/B 참고 |
-| FP-INT01 S2S Direct Fast Path | TA의 B를 고정한 원칙 | TA의 정상 A/B를 비교하기 전에는 고정 원칙으로 전제하지 않음 |
-| TASK-T01 Event-first + Query | 공통 tactic과 일치 | DP로 승격하지 않음 |
-| CTX supporting choices | CX의 부분 후보 | active candidate contract로 다시 정의하기 전에는 결정으로 간주하지 않음 |
+| IR-DP01 | VIA-DP-06 의미 판단 구조와 거의 동일 | 새 QA trade-off로 다시 검토 |
+| TASK-DP01 | VIA-DP-02 상태 소유 구조 중 Task 변경 권한자 부분만 다룸 | VIA-DP-02 범위를 먼저 확정한 뒤 독립 유지 여부 판단 |
+| AGENT-DP01 | VIA-DP-09 Agent 차이 흡수 위치와 거의 동일 | Agent 기능을 잃지 않는 상태에서 B의 장점이 실제로 있는지 확인 |
+| EXEC-DP01 | VIA-DP-11 Process 격리의 구체적인 형태 | 격리할 연동 코드 범위를 명시하고 재사용 가능 |
+| S2S Direct Fast Path 원칙 | VIA-DP-04의 대안 B를 미리 선택한 형태 | VIA-DP-04 A/B 검토 전에는 고정 원칙으로 두지 않음 |
+| Event-first + Query Reconciliation | 이번 검토에서도 공통 tactic | DP로 승격하지 않음 |
+| 기존 Context 관련 선택 | VIA-DP-05의 부분 후보 | 현재 후보 계약으로 다시 정의 |
 
-Accepted ADR은 이 review draft만으로 변경되지 않는다. Core DP 집합과 candidate contract가 승인된 뒤에만 기존 ADR의 유지·재검증·대체 필요성을 별도로 판단한다.
+현재 승인된 ADR은 이 검토 초안만으로 변경되지 않는다. 후보 집합과 각 후보의 상세 정의를 승인한 뒤에만 유지·재검증·대체 여부를 판단한다.
 
-## 10. 권장 논의 순서
+## 11. 다음 논의 순서
 
-다음 순서는 숫자를 맞추기 위한 것이 아니라 앞 결정이 뒤 결정의 후보 범위를 정의하는 정도를 따른다.
+다음에는 `VIA-DP-01`부터 각 후보를 한 번에 하나씩 검토한다. 각 후보 문서는 다음 순서로 작성한다.
 
-1. **DH** — VIA가 직접 소유할 processing capability의 범위
-2. **LA** — 전체 lifecycle truth와 writer topology
-3. **VC** — Voice processing dependency composition
-4. **TA** — Voice와 Core 사이의 turn/response commit authority
-5. **CX** — Context의 materialization, release와 provenance
-6. **SA** — semantic authority의 통합/단계 topology
-7. **OG** — compound Request와 Agent execution의 coordination authority
-8. **PR** — durable truth와 recovery representation
-9. **AI** — Agent variation을 해석하는 boundary
-10. **MI** — Model Runtime integration과 resource/failure ownership
-11. **FI** — OS process fault boundary
-12. **EV** — trace/evidence ownership과 dependency direction
+1. 사용자가 체감하는 구체적인 상황
+2. 한 문장 Architecture 질문
+3. 양쪽 모두 지켜야 하는 공통 조건
+4. 대안 A의 Component·Interface·State·Deployment
+5. 대안 B의 Component·Interface·State·Deployment
+6. A가 유리할 수 있는 QA와 구조적 이유
+7. B가 유리할 수 있는 QA와 구조적 이유
+8. 다른 DP와의 독립성
+9. 한쪽이 지배적이면 DP를 폐기할 조건
 
-EV의 상세 대안은 뒤에서 논의하지만, 어떤 후보도 측정 불가능해지지 않도록 최소 event/correlation 계약은 모든 candidate definition 작성 전에 공통으로 둔다.
-
-## 11. 다음 승인 단위
-
-이 문서를 승인한다고 A/B 구현이나 측정을 시작하지 않는다. 다음에는 DP별로 아래 한 장짜리 candidate card를 순서대로 검토한다.
-
-1. 한 문장 Architecture question
-2. 고정 invariant와 명시적 scope exclusion
-3. 구현 가능한 A/B 책임·계약·상태·배치
-4. A와 B 각각의 장점이 생기는 causal path
-5. Primary QA hypothesis와 Regression/N/A 후보
-6. 다른 DP와의 독립성 및 필요한 제한 교차 확인
-7. 한쪽이 dominated이면 DP를 폐기하는 반증 조건
-
-각 card가 승인된 뒤에만 전체 Core DP inventory를 확정한다.
+모든 후보가 이 검토를 통과한 뒤에만 최종 Core DP inventory를 확정한다. 구현·측정·ADR 변경은 그 이후 단계다.
