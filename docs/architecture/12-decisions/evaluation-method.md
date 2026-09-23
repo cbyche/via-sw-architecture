@@ -11,6 +11,8 @@
 
 평가 전에 [전체 QA 사고실험 비교표](./dp-review-protocol.md#73-전체-qa-사고실험-비교표)를 작성한다. 상호 배타적인 steelman A/B에 대해 전체 QA의 예상 우세와 차이 크기, 판단 확실성, 구조적 이유와 조건을 남긴다. 이는 측정 전 가설이며 아래 Evaluation A/B의 실행 결과나 score를 대체하지 않는다. 이후 결과와 대조할 수 있도록 예상표 version을 보존한다.
 
+현재 문서 검토의 [최종 요약](./dp-executive-summary.md)과 [전체 후보 분류](./dp-review-synthesis.md)는 13개 보고서를 우선 핵심 검증·조건부 핵심·선행 범위/기능·보조 설계로 나눈다. 이 분류는 아래 sensitivity sweep을 실행한 결과가 아니다. 기능 부적합 후보나 비교 구간이 다른 QA를 수치 점수로 강제 비교하지 않고, 양방향 trade-off가 약한 후보도 핵심 평가표의 수를 채우기 위해 유지하지 않는다.
+
 실제 평가는 두 단계로 나눈다.
 
 ### Evaluation A — Architecture Sensitivity Sweep

@@ -14,12 +14,14 @@
 - Downstream Agent는 업무 reasoning, planning, tool 선택·실행을 책임진다.
 - Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
-- Architecture 선택은 IR, TASK, AGENT, EXEC DP별 A/B 직접 비교로 수행한다.
+- Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙으로 재구성된 사용자 검토 초안이며 active ID는 19개다.
 - ASR은 아직 선정하지 않았으며 Architecture 영향이 확인된 QA에 별도 번호 없이 표시한다.
 - QA-01~05는 responsiveness, QA-11~15는 correctness/continuity, QA-21~23은 modifiability, QA-31/32는 reliability/availability, QA-41은 resource, QA-51은 privacy, QA-61/62는 observability를 다룬다. 새 harness와 결과는 아직 없다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
+
+DP 상세 보고서를 읽기 전에는 [최종 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. 13개 후보의 재구성 결과와 우선 검증·조건부·선행·보조 분류를 설명하며, 기존 ADR을 변경하거나 후보 구현·QA 측정을 완료한 문서가 아니다.
 
 ## Required reading order
 
@@ -53,7 +55,7 @@
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
 | Machine contract, pending targets, harness | Pending | 구현·실행 전에 먼저 동결해야 함 |
 | Current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
-| DP inventory | Current | IR/TASK/AGENT/EXEC A/B alternatives |
+| DP inventory | Existing records + review proposal | 기존 IR/TASK/AGENT/EXEC와 새 VIA-DP-01~13 독립 검토 보고서; 새 분류는 사용자 검토 전 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
 ## How the baseline becomes a decision

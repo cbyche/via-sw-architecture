@@ -17,7 +17,9 @@
 
 ## Current architecture work
 
-현재 비교하는 Core Decision Point는 네 개다.
+새 DP 검토는 [최종 요약 보고서](docs/architecture/12-decisions/dp-executive-summary.md)부터 읽는다. 초기 후보 전체를 재검토하고 총 13개 독립 보고서로 정리했으며, 우선 핵심 검증 3개·조건부 핵심 4개·선행 범위/기능 3개·보조 설계 3개를 제안한다. 실제 QA 측정이나 최종 선택은 아직 하지 않았다.
+
+아래 네 개는 **기존 ADR로 기록된 결정 축**이다. 새 검토 제안과 구분하며 승인·유예 상태 및 재검증 조건을 유지한다.
 
 | DP | Architecture question | Current decision state |
 | --- | --- | --- |
