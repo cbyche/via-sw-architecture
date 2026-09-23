@@ -9,7 +9,9 @@
 
 최종 발표에서 구조 대안별 QA trade-off가 명확히 보여야 한다. 그러나 후보 점수를 본 뒤 유리한 QA만 고르거나 target/score band를 바꾸면 Architecture 평가가 아니라 결과 맞추기가 된다.
 
-평가는 두 단계로 나눈다.
+평가 전에 [전체 QA 사고실험 비교표](./dp-review-protocol.md#73-전체-qa-사고실험-비교표)를 작성한다. 상호 배타적인 steelman A/B에 대해 전체 QA의 예상 우세와 차이 크기, 판단 확실성, 구조적 이유와 조건을 남긴다. 이는 측정 전 가설이며 아래 Evaluation A/B의 실행 결과나 score를 대체하지 않는다. 이후 결과와 대조할 수 있도록 예상표 version을 보존한다.
+
+실제 평가는 두 단계로 나눈다.
 
 ### Evaluation A — Architecture Sensitivity Sweep
 
@@ -23,22 +25,23 @@
 ### Evaluation B — Decision Evaluation
 
 - Evaluation A 결과와 구조 인과분석을 Differentiation Criteria에 적용
-- criteria를 충족한 약 3~4개를 해당 DP의 Primary Architecture Driver로 고정
+- criteria를 충족한 QA를 해당 DP의 Primary Architecture Driver로 확정. 발표 편의를 위해 개수를 강제하지 않음
 - 나머지는 regression / constraint / secondary evidence로 유지
 - 전체 DP를 가로지르는 구조 영향과 위험을 [Quality Model](../08-quality-attributes/quality-model.md)의 기준으로 검토하여 QA별 ASR 상태를 기록
 - Primary set 고정 후 final decision narrative와 weakness/tactic evaluation 수행
 
-## 1-A. Candidate Mutual-Exclusivity Criteria
+## 1-A. 상호 배타적인 Steelman A/B 구성
 
-Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한다.
+상세 QA 비교표와 Candidate Implementation에 앞서 [DP 공통 검토 절차](./dp-review-protocol.md)를 적용한다. 핵심 요건은 다음과 같다.
 
-1. 두 대안 모두 필수 기능을 충족하는 정상 Architecture다.
-2. 같은 authoritative owner / canonical contract / primary state path / process fault boundary를 서로 다르게 결정한다.
-3. A+B를 단순 결합하면 decision이 사라지는 경우 두 안을 독립 Architecture alternative로 인정하지 않는다.
-4. 공통 tactic은 허용하지만 authority를 바꾸면 candidate identity 변경으로 처리한다.
-5. Hybrid는 단순 장점 결합이 아니라 새로운 authority split과 독립적인 비용/변경면을 가질 때만 별도 family로 인정한다.
+1. 같은 목표·필수 기능·완료 조건을 충족하는 두 정상 Architecture를 구성한다.
+2. **같은 결정 범위에서 두 안은 상호 배타적(mutually exclusive)이며 서로에게 steelman이어야 한다.** 각 안의 채택 이유, 가능한 보완책과 보완 후 남는 약점을 설명한다.
+3. 같은 대상·조건의 최종 권한, 계약, 기준 상태 또는 Process 경계를 어떻게 서로 양립할 수 없게 결정하는지 명시한다. 공통 기술의 공존만으로 상호 배타성 여부를 판정하지 않는다.
+4. hybrid가 양쪽 장점을 취할 수 있으면 이를 새 A로 구성하고, 이에 대등하면서 상호 배타적인 새 B를 도출한다. B가 성립하지 않으면 DP를 재정의·분할·통합하거나 제외한다.
+5. 정상적인 snapshot·cache·retry·로그 등은 양쪽에서 검토한다. 후보 결정을 유지하는 보완책이면 해당 안에 포함하고, 최종 권한·기준 기록을 바꾸면 새 후보 version으로 처리한다.
+6. 유력한 제3안을 배제한 이유, 외부 기능의 실현 가능성, 다른 DP의 고정 조건과 QA 인과를 기록한다. 점수 차이를 만들기 위해 기능·보완책을 한쪽에서 제거하지 않는다.
 
-이 criteria를 충족하지 못한 비교는 QA sensitivity가 크게 보여도 발표용 Architecture Decision으로 사용하지 않는다.
+이 기준을 통과하지 못한 비교는 QA 차이가 크게 보여도 Architecture Decision 근거로 사용하지 않는다. 아래 평가에서 확인되는 동점이나 한쪽의 지배적 결과도 그대로 남긴다.
 
 ## 2. 사후 논리 만들기와 허용되는 해석의 경계
 
@@ -127,14 +130,14 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 각 DP는 다음 순서로 제시한다.
 
 1. DP가 다루는 구조 질문
-2. 합리적 후보 A/B/C
+2. hybrid·제3안 검토를 거쳐 구성한 상호 배타적인 steelman A/B
 3. 승인된 active QA sensitivity sweep mini-heatmap
-4. Differentiation Criteria를 충족한 Primary 3~4개 확대
+4. Differentiation Criteria를 충족한 Primary QA 확대
 5. Primary QA의 raw metric + 0~5 score
 6. trade-off 설명
 7. 선택
 8. 선택안의 weakness
-9. tactic 적용 후 동일 metric 재평가
+9. 후보 정의 때 포함한 보완책과 남는 약점 설명. 결과 후 새 보완책을 발견하면 양쪽 적용 가능성을 검토하고 후보 version을 갱신하여 동일 metric 재평가
 
 이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 active QA 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
 
