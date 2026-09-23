@@ -1,6 +1,6 @@
 # Current Architecture Measurement Harness
 
-> **Status: W-01~W-03 `NOT_IMPLEMENTED / NOT_RUN`**
+> **Status: QA-01~QA-03 `NOT_IMPLEMENTED / NOT_RUN`**
 
 이 디렉터리는 현재 Architecture baseline에 맞는 machine-readable contract, fixture, executable harness, raw-trace validator, aggregation code를 구현할 active 위치다.
 

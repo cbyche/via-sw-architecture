@@ -72,7 +72,7 @@ Retention horizon은 correctness threshold와 분리한다.
 
 - 현재 canonical fixture의 pre-turn interaction은 최대 약 600ms 전에 발생한다.
 - Test Case는 필요한 source event를 모두 candidate input timeline에 제공한다.
-- 실제 제품의 ring-buffer retention 길이는 Architecture/implementation parameter이며 **이번 ASR score의 고정 4초 requirement가 아니다.**
+- 실제 제품의 ring-buffer retention 길이는 Architecture/implementation parameter이며 **이번 QA score의 고정 4초 requirement가 아니다.**
 - 이후 더 긴 select-then-speak 간격을 robustness variant로 추가하려면 candidate 결과를 보기 전에 별도 rebaseline으로 고정한다.
 
 즉 이번 평가가 검증하는 것은 “4초를 저장하는가”가 아니라 **필요한 timestamped evidence를 잃지 않고 올바른 speech/deictic event와 연계하는가**이다.

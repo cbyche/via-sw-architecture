@@ -32,14 +32,14 @@ async fn prepare(
         HandoffCoordinator::new(EdgeNormalized::new(agent.clone()), repository.clone());
 
     for index in 0..active_tasks {
-        let task_id = format!("W09-T{index}");
+        let task_id = format!("QA09-T{index}");
         let created = task_authority
             .apply(TaskCommand {
-                command_id: format!("w09-create-{index}"),
+                command_id: format!("qa09-create-{index}"),
                 task_id: task_id.clone(),
                 expected_revision: 0,
                 op: TaskOp::Create {
-                    goal: format!("W-09 recovery Task {index}"),
+                    goal: format!("QA-09 recovery Task {index}"),
                 },
             })
             .await?;
@@ -47,13 +47,13 @@ async fn prepare(
             .handoff(
                 task_authority.as_ref(),
                 created,
-                format!("W-09 recovery Task {index}"),
-                format!("w09-submit-{index}"),
+                format!("QA-09 recovery Task {index}"),
+                format!("qa09-submit-{index}"),
             )
             .await?;
 
         if completed {
-            let artifact = format!("W09-ART-{index}");
+            let artifact = format!("QA09-ART-{index}");
             agent.complete(&result.accepted.run_id, artifact.clone())?;
             let synchronizer = AgentSynchronizer::new(EdgeNormalized::new(agent.clone()));
             let (updated, _) = synchronizer
@@ -86,7 +86,7 @@ async fn recover(
 
     let mut recovered = Vec::new();
     for index in 0..active_tasks {
-        let task_id = format!("W09-T{index}");
+        let task_id = format!("QA09-T{index}");
         let current = repository.get(&task_id).await?;
         let link = repository
             .execution_link(&task_id)
@@ -113,7 +113,7 @@ async fn recover(
             // Exercise one permitted user control through the recreated Task authority.
             let cancel_local = task_authority
                 .apply(TaskCommand {
-                    command_id: format!("w09-recovery-cancel-{index}"),
+                    command_id: format!("qa09-recovery-cancel-{index}"),
                     task_id: task_id.clone(),
                     expected_revision: current.revision,
                     op: TaskOp::Cancel,
@@ -179,12 +179,12 @@ pub async fn whole_restart_smoke() -> anyhow::Result<serde_json::Value> {
 
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"W-09 whole-restart four-strata correctness smoke for both TASK candidates",
+        "scope":"QA-09 whole-restart four-strata correctness smoke for both TASK candidates",
         "strata":strata,
         "fault_model":"VIA-side runtime objects discarded; SQLite and external Agent fixture survive",
         "os_process_kill":false,
-        "w09_representative_metric":"NOT_RUN",
-        "w09_metric_eligible":false,
-        "note":"Final W-09 requires real process restart, 500ms controller delay, 100 trials/stratum, and the two integration-fatal strata."
+        "qa09_representative_metric":"NOT_RUN",
+        "qa09_metric_eligible":false,
+        "note":"Final QA-09 requires real process restart, 500ms controller delay, 100 trials/stratum, and the two integration-fatal strata."
     }))
 }

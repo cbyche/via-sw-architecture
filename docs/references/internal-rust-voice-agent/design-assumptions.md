@@ -26,7 +26,7 @@ Explicitly documented: mode determines which layers are mounted, so it is repres
 DP-06, DP-08
 
 **Related QA**  
-QA-01, QA-05, QA-10
+REF-QA-01, REF-QA-05, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -46,7 +46,7 @@ Explicitly documented: multiple provider families share voice/session policy whi
 DP-06, DP-07
 
 **Related QA**  
-QA-01, QA-05, QA-07
+REF-QA-01, REF-QA-05, REF-QA-07
 
 **Confidence**  
 Confirmed
@@ -66,7 +66,7 @@ The transcript module explicitly documents that settled transcript may arrive af
 DP-01
 
 **Related QA**  
-QA-01, QA-09, QA-10
+REF-QA-01, REF-QA-09, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -86,7 +86,7 @@ Explicitly documented: referents and ordered deixis are new prototype components
 DP-02, DP-08
 
 **Related QA**  
-QA-01, QA-06, QA-09
+REF-QA-01, REF-QA-06, REF-QA-09
 
 **Confidence**  
 Confirmed
@@ -106,7 +106,7 @@ Explicitly documented: questions the realtime model can answer remain immediate,
 DP-03
 
 **Related QA**  
-QA-01, QA-05, QA-07
+REF-QA-01, REF-QA-05, REF-QA-07
 
 **Confidence**  
 Confirmed
@@ -126,7 +126,7 @@ Explicitly documented as “one dispatcher”; the architecture aims to keep a n
 DP-04, DP-11, DP-12
 
 **Related QA**  
-QA-05, QA-11
+REF-QA-05, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -146,7 +146,7 @@ Explicitly documented to make Work lifecycle and permission behavior consistent 
 DP-04, DP-05, DP-12
 
 **Related QA**  
-QA-03, QA-05, QA-11
+REF-QA-03, REF-QA-05, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -166,7 +166,7 @@ Explicitly documented: the coordinator identity is intended to survive voice ses
 DP-04, DP-09
 
 **Related QA**  
-QA-03, QA-10
+REF-QA-03, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -186,7 +186,7 @@ Explicitly documented: a unified record gives cancellation/query/lifecycle behav
 DP-05, DP-09
 
 **Related QA**  
-QA-02, QA-03, QA-10
+REF-QA-02, REF-QA-03, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -206,7 +206,7 @@ Explicitly documented: exclusion alone is insufficient for the coordinator sessi
 DP-05
 
 **Related QA**  
-QA-02, QA-03
+REF-QA-02, REF-QA-03
 
 **Confidence**  
 Confirmed
@@ -226,7 +226,7 @@ Not explicitly documented as a VIA-style resource model; this limitation is an a
 DP-05
 
 **Related QA**  
-QA-02, QA-03
+REF-QA-02, REF-QA-03
 
 **Confidence**  
 Inferred
@@ -246,7 +246,7 @@ Explicitly documented: sending a cancel message does not prove execution has sto
 DP-05, DP-09
 
 **Related QA**  
-QA-03
+REF-QA-03
 
 **Confidence**  
 Confirmed
@@ -266,7 +266,7 @@ Explicitly documented: delegated results can become ready while either side is s
 DP-06, DP-08
 
 **Related QA**  
-QA-01, QA-09
+REF-QA-01, REF-QA-09
 
 **Confidence**  
 Confirmed
@@ -286,7 +286,7 @@ Explicitly documented: the text client is an end-to-end harness for the same Gat
 DP-08
 
 **Related QA**  
-QA-03, QA-05, QA-10
+REF-QA-03, REF-QA-05, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -306,7 +306,7 @@ Not explicitly documented as rejection of dynamic optimization; the selection be
 DP-07
 
 **Related QA**  
-QA-01, QA-05, QA-07
+REF-QA-01, REF-QA-05, REF-QA-07
 
 **Confidence**  
 Confirmed
@@ -326,7 +326,7 @@ Explicitly documented: incomplete/inconsistent capability declarations should fa
 DP-12
 
 **Related QA**  
-QA-05, QA-11
+REF-QA-05, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -346,7 +346,7 @@ Explicitly documented that registration is data and one dispatcher resolves the 
 DP-11, DP-12
 
 **Related QA**  
-QA-05, QA-11
+REF-QA-05, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -366,7 +366,7 @@ Explicitly documented as duplicate-submission suppression so repeated model tool
 DP-09
 
 **Related QA**  
-QA-03, QA-10
+REF-QA-03, REF-QA-10
 
 **Confidence**  
 Confirmed
@@ -386,7 +386,7 @@ Not explicitly documented as a general task-association strategy. The architectu
 DP-09
 
 **Related QA**  
-QA-03, QA-10
+REF-QA-03, REF-QA-10
 
 **Confidence**  
 Confirmed for implementation behavior; Inferred as a general association strategy
@@ -406,7 +406,7 @@ Explicitly documented: the type widens an upstream single-objective contract whi
 DP-10
 
 **Related QA**  
-QA-01, QA-07, QA-10
+REF-QA-01, REF-QA-07, REF-QA-10
 
 **Confidence**  
 Confirmed for the primitive; Inferred/Unconfirmed for end-to-end runtime fan-out
@@ -426,7 +426,7 @@ Explicitly documented: the componentized local pipeline should preserve the same
 DP-06, DP-07
 
 **Related QA**  
-QA-01, QA-05, QA-07
+REF-QA-01, REF-QA-05, REF-QA-07
 
 **Confidence**  
 Confirmed
@@ -446,7 +446,7 @@ Explicitly documented: VIA ships no agent harness of its own; a harness answers 
 DP-04, DP-11
 
 **Related QA**  
-QA-05, QA-11
+REF-QA-05, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -466,7 +466,7 @@ Explicitly documented in the ACP adapter: returning an ended/empty stream is pre
 DP-04, DP-12
 
 **Related QA**  
-QA-05, QA-08, QA-11
+REF-QA-05, REF-QA-08, REF-QA-11
 
 **Confidence**  
 Confirmed
@@ -486,7 +486,7 @@ Not explicitly documented as intentional; this is a snapshot-analysis limitation
 All DPs where missing rationale could affect comparison
 
 **Related QA**  
-QA-05
+REF-QA-05
 
 **Confidence**  
 Confirmed

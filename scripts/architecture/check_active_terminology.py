@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
-"""Reject superseded metric and lifecycle terminology in active documents."""
+"""Reject superseded metric, requirement, and lifecycle terminology."""
 
 from pathlib import Path
+import re
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DOC_ROOT = ROOT / "docs" / "architecture"
+ACTIVE_INPUTS = (
+    ROOT / "README.md",
+    ROOT / "AGENTS.md",
+    ROOT / "CONTRIBUTING.md",
+    ROOT / ".github" / "workflows",
+    ROOT / "docs" / "architecture",
+    ROOT / "docs" / "adr",
+    ROOT / "benchmark" / "architecture",
+    ROOT / "prototypes" / "candidates",
+    ROOT / "scripts" / "architecture",
+)
+TEXT_SUFFIXES = {".md", ".py", ".rs", ".json", ".toml", ".yml", ".yaml"}
 FORBIDDEN = (
     "Conversational Reaction Responsiveness",
     "Task Handoff Responsiveness",
@@ -22,15 +34,36 @@ FORBIDDEN = (
     "12-B",
     "VIA-DESIGN",
 )
+FORBIDDEN_PATTERNS = (
+    ("legacy W-series metric ID", re.compile(r"\bW-(?:0[1-9]|1[0-2])\b")),
+    ("numbered ASR ID", re.compile(r"\bASR-\d{2}\b")),
+)
+
+
+def active_files() -> list[Path]:
+    files: list[Path] = []
+    for item in ACTIVE_INPUTS:
+        if item.is_file():
+            files.append(item)
+            continue
+        for path in item.rglob("*"):
+            if "target" in path.parts or path.suffix not in TEXT_SUFFIXES:
+                continue
+            if path.is_file() and path.resolve() != Path(__file__).resolve():
+                files.append(path)
+    return sorted(set(files))
 
 
 def main() -> int:
     violations: list[str] = []
-    for path in sorted(DOC_ROOT.rglob("*.md")):
+    for path in active_files():
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             for term in FORBIDDEN:
                 if term in line:
                     violations.append(f"{path.relative_to(ROOT)}:{line_number}: {term}")
+            for label, pattern in FORBIDDEN_PATTERNS:
+                if pattern.search(line):
+                    violations.append(f"{path.relative_to(ROOT)}:{line_number}: {label}")
 
     if violations:
         print("Superseded terminology found in active documents:")

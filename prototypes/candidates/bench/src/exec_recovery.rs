@@ -130,12 +130,12 @@ async fn prepare_links(
     let mut links = Vec::with_capacity(active_tasks);
 
     for index in 0..active_tasks {
-        let task_id = format!("W09-EXEC-T{index}");
-        let submission_key = format!("w09-exec-submit-{index}");
-        let goal = format!("W-09 integration-fatal Task {index}");
+        let task_id = format!("QA09-EXEC-T{index}");
+        let submission_key = format!("qa09-exec-submit-{index}");
+        let goal = format!("QA-09 integration-fatal Task {index}");
         let created = authority
             .apply(TaskCommand {
-                command_id: format!("w09-exec-create-{index}"),
+                command_id: format!("qa09-exec-create-{index}"),
                 task_id: task_id.clone(),
                 expected_revision: 0,
                 op: TaskOp::Create { goal: goal.clone() },
@@ -253,7 +253,7 @@ async fn one_stratum(
         // Recovery completion requires usable control, not just a queryable process.
         let cancel_local = authority
             .apply(TaskCommand {
-                command_id: format!("w09-exec-recovery-cancel-{index}"),
+                command_id: format!("qa09-exec-recovery-cancel-{index}"),
                 task_id: task_id.clone(),
                 expected_revision: task.revision,
                 op: TaskOp::Cancel,
@@ -295,7 +295,7 @@ pub async fn integration_fatal_smoke(
 }
 
 fn nearest_rank_p95(values: &[u64]) -> anyhow::Result<u64> {
-    anyhow::ensure!(!values.is_empty(), "p95 requires at least one W-09 trial");
+    anyhow::ensure!(!values.is_empty(), "p95 requires at least one QA-09 trial");
     let mut sorted = values.to_vec();
     sorted.sort_unstable();
     let rank = (95 * sorted.len()).div_ceil(100);
@@ -311,14 +311,14 @@ pub async fn integration_fatal(
     let (trials_per_stratum, shared_restart_delay, metric_eligible) = match profile {
         "smoke" => (1usize, Duration::from_millis(2), false),
         "frozen" => (100usize, Duration::from_millis(500), true),
-        other => anyhow::bail!("unknown W-09 profile: {other}; use smoke or frozen"),
+        other => anyhow::bail!("unknown QA-09 profile: {other}; use smoke or frozen"),
     };
     if metric_eligible {
         let fingerprint = freeze_fingerprint
-            .ok_or_else(|| anyhow::anyhow!("frozen W-09 requires --freeze-fingerprint"))?;
+            .ok_or_else(|| anyhow::anyhow!("frozen QA-09 requires --freeze-fingerprint"))?;
         anyhow::ensure!(
             fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
-            "invalid W-09 freeze fingerprint"
+            "invalid QA-09 freeze fingerprint"
         );
     }
     let mut candidates = Vec::new();
@@ -361,7 +361,7 @@ pub async fn integration_fatal(
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"W-09 integration-host fatal running/queryable × 1/4 Task trials",
+        "scope":"QA-09 integration-host fatal running/queryable × 1/4 Task trials",
         "profile":profile,
         "freeze_fingerprint":freeze_fingerprint,
         "trials_per_stratum":trials_per_stratum,
@@ -369,8 +369,8 @@ pub async fn integration_fatal(
         "task_architecture_fixed":"SharedTaskService for both EXEC candidates",
         "external_agent_fixture":"persistent state outside integration worker volatile memory",
         "candidates":candidates,
-        "w09_representative_metric":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
-        "w09_strata_metric_eligible":metric_eligible,
-        "note":"The final six-strata W-09 metric is assembled with the matching whole-process result."
+        "qa09_representative_metric":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
+        "qa09_strata_metric_eligible":metric_eligible,
+        "note":"The final six-strata QA-09 metric is assembled with the matching whole-process result."
     }))
 }

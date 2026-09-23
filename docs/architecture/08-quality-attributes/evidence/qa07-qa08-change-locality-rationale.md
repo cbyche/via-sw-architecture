@@ -1,4 +1,4 @@
-# ASR-04/05 Target Rationale — Change Locality
+# QA-07/QA-08 Target Rationale — Change Locality
 
 > 작성일: 2026-09-21
 > 상태: **Target proposal의 근거**. 아직 0~5 score band나 Architecture 후보 결과를 보지 않고 작성한다.
@@ -16,7 +16,7 @@ ISO/IEC 25010의 Maintainability 계열과 SEI의 modifiability tactics는 변�
 
 그러나 **ISO나 SEI가 "변경 요소 2개 이하가 합격" 같은 VIA용 숫자를 규정하지 않는다.** 따라서 숫자 target은 외부 표준의 숫자를 가져오는 것이 아니라 VIA의 책임 경계와 intentional change catalog에서 도출한다.
 
-## 2. ASR-04 — Agent Ecosystem Interoperability & Substitutability
+## 2. QA-07 — Agent Ecosystem Interoperability & Substitutability
 
 고정 제품 방향은 VIA가 특정 Primary Agent Runtime에 종속되지 않는 Agent-neutral orchestration system이라는 것이다.
 
@@ -29,7 +29,7 @@ Agent change A-01~09에서 정상적인 구조의 기대는 다음과 같다.
 ### Target proposal
 
 ```text
-ASR-04 target:
+QA-07 target:
 Average changed architecture elements per Agent change <= 2.0
 ```
 
@@ -42,9 +42,9 @@ Average changed architecture elements per Agent change <= 2.0
 
 따라서 평균 2.0은 "외부 표준의 정답 숫자"가 아니라 **Agent-neutral이라는 VIA의 제품 정체성을 만족시키는 locality budget**이다.
 
-## 3. ASR-05 — Evolvability & Maintainability
+## 3. QA-08 — Evolvability & Maintainability
 
-ASR-05의 M-01~09 + C-01~06은 Agent 변화보다 이질적이다.
+QA-08의 M-01~09 + C-01~06은 Agent 변화보다 이질적이다.
 
 - Model provider/runtime change는 보통 binding/configuration 수준에 국소화 가능하다.
 - Context provider/format 변화는 adapter/contract 수준 변화가 가능하다.
@@ -59,7 +59,7 @@ ASR-05의 M-01~09 + C-01~06은 Agent 변화보다 이질적이다.
 ### Target proposal
 
 ```text
-ASR-05 target:
+QA-08 target:
 Average changed architecture elements per non-Agent change <= 3.0
 ```
 
@@ -69,7 +69,7 @@ Average changed architecture elements per non-Agent change <= 3.0
 - persistent-state evolution처럼 본질적으로 migration을 요구하는 변화는 3 요소까지 정상 범위
 - 평균이 3을 지속적으로 초과하면 intentional variable이 subsystem boundary를 넘어 여러 Core responsibility로 ripple되는 구조를 의미할 가능성이 커짐
 
-ASR-04보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 **실제 schema migration과 deployment/runtime relocation**이 포함되어 있기 때문이다.
+QA-07보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 **실제 schema migration과 deployment/runtime relocation**이 포함되어 있기 때문이다.
 
 ## 4. 숫자를 후보 결과에서 역산하지 않는 규칙
 
@@ -77,8 +77,8 @@ ASR-04보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 *
 
 Measurement Contract Definition에서 target을 승인하면:
 
-- A-01~09 모두 같은 ASR-04 target/score rule을 사용한다.
-- M-01~09+C-01~06 모두 같은 ASR-05 target/score rule을 사용한다.
+- A-01~09 모두 같은 QA-07 target/score rule을 사용한다.
+- M-01~09+C-01~06 모두 같은 QA-08 target/score rule을 사용한다.
 - 특정 DP나 후보에 유리하도록 threshold를 바꾸지 않는다.
 - raw change별 C/I/S/D breakdown을 항상 보존한다.
 

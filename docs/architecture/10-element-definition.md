@@ -1,15 +1,15 @@
 # 10. Architecture Element Definition — 설계 요소와 변경량 집계 기준
 
-> 상태: **사용자 승인 완료 · ASR-04/05 변경량 측정의 공통 기준으로 사용**
+> 상태: **사용자 승인 완료 · QC-04/QC-05 변경량 측정의 공통 기준으로 사용**
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
-> 입력: [02 용어](./02-terms.md), [03 설계 범위](./03-fixed-architecture-scope.md), [04 공통 흐름](./04-canonical-interaction-flow.md), [06 FA-16](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 확정 ASR](./08-quality-attributes/architecture-significant-requirements.md)
+> 입력: [02 용어](./02-terms.md), [03 설계 범위](./03-fixed-architecture-scope.md), [04 공통 흐름](./04-canonical-interaction-flow.md), [06 FA-16](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [09 품질과 평가 근거의 연결](./09-traceability.md)
 
 ## 10.1 목적 — 코드를 모두 만들기 전에 무엇을 셀 것인가
 
 **Architecture Element는 설계에서 책임·계약·상태·배치를 독립적으로 설명하고, 변경 전후를 확인할 수 있는 단위이다.** 단순히 그림에 그린 박스나 소스 파일 수가 아니다.
 
-ASR-04·05에서 세는 것은 **같은 변경을 받아들이기 위해 수정·추가·제거해야 하는 설계 요소의 수**이다. 개발 시간, M/M, 코드 줄 수, 컴파일 대상 수가 아니다.
+QC-04·QC-05에서 세는 것은 **같은 변경을 받아들이기 위해 수정·추가·제거해야 하는 설계 요소의 수**이다. 개발 시간, M/M, 코드 줄 수, 컴파일 대상 수가 아니다.
 
 | 지금 확정할 기준 | 대안 명세를 작성할 때 채워야 하는 내용 |
 | --- | --- |
@@ -96,7 +96,7 @@ flowchart LR
 | **RC-15 정책·동의·승인 중계** | Context 접근·전달 허용, 유효 동의, pending 질문/Action과 응답 연결. Agent 내부 enforcement는 제외 | UC-16, A-07·08 |
 | **RC-16 User Memory 관리** | 허용된 기억의 사용·확인·변경·삭제. Routine 저장을 무인 실행기로 확대하지 않음 | UC-17, C-04 |
 | **RC-17 저장·재연결·이행** | 담당 상태의 저장·재시작 복원·schema 이행과 외부 실행 확인. 별도 중앙 저장소를 강제하지 않음 | UC-18, FA-14, C-04·06 |
-| **RC-18 설정·진단 기록** | 연결 설정, 관측·오류·성능 증거의 correlation. 로그를 업무 authoritative state로 자동 간주하지 않음 | QA-10 지원 요구, FA-15·16 |
+| **RC-18 설정·진단 기록** | 연결 설정, 관측·오류·성능 증거의 correlation. 로그를 업무 authoritative state로 자동 간주하지 않음 | QC-10 지원 요구, FA-15·16 |
 
 **한 RC 행을 여러 군데서 담당할 수 있고 한 Component가 여러 RC를 담당할 수 있다.** 다만 집계 C의 책임 깊이는 후보 사이에서 맞춘다. 하나의 거대 박스에 RC 전체를 숨긴 후보와 세부 책임을 모두 노출한 후보를 그 박스 수로 비교하지 않는다.
 
@@ -173,8 +173,8 @@ Model 가중치, Agent 내부 planner/Tool, 외부 Calendar 서버의 내부 코
 전부 적용 가능하고 기능 유지 근거를 갖춘 경우:
 
 ```text
-ASR-04 = [N(A-01) + ... + N(A-09)] / 9
-ASR-05 = [N(M-01) + ... + N(M-09) + N(C-01) + ... + N(C-06)] / 15
+QC-04 = [N(A-01) + ... + N(A-09)] / 9
+QC-05 = [N(M-01) + ... + N(M-09) + N(C-01) + ... + N(C-06)] / 15
 ```
 
 각 변경은 같은 후보의 원래 baseline에서 **독립 적용**한다. 다음 변경이 앞 변경의 이점을 물려받게 하지 않는다. M/C별 내역은 보존하되 08이 정한 비Agent 15개 대표값을 임의의 가중 평균으로 바꾸지 않는다.

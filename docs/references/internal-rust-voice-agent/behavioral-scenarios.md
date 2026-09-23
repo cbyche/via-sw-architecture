@@ -37,7 +37,7 @@ Reference snapshot: source commit `b6032a4c472e18ec216b3e8592346ab269495342`.
 
 **VIA relevance**
 
-DP-03, DP-06, DP-07; QA-01.
+DP-03, DP-06, DP-07; REF-QA-01.
 
 ## BS-02 — Voice Request Delegates Long-Running Work
 
@@ -76,7 +76,7 @@ DP-03, DP-06, DP-07; QA-01.
 
 **VIA relevance**
 
-DP-03, DP-04, DP-05; QA-01, QA-02, QA-03.
+DP-03, DP-04, DP-05; REF-QA-01, REF-QA-02, REF-QA-03.
 
 ## BS-03 — Settled Transcript Arrives After Delegation Tool Call
 
@@ -106,7 +106,7 @@ DP-03, DP-04, DP-05; QA-01, QA-02, QA-03.
 
 **VIA relevance**
 
-DP-01; QA-01, QA-09, QA-10.
+DP-01; REF-QA-01, REF-QA-09, REF-QA-10.
 
 ## BS-04 — Completed Work Waits for a Safe Announcement Window
 
@@ -137,7 +137,7 @@ DP-01; QA-01, QA-09, QA-10.
 
 **VIA relevance**
 
-DP-06, DP-08; QA-01, QA-09.
+DP-06, DP-08; REF-QA-01, REF-QA-09.
 
 ## BS-05 — Text Client Uses the Same Gateway and Work Plane
 
@@ -169,7 +169,7 @@ DP-06, DP-08; QA-01, QA-09.
 
 **VIA relevance**
 
-DP-08, DP-09; QA-03, QA-05, QA-10.
+DP-08, DP-09; REF-QA-03, REF-QA-05, REF-QA-10.
 
 ## BS-06 — Agent Mode Starts Without a Configured Harness
 
@@ -199,7 +199,7 @@ DP-08, DP-09; QA-03, QA-05, QA-10.
 
 **VIA relevance**
 
-DP-03, DP-04, DP-12; QA-04, QA-05.
+DP-03, DP-04, DP-12; REF-QA-04, REF-QA-05.
 
 ## BS-07 — User Cancels Active Work
 
@@ -230,7 +230,7 @@ DP-03, DP-04, DP-12; QA-04, QA-05.
 
 **VIA relevance**
 
-DP-05, DP-09; QA-03, QA-10.
+DP-05, DP-09; REF-QA-03, REF-QA-10.
 
 ## BS-08 — User Asks About an Existing Delegated Task
 
@@ -258,7 +258,7 @@ DP-05, DP-09; QA-03, QA-10.
 
 **VIA relevance**
 
-DP-09; QA-03, QA-10.
+DP-09; REF-QA-03, REF-QA-10.
 
 ## BS-09 — Concurrent Work from Multiple Owners
 
@@ -288,7 +288,7 @@ DP-09; QA-03, QA-10.
 
 **VIA relevance**
 
-DP-05; QA-02, QA-03.
+DP-05; REF-QA-02, REF-QA-03.
 
 ## BS-10 — Local Componentized Voice Pipeline with Barge-In
 
@@ -320,7 +320,7 @@ DP-05; QA-02, QA-03.
 
 **VIA relevance**
 
-DP-06, DP-07; QA-01, QA-05, QA-07.
+DP-06, DP-07; REF-QA-01, REF-QA-05, REF-QA-07.
 
 ## BS-11 — Interface Mode Resolves a Host Referent
 
@@ -353,7 +353,7 @@ DP-06, DP-07; QA-01, QA-05, QA-07.
 
 **VIA relevance**
 
-DP-02, DP-08; QA-09, QA-10.
+DP-02, DP-08; REF-QA-09, REF-QA-10.
 
 ## BS-12 — Gateway Restart / Downstream Session Resume
 
@@ -382,7 +382,7 @@ DP-02, DP-08; QA-09, QA-10.
 
 **VIA relevance**
 
-DP-04, DP-09; QA-03, QA-04.
+DP-04, DP-09; REF-QA-03, REF-QA-04.
 
 ## BS-13 — Capability/Health Validation Before or During Dispatch
 
@@ -411,7 +411,7 @@ DP-04, DP-09; QA-03, QA-04.
 
 **VIA relevance**
 
-DP-11, DP-12; QA-05, QA-11.
+DP-11, DP-12; REF-QA-05, REF-QA-11.
 
 ## Scenarios Requiring Additional Inspection
 

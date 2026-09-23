@@ -1,8 +1,8 @@
 # TASK-DP01 — Task 상태를 공유 서비스가 갱신할지, Task별 소유자가 갱신할지
 
 > 상태: Candidate definition current. actor·central에 대한 성능 우열 가정 없음.
-> Current measurement contract: 새 W-01/W-03 Voice 경로와 W-04의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 W-08/W-09만 active hypothesis로 유지한다.
-<!-- candidate: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-08","W-09"],"alternatives":{"A":["VIA-C-TASKSERVICE","VIA-I-TXNTRANSITION"],"B":["VIA-C-TASKACTOR","VIA-C-ACTIVATION","VIA-I-MAILBOX","VIA-S-ACTIVATION"]}} -->
+> Current measurement contract: 새 QA-01/QA-03 Voice 경로와 QA-04의 applicability는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)를 기준으로 재동결한다. 재동결 전에는 QA-08/QA-09만 active hypothesis로 유지한다.
+<!-- candidate: {"dp":"TASK-DP01","reference":"A","hypotheses":["QA-08","QA-09"],"alternatives":{"A":["VIA-C-TASKSERVICE","VIA-I-TXNTRANSITION"],"B":["VIA-C-TASKACTOR","VIA-C-ACTIVATION","VIA-I-MAILBOX","VIA-S-ACTIVATION"]}} -->
 
 ## 1. 결정과 중요성
 
@@ -60,7 +60,7 @@ Agent를 기다리며 mailbox를 막지 않는다. `SUBMIT_PENDING`을 저장하
 | accepted 뒤 로컬 commit 이전 crash | submission_key로 조회·조정 | 동일 조회·조정 후 소유자 commit | 공통 외부 계약 없으면 Unknown |
 | 완료/cancel race | source revision·현재 state로 전이 | 동일 규칙을 actor가 전이 | cancel_requested를 canceled로 단정하지 않음 |
 
-W-09 복구는 UI 창이나 actor activation만 띄운 시점이 아니다. 해당 Task들의 확인된 상태·result·허용 control이 사용 가능할 때 끝난다. A의 lazy load와 B의 lazy activation도 동일 active Task 집합으로 검사한다.
+QA-09 복구는 UI 창이나 actor activation만 띄운 시점이 아니다. 해당 Task들의 확인된 상태·result·허용 control이 사용 가능할 때 끝난다. A의 lazy load와 B의 lazy activation도 동일 active Task 집합으로 검사한다.
 
 ## 5. ELEMENTS
 
@@ -79,6 +79,6 @@ W-09 복구는 UI 창이나 actor activation만 띄운 시점이 아니다. 해�
 
 A는 여러 Task의 관계 조회·transaction 제어가 직접적이지만 conflict 재처리와 공유 저장소의 비용을 부담할 수 있다. B는 Task별 ordering과 activation scope가 명확하지만 in-memory mailbox routing·persistent fencing·cross-Task command 조정이 추가된다. **중앙형=동시성 불가, actor=빠른 복구라는 결론은 허용하지 않는다.**
 
-W-08은 C-04/06 등을 포함한 전체 15 change의 수정 ID를 보고, W-09는 6 recovery strata를 유지한다. 접수+Link commit과 foreground 1/4 Task span은 새 W-01/W-03 및 W-04 contract를 재동결할 때 진단 trace로 다시 배치한다. 진단 span은 command 대기, conflict retry, transaction wait/commit, activation, external reconciliation이다.
+QA-08은 C-04/06 등을 포함한 전체 15 change의 수정 ID를 보고, QA-09는 6 recovery strata를 유지한다. 접수+Link commit과 foreground 1/4 Task span은 새 QA-01/QA-03 및 QA-04 contract를 재동결할 때 진단 trace로 다시 배치한다. 진단 span은 command 대기, conflict retry, transaction wait/commit, activation, external reconciliation이다.
 
 TC-09.3/12.3/14.2/18.1~18.6의 상태 전이를 상세 trace로 사용한다. 실제 fixed 4-Task 부하에서 차이가 없다면 동점이며 부하를 임의로 늘려 공식 점수를 만들지 않는다. TASK-DP01 A/B × EXEC A/B를 교차 확인해 writer 차이와 process 차이를 분리한다.

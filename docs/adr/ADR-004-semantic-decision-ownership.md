@@ -4,11 +4,11 @@
 - Date: 2026-09-22
 - Related DP: IR-DP01
 
-> Current measurement-contract impact: 이전 W-01/W-02 수식 기반 latency는 superseded되어 현재 근거에서 제외한다. Deferred 상태는 유지하며 새 delegated/direct Voice token ledger와 call graph로 다시 비교한다.
+> Current measurement-contract impact: 이전 QA-01/QA-02 수식 기반 latency는 superseded되어 현재 근거에서 제외한다. Deferred 상태는 유지하며 새 delegated/direct Voice token ledger와 call graph로 다시 비교한다.
 
 ## Context
 
-The earlier candidate evaluation compares an integrated semantic authority with staged grounding, Task association, and handling authorities using the same hosted Qwen3-8B reference profile. The `2^4` reference campaign evaluated IR A/B in all eight TASK/AGENT/EXEC contexts, but the hosted W-05 run remains blocked on the OpenRouter credential.
+The earlier candidate evaluation compares an integrated semantic authority with staged grounding, Task association, and handling authorities using the same hosted Qwen3-8B reference profile. The `2^4` reference campaign evaluated IR A/B in all eight TASK/AGENT/EXEC contexts, but the hosted QA-05 run remains blocked on the OpenRouter credential.
 
 ## Decision
 
@@ -22,12 +22,12 @@ Candidate B creates independent stage contracts and provenance, allowing correct
 
 | QA | Result |
 |---|---|
-| W-08 | A/B both 1.933, score 4 |
-| W-05 | BLOCKED_NOT_RUN because the OpenRouter credential was absent |
-| W-01 (historical) | Superseded by the current delegated Voice definition |
-| W-02 (historical) | Superseded by the current direct Voice definition |
+| QA-08 | A/B both 1.933, score 4 |
+| QA-05 | BLOCKED_NOT_RUN because the OpenRouter credential was absent |
+| QA-01 (historical) | Superseded by the current delegated Voice definition |
+| QA-02 (historical) | Superseded by the current direct Voice definition |
 
-The prior reference model favored A on historical W-01/W-02 formulas, but those values no longer support the decision. W-05 remains unmeasured and the new Voice call graphs are not frozen, so A remains only the interim reference rather than an accepted winner.
+The prior reference model favored A on historical QA-01/QA-02 formulas, but those values no longer support the decision. QA-05 remains unmeasured and the new Voice call graphs are not frozen, so A remains only the interim reference rather than an accepted winner.
 
 ## Interim tactics
 

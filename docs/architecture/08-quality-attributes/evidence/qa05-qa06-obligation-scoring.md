@@ -1,4 +1,4 @@
-# ASR-02 / ASR-03 Obligation Scoring — 정도 기반 평가 기준
+# QA-05 / QA-06 Obligation Scoring — 정도 기반 평가 기준
 
 > 작성일: 2026-09-21
 > 상태: **사용자 승인된 measurement/oracle 보정**. 실제 Architecture 후보 결과는 NOT_RUN.
@@ -6,27 +6,27 @@
 
 ## 1. 대표 Metric
 
-### ASR-02 Task Completion Effectiveness
+### QA-05 Task Completion Effectiveness
 
 **Task Completion Obligation Satisfaction Rate (%)**
 
-TC i에 적용되는 ASR-02 obligation 집합을 O(i,02)라 한다.
+TC i에 적용되는 QA-05 obligation 집합을 O(i,02)라 한다.
 
     TC02_i
     = satisfied(O(i,02)) / |O(i,02)|
 
-    ASR-02
+    QA-05
     = 100 × mean(TC02_i)
       for canonical 48 TCs
 
-### ASR-03 Interaction & Task Continuity
+### QA-06 Interaction & Task Continuity
 
 **Continuity Obligation Preservation Rate (%)**
 
     TC03_i
     = preserved(O(i,03)) / |O(i,03)|
 
-    ASR-03
+    QA-06
     = 100 × mean(TC03_i)
       for canonical 30 TCs
 
@@ -41,7 +41,7 @@ TC를 동일 가중한다. 복잡한 TC에 obligation이 많다는 이유로 전
 
 후보 결과를 본 뒤 obligation을 쪼개거나 합치지 않는다.
 
-### ASR-02 대표 category
+### QA-05 대표 category
 
 - GOAL: 현재 사용자 목표/의미 보존
 - REFERENT: 대상/source binding
@@ -52,7 +52,7 @@ TC를 동일 가중한다. 복잡한 TC에 obligation이 많다는 이유로 전
 - CLARIFICATION: 질문 및 사용자 답의 원 Request binding
 - OUTCOME: terminal result/outcome binding
 
-### ASR-03 대표 category
+### QA-06 대표 category
 
 - CONVERSATION: 앞 대화/설명 관계 보존
 - REFERENT_HISTORY: 과거 referent/result 재참조
@@ -65,24 +65,24 @@ TC를 동일 가중한다. 복잡한 TC에 obligation이 많다는 이유로 전
 
 Category는 obligation granularity를 검토하기 위한 label이며 별도 가중치가 아니다.
 
-## 3. Multi-ASR TC
+## 3. Multi-QA TC
 
-같은 TC가 여러 ASR을 검증해도 실행은 한 번이다. 다만 obligation마다 ASR tag를 둔다.
+같은 TC가 여러 QA을 검증해도 실행은 한 번이다. 다만 obligation마다 QA tag를 둔다.
 
 예:
 
     TC-01.3 "새 질문인데 피타고라스 정리를 설명해줘"
 
-    O1 [ASR-02, GOAL]
+    O1 [QA-05, GOAL]
       새 주제 질문에 맞는 응답을 만든다.
 
-    O2 [ASR-03, TASK_IDENTITY]
+    O2 [QA-06, TASK_IDENTITY]
       기존 T-PPT에 이 요청을 잘못 연결하지 않는다.
 
-    O3 [ASR-03, MULTI_TASK_ISOLATION]
+    O3 [QA-06, MULTI_TASK_ISOLATION]
       T-PPT를 수정/취소하지 않는다.
 
-ASR-02 O1이 실패했다고 ASR-03 O2/O3을 자동 FAIL 처리하지 않으며 그 반대도 마찬가지다.
+QA-05 O1이 실패했다고 QA-06 O2/O3을 자동 FAIL 처리하지 않으며 그 반대도 마찬가지다.
 
 ## 4. Strict PASS는 버리지 않는다
 
@@ -97,7 +97,7 @@ degree metric만 보면 심각한 한 조건 실패가 평균에 묻힐 수 있�
 
     TC-09.3 Data-dependent Compound Request
 
-    ASR-02 obligations:
+    QA-05 obligations:
       O1 두 Request 보존       PASS
       O2 data dependency 보존  PASS
       O3 실제 summary binding  PASS
@@ -111,13 +111,13 @@ degree metric만 보면 심각한 한 조건 실패가 평균에 묻힐 수 있�
 
 **그럴 수 있으며 그 자체는 문제가 아니다.**
 
-ASR-02/03은 Architecture가 반드시 만족해야 할 중요한 품질이지만, 모든 DP에서 반드시 후보를 가르는 metric일 필요는 없다.
+QA-05/QA-06은 Architecture가 반드시 만족해야 할 중요한 품질이지만, 모든 DP에서 반드시 후보를 가르는 metric일 필요는 없다.
 
 같은 모델과 같은 Context가 실제 판단 경계까지 전달되고, 필요한 Conversation/Task/Execution state를 모든 후보가 올바르게 유지한다면 여러 후보가 모두 100%를 받을 수 있다.
 
-그 경우의 해석은 `이 DP에서 ASR-02/03이 차이를 만들지 않았다`이지, 시험을 더 어렵게 만들어 억지로 실패를 만들어야 한다는 뜻이 아니다.
+그 경우의 해석은 `이 DP에서 QA-05/QA-06이 차이를 만들지 않았다`이지, 시험을 더 어렵게 만들어 억지로 실패를 만들어야 한다는 뜻이 아니다.
 
-DP에서 ASR-02 또는 ASR-03을 Primary QA로 선정하려면 후보 구조 차이가 다음 causal chain을 가져야 한다.
+DP에서 QA-05 또는 QA-06을 Primary QA로 선정하려면 후보 구조 차이가 다음 causal chain을 가져야 한다.
 
     responsibility / contract / state authority 차이
     → 사용할 수 있는 evidence 또는 유지 가능한 identity/correlation 차이

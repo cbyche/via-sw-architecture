@@ -30,23 +30,24 @@
 
 ## Current measurement status
 
-현재 단계는 **Measurement Contract Definition**이다. W-01~W-12의 측정 의미와 조건을 먼저 확정하며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
+현재 단계는 **Measurement Contract Definition**이다. QA-01~QA-12의 측정 의미와 조건을 먼저 확정하며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
 
 | Item | Status |
 | --- | --- |
 | System boundary, representative use cases, change scenarios | Defined |
-| Working-12 measurement dimensions | Defined; W-01~W-03 Voice definition updated |
-| W-01~W-03 event and software-boundary contract | Draft defined; machine freeze pending |
-| W-01~W-03 machine-readable contract and harness | **Not implemented** |
-| W-01~W-03 current results | **Not run** |
+| QC taxonomy and QA-01~QA-12 catalog | Defined; QA-01~QA-03 Voice definition updated |
+| ASR classification | **Not selected; QA별 Architecture 영향 검토 전** |
+| QA-01~QA-03 event and software-boundary contract | Draft defined; machine freeze pending |
+| QA-01~QA-03 machine-readable contract and harness | **Not implemented** |
+| QA-01~QA-03 current results | **Not run** |
 | Actual S2S/VIA LLM/product latency evidence | **Not measured** |
 | Previous measurement code and results | Historical/superseded archive |
 
 새 Voice responsiveness 정의는 다음과 같다.
 
-- **W-01 — Delegated Task Result Responsiveness:** Agent 실행시간을 제외하고, Voice 요청의 위임 준비와 Agent 결과의 Voice 전달에 VIA가 소비한 시간
-- **W-02 — VIA Direct Voice Response Responsiveness:** Downstream Agent 없이 VIA가 직접 답하는 Voice 요청의 전체 반응시간
-- **W-03 — Agent Progress Voice Feedback Responsiveness:** Agent status가 source에서 제공 가능해진 뒤 사용자에게 audible Voice로 전달되기까지의 시간
+- **QA-01 — Delegated Task Result Responsiveness:** Agent 실행시간을 제외하고, Voice 요청의 위임 준비와 Agent 결과의 Voice 전달에 VIA가 소비한 시간
+- **QA-02 — VIA Direct Voice Response Responsiveness:** Downstream Agent 없이 VIA가 직접 답하는 Voice 요청의 전체 반응시간
+- **QA-03 — Agent Progress Voice Feedback Responsiveness:** Agent status가 source에서 제공 가능해진 뒤 사용자에게 audible Voice로 전달되기까지의 시간
 
 세 지표의 endpoint, 포함·제외 구간, S2S 234 ms와 VIA LLM 추정치의 허용 범위는 [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md)만을 따른다. 과거 harness의 수치나 이름을 현재 결과로 해석하면 안 된다.
 
@@ -58,10 +59,11 @@
 2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA가 무엇이고 무엇이 아닌지
 3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md) — 모든 후보가 공통으로 만족할 범위
 4. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 평가할 사용자 상황
-5. [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md) — 현재 W-01~W-03 정의
-6. [Event & Boundary Contract](docs/architecture/11-measurement/event-boundary-contract.md) — 실제 사건과 software 진단 event의 경계
-7. [Measurement guide](docs/architecture/11-measurement/README.md) — 결과 전 동결해야 할 계약과 evidence level
-8. [Architecture decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — DP 대안, 판단 방법, 현재 결정
+5. [Quality Model](docs/architecture/08-quality-attributes/quality-model.md) — QC·QA·ASR의 관계와 현재 QA catalog
+6. [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md) — 현재 QA-01~QA-03 정의
+7. [Event & Boundary Contract](docs/architecture/11-measurement/event-boundary-contract.md) — 실제 사건과 software 진단 event의 경계
+8. [Measurement guide](docs/architecture/11-measurement/README.md) — 결과 전 동결해야 할 계약과 evidence level
+9. [Architecture decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — DP 대안, 판단 방법, 현재 결정
 
 저장소를 수정하는 LLM은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 
@@ -82,14 +84,14 @@
 
 - `NOT_IMPLEMENTED`와 `NOT_RUN`은 결과가 없다는 뜻이다. archive 수치로 빈칸을 채우지 않는다.
 - 계산값, scheduled mock/reference 측정, 실제 모델 측정, 제품 end-to-end 측정을 같은 evidence로 취급하지 않는다.
-- Qwen3-Omni의 공개 234 ms는 제한된 조건의 theoretical first-audio-packet reference다. W metric 시작점이나 제품 latency가 아니다.
+- Qwen3-Omni의 공개 234 ms는 제한된 조건의 theoretical first-audio-packet reference다. QA metric 시작점이나 제품 latency가 아니다.
 - VIA LLM token-rate 계산은 `ESTIMATED_MODEL_ONLY`; 실제 component span과 섞어도 `HYBRID_REFERENCE_ESTIMATE`다.
 - 유효 endpoint는 무음·earcon·filler가 아니라 첫 **meaningful audible** onset이다.
 - 실제 audible latency 주장은 speaker/loopback 수준의 onset 관측이 있어야 한다. instrumented sink 도착과 동일하지 않다.
 
 ## Development
 
-`architecture-ci`는 `main` 변경마다 active 문서 정합성과 candidate prototype을 검사한다. `candidate-review-bundle`은 외부 리뷰용 source·lock·test output 묶음이 필요할 때만 수동 실행한다. 두 workflow 모두 W 측정 campaign이나 Architecture 승자 결정을 수행하지 않는다.
+`architecture-ci`는 `main` 변경마다 active 문서 정합성과 candidate prototype을 검사한다. `candidate-review-bundle`은 외부 리뷰용 source·lock·test output 묶음이 필요할 때만 수동 실행한다. 두 workflow 모두 QA 측정 campaign이나 Architecture 승자 결정을 수행하지 않는다.
 
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py

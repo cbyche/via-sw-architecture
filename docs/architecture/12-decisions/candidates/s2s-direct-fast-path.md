@@ -1,6 +1,6 @@
 # FP-INT01 — S2S Direct Fast Path
 
-> Current measurement contract: W-01~W-03이 delegated result, direct Voice response, Agent progress Voice feedback으로 재정의되었다. 이 문서의 기존 latency 연결은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재검토한다.
+> Current measurement contract: QA-01~QA-03이 delegated result, direct Voice response, Agent progress Voice feedback으로 재정의되었다. 이 문서의 기존 latency 연결은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재검토한다.
 
 > **상태: 공통 원칙으로 확정.** S2S Direct Fast Path는 독립 DP가 아니며 모든 후보의 공통 조건으로 사용한다.
 
@@ -25,7 +25,7 @@ flowchart LR
 - Direct Response도 canonical Conversation에 기록한다.
 - Voice Runtime이 판단할 수 없는 Context/Task/Agent routing은 Core responsibility다.
 - interruption은 audio generation을 멈추되 명시적 cancel intent 없이 Task를 취소하지 않는다.
-- S2S가 필요한 route/control event를 native로 제공하지 않으면 supplemental interpretation을 추가하며 direct-response 비용을 W-02에 포함한다. Delegation 경로의 비용 귀속은 새 W-01 call graph에서 별도 고정한다.
+- S2S가 필요한 route/control event를 native로 제공하지 않으면 supplemental interpretation을 추가하며 direct-response 비용을 QA-02에 포함한다. Delegation 경로의 비용 귀속은 새 QA-01 call graph에서 별도 고정한다.
 
 ## 왜 기존 B를 탈락시키는가
 
@@ -33,10 +33,10 @@ flowchart LR
 
 따라서 A와 B 사이에 충분히 강한 제품 trade-off가 없고 A가 자연스러운 구조로 지배할 가능성이 높다. 발표 목적상 이런 candidate를 억지로 유지하지 않는다.
 
-## 관련 W metric
+## 관련 QA metric
 
-- **W-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 W-01 delegation 경로의 관련성은 별도 재검토한다.
-- **W-08 Evolvability & Maintainability** — S2S event/control 계약 변경은 regression으로 추적.
+- **QA-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 QA-01 delegation 경로의 관련성은 별도 재검토한다.
+- **QA-08 Evolvability & Maintainability** — S2S event/control 계약 변경은 regression으로 추적.
 - Voice barge-in/jitter — secondary observation.
 
 이 문서는 Architecture Decision score 대상이 아니다.

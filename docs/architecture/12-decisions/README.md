@@ -6,7 +6,7 @@
 
 1. 하나의 DP가 바꾸는 authority, state ownership, contract, call graph 또는 fault boundary를 명시한다.
 2. 다른 DP와 fixture/dependency 조건을 고정한다.
-3. Working-12 전수를 확인하되, 실제 구조 인과가 있는 W만 primary driver로 사용한다.
+3. QA catalog 전수를 확인하되, 실제 구조 인과가 있는 QA만 해당 DP의 primary driver로 사용한다.
 4. A/B raw metric과 correctness를 paired comparison으로 제시한다.
 5. 선택안의 장점뿐 아니라 약점, tactic, 재검증 조건을 ADR에 남긴다.
 
@@ -25,4 +25,4 @@
 
 ## What is not current evidence
 
-이전 full-factorial result와 W12-G1 mapping은 [archive](../../archive/w12-g1/README.md)에 있다. 새 W-01~W-03 endpoint에 맞춘 직접 A/B 결과가 아니므로 현재 Voice 근거로 재사용하지 않는다. 새 결과가 없으면 `NOT_RUN`으로 남긴다.
+이전 full-factorial result와 W12-G1 mapping은 [archive](../../archive/w12-g1/README.md)에 있다. 새 QA-01~QA-03 endpoint에 맞춘 직접 A/B 결과가 아니므로 현재 Voice 근거로 재사용하지 않는다. 새 결과가 없으면 `NOT_RUN`으로 남긴다.

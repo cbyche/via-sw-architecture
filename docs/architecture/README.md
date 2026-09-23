@@ -15,9 +15,11 @@
 - Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
 - Architecture 선택은 IR, TASK, AGENT, EXEC DP별 A/B 직접 비교로 수행한다.
-- W-01~W-03은 Voice 중심으로 재정의됐으나 새 harness와 결과는 아직 없다.
+- QC-01~QC-10은 상위 품질 관심사, QA-01~QA-12는 현재 측정 가능한 품질 속성이다.
+- ASR은 아직 선정하지 않았으며 Architecture 영향이 확인된 QA에 별도 번호 없이 표시한다.
+- QA-01~QA-03은 Voice 중심으로 재정의됐으나 새 harness와 결과는 아직 없다.
 
-모든 W의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
+모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
 ## Required reading order
 
@@ -31,7 +33,7 @@
 | 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 후보 비교에서 무엇을 동일하게 유지하는가? |
 | 7 | [Intentional Variables](./07-intentional-variables.md) | 어떤 모델·Agent·계약 변화를 견뎌야 하는가? |
 | 8 | [Quality Attributes](./08-quality-attributes/README.md) | 어떤 품질을 어떤 지표로 관찰하는가? |
-| 9 | [Traceability](./09-traceability.md) | Scope→UC→ASR이 어떻게 연결되는가? |
+| 9 | [Traceability](./09-traceability.md) | Scope→UC→QC→QA가 어떻게 연결되는가? |
 | 10 | [Architecture Element Definition](./10-element-definition.md) | 후보의 component/contract/state를 어떤 단위로 비교하는가? |
 | 11 | [Measurement](./11-measurement/README.md) | 결과 전에 무엇을 동결하고 어떤 evidence를 생성하는가? |
 | 12 | [Decisions](./12-decisions/README.md) | DP별 A/B를 어떻게 비교하고 결정하는가? |
@@ -44,10 +46,12 @@
 | --- | --- | --- |
 | Mission, boundary, common scope | Current | 후보가 바꿀 수 없는 출발점 |
 | Representative Use Cases and change scenarios | Current | 평가 모집단과 변화 범위 |
-| W-01~W-03 semantic definitions | Current draft for implementation | endpoint와 포함·제외 구간은 정의됨 |
-| W-01~W-03 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
-| W-01~W-03 machine contract, targets, harness | Pending | 구현·실행 금지라는 뜻이 아니라 먼저 동결해야 함 |
-| W-01~W-03 current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
+| QC taxonomy and QA catalog | Current | QC-01~QC-10에서 QA-01~QA-12를 구체화 |
+| ASR classification | Pending | QA별 Architecture 영향 검토 전 |
+| QA-01~QA-03 semantic definitions | Current draft for implementation | endpoint와 포함·제외 구간은 정의됨 |
+| QA-01~QA-03 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
+| QA-01~QA-03 machine contract, targets, harness | Pending | 구현·실행 금지라는 뜻이 아니라 먼저 동결해야 함 |
+| QA-01~QA-03 current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
 | DP inventory | Current | IR/TASK/AGENT/EXEC A/B alternatives |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 

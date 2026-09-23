@@ -10,7 +10,7 @@
 
 ## What it is not
 
-- 현재 W-01~W-03 measurement harness
+- 현재 QA-01~QA-03 measurement harness
 - 실제 S2S/VIA LLM 실행 또는 제품 latency evidence
 - `fixtures/s2s-delay-smoke.json`의 delay를 production profile로 주장하는 근거
 - archived full-factorial 결과를 다시 현재화하는 도구

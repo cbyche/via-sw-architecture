@@ -226,7 +226,7 @@ Observed mechanisms include:
 - stale tool-call rejection by turn id/generation;
 - duplicate Work suppression by submission key.
 
-These mechanisms are reference evidence for QA-03 and QA-04; they are not automatically VIA recovery requirements beyond what the Approved Baseline already states.
+These mechanisms are reference evidence for REF-QA-03 and REF-QA-04; they are not automatically VIA recovery requirements beyond what the Approved Baseline already states.
 
 ## Voice, Session, Context, Agent, Task, and Model Integration
 

@@ -4,7 +4,7 @@
 - Date: 2026-09-22
 - Related DP: TASK-DP01
 
-> Current measurement-contract impact: 이전 W-02 responsiveness와 W-01 기반 W-04 reference evidence는 superseded/review-required다. 이 ADR의 선택은 유지하되 새 W-01/W-03과 재정의된 W-04로 재검증해야 한다.
+> Current measurement-contract impact: 이전 QA-02 responsiveness와 QA-01 기반 QA-04 reference evidence는 superseded/review-required다. 이 ADR의 선택은 유지하되 새 QA-01/QA-03과 재정의된 QA-04로 재검증해야 한다.
 
 ## Context
 
@@ -22,12 +22,12 @@ Candidate B assigns each Task to a durable single-writer supervisor with activat
 
 | QA | Result |
 |---|---|
-| W-08 | A/B both 1.933, score 4 |
-| W-09 | B was about 0.17ms lower on this run; both score 5 and effectively tied |
-| W-02 (historical) | Superseded handoff endpoint; not current evidence |
-| W-04 (historical) | Depends on the superseded W-01 foreground contract; review required |
+| QA-08 | A/B both 1.933, score 4 |
+| QA-09 | B was about 0.17ms lower on this run; both score 5 and effectively tied |
+| QA-02 (historical) | Superseded handoff endpoint; not current evidence |
+| QA-04 (historical) | Depends on the superseded QA-01 foreground contract; review required |
 
-At the time of the 2026-09-22 decision, the explicitly simulated-reference W-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded W-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current performance evidence until revalidation.
+At the time of the 2026-09-22 decision, the explicitly simulated-reference QA-04 campaign supported B, including a frozen TASK×EXEC interaction of `-0.01`. That result is now historical because its denominator used the superseded QA-01 contract. The accepted decision is preserved for continuity, but it must not be presented as current performance evidence until revalidation.
 
 ## Tactics and weakness
 

@@ -1,9 +1,9 @@
-# Architecture Evaluation Method — Working-12 Sensitivity Sweep
+# Architecture Evaluation Method — QA Catalog Sensitivity Sweep
 
 > 작성일: 2026-09-21
 > 상태: **평가 방법 current / 실제 DP 후보 점수 산출 전**
-> 목적: Working-12 metric을 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
-> Current measurement contract: W-01~W-03의 명칭·endpoint는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
+> 목적: QA Catalog metric을 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
+> Current measurement contract: QA-01~QA-03의 명칭·endpoint는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
 
 ## 1. 핵심 원칙
 
@@ -13,10 +13,10 @@
 
 ### Evaluation A — Architecture Sensitivity Sweep
 
-- Working-12 metric을 모두 확인
+- QA Catalog metric을 모두 확인
 - 각 DP의 모든 합리적 후보를 같은 Metric/Target/Score Boundary로 평가
 - weighted total / winner를 만들지 않음
-- 구조적으로 해당 DP와 인과관계가 없는 ASR은 N/A로 기록
+- 구조적으로 해당 DP와 인과관계가 없는 QA는 N/A로 기록
 - 동일 점수도 그대로 공개
 - 후보별 trade-off pattern과 실제 sensitivity를 관찰
 
@@ -25,6 +25,7 @@
 - Evaluation A 결과와 구조 인과분석을 Differentiation Criteria에 적용
 - criteria를 충족한 약 3~4개를 해당 DP의 Primary Architecture Driver로 고정
 - 나머지는 regression / constraint / secondary evidence로 유지
+- 전체 DP를 가로지르는 구조 영향과 위험을 [Quality Model](../08-quality-attributes/quality-model.md)의 기준으로 검토하여 QA별 ASR 상태를 기록
 - Primary set 고정 후 final decision narrative와 weakness/tactic evaluation 수행
 
 ## 1-A. Candidate Mutual-Exclusivity Criteria
@@ -37,7 +38,7 @@ Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한�
 4. 공통 tactic은 허용하지만 authority를 바꾸면 candidate identity 변경으로 처리한다.
 5. Hybrid는 단순 장점 결합이 아니라 새로운 authority split과 독립적인 비용/변경면을 가질 때만 별도 family로 인정한다.
 
-이 criteria를 충족하지 못한 비교는 ASR sensitivity가 크게 보여도 발표용 Architecture Decision으로 사용하지 않는다.
+이 criteria를 충족하지 못한 비교는 QA sensitivity가 크게 보여도 발표용 Architecture Decision으로 사용하지 않는다.
 
 ## 2. 사후 논리 만들기와 허용되는 해석의 경계
 
@@ -47,7 +48,7 @@ Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한�
 - 발표용 문구·시각화를 결과에 맞게 명확하게 다듬기
 
 금지:
-- 특정 후보가 유리하도록 ASR target/score boundary 변경
+- 특정 후보가 유리하도록 QA target/score boundary 변경
 - 후보 결과를 본 뒤 새 ASR을 즉석 추가
 - 점수 차이가 난 QA만 골라 중요했다고 주장
 - 구조 인과관계가 없는 우연한 차이를 Architecture trade-off로 주장
@@ -55,28 +56,28 @@ Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한�
 
 즉 **storytelling은 결과 후에 다듬을 수 있지만, 평가 논리와 기준은 결과 전에 고정한다.**
 
-## 3. Working-12 전수 Sweep
+## 3. QA Catalog 전수 Sweep
 
-| ID | W metric | Sweep role |
+| ID | QA metric | Sweep role |
 | --- | --- | --- |
-| W-01 | Delegated Task Result Responsiveness | strong candidate / target pending |
-| W-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
-| W-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
-| W-04 | Concurrent Task Performance Isolation | strong candidate |
-| W-05 | Task Completion Effectiveness | conditional |
-| W-06 | Interaction & Task Continuity | conditional |
-| W-07 | Agent Ecosystem Interoperability & Substitutability | strong candidate |
-| W-08 | Evolvability & Maintainability | strong candidate |
-| W-09 | Recovery Timeliness & Recoverability | strong/conditional |
-| W-10 | Dependency Failure Containment & Graceful Degradation | strong candidate |
-| W-11 | Privacy Exposure Minimization | strong candidate |
-| W-12 | Action & Access Safety | constraint-style |
+| QA-01 | Delegated Task Result Responsiveness | strong candidate / target pending |
+| QA-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
+| QA-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
+| QA-04 | Concurrent Task Performance Isolation | strong candidate |
+| QA-05 | Task Completion Effectiveness | conditional |
+| QA-06 | Interaction & Task Continuity | conditional |
+| QA-07 | Agent Ecosystem Interoperability & Substitutability | strong candidate |
+| QA-08 | Evolvability & Maintainability | strong candidate |
+| QA-09 | Recovery Timeliness & Recoverability | strong/conditional |
+| QA-10 | Dependency Failure Containment & Graceful Degradation | strong candidate |
+| QA-11 | Privacy Exposure Minimization | strong candidate |
+| QA-12 | Action & Access Safety | constraint-style |
 
-Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable W를 계산한다.
+Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable QA를 계산한다.
 
 ## 4. Differentiation Criteria
 
-어떤 W metric을 특정 DP의 Primary Architecture Driver로 인정하려면 다음을 모두 만족해야 한다.
+어떤 QA metric을 특정 DP의 Primary Architecture Driver로 인정하려면 다음을 모두 만족해야 한다.
 
 ### G1. Product Relevance
 
@@ -98,7 +99,7 @@ Evaluation A 결과에서 다음 중 하나 이상이 나타난다.
 
 ### G4. Non-Redundancy
 
-다른 Primary ASR과 사실상 동일한 response를 중복 측정하지 않는다.
+다른 Primary QA와 사실상 동일한 response를 중복 측정하지 않는다.
 
 ### G5. Evidence Traceability
 
@@ -110,7 +111,7 @@ Evaluation A 결과에서 다음 중 하나 이상이 나타난다.
 
 Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유리한가'가 아니라 **실제 구조 sensitivity가 존재하는가**만 판단한다.
 
-예를 들어 세 후보가 ASR-06에서 모두 100%를 얻으면 이를 숨기지 않고 'non-discriminating constraint'로 기록한다. 반대로 ASR-01에서 5/3/2점으로 갈리고 call graph 차이로 설명 가능하면 Primary driver가 될 수 있다.
+예를 들어 세 후보가 QA-10에서 모두 100%를 얻으면 이를 숨기지 않고 `non-discriminating constraint`로 기록한다. 반대로 QA-07에서 점수가 갈리고 contract boundary 차이로 설명 가능하면 해당 DP의 Primary driver가 될 수 있다.
 
 이 criteria는 후보의 승자를 고르는 규칙이 아니라 **어떤 QA가 이 DP에서 실제 trade-off 축인지 식별하는 규칙**이다.
 
@@ -120,7 +121,7 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 
 1. DP가 다루는 구조 질문
 2. 합리적 후보 A/B/C
-3. 12개 ASR sensitivity sweep mini-heatmap
+3. 12개 QA sensitivity sweep mini-heatmap
 4. Differentiation Criteria를 충족한 Primary 3~4개 확대
 5. Primary QA의 raw metric + 0~5 score
 6. trade-off 설명
@@ -128,11 +129,11 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 8. 선택안의 weakness
 9. tactic 적용 후 동일 metric 재평가
 
-이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 12개 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 ASR도 숨기지 않는다.
+이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 12개 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
 
 ## 7. 12 진입 전 남은 작업
 
-실제 DP 후보 점수를 계산하기 전에 Working-12 metric 모두에 대해 다음을 동결한다.
+실제 DP 후보 점수를 계산하기 전에 QA Catalog metric 모두에 대해 다음을 동결한다.
 
 - 대표 Metric
 - workload / stimulus
@@ -141,4 +142,4 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 - evidence level
 - N/A 판정 규칙
 
-기존 7개 ASR 중심 scoring은 Working-12 측정 관점이 도입되면서 최종 freeze 상태가 아니다. 12개 W의 scoring baseline을 먼저 재작성한다.
+ASR은 아직 선정하지 않았다. 12개 QA의 scoring baseline과 DP별 구조 인과를 먼저 정리한 뒤, 별도 ID를 만들지 않고 해당 QA에 ASR 상태를 기록한다.

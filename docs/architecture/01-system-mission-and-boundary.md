@@ -150,7 +150,7 @@ VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구
 - S2S Model을 통한 User Turn과 Response도 모두 VIA conversation state에서 관리한다.
 - Voice Runtime의 interface, streaming event, state 처리, S2S Model invocation, deployment binding, 다른 VIA 요소와의 연결 방식은 VIA Architecture 설계 범위에 포함한다.
 - S2S Model 자체의 내부 구조와 학습 방법은 VIA Architecture 설계 범위에 포함하지 않는다.
-- 별도의 ASR, VAD, TTS 또는 helper model을 추가할 수 있으나, 이는 명시적인 Architecture 설계로 결정해야 하며 S2S Model은 기본 Voice Model로 유지한다.
+- 별도의 speech recognizer(음성 인식), VAD, TTS 또는 helper model을 추가할 수 있으나, 이는 명시적인 Architecture 설계로 결정해야 하며 S2S Model은 기본 Voice Model로 유지한다.
 - 필요한 입력·시간·정정 이벤트가 특정 S2S Model에 모두 내장되어 있다고 가정하지 않는다. 제품이 필요로 하는 정보는 Voice Runtime의 연계 설계에서 제공한다.
 
 ### 2. VIA Semantic Inference — VIA Architecture 범위 안

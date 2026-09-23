@@ -1,6 +1,6 @@
 # Candidate Architecture — 공통 구조·계약·비교 기준
 
-> **Current measurement contract notice:** W-01~W-03 endpoint는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 이 문서의 기존 metric 연결은 historical이며 새 DP×W execution mapping이 동결될 때까지 측정 근거로 사용하지 않는다.
+> **Current measurement contract notice:** QA-01~QA-03 endpoint는 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 이 문서의 기존 metric 연결은 historical이며 새 DP×QA execution mapping이 동결될 때까지 측정 근거로 사용하지 않는다.
 > 공통 metric event와 software boundary의 의미는 [Event & Boundary Contract](../../11-measurement/event-boundary-contract.md)를 따른다.
 > 상태: Candidate definition current / measurement mapping pending. 후보 결과·승자 없음.
 > 01~07 제품 조건, 10 요소 집계와 [Measurement & Scoring Contract](../../11-measurement/scoring-contract.md)를 대체하지 않는다.
@@ -48,7 +48,7 @@ SemanticDecision은 실행 권한이 아니다. 유효성·policy·Task revision
 1. Task owner가 `intent + submission_key + outbox`를 한 짧은 transaction으로 저장한다.
 2. EffectDispatcher가 transaction 밖에서 Agent를 호출한다.
 3. Agent의 유효 접수/run identity를 확인한다.
-4. 같은 Task owner가 ExecutionLink와 접수 상태를 저장한다. 이 event는 새 W-01의 handoff 진단 trace와 correctness 검증에 보존하지만 더 이상 W-02 종료점이 아니다.
+4. 같은 Task owner가 ExecutionLink와 접수 상태를 저장한다. 이 event는 새 QA-01의 handoff 진단 trace와 correctness 검증에 보존하지만 더 이상 QA-02 종료점이 아니다.
 
 Agent accepted 뒤 4 이전 crash는 외부 Agent의 submission-key 조회/중복 억제 계약이 있을 때만 같은 실행으로 조정한다. 이 기능이 없으면 확인 불가로 표시하고 state-changing Action을 자동 재발행하지 않는다. Outbox는 외부 exactly-once 보장이 아니다. [E2](../../../archive/w12-g1/evidence-and-readiness.md)
 
@@ -143,10 +143,10 @@ State는 wire DTO를 이름만 바꾼 중복이 아니다. 표에 별도 보관�
 
 ## 5. 전수 sweep과 후보 교차 영향
 
-각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. W-01~W-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 W-01/02/03은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
+각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. QA-01~QA-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 QA-01/QA-02/QA-03은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
 
-W-09는 whole restart 4 + integration fatal 2 strata, W-10은 external 24 + host-fatal 4 cells를 유지한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 재시작이 충분히 빠르면 두 안 모두 W-10 100%일 수 있다. 그때 interruption duration만 secondary로 남기며 deadline/분모를 바꿔 차이를 만들지 않는다.
+QA-09는 whole restart 4 + integration fatal 2 strata, QA-10은 external 24 + host-fatal 4 cells를 유지한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 재시작이 충분히 빠르면 두 안 모두 QA-10 100%일 수 있다. 그때 interruption duration만 secondary로 남기며 deadline/분모를 바꿔 차이를 만들지 않는다.
 
-W-11은 외부 endpoint가 실제 얻는 정보의 union이다. 배치가 같더라도 외부로 전달한 정보가 다르면 노출은 달라질 수 있다. 반대로 on-device working context만 다르면 그 자체는 remote 노출이 아니다. Supporting의 W-11을 강한 driver로 사전 승격하지 않는다.
+QA-11은 외부 endpoint가 실제 얻는 정보의 union이다. 배치가 같더라도 외부로 전달한 정보가 다르면 노출은 달라질 수 있다. 반대로 on-device working context만 다르면 그 자체는 remote 노출이 아니다. Supporting의 QA-11을 강한 driver로 사전 승격하지 않는다.
 
 평가 자산 상태와 사전 확인 조건은 [evidence-and-readiness](../../../archive/w12-g1/evidence-and-readiness.md)를 따른다.

@@ -76,7 +76,7 @@ Reference snapshot: `cbyche/via-internal-rust-reference`, source commit `b6032a4
 | --- | --- |
 | `source/crates/via-work/src/lib.rs` | Architectural overview of unified Work lifecycle, ownership, concurrency and cancellation semantics. |
 | `source/crates/via-work/src/record.rs` | Concrete Work record fields and what state is persisted/public. |
-| `source/crates/via-work/src/manager/` | Work actor/command processing and lifecycle authority. Important for QA-03 and DP-05. |
+| `source/crates/via-work/src/manager/` | Work actor/command processing and lifecycle authority. Important for REF-QA-03 and DP-05. |
 | `source/crates/via-work/src/scheduler.rs` | Global/per-owner/lane admission rules; primary evidence for concurrency arbitration. |
 | `source/crates/via-work/src/store.rs` | Persistence, atomic/coalesced save, quarantine/recovery behavior. |
 | `source/crates/via-work/src/reconcile.rs` | Cancellation/recovery reconciliation evidence. |

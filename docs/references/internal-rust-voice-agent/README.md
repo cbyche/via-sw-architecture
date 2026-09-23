@@ -1,6 +1,8 @@
 # Internal Rust Voice Agent Reference
 
 > **REFERENCE ONLY:** This snapshot is neither the active VIA baseline nor evidence that a referenced structure was selected. Current decisions remain under [`docs/architecture`](../../architecture/README.md) and [`docs/adr`](../../adr/README.md).
+>
+> `REF-QA-xx` labels are snapshot-local legacy references and do not identify the current `QA-01~QA-12` catalog. In these imported Voice implementation notes, `ASR` means automatic speech recognition unless explicitly expanded otherwise.
 
 ## Purpose
 

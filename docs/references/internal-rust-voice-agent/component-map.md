@@ -73,7 +73,7 @@ The important architectural dependency tendencies observed are:
 6. **Context is separate from conversation and Work.** `via-context` has different referent/surface lifetimes and responsibilities from durable conversation memory and task state.
 7. **The composition root is intentionally privileged.** `via-app` is where cross-layer wiring occurs, reducing the need for lower crates to violate dependency direction.
 
-These directions are supported by `source/docs/architecture.md`, crate-level module documentation, and the root Cargo workspace. They should be treated as implementation evidence for VIA QA-05, not as approved VIA layering.
+These directions are supported by `source/docs/architecture.md`, crate-level module documentation, and the root Cargo workspace. They should be treated as implementation evidence for VIA REF-QA-05, not as approved VIA layering.
 
 ## Ownership Boundaries Relevant to VIA Decision Points
 

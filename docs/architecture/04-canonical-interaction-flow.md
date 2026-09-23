@@ -107,7 +107,7 @@ Request Handling은 **이번 요청을 어디에서 어떻게 처리하는가**�
 
 ## 4.3 Voice Runtime 및 S2S Flow
 
-Voice 입력은 단순히 ASR 결과를 만드는 경로가 아니다.
+Voice 입력은 단순히 speech-recognition 결과를 만드는 경로가 아니다.
 
 Voice Runtime은 S2S Model을 사용하여 다음 두 기능을 지원한다.
 

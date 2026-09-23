@@ -1,7 +1,7 @@
 # TASK-T01 — Agent State Update Delivery Strategy
 
 > **상태: 공통 tactic으로 확정.** Event-first + Query Reconciliation은 독립 DP가 아니며 모든 후보의 공통 조건으로 사용한다.
-> Current measurement contract: 새 W-03은 Agent status source event부터 audible Voice feedback까지 측정한다. 아래 기존 feedback 가설은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재동결한다.
+> Current measurement contract: 새 QA-03은 Agent status source event부터 audible Voice feedback까지 측정한다. 아래 기존 feedback 가설은 [Voice Responsiveness](../../08-quality-attributes/voice-responsiveness.md)에 맞춰 구현 전에 재동결한다.
 
 ## 결론
 
@@ -25,11 +25,11 @@ flowchart LR
 
 A2A는 polling, streaming, push를 보완적인 update mechanism으로 설명하고 Get Task를 stream/push 이후 current-state 조회에도 사용한다. 따라서 이들을 억지로 상호배타적 Architecture family로 만들지 않는다.
 
-## 관련 W metric
+## 관련 QA metric
 
-- **W-03 Agent Progress Voice Feedback Responsiveness** — source status event가 실제 audible Voice feedback으로 얼마나 빨리 전달되는가.
-- **W-04 Concurrent Task Performance Isolation** — event fan-in/query workload가 foreground에 주는 영향.
-- **W-07 Agent Ecosystem Interoperability & Substitutability** — 지원 mechanism 차이를 integration layer가 얼마나 국소화하는가.
-- **W-09 Recovery Timeliness & Recoverability** — reconnect 후 query/reconciliation으로 current state를 얼마나 빨리 회복하는가.
+- **QA-03 Agent Progress Voice Feedback Responsiveness** — source status event가 실제 audible Voice feedback으로 얼마나 빨리 전달되는가.
+- **QA-04 Concurrent Task Performance Isolation** — event fan-in/query workload가 foreground에 주는 영향.
+- **QA-07 Agent Ecosystem Interoperability & Substitutability** — 지원 mechanism 차이를 integration layer가 얼마나 국소화하는가.
+- **QA-09 Recovery Timeliness & Recoverability** — reconnect 후 query/reconciliation으로 current state를 얼마나 빨리 회복하는가.
 
 이 값들은 AGENT-DP01/TASK-DP01/EXEC-DP01 candidate의 실제 구조와 함께 관찰하며, TASK-T01 자체의 A/B winner를 만들지 않는다.

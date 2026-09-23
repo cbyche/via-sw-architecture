@@ -60,7 +60,7 @@ impl Profile {
                 fatal_deadline: Duration::from_secs(5),
                 metric_eligible: true,
             }),
-            other => anyhow::bail!("unknown W-10 profile: {other}; use smoke or frozen"),
+            other => anyhow::bail!("unknown QA-10 profile: {other}; use smoke or frozen"),
         }
     }
 }
@@ -69,17 +69,17 @@ fn expected_capabilities(spec: &Value) -> anyhow::Result<HashMap<String, String>
     let mut out = HashMap::new();
     for capability in spec["capabilities"]
         .as_array()
-        .ok_or_else(|| anyhow::anyhow!("W-10 capabilities must be an array"))?
+        .ok_or_else(|| anyhow::anyhow!("QA-10 capabilities must be an array"))?
     {
         let id = capability["id"]
             .as_str()
-            .ok_or_else(|| anyhow::anyhow!("W-10 capability id missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-10 capability id missing"))?;
         let token = capability["expected_token"]
             .as_str()
-            .ok_or_else(|| anyhow::anyhow!("W-10 capability expected_token missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-10 capability expected_token missing"))?;
         anyhow::ensure!(
             out.insert(id.to_string(), token.to_string()).is_none(),
-            "duplicate W-10 capability {id}"
+            "duplicate QA-10 capability {id}"
         );
     }
     Ok(out)
@@ -87,16 +87,16 @@ fn expected_capabilities(spec: &Value) -> anyhow::Result<HashMap<String, String>
 
 fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     anyhow::ensure!(
-        spec["version"] == "W10-CANDIDATE-v1",
-        "unexpected W-10 spec version"
+        spec["version"] == "QA10-CANDIDATE-v1",
+        "unexpected QA-10 spec version"
     );
     anyhow::ensure!(
         spec["metric"]["formula"] == "100 * passed_cells / 28",
-        "W-10 denominator/formula changed"
+        "QA-10 denominator/formula changed"
     );
     anyhow::ensure!(
         spec["metric"]["cell_pass_rule"] == "STRICT_ALL_TRIALS_PASS",
-        "W-10 cell rule must remain strict"
+        "QA-10 cell rule must remain strict"
     );
 
     let external = spec["external_cells"]
@@ -107,72 +107,72 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("integration_fatal_cells missing"))?;
     anyhow::ensure!(
         external.len() == 24,
-        "W-10 requires exactly 24 external cells"
+        "QA-10 requires exactly 24 external cells"
     );
-    anyhow::ensure!(fatal.len() == 4, "W-10 requires exactly 4 fatal cells");
+    anyhow::ensure!(fatal.len() == 4, "QA-10 requires exactly 4 fatal cells");
 
     let frozen = &spec["frozen_profile"];
     anyhow::ensure!(
         frozen["external"]["failure_modes"] == json!(["connection_refused", "no_reply"]),
-        "W-10 external failure modes changed"
+        "QA-10 external failure modes changed"
     );
     anyhow::ensure!(
         frozen["external"]["repeats_per_mode"] == 5,
-        "W-10 external repeat count changed"
+        "QA-10 external repeat count changed"
     );
     anyhow::ensure!(
         frozen["external"]["trial_parallelism_within_cell"] == 10,
-        "W-10 frozen within-cell parallelism changed"
+        "QA-10 frozen within-cell parallelism changed"
     );
     anyhow::ensure!(
         frozen["external"]["fault_hold_ms"] == 30000,
-        "W-10 fault hold changed"
+        "QA-10 fault hold changed"
     );
     anyhow::ensure!(
         frozen["external"]["probe_offsets_ms"] == json!([2000, 10000, 20000]),
-        "W-10 probe offsets changed"
+        "QA-10 probe offsets changed"
     );
     anyhow::ensure!(
         frozen["external"]["capability_deadline_ms"] == 5000,
-        "W-10 capability deadline changed"
+        "QA-10 capability deadline changed"
     );
     anyhow::ensure!(
         frozen["integration_fatal"]["repeats"] == 5,
-        "W-10 fatal repeat count changed"
+        "QA-10 fatal repeat count changed"
     );
 
     let smoke = &spec["smoke_profile"];
     anyhow::ensure!(
         matches!(smoke["metric_eligible"].as_bool(), Some(false)),
-        "W-10 smoke must remain metric-ineligible"
+        "QA-10 smoke must remain metric-ineligible"
     );
     anyhow::ensure!(
         smoke["external"]["repeats_per_mode"] == 1,
-        "W-10 smoke repeat count changed"
+        "QA-10 smoke repeat count changed"
     );
     anyhow::ensure!(
         smoke["external"]["trial_parallelism_within_cell"] == 1,
-        "W-10 smoke within-cell parallelism changed"
+        "QA-10 smoke within-cell parallelism changed"
     );
     anyhow::ensure!(
         smoke["external"]["fault_hold_ms"] == 200,
-        "W-10 smoke fault hold changed"
+        "QA-10 smoke fault hold changed"
     );
     anyhow::ensure!(
         smoke["external"]["probe_offsets_ms"] == json!([5, 25, 50]),
-        "W-10 smoke probe offsets changed"
+        "QA-10 smoke probe offsets changed"
     );
     anyhow::ensure!(
         smoke["external"]["capability_deadline_ms"] == 500,
-        "W-10 smoke capability deadline changed"
+        "QA-10 smoke capability deadline changed"
     );
     anyhow::ensure!(
         smoke["integration_fatal"]["repeats"] == 1,
-        "W-10 smoke fatal repeat count changed"
+        "QA-10 smoke fatal repeat count changed"
     );
     anyhow::ensure!(
         smoke["integration_fatal"]["capability_deadline_ms"] == 2000,
-        "W-10 smoke fatal deadline changed"
+        "QA-10 smoke fatal deadline changed"
     );
 
     let capabilities = spec["capabilities"]
@@ -201,7 +201,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("dependencies missing"))?;
     anyhow::ensure!(
         dependencies.len() == 6,
-        "W-10 requires exactly six external dependencies"
+        "QA-10 requires exactly six external dependencies"
     );
     let dependency_ids = dependencies
         .iter()
@@ -211,7 +211,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
                 .ok_or_else(|| anyhow::anyhow!("dependency id missing"))
         })
         .collect::<anyhow::Result<HashSet<_>>>()?;
-    anyhow::ensure!(dependency_ids.len() == 6, "duplicate W-10 dependency");
+    anyhow::ensure!(dependency_ids.len() == 6, "duplicate QA-10 dependency");
 
     let mut ids = HashSet::new();
     let mut dependency_counts: HashMap<&str, usize> = HashMap::new();
@@ -219,7 +219,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         let id = cell["id"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("external cell id missing"))?;
-        anyhow::ensure!(ids.insert(id), "duplicate W-10 cell id {id}");
+        anyhow::ensure!(ids.insert(id), "duplicate QA-10 cell id {id}");
         let dependency = cell["failed_dependency"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("failed_dependency missing in {id}"))?;
@@ -228,11 +228,11 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
             .ok_or_else(|| anyhow::anyhow!("unaffected_capability missing in {id}"))?;
         anyhow::ensure!(
             dependency_ids.contains(dependency),
-            "unknown W-10 dependency {dependency}"
+            "unknown QA-10 dependency {dependency}"
         );
         let intrinsic = cap_dependencies
             .get(capability)
-            .ok_or_else(|| anyhow::anyhow!("unknown W-10 capability {capability}"))?;
+            .ok_or_else(|| anyhow::anyhow!("unknown QA-10 capability {capability}"))?;
         anyhow::ensure!(
             !intrinsic.contains(dependency),
             "{id} is invalid: {capability} intrinsically depends on failed {dependency}"
@@ -242,7 +242,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     for dependency in dependency_ids {
         anyhow::ensure!(
             dependency_counts.get(dependency) == Some(&4),
-            "W-10 dependency {dependency} must contribute exactly four cells"
+            "QA-10 dependency {dependency} must contribute exactly four cells"
         );
     }
 
@@ -250,7 +250,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         let id = cell["id"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("fatal cell id missing"))?;
-        anyhow::ensure!(ids.insert(id), "duplicate W-10 cell id {id}");
+        anyhow::ensure!(ids.insert(id), "duplicate QA-10 cell id {id}");
         anyhow::ensure!(
             cell["fault"] == "integration_host_fatal",
             "{id} must use the frozen integration_host_fatal fault"
@@ -263,7 +263,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
             "unknown fatal capability {capability}"
         );
     }
-    anyhow::ensure!(ids.len() == 28, "W-10 requires exactly 28 unique cells");
+    anyhow::ensure!(ids.len() == 28, "QA-10 requires exactly 28 unique cells");
     Ok(())
 }
 
@@ -290,7 +290,7 @@ async fn start_external_fault_fixture(
             });
             Ok((address.to_string(), Some(server)))
         }
-        other => anyhow::bail!("unknown external W-10 fault mode {other}"),
+        other => anyhow::bail!("unknown external QA-10 fault mode {other}"),
     }
 }
 
@@ -322,7 +322,7 @@ async fn run_external_trial(
     .await??;
     anyhow::ensure!(
         matches!(ping, Some(value) if value["status"] == "pong"),
-        "W-10 candidate host did not start"
+        "QA-10 candidate host did not start"
     );
 
     let (address, fault_server) =
@@ -330,7 +330,7 @@ async fn run_external_trial(
     let fault = timeout(
         context.profile.capability_deadline,
         session.request(json!({
-            "op":"w10_begin_external_fault",
+            "op":"qa10_begin_external_fault",
             "mode":fault_mode,
             "failed_dependency":context.failed_dependency,
             "address":address
@@ -340,7 +340,7 @@ async fn run_external_trial(
     let fault_observed = matches!(
         fault,
         Some(value)
-            if value["status"] == "w10_fault_started"
+            if value["status"] == "qa10_fault_started"
                 && value["mode"] == fault_mode
                 && value["fault_observed"] == true
     );
@@ -352,7 +352,7 @@ async fn run_external_trial(
         let observed = timeout(
             context.profile.capability_deadline,
             session.request(json!({
-                "op":"w10_capability_probe",
+                "op":"qa10_capability_probe",
                 "capability":context.capability
             })),
         )
@@ -360,7 +360,7 @@ async fn run_external_trial(
         probes_ok &= matches!(
             observed,
             Some(value)
-                if value["status"] == "w10_capability_probe"
+                if value["status"] == "qa10_capability_probe"
                     && value["capability"] == context.capability
                     && value["value"] == context.expected
         );
@@ -397,11 +397,11 @@ impl HostSession {
         let stdin = child
             .stdin
             .take()
-            .ok_or_else(|| anyhow::anyhow!("W-10 host stdin missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-10 host stdin missing"))?;
         let stdout = child
             .stdout
             .take()
-            .ok_or_else(|| anyhow::anyhow!("W-10 host stdout missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-10 host stdout missing"))?;
         Ok(Self {
             child,
             stdin,
@@ -458,7 +458,7 @@ async fn integration_trial(
     let ping = timeout(deadline, session.request(json!({"op":"ping"}))).await??;
     anyhow::ensure!(
         matches!(ping, Some(value) if value["status"] == "pong"),
-        "W-10 candidate host did not start"
+        "QA-10 candidate host did not start"
     );
 
     let start = Instant::now();
@@ -510,10 +510,10 @@ pub async fn run(
     if profile.metric_eligible {
         let fingerprint = freeze_fingerprint
             .as_deref()
-            .ok_or_else(|| anyhow::anyhow!("frozen W-10 requires --freeze-fingerprint"))?;
+            .ok_or_else(|| anyhow::anyhow!("frozen QA-10 requires --freeze-fingerprint"))?;
         anyhow::ensure!(
             fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
-            "invalid W-10 freeze fingerprint"
+            "invalid QA-10 freeze fingerprint"
         );
     }
 
@@ -638,7 +638,7 @@ pub async fn run(
 
     Ok(json!({
         "status":"PASS",
-        "scope":"W-10 28-cell containment controller candidate-endpoint trials",
+        "scope":"QA-10 28-cell containment controller candidate-endpoint trials",
         "spec":spec_path,
         "spec_version":spec["version"],
         "profile":profile.name,
@@ -646,7 +646,7 @@ pub async fn run(
         "freeze_fingerprint":freeze_fingerprint,
         "frozen_contract_validated":true,
         "candidates":candidate_results,
-        "w10_representative_metric":if profile.metric_eligible {
+        "qa10_representative_metric":if profile.metric_eligible {
             json!(candidate_results.iter().map(|candidate| json!({
                 "exec_candidate":candidate["exec_candidate"],
                 "unaffected_capability_retention_pct":candidate["controller_retention_pct"]
@@ -654,7 +654,7 @@ pub async fn run(
         } else {
             json!("NOT_RUN")
         },
-        "w10_metric_eligible":profile.metric_eligible,
+        "qa10_metric_eligible":profile.metric_eligible,
         "candidate_endpoint_adapter_ready":true,
         "measurement_freeze_required":!profile.metric_eligible,
         "external_capability_evidence":"ACTUAL_CANDIDATE_HOST_PROBE_SURFACE_WITH_DETERMINISTIC_DEPENDENCY_FIXTURES",

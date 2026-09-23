@@ -19,18 +19,18 @@ Reference snapshot: `cbyche/via-internal-rust-reference`, source commit `b6032a4
 
 | DP | Prototype has relevant choice? | Closest VIA alternative | Evidence summary | Related QA | Confidence |
 | --- | --- | --- | --- | --- | --- |
-| DP-01 Partial / streaming input processing | Yes | **A — final-turn semantic processing**, with streaming transcription used elsewhere | Streaming ASR/running transcript exists, but `spawn_thinking` normally uses model objective; settled transcript is bounded fallback. No incremental intent/prefetch path confirmed. | QA-01, QA-09, QA-10 | Confirmed |
-| DP-02 Interaction context representation | Yes, but different problem shape | **Unknown / no direct match** | `ContextPack` + stable referents + generation-tagged `SurfaceSnapshot`; no inspected timestamped turn Interaction Timeline/pointer history. | QA-01, QA-09 | Confirmed for observed model; Unknown for full-repo absence |
-| DP-03 Capability placement boundary | Yes | **B — Hybrid allow-listed/local fast path + delegation** | Realtime model answers directly and runs bounded control tools; project/long work uses managed delegation. | QA-01, QA-05, QA-07 | Confirmed |
-| DP-04 Generic vs specialized Downstream Agent integration | Yes | **B — common port + internal/backend-specific extension data** | One `DownstreamAgent` seam; ACP/CLI adapters; backend-specific profiles/native-delegation flags remain behind common dispatcher rather than dedicated bypass. | QA-01, QA-05, QA-07 | Confirmed |
-| DP-05 Concurrent task resource arbitration | Partially | **Unknown; mechanism is B-like keyed queue/admission but scope is narrower** | Global/per-owner/lane admission and coordinator serialization exist; no Agent-declared generic PC resource requirements/arbitration confirmed. | QA-02, QA-03 | Confirmed for scheduler; Unknown for full resource DP |
-| DP-06 Voice runtime composition & ASR side channel | Yes | **Mixed B/C support** | Cloud realtime providers can behave like S2S with transcript events; local provider can be decomposed VAD+streaming ASR+reasoning+TTS behind same interface. | QA-01, QA-05, QA-09 | Confirmed |
-| DP-07 Model gateway selection policy | Yes | **A — component/configuration-fixed binding** | Registry resolves requested provider/alias or configured default; no privacy/cost/telemetry scoring optimizer found. | QA-01, QA-05, QA-07 | Confirmed |
-| DP-08 Voice/Text interaction unification boundary | Yes | **B-like common early runtime**, but not canonical VIA `UserTurn` proof | Text and voice use same realtime Gateway/session/event/Work plane; modality flags remain distinct. | QA-03, QA-10, QA-05 | Confirmed behavior; mapping partly Inferred |
-| DP-09 Existing-task vs new-task association | Yes | **A — model-only at semantic decision point** | Model chooses `spawn_thinking` vs status/cancel tools; deterministic code resolves ids/defaults after tool choice. Same-turn new delegation is deduplicated. | QA-10, QA-03 | Confirmed |
-| DP-10 Intent refinement architecture | Yes, but limited | **A — single-shot/model-authored objective** | Delegation is objective-centric. `IntentSet` fan-out primitive exists but no canonical goal/action/target/params/capability refinement/validator pipeline; production fan-out call site not confirmed. | QA-01, QA-10, QA-07 | Confirmed primitive; runtime fan-out needs inspection |
-| DP-11 Downstream Agent routing architecture | Relevant integration exists, routing choice does not match | **Unknown / no direct match** | `HarnessRegistry` is configured backend-id lookup, not LLM-only or capability/semantic multi-Agent routing. | QA-01, QA-11, QA-05 | Confirmed |
-| DP-12 Downstream Agent capability contract | Yes | **C-like partial — stable manifest + dynamic health** | Seven startup-validated static capability flags plus dynamic health/backoff. No dynamic capability discovery or Agent resource-requirement contract confirmed. | QA-11, QA-05 | Confirmed |
+| DP-01 Partial / streaming input processing | Yes | **A — final-turn semantic processing**, with streaming transcription used elsewhere | Streaming ASR/running transcript exists, but `spawn_thinking` normally uses model objective; settled transcript is bounded fallback. No incremental intent/prefetch path confirmed. | REF-QA-01, REF-QA-09, REF-QA-10 | Confirmed |
+| DP-02 Interaction context representation | Yes, but different problem shape | **Unknown / no direct match** | `ContextPack` + stable referents + generation-tagged `SurfaceSnapshot`; no inspected timestamped turn Interaction Timeline/pointer history. | REF-QA-01, REF-QA-09 | Confirmed for observed model; Unknown for full-repo absence |
+| DP-03 Capability placement boundary | Yes | **B — Hybrid allow-listed/local fast path + delegation** | Realtime model answers directly and runs bounded control tools; project/long work uses managed delegation. | REF-QA-01, REF-QA-05, REF-QA-07 | Confirmed |
+| DP-04 Generic vs specialized Downstream Agent integration | Yes | **B — common port + internal/backend-specific extension data** | One `DownstreamAgent` seam; ACP/CLI adapters; backend-specific profiles/native-delegation flags remain behind common dispatcher rather than dedicated bypass. | REF-QA-01, REF-QA-05, REF-QA-07 | Confirmed |
+| DP-05 Concurrent task resource arbitration | Partially | **Unknown; mechanism is B-like keyed queue/admission but scope is narrower** | Global/per-owner/lane admission and coordinator serialization exist; no Agent-declared generic PC resource requirements/arbitration confirmed. | REF-QA-02, REF-QA-03 | Confirmed for scheduler; Unknown for full resource DP |
+| DP-06 Voice runtime composition & ASR side channel | Yes | **Mixed B/C support** | Cloud realtime providers can behave like S2S with transcript events; local provider can be decomposed VAD+streaming ASR+reasoning+TTS behind same interface. | REF-QA-01, REF-QA-05, REF-QA-09 | Confirmed |
+| DP-07 Model gateway selection policy | Yes | **A — component/configuration-fixed binding** | Registry resolves requested provider/alias or configured default; no privacy/cost/telemetry scoring optimizer found. | REF-QA-01, REF-QA-05, REF-QA-07 | Confirmed |
+| DP-08 Voice/Text interaction unification boundary | Yes | **B-like common early runtime**, but not canonical VIA `UserTurn` proof | Text and voice use same realtime Gateway/session/event/Work plane; modality flags remain distinct. | REF-QA-03, REF-QA-10, REF-QA-05 | Confirmed behavior; mapping partly Inferred |
+| DP-09 Existing-task vs new-task association | Yes | **A — model-only at semantic decision point** | Model chooses `spawn_thinking` vs status/cancel tools; deterministic code resolves ids/defaults after tool choice. Same-turn new delegation is deduplicated. | REF-QA-10, REF-QA-03 | Confirmed |
+| DP-10 Intent refinement architecture | Yes, but limited | **A — single-shot/model-authored objective** | Delegation is objective-centric. `IntentSet` fan-out primitive exists but no canonical goal/action/target/params/capability refinement/validator pipeline; production fan-out call site not confirmed. | REF-QA-01, REF-QA-10, REF-QA-07 | Confirmed primitive; runtime fan-out needs inspection |
+| DP-11 Downstream Agent routing architecture | Relevant integration exists, routing choice does not match | **Unknown / no direct match** | `HarnessRegistry` is configured backend-id lookup, not LLM-only or capability/semantic multi-Agent routing. | REF-QA-01, REF-QA-11, REF-QA-05 | Confirmed |
+| DP-12 Downstream Agent capability contract | Yes | **C-like partial — stable manifest + dynamic health** | Seven startup-validated static capability flags plus dynamic health/backoff. No dynamic capability discovery or Agent resource-requirement contract confirmed. | REF-QA-11, REF-QA-05 | Confirmed |
 
 ## DP-01 — Partial / Streaming Input Processing
 
@@ -55,7 +55,7 @@ Whether partial ASR is ignored semantically until final input, used for read-onl
 - `source/crates/via-voice/src/tools/handler.rs`
 
 **Related QA**  
-QA-01, QA-09, QA-10.
+REF-QA-01, REF-QA-09, REF-QA-10.
 
 **Architecture use**  
 Useful baseline evidence for latency/complexity tradeoffs, but it does not validate the VIA assumption that partial input should or should not be semantically exploited.
@@ -86,7 +86,7 @@ Speech-start snapshot vs timestamped turn-level Interaction Timeline vs timeline
 - `source/docs/deviations/phase-7.md`
 
 **Related QA**  
-QA-01, QA-09.
+REF-QA-01, REF-QA-09.
 
 **Architecture use**  
 Strong reference for referent identity/staleness/provenance; weak evidence for temporal grounding. Additional host/realtime event inspection is required before claiming absence of timeline evidence across the entire codebase.
@@ -115,7 +115,7 @@ Thin VIA delegation vs hybrid local fast path vs richer local capabilities.
 - `source/crates/via-downstream/src/agent.rs`
 
 **Related QA**  
-QA-01, QA-05, QA-07.
+REF-QA-01, REF-QA-05, REF-QA-07.
 
 **Architecture use**  
 Provides concrete evidence that a bounded fast path can coexist with opaque downstream execution. It does not define which VIA capabilities should be allow-listed locally.
@@ -144,7 +144,7 @@ Generic protocol only vs common port with internal extension vs dedicated intern
 - `source/docs/architecture.md` §6
 
 **Related QA**  
-QA-01, QA-05, QA-07.
+REF-QA-01, REF-QA-05, REF-QA-07.
 
 **Architecture use**  
 Strong reference input for preserving AP-05-style downstream autonomy while retaining a stable common contract.
@@ -173,7 +173,7 @@ Global lease vs per-resource lock/queue vs cooperative resource-aware scheduler 
 - `source/crates/via-downstream/src/capability.rs`
 
 **Related QA**  
-QA-02, QA-03.
+REF-QA-02, REF-QA-03.
 
 **Architecture use**  
 Useful implementation reference for ordered/admitted concurrency, but additional resource-contract code inspection is needed before using it as evidence for FR-41.
@@ -202,7 +202,7 @@ S2S + final transcript vs S2S + streaming ASR/delta side-channel vs decomposed V
 - `source/crates/via-voice/src/mode.rs`
 
 **Related QA**  
-QA-01, QA-05, QA-09.
+REF-QA-01, REF-QA-05, REF-QA-09.
 
 **Architecture use**  
 Important evidence that the VIA decision may need to distinguish the **upper voice-runtime contract** from the **provider-specific internal pipeline composition**.
@@ -228,7 +228,7 @@ Fixed binding vs prequalified policy selection vs telemetry-driven dynamic optim
 - `source/crates/via-catalog/`
 
 **Related QA**  
-QA-01, QA-05, QA-07.
+REF-QA-01, REF-QA-05, REF-QA-07.
 
 **Architecture use**  
 Reference for provider abstraction/registration, not evidence that VIA should use static selection.
@@ -257,7 +257,7 @@ Late modality merge vs early canonical UserTurn vs common Conversation Turn Mana
 - `source/crates/via-app/src/lib.rs`
 
 **Related QA**  
-QA-03, QA-10, QA-05.
+REF-QA-03, REF-QA-10, REF-QA-05.
 
 **Architecture use**  
 Strong reference for common downstream execution/task state across modalities; insufficient to decide how VIA should represent modality-specific interaction evidence.
@@ -285,7 +285,7 @@ Model-only classification vs deterministic candidate filter + model classify vs 
 - `source/crates/via-downstream/src/session_key.rs`
 
 **Related QA**  
-QA-10, QA-03.
+REF-QA-10, REF-QA-03.
 
 **Architecture use**  
 Useful negative reference: deterministic id handling exists after intent selection, but does not solve VIA's broader existing-vs-new Task association problem.
@@ -313,7 +313,7 @@ Single-shot model vs staged normalizer/temporal binder/model/validator vs iterat
 - `source/crates/via-voice/src/tools/transcripts.rs`
 
 **Related QA**  
-QA-01, QA-10, QA-07.
+REF-QA-01, REF-QA-10, REF-QA-07.
 
 **Architecture use**  
 Prototype can inform fan-out/work submission mechanics after intent exists; it is weaker reference evidence for the VIA intent-refinement pipeline itself.
@@ -340,7 +340,7 @@ LLM-only routing vs capability eligibility + semantic reranker vs ontology/deter
 - `source/crates/via-coordinator/src/profile.rs`
 
 **Related QA**  
-QA-01, QA-11, QA-05.
+REF-QA-01, REF-QA-11, REF-QA-05.
 
 **Architecture use**  
 Strong evidence for the *post-routing execution port*; little direct evidence for the *routing algorithm* VIA must choose.
@@ -369,7 +369,7 @@ Static manifest vs runtime discovery vs stable manifest + dynamic health/resourc
 - `source/crates/via-downstream/src/registry.rs`
 
 **Related QA**  
-QA-11, QA-05.
+REF-QA-11, REF-QA-05.
 
 **Architecture use**  
 One of the strongest prototype references: it demonstrates why stable declared capability and changing runtime health should be modeled separately. VIA still needs to decide the resource and dynamic-discovery portions of its own contract.

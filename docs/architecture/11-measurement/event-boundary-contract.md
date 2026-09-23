@@ -1,16 +1,16 @@
 # Measurement Event & Boundary Contract
 
-> 상태: **W-01~W-03 EVENT CONTRACT DRAFT / machine freeze 전**
+> 상태: **QA-01~QA-03 EVENT CONTRACT DRAFT / machine freeze 전**
 >
-> 목적: 모든 W metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
+> 목적: 모든 QA metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
 >
-> 범위: 이 문서는 공통 event 의미와 관측 원칙의 source of truth다. W별 모집단·집계·target·score는 `scoring-contract.md`, 기능 fixture와 oracle은 `test-case-catalog.md`에서 관리한다.
+> 범위: 이 문서는 공통 event 의미와 관측 원칙의 source of truth다. QA별 모집단·집계·target·score는 `scoring-contract.md`, 기능 fixture와 oracle은 `test-case-catalog.md`에서 관리한다.
 
 ## 1. 공통 원칙
 
 1. **실제 사건과 software 인식 event를 구분한다.** 사용자 발화 종료, Agent ingress, result/status source availability, audible output이 metric 경계다. VAD 판단, local enqueue, VIA receive, audio enqueue는 진단 event다.
 2. **Architecture가 만든 경계 비용을 숨기지 않는다.** 실제 critical path에 참여한 Context, IR, Task, Agent adapter, serialization, queue, IPC/RPC, network, validation, Model, speech와 playback 비용을 포함한다.
-3. **실행 위치를 바꿔 시간을 제외하지 않는다.** 같은 책임을 helper, worker 또는 child process로 옮겨도 해당 W의 의미 경로에 필요하면 포함한다.
+3. **실행 위치를 바꿔 시간을 제외하지 않는다.** 같은 책임을 helper, worker 또는 child process로 옮겨도 해당 QA의 의미 경로에 필요하면 포함한다.
 4. **유효한 결과만 endpoint로 인정한다.** 무음, earcon, filler, 접수 인사, spinner, invalid payload와 잘못 연결된 result/status는 종료점이 아니다.
 5. **사용자 관점 endpoint와 harness proxy를 구분한다.** 제품 측정은 acoustic/audio loopback을 사용한다. instrumented device callback 또는 mock playback sink는 reference-harness proxy이며 실제 speaker 실측으로 부르지 않는다.
 6. 모든 timestamp는 한 trial 안에서 monotonic clock domain으로 비교한다. 외부 source 사건은 source-controlled harness event, clock synchronization 또는 오차가 명시된 correlation으로 연결한다. VIA 수신시각으로 source event를 대체하지 않는다.
@@ -22,7 +22,7 @@
 사용자가 실제 발화를 마친 acoustic 시점이다. 입력 capture timeline에서 마지막 의미 있는 speech sample의 끝으로 정의한다.
 
 - VAD가 end-of-speech를 선언한 시각이 아니다.
-- ASR final transcript, S2S turn-end event 또는 WAV read 완료 시각이 아니다.
+- speech-recognition final transcript, S2S turn-end event 또는 WAV read 완료 시각이 아니다.
 - fixture WAV는 `speech_end_frame`을 사전 annotation하고 `capture_start_monotonic + speech_end_frame / sample_rate`로 event를 복원한다. 파일 끝의 trailing silence는 시작점을 늦추지 않는다.
 - `vad_end_detected`, `transcript_finalized`, `input_read_complete`는 별도 진단 timestamp다.
 
@@ -30,7 +30,7 @@
 
 ### `agent_request_available_at_agent_ingress`
 
-검증된 Agent 요청이 선언된 Agent ingress에서 소비 가능해진 최초 시점이다. W-01의 outbound VIA 구간 종료점이다.
+검증된 Agent 요청이 선언된 Agent ingress에서 소비 가능해진 최초 시점이다. QA-01의 outbound VIA 구간 종료점이다.
 
 이 event 전에는 다음이 모두 포함된다.
 
@@ -46,7 +46,7 @@
 terminal result가 Agent source interface에서 조회 또는 stream 가능한 최초 시점이다.
 
 - VIA가 polling으로 발견하거나 event를 수신한 시점이 아니다.
-- 이 시점 이후의 polling cadence, stream delivery, network, IPC, Agent 계약 normalization, Task/run correlation과 validation은 W-01에 포함된다.
+- 이 시점 이후의 polling cadence, stream delivery, network, IPC, Agent 계약 normalization, Task/run correlation과 validation은 QA-01에 포함된다.
 - terminal result의 Task/run/artifact identity와 revision이 oracle을 만족해야 한다.
 
 ### `agent_status_available_at_source`
@@ -54,7 +54,7 @@ terminal result가 Agent source interface에서 조회 또는 stream 가능한 �
 비terminal progress, clarification/question 또는 partial/failure status가 Agent source interface에서 조회 또는 stream 가능한 최초 시점이다.
 
 - VIA receive/handler start가 아니다.
-- 이 시점 이후의 polling/stream 발견과 모든 inbound software 경계는 W-03에 포함된다.
+- 이 시점 이후의 polling/stream 발견과 모든 inbound software 경계는 QA-03에 포함된다.
 - source status가 실제 Task/run과 연결되고 새로운 확인 상태를 나타내야 한다. 생성되지 않은 진행률이나 반복 filler는 유효하지 않다.
 
 ### `first_meaningful_audible_result_audio`
@@ -73,9 +73,9 @@ downstream Agent를 사용하지 않는 유효한 direct response의 의미 있�
 
 유효한 Agent status의 의미 있는 첫 audio sample이 실제 재생되기 시작한 시점이다. primary reference stratum은 사용자가 발화 중이지 않고 audio lane이 비어 있는 조건을 고정한다. 사용자 발화·우선순위 정책 때문에 의도적으로 보류된 시간은 별도 policy stratum으로 기록한다.
 
-## 3. W-01~W-03 formula
+## 3. QA-01~QA-03 formula
 
-### W-01 — Delegated Task Result Responsiveness
+### QA-01 — Delegated Task Result Responsiveness
 
 ```text
 t0 = user_input_end
@@ -83,41 +83,41 @@ t1 = agent_request_available_at_agent_ingress
 t2 = agent_result_available_at_source
 t3 = first_meaningful_audible_result_audio
 
-W-01 sample = (t1 - t0) + (t3 - t2)
+QA-01 sample = (t1 - t0) + (t3 - t2)
 excluded_agent_interval = t2 - t1
 full_user_wait_secondary = t3 - t0
 ```
 
-W-01에서 명시적으로 제외하는 것은 Agent ingress 이후 result source availability 이전의 downstream Agent 내부 interval뿐이다. VIA가 소유하거나 Architecture 후보가 변경하는 outbound/inbound 경계는 제외하지 않는다.
+QA-01에서 명시적으로 제외하는 것은 Agent ingress 이후 result source availability 이전의 downstream Agent 내부 interval뿐이다. VIA가 소유하거나 Architecture 후보가 변경하는 outbound/inbound 경계는 제외하지 않는다.
 
-### W-02 — VIA Direct Voice Response Responsiveness
+### QA-02 — VIA Direct Voice Response Responsiveness
 
 ```text
 t0 = user_input_end
 t1 = first_meaningful_audible_direct_response
 
-W-02 sample = t1 - t0
+QA-02 sample = t1 - t0
 ```
 
 S2S-native direct response와 VIA LLM direct response는 서로 다른 case stratum으로 보존한다. 실제 route에 참여한 component만 포함하되, route 변경으로 필요한 비용을 누락하지 않는다.
 
-### W-03 — Agent Progress Voice Feedback Responsiveness
+### QA-03 — Agent Progress Voice Feedback Responsiveness
 
 ```text
 t0 = agent_status_available_at_source
 t1 = first_meaningful_audible_status_audio
 
-W-03 sample = t1 - t0
+QA-03 sample = t1 - t0
 ```
 
 Agent가 status를 만들기 전 시간은 제외한다. source availability 이후 VIA가 이를 발견하고 사용자에게 들려주기까지의 모든 비용은 포함한다.
 
 ## 4. Component participation
 
-| 경로 | W-01 | W-02 | W-03 |
+| 경로 | QA-01 | QA-02 | QA-03 |
 |---|---|---|---|
 | acoustic input end 이후 VAD/turn detection | 포함 | 포함 | 해당 없음 |
-| ASR/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 |
+| Speech recognition/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 |
 | Conversation/Context materialization | 실제 경로면 포함 | 실제 경로면 포함 | status composition에 필요하면 포함 |
 | IR/VIA LLM | 위임·결과 composition에 필요하면 포함 | 실제 direct route에 필요하면 포함 | status composition에 필요하면 포함 |
 | Task state/correlation | 포함 | 실제 direct route에 필요할 때만 포함 | 포함 |
@@ -131,7 +131,7 @@ DP applicability는 DP 이름만으로 정하지 않고 이 실제 component pat
 
 ## 5. 모든 W가 갖춰야 할 measurement card
 
-W-04~W-12를 포함한 각 W는 결과와 구현 전에 다음을 한 곳에서 고정한다.
+QA-04~QA-12를 포함한 각 W는 결과와 구현 전에 다음을 한 곳에서 고정한다.
 
 1. 사용자·외부 source·fault 등 실제 stimulus event
 2. 사용자 또는 system 관점의 terminal observable

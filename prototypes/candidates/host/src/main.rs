@@ -104,7 +104,7 @@ fn is_running_snapshot(reply: &NativeReply) -> bool {
 
 fn probe_response(capability: &str, value: &str, evidence: &str) -> serde_json::Value {
     serde_json::json!({
-        "status":"w10_capability_probe",
+        "status":"qa10_capability_probe",
         "capability":capability,
         "value":value,
         "evidence":evidence
@@ -130,7 +130,7 @@ fn core_probe_response(request: &serde_json::Value) -> Option<serde_json::Value>
     let Some(value) = static_probe_value(capability) else {
         return Some(probe_error(
             capability,
-            format!("unknown W-10 core probe capability: {capability}"),
+            format!("unknown QA-10 core probe capability: {capability}"),
         ));
     };
     Some(serde_json::json!({
@@ -143,7 +143,7 @@ fn core_probe_response(request: &serde_json::Value) -> Option<serde_json::Value>
 async fn begin_external_fault(
     request: &serde_json::Value,
 ) -> Result<Option<serde_json::Value>, Box<dyn std::error::Error>> {
-    if request.get("op").and_then(serde_json::Value::as_str) != Some("w10_begin_external_fault") {
+    if request.get("op").and_then(serde_json::Value::as_str) != Some("qa10_begin_external_fault") {
         return Ok(None);
     }
     let mode = request
@@ -153,33 +153,33 @@ async fn begin_external_fault(
     let address = request
         .get("address")
         .and_then(serde_json::Value::as_str)
-        .ok_or_else(|| std::io::Error::other("W-10 fault address missing"))?;
+        .ok_or_else(|| std::io::Error::other("QA-10 fault address missing"))?;
 
     let response = match mode {
         "connection_refused" => {
             let observed = TcpStream::connect(address).await.is_err();
             serde_json::json!({
-                "status":"w10_fault_started",
+                "status":"qa10_fault_started",
                 "mode":mode,
                 "fault_observed":observed
             })
         }
         "no_reply" => {
             let mut stream = TcpStream::connect(address).await?;
-            stream.write_all(b"w10").await?;
+            stream.write_all(b"qa10").await?;
             tokio::spawn(async move {
                 let mut byte = [0_u8; 1];
                 let _ = stream.read(&mut byte).await;
             });
             serde_json::json!({
-                "status":"w10_fault_started",
+                "status":"qa10_fault_started",
                 "mode":mode,
                 "fault_observed":true
             })
         }
         other => serde_json::json!({
             "status":"error",
-            "message":format!("unknown W-10 external fault mode: {other}")
+            "message":format!("unknown QA-10 external fault mode: {other}")
         }),
     };
     Ok(Some(response))
@@ -189,7 +189,7 @@ async fn shared_capability_probe(
     agent: &DeterministicAgent,
     request: &serde_json::Value,
 ) -> Result<Option<serde_json::Value>, Box<dyn std::error::Error>> {
-    if request.get("op").and_then(serde_json::Value::as_str) != Some("w10_capability_probe") {
+    if request.get("op").and_then(serde_json::Value::as_str) != Some("qa10_capability_probe") {
         return Ok(None);
     }
     let capability = request
@@ -208,23 +208,23 @@ async fn shared_capability_probe(
     let Some((agent_id, task_id, value)) = agent_probe_spec(capability) else {
         return Ok(Some(probe_error(
             capability,
-            format!("unknown W-10 capability probe: {capability}"),
+            format!("unknown QA-10 capability probe: {capability}"),
         )));
     };
     let accepted = agent
         .submit(SubmitRequest {
             task_id: task_id.into(),
-            submission_key: format!("w10-{agent_id}-{task_id}"),
-            goal: format!("W-10 health probe for {agent_id}"),
+            submission_key: format!("qa10-{agent_id}-{task_id}"),
+            goal: format!("QA-10 health probe for {agent_id}"),
         })
         .await?;
     let run_id = accepted_run_id(&accepted)
-        .ok_or_else(|| std::io::Error::other("W-10 agent probe was not accepted"))?;
+        .ok_or_else(|| std::io::Error::other("QA-10 agent probe was not accepted"))?;
     let snapshot = agent.query(&run_id).await?;
     if !is_running_snapshot(&snapshot) {
         return Ok(Some(probe_error(
             capability,
-            "W-10 agent task is not running",
+            "QA-10 agent task is not running",
         )));
     }
     Ok(Some(probe_response(
@@ -238,7 +238,7 @@ async fn isolated_capability_probe(
     bridge: &ProcessBridge,
     request: &serde_json::Value,
 ) -> Result<Option<serde_json::Value>, Box<dyn std::error::Error>> {
-    if request.get("op").and_then(serde_json::Value::as_str) != Some("w10_capability_probe") {
+    if request.get("op").and_then(serde_json::Value::as_str) != Some("qa10_capability_probe") {
         return Ok(None);
     }
     let capability = request
@@ -257,23 +257,23 @@ async fn isolated_capability_probe(
     let Some((agent_id, task_id, value)) = agent_probe_spec(capability) else {
         return Ok(Some(probe_error(
             capability,
-            format!("unknown W-10 capability probe: {capability}"),
+            format!("unknown QA-10 capability probe: {capability}"),
         )));
     };
     let accepted = bridge
         .submit(SubmitRequest {
             task_id: task_id.into(),
-            submission_key: format!("w10-{agent_id}-{task_id}"),
-            goal: format!("W-10 health probe for {agent_id}"),
+            submission_key: format!("qa10-{agent_id}-{task_id}"),
+            goal: format!("QA-10 health probe for {agent_id}"),
         })
         .await?;
     let run_id = accepted_run_id(&accepted)
-        .ok_or_else(|| std::io::Error::other("W-10 isolated agent probe was not accepted"))?;
+        .ok_or_else(|| std::io::Error::other("QA-10 isolated agent probe was not accepted"))?;
     let snapshot = bridge.query(&run_id).await?;
     if !is_running_snapshot(&snapshot) {
         return Ok(Some(probe_error(
             capability,
-            "W-10 isolated agent task is not running",
+            "QA-10 isolated agent task is not running",
         )));
     }
     Ok(Some(probe_response(

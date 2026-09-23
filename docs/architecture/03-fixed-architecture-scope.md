@@ -296,7 +296,7 @@ Agent가 업무용 앱을 여는 것은 허용되지만 사용자 질문·승인
 다음 구조적 문제는 이후 Architecture Decision에서 반드시 결정한다.
 
 - Voice Runtime을 S2S 중심으로 어떻게 구성할 것인가
-- 추가 ASR/VAD/TTS/helper model을 둘 것인가
+- 추가 speech recognizer/VAD/TTS/helper model을 둘 것인가
 - S2S Direct Response와 VIA Core 처리 사이의 boundary를 어떻게 구성할 것인가
 - VIA semantic inference를 어디에서 수행할 것인가
 - Context를 언제 수집하고 어디에서 보관할 것인가

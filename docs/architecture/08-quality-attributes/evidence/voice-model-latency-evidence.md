@@ -1,4 +1,4 @@
-# ASR-01 근거 원장 — Windows Consumer PC / Qwen3-8B reference profile
+# QA-01~QA-03 근거 원장 — Windows Consumer PC / Qwen3-8B reference profile
 
 > 재정리일: 2026-09-21
 > 상태: **Measurement planning evidence**. 실제 VIA 후보의 measured latency가 아니며 target/score도 아직 아니다.
@@ -6,7 +6,7 @@
 
 ## 1. 왜 Qualcomm profile을 대표 근거에서 제외하는가
 
-기존 Qualcomm Snapdragon X Elite 자료는 Qwen3-8B의 공개 TTFT/generation 수치를 제공한다는 장점이 있었지만 VIA의 기본 가정인 **Windows PC + Intel-class CPU + 일반 consumer discrete GPU**와 실행 환경이 다르다. 따라서 Qualcomm 수치는 교차 참고로만 남기고 ASR-01의 주 planning profile에는 사용하지 않는다.
+기존 Qualcomm Snapdragon X Elite 자료는 Qwen3-8B의 공개 TTFT/generation 수치를 제공한다는 장점이 있었지만 VIA의 기본 가정인 **Windows PC + Intel-class CPU + 일반 consumer discrete GPU**와 실행 환경이 다르다. 따라서 Qualcomm 수치는 교차 참고로만 남기고 QA-01~QA-03의 주 planning profile에는 사용하지 않는다.
 
 대표 planning evidence는 다음 우선순위로 사용한다.
 
@@ -101,7 +101,7 @@ https://github.com/SearchSavior/OpenArc/issues/43
 
 이 장치는 desktop RTX 4070이 아니라 laptop GPU이므로 4060 profile을 대체하는 target hardware로 쓰지 않는다. 대신 Intel/Windows-class consumer system에서 **40~45 tok/s decode가 실제 관측된다는 sanity check**로 사용한다.
 
-## 5. ASR-01 계산식
+## 5. QA-01~QA-03 계산식
 
 실제 serialized token count를 `Nin`, 해당 판단/응답에 필요한 실제 생성 token 수를 `Nout`이라 한다.
 

@@ -563,9 +563,10 @@ Action의 실제 실행과 권한 강제는 Downstream Agent 책임이다. VIA�
 
 | 용어 | 정의 |
 | --- | --- |
-| **Architecture Significant Requirement (ASR)** | 제품 성공에 중요하고 구조적 대응이 필요한 상위 품질 요구. 현재 ASR-01~07이다. |
-| **Working-12 / W metric** | ASR을 DP별 A/B 구조 비교에서 관찰하기 위해 분해한 12개 측정·평가 ID. 새로운 제품 요구사항 목록이 아니다. |
-| **Measurement Contract Definition** | W별 stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정하는 현재 단계. |
+| **Quality Concern (QC)** | ISO/IEC 25010 관점과 VIA 제품 문맥에서 도출한 상위 품질 관심사. coverage를 조직하지만 직접 점수를 만들지 않는다. |
+| **Quality Attribute (QA)** | stimulus, response와 measure를 정의하여 Architecture 후보를 비교할 수 있게 만든 품질 속성. 현재 QA-01~QA-12다. |
+| **Architecture Significant Requirement (ASR)** | QA 중 책임 배치, interface, state authority, process/deployment boundary 또는 중요한 구조 trade-off에 중대한 영향을 주는 것으로 판정된 항목. 별도 번호를 만들지 않고 기존 QA ID에 분류를 표시한다. 현재 확정된 ASR은 없다. |
+| **Measurement Contract Definition** | QA별 stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정하는 현재 단계. |
 | **Candidate Implementation** | 확정된 계약에 맞춰 DP별 A/B 구조와 측정 가능한 실행 경로를 구현하는 단계. |
 | **A/B Measurement & Evaluation** | 다른 DP 조건을 고정하고 한 DP의 A/B를 직접 실행·비교하는 단계. |
 | **Architecture Decision** | 측정 결과와 구조적 인과를 근거로 선택, 약점과 재검증 조건을 ADR에 기록하는 단계. |

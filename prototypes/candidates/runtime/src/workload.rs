@@ -15,17 +15,17 @@ impl BackgroundLoadConfig {
     pub fn validate(self) -> Result<Self, ApplyError> {
         if !matches!(self.active_tasks, 1 | 4) {
             return Err(ApplyError::Invalid(
-                "W-04 background load requires exactly 1 or 4 active Tasks".into(),
+                "QA-04 background load requires exactly 1 or 4 active Tasks".into(),
             ));
         }
         if self.rounds == 0 {
             return Err(ApplyError::Invalid(
-                "W-04 background load requires at least one update round".into(),
+                "QA-04 background load requires at least one update round".into(),
             ));
         }
         if self.update_period.is_zero() {
             return Err(ApplyError::Invalid(
-                "W-04 background update period must be non-zero".into(),
+                "QA-04 background update period must be non-zero".into(),
             ));
         }
         Ok(self)
@@ -39,25 +39,25 @@ pub struct BackgroundLoadReport {
     pub update_period_ms: u128,
     pub updates_applied: usize,
     pub elapsed_ms: u128,
-    pub w04_metric_eligible: bool,
+    pub qa04_metric_eligible: bool,
 }
 
 async fn prepare_task(authority: &dyn TaskAuthority, index: usize) -> Result<TaskView, ApplyError> {
-    let task_id = format!("W04-BG-{index}");
-    let run_id = format!("w04-run-{index}");
+    let task_id = format!("QA04-BG-{index}");
+    let run_id = format!("qa04-run-{index}");
     let created = authority
         .apply(TaskCommand {
-            command_id: format!("w04-create-{index}"),
+            command_id: format!("qa04-create-{index}"),
             task_id: task_id.clone(),
             expected_revision: 0,
             op: TaskOp::Create {
-                goal: format!("deterministic W-04 background Task {index}"),
+                goal: format!("deterministic QA-04 background Task {index}"),
             },
         })
         .await?;
     authority
         .apply(TaskCommand {
-            command_id: format!("w04-accept-{index}"),
+            command_id: format!("qa04-accept-{index}"),
             task_id,
             expected_revision: created.revision,
             op: TaskOp::AcceptExecution { run_id },
@@ -65,11 +65,11 @@ async fn prepare_task(authority: &dyn TaskAuthority, index: usize) -> Result<Tas
         .await
 }
 
-/// Drive the fixed W-04 background workload shape.
+/// Drive the fixed QA-04 background workload shape.
 ///
-/// This intentionally does not compute W-04. The final W-04 representative metric is
-/// W-01 Macro-p95 under this load at 4 active Tasks divided by the same candidate's
-/// W-01 Macro-p95 at 1 active Task. A caller must run the six W-01 foreground probes
+/// This intentionally does not compute QA-04. The final QA-04 representative metric is
+/// QA-01 Macro-p95 under this load at 4 active Tasks divided by the same candidate's
+/// QA-01 Macro-p95 at 1 active Task. A caller must run the six QA-01 foreground probes
 /// while this workload is active and retain those endpoint measurements separately.
 pub async fn run_background_load(
     authority: Arc<dyn TaskAuthority>,
@@ -93,18 +93,18 @@ pub async fn run_background_load(
             let mut applied = 0usize;
             for round in 1..=rounds {
                 let multiplier = u32::try_from(round)
-                    .map_err(|_| ApplyError::Invalid("too many W-04 rounds".into()))?;
+                    .map_err(|_| ApplyError::Invalid("too many QA-04 rounds".into()))?;
                 sleep_until(start + update_period.saturating_mul(multiplier)).await;
                 let percent = u8::try_from((round * 100) / (rounds + 1))
-                    .map_err(|_| ApplyError::Invalid("W-04 progress conversion failed".into()))?;
+                    .map_err(|_| ApplyError::Invalid("QA-04 progress conversion failed".into()))?;
                 let run_id = current.run_id.clone().ok_or_else(|| {
-                    ApplyError::Invalid("W-04 background Task lost run identity".into())
+                    ApplyError::Invalid("QA-04 background Task lost run identity".into())
                 })?;
                 let source_revision = u64::try_from(round + 1)
-                    .map_err(|_| ApplyError::Invalid("W-04 source revision overflow".into()))?;
+                    .map_err(|_| ApplyError::Invalid("QA-04 source revision overflow".into()))?;
                 current = authority
                     .apply(TaskCommand {
-                        command_id: format!("w04-event-{}-{source_revision}", current.task_id),
+                        command_id: format!("qa04-event-{}-{source_revision}", current.task_id),
                         task_id: current.task_id.clone(),
                         expected_revision: current.revision,
                         op: TaskOp::ApplyObservation {
@@ -125,7 +125,7 @@ pub async fn run_background_load(
     let mut updates_applied = 0usize;
     for worker in workers {
         updates_applied += worker.await.map_err(|error| {
-            ApplyError::Storage(format!("W-04 workload task join failed: {error}"))
+            ApplyError::Storage(format!("QA-04 workload task join failed: {error}"))
         })??;
     }
 
@@ -135,8 +135,8 @@ pub async fn run_background_load(
         update_period_ms: config.update_period.as_millis(),
         updates_applied,
         elapsed_ms: start.elapsed().as_millis(),
-        // Background workload execution alone is not the W-04 representative metric.
-        w04_metric_eligible: false,
+        // Background workload execution alone is not the QA-04 representative metric.
+        qa04_metric_eligible: false,
     })
 }
 
@@ -188,9 +188,9 @@ mod tests {
             .await
             .unwrap();
             assert_eq!(report.updates_applied, 12);
-            assert!(!report.w04_metric_eligible);
+            assert!(!report.qa04_metric_eligible);
             for index in 0..4 {
-                let task = repository.get(&format!("W04-BG-{index}")).await.unwrap();
+                let task = repository.get(&format!("QA04-BG-{index}")).await.unwrap();
                 assert_eq!(task.revision, 5);
             }
         }

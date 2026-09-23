@@ -39,14 +39,14 @@ async fn host_prepare(
         HandoffCoordinator::new(EdgeNormalized::new(agent.clone()), repository.clone());
     let mut prepared = Vec::with_capacity(active_tasks);
     for index in 0..active_tasks {
-        let task_id = format!("W09-PROC-T{index}");
+        let task_id = format!("QA09-PROC-T{index}");
         let created = task_authority
             .apply(TaskCommand {
-                command_id: format!("w09-proc-create-{index}"),
+                command_id: format!("qa09-proc-create-{index}"),
                 task_id: task_id.clone(),
                 expected_revision: 0,
                 op: TaskOp::Create {
-                    goal: format!("W-09 process recovery Task {index}"),
+                    goal: format!("QA-09 process recovery Task {index}"),
                 },
             })
             .await?;
@@ -54,13 +54,13 @@ async fn host_prepare(
             .handoff(
                 task_authority.as_ref(),
                 created,
-                format!("W-09 process recovery Task {index}"),
-                format!("w09-proc-submit-{index}"),
+                format!("QA-09 process recovery Task {index}"),
+                format!("qa09-proc-submit-{index}"),
             )
             .await?;
         let mut final_task = result.task;
         if completed {
-            let artifact = format!("W09-PROC-ART-{index}");
+            let artifact = format!("QA09-PROC-ART-{index}");
             agent.complete(&result.accepted.run_id, artifact.clone())?;
             let sync = AgentSynchronizer::new(EdgeNormalized::new(agent.clone()));
             let (updated, _) = sync
@@ -91,7 +91,7 @@ async fn host_probe(
     let mut recovered = Vec::with_capacity(active_tasks);
 
     for index in 0..active_tasks {
-        let task_id = format!("W09-PROC-T{index}");
+        let task_id = format!("QA09-PROC-T{index}");
         let current = repository.get(&task_id).await?;
         let link = repository
             .execution_link(&task_id)
@@ -111,7 +111,7 @@ async fn host_probe(
             anyhow::ensure!(snapshot.state == "running");
             let local = task_authority
                 .apply(TaskCommand {
-                    command_id: format!("w09-proc-recovery-cancel-{index}"),
+                    command_id: format!("qa09-proc-recovery-cancel-{index}"),
                     task_id: task_id.clone(),
                     expected_revision: current.revision,
                     op: TaskOp::Cancel,
@@ -174,7 +174,7 @@ pub async fn runtime_host(
                 write_line(&mut stdout, &value).await?;
             }
             Some("abort") => std::process::abort(),
-            other => anyhow::bail!("unsupported W-09 runtime-host command: {other:?}"),
+            other => anyhow::bail!("unsupported QA-09 runtime-host command: {other:?}"),
         }
     }
     Ok(())
@@ -197,7 +197,7 @@ impl RuntimeSession {
     ) -> anyhow::Result<Self> {
         let mut command = Command::new(executable);
         command
-            .arg("w09-runtime-host")
+            .arg("qa09-runtime-host")
             .arg("--task-candidate")
             .arg(candidate)
             .arg("--db")
@@ -217,11 +217,11 @@ impl RuntimeSession {
         let stdin = child
             .stdin
             .take()
-            .ok_or_else(|| anyhow::anyhow!("W-09 runtime host stdin missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-09 runtime host stdin missing"))?;
         let stdout = child
             .stdout
             .take()
-            .ok_or_else(|| anyhow::anyhow!("W-09 runtime host stdout missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("QA-09 runtime host stdout missing"))?;
         Ok(Self {
             child,
             stdin,
@@ -265,7 +265,7 @@ async fn one_stratum(
     let prepared = first
         .request("prepare")
         .await?
-        .ok_or_else(|| anyhow::anyhow!("W-09 runtime host ended during prepare"))?;
+        .ok_or_else(|| anyhow::anyhow!("QA-09 runtime host ended during prepare"))?;
     anyhow::ensure!(prepared["status"] == "PASS");
 
     let fault_start = Instant::now();
@@ -289,7 +289,7 @@ async fn one_stratum(
     let probe = second
         .request("probe")
         .await?
-        .ok_or_else(|| anyhow::anyhow!("W-09 restarted host ended during probe"))?;
+        .ok_or_else(|| anyhow::anyhow!("QA-09 restarted host ended during probe"))?;
     anyhow::ensure!(probe["status"] == "PASS");
 
     Ok(serde_json::json!({
@@ -308,7 +308,7 @@ pub async fn whole_process_smoke() -> anyhow::Result<serde_json::Value> {
 }
 
 fn nearest_rank_p95(values: &[u64]) -> anyhow::Result<u64> {
-    anyhow::ensure!(!values.is_empty(), "p95 requires at least one W-09 trial");
+    anyhow::ensure!(!values.is_empty(), "p95 requires at least one QA-09 trial");
     let mut sorted = values.to_vec();
     sorted.sort_unstable();
     let rank = (95 * sorted.len()).div_ceil(100);
@@ -322,14 +322,14 @@ pub async fn whole_process(
     let (trials_per_stratum, restart_delay, metric_eligible) = match profile {
         "smoke" => (1usize, Duration::from_millis(2), false),
         "frozen" => (100usize, Duration::from_millis(500), true),
-        other => anyhow::bail!("unknown W-09 profile: {other}; use smoke or frozen"),
+        other => anyhow::bail!("unknown QA-09 profile: {other}; use smoke or frozen"),
     };
     if metric_eligible {
         let fingerprint = freeze_fingerprint
-            .ok_or_else(|| anyhow::anyhow!("frozen W-09 requires --freeze-fingerprint"))?;
+            .ok_or_else(|| anyhow::anyhow!("frozen QA-09 requires --freeze-fingerprint"))?;
         anyhow::ensure!(
             fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
-            "invalid W-09 freeze fingerprint"
+            "invalid QA-09 freeze fingerprint"
         );
     }
     let executable = std::env::current_exe()?;
@@ -375,7 +375,7 @@ pub async fn whole_process(
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"W-09 whole-VIA process-abort four-strata trials",
+        "scope":"QA-09 whole-VIA process-abort four-strata trials",
         "profile":profile,
         "freeze_fingerprint":freeze_fingerprint,
         "trials_per_stratum":trials_per_stratum,
@@ -383,8 +383,8 @@ pub async fn whole_process(
         "candidates":candidates,
         "external_agent_fixture":"persistent state outside VIA runtime process",
         "durable_via_state":"SQLite reopened after process loss",
-        "w09_representative_metric":"REQUIRES_TWO_INTEGRATION_FATAL_STRATA",
-        "w09_strata_metric_eligible":metric_eligible,
-        "note":"The final six-strata W-09 metric is assembled with the matching EXEC integration-fatal result."
+        "qa09_representative_metric":"REQUIRES_TWO_INTEGRATION_FATAL_STRATA",
+        "qa09_strata_metric_eligible":metric_eligible,
+        "note":"The final six-strata QA-09 metric is assembled with the matching EXEC integration-fatal result."
     }))
 }

@@ -42,7 +42,9 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 - The active Architecture baseline is `docs/architecture/`.
 - Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
-- W-01, W-02, and W-03 are Voice-in/Voice-out metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
+- QC-01~QC-10 are top-level quality concerns; QA-01~QA-12 are the current measurable quality attributes.
+- No ASR is confirmed yet. ASR is a classification applied to an existing QA after architectural impact is established, not a separate numbered series.
+- QA-01, QA-02, and QA-03 are Voice-in/Voice-out metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
 - Their semantic and event-boundary document drafts exist, but the machine-readable contract, harness, target, score bands, and current results are not yet implemented or run.
 - Existing predecessor implementation and results under the `w12-g1` archive are historical/superseded. `Gate 1` and `Gate 2` are not active lifecycle names.
 - Current accepted decisions have caveats: AGENT-DP01=A, TASK-DP01=B, EXEC-DP01=B; IR-DP01 is deferred with A only as an interim reference. Read the ADRs before describing them.
@@ -70,7 +72,7 @@ Do not place new active files under a historical namespace. Do not overwrite pri
 
 - Keep user goals, completion conditions, fixtures, and external dependency profiles equal across candidate A/B comparisons.
 - Compare one DP at a time. Record fixed context and `source_execution_key` when a result is reused for non-applicable axes; do not duplicate it as independent samples.
-- Keep TASK and AGENT non-applicable to a W path when they do not physically participate. Do not manufacture causality to fill a matrix.
+- Keep TASK and AGENT non-applicable to a QA path when they do not physically participate. Do not manufacture causality to fill a matrix.
 - Freeze definitions, fixtures, repetition counts, aggregation, failure treatment, target, and score boundaries before seeing candidate results.
 - Keep candidate input separate from evaluator-only oracle data.
 - Record failures and timeouts; never select only successful samples to improve percentiles.
@@ -88,14 +90,14 @@ Use exact evidence labels and state limitations near the claim.
 
 Do not call mock/reference evidence `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or target-device production latency.
 
-For W-01~W-03 specifically:
+For QA-01~QA-03 specifically:
 
 - Use Voice input and audible Voice output as the primary path.
 - The endpoint is first meaningful audible audio onset, not payload delivery to an instrumented sink; silence, earcons, filler, and generic acknowledgements do not end the metric.
-- W-01 excludes Downstream Agent queue/execution/completion time but preserves full user wall-clock as secondary evidence.
-- W-02 contains no Downstream Agent execution.
-- W-03 starts when a valid Agent status is available at its source.
-- Qwen3-Omni 234 ms is a theoretical first-audio-packet reference under published conditions. It is not a W start point, generic TTS latency, or actual VIA measurement. Use it only as a frozen scheduled dependency span when the contract permits.
+- QA-01 excludes Downstream Agent queue/execution/completion time but preserves full user wall-clock as secondary evidence.
+- QA-02 contains no Downstream Agent execution.
+- QA-03 starts when a valid Agent status is available at its source.
+- Qwen3-Omni 234 ms is a theoretical first-audio-packet reference under published conditions. It is not a QA start point, generic TTS latency, or actual VIA measurement. Use it only as a frozen scheduled dependency span when the contract permits.
 - VIA LLM token-rate planning must freeze serialized prompts, tokenizer, input/output token counts, dependency graph, and rate profile. Label the result as an estimate, not measured wall-clock.
 - Keep network, IPC, validation, Context access, speech generation, playback queue, audio buffer, and device onset as separate spans rather than hiding them in model time.
 
