@@ -1,8 +1,8 @@
 # AGENT-DP01 — Agent 차이를 경계에서 해석할지, Core의 typed handler가 해석할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. Agent 중립성은 양 후보 공통 요구다.
-> W12-G2: 아래 W-02/W-03 responsiveness 가설은 이전 endpoint의 historical mapping이다. 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
-<!-- gate2: {"dp":"AGENT-DP01","reference":"A","hypotheses":["W-02","W-03","W-07","W-08"],"alternatives":{"A":["G2-C-EDGESEM","G2-I-CANONAGENT"],"B":["G2-C-TYPEDHANDLER","G2-I-TYPEDAGENT"]}} -->
+> W12-G2: 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다. 재동결 전에는 W-07/W-08만 active hypothesis로 유지한다.
+<!-- gate2: {"dp":"AGENT-DP01","reference":"A","hypotheses":["W-07","W-08"],"alternatives":{"A":["G2-C-EDGESEM","G2-I-CANONAGENT"],"B":["G2-C-TYPEDHANDLER","G2-I-TYPEDAGENT"]}} -->
 
 ## 1. 질문을 정확하게 한정하기
 

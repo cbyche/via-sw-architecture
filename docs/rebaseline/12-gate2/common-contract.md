@@ -143,7 +143,7 @@ State는 wire DTO를 이름만 바꾼 중복이 아니다. 표에 별도 보관�
 
 ## 5. 전수 sweep과 후보 교차 영향
 
-각 DP 문서의 `H`는 W12-G1의 사전 인과 가설이며 W-01~W-03은 W12-G2에서 재매핑한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 W-01/02/03은 11-E의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
+각 DP 문서의 `H` metadata에는 재동결이 끝난 active hypothesis만 둔다. W-01~W-03은 새 applicability가 확정될 때까지 `H`에서 제외한다. 후보 결과 전 `Primary`, 점수, 개선율을 확정하지 않는다. 새 W-01/02/03은 11-E의 서로 다른 Voice endpoint를 사용하고, query/Poll delay나 LLM processing 평균을 runtime p95로 치환하지 않는다.
 
 W-09는 whole restart 4 + integration fatal 2 strata, W-10은 external 24 + host-fatal 4 cells를 유지한다. **동일한 adapter fatal fault**가 자신의 host를 종료하게 하며 Single-process 후보에만 다른 결함을 심지 않는다. 재시작이 충분히 빠르면 두 안 모두 W-10 100%일 수 있다. 그때 interruption duration만 secondary로 남기며 deadline/분모를 바꿔 차이를 만들지 않는다.
 

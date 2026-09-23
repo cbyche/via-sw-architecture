@@ -20,11 +20,11 @@
 | 5 | [Representative Use Cases](./05-representative-use-cases.md) | 검토 완료 · 기준선 확정 |
 | 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 검토 완료 · 공통 비교 조건 확정 |
 | 7 | [Intentional Variables](./07-intentional-variables.md) | 검토 완료 · 24개 변경 집합 확정 |
-| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 검토 완료 · 7개 ASR 기준선 확정 |
+| 8 | [Architecture Significant Requirements](./08-architecture-significant-requirements.md) | 7개 ASR historical baseline · Working-12 후속 계약 사용 |
 | 9 | [ASR ↔ UC / Evolution Scenario Mapping](./09-asr-uc-change-mapping.md) | 작성 완료 · 09/10 공동 검토본 |
 | 10 | [Architecture Element Definition](./10-architecture-element-definition.md) | 작성 완료 · 09/10 공동 검토본 |
 | 11 | [Test Case & Measurement](./11-test-case-catalog.md) | W-01~W-03 Voice 정의 재작성 · 구현/target/score 재동결 전 |
-| 12 | Architecture Decision Points | 이후 작성 |
+| 12 | [Architecture Evaluation Method](./12-00-evaluation-method.md) | W12-G1 결과 archive 완료 · 새 DP×W mapping 재동결 전 |
 
 ## 현재 리뷰 지점 — W-01~W-03 Voice 측정 재정의
 

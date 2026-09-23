@@ -8,7 +8,7 @@
 
 - W-01은 Agent delegation 결과의 VIA active time, W-02는 VIA direct Voice response, W-03은 Agent progress/status의 Voice feedback latency로 분리한다.
 - Voice input→Voice output을 대표 경로로 사용하고 Text-only latency는 secondary/regression으로 내린다.
-- 기존 W-02 Task Handoff Responsiveness는 W-01 진단 trace로 흡수하고 독립 대표 Metric에서는 폐기한다.
+- 기존 W-02 handoff metric은 W-01 진단 trace로 흡수하고 독립 대표 Metric에서는 폐기한다.
 - W-04의 분모는 별도 저성능 baseline이 아니라 **같은 candidate의 같은 workload·configuration에서 active background Task만 1개인 경우**다.
 - 정확한 복구 여부는 유지하며 W-09는 복구 가능한 조건의 시간으로 비교한다. W-10은 장애가 유지되는 동안 무관 기능이 살아 있는지 본다.
 - W-11은 보호 정보단위와 reachable handle scope를 사전에 고정한다. byte 수·압축률을 개인정보 보호 수준으로 오인하지 않는다.

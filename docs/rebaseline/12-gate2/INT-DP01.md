@@ -25,7 +25,7 @@ flowchart LR
 - Direct Response도 canonical Conversation에 기록한다.
 - Voice Runtime이 판단할 수 없는 Context/Task/Agent routing은 Core responsibility다.
 - interruption은 audio generation을 멈추되 명시적 cancel intent 없이 Task를 취소하지 않는다.
-- S2S가 필요한 route/control event를 native로 제공하지 않으면 supplemental interpretation을 추가하며 비용을 W-01에 포함한다.
+- S2S가 필요한 route/control event를 native로 제공하지 않으면 supplemental interpretation을 추가하며 direct-response 비용을 W-02에 포함한다. Delegation 경로의 비용 귀속은 새 W-01 call graph에서 별도 고정한다.
 
 ## 왜 기존 B를 탈락시키는가
 

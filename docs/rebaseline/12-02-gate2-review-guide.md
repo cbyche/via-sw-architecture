@@ -1,9 +1,9 @@
 # 12-02. Gate 2 — Core Architecture Candidate Review
 
-> **W12-G2 notice:** 이 리뷰의 W-01~W-03 명칭·가설은 이전 측정 정의를 사용한다. 새 Voice 정의는 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따르며 관련 latency 근거와 DP applicability는 재동결 전까지 미확정이다.
-> **G2-DESIGN-v1.1 / 2026-09-22 / 사용자 승인 완료 — 구현·측정 준비로 전환**
+> **W12-G2 notice:** W-01~W-03은 [11-E](./11e-voice-responsiveness-measurement-redefinition.md)를 따른다. 아래 네 DP의 새 Voice applicability는 아직 재동결 전이며, 기존 mapping은 [W12-G1 archive](./archive/w12-g1/12-01a-scope-and-coverage-ledger.md)에만 보존한다.
+> **G2-DESIGN-v1.1 / 2026-09-22 / 후보 구조 승인 유지 — W12-G2 측정 mapping 재검토 중**
 > Source snapshot: `e9646d4a074afb7a3cf4e85f5ca48c939a697fbf`.
-> 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 아직 점수·승자·최종 Architecture 없음.
+> 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 기존 결정 상태는 ADR을 따르며 새 W-01~W-03 결과는 아직 없다.
 
 ## Working ASR 빠른 참조
 
@@ -26,12 +26,12 @@
 
 처음 상세화한 6개 중 두 개를 다시 탈락시켰다. **INT-DP01은 S2S Direct Fast Path를 고정 원칙으로, TASK-DP02는 event+query 혼합 동기화 tactic으로 내린다.** 둘 다 유효한 설계 관심사지만 현재 요구에서는 강한 상호배타적 Architecture 대안이 아니다.
 
-| Gate 2 DP | A | B | 중요하게 보는 ASR |
+| Gate 2 DP | A | B | 현재 확정된 비교축 / 새 Voice 상태 |
 |---|---|---|---|
-| [IR-DP01](./12-gate2/IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | W-01 대화 반응성, W-02 인계 반응성, W-05 요청 처리 충실도, W-08 변경 용이성 |
-| [TASK-DP01](./12-gate2/TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | W-02 인계, W-04 동시 Task 격리, W-08 변경 용이성, W-09 복구 |
-| [AGENT-DP01](./12-gate2/AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | W-02 인계, W-03 feedback, W-07 Agent 교체성, W-08 변경 용이성 |
-| [EXEC-DP01](./12-gate2/EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | W-01 대화 반응성, W-04 동시성, W-09 복구, W-10 장애 격리 |
+| [IR-DP01](./12-gate2/IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | W-05, W-08 / W-01·W-02 applicability 재동결 전 |
+| [TASK-DP01](./12-gate2/TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | W-08, W-09 / W-01·W-03 및 W-04 재검토 |
+| [AGENT-DP01](./12-gate2/AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | W-07, W-08 / W-01·W-03 applicability 재동결 전 |
+| [EXEC-DP01](./12-gate2/EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | W-09, W-10 / W-01~W-03 및 W-04 재검토 |
 
 이 네 개는 각각 **semantic authority topology / Task single-writer model / Agent contract boundary / OS process fault boundary**라는 서로 다른 Architecture 축을 결정한다. Supporting DP인 CTX-DP01/02, SEC-DP01은 Master Catalog에 유지하되 본 Gate 2의 우선 비교에서 제외한다.
 
@@ -55,7 +55,7 @@ VIA의 기본 tactic은 **stream/event를 지원하면 low-latency update에 사
 
 같은 Qwen reference Model이라도 한 번에 joint decision을 내릴 때와 3개 stage로 나눌 때 실제 정확도는 달라질 수 있다. **그 방향은 Architecture만으로 예측할 수 없고 Model의 structured reasoning 능력에 상당 부분 의존한다.** 따라서 W-05를 “stage형이 더 정확하다/부정확하다”는 논리로 쓰지 않고 실제 동일 Model·동일 corpus 결과로만 평가한다.
 
-Architecture 자체가 직접 바꾸는 것은 prompt/call critical path와 semantic contract의 변경 국소성이다. 따라서 W-01/W-02/W-08은 강한 구조 인과, W-05는 **model-dependent empirical discriminator**로 취급한다.
+Architecture 자체가 직접 바꾸는 것은 prompt/call critical path와 semantic contract의 변경 국소성이다. W-05는 **model-dependent empirical discriminator**로 유지하고 W-08은 active hypothesis로 둔다. W-01/W-02는 새 call graph가 동결된 뒤 applicability를 확정한다.
 
 ### TASK-DP01 — 유지, 단 ‘Agent harness의 두 표준 형태’라고 말하지 않는다
 
@@ -86,13 +86,13 @@ Tokio가 process isolation 자체를 제공하는 것은 아니다. **격리는 
 
 4 pair의 change ledger는 공통 reference + 각 DP의 B variant라는 one-factor contrast를 유지한다. Runtime/reference 평가는 **16개 `2^4` complete configuration**으로 조립해 IR×TASK, TASK×AGENT, TASK×EXEC 등 결합 효과를 함께 확인한다.
 
-## 5. 결과 상태와 다음 단계
+## 5. 현재 상태와 다음 단계
 
-Gate 2 구조는 사용자 승인 완료했다. 다음 구현·측정 단계에서는 아래 네 구조를 그대로 동결해 실행 자산을 만든다.
+네 DP의 후보 구조 자체는 승인 상태를 유지한다. 다만 새 W-01~W-03에 대해서는 다음을 결과와 코드보다 먼저 고정한다.
 
-1. IR의 1회 통합 판단 vs 단계별 판단이 실제 VIA semantic responsibility를 잘 나타내는가.
-2. TASK의 shared writer vs per-Task durable writer가 지나치게 특수하거나 불공정하지 않은가.
-3. AGENT의 normalization boundary가 protocol 선택과 명확히 분리되는가.
-4. EXEC의 same-process vs separate-process가 Windows/Rust 구현에서 현실적인가.
+1. 각 DP가 실제로 바꾸는 Voice call graph와 applicable W를 지정한다.
+2. 다른 DP 조건을 고정한 A/B paired comparison과 공통 payload를 정의한다.
+3. fixture, token ledger, audible endpoint, 반복·집계 규칙을 동결한다.
+4. 그 뒤 machine contract와 측정 코드를 변경한다.
 
-이 네 구조의 C/I/S/D와 metric ledger를 Gate 2 승인본으로 freeze하고, 12-A sensitivity 측정 준비로 넘어간다.
+재동결 전에는 과거 DP×W mapping이나 수식 기반 결과를 새 후보의 성능 근거로 사용하지 않는다.

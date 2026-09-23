@@ -1,6 +1,6 @@
 # AA-028 — Gate 2 Sensitivity and Decision Closure
 
-> Historical note: this analysis predates the 16-configuration campaign. Current combined evidence and decisions are documented in `docs/rebaseline/12-07-full-factorial-results.md` and ADR-001 through ADR-004.
+> Historical note: this analysis predates the 16-configuration campaign. The former combined evidence is archived in `docs/rebaseline/archive/w12-g1/12-07-full-factorial-results.md`; current decision status is recorded in ADR-001 through ADR-004.
 >
 > W12-G2 note: the W-01/W-02 names, endpoints, and availability statements below are historical. The current pre-implementation Voice definitions are in `docs/rebaseline/11e-voice-responsiveness-measurement-redefinition.md`; they have not yet been measured.
 
@@ -46,7 +46,7 @@ This is a completed evaluation outcome even though three choices are deferred: t
 ## Traceability
 
 - Method: `docs/rebaseline/12-00-evaluation-method.md`
-- Results: `docs/rebaseline/12-05-gate2-measurement-results.md`
+- Historical results: `docs/rebaseline/archive/w12-g1/12-05-gate2-measurement-results.md`
 - Machine ledger: `results/rebaseline/gate2-freeze-b6ff0b07/sensitivity-sweep.json`
 - Accepted decision: `docs/adr/ADR-001-agent-integration-contract-boundary.md`
 - Deferred decisions: ADR-002 through ADR-004

@@ -1,8 +1,8 @@
 # IR-DP01 — 요청을 한 번에 함께 판단할지, 계약으로 나눈 단계가 판단할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. semantic accuracy와 latency는 NOT_RUN.
-> W12-G2: 이 문서의 W-01/W-02 latency 가설은 이전 endpoint의 historical mapping이다. 새 delegated/direct Voice call graph는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
-<!-- gate2: {"dp":"IR-DP01","reference":"A","hypotheses":["W-01","W-02","W-05","W-08"],"alternatives":{"A":["G2-C-JOINT","G2-C-SEMCHECK"],"B":["G2-C-GROUNDREFINE","G2-C-ASSOCIATE","G2-C-SELECT","G2-C-SEMCHECK","G2-I-GROUNDED","G2-I-ASSOCIATED","G2-S-SEMSTAGES"]}} -->
+> W12-G2: 새 delegated/direct Voice call graph는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다. 재동결 전에는 W-05/W-08만 active hypothesis로 유지한다.
+<!-- gate2: {"dp":"IR-DP01","reference":"A","hypotheses":["W-05","W-08"],"alternatives":{"A":["G2-C-JOINT","G2-C-SEMCHECK"],"B":["G2-C-GROUNDREFINE","G2-C-ASSOCIATE","G2-C-SELECT","G2-C-SEMCHECK","G2-I-GROUNDED","G2-I-ASSOCIATED","G2-S-SEMSTAGES"]}} -->
 
 ## 1. 왜 필요한 결정인가
 

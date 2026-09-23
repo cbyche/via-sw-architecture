@@ -1,8 +1,8 @@
 # TASK-DP01 — Task 상태를 공유 서비스가 갱신할지, Task별 소유자가 갱신할지
 
 > G2-DESIGN-v1.1 / Gate 2 리뷰용. actor·central에 대한 성능 우열 가정 없음.
-> W12-G2: 이 문서의 W-02 latency 가설은 이전 handoff endpoint의 historical mapping이다. 새 W-01/W-03 Voice 경로의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다.
-<!-- gate2: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-02","W-04","W-08","W-09"],"alternatives":{"A":["G2-C-TASKSERVICE","G2-I-TXNTRANSITION"],"B":["G2-C-TASKACTOR","G2-C-ACTIVATION","G2-I-MAILBOX","G2-S-ACTIVATION"]}} -->
+> W12-G2: 새 W-01/W-03 Voice 경로와 W-04의 applicability는 [11-E](../11e-voice-responsiveness-measurement-redefinition.md)를 기준으로 재동결한다. 재동결 전에는 W-08/W-09만 active hypothesis로 유지한다.
+<!-- gate2: {"dp":"TASK-DP01","reference":"A","hypotheses":["W-08","W-09"],"alternatives":{"A":["G2-C-TASKSERVICE","G2-I-TXNTRANSITION"],"B":["G2-C-TASKACTOR","G2-C-ACTIVATION","G2-I-MAILBOX","G2-S-ACTIVATION"]}} -->
 
 ## 1. 결정과 중요성
 
@@ -79,6 +79,6 @@ W-09 복구는 UI 창이나 actor activation만 띄운 시점이 아니다. 해�
 
 A는 여러 Task의 관계 조회·transaction 제어가 직접적이지만 conflict 재처리와 공유 저장소의 비용을 부담할 수 있다. B는 Task별 ordering과 activation scope가 명확하지만 in-memory mailbox routing·persistent fencing·cross-Task command 조정이 추가된다. **중앙형=동시성 불가, actor=빠른 복구라는 결론은 허용하지 않는다.**
 
-W-02는 접수+Link commit, W-04는 1/4 Task에서 foreground ratio와 절대 latency, W-09는 6 recovery strata, W-08은 C-04/06 등을 포함한 전체 15 change의 수정 ID를 본다. 진단 span은 command 대기, conflict retry, transaction wait/commit, activation, external reconciliation이다.
+W-08은 C-04/06 등을 포함한 전체 15 change의 수정 ID를 보고, W-09는 6 recovery strata를 유지한다. 접수+Link commit과 foreground 1/4 Task span은 새 W-01/W-03 및 W-04 contract를 재동결할 때 진단 trace로 다시 배치한다. 진단 span은 command 대기, conflict retry, transaction wait/commit, activation, external reconciliation이다.
 
 TC-09.3/12.3/14.2/18.1~18.6의 상태 전이를 상세 trace로 사용한다. 실제 fixed 4-Task 부하에서 차이가 없다면 동점이며 부하를 임의로 늘려 공식 점수를 만들지 않는다. TASK-DP01 A/B × EXEC A/B를 교차 확인해 writer 차이와 process 차이를 분리한다.
