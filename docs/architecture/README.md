@@ -1,43 +1,76 @@
 # VIA Architecture Baseline
 
-> 상태: **현재 Architecture source of truth**
+> **Status: active and authoritative**
 
-이 디렉터리는 VIA의 시스템 정의에서 출발해 품질 속성, 측정 계약, Decision Point를 도출하는 현재 기준선이다. 과거 v1.1, vNext/DP-00, W12-G1 자료는 [`../archive/`](../archive/README.md)에 격리한다.
+이 디렉터리는 VIA의 시스템 정의, 공통 범위, 대표 Use Case, 변화 시나리오, 품질 속성, 측정 계약, Decision Point를 연결한 현재 Architecture 기준선이다. 이 기준선이 답하려는 질문은 다음과 같다.
 
-## Reading order
+> 사용자 PC에서 연속적인 Voice interaction을 유지하면서 direct response와 여러 Downstream Agent 위임을 일관되게 연결하려면, VIA 내부의 책임·상태·계약·process boundary를 어떻게 나누어야 하는가?
 
-| 순서 | 문서 | 상태 |
+과거 v1.1, vNext/DP-00, W12-G1 문서는 [archive](../archive/README.md)에 있으며 현재 기준이 아니다.
+
+## Baseline at a glance
+
+- VIA는 사용자 interaction과 orchestration을 책임진다.
+- Downstream Agent는 업무 reasoning, planning, tool 선택·실행을 책임진다.
+- Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
+- 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
+- Architecture 선택은 IR, TASK, AGENT, EXEC DP별 A/B 직접 비교로 수행한다.
+- W-01~W-03은 Voice 중심으로 재정의됐으나 새 harness와 결과는 아직 없다.
+
+모든 W의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
+
+## Required reading order
+
+| 순서 | 문서 | 답하는 질문 |
 | --- | --- | --- |
-| 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | current |
-| 2 | [Terms](./02-terms.md) | current |
-| 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | current |
-| 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | current |
-| 5 | [Representative Use Cases](./05-representative-use-cases.md) | current |
-| 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | current |
-| 7 | [Intentional Variables](./07-intentional-variables.md) | current |
-| 8 | [Quality Attributes](./08-quality-attributes/README.md) | W-01~W-03 재정의 완료, 구현 전 |
-| 9 | [Traceability](./09-traceability.md) | current |
-| 10 | [Architecture Element Definition](./10-element-definition.md) | current |
-| 11 | [Measurement](./11-measurement/README.md) | 새 W-01~W-03 machine contract 재동결 전 |
-| 12 | [Decisions](./12-decisions/README.md) | DP별 A/B 직접 비교 기준 |
+| 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA가 무엇을 책임지고 무엇을 Agent에 맡기는가? |
+| 2 | [Terms](./02-terms.md) | 같은 용어를 어떤 뜻으로 쓰는가? |
+| 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 모든 후보가 공통으로 제공해야 할 기능은 무엇인가? |
+| 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | direct/delegated interaction이 어떤 lifecycle을 따르는가? |
+| 5 | [Representative Use Cases](./05-representative-use-cases.md) | 어떤 사용자 상황으로 Architecture를 검증하는가? |
+| 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 후보 비교에서 무엇을 동일하게 유지하는가? |
+| 7 | [Intentional Variables](./07-intentional-variables.md) | 어떤 모델·Agent·계약 변화를 견뎌야 하는가? |
+| 8 | [Quality Attributes](./08-quality-attributes/README.md) | 어떤 품질을 어떤 지표로 관찰하는가? |
+| 9 | [Traceability](./09-traceability.md) | Scope→UC→ASR이 어떻게 연결되는가? |
+| 10 | [Architecture Element Definition](./10-element-definition.md) | 후보의 component/contract/state를 어떤 단위로 비교하는가? |
+| 11 | [Measurement](./11-measurement/README.md) | 결과 전에 무엇을 동결하고 어떤 evidence를 생성하는가? |
+| 12 | [Decisions](./12-decisions/README.md) | DP별 A/B를 어떻게 비교하고 결정하는가? |
 
-## Current review point
+문서를 부분 검색으로 먼저 읽으면 역사적 이름과 현재 정의를 섞기 쉽다. 새 참여자는 최소한 01, 03, 05, 08, 11, 12 순서를 유지한다.
 
-W-01~W-03은 Voice 중심으로 재정의됐다. [`voice-responsiveness.md`](./08-quality-attributes/voice-responsiveness.md)가 세 지표의 endpoint, 포함·제외 구간, S2S 234 ms와 VIA LLM latency evidence의 허용 범위를 정의한다.
+## Current status
 
-현재 순서는 다음과 같다.
+| Area | State | Meaning |
+| --- | --- | --- |
+| Mission, boundary, common scope | Current | 후보가 바꿀 수 없는 출발점 |
+| Representative Use Cases and change scenarios | Current | 평가 모집단과 변화 범위 |
+| W-01~W-03 semantic definitions | Current draft for implementation | endpoint와 포함·제외 구간은 정의됨 |
+| W-01~W-03 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
+| W-01~W-03 machine contract, targets, harness | Pending | 구현·실행 금지라는 뜻이 아니라 먼저 동결해야 함 |
+| W-01~W-03 current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
+| DP inventory | Current | IR/TASK/AGENT/EXEC A/B alternatives |
+| ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
-1. 각 DP의 A/B 대안과 W-01~W-03 applicability를 확정한다.
-2. use case별 Voice fixture, prompt/token ledger, model-rate profile, mock dependency와 audio playback 관측 계약을 결과 전에 동결한다.
-3. 새 계약을 machine-readable fixture와 harness로 구현한다.
-4. 동일 조건의 paired run으로 각 DP의 A/B를 직접 비교한다.
+## How the baseline becomes a decision
 
-기존 W12-G1 harness와 결과는 새 정의의 측정값이 아니다. 실제 모델·제품 latency로 주장하지 않으며, 새 측정 구현 전까지 W-01~W-03은 `NOT_IMPLEMENTED / NOT_RUN`이다.
+```text
+Mission and fixed scope
+  → representative Use Cases and changes
+  → quality attribute and metric definition
+  → pre-result measurement freeze
+  → one-DP-at-a-time A/B execution
+  → raw evidence and aggregation
+  → trade-off analysis
+  → ADR
+```
 
-## Authoring rules
+같은 실행 결과를 TASK/AGENT 등 non-applicable 축으로 복제해 표본 수를 늘리지 않는다. 여러 DP 조합은 interaction 확인에 사용할 수 있지만 primary decision은 각 DP의 paired contrast다.
 
-- 사용자 요구와 완료 조건을 특정 후보에 맞춰 바꾸지 않는다.
-- 각 DP는 다른 DP 조건을 고정한 A/B paired comparison으로 평가한다.
-- contract와 fixture는 결과를 보기 전에 동결한다.
-- 계산값, mock/reference 측정, 실제 모델 측정, 제품 측정을 evidence label로 구분한다.
-- active 문서가 archive 문서를 현재 기준으로 가리키지 않도록 한다.
+## Active authoring rules
+
+- 사용자 목표와 완료 조건을 특정 후보에 맞춰 바꾸지 않는다.
+- 결과를 보기 전에 fixture, repetition, percentile, target, score, failure treatment를 동결한다.
+- 계산, mock/reference 실행, 실제 모델 실행, 제품 실행의 evidence level을 구분한다.
+- `NOT_IMPLEMENTED`나 `NOT_RUN`을 과거 수치로 채우지 않는다.
+- 현재 문서가 archive를 normative source로 인용하지 않도록 한다.
+- 정의 변경 시 관련 traceability, measurement guide, result status, ADR caveat를 함께 확인한다.

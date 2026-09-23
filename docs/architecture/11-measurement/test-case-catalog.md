@@ -4,6 +4,7 @@
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
 > **W12-G2 notice:** 이 문서의 기능 fixture와 oracle은 유지하지만 W-01~W-03 대표 case membership과 Voice timing event는 아직 이 catalog에 반영되지 않았다. 잠정 membership과 추가 event 요구는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)를 따르며 새 freeze에서 확정한다.
+> timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
 ## B.1 원자료 구성
 

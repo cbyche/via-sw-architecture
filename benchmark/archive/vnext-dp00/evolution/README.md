@@ -1,5 +1,7 @@
 # Evolution Exercise Suite
 
+> **ARCHIVED vNext/DP-00 SNAPSHOT:** This prospective protocol was never the current Gate 2 measurement contract. Its original paths are preserved as historical text.
+
 The prospectively frozen DP-00 QA-03 v1 contract is defined by:
 
 - `docs/evaluation/dp00-qa03-flexibility-experiment-protocol-v1.md`

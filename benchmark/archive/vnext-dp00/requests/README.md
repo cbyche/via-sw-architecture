@@ -1,5 +1,7 @@
 # Architecture Request Suite
 
+> **ARCHIVED vNext/DP-00 SNAPSHOT:** These categories belong to the retired vNext planning generation. Current Use Cases are under [`docs/architecture`](../../../../docs/architecture/README.md).
+
 The production request suite is maintained here as structured YAML/JSON later.
 This markdown file documents initial scenario categories.
 

@@ -1,5 +1,7 @@
 # Measurement Readiness Audit
 
+> **HISTORICAL / SUPERSEDED:** This audit validates the former W12-G1 timing contract, not the current Voice responsiveness contract. Keep it for provenance; do not interpret a pass as current measurement readiness.
+
 > 2026-09-22 / 비교 성능 측정 전의 코드·계약 검증. 이 디렉터리는 p95·0~5 score·승자를 산출하지 않는다.
 
 ## 역할

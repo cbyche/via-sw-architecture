@@ -1,46 +1,97 @@
 # VIA Software Architecture
 
-Samsung PC용 Voice Interaction Agent(VIA)의 소프트웨어 아키텍처를 정의하고, Decision Point별 대안을 검증하기 위한 저장소다.
+이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다. VIA는 사용자 PC에서 Voice·Text·화면 interaction을 하나의 대화로 관리하고, 직접 답할 수 있는 요청은 처리하며, 실제 업무는 Downstream Agent에 위임한 뒤 진행 상황과 결과를 다시 사용자에게 연결한다.
 
-## Current source of truth
+이 과제의 핵심은 특정 모델이나 Agent를 고르는 것이 아니다. **VIA 내부의 책임·상태·계약·process boundary를 어디에 둘지** Decision Point(DP)별 A/B 대안을 만들고, 동일 조건의 측정으로 trade-off를 비교해 근거 있는 Architecture Decision을 남기는 것이다.
 
-현재 기준선은 [`docs/architecture/`](docs/architecture/README.md)다. 시스템 범위, 대표 Use Case, 품질 속성, 측정 계약, Decision Point를 이 순서로 관리한다.
+## System boundary
 
-```text
-System definition and use cases
-    -> quality attributes and measurement contracts
-    -> Decision Point A/B alternatives
-    -> controlled prototype and benchmark
-    -> evidence
-    -> ADR
-```
+| 영역 | 책임 |
+| --- | --- |
+| VIA | Voice/Text interaction, 화면·대화 Context, direct response, 요청·Agent orchestration, Conversation/Task 상태, progress/result 전달 |
+| Downstream Agent | 업무별 reasoning, planning, tool 선택·실행, 외부 업무 상태 변경 |
+| AI Model Runtime | S2S와 VIA semantic inference에 사용하는 local/remote dependency. 연결 구조는 범위 안, 모델 내부 구현·학습은 범위 밖 |
+| 제품 범위 밖 | Downstream Agent 내부 모델의 성능과 실행시간, VIA가 직접 수행하지 않는 외부 업무 구현 |
 
-현재 Voice responsiveness 정의는 다음 세 지표로 분리한다.
+정확한 경계는 [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md)가 기준이다.
 
-- W-01: Agent delegation 결과를 사용자에게 Voice로 전달하기까지의 VIA 책임시간
-- W-02: VIA direct Voice response의 전체 반응시간
-- W-03: Agent progress/status가 제공 가능해진 뒤 Voice feedback이 들리기까지의 반응시간
+## Current architecture work
 
-정확한 endpoint와 포함·제외 구간은 [`voice-responsiveness.md`](docs/architecture/08-quality-attributes/voice-responsiveness.md)가 유일한 active source of truth다. 새 정의에 맞는 측정 코드는 아직 구현하지 않았으며, 기존 W12-G1 수치와 harness는 historical evidence다.
+현재 비교하는 Core Decision Point는 네 개다.
+
+| DP | Architecture question | Current decision state |
+| --- | --- | --- |
+| IR-DP01 | semantic authority를 통합할 것인가, 단계별로 분리할 것인가 | Deferred; A는 interim reference |
+| TASK-DP01 | Task 상태를 공유 service가 소유할 것인가, Task별 supervisor가 소유할 것인가 | B accepted; 새 Voice metric으로 재검증 필요 |
+| AGENT-DP01 | Agent 차이를 경계에서 canonical contract로 정규화할 것인가 | A accepted |
+| EXEC-DP01 | integration runtime을 단일 process에 둘 것인가, process 격리할 것인가 | B accepted; 새 Voice metric으로 재검증 필요 |
+
+각 DP는 **다른 DP 조건을 고정한 A/B paired comparison**으로 평가한다. 16개 조합의 global winner를 먼저 고르는 방식이 아니며, full-factorial 분석은 interaction 확인을 위한 secondary analysis일 뿐이다.
+
+## Current measurement status
+
+| Item | Status |
+| --- | --- |
+| System boundary, representative use cases, change scenarios | Defined |
+| Working-12 quality attributes | Defined; W-01~W-03 Voice definition updated |
+| W-01~W-03 event and software-boundary contract | Draft defined; machine freeze pending |
+| W-01~W-03 machine-readable contract and harness | **Not implemented** |
+| W-01~W-03 current results | **Not run** |
+| Actual S2S/VIA LLM/product latency evidence | **Not measured** |
+| Previous W12-G1 code and results | Historical/superseded archive |
+
+새 Voice responsiveness 정의는 다음과 같다.
+
+- **W-01 — Delegated Task Result Responsiveness:** Agent 실행시간을 제외하고, Voice 요청의 위임 준비와 Agent 결과의 Voice 전달에 VIA가 소비한 시간
+- **W-02 — VIA Direct Voice Response Responsiveness:** Downstream Agent 없이 VIA가 직접 답하는 Voice 요청의 전체 반응시간
+- **W-03 — Agent Progress Voice Feedback Responsiveness:** Agent status가 source에서 제공 가능해진 뒤 사용자에게 audible Voice로 전달되기까지의 시간
+
+세 지표의 endpoint, 포함·제외 구간, S2S 234 ms와 VIA LLM 추정치의 허용 범위는 [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md)만을 따른다. 과거 harness의 수치나 이름을 현재 결과로 해석하면 안 된다.
+
+## Start here
+
+새로 참여한 사람과 LLM은 아래 순서로 읽는다.
+
+1. [Architecture baseline guide](docs/architecture/README.md) — 전체 문서의 위계와 현재 상태
+2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA가 무엇이고 무엇이 아닌지
+3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md) — 모든 후보가 공통으로 만족할 범위
+4. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 평가할 사용자 상황
+5. [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md) — 현재 W-01~W-03 정의
+6. [Event & Boundary Contract](docs/architecture/11-measurement/event-boundary-contract.md) — 실제 사건과 software 진단 event의 경계
+7. [Measurement guide](docs/architecture/11-measurement/README.md) — 결과 전 동결해야 할 계약과 evidence level
+8. [Architecture decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — DP 대안, 판단 방법, 현재 결정
+
+저장소를 수정하는 LLM은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 
 ## Repository map
 
-| 경로 | 역할 |
+| 경로 | 현재 역할 |
 | --- | --- |
-| [`docs/architecture/`](docs/architecture/README.md) | 현재 Architecture 기준선 |
-| [`docs/adr/`](docs/adr/) | 채택된 Architecture Decision Record |
-| [`docs/references/`](docs/references/) | 외부·내부 참조자료 |
-| [`docs/archive/`](docs/archive/README.md) | v1.1, vNext/DP-00, W12-G1 과거 세대 |
-| [`benchmark/architecture/`](benchmark/architecture/README.md) | 다음 측정 구현의 active 위치 |
-| [`benchmark/archive/`](benchmark/archive/README.md) | 과거 benchmark 구현 |
-| [`prototypes/gate2/`](prototypes/gate2/README.md) | 현재 Gate 2 후보 구현 |
-| [`results/gate2/`](results/gate2/README.md) | 현재 및 과거 Gate 2 evidence |
-| [`scripts/gate2/`](scripts/gate2/README.md) | 현재 검증 도구 |
+| [`docs/architecture/`](docs/architecture/README.md) | 유일한 active Architecture 기준선 |
+| [`docs/adr/`](docs/adr/README.md) | 승인·유예된 Architecture Decision Record |
+| [`docs/references/`](docs/references/README.md) | 출처와 참고자료; 요구사항이나 결정 자체는 아님 |
+| [`benchmark/architecture/`](benchmark/architecture/README.md) | 다음 measurement contract와 harness의 active 위치 |
+| [`prototypes/gate2/`](prototypes/gate2/README.md) | Gate 2 Architecture 후보 구현 |
+| [`results/gate2/current/`](results/gate2/current/README.md) | 현재 계약으로 생성된 evidence만 저장할 위치 |
+| [`scripts/gate2/`](scripts/gate2/README.md) | active 문서·구조 검증 도구 |
+| [`docs/archive/`](docs/archive/README.md), [`benchmark/archive/`](benchmark/archive/README.md), [`results/gate2/archive/`](results/gate2/archive/README.md) | 퇴역한 세대와 historical evidence |
 
-## Historical generations
+## Evidence interpretation
 
-`requirements-v1.1`, `requirements-vNext`와 기존 DP-00/QA 실험은 삭제하지 않았다. active namespace에서 분리해 [`docs/archive/`](docs/archive/README.md)와 Git `archive/*` 태그로 보존한다. 과거 문서는 provenance와 참고용이며 현재 요구사항·지표·결과로 인용하지 않는다.
+- `NOT_IMPLEMENTED`와 `NOT_RUN`은 결과가 없다는 뜻이다. archive 수치로 빈칸을 채우지 않는다.
+- 계산값, scheduled mock/reference 측정, 실제 모델 측정, 제품 end-to-end 측정을 같은 evidence로 취급하지 않는다.
+- Qwen3-Omni의 공개 234 ms는 제한된 조건의 theoretical first-audio-packet reference다. W metric 시작점이나 제품 latency가 아니다.
+- VIA LLM token-rate 계산은 `ESTIMATED_MODEL_ONLY`; 실제 component span과 섞어도 `HYBRID_REFERENCE_ESTIMATE`다.
+- 유효 endpoint는 무음·earcon·filler가 아니라 첫 **meaningful audible** onset이다.
+- 실제 audible latency 주장은 speaker/loopback 수준의 onset 관측이 있어야 한다. instrumented sink 도착과 동일하지 않다.
 
 ## Development
 
-저장소 작업 규칙은 [`AGENTS.md`](AGENTS.md)와 [`CONTRIBUTING.md`](CONTRIBUTING.md)를 따른다. Python 검증은 `.venv`를 사용하고, Rust 후보 구현은 `prototypes/gate2`에서 검증한다.
+```bash
+.venv/bin/python scripts/gate2/check_active_markdown_links.py
+.venv/bin/python scripts/gate2/check_active_w_metric_terms.py
+cargo +1.98.1 fmt --manifest-path prototypes/gate2/Cargo.toml --all -- --check
+cargo +1.98.1 test --locked --manifest-path prototypes/gate2/Cargo.toml --workspace --all-targets
+```
+
+작업 규칙은 [AGENTS.md](AGENTS.md), 사람 기여 절차는 [CONTRIBUTING.md](CONTRIBUTING.md)를 따른다.

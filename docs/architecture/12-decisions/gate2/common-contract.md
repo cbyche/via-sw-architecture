@@ -1,6 +1,7 @@
 # Gate 2 — 공통 구조·계약·비교 기준
 
 > **W12-G2 notice:** W-01~W-03 endpoint는 [11-E](../../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 이 문서의 기존 metric 연결은 historical이며 새 DP×W execution mapping이 동결될 때까지 측정 근거로 사용하지 않는다.
+> 공통 metric event와 software boundary의 의미는 [Event & Boundary Contract](../../11-measurement/event-boundary-contract.md)를 따른다.
 > G2-DESIGN-v1.1 / 2026-09-22 / 자체 리뷰 반영 · 사용자 리뷰 대기. 후보 결과·승자 없음.
 > 원천 snapshot: `cf21c7361d392b30ad95cd8ec48a7d97d847a19b`.
 > 01~07 제품 조건, 10 요소 집계, 11-D metric/target/score를 대체하지 않는다.

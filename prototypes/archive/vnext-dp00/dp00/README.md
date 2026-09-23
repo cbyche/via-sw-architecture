@@ -1,5 +1,7 @@
 # DP-00 Qualification Prototype
 
+> **ARCHIVED vNext/DP-00 SNAPSHOT:** This prototype, toolchain direction, runner, and profiles are historical. The active candidate workspace is [`prototypes/gate2`](../../../gate2/README.md).
+
 Phase 1 provides only the neutral Rust workspace and evaluation-support
 infrastructure. Architecture alternatives and their decision logic are deliberately
 absent.

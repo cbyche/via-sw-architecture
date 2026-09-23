@@ -13,12 +13,18 @@ ACTIVE_INPUTS = (
     ROOT / "CONTRIBUTING.md",
     ROOT / "docs" / "architecture",
     ROOT / "docs" / "adr",
+    ROOT / "docs" / "references" / "README.md",
+    ROOT / "docs" / "archive" / "README.md",
     ROOT / "benchmark" / "README.md",
     ROOT / "benchmark" / "architecture",
+    ROOT / "benchmark" / "archive" / "README.md",
     ROOT / "prototypes" / "gate2",
+    ROOT / "prototypes" / "archive" / "README.md",
     ROOT / "results" / "gate2" / "README.md",
     ROOT / "results" / "gate2" / "current",
+    ROOT / "results" / "gate2" / "archive" / "README.md",
     ROOT / "scripts" / "gate2" / "README.md",
+    ROOT / "scripts" / "archive" / "README.md",
 )
 LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 

@@ -1,5 +1,7 @@
 # DP-00 Runtime Pilot v0 Corpus
 
+> **ARCHIVED vNext/DP-00 SNAPSHOT:** This corpus remains calibration provenance only. It is not a current fixture, freeze, or Architecture score.
+
 ## Status
 
 **Pilot calibration input — not a final evaluation corpus or score.**

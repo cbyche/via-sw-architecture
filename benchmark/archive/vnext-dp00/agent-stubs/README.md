@@ -1,5 +1,7 @@
 # Downstream Agent Stubs
 
+> **ARCHIVED vNext/DP-00 SNAPSHOT:** This file preserves an earlier plan. It is not the current Agent contract or benchmark profile. Start from [`benchmark/architecture`](../../../architecture/README.md).
+
 Deterministic stubs isolate VIA architecture from downstream-agent compute/latency.
 
 Planned profiles:

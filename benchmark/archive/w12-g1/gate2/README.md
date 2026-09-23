@@ -1,5 +1,7 @@
 # Gate 2 review tooling
 
+> **HISTORICAL / SUPERSEDED:** The commands and W12-G1 contracts below are preserved for audit. They do not implement the current W-01~W-03 definitions and must not generate current evidence. See [`benchmark/architecture`](../../../architecture/README.md).
+
 `catalog_check.py`는 GitHub Markdown을 원본으로 사용하여 **자체 리뷰 후 남은 Core 4개 DP**의 A/B inventory와 complete configuration을 조립한다. FP-INT01(S2S Direct Fast Path)과 TASK-T01(Event-first + Query Reconciliation)은 공통 fixed principle/tactic이며 score pair가 아니다.
 
 ```bash

@@ -1,5 +1,7 @@
 # Internal Rust Voice Agent Reference
 
+> **REFERENCE ONLY:** This snapshot is neither the active VIA baseline nor evidence that a referenced structure was selected. Current decisions remain under [`docs/architecture`](../../architecture/README.md) and [`docs/adr`](../../adr/README.md).
+
 ## Purpose
 
 This directory records architecture observations derived from the existing

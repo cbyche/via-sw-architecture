@@ -3,6 +3,7 @@
 > 버전: **W12-G2-DRAFT — W-01~W-03 Voice responsiveness 재정의, 측정 구현 전**.
 > W-01~W-03의 상세 source of truth는 [`voice-responsiveness.md`](../08-quality-attributes/voice-responsiveness.md)다. W12-G1 정의·target·score와 기존 결과는 이 세 지표에 한해 historical/superseded다.
 > [`baseline.json`](../../../benchmark/archive/w12-g1/working12/baseline.json)은 W12-G1 machine contract이며 W-01~W-03 새 측정에 사용하면 안 된다. 측정 코드는 후속 구현 작업에서 별도 freeze와 함께 변경한다.
+> 모든 metric endpoint event의 의미와 관측 규칙은 [`event-boundary-contract.md`](./event-boundary-contract.md)를 따른다.
 
 ## 1. 변경 요약
 
@@ -80,21 +81,21 @@ W-01/02의 시작점은 원음 발화 종료다. 전사 확정이 늦다고 cloc
 
 ### 4.4 성능을 숨기는 방식 금지
 
-W-02 direct response에 필요한 bounded Read/Search/Understand는 실행 위치만 바꾸어 latency에서 숨기지 않는다. W-01은 `agent_dispatch_committed → agent_result_available_at_source`의 downstream interval만 제외하며 다른 VIA span을 임의로 차감하지 않는다. 여러 Agent가 겹치는 경우 interval을 단순 합산하지 않고 새 fixture contract에서 union/critical-result 규칙을 먼저 고정한다. 공통 trace에 각 metric 경계를 명시한다.
+W-02 direct response에 필요한 bounded Read/Search/Understand는 실행 위치만 바꾸어 latency에서 숨기지 않는다. W-01은 `agent_request_available_at_agent_ingress → agent_result_available_at_source`의 downstream Agent 내부 interval만 제외하며 다른 VIA span을 임의로 차감하지 않는다. 여러 Agent가 겹치는 경우 interval을 단순 합산하지 않고 새 fixture contract에서 union/critical-result 규칙을 먼저 고정한다. 공통 trace에 각 metric 경계를 명시한다.
 
 ## 5. W별 측정 카드
 
 ### W-01 Delegated Task Result Responsiveness
 
-`user_input_end → agent_dispatch_committed`와 `agent_result_available_at_source → first_audible_result_audio` 두 VIA segment를 합한다. 두 event 사이의 downstream Agent 접수·queue·실행·완료 대기는 제외하되 full wall-clock은 secondary로 보존한다. 첫 접수 멘트나 progress status는 종료점이 아니다.
+`user_input_end → agent_request_available_at_agent_ingress`와 `agent_result_available_at_source → first_meaningful_audible_result_audio` 두 VIA segment를 합한다. Agent ingress 이후 result source availability 이전의 downstream Agent 내부 queue·실행·완료 대기는 제외하되 full wall-clock은 secondary로 보존한다. local dispatch commit, Agent 계약 변환, IPC/network delivery는 제외하지 않는다. 첫 접수 멘트나 progress status는 종료점이 아니다.
 
 ### W-02 VIA Direct Voice Response Responsiveness
 
-downstream Agent가 없는 direct/bounded Voice request에서 `user_input_end → first_audible_direct_response_audio` wall-clock을 측정한다. 필요한 Context, VIA LLM, 검증, speech 생성과 playback start를 모두 포함한다.
+downstream Agent가 없는 direct/bounded Voice request에서 `user_input_end → first_meaningful_audible_direct_response` wall-clock을 측정한다. 필요한 Context, VIA LLM, 검증, speech 생성과 playback start를 모두 포함한다. S2S-native와 VIA LLM direct route는 별도 case stratum으로 보존한다.
 
 ### W-03 Agent Progress Voice Feedback Responsiveness
 
-`agent_status_available_at_source → first_audible_status_audio`를 측정한다. stream/poll 발견, Task/run correlation, state 검증, status composition, speech 생성과 playback start를 포함한다. Agent가 status를 생성하기까지의 시간은 제외한다.
+`agent_status_available_at_source → first_meaningful_audible_status_audio`를 측정한다. stream/poll 발견, Task/run correlation, state 검증, status composition, speech 생성과 playback start를 포함한다. Agent가 status를 생성하기까지의 시간은 제외한다. primary reference stratum은 audio lane이 비어 있는 조건이다.
 
 세 metric의 정확한 formula, 유효성 규칙, 잠정 fixture membership과 raw trace 필드는 11-E를 따른다. target과 score band는 새 결과를 보기 전에 별도 freeze한다.
 

@@ -4,7 +4,9 @@
 >
 > 목적: Working-12의 W-01~W-03을 Voice 중심 사용자 경험과 DP별 A/B 직접 비교에 맞게 재정의한다. 측정 코드는 아직 변경하지 않는다.
 >
-> 효력: 이 문서는 W-01~W-03에 한해 `11d-working-12-measurement-and-scoring.md`의 W12-G1 정의를 대체한다. 기존 코드·freeze·결과는 역사적 증거이며 새 정의의 결과로 재사용하지 않는다.
+> 효력: 이 문서는 W-01~W-03의 current semantic definition이다. [`scoring-contract.md`](../11-measurement/scoring-contract.md)는 이 정의를 따르며 기존 코드·freeze·결과는 새 정의의 결과로 재사용하지 않는다.
+>
+> 공통 event의 정확한 의미와 관측 규칙은 [`event-boundary-contract.md`](../11-measurement/event-boundary-contract.md)를 따른다.
 
 ## 1. 공통 원칙
 
@@ -26,16 +28,16 @@ Voice로 요청한 Agent delegation 업무에 대해 VIA가 요청을 해석·�
 
 ```text
 t0 = user_input_end
-t1 = agent_dispatch_committed
+t1 = agent_request_available_at_agent_ingress
 t2 = agent_result_available_at_source
-t3 = first_audible_result_audio
+t3 = first_meaningful_audible_result_audio
 
 W-01 sample = (t1 - t0) + (t3 - t2)
 full_user_wait_secondary = t3 - t0
 excluded_agent_interval = t2 - t1
 ```
 
-`agent_dispatch_committed`는 VIA가 검증된 위임 payload와 correlation을 확정하여 downstream 경계로 넘긴 시각이다. downstream Agent의 acceptance와 실행은 W-01에 포함하지 않는다. `agent_result_available_at_source`는 결과가 VIA 밖의 Agent source에서 조회 또는 stream 가능한 최초 시각이며, 중간 broker가 늦게 읽었다고 시작점을 뒤로 옮기지 않는다.
+`agent_request_available_at_agent_ingress`는 검증된 위임 요청이 Agent ingress에서 소비 가능해진 최초 시각이다. local dispatch commit, Agent 계약 변환, serialization, EXEC queue/IPC와 outbound transport를 이 event 전에 포함한다. downstream Agent 내부의 acceptance queue와 실행은 W-01에 포함하지 않는다. `agent_result_available_at_source`는 결과가 VIA 밖의 Agent source에서 조회 또는 stream 가능한 최초 시각이며, 중간 broker가 늦게 읽었다고 시작점을 뒤로 옮기지 않는다.
 
 여러 Agent가 겹치는 compound request는 외부 interval을 단순 합산하지 않는다. representative fixture에 포함하려면 결과에 필요한 Agent interval의 union과 first-result policy를 별도 동결해야 한다. 그 전에는 single-delegation case만 대표값에 사용한다.
 
@@ -48,13 +50,15 @@ Voice 발화 종료
 → VIA LLM 요청 정리·Task 연관·Agent 선택·위임 판단
 → structured output 완성·검증·repair
 → durable local dispatch/correlation commit
+→ Agent 계약 변환·serialization·EXEC queue/IPC·outbound transport
+→ Agent ingress에서 요청 사용 가능
 → [downstream Agent interval 제외]
 → Agent result source event 수신
 → Task/run correlation 및 결과 검증
 → 필요한 VIA LLM 결과 요약·Voice response composition
 → speech 생성
 → playback queue/buffer/device
-→ first audible result audio
+→ first meaningful audible result audio
 ```
 
 첫 접수 멘트나 “처리 중” status는 W-01 종료점이 아니다. 실제 Agent 결과의 의미 있는 Voice 전달이 종료점이다.
@@ -65,7 +69,7 @@ Voice 발화 종료
 mean_of_case_p95_delegated_via_active_ms
 ```
 
-잠정 canonical 후보는 `TC-07.1`, `TC-08.1`, `TC-08.2`, `TC-10.4`다. 각 case에는 deterministic Agent result fixture와 `agent_dispatch_committed`/`agent_result_available_at_source` event가 추가되어야 하며, 이 membership은 새 Measurement Freeze 전에 확정한다.
+잠정 canonical 후보는 `TC-07.1`, `TC-08.1`, `TC-08.2`, `TC-10.4`다. 각 case에는 deterministic Agent result fixture와 `agent_request_available_at_agent_ingress`/`agent_result_available_at_source` event가 추가되어야 하며, 이 membership은 새 Measurement Freeze 전에 확정한다.
 
 ## 3. W-02 — VIA Direct Voice Response Responsiveness
 
@@ -77,7 +81,7 @@ downstream Agent delegation 없이 VIA가 직접 답하는 Voice request의 전�
 
 ```text
 t0 = user_input_end
-t1 = first_audible_direct_response_audio
+t1 = first_meaningful_audible_direct_response
 
 W-02 sample = t1 - t0
 ```
@@ -100,6 +104,8 @@ Voice 발화 종료
 
 bounded Read/Search/Understand는 실행 위치가 Core인지 helper인지와 무관하게 direct response 결과에 필요하면 포함한다. open-ended downstream Agent를 시작하는 case는 W-02 모집단에 넣지 않는다.
 
+S2S-native direct response와 VIA LLM direct response는 별도 case stratum으로 보존한다. 무음, earcon, generic acknowledgement와 filler는 유효 direct response endpoint가 아니다.
+
 ### 대표 Metric
 
 ```text
@@ -118,7 +124,7 @@ Agent의 progress/status가 source에서 제공 가능해진 뒤 VIA가 이를 �
 
 ```text
 t0 = agent_status_available_at_source
-t1 = first_audible_status_audio
+t1 = first_meaningful_audible_status_audio
 
 W-03 sample = t1 - t0
 ```
@@ -138,6 +144,8 @@ Agent status source event available
 ```
 
 유효 status는 실제 Request/Task/run과 연결되고 확인된 상태나 처리 단계에 근거해야 한다. 완료·접수·진행률을 사실보다 먼저 주장하거나, 동일한 무의미 문구를 반복하여 latency를 만족시켜서는 안 된다. 사용자가 발화 중이면 audio를 겹쳐 재생하지 않으며, 정책상 보류된 interval과 Text fallback은 raw trace에 별도로 남긴다.
+
+primary reference stratum은 사용자가 발화 중이지 않고 audio lane이 비어 있는 조건을 고정한다. 사용자 발화나 우선순위 정책으로 의도적으로 보류된 시간은 별도 policy stratum으로 기록한다.
 
 ### 대표 Metric
 
@@ -194,7 +202,7 @@ estimated_model_subtotal
 - actual route와 component/call graph
 - prompt/input/output token ledger
 - Context/payload byte 크기와 digest
-- source event, dispatch, result/status availability event
+- source event, local dispatch commit, Agent ingress, result/status availability event
 - speech generation start/end
 - playback enqueue, device callback과 first audible audio
 - correctness, timeout, retry/repair와 evidence scope
