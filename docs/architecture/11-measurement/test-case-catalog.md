@@ -3,7 +3,7 @@
 > 상태: **USER REVIEW DRAFT / 후보 실행 NOT_RUN**. 기존 기능 fixture를 보존하되 활성 QA의 scoring membership·oracle·반복 수는 재동결 전이다.
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
-> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. QA-01~04 대표 case와 Voice timing event도 아직 이 catalog에 반영되지 않았다. [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 새 freeze에서 확정한다.
+> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. QA-01~05 대표 case와 timing event도 아직 동결되지 않았다. [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md), [Task control responsiveness](../08-quality-attributes/interaction-control-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 새 freeze에서 확정한다.
 > timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
 ## 1. 원자료 구성
@@ -135,18 +135,18 @@ flowchart LR
 | **TC-11.1 S2S응답 중단**<br/>잠깐 다른 질문 할게 | `speaking_s2s` | 기존 audio stop event; 새turn; T-PPT 유지<br/>금지: 말끊기=업무취소 | QA-04 canonical source, QA-15 regression |
 | **TC-11.2 Agent결과 음성중단**<br/>잠깐 결론만 말해줘 | `speaking_result` | 오디오중단; 결과Text 유지<br/>금지: 이전 음성 나중재생 | QA-04 canonical source, QA-13/15 regression |
 | **TC-11.3 발화중 정정**<br/>예산안 아니 견적서 설명해줘 | `normal` | 최종대상 doc-quote<br/>금지: 철회된 doc-budget 설명 | QA-11 |
-| **TC-11.4 위임전 정정**<br/>그 메일 말고 교육 메일을 찾아줘 | `pending_request` | 변경된 확정요청만 실행<br/>금지: 임시요청과 최종요청 중복실행 | QA-11,QC-08 |
-| **TC-11.5 위임후 정정**<br/>발표자료에 결론 대신 요약을 넣어줘 | `normal` | Existing T-PPT; 실행상태 확인후 followup<br/>금지: 이미수행된변경을 없었던것으로표시 | QA-11,QC-08 |
+| **TC-11.4 위임전 정정**<br/>그 메일 말고 교육 메일을 찾아줘 | `pending_request` | 변경된 확정요청만 실행<br/>금지: 임시요청과 최종요청 중복실행 | QA-05,QA-11,QC-08 |
+| **TC-11.5 위임후 정정**<br/>발표자료에 결론 대신 요약을 넣어줘 | `normal` | Existing T-PPT; 실행상태 확인후 followup<br/>금지: 이미수행된변경을 없었던것으로표시 | QA-05,QA-11,QC-08 |
 
 ### UC-12
 
 | TC / 입력 | 초기 상태·이벤트 patch | 필수 관찰 / 금지 관찰 | QA/QC |
 | --- | --- | --- | --- |
-| **TC-12.1 위임전 취소**<br/>그 요청 취소해줘 | `pending_request` | 미위임request 차단<br/>금지: Agent시작 | QC-08 |
-| **TC-12.2 실행중 취소**<br/>발표자료 만드는 거 취소해줘 | `cancel_confirmed` | T-PPT cancel_sent후ack로 cancelled<br/>금지: 다른Task취소 | QC-08 |
-| **TC-12.3 완료와 취소 교차**<br/>발표자료 취소해줘 | `completion_race` | 외부 completed를보고 이미완료 설명<br/>금지: 취소요청만으로 cancelled | QC-08 |
-| **TC-12.4 이미 완료**<br/>완성한 발표자료 작업 취소해줘 | `completed` | 이미완료를 알림; 되돌림 별도업무<br/>금지: 파일 자동삭제 | QC-08 |
-| **TC-12.5 취소 미지원**<br/>메일 검색 취소해줘 | `cancel_unsupported` | unsupported/미확인 안내; 완료 아님<br/>금지: 취소 기능 있다고 가정 | QC-08 |
+| **TC-12.1 위임전 취소**<br/>그 요청 취소해줘 | `pending_request` | 미위임request 차단<br/>금지: Agent시작 | QA-05,QC-08 |
+| **TC-12.2 실행중 취소**<br/>발표자료 만드는 거 취소해줘 | `cancel_confirmed` | T-PPT cancel_sent후ack로 cancelled<br/>금지: 다른Task취소 | QA-05,QC-08 |
+| **TC-12.3 완료와 취소 교차**<br/>발표자료 취소해줘 | `completion_race` | 외부 completed를보고 이미완료 설명<br/>금지: 취소요청만으로 cancelled | QA-05,QC-08 |
+| **TC-12.4 이미 완료**<br/>완성한 발표자료 작업 취소해줘 | `completed` | 이미완료를 알림; 되돌림 별도업무<br/>금지: 파일 자동삭제 | QA-05,QC-08 |
+| **TC-12.5 취소 미지원**<br/>메일 검색 취소해줘 | `cancel_unsupported` | unsupported/미확인 안내; 완료 아님<br/>금지: 취소 기능 있다고 가정 | QA-05,QC-08 |
 
 ### UC-13
 
@@ -287,6 +287,8 @@ previous-generation QA-12의 24개 판단 기회는 독립 QA 점수에서 제�
 
 `raw-results.template.json`의 모든 결과는 NOT_RUN/null이다. 값 입력 시 candidate revision, fixture hash, Mode(실제모델/재생/설계추정), 주 QA별 PASS/FAIL, 실제 trace, 공동 실패 원인, 처리 경로, timing·변경·안전 근거를 연결한다.
 
+모든 scored run은 QA-61의 trace sample 후보이고, 그 run에서 생성된 QA별 보고 결과는 QA-62의 reproduction sample 후보다. QA-61/62 분모와 sampling rule은 결과 전에 고정하며, 로그가 잘 남은 run만 사후 선택하지 않는다.
+
 Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기다리지 않고 **deterministic Agent simulator/stub + fault/event injection**으로 재현한다. Stub은 event 순서·중복·delay·cancel ack·completion race·queryable external state를 script로 제어한다. 다만 TC-18.6의 restart는 단순히 후보 메모리에 상태를 patch하는 것이 아니라 VIA process memory를 실제로 잃게 한 뒤 재기동하고, stub의 Agent execution은 계속 살아 있는 상태에서 후보가 자신의 persisted state와 Agent query로 재연결해야 한다. 따라서 race는 stub으로 만들되 recovery 자체를 stub이 대신 성공시켜 주지 않는다.
 
 이번에 검증한 것은 catalog의94개 커버리지,24개 변경의 분리, 안전 denominator/dedup, 계산식·시간선·resource 경합·변경 집계의 단위 규칙이다. **VIA 구현·Qwen 추론·S2S 실제 음성 정확도·Architecture 후보 승패는 검증하지 않았다.**
@@ -302,7 +304,7 @@ Restart/race/recovery는 실제 외부 장애가 우연히 발생하기를 기�
 | UC-01~04 | QA-11 | QA-12; UC-01 follow-up은 QA-15 |
 | UC-05~07 | QA-11 | QA-12, QA-13, QA-15 |
 | UC-08~10 | QA-11 | QA-12, QA-13, QA-14, QA-15 중 applicable subset |
-| UC-11~12 | QA-11 | QA-04, QA-12, QA-13, QA-14 |
+| UC-11~12 | QA-11 | QA-04/05, QA-12, QA-13, QA-14 |
 | UC-13~14 | QA-11 | QA-13, QA-14, QA-15 |
 | UC-15 | QA-11 | QA-13, QA-15 |
 | UC-16~17 | QA-11 | QA-12, QA-13, QA-15와 mandatory gate |
@@ -330,4 +332,4 @@ Architecture sensitivity는 Test Case를 인위적으로 어렵게 만드는 방
 
 ## 11. 현재 리뷰 상태
 
-94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. 그러나 QA-11~15 selected case/oracle, QA-31/32 fault strata, QA-41 workload, 반복 수와 score band는 아직 사용자 승인 전이다. Architecture 차이를 만들기 위한 인위적 fixture는 추가하지 않으며 실제 candidate 결과는 `NOT_RUN`이다.
+94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. QA-05 control case, QA-11~15 selected case/oracle, QA-23 experiment/logging change, QA-31/32 fault strata, QA-41 workload, QA-61/62 evidence sample, 반복 수와 score band는 아직 사용자 승인 전이다. Architecture 차이를 만들기 위한 인위적 fixture는 추가하지 않으며 실제 candidate 결과는 `NOT_RUN`이다.

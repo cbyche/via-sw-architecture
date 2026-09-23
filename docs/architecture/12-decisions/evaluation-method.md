@@ -64,17 +64,21 @@ Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한�
 | QA-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
 | QA-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
 | QA-04 | Voice Interruption Responsiveness | strong/conditional; target pending |
+| QA-05 | Task Control Responsiveness | strong/conditional; target pending |
 | QA-11 | VIA Request Handling Correctness | previous QA-05 metric preserved; integrated outcome; conditional |
 | QA-12 | Request Semantic Resolution Correctness | non-additive driver; conditional |
 | QA-13 | Task & Interaction Binding Correctness | non-additive driver; strong/conditional |
 | QA-14 | Async State Convergence Correctness | non-additive driver; strong/conditional |
 | QA-15 | Interaction & Task Continuity Correctness | non-additive driver; strong/conditional |
 | QA-21 | Agent Change Locality | strong candidate |
-| QA-22 | Model & Context Change Locality | strong candidate |
+| QA-22 | Model, Context & State Change Locality | strong candidate |
+| QA-23 | Experiment & Logging Change Locality | strong/conditional; target pending |
 | QA-31 | Correct Task Recovery Time | strong/conditional |
 | QA-32 | Fault Blast Radius | strong/conditional |
 | QA-41 | Target-device Memory Footprint | strong/conditional; target pending |
 | QA-51 | Protected Data Exposure Minimization | strong candidate |
+| QA-61 | Execution Trace Completeness | strong/conditional; target pending |
+| QA-62 | Evidence Reproducibility | strong/conditional; target pending |
 
 Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable active QA를 계산한다. 단, QA-11과 QA-12~15는 같은 성공을 중복 보상하는 weighted total로 합산하지 않는다. 동시성은 workload stratum, action/access safety는 필수 회귀로 별도 기록한다.
 

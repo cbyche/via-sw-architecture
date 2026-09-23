@@ -161,7 +161,7 @@ Architecture는 다음 교차 상황을 처리해야 한다.
 9. **외부 생태계 변화의 파급 격리** — Model, Agent, Context provider, 저장 계약과 배치가 바뀌어도 사용자-facing 의미를 유지해야 한다.
 10. **측정 가능한 Architecture 인과관계** — 관측 차이를 책임, 계약, 상태 소유권, dependency 방향, call graph 또는 process boundary의 차이로 설명할 수 있어야 한다.
 
-현재 QA 초안은 이 problem space를 responsiveness(QA-01~04), correctness/continuity(QA-11~15), 변화 국소성(QA-21/22), recovery와 fault containment(QA-31/32), target-device resource(QA-41), 보호정보 최소 노출(QA-51)로 관찰하려 한다. QA catalog와 ASR은 아직 확정되지 않았다.
+현재 QA 초안은 이 problem space를 responsiveness(QA-01~05), correctness/continuity(QA-11~15), 변화 국소성(QA-21~23), recovery와 fault containment(QA-31/32), target-device resource(QA-41), 보호정보 최소 노출(QA-51), 실행 trace와 evidence 재현성(QA-61/62)으로 관찰하려 한다. QA catalog와 ASR은 아직 확정되지 않았다.
 
 ## 8. 후속 의사결정 후보 도출 원칙
 

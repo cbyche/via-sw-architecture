@@ -36,10 +36,12 @@
 | --- | --- |
 | System boundary, representative use cases, change scenarios | Defined |
 | QC taxonomy | QC-01~QC-10 defined |
-| QA catalog | **User-review draft**; category ranges and 15 active single-metric QA definitions recorded |
+| QA catalog | **User-review draft**; category ranges and 19 active single-metric QA definitions recorded |
 | ASR classification | **Not selected; QA별 Architecture 영향 검토 전** |
-| QA-01~QA-04 event and software-boundary contract | Draft defined; machine freeze pending |
+| QA-01~QA-05 event and software-boundary contract | Draft defined; machine freeze pending |
+| QA-05 Task control contract | Draft defined; machine freeze pending |
 | QA-11~15, QA-31/32/41 semantic contract | Draft defined; machine freeze pending |
+| QA-61/62 observability contract | Draft defined; machine freeze pending |
 | Machine-readable contract and harness | **Not implemented** |
 | Current QA results | **Not run** |
 | Actual S2S/VIA LLM/product latency evidence | **Not measured** |
@@ -51,8 +53,9 @@
 - **QA-02 — VIA Direct Voice Response Responsiveness:** Downstream Agent 없이 VIA가 직접 답하는 Voice 요청의 전체 반응시간
 - **QA-03 — Agent Progress Voice Feedback Responsiveness:** Agent status가 source에서 제공 가능해진 뒤 사용자에게 audible Voice로 전달되기까지의 시간
 - **QA-04 — Voice Interruption Responsiveness:** 사용자의 실제 barge-in 발화 시작부터 중단 대상 음성의 마지막 audible sample까지의 시간
+- **QA-05 — Task Control Responsiveness:** 사용자 제어 입력 종료부터 올바른 Task 처리 상태가 보이거나 들릴 때까지의 시간
 
-네 지표의 endpoint, 포함·제외 구간, S2S 234 ms와 VIA LLM 추정치의 허용 범위는 [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md)만을 따른다. 과거 harness의 수치나 이름을 현재 결과로 해석하면 안 된다.
+QA-01~04의 Voice endpoint, 포함·제외 구간, S2S 234 ms와 VIA LLM 추정치의 허용 범위는 [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md)를 따른다. QA-05는 [Task Control Responsiveness](docs/architecture/08-quality-attributes/interaction-control-responsiveness.md)를 따른다. 과거 harness의 수치나 이름을 현재 결과로 해석하면 안 된다.
 
 ## Start here
 
@@ -64,9 +67,11 @@
 4. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 평가할 사용자 상황
 5. [Quality Model](docs/architecture/08-quality-attributes/quality-model.md) — QC·QA·ASR의 관계와 현재 QA catalog
 6. [Voice Responsiveness](docs/architecture/08-quality-attributes/voice-responsiveness.md) — 현재 QA-01~QA-04 정의
-7. [Event & Boundary Contract](docs/architecture/11-measurement/event-boundary-contract.md) — 실제 사건과 software 진단 event의 경계
-8. [Measurement guide](docs/architecture/11-measurement/README.md) — 결과 전 동결해야 할 계약과 evidence level
-9. [Architecture decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — DP 대안, 판단 방법, 현재 결정
+7. [Task Control Responsiveness](docs/architecture/08-quality-attributes/interaction-control-responsiveness.md) — 현재 QA-05 정의
+8. [Observability](docs/architecture/08-quality-attributes/observability.md) — 현재 QA-61/62 정의
+9. [Event & Boundary Contract](docs/architecture/11-measurement/event-boundary-contract.md) — 실제 사건과 software 진단 event의 경계
+10. [Measurement guide](docs/architecture/11-measurement/README.md) — 결과 전 동결해야 할 계약과 evidence level
+11. [Architecture decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — DP 대안, 판단 방법, 현재 결정
 
 저장소를 수정하는 LLM은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 

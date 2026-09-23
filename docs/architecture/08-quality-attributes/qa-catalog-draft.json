@@ -11,15 +11,16 @@
     "QA-31..QA-39": "Reliability & Availability",
     "QA-41..QA-49": "Resource Efficiency",
     "QA-51..QA-59": "Privacy & Security",
-    "QA-61..QA-69": "Observability (reserved)"
+    "QA-61..QA-69": "Observability"
   },
   "active_qa_ids": [
-    "QA-01", "QA-02", "QA-03", "QA-04",
+    "QA-01", "QA-02", "QA-03", "QA-04", "QA-05",
     "QA-11", "QA-12", "QA-13", "QA-14", "QA-15",
-    "QA-21", "QA-22",
+    "QA-21", "QA-22", "QA-23",
     "QA-31", "QA-32",
     "QA-41",
-    "QA-51"
+    "QA-51",
+    "QA-61", "QA-62"
   ],
   "quality_attributes": [
     {
@@ -52,6 +53,14 @@
       "name": "Voice Interruption Responsiveness",
       "qc": ["QC-01"],
       "metric": "worst_case_case_p95_barge_in_to_audio_stop_ms",
+      "draft_target": null
+    },
+    {
+      "id": "QA-05",
+      "category": "Responsiveness",
+      "name": "Task Control Responsiveness",
+      "qc": ["QC-01", "QC-08"],
+      "metric": "worst_case_case_p95_task_control_response_ms",
       "draft_target": null
     },
     {
@@ -111,11 +120,20 @@
     {
       "id": "QA-22",
       "category": "Modifiability",
-      "name": "Model & Context Change Locality",
+      "name": "Model, Context & State Change Locality",
       "qc": ["QC-05"],
       "metric": "mean_changed_architecture_elements_per_non_agent_change",
       "change_pack": ["M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "M-07", "M-08", "M-09", "C-01", "C-02", "C-03", "C-04", "C-05", "C-06"],
       "draft_target": {"operator": "<=", "value": 3, "unit": "architecture_elements"}
+    },
+    {
+      "id": "QA-23",
+      "category": "Modifiability",
+      "name": "Experiment & Logging Change Locality",
+      "qc": ["QC-05", "QC-10"],
+      "metric": "mean_changed_architecture_elements_per_experiment_or_logging_change",
+      "change_pack": ["E-01", "E-02", "E-03", "E-04", "E-05"],
+      "draft_target": null
     },
     {
       "id": "QA-31",
@@ -148,6 +166,22 @@
       "qc": ["QC-09"],
       "metric": "whole_workload_union_excess_exposed_protected_units",
       "draft_target": {"operator": "=", "value": 0, "unit": "protected_information_units"}
+    },
+    {
+      "id": "QA-61",
+      "category": "Observability",
+      "name": "Execution Trace Completeness",
+      "qc": ["QC-10"],
+      "metric": "complete_execution_trace_run_rate_pct",
+      "draft_target": null
+    },
+    {
+      "id": "QA-62",
+      "category": "Observability",
+      "name": "Evidence Reproducibility",
+      "qc": ["QC-10"],
+      "metric": "exactly_reproduced_evaluation_result_rate_pct",
+      "draft_target": null
     }
   ],
   "legacy_id_migration": [

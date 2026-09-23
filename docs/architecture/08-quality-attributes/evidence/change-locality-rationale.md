@@ -1,11 +1,11 @@
-# QA-21/QA-22 Change Locality Contract Rationale
+# QA-21~QA-23 Change Locality Contract Rationale
 
 > 작성일: 2026-09-23
 > 상태: **USER REVIEW DRAFT** — target, score band, change pack 모두 결과 전 승인 대상이다.
 
 ## 1. 왜 이 두 QA를 유지하는가
 
-Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-21/22는 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.
+Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-21~23은 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.
 
 ISO/IEC 25010의 modularity/modifiability와 SEI의 modifiability tactics는 변경 국소화와 ripple-effect 제한의 중요성을 뒷받침하지만, VIA용 숫자 target을 제공하지는 않는다. 따라서 `2개`와 `3개`는 표준값이 아니라 아래 고정 change pack과 VIA 책임 경계에서 도출한 초안 budget이다.
 
@@ -72,9 +72,28 @@ draft target = 평균 3.0개 이하
 
 각 change의 정확한 before/after, 동일 조건과 완료 확인은 [Intentional Variables](../../07-intentional-variables.md)가 기준이다. 제목만 보고 fixture를 축약하지 않는다.
 
-## 5. DP별 applicability 판정
+## 5. QA-23 Experiment·Logging change pack
 
-QA-21/22를 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완성된 뒤 각 `DP × change`에 대해 아래 중 하나를 **결과 전에** 기록한다.
+QA-23은 연구 조직이 새로운 기능을 시험하고 로그를 개선할 때 반복되는 다음 **5개 변화**를 같은 후보 baseline에 독립 적용한다. 이 묶음은 07의 제품·외부 계약 변화 24개와 별도이며, 새로운 사용자 기능을 추가하지 않는다.
+
+| ID | 변화 | 유지 조건 |
+| --- | --- | --- |
+| E-01 | 기존 사용자 경로에 새 timing span 추가 | 기존 동작·metric 결과·privacy 유지 |
+| E-02 | Conversation/Request/Task/Agent run을 잇는 correlation dimension 추가 | 기존 identity와 trace reader 유지 |
+| E-03 | trace event schema를 새 version으로 확장 | 기존 evidence를 계속 읽고 검증 가능 |
+| E-04 | evidence export/storage 방식을 local file과 분석 backend 사이에서 변경 | 같은 raw meaning, 누락·중복 금지, privacy 유지 |
+| E-05 | 새 A/B experiment assignment와 실제 exposure configuration 기록 추가 | 비할당 사용자 동작과 기존 실험 재현성 유지 |
+
+```text
+QA-23 = mean N(E-01...E-05)
+draft target = PENDING
+```
+
+사람이 구현하는 데 걸린 일수나 코드 line 수는 세지 않는다. 새 실험·로그 요구가 몇 개의 Architecture 책임·계약·상태·배치로 퍼지는지만 센다.
+
+## 6. DP별 applicability 판정
+
+QA-21~23을 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완성된 뒤 각 `DP × change`에 대해 아래 중 하나를 **결과 전에** 기록한다.
 
 | 값 | 의미 |
 | --- | --- |
@@ -83,9 +102,9 @@ QA-21/22를 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완�
 | `NOT_APPLICABLE` | 변화 대상 자체가 후보에 없으며 이유를 설명할 수 있음. 0으로 평균에 넣지 않음 |
 | `UNRESOLVED` | 필수 기능을 유지할 변경 설계를 만들지 못함. 0으로 처리하지 않음 |
 
-Primary expectation은 Agent boundary를 바꾸는 DP에 QA-21, semantic/model/context/state boundary를 바꾸는 DP에 QA-22이지만, 이름만으로 결정하지 않고 실제 responsibility·contract·state·deployment 차이를 확인한다.
+Primary expectation은 Agent boundary를 바꾸는 DP에 QA-21, semantic/model/context/state boundary를 바꾸는 DP에 QA-22, instrumentation/evidence boundary를 바꾸는 DP에 QA-23이지만, 이름만으로 결정하지 않고 실제 responsibility·contract·state·deployment 차이를 확인한다.
 
-## 6. 결과가 나오기 전에 잠글 것
+## 7. 결과가 나오기 전에 잠글 것
 
 - 후보별 전체 Architecture Element ledger와 granularity review
 - 각 change의 `DP × change` applicability

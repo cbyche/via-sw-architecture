@@ -7,7 +7,7 @@
 
 제품적으로 중요한 관심사, 특정 DP의 A/B를 가르는 QA, 시스템 수준 ASR은 서로 다르다. 정상 기능을 충족한 합리적 대안 사이에서 같은 현실적 조건 아래 metric이 달라질 구조 인과가 있어야 해당 DP의 Primary QA가 된다.
 
-현재 active catalog는 QA-01/02/03/04, QA-11/12/13/14/15, QA-21/22, QA-31/32, QA-41, QA-51이다. 모든 QA는 하나의 대표 metric을 가진다. QA-11은 integrated outcome이고 QA-12~15는 non-additive driver다.
+현재 active catalog는 QA-01~05, QA-11~15, QA-21~23, QA-31/32, QA-41, QA-51, QA-61/62다. 모든 QA는 하나의 대표 metric을 가진다. QA-11은 integrated outcome이고 QA-12~15는 non-additive driver다.
 
 ## 2. 예상되는 구조 민감도
 
@@ -15,6 +15,7 @@
 | --- | --- |
 | QA-01~03 | call graph, process/IPC boundary, state lookup, validation, buffering, playback path |
 | QA-04 | input arbitration authority, cancellation propagation, playback queue/renderer ownership |
+| QA-05 | control interpretation, Task binding, durable command commit, source confirmation과 response composition path |
 | QA-11 | 전체 semantic→binding→execution→result 연결이 보존되는 정도 |
 | QA-12 | semantic authority topology, Context materialization, model input/output contract와 validation 위치 |
 | QA-13 | Conversation/Interaction/Task/external-run identity owner와 binding contract |
@@ -22,10 +23,13 @@
 | QA-15 | channel/session lifetime과 Conversation/Task lifetime의 분리, durable relationship ownership |
 | QA-21 | Agent-specific 차이를 adapter/contract boundary에 국소화하는 정도 |
 | QA-22 | Model·Context·state·deployment 변화의 dependency direction과 ripple effect |
+| QA-23 | instrumentation contract, correlation ownership, trace schema와 evidence exporter dependency direction |
 | QA-31 | persistence, reconciliation, restart boundary와 recovery call graph |
 | QA-32 | process/fault boundary, bulkhead, queue와 shared-resource topology |
 | QA-41 | process topology, duplicated runtime state, queue/buffer ownership, local-model placement |
 | QA-51 | local/remote placement, Context packaging과 recipient별 filtering boundary |
+| QA-61 | event envelope, identity propagation, timestamp provenance, collector/spool과 process boundary |
+| QA-62 | immutable raw evidence, freeze manifest, analyzer version과 result-generation dependency direction |
 
 동시성은 독립 QA가 아니라 applicable QA의 workload stratum이다. Action/access safety는 모든 후보의 0-violation 필수 회귀다. Observability는 각 metric을 믿을 수 있게 하는 evidence condition이며, 별도 metric이 승인되기 전에는 점수 축으로 만들지 않는다.
 

@@ -25,6 +25,7 @@ def main() -> int:
         "Reliability & Availability": range(31, 40),
         "Resource Efficiency": range(41, 50),
         "Privacy & Security": range(51, 60),
+        "Observability": range(61, 70),
     }
 
     entry_ids = [entry["id"] for entry in entries]

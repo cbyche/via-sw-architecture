@@ -7,11 +7,13 @@
 구현은 다음 source를 순서대로 따라야 한다.
 
 1. [Voice Responsiveness](../../docs/architecture/08-quality-attributes/voice-responsiveness.md)
-2. [Correctness & Continuity](../../docs/architecture/08-quality-attributes/correctness-and-continuity.md)
-3. [Reliability & Resource](../../docs/architecture/08-quality-attributes/reliability-and-resource.md)
-4. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
-5. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
-6. 결과 전에 승인된 machine contract와 Measurement Freeze
+2. [Task Control Responsiveness](../../docs/architecture/08-quality-attributes/interaction-control-responsiveness.md)
+3. [Correctness & Continuity](../../docs/architecture/08-quality-attributes/correctness-and-continuity.md)
+4. [Reliability & Resource](../../docs/architecture/08-quality-attributes/reliability-and-resource.md)
+5. [Observability](../../docs/architecture/08-quality-attributes/observability.md)
+6. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
+7. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
+8. 결과 전에 승인된 machine contract와 Measurement Freeze
 
 ## Expected layout
 

@@ -12,8 +12,10 @@
 | --- | --- |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
 | [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-04 semantic boundary and raw trace requirements |
+| [Task Control Responsiveness](../08-quality-attributes/interaction-control-responsiveness.md) | QA-05 control input and truthful disposition boundary |
 | [Correctness & Continuity](../08-quality-attributes/correctness-and-continuity.md) | QA-11~QA-15 predicate ownership and non-additive reporting |
 | [Reliability & Resource](../08-quality-attributes/reliability-and-resource.md) | QA-31/32/41 boundary and accounting rules |
+| [Observability](../08-quality-attributes/observability.md) | QA-61/62 trace completeness and evidence reproduction |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
@@ -59,7 +61,7 @@
 
 Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or `TARGET_WINDOWS_LATENCY`. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
 
-## QA-01~QA-04 implementation prerequisites
+## QA-01~QA-05 implementation prerequisites
 
 Before implementation, freeze at least:
 
@@ -70,6 +72,7 @@ Before implementation, freeze at least:
 - QA-02 direct-only route rule
 - QA-03 valid, correlated, non-stale status rule
 - QA-04 actual acoustic barge-in onset and last audible interrupted-response sample
+- QA-05 Voice/Text control input end와 correct Task control disposition presentation
 - IR/TASK/AGENT/EXEC applicability and fixed paired context
 - prompt/token ledger and sequential/parallel model-call graph
 - mock S2S meaning, scheduled delay profile, and playback profile
@@ -83,6 +86,13 @@ Correctness, reliability와 resource QA는 추가로 다음을 동결한다.
 - QA-31 fault/recovery strata와 QA-32 necessary dependency closure 및 user-visible unit registry
 - QA-41 target PC, process/local-model accounting boundary와 memory sampler
 - mandatory action/access zero-violation gate fixture
+
+Modifiability와 observability QA는 추가로 다음을 동결한다.
+
+- QA-23 E-01~E-05 experiment/logging change pack과 element ledger
+- QA-61 complete execution trace의 required identity·event·version relation
+- QA-62 immutable evidence package, freeze manifest와 clean evaluator
+- missing/duplicate/out-of-order evidence 처리와 privacy-preserving field
 
 Qwen3-Omni 234 ms may be used only as a clearly labeled scheduled reference span for a matching full-S2S first-packet dependency. It is not a metric start point, generic TTS cost, network cost, or actual model execution.
 

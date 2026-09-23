@@ -19,21 +19,25 @@
 
 | ID | 대표 Metric | 3점 목표 | 설명 |
 | --- | --- | ---: | --- |
-| QA-01 | worst-case canonical-case p95 delegated VIA active time | ≤2,000ms | 위임 전 VIA 구간 + Agent 결과 준비 후 VIA 구간 |
-| QA-02 | worst-case canonical-case p95 direct Voice response | ≤1,000ms | user input end → first meaningful audible response |
-| QA-03 | worst-case canonical-case p95 status-to-Voice | ≤1,000ms | source status available → first meaningful audible status |
-| QA-04 | worst-case canonical-case p95 barge-in-to-audio-stop | PENDING | 실제 barge-in onset → interrupted audio의 마지막 audible sample |
-| QA-11 | correct machine-oracle runs | ≥95% | previous QA-05 metric을 유지한 integrated correctness |
-| QA-12 | strict semantic-resolution pass rate | PENDING | goal·referent·관계·Task Relation·route 의미 |
-| QA-13 | strict interaction-binding pass rate | PENDING | control/event/result의 Request·Task·run·question binding |
-| QA-14 | strict async-state-convergence pass rate | PENDING | reorder·duplicate·race 뒤 authoritative state |
-| QA-15 | strict continuity-scenario pass rate | PENDING | 정상 channel·conversation·path transition |
-| QA-21 | mean changed Architecture Elements / Agent change | ≤2 | A-01~A-09 전체 |
-| QA-22 | mean changed Architecture Elements / non-Agent change | ≤3 | M-01~M-09 + C-01~C-06 전체 |
-| QA-31 | worst fault-stratum p95 full Task recovery | ≤5,000ms | 정확한 state·result·control 복귀 |
-| QA-32 | worst fault excess affected user-visible units | PENDING | necessary dependency closure 밖의 불필요한 장애 영향 |
-| QA-41 | worst workload-stratum p95 peak committed memory | PENDING | target PC의 전체 후보-local accounting boundary |
-| QA-51 | whole-workload union excess exposed protected units | 0 | recipient/purpose 최소 필요정보 초과분 |
+| QA-01 | 가장 느린 대표 case의 p95 VIA 처리시간(Agent 실행 제외) | ≤2,000ms | 위임 전 VIA 구간 + Agent 결과 준비 후 VIA 구간 |
+| QA-02 | 가장 느린 대표 case의 p95 직접 Voice 응답시간 | ≤1,000ms | user input end → first meaningful audible response |
+| QA-03 | 가장 느린 대표 case의 p95 Agent 상태 Voice 전달시간 | ≤1,000ms | source status available → first meaningful audible status |
+| QA-04 | 가장 느린 대표 case의 p95 barge-in 후 음성 정지시간 | PENDING | 실제 barge-in onset → interrupted audio의 마지막 audible sample |
+| QA-05 | 가장 느린 대표 control case의 p95 올바른 처리상태 응답시간 | PENDING | 사용자 제어 입력 종료 → 올바른 Task 처리 상태 표시 |
+| QA-11 | 올바르게 처리된 전체 요청 run 비율 | ≥95% | previous QA-05 metric을 유지한 integrated correctness |
+| QA-12 | 의미를 올바르게 해석한 run 비율 | PENDING | goal·referent·관계·Task Relation·route 의미 |
+| QA-13 | 올바른 Task·Interaction에 연결한 run 비율 | PENDING | control/event/result의 Request·Task·run·question binding |
+| QA-14 | 비동기 event 뒤 올바른 상태로 수렴한 run 비율 | PENDING | reorder·duplicate·race 뒤 authoritative state |
+| QA-15 | 전환 뒤 필요한 대화·Task 관계가 유지된 scenario 비율 | PENDING | 정상 channel·conversation·path transition |
+| QA-21 | Agent 변화 한 건당 바뀌는 Architecture Element 평균 수 | ≤2 | A-01~A-09 전체 |
+| QA-22 | Model·Context·State 변화 한 건당 바뀌는 Architecture Element 평균 수 | ≤3 | M-01~M-09 + C-01~C-06 전체 |
+| QA-23 | 실험·로그 변화 한 건당 바뀌는 Architecture Element 평균 수 | PENDING | E-01~E-05 전체 |
+| QA-31 | 가장 느린 fault 종류의 p95 전체 Task 복구시간 | ≤5,000ms | 정확한 state·result·control 복귀 |
+| QA-32 | 한 fault가 불필요하게 함께 중단시킨 사용자 기능·Task의 최대 수 | PENDING | necessary dependency closure 밖의 불필요한 장애 영향 |
+| QA-41 | 가장 무거운 workload의 p95 최대 메모리 사용량 | PENDING | target PC의 전체 후보-local committed memory |
+| QA-51 | 전체 workload에서 필요 이상 노출된 보호정보 단위 수 | 0 | recipient/purpose 최소 필요정보 초과분 |
+| QA-61 | 로그로 전체 실행을 재구성할 수 있는 run 비율 | PENDING | complete execution trace |
+| QA-62 | 저장된 근거로 같은 평가 결과를 정확히 다시 만든 비율 | PENDING | raw evidence + frozen evaluator |
 
 ## 3. 현재 draft 0~5 score bands
 
@@ -50,7 +54,7 @@
 | QA-31 | ≤1,000ms | ≤2,500ms | ≤5,000ms | ≤10,000ms | ≤20,000ms | >20,000ms 또는 recovery failure |
 | QA-51 | 0 | 1 | 2~3 | 4~7 | 8~15 | ≥16 또는 unbounded |
 
-QA-04/12/13/14/15/32/41의 target과 score band는 PENDING이다. 기존 QA의 threshold를 복사하지 않는다. QA-51은 5점만 target을 충족하며 나머지 band는 degradation 설명용이지 개인정보 노출 허용 기준이 아니다.
+QA-04/05/12/13/14/15/23/32/41/61/62의 target과 score band는 PENDING이다. 기존 QA의 threshold를 복사하지 않는다. QA-51은 5점만 target을 충족하며 나머지 band는 degradation 설명용이지 개인정보 노출 허용 기준이 아니다.
 
 ## 4. QA-01~QA-04 Responsiveness
 
@@ -63,13 +67,27 @@ QA-04/12/13/14/15/32/41의 target과 score band는 PENDING이다. 기존 QA의 t
 
 네 QA는 서로 다른 terminal event를 가지므로 평균내거나 하나의 Voice responsiveness score로 합치지 않는다. Qwen3-Omni 234ms와 VIA LLM token-rate estimate는 dependency planning input일 뿐 목표 근거나 실제 product p95가 아니다.
 
-## 5. QA-11~QA-15 Correctness & Continuity
+## 5. QA-05 Task Control Responsiveness
+
+정확한 경계는 [Task Control Responsiveness Contract](../08-quality-attributes/interaction-control-responsiveness.md)를 따른다.
+
+~~~text
+sample = correct Task control disposition visible/audible - user control input end
+QA-05 = maximum canonical-control-case p95
+~~~
+
+버튼 handler 완료나 local queue 삽입은 종료점이 아니다. 취소·정정이 올바른 Task에 연결되고, 실제 source 상태에 맞는 requested/confirmed/already-completed/unsupported/unknown disposition이 처음 보이거나 들린 시점까지 측정한다.
+
+## 6. QA-11~QA-15 Correctness & Continuity
 
 정확한 predicate 경계는 [Correctness & Continuity Contract](../08-quality-attributes/correctness-and-continuity.md)를 따른다.
 
 ~~~text
-strict pass rate
-= 100 × all-applicable-predicates-pass runs / all scored runs
+case pass rate
+= all-applicable-predicates-pass runs / scored runs for that case
+
+QA result
+= 100 × mean(case pass rate)
 ~~~
 
 QA별 predicate ownership:
@@ -82,7 +100,7 @@ QA별 predicate ownership:
 
 같은 run을 여러 QA가 관찰할 수 있지만 QA-11과 driver QA를 하나의 합산 점수에 넣지 않는다. QA-12~15 전용 isolation fixture는 시험기가 정답을 후보에 주입하지 않으면서 해당 책임의 구조 인과를 분리해야 한다.
 
-## 6. QA-21·QA-22 Change Locality
+## 7. QA-21~QA-23 Change Locality
 
 Architecture Element의 normative definition과 count rule은 [Architecture Element Definition](../10-element-definition.md)을 따른다.
 
@@ -90,13 +108,14 @@ Architecture Element의 normative definition과 count rule은 [Architecture Elem
 N(change) = |modified ∪ added ∪ removed Architecture Element IDs|
 QA-21 = mean N(A-01...A-09)
 QA-22 = mean N(M-01...M-09, C-01...C-06)
+QA-23 = mean N(E-01...E-05)
 ~~~
 
-평균 changed element count가 각 QA의 유일한 대표 metric이다. change별 raw count, C/I/S/D breakdown, maximum, migration과 coordinated deployment 필요 여부는 supporting evidence다.
+평균 changed element count가 각 QA의 유일한 대표 metric이다. change별 raw count, C/I/S/D breakdown, maximum, migration과 coordinated deployment 필요 여부는 supporting evidence다. QA-23은 구현 일수나 code line 수가 아니라 연구 instrumentation 변화의 Architecture 파급만 센다.
 
 UNRESOLVED, 기능 축소 또는 미검증 change를 평균에서 제외해 작은 값을 만들지 않는다. 전체 frozen change pack에 대한 기능 유지 근거가 있을 때만 대표 평균을 낸다.
 
-## 7. QA-31·QA-32 Reliability & Availability
+## 8. QA-31·QA-32 Reliability & Availability
 
 정확한 계약은 [Reliability & Resource Contract](../08-quality-attributes/reliability-and-resource.md)를 따른다.
 
@@ -119,7 +138,7 @@ representative = max excess_affected(f)
 
 두 metric은 같은 fault run에서 계산할 수 있지만 합산하지 않는다. QA-31은 복구 시간, QA-32는 불필요한 영향 범위를 답한다.
 
-## 8. QA-41 Target Device Memory Footprint
+## 9. QA-41 Target Device Memory Footprint
 
 ~~~text
 trial value = workload window peak committed bytes
@@ -129,7 +148,7 @@ QA-41 = maximum case value across frozen workload strata
 
 모든 VIA-owned process, local helper와 후보 선택 때문에 target PC에서 실행되는 local Model Runtime을 포함한다. process별 memory, CPU/GPU/VRAM과 energy는 supporting evidence다. target PC와 accounting boundary를 승인하기 전에는 target이나 score를 만들지 않는다.
 
-## 9. QA-51 Protected Data Exposure Minimization
+## 10. QA-51 Protected Data Exposure Minimization
 
 ~~~text
 excess_exposure
@@ -141,9 +160,27 @@ QA-51 = whole-workload union of excess exposed units
 
 같은 단위의 재전송은 한 번만 센다. recipient가 같은 사실이나 더 넓은 scope를 복원할 수 있으면 암호화·요약·handle도 노출로 판정한다. 모든 요청을 차단해 0을 만든 후보는 기능 적합성에 실패한다.
 
-## 10. Workload condition과 qualification gate
+## 11. QA-61·QA-62 Observability
 
-동시 Task는 QA-01~04, QA-11~15, QA-31/32와 QA-41의 workload stratum이다. 이전 catalog의 concurrency ratio를 자동 승계하지 않는다.
+정확한 계약은 [Observability Contract](../08-quality-attributes/observability.md)를 따른다.
+
+QA-61:
+
+~~~text
+100 × complete execution-trace runs / all scored runs
+~~~
+
+QA-62:
+
+~~~text
+100 × exactly reproduced evaluation results / sampled reported results
+~~~
+
+QA-61은 실행을 로그에서 재구성할 수 있는지, QA-62는 raw evidence에서 보고 숫자를 다시 만들 수 있는지를 측정한다. 로그 건수·저장 byte·대시보드 수는 대표 metric이 아니다.
+
+## 12. Workload condition과 qualification gate
+
+동시 Task는 QA-01~05, QA-11~15, QA-31/32, QA-41과 QA-61의 workload stratum이다. 이전 catalog의 concurrency ratio를 자동 승계하지 않는다.
 
 다음 violation은 다른 QA 점수로 상쇄하지 않는다.
 
@@ -154,7 +191,7 @@ QA-51 = whole-workload union of excess exposed units
 
 한 건이라도 발생하면 해당 후보는 qualification gate에 실패한다.
 
-## 11. 다음 승인 전 금지사항
+## 13. 다음 승인 전 금지사항
 
 - 새 QA 결과 생성
 - PENDING target이나 score를 임의 작성

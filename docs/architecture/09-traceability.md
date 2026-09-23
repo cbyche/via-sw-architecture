@@ -38,16 +38,16 @@ flowchart LR
 
 | QC | 상위 품질 관심사 | 구체화된 현재 QA | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-04; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행·Voice 중단의 반응성과 동시 업무 조건 |
+| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-05; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행·Voice 중단·Task 제어의 반응성 |
 | **QC-02** | **Task Completion Effectiveness** | QA-11~QA-13 | 통합 요청 처리, 의미 해석, 올바른 Task·Interaction 연결 |
 | **QC-03** | **Interaction & Task Continuity** | QA-14/15; 장애 후는 QA-31 | 비동기 상태 수렴과 정상 전환·재연결 뒤 continuity |
 | **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | QA-21 | **A-01~09 전체 9개** |
-| **QC-05** | **Evolvability & Maintainability** | QA-22 | **M-01~09 + C-01~06 전체 15개** |
+| **QC-05** | **Evolvability & Maintainability** | QA-22/23 | **M-01~09 + C-01~06 전체 15개**, 연구 실험·로그 E-01~05 |
 | **QC-06** | **Resource & Deployment Efficiency** | QA-41 | target-device peak committed memory; deployment 조건은 고정 workload/context |
 | **QC-07** | **Concurrency & Capacity** | 독립 QA 없음 | applicable QA의 workload stratum |
 | **QC-08** | **Reliability & Recoverability** | QA-31/32 | 정확한 복구 시간과 초과 영향 user-visible unit 수 |
 | **QC-09** | **Privacy, Security & Action Safety** | QA-51 + 필수 action/access 회귀 | 최소 필요 범위를 넘은 보호정보 노출과 승인·접근 위반 0건 |
-| **QC-10** | **Observability & Evidence Integrity** | 독립 QA 없음 | 모든 QA trace의 필수 증거 조건 |
+| **QC-10** | **Observability & Evidence Integrity** | QA-61/62; QA-23 change pack | 실행 trace 완전성, 평가 결과 재현성과 instrumentation 변경 국소성 |
 
 QC-02에서 구체화된 QA-11~13이 Task Completion과 관련된다고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
 
@@ -80,7 +80,7 @@ QA-11은 전체 요청 처리의 integrated outcome이고 QA-12~15는 semantic, 
 | **UC-09 / .1~.5** | 복합 요청 | **QC-02:** 누락 없는 요청과 독립·순차·의존·조건 관계 | QC-03 기존 업무 혼합; QC-08 부분 실패; QC-09 변경 업무 승인 |
 | **UC-10 / .1~.5** | 기존 업무 조회·추가·수정 | **QC-03:** 동일 목표·결과물의 연결. **QC-02:** 현재 지시의 의미 | QC-08 근거 있는 상태·실행 연결; QC-01 응답 지연 |
 | **UC-11 / .1~.5** | 음성 중단과 정정 | **QC-01:** 사용자 barge-in 뒤 출력 음성 정지. **QC-02:** 정정된 요청 해석 | QA-04는 acoustic onset→last audible sample; QC-03 이전 맥락; QC-08 업무 자동 취소 방지 |
-| **UC-12 / .1~.5** | 특정 업무 취소 | **QC-08:** 취소 접수·종료·이미 완료·미확인 구분 | QC-02 의도한 대상; QC-03 Task 유지; QC-01 VIA의 제어 전달 구간 |
+| **UC-12 / .1~.5** | 특정 업무 취소 | **QC-08:** 취소 접수·종료·이미 완료·미확인 구분. **QC-01:** QA-05 제어 응답시간 | QC-02 의도한 대상; QC-03 Task 유지 |
 | **UC-13 / .1~.6** | 비동기 진행·결과·알림 | **QC-08:** 이벤트의 업무 연결과 확인된 상태. **QC-03:** 대화가 바뀌어도 결과 연결 | QC-01 결과 전달; QC-02 결과 의미·Voice/Text 일치; QC-09 질문/승인 |
 | **UC-14 / .1~.5** | 여러 업무 번갈아 관리 | **QC-03:** 업무 전환 후 맥락. **QC-08:** 교차 이벤트·대기·독립 업무 처리 | QC-02 복합 지시 대상; QC-01 간섭; QC-09 여러 대기 승인 |
 | **UC-15 / .1~.5** | Voice/Text 전환·재연결 | **QC-03:** 채널과 대화·Task 수명 분리 | QC-01 재연결 후 응답; QC-08 중복 실행 방지 |
@@ -104,13 +104,15 @@ QC-04·QC-05가 이 표의 주 검증에 없는 것은 누락이 아니다. **�
 
 기능 분리 진단에서 고정 입력을 제공했다면 그 입력과 목적을 명시한다. 시험기가 정답 Task ID나 사라진 history를 제공한 진단 결과를 실제 의미 정확도·복구 성공률로 대체하지 않는다.
 
-### QA-01~QA-04의 시간선
+### QA-01~QA-05의 시간선
 
-QC-01의 responsiveness concern은 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback, QA-04 Voice interruption으로 분리한다. 네 QA를 서로 평균내지 않으며 각 QA 안에서도 서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다. 세부 경계와 집계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md)를 따른다.
+QC-01의 responsiveness concern은 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback, QA-04 Voice interruption, QA-05 Task control로 분리한다. 다섯 QA를 서로 평균내지 않으며 각 QA 안에서도 서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다. Voice 경계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md), Task control 경계는 [Task Control Responsiveness](./08-quality-attributes/interaction-control-responsiveness.md)를 따른다.
 
 위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent의 open-ended domain research/planning/tool execution과 사용자 확인 대기를 따로 기록한다. 단, bounded Read/Search/Understand 작업을 Architecture 선택으로 Agent에 옮긴 경우에는 단순히 프로세스 위치가 Agent라는 이유로 그 시간을 제외하지 않는다.
 
 Voice interruption은 QA-04의 독립 metric이다. 실제 barge-in acoustic onset부터 중단 대상의 마지막 meaningful audible sample까지 측정하며 QA-01~03 모집단과 합치지 않는다.
+
+Task 취소·정정은 QA-05의 독립 metric이다. 사용자 제어 입력 종료부터 올바른 Task의 사실에 맞는 disposition이 보이거나 들릴 때까지 측정하며, audio stop 또는 Agent 내부 실행 완료시간과 합치지 않는다.
 
 VIA가 쓰는 모델·Context 조회는 원격이어도 VIA 의존 구간이다. 같은 설명 작업을 Agent로 옮겨 그 시간을 제외했다고 사용자 전체 대기가 줄었다고 주장하지 않는다. 06 FA-12의 경계와 별도 전체 경로 분석 규칙을 유지한다.
 
@@ -153,13 +155,15 @@ Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는
 | **C-05 같은 종류의 정보원 추가** | **QC-05** | 기존 정보원 유지와 새 정보원 ID·권한 구분 | QC-02, QC-03, QC-09 |
 | **C-06 대화·업무 기록 형식 변경** | **QC-05** | 기존 관계·삭제·진행 업무·복구의 이행 | QC-03, QC-08, QC-09 |
 
+QA-23의 E-01~05는 07의 제품·외부 계약 24개를 바꾸지 않는 별도 연구 변화 묶음이다. 사용자 UC를 추가하지 않고 기존 실행 경로의 timing, correlation, trace schema, export와 experiment assignment 기록을 변경한다. 상세 정의는 [Change Locality Contract](./08-quality-attributes/evidence/change-locality-rationale.md)를 따른다.
+
 ### 집계 소유권과 중복 방지
 
 - A-01~09의 변경 요소 수는 **QA-21에 한 번** 반영한다. 인증·상태 변경이라는 이유로 QA-22에도 가산하지 않는다.
 - M-01~09와 C-01~06은 **QA-22의 15개 집합 전체**이다. M-03·C-02 등을 대표값에서 임의로 제외하지 않는다. M/C별 상세 결과는 원인 설명을 위해 함께 보존한다.
 - 한 변경으로 여러 요소가 바뀌어도 10의 동일 ID 집계 규칙을 적용한다. 다른 변경에서 같은 요소를 다시 수정하면 그 별도 변경에도 셀 수 있다. 변경별 독립 시나리오이기 때문이다.
 - 적용 없음·처리 불가·미측정은 0이 아니다. 모든 24개 항목에 답하되, 비교 가능한 분모와 전체 집합의 충족 여부를 함께 공개한다. 실패한 변경을 빼서 성공한 변경만의 평균으로 전체 우승을 주장하지 않는다.
-- 07은 분야별 원장을 유지하고, QA-21은 Agent 9개, QA-22는 비Agent 15개의 대표 집계를 사용한다. 두 집합을 하나의 평균으로 합치지 않는다.
+- 07은 분야별 원장을 유지하고, QA-21은 Agent 9개, QA-22는 비Agent 15개의 대표 집계를 사용한다. QA-23은 08에 정의한 연구 실험·로그 5개 change pack을 별도로 사용한다. 세 집합을 하나의 평균으로 합치지 않는다.
 
 ## 9.7 이후 평가 기록에 반드시 남길 정보
 
@@ -183,7 +187,7 @@ Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는
 | --- | --- |
 | 평가 관련 QC coverage를 유지했는가? | QC 10개와 UC·변경 연결을 유지. 세부 측정은 QA catalog에서 관리 |
 | UC가 빠졌는가? | 18개와 94개 명시 변형 범위를 연결; 경계 조건은 05에서 상속 |
-| 변경이 빠졌거나 두 대표값에 중복됐는가? | 24개 모두 한 QA에 배정: QA-21 Agent 9 / QA-22 비Agent 15 |
+| 변경이 빠졌거나 대표값에 중복됐는가? | 제품·외부 계약 24개는 QA-21 Agent 9 / QA-22 비Agent 15, 연구 변화 5개는 QA-23에 별도 배정 |
 | QC-02/QC-03/QC-08의 관점이 구분되는가? | 현재 요청의 완료 / 전환 후 맥락 / 이벤트·장애 처리로 구분 |
 | 실제 점수까지 확정했는가? | 아니오. 11의 표본·정답·집계·목표·점수는 별도 리뷰 |
 
@@ -191,4 +195,4 @@ Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는
 
 ## 9.9 측정 자료 연결
 
-이 연결표의 UC·변경 소유권은 유지한다. 측정 정의는 [11 Measurement](./11-measurement/README.md), 94개 변형과 24개 변경의 구체 명세는 [Test Case Catalog](./11-measurement/test-case-catalog.md)에 연결한다. 표본 배합과 최종 점수는 아직 동결하지 않았다.
+이 연결표의 UC·변경 소유권은 유지한다. 측정 정의는 [11 Measurement](./11-measurement/README.md), 94개 UC 변형과 제품·외부 계약 24개 변경의 구체 명세는 [Test Case Catalog](./11-measurement/test-case-catalog.md)에 연결한다. 연구 변화 5개는 [Change Locality Contract](./08-quality-attributes/evidence/change-locality-rationale.md)가 정의한다. 표본 배합과 최종 점수는 아직 동결하지 않았다.

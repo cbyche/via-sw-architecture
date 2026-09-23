@@ -1,6 +1,6 @@
 # Measurement Event & Boundary Contract
 
-> 상태: **QA-01~QA-04 EVENT CONTRACT DRAFT / machine freeze 전**
+> 상태: **QA-01~QA-05 EVENT CONTRACT DRAFT / machine freeze 전**
 >
 > 목적: 모든 QA metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
 >
@@ -89,7 +89,23 @@ VIA가 Voice Response를 재생하는 동안 사용자의 새 발화가 micropho
 - 제품 evidence는 audio loopback에서 중단 대상 waveform의 끝을 관측한다.
 - reference harness proxy를 사용하면 실제 speaker stop이라고 주장하지 않는다.
 
-## 3. QA-01~QA-04 formula
+### `task_control_input_end`
+
+사용자의 취소·정정·후속 제어 입력이 끝난 실제 시각이다.
+
+- Voice는 `user_input_end`와 같은 acoustic speech-end 기준을 사용한다.
+- Text는 사용자가 해당 입력을 submit한 시각을 사용한다.
+- transcript finalization, semantic handler 시작 또는 UI event 처리 완료 시각으로 대체하지 않는다.
+
+### `correct_task_control_disposition_presented`
+
+올바른 Task에 대한 사실에 맞는 제어 처리 상태가 사용자에게 처음 보이거나 들린 시각이다.
+
+- 위임 전 중단, 요청 기록·전달, source-confirmed 상태, 이미 완료, 미지원 또는 확인 불가 중 실제 상황과 일치해야 한다.
+- local queue 삽입, IPC write, 임의 acknowledgement 또는 확인되지 않은 `canceled` 표시는 endpoint가 아니다.
+- Voice 응답이면 meaningful audible onset, Text 응답이면 UI에 committed content가 표시된 시각을 사용한다.
+
+## 3. QA-01~QA-05 formula
 
 ### QA-01 — Delegated Path VIA Responsiveness
 
@@ -139,26 +155,37 @@ QA-04 sample = t1 - t0
 
 activity detection, interruption routing, generation cancellation, playback queue/buffer 폐기와 device stop을 포함한다. 새 User Turn의 semantic 처리와 새 응답 생성은 종료점 뒤의 별도 경로다. Voice interruption을 Agent Task cancel 완료로 해석하지 않는다.
 
+### QA-05 — Task Control Responsiveness
+
+```text
+t0 = task_control_input_end
+t1 = correct_task_control_disposition_presented
+
+QA-05 sample = t1 - t0
+```
+
+제어의 외부 완료를 기다려야만 사실에 맞는 disposition을 만들 수 있는 case는 source confirmation을 포함한다. VIA가 `requested/pending`을 정확히 표시할 수 있는 case에 외부 완료시간을 억지로 포함하거나, 반대로 아직 확인되지 않은 완료를 먼저 주장하지 않는다.
+
 ## 4. Component participation
 
-| 경로 | QA-01 | QA-02 | QA-03 | QA-04 |
-|---|---|---|---|---|
-| acoustic input end 이후 VAD/turn detection | 포함 | 포함 | 해당 없음 | barge-in activity detection 포함 |
-| Speech recognition/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 | 새 응답 의미 확정은 제외 |
-| Conversation/Context materialization | 실제 경로면 포함 | 실제 경로면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 |
-| IR/VIA LLM | 위임·결과 composition에 필요하면 포함 | 실제 direct route에 필요하면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 |
-| Task state/correlation | 포함 | 실제 direct route에 필요할 때만 포함 | 포함 | Agent Task cancel은 해당 없음 |
-| Agent contract normalization | outbound와 inbound 모두 포함 | Agent가 없으므로 원칙상 해당 없음 | inbound 포함 | 해당 없음 |
-| EXEC queue/IPC/RPC/network | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | interruption signal 경로면 포함 |
-| downstream Agent 내부 실행 | 제외 | 해당 없음 | status 생성 전은 제외 | 해당 없음 |
-| validation/policy/repair | 포함 | 포함 | 포함 | interruption policy가 critical path면 포함 |
-| speech generation/playback/device | 포함 | 포함 | 포함 | generation cancel과 playback/device stop 포함 |
+| 경로 | QA-01 | QA-02 | QA-03 | QA-04 | QA-05 |
+|---|---|---|---|---|---|
+| acoustic input end 이후 VAD/turn detection | 포함 | 포함 | 해당 없음 | barge-in activity detection 포함 | Voice control이면 포함 |
+| Speech recognition/S2S input finalization | 실제 경로면 포함 | 실제 경로면 포함 | 해당 없음 | 새 응답 의미 확정은 제외 | Voice control이면 포함 |
+| Conversation/Context materialization | 실제 경로면 포함 | 실제 경로면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 | 대상 Task 판별에 필요하면 포함 |
+| IR/VIA LLM | 위임·결과 composition에 필요하면 포함 | 실제 direct route에 필요하면 포함 | status composition에 필요하면 포함 | 원칙상 해당 없음 | control 의미·대상 판단에 필요하면 포함 |
+| Task state/correlation | 포함 | 실제 direct route에 필요할 때만 포함 | 포함 | Agent Task cancel은 해당 없음 | 포함 |
+| Agent contract normalization | outbound와 inbound 모두 포함 | Agent가 없으므로 원칙상 해당 없음 | inbound 포함 | 해당 없음 | 실제 control/disposition 경로면 포함 |
+| EXEC queue/IPC/RPC/network | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | 실제 경로의 모든 경계 포함 | interruption signal 경로면 포함 | 실제 control/disposition 경로면 포함 |
+| downstream Agent 내부 실행 | 제외 | 해당 없음 | status 생성 전은 제외 | 해당 없음 | disposition에 필요한 source confirmation만 포함 |
+| validation/policy/repair | 포함 | 포함 | 포함 | interruption policy가 critical path면 포함 | 포함 |
+| speech generation/playback/device | 포함 | 포함 | 포함 | generation cancel과 playback/device stop 포함 | Voice disposition이면 포함 |
 
 DP applicability는 DP 이름만으로 정하지 않고 이 실제 component path를 기준으로 고정한다. 어떤 case에서 DP 후보 A/B가 같은 경로를 실행하면 동점 또는 non-applicable로 기록하며 임의 지연을 추가하지 않는다.
 
 ## 5. 모든 QA가 갖춰야 할 measurement card
 
-QA-11~15/21/22/31/32/41/51을 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
+QA-11~15/21~23/31/32/41/51/61/62를 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
 
 1. 사용자·외부 source·fault 등 실제 stimulus event
 2. 사용자 또는 system 관점의 terminal observable

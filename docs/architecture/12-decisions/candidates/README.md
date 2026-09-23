@@ -12,17 +12,21 @@
 | **QA-02** | **VIA Direct Voice Response Responsiveness** — downstream Agent 없는 직접 Voice 응답이 실제로 들리기까지의 시간 |
 | **QA-03** | **Agent Progress Voice Feedback Responsiveness** — Agent status가 준비된 뒤 상태 안내 Voice가 실제로 들리기까지의 시간 |
 | **QA-04** | **Voice Interruption Responsiveness** — barge-in acoustic onset 뒤 중단 대상 음성이 멈추기까지의 시간 |
+| **QA-05** | **Task Control Responsiveness** — 사용자 제어 입력 뒤 올바른 Task 처리 상태가 보이거나 들리기까지의 시간 |
 | **QA-11** | **VIA Request Handling Correctness** — previous QA-05의 machine-oracle run 정확도 |
 | **QA-12** | **Request Semantic Resolution Correctness** — 요청 의미를 정확히 해석한 비율 |
 | **QA-13** | **Task & Interaction Binding Correctness** — 요청·응답·제어·event를 올바른 identity에 연결한 비율 |
 | **QA-14** | **Async State Convergence Correctness** — 정상 비동기 sequence가 정답 상태로 수렴한 비율 |
 | **QA-15** | **Interaction & Task Continuity Correctness** — 정상 전환·재연결 뒤 관계가 유지된 비율 |
 | **QA-21** | **Agent Change Locality** — Agent 변화 시 바뀌는 Architecture Element의 평균 수 |
-| **QA-22** | **Model & Context Change Locality** — Model/Context/State 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-22** | **Model, Context & State Change Locality** — Model/Context/State 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-23** | **Experiment & Logging Change Locality** — 실험·로그 변화 시 바뀌는 Architecture Element의 평균 수 |
 | **QA-31** | **Correct Task Recovery Time** — 장애 뒤 모든 영향 Task의 올바른 상태·결과·제어를 회복하는 시간 |
 | **QA-32** | **Fault Blast Radius** — fault allowance를 넘어 영향받은 user-visible unit 수 |
 | **QA-41** | **Target-device Memory Footprint** — workload stratum별 peak committed memory의 worst p95 |
 | **QA-51** | **Protected Data Exposure Minimization** — 정상 업무의 최소 필요량을 넘겨 외부에 노출한 보호정보 단위 수 |
+| **QA-61** | **Execution Trace Completeness** — 로그에서 전체 실행을 재구성할 수 있는 run 비율 |
+| **QA-62** | **Evidence Reproducibility** — raw evidence에서 같은 평가 결과를 정확히 다시 만든 비율 |
 
 ## 1. 비교 대상 — 4개
 
@@ -36,6 +40,8 @@
 | [EXEC-DP01](./EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | QA-31/32/41 중심 hypothesis; Voice와 동시 workload 재검토 |
 
 이 네 개는 각각 **semantic authority topology / Task single-writer model / Agent contract boundary / OS process fault boundary**라는 서로 다른 Architecture 축을 결정한다. Supporting DP인 CTX-DP01/02, SEC-DP01은 Master Catalog에 유지하되 현재 우선 비교에서 제외한다.
+
+QA-05/23/61/62는 active catalog에 포함하지만 기존 DP의 Primary QA로 자동 지정하지 않는다. Evaluation A에서 실제 control path, instrumentation dependency와 evidence ownership이 후보별로 달라지는지 확인한 뒤 `Primary / Regression / N/A`를 고정한다.
 
 ## 2. DP에서 내린 두 주제
 

@@ -30,7 +30,7 @@ ASR — Architecture 영향이 확인된 QA에 부여하는 분류
 | QA-31~39 | Reliability & Availability | 장애의 영향 범위와 정확한 복구 |
 | QA-41~49 | Resource Efficiency | target device의 실행 가능성과 자원 부담 |
 | QA-51~59 | Privacy & Security | 보호정보 노출과 보안 관심사 |
-| QA-61~69 | Observability | 예약 범위. 현재 active QA 없음 |
+| QA-61~69 | Observability | 실행 기록의 완전성과 평가 근거의 재현성 |
 
 번호 범위 안의 공백은 의도적이다. QA가 추가·제거되어도 기존 ID를 당겨 붙이지 않는다.
 
@@ -38,21 +38,25 @@ ASR — Architecture 영향이 확인된 QA에 부여하는 분류
 
 | ID | Quality Attribute | 단일 대표 Metric | 상태 |
 | --- | --- | --- | --- |
-| QA-01 | Delegated Path VIA Responsiveness | worst canonical-case p95 delegated VIA active time | semantic definition current; target draft |
-| QA-02 | VIA Direct Voice Response Responsiveness | worst canonical-case p95 direct Voice response time | semantic definition current; target draft |
-| QA-03 | Agent Progress Voice Feedback Responsiveness | worst canonical-case p95 status-to-Voice time | semantic definition current; target draft |
-| QA-04 | Voice Interruption Responsiveness | worst canonical-case p95 barge-in-to-audio-stop time | semantic draft; target pending |
-| QA-11 | VIA Request Handling Correctness | correct machine-oracle runs | previous QA-05 metric preserved; integrated outcome; target draft |
-| QA-12 | Request Semantic Resolution Correctness | strict semantic-resolution pass rate | driver draft; target pending |
-| QA-13 | Task & Interaction Binding Correctness | strict interaction-binding pass rate | driver draft; target pending |
-| QA-14 | Async Task State Convergence Correctness | strict async-state-convergence pass rate | driver draft; target pending |
-| QA-15 | Interaction & Task Continuity Correctness | strict continuity-scenario pass rate | driver draft; target pending |
-| QA-21 | Agent Change Locality | mean changed Architecture Elements per Agent change | change pack current; target draft |
-| QA-22 | Model & Context Change Locality | mean changed Architecture Elements per non-Agent change | change pack current; target draft |
-| QA-31 | Correct Task Recovery Time | worst fault-stratum p95 full Task recovery time | recovery draft; target draft |
-| QA-32 | Fault Blast Radius | worst fault excess affected user-visible units | semantic draft; target pending |
-| QA-41 | Target Device Memory Footprint | worst workload-stratum p95 peak committed memory | semantic draft; target pending |
-| QA-51 | Protected Data Exposure Minimization | whole-workload union of excess exposed protected units | exposure draft; target draft |
+| QA-01 | Delegated Path VIA Responsiveness | 가장 느린 대표 case의 p95 VIA 처리시간(Agent 실행 제외) | semantic definition current; target draft |
+| QA-02 | VIA Direct Voice Response Responsiveness | 가장 느린 대표 case의 p95 직접 Voice 응답시간 | semantic definition current; target draft |
+| QA-03 | Agent Progress Voice Feedback Responsiveness | 가장 느린 대표 case의 p95 Agent 상태 Voice 전달시간 | semantic definition current; target draft |
+| QA-04 | Voice Interruption Responsiveness | 가장 느린 대표 case의 p95 barge-in 후 음성 정지시간 | semantic draft; target pending |
+| QA-05 | Task Control Responsiveness | 가장 느린 대표 control case의 p95 올바른 처리상태 응답시간 | semantic draft; target pending |
+| QA-11 | VIA Request Handling Correctness | 올바르게 처리된 전체 요청 run 비율 | previous QA-05 metric preserved; integrated outcome; target draft |
+| QA-12 | Request Semantic Resolution Correctness | 의미를 올바르게 해석한 run 비율 | driver draft; target pending |
+| QA-13 | Task & Interaction Binding Correctness | 올바른 Task·Interaction에 연결한 run 비율 | driver draft; target pending |
+| QA-14 | Async Task State Convergence Correctness | 비동기 event 뒤 올바른 상태로 수렴한 run 비율 | driver draft; target pending |
+| QA-15 | Interaction & Task Continuity Correctness | 전환 뒤 필요한 대화·Task 관계가 유지된 scenario 비율 | driver draft; target pending |
+| QA-21 | Agent Change Locality | Agent 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
+| QA-22 | Model, Context & State Change Locality | Model·Context·State 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
+| QA-23 | Experiment & Logging Change Locality | 실험·로그 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack draft; target pending |
+| QA-31 | Correct Task Recovery Time | 가장 느린 fault 종류의 p95 전체 Task 복구시간 | recovery draft; target draft |
+| QA-32 | Fault Blast Radius | 한 fault가 불필요하게 함께 중단시킨 사용자 기능·Task의 최대 수 | semantic draft; target pending |
+| QA-41 | Target Device Memory Footprint | 가장 무거운 workload의 p95 최대 메모리 사용량 | semantic draft; target pending |
+| QA-51 | Protected Data Exposure Minimization | 전체 workload에서 필요 이상 노출된 보호정보 단위 수 | exposure draft; target draft |
+| QA-61 | Execution Trace Completeness | 로그로 전체 실행을 재구성할 수 있는 run 비율 | semantic draft; target pending |
+| QA-62 | Evidence Reproducibility | 저장된 근거로 같은 평가 결과를 정확히 다시 만든 비율 | semantic draft; target pending |
 
 ## 4. QA-11과 QA-12~15의 관계
 
@@ -72,22 +76,22 @@ QA-11 VIA Request Handling Correctness
 
 | QC | Quality Concern | 현재 처리 |
 | --- | --- | --- |
-| QC-01 | User-Experienced Responsiveness | QA-01~04. 동시 Task는 workload condition |
+| QC-01 | User-Experienced Responsiveness | QA-01~05. 동시 Task는 workload condition |
 | QC-02 | VIA Request Handling Correctness | QA-11~13 |
 | QC-03 | Interaction & Task Continuity | 정상 조건 QA-13~15, 장애 후 QA-31 |
 | QC-04 | Agent Ecosystem Interoperability & Substitutability | QA-21 |
-| QC-05 | Evolvability & Maintainability | QA-22 |
-| QC-06 | Resource & Deployment Efficiency | QA-41. Energy는 future candidate |
+| QC-05 | Evolvability & Maintainability | QA-22/23 |
+| QC-06 | Resource & Deployment Efficiency | QA-41. 다른 resource 값은 diagnostic으로만 보존하고 합성 QA를 추가하지 않음 |
 | QC-07 | Concurrency & Capacity | 독립 QA 없음. 관련 QA의 workload condition |
 | QC-08 | Reliability & Recoverability | QA-14, QA-31, QA-32 |
 | QC-09 | Privacy, Security & Action Safety | QA-51 + mandatory zero-violation gate |
-| QC-10 | Observability & Evidence Integrity | 모든 QA trace의 공통 evidence requirement |
+| QC-10 | Observability & Evidence Integrity | QA-23, QA-61/62 + 모든 QA trace의 공통 evidence requirement |
 
 ## 6. 단일 metric 원칙
 
 각 QA는 심사위원에게 한 문장으로 설명할 수 있는 대표 metric 하나만 가진다. component trace, case별 값, C/I/S/D breakdown, maximum, CPU/GPU sample과 failure reason은 대표 metric을 해석하는 supporting evidence이지 같은 QA의 추가 대표 metric이 아니다.
 
-서로 다른 terminal event나 단위를 한 scalar로 임의 합성하지 않는다. 예를 들어 Voice interruption과 Agent cancel delivery는 모두 interaction control이지만 endpoint가 다르므로 현재 QA-04에는 Voice interruption만 포함한다.
+서로 다른 terminal event나 단위를 한 scalar로 임의 합성하지 않는다. Voice interruption은 QA-04, Task 취소·정정 처리 상태는 QA-05로 분리한다. 실행 trace 완전성은 QA-61, 그 trace에서 평가 결과를 다시 만드는 능력은 QA-62로 분리한다.
 
 ## 7. Mandatory qualification gates
 
@@ -108,11 +112,11 @@ unauthorized access or disclosure = 0
 | --- | --- | --- |
 | QA-05 | QA-11 | VIA request handling integrated outcome |
 | QA-07 | QA-21 | Agent Change Locality |
-| QA-08 | QA-22 | Model & Context Change Locality |
+| QA-08 | QA-22 | Model, Context & State Change Locality |
 | QA-09 | QA-31 | Correct Task Recovery Time |
 | QA-11 | QA-51 | Protected Data Exposure Minimization |
 
-과거 QA-04/06/10/12 정의는 [QA Catalog Draft v1 Archive](../../archive/qa-catalog-draft-v1/README.md)에만 남는다. 현재 QA-04와 QA-12는 category-range generation에서 새로 정의된 다른 품질 속성이다. Archive의 ID와 문서는 변경하지 않는다.
+과거 QA-04/06/10/12 정의는 [QA Catalog Draft v1 Archive](../../archive/qa-catalog-draft-v1/README.md)에만 남는다. Previous-generation QA-05의 의미는 QA-11로 이동했다. 현재 QA-04, QA-05와 QA-12는 category-range generation에서 새로 정의된 다른 품질 속성이다. Archive의 ID와 문서는 변경하지 않는다.
 
 ## 9. QA 인정과 ASR 판정
 
