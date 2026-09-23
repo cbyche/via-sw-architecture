@@ -12,6 +12,8 @@
 
 각 DP의 발표용 배경 인트로와 A/B Mermaid 그림은 [그림 작성 기준](./dp-diagram-guide.md)을 따른다. VIA 내 위치, 두 안의 공통 부분과 구조 차이가 같은 시야에서 드러나야 한다.
 
+첫 적용 사례는 [VIA-DP-01 — 범위가 정해진 정보 처리의 책임 경계](./via-dp-01-direct-handling.md)다. Hybrid를 포함한 A/B, 8개 사고실험, 전체 19개 QA 비교와 자체 검토를 담는다. 구조 결정으로는 유효하지만 충분한 QA trade-off는 아직 입증하지 못해 Core DP 확정은 보류한다. 구현·측정·대안 선택은 하지 않았다.
+
 ## Decision method
 
 1. 하나의 DP가 바꾸는 authority, state ownership, contract, call graph 또는 fault boundary를 명시한다.
