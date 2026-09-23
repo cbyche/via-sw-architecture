@@ -85,9 +85,9 @@ COMMON의 NativeClients, Registry와 ExecutionLink/Pending 상태를 재사용�
 
 | 사전 가설 | 검증할 구조 경로 | 반증/주의 |
 |---|---|---|
-| QA-07 Agent Ecosystem Interoperability & Substitutability | A-01~09가 adapter·typed handler·소비 계약까지 바꾸는지 | 두 안 모두 edge/client만 고치면 동점 |
-| QA-08 Evolvability & Maintainability | M/C 변화가 integration 소비자와 공유 계약을 바꾸는지 | Agent change를 QA-08에 중복 계산하지 않음 |
-| QA-01 Delegated Task Result Responsiveness / QA-03 Agent Progress Voice Feedback Responsiveness | native→중립 계약 변환·검증·필요한 protocol 조합 | 새 endpoint에 대한 applicability와 latency는 재동결 필요 |
+| QA-07 Agent Change Locality | A-01~09가 adapter·typed handler·소비 계약까지 바꾸는지 | 두 안 모두 edge/client만 고치면 동점 |
+| QA-08 Model & Context Change Locality | M/C 변화가 integration 소비자와 공유 계약을 바꾸는지 | Agent change를 QA-08에 중복 계산하지 않음 |
+| QA-01 Delegated Path VIA Responsiveness / QA-03 Agent Progress Voice Feedback Responsiveness | native→중립 계약 변환·검증·필요한 protocol 조합 | 새 endpoint에 대한 applicability와 latency는 재동결 필요 |
 
 A는 Core의 수명 의미를 단순화하고 provider 적응을 국소화하기 쉽지만 adapter에 기능 해석 책임이 모인다. B는 capability 차이를 명시적으로 조합하기 쉽지만 Core가 그 variation의 변경을 따라가야 할 수 있다. 두 안 모두 기능 보존을 전제로 하고, 바뀌는 모든 C/I/S/D와 회귀 UC를 원장에 남긴다.
 

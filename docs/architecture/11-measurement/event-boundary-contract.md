@@ -75,7 +75,7 @@ downstream Agent를 사용하지 않는 유효한 direct response의 의미 있�
 
 ## 3. QA-01~QA-03 formula
 
-### QA-01 — Delegated Task Result Responsiveness
+### QA-01 — Delegated Path VIA Responsiveness
 
 ```text
 t0 = user_input_end
@@ -129,9 +129,9 @@ Agent가 status를 만들기 전 시간은 제외한다. source availability 이
 
 DP applicability는 DP 이름만으로 정하지 않고 이 실제 component path를 기준으로 고정한다. 어떤 case에서 DP 후보 A/B가 같은 경로를 실행하면 동점 또는 non-applicable로 기록하며 임의 지연을 추가하지 않는다.
 
-## 5. 모든 W가 갖춰야 할 measurement card
+## 5. 모든 QA가 갖춰야 할 measurement card
 
-QA-04~QA-12를 포함한 각 W는 결과와 구현 전에 다음을 한 곳에서 고정한다.
+QA-05/07/08/09/11을 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
 
 1. 사용자·외부 source·fault 등 실제 stimulus event
 2. 사용자 또는 system 관점의 terminal observable

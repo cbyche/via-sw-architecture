@@ -1,25 +1,21 @@
 # Architecture Candidates
 
-> **Current measurement contract notice:** QA-01~QA-03은 [Voice responsiveness 정의](../../08-quality-attributes/voice-responsiveness.md)를 따른다. 아래 네 DP의 새 Voice applicability는 아직 재동결 전이며, 기존 mapping은 [historical archive](../../../archive/w12-g1/12-01a-scope-and-coverage-ledger.md)에만 보존한다.
-> **상태: 후보 구조 승인 유지 / measurement mapping 재검토 중**
+> **Current measurement contract notice:** 전체 QA catalog가 사용자 검토 중이다. 아래 mapping은 hypothesis이며 결과·ASR이 아니다. 기존 mapping은 [historical archive](../../../archive/w12-g1/12-01a-scope-and-coverage-ledger.md)에만 보존한다.
+> **상태: 후보 구조 승인 유지 / QA applicability 재검토 중**
 > 목적은 **발표에서 억지 trade-off를 만드는 것이 아니라, 실제로 강한 SW Architecture decision만 남겨 “잘 만든 A vs 잘 만든 B”를 비교 가능하게 만드는 것**이다. 기존 결정 상태는 ADR을 따르며 새 QA-01~QA-03 결과는 아직 없다.
 
 ## QA catalog 빠른 참조
 
 | ID | Quality Attribute |
 |---|---|
-| **QA-01** | **Delegated Task Result Responsiveness** — Agent 외부 대기를 제외한 VIA 위임 전·결과 후 Voice 처리시간 |
+| **QA-01** | **Delegated Path VIA Responsiveness** — Agent 외부 대기를 제외한 VIA 위임 전·결과 후 Voice 처리시간 |
 | **QA-02** | **VIA Direct Voice Response Responsiveness** — downstream Agent 없는 직접 Voice 응답이 실제로 들리기까지의 시간 |
 | **QA-03** | **Agent Progress Voice Feedback Responsiveness** — Agent status가 준비된 뒤 상태 안내 Voice가 실제로 들리기까지의 시간 |
-| **QA-04** | **Concurrent Task Performance Isolation** — 여러 Task가 동시에 있을 때 foreground 반응성이 얼마나 덜 저하되는가 |
-| **QA-05** | **Task Completion Effectiveness** — referent·요청·Task·Agent 연결 의무를 얼마나 정확히 만족하는가 |
-| **QA-06** | **Interaction & Task Continuity** — modality/connection/Task 전환에도 맥락·identity를 얼마나 보존하는가 |
-| **QA-07** | **Agent Ecosystem Interoperability & Substitutability** — Agent 추가·교체 시 VIA 변경이 얼마나 국소적인가 |
-| **QA-08** | **Evolvability & Maintainability** — Model/Context/Storage 변화가 VIA 구조에 얼마나 적게 퍼지는가 |
-| **QA-09** | **Recovery Timeliness & Recoverability** — 장애·재시작 뒤 올바른 Task control을 얼마나 빨리 회복하는가 |
-| **QA-10** | **Dependency Failure Containment & Graceful Degradation** — 한 dependency 장애가 무관 기능까지 얼마나 덜 전파되는가 |
-| **QA-11** | **Privacy Exposure Minimization** — 민감 Context를 외부 dependency에 얼마나 최소 범위로 노출하는가 |
-| **QA-12** | **Action & Access Safety** — 잘못된 접근·반출·승인 연결을 정확히 차단하는가 |
+| **QA-05** | **VIA Request Handling Correctness** — 의도·대상·Task·경로·Agent·결과를 얼마나 정확히 연결하는가 |
+| **QA-07** | **Agent Change Locality** — Agent 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-08** | **Model & Context Change Locality** — Model/Context/State 변화 시 바뀌는 Architecture Element의 평균 수 |
+| **QA-09** | **Correct Task Recovery Time** — 장애 뒤 모든 영향 Task의 올바른 상태·결과·제어를 회복하는 시간 |
+| **QA-11** | **Protected Data Exposure Minimization** — 정상 업무의 최소 필요량을 넘겨 외부에 노출한 보호정보 단위 수 |
 
 ## 1. 비교 대상 — 4개
 
@@ -28,9 +24,9 @@
 | Candidate DP | A | B | 현재 확정된 비교축 / 새 Voice 상태 |
 |---|---|---|---|
 | [IR-DP01](./IR-DP01.md) | **Integrated Semantic Authority** | **Staged Semantic Authorities** | QA-05, QA-08 / QA-01·QA-02 applicability 재동결 전 |
-| [TASK-DP01](./TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | QA-08, QA-09 / QA-01·QA-03 및 QA-04 재검토 |
+| [TASK-DP01](./TASK-DP01.md) | **Shared Transactional Task Service** | **Durable Per-Task Supervisor** | QA-08, QA-09 / QA-01·QA-03 및 동시 workload 재검토 |
 | [AGENT-DP01](./AGENT-DP01.md) | **Edge-normalized Canonical Contract** | **Core-visible Typed Contracts** | QA-07, QA-08 / QA-01·QA-03 applicability 재동결 전 |
-| [EXEC-DP01](./EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | QA-09, QA-10 / QA-01~QA-03 및 QA-04 재검토 |
+| [EXEC-DP01](./EXEC-DP01.md) | **Single-process Partitioned Runtime** | **Process-isolated Integration Runtime** | QA-09 / QA-01~QA-03 및 동시 workload 재검토; blast radius는 secondary |
 
 이 네 개는 각각 **semantic authority topology / Task single-writer model / Agent contract boundary / OS process fault boundary**라는 서로 다른 Architecture 축을 결정한다. Supporting DP인 CTX-DP01/02, SEC-DP01은 Master Catalog에 유지하되 현재 우선 비교에서 제외한다.
 

@@ -383,8 +383,9 @@ pub async fn whole_process(
         "candidates":candidates,
         "external_agent_fixture":"persistent state outside VIA runtime process",
         "durable_via_state":"SQLite reopened after process loss",
-        "qa09_representative_metric":"REQUIRES_TWO_INTEGRATION_FATAL_STRATA",
-        "qa09_strata_metric_eligible":metric_eligible,
-        "note":"The final six-strata QA-09 metric is assembled with the matching EXEC integration-fatal result."
+        "legacy_representative_fragment":"REQUIRES_TWO_INTEGRATION_FATAL_STRATA",
+        "legacy_profile_metric_eligible":metric_eligible,
+        "active_qa_metric_eligible":false,
+        "note":"Legacy recovery diagnostic only; it is not the active draft QA-09 representative metric."
     }))
 }

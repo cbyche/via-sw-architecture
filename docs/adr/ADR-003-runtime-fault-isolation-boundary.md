@@ -4,7 +4,7 @@
 - Date: 2026-09-22
 - Related DP: EXEC-DP01
 
-> Current measurement-contract impact: 이전 QA-01~QA-03 latency와 QA-01 기반 QA-04 evidence는 superseded/review-required다. Process-isolation 결정은 QA-09 recovery와 QA-10 containment 근거로 유지하고 새 Voice latency는 재측정한다.
+> Current measurement-contract impact: 이전 QA-01~QA-04 evidence는 superseded다. QA-04는 workload condition으로, QA-10 containment는 QA-09 secondary trace로 이동했다. Process-isolation 결정은 보존하되 새 QA-09 recovery contract와 Voice latency로 재검증한다.
 
 ## Context
 
@@ -23,9 +23,9 @@ Candidate B adds versioned IPC, worker lifecycle supervision, and an independent
 | QA | Result |
 |---|---|
 | QA-09 | B was about 176.33ms lower in all 8/8 contexts; both score 5 and pass target |
-| QA-10 | A/B both 28/28, 100%, score 5 |
+| QA-10 (historical, retired draft) | A/B both 28/28, 100%, score 5; current QA score로 사용하지 않음 |
 | QA-01 (historical) | Superseded by the current measurement contract Voice definition; not current evidence |
-| QA-04 (historical) | Depends on the superseded QA-01 foreground contract; review required |
+| QA-04 (historical, retired draft) | Depends on the superseded QA-01 foreground contract; not a current QA |
 
 Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/564ms in the full-factorial run. QA-09 did not split a band, but its raw recovery improvement remains direct evidence for B. The previous QA-01/QA-02/QA-03 and QA-04 reference costs are historical and must be remeasured under the current measurement contract.
 

@@ -48,7 +48,7 @@ enum Command {
         #[arg(long)]
         trace: PathBuf,
     },
-    Qa04LoadSmoke,
+    BackgroundLoadSmoke,
     Qa09WholeRestartSmoke,
     Qa09IntegrationFatalSmoke {
         #[arg(long)]
@@ -73,7 +73,7 @@ enum Command {
         #[arg(long)]
         freeze_fingerprint: Option<String>,
     },
-    Qa10Containment {
+    ContainmentDiagnostic {
         #[arg(long)]
         spec: PathBuf,
         #[arg(long)]
@@ -108,7 +108,7 @@ async fn main() -> anyhow::Result<()> {
         Command::ExecAbortSmoke { worker } => exec_abort_smoke(worker).await?,
         Command::ExecBlastSmoke { host, worker } => exec_blast_smoke(host, worker).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
-        Command::Qa04LoadSmoke => qa04_load_smoke().await?,
+        Command::BackgroundLoadSmoke => background_load_smoke().await?,
         Command::Qa09WholeRestartSmoke => recovery::whole_restart_smoke().await?,
         Command::Qa09IntegrationFatalSmoke { host, worker } => {
             exec_recovery::integration_fatal_smoke(host, worker).await?
@@ -127,7 +127,7 @@ async fn main() -> anyhow::Result<()> {
             profile,
             freeze_fingerprint,
         } => whole_process_recovery::whole_process(&profile, freeze_fingerprint.as_deref()).await?,
-        Command::Qa10Containment {
+        Command::ContainmentDiagnostic {
             spec,
             host,
             worker,
@@ -384,7 +384,7 @@ async fn exec_blast_smoke(host: PathBuf, worker: PathBuf) -> anyhow::Result<serd
     }))
 }
 
-async fn qa04_load_smoke() -> anyhow::Result<serde_json::Value> {
+async fn background_load_smoke() -> anyhow::Result<serde_json::Value> {
     let mut runs = Vec::new();
     for candidate in ["shared", "per_task"] {
         for active_tasks in [1usize, 4usize] {
@@ -406,25 +406,25 @@ async fn qa04_load_smoke() -> anyhow::Result<serde_json::Value> {
             .await?;
             anyhow::ensure!(
                 report.updates_applied == active_tasks * 3,
-                "QA-04 workload smoke dropped background updates"
+                "background workload smoke dropped background updates"
             );
             runs.push(serde_json::json!({
                 "candidate": candidate,
                 "active_tasks": active_tasks,
                 "updates_applied": report.updates_applied,
                 "elapsed_ms": report.elapsed_ms,
-                "qa04_metric_eligible": report.qa04_metric_eligible
+                "representative_metric_eligible": report.representative_metric_eligible
             }));
         }
     }
 
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"QA-04 fixed 1-vs-4 active background Task load-shape smoke",
+        "scope":"background Task load-shape smoke retained as a non-scoring workload diagnostic",
         "fixed_shape":"1 update per Task per cadence; production cadence remains 1000ms up to 30s",
         "runs":runs,
-        "qa04_representative_metric":"NOT_RUN",
-        "note":"Final QA-04 requires the six QA-01 foreground probes while this load is active.",
+        "representative_metric":"NOT_RUN",
+        "note":"Active QA workload level and scored foreground probes are not yet frozen.",
         "benchmark":"NOT_RUN"
     }))
 }

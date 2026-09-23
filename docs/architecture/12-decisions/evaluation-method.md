@@ -1,7 +1,7 @@
 # Architecture Evaluation Method — QA Catalog Sensitivity Sweep
 
 > 작성일: 2026-09-21
-> 상태: **평가 방법 current / 실제 DP 후보 점수 산출 전**
+> 상태: **USER REVIEW DRAFT / QA catalog 승인 및 실제 DP 후보 점수 산출 전**
 > 목적: QA Catalog metric을 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
 > Current measurement contract: QA-01~QA-03의 명칭·endpoint는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
 
@@ -60,20 +60,16 @@ Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한�
 
 | ID | QA metric | Sweep role |
 | --- | --- | --- |
-| QA-01 | Delegated Task Result Responsiveness | strong candidate / target pending |
+| QA-01 | Delegated Path VIA Responsiveness | strong candidate / target pending |
 | QA-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
 | QA-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
-| QA-04 | Concurrent Task Performance Isolation | strong candidate |
-| QA-05 | Task Completion Effectiveness | conditional |
-| QA-06 | Interaction & Task Continuity | conditional |
-| QA-07 | Agent Ecosystem Interoperability & Substitutability | strong candidate |
-| QA-08 | Evolvability & Maintainability | strong candidate |
-| QA-09 | Recovery Timeliness & Recoverability | strong/conditional |
-| QA-10 | Dependency Failure Containment & Graceful Degradation | strong candidate |
-| QA-11 | Privacy Exposure Minimization | strong candidate |
-| QA-12 | Action & Access Safety | constraint-style |
+| QA-05 | VIA Request Handling Correctness | conditional |
+| QA-07 | Agent Change Locality | strong candidate |
+| QA-08 | Model & Context Change Locality | strong candidate |
+| QA-09 | Correct Task Recovery Time | strong/conditional |
+| QA-11 | Protected Data Exposure Minimization | strong candidate |
 
-Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable QA를 계산한다.
+Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable active QA를 계산한다. 동시성은 workload stratum, action/access safety는 필수 회귀, containment는 QA-09 secondary trace로 별도 기록한다.
 
 ## 4. Differentiation Criteria
 
@@ -111,7 +107,7 @@ Evaluation A 결과에서 다음 중 하나 이상이 나타난다.
 
 Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유리한가'가 아니라 **실제 구조 sensitivity가 존재하는가**만 판단한다.
 
-예를 들어 세 후보가 QA-10에서 모두 100%를 얻으면 이를 숨기지 않고 `non-discriminating constraint`로 기록한다. 반대로 QA-07에서 점수가 갈리고 contract boundary 차이로 설명 가능하면 해당 DP의 Primary driver가 될 수 있다.
+예를 들어 세 후보가 필수 안전 회귀를 모두 통과하면 이를 숨기지 않고 `non-discriminating constraint`로 기록한다. 반대로 QA-07에서 점수가 갈리고 contract boundary 차이로 설명 가능하면 해당 DP의 Primary driver가 될 수 있다.
 
 이 criteria는 후보의 승자를 고르는 규칙이 아니라 **어떤 QA가 이 DP에서 실제 trade-off 축인지 식별하는 규칙**이다.
 
@@ -121,7 +117,7 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 
 1. DP가 다루는 구조 질문
 2. 합리적 후보 A/B/C
-3. 12개 QA sensitivity sweep mini-heatmap
+3. 승인된 active QA sensitivity sweep mini-heatmap
 4. Differentiation Criteria를 충족한 Primary 3~4개 확대
 5. Primary QA의 raw metric + 0~5 score
 6. trade-off 설명
@@ -129,7 +125,7 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 8. 선택안의 weakness
 9. tactic 적용 후 동일 metric 재평가
 
-이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 12개 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
+이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 active QA 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
 
 ## 7. 12 진입 전 남은 작업
 
@@ -142,4 +138,4 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 - evidence level
 - N/A 판정 규칙
 
-ASR은 아직 선정하지 않았다. 12개 QA의 scoring baseline과 DP별 구조 인과를 먼저 정리한 뒤, 별도 ID를 만들지 않고 해당 QA에 ASR 상태를 기록한다.
+ASR은 아직 선정하지 않았다. 사용자 검토 중인 active QA의 scoring baseline과 DP별 구조 인과를 먼저 정리한 뒤, 별도 ID를 만들지 않고 해당 QA에 ASR 상태를 기록한다.

@@ -361,7 +361,7 @@ pub async fn integration_fatal(
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"QA-09 integration-host fatal running/queryable × 1/4 Task trials",
+        "scope":"legacy integration-host fatal running/queryable × 1/4 Task diagnostic",
         "profile":profile,
         "freeze_fingerprint":freeze_fingerprint,
         "trials_per_stratum":trials_per_stratum,
@@ -369,8 +369,9 @@ pub async fn integration_fatal(
         "task_architecture_fixed":"SharedTaskService for both EXEC candidates",
         "external_agent_fixture":"persistent state outside integration worker volatile memory",
         "candidates":candidates,
-        "qa09_representative_metric":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
-        "qa09_strata_metric_eligible":metric_eligible,
-        "note":"The final six-strata QA-09 metric is assembled with the matching whole-process result."
+        "legacy_representative_fragment":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
+        "legacy_profile_metric_eligible":metric_eligible,
+        "active_qa_metric_eligible":false,
+        "note":"Legacy recovery diagnostic only; it is not the active draft QA-09 representative metric."
     }))
 }

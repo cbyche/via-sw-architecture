@@ -30,12 +30,13 @@
 
 ## Current measurement status
 
-현재 단계는 **Measurement Contract Definition**이다. QA-01~QA-12의 측정 의미와 조건을 먼저 확정하며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
+현재 단계는 **Measurement Contract Definition**이다. QA catalog 자체를 사용자와 재검토하고 있으며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
 
 | Item | Status |
 | --- | --- |
 | System boundary, representative use cases, change scenarios | Defined |
-| QC taxonomy and QA-01~QA-12 catalog | Defined; QA-01~QA-03 Voice definition updated |
+| QC taxonomy | QC-01~QC-10 defined |
+| QA catalog | **User-review draft**; active draft IDs are QA-01/02/03/05/07/08/09/11 |
 | ASR classification | **Not selected; QA별 Architecture 영향 검토 전** |
 | QA-01~QA-03 event and software-boundary contract | Draft defined; machine freeze pending |
 | QA-01~QA-03 machine-readable contract and harness | **Not implemented** |
@@ -45,7 +46,7 @@
 
 새 Voice responsiveness 정의는 다음과 같다.
 
-- **QA-01 — Delegated Task Result Responsiveness:** Agent 실행시간을 제외하고, Voice 요청의 위임 준비와 Agent 결과의 Voice 전달에 VIA가 소비한 시간
+- **QA-01 — Delegated Path VIA Responsiveness:** Agent 실행시간을 제외하고, Voice 요청의 위임 준비와 Agent 결과의 Voice 전달에 VIA가 소비한 시간
 - **QA-02 — VIA Direct Voice Response Responsiveness:** Downstream Agent 없이 VIA가 직접 답하는 Voice 요청의 전체 반응시간
 - **QA-03 — Agent Progress Voice Feedback Responsiveness:** Agent status가 source에서 제공 가능해진 뒤 사용자에게 audible Voice로 전달되기까지의 시간
 
@@ -96,6 +97,7 @@
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py
+.venv/bin/python scripts/architecture/check_qa_catalog.py
 cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
 cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
 ```

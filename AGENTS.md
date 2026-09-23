@@ -42,9 +42,11 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 - The active Architecture baseline is `docs/architecture/`.
 - Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
-- QC-01~QC-10 are top-level quality concerns; QA-01~QA-12 are the current measurable quality attributes.
+- QC-01~QC-10 are top-level quality concerns. The QA catalog is an unapproved user-review draft; its active draft IDs are QA-01/02/03/05/07/08/09/11. Do not fill the gaps, renumber them, or describe the catalog as final.
+- QA-04/06/10/12 are retired draft definitions preserved in `docs/archive/qa-catalog-draft-v1/`, not current measurable attributes. Their concerns are either folded into another QA, treated as a workload/diagnostic condition, or retained as a mandatory regression.
 - No ASR is confirmed yet. ASR is a classification applied to an existing QA after architectural impact is established, not a separate numbered series.
-- QA-01, QA-02, and QA-03 are Voice-in/Voice-out metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
+- QA-01, QA-02, and QA-03 are Voice-in/Voice-out draft metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
+- QA-05 uses pre-approved machine-readable semantic oracles, not per-run human free-text scoring. QA-07/08 count frozen Architecture Elements. QA-09 measures correct recovery time. QA-11 counts excess protected-information exposure.
 - Their semantic and event-boundary document drafts exist, but the machine-readable contract, harness, target, score bands, and current results are not yet implemented or run.
 - Existing predecessor implementation and results under the `w12-g1` archive are historical/superseded. `Gate 1` and `Gate 2` are not active lifecycle names.
 - Current accepted decisions have caveats: AGENT-DP01=A, TASK-DP01=B, EXEC-DP01=B; IR-DP01 is deferred with A only as an interim reference. Read the ADRs before describing them.

@@ -60,7 +60,9 @@ impl Profile {
                 fatal_deadline: Duration::from_secs(5),
                 metric_eligible: true,
             }),
-            other => anyhow::bail!("unknown QA-10 profile: {other}; use smoke or frozen"),
+            other => anyhow::bail!(
+                "unknown containment diagnostic profile: {other}; use smoke or frozen"
+            ),
         }
     }
 }
@@ -69,17 +71,17 @@ fn expected_capabilities(spec: &Value) -> anyhow::Result<HashMap<String, String>
     let mut out = HashMap::new();
     for capability in spec["capabilities"]
         .as_array()
-        .ok_or_else(|| anyhow::anyhow!("QA-10 capabilities must be an array"))?
+        .ok_or_else(|| anyhow::anyhow!("containment diagnostic capabilities must be an array"))?
     {
         let id = capability["id"]
             .as_str()
-            .ok_or_else(|| anyhow::anyhow!("QA-10 capability id missing"))?;
-        let token = capability["expected_token"]
-            .as_str()
-            .ok_or_else(|| anyhow::anyhow!("QA-10 capability expected_token missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("containment diagnostic capability id missing"))?;
+        let token = capability["expected_token"].as_str().ok_or_else(|| {
+            anyhow::anyhow!("containment diagnostic capability expected_token missing")
+        })?;
         anyhow::ensure!(
             out.insert(id.to_string(), token.to_string()).is_none(),
-            "duplicate QA-10 capability {id}"
+            "duplicate containment diagnostic capability {id}"
         );
     }
     Ok(out)
@@ -87,16 +89,16 @@ fn expected_capabilities(spec: &Value) -> anyhow::Result<HashMap<String, String>
 
 fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     anyhow::ensure!(
-        spec["version"] == "QA10-CANDIDATE-v1",
-        "unexpected QA-10 spec version"
+        spec["version"] == "CONTAINMENT-DIAGNOSTIC-v1",
+        "unexpected containment diagnostic spec version"
     );
     anyhow::ensure!(
         spec["metric"]["formula"] == "100 * passed_cells / 28",
-        "QA-10 denominator/formula changed"
+        "containment diagnostic denominator/formula changed"
     );
     anyhow::ensure!(
         spec["metric"]["cell_pass_rule"] == "STRICT_ALL_TRIALS_PASS",
-        "QA-10 cell rule must remain strict"
+        "containment diagnostic cell rule must remain strict"
     );
 
     let external = spec["external_cells"]
@@ -107,72 +109,75 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("integration_fatal_cells missing"))?;
     anyhow::ensure!(
         external.len() == 24,
-        "QA-10 requires exactly 24 external cells"
+        "containment diagnostic requires exactly 24 external cells"
     );
-    anyhow::ensure!(fatal.len() == 4, "QA-10 requires exactly 4 fatal cells");
+    anyhow::ensure!(
+        fatal.len() == 4,
+        "containment diagnostic requires exactly 4 fatal cells"
+    );
 
     let frozen = &spec["frozen_profile"];
     anyhow::ensure!(
         frozen["external"]["failure_modes"] == json!(["connection_refused", "no_reply"]),
-        "QA-10 external failure modes changed"
+        "containment diagnostic external failure modes changed"
     );
     anyhow::ensure!(
         frozen["external"]["repeats_per_mode"] == 5,
-        "QA-10 external repeat count changed"
+        "containment diagnostic external repeat count changed"
     );
     anyhow::ensure!(
         frozen["external"]["trial_parallelism_within_cell"] == 10,
-        "QA-10 frozen within-cell parallelism changed"
+        "containment diagnostic frozen within-cell parallelism changed"
     );
     anyhow::ensure!(
         frozen["external"]["fault_hold_ms"] == 30000,
-        "QA-10 fault hold changed"
+        "containment diagnostic fault hold changed"
     );
     anyhow::ensure!(
         frozen["external"]["probe_offsets_ms"] == json!([2000, 10000, 20000]),
-        "QA-10 probe offsets changed"
+        "containment diagnostic probe offsets changed"
     );
     anyhow::ensure!(
         frozen["external"]["capability_deadline_ms"] == 5000,
-        "QA-10 capability deadline changed"
+        "containment diagnostic capability deadline changed"
     );
     anyhow::ensure!(
         frozen["integration_fatal"]["repeats"] == 5,
-        "QA-10 fatal repeat count changed"
+        "containment diagnostic fatal repeat count changed"
     );
 
     let smoke = &spec["smoke_profile"];
     anyhow::ensure!(
         matches!(smoke["metric_eligible"].as_bool(), Some(false)),
-        "QA-10 smoke must remain metric-ineligible"
+        "containment diagnostic smoke must remain metric-ineligible"
     );
     anyhow::ensure!(
         smoke["external"]["repeats_per_mode"] == 1,
-        "QA-10 smoke repeat count changed"
+        "containment diagnostic smoke repeat count changed"
     );
     anyhow::ensure!(
         smoke["external"]["trial_parallelism_within_cell"] == 1,
-        "QA-10 smoke within-cell parallelism changed"
+        "containment diagnostic smoke within-cell parallelism changed"
     );
     anyhow::ensure!(
         smoke["external"]["fault_hold_ms"] == 200,
-        "QA-10 smoke fault hold changed"
+        "containment diagnostic smoke fault hold changed"
     );
     anyhow::ensure!(
         smoke["external"]["probe_offsets_ms"] == json!([5, 25, 50]),
-        "QA-10 smoke probe offsets changed"
+        "containment diagnostic smoke probe offsets changed"
     );
     anyhow::ensure!(
         smoke["external"]["capability_deadline_ms"] == 500,
-        "QA-10 smoke capability deadline changed"
+        "containment diagnostic smoke capability deadline changed"
     );
     anyhow::ensure!(
         smoke["integration_fatal"]["repeats"] == 1,
-        "QA-10 smoke fatal repeat count changed"
+        "containment diagnostic smoke fatal repeat count changed"
     );
     anyhow::ensure!(
         smoke["integration_fatal"]["capability_deadline_ms"] == 2000,
-        "QA-10 smoke fatal deadline changed"
+        "containment diagnostic smoke fatal deadline changed"
     );
 
     let capabilities = spec["capabilities"]
@@ -201,7 +206,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         .ok_or_else(|| anyhow::anyhow!("dependencies missing"))?;
     anyhow::ensure!(
         dependencies.len() == 6,
-        "QA-10 requires exactly six external dependencies"
+        "containment diagnostic requires exactly six external dependencies"
     );
     let dependency_ids = dependencies
         .iter()
@@ -211,7 +216,10 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
                 .ok_or_else(|| anyhow::anyhow!("dependency id missing"))
         })
         .collect::<anyhow::Result<HashSet<_>>>()?;
-    anyhow::ensure!(dependency_ids.len() == 6, "duplicate QA-10 dependency");
+    anyhow::ensure!(
+        dependency_ids.len() == 6,
+        "duplicate containment diagnostic dependency"
+    );
 
     let mut ids = HashSet::new();
     let mut dependency_counts: HashMap<&str, usize> = HashMap::new();
@@ -219,7 +227,10 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         let id = cell["id"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("external cell id missing"))?;
-        anyhow::ensure!(ids.insert(id), "duplicate QA-10 cell id {id}");
+        anyhow::ensure!(
+            ids.insert(id),
+            "duplicate containment diagnostic cell id {id}"
+        );
         let dependency = cell["failed_dependency"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("failed_dependency missing in {id}"))?;
@@ -228,11 +239,11 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
             .ok_or_else(|| anyhow::anyhow!("unaffected_capability missing in {id}"))?;
         anyhow::ensure!(
             dependency_ids.contains(dependency),
-            "unknown QA-10 dependency {dependency}"
+            "unknown containment diagnostic dependency {dependency}"
         );
-        let intrinsic = cap_dependencies
-            .get(capability)
-            .ok_or_else(|| anyhow::anyhow!("unknown QA-10 capability {capability}"))?;
+        let intrinsic = cap_dependencies.get(capability).ok_or_else(|| {
+            anyhow::anyhow!("unknown containment diagnostic capability {capability}")
+        })?;
         anyhow::ensure!(
             !intrinsic.contains(dependency),
             "{id} is invalid: {capability} intrinsically depends on failed {dependency}"
@@ -242,7 +253,7 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
     for dependency in dependency_ids {
         anyhow::ensure!(
             dependency_counts.get(dependency) == Some(&4),
-            "QA-10 dependency {dependency} must contribute exactly four cells"
+            "containment diagnostic dependency {dependency} must contribute exactly four cells"
         );
     }
 
@@ -250,7 +261,10 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
         let id = cell["id"]
             .as_str()
             .ok_or_else(|| anyhow::anyhow!("fatal cell id missing"))?;
-        anyhow::ensure!(ids.insert(id), "duplicate QA-10 cell id {id}");
+        anyhow::ensure!(
+            ids.insert(id),
+            "duplicate containment diagnostic cell id {id}"
+        );
         anyhow::ensure!(
             cell["fault"] == "integration_host_fatal",
             "{id} must use the frozen integration_host_fatal fault"
@@ -263,7 +277,10 @@ fn validate_spec(spec: &Value) -> anyhow::Result<()> {
             "unknown fatal capability {capability}"
         );
     }
-    anyhow::ensure!(ids.len() == 28, "QA-10 requires exactly 28 unique cells");
+    anyhow::ensure!(
+        ids.len() == 28,
+        "containment diagnostic requires exactly 28 unique cells"
+    );
     Ok(())
 }
 
@@ -290,7 +307,7 @@ async fn start_external_fault_fixture(
             });
             Ok((address.to_string(), Some(server)))
         }
-        other => anyhow::bail!("unknown external QA-10 fault mode {other}"),
+        other => anyhow::bail!("unknown external containment diagnostic fault mode {other}"),
     }
 }
 
@@ -322,7 +339,7 @@ async fn run_external_trial(
     .await??;
     anyhow::ensure!(
         matches!(ping, Some(value) if value["status"] == "pong"),
-        "QA-10 candidate host did not start"
+        "containment diagnostic candidate host did not start"
     );
 
     let (address, fault_server) =
@@ -330,7 +347,7 @@ async fn run_external_trial(
     let fault = timeout(
         context.profile.capability_deadline,
         session.request(json!({
-            "op":"qa10_begin_external_fault",
+            "op":"containment_begin_external_fault",
             "mode":fault_mode,
             "failed_dependency":context.failed_dependency,
             "address":address
@@ -340,7 +357,7 @@ async fn run_external_trial(
     let fault_observed = matches!(
         fault,
         Some(value)
-            if value["status"] == "qa10_fault_started"
+            if value["status"] == "containment_fault_started"
                 && value["mode"] == fault_mode
                 && value["fault_observed"] == true
     );
@@ -352,7 +369,7 @@ async fn run_external_trial(
         let observed = timeout(
             context.profile.capability_deadline,
             session.request(json!({
-                "op":"qa10_capability_probe",
+                "op":"containment_capability_probe",
                 "capability":context.capability
             })),
         )
@@ -360,7 +377,7 @@ async fn run_external_trial(
         probes_ok &= matches!(
             observed,
             Some(value)
-                if value["status"] == "qa10_capability_probe"
+                if value["status"] == "containment_capability_probe"
                     && value["capability"] == context.capability
                     && value["value"] == context.expected
         );
@@ -397,11 +414,11 @@ impl HostSession {
         let stdin = child
             .stdin
             .take()
-            .ok_or_else(|| anyhow::anyhow!("QA-10 host stdin missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("containment diagnostic host stdin missing"))?;
         let stdout = child
             .stdout
             .take()
-            .ok_or_else(|| anyhow::anyhow!("QA-10 host stdout missing"))?;
+            .ok_or_else(|| anyhow::anyhow!("containment diagnostic host stdout missing"))?;
         Ok(Self {
             child,
             stdin,
@@ -458,7 +475,7 @@ async fn integration_trial(
     let ping = timeout(deadline, session.request(json!({"op":"ping"}))).await??;
     anyhow::ensure!(
         matches!(ping, Some(value) if value["status"] == "pong"),
-        "QA-10 candidate host did not start"
+        "containment diagnostic candidate host did not start"
     );
 
     let start = Instant::now();
@@ -508,12 +525,12 @@ pub async fn run(
     let expected = expected_capabilities(&spec)?;
     let profile = Profile::from_name(&profile_name)?;
     if profile.metric_eligible {
-        let fingerprint = freeze_fingerprint
-            .as_deref()
-            .ok_or_else(|| anyhow::anyhow!("frozen QA-10 requires --freeze-fingerprint"))?;
+        let fingerprint = freeze_fingerprint.as_deref().ok_or_else(|| {
+            anyhow::anyhow!("frozen containment diagnostic requires --freeze-fingerprint")
+        })?;
         anyhow::ensure!(
             fingerprint.len() == 64 && fingerprint.chars().all(|value| value.is_ascii_hexdigit()),
-            "invalid QA-10 freeze fingerprint"
+            "invalid containment diagnostic freeze fingerprint"
         );
     }
 
@@ -638,7 +655,7 @@ pub async fn run(
 
     Ok(json!({
         "status":"PASS",
-        "scope":"QA-10 28-cell containment controller candidate-endpoint trials",
+        "scope":"containment diagnostic 28-cell containment controller candidate-endpoint trials",
         "spec":spec_path,
         "spec_version":spec["version"],
         "profile":profile.name,
@@ -646,7 +663,7 @@ pub async fn run(
         "freeze_fingerprint":freeze_fingerprint,
         "frozen_contract_validated":true,
         "candidates":candidate_results,
-        "qa10_representative_metric":if profile.metric_eligible {
+        "legacy_containment_diagnostic":if profile.metric_eligible {
             json!(candidate_results.iter().map(|candidate| json!({
                 "exec_candidate":candidate["exec_candidate"],
                 "unaffected_capability_retention_pct":candidate["controller_retention_pct"]
@@ -654,14 +671,15 @@ pub async fn run(
         } else {
             json!("NOT_RUN")
         },
-        "qa10_metric_eligible":profile.metric_eligible,
+        "legacy_profile_metric_eligible":profile.metric_eligible,
+        "active_qa_metric_eligible":false,
         "candidate_endpoint_adapter_ready":true,
         "measurement_freeze_required":!profile.metric_eligible,
         "external_capability_evidence":"ACTUAL_CANDIDATE_HOST_PROBE_SURFACE_WITH_DETERMINISTIC_DEPENDENCY_FIXTURES",
         "external_fault_evidence":"CANDIDATE_INITIATED_SOCKET_CONNECTION_REFUSED_OR_NO_REPLY",
         "integration_fatal_evidence":"ACTUAL_SHARED_HOST_RESTART_VS_ISOLATED_WORKER_RESTART_WITH_COMMON_DEADLINE",
         "note":if profile.metric_eligible {
-            "Frozen repeats/timing executed; publish only through the approval-gated representative runner."
+            "Legacy frozen diagnostic executed; it is not an active QA metric under the draft catalog."
         } else {
             "Smoke routes probes through each candidate host but is not representative metric evidence."
         }

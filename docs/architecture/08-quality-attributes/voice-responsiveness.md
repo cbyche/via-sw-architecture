@@ -18,7 +18,7 @@
 - 잘못된 결과·status·Task binding은 빠른 성공으로 세지 않는다. timeout과 correctness failure를 raw trace에 남기며 성공 표본만 선택해 p95를 만들지 않는다.
 - 기존 제안인 stratum별 10 warm-up + 100 scored trials, nearest-rank p95, case p95의 동일가중 Macro-p95는 새 fixture freeze에서 재승인하기 전까지 **proposed** 상태다.
 
-## 2. QA-01 — Delegated Task Result Responsiveness
+## 2. QA-01 — Delegated Path VIA Responsiveness
 
 ### 의미
 
@@ -214,5 +214,5 @@ estimated_model_subtotal
 
 - 기존 `reference_campaign.py`의 QA-01~QA-03 수식 결과는 W12-G1 historical/superseded evidence다.
 - `benchmark/archive/w12-g1/working12/baseline.json`, `w01-foreground-strata.json`과 archived runner는 아직 이 문서와 일치하지 않는다. 이 문서 승인 후 별도 구현 작업에서 변경한다.
-- 기존 QA-01에 의존한 QA-04 foreground ratio는 새 QA-01 정의와 fixture가 고정될 때까지 재검토 대상으로 둔다.
+- 동시 Task는 독립 QA ratio가 아니라 QA-01~QA-03의 workload condition으로 둔다. 지원할 동시 Task 수는 제품 workload 근거와 함께 결과 전에 고정한다.
 - QA-01~QA-03의 target과 0~5 score band는 기존 값을 이관하지 않는다. 새 representative fixture와 product budget을 결과 전에 별도로 승인한다.

@@ -9,6 +9,7 @@
 | v1.1 | [requirements-v1.1](./requirements-v1.1/requirements-v1.1.md) | `archive/pre-rebaseline-main-20260923` |
 | vNext / DP-00 | [vnext-dp00](./vnext-dp00/) | `archive/vnext-dp00-executable-v3`, `archive/vnext-interim-report`, `archive/qa03-v1/*` |
 | Rebaseline W12-G1 | [w12-g1](./w12-g1/README.md) | repository history before the W12-G2 definition change |
+| QA catalog draft v1 | [qa-catalog-draft-v1](./qa-catalog-draft-v1/README.md) | repository history before the 2026-09-23 QA catalog review |
 
 The current source of truth is [docs/architecture](../architecture/README.md).
 

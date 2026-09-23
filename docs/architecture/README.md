@@ -15,7 +15,7 @@
 - Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
 - Architecture 선택은 IR, TASK, AGENT, EXEC DP별 A/B 직접 비교로 수행한다.
-- QC-01~QC-10은 상위 품질 관심사, QA-01~QA-12는 현재 측정 가능한 품질 속성이다.
+- QC-01~QC-10은 상위 품질 관심사다. QA catalog는 사용자 검토 중인 초안이며 현재 활성 초안 ID는 QA-01/02/03/05/07/08/09/11이다.
 - ASR은 아직 선정하지 않았으며 Architecture 영향이 확인된 QA에 별도 번호 없이 표시한다.
 - QA-01~QA-03은 Voice 중심으로 재정의됐으나 새 harness와 결과는 아직 없다.
 
@@ -46,7 +46,8 @@
 | --- | --- | --- |
 | Mission, boundary, common scope | Current | 후보가 바꿀 수 없는 출발점 |
 | Representative Use Cases and change scenarios | Current | 평가 모집단과 변화 범위 |
-| QC taxonomy and QA catalog | Current | QC-01~QC-10에서 QA-01~QA-12를 구체화 |
+| QC taxonomy | Current | QC-01~QC-10 상위 관심사 |
+| QA catalog | User-review draft | 활성 초안 QA-01/02/03/05/07/08/09/11; 번호 공백은 의도적 |
 | ASR classification | Pending | QA별 Architecture 영향 검토 전 |
 | QA-01~QA-03 semantic definitions | Current draft for implementation | endpoint와 포함·제외 구간은 정의됨 |
 | QA-01~QA-03 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |

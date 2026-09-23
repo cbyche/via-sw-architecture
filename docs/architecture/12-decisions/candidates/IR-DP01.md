@@ -12,9 +12,9 @@ VIA는 '이걸 정리해서 아까 업무에 넣어줘'를 **대상·요청 관�
 
 ## 1-A. Model 능력 의존성
 
-**QA-05 Task Completion Effectiveness의 차이는 Model 능력에 상당 부분 의존한다.** 같은 Qwen reference Model이 joint structured output을 안정적으로 만들 수 있으면 A가 기능적으로 불리하지 않을 수 있고, 복잡한 joint schema에서 오류가 늘면 B의 집중된 stage가 유리할 수 있다. 반대로 stage 간 중간 판단 오류가 누적되면 B가 불리할 수도 있다.
+**QA-05 VIA Request Handling Correctness의 차이는 Model 능력에 상당 부분 의존한다.** 같은 VIA Model이 joint structured output을 안정적으로 만들 수 있으면 A가 기능적으로 불리하지 않을 수 있고, 복잡한 joint schema에서 오류가 늘면 B의 집중된 stage가 유리할 수 있다. 반대로 stage 간 중간 판단 오류가 누적되면 B가 불리할 수도 있다.
 
-따라서 Architecture가 QA-05의 우열을 미리 결정했다고 말하지 않는다. 같은 Model/corpus/Context의 실제 결과만 QA-05 차이로 인정한다. Current measurement contract에서는 **QA-01 Delegated Task Result Responsiveness / QA-02 VIA Direct Voice Response Responsiveness**의 후보별 token ledger와 call critical path를 새로 동결하고 QA-08 Evolvability & Maintainability와 함께 본다.
+따라서 Architecture가 QA-05의 우열을 미리 결정했다고 말하지 않는다. 같은 Model/corpus/Context의 실제 결과만 QA-05 차이로 인정한다. Current measurement contract에서는 **QA-01 Delegated Path VIA Responsiveness / QA-02 VIA Direct Voice Response Responsiveness**의 후보별 token ledger와 call critical path를 새로 동결하고 QA-08 Model & Context Change Locality와 함께 본다.
 
 ## 2. A — Integrated Semantic Authority
 
@@ -80,9 +80,9 @@ Model client, Context access, final Decision interface는 COMMON 재사용이다
 
 | 사전 가설 | 비교 근거 | 반증 조건 |
 |---|---|---|
-| QA-01 Delegated Task Result Responsiveness / QA-02 VIA Direct Voice Response Responsiveness | A의 전체 prompt와 B의 누적 prompt·decode·critical path, 실제 bypass/repair 횟수 | 새 Voice endpoint와 call graph 동결 전 우열 미정 |
-| QA-05 Task Completion Effectiveness | 동일 48 TC의 obligation별 실제 모델 결과 | 둘 다 필요한 정보를 보존하면 동점 가능 |
-| QA-08 Evolvability & Maintainability | M-02/03/08 변화의 component·stage contract 수정 | 공통 adapter에 국소화되면 예상 차이가 없어짐 |
+| QA-01 Delegated Path VIA Responsiveness / QA-02 VIA Direct Voice Response Responsiveness | A의 전체 prompt와 B의 누적 prompt·decode·critical path, 실제 bypass/repair 횟수 | 새 Voice endpoint와 call graph 동결 전 우열 미정 |
+| QA-05 VIA Request Handling Correctness | 동일 selected corpus의 machine-readable predicate 결과 | 둘 다 필요한 정보를 보존하면 동점 가능 |
+| QA-08 Model & Context Change Locality | M-02/03/08 변화의 component·stage contract 수정 | 공통 adapter에 국소화되면 예상 차이가 없어짐 |
 
 TC-04.2/06.2/09.3/09.4/14.5를 설명용 대표 trace로 사용하되 전체 membership을 유지한다. A의 장점 후보는 joint evidence와 적은 boundary, 단점 후보는 prompt/책임 결합이다. B는 집중된 판단과 독립 변경에 유리할 수 있으나 중간 계약·correction·누적 decode 비용을 부담한다.
 

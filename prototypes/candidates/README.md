@@ -10,10 +10,11 @@
 
 ## What it is not
 
-- 현재 QA-01~QA-03 measurement harness
+- 현재 draft QA measurement harness 또는 점수 생성기
 - 실제 S2S/VIA LLM 실행 또는 제품 latency evidence
 - `fixtures/s2s-delay-smoke.json`의 delay를 production profile로 주장하는 근거
 - archived full-factorial 결과를 다시 현재화하는 도구
+- `background-load-smoke`, 기존 recovery/containment profile의 출력은 구조 진단이며 현재 QA metric이 아님
 
 대안의 정의와 현재 decision state는 [Architecture Candidate Decision Points](../../docs/architecture/12-decisions/candidates/README.md), 측정 규칙은 [Measurement Guide](../../docs/architecture/11-measurement/README.md)를 따른다.
 

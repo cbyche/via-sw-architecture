@@ -1,93 +1,96 @@
-# QA-07/QA-08 Target Rationale — Change Locality
+# QA-07/QA-08 Change Locality Contract Rationale
 
-> 작성일: 2026-09-21
-> 상태: **Target proposal의 근거**. 아직 0~5 score band나 Architecture 후보 결과를 보지 않고 작성한다.
+> 작성일: 2026-09-23
+> 상태: **USER REVIEW DRAFT** — target, score band, change pack 모두 결과 전 승인 대상이다.
 
-## 1. 외부 근거가 말해 주는 것과 말해 주지 않는 것
+## 1. 왜 이 두 QA를 유지하는가
 
-ISO/IEC 25010의 Maintainability 계열과 SEI의 modifiability tactics는 변경을 국소화하고 ripple effect를 제한하는 것이 좋은 구조의 핵심임을 지지한다.
+Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-07/08은 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.
 
-- ISO/IEC 25010의 modularity/modifiability 개념은 한 component 변경이 다른 component에 미치는 영향을 최소화하고 효과적으로 수정할 수 있어야 함을 다룬다.
-- SEI modifiability tactics는 semantic coherence, information hiding, interface 사용, dependency restriction 등을 통해 변경이 가능한 한 적은 module에 영향을 주도록 하는 것을 목표로 한다.
+ISO/IEC 25010의 modularity/modifiability와 SEI의 modifiability tactics는 변경 국소화와 ripple-effect 제한의 중요성을 뒷받침하지만, VIA용 숫자 target을 제공하지는 않는다. 따라서 `2개`와 `3개`는 표준값이 아니라 아래 고정 change pack과 VIA 책임 경계에서 도출한 초안 budget이다.
 
-근거:
 - ISO/IEC 25010:2023 product quality model: https://www.iso.org/standard/78176.html
 - SEI, Modifiability Tactics: https://www.sei.cmu.edu/library/modifiability-tactics/
 
-그러나 **ISO나 SEI가 "변경 요소 2개 이하가 합격" 같은 VIA용 숫자를 규정하지 않는다.** 따라서 숫자 target은 외부 표준의 숫자를 가져오는 것이 아니라 VIA의 책임 경계와 intentional change catalog에서 도출한다.
+## 2. Architecture Element의 의미
 
-## 2. QA-07 — Agent Ecosystem Interoperability & Substitutability
+Architecture Element는 파일·클래스·함수·diagram box가 아니다. 다음 네 유형 중 하나이며, 소유자·경계·독립성·변경 판정·설계 근거를 모두 설명할 수 있어야 한다.
 
-고정 제품 방향은 VIA가 특정 Primary Agent Runtime에 종속되지 않는 Agent-neutral orchestration system이라는 것이다.
+| 유형 | 한 개로 세는 단위 |
+| --- | --- |
+| C — Component | 구분되는 입력·출력과 책임을 가진 처리 책임 |
+| I — Interface | 제공자와 소비자가 함께 지키는 독립된 의미·오류·수명 계약 |
+| S — State | 독립 소유자·참조자·수명·갱신/이행 규칙이 있는 상태 모델 |
+| D — Runtime | 시작·종료·복구·통신 결합을 독립 관리하는 배치 명세 |
 
-Agent change A-01~09에서 정상적인 구조의 기대는 다음과 같다.
+후보별 전수 element ledger를 결과 전에 동결한다. 같은 의미를 파일 여러 개로 나눠도 하나이고, 부모 요약과 자식을 중복 계산하지 않는다. 설정값·rename·rebuild만 바뀌면 0개다. 상세 등록·중복 금지·수정/추가/제거 규칙은 [Architecture Element Definition](../../10-element-definition.md)이 유일한 기준이다.
 
-1. provider/protocol-specific 차이는 integration boundary에 국소화한다.
-2. VIA의 Conversation/Request/Task/Policy/Core orchestration semantics까지 반복적으로 수정하지 않는다.
-3. 기능 유지가 전제다. 변경 요소가 적어도 기능을 잃으면 유효한 값이 아니다.
+## 3. QA-07 Agent change pack
 
-### Target proposal
+QA-07은 다음 **9개를 모두** 같은 후보 baseline에 독립 적용한다.
 
-```text
-QA-07 target:
-Average changed architecture elements per Agent change <= 2.0
-```
-
-제품적 해석:
-
-- **0**: 기존 계약 안의 configuration/registration만으로 대응
-- **1**: Agent-specific adapter/binding 한 요소에서 국소화
-- **2**: adapter/binding + 공통 registry/factory/contract 중 실제로 필요한 한 요소 수정
-- **3 이상이 반복**: Agent 변화가 integration seam을 넘어 Core contract/state/responsibility로 전파되는 구조적 결합을 의심해야 함
-
-따라서 평균 2.0은 "외부 표준의 정답 숫자"가 아니라 **Agent-neutral이라는 VIA의 제품 정체성을 만족시키는 locality budget**이다.
-
-## 3. QA-08 — Evolvability & Maintainability
-
-QA-08의 M-01~09 + C-01~06은 Agent 변화보다 이질적이다.
-
-- Model provider/runtime change는 보통 binding/configuration 수준에 국소화 가능하다.
-- Context provider/format 변화는 adapter/contract 수준 변화가 가능하다.
-- persistent-state schema 변화는 정당하게 State schema + Repository behavior + Migration responsibility를 함께 바꿀 수 있다.
-
-10 문서의 C-06 예시도 다음 세 요소를 정당한 변경으로 예시한다.
-
-1. State/Data Schema 수정
-2. Repository/loader-writer 책임 수정
-3. Migration responsibility 추가
-
-### Target proposal
+| ID | 변화 |
+| --- | --- |
+| A-01 | Agent 추가 |
+| A-02 | 동일 업무 Agent 교체 |
+| A-03 | 다른 Agent protocol 지원 |
+| A-04 | 상태 전달 방식 변경 |
+| A-05 | 실행 식별·후속 요청 계약 변경 |
+| A-06 | capability 계약 재구성 |
+| A-07 | Agent 인증 계약 변경 |
+| A-08 | 질문·승인 응답 계약 변경 |
+| A-09 | 결과물 전달 계약 변경 |
 
 ```text
-QA-08 target:
-Average changed architecture elements per non-Agent change <= 3.0
+QA-07 = mean N(A-01...A-09)
+draft target = 평균 2.0개 이하
 ```
 
-제품적 해석:
+0은 기존 계약 안의 configuration/registration, 1은 한 adapter/binding에 국소화, 2는 adapter와 실제로 필요한 공통 contract/registry 한 요소의 변화로 해석할 수 있다. 3개 이상이 반복되면 Agent 변화가 integration seam을 넘어 Core responsibility/state로 퍼지는지 검토한다.
 
-- 일반 Model/Context provider 변화는 이상적으로 0~2 요소에 국소화
-- persistent-state evolution처럼 본질적으로 migration을 요구하는 변화는 3 요소까지 정상 범위
-- 평균이 3을 지속적으로 초과하면 intentional variable이 subsystem boundary를 넘어 여러 Core responsibility로 ripple되는 구조를 의미할 가능성이 커짐
+## 4. QA-08 Model·Context·state change pack
 
-QA-07보다 한 단계 넓은 budget을 두는 이유는 non-Agent catalog에 **실제 schema migration과 deployment/runtime relocation**이 포함되어 있기 때문이다.
+QA-08은 다음 **15개를 모두** 같은 후보 baseline에 독립 적용한다.
 
-## 4. 숫자를 후보 결과에서 역산하지 않는 규칙
+| ID | 변화 | ID | 변화 |
+| --- | --- | --- | --- |
+| M-01 | S2S 제공자 교체 | M-02 | 의미 판단 모델 교체 |
+| M-03 | 모델 실행 프로필 변경 | M-04 | 외부 Cloud → Private Cloud |
+| M-05 | Remote → 사용자 PC | M-06 | 사용자 PC → Remote |
+| M-07 | S2S 이벤트 정보 변경 | M-08 | 의미 판단 응답 방식 변경 |
+| M-09 | 모델 대화 이력 전달 계약 변경 | C-01 | 정보 Source 제공자 교체 |
+| C-02 | 문서 형식 추가 | C-03 | 화면 연동 계약 변경 |
+| C-04 | 기억 기록 형식 확장 | C-05 | 같은 종류의 정보원 추가 |
+| C-06 | 대화·업무 기록 형식 변경 |  |  |
 
-위 2.0 / 3.0은 Architecture 후보의 변경량을 계산하기 전에 제안한다.
+```text
+QA-08 = mean N(M-01...M-09, C-01...C-06)
+draft target = 평균 3.0개 이하
+```
 
-Measurement Contract Definition에서 target을 승인하면:
+일반 provider 변화는 0~2개에 국소화할 수 있지만 persistent-state evolution은 schema, repository behavior와 migration responsibility를 정당하게 함께 바꿀 수 있다. 따라서 QA-08의 draft budget이 QA-07보다 한 요소 넓다.
 
-- A-01~09 모두 같은 QA-07 target/score rule을 사용한다.
-- M-01~09+C-01~06 모두 같은 QA-08 target/score rule을 사용한다.
-- 특정 DP나 후보에 유리하도록 threshold를 바꾸지 않는다.
-- raw change별 C/I/S/D breakdown을 항상 보존한다.
+각 change의 정확한 before/after, 동일 조건과 완료 확인은 [Intentional Variables](../../07-intentional-variables.md)가 기준이다. 제목만 보고 fixture를 축약하지 않는다.
 
-평균 하나만으로 hotspot을 숨기지 않도록 per-change raw maximum과 change ledger도 secondary evidence로 표시하지만 대표 metric은 08에서 확정한 average changed elements를 유지한다.
+## 5. DP별 applicability 판정
 
-## 5. 아직 Measurement Contract Definition에서 결정할 것
+QA-07/08을 모든 DP에 억지로 적용하지 않는다. 후보 명세가 완성된 뒤 각 `DP × change`에 대해 아래 중 하나를 **결과 전에** 기록한다.
 
-- 위 proposed target 2.0 / 3.0 승인 여부
-- target을 기준으로 한 0~5 score boundary의 폭
-- 처리 불가 / 미측정 change의 score 처리
+| 값 | 의미 |
+| --- | --- |
+| `APPLICABLE` | 그 DP의 A/B 구조 차이가 해당 변화의 element count를 바꿀 인과가 있음 |
+| `REGRESSION_ONLY` | 변화 수용은 확인하지만 그 DP의 구조 차이와 직접 인과가 없음 |
+| `NOT_APPLICABLE` | 변화 대상 자체가 후보에 없으며 이유를 설명할 수 있음. 0으로 평균에 넣지 않음 |
+| `UNRESOLVED` | 필수 기능을 유지할 변경 설계를 만들지 못함. 0으로 처리하지 않음 |
 
-score band는 Architecture 후보 결과를 보기 전에 고정해야 한다.
+Primary expectation은 Agent boundary를 바꾸는 DP에 QA-07, semantic/model/context/state boundary를 바꾸는 DP에 QA-08이지만, 이름만으로 결정하지 않고 실제 responsibility·contract·state·deployment 차이를 확인한다.
+
+## 6. 결과가 나오기 전에 잠글 것
+
+- 후보별 전체 Architecture Element ledger와 granularity review
+- 각 change의 `DP × change` applicability
+- changed ID, 변경 종류와 이유를 기록할 ledger schema
+- 기능 유지 regression과 `UNRESOLVED` 처리
+- 평균, raw maximum, C/I/S/D breakdown과 0~5 band
+
+개발 공수나 M/M은 팀 숙련도와 prototype 완성도에 크게 좌우되므로 대표 metric으로 환산하지 않는다. 필요하면 secondary planning evidence로만 병기한다. 후보 결과를 본 뒤 element를 쪼개거나 합치고 change pack 또는 threshold를 바꾸지 않는다.

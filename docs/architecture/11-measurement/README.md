@@ -2,7 +2,7 @@
 
 > **Current state:** QA-01~QA-03 semantic definitions exist; machine contract, target, score bands, harness, and current results do not.
 >
-> **Current phase: Measurement Contract Definition.** 현재는 QA-01~QA-12 각각에 대해 무엇을 어떤 경계와 조건으로 측정할지 확정하는 단계다. 후보 구현이나 A/B 실행 단계가 아니다.
+> **Current phase: Measurement Contract Definition.** 현재는 사용자 검토 중인 QA catalog와 각 QA의 경계·조건·채점 방식을 확정하는 단계다. 후보 구현이나 A/B 실행 단계가 아니다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
@@ -13,7 +13,7 @@
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
 | [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-03 semantic boundary and raw trace requirements |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
-| [QA Measurement & Scoring Contract](./scoring-contract.md) | QA-04~QA-12와 재동결 전 상태 |
+| [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
 외부 model 근거는 [Quality Attribute evidence](../08-quality-attributes/evidence/)에 둔다. 그 자료는 입력 profile이나 estimate를 정당화할 수 있지만 실행하지 않은 모델을 measured evidence로 만들지는 않는다.

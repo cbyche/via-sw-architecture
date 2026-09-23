@@ -28,6 +28,7 @@ jobs:
         run: |
           python3 scripts/architecture/check_active_terminology.py
           python3 scripts/architecture/check_active_markdown_links.py
+          python3 scripts/architecture/check_qa_catalog.py
 
   candidate-prototype:
     strategy:
@@ -60,7 +61,7 @@ jobs:
           cargo run --locked -q -p via-bench -- exec-abort-smoke --worker target/debug/via-worker
           cargo run --locked -q -p via-bench -- exec-blast-smoke --host target/debug/via-host --worker target/debug/via-worker
           cargo run --locked -q -p via-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
-          cargo run --locked -q -p via-bench -- qa04-load-smoke
+          cargo run --locked -q -p via-bench -- background-load-smoke
           cargo run --locked -q -p via-bench -- qa09-whole-restart-smoke
           cargo run --locked -q -p via-bench -- qa09-whole-process-smoke
           cargo run --locked -q -p via-bench -- qa09-integration-fatal-smoke --host target/debug/via-host --worker target/debug/via-worker

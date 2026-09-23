@@ -183,8 +183,8 @@ pub async fn whole_restart_smoke() -> anyhow::Result<serde_json::Value> {
         "strata":strata,
         "fault_model":"VIA-side runtime objects discarded; SQLite and external Agent fixture survive",
         "os_process_kill":false,
-        "qa09_representative_metric":"NOT_RUN",
-        "qa09_metric_eligible":false,
-        "note":"Final QA-09 requires real process restart, 500ms controller delay, 100 trials/stratum, and the two integration-fatal strata."
+        "active_qa_metric":"NOT_RUN",
+        "active_qa_metric_eligible":false,
+        "note":"Legacy recovery structural smoke only; the draft QA-09 fault strata, workload, repetition, aggregation, and score remain unfrozen."
     }))
 }

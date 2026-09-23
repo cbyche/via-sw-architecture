@@ -36,7 +36,7 @@ flowchart LR
 ## 관련 QA metric
 
 - **QA-02 VIA Direct Voice Response Responsiveness** — S2S direct path의 실제 audible 응답 latency. 새 QA-01 delegation 경로의 관련성은 별도 재검토한다.
-- **QA-08 Evolvability & Maintainability** — S2S event/control 계약 변경은 regression으로 추적.
+- **QA-08 Model & Context Change Locality** — S2S event/control 계약 변경은 regression으로 추적.
 - Voice barge-in/jitter — secondary observation.
 
 이 문서는 Architecture Decision score 대상이 아니다.

@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "status": "USER_REVIEW_DRAFT",
+  "asr_selection": "NONE_UNASSESSED",
+  "renumbering_policy": "PRESERVE_GAPS_UNTIL_CATALOG_APPROVAL",
+  "active_qa_ids": ["QA-01", "QA-02", "QA-03", "QA-05", "QA-07", "QA-08", "QA-09", "QA-11"],
+  "quality_attributes": [
+    {
+      "id": "QA-01",
+      "name": "Delegated Path VIA Responsiveness",
+      "qc": ["QC-01"],
+      "metric": "worst_case_case_p95_delegated_via_active_time_ms",
+      "draft_target": {"operator": "<=", "value": 2000, "unit": "ms"}
+    },
+    {
+      "id": "QA-02",
+      "name": "VIA Direct Voice Response Responsiveness",
+      "qc": ["QC-01"],
+      "metric": "worst_case_case_p95_direct_voice_response_ms",
+      "draft_target": {"operator": "<=", "value": 1000, "unit": "ms"}
+    },
+    {
+      "id": "QA-03",
+      "name": "Agent Progress Voice Feedback Responsiveness",
+      "qc": ["QC-01"],
+      "metric": "worst_case_case_p95_status_to_voice_ms",
+      "draft_target": {"operator": "<=", "value": 1000, "unit": "ms"}
+    },
+    {
+      "id": "QA-05",
+      "name": "VIA Request Handling Correctness",
+      "qc": ["QC-02", "QC-03"],
+      "metric": "correct_machine_oracle_runs_pct",
+      "draft_target": {"operator": ">=", "value": 95, "unit": "percent"}
+    },
+    {
+      "id": "QA-07",
+      "name": "Agent Change Locality",
+      "qc": ["QC-04"],
+      "metric": "mean_changed_architecture_elements_per_agent_change",
+      "change_pack": ["A-01", "A-02", "A-03", "A-04", "A-05", "A-06", "A-07", "A-08", "A-09"],
+      "draft_target": {"operator": "<=", "value": 2, "unit": "architecture_elements"}
+    },
+    {
+      "id": "QA-08",
+      "name": "Model & Context Change Locality",
+      "qc": ["QC-05"],
+      "metric": "mean_changed_architecture_elements_per_non_agent_change",
+      "change_pack": ["M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "M-07", "M-08", "M-09", "C-01", "C-02", "C-03", "C-04", "C-05", "C-06"],
+      "draft_target": {"operator": "<=", "value": 3, "unit": "architecture_elements"}
+    },
+    {
+      "id": "QA-09",
+      "name": "Correct Task Recovery Time",
+      "qc": ["QC-03", "QC-08"],
+      "metric": "worst_fault_stratum_p95_full_task_recovery_ms",
+      "draft_target": {"operator": "<=", "value": 5000, "unit": "ms"}
+    },
+    {
+      "id": "QA-11",
+      "name": "Protected Data Exposure Minimization",
+      "qc": ["QC-09"],
+      "metric": "whole_workload_union_excess_exposed_protected_units",
+      "draft_target": {"operator": "=", "value": 0, "unit": "protected_information_units"}
+    }
+  ],
+  "retired_draft_ids": [
+    {"id": "QA-04", "disposition": "WORKLOAD_CONDITION", "current_location": ["QA-01", "QA-02", "QA-03", "QA-05", "QA-09"]},
+    {"id": "QA-06", "disposition": "MERGED", "current_location": ["QA-05", "QA-09"]},
+    {"id": "QA-10", "disposition": "MERGED_AS_SECONDARY_TRACE", "current_location": ["QA-09"]},
+    {"id": "QA-12", "disposition": "MANDATORY_REGRESSION", "current_location": ["QC-09"]}
+  ]
+}

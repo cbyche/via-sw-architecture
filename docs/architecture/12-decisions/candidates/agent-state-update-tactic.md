@@ -28,8 +28,8 @@ A2A는 polling, streaming, push를 보완적인 update mechanism으로 설명하
 ## 관련 QA metric
 
 - **QA-03 Agent Progress Voice Feedback Responsiveness** — source status event가 실제 audible Voice feedback으로 얼마나 빨리 전달되는가.
-- **QA-04 Concurrent Task Performance Isolation** — event fan-in/query workload가 foreground에 주는 영향.
-- **QA-07 Agent Ecosystem Interoperability & Substitutability** — 지원 mechanism 차이를 integration layer가 얼마나 국소화하는가.
-- **QA-09 Recovery Timeliness & Recoverability** — reconnect 후 query/reconciliation으로 current state를 얼마나 빨리 회복하는가.
+- **동시 Task workload condition** — event fan-in/query workload에서 QA-01~03·05·09 결과가 유지되는지 확인.
+- **QA-07 Agent Change Locality** — 지원 mechanism 차이를 integration layer가 얼마나 국소화하는가.
+- **QA-09 Correct Task Recovery Time** — reconnect 후 query/reconciliation으로 current state를 얼마나 빨리 회복하는가.
 
 이 값들은 AGENT-DP01/TASK-DP01/EXEC-DP01 candidate의 실제 구조와 함께 관찰하며, TASK-T01 자체의 A/B winner를 만들지 않는다.

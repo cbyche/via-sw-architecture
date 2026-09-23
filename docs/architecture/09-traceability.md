@@ -1,13 +1,13 @@
 # 9. QC ↔ UC / Evolution Scenario Mapping — 품질과 평가 근거의 연결
 
-> 상태: **사용자 승인 완료 · 현재 Measurement 문서에 연결됨**
+> 상태: **QA catalog 재검토 중 · 연결표 갱신 초안**
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
 > 입력: [05 대표 UC](./05-representative-use-cases.md), [06 공통 조건](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [10 설계 요소와 변경량 집계](./10-element-definition.md)
 
 ## 9.1 목적과 이번 작업의 경계
 
-**09는 현재 평가에 연결된 7개 QC가 어떤 사용자 상황과 변경에서 드러나는지 추적한다.** QC-06·QC-07·QC-10은 현재 독립 QA가 없으므로 이 연결표의 대표 평가 대상에서 제외한다. 이 문서는 ASR을 선정하지 않는다.
+**09는 QC가 어떤 사용자 상황과 변경에서 드러나며, 활성 초안 QA 또는 필수 회귀에 어떻게 반영되는지 추적한다.** 독립 QA가 없다는 이유로 QC 자체를 삭제하지 않는다. 이 문서는 ASR을 선정하지 않는다.
 
 | 지금 정리하는 것 | 이번에 진행하지 않는 것 |
 | --- | --- |
@@ -19,12 +19,12 @@
 
 ```mermaid
 flowchart LR
-    Q["08 Quality Model<br/>평가 관련 QC 7개"]
+    Q["08 Quality Model<br/>QC 10개와 QA 초안"]
     U["05 사용자 UC 18개<br/>필수 변형 포함"]
     X["07 변경 24개<br/>Agent 9 + 비Agent 15"]
     T["09 연결표<br/>무엇을 왜 확인하는가"]
     E["10 설계 요소·변경 원장"]
-    R["09/10 사용자 승인 완료"]
+    R["09/10 사용자 검토 초안"]
     NEXT["Measurement Contract Definition<br/>승인 후 Candidate A/B 비교"]
     Q --> T
     U --> T
@@ -34,21 +34,24 @@ flowchart LR
     R --> NEXT
 ```
 
-## 9.2 평가에 연결된 7개 QC
+## 9.2 QC에서 활성 QA 또는 시험 조건으로의 연결
 
 | QC | 상위 품질 관심사 | 구체화된 현재 QA | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-04 | 입력 처리·직접 응답·위임 전후·Agent 결과 전달과 동시 업무 간섭 |
+| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-03; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행의 Voice 반응성과 동시 업무 조건 |
 | **QC-02** | **Task Completion Effectiveness** | QA-05 | VIA가 요청·대상·제약·업무·Agent를 맞게 연결하고 요구된 결과를 전달했는가 |
-| **QC-03** | **Interaction & Task Continuity** | QA-06 | 대화·채널·직접/위임 경로·업무 전환 후 기존 맥락과 identity가 이어지는가 |
+| **QC-03** | **Interaction & Task Continuity** | 정상 조건은 QA-05 assertion; 장애 후는 QA-09 | 대화·채널·직접/위임 경로·업무 전환 후 맥락과 identity가 이어지는가 |
 | **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | QA-07 | **A-01~09 전체 9개** |
 | **QC-05** | **Evolvability & Maintainability** | QA-08 | **M-01~09 + C-01~06 전체 15개** |
-| **QC-08** | **Reliability & Recoverability** | QA-09·QA-10 | 비동기 이벤트·취소·부분 실패·재시작과 dependency fault 처리 |
-| **QC-09** | **Privacy, Security & Action Safety** | QA-11·QA-12 | 보호 정보 노출과 접근·Action 승인 경계 |
+| **QC-06** | **Resource & Deployment Efficiency** | 독립 QA 없음 | 고정 환경·제약 및 secondary resource trace |
+| **QC-07** | **Concurrency & Capacity** | 독립 QA 없음 | QA-01~03·05·09의 workload stratum |
+| **QC-08** | **Reliability & Recoverability** | QA-09 | 비동기 이벤트·취소·부분 실패·재시작 뒤 정확한 복구 시간; blast radius는 secondary trace |
+| **QC-09** | **Privacy, Security & Action Safety** | QA-11 + 필수 action/access 회귀 | 최소 필요 범위를 넘은 보호정보 노출과 승인·접근 위반 0건 |
+| **QC-10** | **Observability & Evidence Integrity** | 독립 QA 없음 | 모든 QA trace의 필수 증거 조건 |
 
 QC-02에서 구체화된 QA-05가 Task Completion이라고 해서 Agent의 보고서 작성 능력·웹 조사 품질을 VIA 점수로 세지 않는다. **06의 시험용 Agent가 제공한 업무 결과를 이용해 VIA가 맡은 처리와 연결을 검증한다.** 실제 VIA 모델의 판단 품질은 별도로 관측하며, 정답을 되돌려주는 모의 모델로 그 정확도를 실측했다고 주장하지 않는다.
 
-QC-02·QC-03은 한 TC를 단순 PASS/FAIL 하나로만 압축하지 않는다. TC별로 사전 등록한 atomic obligation의 충족/보존 정도를 측정하고, strict TC PASS는 모든 해당 obligation이 충족되었는지를 보여주는 secondary evidence로 보존한다.
+QC-02·QC-03의 정상 동작은 QA-05에서 함께 다룬다. 실행 중 사람이 자연어 답을 점수화하지 않고, TC별로 사전 승인한 exact/set/relation/proposition/clarification/binding predicate를 자동 판정한다. strict TC PASS는 모든 해당 predicate가 충족되었는지를 보여주는 secondary evidence다.
 
 ## 9.3 연결표를 읽는 규칙
 
@@ -117,7 +120,7 @@ QA-05에서는 올바른 확인 질문을 했다는 사실만으로 원래 업�
 
 QC-08의 “외부 상태 확인 불가를 정직하게 알림”은 그 실패 조건의 올바른 처리이다. **복구 가능한 조건에서 실제 업무를 재연결해야 한다는 FA-14 요구와 QA-09 recovery 판정을 대신하지 않는다.**
 
-QA-12의 위반은 다른 QA의 높은 점수로 상쇄하지 않는다. 모든 요청을 차단한 구조도 사용자 UC를 충족하지 못하므로 적합한 후보가 아니다. 같은 고정 시나리오의 위반 건수를 비교하며 중복 로그 수를 위반 수로 세지 않는 집계는 11에서 정의한다.
+Action/access 회귀 위반은 다른 QA의 높은 점수로 상쇄하지 않는다. 모든 요청을 차단한 구조도 사용자 UC를 충족하지 못하므로 적합한 후보가 아니다. 이 회귀는 독립 QA 점수가 아니라 stale/wrong-target/revoked approval 위반 0건이라는 공통 적합성 조건이다.
 
 ## 9.6 변경 24개 전체 연결표
 
