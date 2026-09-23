@@ -213,6 +213,6 @@ estimated_model_subtotal
 ## 8. 기존 자료와 후속 작업
 
 - 기존 `reference_campaign.py`의 W-01~W-03 수식 결과는 W12-G1 historical/superseded evidence다.
-- `benchmark/archive/w12-g1/working12/baseline.json`, `w01-foreground-strata.json`, timing adapter와 Gate 2 runner는 아직 이 문서와 일치하지 않는다. 이 문서 승인 후 별도 구현 작업에서 변경한다.
+- `benchmark/archive/w12-g1/working12/baseline.json`, `w01-foreground-strata.json`과 archived runner는 아직 이 문서와 일치하지 않는다. 이 문서 승인 후 별도 구현 작업에서 변경한다.
 - 기존 W-01에 의존한 W-04 foreground ratio는 새 W-01 정의와 fixture가 고정될 때까지 재검토 대상으로 둔다.
 - W-01~W-03의 target과 0~5 score band는 기존 값을 이관하지 않는다. 새 representative fixture와 product budget을 결과 전에 별도로 승인한다.

@@ -3,7 +3,7 @@
 > 작성일: 2026-09-21
 > 상태: **12 Architecture Decision 평가 방법 초안 — 실제 DP 후보 점수 산출 전**
 > 목적: Working ASR 12개를 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
-> W12-G2: W-01~W-03의 명칭·endpoint는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
+> Current measurement contract: W-01~W-03의 명칭·endpoint는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md)로 재정의되었다. 세 지표의 target/score와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
 
 ## 1. 핵심 원칙
 
@@ -29,7 +29,7 @@
 
 ## 1-A. Candidate Mutual-Exclusivity Gate
 
-Gate 2에서 상세 후보를 만들기 전에 각 DP의 대안은 다음을 만족해야 한다.
+Candidate Implementation 전에 각 DP의 대안은 다음을 만족해야 한다.
 
 1. 두 대안 모두 필수 기능을 충족하는 정상 Architecture다.
 2. 같은 authoritative owner / canonical contract / primary state path / process fault boundary를 서로 다르게 결정한다.

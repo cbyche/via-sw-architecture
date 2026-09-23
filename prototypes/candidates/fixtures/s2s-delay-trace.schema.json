@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VIA candidate S2S delay replay trace",
+  "type": "object",
+  "required": [
+    "evidence_level",
+    "source",
+    "samples_ms"
+  ],
+  "properties": {
+    "evidence_level": {
+      "enum": [
+        "TEST_ONLY",
+        "MEASURED_S2S",
+        "FROZEN_REPLAY_FROM_MEASURED_S2S"
+      ]
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "measurement_platform": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "definition": {
+      "type": "string",
+      "const": "user_input_end_to_route_or_direct_response_event_available"
+    },
+    "samples_ms": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    }
+  }
+}

@@ -30,6 +30,8 @@
 
 ## Current measurement status
 
+현재 단계는 **Measurement Contract Definition**이다. W-01~W-12의 측정 의미와 조건을 먼저 확정하며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
+
 | Item | Status |
 | --- | --- |
 | System boundary, representative use cases, change scenarios | Defined |
@@ -38,7 +40,7 @@
 | W-01~W-03 machine-readable contract and harness | **Not implemented** |
 | W-01~W-03 current results | **Not run** |
 | Actual S2S/VIA LLM/product latency evidence | **Not measured** |
-| Previous W12-G1 code and results | Historical/superseded archive |
+| Previous measurement code and results | Historical/superseded archive |
 
 새 Voice responsiveness 정의는 다음과 같다.
 
@@ -71,10 +73,10 @@
 | [`docs/adr/`](docs/adr/README.md) | 승인·유예된 Architecture Decision Record |
 | [`docs/references/`](docs/references/README.md) | 출처와 참고자료; 요구사항이나 결정 자체는 아님 |
 | [`benchmark/architecture/`](benchmark/architecture/README.md) | 다음 measurement contract와 harness의 active 위치 |
-| [`prototypes/gate2/`](prototypes/gate2/README.md) | Gate 2 Architecture 후보 구현 |
-| [`results/gate2/current/`](results/gate2/current/README.md) | 현재 계약으로 생성된 evidence만 저장할 위치 |
-| [`scripts/gate2/`](scripts/gate2/README.md) | active 문서·구조 검증 도구 |
-| [`docs/archive/`](docs/archive/README.md), [`benchmark/archive/`](benchmark/archive/README.md), [`results/gate2/archive/`](results/gate2/archive/README.md) | 퇴역한 세대와 historical evidence |
+| [`prototypes/candidates/`](prototypes/candidates/README.md) | Architecture 후보 구현 |
+| [`results/architecture-evaluation/current/`](results/architecture-evaluation/current/README.md) | 현재 계약으로 생성된 evidence만 저장할 위치 |
+| [`scripts/architecture/`](scripts/architecture/README.md) | active 문서·구조 검증 도구 |
+| [`docs/archive/`](docs/archive/README.md), [`benchmark/archive/`](benchmark/archive/README.md), [`results/gate2/archive/`](results/gate2/archive/README.md) | 퇴역한 세대와 historical evidence; `gate2`는 과거 campaign 이름일 뿐 현재 단계명이 아님 |
 
 ## Evidence interpretation
 
@@ -88,10 +90,10 @@
 ## Development
 
 ```bash
-.venv/bin/python scripts/gate2/check_active_markdown_links.py
-.venv/bin/python scripts/gate2/check_active_w_metric_terms.py
-cargo +1.98.1 fmt --manifest-path prototypes/gate2/Cargo.toml --all -- --check
-cargo +1.98.1 test --locked --manifest-path prototypes/gate2/Cargo.toml --workspace --all-targets
+.venv/bin/python scripts/architecture/check_active_markdown_links.py
+.venv/bin/python scripts/architecture/check_active_w_metric_terms.py
+cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
+cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
 ```
 
 작업 규칙은 [AGENTS.md](AGENTS.md), 사람 기여 절차는 [CONTRIBUTING.md](CONTRIBUTING.md)를 따른다.

@@ -27,8 +27,8 @@ When documents disagree, use this order:
 1. Explicit instructions in the current user request
 2. `docs/architecture/` active baseline
 3. `docs/adr/` decision records, interpreted with their status and caveats
-4. Active code under `benchmark/architecture/`, `prototypes/gate2/`, and `scripts/gate2/`
-5. Current evidence under `results/gate2/current/`
+4. Active code under `benchmark/architecture/`, `prototypes/candidates/`, and `scripts/architecture/`
+5. Current evidence under `results/architecture-evaluation/current/`
 6. `docs/references/` as supporting context only
 7. Any `archive/` path as historical provenance only
 
@@ -44,7 +44,7 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
 - W-01, W-02, and W-03 are Voice-in/Voice-out metrics defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
 - Their semantic and event-boundary document drafts exist, but the machine-readable contract, harness, target, score bands, and current results are not yet implemented or run.
-- Existing W12-G1 implementation and results are historical/superseded.
+- Existing predecessor implementation and results under the `w12-g1` archive are historical/superseded. `Gate 1` and `Gate 2` are not active lifecycle names.
 - Current accepted decisions have caveats: AGENT-DP01=A, TASK-DP01=B, EXEC-DP01=B; IR-DP01 is deferred with A only as an interim reference. Read the ADRs before describing them.
 
 Do not silently turn a pending definition into an implemented fact or a deferred decision into an accepted one.
@@ -57,10 +57,12 @@ Do not silently turn a pending definition into an implemented fact or a deferred
 | Accepted or deferred decision record | `docs/adr/` |
 | External/internal source material | `docs/references/` |
 | Measurement fixtures, adapters, runners, analyzers | `benchmark/architecture/` |
-| Candidate Architecture implementation | `prototypes/gate2/` |
-| Evidence produced by the current frozen contract | `results/gate2/current/` |
-| Active consistency and review scripts | `scripts/gate2/` |
+| Candidate Architecture implementation | `prototypes/candidates/` |
+| Evidence produced by the current frozen contract | `results/architecture-evaluation/current/` |
+| Active consistency and review scripts | `scripts/architecture/` |
 | Superseded generations | the matching `archive/` tree |
+
+The active lifecycle names are **Measurement Contract Definition → Candidate Implementation → A/B Measurement & Evaluation → Architecture Decision**. Do not introduce `Gate 1` or `Gate 2` as current phase names. Exact legacy names may appear only when identifying archived paths or historical evidence.
 
 Do not place new active files under a historical namespace. Do not overwrite prior result directories; create a new freeze/result directory when a new campaign is authorized.
 
@@ -124,16 +126,16 @@ Before completion:
 Minimum documentation checks:
 
 ```bash
-.venv/bin/python scripts/gate2/check_active_markdown_links.py
-.venv/bin/python scripts/gate2/check_active_w_metric_terms.py
+.venv/bin/python scripts/architecture/check_active_markdown_links.py
+.venv/bin/python scripts/architecture/check_active_w_metric_terms.py
 ```
 
-Candidate Rust checks when `prototypes/gate2/` changes:
+Candidate Rust checks when `prototypes/candidates/` changes:
 
 ```bash
-cargo +1.98.1 fmt --manifest-path prototypes/gate2/Cargo.toml --all -- --check
-cargo +1.98.1 clippy --locked --manifest-path prototypes/gate2/Cargo.toml --workspace --all-targets -- -D warnings
-cargo +1.98.1 test --locked --manifest-path prototypes/gate2/Cargo.toml --workspace --all-targets
+cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
+cargo +1.98.1 clippy --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets -- -D warnings
+cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
 ```
 
 ## 8. Git policy

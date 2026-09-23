@@ -13,7 +13,7 @@
 
 ## Expected layout
 
-새 구현이 시작되면 목적별로 contract/fixture, runner, trace schema, analyzer, tests를 분리한다. Raw result나 generated summary는 이 디렉터리가 아니라 [results/gate2/current](../../results/gate2/current/README.md)의 새 freeze directory에 저장한다.
+새 구현이 시작되면 목적별로 contract/fixture, runner, trace schema, analyzer, tests를 분리한다. Raw result나 generated summary는 이 디렉터리가 아니라 [results/architecture-evaluation/current](../../results/architecture-evaluation/current/README.md)의 새 freeze directory에 저장한다.
 
 ## Non-goals
 

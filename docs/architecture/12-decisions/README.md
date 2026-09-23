@@ -10,7 +10,7 @@
 4. A/B raw metric과 correctness를 paired comparison으로 제시한다.
 5. 선택안의 장점뿐 아니라 약점, tactic, 재검증 조건을 ADR에 남긴다.
 
-자세한 규칙은 [Evaluation Method](./evaluation-method.md), 대안 inventory는 [Gate 2 Decision Points](./gate2/README.md)를 따른다. 여러 DP 조합의 weighted global winner는 기본 의사결정 방식이 아니다.
+자세한 규칙은 [Evaluation Method](./evaluation-method.md), 대안 inventory는 [Architecture Candidate Decision Points](./candidates/README.md)를 따른다. 여러 DP 조합의 weighted global winner는 기본 의사결정 방식이 아니다.
 
 ## Current DP status
 

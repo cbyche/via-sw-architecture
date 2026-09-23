@@ -9,9 +9,9 @@ on:
       - 'docs/architecture/**'
       - 'docs/adr/**'
       - 'benchmark/architecture/**'
-      - 'prototypes/gate2/**'
-      - 'results/gate2/current/**'
-      - 'scripts/gate2/**'
+      - 'prototypes/candidates/**'
+      - 'results/architecture-evaluation/current/**'
+      - 'scripts/architecture/**'
       - '.github/workflows/architecture-ci.yml'
   workflow_dispatch:
 
@@ -26,10 +26,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check active terminology and links
         run: |
-          python3 scripts/gate2/check_active_w_metric_terms.py
-          python3 scripts/gate2/check_active_markdown_links.py
+          python3 scripts/architecture/check_active_w_metric_terms.py
+          python3 scripts/architecture/check_active_markdown_links.py
 
-  gate2-prototype:
+  candidate-prototype:
     strategy:
       fail-fast: false
       matrix:
@@ -40,27 +40,27 @@ jobs:
       - name: Install frozen Rust toolchain
         run: |
           rustup toolchain install 1.98.1 --profile minimal --component rustfmt,clippy
-          cd prototypes/gate2
+          cd prototypes/candidates
           rustup override set 1.98.1
       - name: Formatting
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: cargo fmt --all -- --check
       - name: Clippy
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: cargo clippy --locked --workspace --all-targets -- -D warnings
       - name: Tests
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: cargo test --locked --workspace --all-targets
       - name: Structural smoke
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: |
-          cargo build --locked -p gate2-worker -p gate2-host -p gate2-bench
-          cargo run --locked -q -p gate2-bench -- smoke
-          cargo run --locked -q -p gate2-bench -- exec-smoke --worker target/debug/gate2-worker
-          cargo run --locked -q -p gate2-bench -- exec-abort-smoke --worker target/debug/gate2-worker
-          cargo run --locked -q -p gate2-bench -- exec-blast-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
-          cargo run --locked -q -p gate2-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
-          cargo run --locked -q -p gate2-bench -- w04-load-smoke
-          cargo run --locked -q -p gate2-bench -- w09-whole-restart-smoke
-          cargo run --locked -q -p gate2-bench -- w09-whole-process-smoke
-          cargo run --locked -q -p gate2-bench -- w09-integration-fatal-smoke --host target/debug/gate2-host --worker target/debug/gate2-worker
+          cargo build --locked -p via-worker -p via-host -p via-bench
+          cargo run --locked -q -p via-bench -- smoke
+          cargo run --locked -q -p via-bench -- exec-smoke --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- exec-abort-smoke --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- exec-blast-smoke --host target/debug/via-host --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
+          cargo run --locked -q -p via-bench -- w04-load-smoke
+          cargo run --locked -q -p via-bench -- w09-whole-restart-smoke
+          cargo run --locked -q -p via-bench -- w09-whole-process-smoke
+          cargo run --locked -q -p via-bench -- w09-integration-fatal-smoke --host target/debug/via-host --worker target/debug/via-worker

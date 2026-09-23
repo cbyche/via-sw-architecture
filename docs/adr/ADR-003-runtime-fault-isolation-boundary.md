@@ -4,11 +4,11 @@
 - Date: 2026-09-22
 - Related DP: EXEC-DP01
 
-> W12-G2 impact: 이전 W-01~W-03 latency와 W-01 기반 W-04 evidence는 superseded/review-required다. Process-isolation 결정은 W-09 recovery와 W-10 containment 근거로 유지하고 새 Voice latency는 재측정한다.
+> Current measurement-contract impact: 이전 W-01~W-03 latency와 W-01 기반 W-04 evidence는 superseded/review-required다. Process-isolation 결정은 W-09 recovery와 W-10 containment 근거로 유지하고 새 Voice latency는 재측정한다.
 
 ## Context
 
-Gate 2 compared integration code in the VIA process with the same code in a supervised child process. The comparison included whole-process recovery, integration-host fatal faults, and a fixed containment matrix. The `2^4` follow-up evaluated EXEC A/B in all eight contexts formed by IR, TASK, and AGENT choices.
+The earlier candidate evaluation compared integration code in the VIA process with the same code in a supervised child process. The comparison included whole-process recovery, integration-host fatal faults, and a fixed containment matrix. The `2^4` follow-up evaluated EXEC A/B in all eight contexts formed by IR, TASK, and AGENT choices.
 
 ## Decision
 
@@ -24,10 +24,10 @@ Candidate B adds versioned IPC, worker lifecycle supervision, and an independent
 |---|---|
 | W-09 | B was about 176.33ms lower in all 8/8 contexts; both score 5 and pass target |
 | W-10 | A/B both 28/28, 100%, score 5 |
-| W-01 (historical) | Superseded by the W12-G2 Voice definition; not current evidence |
+| W-01 (historical) | Superseded by the current measurement contract Voice definition; not current evidence |
 | W-04 (historical) | Depends on the superseded W-01 foreground contract; review required |
 
-Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/564ms in the full-factorial run. W-09 did not split a band, but its raw recovery improvement remains direct evidence for B. The previous W-01/W-02/W-03 and W-04 reference costs are historical and must be remeasured under W12-G2.
+Candidate B's integration-fatal p95 values were 18/33ms versus A's 545/564ms in the full-factorial run. W-09 did not split a band, but its raw recovery improvement remains direct evidence for B. The previous W-01/W-02/W-03 and W-04 reference costs are historical and must be remeasured under the current measurement contract.
 
 ## Tactics and weakness
 

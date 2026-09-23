@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'prototypes/gate2/**'
+      - 'prototypes/candidates/**'
       - '.github/workflows/architecture-review-audit.yml'
   workflow_dispatch:
 
@@ -22,24 +22,24 @@ jobs:
       - name: Fixed toolchain
         run: |
           rustup toolchain install 1.98.1 --profile minimal --component rustfmt,clippy
-          cd prototypes/gate2
+          cd prototypes/candidates
           rustup override set 1.98.1
       - name: Verify formatting
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: cargo fmt --all -- --check
       - name: Run correctness guards
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: |
           set -o pipefail
           ulimit -c 0
           cargo test --locked --workspace --all-targets -- --test-threads=2 2>&1 | tee audit-test-output.txt
       - name: Lint
-        working-directory: prototypes/gate2
+        working-directory: prototypes/candidates
         run: cargo clippy --locked --workspace --all-targets -- -D warnings
       - name: Package exact audited source and lock
         if: always()
         run: |
-          tar --exclude=target --exclude='*.db*' --exclude='__pycache__' -czf review-source.tar.gz prototypes/gate2
+          tar --exclude=target --exclude='*.db*' --exclude='__pycache__' -czf review-source.tar.gz prototypes/candidates
           printf '%s\n' '${{ github.sha }}' > review-source-sha.txt
       - uses: actions/upload-artifact@v4
         if: always()
@@ -48,6 +48,6 @@ jobs:
           path: |
             review-source.tar.gz
             review-source-sha.txt
-            prototypes/gate2/Cargo.lock
-            prototypes/gate2/audit-test-output.txt
+            prototypes/candidates/Cargo.lock
+            prototypes/candidates/audit-test-output.txt
           retention-days: 7

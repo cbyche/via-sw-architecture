@@ -1,6 +1,6 @@
 # 11-D. Working-12 Measurement & Scoring Contract
 
-> 버전: **W12-G2-DRAFT — W-01~W-03 Voice responsiveness 재정의, 측정 구현 전**.
+> 버전: **MEASUREMENT-CONTRACT-DRAFT — W-01~W-03 Voice responsiveness 재정의, 측정 구현 전**.
 > W-01~W-03의 상세 source of truth는 [`voice-responsiveness.md`](../08-quality-attributes/voice-responsiveness.md)다. W12-G1 정의·target·score와 기존 결과는 이 세 지표에 한해 historical/superseded다.
 > [`baseline.json`](../../../benchmark/archive/w12-g1/working12/baseline.json)은 W12-G1 machine contract이며 W-01~W-03 새 측정에 사용하면 안 된다. 측정 코드는 후속 구현 작업에서 별도 freeze와 함께 변경한다.
 > 모든 metric endpoint event의 의미와 관측 규칙은 [`event-boundary-contract.md`](./event-boundary-contract.md)를 따른다.
@@ -116,7 +116,7 @@ W-04는 W12-G1 W-01 foreground probe에 의존하므로 새 W-01 정의와 repre
 
 multi-ASR TC의 요구는 관련 W에만 tag하고, 같은 실패를 자동 복사하지 않는다. 정답을 replay하는 Model stub은 semantic accuracy를 측정하지 않는다. pipeline별 임의 error rate를 가정해 점수를 채우지 않는다. 동등하게 잘 만든 후보 모두 100%면 동점이다.
 
-TC-06.2·06.3·14.5는 **적절한 clarification, 원 Request에 대한 답변 binding, 최종 처리 결과**를 모두 판정해야 한다. 기존 짧은 관찰 문장이나 generator가 final outcome을 빠뜨리면 실행 전에 assertion ledger를 보완하고 버전을 잠근다. 이를 candidate 결과를 본 뒤 partial-credit 기준을 바꾸는 데 쓰지 않는다. 11-B 원문과 generated obligation ledger의 동일 의미를 Gate 2 실행 준비 검사에 포함한다.
+TC-06.2·06.3·14.5는 **적절한 clarification, 원 Request에 대한 답변 binding, 최종 처리 결과**를 모두 판정해야 한다. 기존 짧은 관찰 문장이나 generator가 final outcome을 빠뜨리면 실행 전에 assertion ledger를 보완하고 버전을 잠근다. 이를 candidate 결과를 본 뒤 partial-credit 기준을 바꾸는 데 쓰지 않는다. 11-B 원문과 generated obligation ledger의 동일 의미를 A/B 실행 준비 검사에 포함한다.
 
 ### W-07 / W-08 Change Locality
 
@@ -189,7 +189,7 @@ exposure = 100 × |whole-workload union of exposed protected units| / 20
 
 압축·암호화·summary라는 포장 자체로 정보 단위를 없애지 않는다. 수신자가 해독/복원하거나 같은 사실을 알 수 있으면 그 단위를 기록한다. Abstract handle 자체를 보내도 열어주는 scope 전체를 센다. 공개정보는 분모를 늘리는 데 쓰지 않는다. 모든 요청을 차단해 얻은 0 노출은 정상 기능을 유지하지 못했으므로 적합한 privacy 비교값이 아니다.
 
-**목표 25%=5/20**는 제한된 공유 예산을 검토하기 위한 신규 제품 제안이다. NIST가 정한 privacy cutoff나 유출 위험 확률이 아니다. 원래 사용자 목표상 반드시 공개해야 하는 정보량과 함께 리뷰해야 한다. 20개 정보단위가 임의 byte 쪼개기가 아닌지, 의미 동등한 요약 노출의 annotation이 일관적인지도 Gate 2에서 확인한다. 정보 단위/대상 corpus를 바꾸면 target을 조용히 재사용하지 말고 명시적 새 평가 버전으로 검토한다.
+**목표 25%=5/20**는 제한된 공유 예산을 검토하기 위한 신규 제품 제안이다. NIST가 정한 privacy cutoff나 유출 위험 확률이 아니다. 원래 사용자 목표상 반드시 공개해야 하는 정보량과 함께 리뷰해야 한다. 20개 정보단위가 임의 byte 쪼개기가 아닌지, 의미 동등한 요약 노출의 annotation이 일관적인지도 A/B 실행 전에 확인한다. 정보 단위/대상 corpus를 바꾸면 target을 조용히 재사용하지 말고 명시적 새 평가 버전으로 검토한다.
 
 ### W-12 Action & Access Safety
 
@@ -208,10 +208,10 @@ exposure = 100 × |whole-workload union of exposed protected units| / 20
 | 완전한 C/I/S/D change ledger | W-07/08 설계 변경량 | 구현 공수·성능 실측 |
 | 설계+전체 reachable scope 분석 | W-11 계획상 노출 범위 | 실제 개인정보 유출 위험 확률 |
 
-현재 코드가 수행한 것은 score lookup·분모·formula·coverage의 검증이다. 12개 전수 sweep을 실행한 것이 아니다. 음성/OS 원본, 실제 runtime build pin, candidate API adapter, exact prompt tokenization, semantic judgment와 실행 trace는 Gate 2/후속 실행 자산으로 남는다. 이 파일은 그 자산을 만들 때 바꿔서는 안 될 **비교 계약**을 먼저 명시한 것이다.
+현재 코드가 수행한 것은 score lookup·분모·formula·coverage의 검증이다. 12개 전수 sweep을 실행한 것이 아니다. 음성/OS 원본, 실제 runtime build pin, candidate API adapter, exact prompt tokenization, semantic judgment와 실행 trace는 Candidate Implementation과 A/B Measurement 단계에서 만들어야 한다. 이 파일은 그 자산을 만들 때 바꿔서는 안 될 **비교 계약**을 먼저 명시한 것이다.
 
 ## 7. Freeze와 예외 처리
 
-Gate 1은 catalog와 이 계약의 검토 버전, Gate 2는 candidate/E-ID/실행 자산 hash까지 동결하는 지점이다. 새로운 제품 목표·metric·분모가 필요하면 변경 사유·영향·버전을 기록하고 모든 후보에 다시 동일하게 적용한다. 결과를 보고 특정 후보만 band, timeout, cache, Agent 능력을 바꾸지 않는다.
+Measurement Contract Definition에서 catalog, metric, target, 분모와 집계 규칙을 승인한다. Candidate Implementation이 끝나면 candidate/E-ID와 실행 자산 hash를 Measurement Freeze로 동결한 뒤 A/B Measurement를 시작한다. 새로운 제품 목표·metric·분모가 필요하면 변경 사유·영향·버전을 기록하고 모든 후보에 다시 동일하게 적용한다. 결과를 보고 특정 후보만 band, timeout, cache, Agent 능력을 바꾸지 않는다.
 
 공개 모델 profile의 정확한 runtime/hardware 분포가 부족한 상태에서는 타당한 latency 수치가 없는 칸을 비워둔다. 결과를 예쁘게 만들기 위해 estimated 평균을 p95로 이름만 바꾸지 않는다.

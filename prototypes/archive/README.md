@@ -2,7 +2,7 @@
 
 > **Historical only.**
 
-This tree preserves prototype generations that no longer implement the active Architecture baseline. The current Gate 2 candidate workspace is [prototypes/gate2](../gate2/README.md).
+This tree preserves prototype generations that no longer implement the active Architecture baseline. The current candidate workspace is [prototypes/candidates](../candidates/README.md).
 
 - [vNext/DP-00](./vnext-dp00/dp00/README.md) is retained to audit its runtime and qualification design.
 - Its toolchain, fixtures, alternative identities, commands, and performance profiles are not current defaults.

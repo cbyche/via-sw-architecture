@@ -1,6 +1,8 @@
 # Measurement Guide
 
 > **Current state:** W-01~W-03 semantic definitions exist; machine contract, target, score bands, harness, and current results do not.
+>
+> **Current phase: Measurement Contract Definition.** 현재는 W-01~W-12 각각에 대해 무엇을 어떤 경계와 조건으로 측정할지 확정하는 단계다. 후보 구현이나 A/B 실행 단계가 아니다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
@@ -31,7 +33,16 @@
 9. source revision과 fixture digest를 Measurement Freeze로 고정한다.
 10. A/B paired run을 수행하고 raw trace에서 summary를 재생성한다.
 
-현재 W-01~W-03은 1~3의 semantic/event-boundary draft까지만 진행됐다. 모든 W의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. 기존 W12-G1 code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+## Lifecycle names
+
+1. **Measurement Contract Definition** — W별 의미, fixture, endpoint, 반복·집계, target과 evidence 범위를 확정한다.
+2. **Candidate Implementation** — 확정된 계약을 만족하는 DP별 A/B 후보와 harness를 구현한다.
+3. **A/B Measurement & Evaluation** — 다른 DP 조건을 고정한 paired run으로 raw evidence를 생성·평가한다.
+4. **Architecture Decision** — 측정 결과와 구조적 원인을 ADR에 반영한다.
+
+`Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
+
+현재 W-01~W-03은 위 `Required sequence`의 1~3에 해당하는 semantic/event-boundary draft까지만 진행됐다. 모든 W의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 
@@ -46,7 +57,7 @@
 
 Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or `TARGET_WINDOWS_LATENCY`. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
 
-## W-01~W-03 implementation gate
+## W-01~W-03 implementation prerequisites
 
 Before implementation, freeze at least:
 
@@ -71,4 +82,4 @@ Qwen3-Omni 234 ms may be used only as a clearly labeled scheduled reference span
 - Actual human recordings, Windows playback capture, current S2S/VIA LLM runs, and current DP A/B Voice results do not exist.
 - Archive assets may inform a new fixture review, but their old timing names, constants, target, score, and results are not inherited.
 
-Current implementation belongs in [benchmark/architecture](../../../benchmark/architecture/README.md). Valid current evidence belongs in [results/gate2/current](../../../results/gate2/current/README.md).
+Current implementation belongs in [benchmark/architecture](../../../benchmark/architecture/README.md). Valid current evidence belongs in [results/architecture-evaluation/current](../../../results/architecture-evaluation/current/README.md).
