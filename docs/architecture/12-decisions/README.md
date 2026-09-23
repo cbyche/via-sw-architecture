@@ -4,6 +4,8 @@
 
 새로운 Decision Point를 처음부터 도출할 때 사용할 시스템 이해 검토 기록은 [VIA System Understanding Review](./system-understanding-review.md)에 있다. 이 기록은 비규범 분석 입력이며 기존 DP나 ADR을 정답으로 전제하지 않는다.
 
+시스템 이해와 active QA에서 전체 Core DP 후보를 백지 도출한 결과와 구조 강도·QA coverage·독립성 검토는 [Core Decision Point Discovery](./core-dp-discovery.md)에 있다. 이 문서는 사용자 검토 초안이며 기존 후보 정의나 ADR을 변경하지 않는다.
+
 ## Decision method
 
 1. 하나의 DP가 바꾸는 authority, state ownership, contract, call graph 또는 fault boundary를 명시한다.
