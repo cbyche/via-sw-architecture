@@ -10,6 +10,7 @@
 | vNext / DP-00 | [vnext-dp00](./vnext-dp00/) | `archive/vnext-dp00-executable-v3`, `archive/vnext-interim-report`, `archive/qa03-v1/*` |
 | Rebaseline W12-G1 | [w12-g1](./w12-g1/README.md) | repository history before the W12-G2 definition change |
 | QA catalog draft v1 | [qa-catalog-draft-v1](./qa-catalog-draft-v1/README.md) | repository history before the 2026-09-23 QA catalog review |
+| DP pre-inventory summaries and candidates | [2026-09-25 provenance](./dp-review-pre-inventory-2026-09-25/PROVENANCE.md) | 전수 VIA-DP-01~18 정리 직전 사본; 사용자 로컬 수정 포함 |
 
 The current source of truth is [docs/architecture](../architecture/README.md).
 

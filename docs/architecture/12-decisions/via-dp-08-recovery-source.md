@@ -1,10 +1,10 @@
 # VIA-DP-08 — 재시작 후 상태의 기준 기록
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 상태 변경 이력과 checkpoint를 복구의 진실로 삼을 것인가, 현재 상태와 미완료 동작 기록을 진실로 삼을 것인가?
 >
-> 현재 판단: **보조 설계 결정으로 유지 — 강한 양방향 QA trade-off 미입증** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **설계 후보로 유지 — 강한 양방향 QA trade-off 미입증** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — 취소 요청 직후 재시작하면 무엇을 믿을까?
 
@@ -37,6 +37,14 @@ class Q change;
 
 **미확인 사항:** 실제 state 크기·변경 이력 길이·checkpoint 빈도·복원 critical path·schema 이행 ledger. 그 값을 이번 문서에서 tuning하거나 임의 지연으로 채우지 않는다. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 상태 변경 이력 + 검증된 checkpoint
 
 확정된 상태 전이 이력이 권위 있는 원본이다. 현재 view와 checkpoint는 이력의 특정 위치에서 만든 파생 상태이며, 유효한 checkpoint 이후 tail을 재생해 복원한다. 모든 이력을 매번 처음부터 재생하는 약한 안이 아니라 빠른 현재 view와 이력 복구를 함께 쓰는 hybrid다.
@@ -45,20 +53,24 @@ class Q change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- C["공통 상태 확정"] -->|확정 전이 append| E[("[변경] 기준 전이 이력")]
- E -->|검증된 위치까지| S[("checkpoint·현재 view")]
- E -->|checkpoint 뒤 tail| R["[변경] 복원·재생"]
- S -->|검증된 시작 상태| R
- R -->|원래 명령 ID로 확인| O["공통 Agent 재연결"]
+ subgraph V["VIA Core Process — 저장·복구 영역"]
+ T["공통 Task Owner"] -->|"command id·확정 전이 append"| E[("[변경] Authoritative Event Store<br/>원본 전이·효과 ID")]
+ E -->|"확정 position"| P["Projection·Checkpoint Builder"]
+ P -->|"파생 기록"| S[("현재 view·checkpoint")]
+ R["[변경] Recovery Replayer"] -->|"tail 읽기"| E
+ S -->|"position·schema 확인"| R
+ R -->|"복원된 Task"| T
+ E -.->|"비동기: 확정 효과 조회"| D["공통 Effect Dispatcher<br/>미확인 실행 먼저 query"]
+ D -.->|"비동기: 외부 사실"| T
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class C,S,O common;
-class E,R change;
+ D <-->|"같은 submission key·run id"| A["외부 Agent Runtime"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Task Owner가 전이·effect identity를 Event Store에 확정한다. view·checkpoint는 이력 position이 있는 파생 자료다. Dispatcher는 확정 효과만 transaction 밖에서 전달한다.
+2. 재시작하면 checkpoint를 검증하고 이후 tail을 재생한다. view가 다르면 기준은 이력이다. replay는 이미 수행한 외부 Action을 다시 실행한다는 뜻이 아니다.
+3. 미확인 실행은 같은 run/submission key로 조회한다. 외부 조회·중복 억제 미지원이면 확인 불가로 남긴다. 이력에 실제 관측하지 않은 Agent 완료를 만들어 넣지 않는다.
 
 현재 view가 있어도 진실의 기준은 전이 이력이다. Checkpoint의 이력 위치·schema가 맞지 않으면 그대로 신뢰하지 않는다.
 
@@ -70,23 +82,26 @@ class E,R change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- C["공통 상태 확정"] -->|원자적 state·명령 commit| S[("[변경] 현재 상태·미완료 동작")]
- C -->|공통 감사·연구 근거| E[("전이·실행 이력")]
- S -->|직접 복원| R["[변경] 현재 상태 복원"]
- R -->|원래 명령 ID로 확인| O["공통 Agent 재연결"]
+ subgraph V["VIA Core Process — 저장·복구 영역"]
+ T["공통 Task Owner"] -->|"단일 transaction"| S[("[변경] Authoritative State Store<br/>현재 Task·version·pending·outbox")]
+ T -->|"동일 trace 의무"| E[("감사·연구 이력<br/>복구 권한 없음")]
+ R["[변경] State Loader"] -->|"현재 상태·미완료 명령 읽기"| S
+ R -->|"복원된 Task"| T
+ S -.->|"비동기: 확정 outbox 조회"| D["공통 Effect Dispatcher<br/>미확인 실행 먼저 query"]
+ D -.->|"비동기: 외부 사실"| T
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class C,E,O common;
-class S,R change;
+ D <-->|"같은 submission key·run id"| A["외부 Agent Runtime"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 현재 state·revision·dedup·outbox를 함께 commit한다. 감사 이력도 남기지만 복구 원본은 아니다. 감사 기록의 시점은 VIA-DP-12를 A/B 동일하게 고정한다.
+2. Loader는 현재 기록과 pending 명령을 읽고 schema 이행·무결성을 검사한다. 이후 공통 Dispatcher로 실제 외부 상태를 확인한다.
+3. 감사 이력과 state가 다르면 로그로 조용히 덮지 않고 승인된 state migration·불일치 규칙을 따른다. 양쪽 모두 영속 기록이 필요하며 메모리 queue만으로 복구를 보장하지 않는다.
 
 감사 이력이 있다는 이유로 A가 되지 않는다. 복구의 최종 기준은 현재 상태와 확정된 미완료 동작이다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -173,7 +188,7 @@ C-06에서 A는 event reader/upcaster·checkpoint schema·projection, B는 state
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 비슷 예상 | 중간 | 연구 evidence contract를 양쪽에 동일하게 제공 가능 [T3](#t3) | 회귀 |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건에 따라 다름 | 중간 | checkpoint tail 대 current loading, 공통 외부 대기의 비중 [T2](#t2) | 보조 비교 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 | 중간 | 기준 기록 선택이 별도 Process 격리는 아님 [T2](#t2) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향 미정 | 낮음 | replay buffer·current cache의 실제 peak 수명 필요 [T2](#t2) | 보조 비교 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향 미정 | 낮음 | replay buffer·current cache의 실제 peak 수명 필요 [T2](#t2) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 이력 보존도 동일한 최소 정보·삭제 정책 적용 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | domain event만으로 execution trace는 완성되지 않음 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 두 안 모두 frozen execution evidence로 같은 평가 재계산 가능 [T3](#t3) | 필수 회귀 |
@@ -194,7 +209,7 @@ DP-02 상태 소유 경계와 독립이다. DP-12의 실행 evidence durability�
 
 ## 10. 현재 판단과 재검토 조건
 
-**보조 설계 결정으로 유지하고 핵심 A/B 평가에서는 우선 제외한다.** 재시작 구조로 중요하지만 ‘이력은 정확·관측 우세, 현재 state는 빠름’이라는 초기 trade-off는 steelman 뒤 성립하지 않는다. 저장·이행 계약을 선택해야 한다는 사실과 강한 QA 점수 비교 대상이라는 사실을 구분한다.
+**설계 후보로 유지하고 핵심 A/B 평가에서는 우선 제외한다.** 재시작 구조로 중요하지만 ‘이력은 정확·관측 우세, 현재 state는 빠름’이라는 초기 trade-off는 steelman 뒤 성립하지 않는다. 저장·이행 계약을 선택해야 한다는 사실과 강한 QA 점수 비교 대상이라는 사실을 구분한다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

@@ -40,6 +40,8 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 
 - The authoritative branch is `main`.
 - The active Architecture baseline is `docs/architecture/`.
+- Current decision reports use VIA-DP-01~18; legacy IR/TASK/AGENT/EXEC IDs are provenance only, not the primary reading path. TASK-DP01 is carried forward as VIA-DP-14 without changing ADR-002's accepted B status or its revalidation caveats.
+- VIA uses exactly one S2S model and one semantic LLM. Never load or replicate models per Component, Task, or semantic stage. Role-specific prompts, calls, sessions and buffers may differ; they share the same models. Additional ASR/TTS/helper models are outside the current scope. Downstream Agent internals remain external.
 - Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
 - QC-01~QC-10 are top-level quality concerns. The QA catalog is a user-review draft organized by category ranges. Active draft IDs are QA-01~05, QA-11~15, QA-21~23, QA-31/32, QA-41, QA-51, and QA-61/62. The one-time category renumbering is complete; preserve gaps and do not describe the catalog as final.

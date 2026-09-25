@@ -17,16 +17,16 @@
 
 ## Current architecture work
 
-새 DP 검토는 [최종 요약 보고서](docs/architecture/12-decisions/dp-executive-summary.md)부터 읽는다. 초기 후보 전체를 재검토하고 총 13개 독립 보고서로 정리했으며, 우선 핵심 검증 3개·조건부 핵심 4개·선행 범위/기능 3개·보조 설계 3개를 제안한다. 실제 QA 측정이나 최종 선택은 아직 하지 않았다.
+새 DP 검토는 [전체 요약 보고서](docs/architecture/12-decisions/dp-executive-summary.md)부터 읽는다. VIA-DP-01~18의 책임·상태·계약·Process 차이를 구현 수준으로 정리했다. 목적은 전수 inventory이며 최종 DP/ASR 우선순위는 아직 선정하지 않았다. 실제 QA 측정이나 새 최종 선택은 하지 않았다.
 
 아래 네 개는 **기존 ADR로 기록된 결정 축**이다. 새 검토 제안과 구분하며 승인·유예 상태 및 재검증 조건을 유지한다.
 
 | DP | Architecture question | Current decision state |
 | --- | --- | --- |
-| IR-DP01 | semantic authority를 통합할 것인가, 단계별로 분리할 것인가 | Deferred; A는 interim reference |
-| TASK-DP01 | Task 상태를 공유 service가 소유할 것인가, Task별 supervisor가 소유할 것인가 | B accepted; 새 Voice metric으로 재검증 필요 |
-| AGENT-DP01 | Agent 차이를 경계에서 canonical contract로 정규화할 것인가 | A accepted |
-| EXEC-DP01 | integration runtime을 단일 process에 둘 것인가, process 격리할 것인가 | B accepted; 새 Voice metric으로 재검증 필요 |
+| VIA-DP-06 | semantic authority를 통합할 것인가, 단계별로 분리할 것인가 | Deferred; A는 interim reference |
+| VIA-DP-14 | Task 상태를 공유 service가 소유할 것인가, Task별 supervisor가 소유할 것인가 | B accepted; 새 Voice metric으로 재검증 필요 |
+| VIA-DP-09 | Agent 차이를 경계에서 canonical contract로 정규화할 것인가 | A accepted |
+| VIA-DP-11 | integration runtime을 단일 process에 둘 것인가, process 격리할 것인가 | 현행 A 방향 accepted(이전 B); 실제 VIA Client 범위·새 QA 재검증 필요 |
 
 각 DP는 **다른 DP 조건을 고정한 A/B paired comparison**으로 평가한다. 16개 조합의 global winner를 먼저 고르는 방식이 아니며, full-factorial 분석은 interaction 확인을 위한 secondary analysis일 뿐이다.
 

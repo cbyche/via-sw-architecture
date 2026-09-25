@@ -182,3 +182,13 @@ flowchart LR
 Mermaid 원문을 문서에 보존한다. 발표용으로 이미지로 내보낼 때에도 DP와 후보 version을 맞추고, 문서·그림·QA 표가 서로 다른 대안을 설명하지 않도록 함께 갱신한다.
 
 전체 적용에서 넓은 단일 행 때문에 축소되던 그림은 세로 흐름으로 바꾸고, `subgraph`의 의도한 방향도 명시했다. 비동기 순서 그림에서는 양쪽의 병렬 준비 기회를 보존한다. 정상적인 병렬 승인을 본문에서 허용하면서 그림만 직렬로 그리는 식으로 상대안을 약화하지 않는다.
+
+## 6. 현행 보고서의 구현 상세 수준
+
+위 축약 예시는 표현 교육용이며 완료된 DP 그림을 대체하지 않는다. 현재 VIA-DP의 A/B는 Component·Process·message 수준으로 그린다. 변경은 색상 대신 [변경] 텍스트만으로 표시해도 된다. 같은 이름은 같은 공통 책임을 뜻한다.
+
+- 메모리 inbox·bounded queue·audio buffer와 디스크 상태·outbox를 별도 노드로 구분한다. queue 수락을 commit으로 읽히게 하지 않는다.
+- 메시지에는 command/revision, snapshot/ref, event/ACK 등 실제 계약 의미를 표시하고 반환·확정 순서를 본문 번호와 대응한다.
+- Process 경계와 논리 책임을 구분한다. Process 배치가 해당 DP의 선택이 아니면 양쪽 동일한 비교용 가정으로 표시한다. 외부 Agent Runtime과 VIA Client worker는 다른 주체다.
+- S2S 1개와 semantic LLM 1개의 공유 dependency를 표시한다. 반복 호출/세션을 모델 복제처럼 그리지 않는다. 경로상 모델이 참여하지 않으면 공통 생략이라고 설명한다.
+- bus·broker·queue가 설계상 실제 필요할 때만 그린다. message bus 제품 선택과 authority 선택을 묶지 않는다. 정상 흐름과 늦은 결과·재연결·취소·장애를 본문에서 완결한다.

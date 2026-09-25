@@ -1,6 +1,6 @@
 # VIA-DP-02 — 대화와 Task 관계의 확정 경계
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 대화·요청과 Task의 관계를 하나의 원자적 커밋으로 확정할 것인가, 독립 소유자의 확정을 연결할 것인가?
 >
@@ -36,6 +36,14 @@ class Q change;
 
 **미확인 사항:** 교차 관계 변경의 실제 빈도, commit 지연, 지연 event 분포, C-06 상태 변경의 전체 요소 ledger. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 분리된 처리 책임 + 공동 원자 커밋
 
 대화·Task 처리는 모듈로 분리하되, 관계를 바꿀 때는 하나의 관계 확정자가 관련 version과 정책을 검사하고 한 번에 커밋한다. Task별 mailbox·읽기용 사본·낙관적 version 검사를 허용한다. 기존 ‘통합 소유자’의 일관성과 ‘분리 책임’의 모듈성을 결합한 hybrid다.
@@ -44,19 +52,22 @@ class Q change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- C["대화 처리"] -->|변경 제안| J["[변경] 관계 확정자"]
- T["Task 처리"] -->|변경 제안| J
- J -->|공동 원자 커밋| S[("대화·Task 기준 기록")]
- J -->|확정한 명령만 전달| O["공통 Agent 연동"]
+ subgraph V["VIA Core Process — A/B 동일"]
+ I["공통 사용자 명령·Agent 관측"] -->|"command id·대상 revision"| H["대화·Task 변경 Handler"]
+ H -->|"관계 변경 제안"| J["[변경] Joint Commit Coordinator<br/>질문·동의·Task version 검사"]
+ J -->|"단일 transaction"| DB[("공통 Repository<br/>Conversation·Task·Link<br/>dedup·outbox")]
+ DB -->|"commit 완료"| P["공통 UI·Voice 게시"]
+ DB -.->|"비동기: outbox 조회"| D["공통 Effect Dispatcher"]
+ D -.->|"비동기: 접수·결과 관측"| I
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class C,T,S,O common;
-class J change;
+ D <-->|"Agent API·명령 ID"| A["외부 Agent Runtime"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Handler가 변경안을 만들고 Coordinator가 같은 transaction에서 질문·동의 범위·Task revision을 검사한다. 관계·명령·outbox를 함께 확정한다.
+2. commit 후 확정 상태를 게시하고 Dispatcher가 외부 호출한다. Agent·LLM을 기다리는 동안 transaction을 유지하지 않는다. Task별 준비·조회는 병렬이어도 교차 관계 확정 기준은 하나다.
+3. version 충돌은 최신 기록으로 재검토한다. commit 전 crash는 미확정, commit 후 crash는 저장된 명령에서 복구한다. outbox는 디스크 기록이며 별도 메시지 버스가 아니다.
 
 처리 모듈이 나뉘어도 최종 관계 확정은 하나다. 공유 DB를 사용한다는 사실보다 교차 변경을 승인·커밋하는 권한이 핵심이다.
 
@@ -68,24 +79,31 @@ class J change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- C["[변경] 대화 소유자"] -->|독립 확정| CS[("대화 기준 기록")]
- R["[변경] 관계 조정자"] -->|예약·확인| C
- R -->|예약·확인| T["[변경] Task 소유자"]
- T -->|독립 확정| TS[("Task 기준 기록")]
- T -->|관계 확인 후 명령| O["공통 Agent 연동"]
+ subgraph V["VIA Core Process — A/B 동일"]
+ I["공통 사용자 명령·Agent 관측"] -->|"같은 command id"| R["[변경] Relation Reconciler<br/>예약·확인·완료 소유"]
+ R <-->|"reserve / confirm"| C["Conversation Owner"]
+ R <-->|"prepare / confirm"| T["Task Owner"]
+ C -->|"독립 transaction"| CS[("Conversation·예약·outbox")]
+ T -->|"독립 transaction"| TS[("Task·dedup·outbox")]
+ CS -.->|"비동기: 재전달 확인"| R
+ TS -.->|"비동기: 재전달 확인"| R
+ R -->|"확인 완료 저장"| RS[("조정 기록")]
+ RS -->|"확인된 disposition"| P["공통 UI·Voice 게시"]
+ RS -.->|"비동기: 실행 명령"| D["공통 Effect Dispatcher"]
+ D -.->|"비동기: 접수·결과 관측"| I
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class CS,TS,O common;
-class C,R,T change;
+ D <-->|"Agent API·명령 ID"| A["외부 Agent Runtime"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Reconciler가 command ID를 보존하고 대화 답변 예약과 Task 전이 확인을 각각 요청한다. 같은 DB 파일이어도 owner별 transaction은 독립이다.
+2. 영속 outbox의 확인을 받아 양쪽 revision·승인 범위가 맞아야 관계 완료를 기록하고 외부 명령을 release한다. 한쪽만 확정되면 성공이 아닌 조정 대기 상태다.
+3. 재시작하면 owner 기록과 조정 상태에서 미완료 교환만 잇는다. 중복 확인은 command ID로 제거한다. 최종 공동 commit으로 양쪽 상태를 다시 확정하도록 바꾸면 A가 된다.
 
 두 기록을 한 트랜잭션으로 공동 확정하지 않는다. 같은 DB 안에서도 서로 독립적으로 확정하면 B이며, 다른 Process 배치는 필수가 아니다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -175,7 +193,7 @@ A-01~09는 동일 Agent 경계에서 흡수하는 회귀다. M-01~09 및 C-01~05
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | owner 수만으로 E-01~05 변경 요소 수를 도출 못함 [T3](#t3) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건에 따라 다름 | 중간 | B reconciliation 대 A 공동 복원량; 최악 fault 확인 필요 [T2](#t2) | 주 비교 후보 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷; Process 격리 우세 없음 | 중간 | 필수 owner 의존과 무관한 전파를 구별 [T2](#t2) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | A 경합 buffer와 B 조정 상태·사본 크기 미정 [T2](#t2) | 보조 비교 후보 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | A 경합 buffer와 B 조정 상태·사본 크기 미정 [T2](#t2) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 같은 보호정보·수신자 정책; owner 분리 자체는 노출 아님 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | 중앙 관계 기록과 완전한 owner trace 모두 허용 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 저장 evidence·평가 version 보존은 동일 [T3](#t3) | 필수 회귀 |
@@ -196,7 +214,7 @@ DP-08 저장 기준과 DP-11 Process 경계는 별도다. DP-04 응답 권한, D
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 핵심 후보로 유지한다.** ‘중앙은 정확, 분리는 장애 격리’라는 초기 설명을 철회하고, 실제 공동 commit 대 독립 commit의 비용으로 좁혔다. QA-05/31과 변경·관계 검증의 차이가 구체 ledger와 trace에서 사라지면 supporting 결정으로 재분류한다. 지금 A/B 승자를 선택하지 않는다.
+**조건부 후보로 유지한다.** ‘중앙은 정확, 분리는 장애 격리’라는 초기 설명을 철회하고, 실제 공동 commit 대 독립 commit의 비용으로 좁혔다. QA-05/31과 변경·관계 검증의 차이가 구체 ledger와 trace에서 사라지면 supporting 결정으로 재분류한다. 지금 A/B 승자를 선택하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

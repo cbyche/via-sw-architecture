@@ -1,56 +1,61 @@
-# Architecture Decisions
+# Architecture Decisions — 전체 후보 18개
 
-이 디렉터리는 VIA의 구조 질문을 Decision Point로 만들고, 각 DP의 합리적인 A/B 대안을 직접 비교해 선택과 약점을 설명한다.
+**현재 목적은 가능한 Architecture 의사결정을 빠짐없이 구체화하는 것이다.** 최종 발표용 4~5개 DP나 4~6개 ASR을 지금 선정하지 않는다. 과거의 ‘우선 핵심·보조’ 분류는 후보 누락·자동 제외의 근거가 아니다.
 
-**최신 선정 논의는 [핵심 Architecture·ASR 재선정 요약](./core-architecture-reassessment.md)부터 읽는다.** 2026-09-25 사용자 리뷰를 반영해 시스템 중심성, 강한 A/B, QA 다양성을 재검토했다. 핵심 설계 영역과 충분한 trade-off가 확인된 DP를 구별하며, 기존 ADR이나 QA 정의를 변경하지 않는 제안이다.
+## 읽는 순서
 
-[이전 DP 최종 요약 보고서](./dp-executive-summary.md)는 최초 13개 후보 검토의 결론을 보존한다. 후보별 A/B·판정·UC/QA coverage·검증 기록은 [전체 검토 종합](./dp-review-synthesis.md)에 있다. 아래 목록은 그 최초 검토 분류이며 최신 선정 제안과 구별한다.
+1. [전체 요약 보고서](./dp-executive-summary.md): 시스템 구조와 DP의 실제 구현 차이.
+2. [후보 지도](./core-dp-discovery.md): 서로 다른 질문·겹치기 쉬운 경계.
+3. 아래 VIA-DP 독립 보고서: 배경 → A/B 구현도·동작 → 배타성 → 사고실험 → 전체 19개 QA → 판단.
+4. [이전 번호 매핑·누락 점검](./legacy-dp-mapping.md): 기존 9개 질문·25개 주제와 현행 책임 연결.
+5. [정리·검증 기록](./dp-review-synthesis.md): 완료 범위·미확인 사항·검증 상태.
 
-새로운 Decision Point를 처음부터 도출할 때 사용할 시스템 이해 검토 기록은 [VIA System Understanding Review](./system-understanding-review.md)에 있다. 이 기록은 비규범 분석 입력이며 기존 DP나 ADR을 정답으로 전제하지 않는다.
+## 공통 제약
 
-시스템 이해와 active QA에서 백지 도출한 [후보 지도](./core-dp-discovery.md)는 전체 상세 검토 결과를 반영했다. 초기 12개를 재구성하고 DP-13을 추가했다. 새 후보 정의는 사용자 검토 제안이며 기존 ADR의 결정 상태를 변경하지 않는다.
-
-모든 새 후보의 상세 논의에는 [DP 공통 검토 절차](./dp-review-protocol.md)를 적용한다. A/B의 상호 배타성, 양쪽 steelman, hybrid 재구성, 동일 기능·공정한 비교와 완료 기준을 같은 순서로 확인한다.
-
-각 DP 페이지는 처음 읽는 SW Architect 심사관도 이전 대화나 다른 문서 없이 핵심 논리를 따라갈 수 있는 독립된 보고서로 작성한다. 배경부터 현재 판단까지의 보고서 목차와 읽기 검토 기준도 공통 절차에 포함한다.
-
-각 DP의 발표용 배경 인트로와 A/B Mermaid 그림은 [그림 작성 기준](./dp-diagram-guide.md)을 따른다. VIA 내 위치, 두 안의 공통 부분과 구조 차이가 같은 시야에서 드러나야 한다.
-
-첫 적용 사례인 [VIA-DP-01](./via-dp-01-direct-handling.md)에 이어 DP-02~13의 독립 보고서를 작성했다. 모두 배경·A/B 그림, hybrid·상호 배타성·steelman, 전체 19개 QA 사고실험과 자체 검토를 담는다. 구현·측정·대안 선택은 하지 않았다.
+- S2S 모델 1개와 semantic LLM 1개. Component·Task·단계별 추가 적재 없음. 역할별 프롬프트·세션은 공유 모델 사용.
+- 외부 Agent Runtime은 자체 Process/원격 dependency. VIA Client를 별도 worker에 두는 것과 Agent를 embed하는 것은 다름.
+- 현재 QA 번호만 사용: 01~05, 11~15, 21~23, 31/32, 41, 51, 61/62. 단일 metric 원칙 유지.
+- QA-41은 자원 확인 대상으로 유지하되 메모리 상한·유의미한 구조 차이 근거 없이 핵심 ASR로 추천하지 않음.
+- 모든 현재 QA 결과는 `NOT_RUN`. 후보 명세·기존 부분 코드·제품 검증을 구별함.
 
 ## Detailed review reports
 
-| 현재 분류 제안 | 독립 보고서 |
-| --- | --- |
-| 우선 핵심 검증 | [11 Process 격리](./via-dp-11-process-isolation.md) · [12 실행 근거 확정](./via-dp-12-evidence-commit.md) · [13 제어 자원 예약](./via-dp-13-control-reservation.md) |
-| 조건부 핵심 | [02 대화·Task 확정](./via-dp-02-state-consistency.md) · [04 응답 게시](./via-dp-04-response-authority.md) · [05 Context 읽기](./via-dp-05-context-contract.md) · [06 의미 확정](./via-dp-06-semantic-authority.md) |
-| 선행 범위·기능 | [01 직접 처리](./via-dp-01-direct-handling.md) · [03 음성 근거](./via-dp-03-voice-evidence.md) · [07 복합 요청](./via-dp-07-compound-orchestration.md) |
-| 보조 설계 | [08 복구 기준 기록](./via-dp-08-recovery-source.md) · [09 Agent 의미](./via-dp-09-agent-semantics.md) · [10 Model 세션](./via-dp-10-model-session-authority.md) |
+ID 순서는 우선순위가 아니다. 같은 이름의 공통 Component, 명시된 Process 경계, queue/buffer·영속 기록과 메시지 흐름을 A/B에서 대응해 읽는다.
 
-조건부 후보까지 합쳐 핵심 DP 확정으로 해석하지 않는다. 실제 QA 결과는 모두 `NOT_RUN`이다. VIA-DP의 A/B 문자는 아래 기존 ADR의 A/B 문자와 자동 대응하지 않으며 [이력 매핑](./dp-review-synthesis.md#idab-이력과-기존-adr)을 확인한다.
-
-## Decision method
-
-1. 하나의 DP가 바꾸는 authority, state ownership, contract, call graph 또는 fault boundary를 명시한다.
-2. hybrid와 유력한 제3안을 검토하고, 동일한 결정 범위에서 상호 배타적인 steelman A/B를 구성한다.
-3. 다른 DP와 fixture/dependency 조건을 고정한다.
-4. QA catalog 전수를 확인하되, 실제 구조 인과가 있는 QA만 해당 DP의 primary driver로 사용한다.
-5. A/B raw metric과 correctness를 paired comparison으로 제시한다.
-6. 선택안의 장점뿐 아니라 약점, tactic, 재검증 조건을 ADR에 남긴다.
-
-자세한 규칙은 [Evaluation Method](./evaluation-method.md), 대안 inventory는 [Architecture Candidate Decision Points](./candidates/README.md)를 따른다. 여러 DP 조합의 weighted global winner는 기본 의사결정 방식이 아니다.
+| 독립 보고서 | 대안 A | 대안 B |
+| --- | --- | --- |
+| [VIA-DP-01 범위가 정해진 정보 처리의 책임 경계](./via-dp-01-direct-handling.md) | 선택적 직접 처리 + Agent 위임 | 정보 처리 실행의 Agent 일원화 |
+| [VIA-DP-02 대화와 Task 관계의 확정 경계](./via-dp-02-state-consistency.md) | 분리된 처리 책임 + 공동 원자 커밋 | 독립 상태 확정 + 관계 조정 |
+| [VIA-DP-03 음성 입력 근거의 최종 기준](./via-dp-03-voice-evidence.md) | VIA 입력 계약 + 비모델 정렬·정규화 | S2S 입력 계약을 기준으로 사용 |
+| [VIA-DP-04 S2S 직접 응답의 게시 권한](./via-dp-04-response-authority.md) | 한정 권한 위임 + 범위 밖 Core 승인 | 모든 직접 응답에 Core 요청별 승인 |
+| [VIA-DP-05 요청 Context의 읽기 집합 확정 계약](./via-dp-05-context-contract.md) | 불변 입력 명세 + 필요한 값만 지연 적재 | 범위 제한 조회 권한 + 처리 중 입력 확장 |
+| [VIA-DP-06 요청 의미의 최종 확정 권한](./via-dp-06-semantic-authority.md) | 단계별 보조 처리 + 통합 최종 확정 | 단계별 의미 권한 + 명시적 정정 계약 |
+| [VIA-DP-07 복합 요청 관계의 실행 책임](./via-dp-07-compound-orchestration.md) | VIA 관계 조정 + 가능한 부분의 묶음 위임 | 복합 업무 전체의 Agent 조정 |
+| [VIA-DP-08 재시작 후 상태의 기준 기록](./via-dp-08-recovery-source.md) | 상태 변경 이력 + 검증된 checkpoint | 현재 상태 + 미완료 동작 + 감사 이력 |
+| [VIA-DP-09 Agent 수명 계약의 의미 해석 위치](./via-dp-09-agent-semantics.md) | 공통 의미 정규화 + 손실 없는 확장 | 공통 전송·타입 계약 + Core 유형별 의미 확정 |
+| [VIA-DP-10 Model 세션·연결 수명의 관리 권한](./via-dp-10-model-session-authority.md) | 공통 세션 관리자 + 역할별 직접 stream | 역할별 세션 소유 + 공통 adapter library |
+| [VIA-DP-11 외부 연동 코드의 Process 장애 경계](./via-dp-11-process-isolation.md) | 위험 연동 격리 + 얇은 Core 연결부 | 같은 Process + 제한된 queue·실패 처리 |
+| [VIA-DP-12 응답 게시와 실행 근거의 영속 확정 순서](./via-dp-12-evidence-commit.md) | 최소 근거 선확정 + 상세 자료 비동기 수집 | 게시와 영속 기록의 비동기 분리 |
+| [VIA-DP-13 사용자 제어를 위한 실행 자원을 예약할 것인가](./via-dp-13-control-reservation.md) | 제어 여력 예약 + 회수 가능한 유휴 자원 공유 | 전체 자원 공유 + 우선순위 기반 제어 우대 |
+| [VIA-DP-14 Task 상태 전이의 소유권](./via-dp-14-task-state-authority.md) | 공유 transactional Task 서비스 | Task별 단일 writer supervisor |
+| [VIA-DP-15 Agent 상태를 확정하는 관측 경로](./via-dp-15-agent-observation-authority.md) | 유효 event 확정 + query 복구 | Event 알림 + query 확인 후 확정 |
+| [VIA-DP-16 모델 입력 이력의 구성·유지 책임](./via-dp-16-model-context-state.md) | 요청별 재구성 + version 검증 cache | 증분 working context + 필요 시 재구성 |
+| [VIA-DP-17 Source를 소비 가능한 Context로 만드는 책임](./via-dp-17-context-materialization-authority.md) | 공통 materializer + 소비자별 projection | 공통 접근 handle + 소비자 소유 변환 |
+| [VIA-DP-18 보호정보·Action 사용 시 권한을 확인하는 위치](./via-dp-18-authorization-enforcement.md) | 사용마다 중앙 승인 + 사전 준비 cache | 철회 가능한 capability + 로컬 use gate |
 
 ## Existing ADR status
 
-| DP | A / B question | Status | Record |
-| --- | --- | --- | --- |
-| IR-DP01 | integrated vs staged semantic authority | Deferred; A interim reference | [ADR-004](../../adr/ADR-004-semantic-decision-ownership.md) |
-| TASK-DP01 | shared transactional service vs durable per-Task supervisor | B accepted; new Voice revalidation required | [ADR-002](../../adr/ADR-002-task-state-authority.md) |
-| AGENT-DP01 | edge-normalized canonical contract vs core-visible typed contracts | A accepted | [ADR-001](../../adr/ADR-001-agent-integration-contract-boundary.md) |
-| EXEC-DP01 | single-process partition vs process-isolated integration runtime | B accepted; new Voice revalidation required | [ADR-003](../../adr/ADR-003-runtime-fault-isolation-boundary.md) |
+새 번호로 설명을 완결하되 과거 승인 기록을 삭제하거나 재승인하지 않는다.
 
-“Accepted”는 모든 과거 metric이 현재 정의에도 유효하다는 뜻이 아니다. 각 ADR의 evidence와 revalidation condition을 함께 읽는다.
+| 현행 DP | 기존 결정 상태 | 이력 |
+| --- | --- | --- |
+| VIA-DP-06 | Deferred; A는 interim reference | ADR-004 / IR-DP01 |
+| VIA-DP-09 | A accepted; 현행 change pack 근거 재확인 | ADR-001 / AGENT-DP01 |
+| VIA-DP-11 | 현행 A 방향에 해당하는 기존 격리안 accepted; 현행 제품 범위·QA 재검증 필요 | ADR-003 / EXEC-DP01의 B |
+| VIA-DP-14 | B accepted; 현행 Voice·상태·복구 QA 재검증 필요 | ADR-002 / TASK-DP01 |
 
-## What is not current evidence
+핵심 이해를 위해 옛 후보를 다시 읽을 필요는 없다. 정확한 이력은 [매핑](./legacy-dp-mapping.md), 승인 원문은 [ADR index](../../adr/README.md)에 남긴다. accepted 상태는 현재 실측 승자를 뜻하지 않는다.
 
-이전 full-factorial result와 W12-G1 mapping은 [archive](../../archive/w12-g1/README.md)에 있다. 현행 QA catalog에 맞춘 직접 A/B 결과가 아니므로 현재 근거로 재사용하지 않는다. 새 결과가 없으면 `NOT_RUN`으로 남긴다.
+## 공통 작성·평가 계약
+
+[Review protocol](./dp-review-protocol.md), [그림 기준](./dp-diagram-guide.md), [평가 방법](./evaluation-method.md)을 적용한다. 동일 범위에서 mutually exclusive한 steelman A/B를 구성하며 합리적 hybrid를 먼저 반영한다. 다른 DP·기능·dependency 조건을 고정하고 실제 참여 QA만 비교한다. 충분한 trade-off 미입증도 정상적인 결론이다.

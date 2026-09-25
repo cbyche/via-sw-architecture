@@ -175,3 +175,7 @@ Architecture 의사결정 후보는 최소한 다음을 만족해야 한다.
 - 나중에 바꾸기 어렵거나 변경 비용이 크다.
 - 특정 구현 세부사항이나 단순 성능 tuning이 아니다.
 - 측정 결과에 맞추어 사후 구성한 선택이 아니다.
+
+## 현행 inventory와 모델 제약 보충 · 2026-09-25
+
+이해 기록의 당시 QA/DP 제안은 최종 선정이 아니다. 현행 후보는 [VIA-DP-01~18](./README.md), 이전 계열 관계는 [매핑](./legacy-dp-mapping.md)을 따른다. VIA는 S2S 1개와 semantic LLM 1개만 사용하며 Component/Task별 추가 모델을 적재하지 않는다. 역할별 prompt·세션은 공유 모델에 대한 호출 방식이다. 외부 Agent Runtime과 VIA 내부 Client는 구분한다. QA-41은 메모리 예산·의미 있는 차이 근거 없이 핵심 ASR로 끌어올리지 않는다.

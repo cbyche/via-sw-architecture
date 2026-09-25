@@ -1,10 +1,10 @@
 # VIA-DP-13 — 사용자 제어를 위한 실행 자원을 예약할 것인가
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 같은 PC 자원 한도 안에서 중단·Task 제어 경로에 회수 가능한 최소 실행 여력을 보장할 것인가?
 >
-> 현재 판단: **새 후보 · 우선 검증할 핵심 DP 제안** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **새 후보 · 추가 검증 후보** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — 업무가 바쁠수록 ‘그만’이라는 말은 더 빨리 처리되어야 한다
 
@@ -38,6 +38,14 @@ classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
 
 **미확인 사항:** 목표 PC 자원 한도, 제어와 일반 작업의 실제 공유 지점, 긴 비선점 구간, 외부 추론이 제어 응답에 필요한 비율은 확인 전이다. 비선점은 시작한 처리를 안전하게 즉시 중단할 수 없다는 뜻이다. 외부 Runtime 대기가 지배적이면 VIA 내부 여력만 예약해서 QA-05를 개선할 수 없다. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 제어 여력 예약 + 회수 가능한 유휴 자원 공유
 
 제어 경로에 필요한 최소 실행 슬롯과 bounded admission 여력을 VIA가 예약한다. 일반 작업은 나머지를 사용하고, 제어 요청이 오면 정해진 경계 안에 회수할 수 있는 작업만 유휴 예약분을 빌린다. 회수 불가능한 긴 작업은 마지막 제어 슬롯을 점유할 수 없다.
@@ -48,20 +56,29 @@ classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
 
 ```mermaid
 flowchart TB
- C["사용자 제어"] --> Q["공통 우선순위·admission"]
- W["일반 업무"] --> Q
- Q --> R["[변경] 제어 최소 여력<br/>일반 작업의 점유 제한"]
- Q --> S["[변경] 일반 작업 자원"]
- S -->|회수 가능한 작업만 차용| R
- R --> D["같은 Playback·Task·Model 의존"]
- S --> D
- class C,W,Q,D common;
- class R,S change;
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
+ subgraph V["VIA Core Process — 같은 총 실행 슬롯 N"]
+ C["공통 control ingress"] --> CQ["공통 bounded control queue"]
+ W["공통 일반 작업 ingress"] --> WQ["공통 bounded work queue"]
+ CQ --> A["[변경] Reservation Admission<br/>회수 가능한 차용만 허용"]
+ WQ --> A
+ A -->|"최소 r개 보존"| CP["제어 실행 슬롯 r"]
+ A -->|"나머지와 회수 가능한 차용"| WP["일반 실행 슬롯 N-r"]
+ CP -->|"stop generation"| P["공통 Playback buffer·device"]
+ CP -->|"control command"| T["공통 Task Owner·Agent Client"]
+ WP -->|"일반 처리"| T
+ CP -->|"의미 판별 필요 시"| M["공통 Semantic Client queue"]
+ WP --> M
+ end
+ M <-->|"같은 용량·취소 지원"| L["Semantic LLM 1개"]
 ```
 
-주황색 차이는 자원을 더 추가하는 것이 아니라 같은 한도 안에서 점유 권한을 나누는 것이다. 필요한 내부 의존에도 예약 계약이 이어져야 한다.
+**실제 호출·상태·실패 처리 순서**
+
+1. 양쪽은 같은 queue·총 슬롯 N을 가진다. A는 마지막 r개를 회수 불가능한 일반 작업에 주지 않는다. N·r은 추후 동결할 파라미터이지 제품 목표가 아니다.
+2. barge-in은 Playback을 중단하고 Task 취소는 Owner가 처리한다. 대상 의미 판별이 필요하면 같은 LLM을 쓴다. **제어용 LLM은 추가하지 않는다.** S2S도 공통 1개이며 그림은 그 이후 자원 영역이다.
+3. 차용 슬롯은 약속된 경계에서 반환해야 한다. lock·DB·Client queue까지 분석한다. 외부 모델 비선점 추론·OS scheduling까지 이 예약이 보장하지는 않는다.
+
+[변경] 표시는 자원을 더 추가하는 것이 아니라 같은 한도 안에서 점유 권한을 나누는 것이다. 필요한 내부 의존에도 예약 계약이 이어져야 한다.
 
 ## 4. 대안 B — 전체 자원 공유 + 우선순위 기반 제어 우대
 
@@ -73,19 +90,28 @@ B는 합리적인 공유 구조다. 긴 비선점 작업이 없거나 실제 제
 
 ```mermaid
 flowchart TB
- C["사용자 제어"] --> Q["공통 우선순위·admission"]
- W["일반 업무"] --> Q
- Q --> P["[변경] 전체 공유 자원<br/>제어를 다음 순서로 우대"]
- P --> D["같은 Playback·Task·Model 의존"]
- class C,W,Q,D common;
- class P change;
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
+ subgraph V["VIA Core Process — 같은 총 실행 슬롯 N"]
+ C["공통 control ingress"] --> CQ["공통 bounded control queue"]
+ W["공통 일반 작업 ingress"] --> WQ["공통 bounded work queue"]
+ CQ --> A["[변경] Priority Admission<br/>제어 우선 · 예약 없음"]
+ WQ --> A
+ A -->|"빈 슬롯의 다음 작업 선택"| SP["공유 슬롯 N<br/>일반 작업 전체 점유 가능"]
+ SP -->|"stop generation"| P["공통 Playback buffer·device"]
+ SP -->|"control·일반 처리"| T["공통 Task Owner·Agent Client"]
+ SP -->|"의미 판별 필요 시"| M["공통 Semantic Client queue"]
+ end
+ M <-->|"같은 용량·취소 지원"| L["Semantic LLM 1개"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 다음 작업 선택 시 control을 우선하지만 일반 작업도 빈 슬롯을 전부 쓸 수 있다. FIFO만 쓰는 약한 B가 아니다.
+2. 모든 슬롯이 비선점 작업 중이면 제어는 첫 반환까지 기다린다. 작업 분할·협력적 취소·admission 제한으로 지연을 줄일 수 있다.
+3. 음성 중단이 이미 독립 callback에서 실행되면 이 pool은 QA-04에 비참여한다. QA-05도 공유 LLM·Agent 대기가 지배하면 예약 효과가 작다. 실제 참여 경로를 확인한다.
 
 B에도 우선순위와 과부하 제어가 있다. 차이는 이미 실행 중인 일반 작업이 모든 여력을 점유할 수 있다는 점이다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -184,7 +210,7 @@ M-05/06의 local/remote Model 전환과 E change pack이 새 queue·자원 계�
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | E 변경이 예약·queue 계측 계약까지 바꾸는지에 달려 있다. 별도 정책 요소 수만으로 결론내리지 않는다. [T4](#t4) | 변경 회귀 |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 판단 근거 부족 | 낮음 | 복구를 예약 제어 등급으로 둘지 공통으로 동결해야 한다. 단순 UI 응답 재개는 올바른 Task 복구가 아니다. [T3](#t3) | 회귀 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 예상 · 작음 | 중간 | 같은 Process·fault boundary를 유지한다. 정상 과부하 감소를 장애 영향 단위 감소로 바꾸지 않는다. [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | 총 한도가 같다. 예약 metadata·queue 분포·차용 비용의 실제 peak를 봐야 한다. [T2](#t2) | 자원 회귀 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | 총 한도가 같다. 예약 metadata·queue 분포·차용 비용의 실제 peak를 봐야 한다. [T2](#t2) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 예상 · 작음 | 중간 | 같은 최소 필요 정보·recipient·목적이며 slot 예약은 공개 권한을 바꾸지 않는다. [T4](#t4) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 예상 · 작음 | 낮음 | 양쪽 모두 전체 요청 trace를 보존해야 한다. backlog와 timeout 누락을 포함해 확인한다. [T4](#t4) | 관측 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 예상 · 작음 | 중간 | 동일 raw evidence·manifest·analyzer를 저장한다. scheduler 결정론이나 Model 재실행률을 metric으로 바꾸지 않는다. [T4](#t4) | 관측 회귀 |

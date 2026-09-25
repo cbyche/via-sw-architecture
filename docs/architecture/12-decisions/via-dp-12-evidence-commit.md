@@ -1,10 +1,10 @@
 # VIA-DP-12 — 응답 게시와 실행 근거의 영속 확정 순서
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 최소 실행 근거의 영속 확인 뒤 응답·제어 disposition을 게시할 것인가, 정상 기록을 유지하되 게시와 영속 기록을 비동기로 분리할 것인가?
 >
-> 현재 판단: **우선 핵심 검증 후보 — 중앙 수집 위치에서 기록 완료 의무로 재정의** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **검증 후보 — 중앙 수집 위치에서 기록 완료 의무로 재정의** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — 시험은 끝났는데 왜 그런 결과가 나왔는지 로그가 없다면?
 
@@ -36,6 +36,14 @@ class Q change;
 
 **미확인 사항:** 최소 record 크기·state commit과의 결합 가능성·저장 지연, 장애가 flush 전후 어느 구간에 발생하는지, 후발 acoustic event 수집·보존 방식. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 최소 근거 선확정 + 상세 자료 비동기 수집
 
 게시 전 이미 발생한 필수 입력·경로·identity·설정·판단·source event 근거를 local durable 저장소가 확인한 뒤 결과를 내보낸다. 큰 artifact와 분석용 부가 자료의 수집·원격 export는 비동기로 둘 수 있다. Business state transaction과 기록을 합칠 수 있으면 허용한다. 최소 의무만 동기로 하는 hybrid다.
@@ -44,20 +52,24 @@ class Q change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- R["공통 결과·control 준비"] -->|관측된 최소 근거| L["[변경] 영속 기록 writer"]
- L -->|durable 확인| P["[변경] 게시 허용"]
- P -->|같은 의미의 응답| O["공통 Voice·Text 출력"]
- O -.->|비동기: 실제 출력 관측| L
- L -.->|비동기: 상세·export| E["공통 evidence package"]
+ subgraph V["VIA Core Process — A/B 동일"]
+ R["공통 Response Producer<br/>업무 state·outbox 보장 동일"] -->|"관측된 최소 record"| Q["공통 bounded evidence queue"]
+ Q -->|"batch append"| W["공통 Evidence Writer"]
+ W -->|"durable commit"| S[("공통 local durable spool")]
+ S -->|"record id·durable ACK"| G["[변경] Publish Gate<br/>해당 ACK 필수"]
+ R -->|"게시 후보·record id"| G
+ G -->|"응답 release"| P["공통 Text UI·Playback buffer"]
+ P -.->|"비동기: 실제 출력 event"| Q
+ S -.->|"비동기: 확정 record 수집"| X["공통 Exporter·manifest builder"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class R,O,E common;
-class L,P change;
+ X -->|"evidence package"| E[("연구 evidence 저장소")]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 업무 state·Action audit·outbox 보장은 동일하다. Producer가 게시 전까지 관측한 최소 evidence를 queue로 보내고 Writer가 local spool에 저장한다.
+2. Gate는 해당 record의 durable ACK를 받아야 응답을 release한다. enqueue는 영속 확인이 아니다. 저장 지연·포화 때는 게시 보류 또는 명시된 실패가 발생한다.
+3. 실제 audible onset·중단 offset은 게시 후 별도 기록한다. Exporter는 확정 자료와 manifest를 비동기 수집한다. A도 미래의 물리 출력까지 사전 보장하지 못한다.
 
 A도 아직 발생하지 않은 실제 출력 event의 영속성을 사전에 보장하지 않는다. 선확정 대상과 후발 관측을 분리한다.
 
@@ -69,25 +81,28 @@ Queue 포화 때는 명시된 backpressure·부가 이벤트 축소·요청 보�
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- R["공통 결과·control 준비"] -->|즉시 게시 가능| P["[변경] 게시 허용"]
- R -->|같은 최소 근거| Q["[변경] bounded 기록 queue"]
- P -->|같은 의미의 응답| O["공통 Voice·Text 출력"]
- Q -.->|비동기: flush| L["공통 영속 writer"]
- O -.->|비동기: 실제 출력 관측| Q
- L -.->|비동기: 상세·export| E["공통 evidence package"]
+ subgraph V["VIA Core Process — A/B 동일"]
+ R["공통 Response Producer<br/>업무 state·outbox 보장 동일"] -->|"관측된 최소 record"| Q["공통 bounded evidence queue"]
+ Q -->|"수락·포화 통지 · durable 아님"| G["[변경] Publish Gate<br/>durable ACK 없이 게시 가능"]
+ R -->|"게시 후보·record id"| G
+ G -->|"응답 release"| P["공통 Text UI·Playback buffer"]
+ Q -.->|"비동기: batch flush"| W["공통 Evidence Writer"]
+ W -->|"durable commit"| S[("공통 local durable spool")]
+ P -.->|"비동기: 실제 출력 event"| Q
+ S -.->|"비동기: 확정 record 수집"| X["공통 Exporter·manifest builder"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class R,O,L,E common;
-class P,Q change;
+ X -->|"evidence package"| E[("연구 evidence 저장소")]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 같은 required record·Writer·spool을 쓴다. queue 수락 뒤 durable 완료를 기다리지 않고 게시할 수 있으며 Writer는 background flush를 한다.
+2. 포화·required record 손실은 명시하고 run을 불완전으로 남긴다. 성공 표본만 보관하거나 로그를 끄는 안이 아니다.
+3. 게시 직후 flush 전 crash에서는 응답은 갔지만 근거가 유실될 수 있다. 실제 출력 후발 event의 손실은 양쪽에 남는다. QA-61 완전성과 QA-62 재계산 가능성을 동일시하지 않는다.
 
 B가 정상적으로 영속 로그를 남겨도 게시 전 완료를 의무화하지 않는다는 점에서 A와 다르다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -185,7 +200,7 @@ M-01~09·C-01~06·A-01~09는 필요한 producer·source version이 실제 바뀌
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 조건부: B 우세 가능; 크기 미정 | 낮음 | A의 선확정 집합·게시 gate까지 변경되는 경우 [T4](#t4) | 주 비교 후보 |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 비슷 예상; backlog 조건부 | 중간 | Task recovery와 연구 trace 복구를 혼동하지 않음 [T3](#t3) | 회귀 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 조건부; 정의 선행 | 낮음 | writer failure가 무관한 기능까지 막는지 공통 closure로 검증 [T3](#t3) | 주 비교 가능성 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건에 따라 다름 | 중간 | pending release 대 flush backlog의 실제 peak [T4](#t4) | 주 비교 후보 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건에 따라 다름 | 중간 | pending release 대 flush backlog의 실제 peak [T4](#t4) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 같은 최소 evidence·redaction·recipient 정책 [T4](#t4) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 조건부: A 우세; 전체 크기 미정 | 중간 | 선확정 전 event의 유실 창 감소, 후발 출력 event는 공통 한계 [T2](#t2) | 주 비교 후보 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 또는 조건부 | 중간 | incomplete 판정도 재현 가능; 원래 보고 근거 손실 때만 실패 [T3](#t3) | 필수 검증 |
@@ -206,7 +221,7 @@ DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있다. D
 
 ## 10. 현재 판단과 재검토 조건
 
-**재정의한 축을 우선 핵심 검증 후보로 유지한다.** 중앙 수집 위치 자체는 보조 설계로 남긴다. Business commit이 이미 모든 필요한 근거를 보호해 A의 추가 비용과 B의 유실 창이 모두 사라지면 이 축도 핵심 평가에서 내린다. QA-62를 QA-61의 복제 점수로 쓰지 않는다.
+**재정의한 축을 검증 후보로 유지한다.** 중앙 수집 위치 자체는 보조 설계로 남긴다. Business commit이 이미 모든 필요한 근거를 보호해 A의 추가 비용과 B의 유실 창이 모두 사라지면 이 축도 핵심 평가에서 내린다. QA-62를 QA-61의 복제 점수로 쓰지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

@@ -1,66 +1,52 @@
 # VIA Architecture Decision 후보 지도
 
-> **전체 상세 검토 반영 · 2026-09-24 · 사용자 검토 제안**
->
-> 처음 읽는다면 [최종 요약 보고서](./dp-executive-summary.md)를 먼저 읽는다. 이 페이지는 시스템에서 후보를 도출한 논리와 상세 보고서의 탐색 지도다. 모든 후보가 핵심 DP로 승인되었다는 뜻은 아니다.
+> 2026-09-25 · 전수 inventory · 선정 순위가 아님
 
-## 1. 어떤 문제에서 출발했는가
+VIA는 사용자 입력의 의미를 이해하고 직접 응답하거나 외부 Agent에 위임한 뒤, 비동기 상태와 결과를 같은 대화·Task로 잇는다. 이 책임을 실제로 구성하는 독립 질문을 18개 보고서로 관리한다. 문서 수가 확정 핵심 DP 수는 아니다.
 
-VIA는 Voice·Text·화면 interaction을 이어가면서 직접 정보 요청과 여러 Agent 업무를 같은 대화·Task 상태에 연결한다. 실제 업무 계획·Tool 실행은 Agent가, 추론은 Model Runtime이 담당한다. 따라서 중요한 질문은 제품 이름이나 모델 크기가 아니라 **누가 의미·상태·게시·실행 관계를 확정하고, 어떤 계약과 장애·자원 경계로 연결하는가**다.
+## 시스템 책임에서 출발하는 읽기 지도
 
-[시스템 이해 검토](./system-understanding-review.md), [대표 UC](../05-representative-use-cases.md), [19개 QA](../08-quality-attributes/quality-model.md), [전체 변경 집합](../07-intentional-variables.md)을 출발점으로 삼았다. 기존 ADR은 이미 검토했던 구조와 caveat를 확인하는 참고자료이며 후보의 정답이나 발굴 순서를 정하지 않았다.
+| 책임 영역 | 질문과 담당 VIA-DP |
+| --- | --- |
+| 입력·화면 근거 | 03 입력 revision의 의미 계약 |
+| Context | 05 읽기 집합의 확장 권한, 17 source 값 변환 owner, 16 모델 입력 이력 유지 |
+| 요청 이해·실행 범위 | 06 의미 확정, 01 bounded 직접 실행, 07 명시된 복합 관계 실행 |
+| 대화·Task 상태 | 02 교차 관계 commit, 14 Task writer, 08 복구 원본 |
+| 외부 Agent | 09 수명 의미 해석, 15 상태 확정 근거 |
+| 모델·사용자 응답 | 10 세션 수명, 04 게시 승인 |
+| 권한·실행 경계 | 18 protected use 승인, 11 VIA Client Process, 13 제어 여력 |
+| 연구 기록 | 12 게시 전 실행 근거의 영속 확인 |
 
-| 시스템의 난제 | 자연스럽게 나오는 설계 질문 | 후보 |
+## 전체 후보와 대안
+
+| 독립 보고서 | 대안 A | 대안 B |
 | --- | --- | --- |
-| 직접 답변과 실제 업무의 책임 구분 | VIA가 어떤 실행을 직접 소유하는가? | 01 |
-| 여러 대화·질문·업무가 동시에 변함 | 교차 관계를 어디에서 최종 확정하는가? | 02 |
-| 화면 지칭·음성 정정의 시점이 다름 | 어떤 음성 근거와 Context 계약을 기준으로 의미를 정하는가? | 03·05·06 |
-| 빠른 음성과 일관된 권한을 함께 요구 | 게시에 요청별 Core 승인이 필요한가? | 04 |
-| 복합 업무의 부분 취소·늦은 결과 | 상위 실행 관계와 외부 상태 의미를 누가 소유하는가? | 07·09 |
-| 재시작 이후 같은 업무를 이어야 함 | 무엇이 복구 기준이며 외부 실행과 어떻게 다시 연결하는가? | 08·10 |
-| 한 연동의 crash와 PC 자원 공유 | 어디서 치명적 장애를 끊고 제어 실행 여력을 어떻게 남기는가? | 11·13 |
-| 연구자가 실행을 재구성·재평가해야 함 | 어느 시점까지 실행 근거의 영속 기록을 요구하는가? | 12 |
+| [VIA-DP-01 범위가 정해진 정보 처리의 책임 경계](./via-dp-01-direct-handling.md) | 선택적 직접 처리 + Agent 위임 | 정보 처리 실행의 Agent 일원화 |
+| [VIA-DP-02 대화와 Task 관계의 확정 경계](./via-dp-02-state-consistency.md) | 분리된 처리 책임 + 공동 원자 커밋 | 독립 상태 확정 + 관계 조정 |
+| [VIA-DP-03 음성 입력 근거의 최종 기준](./via-dp-03-voice-evidence.md) | VIA 입력 계약 + 비모델 정렬·정규화 | S2S 입력 계약을 기준으로 사용 |
+| [VIA-DP-04 S2S 직접 응답의 게시 권한](./via-dp-04-response-authority.md) | 한정 권한 위임 + 범위 밖 Core 승인 | 모든 직접 응답에 Core 요청별 승인 |
+| [VIA-DP-05 요청 Context의 읽기 집합 확정 계약](./via-dp-05-context-contract.md) | 불변 입력 명세 + 필요한 값만 지연 적재 | 범위 제한 조회 권한 + 처리 중 입력 확장 |
+| [VIA-DP-06 요청 의미의 최종 확정 권한](./via-dp-06-semantic-authority.md) | 단계별 보조 처리 + 통합 최종 확정 | 단계별 의미 권한 + 명시적 정정 계약 |
+| [VIA-DP-07 복합 요청 관계의 실행 책임](./via-dp-07-compound-orchestration.md) | VIA 관계 조정 + 가능한 부분의 묶음 위임 | 복합 업무 전체의 Agent 조정 |
+| [VIA-DP-08 재시작 후 상태의 기준 기록](./via-dp-08-recovery-source.md) | 상태 변경 이력 + 검증된 checkpoint | 현재 상태 + 미완료 동작 + 감사 이력 |
+| [VIA-DP-09 Agent 수명 계약의 의미 해석 위치](./via-dp-09-agent-semantics.md) | 공통 의미 정규화 + 손실 없는 확장 | 공통 전송·타입 계약 + Core 유형별 의미 확정 |
+| [VIA-DP-10 Model 세션·연결 수명의 관리 권한](./via-dp-10-model-session-authority.md) | 공통 세션 관리자 + 역할별 직접 stream | 역할별 세션 소유 + 공통 adapter library |
+| [VIA-DP-11 외부 연동 코드의 Process 장애 경계](./via-dp-11-process-isolation.md) | 위험 연동 격리 + 얇은 Core 연결부 | 같은 Process + 제한된 queue·실패 처리 |
+| [VIA-DP-12 응답 게시와 실행 근거의 영속 확정 순서](./via-dp-12-evidence-commit.md) | 최소 근거 선확정 + 상세 자료 비동기 수집 | 게시와 영속 기록의 비동기 분리 |
+| [VIA-DP-13 사용자 제어를 위한 실행 자원을 예약할 것인가](./via-dp-13-control-reservation.md) | 제어 여력 예약 + 회수 가능한 유휴 자원 공유 | 전체 자원 공유 + 우선순위 기반 제어 우대 |
+| [VIA-DP-14 Task 상태 전이의 소유권](./via-dp-14-task-state-authority.md) | 공유 transactional Task 서비스 | Task별 단일 writer supervisor |
+| [VIA-DP-15 Agent 상태를 확정하는 관측 경로](./via-dp-15-agent-observation-authority.md) | 유효 event 확정 + query 복구 | Event 알림 + query 확인 후 확정 |
+| [VIA-DP-16 모델 입력 이력의 구성·유지 책임](./via-dp-16-model-context-state.md) | 요청별 재구성 + version 검증 cache | 증분 working context + 필요 시 재구성 |
+| [VIA-DP-17 Source를 소비 가능한 Context로 만드는 책임](./via-dp-17-context-materialization-authority.md) | 공통 materializer + 소비자별 projection | 공통 접근 handle + 소비자 소유 변환 |
+| [VIA-DP-18 보호정보·Action 사용 시 권한을 확인하는 위치](./via-dp-18-authorization-enforcement.md) | 사용마다 중앙 승인 + 사전 준비 cache | 철회 가능한 capability + 로컬 use gate |
 
-## 2. 후보 선정 기준
+## 겹쳐 보이지만 다른 결정
 
-책임·권한·상태 소유권·계약·Process/deployment·dependency 방향을 결정하고, 정상적인 A/B가 존재하며, 여러 Component와 QA에 구조적인 영향을 주고, 나중의 변경 비용이 커야 한다. 구현 세부·단순 튜닝·후보 결과에 맞춘 선택은 제외한다.
+- **02 vs 14:** 여러 상태의 관계를 함께 commit하는가 vs 한 Task에 누가 쓰는가.
+- **05 vs 17 vs 16:** 어떤 source를 읽을 수 있는가 vs 값을 누가 만드는가 vs 대화 이력을 어떻게 유지하는가.
+- **09 vs 15:** Agent 사건의 의미를 어디서 해석하는가 vs event 자체로 상태를 확정할 수 있는가.
+- **04 vs 18:** 응답 게시 권한 vs 보호정보·Action의 사용 권한.
+- **10 vs 11 vs 13:** 모델 세션 권한 vs VIA Client의 Process 경계 vs 일반 작업의 제어 자원 점유 권한.
+- **08 vs 12:** 운영 상태 복구의 원본 vs 사용자 응답 전 연구 근거의 기록 완료 의무.
 
-**상호 배타적 steelman**이 핵심이다. 같은 범위에서 최종 결정 규칙이 양립할 수 없어야 하고, 두 안 모두 합리적인 설계자가 채택할 만해야 한다. hybrid로 장점을 결합할 수 있으면 이를 새 A로 넣고 동등하게 강한 B를 다시 찾는다. cache·로그·retry·공통 library 같은 정상 보완을 한쪽에서 금지하지 않는다.
-
-중요한 구조 결정이어도 강한 양방향 QA trade-off가 남지 않으면 핵심 평가 대상이 아닐 수 있다. 전체 과정과 분류 기준은 [공통 검토 절차](./dp-review-protocol.md)를 따른다.
-
-## 3. 현재 후보 지도 — 13개
-
-| ID · 독립 보고서 | 한 문장 질문 | 현재 분류 |
-| --- | --- | --- |
-| [VIA-DP-01 직접 정보 처리](./via-dp-01-direct-handling.md) | 제한된 정보 처리 실행을 VIA도 소유할 것인가? | 선행 범위 |
-| [VIA-DP-02 대화·Task 확정](./via-dp-02-state-consistency.md) | 교차 관계를 공동 원자 확정할 것인가, 독립 확정을 조정할 것인가? | 조건부 핵심 |
-| [VIA-DP-03 음성 입력 근거](./via-dp-03-voice-evidence.md) | 최종 근거를 VIA가 중재할 것인가, S2S-native 의미 계약에 둘 것인가? | 선행 기능 |
-| [VIA-DP-04 직접 응답 게시](./via-dp-04-response-authority.md) | 제한된 게시 권한을 Voice에 위임할 것인가, 매 요청 Core 승인을 요구할 것인가? | 조건부 핵심 |
-| [VIA-DP-05 Context 읽기 집합](./via-dp-05-context-contract.md) | 같은 입력 세대의 읽기 집합을 닫을 것인가, 허용 조회로 확장할 것인가? | 조건부 핵심 |
-| [VIA-DP-06 의미 확정](./via-dp-06-semantic-authority.md) | 최종 권한자가 의미 전체를 조정할 것인가, 단계별 owner만 자기 의미를 정정할 것인가? | 조건부 핵심 |
-| [VIA-DP-07 복합 요청](./via-dp-07-compound-orchestration.md) | 상위 실행 관계를 VIA가 소유할 것인가, 전체 관계를 Agent가 소유할 것인가? | 선행 기능 |
-| [VIA-DP-08 복구 기준 기록](./via-dp-08-recovery-source.md) | 확정 이력과 현재 상태 중 무엇으로 복구 충돌을 해소할 것인가? | 보조 설계 |
-| [VIA-DP-09 Agent 의미 경계](./via-dp-09-agent-semantics.md) | Agent 사건의 Task 의미를 경계와 Core 중 어디에서 확정할 것인가? | 보조 설계 |
-| [VIA-DP-10 Model 세션 관리](./via-dp-10-model-session-authority.md) | 공통 관리자와 역할 owner 중 누가 세션 생성·회복을 승인할 것인가? | 보조 설계 |
-| [VIA-DP-11 Process 격리](./via-dp-11-process-isolation.md) | 같은 위험 연동 실행을 Core의 주소 공간 밖에 둘 것인가? | 우선 핵심 |
-| [VIA-DP-12 실행 근거 확정](./via-dp-12-evidence-commit.md) | 관측된 최소 근거의 영속 확인을 기다린 뒤 응답을 게시할 것인가? | 우선 핵심 |
-| [VIA-DP-13 제어 자원 예약](./via-dp-13-control-reservation.md) | 일반 작업이 마지막 제어 실행 여력까지 점유할 수 있는가? | 우선 핵심 · 신규 |
-
-우선 핵심 3개도 실제 차이 크기·target·승자는 미확정이다. 조건부 4개까지 합쳐 ‘7개 핵심 확정’이라고 소개하지 않는다. 선행·보조 결정은 삭제한 것이 아니라 다른 비교의 공통 조건과 설계 계약으로 유지한다.
-
-## 4. 초기 발견 목록과 무엇이 달라졌는가
-
-처음의 12개는 질문을 찾는 출발 초안이었다. 전체 검토에서 혼합 가능한 선택을 재구성하고, 부당한 성능·정확성 가정을 제거했다. Context의 snapshot/handle, 로그의 개별/중앙 수집, Model의 직접/공통 연결은 그 이름만으로 배타적이지 않았다.
-
-현재 A/B는 각 독립 보고서와 [전체 검토 종합 §2](./dp-review-synthesis.md#2-전체-후보와-최종-분류-제안)가 기준이다. 이전 이름·A/B 문자·QA 우세 주장은 현재 정의와 자동 호환되지 않는다. 초기 표는 Git commit `ce4a7234a7f4ef9cf4ac13a9d8b604ea96c03ae9`에 보존되어 있고, 재정의 및 기존 ADR 대응은 [검토 종합 §3](./dp-review-synthesis.md#3-왜-초기-ab를-그대로-유지하지-않았는가)에 기록했다.
-
-## 5. 다음 문서로 이동
-
-- [최종 요약 보고서](./dp-executive-summary.md): 상세 보고서 전 전체 판단·세 우선 후보·권장 순서를 읽는다.
-- [전체 검토 종합](./dp-review-synthesis.md): 13개 분류 근거, 의존·조합, UC·QA·변경 coverage, 추가 후보와 검증 기록을 확인한다.
-- 위 표의 독립 보고서: 배경 그림 → A/B 구조 → 배타성 → 사고실험 → 전체 19개 QA → 현재 판단을 읽는다.
-- [검토 절차](./dp-review-protocol.md)와 [그림 기준](./dp-diagram-guide.md): 같은 기준으로 후속 후보를 검토한다.
-- [기존 ADR 상태](./README.md#existing-adr-status): 새 검토 제안과 이미 accepted/deferred인 결정을 구별한다.
-
-이 단계에서 구현·측정·ADR 변경은 하지 않았다. 모든 새 후보 결과는 `NOT_RUN`이다.
+같은 제품에서 이 축들은 조합할 수 있다. 한 DP의 A와 B를 같은 조건의 최종 권한으로 동시에 채택할 수 있다는 뜻은 아니다. [이력·누락 점검](./legacy-dp-mapping.md)은 기존 계열과 주제가 어디로 갔는지 설명한다. [요약](./dp-executive-summary.md)은 실제 구조 수준으로 읽는 출발점이다.

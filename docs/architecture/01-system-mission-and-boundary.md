@@ -140,6 +140,12 @@ VIA 내부의 대화 기록·작업 상태·설정·허용된 User Memory를 저
 
 ## 1.3 AI Model Boundary
 
+### 현재 과제의 고정 모델 구성
+
+**VIA는 S2S 모델 1개와 semantic LLM 1개를 사용한다.** Component별·Task별·의미 처리 단계별로 별도 모델을 올리거나 복제하지 않는다. 각 Component는 역할별 프롬프트·출력 schema를 사용할 수 있지만 같은 semantic LLM을 호출한다. 여러 호출·세션·프롬프트가 있다는 것은 여러 모델이 있다는 뜻이 아니다.
+
+모델의 local/remote 배치는 별도 조건이며 두 모델을 반드시 PC에 모두 올린다는 뜻은 아니다. 같은 DP의 A/B에서는 같은 모델 구성과 실행 조건을 고정한다. 아래의 모델 교체 가능성은 이 두 역할의 모델을 교체한다는 의미이지 모델을 추가한다는 의미가 아니다. Downstream Agent 내부 모델은 외부 책임이며 VIA의 두 모델 구성에 포함하지 않는다.
+
 VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구분한다.
 
 ### 1. Voice S2S Model 사용 및 Integration — VIA Architecture 범위 안
@@ -150,7 +156,7 @@ VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구
 - S2S Model을 통한 User Turn과 Response도 모두 VIA conversation state에서 관리한다.
 - Voice Runtime의 interface, streaming event, state 처리, S2S Model invocation, deployment binding, 다른 VIA 요소와의 연결 방식은 VIA Architecture 설계 범위에 포함한다.
 - S2S Model 자체의 내부 구조와 학습 방법은 VIA Architecture 설계 범위에 포함하지 않는다.
-- 별도의 speech recognizer(음성 인식), VAD, TTS 또는 helper model을 추가할 수 있으나, 이는 명시적인 Architecture 설계로 결정해야 하며 S2S Model은 기본 Voice Model로 유지한다.
+- 별도 speech recognizer·TTS·helper 모델을 추가하는 안은 현재 과제의 고정 구성 밖이다. 비모델 신호 처리·clock 정렬·buffer·adapter는 둘 수 있으나 추가 학습 모델로 부족한 S2S 기능을 숨겨 보완하지 않는다. 두 모델과 관측 가능한 근거로 필수 기능을 충족하지 못하면 capability 미충족으로 보고한다.
 - 필요한 입력·시간·정정 이벤트가 특정 S2S Model에 모두 내장되어 있다고 가정하지 않는다. 제품이 필요로 하는 정보는 Voice Runtime의 연계 설계에서 제공한다.
 
 ### 2. VIA Semantic Inference — VIA Architecture 범위 안
@@ -191,7 +197,7 @@ Downstream Agent가 domain reasoning, planning, tool selection 또는 tool execu
 7. **Downstream Agent의 업무 실행이 필요하지 않은 요청은 VIA 내부에서 직접 응답할 수 있다.**
 8. **Direct Response와 Agent-delegated Response는 동일한 VIA conversation 관리 체계 안에서 관리한다.**
 9. **모든 사용자에게 보이는 응답은 Text로 Chat UI에 기록하고, Voice interaction이 활성화된 경우 핵심 내용을 짧은 Voice Response로 함께 제공한다.**
-10. **VIA 내부 semantic decision의 책임 위치와 inference 방식은 Architecture에서 명시적으로 결정하며, 모든 판단이 하나의 고정 Model 또는 하나의 고정 Component에서 수행된다고 가정하지 않는다.**
+10. **VIA 내부 semantic decision의 책임 위치는 여러 Component로 나눌 수 있지만, 모델 추론은 공통 semantic LLM 1개를 사용한다. 역할별 프롬프트·호출·세션 분리는 모델 추가 적재가 아니다.**
 11. **Downstream Agent 내부의 Model, reasoning, planning, tool selection, tool execution 및 execution 성능은 VIA Architecture 평가 범위에서 제외한다.**
 
 본 절에서는 최종 Architecture Significant Requirement를 미리 고정하지 않는다. ASR은 이후 시스템 기능, 대표 Use Case, Fixed Assumption, 변화 시나리오를 정의한 뒤 그 결과에서 도출한다.

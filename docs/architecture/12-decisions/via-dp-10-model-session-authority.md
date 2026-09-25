@@ -1,14 +1,14 @@
 # VIA-DP-10 — Model 세션·연결 수명의 관리 권한
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 공통 관리자가 역할별 세션의 생성·회복을 소유할 것인가, 각 역할 Component가 자기 세션을 소유할 것인가?
 >
-> 현재 판단: **보조 설계 결정으로 유지 — Gateway·공유 모델·별도 Process의 결합을 해체** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **설계 후보로 유지 — Gateway·공유 모델·별도 Process의 결합을 해체** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — 같은 모델을 쓰는 두 역할의 연결이 끊기면?
 
-Voice 응답과 요청 의미 판단이 같은 Model Runtime을 사용할 수 있다. Voice 연결만 끊겼을 때 의미 판단까지 다시 시작해야 할까? 제공자가 바뀔 때 각 역할이 연결·취소·복원 코드를 모두 고쳐야 할까? 공통 관리가 도움이 될 수 있지만, 모든 stream을 하나의 relay에 통과시키거나 모든 모델을 하나의 Process에 올리는 것까지 같은 결정은 아니다.
+Voice는 S2S 모델 1개를, 요청 의미 판단 역할들은 semantic LLM 1개를 사용한다. 모델별 연결의 생성·회복 권한을 공통으로 관리할지 결정한다. Voice 연결만 끊겼을 때 의미 판단까지 다시 시작해야 할까? 제공자가 바뀔 때 각 역할이 연결·취소·복원 코드를 모두 고쳐야 할까? 공통 관리가 도움이 될 수 있지만, 모든 stream을 하나의 relay에 통과시키거나 모든 모델을 하나의 Process에 올리는 것까지 같은 결정은 아니다.
 
 ```mermaid
 flowchart TB
@@ -32,9 +32,17 @@ class Q change;
 
 **기준선에서 확인한 사실:** 01·03은 Model Runtime을 local/remote dependency로 두며 통합 책임은 VIA에 둔다. UC-11·15·18은 취소·연결 종료·재연결에도 대화와 업무 관계를 유지하도록 요구한다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
-**이번 비교의 설계 가정:** 동일 모델 기능·Runtime·배치·가중치 공유 가능성·총 자원 한도·native cancellation 기능을 제공한다. 양쪽에 공통 stateless adapter library·직접 data stream·역할별 queue를 허용한다. Model의 provider conversation ID는 VIA Conversation identity가 아니다.
+**이번 비교의 설계 가정:** 동일 모델 기능·Runtime·배치·모델 수 고정·총 자원 한도·native cancellation 기능을 제공한다. 양쪽에 공통 stateless adapter library·직접 data stream·역할별 queue를 허용한다. Model의 provider conversation ID는 VIA Conversation identity가 아니다.
 
 **미확인 사항:** 세션 재사용 가능성과 동시 호출·취소의 native 계약, 공통 manager가 실제로 줄이는 변경 요소·resident 메모리, 연결 회복 비용. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
 
 ## 3. 대안 A — 공통 세션 관리자 + 역할별 직접 stream
 
@@ -44,21 +52,23 @@ class Q change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- R["공통 Voice 역할"] -->|세션 요청·회복| G["[변경] 공통 세션 관리자<br/>역할별 lease·세대 확정"]
- C["공통 의미 역할"] -->|세션 요청·회복| G
- G -->|공통 무상태 adapter 사용| L["공통 adapter library"]
+ subgraph V["VIA Core Process — 세션 제어 영역"]
+ W["공통 Voice Runtime<br/>audio buffer"] <-->|"생성·회복 요청<br/>S2S handle 반환"| G["[변경] Session Manager<br/>role별 lease·generation 권한"]
+ C["공통 Semantic Components<br/>역할별 prompt"] <-->|"생성·회복 요청<br/>semantic handle 반환"| G
+ G <-->|"lease·binding·health"| R[("세션 registry<br/>Task DB와 별개")]
+ G -->|"함수 호출"| L["공통 무상태 Adapter Library"]
  end
- G -->|생성·회복 제어| M["공통 Model Runtime"]
- R -->|직접 inference·stream| M
- C -->|직접 inference·stream| M
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class R,C,L,M common;
-class G change;
+ G -->|"create·reconnect 제어"| S["S2S 모델 1개"]
+ G -->|"create·reconnect 제어"| M["Semantic LLM 1개"]
+ W <-->|"직접 audio stream"| S
+ C <-->|"직접 inference stream"| M
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Voice와 의미 Component가 Manager에 세션을 요청한다. Manager는 공통 adapter library로 해당 모델에 연결하고 role별 generation·lease를 등록한다. registry는 모델 인스턴스를 늘리는 장치가 아니다.
+2. handle을 받아 Voice는 S2S 1개에, 의미 역할은 semantic LLM 1개에 직접 stream을 연결한다. 모든 audio/token이 Manager를 통과할 필요는 없다. Library는 코드 재사용이지 별도 서비스가 아니다.
+3. Voice 단절이면 해당 lease만 fence하고 재연결한다. 무관한 semantic 세션까지 초기화하지 않는다. 늦은 응답은 generation으로 거부하고 VIA Conversation·Task identity는 유지한다.
 
 관리자는 모든 token·audio의 강제 relay가 아니다. 공통 authority가 있어도 fast data path를 둘 수 있다.
 
@@ -70,23 +80,25 @@ Voice와 의미 처리 Component가 자기 세션의 생성·취소·회복을 �
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- R["[변경] Voice 세션 owner"] -->|공통 무상태 adapter 사용| L["공통 adapter library"]
- C["[변경] 의미 세션 owner"] -->|공통 무상태 adapter 사용| L
+ subgraph V["VIA Core Process — 세션 제어 영역"]
+ W["[변경] Voice Session Owner<br/>세션 metadata·generation 소유<br/>자기 생성·회복 권한"]
+ C["[변경] Semantic Role Owners<br/>역할별 metadata·generation 소유<br/>자기 생성·회복 권한"]
+ W -->|"함수 호출"| L["공통 무상태 Adapter Library<br/>인증·wire·pool 재사용"]
+ C -->|"함수 호출"| L
  end
- R -->|세션·직접 stream| M["공통 Model Runtime"]
- C -->|세션·직접 stream| M
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class L,M common;
-class R,C change;
+ W <-->|"생성·회복<br/>직접 audio stream"| S["S2S 모델 1개"]
+ C <-->|"생성·회복<br/>직접 inference stream"| M["Semantic LLM 1개"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 각 역할이 자기 세션 생성·취소·재연결을 결정한다. 같은 library를 쓰지만 모든 새 generation을 승인하는 공통 실행 중 Manager는 없다.
+2. Voice는 동일 S2S, 모든 의미 역할은 동일 LLM에 연결한다. provider가 복수 세션을 지원하지 않으면 그 제한을 양쪽에 동일 적용한다. 세션 소유권 분리는 모델 복제나 무제한 병렬 추론이 아니다.
+3. 단절된 owner가 generation을 증가시키고 필요한 이력을 다시 보낸다. VIA identity는 바꾸지 않는다. 모델 용량·admission 조건은 A와 동일하다.
 
 공통 library의 존재는 공통 실행 중 authority와 다르다. 같은 Runtime을 사용하는 것도 B와 양립한다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -111,7 +123,7 @@ A/B 모두 같은 기능·권한·실패 의미와 합리적인 보완책을 허
 sequenceDiagram
  participant V as Voice 역할
  participant M as 공통 세션 관리자
- participant R as 같은 Model Runtime
+ participant R as 해당 Model Runtime
  alt A 공통 관리 권한
  V->>M: 세션 단절 통지
  M->>M: 역할 lease와 새 세대 확정
@@ -131,7 +143,7 @@ sequenceDiagram
 
 ### T1. 정상 호출과 음성 중단
 
-같은 Model 세션에서 Voice 생성과 의미 판단을 수행한다. A는 사전 lease가 있으면 직접 stream을 사용하고, B는 역할 owner가 같은 Runtime에 직접 연결한다. 준비된 steady-state에서 A에 강제 relay 비용을 넣을 수 없다. Cold 연결 시 A의 manager 계약과 B의 역할 초기화 비용이 다를 수 있으나 native pooling·cache를 양쪽에 허용한다.
+같은 고정 구성의 S2S 세션에서 Voice를, semantic LLM 세션에서 의미 판단을 수행한다. A는 사전 lease가 있으면 직접 stream을 사용하고, B는 역할 owner가 같은 Runtime에 직접 연결한다. 준비된 steady-state에서 A에 강제 relay 비용을 넣을 수 없다. Cold 연결 시 A의 manager 계약과 B의 역할 초기화 비용이 다를 수 있으나 native pooling·cache를 양쪽에 허용한다.
 
 사용자 끼어들기 때 두 안 모두 local playback을 먼저 멈추고 해당 모델 generation을 취소한다. 모델의 취소 확인이 늦어도 음성 정지를 늦출 이유가 없다. 따라서 QA-04의 A/B 자동 우세는 없고 QA-01/02/03/05 역시 실제 setup critical path를 확인해야 한다.
 
@@ -172,7 +184,7 @@ M-01/02는 provider별 adapter, M-03은 역할별 profile·입력 한도, M-04~0
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 공통 계측과 role producer 수정의 범위 미정 [T3](#t3) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건부; 방향 미정 | 낮음 | Task 영향·lease 복원·외부 reconciliation까지 확인 [T2](#t2) | 보조 비교 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 예상; fault별 확인 | 중간 | A도 role별 recovery 가능; 공통 manager fault는 별도 원인 [T2](#t2) | 필수 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | 양쪽 weight 공유 가능, manager와 role metadata의 실제 peak 필요 [T3](#t3) | 보조 비교 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | 양쪽 weight 공유 가능, manager와 role metadata의 실제 peak 필요 [T3](#t3) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 공통 privacy 검사와 최소 Context는 B에도 허용 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | 공통 source·role·generation trace를 두 안 모두 보존 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 평가 evidence 보존과 role 수명 authority는 별개 [T3](#t3) | 필수 회귀 |
@@ -193,7 +205,7 @@ DP-03 음성 입력 계약과 DP-06 의미 판단은 이 수명 관리를 사용
 
 ## 10. 현재 판단과 재검토 조건
 
-**보조 설계 결정으로 유지한다.** 구조 질문은 유효하지만 Gateway·별도 Process·모델 공유·scheduling을 묶어서 만든 초기 trade-off는 인정하지 않는다. 실제 role 변경 ledger나 cold path가 충분한 반대 방향 QA 효과를 보이면 다시 핵심 후보로 검토한다.
+**설계 후보로 유지한다.** 구조 질문은 유효하지만 Gateway·별도 Process·모델 공유·scheduling을 묶어서 만든 초기 trade-off는 인정하지 않는다. 실제 role 변경 ledger나 cold path가 충분한 반대 방향 QA 효과를 보이면 다시 핵심 후보로 검토한다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

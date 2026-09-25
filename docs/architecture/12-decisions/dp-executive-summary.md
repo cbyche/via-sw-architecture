@@ -1,150 +1,294 @@
-# VIA Architecture Decision 검토 — 최종 요약 보고서
+# VIA Architecture Decision — 전체 후보 요약 보고서
 
-> **후속 검토 안내:** 시스템 중심성과 QA 다양성에 대한 사용자 리뷰를 반영한 [핵심 Architecture·ASR 재선정 요약](./core-architecture-reassessment.md)이 있다. 아래 내용은 2026-09-24 최초 검토의 이력으로 보존하며, 최신 선정 제안은 후속 문서를 따른다. 어느 문서도 ASR 확정이나 A/B 승자 선정을 의미하지 않는다.
+> 2026-09-25 · 전수 정리·구현 구조 명세 · 최종 선정/실측 아님
 
-> **상세 DP 보고서를 읽기 전에 보는 문서 · 2026-09-24**
->
-> 이번 문서·사고실험 검토의 최종 요약이다. Architecture 최종 승인이나 A/B 승자 선정 보고서는 아니다. 모든 후보의 실제 QA 측정은 `NOT_RUN`이며, 기존 ADR과 QA 정의는 변경하지 않았다.
+## 1. 결론부터
 
-## 1. 결론부터 — 중요한 결정과 좋은 비교 문제는 같지 않다
+**현재 관리 대상은 VIA-DP-01~18, 총 18개다.** 기존 13개를 상세화하고 Task writer를 14로 편입했다. 이전 계열 대조에서 빠졌던 관측 확정·모델 입력 이력·Source 변환·사용 권한 질문을 15~18로 보완했다. 모두 심화 검토할 수 있게 보존하며 최종 발표용 순위·DP 4~5개·ASR 4~6개는 아직 선정하지 않는다.
 
-VIA의 구조 문제를 초기 12개 후보에서 다시 검토했다. 양쪽에 합리적인 보완책을 넣고, 혼합 설계로 차이를 없앨 수 있는지 확인한 뒤 **새 후보 1개를 포함한 13개 독립 보고서**로 정리했다.
+보고서를 읽으면 어떤 Component가 어떤 요청을 받고, 어느 상태를 소유하며, 어떤 queue·buffer·저장·Process 경계를 통과하는지 알 수 있어야 한다. 아래 네 영역은 전체 시스템을 설명하는 **읽기 순서**이며 추천 순위가 아니다. 나머지 14개도 독립 보고서로 같은 수준의 A/B 구현도·전체 QA 표를 제공한다.
 
-결론은 “13개를 모두 같은 무게의 핵심 DP로 평가하자”가 아니다.
+## 2. 바뀌지 않는 시스템 경계
 
-| 분류 | 후보 | 이번 판단 |
+VIA가 Voice/Text/화면 interaction·요청 의미·Conversation/Task·위임과 결과 연결을 소유한다. Downstream Agent가 도메인 계획·Tool 실행을 한다. OpenClaw·Hermes 같은 외부 Runtime은 VIA Client와 다른 Process 또는 원격 서비스다.
+
+**VIA 모델은 S2S 1개와 semantic LLM 1개다.** 단계·Component·Task가 늘어도 모델을 추가 적재하지 않는다. 각 역할은 다른 prompt·schema·세션을 사용할 수 있지만 같은 모델 용량을 공유한다. 모델 수와 호출 수·프로세스 수를 혼동하지 않는다.
+
+그림의 Core Process는 각 DP를 비교하기 위한 공통 참조 배치이며 최종 전역 배치 승인이 아니다. VIA-DP-11만 지정된 Client 코드의 Process 경계를 바꾼다. queue는 메모리 대기, 원통은 영속 기록이다. 별도 메시지 버스 제품은 가정하지 않는다.
+
+## 3. 전체 질문 한눈에 보기
+
+| 독립 보고서 | 대안 A | 대안 B |
 | --- | --- | --- |
-| **우선 검증할 핵심 DP: 3개** | 11 장애 격리, 12 실행 근거 확정, 13 제어 자원 예약 | 같은 기능을 유지해도 서로 맞서는 비용·효과를 구조로 설명할 수 있다. 실제 크기와 목표 충족은 검증 전이다. |
-| **조건부 핵심 후보: 4개** | 02 상태 확정, 04 응답 권한, 05 Context 계약, 06 의미 권한 | 중요한 책임·계약 차이는 남지만, 실제 경로·부하·변경 집합에서 충분한 양방향 QA 차이가 남는지 추가 명세가 필요하다. |
-| **선행 범위·기능 적합성 결정: 3개** | 01 직접 처리, 03 음성 근거, 07 복합 요청 | 먼저 VIA와 외부 dependency가 어떤 기능을 실제로 제공하는지 정해야 한다. 현재 QA 숫자로 성급히 승패를 비교하면 왜곡된다. |
-| **보조 설계 결정: 3개** | 08 복구 기준 기록, 09 Agent 의미 경계, 10 Model 세션 관리 | 구조 결정으로는 유효하다. 그러나 강한 양쪽 설계를 비교하면 충분한 반대 방향 QA 이점이 아직 설명되지 않는다. 핵심 평가표를 채우기 위해 유지하지 않는다. |
+| [VIA-DP-01 범위가 정해진 정보 처리의 책임 경계](./via-dp-01-direct-handling.md) | 선택적 직접 처리 + Agent 위임 | 정보 처리 실행의 Agent 일원화 |
+| [VIA-DP-02 대화와 Task 관계의 확정 경계](./via-dp-02-state-consistency.md) | 분리된 처리 책임 + 공동 원자 커밋 | 독립 상태 확정 + 관계 조정 |
+| [VIA-DP-03 음성 입력 근거의 최종 기준](./via-dp-03-voice-evidence.md) | VIA 입력 계약 + 비모델 정렬·정규화 | S2S 입력 계약을 기준으로 사용 |
+| [VIA-DP-04 S2S 직접 응답의 게시 권한](./via-dp-04-response-authority.md) | 한정 권한 위임 + 범위 밖 Core 승인 | 모든 직접 응답에 Core 요청별 승인 |
+| [VIA-DP-05 요청 Context의 읽기 집합 확정 계약](./via-dp-05-context-contract.md) | 불변 입력 명세 + 필요한 값만 지연 적재 | 범위 제한 조회 권한 + 처리 중 입력 확장 |
+| [VIA-DP-06 요청 의미의 최종 확정 권한](./via-dp-06-semantic-authority.md) | 단계별 보조 처리 + 통합 최종 확정 | 단계별 의미 권한 + 명시적 정정 계약 |
+| [VIA-DP-07 복합 요청 관계의 실행 책임](./via-dp-07-compound-orchestration.md) | VIA 관계 조정 + 가능한 부분의 묶음 위임 | 복합 업무 전체의 Agent 조정 |
+| [VIA-DP-08 재시작 후 상태의 기준 기록](./via-dp-08-recovery-source.md) | 상태 변경 이력 + 검증된 checkpoint | 현재 상태 + 미완료 동작 + 감사 이력 |
+| [VIA-DP-09 Agent 수명 계약의 의미 해석 위치](./via-dp-09-agent-semantics.md) | 공통 의미 정규화 + 손실 없는 확장 | 공통 전송·타입 계약 + Core 유형별 의미 확정 |
+| [VIA-DP-10 Model 세션·연결 수명의 관리 권한](./via-dp-10-model-session-authority.md) | 공통 세션 관리자 + 역할별 직접 stream | 역할별 세션 소유 + 공통 adapter library |
+| [VIA-DP-11 외부 연동 코드의 Process 장애 경계](./via-dp-11-process-isolation.md) | 위험 연동 격리 + 얇은 Core 연결부 | 같은 Process + 제한된 queue·실패 처리 |
+| [VIA-DP-12 응답 게시와 실행 근거의 영속 확정 순서](./via-dp-12-evidence-commit.md) | 최소 근거 선확정 + 상세 자료 비동기 수집 | 게시와 영속 기록의 비동기 분리 |
+| [VIA-DP-13 사용자 제어를 위한 실행 자원을 예약할 것인가](./via-dp-13-control-reservation.md) | 제어 여력 예약 + 회수 가능한 유휴 자원 공유 | 전체 자원 공유 + 우선순위 기반 제어 우대 |
+| [VIA-DP-14 Task 상태 전이의 소유권](./via-dp-14-task-state-authority.md) | 공유 transactional Task 서비스 | Task별 단일 writer supervisor |
+| [VIA-DP-15 Agent 상태를 확정하는 관측 경로](./via-dp-15-agent-observation-authority.md) | 유효 event 확정 + query 복구 | Event 알림 + query 확인 후 확정 |
+| [VIA-DP-16 모델 입력 이력의 구성·유지 책임](./via-dp-16-model-context-state.md) | 요청별 재구성 + version 검증 cache | 증분 working context + 필요 시 재구성 |
+| [VIA-DP-17 Source를 소비 가능한 Context로 만드는 책임](./via-dp-17-context-materialization-authority.md) | 공통 materializer + 소비자별 projection | 공통 접근 handle + 소비자 소유 변환 |
+| [VIA-DP-18 보호정보·Action 사용 시 권한을 확인하는 위치](./via-dp-18-authorization-enforcement.md) | 사용마다 중앙 승인 + 사전 준비 cache | 철회 가능한 capability + 로컬 use gate |
 
-이 분류 자체도 사용자 검토 제안이다. **문서 작성 완료, 구조적 대안의 성립, 충분한 QA trade-off, 실제 성능 입증은 서로 다른 상태**다.
+## 4. 네 중심 영역의 실제 동작
 
-## 2. VIA는 무엇을 해결하는 시스템인가
+아래는 상세 보고서의 A/B 구현 설명을 같은 의미로 옮긴 것이다. 차이가 없는 비용도 양쪽에 보이며 LLM 출력은 상태 변경 권한이 아니다. 제품 구현·QA 측정이 완료된 그림은 아니다.
 
-사용자는 화면의 대상을 가리키며 질문하고, 답변을 듣다가 정정하고, 실제 업무를 맡기고, 다른 대화를 하면서 그 업무의 진행과 결과를 다시 받는다. 여러 업무 중 하나만 취소하거나 PC의 VIA가 재시작되어도 같은 대화와 업무 관계가 이어져야 한다.
+### 4.1 VIA-DP-06 — 요청 의미 이해
 
-VIA는 이 interaction과 업무 연결을 소유한다. Downstream Agent는 업무 계획·Tool 선택·실행을, Model Runtime은 S2S와 의미 판단의 추론 실행을 담당한다. VIA가 외부 업무를 직접 실행하는 범용 Agent로 바뀌는 것은 이 검토의 목표가 아니다.
+같은 사용자의 대상·Task·처리 경로가 서로 영향을 줄 때 전체를 한 owner가 고칠지 단계별 owner가 고칠지 결정한다. 정확도는 QA-12와 통합 QA-11, 실제 호출 graph는 QA-01/02/05, 변경 계약은 QA-22로 확인한다. 통합이 항상 정확하거나 분리가 항상 수정하기 쉽다고 단정하지 않는다.
+
+#### 대안 A — 단계별 보조 처리 + 통합 최종 확정
+
+필요한 grounding·Task 검색·capability 조회를 모듈이나 보조 단계로 나눌 수 있지만 하나의 semantic authority가 최종 의미 묶음을 일관되게 확정한다. 부분 cache·병렬 조회·특정 항목 재계산도 허용한다. 모듈성과 공동 판단을 결합한 hybrid다.
+
+최종 확정자는 서로 모순된 보조 결과를 조정하고 clarification을 선택한다. 강점은 관련 의미를 함께 볼 수 있다는 것이며, 약점은 최종 schema·검증·판단 규칙의 결합이다. 단일 호출·단일 거대 prompt를 필수 조건으로 삼지 않는다.
 
 ```mermaid
-flowchart LR
- U["사용자<br/>Voice·Text·화면"] --> I["VIA<br/>입력 의미·Context"]
- I --> S["VIA<br/>대화·Task 관계와 제어"]
- S --> O["VIA<br/>응답·진행·결과 전달"]
- O --> U
- S --> A["Downstream Agent<br/>업무 계획·실행"]
- A -. "비동기 상태·결과·질문" .-> S
- I --> M["Model Runtime<br/>추론 실행"]
- M --> O
- classDef via fill:#FFF7ED,stroke:#C2410C,color:#7C2D12;
- classDef external fill:#F3F4F6,stroke:#64748B,color:#111827;
- class I,S,O via;
- class U,A,M external;
+flowchart TB
+ subgraph V["VIA Core Process — 의미 처리 영역"]
+ E["공통 Evidence Reader<br/>원문·화면·대화·Task view·capability"] -->|"같은 원천 근거"| C["[변경] Semantic Coordinator<br/>전체 의미 최종 수정 권한"]
+ C -->|"통합 prompt·schema"| Q["공통 Semantic Client<br/>bounded 호출 queue·revision"]
+ Q -.->|"비동기: 모델 출력 후보"| C
+ C -->|"목표·대상·Task 관계·handling"| K["공통 Contract Validator<br/>형식·ID·정책·version 검사"]
+ K -->|"충돌·오류: repair"| C
+ K -->|"검증된 SemanticDecision"| T["공통 Router·Task Owner<br/>상태 commit·Agent 연결"]
+ end
+ Q <-->|"inference API·같은 설정"| M["Semantic LLM 1개"]
 ```
 
-그림의 주황색은 VIA가 책임지는 논리 영역이다. 고정된 Component 수나 Process 배치를 뜻하지 않는다. Model 출력도 VIA의 게시·권한 검사를 생략하지 않는다.
+**실제 호출·상태·실패 처리 순서**
 
-여기서 어려운 점은 단순 호출 연결이 아니다.
+1. Evidence Reader가 원문과 관측 가능한 화면·Task 후보·capability를 준비한다. Coordinator가 통합 프롬프트로 공유 semantic LLM에 요청한다. 평가 정답인 문서·Task ID를 입력에 넣어 주지는 않는다.
+2. 모델은 ‘대상 D7, 기존 Task T3, 위임, doc_edit 필요’ 같은 묶음을 제안한다. Coordinator는 서로 모순된 항목을 함께 재판단할 권한이 있다. Validator는 schema·ID·정책·현재 revision을 검사하며 업무 의미를 대신 지어내지 않는다.
+3. READY만 Task Owner에 전달한다. NEED_CONTEXT는 근거 보완, CLARIFY는 사용자 질문, 오류는 제한된 repair다. 모델은 Task DB에 쓰지 않는다. 보조 호출을 나눠도 전체 의미 수정 권한은 Coordinator에 남는다.
 
-- **의미가 계속 바뀐다.** “이것”의 화면 시점, 늦은 음성 정정, 기존 Task 지칭을 함께 맞춰야 한다.
-- **시간이 서로 다르다.** 말은 즉시 끊어야 하지만 외부 업무의 취소·완료는 나중에 확인된다.
-- **하나의 대화가 여러 실행과 이어진다.** 늦거나 중복된 결과를 다른 Task에 붙이거나 취소한 일을 되살려서는 안 된다.
-- **PC 자원과 장애가 공유된다.** 한 연동의 crash나 많은 일반 작업이 대화와 제어까지 멈추게 할 수 있다.
-- **연구 결과를 설명할 수 있어야 한다.** 무엇을 보고 어떤 판단·상태·출력을 만들었는지 남기되, 기록 때문에 사용자 응답이 막히는 비용도 다뤄야 한다.
+보조 단계 수가 아니라 최종 의미 묶음을 누가 수정·확정하는지가 A의 식별 규칙이다.
 
-## 3. 먼저 검증할 세 결정
+#### 대안 B — 단계별 의미 권한 + 명시적 정정 계약
 
-### DP-11 — 연동 코드의 치명적 장애를 어디까지 전파시킬 것인가
+grounding/refinement, Task association, handling/capability 선택이 각자의 의미 계약을 확정한다. 후속 단계는 앞 결과가 틀리거나 부족하면 정정 요청을 보내 해당 권한자가 새 version을 만들게 한다. 최종 validator는 계약 조합의 유효성을 검사하지만 임의로 앞 의미를 다시 결정하지 않는다.
 
-**A:** 위험한 연동 실행을 별도 Process에 두고 Core에는 얇은 연결 계층을 둔다.
+각 단계는 필요한 근거에 집중하고 독립 교체·부분 재실행할 수 있다. 공통 모델·prompt fragment·검증 library를 공유할 수 있다. 그러나 후속 정보로 앞 판단을 바꿀 때 version 연결과 재개 규칙이 필요하며, schema를 통과한 의미 오류가 자동으로 사라지지는 않는다.
 
-**B:** 같은 Process 안에서 queue·책임을 나누고 직접 연결한다.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core Process — 의미 처리 영역"]
+ E["공통 Evidence Reader<br/>원문·화면·대화·Task view·capability"] -->|"같은 원천 근거"| G["[변경] Grounding Resolver<br/>목표·대상 owner"]
+ G -->|"GroundingResult·version"| T["[변경] Task Associator<br/>Task 관계 owner"]
+ T -->|"TaskRelation·version"| H["[변경] Handling Selector<br/>경로·capability owner"]
+ T -->|"CORRECT_PRIOR_STAGE"| G
+ H -->|"정정 요청"| T
+ G <-->|"grounding prompt / 결과"| Q["공통 Semantic Client<br/>bounded 호출 queue·revision"]
+ T <-->|"association prompt / 결과"| Q
+ H <-->|"handling prompt / 결과"| Q
+ H -->|"검증할 계약 묶음"| K["공통 Contract Validator<br/>이전 의미 임의 수정 금지"]
+ K -->|"검증된 SemanticDecision"| O["공통 Router·Task Owner<br/>상태 commit·Agent 연결"]
+ end
+ Q <-->|"inference API·같은 설정"| M["Semantic LLM 1개"]
+```
 
-A는 연동 Process의 치명적 종료가 Core와 무관한 Task까지 죽이는 것을 줄일 수 있다. B는 Process 간 전달과 추가 buffer·worker 비용을 줄일 수 있다. 양쪽 모두 일반 오류 처리, 재시도, 상태 보존을 갖춘다.
+**실제 호출·상태·실패 처리 순서**
 
-**주요 맞교환:** 불필요한 장애 영향·올바른 복구(QA-32/31) ↔ 정상 경로 응답시간·PC 메모리(QA-01~03/41, 실제 참여 경로에 한정).
+1. Grounding은 목표·대상, Association은 기존/신규 Task 관계, Handling은 처리 경로를 정한다. 세 Component는 각기 다른 프롬프트로 **같은 LLM**을 호출한다. Reader의 원천 근거는 필요한 각 단계에 제공하며 앞 단계 요약만으로 정보 손실을 강제하지 않는다.
+2. 후속 단계가 ‘D7과 T3가 맞지 않음’을 발견하면 앞 결과를 덮지 않고 원 owner에 CORRECT_PRIOR_STAGE를 보낸다. 새 version이 오면 영향받은 후속 단계만 재개한다. 모델 응답은 call ID·request revision으로 원 호출자에 반환한다.
+3. Validator가 조합을 검사한 뒤 공통 Router에 전달한다. 최소 예시는 A 1회·B 3회 호출일 수 있지만 고정 정의는 아니다. 양쪽 fast path·cache·부분 repair를 허용하고 실제 공유 모델 대기를 포함한다.
 
-반드시 확인할 것은 같은 연동 코드·같은 fault를 비교하는지와, IPC 비용이 실제 최악 응답시간을 움직이는지다. 기존 EXEC ADR의 격리 결정은 유지하며, 이 문서는 현재 QA로 재검토할 후보를 명확히 한 것이다.
+그림은 의존관계를 드러내는 대표 경로다. 독립 조회의 병렬화와 필요 없는 단계 생략을 금지하지 않는다.
 
-[DP-11 상세 보고서](./via-dp-11-process-isolation.md)
 
-### DP-12 — 사용자에게 응답하기 전에 실행 근거를 저장해야 하는가
+### 4.2 VIA-DP-14 — Task 상태 관리
 
-**A:** 지금까지 관측한 최소 실행 근거의 영속 저장을 확인한 뒤 응답을 게시한다. 상세 기록·export는 비동기로 처리한다.
+같은 Task의 취소와 완료가 교차할 때 write를 조정하는 책임이다. QA-01/03/05의 queue·충돌 비용, QA-13/14의 정확성, QA-22와 QA-31을 확인한다. 같은 DB mutex가 양쪽에 있으므로 B가 자동 병렬·복구 우세인 것은 아니다.
 
-**B:** 같은 기록을 bounded queue에 넣되 영속 저장 완료를 기다리지 않고 응답을 게시한다.
+#### 대안 A — 공유 transactional Task 서비스
 
-A는 게시 전 근거의 유실 창을 줄인다. B는 저장 지연을 사용자 응답 경로에서 분리할 수 있다. B가 로그를 안 남기는 비교가 아니며, 업무 상태·승인 기록의 공통 영속 의무는 양쪽 모두 지킨다.
+TaskService의 무상태 handler가 명령마다 저장소 revision을 확인하고 전이를 수행한다. Task별 준비·분할 queue·짧은 transaction을 허용하므로 전역 직렬 서비스가 아니다. 소유자 활성화 없이 호출할 수 있지만 동시 갱신 충돌의 재시도 책임이 남는다.
 
-**주요 맞교환:** 실행 trace 완전성(QA-61, crash 조건부) ↔ 응답시간과 저장 장애 중 기능 진행.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core — OS Process"]
+ I["공통 사용자 명령·Agent 관측"] -->|"TaskCommand: task id·command id·revision"| S["[변경] SharedTaskService<br/>무상태 전이 handler"]
+ S -->|"apply · revision 조건부 write"| R["공통 Repository<br/>전이·dedup·transaction 검사"]
+ R <-->|"짧은 transaction"| DB[("공통 Task DB<br/>Task·Link·pending·outbox")]
+ R -->|"commit된 TaskView"| O["공통 응답·조회"]
+ DB -.->|"비동기: outbox 조회"| D["공통 Effect Dispatcher·Agent Client"]
+ D -.->|"비동기: 접수·결과 관측"| I
+ end
+ D <-->|"실행·query·control API"| A["외부 Agent Runtime"]
+```
 
-실제 음성이 나간 시각은 나가기 전에 기록할 수 없다. 따라서 A도 완전한 trace를 무조건 보장하지 않는다. 불완전한 실행의 FAIL 판정을 그대로 재계산할 수 있으므로 QA-62 평가 재현성이 자동으로 A 우세인 것도 아니다.
+**실제 호출·상태·실패 처리 순서**
 
-[DP-12 상세 보고서](./via-dp-12-evidence-commit.md)
+1. 같은 TaskCommand를 SharedTaskService.apply에 보낸다. Repository가 command 중복·expected revision·허용 전이를 검사하고 상태와 효과를 commit한다. 중복 명령은 보존한 결과를 반환한다.
+2. 충돌한 handler는 최신 상태를 읽고 같은 사용자 의도에 맞게 재검토한다. 이미 완료됐으면 취소 완료라고 덮지 않는다. Task별 준비는 병렬일 수 있지만 실제 DB write 제약은 그대로다.
+3. Dispatcher는 commit 뒤 외부 호출하고 결과를 새 관측 command로 돌려보낸다. 재시작 시 기존 명령·Link·outbox로 복구한다. Agent나 LLM 응답을 transaction 안에서 기다리지 않는다.
 
-### DP-13 — 바쁜 순간에도 사용자 제어가 쓸 자원을 남겨둘 것인가
+#### 대안 B — Task별 단일 writer supervisor
 
-**A:** 제어에 필요한 최소 실행 여력을 예약하고, 즉시 회수 가능한 일반 작업에만 유휴분을 빌려준다.
+각 Task에 활성 owner 하나와 메모리 mailbox를 둔다. 같은 Task의 command는 그 owner가 순서대로 처리하고 Repository가 epoch를 검사한다. 공통 전이 library·저장소·지연 활성화를 허용한다. Task별 순서와 수명 경계가 명시적이지만 registry·mailbox·fencing 계약이 추가된다.
 
-**B:** 전체 자원을 공유하며 제어를 우선 처리하지만, 일반 작업의 전체 자원 점유를 허용한다.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core — OS Process"]
+ I["공통 사용자 명령·Agent 관측"] -->|"TaskCommand: task id·command id·revision"| D["[변경] Activation Directory<br/>task id에서 유효 owner 찾기"]
+ D -->|"T3 envelope"| Q3["bounded T3 mailbox · 메모리"]
+ D -->|"T7 envelope"| Q7["bounded T7 mailbox · 메모리"]
+ Q3 --> S3["[변경] T3 Supervisor · epoch e3"]
+ Q7 --> S7["[변경] T7 Supervisor · epoch e7"]
+ S3 -->|"apply_with_epoch"| R["공통 Repository<br/>전이·dedup·revision + epoch 검사"]
+ S7 -->|"apply_with_epoch"| R
+ D -->|"activate: owner epoch 증가"| R
+ R <-->|"짧은 transaction"| DB[("공통 Task DB<br/>Task·Link·pending·outbox + owner epoch")]
+ R -->|"commit된 TaskView · reply"| O["공통 응답·조회"]
+ DB -.->|"비동기: outbox 조회"| X["공통 Effect Dispatcher·Agent Client"]
+ X -.->|"비동기: 접수·결과 관측"| I
+ end
+ X <-->|"실행·query·control API"| A["외부 Agent Runtime"]
+```
 
-B의 우선순위가 높아도 이미 실행 중인 작업을 안전하게 중단할 수 없다면 제어는 기다린다. A는 그 대기를 줄이는 대신 일부 일반 작업의 시작을 늦출 수 있다. 같은 총 자원 한도로 비교한다.
+**실제 호출·상태·실패 처리 순서**
 
-**주요 맞교환:** 음성 중단·Task 제어 응답(QA-04/05) ↔ 일반 요청 응답(QA-01/02, 포화 경로 한정).
+1. Directory가 Task ID의 sender를 찾는다. 없거나 종료됐으면 Repository.activate로 새 epoch를 저장하고 supervisor와 bounded mailbox를 만든다. 현재 구조 코드의 mailbox 용량 64는 구현값이지 제품 요구가 아니다.
+2. Supervisor가 한 envelope씩 apply_with_epoch를 수행하고 commit 뒤 caller의 reply 채널로 결과를 반환한다. **mailbox 자체는 영속 queue가 아니다.** caller는 응답 소실 시 같은 command ID로 재시도하고 Repository가 중복 효과를 막는다.
+3. 재활성화 이전 epoch의 늦은 writer는 거부한다. 외부 응답은 mailbox에서 기다리지 않고 Dispatcher의 후속 command로 받는다. T3와 T7은 같은 코드의 인스턴스이며 모델도 DB도 Task별로 복제하지 않는다.
 
-기존 12개에서 빠져 있던 정상 과부하의 자원 점유 권한이다. Process 장애 격리와 다른 결정이므로 새 DP로 추가했다. 외부 Model이 병목이면 VIA 내부 예약만으로 해결되지 않는다.
+### 4.3 VIA-DP-09 — 이기종 Agent 통합
 
-[DP-13 상세 보고서](./via-dp-13-control-reservation.md)
+외부 Agent의 취소 접수와 실제 종료를 어디에서 공통 의미로 바꾸는가다. QA-21 변경 영향이 직접적인 질문이다. QA-01/03/05 및 QA-11/13/14는 같은 의미·검사·배치라면 비슷할 수 있다. 관련성이 있다는 이유로 반대 방향 우세를 만들지 않는다.
 
-## 4. 나머지 결정은 어떻게 다룰 것인가
+#### 대안 A — 공통 의미 정규화 + 손실 없는 확장
 
-### 조건을 구체화한 뒤 핵심 여부를 판단할 네 후보
+연동 경계의 의미 adapter가 provider별 수명을 공통 operation·observation으로 바꾼다. unsupported·pending·source-confirmed·artifact 조회 참조를 명시하며, 필요한 확장 정보와 native provenance를 함께 보존한다. Core는 이 공통 의미를 소비한다.
 
-| DP | 선택의 본질 | 핵심 평가로 올리기 전에 확인할 것 |
-| --- | --- | --- |
-| [02 대화·Task 확정 경계](./via-dp-02-state-consistency.md) | 공동 원자 확정 ↔ 독립 owner 확정과 조정 | 교차 관계 갱신의 실제 경로, 정합성 유지 비용과 지연·복구 차이. 소유자 분리만으로 장애 격리를 주장하지 않는다. |
-| [04 직접 응답 게시 권한](./via-dp-04-response-authority.md) | 제한적으로 Voice에 위임 ↔ 요청마다 Core 승인 | 병렬 승인·사전 계산 후에도 왕복이 임계 경로에 남는지, 권한 회수 비용이 무엇인지 |
-| [05 Context 읽기 계약](./via-dp-05-context-contract.md) | 세대별 입력 집합 확정 ↔ 같은 세대에서 허용 조회 확장 | 추가 자료가 필요한 경우의 세대 갱신 비용과 변경·재구성 비용. lazy loading은 양쪽 모두 허용한다. |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | 최종 확정자가 의미를 함께 조정 ↔ 단계별 owner가 자기 의미만 정정 | 부분 재사용·cache 후에도 남는 정정 경로와 전체 변경 집합의 영향. 모델 호출 수를 억지로 다르게 하지 않는다. |
+최선의 A는 최소 공통분모로 기능을 깎지 않는다. 새 개념이 공통 계약으로 표현되지 않으면 version을 확장하고 소비자를 함께 검토한다. Adapter가 Task state를 직접 쓰거나 source revision을 만들어내지는 않는다. 강점은 provider 차이의 경계 집중이며 약점은 의미 adapter의 계약 유지 책임이다.
 
-이 네 개를 지금 “강한 핵심 DP 확정”이라고 부르지 않는다. 조건을 구체화해도 trade-off가 약하면 보조 결정으로 낮춘다.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core Process — A/B 동일 배치"]
+ T["공통 Task Owner·Repository<br/>최종 Task state writer"] <-->|"canonical 명령 요청<br/>Pending·Confirmed 관측 반환"| E["[변경] Semantic Agent Adapter<br/>native 수명을 공통 의미로 확정"]
+ E -->|"native 호출"| C["공통 Transport Client<br/>인증·timeout·연결"]
+ C -.->|"비동기: source event·query 결과"| E
+ E <-->|"VIA·native ID 참조"| K[("공통 ExecutionLink·capability")]
+ T -->|"확인된 disposition"| P["공통 Voice·Text 응답"]
+ end
+ C <-->|"지원하는 A2A 또는 고유 API"| G["외부 Agent Runtime<br/>별도 Process 또는 원격"]
+```
 
-### 먼저 범위와 capability를 정할 세 결정
+**실제 호출·상태·실패 처리 순서**
 
-DP-01은 제한된 정보 처리를 VIA가 직접 할지 Agent가 전담할지다. 직접 경로와 위임 경로는 QA 측정 구간이 달라 속도 숫자를 그대로 비교할 수 없다.
+1. Task Owner의 cancel을 Adapter가 외부 호출로 변환한다. Client는 인증·연결·timeout을 처리한다. event가 있으면 수신하고 필요한 경우 지원되는 query로 확인한다.
+2. 예시 P의 종료 확인은 CancelConfirmed, Q의 취소 접수는 CancelPending으로 Adapter가 해석한다. P/Q는 설명용 fixture이며 특정 제품의 API 지원 주장이 아니다. 필요한 확장·원천 근거를 보존한다.
+3. Task를 쓰는 것은 Owner다. 늦은 completion도 사실대로 반영한다. 별도 message bus·추가 LLM 없이 결정적 변환 코드로 구현할 수 있다.
 
-DP-03은 음성 입력의 최종 근거를 VIA가 정규화·보완할지 S2S 원천 계약에 둘지다. 화면 지칭·정정에 필요한 정보를 제공하지 못하는 후보는 낮은 점수를 받는 정상 대안이 아니라 기능 적합성 문제다.
+공통 형식은 기능을 지우는 형식이 아니다. 사실·미지원·확장 의미를 보존해야 같은 기능 비교가 된다.
 
-DP-07은 복합 요청의 상위 실행 관계를 VIA가 조정할지 Agent가 전부 소유할지다. 부분 취소·node별 조회·기존 Task 연결 기능이 없는 Agent를 있다고 가정해서는 안 된다.
+#### 대안 B — 공통 전송·타입 계약 + Core 유형별 의미 확정
 
-상세: [01 직접 처리](./via-dp-01-direct-handling.md) · [03 음성 근거](./via-dp-03-voice-evidence.md) · [07 복합 요청](./via-dp-07-compound-orchestration.md)
+연동 경계는 인증·전송·wire 형식을 변환하고 provider-neutral typed variation을 전달한다. Core의 제한된 capability handler가 follow-up·cancel·status mode를 해석한다. 다른 Core 모듈에는 provider SDK를 노출하지 않는다.
 
-### 구조적으로 필요하지만 점수 대결을 강제하지 않을 세 결정
+공통 handler library와 공통 Task invariant를 허용한다. 새 capability 의미를 Core가 명시적으로 다루기 쉽다는 채택 이유가 있지만, 이것이 A에서는 표현 불가능하다는 뜻은 아니다. Typed contract와 그 소비 handler의 변경 책임이 남는다.
 
-DP-08은 재시작 시 확정 이력과 현재 상태 중 무엇이 최종 기준인지다. 두 안 모두 checkpoint·감사 이력·미완료 명령을 가질 수 있다.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core Process — A/B 동일 배치"]
+ T["공통 Task Owner·Repository<br/>최종 Task state writer"] <-->|"canonical 명령 요청<br/>Pending·Confirmed 관측 반환"| H["[변경] Core Lifecycle Handler<br/>typed variation 의미 확정"]
+ H <-->|"typed operation 요청<br/>PConfirmed·QRequested 반환"| E["Typed Contract Adapter<br/>안정된 타입으로 변환"]
+ E -->|"native 호출"| C["공통 Transport Client<br/>인증·timeout·연결"]
+ C -.->|"비동기: source event·query 결과"| E
+ H <-->|"VIA·native ID 참조"| K[("공통 ExecutionLink·capability")]
+ T -->|"확인된 disposition"| P["공통 Voice·Text 응답"]
+ end
+ C <-->|"지원하는 A2A 또는 고유 API"| G["외부 Agent Runtime<br/>별도 Process 또는 원격"]
+```
 
-DP-09는 Agent 고유 사건의 업무 의미를 경계에서 정규화할지 Core에서 해석할지다. 손실 없는 확장을 허용하면 “정규화는 정확성을 희생한다”는 단순 대립이 사라진다.
+**실제 호출·상태·실패 처리 순서**
 
-DP-10은 Model 세션의 생성·회복 권한을 공통 관리자가 가질지 역할별 owner가 가질지다. 양쪽 모두 공통 library, 직접 데이터 stream, Model 가중치 공유가 가능하다.
+1. 같은 Client를 쓴다. Typed Adapter는 wire를 타입으로 바꾸지만 취소 완료 여부의 최종 의미는 Core Handler가 정한다.
+2. 제한된 Handler가 PConfirmed/QRequested를 Task 의미로 바꾸어 Owner에 전달한다. provider SDK를 UI·대화·Task 모듈 전체에 노출하는 구조가 아니다.
+3. 명령·재연결에도 같은 경계를 쓴다. 공통 library·extension·provenance는 양쪽에 허용한다. 위치 차이만으로 속도·정확도 우세를 만들지 않고 QA-21의 실제 변경 전파를 비교한다.
 
-이들을 버리는 것이 아니다. **전체 구조의 명시적 설계·변경 계약으로 남기되, 반대 방향 QA 이점을 발명하지 않는다.**
+B의 차이는 Core 전체에 native 데이터를 흩뿌리는 것이 아니라 제한된 handler가 수명 의미를 소유한다는 것이다.
 
-상세: [08 복구 기록](./via-dp-08-recovery-source.md) · [09 Agent 의미](./via-dp-09-agent-semantics.md) · [10 Model 세션](./via-dp-10-model-session-authority.md)
 
-## 5. 추천하는 진행 순서와 완료 범위
+### 4.4 VIA-DP-11 — VIA Client 실행 경계
 
-먼저 DP-01/03/07의 범위·기능 조건을 정리해 모든 후보가 같은 제품을 만들도록 한다. 그다음 **DP-11 → DP-13 → DP-12** 순서로 검증 준비를 권한다. 각각 장애, 정상 과부하, 기록 비용이라는 구별되는 사건으로 가설을 반증하기 쉽다. 이는 A를 순서대로 채택하자는 뜻이 아니다.
+격리 대상은 VIA가 작성하거나 탑재하는 Client·SDK다. 외부 Agent는 A/B 모두 밖에서 실행한다. VIA Client의 실제 fatal 위험이 확인될 때 QA-32와 정상 전달 시간의 비교가 성립한다. 외부 Agent crash나 가정한 모델 복제를 이점으로 쓰지 않는다.
 
-DP-02/04/05/06은 의존 경로·정정·세대 계약을 더 구체화한 후 승격 여부를 판단한다. DP-08/09/10은 각 비교에서 고정할 공통 구조로 명시한다. 개별 DP의 유리한 선택을 조합했을 때 충돌하지 않는지도 제한적으로 확인한다. 전체 조합에서 하나의 총점 우승 구성을 고르는 방식은 사용하지 않는다.
+#### 대안 A — 위험 연동 격리 + 얇은 Core 연결부
 
-이번에 완료한 것은 다음이다.
+외부 연동 실행 코드를 supervised worker Process에 두고 Core에는 검증·연결용 얇은 facade와 상태 authority를 남긴다. 모든 VIA를 무조건 여러 Process로 쪼개지 않는 hybrid다. 공유 메모리·batch·작은 제어 message·warm worker를 허용한다.
 
-- 모든 13개 후보의 독립 보고서, 배경·A/B 구조 그림, 상호 배타성·hybrid·steelman 검토.
-- 각 보고서의 **전체 19개 QA** 예상표와 근거·반례·미확인 조건.
-- UC-01~18, 전체 변경 집합과 QA의 coverage 점검, DP 간 의존·중복 검토.
-- 전체 적용 경험을 반영한 공통 review protocol 보완과 문서 검증.
+Worker generation·in-flight 명령·source identity를 관리하고, worker가 죽으면 새 generation을 만들고 외부 실행 사실을 확인한다. 장점은 대상 연동의 fatal failure가 Core의 메모리·음성 제어를 직접 파괴하지 않는다는 것이다. 약점은 IPC 계약·추가 Runtime·끊긴 전달의 불확실성이다.
 
-**하지 않은 일:** 후보 구현, QA 측정·점수화, 실제 모델 기능 입증, A/B 최종 선택, ASR 확정, 기존 ADR 변경.
+```mermaid
+flowchart TB
+ subgraph V["VIA Core — OS Process"]
+ T["공통 Task Owner·Repository<br/>정책·command·outbox"] -->|"commit된 명령"| F["[변경] IPC Facade·Worker Supervisor"]
+ F <-->|"명령·회신"| Q["bounded IPC queue<br/>command id·worker generation"]
+ F -.->|"비동기: 검증된 관측"| T
+ end
+ subgraph W["VIA 소유 Integration Worker — 별도 OS Process"]
+ I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
+ end
+ Q <-->|"versioned IPC frame"| I
+ I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+```
 
-처음에는 이 문서만 읽고 “세 우선 후보와 네 조건부 후보의 분류가 적절한가”를 판단하면 된다. 이후 관심 DP의 독립 보고서로 내려가면 된다. 전체 후보 변경 이력·coverage·검증 기록은 [전체 검토 종합](./dp-review-synthesis.md), 공통 판정 규칙은 [DP 공통 검토 절차](./dp-review-protocol.md)에 있다.
+**실제 호출·상태·실패 처리 순서**
+
+1. Core가 명령을 영속 저장하고 Facade가 command ID·worker generation을 붙여 IPC로 보낸다. bounded IPC queue는 전달 대기 공간이며 durable outbox를 대체하지 않는다.
+2. **Worker는 VIA의 Agent Client/SDK를 실행하며 외부 Agent 자체를 실행하지 않는다.** Client가 외부 Runtime의 지원 API에 접속한다. A2A 지원 여부는 실제 profile로 확인한다.
+3. Worker 종료 시 재시작하고 in-flight 명령은 외부 ID로 확인한다. 외부 Agent 자체의 crash는 B에서도 외부 경계의 문제다. 차이를 만드는 fault는 VIA Client의 잡을 수 없는 fatal failure다.
+
+이 그림의 두 경계는 실제 OS Process다. Worker를 나눴다는 이유로 외부 Action이 exactly-once가 되지는 않는다.
+
+#### 대안 B — 같은 Process + 제한된 queue·실패 처리
+
+동일 연동 코드를 Core와 같은 OS Process에서 실행한다. 별도 task·thread, bounded queue, timeout·cancellation, 안전한 메모리 접근과 잡을 수 있는 예외 처리로 논리적으로 격리한다. Core 잠금을 잡고 외부 API를 기다리지 않는다.
+
+같은 주소 공간의 직접 호출·buffer 공유로 IPC와 별도 worker 수명을 피하는 강한 안이다. 정상 예외를 모두 Core crash로 만드는 비교는 하지 않는다. 다만 Process abort나 잡을 수 없는 fatal failure가 실제로 발생하면 논리 queue가 Core를 살려주지는 못한다.
+
+```mermaid
+flowchart TB
+ subgraph V["VIA Core — OS Process"]
+ T["공통 Task Owner·Repository<br/>정책·command·outbox"] -->|"commit된 명령"| Q["bounded client queue<br/>command id·cancel token"]
+ Q -->|"같은 Process의 async 호출"| I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
+ I -.->|"비동기: 검증된 관측"| T
+ end
+ I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 같은 Client·명령·outbox를 Core Process의 async queue로 연결한다. 별도 IPC frame·Worker Supervisor가 없다. 외부 응답을 기다리며 DB transaction을 잡지 않는다.
+2. ‘같은 Process’는 VIA Client의 배치다. OpenClaw·Hermes Runtime을 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
+3. 잡을 수 없는 Client fatal은 Core까지 종료시킬 수 있다. 그러나 해당 코드·fault가 제품에 실제로 필요한지 미확인이라면 QA-32의 큰 이점이나 핵심 DP 지위를 단정하지 않는다.
+
+Thread·mailbox 격리는 정상 정지·예외를 제한할 수 있지만 주소 공간이 같은 fatal 종료 경계는 유지된다.
+
+
+## 5. 나머지 질문을 생략하지 않는 방법
+
+Context는 05(읽기 집합)·16(이력 유지)·17(값 변환)로, 비동기 상태는 02(교차 commit)·08(복구 원본)·15(관측 확정)로 읽는다. Voice는 03(입력 근거)·04(게시)·10(세션)·13(자원), 실행 범위는 01·07, 실행 근거는 12, protected use는 18에서 다룬다. 이 배치는 관심사 지도이지 작은 DP는 중요하지 않다는 판단이 아니다.
+
+## 6. QA와 최종 선정은 분리한다
+
+현재 19개 single-metric QA를 모든 보고서에서 검토했다. 최종 보고서에는 Responsiveness·Accuracy·Modifiability를 포함하되 각 계열 최대 2개라는 사용자 방향을 유지한다. 아직 구체 ASR 묶음을 고정하지 않는다. QA-11과 QA-12~15를 독립 성공 점수처럼 합산하지 않는다.
+
+QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차이가 미확인이라 핵심 ASR 우선 추천에서 제외한다. QA-32는 VIA Client fatal 위험, QA-61은 실제 기록 유실 구간처럼 구체 인과를 확인해야 한다. QA-51은 기존 metric과 권한 gate를 유지하며 범위를 확대하지 않는다.
+
+## 7. 무엇이 완료됐고 무엇이 남았는가
+
+완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑이다. 현재 QA 결과는 모두 NOT_RUN이다. 부분 코드·prompt는 존재하지만 실제 두 모델·Windows·제3자 Runtime을 연결한 제품 검증은 아니다. 기존 ADR의 승인·유예와 재검증 조건은 각 대응 VIA-DP에 보존했다.
+
+문서 검증과 미확인 사항은 [검토 종합](./dp-review-synthesis.md), 정확한 옛 ID 대응은 [이력·누락 점검](./legacy-dp-mapping.md)을 따른다. 다음 선정에서 현재의 가설·표를 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.

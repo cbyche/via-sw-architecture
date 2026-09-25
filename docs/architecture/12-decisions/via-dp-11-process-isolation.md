@@ -1,10 +1,10 @@
 # VIA-DP-11 — 외부 연동 코드의 Process 장애 경계
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 치명적 실패 가능성이 있는 연동 실행을 별도 Process에 가둘 것인가, Core와 같은 Process에서 논리적으로 격리할 것인가?
 >
-> 현재 판단: **우선 핵심 검증 후보 — 장애 전파 대 IPC·자원 비용의 직접적인 구조 인과** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **조건부 설계 후보 — VIA Client의 실제 fatal 위험 확인이 선행** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — 한 Agent 연동이 죽어도 VIA와 다른 업무는 살아 있어야 할까?
 
@@ -27,13 +27,21 @@ class Q change;
 
 **용어:** Process는 주소 공간과 종료 수명을 가진 OS 실행 단위다. IPC는 Process 사이의 통신이며, facade는 Core에 남는 얇은 연결 계층이다. fatal fault는 같은 Process를 종료시키는 장애로 일반 예외와 구별한다. in-flight는 외부 요청을 보냈지만 결과를 아직 확정하지 못한 상태다.
 
-대상 연동 코드·dependency 집합을 결과 전에 같은 의미로 고정한다. 정상 예외·timeout과 Process abort·native fatal failure를 구분한다. Core 로직, canonical state, 정책 authority는 양쪽 모두 Core에 유지한다.
+대상은 VIA가 소유하는 Agent Client·SDK 연동 코드다. 외부 Downstream Agent Runtime은 양쪽 모두 별도 Process 또는 원격에 있으며 이를 Core 안에 넣는 선택이 아니다. 대상 코드·dependency 집합을 결과 전에 같은 의미로 고정한다. 정상 예외·timeout과 Process abort·native fatal failure를 구분한다. Core 로직, canonical state, 정책 authority는 양쪽 모두 Core에 유지한다.
 
 **기준선에서 확인한 사실:** UC-14는 한 업무 문제로 무관한 대화가 중단되지 않도록 요구하고, UC-18·QA-31/32는 올바른 재연결과 불필요한 영향 범위를 구분한다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
 **이번 비교의 설계 가정:** 같은 연동 기능·외부 API·총 자원 한도·queue 제한·timeout·저장 보장·명령 identity·source fault를 적용한다. A에만 코드를 더 안전하게 만들거나 B에만 blocking API를 강제하지 않는다. 실제 Native SDK의 존재·취약성을 확정 사실로 주장하지 않는다.
 
 **미확인 사항:** target Windows IPC·serialization 비용, worker 시작·재연결 비용, 외부 실행의 idempotency/조회 capability, fault별 user-visible unit과 최악 대표값. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
 
 ## 3. 대안 A — 위험 연동 격리 + 얇은 Core 연결부
 
@@ -43,21 +51,23 @@ Worker generation·in-flight 명령·source identity를 관리하고, worker가 
 
 ```mermaid
 flowchart TB
- subgraph C["VIA Core — OS Process"]
- S["공통 Task·정책 authority"] -->|검증된 명령| F["[변경] 얇은 IPC facade·supervisor"]
+ subgraph V["VIA Core — OS Process"]
+ T["공통 Task Owner·Repository<br/>정책·command·outbox"] -->|"commit된 명령"| F["[변경] IPC Facade·Worker Supervisor"]
+ F <-->|"명령·회신"| Q["bounded IPC queue<br/>command id·worker generation"]
+ F -.->|"비동기: 검증된 관측"| T
  end
- subgraph W["연동 worker — 별도 OS Process"]
- I["[변경] 동일 연동 실행 코드"]
+ subgraph W["VIA 소유 Integration Worker — 별도 OS Process"]
+ I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
  end
- F -->|versioned IPC·명령 ID| I
- I -.->|비동기: 결과·worker generation| F
- I -->|공통 native API| G["외부 Agent·Source"]
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class S,G common;
-class F,I change;
+ Q <-->|"versioned IPC frame"| I
+ I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Core가 명령을 영속 저장하고 Facade가 command ID·worker generation을 붙여 IPC로 보낸다. bounded IPC queue는 전달 대기 공간이며 durable outbox를 대체하지 않는다.
+2. **Worker는 VIA의 Agent Client/SDK를 실행하며 외부 Agent 자체를 실행하지 않는다.** Client가 외부 Runtime의 지원 API에 접속한다. A2A 지원 여부는 실제 profile로 확인한다.
+3. Worker 종료 시 재시작하고 in-flight 명령은 외부 ID로 확인한다. 외부 Agent 자체의 crash는 B에서도 외부 경계의 문제다. 차이를 만드는 fault는 VIA Client의 잡을 수 없는 fatal failure다.
 
 이 그림의 두 경계는 실제 OS Process다. Worker를 나눴다는 이유로 외부 Action이 exactly-once가 되지는 않는다.
 
@@ -69,21 +79,23 @@ class F,I change;
 
 ```mermaid
 flowchart TB
- subgraph C["VIA Core — 하나의 OS Process"]
- S["공통 Task·정책 authority"] -->|직접 bridge·명령 ID| I["[변경] 동일 연동 실행 코드"]
- I -.->|비동기: 결과| S
+ subgraph V["VIA Core — OS Process"]
+ T["공통 Task Owner·Repository<br/>정책·command·outbox"] -->|"commit된 명령"| Q["bounded client queue<br/>command id·cancel token"]
+ Q -->|"같은 Process의 async 호출"| I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
+ I -.->|"비동기: 검증된 관측"| T
  end
- I -->|공통 native API| G["외부 Agent·Source"]
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class S,G common;
-class I change;
+ I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 같은 Client·명령·outbox를 Core Process의 async queue로 연결한다. 별도 IPC frame·Worker Supervisor가 없다. 외부 응답을 기다리며 DB transaction을 잡지 않는다.
+2. ‘같은 Process’는 VIA Client의 배치다. OpenClaw·Hermes Runtime을 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
+3. 잡을 수 없는 Client fatal은 Core까지 종료시킬 수 있다. 그러나 해당 코드·fault가 제품에 실제로 필요한지 미확인이라면 QA-32의 큰 이점이나 핵심 DP 지위를 단정하지 않는다.
 
 Thread·mailbox 격리는 정상 정지·예외를 제한할 수 있지만 주소 공간이 같은 fatal 종료 경계는 유지된다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -127,7 +139,7 @@ sequenceDiagram
 
 <a id="t1"></a>
 
-### T1. 정상 handoff·status·Context 전달 비용
+### T1. 정상 handoff·status·Agent 입력 전달 비용
 
 같은 payload가 Core에서 연동 실행을 거쳐 실제 Agent ingress에 도달한다. A의 추가 비용은 실제 serialization·IPC·queue·validation·copy의 비중첩 부분이며 B도 bridge·queue·validation 비용이 있다. A의 shared memory·batch는 비용을 줄일 수 있지만 version·수명 검사가 공짜는 아니다.
 
@@ -137,7 +149,7 @@ B는 정상 small-message·warm-worker 조건에서 조금 유리할 가능성�
 
 ### T2. 같은 연동의 fatal fault와 정상 오류
 
-메일 연동 실행에서 잡을 수 없는 Process 종료 사건을 주입한다. A는 worker만 종료되어 Core·다른 Task·공통 playback 제어가 살아 있을 수 있다. B는 같은 Process가 종료되어 그 연동을 필요로 하지 않던 기능까지 중단될 수 있다. 이 차이가 QA-32의 직접적인 구조 원인이다. 필요 의존 집합을 ‘같은 Process의 모든 기능’으로 정의해 B의 전파를 필수로 바꾸면 안 된다.
+메일 업무를 맡은 외부 Agent와 통신하는 VIA Client 코드에 잡을 수 없는 Process 종료 사건을 주입한다. 외부 Agent 자체의 crash를 주입하는 실험과는 다르다. A는 worker만 종료되어 Core·다른 Task·공통 playback 제어가 살아 있을 수 있다. B는 같은 Process가 종료되어 그 연동을 필요로 하지 않던 기능까지 중단될 수 있다. 이 차이가 QA-32의 직접적인 구조 원인이다. 필요 의존 집합을 ‘같은 Process의 모든 기능’으로 정의해 B의 전파를 필수로 바꾸면 안 된다.
 
 반대로 정상 timeout·잡을 수 있는 예외에서는 B도 해당 연동만 실패 처리할 수 있어 A가 크게 우세하다고 할 수 없다. Core 자체의 fatal fault·PC 전체 종료에는 A도 보호되지 않는다. 어느 fault가 전체 QA-32 최댓값을 지배하는지 같은 fault pack으로 확인한다. Process 분리만으로 OS 자원 고갈·공유 lock·shared-memory 손상까지 격리된다고 주장하지 않는다.
 
@@ -164,7 +176,7 @@ A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protoc
 | QA · 단일 metric | 예상 방향·크기 | 확실성 | 구조적 이유·반례와 근거 | 역할 |
 | --- | --- | --- | --- | --- |
 | QA-01 위임 경로 VIA 처리시간 · 최악 case p95; Agent 실행 제외 | 조건부: B 조금 우세 예상 | 중간 | 추가 IPC의 실제 비중첩 경로; Model 지배·shared memory면 축소 [T1](#t1) | 주 비교 후보 |
-| QA-02 직접 Voice 응답시간 · 최악 case p95 | 비참여 경로는 비슷; 연동 사용 시 B 가능 | 중간 | Context 경로가 실제 worker를 통과하는 경우만 [T1](#t1) | 주 비교 후보·회귀 |
+| QA-02 직접 Voice 응답시간 · 최악 case p95 | 비슷 예상; 정상 직접 경로 비참여 | 중간 | 격리 대상은 Agent Client이므로 Agent 없는 직접 응답에 IPC를 넣지 않음 [T1](#t1) | 회귀 |
 | QA-03 Agent 상태 Voice 전달시간 · 최악 case p95 | 조건부: B 조금 우세 예상 | 중간 | source status 이후 IPC·변환 비용 포함 [T1](#t1) | 주 비교 후보 |
 | QA-04 음성 중단시간 · 최악 case p95 | 정상은 비슷; fatal fault 지속성은 A 가능 | 중간 | playback은 Core 공통; crash로 기능 소실은 별도 실패 포함 [T2](#t2) | 회귀·fault 검증 |
 | QA-05 Task 제어 응답시간 · 최악 control case p95 | 조건부: B 조금 우세 예상 | 중간 | 실제 control IPC 비용; 확인 의미는 동일 [T1](#t1) | 주 비교 후보 |
@@ -178,7 +190,7 @@ A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protoc
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 조건부: B 유리 가능; 크기 미정 | 낮음 | Process 경계 계측·reader 추가 수정이 실제 필요한 경우 [T4](#t4) | 주 비교 가능성 |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건부: A 우세 가능 | 중간 | integration fatal의 복원 범위 감소, 최악 fault 집계는 별도 [T3](#t3) | 주 비교 후보 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 조건부: A 크게 우세 가능한 fault 존재 | 높음 | 동일 integration fatal이 무관한 Core 기능을 함께 종료시키는가 [T2](#t2) | 주 비교 후보 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부: B 우세 가능 | 중간 | worker·IPC의 추가 resident 자원, peak 크기는 미정 [T4](#t4) | 주 비교 후보 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부: B 우세 가능 | 중간 | worker·IPC의 추가 resident 자원, peak 크기는 미정 [T4](#t4) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | Process 분리는 초과 정보 제공 정책의 대체물이 아님 [T4](#t4) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 예상; crash 보존 확인 | 중간 | worker 로그 손실은 별도 기록 계약으로 검증 [T4](#t4) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 동일 frozen evidence·evaluator 보존 [T4](#t4) | 필수 회귀 |
@@ -193,13 +205,17 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 근거 계약: [Voice responsiveness](../08-quality-attributes/voice-responsiveness.md), [Task 제어](../08-quality-attributes/interaction-control-responsiveness.md), [실제 event 경계](../11-measurement/event-boundary-contract.md), [정확성·연속성](../08-quality-attributes/correctness-and-continuity.md), [복구·장애·메모리](../08-quality-attributes/reliability-and-resource.md), [19개 QA catalog](../08-quality-attributes/quality-model.md), [변경 전체 집합](../07-intentional-variables.md), [변경 요소와 실험 change pack](../08-quality-attributes/evidence/change-locality-rationale.md), [관측·재현](../08-quality-attributes/observability.md), [Privacy·집계](../11-measurement/scoring-contract.md). 문서 사고실험은 실행 evidence label이나 기존 archive 결과로 대신하지 않는다.
 
+### 현재 구현 근거와 미구현 범위
+
+[exec.rs](../../../prototypes/candidates/runtime/src/exec.rs)는 LocalBridge/ProcessBridge의 구조 예시다. [worker](../../../prototypes/candidates/worker/src/main.rs)는 DeterministicAgent fixture를 사용하며 실제 OpenClaw·Hermes A2A Client를 구현·검증한 것이 아니다. 따라서 worker abort 실험을 외부 Agent Runtime의 장애 격리 증거로 재사용하지 않는다.
+
 ## 9. 다른 DP·변경 비용
 
 [기존 EXEC ADR](../../adr/ADR-003-runtime-fault-isolation-boundary.md)은 격리 B accepted이며 새 QA 재검증 caveat가 있다. 이 보고서의 hybrid A와 대응하지만 기존 문자의 의미나 결정은 바꾸지 않는다. DP-02/08 상태, DP-12 evidence, DP-13 queue 자원은 각각 별도 축이다. 전환 시 frame version·in-flight 명령·worker generation·업데이트/rollback 호환을 이행한다.
 
 ## 10. 현재 판단과 재검토 조건
 
-**우선 핵심 검증 후보로 유지한다.** 정상 경로의 통신·자원 비용과 fatal fault의 불필요한 영향 범위라는 반대 방향 인과가 남는다. 같은 Process sandbox가 동일 기능과 containment를 제공하거나 fatal fault profile이 해당 제품에 부적합하면 비교를 다시 연다. 지금 실제 승자·점수·target 충족을 선언하지 않는다.
+**조건부 후보로 유지하고 우선 핵심 추천은 철회한다.** 실제 VIA Client에 격리할 fatal 위험이 확인될 때 정상 IPC 비용과 장애 범위의 비교가 성립한다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 격리 A의 이점으로 세지 않는다. 같은 Process sandbox가 동일 기능과 containment를 제공하거나 fatal fault profile이 해당 제품에 부적합하면 비교를 다시 연다. 지금 실제 승자·점수·target 충족을 선언하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

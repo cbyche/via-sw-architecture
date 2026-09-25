@@ -6,6 +6,10 @@
 
 ## 1. 분류 체계
 
+**모든 QA의 공통 전제:** VIA는 S2S 모델 1개와 semantic LLM 1개만 사용한다. Component·Task마다 별도 모델을 올리지 않는다. 역할별 프롬프트·호출 수·세션은 달라질 수 있으므로 지연에는 실제 공유 모델 대기와 호출 graph를, 메모리에는 실제 cache·buffer를 포함한다. 모델 복제 유무로 DP의 trade-off를 만들지 않는다. 정의는 [Model Boundary](../01-system-mission-and-boundary.md#13-ai-model-boundary), 비교 조건은 [FA-10](../06-fixed-assumptions.md#65-모델-비교-규칙)을 따른다.
+
+QA-41은 카탈로그에서 유지하되 현재 메모리 상한 요구나 의미 있는 구조 차이의 근거가 없으므로 최종 보고서의 핵심 ASR로 우선 추천하지 않는다. 실측 없이 ‘수 MB 차이’나 ‘모델 여러 개 절약’을 주장하지 않는다. 현재 번호 체계만 새 보고서·표에 사용하며 이전 QA ID는 이력 매핑에만 남긴다.
+
 ```text
 ISO/IEC 25010 기반 품질 관점
         ↓

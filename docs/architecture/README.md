@@ -21,7 +21,7 @@
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
-DP 상세 보고서를 읽기 전에는 [최종 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. 13개 후보의 재구성 결과와 우선 검증·조건부·선행·보조 분류를 설명하며, 기존 ADR을 변경하거나 후보 구현·QA 측정을 완료한 문서가 아니다.
+DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. VIA-DP-01~18의 전수 inventory와 구현 구조를 설명하며, 과거 우선순위로 후보를 제외하지 않는다. 기존 ADR 변경·새 후보 구현·QA 측정 완료를 뜻하지 않는다.
 
 ## Required reading order
 
@@ -55,7 +55,7 @@ DP 상세 보고서를 읽기 전에는 [최종 요약 보고서](./12-decisions
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
 | Machine contract, pending targets, harness | Pending | 구현·실행 전에 먼저 동결해야 함 |
 | Current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
-| DP inventory | Existing records + review proposal | 기존 IR/TASK/AGENT/EXEC와 새 VIA-DP-01~13 독립 검토 보고서; 새 분류는 사용자 검토 전 |
+| DP inventory | Exhaustive review draft | VIA-DP-01~18 독립 보고서; 이전 계열 매핑·coverage 점검, 최종 선정 보류 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
 ## How the baseline becomes a decision

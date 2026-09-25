@@ -1,6 +1,6 @@
 # VIA-DP-07 — 복합 요청 관계의 실행 책임
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: VIA가 일부 요청 관계를 직접 조정하며 묶음 위임을 조합할 것인가, 실행 가능한 복합 업무 전체의 관계 조정을 Agent에 맡길 것인가?
 >
@@ -36,6 +36,14 @@ class Q change;
 
 **미확인 사항:** 전체 대표 복합 요청을 소화하는 Agent의 실제 capability, 이미 진행 중인 다른 Agent 실행을 조정할 수 있는 계약, node별 source event 경계. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — VIA 관계 조정 + 가능한 부분의 묶음 위임
 
 VIA는 사용자 요청 관계 중 상위 연결의 준비·보류·부분 완료를 관리한다. Agent가 잘 처리할 수 있는 연결된 부분은 하나의 묶음으로 위임하고, 묶음 간 결과와 조건을 VIA가 잇는다. 모든 node를 하나씩 위임하는 약한 안이 아니라 묶음과 개별 실행을 조합한 hybrid다.
@@ -44,18 +52,22 @@ VIA는 사용자 관계 graph와 node·Task·Agent 실행의 연결을 소유한
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- R["공통 요청 의미·Task identity"] -->|사용자 관계| G["[변경] VIA 관계 조정"]
- G -->|준비된 묶음·node| I["공통 Agent 연동"]
+ subgraph V["VIA Core Process — 복합 요청 영역"]
+ R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> G["[변경] Relation Scheduler<br/>묶음 사이 readiness 소유"]
+ G -->|"node·artifact version·준비 상태"| DB[("공통 Task Repository<br/>관계·명령·outbox")]
+ DB -.->|"비동기: 준비된 명령"| D["공통 Dispatcher·Agent Client"]
+ D -.->|"비동기: node 관측"| G
+ U["공통 Task Control"] -->|"발송 node 보류·취소"| G
+ G -->|"확인된 부분 결과"| P["공통 사용자 응답"]
  end
- I -->|업무 실행| A["공통 Agent 집합"]
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class R,I,A common;
-class G change;
+ D <-->|"묶음별 submit·control API"| A["외부 Agent Runtime 집합<br/>각 업무 계획·실행"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Scheduler는 ‘요약 → 발송’이라는 사용자 관계를 저장한다. 요약 방법·메일 Tool은 정하지 않는다. 준비된 묶음만 outbox에 넣어 외부 Agent에 전달한다.
+2. 요약 완료가 오면 node·artifact version을 확인하고 발송이 아직 허용될 때만 후행 명령을 만든다. ‘발송만 취소’가 먼저 확정됐다면 늦은 요약 결과가 발송을 되살리지 않는다.
+3. crash 뒤 저장된 node·submission key를 확인한다. 위임한 묶음 내부 제어는 Agent capability에 의존한다. Scheduler·Task마다 별도 모델이나 외부 Agent Process를 생성하지 않는다.
 
 VIA가 조정하는 것은 사용자가 명시한 업무 관계다. Agent 내부 Tool graph를 복제하지 않는다.
 
@@ -67,22 +79,26 @@ VIA는 관계를 포함한 요청을 이를 수행할 수 있는 Agent에 위임
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- R["공통 요청 의미·Task identity"] -->|관계가 담긴 한 실행 요청| I["공통 Agent 연동"]
+ subgraph V["VIA Core Process — 복합 요청 영역"]
+ R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> T["공통 Task Owner<br/>외부 node와 VIA identity 연결"]
+ T -->|"복합 요청·mapping·outbox"| DB[("공통 Task Repository")]
+ DB -.->|"비동기: 복합 실행 명령"| D["공통 Dispatcher·Agent Client"]
+ D -.->|"비동기: node 상태·부분 결과"| T
+ U["공통 Task Control"] -->|"외부 run·발송 node 지정"| T
+ T -->|"확인된 부분 결과"| P["공통 사용자 응답"]
  end
- I -->|복합 업무 위임| G["[변경] 선택된 Agent의 관계 조정"]
- G -->|업무별 내부 실행| A["Agent 업무 실행"]
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class R,I,A common;
-class G change;
+ D <-->|"submit graph·cancel node·query"| A["[변경] 외부 복합 Agent Runtime<br/>전체 readiness·업무 실행 소유"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. VIA는 동일 node·관계를 가진 요청을 지원 Agent에 보내고 반환된 run/node ID를 Task에 연결한다. 다음 node를 시작할 readiness는 Agent가 결정한다.
+2. 부분 취소는 안정된 node ID로 전달한다. Agent가 접수·취소 완료·이미 실행을 구분하고 부분 결과를 제공해야 같은 사용자 기능이 성립한다.
+3. 지원하지 않는 Agent를 위해 VIA에 숨은 Scheduler를 넣으면 A로 바뀐다. 필요한 capability가 없는 profile에서는 B를 비교하지 않는다. 외부 Runtime은 양쪽 모두 VIA Process 밖이다.
 
 Agent-neutral 원칙을 유지하려면 특정 Agent가 VIA 전체의 의미·Task authority를 가져서는 안 된다. 복합 실행 책임만 선택된 Agent에 놓는다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 두 구조도는 실행 요청의 정방향을 같은 시야로 비교한다. 생략한 역방향의 부분 결과·제어 확인은 아래 동일 사건 sequence에서 함께 설명한다.
 
@@ -179,7 +195,7 @@ A의 graph state와 B의 외부 node shadow view가 모두 필요하므로 B의 
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 상위 관계와 외부 node evidence 계약의 변경 수 미정 [T4](#t4) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건부; 크기 미정 | 낮음 | Agent의 부분 상태 조회·재연결 기능이 필요 [T3](#t3) | 기능 적합성 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷; 의존 범위 고정 필요 | 중간 | 복합 Agent 필수 의존 실패를 초과 전파로 세지 않음 [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향 미정 | 낮음 | VIA graph와 복합 node view의 실제 resident 상태 비교 [T4](#t4) | 주 비교 가능성 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향 미정 | 낮음 | VIA graph와 복합 node view의 실제 resident 상태 비교 [T4](#t4) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 업무 묶음이라는 이유로 과다 Context 전달 금지 [T4](#t4) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | B에도 상위 node·Task·실행 연결 trace를 허용 [T4](#t4) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | Agent 재실행 없이 보존된 평가 근거 재계산 [T4](#t4) | 필수 회귀 |

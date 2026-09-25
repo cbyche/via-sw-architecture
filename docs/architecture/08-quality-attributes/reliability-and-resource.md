@@ -61,6 +61,8 @@ Architecture Component 수를 blast-radius unit으로 사용하지 않는다. fa
 
 ## 3. QA-41 — Target Device Memory Footprint
 
+현재 구성은 S2S 모델 1개·semantic LLM 1개이며 Component·Task별 복제는 금지한다. 모델이 local이면 실제 적재와 공유 자원 accounting을 확인하고, remote이면 서버 메모리를 PC 사용량에 넣지 않는다. 세션·KV cache·queue·buffer 차이는 포함하지만 크기를 사전 단정하지 않는다. 메모리 상한 요구와 구조 차이의 중요성이 미확정이므로 QA-41은 자원 확인 대상으로 유지하며 핵심 ASR 우선 추천에서 제외한다.
+
 ### 질문
 
 고정 workload에서 후보 Architecture가 target PC에 요구하는 최대 committed memory는 얼마인가?

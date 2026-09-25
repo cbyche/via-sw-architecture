@@ -1,10 +1,10 @@
 # VIA-DP-09 — Agent 수명 계약의 의미 해석 위치
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 공통 수명 의미와 확장 정보를 연동 경계에서 확정할 것인가, Core의 유형별 handler가 확정할 것인가?
 >
-> 현재 판단: **보조 설계 결정으로 유지 — 변경 국소화는 유효하나 반대 방향 QA 이점 미입증** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **설계 후보로 유지 — 변경 국소화는 유효하나 반대 방향 QA 이점 미입증** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
 
 ## 1. 배경 — ‘취소됨’과 ‘취소 요청을 받음’은 어디서 구별할까?
 
@@ -35,6 +35,14 @@ class Q change;
 
 **미확인 사항:** 현재 전체 A-01~09 change pack에 대한 동등한 요소 ledger, 새로운 수명 개념을 공통 계약으로 수용하는 비용, 변환 경로의 실제 latency. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 공통 의미 정규화 + 손실 없는 확장
 
 연동 경계의 의미 adapter가 provider별 수명을 공통 operation·observation으로 바꾼다. unsupported·pending·source-confirmed·artifact 조회 참조를 명시하며, 필요한 확장 정보와 native provenance를 함께 보존한다. Core는 이 공통 의미를 소비한다.
@@ -43,17 +51,21 @@ class Q change;
 
 ```mermaid
 flowchart TB
- G["공통 Agent native API"] -->|source event| E
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- E["[변경] 의미 adapter"] -->|공통 의미·capability·확장| C["공통 Task owner"]
+ subgraph V["VIA Core Process — A/B 동일 배치"]
+ T["공통 Task Owner·Repository<br/>최종 Task state writer"] <-->|"canonical 명령 요청<br/>Pending·Confirmed 관측 반환"| E["[변경] Semantic Agent Adapter<br/>native 수명을 공통 의미로 확정"]
+ E -->|"native 호출"| C["공통 Transport Client<br/>인증·timeout·연결"]
+ C -.->|"비동기: source event·query 결과"| E
+ E <-->|"VIA·native ID 참조"| K[("공통 ExecutionLink·capability")]
+ T -->|"확인된 disposition"| P["공통 Voice·Text 응답"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class G,C common;
-class E change;
+ C <-->|"지원하는 A2A 또는 고유 API"| G["외부 Agent Runtime<br/>별도 Process 또는 원격"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Task Owner의 cancel을 Adapter가 외부 호출로 변환한다. Client는 인증·연결·timeout을 처리한다. event가 있으면 수신하고 필요한 경우 지원되는 query로 확인한다.
+2. 예시 P의 종료 확인은 CancelConfirmed, Q의 취소 접수는 CancelPending으로 Adapter가 해석한다. P/Q는 설명용 fixture이며 특정 제품의 API 지원 주장이 아니다. 필요한 확장·원천 근거를 보존한다.
+3. Task를 쓰는 것은 Owner다. 늦은 completion도 사실대로 반영한다. 별도 message bus·추가 LLM 없이 결정적 변환 코드로 구현할 수 있다.
 
 공통 형식은 기능을 지우는 형식이 아니다. 사실·미지원·확장 의미를 보존해야 같은 기능 비교가 된다.
 
@@ -65,22 +77,26 @@ class E change;
 
 ```mermaid
 flowchart TB
- G["공통 Agent native API"] -->|source event| E
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- E["공통 전송·타입 adapter"] -->|typed variation| H["[변경] Core capability handler"]
- H -->|해석한 의미| C["공통 Task owner"]
+ subgraph V["VIA Core Process — A/B 동일 배치"]
+ T["공통 Task Owner·Repository<br/>최종 Task state writer"] <-->|"canonical 명령 요청<br/>Pending·Confirmed 관측 반환"| H["[변경] Core Lifecycle Handler<br/>typed variation 의미 확정"]
+ H <-->|"typed operation 요청<br/>PConfirmed·QRequested 반환"| E["Typed Contract Adapter<br/>안정된 타입으로 변환"]
+ E -->|"native 호출"| C["공통 Transport Client<br/>인증·timeout·연결"]
+ C -.->|"비동기: source event·query 결과"| E
+ H <-->|"VIA·native ID 참조"| K[("공통 ExecutionLink·capability")]
+ T -->|"확인된 disposition"| P["공통 Voice·Text 응답"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class G,E,C common;
-class H change;
+ C <-->|"지원하는 A2A 또는 고유 API"| G["외부 Agent Runtime<br/>별도 Process 또는 원격"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 같은 Client를 쓴다. Typed Adapter는 wire를 타입으로 바꾸지만 취소 완료 여부의 최종 의미는 Core Handler가 정한다.
+2. 제한된 Handler가 PConfirmed/QRequested를 Task 의미로 바꾸어 Owner에 전달한다. provider SDK를 UI·대화·Task 모듈 전체에 노출하는 구조가 아니다.
+3. 명령·재연결에도 같은 경계를 쓴다. 공통 library·extension·provenance는 양쪽에 허용한다. 위치 차이만으로 속도·정확도 우세를 만들지 않고 QA-21의 실제 변경 전파를 비교한다.
 
 B의 차이는 Core 전체에 native 데이터를 흩뿌리는 것이 아니라 제한된 handler가 수명 의미를 소유한다는 것이다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 두 그림은 같은 Agent 사건을 수신해 Task 의미로 바꾸는 경로를 확대한다. 역방향의 실행·취소 명령 변환도 같은 의미 책임을 따르며, 아래 취소·완료 사고실험에서 함께 검토한다.
 
@@ -146,7 +162,7 @@ M-01~09·C-01~06은 공통 모델·Context·저장 경계가 중심이며 mappin
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 공통 계측 API와 실제 의미 변환 producer 수정 범위 [T3](#t3) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 비슷 예상 | 중간 | 같은 native mapping·명령 복원·외부 조회 [T3](#t3) | 회귀 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 | 중간 | Core 대 edge 논리 위치만으로 Process 격리 이점 없음 [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 비슷 예상 | 낮음 | 같은 capability·mapping을 보존; 표현 크기 미측정 [T3](#t3) | 보조 비교 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 비슷 예상 | 낮음 | 같은 capability·mapping을 보존; 표현 크기 미측정 [T3](#t3) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 같은 recipient·purpose별 최소 범위 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | A도 native provenance·확장 정보를 보존 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 동일 evidence와 evaluator를 보존 가능 [T3](#t3) | 필수 회귀 |
@@ -167,7 +183,7 @@ A-01~09 각각의 native before/after와 canonical/typed 계약, 변경 요소 I
 
 ## 10. 현재 판단과 재검토 조건
 
-**보조 설계 결정으로 유지한다.** QA-21의 자연스러운 인과는 있지만 충분한 반대 방향 QA trade-off가 현행 초안에서 입증되지 않았다. 새 수명 개념의 전체 ledger에서 실제 충돌이 드러나면 다시 핵심 후보로 올릴 수 있다. 기존 accepted ADR은 그대로다.
+**설계 후보로 유지한다.** QA-21의 자연스러운 인과는 있지만 충분한 반대 방향 QA trade-off가 현행 초안에서 입증되지 않았다. 새 수명 개념의 전체 ledger에서 실제 충돌이 드러나면 다시 핵심 후보로 올릴 수 있다. 기존 accepted ADR은 그대로다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

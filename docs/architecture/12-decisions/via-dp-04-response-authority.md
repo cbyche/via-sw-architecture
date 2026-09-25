@@ -1,6 +1,6 @@
 # VIA-DP-04 — S2S 직접 응답의 게시 권한
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 제한된 직접 응답의 게시 권한을 Voice Runtime에 위임할 것인가, 모든 응답에 Core의 요청별 승인을 요구할 것인가?
 >
@@ -36,6 +36,14 @@ class Q change;
 
 **미확인 사항:** Core가 승인할 수 있는 시점과 첫 유효 음성 준비 시점의 실제 중첩, 위임 범위 검사 비용, 철회 전파·lease 수명·기록 ledger. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 한정 권한 위임 + 범위 밖 Core 승인
 
 Core는 허용된 응답 범위와 세대 번호를 정해 Voice Runtime에 게시 권한을 위임한다. Voice는 그 범위의 Request에 대해 현재성·취소 여부를 검사하고 직접 응답을 확정한다. Task 제어·추가 정보가 필요한 요청은 Core로 넘긴다. 빠른 경로와 중앙 정책을 결합한 hybrid다.
@@ -44,20 +52,25 @@ Core는 허용된 응답 범위와 세대 번호를 정해 Voice Runtime에 게�
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- C["Core 요청·정책 관리"] -->|범위·세대 권한 위임| R["[변경] Voice Runtime 게시 권한"]
- S["공통 S2S 응답 후보"] -->|응답 준비| R
- R -->|범위 안 직접 확정| O["공통 Voice·Text 출력"]
- R -.->|비동기: 실제 응답·정정 기록| C
- R -->|범위 밖 요청| C
+ S["S2S 모델 1개"] -.->|"비동기: audio chunk·transcript"| B
+ subgraph V["VIA Core Process — A/B 동일"]
+ C["공통 Core Route Owner<br/>Request revision·정책"] -->|"범위·epoch·만료 lease"| G["[변경] Voice Publish Gate<br/>위임 범위의 최종 권한"]
+ B["공통 생성 audio buffer<br/>request·generation별 분리"] -->|"준비된 chunk"| G
+ G <-->|"범위 밖 요청만 개별 승인"| C
+ G -->|"현재 권한 확인 후 release"| P["공통 Playback queue·device"]
+ G -->|"Text·확정 기록"| H[("공통 Conversation 기록")]
+ P -.->|"비동기: 실제 전달 offset"| H
+ U["공통 barge-in detector"] -->|"즉시 stop"| P
+ U -->|"generation 증가·buffer 무효화"| G
+ C -->|"철회·새 epoch"| G
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class C,S,O common;
-class R change;
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Core가 범위·epoch·만료 lease를 Gate에 준다. S2S audio는 request/generation별 buffer에 들어가며 생성 완료만으로 게시하지 않는다.
+2. Gate가 입력·취소·lease 범위를 검사한다. 범위 안이면 Core의 개별 승인 없이 게시하고 범위 밖이면 승인받는다. Text 기록·음성 전달 의무는 B와 같다.
+3. 끼어들기는 playback을 즉시 멈추고 이전 generation의 chunk를 폐기한다. Core 권한 인계는 lease 회수 확인 또는 만료 뒤 완료한다. 실제 전달 offset은 별도 기록한다.
 
 Core가 정책을 소유하더라도 모든 Request의 게시 승인을 직접 수행하는 것은 아니다. 위임된 범위의 최종 게시 권한은 Voice에 있다.
 
@@ -69,24 +82,29 @@ Voice는 음성을 미리 만들고 buffer할 수 있지만 의미 있는 답변
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- S["공통 S2S 응답 후보"] -->|미리 생성·buffer| R["Voice Runtime"]
- R -->|해당 Request 승인 요청| C["[변경] Core 게시 승인"]
- C -->|현재 세대의 요청별 승인| R
- R -->|승인 후 출력| O["공통 Voice·Text 출력"]
- R -.->|비동기: 실제 응답·정정 기록| C
+ S["S2S 모델 1개"] -.->|"비동기: audio chunk·transcript"| B
+ subgraph V["VIA Core Process — A/B 동일"]
+ C["[변경] Core Route Owner<br/>요청별 최종 게시 승인"] -->|"request id·revision·승인"| G["Voice Publish Gate<br/>현재 승인 검사"]
+ B["공통 생성 audio buffer<br/>request·generation별 분리"] -->|"준비된 chunk"| G
+ G -->|"승인 요청 · 선요청 가능"| C
+ G -->|"audio와 승인 모두 준비 후 release"| P["공통 Playback queue·device"]
+ G -->|"Text·확정 기록"| H[("공통 Conversation 기록")]
+ P -.->|"비동기: 실제 전달 offset"| H
+ U["공통 barge-in detector"] -->|"즉시 stop"| P
+ U -->|"generation 증가·buffer 무효화"| G
+ C -->|"승인 철회·새 revision"| G
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class S,R,O common;
-class C change;
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. 음성 생성과 병렬로 요청별 Core 승인을 받는다. Core는 필요한 경우에만 공유 semantic LLM을 사용하며 모든 승인에 모델 왕복을 강제하지 않는다.
+2. 유효 승인과 audio가 모두 준비되어야 Gate가 release한다. 대기 buffer 포화 때는 생성 backpressure 또는 취소를 수행한다. 승인 선행이면 추가 대기가 없을 수 있다.
+3. barge-in은 승인 응답을 기다리지 않고 재생을 멈춘다. 늦은 승인·chunk는 generation 검사에서 거절한다. 요청별 승인을 재사용 가능한 포괄 lease로 없애면 A가 된다.
 
 B의 Core 승인은 별도의 느린 의미 모델 호출과 동의어가 아니다. 실제로 승인 기다림이 남는지를 검토해야 한다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -178,7 +196,7 @@ M-01/07/09는 Voice event·대화 연결, M-02/03/08은 실제 범위 판단에 
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 게시·실제 재생 event 계측은 양쪽 모두 필요 [T3](#t3) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 비슷; 대상 Task 영향 시 재검토 | 중간 | Voice만 재연결한 것을 Task recovery로 세지 않음 [T3](#t3) | 회귀 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 | 중간 | 논리 권한 분리가 Process fault 격리는 아님 [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향·크기 미정 | 낮음 | A lease·사본 대 B 음성 승인 대기 buffer [T1](#t1) | 주 비교 후보 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향·크기 미정 | 낮음 | A lease·사본 대 B 음성 승인 대기 buffer [T1](#t1) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | Core 집중 여부와 관계없이 같은 scope 검사 필수 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | 의도·승인·실제 출력 연결을 양쪽 모두 기록 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 원천 근거·평가기 version 보존 공통 [T3](#t3) | 필수 회귀 |
@@ -199,7 +217,7 @@ DP-03 입력 evidence, DP-02 상태 commit, DP-12 기록 선행 의무, DP-13 �
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 핵심 후보로 유지한다.** 응답 게시 권한은 강한 구조 결정이지만, 사전 승인을 허용한 B와 공유 기록을 가진 A 사이에 충분한 QA 차이가 남는지 확인해야 한다. 승인 대기가 숨겨지고 변경·메모리 차이도 사라지면 우선순위를 낮춘다.
+**조건부 후보로 유지한다.** 응답 게시 권한은 강한 구조 결정이지만, 사전 승인을 허용한 B와 공유 기록을 가진 A 사이에 충분한 QA 차이가 남는지 확인해야 한다. 승인 대기가 숨겨지고 변경·메모리 차이도 사라지면 우선순위를 낮춘다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

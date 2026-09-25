@@ -1,6 +1,6 @@
 # VIA-DP-01 — 범위가 정해진 정보 처리의 책임 경계
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 결정할 것: VIA가 제한된 정보 처리 기능을 직접 소유하면서 Agent 위임과 조합할 것인가, 해당 기능의 실행 책임을 모두 Downstream Agent에 둘 것인가?
 >
@@ -88,6 +88,14 @@ B는 지정된 구간만 받아 단일 호출로 요약하는 전용 Agent를 �
 
 문서 요약의 동일 완료 조건에는 요청한 내용·형식·출처 연결과 허용 범위 준수가 포함된다. VIA 통합 검증에서는 사전 정의한 결과와 **oracle(실행 전에 정한 정답·허용 상태 조건)**로 통제한다. 외부 Agent의 일반적인 요약 능력과 VIA 모델의 능력을 임의로 비교해 Architecture 우열을 만들지 않는다.
 
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+
 ## 3. 대안 A — 선택적 직접 처리 + Agent 위임
 
 VIA가 지원하기로 선언한 제한된 기능을 직접 소유한다. 이 보고서의 최소 기능은 지정 구간의 발췌·요약이다. 범위·권한·실행 조건에 맞는 요청에는 직접 경로를 사용하고, 그 밖의 업무는 Agent에 위임한다. 직접 처리 실패 시에도 허용된 범위에서 Agent로 전환할 수 있다.
@@ -96,32 +104,29 @@ VIA가 지원하기로 선언한 제한된 기능을 직접 소유한다. 이 �
 
 ```mermaid
 flowchart TB
-    U["사용자 요청<br/>선택한 문서의 결론 요약"]
-    subgraph VIA["VIA — 논리적 책임 경계 / A"]
-        C["공통 요청·상태 관리<br/>Context 연결·접근 정책<br/>Conversation·Request·Task 기준 기록 소유"]
-        D["[추가] 제한된 직접 처리기<br/>발췌·요약 실행 계약의 VIA 소유"]
-        J["Agent 연동<br/>Task·실행 연결 / 요청·결과 변환"]
-        P["공통 응답 승인·기록<br/>현재 요청의 유효한 결과만 게시"]
-        C -->|"직접 지원 범위"| D
-        C -->|"위임·허용된 fallback"| J
-        D -.->|"비동기: 직접 결과"| P
-        J -.->|"비동기: 연결된 결과"| P
-    end
-    G["Downstream Agent<br/>위임된 업무 실행 책임"]
-    M["Model Runtime<br/>음성·의미 모델 / 공유 가능"]
-    O["사용자 응답<br/>Voice·Text"]
-    U -->|"입력"| C
-    P -->|"승인된 응답"| O
-    D -->|"[추가] 정보 가공 호출"| M
-    J -->|"실행 요청"| G
-    G -.->|"비동기: 실행 결과"| J
-    classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-    classDef changed fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-    class U,C,J,P,G,M,O common;
-    class D changed;
+ subgraph V["VIA Core Process — 공통 비교용 배치"]
+ R["공통 Request Router<br/>revision·접근 정책"] -->|"지원 범위 요약"| D["[변경] Bounded Answer Handler<br/>직접 실행 계약 소유"]
+ D <-->|"허용 구간·source version"| C["공통 Context Reader"]
+ D <-->|"요약 prompt / 결과 후보"| L["공통 Semantic Client<br/>bounded 호출 queue"]
+ R -->|"업무·허용된 fallback"| T["공통 Task Owner·Repository<br/>명령·영속 outbox"]
+ T -->|"commit 후 전달"| X["공통 Agent Client"]
+ X -.->|"비동기: 접수·결과 연결"| T
+ D -->|"검증한 직접 답"| P["공통 Response Publisher"]
+ T -->|"검증한 위임 결과"| P
+ P -->|"Text 기록·Voice 요청"| O["공통 Voice Runtime·UI<br/>playback buffer"]
+ end
+ L <-->|"inference API"| M["Semantic LLM 1개"]
+ O <-->|"audio stream"| S["S2S 모델 1개"]
+ X <-->|"Agent API·event"| G["외부 Agent Runtime<br/>별도 Process 또는 원격"]
 ```
 
-회색은 B에도 있는 책임, 주황색은 A가 추가로 소유하는 직접 기능이다. 실선은 표시한 요청·응답 흐름, 점선은 비동기 결과다. Context와 기준 기록은 양쪽에서 같은 공통 관리 영역에 축약했다. 응답 승인·기록 상자는 그 관리 영역의 출력 측 책임을 펼친 것이며 새 상태 소유자를 뜻하지 않는다. VIA 박스는 Process 경계가 아니며 Model·Agent의 PC/원격 배치도 정하지 않는다. **양쪽에 공통으로 존재하는 음성·요청 해석용 Model 호출**, 모델 반환·음성 재생 상세·취소·진행 알림은 생략했다. 그림 상자는 Architecture Element 계수 결과가 아니다.
+**실제 호출·상태·실패 처리 순서**
+
+1. Router가 허용 문서·요청 revision을 연결하면 Bounded Answer Handler가 필요한 구간을 읽고 공유 semantic LLM에 요약 프롬프트를 보낸다. 전용 요약 모델은 추가하지 않는다.
+2. Handler는 모델 출력의 출처·revision·계약을 검증해 Publisher에 전달한다. Publisher는 같은 대화에 Text를 기록하고 Voice Runtime으로 음성을 전달한다. 이 경로에는 Agent 실행이나 새 Task가 필수는 아니다.
+3. 범위 밖 또는 허용된 fallback이면 Task Owner가 명령·outbox를 영속 저장한 뒤 Client가 외부 호출한다. 정정 후 늦은 직접 결과는 폐기하며 같은 요청에 직접 답과 Agent 결과를 중복 게시하지 않는다.
+
+그림은 공통 비교용 Core Process와 외부 Agent·두 모델을 구분한다. [변경]은 직접 실행 책임이다. 입력 수신 상세와 S2S 일반 대화 경로는 양쪽 공통으로 생략했다.
 
 **강점의 최선 형태:** 이미 확보한 Context와 공유 모델을 활용해 Agent 경계를 거치지 않고 처리할 수 있다. 해당 직접 요청에는 Agent 가용성이 필수 조건이 아니다. 필요하면 위임하므로 직접 기능의 범위를 좁게 유지할 수 있다.
 
@@ -135,29 +140,27 @@ VIA는 요청의 의미와 Context를 연결하지만, 이 DP의 대상인 발�
 
 ```mermaid
 flowchart TB
-    U["사용자 요청<br/>선택한 문서의 결론 요약"]
-    subgraph VIA["VIA — 논리적 책임 경계 / B"]
-        C["공통 요청·상태 관리<br/>Context 연결·접근 정책<br/>Conversation·Request·Task 기준 기록 소유"]
-        J["[변경] Agent 연동<br/>정보 처리도 Task·실행 연결"]
-        P["공통 응답 승인·기록<br/>현재 요청의 유효한 결과만 게시"]
-        C -->|"정보 처리를 포함한 모든 위임"| J
-        J -.->|"비동기: 연결된 결과"| P
-    end
-    G["[변경] Downstream Agent<br/>발췌·요약 실행 계약도 Agent가 소유"]
-    M["Model Runtime<br/>음성·의미 모델 / 공유 가능"]
-    O["사용자 응답<br/>Voice·Text"]
-    U -->|"입력"| C
-    P -->|"승인된 응답"| O
-    J -->|"실행 요청"| G
-    G -.->|"비동기: 실행 결과"| J
-    G -->|"허용: 동등한 정보 가공"| M
-    classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-    classDef changed fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-    class U,C,P,M,O common;
-    class J,G changed;
+ subgraph V["VIA Core Process — 공통 비교용 배치"]
+ R["공통 Request Router<br/>revision·접근 정책"] <-->|"허용 구간·source version"| C["공통 Context Reader"]
+ R <-->|"요청 이해 prompt / 의미 후보"| L["공통 Semantic Client<br/>bounded 호출 queue"]
+ R -->|"[변경] 요약도 위임"| T["공통 Task Owner·Repository<br/>명령·영속 outbox"]
+ T -->|"commit 후 전달"| X["공통 Agent Client"]
+ X -.->|"비동기: 접수·결과 연결"| T
+ T -->|"검증한 위임 결과"| P["공통 Response Publisher"]
+ P -->|"Text 기록·Voice 요청"| O["공통 Voice Runtime·UI<br/>playback buffer"]
+ end
+ L <-->|"inference API"| M["Semantic LLM 1개"]
+ O <-->|"audio stream"| S["S2S 모델 1개"]
+ X <-->|"Agent API·event"| G["외부 Agent Runtime<br/>요약 실행도 외부 책임"]
 ```
 
-회색 노드는 A와 같은 책임이다. 주황색의 `[변경]`은 Agent 연동과 Agent의 실행 범위가 넓어진다는 뜻이다. A의 직접 처리기는 없다. 화살표·논리 경계·생략 범위는 A와 같다. Agent의 Model 호출은 허용되는 최적화이며 특정 Agent 내부 구현을 VIA가 소유한다는 뜻은 아니다. 이 그림으로 별도 Process 비용이나 원격 통신 비용을 자동 가정하지 않는다.
+**실제 호출·상태·실패 처리 순서**
+
+1. 같은 Router·Reader·Semantic Client로 요청을 이해하지만 VIA 안의 요약 실행 Handler는 없다. 허용 구간과 요약 요청을 외부 Agent에 전달한다. 외부 Agent 내부 모델은 VIA의 공유 LLM과 동일하다고 가정하지 않는다.
+2. Task Owner가 Task·명령 ID·submission key를 저장한다. Agent 접수·진행·결과는 해당 Task에 연결한 뒤 Publisher로 보낸다. 외부 응답을 기다리며 DB transaction을 잡지 않는다.
+3. 취소는 외부 실행 ID로 전달하고 실제 확인된 상태만 알린다. S2S 일반 대화는 그대로 직접 처리한다. 요약은 A에서 QA-02, B에서 QA-01 경로가 될 수 있어 서로 다른 대표 시간을 동일 metric처럼 비교하지 않는다.
+
+그림의 공통 이름은 A와 같은 책임이다. 직접 요약 Handler가 없으며 Agent 내부 모델은 외부 책임이다. VIA의 모델 수·배치는 A와 동일하고 외부 실행시간을 VIA 비용 절약으로 해석하지 않는다.
 
 **강점의 최선 형태:** VIA는 이미 필요한 Agent 연결·Task 제어 계약으로 정보 처리도 수용한다. 개별 발췌·요약 기능의 실행 구현과 변경 책임을 Agent 경계 밖에 유지한다. 전용 Agent·streaming·최소 Context 전달로 불필요한 실행 비용을 줄일 수 있다.
 
@@ -375,7 +378,7 @@ QA-62는 같은 모델 답을 다시 생성하는 비율이 아니라 **저장�
 | QA-23 실험·로그 변화 영향 범위: 5개 변화의 변경 요소 평균 | **판단 근거 부족**, 방향·크기 미정 | 낮음 | 공통 계측이 흡수할 수 있음. 실제 생산자 계약 변화 수 미정. [T5](#t5)·[T8](#t8) | 주 비교 후보 또는 회귀로 후속 분류 |
 | QA-31 올바른 Task 복구시간: 최악 fault p95 | 공통 Task는 **비슷**. Task 없는 직접 경로에는 적용하지 않음 | 중간 | 상태·복구 정책 고정. 직접 경로를 복구시간 0으로 채점 금지. [T4](#t4) | 회귀·적용성 확인 |
 | QA-32 불필요한 장애 영향 범위: 초과 중단 단위 최대 수 | **비슷**, 공통 격리 조건 | 중간 | B 정보 기능의 필수 Agent 의존 실패는 초과 전파가 아님. 무관한 기능 중단 시 재검토. [T4](#t4) | 회귀 확인 |
-| QA-41 target PC 메모리: 최악 workload의 peak p95 | **조건에 따라 다름**, 크기 미정 | 낮음 | A 전용 상주 자원이 지배하면 B 우세, 공유 모델이면 비슷 가능, B 전달 buffer가 지배하면 A 우세. [T6](#t6) | 주 비교 후보 |
+| QA-41 target PC 메모리: 최악 workload의 peak p95 | **조건에 따라 다름**, 크기 미정 | 낮음 | A 전용 상주 자원이 지배하면 B 우세, 공유 모델이면 비슷 가능, B 전달 buffer가 지배하면 A 우세. [T6](#t6) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출: 초과 노출 단위 수 | **비슷**, 최소 범위를 지킨 경우 | 중간 | B도 최소 Context, A도 원격 Model 가능. 총 전달량이 아닌 초과분. [T7](#t7) | 필수 정책 회귀 |
 | QA-61 실행 trace 완전성: 완전한 trace run 비율 | **비슷**, 공통 관측 계약 조건 | 중간 | 각각 실제 경로를 완전히 연결해야 함. 이벤트 수·Agent 내부 비공개만으로 우열 없음. [T8](#t8) | 필수 근거 회귀 |
 | QA-62 평가 재현성: 동일 평가 재계산 비율 | **비슷**, 동일 evidence 보존 조건 | 중간 | 모델 재실행의 답 동일성이 아님. 양쪽 모두 frozen evidence로 평가 재현 가능. [T8](#t8) | 필수 근거 회귀 |

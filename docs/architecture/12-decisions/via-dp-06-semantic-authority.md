@@ -1,6 +1,6 @@
 # VIA-DP-06 — 요청 의미의 최종 확정 권한
 
-> **검토 초안 v1 · 2026-09-24 · 사용자 검토 전**
+> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
 >
 > 질문: 대상·Task 관계·처리 경로를 하나의 의미 확정자가 함께 결정할 것인가, 단계별 권한자가 계약을 통해 확정할 것인가?
 >
@@ -32,9 +32,17 @@ class Q change;
 
 **기준선에서 확인한 사실:** UC-05·06·09·10·14는 과거 대상, 부족한 정보, 복합 관계, Existing/New Task 구분을 요구한다. Canonical Flow는 판단 순서·병렬화·모델 호출 수를 미리 고정하지 않는다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
-**이번 비교의 설계 가정:** 같은 원천 근거·모델 역할 적합성·최종 의미 schema·oracle, Context 계약·Task 상태 확정·Agent 경계·게시 권한을 둔다. 같은 책임에는 같은 모델을 우선 사용하고 역할 분할로 달라진 구성은 결합 효과로 표시한다.
+**이번 비교의 설계 가정:** 같은 원천 근거·모델 역할 적합성·최종 의미 schema·oracle, Context 계약·Task 상태 확정·Agent 경계·게시 권한을 둔다. A/B 모두 같은 semantic LLM 1개를 사용하며 프롬프트·출력 schema·호출 graph의 차이만 허용한다.
 
 **미확인 사항:** 실제 serialized prompt·token 길이·모델 호출 graph, corpus별 정확도, 부분 재판단의 빈도와 15개 Model·Context 변경 ledger. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+
+### 구현도를 읽기 위한 공통 전제
+
+**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+
+Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+
+실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
 
 ## 3. 대안 A — 단계별 보조 처리 + 통합 최종 확정
 
@@ -44,18 +52,22 @@ class Q change;
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / A"]
- direction TB
- X["공통 Context·Task view"] -->|근거| H["보조 grounding·조회"]
- H -->|판단 후보| J["[변경] 통합 의미 확정자"]
- J -->|최종 대상·Task 관계·handling| O["공통 상태 확정·Agent 연결"]
+ subgraph V["VIA Core Process — 의미 처리 영역"]
+ E["공통 Evidence Reader<br/>원문·화면·대화·Task view·capability"] -->|"같은 원천 근거"| C["[변경] Semantic Coordinator<br/>전체 의미 최종 수정 권한"]
+ C -->|"통합 prompt·schema"| Q["공통 Semantic Client<br/>bounded 호출 queue·revision"]
+ Q -.->|"비동기: 모델 출력 후보"| C
+ C -->|"목표·대상·Task 관계·handling"| K["공통 Contract Validator<br/>형식·ID·정책·version 검사"]
+ K -->|"충돌·오류: repair"| C
+ K -->|"검증된 SemanticDecision"| T["공통 Router·Task Owner<br/>상태 commit·Agent 연결"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class X,H,O common;
-class J change;
+ Q <-->|"inference API·같은 설정"| M["Semantic LLM 1개"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Evidence Reader가 원문과 관측 가능한 화면·Task 후보·capability를 준비한다. Coordinator가 통합 프롬프트로 공유 semantic LLM에 요청한다. 평가 정답인 문서·Task ID를 입력에 넣어 주지는 않는다.
+2. 모델은 ‘대상 D7, 기존 Task T3, 위임, doc_edit 필요’ 같은 묶음을 제안한다. Coordinator는 서로 모순된 항목을 함께 재판단할 권한이 있다. Validator는 schema·ID·정책·현재 revision을 검사하며 업무 의미를 대신 지어내지 않는다.
+3. READY만 Task Owner에 전달한다. NEED_CONTEXT는 근거 보완, CLARIFY는 사용자 질문, 오류는 제한된 repair다. 모델은 Task DB에 쓰지 않는다. 보조 호출을 나눠도 전체 의미 수정 권한은 Coordinator에 남는다.
 
 보조 단계 수가 아니라 최종 의미 묶음을 누가 수정·확정하는지가 A의 식별 규칙이다.
 
@@ -67,24 +79,30 @@ grounding/refinement, Task association, handling/capability 선택이 각자의 
 
 ```mermaid
 flowchart TB
- subgraph V["VIA 논리 경계 / B"]
- direction TB
- X["공통 Context·Task view"] -->|근거| G["[변경] 대상·목표 확정"]
- G -->|versioned 의미 계약| T["[변경] Task 관계 확정"]
- T -->|versioned 관계 계약| H["[변경] handling 확정"]
- H -->|정정 요청은 원 권한자로| G
- H -->|검증한 계약 조합| O["공통 상태 확정·Agent 연결"]
+ subgraph V["VIA Core Process — 의미 처리 영역"]
+ E["공통 Evidence Reader<br/>원문·화면·대화·Task view·capability"] -->|"같은 원천 근거"| G["[변경] Grounding Resolver<br/>목표·대상 owner"]
+ G -->|"GroundingResult·version"| T["[변경] Task Associator<br/>Task 관계 owner"]
+ T -->|"TaskRelation·version"| H["[변경] Handling Selector<br/>경로·capability owner"]
+ T -->|"CORRECT_PRIOR_STAGE"| G
+ H -->|"정정 요청"| T
+ G <-->|"grounding prompt / 결과"| Q["공통 Semantic Client<br/>bounded 호출 queue·revision"]
+ T <-->|"association prompt / 결과"| Q
+ H <-->|"handling prompt / 결과"| Q
+ H -->|"검증할 계약 묶음"| K["공통 Contract Validator<br/>이전 의미 임의 수정 금지"]
+ K -->|"검증된 SemanticDecision"| O["공통 Router·Task Owner<br/>상태 commit·Agent 연결"]
  end
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class X,O common;
-class G,T,H change;
+ Q <-->|"inference API·같은 설정"| M["Semantic LLM 1개"]
 ```
+
+**실제 호출·상태·실패 처리 순서**
+
+1. Grounding은 목표·대상, Association은 기존/신규 Task 관계, Handling은 처리 경로를 정한다. 세 Component는 각기 다른 프롬프트로 **같은 LLM**을 호출한다. Reader의 원천 근거는 필요한 각 단계에 제공하며 앞 단계 요약만으로 정보 손실을 강제하지 않는다.
+2. 후속 단계가 ‘D7과 T3가 맞지 않음’을 발견하면 앞 결과를 덮지 않고 원 owner에 CORRECT_PRIOR_STAGE를 보낸다. 새 version이 오면 영향받은 후속 단계만 재개한다. 모델 응답은 call ID·request revision으로 원 호출자에 반환한다.
+3. Validator가 조합을 검사한 뒤 공통 Router에 전달한다. 최소 예시는 A 1회·B 3회 호출일 수 있지만 고정 정의는 아니다. 양쪽 fast path·cache·부분 repair를 허용하고 실제 공유 모델 대기를 포함한다.
 
 그림은 의존관계를 드러내는 대표 경로다. 독립 조회의 병렬화와 필요 없는 단계 생략을 금지하지 않는다.
 
-두 구조도는 같은 확대 영역을 그린다. 회색은 공통 책임, 주황색과 `[변경]` 표기는 바뀌는 책임이다. 실선은 이름을 붙인 기능 흐름, 점선은 명시된 비동기 전달이다. **별도 Process라고 적힌 경우 외에는 논리 경계**다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
+두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
@@ -147,7 +165,7 @@ B가 이미 확정한 grounding을 보존하고 handling만 재실행할 때 이
 
 M-02/03/08/09가 주요 의미 모델 계약 변화다. A는 통합 출력·검증, B는 영향을 받는 단계와 중간 의미 schema·reader가 바뀔 수 있다. B가 단계 분리로 항상 적은 요소를 바꾼다는 가정은 틀리다. M-01/07은 입력 경계, M-04~06은 공통 배치, C-01~06은 실제 Context·Task view schema 소비자를 확인한다. A-01~09에서는 capability 의미가 이 경계에 도달하는 A-06 등의 영향을 확인하되 나머지 Agent transport 변경을 억지로 primary로 만들지 않는다.
 
-E-01~05는 A에도 판단 후보·최종 확정의 근거 event를 남길 수 있고 B에도 공통 schema·export를 사용할 수 있다. 단계별 모델의 비공개 사고과정 수집은 필요하지 않다. 재연결·복구 시 최종 확정 여부와 유효한 부분 결과의 version을 복원하고 이미 나간 Agent 실행을 재시도하지 않는다. 중간 상태 수가 많다는 사실만으로 QA-31/41이 얼마나 달라지는지는 도출할 수 없다.
+E-01~05는 A에도 판단 후보·최종 확정의 근거 event를 남길 수 있고 B에도 공통 schema·export를 사용할 수 있다. 공유 모델의 비공개 사고과정 수집은 필요하지 않다. 재연결·복구 시 최종 확정 여부와 유효한 부분 결과의 version을 복원하고 이미 나간 Agent 실행을 재시도하지 않는다. 중간 상태 수가 많다는 사실만으로 QA-31/41이 얼마나 달라지는지는 도출할 수 없다.
 
 ## 7. 전체 19개 QA 비교
 
@@ -170,7 +188,7 @@ E-01~05는 A에도 판단 후보·최종 확정의 근거 event를 남길 수 �
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 단계 수가 producer 변경 수와 같지는 않음 [T3](#t3) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 판단 근거 부족 | 낮음 | 유효 부분 판단의 복구 필요량과 외부 실행 확인 조건 [T3](#t3) | 회귀 |
 | QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷 | 중간 | 논리 단계 분리는 fatal Process 격리와 다름 [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건에 따라 다름 | 낮음 | A prompt·cache 대 B 중간 상태·동시 호출 buffer [T2](#t2) | 주 비교 후보 |
+| QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건에 따라 다름 | 낮음 | A prompt·cache 대 B 중간 상태·동시 호출 buffer [T2](#t2) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 단계별 필요 정보만 전달하고 목적별 초과분은 금지 [T3](#t3) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | A도 관측 가능한 입력·출력·version의 근거를 남길 수 있음 [T3](#t3) | 필수 회귀 |
 | QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | 중간 단계 수가 평가 재계산 가능성을 자동 결정하지 않음 [T3](#t3) | 필수 회귀 |
@@ -185,13 +203,17 @@ A는 상호 의존 의미를 공동 결정하는 요구에서, B는 안정된 �
 
 근거 계약: [Voice responsiveness](../08-quality-attributes/voice-responsiveness.md), [Task 제어](../08-quality-attributes/interaction-control-responsiveness.md), [실제 event 경계](../11-measurement/event-boundary-contract.md), [정확성·연속성](../08-quality-attributes/correctness-and-continuity.md), [복구·장애·메모리](../08-quality-attributes/reliability-and-resource.md), [19개 QA catalog](../08-quality-attributes/quality-model.md), [변경 전체 집합](../07-intentional-variables.md), [변경 요소와 실험 change pack](../08-quality-attributes/evidence/change-locality-rationale.md), [관측·재현](../08-quality-attributes/observability.md), [Privacy·집계](../11-measurement/scoring-contract.md). 문서 사고실험은 실행 evidence label이나 기존 archive 결과로 대신하지 않는다.
 
+### 현재 구현 근거와 미구현 범위
+
+[통합 prompt](../../../prototypes/candidates/prompts/integrated-system.md), [grounding prompt](../../../prototypes/candidates/prompts/stage1-grounding-system.md), [association prompt](../../../prototypes/candidates/prompts/stage2-task-system.md), [handling prompt](../../../prototypes/candidates/prompts/stage3-handling-system.md)가 있다. 역할별 prompt는 별도 모델이 아니다. 이 파일의 존재는 실제 모델 호출·정확도·제품 경로를 실행했다는 증거가 아니다.
+
 ## 9. 다른 DP·변경 비용
 
 DP-03/05가 입력 근거와 조회 계약을, DP-02가 상태 적용을 제공한다. DP-04 게시 권한과 의미 확정 권한은 다른 결정이다. [기존 IR ADR](../../adr/ADR-004-semantic-decision-ownership.md)은 Deferred이며 A는 interim reference일 뿐이다. A→B에는 중간 schema·version·정정 reader, B→A에는 단일 의미 묶음과 진행 단계 이행이 필요하다.
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 핵심 후보로 유지한다.** QA-01/02/05, QA-12, QA-22/41의 구조적 인과는 설명되지만 방향은 미확인이다. 실제 계약을 작성한 뒤에도 차이가 단순 prompt tuning만 남으면 핵심 DP에서 제외한다. 기존 IR 유예 결정과 QA/ASR 상태는 변경하지 않는다.
+**조건부 후보로 유지한다.** QA-01/02/05, QA-12, QA-22의 구조적 인과는 설명되지만 방향은 미확인이다. 실제 계약을 작성한 뒤에도 차이가 단순 prompt tuning만 남으면 핵심 DP에서 제외한다. 기존 IR 유예 결정과 QA/ASR 상태는 변경하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

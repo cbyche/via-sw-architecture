@@ -11,7 +11,7 @@
 
 평가 전에 [전체 QA 사고실험 비교표](./dp-review-protocol.md#73-전체-qa-사고실험-비교표)를 작성한다. 상호 배타적인 steelman A/B에 대해 전체 QA의 예상 우세와 차이 크기, 판단 확실성, 구조적 이유와 조건을 남긴다. 이는 측정 전 가설이며 아래 Evaluation A/B의 실행 결과나 score를 대체하지 않는다. 이후 결과와 대조할 수 있도록 예상표 version을 보존한다.
 
-현재 문서 검토의 [최종 요약](./dp-executive-summary.md)과 [전체 후보 분류](./dp-review-synthesis.md)는 13개 보고서를 우선 핵심 검증·조건부 핵심·선행 범위/기능·보조 설계로 나눈다. 이 분류는 아래 sensitivity sweep을 실행한 결과가 아니다. 기능 부적합 후보나 비교 구간이 다른 QA를 수치 점수로 강제 비교하지 않고, 양방향 trade-off가 약한 후보도 핵심 평가표의 수를 채우기 위해 유지하지 않는다.
+현재 [전체 요약](./dp-executive-summary.md)과 [정리 기록](./dp-review-synthesis.md)은 VIA-DP-01~18 전수 inventory다. 과거의 우선·보조 분류는 현행 선정 결론이 아니다. 후보 보존과 최종 평가 채택은 구분하며, 기능 부적합·비참여 경로·약한 trade-off를 숨기지 않는다.
 
 실제 평가는 두 단계로 나눈다.
 
@@ -80,7 +80,7 @@
 | QA-23 | Experiment & Logging Change Locality | strong/conditional; target pending |
 | QA-31 | Correct Task Recovery Time | strong/conditional |
 | QA-32 | Fault Blast Radius | strong/conditional |
-| QA-41 | Target-device Memory Footprint | strong/conditional; target pending |
+| QA-41 | Target-device Memory Footprint | 자원 진단; 상한·유의미한 구조 차이 근거 전 ASR 우선 제외 |
 | QA-51 | Protected Data Exposure Minimization | strong candidate |
 | QA-61 | Execution Trace Completeness | strong/conditional; target pending |
 | QA-62 | Evidence Reproducibility | strong/conditional; target pending |
@@ -143,7 +143,7 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 
 이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 active QA 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
 
-## 7. 12 진입 전 남은 작업
+## 7. A/B 측정 진입 전 남은 작업
 
 실제 DP 후보 점수를 계산하기 전에 QA Catalog metric 모두에 대해 다음을 동결한다.
 
