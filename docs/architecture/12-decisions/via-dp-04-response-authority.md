@@ -223,4 +223,4 @@ DP-03 입력 evidence, DP-02 상태 commit, DP-12 기록 선행 의무, DP-13 �
 
 빠른 B를 만들기 위해 Core를 생략하는 식의 초기 A/B 혼동을 제거하고 hybrid를 새 A로 명시했다. 요청별 승인을 무조건 LLM 왕복으로 계산하지 않았다. Privacy·정확성 우세와 Process 격리 이점을 자동 부여하지 않았다.
 
-검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 렌더링·정합성 검사와 전체 후보의 최종 분류는 [전체 검토 종합](./dp-review-synthesis.md)에 기록한다.
+검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.

@@ -221,4 +221,4 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 정상 예외와 Process fatal을 분리했다. A에도 얇은 Core facade·shared memory·warm worker를 허용하고 B에도 bounded queue·안전한 오류 처리를 허용했다. 필요 의존 집합을 배치 결과로 넓혀 장애 전파를 숨기는 오류를 명시적으로 금지했다.
 
-검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 렌더링·정합성 검사와 전체 후보의 최종 분류는 [전체 검토 종합](./dp-review-synthesis.md)에 기록한다.
+검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.

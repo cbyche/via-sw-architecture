@@ -156,4 +156,4 @@ Agent event/query의 정보량·순서·snapshot 일관성을 먼저 명세한�
 
 push 대 polling처럼 섞을 수 있는 기술 대비를 버리고 ‘query 없이 상태를 확정할 수 있는가’로 좁혔다. 단순 polling 주기·외부 기능 부족으로 우열을 만들지 않았다.
 
-이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [이력·누락 점검](./legacy-dp-mapping.md)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.
+이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [요약의 추적성 부록](./dp-executive-summary.md#legacy-mapping)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.

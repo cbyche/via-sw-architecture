@@ -154,4 +154,4 @@ VIA-DP-04는 응답 게시 권한이며 보호 use authorization과 다르다. 0
 
 철회 불가능한 bearer token을 B로 비교하지 않았다. 중앙 검사를 원격/LLM 호출로 부풀리지 않았고 새로운 보안 QA를 만들지 않았다.
 
-이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [이력·누락 점검](./legacy-dp-mapping.md)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.
+이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [요약의 추적성 부록](./dp-executive-summary.md#legacy-mapping)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.

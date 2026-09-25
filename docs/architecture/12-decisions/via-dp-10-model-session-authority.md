@@ -211,4 +211,4 @@ DP-03 음성 입력 계약과 DP-06 의미 판단은 이 수명 관리를 사용
 
 A의 공통 control과 직접 data path를 함께 허용했다. B에도 공통 adapter와 Model Runtime 공유를 허용했다. QA-04의 물리 음성 정지와 원격 inference 취소를 구별하고, Process 격리·자원 예약은 다른 DP로 분리했다.
 
-검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 렌더링·정합성 검사와 전체 후보의 최종 분류는 [전체 검토 종합](./dp-review-synthesis.md)에 기록한다.
+검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.

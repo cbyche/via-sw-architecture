@@ -11,7 +11,7 @@
 
 평가 전에 [전체 QA 사고실험 비교표](./dp-review-protocol.md#73-전체-qa-사고실험-비교표)를 작성한다. 상호 배타적인 steelman A/B에 대해 전체 QA의 예상 우세와 차이 크기, 판단 확실성, 구조적 이유와 조건을 남긴다. 이는 측정 전 가설이며 아래 Evaluation A/B의 실행 결과나 score를 대체하지 않는다. 이후 결과와 대조할 수 있도록 예상표 version을 보존한다.
 
-현재 [전체 요약](./dp-executive-summary.md)과 [정리 기록](./dp-review-synthesis.md)은 VIA-DP-01~18 전수 inventory다. 과거의 우선·보조 분류는 현행 선정 결론이 아니다. 후보 보존과 최종 평가 채택은 구분하며, 기능 부적합·비참여 경로·약한 trade-off를 숨기지 않는다.
+현재 [전체 요약](./dp-executive-summary.md)은 VIA-DP-01~18 전수 inventory와 미완료 사항을 설명한다. 과거의 우선·보조 분류는 현행 선정 결론이 아니다. 후보 보존과 최종 평가 채택은 구분하며, 기능 부적합·비참여 경로·약한 trade-off를 숨기지 않는다.
 
 실제 평가는 두 단계로 나눈다.
 

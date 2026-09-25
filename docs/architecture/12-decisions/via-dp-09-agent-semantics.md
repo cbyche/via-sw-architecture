@@ -189,4 +189,4 @@ A-01~09 각각의 native before/after와 canonical/typed 계약, 변경 요소 I
 
 ‘공통 형식은 기능 손실, Core handler는 정확성 향상’이라는 불공정한 대비를 제거했다. 양쪽에 typed extension·공통 library·source provenance를 허용했다. 이전 generation의 수치를 현재 QA-21 결과로 재사용하지 않았다.
 
-검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 렌더링·정합성 검사와 전체 후보의 최종 분류는 [전체 검토 종합](./dp-review-synthesis.md)에 기록한다.
+검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.

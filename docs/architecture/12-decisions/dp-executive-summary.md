@@ -277,9 +277,33 @@ flowchart TB
 Thread·mailbox 격리는 정상 정지·예외를 제한할 수 있지만 주소 공간이 같은 fatal 종료 경계는 유지된다.
 
 
-## 5. 나머지 질문을 생략하지 않는 방법
+<a id="decision-map"></a>
+
+## 5. 전체 책임 지도와 DP 사이의 경계
 
 Context는 05(읽기 집합)·16(이력 유지)·17(값 변환)로, 비동기 상태는 02(교차 commit)·08(복구 원본)·15(관측 확정)로 읽는다. Voice는 03(입력 근거)·04(게시)·10(세션)·13(자원), 실행 범위는 01·07, 실행 근거는 12, protected use는 18에서 다룬다. 이 배치는 관심사 지도이지 작은 DP는 중요하지 않다는 판단이 아니다.
+
+| 책임 영역 | 질문과 담당 VIA-DP |
+| --- | --- |
+| 입력·화면 근거 | 03 입력 revision의 의미 계약 |
+| Context | 05 읽기 집합의 확장 권한, 17 source 값 변환 owner, 16 모델 입력 이력 유지 |
+| 요청 이해·실행 범위 | 06 의미 확정, 01 bounded 직접 실행, 07 명시된 복합 관계 실행 |
+| 대화·Task 상태 | 02 교차 관계 commit, 14 Task writer, 08 복구 원본 |
+| 외부 Agent | 09 수명 의미 해석, 15 상태 확정 근거 |
+| 모델·사용자 응답 | 10 세션 수명, 04 게시 승인 |
+| 권한·실행 경계 | 18 protected use 승인, 11 VIA Client Process, 13 제어 여력 |
+| 연구 기록 | 12 게시 전 실행 근거의 영속 확인 |
+
+### 겹쳐 보이지만 다른 결정
+
+- **02 vs 14:** 여러 상태의 관계를 함께 commit하는가 vs 한 Task에 누가 쓰는가.
+- **05 vs 17 vs 16:** 어떤 source를 읽을 수 있는가 vs 값을 누가 만드는가 vs 대화 이력을 어떻게 유지하는가.
+- **09 vs 15:** Agent 사건의 의미를 어디서 해석하는가 vs event 자체로 상태를 확정할 수 있는가.
+- **04 vs 18:** 응답 게시 권한 vs 보호정보·Action의 사용 권한.
+- **10 vs 11 vs 13:** 모델 세션 권한 vs VIA Client의 Process 경계 vs 일반 작업의 제어 자원 점유 권한.
+- **08 vs 12:** 운영 상태 복구의 원본 vs 사용자 응답 전 연구 근거의 기록 완료 의무.
+
+이 독립 축들은 같은 제품에서 조합할 수 있다. 한 DP의 A/B를 같은 조건의 최종 권한으로 동시에 채택할 수 있다는 뜻은 아니다.
 
 ## 6. QA와 최종 선정은 분리한다
 
@@ -287,8 +311,94 @@ Context는 05(읽기 집합)·16(이력 유지)·17(값 변환)로, 비동기 �
 
 QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차이가 미확인이라 핵심 ASR 우선 추천에서 제외한다. QA-32는 VIA Client fatal 위험, QA-61은 실제 기록 유실 구간처럼 구체 인과를 확인해야 한다. QA-51은 기존 metric과 권한 gate를 유지하며 범위를 확대하지 않는다.
 
+<a id="review-status"></a>
+
 ## 7. 무엇이 완료됐고 무엇이 남았는가
 
 완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑이다. 현재 QA 결과는 모두 NOT_RUN이다. 부분 코드·prompt는 존재하지만 실제 두 모델·Windows·제3자 Runtime을 연결한 제품 검증은 아니다. 기존 ADR의 승인·유예와 재검증 조건은 각 대응 VIA-DP에 보존했다.
 
-문서 검증과 미확인 사항은 [검토 종합](./dp-review-synthesis.md), 정확한 옛 ID 대응은 [이력·누락 점검](./legacy-dp-mapping.md)을 따른다. 다음 선정에서 현재의 가설·표를 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
+### 구현 근거와 남은 확인
+
+- 06: 역할별 prompt/schema가 있으나 실제 모델 정확도·지연은 미측정.
+- 09: native fixture 변환 구조가 있으나 외부 제품 capability 검증과 전체 9건 ledger는 미완료.
+- 11: bridge·worker fixture는 있으나 OpenClaw·Hermes Client의 제품 fault 근거가 아님.
+- 14: SharedTaskService·PerTaskSupervisors·공통 SQLite Repository가 있으나 현행 Voice·복구 QA 검증이 아님.
+- 15~18: 이번에 추가한 문서 후보. 제품 A/B 구현·measurement freeze·실행은 하지 않음.
+
+모든 후보에 S2S 1개·semantic LLM 1개를 적용한다. Task supervisor·prompt·session·worker 수와 모델 수를 혼동하지 않는다. 모델 queue·cache·취소 지원은 실제 profile 확인 전이다.
+
+최종 DP/ASR 선정, 실제 Windows·모델·Agent 연결, 전체 변경 ledger, 목표·점수·fixture 동결과 A/B 측정은 남아 있다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
+
+이전 작업의 문서 검증 기록은 docs/archive/dp-document-consolidation-2026-09-25/dp-review-synthesis.md에 당시 이력으로 보존했다. 현재 제품 QA 결과를 뜻하지 않는다.
+
+<a id="legacy-mapping"></a>
+
+## 부록. 이전 DP 번호와 누락 점검
+
+이 부록은 이전 후보를 정답으로 삼지 않고 **질문이 사라졌는지 확인하는 원장**이다. 기존 후보 문서·ADR과 historical catalog를 구분해 대조했다. 이력의 분류·QA 번호·점수는 현행 요구나 측정 근거로 승계하지 않는다. 파일 이름·A/B 문자만으로 대응시키지 않는다.
+
+### 1. 기존 9개 계열 질문
+
+| 이전 ID·질문 | 현행 담당 | 정확한 관계·A/B 대응 | 처리 |
+| --- | --- | --- | --- |
+| INT-DP01 Turn routing·fast path | VIA-DP-04 중심, 01·06 연결 | 직접 응답 route release는 04 A의 제한 위임 vs B의 요청별 승인. bounded 실행 범위는 01, 요청 의미·handling 판별은 06. 외부 Action을 Voice가 독립 승인한다는 뜻 아님 | 기존 넓은 질문을 책임별 분리; 별도 중복 ID 없음 |
+| IR-DP01 semantic authority | VIA-DP-06 | A 통합·B 단계 권한 유지. 같은 LLM 1개 고정 | 상세 구현도·prompt 근거 보완 |
+| TASK-DP01 Task writer | VIA-DP-14 | A 공유 transaction service·B Task별 supervisor 유지 | 새 보고서 추가; B accepted caveat 내장 |
+| TASK-DP02 상태 synchronization | VIA-DP-15 | 과거 B의 event 확정+query 보완은 현행 A, 과거 A의 query 확정은 현행 B. 단순 push/poll 대비 폐기 | event+query 공통 tactic과 별개인 확정 권한만 복원 |
+| AGENT-DP01 의미 경계 | VIA-DP-09 | A edge 의미 확정·B Core typed handler 유지. 손실 없는 extension은 양쪽 허용 | 기능 손실 대 정확성이라는 가짜 대립 제거 |
+| EXEC-DP01 Process 경계 | VIA-DP-11 | 과거 A 같은 Process → 현행 B, 과거 B 격리 → 현행 A | 대상은 VIA Client·SDK. 외부 Runtime embed 아님 |
+| CTX-DP01 materialization owner | VIA-DP-17 | 과거 A 중앙 변환·B consumer 변환을 재구성. snapshot/handle만으로 배타성 주장 안 함 | 05의 read-set 질문과 달라 별도 추가 |
+| CTX-DP02 model-facing history | VIA-DP-16 | A 요청별 재구성·B 증분 working state, cache/rebuild 양쪽 허용 | 10의 session과 달라 별도 추가 |
+| SEC-DP01 protected-use 권한 | VIA-DP-18 | A use별 중앙 승인·B 철회 가능한 local capability 검증 | 기존 privacy 요구만 보존; 새 QA·범위 확대 없음 |
+
+사용자가 지칭한 EXE 계열은 저장소에서 **EXEC-DP01**로 확인했다. EXE-DP라는 별도 정의는 발견하지 못했으며 같은 항목으로 연결한다. 옛 INT/TASK tactic의 ‘항상 고정’ 문구는 현재 전수 검토를 제한하지 않는다.
+
+### 2. 별도 이름이 있었으나 중복·공통 조건이었던 질문
+
+| 이전 이름 | 현행 처리 | 누락이 아닌 이유 |
+| --- | --- | --- |
+| MODEL-DP01 배치 | 공통 FA-10 및 M-04~06 변화 조건 | local/remote는 명시하지만 동일 DP 비교에서 고정. S2S 1개·semantic LLM 1개라는 현재 범위를 바꾸는 후보는 추가하지 않음 |
+| STATE-DP01 journal/snapshot | VIA-DP-08 | 저장 기술 자체가 아니라 복구의 최종 기준 기록으로 재정의 |
+| ORCH-DP01 bounded 실행 배치 | VIA-DP-01 | 전역 Core/Agent 양자택일을 버리고 선택적 직접 처리 hybrid 대 직접 기능 미소유로 범위 명확화 |
+| FP-INT01 | VIA-DP-04 A의 한정 fast path | 구현 가능한 참조 경로이며 모든 VIA-DP를 미리 결정하는 규범 아님 |
+| TASK-T01 | VIA-DP-15 A의 event+query 보완 | 두 transport 병용 자체는 tactic; event 확정 권한은 별도 검토 |
+
+과거 DP-00/13~16의 범용 Agent·로컬 실행·제어·복구·장애 경계는 다른 세대 번호다. VIA-DP-13~16과 숫자만으로 대응하지 않는다. Agent-neutral 책임 경계는 유지하고 복합 조정은 07, Task writer는 14, 복구는 08, VIA Client 배치는 11에서 다룬다. 외부 domain planning을 VIA 내부로 가져오는 과거 범위는 재개하지 않는다.
+
+### 3. 원래 25개 주제의 전수 귀속
+
+| 원래 주제 | 현행 귀속 | 처리 이유 |
+| --- | --- | --- |
+| S01 Agent-neutral 경계 | 공통 System Mission | 외부 업무 책임은 비교로 바꾸지 않음 |
+| S02 S2S/Core 중계 | 04·06 | 게시와 의미 권한 분리 |
+| S03 barge-in·audio buffer | 04·13 | 필수 물리 제어·자원 계약, buffer 크기는 tuning |
+| S04 model adapter·helper | 03·06·10 | 두 모델 고정; 추가 helper 모델은 범위 밖 |
+| S05 시각·선택·trajectory | 03·05·06 | 관측 근거·전달·해석 구분 |
+| S06 Source 값 변환 | 17 | 누락 owner 질문 복원 |
+| S07 대화·Task 모델 입력 | 16 | working state 책임 복원 |
+| S08 refinement·association | 06 | 의미 권한 |
+| S09 Agent 선택 | 06·09 | capability 판단과 외부 의미 계약 |
+| S10 bounded 직접 처리 | 01 | 지원 기능의 실행 책임 |
+| S11 VIA-local tracked path | 01·14 | 직접 기능의 추적은 VIA Task 계약; 제3자 Runtime embed 아님 |
+| S12 복합 관계 | 06·07·02 | 관계 이해·실행·교차 확정 |
+| S13 Task state writer | 14 | 새 번호로 독립 설명 |
+| S14 persistence·outbox | 08·02·14 | 복구 원본과 원자성·writer 분리; 멱등은 공통 |
+| S15 Agent 계약 | 09 | 수명 의미 경계 |
+| S16 push/poll·feedback | 15·04 | source 확정과 사용자 게시 |
+| S17 동의·승인·egress | 18·09 | use-time 권한과 외부 승인 의미 |
+| S18 Process·queue·scheduler | 11·13 | crash 경계와 정상 자원 점유 분리 |
+| S19 User Memory | 05·16·17·18 | 저장·삭제·조회 요구는 필수, 독립 점수용 DP 아님 |
+| S20 재시작 재연결 | 08·10·14·15 | 상태·모델 세션·owner·외부 관측 복원 |
+| S21 응답·알림 | 04·12·13 | 게시·기록 순서·실행 자원 |
+| S22 telemetry | 12 및 모든 DP trace | QA-23/61/62 전수 점검 |
+| S23 OS/framework/DB 제품 | 해당 DP 구현 조건 | 계약·배치 변화 없으면 제품 선택만으로 DP 추가 안 함 |
+| S24 domain planning·Tool 실행 | Downstream Agent | VIA 범위 밖 |
+| S25 Mobile/TV/Robot | 현 PC 범위 밖 | 제품 범위 확대 안 함 |
+
+이 표는 질문 귀속 확인이지 모든 UC의 구현·시험 통과 주장이 아니다. 아직 발견하지 못한 미래의 모든 DP까지 완전하다는 뜻도 아니다. 새로운 독립 권한·상태·계약 질문이 나오면 기존 항목에 억지로 접지 말고 같은 protocol로 추가 검토한다.
+
+### 4. provenance와 상태
+
+대조 대상은 기존 candidates의 IR/TASK/AGENT/EXEC 정의, ADR-001~004, docs/archive/w12-g1/12-01-dp-master-catalog.md의 9개 질문과 12-01a-scope-and-coverage-ledger.md의 25개 주제다. archive는 **historical provenance only**이며 현재 요구·QA·결정의 normative source가 아니다. 현재 번호·정의는 [개별 보고서 목록](./README.md), QA는 [현행 catalog](../08-quality-attributes/quality-model.md)를 따른다.
+
+기존 승인 이력은 06 Deferred/A interim, 09 A accepted, 11의 A 방향에 대응하는 기존 격리 B accepted, 14 B accepted로 유지한다. 새 15~18은 검토 초안이고 승자·ASR 확정은 없다.

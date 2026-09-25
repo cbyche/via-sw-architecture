@@ -16,7 +16,7 @@
 - archived full-factorial 결과를 다시 현재화하는 도구
 - `background-load-smoke`, 기존 recovery/containment profile의 출력은 구조 진단이며 현재 QA metric이 아님
 
-대안의 정의와 현재 decision state는 [Architecture Candidate Decision Points](../../docs/architecture/12-decisions/candidates/README.md), 측정 규칙은 [Measurement Guide](../../docs/architecture/11-measurement/README.md)를 따른다.
+대안의 정의와 현재 decision state는 [Architecture Candidate Decision Points](../../docs/architecture/12-decisions/README.md), 측정 규칙은 [Measurement Guide](../../docs/architecture/11-measurement/README.md)를 따른다.
 
 ## Verification
 

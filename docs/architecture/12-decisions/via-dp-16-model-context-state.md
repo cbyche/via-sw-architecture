@@ -156,4 +156,4 @@ VIA-DP-05의 read-set 확장, 08의 canonical 복구, 10의 provider session과 
 
 지속 Context를 Task별 모델 적재로 오해하지 않도록 했다. B에도 canonical rebuild를 허용하고 A에도 cache를 허용했다. 삭제·watermark를 빼서 B를 빠르게 만드는 비교를 금지했다.
 
-이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [이력·누락 점검](./legacy-dp-mapping.md)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.
+이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [요약의 추적성 부록](./dp-executive-summary.md#legacy-mapping)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.

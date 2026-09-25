@@ -165,4 +165,4 @@ VIA-DP-14로 정식 관리하고 기존 B 선택·재검증 조건을 이 문서
 
 Task supervisor를 Agent runtime·모델·Process와 구별했다. 메모리 mailbox를 durable로 부르지 않았고 공통 DB mutex를 감췄을 때 생기는 병렬 성능 과장을 제거했다. VIA-DP-02와의 중복을 분리했으며 새 번호 부여가 새 승자 선정을 뜻하지 않음을 명시했다.
 
-이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [이력·누락 점검](./legacy-dp-mapping.md)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.
+이 검토는 문서·사고실험이며 외부 심사나 후보 QA 검증 통과가 아니다. 옛 번호는 [요약의 추적성 부록](./dp-executive-summary.md#legacy-mapping)에만 연결하고, 현재 설명은 이 VIA-DP와 현행 QA 번호로 완결한다.
