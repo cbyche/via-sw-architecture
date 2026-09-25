@@ -2,7 +2,9 @@
 
 이 디렉터리는 VIA의 구조 질문을 Decision Point로 만들고, 각 DP의 합리적인 A/B 대안을 직접 비교해 선택과 약점을 설명한다.
 
-**먼저 [DP 최종 요약 보고서](./dp-executive-summary.md)를 읽는다.** 전체 시스템의 난제, 13개 후보의 분류, 우선 검증할 세 결정과 추천 순서를 상세 보고서보다 먼저 설명한다. 후보별 A/B·판정·UC/QA coverage·검증 기록은 [전체 검토 종합](./dp-review-synthesis.md)에 있다.
+**최신 선정 논의는 [핵심 Architecture·ASR 재선정 요약](./core-architecture-reassessment.md)부터 읽는다.** 2026-09-25 사용자 리뷰를 반영해 시스템 중심성, 강한 A/B, QA 다양성을 재검토했다. 핵심 설계 영역과 충분한 trade-off가 확인된 DP를 구별하며, 기존 ADR이나 QA 정의를 변경하지 않는 제안이다.
+
+[이전 DP 최종 요약 보고서](./dp-executive-summary.md)는 최초 13개 후보 검토의 결론을 보존한다. 후보별 A/B·판정·UC/QA coverage·검증 기록은 [전체 검토 종합](./dp-review-synthesis.md)에 있다. 아래 목록은 그 최초 검토 분류이며 최신 선정 제안과 구별한다.
 
 새로운 Decision Point를 처음부터 도출할 때 사용할 시스템 이해 검토 기록은 [VIA System Understanding Review](./system-understanding-review.md)에 있다. 이 기록은 비규범 분석 입력이며 기존 DP나 ADR을 정답으로 전제하지 않는다.
 
