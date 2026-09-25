@@ -319,7 +319,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 **관련성이 있다는 것과 A/B의 품질 차이가 있다는 것은 다르다.** 첫 지도는 설계 검토 대상을, [두 번째 지도](#ab-qa-difference)는 현재 사고실험에서 차이를 예상할 근거가 있는 대상을 보여준다. 여기서 ‘성능’은 속도만이 아니라 정확도·변경 범위·복구·기록 등 각 QA의 단일 metric 결과를 뜻한다.
 
-기준은 2026-09-26의 VIA-DP-01~18 각 §6 사고실험과 §7 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 같은 18×19 관계를 세 표로 나누었다. 측정 결과는 모두 **NOT_RUN**이다.
+기준은 2026-09-26의 VIA-DP-01~18 각 §6 사고실험과 §7 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 측정 결과는 모두 **NOT_RUN**이다.
 
 열 이름은 [현행 QA의 단일 metric](../08-quality-attributes/quality-model.md#3-active-draft-qa-catalog)을 줄인 것이다. QA-01은 Agent 실행시간을 제외한다. QA-21~23은 해당 변화 한 건당 변경 설계 요소의 평균 수이며, QA-32는 필수 의존 범위를 넘어 불필요하게 중단된 기능·Task 수다. QA-51은 총 전달량이 아니라 필요 이상의 보호정보 노출, QA-62는 모델 답 재생성이 아니라 저장 근거로 평가 결과를 다시 만드는 능력이다.
 
@@ -328,164 +328,84 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 예를 들어 DP-14의 QA-14는 Task 상태 소유자를 바꿔도 올바르게 수렴하는지 확인하므로 ●다. 하지만 양쪽에 같은 version·중복 제거·terminal 규칙을 적용하면, 어느 쪽이 더 정확하다는 근거는 아직 없다. 따라서 두 번째 지도에서는 차이 항목으로 체크하지 않는다.
 
-#### 응답성
-
-| VIA-DP · 질문 요약 | QA-01<br/>위임 처리 | QA-02<br/>직접 응답 | QA-03<br/>상태 전달 | QA-04<br/>음성 중단 | QA-05<br/>Task 제어 |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | ● | ● | · | · | ● |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | ● | ● | ● | · | ● |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | ● | ● | · | · | ● |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | · | ● | · | · | · |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | ● | ● | ● | · | ● |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ● | ● | ● | · | ● |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ● | · | ● | · | ● |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | ● | ● | ● | · | ● |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | ● | · | ● | · | ● |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | ● | ● | · | · | ● |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ● | · | ● | ● | ● |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | ● | ● | ● | · | ● |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | ● | ● | ● | ● | ● |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | ● | · | ● | · | ● |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ● | · | ● | · | ● |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | ● | ● | · | · | ● |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | ● | ● | · | · | ● |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ● | ● | · | · | ● |
-
-#### 정확성·연속성
-
-| VIA-DP · 질문 요약 | QA-11<br/>전체 처리 | QA-12<br/>의미 해석 | QA-13<br/>Task 연결 | QA-14<br/>상태 수렴 | QA-15<br/>연속성 |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | ● | · | ● | ● | ● |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | ● | · | ● | ● | ● |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | ● | ● | · | · | ● |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | ● | ● | ● | · | ● |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | ● | ● | · | · | ● |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ● | ● | · | · | · |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ● | · | ● | ● | ● |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | ● | · | ● | ● | ● |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | ● | · | ● | ● | ● |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | ● | · | ● | · | ● |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ● | · | ● | ● | · |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | ● | ● | ● | ● | ● |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | ● | · | · | ● | ● |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | ● | · | ● | ● | ● |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ● | · | ● | ● | ● |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | ● | ● | ● | · | ● |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | ● | ● | · | · | ● |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ● | · | ● | · | ● |
-
-#### 변경 용이성·신뢰성·자원·개인정보·관측성
-
-| VIA-DP · 질문 요약 | QA-21<br/>Agent 변경 | QA-22<br/>Model·Context<br/>·State 변경 | QA-23<br/>실험·로그 변경 | QA-31<br/>Task 복구 | QA-32<br/>장애 전파 | QA-41<br/>PC 메모리 | QA-51<br/>초과 노출 | QA-61<br/>trace 완전성 | QA-62<br/>평가 재현 |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | · | ● | ● | ● | · | ● | ● | · | · |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | · | ● | ● | ● | · | ● | · | · | · |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | · | ● | ● | ● | · | ● | ● | ● | · |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | · | ● | ● | · | · | ● | · | ● | · |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | · | ● | ● | ● | · | ● | ● | ● | ● |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ● | ● | ● | ● | · | ● | · | · | · |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ● | ● | ● | ● | · | ● | · | ● | · |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | · | ● | · | ● | · | ● | · | · | · |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | ● | · | ● | · | · | · | · | ● | · |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | · | ● | ● | ● | ● | ● | · | ● | · |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ● | ● | ● | ● | ● | ● | · | ● | · |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | · | ● | ● | ● | ● | ● | · | ● | ● |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | · | ● | ● | ● | · | ● | · | · | · |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | · | ● | ● | ● | · | ● | · | ● | · |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ● | · | ● | ● | · | ● | · | ● | · |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | · | ● | ● | ● | · | ● | ● | ● | ● |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | · | ● | ● | ● | · | ● | ● | ● | · |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ● | ● | ● | ● | · | ● | ● | ● | · |
+| VIA-DP · 질문 요약 | QA-01<br/>위임 처리 | QA-02<br/>직접 응답 | QA-03<br/>상태 전달 | QA-04<br/>음성 중단 | QA-05<br/>Task 제어 | QA-11<br/>전체 처리 | QA-12<br/>의미 해석 | QA-13<br/>Task 연결 | QA-14<br/>상태 수렴 | QA-15<br/>연속성 | QA-21<br/>Agent 변경 | QA-22<br/>Model·Context<br/>·State 변경 | QA-23<br/>실험·로그 변경 | QA-31<br/>Task 복구 | QA-32<br/>장애 전파 | QA-41<br/>PC 메모리 | QA-51<br/>초과 노출 | QA-61<br/>trace 완전성 | QA-62<br/>평가 재현 |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | ● | ● | · | · | ● | ● | · | ● | ● | ● | · | ● | ● | ● | · | ● | ● | · | · |
+| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | ● | ● | ● | · | ● | ● | · | ● | ● | ● | · | ● | ● | ● | · | ● | · | · | · |
+| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | ● | ● | · | · | ● | ● | ● | · | · | ● | · | ● | ● | ● | · | ● | ● | ● | · |
+| [04 직접 응답 승인](./via-dp-04-response-authority.md) | · | ● | · | · | · | ● | ● | ● | · | ● | · | ● | ● | · | · | ● | · | ● | · |
+| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | ● | ● | ● | · | ● | ● | ● | · | · | ● | · | ● | ● | ● | · | ● | ● | ● | ● |
+| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ● | ● | ● | · | ● | ● | ● | · | · | · | ● | ● | ● | ● | · | ● | · | · | · |
+| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ● | · | ● | · | ● | ● | · | ● | ● | ● | ● | ● | ● | ● | · | ● | · | ● | · |
+| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | ● | ● | ● | · | ● | ● | · | ● | ● | ● | · | ● | · | ● | · | ● | · | · | · |
+| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | ● | · | ● | · | ● | ● | · | ● | ● | ● | ● | · | ● | · | · | · | · | ● | · |
+| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | ● | ● | · | · | ● | ● | · | ● | · | ● | · | ● | ● | ● | ● | ● | · | ● | · |
+| [11 Process 격리](./via-dp-11-process-isolation.md) | ● | · | ● | ● | ● | ● | · | ● | ● | · | ● | ● | ● | ● | ● | ● | · | ● | · |
+| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | ● | ● | ● | · | ● | ● | ● | ● | ● | ● | · | ● | ● | ● | ● | ● | · | ● | ● |
+| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | ● | ● | ● | ● | ● | ● | · | · | ● | ● | · | ● | ● | ● | · | ● | · | · | · |
+| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | ● | · | ● | · | ● | ● | · | ● | ● | ● | · | ● | ● | ● | · | ● | · | ● | · |
+| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ● | · | ● | · | ● | ● | · | ● | ● | ● | ● | · | ● | ● | · | ● | · | ● | · |
+| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | ● | ● | · | · | ● | ● | ● | ● | · | ● | · | ● | ● | ● | · | ● | ● | ● | ● |
+| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | ● | ● | · | · | ● | ● | ● | · | · | ● | · | ● | ● | ● | · | ● | ● | ● | · |
+| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ● | ● | · | · | ● | ● | · | ● | · | ● | ● | ● | ● | ● | · | ● | ● | ● | · |
 
 <a id="ab-qa-difference"></a>
 
-### 6.2 A/B 차이 가능성 지도 — 어떤 QA 결과가 갈릴 수 있는가?
+### 6.2 A/B 차이 가능성 지도 — 어디에서 얼마나 확실하게 차이를 예상하는가?
 
-**✓는 확정 우열이나 큰 차이가 아니라, 명시한 조건에서 비교할 수 있는 차이 가설이다.** 동일 기능·모델·입력·자원과 양쪽의 정상적인 보완책을 유지한 뒤에도 달라지는 처리·변경·유실 경로가 있는 경우만 체크했다. 방향이 뒤집히거나 전체 대표값에서는 차이가 사라질 수 있다.
+기존의 동일한 ✓ 표시를 **높음·중간·낮음**으로 나눴다. 등급은 **차이를 예상하는 근거의 확실성**이지 차이의 크기나 QA 중요도가 아니다. ‘높음’도 명시한 사고실험 조건에서의 판단이며, 전체 QA 대표값의 실측 차이를 뜻하지 않는다. 현재 측정은 모두 NOT_RUN이다.
 
-| 표시 | 해석 |
+| 표시 | 읽는 방법 |
 | --- | --- |
-| ✓ | 차이가 생길 구체적인 경로와 조건이 있다. A/B 방향·크기·대표성은 상세 보고서와 아래 조건표를 함께 확인한다. |
-| ? | QA와 관련은 있지만 차이 주장에 필요한 기능·실패 빈도·변경 내역 등의 근거가 부족하다. 동점도 차이도 확정하지 않는다. |
-| — | 현재 고정 조건에서는 비슷할 것으로 보거나, 이 DP가 해당 경로에 참여하지 않는다. 실측 동점이라는 뜻은 아니다. |
-| × | 대상 시나리오의 경로·endpoint·분모가 달라 직접 비교할 수 없다. 공통 경로의 회귀는 별도로 유지한다. |
+| **높음·A** / **높음·B** | **차이의 구조적 원인과 방향이 가장 뚜렷하다.** 명시한 사건에서 Process 경계 등 고정된 구조·계약으로 효과를 직접 설명할 수 있다. |
+| 중간·A / 중간·B / 중간·↔ | 구체적인 차이 경로는 있으나 실제 대기·부하·장애 시점 등에 좌우된다. 조건을 확인하면 우열 비교에 쓸 수 있다. |
+| 낮음 | 가능한 차이 경로는 찾았지만 실제 모델 결과·계약 변경 내역·복원 경로 등에 크게 의존한다. 아직 확실한 차이로 내세우지 않는다. |
+| ? | 차이 자체를 판단할 근거가 부족하다. 동점도 차이도 확정하지 않는다. |
+| — | 현재 조건에서 비슷할 것으로 보거나 해당 경로에 이 DP가 참여하지 않는다. 실측 동점은 아니다. |
+| × | 대상 시나리오의 경로·endpoint·분모가 달라 직접 비교할 수 없다. 공통 경로의 회귀는 별도다. |
 
-단순히 ‘주 비교 후보’라고 적혀 있다는 이유만으로 ✓를 부여하지 않았다. 상세 표가 ‘판단 근거 부족’이면 ?로 남겼다. 조건부 문구도 구체적인 차이 근거가 부족하면 ?다. 예를 들어 DP-04의 QA-12, DP-07의 QA-03, DP-12의 QA-31/32는 추가 확인이 먼저다.
+**A/B는 유리할 것으로 예상되는 대안**, **↔는 조건에 따라 A/B 우세가 뒤집히는 경우**다. 방향을 뒷받침하지 못하면 등급만 적는다. 낮음에도 제한적인 방향 근거가 있으면 ‘낮음·A/B/↔’로 표시한다. 시간·변경 수처럼 작을수록 좋은 metric도 A/B는 값의 크기가 아닌 품질상의 우세를 뜻한다.
 
-#### 응답성
+등급은 각 상세 보고서 §6의 사고실험과 §7의 ‘확실성’을 대조했으며, 원문의 확실성보다 높이지 않았다. ‘비슷하지만 특정 경로에서는 조건부’라는 보조 가설, 근거 누락이 정확성 판정에 미치는 간접 효과, 실제 동시 수명이 미정인 buffer 차이는 낮음으로 보수적으로 분류했다. ‘비슷’의 확실성이 높다고 높은 차이 등급으로 바꾸지 않는다. ‘판단 근거 부족’은 그대로 ?다. DP-04×QA-12, DP-07×QA-03, DP-12×QA-31/32처럼 추가 확인이 먼저인 항목도 ?를 유지했다.
 
-| VIA-DP · 질문 요약 | QA-01<br/>위임 처리 | QA-02<br/>직접 응답 | QA-03<br/>상태 전달 | QA-04<br/>음성 중단 | QA-05<br/>Task 제어 |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | × | × | — | — | × |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | ✓ | ✓ | ✓ | — | ✓ |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | ✓ | ✓ | — | — | ✓ |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | — | ✓ | — | — | — |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | ✓ | ✓ | ✓ | — | ✓ |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ✓ | ✓ | ✓ | — | ✓ |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | × | — | ? | — | ✓ |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | ✓ | ✓ | ✓ | — | ✓ |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | — | — | — | — | — |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | ✓ | ✓ | — | — | ✓ |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ✓ | — | ✓ | ✓ | ✓ |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | ✓ | ✓ | ✓ | — | ✓ |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | ✓ | ✓ | ? | ✓ | ✓ |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | ✓ | — | ✓ | — | ✓ |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ✓ | — | ✓ | — | ✓ |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | ✓ | ✓ | — | — | ✓ |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | ✓ | ✓ | — | — | ✓ |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ✓ | ✓ | — | — | ✓ |
+| VIA-DP · 질문 요약 | QA-01<br/>위임 처리 | QA-02<br/>직접 응답 | QA-03<br/>상태 전달 | QA-04<br/>음성 중단 | QA-05<br/>Task 제어 | QA-11<br/>전체 처리 | QA-12<br/>의미 해석 | QA-13<br/>Task 연결 | QA-14<br/>상태 수렴 | QA-15<br/>연속성 | QA-21<br/>Agent 변경 | QA-22<br/>Model·Context<br/>·State 변경 | QA-23<br/>실험·로그 변경 | QA-31<br/>Task 복구 | QA-32<br/>장애 전파 | QA-41<br/>PC 메모리 | QA-51<br/>초과 노출 | QA-61<br/>trace 완전성 | QA-62<br/>평가 재현 |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | × | × | — | — | × | ? | — | ? | × | — | — | ? | ? | × | — | 낮음 | — | — | — |
+| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | 중간·↔ | 낮음 | 낮음 | — | 중간·↔ | ? | — | ? | — | — | — | 낮음 | ? | 중간·↔ | — | ? | — | — | — |
+| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | 낮음·↔ | 낮음 | — | — | 낮음 | ? | ? | — | — | — | — | 낮음 | ? | ? | — | ? | — | — | — |
+| [04 직접 응답 승인](./via-dp-04-response-authority.md) | — | 중간·A | — | — | — | ? | ? | — | — | — | — | ? | ? | — | — | 낮음 | — | — | — |
+| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | 중간·↔ | 중간·↔ | 낮음 | — | 낮음 | ? | — | — | — | — | — | ? | ? | 낮음 | — | 낮음 | — | — | — |
+| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | 중간·↔ | 중간·↔ | 낮음 | — | 중간·↔ | ? | 낮음 | — | — | — | 낮음 | 낮음 | ? | ? | — | 낮음 | — | — | — |
+| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | × | — | ? | — | 중간·A | ? | — | — | — | — | 낮음 | ? | ? | 낮음 | — | 낮음 | — | — | — |
+| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | 낮음 | 낮음 | 낮음 | — | 낮음 | — | — | — | — | — | — | 낮음 | — | 중간·↔ | — | 낮음 | — | — | — |
+| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | — | — | — | — | — | — | — | — | — | — | 중간·↔ | — | ? | — | — | — | — | — | — |
+| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | 낮음 | 낮음 | — | — | 낮음 | — | — | — | — | — | — | 낮음 | ? | 낮음 | — | ? | — | — | — |
+| [11 Process 격리](./via-dp-11-process-isolation.md) | 중간·B | — | 중간·B | 낮음·A | 중간·B | ? | — | — | — | — | 낮음 | 낮음 | 낮음·B | 중간·A | **높음·A** | 중간·B | — | — | — |
+| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | 중간·B | 중간·B | 중간·B | — | 중간·B | 낮음† | 낮음† | 낮음† | 낮음† | 낮음† | — | 낮음 | 낮음·B | ? | ? | 낮음 | — | 중간·A | 낮음 |
+| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | 중간·B | 중간·B | ? | 중간·A | 중간·A | ? | — | — | ? | — | — | 낮음·B | ? | ? | — | ? | — | — | — |
+| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | 낮음 | — | 낮음 | — | 낮음 | — | — | — | — | — | — | 낮음 | ? | 낮음 | — | ? | — | — | — |
+| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | 낮음·A | — | 중간·A | — | 낮음·A | ? | — | — | — | — | 낮음 | — | ? | 낮음 | — | ? | — | — | — |
+| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | 낮음 | 낮음 | — | — | 낮음 | ? | — | — | — | — | — | 낮음 | ? | 낮음 | — | ? | — | — | — |
+| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | 낮음 | 낮음 | — | — | 낮음 | ? | — | — | — | — | — | 낮음 | ? | 낮음 | — | ? | — | — | — |
+| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | 낮음·B | 낮음·B | — | — | 낮음 | ? | — | — | — | — | 낮음 | 낮음 | ? | 낮음 | — | ? | — | — | — |
 
-#### 정확성·연속성
+**† DP-12의 정확성 등급은 근거 누락에 따른 판정 차이를 포함한다.** 실제 의미 해석이나 Task 동작이 더 정확해진다는 주장이 아니다. 해당 QA 판정에 필요한 trace가 사라지는 경우에만 실패 처리 차이가 생긴다. 독립 관측자가 그 근거를 보존하면 이 차이는 사라질 수 있다. QA-61과 중복 성공 점수로 합산하지 않는다.
 
-| VIA-DP · 질문 요약 | QA-11<br/>전체 처리 | QA-12<br/>의미 해석 | QA-13<br/>Task 연결 | QA-14<br/>상태 수렴 | QA-15<br/>연속성 |
-| --- | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | ? | — | ? | × | — |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | ? | — | ? | — | — |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | ? | ? | — | — | — |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | ? | ? | — | — | — |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | ? | — | — | — | — |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ? | ✓ | — | — | — |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ? | — | — | — | — |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | — | — | — | — | — |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | — | — | — | — | — |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | — | — | — | — | — |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ? | — | — | — | — |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | ✓† | ✓† | ✓† | ✓† | ✓† |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | ? | — | — | ? | — |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | — | — | — | — | — |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ? | — | — | — | — |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | ? | — | — | — | — |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | ? | — | — | — | — |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ? | — | — | — | — |
+#### 가장 뚜렷한 항목과 아직 조건부인 항목
 
-#### 변경 용이성·신뢰성·자원·개인정보·관측성
+| DP × QA | 등급·방향 | 이 수준으로 표시한 이유와 한계 |
+| --- | --- | --- |
+| [DP-11 × QA-32 장애 영향](./via-dp-11-process-isolation.md#t2) | **높음·A** | 같은 연동 코드의 fatal fault가 A에서는 worker에, B에서는 Core와 같은 Process에 발생한다. 무관한 기능의 동반 종료 차이를 구조로 설명할 수 있다. 단, Core 자체·PC 전체 장애까지 격리하는 것은 아니며 전체 fault pack의 최댓값은 미측정이다. |
+| [DP-12 × QA-61 trace 완전성](./via-dp-12-evidence-commit.md#t2) | 중간·A | 게시 직후 flush 전 crash에서 A가 사전 근거를 더 보존한다. 그러나 후발 출력 event를 양쪽 모두 잃으면 전체 trace는 모두 불완전해질 수 있어 높음으로 올리지 않았다. |
+| [DP-13 × QA-05 Task 제어](./via-dp-13-control-reservation.md#t3) | 중간·A | 포화 자원의 예약 여력이 내부 제어 대기를 줄인다. 실제 제어 경로의 lock·공유 모델까지 이점이 이어져야 하므로 단순 worker 예약만으로 확정하지 않는다. |
+| [DP-13 × QA-01/02 일반 요청](./via-dp-13-control-reservation.md#t1) | 중간·B | 같은 포화 조건에서 A가 제어용으로 남긴 여력을 B는 일반 요청에 사용한다. 저부하·안전한 자원 차용에서는 차이가 줄어든다. 위 제어 이점의 반대 비용이다. |
+| [DP-06 × QA-12 의미 해석](./via-dp-06-semantic-authority.md#t1) | 낮음·방향 미정 | 공동 맥락 판단과 단계별 집중·정정은 다른 구조지만 어느 쪽이 더 정확한지는 같은 모델·corpus 검증 없이는 알 수 없다. 중요한 QA라는 이유만으로 높음에 넣지 않았다. |
 
-| VIA-DP · 질문 요약 | QA-21<br/>Agent 변경 | QA-22<br/>Model·Context<br/>·State 변경 | QA-23<br/>실험·로그 변경 | QA-31<br/>Task 복구 | QA-32<br/>장애 전파 | QA-41<br/>PC 메모리 | QA-51<br/>초과 노출 | QA-61<br/>trace 완전성 | QA-62<br/>평가 재현 |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [01 직접 처리 범위](./via-dp-01-direct-handling.md) | — | ? | ? | × | — | ✓ | — | — | — |
-| [02 대화–Task 확정](./via-dp-02-state-consistency.md) | — | ✓ | ? | ✓ | — | ? | — | — | — |
-| [03 음성 입력 근거](./via-dp-03-voice-evidence.md) | — | ✓ | ? | ? | — | ? | — | — | — |
-| [04 직접 응답 승인](./via-dp-04-response-authority.md) | — | ? | ? | — | — | ✓ | — | — | — |
-| [05 Context 읽기 집합](./via-dp-05-context-contract.md) | — | ? | ? | ✓ | — | ✓ | — | — | — |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md) | ✓ | ✓ | ? | ? | — | ✓ | — | — | — |
-| [07 복합 요청 실행](./via-dp-07-compound-orchestration.md) | ✓ | ? | ? | ✓ | — | ✓ | — | — | — |
-| [08 복구 기준 기록](./via-dp-08-recovery-source.md) | — | ✓ | — | ✓ | — | ✓ | — | — | — |
-| [09 Agent 의미 해석](./via-dp-09-agent-semantics.md) | ✓ | — | ? | — | — | — | — | — | — |
-| [10 모델 세션 수명](./via-dp-10-model-session-authority.md) | — | ✓ | ? | ✓ | — | ? | — | — | — |
-| [11 Process 격리](./via-dp-11-process-isolation.md) | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | — |
-| [12 응답–기록 순서](./via-dp-12-evidence-commit.md) | — | ✓ | ✓ | ? | ? | ✓ | — | ✓ | ✓ |
-| [13 제어 자원 예약](./via-dp-13-control-reservation.md) | — | ✓ | ? | ? | — | ? | — | — | — |
-| [14 Task 상태 소유](./via-dp-14-task-state-authority.md) | — | ✓ | ? | ✓ | — | ? | — | — | — |
-| [15 Agent 상태 관측](./via-dp-15-agent-observation-authority.md) | ✓ | — | ? | ✓ | — | ? | — | — | — |
-| [16 모델 입력 이력](./via-dp-16-model-context-state.md) | — | ✓ | ? | ✓ | — | ? | — | — | — |
-| [17 Context 값 변환](./via-dp-17-context-materialization-authority.md) | — | ✓ | ? | ✓ | — | ? | — | — | — |
-| [18 사용 권한 검사](./via-dp-18-authorization-enforcement.md) | ✓ | ✓ | ? | ✓ | — | ? | — | — | — |
+현재 상세 보고서 근거로 **높음인 차이는 DP-11×QA-32 한 항목**이다. 이것이 유일하게 중요한 DP라는 뜻은 아니다. DP-12·13처럼 반대 방향의 QA 효과가 구체적인 경우에도 조건 미확인과 전체 대표값의 불확실성은 그대로 남긴다.
 
-**† DP-12의 정확성 체크는 근거 누락에 따른 판정 차이를 포함한다.** 실제 의미 해석이나 Task 동작이 더 정확해진다는 주장이 아니다. 해당 QA 판정에 필요한 trace가 사라지는 경우에만 실패 처리 차이가 생긴다. 독립 관측자가 그 근거를 보존하면 이 차이는 사라질 수 있다. QA-61과 중복 성공 점수로 합산하지 않는다.
+### 6.3 차이 등급의 조건과 근거
 
-### 6.3 체크를 성립시키는 조건과 근거
-
-아래 조건은 위 지도의 일부다. 조건을 빼고 ✓만 최종 발표에 옮기지 않는다. ‘비교 근거’ 링크는 각 보고서의 사고실험이며 실측 evidence가 아니다. 한 case의 차이를 최악 case p95·전체 성공률·전체 변경 평균의 차이로 바로 확대하지 않는다.
+아래 조건은 위 지도의 일부다. 조건을 빼고 등급·A/B 방향만 최종 발표에 옮기지 않는다. ‘비교 근거’ 링크는 각 보고서의 사고실험이며 실측 evidence가 아니다. 한 case의 차이를 최악 case p95·전체 성공률·전체 변경 평균의 차이로 바로 확대하지 않는다.
 
 | DP · 비교 근거 | 차이 가능성의 핵심 조건과 남은 확인 |
 | --- | --- |
@@ -512,10 +432,10 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 - **관련성은 넓고, 차이 근거는 그보다 좁다.** DP-14×QA-14와 DP-18×QA-51처럼 중요한 필수 검증이어도 우열을 만드는 지표는 아닐 수 있다.
 - **정확성은 아직 검증 공백이 크다.** DP-06×QA-12는 모델 검증이 필요한 차이 가설이다. DP-12×QA-11~15는 근거 보존 효과이므로 이를 의미·상태 알고리즘 정확도 개선의 대체 근거로 쓰지 않는다.
-- **✓의 수로 핵심 DP·ASR을 선정하지 않는다.** 실제 대표값 차이, 제품에서의 중요성, A에 유리한 QA와 B에 유리한 QA가 모두 있는지를 다음 단계에서 확인한다. QA-41의 체크도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
+- **차이 표시의 수로 핵심 DP·ASR을 선정하지 않는다.** 실제 대표값 차이, 제품에서의 중요성, A에 유리한 QA와 B에 유리한 QA가 모두 있는지를 다음 단계에서 확인한다. QA-41의 차이 등급도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
 - **차이가 없어도 의무는 남는다.** QA-51 안전 조건, 정확한 Task 연결·수렴·연속성, trace·평가 재현 계약은 어느 대안을 택해도 지켜야 한다. QA-11과 원인 QA-12~15도 독립 점수로 중복 합산하지 않는다.
 
-갱신할 때는 개별 DP의 사고실험·19개 QA 표를 먼저 수정하고 두 지도를 함께 대조한다. 첫 지도의 ● 없이 두 번째 지도에 ✓를 추가하지 않으며, ?·×를 해결했다는 이유만으로 실측 우열을 선언하지 않는다.
+갱신할 때는 개별 DP의 사고실험·19개 QA 표를 먼저 수정하고 두 지도를 함께 대조한다. 첫 지도의 ● 없이 두 번째 지도에 차이 등급을 추가하지 않으며, ?·×를 해결했다는 이유만으로 실측 우열을 선언하지 않는다.
 
 <a id="review-status"></a>
 
