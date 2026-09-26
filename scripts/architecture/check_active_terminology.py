@@ -25,18 +25,15 @@ FORBIDDEN = (
     "mean_of_case_p95_response_start_ms",
     "mean_of_case_p95_agent_acceptance_ms",
     "mean_of_case_p95_event_to_visible_ms",
-    "11-A",
-    "11-B",
-    "11-C",
-    "11-D",
-    "11-E",
-    "12-A",
-    "12-B",
     "VIA-DESIGN",
 )
 FORBIDDEN_PATTERNS = (
     ("legacy W-series metric ID", re.compile(r"\bW-(?:0[1-9]|1[0-2])\b")),
     ("numbered ASR ID", re.compile(r"\bASR-\d{2}\b")),
+    (
+        "legacy QA sub-ID",
+        re.compile(r"(?<![A-Za-z0-9-])(?:11-[A-E]|12-[AB])(?![A-Za-z0-9-])"),
+    ),
 )
 
 

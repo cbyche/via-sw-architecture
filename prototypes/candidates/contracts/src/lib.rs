@@ -233,6 +233,62 @@ pub enum WorkerResponse {
     Error { message: String },
 }
 
+/// Source-controlled protocol exposed by the external Reference Agent runtime.
+/// Candidate A and B use this exact contract; fixture-control operations are used
+/// only by the evaluator and are never available through the VIA client surface.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(tag = "op", rename_all = "snake_case")]
+pub enum ReferenceAgentRequest {
+    Submit {
+        request: SubmitRequest,
+    },
+    Query {
+        run_id: String,
+    },
+    FollowUp {
+        run_id: String,
+        text: String,
+    },
+    Cancel {
+        run_id: String,
+    },
+    EventsSince {
+        run_id: String,
+        after_revision: u64,
+    },
+    EmitProgress {
+        run_id: String,
+        percent: u8,
+    },
+    Ask {
+        run_id: String,
+        question_id: String,
+        text: String,
+    },
+    Complete {
+        run_id: String,
+        artifact: String,
+    },
+    ConfirmCancel {
+        run_id: String,
+    },
+    Fail {
+        run_id: String,
+        reason: String,
+    },
+    Ping,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[serde(tag = "status", rename_all = "snake_case")]
+pub enum ReferenceAgentResponse {
+    Reply { reply: NativeReply },
+    Events { events: Vec<NativeEvent> },
+    Ack,
+    Pong,
+    Error { message: String },
+}
+
 #[derive(Debug, Error)]
 pub enum AgentError {
     #[error("run not found: {0}")]

@@ -1,0 +1,92 @@
+{
+  "contract_id": "VIA-DP-11-PILOT-v1",
+  "status": "PILOT_FROZEN",
+  "decision_point": "VIA-DP-11",
+  "purpose": "Validate the A/B measurement pipeline and observe whether process placement creates opposing normal-path and fault-path effects before the final campaign.",
+  "target": {
+    "device": "current MacBook Air M5",
+    "os_family": "macOS",
+    "power_condition": "AC or battery level recorded in manifest",
+    "background_condition": "ordinary desktop idle; observed process list is not modified by the harness"
+  },
+  "fixed_context": {
+    "task_authority": "SharedTaskService",
+    "agent_contract": "DeterministicAgent Q full-capability profile",
+    "agent_state": "persistent file outside the VIA integration-client fault domain for recovery trials",
+    "s2s_model": "not on the DP-11 integration-client fault path; no synthetic S2S delay is inserted",
+    "semantic_llm": "not on the DP-11 integration-client fault path; no synthetic model delay is inserted",
+    "model_replication": "exactly one S2S and one semantic LLM in the system; neither is instantiated by this harness"
+  },
+  "candidates": {
+    "A": {
+      "id": "isolated_worker",
+      "description": "Agent client code runs in a supervised child process; Core communicates through versioned JSON-lines IPC."
+    },
+    "B": {
+      "id": "same_process",
+      "description": "The same Agent client code runs inside the Core process behind an async bridge."
+    }
+  },
+  "workloads": {
+    "normal_bridge_diagnostic": {
+      "warmup_per_candidate": 20,
+      "scored_trials_per_candidate": 200,
+      "operations": ["submit", "query", "events_since", "follow_up", "cancel"],
+      "metric_status": "diagnostic_only",
+      "reason": "The bridge subspan does not contain the user/acoustic endpoints required by QA-01, QA-03, or QA-05."
+    },
+    "integration_client_fatal_recovery": {
+      "fault": "the VIA-owned Agent client process/address space aborts after 1 or 4 running Tasks have durable execution links",
+      "active_task_strata": [1, 4],
+      "scored_trials_per_candidate_per_stratum": 20,
+      "synthetic_restart_delay_ms": 0,
+      "success_oracle": "all affected Task/run links remain correct, the external execution is queryable, and valid Task control is usable",
+      "timeout_ms": 5000,
+      "qa": "QA-31",
+      "pilot_metric": "maximum of the two stratum p95 full recovery times"
+    },
+    "integration_client_fatal_blast_radius": {
+      "scored_trials_per_candidate": 10,
+      "fault": "the same VIA-owned Agent client address space aborts",
+      "necessary_dependency_closure": ["affected_agent_integration"],
+      "independent_user_visible_units": [
+        "direct_voice_interaction",
+        "text_interaction",
+        "unrelated_task_query_control",
+        "context_source_read"
+      ],
+      "qa": "QA-32",
+      "metric": "maximum count of independent units made unavailable by the fault"
+    }
+  },
+  "observability": {
+    "qa": "QA-61",
+    "required_raw_fields": [
+      "contract_id",
+      "contract_sha256",
+      "source_execution_key",
+      "candidate",
+      "workload",
+      "trial",
+      "outcome",
+      "evidence_label",
+      "started_at_utc",
+      "duration_ns",
+      "raw_observation"
+    ],
+    "metric": "100 * records containing every required field / all scored raw records"
+  },
+  "aggregation": {
+    "percentile": "nearest-rank p95",
+    "failures": "retained in the denominator and raw data; a timeout uses the frozen timeout as a censored lower bound and fails its oracle",
+    "candidate_order": "normal diagnostic same_process then isolated_worker; recovery and blast commands exercise both candidates in a fixed implementation order recorded in raw data",
+    "selection": "no winner is selected by the pilot"
+  },
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "limitations": [
+    "This is not PRODUCT_E2E evidence.",
+    "QA-31 covers one frozen integration-client-fatal fault stratum, not the final all-fault maximum.",
+    "The normal bridge timings are supporting diagnostics and must not be reported as QA-01, QA-03, or QA-05.",
+    "QA-32 applies only to the frozen independent-unit registry in this contract."
+  ]
+}

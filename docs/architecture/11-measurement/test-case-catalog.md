@@ -1,9 +1,9 @@
 # Test Case Catalog — QA 재선정용 Source Pool
 
-> 상태: **USER REVIEW DRAFT / 후보 실행 NOT_RUN**. 기존 기능 fixture를 보존하되 활성 QA의 scoring membership·oracle·반복 수는 재동결 전이다.
+> 상태: **USER REVIEW DRAFT / VIA-DP-06·11 reference campaign 완료 / 나머지 후보 NOT_RUN**. 기존 기능 fixture를 보존하되, 각 공식 campaign이 채택하지 않은 case의 scoring membership·oracle·반복 수는 재동결 전이다.
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
-> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. QA-01~05 대표 case와 timing event도 아직 동결되지 않았다. [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md), [Task control responsiveness](../08-quality-attributes/interaction-control-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 새 freeze에서 확정한다.
+> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. VIA-DP-06 v4와 VIA-DP-11 v4가 채택한 case·event·반복은 각 campaign contract에 동결되어 있다. 나머지 DP는 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md), [Task control responsiveness](../08-quality-attributes/interaction-control-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 별도 freeze에서 확정한다.
 > timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
 ## 1. 원자료 구성
@@ -225,7 +225,7 @@ TC-03.1은 발화 시작500ms 전 para-A 선택이다. TC-04.6은 첫 지칭을 
 3. **raw region만 있고 object identity를 얻을 수 없는 fallback:** ground-truth region과 IoU ≥ 0.50을 최소 overlap 조건으로 사용하며, 잘못된 추가 target을 포함하면 FAIL이다. IoU 0.50은 vision evaluation에서 널리 쓰이는 최소 overlap 기준을 빌린 fallback일 뿐, identity 기반 판정보다 우선하지 않는다.
 4. **시간 관계:** transcript 도착 시각을 interaction 시각으로 사용하지 않는다. 고정 ±N ms 또는 N초 matching tolerance를 두지 않고 fixture의 source event timestamp/order와 deictic expression의 source timestamp/order로 판정한다. 현재 canonical fixture는 필요한 pre-turn event를 입력 timeline에 포함한다.
 
-Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. 최근 speech-gesture 연구는 gesture가 관련 speech와 동시 또는 선행하는 경향을 재확인하지만 VIA에 그대로 적용할 보편적인 시간 threshold를 제시하지 않는다. 따라서 과거 1997 HCI 연구의 4초 관찰값은 historical background로만 두고 scoring requirement로 사용하지 않는다. HTML은 합성 화면 원본이고 실제 Windows 앱 capture나 사용자 자연동작 분포가 아니다.
+macOS/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능한 경우 geometry 근사보다 identity/hit-test를 우선한다. 최근 speech-gesture 연구는 gesture가 관련 speech와 동시 또는 선행하는 경향을 재확인하지만 VIA에 그대로 적용할 보편적인 시간 threshold를 제시하지 않는다. 따라서 과거 1997 HCI 연구의 4초 관찰값은 historical background로만 두고 scoring requirement로 사용하지 않는다. HTML은 합성 화면 원본이고 실제 앱 capture나 사용자 자연동작 분포가 아니다.
 
 ## 4. 변경 시험 24개
 
@@ -253,7 +253,7 @@ Windows/W3C pointer API가 좌표·target·timestamp를 제공하므로 가능�
 | **A-09 결과물 전달 계약 변경** | 완료 메시지에 설명·파일 링크 포함 → 설명·파일·근거를 구분한 결과 목록과 조회용 참조 제공 | 실제 결과물·권한·업무 완료 의미 유지. 본 시험에서는 참조 유효기간 등 추가 인증 변화는 포함하지 않음 | QA-21 |
 | **C-01 정보 Source 제공자 교체** | Calendar 제공자 A → 같은 일정 정보를 제공하는 B. native identity/field/API 차이 포함 | 사용자 일정 내용·접근 범위, Context 종류, 사용자 목표 | QA-22 |
 | **C-02 문서 형식 추가** | 기존 문서 읽기 유지 + DOCX 문서의 본문·표를 읽는 형식 지원 추가 | read-only 책임, 기존 문서 지원, 사용자 요청 의미 | QA-22 |
-| **C-03 화면 연동 계약 변경** | 같은 Windows PC의 앱/화면 제공 API가 object handle·좌표/선택 표현을 변경 | 사용자의 실제 화면·포인터·선택 동작, 필요한 지칭 결과 | QA-22 |
+| **C-03 화면 연동 계약 변경** | 같은 target Mac의 앱/화면 제공 API가 object handle·좌표/선택 표현을 변경 | 사용자의 실제 화면·포인터·선택 동작, 필요한 지칭 결과 | QA-22 |
 | **C-04 기억 기록 형식 확장** | 저장된 선호 key/value에 기록 version·수정 시점·사용자 등록 근거를 추가 | 기존 기억 내용·허용 범위·확인/수정/삭제 기능 | QA-22 |
 | **C-05 같은 종류의 정보원 추가** | Calendar 제공자 A만 연결 → A를 유지하며 B도 추가 | 같은 활성 사용자·Context 종류·UC, 각 Source의 제공 능력과 접근 허용. 일정 통합/중복 제거라는 새 사용자 기능은 추가하지 않음 | QA-22 |
 | **C-06 대화·업무 기록 형식 변경** | 저장 기록 V1 → 같은 Conversation/Request/Task/Agent 실행 관계를 다른 구조로 표현하는 V2 | 기존 내용·권한·삭제 결과·진행 업무·필수 복구 기능. 같은 저장 기술 사용, 계획된 정지 후 이행 허용 | QA-22 |
@@ -330,6 +330,47 @@ Architecture sensitivity는 Test Case를 인위적으로 어렵게 만드는 방
 
 진단 목적으로 counterfactual/opaque probe를 사용할 수는 있으나 대표 QA score에는 포함하지 않고 구조 원인 분석용 evidence로만 취급한다.
 
-## 11. 현재 리뷰 상태
+## 11. VIA-DP-06 24개 breadth workload
 
-94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. QA-05 control case, QA-11~15 selected case/oracle, QA-23 experiment/logging change, QA-31/32 fault strata, QA-41 workload, QA-61/62 evidence sample, 반복 수와 score band는 아직 사용자 승인 전이다. Architecture 차이를 만들기 위한 인위적 fixture는 추가하지 않으며 실제 candidate 결과는 `NOT_RUN`이다.
+VIA-DP-06은 Context Engine 구현을 비교하지 않는다. 모든 후보는 같은 Context
+Engine이 이미 생성했다고 가정한 canonical Evidence를 받는다. 따라서 실제 Mac
+화면 capture·마우스 수집·UI object 인식의 정확성은 이 workload의 주장이 아니다.
+그 경로는 Context Engine을 다루는 DP에서 별도로 비교한다.
+
+```mermaid
+flowchart LR
+    PC["합성 PC 사건<br/>화면·선택·포인터·Task"] --> CE["고정 Context Engine 출력으로 간주"]
+    CE --> INPUT["후보 입력 fixture<br/>Context Evidence 24건"]
+    INPUT --> A["A 통합 권한"]
+    INPUT --> B["B 단계별 권한"]
+    INPUT --> BP["B′ + 단계 생략 tactic"]
+    ORACLE["분리된 evaluator-only oracle"] --> SCORE["field·strict 판정"]
+    A --> SCORE
+    B --> SCORE
+    BP --> SCORE
+```
+
+후보 입력은 `benchmark/architecture/fixtures/dp06-semantic-input-v4.json`, 정답은
+`dp06-semantic-oracle-v4.json`에 분리했다. 후보에게는 source, interaction event,
+Task view, pending interaction과 capability만 전달하며 expected field는 전달하지
+않는다. 각 case는 다음 빈 구멍을 최소 집합으로 채운다.
+
+| 묶음 | Case 수 | 대표 UC와 검증 의미 |
+| --- | ---: | --- |
+| Direct `D` | 2 | UC-02/05: 현재 자료와 이전 대화 직접응답 |
+| Work `W` | 4 | UC-06/08/10/14: 새 위임, follow-up, ambiguity, pending answer |
+| Control `C` | 3 | UC-10/11/14: query, cancel, 복수 Task 분리 |
+| Compound `P` | 4 | UC-09: independent, sequential, data-dependent, conditional |
+| Grounding `G` | 3 | UC-03/04/11: 복수 선택, 대상 정정, 역할이 다른 선택 집합 |
+| Clarification `Q` | 1 | UC-06: 같은 종류의 source 후보가 둘일 때 확인 요구 |
+| Task transition `T` | 3 | UC-07/10: direct→Task, 완료 Task 수정, artifact 기반 New Task |
+| Approval `A` | 1 | UC-16: pending approval이 둘일 때 짧은 답의 ambiguity |
+| Missing dependency `E` | 2 | UC-18: source 부재, capability 부재 |
+| Cross-evidence `X` | 1 | UC-05/10: 복수 referent 후보와 Task input linkage의 공동 해석 |
+
+총 24건이다. 2026-09-27 breadth 실행은 case당 1회이며 최종 percentile campaign은
+아니다. 중간 DP-06 결과는 삭제했다. 정식 v4 campaign이 실행되면 각 field의 expected/actual/PASS와 repair 위치·token·호출시간을 새 raw JSONL에 보존한다.
+
+## 12. 현재 리뷰 상태
+
+94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. VIA-DP-06 v4는 그중 구조적으로 민감한 24건을 동결해 72개 A/B/B′ trial을 실행했고, VIA-DP-11 v4는 process-isolation에 실제로 참여하는 정상·fault·resource·change 경로를 실행했다. 두 결과는 [current evidence index](../../../results/architecture-evaluation/current/README.md)에서 확인한다. 이 두 campaign에 포함되지 않은 source-pool 항목의 반복 수·score band와 최종 ASR 분류는 추가 freeze 전까지 확정하지 않는다.

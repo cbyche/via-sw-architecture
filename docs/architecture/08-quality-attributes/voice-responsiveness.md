@@ -207,16 +207,7 @@ Qwen3-Omni 공개 234ms는 concurrency=1에서 tail-packet preprocessing, Thinke
 
 ## 7. VIA LLM latency planning contract
 
-QA-01~QA-03 reference planning에서는 hosted VIA LLM wall-clock을 대표값으로 사용하지 않는다. QA-04는 LLM token-rate가 아니라 실제 interruption path를 측정한다. 후보별 실제 serialized prompt와 frozen tokenizer로 token 수를 계산하고, 현재 승인된 Windows consumer reference profile을 사용한다.
-
-```text
-R_prompt = 2103.19 token/s
-R_gen    = 40.58 token/s
-
-estimated_model_subtotal
-= input_tokens / R_prompt
- + required_output_tokens / R_gen
-```
+QA-01~QA-03은 target Mac의 local Qwen3-8B를 실제 호출한다. QA-04는 LLM token-rate가 아니라 실제 interruption path를 측정한다. 후보별 actual serialized prompt와 frozen tokenizer로 token 수를 기록하고, queue·prompt processing·first meaningful output·structured completion을 직접 계측한다.
 
 각 LLM call은 다음을 결과 전에 고정한다.
 
@@ -230,7 +221,7 @@ estimated_model_subtotal
 
 순차 call은 합산하고 실제로 독립 resource에서 병렬 실행 가능한 call만 critical-path max를 사용한다. network, IPC/RPC, Context access, validation, speech generation과 playback은 model subtotal에 섞지 않고 별도 실제 또는 frozen reference span으로 둔다.
 
-이 값은 `ESTIMATED_MODEL_ONLY`다. 실제 component span과 결합한 결과도 `HYBRID_REFERENCE_ESTIMATE`이며 `MEASURED_MODEL`, `PRODUCT_E2E` 또는 target Windows absolute latency로 부르지 않는다.
+실제 local model span은 `MEASURED_MODEL`로 기록할 수 있지만 physical audio endpoint가 없는 결과를 `PRODUCT_E2E`로 부르지 않는다. Smoke-test throughput을 이후 모든 prompt의 고정 속도로 환산하지 않는다.
 
 ## 8. Raw trace 최소 항목
 

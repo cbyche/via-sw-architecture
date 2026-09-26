@@ -1,6 +1,6 @@
 # Quality Model and Draft QA Catalog
 
-> 상태: **USER REVIEW DRAFT / category·single-metric 구조 합의 / target·score·ASR 미확정**
+> 상태: **USER REVIEW DRAFT / category·single-metric 구조 합의 / ASR 후보 10개 선정·확정 ASR 없음**
 >
 > 이번 generation은 QA를 품질 계열별 번호 범위로 한 번 재번호화했다. 각 QA는 하나의 대표 metric만 가진다. 이름·metric은 current draft이며 target, score band, workload와 ASR은 추가 승인 전까지 확정값이 아니다.
 
@@ -22,7 +22,7 @@ QA — 하나의 stimulus/response와 하나의 대표 metric
 ASR — Architecture 영향이 확인된 QA에 부여하는 분류
 ```
 
-현재 확정된 ASR은 없다. QA가 중요해 보여도 정상적인 Architecture 대안 사이에서 구조적 인과를 설명할 수 없으면 ASR로 확정하지 않는다.
+현재 확정된 ASR은 없다. 다만 [VIA Core Evaluation Profile](../11-measurement/evaluation-profile.md)에서 QA-01, 02, 05, 11, 12, 21, 22, 31, 32, 61을 한 campaign에서 검증할 `CANDIDATE` working set으로 선정했다. QA가 중요해 보여도 정상적인 Architecture 대안 사이에서 구조적 인과와 실제 차이를 확인하지 못하면 `CONFIRMED_ASR`로 올리지 않는다.
 
 ## 2. QA category와 번호 범위
 
@@ -132,4 +132,13 @@ active QA는 다음 질문에 모두 답해야 한다.
 4. 사람이 매번 주관적으로 판정하지 않고 반복 측정할 수 있는가?
 5. metric과 목표를 한 문장으로 설명할 수 있는가?
 
-QA별 ASR 상태는 `UNASSESSED`, `CANDIDATE`, `CONFIRMED_ASR`, `NOT_ASR` 중 하나로 관리한다. 현재 active draft QA는 모두 `UNASSESSED`다.
+QA별 ASR 상태는 `UNASSESSED`, `CANDIDATE`, `CONFIRMED_ASR`, `NOT_ASR` 중 하나로 관리한다.
+
+| 상태 | QA |
+| --- | --- |
+| `CANDIDATE` | QA-01, QA-02, QA-05, QA-11, QA-12, QA-21, QA-22, QA-31, QA-32, QA-61 |
+| `UNASSESSED` | QA-03, QA-04, QA-13, QA-14, QA-15, QA-23, QA-41, QA-51, QA-62 |
+| `CONFIRMED_ASR` | 없음 |
+| `NOT_ASR` | 없음 |
+
+`UNASSESSED`도 harness에서 제외한다는 뜻이 아니다. QA-03/04/13~15/62는 같은 trace에서 보조 QA로 계산하고, QA-41은 target-device 진단값으로 기록한다.

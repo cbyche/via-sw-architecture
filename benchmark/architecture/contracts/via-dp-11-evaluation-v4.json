@@ -1,0 +1,88 @@
+{
+  "contract_id": "VIA-DP-11-EVALUATION-v4",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-11",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "target": "MacBook Air M5, 24 GB, macOS 26.5.1",
+  "candidates": ["isolated_worker", "same_process"],
+  "candidate_meaning": {
+    "isolated_worker": "VIA-owned Agent client in a supervised worker process",
+    "same_process": "the same VIA-owned Agent client in the Core process"
+  },
+  "fixed_context": {
+    "semantic_model": "one shared Qwen3-8B Q4_K_M local runtime; semantic records are diagnostic only",
+    "downstream_agent": "same external deterministic Reference Agent implementation and contract; normal and fault strata use separate fresh persistent state files so workload history is not a hidden variable",
+    "task_authority": "same Task/run binding, command identity and recovery oracle",
+    "changed_axis": "only the OS process boundary of the VIA-owned Agent client"
+  },
+  "fixtures": {
+    "normal": "benchmark/architecture/fixtures/dp11-normal-v1.json",
+    "semantic_context": "benchmark/architecture/fixtures/dp11-semantic-context-v2.json",
+    "change_ledger": "benchmark/architecture/fixtures/dp11-change-ledger-v1.json"
+  },
+  "repetitions": {
+    "semantic_runs_per_input_case": 1,
+    "runtime_trials_per_case_per_candidate": 5,
+    "F-01_common_whole_via_restart": 10,
+    "F-02_integration_client_fatal_per_candidate": 20,
+    "F-03_common_post_publish_pre_commit": 10,
+    "memory_samples_per_N5_trial": 1
+  },
+  "aggregation": {
+    "recovery": "maximum fault-stratum nearest-rank p95",
+    "blast_radius": "maximum excess affected independent user-visible units",
+    "memory": "nearest-rank p95 of candidate-owned process RSS plus the one shared local semantic runtime",
+    "trace": "100 * complete scored runtime/fault records / all scored runtime/fault records",
+    "reproduction": "exact independent analyzer reproduction of the frozen core summary"
+  },
+  "fault_recovery_timeout_ms": 30000,
+  "qa_applicability": {
+    "QA-01": "BLOCKED_RENDERER_PROXY_IS_NOT_THE_REQUIRED_MEANINGFUL_AUDIBLE_ENDPOINT",
+    "QA-02": "N/A_DIRECT_RESPONSE_PATH_DOES_NOT_USE_THE_AGENT_CLIENT_PROCESS_BOUNDARY",
+    "QA-03": "BLOCKED_RENDERER_PROXY_IS_NOT_THE_REQUIRED_MEANINGFUL_AUDIBLE_STATUS_ENDPOINT",
+    "QA-04": "N/A_NORMAL_BARGE_IN_PATH_DOES_NOT_USE_THE_AGENT_CLIENT_PROCESS_BOUNDARY",
+    "QA-05": "BLOCKED_CONTROL_PRESENTATION_PROXY_OMITS_THE_REQUIRED_AUDIBLE_ENDPOINT",
+    "QA-11": "BLOCKED_EXISTING_RUNTIME_FIXTURE_DOES_NOT_IMPLEMENT_ALL_ACTIVE_INTEGRATED_PREDICATES",
+    "QA-12": "N/A_DP11_DOES_NOT_CHANGE_THE_SHARED_SEMANTIC_RESOLUTION_PATH",
+    "QA-13": "BLOCKED_EXISTING_RUNTIME_FIXTURE_IMPLEMENTS_ONLY_A_SUBSET_OF_ACTIVE_BINDING_PREDICATES",
+    "QA-14": "BLOCKED_EXISTING_RUNTIME_FIXTURE_IMPLEMENTS_ONLY_A_SUBSET_OF_ACTIVE_CONVERGENCE_PREDICATES",
+    "QA-15": "N/A_NORMAL_CHANNEL_AND_TASK_CONTINUITY_DOES_NOT_USE_THIS_PROCESS_PLACEMENT_AXIS",
+    "QA-21": "BLOCKED_AGENT_CHANGE_PACK_IS_A_DESIGN_LEDGER_NOT_EXECUTED_SOURCE_CHANGES",
+    "QA-22": "N/A_MODEL_CONTEXT_AND_STATE_CHANGE_PACK_DOES_NOT_CHANGE_THIS_AGENT_CLIENT_PLACEMENT_AXIS",
+    "QA-23": "BLOCKED_OBSERVABILITY_CHANGE_PACK_IS_A_DESIGN_LEDGER_NOT_EXECUTED_SOURCE_CHANGES",
+    "QA-31": "APPLICABLE_EXECUTED_F01_F03_RECOVERY_STRATA",
+    "QA-32": "APPLICABLE_EXECUTED_F01_F03_FAULT_CONTAINMENT_STRATA",
+    "QA-41": "APPLICABLE_TARGET_MAC_PROCESS_TREE_RSS_WITH_SHARED_MODEL_COUNTED_ONCE",
+    "QA-51": "N/A_BOTH_CANDIDATES_REMAIN_INSIDE_THE_SAME_VIA_TRUST_BOUNDARY",
+    "QA-61": "APPLICABLE_EXECUTED_RUNTIME_AND_FAULT_RECORDS",
+    "QA-62": "APPLICABLE_CAMPAIGN_WIDE"
+  },
+  "qa_plan": {
+    "QA-01": {"role":"blocked","method":"physical audible endpoint not implemented"},
+    "QA-02": {"role":"non_applicable","method":"direct path bypasses Agent client"},
+    "QA-03": {"role":"blocked","method":"physical audible status endpoint not implemented"},
+    "QA-04": {"role":"non_applicable","method":"normal barge-in bypasses Agent client"},
+    "QA-05": {"role":"blocked","method":"physical audible control endpoint not implemented"},
+    "QA-11": {"role":"blocked","method":"active integrated predicate pack incomplete"},
+    "QA-12": {"role":"non_applicable","method":"shared semantic path"},
+    "QA-13": {"role":"blocked","method":"active binding predicate pack incomplete"},
+    "QA-14": {"role":"blocked","method":"active convergence predicate pack incomplete"},
+    "QA-15": {"role":"non_applicable","method":"normal continuity bypasses process placement"},
+    "QA-21": {"role":"blocked","method":"design ledger only"},
+    "QA-22": {"role":"non_applicable","method":"change pack bypasses process placement"},
+    "QA-23": {"role":"blocked","method":"design ledger only"},
+    "QA-31": {"role":"measured","method":"F-01..F-03 actual process recovery"},
+    "QA-32": {"role":"measured","method":"F-01..F-03 actual excess affected units"},
+    "QA-41": {"role":"measured","method":"target-Mac process-tree RSS"},
+    "QA-51": {"role":"non_applicable","method":"same VIA trust boundary"},
+    "QA-61": {"role":"measured","method":"runtime/fault trace completeness"},
+    "QA-62": {"role":"measured","method":"independent analyzer reproduction"}
+  },
+  "failure_treatment": "All errors and timeouts remain in raw evidence; no successful-sample filtering.",
+  "source_reuse": "Common executions are stored once and mapped with source_execution_key; they are not duplicated as independent samples.",
+  "limitations": [
+    "This campaign deliberately does not score proxy Voice endpoints as QA-01~05.",
+    "The deterministic Reference Agent validates the VIA boundary, not third-party Agent reasoning quality.",
+    "Semantic, normal-path correctness, design-ledger and exposure records are retained as diagnostics but are not promoted to QA values where the active contract is incomplete or structurally non-applicable."
+  ]
+}

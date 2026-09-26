@@ -12,7 +12,7 @@ DP와 QA의 연결은 [관련성 지도](#dp-qa-coverage), A/B 비교에 사용�
 
 ## 2. 바뀌지 않는 시스템 경계
 
-VIA가 Voice/Text/화면 interaction·요청 의미·Conversation/Task·위임과 결과 연결을 소유한다. Downstream Agent가 도메인 계획·Tool 실행을 한다. OpenClaw·Hermes 같은 외부 Runtime은 VIA Client와 다른 Process 또는 원격 서비스다.
+VIA가 Voice/Text/화면 interaction·요청 의미·Conversation/Task·위임과 결과 연결을 소유한다. Downstream Agent가 도메인 계획·Tool 실행을 한다. 이번 평가는 VIA 밖에서 동작하는 deterministic Reference Agent를 모든 후보에 동일하게 사용한다.
 
 **VIA 모델은 S2S 1개와 semantic LLM 1개다.** 단계·Component·Task가 늘어도 모델을 추가 적재하지 않는다. 각 역할은 다른 prompt·schema·세션을 사용할 수 있지만 같은 모델 용량을 공유한다. 모델 수와 호출 수·프로세스 수를 혼동하지 않는다.
 
@@ -243,7 +243,7 @@ flowchart TB
  I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
  end
  Q <-->|"versioned IPC frame"| I
- I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+ I <-->|"고정 Reference Agent contract"| A["Reference Agent<br/>VIA 밖의 동일 fixture"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
@@ -267,13 +267,13 @@ flowchart TB
  Q -->|"같은 Process의 async 호출"| I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
  I -.->|"비동기: 검증된 관측"| T
  end
- I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+ I <-->|"고정 Reference Agent contract"| A["Reference Agent<br/>VIA 밖의 동일 fixture"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
 
 1. 같은 Client·명령·outbox를 Core Process의 async queue로 연결한다. 별도 IPC frame·Worker Supervisor가 없다. 외부 응답을 기다리며 DB transaction을 잡지 않는다.
-2. ‘같은 Process’는 VIA Client의 배치다. OpenClaw·Hermes Runtime을 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
+2. ‘같은 Process’는 VIA Client의 배치다. Reference Agent 자체를 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
 3. 잡을 수 없는 Client fatal은 Core까지 종료시킬 수 있다. 그러나 해당 코드·fault가 제품에 실제로 필요한지 미확인이라면 QA-32의 큰 이점이나 핵심 DP 지위를 단정하지 않는다.
 
 Thread·mailbox 격리는 정상 정지·예외를 제한할 수 있지만 주소 공간이 같은 fatal 종료 경계는 유지된다.
@@ -309,7 +309,7 @@ Context는 05(읽기 집합)·16(이력 유지)·17(값 변환)로, 비동기 �
 
 ## 6. QA와 최종 선정은 분리한다
 
-현재 19개 single-metric QA를 모든 보고서에서 검토했다. 최종 보고서에는 Responsiveness·Accuracy·Modifiability를 포함하되 각 계열 최대 2개라는 사용자 방향을 유지한다. 아직 구체 ASR 묶음을 고정하지 않는다. QA-11과 QA-12~15를 독립 성공 점수처럼 합산하지 않는다.
+현재 19개 single-metric QA를 모든 보고서에서 검토했다. [Core Evaluation Profile](../11-measurement/evaluation-profile.md)은 우선 측정할 ASR 후보 10개를 정했고, 실제 구조 sensitivity를 확인한 뒤 최종 보고서의 더 작은 ASR 집합으로 좁힌다. QA-11과 QA-12~15를 독립 성공 점수처럼 합산하지 않는다.
 
 QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차이가 미확인이라 핵심 ASR 우선 추천에서 제외한다. QA-32는 VIA Client fatal 위험, QA-61은 실제 기록 유실 구간처럼 구체 인과를 확인해야 한다. QA-51은 기존 metric과 권한 gate를 유지하며 범위를 확대하지 않는다.
 
@@ -319,7 +319,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 **관련성이 있다는 것과 A/B의 품질 차이가 있다는 것은 다르다.** 첫 지도는 설계 검토 대상을, [두 번째 지도](#ab-qa-difference)는 현재 사고실험에서 차이를 예상할 근거가 있는 대상을 보여준다. 여기서 ‘성능’은 속도만이 아니라 정확도·변경 범위·복구·기록 등 각 QA의 단일 metric 결과를 뜻한다.
 
-기준은 2026-09-26의 VIA-DP-01~18 각 §6 사고실험과 §7 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 측정 결과는 모두 **NOT_RUN**이다.
+기준은 VIA-DP-01~18 각 사고실험과 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 지도는 설계 단계의 적용성·차이 가능성을 나타내며 측정값 표가 아니다. 현재 공식 reference campaign은 VIA-DP-06 v4와 VIA-DP-11 v4이고, 나머지는 **NOT_RUN**이다. 실행 결과와 한계는 [current evaluation executive report](../../../results/architecture-evaluation/current/evaluation-executive-report-20260927.md)를 따른다.
 
 열 이름은 [현행 QA의 단일 metric](../08-quality-attributes/quality-model.md#3-active-draft-qa-catalog)을 줄인 것이다. QA-01은 Agent 실행시간을 제외한다. QA-21~23은 해당 변화 한 건당 변경 설계 요소의 평균 수이며, QA-32는 필수 의존 범위를 넘어 불필요하게 중단된 기능·Task 수다. QA-51은 총 전달량이 아니라 필요 이상의 보호정보 노출, QA-62는 모델 답 재생성이 아니라 저장 근거로 평가 결과를 다시 만드는 능력이다.
 
@@ -353,7 +353,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 ### 6.2 A/B 차이 가능성 지도 — 어디에서 얼마나 확실하게 차이를 예상하는가?
 
-기존의 동일한 ✓ 표시를 **높음·중간·낮음**으로 나눴다. 등급은 **차이를 예상하는 근거의 확실성**이지 차이의 크기나 QA 중요도가 아니다. ‘높음’도 명시한 사고실험 조건에서의 판단이며, 전체 QA 대표값의 실측 차이를 뜻하지 않는다. 현재 측정은 모두 NOT_RUN이다.
+기존의 동일한 ✓ 표시를 **높음·중간·낮음**으로 나눴다. 등급은 **차이를 예상하는 근거의 확실성**이지 차이의 크기나 QA 중요도가 아니다. ‘높음’도 명시한 사고실험 조건에서의 판단이며, 전체 QA 대표값의 실측 차이를 뜻하지 않는다. 모든 행은 현재 예상 지도다.
 
 | 표시 | 읽는 방법 |
 | --- | --- |
@@ -395,13 +395,13 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 | DP × QA | 등급·방향 | 이 수준으로 표시한 이유와 한계 |
 | --- | --- | --- |
-| [DP-11 × QA-32 장애 영향](./via-dp-11-process-isolation.md#t2) | **높음·A** | 같은 연동 코드의 fatal fault가 A에서는 worker에, B에서는 Core와 같은 Process에 발생한다. 무관한 기능의 동반 종료 차이를 구조로 설명할 수 있다. 단, Core 자체·PC 전체 장애까지 격리하는 것은 아니며 전체 fault pack의 최댓값은 미측정이다. |
+| [DP-11 × QA-32 장애 영향](./via-dp-11-process-isolation.md#t2) | **높음·A** | 같은 연동 코드의 fatal fault가 A에서는 worker에, B에서는 Core와 같은 Process에 발생한다. Preliminary harness의 관측은 정식 QA evidence가 아니며 공통 harness qualification 뒤 재측정한다. |
 | [DP-12 × QA-61 trace 완전성](./via-dp-12-evidence-commit.md#t2) | 중간·A | 게시 직후 flush 전 crash에서 A가 사전 근거를 더 보존한다. 그러나 후발 출력 event를 양쪽 모두 잃으면 전체 trace는 모두 불완전해질 수 있어 높음으로 올리지 않았다. |
 | [DP-13 × QA-05 Task 제어](./via-dp-13-control-reservation.md#t3) | 중간·A | 포화 자원의 예약 여력이 내부 제어 대기를 줄인다. 실제 제어 경로의 lock·공유 모델까지 이점이 이어져야 하므로 단순 worker 예약만으로 확정하지 않는다. |
 | [DP-13 × QA-01/02 일반 요청](./via-dp-13-control-reservation.md#t1) | 중간·B | 같은 포화 조건에서 A가 제어용으로 남긴 여력을 B는 일반 요청에 사용한다. 저부하·안전한 자원 차용에서는 차이가 줄어든다. 위 제어 이점의 반대 비용이다. |
 | [DP-06 × QA-12 의미 해석](./via-dp-06-semantic-authority.md#t1) | 낮음·방향 미정 | 공동 맥락 판단과 단계별 집중·정정은 다른 구조지만 어느 쪽이 더 정확한지는 같은 모델·corpus 검증 없이는 알 수 없다. 중요한 QA라는 이유만으로 높음에 넣지 않았다. |
 
-현재 상세 보고서 근거로 **높음인 차이는 DP-11×QA-32 한 항목**이다. 이것이 유일하게 중요한 DP라는 뜻은 아니다. DP-12·13처럼 반대 방향의 QA 효과가 구체적인 경우에도 조건 미확인과 전체 대표값의 불확실성은 그대로 남긴다.
+현재 정식 실측으로 확정한 차이는 없다. DP-11×QA-32를 포함한 높은 차이 가설도 공통 harness qualification 뒤 재측정한다. DP-12·13처럼 반대 방향의 QA 효과가 예상되는 후보도 조건 미확인과 전체 대표값의 불확실성이 남아 있다.
 
 ### 6.3 차이 등급의 조건과 근거
 
@@ -441,19 +441,19 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 ## 7. 무엇이 완료됐고 무엇이 남았는가
 
-완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑이다. 현재 QA 결과는 모두 NOT_RUN이다. 부분 코드·prompt는 존재하지만 실제 두 모델·Windows·제3자 Runtime을 연결한 제품 검증은 아니다. 기존 ADR의 승인·유예와 재검증 조건은 각 대응 VIA-DP에 보존했다.
+완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑과 preliminary DP-11 harness diagnostic이다. V3는 19행 표·raw 보존·재계산 형식만 검증했으며 QA-01~15 전체 contract를 충족하지 못해 Architecture evidence로 인정하지 않는다. 대안은 선택하지 않았다. Local semantic LLM·Alibaba S2S smoke와 Reference Agent diagnostic은 제품 E2E 검증이 아니다. 기존 ADR의 승인·유예와 재검증 조건은 각 대응 VIA-DP에 보존했다.
 
 ### 구현 근거와 남은 확인
 
 - 06: 역할별 prompt/schema가 있으나 실제 모델 정확도·지연은 미측정.
 - 09: native fixture 변환 구조가 있으나 외부 제품 capability 검증과 전체 9건 ledger는 미완료.
-- 11: bridge·worker fixture는 있으나 OpenClaw·Hermes Client의 제품 fault 근거가 아님.
+- 11: 외부 Reference Agent, bridge·worker candidate와 preliminary raw pipeline까지 구현. QA-01~15 공통 contract·sentinel qualification, Physical Voice E2E와 실제 제품 Agent Client fault profile은 미완료.
 - 14: SharedTaskService·PerTaskSupervisors·공통 SQLite Repository가 있으나 현행 Voice·복구 QA 검증이 아님.
 - 15~18: 이번에 추가한 문서 후보. 제품 A/B 구현·measurement freeze·실행은 하지 않음.
 
 모든 후보에 S2S 1개·semantic LLM 1개를 적용한다. Task supervisor·prompt·session·worker 수와 모델 수를 혼동하지 않는다. 모델 queue·cache·취소 지원은 실제 profile 확인 전이다.
 
-최종 DP/ASR 선정, 실제 Windows·모델·Agent 연결, 전체 변경 ledger, 목표·점수·fixture 동결과 A/B 측정은 남아 있다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
+최종 DP/ASR 확정, Voice E2E 연결, 나머지 DP candidate, 전체 변경 ledger와 full A/B campaign은 남아 있다. Target Mac, local semantic LLM, Alibaba S2S와 Reference Agent 방향은 고정했다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
 
 이전 작업의 문서 검증 기록은 docs/archive/dp-document-consolidation-2026-09-25/dp-review-synthesis.md에 당시 이력으로 보존했다. 현재 제품 QA 결과를 뜻하지 않는다.
 

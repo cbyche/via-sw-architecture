@@ -1,0 +1,97 @@
+{
+  "contract_id": "VIA-DP-11-PILOT-v2",
+  "contract_sha256": "76e19385228f25a78a866e4fd51ad6b793eb2ac66210222273d6af37b6ec0f42",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "normal_bridge_diagnostic": {
+    "same_process": {
+      "full_lifecycle_ns": {
+        "count": 200,
+        "min": 10125,
+        "median": 10584,
+        "p95": 14792,
+        "max": 132917
+      },
+      "cancel_ns": {
+        "count": 200,
+        "min": 750,
+        "median": 833,
+        "p95": 959,
+        "max": 1167
+      },
+      "correctness_pass_rate_pct": 100.0
+    },
+    "isolated_worker": {
+      "full_lifecycle_ns": {
+        "count": 200,
+        "min": 214125,
+        "median": 283416,
+        "p95": 482292,
+        "max": 799583
+      },
+      "cancel_ns": {
+        "count": 200,
+        "min": 37666,
+        "median": 52750,
+        "p95": 100500,
+        "max": 174042
+      },
+      "correctness_pass_rate_pct": 100.0
+    }
+  },
+  "qa31_integration_client_fatal_pilot": {
+    "same_process": {
+      "strata_duration_ns": {
+        "1": {
+          "count": 20,
+          "min": 18684458,
+          "median": 19717958,
+          "p95": 22490209,
+          "max": 33768167
+        },
+        "4": {
+          "count": 20,
+          "min": 30270959,
+          "median": 31902333,
+          "p95": 33778083,
+          "max": 35228208
+        }
+      },
+      "qa31_pilot_worst_stratum_p95_ns": 33778083
+    },
+    "isolated_worker": {
+      "strata_duration_ns": {
+        "1": {
+          "count": 20,
+          "min": 17485625,
+          "median": 17769958,
+          "p95": 18718125,
+          "max": 18742416
+        },
+        "4": {
+          "count": 20,
+          "min": 29611375,
+          "median": 30685625,
+          "p95": 32685667,
+          "max": 34629958
+        }
+      },
+      "qa31_pilot_worst_stratum_p95_ns": 32685667
+    }
+  },
+  "qa32_fault_blast_radius": {
+    "same_process": 4,
+    "isolated_worker": 0
+  },
+  "qa61_complete_execution_trace_run_rate_pct": 100.0,
+  "trace_records": {
+    "complete": 500,
+    "total": 500
+  },
+  "limitations": [
+    "This is not PRODUCT_E2E evidence.",
+    "QA-31 covers one frozen integration-client-fatal fault stratum, not the final all-fault maximum.",
+    "The normal bridge timings are supporting diagnostics and must not be reported as QA-01, QA-03, or QA-05.",
+    "QA-32 applies only to the frozen independent-unit registry in this contract.",
+    "The QA-61 pilot result validates the external evidence envelope; it does not yet validate preservation of worker-local log records immediately before a fatal abort."
+  ]
+}

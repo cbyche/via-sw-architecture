@@ -7,6 +7,7 @@ use tokio::{
 use via_contracts::{
     AgentBackend, NativeReply, PReply, QReply, SubmitRequest, WorkerRequest, WorkerResponse,
 };
+use via_fixture::RemoteReferenceAgent;
 use via_fixture::{AgentShape, DeterministicAgent};
 use via_runtime::exec::{IntegrationBridge, ProcessBridge};
 
@@ -24,18 +25,23 @@ struct Args {
     worker: Option<PathBuf>,
     #[arg(long)]
     agent_state_file: Option<PathBuf>,
+    #[arg(long)]
+    agent_address: Option<String>,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
+    if args.agent_state_file.is_some() && args.agent_address.is_some() {
+        return Err("--agent-state-file and --agent-address are mutually exclusive".into());
+    }
     match args.mode {
-        Mode::Shared => run_shared(args.agent_state_file).await?,
+        Mode::Shared => run_shared(args.agent_state_file, args.agent_address).await?,
         Mode::Isolated => {
             let worker = args
                 .worker
                 .ok_or("--worker is required for isolated mode")?;
-            run_isolated(worker, args.agent_state_file).await?;
+            run_isolated(worker, args.agent_state_file, args.agent_address).await?;
         }
     }
     Ok(())
@@ -188,7 +194,7 @@ async fn begin_external_fault(
 }
 
 async fn shared_capability_probe(
-    agent: &DeterministicAgent,
+    agent: &dyn AgentBackend,
     request: &serde_json::Value,
 ) -> Result<Option<serde_json::Value>, Box<dyn std::error::Error>> {
     if request.get("op").and_then(serde_json::Value::as_str) != Some("containment_capability_probe")
@@ -289,10 +295,15 @@ async fn isolated_capability_probe(
     )))
 }
 
-async fn run_shared(agent_state_file: Option<PathBuf>) -> Result<(), Box<dyn std::error::Error>> {
-    let agent = match agent_state_file {
-        Some(path) => DeterministicAgent::persistent(AgentShape::Q, path)?,
-        None => DeterministicAgent::new(AgentShape::Q),
+async fn run_shared(
+    agent_state_file: Option<PathBuf>,
+    agent_address: Option<String>,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let agent: Box<dyn AgentBackend> = match (agent_address, agent_state_file) {
+        (Some(address), None) => Box::new(RemoteReferenceAgent::new(address)),
+        (None, Some(path)) => Box::new(DeterministicAgent::persistent(AgentShape::Q, path)?),
+        (None, None) => Box::new(DeterministicAgent::new(AgentShape::Q)),
+        (Some(_), Some(_)) => unreachable!("validated by main"),
     };
     let mut lines = BufReader::new(tokio::io::stdin()).lines();
     let mut stdout = tokio::io::stdout();
@@ -307,7 +318,7 @@ async fn run_shared(agent_state_file: Option<PathBuf>) -> Result<(), Box<dyn std
             write_value(&mut stdout, &response).await?;
             continue;
         }
-        if let Some(response) = shared_capability_probe(&agent, &raw).await? {
+        if let Some(response) = shared_capability_probe(agent.as_ref(), &raw).await? {
             write_value(&mut stdout, &response).await?;
             continue;
         }
@@ -362,11 +373,9 @@ async fn run_shared(agent_state_file: Option<PathBuf>) -> Result<(), Box<dyn std
 async fn run_isolated(
     worker: PathBuf,
     agent_state_file: Option<PathBuf>,
+    agent_address: Option<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let mut bridge = match &agent_state_file {
-        Some(path) => ProcessBridge::spawn_with_state_file(&worker, path).await?,
-        None => ProcessBridge::spawn(&worker).await?,
-    };
+    let mut bridge = spawn_isolated_bridge(&worker, &agent_state_file, &agent_address).await?;
     let mut lines = BufReader::new(tokio::io::stdin()).lines();
     let mut stdout = tokio::io::stdout();
 
@@ -424,14 +433,24 @@ async fn run_isolated(
             WorkerRequest::Ping => WorkerResponse::Pong,
             WorkerRequest::AbortHost => {
                 bridge.abort_host().await?;
-                bridge = match &agent_state_file {
-                    Some(path) => ProcessBridge::spawn_with_state_file(&worker, path).await?,
-                    None => ProcessBridge::spawn(&worker).await?,
-                };
+                bridge = spawn_isolated_bridge(&worker, &agent_state_file, &agent_address).await?;
                 WorkerResponse::Pong
             }
         };
         write_response(&mut stdout, response).await?;
     }
     Ok(())
+}
+
+async fn spawn_isolated_bridge(
+    worker: &PathBuf,
+    agent_state_file: &Option<PathBuf>,
+    agent_address: &Option<String>,
+) -> Result<ProcessBridge, Box<dyn std::error::Error>> {
+    Ok(match (agent_address, agent_state_file) {
+        (Some(address), None) => ProcessBridge::spawn_with_agent_address(worker, address).await?,
+        (None, Some(path)) => ProcessBridge::spawn_with_state_file(worker, path).await?,
+        (None, None) => ProcessBridge::spawn(worker).await?,
+        (Some(_), Some(_)) => unreachable!("validated by main"),
+    })
 }

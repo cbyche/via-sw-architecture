@@ -1,0 +1,52 @@
+{
+  "fixture_id": "DP11-NORMAL-v1",
+  "synthetic_context": {
+    "conversation_id": "CONV-BUDGET-01",
+    "visible_document": "doc-budget",
+    "document_summary": "2026년 교육 예산은 1억 원이며 상반기 집행률은 62%다. 외부 교육비가 계획보다 12% 높다.",
+    "active_tasks": {
+      "T-PPT": "예산 발표자료 작성 중",
+      "T-MAIL": "교육 일정 메일 검색 중"
+    },
+    "pending_question": {
+      "task_id": "T-PPT",
+      "question_id": "Q-FORMAT",
+      "text": "발표자료를 5장으로 만들까요?"
+    }
+  },
+  "cases": [
+    {"id":"N1-01","family":"N-01","kind":"direct","input":"이 예산표의 핵심 결론을 알려줘","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"},"qa":["QA-02","QA-11","QA-12","QA-61"]},
+    {"id":"N1-02","family":"N-01","kind":"direct","input":"외부 교육비가 계획보다 얼마나 높은지 말해줘","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"},"qa":["QA-02","QA-11","QA-12","QA-61"]},
+    {"id":"N1-03","family":"N-01","kind":"direct","input":"상반기 예산 집행률만 짧게 알려줘","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"},"qa":["QA-02","QA-11","QA-12","QA-61"]},
+    {"id":"N1-04","family":"N-01","kind":"direct_followup","input":"방금 결론을 한 문장으로 다시 말해줘","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"},"qa":["QA-02","QA-11","QA-12","QA-15","QA-61"]},
+
+    {"id":"N2-01","family":"N-02","kind":"delegate","input":"이 예산 보고서의 결론으로 5장 발표자료를 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N2-02","family":"N-02","kind":"delegate","input":"이 문서의 예산 위험을 정리한 보고서 파일을 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N2-03","family":"N-02","kind":"delegate","input":"현재 예산표를 바탕으로 경영진용 요약 슬라이드를 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N2-04","family":"N-02","kind":"delegate","input":"교육비 초과 원인을 조사해서 비교 보고서로 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-61"]},
+
+    {"id":"N3-01","family":"N-03","kind":"delegate","input":"그 문서로 발표자료를 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N3-02","family":"N-03","kind":"follow_up","input":"거기에 결론 한 장 더 넣어줘","expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"},"qa":["QA-01","QA-05","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N3-03","family":"N-03","kind":"clarification","input":"그거 취소해줘","expected":{"route":"clarify","task_relation":"ambiguous","target_task":null,"action":"clarify"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N3-04","family":"N-03","kind":"delegate","input":"지난번 발표자료 결과를 참고해서 별도의 예산 보고서를 만들어줘","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"},"qa":["QA-01","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N3-05","family":"N-03","kind":"answer_question","input":"응, 5장으로 만들어줘","expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"answer_question"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+
+    {"id":"N4-01","family":"N-04","kind":"progress","input":null,"expected":{"route":"event","task_relation":"existing","target_task":"T-PPT","action":"progress"},"qa":["QA-03","QA-11","QA-13","QA-14","QA-61"]},
+    {"id":"N4-02","family":"N-04","kind":"agent_question","input":null,"expected":{"route":"event","task_relation":"existing","target_task":"T-PPT","action":"question"},"qa":["QA-03","QA-11","QA-13","QA-14","QA-61"]},
+    {"id":"N4-03","family":"N-04","kind":"answer_question","input":"표 형식으로 정리해줘","expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"answer_question"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N4-04","family":"N-04","kind":"follow_up","input":"텍스트로 결론 한 줄만 먼저 보여줘","expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N4-05","family":"N-04","kind":"result","input":null,"expected":{"route":"event","task_relation":"existing","target_task":"T-PPT","action":"result"},"qa":["QA-01","QA-11","QA-13","QA-14","QA-61"]},
+    {"id":"N4-06","family":"N-04","kind":"failure","input":null,"expected":{"route":"event","task_relation":"existing","target_task":"T-PPT","action":"failure"},"qa":["QA-03","QA-11","QA-13","QA-14","QA-61"]},
+
+    {"id":"N5-01","family":"N-05","kind":"cancel","input":"메일 검색은 취소하고 발표자료는 계속해줘","expected":{"route":"control","task_relation":"existing","target_task":"T-MAIL","action":"cancel"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-14","QA-61"]},
+    {"id":"N5-02","family":"N-05","kind":"follow_up","input":"발표자료에 결론 한 장 추가해줘","expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"},"qa":["QA-01","QA-05","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N5-03","family":"N-05","kind":"query","input":"메일 검색은 어디까지 됐어?","expected":{"route":"control","task_relation":"existing","target_task":"T-MAIL","action":"query"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N5-04","family":"N-05","kind":"reordered_results","input":null,"expected":{"route":"event","task_relation":"existing","target_task":"MULTIPLE","action":"reordered_results"},"qa":["QA-11","QA-13","QA-14","QA-61"]},
+    {"id":"N5-05","family":"N-05","kind":"cancel_completion_race","input":"발표자료 작업 취소해줘","expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"cancel_race"},"qa":["QA-05","QA-11","QA-12","QA-13","QA-14","QA-61"]},
+
+    {"id":"N6-01","family":"N-06","kind":"barge_in_direct","input":"잠깐, 결론만 말해줘","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"barge_in"},"qa":["QA-02","QA-04","QA-11","QA-12","QA-61"]},
+    {"id":"N6-02","family":"N-06","kind":"barge_in_result","input":"잠깐, 파일 이름만 알려줘","expected":{"route":"direct","task_relation":"existing","target_task":"T-PPT","action":"barge_in"},"qa":["QA-04","QA-11","QA-12","QA-13","QA-15","QA-61"]},
+    {"id":"N6-03","family":"N-06","kind":"barge_in_status","input":"잠깐, 지금 몇 퍼센트야?","expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"barge_in_query"},"qa":["QA-03","QA-04","QA-05","QA-11","QA-12","QA-13","QA-61"]},
+    {"id":"N6-04","family":"N-06","kind":"barge_in_correction","input":"아니, 메일 말고 발표자료 작업을 취소해줘","expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"cancel"},"qa":["QA-04","QA-05","QA-11","QA-12","QA-13","QA-14","QA-61"]}
+  ]
+}

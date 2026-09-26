@@ -28,7 +28,7 @@
 | Privacy & Security | QA-51 |
 | Observability | QA-61/62 |
 
-현재 확정된 ASR은 없다.
+현재 확정된 ASR은 없다. QA-01, 02, 05, 11, 12, 21, 22, 31, 32, 61은 [Core Evaluation Profile](../11-measurement/evaluation-profile.md)의 `CANDIDATE` working set이다.
 
 ## Interpretation rules
 

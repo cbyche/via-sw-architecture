@@ -1,0 +1,80 @@
+{
+  "fixture_id": "VIA-DP-06-SEMANTIC-INPUT-v4",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "purpose": "Compare semantic authority with identical canonical Context Evidence; this fixture does not execute a Context Engine.",
+  "request_revision": 8,
+  "context_contract": {
+    "mode": "canonical_evidence_replay",
+    "same_input_for_all_candidates": true,
+    "actual_pc_capture": false,
+    "note": "Sources and interaction events are synthetic outputs that a common Context Engine is assumed to have produced."
+  },
+  "evidence": {
+    "conversation_id": "CONV-BUDGET-01",
+    "sources": [
+      {"source_id":"screen","version":"42","target_id":"doc-budget","content":"2026년 교육 예산은 1억 원이며 상반기 집행률은 62%다. 외부 교육비가 계획보다 12% 높다."},
+      {"source_id":"screen","version":"42","target_id":"para-A","content":"외부 교육비 초과 원인을 다음 분기 계획에 반영해야 한다."},
+      {"source_id":"screen","version":"42","target_id":"para-B","content":"다음 분기에는 외부 교육 횟수를 조정하고 내부 교육을 확대한다."},
+      {"source_id":"screen","version":"42","target_id":"chart-A","content":"2025년 교육 예산 1억 원"},
+      {"source_id":"screen","version":"42","target_id":"chart-B","content":"2026년 교육 예산 1억2천만 원"},
+      {"source_id":"screen","version":"42","target_id":"table-A","content":"상반기 집행률 62%"},
+      {"source_id":"screen","version":"42","target_id":"table-B","content":"하반기 예상 집행률 91%"},
+      {"source_id":"screen","version":"18","target_id":"doc-quote-A","content":"A사 교육 견적서: 총액 500만원, 유효기간 30일"},
+      {"source_id":"screen","version":"7","target_id":"doc-quote-B","content":"B사 교육 견적서: 총액 480만원, 유효기간 14일"},
+      {"source_id":"calendar","version":"2026-09-26T09:00:00+09:00","target_id":"today-afternoon","content":"오늘 오후 3시는 비어 있다."},
+      {"source_id":"history","version":"12","target_id":"previous-budget-conclusion","content":"예산의 핵심 결론은 외부 교육비가 계획보다 12% 높다는 점이다."},
+      {"source_id":"history","version":"13","target_id":"previous-budget-summary","content":"교육 예산 증가와 외부 교육비 초과 원인을 요약했다."},
+      {"source_id":"artifact","version":"5","target_id":"art-PPT","content":"완료된 5장짜리 예산 발표자료"},
+      {"source_id":"archive","version":"3","target_id":"doc-budget-old","content":"2025년 교육 예산안 초안"}
+    ],
+    "interaction_events": [
+      {"event_id":"EV-SELECT-CHARTS","kind":"selection","occurred_ms":1000,"target_ids":["chart-A","chart-B"]},
+      {"event_id":"EV-POINT-A","kind":"pointer","occurred_ms":1000,"target_ids":["para-A"]},
+      {"event_id":"EV-CORRECT-B","kind":"pointer_correction","occurred_ms":1800,"withdrawn_target_ids":["para-A"],"target_ids":["para-B"]},
+      {"event_id":"EV-MIXED-ROLE","kind":"selection_roles","occurred_ms":1000,"preserve_target_ids":["table-A","table-B"],"modify_target_ids":["para-B"]}
+    ],
+    "tasks": [
+      {"task_id":"T-PPT","task_view_revision":8,"state":"running","description":"doc-budget 기반 예산 발표자료 작성 중","user_aliases":["발표자료","예산 발표자료"],"capability":"document_authoring","input_target_ids":["doc-budget"]},
+      {"task_id":"T-MAIL","task_view_revision":3,"state":"running","description":"교육 일정 메일 검색 중","user_aliases":["메일","메일 검색"],"capability":"mail_search","input_target_ids":[]},
+      {"task_id":"T-PPT-DONE","task_view_revision":11,"state":"completed","description":"doc-budget 기반 예산 발표자료 완료","user_aliases":["완성 발표자료","완성한 발표자료"],"capability":"document_authoring","input_target_ids":["doc-budget"],"artifact_target_ids":["art-PPT"]}
+    ],
+    "pending_interactions": [
+      {"pending_interaction_id":"Q-FORMAT","task_id":"T-PPT","kind":"question","text":"발표자료를 5장으로 만들까요?"},
+      {"pending_interaction_id":"P-SEND-PPT","task_id":"T-PPT","kind":"approval","text":"발표자료 외부 전송을 승인할까요?"},
+      {"pending_interaction_id":"P-SEND-MAIL","task_id":"T-MAIL","kind":"approval","text":"검색된 메일 전달을 승인할까요?"}
+    ],
+    "capabilities": [
+      {"id":"document_authoring","description":"문서·발표자료 생성과 수정"},
+      {"id":"mail_search","description":"메일 검색"},
+      {"id":"desktop_control","description":"앱 저장·창 닫기"},
+      {"id":"email_send","description":"이메일 발송"},
+      {"id":"calendar_write","description":"일정 생성"}
+    ]
+  },
+  "cases": [
+    {"id":"TC-D01","uc_ids":["UC-02.1"],"qa_latency":"QA-02","request":"이 예산표의 핵심 결론을 알려줘","source_ids":["doc-budget"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"예산표의 핵심 결론은 외부 교육비가 계획보다 12퍼센트 높다는 점입니다."},
+    {"id":"TC-D02","uc_ids":["UC-05.3"],"qa_latency":"QA-02","request":"방금 결론을 한 문장으로 다시 말해줘","source_ids":["previous-budget-conclusion"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"외부 교육비 초과가 현재 예산의 핵심 위험입니다."},
+    {"id":"TC-W01","uc_ids":["UC-08.2"],"qa_latency":"QA-01","request":"이 예산안으로 5장 발표자료를 만들어줘","source_ids":["doc-budget"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"예산안을 바탕으로 다섯 장 발표자료 작업을 시작했습니다."},
+    {"id":"TC-W02","uc_ids":["UC-10.3"],"qa_latency":"QA-01","request":"거기에 결론 한 장 더 넣어줘","source_ids":[],"event_ids":[],"task_ids":["T-PPT"],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"진행 중인 발표자료 작업에 결론 한 장 추가를 전달했습니다."},
+    {"id":"TC-W03","uc_ids":["UC-14.5"],"qa_latency":"QA-05","request":"그거 취소해줘","source_ids":[],"event_ids":[],"task_ids":["T-PPT","T-MAIL"],"pending_ids":[],"capability_ids":[],"spoken_result":"발표자료와 메일 검색 중 어느 작업을 취소할지 알려주세요."},
+    {"id":"TC-W04","uc_ids":["UC-06.4"],"qa_latency":"QA-05","request":"응, 5장으로 만들어줘","source_ids":[],"event_ids":[],"task_ids":["T-PPT"],"pending_ids":["Q-FORMAT"],"capability_ids":["document_authoring"],"spoken_result":"발표자료를 다섯 장으로 만들도록 답변을 전달했습니다."},
+    {"id":"TC-C01","uc_ids":["UC-14.1"],"qa_latency":"QA-05","request":"메일 검색은 취소하고 발표자료는 계속해줘","source_ids":[],"event_ids":[],"task_ids":["T-PPT","T-MAIL"],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"메일 검색만 취소 요청했고 발표자료 작업은 계속 진행합니다."},
+    {"id":"TC-C02","uc_ids":["UC-10.2"],"qa_latency":"QA-05","request":"메일 검색은 어디까지 됐어?","source_ids":[],"event_ids":[],"task_ids":["T-MAIL"],"pending_ids":[],"capability_ids":[],"spoken_result":"메일 검색 작업의 현재 상태를 확인했습니다."},
+    {"id":"TC-C03","uc_ids":["UC-11.5"],"qa_latency":"QA-05","request":"아니, 메일 말고 발표자료 작업을 취소해줘","source_ids":[],"event_ids":[],"task_ids":["T-PPT","T-MAIL"],"pending_ids":[],"capability_ids":[],"spoken_result":"메일 검색은 유지하고 발표자료 작업만 취소 요청했습니다."},
+    {"id":"TC-P01","uc_ids":["UC-09.1"],"qa_latency":"QA-02","request":"이 문단을 요약하고 오늘 오후 일정도 알려줘","source_ids":["para-A","today-afternoon"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"문단 요약과 오늘 오후 일정을 각각 확인했습니다."},
+    {"id":"TC-P02","uc_ids":["UC-09.2"],"qa_latency":"QA-01","request":"이 문서를 저장한 다음 창을 닫아줘","source_ids":["doc-budget"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":["desktop_control"],"spoken_result":"문서를 저장한 뒤 창을 닫는 순서로 작업을 맡겼습니다."},
+    {"id":"TC-P03","uc_ids":["UC-09.3"],"qa_latency":"QA-01","request":"예산안을 요약한 뒤 그 요약을 김대리에게 보내줘","source_ids":["doc-budget"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":["document_authoring","email_send"],"spoken_result":"예산안 요약 결과를 김대리에게 보내는 순서로 작업을 맡겼습니다."},
+    {"id":"TC-G01","uc_ids":["UC-03.2"],"qa_latency":"QA-02","request":"이것들 차이를 정리해줘","source_ids":["chart-A","chart-B"],"event_ids":["EV-SELECT-CHARTS"],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"두 차트의 예산 차이를 정리했습니다."},
+    {"id":"TC-G02","uc_ids":["UC-04.6","UC-11.3"],"qa_latency":"QA-02","request":"이 부분 아니 여기만 설명해줘","source_ids":["para-A","para-B"],"event_ids":["EV-POINT-A","EV-CORRECT-B"],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"정정해서 가리킨 두 번째 문단만 설명했습니다."},
+    {"id":"TC-G03","uc_ids":["UC-04.5"],"qa_latency":"QA-01","request":"이 표들은 두고 이 문단만 고쳐줘","source_ids":["table-A","table-B","para-B"],"event_ids":["EV-MIXED-ROLE"],"task_ids":[],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"두 표는 유지하고 지정한 문단만 수정하도록 맡겼습니다."},
+    {"id":"TC-Q01","uc_ids":["UC-06.2"],"qa_latency":"QA-02","request":"그 견적서 요약해줘","source_ids":["doc-quote-A","doc-quote-B"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"A사와 B사 견적서 중 어느 것을 말하는지 알려주세요."},
+    {"id":"TC-T01","uc_ids":["UC-07.2"],"qa_latency":"QA-01","request":"아까 예산안 요약으로 발표자료 만들어줘","source_ids":["previous-budget-summary"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"앞서 요약한 예산안을 바탕으로 새 발표자료 작업을 시작했습니다."},
+    {"id":"TC-T02","uc_ids":["UC-10.4"],"qa_latency":"QA-01","request":"완성한 발표자료에 한 장 더 추가해줘","source_ids":["art-PPT"],"event_ids":[],"task_ids":["T-PPT-DONE"],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"완료된 발표자료 Task에 새 수정 실행을 연결했습니다."},
+    {"id":"TC-T03","uc_ids":["UC-10.5"],"qa_latency":"QA-01","request":"완성 발표자료를 참고해서 별도 회의록 파일 만들어줘","source_ids":["art-PPT"],"event_ids":[],"task_ids":["T-PPT-DONE"],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"완성 발표자료를 참조하는 별도 회의록 Task를 만들었습니다."},
+    {"id":"TC-P04","uc_ids":["UC-09.4"],"qa_latency":"QA-01","request":"오늘 3시가 비었으면 회의를 만들고 아니면 알려주기만 해","source_ids":["today-afternoon"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":["calendar_write"],"spoken_result":"오늘 세 시가 비어 있어 회의 생성 작업을 맡겼습니다."},
+    {"id":"TC-A01","uc_ids":["UC-16.5"],"qa_latency":"QA-05","request":"응","source_ids":[],"event_ids":[],"task_ids":["T-PPT","T-MAIL"],"pending_ids":["P-SEND-PPT","P-SEND-MAIL"],"capability_ids":[],"spoken_result":"어느 승인 요청에 답한 것인지 알려주세요."},
+    {"id":"TC-E01","uc_ids":["UC-18.1"],"qa_latency":"QA-02","request":"없는자료.pdf 읽어줘","source_ids":[],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"해당 자료가 없어 읽을 수 없습니다."},
+    {"id":"TC-E02","uc_ids":["UC-18.3"],"qa_latency":"QA-01","request":"발표자료 만들어줘","source_ids":["doc-budget"],"event_ids":[],"task_ids":[],"pending_ids":[],"capability_ids":[],"spoken_result":"현재 발표자료를 만들 수 있는 Agent가 없습니다."},
+    {"id":"TC-X01","uc_ids":["UC-05.4","UC-10.3"],"qa_latency":"QA-01","request":"아까 그 예산안에 결론 한 장 더 넣어줘","source_ids":["doc-budget","doc-budget-old"],"event_ids":[],"task_ids":["T-PPT"],"pending_ids":[],"capability_ids":["document_authoring"],"spoken_result":"진행 중인 현재 예산안 발표자료에 결론 한 장 추가를 전달했습니다."}
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "contract_id": "QA01-15-FOUNDATION-v1",
+  "status": "HARNESS_QUALIFICATION_REQUIRED",
+  "clock": "single-trial monotonic nanoseconds",
+  "latency_failure_treatment": {
+    "missing_or_invalid_endpoint": "score frozen timeout and mark censored",
+    "correctness_failure": "preserve observed response latency and report correctness failure separately",
+    "successful_sample_filtering": "forbidden"
+  },
+  "latency": {
+    "QA-01": {
+      "timeout_ms": 10000,
+      "formula": "(agent_request_available_at_agent_ingress-user_input_end)+(first_meaningful_audible_result_audio-agent_result_available_at_source)",
+      "required_events": [
+        "user_input_end",
+        "agent_request_available_at_agent_ingress",
+        "agent_result_available_at_source",
+        "first_meaningful_audible_result_audio"
+      ],
+      "required_endpoint_provenance": {
+        "user_input_end": ["annotated_capture_wav"],
+        "first_meaningful_audible_result_audio": ["audio_loopback"]
+      },
+      "forbidden_endpoint_provenance": ["payload_delivery", "renderer_callback", "queue_operation", "api_return"]
+    },
+    "QA-02": {
+      "timeout_ms": 10000,
+      "formula": "first_meaningful_audible_direct_response-user_input_end",
+      "required_events": ["user_input_end", "first_meaningful_audible_direct_response"],
+      "required_endpoint_provenance": {
+        "user_input_end": ["annotated_capture_wav"],
+        "first_meaningful_audible_direct_response": ["audio_loopback"]
+      },
+      "forbidden_endpoint_provenance": ["payload_delivery", "renderer_callback", "queue_operation", "api_return"]
+    },
+    "QA-03": {
+      "timeout_ms": 5000,
+      "formula": "first_meaningful_audible_status_audio-agent_status_available_at_source",
+      "required_events": ["agent_status_available_at_source", "first_meaningful_audible_status_audio"],
+      "required_endpoint_provenance": {
+        "agent_status_available_at_source": ["reference_agent_source"],
+        "first_meaningful_audible_status_audio": ["audio_loopback"]
+      },
+      "forbidden_endpoint_provenance": ["via_receive", "payload_delivery", "renderer_callback", "queue_operation"]
+    },
+    "QA-04": {
+      "timeout_ms": 2000,
+      "formula": "interrupted_response_last_audible_sample-barge_in_speech_onset",
+      "required_events": ["barge_in_speech_onset", "interrupted_response_last_audible_sample"],
+      "required_endpoint_provenance": {
+        "barge_in_speech_onset": ["annotated_capture_wav"],
+        "interrupted_response_last_audible_sample": ["audio_loopback"]
+      },
+      "forbidden_endpoint_provenance": ["queue_operation", "cancel_return", "renderer_callback", "api_return"]
+    },
+    "QA-05": {
+      "timeout_ms": 5000,
+      "formula": "correct_task_control_disposition_presented-task_control_input_end",
+      "required_events": ["task_control_input_end", "correct_task_control_disposition_presented"],
+      "required_endpoint_provenance": {
+        "task_control_input_end": ["annotated_capture_wav", "text_submit"],
+        "correct_task_control_disposition_presented": ["audio_loopback", "ui_commit"]
+      },
+      "required_path_stages": ["input_finalization", "semantic_target_resolution", "task_binding", "control_delivery", "truthful_disposition"],
+      "forbidden_endpoint_provenance": ["local_enqueue", "ipc_write", "api_return", "renderer_callback"]
+    }
+  },
+  "correctness": {
+    "QA-11": {
+      "metric": "100 * mean(case strict integrated PASS rate)",
+      "required_groups": ["response_or_result", "cardinality", "mandatory_gate"],
+      "driver_groups": {"semantic":"QA-12", "binding":"QA-13", "state":"QA-14", "continuity":"QA-15"},
+      "rule": "own predicates and every applicable driver pass; driver applicability or N/A must be explicit"
+    },
+    "QA-12": {
+      "metric": "strict semantic resolution PASS rate",
+      "required_groups": ["goal", "constraints", "deliverables", "referents", "decomposition", "clarification", "task_relation", "handling", "agent_capability"]
+    },
+    "QA-13": {
+      "metric": "strict interaction binding PASS rate",
+      "required_groups": ["conversation", "request", "task", "agent_execution", "pending_interaction", "result_artifact", "cardinality"]
+    },
+    "QA-14": {
+      "metric": "strict async state convergence PASS rate",
+      "required_groups": ["accepted_revision", "duplicate_suppression", "stale_rejection", "race_resolution", "terminality", "result_reference", "pending_interaction", "allowed_control"]
+    },
+    "QA-15": {
+      "metric": "strict continuity scenario PASS rate",
+      "required_groups": ["conversation_relation", "referent_relation", "task_relation", "channel_transition", "connection_transition"]
+    }
+  },
+  "oracle_operators": [
+    "EXACT",
+    "ONE_OF",
+    "SET_EQUAL",
+    "ORDERED_RELATION",
+    "REQUIRED_PROPOSITION",
+    "FORBIDDEN_PROPOSITION",
+    "CLARIFICATION_REQUIRED",
+    "BINDING",
+    "CARDINALITY",
+    "FINAL_STATE_EQUAL",
+    "CONTINUITY_RELATION"
+  ],
+  "aggregation": {
+    "latency": "nearest-rank p95 per case, maximum case p95",
+    "correctness": "100 * mean(case PASS trials / all scored trials)",
+    "latency_warmups_per_case": 10,
+    "latency_scored_trials_per_case": 100,
+    "semantic_trials_per_case": 3,
+    "state_trials_per_stratum": 20,
+    "continuity_trials_per_scenario": 10
+  },
+  "qualification_gate": {
+    "normal_trace_must_pass": true,
+    "each_mutation_must_fail_with_expected_code": true,
+    "default_pass_for_missing_predicate": false,
+    "dp_campaign_allowed_only_after_gate": true
+  }
+}

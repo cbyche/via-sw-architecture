@@ -1,0 +1,174 @@
+{
+  "run_id": "dp11-pilot-v2-20260926",
+  "created_at_utc": "2026-09-26T10:50:21.404679Z",
+  "contract": "benchmark/architecture/contracts/via-dp-11-pilot-v2.json",
+  "contract_sha256": "76e19385228f25a78a866e4fd51ad6b793eb2ac66210222273d6af37b6ec0f42",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "target": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "processor": "arm",
+    "macos": "26.5.1"
+  },
+  "git": {
+    "head": "35f57e352b83323a42ab19f0671627b3dc6e23db",
+    "status_porcelain": "M benchmark/architecture/README.md\n M docs/architecture/06-fixed-assumptions.md\n M docs/architecture/07-intentional-variables.md\n M docs/architecture/08-quality-attributes/README.md\n M docs/architecture/08-quality-attributes/evidence/grounding-oracle-evidence.md\n M docs/architecture/08-quality-attributes/evidence/qwen3-omni-s2s-latency-evidence.md\n M docs/architecture/08-quality-attributes/evidence/voice-model-latency-evidence.md\n M docs/architecture/08-quality-attributes/quality-model.md\n M docs/architecture/08-quality-attributes/reliability-and-resource.md\n M docs/architecture/08-quality-attributes/voice-responsiveness.md\n M docs/architecture/11-measurement/README.md\n M docs/architecture/11-measurement/test-case-catalog.md\n M docs/architecture/12-decisions/dp-executive-summary.md\n M docs/architecture/12-decisions/evaluation-method.md\n M docs/architecture/12-decisions/via-dp-11-process-isolation.md\n M docs/architecture/README.md\n M prototypes/candidates/bench/src/exec_recovery.rs\n M prototypes/candidates/bench/src/main.rs\n M scripts/architecture/README.md\n?? benchmark/architecture/contracts/\n?? benchmark/architecture/run_dp11_pilot.py\n?? docs/architecture/11-measurement/evaluation-profile.md\n?? results/architecture-evaluation/current/dp11-pilot-v1-20260926/\n?? results/architecture-evaluation/current/dp11-pilot-v2-20260926/\n?? scripts/architecture/smoke_alibaba_s2s.py\n?? scripts/architecture/start_local_semantic_model.sh"
+  },
+  "binaries": {
+    "via-bench": "960b78f5383853dc8ac4531b9870e6ff47dc47ac3b430c958ff67a6c41133554",
+    "via-host": "3f564b8a0600816216c400a2e7e8b55fcacf70a31df4c816483cb4812db826dc",
+    "via-worker": "11683d0ac7b3c22fa463bce6f5dd7f86d1fcc637214bfe7badf2c211aa77b65d"
+  },
+  "commands": [
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "dp11-normal-diagnostic",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker",
+        "--trials",
+        "200",
+        "--warmup",
+        "20"
+      ],
+      "duration_ns": 734687750,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "qa09-integration-fatal",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker",
+        "--profile",
+        "dp11-pilot",
+        "--freeze-fingerprint",
+        "76e19385228f25a78a866e4fd51ad6b793eb2ac66210222273d6af37b6ec0f42"
+      ],
+      "duration_ns": 3922554459,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 27522459,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26203459,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26173333,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26551875,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 25982958,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26159875,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26356125,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26106583,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 25968000,
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-bench",
+        "exec-blast-smoke",
+        "--host",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-host",
+        "--worker",
+        "/Users/changbae/Workspace/via-sw-architecture/prototypes/candidates/target/debug/via-worker"
+      ],
+      "duration_ns": 26463000,
+      "stderr": ""
+    }
+  ]
+}

@@ -16,7 +16,7 @@
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
 - Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙으로 재구성된 사용자 검토 초안이며 active ID는 19개다.
-- ASR은 아직 선정하지 않았으며 Architecture 영향이 확인된 QA에 별도 번호 없이 표시한다.
+- 확정 ASR은 아직 없다. 우선 측정할 ASR 후보 10개는 [Core Evaluation Profile](./11-measurement/evaluation-profile.md)에 기록하며, Architecture 영향이 확인되면 기존 QA ID에 분류를 표시한다.
 - QA-01~05는 responsiveness, QA-11~15는 correctness/continuity, QA-21~23은 modifiability, QA-31/32는 reliability/availability, QA-41은 resource, QA-51은 privacy, QA-61/62는 observability를 다룬다. 새 harness와 결과는 아직 없다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.

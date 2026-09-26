@@ -141,6 +141,8 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 8. 선택안의 weakness
 9. 후보 정의 때 포함한 보완책과 남는 약점 설명. 결과 후 새 보완책을 발견하면 양쪽 적용 가능성을 검토하고 후보 version을 갱신하여 동일 metric 재평가
 
+QA-01~05의 발표 표는 p95 대표값 옆에 동일 표본의 평균과 sample count를 둔다. QA-11/12는 strict 성공 분자/분모와 field-level correctness를 함께 보여주되 field-level을 새 QA나 독립 가중치로 취급하지 않는다. 선택안에 tactic을 적용한 B′를 실제 실행했다면 complete table에 함께 두고, 실행하지 않은 QA는 A/B 값을 복사하지 않고 N/A로 표시한다.
+
 이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 active QA 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
 
 ## 7. A/B 측정 진입 전 남은 작업
@@ -154,4 +156,4 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 - evidence level
 - N/A 판정 규칙
 
-ASR은 아직 선정하지 않았다. 사용자 검토 중인 active QA의 scoring baseline과 DP별 구조 인과를 먼저 정리한 뒤, 별도 ID를 만들지 않고 해당 QA에 ASR 상태를 기록한다.
+확정 ASR은 아직 없다. [Core Evaluation Profile](../11-measurement/evaluation-profile.md)의 10개 `CANDIDATE`를 먼저 같은 campaign에서 측정하고 DP별 구조 인과와 실제 sensitivity를 확인한 뒤, 별도 ID를 만들지 않고 `CONFIRMED_ASR` 또는 다른 상태로 갱신한다.

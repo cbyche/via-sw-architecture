@@ -1,0 +1,73 @@
+{
+  "contract_id": "VIA-DP-06-EVALUATION-v4",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-06",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "candidates": ["A", "B", "B_PRIME"],
+  "candidate_meaning": {
+    "A": "one integrated semantic authority call",
+    "B": "three staged semantic authority calls",
+    "B_PRIME": "B plus a deterministic post-grounding fast-path tactic"
+  },
+  "fixed_context": {
+    "semantic_model": "one shared Qwen3-8B Q4_K_M GGUF local endpoint",
+    "input": "same generated request WAV and frozen evaluator annotation",
+    "context_engine": "out of scope; same frozen Context output fixture",
+    "agent": "same external Reference Agent process and TCP contract",
+    "voice_renderer": "same macOS Yuna renderer and BlackHole loopback",
+    "s2s": "not invoked; no S2S tool calling"
+  },
+  "fixture": "benchmark/architecture/fixtures/dp06-semantic-input-v4.json",
+  "oracle": "benchmark/architecture/fixtures/dp06-semantic-oracle-v4.json",
+  "change_exercises": "benchmark/architecture/fixtures/dp06-change-exercises-v4.json",
+  "foundation_contract": "benchmark/architecture/contracts/qa01-15-foundation-v1.json",
+  "repetitions": {
+    "scored_trials_per_case": 1,
+    "reason": "24-case breadth-first Architecture reference campaign; not production percentile qualification"
+  },
+  "aggregation": {
+    "latency_primary": "maximum scored case latency",
+    "latency_auxiliary": ["arithmetic mean", "actual full user wall clock", "all raw samples"],
+    "correctness_primary": "100 * mean(strict case pass)",
+    "correctness_auxiliary": ["field-level correctness", "strict case success", "all atomic observations"],
+    "changeability": "mean actually changed frozen Architecture Element files per executed exercise",
+    "traceability": "100 * complete traces / all scored traces",
+    "reproducibility": "100 only when a separate analyzer process reproduces the core-summary digest"
+  },
+  "substantive_response_oracle": true,
+  "physical_endpoint_timeout_ms": {
+    "QA-01": 60000,
+    "QA-02": 60000,
+    "QA-05": 60000
+  },
+  "latency_case_overrides": {
+    "TC-E02": "QA-02"
+  },
+  "timeout_policy": {
+    "physical_endpoint_missing": "score frozen timeout and mark censored",
+    "correctness_failure_with_observed_response": "preserve actual elapsed time and report correctness separately",
+    "wrong_non_agent_route_for_QA01": "when both Agent interval events are absent but user-input end and meaningful audible response are observed, use actual full response time; keep correctness failed",
+    "successful_sample_filtering": "forbidden"
+  },
+  "qa_applicability": {
+    "QA-01": "APPLICABLE_AGENT_RESULT_CASES",
+    "QA-02": "APPLICABLE_DIRECT_RESPONSE_CASES",
+    "QA-03": "N/A_DP06_DOES_NOT_CHANGE_STATUS_RECONNECTION",
+    "QA-04": "N/A_DP06_DOES_NOT_CHANGE_BARGE_IN_CONTROL",
+    "QA-05": "APPLICABLE_CONTROL_OR_DISPOSITION_CASES",
+    "QA-11": "APPLICABLE_ALL_CASES",
+    "QA-12": "APPLICABLE_ALL_CASES",
+    "QA-13": "APPLICABLE_ALL_CASES",
+    "QA-14": "N/A_NO_ASYNC_STATE_RACE_IN_THIS_DP",
+    "QA-15": "BLOCKED_DP06_PARTICIPATES_IN_FOLLOW_UP_SEMANTICS_BUT_THE_FROZEN_24_CASE_CORPUS_HAS_NO_CHANNEL_OR_RECONNECT_TRANSITION",
+    "QA-21": "BLOCKED_DP06_PARTICIPATES_IN_CAPABILITY_SEMANTICS_BUT_THE_FULL_A01_A09_CHANGE_PACK_IS_NOT_EXECUTABLE",
+    "QA-22": "BLOCKED_ONLY_TWO_DIAGNOSTIC_EXERCISES_EXIST_NOT_THE_REQUIRED_M01_M09_C01_C06_CLOSED_PACK",
+    "QA-23": "BLOCKED_ONLY_TWO_DIAGNOSTIC_EXERCISES_EXIST_NOT_THE_REQUIRED_E01_E05_CLOSED_PACK",
+    "QA-31": "BLOCKED_SEMANTIC_CALL_GRAPH_PARTICIPATES_IN_RETRY_RECOVERY_BUT_NO_FROZEN_FAULT_REPETITION_EXISTS",
+    "QA-32": "N/A_NO_FAULT_CONTAINMENT_BOUNDARY_DIFFERENCE",
+    "QA-41": "BLOCKED_CALL_GRAPH_AND_BUFFERS_PARTICIPATE_BUT_ISOLATED_TARGET_DEVICE_PEAK_MEMORY_P95_IS_NOT_IMPLEMENTED",
+    "QA-51": "N/A_NO_PROTECTED_INFORMATION_BOUNDARY_DIFFERENCE",
+    "QA-61": "APPLICABLE_ALL_CASES",
+    "QA-62": "APPLICABLE_CAMPAIGN_WIDE"
+  }
+}

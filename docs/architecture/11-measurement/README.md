@@ -1,8 +1,8 @@
 # Measurement Guide
 
-> **Current state:** active QA의 category와 single-metric semantic definitions가 있으며, machine contract, 일부 target/score band, harness와 current results는 없다.
+> **Current state:** active QA category와 single-metric semantic definitions가 있다. VIA-DP-06 v4와 VIA-DP-11 v4는 fail-closed 19-QA reference result를 만들었고, 나머지 DP의 machine contract·candidate·current result는 아직 없다.
 >
-> **Current phase: Measurement Contract Definition.** 현재는 사용자 검토 중인 QA catalog와 각 QA의 경계·조건·채점 방식을 확정하는 단계다. 후보 구현이나 A/B 실행 단계가 아니다.
+> **Current phase:** DP-06/11은 **A/B Measurement & Evaluation**, 나머지는 **Measurement Contract Definition 또는 Candidate Implementation**이다. DP마다 lifecycle 상태를 따로 관리한다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
@@ -11,6 +11,7 @@
 | Document | Role |
 | --- | --- |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
+| [QA-01~15 Common Harness Contract](./qa01-15-harness-contract.md) | DP 공통 trace·oracle·audio endpoint·sentinel qualification gate |
 | [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-04 semantic boundary and raw trace requirements |
 | [Task Control Responsiveness](../08-quality-attributes/interaction-control-responsiveness.md) | QA-05 control input and truthful disposition boundary |
 | [Correctness & Continuity](../08-quality-attributes/correctness-and-continuity.md) | QA-11~QA-15 predicate ownership and non-additive reporting |
@@ -18,6 +19,8 @@
 | [Observability](../08-quality-attributes/observability.md) | QA-61/62 trace completeness and evidence reproduction |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
+| [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 두 Model, Reference Agent, ASR 후보와 최소 workload/fault |
+| [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | VIA-DP-01~18 연속 평가의 실행 순서, 완결 조건과 진행 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
 외부 model 근거는 [Quality Attribute evidence](../08-quality-attributes/evidence/)에 둔다. 그 자료는 입력 profile이나 estimate를 정당화할 수 있지만 실행하지 않은 모델을 measured evidence로 만들지는 않는다.
@@ -46,7 +49,7 @@
 
 `Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
 
-현재 active QA는 위 `Required sequence`의 1~3에 해당하는 semantic draft까지만 진행됐고 일부 target/score는 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. DP-06/11의 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 
@@ -59,7 +62,7 @@
 | `MEASURED_MODEL` | named model actually executed | that model in the recorded environment |
 | `PRODUCT_E2E` | product path and required physical endpoints observed | recorded product/environment only |
 
-Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or `TARGET_WINDOWS_LATENCY`. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
+Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or target-device absolute latency. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
 
 ## QA-01~QA-05 implementation prerequisites
 
@@ -100,7 +103,16 @@ Qwen3-Omni 234 ms may be used only as a clearly labeled scheduled reference span
 
 - The catalog contains 18 approved UCs and 94 explicit variants, plus 24 change scenarios.
 - Synthetic fixtures and evaluator oracles exist in the [W12-G1 archive](../../../benchmark/archive/w12-g1/README.md).
-- Actual human recordings, Windows playback capture, current S2S/VIA LLM runs, and current DP A/B Voice results do not exist.
+- Actual human recordings, target-Mac playback capture와 current DP A/B Voice 결과는 없다. Local semantic LLM과 Alibaba S2S synthetic-WAV smoke evidence는 공식 QA run이 아니다.
+- VIA-DP-11 v3와 이전 pilot은 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)다. current Architecture 비교에는 v4 targeted result만 사용한다.
 - Archive assets may inform a new fixture review, but their old timing names, constants, target, score, and results are not inherited.
 
 Current implementation belongs in [benchmark/architecture](../../../benchmark/architecture/README.md). Valid current evidence belongs in [results/architecture-evaluation/current](../../../results/architecture-evaluation/current/README.md).
+
+## Result reporting and storage convention
+
+- 새 결과는 `results/architecture-evaluation/current/dpNN-<campaign>-vN-YYYYMMDD/`에 campaign별로 추가하며 기존 결과를 덮어쓰지 않는다.
+- `raw/`, frozen contract·fixture·oracle과 digest, environment/source manifest, 재생성 가능한 `summary.json`, `report.md`를 함께 보존한다.
+- QA-01~05는 p95 대표값과 같은 scored sample의 산술평균·sample count를 함께 보고한다. case당 1회 실행의 최대값은 p95로 부르지 않는다.
+- QA-11/12는 strict 대표값을 분자/분모와 함께, field-level correctness를 보조 진단으로 함께 보고한다. QA-11 integrated path를 실행하지 않았으면 QA-11은 N/A이며 semantic 값은 선행조건 proxy일 뿐이다.
+- B′ 같은 선택안+tactic 후보를 실행했다면 applicable QA의 complete table에 함께 표시한다. 별도 실행·ledger가 없으면 A/B 값을 복제하지 않고 N/A로 둔다.

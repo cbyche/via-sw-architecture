@@ -7,7 +7,7 @@
 
 Interaction Grounding은 가능한 경우 픽셀 근사보다 **UI/object identity와 event-time hit-test**를 우선한다.
 
-웹/GUI pointer event 모델은 pointer coordinate와 event target을 제공하고, target은 해당 좌표에서의 hit testing으로 정해진다. Windows pointer/mouse 입력도 화면 좌표와 timestamp를 관측할 수 있다. 따라서 fixture가 object identity를 제공할 수 있는 경우 임의의 ±pixel tolerance보다 "해당 시각에 어떤 target을 가리켰는가"가 더 직접적인 oracle이다.
+웹/GUI pointer event 모델은 pointer coordinate와 event target을 제공하고, target은 해당 좌표에서의 hit testing으로 정해진다. macOS pointer/mouse 입력도 화면 좌표와 timestamp를 관측할 수 있다. 따라서 fixture가 object identity를 제공할 수 있는 경우 임의의 ±pixel tolerance보다 "해당 시각에 어떤 target을 가리켰는가"가 더 직접적인 oracle이다.
 
 근거:
 - W3C Pointer Events: https://www.w3.org/TR/pointerevents3/

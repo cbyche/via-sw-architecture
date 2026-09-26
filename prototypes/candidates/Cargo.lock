@@ -190,80 +190,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
 
 [[package]]
-name = "via-bench"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "via-contracts",
- "via-fixture",
- "via-runtime",
- "serde_json",
- "tempfile",
- "tokio",
-]
-
-[[package]]
-name = "via-contracts"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "serde",
- "thiserror",
-]
-
-[[package]]
-name = "via-fixture"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "via-contracts",
- "serde",
- "serde_json",
- "tempfile",
- "tokio",
-]
-
-[[package]]
-name = "via-host"
-version = "0.1.0"
-dependencies = [
- "clap",
- "via-contracts",
- "via-fixture",
- "via-runtime",
- "serde_json",
- "tokio",
-]
-
-[[package]]
-name = "via-runtime"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-trait",
- "via-contracts",
- "via-fixture",
- "rusqlite",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "tokio",
-]
-
-[[package]]
-name = "via-worker"
-version = "0.1.0"
-dependencies = [
- "via-contracts",
- "via-fixture",
- "serde_json",
- "tokio",
-]
-
-[[package]]
 name = "getrandom"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -690,6 +616,91 @@ name = "vcpkg"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
+name = "via-bench"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "via-contracts",
+ "via-fixture",
+ "via-runtime",
+]
+
+[[package]]
+name = "via-contracts"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "via-fixture"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+ "via-contracts",
+]
+
+[[package]]
+name = "via-host"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "serde_json",
+ "tokio",
+ "via-contracts",
+ "via-fixture",
+ "via-runtime",
+]
+
+[[package]]
+name = "via-reference-agent"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "serde_json",
+ "tokio",
+ "via-contracts",
+ "via-fixture",
+]
+
+[[package]]
+name = "via-runtime"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "tokio",
+ "via-contracts",
+ "via-fixture",
+]
+
+[[package]]
+name = "via-worker"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
+ "tokio",
+ "via-contracts",
+ "via-fixture",
+]
 
 [[package]]
 name = "wasi"

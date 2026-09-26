@@ -1,0 +1,34 @@
+{
+  "fixture_id": "DP11-SEMANTIC-CONTEXT-v2",
+  "reason": "Case-specific Context prevents an unrelated pending question from contaminating every semantic request.",
+  "cases": {
+    "N1-01": {"active_tasks":{},"pending_question":null,"expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"}},
+    "N1-02": {"active_tasks":{},"pending_question":null,"expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"}},
+    "N1-03": {"active_tasks":{},"pending_question":null,"expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"}},
+    "N1-04": {"active_tasks":{},"pending_question":null,"previous_response":"예산의 핵심 결론은 외부 교육비가 계획보다 12% 높다는 점이다.","expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"}},
+
+    "N2-01": {"active_tasks":{},"pending_question":null,"expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+    "N2-02": {"active_tasks":{},"pending_question":null,"expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+    "N2-03": {"active_tasks":{},"pending_question":null,"expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+    "N2-04": {"active_tasks":{},"pending_question":null,"expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+
+    "N3-01": {"active_tasks":{},"pending_question":null,"expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+    "N3-02": {"active_tasks":{"T-PPT":"현재 예산 보고서로 발표자료 작성 중"},"pending_question":null,"expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"}},
+    "N3-03": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"clarify","task_relation":"ambiguous","target_task":null,"action":"clarify"}},
+    "N3-04": {"active_tasks":{},"pending_question":null,"previous_result":"지난번 발표자료 결과 artifact-old-ppt","expected":{"route":"delegate","task_relation":"new","target_task":null,"action":"create"}},
+    "N3-05": {"active_tasks":{"T-PPT":"발표자료 작성 중"},"pending_question":{"task_id":"T-PPT","question_id":"Q-FORMAT","text":"발표자료를 5장으로 만들까요?"},"expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"answer_question"}},
+
+    "N4-03": {"active_tasks":{"T-PPT":"발표자료 작성 중"},"pending_question":{"task_id":"T-PPT","question_id":"Q-FORMAT","text":"표 형식으로 정리할까요?"},"expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"answer_question"}},
+    "N4-04": {"active_tasks":{"T-PPT":"발표자료 작성 중"},"pending_question":null,"expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"}},
+
+    "N5-01": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-MAIL","action":"cancel"}},
+    "N5-02": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"delegate","task_relation":"existing","target_task":"T-PPT","action":"follow_up"}},
+    "N5-03": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-MAIL","action":"query"}},
+    "N5-05": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"cancel"}},
+
+    "N6-01": {"active_tasks":{},"pending_question":null,"expected":{"route":"direct","task_relation":"none","target_task":null,"action":"answer"}},
+    "N6-02": {"active_tasks":{"T-PPT":"발표자료 작성 완료; 결과 파일 budget.pptx"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"query"}},
+    "N6-03": {"active_tasks":{"T-PPT":"발표자료 작성 40% 진행 중"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"query"}},
+    "N6-04": {"active_tasks":{"T-PPT":"발표자료 작성 중","T-MAIL":"메일 검색 중"},"pending_question":null,"expected":{"route":"control","task_relation":"existing","target_task":"T-PPT","action":"cancel"}}
+  }
+}

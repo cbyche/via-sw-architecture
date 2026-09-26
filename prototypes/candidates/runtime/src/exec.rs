@@ -91,6 +91,15 @@ impl ProcessBridge {
         Self::spawn_command(command, worker.as_ref()).await
     }
 
+    pub async fn spawn_with_agent_address(
+        worker: impl AsRef<Path>,
+        agent_address: &str,
+    ) -> anyhow::Result<Self> {
+        let mut command = Command::new(worker.as_ref());
+        command.arg("--agent-address").arg(agent_address);
+        Self::spawn_command(command, worker.as_ref()).await
+    }
+
     async fn spawn_command(mut command: Command, worker: &Path) -> anyhow::Result<Self> {
         let mut child = command
             .stdin(std::process::Stdio::piped())

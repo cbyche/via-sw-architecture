@@ -44,6 +44,14 @@ enum Command {
         #[arg(long)]
         worker: PathBuf,
     },
+    Dp11NormalDiagnostic {
+        #[arg(long)]
+        worker: PathBuf,
+        #[arg(long, default_value_t = 200)]
+        trials: usize,
+        #[arg(long, default_value_t = 20)]
+        warmup: usize,
+    },
     S2sSmoke {
         #[arg(long)]
         trace: PathBuf,
@@ -107,6 +115,11 @@ async fn main() -> anyhow::Result<()> {
         Command::ExecSmoke { worker } => exec_smoke(worker).await?,
         Command::ExecAbortSmoke { worker } => exec_abort_smoke(worker).await?,
         Command::ExecBlastSmoke { host, worker } => exec_blast_smoke(host, worker).await?,
+        Command::Dp11NormalDiagnostic {
+            worker,
+            trials,
+            warmup,
+        } => dp11_normal_diagnostic(worker, trials, warmup).await?,
         Command::S2sSmoke { trace } => s2s_smoke(trace).await?,
         Command::BackgroundLoadSmoke => background_load_smoke().await?,
         Command::Qa09WholeRestartSmoke => recovery::whole_restart_smoke().await?,
@@ -283,6 +296,100 @@ async fn exec_abort_smoke(worker: PathBuf) -> anyhow::Result<serde_json::Value> 
     }))
 }
 
+fn elapsed_ns(start: std::time::Instant) -> u64 {
+    u64::try_from(start.elapsed().as_nanos()).unwrap_or(u64::MAX)
+}
+
+async fn dp11_bridge_trial(
+    bridge: &dyn IntegrationBridge,
+    candidate: &str,
+    trial: usize,
+    warmup: bool,
+) -> anyhow::Result<serde_json::Value> {
+    let request = SubmitRequest {
+        task_id: format!("DP11-NORMAL-{candidate}-{trial}"),
+        submission_key: format!("dp11-normal-{candidate}-{trial}"),
+        goal: "summarize the synthetic project update".into(),
+    };
+
+    let lifecycle_start = std::time::Instant::now();
+    let submit_start = std::time::Instant::now();
+    let accepted = bridge.submit(request).await?;
+    let submit_ns = elapsed_ns(submit_start);
+    let run = run_id(&accepted)?;
+
+    let query_start = std::time::Instant::now();
+    let _ = bridge.query(&run).await?;
+    let query_ns = elapsed_ns(query_start);
+
+    let events_start = std::time::Instant::now();
+    let events = bridge.events_since(&run, 0).await?;
+    let events_ns = elapsed_ns(events_start);
+    anyhow::ensure!(
+        !events.is_empty(),
+        "normal diagnostic lost initial Agent event"
+    );
+
+    let follow_up_start = std::time::Instant::now();
+    let _ = bridge
+        .follow_up(&run, "use the concise format".into())
+        .await?;
+    let follow_up_ns = elapsed_ns(follow_up_start);
+
+    let cancel_start = std::time::Instant::now();
+    let _ = bridge.cancel(&run).await?;
+    let cancel_ns = elapsed_ns(cancel_start);
+
+    Ok(serde_json::json!({
+        "candidate":candidate,
+        "trial":trial,
+        "warmup":warmup,
+        "submit_ns":submit_ns,
+        "query_ns":query_ns,
+        "events_since_ns":events_ns,
+        "follow_up_ns":follow_up_ns,
+        "cancel_ns":cancel_ns,
+        "full_lifecycle_ns":elapsed_ns(lifecycle_start),
+        "correctness_pass":true
+    }))
+}
+
+/// Measures only the VIA-owned Agent-client bridge subspan. It is deliberately
+/// diagnostic evidence, not QA-01/03/05 user-endpoint evidence.
+async fn dp11_normal_diagnostic(
+    worker: PathBuf,
+    trials: usize,
+    warmup: usize,
+) -> anyhow::Result<serde_json::Value> {
+    anyhow::ensure!(trials > 0, "DP-11 normal diagnostic requires scored trials");
+
+    let local = LocalBridge::new(Arc::new(DeterministicAgent::new(AgentShape::Q)));
+    let process = ProcessBridge::spawn(&worker).await?;
+    let mut runs = Vec::with_capacity((trials + warmup) * 2);
+
+    for candidate in ["same_process", "isolated_worker"] {
+        let bridge: &dyn IntegrationBridge = if candidate == "same_process" {
+            &local
+        } else {
+            &process
+        };
+        for index in 0..(warmup + trials) {
+            runs.push(dp11_bridge_trial(bridge, candidate, index + 1, index < warmup).await?);
+        }
+    }
+
+    Ok(serde_json::json!({
+        "status":"PASS",
+        "scope":"VIA-DP-11 normal Agent-client bridge subspan",
+        "evidence_label":"MEASURED_REFERENCE_HARNESS",
+        "metric_eligible":false,
+        "reason":"This excludes the frozen user/acoustic endpoints required by QA-01, QA-03, and QA-05.",
+        "trials_per_candidate":trials,
+        "warmup_per_candidate":warmup,
+        "runs":runs
+    }))
+}
+
 struct HostSession {
     child: Child,
     stdin: ChildStdin,
@@ -318,6 +425,17 @@ impl HostSession {
     }
 
     async fn request(&mut self, request: WorkerRequest) -> anyhow::Result<Option<WorkerResponse>> {
+        let value = self.request_value(serde_json::to_value(request)?).await?;
+        value
+            .map(serde_json::from_value)
+            .transpose()
+            .map_err(Into::into)
+    }
+
+    async fn request_value(
+        &mut self,
+        request: serde_json::Value,
+    ) -> anyhow::Result<Option<serde_json::Value>> {
         self.stdin
             .write_all(serde_json::to_string(&request)?.as_bytes())
             .await?;
@@ -328,6 +446,34 @@ impl HostSession {
             None => Ok(None),
         }
     }
+}
+
+async fn probe_independent_core_units(
+    session: &mut HostSession,
+) -> anyhow::Result<Vec<serde_json::Value>> {
+    let capabilities = [
+        ("direct_voice_interaction", "CAP-S2S-DIRECT"),
+        ("text_interaction", "CAP-TEXT-INTERACTION"),
+        ("unrelated_task_query_control", "CAP-LOCAL-TASK-CARD-READ"),
+        ("context_source_read", "CAP-BOUNDED-DOC-READ"),
+    ];
+    let mut observations = Vec::with_capacity(capabilities.len());
+    for (unit, capability) in capabilities {
+        let response = session
+            .request_value(serde_json::json!({
+                "op":"core_probe",
+                "capability":capability
+            }))
+            .await?;
+        let available = matches!(response, Some(ref value) if value["status"] == "core_probe");
+        observations.push(serde_json::json!({
+            "unit":unit,
+            "capability":capability,
+            "available":available,
+            "response":response
+        }));
+    }
+    Ok(observations)
 }
 
 async fn exec_blast_smoke(host: PathBuf, worker: PathBuf) -> anyhow::Result<serde_json::Value> {
@@ -372,6 +518,13 @@ async fn exec_blast_smoke(host: PathBuf, worker: PathBuf) -> anyhow::Result<serd
         isolated.child.try_wait()?.is_none(),
         "isolated Core host exited after integration worker fatal fault"
     );
+    let isolated_independent_unit_probes = probe_independent_core_units(&mut isolated).await?;
+    anyhow::ensure!(
+        isolated_independent_unit_probes
+            .iter()
+            .all(|probe| probe["available"] == true),
+        "isolated Core lost an independent user-visible unit"
+    );
 
     Ok(serde_json::json!({
         "status":"PASS",
@@ -380,6 +533,8 @@ async fn exec_blast_smoke(host: PathBuf, worker: PathBuf) -> anyhow::Result<serd
         "shared_exit_success":shared_status.success(),
         "isolated_core_host_survived":true,
         "isolated_worker_restarted":true,
+        "shared_independent_unit_probes":"UNAVAILABLE_BECAUSE_CORE_PROCESS_EXITED",
+        "isolated_independent_unit_probes":isolated_independent_unit_probes,
         "benchmark":"NOT_RUN"
     }))
 }

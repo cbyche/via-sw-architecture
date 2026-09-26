@@ -7,9 +7,14 @@ use std::{
     sync::{Arc, Mutex},
     time::{Duration, Instant},
 };
+use tokio::{
+    io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
+    net::TcpStream,
+};
 use via_contracts::{
     AgentBackend, AgentError, CapabilityProfile, NativeEvent, NativeReply, PEvent, PEventKind,
-    PReply, QEvent, QEventKind, QReply, SubmitRequest,
+    PReply, QEvent, QEventKind, QReply, ReferenceAgentRequest, ReferenceAgentResponse,
+    SubmitRequest,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -557,6 +562,148 @@ impl AgentBackend for DeterministicAgent {
             })
             .cloned()
             .collect())
+    }
+}
+
+/// Client for the external Reference Agent runtime. A fresh TCP connection is
+/// used for each operation so connection lifetime is not a hidden candidate
+/// difference; both DP-11 candidates use this same implementation.
+#[derive(Clone)]
+pub struct RemoteReferenceAgent {
+    address: Arc<String>,
+}
+
+impl RemoteReferenceAgent {
+    pub fn new(address: impl Into<String>) -> Self {
+        Self {
+            address: Arc::new(address.into()),
+        }
+    }
+
+    async fn request(
+        &self,
+        request: ReferenceAgentRequest,
+    ) -> Result<ReferenceAgentResponse, AgentError> {
+        let mut stream = TcpStream::connect(self.address.as_str())
+            .await
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        let encoded =
+            serde_json::to_vec(&request).map_err(|error| AgentError::Backend(error.to_string()))?;
+        stream
+            .write_all(&encoded)
+            .await
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        stream
+            .write_all(b"\n")
+            .await
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        stream
+            .flush()
+            .await
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+
+        let mut line = String::new();
+        BufReader::new(stream)
+            .read_line(&mut line)
+            .await
+            .map_err(|error| AgentError::Backend(error.to_string()))?;
+        if line.is_empty() {
+            return Err(AgentError::Backend(
+                "Reference Agent closed without a response".into(),
+            ));
+        }
+        serde_json::from_str(&line).map_err(|error| AgentError::Backend(error.to_string()))
+    }
+}
+
+#[async_trait]
+impl AgentBackend for RemoteReferenceAgent {
+    fn capabilities(&self) -> CapabilityProfile {
+        CapabilityProfile {
+            query: true,
+            streaming: true,
+            follow_up: true,
+            cancel: true,
+        }
+    }
+
+    async fn submit(&self, request: SubmitRequest) -> Result<NativeReply, AgentError> {
+        match self
+            .request(ReferenceAgentRequest::Submit { request })
+            .await?
+        {
+            ReferenceAgentResponse::Reply { reply } => Ok(reply),
+            ReferenceAgentResponse::Error { message } => Err(AgentError::Backend(message)),
+            other => Err(AgentError::Backend(format!(
+                "unexpected Reference Agent submit response: {other:?}"
+            ))),
+        }
+    }
+
+    async fn query(&self, run_id: &str) -> Result<NativeReply, AgentError> {
+        match self
+            .request(ReferenceAgentRequest::Query {
+                run_id: run_id.into(),
+            })
+            .await?
+        {
+            ReferenceAgentResponse::Reply { reply } => Ok(reply),
+            ReferenceAgentResponse::Error { message } => Err(AgentError::Backend(message)),
+            other => Err(AgentError::Backend(format!(
+                "unexpected Reference Agent query response: {other:?}"
+            ))),
+        }
+    }
+
+    async fn follow_up(&self, run_id: &str, text: String) -> Result<NativeReply, AgentError> {
+        match self
+            .request(ReferenceAgentRequest::FollowUp {
+                run_id: run_id.into(),
+                text,
+            })
+            .await?
+        {
+            ReferenceAgentResponse::Reply { reply } => Ok(reply),
+            ReferenceAgentResponse::Error { message } => Err(AgentError::Backend(message)),
+            other => Err(AgentError::Backend(format!(
+                "unexpected Reference Agent follow-up response: {other:?}"
+            ))),
+        }
+    }
+
+    async fn cancel(&self, run_id: &str) -> Result<NativeReply, AgentError> {
+        match self
+            .request(ReferenceAgentRequest::Cancel {
+                run_id: run_id.into(),
+            })
+            .await?
+        {
+            ReferenceAgentResponse::Reply { reply } => Ok(reply),
+            ReferenceAgentResponse::Error { message } => Err(AgentError::Backend(message)),
+            other => Err(AgentError::Backend(format!(
+                "unexpected Reference Agent cancel response: {other:?}"
+            ))),
+        }
+    }
+
+    async fn events_since(
+        &self,
+        run_id: &str,
+        after_revision: u64,
+    ) -> Result<Vec<NativeEvent>, AgentError> {
+        match self
+            .request(ReferenceAgentRequest::EventsSince {
+                run_id: run_id.into(),
+                after_revision,
+            })
+            .await?
+        {
+            ReferenceAgentResponse::Events { events } => Ok(events),
+            ReferenceAgentResponse::Error { message } => Err(AgentError::Backend(message)),
+            other => Err(AgentError::Backend(format!(
+                "unexpected Reference Agent events response: {other:?}"
+            ))),
+        }
     }
 }
 

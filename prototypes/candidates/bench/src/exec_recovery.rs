@@ -276,13 +276,15 @@ async fn one_stratum(
         }));
     }
 
+    let recovery_elapsed = fault_start.elapsed();
     Ok(serde_json::json!({
         "exec_candidate":mode,
         "active_tasks":active_tasks,
         "external_agent_state_file":true,
         "shared_host_restarted":shared_host_restarted,
         "isolated_core_survived":mode == "isolated",
-        "recovery_elapsed_ms":fault_start.elapsed().as_millis(),
+        "recovery_elapsed_ns":u64::try_from(recovery_elapsed.as_nanos()).unwrap_or(u64::MAX),
+        "recovery_elapsed_ms":recovery_elapsed.as_millis(),
         "recovered":recovered
     }))
 }
@@ -310,8 +312,13 @@ pub async fn integration_fatal(
 ) -> anyhow::Result<serde_json::Value> {
     let (trials_per_stratum, shared_restart_delay, metric_eligible) = match profile {
         "smoke" => (1usize, Duration::from_millis(2), false),
+        // The pilot observes actual local process restart cost. It deliberately adds
+        // no synthetic delay to either candidate.
+        "dp11-pilot" => (20usize, Duration::ZERO, true),
         "frozen" => (100usize, Duration::from_millis(500), true),
-        other => anyhow::bail!("unknown QA-09 profile: {other}; use smoke or frozen"),
+        other => {
+            anyhow::bail!("unknown recovery profile: {other}; use smoke, dp11-pilot, or frozen")
+        }
     };
     if metric_eligible {
         let fingerprint = freeze_fingerprint
@@ -340,28 +347,45 @@ pub async fn integration_fatal(
             }
             let elapsed = trials
                 .iter()
-                .map(|value| value["recovery_elapsed_ms"].as_u64().unwrap())
+                .map(|value| {
+                    if profile == "dp11-pilot" {
+                        value["recovery_elapsed_ns"].as_u64().unwrap()
+                    } else {
+                        value["recovery_elapsed_ms"].as_u64().unwrap()
+                    }
+                })
                 .collect::<Vec<_>>();
             strata.push(serde_json::json!({
                 "state":"running_queryable",
                 "active_tasks":active_tasks,
                 "trials":trials,
-                "p95_recovery_ms":nearest_rank_p95(&elapsed)?
+                "p95_recovery":nearest_rank_p95(&elapsed)?,
+                "p95_recovery_unit":if profile == "dp11-pilot" { "ns" } else { "ms" }
             }));
         }
         let p95_values = strata
             .iter()
-            .map(|value| value["p95_recovery_ms"].as_f64().unwrap())
+            .map(|value| value["p95_recovery"].as_f64().unwrap())
             .collect::<Vec<_>>();
         candidates.push(serde_json::json!({
             "exec_candidate":mode,
             "strata":strata,
-            "two_strata_mean_p95_ms":p95_values.iter().sum::<f64>() / p95_values.len() as f64
+            "two_strata_mean_p95":p95_values.iter().sum::<f64>() / p95_values.len() as f64,
+            "two_strata_mean_p95_unit":if profile == "dp11-pilot" { "ns" } else { "ms" }
         }));
     }
     Ok(serde_json::json!({
         "status":"PASS",
-        "scope":"legacy integration-host fatal running/queryable × 1/4 Task diagnostic",
+        "scope":if profile == "dp11-pilot" {
+            "VIA-DP-11 integration-client fatal recovery pilot"
+        } else {
+            "legacy integration-host fatal running/queryable × 1/4 Task diagnostic"
+        },
+        "evidence_label":if profile == "dp11-pilot" {
+            "MEASURED_REFERENCE_HARNESS"
+        } else {
+            "LEGACY_DIAGNOSTIC"
+        },
         "profile":profile,
         "freeze_fingerprint":freeze_fingerprint,
         "trials_per_stratum":trials_per_stratum,
@@ -371,7 +395,12 @@ pub async fn integration_fatal(
         "candidates":candidates,
         "legacy_representative_fragment":"REQUIRES_FOUR_WHOLE_PROCESS_STRATA",
         "legacy_profile_metric_eligible":metric_eligible,
-        "active_qa_metric_eligible":false,
-        "note":"Legacy recovery diagnostic only; it is not the active draft QA-09 representative metric."
+        "active_qa_metric_eligible":profile == "dp11-pilot",
+        "active_qa":if profile == "dp11-pilot" { "QA-31" } else { "N/A" },
+        "note":if profile == "dp11-pilot" {
+            "Pilot QA-31 evidence for the frozen integration-client fatal stratum only; it is not the final all-fault representative value."
+        } else {
+            "Legacy recovery diagnostic only; it is not an active QA representative metric."
+        }
     }))
 }

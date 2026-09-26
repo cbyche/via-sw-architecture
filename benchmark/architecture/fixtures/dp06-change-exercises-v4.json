@@ -1,0 +1,84 @@
+{
+  "fixture_id": "VIA-DP-06-CHANGE-EXERCISES-v4",
+  "rule": "Each edit is executed against a temporary copy. The metric counts unique source-controlled Architecture Element files whose bytes actually change; a missing match invalidates the exercise.",
+  "exercises": [
+    {
+      "id": "SEM-ADD-PROVENANCE",
+      "qa_id": "QA-22",
+      "description": "Add a required provenance hint to semantic grounding",
+      "edits": {
+        "A": [
+          {"file":"prototypes/candidates/prompts/integrated-system.md","find":"request_revision","replace":"request_revision and provenance_hint"}
+        ],
+        "B": [
+          {"file":"prototypes/candidates/prompts/stage1-grounding-system.md","find":"source/version provenance","replace":"source/version provenance plus provenance_hint"},
+          {"file":"prototypes/candidates/prompts/stage2-task-system.md","find":"original request IDs, provenance","replace":"original request IDs, provenance plus provenance_hint"}
+        ],
+        "B_PRIME": [
+          {"file":"prototypes/candidates/prompts/stage1-grounding-system.md","find":"source/version provenance","replace":"source/version provenance plus provenance_hint"},
+          {"file":"prototypes/candidates/prompts/stage2-task-system.md","find":"original request IDs, provenance","replace":"original request IDs, provenance plus provenance_hint"}
+        ]
+      }
+    },
+    {
+      "id": "SEM-ADD-HANDLING-STATE",
+      "qa_id": "QA-22",
+      "description": "Add a new semantic handling state",
+      "edits": {
+        "A": [
+          {"file":"prototypes/candidates/prompts/integrated-schema.json","find":"bounded_core", "replace":"bounded_core_next"},
+          {"file":"prototypes/candidates/prompts/integrated-system.md","find":"handling=task_control", "replace":"handling=task_control_next"}
+        ],
+        "B": [
+          {"file":"prototypes/candidates/prompts/stage3-schema.json","find":"bounded_core", "replace":"bounded_core_next"},
+          {"file":"prototypes/candidates/prompts/stage3-handling-system.md","find":"bounded_core", "replace":"bounded_core_next"}
+        ],
+        "B_PRIME": [
+          {"file":"prototypes/candidates/prompts/stage3-schema.json","find":"bounded_core", "replace":"bounded_core_next"},
+          {"file":"prototypes/candidates/prompts/stage3-handling-system.md","find":"bounded_core", "replace":"bounded_core_next"},
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"b_prime_fast_path", "replace":"b_prime_fast_path_instrumented"}
+        ]
+      }
+    },
+    {
+      "id": "OBS-MODEL-CALL-SPAN",
+      "qa_id": "QA-23",
+      "description": "Add one trace field at every semantic authority call site",
+      "edits": {
+        "A": [
+          {"file":"prototypes/candidates/prompts/integrated-system.md","find":"Return", "replace":"Emit model_call_span, then Return"}
+        ],
+        "B": [
+          {"file":"prototypes/candidates/prompts/stage1-grounding-system.md","find":"Return", "replace":"Emit model_call_span, then Return"},
+          {"file":"prototypes/candidates/prompts/stage2-task-system.md","find":"Return", "replace":"Emit model_call_span, then Return"},
+          {"file":"prototypes/candidates/prompts/stage3-handling-system.md","find":"Return", "replace":"Emit model_call_span, then Return"}
+        ],
+        "B_PRIME": [
+          {"file":"prototypes/candidates/prompts/stage1-grounding-system.md","find":"Return", "replace":"Emit model_call_span, then Return"},
+          {"file":"prototypes/candidates/prompts/stage2-task-system.md","find":"Return", "replace":"Emit model_call_span, then Return"},
+          {"file":"prototypes/candidates/prompts/stage3-handling-system.md","find":"Return", "replace":"Emit model_call_span, then Return"}
+        ]
+      }
+    },
+    {
+      "id": "OBS-REPAIR-LOCATION",
+      "qa_id": "QA-23",
+      "description": "Add explicit repair-location evidence",
+      "edits": {
+        "A": [
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"integrated_repair", "replace":"integrated_repair_with_location"}
+        ],
+        "B": [
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"grounding_repair", "replace":"grounding_repair_with_location"},
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"association_repair", "replace":"association_repair_with_location"},
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"handling_repair", "replace":"handling_repair_with_location"}
+        ],
+        "B_PRIME": [
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"grounding_repair", "replace":"grounding_repair_with_location"},
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"association_repair", "replace":"association_repair_with_location"},
+          {"file":"benchmark/architecture/_dp06_semantic_candidates.py","find":"handling_repair", "replace":"handling_repair_with_location"}
+        ]
+      }
+    }
+  ]
+}

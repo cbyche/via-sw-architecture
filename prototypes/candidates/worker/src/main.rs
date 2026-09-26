@@ -1,27 +1,45 @@
 use std::path::PathBuf;
 use tokio::io::{AsyncBufReadExt, AsyncWriteExt, BufReader};
 use via_contracts::{AgentBackend, WorkerRequest, WorkerResponse};
-use via_fixture::{AgentShape, DeterministicAgent};
+use via_fixture::{AgentShape, DeterministicAgent, RemoteReferenceAgent};
 
-fn state_file_arg() -> Result<Option<PathBuf>, Box<dyn std::error::Error>> {
+struct Args {
+    state_file: Option<PathBuf>,
+    agent_address: Option<String>,
+}
+
+fn parse_args() -> Result<Args, Box<dyn std::error::Error>> {
     let mut args = std::env::args_os().skip(1);
     let mut state_file = None;
+    let mut agent_address = None;
     while let Some(arg) = args.next() {
         if arg == "--state-file" {
             let value = args.next().ok_or("--state-file requires a path")?;
             state_file = Some(PathBuf::from(value));
+        } else if arg == "--agent-address" {
+            let value = args.next().ok_or("--agent-address requires a value")?;
+            agent_address = Some(value.to_string_lossy().into_owned());
         } else {
             return Err(format!("unknown worker argument: {}", arg.to_string_lossy()).into());
         }
     }
-    Ok(state_file)
+    if state_file.is_some() && agent_address.is_some() {
+        return Err("--state-file and --agent-address are mutually exclusive".into());
+    }
+    Ok(Args {
+        state_file,
+        agent_address,
+    })
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let agent = match state_file_arg()? {
-        Some(path) => DeterministicAgent::persistent(AgentShape::Q, path)?,
-        None => DeterministicAgent::new(AgentShape::Q),
+    let args = parse_args()?;
+    let agent: Box<dyn AgentBackend> = match (args.agent_address, args.state_file) {
+        (Some(address), None) => Box::new(RemoteReferenceAgent::new(address)),
+        (None, Some(path)) => Box::new(DeterministicAgent::persistent(AgentShape::Q, path)?),
+        (None, None) => Box::new(DeterministicAgent::new(AgentShape::Q)),
+        (Some(_), Some(_)) => unreachable!("validated by parse_args"),
     };
     let mut lines = BufReader::new(tokio::io::stdin()).lines();
     let mut stdout = tokio::io::stdout();

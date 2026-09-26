@@ -1,0 +1,98 @@
+{
+  "contract_id": "VIA-DP-11-COMPLETE-v2",
+  "status": "IMPLEMENTER_FROZEN_BEFORE_RUN",
+  "decision_point": "VIA-DP-11",
+  "target": "MacBook Air M5, 24 GB, macOS 26.5.1",
+  "candidate_A": "isolated_worker",
+  "candidate_B": "same_process",
+  "fixed_context": {
+    "semantic_model": "Qwen3-8B Q4_K_M, one shared local llama.cpp runtime, non-thinking",
+    "s2s_model": "qwen3-omni-flash-realtime-2025-12-01; provider connectivity smoke retained separately",
+    "voice_endpoint": "instrumented reference renderer/audio-buffer proxy, not physical speaker onset",
+    "downstream_agent": "one external deterministic Reference Agent process shared by both candidates",
+    "task_authority": "same logical Task/run binding and oracle for both candidates",
+    "changed_axis": "VIA-owned Agent client executes in a supervised worker process for A and in the Core process for B"
+  },
+  "fixtures": {
+    "normal": "benchmark/architecture/fixtures/dp11-normal-v1.json",
+    "semantic_context": "benchmark/architecture/fixtures/dp11-semantic-context-v2.json",
+    "change_ledger": "benchmark/architecture/fixtures/dp11-change-ledger-v1.json"
+  },
+  "repetitions": {
+    "semantic_runs_per_input_case": 1,
+    "runtime_trials_per_case_per_candidate": 5,
+    "F-01_common_whole_via_restart": 10,
+    "F-02_integration_client_fatal_per_candidate": 20,
+    "F-03_common_post_publish_pre_commit": 10,
+    "memory_samples_per_N5_trial": 1
+  },
+  "execution_order": "A/B is interleaved per case and trial; first candidate alternates to reduce ordering and thermal bias.",
+  "aggregation": {
+    "latency": "nearest-rank p95 per case, then maximum case p95",
+    "correctness": "100 * mean of case pass rates",
+    "change_locality": "mean unique changed Architecture Element IDs across the full frozen pack",
+    "recovery": "maximum fault-stratum nearest-rank p95",
+    "blast_radius": "maximum excess affected independent user-visible units",
+    "memory": "nearest-rank p95 of candidate-owned process RSS plus the one shared local semantic runtime",
+    "trace": "100 * complete scored records / all scored records",
+    "reproduction": "100 * exactly reproduced reported metrics / sampled reported metrics"
+  },
+  "failure_treatment": "All errors and timeouts remain in raw data and fail applicable correctness predicates. No successful-run filtering.",
+  "source_reuse": "Non-applicable common executions are stored once with candidate=common and mapped to A/B by source_execution_key; they are not duplicated as independent samples.",
+  "qa_plan": {
+    "QA-01": {"role":"primary_candidate","method":"normal delegated cases; shared semantic/model span plus real candidate bridge and instrumented renderer proxy"},
+    "QA-02": {"role":"non_applicable_regression","method":"common direct-response execution mapped to both candidates"},
+    "QA-03": {"role":"primary_candidate","method":"Reference Agent source event to candidate bridge receipt and renderer proxy"},
+    "QA-04": {"role":"non_applicable_regression","method":"common reference audio-lane interruption mapped to both candidates"},
+    "QA-05": {"role":"primary_candidate","method":"text control submit to correct disposition presentation"},
+    "QA-11": {"role":"qualification","method":"28-case integrated strict outcome"},
+    "QA-12": {"role":"non_applicable_regression","method":"shared semantic-model structured output with case-specific Context; same source mapped to both candidates"},
+    "QA-13": {"role":"qualification","method":"strict Task/run/event binding predicates"},
+    "QA-14": {"role":"qualification","method":"duplicate/reorder/race final-state predicates"},
+    "QA-15": {"role":"qualification","method":"channel/follow-up/Task continuity predicates"},
+    "QA-21": {"role":"candidate_assessment","method":"full A-01..A-09 element ledger"},
+    "QA-22": {"role":"non_applicable_regression","method":"full M-01..M-09 and C-01..C-06 element ledger"},
+    "QA-23": {"role":"supporting_candidate","method":"full E-01..E-05 element ledger"},
+    "QA-31": {"role":"primary_candidate","method":"F-01..F-03; common faults referenced once"},
+    "QA-32": {"role":"primary_candidate","method":"F-01..F-03 frozen necessary dependency closures"},
+    "QA-41": {"role":"diagnostic_candidate","method":"N-05 process-tree RSS plus shared local semantic model RSS"},
+    "QA-51": {"role":"qualification","method":"excess protected-information units in all Agent payloads"},
+    "QA-61": {"role":"primary_candidate","method":"complete execution relation envelope for all scored runtime/fault records"},
+    "QA-62": {"role":"qualification","method":"clean analyzer exact reproduction from frozen contract and raw records"}
+  },
+  "initial_difference_thresholds": {
+    "QA-01_ms_and_pct": [100, 10],
+    "QA-02_ms_and_pct": [100, 10],
+    "QA-03_ms_and_pct": [100, 10],
+    "QA-04_ms_and_pct": [20, 20],
+    "QA-05_ms_and_pct": [100, 10],
+    "QA-11_percentage_points": 5,
+    "QA-12_percentage_points": 5,
+    "QA-13_percentage_points": 5,
+    "QA-14_percentage_points": 5,
+    "QA-15_percentage_points": 5,
+    "QA-21_elements": 1,
+    "QA-22_elements": 1,
+    "QA-23_elements": 1,
+    "QA-31_ms_and_pct": [500, 20],
+    "QA-32_units": 1,
+    "QA-41_MiB_and_pct": [100, 10],
+    "QA-51_units": 1,
+    "QA-61_percentage_points": 5,
+    "QA-62_percentage_points": 0
+  },
+  "evidence_labels": [
+    "MEASURED_MODEL",
+    "MEASURED_REFERENCE_HARNESS",
+    "HYBRID_REFERENCE_ESTIMATE",
+    "ARCHITECTURE_LEDGER"
+  ],
+  "limitations": [
+    "Voice timing uses an instrumented reference renderer and audio-buffer proxy, not physical acoustic loopback; it is not PRODUCT_E2E.",
+    "The external Reference Agent is deterministic and does not measure real Agent reasoning quality or execution time.",
+    "The complete table determines DP-to-QA usefulness; it is not an Architecture winner selection.",
+    "One semantic-model execution per input case is reused for both process candidates because VIA-DP-11 does not change the semantic path.",
+    "QA-21/22/23 are frozen Architecture Element ledgers rather than runtime measurements.",
+    "QA-62 remains unscored until an independent clean analyzer exactly reproduces the reported table."
+  ]
+}

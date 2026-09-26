@@ -92,7 +92,7 @@ trial별로 workload window의 전체 peak committed bytes를 기록하고, stra
 
 한 후보의 local dependency를 별도 process라는 이유로 제외하지 않는다. process별 working set, CPU/GPU/VRAM과 energy sample은 원인 분석 evidence이며 QA-41의 추가 대표 metric이 아니다.
 
-Target PC 사양, OS build, power mode, warm/cold condition과 workload를 결과 전에 고정한다. 제품 장비가 미정인 현재는 target과 score band를 만들지 않는다.
+Target PC는 [VIA Core Evaluation Profile](../11-measurement/evaluation-profile.md)의 MacBook Air M5로 고정한다. OS build, power mode, warm/cold condition과 workload를 run manifest에 기록한다. 메모리 target과 score band는 요구 근거가 없으므로 만들지 않는다.
 
 ## 4. 공통 fault·resource 원칙
 

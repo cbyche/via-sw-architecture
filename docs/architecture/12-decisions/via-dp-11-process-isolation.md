@@ -1,10 +1,10 @@
 # VIA-DP-11 — 외부 연동 코드의 Process 장애 경계
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **검토 초안 v6 · 2026-09-27 · targeted reference campaign 완료 · 사용자 검토 전**
 >
 > 질문: 치명적 실패 가능성이 있는 연동 실행을 별도 Process에 가둘 것인가, Core와 같은 Process에서 논리적으로 격리할 것인가?
 >
-> 현재 판단: **조건부 설계 후보 — VIA Client의 실제 fatal 위험 확인이 선행** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **조건부 핵심 후보 — Process fatal에서 QA-32 차이 확인** v4 reference campaign은 A 0개, B 4개의 불필요 중단 단위를 관측했다. 실제 제품 Client의 fatal 위험과 발생 빈도 확인 전에는 최종 대안을 선택하지 않는다.
 
 ## 1. 배경 — 한 Agent 연동이 죽어도 VIA와 다른 업무는 살아 있어야 할까?
 
@@ -33,7 +33,7 @@ class Q change;
 
 **이번 비교의 설계 가정:** 같은 연동 기능·외부 API·총 자원 한도·queue 제한·timeout·저장 보장·명령 identity·source fault를 적용한다. A에만 코드를 더 안전하게 만들거나 B에만 blocking API를 강제하지 않는다. 실제 Native SDK의 존재·취약성을 확정 사실로 주장하지 않는다.
 
-**미확인 사항:** target Windows IPC·serialization 비용, worker 시작·재연결 비용, 외부 실행의 idempotency/조회 capability, fault별 user-visible unit과 최악 대표값. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+**미확인 사항:** target Mac IPC·serialization 비용, worker 시작·재연결 비용, Reference Agent의 idempotency/조회 capability, fault별 user-visible unit과 최악 대표값. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
 ### 구현도를 읽기 위한 공통 전제
 
@@ -60,7 +60,7 @@ flowchart TB
  I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
  end
  Q <-->|"versioned IPC frame"| I
- I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+ I <-->|"고정 Reference Agent contract"| A["Reference Agent<br/>VIA 밖의 동일 fixture"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
@@ -84,13 +84,13 @@ flowchart TB
  Q -->|"같은 Process의 async 호출"| I["[변경] 같은 Agent Client·SDK<br/>VIA 소유 연동 코드"]
  I -.->|"비동기: 검증된 관측"| T
  end
- I <-->|"지원하는 A2A 또는 고유 API"| A["외부 Downstream Agent Runtime<br/>OpenClaw·Hermes 등 연동 대상<br/>별도 Process 또는 원격"]
+ I <-->|"고정 Reference Agent contract"| A["Reference Agent<br/>VIA 밖의 동일 fixture"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
 
 1. 같은 Client·명령·outbox를 Core Process의 async queue로 연결한다. 별도 IPC frame·Worker Supervisor가 없다. 외부 응답을 기다리며 DB transaction을 잡지 않는다.
-2. ‘같은 Process’는 VIA Client의 배치다. OpenClaw·Hermes Runtime을 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
+2. ‘같은 Process’는 VIA Client의 배치다. Reference Agent 자체를 VIA 안에 embed한다는 뜻이 아니다. timeout·일반 오류는 해당 호출의 실패로 처리한다.
 3. 잡을 수 없는 Client fatal은 Core까지 종료시킬 수 있다. 그러나 해당 코드·fault가 제품에 실제로 필요한지 미확인이라면 QA-32의 큰 이점이나 핵심 DP 지위를 단정하지 않는다.
 
 Thread·mailbox 격리는 정상 정지·예외를 제한할 수 있지만 주소 공간이 같은 fatal 종료 경계는 유지된다.
@@ -169,9 +169,9 @@ A의 worker runtime·supervisor·IPC buffer를 모두 QA-41에 포함한다. B�
 
 A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protocol·인증·artifact 또는 Model local/remote 변경이 IPC frame·배치에 실제로 닿는지 ledger로 확인한다. E-01~05는 Process generation·clock correlation·worker spool·schema·export·assignment를 포함한다. A가 Process별 source를 알기 쉽다는 이유로 trace가 자동 완전한 것은 아니다. Worker crash 직전 volatile 로그는 잃을 수 있으므로 DP-12 기록 의무를 두 안에 같게 둔다.
 
-## 7. 전체 19개 QA 비교
+## 7. 전체 19개 QA 사고실험
 
-**사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
+다음 표는 실행 전에 작성한 사고실험이다. §8의 실측표와 분리해 예상이 결과를 대체하거나 결과에 맞춰 다시 쓰이지 않도록 보존한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다.
 
 | QA · 단일 metric | 예상 방향·크기 | 확실성 | 구조적 이유·반례와 근거 | 역할 |
 | --- | --- | --- | --- | --- |
@@ -197,9 +197,25 @@ A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protoc
 
 A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강하다. B는 정상 경로의 IPC·resident runtime 비용을 줄일 이유가 있다. 다만 전체 대표값의 실제 우열과 강도는 fault·workload pack을 고정해 확인해야 한다.
 
-## 8. 공정한 검증 계획 — 실행하지 않음
+## 8. v4 targeted reference campaign 결과
 
-정상 예외, 연동 fatal, Core fatal, worker restart, uncertain dispatch를 구분한 fault pack과 같은 의미의 necessary dependency closure를 고정한다. Worker만 죽는 A와 임의로 더 큰 fault를 주는 B를 비교하지 않는다. 실제 Windows IPC와 audible endpoint는 구현 승인 후 확인한다.
+[v4 결과](../../../results/architecture-evaluation/current/dp11-evaluation-v4-20260927/report.md)는 동일한 VIA Client와 외부 Reference Agent 계약에서 Process 배치만 바꾼 targeted `MEASURED_REFERENCE_HARNESS`다. 기존 v1~v3는 측정기 개발 provenance로만 남긴다.
+
+| QA | A 별도 worker | B 같은 Process | 해석 |
+| --- | ---: | ---: | --- |
+| QA-31 최악 fault p95 복구시간 | 11.5 ms | 11.3 ms | 같은 reference 환경에서는 실질 차이 없음 |
+| QA-32 최대 초과 중단 단위 | **0** | **4** | A가 integration fatal을 Core의 독립 기능에서 격리 |
+| QA-41 peak memory p95 | 7,813.2 MiB | 7,809.5 MiB | B가 약 3.7 MiB 작지만 shared local model이 대부분 |
+| QA-61 complete trace | 100% | 100% | 동률 |
+| QA-62 independent replay | 100% | 100% | 동률 |
+
+19개 QA 행을 모두 보고했다. QA-02/04/12/15/22/51은 이 DP의 frozen path에 물리적으로 참여하지 않아 `N/A`다. QA-01/03/05는 physical audible endpoint가 없고, QA-11/13/14는 active predicate pack이 불완전하며, QA-21/23은 실제 source change가 아닌 design ledger만 있어 `BLOCKED`다. proxy 값을 공식 QA 숫자로 승격하지 않았다.
+
+정상 workload와 fault workload는 같은 Reference Agent 구현·계약을 쓰되 별도 persistent state에서 시작한다. 단순 JSON fixture의 누적 저장 비용이 Process fault 시간으로 섞이는 오염을 제거하기 위한 stratum 분리이며, 후보별 fault 입력 수와 상태 조건은 동일하다. 실패 trial은 30초 recovery timeout으로 raw에 남긴다.
+
+### 남은 제품 검증
+
+다음 단계에서 제품 수준으로 승격하려면 실제 Agent Client fault profile과 audible endpoint를 확인한다. Worker만 죽는 A와 임의로 더 큰 fault를 주는 B를 비교하지 않는다. 현재 Reference Agent campaign의 complete table을 실제 제품 evidence로 과장하지 않는다.
 
 측정에 앞서 동일한 목표·fixture·외부 기능·자원 조건, case별 실제 참여 경로, 실패·timeout 처리, 반복·집계·target·동점 기준을 동결한다. 최종 점수나 승리 개수는 지금 만들지 않는다. QA-11과 QA-12~15의 성공을 중복 합산하지 않는다. 잘못된 대상·중복 Action, 무효 승인, 무단 접근은 점수로 상쇄할 수 없는 필수 위반 조건이다.
 
@@ -207,7 +223,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ### 현재 구현 근거와 미구현 범위
 
-[exec.rs](../../../prototypes/candidates/runtime/src/exec.rs)는 LocalBridge/ProcessBridge의 구조 예시다. [worker](../../../prototypes/candidates/worker/src/main.rs)는 DeterministicAgent fixture를 사용하며 실제 OpenClaw·Hermes A2A Client를 구현·검증한 것이 아니다. 따라서 worker abort 실험을 외부 Agent Runtime의 장애 격리 증거로 재사용하지 않는다.
+[exec.rs](../../../prototypes/candidates/runtime/src/exec.rs)의 LocalBridge/ProcessBridge, [worker](../../../prototypes/candidates/worker/src/main.rs)와 별도 [Reference Agent](../../../prototypes/candidates/reference-agent/src/main.rs)를 complete campaign에서 실행했다. Contract, runner와 independent analyzer는 [active benchmark harness](../../../benchmark/architecture/README.md)에 있다. 이 구현은 Reference Agent 기반 후보 검증이며 제품 Agent Runtime이나 Voice E2E 구현이 아니다.
 
 ## 9. 다른 DP·변경 비용
 
@@ -215,7 +231,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 후보로 유지하고 우선 핵심 추천은 철회한다.** 실제 VIA Client에 격리할 fatal 위험이 확인될 때 정상 IPC 비용과 장애 범위의 비교가 성립한다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 격리 A의 이점으로 세지 않는다. 같은 Process sandbox가 동일 기능과 containment를 제공하거나 fatal fault profile이 해당 제품에 부적합하면 비교를 다시 연다. 지금 실제 승자·점수·target 충족을 선언하지 않는다.
+**조건부 핵심 후보로 유지한다.** Reference harness에서는 QA-32의 강한 A 우세와 QA-41의 작은 B 우세가 실제로 갈렸다. 다만 실제 VIA Client에 격리할 fatal 위험이 확인될 때만 QA-32의 제품 중요도가 생긴다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 A의 이점으로 세지 않는다. 현재 overall winner는 선언하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 
