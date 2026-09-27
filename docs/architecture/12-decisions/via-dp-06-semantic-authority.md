@@ -4,7 +4,7 @@
 >
 > 질문: 대상·Task 관계·처리 경로를 하나의 의미 확정자가 함께 결정할 것인가, 단계별 권한자가 계약을 통해 확정할 것인가?
 >
-> 현재 판단: **핵심 검증 후보 — 호출 수가 아닌 의미 계약의 권한으로 비교** 2026-09-27 v4 reference campaign은 24개 UC 기반 case를 후보별 1회 실행해 구조적 차이를 관측했다. 반복 p95나 제품 E2E가 아니므로 최종 대안 선택과 ASR 확정은 유예한다.
+> 현재 판단: **핵심 검증 후보 — 호출 수가 아닌 의미 계약의 권한으로 비교** 2026-09-27 v5 reference campaign은 24개 UC 기반 correctness case와 대표 responsiveness case별 20회 반복을 실행했다. 일부 QA는 아직 `BLOCKED`이고 제품 E2E가 아니므로 최종 대안 선택과 ASR 확정은 유예한다.
 
 ## 1. 배경 — ‘아까 그 자료’의 대상과 Task를 따로 정해도 될까?
 
@@ -211,21 +211,21 @@ A는 상호 의존 의미를 공동 결정하는 요구에서, B는 안정된 �
 
 VIA-DP-03/05가 입력 근거와 조회 계약을, VIA-DP-02가 상태 적용을 제공한다. VIA-DP-04 게시 권한과 의미 확정 권한은 다른 결정이다. [기존 IR ADR](../../adr/ADR-004-semantic-decision-ownership.md)은 Deferred이며 A는 interim reference일 뿐이다. A→B에는 중간 schema·version·정정 reader, B→A에는 단일 의미 묶음과 진행 단계 이행이 필요하다.
 
-## 10. v4 reference campaign 결과와 현재 판단
+## 10. v5 integrated reference campaign 결과와 현재 판단
 
-정식 source of truth는 [`via-dp-06-evaluation-v4-20260927`](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)과 `VIA-DP-06-EVALUATION-v4` 계약이다. A/B/B′는 같은 local Qwen3-8B GGUF 1개, canonical synthetic Context Evidence, 외부 Reference Agent와 BlackHole loopback Voice renderer를 사용했다. 후보 입력과 evaluator-only oracle은 분리했다.
+정식 source of truth는 [`via-dp-06-evaluation-v5-20260927`](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v5-20260927/report.md)과 `VIA-DP-06-EVALUATION-v5` 계약이다. v4는 반복 설계를 검증하기 전의 breadth evidence로 보존하되 현재 수치는 v5를 따른다. A/B/B′는 같은 local Qwen3-8B Q4_K_M 1개, canonical synthetic Context Evidence, 외부 Reference Agent와 generated request WAV·macOS Yuna·BlackHole loopback을 사용했다. 후보 입력과 evaluator-only oracle은 분리했다.
 
-- QA-01 최악 case 실제 처리시간은 A **17.8초**, B **27.7초**, B′ **24.3초**였고 평균은 각각 **13.4초, 22.4초, 15.3초**였다. 의미가 틀려 Agent 경로를 타지 않았어도 audible response가 있으면 60초로 바꾸지 않고 실제 wall-clock을 사용했다.
-- QA-02 최악 case는 A **19.7초**, B **25.5초**, B′ **15.9초**였다. QA-05 최악 case는 A **38.4초**, B **27.5초**, B′ **24.3초**였다. case당 1회이므로 이 값은 frozen corpus 최대값이지 p95가 아니다.
+- correctness breadth는 **24 case × 3 후보 = 72 trial**, responsiveness는 QA-01/02/05 각각 후보별 warm-up 2회 뒤 **20 scored trial**, 전체 scored raw는 **252건**이다. 후보별 84건으로 균형을 맞췄고 runner failure와 trace 누락은 0건이다.
+- QA-01 p95는 A **23.7초**, B **42.3초**, B′ **15.3초**이고 평균은 각각 **22.1초, 40.5초, 14.8초**다. QA-02 p95는 A **22.4초**, B **43.9초**, B′ **15.1초**, QA-05 p95는 A **24.0초**, B **15.2초**, B′ **13.8초**다. semantic 오답이어도 audible response가 관측되면 timeout으로 바꾸지 않고 실제 시간을 사용했다.
 - QA-11 strict 통합 성공은 A **8/24(33.3%)**, B **6/24(25.0%)**, B′ **6/24(25.0%)**다. QA-12 field-level correctness는 A **202/257(78.6%)**, B **171/257(66.5%)**, B′ **173/257(67.3%)**이며 strict 성공은 각각 **8/24, 6/24, 6/24**다. QA-13은 A **17/24(70.8%)**, B **13/24(54.2%)**, B′ **14/24(58.3%)**다.
-- QA-61과 QA-62는 세 후보 모두 **100%**다. QA-03/04/14/32/51은 이 DP의 frozen path에 물리적으로 참여하지 않아 `N/A`다. QA-15/21~23/31/41은 관련되지만 complete transition corpus, closed change pack, fault repetition 또는 격리된 memory p95가 없어 `BLOCKED`다.
-- 모델 호출은 A **26회**, B **70회**, B′ **52회**였다. B′ tactic은 B의 호출 수와 QA-01/02/05 시간을 줄였지만 A의 통합 정확도 수준을 회복하지 못했다. 호출별 token·시간과 repair 위치는 raw에 보존한다.
+- 모델 호출은 A **86회(평균 1.02/trial)**, B **210회(2.50/trial)**, B′ **112회(1.33/trial)**다. repair 위치도 `integrated_repair`, `association_repair`, `grounding_repair`로 raw에 보존했다. B′는 Architecture 권한을 바꾸지 않는 deterministic fast-path tactic이며 B보다 모든 측정 responsiveness를 개선했지만 correctness는 A 수준을 회복하지 못했다.
+- QA-61과 QA-62는 세 후보 모두 **100%**다. QA-03/04/14/32/51은 이 DP 구조가 frozen path에 물리적으로 참여하지 않아 `N/A`다. QA-15/21~23/31/41은 관련되지만 complete transition corpus, executable full change pack, fault repetition 또는 격리된 memory p95가 없어 `BLOCKED`다. 숫자로 대체하지 않았다.
 
-대용량 WAV 원본은 target Mac에 유지하며 상대 경로·크기·SHA-256을 `raw/audio-artifact-digests.json`에 기록했다. 구조화된 72-trial raw와 독립 analyzer replay는 Git에 보존한다.
+raw 252건, warm-up 18건, model/token ledger, audio artifact, manifest와 독립 analyzer replay digest를 같은 immutable result directory에 보존한다. evidence label은 `MEASURED_REFERENCE_HARNESS`이며 실제 S2S product path를 실행한 `PRODUCT_E2E`가 아니다.
 
 ### 현재 판단
 
-**핵심 후보로 유지한다.** 이번 reference campaign에서는 A가 QA-11~13 correctness와 QA-01에서 우세했고, B′가 B의 responsiveness 약점을 줄이며 QA-02/05 최악 case에서 가장 짧았다. 다만 case당 1회라 분산·p95·재현 반복이 없고 여섯 QA가 `BLOCKED`이므로 승자를 고르거나 ASR을 확정하지 않는다. 기존 IR 유예 결정도 변경하지 않는다.
+**핵심 후보로 유지한다.** 이번 reference campaign에서는 A가 QA-11~13 correctness에서 우세했고, B′가 QA-01/02/05 p95에서 가장 짧았다. 따라서 correctness와 responsiveness 사이의 실제 trade-off가 관측됐다. 다만 여섯 QA가 `BLOCKED`이고 reference Voice 경로이므로 승자를 고르거나 ASR을 확정하지 않는다. 기존 IR 유예 결정도 변경하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

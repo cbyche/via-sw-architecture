@@ -401,7 +401,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 | [VIA-DP-13 × QA-01/02 일반 요청](./via-dp-13-control-reservation.md#t1) | 중간·B | 같은 포화 조건에서 A가 제어용으로 남긴 여력을 B는 일반 요청에 사용한다. 저부하·안전한 자원 차용에서는 차이가 줄어든다. 위 제어 이점의 반대 비용이다. |
 | [VIA-DP-06 × QA-12 의미 해석](./via-dp-06-semantic-authority.md#t1) | 낮음·방향 미정 | 공동 맥락 판단과 단계별 집중·정정은 다른 구조지만 어느 쪽이 더 정확한지는 같은 모델·corpus 검증 없이는 알 수 없다. 중요한 QA라는 이유만으로 높음에 넣지 않았다. |
 
-현재 정식 실측으로 확정한 차이는 없다. VIA-DP-11×QA-32를 포함한 높은 차이 가설도 공통 harness qualification 뒤 재측정한다. VIA-DP-12·13처럼 반대 방향의 QA 효과가 예상되는 후보도 조건 미확인과 전체 대표값의 불확실성이 남아 있다.
+VIA-DP-06 v5 reference campaign에서는 A가 QA-11~13 correctness에서, B′가 QA-01/02/05 responsiveness에서 우세해 양방향 차이가 관측됐다. 이는 `MEASURED_REFERENCE_HARNESS` 근거이며 제품 E2E나 최종 Architecture 선택은 아니다. VIA-DP-11×QA-32를 포함한 나머지 높은 차이 가설은 공통 통합 harness에서 재측정한다.
 
 ### 6.3 차이 등급의 조건과 근거
 
@@ -431,7 +431,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 ### 6.4 이 지도에서 읽을 수 있는 것과 없는 것
 
 - **관련성은 넓고, 차이 근거는 그보다 좁다.** VIA-DP-14×QA-14와 VIA-DP-18×QA-51처럼 중요한 필수 검증이어도 우열을 만드는 지표는 아닐 수 있다.
-- **정확성은 아직 검증 공백이 크다.** VIA-DP-06×QA-12는 모델 검증이 필요한 차이 가설이다. VIA-DP-12×QA-11~15는 근거 보존 효과이므로 이를 의미·상태 알고리즘 정확도 개선의 대체 근거로 쓰지 않는다.
+- **정확성은 일부 검증됐지만 공백이 남는다.** VIA-DP-06×QA-12는 local Qwen reference campaign에서 A/B/B′ 차이를 관측했다. QA-15와 전체 change/fault/resource 축은 아직 `BLOCKED`다. VIA-DP-12×QA-11~15의 근거 보존 효과를 의미·상태 알고리즘 정확도의 대체 근거로 쓰지 않는다.
 - **차이 표시의 수로 핵심 DP·ASR을 선정하지 않는다.** 실제 대표값 차이, 제품에서의 중요성, A에 유리한 QA와 B에 유리한 QA가 모두 있는지를 다음 단계에서 확인한다. QA-41의 차이 등급도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
 - **차이가 없어도 의무는 남는다.** QA-51 안전 조건, 정확한 Task 연결·수렴·연속성, trace·평가 재현 계약은 어느 대안을 택해도 지켜야 한다. QA-11과 원인 QA-12~15도 독립 점수로 중복 합산하지 않는다.
 
@@ -441,11 +441,11 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 ## 7. 무엇이 완료됐고 무엇이 남았는가
 
-완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑과 preliminary VIA-DP-11 harness diagnostic이다. V3는 19행 표·raw 보존·재계산 형식만 검증했으며 QA-01~15 전체 contract를 충족하지 못해 Architecture evidence로 인정하지 않는다. 대안은 선택하지 않았다. Local semantic LLM·Alibaba S2S smoke와 Reference Agent diagnostic은 제품 E2E 검증이 아니다. 기존 ADR의 승인·유예와 재검증 조건은 각 대응 VIA-DP에 보존했다.
+완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑, VIA-DP-06 v5 통합 reference campaign이다. v5는 24-case correctness와 대표 responsiveness case별 20회 반복, local semantic LLM·외부 Reference Agent·reference Voice loopback·독립 raw replay를 포함한다. 여섯 QA가 `BLOCKED`이고 Alibaba S2S product path는 실행하지 않았으므로 전체 완료나 제품 E2E로 부르지 않는다. 대안은 선택하지 않았고 기존 ADR의 승인·유예와 재검증 조건은 보존했다.
 
 ### 구현 근거와 남은 확인
 
-- 06: 역할별 prompt/schema가 있으나 실제 모델 정확도·지연은 미측정.
+- 06: v5에서 실제 local Qwen 모델 정확도와 QA-01/02/05 reference Voice 지연을 측정했다. QA-15/21~23/31/41과 제품 S2S E2E는 미측정이다.
 - 09: native fixture 변환 구조가 있으나 외부 제품 capability 검증과 전체 9건 ledger는 미완료.
 - 11: 외부 Reference Agent, bridge·worker candidate와 preliminary raw pipeline까지 구현. QA-01~15 공통 contract·sentinel qualification, Physical Voice E2E와 실제 제품 Agent Client fault profile은 미완료.
 - 14: SharedTaskService·PerTaskSupervisors·공통 SQLite Repository가 있으나 현행 Voice·복구 QA 검증이 아님.

@@ -242,6 +242,40 @@ def write_report(result_dir: Path, summary: dict[str, Any]) -> None:
     (result_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def finalize_package(result_dir: Path, summary: dict[str, Any], core_digest: str) -> None:
+    """Record analysis provenance without rewriting any frozen raw observation."""
+    summary_path = result_dir / "summary.json"
+    receipt_path = result_dir / "replay-receipt.json"
+    manifest_path = result_dir / "manifest.json"
+    manifest = load(manifest_path)
+    manifest.update(
+        status="ANALYSIS_COMPLETE_WITH_BLOCKED_AXES",
+        analyzer_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        summary_sha256=hashlib.sha256(summary_path.read_bytes()).hexdigest(),
+        replay_receipt_sha256=hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
+        replay_core_summary_sha256=core_digest,
+        replay_verified=True,
+        result_limit=(
+            "Integrated reference campaign is complete for the measured axes; "
+            "QA-15/21/22/23/31/41 remain BLOCKED and the package is not PRODUCT_E2E."
+        ),
+    )
+    audio_index = result_dir / "raw/audio-artifact-digests.json"
+    if audio_index.exists():
+        manifest["audio_artifact_index_sha256"] = hashlib.sha256(audio_index.read_bytes()).hexdigest()
+        manifest["audio_artifact_count"] = load(audio_index)["artifact_count"]
+    write(manifest_path, manifest)
+    (result_dir / "STATUS.md").write_text(
+        "# VIA-DP-06 evaluation v5 status\n\n"
+        "**ANALYSIS_COMPLETE_WITH_BLOCKED_AXES**\n\n"
+        "The frozen integrated reference campaign and independent raw replay completed. "
+        "Measured and N/A axes are reported in `report.md`; QA-15, QA-21, QA-22, "
+        "QA-23, QA-31, and QA-41 remain BLOCKED. This is not `PRODUCT_E2E` and "
+        "does not by itself select an Architecture alternative.\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--result-dir", type=Path, required=True)
@@ -274,6 +308,7 @@ def main() -> int:
         {"status": "PASS", "independent_replay_pct": 100.0, "core_summary_sha256": core_digest},
     )
     write_report(result_dir, summary)
+    finalize_package(result_dir, summary, core_digest)
     print(core_digest)
     return 0
 
