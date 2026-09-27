@@ -65,7 +65,12 @@ candidate를 실행한다. executable 후보는
 공통 Rust candidate runtime과 Voice/model/Agent 통합 경로에서 다시 측정해야 한다.
 
 `run_dp06_evaluation_v5.py`는 24-case correctness breadth와 QA-01/02/05별 20회
-physical-loopback latency stratum을 분리한다. `run_dp11_evaluation_v5.py`는 같은 target
+physical-loopback latency stratum을 분리한다. `run_dp06_change_locality_v6.py`는
+기존 v5 trial을 재실행하지 않고 QA-21~23의 전체 29개 change pack을
+동결 Architecture Element 원장에 A/B/B′ 각각 독립 적용한다. 이 축은
+`HYBRID_REFERENCE_ESTIMATE`이며 제품 code migration 실측으로 해석하지 않는다.
+
+`run_dp11_evaluation_v5.py`는 같은 target
 Mac Voice/model 조건에서 실제 Rust host의 `isolated_worker`와 `same_process`를 외부
 Reference Agent 앞에 배치하고 QA-01/03/05, correctness, fault, memory와 trace를 함께
 수집한다. 두 runner 모두 warm-up을 별도 raw에 기록하고 scored failure를 삭제하지 않는다.

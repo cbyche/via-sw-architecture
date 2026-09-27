@@ -401,7 +401,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 | [VIA-DP-13 × QA-01/02 일반 요청](./via-dp-13-control-reservation.md#t1) | 중간·B | 같은 포화 조건에서 A가 제어용으로 남긴 여력을 B는 일반 요청에 사용한다. 저부하·안전한 자원 차용에서는 차이가 줄어든다. 위 제어 이점의 반대 비용이다. |
 | [VIA-DP-06 × QA-12 의미 해석](./via-dp-06-semantic-authority.md#t1) | 낮음·방향 미정 | 공동 맥락 판단과 단계별 집중·정정은 다른 구조지만 어느 쪽이 더 정확한지는 같은 모델·corpus 검증 없이는 알 수 없다. 중요한 QA라는 이유만으로 높음에 넣지 않았다. |
 
-VIA-DP-06 v5 reference campaign에서는 A가 QA-11~13 correctness에서, B′가 QA-01/02/05 responsiveness에서 우세해 양방향 차이가 관측됐다. 이는 `MEASURED_REFERENCE_HARNESS` 근거이며 제품 E2E나 최종 Architecture 선택은 아니다. VIA-DP-11×QA-32를 포함한 나머지 높은 차이 가설은 공통 통합 harness에서 재측정한다.
+VIA-DP-06 v6 통합 보고서에서는 v5 reference campaign의 A QA-11~13 correctness 우세와 B′ QA-01/02/05 responsiveness 우세를 그대로 참조했다. 추가한 QA-21~23 전체 변경 원장에서 QA-21·22는 동률이고 QA-23은 A 2.80 대 B/B′ 3.60개/변화로 A가 우세했다. 응답성·정확성은 `MEASURED_REFERENCE_HARNESS`, 변경 원장은 `HYBRID_REFERENCE_ESTIMATE`이며 제품 E2E나 최종 Architecture 선택은 아니다.
 
 ### 6.3 차이 등급의 조건과 근거
 
@@ -414,7 +414,7 @@ VIA-DP-06 v5 reference campaign에서는 A가 QA-11~13 correctness에서, B′�
 | [03 음성 입력 근거](./via-dp-03-voice-evidence.md#t2) | 같은 필수 음성 근거를 두 안 모두 제공할 수 있어야 한다. 정렬·정규화가 critical path에 남는 경우 QA-01/02/05, 제공자 변화가 경계를 넘는 경우 QA-22를 비교한다. 기능 부재를 낮은 정확도 점수로 바꾸지 않는다. |
 | [04 직접 응답 승인](./via-dp-04-response-authority.md#t1) | Core 승인이 음성 준비보다 늦으면 QA-02에서 A가 유리할 수 있다. 사전 승인으로 겹치면 차이가 작다. QA-41은 lease·사본 대 승인 대기 buffer이며 크기는 미정이다. |
 | [05 Context 읽기 집합](./via-dp-05-context-contract.md#t2) | 처리 중 새 자료가 필요할 때 A의 입력 세대 재확정과 B의 추가 조회가 갈린다. QA-03/05도 실제 Context 보완에 참여해야 한다. 재시작의 조회 복원과 값의 동시 수명이 QA-31/41에 연결된다. |
-| [06 의미 확정 권한](./via-dp-06-semantic-authority.md#t1) | QA-12는 공동 맥락 판단과 단계별 집중·정정의 차이를 실제 모델 corpus로 확인해야 한다. 지연은 같은 semantic LLM의 실제 호출 의존 관계로, QA-21/22는 의미 계약이 전파되는 변경 내역으로 비교한다. QA-11 통합 우열은 아직 ?다. |
+| [06 의미 확정 권한](./via-dp-06-semantic-authority.md#t1) | v5에서 지연·정확성을, v6에서 QA-21~23 전체 변경 원장을 검증했다. QA-21·22는 동률이고 QA-23은 A가 평균 0.80개/변화 적었다. QA-15/31/41은 아직 `BLOCKED`다. |
 | [07 복합 요청 실행](./via-dp-07-compound-orchestration.md#t1) | B가 동등한 node 제어·질문·복구 기능을 제공해야 한다. QA-05는 후행 위임 전 억제, QA-21은 복합 계약 변경, QA-31/41은 관계 복원·상태 수명의 차이다. QA-01은 공통 복합 집계 미정으로 ×, QA-03은 동일 source 정의 전까지 ?다. |
 | [08 복구 기준 기록](./via-dp-08-recovery-source.md#t2) | QA-31은 checkpoint와 남은 이력 재생 대 현재 상태 로딩·미완료 동작 복원이다. 정상 지연은 실제 durable 쓰기가 경로에 있을 때만, QA-22/41은 reader 이행·복원 buffer에 따라 달라진다. |
 | [09 Agent 의미 해석](./via-dp-09-agent-semantics.md#t2) | QA-21은 공통 의미로 흡수되는 변화에서는 A, 새 수명 의미로 공통 계약까지 바뀌면 B가 유리할 수 있다. 전체 9건 변경 평균은 미정이며 정확성의 반대 방향 우세를 자동 부여하지 않는다. |
@@ -431,7 +431,7 @@ VIA-DP-06 v5 reference campaign에서는 A가 QA-11~13 correctness에서, B′�
 ### 6.4 이 지도에서 읽을 수 있는 것과 없는 것
 
 - **관련성은 넓고, 차이 근거는 그보다 좁다.** VIA-DP-14×QA-14와 VIA-DP-18×QA-51처럼 중요한 필수 검증이어도 우열을 만드는 지표는 아닐 수 있다.
-- **정확성은 일부 검증됐지만 공백이 남는다.** VIA-DP-06×QA-12는 local Qwen reference campaign에서 A/B/B′ 차이를 관측했다. QA-15와 전체 change/fault/resource 축은 아직 `BLOCKED`다. VIA-DP-12×QA-11~15의 근거 보존 효과를 의미·상태 알고리즘 정확도의 대체 근거로 쓰지 않는다.
+- **정확성과 변경 원장은 검증됐지만 공백이 남는다.** VIA-DP-06×QA-12는 local Qwen reference campaign에서 A/B/B′ 차이를 관측했고, QA-21~23 전체 pack은 v6 구조 원장으로 평가했다. QA-15/31/41은 아직 `BLOCKED`다. VIA-DP-12×QA-11~15의 근거 보존 효과를 의미·상태 알고리즘 정확도의 대체 근거로 쓰지 않는다.
 - **차이 표시의 수로 핵심 DP·ASR을 선정하지 않는다.** 실제 대표값 차이, 제품에서의 중요성, A에 유리한 QA와 B에 유리한 QA가 모두 있는지를 다음 단계에서 확인한다. QA-41의 차이 등급도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
 - **차이가 없어도 의무는 남는다.** QA-51 안전 조건, 정확한 Task 연결·수렴·연속성, trace·평가 재현 계약은 어느 대안을 택해도 지켜야 한다. QA-11과 원인 QA-12~15도 독립 점수로 중복 합산하지 않는다.
 
@@ -441,11 +441,11 @@ VIA-DP-06 v5 reference campaign에서는 A가 QA-11~13 correctness에서, B′�
 
 ## 7. 무엇이 완료됐고 무엇이 남았는가
 
-완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑, VIA-DP-06 v5 통합 reference campaign이다. v5는 24-case correctness와 대표 responsiveness case별 20회 반복, local semantic LLM·외부 Reference Agent·reference Voice loopback·독립 raw replay를 포함한다. 여섯 QA가 `BLOCKED`이고 Alibaba S2S product path는 실행하지 않았으므로 전체 완료나 제품 E2E로 부르지 않는다. 대안은 선택하지 않았고 기존 ADR의 승인·유예와 재검증 조건은 보존했다.
+완료 범위는 18개 후보 문서·구현 수준 그림·전체 QA 사고실험·이전 계열 매핑, VIA-DP-06 v6 통합 보고서다. v6는 v5의 24-case correctness·대표 responsiveness case별 20회 반복·local semantic LLM·외부 Reference Agent·reference Voice loopback·독립 raw replay를 참조하고, QA-21~23의 87개 구조 원장을 추가한다. QA-15/31/41이 `BLOCKED`이고 Alibaba S2S product path는 실행하지 않았으므로 전체 완료나 제품 E2E로 부르지 않는다. 대안은 선택하지 않았고 기존 ADR의 승인·유예와 재검증 조건은 보존했다.
 
 ### 구현 근거와 남은 확인
 
-- 06: v5에서 실제 local Qwen 모델 정확도와 QA-01/02/05 reference Voice 지연을 측정했다. QA-15/21~23/31/41과 제품 S2S E2E는 미측정이다.
+- 06: v5에서 실제 local Qwen 모델 정확도와 QA-01/02/05 reference Voice 지연을 측정했고, v6에서 QA-21~23 전체 변경 pack을 구조 원장으로 평가했다. QA-15/31/41과 제품 S2S E2E는 미측정이다.
 - 09: native fixture 변환 구조가 있으나 외부 제품 capability 검증과 전체 9건 ledger는 미완료.
 - 11: 외부 Reference Agent, bridge·worker candidate와 preliminary raw pipeline까지 구현. QA-01~15 공통 contract·sentinel qualification, Physical Voice E2E와 실제 제품 Agent Client fault profile은 미완료.
 - 14: SharedTaskService·PerTaskSupervisors·공통 SQLite Repository가 있으나 현행 Voice·복구 QA 검증이 아님.

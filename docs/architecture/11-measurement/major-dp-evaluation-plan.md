@@ -123,7 +123,7 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 
 | DP | 보존된 결과 경로 | 현재 증거 수준 | 다음 작업 |
 | --- | --- | --- | --- |
-| VIA-DP-06 | `via-dp-06-evaluation-v5-20260927/` | ANALYSIS_COMPLETE_WITH_BLOCKED_AXES | QA-15/21~23/31/41 후속 pack; 현재 수치는 v5 사용 |
+| VIA-DP-06 | `via-dp-06-evaluation-v6-20260927/` | ANALYSIS_COMPLETE_WITH_NON_QA20_BLOCKED_AXES | QA-21~23 보완 완료; QA-15/31/41 후속 endpoint·반복 필요 |
 | VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | V5_RUNNER_READY / v4는 TARGETED_PROCESS_EVIDENCE | v5 qualification 후 통합 Voice/model/Rust-host campaign |
 | VIA-DP-14 | `via-dp-14-evaluation-v1-20260927/` | INTEGRATED_RUNNER_READY | 실제 Rust Task host, race/reopen, Voice/model/Agent campaign qualification 필요 |
 | VIA-DP-09 | `via-dp-09-evaluation-v1-20260927/` | PRELIMINARY_COMPONENT_ONLY | Rust lifecycle path와 shared model/Voice/Agent에 결합 |
@@ -186,7 +186,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 
 | DP | Decision audit | 19-QA audit | Implementation | Qualification | Campaign | Report | 상태 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| VIA-DP-06 | 완료 | 완료 | v5 통합 reference | 완료 | breadth 72 + latency 180 | 완료 | ANALYSIS_COMPLETE_WITH_BLOCKED_AXES |
+| VIA-DP-06 | 완료 | 완료 | v5 통합 reference + v6 변경 원장 | 완료 | breadth 72 + latency 180 + locality 87 | 완료 | ANALYSIS_COMPLETE_WITH_NON_QA20_BLOCKED_AXES |
 | VIA-DP-11 | 완료 | 완료 | v5 통합 runner 구현 | 대기 | process/fault v4만 | 예비 보고서 | V5_RUNNER_READY |
 | VIA-DP-14 | 완료 | 완료 | 통합 Rust Task host·runner 구현 | 대기 | 대기 | 대기 | INTEGRATED_RUNNER_READY |
 | VIA-DP-09 | 완료 | 완료 | Python component | 완료 | preliminary | 예비 보고서 | PRELIMINARY_COMPONENT_ONLY |
@@ -224,6 +224,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 | 2026-09-27 | VIA-DP-11 v5 runner 구현 | local Qwen, generated input WAV, actual Rust shared/isolated host, external Agent, audible loopback, fault/memory/trace 결합 | DP-06 종료 후 qualification |
 | 2026-09-27 | VIA-DP-14 executable Task host·runner 구현 | SharedTaskService/PerTaskSupervisors, actual race, DB reopen, model/Agent/audio path 결합 | DP-06·11 뒤 qualification |
 | 2026-09-27 | VIA-DP-06 v5 공식 campaign·독립 replay | raw 252건+warm-up 18건, 후보별 84건, failure/trace 누락 0; A correctness 우세, B′ responsiveness 우세 | VIA-DP-11 v5 qualification |
+| 2026-09-27 | VIA-DP-06 QA-21~23 v6 보완 | 기존 252건은 `source_execution_key`로 참조만 하고, 29개 변경×3 후보=87개 비누적 원장 실행·독립 replay; QA-23에서 A 우세 | VIA-DP-11 v5 qualification |
 
 ## 12. 다음 단일 작업
 
