@@ -41,6 +41,10 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
 def git_revision() -> str:
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 
@@ -210,13 +214,44 @@ def main() -> int:
     source_path = ROOT / contract["source_campaign"]["path"]
     source_summary = source_path / "summary.json"
     source_manifest = source_path / "manifest.json"
+    source_records = read_jsonl(source_path / "raw/trials.jsonl")
+    source_keys = {
+        "QA-01": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "latency_repetition" and record["case_id"] == "TC-W01"
+        ],
+        "QA-02": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "latency_repetition" and record["case_id"] == "TC-D01"
+        ],
+        "QA-05": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "latency_repetition" and record["case_id"] == "TC-W03"
+        ],
+        "QA-11": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "correctness_breadth"
+        ],
+        "QA-12": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "correctness_breadth"
+        ],
+        "QA-13": [
+            record["source_execution_key"] for record in source_records
+            if record["stratum"] == "correctness_breadth"
+        ],
+        "QA-61": [record["source_execution_key"] for record in source_records],
+        "QA-62": [record["source_execution_key"] for record in source_records],
+    }
     source_map = {
         "reuse_mode": "REFERENCE_ONLY_NOT_INDEPENDENT_SAMPLES",
         "source_campaign": contract["source_campaign"]["path"],
         "source_summary_sha256": sha256_file(source_summary),
         "source_manifest_sha256": sha256_file(source_manifest),
         "source_raw_sha256": load(source_manifest)["raw_sha256"],
-        "reused_qa_ids": ["QA-01", "QA-02", "QA-03", "QA-04", "QA-05", "QA-11", "QA-12", "QA-13", "QA-14", "QA-15", "QA-31", "QA-32", "QA-41", "QA-51", "QA-61", "QA-62"],
+        "reused_measured_qa_ids": ["QA-01", "QA-02", "QA-05", "QA-11", "QA-12", "QA-13", "QA-61", "QA-62"],
+        "reused_disposition_qa_ids": ["QA-03", "QA-04", "QA-14", "QA-15", "QA-31", "QA-32", "QA-41", "QA-51"],
+        "source_execution_keys_by_qa": source_keys,
         "newly_executed_qa_ids": ["QA-21", "QA-22", "QA-23"],
     }
     write(output_dir / "source-evidence-map.json", source_map)
