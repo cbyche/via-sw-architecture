@@ -1,0 +1,73 @@
+{
+  "contract_id": "VIA-DP-11-EVALUATION-v5",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-11",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "target": "MacBook Air M5, 24 GB, macOS 26.5.1",
+  "candidates": ["isolated_worker", "same_process"],
+  "candidate_meaning": {
+    "isolated_worker": "VIA-owned Agent client in a supervised Rust worker process",
+    "same_process": "the same VIA-owned Agent client inside the Rust Core process"
+  },
+  "fixed_context": {
+    "semantic_model": "one shared Qwen3-8B Q4_K_M local runtime; a paired A/B trial reuses one actual semantic source execution",
+    "input": "one generated request WAV and one BlackHole input observation per paired A/B trial",
+    "downstream_agent": "same external deterministic Reference Agent process and TCP contract",
+    "voice_renderer": "same macOS Yuna renderer and BlackHole loopback",
+    "changed_axis": "only the OS process boundary of the VIA-owned Agent client"
+  },
+  "fixtures": {
+    "normal": "benchmark/architecture/fixtures/dp11-normal-v1.json",
+    "semantic_context": "benchmark/architecture/fixtures/dp11-semantic-context-v2.json",
+    "change_ledger": "benchmark/architecture/fixtures/dp11-change-ledger-v1.json"
+  },
+  "strata": {
+    "correctness_breadth": {
+      "membership": "all cases whose execution or observation path physically crosses the Agent client",
+      "scored_trials_per_case_per_candidate": 1
+    },
+    "latency_repetition": {
+      "case_qa_mapping": {"N2-01": "QA-01", "N4-01": "QA-03", "N5-01": "QA-05"},
+      "warmup_trials_per_case_per_candidate": 2,
+      "scored_trials_per_case_per_candidate": 20
+    },
+    "faults": {
+      "F-01_common_whole_via_restart": 10,
+      "F-02_integration_client_fatal_per_candidate": 10,
+      "F-03_common_post_publish_pre_commit": 10
+    }
+  },
+  "aggregation": {
+    "latency": "nearest-rank p95 and arithmetic mean over each 20-sample representative stratum",
+    "correctness": "strict case success and atomic field correctness over applicable breadth cases",
+    "recovery": "maximum fault-stratum nearest-rank p95",
+    "blast_radius": "maximum excess affected independent user-visible units",
+    "memory": "nearest-rank p95 of candidate process-tree RSS plus the one shared local semantic runtime counted once",
+    "trace": "100 * complete scored records / all scored records",
+    "reproduction": "exact independent analyzer reproduction from raw evidence"
+  },
+  "fault_recovery_timeout_ms": 30000,
+  "physical_endpoint_timeout_ms": {"QA-01": 60000, "QA-03": 60000, "QA-05": 60000},
+  "qa_applicability": {
+    "QA-01": "APPLICABLE_REPEATED_AGENT_RESULT_PATH",
+    "QA-02": "N/A_DIRECT_RESPONSE_BYPASSES_AGENT_CLIENT_PROCESS_BOUNDARY",
+    "QA-03": "APPLICABLE_REPEATED_AGENT_STATUS_PATH",
+    "QA-04": "N/A_NORMAL_BARGE_IN_PLAYBACK_PATH_BYPASSES_AGENT_CLIENT_PROCESS_BOUNDARY",
+    "QA-05": "APPLICABLE_REPEATED_AGENT_CONTROL_PATH",
+    "QA-11": "APPLICABLE_AGENT_PATH_BREADTH_CASES",
+    "QA-12": "N/A_SHARED_SEMANTIC_RESOLUTION_PRECEDES_PROCESS_PLACEMENT_AXIS",
+    "QA-13": "APPLICABLE_AGENT_PATH_BREADTH_CASES",
+    "QA-14": "APPLICABLE_AGENT_EVENT_AND_CONTROL_STATE_CASES",
+    "QA-15": "N/A_NORMAL_CHANNEL_CONTINUITY_BYPASSES_PROCESS_PLACEMENT_AXIS",
+    "QA-21": "BLOCKED_FULL_AGENT_CHANGE_PACK_NOT_EXECUTED",
+    "QA-22": "N/A_MODEL_CONTEXT_STATE_CHANGE_PACK_BYPASSES_AGENT_CLIENT_PLACEMENT",
+    "QA-23": "BLOCKED_FULL_EXPERIMENT_LOG_CHANGE_PACK_NOT_EXECUTED",
+    "QA-31": "APPLICABLE_EXECUTED_FAULT_STRATA",
+    "QA-32": "APPLICABLE_EXECUTED_FAULT_CONTAINMENT_STRATA",
+    "QA-41": "APPLICABLE_TARGET_MAC_PROCESS_TREE_RSS_WITH_SHARED_MODEL_COUNTED_ONCE",
+    "QA-51": "N/A_BOTH_CANDIDATES_REMAIN_IN_SAME_VIA_TRUST_BOUNDARY",
+    "QA-61": "APPLICABLE_ALL_SCORED_RUNTIME_AND_FAULT_RECORDS",
+    "QA-62": "APPLICABLE_CAMPAIGN_WIDE"
+  },
+  "failure_treatment": "All endpoint failures and timeouts remain in raw evidence; successful-sample filtering is forbidden."
+}

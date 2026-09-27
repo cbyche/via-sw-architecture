@@ -64,6 +64,12 @@ candidate를 실행한다. executable 후보는
 구분하며 내부 진단시간을 Voice QA로 승격하지 않는다. 이 Python component 결과는
 공통 Rust candidate runtime과 Voice/model/Agent 통합 경로에서 다시 측정해야 한다.
 
+`run_dp06_evaluation_v5.py`는 24-case correctness breadth와 QA-01/02/05별 20회
+physical-loopback latency stratum을 분리한다. `run_dp11_evaluation_v5.py`는 같은 target
+Mac Voice/model 조건에서 실제 Rust host의 `isolated_worker`와 `same_process`를 외부
+Reference Agent 앞에 배치하고 QA-01/03/05, correctness, fault, memory와 trace를 함께
+수집한다. 두 runner 모두 warm-up을 별도 raw에 기록하고 scored failure를 삭제하지 않는다.
+
 ```bash
 .venv/bin/python benchmark/architecture/run_priority_dp_campaigns.py
 ```
