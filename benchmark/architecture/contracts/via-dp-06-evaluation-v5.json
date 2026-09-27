@@ -1,0 +1,90 @@
+{
+  "contract_id": "VIA-DP-06-EVALUATION-v5",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-06",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "candidates": ["A", "B", "B_PRIME"],
+  "candidate_meaning": {
+    "A": "one integrated semantic authority call",
+    "B": "three staged semantic authority calls",
+    "B_PRIME": "B plus a deterministic post-grounding fast-path tactic"
+  },
+  "fixed_context": {
+    "semantic_model": "one shared Qwen3-8B Q4_K_M GGUF local endpoint",
+    "input": "same generated request WAV and frozen evaluator annotation",
+    "context_engine": "out of scope; same frozen Context output fixture",
+    "agent": "same external Reference Agent process and TCP contract",
+    "voice_renderer": "same macOS Yuna renderer and BlackHole loopback",
+    "s2s": "not invoked; no S2S tool calling"
+  },
+  "fixture": "benchmark/architecture/fixtures/dp06-semantic-input-v4.json",
+  "oracle": "benchmark/architecture/fixtures/dp06-semantic-oracle-v4.json",
+  "change_exercises": "benchmark/architecture/fixtures/dp06-change-exercises-v4.json",
+  "foundation_contract": "benchmark/architecture/contracts/qa01-15-foundation-v1.json",
+  "strata": {
+    "correctness_breadth": {
+      "cases": "ALL_24",
+      "warmup_trials_per_case": 0,
+      "scored_trials_per_case": 1,
+      "purpose": "deterministic semantic and integrated correctness breadth; not a latency percentile sample"
+    },
+    "latency_repetition": {
+      "cases": ["TC-W01", "TC-D01", "TC-W03"],
+      "qa_mapping": {
+        "TC-W01": "QA-01",
+        "TC-D01": "QA-02",
+        "TC-W03": "QA-05"
+      },
+      "warmup_trials_per_case": 2,
+      "scored_trials_per_case": 20,
+      "purpose": "paired representative normal-path latency distributions for QA-01, QA-02 and QA-05"
+    }
+  },
+  "run_order": {
+    "correctness_breadth": "candidate-major with all raw records appended immediately",
+    "latency_repetition": "round-robin by repetition, case and candidate after candidate-specific warmup",
+    "successful_sample_filtering": "forbidden"
+  },
+  "aggregation": {
+    "latency_primary": "nearest-rank p95 over 20 scored samples for each representative QA stratum",
+    "latency_auxiliary": ["arithmetic mean", "median", "minimum", "maximum", "actual full user wall clock", "all raw samples"],
+    "correctness_primary": "100 * mean(strict case pass) over 24 breadth cases",
+    "correctness_auxiliary": ["field-level correctness", "strict case success", "all atomic observations"],
+    "changeability": "mean actually changed frozen Architecture Element files per executed exercise",
+    "traceability": "100 * complete traces / all scored traces",
+    "reproducibility": "100 only when a separate analyzer process reproduces the core-summary digest"
+  },
+  "substantive_response_oracle": true,
+  "physical_endpoint_timeout_ms": {
+    "QA-01": 60000,
+    "QA-02": 60000,
+    "QA-05": 60000
+  },
+  "timeout_policy": {
+    "physical_endpoint_missing": "score frozen timeout and mark censored",
+    "correctness_failure_with_observed_response": "preserve actual elapsed time and report correctness separately",
+    "wrong_non_agent_route_for_QA01": "preserve actual full response time and keep correctness failed",
+    "successful_sample_filtering": "forbidden"
+  },
+  "qa_applicability": {
+    "QA-01": "APPLICABLE_REPEATED_AGENT_RESULT_STRATUM",
+    "QA-02": "APPLICABLE_REPEATED_DIRECT_RESPONSE_STRATUM",
+    "QA-03": "N/A_DP06_DOES_NOT_CHANGE_STATUS_RECONNECTION",
+    "QA-04": "N/A_DP06_DOES_NOT_CHANGE_BARGE_IN_CONTROL",
+    "QA-05": "APPLICABLE_REPEATED_CONTROL_DISPOSITION_STRATUM",
+    "QA-11": "APPLICABLE_ALL_BREADTH_CASES",
+    "QA-12": "APPLICABLE_ALL_BREADTH_CASES",
+    "QA-13": "APPLICABLE_ALL_BREADTH_CASES",
+    "QA-14": "N/A_NO_ASYNC_STATE_RACE_IN_THIS_DP",
+    "QA-15": "BLOCKED_DP06_PARTICIPATES_BUT_NO_CHANNEL_OR_RECONNECT_TRANSITION_IN_FROZEN_CORPUS",
+    "QA-21": "BLOCKED_FULL_A01_A09_CHANGE_PACK_NOT_EXECUTABLE",
+    "QA-22": "BLOCKED_FULL_M01_M09_C01_C06_CHANGE_PACK_NOT_EXECUTABLE",
+    "QA-23": "BLOCKED_FULL_E01_E05_CHANGE_PACK_NOT_EXECUTABLE",
+    "QA-31": "BLOCKED_NO_FROZEN_SEMANTIC_RETRY_FAULT_REPETITION",
+    "QA-32": "N/A_NO_FAULT_CONTAINMENT_BOUNDARY_DIFFERENCE",
+    "QA-41": "BLOCKED_ISOLATED_TARGET_DEVICE_PEAK_MEMORY_P95_NOT_IMPLEMENTED",
+    "QA-51": "N/A_NO_PROTECTED_INFORMATION_BOUNDARY_DIFFERENCE",
+    "QA-61": "APPLICABLE_ALL_SCORED_TRIALS",
+    "QA-62": "APPLICABLE_CAMPAIGN_WIDE"
+  }
+}

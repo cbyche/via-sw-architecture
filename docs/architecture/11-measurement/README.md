@@ -1,8 +1,8 @@
 # Measurement Guide
 
-> **Current state:** active QA category와 single-metric semantic definitions가 있다. VIA-DP-02·05·06·09·11·12·13은 fail-closed 19-QA reference result를 만들었고, 나머지 DP의 machine contract·candidate·current result는 아직 없다.
+> **Current state:** active QA category와 single-metric semantic definitions가 있다. VIA-DP-02·05·06·09·11·12·13은 예비 reference result를 만들었지만, 통합 경로·실제 endpoint·반복을 모두 만족하는 최종 Architecture decision evidence는 아직 없다.
 >
-> **Current phase:** VIA-DP-02/05/06/09/11/12/13은 **A/B Measurement & Evaluation**, 나머지는 **Measurement Contract Definition 또는 Candidate Implementation**이다. DP마다 lifecycle 상태를 따로 관리한다.
+> **Current phase:** 공통 통합 하네스와 VIA-DP-06 v5는 **Candidate Implementation**, 나머지 DP는 **Measurement Contract Definition 또는 Candidate Implementation**이다. 기존 결과는 재사용 가능한 예비 증거일 뿐 최종 완료 상태가 아니다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
@@ -49,7 +49,7 @@
 
 `Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
 
-일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. 완료된 일곱 DP의 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. 일곱 DP의 예비 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 

@@ -1,12 +1,12 @@
 # VIA Architecture evaluation — 실행 요약 보고서
 
-> 2026-09-27 · target Mac reference harness · Architecture winner/ASR 최종 확정 전
+> 2026-09-27 · superseded preliminary/targeted evidence · Architecture winner/ASR 최종 확정 전
 
 ## 1. 결론
 
-이번 실행에서 **공식 package까지 완결된 DP는 VIA-DP-02·05·06·09·11·12·13 일곱 개**다.
-모든 package는 후보별 active QA 19행을 빠짐없이 가지며, 숫자를 만들 수 없는 행을
-임의 PASS나 proxy로 채우지 않고 `N/A` 또는 `BLOCKED`로 분리했다.
+이번 실행은 VIA-DP-02·05·06·09·11·12·13의 **예비/부분 evidence package**를 만들었다.
+package 형식은 후보별 active QA 19행을 가지지만, 후속 품질 감사에서 통합 경로·실제
+endpoint·반복 조건이 부족해 어떤 DP도 최종 `COMPLETE`가 아닌 것으로 재분류되었다.
 
 - **VIA-DP-06:** A 통합 semantic authority가 correctness와 QA-01에서 우세했다.
   B′ tactic은 B의 모델 호출과 지연을 줄여 QA-02/05 frozen-case 최대시간에서 가장
@@ -26,7 +26,7 @@
   Voice endpoint와 전체 change/recovery pack이 없어 현재 QA에서 구조적 trade-off를
   입증하지 못했다.
 
-따라서 실제 양방향 trade-off가 가장 명확한 현재 조합은 **VIA-DP-11 × QA-32/QA-41**과
+예비 결과에서 양방향 trade-off 징후가 가장 명확한 조합은 **VIA-DP-11 × QA-32/QA-41**과
 **VIA-DP-12 × QA-05·11/QA-61**이다.
 VIA-DP-06에서는 A와 B′가 correctness 대 responsiveness에서 갈렸지만 case당 1회라
 분산과 p95를 주장할 수 없다. 두 결과만으로 Architecture winner나 ASR을 확정하지 않는다.
@@ -69,7 +69,7 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 
 정식 보고서: [VIA-DP-11 v4](./via-dp-11-evaluation-v4-20260927/report.md)
 
-## 4. 추가 완료 campaign 핵심 결과
+## 4. 추가 예비 campaign 핵심 결과
 
 | DP | A 핵심값 | B 핵심값 | 현재 해석 |
 | --- | --- | --- | --- |
@@ -90,18 +90,18 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 | DP | 현재 증거 상태 | 이번에 확인한 것 | 공식 QA 값이 아직 없는 이유 |
 | --- | --- | --- | --- |
 | 01 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | executable direct/Agent scope 후보 없음 |
-| 02 | **COMPLETE_REFERENCE_CAMPAIGN** | 실제 SQLite commit/reopen, 120 raw trials, replay PASS | Voice·전체 change pack은 BLOCKED |
+| 02 | **TARGETED_PARTIAL** | 실제 SQLite commit/reopen, 120 raw trials, replay PASS | 통합 Voice/model/Agent 경로와 전체 change pack 미결합 |
 | 03 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | 실제 Voice evidence 후보 없음 |
 | 04 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | S2S 게시 authority 후보·audible corpus 없음 |
-| 05 | **COMPLETE_REFERENCE_CAMPAIGN** | 200 raw trials, Context version/권한 oracle, replay PASS | Voice·전체 change/recovery pack은 BLOCKED |
-| 06 | **COMPLETE_REFERENCE_CAMPAIGN** | 72 raw trial, 19-QA report, replay PASS | 반복 p95·6개 관련 QA contract는 후속 필요 |
+| 05 | **PRELIMINARY_COMPONENT_ONLY** | 200 raw trials, Context version/권한 oracle, replay PASS | Python component path이며 통합 경로 미결합 |
+| 06 | **INTEGRATED_REFERENCE_BREADTH_ONLY** | 72 raw trial, model/Agent/audio path, replay PASS | case당 1회라 p95·최종 선택 불가 |
 | 07 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | compound execution 후보·oracle 미구현 |
 | 08 | PROTOTYPE_PRIMITIVES_ONLY | restart/recovery primitive tests PASS | event+checkpoint 대 snapshot+outbox 전체 후보 미구현 |
-| 09 | **COMPLETE_REFERENCE_CAMPAIGN** | 450 raw trials, 9 native lifecycle changes, replay PASS | Voice·restart·E change pack은 BLOCKED |
+| 09 | **PRELIMINARY_COMPONENT_ONLY** | 450 raw trials, 9 component change exercise, replay PASS | Rust lifecycle/Voice/model/Agent 통합 경로 미결합 |
 | 10 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | session lifecycle 후보·stream fixture 미구현 |
-| 11 | **COMPLETE_TARGETED_CAMPAIGN** | fault/recovery/memory/trace, 19-QA report, replay PASS | Voice/correctness/change-locality 일부 BLOCKED |
-| 12 | **COMPLETE_REFERENCE_CAMPAIGN** | 200 raw trials, flush-before-crash/writer-fault, replay PASS | Voice·QA-32 closure·memory는 BLOCKED |
-| 13 | **COMPLETE_REFERENCE_CAMPAIGN** | 60 raw trials, 실제 thread-pool saturation, replay PASS | acoustic Voice·shared model 구간은 BLOCKED |
+| 11 | **TARGETED_PROCESS_EVIDENCE** | fault/recovery/memory/trace, 19-QA report, replay PASS | 전체 interaction/correctness/change path 미결합 |
+| 12 | **TARGETED_PARTIAL** | 200 raw trials, flush-before-crash/writer-fault, replay PASS | Rust evidence store와 통합 path 미결합 |
+| 13 | **TARGETED_PARTIAL** | 60 raw trials, 실제 thread-pool saturation, replay PASS | 실제 scheduler와 Voice/shared model path 미결합 |
 | 14 | PROTOTYPE_PRIMITIVES_ONLY | shared writer/per-Task writer invariant tests PASS | frozen race/load campaign과 19-QA endpoint 미구현 |
 | 15 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | push-confirm/query-confirm 후보·event source fixture 미구현 |
 | 16 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | model-history state 후보·reconnect fixture 미구현 |
@@ -114,8 +114,8 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 
 ## 6. 다음 우선순위
 
-다음 implementation 순서는 상태·권한 소유권과 현재 primitive 재사용 가능성을 함께
-고려해 **VIA-DP-14 → VIA-DP-08 → VIA-DP-04 → VIA-DP-15 → VIA-DP-18**이다. 각 DP는 같은 절차를 따른다.
+다음 implementation은 **VIA-DP-06 v5 공통 통합 하네스**를 먼저 완성한다. 그 뒤
+**VIA-DP-11 → 14 → 09 → 02 → 08 → 13** 순서로 한 축씩 교체하고, 나머지 DP 전체로 확장한다.
 
 1. A/B mutually exclusive·steelman 재감사
 2. 19개 QA별 실제 참여 graph와 `MEASURED/N/A/BLOCKED` 사전 동결
@@ -123,6 +123,6 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 4. sentinel qualification 뒤 단 한 번의 official campaign
 5. raw append, 독립 replay, 19-QA package 검사
 
-일곱 campaign에서 확인한 가장 큰 교훈은 **“19행을 채우는 것”과 “19개를 측정한 척하는
-것”은 다르다**는 점이다. 현재 결과는 실제 endpoint가 있는 축만 숫자로 남겼기 때문에
-후속 DP와 비교 가능한 기준선으로 사용할 수 있다.
+일곱 예비 campaign에서 확인한 가장 큰 교훈은 **“19행을 채우는 것”과 “Architecture
+의사결정에 충분한 통합 측정”은 다르다**는 점이다. 현재 결과는 harness와 후보 구현을
+재사용할 수 있는 개발 기준선이며, 최종 A/B 선택 수치로 사용하지 않는다.

@@ -522,8 +522,13 @@ def run_change_exercises(output_dir: Path) -> list[dict[str, Any]]:
 def run_trial(
     *, endpoint: str, candidate: str, fixture: dict[str, Any], case: dict[str, Any],
     expected: dict[str, Any], foundation: dict[str, Any], output_dir: Path, trial: int,
+    stratum: str = "correctness_breadth", warmup: bool = False,
 ) -> dict[str, Any]:
-    trial_dir = output_dir / "artifacts" / candidate / case["id"] / f"trial-{trial:02d}"
+    phase = "warmup" if warmup else "scored"
+    trial_dir = (
+        output_dir / "artifacts" / stratum / phase / candidate / case["id"]
+        / f"trial-{trial:02d}"
+    )
     trial_dir.mkdir(parents=True, exist_ok=True)
     input_wav = output_dir / "stimuli" / f"{case['id']}.wav"
     input_report = probe_audio(input_wav, trial_dir / "input-audio")
@@ -551,7 +556,8 @@ def run_trial(
         "schema_version": "via.dp06.evaluation-trial.v4",
         "evidence_label": "MEASURED_REFERENCE_HARNESS",
         "candidate": candidate, "case_id": case["id"], "trial": trial,
-        "source_execution_key": f"{candidate}:{case['id']}:{trial}",
+        "stratum": stratum, "warmup": warmup,
+        "source_execution_key": f"{stratum}:{phase}:{candidate}:{case['id']}:{trial}",
         "request_annotation": case["request"],
         "input_audio_report": input_report,
         "semantic_output": semantic_output,

@@ -2,14 +2,14 @@
 
 - [Audio loopback qualification v1](audio-loopback-qualification-v1-20260926/README.md): BlackHole 2ch known-waveform output→capture qualification, PASS (`MEASURED_REFERENCE_HARNESS`)
 
-> **Status: VIA-DP-06 v4 reference campaign과 VIA-DP-11 v4 targeted campaign 완료**
+> **Status: 통합 Architecture campaign 재구축 중. 아래 결과는 예비/부분 증거이며 최종 완료 DP는 없음.**
 
 ## Current evidence
 
-- [2026-09-27 실행 요약 보고서](./evaluation-executive-report-20260927.md)는 완료된 VIA-DP-02/05/06/09/11/12/13 결과와 VIA-DP-01~18 전체 readiness를 한 문서에서 정리한다.
-- [VIA-DP-02 v2](./via-dp-02-evaluation-v2-20260927/report.md), [VIA-DP-05 v1](./via-dp-05-evaluation-v1-20260927/report.md), [VIA-DP-09 v1](./via-dp-09-evaluation-v1-20260927/report.md), [VIA-DP-12 v1](./via-dp-12-evaluation-v1-20260927/report.md), [VIA-DP-13 v1](./via-dp-13-evaluation-v1-20260927/report.md)은 이번 우선 campaign의 current evidence다.
-- [VIA-DP-06 evaluation v4](./via-dp-06-evaluation-v4-20260927/report.md)는 24개 case × A/B/B′의 72 trial을 실행한 `MEASURED_REFERENCE_HARNESS`다. active QA 19행을 모두 보고하며 유효 endpoint가 없는 행은 `N/A` 또는 `BLOCKED`다. case당 1회라 production p95나 최종 대안 선택 근거로 사용하지 않는다.
-- [VIA-DP-11 evaluation v4](./via-dp-11-evaluation-v4-20260927/report.md)는 Process fault·recovery·memory·trace에 한정한 targeted `MEASURED_REFERENCE_HARNESS`다. QA-32는 A 0개, B 4개의 초과 중단 단위를 관측했고 QA-41은 B가 약 3.7 MiB 작았다. proxy endpoint와 partial predicate는 `BLOCKED`로 남겼다.
+- [2026-09-27 실행 요약 보고서](./evaluation-executive-report-20260927.md)는 기존 VIA-DP-02/05/06/09/11/12/13 결과와 VIA-DP-01~18 readiness를 정리한 예비 보고서다. `COMPLETE` 표기는 현재 완료 기준으로 superseded되었다.
+- [VIA-DP-02 v2](./via-dp-02-evaluation-v2-20260927/report.md), [VIA-DP-05 v1](./via-dp-05-evaluation-v1-20260927/report.md), [VIA-DP-09 v1](./via-dp-09-evaluation-v1-20260927/report.md), [VIA-DP-12 v1](./via-dp-12-evaluation-v1-20260927/report.md), [VIA-DP-13 v1](./via-dp-13-evaluation-v1-20260927/report.md)은 component/targeted 예비 증거다. 통합 A/B 측정값으로 사용하지 않는다.
+- [VIA-DP-06 evaluation v4](./via-dp-06-evaluation-v4-20260927/report.md)는 24개 case × A/B/B′의 72 trial을 실행한 `MEASURED_REFERENCE_HARNESS`다. 증거 수준은 `INTEGRATED_REFERENCE_BREADTH_ONLY`다. active QA 19행을 모두 보고하며 유효 endpoint가 없는 행은 `N/A` 또는 `BLOCKED`다. case당 1회라 production p95나 최종 대안 선택 근거로 사용하지 않는다.
+- [VIA-DP-11 evaluation v4](./via-dp-11-evaluation-v4-20260927/report.md)는 Process fault·recovery·memory·trace에 한정한 `TARGETED_PROCESS_EVIDENCE`다. QA-32는 A 0개, B 4개의 초과 중단 단위를 관측했고 QA-41은 B가 약 3.7 MiB 작았다. 전체 interaction path의 결론이 아니며 proxy endpoint와 partial predicate는 `BLOCKED`다.
 - 실행 evidence는 허용된 evidence label을 실제 source별로 구분한다. Physical Voice product path가 아니므로 `PRODUCT_E2E`가 아니다.
 - 이전 VIA-DP-11 pilot 및 complete-v1~v3는 [preliminary archive](../archive/dp11-preliminary-20260926/README.md)로 이동했다. current Architecture 주장에 사용하지 않는다.
 

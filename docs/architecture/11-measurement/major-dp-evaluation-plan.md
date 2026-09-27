@@ -1,6 +1,6 @@
 # 주요 VIA-DP 연속 평가 실행 계획
 
-> 상태: **ACTIVE PLAN — 공식 campaign 실행 전**
+> 상태: **ACTIVE RECOVERY PLAN — 통합 campaign 재구축 중**
 > 시작일: 2026-09-27
 > 목표: VIA-DP-01~18 전체를 동일한 Architecture 평가 절차로 검토·구현·측정한다.
 
@@ -31,8 +31,36 @@
     immutable campaign만 둔다.
 14. 모든 보고서는 A/B 및 허용된 tactic 후보를 포함한 19-QA complete table을 가진다.
 15. 한 DP가 `BLOCKED`/`INVALID`여도 원인이 독립적인 다음 DP는 계속 진행한다.
+16. result package가 완결됐다는 이유만으로 `COMPLETE`라고 하지 않는다. 관련 QA의
+    실제 endpoint, 반복 수, candidate 구조 참여와 독립 replay가 모두 충족되어야 한다.
+17. 아래 수준보다 낮은 기존 결과는 원본을 보존하되 Architecture 선택 근거가 아닌
+    `PRELIMINARY_COMPONENT_ONLY`, `TARGETED_PARTIAL`,
+    `TARGETED_PROCESS_EVIDENCE`, `INTEGRATED_REFERENCE_BREADTH_ONLY`로 표시한다.
 
-## 2. DP별 공통 lifecycle
+## 2. 완료 판정 기준
+
+DP-06 v4의 장점인 실제 local semantic model, 외부 Reference Agent process, generated
+Voice input, BlackHole audible loopback과 raw field-level oracle을 공통 최저선으로 삼는다.
+그보다 높은 최종 campaign은 다음을 모두 만족해야 한다.
+
+1. A/B가 문서 설명이 아니라 component/process/message/state 차이로 실행된다.
+2. 두 후보에서 해당 DP 외의 model, fixture, Agent, Context, 자원 한도는 같다.
+3. 19개 QA를 모두 감사하고 각 셀을 `MEASURED`, `N/A`, `BLOCKED`로 근거와 함께 남긴다.
+4. Responsiveness 대표값은 warm-up 뒤 case별 20회 이상의 scored repetition에서 계산한다.
+5. correctness는 strict case success와 field-level predicate 원본을 함께 보존한다.
+6. fault/recovery가 관련되면 독립 fresh state fault trial을 조건별 10회 이상 실행한다.
+7. QA-21~23은 실제 change exercise와 frozen element ledger로 측정한다.
+8. QA-41은 후보 process와 shared local model을 포함한 동일 accounting boundary를 쓴다.
+9. QA-51은 evaluator-only protected-data oracle로 실제 exposure를 판정한다.
+10. QA-61/62는 raw trace completeness와 clean replay digest로 측정한다.
+11. physical endpoint가 필요한 QA는 실제 input/loopback 사건을 사용한다. 관련 endpoint가
+    없으면 숫자를 만들지 않고 `BLOCKED`로 남긴다.
+12. 모든 raw trial, model call/token ledger, repair 위치, failure, timeout과 environment를
+    immutable result directory에 보존한다.
+
+이 기준을 모두 충족하기 전에는 보고서가 19행 표를 가진 경우에도 `COMPLETE`가 아니다.
+
+## 3. DP별 공통 lifecycle
 
 1. **Decision audit:** A/B 상호 배타성, steelman, Architecture 차이와 tactic 구분
 2. **19-QA audit:** 19개 각각의 endpoint와 A/B 차이 참여 경로 작성
@@ -43,7 +71,7 @@
 7. **Independent analysis:** 별도 process가 raw summary digest를 재현
 8. **Report/audit:** 19-QA 표, 보조 지표, 원인·한계, tests/link/terminology/diff 검사
 
-## 3. 공통 QA 19개
+## 4. 공통 QA 19개
 
 | 범주 | QA |
 | --- | --- |
@@ -58,9 +86,9 @@
 QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보고하지만 단순 합산한
 후보 점수는 만들지 않는다.
 
-## 4. 실행 순서
+## 5. 실행 순서
 
-### 4.1 1차 핵심 DP
+### 5.1 1차 핵심 DP
 
 사용자와 합의한 순서로 먼저 처리한다.
 
@@ -72,7 +100,7 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 6. VIA-DP-08 — 복구 기준 기록
 7. VIA-DP-13 — control 자원 예약
 
-### 4.2 후속 전체 DP
+### 5.2 후속 전체 DP
 
 1차 완료 후 다음 우선순위로 나머지를 처리한다. 우선순위는 핵심 사용자 경로 참여,
 상태·권한 소유권, A/B의 19-QA trade-off 가능성, 변경 비용 순이다.
@@ -91,25 +119,25 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 
 각 DP의 decision audit 결과 순서를 바꿔야 하면 이유를 실행 로그에 먼저 기록한다.
 
-## 5. 공식 campaign 이름과 현재 준비 상태
+## 6. 현재 증거 수준과 다음 campaign
 
-| DP | 공식 결과 경로 | 현재 상태 | 다음 작업 |
+| DP | 보존된 결과 경로 | 현재 증거 수준 | 다음 작업 |
 | --- | --- | --- | --- |
-| VIA-DP-06 | `via-dp-06-evaluation-v4-20260927/` | COMPLETE | 결과 감사·요약 반영 완료 |
-| VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | COMPLETE | 결과 감사·요약 반영 완료 |
+| VIA-DP-06 | `via-dp-06-evaluation-v4-20260927/` | INTEGRATED_REFERENCE_BREADTH_ONLY | v5 공통 통합 하네스, case별 20회 반복 |
+| VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | TARGETED_PROCESS_EVIDENCE | 통합 Voice/semantic/Task 경로에 실제 process 후보 결합 |
 | VIA-DP-14 | `via-dp-14-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | 두 Task writer는 있으나 frozen race/load campaign 필요 |
-| VIA-DP-09 | `via-dp-09-evaluation-v1-20260927/` | COMPLETE | 9 native change case·19-QA report·replay 완료 |
-| VIA-DP-02 | `via-dp-02-evaluation-v2-20260927/` | COMPLETE | 공동 commit/reconciliation·reopen recovery 완료 |
+| VIA-DP-09 | `via-dp-09-evaluation-v1-20260927/` | PRELIMINARY_COMPONENT_ONLY | Rust lifecycle path와 shared model/Voice/Agent에 결합 |
+| VIA-DP-02 | `via-dp-02-evaluation-v2-20260927/` | TARGETED_PARTIAL | Rust Task/Conversation store와 통합 interaction path 결합 |
 | VIA-DP-08 | `via-dp-08-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | recovery primitive는 있으나 두 복구 원본 후보 campaign 미구현 |
-| VIA-DP-13 | `via-dp-13-evaluation-v1-20260927/` | COMPLETE | 예약/shared thread-pool saturation·19-QA report 완료 |
-| VIA-DP-05 | `via-dp-05-evaluation-v1-20260927/` | COMPLETE | manifest/read-set Context corpus·19-QA report 완료 |
-| VIA-DP-12 | `via-dp-12-evaluation-v1-20260927/` | COMPLETE | durable gate/async flush fault corpus·19-QA report 완료 |
+| VIA-DP-13 | `via-dp-13-evaluation-v1-20260927/` | TARGETED_PARTIAL | 실제 scheduler/queue와 정상·포화 통합 workload 결합 |
+| VIA-DP-05 | `via-dp-05-evaluation-v1-20260927/` | PRELIMINARY_COMPONENT_ONLY | 실제 Context adapter/read-set과 semantic path 결합 |
+| VIA-DP-12 | `via-dp-12-evaluation-v1-20260927/` | TARGETED_PARTIAL | Rust evidence store와 response/Agent dispatch 경로 결합 |
 | VIA-DP-01,03,04,07,10,15~18 | `via-dp-NN-evaluation-v1-20260927/` | AUDIT_REQUIRED | executable candidate·oracle 구현 필요 |
 
 `IMPLEMENTATION_REQUIRED`는 blocker나 결론이 아니다. 문서 후보를 실제 executable
 candidate와 evaluator로 옮겨야 한다는 현재 상태다.
 
-## 6. VIA-DP-06 동결 실행 카드
+## 7. VIA-DP-06 v4 보존 카드와 v5 기준
 
 - Contract: `benchmark/architecture/contracts/via-dp-06-evaluation-v4.json`
 - Candidates: A, B, B′
@@ -122,13 +150,14 @@ candidate와 evaluator로 옮겨야 한다는 현재 상태다.
 - Correctness: QA-11~13 strict, QA-12 field-level 보조
 - Responsiveness: QA-01/02/05 endpoint와 full wall-clock
 - Physical endpoint failure score: 60초; semantic 오답에는 적용하지 않음
-- Repetition: case당 1회 breadth. production p95라고 부르지 않음
-- 예상 실행: 약 30~40분
+- Repetition: case당 1회 breadth. production p95도 최종 선택 근거도 아님
+- v5: 동일 24개 case를 유지하되 warm-up 2회 + scored 20회, candidate process와
+  shared dependency 수명을 고정하고 trial-level raw를 즉시 기록
 
 VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability는 qualification에서
 실제 참여 경로를 재확인하며, 비참여가 입증된 QA만 `N/A`로 확정한다.
 
-## 7. DP별 산출물 완결 조건
+## 8. DP별 산출물 완결 조건
 
 - `manifest.json`: contract/fixture/oracle/source digest와 환경
 - `raw/trials.jsonl`: 성공·실패·timeout 포함 원본
@@ -140,7 +169,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 
 값이 없는 QA도 행을 삭제하지 않는다. `N/A` 또는 `BLOCKED`와 구체 사유를 쓴다.
 
-## 8. 사용자 개입 정책
+## 9. 사용자 개입 정책
 
 밤사이 사용자 개입은 요구하지 않는다. 다음 경우에만 해당 DP를 멈추고 아침 보고서에
 명시한 뒤 독립적인 다음 DP로 진행한다.
@@ -153,22 +182,22 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 그 외 candidate 구현, synthetic fixture, Reference Agent, fault/load injection, 측정,
 분석과 보고서는 자동 진행한다. 승자와 ASR 사업 우선순위는 사용자가 결정한다.
 
-## 9. 진행표
+## 10. 진행표
 
 | DP | Decision audit | 19-QA audit | Implementation | Qualification | Campaign | Report | 상태 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| VIA-DP-06 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
-| VIA-DP-11 | 완료 | 완료 | targeted v4 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| VIA-DP-06 | 완료 | 완료 | v4 breadth | 완료 | 1회 breadth | 예비 보고서 | INTEGRATED_REFERENCE_BREADTH_ONLY |
+| VIA-DP-11 | 완료 | 완료 | targeted v4 | 완료 | process/fault 일부 | 예비 보고서 | TARGETED_PROCESS_EVIDENCE |
 | VIA-DP-14 | 완료 | 사고실험 있음 | 두 writer primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| VIA-DP-09 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
-| VIA-DP-02 | 완료 | 완료 | v2 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| VIA-DP-09 | 완료 | 완료 | Python component | 완료 | preliminary | 예비 보고서 | PRELIMINARY_COMPONENT_ONLY |
+| VIA-DP-02 | 완료 | 완료 | Python targeted v2 | 완료 | partial | 예비 보고서 | TARGETED_PARTIAL |
 | VIA-DP-08 | 완료 | 사고실험 있음 | recovery primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| VIA-DP-13 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
-| VIA-DP-05 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
-| VIA-DP-12 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| VIA-DP-13 | 완료 | 완료 | Python targeted | 완료 | partial | 예비 보고서 | TARGETED_PARTIAL |
+| VIA-DP-05 | 완료 | 완료 | Python component | 완료 | preliminary | 예비 보고서 | PRELIMINARY_COMPONENT_ONLY |
+| VIA-DP-12 | 완료 | 완료 | Python targeted | 완료 | partial | 예비 보고서 | TARGETED_PARTIAL |
 | VIA-DP-01,03,04,07,10,15~18 | 완료 | 사고실험 있음 | 미구현 | 대기 | 대기 | 대기 | AUDIT_REQUIRED |
 
-## 10. 실행 로그
+## 11. 실행 로그
 
 | 시각 (KST) | 항목 | 결과 | 다음 작업 |
 | --- | --- | --- | --- |
@@ -190,13 +219,15 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 | 2026-09-27 | VIA-DP-05/09/13/12 v1 official campaign | 각각 200/450/60/200 raw trial, 독립 replay·package 검사 PASS | VIA-DP-02 endpoint 감사 |
 | 2026-09-27 | VIA-DP-02 v1 endpoint 감사 | INVALID; QA-05에 DB 준비 포함, QA-31 reopen 누락 | v1 archive 후 v2 contract·candidate 수정 |
 | 2026-09-27 | VIA-DP-02 v2 official campaign | 120 raw trial, 실제 reopen recovery, 독립 replay·package 검사 PASS | 전체 결과 문서 반영 |
+| 2026-09-27 | 전 결과 품질 재감사 | 7개 결과 모두 최종 `COMPLETE` 기준 미달. package 완결성과 Architecture 의사결정 증거를 혼동한 상태를 정정 | 공통 통합 하네스와 DP-06 v5 구축 |
 
-## 11. 다음 단일 작업
+## 12. 다음 단일 작업
 
 ### 2026-09-27 사용자 지시 정정
 
-준비도 분석에서 멈추지 않는다. 다음 다섯 DP는 executable A/B, frozen
-fixture/oracle, official campaign과 19-QA report까지 완결했다.
+준비도 분석에서 멈추지 않는다. 먼저 DP-06 v5를 공통 통합 campaign의 reference
+implementation으로 만든다. 이후 같은 runner, trace schema와 evaluator를 재사용하여
+DP-11 → 14 → 09 → 02 → 08 → 13 순서로 한 축씩 교체한다.
 
 1. VIA-DP-05 — 닫힌 Context manifest 대 확장 가능한 scoped read-set
 2. VIA-DP-09 — edge semantic normalization 대 Core lifecycle handler
@@ -204,10 +235,6 @@ fixture/oracle, official campaign과 19-QA report까지 완결했다.
 4. VIA-DP-13 — 회수 가능한 control reservation 대 완전 공유 priority pool
 5. VIA-DP-12 — 최소 evidence durable ACK 선행 대 비동기 flush
 
-각 campaign은 실제로 구현된 경계만 `MEASURED`로 보고했다. Voice acoustic endpoint,
-전체 change pack 또는 full-model accounting처럼 이번 reference path에 없는 QA는 숫자를
-만들지 않고 `BLOCKED` 또는 물리 비참여가 입증된 경우에만 `N/A`로 남긴다. unit test와
-내부 queue 시간은 해당 QA의 실제 endpoint를 대체하지 않는다.
-
-다음 단일 작업은 VIA-DP-14의 두 Task writer를 race/load fixture와 machine oracle로
-감싸는 것이다. 이후 VIA-DP-08 → VIA-DP-04 → VIA-DP-15 → VIA-DP-18 순서로 같은 기준을 적용한다.
+DP-06 v5가 qualification과 독립 replay를 통과하기 전에는 다른 DP의 공식 campaign을
+시작하지 않는다. 다만 candidate 구현과 applicability audit은 병행할 수 있다. v5가
+통과하면 기존 component experiment의 숫자를 재사용하지 않고 통합 경로에서 다시 측정한다.

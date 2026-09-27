@@ -1,6 +1,6 @@
 # Current Architecture Measurement Harness
 
-> **Status: QA-01~15 common evaluator foundation implemented; seven official reference campaigns complete**
+> **Status: QA-01~15 common evaluator foundation implemented; seven preliminary/targeted campaigns preserved; integrated campaign rebuild in progress**
 
 이 디렉터리는 현재 Architecture baseline에 맞는 machine-readable contract, fixture, executable harness, raw-trace validator, aggregation code를 구현할 active 위치다.
 
@@ -47,19 +47,22 @@ QA 번호가 아니다.
 중간 pilot/reference runner, contract와 결과는 삭제했다. 현재 VIA-DP-06 source of truth는
 `via-dp-06-evaluation-v4.json`, v4 fixture 3종, `run_dp06_evaluation.py`,
 `analyze_dp06_evaluation.py`뿐이다. 공식 결과는
-[`via-dp-06-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)에 있다.
+[`via-dp-06-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)에 있다. v4는 case당 1회 breadth run이므로
+`INTEGRATED_REFERENCE_BREADTH_ONLY`이며 최종 선택 근거가 아니다.
 
 VIA-DP-11의 active runner는 `via-dp-11-evaluation-v4.json`을 사용한다. 기존 v1~v3
 결과와 analyzer는 preliminary provenance이며, v4는 proxy를 QA 값으로 승격하지 않고
 실제 실행 가능한 fault recovery, blast radius, target-Mac memory와 trace만 점수화한다.
-공식 결과는 [`via-dp-11-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)에 있다.
+보존 결과는 [`via-dp-11-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)에 있다. 이는 Process/fault 축의
+`TARGETED_PROCESS_EVIDENCE`이고 전체 interaction path의 완료 증거가 아니다.
 
-`run_priority_dp_campaigns.py`는 VIA-DP-05/09/02/13/12 순서의 targeted reference
+`run_priority_dp_campaigns.py`는 VIA-DP-05/09/02/13/12 순서의 preliminary/targeted reference
 candidate를 실행한다. executable 후보는
 `prototypes/candidates/reference_harness/candidates.py`, frozen contract는
 `via-dp-02-evaluation-v2.json`과 각 DP의 v1 JSON, 독립 raw analyzer는
 `analyze_priority_dp_campaign.py`다. 각 결과는 19개 QA 전체를 `MEASURED/N/A/BLOCKED`로
-구분하며 내부 진단시간을 Voice QA로 승격하지 않는다.
+구분하며 내부 진단시간을 Voice QA로 승격하지 않는다. 이 Python component 결과는
+공통 Rust candidate runtime과 Voice/model/Agent 통합 경로에서 다시 측정해야 한다.
 
 ```bash
 .venv/bin/python benchmark/architecture/run_priority_dp_campaigns.py
