@@ -1,0 +1,57 @@
+{
+  "contract_id": "VIA-DP-14-EVALUATION-v1",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-14",
+  "evidence_label": "MEASURED_REFERENCE_HARNESS",
+  "target": "MacBook Air M5, 24 GB, macOS 26.5.1",
+  "candidates": ["shared_service", "per_task_supervisor"],
+  "candidate_meaning": {
+    "shared_service": "stateless shared Task transition service with repository revision arbitration",
+    "per_task_supervisor": "one active single-writer supervisor and bounded mailbox per Task with repository epoch fencing"
+  },
+  "fixed_context": {
+    "semantic_model": "one shared local Qwen3-8B Q4_K_M",
+    "agent_integration": "same supervised Rust integration worker and external Reference Agent",
+    "repository": "same SQLite WAL/FULL schema, transition rules and command dedup",
+    "voice": "same generated request WAV, macOS Yuna renderer and BlackHole loopback",
+    "changed_axis": "only Task state transition ownership and command arbitration"
+  },
+  "normal_cases": {
+    "T-CREATE": "semantic request, Task creation, Agent handoff, result commit and audible result",
+    "T-STATUS": "Agent progress source event, Task observation commit and audible status",
+    "T-CANCEL": "semantic control request, cancel commit, Agent confirmation and audible disposition",
+    "T-RACE": "concurrent cancel and completion for the same Task followed by terminal convergence",
+    "T-MULTI": "four independent Tasks with a hot-Task race and unaffected progress on the other Tasks"
+  },
+  "repetitions": {
+    "correctness_breadth_per_case_per_candidate": 1,
+    "latency_warmup_per_case_per_candidate": 2,
+    "latency_scored_per_case_per_candidate": 20,
+    "recovery_faults_per_candidate": 10,
+    "race_trials_per_candidate": 20
+  },
+  "latency_case_qa_mapping": {"T-CREATE": "QA-01", "T-STATUS": "QA-03", "T-CANCEL": "QA-05"},
+  "physical_endpoint_timeout_ms": {"QA-01": 60000, "QA-03": 60000, "QA-05": 60000},
+  "recovery_timeout_ms": 30000,
+  "qa_applicability": {
+    "QA-01": "APPLICABLE_TASK_CREATE_ACCEPT_RESULT_COMMIT_PATH",
+    "QA-02": "N/A_DIRECT_RESPONSE_WITHOUT_TASK_WRITE_BYPASSES_THIS_AXIS",
+    "QA-03": "APPLICABLE_AGENT_STATUS_TO_TASK_COMMIT_TO_AUDIBLE_PATH",
+    "QA-04": "N/A_PLAYBACK_INTERRUPTION_DOES_NOT_WAIT_FOR_TASK_COMMIT",
+    "QA-05": "APPLICABLE_TASK_CONTROL_COMMIT_AND_DISPOSITION_PATH",
+    "QA-11": "APPLICABLE_ALL_FIVE_NORMAL_CASES",
+    "QA-12": "N/A_SHARED_SEMANTIC_MODEL_PRECEDES_TASK_WRITER_AXIS",
+    "QA-13": "APPLICABLE_TASK_RUN_AND_COMMAND_BINDING_CASES",
+    "QA-14": "APPLICABLE_STATUS_CONTROL_RACE_AND_MULTI_TASK_CASES",
+    "QA-15": "APPLICABLE_RESTART_AND_REOPEN_CONTINUITY_CASES",
+    "QA-21": "N/A_AGENT_CHANGE_PACK_DOES_NOT_CHANGE_TASK_WRITER_OWNERSHIP",
+    "QA-22": "BLOCKED_FULL_STATE_CHANGE_PACK_NOT_EXECUTED",
+    "QA-23": "BLOCKED_FULL_EXPERIMENT_LOG_CHANGE_PACK_NOT_EXECUTED",
+    "QA-31": "APPLICABLE_TASK_HOST_RESTART_REOPEN_AND_CONTROL_RECOVERY",
+    "QA-32": "N/A_BOTH_CANDIDATES_SHARE_THE_SAME_PROCESS_AND_DATABASE_FAULT_BOUNDARY",
+    "QA-41": "APPLICABLE_TARGET_MAC_PROCESS_RSS_WITH_SHARED_MODEL_COUNTED_ONCE",
+    "QA-51": "N/A_SAME_DATA_SCOPE_AND_TRUST_BOUNDARY",
+    "QA-61": "APPLICABLE_ALL_SCORED_NORMAL_RACE_AND_FAULT_RECORDS",
+    "QA-62": "APPLICABLE_CAMPAIGN_WIDE"
+  }
+}

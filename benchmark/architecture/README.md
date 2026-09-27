@@ -70,6 +70,11 @@ Mac Voice/model 조건에서 실제 Rust host의 `isolated_worker`와 `same_proc
 Reference Agent 앞에 배치하고 QA-01/03/05, correctness, fault, memory와 trace를 함께
 수집한다. 두 runner 모두 warm-up을 별도 raw에 기록하고 scored failure를 삭제하지 않는다.
 
+`via-task-host`와 `run_dp14_evaluation.py`는 VIA-DP-14의 두 Task writer를 같은
+JSON command, SQLite repository, isolated Agent integration과 physical Voice endpoint에
+연결한다. 정상 create/status/cancel, cancel-completion race, multi-Task, restart/reopen을
+분리된 stratum으로 기록한다.
+
 ```bash
 .venv/bin/python benchmark/architecture/run_priority_dp_campaigns.py
 ```

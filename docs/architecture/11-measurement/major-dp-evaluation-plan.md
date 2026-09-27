@@ -125,7 +125,7 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 | --- | --- | --- | --- |
 | VIA-DP-06 | `via-dp-06-evaluation-v4-20260927/` | INTEGRATED_REFERENCE_BREADTH_ONLY | v5 공통 통합 하네스, case별 20회 반복 |
 | VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | V5_RUNNER_READY / v4는 TARGETED_PROCESS_EVIDENCE | v5 qualification 후 통합 Voice/model/Rust-host campaign |
-| VIA-DP-14 | `via-dp-14-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | 두 Task writer는 있으나 frozen race/load campaign 필요 |
+| VIA-DP-14 | `via-dp-14-evaluation-v1-20260927/` | INTEGRATED_RUNNER_READY | 실제 Rust Task host, race/reopen, Voice/model/Agent campaign qualification 필요 |
 | VIA-DP-09 | `via-dp-09-evaluation-v1-20260927/` | PRELIMINARY_COMPONENT_ONLY | Rust lifecycle path와 shared model/Voice/Agent에 결합 |
 | VIA-DP-02 | `via-dp-02-evaluation-v2-20260927/` | TARGETED_PARTIAL | Rust Task/Conversation store와 통합 interaction path 결합 |
 | VIA-DP-08 | `via-dp-08-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | recovery primitive는 있으나 두 복구 원본 후보 campaign 미구현 |
@@ -188,7 +188,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | VIA-DP-06 | 완료 | 완료 | v4 breadth | 완료 | 1회 breadth | 예비 보고서 | INTEGRATED_REFERENCE_BREADTH_ONLY |
 | VIA-DP-11 | 완료 | 완료 | v5 통합 runner 구현 | 대기 | process/fault v4만 | 예비 보고서 | V5_RUNNER_READY |
-| VIA-DP-14 | 완료 | 사고실험 있음 | 두 writer primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
+| VIA-DP-14 | 완료 | 완료 | 통합 Rust Task host·runner 구현 | 대기 | 대기 | 대기 | INTEGRATED_RUNNER_READY |
 | VIA-DP-09 | 완료 | 완료 | Python component | 완료 | preliminary | 예비 보고서 | PRELIMINARY_COMPONENT_ONLY |
 | VIA-DP-02 | 완료 | 완료 | Python targeted v2 | 완료 | partial | 예비 보고서 | TARGETED_PARTIAL |
 | VIA-DP-08 | 완료 | 사고실험 있음 | recovery primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
@@ -222,6 +222,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 | 2026-09-27 | 전 결과 품질 재감사 | 7개 결과 모두 최종 `COMPLETE` 기준 미달. package 완결성과 Architecture 의사결정 증거를 혼동한 상태를 정정 | 공통 통합 하네스와 DP-06 v5 구축 |
 | 2026-09-27 | VIA-DP-06 v5 계약·runner 동결 | 24-case correctness + QA-01/02/05 각 20회 physical-loopback 반복, source revision `a5bfadda` | 공식 campaign 실행 중 |
 | 2026-09-27 | VIA-DP-11 v5 runner 구현 | local Qwen, generated input WAV, actual Rust shared/isolated host, external Agent, audible loopback, fault/memory/trace 결합 | DP-06 종료 후 qualification |
+| 2026-09-27 | VIA-DP-14 executable Task host·runner 구현 | SharedTaskService/PerTaskSupervisors, actual race, DB reopen, model/Agent/audio path 결합 | DP-06·11 뒤 qualification |
 
 ## 12. 다음 단일 작업
 

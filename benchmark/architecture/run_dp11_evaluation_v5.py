@@ -283,6 +283,8 @@ def main() -> int:
     write_json(output_dir / "manifest.json", manifest)
     raw_path = output_dir / "raw/trials.jsonl"
     warmup_path = output_dir / "raw/warmups.jsonl"
+    raw_path.touch()
+    warmup_path.touch()
 
     agent = LegacyAgentAdapter()
     hosts = {
