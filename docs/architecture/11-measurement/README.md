@@ -2,7 +2,7 @@
 
 > **Current state:** active QA category와 single-metric semantic definitions가 있다. VIA-DP-02·05·06·09·11·12·13은 fail-closed 19-QA reference result를 만들었고, 나머지 DP의 machine contract·candidate·current result는 아직 없다.
 >
-> **Current phase:** DP-02/05/06/09/11/12/13은 **A/B Measurement & Evaluation**, 나머지는 **Measurement Contract Definition 또는 Candidate Implementation**이다. DP마다 lifecycle 상태를 따로 관리한다.
+> **Current phase:** VIA-DP-02/05/06/09/11/12/13은 **A/B Measurement & Evaluation**, 나머지는 **Measurement Contract Definition 또는 Candidate Implementation**이다. DP마다 lifecycle 상태를 따로 관리한다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 

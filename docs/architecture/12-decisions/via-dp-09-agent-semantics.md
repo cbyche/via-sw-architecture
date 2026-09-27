@@ -137,7 +137,7 @@ A-01/02/03은 신규·교체·protocol, A-04/05는 status·실행 식별, A-06�
 
 ### T3. 복구·모델 변화·근거 수집
 
-재시작 시 양쪽 모두 VIA Task와 native 실행 ID·질문 ID·취소 ID의 mapping을 복원한다. Source가 없는 revision을 adapter든 handler든 만들어내서는 안 된다. Adapter 위치가 Process fault boundary를 바꾸는 것은 아니며, 동일 fault는 DP-11 조건에서 검토한다.
+재시작 시 양쪽 모두 VIA Task와 native 실행 ID·질문 ID·취소 ID의 mapping을 복원한다. Source가 없는 revision을 adapter든 handler든 만들어내서는 안 된다. Adapter 위치가 Process fault boundary를 바꾸는 것은 아니며, 동일 fault는 VIA-DP-11 조건에서 검토한다.
 
 M-01~09·C-01~06은 공통 모델·Context·저장 경계가 중심이며 mapping schema를 실제로 소비하는 부분만 추가 전파를 기록한다. E-01~05는 native source와 canonical/typed 의미를 잇는 span·correlation·schema·export·assignment가 대상이다. 양쪽 모두 완전한 event provenance와 frozen evaluator를 가질 수 있어 QA-61/62 자동 우세는 없다. 최소 정보 제공도 양쪽에 동일하다.
 
@@ -179,7 +179,7 @@ A-01~09 각각의 native before/after와 canonical/typed 계약, 변경 요소 I
 
 ## 9. 다른 DP·변경 비용
 
-[기존 AGENT ADR](../../adr/ADR-001-agent-integration-contract-boundary.md)은 A accepted이며 과거 change-ledger 근거와 현재 QA caveat를 가진다. 이 보고서는 이를 취소하거나 현재 실측으로 재승인하지 않는다. DP-07 node capability, DP-02 Task state, DP-11 배치는 독립이다. 전환 시 in-flight native ID와 의미 version을 보존하고 reader·control mapping을 함께 이행한다.
+[기존 AGENT ADR](../../adr/ADR-001-agent-integration-contract-boundary.md)은 A accepted이며 과거 change-ledger 근거와 현재 QA caveat를 가진다. 이 보고서는 이를 취소하거나 현재 실측으로 재승인하지 않는다. VIA-DP-07 node capability, VIA-DP-02 Task state, VIA-DP-11 배치는 독립이다. 전환 시 in-flight native ID와 의미 version을 보존하고 reader·control mapping을 함께 이행한다.
 
 ## 10. 현재 판단과 재검토 조건
 
@@ -193,6 +193,6 @@ A-01~09 각각의 native before/after와 canonical/typed 계약, 변경 요소 I
 
 ## 12. v1 reference campaign 결과
 
-[정식 결과](../../../results/architecture-evaluation/current/dp09-evaluation-v1-20260927/report.md)는 9개 native lifecycle 변화 × 후보별 25회를 실행했다. QA-11/13/14는 두 안 모두 225/225였고, QA-05 p95는 A 0.001ms, B 0.001ms로 실질 차이가 없었다. QA-21 평균은 A 1.44 elements, B 2.00 elements였다.
+[정식 결과](../../../results/architecture-evaluation/current/via-dp-09-evaluation-v1-20260927/report.md)는 9개 native lifecycle 변화 × 후보별 25회를 실행했다. QA-11/13/14는 두 안 모두 225/225였고, QA-05 p95는 A 0.001ms, B 0.001ms로 실질 차이가 없었다. QA-21 평균은 A 1.44 elements, B 2.00 elements였다.
 
 **현재 결론:** A의 변경 국소화만 관측됐고 B의 반대 방향 QA 이점은 관측되지 않았다. 기존 A accepted ADR과 일치하지만, 현행 최종보고서의 양방향 trade-off DP 후보로는 약하다.

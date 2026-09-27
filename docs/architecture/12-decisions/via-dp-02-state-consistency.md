@@ -210,7 +210,7 @@ A의 채택 근거는 빈번한 교차 관계를 한 번에 확정하는 비용�
 
 ## 9. 다른 DP·변경 비용
 
-DP-08 저장 기준과 DP-11 Process 경계는 별도다. DP-04 응답 권한, DP-07 복합 관계, DP-12 기록 의무와 조합 시 교차 확정 계약을 다시 확인한다. [기존 TASK ADR](../../adr/ADR-002-task-state-authority.md)은 Task별 writer 선택이며 이 보고서로 변경하지 않는다. A→B는 예약·중간 상태와 reader 호환 이행, B→A는 미완료 조정 종료 및 공동 commit 경계로의 이행이 필요하다.
+VIA-DP-08 저장 기준과 VIA-DP-11 Process 경계는 별도다. VIA-DP-04 응답 권한, VIA-DP-07 복합 관계, VIA-DP-12 기록 의무와 조합 시 교차 확정 계약을 다시 확인한다. [기존 TASK ADR](../../adr/ADR-002-task-state-authority.md)은 Task별 writer 선택이며 이 보고서로 변경하지 않는다. A→B는 예약·중간 상태와 reader 호환 이행, B→A는 미완료 조정 종료 및 공동 commit 경계로의 이행이 필요하다.
 
 ## 10. 현재 판단과 재검토 조건
 
@@ -224,6 +224,6 @@ DP-08 저장 기준과 DP-11 Process 경계는 별도다. DP-04 응답 권한, D
 
 ## 12. v2 reference campaign 결과
 
-[정식 결과](../../../results/architecture-evaluation/current/dp02-evaluation-v2-20260927/report.md)는 5개 관계 case × 후보별 12회를 실제 SQLite `FULL` durability와 reopen recovery로 실행했다. QA-05 p95는 공동 commit A 0.590ms, reconciliation B 2.083ms였고, QA-31은 A 0.346ms, B 0.952ms였다. QA-11/13/14/15는 양쪽 모두 60/60, QA-32 excess unit은 0이었다.
+[정식 결과](../../../results/architecture-evaluation/current/via-dp-02-evaluation-v2-20260927/report.md)는 5개 관계 case × 후보별 12회를 실제 SQLite `FULL` durability와 reopen recovery로 실행했다. QA-05 p95는 공동 commit A 0.590ms, reconciliation B 2.083ms였고, QA-31은 A 0.346ms, B 0.952ms였다. QA-11/13/14/15는 양쪽 모두 60/60, QA-32 excess unit은 0이었다.
 
 **현재 결론:** 이번 workload에서는 A가 응답·복구에서 우세하고 B의 반대 방향 QA 이점이 나타나지 않았다. invalid v1은 DB 준비를 QA-05에 포함하고 실제 reopen이 없어 archive했으며 근거로 사용하지 않는다.

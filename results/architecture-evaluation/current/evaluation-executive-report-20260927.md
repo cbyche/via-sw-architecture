@@ -26,9 +26,9 @@
   Voice endpoint와 전체 change/recovery pack이 없어 현재 QA에서 구조적 trade-off를
   입증하지 못했다.
 
-따라서 실제 양방향 trade-off가 가장 명확한 현재 조합은 **DP-11 × QA-32/QA-41**과
-**DP-12 × QA-05·11/QA-61**이다.
-DP-06에서는 A와 B′가 correctness 대 responsiveness에서 갈렸지만 case당 1회라
+따라서 실제 양방향 trade-off가 가장 명확한 현재 조합은 **VIA-DP-11 × QA-32/QA-41**과
+**VIA-DP-12 × QA-05·11/QA-61**이다.
+VIA-DP-06에서는 A와 B′가 correctness 대 responsiveness에서 갈렸지만 case당 1회라
 분산과 p95를 주장할 수 없다. 두 결과만으로 Architecture winner나 ASR을 확정하지 않는다.
 
 ## 2. VIA-DP-06 핵심 결과
@@ -48,7 +48,7 @@ Qwen3-8B 1개, synthetic Context output, 외부 Reference Agent와 BlackHole loo
 | QA-61 / QA-62 | 100% / 100% | 100% / 100% | 100% / 100% | 동률 |
 | Model calls | 26 | 70 | 52 | B′가 B 약점 완화 |
 
-정식 보고서: [DP-06 v4](./dp06-evaluation-v4-20260927/report.md)
+정식 보고서: [VIA-DP-06 v4](./via-dp-06-evaluation-v4-20260927/report.md)
 
 ## 3. VIA-DP-11 핵심 결과
 
@@ -67,23 +67,23 @@ supervised worker, B는 Core Process에 배치했다. 정상 workload와 fault w
 QA-01/03/05의 renderer proxy, QA-11/13/14의 부분 predicate와 QA-21/23의 design
 ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 
-정식 보고서: [DP-11 v4](./dp11-evaluation-v4-20260927/report.md)
+정식 보고서: [VIA-DP-11 v4](./via-dp-11-evaluation-v4-20260927/report.md)
 
 ## 4. 추가 완료 campaign 핵심 결과
 
 | DP | A 핵심값 | B 핵심값 | 현재 해석 |
 | --- | --- | --- | --- |
-| DP-05 | QA-11/12/15 100%; path p95 0.027 ms | QA-11/12/15 100%; path p95 0.039 ms | QA trade-off 미입증; path 시간은 진단값 |
-| DP-09 | QA-05 p95 0.001 ms; QA-21 1.44 elements | QA-05 p95 0.001 ms; QA-21 2.00 elements | A 우세, 반대 방향 QA 미관측 |
-| DP-02 v2 | QA-05 p95 0.590 ms; QA-31 0.346 ms | QA-05 p95 2.083 ms; QA-31 0.952 ms | A 우세, correctness 동률 |
-| DP-13 | QA-05 p95 0.234 ms; work p95 129.5 ms | QA-05 p95 41.021 ms; work p95 90.2 ms | control 대 일반 처리량 trade-off; 후자는 진단값 |
-| DP-12 | QA-05 p95 100 ms; QA-11 80%; QA-61 80% | QA-05 p95 0.085 ms; QA-11 100%; QA-61 60% | responsiveness/completion 대 evidence completeness |
+| VIA-DP-05 | QA-11/12/15 100%; path p95 0.027 ms | QA-11/12/15 100%; path p95 0.039 ms | QA trade-off 미입증; path 시간은 진단값 |
+| VIA-DP-09 | QA-05 p95 0.001 ms; QA-21 1.44 elements | QA-05 p95 0.001 ms; QA-21 2.00 elements | A 우세, 반대 방향 QA 미관측 |
+| VIA-DP-02 v2 | QA-05 p95 0.590 ms; QA-31 0.346 ms | QA-05 p95 2.083 ms; QA-31 0.952 ms | A 우세, correctness 동률 |
+| VIA-DP-13 | QA-05 p95 0.234 ms; work p95 129.5 ms | QA-05 p95 41.021 ms; work p95 90.2 ms | control 대 일반 처리량 trade-off; 후자는 진단값 |
+| VIA-DP-12 | QA-05 p95 100 ms; QA-11 80%; QA-61 80% | QA-05 p95 0.085 ms; QA-11 100%; QA-61 60% | responsiveness/completion 대 evidence completeness |
 
-정식 보고서: [DP-05](./dp05-evaluation-v1-20260927/report.md),
-[DP-09](./dp09-evaluation-v1-20260927/report.md),
-[DP-02 v2](./dp02-evaluation-v2-20260927/report.md),
-[DP-13](./dp13-evaluation-v1-20260927/report.md),
-[DP-12](./dp12-evaluation-v1-20260927/report.md).
+정식 보고서: [VIA-DP-05](./via-dp-05-evaluation-v1-20260927/report.md),
+[VIA-DP-09](./via-dp-09-evaluation-v1-20260927/report.md),
+[VIA-DP-02 v2](./via-dp-02-evaluation-v2-20260927/report.md),
+[VIA-DP-13](./via-dp-13-evaluation-v1-20260927/report.md),
+[VIA-DP-12](./via-dp-12-evaluation-v1-20260927/report.md).
 
 ## 5. 18개 DP 전체 진행 상태
 
@@ -115,7 +115,7 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 ## 6. 다음 우선순위
 
 다음 implementation 순서는 상태·권한 소유권과 현재 primitive 재사용 가능성을 함께
-고려해 **DP-14 → DP-08 → DP-04 → DP-15 → DP-18**이다. 각 DP는 같은 절차를 따른다.
+고려해 **VIA-DP-14 → VIA-DP-08 → VIA-DP-04 → VIA-DP-15 → VIA-DP-18**이다. 각 DP는 같은 절차를 따른다.
 
 1. A/B mutually exclusive·steelman 재감사
 2. 19개 QA별 실제 참여 graph와 `MEASURED/N/A/BLOCKED` 사전 동결

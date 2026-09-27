@@ -230,7 +230,7 @@ def write_report(result_dir: Path, summary: dict[str, Any]) -> None:
     for qa_id in QA_IDS:
         lines.append("| " + qa_id + " | " + " | ".join(cell(summary["candidate_results"][candidate], qa_id) for candidate in candidates) + " |")
     lines += ["", "## N/A and blocked audit", ""]
-    lines.append("`N/A` means the DP-06 A/B structural difference does not physically participate in the frozen path. `BLOCKED` means it does participate, but this campaign lacks the approved endpoint, complete change pack, repetition, or isolation needed for a valid value.")
+    lines.append("`N/A` means the VIA-DP-06 A/B structural difference does not physically participate in the frozen path. `BLOCKED` means it does participate, but this campaign lacks the approved endpoint, complete change pack, repetition, or isolation needed for a valid value.")
     lines += ["", "| QA | Disposition | Frozen reason |", "| --- | --- | --- |"]
     freeze = load(FREEZE)
     for qa_id in QA_IDS:

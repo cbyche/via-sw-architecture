@@ -209,11 +209,11 @@ A는 상호 의존 의미를 공동 결정하는 요구에서, B는 안정된 �
 
 ## 9. 다른 DP·변경 비용
 
-DP-03/05가 입력 근거와 조회 계약을, DP-02가 상태 적용을 제공한다. DP-04 게시 권한과 의미 확정 권한은 다른 결정이다. [기존 IR ADR](../../adr/ADR-004-semantic-decision-ownership.md)은 Deferred이며 A는 interim reference일 뿐이다. A→B에는 중간 schema·version·정정 reader, B→A에는 단일 의미 묶음과 진행 단계 이행이 필요하다.
+VIA-DP-03/05가 입력 근거와 조회 계약을, VIA-DP-02가 상태 적용을 제공한다. VIA-DP-04 게시 권한과 의미 확정 권한은 다른 결정이다. [기존 IR ADR](../../adr/ADR-004-semantic-decision-ownership.md)은 Deferred이며 A는 interim reference일 뿐이다. A→B에는 중간 schema·version·정정 reader, B→A에는 단일 의미 묶음과 진행 단계 이행이 필요하다.
 
 ## 10. v4 reference campaign 결과와 현재 판단
 
-정식 source of truth는 [`dp06-evaluation-v4-20260927`](../../../results/architecture-evaluation/current/dp06-evaluation-v4-20260927/report.md)과 `VIA-DP-06-EVALUATION-v4` 계약이다. A/B/B′는 같은 local Qwen3-8B GGUF 1개, canonical synthetic Context Evidence, 외부 Reference Agent와 BlackHole loopback Voice renderer를 사용했다. 후보 입력과 evaluator-only oracle은 분리했다.
+정식 source of truth는 [`via-dp-06-evaluation-v4-20260927`](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)과 `VIA-DP-06-EVALUATION-v4` 계약이다. A/B/B′는 같은 local Qwen3-8B GGUF 1개, canonical synthetic Context Evidence, 외부 Reference Agent와 BlackHole loopback Voice renderer를 사용했다. 후보 입력과 evaluator-only oracle은 분리했다.
 
 - QA-01 최악 case 실제 처리시간은 A **17.8초**, B **27.7초**, B′ **24.3초**였고 평균은 각각 **13.4초, 22.4초, 15.3초**였다. 의미가 틀려 Agent 경로를 타지 않았어도 audible response가 있으면 60초로 바꾸지 않고 실제 wall-clock을 사용했다.
 - QA-02 최악 case는 A **19.7초**, B **25.5초**, B′ **15.9초**였다. QA-05 최악 case는 A **38.4초**, B **27.5초**, B′ **24.3초**였다. case당 1회이므로 이 값은 frozen corpus 최대값이지 p95가 아니다.

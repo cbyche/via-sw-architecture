@@ -419,11 +419,11 @@ def _dp12(candidate: str, case: dict[str, Any], work_dir: Path) -> dict[str, Any
 
 
 RUNNERS: dict[str, Callable[[str, dict[str, Any], Path], dict[str, Any]]] = {
-    "DP-02": _dp02,
-    "DP-05": _dp05,
-    "DP-09": _dp09,
-    "DP-12": _dp12,
-    "DP-13": _dp13,
+    "VIA-DP-02": _dp02,
+    "VIA-DP-05": _dp05,
+    "VIA-DP-09": _dp09,
+    "VIA-DP-12": _dp12,
+    "VIA-DP-13": _dp13,
 }
 
 

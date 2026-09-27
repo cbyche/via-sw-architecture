@@ -54,11 +54,11 @@ class PriorityDpCampaignTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             expected = {
-                "DP-02": ({"joint_commit_completed", "joint_commit_recovered"}, {"relation_reconciliation_completed"}),
-                "DP-05": ({"context_manifest_committed"}, {"context_capability_issued"}),
-                "DP-09": ({"edge_semantic_normalized"}, {"core_lifecycle_interpreted"}),
-                "DP-12": ({"response_withheld", "evidence_durable"}, {"evidence_enqueued"}),
-                "DP-13": ({"control_execution_started"}, {"control_execution_started"}),
+                "VIA-DP-02": ({"joint_commit_completed", "joint_commit_recovered"}, {"relation_reconciliation_completed"}),
+                "VIA-DP-05": ({"context_manifest_committed"}, {"context_capability_issued"}),
+                "VIA-DP-09": ({"edge_semantic_normalized"}, {"core_lifecycle_interpreted"}),
+                "VIA-DP-12": ({"response_withheld", "evidence_durable"}, {"evidence_enqueued"}),
+                "VIA-DP-13": ({"control_execution_started"}, {"control_execution_started"}),
             }
             for dp, contract in by_dp.items():
                 case = contract["cases"][0]
@@ -68,7 +68,7 @@ class PriorityDpCampaignTests(unittest.TestCase):
                     traces[candidate] = {event["event"] for event in result["trace"]}
                 self.assertTrue(traces["A"].intersection(expected[dp][0]))
                 self.assertTrue(traces["B"].intersection(expected[dp][1]))
-                if dp != "DP-13":
+                if dp != "VIA-DP-13":
                     self.assertNotEqual(traces["A"], traces["B"])
 
 

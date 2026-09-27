@@ -217,7 +217,7 @@ required pre-release evidence와 post-output evidence를 먼저 분리해 승인
 
 ## 9. 다른 DP·변경 비용
 
-DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있다. DP-11 worker generation과 DP-13 제어 자원 경로를 같은 조건으로 둔다. DP-04 Voice 자율 게시도 이 기록 의무를 우회하지 않는다. A→B는 보존 보장 변화·manifest를 명시하고, B→A는 gate·durable acknowledgement·reader·기존 pending queue drain을 이행한다.
+VIA-DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있다. VIA-DP-11 worker generation과 VIA-DP-13 제어 자원 경로를 같은 조건으로 둔다. VIA-DP-04 Voice 자율 게시도 이 기록 의무를 우회하지 않는다. A→B는 보존 보장 변화·manifest를 명시하고, B→A는 gate·durable acknowledgement·reader·기존 pending queue drain을 이행한다.
 
 ## 10. 현재 판단과 재검토 조건
 
@@ -231,6 +231,6 @@ DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있다. D
 
 ## 12. v1 reference campaign 결과
 
-[정식 결과](../../../results/architecture-evaluation/current/dp12-evaluation-v1-20260927/report.md)는 정상·flush 전 crash·writer failure를 포함한 5개 case를 후보별 20회 실행했다. QA-05 p95는 선확정 A 100ms, 비동기 B 0.085ms였고 QA-11은 A 80%, B 100%였다. 반대로 QA-61 complete trace는 A 80%, B 60%였다. QA-23 평균은 A 3.0, B 2.0 elements였고 QA-62 replay는 둘 다 100%였다.
+[정식 결과](../../../results/architecture-evaluation/current/via-dp-12-evaluation-v1-20260927/report.md)는 정상·flush 전 crash·writer failure를 포함한 5개 case를 후보별 20회 실행했다. QA-05 p95는 선확정 A 100ms, 비동기 B 0.085ms였고 QA-11은 A 80%, B 100%였다. 반대로 QA-61 complete trace는 A 80%, B 60%였다. QA-23 평균은 A 3.0, B 2.0 elements였고 QA-62 replay는 둘 다 100%였다.
 
 **현재 결론:** 현재 일곱 campaign 중 responsiveness·request completion과 observability가 반대 방향으로 가장 명확하게 갈린 DP다. A의 100ms는 writer-failure endpoint 부재에 동결한 timeout을 포함하며 정상 fsync만의 지연으로 해석하면 안 된다.

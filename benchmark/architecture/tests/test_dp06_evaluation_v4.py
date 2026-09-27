@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static and evaluator qualification for the single active DP-06 campaign."""
+"""Static and evaluator qualification for the single active VIA-DP-06 campaign."""
 
 from __future__ import annotations
 

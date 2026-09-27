@@ -361,7 +361,10 @@ async fn dp11_normal_diagnostic(
     trials: usize,
     warmup: usize,
 ) -> anyhow::Result<serde_json::Value> {
-    anyhow::ensure!(trials > 0, "DP-11 normal diagnostic requires scored trials");
+    anyhow::ensure!(
+        trials > 0,
+        "VIA-DP-11 normal diagnostic requires scored trials"
+    );
 
     let local = LocalBridge::new(Arc::new(DeterministicAgent::new(AgentShape::Q)));
     let process = ProcessBridge::spawn(&worker).await?;

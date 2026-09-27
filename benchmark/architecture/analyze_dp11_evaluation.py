@@ -166,7 +166,7 @@ def main() -> int:
     (result_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     status = "COMPLETE" if receipt["reproduced"] else "INVALID"
     (result_dir / "STATUS.md").write_text(
-        f"# Evidence Status\n\n> **{status} — targeted DP-11 v4 reference campaign**\n\n"
+        f"# Evidence Status\n\n> **{status} — targeted VIA-DP-11 v4 reference campaign**\n\n"
         "All 19 QA rows are present. Only QA-31, QA-32, QA-41, QA-61 and QA-62 are scored; "
         "all other rows are explicitly N/A or BLOCKED by the frozen participation audit.\n",
         encoding="utf-8",

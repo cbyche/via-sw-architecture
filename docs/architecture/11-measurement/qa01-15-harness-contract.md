@@ -146,7 +146,7 @@ Proxy 값을 넣어 `MEASURED_DIFFERENTIATOR` 칸을 채우지 않는다. `NOT_R
 
 ## 9. 현재 상태
 
-DP-11 v3는 raw format·표·independent replay의 개발 자료다. 위 contract의 endpoint fidelity와 correctness sentinel을 통과하지 않았으므로 공식 campaign이 아니다. 다음 구현 대상은 DP-11 재실행이 아니라 이 공통 evaluator와 qualification suite다.
+VIA-DP-11 v3는 raw format·표·independent replay의 개발 자료다. 위 contract의 endpoint fidelity와 correctness sentinel을 통과하지 않았으므로 공식 campaign이 아니다. 다음 구현 대상은 VIA-DP-11 재실행이 아니라 이 공통 evaluator와 qualification suite다.
 
 ## 10. 공통 결과 저장 형식
 

@@ -567,7 +567,7 @@ impl AgentBackend for DeterministicAgent {
 
 /// Client for the external Reference Agent runtime. A fresh TCP connection is
 /// used for each operation so connection lifetime is not a hidden candidate
-/// difference; both DP-11 candidates use this same implementation.
+/// difference; both VIA-DP-11 candidates use this same implementation.
 #[derive(Clone)]
 pub struct RemoteReferenceAgent {
     address: Arc<String>,

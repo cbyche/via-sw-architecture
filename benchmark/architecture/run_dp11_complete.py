@@ -1004,7 +1004,7 @@ def main() -> int:
     exposure_records: list[dict[str, Any]] = []
     memory_records: list[dict[str, Any]] = []
     try:
-        # DP-11 does not participate in direct-only cases; execute them once.
+        # VIA-DP-11 does not participate in direct-only cases; execute them once.
         for case in cases:
             if case["kind"] in {"direct", "direct_followup", "clarification", "barge_in_direct"}:
                 print(f"[normal/common] {case['id']}", flush=True)

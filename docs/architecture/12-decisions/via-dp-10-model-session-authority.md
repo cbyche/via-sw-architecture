@@ -111,7 +111,7 @@ flowchart TB
 
 동일 역할 세션의 새 generation을 공통 manager가 최종 승인하면 A, 역할 owner가 독립 확정하면 B다. B에 모든 role 세션의 최종 생성·회복을 맡는 살아 있는 조정자를 두면 A다. Provider 자체의 내부 pooling은 두 안의 외부 공통 기능이다.
 
-공통 control manager와 직접 stream의 hybrid를 A로 재구성했다. ‘Gateway면 항상 추가 audio hop’과 ‘역할별이면 가중치 복제’는 폐기했다. 자원 예약은 DP-13, Process 격리는 DP-11로 분리한다. 공통 함수 library만 추가하는 선택은 독립 Architecture DP로 세지 않는다.
+공통 control manager와 직접 stream의 hybrid를 A로 재구성했다. ‘Gateway면 항상 추가 audio hop’과 ‘역할별이면 가중치 복제’는 폐기했다. 자원 예약은 VIA-DP-13, Process 격리는 VIA-DP-11로 분리한다. 공통 함수 library만 추가하는 선택은 독립 Architecture DP로 세지 않는다.
 
 A/B 모두 같은 기능·권한·실패 의미와 합리적인 보완책을 허용하는 **steelman**이다. 같은 결정 범위의 최종 기준은 **mutually exclusive**해야 한다. 속도 차이를 만들기 위해 한쪽의 검증·기록·cache를 빼지 않는다.
 
@@ -201,7 +201,7 @@ Role별 session·stream·cancel·health의 실제 native 기능과 manager 부�
 
 ## 9. 다른 DP·변경 비용
 
-DP-03 음성 입력 계약과 DP-06 의미 판단은 이 수명 관리를 사용한다. DP-11 Process 경계, DP-13 자원 예약을 공통 manager 선택에 묶지 않는다. A→B는 활성 lease·generation·취소 ownership 인계, B→A는 역할 상태의 등록·중복 생성 방지·reader 호환이 필요하다.
+VIA-DP-03 음성 입력 계약과 VIA-DP-06 의미 판단은 이 수명 관리를 사용한다. VIA-DP-11 Process 경계, VIA-DP-13 자원 예약을 공통 manager 선택에 묶지 않는다. A→B는 활성 lease·generation·취소 ownership 인계, B→A는 역할 상태의 등록·중복 생성 방지·reader 호환이 필요하다.
 
 ## 10. 현재 판단과 재검토 조건
 

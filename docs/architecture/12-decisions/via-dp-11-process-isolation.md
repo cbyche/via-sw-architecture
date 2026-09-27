@@ -167,7 +167,7 @@ A의 복구 경로는 worker 시작·handshake·미완료 명령 reconciliation,
 
 A의 worker runtime·supervisor·IPC buffer를 모두 QA-41에 포함한다. B의 같은 Process thread stack·queue도 포함한다. 원격 Agent 내부 memory를 이동하여 VIA PC 절약처럼 말하지 않는다. 동등 구현에서 A의 추가 resident runtime은 B에 유리한 원인이지만 peak와 모델 지배 여부 없이는 크기를 정하지 않는다.
 
-A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protocol·인증·artifact 또는 Model local/remote 변경이 IPC frame·배치에 실제로 닿는지 ledger로 확인한다. E-01~05는 Process generation·clock correlation·worker spool·schema·export·assignment를 포함한다. A가 Process별 source를 알기 쉽다는 이유로 trace가 자동 완전한 것은 아니다. Worker crash 직전 volatile 로그는 잃을 수 있으므로 DP-12 기록 의무를 두 안에 같게 둔다.
+A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protocol·인증·artifact 또는 Model local/remote 변경이 IPC frame·배치에 실제로 닿는지 ledger로 확인한다. E-01~05는 Process generation·clock correlation·worker spool·schema·export·assignment를 포함한다. A가 Process별 source를 알기 쉽다는 이유로 trace가 자동 완전한 것은 아니다. Worker crash 직전 volatile 로그는 잃을 수 있으므로 VIA-DP-12 기록 의무를 두 안에 같게 둔다.
 
 ## 7. 전체 19개 QA 사고실험
 
@@ -199,7 +199,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ## 8. v4 targeted reference campaign 결과
 
-[v4 결과](../../../results/architecture-evaluation/current/dp11-evaluation-v4-20260927/report.md)는 동일한 VIA Client와 외부 Reference Agent 계약에서 Process 배치만 바꾼 targeted `MEASURED_REFERENCE_HARNESS`다. 기존 v1~v3는 측정기 개발 provenance로만 남긴다.
+[v4 결과](../../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)는 동일한 VIA Client와 외부 Reference Agent 계약에서 Process 배치만 바꾼 targeted `MEASURED_REFERENCE_HARNESS`다. 기존 v1~v3는 측정기 개발 provenance로만 남긴다.
 
 | QA | A 별도 worker | B 같은 Process | 해석 |
 | --- | ---: | ---: | --- |
@@ -227,7 +227,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ## 9. 다른 DP·변경 비용
 
-[기존 EXEC ADR](../../adr/ADR-003-runtime-fault-isolation-boundary.md)은 격리 B accepted이며 새 QA 재검증 caveat가 있다. 이 보고서의 hybrid A와 대응하지만 기존 문자의 의미나 결정은 바꾸지 않는다. DP-02/08 상태, DP-12 evidence, DP-13 queue 자원은 각각 별도 축이다. 전환 시 frame version·in-flight 명령·worker generation·업데이트/rollback 호환을 이행한다.
+[기존 EXEC ADR](../../adr/ADR-003-runtime-fault-isolation-boundary.md)은 격리 B accepted이며 새 QA 재검증 caveat가 있다. 이 보고서의 hybrid A와 대응하지만 기존 문자의 의미나 결정은 바꾸지 않는다. VIA-DP-02/08 상태, VIA-DP-12 evidence, VIA-DP-13 queue 자원은 각각 별도 축이다. 전환 시 frame version·in-flight 명령·worker generation·업데이트/rollback 호환을 이행한다.
 
 ## 10. 현재 판단과 재검토 조건
 

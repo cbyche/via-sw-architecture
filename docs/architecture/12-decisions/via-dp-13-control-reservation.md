@@ -247,6 +247,6 @@ A→B는 예약 상태·차용 계약·admission을 풀어야 하고, B→A는 �
 
 ## 12. v1 reference campaign 결과
 
-[정식 결과](../../../results/architecture-evaluation/current/dp13-evaluation-v1-20260927/report.md)는 같은 4 worker와 동일 non-preemptive work로 3개 load profile을 후보별 10회 실행했다. QA-05 p95는 예약 A 0.234ms, 공유 B 41.021ms였다. 일반 work makespan p95는 A 129.5ms, B 90.2ms였다. 후자는 active QA를 대신하지 않는 구조 원인 진단이다. QA-11/13/14는 모두 30/30이었다.
+[정식 결과](../../../results/architecture-evaluation/current/via-dp-13-evaluation-v1-20260927/report.md)는 같은 4 worker와 동일 non-preemptive work로 3개 load profile을 후보별 10회 실행했다. QA-05 p95는 예약 A 0.234ms, 공유 B 41.021ms였다. 일반 work makespan p95는 A 129.5ms, B 90.2ms였다. 후자는 active QA를 대신하지 않는 구조 원인 진단이다. QA-11/13/14는 모두 30/30이었다.
 
 **현재 결론:** control responsiveness 대 일반 처리량의 구조적 맞교환은 확인됐다. 다만 최종보고서의 QA trade-off로 쓰려면 실제 Voice endpoint로 QA-01/02/04를 추가 실행해야 한다.

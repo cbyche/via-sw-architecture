@@ -44,7 +44,7 @@ QA catalog는 여전히 사용자 검토 초안이지만, DP별 lifecycle은 독
 | QA-05 Task control contract | Draft defined; machine freeze pending |
 | QA-11~15, QA-31/32/41 semantic contract | Draft defined; machine freeze pending |
 | QA-61/62 observability contract | Draft defined; machine freeze pending |
-| Machine-readable contract and harness | DP-02·05·06·09·11·12·13 implemented; 나머지 pending |
+| Machine-readable contract and harness | VIA-DP-02·05·06·09·11·12·13 implemented; 나머지 pending |
 | Current QA results | 일곱 DP의 19-QA reference package 완료; Architecture winner 미선정 |
 | Actual S2S/VIA LLM/product latency evidence | **Not measured** |
 | Previous measurement code and results | Historical/superseded archive |

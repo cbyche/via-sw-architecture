@@ -213,7 +213,7 @@ A는 Core 승인 대기가 지배적인 S2S 직접 경로에서 합리적이고,
 
 ## 9. 다른 DP·변경 비용
 
-DP-03 입력 evidence, DP-02 상태 commit, DP-12 기록 선행 의무, DP-13 제어 자원을 고정한다. A의 빠른 경로도 기록 의무·자원 경계에 따라 기다릴 수 있다. A→B 전환 시 기존 lease를 소진·회수하고 진행 Request를 인계한다. B→A는 scope·세대·회수 계약과 replay 방지를 도입한다.
+VIA-DP-03 입력 evidence, VIA-DP-02 상태 commit, VIA-DP-12 기록 선행 의무, VIA-DP-13 제어 자원을 고정한다. A의 빠른 경로도 기록 의무·자원 경계에 따라 기다릴 수 있다. A→B 전환 시 기존 lease를 소진·회수하고 진행 Request를 인계한다. B→A는 scope·세대·회수 계약과 replay 방지를 도입한다.
 
 ## 10. 현재 판단과 재검토 조건
 

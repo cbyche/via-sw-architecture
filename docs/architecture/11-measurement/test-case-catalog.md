@@ -369,7 +369,7 @@ Task view, pending interaction과 capability만 전달하며 expected field는 �
 | Cross-evidence `X` | 1 | UC-05/10: 복수 referent 후보와 Task input linkage의 공동 해석 |
 
 총 24건이다. 2026-09-27 breadth 실행은 case당 1회이며 최종 percentile campaign은
-아니다. 중간 DP-06 결과는 삭제했다. 정식 v4 campaign이 실행되면 각 field의 expected/actual/PASS와 repair 위치·token·호출시간을 새 raw JSONL에 보존한다.
+아니다. 중간 VIA-DP-06 결과는 삭제했다. 정식 v4 campaign이 실행되면 각 field의 expected/actual/PASS와 repair 위치·token·호출시간을 새 raw JSONL에 보존한다.
 
 ## 12. 현재 리뷰 상태
 

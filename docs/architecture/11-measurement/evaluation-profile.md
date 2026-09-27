@@ -114,7 +114,7 @@ QA-03, QA-04, QA-13~15와 QA-62는 같은 trace에서 함께 계산해 보조 QA
 
 QA-21/22는 위 실행을 반복해 얻는 시간이 아니라 별도 change pack의 Architecture Element ledger로 계산한다. N-01~06은 변경 뒤 필수 기능이 유지됐는지 확인하는 회귀 입력으로 재사용한다.
 
-정상 여섯 workload가 VIA-DP-01~07, 09~11, 13~18의 정상 경로를 덮는다. 복구 원본인 DP-08과 crash 전후 기록 순서인 DP-12는 정상 실행만으로 차이가 드러나지 않으므로 아래 최소 fault가 담당한다. 따라서 workload 수를 더 늘리지 않고도 18개 DP의 참여 경로를 한 번 이상 관찰할 수 있다.
+정상 여섯 workload가 VIA-DP-01~07, 09~11, 13~18의 정상 경로를 덮는다. 복구 원본인 VIA-DP-08과 crash 전후 기록 순서인 VIA-DP-12는 정상 실행만으로 차이가 드러나지 않으므로 아래 최소 fault가 담당한다. 따라서 workload 수를 더 늘리지 않고도 18개 DP의 참여 경로를 한 번 이상 관찰할 수 있다.
 
 ## 5. 최소 fault 3개
 
@@ -155,4 +155,4 @@ F-02에서 외부 Reference Agent 자체의 crash를 Process 격리의 이점으
 4. 그 뒤에만 한 축을 바꾼 DP별 A/B candidate를 구현한다.
 5. 같은 MacBook과 dependency profile에서 complete 19-QA 표를 생성하고 실제 변별 QA를 선별한다.
 
-현재 완료된 것은 local semantic LLM 설치·실행, Alibaba S2S 합성 WAV 왕복 smoke test, 외부 deterministic Reference Agent, [DP-06 v4](../../../results/architecture-evaluation/current/dp06-evaluation-v4-20260927/report.md)와 [DP-11 v4 targeted campaign](../../../results/architecture-evaluation/current/dp11-evaluation-v4-20260927/report.md)이다. 이전 DP-11 v1~v3는 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)이며 current claim에 사용하지 않는다.
+현재 완료된 것은 local semantic LLM 설치·실행, Alibaba S2S 합성 WAV 왕복 smoke test, 외부 deterministic Reference Agent, [VIA-DP-06 v4](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)와 [VIA-DP-11 v4 targeted campaign](../../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)이다. 이전 VIA-DP-11 v1~v3는 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)이며 current claim에 사용하지 않는다.

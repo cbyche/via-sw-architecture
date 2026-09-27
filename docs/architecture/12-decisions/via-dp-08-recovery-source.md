@@ -165,7 +165,7 @@ A의 checkpoint를 금지하거나 B의 인덱스를 금지하지 않는다. 저
 
 A의 domain event 이력만으로는 acoustic endpoint·model config·fixture·실제 응답 trace가 완성되지 않는다. B도 같은 execution evidence와 evaluator를 보존할 수 있다. 따라서 QA-61/62는 A의 자동 우세가 아니다. 과거 Task transition을 replay하는 것과 평가 숫자를 재계산하는 것은 다른 기능이다.
 
-C-06에서 A는 event reader/upcaster·checkpoint schema·projection, B는 state migration·pending 명령 reader·감사 schema를 확인한다. 변경 요소 수는 이런 역할을 실제로 독립 소유하는지 ledger로 판정하며 이름 개수로 세지 않는다. M-01~09·C-01~05·A-01~09도 같은 전체 pack에 포함하되 해당 경계에서 의미가 바뀌는 항목만 추적한다. E-01~05는 공통 instrumentation·evidence 책임이며 DP-12의 기록 의무를 양쪽에 동일하게 적용한다. 보존·삭제·보호정보 최소화도 이력 방식의 예외가 아니다.
+C-06에서 A는 event reader/upcaster·checkpoint schema·projection, B는 state migration·pending 명령 reader·감사 schema를 확인한다. 변경 요소 수는 이런 역할을 실제로 독립 소유하는지 ledger로 판정하며 이름 개수로 세지 않는다. M-01~09·C-01~05·A-01~09도 같은 전체 pack에 포함하되 해당 경계에서 의미가 바뀌는 항목만 추적한다. E-01~05는 공통 instrumentation·evidence 책임이며 VIA-DP-12의 기록 의무를 양쪽에 동일하게 적용한다. 보존·삭제·보호정보 최소화도 이력 방식의 예외가 아니다.
 
 ## 7. 전체 19개 QA 비교
 
@@ -205,7 +205,7 @@ A는 전이 이력을 운영 상태의 기준으로 삼으려는 요구에서, B
 
 ## 9. 다른 DP·변경 비용
 
-DP-02 상태 소유 경계와 독립이다. DP-12의 실행 evidence durability는 양쪽 상태 방식에 적용할 수 있다. DP-11 Process 복구도 같은 기준 기록을 사용한다. A→B는 특정 이력 위치의 authoritative state 전환, B→A는 기준 snapshot·명령 상태와 시작 event 경계를 명시해야 한다. 기존 history를 새 event가 있었던 것처럼 재작성하지 않는다.
+VIA-DP-02 상태 소유 경계와 독립이다. VIA-DP-12의 실행 evidence durability는 양쪽 상태 방식에 적용할 수 있다. VIA-DP-11 Process 복구도 같은 기준 기록을 사용한다. A→B는 특정 이력 위치의 authoritative state 전환, B→A는 기준 snapshot·명령 상태와 시작 event 경계를 명시해야 한다. 기존 history를 새 event가 있었던 것처럼 재작성하지 않는다.
 
 ## 10. 현재 판단과 재검토 조건
 

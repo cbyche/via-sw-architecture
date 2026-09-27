@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recompute DP-02/05/09/12/13 summaries from immutable raw trials."""
+"""Recompute VIA-DP-02/05/09/12/13 summaries from immutable raw trials."""
 
 from __future__ import annotations
 

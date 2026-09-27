@@ -212,7 +212,7 @@ C-01~05의 제공자·문서형식·화면·기억·다중 Source 변경은 A의
 
 ## 9. 다른 DP·변경 비용
 
-DP-03은 입력 시각 근거를 생성하고 DP-06은 Context를 소비해 판단한다. DP-01 직접 처리 범위와 DP-07 복합 업무를 고정한다. DP-12는 평가 근거 기록, DP-08은 Task 복구 기준이며 Context 전달과 독립이다. A→B는 capability·read-set 상태, B→A는 미완료 조회 종료·명세 이행·reader 호환이 필요하다.
+VIA-DP-03은 입력 시각 근거를 생성하고 VIA-DP-06은 Context를 소비해 판단한다. VIA-DP-01 직접 처리 범위와 VIA-DP-07 복합 업무를 고정한다. VIA-DP-12는 평가 근거 기록, VIA-DP-08은 Task 복구 기준이며 Context 전달과 독립이다. A→B는 capability·read-set 상태, B→A는 미완료 조회 종료·명세 이행·reader 호환이 필요하다.
 
 ## 10. 현재 판단과 재검토 조건
 
@@ -226,6 +226,6 @@ DP-03은 입력 시각 근거를 생성하고 DP-06은 Context를 소비해 판�
 
 ## 12. v1 reference campaign 결과
 
-[정식 결과](../../../results/architecture-evaluation/current/dp05-evaluation-v1-20260927/report.md)는 5개 Context case를 후보별 20회 실행했다. QA-11/12/15와 QA-61은 두 안 모두 100%, QA-51 excess exposure는 0이었다. 전체 reference path p95는 A 0.027ms, B 0.039ms였지만 Voice endpoint가 없는 원인 진단값이므로 QA-01/02로 승격하지 않았다.
+[정식 결과](../../../results/architecture-evaluation/current/via-dp-05-evaluation-v1-20260927/report.md)는 5개 Context case를 후보별 20회 실행했다. QA-11/12/15와 QA-61은 두 안 모두 100%, QA-51 excess exposure는 0이었다. 전체 reference path p95는 A 0.027ms, B 0.039ms였지만 Voice endpoint가 없는 원인 진단값이므로 QA-01/02로 승격하지 않았다.
 
 **현재 결론:** 측정된 QA에서는 구조적 trade-off가 나타나지 않았다. 전체 Context change/recovery pack과 실제 Voice path가 추가돼도 차이가 없으면 supporting contract로 내린다.

@@ -196,7 +196,7 @@ def classify(qa_id: str, values: dict[str, Any], role: str) -> tuple[str, str]:
     if qa_id == "QA-62":
         return ("재현 완료" if a == 100 and b == 100 else "재현 불완전", "qualification")
     if role == "non_applicable_regression":
-        return "공통/회귀 검증; DP-11 변별용 아님", "regression"
+        return "공통/회귀 검증; VIA-DP-11 변별용 아님", "regression"
     if a == b:
         suffix = "공통 qualification" if role == "qualification" else "차이 없음"
         return f"A/B 동일; {suffix}", "no_difference"
@@ -245,13 +245,13 @@ def report(evidence: Path, values: dict[str, dict[str, Any]]) -> str:
 
 동결 최소 차이를 넘은 조합은 {meaningful_text}뿐이다. 나머지 수치 차이는 최소 차이 미달이거나 공통·회귀 축이다. 따라서 이 보고서는 전체 승자를 선택하지 않는다.
 
-QA-12는 69.57%, 통합 QA-11은 75.00%로 양쪽이 같다. 이는 공통 semantic 경로의 한계이며 DP-11 process placement 차이가 아니다. 결과에 맞춰 없애거나 A/B trade-off로 세지 않고 qualification 미달로 보존한다.
+QA-12는 69.57%, 통합 QA-11은 75.00%로 양쪽이 같다. 이는 공통 semantic 경로의 한계이며 VIA-DP-11 process placement 차이가 아니다. 결과에 맞춰 없애거나 A/B trade-off로 세지 않고 qualification 미달로 보존한다.
 
 ## 전체 DP × QA 표
 
 시간·변경 요소·영향 단위·메모리·노출은 작을수록 좋다. 정확성·완전성·재현성은 클수록 좋다.
 
-| QA | A | B | 동결 기준 판정 | DP-11에서의 역할 |
+| QA | A | B | 동결 기준 판정 | VIA-DP-11에서의 역할 |
 | --- | ---: | ---: | --- | --- |
 {chr(10).join(rows)}
 
@@ -260,7 +260,7 @@ QA-12는 69.57%, 통합 QA-11은 75.00%로 양쪽이 같다. 이는 공통 seman
 - **QA-32:** A는 주입한 Integration Client fatal fault를 worker에 격리했다. B는 Core process와 함께 독립 사용자 기능 네 개를 잃었다. 가장 강한 구조적 trade-off다.
 - **QA-23:** B는 worker IPC·supervision 경계가 없어서 frozen 실험·로그 change pack의 변경 Architecture Element가 더 적었다.
 - **QA-01/03/05/31/41:** 수치 방향은 갈렸지만 절대 차이가 동결 기준에 못 미쳤다. 측정값은 보존하되 trade-off로 승격하지 않는다.
-- **QA-02/04/12/22:** 공통 또는 회귀 축이다. DP-11이 이 경로를 소유하지 않으므로 동률이나 미세한 proxy noise가 정상이다.
+- **QA-02/04/12/22:** 공통 또는 회귀 축이다. VIA-DP-11이 이 경로를 소유하지 않으므로 동률이나 미세한 proxy noise가 정상이다.
 - **QA-11/13/14/15/51/61/62:** qualification이다. 더 빠르거나 더 잘 격리된 후보가 부정확·불안전·추적 불가·재현 불가한 상태로 이기는 것을 막는다.
 
 ## Evidence package

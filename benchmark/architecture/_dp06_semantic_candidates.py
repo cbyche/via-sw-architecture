@@ -1055,7 +1055,7 @@ def common_reference(output_dir: Path, spoken_wav: Path) -> dict[str, Any]:
         subprocess.run([sys.executable, "-c", child, str(recovery_state)], check=True)
         recovery_samples_ms.append((time.monotonic_ns() - started) / 1_000_000)
     return {
-        "source_execution_key": "dp06-evaluation-v4-common-reference",
+        "source_execution_key": "via-dp-06-evaluation-v4-common-reference",
         "QA-03": {"samples_ms": [qa03_ms], "valid": True},
         "QA-04": {"samples_ms": [interrupted["interruptionMs"]], "valid": True},
         "QA-13": {"passes": [True] * 7, "scenarios": state_strata},

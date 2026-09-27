@@ -44,17 +44,17 @@ state·continuity를 깨뜨린 sentinel이 정확한 failure code로 FAIL하는�
 workload는 UC 출처를 기록하며 `D/W/C/P/G/Q/T/A/E/X`는 Test Case 접두사이지 DP나
 QA 번호가 아니다.
 
-중간 pilot/reference runner, contract와 결과는 삭제했다. 현재 DP-06 source of truth는
+중간 pilot/reference runner, contract와 결과는 삭제했다. 현재 VIA-DP-06 source of truth는
 `via-dp-06-evaluation-v4.json`, v4 fixture 3종, `run_dp06_evaluation.py`,
 `analyze_dp06_evaluation.py`뿐이다. 공식 결과는
-[`dp06-evaluation-v4-20260927`](../../results/architecture-evaluation/current/dp06-evaluation-v4-20260927/report.md)에 있다.
+[`via-dp-06-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)에 있다.
 
-DP-11의 active runner는 `via-dp-11-evaluation-v4.json`을 사용한다. 기존 v1~v3
+VIA-DP-11의 active runner는 `via-dp-11-evaluation-v4.json`을 사용한다. 기존 v1~v3
 결과와 analyzer는 preliminary provenance이며, v4는 proxy를 QA 값으로 승격하지 않고
 실제 실행 가능한 fault recovery, blast radius, target-Mac memory와 trace만 점수화한다.
-공식 결과는 [`dp11-evaluation-v4-20260927`](../../results/architecture-evaluation/current/dp11-evaluation-v4-20260927/report.md)에 있다.
+공식 결과는 [`via-dp-11-evaluation-v4-20260927`](../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)에 있다.
 
-`run_priority_dp_campaigns.py`는 DP-05/09/02/13/12 순서의 targeted reference
+`run_priority_dp_campaigns.py`는 VIA-DP-05/09/02/13/12 순서의 targeted reference
 candidate를 실행한다. executable 후보는
 `prototypes/candidates/reference_harness/candidates.py`, frozen contract는
 `via-dp-02-evaluation-v2.json`과 각 DP의 v1 JSON, 독립 raw analyzer는
@@ -83,7 +83,7 @@ Runner는 기존 output directory를 덮어쓰지 않는다. Raw JSONL과 derive
   --evidence results/architecture-evaluation/archive/dp11-preliminary-20260926/dp11-complete-v3-20260926 --check
 
 .venv/bin/python benchmark/architecture/analyze_dp06_evaluation.py \
-  --result-dir results/architecture-evaluation/current/dp06-evaluation-v4-YYYYMMDD
+  --result-dir results/architecture-evaluation/current/via-dp-06-evaluation-v4-YYYYMMDD
 ```
 
 ## Non-goals
