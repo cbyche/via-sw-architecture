@@ -1,0 +1,51 @@
+{
+  "contract_id": "VIA-DP-06-CHANGE-LOCALITY-v6",
+  "status": "FROZEN_FOR_CAMPAIGN",
+  "decision_point": "VIA-DP-06",
+  "scope": "QA-21, QA-22, QA-23 supplemental change-locality evaluation",
+  "evidence_label": "HYBRID_REFERENCE_ESTIMATE",
+  "candidates": ["A", "B", "B_PRIME"],
+  "candidate_meaning": {
+    "A": "one integrated semantic authority",
+    "B": "three staged semantic authorities with explicit correction contracts",
+    "B_PRIME": "B plus a non-architectural deterministic fast-path tactic; same element ledger as B"
+  },
+  "source_campaign": {
+    "path": "results/architecture-evaluation/current/via-dp-06-evaluation-v5-20260927",
+    "reuse_rule": "Reuse v5 source_execution_key observations by reference only; do not copy them as new samples and do not rerun them."
+  },
+  "element_ledger": "benchmark/architecture/fixtures/dp06-architecture-elements-v6.json",
+  "change_pack": "benchmark/architecture/fixtures/dp06-change-locality-pack-v6.json",
+  "element_types": ["C", "I", "S", "D"],
+  "required_change_ids": {
+    "QA-21": ["A-01", "A-02", "A-03", "A-04", "A-05", "A-06", "A-07", "A-08", "A-09"],
+    "QA-22": ["M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "M-07", "M-08", "M-09", "C-01", "C-02", "C-03", "C-04", "C-05", "C-06"],
+    "QA-23": ["E-01", "E-02", "E-03", "E-04", "E-05"]
+  },
+  "execution": {
+    "baseline": "Each change starts from the same frozen candidate ledger; changes are never cumulative.",
+    "operations": {
+      "M": "Modify one existing frozen Architecture Element.",
+      "A": "Add one new independent Architecture Element.",
+      "R": "Remove one existing Architecture Element."
+    },
+    "zero_rule": "Zero is valid only when the frozen architecture absorbs the change through configuration without changing an Architecture Element.",
+    "source_anchor_rule": "Every frozen baseline element must have an existing repository anchor before execution.",
+    "completion_rule": "The per-change preserved-capability and completion contract must remain recorded; this design-ledger campaign does not claim product runtime regression execution."
+  },
+  "aggregation": {
+    "primary": "Arithmetic mean of changed Architecture Element count across every required change in the QA pack.",
+    "supporting": ["per-change count", "maximum count", "C/I/S/D breakdown", "modified/added/removed element IDs"],
+    "rounding": "Report primary means to two decimal places; preserve exact numerator and denominator in raw evidence."
+  },
+  "qa_applicability": {
+    "QA-21": "REGRESSION_ONLY_WITH_APPLICABLE_AGENT_CAPABILITY_CASES",
+    "QA-22": "APPLICABLE_SEMANTIC_MODEL_CONTEXT_STATE_CHANGE_PACK",
+    "QA-23": "APPLICABLE_SEMANTIC_AUTHORITY_INSTRUMENTATION_FANOUT"
+  },
+  "limitations": [
+    "This campaign executes a source-anchored Architecture Element ledger, not a product code migration.",
+    "It measures structural change locality, not implementation effort, lines of code, or elapsed development time.",
+    "B_PRIME shares B's element ledger because its fast path is a tactic, not a separate Architecture structure."
+  ]
+}
