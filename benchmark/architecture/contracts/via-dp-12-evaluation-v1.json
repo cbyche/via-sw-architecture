@@ -1,0 +1,45 @@
+{
+  "campaign_id": "dp12-evaluation-v1-20260927",
+  "dp": "DP-12",
+  "candidates": ["A", "B"],
+  "repetitions": 20,
+  "alternative_names": {
+    "A": "최소 evidence durable ACK 후 게시",
+    "B": "게시와 evidence background flush 분리"
+  },
+  "discriminator": "같은 response가 해당 최소 evidence의 durable ACK 전에 게시될 수 없으면 A, 게시될 수 있으면 B",
+  "report_conclusion": "동일 local spool과 record를 사용해 정상·flush 전 crash·writer failure에서 Text disposition latency, 사용자 요청 완료, logging change 범위와 trace completeness를 비교했다.",
+  "limitations": [
+    "실제 Voice playback 후발 event는 실행하지 않아 QA-01~03을 내부 publish 시간으로 대체하지 않았다.",
+    "Business state/outbox durability는 공통 fixture로 고정하고 diagnostic evidence ordering만 비교했다.",
+    "QA-23은 E-01~05를 대표하는 동결 schema-change exercise에서 실제 후보 element registry를 통과한 값이다."
+  ],
+  "cases": [
+    {"id": "E-01-NORMAL", "control": true, "control_timeout_ms": 100},
+    {"id": "E-02-CRASH", "control": true, "control_timeout_ms": 100, "crash_before_flush": true},
+    {"id": "E-03-WRITER-FAIL", "control": true, "control_timeout_ms": 100, "writer_failure": true},
+    {"id": "E-04-NORMAL", "control": false},
+    {"id": "E-05-NORMAL", "control": false}
+  ],
+  "qa_map": {
+    "QA-01": {"status": "BLOCKED", "reason": "publish ordering은 참여하지만 Voice input·Agent result·audible endpoint를 실행하지 않음"},
+    "QA-02": {"status": "BLOCKED", "reason": "direct publish ordering은 참여하지만 audible Voice onset이 없음"},
+    "QA-03": {"status": "BLOCKED", "reason": "status publish ordering은 참여하지만 audible Voice status endpoint가 없음"},
+    "QA-04": {"status": "N/A", "reason": "음성 stop은 diagnostic evidence gate를 기다리지 않는 공통 안전 경로"},
+    "QA-05": {"status": "MEASURED", "field": "control_ms", "aggregation": "duration"},
+    "QA-11": {"status": "MEASURED", "field": "strict_success", "aggregation": "rate"},
+    "QA-12": {"status": "N/A", "reason": "semantic interpretation은 게시·기록 ordering 전에 동일하게 확정됨"},
+    "QA-13": {"status": "N/A", "reason": "Task binding business durability는 공통이고 후보 차이에 참여하지 않음"},
+    "QA-14": {"status": "N/A", "reason": "Task state convergence는 공통 business state 경로에 있음"},
+    "QA-15": {"status": "N/A", "reason": "Conversation·Task continuity는 diagnostic evidence ordering을 통과하지 않음"},
+    "QA-21": {"status": "N/A", "reason": "Agent contract 변화는 evidence publish ordering을 변경하지 않음"},
+    "QA-22": {"status": "BLOCKED", "reason": "전체 Model·Context·State change pack에서 required evidence 변경 exercise 미실행"},
+    "QA-23": {"status": "MEASURED", "field": "change_elements", "aggregation": "change_average"},
+    "QA-31": {"status": "N/A", "reason": "Task recovery는 공통 business state이고 diagnostic spool recovery를 QA-31로 세지 않음"},
+    "QA-32": {"status": "BLOCKED", "reason": "writer fault의 승인된 necessary dependency closure와 user-visible unit registry 미동결"},
+    "QA-41": {"status": "BLOCKED", "reason": "pending release와 flush backlog의 target-device peak committed memory campaign 미실행"},
+    "QA-51": {"status": "MEASURED", "field": "exposure_excess", "aggregation": "exposure"},
+    "QA-61": {"status": "MEASURED", "field": "trace_complete", "aggregation": "rate"},
+    "QA-62": {"status": "MEASURED", "field": "strict_success", "aggregation": "replay"}
+  }
+}

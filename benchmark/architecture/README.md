@@ -1,6 +1,6 @@
 # Current Architecture Measurement Harness
 
-> **Status: QA-01~15 common evaluator foundation implemented; official DP campaign NOT_RUN**
+> **Status: QA-01~15 common evaluator foundation implemented; seven official reference campaigns complete**
 
 이 디렉터리는 현재 Architecture baseline에 맞는 machine-readable contract, fixture, executable harness, raw-trace validator, aggregation code를 구현할 active 위치다.
 
@@ -53,6 +53,17 @@ DP-11의 active runner는 `via-dp-11-evaluation-v4.json`을 사용한다. 기존
 결과와 analyzer는 preliminary provenance이며, v4는 proxy를 QA 값으로 승격하지 않고
 실제 실행 가능한 fault recovery, blast radius, target-Mac memory와 trace만 점수화한다.
 공식 결과는 [`dp11-evaluation-v4-20260927`](../../results/architecture-evaluation/current/dp11-evaluation-v4-20260927/report.md)에 있다.
+
+`run_priority_dp_campaigns.py`는 DP-05/09/02/13/12 순서의 targeted reference
+candidate를 실행한다. executable 후보는
+`prototypes/candidates/reference_harness/candidates.py`, frozen contract는
+`via-dp-02-evaluation-v2.json`과 각 DP의 v1 JSON, 독립 raw analyzer는
+`analyze_priority_dp_campaign.py`다. 각 결과는 19개 QA 전체를 `MEASURED/N/A/BLOCKED`로
+구분하며 내부 진단시간을 Voice QA로 승격하지 않는다.
+
+```bash
+.venv/bin/python benchmark/architecture/run_priority_dp_campaigns.py
+```
 
 ```bash
 cargo +1.98.1 build --locked --manifest-path prototypes/candidates/Cargo.toml \

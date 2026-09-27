@@ -4,7 +4,7 @@
 >
 > 질문: 최소 실행 근거의 영속 확인 뒤 응답·제어 disposition을 게시할 것인가, 정상 기록을 유지하되 게시와 영속 기록을 비동기로 분리할 것인가?
 >
-> 현재 판단: **검증 후보 — 중앙 수집 위치에서 기록 완료 의무로 재정의** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **v1 reference campaign 완료 — responsiveness/completion 대 trace completeness trade-off 관측**. Architecture 선택과 ASR 확정은 하지 않았다.
 
 ## 1. 배경 — 시험은 끝났는데 왜 그런 결과가 나왔는지 로그가 없다면?
 
@@ -181,7 +181,7 @@ M-01~09·C-01~06·A-01~09는 필요한 producer·source version이 실제 바뀌
 
 ## 7. 전체 19개 QA 비교
 
-**사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
+**실행 전 사고실험 예상.** 아래 표는 §12의 v1 측정 결과가 아니라 후보 구현 전 구조적 가설이다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 
 | QA · 단일 metric | 예상 방향·크기 | 확실성 | 구조적 이유·반례와 근거 | 역할 |
 | --- | --- | --- | --- | --- |
@@ -207,7 +207,7 @@ M-01~09·C-01~06·A-01~09는 필요한 producer·source version이 실제 바뀌
 
 A는 실행이 끝난 뒤 근거가 없어 연구를 다시 해야 하는 위험을 줄이는 선택이고, B는 기록 시스템의 tail을 사용자 게시에서 분리하는 선택이다. 응답 지연과 QA-61 사이의 반대 방향 구조 인과가 남지만, 무장애 정상 run만으로는 거의 동점일 수 있다.
 
-## 8. 공정한 검증 계획 — 실행하지 않음
+## 8. 공정한 검증 계획 — 실행 전 기준
 
 required pre-release evidence와 post-output evidence를 먼저 분리해 승인한다. 동일 writer·batch·state commit 결합을 허용하고, 공통 독립 observer로 게시·flush·crash 위치를 검증한다. 누락 run·실패 판정·재현 표본을 사후 삭제하지 않는다. 이번에는 로그 구현·장애 주입·측정하지 않는다.
 
@@ -228,3 +228,9 @@ DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있다. D
 처음의 수집 위치 대립을 hybrid로 통합하고 응답과 영속 기록의 ordering을 실제 결정으로 삼았다. A도 실제 출력 이전에 미래 endpoint를 기록할 수 없다는 한계를 명시했다. 비동기 B의 정상 기록·누락 감지·bounded buffer를 보장했다.
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
+
+## 12. v1 reference campaign 결과
+
+[정식 결과](../../../results/architecture-evaluation/current/dp12-evaluation-v1-20260927/report.md)는 정상·flush 전 crash·writer failure를 포함한 5개 case를 후보별 20회 실행했다. QA-05 p95는 선확정 A 100ms, 비동기 B 0.085ms였고 QA-11은 A 80%, B 100%였다. 반대로 QA-61 complete trace는 A 80%, B 60%였다. QA-23 평균은 A 3.0, B 2.0 elements였고 QA-62 replay는 둘 다 100%였다.
+
+**현재 결론:** 현재 일곱 campaign 중 responsiveness·request completion과 observability가 반대 방향으로 가장 명확하게 갈린 DP다. A의 100ms는 writer-failure endpoint 부재에 동결한 timeout을 포함하며 정상 fsync만의 지연으로 해석하면 안 된다.

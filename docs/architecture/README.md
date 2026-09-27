@@ -17,7 +17,7 @@
 - Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙으로 재구성된 사용자 검토 초안이며 active ID는 19개다.
 - 확정 ASR은 아직 없다. 우선 측정할 ASR 후보 10개는 [Core Evaluation Profile](./11-measurement/evaluation-profile.md)에 기록하며, Architecture 영향이 확인되면 기존 QA ID에 분류를 표시한다.
-- QA-01~05는 responsiveness, QA-11~15는 correctness/continuity, QA-21~23은 modifiability, QA-31/32는 reliability/availability, QA-41은 resource, QA-51은 privacy, QA-61/62는 observability를 다룬다. 새 harness와 결과는 아직 없다.
+- QA-01~05는 responsiveness, QA-11~15는 correctness/continuity, QA-21~23은 modifiability, QA-31/32는 reliability/availability, QA-41은 resource, QA-51은 privacy, QA-61/62는 observability를 다룬다. DP-02·05·06·09·11·12·13은 current reference 결과가 있고 나머지는 아직 없다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
@@ -53,8 +53,8 @@ DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions
 | ASR classification | Pending | QA별 Architecture 영향 검토 전 |
 | QA semantic definitions | Current draft | active QA별 단일 metric과 의미 경계 정의됨 |
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
-| Machine contract, pending targets, harness | Pending | 구현·실행 전에 먼저 동결해야 함 |
-| Current evidence | `NOT_RUN` | archive 결과로 대체하지 않음 |
+| Machine contract, pending targets, harness | Mixed | 일곱 DP 완료; 나머지는 구현·실행 전에 먼저 동결해야 함 |
+| Current evidence | Seven reference campaigns | DP-02·05·06·09·11·12·13; archive 결과로 대체하지 않음 |
 | DP inventory | Exhaustive review draft | VIA-DP-01~18 독립 보고서; 이전 계열 매핑·coverage 점검, 최종 선정 보류 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 

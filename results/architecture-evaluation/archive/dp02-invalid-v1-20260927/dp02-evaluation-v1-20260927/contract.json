@@ -1,0 +1,45 @@
+{
+  "campaign_id": "dp02-evaluation-v1-20260927",
+  "dp": "DP-02",
+  "candidates": ["A", "B"],
+  "repetitions": 12,
+  "alternative_names": {
+    "A": "교차 관계 공동 원자 commit",
+    "B": "독립 owner commit + relation reconciliation"
+  },
+  "discriminator": "Conversation·Task 교차 관계를 하나의 최종 transaction으로 확정하면 A, 독립 commit의 확인으로 확정하면 B",
+  "report_conclusion": "실제 SQLite FULL durability를 사용해 정상 교차 관계, Task control, 완료 교차와 중단 후 복구를 실행했다. 후보별 commit 수와 reconciliation이 Text disposition·관계 정확성·복구시간에 미치는 영향을 비교한다.",
+  "limitations": [
+    "동일 Process 안의 reference SQLite 구현이며 distributed database나 Process isolation을 비교하지 않는다.",
+    "Voice acoustic endpoint와 전체 15개 state change pack은 실행하지 않았다.",
+    "절대시간은 target Mac filesystem과 Python sqlite3에 한정된다."
+  ],
+  "cases": [
+    {"id": "REL-CANCEL", "task_id": "T-PPT", "expected_state": "CANCEL_REQUESTED", "control": true},
+    {"id": "REL-CONSENT", "task_id": "T-MAIL", "expected_state": "AUTHORIZED", "control": true},
+    {"id": "REL-COMPLETE-RACE", "task_id": "T-PPT", "expected_state": "COMPLETED", "control": true},
+    {"id": "REL-CHANNEL", "task_id": "T-PPT", "expected_state": "RUNNING"},
+    {"id": "REL-RECOVERY", "task_id": "T-MAIL", "expected_state": "CANCEL_REQUESTED", "control": true, "inject_crash": true}
+  ],
+  "qa_map": {
+    "QA-01": {"status": "BLOCKED", "reason": "교차 commit은 위임 경로에 참여하지만 Voice·Agent ingress/result·audible endpoint를 실행하지 않음"},
+    "QA-02": {"status": "BLOCKED", "reason": "기존 Task를 참조하는 direct Voice case의 acoustic endpoint를 실행하지 않음"},
+    "QA-03": {"status": "BLOCKED", "reason": "Agent status와 Conversation 게시 관계는 관련되지만 audible status endpoint가 없음"},
+    "QA-04": {"status": "N/A", "reason": "음성 playback 중단은 교차 관계 commit을 기다리지 않음"},
+    "QA-05": {"status": "MEASURED", "field": "control_ms", "aggregation": "duration"},
+    "QA-11": {"status": "MEASURED", "field": "strict_success", "aggregation": "rate"},
+    "QA-12": {"status": "N/A", "reason": "사용자 의미 해석 결과는 동일한 fixture로 고정됨"},
+    "QA-13": {"status": "MEASURED", "field": "binding_correct", "aggregation": "rate"},
+    "QA-14": {"status": "MEASURED", "field": "converged", "aggregation": "rate"},
+    "QA-15": {"status": "MEASURED", "field": "continuity_correct", "aggregation": "rate"},
+    "QA-21": {"status": "N/A", "reason": "Agent integration contract는 양쪽에서 고정됨"},
+    "QA-22": {"status": "BLOCKED", "reason": "C-06을 포함한 15개 전체 Model·Context·State change exercise 미실행"},
+    "QA-23": {"status": "BLOCKED", "reason": "E-01~05 전체 experiment/logging change exercise 미실행"},
+    "QA-31": {"status": "MEASURED", "field": "recovery_ms", "aggregation": "duration"},
+    "QA-32": {"status": "MEASURED", "field": "excess_interrupted_units", "aggregation": "max_count"},
+    "QA-41": {"status": "BLOCKED", "reason": "전체 VIA와 공유 모델을 포함한 peak committed memory boundary 미실행"},
+    "QA-51": {"status": "MEASURED", "field": "exposure_excess", "aggregation": "exposure"},
+    "QA-61": {"status": "MEASURED", "field": "trace_complete", "aggregation": "rate"},
+    "QA-62": {"status": "MEASURED", "field": "strict_success", "aggregation": "replay"}
+  }
+}

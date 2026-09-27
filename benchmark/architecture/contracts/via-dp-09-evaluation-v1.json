@@ -1,0 +1,49 @@
+{
+  "campaign_id": "dp09-evaluation-v1-20260927",
+  "dp": "DP-09",
+  "candidates": ["A", "B"],
+  "repetitions": 25,
+  "alternative_names": {
+    "A": "Agent 경계 semantic normalization",
+    "B": "typed contract + Core lifecycle handler"
+  },
+  "discriminator": "Task-level 수명 의미의 최종 해석자가 edge adapter면 A, Core lifecycle handler면 B",
+  "report_conclusion": "동일 native lifecycle corpus에서 두 후보의 기능 보존, Text control disposition, Task 연결·수렴과 9개 Agent 변화의 실제 handler 영향 범위를 비교했다.",
+  "limitations": [
+    "외부 Reference Agent의 native event를 deterministic fixture로 실행했으며 실제 OpenClaw/Hermes 제품은 사용하지 않았다.",
+    "Voice status playback과 전체 재시작 recovery는 실행하지 않았다.",
+    "QA-21은 동결된 9개 native change case가 실제로 통과한 reference element registry의 평균이다."
+  ],
+  "cases": [
+    {"id": "A-01", "provider": "P", "native_kind": "p_cancel_confirmed", "expected_state": "CANCELLED", "control": true},
+    {"id": "A-02", "provider": "Q", "native_kind": "q_cancel_requested", "expected_state": "CANCEL_PENDING", "control": true},
+    {"id": "A-03", "provider": "Q", "native_kind": "completion_after_cancel", "expected_state": "COMPLETED"},
+    {"id": "A-04", "provider": "P", "native_kind": "unsupported", "expected_state": "UNSUPPORTED", "control": true},
+    {"id": "A-05", "provider": "Q", "native_kind": "question", "expected_state": "WAITING_USER"},
+    {"id": "A-06", "provider": "P", "native_kind": "artifact", "expected_state": "COMPLETED"},
+    {"id": "A-07", "provider": "R", "native_kind": "paused", "expected_state": "PAUSED"},
+    {"id": "A-08", "provider": "R", "native_kind": "progress", "expected_state": "RUNNING"},
+    {"id": "A-09", "provider": "R", "native_kind": "failed", "expected_state": "FAILED"}
+  ],
+  "qa_map": {
+    "QA-01": {"status": "BLOCKED", "reason": "Agent 실행 전후 경계는 참여하지만 Voice input·Agent interval·audible result endpoint를 실행하지 않음"},
+    "QA-02": {"status": "N/A", "reason": "direct response에는 Agent lifecycle 의미 경계가 참여하지 않음"},
+    "QA-03": {"status": "BLOCKED", "reason": "Agent status 의미는 실행했지만 audible Voice presentation endpoint가 없음"},
+    "QA-04": {"status": "N/A", "reason": "음성 playback 중단은 Agent lifecycle 의미 해석을 통과하지 않음"},
+    "QA-05": {"status": "MEASURED", "field": "control_ms", "aggregation": "duration"},
+    "QA-11": {"status": "MEASURED", "field": "strict_success", "aggregation": "rate"},
+    "QA-12": {"status": "N/A", "reason": "사용자 요청 의미는 고정되어 Agent native lifecycle 해석만 비교함"},
+    "QA-13": {"status": "MEASURED", "field": "binding_correct", "aggregation": "rate"},
+    "QA-14": {"status": "MEASURED", "field": "converged", "aggregation": "rate"},
+    "QA-15": {"status": "N/A", "reason": "채널 재연결·Conversation continuity scenario가 없음"},
+    "QA-21": {"status": "MEASURED", "field": "change_elements", "aggregation": "change_average"},
+    "QA-22": {"status": "N/A", "reason": "Model·Context·State 변화는 고정 Agent lifecycle boundary를 변경하지 않음"},
+    "QA-23": {"status": "BLOCKED", "reason": "E-01~05 전체 logging change exercise 미실행"},
+    "QA-31": {"status": "BLOCKED", "reason": "native execution mapping을 포함한 restart recovery campaign 미실행"},
+    "QA-32": {"status": "N/A", "reason": "두 후보는 같은 Process·fault boundary에 배치됨"},
+    "QA-41": {"status": "BLOCKED", "reason": "전체 VIA와 공유 모델을 포함한 peak committed memory boundary 미실행"},
+    "QA-51": {"status": "MEASURED", "field": "exposure_excess", "aggregation": "exposure"},
+    "QA-61": {"status": "MEASURED", "field": "trace_complete", "aggregation": "rate"},
+    "QA-62": {"status": "MEASURED", "field": "strict_success", "aggregation": "replay"}
+  }
+}

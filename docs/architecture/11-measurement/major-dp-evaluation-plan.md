@@ -98,11 +98,13 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 | DP-06 | `dp06-evaluation-v4-20260927/` | COMPLETE | 결과 감사·요약 반영 완료 |
 | DP-11 | `dp11-evaluation-v4-20260927/` | COMPLETE | 결과 감사·요약 반영 완료 |
 | DP-14 | `dp14-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | 두 Task writer는 있으나 frozen race/load campaign 필요 |
-| DP-09 | `dp09-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | 두 adapter는 있으나 full Agent change pack 실행 필요 |
-| DP-02 | `dp02-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | handoff invariant는 있으나 공동 commit/reconciliation 후보가 불완전 |
+| DP-09 | `dp09-evaluation-v1-20260927/` | COMPLETE | 9 native change case·19-QA report·replay 완료 |
+| DP-02 | `dp02-evaluation-v2-20260927/` | COMPLETE | 공동 commit/reconciliation·reopen recovery 완료 |
 | DP-08 | `dp08-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | recovery primitive는 있으나 두 복구 원본 후보 campaign 미구현 |
-| DP-13 | `dp13-evaluation-v1-20260927/` | PROTOTYPE_PRIMITIVES_ONLY | load driver는 있으나 두 자원 예약 scheduler 후보 미구현 |
-| DP-01,03~05,07,10,12,15~18 | `dpNN-evaluation-v1-20260927/` | AUDIT_REQUIRED | 1차 DP 후 importance audit |
+| DP-13 | `dp13-evaluation-v1-20260927/` | COMPLETE | 예약/shared thread-pool saturation·19-QA report 완료 |
+| DP-05 | `dp05-evaluation-v1-20260927/` | COMPLETE | manifest/read-set Context corpus·19-QA report 완료 |
+| DP-12 | `dp12-evaluation-v1-20260927/` | COMPLETE | durable gate/async flush fault corpus·19-QA report 완료 |
+| DP-01,03,04,07,10,15~18 | `dpNN-evaluation-v1-20260927/` | AUDIT_REQUIRED | executable candidate·oracle 구현 필요 |
 
 `IMPLEMENTATION_REQUIRED`는 blocker나 결론이 아니다. 문서 후보를 실제 executable
 candidate와 evaluator로 옮겨야 한다는 현재 상태다.
@@ -158,11 +160,13 @@ DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability는 qu
 | DP-06 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
 | DP-11 | 완료 | 완료 | targeted v4 완료 | 완료 | 완료 | 완료 | COMPLETE |
 | DP-14 | 완료 | 사고실험 있음 | 두 writer primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| DP-09 | 완료 | 사고실험 있음 | 두 adapter primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| DP-02 | 완료 | 사고실험 있음 | handoff primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
+| DP-09 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| DP-02 | 완료 | 완료 | v2 완료 | 완료 | 완료 | 완료 | COMPLETE |
 | DP-08 | 완료 | 사고실험 있음 | recovery primitive | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| DP-13 | 완료 | 사고실험 있음 | load driver만 있음 | 대기 | 대기 | 대기 | PROTOTYPE_PRIMITIVES_ONLY |
-| DP-01,03~05,07,10,12,15~18 | 완료 | 사고실험 있음 | 미구현 | 대기 | 대기 | 대기 | AUDIT_REQUIRED |
+| DP-13 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| DP-05 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| DP-12 | 완료 | 완료 | 완료 | 완료 | 완료 | 완료 | COMPLETE |
+| DP-01,03,04,07,10,15~18 | 완료 | 사고실험 있음 | 미구현 | 대기 | 대기 | 대기 | AUDIT_REQUIRED |
 
 ## 10. 실행 로그
 
@@ -182,10 +186,28 @@ DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability는 qu
 | 2026-09-27 | DP-11 v4 네 번째 시도 | INVALID; 두 후보 fault run을 한 state에 누적해 150 run에서 reference JSON 저장 timeout | 후보별 동일한 fresh Agent state로 분리하고 phase raw 즉시 저장 적용 |
 | 2026-09-27 | DP-11 v4 공식 campaign | 완료; QA-31/32/41/61/62 측정, 독립 replay와 19-QA package 검사 통과 | 나머지 DP readiness와 최종 요약 정리 |
 | 2026-09-27 | DP-02/08/09/13/14 구현 자산 감사 | 공통 primitive는 존재하나 DP별 동결 후보·전체 oracle 없음 | smoke를 공식 QA로 승격하지 않고 후보 구현부터 진행 |
+| 2026-09-27 | DP-05/09/02/13/12 executable reference 후보·contract 구현 | qualification 23 tests PASS; 19개 QA map·배타 trace 확인 | official campaign 실행 |
+| 2026-09-27 | DP-05/09/13/12 v1 official campaign | 각각 200/450/60/200 raw trial, 독립 replay·package 검사 PASS | DP-02 endpoint 감사 |
+| 2026-09-27 | DP-02 v1 endpoint 감사 | INVALID; QA-05에 DB 준비 포함, QA-31 reopen 누락 | v1 archive 후 v2 contract·candidate 수정 |
+| 2026-09-27 | DP-02 v2 official campaign | 120 raw trial, 실제 reopen recovery, 독립 replay·package 검사 PASS | 전체 결과 문서 반영 |
 
 ## 11. 다음 단일 작업
 
-DP-14의 두 Task writer primitive를 같은 외부 계약으로 감싸고, race/load fixture와
-machine oracle을 먼저 동결한다. sentinel qualification을 통과하기 전에는 공식 결과
-directory를 만들지 않는다. 이후 순서는 DP-09 → DP-02 → DP-08 → DP-13이며, 각 DP는
-후보·oracle 미구현 상태를 unit-test 숫자로 대신하지 않는다.
+### 2026-09-27 사용자 지시 정정
+
+준비도 분석에서 멈추지 않는다. 다음 다섯 DP는 executable A/B, frozen
+fixture/oracle, official campaign과 19-QA report까지 완결했다.
+
+1. DP-05 — 닫힌 Context manifest 대 확장 가능한 scoped read-set
+2. DP-09 — edge semantic normalization 대 Core lifecycle handler
+3. DP-02 — 공동 관계 commit 대 독립 commit+reconciliation
+4. DP-13 — 회수 가능한 control reservation 대 완전 공유 priority pool
+5. DP-12 — 최소 evidence durable ACK 선행 대 비동기 flush
+
+각 campaign은 실제로 구현된 경계만 `MEASURED`로 보고했다. Voice acoustic endpoint,
+전체 change pack 또는 full-model accounting처럼 이번 reference path에 없는 QA는 숫자를
+만들지 않고 `BLOCKED` 또는 물리 비참여가 입증된 경우에만 `N/A`로 남긴다. unit test와
+내부 queue 시간은 해당 QA의 실제 endpoint를 대체하지 않는다.
+
+다음 단일 작업은 DP-14의 두 Task writer를 race/load fixture와 machine oracle로
+감싸는 것이다. 이후 DP-08 → DP-04 → DP-15 → DP-18 순서로 같은 기준을 적용한다.

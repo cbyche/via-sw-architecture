@@ -32,7 +32,7 @@
 
 ## Current measurement status
 
-현재 단계는 **Measurement Contract Definition**이다. QA catalog 자체를 사용자와 재검토하고 있으며, 아직 Candidate Implementation이나 A/B Measurement를 수행하는 단계가 아니다.
+QA catalog는 여전히 사용자 검토 초안이지만, DP별 lifecycle은 독립적으로 진행한다. VIA-DP-02·05·06·09·11·12·13은 reference candidate와 공식 campaign을 완료했고 나머지는 Measurement Contract Definition 또는 Candidate Implementation 단계다.
 
 | Item | Status |
 | --- | --- |
@@ -44,8 +44,8 @@
 | QA-05 Task control contract | Draft defined; machine freeze pending |
 | QA-11~15, QA-31/32/41 semantic contract | Draft defined; machine freeze pending |
 | QA-61/62 observability contract | Draft defined; machine freeze pending |
-| Machine-readable contract and harness | **Not implemented** |
-| Current QA results | **Not run** |
+| Machine-readable contract and harness | DP-02·05·06·09·11·12·13 implemented; 나머지 pending |
+| Current QA results | 일곱 DP의 19-QA reference package 완료; Architecture winner 미선정 |
 | Actual S2S/VIA LLM/product latency evidence | **Not measured** |
 | Previous measurement code and results | Historical/superseded archive |
 

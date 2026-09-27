@@ -319,7 +319,7 @@ QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차�
 
 **관련성이 있다는 것과 A/B의 품질 차이가 있다는 것은 다르다.** 첫 지도는 설계 검토 대상을, [두 번째 지도](#ab-qa-difference)는 현재 사고실험에서 차이를 예상할 근거가 있는 대상을 보여준다. 여기서 ‘성능’은 속도만이 아니라 정확도·변경 범위·복구·기록 등 각 QA의 단일 metric 결과를 뜻한다.
 
-기준은 VIA-DP-01~18 각 사고실험과 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 지도는 설계 단계의 적용성·차이 가능성을 나타내며 측정값 표가 아니다. 현재 공식 reference campaign은 VIA-DP-06 v4와 VIA-DP-11 v4이고, 나머지는 **NOT_RUN**이다. 실행 결과와 한계는 [current evaluation executive report](../../../results/architecture-evaluation/current/evaluation-executive-report-20260927.md)를 따른다.
+기준은 VIA-DP-01~18 각 사고실험과 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 지도는 설계 단계의 적용성·차이 가능성을 나타내며 측정값 표가 아니다. 현재 공식 reference campaign은 VIA-DP-02·05·06·09·11·12·13이고, 나머지는 **NOT_RUN**이다. 실행 결과와 한계는 [current evaluation executive report](../../../results/architecture-evaluation/current/evaluation-executive-report-20260927.md)를 따른다.
 
 열 이름은 [현행 QA의 단일 metric](../08-quality-attributes/quality-model.md#3-active-draft-qa-catalog)을 줄인 것이다. QA-01은 Agent 실행시간을 제외한다. QA-21~23은 해당 변화 한 건당 변경 설계 요소의 평균 수이며, QA-32는 필수 의존 범위를 넘어 불필요하게 중단된 기능·Task 수다. QA-51은 총 전달량이 아니라 필요 이상의 보호정보 노출, QA-62는 모델 답 재생성이 아니라 저장 근거로 평가 결과를 다시 만드는 능력이다.
 

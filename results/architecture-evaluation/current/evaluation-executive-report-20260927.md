@@ -4,8 +4,8 @@
 
 ## 1. 결론
 
-이번 실행에서 **공식 package까지 완결된 DP는 VIA-DP-06과 VIA-DP-11 두 개**다.
-두 package 모두 후보별 active QA 19행을 빠짐없이 가지며, 숫자를 만들 수 없는 행을
+이번 실행에서 **공식 package까지 완결된 DP는 VIA-DP-02·05·06·09·11·12·13 일곱 개**다.
+모든 package는 후보별 active QA 19행을 빠짐없이 가지며, 숫자를 만들 수 없는 행을
 임의 PASS나 proxy로 채우지 않고 `N/A` 또는 `BLOCKED`로 분리했다.
 
 - **VIA-DP-06:** A 통합 semantic authority가 correctness와 QA-01에서 우세했다.
@@ -14,8 +14,20 @@
 - **VIA-DP-11:** 별도 worker A는 integration-client fatal에서 무관한 기능의 초과
   중단을 **0개**로 제한했고, 같은 Process B는 **4개**를 중단시켰다. B는 target-Mac
   peak memory p95가 약 **3.7 MiB** 작았다. 복구시간 차이는 0.3 ms 미만이었다.
+- **VIA-DP-12:** 비동기 flush B는 QA-05와 사용자 요청 완료에서 우세했지만, crash와
+  writer failure를 포함한 QA-61 trace completeness는 A **80%**, B **60%**였다.
+- **VIA-DP-13:** 예약 A는 QA-05 p95가 **0.234 ms**, 공유 B는 **41.021 ms**였다.
+  반대로 일반 work makespan p95는 A **129.5 ms**, B **90.2 ms**였다. makespan은
+  활성 QA를 대신하지 않는 원인 진단이다.
+- **VIA-DP-02:** 공동 commit A가 QA-05와 QA-31에서 우세했고 정확성·수렴은 동률이었다.
+- **VIA-DP-09:** 두 안 모두 lifecycle correctness 100%였고, A의 QA-21 평균 변경
+  element가 **1.44**, B가 **2.00**이었다.
+- **VIA-DP-05:** 측정 가능한 correctness·continuity·privacy·trace는 모두 동률이었다.
+  Voice endpoint와 전체 change/recovery pack이 없어 현재 QA에서 구조적 trade-off를
+  입증하지 못했다.
 
-따라서 실제 양방향 trade-off가 가장 명확한 현재 조합은 **DP-11 × QA-32/QA-41**이다.
+따라서 실제 양방향 trade-off가 가장 명확한 현재 조합은 **DP-11 × QA-32/QA-41**과
+**DP-12 × QA-05·11/QA-61**이다.
 DP-06에서는 A와 B′가 correctness 대 responsiveness에서 갈렸지만 case당 1회라
 분산과 p95를 주장할 수 없다. 두 결과만으로 Architecture winner나 ASR을 확정하지 않는다.
 
@@ -57,23 +69,39 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 
 정식 보고서: [DP-11 v4](./dp11-evaluation-v4-20260927/report.md)
 
-## 4. 18개 DP 전체 진행 상태
+## 4. 추가 완료 campaign 핵심 결과
+
+| DP | A 핵심값 | B 핵심값 | 현재 해석 |
+| --- | --- | --- | --- |
+| DP-05 | QA-11/12/15 100%; path p95 0.027 ms | QA-11/12/15 100%; path p95 0.039 ms | QA trade-off 미입증; path 시간은 진단값 |
+| DP-09 | QA-05 p95 0.001 ms; QA-21 1.44 elements | QA-05 p95 0.001 ms; QA-21 2.00 elements | A 우세, 반대 방향 QA 미관측 |
+| DP-02 v2 | QA-05 p95 0.590 ms; QA-31 0.346 ms | QA-05 p95 2.083 ms; QA-31 0.952 ms | A 우세, correctness 동률 |
+| DP-13 | QA-05 p95 0.234 ms; work p95 129.5 ms | QA-05 p95 41.021 ms; work p95 90.2 ms | control 대 일반 처리량 trade-off; 후자는 진단값 |
+| DP-12 | QA-05 p95 100 ms; QA-11 80%; QA-61 80% | QA-05 p95 0.085 ms; QA-11 100%; QA-61 60% | responsiveness/completion 대 evidence completeness |
+
+정식 보고서: [DP-05](./dp05-evaluation-v1-20260927/report.md),
+[DP-09](./dp09-evaluation-v1-20260927/report.md),
+[DP-02 v2](./dp02-evaluation-v2-20260927/report.md),
+[DP-13](./dp13-evaluation-v1-20260927/report.md),
+[DP-12](./dp12-evaluation-v1-20260927/report.md).
+
+## 5. 18개 DP 전체 진행 상태
 
 | DP | 현재 증거 상태 | 이번에 확인한 것 | 공식 QA 값이 아직 없는 이유 |
 | --- | --- | --- | --- |
 | 01 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | executable direct/Agent scope 후보 없음 |
-| 02 | PROTOTYPE_PRIMITIVES_ONLY | handoff invariant tests PASS | 공동 commit 대 reconciliation 전체 후보·oracle 미구현 |
+| 02 | **COMPLETE_REFERENCE_CAMPAIGN** | 실제 SQLite commit/reopen, 120 raw trials, replay PASS | Voice·전체 change pack은 BLOCKED |
 | 03 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | 실제 Voice evidence 후보 없음 |
 | 04 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | S2S 게시 authority 후보·audible corpus 없음 |
-| 05 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | Context read-set 두 후보와 source fixture 미구현 |
+| 05 | **COMPLETE_REFERENCE_CAMPAIGN** | 200 raw trials, Context version/권한 oracle, replay PASS | Voice·전체 change/recovery pack은 BLOCKED |
 | 06 | **COMPLETE_REFERENCE_CAMPAIGN** | 72 raw trial, 19-QA report, replay PASS | 반복 p95·6개 관련 QA contract는 후속 필요 |
 | 07 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | compound execution 후보·oracle 미구현 |
 | 08 | PROTOTYPE_PRIMITIVES_ONLY | restart/recovery primitive tests PASS | event+checkpoint 대 snapshot+outbox 전체 후보 미구현 |
-| 09 | PROTOTYPE_PRIMITIVES_ONLY | edge/core adapter invariant tests PASS | A-01~09 실제 source-change pack 미구현 |
+| 09 | **COMPLETE_REFERENCE_CAMPAIGN** | 450 raw trials, 9 native lifecycle changes, replay PASS | Voice·restart·E change pack은 BLOCKED |
 | 10 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | session lifecycle 후보·stream fixture 미구현 |
 | 11 | **COMPLETE_TARGETED_CAMPAIGN** | fault/recovery/memory/trace, 19-QA report, replay PASS | Voice/correctness/change-locality 일부 BLOCKED |
-| 12 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | publish/commit crash 후보·evidence oracle 미구현 |
-| 13 | PROTOTYPE_PRIMITIVES_ONLY | fixed load driver smoke PASS | reserved-control 대 shared-priority scheduler 미구현 |
+| 12 | **COMPLETE_REFERENCE_CAMPAIGN** | 200 raw trials, flush-before-crash/writer-fault, replay PASS | Voice·QA-32 closure·memory는 BLOCKED |
+| 13 | **COMPLETE_REFERENCE_CAMPAIGN** | 60 raw trials, 실제 thread-pool saturation, replay PASS | acoustic Voice·shared model 구간은 BLOCKED |
 | 14 | PROTOTYPE_PRIMITIVES_ONLY | shared writer/per-Task writer invariant tests PASS | frozen race/load campaign과 19-QA endpoint 미구현 |
 | 15 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | push-confirm/query-confirm 후보·event source fixture 미구현 |
 | 16 | DOCUMENT_ONLY | A/B 보고서·19-QA 사고실험 | model-history state 후보·reconnect fixture 미구현 |
@@ -84,10 +112,10 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 아직 없는 후보에 손으로 숫자를 넣거나 관련성이 있다는 이유만으로 19개 QA를 모두
 측정값처럼 보이게 하지 않았다.
 
-## 5. 다음 우선순위
+## 6. 다음 우선순위
 
 다음 implementation 순서는 상태·권한 소유권과 현재 primitive 재사용 가능성을 함께
-고려해 **DP-14 → DP-09 → DP-02 → DP-08 → DP-13**이다. 각 DP는 같은 절차를 따른다.
+고려해 **DP-14 → DP-08 → DP-04 → DP-15 → DP-18**이다. 각 DP는 같은 절차를 따른다.
 
 1. A/B mutually exclusive·steelman 재감사
 2. 19개 QA별 실제 참여 graph와 `MEASURED/N/A/BLOCKED` 사전 동결
@@ -95,6 +123,6 @@ ledger는 공식 값으로 승격하지 않고 `BLOCKED`로 남겼다.
 4. sentinel qualification 뒤 단 한 번의 official campaign
 5. raw append, 독립 replay, 19-QA package 검사
 
-DP-06/11에서 확인한 가장 큰 교훈은 **“19행을 채우는 것”과 “19개를 측정한 척하는
+일곱 campaign에서 확인한 가장 큰 교훈은 **“19행을 채우는 것”과 “19개를 측정한 척하는
 것”은 다르다**는 점이다. 현재 결과는 실제 endpoint가 있는 축만 숫자로 남겼기 때문에
 후속 DP와 비교 가능한 기준선으로 사용할 수 있다.

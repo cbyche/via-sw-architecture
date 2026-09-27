@@ -1,0 +1,45 @@
+{
+  "campaign_id": "dp05-evaluation-v1-20260927",
+  "dp": "DP-05",
+  "candidates": ["A", "B"],
+  "repetitions": 20,
+  "alternative_names": {
+    "A": "불변 Context manifest + generation 전환",
+    "B": "scoped Context capability + 점진적 read-set"
+  },
+  "discriminator": "같은 Context generation에서 최초 집합 밖 ref를 읽을 수 있으면 B, 새 generation 확정이 필수면 A",
+  "report_conclusion": "두 후보는 동일한 source version과 권한 oracle을 만족했다. 측정값은 manifest 재확정과 capability별 조회 검증의 실제 reference 비용, correctness, continuity, privacy와 trace 차이를 보여 준다.",
+  "limitations": [
+    "semantic LLM과 Voice acoustic endpoint를 호출하지 않은 deterministic Context-consumer reference path다.",
+    "전체 C/M change pack과 recovery fault pack은 실행하지 않았다.",
+    "절대시간은 Python reference 구현의 target-Mac 결과이며 제품 latency가 아니다."
+  ],
+  "cases": [
+    {"id": "CTX-HIT", "initial_refs": ["doc:v1"], "required_refs": ["doc:v1"]},
+    {"id": "CTX-LATE", "initial_refs": ["doc:v1"], "required_refs": ["doc:v1", "mail:v1"]},
+    {"id": "CTX-OVERBROAD", "initial_refs": ["doc:v1", "mail:v1", "calendar:v1"], "required_refs": ["doc:v1"]},
+    {"id": "CTX-REVOKED", "initial_refs": ["mail:v1"], "required_refs": ["mail:v1"], "revoked_refs": ["mail:v1"]},
+    {"id": "CTX-PINNED", "initial_refs": ["doc:v1"], "required_refs": ["doc:v1"], "continuity": true}
+  ],
+  "qa_map": {
+    "QA-01": {"status": "BLOCKED", "reason": "구조는 위임 준비에 참여하지만 Agent ingress와 audible Voice 결과 endpoint를 실행하지 않음"},
+    "QA-02": {"status": "BLOCKED", "reason": "구조는 direct Context 경로에 참여하지만 Voice input과 audible onset을 실행하지 않음"},
+    "QA-03": {"status": "N/A", "reason": "동결 case의 Agent status 전달 경로는 새 Context 조회를 수행하지 않음"},
+    "QA-04": {"status": "N/A", "reason": "음성 playback 중단 경로가 Context read-set 확정에 참여하지 않음"},
+    "QA-05": {"status": "BLOCKED", "reason": "Context가 필요한 Task control corpus와 presentation endpoint를 실행하지 않음"},
+    "QA-11": {"status": "MEASURED", "field": "strict_success", "aggregation": "rate"},
+    "QA-12": {"status": "MEASURED", "field": "semantic_correct", "aggregation": "rate"},
+    "QA-13": {"status": "N/A", "reason": "Request와 Task 연결은 고정되어 후보 경로에 참여하지 않음"},
+    "QA-14": {"status": "N/A", "reason": "비동기 Task state event가 동결 Context case에 없음"},
+    "QA-15": {"status": "MEASURED", "field": "continuity_correct", "aggregation": "rate"},
+    "QA-21": {"status": "N/A", "reason": "Agent 계약 변화가 Context read-set 후보를 통과하지 않음"},
+    "QA-22": {"status": "BLOCKED", "reason": "15개 전체 Model·Context·State change pack의 실제 변경 exercise 미실행"},
+    "QA-23": {"status": "BLOCKED", "reason": "5개 전체 실험·로그 change pack의 실제 변경 exercise 미실행"},
+    "QA-31": {"status": "BLOCKED", "reason": "진행 요청의 Context generation/read-set recovery fault pack 미실행"},
+    "QA-32": {"status": "N/A", "reason": "이번 정상 Context corpus에는 fault injection이 없음"},
+    "QA-41": {"status": "BLOCKED", "reason": "공유 semantic model을 포함한 target-device peak committed memory boundary 미실행"},
+    "QA-51": {"status": "MEASURED", "field": "exposure_excess", "aggregation": "exposure"},
+    "QA-61": {"status": "MEASURED", "field": "trace_complete", "aggregation": "rate"},
+    "QA-62": {"status": "MEASURED", "field": "strict_success", "aggregation": "replay"}
+  }
+}
