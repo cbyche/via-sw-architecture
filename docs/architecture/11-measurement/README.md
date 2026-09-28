@@ -4,6 +4,11 @@
 >
 > **Current focus:** Core DP는 VIA-DP-03·05·06·07·15·17의 6개로 확정했다. 현재 단계는 **Measurement Contract Definition**이며 DP-03부터 05→17→06→07→15 순으로 한 번에 하나씩 심층 정의한다. 기존 결과는 재사용 가능한 예비 증거일 뿐 새 Core ASR 결과나 최종 winner가 아니다.
 
+여섯 Core DP의 공식 PoC는 실제 Model·Agent 제품 개발을 선행조건으로 두지 않는다. 공통 Shared
+Evaluation Spine과 근거가 동결된 deterministic dependency mock을 사용해
+`MEASURED_MOCK_E2E` QA-09/19/29/39 결과와 별점을 만든다. DP별 차이는 같은 spine에 적용하는 최소
+event/state patch로 표현한다.
+
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
 ## Authoritative inputs
@@ -21,8 +26,16 @@
 | [Observability](../08-quality-attributes/observability.md) | QA-61/62 trace completeness and evidence reproduction |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
+| [Core DP PoC Mock & Shared Spine Contract](./core-poc-mock-and-spine-contract.md) | 모든 Core DP의 deterministic mock, 공통 사용자 여정, DP event patch, 실행 기본값과 공식 `MEASURED_MOCK_E2E` 결과 계약 |
+| [Core Shared Spine Registry](./contracts/core-shared-spine.json) | SP-01~07의 machine-readable source case·oracle family·DP patch eligibility |
+| [Core ASR Score Bands](./contracts/core-asr-score-bands.json) | QA-09/19/29/39 공통 system target과 0~5 boundary proposal |
+| [Dependency Mock Profile Schema](./contracts/core-dependency-mock-profile.schema.json) | 모든 DP mock의 timing·behavior·근거·seed machine contract |
 | [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 공통 Model과 DP-03 candidate별 speech evidence dependency, Reference Agent, 네 core ASR의 최소 workload/fault |
 | [VIA-DP-03 Capability & Freeze Draft](./via-dp-03-capability-and-freeze.md) | A의 Streaming ASR partial timestamp와 B의 S2S turn-final timestamp capability gate, candidate 계약과 pre-result 모집단 초안 |
+| [VIA-DP-03 Candidate Contract](./via-dp-03-candidate-contract.md) | A/B 공통 speech event, candidate schema, clock·UI anchor·retention, 지칭 pattern과 revision lifecycle 초안 |
+| [VIA-DP-03 Fixture, Oracle, Fault & Change Contract](./via-dp-03-fixture-and-oracle.md) | 동일 audio/UI 입력, hidden oracle, functional qualification pack, Core-ASR endpoint·fault·change pack과 사용자 승인 항목 |
+| [VIA-DP-03 Spine Patch Registry](./contracts/via-dp-03-spine-patch.json) | SP-01/02/04/07에 적용할 A/B event sequence와 fault patch 초안 |
+| [VIA-DP-03 A Mock Profile](./contracts/via-dp-03-a-streaming-asr-mock-profile.json) / [B Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json) | A의 Streaming ASR와 B의 time-aligned S2S timing·behavior·근거·seed 초안 |
 | [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | Core DP 6개 실행 순서, 완결 조건과 전체 inventory의 보존 자산 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
@@ -52,7 +65,11 @@
 
 `Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
 
-일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. Archived predecessor 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+Core ASR 4개의 system target·score band proposal은 작성했지만 Measurement Freeze 전이며, 일부
+detailed diagnostic QA의 standalone target/score도 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는
+[Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. Archived
+predecessor 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived code를 그대로
+실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 
@@ -60,7 +77,7 @@
 | --- | --- | --- |
 | `ESTIMATED_MODEL_ONLY` | frozen tokens ÷ documented rate | model-only planning estimate |
 | `HYBRID_REFERENCE_ESTIMATE` | observed spans plus estimated/reference spans | reference scenario estimate |
-| `MEASURED_MOCK_E2E` | executable mock path with observed endpoints | that mock harness under its frozen profile |
+| `MEASURED_MOCK_E2E` | frozen dependency mock과 실제 candidate path 및 endpoint를 실행 | 해당 mock profile에서의 공식 Architecture PoC QA-09/19/29/39 결과 |
 | `MEASURED_REFERENCE_HARNESS` | instrumented reference path | reference implementation behavior |
 | `MEASURED_MODEL` | named model actually executed | that model in the recorded environment |
 | `PRODUCT_E2E` | product path and required physical endpoints observed | recorded product/environment only |

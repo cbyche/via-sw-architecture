@@ -3,7 +3,9 @@
 > 작성일: 2026-09-21
 > 상태: **CORE ASR APPROVED / measurement freeze 및 실제 DP 후보 점수 산출 전**
 > 목적: QA-09·19·29·39를 모든 DP의 공통 Architecture 평가축으로 사용하고 상세 진단을 보존하면서 사후 해석·cherry-picking을 방지한다.
-> Current measurement contract: core 정의와 집계는 승인됐고 target/score, fixture, 반복 수와 DP applicability는 새 Measurement Freeze 전에 고정한다.
+> Current measurement contract: core 정의·집계와 mock/spine 방법은 승인됐고 system target·score
+> band proposal, DP별 event patch, mock profile, fixture digest와 applicability는 Measurement Freeze
+> 전에 고정한다.
 
 ## 1. 핵심 원칙
 
@@ -141,4 +143,6 @@ QA-09는 합계·sample count·산술평균과 class breakdown을, QA-19는 corr
 - evidence level
 - N/A 판정 규칙
 
-QA-09·19·29·39의 `CONFIRMED_ASR` 분류는 확정됐다. 아직 확정하지 않은 것은 DP별 모집단·반복·target·score band와 실제 결과다. 기존 reference campaign을 새 core QA 결과로 소급 집계하지 않는다.
+QA-09·19·29·39의 `CONFIRMED_ASR` 분류는 확정됐다. 공통 system target·score band proposal을
+작성했으며 DP별 Shared Spine patch·mock profile·applicable 모집단과 함께 freeze해야 한다. 기존
+reference campaign을 새 core QA 결과로 소급 집계하지 않는다.

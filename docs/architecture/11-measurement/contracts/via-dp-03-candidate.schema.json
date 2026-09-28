@@ -1,0 +1,275 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://via.local/schemas/via-dp-03-candidate.schema.json",
+  "title": "VIA-DP-03 Voice Evidence Candidate",
+  "description": "Pre-freeze machine contract for one deictic transcript span and its source-time UI evidence references. This schema does not contain the resolved referent or evaluator oracle.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "candidate_id",
+    "utterance_id",
+    "span_id",
+    "candidate_revision",
+    "text",
+    "text_start_char",
+    "text_end_char",
+    "pattern_id",
+    "speech_clock_id",
+    "clock_mapping_id",
+    "speech_start_ms",
+    "speech_end_ms",
+    "ui_evidence",
+    "provenance",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "via.voice-evidence-candidate.v0.1"
+    },
+    "candidate_id": {
+      "$ref": "#/$defs/nonEmptyId"
+    },
+    "utterance_id": {
+      "$ref": "#/$defs/nonEmptyId"
+    },
+    "span_id": {
+      "$ref": "#/$defs/nonEmptyId"
+    },
+    "candidate_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "text_start_char": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Inclusive Unicode code-point offset in the NFC-normalized transcript."
+    },
+    "text_end_char": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Exclusive Unicode code-point offset in the NFC-normalized transcript. Must be greater than text_start_char; semantic validation enforces this relation."
+    },
+    "pattern_id": {
+      "$ref": "#/$defs/nonEmptyId"
+    },
+    "speech_clock_id": {
+      "$ref": "#/$defs/nonEmptyId"
+    },
+    "clock_mapping_id": {
+      "$ref": "#/$defs/nonEmptyId",
+      "description": "Identity of the receipt that maps provider audio offsets to local capture frames and the UI monotonic clock."
+    },
+    "speech_start_ms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "speech_end_ms": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Must be greater than or equal to speech_start_ms; semantic validation enforces this relation."
+    },
+    "ui_evidence": {
+      "$ref": "#/$defs/uiEvidence"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    },
+    "status": {
+      "enum": [
+        "provisional",
+        "final",
+        "retracted"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "alternative": {
+                "const": "B"
+              }
+            },
+            "required": [
+              "alternative"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "candidate_revision": {
+            "const": 1
+          },
+          "status": {
+            "const": "final"
+          },
+          "provenance": {
+            "properties": {
+              "source_final": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "provisional"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "provenance": {
+            "properties": {
+              "alternative": {
+                "const": "A"
+              },
+              "source_final": {
+                "const": false
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "nonEmptyId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "idArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyId"
+      },
+      "uniqueItems": true
+    },
+    "uiEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeline_slice_id",
+        "ui_clock_id",
+        "screen_revision_id",
+        "pointer_samples",
+        "selection_state_id",
+        "focus_state_id",
+        "window_id",
+        "document_id",
+        "viewport_id",
+        "state_transition_ids"
+      ],
+      "properties": {
+        "timeline_slice_id": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "ui_clock_id": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "screen_revision_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "pointer_samples": {
+          "$ref": "#/$defs/idArray"
+        },
+        "selection_state_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "focus_state_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "window_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "document_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "viewport_id": {
+          "$ref": "#/$defs/nullableId"
+        },
+        "state_transition_ids": {
+          "$ref": "#/$defs/idArray"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alternative",
+        "provider",
+        "profile",
+        "source_epoch",
+        "source_event_id",
+        "source_event_seq",
+        "source_segment_id",
+        "source_revision",
+        "source_final",
+        "observed_at_monotonic_ms"
+      ],
+      "properties": {
+        "alternative": {
+          "enum": [
+            "A",
+            "B"
+          ]
+        },
+        "provider": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "profile": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "source_epoch": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "source_event_id": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "source_event_seq": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_segment_id": {
+          "$ref": "#/$defs/nonEmptyId"
+        },
+        "source_revision": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "source_final": {
+          "type": "boolean"
+        },
+        "observed_at_monotonic_ms": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

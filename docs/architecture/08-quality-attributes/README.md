@@ -1,6 +1,9 @@
 # Quality Concerns and Quality Attributes
 
-이 디렉터리는 VIA의 상위 품질 관심사(QC)를 정리하고, Architecture 후보를 비교할 측정 가능한 품질 속성(QA)을 정의한다. **QA-09·19·29·39는 핵심 `CONFIRMED_ASR`이며, target·score band·fixture·반복과 새 machine contract는 Measurement Freeze 전까지 미확정이다.**
+이 디렉터리는 VIA의 상위 품질 관심사(QC)를 정리하고, Architecture 후보를 비교할 측정 가능한 품질
+속성(QA)을 정의한다. **QA-09·19·29·39는 핵심 `CONFIRMED_ASR`이며 공통 system target·score band
+proposal을 작성했다. 이 숫자와 DP별 Shared Spine patch·mock profile·fixture digest·applicable
+population은 Measurement Freeze 전까지 미확정이다.**
 
 ## Current documents
 

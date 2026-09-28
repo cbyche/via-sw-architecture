@@ -105,6 +105,11 @@ Task Association을 평가하면서 정답 Task ID를 입력에 몰래 넣지 �
 
 **공통 기반 불변식: S2S 1개 + semantic LLM 1개, Component·Task·단계별 복제 금지.** 프롬프트, schema, 호출 횟수·순서, 세션·KV cache는 달라질 수 있다. 동일 모델의 동시 호출 지원·대기·취소 한도는 실제 dependency profile로 고정하며, 단계 분리를 무료 병렬 추론으로 간주하지 않는다. VIA-DP-03 A는 비교 축 자체로 timestamp-capable Streaming ASR 1개를 추가하는 승인된 예외이고, B는 별도 ASR 없이 S2S 1개에 time-aligned final-text capability를 요구한다. 그 밖의 ASR·TTS·helper 추가는 현재 범위 밖이다.
 
+Core-DP Architecture PoC에서 위 논리 dependency는 각각 하나의 deterministic behavior mock으로
+표현한다. Mock profile은 event·timing·error·fault schedule과 근거를 결과 전에 동결하며, 실제
+candidate 경로와 endpoint를 실행한 `MEASURED_MOCK_E2E` 결과를 QA-09/19/29/39 점수에 사용한다.
+실제 Model·Agent 제품 연결은 PoC 선행조건이 아니라 후속 revalidation이다.
+
 | 비교 목적 | 동일하게 두는 것 | 달라도 되는 것 | 결과 해석 |
 | --- | --- | --- | --- |
 | 같은 판단 책임의 구조 비교 | 같은 기준 모델·버전·생성 설정, 같은 원천 입력, 같은 기능 요구 | 구조 때문에 달라진 Context 표현·입력 길이·호출 수·실행 순서 | 구조 효과를 우선 관찰 |
@@ -217,7 +222,10 @@ Agent 내부 업무는 실행하지 않고, 요청에 따라 정해진 결과·�
 
 시험 원본, 초기 상태, 평가 정답, 후보 설정을 평가 전에 버전으로 고정한다. 캐시가 비어 있는 경우와 준비된 경우를 구분하며, 한 후보만 미리 준비하지 않는다. 기록·검증·보안 기능을 한쪽에서만 꺼서 속도를 비교하지 않는다.
 
-정확도 평가에는 실제 Model 결과인지, 고정 응답 재생인지 표시한다. 기능이 틀린 결과를 빠르다는 이유로 정상 성공군에 포함하지 않고, 실패·보류도 누락하지 않는다. 반복 횟수와 집계 방식은 08·11에서 모든 후보에 공통으로 정하며, 불확실성이 큰 값이나 미측정값을 0~5점의 정밀한 결론으로 바꾸지 않는다.
+정확도 평가에는 evidence label과 mock profile ID를 표시한다. Deterministic mock을 사용한 공식 PoC는
+동결된 behavior profile 아래의 VIA system accuracy를 측정한다. 기능이 틀린 결과를 빠르다는 이유로
+정상 성공군에 포함하지 않고, 실패·보류도 누락하지 않는다. 반복 횟수와 집계 방식은 08·11에서 모든
+후보에 공통으로 정한다.
 
 ---
 

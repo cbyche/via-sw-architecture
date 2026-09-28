@@ -1,0 +1,114 @@
+{
+  "schema_version": "via.core-dependency-mock-profile.v0.1",
+  "profile_id": "via-dp-03-b-s2s-time-aligned-final",
+  "profile_revision": "draft-2026-09-28.1",
+  "dependency_role": "s2s",
+  "logical_instance_count": 1,
+  "evidence_label": "MEASURED_MOCK_E2E",
+  "primary_timing_profile_id": "B-NOMINAL-EQUAL-FINAL",
+  "timing_profiles": [
+    {
+      "timing_profile_id": "B-NOMINAL-EQUAL-FINAL",
+      "role": "primary",
+      "events": [
+        {
+          "event_name": "time_aligned_final_observed",
+          "clock_origin": "utterance_end",
+          "scheduled_offset_ms": 300,
+          "payload_fixture_ref": "dp03/b/final-correct"
+        }
+      ]
+    },
+    {
+      "timing_profile_id": "B-FAST-SENSITIVITY",
+      "role": "fast_sensitivity",
+      "events": [
+        {
+          "event_name": "time_aligned_final_observed",
+          "clock_origin": "utterance_end",
+          "scheduled_offset_ms": 180,
+          "payload_fixture_ref": "dp03/b/final-correct"
+        }
+      ]
+    },
+    {
+      "timing_profile_id": "B-SLOW-SENSITIVITY",
+      "role": "slow_sensitivity",
+      "events": [
+        {
+          "event_name": "time_aligned_final_observed",
+          "clock_origin": "utterance_end",
+          "scheduled_offset_ms": 600,
+          "payload_fixture_ref": "dp03/b/final-correct"
+        }
+      ]
+    }
+  ],
+  "behavior_variants": [
+    {
+      "variant_id": "B-CORRECT",
+      "class": "correct",
+      "event_fixture_ref": "dp03/b/correct-final",
+      "applicable_spine_ids": [
+        "SP-01",
+        "SP-02",
+        "SP-04"
+      ]
+    },
+    {
+      "variant_id": "B-CORRECTED-UTTERANCE",
+      "class": "corrected",
+      "event_fixture_ref": "dp03/b/final-with-both-deictic-spans-and-correction-cue",
+      "applicable_spine_ids": [
+        "SP-04"
+      ]
+    },
+    {
+      "variant_id": "B-MISSING-FINAL",
+      "class": "missing",
+      "event_fixture_ref": "dp03/b/missing-final",
+      "applicable_spine_ids": [
+        "SP-07"
+      ]
+    },
+    {
+      "variant_id": "B-DUPLICATE-STALE",
+      "class": "stale",
+      "event_fixture_ref": "dp03/b/duplicate-late-old-epoch",
+      "applicable_spine_ids": [
+        "SP-07"
+      ]
+    },
+    {
+      "variant_id": "B-DISCONNECT-RECONNECT",
+      "class": "disconnect_reconnect",
+      "event_fixture_ref": "dp03/b/disconnect-reconnect",
+      "applicable_spine_ids": [
+        "SP-07"
+      ]
+    }
+  ],
+  "evidence_basis": [
+    {
+      "kind": "primary_research",
+      "reference": "Whisper: Robust Speech Recognition via Large-Scale Weak Supervision",
+      "supported_claim": "A speech model can generate timestamp and text tokens in one native decoding contract."
+    },
+    {
+      "kind": "primary_research",
+      "reference": "Moshi: a speech-text foundation model for real-time dialogue",
+      "supported_claim": "A spoken dialogue model can natively produce time-aligned text representations."
+    },
+    {
+      "kind": "team_dependency_contract",
+      "reference": "VIA-DP-03 B build acceptance contract",
+      "supported_claim": "The final product candidate is a team S2S build that emits turn-final aligned text without a separate ASR or aligner."
+    },
+    {
+      "kind": "system_budget_allocation",
+      "reference": "QA-09 system target proposal and symmetric DP-03 primary final-arrival budget",
+      "supported_claim": "The primary 300 ms final-arrival delay is equal to A final arrival so the primary PoC does not pre-award model latency to either architecture."
+    }
+  ],
+  "deterministic_seed": 30032
+}

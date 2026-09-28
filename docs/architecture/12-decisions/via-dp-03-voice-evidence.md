@@ -6,10 +6,12 @@
 > VIA가 provisional evidence로 관리할 것인가, S2S 모델 자체가 발화 종료 후
 > timestamped transcript를 최종 evidence로 제공할 것인가?
 >
-> 현재 판단: 대안 A/B의 책임·호출·candidate lifecycle은 합의했다. 모델 제품, fixture,
-> 반복 수, timeout, target과 score band는 아직 `PENDING`이고 실제 결과는 `NOT_RUN`이다.
+> 현재 판단: 대안 A/B의 책임·호출·candidate lifecycle은 합의했다. PoC는 A/B dependency behavior
+> mock을 공식 profile로 사용한다. DP-03 spine patch·mock schedule과 Measurement Freeze는 아직
+> `PENDING`이고 실제 결과는 `NOT_RUN`이다.
 > 구현과 측정은 시작하지 않았다. 상세 동결 원장은
-> [DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)를 따른다.
+> [DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)를 따르며,
+> 공통 event·candidate 의미는 [DP-03 Candidate Contract](../11-measurement/via-dp-03-candidate-contract.md)에 둔다.
 
 ## 1. 해결할 사용자 문제
 
@@ -24,8 +26,10 @@
 → 이후 Grounding에서 확정할 referent
 ```
 
-UC-03의 사전 선택, UC-04의 발화 중 복수 지칭·drag·정정·창 이동과 UC-11의 Voice correction을
-모두 지원한다. 정보가 부족하면 임의 대상을 선택하지 않고 clarification한다.
+UC-03의 사전 선택, UC-04의 발화 중 복수 지칭·drag·정정·창 이동과 UC-11 중 UI 지칭을 포함한
+Voice correction을 지원한다. UI 지칭이 없는 일반 transcript correction은 DP-03 후보 차이가 실제로
+참여하지 않으므로 모집단에 억지로 넣지 않는다. 정보가 부족하면 임의 대상을 선택하지 않고
+clarification한다.
 
 ## 2. DP-03의 경계
 
@@ -72,29 +76,53 @@ Grounding과 semantic LLM은 DP-03 candidate를 소비해 실제 referent와 요
 ## 4. 공통 candidate 의미 계약
 
 Candidate는 최종 referent가 아니라 **지칭 span과 당시 UI evidence를 묶어 고정한 입력 근거**다.
-합의한 A의 provisional 예시는 다음과 같다.
+합의한 A의 provisional machine example은 다음과 같다.
 
 ```json
 {
+  "schema_version": "via.voice-evidence-candidate.v0.1",
+  "candidate_id": "candidate-1",
+  "utterance_id": "utterance-1",
   "span_id": "span-1",
+  "candidate_revision": 3,
   "text": "여기",
+  "text_start_char": 8,
+  "text_end_char": 10,
+  "pattern_id": "ko.locative.here",
+  "speech_clock_id": "audio-input-epoch-7",
+  "clock_mapping_id": "clock-map-7",
   "speech_start_ms": 1120,
   "speech_end_ms": 1340,
-  "asr_revision": 3,
   "ui_evidence": {
-    "screen_revision_id": 104,
+    "timeline_slice_id": "ui-slice-88",
+    "ui_clock_id": "ui-monotonic-1",
+    "screen_revision_id": "screen-104",
     "pointer_samples": ["pointer-310", "pointer-311"],
     "selection_state_id": "selection-42",
     "focus_state_id": "focus-18",
     "window_id": "window-7",
     "document_id": "document-3",
-    "viewport_id": "viewport-91"
+    "viewport_id": "viewport-91",
+    "state_transition_ids": []
+  },
+  "provenance": {
+    "alternative": "A",
+    "provider": "provider-name",
+    "profile": "profile-name",
+    "source_epoch": "asr-epoch-7",
+    "source_event_id": "provider-event-21",
+    "source_event_seq": 21,
+    "source_segment_id": "provider-segment-4",
+    "source_revision": "partial-3",
+    "source_final": false,
+    "observed_at_monotonic_ms": 1842
   },
   "status": "provisional"
 }
 ```
 
-Machine schema는 Measurement Freeze에서 확정하되 다음 의미는 유지한다.
+Machine schema 초안은 [Candidate Contract](../11-measurement/via-dp-03-candidate-contract.md)에서
+관리하고 Measurement Freeze에서 확정하되 다음 의미는 유지한다.
 
 | Field | 의미 |
 | --- | --- |
@@ -177,8 +205,9 @@ Timestamp-capable S2S
 ```
 
 B에는 별도 Streaming ASR이 없다. 우리 팀이 S2S 모델에 time-aligned text output 기능을 개발하는
-것을 기본 방향으로 한다. PoC에서 근거가 있는 기존 timestamp-capable model을 사용하거나 구조
-검증용 mock/replay를 사용할 수 있지만, mock을 모델 정확도·지연의 실측으로 해석하지 않는다.
+것이 최종 제품 방향이다. 이번 Architecture PoC는 그 개발을 선행조건으로 두지 않고, 아래 native
+turn-final output contract를 deterministic S2S behavior mock으로 재현한다. 이 mock을 통과한
+QA-09/19/29/39는 `MEASURED_MOCK_E2E` 공식 PoC 점수로 사용한다.
 
 ```mermaid
 flowchart TB
@@ -259,9 +288,11 @@ sequenceDiagram
  G->>G: referent·role·goal 해석
 ```
 
-사용자가 “이 부분, 아니 여기”라고 정정하면 A는 partial revision에 따라 앞 candidate를 철회하고,
-B는 final transcript 안의 두 span과 정정 관계를 source-time 순서로 전달해야 한다. 어느 후보도
-최신 pointer 하나로 전체 utterance를 대체하지 않는다.
+사용자가 “이 부분, 아니 여기”라고 정정해도 recognizer의 final transcript에 두 표현이 남아 있으면
+A와 B 모두 두 span과 각 시점의 UI evidence를 final candidate로 보존한다. Correction cue와 순서를
+해석해 앞 referent를 철회하는 것은 이후 Grounding의 일이다. A의 `retracted` candidate는 사용자의
+의미 정정이 아니라 partial에 있던 지칭 span 자체가 후속 ASR revision에서 사라진 경우에만 생긴다.
+어느 후보도 최신 pointer 하나로 전체 utterance를 대체하지 않는다.
 
 ## 9. Core ASR에서 볼 구조적 차이
 
@@ -276,25 +307,27 @@ Measurement Freeze에서 승인한다.
 | QA-39 | A의 ASR stream 단절·stale revision과 B의 S2S final evidence 누락·duplicate가 다른 경로와 Task로 확산되지 않고 복구되는지 |
 
 A가 빠르거나 B가 정확하다고 미리 가정하지 않는다. Timestamp-capable Streaming ASR도 lookahead와
-revision 때문에 늦을 수 있고, B의 final decode도 발화 종료 직후 빠르게 끝날 수 있다. 실제 span을
-각각 기록해 비교한다.
+revision 때문에 늦을 수 있고, B의 final decode도 발화 종료 직후 빠르게 끝날 수 있다. 결과 전에
+동결한 A/B mock schedule과 실제 candidate 처리 span을 각각 기록해 비교한다.
 
 ## 10. Capability와 evidence 제한
 
-모델 timestamp 생성 자체는 기존 ASR·speech model 사례로 기술적 근거가 있지만, 현재 B 계약을
-만족하는 특정 S2S profile은 아직 선택하지 않았다. Qwen 계열을 포함한 제품·모델 선택은 candidate
-capability qualification에서 다시 검토한다.
+모델 timestamp 생성 자체는 기존 ASR·speech model 사례와 팀 개발 방향으로 기술적 근거를 확보한다.
+A의 streaming event shape와 B의 native aligned-text 가능성 근거는
+[DP-03 Speech Evidence Capability 조사](../08-quality-attributes/evidence/via-dp-03-speech-evidence-capability.md)에
+기록한다. 특정 상용 A나 완성된 B build는 PoC 선행조건이 아니다.
 
-Mock은 다음만 검증할 수 있다.
+이번 PoC의 A/B mock은 다음을 공식 평가한다.
 
-- candidate schema와 revision 처리
-- UI evidence reference 연결
-- late/stale/duplicate/failure 처리
-- Core/Grounding 경계와 trace
+- QA-09: 동결된 dependency schedule을 포함한 실제 candidate 경로의 VIA-attributable time
+- QA-19: correct/degraded/error speech-evidence profile에서 최종 field accuracy
+- QA-29: 별도 ASR contract 대 S2S native output contract의 changed Architecture Element 수
+- QA-39: late/stale/duplicate/disconnect fault의 containment·recovery 성공률
 
-Mock 또는 evaluator oracle timestamp로 실제 model timestamp 정확도, 실제 latency, revision 빈도,
-QA-09/19 winner를 주장하지 않는다. 실제 모델이 실행되면 `MEASURED_MODEL`, mock/replay이면 해당
-measurement evidence label을 정확히 사용한다.
+Mock event와 evaluator oracle은 분리하며 mock이 final system answer를 후보에 주지 않는다. 결과는
+[Core DP PoC Mock & Shared Spine Contract](../11-measurement/core-poc-mock-and-spine-contract.md)에 따라
+`MEASURED_MOCK_E2E`로 기록하고 A/B winner 판단에 직접 사용한다. 실제 모델 연결은 같은 spine으로
+나중에 수행할 별도 revalidation이다.
 
 ## 11. 현재 상태와 다음 작업
 
@@ -308,11 +341,12 @@ measurement evidence label을 정확히 사용한다.
 
 아직 동결하지 않은 것:
 
-- A의 실제 Streaming ASR 제품·버전과 partial/final timestamp semantics
-- B의 S2S model architecture/profile과 timestamp output contract
-- 공통 machine schema와 UI evidence reference 수명
-- fixture, repetition, timeout, target, score band와 fault deadline
+- A mock의 partial timestamp·revision·arrival/error schedule
+- B mock의 turn-final aligned-text·arrival/error schedule
+- 제품 UI evidence retention budget
+- Shared Spine membership, DP-03 event patch와 fixture digest
 - active candidate, runner와 result
 
-다음 작업은 구현이 아니라 [DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)의
-A/B gate와 PoC evidence 수준을 이 정의에 맞게 완성하고 사용자 승인을 받는 것이다.
+다음 작업은 구현이 아니라 candidate schema·fixture·oracle·fault와 QA-29 ledger를 review하고,
+[DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)의 A/B mock
+behavior profile과 Shared Spine patch를 확정해 Measurement Freeze를 만드는 것이다.

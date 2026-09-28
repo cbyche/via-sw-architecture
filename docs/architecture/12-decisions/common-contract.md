@@ -6,6 +6,11 @@
 
 공통 기반으로 S2S 모델 1개와 semantic LLM 1개를 공유한다. 역할별 prompt·세션·호출은 모델 추가 적재가 아니다. 같은 목표·원천 데이터·정보 시점·Agent capability와 총 worker budget을 A/B에 적용한다. VIA-DP-03은 evidence-source topology가 비교 축이므로 A에 timestamp-capable Streaming ASR 1개를 포함하고 B에는 별도 ASR 없이 timestamp-capable S2S를 사용한다. 이 차이를 제외한 새 ASR/VAD/TTS/helper 모델은 허용하지 않는다. 후보에 필요한 capability가 부족하면 낮은 점수로 대체하지 않고 미충족으로 기록한다.
 
+Core-DP PoC에서는 S2S·semantic LLM·Context Source·Downstream Agent를 각각 하나의 deterministic
+dependency mock으로 표현한다. 여섯 DP는 같은 Shared Evaluation Spine을 사용하고 해당 DP의
+event/state patch만 바꾼다. 동결된 mock과 실제 candidate path를 실행한 `MEASURED_MOCK_E2E` 결과는
+QA-09/19/29/39 수치·별점과 A/B 결정에 직접 사용한다.
+
 한 번에 하나의 DP만 바꾸고 나머지 선택을 명시적으로 고정한다. 이전의 A/A/A/A 참조값을 자동 적용하지 않는다. 주요 상호작용은 별도 교차 검증하며 후보 결과를 독립 표본처럼 복제하지 않는다. Model 배치는 원칙적으로 동일 조건이다. DP-03처럼 배치·dependency topology 자체가 축이면 그 차이와 자원·지연·장애 경계를 candidate manifest에 기록한다. 외부 Agent Runtime은 양쪽 모두 외부 dependency다.
 
 ## 2. Identity·메시지·상태

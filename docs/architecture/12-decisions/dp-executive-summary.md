@@ -72,6 +72,9 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 - QA-39는 recovery time과 blast radius를 더하지 않는다. 두 조건과 correctness를 모두 만족한 fault trial의 **단순 성공률**이다.
 - QA-41 memory는 target-device diagnostic이다. QA-51과 action/access rule은 safety qualification, QA-61/62는 evidence qualification이다.
 - 서로 다른 DP는 applicable case·field·change·fault 모집단이 다를 수 있으므로 DP 사이 절대값을 합산해 순위를 만들지 않는다. 같은 DP의 A/B만 동일 모집단으로 직접 비교한다.
+- 여섯 Core DP의 공식 PoC는 같은 Shared Evaluation Spine과 근거가 동결된 deterministic dependency
+  mock을 사용한다. DP 차이는 spine의 최소 event/state patch로 표현하고 `MEASURED_MOCK_E2E`
+  결과를 네 Core ASR 수치와 공통 별점에 직접 사용한다.
 
 정확한 수식·실패 처리·field/change/fault 범위는 [Core ASR Contract](../08-quality-attributes/core-asr-contract.md)가 유일한 상세 기준이다.
 
@@ -81,7 +84,7 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 
 | Core DP | 주 Component | 서로 배타적인 A/B 질문 | Core ASR 역할 | 현재 상태 |
 | --- | --- | --- | --- | --- |
-| [VIA-DP-03](./via-dp-03-voice-evidence.md) | Voice Engine, Context/Intent 입력 경계 | A의 timestamp-capable Streaming ASR partial로 provisional evidence를 만들 것인가, B의 S2S turn-final timestamped transcript로 final evidence를 만들 것인가? | QA-09·19·29 primary, QA-39 regression | A/B identity·candidate 의미·Grounding 경계 합의; 실제 A ASR와 B S2S profile, machine schema와 freeze는 `PENDING` |
+| [VIA-DP-03](./via-dp-03-voice-evidence.md) | Voice Engine, Context/Intent 입력 경계 | A의 timestamp-capable Streaming ASR partial로 provisional evidence를 만들 것인가, B의 S2S turn-final timestamped transcript로 final evidence를 만들 것인가? | QA-09·19·29 primary, QA-39 regression | A/B identity·candidate 계약 `DRAFT`; mock behavior profile·spine patch와 Measurement Freeze는 `PENDING` |
 | [VIA-DP-05](./via-dp-05-context-contract.md) | Context Engine, Intent Refiner | semantic execution 전에 Context read-set을 닫을 것인가, 같은 execution에서 bounded source를 demand-driven으로 확장할 것인가? | QA-09·19·29·39 primary | 새 A/B 정의 완료, measurement freeze 미작성 |
 | [VIA-DP-17](./via-dp-17-context-materialization-authority.md) | Context Engine과 Context consumer | 선택된 Source를 공통 canonical ContextValue로 확정할 것인가, consumer가 목적별 Context view를 확정할 것인가? | QA-09·19·29·39 primary | 새 A/B 정의 완료, measurement freeze 미작성 |
 | [VIA-DP-06](./via-dp-06-semantic-authority.md) | Intent Refiner, Orchestrator, Task association, Agent Router | 하나의 통합 authority가 최종 의미를 확정할 것인가, 단계별 authority가 versioned correction으로 협력할 것인가? | QA-09·19·29 primary, QA-39 regression | reference evidence는 있으나 새 core-ASR 결과와 product E2E는 아님 |
@@ -107,7 +110,8 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 
 사용자 interaction이 실제로 흐르는 순서대로 다음 순서를 기본으로 한다.
 
-1. **DP-03 — Voice evidence**: S2S가 필수 timestamp·revision evidence를 제공할 수 있는지 먼저 확인한다.
+1. **DP-03 — Voice evidence**: A의 Streaming ASR mock partial timestamp와 B의 S2S mock native final
+   timestamp를 같은 spine에 적용할 contract를 먼저 동결한다.
 2. **DP-05 — Context acquisition**: 요청 처리 중 Source 획득 범위를 언제 닫는지 확정한다.
 3. **DP-17 — Context representation**: 선택된 Source를 어떤 표현 계약으로 소비할지 확정한다.
 4. **DP-06 — Semantic authority**: Voice·Context evidence를 바탕으로 목표·대상·Task relation·handling을 누가 최종 확정하는지 비교한다.
@@ -145,10 +149,10 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 ### 아직 완료되지 않음
 
 - 여섯 DP별 machine-readable case/field/change/fault registry
-- DP별 반복 수·timeout·target·score band와 Measurement Freeze
-- DP-03 A용 Streaming ASR profile과 B용 timestamp-capable S2S build/profile의 capability qualification
-- DP-03 공통 candidate machine schema, deterministic detector registry와 UI evidence retention 계약
-- DP-07 bundle contract와 DP-15 progress/snapshot contract의 외부 Agent capability qualification
+- DP별 Shared Spine patch·mock timing/error/fault profile과 Measurement Freeze
+- 공통 system target·score band를 적용할 analyzer와 score schema
+- DP-03 candidate schema·detector registry 초안의 freeze와 제품 UI evidence retention budget 승인
+- DP-07 bundle과 DP-15 progress/snapshot의 Reference-Agent mock behavior contract freeze
 - 새 A/B candidate implementation과 네 core-ASR full campaign
 - 여섯 DP의 A/B winner와 이를 반영한 새 ADR
 

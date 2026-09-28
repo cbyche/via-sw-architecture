@@ -2,7 +2,10 @@
 
 > 상태: **ACTIVE CORE-ASR BASELINE / QA-09·19·29·39 CONFIRMED_ASR / measurement freeze pending**
 >
-> 2026-09-28 사용자 결정으로 네 통합 QA를 핵심 ASR로 확정했다. 기존 상세 QA는 새 core QA의 measurement stratum·field family·change pack·fault diagnostic으로 유지하며 독립 ASR 점수로 중복 가중하지 않는다. target, score band, DP별 fixture와 반복은 별도 Measurement Freeze 전까지 미확정이다.
+> 2026-09-28 사용자 결정으로 네 통합 QA를 핵심 ASR로 확정했다. 기존 상세 QA는 새 core QA의
+> measurement stratum·field family·change pack·fault diagnostic으로 유지하며 독립 ASR 점수로 중복
+> 가중하지 않는다. Core QA의 system target·score band proposal을 작성했고 DP별 Shared Spine
+> patch·mock profile·fixture digest·applicability와 함께 Measurement Freeze 전까지 미확정이다.
 
 ## 1. 분류 체계
 
@@ -47,20 +50,20 @@ ASR — Architecture 영향이 확인된 QA에 부여하는 분류
 | QA-03 | Agent Progress Voice Feedback Responsiveness | Agent의 진행 상태가 나온 뒤 VIA가 그 소식을 사용자에게 음성으로 얼마나 빨리 알려주는지를 본다. | 가장 느린 대표 case의 p95 Agent 상태 Voice 전달시간 | semantic definition current; target draft |
 | QA-04 | Voice Interruption Responsiveness | 사용자가 말로 끼어들었을 때 VIA가 재생 중인 음성을 얼마나 빨리 멈추는지를 본다. | 가장 느린 대표 case의 p95 barge-in 후 음성 정지시간 | semantic draft; target pending |
 | QA-05 | Task Control Responsiveness | 사용자가 작업을 취소하거나 정정했을 때 VIA가 올바른 처리 상태를 얼마나 빨리 알려주는지를 본다. | 가장 느린 대표 control case의 p95 올바른 처리상태 응답시간 | semantic draft; target pending |
-| QA-09 | Average VIA-attributable Interaction Responsiveness | delegation·direct response·Agent progress·Task control에서 VIA가 책임지는 처리시간을 사용자 관점의 하나의 평균으로 본다. | applicable scored trial 전체의 평균 VIA 책임시간 | **CONFIRMED_ASR**; target pending |
+| QA-09 | Average VIA-attributable Interaction Responsiveness | delegation·direct response·Agent progress·Task control에서 VIA가 책임지는 처리시간을 사용자 관점의 하나의 평균으로 본다. | applicable scored trial 전체의 평균 VIA 책임시간 | **CONFIRMED_ASR**; proposed target ≤1,500 ms |
 | QA-11 | VIA Request Handling Correctness | VIA가 사용자 요청을 이해하고 처리하여 응답·위임·진행 상태·사용자 질문·완료 연결까지 전체적으로 올바르게 완료하는지를 본다. | 올바르게 처리된 전체 요청 run 비율 | previous QA-05 metric preserved; integrated outcome; target draft |
 | QA-12 | Request Semantic Resolution Correctness | VIA가 사용자의 목표와 대상, 조건 및 요청 사이의 관계를 올바르게 이해하는지를 본다. | 의미를 올바르게 해석한 run 비율 | driver draft; target pending |
 | QA-13 | Task & Interaction Binding Correctness | VIA가 요청과 응답, 제어 및 외부 소식을 의도한 대화와 작업에 정확히 연결하는지를 본다. | 올바른 Task·Interaction에 연결한 run 비율 | driver draft; target pending |
 | QA-14 | Async Task State Convergence Correctness | 외부 소식이 늦거나 중복되거나 순서가 바뀌어도 VIA가 최종적으로 올바른 작업 상태를 유지하는지를 본다. | 비동기 event 뒤 올바른 상태로 수렴한 run 비율 | driver draft; target pending |
 | QA-15 | Interaction & Task Continuity Correctness | 음성과 텍스트, 대화와 작업 사이를 오가더라도 필요한 맥락과 작업 관계가 유지되는지를 본다. | 전환 뒤 필요한 대화·Task 관계가 유지된 scenario 비율 | driver draft; target pending |
-| QA-19 | VIA Request Handling Field Accuracy | QA-11의 응답·위임·진행 상태 처리 결과와 QA-12의 의미 해석을 구성하는 applicable field가 얼마나 정확한지 본다. | 전체 applicable QA-11/12 oracle field 중 correct field 비율 | **CONFIRMED_ASR**; target pending |
+| QA-19 | VIA Request Handling Field Accuracy | QA-11의 응답·위임·진행 상태 처리 결과와 QA-12의 의미 해석을 구성하는 applicable field가 얼마나 정확한지 본다. | 전체 applicable QA-11/12 oracle field 중 correct field 비율 | **CONFIRMED_ASR**; proposed target ≥95% |
 | QA-21 | Agent Change Locality | Agent를 추가하거나 바꿀 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | Agent 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
 | QA-22 | Model, Context & State Change Locality | Model과 Context 또는 상태 계약을 바꿀 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | Model·Context·State 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
 | QA-23 | Experiment & Logging Change Locality | 새로운 실험이나 로그를 추가할 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | 실험·로그 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack draft; target pending |
-| QA-29 | Average Architecture Change Locality | 해당 DP에 적용 가능한 Agent·Model·Context·State·Experiment·Logging 변화를 수용할 때 평균 몇 개의 Architecture Element가 바뀌는지 본다. | applicable change당 평균 changed Architecture Element 수 | **CONFIRMED_ASR**; target pending |
+| QA-29 | Average Architecture Change Locality | 해당 DP에 적용 가능한 Agent·Model·Context·State·Experiment·Logging 변화를 수용할 때 평균 몇 개의 Architecture Element가 바뀌는지 본다. | applicable change당 평균 changed Architecture Element 수 | **CONFIRMED_ASR**; proposed target ≤3.0 |
 | QA-31 | Correct Task Recovery Time | 장애가 발생한 뒤 VIA가 영향받은 작업을 올바른 상태와 결과로 되돌리는 데 걸리는 시간을 본다. | 가장 느린 fault 종류의 p95 전체 Task 복구시간 | recovery draft; target draft |
 | QA-32 | Fault Blast Radius | 한 부분의 장애가 그 부분에 의존하지 않는 사용자 기능이나 작업까지 불필요하게 멈추게 하는 범위를 본다. | 한 fault가 불필요하게 함께 중단시킨 사용자 기능·Task의 최대 수 | semantic draft; target pending |
-| QA-39 | Fault Containment & Recovery Success Rate | 장애가 필요한 범위 안에 머물고 모든 영향 Task가 제한 시간 안에 올바르게 복구된 비율을 본다. | 전체 applicable fault trial 중 containment·recovery PASS 비율 | **CONFIRMED_ASR**; target pending |
+| QA-39 | Fault Containment & Recovery Success Rate | 장애가 필요한 범위 안에 머물고 모든 영향 Task가 제한 시간 안에 올바르게 복구된 비율을 본다. | 전체 applicable fault trial 중 containment·recovery PASS 비율 | **CONFIRMED_ASR**; proposed target ≥95% |
 | QA-41 | Target Device Memory Footprint | VIA가 실제 설치될 PC에서 업무를 처리하는 동안 사용하는 최대 메모리 크기를 본다. | 가장 무거운 workload의 p95 최대 메모리 사용량 | semantic draft; target pending |
 | QA-51 | Protected Data Exposure Minimization | VIA가 업무에 꼭 필요한 범위를 넘어 보호정보를 외부에 드러내지 않는지를 본다. | 전체 workload에서 필요 이상 노출된 보호정보 단위 수 | exposure draft; target draft |
 | QA-61 | Execution Trace Completeness | 저장된 로그만으로 한 요청이 어떤 경로와 상태를 거쳐 어떤 결과가 되었는지 재구성할 수 있는지를 본다. | 로그로 전체 실행을 재구성할 수 있는 run 비율 | semantic draft; target pending |

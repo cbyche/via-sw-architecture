@@ -6,18 +6,19 @@
 >
 > **Core DPs:** VIA-DP-03, VIA-DP-05, VIA-DP-17, VIA-DP-06, VIA-DP-07, VIA-DP-15
 >
-> **Current next work:** VIA-DP-03 capability gap resolution and pre-result Measurement Freeze
+> **Current next work:** Shared Evaluation Spine 위 VIA-DP-03 A/B mock profile과 pre-result Measurement Freeze
 
 이 문서는 새 session이 과거 runner의 진행 순서를 이어가지 않고 현재 Core DP 작업을
 시작하기 위한 실행 원장이다. Core DP의 의미와 선정 이유는
 [Current Architecture Focus](../12-decisions/dp-executive-summary.md), metric은
-[Core ASR Contract](../08-quality-attributes/core-asr-contract.md)가 기준이다.
+[Core ASR Contract](../08-quality-attributes/core-asr-contract.md), 모든 DP에 공통인 PoC 방법은
+[Mock & Shared Spine Contract](./core-poc-mock-and-spine-contract.md)가 기준이다.
 
 ## 1. 실행 순서
 
 | 순서 | DP | 먼저 확정할 질문 | 현재 상태 |
 | ---: | --- | --- | --- |
-| 1 | VIA-DP-03 | A의 Streaming ASR partial timestamp와 B의 S2S turn-final timestamp가 같은 final candidate 기능을 만족하는가? | **IN PROGRESS — A/B design agreed; concrete profiles and freeze pending** |
+| 1 | VIA-DP-03 | A의 Streaming ASR partial timestamp와 B의 S2S turn-final timestamp가 같은 final candidate 기능을 만족하는가? | **IN PROGRESS — common contract drafted; A/B mock behavior profile과 spine patch freeze pending** |
 | 2 | VIA-DP-05 | Context read-set을 semantic execution 전에 닫을지, 같은 execution에서 bounded 확장할지 | PENDING |
 | 3 | VIA-DP-17 | 선택된 Source를 canonical value로 확정할지, consumer별 view로 확정할지 | PENDING |
 | 4 | VIA-DP-06 | 최종 semantic decision을 통합 authority가 소유할지, 단계별 authority가 correction과 함께 소유할지 | PENDING |
@@ -35,12 +36,13 @@ Process-fatal integration이 제품 범위에 들어오는 별도 scope decision
 
 1. **Decision contract** — A/B를 구분하는 authority·state·contract·call graph·deployment
    또는 fault boundary를 하나로 명시한다.
-2. **Capability qualification** — 양쪽이 같은 user-visible 기능과 oracle을 제공할 수 있는지
-   확인한다. 필수 기능 미지원은 낮은 점수가 아니라 `UNRESOLVED` 또는 부적합이다.
+2. **Mock contract qualification** — 실제 제품 개발 없이도 양쪽 dependency behavior mock이 같은
+   user-visible 기능과 oracle을 제공하도록 event·timing·error contract와 근거를 확정한다.
 3. **Core-ASR applicability** — QA-09 trial, QA-19 field, QA-29 change, QA-39 fault를
    `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`로 동결한다.
 4. **Measurement Freeze** — fixture, endpoint, 반복 수, timeout, aggregation, failure
-   treatment, target, score band와 digest를 결과 전에 확정한다.
+   treatment, shared spine membership, DP patch, mock profile과 digest를 결과 전에 확정한다. 공통
+   target과 score band proposal도 이때 함께 승인한다.
 5. **Candidate Implementation** — 다른 DP 조건을 고정하고 현재 DP 축만 다른 A/B를 만든다.
 6. **Qualification** — 정상 trace와 endpoint·semantic·binding·recovery를 깨뜨린 sentinel이
    각각 예상대로 PASS/FAIL하는지 검증한다.
@@ -54,6 +56,8 @@ Process-fatal integration이 제품 범위에 들어오는 별도 scope decision
 ## 3. 비교 불변조건
 
 - A/B의 user goal, completion condition, fixture와 oracle은 같다. External dependency profile도 원칙적으로 같지만 DP-03의 ASR-vs-S2S evidence-source topology처럼 해당 DP가 직접 바꾸는 profile 차이는 manifest에 명시하고 비용에 포함한다.
+- 여섯 DP는 같은 Shared Evaluation Spine을 사용하고 구조 차이는 최소 event/state patch로만
+  활성화한다. 공식 campaign evidence는 `MEASURED_MOCK_E2E`다.
 - 공통 기반 S2S Model 1개와 semantic LLM 1개를 공유하며 Component별 모델을 복제하지 않는다. DP-03 A의 Streaming ASR 1개만 현재 DP의 명시적 독립 변수로 허용한다.
 - Candidate 입력에 evaluator-only oracle을 넣지 않는다.
 - Agent queue/execution처럼 metric에서 제외하는 시간도 secondary wall-clock evidence에서
@@ -84,16 +88,17 @@ environment manifest, raw trace, replay receipt, `summary.json`과 `report.md`�
 구현부터 시작하지 않고 아래 산출물을 먼저 작성한다. 현재 상세 상태와 모집단 초안은
 [VIA-DP-03 Capability & Freeze Draft](./via-dp-03-capability-and-freeze.md)에 기록한다.
 
-1. A용 timestamp-capable Streaming ASR product/profile과 partial timestamp·revision 조건
-2. B용 timestamp-capable S2S 개발 build 또는 PoC profile과 turn-final output contract
+1. A용 timestamp-capable Streaming ASR mock의 partial timestamp·revision·timing behavior profile
+2. B용 timestamp-capable S2S mock의 turn-final output·timing behavior profile
 3. A의 provisional path와 B의 turn-final path가 같은 final candidate와 user-visible 기능을
    제공하는지에 대한 capability gate
 4. QA-09 trial, QA-19 field, QA-29 change, QA-39 fault 후보 모집단
 5. 결과를 보기 전 승인할 VIA-DP-03 Measurement Freeze 초안
 
 현재 합의한 A/B identity와 candidate 의미는 [DP-03 decision](../12-decisions/via-dp-03-voice-evidence.md)에
-기록했다. 그러나 A의 실제 Streaming ASR과 B의 S2S 개발 build/product profile은 아직 선택하지 않았고,
-둘의 timestamp 정확도·도착 시각·revision semantics도 관측하지 않았다. 따라서 profile별 capability는
-`PENDING`, Measurement Freeze는 `NOT_FROZEN`, Core ASR 결과는 `NOT_RUN`이다.
+기록했다. Candidate·clock·UI evidence 계약과 fixture/oracle/fault/change pack도 draft로 작성했다.
+실제 상용 ASR나 팀 S2S build는 이번 PoC의 선행조건이 아니다. 대신 A/B mock의 timestamp
+accuracy·arrival·revision/error schedule과 Shared Spine patch가 아직 동결되지 않았다. 따라서
+Measurement Freeze는 `NOT_FROZEN`, Core ASR 결과는 `NOT_RUN`이다.
 
 이 다섯 항목과 동등 기능 gate가 확정되기 전에는 active runner, candidate, result를 만들지 않는다.

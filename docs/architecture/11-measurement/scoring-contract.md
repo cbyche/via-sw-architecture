@@ -1,8 +1,10 @@
 # Core ASR Measurement & Scoring Contract
 
-> 상태: **QA-09·19·29·39 metric approved / Measurement Freeze 전 실행 금지 / target·score 미확정**
+> 상태: **QA-09·19·29·39 metric approved / system target·0~5 score band `DRAFT_FOR_FREEZE` / 실행 금지**
 >
-> 이 문서는 네 core ASR의 대표 metric과 supporting measurement를 기록한다. fixture·oracle·반복·timeout·target이 승인되기 전에는 새 core-ASR Measurement Freeze나 결과를 만들지 않는다.
+> 이 문서는 네 core ASR의 대표 metric, VIA system 차원의 공통 목표와 supporting measurement를
+> 기록한다. DP별 fixture·oracle·mock profile과 population이 승인되기 전에는 새 core-ASR 결과를
+> 만들지 않는다.
 
 ## 1. 공통 규칙
 
@@ -13,18 +15,35 @@
 - 잘못된 결과, timeout, recovery failure와 gate violation을 성공 표본에서 제거하지 않는다.
 - 후보 결과를 보기 전에 fixture, oracle, 반복 수, aggregation과 score boundary를 동결한다.
 - QA-01~05, QA-11~15, QA-21~23과 QA-31/32는 core ASR의 input·diagnostic이며 독립 ASR 점수로 중복 가중하지 않는다.
-- target이 PENDING인 QA에는 임의의 0~5 score를 만들지 않는다.
+- 모든 Core DP PoC는 [Mock & Shared Spine Contract](./core-poc-mock-and-spine-contract.md)의
+  `MEASURED_MOCK_E2E` 방법과 아래 동일 score band를 사용한다.
 
 ## 2. Core ASR metric과 목표
 
-| ID | 대표 Metric | 목표 | 설명 |
+| ID | 대표 Metric | 제안 목표 | 설명 |
 | --- | --- | ---: | --- |
-| QA-09 | applicable scored trial 전체의 평균 VIA 책임시간 | PENDING | QA-01/02/03/05 event formula; QA-04 제외 |
-| QA-19 | 전체 applicable machine-oracle field accuracy | PENDING | QA-11/12 field를 중복 없이 평탄화; QA-13~15는 회귀 진단 |
-| QA-29 | applicable change당 평균 changed Architecture Element 수 | PENDING | QA-21/22/23 change superset의 DP별 applicable 집합 |
-| QA-39 | containment·recovery에 성공한 applicable fault trial 비율 | PENDING | QA-31/32 evidence로 binary PASS 판정 |
+| QA-09 | applicable scored trial 전체의 평균 VIA 책임시간 | **≤1,500 ms** | QA-01/02/03/05 event formula; QA-04 제외 |
+| QA-19 | 전체 applicable machine-oracle field accuracy | **≥95%** | QA-11/12 field를 중복 없이 평탄화; QA-13~15는 회귀 진단 |
+| QA-29 | applicable change당 평균 changed Architecture Element 수 | **≤3.0** | QA-21/22/23 change superset의 DP별 applicable 집합 |
+| QA-39 | containment·recovery에 성공한 applicable fault trial 비율 | **≥95%** | QA-31/32 evidence로 binary PASS 판정 |
 
-네 QA의 target과 0~5 score band는 근거를 승인하기 전까지 만들지 않는다. 이전 상세 QA의 target을 평균·변환하여 복사하지 않는다.
+Freeze되면 3점은 VIA Architecture가 달성해야 하는 공통 목표가 된다. QA-09는 direct/status 1,000 ms와 delegation
+2,000 ms detailed target 사이의 system-wide 평균 목표로 1,500 ms를 사용한다. QA-19는 integrated
+request correctness의 기존 95% 목표, QA-29는 Model·Context·State 변화의 기존 3-element 목표를
+system target으로 유지한다. QA-39는 fault trial 95% 성공을 최소 Architecture 목표로 두고 5점은
+모든 scored fault trial 성공으로 제한한다.
+
+### 2.1 Core ASR 0~5 score band proposal
+
+| Core ASR | 5 | 4 | 3 — target | 2 | 1 | 0 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| QA-09 | ≤750 ms | ≤1,000 ms | ≤1,500 ms | ≤2,000 ms | ≤3,000 ms | >3,000 ms |
+| QA-19 | ≥99% | ≥97% | ≥95% | ≥90% | ≥80% | <80% |
+| QA-29 | ≤1.0 | ≤2.0 | ≤3.0 | ≤4.0 | ≤5.0 | >5.0 |
+| QA-39 | 100% | ≥98% | ≥95% | ≥90% | ≥80% | <80% |
+
+Boundary는 표에서 왼쪽부터 처음 만족하는 가장 높은 점수를 적용한다. Raw numerator·denominator와
+metric을 별점과 함께 공개하며 네 별점을 하나의 가중 총점으로 합치지 않는다.
 
 ## 3. Core ASR 공식
 
@@ -110,7 +129,10 @@ fault family macro-average를 사용하지 않는다. 별도 빈도 가중이 �
 | QA-31 | ≤1,000ms | ≤2,500ms | ≤5,000ms | ≤10,000ms | ≤20,000ms | >20,000ms 또는 recovery failure |
 | QA-51 | 0 | 1 | 2~3 | 4~7 | 8~15 | ≥16 또는 unbounded |
 
-이 band는 QA-09/19/29/39에 승계하지 않는다. QA-04/05/12/13/14/15/23/32/41/61/62의 target과 score band는 PENDING이다. QA-51은 5점만 target을 충족하며 나머지 band는 degradation 설명용이지 개인정보 노출 허용 기준이 아니다.
+이 detailed band 자체를 QA-09/19/29/39 계산에 사용하지 않는다. Core ASR은 §2.1의 system band를
+사용한다. QA-04/05/12/13/14/15/23/32/41/61/62의 standalone target과 score band는 PENDING이다.
+QA-51은 5점만 target을 충족하며 나머지 band는 degradation 설명용이지 개인정보 노출 허용 기준이
+아니다.
 
 ## 6. QA-01~QA-05 Responsiveness input
 
@@ -250,8 +272,8 @@ QA-61은 실행을 로그에서 재구성할 수 있는지, QA-62는 raw evidenc
 ## 15. 다음 승인 전 금지사항
 
 - 새 QA 결과 생성
-- PENDING target이나 score를 임의 작성
-- draft target을 승인된 product SLO로 표현
+- DP별 Measurement Freeze 전에 score population·timeout·mock profile 변경
+- PoC target을 별도 승인 없이 production SLO로 표현
 - archived 결과를 현재 QA evidence로 재사용
 - human free-text judge나 LLM-as-judge를 유일한 correctness oracle로 사용
 - 후보 결과를 본 뒤 element granularity, change pack, fault unit 또는 score band 변경

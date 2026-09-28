@@ -1,0 +1,148 @@
+{
+  "schema_version": "via.dp03.deictic-patterns.v0.1",
+  "status": "DRAFT_NOT_FROZEN",
+  "language": "ko-KR",
+  "normalization": {
+    "unicode": "NFC",
+    "offset_unit": "unicode_code_point",
+    "preserve_source_offset_mapping": true
+  },
+  "particle_suffixes": [
+    "에서",
+    "으로",
+    "이랑",
+    "부터",
+    "까지",
+    "은",
+    "는",
+    "이",
+    "가",
+    "을",
+    "를",
+    "에",
+    "로",
+    "와",
+    "과",
+    "랑",
+    "도",
+    "만",
+    "보다"
+  ],
+  "particle_suffix_match_order": "longest_first",
+  "standalone_patterns": [
+    {
+      "pattern_id": "ko.locative.here",
+      "forms": [
+        "여기"
+      ]
+    },
+    {
+      "pattern_id": "ko.locative.there_visible",
+      "forms": [
+        "저기"
+      ]
+    },
+    {
+      "pattern_id": "ko.pronoun.this",
+      "forms": [
+        "이거",
+        "이것"
+      ]
+    },
+    {
+      "pattern_id": "ko.pronoun.that_visible",
+      "forms": [
+        "저거",
+        "저것"
+      ]
+    },
+    {
+      "pattern_id": "ko.direction.this",
+      "forms": [
+        "이쪽"
+      ]
+    },
+    {
+      "pattern_id": "ko.direction.that_visible",
+      "forms": [
+        "저쪽"
+      ]
+    },
+    {
+      "pattern_id": "ko.place.this",
+      "forms": [
+        "이곳"
+      ]
+    },
+    {
+      "pattern_id": "ko.place.that_visible",
+      "forms": [
+        "저곳"
+      ]
+    },
+    {
+      "pattern_id": "ko.pronoun.this_plural",
+      "forms": [
+        "이것들"
+      ]
+    },
+    {
+      "pattern_id": "ko.pronoun.that_visible_plural",
+      "forms": [
+        "저것들"
+      ]
+    }
+  ],
+  "determiner_noun_patterns": {
+    "determiners": [
+      "이",
+      "저"
+    ],
+    "allow_whitespace": true,
+    "allow_compact": true,
+    "nouns": [
+      "부분",
+      "영역",
+      "표",
+      "그래프",
+      "차트",
+      "문단",
+      "문장",
+      "셀",
+      "행",
+      "열",
+      "범위",
+      "파일",
+      "문서",
+      "창",
+      "화면",
+      "항목",
+      "버튼",
+      "링크",
+      "이미지",
+      "사진",
+      "둘"
+    ]
+  },
+  "excluded_bare_or_anaphoric_forms": [
+    "이",
+    "저",
+    "그",
+    "거기",
+    "그거",
+    "그것",
+    "그쪽",
+    "그곳"
+  ],
+  "semantic_correction_cues": [
+    "아니",
+    "아니고",
+    "말고"
+  ],
+  "correction_cues_create_candidate_retraction": false,
+  "notes": [
+    "Exact matching applies after at most one registered particle suffix is stripped from an eojeol.",
+    "A correction cue is preserved for later semantic Grounding; it does not retract a DP-03 candidate.",
+    "An ASR revision that removes a previously observed span may produce a retracted candidate event."
+  ]
+}

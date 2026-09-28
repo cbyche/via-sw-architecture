@@ -130,7 +130,8 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 
 - `docs/architecture/`는 현재 시스템 정의와 Architecture 기준선이다.
 - 대표 Use Case와 고정 범위는 정의되어 있지만 내부 Component 배치와 여러 구조 선택은 아직 평가 대상이다.
-- QA catalog는 네 core QA와 상세 measurement·diagnostic QA로 구성된다. target, score band, workload와 DP별 applicability freeze는 아직 완료되지 않았다.
+- QA catalog는 네 core QA와 상세 measurement·diagnostic QA로 구성된다. Core QA의 system target과
+  score band proposal을 작성했고 Shared Spine·mock profile·DP별 applicability와 함께 freeze 전이다.
 - QA-09, QA-19, QA-29, QA-39를 핵심 Architecture Significant Requirement(ASR)로 확정했다. 이 분류는 측정 완료나 특정 후보의 승리를 뜻하지 않는다.
 - VIA-DP-01~18은 구조적 선택의 전체 inventory다. 현재 보고서와 평가가 중점적으로 다룰 Core DP는 **VIA-DP-03·05·06·07·15·17의 6개로 확정**했다. 이 확정은 A/B winner나 측정 완료를 뜻하지 않는다.
 - 새 Core-ASR generation의 active candidate와 result는 아직 없다. 이전 reference runner·candidate·result는 archive에 보존하며 현재 QA 값이나 winner로 해석하지 않는다.

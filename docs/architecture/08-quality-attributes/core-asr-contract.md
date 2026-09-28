@@ -1,10 +1,13 @@
 # Core Architecture-Significant Requirements Contract
 
-> **Status: active core-ASR definition / measurement freeze pending**
+> **Status: active core-ASR definition / system score-band proposal and DP별 measurement freeze pending**
 >
 > **Confirmed core ASRs:** QA-09, QA-19, QA-29, QA-39
 >
-> 이 문서는 2026-09-28 사용자 결정에 따라 VIA-DP-01~18을 평가할 네 개의 핵심 Architecture Significant Requirement를 정의한다. ASR 분류와 대표 metric은 확정됐지만, DP별 fixture·반복 수·timeout·target·score band와 새 machine contract는 아직 동결·구현되지 않았다. 따라서 기존 reference 결과를 이 네 QA의 결과로 소급 변환하지 않는다.
+> 이 문서는 2026-09-28 사용자 결정에 따라 VIA-DP-01~18을 평가할 네 개의 핵심 Architecture
+> Significant Requirement를 정의한다. ASR 분류·대표 metric은 확정했고 공통 system target·score
+> band proposal을 작성했지만, 이 숫자와 DP별 spine patch·mock profile·applicable population은 아직
+> 동결·구현되지 않았다. 따라서 기존 reference 결과를 이 네 QA의 결과로 소급 변환하지 않는다.
 
 ## 1. 왜 네 개로 통합하는가
 
@@ -36,6 +39,10 @@ QA-41은 target-device memory 진단값, QA-51은 privacy/security qualification
 - 실패·timeout·missing evidence를 성공 표본에서 제거하지 않는다.
 - 동일 fixture와 외부 dependency profile을 사용하고 후보 입력과 evaluator-only oracle을 분리한다.
 - raw event, field verdict, changed element ID, fault verdict를 보존하여 대표값을 독립적으로 재계산할 수 있어야 한다.
+- 여섯 Core DP는 [Shared Evaluation Spine](../11-measurement/core-poc-mock-and-spine-contract.md)을
+  공통 사용자 여정으로 사용하고, DP 차이는 결과 전에 동결한 최소 event/state patch로 활성화한다.
+- 공식 Core-DP PoC는 deterministic dependency mock을 사용하며 그 결과를 `MEASURED_MOCK_E2E`로
+  QA-09/19/29/39 수치와 별점에 직접 사용한다.
 
 ### 2.1 VIA component 관점에서 무엇을 보는가
 
@@ -293,7 +300,8 @@ VIA는 후보마다 새 모델을 올리지 않고 S2S 한 개와 semantic LLM �
 - QA-09 timeout과 precision requirement
 - QA-19 field granularity ledger
 - QA-39 recovery deadline
-- 네 QA의 target과 0~5 score band
+- DP별 shared-spine membership과 event/state patch digest
+- DP별 mock timing·error·fault profile
 - 새 계약으로 실행한 A/B 결과
 
 기존 QA-01~62 reference 결과는 상세 input의 예비 근거일 수 있지만 QA-09/19/29/39 결과가 아니다. 새 Measurement Freeze와 독립 실행 없이 네 core ASR의 숫자나 winner를 보고하지 않는다.

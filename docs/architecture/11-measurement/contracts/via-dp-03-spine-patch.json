@@ -1,0 +1,153 @@
+{
+  "schema_version": "via.dp-03-spine-patch.v0.1",
+  "status": "DRAFT_FOR_FREEZE",
+  "decision_point": "VIA-DP-03",
+  "fixed_context": {
+    "shared_spine_version": "via.core-shared-spine.v0.1",
+    "same_audio_bytes": true,
+    "same_ui_timeline": true,
+    "same_deictic_pattern_registry": true,
+    "same_candidate_consumer": true,
+    "same_grounding_and_semantic_path": true,
+    "same_endpoint_and_oracle": true
+  },
+  "independent_variable": {
+    "A": "timestamp-capable Streaming ASR partial/revision/final events plus timestamp-free S2S",
+    "B": "turn-final time-aligned text event from the single S2S with no separate ASR"
+  },
+  "patches": [
+    {
+      "patch_id": "DP03-P-SP01",
+      "spine_id": "SP-01",
+      "source_cases": [
+        "TC-03.5",
+        "TC-04.1",
+        "TC-04.2",
+        "TC-04.7"
+      ],
+      "speech_situations": [
+        "single_deictic_span",
+        "repeated_deictic_spans_with_distinct_ui_slices",
+        "pre_turn_ui_state",
+        "window_document_transition"
+      ],
+      "A_event_sequence": [
+        "asr_partial_observed",
+        "deictic_span_detected",
+        "candidate_created_provisional",
+        "ui_evidence_pinned",
+        "asr_final_observed",
+        "candidate_finalized",
+        "candidate_handoff_completed"
+      ],
+      "B_event_sequence": [
+        "utterance_end",
+        "s2s_time_aligned_final_observed",
+        "deictic_span_detected",
+        "candidate_created_final",
+        "ui_evidence_pinned",
+        "candidate_handoff_completed"
+      ],
+      "primary_core_asrs": [
+        "QA-09",
+        "QA-19",
+        "QA-29"
+      ]
+    },
+    {
+      "patch_id": "DP03-P-SP02",
+      "spine_id": "SP-02",
+      "source_cases": [
+        "TC-04.4",
+        "TC-04.5"
+      ],
+      "speech_situations": [
+        "deictic_span_during_selection_transition",
+        "referent_role_and_preserved_set"
+      ],
+      "A_event_sequence": [
+        "asr_partial_observed",
+        "deictic_span_detected",
+        "candidate_created_provisional",
+        "selection_transition_slice_pinned",
+        "asr_final_observed",
+        "candidate_finalized",
+        "candidate_handoff_completed"
+      ],
+      "B_event_sequence": [
+        "utterance_end",
+        "s2s_time_aligned_final_observed",
+        "deictic_span_detected",
+        "candidate_created_final",
+        "selection_transition_slice_pinned",
+        "candidate_handoff_completed"
+      ],
+      "primary_core_asrs": [
+        "QA-09",
+        "QA-19",
+        "QA-29"
+      ]
+    },
+    {
+      "patch_id": "DP03-P-SP04",
+      "spine_id": "SP-04",
+      "source_cases": [
+        "TC-04.6"
+      ],
+      "speech_situations": [
+        "semantic_correction_with_two_final_deictic_spans",
+        "recognizer_revision_removes_provisional_span"
+      ],
+      "A_event_sequence": [
+        "asr_partial_observed",
+        "candidate_created_provisional",
+        "candidate_revised_or_retracted_only_if_asr_text_changes",
+        "asr_final_observed",
+        "all_final_transcript_spans_finalized",
+        "candidate_handoff_completed"
+      ],
+      "B_event_sequence": [
+        "utterance_end",
+        "s2s_time_aligned_final_observed",
+        "all_final_transcript_spans_created_final",
+        "candidate_handoff_completed"
+      ],
+      "semantic_correction_rule": "Both final transcript spans remain DP-03 candidates; later Grounding retracts the earlier referent.",
+      "primary_core_asrs": [
+        "QA-09",
+        "QA-19",
+        "QA-29"
+      ]
+    },
+    {
+      "patch_id": "DP03-P-SP07",
+      "spine_id": "SP-07",
+      "source_cases": [
+        "TC-15.3",
+        "TC-18.2",
+        "TC-18.6"
+      ],
+      "fault_items": [
+        "evidence_source_disconnect_before_final",
+        "old_epoch_event_after_reconnect",
+        "duplicate_event",
+        "late_or_inverted_revision",
+        "audio_clock_mapping_gap",
+        "ui_slice_evicted_before_handoff"
+      ],
+      "A_fault_source": "streaming_asr_and_shared_voice_epoch",
+      "B_fault_source": "s2s_time_aligned_final_and_shared_voice_epoch",
+      "common_pass_conditions": [
+        "containment",
+        "correct_recovery_or_truthful_clarification",
+        "recovery_before_deadline",
+        "no_duplicate_or_wrong_binding",
+        "complete_evidence"
+      ],
+      "primary_core_asrs": [],
+      "regression_core_asrs": [
+        "QA-39"
+      ]
+    }
+  ]
+}
