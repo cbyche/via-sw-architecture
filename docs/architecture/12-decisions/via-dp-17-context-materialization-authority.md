@@ -1,10 +1,10 @@
 # VIA-DP-17 — Context 표현의 최종 의미 소유권
 
-> **핵심 DP 초안 v2 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
+> **Core DP 3/6 · 초안 v2 · 2026-09-28 · 상세 Measurement Freeze 전**
 >
 > 질문: 선택된 Source를 공통 canonical ContextValue로 한 번 확정할 것인가, 검증된 raw slice와 provenance를 바탕으로 각 소비자가 목적별 Context view를 확정할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. VIA-DP-05의 source 획득 계획과 독립된 표현 권한 질문으로 강화했다. Canonical 재사용 대 목적별 정확성, 공통 failure domain 대 소비자 격리의 차이를 새 후보로 측정해야 하며 실제 결과는 `NOT_RUN`이다.
+> 현재 판단: **현재 Core DP set에 확정 포함**. VIA-DP-05의 source 획득 계획과 독립된 표현 권한 질문으로 강화했다. Canonical 재사용 대 목적별 정확성, 공통 failure domain 대 소비자 격리의 차이를 새 후보로 측정해야 하며 실제 결과는 `NOT_RUN`이다.
 
 ## 1. 배경 — 같은 PDF 표를 요청 이해와 답변 생성이 함께 쓰려면?
 
@@ -160,7 +160,7 @@ VIA-DP-05는 읽기 집합, 06은 의미 판단, 16은 대화 이력 working sta
 
 ## 10. 현재 판단과 재검토 조건
 
-**Canonical ContextValue 대 consumer-specific view의 의미 권한으로 핵심 shortlist에 유지한다.** 실제 측정에서는 반복 소비 latency, task-specific field 정확도, source-format 대 consumer-requirement change, materializer/consumer fault를 함께 동결한다. 모든 차이가 wire format이나 library 배치에만 남으면 보조 계약으로 다시 내리며 억지로 핵심 지위를 유지하지 않는다.
+**Canonical ContextValue 대 consumer-specific view의 의미 권한을 Core DP로 유지한다.** 실제 측정에서는 반복 소비 latency, task-specific field 정확도, source-format 대 consumer-requirement change, materializer/consumer fault를 함께 동결한다. 모든 차이가 wire format이나 library 배치에만 남으면 Core DP 정의의 유효성을 명시적으로 재검토한다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

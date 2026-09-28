@@ -1,10 +1,10 @@
 # VIA-DP-12 — 응답 게시와 실행 근거의 영속 확정 순서
 
-> **보조 DP v3 · 2026-09-28 · 핵심 shortlist 제외**
+> **Non-core supporting DP v3 · 2026-09-28**
 >
 > 질문: 최소 실행 근거의 영속 확인 뒤 응답·제어 disposition을 게시할 것인가, 정상 기록을 유지하되 게시와 영속 기록을 비동기로 분리할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에서 제외**. 정상 경로에서는 저장과 응답 준비를 병렬화하면 publish barrier 차이가 작고, 주요 반대 효과가 core ASR보다 QA-61 evidence qualification에 집중된다. Business state·command outbox·Action audit의 필수 durability는 공통 계약으로 유지하며 Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
+> 현재 판단: **현재 Core DP set에서 제외**. 정상 경로에서는 저장과 응답 준비를 병렬화하면 publish barrier 차이가 작고, 주요 반대 효과가 core ASR보다 QA-61 evidence qualification에 집중된다. Business state·command outbox·Action audit의 필수 durability는 공통 계약으로 유지하며 Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
 
 ## 1. 배경 — 시험은 끝났는데 왜 그런 결과가 나왔는지 로그가 없다면?
 
@@ -231,8 +231,8 @@ VIA-DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있�
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
 
-## 12. v1 reference campaign 결과
+## 12. Archived v1 reference campaign
 
-[정식 결과](../../../results/architecture-evaluation/current/via-dp-12-evaluation-v1-20260927/report.md)는 정상·flush 전 crash·writer failure를 포함한 5개 case를 후보별 20회 실행했다. QA-05 p95는 선확정 A 100ms, 비동기 B 0.085ms였고 QA-11은 A 80%, B 100%였다. 반대로 QA-61 complete trace는 A 80%, B 60%였다. QA-23 평균은 A 3.0, B 2.0 elements였고 QA-62 replay는 둘 다 100%였다.
+[pre-Core-ASR v1 reference result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-12-evaluation-v1-20260927/report.md)는 정상·flush 전 crash·writer failure를 포함한 5개 case를 후보별 20회 실행했다. QA-05 p95는 선확정 A 100ms, 비동기 B 0.085ms였고 QA-11은 A 80%, B 100%였다. 반대로 QA-61 complete trace는 A 80%, B 60%였다. QA-23 평균은 A 3.0, B 2.0 elements였고 QA-62 replay는 둘 다 100%였다.
 
-**현재 결론:** 현재 일곱 campaign 중 responsiveness·request completion과 observability가 반대 방향으로 가장 명확하게 갈린 DP다. A의 100ms는 writer-failure endpoint 부재에 동결한 timeout을 포함하며 정상 fsync만의 지연으로 해석하면 안 된다.
+**역사적 관측:** 당시 일곱 campaign 중 responsiveness·request completion과 observability가 반대 방향으로 가장 명확하게 갈렸다. A의 100ms는 writer-failure endpoint 부재에 동결한 timeout을 포함하며 정상 fsync만의 지연으로 해석하면 안 된다. 현재 Core-ASR 결과는 아니다.

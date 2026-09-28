@@ -4,7 +4,7 @@
 >
 > 질문: 공통 수명 의미와 확장 정보를 연동 경계에서 확정할 것인가, Core의 유형별 handler가 확정할 것인가?
 >
-> 현재 판단: **v1 reference campaign 완료 — A 변경 국소화 관측, 반대 방향 QA 이점 미관측**. 기존 ADR 상태는 유지한다.
+> 현재 판단: **Non-core supporting decision.** 기존 A accepted ADR은 유지한다. Pre-Core-ASR v1에서 A의 변경 국소화를 관측했지만 현재 QA 결과나 Core DP winner로 사용하지 않는다.
 
 ## 1. 배경 — ‘취소됨’과 ‘취소 요청을 받음’은 어디서 구별할까?
 
@@ -193,8 +193,8 @@ A-01~09 각각의 native before/after와 canonical/typed 계약, 변경 요소 I
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
 
-## 12. v1 reference campaign 결과
+## 12. Archived v1 reference campaign
 
-[정식 결과](../../../results/architecture-evaluation/current/via-dp-09-evaluation-v1-20260927/report.md)는 9개 native lifecycle 변화 × 후보별 25회를 실행했다. QA-11/13/14는 두 안 모두 225/225였고, QA-05 p95는 A 0.001ms, B 0.001ms로 실질 차이가 없었다. QA-21 평균은 A 1.44 elements, B 2.00 elements였다.
+[pre-Core-ASR v1 reference result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-09-evaluation-v1-20260927/report.md)는 9개 native lifecycle 변화 × 후보별 25회를 실행했다. QA-11/13/14는 두 안 모두 225/225였고, QA-05 p95는 A 0.001ms, B 0.001ms로 실질 차이가 없었다. QA-21 평균은 A 1.44 elements, B 2.00 elements였다.
 
-**현재 결론:** A의 변경 국소화만 관측됐고 B의 반대 방향 QA 이점은 관측되지 않았다. 기존 A accepted ADR과 일치하지만, 현행 최종보고서의 양방향 trade-off DP 후보로는 약하다.
+**역사적 관측:** A의 변경 국소화만 관측됐고 B의 반대 방향 QA 이점은 관측되지 않았다. 기존 A accepted ADR의 provenance로는 남지만 현재 Core-ASR 결과가 아니다.

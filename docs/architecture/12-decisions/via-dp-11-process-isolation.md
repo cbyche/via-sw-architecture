@@ -1,10 +1,10 @@
 # VIA-DP-11 — 외부 연동 코드의 Process 장애 경계
 
-> **조건부 보조 DP v7 · 2026-09-28 · A2A/ACP 전제 반영 / 제품 fault inventory 전**
+> **Non-core supporting DP v8 · 2026-09-28 · A2A/ACP 전제 반영**
 >
 > 질문: 치명적 실패 가능성이 있는 연동 실행을 별도 Process에 가둘 것인가, Core와 같은 Process에서 논리적으로 격리할 것인가?
 >
-> 현재 판단: **현재 핵심 DP shortlist에서 제외, 제품 fault inventory 조건부 재승격**. VIA가 Downstream Agent와 A2A/ACP 같은 표준 protocol로 통신하고 Agent Runtime은 항상 외부에 있다는 전제를 명시한다. v4 reference의 injected fatal 차이는 보존하지만, 실제 VIA-side protocol client가 잡을 수 없는 fatal 위험을 갖는지 확인하기 전에는 핵심성 근거로 쓰지 않는다.
+> 현재 판단: **현재 Core DP set에서 제외했으며 여섯 DP의 대체 후보가 아니다.** VIA가 Downstream Agent와 A2A/ACP 같은 표준 protocol로 통신하고 Agent Runtime은 항상 외부에 있다는 전제를 명시한다. v4 reference의 injected fatal 차이는 보존한다. 실제 VIA-side protocol client에 native/plugin/OS bridge 같은 Process-fatal dependency가 제품 범위에 새로 들어오면 그때 별도 scope decision으로 다시 검토한다.
 
 ## 1. 배경 — 한 Agent 연동이 죽어도 VIA와 다른 업무는 살아 있어야 할까?
 
@@ -201,9 +201,9 @@ A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protoc
 
 A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강하다. B는 정상 경로의 IPC·resident runtime 비용을 줄일 이유가 있다. 다만 전체 대표값의 실제 우열과 강도는 fault·workload pack을 고정해 확인해야 한다.
 
-## 8. v4 targeted reference campaign 결과
+## 8. Archived v4 targeted reference campaign
 
-[v4 결과](../../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)는 동일한 VIA Client와 외부 Reference Agent 계약에서 Process 배치만 바꾼 targeted `MEASURED_REFERENCE_HARNESS`다. 기존 v1~v3는 측정기 개발 provenance로만 남긴다.
+[pre-Core-ASR v4 result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-11-evaluation-v4-20260927/report.md)는 동일한 VIA Client와 외부 Reference Agent 계약에서 Process 배치만 바꾼 targeted `MEASURED_REFERENCE_HARNESS`다. 현재 Core-ASR 결과가 아니며 기존 v1~v3도 측정기 개발 provenance로만 남긴다.
 
 | QA | A 별도 worker | B 같은 Process | 해석 |
 | --- | ---: | ---: | --- |
@@ -227,7 +227,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ### 현재 구현 근거와 미구현 범위
 
-[exec.rs](../../../prototypes/candidates/runtime/src/exec.rs)의 LocalBridge/ProcessBridge, [worker](../../../prototypes/candidates/worker/src/main.rs)와 별도 [Reference Agent](../../../prototypes/candidates/reference-agent/src/main.rs)를 complete campaign에서 실행했다. Contract, runner와 independent analyzer는 [active benchmark harness](../../../benchmark/architecture/README.md)에 있다. 이 구현은 Reference Agent 기반 후보 검증이며 제품 Agent Runtime이나 Voice E2E 구현이 아니다.
+[archived exec.rs](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/runtime/src/exec.rs)의 LocalBridge/ProcessBridge, [worker](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/worker/src/main.rs)와 별도 [Reference Agent](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/reference-agent/src/main.rs)를 당시 campaign에서 실행했다. Contract, runner와 independent analyzer도 [benchmark archive](../../../benchmark/archive/pre-core-asr-reference-20260927/README.md)에 있다. 이 구현은 현재 candidate가 아니며 제품 Agent Runtime이나 Voice E2E 구현도 아니다.
 
 ## 9. 다른 DP·변경 비용
 
@@ -235,7 +235,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ## 10. 현재 판단과 재검토 조건
 
-**현재 핵심 shortlist에서는 제외하고 조건부 보조 DP로 유지한다.** A2A/ACP client는 VIA 안의 protocol adapter이지 Downstream Agent Runtime이 아니다. Reference harness에서는 injected Process fatal에 대해 QA-32의 강한 A 우세와 QA-41의 작은 B 우세가 갈렸지만, 실제 제품 client가 safe-language 표준 protocol 구현이면 그 fault의 대표성이 낮을 수 있다. native SDK·plugin·browser/OS bridge 등 실제 fatal-risk integration inventory가 확인될 때만 “VIA-owned external integration host 격리”로 범위를 넓혀 핵심 재승격을 검토한다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 A의 이점으로 세지 않는다. 현재 overall winner는 선언하지 않는다.
+**현재 Core DP set에서 제외한 supporting decision으로 유지하며 6개 실패 시 자동 투입하지 않는다.** A2A/ACP client는 VIA 안의 protocol adapter이지 Downstream Agent Runtime이 아니다. Reference harness에서는 injected Process fatal에 대해 QA-32의 강한 A 우세와 QA-41의 작은 B 우세가 갈렸지만, 실제 제품 client가 safe-language 표준 protocol 구현이면 그 fault의 대표성이 낮을 수 있다. native SDK·plugin·browser/OS bridge 등 실제 fatal-risk integration이 제품 범위에 새로 들어오면 “VIA-owned external integration host 격리”를 별도 scope change로 검토한다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 A의 이점으로 세지 않는다. 현재 overall winner는 선언하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

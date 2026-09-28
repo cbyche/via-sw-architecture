@@ -32,7 +32,7 @@ Previous-generation QA-07 passed the then-frozen differentiation criteria with a
 
 ## Evidence
 
-- Prototype: `prototypes/candidates/runtime/src/agent.rs`
+- Historical prototype: `prototypes/archive/pre-core-asr-reference-20260927/candidates/runtime/src/agent.rs`
 - Benchmark: `benchmark/archive/w12-g1/gate2/change_analysis.py`
 - Results: `results/gate2/archive/w12-g1/rebaseline/gate2-freeze-b6ff0b07/w07-w08-scores.json`
 - Full-factorial results: `results/gate2/archive/w12-g1/rebaseline/gate2-factorial-c8869c88/full-factorial.json`

@@ -4,7 +4,7 @@
 >
 > 질문: 같은 PC 자원 한도 안에서 중단·Task 제어 경로에 회수 가능한 최소 실행 여력을 보장할 것인가?
 >
-> 현재 판단: **v1 reference campaign 완료 — control responsiveness 대 일반 처리량 trade-off 관측**. Voice QA와 Architecture 선택은 미확정이다.
+> 현재 판단: **Non-core supporting decision.** Pre-Core-ASR v1에서 control responsiveness 대 일반 처리량 trade-off 징후를 관측했지만 현재 Voice/Core-ASR 결과와 Architecture winner는 없다.
 
 ## 1. 배경 — 업무가 바쁠수록 ‘그만’이라는 말은 더 빨리 처리되어야 한다
 
@@ -247,8 +247,8 @@ A→B는 예약 상태·차용 계약·admission을 풀어야 하고, B→A는 �
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
 
-## 12. v1 reference campaign 결과
+## 12. Archived v1 reference campaign
 
-[정식 결과](../../../results/architecture-evaluation/current/via-dp-13-evaluation-v1-20260927/report.md)는 같은 4 worker와 동일 non-preemptive work로 3개 load profile을 후보별 10회 실행했다. QA-05 p95는 예약 A 0.234ms, 공유 B 41.021ms였다. 일반 work makespan p95는 A 129.5ms, B 90.2ms였다. 후자는 active QA를 대신하지 않는 구조 원인 진단이다. QA-11/13/14는 모두 30/30이었다.
+[pre-Core-ASR v1 reference result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-13-evaluation-v1-20260927/report.md)는 같은 4 worker와 동일 non-preemptive work로 3개 load profile을 후보별 10회 실행했다. QA-05 p95는 예약 A 0.234ms, 공유 B 41.021ms였다. 일반 work makespan p95는 A 129.5ms, B 90.2ms였다. 후자는 active QA를 대신하지 않는 구조 원인 진단이다. QA-11/13/14는 모두 30/30이었다.
 
-**현재 결론:** control responsiveness 대 일반 처리량의 구조적 맞교환은 확인됐다. 다만 최종보고서의 QA trade-off로 쓰려면 실제 Voice endpoint로 QA-01/02/04를 추가 실행해야 한다.
+**역사적 관측:** control responsiveness 대 일반 처리량의 구조적 맞교환 징후가 있었다. 현재 QA-09/19/29/39 결과가 아니며 새 계약에서 다시 검증해야 한다.

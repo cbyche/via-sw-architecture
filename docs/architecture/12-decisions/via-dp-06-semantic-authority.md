@@ -1,10 +1,10 @@
 # VIA-DP-06 — 요청 의미의 최종 확정 권한
 
-> **핵심 DP v3 · 2026-09-28 · 사용자 shortlist 선정 반영 / 재검증 caveat 유지**
+> **Core DP 4/6 · v3 · 2026-09-28 · 재검증 caveat 유지**
 >
 > 질문: 대상·Task 관계·처리 경로를 하나의 의미 확정자가 함께 결정할 것인가, 단계별 권한자가 계약을 통해 확정할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함 — 호출 수가 아닌 의미 계약의 권한으로 비교**. 2026-09-27 v5 reference campaign의 응답성·정확성 252건을 재실행하지 않고, v6에서 QA-21~23 변경 원장 87건을 추가했다. 일부 QA는 아직 `BLOCKED`이고 제품 E2E가 아니므로 최종 대안 선택은 유예한다.
+> 현재 판단: **현재 Core DP set에 확정 포함 — 호출 수가 아닌 의미 계약의 권한으로 비교.** 2026-09-27 v5/v6는 archive한 predecessor reference일 뿐 새 Core-ASR 값이 아니다. 현재 결과는 `NOT_RUN`이며 최종 대안 선택은 유예한다.
 
 ## 1. 배경 — ‘아까 그 자료’의 대상과 Task를 따로 정해도 될까?
 
@@ -207,15 +207,15 @@ A는 상호 의존 의미를 공동 결정하는 요구에서, B는 안정된 �
 
 ### 현재 구현 근거와 미구현 범위
 
-[통합 prompt](../../../prototypes/candidates/prompts/integrated-system.md), [grounding prompt](../../../prototypes/candidates/prompts/stage1-grounding-system.md), [association prompt](../../../prototypes/candidates/prompts/stage2-task-system.md), [handling prompt](../../../prototypes/candidates/prompts/stage3-handling-system.md)가 있다. 역할별 prompt는 별도 모델이 아니다. 이 파일의 존재는 실제 모델 호출·정확도·제품 경로를 실행했다는 증거가 아니다.
+[archived 통합 prompt](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/prompts/integrated-system.md), [grounding prompt](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/prompts/stage1-grounding-system.md), [association prompt](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/prompts/stage2-task-system.md), [handling prompt](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/prompts/stage3-handling-system.md)가 역사적 구현 근거로 남아 있다. 역할별 prompt는 별도 모델이 아니다. 이 파일의 존재는 현재 candidate나 실제 모델 정확도·제품 경로의 증거가 아니다.
 
 ## 9. 다른 DP·변경 비용
 
 VIA-DP-03/05가 입력 근거와 조회 계약을, VIA-DP-02가 상태 적용을 제공한다. VIA-DP-04 게시 권한과 의미 확정 권한은 다른 결정이다. [기존 IR ADR](../../adr/ADR-004-semantic-decision-ownership.md)은 Deferred이며 A는 interim reference일 뿐이다. A→B에는 중간 schema·version·정정 reader, B→A에는 단일 의미 묶음과 진행 단계 이행이 필요하다.
 
-## 10. v6 통합 평가 결과와 현재 판단
+## 10. Archived v6 통합 평가와 현재 판단
 
-정식 통합 요약은 [`via-dp-06-evaluation-v6-20260927`](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v6-20260927/report.md)이다. 응답성·정확성은 [`v5`](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v5-20260927/report.md)의 원시 증거를 `source_execution_key`와 digest로 참조했고, 재실행하거나 독립 sample로 복제하지 않았다. QA-21~23은 `VIA-DP-06-CHANGE-LOCALITY-v6` 계약과 동결된 전체 Architecture Element 원장으로 새로 평가했다. v4는 반복 설계 전 breadth evidence로만 보존한다.
+Pre-Core-ASR 통합 요약은 [`via-dp-06-evaluation-v6-20260927`](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-06-evaluation-v6-20260927/report.md)이다. 응답성·정확성은 [`v5`](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-06-evaluation-v5-20260927/report.md)의 원시 증거를 `source_execution_key`와 digest로 참조했고, 재실행하거나 독립 sample로 복제하지 않았다. QA-21~23은 당시 `VIA-DP-06-CHANGE-LOCALITY-v6` 계약과 Architecture Element 원장으로 평가했다. 이 결과는 현재 QA-09/19/29/39 값이나 winner가 아니며, v4는 반복 설계 전 breadth evidence로만 보존한다.
 
 A/B/B′는 같은 local Qwen3-8B Q4_K_M 1개, canonical synthetic Context Evidence, 외부 Reference Agent와 generated request WAV·macOS Yuna·BlackHole loopback을 사용했다. 후보 입력과 evaluator-only oracle은 분리했다.
 

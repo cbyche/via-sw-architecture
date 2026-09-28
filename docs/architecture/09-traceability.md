@@ -4,6 +4,7 @@
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
 > 입력: [05 대표 UC](./05-representative-use-cases.md), [06 공통 조건](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [10 설계 요소와 변경량 집계](./10-element-definition.md)
+> 현재 Core QA·Core DP 선정 결과: [Current Architecture Focus](./12-decisions/dp-executive-summary.md)
 
 ## 9.1 목적과 이번 작업의 경계
 
@@ -13,7 +14,7 @@
 | --- | --- |
 | QC ↔ UC 18개 및 필수 변형 ↔ 변경 24개의 연결 | 새로운 QA/QC/UC/변경 시나리오 추가 |
 | 주 검증 목적, 함께 유지할 품질, 필요한 증거 | 실제 녹음·화면·정답 제작, 반복 횟수·배합·목표·0~5점 구간 동결 |
-| QC 사이의 겹침을 구분하는 판정 관점 | Architecture 후보 설계·우열·주요 DP 선정 |
+| QC 사이의 겹침을 구분하는 판정 관점 | 이 문서 자체에서 Architecture 후보를 재설계하거나 Core DP·A/B winner를 다시 선정하는 일 |
 
 **아래 10개 QC는 현재 QA catalog의 상위 coverage 분류다.** 표의 연결 수는 중요도 점수나 평가 가중치가 아니다. 이 문서만으로 특정 DP가 core ASR 값을 개선한다고 주장하지 않는다.
 
@@ -163,7 +164,7 @@ QA-23의 E-01~05는 07의 제품·외부 계약 24개를 바꾸지 않는 별도
 - M-01~09와 C-01~06은 **QA-22의 15개 집합 전체**이다. M-03·C-02 등을 대표값에서 임의로 제외하지 않는다. M/C별 상세 결과는 원인 설명을 위해 함께 보존한다.
 - 한 변경으로 여러 요소가 바뀌어도 10의 동일 ID 집계 규칙을 적용한다. 다른 변경에서 같은 요소를 다시 수정하면 그 별도 변경에도 셀 수 있다. 변경별 독립 시나리오이기 때문이다.
 - 적용 없음·처리 불가·미측정은 0이 아니다. 모든 24개 항목에 답하되, 비교 가능한 분모와 전체 집합의 충족 여부를 함께 공개한다. 실패한 변경을 빼서 성공한 변경만의 평균으로 전체 우승을 주장하지 않는다.
-- 07은 분야별 원장을 유지하고, QA-21은 Agent 9개, QA-22는 비Agent 15개의 대표 집계를 사용한다. QA-23은 08에 정의한 연구 실험·로그 5개 change pack을 별도로 사용한다. 세 집합을 하나의 평균으로 합치지 않는다.
+- QA-21은 Agent 9개, QA-22는 Model·Context·State 15개, QA-23은 연구 실험·로그 5개 change pack의 상세 원장과 진단값을 각각 유지한다. Core ASR QA-29에서는 이 세 집합 중 해당 DP에 `APPLICABLE`로 사전 동결한 change를 하나의 모집단으로 합쳐 change당 changed element 수를 단순 평균한다. Family 평균을 다시 평균하는 macro-average는 사용하지 않는다.
 
 ## 9.7 이후 평가 기록에 반드시 남길 정보
 

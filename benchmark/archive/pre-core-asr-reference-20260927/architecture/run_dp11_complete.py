@@ -418,9 +418,11 @@ def execute_case(
     semantic: dict[str, Any] | None,
     host: JsonLineProcess,
     agent: ReferenceAgent,
+    execution_namespace: str = "",
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     kind = case["kind"]
-    run_prefix = f"{candidate}-{case['id']}-{trial}"
+    namespace = f"{execution_namespace}-" if execution_namespace else ""
+    run_prefix = f"{namespace}{candidate}-{case['id']}-{trial}"
     started = time.monotonic_ns()
     runtime_pass = True
     binding_pass = True

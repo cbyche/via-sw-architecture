@@ -4,6 +4,7 @@
 
 | Generation | Contents | Why retained |
 | --- | --- | --- |
+| [Pre-Core-ASR reference 2026-09-27](./pre-core-asr-reference-20260927/README.md) | predecessor detailed-QA contracts, runners, analyzers and tests, including unfinished DP-11 v5 | preserve the last active harness before the Core ASR/Core DP reset |
 | [vNext/DP-00](./vnext-dp00/) | qualification prototype support, calibration corpus, analyzers | provenance and design reference |
 | [W12-G1](./w12-g1/README.md) | prior Working-12 fixtures, readiness checks, Gate 2 campaign | audit of superseded definitions and results |
 

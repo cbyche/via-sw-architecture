@@ -1,8 +1,8 @@
 # Measurement Guide
 
-> **Current state:** QA-09·19·29·39는 confirmed core ASR이고 상세 QA는 input·diagnostic·qualification으로 유지한다. VIA-DP-02·05·06·09·11·12·13의 기존 reference result는 새 core 계약 이전의 예비 evidence이며 core ASR 결과가 아니다.
+> **Current state:** QA-09·19·29·39는 confirmed core ASR이고 상세 QA는 input·diagnostic·qualification으로 유지한다. 새 Core-ASR generation의 active harness, candidate와 result는 아직 없으며 여섯 Core DP 결과는 모두 `NOT_RUN`이다.
 >
-> **Current phase:** 공통 통합 하네스와 VIA-DP-06 v5는 **Candidate Implementation**, 나머지 DP는 **Measurement Contract Definition 또는 Candidate Implementation**이다. 기존 결과는 재사용 가능한 예비 증거일 뿐 최종 완료 상태가 아니다.
+> **Current focus:** Core DP는 VIA-DP-03·05·06·07·15·17의 6개로 확정했다. 현재 단계는 **Measurement Contract Definition**이며 DP-03부터 05→17→06→07→15 순으로 한 번에 하나씩 심층 정의한다. 기존 결과는 재사용 가능한 예비 증거일 뿐 새 Core ASR 결과나 최종 winner가 아니다.
 
 이 디렉터리는 Architecture 후보를 비교하기 전에 고정해야 할 시험 입력, oracle, timing endpoint, 반복·집계, evidence level을 관리한다. 목적은 결과를 보고 유리한 계약을 선택하는 일을 막고, 각 DP의 A/B 차이를 같은 조건에서 재현하는 것이다.
 
@@ -10,6 +10,7 @@
 
 | Document | Role |
 | --- | --- |
+| [Current Architecture Focus](../12-decisions/dp-executive-summary.md) | Core QA 4개, Core DP 6개, 심층 검토 순서와 미완료 작업 |
 | [Core ASR Contract](../08-quality-attributes/core-asr-contract.md) | QA-09/19/29/39 정의·집계·실패 처리와 VIA-DP-01~18 적용 원장 |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
 | [QA-01~15 Common Harness Contract](./qa01-15-harness-contract.md) | DP 공통 trace·oracle·audio endpoint·sentinel qualification gate |
@@ -21,7 +22,7 @@
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
 | [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 두 Model, Reference Agent, 네 core ASR의 최소 workload/fault |
-| [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | VIA-DP-01~18 연속 평가의 실행 순서, 완결 조건과 진행 원장 |
+| [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | Core DP 6개 실행 순서, 완결 조건과 전체 inventory의 보존 자산 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
 외부 model 근거는 [Quality Attribute evidence](../08-quality-attributes/evidence/)에 둔다. 그 자료는 입력 profile이나 estimate를 정당화할 수 있지만 실행하지 않은 모델을 measured evidence로 만들지는 않는다.
@@ -50,7 +51,7 @@
 
 `Gate 1`과 `Gate 2`는 현재 lifecycle 용어로 사용하지 않는다. archive 경로의 과거 campaign 식별자만 그대로 보존한다.
 
-일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. 일곱 DP의 예비 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived predecessor code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
+일부 target/score는 여전히 `PENDING`이다. 모든 QA의 event 의미와 실제/software 경계는 [Event & Boundary Contract](./event-boundary-contract.md)의 공통 형식으로 작성한다. Archived predecessor 결과가 다른 DP의 미구현 contract를 자동으로 확정하지 않으며, archived code를 그대로 실행하는 것은 8~10을 충족하지 않는다.
 
 ## Evidence classes
 
@@ -77,7 +78,7 @@ Before implementation, freeze at least:
 - QA-03 valid, correlated, non-stale status rule
 - QA-04 actual acoustic barge-in onset and last audible interrupted-response sample
 - QA-05 Voice/Text control input end와 correct Task control disposition presentation
-- IR/TASK/AGENT/EXEC applicability and fixed paired context
+- 현재 DP의 core-ASR applicability와 다른 DP를 고정한 paired context
 - prompt/token ledger and sequential/parallel model-call graph
 - mock S2S meaning, scheduled delay profile, and playback profile
 - warm-up/scored count, run order, timeout, failed-trial handling, percentile algorithm
@@ -102,13 +103,13 @@ Modifiability와 observability QA는 추가로 다음을 동결한다.
 
 Qwen3-Omni 234 ms may be used only as a clearly labeled scheduled reference span for a matching full-S2S first-packet dependency. It is not a metric start point, generic TTS cost, network cost, or actual model execution.
 
-## Existing assets and their limits
+## Archived predecessor assets and their limits
 
 - The catalog contains 18 approved UCs and 94 explicit variants, plus 24 change scenarios.
-- Synthetic fixtures and evaluator oracles exist in the [W12-G1 archive](../../../benchmark/archive/w12-g1/README.md).
-- Actual human recordings, target-Mac playback capture와 current DP A/B Voice 결과는 없다. Local semantic LLM과 Alibaba S2S synthetic-WAV smoke evidence는 공식 QA run이 아니다.
-- VIA-DP-11 v3와 이전 pilot은 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)다. current Architecture 비교에는 v4 targeted result만 사용한다.
-- Archive assets may inform a new fixture review, but their old timing names, constants, target, score, and results are not inherited.
+- 2026-09-27 detailed-QA runner와 unfinished DP-11 v5는 [benchmark archive](../../../benchmark/archive/pre-core-asr-reference-20260927/README.md), 당시 candidate는 [prototype archive](../../../prototypes/archive/pre-core-asr-reference-20260927/README.md)에 있다.
+- 당시 qualification과 VIA-DP-02/05/06/09/11/12/13 result는 [evidence archive](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/README.md)에 있다.
+- Actual human recordings와 현재 Core DP A/B Voice 결과는 없다. Local semantic LLM, Alibaba S2S synthetic-WAV smoke와 과거 BlackHole capture는 새 공식 QA run이 아니다.
+- Archive assets may inform a new fixture review, but their old timing names, constants, target, score, paths, commands and results are not inherited.
 
 Current implementation belongs in [benchmark/architecture](../../../benchmark/architecture/README.md). Valid current evidence belongs in [results/architecture-evaluation/current](../../../results/architecture-evaluation/current/README.md).
 

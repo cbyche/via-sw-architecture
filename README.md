@@ -132,8 +132,8 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 - 대표 Use Case와 고정 범위는 정의되어 있지만 내부 Component 배치와 여러 구조 선택은 아직 평가 대상이다.
 - QA catalog는 네 core QA와 상세 measurement·diagnostic QA로 구성된다. target, score band, workload와 DP별 applicability freeze는 아직 완료되지 않았다.
 - QA-09, QA-19, QA-29, QA-39를 핵심 Architecture Significant Requirement(ASR)로 확정했다. 이 분류는 측정 완료나 특정 후보의 승리를 뜻하지 않는다.
-- VIA-DP-01~18은 구조적 선택의 전체 inventory다. 2026-09-28 사용자 결정으로 VIA-DP-03·05·06·07·15·17을 상세 검토할 핵심 DP shortlist로 선정했지만, 목록·shortlist 포함이 대안 승자나 측정 완료를 뜻하지 않는다.
-- 현재 reference 결과는 후보·측정 구조를 검토하기 위한 예비/부분 evidence다. 최종 Architecture Decision이나 제품 end-to-end 측정으로 해석하지 않는다.
+- VIA-DP-01~18은 구조적 선택의 전체 inventory다. 현재 보고서와 평가가 중점적으로 다룰 Core DP는 **VIA-DP-03·05·06·07·15·17의 6개로 확정**했다. 이 확정은 A/B winner나 측정 완료를 뜻하지 않는다.
+- 새 Core-ASR generation의 active candidate와 result는 아직 없다. 이전 reference runner·candidate·result는 archive에 보존하며 현재 QA 값이나 winner로 해석하지 않는다.
 - 기존 ADR의 accepted/deferred 상태와 재검증 caveat는 유지한다.
 
 따라서 `NOT_IMPLEMENTED`, `NOT_RUN`, `N/A`, `BLOCKED`를 과거 결과로 채우거나 draft를 확정된 제품 Architecture로 설명하면 안 된다. 최신 세부 상태는 [Architecture Baseline](docs/architecture/README.md), [Measurement Guide](docs/architecture/11-measurement/README.md), [Current Evaluation Results](results/architecture-evaluation/current/README.md), [Architecture Decisions](docs/architecture/12-decisions/README.md)에서 확인한다.
@@ -144,15 +144,16 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 
 1. [Architecture Baseline](docs/architecture/README.md) — 문서 위계와 현재 기준선
 2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 책임 경계
-3. [Terms](docs/architecture/02-terms.md) — Conversation, Request, Task, Agent Execution 등 핵심 개념
-4. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md) — 모든 후보가 만족할 공통 범위
-5. [Canonical Interaction Flow](docs/architecture/04-canonical-interaction-flow.md) — direct/delegated interaction의 논리적 흐름
-6. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 사용자가 얻어야 할 행동과 완료 조건
-7. [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md)과 [Intentional Variables](docs/architecture/07-intentional-variables.md) — 비교 중 고정할 조건과 대응할 변화
-8. [Quality Attributes](docs/architecture/08-quality-attributes/README.md)과 [Traceability](docs/architecture/09-traceability.md) — 품질 초안과 요구 연결
-9. [Architecture Element Definition](docs/architecture/10-element-definition.md) — 후보 구조와 변경량을 비교하는 단위
-10. [Measurement](docs/architecture/11-measurement/README.md) — 결과 전에 동결할 계약과 evidence 수준
-11. [Architecture Decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — 대안, 평가 방법과 현재 결정
+3. [Current Architecture Focus](docs/architecture/12-decisions/dp-executive-summary.md) — 확정한 Core QA 4개, Core DP 6개와 다음 작업
+4. [Terms](docs/architecture/02-terms.md) — Conversation, Request, Task, Agent Execution 등 핵심 개념
+5. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md) — 모든 후보가 만족할 공통 범위
+6. [Canonical Interaction Flow](docs/architecture/04-canonical-interaction-flow.md) — direct/delegated interaction의 논리적 흐름
+7. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 사용자가 얻어야 할 행동과 완료 조건
+8. [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md)과 [Intentional Variables](docs/architecture/07-intentional-variables.md) — 비교 중 고정할 조건과 대응할 변화
+9. [Quality Attributes](docs/architecture/08-quality-attributes/README.md)과 [Traceability](docs/architecture/09-traceability.md) — 품질 초안과 요구 연결
+10. [Architecture Element Definition](docs/architecture/10-element-definition.md) — 후보 구조와 변경량을 비교하는 단위
+11. [Measurement](docs/architecture/11-measurement/README.md) — 결과 전에 동결할 계약과 evidence 수준
+12. [Architecture Decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — 대안, 평가 방법과 현재 결정
 
 저장소를 수정하는 LLM과 automation은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 
@@ -171,15 +172,15 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 
 ## Development
 
-`architecture-ci`는 active 문서의 링크·용어·QA catalog와 candidate prototype을 검사한다. 이 검사는 QA campaign이나 Architecture winner를 자동으로 결정하지 않는다.
+`architecture-ci`는 active 문서의 링크·용어·QA catalog를 검사한다. Active candidate
+workspace는 VIA-DP-03 Measurement Freeze 뒤 새로 만들며, 그때 해당 source에 맞는
+fmt·lint·test job을 CI에 함께 추가한다. 이 검사는 QA campaign이나 Architecture winner를
+자동으로 결정하지 않는다.
 
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py
 .venv/bin/python scripts/architecture/check_qa_catalog.py
-cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
-cargo +1.98.1 clippy --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets -- -D warnings
-cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
 ```
 
 작업 규칙은 [AGENTS.md](AGENTS.md), 사람 기여 절차는 [CONTRIBUTING.md](CONTRIBUTING.md)를 따른다.

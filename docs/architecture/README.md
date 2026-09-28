@@ -17,31 +17,32 @@
 - Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙을 유지하며, 네 통합 core QA와 상세 measurement·diagnostic QA를 함께 관리한다.
 - **QA-09·19·29·39를 핵심 `CONFIRMED_ASR`로 확정했다.** 정의와 VIA-DP-01~18 적용 원장은 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)에 있다. target·score band·DP별 모집단·machine contract·새 결과는 아직 pending이다.
-- **VIA-DP-03·05·06·07·15·17을 핵심 DP shortlist로 선정했다.** 이는 A/B 승자나 측정 완료가 아니다. VIA-DP-02·12는 supporting decision, VIA-DP-11은 실제 fatal-risk integration이 확인될 때 재승격하는 조건부 보조 DP다.
-- QA-01/02/03/05는 QA-09 input, QA-11/12는 QA-19 field source, QA-21~23은 QA-29 change source, QA-31/32는 QA-39 fault evidence다. QA-04·13~15·41·51·61/62는 회귀·진단·qualification으로 유지한다. 기존 일곱 DP reference 결과는 새 core ASR 결과가 아니다.
+- **VIA-DP-03·05·06·07·15·17을 현재 보고서와 평가의 Core DP set으로 확정했다.** 이는 A/B winner나 측정 완료가 아니다. VIA-DP-11은 여섯 DP의 대체 후보가 아니며 실제 fatal-risk integration이 제품 범위에 새로 들어올 때만 별도 scope decision으로 다시 검토한다.
+- QA-01/02/03/05는 QA-09 input, QA-11/12는 QA-19 field source, QA-21~23은 QA-29 change source, QA-31/32는 QA-39 fault evidence다. QA-04·13~15·41·51·61/62는 회귀·진단·qualification으로 유지한다. 이전 일곱 DP reference generation은 archive했으며 새 core ASR 결과가 아니다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
-DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. VIA-DP-01~18의 전수 inventory와 여섯 핵심 DP의 선정 경계를 설명한다. Supporting/조건부 분류는 질문 삭제나 기존 ADR 변경이 아니며, shortlist 선정도 새 후보 구현·QA 측정 완료를 뜻하지 않는다.
+DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisions/dp-executive-summary.md)를 본다. Core QA 4개, Core DP 6개, 심층 검토 순서와 남은 작업을 현재 기준으로 설명한다. 전체 18개 inventory는 [Decision index](./12-decisions/README.md)에서 별도로 유지한다.
 
 ## Required reading order
 
 | 순서 | 문서 | 답하는 질문 |
 | --- | --- | --- |
 | 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA가 무엇을 책임지고 무엇을 Agent에 맡기는가? |
-| 2 | [Terms](./02-terms.md) | 같은 용어를 어떤 뜻으로 쓰는가? |
-| 3 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 모든 후보가 공통으로 제공해야 할 기능은 무엇인가? |
-| 4 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | direct/delegated interaction이 어떤 lifecycle을 따르는가? |
-| 5 | [Representative Use Cases](./05-representative-use-cases.md) | 어떤 사용자 상황으로 Architecture를 검증하는가? |
-| 6 | [Fixed Assumptions](./06-fixed-assumptions.md) | 후보 비교에서 무엇을 동일하게 유지하는가? |
-| 7 | [Intentional Variables](./07-intentional-variables.md) | 어떤 모델·Agent·계약 변화를 견뎌야 하는가? |
-| 8 | [Quality Attributes](./08-quality-attributes/README.md) | 어떤 품질을 어떤 지표로 관찰하는가? |
-| 9 | [Traceability](./09-traceability.md) | Scope→UC→QC→QA가 어떻게 연결되는가? |
-| 10 | [Architecture Element Definition](./10-element-definition.md) | 후보의 component/contract/state를 어떤 단위로 비교하는가? |
-| 11 | [Measurement](./11-measurement/README.md) | 결과 전에 무엇을 동결하고 어떤 evidence를 생성하는가? |
-| 12 | [Decisions](./12-decisions/README.md) | DP별 A/B를 어떻게 비교하고 결정하는가? |
+| 2 | [Current Architecture Focus](./12-decisions/dp-executive-summary.md) | 현재 Core QA·Core DP와 다음 작업은 무엇인가? |
+| 3 | [Terms](./02-terms.md) | 같은 용어를 어떤 뜻으로 쓰는가? |
+| 4 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 모든 후보가 공통으로 제공해야 할 기능은 무엇인가? |
+| 5 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | direct/delegated interaction이 어떤 lifecycle을 따르는가? |
+| 6 | [Representative Use Cases](./05-representative-use-cases.md) | 어떤 사용자 상황으로 Architecture를 검증하는가? |
+| 7 | [Fixed Assumptions](./06-fixed-assumptions.md) | 후보 비교에서 무엇을 동일하게 유지하는가? |
+| 8 | [Intentional Variables](./07-intentional-variables.md) | 어떤 모델·Agent·계약 변화를 견뎌야 하는가? |
+| 9 | [Quality Attributes](./08-quality-attributes/README.md) | 어떤 품질을 어떤 지표로 관찰하는가? |
+| 10 | [Traceability](./09-traceability.md) | Scope→UC→QC→QA가 어떻게 연결되는가? |
+| 11 | [Architecture Element Definition](./10-element-definition.md) | 후보의 component/contract/state를 어떤 단위로 비교하는가? |
+| 12 | [Measurement](./11-measurement/README.md) | 결과 전에 무엇을 동결하고 어떤 evidence를 생성하는가? |
+| 13 | [Decisions](./12-decisions/README.md) | DP별 A/B를 어떻게 비교하고 결정하는가? |
 
-문서를 부분 검색으로 먼저 읽으면 역사적 이름과 현재 정의를 섞기 쉽다. 새 참여자는 최소한 01, 03, 05, 08, 11, 12 순서를 유지한다.
+문서를 부분 검색으로 먼저 읽으면 역사적 이름과 현재 정의를 섞기 쉽다. 새 참여자는 최소한 **01 → Current Architecture Focus → 03 → 05 → 08 → 11 → 12**의 읽기 순서를 유지한다.
 
 ## Current status
 
@@ -54,9 +55,10 @@ DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions
 | ASR classification | Confirmed | QA-09·19·29·39; 측정 freeze와 결과는 pending |
 | QA semantic definitions | Current | [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)와 상세 QA 의미 경계 |
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
-| Machine contract, pending targets, harness | Mixed | 일곱 DP 완료; 나머지는 구현·실행 전에 먼저 동결해야 함 |
-| Current evidence | Seven reference campaigns | VIA-DP-02·05·06·09·11·12·13; archive 결과로 대체하지 않음 |
-| DP inventory | Exhaustive review draft | VIA-DP-01~18 독립 보고서; 이전 계열 매핑·coverage 점검, 최종 선정 보류 |
+| Machine contract, pending targets, harness | Mixed | 기존 reference package는 있으나 여섯 Core DP의 새 contract·target·full campaign은 미완료 |
+| Current evidence | Empty / `NOT_RUN` | 이전 VIA-DP-02·05·06·09·11·12·13 reference generation은 archive; current 결과로 대체하지 않음 |
+| Core DP set | Confirmed | VIA-DP-03·05·06·07·15·17; A/B winner와 measurement freeze는 pending |
+| Full DP inventory | Current supporting inventory | VIA-DP-01~18 독립 보고서; 비핵심 DP도 공통 계약·회귀·추적성을 위해 유지 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
 ## How the baseline becomes a decision

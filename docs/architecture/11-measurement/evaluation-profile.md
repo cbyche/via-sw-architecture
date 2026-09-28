@@ -20,7 +20,7 @@
 
 구성 불변식은 **S2S 1개 + semantic LLM 1개**다. Component·Task·단계별 모델 복제는 허용하지 않는다. 역할별 prompt, schema, session과 호출 graph만 달라질 수 있다.
 
-BlackHole 2ch 설치와 재기동을 완료했다. Native CoreAudio qualification에서 48 kHz stereo known chirp의 output→input capture가 normalized correlation 1.0, peak amplitude 0.199990, output-to-capture offset 21.333 ms로 통과했다. Raw emitted/captured WAV와 판정값은 [audio-loopback qualification v1](../../../results/architecture-evaluation/current/audio-loopback-qualification-v1-20260926/README.md)에 보존한다. 이는 harness 경로의 `MEASURED_REFERENCE_HARNESS` 검증이며 제품 latency 결과가 아니다.
+2026-09-26 predecessor generation에서 BlackHole 2ch 설치·재기동 뒤 Native CoreAudio qualification을 실행했다. 48 kHz stereo known chirp의 output→input capture는 normalized correlation 1.0, peak amplitude 0.199990, output-to-capture offset 21.333 ms였다. Raw emitted/captured WAV와 판정값은 [archived audio-loopback qualification v1](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/audio-loopback-qualification-v1-20260926/README.md)에 보존한다. 이는 당시 harness 경로 검증이지 제품 latency나 현재 environment qualification이 아니므로 새 scored run 전에 다시 확인한다.
 
 ### S2S 연결값
 
@@ -144,4 +144,4 @@ F-02에서 외부 Reference Agent 자체의 crash를 Process 격리의 이점으
 4. 그 뒤에만 한 축을 바꾼 DP별 A/B candidate를 구현한다.
 5. 같은 MacBook과 dependency profile에서 complete four-core-ASR 표와 상세 breakdown을 생성한다.
 
-현재 qualification이 끝난 것은 local semantic LLM 설치·실행, Alibaba S2S 합성 WAV 왕복 smoke test와 외부 deterministic Reference Agent다. [VIA-DP-06 v4](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)는 case당 1회 breadth evidence, [VIA-DP-11 v4](../../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)는 targeted Process evidence다. 둘 다 최종 통합 campaign 완료가 아니다. 이전 VIA-DP-11 v1~v3는 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)이며 current claim에 사용하지 않는다.
+2026-09-27 predecessor generation에서는 local semantic LLM, Alibaba S2S 합성 WAV 왕복 smoke와 외부 deterministic Reference Agent를 qualification했다. [Archived VIA-DP-06 v4](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-06-evaluation-v4-20260927/report.md)는 case당 1회 breadth evidence, [archived VIA-DP-11 v4](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-11-evaluation-v4-20260927/report.md)는 targeted Process evidence다. 둘 다 현재 qualification이나 Core-ASR campaign이 아니다. 새 DP-03 Measurement Freeze에서 실제 dependency version과 environment를 다시 qualification한다.

@@ -350,8 +350,10 @@ flowchart LR
     BP --> SCORE
 ```
 
-후보 입력은 `benchmark/architecture/fixtures/dp06-semantic-input-v4.json`, 정답은
-`dp06-semantic-oracle-v4.json`에 분리했다. 후보에게는 source, interaction event,
+이 workload에 사용한 후보 입력과 정답은 각각
+`benchmark/archive/pre-core-asr-reference-20260927/architecture/fixtures/dp06-semantic-input-v4.json`과
+`dp06-semantic-oracle-v4.json`에 역사적 provenance로 분리 보존했다. 현재 fixture로
+재사용하지 않는다. 당시 후보에게는 source, interaction event,
 Task view, pending interaction과 capability만 전달하며 expected field는 전달하지
 않는다. 각 case는 다음 빈 구멍을 최소 집합으로 채운다.
 

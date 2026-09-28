@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use std::{
     path::PathBuf,
     sync::Arc,
@@ -17,6 +17,14 @@ struct Args {
     listen: String,
     #[arg(long)]
     state_file: Option<PathBuf>,
+    #[arg(long, value_enum, default_value_t = Shape::Q)]
+    shape: Shape,
+}
+
+#[derive(Clone, Copy, ValueEnum)]
+enum Shape {
+    P,
+    Q,
 }
 
 async fn dispatch(
@@ -175,9 +183,13 @@ async fn serve_connection(
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
+    let shape = match args.shape {
+        Shape::P => AgentShape::P,
+        Shape::Q => AgentShape::Q,
+    };
     let agent = match args.state_file {
-        Some(path) => DeterministicAgent::persistent(AgentShape::Q, path)?,
-        None => DeterministicAgent::new(AgentShape::Q),
+        Some(path) => DeterministicAgent::persistent(shape, path)?,
+        None => DeterministicAgent::new(shape),
     };
     let listener = TcpListener::bind(&args.listen).await?;
     println!(

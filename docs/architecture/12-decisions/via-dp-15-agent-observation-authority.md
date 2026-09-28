@@ -1,10 +1,10 @@
 # VIA-DP-15 — Agent progress state의 유지 방식
 
-> **핵심 DP 초안 v2 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
+> **Core DP 6/6 · 초안 v2 · 2026-09-28 · 상세 Measurement Freeze 전**
 >
 > 질문: Agent의 중간 progress·질문·결과를 VIA가 지속적으로 projection해 관리할 것인가, event는 변화 hint로만 쓰고 필요한 시점에 authoritative snapshot을 조회할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. Agent delegation 이후 사용자가 보지 않는 동안에도 VIA가 진행 상태를 어떻게 관리하는지까지 범위를 넓혔다. 단순 event 대 polling이나 event마다 query하는 약한 비교가 아니며 실제 QA 측정은 `NOT_RUN`이다.
+> 현재 판단: **현재 Core DP set에 확정 포함**. Agent delegation 이후 사용자가 보지 않는 동안에도 VIA가 진행 상태를 어떻게 관리하는지까지 범위를 넓혔다. 단순 event 대 polling이나 event마다 query하는 약한 비교가 아니며 실제 QA 측정은 `NOT_RUN`이다.
 
 ## 1. 배경 — 완료 소식을 받으면 바로 완료로 알려도 될까?
 
@@ -158,7 +158,7 @@ Agent event/query의 정보량·순서·snapshot 일관성을 먼저 명세한�
 
 ## 10. 현재 판단과 재검토 조건
 
-**Continuous projection 대 on-demand snapshot으로 핵심 shortlist에 유지한다.** 후속 심층 검토에서 필수 milestone·짧은 질문의 보존 범위, notification policy와 상태 authority의 분리, status query/Voice endpoint, progress field registry와 event-loss/restart fault pack을 동결한다. 모든 중간 event를 반드시 VIA에 영속해야 하는 제품 요구가 확정되면 B는 비교 후보가 아니라 기능 부적합이 된다.
+**Continuous projection 대 on-demand snapshot을 Core DP로 유지한다.** 후속 심층 검토에서 필수 milestone·짧은 질문의 보존 범위, notification policy와 상태 authority의 분리, status query/Voice endpoint, progress field registry와 event-loss/restart fault pack을 동결한다. 모든 중간 event를 반드시 VIA에 영속해야 하는 제품 요구가 확정되면 B는 비교 후보가 아니라 기능 부적합이 된다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

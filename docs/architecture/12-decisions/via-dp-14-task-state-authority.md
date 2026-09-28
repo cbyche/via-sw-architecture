@@ -4,7 +4,7 @@
 >
 > 질문: 공유 Task 서비스가 revision으로 쓰기를 조정할 것인가, Task별 단일 supervisor가 명령을 받아 쓸 것인가?
 >
-> 현재 판단: 기존 TASK-DP01을 현행 번호로 편입한다. 기존 B accepted는 유지하되 현행 QA 재검증이 필요하다. 강한 양방향 trade-off는 미입증이다. 후보 문서의 완성과 QA trade-off 입증은 별개다. 실제 QA 측정은 `NOT_RUN`이며 이번 작업에서 구현·측정·새 승자 선정은 하지 않았다.
+> 현재 판단: **Non-core supporting decision.** 기존 TASK-DP01을 현행 번호로 편입하고 B accepted를 유지하되 현행 QA 재검증이 필요하다. 현재 Core DP 6개에는 포함하지 않으며 새 QA 측정은 `NOT_RUN`이다.
 
 ## 1. 배경 — 취소와 완료가 동시에 오면 누가 Task를 갱신할까?
 
@@ -157,7 +157,7 @@ QA-11과 QA-12~15는 통합 결과와 원인 지표이므로 중복 합산하지
 
 VIA-DP-02는 교차 관계 원자성, 08은 복구 원본, 09는 Agent 의미 해석, 11은 Process 배치다. 전환에는 진행 명령의 drain·소유권 fencing·reader 호환이 필요하다. 기존 ADR-002의 B accepted를 유지한다. 그때 사용한 이전 세대 responsiveness·동시성 결과는 현행 근거가 아니고 현재 QA-01/03/05·13~15/31/32로 재검증해야 한다.
 
-확인 가능한 구조 코드는 [task.rs](../../../prototypes/candidates/runtime/src/task.rs)의 SharedTaskService·PerTaskSupervisors와 [repository.rs](../../../prototypes/candidates/runtime/src/repository.rs)다. 이 코드는 구조 예시와 부분 테스트를 제공할 뿐 현재 Voice·실제 모델·제품 QA 검증을 완료한 증거가 아니다.
+확인 가능한 역사적 구조 코드는 [archived task.rs](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/runtime/src/task.rs)의 SharedTaskService·PerTaskSupervisors와 [archived repository.rs](../../../prototypes/archive/pre-core-asr-reference-20260927/candidates/runtime/src/repository.rs)다. 이 코드는 구조 예시와 부분 테스트일 뿐 현재 candidate나 Voice·실제 모델·제품 QA 검증 증거가 아니다.
 
 ## 10. 현재 판단과 재검토 조건
 

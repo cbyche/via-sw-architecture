@@ -1,10 +1,10 @@
 # VIA-DP-05 — 요청 Context의 획득 계획 확정 계약
 
-> **핵심 DP 초안 v3 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
+> **Core DP 2/6 · 초안 v3 · 2026-09-28 · 상세 Measurement Freeze 전**
 >
 > 질문: 필요한 Context를 먼저 계획·동결한 뒤 의미 처리를 실행할 것인가, 의미 처리 중 bounded 조회로 같은 실행의 읽기 집합을 확장할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. 기존 v1 component reference에서 trade-off가 없었으므로 그 결과를 새 v3 후보의 근거로 소급하지 않는다. Plan 적중·추가 근거 발견·과다 준비·source fault를 포함한 새 계약과 실제 Voice/semantic 경로 측정이 필요하다.
+> 현재 판단: **현재 Core DP set에 확정 포함**. 기존 v1 component reference에서 trade-off가 없었으므로 그 결과를 새 v3 후보의 근거로 소급하지 않는다. Plan 적중·추가 근거 발견·과다 준비·source fault를 포함한 새 계약과 실제 Voice/semantic 경로 측정이 필요하다.
 
 ## 1. 배경 — ‘이 자료’에 답하는 도중 다른 정보가 필요해지면?
 
@@ -231,7 +231,7 @@ VIA-DP-03은 입력 시각 근거를 생성하고 VIA-DP-06은 Context를 소비
 
 ## 10. 현재 판단과 재검토 조건
 
-**Plan-first 대 demand-driven 획득 계약으로 핵심 shortlist에 유지한다.** 상세 검토에서는 predictable·emergent Context workload, sequential read 왕복, replan, source loss와 checkpoint 복구를 동결한다. 실제 차이가 prefetch 설정이나 cache 정책뿐으로 축소되면 supporting 계약으로 다시 내린다. QA 점수를 얻으려고 최신성과 과거 시점 요구를 다르게 주거나 Privacy 범위를 넓히지 않는다.
+**Plan-first 대 demand-driven 획득 계약을 Core DP로 유지한다.** 상세 검토에서는 predictable·emergent Context workload, sequential read 왕복, replan, source loss와 checkpoint 복구를 동결한다. 실제 차이가 prefetch 설정이나 cache 정책뿐으로 축소되면 Core DP 정의의 유효성을 명시적으로 재검토한다. QA 점수를 얻으려고 최신성과 과거 시점 요구를 다르게 주거나 Privacy 범위를 넓히지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 
@@ -239,8 +239,8 @@ VIA-DP-03은 입력 시각 근거를 생성하고 VIA-DP-06은 Context를 소비
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
 
-## 12. v1 reference campaign 결과
+## 12. Archived v1 reference campaign
 
-[정식 결과](../../../results/architecture-evaluation/current/via-dp-05-evaluation-v1-20260927/report.md)는 5개 Context case를 후보별 20회 실행했다. QA-11/12/15와 QA-61은 두 안 모두 100%, QA-51 excess exposure는 0이었다. 전체 reference path p95는 A 0.027ms, B 0.039ms였지만 Voice endpoint가 없는 원인 진단값이므로 QA-01/02로 승격하지 않았다.
+[pre-Core-ASR v1 reference result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-05-evaluation-v1-20260927/report.md)는 5개 Context case를 후보별 20회 실행했다. QA-11/12/15와 QA-61은 두 안 모두 100%, QA-51 excess exposure는 0이었다. 전체 reference path p95는 A 0.027ms, B 0.039ms였지만 Voice endpoint가 없는 원인 진단값이므로 QA-01/02로 승격하지 않았다.
 
-**현재 결론:** 측정된 QA에서는 구조적 trade-off가 나타나지 않았다. 전체 Context change/recovery pack과 실제 Voice path가 추가돼도 차이가 없으면 supporting contract로 내린다.
+**역사적 관측:** 당시 상세 QA에서는 구조적 trade-off가 나타나지 않았다. 이 결과는 현재 Core DP 지위를 낮추지 않으며, 새 QA-09/19/29/39 모집단과 실제 Voice path로 다시 비교해야 한다.

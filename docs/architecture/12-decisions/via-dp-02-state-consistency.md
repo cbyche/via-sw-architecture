@@ -1,10 +1,10 @@
 # VIA-DP-02 — 대화와 Task 관계의 확정 경계
 
-> **보조 DP v3 · 2026-09-28 · 핵심 shortlist 제외**
+> **Non-core supporting DP v3 · 2026-09-28**
 >
 > 질문: 대화·요청과 Task의 관계를 하나의 원자적 커밋으로 확정할 것인가, 독립 소유자의 확정을 연결할 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에서 제외**. 교차 commit 계약은 유효한 supporting design decision으로 보존한다. v2 reference에서 정상 지연은 낮은 single-digit millisecond였고 accuracy·blast-radius trade-off가 나타나지 않아 최종 보고서의 제한된 핵심 DP 자리를 사용하지 않는다. Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
+> 현재 판단: **현재 Core DP set에서 제외**. 교차 commit 계약은 유효한 supporting design decision으로 보존한다. v2 reference에서 정상 지연은 낮은 single-digit millisecond였고 accuracy·blast-radius trade-off가 나타나지 않아 최종 보고서의 제한된 Core DP 자리를 사용하지 않는다. Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
 
 ## 1. 배경 — 취소 중에 다른 Task의 질문이 도착하면 무엇이 먼저 확정되어야 할까?
 
@@ -224,8 +224,8 @@ VIA-DP-08 저장 기준과 VIA-DP-11 Process 경계는 별도다. VIA-DP-04 응�
 
 검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
 
-## 12. v2 reference campaign 결과
+## 12. Archived v2 reference campaign
 
-[정식 결과](../../../results/architecture-evaluation/current/via-dp-02-evaluation-v2-20260927/report.md)는 5개 관계 case × 후보별 12회를 실제 SQLite `FULL` durability와 reopen recovery로 실행했다. QA-05 p95는 공동 commit A 0.590ms, reconciliation B 2.083ms였고, QA-31은 A 0.346ms, B 0.952ms였다. QA-11/13/14/15는 양쪽 모두 60/60, QA-32 excess unit은 0이었다.
+[pre-Core-ASR v2 reference result](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/via-dp-02-evaluation-v2-20260927/report.md)는 5개 관계 case × 후보별 12회를 실제 SQLite `FULL` durability와 reopen recovery로 실행했다. QA-05 p95는 공동 commit A 0.590ms, reconciliation B 2.083ms였고, QA-31은 A 0.346ms, B 0.952ms였다. QA-11/13/14/15는 양쪽 모두 60/60, QA-32 excess unit은 0이었다.
 
-**현재 결론:** 이번 workload에서는 A가 응답·복구에서 우세하고 B의 반대 방향 QA 이점이 나타나지 않았다. invalid v1은 DB 준비를 QA-05에 포함하고 실제 reopen이 없어 archive했으며 근거로 사용하지 않는다.
+**역사적 관측:** 당시 workload에서는 A가 응답·복구에서 우세하고 B의 반대 방향 QA 이점이 나타나지 않았다. 이 수치는 현재 Core ASR 값이나 winner가 아니다. Invalid v1은 DB 준비를 QA-05에 포함하고 실제 reopen이 없어 archive했으며 근거로 사용하지 않는다.

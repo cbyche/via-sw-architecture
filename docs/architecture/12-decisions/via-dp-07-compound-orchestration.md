@@ -1,10 +1,10 @@
 # VIA-DP-07 — 복합 요청 graph의 dependency 실행 권한
 
-> **핵심 DP 초안 v3 · 2026-09-28 · 사용자 선정 반영 / 상세 검토 예정**
+> **Core DP 5/6 · 초안 v3 · 2026-09-28 · 상세 검토 예정**
 >
 > 질문: 사용자가 명시한 복합 요청 graph의 dependency edge를 VIA가 node 단위로 모두 실행 관리할 것인가, 같은 owner Agent가 처리할 수 있는 bundle 내부 edge는 그 Agent에 맡길 것인가?
 >
-> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. “전체 복합 요청을 한 Agent에 위임”하는 약한 B를 폐기하고, capability·기존 Task owner에 따라 bundle을 나눈 뒤 edge별 readiness authority를 비교하도록 재정의했다. 상세 capability와 measurement contract는 후속 심층 검토에서 동결하며 실제 결과는 `NOT_RUN`이다.
+> 현재 판단: **현재 Core DP set에 확정 포함**. “전체 복합 요청을 한 Agent에 위임”하는 약한 B를 폐기하고, capability·기존 Task owner에 따라 bundle을 나눈 뒤 edge별 readiness authority를 비교하도록 재정의했다. 상세 capability와 measurement contract는 후속 심층 검토에서 동결하며 실제 결과는 `NOT_RUN`이다.
 
 ## 1. 배경 — ‘요약은 하고, 메일만 취소해’는 누가 집행할까?
 
@@ -220,7 +220,7 @@ VIA-DP-01 직접 처리 범위, VIA-DP-02 관계 확정, VIA-DP-06 사용자 관
 
 ## 10. 현재 판단과 재검토 조건
 
-**Node-level edge authority 대 owner-affinity bundle authority로 핵심 shortlist에 유지한다.** 후속 심층 검토에서 bundle capability, 기존 Task owner 보존, cross-bundle artifact·control, 공통 QA-09 복합 집계 경계를 먼저 동결한다. 동등한 node status·부분 control·재연결을 제공하지 못하는 Agent profile은 B 점수 표본이 아니라 기능 부적합으로 분리한다.
+**Node-level edge authority 대 owner-affinity bundle authority를 Core DP로 유지한다.** 후속 심층 검토에서 bundle capability, 기존 Task owner 보존, cross-bundle artifact·control, 공통 QA-09 복합 집계 경계를 먼저 동결한다. 동등한 node status·부분 control·재연결을 제공하지 못하는 Agent profile은 B 점수 표본이 아니라 기능 부적합으로 분리한다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

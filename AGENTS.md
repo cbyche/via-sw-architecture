@@ -13,10 +13,11 @@ For any non-trivial Architecture or measurement task, read these files in order:
 1. `README.md`
 2. `docs/architecture/README.md`
 3. `docs/architecture/01-system-mission-and-boundary.md`
-4. the relevant use case or quality-attribute document
-5. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
-6. `docs/architecture/11-measurement/README.md` for measurement work
-7. `docs/architecture/12-decisions/README.md` and the relevant ADR for decision work
+4. `docs/architecture/12-decisions/dp-executive-summary.md` for the current Core ASRs, Core DPs, and next work
+5. the relevant use case or quality-attribute document
+6. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
+7. `docs/architecture/11-measurement/README.md` for measurement work
+8. `docs/architecture/12-decisions/README.md` and the relevant ADR for decision work
 
 Do not infer the current project from filenames found by search alone.
 
@@ -41,6 +42,11 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 - The authoritative branch is `main`.
 - The active Architecture baseline is `docs/architecture/`.
 - Current decision reports use VIA-DP-01~18; legacy IR/TASK/AGENT/EXEC IDs are provenance only, not the primary reading path. TASK-DP01 is carried forward as VIA-DP-14 without changing ADR-002's accepted B status or its revalidation caveats.
+- The current Core DP set is fixed to **VIA-DP-03, VIA-DP-05, VIA-DP-06, VIA-DP-07, VIA-DP-15, and VIA-DP-17**. These six receive the primary deep-definition, implementation, and measurement effort. Their A/B winners are not selected yet.
+- Use this default deep-review order: **03 → 05 → 17 → 06 → 07 → 15**. It follows the user interaction flow; it does not create winner dependencies between DPs. DP-05 and DP-17 remain independent axes.
+- VIA-DP-11 is a non-core supporting decision, not a seventh fallback if one of the six is weak. Revisit it only through an explicit scope change if a real VIA-side native SDK, plugin, browser/OS bridge, or other Process-fatal integration enters product scope. Preserve ADR-003 and existing reference assets with their caveats.
+- The current lifecycle stage for the six Core DPs is **Measurement Contract Definition**. Start with VIA-DP-03 capability qualification and A/B contract freeze; do not continue the old DP-11 runner sequence by inertia.
+- The active `benchmark/architecture/`, `prototypes/candidates/`, and `results/architecture-evaluation/current/` trees were reset after the Core ASR/Core DP selection. They contain no current runner, executable candidate, or Core-ASR result yet. The 2026-09-27 generation is historical provenance under the matching archive trees; do not resume it in place.
 - VIA uses exactly one S2S model and one semantic LLM. Never load or replicate models per Component, Task, or semantic stage. Role-specific prompts, calls, sessions and buffers may differ; they share the same models. Additional ASR/TTS/helper models are outside the current scope. Downstream Agent internals remain external.
 - Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
 - A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
@@ -137,13 +143,9 @@ Minimum documentation checks:
 .venv/bin/python scripts/architecture/check_active_terminology.py
 ```
 
-Candidate Rust checks when `prototypes/candidates/` changes:
-
-```bash
-cargo +1.98.1 fmt --manifest-path prototypes/candidates/Cargo.toml --all -- --check
-cargo +1.98.1 clippy --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets -- -D warnings
-cargo +1.98.1 test --locked --manifest-path prototypes/candidates/Cargo.toml --workspace --all-targets
-```
+Candidate Rust checks apply only after an active Cargo workspace has been created under
+`prototypes/candidates/`. Add the exact frozen toolchain commands to this section and CI together
+with that workspace; do not run the archived workspace as a substitute.
 
 ## 8. Git policy
 

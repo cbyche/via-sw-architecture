@@ -1,0 +1,67 @@
+name: architecture-ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'AGENTS.md'
+      - 'docs/architecture/**'
+      - 'docs/adr/**'
+      - 'benchmark/architecture/**'
+      - 'prototypes/candidates/**'
+      - 'results/architecture-evaluation/current/**'
+      - 'scripts/architecture/**'
+      - '.github/workflows/architecture-ci.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: architecture-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  current-contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check active terminology and links
+        run: |
+          python3 scripts/architecture/check_active_terminology.py
+          python3 scripts/architecture/check_active_markdown_links.py
+          python3 scripts/architecture/check_qa_catalog.py
+
+  candidate-prototype:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install frozen Rust toolchain
+        run: |
+          rustup toolchain install 1.98.1 --profile minimal --component rustfmt,clippy
+          cd prototypes/candidates
+          rustup override set 1.98.1
+      - name: Formatting
+        working-directory: prototypes/candidates
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        working-directory: prototypes/candidates
+        run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - name: Tests
+        working-directory: prototypes/candidates
+        run: cargo test --locked --workspace --all-targets
+      - name: Structural smoke
+        working-directory: prototypes/candidates
+        run: |
+          cargo build --locked -p via-worker -p via-host -p via-bench
+          cargo run --locked -q -p via-bench -- smoke
+          cargo run --locked -q -p via-bench -- exec-smoke --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- exec-abort-smoke --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- exec-blast-smoke --host target/debug/via-host --worker target/debug/via-worker
+          cargo run --locked -q -p via-bench -- s2s-smoke --trace fixtures/s2s-delay-smoke.json
+          cargo run --locked -q -p via-bench -- background-load-smoke
+          cargo run --locked -q -p via-bench -- qa09-whole-restart-smoke
+          cargo run --locked -q -p via-bench -- qa09-whole-process-smoke
+          cargo run --locked -q -p via-bench -- qa09-integration-fatal-smoke --host target/debug/via-host --worker target/debug/via-worker

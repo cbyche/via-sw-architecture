@@ -196,6 +196,7 @@ def execute_normal_trial(
         semantic=semantic,
         host=host,
         agent=agent,
+        execution_namespace=f"{stratum}-{'warmup' if warmup else 'scored'}",
     )
     source_events = agent.drain_events()
     output_report = _RENDERER.take_last() if len(_RENDERER.reports) > renderer_count else None

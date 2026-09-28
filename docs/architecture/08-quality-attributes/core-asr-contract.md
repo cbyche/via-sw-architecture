@@ -260,7 +260,7 @@ VIA는 후보마다 새 모델을 올리지 않고 S2S 한 개와 semantic LLM �
 
 모든 DP는 QA-09·19·29·39 네 값을 같은 A/B campaign package에 포함한다. 아래 `P`는 DP 구조 차이로 값이 달라질 Primary hypothesis, `R`은 같은 기능·계약을 지키는지 확인하는 Regression-only다. 최종 applicability와 case/change/fault ID는 각 Measurement Freeze에서 확정한다.
 
-2026-09-28 선정한 핵심 DP shortlist는 VIA-DP-03·05·06·07·15·17이다. 아래 원장은 18개 전체 inventory의 QA 적용 가능성을 보존하는 표이므로 shortlist 밖 DP도 삭제하지 않는다. VIA-DP-02·12는 supporting decision, VIA-DP-11은 실제 fatal-risk integration 확인 전 조건부 보조 DP다.
+현재 보고서와 평가의 Core DP set은 VIA-DP-03·05·06·07·15·17의 6개로 확정했다. 아래 원장은 18개 전체 inventory의 QA 적용 가능성을 보존하는 표이므로 Core 밖 DP도 삭제하지 않는다. VIA-DP-11은 여섯 DP의 대체 후보가 아니며 실제 Process-fatal integration이 제품 범위에 새로 들어올 때 별도 scope decision으로 다시 검토한다.
 
 | DP | QA-09 모집단 | QA-19 주요 field | QA-29 주요 change | QA-39 주요 fault | 초기 역할 |
 | --- | --- | --- | --- | --- | --- |
