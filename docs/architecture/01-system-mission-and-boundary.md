@@ -200,4 +200,4 @@ Downstream Agent가 domain reasoning, planning, tool selection 또는 tool execu
 10. **VIA 내부 semantic decision의 책임 위치는 여러 Component로 나눌 수 있지만, 모델 추론은 공통 semantic LLM 1개를 사용한다. 역할별 프롬프트·호출·세션 분리는 모델 추가 적재가 아니다.**
 11. **Downstream Agent 내부의 Model, reasoning, planning, tool selection, tool execution 및 execution 성능은 VIA Architecture 평가 범위에서 제외한다.**
 
-본 절에서는 최종 Architecture Significant Requirement를 미리 고정하지 않는다. ASR은 이후 시스템 기능, 대표 Use Case, Fixed Assumption, 변화 시나리오를 정의한 뒤 그 결과에서 도출한다.
+이 문서는 ASR을 도출하기 전에 고정해야 할 시스템 경계를 정의하므로 이 절 자체에서 ASR을 선택하지 않는다. 현재 도출·확정된 Core ASR은 [Current Architecture Focus](./12-decisions/dp-executive-summary.md)와 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)를 따른다.

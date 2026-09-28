@@ -146,7 +146,7 @@ Proxy 값을 넣어 `PRIMARY` 칸을 채우지 않는다. `UNRESOLVED`는 좋은
 
 ## 9. 현재 상태
 
-VIA-DP-11 v3는 raw format·표·independent replay의 개발 자료다. 위 contract의 endpoint fidelity와 correctness sentinel을 통과하지 않았으므로 공식 campaign이 아니다. 다음 구현 대상은 VIA-DP-11 재실행이 아니라 이 공통 evaluator와 qualification suite다.
+VIA-DP-11 v3는 raw format·표·independent replay의 개발 자료다. 위 contract의 endpoint fidelity와 correctness sentinel을 통과하지 않았으므로 공식 campaign이 아니다. 현재 다음 작업은 VIA-DP-03의 S2S capability qualification과 pre-result Measurement Freeze 초안이다. 그 freeze가 승인된 뒤 candidate나 campaign보다 먼저 이 공통 evaluator와 qualification suite를 Core-ASR v2로 구현한다. VIA-DP-11을 재실행하거나 과거 harness를 active 구현으로 되살리지 않는다.
 
 ## 10. 공통 결과 저장 형식
 

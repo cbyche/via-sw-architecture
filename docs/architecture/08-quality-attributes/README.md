@@ -29,7 +29,7 @@
 | Privacy & Security | QA-51 |
 | Observability | QA-61/62 |
 
-현재 확정된 핵심 ASR은 **QA-09, QA-19, QA-29, QA-39**다. 모든 VIA-DP-01~18은 네 값을 같은 A/B package에서 산출하며, 구조 인과가 없는 항목은 `REGRESSION_ONLY`로 표시한다.
+현재 확정된 핵심 ASR은 **QA-09, QA-19, QA-29, QA-39**다. 모든 VIA-DP-01~18은 같은 A/B package에서 네 QA의 역할을 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED` 중 하나로 명시한다. 구조 인과가 없거나 물리적으로 참여하지 않는 QA를 억지로 측정값으로 만들지 않는다.
 
 ## Interpretation rules
 

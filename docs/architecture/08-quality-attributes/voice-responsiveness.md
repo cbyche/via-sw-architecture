@@ -248,6 +248,6 @@ QA-04는 추가로 barge-in audio fixture, acoustic onset, VAD/activity detectio
 ## 9. 기존 자료와 후속 작업
 
 - 기존 `reference_campaign.py`의 QA-01~QA-03 수식 결과는 W12-G1 historical/superseded evidence다.
-- `benchmark/archive/w12-g1/working12/baseline.json`, `w01-foreground-strata.json`과 archived runner는 아직 이 문서와 일치하지 않는다. 이 문서 승인 후 별도 구현 작업에서 변경한다.
+- `benchmark/archive/w12-g1/working12/baseline.json`, `w01-foreground-strata.json`과 archived runner는 이 문서와 일치하지 않는 역사 자료다. Archive를 수정·재사용하지 않고, DP별 Measurement Freeze가 승인된 뒤 새 구현을 `benchmark/architecture/`에 만든다.
 - 동시 Task는 독립 QA ratio가 아니라 QA-01~QA-04의 workload condition으로 둔다. 지원할 동시 Task 수는 제품 workload 근거와 함께 결과 전에 고정한다.
 - QA-01~QA-04의 target과 0~5 score band는 기존 값을 이관하지 않는다. 새 representative fixture와 product budget을 결과 전에 별도로 승인한다.

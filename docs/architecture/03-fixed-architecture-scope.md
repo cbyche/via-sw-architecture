@@ -91,7 +91,7 @@ flowchart LR
 
 VIA Local Software 박스는 사용자 PC에서 실행되는 VIA 자체를 나타낸다. Voice Runtime은 그 안에 있으며, **S2S Model Runtime**과 **Semantic Model Runtime**은 용도가 다른 Model dependency로 구분한다. 각각 local 또는 remote에 배치될 수 있다.
 
-Model 박스를 밖에 그렸다는 이유로 반드시 원격 또는 별도 프로세스로 배치해야 하는 것은 아니다. 두 Model 용도의 구분도 반드시 서로 다른 물리 모델 두 개를 도입해야 한다는 뜻은 아니다. 이 그림은 책임 관계를 보여주며 실제 배치는 설계에서 결정한다.
+Model 박스를 밖에 그렸다는 이유로 반드시 원격 또는 별도 프로세스로 배치해야 하는 것은 아니다. 현재 고정 구성은 **S2S Model 1개와 semantic LLM 1개**이며, Component·Task·semantic stage별 복제나 추가 speech helper model은 허용하지 않는다. 두 runtime은 local/remote 또는 같은/다른 process에 배치할 수 있지만 역할·호출·evidence 경계는 구분한다. 이 그림은 책임 관계를 보여주며 실제 배치는 설계에서 결정한다.
 
 다음은 VIA Architecture 설계 범위에 포함한다.
 

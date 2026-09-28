@@ -24,25 +24,29 @@
 
 DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisions/dp-executive-summary.md)를 본다. Core QA 4개, Core DP 6개, 심층 검토 순서와 남은 작업을 현재 기준으로 설명한다. 전체 18개 inventory는 [Decision index](./12-decisions/README.md)에서 별도로 유지한다.
 
-## Required reading order
+## Minimum orientation path
+
+처음 접속한 session은 아래 다섯 단계만 먼저 읽는다. 목적·기능 요구사항을 이해하기 전에 QA나 DP부터 해석하지 않는다.
 
 | 순서 | 문서 | 답하는 질문 |
 | --- | --- | --- |
-| 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA가 무엇을 책임지고 무엇을 Agent에 맡기는가? |
-| 2 | [Current Architecture Focus](./12-decisions/dp-executive-summary.md) | 현재 Core QA·Core DP와 다음 작업은 무엇인가? |
-| 3 | [Terms](./02-terms.md) | 같은 용어를 어떤 뜻으로 쓰는가? |
-| 4 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md) | 모든 후보가 공통으로 제공해야 할 기능은 무엇인가? |
-| 5 | [Canonical Interaction Flow](./04-canonical-interaction-flow.md) | direct/delegated interaction이 어떤 lifecycle을 따르는가? |
-| 6 | [Representative Use Cases](./05-representative-use-cases.md) | 어떤 사용자 상황으로 Architecture를 검증하는가? |
-| 7 | [Fixed Assumptions](./06-fixed-assumptions.md) | 후보 비교에서 무엇을 동일하게 유지하는가? |
-| 8 | [Intentional Variables](./07-intentional-variables.md) | 어떤 모델·Agent·계약 변화를 견뎌야 하는가? |
-| 9 | [Quality Attributes](./08-quality-attributes/README.md) | 어떤 품질을 어떤 지표로 관찰하는가? |
-| 10 | [Traceability](./09-traceability.md) | Scope→UC→QC→QA가 어떻게 연결되는가? |
-| 11 | [Architecture Element Definition](./10-element-definition.md) | 후보의 component/contract/state를 어떤 단위로 비교하는가? |
-| 12 | [Measurement](./11-measurement/README.md) | 결과 전에 무엇을 동결하고 어떤 evidence를 생성하는가? |
-| 13 | [Decisions](./12-decisions/README.md) | DP별 A/B를 어떻게 비교하고 결정하는가? |
+| 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA는 왜 존재하며 무엇을 책임지는가? |
+| 2 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md)와 [Representative Use Cases](./05-representative-use-cases.md) | 모든 후보가 제공해야 할 기능과 사용자 완료 조건은 무엇인가? |
+| 3 | [Current Architecture Focus](./12-decisions/dp-executive-summary.md) | 확정한 Core ASR·Core DP와 미완료 작업은 무엇인가? |
+| 4 | [Core ASR Contract](./08-quality-attributes/core-asr-contract.md) | 네 Core ASR을 정확히 어떻게 해석하는가? |
+| 5 | [Core DP Evaluation Plan](./11-measurement/major-dp-evaluation-plan.md) | 어떤 순서로 무엇을 동결·구현·측정하는가? |
 
-문서를 부분 검색으로 먼저 읽으면 역사적 이름과 현재 정의를 섞기 쉽다. 새 참여자는 최소한 **01 → Current Architecture Focus → 03 → 05 → 08 → 11 → 12**의 읽기 순서를 유지한다.
+세부 문서는 작업 목적에 따라 연다.
+
+| 필요 | 문서 |
+| --- | --- |
+| 용어와 요청 lifecycle | [Terms](./02-terms.md), [Canonical Interaction Flow](./04-canonical-interaction-flow.md) |
+| A/B 고정 조건과 변화 시나리오 | [Fixed Assumptions](./06-fixed-assumptions.md), [Intentional Variables](./07-intentional-variables.md) |
+| 상세 QA와 요구 추적 | [Quality Attributes](./08-quality-attributes/README.md), [Traceability](./09-traceability.md), [Architecture Element Definition](./10-element-definition.md) |
+| 측정 endpoint와 evidence | [Measurement](./11-measurement/README.md) |
+| 전체 DP inventory와 기존 결정 | [Decisions](./12-decisions/README.md), [ADRs](../adr/README.md) |
+
+부분 검색, 전체 18개 DP 순회, archive 열람으로 시작하지 않는다. Archive는 현재 요구·계약·결과가 아니라 필요할 때만 확인하는 provenance다.
 
 ## Current status
 

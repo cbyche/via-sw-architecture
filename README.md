@@ -140,20 +140,25 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 
 ## Start here
 
-새로 참여한 사람과 LLM은 다음 순서로 읽는다.
+처음 접속한 사람과 LLM은 아래 **최소 경로만 먼저** 읽는다. 이 순서로 과제의 목적, 고정 기능, 핵심 QA, 핵심 DP와 바로 다음 작업까지 파악한 뒤 필요한 상세 문서만 연다.
 
-1. [Architecture Baseline](docs/architecture/README.md) — 문서 위계와 현재 기준선
-2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 책임 경계
-3. [Current Architecture Focus](docs/architecture/12-decisions/dp-executive-summary.md) — 확정한 Core QA 4개, Core DP 6개와 다음 작업
-4. [Terms](docs/architecture/02-terms.md) — Conversation, Request, Task, Agent Execution 등 핵심 개념
-5. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md) — 모든 후보가 만족할 공통 범위
-6. [Canonical Interaction Flow](docs/architecture/04-canonical-interaction-flow.md) — direct/delegated interaction의 논리적 흐름
-7. [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 사용자가 얻어야 할 행동과 완료 조건
-8. [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md)과 [Intentional Variables](docs/architecture/07-intentional-variables.md) — 비교 중 고정할 조건과 대응할 변화
-9. [Quality Attributes](docs/architecture/08-quality-attributes/README.md)과 [Traceability](docs/architecture/09-traceability.md) — 품질 초안과 요구 연결
-10. [Architecture Element Definition](docs/architecture/10-element-definition.md) — 후보 구조와 변경량을 비교하는 단위
-11. [Measurement](docs/architecture/11-measurement/README.md) — 결과 전에 동결할 계약과 evidence 수준
-12. [Architecture Decisions](docs/architecture/12-decisions/README.md)과 [ADRs](docs/adr/README.md) — 대안, 평가 방법과 현재 결정
+1. [Architecture Baseline](docs/architecture/README.md) — 현재 기준선과 문서 위계
+2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 VIA/Agent 책임 경계
+3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md)와 [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 모든 후보가 제공해야 할 기능과 사용자 완료 조건
+4. [Current Architecture Focus](docs/architecture/12-decisions/dp-executive-summary.md) — 확정한 Core ASR 4개, Core DP 6개와 심층 검토 순서
+5. [Core DP Evaluation Plan](docs/architecture/11-measurement/major-dp-evaluation-plan.md) — 현재 단계와 DP-03부터 시작할 실제 작업
+
+다음 문서는 해당 작업을 할 때만 추가로 읽는다.
+
+| 작업 | 추가 문서 |
+| --- | --- |
+| 용어·논리 흐름 확인 | [Terms](docs/architecture/02-terms.md), [Canonical Interaction Flow](docs/architecture/04-canonical-interaction-flow.md) |
+| 비교 조건·변화 시나리오 확인 | [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md), [Intentional Variables](docs/architecture/07-intentional-variables.md) |
+| QA 정의·요구 추적 | [Quality Attributes](docs/architecture/08-quality-attributes/README.md), [Traceability](docs/architecture/09-traceability.md), [Architecture Element Definition](docs/architecture/10-element-definition.md) |
+| 측정 계약 작성·실행 | [Measurement](docs/architecture/11-measurement/README.md) |
+| DP·기존 결정 검토 | [Architecture Decisions](docs/architecture/12-decisions/README.md), [ADRs](docs/adr/README.md) |
+
+처음부터 전체 18개 DP, 상세 QA catalog 또는 archive를 순서대로 읽지 않는다. 이들은 현재 작업에서 필요할 때 찾는 참조다.
 
 저장소를 수정하는 LLM과 automation은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 

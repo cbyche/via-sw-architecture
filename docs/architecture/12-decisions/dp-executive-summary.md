@@ -40,6 +40,19 @@ VIA는 사용자의 Voice·Text·화면 interaction을 받고, Context와 요청
 
 VIA는 **S2S Model 1개와 semantic LLM 1개**를 사용한다. Component·Task·semantic stage별로 모델을 복제하지 않는다. 역할별 prompt·call·session·buffer는 달라질 수 있지만 모델 개수를 늘려 A/B 차이를 만들지 않는다.
 
+### 2.1 모든 후보가 유지해야 하는 기능
+
+Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 사용자 경험을 모두 제공해야 하며, 한쪽이 제공하지 못하면 낮은 점수가 아니라 기능 부적합 또는 `UNRESOLVED`다.
+
+- Voice·Text·화면 interaction과 “이거”, “아까 그 파일” 같은 지칭을 같은 Conversation에서 이어간다.
+- 일반 지식과 범위가 명확한 read-only 요청에는 직접 응답할 수 있고, 조사·문서 작성·Application 조작 같은 실제 업무는 적절한 Agent에 위임한다.
+- 직접 응답 뒤 실제 업무를 이어 맡기고, 새 업무와 기존 Task의 후속 요청·정정·취소를 구분한다.
+- 독립·순차·조건·데이터 의존 복합 요청의 관계를 보존하되, domain planning과 Tool 선택은 Agent에 맡긴다.
+- 여러 Agent 업무의 진행·질문·승인·결과를 올바른 Conversation과 Task에 연결하고 Voice/Text 채널을 바꿔도 이어간다.
+- 권한·Consent·User Memory 제어를 지키고, 장애·재시작 뒤 확인되지 않은 완료나 중복 Action을 만들지 않는다.
+
+정식 기능 범위는 [Fixed Architecture Scope](../03-fixed-architecture-scope.md), 사용자 목표와 성공·실패 조건은 [Representative Use Cases](../05-representative-use-cases.md)가 기준이다.
+
 ## 3. 네 개의 Core ASR
 
 중요도는 **QA-09와 QA-19가 가장 높고, 그다음이 QA-29와 QA-39**다. 네 QA는 서로 다른 질문에 답하므로 하나의 가중 총점으로 합치지 않는다.
@@ -151,30 +164,16 @@ VIA-DP-01~18 전체 목록은 [Decision index](./README.md)에 유지한다. Cor
 ## 9. 새 세션의 읽기 순서
 
 1. [System Mission & Boundary](../01-system-mission-and-boundary.md) — VIA와 Agent의 책임 경계
-2. **이 문서** — 현재 Core QA, Core DP와 다음 작업
-3. [Core ASR Contract](../08-quality-attributes/core-asr-contract.md) — 네 QA의 정확한 수식과 실패 처리
-4. [Decision index](./README.md) — 18개 inventory와 여섯 Core DP 문서 링크
+2. [Fixed Architecture Scope](../03-fixed-architecture-scope.md)와 [Representative Use Cases](../05-representative-use-cases.md) — 고정 기능과 사용자 완료 조건
+3. **이 문서** — 현재 Core ASR, Core DP와 다음 작업
+4. [Core ASR Contract](../08-quality-attributes/core-asr-contract.md) — 네 QA의 정확한 수식과 실패 처리
 5. 현재 차례의 Core DP 개별 보고서 — A/B 구조·사고실험·미확정 사항
-6. [Measurement Guide](../11-measurement/README.md)와 [Major DP Evaluation Plan](../11-measurement/major-dp-evaluation-plan.md) — pre-result freeze와 실행 절차
-7. [ADRs](../../adr/README.md) — accepted/deferred 상태와 재검증 caveat
+6. [Major DP Evaluation Plan](../11-measurement/major-dp-evaluation-plan.md) — pre-result freeze와 실행 절차
 
-부분 검색이나 archive 문서를 먼저 읽지 않는다. Archive는 당시 판단의 provenance일 뿐 현재 요구·우선순위·결과가 아니다.
+전체 inventory, 상세 측정 계약, ADR은 현재 작업에서 필요할 때 [Decision index](./README.md), [Measurement Guide](../11-measurement/README.md), [ADRs](../../adr/README.md)에서 찾는다. 부분 검색이나 archive 문서로 시작하지 않는다. Archive는 당시 판단의 provenance일 뿐 현재 요구·우선순위·결과가 아니다.
 
 <a id="legacy-mapping"></a>
 
-## 10. 이전 번호의 최소 추적성
+## 10. Legacy provenance
 
-이 표는 역사적 질문이 사라지지 않았는지 확인하기 위한 참조이며 현재 Core DP를 늘리지 않는다.
-
-| 이전 질문 | 현재 연결 |
-| --- | --- |
-| IR-DP01 semantic authority | VIA-DP-06 |
-| TASK-DP01 Task writer | VIA-DP-14 |
-| TASK-DP02 status synchronization | VIA-DP-15 |
-| AGENT-DP01 lifecycle semantics | VIA-DP-09 |
-| EXEC-DP01 process isolation | VIA-DP-11 |
-| CTX-DP01 materialization owner | VIA-DP-17 |
-| CTX-DP02 model-facing history | VIA-DP-16 |
-| SEC-DP01 protected-use authority | VIA-DP-18 |
-
-상세한 과거 9개 질문·25개 주제 매핑과 이전 DP–QA 지도는 [2026-09-28 pre-cleanup snapshot](../../archive/core-dp-selection-pre-cleanup-2026-09-28/README.md)에 보존한다. 현재 판단은 이 active 문서와 개별 DP 보고서를 따른다.
+IR/TASK/AGENT/EXEC/CTX/SEC 번호는 현재 작업의 읽기 경로나 Core DP 목록이 아니다. 옛 번호와 VIA-DP-01~18의 상세 매핑은 [2026-09-28 pre-cleanup snapshot](../../archive/core-dp-selection-pre-cleanup-2026-09-28/README.md)에 보존한다. 현재 판단은 이 active 문서와 개별 VIA-DP 보고서를 따른다.

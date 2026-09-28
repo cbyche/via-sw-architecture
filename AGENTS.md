@@ -13,11 +13,12 @@ For any non-trivial Architecture or measurement task, read these files in order:
 1. `README.md`
 2. `docs/architecture/README.md`
 3. `docs/architecture/01-system-mission-and-boundary.md`
-4. `docs/architecture/12-decisions/dp-executive-summary.md` for the current Core ASRs, Core DPs, and next work
-5. the relevant use case or quality-attribute document
-6. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
-7. `docs/architecture/11-measurement/README.md` for measurement work
-8. `docs/architecture/12-decisions/README.md` and the relevant ADR for decision work
+4. `docs/architecture/03-fixed-architecture-scope.md` and `docs/architecture/05-representative-use-cases.md` for the fixed functional requirements
+5. `docs/architecture/12-decisions/dp-executive-summary.md` for the current Core ASRs, Core DPs, and next work
+6. the relevant quality-attribute or DP document
+7. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
+8. `docs/architecture/11-measurement/README.md` for measurement work
+9. `docs/architecture/12-decisions/README.md` and the relevant ADR for decision work
 
 Do not infer the current project from filenames found by search alone.
 
@@ -33,7 +34,7 @@ When documents disagree, use this order:
 6. `docs/references/` as supporting context only
 7. Any `archive/` path as historical provenance only
 
-Never treat content under `docs/archive/`, `benchmark/archive/`, `prototypes/archive/`, or `results/gate2/archive/` as a current requirement, contract, result, or recommendation. Historical files may contain old paths and commands preserved from their original layout.
+Never treat content under `docs/archive/`, `benchmark/archive/`, `prototypes/archive/`, `results/architecture-evaluation/archive/`, or `results/gate2/archive/` as a current requirement, contract, result, or recommendation. Historical files may contain old paths and commands preserved from their original layout.
 
 Do not modify an approved baseline, an accepted ADR, or archived evidence unless the task explicitly requires that change. If a current definition supersedes an old one, update active cross-references and preserve the prior generation in the archive.
 
