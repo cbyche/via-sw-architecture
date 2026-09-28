@@ -179,7 +179,9 @@ E-01 timing span은 선확정 집합·critical path에 추가되는지, E-02 cor
 
 M-01~09·C-01~06·A-01~09는 필요한 producer·source version이 실제 바뀌는지를 같은 전체 pack에서 검토한다. QA-41에는 A의 pending release buffer와 B의 flush backlog가 모두 들어가며 어느 쪽이 큰지 workload에 달린다. 보호정보 원문을 더 남겨 완전성을 높이지 않고 digest·opaque ID·허용된 frozen 자료 참조를 사용한다. 삭제된 User Memory를 과거 evidence 명목으로 다음 요청에 재주입하지 않는다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/29/39 `PRIMARY`, QA-19 `REGRESSION_ONLY`**다. publish·durable-evidence 경로 시간, evidence/logging change와 publish 직후 commit 전 crash를 주로 비교하고 response·state field는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **실행 전 사고실험 예상.** 아래 표는 §12의 v1 측정 결과가 아니라 후보 구현 전 구조적 가설이다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

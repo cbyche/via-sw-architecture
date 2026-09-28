@@ -3,6 +3,8 @@
 > 작성일: 2026-09-23
 > 상태: **USER REVIEW DRAFT** — target, score band, change pack 모두 결과 전 승인 대상이다.
 
+QA-21~23은 [QA-29 core ASR](../core-asr-contract.md#5-qa-29--average-architecture-change-locality)의 상세 change source다. 기존 family 평균은 diagnostic으로 유지하고 새 대표값은 해당 DP에서 사전 동결한 applicable change 합집합의 단순 평균이다.
+
 ## 1. 왜 이 두 QA를 유지하는가
 
 Responsiveness와 correctness를 높이는 구조는 semantic responsibility, state, adapter와 runtime boundary를 더 복잡하게 만들 수 있다. QA-21~23은 이 trade-off를 **변화 한 건을 수용할 때 실제로 손대야 하는 Architecture Element 수**로 드러낸다.

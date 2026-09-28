@@ -175,7 +175,9 @@ Voice 재연결 시 A는 이전 lease를 재사용하지 않고 새로운 세대
 
 M-01/07/09는 Voice event·대화 연결, M-02/03/08은 실제 범위 판단에 Model을 쓰는 경우, M-04~06은 공통 배치 계층, C-01~05는 공통 Context, C-06은 승인·위임 상태 이행을 확인한다. A-01~09는 위임 경로 회귀다. E-01~05는 게시 의도와 실제 재생 event, lease·Request correlation, version reader·export·assignment 전파를 확인한다. A/B 모두 공통 계측 SDK를 허용하므로 A가 무조건 더 많은 요소를 바꾼다고 할 수 없다. 완전한 기록과 최소 보호정보 조건도 동일하다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09 `PRIMARY`, QA-19/29/39 `REGRESSION_ONLY`**다. S2S direct response 게시까지의 VIA 평균시간이 주 비교 대상이며 authorization field, 계약 변경, 권한 회수와 재시작은 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

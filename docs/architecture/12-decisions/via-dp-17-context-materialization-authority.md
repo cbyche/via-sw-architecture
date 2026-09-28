@@ -109,7 +109,9 @@ flowchart TB
 
 C-02 새 문서 형식과 C-03 화면 계약 변화에서 A는 Materializer·공통 값 schema, B는 library·소비자 reader를 바꾼다. A가 이미 모든 값을 표현하면 국소화되지만 새 consumer별 의미는 공통 계약 확장을 요구할 수 있다. B의 library 수정만으로 끝나면 차이가 없다. 전체 M9+C6 ledger를 작성해야 한다. 실제 소비한 최종 값과 source를 남겨 trace 누락을 막는다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. materialized-Context interaction 시간, referent·Context-value·handling field, source/materializer change와 Context 재구성을 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 

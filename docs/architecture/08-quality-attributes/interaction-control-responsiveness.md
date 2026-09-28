@@ -4,6 +4,8 @@
 >
 > 목적: QA-05가 사용자의 Task 제어 요청에 VIA가 얼마나 빨리 올바른 상태로 답하는지를 하나의 직관적인 시간 metric으로 정의한다.
 
+QA-05 event formula는 [QA-09 core ASR](./core-asr-contract.md#3-qa-09--average-via-attributable-interaction-responsiveness)의 Task-control interaction class로 유지한다. 기존 p95는 diagnostic이며 새 core 대표값은 QA-01/02/03/05 applicable trial 전체의 산술평균이다.
+
 ## 1. QA-05 — Task Control Responsiveness
 
 ### 질문

@@ -1,13 +1,13 @@
 # 9. QC ↔ UC / Evolution Scenario Mapping — 품질과 평가 근거의 연결
 
-> 상태: **QA catalog 재검토 중 · 연결표 갱신 초안**
+> 상태: **CORE ASR 연결 기준 반영 · measurement freeze pending**
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
 > 입력: [05 대표 UC](./05-representative-use-cases.md), [06 공통 조건](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [10 설계 요소와 변경량 집계](./10-element-definition.md)
 
 ## 9.1 목적과 이번 작업의 경계
 
-**09는 QC가 어떤 사용자 상황과 변경에서 드러나며, 활성 초안 QA 또는 필수 회귀에 어떻게 반영되는지 추적한다.** 독립 QA가 없다는 이유로 QC 자체를 삭제하지 않는다. 이 문서는 ASR을 선정하지 않는다.
+**09는 QC가 어떤 사용자 상황과 변경에서 드러나며, 네 core ASR 또는 필수 회귀에 어떻게 반영되는지 추적한다.** 독립 QA가 없다는 이유로 QC 자체를 삭제하지 않는다. ASR 선정 결과는 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)를 따른다.
 
 | 지금 정리하는 것 | 이번에 진행하지 않는 것 |
 | --- | --- |
@@ -15,7 +15,7 @@
 | 주 검증 목적, 함께 유지할 품질, 필요한 증거 | 실제 녹음·화면·정답 제작, 반복 횟수·배합·목표·0~5점 구간 동결 |
 | QC 사이의 겹침을 구분하는 판정 관점 | Architecture 후보 설계·우열·주요 DP 선정 |
 
-**아래 10개 QC는 현재 QA catalog의 상위 coverage 분류다.** 표의 연결 수는 중요도 점수나 평가 가중치가 아니다. 이 문서만으로 특정 DP가 해당 QA를 개선하거나 해당 QA가 ASR이라고 주장하지 않는다.
+**아래 10개 QC는 현재 QA catalog의 상위 coverage 분류다.** 표의 연결 수는 중요도 점수나 평가 가중치가 아니다. 이 문서만으로 특정 DP가 core ASR 값을 개선한다고 주장하지 않는다.
 
 ```mermaid
 flowchart LR
@@ -38,14 +38,14 @@ flowchart LR
 
 | QC | 상위 품질 관심사 | 구체화된 현재 QA | 09에서 연결할 주 대상 |
 | --- | --- | --- | --- |
-| **QC-01** | **User-Experienced Responsiveness** | QA-01~QA-05; 동시성은 workload condition | 위임 결과·직접 응답·Agent 진행·Voice 중단·Task 제어의 반응성 |
-| **QC-02** | **Task Completion Effectiveness** | QA-11~QA-13 | 통합 요청 처리, 의미 해석, 올바른 Task·Interaction 연결 |
-| **QC-03** | **Interaction & Task Continuity** | QA-14/15; 장애 후는 QA-31 | 비동기 상태 수렴과 정상 전환·재연결 뒤 continuity |
-| **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | QA-21 | **A-01~09 전체 9개** |
-| **QC-05** | **Evolvability & Maintainability** | QA-22/23 | **M-01~09 + C-01~06 전체 15개**, 연구 실험·로그 E-01~05 |
+| **QC-01** | **User-Experienced Responsiveness** | **QA-09**; QA-01/02/03/05 input, QA-04 회귀 | 위임 결과·직접 응답·Agent 진행·Task 제어의 VIA 평균시간과 Voice 중단 회귀 |
+| **QC-02** | **Task Completion Effectiveness** | **QA-19**; QA-11/12 field source | 통합 요청 처리와 의미 해석 field 정확도 |
+| **QC-03** | **Interaction & Task Continuity** | QA-13~15 회귀; 장애 후는 **QA-39** | binding·비동기 상태 수렴·정상 continuity와 장애 복구 |
+| **QC-04** | **Agent Ecosystem Interoperability & Substitutability** | **QA-29**; QA-21 source | **A-01~09 전체 9개** |
+| **QC-05** | **Evolvability & Maintainability** | **QA-29**; QA-22/23 source | **M-01~09 + C-01~06 전체 15개**, 연구 실험·로그 E-01~05 |
 | **QC-06** | **Resource & Deployment Efficiency** | QA-41 | target-device peak committed memory; deployment 조건은 고정 workload/context |
 | **QC-07** | **Concurrency & Capacity** | 독립 QA 없음 | applicable QA의 workload stratum |
-| **QC-08** | **Reliability & Recoverability** | QA-31/32 | 정확한 복구 시간과 초과 영향 user-visible unit 수 |
+| **QC-08** | **Reliability & Recoverability** | **QA-39**; QA-31/32 evidence | containment와 제한시간 내 올바른 복구 성공률 |
 | **QC-09** | **Privacy, Security & Action Safety** | QA-51 + 필수 action/access 회귀 | 최소 필요 범위를 넘은 보호정보 노출과 승인·접근 위반 0건 |
 | **QC-10** | **Observability & Evidence Integrity** | QA-61/62; QA-23 change pack | 실행 trace 완전성, 평가 결과 재현성과 instrumentation 변경 국소성 |
 
@@ -104,9 +104,9 @@ QC-04·QC-05가 이 표의 주 검증에 없는 것은 누락이 아니다. **�
 
 기능 분리 진단에서 고정 입력을 제공했다면 그 입력과 목적을 명시한다. 시험기가 정답 Task ID나 사라진 history를 제공한 진단 결과를 실제 의미 정확도·복구 성공률로 대체하지 않는다.
 
-### QA-01~QA-05의 시간선
+### QA-09와 상세 시간선
 
-QC-01의 responsiveness concern은 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback, QA-04 Voice interruption, QA-05 Task control로 분리한다. 다섯 QA를 서로 평균내지 않으며 각 QA 안에서도 서로 난이도가 다른 전체 TC를 하나의 모집단에 합쳐 p95를 만들지 않는다. Voice 경계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md), Task control 경계는 [Task Control Responsiveness](./08-quality-attributes/interaction-control-responsiveness.md)를 따른다.
+QC-01의 core 대표값 QA-09는 QA-01 delegated result, QA-02 direct response, QA-03 progress feedback, QA-05 Task control의 VIA-attributable trial을 하나의 사전 동결 모집단으로 구성해 **산술평균**한다. A/B에는 같은 case와 반복을 적용하며 class·case별 breakdown도 함께 공개한다. QA-04 Voice interruption은 단위는 같아도 다른 사용자 행동을 측정하므로 QA-09에서 제외한 회귀다. Voice 경계는 [Voice Responsiveness](./08-quality-attributes/voice-responsiveness.md), Task control 경계는 [Task Control Responsiveness](./08-quality-attributes/interaction-control-responsiveness.md)를 따른다.
 
 위임 시간은 입력 종료부터 인계까지와 Agent 결과 준비 후 사용자 전달 구간을 연결하되, Agent의 open-ended domain research/planning/tool execution과 사용자 확인 대기를 따로 기록한다. 단, bounded Read/Search/Understand 작업을 Architecture 선택으로 Agent에 옮긴 경우에는 단순히 프로세스 위치가 Agent라는 이유로 그 시간을 제외하지 않는다.
 

@@ -15,6 +15,7 @@ def main() -> int:
     catalog = json.loads(REGISTRY.read_text(encoding="utf-8"))
     active = catalog["active_qa_ids"]
     entries = catalog["quality_attributes"]
+    confirmed_asrs = catalog["confirmed_asr_ids"]
     migrations = catalog["legacy_id_migration"]
     legacy_retired = catalog["legacy_retired_definitions"]
     violations: list[str] = []
@@ -33,6 +34,10 @@ def main() -> int:
         violations.append("active_qa_ids must match quality_attributes order exactly")
     if len(active) != len(set(active)):
         violations.append("active QA IDs must be unique")
+    if confirmed_asrs != ["QA-09", "QA-19", "QA-29", "QA-39"]:
+        violations.append("confirmed core ASRs must be QA-09, QA-19, QA-29, QA-39")
+    if not set(confirmed_asrs).issubset(set(active)):
+        violations.append("confirmed ASR IDs must all be active")
 
     migration_old_ids = [entry["old_id"] for entry in migrations]
     migration_new_ids = [entry["new_id"] for entry in migrations]
@@ -65,18 +70,23 @@ def main() -> int:
         if entry["old_id"] not in {"QA-04", "QA-06", "QA-10", "QA-12"}:
             violations.append(f"unexpected legacy retired ID: {entry['old_id']}")
 
-    if catalog["status"] != "USER_REVIEW_DRAFT":
-        violations.append("catalog status must remain USER_REVIEW_DRAFT until user approval")
-    if catalog["asr_selection"] != "NONE_UNASSESSED":
-        violations.append("ASR selection changed without a catalog rebaseline")
+    if catalog["status"] != "ACTIVE_CORE_ASR_BASELINE_MEASUREMENT_FREEZE_PENDING":
+        violations.append("catalog status must preserve the approved core-ASR baseline state")
+    if catalog["asr_selection"] != "CONFIRMED_QA_09_QA_19_QA_29_QA_39":
+        violations.append("catalog ASR selection must match the approved four core ASRs")
+    for entry in entries:
+        expected = "CONFIRMED_ASR" if entry["id"] in confirmed_asrs else None
+        if entry.get("asr_status") != expected:
+            if expected is not None or "asr_status" in entry:
+                violations.append(f"{entry['id']} has inconsistent asr_status")
 
     if violations:
         print("Draft QA catalog consistency errors:")
         print("\n".join(violations))
         return 1
     print(
-        "PASS: draft QA registry has "
-        f"{len(active)} active IDs, {len(migrations)} migrations, "
+        "PASS: core-ASR QA registry has "
+        f"{len(active)} active IDs, {len(confirmed_asrs)} confirmed ASRs, {len(migrations)} migrations, "
         f"and {len(legacy_retired)} legacy retired definitions"
     )
     return 0

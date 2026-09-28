@@ -141,7 +141,9 @@ A-01/02/03은 신규·교체·protocol, A-04/05는 status·실행 식별, A-06�
 
 M-01~09·C-01~06은 공통 모델·Context·저장 경계가 중심이며 mapping schema를 실제로 소비하는 부분만 추가 전파를 기록한다. E-01~05는 native source와 canonical/typed 의미를 잇는 span·correlation·schema·export·assignment가 대상이다. 양쪽 모두 완전한 event provenance와 frozen evaluator를 가질 수 있어 QA-61/62 자동 우세는 없다. 최소 정보 제공도 양쪽에 동일하다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-29 `PRIMARY`, QA-09/19/39 `REGRESSION_ONLY`**다. Agent 생태계 변화가 VIA 요소에 퍼지는 수가 주 비교 대상이며 submit·status·control·result의 시간·field·복구는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **실행 전 사고실험 예상.** 아래 표는 §12의 v1 측정 결과가 아니라 후보 구현 전 구조적 가설이다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

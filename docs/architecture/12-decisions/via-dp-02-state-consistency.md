@@ -172,7 +172,9 @@ Voice를 끄고 Text로 답해도 두 안 모두 대기 질문과 Task identity�
 
 A-01~09는 동일 Agent 경계에서 흡수하는 회귀다. M-01~09 및 C-01~05는 공통 모델·Context 경계가 중심이며, C-06에서 A의 공동 관계 schema·commit 계약 또는 B의 조정 상태·이행 계약이 실제로 바뀌는지 ledger로 확인한다. 모듈화된 A를 일부러 전체 수정으로 세지 않는다. E-01~05도 공통 trace API·reader·export·assignment 변경과 owner별 수정이 필요한 부분을 분리한다. 전체 9/15/5개 평균을 예시 한 건으로 대신할 수 없다. Privacy는 같은 정보 범위를 유지하면 비슷하다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. Conversation–Task 교차 확정 경로 시간, binding·revision·final-state field, state schema change, 두 상태 확정 사이 crash와 reconciliation을 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **실행 전 사고실험 예상.** 아래 표는 §12의 v2 측정 결과가 아니라 후보 구현 전 구조적 가설이다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

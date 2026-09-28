@@ -117,7 +117,9 @@ commit 뒤 reply 전 crash에서는 양쪽 모두 command dedup으로 동일 결
 
 C-06 상태 schema 변경 시 A의 transaction 계약과 B의 activation·command reader를 비교한다. B는 공통 library를 바꾸지 Task 4개를 4개 Architecture Element로 세지 않는다. M-01~09/C-01~06 전체 15건, Agent 9건, 연구 5건의 변경 ledger를 각각 유지한다. trace에는 command·epoch·source revision·commit·reply를 연결한다. 양쪽의 정상 최적화 뒤 차이가 없어지면 강한 독립 평가 DP라는 가설을 철회한다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. Task command·status·control 시간, revision·terminality·result field, state-owner change와 owner/Core crash 복구를 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 

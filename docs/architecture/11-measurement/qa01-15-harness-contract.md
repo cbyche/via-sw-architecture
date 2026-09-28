@@ -1,6 +1,6 @@
-# QA-01~QA-15 공통 측정 Harness 계약
+# Core ASR 공통 측정 Harness 계약
 
-> 상태: **MEASUREMENT FOUNDATION v1 / DP 실행 금지 상태**
+> 상태: **FOUNDATION REQUIRES CORE-ASR V2 UPDATE / DP 실행 금지 상태**
 >
 > 목적: DP마다 측정 코드를 다시 만들지 않고, 모든 후보가 같은 event·oracle·집계·실패 처리를 사용하는 공통 기반을 고정한다.
 
@@ -8,10 +8,10 @@
 
 다음 네 조건을 모두 통과해야 DP별 A/B campaign을 시작할 수 있다.
 
-1. **Contract completeness:** QA-01~15의 모든 endpoint와 predicate가 machine contract에 있고 `default PASS`가 없다.
+1. **Contract completeness:** QA-09/19/29/39와 그 상세 input의 모든 endpoint·field·change·fault verdict가 machine contract에 있고 `default PASS`가 없다.
 2. **Failure sensitivity:** QA별 정상 trace는 PASS하고, 의도적으로 한 의무를 깨뜨린 sentinel trace는 반드시 FAIL한다.
 3. **Endpoint fidelity:** Voice 대표값은 annotated Voice input과 audio loopback endpoint를 사용한다. queue clear·payload delivery·renderer 함수 반환은 진단값일 뿐 대표 QA endpoint가 아니다.
-4. **Independent replay:** raw trace만으로 trial 판정, latency sample, case p95와 correctness macro-rate를 정확히 다시 계산한다.
+4. **Independent replay:** raw evidence만으로 네 core ASR의 원 분자·분모와 산술평균/성공률을 정확히 다시 계산한다.
 
 이 gate를 통과하지 못한 실행은 `PRELIMINARY_HARNESS_DIAGNOSTIC`이며 DP, ASR 또는 Architecture 결론에 사용하지 않는다.
 
@@ -20,7 +20,7 @@
 ```mermaid
 flowchart LR
   F["Frozen fixture pack<br/>WAV·Context·Agent events"] --> R["Candidate-neutral scenario runner"]
-  O["Evaluator-only oracle<br/>QA-11~15 predicates"] --> E["Common QA evaluator"]
+  O["Evaluator-only oracle<br/>QA-11/12 fields + regression predicates"] --> E["Common QA evaluator"]
   R --> A["Candidate A adapter"]
   R --> B["Candidate B adapter"]
   A --> T["Versioned raw event trace"]
@@ -28,7 +28,7 @@ flowchart LR
   L["Audio loopback observer"] --> T
   G["Reference Agent source clock"] --> T
   T --> E
-  E --> S["19-QA complete table"]
+  E --> S["4-core-ASR table<br/>+ detailed diagnostics"]
   T --> X["Independent replay analyzer"]
   X --> S
 ```
@@ -49,11 +49,11 @@ Voice input은 사람이 실시간 발화하지 않는다. 사전 생성한 PCM 
 
 Voice output 대표 endpoint는 실제 audio output device를 audio loopback으로 관측한다. 시작 sample과 중단 대상의 마지막 sample을 waveform correlation으로 찾는다. Model packet 도착, buffer enqueue, queue clear와 callback은 원인 분석 event로만 남긴다.
 
-## 4. QA-01~QA-05 시간 측정
+## 4. QA-09 시간 측정과 상세 event
 
-모든 latency trial은 같은 monotonic clock domain의 원시 timestamp에서 계산한다. 물리적 endpoint가 없거나 event provenance가 무효이면 frozen timeout 값으로 censored 처리한다. 응답은 실제로 제시됐지만 correctness oracle을 위반한 경우에는 실제 처리시간을 그대로 보존하고 correctness 실패를 별도 열로 보고한다. 의미 실패를 timeout으로 바꾸지 않는다.
+모든 latency trial은 같은 monotonic clock domain의 원시 timestamp에서 계산한다. 물리적 endpoint가 없거나 event provenance가 무효이면 frozen timeout 값을 넣는다. 잘못된 응답의 실제 시각은 raw trace에 보존하지만 올바르고 의미 있는 terminal event가 아니므로 QA-09 trial 값에는 frozen timeout을 적용하고 QA-19 field 실패를 함께 기록한다.
 
-| QA | 필수 원시 event | Trial 계산 | 대표값 |
+| 상세 stratum | 필수 원시 event | QA-09 trial 계산 | 상세 진단 |
 | --- | --- | --- | --- |
 | QA-01 | `user_input_end`, `agent_request_available_at_agent_ingress`, `agent_result_available_at_source`, `first_meaningful_audible_result_audio` | `(t1-t0)+(t3-t2)`; Agent 내부 `t2-t1` 제외 | case별 nearest-rank p95 중 최댓값 |
 | QA-02 | `user_input_end`, `first_meaningful_audible_direct_response` | `t1-t0` | case별 nearest-rank p95 중 최댓값 |
@@ -63,7 +63,7 @@ Voice output 대표 endpoint는 실제 audio output device를 audio loopback으�
 
 QA-05에는 input finalization, semantic target resolution, Task binding, control 전달, 필요한 source confirmation과 실제 Voice/UI presentation이 모두 포함된다. `cancel RPC + query` 같은 내부 부분시간만 QA-05라고 부르지 않는다.
 
-QA-01~05 결과표는 위 p95 대표값과 함께 **동일한 전체 scored sample의 산술평균**을 보조지표로 표시한다. 평균은 심사자가 전형적인 처리시간을 이해하기 위한 설명값이며, tail latency를 나타내는 p95 대표 metric이나 target 판정을 대체하지 않는다. p95와 평균 모두 실패·timeout을 포함한 같은 frozen failure treatment를 사용하고 각 값의 sample count를 함께 공개한다. case당 1회인 breadth 실행은 p95라고 부르지 않고 `case 최대값 proxy`와 평균으로 명시한다.
+QA-09의 대표값은 QA-01/02/03/05 applicable scored trial 전체의 **산술평균**이다. 네 stratum의 단위는 모두 VIA-attributable milliseconds이며 A/B에는 같은 case와 repetition을 쓴다. 합계, sample count, class·case별 평균과 timeout 수를 함께 공개한다. 위 표의 p95는 상세 계약과 과거 결과 추적을 위한 tail diagnostic일 뿐 QA-09 target이나 score를 대체하지 않는다. QA-04는 Voice interruption 회귀이므로 QA-09 분모에서 제외한다.
 
 ### Voice endpoint 허용 근거
 
@@ -74,7 +74,7 @@ QA-01~05 결과표는 위 p95 대표값과 함께 **동일한 전체 scored samp
 | Instrumented renderer callback | 대표값 금지, 진단값만 | `MEASURED_REFERENCE_HARNESS` |
 | payload delivery, queue enqueue/clear, API return | 대표값 금지 | diagnostic only |
 
-## 5. QA-11~QA-15 정확성 측정
+## 5. QA-19 field accuracy와 QA-13~15 회귀
 
 Evaluator는 case마다 명시된 predicate만 평가하며 누락된 predicate를 `true`로 간주하지 않는다. 적용되지 않으면 oracle에 명시적으로 `N/A`가 있어야 한다.
 
@@ -86,22 +86,22 @@ Evaluator는 case마다 명시된 predicate만 평가하며 누락된 predicate�
 | QA-14 | revision acceptance, duplicate suppression, stale-event rejection, race resolution, terminality, result reference, pending interaction, allowed control | 전체 event script 뒤 final state oracle와 일치 |
 | QA-15 | channel·connection·conversation·Task 전환 전후 identity/referent 관계 | 모든 continuity relation 유지 |
 
-QA-11은 통합 outcome이고 QA-12~15는 실패 원인이다. 다섯 값을 합산하거나 평균내지 않는다.
+QA-11은 통합 outcome이고 QA-12는 semantic driver다. 두 계약의 atomic predicate를 중복 없는 field ID로 평탄화하여 QA-19의 `correct applicable fields / all applicable fields`를 계산한다. QA-13~15는 Task binding·state convergence·continuity 회귀이며 QA-19 분모에 자동 포함하지 않는다.
 
-QA-11과 QA-12 결과에는 strict 대표값 외에 다음 보조지표를 함께 보존한다.
+QA-19 결과에는 다음 대표값과 보조지표를 함께 보존한다.
 
-- `field_level_correctness = correct atomic predicates / applicable atomic predicates`
+- `QA-19 field_accuracy = correct non-duplicate applicable QA-11/12 fields / all such fields`
 - `strict_case_success = all applicable predicates가 맞은 case 수 / scored case 수`
 
-Field-level은 어느 의미·결과 항목에서 차이가 났는지 설명하는 진단값이며 strict 대표 metric을 대체하지 않는다. Strict 비율은 반드시 분자/분모와 함께 표시한다. QA-11 field-level은 응답·위임·Task 상태 연결 등 integrated predicate 전체에서 계산하고, QA-12 field-level은 semantic predicate만 계산한다. Semantic stage만 실행한 campaign은 QA-11을 `N/A / NOT_MEASURED_PRODUCT_INTEGRATED_OUTCOME`으로 두고 QA-12 값을 **QA-11 선행조건 proxy**로만 표시한다. 두 QA가 같은 값처럼 보이도록 복제하지 않는다.
+Field accuracy가 QA-19의 대표 metric이다. QA-11/12 strict 비율과 QA-13~15 pass rate는 반드시 분자/분모와 함께 진단으로 표시한다. Semantic stage만 실행한 campaign은 integrated QA-11 field를 측정한 것처럼 채우지 않고 `UNRESOLVED / NOT_MEASURED_PRODUCT_INTEGRATED_OUTCOME`으로 둔다. QA-12 값을 QA-11 field로 복제하지 않는다.
 
 ### Oracle 연산자
 
 `EXACT`, `ONE_OF`, `SET_EQUAL`, `ORDERED_RELATION`, `REQUIRED_PROPOSITION`, `FORBIDDEN_PROPOSITION`, `CLARIFICATION_REQUIRED`, `BINDING`, `CARDINALITY`, `FINAL_STATE_EQUAL`, `CONTINUITY_RELATION`만 사용한다. 자연어 문체를 채점하지 않고 structured fact와 관계를 채점한다.
 
-## 6. 최소 corpus와 반복
+## 6. corpus와 반복 freeze
 
-Fixture 수를 임의로 늘려 쉬운 case로 실패를 희석하지 않는다.
+Fixture 수를 임의로 늘려 쉬운 case로 실패를 희석하지 않는다. 아래 v1 수치는 기존 상세 harness의 planning reference이며 새 core-ASR campaign의 승인값이 아니다. QA-09/19/29/39 모집단과 반복은 pilot variance, 요구 precision과 실행비용을 근거로 별도 Measurement Freeze에서 정한다.
 
 | Pack | 최소 구성 | 반복 |
 | --- | --- | --- |
@@ -134,15 +134,15 @@ Model·S2S가 DP의 변경 경로에 참여하지 않으면 같은 frozen source
 
 ## 8. DP campaign acceptance
 
-DP별 complete table은 각 QA를 다음 중 하나로만 기록한다.
+DP별 package는 QA-09/19/29/39 각각을 다음 중 하나로 기록하고 상세 진단을 연결한다.
 
-- `MEASURED_DIFFERENTIATOR`: 공통 evaluator와 해당 candidate path를 실제 실행해 A/B를 비교함
-- `MEASURED_QUALIFICATION`: 양쪽이 동일 의무를 만족하는지 실제 실행함
+- `PRIMARY`: 구조 차이의 자연 인과를 사전 가정하고 공통 evaluator로 A/B를 비교함
+- `REGRESSION_ONLY`: 양쪽이 동일 의무를 만족하는지 실제 실행함
 - `COMMON_SOURCE_REGRESSION`: DP가 물리적으로 참여하지 않아 같은 source execution을 명시적으로 매핑함
 - `NOT_APPLICABLE`: 해당 QA 모집단에 그 DP 경로가 없고 이유가 component path로 증명됨
-- `NOT_RUN`: 필요한 endpoint 또는 dependency를 실행하지 않음
+- `UNRESOLVED`: 필요한 설계, endpoint, registry 또는 dependency를 실행하지 못함
 
-Proxy 값을 넣어 `MEASURED_DIFFERENTIATOR` 칸을 채우지 않는다. `NOT_RUN`은 실패가 아니라 정직한 상태이며, 모든 QA를 억지로 숫자로 만드는 것보다 우선한다.
+Proxy 값을 넣어 `PRIMARY` 칸을 채우지 않는다. `UNRESOLVED`는 좋은 점수가 아니며, 모든 core ASR을 억지로 숫자로 만드는 것보다 정직하게 남긴다.
 
 ## 9. 현재 상태
 

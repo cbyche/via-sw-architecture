@@ -8,12 +8,14 @@
 >
 > 공통 event의 정확한 의미와 관측 규칙은 [`event-boundary-contract.md`](../11-measurement/event-boundary-contract.md)를 따른다.
 
+QA-01/02/03은 [QA-09 core ASR](./core-asr-contract.md#3-qa-09--average-via-attributable-interaction-responsiveness)의 상세 interaction class로 유지한다. 각 event formula는 그대로지만 p95는 새 core 대표값이 아니다. QA-09는 QA-05를 더해 모든 applicable scored trial의 산술평균을 사용한다. QA-04는 QA-09 모집단에서 제외하고 Voice interruption regression으로 유지한다.
+
 ## 1. 공통 원칙
 
 - 대표 경로는 **Voice input → Voice output**이다. Text-only latency는 secondary/regression이며 대표값에 넣지 않는다.
 - 출력 종료점은 payload가 sink에 도착한 시각이 아니라 **첫 audible audio sample이 실제 재생되기 시작한 시각**이다. speech 생성, playback queue, audio buffer와 device/renderer start 지연을 포함한다.
 - 실제 제품 측정은 audio loopback 등으로 audible onset을 관측한다. instrumented playback sink는 reference-harness evidence일 뿐 실제 speaker 출력이라고 주장하지 않는다.
-- QA-01은 Agent delegation, QA-02는 downstream Agent가 없는 direct response, QA-03은 Agent progress/status 전달, QA-04는 Voice interruption을 각각 측정한다. 서로 평균내지 않는다.
+- QA-01은 Agent delegation, QA-02는 downstream Agent가 없는 direct response, QA-03은 Agent progress/status 전달, QA-04는 Voice interruption을 각각 진단한다. QA-01/02/03은 QA-05와 함께 QA-09의 단순 평균에 들어가며 QA-04는 들어가지 않는다.
 - 각 DP는 다른 DP 조건을 고정한 A/B paired run으로 직접 비교한다. 여러 DP 조합의 global winner를 이 세 지표의 기본 분석 단위로 삼지 않는다.
 - 잘못된 결과·status·Task binding은 빠른 성공으로 세지 않는다. timeout과 correctness failure를 raw trace에 남기며 성공 표본만 선택해 p95를 만들지 않는다.
 - 기존 제안인 stratum별 10 warm-up + 100 scored trials, nearest-rank p95, case p95의 동일가중 Macro-p95는 새 fixture freeze에서 재승인하기 전까지 **proposed** 상태다.

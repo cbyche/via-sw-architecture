@@ -355,7 +355,9 @@ QA-62는 같은 모델 답을 다시 생성하는 비율이 아니라 **저장�
 
 **반증·확인:** 독립 fixture의 사건 집합과 후보 trace를 비교하고, 누락·전송 실패·부분 파일·schema 변경에도 완전성과 재계산 가능성을 확인한다. 한쪽에만 공통 trace 수집기나 정상 종료 flush를 제공하지 않는다. [Voice Contract §4·5](../08-quality-attributes/voice-responsiveness.md), [Observability Contract](../08-quality-attributes/observability.md)가 근거다.
 
-## 7. 전체 19개 QA의 예상 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29 `PRIMARY`, QA-39 `REGRESSION_ONLY`**다. 같은 bounded goal의 direct/delegated VIA 평균시간, handling·Task-relation field와 직접처리 계약 change를 주로 비교하고 Agent 경로 장애 뒤 독립 direct 경로는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 기존 QA 행은 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 아래는 §2의 공통 조건과 §3·4의 steelman을 적용한 결과다. 시간·변경 수·장애 영향·메모리·노출은 작을수록, 정확도·연속성·기록·재현 비율은 클수록 좋다. 정확한 정의는 [QA Catalog](../08-quality-attributes/quality-model.md)를 따른다.
 

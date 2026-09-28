@@ -1,6 +1,6 @@
 # Measurement Guide
 
-> **Current state:** active QA category와 single-metric semantic definitions가 있다. VIA-DP-02·05·06·09·11·12·13은 예비 reference result를 만들었지만, 통합 경로·실제 endpoint·반복을 모두 만족하는 최종 Architecture decision evidence는 아직 없다.
+> **Current state:** QA-09·19·29·39는 confirmed core ASR이고 상세 QA는 input·diagnostic·qualification으로 유지한다. VIA-DP-02·05·06·09·11·12·13의 기존 reference result는 새 core 계약 이전의 예비 evidence이며 core ASR 결과가 아니다.
 >
 > **Current phase:** 공통 통합 하네스와 VIA-DP-06 v5는 **Candidate Implementation**, 나머지 DP는 **Measurement Contract Definition 또는 Candidate Implementation**이다. 기존 결과는 재사용 가능한 예비 증거일 뿐 최종 완료 상태가 아니다.
 
@@ -10,6 +10,7 @@
 
 | Document | Role |
 | --- | --- |
+| [Core ASR Contract](../08-quality-attributes/core-asr-contract.md) | QA-09/19/29/39 정의·집계·실패 처리와 VIA-DP-01~18 적용 원장 |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
 | [QA-01~15 Common Harness Contract](./qa01-15-harness-contract.md) | DP 공통 trace·oracle·audio endpoint·sentinel qualification gate |
 | [Voice Responsiveness](../08-quality-attributes/voice-responsiveness.md) | QA-01~QA-04 semantic boundary and raw trace requirements |
@@ -19,7 +20,7 @@
 | [Observability](../08-quality-attributes/observability.md) | QA-61/62 trace completeness and evidence reproduction |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
-| [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 두 Model, Reference Agent, ASR 후보와 최소 workload/fault |
+| [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 두 Model, Reference Agent, 네 core ASR의 최소 workload/fault |
 | [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | VIA-DP-01~18 연속 평가의 실행 순서, 완결 조건과 진행 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
@@ -34,7 +35,7 @@
 3. component path, event names, monotonic clock, included/excluded interval을 정의한다.
 4. model call별 serialized prompt, tokenizer, input/output token ledger, rate profile을 동결한다.
 5. mock/reference/actual dependency와 audio playback observation contract를 구분한다.
-6. warm-up, scored repetition, timeout, failure handling, percentile와 macro aggregation을 동결한다.
+6. warm-up, scored repetition, timeout, failure handling과 core 단순평균 집계를 동결한다.
 7. target, 0~5 score boundary와 evidence label을 결과 전에 승인한다.
 8. machine-readable fixture와 validation test를 구현한다.
 9. source revision과 fixture digest를 Measurement Freeze로 고정한다.
@@ -64,7 +65,7 @@
 
 Mock/reference evidence must not use `LIVE_S2S`, `MEASURED_MODEL`, `PRODUCT_E2E`, or target-device absolute latency. An instrumented delivery sink is not a physical speaker; audible onset needs an appropriate playback/loopback observation.
 
-## QA-01~QA-05 implementation prerequisites
+## Core ASR implementation prerequisites
 
 Before implementation, freeze at least:
 
@@ -81,6 +82,8 @@ Before implementation, freeze at least:
 - mock S2S meaning, scheduled delay profile, and playback profile
 - warm-up/scored count, run order, timeout, failed-trial handling, percentile algorithm
 - raw trace schema, summary schema, evidence label, source/fixture fingerprints
+
+위 상세 event에서 QA-09는 QA-01/02/03/05 applicable trial의 `VIA-attributable milliseconds`를 산술평균한다. QA-04는 Voice 회귀이며 평균에서 제외한다. QA-19는 QA-11/12의 중복 없는 applicable field를 micro-average하고 QA-13~15는 회귀 진단으로 남긴다. QA-29는 DP별 applicable QA-21~23 change를, QA-39는 DP별 applicable fault trial을 단순 pooled average로 집계한다.
 
 Correctness, reliability와 resource QA는 추가로 다음을 동결한다.
 
@@ -113,6 +116,7 @@ Current implementation belongs in [benchmark/architecture](../../../benchmark/ar
 
 - 새 결과는 `results/architecture-evaluation/current/dpNN-<campaign>-vN-YYYYMMDD/`에 campaign별로 추가하며 기존 결과를 덮어쓰지 않는다.
 - `raw/`, frozen contract·fixture·oracle과 digest, environment/source manifest, 재생성 가능한 `summary.json`, `report.md`를 함께 보존한다.
-- QA-01~05는 p95 대표값과 같은 scored sample의 산술평균·sample count를 함께 보고한다. case당 1회 실행의 최대값은 p95로 부르지 않는다.
-- QA-11/12는 strict 대표값을 분자/분모와 함께, field-level correctness를 보조 진단으로 함께 보고한다. QA-11 integrated path를 실행하지 않았으면 QA-11은 N/A이며 semantic 값은 선행조건 proxy일 뿐이다.
+- QA-09는 applicable QA-01/02/03/05 scored trial 전체의 합계·sample count·산술평균을 대표값으로 보고한다. p95는 선택적 tail diagnostic일 뿐 core score가 아니다.
+- QA-19는 QA-11/12의 중복 없는 applicable field에 대한 `correct / total`을 대표값으로 보고하고 case·field-family breakdown과 strict run pass를 진단으로 둔다. QA-13~15는 별도 회귀 진단이다.
+- QA-29는 `sum changed elements / applicable changes`, QA-39는 `successful fault trials / all applicable fault trials`을 원 분자·분모와 함께 보고한다.
 - B′ 같은 선택안+tactic 후보를 실행했다면 applicable QA의 complete table에 함께 표시한다. 별도 실행·ledger가 없으면 A/B 값을 복제하지 않고 N/A로 둔다.

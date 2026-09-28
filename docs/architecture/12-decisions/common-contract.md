@@ -34,9 +34,9 @@ VIA-DP-14의 기존 부분 코드는 양쪽 모두 동일 SQLite WAL/FULL 저장
 
 ## 4. QA·요소 집계·증거
 
-현행 [QA catalog](../08-quality-attributes/quality-model.md)·[event endpoint](../11-measurement/event-boundary-contract.md)·[요소 집계](../10-element-definition.md)·[평가 방법](evaluation-method.md)을 따른다. 19개 QA를 모두 검토하되 물리적으로 비참여인 경로에 인과를 만들지 않는다. QA-41은 자원 확인이며 예산·유의미한 차이 근거 없이 주요 ASR로 삼지 않는다.
+현행 [Core ASR Contract](../08-quality-attributes/core-asr-contract.md)·[QA catalog](../08-quality-attributes/quality-model.md)·[event endpoint](../11-measurement/event-boundary-contract.md)·[요소 집계](../10-element-definition.md)·[평가 방법](evaluation-method.md)을 따른다. 모든 DP package에서 QA-09·19·29·39를 산출하되, 물리적으로 비참여인 경로에 인과를 만들지 않고 `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`를 구분한다. QA-41은 자원 진단이며 core ASR이 아니다.
 
-그림의 상위 박스·Task 인스턴스·메서드를 추가 Architecture Element로 세지 않는다. 전체 변경 pack과 동결된 element ledger를 작성하기 전 QA-21~23의 수치 우세를 확정하지 않는다. 현재 부분 코드는 구현 근거의 일부일 뿐 제품 E2E·실제 모델·현재 QA 실측 증거가 아니다. 모든 새 QA 결과는 NOT_RUN이다.
+그림의 상위 박스·Task 인스턴스·메서드를 추가 Architecture Element로 세지 않는다. DP별 applicable change pack과 동결된 element ledger를 작성하기 전 QA-29의 수치 우세를 확정하지 않는다. 현재 부분 코드는 구현 근거의 일부일 뿐 제품 E2E·실제 모델·core ASR 실측 증거가 아니다. 네 core ASR의 새 결과는 모두 NOT_RUN이다.
 
 ## 5. 탐색
 

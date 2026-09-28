@@ -4,7 +4,7 @@
 
 ## 1. 목적과 범위
 
-QA-11~15는 Downstream Agent가 업무를 얼마나 잘 수행했는지가 아니라 VIA가 사용자의 요청 의미, interaction binding, async state와 continuity를 올바르게 유지했는지를 측정한다.
+QA-11~15는 Downstream Agent가 업무를 얼마나 잘 수행했는지가 아니라 VIA가 사용자의 요청 의미, interaction binding, async state와 continuity를 올바르게 유지했는지를 측정한다. Core ASR QA-19는 그중 QA-11/12의 중복 없는 applicable field만 단순 micro-average하고 QA-13~15는 별도 회귀 진단으로 유지한다.
 
 QA-11~15의 기본 corpus는 정상 network, 정상 dependency와 고정 Agent fixture를 사용한다. network failure와 recovery time은 QA-31, fault blast radius는 QA-32로 분리한다.
 

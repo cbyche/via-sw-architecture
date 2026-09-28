@@ -7,7 +7,7 @@
 
 제품적으로 중요한 관심사, 특정 DP의 A/B를 가르는 QA, 시스템 수준 ASR은 서로 다르다. 정상 기능을 충족한 합리적 대안 사이에서 같은 현실적 조건 아래 metric이 달라질 구조 인과가 있어야 해당 DP의 Primary QA가 된다.
 
-현재 active catalog는 QA-01~05, QA-11~15, QA-21~23, QA-31/32, QA-41, QA-51, QA-61/62다. 모든 QA는 하나의 대표 metric을 가진다. QA-11은 integrated outcome이고 QA-12~15는 non-additive driver다.
+현재 core ASR은 QA-09·19·29·39다. QA-01~05, QA-11~15, QA-21~23, QA-31/32는 input·diagnostic으로, QA-41/51/61/62는 diagnostic·qualification으로 유지한다. QA-19는 QA-11/12 field의 superset이고 QA-13~15는 회귀 진단이다.
 
 ## 2. 예상되는 구조 민감도
 

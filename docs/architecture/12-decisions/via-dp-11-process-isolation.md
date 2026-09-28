@@ -169,7 +169,9 @@ A의 worker runtime·supervisor·IPC buffer를 모두 QA-41에 포함한다. B�
 
 A-01~09·M-01~09·C-01~06에서 의미 경계는 고정한다. 특히 새 protocol·인증·artifact 또는 Model local/remote 변경이 IPC frame·배치에 실제로 닿는지 ledger로 확인한다. E-01~05는 Process generation·clock correlation·worker spool·schema·export·assignment를 포함한다. A가 Process별 source를 알기 쉽다는 이유로 trace가 자동 완전한 것은 아니다. Worker crash 직전 volatile 로그는 잃을 수 있으므로 VIA-DP-12 기록 의무를 두 안에 같게 둔다.
 
-## 7. 전체 19개 QA 사고실험
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/29/39 `PRIMARY`, QA-19 `REGRESSION_ONLY`**다. Agent-client process 경로 시간, process·instrumentation change와 fatal crash 격리·복구를 주로 비교하고 IPC 전후 field는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 19행은 과거 detailed evidence이며 새 core 결과가 아니다.
 
 다음 표는 실행 전에 작성한 사고실험이다. §8의 실측표와 분리해 예상이 결과를 대체하거나 결과에 맞춰 다시 쓰이지 않도록 보존한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다.
 

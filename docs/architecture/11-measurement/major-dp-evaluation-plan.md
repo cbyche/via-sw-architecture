@@ -9,8 +9,8 @@
 
 ## 1. 불변 규칙
 
-1. **모든 DP의 기본 평가표는 active QA 19개 전체다.** 일부 QA만 선택해 시작하지 않는다.
-2. 각 QA는 `MEASURED`, `N/A`, `BLOCKED` 중 하나와 근거를 가져야 한다.
+1. **모든 DP의 기본 평가표는 core ASR QA-09·19·29·39 전체다.** 상세 QA input·diagnostic·qualification도 삭제하지 않는다.
+2. 각 core ASR은 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED` 중 하나와 근거를 가져야 한다.
 3. `N/A`는 A/B 구조 차이가 해당 QA의 실제 dependency graph에 물리적으로 참여하지
    않을 때만 허용한다. 차이가 작을 것 같다는 이유는 `N/A`가 아니다.
 4. `BLOCKED`는 QA가 관련되지만 유효한 endpoint, oracle, 반복 또는 candidate 구현이
@@ -29,7 +29,7 @@
     결함 발견 시 그 campaign을 `INVALID`로 중단하고 이 문서에 기록한다.
 13. preflight는 `/private/tmp`에서 수행하고 성공 후 삭제한다. `current/`에는 공식
     immutable campaign만 둔다.
-14. 모든 보고서는 A/B 및 허용된 tactic 후보를 포함한 19-QA complete table을 가진다.
+14. 모든 보고서는 A/B 및 허용된 tactic 후보를 포함한 four-core-ASR complete table과 상세 evidence를 가진다.
 15. 한 DP가 `BLOCKED`/`INVALID`여도 원인이 독립적인 다음 DP는 계속 진행한다.
 16. result package가 완결됐다는 이유만으로 `COMPLETE`라고 하지 않는다. 관련 QA의
     실제 endpoint, 반복 수, candidate 구조 참여와 독립 replay가 모두 충족되어야 한다.
@@ -45,7 +45,7 @@ Voice input, BlackHole audible loopback과 raw field-level oracle을 공통 최�
 
 1. A/B가 문서 설명이 아니라 component/process/message/state 차이로 실행된다.
 2. 두 후보에서 해당 DP 외의 model, fixture, Agent, Context, 자원 한도는 같다.
-3. 19개 QA를 모두 감사하고 각 셀을 `MEASURED`, `N/A`, `BLOCKED`로 근거와 함께 남긴다.
+3. 네 core ASR을 모두 감사하고 각 셀에 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`와 근거를 남긴다.
 4. Responsiveness 대표값은 warm-up 뒤 case별 20회 이상의 scored repetition에서 계산한다.
 5. correctness는 strict case success와 field-level predicate 원본을 함께 보존한다.
 6. fault/recovery가 관련되면 독립 fresh state fault trial을 조건별 10회 이상 실행한다.
@@ -58,33 +58,30 @@ Voice input, BlackHole audible loopback과 raw field-level oracle을 공통 최�
 12. 모든 raw trial, model call/token ledger, repair 위치, failure, timeout과 environment를
     immutable result directory에 보존한다.
 
-이 기준을 모두 충족하기 전에는 보고서가 19행 표를 가진 경우에도 `COMPLETE`가 아니다.
+이 기준을 모두 충족하기 전에는 보고서가 네 core ASR 행을 가진 경우에도 `COMPLETE`가 아니다.
 
 ## 3. DP별 공통 lifecycle
 
 1. **Decision audit:** A/B 상호 배타성, steelman, Architecture 차이와 tactic 구분
-2. **19-QA audit:** 19개 각각의 endpoint와 A/B 차이 참여 경로 작성
+2. **Core-ASR audit:** 네 core ASR의 모집단과 A/B 차이 참여 경로, 상세 evidence 작성
 3. **Candidate implementation:** component/process/message/state 수준 A/B 구현
 4. **Fixture/oracle freeze:** 정상 workload 우선, 필요한 fault/load/change pack만 추가
 5. **Qualification:** 정상 trace PASS, mutation sentinel은 예상 failure code로 FAIL
 6. **Official campaign:** 새 result directory, 실패 포함 raw 즉시 append
 7. **Independent analysis:** 별도 process가 raw summary digest를 재현
-8. **Report/audit:** 19-QA 표, 보조 지표, 원인·한계, tests/link/terminology/diff 검사
+8. **Report/audit:** 네 core ASR 표, 상세 지표, 원인·한계, tests/link/terminology/diff 검사
 
-## 4. 공통 QA 19개
+## 4. 공통 core ASR 4개
 
-| 범주 | QA |
-| --- | --- |
-| Responsiveness | QA-01, QA-02, QA-03, QA-04, QA-05 |
-| Correctness / continuity | QA-11, QA-12, QA-13, QA-14, QA-15 |
-| Modifiability | QA-21, QA-22, QA-23 |
-| Reliability | QA-31, QA-32 |
-| Resource | QA-41 |
-| Privacy | QA-51 |
-| Observability | QA-61, QA-62 |
+| 핵심 질문 | Core ASR | 상세 input/diagnostic |
+| --- | --- | --- |
+| 빠른가? | QA-09 | QA-01/02/03/05; QA-04 회귀 |
+| 정확한가? | QA-19 | QA-11/12 field; QA-13~15 회귀 |
+| 변화에 강한가? | QA-29 | QA-21~23 change ledger |
+| 장애에도 살아남는가? | QA-39 | QA-31/32 fault evidence |
 
-QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보고하지만 단순 합산한
-후보 점수는 만들지 않는다.
+QA-41은 memory diagnostic, QA-51과 action/access rule은 safety qualification,
+QA-61/62는 evidence qualification이다. core ASR과 합산한 단일 후보 점수는 만들지 않는다.
 
 ## 5. 실행 순서
 
@@ -103,7 +100,7 @@ QA-11은 통합 결과이고 QA-12~15는 비가산 원인 지표다. 모두 보�
 ### 5.2 후속 전체 DP
 
 1차 완료 후 다음 우선순위로 나머지를 처리한다. 우선순위는 핵심 사용자 경로 참여,
-상태·권한 소유권, A/B의 19-QA trade-off 가능성, 변경 비용 순이다.
+상태·권한 소유권, A/B의 core-ASR trade-off 가능성, 변경 비용 순이다.
 
 1. VIA-DP-04 — S2S 직접 응답 게시 권한
 2. VIA-DP-05 — 요청 Context 읽기 집합 계약
@@ -154,8 +151,8 @@ candidate와 evaluator로 옮겨야 한다는 현재 상태다.
 - v5: 동일 24개 case를 유지하되 warm-up 2회 + scored 20회, candidate process와
   shared dependency 수명을 고정하고 trial-level raw를 즉시 기록
 
-VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability는 qualification에서
-실제 참여 경로를 재확인하며, 비참여가 입증된 QA만 `N/A`로 확정한다.
+VIA-DP-06도 네 core ASR 전부와 상세 evidence를 표에 포함한다. contract의 applicability는 qualification에서
+실제 참여 경로를 재확인하며, 비참여가 입증된 모집단만 `NOT_APPLICABLE`로 확정한다.
 
 ## 8. DP별 산출물 완결 조건
 
@@ -164,7 +161,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 - `raw/change-exercises.json`: 실제 QA-21~23 change observation
 - `summary.json`: raw 재계산 결과
 - `replay-receipt.json`: 독립 analyzer digest 검증
-- `report.md`: 19-QA complete table, 보조 지표, 원인과 evidence 한계
+- `report.md`: four-core-ASR complete table, 상세 지표, 원인과 evidence 한계
 - `STATUS.md`: `COMPLETE`, `BLOCKED` 또는 `INVALID`와 근거
 
 값이 없는 QA도 행을 삭제하지 않는다. `N/A` 또는 `BLOCKED`와 구체 사유를 쓴다.
@@ -184,7 +181,7 @@ VIA-DP-06도 19개 QA 전부를 표에 포함한다. contract의 applicability�
 
 ## 10. 진행표
 
-| DP | Decision audit | 19-QA audit | Implementation | Qualification | Campaign | Report | 상태 |
+| DP | Decision audit | Core-ASR audit | Implementation | Qualification | Campaign | Report | 상태 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | VIA-DP-06 | 완료 | 완료 | v5 통합 reference + v6 변경 원장 | 완료 | breadth 72 + latency 180 + locality 87 | 완료 | ANALYSIS_COMPLETE_WITH_NON_QA20_BLOCKED_AXES |
 | VIA-DP-11 | 완료 | 완료 | v5 통합 runner 구현 | 대기 | process/fault v4만 | 예비 보고서 | V5_RUNNER_READY |

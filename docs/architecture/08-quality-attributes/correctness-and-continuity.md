@@ -4,13 +4,15 @@
 >
 > 목적: QA-11~QA-15를 서로 다른 단일 metric으로 정의하고, integrated outcome과 driver QA의 중복 가중을 방지한다.
 
+2026-09-28 이후 QA-11/12 predicate는 [QA-19 core ASR](./core-asr-contract.md#4-qa-19--via-request-handling-field-accuracy)의 field source다. 기존 strict pass는 diagnostic으로 유지하며 새 대표값은 중복 없는 applicable QA-11/12 field 전체의 단순 accuracy다. QA-13~15는 Task binding·상태 수렴·연속성 회귀 진단으로 유지하며 QA-19 분모에 자동 포함하지 않는다.
+
 ## 1. 공통 원칙
 
 - Downstream Agent의 조사·계획·Tool 실행·문서 품질은 이 QA들의 채점 대상이 아니다.
 - 사람이나 LLM이 실행 중 자유문장을 주관적으로 채점하지 않는다.
 - 각 case의 evaluator-only predicate와 허용 해석은 결과 전에 machine-readable 형식으로 승인한다.
 - timeout, invalid output, exhausted repair와 missing required trace는 실패다.
-- 같은 실행을 여러 QA에서 관찰할 수 있지만 QA-11과 QA-12~15를 weighted total에 독립 표처럼 합산하지 않는다.
+- 같은 fact를 QA-11과 QA-12에서 관찰했다면 QA-19 registry에는 하나의 field ID만 둔다. QA-11/12 strict 결과와 QA-13~15 회귀 결과를 QA-19와 독립 ASR 점수로 합산하지 않는다.
 - wrong-target Action, duplicate external Action, revoked/mismatched approval과 unauthorized access는 별도 mandatory zero-violation gate다.
 
 각 QA의 기본 판정은 다음 형식을 따른다.

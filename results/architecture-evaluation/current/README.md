@@ -4,6 +4,8 @@
 
 > **Status: 통합 Architecture campaign 재구축 중. 아래 결과는 예비/부분 증거이며 최종 완료 DP는 없음.**
 
+> **Core-ASR notice:** QA-09·19·29·39는 2026-09-28에 확정됐지만 아래 campaign보다 늦게 정의됐다. 아래 상세 QA 결과를 새 core 값으로 소급 집계하거나 core-ASR winner 근거로 사용하지 않는다. 새 machine contract와 Measurement Freeze 뒤 별도 campaign이 필요하다.
+
 ## Current evidence
 
 - [2026-09-27 실행 요약 보고서](./evaluation-executive-report-20260927.md)는 기존 VIA-DP-02/05/06/09/11/12/13 결과와 VIA-DP-01~18 readiness를 정리한 예비 보고서다. `COMPLETE` 표기는 현재 완료 기준으로 superseded되었다.

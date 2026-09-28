@@ -1,19 +1,20 @@
 # Current Architecture Measurement Harness
 
-> **Status: QA-01~15 common evaluator foundation implemented; seven preliminary/targeted campaigns preserved; integrated campaign rebuild in progress**
+> **Status: predecessor detailed-QA evaluator implemented; QA-09/19/29/39 analyzer not yet implemented; seven preliminary/targeted campaigns preserved**
 
 이 디렉터리는 현재 Architecture baseline에 맞는 machine-readable contract, fixture, executable harness, raw-trace validator, aggregation code를 구현할 active 위치다.
 
 구현은 다음 source를 순서대로 따라야 한다.
 
-1. [Voice Responsiveness](../../docs/architecture/08-quality-attributes/voice-responsiveness.md)
-2. [Task Control Responsiveness](../../docs/architecture/08-quality-attributes/interaction-control-responsiveness.md)
-3. [Correctness & Continuity](../../docs/architecture/08-quality-attributes/correctness-and-continuity.md)
-4. [Reliability & Resource](../../docs/architecture/08-quality-attributes/reliability-and-resource.md)
-5. [Observability](../../docs/architecture/08-quality-attributes/observability.md)
-6. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
-7. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
-8. 결과 전에 승인된 machine contract와 Measurement Freeze
+1. [Core ASR Contract](../../docs/architecture/08-quality-attributes/core-asr-contract.md)
+2. [Voice Responsiveness](../../docs/architecture/08-quality-attributes/voice-responsiveness.md)
+3. [Task Control Responsiveness](../../docs/architecture/08-quality-attributes/interaction-control-responsiveness.md)
+4. [Correctness & Continuity](../../docs/architecture/08-quality-attributes/correctness-and-continuity.md)
+5. [Reliability & Resource](../../docs/architecture/08-quality-attributes/reliability-and-resource.md)
+6. [Observability](../../docs/architecture/08-quality-attributes/observability.md)
+7. [Measurement Guide](../../docs/architecture/11-measurement/README.md)
+8. [Evaluation Method](../../docs/architecture/12-decisions/evaluation-method.md)
+9. 결과 전에 승인된 machine contract와 Measurement Freeze
 
 ## Expected layout
 
@@ -60,8 +61,8 @@ VIA-DP-11의 active runner는 `via-dp-11-evaluation-v4.json`을 사용한다. �
 candidate를 실행한다. executable 후보는
 `prototypes/candidates/reference_harness/candidates.py`, frozen contract는
 `via-dp-02-evaluation-v2.json`과 각 DP의 v1 JSON, 독립 raw analyzer는
-`analyze_priority_dp_campaign.py`다. 각 결과는 19개 QA 전체를 `MEASURED/N/A/BLOCKED`로
-구분하며 내부 진단시간을 Voice QA로 승격하지 않는다. 이 Python component 결과는
+`analyze_priority_dp_campaign.py`다. 각 결과는 predecessor detailed QA 19행을 `MEASURED/N/A/BLOCKED`로
+구분하며 내부 진단시간을 Voice QA로 승격하지 않는다. 이 runner는 새 QA-09/19/29/39를 계산하지 않는다. Python component 결과는
 공통 Rust candidate runtime과 Voice/model/Agent 통합 경로에서 다시 측정해야 한다.
 
 `run_dp06_evaluation_v5.py`는 24-case correctness breadth와 QA-01/02/05별 20회

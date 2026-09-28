@@ -163,7 +163,9 @@ M-01/02는 provider별 adapter, M-03은 역할별 profile·입력 한도, M-04~0
 
 양쪽이 같은 가중치와 native pool을 공유할 수 있으므로 A의 메모리 우세를 단정하지 않는다. 차이는 manager 상태·lease·buffer 대 역할별 세션 metadata이며 실제 peak가 필요하다. E-01~05는 source clock·session generation·role correlation·schema·export·assignment의 공통 API 변경과 소비자 변경을 구별한다. Trace·privacy 검사 library는 B에도 제공할 수 있다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/29/39 `PRIMARY`, QA-19 `REGRESSION_ONLY`**다. model-session interaction 시간, Model/session change와 단절·재연결 복구를 주로 비교하고 요청 처리 field는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

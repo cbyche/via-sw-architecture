@@ -189,7 +189,9 @@ UC-14/15의 상태 복원·결과 통지와 E-04 로그 export를 제어 요청�
 
 M-05/06의 local/remote Model 전환과 E change pack이 새 queue·자원 계약을 건드리는지는 전체 QA-22/23 change ledger에 기록한다. 특정 scheduler 변경 한 건을 전체 평균으로 대표하지 않는다. slot 점유·admission·queue 대기와 실제 오디오/제어 endpoint를 trace로 연결해야 하며, 양쪽에 동일 관측 비용을 적용한다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09 `PRIMARY`, QA-19/29/39 `REGRESSION_ONLY`**다. 포화 workload의 direct·delegated·status·control 평균시간이 주 비교 대상이며 admission field, scheduler change와 lane 장애는 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **실행 전 사고실험 예상.** 아래 표는 §12의 v1 측정 결과가 아니라 후보 구현 전 구조적 가설이다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

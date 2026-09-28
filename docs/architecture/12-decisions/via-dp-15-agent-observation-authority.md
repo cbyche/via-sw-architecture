@@ -110,7 +110,9 @@ event 하나 누락 뒤 오래된 event가 도착한다. A는 gap 감지와 quer
 
 A-04 상태 제공·A-05 실행 identity·A-08 질문 계약 변화에서 cursor/validator와 query/coalescer의 변경 요소를 비교한다. B도 typed adapter·공통 reader를 재사용할 수 있다. A가 event 구조를 이미 공통 경계에서 흡수하면 반대 방향 변경 이점이 사라진다. QA-61에는 source event와 실제 query·commit·audible 관계를 남기며 모델 사고과정은 수집하지 않는다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. Agent status·result·control 시간, source-confirmed field, cursor·query change와 event-stream loss 뒤 reconciliation을 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 

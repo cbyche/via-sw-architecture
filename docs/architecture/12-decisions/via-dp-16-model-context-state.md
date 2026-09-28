@@ -110,7 +110,9 @@ flowchart TB
 
 M-03 입력 한도·M-09 이력 전달·C-04 Memory·C-06 저장 schema 변경에서 Builder/cache와 Projector/view reader의 수정 요소를 기록한다. 15건 평균은 사례 4건만으로 대체하지 않는다. trace는 당시 실제 모델 입력·원천 version을 보존한다. B의 prompt 조립 절감이 모델 prefill 절감으로 자동 연결되지 않으며 native prefix cache는 양쪽 허용한다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. history-dependent interaction 시간, semantic·Task-relation field, cache/projector change와 working-context loss 뒤 cold rebuild를 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 

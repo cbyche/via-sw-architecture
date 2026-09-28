@@ -4,7 +4,7 @@
 
 ## 1. 결론부터
 
-**현재 관리 대상은 VIA-DP-01~18, 총 18개다.** 기존 13개를 상세화하고 Task writer를 14로 편입했다. 이전 계열 대조에서 빠졌던 관측 확정·모델 입력 이력·Source 변환·사용 권한 질문을 15~18로 보완했다. 모두 심화 검토할 수 있게 보존하며 최종 발표용 순위·DP 4~5개·ASR 4~6개는 아직 선정하지 않는다.
+**현재 관리 대상은 VIA-DP-01~18, 총 18개다.** 기존 13개를 상세화하고 Task writer를 14로 편입했다. 이전 계열 대조에서 빠졌던 관측 확정·모델 입력 이력·Source 변환·사용 권한 질문을 15~18로 보완했다. QA-09·19·29·39 네 core ASR은 확정했으며, 최종 발표용 핵심 DP 선정은 다음 작업으로 남긴다.
 
 보고서를 읽으면 어떤 Component가 어떤 요청을 받고, 어느 상태를 소유하며, 어떤 queue·buffer·저장·Process 경계를 통과하는지 알 수 있어야 한다. 아래 네 영역은 전체 시스템을 설명하는 **읽기 순서**이며 추천 순위가 아니다. 나머지 14개도 독립 보고서로 같은 수준의 A/B 구현도·전체 QA 표를 제공한다.
 
@@ -307,19 +307,42 @@ Context는 05(읽기 집합)·16(이력 유지)·17(값 변환)로, 비동기 �
 
 이 독립 축들은 같은 제품에서 조합할 수 있다. 한 DP의 A/B를 같은 조건의 최종 권한으로 동시에 채택할 수 있다는 뜻은 아니다.
 
-## 6. QA와 최종 선정은 분리한다
+## 6. 네 core ASR을 모든 DP에 적용한다
 
-현재 19개 single-metric QA를 모든 보고서에서 검토했다. [Core Evaluation Profile](../11-measurement/evaluation-profile.md)은 우선 측정할 ASR 후보 10개를 정했고, 실제 구조 sensitivity를 확인한 뒤 최종 보고서의 더 작은 ASR 집합으로 좁힌다. QA-11과 QA-12~15를 독립 성공 점수처럼 합산하지 않는다.
+2026-09-28 결정으로 **QA-09, QA-19, QA-29, QA-39를 핵심 `CONFIRMED_ASR`**로 확정했다. 각각 사용자가 체감하는 VIA 평균시간, QA-11/12 field 정확도, 변화당 평균 Architecture Element 수, 장애 containment·correct-recovery 성공률에 답한다. 모든 VIA-DP-01~18은 네 값을 같은 A/B package에서 산출한다. 아직 target·score band·DP별 모집단·새 결과는 확정되지 않았다.
 
-QA-41은 삭제하지 않지만 메모리 상한 요구와 중요한 구조 차이가 미확인이라 핵심 ASR 우선 추천에서 제외한다. QA-32는 VIA Client fatal 위험, QA-61은 실제 기록 유실 구간처럼 구체 인과를 확인해야 한다. QA-51은 기존 metric과 권한 gate를 유지하며 범위를 확대하지 않는다.
+`P`는 구조 차이 때문에 값이 달라질 것을 검증하는 `PRIMARY` 가설, `R`은 같은 기능을 유지하는지 확인하는 `REGRESSION_ONLY`다. 이는 승자나 실측 차이가 아니다. 상세 정의와 case·field·change·fault 내용은 [Core ASR Contract](../08-quality-attributes/core-asr-contract.md)를 따른다.
+
+| DP | QA-09 평균 VIA 시간 | QA-19 QA-11/12 field | QA-29 변경 국소성 | QA-39 장애 성공률 |
+| --- | :---: | :---: | :---: | :---: |
+| VIA-DP-01 | P | P | P | R |
+| VIA-DP-02 | P | P | P | P |
+| VIA-DP-03 | P | P | P | R |
+| VIA-DP-04 | P | R | R | R |
+| VIA-DP-05 | P | P | P | P |
+| VIA-DP-06 | P | P | P | R |
+| VIA-DP-07 | P | P | P | P |
+| VIA-DP-08 | R/조건부 P | R/조건부 P | R/조건부 P | P |
+| VIA-DP-09 | R | R | P | R |
+| VIA-DP-10 | P | R | P | P |
+| VIA-DP-11 | P | R | P | P |
+| VIA-DP-12 | P | R | P | P |
+| VIA-DP-13 | P | R | R | R |
+| VIA-DP-14 | P | P | P | P |
+| VIA-DP-15 | P | P | P | P |
+| VIA-DP-16 | P | P | P | P |
+| VIA-DP-17 | P | P | P | P |
+| VIA-DP-18 | P | P | P | P + safety gate |
+
+QA-41은 memory diagnostic으로 남긴다. QA-51과 action/access rule은 safety qualification, QA-61/62는 evidence qualification이다. 기존 19개 상세 QA 표는 새 core 값을 계산하고 원인을 설명하는 input·diagnostic 지도이며 독립 ASR 점수로 중복 합산하지 않는다.
 
 <a id="dp-qa-coverage"></a>
 
-### 6.1 DP–QA 관련성 지도 — 무엇을 함께 검토해야 하는가?
+### 6.1 상세 DP–QA 관련성 지도 — 무엇을 함께 검토해야 하는가?
 
 **관련성이 있다는 것과 A/B의 품질 차이가 있다는 것은 다르다.** 첫 지도는 설계 검토 대상을, [두 번째 지도](#ab-qa-difference)는 현재 사고실험에서 차이를 예상할 근거가 있는 대상을 보여준다. 여기서 ‘성능’은 속도만이 아니라 정확도·변경 범위·복구·기록 등 각 QA의 단일 metric 결과를 뜻한다.
 
-기준은 VIA-DP-01~18 각 사고실험과 전체 QA 표다. 아래 DP 이름은 §3의 정식 제목을 줄인 것이며, 행 이름을 누르면 해당 보고서로 이동한다. 각 지도는 **DP 18개 행 × QA 19개 열의 단일 표**다. 두 표의 행·열 순서는 동일하며, 가로로 스크롤하면 모든 QA를 이어서 볼 수 있다. 지도는 설계 단계의 적용성·차이 가능성을 나타내며 측정값 표가 아니다. 현재 공식 reference campaign은 VIA-DP-02·05·06·09·11·12·13이고, 나머지는 **NOT_RUN**이다. 실행 결과와 한계는 [current evaluation executive report](../../../results/architecture-evaluation/current/evaluation-executive-report-20260927.md)를 따른다.
+기준은 VIA-DP-01~18 각 사고실험과 기존 상세 QA 표다. 아래 두 지도는 **DP 18개 행 × 상세 QA 19개 열**이며 core ASR 결과표가 아니다. core 모집단을 구성하고 원인을 분석할 때 쓰는 설계 가설이다. 기존 reference campaign은 VIA-DP-02·05·06·09·11·12·13에 있으나 새 core 계약 이전 결과이므로 QA-09/19/29/39 결과로 소급하지 않는다.
 
 열 이름은 [현행 QA의 단일 metric](../08-quality-attributes/quality-model.md#3-active-draft-qa-catalog)을 줄인 것이다. QA-01은 Agent 실행시간을 제외한다. QA-21~23은 해당 변화 한 건당 변경 설계 요소의 평균 수이며, QA-32는 필수 의존 범위를 넘어 불필요하게 중단된 기능·Task 수다. QA-51은 총 전달량이 아니라 필요 이상의 보호정보 노출, QA-62는 모델 답 재생성이 아니라 저장 근거로 평가 결과를 다시 만드는 능력이다.
 
@@ -432,10 +455,10 @@ VIA-DP-06 v6 통합 보고서에서는 v5 reference campaign의 A QA-11~13 corre
 
 - **관련성은 넓고, 차이 근거는 그보다 좁다.** VIA-DP-14×QA-14와 VIA-DP-18×QA-51처럼 중요한 필수 검증이어도 우열을 만드는 지표는 아닐 수 있다.
 - **정확성과 변경 원장은 검증됐지만 공백이 남는다.** VIA-DP-06×QA-12는 local Qwen reference campaign에서 A/B/B′ 차이를 관측했고, QA-21~23 전체 pack은 v6 구조 원장으로 평가했다. QA-15/31/41은 아직 `BLOCKED`다. VIA-DP-12×QA-11~15의 근거 보존 효과를 의미·상태 알고리즘 정확도의 대체 근거로 쓰지 않는다.
-- **차이 표시의 수로 핵심 DP·ASR을 선정하지 않는다.** 실제 대표값 차이, 제품에서의 중요성, A에 유리한 QA와 B에 유리한 QA가 모두 있는지를 다음 단계에서 확인한다. QA-41의 차이 등급도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
+- **차이 표시의 수로 핵심 DP를 선정하지 않는다.** 네 core ASR의 실제 대표값 차이, 제품 중요성과 양방향 trade-off를 다음 단계에서 확인한다. QA-41 차이 등급도 메모리 상한이나 중요한 차이가 확인됐다는 뜻이 아니다.
 - **차이가 없어도 의무는 남는다.** QA-51 안전 조건, 정확한 Task 연결·수렴·연속성, trace·평가 재현 계약은 어느 대안을 택해도 지켜야 한다. QA-11과 원인 QA-12~15도 독립 점수로 중복 합산하지 않는다.
 
-갱신할 때는 개별 DP의 사고실험·19개 QA 표를 먼저 수정하고 두 지도를 함께 대조한다. 첫 지도의 ● 없이 두 번째 지도에 차이 등급을 추가하지 않으며, ?·×를 해결했다는 이유만으로 실측 우열을 선언하지 않는다.
+갱신할 때는 개별 DP의 core-ASR 역할과 상세 QA 사고실험을 함께 수정한다. 첫 지도의 ● 없이 두 번째 지도에 차이 등급을 추가하지 않으며, ?·×를 해결했다는 이유만으로 실측 우열을 선언하지 않는다.
 
 <a id="review-status"></a>
 
@@ -453,7 +476,7 @@ VIA-DP-06 v6 통합 보고서에서는 v5 reference campaign의 A QA-11~13 corre
 
 모든 후보에 S2S 1개·semantic LLM 1개를 적용한다. Task supervisor·prompt·session·worker 수와 모델 수를 혼동하지 않는다. 모델 queue·cache·취소 지원은 실제 profile 확인 전이다.
 
-최종 DP/ASR 확정, Voice E2E 연결, 나머지 DP candidate, 전체 변경 ledger와 full A/B campaign은 남아 있다. Target Mac, local semantic LLM, Alibaba S2S와 Reference Agent 방향은 고정했다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
+핵심 DP 선정, Voice E2E 연결, 나머지 DP candidate, core-ASR machine contract·전체 변경 ledger와 full A/B campaign은 남아 있다. Target Mac, local semantic LLM, Alibaba S2S와 Reference Agent 방향은 고정했다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
 
 이전 작업의 문서 검증 기록은 docs/archive/dp-document-consolidation-2026-09-25/dp-review-synthesis.md에 당시 이력으로 보존했다. 현재 제품 QA 결과를 뜻하지 않는다.
 
@@ -527,4 +550,4 @@ VIA-DP-06 v6 통합 보고서에서는 v5 reference campaign의 A QA-11~13 corre
 
 대조 대상은 기존 candidates의 IR/TASK/AGENT/EXEC 정의, ADR-001~004, docs/archive/w12-g1/12-01-dp-master-catalog.md의 9개 질문과 12-01a-scope-and-coverage-ledger.md의 25개 주제다. archive는 **historical provenance only**이며 현재 요구·QA·결정의 normative source가 아니다. 현재 번호·정의는 [개별 보고서 목록](./README.md), QA는 [현행 catalog](../08-quality-attributes/quality-model.md)를 따른다.
 
-기존 승인 이력은 06 Deferred/A interim, 09 A accepted, 11의 A 방향에 대응하는 기존 격리 B accepted, 14 B accepted로 유지한다. 새 15~18은 검토 초안이고 승자·ASR 확정은 없다.
+기존 승인 이력은 06 Deferred/A interim, 09 A accepted, 11의 A 방향에 대응하는 기존 격리 B accepted, 14 B accepted로 유지한다. 새 15~18은 검토 초안이고 DP 승자는 확정하지 않았다. QA-09·19·29·39의 ASR 분류만 이번 세대에서 확정했다.

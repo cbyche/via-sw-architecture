@@ -3,7 +3,7 @@
 > 상태: **USER REVIEW DRAFT / VIA-DP-02·05·06·09·11·12·13 예비 campaign 보존 / 통합 campaign NOT_RUN**. 기존 기능 fixture를 보존하되, 각 campaign이 채택하지 않은 case의 scoring membership·oracle·반복 수는 재동결 전이다.
 > 원문 UC는 [05](../05-representative-use-cases.md), 변경 전후 원문은 [07](../07-intentional-variables.md)이다.
 >
-> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 QA-11~15 분모가 아니다. 일곱 예비 DP campaign이 채택한 case·event·반복은 각 contract에 보존되어 있으나 최종 통합 분모가 아니다. 새 campaign은 [Voice responsiveness 정의](../08-quality-attributes/voice-responsiveness.md), [Task control responsiveness](../08-quality-attributes/interaction-control-responsiveness.md)와 [Correctness oracle](../08-quality-attributes/evidence/correctness-oracle-contract.md)을 따라 별도 freeze에서 확정한다.
+> **Current measurement notice:** 이 문서의 94개 variation은 source pool이며 그 자체가 core ASR 분모가 아니다. QA-09 case, QA-19 QA-11/12 field, QA-29 change와 QA-39 fault 모집단은 DP별 Measurement Freeze에서 확정한다. QA-13~15는 correctness/continuity 회귀다. 일곱 예비 campaign의 case·event·반복을 새 core 결과로 소급 사용하지 않는다.
 > timing event의 의미와 실제 사용자/source 경계는 [Event & Boundary Contract](./event-boundary-contract.md)를 따른다. TC에는 그 event의 관측 fixture와 oracle만 연결하며 별도 의미를 재정의하지 않는다.
 
 ## 1. 원자료 구성

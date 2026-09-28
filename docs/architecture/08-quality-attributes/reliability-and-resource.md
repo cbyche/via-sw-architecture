@@ -4,6 +4,8 @@
 >
 > 목적: QA-31 recovery time, QA-32 fault blast radius와 QA-41 target-device memory를 서로 다른 단일 metric으로 정의한다.
 
+QA-31/32는 [QA-39 core ASR](./core-asr-contract.md#6-qa-39--fault-containment--recovery-success-rate)의 fault PASS 입력과 diagnostic으로 유지한다. 새 대표값은 containment·correct recovery·deadline 조건을 모두 통과한 applicable fault trial의 단순 성공률이다. QA-41은 core ASR이 아닌 memory diagnostic이다.
+
 ## 1. QA-31 — Correct Task Recovery Time
 
 ### 질문
@@ -61,7 +63,9 @@ Architecture Component 수를 blast-radius unit으로 사용하지 않는다. fa
 
 ## 3. QA-41 — Target Device Memory Footprint
 
-현재 구성은 S2S 모델 1개·semantic LLM 1개이며 Component·Task별 복제는 금지한다. 모델이 local이면 실제 적재와 공유 자원 accounting을 확인하고, remote이면 서버 메모리를 PC 사용량에 넣지 않는다. 세션·KV cache·queue·buffer 차이는 포함하지만 크기를 사전 단정하지 않는다. 메모리 상한 요구와 구조 차이의 중요성이 미확정이므로 QA-41은 자원 확인 대상으로 유지하며 핵심 ASR 우선 추천에서 제외한다.
+현재 구성은 S2S 모델 1개·semantic LLM 1개이며 Component·Task별 복제는 금지한다. QA-41은 모델 memory만도, VIA software memory만도 아닌 **target PC에서 후보 경로를 실행하기 위해 commit된 둘의 합계**다. 모델이 local이면 weights·runtime·KV cache를 포함하고, remote이면 서버 memory를 PC 사용량에 넣지 않는다. VIA process·helper process·heap·stack·queue·IPC/audio buffer도 포함한다.
+
+다만 shared model baseline과 후보별 software/cache/buffer delta를 반드시 분리 보고한다. 한 DP의 A/B에서 큰 model weight는 동일하고 process·buffer 차이만 남을 가능성이 높다. 메모리 상한 요구와 반복 검증된 유의미한 구조 차이가 아직 없으므로 QA-41은 자원 진단이며 core ASR이 아니다.
 
 ### 질문
 
@@ -100,7 +104,7 @@ Target PC는 [VIA Core Evaluation Profile](../11-measurement/evaluation-profile.
 - 성공한 recovery만 골라 p95를 만들지 않는다.
 - 확인 근거가 없는 외부 실행을 정상 복구로 처리하지 않는다.
 - 모든 요청을 차단하거나 기능을 제거해 blast radius나 memory를 낮춘 후보는 기능 적합성에 실패한다.
-- QA-31과 QA-32는 같은 fault run에서 계산할 수 있지만 서로 다른 metric이며 합산하지 않는다.
+- QA-31과 QA-32의 raw 단위는 합산하지 않는다. 두 조건을 binary fault-trial PASS로 바꾼 뒤 QA-39 성공률을 계산한다.
 
 ## 5. Freeze 전에 남은 작업
 

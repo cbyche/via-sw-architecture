@@ -1,9 +1,10 @@
 {
-  "schema_version": "2.0",
-  "catalog_generation": "CATEGORY_RANGES_V2",
-  "status": "USER_REVIEW_DRAFT",
-  "asr_selection": "NONE_UNASSESSED",
-  "renumbering_policy": "ONE_TIME_CATEGORY_RENUMBERING_COMPLETE_PRESERVE_GAPS",
+  "schema_version": "3.0",
+  "catalog_generation": "CORE_ASR_V3",
+  "status": "ACTIVE_CORE_ASR_BASELINE_MEASUREMENT_FREEZE_PENDING",
+  "asr_selection": "CONFIRMED_QA_09_QA_19_QA_29_QA_39",
+  "confirmed_asr_ids": ["QA-09", "QA-19", "QA-29", "QA-39"],
+  "renumbering_policy": "PRESERVE_EXISTING_IDS_ADD_INTEGRATED_CATEGORY_END_IDS",
   "category_ranges": {
     "QA-01..QA-09": "Responsiveness",
     "QA-11..QA-19": "Correctness & Continuity",
@@ -14,10 +15,10 @@
     "QA-61..QA-69": "Observability"
   },
   "active_qa_ids": [
-    "QA-01", "QA-02", "QA-03", "QA-04", "QA-05",
-    "QA-11", "QA-12", "QA-13", "QA-14", "QA-15",
-    "QA-21", "QA-22", "QA-23",
-    "QA-31", "QA-32",
+    "QA-01", "QA-02", "QA-03", "QA-04", "QA-05", "QA-09",
+    "QA-11", "QA-12", "QA-13", "QA-14", "QA-15", "QA-19",
+    "QA-21", "QA-22", "QA-23", "QA-29",
+    "QA-31", "QA-32", "QA-39",
     "QA-41",
     "QA-51",
     "QA-61", "QA-62"
@@ -61,6 +62,17 @@
       "name": "Task Control Responsiveness",
       "qc": ["QC-01", "QC-08"],
       "metric": "worst_case_case_p95_task_control_response_ms",
+      "draft_target": null
+    },
+    {
+      "id": "QA-09",
+      "category": "Responsiveness",
+      "name": "Average VIA-attributable Interaction Responsiveness",
+      "qc": ["QC-01"],
+      "metric": "mean_applicable_scored_trial_via_attributable_time_ms",
+      "asr_status": "CONFIRMED_ASR",
+      "input_strata": ["QA-01", "QA-02", "QA-03", "QA-05"],
+      "excluded_strata": ["QA-04"],
       "draft_target": null
     },
     {
@@ -109,6 +121,18 @@
       "diagnostic_of": "QA-11"
     },
     {
+      "id": "QA-19",
+      "category": "Correctness & Continuity",
+      "name": "VIA Request Handling Field Accuracy",
+      "qc": ["QC-02"],
+      "metric": "applicable_machine_oracle_field_accuracy_pct",
+      "asr_status": "CONFIRMED_ASR",
+      "input_field_sources": ["QA-11", "QA-12"],
+      "regression_diagnostics": ["QA-13", "QA-14", "QA-15"],
+      "aggregation": "MICRO_AVERAGE_OVER_NON_DUPLICATE_APPLICABLE_FIELDS",
+      "draft_target": null
+    },
+    {
       "id": "QA-21",
       "category": "Modifiability",
       "name": "Agent Change Locality",
@@ -136,6 +160,17 @@
       "draft_target": null
     },
     {
+      "id": "QA-29",
+      "category": "Modifiability",
+      "name": "Average Architecture Change Locality",
+      "qc": ["QC-04", "QC-05", "QC-10"],
+      "metric": "mean_changed_architecture_elements_per_applicable_change",
+      "asr_status": "CONFIRMED_ASR",
+      "change_superset": ["A-01", "A-02", "A-03", "A-04", "A-05", "A-06", "A-07", "A-08", "A-09", "M-01", "M-02", "M-03", "M-04", "M-05", "M-06", "M-07", "M-08", "M-09", "C-01", "C-02", "C-03", "C-04", "C-05", "C-06", "E-01", "E-02", "E-03", "E-04", "E-05"],
+      "aggregation": "SIMPLE_AVERAGE_OVER_PRE_FROZEN_DP_APPLICABLE_CHANGES",
+      "draft_target": null
+    },
+    {
       "id": "QA-31",
       "category": "Reliability & Availability",
       "name": "Correct Task Recovery Time",
@@ -149,6 +184,17 @@
       "name": "Fault Blast Radius",
       "qc": ["QC-08"],
       "metric": "worst_fault_excess_affected_user_visible_units",
+      "draft_target": null
+    },
+    {
+      "id": "QA-39",
+      "category": "Reliability & Availability",
+      "name": "Fault Containment & Recovery Success Rate",
+      "qc": ["QC-03", "QC-08"],
+      "metric": "applicable_fault_trial_containment_and_recovery_success_pct",
+      "asr_status": "CONFIRMED_ASR",
+      "diagnostic_sources": ["QA-31", "QA-32"],
+      "aggregation": "SIMPLE_AVERAGE_OF_BINARY_FAULT_TRIAL_VERDICTS",
       "draft_target": null
     },
     {

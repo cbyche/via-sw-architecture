@@ -1,10 +1,10 @@
 # Measurement Event & Boundary Contract
 
-> 상태: **QA-01~QA-05 EVENT CONTRACT DRAFT / machine freeze 전**
+> 상태: **CORE ASR EVENT CONTRACT DRAFT / machine freeze 전**
 >
 > 목적: 모든 QA metric의 시작·종료 event를 사용자 또는 외부 source의 실제 사건에 고정하고, software가 그 사건을 뒤늦게 인식한 시간을 숨기지 않는다.
 >
-> 범위: 이 문서는 공통 event 의미와 관측 원칙의 source of truth다. QA별 모집단·집계·target·score는 `scoring-contract.md`, 기능 fixture와 oracle은 `test-case-catalog.md`에서 관리한다.
+> 범위: 이 문서는 공통 event 의미와 관측 원칙의 source of truth다. QA-01~05 event는 QA-09 input이며 QA-19/29/39의 field·change·fault boundary도 같은 실제 사건 원칙을 따른다. 모집단·집계·target·score는 `scoring-contract.md`, fixture와 oracle은 `test-case-catalog.md`에서 관리한다.
 
 ## 1. 공통 원칙
 
@@ -166,7 +166,32 @@ QA-05 sample = t1 - t0
 
 제어의 외부 완료를 기다려야만 사실에 맞는 disposition을 만들 수 있는 case는 source confirmation을 포함한다. VIA가 `requested/pending`을 정확히 표시할 수 있는 case에 외부 완료시간을 억지로 포함하거나, 반대로 아직 확인되지 않은 완료를 먼저 주장하지 않는다.
 
-## 4. Component participation
+## 4. Core ASR aggregation boundary
+
+### QA-09
+
+QA-09는 위 QA-01/02/03/05 trial formula를 millisecond 단위로 보존한 뒤 모든 applicable scored trial을 단순 평균한다. QA-04는 포함하지 않는다.
+
+```text
+QA-09 = Σ effective QA-01/02/03/05 trial milliseconds
+        / applicable scored trial 수
+```
+
+correct meaningful endpoint가 없거나 timeout이면 Test Case별로 사전 동결한 timeout을 trial 값으로 사용한다. 잘못된 결과의 빠른 timestamp를 endpoint로 사용하지 않는다. interaction class별 event identity는 평균 뒤에도 raw trace와 breakdown에 남긴다.
+
+### QA-19
+
+QA-19의 경계는 `user_input_end`나 외부 event에서 시작한 실행이 아니라 **frozen QA-11/12 evaluator field registry**다. 실제 response·semantic decision·required association trace에 field evidence가 없으면 해당 field는 `INCORRECT`다. 후보에 제공하지 않은 evaluator oracle과 실제 관측 field를 versioned ID로 연결한다. QA-13~15의 추가 binding·state·continuity predicate는 회귀 진단이며 QA-19 분모에 자동 포함하지 않는다.
+
+### QA-29
+
+QA-29의 stimulus는 frozen change item의 before state이고 terminal observable은 동일 기능을 유지하는 after Architecture Element ledger다. source file 변경 시각이나 구현 완료 시간은 endpoint가 아니다.
+
+### QA-39
+
+QA-39의 시작은 fault가 기능·control을 실제 사용할 수 없게 만든 시점이고, PASS terminal은 necessary dependency closure 밖의 손상 없이 모든 영향 Task의 올바른 state·result·control이 frozen deadline 전에 다시 사용 가능한 상태다. process가 재기동된 시각만으로 PASS하지 않는다.
+
+## 5. Component participation
 
 | 경로 | QA-01 | QA-02 | QA-03 | QA-04 | QA-05 |
 |---|---|---|---|---|---|
@@ -183,7 +208,7 @@ QA-05 sample = t1 - t0
 
 DP applicability는 DP 이름만으로 정하지 않고 이 실제 component path를 기준으로 고정한다. 어떤 case에서 DP 후보 A/B가 같은 경로를 실행하면 동점 또는 non-applicable로 기록하며 임의 지연을 추가하지 않는다.
 
-## 5. 모든 QA가 갖춰야 할 measurement card
+## 6. 모든 QA가 갖춰야 할 measurement card
 
 QA-11~15/21~23/31/32/41/51/61/62를 포함한 각 비Voice QA도 결과와 구현 전에 다음을 한 곳에서 고정한다.
 
@@ -195,7 +220,7 @@ QA-11~15/21~23/31/32/41/51/61/62를 포함한 각 비Voice QA도 결과와 구�
 6. raw diagnostic event와 metric endpoint의 구분
 7. clock domain, source timestamp와 관측 방법
 8. timeout/censoring/failure 처리
-9. warm-up, scored trial, percentile와 macro aggregation
+9. warm-up, scored trial, 산술평균과 supporting uncertainty 계산
 10. evidence label과 주장 가능한 범위
 
 문서 승인이 끝난 뒤 `benchmark/architecture/`에 같은 event ID와 formula를 갖는 machine-readable contract를 만든다. 문서와 machine contract가 다르면 실행하지 않고 freeze를 실패시킨다.

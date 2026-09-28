@@ -108,7 +108,9 @@ payload가 준비된 후 철회가 시작된다. A는 중앙 use gate, B는 각 
 
 A-07 인증·A-08 승인과 C-04 삭제·C-06 기록 변경에서 A는 중앙 정책/API, B는 capability schema·gate validator·revocation reader가 바뀔 수 있다. 공유 validator library를 허용해 B 수정 개수를 부풀리지 않는다. QA-51의 초과 노출은 양쪽 0을 지향하는 필수 검증이며 trade-off를 위해 위반을 허용하지 않는다. 실제 use와 철회 ACK를 trace로 연결한다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`이며 safety gate가 추가**된다. protected-use 시간, authorization field, policy change와 authority 장애 복구를 측정하고 wrong-target·duplicate·revoked approval·unauthorized use 0건을 별도 자격 조건으로 적용한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 

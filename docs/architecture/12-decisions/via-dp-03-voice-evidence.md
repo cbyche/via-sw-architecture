@@ -165,7 +165,9 @@ M-01/07은 이번 경계에 직접 관련된다. M-07의 단어 시각→구간 
 
 Agent A-01~09는 동일 경계를 유지한다. E-01~05는 입력 source·revision의 계측과 schema reader까지 추적하되 더 많은 event가 자동으로 더 완전한 trace를 뜻하지 않는다. 재연결 후 provider epoch를 새 VIA Conversation으로 착각하지 않고, 과거 근거와 이어 주어야 한다. QA-31은 실제 Task가 영향을 받은 fault에 한정하며 Voice-only 재연결을 Task 복구로 대체하지 않는다. 양쪽 모두 원음 무제한 보존이나 과다 외부 제공은 허용하지 않는다.
 
-## 7. 전체 19개 QA 비교
+## 7. Core ASR 적용과 상세 QA 사고실험
+
+이 DP의 초기 역할은 **QA-09/19/29 `PRIMARY`, QA-39 `REGRESSION_ONLY`**다. Voice interaction 시간, input-evidence·referent·correction field와 Voice 계약 change를 주로 비교하고 session 단절·재연결은 복구 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
 

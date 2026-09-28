@@ -1,7 +1,7 @@
 # VIA Core Evaluation Profile
 
-> 기준일: 2026-09-26
-> 상태: **평가 입력 profile 확정 / 공통 QA harness qualification 전 / 모든 DP 공식 campaign NOT_RUN**
+> 기준일: 2026-09-28
+> 상태: **평가 입력 profile 확정 / QA-09·19·29·39 core ASR 확정 / 새 공통 harness qualification 전**
 > 목적: 실제 A/B 구현과 측정에 사용할 장비, Model, Agent, 합성 자료, 핵심 QA와 최소 workload를 한 곳에 고정한다.
 
 ## 1. 이번 평가에서 사용하는 구성
@@ -80,24 +80,18 @@ Reference Agent는 다음만 구현한다.
 
 도메인 reasoning 품질, 실제 브라우저 조작, 실제 메일 발송은 구현하지 않는다. Agent가 정답 Task ID나 evaluator oracle을 VIA에 제공해서도 안 된다. Process 배치 DP를 비교할 때도 Reference Agent 자체는 VIA 밖의 동일 fixture이며, 비교 대상은 VIA-owned client/bridge의 Process 경계다.
 
-## 3. 이번에 우선 측정할 ASR 후보 10개
+## 3. 모든 DP에서 측정할 확정 core ASR 4개
 
-아래 10개를 하나의 campaign에서 수집한다. `CANDIDATE`는 중요성과 구조 인과를 검증할 working set이라는 뜻이며, A/B 결과 전에 `CONFIRMED_ASR`로 승격하지 않는다.
+아래 네 QA는 2026-09-28 사용자 결정으로 `CONFIRMED_ASR`가 됐다. 모든 VIA-DP-01~18 A/B package에서 네 값을 산출하되, 구조 인과가 없는 항목은 `REGRESSION_ONLY`로 명시한다. target·score band와 새 machine contract는 아직 동결되지 않았다.
 
-| Category | ASR 후보 | 선택 이유 |
+| Category | Core ASR | 선택 이유 |
 | --- | --- | --- |
-| Responsiveness | QA-01 Delegated Path VIA Responsiveness | 위임·결과 경로의 call graph 차이를 직접 본다. |
-| Responsiveness | QA-02 VIA Direct Voice Response Responsiveness | 사용자가 가장 자주 체감하는 직접 음성 경로다. |
-| Responsiveness | QA-05 Task Control Responsiveness | 취소·정정이 일반 작업에 밀리는 구조를 구분한다. |
-| Correctness | QA-11 VIA Request Handling Correctness | 전체 요청 결과가 실제로 맞는지 보는 통합 결과다. |
-| Correctness | QA-12 Request Semantic Resolution Correctness | 같은 semantic LLM의 권한·Context·호출 graph 차이를 분리한다. |
-| Modifiability | QA-21 Agent Change Locality | Reference Agent 계약 변경이 VIA에 퍼지는 범위를 센다. |
-| Modifiability | QA-22 Model, Context & State Change Locality | 모델·Context·상태 계약의 변경 파급을 센다. |
-| Reliability | QA-31 Correct Task Recovery Time | 재시작·worker 실패 뒤 올바른 Task 복구를 본다. |
-| Reliability | QA-32 Fault Blast Radius | 한 fault가 무관한 interaction과 Task까지 멈추는지 본다. |
-| Observability | QA-61 Execution Trace Completeness | 모든 QA 결과를 실제 실행 경로로 설명할 수 있는지 본다. |
+| Responsiveness | QA-09 Average VIA-attributable Interaction Responsiveness | delegation·direct·status·control의 VIA 책임시간을 같은 DP A/B 모집단에서 단순 평균한다. |
+| Correctness | QA-19 VIA Request Handling Field Accuracy | QA-11 요청 처리와 QA-12 의미 해석의 중복 없는 applicable field 정확도를 센다. QA-13~15는 회귀 진단이다. |
+| Modifiability | QA-29 Average Architecture Change Locality | 해당 DP에 applicable한 A/M/C/E change당 changed Architecture Element 수를 평균한다. |
+| Reliability | QA-39 Fault Containment & Recovery Success Rate | 불필요한 장애 확산 없이 deadline 안에 올바르게 복구한 fault trial 비율을 센다. |
 
-QA-03, QA-04, QA-13~15와 QA-62는 같은 trace에서 함께 계산해 보조 QA로 보존한다. 특히 QA-03/04 endpoint를 harness에서 빼지 않는다. 다만 현재 핵심 DP의 A/B를 가를 구조 인과가 약하면 최종 보고서의 ASR로 승격하지 않는다. QA-41은 target PC에서 반드시 기록하지만, 현재 메모리 상한 요구가 없으므로 진단값으로 유지한다.
+QA-01~05, QA-11~15, QA-21~23, QA-31/32는 core ASR input·diagnostic으로 보존한다. QA-04는 QA-09 평균에서 제외한 Voice regression이다. QA-41은 target PC에서 기록하지만 score 없는 진단값이고, QA-51·61·62와 action/access rule은 qualification이다.
 
 ## 4. 최소 정상 workload 6개
 
@@ -105,14 +99,14 @@ QA-03, QA-04, QA-13~15와 QA-62는 같은 trace에서 함께 계산해 보조 QA
 
 | ID | 정상 사용자 시나리오 | 반드시 포함할 구조 상황 | 주 DP | 주 QA |
 | --- | --- | --- | --- | --- |
-| N-01 | 화면의 합성 예산표를 가리키며 결론을 직접 질문 | 시간 정렬된 화면 Context, bounded direct response | 01, 03~06, 16~18 | QA-02, 11, 12, 22, 61 |
-| N-02 | 합성 예산 보고서의 결론을 찾아 발표자료 작업에 반영하도록 위임 | Context 선택, semantic 판단, Agent submit/result | 05, 06, 09, 15, 17, 18 | QA-01, 11, 12, 21, 22, 61 |
-| N-03 | “그 문서”처럼 부족한 지시를 대화 이력으로 보완한 뒤 위임 | Conversation·Task·Context relation과 clarification | 02, 06, 07, 14, 16 | QA-01, 05, 11, 12, 22, 61 |
-| N-04 | 장기 작업의 progress, 추가 질문, 결과를 Voice/Text로 이어 받음 | Agent lifecycle, channel transition, result binding | 04, 09, 10, 15 | QA-01, 03, 11, 13, 15, 21, 61 |
-| N-05 | 두 Task가 동시에 진행 중일 때 한 Task만 정정·취소하고 결과는 역순 도착 | control lane, identity binding, async convergence | 02, 07, 13~15 | QA-01, 05, 11, 13, 14, 61 |
-| N-06 | 직접 응답과 Agent 결과 음성 재생 중 사용자가 끼어들어 중단 | 실제 audio queue·renderer stop과 다음 control 입력 | 03, 04, 10, 11, 13 | QA-02, 04, 05, 61 |
+| N-01 | 화면의 합성 예산표를 가리키며 결론을 직접 질문 | 시간 정렬된 화면 Context, bounded direct response | 01, 03~06, 16~18 | QA-09, QA-19, QA-29, QA-61 |
+| N-02 | 합성 예산 보고서의 결론을 찾아 발표자료 작업에 반영하도록 위임 | Context 선택, semantic 판단, Agent submit/result | 05, 06, 09, 15, 17, 18 | QA-09, QA-19, QA-29, QA-61 |
+| N-03 | “그 문서”처럼 부족한 지시를 대화 이력으로 보완한 뒤 위임 | Conversation·Task·Context relation과 clarification | 02, 06, 07, 14, 16 | QA-09, QA-19, QA-29, QA-61 |
+| N-04 | 장기 작업의 progress, 추가 질문, 결과를 Voice/Text로 이어 받음 | Agent lifecycle, channel transition, result binding | 04, 09, 10, 15 | QA-09, QA-19, QA-29, QA-61 |
+| N-05 | 두 Task가 동시에 진행 중일 때 한 Task만 정정·취소하고 결과는 역순 도착 | control lane, identity binding, async convergence | 02, 07, 13~15 | QA-09, QA-19, QA-29, QA-61 |
+| N-06 | 직접 응답과 Agent 결과 음성 재생 중 사용자가 끼어들어 중단 | 실제 audio queue·renderer stop과 다음 control 입력 | 03, 04, 10, 11, 13 | QA-09 control class, QA-19, QA-61; QA-04 regression |
 
-QA-21/22는 위 실행을 반복해 얻는 시간이 아니라 별도 change pack의 Architecture Element ledger로 계산한다. N-01~06은 변경 뒤 필수 기능이 유지됐는지 확인하는 회귀 입력으로 재사용한다.
+QA-29는 위 실행을 반복해 얻는 시간이 아니라 별도 applicable change pack의 Architecture Element ledger로 계산한다. N-01~06은 변경 뒤 필수 기능이 유지됐는지 확인하는 회귀 입력으로 재사용한다.
 
 정상 여섯 workload가 VIA-DP-01~07, 09~11, 13~18의 정상 경로를 덮는다. 복구 원본인 VIA-DP-08과 crash 전후 기록 순서인 VIA-DP-12는 정상 실행만으로 차이가 드러나지 않으므로 아래 최소 fault가 담당한다. 따라서 workload 수를 더 늘리지 않고도 18개 DP의 참여 경로를 한 번 이상 관찰할 수 있다.
 
@@ -122,9 +116,9 @@ QA-21/22는 위 실행을 반복해 얻는 시간이 아니라 별도 change pac
 
 | ID | Fault | 주 DP 영역 | 주 QA |
 | --- | --- | --- | --- |
-| F-01 | active Agent run 중 VIA process 종료 후 재기동 | 복구 원본·Task owner·Agent 상태 재연결 | QA-31, 32, 61 |
-| F-02 | VIA-owned Agent client/worker의 fatal crash | Process isolation | QA-31, 32 |
-| F-03 | 사용자 응답 게시 직후 evidence durable commit 전 crash | 응답–기록 순서 | QA-31, 61, 62 |
+| F-01 | active Agent run 중 VIA process 종료 후 재기동 | 복구 원본·Task owner·Agent 상태 재연결 | QA-39, QA-61 |
+| F-02 | VIA-owned Agent client/worker의 fatal crash | Process isolation | QA-39 |
+| F-03 | 사용자 응답 게시 직후 evidence durable commit 전 crash | 응답–기록 순서 | QA-39, QA-61, QA-62 |
 
 F-02에서 외부 Reference Agent 자체의 crash를 Process 격리의 이점으로 세지 않는다. 양쪽 후보에 같은 fault 의미와 necessary dependency closure를 적용한다.
 
@@ -134,16 +128,11 @@ F-02에서 외부 Reference Agent 자체의 crash를 Process 격리의 이점으
 
 | QA | 초기 target 제안 | A/B 차이 해석의 초기 기준 |
 | --- | --- | --- |
-| QA-01 | p95 ≤ 2,000 ms | ≥ 100 ms이면서 ≥ 10% |
-| QA-02 | p95 ≤ 1,000 ms | ≥ 100 ms이면서 ≥ 10% |
-| QA-05 | p95 ≤ 1,000 ms | ≥ 100 ms이면서 ≥ 10% |
-| QA-11 | ≥ 95% | ≥ 5 percentage points |
-| QA-12 | ≥ 95% | ≥ 5 percentage points |
-| QA-21 | 평균 ≤ 2 Architecture Elements | 평균 ≥ 1 Element 차이 |
-| QA-22 | 평균 ≤ 3 Architecture Elements | 평균 ≥ 1 Element 차이 |
-| QA-31 | p95 ≤ 5,000 ms | ≥ 500 ms이면서 ≥ 20% |
-| QA-32 | excess affected unit = 0 | 1 user-visible unit 이상 차이 |
-| QA-61 | 100% | ≥ 5 percentage points |
+| QA-09 | PENDING | mean difference 기준 PENDING |
+| QA-19 | PENDING | field percentage-point 기준 PENDING |
+| QA-29 | PENDING | applicable change당 평균 Element 기준 PENDING |
+| QA-39 | PENDING | fault success percentage-point 기준 PENDING |
+| QA-61 qualification | 100% 제안 유지 | 결과 신뢰 조건으로 별도 판정 |
 
 이 표는 score band나 최종 제품 SLO를 확정하지 않는다. Fixture, 반복 수, percentile 계산과 실패 처리까지 machine contract로 동결한 뒤 첫 공식 A/B campaign을 시작한다.
 
@@ -151,8 +140,8 @@ F-02에서 외부 Reference Agent 자체의 crash를 Process 격리의 이점으
 
 1. QA-01~15의 complete machine contract, fixture와 oracle schema를 구현한다.
 2. 일부러 latency·semantic·binding·state·continuity를 깨뜨린 sentinel candidate로 각 evaluator의 failure detection을 증명한다.
-3. N-01~06, F-01~03, change pack과 19개 QA 공통 trace를 하나의 reusable harness에 연결한다.
+3. N-01~06, F-01~03, change pack과 네 core ASR의 상세 evidence를 하나의 reusable harness에 연결한다.
 4. 그 뒤에만 한 축을 바꾼 DP별 A/B candidate를 구현한다.
-5. 같은 MacBook과 dependency profile에서 complete 19-QA 표를 생성하고 실제 변별 QA를 선별한다.
+5. 같은 MacBook과 dependency profile에서 complete four-core-ASR 표와 상세 breakdown을 생성한다.
 
 현재 qualification이 끝난 것은 local semantic LLM 설치·실행, Alibaba S2S 합성 WAV 왕복 smoke test와 외부 deterministic Reference Agent다. [VIA-DP-06 v4](../../../results/architecture-evaluation/current/via-dp-06-evaluation-v4-20260927/report.md)는 case당 1회 breadth evidence, [VIA-DP-11 v4](../../../results/architecture-evaluation/current/via-dp-11-evaluation-v4-20260927/report.md)는 targeted Process evidence다. 둘 다 최종 통합 campaign 완료가 아니다. 이전 VIA-DP-11 v1~v3는 [preliminary archive](../../../results/architecture-evaluation/archive/dp11-preliminary-20260926/README.md)이며 current claim에 사용하지 않는다.

@@ -1,9 +1,9 @@
-# Architecture Evaluation Method — QA Catalog Sensitivity Sweep
+# Architecture Evaluation Method — Four-Core-ASR A/B Evaluation
 
 > 작성일: 2026-09-21
-> 상태: **USER REVIEW DRAFT / QA catalog 승인 및 실제 DP 후보 점수 산출 전**
-> 목적: QA Catalog metric을 모두 유지한 상태에서 구조 대안의 실제 trade-off를 탐색하되, 사후 해석·cherry-picking을 방지한다.
-> Current measurement contract: category-range QA catalog와 metric은 초안이며 target/score, fixture, 반복 수와 DP applicability는 새 Measurement Freeze 전에 다시 고정한다.
+> 상태: **CORE ASR APPROVED / measurement freeze 및 실제 DP 후보 점수 산출 전**
+> 목적: QA-09·19·29·39를 모든 DP의 공통 Architecture 평가축으로 사용하고 상세 진단을 보존하면서 사후 해석·cherry-picking을 방지한다.
+> Current measurement contract: core 정의와 집계는 승인됐고 target/score, fixture, 반복 수와 DP applicability는 새 Measurement Freeze 전에 고정한다.
 
 ## 1. 핵심 원칙
 
@@ -15,9 +15,9 @@
 
 실제 평가는 두 단계로 나눈다.
 
-### Evaluation A — Architecture Sensitivity Sweep
+### Evaluation A — Core-ASR Measurement
 
-- QA Catalog metric을 모두 확인
+- QA-09·19·29·39를 모두 산출하고 상세 input·diagnostic·qualification을 함께 확인
 - 각 DP의 모든 합리적 후보를 같은 Metric/Target/Score Boundary로 평가
 - weighted total / winner를 만들지 않음
 - 구조적으로 해당 DP와 인과관계가 없는 QA는 N/A로 기록
@@ -29,7 +29,7 @@
 - Evaluation A 결과와 구조 인과분석을 Differentiation Criteria에 적용
 - criteria를 충족한 QA를 해당 DP의 Primary Architecture Driver로 확정. 발표 편의를 위해 개수를 강제하지 않음
 - 나머지는 regression / constraint / secondary evidence로 유지
-- 전체 DP를 가로지르는 구조 영향과 위험을 [Quality Model](../08-quality-attributes/quality-model.md)의 기준으로 검토하여 QA별 ASR 상태를 기록
+- 네 core ASR의 `PRIMARY`/`REGRESSION_ONLY` 역할과 상세 원인을 [Core ASR Contract](../08-quality-attributes/core-asr-contract.md)의 기준으로 기록
 - Primary set 고정 후 final decision narrative와 weakness/tactic evaluation 수행
 
 ## 1-A. 상호 배타적인 Steelman A/B 구성
@@ -61,31 +61,16 @@
 
 즉 **storytelling은 결과 후에 다듬을 수 있지만, 평가 논리와 기준은 결과 전에 고정한다.**
 
-## 3. QA Catalog 전수 Sweep
+## 3. 네 core ASR과 상세 evidence
 
-| ID | QA metric | Sweep role |
+| ID | Core metric | DP package role |
 | --- | --- | --- |
-| QA-01 | Delegated Path VIA Responsiveness | strong candidate / target pending |
-| QA-02 | VIA Direct Voice Response Responsiveness | strong candidate / target pending |
-| QA-03 | Agent Progress Voice Feedback Responsiveness | strong candidate / target pending |
-| QA-04 | Voice Interruption Responsiveness | strong/conditional; target pending |
-| QA-05 | Task Control Responsiveness | strong/conditional; target pending |
-| QA-11 | VIA Request Handling Correctness | previous QA-05 metric preserved; integrated outcome; conditional |
-| QA-12 | Request Semantic Resolution Correctness | non-additive driver; conditional |
-| QA-13 | Task & Interaction Binding Correctness | non-additive driver; strong/conditional |
-| QA-14 | Async State Convergence Correctness | non-additive driver; strong/conditional |
-| QA-15 | Interaction & Task Continuity Correctness | non-additive driver; strong/conditional |
-| QA-21 | Agent Change Locality | strong candidate |
-| QA-22 | Model, Context & State Change Locality | strong candidate |
-| QA-23 | Experiment & Logging Change Locality | strong/conditional; target pending |
-| QA-31 | Correct Task Recovery Time | strong/conditional |
-| QA-32 | Fault Blast Radius | strong/conditional |
-| QA-41 | Target-device Memory Footprint | 자원 진단; 상한·유의미한 구조 차이 근거 전 ASR 우선 제외 |
-| QA-51 | Protected Data Exposure Minimization | strong candidate |
-| QA-61 | Execution Trace Completeness | strong/conditional; target pending |
-| QA-62 | Evidence Reproducibility | strong/conditional; target pending |
+| QA-09 | applicable interaction trial의 평균 VIA 책임시간 | QA-01/02/03/05 input; QA-04 제외 |
+| QA-19 | applicable QA-11/12 oracle field accuracy | 중복 없는 field micro-average; QA-13~15 회귀 진단 |
+| QA-29 | applicable change당 평균 changed Architecture Element 수 | QA-21~23의 DP별 사전 동결 합집합 |
+| QA-39 | fault containment·correct recovery 성공률 | QA-31/32 evidence로 binary trial PASS 판정 |
 
-Evaluation A에서는 이 역할 label 때문에 점수를 제외하지 않는다. 모든 applicable active QA를 계산한다. 단, QA-11과 QA-12~15는 같은 성공을 중복 보상하는 weighted total로 합산하지 않는다. 동시성은 workload stratum, action/access safety는 필수 회귀로 별도 기록한다.
+모든 DP는 네 행을 결과 package에 포함한다. 구조 차이의 자연 인과가 예상되면 `PRIMARY`, 같은 기능 보존 확인이면 `REGRESSION_ONLY`로 사전 분류한다. 물리적으로 참여하지 않는 모집단은 근거와 함께 `NOT_APPLICABLE`, 설계·endpoint 미완료는 `UNRESOLVED`다. QA-41은 memory diagnostic, QA-51과 action/access rule은 safety qualification, QA-61/62는 evidence qualification으로 별도 기록한다.
 
 ## 4. Differentiation Criteria
 
@@ -133,7 +118,7 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 
 1. DP가 다루는 구조 질문
 2. hybrid·제3안 검토를 거쳐 구성한 상호 배타적인 steelman A/B
-3. 승인된 active QA sensitivity sweep mini-heatmap
+3. 네 core ASR 결과와 상세 breakdown mini-heatmap
 4. Differentiation Criteria를 충족한 Primary QA 확대
 5. Primary QA의 raw metric + 0~5 score
 6. trade-off 설명
@@ -141,13 +126,13 @@ Criteria 자체를 후보 결과 전에 고정하고, '어느 후보에게 유�
 8. 선택안의 weakness
 9. 후보 정의 때 포함한 보완책과 남는 약점 설명. 결과 후 새 보완책을 발견하면 양쪽 적용 가능성을 검토하고 후보 version을 갱신하여 동일 metric 재평가
 
-QA-01~05의 발표 표는 p95 대표값 옆에 동일 표본의 평균과 sample count를 둔다. QA-11/12는 strict 성공 분자/분모와 field-level correctness를 함께 보여주되 field-level을 새 QA나 독립 가중치로 취급하지 않는다. 선택안에 tactic을 적용한 B′를 실제 실행했다면 complete table에 함께 두고, 실행하지 않은 QA는 A/B 값을 복사하지 않고 N/A로 표시한다.
+QA-09는 합계·sample count·산술평균과 class breakdown을, QA-19는 correct/total field와 family breakdown을, QA-29는 changed-element 합계/change 수를, QA-39는 successful/all fault trial을 보여준다. p95, strict run pass, recovery-time 분포와 maximum blast radius는 진단이다. 선택안에 tactic을 적용한 B′를 실제 실행했다면 complete table에 함께 두고, 실행하지 않은 값을 A/B에서 복사하지 않는다.
 
-이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 active QA 전수 sweep과 사전 정의한 criteria로 답할 수 있고, 결과가 평평한 QA도 숨기지 않는다.
+이렇게 하면 '왜 이 QA만 비교했는가?'라는 질문에 네 핵심 사용자 질문과 사전 정의한 상세 evidence로 답할 수 있고, 결과가 평평한 ASR이나 regression failure도 숨기지 않는다.
 
 ## 7. A/B 측정 진입 전 남은 작업
 
-실제 DP 후보 점수를 계산하기 전에 QA Catalog metric 모두에 대해 다음을 동결한다.
+실제 DP 후보 점수를 계산하기 전에 네 core ASR 각각에 대해 다음을 동결한다.
 
 - 대표 Metric
 - workload / stimulus
@@ -156,4 +141,4 @@ QA-01~05의 발표 표는 p95 대표값 옆에 동일 표본의 평균과 sample
 - evidence level
 - N/A 판정 규칙
 
-확정 ASR은 아직 없다. [Core Evaluation Profile](../11-measurement/evaluation-profile.md)의 10개 `CANDIDATE`를 먼저 같은 campaign에서 측정하고 DP별 구조 인과와 실제 sensitivity를 확인한 뒤, 별도 ID를 만들지 않고 `CONFIRMED_ASR` 또는 다른 상태로 갱신한다.
+QA-09·19·29·39의 `CONFIRMED_ASR` 분류는 확정됐다. 아직 확정하지 않은 것은 DP별 모집단·반복·target·score band와 실제 결과다. 기존 reference campaign을 새 core QA 결과로 소급 집계하지 않는다.
