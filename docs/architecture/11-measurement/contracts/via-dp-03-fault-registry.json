@@ -1,0 +1,73 @@
+{
+  "schema_version": "via.dp-03-fault-registry.v0.1",
+  "status": "DRAFT_FOR_FREEZE",
+  "metric": "QA-39",
+  "repetitions_per_fault_per_candidate": 10,
+  "recovery_deadline_ms": 5000,
+  "user_visible_units": [
+    {"id": "UV-01", "name": "current UI-grounded Voice request"},
+    {"id": "UV-02", "name": "unrelated S2S direct Voice request path"},
+    {"id": "UV-03", "name": "Text interaction path"},
+    {"id": "UV-04", "name": "existing Task status and control path"},
+    {"id": "UV-05", "name": "existing Downstream Agent execution path"},
+    {"id": "UV-06", "name": "non-UI Context source read path"}
+  ],
+  "common_pass_conditions": [
+    "actual affected units are a subset of the candidate-specific necessary dependency closure",
+    "current request reaches the frozen correct recovery or truthful clarification disposition",
+    "terminal disposition is available no later than fault onset plus 5000 ms",
+    "no duplicate candidate handoff, response or Agent dispatch",
+    "no stale epoch, wrong UI slice or wrong Request binding survives",
+    "required fault, containment, recovery and terminal evidence is complete"
+  ],
+  "faults": [
+    {
+      "fault_id": "DP03-F-01",
+      "injection": "speech evidence source disconnects after a provisional/input event and before final evidence",
+      "A_injection_source": "streaming_asr",
+      "B_injection_source": "shared_s2s_time_aligned_final",
+      "necessary_dependency_closure": {"A": ["UV-01"], "B": ["UV-01"]},
+      "required_terminal": "reconnect and reconstruct final evidence, or present truthful clarification without dispatch"
+    },
+    {
+      "fault_id": "DP03-F-02",
+      "injection": "an event from the old source epoch arrives after reconnect",
+      "A_injection_source": "streaming_asr",
+      "B_injection_source": "shared_s2s_time_aligned_final",
+      "necessary_dependency_closure": {"A": ["UV-01"], "B": ["UV-01"]},
+      "required_terminal": "old epoch rejected and current request remains bound to new epoch"
+    },
+    {
+      "fault_id": "DP03-F-03",
+      "injection": "the same accepted partial or final evidence event is delivered twice",
+      "A_injection_source": "streaming_asr",
+      "B_injection_source": "shared_s2s_time_aligned_final",
+      "necessary_dependency_closure": {"A": [], "B": []},
+      "required_terminal": "single candidate lifecycle and single handoff or dispatch"
+    },
+    {
+      "fault_id": "DP03-F-04",
+      "injection": "a partial or lower-sequence event arrives after accepted final evidence",
+      "A_injection_source": "streaming_asr",
+      "B_injection_source": "shared_s2s_time_aligned_final_duplicate_or_stale_item",
+      "necessary_dependency_closure": {"A": [], "B": []},
+      "required_terminal": "accepted final candidate is not rolled back or duplicated"
+    },
+    {
+      "fault_id": "DP03-F-05",
+      "injection": "provider audio offsets cannot be mapped across a local capture clock gap",
+      "A_injection_source": "asr_audio_clock_mapping",
+      "B_injection_source": "s2s_audio_clock_mapping",
+      "necessary_dependency_closure": {"A": ["UV-01"], "B": ["UV-01"]},
+      "required_terminal": "evidence marked invalid and truthful clarification presented without guessing a UI slice"
+    },
+    {
+      "fault_id": "DP03-F-06",
+      "injection": "the required UI timeline slice is evicted before candidate handoff",
+      "A_injection_source": "ui_timeline_retention",
+      "B_injection_source": "ui_timeline_retention",
+      "necessary_dependency_closure": {"A": ["UV-01"], "B": ["UV-01"]},
+      "required_terminal": "evidence unavailable and truthful clarification presented without substituting the latest screen state"
+    }
+  ]
+}

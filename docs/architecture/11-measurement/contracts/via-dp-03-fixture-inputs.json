@@ -1,0 +1,182 @@
+{
+  "schema_version": "via.dp-03-fixture-inputs.v0.1",
+  "status": "DRAFT_FOR_FREEZE",
+  "visibility": "CANDIDATE_VISIBLE",
+  "oracle_fields_present": false,
+  "clock_contract": {
+    "audio_clock_id": "dp03-canonical-audio-ms",
+    "ui_clock_id": "dp03-canonical-ui-ms",
+    "clock_mapping_id": "dp03-identity-clock-map-v0.1",
+    "mapping": "audio_ms == ui_monotonic_ms",
+    "error_bound_ms": 0
+  },
+  "common_audio_contract": {
+    "locale": "ko-KR",
+    "encoding": "PCM_S16LE",
+    "sample_rate_hz": 16000,
+    "channels": 1,
+    "source": "deterministic_synthetic_speech",
+    "asset_digest_status": "PENDING_GENERATION"
+  },
+  "cases": [
+    {
+      "fixture_id": "DP03-L-01",
+      "spine_id": "SP-01",
+      "source_case": "TC-04.1",
+      "audio_asset_ref": "audio/dp03-l01.wav",
+      "utterance_end_ms": 1550,
+      "ui_events": [
+        {"id": "l01-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l01-pointer-1", "at_ms": 260, "type": "pointer", "object_id": "chart-A", "x": 340, "y": 280},
+        {"id": "l01-pointer-2", "at_ms": 540, "type": "pointer", "object_id": "chart-A", "x": 348, "y": 282},
+        {"id": "l01-pointer-3", "at_ms": 900, "type": "pointer", "object_id": "chart-B", "x": 760, "y": 285}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l01-a-partial-1", "kind": "partial", "text": "여기 표시된", "observed_at_ms": 680, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 300, "end_ms": 520}]},
+          {"id": "l01-a-final", "kind": "final", "text": "여기 표시된 값 읽어줘", "observed_at_ms": 1850, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 300, "end_ms": 520}]}
+        ],
+        "B": [
+          {"id": "l01-b-final", "kind": "final", "text": "여기 표시된 값 읽어줘", "observed_at_ms": 1850, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 300, "end_ms": 520}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-02",
+      "spine_id": "SP-01",
+      "source_case": "TC-04.2",
+      "audio_asset_ref": "audio/dp03-l02.wav",
+      "utterance_end_ms": 1900,
+      "ui_events": [
+        {"id": "l02-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l02-pointer-1", "at_ms": 260, "type": "pointer", "object_id": "chart-A", "x": 340, "y": 280},
+        {"id": "l02-pointer-2", "at_ms": 500, "type": "pointer", "object_id": "chart-A", "x": 345, "y": 282},
+        {"id": "l02-pointer-3", "at_ms": 820, "type": "pointer", "object_id": "chart-B", "x": 760, "y": 285},
+        {"id": "l02-pointer-4", "at_ms": 1080, "type": "pointer", "object_id": "chart-B", "x": 765, "y": 288}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l02-a-partial-1", "kind": "partial", "text": "여기와", "observed_at_ms": 640, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 280, "end_ms": 480}]},
+          {"id": "l02-a-partial-2", "kind": "partial", "text": "여기와 여기의", "observed_at_ms": 1210, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 280, "end_ms": 480}, {"text_start_char": 4, "text_end_char": 6, "start_ms": 850, "end_ms": 1050}]},
+          {"id": "l02-a-final", "kind": "final", "text": "여기와 여기의 차이를 설명해줘", "observed_at_ms": 2200, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 280, "end_ms": 480}, {"text_start_char": 4, "text_end_char": 6, "start_ms": 850, "end_ms": 1050}]}
+        ],
+        "B": [
+          {"id": "l02-b-final", "kind": "final", "text": "여기와 여기의 차이를 설명해줘", "observed_at_ms": 2200, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 280, "end_ms": 480}, {"text_start_char": 4, "text_end_char": 6, "start_ms": 850, "end_ms": 1050}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-03",
+      "spine_id": "SP-04",
+      "source_case": "TC-04.6",
+      "audio_asset_ref": "audio/dp03-l03.wav",
+      "utterance_end_ms": 2050,
+      "ui_events": [
+        {"id": "l03-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l03-pointer-1", "at_ms": 220, "type": "pointer", "object_id": "para-A", "x": 300, "y": 420},
+        {"id": "l03-pointer-2", "at_ms": 620, "type": "pointer", "object_id": "para-A", "x": 305, "y": 425},
+        {"id": "l03-pointer-3", "at_ms": 1010, "type": "pointer", "object_id": "para-B", "x": 310, "y": 610},
+        {"id": "l03-pointer-4", "at_ms": 1330, "type": "pointer", "object_id": "para-B", "x": 315, "y": 615}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l03-a-partial-1", "kind": "partial", "text": "이 부분", "observed_at_ms": 760, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 260, "end_ms": 600}]},
+          {"id": "l03-a-partial-2", "kind": "partial", "text": "이 부분 아니 여기만", "observed_at_ms": 1440, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 260, "end_ms": 600}, {"text_start_char": 8, "text_end_char": 10, "start_ms": 1050, "end_ms": 1280}]},
+          {"id": "l03-a-final", "kind": "final", "text": "이 부분 아니 여기만 설명해줘", "observed_at_ms": 2350, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 260, "end_ms": 600}, {"text_start_char": 8, "text_end_char": 10, "start_ms": 1050, "end_ms": 1280}]}
+        ],
+        "B": [
+          {"id": "l03-b-final", "kind": "final", "text": "이 부분 아니 여기만 설명해줘", "observed_at_ms": 2350, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 260, "end_ms": 600}, {"text_start_char": 8, "text_end_char": 10, "start_ms": 1050, "end_ms": 1280}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-04",
+      "spine_id": "SP-02",
+      "source_case": "TC-04.5",
+      "audio_asset_ref": "audio/dp03-l04.wav",
+      "utterance_end_ms": 2300,
+      "ui_events": [
+        {"id": "l04-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l04-selection-1", "at_ms": 200, "type": "selection", "object_ids": ["table-A", "table-B"], "selection_state_id": "selection-tables"},
+        {"id": "l04-pointer-1", "at_ms": 1160, "type": "pointer", "object_id": "para-B", "x": 320, "y": 620}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l04-a-partial-1", "kind": "partial", "text": "이 표들은", "observed_at_ms": 820, "alignment_units": [{"text_start_char": 0, "text_end_char": 3, "start_ms": 280, "end_ms": 660}]},
+          {"id": "l04-a-partial-2", "kind": "partial", "text": "이 표들은 두고 이 문단만", "observed_at_ms": 1630, "alignment_units": [{"text_start_char": 0, "text_end_char": 3, "start_ms": 280, "end_ms": 660}, {"text_start_char": 9, "text_end_char": 13, "start_ms": 1180, "end_ms": 1470}]},
+          {"id": "l04-a-final", "kind": "final", "text": "이 표들은 두고 이 문단만 고쳐줘", "observed_at_ms": 2600, "alignment_units": [{"text_start_char": 0, "text_end_char": 3, "start_ms": 280, "end_ms": 660}, {"text_start_char": 9, "text_end_char": 13, "start_ms": 1180, "end_ms": 1470}]}
+        ],
+        "B": [
+          {"id": "l04-b-final", "kind": "final", "text": "이 표들은 두고 이 문단만 고쳐줘", "observed_at_ms": 2600, "alignment_units": [{"text_start_char": 0, "text_end_char": 3, "start_ms": 280, "end_ms": 660}, {"text_start_char": 9, "text_end_char": 13, "start_ms": 1180, "end_ms": 1470}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-05",
+      "spine_id": "SP-01",
+      "source_case": "TC-03.5",
+      "audio_asset_ref": "audio/dp03-l05.wav",
+      "utterance_end_ms": 1650,
+      "ui_events": [
+        {"id": "l05-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l05-pointer-pre", "at_ms": 100, "type": "pointer", "object_id": "chart-A", "x": 340, "y": 280},
+        {"id": "l05-pointer-post", "at_ms": 760, "type": "pointer", "object_id": "chart-B", "x": 760, "y": 285}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l05-a-partial-1", "kind": "partial", "text": "여기 표시된", "observed_at_ms": 700, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 320, "end_ms": 540}]},
+          {"id": "l05-a-final", "kind": "final", "text": "여기 표시된 수치 읽어줘", "observed_at_ms": 1950, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 320, "end_ms": 540}]}
+        ],
+        "B": [
+          {"id": "l05-b-final", "kind": "final", "text": "여기 표시된 수치 읽어줘", "observed_at_ms": 1950, "alignment_units": [{"text_start_char": 0, "text_end_char": 2, "start_ms": 320, "end_ms": 540}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-06",
+      "spine_id": "SP-02",
+      "source_case": "TC-04.4",
+      "audio_asset_ref": "audio/dp03-l06.wav",
+      "utterance_end_ms": 1800,
+      "ui_events": [
+        {"id": "l06-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l06-drag-start", "at_ms": 240, "type": "selection", "object_ids": [], "selection_state_id": "selection-empty", "phase": "start"},
+        {"id": "l06-drag-update", "at_ms": 520, "type": "selection", "object_ids": ["para-A-fragment"], "selection_state_id": "selection-partial", "phase": "update"},
+        {"id": "l06-drag-end", "at_ms": 850, "type": "selection", "object_ids": ["para-A"], "selection_state_id": "selection-para-A", "phase": "end"}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l06-a-partial-1", "kind": "partial", "text": "이 문장들만", "observed_at_ms": 1060, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 360, "end_ms": 900}]},
+          {"id": "l06-a-final", "kind": "final", "text": "이 문장들만 요약해줘", "observed_at_ms": 2100, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 360, "end_ms": 900}]}
+        ],
+        "B": [
+          {"id": "l06-b-final", "kind": "final", "text": "이 문장들만 요약해줘", "observed_at_ms": 2100, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 360, "end_ms": 900}]}
+        ]
+      }
+    },
+    {
+      "fixture_id": "DP03-L-07",
+      "spine_id": "SP-01",
+      "source_case": "TC-04.7",
+      "audio_asset_ref": "audio/dp03-l07.wav",
+      "utterance_end_ms": 2700,
+      "ui_events": [
+        {"id": "l07-screen-1", "at_ms": 0, "type": "screen_revision", "window_id": "window-budget", "document_id": "doc-budget", "viewport_id": "budget-p1"},
+        {"id": "l07-pointer-1", "at_ms": 260, "type": "pointer", "object_id": "para-A", "x": 300, "y": 420},
+        {"id": "l07-window-switch", "at_ms": 980, "type": "window_transition", "window_id": "window-quote", "document_id": "doc-quote", "viewport_id": "quote-p1"},
+        {"id": "l07-pointer-2", "at_ms": 1660, "type": "pointer", "object_id": "quote-body", "x": 300, "y": 420}
+      ],
+      "speech_events": {
+        "A": [
+          {"id": "l07-a-partial-1", "kind": "partial", "text": "이 부분과", "observed_at_ms": 800, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 300, "end_ms": 640}]},
+          {"id": "l07-a-partial-2", "kind": "partial", "text": "이 부분과 저 문서의", "observed_at_ms": 1480, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 300, "end_ms": 640}, {"text_start_char": 6, "text_end_char": 10, "start_ms": 1020, "end_ms": 1320}]},
+          {"id": "l07-a-partial-3", "kind": "partial", "text": "이 부분과 저 문서의 이 부분", "observed_at_ms": 2200, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 300, "end_ms": 640}, {"text_start_char": 6, "text_end_char": 10, "start_ms": 1020, "end_ms": 1320}, {"text_start_char": 12, "text_end_char": 16, "start_ms": 1700, "end_ms": 2040}]},
+          {"id": "l07-a-final", "kind": "final", "text": "이 부분과 저 문서의 이 부분 비교해줘", "observed_at_ms": 3000, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 300, "end_ms": 640}, {"text_start_char": 6, "text_end_char": 10, "start_ms": 1020, "end_ms": 1320}, {"text_start_char": 12, "text_end_char": 16, "start_ms": 1700, "end_ms": 2040}]}
+        ],
+        "B": [
+          {"id": "l07-b-final", "kind": "final", "text": "이 부분과 저 문서의 이 부분 비교해줘", "observed_at_ms": 3000, "alignment_units": [{"text_start_char": 0, "text_end_char": 4, "start_ms": 300, "end_ms": 640}, {"text_start_char": 6, "text_end_char": 10, "start_ms": 1020, "end_ms": 1320}, {"text_start_char": 12, "text_end_char": 16, "start_ms": 1700, "end_ms": 2040}]}
+        ]
+      }
+    }
+  ]
+}

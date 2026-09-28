@@ -26,9 +26,13 @@
     "랑",
     "도",
     "만",
-    "보다"
+    "보다",
+    "의"
   ],
   "particle_suffix_match_order": "longest_first",
+  "optional_plural_markers": [
+    "들"
+  ],
   "standalone_patterns": [
     {
       "pattern_id": "ko.locative.here",
@@ -141,7 +145,8 @@
   ],
   "correction_cues_create_candidate_retraction": false,
   "notes": [
-    "Exact matching applies after at most one registered particle suffix is stripped from an eojeol.",
+    "Exact matching applies after at most one registered particle suffix and then at most one optional plural marker are stripped from the noun eojeol.",
+    "The optional plural marker allows required forms such as 이 표들은 and 이 문장들만 to map to the registered nouns 표 and 문장 without opening arbitrary noun matching.",
     "A correction cue is preserved for later semantic Grounding; it does not retract a DP-03 candidate.",
     "An ASR revision that removes a previously observed span may produce a retracted candidate event."
   ]

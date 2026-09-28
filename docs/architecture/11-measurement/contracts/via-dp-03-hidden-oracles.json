@@ -1,0 +1,63 @@
+{
+  "schema_version": "via.dp-03-hidden-oracles.v0.1",
+  "status": "DRAFT_FOR_FREEZE",
+  "visibility": "EVALUATOR_ONLY",
+  "candidate_access": "PROHIBITED",
+  "cases": [
+    {
+      "fixture_id": "DP03-L-01",
+      "expected_final_spans": [{"text_start_char": 0, "text_end_char": 2, "target_ids": ["chart-A"], "role": "value_source"}],
+      "expected_fields": {"input.final_text": "여기 표시된 값 읽어줘", "referent.target_set": ["chart-A"], "request.goal": "read_displayed_value", "request.handling": "direct"},
+      "forbidden": ["chart-B", "latest_pointer_snapshot_as_referent"]
+    },
+    {
+      "fixture_id": "DP03-L-02",
+      "expected_final_spans": [
+        {"text_start_char": 0, "text_end_char": 2, "target_ids": ["chart-A"], "role": "comparison_left"},
+        {"text_start_char": 4, "text_end_char": 6, "target_ids": ["chart-B"], "role": "comparison_right"}
+      ],
+      "expected_fields": {"input.final_text": "여기와 여기의 차이를 설명해줘", "referent.span_order": ["chart-A", "chart-B"], "referent.target_set": ["chart-A", "chart-B"], "referent.role_by_span": ["comparison_left", "comparison_right"], "request.goal": "compare", "request.handling": "direct"},
+      "forbidden": ["both_spans_bound_to_chart-B", "span_order_collapsed"]
+    },
+    {
+      "fixture_id": "DP03-L-03",
+      "expected_final_spans": [
+        {"text_start_char": 0, "text_end_char": 4, "target_ids": ["para-A"], "role": "corrected_away_target"},
+        {"text_start_char": 8, "text_end_char": 10, "target_ids": ["para-B"], "role": "effective_target"}
+      ],
+      "expected_fields": {"input.final_text": "이 부분 아니 여기만 설명해줘", "referent.target_set": ["para-B"], "referent.retracted_target_set": ["para-A"], "request.goal": "explain", "request.handling": "direct"},
+      "forbidden": ["dp03_candidate_retracted_due_to_semantic_correction", "final_request_targets_para-A", "duplicate_dispatch"]
+    },
+    {
+      "fixture_id": "DP03-L-04",
+      "expected_final_spans": [
+        {"text_start_char": 0, "text_end_char": 3, "target_ids": ["table-A", "table-B"], "role": "preserve"},
+        {"text_start_char": 9, "text_end_char": 13, "target_ids": ["para-B"], "role": "modify"}
+      ],
+      "expected_fields": {"input.final_text": "이 표들은 두고 이 문단만 고쳐줘", "referent.target_set": ["table-A", "table-B", "para-B"], "referent.role_by_span": ["preserve", "modify"], "request.goal": "edit", "request.preserved_target_set": ["table-A", "table-B"], "request.handling": "delegate"},
+      "forbidden": ["table-A_modified", "table-B_modified", "para-B_omitted"]
+    },
+    {
+      "fixture_id": "DP03-L-05",
+      "expected_final_spans": [{"text_start_char": 0, "text_end_char": 2, "target_ids": ["chart-A"], "role": "value_source"}],
+      "expected_fields": {"input.final_text": "여기 표시된 수치 읽어줘", "referent.target_set": ["chart-A"], "request.goal": "read_displayed_value", "request.handling": "direct"},
+      "forbidden": ["chart-B", "post_speech_pointer_overrides_pre_turn_state"]
+    },
+    {
+      "fixture_id": "DP03-L-06",
+      "expected_final_spans": [{"text_start_char": 0, "text_end_char": 4, "target_ids": ["para-A"], "role": "summary_scope"}],
+      "expected_fields": {"input.final_text": "이 문장들만 요약해줘", "referent.target_set": ["para-A"], "request.goal": "summarize", "request.handling": "delegate"},
+      "forbidden": ["selection-empty", "selection-partial", "drag_start_only_as_final_scope"]
+    },
+    {
+      "fixture_id": "DP03-L-07",
+      "expected_final_spans": [
+        {"text_start_char": 0, "text_end_char": 4, "target_ids": ["para-A"], "role": "comparison_left"},
+        {"text_start_char": 6, "text_end_char": 10, "target_ids": ["doc-quote"], "role": "document_scope"},
+        {"text_start_char": 12, "text_end_char": 16, "target_ids": ["quote-body"], "role": "comparison_right"}
+      ],
+      "expected_fields": {"input.final_text": "이 부분과 저 문서의 이 부분 비교해줘", "referent.span_order": ["para-A", "doc-quote", "quote-body"], "referent.target_set": ["para-A", "quote-body"], "referent.role_by_span": ["comparison_left", "document_scope", "comparison_right"], "request.goal": "compare", "request.handling": "direct"},
+      "forbidden": ["same_coordinate_same_document_assumption", "both_content_spans_bound_to_quote-body"]
+    }
+  ]
+}

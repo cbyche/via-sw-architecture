@@ -39,6 +39,16 @@ Oracle transcript, 정답 target identity와 semantic correction label을 depend
 input에 주지 않는다. Mock은 동결된 speech-evidence event만 제공하며 candidate가 만든 final field를
 hidden oracle과 비교해 QA-19 `MEASURED_MOCK_E2E` 점수를 만든다.
 
+Machine-readable 초안은 두 파일로 물리적으로 분리한다.
+
+- [Candidate-visible Fixtures](./contracts/via-dp-03-fixture-inputs.json): 동일 audio reference, UI timeline과
+  A/B mock이 실제로 전달할 transcript/alignment event만 포함한다.
+- [Evaluator-only Oracles](./contracts/via-dp-03-hidden-oracles.json): expected span target·role, 최종
+  QA-19 field와 금지 결과만 포함하며 candidate process에는 mount하거나 전달하지 않는다.
+
+현재 audio asset path와 source timing은 정의했지만 WAV와 digest는 아직 생성하지 않았으므로 두 파일은
+`DRAFT_FOR_FREEZE`다.
+
 ## 2. Functional qualification pack
 
 이 pack은 scored Core-ASR run보다 먼저 양쪽이 같은 기능을 만들 수 있는지 확인한다. Existing Test
@@ -132,7 +142,7 @@ DP-03에 직접 적용할 pre-result change pack은 Core-ASR 원장의 `M-01`, `
 | Change | 고정 자극 | A에서 추적할 경계 | B에서 추적할 경계 |
 | --- | --- | --- | --- |
 | M-01 S2S provider 교체 | 동등 Voice 기능의 S2S adapter/profile 교체 | S2S 대화 경로; ASR authority는 유지 | Voice와 timestamp final contract를 함께 제공할 새 S2S adapter/build |
-| M-07 S2S event 정보 변경 | word timestamp→segment timestamp/revision 계약 | ASR adapter·candidate revision과 별도 S2S event correlation | S2S native alignment unit·candidate adapter |
+| M-07 S2S event 정보 변경 | word timestamp→segment timestamp/revision 계약 | S2S timestamp를 소비하지 않으므로 ASR evidence 계약은 유지; 기능 회귀만 수행 | S2S native alignment unit·candidate adapter·evidence state 변경 |
 | C-03 화면 연동 계약 변경 | handle/coordinate/selection 표현 변경 | 공통 UI timeline normalizer와 evidence reference | 공통 UI timeline normalizer와 evidence reference |
 | E-01 timing span 추가 | candidate lifecycle에 span 하나 추가 | partial/final/candidate producer와 trace contract | final/candidate producer와 trace contract |
 | E-02 correlation 추가 | 새 correlation dimension 전파 | S2S+ASR+candidate causal chain | S2S final+candidate causal chain |
@@ -141,6 +151,12 @@ DP-03에 직접 적용할 pre-result change pack은 Core-ASR 원장의 `M-01`, `
 Architecture Element registry와 실제 changed-element ledger가 없으면 구조 설명만 남기고 숫자를 만들지
 않는다. 공통 library 하나의 변경을 호출 지점 수만큼 중복 세지 않으며, B model training 내부는 VIA
 Architecture Element가 아니지만 model output/API·adapter·deployment contract 변화는 센다.
+
+Machine-readable pre-result baseline과 touched-element set은
+[DP-03 Change Ledger](./contracts/via-dp-03-change-ledger.json)에 둔다. 이 원장은 결과를 본 뒤 요소
+경계를 바꾸지 않도록 C/I/S/D identity와 여섯 독립 change patch를 먼저 고정한 것이다. 최종 QA-29
+수치는 Candidate Implementation에서 각 change patch와 SP-01/02/04 기능 회귀를 실제로 통과한 뒤
+같은 ID 집합으로 집계한다.
 
 ### QA-39 — REGRESSION_ONLY
 
@@ -158,6 +174,12 @@ A의 F-01은 Streaming ASR, B의 F-01은 S2S timestamped-final evidence에 주�
 recovery·no-duplicate·evidence 조건은 동일하다. 공통 기본값은 fault item당 A/B 각 10회와
 5,000 ms recovery deadline이다.
 
+Fault injection 의미, user-visible unit과 candidate별 necessary dependency closure는
+[DP-03 Fault Registry](./contracts/via-dp-03-fault-registry.json)에 둔다. F-01은 현재 turn의 speech
+evidence session disconnect이며 S2S 전체 서비스 중단으로 확대하지 않는다. 따라서 A/B 모두 현재
+UI-grounded Voice request만 necessary closure에 넣고 unrelated Voice/Text/Task/Agent/Context path는
+계속 사용 가능해야 한다.
+
 ## 6. 실행 전 qualification 순서
 
 1. JSON schema와 pattern registry의 static validation
@@ -174,9 +196,9 @@ Candidate Implementation 뒤 이 mock trace로 실행한 결과는 `MEASURED_MOC
 
 | 값 | 현재 상태 |
 | --- | --- |
-| SP-01/02/04 fixture·oracle digest | `PENDING` |
+| SP-01/02/04 fixture·oracle digest | L-01~07 machine payload `DRAFT`; WAV·digest·input-separation receipt `PENDING` |
 | A/B mock profile ID, schedule와 deterministic seed | machine profile `DRAFT`; payload fixture·freeze digest `PENDING` |
-| DP-03 event patch·field/change/fault registry digest | `PENDING` |
+| DP-03 event patch·field/change/fault registry digest | machine registries `DRAFT`; reviewed digest `PENDING` |
 | PoC UI timeline retention | fixture pre-turn 1,000 ms + 발화·finalization·handoff schedule로 계산 예정 |
 | 공통 run order·repetition·timeout·recovery deadline | Shared contract 기본값 채택; freeze digest 전 |
 | QA-09/19/29/39 target·score band | Scoring Contract proposal 사용; DP-03 freeze 전 |
@@ -187,6 +209,8 @@ Candidate Implementation 뒤 이 mock trace로 실행한 결과는 `MEASURED_MOC
 
 Pre-freeze machine 초안은 [DP-03 Spine Patch Registry](./contracts/via-dp-03-spine-patch.json),
 [A Streaming ASR Mock Profile](./contracts/via-dp-03-a-streaming-asr-mock-profile.json)과
-[B S2S Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json)에 둔다. 아직 `PENDING`인 것은 초안의
+[B S2S Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json),
+[Candidate-visible Fixtures](./contracts/via-dp-03-fixture-inputs.json)와
+[Evaluator-only Oracles](./contracts/via-dp-03-hidden-oracles.json)에 둔다. 아직 `PENDING`인 것은 초안의
 존재가 아니라 이 값들을 fixture payload·oracle digest와 묶어 변경 불가능한 Measurement Freeze로
 승인하는 일이다.

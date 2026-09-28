@@ -1,0 +1,74 @@
+{
+  "schema_version": "via.dp-03-change-ledger.v0.1",
+  "status": "DRAFT_FOR_FREEZE",
+  "metric": "QA-29",
+  "count_rule": "unique modified plus added plus removed Architecture Element IDs per independent change",
+  "evidence_status": "PRE_RESULT_DESIGN_LEDGER",
+  "counting_notes": [
+    "M-07 changes S2S timestamp/revision information. Candidate A does not consume S2S timestamp evidence, so its S2S conversation contract and behavior remain unchanged and the item is a zero-element regression-only verification.",
+    "Candidate B consumes native S2S aligned-text information, so M-07 modifies its adapter, normalized evidence contract, candidate handling and evidence session state.",
+    "A zero-element item remains in the QA-29 denominator because the change is applicable and the frozen functional regression must still pass."
+  ],
+  "candidates": {
+    "A": {
+      "baseline_elements": [
+        {"id": "A-C-01", "type": "C", "name": "S2S conversation adapter", "responsibility": "Normalize the shared S2S voice conversation events without owning timestamp evidence."},
+        {"id": "A-C-02", "type": "C", "name": "Streaming ASR evidence adapter", "responsibility": "Normalize partial, revision and final time-aligned ASR events."},
+        {"id": "A-C-03", "type": "C", "name": "Deterministic deictic detector", "responsibility": "Detect frozen Korean deictic spans without semantic grounding."},
+        {"id": "A-C-04", "type": "C", "name": "Candidate lifecycle builder", "responsibility": "Create, revise, retract and finalize source-time voice evidence candidates."},
+        {"id": "A-C-05", "type": "C", "name": "UI timeline normalizer", "responsibility": "Normalize and pin source-time screen, pointer, selection, focus and viewport evidence."},
+        {"id": "A-C-06", "type": "C", "name": "Grounding consumer", "responsibility": "Resolve candidate evidence into semantic referents using the shared semantic path."},
+        {"id": "A-C-07", "type": "C", "name": "DP-03 trace writer", "responsibility": "Record causal speech, candidate, UI pin and handoff events."},
+        {"id": "A-I-01", "type": "I", "name": "S2S conversation contract", "responsibility": "Shared voice turn, response, interruption and session event meaning."},
+        {"id": "A-I-02", "type": "I", "name": "Streaming speech evidence contract", "responsibility": "Partial/final aligned text, epoch, revision, timing and error meaning."},
+        {"id": "A-I-03", "type": "I", "name": "UI timeline contract", "responsibility": "Versioned source UI events and source-clock identity."},
+        {"id": "A-I-04", "type": "I", "name": "Voice evidence candidate contract", "responsibility": "Deictic span and source-time UI evidence reference envelope."},
+        {"id": "A-I-05", "type": "I", "name": "Grounding handoff contract", "responsibility": "Accepted final evidence and clarification/error disposition."},
+        {"id": "A-I-06", "type": "I", "name": "DP-03 trace contract", "responsibility": "Versioned timing, correlation and lifecycle evidence fields."},
+        {"id": "A-S-01", "type": "S", "name": "ASR evidence session state", "responsibility": "Epoch, segment, accepted revision and finality state."},
+        {"id": "A-S-02", "type": "S", "name": "Pinned UI history state", "responsibility": "Retained timeline slices and pin/release lifetime."},
+        {"id": "A-S-03", "type": "S", "name": "Candidate lifecycle state", "responsibility": "Candidate identity, revision, status and provenance."},
+        {"id": "A-S-04", "type": "S", "name": "DP-03 trace record", "responsibility": "Persisted causal trace schema used for replay."},
+        {"id": "A-D-01", "type": "D", "name": "Shared S2S binding", "responsibility": "Connection and lifecycle of the single S2S dependency."},
+        {"id": "A-D-02", "type": "D", "name": "Streaming ASR binding", "responsibility": "Connection and lifecycle of the additional timestamp-capable ASR dependency."}
+      ],
+      "changes": [
+        {"change_id": "M-01", "modified": ["A-C-01", "A-D-01"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "M-07", "modified": [], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "C-03", "modified": ["A-C-05", "A-I-03", "A-S-02"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-01", "modified": ["A-C-02", "A-C-04", "A-C-07", "A-I-06"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-02", "modified": ["A-C-01", "A-C-02", "A-C-04", "A-C-07", "A-I-06", "A-S-04"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-03", "modified": ["A-C-07", "A-I-06", "A-S-04"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]}
+      ]
+    },
+    "B": {
+      "baseline_elements": [
+        {"id": "B-C-01", "type": "C", "name": "S2S conversation and evidence adapter", "responsibility": "Normalize shared voice events and native turn-final aligned text from the single S2S."},
+        {"id": "B-C-03", "type": "C", "name": "Deterministic deictic detector", "responsibility": "Detect frozen Korean deictic spans without semantic grounding."},
+        {"id": "B-C-04", "type": "C", "name": "Final candidate builder", "responsibility": "Create final source-time voice evidence candidates from one S2S final event."},
+        {"id": "B-C-05", "type": "C", "name": "UI timeline normalizer", "responsibility": "Normalize and pin source-time screen, pointer, selection, focus and viewport evidence."},
+        {"id": "B-C-06", "type": "C", "name": "Grounding consumer", "responsibility": "Resolve candidate evidence into semantic referents using the shared semantic path."},
+        {"id": "B-C-07", "type": "C", "name": "DP-03 trace writer", "responsibility": "Record causal speech, candidate, UI pin and handoff events."},
+        {"id": "B-I-01", "type": "I", "name": "S2S conversation contract", "responsibility": "Shared voice turn, response, interruption, session and native final aligned-text meaning."},
+        {"id": "B-I-02", "type": "I", "name": "Final speech evidence contract", "responsibility": "Turn-final aligned text, epoch, timing and error meaning normalized for candidate creation."},
+        {"id": "B-I-03", "type": "I", "name": "UI timeline contract", "responsibility": "Versioned source UI events and source-clock identity."},
+        {"id": "B-I-04", "type": "I", "name": "Voice evidence candidate contract", "responsibility": "Deictic span and source-time UI evidence reference envelope."},
+        {"id": "B-I-05", "type": "I", "name": "Grounding handoff contract", "responsibility": "Accepted final evidence and clarification/error disposition."},
+        {"id": "B-I-06", "type": "I", "name": "DP-03 trace contract", "responsibility": "Versioned timing, correlation and lifecycle evidence fields."},
+        {"id": "B-S-01", "type": "S", "name": "S2S evidence session state", "responsibility": "Epoch, final item identity and acceptance state."},
+        {"id": "B-S-02", "type": "S", "name": "Pinned UI history state", "responsibility": "Retained timeline slices and pin/release lifetime."},
+        {"id": "B-S-03", "type": "S", "name": "Candidate lifecycle state", "responsibility": "Candidate identity, final status and provenance."},
+        {"id": "B-S-04", "type": "S", "name": "DP-03 trace record", "responsibility": "Persisted causal trace schema used for replay."},
+        {"id": "B-D-01", "type": "D", "name": "Shared timestamp-capable S2S binding", "responsibility": "Connection and lifecycle of the single S2S dependency including aligned final text."}
+      ],
+      "changes": [
+        {"change_id": "M-01", "modified": ["B-C-01", "B-D-01"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "M-07", "modified": ["B-C-01", "B-C-04", "B-I-02", "B-S-01"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "C-03", "modified": ["B-C-05", "B-I-03", "B-S-02"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-01", "modified": ["B-C-01", "B-C-04", "B-C-07", "B-I-06"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-02", "modified": ["B-C-01", "B-C-04", "B-C-07", "B-I-06", "B-S-04"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]},
+        {"change_id": "E-03", "modified": ["B-C-07", "B-I-06", "B-S-04"], "added": [], "removed": [], "function_regression": ["SP-01", "SP-02", "SP-04"]}
+      ]
+    }
+  }
+}

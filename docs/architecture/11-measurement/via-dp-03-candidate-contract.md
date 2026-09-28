@@ -177,8 +177,10 @@ Detector는 LLM, pointer movement 또는 evaluator target을 사용하지 않는
 처리 순서는 다음과 같다.
 
 1. Unicode NFC normalization을 적용하되 원문 code-point offset mapping을 보존한다.
-2. whitespace·문장부호로 eojeol range를 만들고 frozen 조사 suffix를 최대 한 번 제거한다.
-3. standalone form과 `이/저 + frozen UI noun` form을 exact match한다.
+2. whitespace·문장부호로 eojeol range를 만들고 frozen 조사 suffix를 최대 한 번 제거한 뒤, noun
+   eojeol 끝의 frozen 복수 표지 `들`을 최대 한 번 제거한다.
+3. standalone form과 `이/저 + frozen UI noun` form을 exact match한다. 따라서 필수 표현
+   `이 표들은`, `이 문장들만`도 각각 noun `표`, `문장`으로 제한적으로 match한다.
 4. bare `이`, `저`, anaphoric `그/거기`와 일반 단어 내부 substring은 match하지 않는다.
 5. match된 text range를 덮는 `alignment_units[]`의 최소 start와 최대 end를 speech interval로 사용한다.
 6. 완성되지 않은 `이/저` partial은 후속 unit을 기다린다.

@@ -219,7 +219,7 @@ oracle이다.
 | --- | --- | --- |
 | S2S provider/model 교체 | Voice 대화 경로와 ASR 병렬 입력 결합 | Voice 대화와 timestamp evidence를 함께 재검증 |
 | Streaming ASR 교체 | timestamp·partial·revision adapter와 profile | `NOT_APPLICABLE` unless B 구조 변경 |
-| Timestamp 정보 변경 | ASR granularity·stability와 candidate lifecycle | S2S output head/token/schema와 candidate adapter |
+| Timestamp 정보 변경 | S2S timestamp를 소비하지 않으므로 ASR evidence 계약 유지; 기능 회귀만 수행 | S2S output head/token/schema, candidate adapter와 evidence state |
 | UI evidence 계약 변경 | 공통 clock/reference mapping | 공통 clock/reference mapping |
 | Trace correlation 추가 | S2S+ASR+candidate identity | S2S final+candidate identity |
 
@@ -247,11 +247,11 @@ closure와 fault injection event digest는 아직 `PENDING`이다.
 | Candidate machine schema와 detector pattern registry | `DRAFT` |
 | UI evidence reference와 retention contract | anchor/lifetime rule `DRAFT`; 제품 budget `PENDING` |
 | Shared Spine membership과 DP-03 event patch digest | `DRAFT` |
-| Voice/UI fixture와 hidden oracle digest | `PENDING` |
+| Voice/UI fixture와 hidden oracle digest | L-01~07 machine payload `DRAFT`; WAV·digest·input-separation receipt `PENDING` |
 | Repetition, run order, timeout | 공통 기본값 채택; campaign digest `PENDING` |
 | QA-19 field registry digest | `DRAFT` |
-| QA-29 element/change ledger | `DRAFT` |
-| QA-39 deadline/fault repetition | 공통 5,000 ms·10회; closure/injection digest `PENDING` |
+| QA-29 element/change ledger | machine ledger `DRAFT`; change regression evidence·digest `PENDING` |
+| QA-39 deadline/fault repetition | machine fault/closure registry `DRAFT`; injection trace·digest `PENDING` |
 | Target와 0~5 score band | 공통 Scoring Contract proposal 사용; DP-03 freeze 전 |
 | Evidence label과 endpoint 범위 | `MEASURED_MOCK_E2E`; physical Voice endpoint qualification `PENDING` |
 
@@ -259,7 +259,11 @@ closure와 fault injection event digest는 아직 `PENDING`이다.
 
 Machine-readable 초안은 [DP-03 Spine Patch Registry](./contracts/via-dp-03-spine-patch.json),
 [A Streaming ASR Mock Profile](./contracts/via-dp-03-a-streaming-asr-mock-profile.json)과
-[B S2S Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json)에 있다. Primary timing은 A/B의
+[B S2S Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json),
+[Candidate-visible Fixtures](./contracts/via-dp-03-fixture-inputs.json)와
+[Evaluator-only Oracles](./contracts/via-dp-03-hidden-oracles.json),
+[Change Ledger](./contracts/via-dp-03-change-ledger.json)와
+[Fault Registry](./contracts/via-dp-03-fault-registry.json)에 있다. Primary timing은 A/B의
 turn-final 도착을 모두 utterance end + 300 ms로 두어 특정 모델 latency를 한쪽에 미리 유리하게
 주지 않는다. A만 지칭 audio interval 종료 + 160 ms의 partial을 받으므로, 그 provisional evidence를
 실제 candidate path가 활용할 수 있는지가 구조 차이로 남는다. 180/600 ms final profile은 양쪽에 같은
@@ -267,8 +271,8 @@ fast/slow sensitivity 조건으로 적용한다.
 
 ## 9. 다음 작업
 
-1. DP-03 spine patch와 A/B mock profile 초안을 review하고 freeze한다.
-2. Candidate schema·pattern registry를 spine fixture example에 적용해 모순과 누락을 review한다.
-3. Voice/UI fixture, hidden semantic oracle, QA-29 ledger와 QA-39 closure/injection digest를 동결한다.
+1. DP-03 spine patch, A/B mock profile, L-01~07 fixture/oracle, QA-29 ledger와 QA-39 registry 초안을 review한다.
+2. Canonical WAV를 생성하고 Voice/UI fixture·hidden oracle·input-separation digest를 만든다.
+3. Fault event payload와 change regression patch를 작성해 현재 static validator에 연결한다.
 4. 전체 contract와 fixture digest를 Measurement Freeze manifest로 만든다.
 5. freeze digest 전에는 active candidate, runner, scored result 또는 winner를 만들지 않는다.
