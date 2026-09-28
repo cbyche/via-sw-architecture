@@ -26,7 +26,7 @@ flowchart TB
 
 대상은 VIA Task의 상태 전이 writer다. Conversation과 Task의 교차 원자 commit은 VIA-DP-02, 복구 원본은 VIA-DP-08로 분리한다. 양쪽에 같은 Repository·revision 검사·명령 dedup·outbox와 외부 재연결 계약을 둔다. epoch는 supervisor가 재활성화될 때 증가하는 소유권 세대이며 이전 writer의 쓰기를 거부하는 기준이다. Supervisor는 async task와 mailbox를 가진 VIA 코드이지 LLM·OS Process·Downstream Agent가 아니다.
 
-**모델 불변식:** S2S 모델 1개 + semantic LLM 1개. Component·Task별 모델을 별도 적재하지 않는다. 프롬프트·세션·호출을 나눠도 공유 모델이며 동시 처리·취소 지원을 임의 가정하지 않는다.
+**모델 조건:** 공통 S2S 1개와 semantic LLM 1개를 공유하고 VIA-DP-03 선택을 양 후보에 동일하게 고정한다. DP-03 A가 fixed context이면 승인된 Streaming ASR 1개도 양쪽에 동일하게 존재한다. 이 DP 자체는 Component·Task별 모델을 추가하지 않으며 동시 처리·취소 지원을 임의 가정하지 않는다.
 
 **그림의 구현 수준:** VIA Core Process는 A/B 공통 비교용 배치다. Process 격리는 VIA-DP-11의 별도 축이며 외부 Agent는 양쪽 모두 별도 Runtime이다. 실선은 라벨의 호출·반환·저장, 점선은 비동기 event다. 메모리 queue 수락과 디스크 commit을 구별하며 별도 message bus 제품은 가정하지 않는다. queue 용량·포화 정책은 추후 동일 조건으로 동결한다. 이 구조도는 후보 명세이며 구현 완료 증거가 아니다.
 

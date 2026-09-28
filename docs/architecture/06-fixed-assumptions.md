@@ -103,15 +103,16 @@ Task Association을 평가하면서 정답 Task ID를 입력에 몰래 넣지 �
 
 ### FA-10. 같은 모델을 고정할 때와 달라도 되는 때
 
-**구성 불변식: S2S 1개 + semantic LLM 1개.** Component·Task·단계 수가 늘어도 모델을 추가 적재하거나 복제하지 않는다. 프롬프트, schema, 호출 횟수·순서, 세션·KV cache는 달라질 수 있다. 동일 모델의 동시 호출 지원·대기·취소 한도는 실제 dependency profile로 고정하며, 단계 분리를 무료 병렬 추론으로 간주하지 않는다. 별도 ASR·TTS·helper 모델 추가는 현재 범위 밖이다.
+**공통 기반 불변식: S2S 1개 + semantic LLM 1개, Component·Task·단계별 복제 금지.** 프롬프트, schema, 호출 횟수·순서, 세션·KV cache는 달라질 수 있다. 동일 모델의 동시 호출 지원·대기·취소 한도는 실제 dependency profile로 고정하며, 단계 분리를 무료 병렬 추론으로 간주하지 않는다. VIA-DP-03 A는 비교 축 자체로 timestamp-capable Streaming ASR 1개를 추가하는 승인된 예외이고, B는 별도 ASR 없이 S2S 1개에 time-aligned final-text capability를 요구한다. 그 밖의 ASR·TTS·helper 추가는 현재 범위 밖이다.
 
 | 비교 목적 | 동일하게 두는 것 | 달라도 되는 것 | 결과 해석 |
 | --- | --- | --- | --- |
 | 같은 판단 책임의 구조 비교 | 같은 기준 모델·버전·생성 설정, 같은 원천 입력, 같은 기능 요구 | 구조 때문에 달라진 Context 표현·입력 길이·호출 수·실행 순서 | 구조 효과를 우선 관찰 |
-| 구조가 모델의 책임을 바꾸는 비교 | 같은 S2S 1개·semantic LLM 1개, 사용자 목표·완료 조건·허용 기능 | 두 모델 안의 책임 배분, 역할별 지시문과 호출 구성 | 추가 모델 없이 구조·프롬프트·호출 graph의 효과를 구분 |
+| 구조가 모델의 책임을 바꾸는 일반 비교 | 같은 S2S 1개·semantic LLM 1개, 사용자 목표·완료 조건·허용 기능 | 두 모델 안의 책임 배분, 역할별 지시문과 호출 구성 | 구조·프롬프트·호출 graph의 효과를 구분 |
+| VIA-DP-03 evidence-source 비교 | 같은 audio·UI timeline·final candidate 의미·detector·Grounding oracle | A의 별도 Streaming ASR 대 B의 timestamp-capable S2S, provisional 대 turn-final lifecycle | dependency topology와 evidence 시점의 구조 효과를 비교 |
 | 07의 모델 교체 평가 | 같은 사용자 기능과 회귀 시험 | 모델 제공자·크기·API·배치 등 해당 변경 항목 | 변경량과 기존 기능 유지 여부를 평가 |
 
-같은 A/B 비교에는 같은 두 모델을 사용한다. S2S와 semantic LLM의 역할별 프롬프트까지 동일하게 강제하지는 않지만, 한쪽에만 더 좋은 모델이나 추가 모델을 제공하지 않는다. M 계열의 모델 교체 평가에서도 각 역할의 모델을 교체할 뿐 동시 적재 수를 늘리지 않는다.
+같은 A/B 비교에는 원칙적으로 같은 기반 모델을 사용한다. S2S와 semantic LLM의 역할별 프롬프트까지 동일하게 강제하지는 않지만, 한쪽에만 근거 없이 더 좋은 모델이나 무관한 helper를 제공하지 않는다. VIA-DP-03은 A의 별도 Streaming ASR와 B의 timestamp-capable S2S가 바로 독립 변수이므로 동일 모델 portfolio를 강제하지 않는다. 대신 같은 원음, UI timeline, detector, final candidate 의미, Grounding, 기능 gate와 oracle을 고정하고 각 후보의 실제 모델 비용·지연·변경 범위를 모두 포함한다.
 
 **‘작은 모델은 반드시 단순 업무만 가능하다’ 또는 ‘큰 모델이어야 범용 업무가 가능하다’는 식으로 크기만으로 역할 적합성을 선언하지 않는다.** 01~05의 요구 동작을 다룰 수 있다는 근거와 지원 인터페이스를 제시한다. 같은 책임의 프롬프트 수정 기회와 시험 데이터 접근도 동등하게 제공하며 최종 시험 전에 버전을 고정한다.
 
@@ -125,7 +126,7 @@ Task Association을 평가하면서 정답 Task ID를 입력에 몰래 넣지 �
 
 이 세 결과를 한 종류의 실측값처럼 섞지 않는다. 후보의 추가 모델 호출을 재생하더라도 그 호출 지연을 자동으로 0으로 처리하지 않는다.
 
-S2S 사용은 고정이나, 단어별 시각·수정된 전사·취소 이벤트를 모든 S2S가 제공한다고 가정하지 않는다. 두 모델과 비모델 연계 기능이 실제로 주는 정보만 후보가 사용한다. 추가 speech recognizer 모델이 있어야만 성립하는 후보는 현 제약에서 기능 적합성 미충족이며 낮은 QA 점수로 대신하지 않는다.
+S2S 사용은 고정이나, 단어별 시각·수정된 전사·취소 이벤트를 모든 S2S가 제공한다고 가정하지 않는다. 각 후보가 실제로 제공하는 정보만 사용한다. VIA-DP-03 A의 Streaming ASR은 숨은 보조물이 아니라 candidate identity·지연·장애·변경 비용에 포함되는 명시적 Architecture dependency다. B가 S2S native timestamp를 제공하지 못하거나 A가 partial timestamp를 제공하지 못하면 낮은 QA 점수로 대신하지 않고 capability gate 미충족으로 기록한다.
 
 ### 속도 추정에 필요한 기록
 

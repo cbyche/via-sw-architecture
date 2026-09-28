@@ -91,7 +91,7 @@ flowchart LR
 
 VIA Local Software 박스는 사용자 PC에서 실행되는 VIA 자체를 나타낸다. Voice Runtime은 그 안에 있으며, **S2S Model Runtime**과 **Semantic Model Runtime**은 용도가 다른 Model dependency로 구분한다. 각각 local 또는 remote에 배치될 수 있다.
 
-Model 박스를 밖에 그렸다는 이유로 반드시 원격 또는 별도 프로세스로 배치해야 하는 것은 아니다. 현재 고정 구성은 **S2S Model 1개와 semantic LLM 1개**이며, Component·Task·semantic stage별 복제나 추가 speech helper model은 허용하지 않는다. 두 runtime은 local/remote 또는 같은/다른 process에 배치할 수 있지만 역할·호출·evidence 경계는 구분한다. 이 그림은 책임 관계를 보여주며 실제 배치는 설계에서 결정한다.
+Model 박스를 밖에 그렸다는 이유로 반드시 원격 또는 별도 프로세스로 배치해야 하는 것은 아니다. 공통 기반은 **S2S Model 1개와 semantic LLM 1개**이며, Component·Task·semantic stage별 복제는 허용하지 않는다. VIA-DP-03 A만 지칭 시각 evidence source로 timestamp-capable Streaming ASR 1개를 추가하는 명시적 후보이고, B는 별도 ASR 없이 S2S의 time-aligned final output을 사용한다. 각 runtime은 local/remote 또는 같은/다른 process에 배치할 수 있지만 역할·호출·evidence 경계는 구분한다. 이 그림은 책임 관계를 보여주며 실제 배치는 설계에서 결정한다.
 
 다음은 VIA Architecture 설계 범위에 포함한다.
 
@@ -296,7 +296,7 @@ Agent가 업무용 앱을 여는 것은 허용되지만 사용자 질문·승인
 다음 구조적 문제는 이후 Architecture Decision에서 반드시 결정한다.
 
 - Voice Runtime을 S2S 중심으로 어떻게 구성할 것인가
-- S2S 모델 1개·semantic LLM 1개 안에서 필요한 입력 근거와 출력·제어 계약을 어떻게 제공할 것인가. 추가 speech recognizer/VAD/TTS/helper 모델은 허용하지 않음
+- Voice evidence를 S2S 자체의 time-aligned output으로 제공할지, VIA-DP-03 A처럼 timestamp-capable Streaming ASR 1개를 별도 evidence source로 둘지. 그 밖의 speech recognizer/VAD/TTS/helper 추가는 별도 scope 승인 없이 허용하지 않음
 - S2S Direct Response와 VIA Core 처리 사이의 boundary를 어떻게 구성할 것인가
 - VIA semantic inference를 어디에서 수행할 것인가
 - Context를 언제 수집하고 어디에서 보관할 것인가

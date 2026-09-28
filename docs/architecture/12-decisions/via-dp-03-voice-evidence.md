@@ -1,218 +1,318 @@
-# VIA-DP-03 — 음성 입력 근거의 최종 기준
+# VIA-DP-03 — 음성 지칭 근거 생성 경로
 
-> **Core DP 1/6 · 초안 v3 · 2026-09-28 · 상세 검토 예정**
+> **Core DP 1/6 · 대안 계약 합의 · Measurement Freeze 전**
 >
-> 질문: 음성·정정·시각 근거의 의미를 VIA가 정규화해 소유할 것인가, S2S 제공자의 이벤트 계약을 기준으로 삼을 것인가?
+> 질문: 지칭 표현의 실제 발화 시각을 별도 timestamp-capable Streaming ASR에서 받아
+> VIA가 provisional evidence로 관리할 것인가, S2S 모델 자체가 발화 종료 후
+> timestamped transcript를 최종 evidence로 제공할 것인가?
 >
-> 현재 판단: **현재 Core DP set에 확정 포함**. Voice Engine의 local capture-time evidence와 S2S/내장 speech contract의 native source-time evidence 사이 권한을 첫 번째로 상세 검토한다. Phrase/segment timestamp·revision capability가 없는 B는 낮은 점수가 아니라 기능 부적합으로 처리한다. 대안 선택·구현·QA 측정은 하지 않았고 실제 결과는 `NOT_RUN`이다.
+> 현재 판단: 대안 A/B의 책임·호출·candidate lifecycle은 합의했다. 모델 제품, fixture,
+> 반복 수, timeout, target과 score band는 아직 `PENDING`이고 실제 결과는 `NOT_RUN`이다.
+> 구현과 측정은 시작하지 않았다. 상세 동결 원장은
+> [DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)를 따른다.
 
-## 1. 배경 — 늦게 도착한 ‘여기’는 어느 화면을 가리키는가?
+## 1. 해결할 사용자 문제
 
-사용자는 첫 그래프를 가리키며 “여기”, 두 번째 그래프를 가리키며 “여기와 비교해줘”라고 말한다. 전사 결과가 늦거나 수정되어 들어와도 VIA는 당시 화면과 각각의 표현을 연결해야 한다. S2S가 필요한 정보를 항상 같은 형식으로 제공한다고 가정할 수 없다. 이 문제는 ASR 제품 선택이 아니라 어떤 입력 근거를 최종 기준으로 유지하고, 누가 그 의미를 보존하는가의 문제다.
+사용자는 첫 그래프를 가리키며 “여기”, 두 번째 그래프를 가리키며 “여기와 비교해줘”라고
+말할 수 있다. Transcript가 늦게 도착했을 때 현재 pointer 위치만 사용하면 두 지칭이 모두
+두 번째 그래프로 잘못 연결될 수 있다. VIA는 적어도 다음 관계를 보존해야 한다.
+
+```text
+음성의 지칭 span
+→ 실제 audio source-time interval
+→ 그 시각의 UI evidence reference
+→ 이후 Grounding에서 확정할 referent
+```
+
+UC-03의 사전 선택, UC-04의 발화 중 복수 지칭·drag·정정·창 이동과 UC-11의 Voice correction을
+모두 지원한다. 정보가 부족하면 임의 대상을 선택하지 않고 clarification한다.
+
+## 2. DP-03의 경계
+
+DP-03은 **지칭 span과 당시 UI 근거를 묶은 candidate를 만드는 경로**만 비교한다.
+
+DP-03에 포함한다.
+
+- timestamp가 있는 transcript span의 획득
+- deterministic deictic-pattern detection
+- partial/final/retraction lifecycle
+- span과 같은 source-time의 UI evidence reference 연결
+- Voice input evidence provenance와 revision 기록
+
+DP-03에 포함하지 않는다.
+
+- screenshot 분석 또는 Vision model 선택
+- `graph-A` 같은 최종 referent 판정
+- request goal, referent role, Task relation과 handling 확정
+- Downstream Agent 계획·Tool 선택·실행
+- S2S 직접 응답·Tool loop 자체의 선택
+
+Grounding과 semantic LLM은 DP-03 candidate를 소비해 실제 referent와 요청 의미를 나중에
+확정한다. Screenshot이 필요하다면 그 Grounding/Context 경로에서 처리한다. DP-03은 screenshot을
+생성·분석하는 방법을 요구하지 않는다.
+
+## 3. A/B 공통 조건
+
+두 후보 모두 다음 기능과 경계를 유지한다.
+
+- Voice Engine은 S2S 음성 입출력, turn-taking, interruption, 허용된 직접 응답과 Tool loop를 제공한다.
+- VIA Core와 semantic LLM은 최종 요청 의미·Task 연결·handling을 담당한다.
+- 같은 audio, Conversation/Request identity와 UI event source를 입력으로 받는다.
+- 같은 deterministic deictic detector와 같은 Grounding consumer를 사용한다.
+- UI evidence timeline은 지칭어가 transcript에 나타나기 전에 이미 기록되고 있어야 한다.
+- UI 행동은 candidate 생성의 필수 `AND` 조건이 아니다. 사전 selection이나 움직임 없는 지칭도 있다.
+- candidate가 참조하는 과거 UI evidence는 Grounding 시점에 조회 가능해야 한다.
+- evaluator-only target과 정답 timestamp를 후보 입력으로 제공하지 않는다.
+- 잘못된 대상을 빨리 고른 결과는 성공이 아니다.
+
+화면 전체 녹화, screenshot 주기와 보존 정책은 이 DP에서 선택하지 않는다. Candidate에는 내용이
+아니라 `screen_revision_id`, pointer/selection/focus/window/document/viewport reference를 남긴다.
+해당 reference를 실제 과거 Context로 복원하는 공통 계약은 별도로 충족해야 한다.
+
+## 4. 공통 candidate 의미 계약
+
+Candidate는 최종 referent가 아니라 **지칭 span과 당시 UI evidence를 묶어 고정한 입력 근거**다.
+합의한 A의 provisional 예시는 다음과 같다.
+
+```json
+{
+  "span_id": "span-1",
+  "text": "여기",
+  "speech_start_ms": 1120,
+  "speech_end_ms": 1340,
+  "asr_revision": 3,
+  "ui_evidence": {
+    "screen_revision_id": 104,
+    "pointer_samples": ["pointer-310", "pointer-311"],
+    "selection_state_id": "selection-42",
+    "focus_state_id": "focus-18",
+    "window_id": "window-7",
+    "document_id": "document-3",
+    "viewport_id": "viewport-91"
+  },
+  "status": "provisional"
+}
+```
+
+Machine schema는 Measurement Freeze에서 확정하되 다음 의미는 유지한다.
+
+| Field | 의미 |
+| --- | --- |
+| `span_id` | 같은 utterance와 revision chain 안에서 지칭 span을 식별하는 ID |
+| `text` | 해당 revision이 인식한 지칭 표현 |
+| `speech_start_ms`, `speech_end_ms` | transcript 도착 시각이 아닌 audio source 기준 구간 |
+| source revision | A는 ASR revision, B는 S2S evidence revision 또는 final item identity |
+| `ui_evidence` | 해당 source-time을 포함하는 과거 UI reference 집합 |
+| `status` | `provisional`, `final`, `retracted` 중 하나 |
+
+`ui_evidence`에 `graph-A` 같은 최종 target을 넣지 않는다. Target 후보·집합·역할은 이후
+Grounding과 semantic 판단의 출력이다.
+
+## 5. 대안 A — VIA 중심 근거 융합
+
+### 5.1 구성
+
+```text
+Timestamp 없는 S2S
++ Timestamp-capable Streaming ASR
++ VIA가 지칭 span과 UI evidence를 연결
+```
+
+여기서 “Timestamp 없는 S2S”는 S2S의 음성 대화·직접 응답·Tool 기능을 제한한다는 뜻이 아니다.
+DP-03 입력 evidence로 사용할 authoritative word/span source timestamp를 S2S가 제공하지 않는다는
+뜻이다. 별도 Streaming ASR은 같은 microphone audio를 받아 transcript와 timestamp를 제공한다.
 
 ```mermaid
 flowchart TB
- A["음성·화면 원천 시각"] -->|동시 관측| Q["[검토 지점] 입력 근거와 revision 기준"]
- S["S2S의 지연·수정 event"] -->|전사·시각| Q
- Q -->|지칭 시점의 근거| C["VIA 요청 이해"]
-
-classDef common fill:#F3F4F6,stroke:#64748B,color:#111827;
-classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
-class A,S,C common;
-class Q change;
+ A["공통 microphone audio"] --> S["S2S<br/>음성 대화·직접 응답·Tool loop"]
+ A --> R["[A] Timestamp-capable<br/>Streaming ASR"]
+ R -->|"partial/final text + source timestamp"| D["공통 deterministic<br/>deictic detector"]
+ U["공통 UI evidence timeline"] --> C["[A] VIA candidate lifecycle"]
+ D --> C
+ C --> E[("Voice evidence candidates")]
+ E --> G["공통 Grounding + semantic LLM"]
 ```
 
-배경 그림의 주황색 검토 지점은 설계 질문이지 추가 Component가 아니다. VIA는 사용자 PC의 Voice·Text interaction과 업무 연결을 책임진다. Downstream Agent는 실제 업무 계획·Tool 실행을, Model Runtime은 추론 실행을 담당한다. 이 보고서는 그 내부 알고리즘이나 학습을 고르지 않는다.
+### 5.2 정상 처리 순서
 
-## 2. 비교 범위와 공통 조건
+1. VIA는 audio와 UI evidence timeline을 같은 monotonic clock에 연결한다.
+2. Streaming ASR partial에서 새 text span과 word/span timestamp를 받는다.
+3. Deterministic code가 이전 partial과 diff하고 지칭 패턴을 찾는다.
+4. 새 지칭 span마다 source-time을 포함하는 UI evidence reference를 pin해 `provisional` candidate를 만든다.
+5. 후속 ASR revision이 span을 확장·교체·삭제하면 candidate를 update 또는 `retracted`로 바꾼다.
+6. ASR final에서 살아 있는 candidate를 `final`로 확정한다.
+7. Grounding과 semantic LLM이 final candidate를 실제 referent·goal·role·handling으로 해석한다.
 
-**용어:** S2S는 음성을 입력받아 음성으로 응답하는 모델 의존성이다. native 계약은 그 제공자가 원래 내보내는 정보의 의미와 형식이다. revision은 입력 해석의 정정 버전이며, 같은 원음·화면의 시각을 연결해야 한다. 보조 처리는 빠진 근거를 확보하는 VIA 책임이지 원천에 없던 정답을 시험기가 제공한다는 뜻이 아니다.
+### 5.3 지칭어 탐지는 모델 판단이 아니다
 
-대상은 Core에 전달하는 음성 입력·시각·정정 근거의 의미 계약이다. S2S 사용은 양쪽에 고정한다. 음성 출력용 TTS, 물리 재생 정지, 응답 게시 권한을 하나의 ‘보조 모델 사용’ 선택으로 묶지 않는다. 필요한 입력 근거가 없는 후보는 느리거나 부정확한 점수가 아니라 기능 부적합이다.
+Candidate 생성에는 별도 LLM을 사용하지 않는다. 예를 들어 `여기`, `저기`, `이거`, `저거`,
+`이 부분`, `저 그래프`, `이 범위`, `이 둘`과 같은 frozen pattern과 partial diff/state machine을
+사용한다. `이`처럼 아직 완성되지 않은 표현은 후속 token을 기다릴 수 있다. Pattern이 일시적으로
+나타났다 사라지면 candidate도 철회한다.
 
-**기준선에서 확인한 사실:** UC-03·04는 사전 선택과 발화 중 지칭·정정을 모두 요구하며, 06 FA-09·10은 시험기가 잃어버린 이력이나 S2S에 없는 기능을 무료로 보충하지 못하게 한다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
+모든 partial에 candidate를 만들지 않는다. 새 revision에서 **새로운 지칭 span이 나타나거나 기존
+span의 경계·text·timestamp가 바뀐 경우에만** 생성·갱신한다. UI 행동이 없다는 이유로 span을
+버리지는 않는다.
 
-**이번 비교의 설계 가정:** 같은 음성·pointer·screen source, source 시각과 도착 시각, S2S 기능 profile, 허용 Context와 정답 corpus를 사용한다. 실제 acoustic onset·playback stop은 양쪽에서 별도 관측한다. 추가 보조 모델은 허용하지 않는다. 비모델 정렬·정규화와 고정 모델의 실제 지원 기능만 사용한다.
+### 5.4 A의 구조적 비용과 기대
 
-**미확인 사항:** 현재 선택된 S2S 제공자가 없으므로 B가 전체 지칭·정정 UC를 만족하는 데 충분한 native evidence를 제공하는지 미확인이다. A의 정규화·보조 처리 비용과 모델 적합성도 미측정이다. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+- S2S와 Streaming ASR이 같은 audio를 각각 처리한다.
+- ASR 연결·timestamp 계약·partial revision·중복·단절 상태를 Voice Engine이 관리한다.
+- 발화 종료 전에 UI evidence를 pin하고 Grounding 준비를 시작할 수 있다.
+- Timestamp가 붙은 partial이 늦거나 흔들리면 early candidate 이점이 줄어든다.
+- Deictic detection과 candidate 생성 계산시간도 QA-09 경로에 포함한다.
+- ASR timestamp 자체의 정확도와 revision 안정성은 QA-19 근거로 검증한다.
 
-### 구현도를 읽기 위한 공통 전제
+고정 delay 추정은 timestamp가 누락된 경우의 진단 또는 fallback tactic일 수 있으나, 합의한 A의
+기본 candidate는 timestamp-capable Streaming ASR을 사용한다. 별도 forced-alignment model은 현재
+기본 A에 포함하지 않는다.
 
-**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+## 6. 대안 B — 모델 중심 근거 제공
 
-Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
+### 6.1 구성
 
-실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
+```text
+Timestamp-capable S2S
++ VIA가 지칭 span과 UI evidence를 연결
+```
 
-## 3. 대안 A — VIA 입력 계약 + 비모델 정렬·정규화
-
-VIA의 입력 근거 관리자가 S2S event와 원음·화면 시각을 정규화해 Request version에 연결한다. S2S가 제공한 근거를 우선 활용하고 관측 원음·화면의 비모델 정렬·clock mapping을 결합한다. 새 ASR·VAD·TTS 모델을 추가하지 않는 hybrid다. 이 범위로 필수 정보를 얻지 못하면 capability 미충족이다.
-
-최종 입력 version과 원천 근거의 관계를 VIA가 소유한다. S2S와 보조 결과가 충돌하면 조용히 덮어쓰지 않고 정정·보류 기준으로 처리한다. 강점은 제공자 변화에 대한 VIA 계약의 안정성이고, 약점은 충돌 해소와 보조 처리의 독립 수명·자원 책임이다.
+B에는 별도 Streaming ASR이 없다. 우리 팀이 S2S 모델에 time-aligned text output 기능을 개발하는
+것을 기본 방향으로 한다. PoC에서 근거가 있는 기존 timestamp-capable model을 사용하거나 구조
+검증용 mock/replay를 사용할 수 있지만, mock을 모델 정확도·지연의 실측으로 해석하지 않는다.
 
 ```mermaid
 flowchart TB
- S["S2S 모델 1개"] -.->|"비동기: transcript·segment·revision"| Q
- R["음성 capture·화면·pointer"] -->|"원음 참조·source time"| B
- subgraph V["VIA Core Process — 입력 영역"]
- Q["공통 bounded 입력 event queue"] --> N["[변경] VIA Evidence Normalizer<br/>clock 정렬·정정 중재"]
- B["공통 시간 인덱스 buffer<br/>원음·화면 참조 · 유한 보존"] -->|"관측된 시점 근거"| N
- N -->|"VIA input revision·출처"| E[("공통 입력 근거 기록")]
- E -->|"TurnEnvelope"| C["공통 Semantic Consumer"]
- end
- C <-->|"공유 client·의미 처리"| M["Semantic LLM 1개"]
+ A["공통 microphone audio"] --> S["[B] Timestamp-capable S2S<br/>음성 대화·Tool loop + time-aligned text"]
+ S -->|"utterance-final text + source timestamp"| D["공통 deterministic<br/>deictic detector"]
+ U["공통 UI evidence timeline"] --> C["[B] VIA final candidate creation"]
+ D --> C
+ C --> E[("Voice evidence candidates")]
+ E --> G["공통 Grounding + semantic LLM"]
 ```
 
-**실제 호출·상태·실패 처리 순서**
+### 6.2 정상 처리 순서
 
-1. Capture가 원음·pointer·화면 참조를 source time으로 buffer에 보존한다. S2S event는 수신 queue로 도착한다. 도착 순서와 발화 순서는 다를 수 있다.
-2. Normalizer는 실제 segment·revision과 clock mapping을 연결해 VIA input revision을 확정한다. 정정이 오면 의존 판단을 무효화한다. 이후 의미 처리는 공유 LLM을 쓴다.
-3. Normalizer는 새 ASR 모델이 아니다. 두 모델과 비모델 처리로 복원할 수 없는 시각·의미는 만들지 않는다. 필요한 기능이 없으면 clarification 또는 capability 미충족으로 남긴다.
+1. S2S는 발화 동안 audio를 처리하지만 DP-03 evidence delta는 내보내지 않는다.
+2. 발화 종료 뒤 S2S가 final transcript와 각 word/span의 audio source timestamp를 제공한다.
+3. A와 같은 deterministic detector가 final transcript에서 지칭 span을 찾는다.
+4. VIA가 각 source-time에 해당하는 UI evidence reference를 연결한다.
+5. B candidate는 처음부터 `final`이며 공통 Grounding과 semantic LLM에 전달된다.
 
-보조 처리기는 항상 호출되는 고정 단계가 아니다. 어떤 결과가 현재 입력을 나타내는지 결정하는 계약은 VIA가 소유한다.
+### 6.3 B의 명시적 제한
 
-## 4. 대안 B — S2S 입력 계약을 기준으로 사용
+- 이번 B는 **turn-final timestamped transcript**를 가정한다.
+- Streaming timestamp와 provisional candidate를 B 기본안에 포함하지 않는다.
+- 이는 S2S가 기술적으로 streaming timestamp를 만들 수 없다는 주장이 아니라 이번 후보의
+  단순화·통합 선택이다. 변경하려면 Measurement Freeze 전에 후보 계약을 다시 승인한다.
+- Tool call은 timestamp 능력을 만들어 주지 않으므로 B의 필수 메커니즘이 아니다.
+- Timestamp는 S2S inference output 또는 그 native event contract여야 한다.
+- Voice Engine 안에서 별도 ASR/aligner와 code가 timestamp를 합성하면 A다.
 
-S2S가 제공하는 transcript·segment·revision·time evidence를 최종 음성 입력 근거로 삼는다. VIA adapter는 표현·clock 연결을 변환하고 필요한 원천을 보존하지만, VIA가 확정한 별도 의미 입력으로 제공자 결과를 대체하지 않는다. 제공자별 typed event를 숨기지 않는 대신 Core와 grounding 경계에서 명시적으로 해석한다.
+### 6.4 B의 구조적 비용과 기대
 
-충분한 native 기능을 가진 제공자에서는 이중 입력 source의 충돌과 별도 입력 중재을 피할 수 있다. 빠른 source 처리와 사전 원음·화면 보존, 재연결·중복 제거는 허용한다. 그러나 native 계약으로 필요한 의미·정정 근거를 만들 수 없으면 이 profile에서 B는 성립하지 않는다.
+- 별도 ASR 연결과 partial revision 상태가 없다.
+- 음성 이해를 S2S와 ASR이 중복 수행하지 않는다.
+- S2S model training, timestamp output head/token과 inference contract 개발이 필요할 수 있다.
+- Grounding은 발화 종료와 final evidence 도착 뒤 시작하므로 A보다 늦을 가능성이 있지만 실측 전
+  방향과 크기를 확정하지 않는다.
+- Model update가 timestamp 정확성·API schema까지 함께 바꿀 수 있어 QA-29 변경 경계가 다르다.
 
-```mermaid
-flowchart TB
- S["S2S 모델 1개"] -.->|"비동기: transcript·segment·revision"| Q
- R["음성 capture·화면·pointer"] -->|"원음 참조·source time"| B
- subgraph V["VIA Core Process — 입력 영역"]
- Q["공통 bounded 입력 event queue"] --> N["[변경] Native Event Adapter<br/>원천 revision 의미 유지"]
- B["공통 시간 인덱스 buffer<br/>원음·화면 참조 · 유한 보존"] -->|"clock·화면 근거"| C
- N -->|"provider 의미·revision"| E[("공통 입력 근거 기록")]
- E -->|"typed input"| C["공통 Semantic Consumer<br/>native 계약 소비"]
- end
- C <-->|"공유 client·의미 처리"| M["Semantic LLM 1개"]
-```
+## 7. 상호 배타성과 같은 기능
 
-**실제 호출·상태·실패 처리 순서**
-
-1. 동일 buffer·queue를 쓴다. Adapter가 wire 형식·clock을 변환하지만 segment·정정의 최종 의미는 S2S 계약을 유지한다.
-2. Consumer는 native 의미와 화면 근거로 요청을 해석한다. provider session과 VIA Conversation ID는 별개로 연결한다. 재연결만으로 새 대화를 만들지 않는다.
-3. 늦은 revision으로 앞 판단을 무효화한다. 제공자가 필요한 근거를 주지 않으면 추가 ASR을 넣지 않는다. 동일 기능을 만족하는 native profile에서만 A/B 비교가 성립한다.
-
-adapter가 있다는 이유만으로 A가 되지 않는다. 독립 입력 source로 제공자 의미를 대체·중재하는 권한을 두지 않는 것이 B의 경계다.
-
-두 구조도는 같은 확대 영역이다. 같은 이름은 공통 책임, `[변경]`은 바뀐 책임이다. 경계의 Process 표시는 공통 비교용 배치이며 실선은 라벨의 기능 흐름, 점선은 비동기 전달이다. 상자 수는 변경 요소 수나 메모리 크기가 아니다.
-
-## 5. 구조 차이·상호 배타성·Hybrid 검토
-
-| 차이 | A | B |
+| 항목 | A | B |
 | --- | --- | --- |
-| 음성 입력의 최종 의미 계약 | VIA-owned input revision | S2S-native revision 의미 |
-| 부족한 native 정보 | 보조 근거로 보완 가능 | 주어진 native profile로 요구 충족 여부 심사 |
-| 변경 경계 | 정규화·보조 처리 책임 | native 계약 소비·adapter 책임 |
-| 공통 | 원천 시각·출처, S2S, 화면 기록, 실제 음성 정지 | 동일 |
+| S2S input timestamp | authoritative source가 아님 | authoritative final source |
+| 별도 ASR | timestamp-capable Streaming ASR 필요 | 없음 |
+| evidence 시점 | 발화 중 provisional + 종료 후 final | 발화 종료 후 final만 |
+| 지칭 pattern detector | 공통 deterministic code | 공통 deterministic code |
+| UI evidence 연결 | VIA | VIA |
+| Grounding·semantic LLM | 공통, 이후 단계 | 공통, 이후 단계 |
+| screenshot/Vision | DP-03 밖 | DP-03 밖 |
 
-같은 입력 충돌에서 A는 VIA 계약에 따라 근거를 중재하고 B는 S2S 계약을 최종 의미 기준으로 삼는다. B가 VIA의 근거 중재를 최종 입력 기준으로 인정하면 A로 이동한다. 단순 format 변환·clock 변환·원음 보존은 양쪽에 허용된다.
+같은 후보 안에서 별도 Streaming ASR timestamp와 S2S timestamp를 VIA가 중재해 최종 기준을 만들면
+A다. 별도 ASR 없이 S2S final timestamp를 그대로 source-time authority로 사용하면 B다.
 
-S2S 근거와 VIA의 관측·비모델 정렬을 결합하는 구조를 A로 포함했다. 추가 helper 모델을 켜는 안은 현재 제약 밖이다. 초기 후보의 VAD·ASR·TTS·정렬 묶음은 서로 독립인 책임을 섞으므로 폐기했다. TTS는 출력 구현 조건, 물리 중단은 공통 필수 기능, response authority는 DP-04로 남긴다. 동등 기능의 B가 없는 profile에서는 억지로 A/B를 만들지 않는다.
+두 후보는 동일한 final candidate 의미와 referent oracle을 만족해야 한다. A의 provisional은 사용자
+부작용을 일으키는 Action이나 Agent dispatch의 확정 근거가 아니다. Early UI pin·Context 준비처럼
+되돌릴 수 있는 준비만 허용하고 final에서 철회·확정한다.
 
-A/B 모두 같은 기능·권한·실패 의미와 합리적인 보완책을 허용하는 **steelman**이다. 같은 결정 범위의 최종 기준은 **mutually exclusive**해야 한다. 속도 차이를 만들기 위해 한쪽의 검증·기록·cache를 빼지 않는다.
-
-### 같은 사건에서 확인하는 순서 차이
-
-다음 그림은 A/B의 차이가 드러나는 동일 사건을 비교한다. 외부 완료와 VIA 내부 확정을 구별하며, 아래 사고실험에서 지연·실패 조건까지 확인한다.
+## 8. 같은 사건의 lifecycle
 
 ```mermaid
 sequenceDiagram
- participant S as S2S 원천
- participant V as VIA 입력 경계
- participant H as 선택적 보조 처리
- participant C as 의미 처리
- S-->>V: 시각이 붙은 입력 revision
- alt A VIA 근거 중재
- V->>H: 필요할 때만 원음 근거 보완
- H-->>V: 보조 근거와 출처
- V->>V: VIA 기준 revision 확정
- else B Native 의미 기준
- V->>V: 원천 revision 의미 유지·형식 변환
- end
- V->>C: 기준 revision과 화면 시점
- S-->>V: 늦은 정정
- V->>C: 같은 기준에 따라 이전 판단 무효화
- Note over S,C: B에 필요한 원천 정보가 없으면 기능 적합성 실패
+ participant U as 사용자/UI
+ participant V as VIA timeline
+ participant A as A Streaming ASR
+ participant B as B Timestamp S2S
+ participant G as 공통 Grounding
+ U->>V: graph-A pointer/selection evidence
+ U->>A: “여기와 ...” audio
+ U->>B: 같은 audio
+ A-->>V: partial “여기” + source timestamp
+ V->>V: A provisional candidate + UI ref pin
+ U->>V: graph-B pointer/selection evidence
+ A-->>V: partial/final “여기와 여기” + revisions
+ V->>V: A candidate update/final
+ B-->>V: utterance-final timestamped transcript
+ V->>V: B final candidates 생성
+ V->>G: 후보별 같은 final candidate 의미
+ G->>G: referent·role·goal 해석
 ```
 
-## 6. 같은 사건을 통과시키는 사고실험
+사용자가 “이 부분, 아니 여기”라고 정정하면 A는 partial revision에 따라 앞 candidate를 철회하고,
+B는 final transcript 안의 두 span과 정정 관계를 source-time 순서로 전달해야 한다. 어느 후보도
+최신 pointer 하나로 전체 utterance를 대체하지 않는다.
 
-<a id="t1"></a>
+## 9. Core ASR에서 볼 구조적 차이
 
-### T1. 두 지칭과 늦은 정정
+DP-03의 초기 역할은 QA-09·QA-19·QA-29 `PRIMARY`, QA-39 `REGRESSION_ONLY`다. 정확한 모집단은
+Measurement Freeze에서 승인한다.
 
-같은 source timeline에서 첫 ‘여기’의 수정 event가 두 번째 지칭 뒤 도착한다. A는 raw evidence → 정규화 revision → 필요한 보조 정렬 → 최종 referent 확정 순서로 처리한다. B는 native segment/revision → provider 의미 해석 → 같은 화면 근거 연결을 수행한다. 양쪽 모두 최신 화면 좌표로 과거 지칭을 대체하지 않는다.
+| Core ASR | DP-03에서 확인할 차이 |
+| --- | --- |
+| QA-09 | A의 ASR partial/timestamp·pattern detection·candidate pin 시간과 B의 utterance-final timestamp 생성 이후 Grounding 준비시간을 포함한 실제 interaction 경로 |
+| QA-19 | 지칭 span 순서, source-time에 연결된 target set·role, correction/retraction과 최종 request field의 정확성 |
+| QA-29 | 별도 ASR 추가·교체·event 변경 대 S2S timestamp model/API 변경의 Architecture Element 영향 |
+| QA-39 | A의 ASR stream 단절·stale revision과 B의 S2S final evidence 누락·duplicate가 다른 경로와 Task로 확산되지 않고 복구되는지 |
 
-A가 부가 정보를 얻어 더 잘 맞춘다는 주장은 실제 추가 근거의 생성 가능성과 정확도가 필요하다. Native evidence가 충분하면 B도 같은 대상을 얻는다. 반대로 어느 안도 원음·시각에서 복원할 근거가 없으면 clarification이 정답이며 oracle가 지칭을 무료로 알려주지 않는다. QA-12/11 방향은 실제 corpus 없이 확정할 수 없다.
+A가 빠르거나 B가 정확하다고 미리 가정하지 않는다. Timestamp-capable Streaming ASR도 lookahead와
+revision 때문에 늦을 수 있고, B의 final decode도 발화 종료 직후 빠르게 끝날 수 있다. 실제 span을
+각각 기록해 비교한다.
 
-<a id="t2"></a>
+## 10. Capability와 evidence 제한
 
-### T2. 지연·중단과 보조 호출
+모델 timestamp 생성 자체는 기존 ASR·speech model 사례로 기술적 근거가 있지만, 현재 B 계약을
+만족하는 특정 S2S profile은 아직 선택하지 않았다. Qwen 계열을 포함한 제품·모델 선택은 candidate
+capability qualification에서 다시 검토한다.
 
-A의 추가 처리가 critical path에 남는 경우에만 B의 QA-01/02/05 이점이 생긴다. 입력 중 병렬로 끝나거나 A가 native 결과를 그대로 쓰면 차이는 사라진다. A가 더 빠른 turn evidence를 제공하면 VIA 인식 지연을 줄일 가능성도 있지만, source 기능·정확성 검증 없이 그 시간을 만들지 않는다.
+Mock은 다음만 검증할 수 있다.
 
-QA-04는 양쪽의 acoustic barge-in부터 실제 재생 정지까지다. ‘B는 S2S 서버가 인식할 때까지 기다린다’는 약한 안을 만들지 않는다. 공통 local playback 제어가 같다면 비슷하다. 두 안 모두 같은 두 모델만 사용한다. QA-41은 입력 queue·원음/화면 buffer·정규화 상태의 실제 수명만 확인하며 모델 추가 적재 차이는 없다.
+- candidate schema와 revision 처리
+- UI evidence reference 연결
+- late/stale/duplicate/failure 처리
+- Core/Grounding 경계와 trace
 
-<a id="t3"></a>
+Mock 또는 evaluator oracle timestamp로 실제 model timestamp 정확도, 실제 latency, revision 빈도,
+QA-09/19 winner를 주장하지 않는다. 실제 모델이 실행되면 `MEASURED_MODEL`, mock/replay이면 해당
+measurement evidence label을 정확히 사용한다.
 
-### T3. 제공자 변경·재연결·연구 기록
+## 11. 현재 상태와 다음 작업
 
-M-01/07은 이번 경계에 직접 관련된다. M-07의 단어 시각→구간 시각 변경에도 원음은 제공되지만, B가 native 의미만으로 UC-04를 만족할 수 있는지는 별도 적합성 확인이다. 실패를 낮은 change count나 낮은 정확도 점수로 포장하지 않는다. A도 보조 정렬·입력 계약이 함께 바뀌면 여러 요소를 수정할 수 있다. M-02~06/08/09는 실제 역할·Runtime 변화가 닿는 경계를 각각 확인하고 C-01~06은 공통 Context·상태 계약 중심의 회귀다.
+완료된 것:
 
-Agent A-01~09는 동일 경계를 유지한다. E-01~05는 입력 source·revision의 계측과 schema reader까지 추적하되 더 많은 event가 자동으로 더 완전한 trace를 뜻하지 않는다. 재연결 후 provider epoch를 새 VIA Conversation으로 착각하지 않고, 과거 근거와 이어 주어야 한다. QA-31은 실제 Task가 영향을 받은 fault에 한정하며 Voice-only 재연결을 Task 복구로 대체하지 않는다. 양쪽 모두 원음 무제한 보존이나 과다 외부 제공은 허용하지 않는다.
+- A/B 구성과 상호 배타성
+- candidate의 의미와 A provisional 예시
+- Grounding·screenshot·Vision의 DP-03 제외
+- A Streaming ASR와 B turn-final S2S evidence lifecycle
+- Core ASR의 구조적 참여 이유
 
-## 7. Core ASR 적용과 상세 QA 사고실험
+아직 동결하지 않은 것:
 
-이 DP의 초기 역할은 **QA-09/19/29 `PRIMARY`, QA-39 `REGRESSION_ONLY`**다. Voice interaction 시간, input-evidence·referent·correction field와 Voice 계약 change를 주로 비교하고 session 단절·재연결은 복구 회귀로 확인한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
+- A의 실제 Streaming ASR 제품·버전과 partial/final timestamp semantics
+- B의 S2S model architecture/profile과 timestamp output contract
+- 공통 machine schema와 UI evidence reference 수명
+- fixture, repetition, timeout, target, score band와 fault deadline
+- active candidate, runner와 result
 
-**사고실험 예상 / 실제 측정 `NOT_RUN`.** §2의 조건과 위 사고실험을 적용한다. 시간·변경 수·중단 수·메모리·노출은 작을수록, 정확성·연속성·완전성·재현 비율은 클수록 좋다. “비슷”은 명시한 조건에서 차이가 작다는 예상이며, “판단 근거 부족”은 방향·크기를 모른다는 뜻이다. 확실성은 실측 신뢰구간이 아니다. **부분 사례의 차이를 최악 case p95·전체 corpus·전체 change pack의 대표값 차이로 확대하지 않는다.**
-
-| QA · 단일 metric | 예상 방향·크기 | 확실성 | 구조적 이유·반례와 근거 | 역할 |
-| --- | --- | --- | --- | --- |
-| QA-01 위임 경로 VIA 처리시간 · 최악 case p95; Agent 실행 제외 | 조건부; 크기 미정 | 낮음 | 보조 처리의 비중첩 구간이면 B, 더 이른 유효 입력이면 A 가능 [T2](#t2) | 주 비교 가능성 |
-| QA-02 직접 Voice 응답시간 · 최악 case p95 | 조건부; 크기 미정 | 낮음 | native fast path가 같으면 비슷; 호출 수만으로 판단 금지 [T2](#t2) | 주 비교 가능성 |
-| QA-03 Agent 상태 Voice 전달시간 · 최악 case p95 | 비슷 | 중간 | source status의 공통 음성 전달은 입력 근거 결정과 별개 [T2](#t2) | 회귀 |
-| QA-04 음성 중단시간 · 최악 case p95 | 비슷 | 중간 | local playback stop은 두 안 모두 허용 [T2](#t2) | 필수 회귀 |
-| QA-05 Task 제어 응답시간 · 최악 control case p95 | 조건부; 크기 미정 | 낮음 | Voice control 입력 해석의 추가 근거 처리에 한정 [T2](#t2) | 주 비교 가능성 |
-| QA-11 전체 요청 처리 정확도 · case별 strict 성공률의 평균 | 판단 근거 부족 | 낮음 | native capability와 전체 corpus 성공 조건 미확인 [T1](#t1) | 기능 적합성 |
-| QA-12 의미 해석 정확도 · strict 성공 run 비율 | 판단 근거 부족 | 낮음 | 추가 evidence의 실제 유효성과 native 정보량 확인 필요 [T1](#t1) | 기능 적합성 |
-| QA-13 Task·Interaction 연결 정확도 · strict 성공 run 비율 | 비슷 | 중간 | 최종 Request·Task identity 연결은 공통 [T3](#t3) | 회귀 |
-| QA-14 비동기 Task 상태 수렴 · strict 성공 run 비율 | 비슷 | 중간 | Task source event 수렴 규칙은 같은 조건 [T3](#t3) | 회귀 |
-| QA-15 대화·Task 연속성 · 성공 scenario 비율 | 비슷 | 중간 | provider epoch가 Conversation identity를 대체하지 않음 [T3](#t3) | 회귀 |
-| QA-21 Agent 변화 영향 범위 · 9개 변화의 변경 요소 평균 | 비슷 | 중간 | Agent 변경 집합과 경계는 공통 [T3](#t3) | 회귀 |
-| QA-22 Model·Context·State 변화 영향 · 15개 변화의 변경 요소 평균 | 조건부; 방향·크기 미정 | 낮음 | 정규화의 흡수 효과 대 정렬 계약 유지, M-07 적합성 우선 [T3](#t3) | 주 비교 가능성 |
-| QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 추가 source producer의 E 변경 ledger 필요 [T3](#t3) | 회귀·ledger |
-| QA-31 올바른 Task 복구시간 · 최악 fault p95 | 판단 근거 부족 | 낮음 | Task가 영향받은 재연결·복원 경로만 비교 [T3](#t3) | 회귀 |
-| QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷; 격리 효과 미확정 | 중간 | 논리 입력 경계가 Process containment를 만들지는 않음 [T3](#t3) | 회귀 |
-| QA-41 PC 메모리 · 최악 workload의 peak p95 | 판단 근거 부족 | 낮음 | 두 모델 수 동일; 입력 buffer·정렬 상태의 실제 peak 필요 [T2](#t2) | 자원 확인·ASR 우선 제외 |
-| QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | source별 허용 목적·범위를 동일하게 유지 [T3](#t3) | 필수 회귀 |
-| QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | 필요한 source revision을 모두 기록하면 native도 complete 가능 [T3](#t3) | 필수 회귀 |
-| QA-62 평가 재현성 · 동일 평가 재계산 비율 | 비슷 | 중간 | evidence와 evaluator 보존은 두 안 모두 가능 [T3](#t3) | 필수 회귀 |
-
-A는 provider 변화를 견디는 입력 계약을, B는 충분한 native 기능을 단순하게 사용하는 구조를 선택할 이유가 있다. 현재 그 provider 적합성이 확인되지 않아 두 정상 후보가 실제로 성립한다고 확정하지 않는다.
-
-## 8. 공정한 검증 계획 — 실행하지 않음
-
-UC-03·04의 모든 하위 유형에 대해 native 제공 정보, 보존 원음·화면, 필요한 변환, 비모델 정렬의 실현 가능성을 적은 capability matrix부터 작성한다. 한쪽이 정보적으로 불가능하면 그 profile에서 비교를 멈춘다. 실제 모델과 고정 응답 재생의 의미 정확도 evidence를 구별한다.
-
-측정에 앞서 동일한 목표·fixture·외부 기능·자원 조건, case별 실제 참여 경로, 실패·timeout 처리, 반복·집계·target·동점 기준을 동결한다. 최종 점수나 승리 개수는 지금 만들지 않는다. QA-11과 QA-12~15의 성공을 중복 합산하지 않는다. 잘못된 대상·중복 Action, 무효 승인, 무단 접근은 점수로 상쇄할 수 없는 필수 위반 조건이다.
-
-근거 계약: [Voice responsiveness](../08-quality-attributes/voice-responsiveness.md), [Task 제어](../08-quality-attributes/interaction-control-responsiveness.md), [실제 event 경계](../11-measurement/event-boundary-contract.md), [정확성·연속성](../08-quality-attributes/correctness-and-continuity.md), [복구·장애·메모리](../08-quality-attributes/reliability-and-resource.md), [19개 QA catalog](../08-quality-attributes/quality-model.md), [변경 전체 집합](../07-intentional-variables.md), [변경 요소와 실험 change pack](../08-quality-attributes/evidence/change-locality-rationale.md), [관측·재현](../08-quality-attributes/observability.md), [Privacy·집계](../11-measurement/scoring-contract.md). 문서 사고실험은 실행 evidence label이나 기존 archive 결과로 대신하지 않는다.
-
-## 9. 다른 DP·변경 비용
-
-DP-05는 확보한 Context의 소비 계약, DP-06은 그 근거로 판단하는 권한이다. DP-04의 응답 승인과 DP-13의 물리 제어 자원은 별개다. A→B는 VIA 입력 version과 provider revision 이행, B→A는 정규화 기록·충돌 해소와 정렬 buffer 수명 이행이 필요하다. 기존 기능이 없는데 추가 모델이나 누락 근거를 측정기에서 무료 제공할 수 없다.
-
-## 10. 현재 판단과 재검토 조건
-
-**Core DP로 유지하되 기능 적합성을 먼저 판정한다.** 상세 검토에서 transcript 도착 시각과 실제 acoustic source time을 구분하고, Voice Engine의 local audio-chunk/screen/pointer clock mapping과 S2S native phrase/segment timestamp·revision 계약을 구체화한다. 동일 기능의 native B가 없으면 점수 비교를 수행하지 않는다. ‘보조 모델을 몇 개 쓰는가’는 하나의 강한 DP가 아니며, 임의 S2S 제품이나 부족한 기능을 실제 제공 사실처럼 쓰지 않는다.
-
-## 11. 자체 검토에서 반영한 개선점
-
-음성 입력·음성 출력·물리 중단을 한꺼번에 바꾸던 결합을 해체했다. Native 기능 부재를 Architecture 점수 열세로 계산하는 오류를 제거했다. 추가 모델은 제약 위반으로 제외했다. 고정 두 모델과 비모델 정렬만으로 동일 기능을 제공할 수 있는지 확인해야 한다.
-
-검토 범위는 문서·사고실험이다. 외부 심사나 후보 성능 검증을 완료했다는 뜻이 아니다. 전체 후보의 현재 상태·미완료 사항은 [요약 보고서](./dp-executive-summary.md#review-status), 문서 검증 기준은 [검토 protocol](./dp-review-protocol.md)을 따른다.
+다음 작업은 구현이 아니라 [DP-03 Capability & Freeze Draft](../11-measurement/via-dp-03-capability-and-freeze.md)의
+A/B gate와 PoC evidence 수준을 이 정의에 맞게 완성하고 사용자 승인을 받는 것이다.

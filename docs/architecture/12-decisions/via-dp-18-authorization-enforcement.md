@@ -24,7 +24,7 @@ flowchart TB
 
 기존 보호정보·consent·Action revision 요구만 다룬다. 새 privacy metric·새 보안 기능 요구를 만들지 않는다. QA-51과 무단 접근·무효 승인 0 위반 조건은 양쪽 동일하다. capability는 scope·destination·action revision·epoch·만료에 묶인 제한 권한이며 단순 bearer token이 아니다. 같은 PC 내부 배치에서 비교하고 중앙 승인에 원격 네트워크나 LLM을 강제하지 않는다.
 
-**모델 불변식:** S2S 모델 1개 + semantic LLM 1개. Component·Task별 모델을 별도 적재하지 않는다. 프롬프트·세션·호출을 나눠도 공유 모델이며 동시 처리·취소 지원을 임의 가정하지 않는다.
+**모델 조건:** 공통 S2S 1개와 semantic LLM 1개를 공유하고 VIA-DP-03 선택을 양 후보에 동일하게 고정한다. DP-03 A가 fixed context이면 승인된 Streaming ASR 1개도 양쪽에 동일하게 존재한다. 이 DP 자체는 Component·Task별 모델을 추가하지 않으며 동시 처리·취소 지원을 임의 가정하지 않는다.
 
 **그림의 구현 수준:** VIA Core Process는 A/B 공통 비교용 배치다. Process 격리는 VIA-DP-11의 별도 축이며 외부 Agent는 양쪽 모두 별도 Runtime이다. 실선은 라벨의 호출·반환·저장, 점선은 비동기 event다. 메모리 queue 수락과 디스크 commit을 구별하며 별도 message bus 제품은 가정하지 않는다. queue 용량·포화 정책은 추후 동일 조건으로 동결한다. 이 구조도는 후보 명세이며 구현 완료 증거가 아니다.
 

@@ -38,7 +38,7 @@ VIA는 사용자의 Voice·Text·화면 interaction을 받고, Context와 요청
 | S2S Model | Voice inference dependency. Voice Engine이 integration과 observable evidence 계약을 소유함 |
 | Semantic LLM | VIA 의미 판단 dependency. Component별 별도 모델이 아니라 공유 모델 1개 |
 
-VIA는 **S2S Model 1개와 semantic LLM 1개**를 사용한다. Component·Task·semantic stage별로 모델을 복제하지 않는다. 역할별 prompt·call·session·buffer는 달라질 수 있지만 모델 개수를 늘려 A/B 차이를 만들지 않는다.
+VIA의 공통 기반은 **S2S Model 1개와 semantic LLM 1개**이며 Component·Task·semantic stage별로 모델을 복제하지 않는다. 역할별 prompt·call·session·buffer는 달라질 수 있다. VIA-DP-03은 evidence source topology 자체가 비교 축이므로 A에 timestamp-capable Streaming ASR 1개를 추가하고, B에는 별도 ASR 없이 S2S의 turn-final time-aligned text capability를 요구한다. 이 한정 예외의 지연·자원·변경·장애 비용은 숨기지 않는다.
 
 ### 2.1 모든 후보가 유지해야 하는 기능
 
@@ -81,7 +81,7 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 
 | Core DP | 주 Component | 서로 배타적인 A/B 질문 | Core ASR 역할 | 현재 상태 |
 | --- | --- | --- | --- | --- |
-| [VIA-DP-03](./via-dp-03-voice-evidence.md) | Voice Engine, Context/Intent 입력 경계 | VIA가 local capture-time evidence를 만들 것인가, S2S가 제공하는 native source-time evidence를 기준으로 삼을 것인가? | QA-09·19·29 primary, QA-39 regression | S2S timestamp·revision capability gate와 상세 fixture 미동결 |
+| [VIA-DP-03](./via-dp-03-voice-evidence.md) | Voice Engine, Context/Intent 입력 경계 | A의 timestamp-capable Streaming ASR partial로 provisional evidence를 만들 것인가, B의 S2S turn-final timestamped transcript로 final evidence를 만들 것인가? | QA-09·19·29 primary, QA-39 regression | A/B identity·candidate 의미·Grounding 경계 합의; 실제 A ASR와 B S2S profile, machine schema와 freeze는 `PENDING` |
 | [VIA-DP-05](./via-dp-05-context-contract.md) | Context Engine, Intent Refiner | semantic execution 전에 Context read-set을 닫을 것인가, 같은 execution에서 bounded source를 demand-driven으로 확장할 것인가? | QA-09·19·29·39 primary | 새 A/B 정의 완료, measurement freeze 미작성 |
 | [VIA-DP-17](./via-dp-17-context-materialization-authority.md) | Context Engine과 Context consumer | 선택된 Source를 공통 canonical ContextValue로 확정할 것인가, consumer가 목적별 Context view를 확정할 것인가? | QA-09·19·29·39 primary | 새 A/B 정의 완료, measurement freeze 미작성 |
 | [VIA-DP-06](./via-dp-06-semantic-authority.md) | Intent Refiner, Orchestrator, Task association, Agent Router | 하나의 통합 authority가 최종 의미를 확정할 것인가, 단계별 authority가 versioned correction으로 협력할 것인가? | QA-09·19·29 primary, QA-39 regression | reference evidence는 있으나 새 core-ASR 결과와 product E2E는 아님 |
@@ -139,13 +139,15 @@ Core DP는 기능을 고르는 목록이 아니다. A/B 어느 쪽이든 다음 
 - Core ASR 4개와 대표 metric 선정
 - Core DP 6개 선정과 비핵심 inventory 분리
 - 여섯 DP의 현재 A/B 구조 질문과 Component 경계 초안
+- DP-03의 A/B evidence-source topology, candidate 의미, provisional/final lifecycle과 Grounding 경계 합의
 - DP-05/17의 독립성, DP-07의 multi-Agent/owner partition, DP-15의 progress 관리 범위 정리
 
 ### 아직 완료되지 않음
 
 - 여섯 DP별 machine-readable case/field/change/fault registry
 - DP별 반복 수·timeout·target·score band와 Measurement Freeze
-- DP-03의 실제 S2S evidence capability qualification
+- DP-03 A용 Streaming ASR profile과 B용 timestamp-capable S2S build/profile의 capability qualification
+- DP-03 공통 candidate machine schema, deterministic detector registry와 UI evidence retention 계약
 - DP-07 bundle contract와 DP-15 progress/snapshot contract의 외부 Agent capability qualification
 - 새 A/B candidate implementation과 네 core-ASR full campaign
 - 여섯 DP의 A/B winner와 이를 반영한 새 ADR

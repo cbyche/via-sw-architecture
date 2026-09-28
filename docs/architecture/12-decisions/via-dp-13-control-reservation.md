@@ -40,7 +40,7 @@ classDef change fill:#FFF7ED,stroke:#C2410C,stroke-width:3px,color:#7C2D12;
 
 ### 구현도를 읽기 위한 공통 전제
 
-**S2S 모델 1개 + semantic LLM 1개**를 고정한다. Component·Task·단계별 별도 적재는 없고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
+**이 DP 비교는 공통 S2S 1개와 semantic LLM 1개를 공유하고 VIA-DP-03 선택을 양 후보에 동일하게 고정한다.** DP-03 A가 fixed context이면 승인된 Streaming ASR 1개도 양쪽에 동일하게 존재한다. 이 DP 자체는 Component·Task·단계별 모델을 추가하지 않고 프롬프트·세션·호출만 나눌 수 있다. 아래는 **구현 가능한 후보 설계 설명**이며 제품 구현 완료나 QA 실측이 아니다. 모델 동시 호출·취소 지원은 공통 dependency profile로 확인한다.
 
 Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비교하는 VIA-DP-11 외에는 한쪽만 별도 Process를 추가하지 않는다. 외부 Agent Runtime은 VIA Client와 별개이며 모델의 local/remote 배치도 별도 조건이다. 생략 영역은 양쪽에서 동일하다.
 

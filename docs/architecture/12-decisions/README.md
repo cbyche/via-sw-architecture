@@ -42,6 +42,6 @@ VIA-DP-01~18은 전체 decision inventory이며 번호는 우선순위가 아니
 
 ## 현재 기준과 이력
 
-S2S 1개·semantic LLM 1개를 유지하며 Component·Task별 모델을 추가 적재하지 않는다. VIA Client와 외부 Agent Runtime을 구별한다. QA는 [현행 catalog](../08-quality-attributes/quality-model.md), 기존 accepted/deferred 결정은 [ADR](../../adr/README.md)을 따른다. 새 보고서 작성은 재승인이나 실측 승자 선정을 뜻하지 않는다.
+공통 기반인 S2S 1개·semantic LLM 1개를 유지하며 Component·Task별 모델을 복제하지 않는다. VIA-DP-03 A의 timestamp-capable Streaming ASR 1개는 해당 evidence-source topology 비교에만 허용된 예외다. VIA Client와 외부 Agent Runtime을 구별한다. QA는 [현행 catalog](../08-quality-attributes/quality-model.md), 기존 accepted/deferred 결정은 [ADR](../../adr/README.md)을 따른다. 새 보고서 작성은 재승인이나 실측 승자 선정을 뜻하지 않는다.
 
 역할이 끝난 중간 문서·이전 경로 안내는 제거했다. 원문과 당시 검증 기록은 [문서 통합 이력](../../archive/dp-document-consolidation-2026-09-25/README.md)에 보존하며 현재 요구의 근거로 사용하지 않는다.

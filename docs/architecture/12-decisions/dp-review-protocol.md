@@ -177,7 +177,7 @@ A/B는 같은 항목과 같은 수준으로 설명한다. 양쪽의 장점과 �
 | 경계 | 논리 책임·Component·OS Process·PC/원격을 구분한다. subgraph만으로 Process 격리를 뜻하지 않는다. 비교용 배치는 양쪽 공통 가정임을 표시한다. |
 | 상태 | writer·기준 기록·파생 view를 구별한다. 메모리 inbox·bounded queue·audio buffer와 디스크 상태·outbox를 별도 노드로 표시한다. queue 수락은 commit이 아니다. |
 | 메시지 | 요청·반환·승인·조회·저장·비동기 event와 command/revision·snapshot/ref·event/ACK 의미를 연결에 적는다. 코드 의존 방향과 메시지 방향을 혼용하지 않는다. |
-| 모델·외부 주체 | S2S 1개·semantic LLM 1개 공유를 유지한다. prompt/세션/반복 호출을 복제로 그리지 않는다. 외부 Agent Runtime과 VIA Client worker를 구분한다. |
+| 모델·외부 주체 | 공통 S2S 1개·semantic LLM 1개 공유와 Component별 복제 금지를 유지한다. DP-03 A에서는 승인된 Streaming ASR 1개와 S2S를 별도 dependency로 그린다. prompt/세션/반복 호출을 복제로 그리지 않는다. 외부 Agent Runtime과 VIA Client worker를 구분한다. |
 | 범례·생략 | 실선은 표시된 호출·반환·읽기·쓰기, 점선은 명시된 비동기 event다. 필요한 동기 의미를 별도로 적고 생략한 공통 경로를 설명한다. bus·broker는 실제 설계에 있을 때만 그린다. |
 
 그림 아래에는 수신→판정→상태 commit→외부 호출→반환의 번호별 흐름과 관련 취소·정정·늦은 결과·실패 처리를 적는다. A/B 뒤에는 공통/변경 사항 비교표를 붙인다. 특정 QA 인과를 그림의 노드·경계·연결로 짚어 설명할 수 있어야 한다.
@@ -358,7 +358,7 @@ ID는 검토 우선순위가 아니라 지속적인 식별자다. 범위를 재�
 현재 목적은 가능성 있는 독립 결정을 완결된 후보로 보존하는 것이다. 앞의 우선·보조 분류는 검토 관점일 뿐 자동 선정/탈락 판정이 아니다. 후보로 문서화하는 것과 강한 양방향 QA trade-off를 입증하는 것을 구분한다. 불성립·중복 축도 누락 점검에 이유를 남긴다.
 
 1. 이전 계열의 모든 결정과 주제를 현행 VIA-DP로 매핑한다. 신규 번호를 붙이면 기존 안의 A/B 방향·ADR 상태까지 적고, 같은 숫자의 이전 세대를 혼동하지 않는다.
-2. S2S 1개 + semantic LLM 1개를 불변식으로 검사한다. 역할·Task별 prompt/세션은 허용하되 모델 추가 적재·임의 helper 모델은 금지한다.
+2. 공통 S2S 1개 + semantic LLM 1개와 Component·Task별 복제 금지를 검사한다. 역할별 prompt/세션은 허용한다. DP-03 A의 Streaming ASR 1개는 명시된 독립 변수로 허용하되, 다른 DP나 후보에 임의 helper 모델을 추가하지 않는다.
 3. 모든 A/B 그림에서 실제 Component, 명시적 Process, 메시지 payload, 메모리 queue/buffer와 영속 저장을 구분한다. 별도 bus가 없으면 있다고 그리지 않는다.
 4. 그림 아래에 수신→판정→상태 commit→외부 호출→반환·늦은 결과/실패 처리를 번호로 설명한다. Process가 단지 비교용 가정이면 표시한다. 외부 Agent와 VIA Client를 구분한다.
 5. 동일한 모델·정보·기능·자원·보완책을 허용한 후 최종 권한 규칙으로 A/B 배타성을 판정한다. 단순 호출 수·메모리 수 MB 추정만으로 중요한 trade-off를 만들지 않는다.

@@ -26,7 +26,7 @@ flowchart TB
 
 Agent 의미 정규화는 VIA-DP-09, VIA Task의 실제 writer topology는 14다. 같은 Agent가 identity·revision/cursor·event와 권위 있는 snapshot query를 제공하는 profile에서 비교한다. 제공하지 않는 revision·snapshot 일관성은 VIA가 만들어내지 않는다. poll 간격이나 알림 빈도만 바꾸는 tuning은 범위 밖이다.
 
-**모델 불변식:** S2S 모델 1개 + semantic LLM 1개. Component·Task별 모델을 별도 적재하지 않는다. 프롬프트·세션·호출을 나눠도 공유 모델이며 동시 처리·취소 지원을 임의 가정하지 않는다.
+**모델 조건:** 공통 S2S 1개와 semantic LLM 1개를 공유하고 VIA-DP-03 선택을 양 후보에 동일하게 고정한다. DP-03 A가 fixed context이면 승인된 Streaming ASR 1개도 양쪽에 동일하게 존재한다. 이 DP 자체는 Component·Task별 모델을 추가하지 않으며 동시 처리·취소 지원을 임의 가정하지 않는다.
 
 **그림의 구현 수준:** VIA Core Process는 A/B 공통 비교용 배치다. Process 격리는 VIA-DP-11의 별도 축이며 외부 Agent는 양쪽 모두 별도 Runtime이다. 실선은 라벨의 호출·반환·저장, 점선은 비동기 event다. 메모리 queue 수락과 디스크 commit을 구별하며 별도 message bus 제품은 가정하지 않는다. queue 용량·포화 정책은 추후 동일 조건으로 동결한다. 이 구조도는 후보 명세이며 구현 완료 증거가 아니다.
 

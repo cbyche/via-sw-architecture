@@ -375,4 +375,8 @@ Task view, pending interaction과 capability만 전달하며 expected field는 �
 
 ## 12. 현재 리뷰 상태
 
-94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. VIA-DP-06 v4는 그중 구조적으로 민감한 24건을 동결해 72개 A/B/B′ trial을 실행했고, VIA-DP-11 v4는 process-isolation에 실제로 참여하는 정상·fault·resource·change 경로를 실행했다. 두 결과는 [current evidence index](../../../results/architecture-evaluation/current/README.md)에서 확인한다. 이 두 campaign에 포함되지 않은 source-pool 항목의 반복 수·score band와 최종 ASR 분류는 추가 freeze 전까지 확정하지 않는다.
+94개 variation, 변경 24개와 기존 회귀 fixture는 source material로 보존했다. 이전 VIA-DP-06 v4와
+VIA-DP-11 v4 실행은 새 Core ASR 선정 전에 수행한 reference campaign이며 현재 evidence가 아니다.
+현재 [Core-ASR result tree](../../../results/architecture-evaluation/current/README.md)는 비어 있고 여섯
+Core DP 결과는 모두 `NOT_RUN`이다. Source-pool 항목의 DP별 membership·반복 수·score band와
+최종 applicability는 각 Measurement Freeze 전까지 확정하지 않는다.

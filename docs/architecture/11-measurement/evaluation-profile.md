@@ -1,8 +1,8 @@
 # VIA Core Evaluation Profile
 
 > 기준일: 2026-09-28
-> 상태: **평가 입력 profile 확정 / QA-09·19·29·39 core ASR 확정 / 새 공통 harness qualification 전**
-> 목적: 실제 A/B 구현과 측정에 사용할 장비, Model, Agent, 합성 자료, 핵심 QA와 최소 workload를 한 곳에 고정한다.
+> 상태: **공통 환경 profile 확정 / DP-03 candidate model profile `PENDING` / 새 공통 harness qualification 전**
+> 목적: 실제 A/B 구현과 측정에 사용할 공통 장비·Agent·합성 자료와 candidate별로 동결해야 할 Model profile을 한 곳에서 관리한다.
 
 ## 1. 이번 평가에서 사용하는 구성
 
@@ -11,32 +11,31 @@
 | Target PC | MacBook Air 15-inch, Apple M5 10-core CPU(4P+6E), 10-core GPU, unified memory 24 GB |
 | OS | macOS 26.5.1 (25F80) |
 | 전원 조건 | AC 전원, 동일 전원 모드. scored run 전 실제 상태를 manifest에 기록 |
-| S2S | Alibaba Cloud Model Studio Singapore, `qwen3-omni-flash-realtime-2025-12-01`, WebSocket |
+| 공통 Voice S2S | 1개 사용. 직접 음성 응답·Tool loop·turn-taking 기능을 유지하며 실제 product/build는 DP-03 capability qualification 뒤 동결 (`PENDING`) |
+| DP-03 A speech evidence | timestamp-capable Streaming ASR 1개 추가. product/version/deployment와 partial timestamp·revision contract `PENDING` |
+| DP-03 B speech evidence | 별도 ASR 없음. S2S 1개가 turn-final time-aligned text를 제공하는 개발 build 또는 product/profile `PENDING` |
 | Semantic LLM | local `Qwen/Qwen3-8B-GGUF`, `Q4_K_M`, non-thinking, 16,384-token context |
 | Semantic runtime | `llama.cpp` 0.5.0 build 11146, local OpenAI-compatible HTTP, Metal |
 | Downstream Agent | VIA 평가용 deterministic Reference Agent 한 종류 |
 | 자료와 외부 동작 | 고정 합성 문서·메일·일정·화면·작업 공간만 사용. 실제 계정·메일 발송·사용자 파일 변경 없음 |
 | Voice endpoint observer | BlackHole 2ch 0.7.1, 48 kHz stereo; known-waveform qualification PASS |
 
-구성 불변식은 **S2S 1개 + semantic LLM 1개**다. Component·Task·단계별 모델 복제는 허용하지 않는다. 역할별 prompt, schema, session과 호출 graph만 달라질 수 있다.
+공통 기반은 **S2S 1개 + semantic LLM 1개**이며 Component·Task·단계별 모델 복제는 허용하지 않는다. DP-03 A에만 timestamp-capable Streaming ASR 1개를 명시적 candidate dependency로 추가한다. A/B는 같은 원음·UI timeline·detector·Grounding·final oracle을 사용하고, 다른 model topology와 evidence 도착 시점은 측정 대상이다.
 
 2026-09-26 predecessor generation에서 BlackHole 2ch 설치·재기동 뒤 Native CoreAudio qualification을 실행했다. 48 kHz stereo known chirp의 output→input capture는 normalized correlation 1.0, peak amplitude 0.199990, output-to-capture offset 21.333 ms였다. Raw emitted/captured WAV와 판정값은 [archived audio-loopback qualification v1](../../../results/architecture-evaluation/archive/pre-core-asr-reference-20260927/evidence/audio-loopback-qualification-v1-20260926/README.md)에 보존한다. 이는 당시 harness 경로 검증이지 제품 latency나 현재 environment qualification이 아니므로 새 scored run 전에 다시 확인한다.
 
-### S2S 연결값
+### DP-03 Voice model profile 동결 조건
 
-```text
-wss://{WorkspaceId}.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model=qwen3-omni-flash-realtime-2025-12-01
-Authorization: Bearer ${DASHSCOPE_API_KEY}
-```
+지금은 특정 Qwen 또는 다른 제품을 A/B의 current profile로 고정하지 않는다. A는 발화 중 partial text와
+word/span source timestamp 및 revision/final semantics를 실제로 제공해야 한다. B는 별도 ASR 없이
+S2S inference/native event가 발화 종료 뒤 final transcript와 word/span source timestamp를 제공해야
+한다. 우리 팀의 S2S build, 근거가 있는 기존 model 또는 구조 mock을 PoC에 사용할 수 있으나 각각의
+evidence 수준을 구분한다.
 
-API key와 Workspace ID는 Singapore의 같은 workspace에서 발급한다. Secret은 저장소, fixture, trace에 기록하지 않는다. 실행 환경에는 다음 두 값만 제공한다.
-
-```text
-DASHSCOPE_API_KEY
-DASHSCOPE_WORKSPACE_ID
-```
-
-공식 근거: [Model 정보](https://www.alibabacloud.com/help/en/model-studio/qwen3-omni-flash-realtime), [Realtime WebSocket](https://www.alibabacloud.com/help/en/model-studio/realtime), [첫 API 호출](https://www.alibabacloud.com/help/en/model-studio/first-api-call-to-qwen).
+Model/product 선택 시 version·revision, deployment, audio format, clock basis, event schema, timeout,
+network condition과 secret 이름을 Measurement Freeze에 기록한다. Secret 값은 repository·fixture·trace에
+기록하지 않는다. 과거 `qwen3-omni-flash-realtime-2025-12-01` 설정과 실험은 reference provenance일 뿐
+현재 DP-03 candidate나 winner가 아니다.
 
 ### Local semantic LLM
 

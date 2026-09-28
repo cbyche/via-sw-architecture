@@ -6,7 +6,7 @@
 
 ## 1. 분류 체계
 
-**모든 QA의 공통 전제:** VIA는 S2S 모델 1개와 semantic LLM 1개만 사용한다. Component·Task마다 별도 모델을 올리지 않는다. 역할별 프롬프트·호출 수·세션은 달라질 수 있으므로 지연에는 실제 공유 모델 대기와 호출 graph를, 메모리에는 실제 cache·buffer를 포함한다. 모델 복제 유무로 DP의 trade-off를 만들지 않는다. 정의는 [Model Boundary](../01-system-mission-and-boundary.md#13-ai-model-boundary), 비교 조건은 [FA-10](../06-fixed-assumptions.md#65-모델-비교-규칙)을 따른다.
+**모든 QA의 공통 전제:** VIA의 공통 기반은 S2S 모델 1개와 semantic LLM 1개이며 Component·Task마다 모델을 복제하지 않는다. 역할별 프롬프트·호출 수·세션은 달라질 수 있으므로 지연에는 실제 공유 모델 대기와 호출 graph를, 메모리에는 실제 cache·buffer를 포함한다. VIA-DP-03만 A의 timestamp-capable Streaming ASR 추가와 B의 S2S-native timestamp capability를 비교 축으로 허용하며, 이때 추가 모델·호출·자원·장애 비용도 QA 근거에 포함한다. 정의는 [Model Boundary](../01-system-mission-and-boundary.md#13-ai-model-boundary), 비교 조건은 [FA-10](../06-fixed-assumptions.md#65-모델-비교-규칙)을 따른다.
 
 QA-41은 진단 QA로 유지한다. 현재 메모리 상한 요구가 없고 공유 local semantic model이 절대값을 지배하며, 현재 DP-11 reference path의 후보 차이는 약 3.7 MiB에 불과했다. 실측 없이 ‘모델 여러 개 절약’을 주장하지 않는다.
 

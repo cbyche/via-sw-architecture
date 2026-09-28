@@ -21,7 +21,8 @@
 | [Observability](../08-quality-attributes/observability.md) | QA-61/62 trace completeness and evidence reproduction |
 | [Test Case Catalog](./test-case-catalog.md) | approved Use Case별 stimulus, state, event, oracle, failure rule |
 | [QA Measurement & Scoring Contract](./scoring-contract.md) | 활성 초안 QA의 metric·score band와 승인 전 상태 |
-| [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 두 Model, Reference Agent, 네 core ASR의 최소 workload/fault |
+| [VIA Core Evaluation Profile](./evaluation-profile.md) | target Mac, 공통 Model과 DP-03 candidate별 speech evidence dependency, Reference Agent, 네 core ASR의 최소 workload/fault |
+| [VIA-DP-03 Capability & Freeze Draft](./via-dp-03-capability-and-freeze.md) | A의 Streaming ASR partial timestamp와 B의 S2S turn-final timestamp capability gate, candidate 계약과 pre-result 모집단 초안 |
 | [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | Core DP 6개 실행 순서, 완결 조건과 전체 inventory의 보존 자산 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 
