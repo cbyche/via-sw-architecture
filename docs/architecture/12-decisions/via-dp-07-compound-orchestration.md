@@ -1,10 +1,10 @@
-# VIA-DP-07 — 복합 요청 관계의 실행 책임
+# VIA-DP-07 — 복합 요청 graph의 dependency 실행 권한
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **핵심 DP 초안 v3 · 2026-09-28 · 사용자 선정 반영 / 상세 검토 예정**
 >
-> 질문: VIA가 일부 요청 관계를 직접 조정하며 묶음 위임을 조합할 것인가, 실행 가능한 복합 업무 전체의 관계 조정을 Agent에 맡길 것인가?
+> 질문: 사용자가 명시한 복합 요청 graph의 dependency edge를 VIA가 node 단위로 모두 실행 관리할 것인가, 같은 owner Agent가 처리할 수 있는 bundle 내부 edge는 그 Agent에 맡길 것인가?
 >
-> 현재 판단: **선행 Agent capability 결정 — 부분 제어를 보존하는 동등 기능 확인 전 핵심 비교 보류** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. “전체 복합 요청을 한 Agent에 위임”하는 약한 B를 폐기하고, capability·기존 Task owner에 따라 bundle을 나눈 뒤 edge별 readiness authority를 비교하도록 재정의했다. 상세 capability와 measurement contract는 후속 심층 검토에서 동결하며 실제 결과는 `NOT_RUN`이다.
 
 ## 1. 배경 — ‘요약은 하고, 메일만 취소해’는 누가 집행할까?
 
@@ -28,13 +28,15 @@ class Q change;
 
 **용어:** 복합 요청의 node는 사용자가 지정한 하위 요청이며, readiness는 앞 결과·조건이 충족되어 그 요청을 시작해도 되는 상태다. capability는 Agent가 실제 제공하는 실행·조회·부분 제어 기능 계약이다. VIA가 사용자의 요청 관계를 연결하는 것과 Agent가 업무 내부 Tool 계획을 세우는 것은 다른 책임이다.
 
-대상은 사용자가 명시한 순서·조건·결과 의존의 실행 조정이다. 요청 분해·의미 해석·Task identity·사용자 승인 창구는 VIA가 계속 소유한다. Agent 내부의 조사 계획·Tool 단계·자체 retry는 VIA가 다시 구현하지 않는다. 이미 실행 중인 서로 다른 Agent Task를 포함한 혼합 입력은 별도 capability 제약을 가진다.
+대상은 사용자가 명시한 순서·조건·결과 의존의 실행 조정과 각 dependency edge의 readiness authority다. 요청 분해·의미 해석·VIA Task identity·사용자 승인 창구와 bundle 사이 관계는 VIA가 계속 소유한다. Agent 내부의 조사 계획·Tool 단계·자체 retry는 VIA가 다시 구현하지 않는다.
+
+하나의 Agent가 모든 capability와 기존 실행 ownership을 가진다고 가정하지 않는다. 먼저 node를 capability와 기존 Task/Agent execution owner에 따라 partition하고, 같은 owner가 동등한 node status·artifact·부분 control을 제공할 수 있는 bundle 내부 edge만 A/B 비교 대상으로 삼는다. 서로 다른 owner 사이 edge는 양쪽 모두 VIA가 관리한다.
 
 **기준선에서 확인한 사실:** UC-09·12·14는 부분 취소와 독립 요청의 지속, 선행 실패 뒤 후행 미실행, 정확한 결과 전달을 요구한다. 단일 복합 Agent가 모든 기능을 제공한다는 현재 확정 사실은 없다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
 **이번 비교의 설계 가정:** 같은 기능 선언의 Agent 집합을 양쪽에 제공한다. 복합 실행·node identity·부분 결과·부분 취소가 가능한 profile과 불가능한 profile을 분리한다. 원래 Task 상태·Context·응답 게시·기록 보장은 동일하다.
 
-**미확인 사항:** 전체 대표 복합 요청을 소화하는 Agent의 실제 capability, 이미 진행 중인 다른 Agent 실행을 조정할 수 있는 계약, node별 source event 경계. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
+**미확인 사항:** bundle submission·node status·artifact version·부분 control의 실제 Agent capability, bundle partition 규칙, node별 source event 경계. 이미 진행 중인 다른 Agent 실행을 다른 owner에게 이식할 수 있다고 가정하지 않는다. 사실·후보 설계·미확인 가정을 서로 바꿔 쓰지 않는다. Conversation은 이어지는 대화, Request는 논리적 요청, Task는 여러 요청에 걸쳐 추적하는 업무다. Oracle은 실행 전에 정한 정답·허용 상태 조건이고, fixture는 고정 입력·외부 사건이다.
 
 ### 구현도를 읽기 위한 공통 전제
 
@@ -44,57 +46,57 @@ Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비�
 
 실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
 
-## 3. 대안 A — VIA 관계 조정 + 가능한 부분의 묶음 위임
+## 3. 대안 A — VIA node-level orchestration
 
-VIA는 사용자 요청 관계 중 상위 연결의 준비·보류·부분 완료를 관리한다. Agent가 잘 처리할 수 있는 연결된 부분은 하나의 묶음으로 위임하고, 묶음 간 결과와 조건을 VIA가 잇는다. 모든 node를 하나씩 위임하는 약한 안이 아니라 묶음과 개별 실행을 조합한 hybrid다.
+VIA는 user-visible node와 그 사이 dependency edge의 준비·보류·부분 완료를 모두 관리한다. 각 node는 capability와 기존 Task owner에 맞는 Agent로 보낸다. 같은 Agent가 연속 node를 수행하더라도 다음 node의 release 여부는 VIA가 source result·artifact version·control state를 확인해 결정한다.
 
-VIA는 사용자 관계 graph와 node·Task·Agent 실행의 연결을 소유한다. 완료 event와 취소가 교차하면 확인한 실행 사실에 따라 후행 요청을 억제하거나 이미 수행된 사실을 알린다. 장점은 서로 다른 Agent·기존 Task를 연결하는 제어 범위이고, 비용은 readiness·부분 상태·artifact version·재시작 중복 방지 계약이다.
+장점은 서로 다른 Agent·기존 Task를 같은 방식으로 연결하고 node별 부분 제어·장애 격리를 유지하는 것이다. 비용은 node 사이마다 VIA status 수신·artifact 연결·readiness commit·다음 dispatch가 반복된다는 점이다.
 
 ```mermaid
 flowchart TB
  subgraph V["VIA Core Process — 복합 요청 영역"]
- R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> G["[변경] Relation Scheduler<br/>묶음 사이 readiness 소유"]
+ R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> G["[변경] Node Relation Scheduler<br/>모든 edge readiness 소유"]
  G -->|"node·artifact version·준비 상태"| DB[("공통 Task Repository<br/>관계·명령·outbox")]
  DB -.->|"비동기: 준비된 명령"| D["공통 Dispatcher·Agent Client"]
  D -.->|"비동기: node 관측"| G
  U["공통 Task Control"] -->|"발송 node 보류·취소"| G
  G -->|"확인된 부분 결과"| P["공통 사용자 응답"]
  end
- D <-->|"묶음별 submit·control API"| A["외부 Agent Runtime 집합<br/>각 업무 계획·실행"]
+ D <-->|"node별 submit·control API"| A["외부 Agent Runtime 집합<br/>capability·기존 owner 유지"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
 
-1. Scheduler는 ‘요약 → 발송’이라는 사용자 관계를 저장한다. 요약 방법·메일 Tool은 정하지 않는다. 준비된 묶음만 outbox에 넣어 외부 Agent에 전달한다.
+1. Scheduler는 ‘요약 → 발송’이라는 사용자 관계를 저장한다. 요약 방법·메일 Tool은 정하지 않는다. 준비된 node만 outbox에 넣어 capability와 기존 owner가 맞는 외부 Agent에 전달한다.
 2. 요약 완료가 오면 node·artifact version을 확인하고 발송이 아직 허용될 때만 후행 명령을 만든다. ‘발송만 취소’가 먼저 확정됐다면 늦은 요약 결과가 발송을 되살리지 않는다.
-3. crash 뒤 저장된 node·submission key를 확인한다. 위임한 묶음 내부 제어는 Agent capability에 의존한다. Scheduler·Task마다 별도 모델이나 외부 Agent Process를 생성하지 않는다.
+3. crash 뒤 저장된 node·submission key를 확인한다. 이미 위임한 개별 node의 실제 중단·완료 확인은 Agent capability에 의존하지만, 아직 release하지 않은 후행 node의 억제는 VIA가 확정한다. Scheduler·Task마다 별도 모델이나 외부 Agent Process를 생성하지 않는다.
 
 VIA가 조정하는 것은 사용자가 명시한 업무 관계다. Agent 내부 Tool graph를 복제하지 않는다.
 
-## 4. 대안 B — 복합 업무 전체의 Agent 조정
+## 4. 대안 B — Owner-affinity bundle orchestration
 
-VIA는 관계를 포함한 요청을 이를 수행할 수 있는 Agent에 위임한다. Agent가 node 준비·조건·실행 관계를 소유하고, VIA는 안정된 node ID·부분 결과·control scope를 받아 사용자 Task view와 연결한다. 독립 정보 질의와 다른 Task 제어까지 하나의 만능 Agent에 몰아넣는 것은 아니다.
+VIA는 같은 capability와 기존 execution owner를 가진 연결 node를 maximal owner-affinity bundle로 partition한다. 선택된 Agent는 bundle 내부 node의 준비·조건·실행 관계를 소유하고, VIA는 bundle 사이 edge와 안정된 node ID·부분 결과·control scope를 사용자 Task view에 연결한다. 복합 요청 전체를 하나의 만능 Agent에 몰아넣는 안이 아니다.
 
-부분 취소·clarification·artifact 관계가 실제 계약으로 제공되어야 강한 B다. VIA의 단일 Task identity와 사용자 창구는 유지된다. 기존 다른 Agent Task까지 포함한 복합 범위를 맡기려면 그 연결 capability가 필요하며, 없으면 그 입력에 B를 적용할 수 없다. B의 기능 부족을 VIA의 낮은 QA 점수로 포장하지 않는다.
+부분 취소·clarification·artifact·node status가 실제 bundle 계약으로 제공되어야 강한 B다. VIA의 단일 Task identity와 사용자 창구는 유지된다. 다른 capability나 기존 Agent execution이 필요한 node는 별도 bundle로 남고 cross-bundle edge는 VIA가 소유한다. 필요한 bundle capability가 없으면 해당 edge에는 B를 적용하지 않으며 기능 부족을 낮은 QA 점수로 포장하지 않는다.
 
 ```mermaid
 flowchart TB
  subgraph V["VIA Core Process — 복합 요청 영역"]
- R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> T["공통 Task Owner<br/>외부 node와 VIA identity 연결"]
- T -->|"복합 요청·mapping·outbox"| DB[("공통 Task Repository")]
- DB -.->|"비동기: 복합 실행 명령"| D["공통 Dispatcher·Agent Client"]
+ R["공통 SemanticDecision<br/>사용자가 명시한 node·의존"] --> T["[변경] Bundle Partitioner<br/>capability·기존 owner 기준"]
+ T -->|"bundle·cross-edge mapping·outbox"| DB[("공통 Task Repository")]
+ DB -.->|"비동기: bundle 실행 명령"| D["공통 Dispatcher·Agent Client"]
  D -.->|"비동기: node 상태·부분 결과"| T
  U["공통 Task Control"] -->|"외부 run·발송 node 지정"| T
  T -->|"확인된 부분 결과"| P["공통 사용자 응답"]
  end
- D <-->|"submit graph·cancel node·query"| A["[변경] 외부 복합 Agent Runtime<br/>전체 readiness·업무 실행 소유"]
+ D <-->|"submit bundle·cancel node·query"| A["[변경] 외부 Agent Runtime 집합<br/>각 bundle 내부 readiness 소유"]
 ```
 
 **실제 호출·상태·실패 처리 순서**
 
-1. VIA는 동일 node·관계를 가진 요청을 지원 Agent에 보내고 반환된 run/node ID를 Task에 연결한다. 다음 node를 시작할 readiness는 Agent가 결정한다.
+1. VIA는 graph를 capability와 기존 owner로 partition하고 각 bundle을 해당 Agent에 보낸다. 반환된 run/node ID를 VIA Task에 연결하며 bundle 내부 다음 node의 readiness는 Agent가 결정한다.
 2. 부분 취소는 안정된 node ID로 전달한다. Agent가 접수·취소 완료·이미 실행을 구분하고 부분 결과를 제공해야 같은 사용자 기능이 성립한다.
-3. 지원하지 않는 Agent를 위해 VIA에 숨은 Scheduler를 넣으면 A로 바뀐다. 필요한 capability가 없는 profile에서는 B를 비교하지 않는다. 외부 Runtime은 양쪽 모두 VIA Process 밖이다.
+3. bundle 내부 edge를 VIA가 사실상 하나씩 release하면 그 edge는 A가 된다. 필요한 capability가 없는 edge는 A 또는 cross-bundle VIA edge로 남긴다. 외부 Runtime은 양쪽 모두 VIA Process 밖이다.
 
 Agent-neutral 원칙을 유지하려면 특정 Agent가 VIA 전체의 의미·Task authority를 가져서는 안 된다. 복합 실행 책임만 선택된 Agent에 놓는다.
 
@@ -106,14 +108,14 @@ Agent-neutral 원칙을 유지하려면 특정 Agent가 VIA 전체의 의미·Ta
 
 | 차이 | A | B |
 | --- | --- | --- |
-| 상위 요청 관계 readiness | VIA가 하나 이상 소유 | 대상 복합 업무에서는 Agent가 전부 소유 |
-| Task와 실행 관계 | node·묶음별 실행 연결 | 복합 실행 + 외부 node 연결 |
+| 비교 대상 edge readiness | VIA가 모든 node edge 소유 | 같은 owner bundle 내부는 Agent, bundle 사이는 VIA |
+| Task와 실행 관계 | node별 실행 연결 | bundle 실행 + 외부 node 연결 |
 | 부분 제어 | VIA가 후행 위임 억제 가능 | Agent의 실제 node control 필요 |
 | 공통 | 사용자가 명시한 관계·VIA Task identity·정직한 상태 | 동일 |
 
-같은 대상 복합 업무의 연결을 VIA가 최종적으로 해제·준비시키면 A, 모든 readiness를 Agent가 확정하면 B다. A가 묶음 내부를 위임해도 VIA 소유 상위 연결이 남으면 A다. B를 돕는 VIA가 사실상 node 실행 순서를 결정하면 A가 된다. 서로 다른 독립 업무의 라우팅은 이 결정과 별개다.
+같은 비교 대상 edge를 VIA가 최종적으로 해제·준비시키면 A, owner Agent가 bundle 내부 상태로 확정하면 B다. B에서도 서로 다른 bundle 사이 edge는 VIA가 소유하므로 “전체 시스템의 orchestration을 특정 Agent에 넘긴다”는 의미가 아니다. B를 돕는 VIA가 bundle 내부 node 실행 순서를 사실상 결정하면 그 edge는 A가 된다.
 
-작은 묶음은 Agent, 묶음 간은 VIA가 조정하는 hybrid를 A에 포함했다. B는 임의 범용 Agent가 아니라 동등한 node control 계약을 가진 복합 Agent다. ‘부분 제어를 못 하지만 빨리 위임한다’는 B는 제외한다. 그 capability가 없다면 선택은 비교 우열이 아니라 기능 적합성에 의해 제한된다.
+제품 graph에는 A edge와 B edge가 함께 존재할 수 있지만, 동일 edge의 authority는 하나다. A 후보는 모든 user-declared edge를 VIA에 유지하고, B 후보는 사전 정의한 owner-compatible edge를 bundle 내부로 이동한다. ‘부분 제어를 못 하지만 빨리 위임한다’는 B는 제외한다. capability가 없다면 선택은 비교 우열이 아니라 기능 적합성에 의해 제한된다.
 
 A/B 모두 같은 기능·권한·실패 의미와 합리적인 보완책을 허용하는 **steelman**이다. 같은 결정 범위의 최종 기준은 **mutually exclusive**해야 한다. 속도 차이를 만들기 위해 한쪽의 검증·기록·cache를 빼지 않는다.
 
@@ -127,11 +129,11 @@ sequenceDiagram
  participant V as VIA
  participant A as Downstream Agent
  U->>V: 요약 후 발송, 이어서 발송만 취소
- alt A VIA가 상위 관계 소유
+ alt A VIA가 모든 node edge 소유
  V->>V: 발송 readiness 보류·취소
  V->>A: 이미 시작한 해당 실행만 제어
- else B Agent가 전체 관계 소유
- V->>A: 복합 실행의 발송 node 취소
+ else B owner bundle 내부 edge는 Agent 소유
+ V->>A: 해당 bundle의 발송 node 취소
  A-->>V: node별 실제 처리 상태
  end
  A-->>V: 늦게 도착한 요약 결과
@@ -154,17 +156,17 @@ B에 안정된 node 결과·control이 있으면 QA-13/14도 올바를 수 있�
 
 ### T2. VIA overhead를 Agent 실행으로 옮긴 효과
 
-A는 상위 연결에서 source 결과 수신 → artifact 연결 → 다음 위임 준비를 수행한다. B는 최초 위임 후 Agent 내부에서 관계를 진행한다. B의 VIA-side 경계가 줄 수 있지만 그 조정 비용은 사라진 것이 아니라 Agent 내부로 이동했다.
+A는 같은 owner가 처리할 수 있는 연속 node에서도 source 결과 수신 → artifact 연결 → readiness commit → 다음 위임을 VIA가 수행한다. B는 bundle을 한 번 위임한 뒤 bundle 내부 edge를 Agent가 진행한다. Cross-bundle edge에서는 B도 VIA를 다시 거친다. B의 VIA-side 경계가 줄 수 있지만 그 조정 비용은 사라진 것이 아니라 Agent 내부로 이동했다.
 
-현행 QA-01은 단일 위임의 outbound와 terminal inbound 경계를 명시한다. 복합 A의 여러 실행에 이를 무조건 합산하거나 B의 전체 interval에서 Agent 시간을 뺀 값과 비교하면 같은 metric이 아니다. 복합 실행의 공통 source endpoint·분모가 승인되기 전에는 이 대상의 QA-01을 직접 비교 불가로 둔다. 전체 사용자 대기시간은 보조 근거다. A도 묶음을 써 경계를 줄일 수 있으므로 node 수 자체를 지연값으로 쓰지 않는다.
+QA-09에는 동일한 사용자 graph를 완료하는 동안 실제로 발생한 VIA-attributable segment를 합산하되 Agent 내부 queue·reasoning·Tool 시간은 제외한다. A의 node별 왕복과 B의 bundle ingress/terminal·cross-bundle 왕복을 같은 source 사건으로 계측한다. Agent 내부로 비용이 이동한 사실을 숨기지 않도록 full user wall-clock도 secondary evidence로 공개한다. 단순 node 수를 지연값으로 쓰지 않고 실제 VIA event를 측정한다.
 
 <a id="t3"></a>
 
 ### T3. 부분 장애·재시작·혼합된 기존 Task
 
-요약 성공, 메일 실패, 다른 보고서는 계속되는 같은 사건을 준다. A는 각 실행의 사실과 준비되지 않은 후행을 복원한다. B는 외부 Agent가 복합 node 상태를 조회·재연결 가능하게 제공해야 한다. 이 capability가 있으면 VIA가 shadow scheduler를 추가할 필요가 없고, 없다면 시험기가 대신 복원할 수 없다. 두 안 모두 확인 없는 재전송으로 외부 Action을 중복시키지 않는다.
+요약 성공, 메일 실패, 다른 보고서는 계속되는 같은 사건을 준다. A는 각 node 실행의 사실과 준비되지 않은 후행을 복원한다. B는 영향 bundle의 node 상태를 조회·재연결하고 cross-bundle edge를 VIA 기록에서 복원한다. Bundle 하나의 Agent가 죽었을 때 같은 bundle의 아직 실행되지 않은 node까지 영향을 받는 범위와 A의 node별 격리를 QA-39에서 비교한다. 두 안 모두 확인 없는 재전송으로 외부 Action을 중복시키지 않는다.
 
-UC-09.5처럼 이미 서로 다른 Agent에 진행 중인 Task와 직접 질문이 섞이면, B가 이를 하나의 복합 실행으로 옮길 수 있다고 가정할 수 없다. 기존 실행 ownership을 Agent가 실제로 제어할 계약이 없으면 해당 혼합 부분은 공통 VIA 제어로 남기거나 B 적용 범위를 좁혀야 한다. ‘전체 시스템은 B’라는 초기 표현을 이 때문에 보류한다.
+UC-09.5처럼 이미 서로 다른 Agent에 진행 중인 Task와 직접 질문이 섞이면 기존 실행을 현재 owner의 bundle에 유지한다. 다른 owner로 이식하지 않으며 owner 사이 dependency는 VIA edge다. 이 partition 규칙 덕분에 A/B 모두 혼합 요청을 처리할 수 있지만, B bundle 내부 node control capability가 없는 Agent는 단일-node bundle로 축소된다.
 
 <a id="t4"></a>
 
@@ -182,12 +184,12 @@ A의 graph state와 B의 외부 node shadow view가 모두 필요하므로 B의 
 
 | QA · 단일 metric | 예상 방향·크기 | 확실성 | 구조적 이유·반례와 근거 | 역할 |
 | --- | --- | --- | --- | --- |
-| QA-01 위임 경로 VIA 처리시간 · 최악 case p95; Agent 실행 제외 | 대상 복합 경로는 직접 비교 불가 | 높음 | 다중 실행과 단일 복합 실행의 공통 집계 경계 미정 [T2](#t2) | 적용성 선행 |
+| QA-01 위임 경로 VIA 처리시간 · 최악 case p95; Agent 실행 제외 | 조건부: B 우세 가능 | 중간 | owner-compatible 연속 node의 VIA 왕복 감소; cross-bundle은 동일, full wall-clock 병기 [T2](#t2) | 주 비교 후보 |
 | QA-02 직접 Voice 응답시간 · 최악 case p95 | 비슷 | 중간 | 공통 직접 응답은 복합 Agent orchestration과 분리 [T2](#t2) | 회귀 |
 | QA-03 Agent 상태 Voice 전달시간 · 최악 case p95 | 조건부; 크기 미정 | 낮음 | 동일 node status source를 정의할 수 있는 profile에서만 비교 [T1](#t1) | 적용성 선행 |
 | QA-04 음성 중단시간 · 최악 case p95 | 비슷 | 중간 | 물리 음성 중단은 node 취소와 다름 [T1](#t1) | 회귀 |
 | QA-05 Task 제어 응답시간 · 최악 control case p95 | 조건부: 위임 전 억제는 A 가능 | 중간 | 위임 후에는 A도 외부 사실 확인; B 부분 제어 capability 필수 [T1](#t1) | 주 비교 가능성 |
-| QA-11 전체 요청 처리 정확도 · case별 strict 성공률의 평균 | 판단 근거 부족 | 낮음 | 동등 기능의 복합 Agent와 혼합 Task 지원 미확인 [T3](#t3) | 기능 적합성 |
+| QA-11 전체 요청 처리 정확도 · case별 strict 성공률의 평균 | 조건부; 방향 미정 | 낮음 | edge owner·artifact version·부분 control·기존 owner binding의 field 정확도 [T1](#t1) [T3](#t3) | 주 비교 후보 |
 | QA-12 의미 해석 정확도 · strict 성공 run 비율 | 비슷 | 중간 | 사용자 관계의 의미 해석은 VIA 공통 책임 [T1](#t1) | 회귀 |
 | QA-13 Task·Interaction 연결 정확도 · strict 성공 run 비율 | 비슷 예상; capability 선행 | 중간 | node ID·부분 control이 있으면 B도 정확히 연결 가능 [T1](#t1) | 기능 적합성 |
 | QA-14 비동기 Task 상태 수렴 · strict 성공 run 비율 | 비슷 예상; capability 선행 | 중간 | 부분 terminal·취소·완료 수렴을 두 안 모두 확인 [T3](#t3) | 기능 적합성 |
@@ -196,7 +198,7 @@ A의 graph state와 B의 외부 node shadow view가 모두 필요하므로 B의 
 | QA-22 Model·Context·State 변화 영향 · 15개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | Agent 내부 graph 변화는 VIA 변경 감소 점수로 바로 환산 못함 [T4](#t4) | 회귀·ledger |
 | QA-23 실험·로그 변화 영향 · 5개 변화의 변경 요소 평균 | 판단 근거 부족 | 낮음 | 상위 관계와 외부 node evidence 계약의 변경 수 미정 [T4](#t4) | 회귀·ledger |
 | QA-31 올바른 Task 복구시간 · 최악 fault p95 | 조건부; 크기 미정 | 낮음 | Agent의 부분 상태 조회·재연결 기능이 필요 [T3](#t3) | 기능 적합성 |
-| QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 비슷; 의존 범위 고정 필요 | 중간 | 복합 Agent 필수 의존 실패를 초과 전파로 세지 않음 [T3](#t3) | 회귀 |
+| QA-32 불필요한 장애 영향 범위 · 초과 중단 단위 최대 수 | 조건부: A 우세 가능 | 중간 | node별 격리 대 bundle owner 장애가 아직 실행되지 않은 sibling node에 미치는 범위 [T3](#t3) | 주 비교 후보 |
 | QA-41 PC 메모리 · 최악 workload의 peak p95 | 조건부; 방향 미정 | 낮음 | VIA graph와 복합 node view의 실제 resident 상태 비교 [T4](#t4) | 자원 확인·ASR 우선 제외 |
 | QA-51 불필요한 보호정보 노출 · 초과 노출 단위 수 | 비슷 | 중간 | 업무 묶음이라는 이유로 과다 Context 전달 금지 [T4](#t4) | 필수 회귀 |
 | QA-61 실행 trace 완전성 · 완전한 trace run 비율 | 비슷 | 중간 | B에도 상위 node·Task·실행 연결 trace를 허용 [T4](#t4) | 필수 회귀 |
@@ -218,7 +220,7 @@ VIA-DP-01 직접 처리 범위, VIA-DP-02 관계 확정, VIA-DP-06 사용자 관
 
 ## 10. 현재 판단과 재검토 조건
 
-**선행 capability·책임 범위 결정으로 남긴다.** B의 동등 기능과 복합 QA-01 경계가 확인되기 전 핵심 점수 비교로 올리지 않는다. 기능이 제한된 Agent 환경에서 A가 필요하다는 사실은 B의 낮은 QA 점수나 모든 환경의 A 승리를 뜻하지 않는다.
+**Node-level edge authority 대 owner-affinity bundle authority로 핵심 shortlist에 유지한다.** 후속 심층 검토에서 bundle capability, 기존 Task owner 보존, cross-bundle artifact·control, 공통 QA-09 복합 집계 경계를 먼저 동결한다. 동등한 node status·부분 control·재연결을 제공하지 못하는 Agent profile은 B 점수 표본이 아니라 기능 부적합으로 분리한다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

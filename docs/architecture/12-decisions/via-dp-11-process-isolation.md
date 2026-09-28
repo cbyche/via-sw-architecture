@@ -1,10 +1,10 @@
 # VIA-DP-11 — 외부 연동 코드의 Process 장애 경계
 
-> **검토 초안 v6 · 2026-09-27 · targeted reference campaign 완료 · 사용자 검토 전**
+> **조건부 보조 DP v7 · 2026-09-28 · A2A/ACP 전제 반영 / 제품 fault inventory 전**
 >
 > 질문: 치명적 실패 가능성이 있는 연동 실행을 별도 Process에 가둘 것인가, Core와 같은 Process에서 논리적으로 격리할 것인가?
 >
-> 현재 판단: **조건부 핵심 후보 — Process fatal에서 QA-32 차이 확인** v4 reference campaign은 A 0개, B 4개의 불필요 중단 단위를 관측했다. 실제 제품 Client의 fatal 위험과 발생 빈도 확인 전에는 최종 대안을 선택하지 않는다.
+> 현재 판단: **현재 핵심 DP shortlist에서 제외, 제품 fault inventory 조건부 재승격**. VIA가 Downstream Agent와 A2A/ACP 같은 표준 protocol로 통신하고 Agent Runtime은 항상 외부에 있다는 전제를 명시한다. v4 reference의 injected fatal 차이는 보존하지만, 실제 VIA-side protocol client가 잡을 수 없는 fatal 위험을 갖는지 확인하기 전에는 핵심성 근거로 쓰지 않는다.
 
 ## 1. 배경 — 한 Agent 연동이 죽어도 VIA와 다른 업무는 살아 있어야 할까?
 
@@ -27,7 +27,9 @@ class Q change;
 
 **용어:** Process는 주소 공간과 종료 수명을 가진 OS 실행 단위다. IPC는 Process 사이의 통신이며, facade는 Core에 남는 얇은 연결 계층이다. fatal fault는 같은 Process를 종료시키는 장애로 일반 예외와 구별한다. in-flight는 외부 요청을 보냈지만 결과를 아직 확정하지 못한 상태다.
 
-대상은 VIA가 소유하는 Agent Client·SDK 연동 코드다. 외부 Downstream Agent Runtime은 양쪽 모두 별도 Process 또는 원격에 있으며 이를 Core 안에 넣는 선택이 아니다. 대상 코드·dependency 집합을 결과 전에 같은 의미로 고정한다. 정상 예외·timeout과 Process abort·native fatal failure를 구분한다. Core 로직, canonical state, 정책 authority는 양쪽 모두 Core에 유지한다.
+대상은 VIA가 소유하는 A2A/ACP protocol client·transport·serialization·authentication·stream/event adapter와, 실제 제품이 필요로 할 때 이를 구현하는 vendor SDK 연동 코드다. 이 코드는 `submit`, `query/status`, `answer`, `cancel`, progress/result event 수신과 VIA Task ID↔Agent run/question/artifact ID mapping을 담당한다. Agent 자체의 reasoning·planning·Tool 실행은 하지 않는다.
+
+외부 Downstream Agent Runtime은 양쪽 모두 별도 Process 또는 원격에 있으며 이를 Core 안에 넣는 선택이 아니다. 단순 safe-language HTTP/WebSocket/A2A/ACP client만 사용하고 잡을 수 없는 native/plugin fatal 가능성이 없다면 정상 timeout·parse error는 같은 Process에서도 격리할 수 있어 DP-11의 핵심 trade-off가 약해진다. 반대로 native SDK, third-party plugin, browser/OS bridge 또는 fatal 가능 parser를 같은 integration host에 적재한다면 다시 핵심 후보가 될 수 있다.
 
 **기준선에서 확인한 사실:** UC-14는 한 업무 문제로 무관한 대화가 중단되지 않도록 요구하고, UC-18·QA-31/32는 올바른 재연결과 불필요한 영향 범위를 구분한다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
@@ -233,7 +235,7 @@ A는 fatal 연동 실패를 무관한 interaction에서 격리할 이유가 강�
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 핵심 후보로 유지한다.** Reference harness에서는 QA-32의 강한 A 우세와 QA-41의 작은 B 우세가 실제로 갈렸다. 다만 실제 VIA Client에 격리할 fatal 위험이 확인될 때만 QA-32의 제품 중요도가 생긴다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 A의 이점으로 세지 않는다. 현재 overall winner는 선언하지 않는다.
+**현재 핵심 shortlist에서는 제외하고 조건부 보조 DP로 유지한다.** A2A/ACP client는 VIA 안의 protocol adapter이지 Downstream Agent Runtime이 아니다. Reference harness에서는 injected Process fatal에 대해 QA-32의 강한 A 우세와 QA-41의 작은 B 우세가 갈렸지만, 실제 제품 client가 safe-language 표준 protocol 구현이면 그 fault의 대표성이 낮을 수 있다. native SDK·plugin·browser/OS bridge 등 실제 fatal-risk integration inventory가 확인될 때만 “VIA-owned external integration host 격리”로 범위를 넓혀 핵심 재승격을 검토한다. 외부 Agent 자체의 crash는 양쪽 외부 경계에서 발생하므로 A의 이점으로 세지 않는다. 현재 overall winner는 선언하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

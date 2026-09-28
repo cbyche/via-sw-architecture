@@ -1,10 +1,10 @@
 # VIA-DP-12 — 응답 게시와 실행 근거의 영속 확정 순서
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **보조 DP v3 · 2026-09-28 · 핵심 shortlist 제외**
 >
 > 질문: 최소 실행 근거의 영속 확인 뒤 응답·제어 disposition을 게시할 것인가, 정상 기록을 유지하되 게시와 영속 기록을 비동기로 분리할 것인가?
 >
-> 현재 판단: **v1 reference campaign 완료 — responsiveness/completion 대 trace completeness trade-off 관측**. Architecture 선택과 ASR 확정은 하지 않았다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에서 제외**. 정상 경로에서는 저장과 응답 준비를 병렬화하면 publish barrier 차이가 작고, 주요 반대 효과가 core ASR보다 QA-61 evidence qualification에 집중된다. Business state·command outbox·Action audit의 필수 durability는 공통 계약으로 유지하며 Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
 
 ## 1. 배경 — 시험은 끝났는데 왜 그런 결과가 나왔는지 로그가 없다면?
 
@@ -223,7 +223,7 @@ VIA-DP-08 운영 상태 기준과 별개로 A/B 어디에도 적용할 수 있�
 
 ## 10. 현재 판단과 재검토 조건
 
-**재정의한 축을 검증 후보로 유지한다.** 중앙 수집 위치 자체는 보조 설계로 남긴다. Business commit이 이미 모든 필요한 근거를 보호해 A의 추가 비용과 B의 유실 창이 모두 사라지면 이 축도 핵심 평가에서 내린다. QA-62를 QA-61의 복제 점수로 쓰지 않는다.
+**핵심 DP에서는 제외하고 evidence infrastructure의 supporting 결정으로 유지한다.** 중앙 수집 위치 자체는 보조 설계로 남긴다. 기본 방향은 business-critical state·outbox·Action audit는 필수 durability를 유지하고, 평가·진단 evidence는 bounded async 수집과 누락 qualification을 적용하는 것이다. 별도 제품 규제·감사 요구가 publish 전 durable evidence를 요구할 때만 이 DP를 다시 핵심 후보로 연다. QA-62를 QA-61의 복제 점수로 쓰지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

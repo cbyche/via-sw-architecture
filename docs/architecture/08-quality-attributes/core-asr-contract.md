@@ -125,8 +125,11 @@ QA-13~15의 Task binding·async state convergence·continuity predicate는 중�
 | Handling | S2S direct/Core direct/Agent, Agent·capability 선택 |
 | Required outcome | QA-11이 요구하는 response·dispatch·clarification·control disposition |
 | Required association | QA-11 request-handling 성공에 필요한 Conversation·Request·Task association |
+| Agent progress outcome | applicable status case의 phase, progress, blocked/answer-needed, terminal state, artifact version, staleness, notification disposition |
 
 기존 QA-11과 QA-12가 같은 semantic fact를 검사했다면 새 registry에는 하나의 field ID만 둔다. field를 작게 쪼개거나 합쳐 결과를 바꾸지 못하도록 ID·source QA·oracle operator·applicability를 Measurement Freeze에서 고정한다.
+
+Agent progress case의 `source_revision`은 status field의 freshness를 판정하는 provenance로 보존한다. 실제 Task/run/question binding과 비동기 event 수렴은 QA-13/14 회귀에서 독립적으로 검증하며, QA-11이 요구하는 outcome field와 동일한 사실을 판정할 때만 기존 QA-19 evidence를 재사용한다.
 
 ### 4.3 대표 metric
 
@@ -257,15 +260,17 @@ VIA는 후보마다 새 모델을 올리지 않고 S2S 한 개와 semantic LLM �
 
 모든 DP는 QA-09·19·29·39 네 값을 같은 A/B campaign package에 포함한다. 아래 `P`는 DP 구조 차이로 값이 달라질 Primary hypothesis, `R`은 같은 기능·계약을 지키는지 확인하는 Regression-only다. 최종 applicability와 case/change/fault ID는 각 Measurement Freeze에서 확정한다.
 
+2026-09-28 선정한 핵심 DP shortlist는 VIA-DP-03·05·06·07·15·17이다. 아래 원장은 18개 전체 inventory의 QA 적용 가능성을 보존하는 표이므로 shortlist 밖 DP도 삭제하지 않는다. VIA-DP-02·12는 supporting decision, VIA-DP-11은 실제 fatal-risk integration 확인 전 조건부 보조 DP다.
+
 | DP | QA-09 모집단 | QA-19 주요 field | QA-29 주요 change | QA-39 주요 fault | 초기 역할 |
 | --- | --- | --- | --- | --- | --- |
 | VIA-DP-01 | 같은 bounded goal의 direct/delegated VIA 구간 | handling·Task relation·response/result | M/C/E와 직접처리 계약 변화 | Agent 경로 장애·VIA 재시작 뒤 독립 direct 경로 | 09/19/29 P, 39 R |
 | VIA-DP-02 | Conversation–Task 교차 commit이 참여하는 response/control/status | Task·Conversation binding, revision, final state | state schema·correlation·logging | 두 상태 확정 사이 crash와 reconciliation | 09/19/29/39 P |
 | VIA-DP-03 | Voice 입력이 필요한 direct/delegated/control | input evidence, referent, correction, goal | M-01/M-07, C-03, E timing | Voice session 단절·재연결과 pending input evidence | 09/19/29 P, 39 R |
 | VIA-DP-04 | S2S direct response publish | route authorization·response binding | S2S/session/approval/log contract | publish authority 회수·Core/Voice Runtime 재시작 | 09 P, 19/29/39 R |
-| VIA-DP-05 | Context 보완이 필요한 direct/delegated/control | read set generation, referent, handling | C-01~06, M-09, E correlation | source loss·restart 뒤 frozen read set 복원 | 09/19/29/39 P |
+| VIA-DP-05 | Plan-first 또는 demand-driven Context 획득이 필요한 direct/delegated/control | read-set generation, additional-read decision, referent, handling | C-01~06, M-09, Context tool·plan·E correlation | source loss·restart 뒤 plan 또는 tool-loop/read-set 복원 | 09/19/29/39 P |
 | VIA-DP-06 | semantic 판단이 필요한 direct/delegated/control | 전체 semantic·handling·Task relation field | M/C/E semantic contract | semantic call/session 실패와 제한된 repair | 09/19/29 P, 39 R |
-| VIA-DP-07 | compound delegation·status·control | dependency graph, binding, partial/final state | Agent compound contract·state·logging | compound 실행 중 crash·부분 결과 복원 | 09/19/29/39 P |
+| VIA-DP-07 | node-level 또는 owner-affinity bundle의 compound delegation·status·control | dependency edge owner, node/bundle binding, artifact, partial/final state | Agent bundle/capability·routing·state·logging | node/bundle 실행 중 crash·부분 결과·cross-bundle 복원 | 09/19/29/39 P |
 | VIA-DP-08 | durable write가 참여하는 정상 interaction | recovered Task·result·control field | persistent state·migration·recovery log | process 종료·checkpoint/journal/current-state 복원 | 39 P, 09/19/29 R 또는 조건부 P |
 | VIA-DP-09 | Agent submit/status/control/result 경로 | lifecycle meaning·Task/run binding | A-01~09와 관련 E change | Agent 연결 단절·취소/완료 재확인 | 29 P, 09/19/39 R |
 | VIA-DP-10 | model session이 참여하는 direct/delegated/control | Conversation·Request continuity와 output binding | M-01~09, session·logging | S2S/semantic session 단절·재연결 | 09/29/39 P, 19 R |
@@ -273,9 +278,9 @@ VIA는 후보마다 새 모델을 올리지 않고 S2S 한 개와 semantic LLM �
 | VIA-DP-12 | publish와 durable evidence가 참여하는 interaction | 실제 response·state와 기록 field | E-01~05와 evidence state | publish 직후 durable commit 전 crash | 09/29/39 P, 19 R |
 | VIA-DP-13 | 고정 포화 workload의 direct/delegated/status/control | 올바른 admission·control disposition | scheduler/resource/log contract | 예약 lane·공유 lane 장애와 재기동 | 09 P, 19/29/39 R |
 | VIA-DP-14 | Task command·status·control | revision, terminality, result, allowed control | state/supervisor/repository/log change | Task owner/Core crash와 fencing 복구 | 09/19/29/39 P |
-| VIA-DP-15 | Agent status·result·control | source-confirmed state·binding·revision | A-04/A-05와 cursor/query/log change | event stream loss와 query reconciliation | 09/19/29/39 P |
+| VIA-DP-15 | Agent progress notification·status query·result/control | phase, progress, blocked/answer-needed, terminal state, artifact version, staleness, notification disposition; source revision은 provenance | progress schema·cursor·projection·snapshot query·notification contract | event loss·역순·Agent 단절·VIA restart 뒤 projection/snapshot 복구 | 09/19/29/39 P |
 | VIA-DP-16 | model history가 필요한 direct/delegated/control | semantic·Task relation·continuity field | M-09, C-04/C-06, cache/projector | working context 손실·cold rebuild | 09/19/29/39 P |
-| VIA-DP-17 | materialized Context가 필요한 direct/delegated/control | referent·Context value·handling field | C-01~05, model consumer, logging | materializer/source crash와 Context 재구성 | 09/19/29/39 P |
+| VIA-DP-17 | canonical 또는 consumer-specific Context view가 필요한 direct/delegated/control | referent·Context value·provenance·handling field와 consumer 간 일관성 | C-01~05, canonical schema, consumer requirement, model consumer, logging | canonical materializer 또는 consumer view 실패와 Context 재구성 | 09/19/29/39 P |
 | VIA-DP-18 | protected use가 참여하는 request/control | authorization scope·binding·handling | A-07/A-08, C/M policy, E audit | central authority/local gate 장애·revocation recovery | 09/19/29/39 P + safety gate |
 
 `R`도 실행 package에서 누락하지 않는다. 다만 값이 같아야 할 경로에 인위적 지연·오류를 넣어 trade-off를 만들지 않는다. 한 DP의 source execution이 특정 core ASR에 물리적으로 참여하지 않으면 `source_execution_key`와 `REGRESSION_ONLY` 근거를 남기고 독립 표본처럼 복제하지 않는다.

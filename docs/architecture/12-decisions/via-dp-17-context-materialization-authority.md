@@ -1,10 +1,10 @@
-# VIA-DP-17 — Source를 소비 가능한 Context로 만드는 책임
+# VIA-DP-17 — Context 표현의 최종 의미 소유권
 
-> **검토 초안 v1 · 2026-09-25 · 구현 구조 상세화 / 사용자 검토 전**
+> **핵심 DP 초안 v2 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
 >
-> 질문: 공통 Context service가 의미 있는 값을 만들어 제공할 것인가, 소비자가 scoped reference를 해석해 자기 입력을 만들 것인가?
+> 질문: 선택된 Source를 공통 canonical ContextValue로 한 번 확정할 것인가, 검증된 raw slice와 provenance를 바탕으로 각 소비자가 목적별 Context view를 확정할 것인가?
 >
-> 현재 판단: 기존 CTX-DP01의 변환 책임을 VIA-DP-05와 분리해 보완한 후보이며 양방향 trade-off는 미확인이다. 후보 문서의 완성과 QA trade-off 입증은 별개다. 실제 QA 측정은 `NOT_RUN`이며 이번 작업에서 구현·측정·새 승자 선정은 하지 않았다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. VIA-DP-05의 source 획득 계획과 독립된 표현 권한 질문으로 강화했다. Canonical 재사용 대 목적별 정확성, 공통 failure domain 대 소비자 격리의 차이를 새 후보로 측정해야 하며 실제 결과는 `NOT_RUN`이다.
 
 ## 1. 배경 — 같은 PDF 표를 요청 이해와 답변 생성이 함께 쓰려면?
 
@@ -23,7 +23,9 @@ flowchart TB
 
 ## 2. 비교 범위와 공통 조건
 
-대상은 Source reference에서 소비 가능한 내용·구조·provenance를 만드는 최종 계약이다. 어떤 자료를 읽을지의 집합은 VIA-DP-05로 동일하게 고정한다. domain reasoning·open-ended 조사는 제외한다. 같은 parser·원천 version·권한·최소 정보·cache를 허용한다. 추가 OCR·embedding·helper 모델은 없으며 필요 기능은 두 고정 모델과 실제 source 기능으로 충족 가능한지 확인한다.
+대상은 이미 선택된 Source reference에서 소비 가능한 내용·구조·provenance를 만드는 **표현의 최종 의미 계약**이다. 어떤 자료를 읽을지, 최초 plan 밖의 자료를 같은 semantic execution에서 추가할 수 있는지는 VIA-DP-05로 동일하게 고정한다. 이 DP는 같은 source를 한 번 canonicalize할지, Grounding·Direct Response·Delegation preparation 같은 소비 목적에 맞춰 별도 view로 만들지를 비교한다.
+
+domain reasoning·open-ended 조사는 제외한다. 같은 parser·원천 version·권한·최소 정보·bounded cache를 허용한다. 추가 OCR·embedding·helper 모델은 없으며, 소비자별 semantic call이 필요해도 VIA의 semantic LLM 한 개를 역할별 호출로 공유한다.
 
 **모델 불변식:** S2S 모델 1개 + semantic LLM 1개. Component·Task별 모델을 별도 적재하지 않는다. 프롬프트·세션·호출을 나눠도 공유 모델이며 동시 처리·취소 지원을 임의 가정하지 않는다.
 
@@ -31,9 +33,11 @@ flowchart TB
 
 **출처와 한계:** [시스템 경계](../01-system-mission-and-boundary.md), [UC](../05-representative-use-cases.md), [공통 조건](../06-fixed-assumptions.md), [현행 QA](../08-quality-attributes/quality-model.md)가 요구의 기준이다. 아래 구조는 그 요구를 만족시키려는 후보 설계다. 실제 지연·오류 빈도·변경 요소 ledger는 미확인이다.
 
-## 3. 대안 A — 공통 materializer + 소비자별 projection
+## 3. 대안 A — Canonical ContextValue + 공통 의미 확정
 
-Context Service가 Source 변환과 version·출처 검증을 소유하고 소비자별 필요한 값만 제공한다. lazy 읽기·공유 cache·projection을 허용하는 hybrid다. Source 변화의 집중 흡수가 이유이며 소비자별 형식 요구를 공통 계약에서 수용하는 비용이 있다.
+Context Engine이 Source 변환과 version·출처 검증을 소유하고 하나의 typed canonical ContextValue를 확정한다. 예를 들어 PDF 표를 header·row·unit·selection·source range·version으로 만든 뒤 Grounding과 Direct Response가 같은 의미를 재사용한다. lazy 읽기·공유 cache·lossless field·소비자별 projection을 허용하지만, source 의미와 provenance의 최종 해석은 canonical contract가 소유한다.
+
+소비자가 canonical schema 밖의 원문을 임의로 다시 해석하지 않는다. 필요한 정보가 없으면 새 materialization generation을 요청한다. 이 경계가 없으면 A가 B로 수렴한다. 강점은 변환 재사용·소비자 간 일관성·source 변화 흡수이고, 약점은 공통 schema가 새로운 소비 목적의 미세한 정보를 표현하지 못하거나 공통 materializer가 여러 경로의 failure domain이 될 수 있다는 점이다.
 
 ```mermaid
 flowchart TB
@@ -53,9 +57,11 @@ flowchart TB
 2. 값·원천 구간·version을 묶어 전달한다. 큰 원문을 무조건 복사하지 않고 같은 cache의 lazy slice를 허용한다. 소비자가 받은 값을 자기 prompt에 배치하는 것은 source 변환 책임과 구별한다.
 3. source 소멸·권한 철회·형식 오류는 명시적 결과로 반환한다. 같은 공유 LLM을 추가로 호출한 변환이 있다면 그 호출·대기·오류도 service 책임이다.
 
-## 4. 대안 B — 공통 접근 handle + 소비자 소유 변환
+## 4. 대안 B — 검증된 Source slice + 소비자별 의미 확정
 
-공통 계층은 안전한 source 접근·identity·version을 제공하고 각 소비자가 자기 입력 값의 변환 계약을 소유한다. parser library·cache를 공유해 코드 복제를 피한다. 소비자 특수 요구를 독립 변경할 수 있지만 여러 소비자에 source 의미 변화가 전파될 수 있다.
+Context Engine은 안전한 source 접근·identity·version·raw/structural slice·provenance를 제공하고 각 소비자가 자기 목적의 Context view 의미를 확정한다. parser library와 raw cache를 공유해 코드 복제를 피하지만 Grounding view, Direct Answer view, Delegation view는 서로 다른 role-specific semantic call과 schema를 가질 수 있다.
+
+강점은 소비 목적에 맞는 정보 선택과 독립 변경이며, 약점은 같은 source를 여러 번 materialize하는 시간·비용, 소비자 간 해석 불일치와 각 view의 복구 책임이다. 모델을 소비자별로 복제하는 안은 아니며 한 semantic LLM의 호출만 분리한다.
 
 ```mermaid
 flowchart TB
@@ -81,11 +87,14 @@ flowchart TB
 
 | 항목 | A | B |
 | --- | --- | --- |
-| 소비 계약 | service가 확정한 ContextValue | scoped raw reference·metadata |
-| 값 의미·변환 책임 | 공통 Materializer | 소비자별 owner |
+| 소비 계약 | 공통 schema의 canonical ContextValue | 검증된 Source slice·metadata·provenance |
+| 값 의미·변환 책임 | Context Engine의 공통 Materializer | Grounding·Direct·Delegation 등 소비자별 owner |
+| 재해석 | schema 밖 정보는 새 materialization generation | 소비 목적별 view 안에서 허용 |
 | 공통 최적화 | lazy projection·cache·library | 동일 허용 |
 
-같은 소비 값의 source 해석·version/provenance 계약을 service가 확정하면 A, 소비자가 resolve 이후 책임지면 B다. snapshot 대 handle이라는 데이터 모양만으로 구별하지 않는다. A도 handle로 지연 전달할 수 있다. B의 shared resolver가 최종 값을 소유하는 살아 있는 service가 되면 A로 이동한다. VIA-DP-05의 닫힌/열린 read-set과는 독립 조합 가능하다.
+같은 source의 의미·version/provenance 계약을 공통 service가 canonical value로 확정하면 A, 공통 계층은 검증된 slice까지만 보장하고 소비자가 목적별 의미를 확정하면 B다. snapshot 대 handle이라는 데이터 모양만으로 구별하지 않는다. A도 handle로 지연 전달할 수 있고 B도 shared parser/cache를 쓸 수 있다. B의 shared resolver가 모든 소비자의 최종 값을 소유하면 A로 이동한다.
+
+VIA-DP-05와는 독립 조합 가능하다. DP-05는 source/read-set의 선택과 확장 시점을, DP-17은 선택된 source의 표현 의미 소유자를 정한다. 따라서 plan-first+canonical, plan-first+consumer view, demand-driven+canonical, demand-driven+consumer view 네 조합이 모두 가능하며 한 축을 비교할 때 다른 축만 고정한다.
 
 양쪽은 같은 기능·안전 조건·자원·외부 capability를 만족하는 **서로의 steelman**이어야 한다. 동일 결정 범위에서는 **mutually exclusive**해야 한다. cache·batch·공통 library·정확성 검사·로그를 한쪽에서 금지해 차이를 만들지 않는다. 같은 강한 설계로 수렴한다면 동점 또는 보조 결정으로 남긴다.
 
@@ -95,13 +104,13 @@ flowchart TB
 
 ### T1. 정상 흐름과 critical path
 
-같은 PDF 표를 Grounding과 Direct Answer가 연달아 쓴다. A는 공통 변환 값을 재사용하고 B도 공유 library·cache로 중복 parse를 피할 수 있다. A의 service 호출 비용과 B의 소비자별 계약 검사 비용만 남을 수 있어 ‘A는 복사 때문에 느림’은 근거가 없다. 모델에 전달되는 정보량과 근거 수준이 같아야 정확도를 공정하게 비교한다.
+같은 PDF 표를 Grounding과 Direct Answer가 연달아 쓴다. A는 canonical 변환과 semantic call 결과를 재사용한다. B도 raw parse/cache는 재사용하지만 목적별 Context view를 확정하는 semantic call·schema 검사는 각각 수행한다. 따라서 A는 반복 소비에서 QA-09가 유리할 수 있고, B는 질문별로 필요한 세부 구조를 보존해 QA-19가 유리할 수 있다. 한쪽에만 원문 또는 정답 field를 제공해 차이를 만드는 것은 금지한다.
 
 <a id="t2"></a>
 
 ### T2. 정정·실패·재연결
 
-문서가 갱신되고 권한이 철회된 뒤 이전 read가 완료된다. A는 Materializer에서, B는 공통 접근 검사와 소비자 final 검증에서 거절한다. 양쪽 모두 source version을 과거 값으로 보존하고 허용 범위를 검사한다. 중앙 service가 멈췄다고 필요 없는 S2S 대화까지 중단하도록 설계하면 추가 의존 문제이며 자연스러운 필수 비용이 아니다.
+문서가 갱신되고 권한이 철회된 뒤 이전 read가 완료된다. A는 Materializer에서, B는 공통 접근 검사와 소비자 final 검증에서 거절한다. 양쪽 모두 source version을 과거 값으로 보존하고 허용 범위를 검사한다. A의 canonical materializer 장애가 Context 소비 경로 전체에 미치는 범위와 B의 개별 consumer view 실패·재계산 범위를 QA-39에서 비교한다. 필요 없는 S2S 대화까지 중단시키지는 않는다.
 
 <a id="t3"></a>
 
@@ -151,7 +160,7 @@ VIA-DP-05는 읽기 집합, 06은 의미 판단, 16은 대화 이력 working sta
 
 ## 10. 현재 판단과 재검토 조건
 
-과거 CTX-DP01을 VIA-DP-05와 같다고 축약하면 owner 축이 누락되므로 따로 수록한다. 실제 차이가 전달 형식·library 배치에만 남으면 보조 계약으로 분류하며 억지 DP 승격은 하지 않는다.
+**Canonical ContextValue 대 consumer-specific view의 의미 권한으로 핵심 shortlist에 유지한다.** 실제 측정에서는 반복 소비 latency, task-specific field 정확도, source-format 대 consumer-requirement change, materializer/consumer fault를 함께 동결한다. 모든 차이가 wire format이나 library 배치에만 남으면 보조 계약으로 다시 내리며 억지로 핵심 지위를 유지하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

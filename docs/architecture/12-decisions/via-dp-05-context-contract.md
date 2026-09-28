@@ -1,10 +1,10 @@
-# VIA-DP-05 — 요청 Context의 읽기 집합 확정 계약
+# VIA-DP-05 — 요청 Context의 획득 계획 확정 계약
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **핵심 DP 초안 v3 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
 >
-> 질문: 의미 처리 전에 입력 원천 집합을 닫을 것인가, 허용 범위 안에서 처리 도중 읽기 집합을 확장할 수 있게 할 것인가?
+> 질문: 필요한 Context를 먼저 계획·동결한 뒤 의미 처리를 실행할 것인가, 의미 처리 중 bounded 조회로 같은 실행의 읽기 집합을 확장할 것인가?
 >
-> 현재 판단: **v1 reference campaign 완료 — 측정된 QA에서 trade-off 미입증**. Architecture 선택과 ASR 확정은 하지 않았다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. 기존 v1 component reference에서 trade-off가 없었으므로 그 결과를 새 v3 후보의 근거로 소급하지 않는다. Plan 적중·추가 근거 발견·과다 준비·source fault를 포함한 새 계약과 실제 Voice/semantic 경로 측정이 필요하다.
 
 ## 1. 배경 — ‘이 자료’에 답하는 도중 다른 정보가 필요해지면?
 
@@ -28,7 +28,9 @@ class Q change;
 
 **용어:** Context는 요청에 필요한 허용된 문서·화면·대화 등의 정보다. 읽기 집합(read-set)은 해당 판단에 사용할 원천 참조와 버전의 집합이다. 입력 세대는 하나의 판단에 적용할 집합의 확정 버전이며, Broker는 허용 범위와 현재 권한을 검사해 조회를 중개한다. lazy loading은 값이 실제 필요할 때 읽는 방식이다.
 
-대상은 VIA의 bounded Context 처리에서 원천 참조·version을 선택하고 소비자에게 주는 계약이다. 업무 조사 계획은 Agent 책임으로 유지한다. ‘발화 당시 화면’과 ‘지금 일정’의 시간 의미는 사용자 요구로 고정하며 A/B에 다른 정답을 주지 않는다.
+대상은 VIA의 bounded Context 처리에서 하나의 semantic execution이 사용할 원천 참조·version을 언제 확정하고 누가 추가 조회를 시작할 수 있는지의 계약이다. 업무 조사 계획은 Agent 책임으로 유지한다. ‘발화 당시 화면’과 ‘지금 일정’의 시간 의미는 사용자 요구로 고정하며 A/B에 다른 정답을 주지 않는다.
+
+VIA-DP-17과의 경계는 명확하다. 이 DP는 **무엇을 읽을 수 있고 같은 실행에서 새 자료를 추가할 수 있는가**를 결정한다. VIA-DP-17은 이미 선택한 Source를 **어떤 의미 표현으로 만들고 누가 그 표현의 최종 책임을 갖는가**를 결정한다. Source 획득 시점과 Source 값의 표현 소유권은 독립 축이다.
 
 **기준선에서 확인한 사실:** UC-02~06·16·17은 지정 자료·과거 대상·최신성·동의 철회·기억 삭제를 요구한다. 과거 포인터를 현재 화면으로 바꾸거나 필요 이상의 Context를 전달해서는 안 된다. 요구의 출처는 [System Mission](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Use Cases](../05-representative-use-cases.md)다.
 
@@ -44,11 +46,11 @@ Core Process는 이 DP의 A/B 공통 비교용 배치다. Process 자체를 비�
 
 실선은 라벨의 호출·반환·읽기·쓰기, 점선은 비동기 event다. Queue/buffer는 별도 노드, 영속 기록은 원통으로 그린다. 메모리 queue 수락은 durable commit이 아니고 별도 message bus 제품도 가정하지 않는다. 메시지는 request/Task/call identity와 관련 revision·generation으로 연결한다. 늦은 결과는 최종 owner가 검사한다. queue 용량·포화 정책은 측정 전 동결하며 무한 queue를 가정하지 않는다.
 
-## 3. 대안 A — 불변 입력 명세 + 필요한 값만 지연 적재
+## 3. 대안 A — Plan-first Context + 동결된 semantic execution
 
-Context 준비자가 요청 세대마다 사용할 원천 참조와 version의 집합을 확정한다. 실제 값은 필요한 순간에 적재할 수 있고, 소비자별로 필요한 부분만 전달한다. 따라서 ‘snapshot이면 전체 원문 복사’라는 약한 안이 아니다. 값의 선적재와 지연 적재를 함께 쓸 수 있는 hybrid다.
+Context Planner가 semantic execution 전에 사용할 source/reference/version 집합을 확정한다. 서로 독립적인 read는 병렬로 시작할 수 있고 실제 값은 필요한 순간에 지연 적재할 수 있다. 따라서 ‘plan-first면 전체 원문을 미리 복사한다’는 약한 안이 아니다. 값의 prefetch와 lazy loading을 함께 쓸 수 있다.
 
-확정 집합 밖의 새 원천이 필요하면 같은 사용자 요청에 새 Context 세대를 만들고 관련 판단만 다시 유효화한다. 기존 cache와 변하지 않은 판단 근거는 재사용할 수 있다. 입력 재현과 소비자 계약은 단순하지만 추가 원천에 대한 확정·무효화 경계는 남는다.
+확정 집합 밖의 새 원천이 필요하면 새 Context generation과 새 semantic attempt를 만들고 영향받은 판단만 다시 실행한다. 기존 cache와 변하지 않은 판단 근거는 재사용할 수 있다. 계획이 맞으면 병렬 준비와 재현성이 유리하지만, 의미 처리 중 필요성이 드러나는 자료는 replan 경계를 거친다.
 
 ```mermaid
 flowchart TB
@@ -72,11 +74,11 @@ flowchart TB
 
 불변 명세는 모든 값의 복사본이 아니다. 같은 세대 안에서 입력 원천 집합을 소비자가 늘릴 수 없다는 것이 차이다.
 
-## 4. 대안 B — 범위 제한 조회 권한 + 처리 중 입력 확장
+## 4. 대안 B — Demand-driven Context + 동일 semantic execution 안의 확장
 
-Context Broker는 Request·목적·수신자·유효 세대에 묶인 조회 권한을 제공한다. 소비자는 그 허용 namespace 안에서 필요한 원천을 선택하며 읽기 집합을 점진적으로 확장한다. 발화 당시 근거는 고정 version으로, 현재성 요구는 같은 사전 규칙으로 조회한다.
+Context Broker는 Request·목적·수신자·유효 세대에 묶인 bounded 조회 capability를 제공한다. Intent Refiner나 다른 semantic consumer는 최소 Context로 실행을 시작하고, 처리 중 필요성이 드러난 원천을 같은 semantic execution 안에서 요청하여 읽기 집합을 점진적으로 확장한다. 발화 당시 근거는 고정 version으로, 현재성 요구는 같은 사전 규칙으로 조회한다.
 
-B도 이미 읽은 자료를 cache하고, 확정된 사실의 불변 사본과 읽기 이력을 남긴다. 권한 범위를 넓히려면 새 동의·세대가 필요하다. 같은 허용 범위 안의 추가 원천을 위해 매번 전체 Context 집합을 다시 확정하지 않는 것이 장점이다. 대신 조회 capability·읽기 이력·source 수명·철회 검사 책임이 지속된다.
+B도 이미 읽은 자료를 cache하고, 확정된 사실의 불변 사본과 tool-call/read-set checkpoint를 남긴다. 권한 범위를 넓히려면 새 동의·세대가 필요하다. 같은 허용 범위 안의 추가 원천을 위해 새 semantic attempt를 시작하지 않는 것이 장점이다. 대신 순차 조회 왕복, 조회 capability, 진행 중 reasoning과 read-set의 복구 책임이 생긴다.
 
 ```mermaid
 flowchart TB
@@ -104,12 +106,23 @@ B는 현재 화면을 무조건 읽는 안이 아니다. 필요한 시점·원�
 
 | 차이 | A | B |
 | --- | --- | --- |
-| 같은 요청 세대의 입력 집합 | 의미 처리 전 닫힘 | 허용 범위 안에서 확장 가능 |
-| 새 원천 필요 시 | 새 입력 세대·관련 판단 유효화 | Broker 조회와 이력 추가 |
+| 같은 semantic execution의 입력 집합 | 실행 전 plan으로 닫힘 | 허용 범위 안에서 실행 중 확장 가능 |
+| 새 원천 필요 시 | 새 generation·semantic attempt | 같은 attempt의 bounded Context 조회 |
 | 기준 evidence | 명세 + 실제 소비 값·출처 | 조회 권한 + 실제 read-set·값·출처 |
 | 공통 | 지연 적재·cache·최소 정보·철회·시간 의미 | 동일 |
 
-같은 Context 세대의 원천 집합 밖을 새 세대 없이 읽을 수 있으면 B, 반드시 새 확정 세대를 거치면 A다. A에 lazy handle을 넣어도 미리 정한 집합 안이면 A다. B가 항상 집합을 닫고 추가 조회를 금지하면 A의 계약이 된다.
+같은 semantic execution이 최초 plan 밖의 source/reference를 새 generation 없이 읽을 수 있으면 B, 반드시 새 plan과 attempt를 거치면 A다. A에 lazy handle과 병렬 prefetch를 넣어도 미리 정한 집합 안이면 A다. B가 seed plan으로 시작해도 실행 중 확장을 허용하면 B다.
+
+제품은 요청 유형에 따라 A/B 정책을 선택할 수 있지만, 하나의 scored semantic attempt에서 어느 규칙을 썼는지는 하나로 결정된다. “현재 선택한 이 표”처럼 source가 고정된 요청과 “관련 메일을 더 찾아 설명해줘”처럼 처리 중 자료가 드러나는 요청을 모두 fixture에 포함한다.
+
+### VIA-DP-17과의 독립 조합
+
+| | DP-17 A canonical ContextValue | DP-17 B consumer-specific view |
+| --- | --- | --- |
+| DP-05 A plan-first | 계획한 source를 공통 표현으로 변환 | 계획한 source를 소비자별로 변환 |
+| DP-05 B demand-driven | 추가로 읽은 source도 공통 표현으로 변환 | 추가로 읽은 source를 소비 목적별로 변환 |
+
+어떤 조합도 논리적으로 가능하다. DP-05의 승자를 먼저 정해야 DP-17을 평가할 수 있는 것은 아니며, 한 축을 비교할 때 다른 축의 조건만 고정하면 된다.
 
 snapshot+handle+cache는 양쪽에 허용했다. 가장 강한 ‘불변 참조 집합과 lazy 값’ 조합을 A로 삼고, 대등한 B를 처리 중 집합 확장 계약으로 재정의했다. cache 크기·prefetch 비율만 다르면 별도 Architecture DP가 아니라 tuning이므로 비교하지 않는다.
 
@@ -218,7 +231,7 @@ VIA-DP-03은 입력 시각 근거를 생성하고 VIA-DP-06은 Context를 소비
 
 ## 10. 현재 판단과 재검토 조건
 
-**닫힌 입력 집합 대 처리 중 확장 계약으로 조건부 유지한다.** 실제 차이가 prefetch 설정이나 cache 정책뿐으로 축소되면 이 DP를 supporting 계약으로 내린다. QA 점수를 얻으려고 최신성과 과거 시점 요구를 다르게 주거나 Privacy 범위를 넓히지 않는다.
+**Plan-first 대 demand-driven 획득 계약으로 핵심 shortlist에 유지한다.** 상세 검토에서는 predictable·emergent Context workload, sequential read 왕복, replan, source loss와 checkpoint 복구를 동결한다. 실제 차이가 prefetch 설정이나 cache 정책뿐으로 축소되면 supporting 계약으로 다시 내린다. QA 점수를 얻으려고 최신성과 과거 시점 요구를 다르게 주거나 Privacy 범위를 넓히지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

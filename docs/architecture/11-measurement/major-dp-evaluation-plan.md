@@ -85,43 +85,29 @@ QA-61/62는 evidence qualification이다. core ASR과 합산한 단일 후보 �
 
 ## 5. 실행 순서
 
-### 5.1 1차 핵심 DP
+### 5.1 핵심 DP shortlist
 
-사용자와 합의한 순서로 먼저 처리한다.
+2026-09-28 사용자 결정으로 다음 여섯 DP를 심층 정의·측정 준비 대상으로 선정했다. 나열 순서는 아직 실행 우선순위가 아니며, 각 DP를 하나씩 논의한 뒤 Measurement Freeze 순서를 확정한다.
 
-1. VIA-DP-06 — semantic 최종 확정 권한
-2. VIA-DP-11 — 외부 연동 Process 장애 경계
-3. VIA-DP-14 — Task 상태 writer
-4. VIA-DP-09 — Agent 의미 해석 위치
-5. VIA-DP-02 — Conversation–Task 확정 경계
-6. VIA-DP-08 — 복구 기준 기록
-7. VIA-DP-13 — control 자원 예약
+1. VIA-DP-03 — Voice input evidence의 local 대 S2S-native authority
+2. VIA-DP-05 — Plan-first 대 demand-driven Context 획득
+3. VIA-DP-06 — semantic 최종 확정 권한
+4. VIA-DP-07 — node-level 대 owner-affinity bundle edge authority
+5. VIA-DP-15 — continuous Agent progress projection 대 on-demand snapshot
+6. VIA-DP-17 — canonical 대 consumer-specific Context 표현
 
-### 5.2 후속 전체 DP
+### 5.2 Supporting·조건부 DP
 
-1차 완료 후 다음 우선순위로 나머지를 처리한다. 우선순위는 핵심 사용자 경로 참여,
-상태·권한 소유권, A/B의 core-ASR trade-off 가능성, 변경 비용 순이다.
-
-1. VIA-DP-04 — S2S 직접 응답 게시 권한
-2. VIA-DP-05 — 요청 Context 읽기 집합 계약
-3. VIA-DP-12 — 응답 게시와 실행 근거 확정 순서
-4. VIA-DP-15 — Agent 상태 관측 확정 경로
-5. VIA-DP-18 — 보호정보·Action 권한 확인 위치
-6. VIA-DP-10 — Model 세션·연결 수명
-7. VIA-DP-16 — Model 입력 이력 유지 책임
-8. VIA-DP-17 — Context materialization 책임
-9. VIA-DP-07 — 복합 요청 관계 실행 책임
-10. VIA-DP-01 — 범위가 정해진 정보 처리 책임 경계
-11. VIA-DP-03 — 음성 입력 근거의 최종 기준
-
-각 DP의 decision audit 결과 순서를 바꿔야 하면 이유를 실행 로그에 먼저 기록한다.
+- VIA-DP-02·12는 핵심 shortlist에서 제외하고 supporting 계약과 기존 evidence를 보존한다.
+- VIA-DP-11은 A2A/ACP client의 실제 native/plugin/fatal-risk dependency inventory가 확인될 때만 재승격한다. 기존 v4 evidence와 v5 runner 작업은 폐기하지 않지만 현재 핵심 campaign의 자동 다음 순서로 두지 않는다.
+- 나머지 VIA-DP는 전체 inventory, fixed context와 regression/qualification 대상으로 유지한다. 핵심에서 빠졌다는 이유로 요구·안전·복구 의무를 삭제하지 않는다.
 
 ## 6. 현재 증거 수준과 다음 campaign
 
 | DP | 보존된 결과 경로 | 현재 증거 수준 | 다음 작업 |
 | --- | --- | --- | --- |
 | VIA-DP-06 | `via-dp-06-evaluation-v6-20260927/` | ANALYSIS_COMPLETE_WITH_NON_QA20_BLOCKED_AXES | QA-21~23 보완 완료; QA-15/31/41 후속 endpoint·반복 필요 |
-| VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | V5_RUNNER_READY / v4는 TARGETED_PROCESS_EVIDENCE | v5 qualification 후 통합 Voice/model/Rust-host campaign |
+| VIA-DP-11 | `via-dp-11-evaluation-v4-20260927/` | V5_RUNNER_READY / v4는 TARGETED_PROCESS_EVIDENCE | runner 보존; 실제 A2A/ACP client fatal-risk inventory 전 신규 핵심 campaign 보류 |
 | VIA-DP-14 | `via-dp-14-evaluation-v1-20260927/` | INTEGRATED_RUNNER_READY | 실제 Rust Task host, race/reopen, Voice/model/Agent campaign qualification 필요 |
 | VIA-DP-09 | `via-dp-09-evaluation-v1-20260927/` | PRELIMINARY_COMPONENT_ONLY | Rust lifecycle path와 shared model/Voice/Agent에 결합 |
 | VIA-DP-02 | `via-dp-02-evaluation-v2-20260927/` | TARGETED_PARTIAL | Rust Task/Conversation store와 통합 interaction path 결합 |
@@ -225,17 +211,13 @@ VIA-DP-06도 네 core ASR 전부와 상세 evidence를 표에 포함한다. cont
 
 ## 12. 다음 단일 작업
 
-### 2026-09-27 사용자 지시 정정
+### 2026-09-28 핵심 DP 선정 반영
 
-준비도 분석에서 멈추지 않는다. 먼저 DP-06 v5를 공통 통합 campaign의 reference
-implementation으로 만든다. 이후 같은 runner, trace schema와 evaluator를 재사용하여
-DP-11 → 14 → 09 → 02 → 08 → 13 순서로 한 축씩 교체한다.
+DP-06 v5/v6와 기존 reference package는 보존한다. 다음 작업은 runner를 관성적으로 확장하는 것이 아니라, VIA-DP-03·05·06·07·15·17 중 사용자가 선택한 한 DP의 심층 A/B 정의와 pre-result Measurement Freeze다.
 
-1. VIA-DP-05 — 닫힌 Context manifest 대 확장 가능한 scoped read-set
-2. VIA-DP-09 — edge semantic normalization 대 Core lifecycle handler
-3. VIA-DP-02 — 공동 관계 commit 대 독립 commit+reconciliation
-4. VIA-DP-13 — 회수 가능한 control reservation 대 완전 공유 priority pool
-5. VIA-DP-12 — 최소 evidence durable ACK 선행 대 비동기 flush
-
-DP-06 v5는 qualification과 독립 replay를 통과했다. 기존 component experiment의 숫자를
-재사용하지 않고, 다음 순서인 DP-11 v5를 qualification한 뒤 통합 경로에서 다시 측정한다.
+- DP-05와 17은 먼저 source 획득 시점과 Context 표현 권한의 2×2 독립성을 확인한다.
+- DP-07은 여러 Agent와 기존 Task owner를 보존하는 bundle partition·edge authority를 명세한다.
+- DP-15는 사용자가 보지 않는 동안의 progress 관리까지 포함하고 QA-19 status field registry를 freeze한다.
+- DP-03은 S2S capability qualification을 먼저 수행한다.
+- DP-11 v5 작업은 보존하되 실제 fatal-risk integration 확인 전 핵심 평가 다음 순서로 진행하지 않는다.
+- DP-02·12에는 새로운 core campaign을 우선 배정하지 않는다.

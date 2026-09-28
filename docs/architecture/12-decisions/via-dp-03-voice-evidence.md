@@ -1,10 +1,10 @@
 # VIA-DP-03 — 음성 입력 근거의 최종 기준
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **핵심 DP 초안 v3 · 2026-09-28 · 사용자 선정 반영 / 상세 검토 예정**
 >
 > 질문: 음성·정정·시각 근거의 의미를 VIA가 정규화해 소유할 것인가, S2S 제공자의 이벤트 계약을 기준으로 삼을 것인가?
 >
-> 현재 판단: **선행 기능 적합성 결정 — 고정 두 모델 안에서 입력 계약을 재정의, 핵심 점수 비교는 보류** 대안 선택·구현·QA 측정은 하지 않았다. 실제 결과는 모두 `NOT_RUN`이다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. Voice Engine의 local capture-time evidence와 S2S/내장 speech contract의 native source-time evidence 사이 권한을 상세 검토할 예정이다. Phrase/segment timestamp·revision capability가 없는 B는 낮은 점수가 아니라 기능 부적합으로 처리한다. 대안 선택·구현·QA 측정은 하지 않았고 실제 결과는 `NOT_RUN`이다.
 
 ## 1. 배경 — 늦게 도착한 ‘여기’는 어느 화면을 가리키는가?
 
@@ -209,7 +209,7 @@ DP-05는 확보한 Context의 소비 계약, DP-06은 그 근거로 판단하는
 
 ## 10. 현재 판단과 재검토 조건
 
-**선행 기능 적합성 결정으로 유지하고 핵심 점수 비교는 보류한다.** ‘보조 모델을 몇 개 쓰는가’는 하나의 강한 DP가 아니었다. 재정의된 입력 authority도 동일 기능의 native B가 확인되어야 평가 후보로 승격한다. 임의 S2S 제품을 선정하거나 부족한 기능을 실제 제공 사실처럼 쓰지 않았다.
+**핵심 shortlist에 유지하되 기능 적합성을 먼저 판정한다.** 상세 검토에서 transcript 도착 시각과 실제 acoustic source time을 구분하고, Voice Engine의 local audio-chunk/screen/pointer clock mapping과 S2S native phrase/segment timestamp·revision 계약을 구체화한다. 동일 기능의 native B가 없으면 점수 비교를 수행하지 않는다. ‘보조 모델을 몇 개 쓰는가’는 하나의 강한 DP가 아니며, 임의 S2S 제품이나 부족한 기능을 실제 제공 사실처럼 쓰지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

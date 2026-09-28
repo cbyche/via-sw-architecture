@@ -41,6 +41,18 @@ correct_machine_oracle_runs_pct
 
 QA-11은 product-level integrated outcome이다. QA-12~15는 QA-11 실패의 구조 원인을 분리하며, QA-11 점수를 QA-12~15와 합산하지 않는다.
 
+### Agent progress/status case의 QA-11 predicate
+
+사용자가 진행 상황을 묻거나 VIA가 진행·질문·완료를 알려야 하는 case에서는 “상태를 말했는가”만 보지 않는다. 결과 전에 동결한 case별 요구에 따라 다음 integrated outcome field를 QA-11 assertion으로 등록한다.
+
+- 현재 `phase`와 구조화 가능한 `progress`
+- `blocked_reason`과 사용자 답변이 필요한지 여부
+- `terminal_state`와 사용 가능한 `artifact_version`
+- 마지막으로 확인된 상태의 `staleness`
+- 지금 사용자에게 알림을 보낼지, 보류할지, 묶어서 보낼지에 대한 `notification_disposition`
+
+`source_revision`은 위 field가 최신의 확인 가능한 Agent 사실에서 왔는지를 판정하는 provenance다. 실제 `Task/run/question` identity binding과 역순·중복 event 뒤 최종 상태 수렴은 각각 QA-13과 QA-14의 별도 회귀 predicate이며 QA-19 분모에 자동 추가하지 않는다. 다만 잘못된 Task에 상태·질문·결과를 적용하면 mandatory wrong-target gate도 실패한다.
+
 ## 3. QA-12 — Request Semantic Resolution Correctness
 
 ### 질문

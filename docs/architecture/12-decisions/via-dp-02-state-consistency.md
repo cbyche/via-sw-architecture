@@ -1,10 +1,10 @@
 # VIA-DP-02 — 대화와 Task 관계의 확정 경계
 
-> **검토 초안 v2 · 2026-09-25 · 구현 구조 상세화 · 사용자 검토 전**
+> **보조 DP v3 · 2026-09-28 · 핵심 shortlist 제외**
 >
 > 질문: 대화·요청과 Task의 관계를 하나의 원자적 커밋으로 확정할 것인가, 독립 소유자의 확정을 연결할 것인가?
 >
-> 현재 판단: **v2 reference campaign 완료 — 공동 commit A가 측정 항목에서 우세**. Architecture 선택과 ASR 확정은 하지 않았다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에서 제외**. 교차 commit 계약은 유효한 supporting design decision으로 보존한다. v2 reference에서 정상 지연은 낮은 single-digit millisecond였고 accuracy·blast-radius trade-off가 나타나지 않아 최종 보고서의 제한된 핵심 DP 자리를 사용하지 않는다. Architecture 대안의 최종 승자를 새로 선택한 것은 아니다.
 
 ## 1. 배경 — 취소 중에 다른 Task의 질문이 도착하면 무엇이 먼저 확정되어야 할까?
 
@@ -216,7 +216,7 @@ VIA-DP-08 저장 기준과 VIA-DP-11 Process 경계는 별도다. VIA-DP-04 응�
 
 ## 10. 현재 판단과 재검토 조건
 
-**조건부 후보로 유지한다.** ‘중앙은 정확, 분리는 장애 격리’라는 초기 설명을 철회하고, 실제 공동 commit 대 독립 commit의 비용으로 좁혔다. QA-05/31과 변경·관계 검증의 차이가 구체 ledger와 trace에서 사라지면 supporting 결정으로 재분류한다. 지금 A/B 승자를 선택하지 않는다.
+**핵심 DP에서는 제외하고 supporting 계약으로 유지한다.** ‘중앙은 정확, 분리는 장애 격리’라는 초기 설명을 철회하고, 실제 공동 commit 대 독립 commit의 비용으로 좁혔다. 향후 구현에서 관계 저장 계약을 정할 때 v2 evidence와 ADR caveat를 참고하되, 새로운 race/fault evidence가 core-ASR의 큰 양방향 차이를 보이기 전에는 핵심 평가 campaign을 우선하지 않는다. 지금 A/B 승자를 선택하지 않는다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

@@ -1,10 +1,10 @@
-# VIA-DP-15 — Agent 상태를 확정하는 관측 경로
+# VIA-DP-15 — Agent progress state의 유지 방식
 
-> **검토 초안 v1 · 2026-09-25 · 구현 구조 상세화 / 사용자 검토 전**
+> **핵심 DP 초안 v2 · 2026-09-28 · 사용자 선정 반영 / 상세 Measurement Freeze 전**
 >
-> 질문: 유효한 상태 event만으로 Task 상태를 갱신할 것인가, event를 받아도 query 확인을 거칠 것인가?
+> 질문: Agent의 중간 progress·질문·결과를 VIA가 지속적으로 projection해 관리할 것인가, event는 변화 hint로만 쓰고 필요한 시점에 authoritative snapshot을 조회할 것인가?
 >
-> 현재 판단: 이전 TASK-DP02의 남은 권한 질문을 복원한 조건부 후보다. Event와 query의 단순 사용 여부는 DP가 아니다. 후보 문서의 완성과 QA trade-off 입증은 별개다. 실제 QA 측정은 `NOT_RUN`이며 이번 작업에서 구현·측정·새 승자 선정은 하지 않았다.
+> 현재 판단: **2026-09-28 핵심 DP shortlist에 포함**. Agent delegation 이후 사용자가 보지 않는 동안에도 VIA가 진행 상태를 어떻게 관리하는지까지 범위를 넓혔다. 단순 event 대 polling이나 event마다 query하는 약한 비교가 아니며 실제 QA 측정은 `NOT_RUN`이다.
 
 ## 1. 배경 — 완료 소식을 받으면 바로 완료로 알려도 될까?
 
@@ -22,7 +22,9 @@ flowchart TB
 
 ## 2. 비교 범위와 공통 조건
 
-대상은 Agent의 상태 관측이 Task Owner에게 유효한 입력이 되는 조건이다. Agent 의미 정규화는 VIA-DP-09, 실제 writer는 14다. 같은 Agent가 identity·순서/신선도 계약과 권위 있는 query를 제공하는 profile에서 비교한다. 제공하지 않는 revision·snapshot 일관성은 VIA가 만들어내지 않는다. poll 간격을 바꾸는 튜닝이나 Agent 내부 event 발생 알고리즘은 범위 밖이다.
+대상은 Agent delegation 이후 progress·question·artifact·terminal state를 VIA가 시간에 따라 유지하는 방식이다. 사용자가 매 event를 통지받는지는 notification policy이고 이 DP와 분리한다. 통지하지 않더라도 A는 VIA 내부 projection을 갱신하고, B는 마지막 확인 snapshot과 dirty/cursor 상태를 유지한다.
+
+Agent 의미 정규화는 VIA-DP-09, VIA Task의 실제 writer topology는 14다. 같은 Agent가 identity·revision/cursor·event와 권위 있는 snapshot query를 제공하는 profile에서 비교한다. 제공하지 않는 revision·snapshot 일관성은 VIA가 만들어내지 않는다. poll 간격이나 알림 빈도만 바꾸는 tuning은 범위 밖이다.
 
 **모델 불변식:** S2S 모델 1개 + semantic LLM 1개. Component·Task별 모델을 별도 적재하지 않는다. 프롬프트·세션·호출을 나눠도 공유 모델이며 동시 처리·취소 지원을 임의 가정하지 않는다.
 
@@ -30,9 +32,9 @@ flowchart TB
 
 **출처와 한계:** [시스템 경계](../01-system-mission-and-boundary.md), [UC](../05-representative-use-cases.md), [공통 조건](../06-fixed-assumptions.md), [현행 QA](../08-quality-attributes/quality-model.md)가 요구의 기준이다. 아래 구조는 그 요구를 만족시키려는 후보 설계다. 실제 지연·오류 빈도·변경 요소 ledger는 미확인이다.
 
-## 3. 대안 A — 유효 event 확정 + query 복구
+## 3. 대안 A — Continuous Progress Projection
 
-정상 상태 event가 계약 검사를 통과하면 query를 기다리지 않고 반영한다. gap·재연결·불일치 때 query로 조정하는 hybrid다. 빠른 source 반영이 이유이며 cursor·중복·순서·gap 관리가 비용이다.
+정상 상태 event가 계약 검사를 통과하면 query를 기다리지 않고 durable VIA progress projection에 반영한다. projection은 phase·progress·blocked reason·pending question·artifact version·terminal state·source revision·last-confirmed time을 Task와 연결한다. 사용자가 통지를 받지 않더라도 이 상태는 계속 갱신된다. gap·재연결·불일치 때 query로 조정하는 hybrid다.
 
 ```mermaid
 flowchart TB
@@ -40,7 +42,7 @@ flowchart TB
  subgraph V["VIA Core Process"]
  Q["공통 bounded event inbox"] --> E["[변경] Event Validator<br/>유효 event 확정 근거 인정"]
  E <-->|"source cursor·dedup"| C[("관측 checkpoint")]
- E -->|"유효 Observation"| T["공통 Task Owner·Repository"]
+ E -->|"유효 Observation"| T["[변경] Continuous Progress Projection<br/>Task·phase·question·artifact·revision"]
  E -->|"gap·충돌·reconnect"| R["공통 Query Reconciler"]
  R -->|"확인된 snapshot·순서 경계"| E
  T -->|"commit된 상태"| P["공통 Voice·Text Publisher"]
@@ -54,19 +56,21 @@ flowchart TB
 2. Task Owner가 commit하고 Publisher가 상태를 알린다. event 처리와 checkpoint 저장 사이의 crash에도 중복 적용되지 않게 command identity를 연결한다.
 3. gap·재연결 때는 query로 현재 상태를 확인한다. query와 늦은 event의 순서는 source 계약으로 정하며 비교 불가능하면 보류·재확인한다.
 
-## 4. 대안 B — Event 알림 + query 확인 후 확정
+## 4. 대안 B — On-demand Authoritative Snapshot
 
-event를 빠른 갱신 알림으로 사용하지만 상태 전이는 query의 검증된 snapshot으로 확정한다. 알림을 합치고 query를 병렬·중복 억제할 수 있는 강한 안이다. query의 일관된 확인 경계를 택하는 대신 정상 event에도 확인 대기가 남을 수 있다.
+event를 상태 변경 hint로 사용하지만 전체 progress state는 query의 검증된 snapshot으로 materialize한다. VIA는 마지막 confirmed snapshot, source cursor, `dirty` 여부와 짧게 살아 있는 question/terminal hint를 보존한다. 사용자의 status 질문, notification rule 발동, terminal·approval 후보, event gap·reconnect·VIA restart 때 query한다. 같은 run의 event burst는 합치고 concurrent query는 하나로 제한한다.
+
+따라서 event 하나마다 query 하나를 보내는 안이 아니다. 권위 있는 snapshot 경계를 택하는 대신 사용자가 묻거나 notification을 결정할 때 query 대기가 남고, query가 제공하지 않는 짧은 중간 사건을 놓칠 수 있다.
 
 ```mermaid
 flowchart TB
  A["외부 Agent Runtime<br/>event와 query 동일 기능"] -.->|"비동기: 상태 변경 알림"| Q
  subgraph V["VIA Core Process"]
- Q["공통 bounded event inbox"] --> H["[변경] Hint Coalescer<br/>run별 query 필요 표시"]
+ Q["공통 bounded event inbox"] --> H["[변경] Hint Coalescer<br/>cursor·dirty·question/terminal hint"]
  H -->|"중복 요청 합치기"| R["공통 Query Reconciler"]
  R -->|"검증된 snapshot만"| E["[변경] Snapshot Validator"]
  E <-->|"query watermark·dedup"| C[("관측 checkpoint")]
- E -->|"유효 Observation"| T["공통 Task Owner·Repository"]
+ E -->|"유효 snapshot"| T["[변경] Last Confirmed Snapshot<br/>필요 시 materialize"]
  T -->|"commit된 상태"| P["공통 Voice·Text Publisher"]
  end
  R <-->|"query current state"| A
@@ -74,19 +78,19 @@ flowchart TB
 
 **실제 호출·상태·실패 처리 순서**
 
-1. 같은 event를 받지만 Hint Coalescer가 run별 확인 필요만 표시한다. payload의 완료 상태를 곧바로 사용자에게 확정 게시하지 않는다.
-2. Reconciler가 query하고 Snapshot Validator가 identity·신선도·terminal 의미를 검사해 Task Owner에 제출한다. event가 없으면 같은 사전 정의된 bounded query fallback을 쓴다.
+1. 같은 event를 받지만 Hint Coalescer가 cursor·dirty 상태와 즉시 확인이 필요한 question/terminal hint만 기록한다. payload의 progress 값을 곧바로 authoritative Task projection으로 확정하지 않는다.
+2. 사용자가 상태를 묻거나 notification rule·terminal hint·gap·reconnect가 query를 요구하면 Reconciler가 snapshot을 요청한다. Snapshot Validator가 identity·신선도·terminal 의미를 검사해 last-confirmed state를 갱신한다.
 3. 동시 query를 합치고 오래된 snapshot을 거절한다. ‘query는 언제나 최신’이라고 가정하지 않는다. 필요한 source 보장이 없으면 이 후보도 부적합이다.
 
 ## 5. 구조 차이·상호 배타성·Hybrid 검토
 
 | 항목 | A | B |
 | --- | --- | --- |
-| 정상 event의 효력 | 계약 충족 시 상태 전이 입력 | query를 깨우는 hint만 |
-| 정상 추가 왕복 | 필수 아님 | query 확인 필요 |
-| 유지 상태 | event cursor·gap·reconcile | hint 합치기·query freshness |
+| 정상 event의 효력 | continuous progress projection의 상태 전이 입력 | cursor·dirty·query를 깨우는 hint |
+| 사용자 status/notification 경로 | local projection에서 즉시 구성 가능 | 필요하면 authoritative snapshot query |
+| 유지 상태 | event history/checkpoint·현재 projection·gap | last snapshot·cursor·dirty·hint·query freshness |
 
-같은 유효 event만으로 상태 전이를 확정할 수 있으면 A, query 확인이 항상 필요하면 B다. event-first와 query 복구의 hybrid를 A에 포함했다. 이전 공통 tactic은 A의 참조 운영 방식으로 보존하되 모든 후보의 영구 정답으로 쓰지 않는다. query/event의 단순 transport 선택은 독립 DP로 만들지 않는다.
+같은 유효 event로 continuous projection을 갱신하면 A, event는 dirty/hint만 남기고 사용자에게 필요한 현재 상태를 snapshot query로 materialize하면 B다. event-first와 gap query 복구의 hybrid를 A에 포함했다. B의 coalescing·terminal fast query도 허용한다. query/event의 단순 transport 선택이나 notification 빈도는 독립 DP로 만들지 않는다.
 
 양쪽은 같은 기능·안전 조건·자원·외부 capability를 만족하는 **서로의 steelman**이어야 한다. 동일 결정 범위에서는 **mutually exclusive**해야 한다. cache·batch·공통 library·정확성 검사·로그를 한쪽에서 금지해 차이를 만들지 않는다. 같은 강한 설계로 수렴한다면 동점 또는 보조 결정으로 남긴다.
 
@@ -96,13 +100,13 @@ flowchart TB
 
 ### T1. 정상 흐름과 critical path
 
-같은 시각에 source 완료가 제공된다. A는 event 검증→Task commit→Voice, B는 hint→query 왕복·검증→동일 commit·Voice를 거친다. 추가 query가 critical path에 남으면 QA-03은 A 유리 가능하다. query가 이미 진행 중이거나 음성 준비와 겹치면 차이가 작다. 유효 revision event 관리가 실제로 더 많은 계약 변경을 요구하는지 QA-21 ledger로 확인해야 반대 방향 trade-off를 말할 수 있다.
+같은 시각에 source progress 또는 완료가 제공된다. A는 event 검증→projection commit→notification/status Voice를 거친다. B는 hint→필요성 판단→snapshot query·검증→동일 출력을 거친다. 추가 query가 critical path에 남으면 QA-03과 사용자 status query의 QA-09는 A가 유리할 수 있다. 반대로 event가 매우 많고 사용자가 거의 묻지 않으면 B가 projection write·schema 부담을 피할 수 있다.
 
 <a id="t2"></a>
 
 ### T2. 정정·실패·재연결
 
-event 하나 누락 뒤 오래된 event가 도착한다. A는 gap 감지와 query 조정, B는 hint 기반 query로 확인한다. 두 안 모두 stale terminal rollback을 금지한다. 재연결 query는 공통이므로 B가 항상 정확하거나 A가 항상 빠른 복구라는 결론은 안 된다. Query가 최종 상태만 제공해 중간 질문을 잃는 profile이면 B의 기능 적합성이 먼저다.
+event 하나 누락 뒤 오래된 event가 도착한다. A는 gap 감지와 projection reconciliation, B는 dirty/cursor에서 snapshot을 다시 확인한다. 두 안 모두 stale terminal rollback을 금지한다. Agent가 불가용하면 A는 마지막 confirmed projection으로 사용자에게 시각과 staleness를 설명할 수 있고 B는 last snapshot 이후 dirty 상태를 명시해야 한다. Query가 최종 상태만 제공해 승인 질문이나 필요한 중간 milestone을 잃는 profile이면 B의 기능 적합성이 먼저다.
 
 <a id="t3"></a>
 
@@ -112,7 +116,9 @@ A-04 상태 제공·A-05 실행 identity·A-08 질문 계약 변화에서 cursor
 
 ## 7. Core ASR 적용과 상세 QA 사고실험
 
-이 DP의 초기 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. Agent status·result·control 시간, source-confirmed field, cursor·query change와 event-stream loss 뒤 reconciliation을 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다. 아래 표는 상세 input·diagnostic이다.
+이 DP의 역할은 **QA-09/19/29/39 모두 `PRIMARY`**다. Agent progress/status 전달과 사용자 status query 시간, source-confirmed field, progress schema·notification/query 계약 변화와 event-stream loss 뒤 복구를 함께 측정한다. 최종 모집단은 [Core ASR Contract의 DP 원장](../08-quality-attributes/core-asr-contract.md#8-via-dp-0118-적용-원장)에서 freeze한다.
+
+QA-19에는 개정한 QA-11 status outcome contract에 따라 `phase`, `progress`, `blocked_reason`, `answer_needed`, `terminal_state`, `artifact_version`, `staleness`, `notification_disposition` 중 case에 applicable한 field를 중복 없이 등록한다. `source_revision`은 freshness 판정 provenance로 보존한다. 실제 `task_id`, `agent_execution_id`, `pending_question_id` binding과 역순·중복 event 뒤 수렴은 QA-13/14 회귀로 독립 검증한다. 잘못된 Task의 progress나 오래된 terminal state 적용은 qualification gate 위반과 함께 기록한다. 아래 표는 상세 input·diagnostic이다.
 
 **사고실험 예상 / 실제 측정 `NOT_RUN`.** 모든 판정은 §2의 동일 조건과 T1~T3의 가설에 한정한다. 조건부 방향은 전체 metric의 실측 우세가 아니다. 시간·변경 수·장애 단위·메모리·노출은 작을수록, 성공·완전성·재현 비율은 클수록 좋다. 일부 사례의 차이를 최악 p95·전체 change pack 평균으로 확대하지 않는다.
 
@@ -152,7 +158,7 @@ Agent event/query의 정보량·순서·snapshot 일관성을 먼저 명세한�
 
 ## 10. 현재 판단과 재검토 조건
 
-누락 방지를 위해 독립 권한 질문으로 수록한다. 동일 기능의 두 source profile이 확인되어야 비교할 수 있다. A의 빠른 상태 전달 외에 B의 실제 변경·검증 부담 이점이 남지 않으면 강한 양방향 DP로 승격하지 않는다.
+**Continuous projection 대 on-demand snapshot으로 핵심 shortlist에 유지한다.** 후속 심층 검토에서 필수 milestone·짧은 질문의 보존 범위, notification policy와 상태 authority의 분리, status query/Voice endpoint, progress field registry와 event-loss/restart fault pack을 동결한다. 모든 중간 event를 반드시 VIA에 영속해야 하는 제품 요구가 확정되면 B는 비교 후보가 아니라 기능 부적합이 된다.
 
 ## 11. 자체 검토에서 반영한 개선점
 

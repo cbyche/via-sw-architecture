@@ -1,14 +1,29 @@
 # VIA Architecture Decision — 전체 후보 요약 보고서
 
-> 2026-09-26 · 전수 정리·구현 구조 명세·DP–QA 지도 · 최종 선정/실측 아님
+> 2026-09-28 · 전수 inventory 유지 / 핵심 DP shortlist 6개 선정 / 대안 승자·새 실측 아님
 
 ## 1. 결론부터
 
-**현재 관리 대상은 VIA-DP-01~18, 총 18개다.** 기존 13개를 상세화하고 Task writer를 14로 편입했다. 이전 계열 대조에서 빠졌던 관측 확정·모델 입력 이력·Source 변환·사용 권한 질문을 15~18로 보완했다. QA-09·19·29·39 네 core ASR은 확정했으며, 최종 발표용 핵심 DP 선정은 다음 작업으로 남긴다.
+**현재 관리 대상은 VIA-DP-01~18, 총 18개이며 그중 VIA-DP-03·05·06·07·15·17을 핵심 DP shortlist로 선정했다.** 이는 A/B 승자나 측정 완료를 뜻하지 않는다. VIA-DP-02·12는 supporting decision으로 내렸고, VIA-DP-11은 A2A/ACP client의 실제 fatal-risk dependency가 확인될 때만 재승격하는 조건부 보조 DP다. 나머지 DP도 inventory와 고정 계약·회귀 검증 대상으로 유지한다.
 
-보고서를 읽으면 어떤 Component가 어떤 요청을 받고, 어느 상태를 소유하며, 어떤 queue·buffer·저장·Process 경계를 통과하는지 알 수 있어야 한다. 아래 네 영역은 전체 시스템을 설명하는 **읽기 순서**이며 추천 순위가 아니다. 나머지 14개도 독립 보고서로 같은 수준의 A/B 구현도·전체 QA 표를 제공한다.
+보고서를 읽으면 어떤 Component가 어떤 요청을 받고, 어느 상태를 소유하며, 어떤 queue·buffer·저장·Process 경계를 통과하는지 알 수 있어야 한다. 18개 inventory는 누락 점검과 supporting 결정을 위해 남기며, 실제 심층 검토와 새 measurement freeze는 아래 여섯 DP를 우선한다.
 
 DP와 QA의 연결은 [관련성 지도](#dp-qa-coverage), A/B 비교에 사용할 차이 가설은 [차이 가능성 지도](#ab-qa-difference)에서 확인한다.
+
+### 1.1 핵심 DP shortlist와 선정 경계
+
+| 핵심 DP | 심층 검토할 구조 질문 | 우선 core ASR |
+| --- | --- | --- |
+| VIA-DP-03 | Voice Engine의 local capture-time evidence 대 S2S native source-time evidence | QA-09·19·29; QA-39 회귀 |
+| VIA-DP-05 | Plan-first Context 획득 대 같은 semantic execution의 demand-driven 확장 | QA-09·19·29·39 |
+| VIA-DP-06 | 통합 의미 최종 확정 대 단계별 의미 권한·정정 계약 | QA-09·19·29; QA-39 회귀 |
+| VIA-DP-07 | 모든 node edge의 VIA readiness authority 대 owner-affinity bundle 내부 Agent authority | QA-09·19·29·39 |
+| VIA-DP-15 | Continuous Agent progress projection 대 on-demand authoritative snapshot | QA-09·19·29·39 |
+| VIA-DP-17 | Canonical ContextValue 대 consumer-specific Context view | QA-09·19·29·39 |
+
+VIA-DP-05와 17은 중복이 아니다. 05는 **어떤 Source를 언제 읽을 수 있는지**, 17은 **선택된 Source를 어떤 의미 표현으로 누가 확정하는지**를 결정한다. 네 조합이 모두 가능하며 한 축을 비교할 때 다른 축을 고정한다.
+
+VIA-DP-02와 12는 구조 질문을 삭제하지 않고 supporting decision으로 보존한다. VIA-DP-11의 Agent Client는 외부 Agent가 아니라 VIA 안에서 A2A/ACP `submit/status/question/cancel/result`와 ID mapping을 수행하는 protocol adapter다. Safe-language 표준 client만 사용하는 현재 전제에서는 injected Process fatal의 제품 대표성이 미확인이라 핵심에서 제외한다. Native SDK·plugin·browser/OS bridge 같은 실제 fatal-risk integration이 확인되면 “VIA-owned external integration host” 경계로 재검토한다.
 
 ## 2. 바뀌지 않는 시스템 경계
 
@@ -26,9 +41,9 @@ VIA가 Voice/Text/화면 interaction·요청 의미·Conversation/Task·위임�
 | [VIA-DP-02 대화와 Task 관계의 확정 경계](./via-dp-02-state-consistency.md) | 분리된 처리 책임 + 공동 원자 커밋 | 독립 상태 확정 + 관계 조정 |
 | [VIA-DP-03 음성 입력 근거의 최종 기준](./via-dp-03-voice-evidence.md) | VIA 입력 계약 + 비모델 정렬·정규화 | S2S 입력 계약을 기준으로 사용 |
 | [VIA-DP-04 S2S 직접 응답의 게시 권한](./via-dp-04-response-authority.md) | 한정 권한 위임 + 범위 밖 Core 승인 | 모든 직접 응답에 Core 요청별 승인 |
-| [VIA-DP-05 요청 Context의 읽기 집합 확정 계약](./via-dp-05-context-contract.md) | 불변 입력 명세 + 필요한 값만 지연 적재 | 범위 제한 조회 권한 + 처리 중 입력 확장 |
+| [VIA-DP-05 요청 Context의 획득 계획 확정 계약](./via-dp-05-context-contract.md) | Plan-first Context + 동결된 semantic execution | Demand-driven Context + 동일 semantic execution 안의 확장 |
 | [VIA-DP-06 요청 의미의 최종 확정 권한](./via-dp-06-semantic-authority.md) | 단계별 보조 처리 + 통합 최종 확정 | 단계별 의미 권한 + 명시적 정정 계약 |
-| [VIA-DP-07 복합 요청 관계의 실행 책임](./via-dp-07-compound-orchestration.md) | VIA 관계 조정 + 가능한 부분의 묶음 위임 | 복합 업무 전체의 Agent 조정 |
+| [VIA-DP-07 복합 요청 graph의 dependency 실행 권한](./via-dp-07-compound-orchestration.md) | VIA node-level orchestration | Owner-affinity bundle orchestration |
 | [VIA-DP-08 재시작 후 상태의 기준 기록](./via-dp-08-recovery-source.md) | 상태 변경 이력 + 검증된 checkpoint | 현재 상태 + 미완료 동작 + 감사 이력 |
 | [VIA-DP-09 Agent 수명 계약의 의미 해석 위치](./via-dp-09-agent-semantics.md) | 공통 의미 정규화 + 손실 없는 확장 | 공통 전송·타입 계약 + Core 유형별 의미 확정 |
 | [VIA-DP-10 Model 세션·연결 수명의 관리 권한](./via-dp-10-model-session-authority.md) | 공통 세션 관리자 + 역할별 직접 stream | 역할별 세션 소유 + 공통 adapter library |
@@ -36,9 +51,9 @@ VIA가 Voice/Text/화면 interaction·요청 의미·Conversation/Task·위임�
 | [VIA-DP-12 응답 게시와 실행 근거의 영속 확정 순서](./via-dp-12-evidence-commit.md) | 최소 근거 선확정 + 상세 자료 비동기 수집 | 게시와 영속 기록의 비동기 분리 |
 | [VIA-DP-13 사용자 제어를 위한 실행 자원을 예약할 것인가](./via-dp-13-control-reservation.md) | 제어 여력 예약 + 회수 가능한 유휴 자원 공유 | 전체 자원 공유 + 우선순위 기반 제어 우대 |
 | [VIA-DP-14 Task 상태 전이의 소유권](./via-dp-14-task-state-authority.md) | 공유 transactional Task 서비스 | Task별 단일 writer supervisor |
-| [VIA-DP-15 Agent 상태를 확정하는 관측 경로](./via-dp-15-agent-observation-authority.md) | 유효 event 확정 + query 복구 | Event 알림 + query 확인 후 확정 |
+| [VIA-DP-15 Agent progress state의 유지 방식](./via-dp-15-agent-observation-authority.md) | Continuous Progress Projection | On-demand Authoritative Snapshot |
 | [VIA-DP-16 모델 입력 이력의 구성·유지 책임](./via-dp-16-model-context-state.md) | 요청별 재구성 + version 검증 cache | 증분 working context + 필요 시 재구성 |
-| [VIA-DP-17 Source를 소비 가능한 Context로 만드는 책임](./via-dp-17-context-materialization-authority.md) | 공통 materializer + 소비자별 projection | 공통 접근 handle + 소비자 소유 변환 |
+| [VIA-DP-17 Context 표현의 최종 의미 소유권](./via-dp-17-context-materialization-authority.md) | Canonical ContextValue + 공통 의미 확정 | 검증된 Source slice + 소비자별 의미 확정 |
 | [VIA-DP-18 보호정보·Action 사용 시 권한을 확인하는 위치](./via-dp-18-authorization-enforcement.md) | 사용마다 중앙 승인 + 사전 준비 cache | 철회 가능한 capability + 로컬 use gate |
 
 ## 4. 네 중심 영역의 실제 동작
@@ -476,7 +491,7 @@ VIA-DP-06 v6 통합 보고서에서는 v5 reference campaign의 A QA-11~13 corre
 
 모든 후보에 S2S 1개·semantic LLM 1개를 적용한다. Task supervisor·prompt·session·worker 수와 모델 수를 혼동하지 않는다. 모델 queue·cache·취소 지원은 실제 profile 확인 전이다.
 
-핵심 DP 선정, Voice E2E 연결, 나머지 DP candidate, core-ASR machine contract·전체 변경 ledger와 full A/B campaign은 남아 있다. Target Mac, local semantic LLM, Alibaba S2S와 Reference Agent 방향은 고정했다. 18개 후보를 모두 설명했다는 사실이 18개 모두에서 강한 양방향 trade-off를 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
+핵심 DP shortlist 선정은 완료했다. 각 핵심 DP의 심층 A/B 정의, Voice E2E 연결, core-ASR machine contract·전체 변경 ledger와 full A/B campaign은 남아 있다. Target Mac, local semantic LLM, Alibaba S2S와 Reference Agent 방향은 고정했다. 18개 후보를 모두 설명했다는 사실이나 여섯 DP를 shortlist에 넣은 사실이 양방향 trade-off·승자·제품 적합성을 입증했다는 뜻은 아니다. 현재 가설·표는 결과에 맞춰 덮어쓰지 않고 version으로 보존한다.
 
 이전 작업의 문서 검증 기록은 docs/archive/dp-document-consolidation-2026-09-25/dp-review-synthesis.md에 당시 이력으로 보존했다. 현재 제품 QA 결과를 뜻하지 않는다.
 

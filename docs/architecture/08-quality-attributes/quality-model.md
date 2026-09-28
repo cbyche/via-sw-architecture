@@ -48,12 +48,12 @@ ASR — Architecture 영향이 확인된 QA에 부여하는 분류
 | QA-04 | Voice Interruption Responsiveness | 사용자가 말로 끼어들었을 때 VIA가 재생 중인 음성을 얼마나 빨리 멈추는지를 본다. | 가장 느린 대표 case의 p95 barge-in 후 음성 정지시간 | semantic draft; target pending |
 | QA-05 | Task Control Responsiveness | 사용자가 작업을 취소하거나 정정했을 때 VIA가 올바른 처리 상태를 얼마나 빨리 알려주는지를 본다. | 가장 느린 대표 control case의 p95 올바른 처리상태 응답시간 | semantic draft; target pending |
 | QA-09 | Average VIA-attributable Interaction Responsiveness | delegation·direct response·Agent progress·Task control에서 VIA가 책임지는 처리시간을 사용자 관점의 하나의 평균으로 본다. | applicable scored trial 전체의 평균 VIA 책임시간 | **CONFIRMED_ASR**; target pending |
-| QA-11 | VIA Request Handling Correctness | VIA가 사용자 요청을 이해하고 처리하여 응답이나 위임과 상태 연결까지 전체적으로 올바르게 완료하는지를 본다. | 올바르게 처리된 전체 요청 run 비율 | previous QA-05 metric preserved; integrated outcome; target draft |
+| QA-11 | VIA Request Handling Correctness | VIA가 사용자 요청을 이해하고 처리하여 응답·위임·진행 상태·사용자 질문·완료 연결까지 전체적으로 올바르게 완료하는지를 본다. | 올바르게 처리된 전체 요청 run 비율 | previous QA-05 metric preserved; integrated outcome; target draft |
 | QA-12 | Request Semantic Resolution Correctness | VIA가 사용자의 목표와 대상, 조건 및 요청 사이의 관계를 올바르게 이해하는지를 본다. | 의미를 올바르게 해석한 run 비율 | driver draft; target pending |
 | QA-13 | Task & Interaction Binding Correctness | VIA가 요청과 응답, 제어 및 외부 소식을 의도한 대화와 작업에 정확히 연결하는지를 본다. | 올바른 Task·Interaction에 연결한 run 비율 | driver draft; target pending |
 | QA-14 | Async Task State Convergence Correctness | 외부 소식이 늦거나 중복되거나 순서가 바뀌어도 VIA가 최종적으로 올바른 작업 상태를 유지하는지를 본다. | 비동기 event 뒤 올바른 상태로 수렴한 run 비율 | driver draft; target pending |
 | QA-15 | Interaction & Task Continuity Correctness | 음성과 텍스트, 대화와 작업 사이를 오가더라도 필요한 맥락과 작업 관계가 유지되는지를 본다. | 전환 뒤 필요한 대화·Task 관계가 유지된 scenario 비율 | driver draft; target pending |
-| QA-19 | VIA Request Handling Field Accuracy | QA-11의 요청 처리 결과와 QA-12의 의미 해석을 구성하는 applicable field가 얼마나 정확한지 본다. | 전체 applicable QA-11/12 oracle field 중 correct field 비율 | **CONFIRMED_ASR**; target pending |
+| QA-19 | VIA Request Handling Field Accuracy | QA-11의 응답·위임·진행 상태 처리 결과와 QA-12의 의미 해석을 구성하는 applicable field가 얼마나 정확한지 본다. | 전체 applicable QA-11/12 oracle field 중 correct field 비율 | **CONFIRMED_ASR**; target pending |
 | QA-21 | Agent Change Locality | Agent를 추가하거나 바꿀 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | Agent 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
 | QA-22 | Model, Context & State Change Locality | Model과 Context 또는 상태 계약을 바꿀 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | Model·Context·State 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack current; target draft |
 | QA-23 | Experiment & Logging Change Locality | 새로운 실험이나 로그를 추가할 때 그 변화가 VIA Architecture의 여러 부분으로 얼마나 적게 퍼지는지를 본다. | 실험·로그 변화 한 건당 바뀌는 Architecture Element 평균 수 | change pack draft; target pending |

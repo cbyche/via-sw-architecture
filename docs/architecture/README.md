@@ -17,11 +17,12 @@
 - Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙을 유지하며, 네 통합 core QA와 상세 measurement·diagnostic QA를 함께 관리한다.
 - **QA-09·19·29·39를 핵심 `CONFIRMED_ASR`로 확정했다.** 정의와 VIA-DP-01~18 적용 원장은 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)에 있다. target·score band·DP별 모집단·machine contract·새 결과는 아직 pending이다.
+- **VIA-DP-03·05·06·07·15·17을 핵심 DP shortlist로 선정했다.** 이는 A/B 승자나 측정 완료가 아니다. VIA-DP-02·12는 supporting decision, VIA-DP-11은 실제 fatal-risk integration이 확인될 때 재승격하는 조건부 보조 DP다.
 - QA-01/02/03/05는 QA-09 input, QA-11/12는 QA-19 field source, QA-21~23은 QA-29 change source, QA-31/32는 QA-39 fault evidence다. QA-04·13~15·41·51·61/62는 회귀·진단·qualification으로 유지한다. 기존 일곱 DP reference 결과는 새 core ASR 결과가 아니다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
-DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. VIA-DP-01~18의 전수 inventory와 구현 구조를 설명하며, 과거 우선순위로 후보를 제외하지 않는다. 기존 ADR 변경·새 후보 구현·QA 측정 완료를 뜻하지 않는다.
+DP 상세 보고서를 읽기 전에는 [전체 요약 보고서](./12-decisions/dp-executive-summary.md)를 본다. VIA-DP-01~18의 전수 inventory와 여섯 핵심 DP의 선정 경계를 설명한다. Supporting/조건부 분류는 질문 삭제나 기존 ADR 변경이 아니며, shortlist 선정도 새 후보 구현·QA 측정 완료를 뜻하지 않는다.
 
 ## Required reading order
 
