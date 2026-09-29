@@ -14,13 +14,22 @@
 
 설계 우선순위는 **QA-19 semantic accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability**다. 낮은 순위도 선택 사항은 아니며, 상위 품질을 이유로 구조적 변경 파급이나 복구 실패를 숨기지 않는다.
 
-이 Architecture는 다음을 invariant로 둔다.
+### 설계 목표와 현재 선택한 원칙
 
-1. 잘못된 대상·Task·승인·Agent command를 확정하거나 게시하지 않는다.
-2. 필요한 근거가 없거나 후보가 충분히 탐색되지 않았으면 추가 조회, clarification 또는 확인 불가로 끝낸다.
-3. 위 정확성 경계를 낮추지 않고 사전 준비·병렬 조회·speculative 생성·선택적 재검증으로 latency를 줄인다.
-4. Model·Agent·Context source별 차이는 versioned canonical contract와 adapter 뒤에 두고, 변경이 무관한 책임·상태로 번지지 않게 한다.
-5. 외부 장애와 process crash는 durable intent·inbox·projection·publication 기록으로 격리하고, 확인되지 않은 실행·상태·전달을 성공으로 복원하지 않는다.
+**품질 목표와 그 목표를 달성하기 위해 선택한 구조를 구분한다.** 아래 처리 정책·구조는 현재 목표 Architecture의 설계 선택이며, 여기에 적었다는 이유로 변경 불가능한 제약이나 이후 Decision Point 도출의 제외 항목이 되지 않는다. 제품 경계·권한 요구·사용자 명시 합의는 각각의 근거를 따르며, 이를 실현하는 구조와 동일시하지 않는다.
+
+| 품질 목표 | 현재 선택한 처리 정책·구조 |
+| --- | --- |
+| QA-19: 목표·대상·Task·승인 연결과 위임 내용의 오류를 최소화한다. | 필수 근거·후보 탐색 범위·권한·revision을 host가 검사한다. 필요한 검증 조건이 충족되지 않으면 해당 실행·게시를 허용하지 않고, 추가 조회·clarification·확인 불가 경로로 처리한다. |
+| QA-09: 의미 있는 응답·위임·진행 전달까지의 VIA 지연을 줄인다. 중단 반응은 별도 QA-04 regression으로 유지한다. | 현재 선택한 검증 절차를 유지하면서 사전 준비·병렬 조회·speculative 생성·선택적 재검증으로 대기와 중복 작업을 줄인다. |
+| QA-29: Model·Agent·Context source 변경이 무관한 책임·상태로 번지는 범위를 줄인다. | versioned canonical contract와 adapter로 의존성별 차이를 분리한다. |
+| QA-39: 장애 영향을 제한하고 실행·상태·전달을 중복·오연결 없이 복구한다. | process 경계와 durable intent·inbox·projection·publication 기록을 사용하며, 확인되지 않은 결과는 성공으로 복원하지 않는다. |
+
+**보장 범위:** 검증 절차를 통과했다는 사실이 의미상 정답임을 보장하지는 않는다. 근거 자체의 오류, 탐색에서 누락된 후보, 모델의 잘못된 해석은 검증을 통과할 수 있다. 이 설계는 그런 오류를 줄이고 발견 시 정정·복구하도록 구성한 것이며, “잘못된 대상·Task·승인·command가 절대 확정되지 않는다”는 무오류 보장이 아니다.
+
+이 문서에서 `invariant`가 필요한 경우에는 “유효한 host admission 없이 command를 전송하지 않는다”처럼 **현재 설계 안에서 유지해야 할 구체적인 상태·제어 규칙**을 뜻한다. 그 규칙의 책임 위치·검증 방식·보장 수단까지 모든 대안에서 고정한다는 뜻은 아니다. 설계를 변경하면 영향받는 규칙과 보장 범위도 함께 재검토한다.
+
+**이후 Decision Point 도출:** 위 처리 정책과 구조도 네 ASR에 중요한 차이를 만드는 경우 도출 대상이다. 대안에 현재 구조의 adapter·내구 기록·검증 순서를 그대로 요구하지 않는다. 공통 제품 요구와 사용자 합의를 유지하면서 다른 보장 수단과 비용을 비교한다. 현재의 accuracy 우선순위는 설계 방향이며, 이후 비교에서 accuracy가 낮은 후보의 responsiveness 측정을 생략하는 필터가 아니다. 네 core ASR의 적용 여부와 applicable 축의 trade-off를 모두 드러낸다. 실제 package 구성은 전체 구조 합의 이후에 진행한다.
 
 ## 2. 사용자 관점의 전체 흐름
 
