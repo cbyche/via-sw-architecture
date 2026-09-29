@@ -15,6 +15,7 @@
 | Core DP selection summary pre-cleanup | [2026-09-28 snapshot](./core-dp-selection-pre-cleanup-2026-09-28/README.md) | Core DP 6개 결론과 이전 DP 중심 설명·상세 지도가 혼재했던 active summary 교체 전 사본 |
 | Pre-Core-ASR evaluation cleanup | [2026-09-28 cleanup snapshot](./pre-core-asr-evaluation-cleanup-2026-09-28/README.md) | 이전 runner·candidate·result와 과거 실행 원장을 active 경로에서 분리하기 전 provenance |
 | Model premise before shared Omni | [2026-09-29 snapshot](./model-premise-before-shared-omni-2026-09-29/README.md) | `3b5a3081`의 분리 모델 전제와 관련 baseline; 공유 Omni·명시적 입력 ASR 방향으로 변경 전 보존 |
+| Target Architecture review history | [2026-09-29 review history](./target-architecture-review-history-2026-09-29/README.md) | `94ef60a3`의 누적 검토 기록·이전 독립 검토를 현재 설계 문서와 분리하여 보존 |
 
 The current source of truth is [docs/architecture](../architecture/README.md).
 

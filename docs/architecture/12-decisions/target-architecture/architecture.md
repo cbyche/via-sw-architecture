@@ -2,7 +2,7 @@
 
 > 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전 / 구현·측정 없음**
 > 작성일: 2026-09-29
-> [설계 개요](./README.md) · [합의 상태와 검토 기록](./review-log.md)
+> [읽기 안내와 합의 상태](./README.md) · [설계 완결성 점검](./design-completeness.md)
 
 ## 1. 한 문장 정의
 
@@ -201,7 +201,7 @@ Controller는 모든 입력에 Request identity를 만들고 직접 경로의 �
 
 S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 질문에 최소한으로 허용한다는 사용자 지정 방향**으로 정한다. “광합성이 뭐야?” 같은 첫 질문은 직접 경로가 될 수 있다. “두 번째 것을 설명해줘”처럼 이전 대화의 지칭이 필요하면 Core로 보낸다. 질문 순서가 아니라 맥락 해석의 필요 여부가 기준이다. S2S 쪽에 자료·Task·기억 해석이나 read/tool/planning loop를 붙이지 않으며, 앞선 대화 view 기반 후속 대화 fast path 제안은 채택하지 않는다.
 
-최소 admission은 **현재 질문만 받는 Omni VoiceProposal + Controller의 좁은 host gate**로 선택했다. 허용 분류는 일반 개념 정의·안정된 일반 설명이며, 전사 일치·dependency flags·질문/정정 상태·현재 revision·Text/audio 대응을 검사한다. Direct 역할에는 과거 대화·Task·화면을 주지 않는다. 조건 미충족·unknown·형식 오류는 같은 Request의 Core 경로로 인계하고 speculative audio를 폐기한다. [구체 계약과 그림](./control-and-lifecycle.md#2-최소-s2s-직접-응답-계약)에 허용 조건·실패 경로를 정의했다. 단어 규칙·confidence나 같은 모델의 자기 판단만으로 숨은 맥락 의존성을 완벽히 판별한다고 가정하지 않는다. [허용·제외 예시](./interaction-and-memory-design.md#2-s2s-직접-응답은-명백한-자체-지식-질문에-한정한다)와 [모델 기능 확인](./model-capability-review.md)을 참고한다. 자체 지식의 사실 정확성을 admission만으로 보장하는 것은 아니다.
+최소 admission은 **현재 질문만 받는 Omni VoiceProposal + Controller의 좁은 host gate**로 선택했다. 허용 분류는 일반 개념 정의·안정된 일반 설명이며, 전사 일치·dependency flags·질문/정정 상태·현재 revision·Text/audio 대응을 검사한다. Direct 역할에는 과거 대화·Task·화면을 주지 않는다. 조건 미충족·unknown·형식 오류는 같은 Request의 Core 경로로 인계하고 speculative audio를 폐기한다. [구체 계약과 그림](./control-and-lifecycle.md#2-최소-s2s-직접-응답-계약)에 허용 조건·실패 경로·입력 예시를 정의했다. 단어 규칙·confidence나 같은 모델의 자기 판단만으로 숨은 맥락 의존성을 완벽히 판별한다고 가정하지 않는다. 실제 지원 근거는 [모델 기능 확인](./model-capability-review.md)을 참고한다. 자체 지식의 사실 정확성을 admission만으로 보장하는 것은 아니다.
 
 ![좁은 직접 응답 허용과 정정·전송 제어](./diagrams/12-admission-and-control.svg)
 
@@ -368,7 +368,11 @@ Task Manager는 확인된 변경을 Controller에 알린다. Controller는 원�
 
 범위가 명확한 자료 설명·요약은 VIA가 직접 처리하고, 조사·업무 분석·계획·파일 생성·외부 실행은 Agent가 담당한다는 방향은 사용자와 합의했다. 공유 semantic LLM이 대상·source 범위·요청 결과를 보고 handling을 제안하고 Controller가 고정 scope·권한·예산을 적용한다. “더 자세히”라는 말 자체는 위임 조건이 아니다. 같은 문단의 상세 설명은 VIA에 남을 수 있지만, 추가 조사를 통한 원인 분석이나 결과물 생성은 첫 요청부터 Agent로 보낸다. VIA가 먼저 답해 보고 사용자가 재요청할 때까지 위임을 미루는 규칙은 아니다.
 
-복합 요청은 독립 목표·사용자 명시 의존 관계를 VIA가 관리하고, 한 업무를 이루는 내부 단계·도구·재시도·보상은 Agent가 관리한다. 하나의 업무를 구성하는 “요약 후 발송”·“조사 후 보고서 작성”은 목표·명시 조건을 보존해 통째로 Agent에 위임한다. 독립된 지속 업무는 같은 Agent를 선택해도 서로 다른 Task로 추적한다. 단독 자료 설명·요약이 VIA 범위라는 이유로 Agent 업무의 준비 단계까지 VIA로 끌어오지 않는다. Agent가 구조화된 부분 결과를 제공하지 않으면 문장이나 접속사만으로 내부 단계의 완료를 추측하지 않는다. 상세 예시는 [복합 요청의 책임 경계](./interaction-and-memory-design.md#4-복합-요청의-실패는-두-수준으로-나눈다)를 따른다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
+복합 요청은 독립 목표·사용자 명시 의존 관계를 VIA가 관리하고, 한 업무를 이루는 내부 단계·도구·재시도·보상은 Agent가 관리한다. 하나의 업무를 구성하는 “요약 후 발송”·“조사 후 보고서 작성”은 목표·명시 조건을 보존해 통째로 Agent에 위임한다. 독립된 지속 업무는 같은 Agent를 선택해도 서로 다른 Task로 추적한다. 단독 자료 설명·요약이 VIA 범위라는 이유로 Agent 업무의 준비 단계까지 VIA로 끌어오지 않는다. Agent가 구조화된 부분 결과를 제공하지 않으면 문장이나 접속사만으로 내부 단계의 완료를 추측하지 않는다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
+
+“이 문단 요약하고 오후 일정 알려줘”처럼 독립 목표가 함께 들어오면 각 Request의 결과·실패를 따로 관리한다. 일회성 직접 응답에 장기 Task를 강제하지 않는다. 독립된 지속 업무는 Agent가 상태·취소·질문·완료를 각각 연결할 identity를 제공해야 하며, 이 계약이 없다고 하나의 불투명한 실행으로 합치지 않는다.
+
+한 Agent가 업무 전체를 수행할 수 없다는 이유로 VIA가 내부 계획을 만들지 않는다. 전체 수행 가능한 Agent를 찾거나 지원 한계를 알리고 사용자 선택을 구한다. 실패 시 완료 범위·artifact version·접수 상태를 확인하며, Agent 내부 retry와 VIA의 외부 재위임을 동시에 시도해 중복 실행하지 않는다. 사용자 명시 all-or-nothing 요구는 실행 전 capability로 확인하고, 여러 Agent의 Action을 VIA가 원자적으로 rollback할 수 있다고 약속하지 않는다.
 
 Agent 질문·승인은 공통 Pending User Interaction에 Task + Execution + question ID + 요청 version으로 등록한다. 여러 질문 중 답변 대상을 특정하지 못하면 “응”을 임의 승인으로 사용하지 않는다.
 
@@ -490,6 +494,6 @@ Reliability/recoverability 경로는 fault 발생 → process·queue·transactio
 5. **지속적으로 바뀌는 자료:** 관련 근거가 계속 바뀌면 재검증으로 진행이 멈출 수 있다. 과거 대상으로 할 수 있는 요청과 현재 version이 필요한 Action을 구분해야 한다.
 6. **구현 비용:** 증거·revision·outbox·event 정합성·출력 전달 상태가 추가된다. IPC·저장·cache 비용을 성능 이점에서 빼놓지 않는다.
 
-반증 가능한 약점은 지금 보존하되 강한 대안, Decision Package, 구체 실험은 전체 구조 합의 이후에 설계한다. 다음 검토 항목은 [검토 기록](./review-log.md)에 있다.
+반증 가능한 약점은 지금 보존하되 강한 대안, Decision Package, 구체 실험은 전체 구조 합의 이후에 설계한다. 주요 선택과 후속 검토 범위는 [설계 완결성 점검](./design-completeness.md)에 있다.
 
 대표 UC 18개·필수 변형과 cross-cutting 기능의 설계 대응, 자체 시나리오 검토와 후속 구현 항목을 [설계 완결성 점검](./design-completeness.md)에 모았다. 주요 기능 설계는 완성안이며 최종 사용자 검토와 이후의 구현·성능 검증은 별개다. 추가 ASR 후보 논의는 사용자 지시에 따라 이후 DP 발굴·대안 비교 시점까지 보류한다.

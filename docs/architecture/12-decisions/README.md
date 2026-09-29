@@ -23,7 +23,7 @@
 | --- | --- | --- |
 | 1 | [Target Architecture 작업 공간](./target-architecture/README.md) | 접근법, 고정 경계, 현재 산출물의 한계 이해 |
 | 2 | [전체 Architecture 제안](./target-architecture/architecture.md) | Component, 상태, 계약, runtime, 동시성, 장애와 위험 검토 |
-| 3 | [검토 기록](./target-architecture/review-log.md) | 사용자 지정 방향, 제안·합의·열린 항목 확인 |
+| 3 | [설계 완결성 점검](./target-architecture/design-completeness.md) | 필수 기능·예외 대응과 구체화한 주요 선택 확인 |
 | 4 | [Target-derived Decision Packages](./decision-packages/README.md) | 전체 구조 합의 이후의 package 도출 규칙 |
 
 현재는 1~3만 진행한다. 전체 Architecture가 충분히 합의되기 전에는 새 Decision Package나 측정 freeze를 만들지 않는다.
