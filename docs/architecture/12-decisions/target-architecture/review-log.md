@@ -86,5 +86,6 @@
 | 2026-09-29 | `architecture.md`의 Mermaid·ASCII 구조 그림을 7개 draw.io 그림과 SVG preview로 교체·보강하고, 동일한 시각 언어와 생성 절차를 추가 | 사용자 지정 표현 방식 반영; Architecture 내용은 제안 상태 유지 |
 | 2026-09-29 | 전체 구조 그림의 핵심 Component 배치와 edge routing을 재구성하고 Policy 판단의 Controller 적용, State Store의 durable infrastructure 위치, Controller가 중재하는 Context·Interpreter 관계를 명시 | 사용자 리뷰 반영; 구조는 계속 제안 상태 |
 | 2026-09-29 | Interaction Runtime을 Channel I/O·Evidence Capture·Timeline & Buffer로 펼치고 Model Access의 S2S client 관계와 직접 S2S 응답의 Response Manager publication protocol을 명시; 색상·화살표 legend 추가 | 사용자 리뷰 반영; 내부 모듈과 protocol은 제안 상태 |
+| 2026-09-29 | 전체 그림을 동일 수준 Component로 재배치하고 Interaction Manager로 명칭 변경; VIA 경계 안에 공유 Store·Model Access 배치, Task Manager의 Gateway 요청과 Gateway→Task→Controller→Response 결과 경로, raw audio와 요청 이벤트의 구분을 명시; publication admission의 근거와 M3 응답 생성 경로 보완 | 사용자 리뷰 반영; 전체 구조는 제안 상태이며 모델 기능·실제 성능 미검증 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.
