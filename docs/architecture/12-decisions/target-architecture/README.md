@@ -2,13 +2,14 @@
 
 > 상태: **설계 초안 / 전체 구조 합의 전 / 구현·측정 없음**
 > 시작일: 2026-09-29
-> 목적: responsiveness와 VIA semantic accuracy를 우선하는 완성된 목표 Architecture를 먼저 설계하고, GitHub에서 대화와 함께 수정한다.
+> 목적: VIA semantic accuracy를 1순위, responsiveness를 2순위로 두는 완성된 목표 Architecture를 먼저 설계하고, GitHub에서 대화와 함께 수정한다.
 
 ## 지금 읽을 문서
 
 | 문서 | 역할 |
 | --- | --- |
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
+| [독립 검토 결과](./independent-review-2026-09-29.md) | 사용자 검토 전 세 관점의 공통 결함, 본문 반영 내용과 열린 질문 |
 | [검토 기록](./review-log.md) | 사용자가 정한 방향, 제안 상태, 미합의 사항, 다음 검토 주제와 변경 기록 |
 
 이 디렉터리는 12번 작업의 첫 단계인 **목표 Architecture 제안**의 source of truth다. 문서에 포함되었다는 이유로 승인된 제품 Architecture나 구현된 기능이 되는 것은 아니다. [Architecture 기준선](../../README.md), accepted ADR, 기존 평가 상태를 이 초안이 자동으로 대체하지 않는다.
@@ -18,7 +19,7 @@
 ```text
 완성된 목표 Architecture 설계·대화·수정
     ↓ 전체 구조 합의 이후
-responsiveness / accuracy에 중요한 구조적 선택 추출
+accuracy / responsiveness에 중요한 구조적 선택 추출
     ↓
 강한 현실적 대안과 비용·유리한 조건 정리
     ↓
@@ -34,8 +35,9 @@ responsiveness / accuracy에 중요한 구조적 선택 추출
 - VIA는 PC의 Voice/Text/screen interaction과 orchestration을 담당한다.
 - Downstream Agent는 domain reasoning, planning, tool selection, 실제 업무 수행을 담당한다.
 - VIA는 S2S 1개와 공유 semantic LLM 1개를 사용한다. Component·Task별 모델 복제나 임의 helper 모델 추가는 하지 않는다.
-- accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이다. Agent가 만든 도메인 결과의 품질과 구분한다.
+- accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이며 현재 목표 Architecture의 1순위 품질이다. Agent가 만든 도메인 결과의 품질과 구분한다.
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
+- responsiveness는 2순위다. 정확성·qualification 조건을 통과한 결과 사이에서 비교하며, 잘못된 결과를 빨리 낸 경로를 이점으로 인정하지 않는다.
 - Voice 연결, Conversation, Request, Task, Agent Execution의 수명을 분리한다.
 
 제품 요구의 근거는 [Mission & Boundary](../../01-system-mission-and-boundary.md), [Fixed Scope](../../03-fixed-architecture-scope.md), [Representative Use Cases](../../05-representative-use-cases.md)다. 용어는 [Terms](../../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../../08-quality-attributes/correctness-and-continuity.md)를 참고한다.

@@ -1,7 +1,7 @@
 # VIA Software Architecture
 
 > **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)를
-> 먼저 완성하고, 그 구조에서 responsiveness와 semantic accuracy를 만드는 핵심 선택을 역으로 추출한다.
+> 먼저 완성하고, 그 구조에서 semantic accuracy와 responsiveness를 만드는 핵심 선택을 역으로 추출한다.
 > 전체 구조는 **검토 중인 초안**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
@@ -123,7 +123,7 @@ System mission and fixed scope
 
 12번 작업은 다음 순서로 진행한다.
 
-1. **Target Architecture Definition** — responsiveness와 semantic accuracy를 우선하는 완성 구조를 설계하고 합의한다.
+1. **Target Architecture Definition** — semantic accuracy를 1순위, responsiveness를 2순위로 두고 완성 구조를 설계하고 합의한다. 정확성 조건을 통과하지 못한 빠른 결과는 우수한 결과로 보지 않는다.
 2. **Decision Reconstruction** — 그 성능을 만드는 중요한 책임·계약·상태·호출·배치 선택만 추출한다.
 3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
 4. **Measurement & Revalidation** — 결과 전에 계약을 동결하고 선택한 구조가 기대한 특성을 실제로 가지는지 검증한다.

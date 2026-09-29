@@ -34,7 +34,7 @@
 
 - 목표 Architecture 안에 실제로 선택된 구조다.
 - responsibility, contract, state ownership, call graph, deployment, persistence 또는 fault boundary의 차이다.
-- responsiveness, semantic accuracy 또는 치명적인 failure behavior에 실질적인 인과 효과가 있다.
+- semantic accuracy, responsiveness 또는 치명적인 failure behavior에 실질적인 인과 효과가 있다.
 - 같은 문제를 해결하는 강한 현실적 대안을 구성할 수 있다.
 - 선택 구조가 기대한 특성을 갖지 못했다고 판단할 반증 조건을 둘 수 있다.
 

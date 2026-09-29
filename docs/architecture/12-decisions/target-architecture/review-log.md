@@ -17,7 +17,7 @@
 | 주제 | 내용 | 상태 |
 | --- | --- | --- |
 | 접근법 | 완성된 목표 Architecture를 먼저 설계하고 주요 구조 선택과 강한 대안은 그 이후 구성 | 사용자 지정 |
-| 최우선 품질 | responsiveness와 VIA 자체의 semantic accuracy | 사용자 지정 |
+| 품질 우선순위 | 1순위 QA-19 semantic accuracy, 2순위 QA-09 responsiveness. 정확성 조건을 통과하지 못한 빠른 결과는 우수한 결과로 보지 않음 | 사용자 지정 |
 | 경계 | VIA는 interaction·orchestration, Agent는 업무 추론·계획·도구·실행 | 사용자 지정 |
 | 모델 | S2S 1개와 공유 semantic LLM 1개; Component·Task별 복제 금지 | 사용자 지정 |
 | 기존 분해 | 기존 결정 번호·대안·순서에 구속되거나 다시 매핑하지 않음 | 사용자 지정 |
@@ -41,6 +41,10 @@
 | revision 검증·outbox·전송 경계에 따른 정정·취소 | 제안·원자성 세부 열림 | [동시성과 전송](./architecture.md#11-동시성정정취소전송) |
 | event 기반 Task 상태와 필요 시 재조회 | 제안 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
 | UI·Voice·Core·연동 worker 배치 | 제안 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
+| host 계산 semantic commit과 bounded-completeness gate | 독립 검토 후 보강·세부 schema 열림 | [요청 확정](./architecture.md#6-요청-이해와-처리-확정) |
+| S2S speculative 생성과 Controller direct admission | 독립 검토 후 보강·admission 기준 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
+| command epoch 기반 dispatch 선형화 | 독립 검토 후 보강·Agent capability 열림 | [동시성과 전송](./architecture.md#11-동시성정정취소전송) |
+| Agent inbox·Task projection·response publication 복구 | 독립 검토 후 보강·상태 전이 열림 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
 
 ## 다음 검토 주제
 
@@ -71,5 +75,7 @@
 | --- | --- | --- |
 | 2026-09-29 | 대화의 전체 설계안을 개요·Architecture·검토 기록으로 문서화 | 사용자 지정 작업 방식 기록; 세부 구조는 제안 상태 유지 |
 | 2026-09-29 | 목표 Architecture를 12번 안으로 이동하고, 합의 후 구조적 선택을 역으로 추출하는 저장소 흐름으로 변경 | 작업 흐름은 사용자 지정; 세부 구조는 제안 상태 유지 |
+| 2026-09-29 | 목표 Architecture 품질 우선순위를 QA-19 semantic accuracy 1순위, QA-09 responsiveness 2순위로 명시 | 사용자 지정; 세부 구조는 제안 상태 유지 |
+| 2026-09-29 | 세 독립 관점의 사전 검토를 기록하고, 공통으로 확인된 S2S admission·evidence coverage·dispatch 선형화·event/response 복구 공백을 본문에 보강 | reviewer 지적 반영; 보강 구조는 사용자 검토 전 제안 상태 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.

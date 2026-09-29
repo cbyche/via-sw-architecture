@@ -8,7 +8,7 @@
 
 ```text
 합의된 목표 Architecture
-  → responsiveness 또는 semantic accuracy에 큰 인과 효과가 있는 구조적 선택
+  → semantic accuracy 또는 responsiveness에 큰 인과 효과가 있는 구조적 선택
   → 같은 문제를 해결하는 가장 강한 현실적 대안
   → 책임·상태·계약·호출·배치·fault boundary 차이
   → 장점·비용·대안이 유리한 조건
@@ -22,7 +22,7 @@
 - 선택한 목표 구조와 해결하는 구체적 문제
 - steelman한 현실적 대안
 - Component, 상태 소유권, 계약, call graph, deployment 또는 fault boundary 차이
-- responsiveness와 accuracy에 영향을 주는 인과 경로
+- accuracy와 responsiveness에 영향을 주는 인과 경로
 - 선택 구조의 비용과 약점
 - 대안이 더 유리해지는 조건
 - 검증 방법과 선택 구조를 기각·재검토할 반증 조건

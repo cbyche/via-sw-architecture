@@ -565,8 +565,8 @@ Action의 실제 실행과 권한 강제는 Downstream Agent 책임이다. VIA�
 | --- | --- |
 | **Quality Concern (QC)** | ISO/IEC 25010 관점과 VIA 제품 문맥에서 도출한 상위 품질 관심사. coverage를 조직하지만 직접 점수를 만들지 않는다. |
 | **Quality Attribute (QA)** | stimulus, response와 하나의 대표 metric을 정의하여 Architecture 후보를 비교할 수 있게 만든 품질 속성. Catalog는 category range로 구성된 사용자 검토 초안이며 범위 안 번호 공백은 의도적으로 보존한다. |
-| **Architecture Significant Requirement (ASR)** | QA 중 책임 배치, interface, state authority, process/deployment boundary 또는 중요한 구조 trade-off에 중대한 영향을 주는 것으로 판정된 항목. 별도 번호를 만들지 않고 기존 QA ID에 분류를 표시한다. 현재 확정된 ASR은 없다. |
-| **Target Architecture Definition** | 01~11의 전제를 만족하며 responsiveness와 semantic accuracy를 우선하는 완성 구조를 먼저 설계·합의하는 현재 단계. |
+| **Architecture Significant Requirement (ASR)** | QA 중 책임 배치, interface, state authority, process/deployment boundary 또는 중요한 구조 trade-off에 중대한 영향을 주는 것으로 판정된 항목. 별도 번호를 만들지 않고 기존 QA ID에 분류를 표시한다. 현재 QA-09·19·29·39가 확정된 core ASR이다. |
+| **Target Architecture Definition** | 01~11의 전제를 만족하며 QA-19 semantic accuracy를 1순위, QA-09 responsiveness를 2순위로 두는 완성 구조를 먼저 설계·합의하는 현재 단계. |
 | **Decision Reconstruction** | 합의된 목표 Architecture에서 성능·장애 특성에 중요한 구조적 선택만 역으로 추출하는 단계. |
 | **Rationale & Falsification** | 선택 구조, 강한 대안, 비용, 대안이 유리한 조건과 반증 조건을 설명하는 단계. |
 | **Measurement & Revalidation** | 결과 전에 검증 계약을 확정하고 선택 구조가 기대한 특성을 실제로 갖는지 확인하는 단계. |

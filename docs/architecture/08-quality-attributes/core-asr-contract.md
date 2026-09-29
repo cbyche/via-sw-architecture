@@ -9,12 +9,18 @@
 > band proposal을 작성했지만, 이 숫자와 DP별 spine patch·mock profile·applicable population은 아직
 > 동결·구현되지 않았다. 따라서 기존 reference 결과를 이 네 QA의 결과로 소급 변환하지 않는다.
 
+## 현재 목표 Architecture의 품질 우선순위
+
+목표 Architecture 설계에서는 **QA-19 semantic accuracy를 1순위**, **QA-09 responsiveness를 2순위**로 둔다. QA-29와 QA-39는 계속 core ASR이며, 이 변경은 네 ASR 중 나머지를 해제하거나 낮은 점수로 상쇄한다는 뜻이 아니다.
+
+QA-19와 QA-09를 가중 합산하지 않는다. 먼저 결과 전에 동결한 semantic-correctness field와 safety·evidence qualification을 통과해야 한다. 그 조건을 만족한 결과 사이에서 QA-09를 비교한다. 잘못된 의미·지칭 대상·Task binding·처리 방향·위임 계약·사용자 결과를 더 빨리 낸 경로는 우수한 Architecture로 판정하지 않는다.
+
 ## 1. 왜 네 개로 통합하는가
 
 최종 Architecture 보고서는 다음 네 질문에 답해야 한다.
 
-1. **빠른가?** — 사용자가 기다리는 VIA 책임시간
-2. **정확한가?** — 요청 의미부터 Task·상태·결과까지의 field 정확도
+1. **정확한가?** — 요청 의미부터 Task·상태·결과까지의 field 정확도
+2. **빠른가?** — 정확한 결과를 내면서 사용자가 기다리는 VIA 책임시간
 3. **변화에 강한가?** — 변화 한 건을 수용할 때 바뀌는 Architecture Element 수
 4. **장애에도 살아남는가?** — 장애를 필요한 범위에 가두고 올바르게 복구한 비율
 
