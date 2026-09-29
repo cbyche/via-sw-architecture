@@ -16,7 +16,7 @@
 
 - VIA는 사용자 interaction과 orchestration을 책임진다.
 - Downstream Agent는 업무 reasoning, planning, tool 선택·실행을 책임진다.
-- Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
+- Voice interaction은 VIA 안에 있으며, 현재 목표 배치는 on-device Omni 1개를 S2S·semantic 두 역할이 공유한다. 입력 보호용 Streaming ASR을 포함한 배치는 12번 주 설계이며, local/remote 교체 시나리오와 이전 DP 조건은 별도로 보존한다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
 - 01~11의 전제 위에서 목표 Architecture를 먼저 설계한다. 이후 네 core ASR에 중요한 구조적 선택만 Decision Package로 추출한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙을 유지하며, 네 통합 core QA와 상세 measurement·diagnostic QA를 함께 관리한다.

@@ -64,7 +64,7 @@ QA-41은 target-device memory 진단값, QA-51은 privacy/security qualification
 | Agent Router | VIA와 외부 Agent 사이의 submit·status·question·result·cancel 계약을 번역한다. | Agent ingress 전과 source result/status 후의 VIA 구간을 포함한다. | Agent/capability 선택과 request-handling field의 실제 전달 근거를 낸다. | Agent 추가·교체·protocol 변화의 파급을 센다. | 연결 단절·worker crash 뒤 duplicate 없이 상태를 재확인하는지 본다. |
 | Downstream Agent | 도메인 reasoning·계획·Tool 실행과 실제 업무 결과 생성을 책임진다. | 내부 queue·reasoning·Tool 실행시간은 제외하고 ingress와 result/status source 시각만 제공한다. | VIA가 보낸 요청과 돌려받은 source fact는 보되 Agent 자체 업무 품질을 VIA 점수로 채점하지 않는다. | Agent 자체 내부 파일 변경은 세지 않고 VIA가 Agent 변화에 대응해 바꾼 Architecture Element만 센다. | 외부 실행의 실제 상태를 확인할 수 있는 범위에서만 복구 판정하며 확인 불가를 성공으로 세지 않는다. |
 
-현재 목표는 음성·semantic 역할이 on-device Omni 한 개를 공유한다. 역할별 prompt·call·session·buffer와 가중치 복제를 구분하고, 입력 보호용 ASR 등 명시된 helper의 전체 비용도 포함한다. 기존 DP의 두 모델 portfolio는 당시 reference이며 metric·기존 applicability 원장은 변경하지 않는다. 새 비교에서 topology가 실제 구조 차이면 그 비용을 공개하고 무관한 모델 성능 차이로 구조 우세를 만들지 않는다.
+S2S와 semantic LLM은 Component마다 따로 적재하는 모델이 아니다. VIA는 각각 한 모델을 공유하고 Component별 prompt·call·session·buffer만 달라질 수 있다. 따라서 QA 차이는 모델 개수를 임의로 늘리거나 줄여 만들지 않고, 책임·계약·상태·호출 graph·Process 경계의 차이로 설명한다.
 
 ## 3. QA-09 — Average VIA-attributable Interaction Responsiveness
 
@@ -254,7 +254,7 @@ fault stratum별 macro-average를 사용하지 않는다. 별도 제품 빈도 �
 
 QA-41은 core ASR이 아니다. 여기서 memory는 **VIA system을 실행하기 위해 target PC에 실제 commit된 전체 memory**다. VIA Core·Voice Runtime·Context·Task·Agent client 같은 software process의 heap/stack/queue/buffer, 후보가 추가한 helper process, local S2S/semantic model runtime과 model weights·KV cache를 모두 포함한다. Remote model 서버의 memory는 포함하지 않는다.
 
-공유 Omni 목표에서는 동일한 portfolio를 쓰는 비교의 weight baseline이 공통이다. 추가 ASR·helper 유무가 구조 차이인 경우 그 weight와 runtime도 후보별 비용으로 포함한다. DP가 바꾸는 부분은 주로 process overhead, IPC buffer, session/KV cache 수명, duplicate serialization과 queue 크기다. 따라서 보고서는 `shared model baseline`, `candidate-specific VIA software`, `candidate-specific cache/buffer/helper process`를 분리하고 A/B peak delta도 함께 보여준다.
+VIA는 후보마다 새 모델을 올리지 않고 S2S 한 개와 semantic LLM 한 개를 공유하므로, 큰 model weight baseline은 A/B에 공통이다. DP가 바꾸는 부분은 주로 process overhead, IPC buffer, session/KV cache 수명, duplicate serialization과 queue 크기다. 따라서 보고서는 `shared model baseline`, `candidate-specific VIA software`, `candidate-specific cache/buffer/helper process`를 분리하고 A/B peak delta도 함께 보여준다.
 
 모든 candidate campaign에서 이 target-device peak committed memory를 diagnostic으로 기록하되 현재는 target·score·Architecture winner에 사용하지 않는다. 메모리 상한 요구가 없고 shared local model이 절대값을 지배하며, 현재 DP-11 reference path의 약 3.7 MiB 차이도 전체 후보에 일반화할 만큼 크거나 반복 검증된 차이가 아니기 때문이다. 향후 명시적 device budget 또는 구조적으로 반복되는 유의미한 A/B delta가 생기면 별도 사용자 승인으로 ASR 재분류를 검토한다.
 

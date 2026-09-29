@@ -63,11 +63,26 @@ VIA와 Downstream Agent의 기본 책임 경계는 다음과 같다.
 
 ### System Context Diagram
 
-아래는 현재 목표 구조의 draw.io 그림을 함께 보여준다. VIA 경계와 외부 책임을 읽기 위한 참조이며, 그림 안의 세부 Component 구성은 제안 상태다. 모델은 현재 on-device 주 배치지만 내부 구현 책임은 의존성으로 구분한다.
+아래 그림은 VIA를 하나의 시스템으로 보고, 사용자 및 외부 시스템과의 관계를 나타낸다. 실행 위치가 local인지 remote인지와 관계없이 **VIA가 책임을 갖고 설계하는 영역과 외부 책임 영역을 구분하는 것**이 목적이다.
 
-![VIA 목표 구조 — 제안 상태](./12-decisions/target-architecture/diagrams/01-system-overview.svg)
+```mermaid
+flowchart LR
+    U["사용자"]
+    VIA["VIA Local Software<br/>사용자 PC에서 실행<br/><br/>Voice Runtime / Text Interaction<br/>Context 이해<br/>Direct Response<br/>Request + Agent Orchestration<br/>Conversation / 작업 상태 관리<br/>Voice / Text 응답"]
+    CTX["Context Source<br/>OS / App / File / Mail / Calendar / Browser / Public Web"]
+    MODEL["AI Model Runtime<br/>S2S / VIA Semantic Inference용<br/>Local 또는 Remote dependency"]
+    AGENT["Downstream Agent<br/>Reasoning / Planning / Tool Execution"]
+    TARGET["실제 작업 대상<br/>OS / Application / Web / External Service"]
 
-[draw.io 편집 원본](./12-decisions/target-architecture/diagrams/01-system-overview.drawio)
+    U -->|"Voice / Text / 화면 interaction"| VIA
+    VIA -->|"Voice / Text 응답"| U
+    VIA <-->|"정책상 허용된 Read-only Context"| CTX
+    VIA <-->|"Inference 요청 / 결과"| MODEL
+    VIA -->|"작업 요청 + 필요한 Context"| AGENT
+    AGENT -->|"Progress / Clarification / Result"| VIA
+    AGENT -->|"실제 업무 수행"| TARGET
+    TARGET -->|"실행 결과"| AGENT
+```
 
 > **경계 해석:** Voice Runtime 자체는 VIA Local Software 안에 있다. S2S 및 VIA Semantic Inference에 사용하는 AI Model Runtime은 local 또는 remote에 배치될 수 있는 dependency이며, **Model을 호출·연결·교체하는 구조는 VIA Architecture 범위에 포함하지만 Model 내부 구현과 학습은 포함하지 않는다.** Context Source 역시 VIA가 사용하는 read-only dependency이다. 외부 업무 상태 변경과 업무의 조사·계획·실행은 Downstream Agent가 담당한다.
 
@@ -125,13 +140,11 @@ VIA 내부의 대화 기록·작업 상태·설정·허용된 User Memory를 저
 
 ## 1.3 AI Model Boundary
 
-### 현재 목표의 모델 구성
+### 현재 과제의 고정 모델 구성
 
-**2026-09-29 사용자 지정: 하나의 on-device Omni 모델을 S2S·semantic 두 논리 역할이 공유한다.** 역할별 입력·출력·Context·session·권한을 분리하고 Component·Task·단계별 가중치 복제를 하지 않는다. 약 10B 목표는 Qwen3-Omni의 Thinker 명명 기준을 따르며 전체 encoder·Talker·decoder와 helper 비용은 별도로 합산한다.
+**VIA의 공통 기반은 S2S 모델 1개와 semantic LLM 1개를 사용한다.** Component별·Task별·의미 처리 단계별로 모델을 복제하지 않는다. 각 Component는 역할별 프롬프트·출력 schema를 사용할 수 있지만 같은 semantic LLM을 호출한다. 여러 호출·세션·프롬프트가 있다는 것은 여러 모델이 있다는 뜻이 아니다.
 
-Semantic 추론 중에도 사용자 발화를 수신·인식해야 한다. 필요한 별도 ASR을 설계에 포함할 수 있으며, 현재 주안은 경량 Streaming ASR을 독립 입력 근거 경로로 두는 것이다. 추가 모델은 명시된 역할·자원·장애 비용을 가져야 한다. 세부 계약과 설계 상태는 [공유 Omni 설계](./12-decisions/target-architecture/shared-omni-runtime.md)를 따른다.
-
-모델팀에 요구할 관측 가능한 기능·연동·스케줄링 계약은 이 Architecture에서 정한다. 모델 학습 및 내부 알고리즘 구현은 여전히 이 저장소 범위 밖이다. 이전 VIA-DP 보고서의 두 모델·ASR 후보 조건은 당시 비교 조건으로 보존하며 새 목표 구조에 자동 적용하지 않는다. Local/remote 변경 시나리오도 유지하지만 현재 제품 주 배치는 on-device다.
+모델의 local/remote 배치는 별도 조건이며 두 모델을 반드시 PC에 모두 올린다는 뜻은 아니다. 같은 DP의 A/B에서는 원칙적으로 같은 모델 구성과 실행 조건을 고정한다. 단, **VIA-DP-03은 evidence 생성 topology 자체가 비교 축**이므로 A는 timestamp-capable Streaming ASR 1개를 추가하고, B는 별도 ASR 없이 S2S 1개가 turn-final time-aligned text를 제공한다. 이 한정 예외는 임의 helper 추가나 Component별 복제를 허용하지 않는다. Downstream Agent 내부 모델은 외부 책임이며 VIA 모델 구성에 포함하지 않는다.
 
 VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구분한다.
 
@@ -143,7 +156,7 @@ VIA 주변에서 사용하는 AI를 책임 범위에 따라 세 영역으로 구
 - S2S Model을 통한 User Turn과 Response도 모두 VIA conversation state에서 관리한다.
 - Voice Runtime의 interface, streaming event, state 처리, S2S Model invocation, deployment binding, 다른 VIA 요소와의 연결 방식은 VIA Architecture 설계 범위에 포함한다.
 - S2S Model 자체의 내부 구조와 학습 방법은 VIA Architecture 설계 범위에 포함하지 않는다. 다만 Architecture가 요구하는 observable capability와 output contract, 그리고 그 capability를 가진 S2S build가 필요한지는 설계 결정에 포함한다.
-- 입력 지속성과 지칭 근거를 위한 별도 Streaming ASR을 주안으로 설계한다. VAD·aligner 등 추가 학습 모델이 필요하면 inventory와 전체 지연·메모리·장애 비용을 명시한다. 누락 기능을 숨은 helper로 보완하지 않는다.
+- 별도 speech recognizer·TTS·helper 모델은 기본 구성에 임의로 추가하지 않는다. 명시적으로 승인된 VIA-DP-03 A만 timestamp-capable Streaming ASR 1개를 candidate topology로 포함한다. 비모델 신호 처리·clock 정렬·buffer·adapter는 둘 수 있으나 승인되지 않은 추가 학습 모델로 부족한 기능을 숨겨 보완하지 않는다.
 - 필요한 입력·시간·정정 이벤트가 특정 S2S Model에 모두 내장되어 있다고 가정하지 않는다. 제품이 필요로 하는 정보는 Voice Runtime의 연계 설계에서 제공한다.
 
 ### 2. VIA Semantic Inference — VIA Architecture 범위 안
@@ -184,7 +197,7 @@ Downstream Agent가 domain reasoning, planning, tool selection 또는 tool execu
 7. **Downstream Agent의 업무 실행이 필요하지 않은 요청은 VIA 내부에서 직접 응답할 수 있다.**
 8. **Direct Response와 Agent-delegated Response는 동일한 VIA conversation 관리 체계 안에서 관리한다.**
 9. **모든 사용자에게 보이는 응답은 Text로 Chat UI에 기록하고, Voice interaction이 활성화된 경우 핵심 내용을 짧은 Voice Response로 함께 제공한다.**
-10. **VIA 내부 semantic decision의 책임 위치는 여러 Component로 나눌 수 있지만, 모델 추론은 공유 Omni의 semantic 역할을 사용한다. 역할별 프롬프트·호출·세션 분리는 모델 추가 적재가 아니다.**
+10. **VIA 내부 semantic decision의 책임 위치는 여러 Component로 나눌 수 있지만, 모델 추론은 공통 semantic LLM 1개를 사용한다. 역할별 프롬프트·호출·세션 분리는 모델 추가 적재가 아니다.**
 11. **Downstream Agent 내부의 Model, reasoning, planning, tool selection, tool execution 및 execution 성능은 VIA Architecture 평가 범위에서 제외한다.**
 
 이 문서는 ASR을 도출하기 전에 고정해야 할 시스템 경계를 정의하므로 이 절 자체에서 ASR을 선택하지 않는다. 현재 도출·확정된 Core ASR은 [Current Architecture Focus](./12-decisions/dp-executive-summary.md)와 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)를 따른다.

@@ -63,7 +63,7 @@ Architecture Component 수를 blast-radius unit으로 사용하지 않는다. fa
 
 ## 3. QA-41 — Target Device Memory Footprint
 
-현재 목표 구조는 하나의 on-device Omni를 S2S·semantic 역할이 공유하며 Component·Task별 weights 복제를 금지한다. 공유 weights와 역할별 KV·runtime·buffer를 구분하고, 주 설계안의 독립 Streaming ASR weights·worker·buffer도 전체 비용에 포함한다. 이전 VIA-DP의 모델·ASR 가정과 결과는 당시 비교 조건으로 보존한다. QA-41은 모델 memory만도, VIA software memory만도 아닌 **target PC에서 후보 경로를 실행하기 위해 commit된 dependency와 VIA software의 합계**다. 모델이 local이면 weights·runtime·KV cache를 포함하고, remote이면 서버 memory를 PC 사용량에 넣지 않는다. VIA process·helper process·heap·stack·queue·IPC/audio buffer도 포함한다.
+공통 기반은 S2S 모델 1개·semantic LLM 1개이며 Component·Task별 복제는 금지한다. VIA-DP-03 A가 timestamp-capable Streaming ASR을 추가하면 그 실제 client/runtime·buffer와 local 배치 시 weights도 후보 비용에 포함한다. QA-41은 모델 memory만도, VIA software memory만도 아닌 **target PC에서 후보 경로를 실행하기 위해 commit된 dependency와 VIA software의 합계**다. 모델이 local이면 weights·runtime·KV cache를 포함하고, remote이면 서버 memory를 PC 사용량에 넣지 않는다. VIA process·helper process·heap·stack·queue·IPC/audio buffer도 포함한다.
 
 다만 shared model baseline과 후보별 software/cache/buffer delta를 반드시 분리 보고한다. 한 DP의 A/B에서 큰 model weight는 동일하고 process·buffer 차이만 남을 가능성이 높다. 메모리 상한 요구와 반복 검증된 유의미한 구조 차이가 아직 없으므로 QA-41은 자원 진단이며 core ASR이 아니다.
 

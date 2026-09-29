@@ -45,7 +45,7 @@ Controller는 Request identity와 현재 입력·권한·출력 세대 및 알�
 | 최소 S2S 직접 응답 | 좁은 허용 범위·host 제외 조건·Core fallback | 단순 direct/Core 인계 출력과 실제 판정 품질 |
 | 이미지 화면의 이해 | 화면 근거와 UI 정보의 선택·제공 계약 | 공유 semantic LLM이 필요한 시각 입력을 처리하는지 |
 
-사용자 입력이 필요한 것은 이미 고정된 모델·PC·local/cloud 제약이 있는 경우 그 조건, 그리고 지원 불가 시 허용할 제품 동작의 변경이다. 고정 조건이 없다면 현 단계에 임의 모델을 선정하거나 실험용 자격증명을 요구하지 않는다. 실측에는 향후 승인된 실행 환경·모델 접근이 필요하며 지금 완료했다고 주장하지 않는다. [모델 기능 확인 원장](./model-capability-review.md)에 공식 문서 확인과 실제 실행 상태를 분리해 기록한다.
+사용자가 공유 on-device Omni, 약 10B Thinker 개발 목표, fine-tuned Qwen3-Omni-30B-A3B-Instruct reference를 지정했다. 모델팀에 요구할 계약도 이 Architecture에서 정하며 별도 ASR을 필요한 구조에 포함할 수 있다. [공유 Omni 설계](./shared-omni-runtime.md)에 입력 보호·역할 분리·자원 경합과 모델/runtime/host 책임을 구체화했다. 사용자에게 API 설계를 떠넘기지 않는다. 실측에는 향후 승인된 실행 환경·모델 접근이 필요하며 지금 완료했다고 주장하지 않는다. [모델 기능 확인 원장](./model-capability-review.md)에 공식 문서 확인과 실제 실행 상태를 분리해 기록한다.
 
 ## 4. 복합 요청의 실패는 두 수준으로 나눈다
 

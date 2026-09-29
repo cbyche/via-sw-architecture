@@ -103,9 +103,7 @@ Task Association을 평가하면서 정답 Task ID를 입력에 몰래 넣지 �
 
 ### FA-10. 같은 모델을 고정할 때와 달라도 되는 때
 
-**현재 목표의 기반: on-device 공유 Omni 1개, 음성·semantic 역할 분리, Component·Task·단계별 가중치 복제 금지.** 입력 지속성을 위한 경량 Streaming ASR을 주안으로 두고 모든 helper를 비용에 포함한다. 역할별 session·KV·호출은 다르며 동시 제출을 무료 병렬 추론으로 간주하지 않는다. 모델/runtime의 실제 지원과 자원 예약은 [공유 Omni 설계](./12-decisions/target-architecture/shared-omni-runtime.md)를 따른다.
-
-아래 기존 VIA-DP-03 비교 예외와 과거 보고서는 당시 모델 portfolio를 보존한 reference다. 새 목표의 고정 전제로 재사용하지 않는다. 새 비교에서는 구조 차이와 관계없는 모델·기능·환경을 같게 놓고, 모델 topology 자체를 비교할 경우 각 추가 비용을 모두 공개한다. 지금 새 비교 계약을 동결하지 않는다.
+**공통 기반 불변식: S2S 1개 + semantic LLM 1개, Component·Task·단계별 복제 금지.** 프롬프트, schema, 호출 횟수·순서, 세션·KV cache는 달라질 수 있다. 동일 모델의 동시 호출 지원·대기·취소 한도는 실제 dependency profile로 고정하며, 단계 분리를 무료 병렬 추론으로 간주하지 않는다. VIA-DP-03 A는 비교 축 자체로 timestamp-capable Streaming ASR 1개를 추가하는 승인된 예외이고, B는 별도 ASR 없이 S2S 1개에 time-aligned final-text capability를 요구한다. 그 밖의 ASR·TTS·helper 추가는 현재 범위 밖이다.
 
 Core-DP Architecture PoC에서 위 논리 dependency는 각각 하나의 deterministic behavior mock으로
 표현한다. Mock profile은 event·timing·error·fault schedule과 근거를 결과 전에 동결하며, 실제
@@ -115,7 +113,7 @@ candidate 경로와 endpoint를 실행한 `MEASURED_MOCK_E2E` 결과를 QA-09/19
 | 비교 목적 | 동일하게 두는 것 | 달라도 되는 것 | 결과 해석 |
 | --- | --- | --- | --- |
 | 같은 판단 책임의 구조 비교 | 같은 기준 모델·버전·생성 설정, 같은 원천 입력, 같은 기능 요구 | 구조 때문에 달라진 Context 표현·입력 길이·호출 수·실행 순서 | 구조 효과를 우선 관찰 |
-| 구조가 모델의 책임을 바꾸는 일반 비교 | 같은 공유 Omni·명시된 helper 구성, 사용자 목표·완료 조건·허용 기능 | 역할별 책임 배분, 지시문과 호출 구성 | 구조·프롬프트·호출 graph의 효과를 구분 |
+| 구조가 모델의 책임을 바꾸는 일반 비교 | 같은 S2S 1개·semantic LLM 1개, 사용자 목표·완료 조건·허용 기능 | 두 모델 안의 책임 배분, 역할별 지시문과 호출 구성 | 구조·프롬프트·호출 graph의 효과를 구분 |
 | VIA-DP-03 evidence-source 비교 | 같은 audio·UI timeline·final candidate 의미·detector·Grounding oracle | A의 별도 Streaming ASR 대 B의 timestamp-capable S2S, provisional 대 turn-final lifecycle | dependency topology와 evidence 시점의 구조 효과를 비교 |
 | 07의 모델 교체 평가 | 같은 사용자 기능과 회귀 시험 | 모델 제공자·크기·API·배치 등 해당 변경 항목 | 변경량과 기존 기능 유지 여부를 평가 |
 

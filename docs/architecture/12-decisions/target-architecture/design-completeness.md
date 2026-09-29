@@ -38,7 +38,7 @@
 | Task 상태는 저장됐지만 Controller callback 전에 crash하면 알림 유실 | projection + domain outbox 원자 기록; consumer event ID와 publication ID로 멱등 인계 | transaction·outbox 관리 비용; schema·crash 검증 필요 |
 | “전송 직전 취소”의 실제 순서가 불분명 | PENDING→DISPATCHING CAS와 Conversation hold·command epoch·policy revision을 같은 Store 경계에서 검사 | acoustic 시작부터 hold 기록까지의 인식·IPC 지연은 남음 |
 | 물리적 음성 재생과 기록을 원자적으로 복구하는 듯한 설명 | 확인된 audible 범위와 DELIVERY_UNKNOWN 분리; 불명 구간 자동 재생 금지 | 완벽한 exactly-once 청취 보장은 없음 |
-| Model Access를 Core에만 그려 Voice 독립성이 불분명 | 하나의 논리 계약, Voice의 S2S adapter와 Core의 semantic adapter로 배치 | bounded IPC·session owner·lease 구현 필요 |
+| Model Access를 Core에만 그려 Voice 독립성이 불분명 | Voice/Core client + Shared Inference Service의 단일 Omni owner + 독립 Speech Input Worker로 개정 | bounded IPC·session owner·lease 및 실제 resource 예약 확인 필요 |
 | Core 장애 중 UI control의 보장 범위가 과도함 | local Voice stop은 유지; Task 취소는 내구 접수 전까지 접수 성공으로 표시하지 않음 | Core 장애 중 업무 제어 가용성 제한 |
 | Context가 다른 owner 상태를 어떻게 읽는지 불명확 | versioned owner read ports, source별 revision, commit 시 dependency 검증 | 여러 read를 하나의 동시 snapshot으로 가정할 수 없음 |
 | 권한 확인 후 실제 제공까지의 경쟁 | Use Envelope와 현재 revision을 read/model/Agent/publication port에서 검사 | 이미 외부로 나간 정보의 소급 회수 불가 |
@@ -51,10 +51,10 @@
 | 항목 | 현재 제안·대응 | 확정에 필요한 것 |
 | --- | --- | --- |
 | S2S direct admission의 기본 방식 | 명백한 독립 자체 지식 질문만 허용; 나머지는 Core라는 범위 합의 | 최소 admission·S2S 인계 출력 계약; 실제 판정 정확도·지연 검증 |
-| S2S capability | time-aligned 입력, host 출력 제어, Text/audio 대응, 의미 보존 음성화, barge-in 필요 | 공식 문서 1차 확인에서 전사 helper 의존을 발견; 모델별 적합 계약과 실제 연결 확인 필요 |
+| S2S capability | time-aligned 입력, host 출력 제어, Text/audio 대응, 의미 보존 음성화, barge-in 필요 | 공유 Omni·별도 ASR 허용으로 전제 개정; 우리가 요구 계약을 정하고 실제 build/runtime에서 확인 |
 | 시각 근거 처리 | UI 구조가 없으면 공유 semantic LLM의 이미지 처리 필요 | 목표 모델 capability와 화면 입력 계약 |
 | Agent capability | 상태 조회·source revision·중복 방지·precondition·취소 지원을 profile로 노출 | 실제 Agent adapter 연결 확인; 미지원일 때의 보장 수준 표시 |
-| 자원·시간 예산 | 유한 queue·buffer·deadline, pin된 evidence의 한도 초과도 gap으로 처리 | 목표 PC·모델 배치·동시 workload에 맞춘 수치; 이번 작업에서 측정 freeze하지 않음 |
+| 자원·시간 예산 | 공유 Omni의 동시 VOICE/SEMANTIC session, 독립 ASR, Voice 예약·chunked prefill·semantic 진행량 | 목표 PC·모델 배치·동시 workload에 맞춘 수치; 이번 작업에서 측정 freeze하지 않음 |
 | 개인정보 보관·삭제 | 최소 evidence 보존, memory tombstone, derived view 폐기, 외부 삭제 한계 명시 | 제품의 보관기간·백업 삭제·provider 정책; 현재 숫자나 법적 보장 미확정 |
 | 발화 차례·중단 후 재개 | 사용자 발화 중 음성 알림 금지와 채널별 요약은 사용자 지정; 불명확한 재개만 확인하는 정책 합의 | 새 요청/대기 결과의 순서, Voice 재연결·다른 Conversation의 음성 안내 범위 |
 | 기억 계층 | 단기 작업 Context·중기 대화/업무 view·장기 허용 기억과 내구 원본을 분리하는 제안 | 기억 승격·보관·삭제 정책, 요약 누락·원본 복원·저장 계약 |
@@ -63,6 +63,8 @@
 문서에 경로가 있다는 이유로 위 질문을 `완료`로 바꾸지 않는다. 새 모델·Agent가 필수 capability를 충족하지 못하거나 그림의 내구·권한 경계를 구현할 수 없다면 해당 구조를 다시 설계한다.
 
 [이번 대화의 합의와 검토 제안](./interaction-and-memory-design.md)은 S2S·모델 확인 책임·복합 실패·기억을 구체화한다. 기능 경로가 문서에 있다는 이유만으로 제품 행동·상태 계약의 합의가 끝난 것은 아니다.
+
+공유 모델 전환의 주안과 남은 resource 수치는 [공유 Omni 설계](./shared-omni-runtime.md)에 있다. 모델 공유·역할 분리·동시 발화 요구는 사용자 지정이고 ASR 배치·스케줄링 세부는 제안이다.
 
 ## 4. 다음 사용자 리뷰 순서
 

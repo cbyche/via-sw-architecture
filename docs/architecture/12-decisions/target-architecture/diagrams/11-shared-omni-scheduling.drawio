@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="11-shared-omni-scheduling" name="공유 Omni — 의미 해석 중에도 듣고, 두 역할을 함께 진행">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1490" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="input" value="A · INPUT — 추론 결과를 기다리지 않고 수신·인식을 계속한다" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="150" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="roles" value="B · SHARED MODEL — 별도 session / KV / 권한, 같은 가중치" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="435" width="1810" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule" value="C · ACCELERATOR — 전체 호출을 직렬 잠그지 않고 짧은 계산 단위로 교대한다" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="875" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="input-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Voice capture&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;microphone · sample sequence&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;AEC · 활동 감지 · local stop&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="input-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;독립 Streaming ASR&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;전용 CPU 예산 · partial / final&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;시간 근거 · 정정 revision · gap&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="input-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;IM timeline&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;원음 + 당시 화면 + 전사 revision&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Omni 불일치는 별도 proposal&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="input-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Final → 의미 해석 · host 검증&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;입력 시작 hold는 별도 즉시 경로&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="voice-job" value="&lt;div style='font-size:19px;font-weight:bold'&gt;VOICE session&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;audio stream · 좁은 direct/Core 제안&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;승인된 내용을 음성화 · tool 없음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="505" width="340" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="semantic-job" value="&lt;div style='font-size:19px;font-weight:bold'&gt;SEMANTIC session&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;목표·referent·Task·handling 제안&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;응답 구성 / 기억 요약은 별도 job&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="675" width="340" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="scheduler" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Model Access scheduler&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;VOICE 연산·KV 예약&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;semantic 최소 진행량 + deadline&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;긴 prefill / encoder 작업 상한&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;취소·admission·bounded microbatch&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="650" y="530" width="500" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="omni" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Omni weights × 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Thinker 약 10B + 주변 모듈&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;두 역할의 Context는 합치지 않음&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;모델 장애는 두 역할에 동시 영향&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;ASR의 자원 비용은 별도&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="530" width="340" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Voice 계산&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;새 audio chunk encode / prefill&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;필요한 decode · 입력 기한 확인&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="940" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Semantic 계산&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;제한된 prefill chunk / decode&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;긴 요약이 장치를 독점하지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="940" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Voice 계산&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;다음 음성 chunk 처리&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;출력 중 새 발화면 generation 취소&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="940" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Semantic / 여유 작업&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;기아 방지 · 남은 deadline 확인&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;background는 여유 자원만 사용&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="940" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="input-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input-0" target="input-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="input-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input-1" target="input-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="input-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input-2" target="input-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="input-start-bypass" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=1.000;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input-0" target="input-3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="260" y="366" />
+              <mxPoint x="1610" y="366" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="voice-to-scheduler" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.163;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="voice-job" target="scheduler">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="voice-to-scheduler-label" value="예약된 진행" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="488.5" y="535" width="103" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="semantic-to-scheduler" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.857;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="semantic-job" target="scheduler">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="semantic-to-scheduler-label" value="제한된 작업" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="488.5" y="705" width="103" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="shared-weights" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="scheduler" target="omni">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="shared-weights-label" value="단일 owner" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1243.0" y="620.5" width="104" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="schedule-0" target="schedule-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="schedule-1" target="schedule-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="schedule-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="schedule-2" target="schedule-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-0" value="→ 관계·전달  ·  점선 = 보조 관계" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="96" width="257" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-1" value="파랑 점선: InputStarted / hold는 ASR·Omni 완료를 기다리지 않는다. 같은 원음은 VOICE session에도 전달하며 ASR에는 의미 확정 권한이 없다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="369" width="1205" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-2" value="순서와 시간 비율은 고정하지 않는다. 동시 활성 session을 batch 또는 교대로 진행하며 실제 kernel 병렬성·즉시 선점을 가정하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1094" width="1121" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-3" value="계속 말하는 동안: ASR은 별도 예산으로 진행 · Omni Voice도 기한 내 진행 · semantic이 무한히 밀리지 않을 용량이 필요하다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=18;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1172" width="1172" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-4" value="포화 대응: background 중단 → 긴 신규 추론 제한 → 확인된 상태 UI 안내. 입력 유실·기한 초과는 기능 실패로 드러낸다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=17;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1223" width="1057" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-5" value="Capture / recognition / Omni Voice 세 단계의 진행을 구분한다. 원음과 근거를 누락시키거나 잘못된 이전 결과를 게시하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=17;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1273" width="1160" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-6" value="추가 ASR · 이중 음성 처리 · 역할별 KV · 공유 장애 비용이 있다. 이 설계의 품질·latency 우세는 아직 검증되지 않았다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=17;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1323" width="1055" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-7" value="색은 책임 구분이며 우선순위 점수가 아니다. ASR과 speech 역할은 다른 기능; 실시간 예약도 의미 확정·dispatch 권한을 주지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1394" width="1089" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="key-blue" value="입력·응답" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#EAF2FF;strokeColor=#2563EB;fontColor=#2563EB;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="48" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-purple" value="의미·요청" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F3ECFF;strokeColor=#7C3AED;fontColor=#7C3AED;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="233" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-cyan" value="Context·근거" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E6F8FB;strokeColor=#0891B2;fontColor=#0891B2;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="418" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-amber" value="정책·판정" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF8E1;strokeColor=#D97706;fontColor=#D97706;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="603" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-green" value="업무·상태" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E9F9F3;strokeColor=#059669;fontColor=#059669;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="788" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-orange" value="명령·Agent" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF1E8;strokeColor=#EA580C;fontColor=#EA580C;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="973" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-gray" value="저장·의존성" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F1F5F9;strokeColor=#475569;fontColor=#475569;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-red" value="중단·실패·불확실" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FDECEC;strokeColor=#DC2626;fontColor=#DC2626;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1343" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="page-title" value="공유 Omni — 의미 해석 중에도 듣고, 두 역할을 함께 진행" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=27;" vertex="1" parent="1">
+          <mxGeometry x="48" y="15" width="1804" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="page-subtitle" value="PROPOSED · 행 A는 입력 보호 경로 · B는 모델 공유 관계 · C는 계산 교대 예시 · 수치형 기한은 아직 미확정" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="48" y="49" width="1804" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

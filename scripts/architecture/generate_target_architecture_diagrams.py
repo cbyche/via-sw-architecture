@@ -424,7 +424,7 @@ def system_overview() -> Diagram:
     lane(d, "coordination", 325, 205, 1650, 835, "INTERACTION & ORCHESTRATION — 모든 실선 Component 박스는 동일한 논리 수준", fill="#FFFFFF", stroke="#D5DDE9")
     lane(d, "shared-services", 325, 1070, 1650, 335, "VIA SHARED SERVICES — 저장과 모델 연동도 VIA 내부 책임", fill="#F1F5F9", stroke="#CBD5E1")
     caption(d, 2080, 190, "EXTERNAL RESPONSIBILITY", 17, COLORS["gray"], weight=700)
-    caption(d, 2080, 218, "같은 PC / 원격 배치 모두 가능", 15)
+    caption(d, 2080, 218, "모델 주 배치: on-device", 15)
 
     box(d, "user", 30, 545, 210, 145, "사용자", ("Voice · Text", "화면 지칭 · 선택"), COLORS["blue_fill"], COLORS["blue"])
     box(d, "interaction", 350, 545, 280, 145, "Interaction Manager", ("입력 · evidence timeline", "재생 · barge-in · S2S client", "M1 · 세부 모듈은 본문 §4"), COLORS["blue_fill"], COLORS["blue"])
@@ -464,13 +464,13 @@ def system_overview() -> Diagram:
     edge(d, "durable-access", ((610, 1180), (610, 1220)), "store-clients", "store", color=COLORS["gray"], dashed=True, bidirectional=True)
     for i, title, color, y in [(1, "M1 · Interaction Manager", "blue", 1150), (2, "M2 · Request Interpreter", "purple", 1220), (3, "M3 · Response Manager", "blue", 1290)]:
         box(d, f"model-client-{i}", 965, y, 275, 46, title, (), COLORS["white"], COLORS[color], kind="dashed")
-        label = {1: "S2S stream", 2: "semantic", 3: "응답 생성"}[i]
+        label = {1: "Voice / ASR", 2: "semantic", 3: "응답 생성"}[i]
         edge(d, f"model-call-{i}", ((1240, y+23), (1380, y+23)), f"model-client-{i}", "model", label, 1310, y+10, COLORS[color], dashed=True, bidirectional=True)
-    box(d, "model", 1380, 1135, 380, 220, "Model Access", ("VIA-owned provider adapter", "session · queue · timeout · cancel", "model runtime과 VIA 계약 연결"), COLORS["gray_fill"], COLORS["gray"])
-    box(d, "s2s", 2080, 1135, 270, 85, "S2S Model × 1", ("streaming audio · transcript",), COLORS["gray_fill"], COLORS["gray"])
-    box(d, "semantic", 2080, 1270, 270, 85, "Semantic LLM × 1", ("해석 · 필요한 응답 생성",), COLORS["gray_fill"], COLORS["gray"])
-    edge(d, "s2s-provider", ((1760, 1175), (2080, 1175)), "model", "s2s", "audio / transcript / generation", 1920, 1162, COLORS["blue"], bidirectional=True)
-    edge(d, "semantic-provider", ((1760, 1310), (2080, 1310)), "model", "semantic", "prompt / structured output", 1920, 1297, COLORS["purple"], bidirectional=True)
+    box(d, "model", 1380, 1135, 380, 220, "Model Access", ("공유 Omni adapter · 단일 scheduler", "역할별 session/KV · Voice 자원 예약", "독립 ASR 연계 · timeout · cancel"), COLORS["gray_fill"], COLORS["gray"])
+    box(d, "omni", 2080, 1100, 270, 175, "Shared Omni × 1", ("VOICE + SEMANTIC", "Thinker 약 10B + 주변 모듈", "weights 공유 · session 분리", "같은 PC · 동시 처리"), COLORS["gray_fill"], COLORS["gray"])
+    box(d, "asr", 2080, 1310, 270, 105, "Streaming ASR × 1", ("입력 인식 · 시간 근거", "독립 자원 예산 · 주 설계안"), COLORS["cyan_fill"], COLORS["cyan"])
+    edge(d, "omni-provider", ((1760, 1175), (2080, 1175)), "model", "omni", "음성 / 해석 / 응답 생성", 1920, 1162, COLORS["purple"], bidirectional=True)
+    edge(d, "asr-provider", ((1760, 1340), (2080, 1340)), "model", "asr", "audio / timed transcript", 1920, 1327, COLORS["cyan"], bidirectional=True)
 
     caption(d, 1350, 815, "STREAMING: chunk와 Request를 구분", 19, COLORS["ink"], weight=700)
     for y, t in [(851,"audio chunk는 Interaction Manager ↔ Model Access"), (881,"Controller에는 시작·정정·확정 이벤트 + evidence 참조"), (911,"Context는 기본 준비 + 변경 시 갱신 + 부족한 근거 조회"), (941,"barge-in은 즉시 로컬 재생 중단; Agent 취소는 의미 확인 후")]:
@@ -632,39 +632,33 @@ def dispatch_recovery() -> Diagram:
 
 
 def runtime_processes() -> Diagram:
-    d = detail('06-runtime-and-fault-boundaries', '배치와 장애 경계 — 논리 Component를 process 수와 혼동하지 않는다', '주 배치안 · VIA는 사용자 PC · 모델 / Agent의 local·remote 위치는 별도 binding', 1240)
-    lane(d,'pc',45,150,1295,905,'VIA / USER PC — 상태 권위는 Core, 즉시 재생 중단은 Voice process',fill='#F8FAFC',stroke='#94A3B8')
-    lane(d,'dependencies',1380,150,475,905,'DEPENDENCY BINDINGS — local 또는 remote',fill='#FCFCFD',dashed=True)
-    card(d,'voice',90,225,'Voice Process',('Interaction Manager: audio·barge-in','Model Access: S2S adapter·session','Core 승인 lease·출력 세대 검사'),'blue',w=540,h=155)
-    card(d,'s2s-port',835,225,'S2S stream port',('audio·transcript·generation','응답 생성도 같은 session owner 경유'),'blue',w=460,h=155)
-    card(d,'s2s-dep',1420,225,'S2S Runtime × 1',('provider capability에 따라','local process / remote 연결'),'gray',w=390,h=155)
-    right(d,'voice-s2s-port','voice','s2s-port',color='blue')
-    right(d,'port-s2s','s2s-port','s2s-dep',color='blue')
-    card(d,'core',90,480,'Core Process',('Controller·Interpreter·Context·Task','Response·Policy·Gateway 상태 권위','Model Access: semantic queue·adapter','Interaction Manager: timeline 결합'),'purple',w=540,h=155)
-    card(d,'llm-port',835,480,'Semantic call port',('현재 입력 우선 · summary 예산','취소·deadline·versioned contract'),'purple',w=460,h=155)
-    card(d,'llm-dep',1420,480,'Semantic LLM × 1',('모든 요청·요약이 같은 모델 공유','동시 처리·선점은 provider 기능'),'gray',w=390,h=155)
-    right(d,'core-llm-port','core','llm-port',color='purple')
-    right(d,'port-llm','llm-port','llm-dep',color='purple')
-    edge(d,'voice-core',((360,380),(360,480)),'voice','core','bounded IPC ↔ lease',525,430,COLORS['blue'],bidirectional=True)
-    card(d,'ui',90,745,'UI Process',('Chat·Task view·화면 capture','IM: Text·evidence buffer','Core와 bounded IPC'),'blue',w=250,h=155)
-    card(d,'store',380,745,'Durable Store',('owner별 transaction','Core 종료 후에도 보존','별도 DB process는 선택'),'gray',w=250,h=155)
-    card(d,'workers',835,745,'Connector Workers',('위험한 native·blocking 연동만 격리','Context / Agent adapter별 restart','Task별 process를 만들지 않음'),'orange',w=460,h=155)
-    card(d,'external',1420,745,'Sources / Agents',('VIA Context는 bounded read','실제 업무 실행은 Agent 책임'),'orange',w=390,h=155)
-    edge(d,'ui-local-stop',((90,800),(65,800),(65,425),(160,425),(160,380)),'ui','voice','local stop',160,415,COLORS['blue'])
-    edge(d,'core-ui',((215,635),(215,745)),'core','ui','IPC',215,697,COLORS['blue'],bidirectional=True)
-    edge(d,'core-store',((505,635),(505,745)),'core','store','repository',505,697,COLORS['gray'],bidirectional=True)
-    edge(d,'core-worker',((630,600),(730,600),(730,822),(835,822)),'core','workers','bounded IPC',730,710,COLORS['orange'],bidirectional=True)
-    right(d,'worker-dependency','workers','external',color='orange')
-    for item in d.edges:
-        if item.id in {'voice-s2s-port', 'port-s2s', 'core-llm-port', 'port-llm', 'worker-dependency'}:
-            item.bidirectional = True
-    for item in d.boxes:
-        if item.id in {'s2s-port', 'llm-port'}:
-            item.kind = 'dashed'
-    caption(d,90,957,'Supervisor: process 재시작·health·backoff만 담당한다. Request·Task 의미 상태나 성공 여부를 결정하지 않는다.',16)
-    caption(d,90,994,'Core 장애: 새 admission 중단 · Voice lease 만료 시 재생 중단 · UI는 마지막 확인 상태와 연결 문제 표시.',16)
-    caption(d,90,1120,'Model Access는 하나의 논리 계약이다. S2S adapter는 Voice, semantic adapter는 Core에 배치하며 모델을 복제하지 않는다.',18,COLORS['ink'],weight=700)
-    caption(d,90,1162,'Voice stop은 Core 응답을 기다리지 않는다. Task 취소는 Core의 내구 접수·Agent 확인이 필요하며 Core 장애 중 성공 접수를 약속하지 않는다.',16)
+    d = detail('06-runtime-and-fault-boundaries', '배치와 장애 경계 — 입력은 독립, Omni 가중치는 한 곳에', '공유 on-device Omni 주안 · process 색은 책임 · 모델 내부는 의존성 · 자원 수치는 미검증', 1470)
+    lane(d,'pc',45,150,1810,1190,'USER PC — Voice / ASR / Core / Shared Inference / UI / Connector 경계',fill='#F8FAFC',stroke='#94A3B8')
+    card(d,'voice',90,235,'Voice Process',('IM: capture · playback · local stop','AEC · 활동 감지 · 짧은 buffer','Model Access client · weights 없음'),'blue',w=400,h=165)
+    card(d,'asr',650,235,'Speech Input Worker',('Streaming ASR × 1 · 전용 입력 근거','CPU 예산 · bounded queue · 시간/revision','Omni 장애·semantic 완료를 기다리지 않음'),'cyan',w=500,h=165)
+    right(d,'voice-asr','voice','asr','audio ↔ evidence','cyan')
+    card(d,'input-note',1340,235,'입력 보호 조건',('Capture + ASR 인식 + Omni Voice 진행','녹음만 쌓아 두는 것은 정상 동시 처리 아님','별도 process ≠ 물리 자원 완전 격리'),'amber',w=450,h=165)
+    card(d,'core',90,560,'Core Process',('Controller · Interpreter · Context · Task','Response · Policy · Gateway 상태 권위','IM timeline · Model Access client','semantic 가중치를 별도 적재하지 않음'),'purple',w=400,h=190)
+    card(d,'service',650,530,'Shared Inference Service',('Model Access server · Omni adapter','단일 scheduler / weights owner','VOICE · SEMANTIC 별도 session/KV','Voice 예약 + semantic 최소 진행량','chunked prefill · deadline · cancel'),'gray',w=500,h=250)
+    card(d,'weights',1340,530,'Omni Model × 1',('Thinker 약 10B + encoder / speech 모듈','같은 PC · 모듈별 한 번 적재','두 역할이 같은 weights를 사용','가중치 공유 ≠ 같은 Context / 권한'),'gray',w=450,h=250)
+    right(d,'core-service','core','service','semantic / 생성','purple')
+    right(d,'service-weights','service','weights','공유 추론','gray')
+    edge(d,'voice-core',((290,400),(290,560)),'voice','core','input / hold / lease',385,495,COLORS['blue'],bidirectional=True)
+    edge(d,'voice-service',((490,370),(580,370),(580,485),(800,485),(800,530)),'voice','service','VOICE stream / 출력',875,470,COLORS['blue'],bidirectional=True)
+    card(d,'ui',90,945,'UI Process',('Text · 화면 evidence','Core 연결 문제 표시','명시적 local stop'),'blue',w=400,h=150)
+    card(d,'store',650,945,'Durable Store',('owner별 transaction · 복구 기록','Core 종료 후에도 데이터 보존','모델 KV는 authoritative state 아님'),'gray',w=500,h=150)
+    card(d,'worker',1340,945,'Connector Workers',('위험한 native·blocking 연동 격리','Context Source / Agent와 통신','외부 업무는 Downstream Agent'),'orange',w=450,h=150)
+    edge(d,'core-ui',((290,750),(290,945)),'core','ui','bounded IPC',185,860,COLORS['blue'],bidirectional=True)
+    edge(d,'core-store',((400,750),(400,850),(900,850),(900,945)),'core','store','repository',675,835,COLORS['gray'],bidirectional=True)
+    edge(d,'core-worker',((460,750),(460,815),(1565,815),(1565,945)),'core','worker','bounded IPC',1380,800,COLORS['orange'],bidirectional=True)
+    edge(d,'ui-stop',((90,1020),(65,1020),(65,315),(90,315)),'ui','voice',color=COLORS['blue'])
+    for e in d.edges:
+        if e.id in {'voice-asr','core-service','service-weights'}: e.bidirectional = True
+    caption(d,90,1150,'Omni service 장애: 두 추론 역할은 함께 중단. Capture · ASR · local stop · Agent event 수신은 유지; UI에서 처리 불가 안내.',17,COLORS['ink'],weight=700)
+    caption(d,90,1190,'Core 장애: 새 admission 중단 · Voice lease 만료 시 playback 정지 · Task 취소는 내구 접수 전까지 성공으로 표시하지 않음.',16)
+    caption(d,90,1230,'ASR 장애: bounded 입력 보존 후 재연결 · gap 명시 · 불완전 근거로 위임 금지. Supervisor는 상태 의미를 결정하지 않음.',16)
+    caption(d,90,1270,'CPU / accelerator / KV / 메모리 대역폭 / 열 예산을 함께 확인한다. 제품 장비에서의 적합성은 아직 미측정이다.',16)
+    caption(d,90,1400,'선은 process 간 계약이다. UI → Voice 왼쪽 경로는 명시적 local stop이며 Core나 추론 서비스 응답을 기다리지 않는다.',16,COLORS['ink'],weight=700)
     return d
 
 
@@ -701,14 +695,14 @@ def four_asr_paths() -> Diagram:
 def response_delivery() -> Diagram:
     d = detail('08-response-and-interruption', '응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권', '박스는 실행 단계 · 화면 상세와 Voice 요약은 같은 사실에서 별도로 구성한다', 1440)
     strip(d,'s2s',150,'A · S2S 직접 응답 — 명백한 자체 지식 질문만 허용','blue',[
-        ('입력 stream',('Interaction Manager → Model Access','같은 S2S가 transcript·답변 생성')),
+        ('입력 stream',('Interaction Manager → Model Access','ASR 입력 근거 + 공유 Omni 음성 역할')),
         ('Provisional generation',('IM buffer에 handle·audio 보류','input revision·출력 세대 결합')),
         ('Controller admission',('좁은 direct 허용 / 나머지는 Core','최소 admission 계약은 설계 중')),
         ('Response Manager',('publication 기록 후 handle release','IM에서만 실제 표시·재생')),
     ],'단순 첫 질문도 허용한다. 과거 대화 지칭·자료·Task 해석은 Core 책임이며 S2S에 Context 탐색·업무 planning을 붙이지 않는다.')
     strip(d,'core-response',435,'B · CORE / AGENT 응답 — 확인된 사실과 질문을 같은 출력 계약으로 전달','blue',[
         ('게시할 사실·질문',('Controller가 identity·scope admission','Task event는 새 발화 없이 도착')),
-        ('필요한 응답 구성',('Response Manager → Model Access','template / 공유 LLM 요약 / 같은 S2S')),
+        ('필요한 응답 구성',('Response Manager → Model Access','template / Omni 해석·음성 역할')),
         ('Publication outbox',('내용·source·version·출력 세대','확정 payload와 생성 내용 검사')),
         ('Interaction Manager',('상세 Text 표시 · Voice는 차례 대기','채널별 실제 전달 receipt 반환')),
     ],'상세 Text와 Voice 요약은 같은 문자열이 아니다. 대상·상태·중요한 실패는 일치시키고 Voice 요약문과 audio를 연결한다.')
@@ -775,6 +769,37 @@ def policy_memory() -> Diagram:
     caption(d,90,1050,'Consent와 Agent Action Approval은 별도 계약이다. VIA는 질문·답을 정확히 중계하며 실제 업무 Action의 권한 강제는 Agent 책임이다.',16,COLORS['ink'],weight=700)
     return d
 
+
+def shared_omni() -> Diagram:
+    d = detail('11-shared-omni-scheduling', '공유 Omni — 의미 해석 중에도 듣고, 두 역할을 함께 진행', '행 A는 입력 보호 경로 · B는 모델 공유 관계 · C는 계산 교대 예시 · 수치형 기한은 아직 미확정', 1490)
+    strip(d,'input',150,'A · INPUT — 추론 결과를 기다리지 않고 수신·인식을 계속한다','cyan',[
+        ('Voice capture',('microphone · sample sequence','AEC · 활동 감지 · local stop')),
+        ('독립 Streaming ASR',('전용 CPU 예산 · partial / final','시간 근거 · 정정 revision · gap')),
+        ('IM timeline',('원음 + 당시 화면 + 전사 revision','Omni 불일치는 별도 proposal')),
+        ('Controller',('Final → 의미 해석 · host 검증','입력 시작 hold는 별도 즉시 경로')),
+    ],'파랑 점선: InputStarted / hold는 ASR·Omni 완료를 기다리지 않는다. 같은 원음은 VOICE session에도 전달하며 ASR에는 의미 확정 권한이 없다.')
+    edge(d,'input-start-bypass',((260,347),(260,366),(1610,366),(1610,347)),'input-0','input-3',color=COLORS['blue'],dashed=True)
+    lane(d,'roles',45,435,1810,410,'B · SHARED MODEL — 별도 session / KV / 권한, 같은 가중치',fill='#F8FAFC')
+    card(d,'voice-job',90,505,'VOICE session',('audio stream · 좁은 direct/Core 제안','승인된 내용을 음성화 · tool 없음'),'blue',w=340,h=130)
+    card(d,'semantic-job',90,675,'SEMANTIC session',('목표·referent·Task·handling 제안','응답 구성 / 기억 요약은 별도 job'),'purple',w=340,h=130)
+    card(d,'scheduler',650,530,'Model Access scheduler',('VOICE 연산·KV 예약','semantic 최소 진행량 + deadline','긴 prefill / encoder 작업 상한','취소·admission·bounded microbatch'),'gray',w=500,h=245)
+    card(d,'omni',1440,530,'Omni weights × 1',('Thinker 약 10B + 주변 모듈','두 역할의 Context는 합치지 않음','모델 장애는 두 역할에 동시 영향','ASR의 자원 비용은 별도'),'gray',w=340,h=245)
+    edge(d,'voice-to-scheduler',((430,570),(650,570)),'voice-job','scheduler','예약된 진행',540,550,COLORS['blue'],bidirectional=True)
+    edge(d,'semantic-to-scheduler',((430,740),(650,740)),'semantic-job','scheduler','제한된 작업',540,720,COLORS['purple'],bidirectional=True)
+    right(d,'shared-weights','scheduler','omni','단일 owner','gray')
+    strip(d,'schedule',875,'C · ACCELERATOR — 전체 호출을 직렬 잠그지 않고 짧은 계산 단위로 교대한다','purple',[
+        ('Voice 계산',('새 audio chunk encode / prefill','필요한 decode · 입력 기한 확인')),
+        ('Semantic 계산',('제한된 prefill chunk / decode','긴 요약이 장치를 독점하지 않음')),
+        ('Voice 계산',('다음 음성 chunk 처리','출력 중 새 발화면 generation 취소')),
+        ('Semantic / 여유 작업',('기아 방지 · 남은 deadline 확인','background는 여유 자원만 사용')),
+    ],'순서와 시간 비율은 고정하지 않는다. 동시 활성 session을 batch 또는 교대로 진행하며 실제 kernel 병렬성·즉시 선점을 가정하지 않는다.')
+    caption(d,90,1190,'계속 말하는 동안: ASR은 별도 예산으로 진행 · Omni Voice도 기한 내 진행 · semantic이 무한히 밀리지 않을 용량이 필요하다.',18,COLORS['ink'],weight=700)
+    caption(d,90,1240,'포화 대응: background 중단 → 긴 신규 추론 제한 → 확인된 상태 UI 안내. 입력 유실·기한 초과는 기능 실패로 드러낸다.',17)
+    caption(d,90,1290,'Capture / recognition / Omni Voice 세 단계의 진행을 구분한다. 원음과 근거를 누락시키거나 잘못된 이전 결과를 게시하지 않는다.',17)
+    caption(d,90,1340,'추가 ASR · 이중 음성 처리 · 역할별 KV · 공유 장애 비용이 있다. 이 설계의 품질·latency 우세는 아직 검증되지 않았다.',17)
+    caption(d,90,1410,'색은 책임 구분이며 우선순위 점수가 아니다. ASR과 speech 역할은 다른 기능; 실시간 예약도 의미 확정·dispatch 권한을 주지 않는다.',16)
+    return d
+
 def diagrams() -> list[Diagram]:
     return [
         system_overview(),
@@ -787,6 +812,7 @@ def diagrams() -> list[Diagram]:
         response_delivery(),
         compound_requests(),
         policy_memory(),
+        shared_omni(),
     ]
 
 

@@ -45,9 +45,36 @@ VIA는 사용자와 여러 Downstream Agent 사이의 **Agent-neutral Interactio
 
 ## Interaction과 업무가 연결되는 방식
 
-![VIA 목표 구조 — 제안 상태](docs/architecture/12-decisions/target-architecture/diagrams/01-system-overview.svg)
+```mermaid
+flowchart LR
+    U["사용자<br/>Voice / Text / 화면 interaction"]
 
-[draw.io 편집 원본](docs/architecture/12-decisions/target-architecture/diagrams/01-system-overview.drawio)
+    subgraph VIA["VIA — 사용자 PC에서 실행"]
+        I["Voice Runtime / Text Interaction"]
+        C["Conversation / Context / Request 이해"]
+        H{"Request Handling"}
+        D["Direct Response"]
+        O["Task / Agent Orchestration"]
+        R["Voice 핵심 응답 / Text 상세·기록"]
+        S["Conversation / Request / Task 상태"]
+    end
+
+    M["S2S Model + Semantic LLM<br/>Local 또는 Remote"]
+    A["Downstream Agent<br/>Reasoning / Planning / Execution"]
+    T["OS / App / Web / External Service"]
+
+    U --> I
+    I <--> M
+    I --> C --> H
+    H -->|"직접 처리"| D --> R
+    H -->|"업무 위임·제어"| O --> A
+    A -->|"Progress / Question / Result"| O
+    A -->|"실제 업무 수행"| T
+    O --> R --> U
+    C <--> S
+    O <--> S
+    R -. "실제 전달 내용 기록" .-> S
+```
 
 VIA는 사용자 입력을 하나 이상의 논리적 Request로 정리하고, 필요한 Context와 관련 Task를 식별한다. 정보가 부족하면 Clarification을 요청하고, 충분하면 S2S Direct Response, VIA Core Direct Response 또는 Downstream Agent Handling 중 적절한 경로로 연결한다. Agent의 진행·질문·결과도 원래 Conversation과 Task로 돌아온다.
 
@@ -70,7 +97,7 @@ Voice Connection이 끝나도 Conversation이나 Task는 끝나지 않는다. Di
 ## 고정된 Architecture 원칙
 
 - VIA software 자체와 Voice Runtime은 사용자 PC에서 실행한다. Model과 다른 dependency는 local 또는 remote일 수 있다.
-- 목표 VIA는 **on-device Omni 1개를 음성·semantic 두 역할이 공유**한다. 역할별 Context·session·권한은 분리하고 모델 가중치는 복제하지 않는다. Semantic 처리 중에도 발화 수신·인식을 유지한다. 경량 Streaming ASR을 독립 입력 근거 경로로 두는 주 설계와 전체 자원 비용은 [공유 모델 설계](docs/architecture/12-decisions/target-architecture/shared-omni-runtime.md)를 따른다.
+- VIA는 **S2S Model 1개와 semantic LLM 1개**를 사용한다. Component·Task·semantic stage별로 Model을 별도 적재하거나 복제하지 않는다.
 - Voice와 Text는 같은 논리적 Conversation, Context와 Task 체계를 공유한다.
 - 모든 user-facing 응답은 Text로 Chat UI와 Conversation에 남기고, Voice가 활성화되어 있으면 즉시 알아야 할 핵심을 짧게 말한다.
 - S2S Direct Response도 VIA Conversation의 일부다. 기록을 위해 같은 Request를 Core에서 다시 실행하거나 중복 응답하지 않는다.

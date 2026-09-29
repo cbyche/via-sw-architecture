@@ -83,7 +83,7 @@ flowchart LR
 
 ### A. VIA가 사용하는 모델의 변화 — M-01~09
 
-현재 목표는 **공유 on-device Omni 1개를 음성·semantic 역할로 사용**하며 입력 보호용 경량 Streaming ASR을 주안으로 설계한다. Component·Task별 가중치 복제를 하지 않는다. 아래 변화 집합은 유지하되 역할 API 변경과 공유 checkpoint 교체를 구분한다. Checkpoint 교체는 두 역할 모두에 영향을 줄 수 있으므로 양쪽 회귀를 확인한다. 추가 helper 필요성과 비용을 명시하며, 기존 DP의 두 모델 조건은 당시 reference로 보존한다.
+공통 기반으로 **S2S 1개·semantic LLM 1개**를 유지하고 Component별·Task별 모델 복제를 허용하지 않는다. 역할별 프롬프트·세션은 공유 모델을 사용한다. VIA-DP-03 A는 별도 timestamp-capable Streaming ASR 1개가 명시적 Architecture dependency인 예외이며, 그 추가·교체 비용을 숨기지 않는다. 그 밖의 추가 보조 모델이 필요해지면 변경 성공이 아니라 현재 제약에서의 기능 미충족으로 기록한다.
 
 모든 항목에서 S2S 사용, 사용자 응답 창구, 대화/Task 연속성과 기존 기능 요구는 유지한다. 다른 모델로 바꾸면서 요구사항을 낮춘 것을 성공적인 교체로 세지 않는다.
 

@@ -80,6 +80,6 @@ Component가 있다는 이유만으로 package를 만들지 않는다. 새 packa
 ## 아직 바뀌지 않은 사실
 
 - 제품 경계, 대표 Use Case와 현재 QA 의미는 01~11의 active 문서를 따른다.
-- S2S 1개와 공유 semantic LLM 1개라는 기반을 유지한다. 목표 Architecture 문서가 실제 dependency capability 확보를 주장하지 않는다.
+- 현재 목표는 on-device Omni 1개를 음성·semantic 두 역할이 공유한다. 입력 보호용 ASR을 포함한 주안은 target 문서에서 발전시키며, 이전 DP의 모델 portfolio는 그대로 보존한다. 실제 capability 확보·성능 확인은 별개다.
 - 기존 accepted/deferred ADR의 상태와 caveat는 유지한다. 새 목표 구조와 충돌하면 숨기지 않고 재검토 필요성을 기록한다.
 - 현재 새 후보 구현과 Core-ASR 결과는 없다. 기존 reference·archive evidence를 새 Architecture의 결과로 소급하지 않는다.

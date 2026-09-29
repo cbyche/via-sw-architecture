@@ -19,7 +19,7 @@
 | 접근법 | 완성된 목표 Architecture를 먼저 설계하고 주요 구조 선택과 강한 대안은 그 이후 구성 | 사용자 지정 |
 | 품질 우선순위 | 목표 Architecture 설계는 1순위 QA-19 semantic accuracy, 2순위 QA-09 responsiveness, 3순위 QA-29 modifiability, 4순위 QA-39 reliability/recoverability. 네 ASR 모두 필수 | 사용자 지정 |
 | 경계 | VIA는 interaction·orchestration, Agent는 업무 추론·계획·도구·실행 | 사용자 지정 |
-| 모델 | S2S 1개와 공유 semantic LLM 1개; Component·Task별 복제 금지 | 사용자 지정 |
+| 모델 | on-device 공유 Omni 1개, 음성·semantic 역할 분리, Component·Task별 가중치 복제 금지; 필요 ASR 허용 | 사용자 지정·이전 두 모델 전제 대체 |
 | 기존 분해 | 기존 결정 번호·대안·순서에 구속되거나 다시 매핑하지 않음 | 사용자 지정 |
 | 이름 | 더 직관적인 Component 이름으로 변경 가능 | 사용자 지정 |
 | 진행 | 전체 구조부터 대화하며 수정하고, 합의 후에만 Decision Package·측정 근거 설계 | 사용자 지정 |
@@ -48,7 +48,7 @@
 | command epoch 기반 dispatch 선형화 | 독립 검토 후 보강·Agent capability 열림 | [동시성과 전송](./architecture.md#11-동시성정정취소전송) |
 | Agent inbox·Task projection·response publication 복구 | 독립 검토 후 보강·상태 전이 열림 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
 | domain event outbox·dispatch CAS·DELIVERY_UNKNOWN | 그림 기반 점검에서 주 설계 구체화·구현 미검증 | [설계 완결성 점검](./design-completeness.md) |
-| S2S adapter는 Voice, semantic adapter는 Core에 배치 | 제안·실제 dependency capability 확인 필요 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
+| Voice/Core client + 공유 Omni service + 독립 ASR worker | 주안 개정·실제 자원/기능 확인 필요 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
 | 최소 S2S 직접 응답 | 명백한 자체 지식 질문만 허용하는 방향 합의; 최소 admission 계약 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
 
 ## 이번 대화에서 확인한 제품 행동
@@ -64,6 +64,13 @@
 | S2S 자체 지식 질문만 직접 응답 | 사용자 지정; 첫 단순 질문도 허용, 대화 지칭·자료·Task 해석은 Core. 후속 대화 fast path 확장안은 미채택 |
 | 한 업무는 통째로 Agent, 독립 업무는 별도 Task | 합의; 요약 후 발송은 한 Task. 동일 Agent를 써도 독립 업무 identity는 분리 |
 | 기억 설계·모델 기능 확인 | 사용자 요청에 따라 진행; 기억 세부 정책·모델 적합성은 완료 아님 |
+
+## 공유 Omni 전환에서 확인한 것
+
+- 사용자 지정: 하나의 Omni를 두 역할로 사용하며 semantic 중에도 발화 수신·인식과 동시 사용을 지원한다. On-device 약 10B 개발 방향이며 reference는 일부 fine-tuning한 Qwen3-Omni-30B-A3B-Instruct다.
+- 사용자 위임: 모델팀 계약을 이 설계에서 정의하고 필요한 ASR을 포함할 수 있다.
+- 주안: 독립 Streaming ASR, 단일 shared inference owner, 역할별 KV·권한, Voice 연산 예약·chunked scheduling·semantic 최소 진행량. 세부안은 사용자 검토 전이며 [상세 문서](./shared-omni-runtime.md)에 있다.
+- 공식 보고서에서 30B가 Thinker 크기임을 확인했다. 같은 기준의 10B와 전체 모델·메모리 합계를 구분한다. 품질 동등성·PC 성능은 미검증이다.
 
 ## 다음 검토 주제
 
@@ -107,5 +114,6 @@
 | 2026-09-29 | 그림 02~07 재구성, 08 응답·중단 / 09 복합 요청 / 10 Context·권한·기억 추가; 알림 유실·dispatch 경쟁·전달 불명·Model Access 배치·실제 사용 시 권한 검사·queue 포화 동작 보강; 18개 UC의 경로와 열린 질문 점검 | 사용자 요청에 따른 자체 설계 검토; 문서 완결성 보강이며 실제 구현·모델·성능 검증 및 전체 구조 합의는 아님 |
 | 2026-09-29 | 지칭 clarification·미전송 보류·VIA/Agent 경계·사용자 발화 비중단·화면 상세/음성 요약 원칙 반영; 그림 08에 알림 대기 경로 추가; S2S 조건부 직접 경로·중단 후 재개·복합 실패·기억 계층 검토안 기록 | 명시한 제품 행동만 합의/사용자 지정; 구조 제안과 실제 모델·성능은 열림 |
 | 2026-09-29 | S2S를 명백한 독립 자체 지식 질문으로 축소; 후속 대화 fast path 제안 철회; 요약·발송을 한 Task로 위임하도록 본문·그림 09 교정; 재개 정책 합의 기록; 모델 기능 공식 문서 1차 확인 | 사용자 지정 범위 반영; 최소 admission·기억·실제 모델 연동은 계속 설계/확인 중 |
+| 2026-09-29 | 사용자 지정에 따라 두 모델 전제를 공유 on-device Omni·역할 분리로 개정; 별도 ASR·동시 입력·자원 예약 주안, Qwen parameter 근거와 모델팀 계약, 그림 01·06·08 개정 및 11 추가 | 공유 방향·동시 입력·필요 ASR 허용은 사용자 지정; 구체 배치·스케줄링·모델 실현은 제안/미검증 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.

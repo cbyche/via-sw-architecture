@@ -64,7 +64,7 @@
 
 **State Store는 VIA 내부의 공유 저장 서비스다.** Conversation·Task뿐 아니라 Context memory·policy·송수신·응답 기록을 함께 지원하므로 semantic Control Plane에만 속하게 두지 않는다. 저장 대기가 dispatch·publication의 latency 경로에 포함될 수 있다. 영속 데이터는 Core process 종료 후에도 남아야 하지만, 별도 DB process를 강제하는 것은 아니다. 각 상태 소유자가 repository·transaction port를 통해 자기 상태를 기록한다.
 
-점선 `S`와 `M1~M3`는 위 Component들의 공통 서비스 접근 관계를 펼쳐 놓은 표기다. 추가 Component, 모델 복제본 또는 메시지 bus가 아니다. S는 명시된 상태 소유자들의 Store 접근이며, M1은 Interaction Manager의 S2S stream, M2는 Interpreter의 semantic 해석, M3는 Response Manager의 필요한 요약·음성 생성이다. 모두 하나의 Model Access를 통해 같은 S2S 1개·semantic LLM 1개를 사용한다.
+점선 `S`와 `M1~M3`는 위 Component들의 공통 서비스 접근 관계를 펼쳐 놓은 표기다. 추가 Component, 모델 복제본 또는 메시지 bus가 아니다. S는 명시된 상태 소유자들의 Store 접근이며, M1은 Interaction Manager의 S2S stream, M2는 Interpreter의 semantic 해석, M3는 Response Manager의 필요한 요약·음성 생성이다. M1~M3는 Model Access를 통해 하나의 on-device Omni를 공유한다. 음성·semantic은 역할이며 별도 가중치가 아니다. M1의 Streaming ASR 경로는 발화 인식·시간 근거를 위한 별도 경량 dependency다.
 
 박스 색은 책임, 선 색은 전달 계약의 영역을 뜻한다. 파랑은 interaction·publication, 보라는 의미 제안·확정, 청록은 evidence·Context, 노랑은 policy·consent, 초록은 Task 상태·결과, 주황은 Agent command, 회색은 저장·모델 연동이다. 초록 event도 수신 즉시 확정 사실이 되는 것은 아니다. `→`는 전달 방향, `↔`는 조회·반환처럼 양쪽 메시지가 있는 protocol, 점선은 공통 서비스 접근 표기다. 양방향은 공동 상태 소유를 뜻하지 않는다. 선 두께에는 추가적인 권한·우선순위 의미가 없다.
 
@@ -81,7 +81,7 @@
 | Response Manager | 확정 사실에서 상세 Text·짧은 Voice를 구성하고 게시·발화 차례·실제 전달 범위를 관리 | publication outbox, 출력 소유권, 채널별 전달 상태 |
 | Policy Manager | Context 접근·제공·기억 사용 통제 | 현재 권한, consent 범위·revision |
 | State Store | transaction, 송수신 기록, 근거 참조, 복구 저장 | 영속 데이터; 상태의 의미는 각 소유 Component가 결정 |
-| Model Access | S2S 1개와 semantic LLM 1개의 provider session·adapter, 호출 우선순위, timeout·취소·예산 | 모델별 queue, provider session·cache 관리 정보 |
+| Model Access | 공유 Omni의 두 역할·ASR 연계, 단일 추론 scheduler·가중치 owner, 자원 admission·timeout·취소 | 역할별 session·KV, job queue·예산·runtime incarnation |
 
 Turn Workspace는 Controller 내부의 요청별 작업 데이터다. Decision Validator는 Controller의 확정 절차에 포함한다. 별도 서비스로 분리해 매 요청에 추가 왕복을 강제하지 않는다.
 
@@ -91,10 +91,10 @@ Interaction Manager는 기존 Interaction Runtime의 이름을 바꾼 것이다.
 | --- | --- | --- |
 | Channel I/O | Voice·Text·UI 입출력, microphone·playback, barge-in, 실제 표시·재생 | 응답 내용·routing·Task 확정 |
 | Evidence Capture | 화면·window·focus·pointer·selection revision 수집 | 지칭 대상의 의미 확정 |
-| Timeline & Buffer | 입력 revision과 evidence 시각 결합, gap·clock mapping, S2S transcript·speculative generation handle 연결 | speculative 응답의 게시 허용 |
+| Timeline & Buffer | 입력 revision과 evidence 시각 결합, gap·clock mapping, ASR 전사·Omni 입력 해석·generation handle 연결 | speculative 응답의 게시 허용 |
 | Turn-Taking Control | 사용자 발화·일시 멈춤·종료 후보와 현재 재생 상태, 발화 차례 검사·로컬 stop | 요청 의미·Task 확정, 임의의 출력 admission |
 
-S2S provider 연결 자체는 Model Access가 소유한다. Interaction Manager는 Model Access client로 audio·control stream을 주고 transcript·generation handle을 받는다. 이 구분으로 device·OS adapter 변화와 model provider 변화가 같은 모듈에 섞이지 않게 한다. Model Access는 모델을 복제하거나 내부에 새 모델을 정의하는 Component가 아니라 VIA와 모델 runtime 사이의 adapter다.
+S2S provider 연결 자체는 Model Access가 소유한다. Interaction Manager는 Model Access client로 audio·control stream을 주고 transcript·generation handle을 받는다. 이 구분으로 device·OS adapter 변화와 model provider 변화가 같은 모듈에 섞이지 않게 한다. Model Access는 논리적인 연동·자원 관리 책임이다. Client는 Voice/Core에, Omni adapter·scheduler·가중치 owner는 Shared Inference Service에, ASR adapter는 독립 Speech Input Worker에 둔다. 별도 process의 client가 가중치를 복제하지 않는다.
 
 State Store에 저장한다고 상태 소유권이 Store로 넘어가지 않는다. Aggregate별 단일 writer를 유지한다. Controller는 Task 변경을 Task Manager에 요청하고, Task Manager는 Gateway의 durable inbox event를 검증한 뒤 projection을 바꾼다. 여러 상태를 함께 확정해야 할 때는 owner가 State Store transaction을 요청한다.
 
@@ -135,14 +135,14 @@ Request는 `RESOLVING`, `WAIT_CONTEXT`, `WAIT_USER`, `WAIT_DEPENDENCY`, `READY`,
 
 | 입력·이벤트 | 실제 경로와 동작 |
 | --- | --- |
-| Audio chunk | Interaction Manager가 Model Access를 통해 S2S에 연속 전달한다. Controller·Context Manager로 매 chunk를 중계하지 않는다. |
+| Audio chunk | Interaction Manager가 독립 Streaming ASR과 공유 Omni의 VOICE session에 Model Access 계약으로 전달한다. Capture는 추론 완료를 기다리지 않으며 Controller·Context Manager로 매 chunk를 중계하지 않는다. |
 | InputStarted | Controller가 provisional Turn과 입력 revision을 만들고 현재 권한 안에서 값싼 기본 Context 준비를 요청한다. |
 | 화면·선택·transcript revision | Interaction Manager가 timeline과 buffer에 기록한다. Controller에는 변경·gap·revision 참조를 전달하며 중간 알림은 묶을 수 있다. 원본 시점 근거는 합쳐 없애지 않는다. 관련 identity·선택·source가 바뀐 경우에만 기본 Context를 갱신한다. |
 | InputFinal | 최종 입력 revision과 해당 구간 evidence 참조를 고정해 Controller에 전달한다. Interpreter는 이 revision으로 해석한다. 아직 partial transcript라면 확정 입력으로 취급하지 않는다. |
 | 추가 근거 필요 | Interpreter가 부족한 field와 bounded read를 제안한다. Controller가 권한·예산을 확인해 Context Manager에 요청하고 제한된 재해석으로 돌아온다. |
 | Barge-in / 새 입력 | Interaction Manager가 현재 재생을 즉시 멈추고 출력 세대를 무효화한다. Controller에는 새 입력·보류 신호, Response Manager에는 중단 receipt를 비동기로 전달한다. 재생 중단은 semantic 해석이나 게시 취소 승인을 기다리지 않는다. |
 
-예를 들어 “이 그래프를… 아니, 저 표를 넣어줘”에서는 두 지칭 시점의 근거를 보존하지만 audio packet마다 자료를 검색하지 않는다. 최종 발화에서 정정한 대상을 해석하고 확정 전에는 위임하지 않는다. 수정 발화가 기존 command의 전송과 경쟁하면 §11의 dispatch 경계를 적용한다. S2S가 partial transcript를 제공하지 않는 경우에도 audio·화면 시점 근거를 보존하고 최종 transcript에 결합해야 하며, 그 기능 확보는 별도 검증 대상이다.
+예를 들어 “이 그래프를… 아니, 저 표를 넣어줘”에서는 두 지칭 시점의 근거를 보존하지만 audio packet마다 자료를 검색하지 않는다. 최종 발화에서 정정한 대상을 해석하고 확정 전에는 위임하지 않는다. 수정 발화가 기존 command의 전송과 경쟁하면 §11의 dispatch 경계를 적용한다. 정규 입력 기록은 Streaming ASR의 revision·시간 근거를 사용한다. Omni가 다르게 해석하면 원음을 참조한 불일치 proposal로 남기고 Controller가 관련 revision을 보완한다. 시간 근거 부재를 현재 화면으로 채우지 않는다.
 
 Interpreter는 목표·대상·Task 관계·처리 방향과 경쟁 후보를 함께 제안한다. 업무 수행 순서나 tool 계획을 새로 만들지 않는다. `READY` 여부는 모델이 선언하지 않고 Controller가 field별 상태와 다음 조건으로 계산한다.
 
@@ -159,7 +159,7 @@ Interpreter는 목표·대상·Task 관계·처리 방향과 경쟁 후보를 �
 
 ## 7. Semantic LLM 계약과 호출 예산
 
-공유 semantic LLM 1개가 목표·대상·Task 관계·routing을 통합 해석한다. 각 판단마다 필수 별도 모델 호출을 두지 않는다.
+공유 Omni의 semantic 역할이 목표·대상·Task 관계·routing을 통합 해석한다. 이하 semantic LLM은 이 논리 역할을 뜻하며 별도 모델 적재가 아니다. 각 판단마다 필수 별도 모델 호출을 두지 않는다.
 
 | 입력 | 내용 |
 | --- | --- |
@@ -191,7 +191,7 @@ LLM이 요청하는 도구는 bounded read-only Context 도구뿐이다. Host가
 | S2S 직접 응답 | 외부·개인·화면·과거 대화·Task·Action·최신성·복합 관계가 필요 없는 self-contained Voice 질문 | admission 판정 방식에 따라 생략 가능 |
 | Core 처리 후 음성 전달 | 화면·자료·Task 판단, clarification, 위임, 진행·결과 | 필요한 해석·구성에 사용 |
 
-S2S는 Model Access를 통해 speculative 응답 생성을 수행할 수 있지만 스스로 게시 권한을 갖지 않는다. Channel I/O가 audio stream을 Model Access에 보내면 Model Access는 transcript revision과 speculative generation handle을 Timeline & Buffer로 돌려준다. Handle은 입력 revision·session·출력 세대에 결합하며 audio는 Interaction Manager의 buffer에 보류한다. Interaction Manager는 이 handle을 Input + Evidence Record와 함께 Controller에 전달할 수 있지만 승인 전에는 재생하지 않는다.
+S2S는 Model Access를 통해 speculative 응답 생성을 수행할 수 있지만 스스로 게시 권한을 갖지 않는다. Channel I/O가 audio stream을 Model Access에 보내면 Model Access는 ASR transcript revision, Omni의 입력 해석과 speculative generation handle을 출처별로 Timeline & Buffer에 돌려준다. Handle은 입력 revision·session·출력 세대에 결합하며 audio는 Interaction Manager의 buffer에 보류한다. Interaction Manager는 이 handle을 Input + Evidence Record와 함께 Controller에 전달할 수 있지만 승인 전에는 재생하지 않는다.
 
 Controller는 모든 입력에 Request identity를 만들고 직접 경로의 허용 여부를 `Direct Admission Record`로 기록한 뒤 한 경로에만 응답 소유권을 부여한다. 허용한 경우 generation handle과 확정 proposition을 Canonical Response Payload에 묶어 Response Manager에 보낸다. Response Manager가 handle·Request·input revision·출력 세대를 확인해 Interaction Manager에 release 또는 cancel을 명령하고, Interaction Manager는 실제 표시·재생·중단 receipt를 돌려준다. 따라서 직접 S2S 응답도 `Model Access ↔ Interaction Manager ↔ Response Manager` 전달 protocol과 `Controller → Response Manager` admission을 모두 지난다. 외부 근거·개인 자료·화면 지칭·과거 대화·Task 관계·Action/control·최신성·복합 관계의 가능성이 하나라도 남으면 Core로 보낸다. admission 전 audio는 재생하지 않고, 기각한 generation은 폐기한다.
 
@@ -203,11 +203,11 @@ S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 �
 
 ### 확보해야 하는 모델 기능
 
-- S2S: 입력 기록, 지칭 시각 근거, host 출력 제어, barge-in, 지정한 응답 의미를 보존하는 음성 생성.
+- Speech Input: Streaming ASR의 입력 기록·revision·지칭 시각 근거. Omni 음성 역할: 제한된 직접/Core 제안과 지정 응답의 의미 보존 음성 생성. Host: 출력 제어와 local barge-in.
 - 공유 semantic LLM: 구조화된 요청 해석. UI 구조 정보가 없는 이미지 화면까지 이해하려면 시각 근거 처리 기능.
-- Core의 응답도 같은 S2S로 음성화한다. 독립 ASR·OCR·TTS/helper 모델을 몰래 추가하지 않는다.
+- Core의 응답도 같은 Omni의 음성 역할로 음성화한다. 입력 근거용 경량 Streaming ASR은 명시된 별도 dependency다. 추가 VAD·aligner·OCR·TTS 등이 필요하면 모델 inventory·비용을 드러내며 자동으로 포함하지 않는다.
 
-이 기능이 실제 dependency에 확보되었다는 주장이 아니다. 시각 입력이나 시간 근거를 제공하지 않는 모델로 전 기능이 가능한 것처럼 설명하지 않는다. 제품 모델 선정·연결 전 capability 확인이 필요하다.
+이 기능이 실제 dependency에 확보되었다는 주장이 아니다. 시각 입력이나 시간 근거를 제공하지 않는 모델로 전 기능이 가능한 것처럼 설명하지 않는다. 모델팀에 요구할 계약도 이 설계에서 정의한다. Reference와 개발 방향, 공개 기능의 근거 및 통합 확인이 필요한 부분은 [모델 확인 원장](./model-capability-review.md)에 있다.
 
 ## 9. Context·cache·stale 처리
 
@@ -273,7 +273,8 @@ User Memory 등록·수정·삭제는 Controller가 의미를 확정하고 Conte
 | Response Record | payload·publication ID, 상세 Text와 Voice 요약의 별도 content version·source 연결, Voice generation과 실제 audible prefix/range, 채널별 표시·대기·재생·중단·ack 상태 |
 | Domain Event / Delivery Intent | event ID, owner aggregate·revision, 원래 Conversation·Request·Task, 원인 event, consumer 적용 상태와 publication ID |
 | Use Envelope | source·recipient·purpose·scope, policy revision·expiry, 요청·generation 결합; 실제 사용 port에서 검증 |
-| Model Call Envelope | call·Request·input revision, role·허용 Context view·출력 schema, deadline·cancel generation·budget |
+| Model Call Envelope | job/session·Request·input/context/policy revision, role/job kind·출력 schema, deadline·cancel generation·resource class·token/KV budget·runtime incarnation |
+| SpeechEvidence | stream·sample range, partial/final transcript revision·대체 구간, span 시각·오차·방법, source build·capture gap; Omni 불일치는 별도 proposal |
 
 외부 문서·Agent 내용은 데이터이며 VIA 정책을 바꾸는 지시가 아니다. 현재 권한은 과거 대화의 동의 문장이 아니라 Policy State에서 확인한다. Agent Action Approval은 VIA가 해당 실행에 중계하고 실제 Action의 권한 강제는 Agent가 담당한다.
 
@@ -294,7 +295,13 @@ Controller는 Conversation별, Task Manager는 Task별 짧은 상태 전이를 �
 
 Voice 수신과 기본 Context 준비, 독립 source 조회, 여러 Agent event 수신, 장기 업무와 새 사용자 질문은 겹쳐 수행할 수 있다. Semantic LLM은 공유 자원이므로 병렬 제출을 무료 병렬 추론으로 간주하지 않는다.
 
-Model Access는 현재 입력·clarification을 우선하고, 무효 호출을 취소하거나 결과를 버린다. 백그라운드 요약은 길이를 제한하고 오래 대기한 작업의 우선순위를 올린다. 실행 중 선점·동시 추론은 실제 모델 capability에 종속된다.
+**주 설계는 공유 Omni의 동시 session + 독립 경량 Streaming ASR + 기한·자원 예약 scheduler다.** 사용자 발화의 capture·recognition은 semantic 완료를 기다리지 않는다. Omni의 VOICE/SEMANTIC session도 동시 활성화하며 Voice 계산 단위에 자원을 예약하고 긴 semantic prefill·요약을 작은 단위로 나눈다. Local playback stop은 추론 scheduler 밖이다. 단순 queue 우선순위만으로 실행 중 거대 kernel을 선점할 수 있다고 가정하지 않는다.
+
+![공유 Omni의 동시 처리와 입력 보호](./diagrams/11-shared-omni-scheduling.svg)
+
+[draw.io 편집 원본](./diagrams/11-shared-omni-scheduling.drawio)
+
+[공유 Omni 상세 설계](./shared-omni-runtime.md)는 역할별 계약·KV 분리, CPU ASR 예산, Omni Voice service 예약, semantic 최소 진행량, 취소·과부하·전사 불일치·모델 장애를 정의한다. 약 10B는 reference와 같은 Thinker 표기이며 전체 weights와 peak memory는 별도다. 지원 장비·workload의 수치 예산과 실측은 아직 없다. 녹음 backlog만 유지한 것을 정상 동시 처리로 보지 않는다.
 
 Queue는 모두 유한하다. 로컬 재생 중단은 모델·Store queue를 기다리지 않고, host의 명시적 제어 접수와 Agent terminal/question event는 일반 progress보다 먼저 처리한다. Progress는 Task별 최신 상태로 합칠 수 있지만 완료·실패·질문·정정 intent는 조용히 버리지 않는다. 내구 수신 여력이 없으면 지원되는 source에 backpressure를 걸고, 유실이 가능한 source는 gap을 기록해 재조회한다. 새 일반 요청을 수용할 수 없으면 바쁜 상태와 재시도 가능 여부를 명시하며 완료나 Agent 접수로 표시하지 않는다. 숫자 예산은 미정이어도 무제한 queue는 허용하지 않는다.
 
@@ -393,7 +400,9 @@ Response Manager 안의 발화 대기열은 publication·Task·result version과
 
 [draw.io 편집 원본](./diagrams/06-runtime-and-fault-boundaries.drawio)
 
-주 배치는 UI Process, Voice Process, Core Process를 분리하고, 위험한 native·blocking 연동을 Connector Worker에 격리하는 구조다. Interaction Manager의 audio·playback·local barge-in과 Model Access의 S2S adapter·session owner는 Voice Process에 둔다. Controller·Interpreter·Context·Task·Response·Policy와 Gateway의 상태 권위, Model Access의 semantic queue·adapter는 Core에 둔다. Response Manager의 음성 생성 요청도 bounded IPC로 Voice의 같은 S2S session owner를 사용한다. Model Access는 하나의 논리 계약이지만 모델별 adapter의 배치가 다르며 모델을 추가 적재하는 것은 아니다.
+주 배치는 UI·Voice·Core, **Shared Inference Service**, **Speech Input Worker**를 분리하고 위험한 native·blocking 연동은 Connector Worker에 격리한다. Voice는 capture·playback·AEC·활동 감지·로컬 stop과 Model Access client를 가진다. Speech Input Worker는 경량 Streaming ASR과 입력 근거 adapter를 독립 CPU 예산으로 실행한다. Core는 Controller·Interpreter·Context·Task·Response·Policy와 Gateway의 상태 권위 및 semantic client를 가진다.
+
+Shared Inference Service는 Model Access의 Omni adapter·단일 scheduler·역할별 session/KV와 **한 번 적재한 Omni weights**를 소유한다. Voice와 Core의 요청이 여기서 함께 진행하며 서로 다른 session의 Context·권한을 합치지 않는다. 긴 native inference가 host 상태 전이를 막지 않게 service process로 분리한다. ASR worker와 Omni service의 분리는 process crash를 격리하지만 전력·열·메모리 대역폭의 물리적 경합은 여전히 device profile에서 확인한다.
 
 Interaction Manager의 Text·화면·pointer 수집은 UI process 쪽 OS adapter와 제한된 evidence buffer를 사용한다. 무거운 화면 읽기는 worker로 격리한다. Voice와 UI의 producer sequence·사건 시각·capture gap을 Core의 Interaction Manager timeline 모듈이 결합한 뒤 Controller에 넘긴다. Voice를 끈 상태에서도 Text·화면 경로는 유지된다. UI의 명시적 음성 stop은 Voice로 직접 전달하며 Task 제어는 Core를 거친다. 따라서 단일 논리 Component의 하위 모듈이 여러 process에 배치된다는 비용과 IPC 계약을 숨기지 않는다.
 
@@ -401,11 +410,13 @@ Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 T
 
 Core가 끊겨도 Voice의 로컬 stop은 동작한다. 새 응답의 admission은 중단하고 기존 playback도 lease 만료 또는 연결 단절 감지로 정지한다. Voice는 Core incarnation과 output epoch가 바뀐 이전 release를 거절한다. UI는 마지막 확인 상태와 Core 연결 문제를 표시하며 Task 취소를 내구 접수한 것처럼 보고하지 않는다. 명시적 UI stop과 실제 Task 취소의 보장 범위는 다르다.
 
-모델 local 배치 시 모델별 runtime 하나, remote 배치 시 연결 adapter를 사용한다. 배치별 지연·메모리·네트워크 비용은 다르며 실제 주 배치는 아직 정하지 않았다.
+모델 주 배치는 on-device 공유 Omni + 경량 ASR이다. Remote는 향후 교체 시나리오이지 기본 fallback이 아니다. 모르는 사이 외부에 음성·화면을 전송하지 않는다. ASR·Omni가 각각 죽으면 새 incarnation으로 복구하며 모델 세션을 VIA 상태의 원본으로 삼지 않는다.
 
 | 장애 | 동작 |
 | --- | --- |
-| Voice Process·S2S 단절 | 음성 복구; Text·Task 추적 유지 |
+| Voice Process 장애 | 해당 구간 입력·출력 gap 명시 후 복구; Core의 Text·Task 추적 유지 |
+| Speech Input Worker 장애 | capture 유지 범위에서 bounded 재연결; 시간/전사 근거 미확보 요청은 commit 금지; backlog 초과를 유실로 표시 |
+| Shared Inference Service 장애 | 음성·semantic 추론 둘 다 중단; capture·ASR·local stop과 Agent event 수신 유지; UI 안내 후 필요한 세션 재구성 |
 | 특정 Context source 실패 | 해당 근거가 필요한 요청만 보류·실패 |
 | Semantic LLM·전체 deadline timeout | partial inference나 불완전 Context를 commit하지 않고 clarification·확인 불가·안전한 실패로 종료; 확인된 상태와 명시적 UI 제어 유지 |
 | Agent 단절 | 실행 실패로 단정하지 않고 상태 재조회·재연결 |
@@ -462,7 +473,7 @@ Reliability/recoverability 경로는 fault 발생 → process·queue·transactio
 
 1. **틀린 근거의 일관된 해석:** 지칭 시각 오류나 source 후보 누락은 schema 검사를 통과할 수 있다. 근거 연결은 의미 정확성의 충분조건이 아니다.
 2. **refinement 예산 초과:** 일반 요청조차 두 번 안에 안정되지 않고 clarification이 반복되면 기본 Context와 해석 책임을 재검토해야 한다.
-3. **공유 모델 병목:** 긴 요약이 새 사용자 요청을 막을 수 있다. 지원되지 않는 선점을 scheduling만으로 해결할 수 없다.
+3. **공유 모델 병목:** Voice 자원 예약·chunked scheduling·입력 ASR에도 실제 장비의 연산·대역폭·열 한계가 남는다. Semantic 중 입력 recognition/Omni Voice가 밀리거나 semantic이 기아 상태이면 profile을 기각한다. 지원되지 않는 선점을 queue만으로 해결할 수 없다.
 4. **필수 dependency 기능 미확보:** 시간 근거·시각 이해·음성 통제·Agent 조회/중복 방지가 없으면 adapter만으로 필수 행동을 충족하지 못할 수 있다.
 5. **지속적으로 바뀌는 자료:** 관련 근거가 계속 바뀌면 재검증으로 진행이 멈출 수 있다. 과거 대상으로 할 수 있는 요청과 현재 version이 필요한 Action을 구분해야 한다.
 6. **구현 비용:** 증거·revision·outbox·event 정합성·출력 전달 상태가 추가된다. IPC·저장·cache 비용을 성능 이점에서 빼놓지 않는다.

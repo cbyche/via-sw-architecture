@@ -62,14 +62,14 @@
         <mxCell id="model-client-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;M3 · Response Manager&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=1;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="965" y="1290" width="275" height="46" as="geometry" />
         </mxCell>
-        <mxCell id="model" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Model Access&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;VIA-owned provider adapter&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;session · queue · timeout · cancel&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;model runtime과 VIA 계약 연결&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="model" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Model Access&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;공유 Omni adapter · 단일 scheduler&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;역할별 session/KV · Voice 자원 예약&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;독립 ASR 연계 · timeout · cancel&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="1380" y="1135" width="380" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="s2s" value="&lt;div style='font-size:19px;font-weight:bold'&gt;S2S Model × 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;streaming audio · transcript&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="2080" y="1135" width="270" height="85" as="geometry" />
+        <mxCell id="omni" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Shared Omni × 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;VOICE + SEMANTIC&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Thinker 약 10B + 주변 모듈&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;weights 공유 · session 분리&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;같은 PC · 동시 처리&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="1100" width="270" height="175" as="geometry" />
         </mxCell>
-        <mxCell id="semantic" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Semantic LLM × 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;해석 · 필요한 응답 생성&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="2080" y="1270" width="270" height="85" as="geometry" />
+        <mxCell id="asr" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Streaming ASR × 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;입력 인식 · 시간 근거&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;독립 자원 예산 · 주 설계안&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="1310" width="270" height="105" as="geometry" />
         </mxCell>
         <mxCell id="u-input" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.276;entryX=0.000;entryY=0.276;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="user" target="interaction">
           <mxGeometry relative="1" as="geometry" />
@@ -203,8 +203,8 @@
         <mxCell id="model-call-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.173;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model-client-1" target="model">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="model-call-1-label" value="S2S stream" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
-          <mxGeometry x="1254.5" y="1145" width="111" height="22" as="geometry" />
+        <mxCell id="model-call-1-label" value="Voice / ASR" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1250.5" y="1145" width="119" height="22" as="geometry" />
         </mxCell>
         <mxCell id="model-call-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=1;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.491;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model-client-2" target="model">
           <mxGeometry relative="1" as="geometry" />
@@ -218,23 +218,23 @@
         <mxCell id="model-call-3-label" value="응답 생성" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
           <mxGeometry x="1265.5" y="1285" width="89" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="s2s-provider" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.182;entryX=0.000;entryY=0.471;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model" target="s2s">
+        <mxCell id="omni-provider" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.182;entryX=0.000;entryY=0.429;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model" target="omni">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="s2s-provider-label" value="audio / transcript / generation" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
-          <mxGeometry x="1773.5" y="1147" width="293" height="22" as="geometry" />
+        <mxCell id="omni-provider-label" value="음성 / 해석 / 응답 생성" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1821.5" y="1147" width="197" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="semantic-provider" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.795;entryX=0.000;entryY=0.471;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model" target="semantic">
+        <mxCell id="asr-provider" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.932;entryX=0.000;entryY=0.286;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="model" target="asr">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="semantic-provider-label" value="prompt / structured output" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
-          <mxGeometry x="1795.0" y="1282" width="250" height="22" as="geometry" />
+        <mxCell id="asr-provider-label" value="audio / timed transcript" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1804.0" y="1312" width="232" height="22" as="geometry" />
         </mxCell>
         <mxCell id="caption-0" value="EXTERNAL RESPONSIBILITY" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=17;fontColor=#475569;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="2080" y="173" width="250" height="29" as="geometry" />
         </mxCell>
-        <mxCell id="caption-1" value="같은 PC / 원격 배치 모두 가능" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=15;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
-          <mxGeometry x="2080" y="203" width="242" height="27" as="geometry" />
+        <mxCell id="caption-1" value="모델 주 배치: on-device" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=15;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="203" width="204" height="27" as="geometry" />
         </mxCell>
         <mxCell id="caption-2" value="STREAMING: chunk와 Request를 구분" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=19;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
           <mxGeometry x="1350" y="796" width="378" height="31" as="geometry" />

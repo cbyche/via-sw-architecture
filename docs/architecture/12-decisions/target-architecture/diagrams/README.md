@@ -41,7 +41,7 @@
 
 ## 그림 목록과 관점
 
-그림마다 박스가 무엇을 나타내는지 구분한다. 01은 논리 Component, 02는 데이터 entity와 관계, 03~05·08~10은 runtime 단계·근거·내구 경계, 06은 process와 의존성 연결 port, 07은 품질 인과 경로다. 서로 다른 관점을 모두 Component 배치도로 읽지 않는다. 06의 점선 port는 process가 아니다.
+그림마다 박스가 무엇을 나타내는지 구분한다. 01은 논리 Component, 02는 데이터 entity와 관계, 03~05·08~10은 runtime 단계·근거·내구 경계, 06은 process·모델 배치, 07은 품질 인과 경로, 11은 입력 경로·모델 공유·스케줄링 관점이다. 서로 다른 관점을 모두 Component 배치도로 읽지 않는다. 11의 역할 session은 모델 복제본이 아니다.
 
 | 그림 | 확인할 내용 | Preview / 편집 원본 |
 | --- | --- | --- |
@@ -50,10 +50,11 @@
 | 03 요청 확정 | 최소 근거 해석, bounded refinement, clarification·실패 | [SVG](./03-request-resolution.svg) · [draw.io](./03-request-resolution.drawio) |
 | 04 지칭의 시간축 | 당시 근거, 정정, 화면 변경, 수집 공백 | [SVG](./04-interaction-evidence-timeline.svg) · [draw.io](./04-interaction-evidence-timeline.drawio) |
 | 05 내구 경계 | command·event·publication과 crash 후 불명 상태 | [SVG](./05-dispatch-and-recovery.svg) · [draw.io](./05-dispatch-and-recovery.drawio) |
-| 06 배치·장애 경계 | Voice/Core 분리, 모델 adapter 배치, UI·Store·worker | [SVG](./06-runtime-and-fault-boundaries.svg) · [draw.io](./06-runtime-and-fault-boundaries.drawio) |
+| 06 배치·장애 경계 | Voice/Core·ASR·공유 추론 service, UI·Store·worker | [SVG](./06-runtime-and-fault-boundaries.svg) · [draw.io](./06-runtime-and-fault-boundaries.drawio) |
 | 07 네 품질 경로 | accuracy·responsiveness·modifiability·recoverability | [SVG](./07-four-asr-critical-paths.svg) · [draw.io](./07-four-asr-critical-paths.drawio) |
 | 08 응답·중단 | S2S와 Core 게시, 상세 Text·Voice 요약, local barge-in·알림 대기 | [SVG](./08-response-and-interruption.svg) · [draw.io](./08-response-and-interruption.drawio) |
 | 09 복합 요청 | 단일 업무 통째 위임, 독립 Task, 실제 목표 간 의존 | [SVG](./09-compound-and-task-routing.svg) · [draw.io](./09-compound-and-task-routing.drawio) |
 | 10 Context·권한·기억 | 읽기와 제공, 권한 철회, User Memory 변경·삭제 | [SVG](./10-context-policy-and-memory.svg) · [draw.io](./10-context-policy-and-memory.drawio) |
+| 11 공유 Omni | 입력 ASR, 역할별 session, 자원 예약·계산 교대 | [SVG](./11-shared-omni-scheduling.svg) · [draw.io](./11-shared-omni-scheduling.drawio) |
 
-10개 그림은 [Architecture 본문](../architecture.md)의 관련 절에 모두 삽입했다. [설계 완결성 점검](../design-completeness.md)에서 UC별 경로와 미확정 항목을 확인할 수 있다.
+11개 그림은 [Architecture 본문](../architecture.md)의 관련 절에 모두 삽입했다. [설계 완결성 점검](../design-completeness.md)에서 UC별 경로와 미확정 항목을 확인할 수 있다.

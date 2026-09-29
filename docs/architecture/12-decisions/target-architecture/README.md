@@ -10,7 +10,8 @@
 | --- | --- |
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
 | [Interaction·업무 경계·기억 검토](./interaction-and-memory-design.md) | S2S 조건부 직접 경로, 사용자 합의, 모델 확인 책임, 복합 업무와 기억 계층 제안 |
-| [모델 기능 확인](./model-capability-review.md) | 공식 문서 근거, 모델 수 제약과 충돌하는 기능, 실제 연결이 필요한 항목 |
+| [공유 Omni·동시 처리 설계](./shared-omni-runtime.md) | 역할 분리, 입력 ASR, 자원 예약·동시 세션·과부하·모델팀 요구 계약 |
+| [모델 기능 확인](./model-capability-review.md) | Qwen3-Omni 30B 표기의 의미, 공개 기능 근거, 실제 통합 확인이 필요한 항목 |
 | [Architecture 그림](./diagrams/README.md) | 본문에 삽입한 SVG preview, draw.io 편집 원본과 색상 규칙 |
 | [설계 완결성 점검](./design-completeness.md) | 18개 UC 경로, 그림 검토 중 교정한 공백과 아직 확정하지 않은 질문 |
 | [독립 검토 결과](./independent-review-2026-09-29.md) | 사용자 검토 전 세 관점의 공통 결함, 본문 반영 내용과 열린 질문 |
@@ -38,7 +39,7 @@
 
 - VIA는 PC의 Voice/Text/screen interaction과 orchestration을 담당한다.
 - Downstream Agent는 domain reasoning, planning, tool selection, 실제 업무 수행을 담당한다.
-- VIA는 S2S 1개와 공유 semantic LLM 1개를 사용한다. Component·Task별 모델 복제나 임의 helper 모델 추가는 하지 않는다.
+- VIA는 on-device Omni 1개를 음성·semantic 두 역할이 공유한다. 역할·session·권한은 분리하고 가중치는 복제하지 않는다. Semantic 중에도 발화 수신·인식을 유지하며 경량 Streaming ASR을 주안에 명시한다. 추가 helper는 필요성과 전체 비용을 드러낸다.
 - 목표 Architecture의 품질 우선순위는 QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability, QA-39 reliability/recoverability 순이다. 낮은 순위도 설계에서 생략하지 않는다.
 - accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이다. Agent가 만든 도메인 결과의 품질과 구분한다.
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
