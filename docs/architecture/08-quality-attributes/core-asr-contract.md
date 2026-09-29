@@ -11,9 +11,9 @@
 
 ## 현재 목표 Architecture의 품질 우선순위
 
-목표 Architecture 설계에서는 **QA-19 semantic accuracy를 1순위**, **QA-09 responsiveness를 2순위**로 둔다. QA-29와 QA-39는 계속 core ASR이며, 이 변경은 네 ASR 중 나머지를 해제하거나 낮은 점수로 상쇄한다는 뜻이 아니다.
+목표 Architecture를 설계할 때는 **QA-19 semantic accuracy를 1순위**, **QA-09 responsiveness를 2순위**로 둔다. QA-29와 QA-39는 계속 core ASR이며, 이 변경은 네 ASR 중 나머지를 해제하거나 낮은 점수로 상쇄한다는 뜻이 아니다.
 
-QA-19와 QA-09를 가중 합산하지 않는다. 먼저 결과 전에 동결한 semantic-correctness field와 safety·evidence qualification을 통과해야 한다. 그 조건을 만족한 결과 사이에서 QA-09를 비교한다. 잘못된 의미·지칭 대상·Task binding·처리 방향·위임 계약·사용자 결과를 더 빨리 낸 경로는 우수한 Architecture로 판정하지 않는다.
+이 순위는 이후 Decision Package의 measurement eligibility 규칙이 아니다. 같은 문제를 해결하는 선택안과 steelman은 결과 전에 동결한 동일 계약으로 QA-19와 QA-09를 각각 측정하고 모두 보고한다. 한 후보가 더 정확하지만 느리고 다른 후보가 덜 정확하지만 빠른 결과도 유효한 trade-off다. 후보를 한 축의 결과로 먼저 제거해 다른 축을 측정하지 않거나, 두 값을 가중 합산해 차이를 숨기지 않는다. Safety·evidence qualification 위반은 동결된 규칙에 따라 최종 선택을 막을 수 있지만 측정값과 실패 evidence를 보고서에서 제거하지 않는다.
 
 ## 1. 왜 네 개로 통합하는가
 

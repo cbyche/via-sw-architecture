@@ -338,7 +338,7 @@ Core Component는 같은 프로세스의 모듈로 시작한다. Connector Worke
 
 ## 16. Accuracy·latency critical path
 
-이 Architecture의 선택 순서는 **semantic accuracy 우선, responsiveness 차순**이다. 의미·대상·Task·처리 방향·위임 내용과 사용자 결과가 동결된 정확성·qualification 조건을 통과한 경로 사이에서만 latency를 비교한다. 두 품질을 하나의 가중 점수로 합치지 않으며, 잘못된 결과를 빨리 낸 경로는 responsiveness 이점으로 인정하지 않는다.
+이 Architecture를 설계하는 선택 순서는 **semantic accuracy 우선, responsiveness 차순**이다. 이는 이후 구조 선택안과 steelman을 비교할 때 accuracy가 낮은 후보의 latency를 측정하지 않는다는 뜻이 아니다. 모든 applicable 후보의 accuracy와 responsiveness를 같은 동결 계약으로 독립 측정하고, 선택안이 더 정확하지만 느리거나 대안이 더 빠르지만 덜 정확한 결과를 그대로 보고한다. 두 품질을 하나의 가중 점수로 합치지 않으며 최종 rationale에서 어떤 손해를 감수했는지 명시한다.
 
 ```text
 Core 직접 응답:

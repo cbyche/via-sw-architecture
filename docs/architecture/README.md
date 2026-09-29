@@ -21,7 +21,7 @@
 - 01~11의 전제 위에서 목표 Architecture를 먼저 설계한다. 이후 성능에 중요한 구조적 선택만 Decision Package로 추출한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙을 유지하며, 네 통합 core QA와 상세 measurement·diagnostic QA를 함께 관리한다.
 - **QA-09·19·29·39를 핵심 `CONFIRMED_ASR`로 확정했다.** 정의와 VIA-DP-01~18 적용 원장은 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)에 있다. 공통 system target·score band proposal은 작성했고 DP별 Shared Spine patch·mock profile·모집단과 함께 freeze 전이다.
-- 현재 목표 Architecture의 품질 우선순위는 **QA-19 semantic accuracy 1순위, QA-09 responsiveness 2순위**다. 둘을 가중 합산하지 않으며, 정확성·qualification 조건을 통과한 결과 사이에서 responsiveness를 비교한다.
+- 현재 목표 Architecture를 설계하는 품질 우선순위는 **QA-19 semantic accuracy 1순위, QA-09 responsiveness 2순위**다. 이후 Decision Package에서는 이 순위를 후보 제거 filter로 쓰지 않고 모든 applicable 후보의 두 값을 독립적으로 측정·보고한다. 선택안이 더 정확하지만 느리거나 steelman이 더 빠르지만 덜 정확한 trade-off를 그대로 남기며, 둘을 가중 합산하지 않는다.
 - 기존 VIA-DP-01~18과 Core DP 6개는 이전 decision-first 작업의 reference로 보존한다. 새 목표 Architecture의 구성요소나 선택을 이 번호에 맞추지 않는다.
 - QA-01/02/03/05는 QA-09 input, QA-11/12는 QA-19 field source, QA-21~23은 QA-29 change source, QA-31/32는 QA-39 fault evidence다. QA-04·13~15·41·51·61/62는 회귀·진단·qualification으로 유지한다. 이전 일곱 DP reference generation은 archive했으며 새 core ASR 결과가 아니다.
 

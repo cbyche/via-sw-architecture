@@ -28,7 +28,7 @@
 3. **dispatch 선형화:** 전송 직전 정정·취소와 기존 command 전송 사이 race를 막는 원자적 경계가 없었다.
 4. **복구 가능한 수신·게시:** Agent event 수신과 Task projection, 응답 계획과 실제 Text·Voice 전달을 crash 뒤 일관되게 복원할 계약이 없었다.
 
-이 네 항목은 latency 최적화보다 먼저 닫아야 한다. 잘못된 대상·Task·승인·command를 빠르게 처리한 결과는 responsiveness 이점으로 인정하지 않는다.
+이 네 항목은 목표 Architecture를 설계할 때 latency 최적화보다 먼저 닫는다. 이후 Decision Package에서는 이 우선순위를 steelman 제외 조건으로 사용하지 않고, 결함이 드러난 후보도 accuracy와 responsiveness 결과를 각각 보존해 trade-off와 failure evidence를 함께 평가한다.
 
 ## 본문에 반영한 보강
 

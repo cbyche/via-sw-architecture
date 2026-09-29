@@ -123,9 +123,9 @@ System mission and fixed scope
 
 12번 작업은 다음 순서로 진행한다.
 
-1. **Target Architecture Definition** — semantic accuracy를 1순위, responsiveness를 2순위로 두고 완성 구조를 설계하고 합의한다. 정확성 조건을 통과하지 못한 빠른 결과는 우수한 결과로 보지 않는다.
+1. **Target Architecture Definition** — semantic accuracy를 1순위, responsiveness를 2순위로 두고 완성 구조를 설계하고 합의한다. 이 우선순위는 이후 후보의 한쪽 지표를 측정에서 제외하는 사전 filter가 아니다.
 2. **Decision Reconstruction** — 그 성능을 만드는 중요한 책임·계약·상태·호출·배치 선택만 추출한다.
-3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
+3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, accuracy·responsiveness의 독립적인 결과와 trade-off, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
 4. **Measurement & Revalidation** — 결과 전에 계약을 동결하고 선택한 구조가 기대한 특성을 실제로 가지는지 검증한다.
 
 Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지할 수 있는지도 같은 기준으로 검토한다. 공통 비교 조건은 [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md), 변경 시나리오는 [Intentional Variables](docs/architecture/07-intentional-variables.md), 측정 원칙은 [Measurement Guide](docs/architecture/11-measurement/README.md)에 정의되어 있다.

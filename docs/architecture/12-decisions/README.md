@@ -40,6 +40,8 @@
 
 Component가 있다는 이유만으로 package를 만들지 않는다. 새 package는 기존 VIA-DP 번호를 이어받거나 기존 inventory에 다시 매핑하지 않는다.
 
+Target Architecture의 `accuracy 1순위, responsiveness 2순위`는 설계 방향이다. Package 비교에서는 선택안과 steelman의 accuracy·responsiveness를 같은 계약으로 독립 측정하고 어느 한쪽을 먼저 탈락시켜 다른 축을 생략하지 않는다. 선택안이 더 정확하지만 느린 경우를 포함해 trade-off를 그대로 설명한 뒤, 최종 선택이 우선순위를 어떻게 적용했는지 rationale에 남긴다.
+
 ## 기존 VIA-DP-01~18의 위치
 
 기존 문서는 이전 decision-first 작업의 active reference로 보존한다. 당시의 Core DP 선정, A/B 정의, measurement 초안과 ADR caveat를 왜곡하거나 현재 측정 결과인 것처럼 바꾸지 않는다.

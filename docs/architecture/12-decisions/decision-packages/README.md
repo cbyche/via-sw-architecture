@@ -28,3 +28,12 @@
 - 검증 방법과 선택 구조를 기각·재검토할 반증 조건
 
 현재는 목표 Architecture가 제안 상태이므로 package 파일을 만들지 않는다. 기존 `via-dp-*.md`는 이전 decision-first inventory의 reference이며 이 디렉터리의 초안으로 간주하지 않는다.
+
+## 비교 원칙
+
+- `accuracy 1순위, responsiveness 2순위`는 목표 Architecture를 선택·설계할 때의 우선순위다.
+- 선택안과 steelman은 동일하게 동결한 모집단·실패 처리·측정 경계로 accuracy와 responsiveness를 각각 측정한다.
+- 한 축의 결과로 후보를 먼저 제외한 뒤 다른 축을 측정하지 않는 방식은 사용하지 않는다.
+- 선택안이 더 정확하지만 느리거나 steelman이 더 빠르지만 덜 정확한 결과를 정상적인 trade-off로 보고한다.
+- 두 축을 하나의 가중 점수로 합치지 않는다. 최종 rationale에서 어떤 손해를 감수하고 왜 선택했는지 명시한다.
+- Qualification 위반이 최종 선택을 막더라도 해당 후보의 측정값과 실패 evidence는 보존한다.

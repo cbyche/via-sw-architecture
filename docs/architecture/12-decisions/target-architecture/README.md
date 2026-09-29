@@ -37,7 +37,7 @@ accuracy / responsiveness에 중요한 구조적 선택 추출
 - VIA는 S2S 1개와 공유 semantic LLM 1개를 사용한다. Component·Task별 모델 복제나 임의 helper 모델 추가는 하지 않는다.
 - accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이며 현재 목표 Architecture의 1순위 품질이다. Agent가 만든 도메인 결과의 품질과 구분한다.
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
-- responsiveness는 2순위다. 정확성·qualification 조건을 통과한 결과 사이에서 비교하며, 잘못된 결과를 빨리 낸 경로를 이점으로 인정하지 않는다.
+- responsiveness는 목표 Architecture 설계의 2순위다. 이후 Decision Package에서는 steelman을 포함한 각 후보의 accuracy와 responsiveness를 독립적으로 측정하며, 더 정확하지만 느린 선택안과 더 빠르지만 덜 정확한 대안의 trade-off를 숨기지 않는다.
 - Voice 연결, Conversation, Request, Task, Agent Execution의 수명을 분리한다.
 
 제품 요구의 근거는 [Mission & Boundary](../../01-system-mission-and-boundary.md), [Fixed Scope](../../03-fixed-architecture-scope.md), [Representative Use Cases](../../05-representative-use-cases.md)다. 용어는 [Terms](../../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../../08-quality-attributes/correctness-and-continuity.md)를 참고한다.
