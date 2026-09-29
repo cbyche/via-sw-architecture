@@ -16,6 +16,8 @@
 
 첫 명령은 생성, `--check`는 읽기 전용 검사다. CI도 source와 `.drawio`·`.svg` 쌍의 일치 및 경로를 검사한다. `.drawio`를 직접 편집했다면 source 정의에도 변경을 반영하고 두 형식을 함께 재생성한다. Source를 갱신하지 않은 수동 편집은 다음 생성에서 덮어써지며 CI의 pair 검사에도 실패한다.
 
+Component를 지칭하는 모든 표시 문구는 [본문 §4](../architecture.md#4-component와-상태-소유권)의 정식 명칭을 그대로 사용한다. 제목·설명·화살표에서 이름을 줄이지 않으며 공간은 줄바꿈·배치로 확보한다. 용어 검사는 Markdown과 두 그림 형식의 표시 문구를 함께 확인한다. 데이터·개념을 뜻하는 Task·Context·Response는 Component 이름과 구분한다.
+
 색상은 그림 사이에서 같은 책임을 뜻한다.
 
 | 색상 | 의미 |
@@ -50,7 +52,7 @@
 | 03 요청 확정 | 최소 근거 해석, bounded refinement, clarification·실패 | [SVG](./03-request-resolution.svg) · [draw.io](./03-request-resolution.drawio) |
 | 04 지칭의 시간축 | 당시 근거, 정정, 화면 변경, 수집 공백 | [SVG](./04-interaction-evidence-timeline.svg) · [draw.io](./04-interaction-evidence-timeline.drawio) |
 | 05 내구 경계 | command·event·publication과 crash 후 불명 상태 | [SVG](./05-dispatch-and-recovery.svg) · [draw.io](./05-dispatch-and-recovery.drawio) |
-| 06 배치·장애 경계 | Voice/Core·ASR·공유 추론 service, UI·Store·worker | [SVG](./06-runtime-and-fault-boundaries.svg) · [draw.io](./06-runtime-and-fault-boundaries.drawio) |
+| 06 배치·장애 경계 | Voice/Core·ASR·공유 추론 service, UI·State Store·worker | [SVG](./06-runtime-and-fault-boundaries.svg) · [draw.io](./06-runtime-and-fault-boundaries.drawio) |
 | 07 네 품질 경로 | accuracy·responsiveness·modifiability·recoverability | [SVG](./07-four-asr-critical-paths.svg) · [draw.io](./07-four-asr-critical-paths.drawio) |
 | 08 응답·중단 | S2S와 Core 게시, 상세 Text·Voice 요약, local barge-in·알림 대기 | [SVG](./08-response-and-interruption.svg) · [draw.io](./08-response-and-interruption.drawio) |
 | 09 복합 요청 | 단일 업무 통째 위임, 독립 Task, 실제 목표 간 의존 | [SVG](./09-compound-and-task-routing.svg) · [draw.io](./09-compound-and-task-routing.drawio) |

@@ -25,7 +25,7 @@ Qwen 명명 방식에 맞춰 **Thinker 약 10B**로 크기를 표현한다. Enco
 | Semantic session | 확정 입력 revision, 필요 원음·화면·대화·Task 근거, 구조화된 해석; bounded read는 host에 제안 |
 | Session/KV state | 역할·Conversation·Request·revision·policy 범위별 분리; 같은 weights라는 이유로 hidden state를 섞지 않음 |
 | Read-only cache | 동일 모델/build·token prefix·modality preprocessing·접근 범위가 검증된 prefix/encoder 결과만 재사용; 무효화와 비용 기록 |
-| 게시·실행 권한 | Controller가 admission, Response Manager가 게시, Task/Gateway가 위임. Runtime은 처리 결과를 반환할 뿐 |
+| 게시·실행 권한 | Request Controller가 admission, Response Manager가 게시, Task Manager와 Agent Gateway가 위임. Runtime은 처리 결과를 반환할 뿐 |
 
 동일 weights를 두 번 호출한 결과는 독립 검증이 아니다. 둘이 같은 오해를 반복할 수 있으며 host의 provenance·revision 검사도 의미의 진실을 증명하지 못한다.
 
@@ -33,7 +33,7 @@ Qwen 명명 방식에 맞춰 **Thinker 약 10B**로 크기를 표현한다. Enco
 
 입력 보장은 세 단계로 구분한다. **녹음만 계속되는 상태를 정상적인 동시 음성 처리라고 부르지 않는다.**
 
-1. **Capture:** Voice Process의 device callback이 monotonic sample sequence로 오디오를 받고 AEC·활동 감지·ring buffer를 처리한다. Omni·Core·Store 완료를 기다리는 lock이나 동기 호출을 두지 않는다. Barge-in은 이 경로에서 출력 세대를 무효화하고 재생을 멈춘다. 활동 감지는 의미상 취소 판단과 다르다.
+1. **Capture:** Voice Process의 device callback이 monotonic sample sequence로 오디오를 받고 AEC·활동 감지·ring buffer를 처리한다. Omni·Core·State Store 완료를 기다리는 lock이나 동기 호출을 두지 않는다. Barge-in은 이 경로에서 출력 세대를 무효화하고 재생을 멈춘다. 활동 감지는 의미상 취소 판단과 다르다.
 2. **Recognition:** 별도 Speech Input Worker의 Streaming ASR이 지속적으로 partial/final transcript·revision·시간 근거를 만든다. 주 배치는 CPU 실행 예산·작업 thread·메모리를 확보하고 Omni accelerator 작업과 분리한다. NPU 이동은 해당 장비에서 지원과 동시 부하를 확인한 뒤 가능한 binding이다. Process 분리만으로 CPU·메모리 대역폭·전력까지 격리됐다고 주장하지 않는다.
 3. **Omni voice processing:** 같은 오디오 참조를 Model Access의 VOICE session에도 제공한다. Stream ingest만 하고 semantic 완료까지 처리를 미루지 않는다. Omni의 audio encoding·voice prefill/decode에 주기적 예산을 예약하고 semantic과 interleave/batch한다. S2S 자체 지식 직접 응답은 좁은 admission 이후에만 게시한다. Core로 인계된 입력의 불필요한 speculative 답변 생성은 중지한다.
 
@@ -43,7 +43,7 @@ ASR은 별도의 작은 인식 모델이며 Omni의 두 역할을 대체하지 �
 
 `SpeechEvidence`는 stream/Turn ID, sample range, transcript revision, partial/final, 대체된 구간, token/span 시간·오차·방법, capture gap과 source build를 포함한다. 인식 token timestamp는 정확한 단어 경계가 아닐 수 있다. 모호한 단어 경계는 보수적인 acoustic interval로 확장하고 겹치는 화면 후보를 유지한다. ASR final은 recognizer의 확정 revision이지 사실상 무오류 선언이 아니다.
 
-Interaction Manager가 정규화한 transcript revision을 VIA 입력 기록의 기준으로 사용한다. Omni가 다르게 들었으면 이를 덮어쓰지 않고 불일치 proposal로 반환한다. 목표·부정·숫자·수신자·지칭에 영향을 주는 불일치는 원음의 제한된 재확인 또는 clarification으로 해소한다. Canonical revision을 바꾸는 것은 Controller이며 관련 proposal·generation·미전송 admission을 무효화한다. 두 전사의 다수결이나 신뢰도 하나로 외부 업무를 보내지 않는다.
+Interaction Manager가 정규화한 transcript revision을 VIA 입력 기록의 기준으로 사용한다. Omni가 다르게 들었으면 이를 덮어쓰지 않고 불일치 proposal로 반환한다. 목표·부정·숫자·수신자·지칭에 영향을 주는 불일치는 원음의 제한된 재확인 또는 clarification으로 해소한다. Canonical revision을 바꾸는 것은 Request Controller이며 관련 proposal·generation·미전송 admission을 무효화한다. 두 전사의 다수결이나 신뢰도 하나로 외부 업무를 보내지 않는다.
 
 직접 S2S 후보에도 최종 입력과 의미상 충돌이 없어야 한다. 모든 단어를 별도 LLM으로 다시 대조하는 경로를 필수로 만들지는 않는다. 대응 근거 부족·핵심 불일치면 Core로 인계한다. 최소 direct/Core 제안 schema는 정하되 그 판정 정확도는 검증 대상이다.
 
@@ -84,10 +84,10 @@ Model Access의 **server 측 단일 scheduler와 weight owner**를 별도 Shared
 “이 문단을 설명해줘”의 semantic job A가 실행 중일 때 사용자가 “아니, 옆 표만 설명해줘”라고 말한다.
 
 1. Voice가 즉시 입력을 capture하고 기존 playback을 멈춘다. ASR이 A의 완료와 무관하게 새 전사를 만든다. Omni Voice session도 예약된 계산 단위로 새 음성을 처리한다.
-2. `InputStarted`가 Controller에 전달되면 같은 Conversation의 미전송 command를 hold한다. 아직 새 목표를 모르므로 모든 Agent 업무를 취소하지 않는다.
+2. `InputStarted`가 Request Controller에 전달되면 같은 Conversation의 미전송 command를 hold한다. 아직 새 목표를 모르므로 모든 Agent 업무를 취소하지 않는다.
 3. A의 게시·dispatch admission을 보류한다. 같은 대화의 speculative 생성은 취소하거나 결과를 보류하되 원래 요청 상태는 보존한다. 무관한 Conversation의 유효한 해석은 남은 예산에서 계속 진행한다.
-4. 발화 확정 뒤 새 입력·시간별 화면·기존 A를 semantic job B에 제공한다. Interpreter가 정정이면 A를 대체하고, 무관한 추가 질문이면 A와 별도 Request로 처리한다.
-5. A가 뒤늦게 완료해도 revision/hold 검사 때문에 이전 대상에 위임하거나 음성을 재개하지 못한다. B도 Controller 검증과 Response admission을 거친다.
+4. 발화 확정 뒤 새 입력·시간별 화면·기존 A를 semantic job B에 제공한다. Request Interpreter가 정정이면 A를 대체하고, 무관한 추가 질문이면 A와 별도 Request로 처리한다.
+5. A가 뒤늦게 완료해도 revision/hold 검사 때문에 이전 대상에 위임하거나 음성을 재개하지 못한다. B도 Request Controller의 검증·publication admission과 Response Manager의 게시 절차를 거친다.
 
 긴 Agent 결과 요약 중 새 발화가 오면 요약을 멈추거나 뒤로 보내고 입력·새 요청을 우선한다. 이미 확인된 상세 결과는 화면에 남는다. 공유 Omni 중단 시에는 양쪽 Omni 역할이 함께 불가하지만 Voice capture·ASR·local stop과 Core의 Agent event 수신은 유지한다. 입력 접수 사실과 요청 처리 완료를 구분해 UI로 안내한다.
 
@@ -145,9 +145,9 @@ Service는 `LOADING → READY`, 오류 시 `DEGRADED/RESTARTING/UNAVAILABLE`로 
 | --- | --- |
 | CPU 입력 | ASR threads/budget, continuous input service deadline, max transcript lag; Speech Input Worker |
 | 추론 연산 | Voice 예약/주기, semantic 최소 quantum/주기, 최대 non-preemptible work, admission cost bound; scheduler |
-| memory | Omni/ASR weights, Voice·semantic 최소 KV, job별 input/output token·image token 상한, workspace, RAM capture/pin·queue·Store reserve; admission |
+| memory | Omni/ASR weights, Voice·semantic 최소 KV, job별 input/output token·image token 상한, workspace, RAM capture/pin·queue·State Store reserve; admission |
 | 시간 | endpoint settle, evidence watermark wait, job/request/read/recovery deadline, lease timeout, retry backoff 상한; 각 owner |
-| 동시성 | 최소 active VOICE 1 + SEMANTIC 1, speech output state, foreground queue bound, source concurrency; Model Access/Context/Gateway |
+| 동시성 | 최소 active VOICE 1 + SEMANTIC 1, speech output state, foreground queue bound, source concurrency; Model Access / Context Manager / Agent Gateway |
 | 환경 | device/runtime/build, 지원 audio/image 형식, clock mapping 방식, power/thermal mode; capability binding |
 
 모든 필드는 배포 설정에서 유한한 값을 가져야 하며 누락된 값을 infinity로 해석하지 않는다. 구성값 validation은 양 역할 예약·최대 단위·전체 메모리 예산의 일관성을 검사한다. 실제 cost bound의 타당성은 후속 검증이며 선언만으로 충족됐다고 주장하지 않는다. 목표 PC 종류나 token/sec를 여기서 임의로 확정하지 않는다.

@@ -13,16 +13,16 @@
 
 | 계층 | 저장과 소유권 | 승격·소멸 조건 |
 | --- | --- | --- |
-| 단기 입력 근거 | IM의 bounded RAM audio/screen timeline; Controller workspace; Context cache | 현재 입력·해석·불일치 해소까지 pin. 안정된 참조·최소 근거 확보 후 raw 해제 |
+| 단기 입력 근거 | Interaction Manager의 bounded RAM audio/screen timeline; Request Controller workspace; Context cache | 현재 입력·해석·불일치 해소까지 pin. 안정된 참조·최소 근거 확보 후 raw 해제 |
 | 중기 작업 view | Context Manager의 최근 대화/Task summary·검색 index·read cache; source owner revision을 포함 | 접근·사용 시 필요한 범위 생성, source 변경·삭제·policy 변경이면 무효화. 원본에서 재구성 |
 | 장기 User Memory | Context Manager의 typed preference/routine/stable fact, origin·허용 범위·revision·삭제 상태 | 명시적 저장/수정 요청만 commit. 자동 장기 승격 없음. 현재 요청이 우선 |
-| 내구 업무·대화 원본 | Controller의 input/request/question, Task의 상태/결과 참조, Gateway의 command/event, Response의 게시·전달 기록 | 관련 owner lifecycle과 사용자 보관·삭제 정책 적용. 요약 cache 만료로 활성 업무 기록을 삭제하지 않음 |
+| 내구 업무·대화 원본 | Request Controller의 input/request/question, Task Manager의 상태/결과 참조, Agent Gateway의 command/event, Response Manager의 게시·전달 기록 | 관련 owner lifecycle과 사용자 보관·삭제 정책 적용. 요약 cache 만료로 활성 업무 기록을 삭제하지 않음 |
 
 Memory routine은 참고 정보이며 무인 예약 실행을 만들지 않는다. “항상 표로 답해”는 허용된 기억 변경이지 사용자 문서를 편집하는 Agent Action이 아니다. 반대로 “내 파일에 이 선호를 기록해”는 외부 파일 변경이므로 Agent다.
 
 ## 2. Context 획득과 지칭의 정확성
 
-기본 Context는 현재 입력·당시 선택·window/document identity·최근 실제 응답·대기 질문·관련 Task 요약·명시적으로 허용된 선호다. 모든 파일·메일 본문을 미리 읽지 않는다. Controller가 현재 source/recipient/purpose scope를 정하고 Context Manager가 port별로 제한된 evidence를 만든다.
+기본 Context는 현재 입력·당시 선택·window/document identity·최근 실제 응답·대기 질문·관련 Task 요약·명시적으로 허용된 선호다. 모든 파일·메일 본문을 미리 읽지 않는다. Request Controller가 현재 source/recipient/purpose scope를 정하고 Context Manager가 port별로 제한된 evidence를 만든다.
 
 | 근거 유형 | 확정 가능한 범위와 계약 |
 | --- | --- |
@@ -43,7 +43,7 @@ Scroll·window 이동은 당시 identity를 바꾸지 않는다. 내용 변경·
 
 ## 3. 조회·요약·cache 규칙
 
-1. Controller가 확정 입력, 관련 owner snapshot, 허용 scope를 요청한다. Context Manager가 source identity·revision·policy·recipient를 포함한 key로 cache를 확인한다.
+1. Request Controller가 확정 입력, 관련 owner snapshot, 허용 scope를 요청한다. Context Manager가 source identity·revision·policy·recipient를 포함한 key로 cache를 확인한다.
 2. 질문에 필요한 원문·typed record를 먼저 고른다. 최신 질문·미해결 제약·부정·대상 ID·수치·승인·상태는 요약으로만 전달하지 않는다.
 3. 예산에 들어가는 관련 원문과 source receipt를 semantic 역할에 제공한다. 길면 명시적 section/page 범위와 retrieval 결과를 전달하며 누락 범위를 기록한다. 필수 근거를 잘라 전체를 읽은 것처럼 답하지 않는다.
 4. 중기 summary는 `source IDs/revisions + covered ranges + omissions + memory/policy epoch`가 있는 파생 view다. 원본이 바뀌면 `DIRTY`, 검증 후 `VALID`, 삭제·철회되면 `INVALID`다. DIRTY/INVALID summary로 실행 대상을 확정하지 않는다.
@@ -74,11 +74,11 @@ Read/전달 권한과 evidence 보관 권한은 구분한다. Source가 저장�
 
 ## 5. 기억 변경·삭제와 권한 철회
 
-User Memory는 `PROPOSED → ACTIVE → SUPERSEDED/DELETED`를 가진다. 명시적 “기억해/바꿔/잊어” 요청을 Interpreter가 해석하고 Controller가 대상·scope를 확정한다. Context Manager가 기억 revision, tombstone, invalidation outbox를 하나의 transaction에 기록한다. 여러 기억이 후보면 삭제 대상을 질문한다. 현재 요청의 일회성 스타일 지시는 지속 기억을 수정하지 않는다.
+User Memory는 `PROPOSED → ACTIVE → SUPERSEDED/DELETED`를 가진다. 명시적 “기억해/바꿔/잊어” 요청을 Request Interpreter가 해석하고 Request Controller가 대상·scope를 확정한다. Context Manager가 기억 revision, tombstone, invalidation outbox를 하나의 transaction에 기록한다. 여러 기억이 후보면 삭제 대상을 질문한다. 현재 요청의 일회성 스타일 지시는 지속 기억을 수정하지 않는다.
 
 **삭제는 먼저 사용을 차단하고, 물리 정리는 그다음 수행한다.**
 
-1. 삭제/철회를 commit하면서 data/policy epoch를 올린다. Context 조회·Model Access job·Gateway 제공·Response 게시가 동일한 epoch를 검사하므로 이전 권한의 결과는 새로 사용되지 않는다.
+1. 삭제/철회를 commit하면서 data/policy epoch를 올린다. Context Manager의 조회·Model Access의 job·Agent Gateway의 제공·Response Manager의 게시가 동일한 epoch를 검사하므로 이전 권한의 결과는 새로 사용되지 않는다.
 2. Dependency index로 summary·cache·검색 index·model session/KV·대기 generation을 찾아 무효화한다. 사용 중 작업을 취소하고 pin도 삭제를 막지 못하게 한다.
 3. managed evidence/기억 본문을 정리한다. 쓰기 실패·실행 중 backend 미응답이면 `PURGE_PENDING`으로 남기고 재시작 후 계속한다. 해당 데이터 접근은 이미 차단되어 있다.
 4. `LOGICALLY_DELETED`와 `LOCAL_PURGE_CONFIRMED`를 구분해 사용자에게 알린다. Device 매체의 잔존 bit나 외부 backup까지 소거했다고 주장하지 않는다.
@@ -99,7 +99,7 @@ Conversation 삭제는 실행 중 Task 취소와 별개다. 기본 UI는 대화 
 - 삭제: DB tombstone·use fence·cleanup intent 먼저 commit → 파일 제거 → purge 확인 기록. Crash 뒤 cleanup intent를 재처리한다.
 - 재시작: 미완성 임시/orphan 파일 정리, ACTIVE manifest의 누락 표시, deletion epoch 적용 후 cache 재구성. 삭제된 데이터를 오래된 index에서 되살리지 않는다.
 
-장기 export 복원은 새 Store incarnation과 현재 schema/deletion ledger를 적용한 import다. 오래된 command·approval·Voice delivery를 다시 실행하지 않으며, 외부 Task는 query로 조정한다. 현재 삭제 ledger와 검증할 수 없는 오래된 backup은 자동 병합하지 않고 별도 읽기/선택적 복원으로 취급한다.
+장기 export 복원은 새 State Store incarnation과 현재 schema/deletion ledger를 적용한 import다. 오래된 command·approval·Voice delivery를 다시 실행하지 않으며, 외부 Task는 query로 조정한다. 현재 삭제 ledger와 검증할 수 없는 오래된 backup은 자동 병합하지 않고 별도 읽기/선택적 복원으로 취급한다.
 
 ## 7. 수용 범위와 비용
 

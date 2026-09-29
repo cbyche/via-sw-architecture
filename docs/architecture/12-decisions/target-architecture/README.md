@@ -48,7 +48,7 @@
 - accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이다. Agent가 만든 도메인 결과의 품질과 구분한다.
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
 - modifiability는 Agent·Model·Context source·계약 변화가 VIA의 책임·interface·state·runtime에 퍼지는 범위를 다룬다.
-- reliability/recoverability는 dependency·process·network·Store 장애를 가두고 중복·오연결 없이 확인 가능한 상태로 복구하는 능력을 다룬다.
+- reliability/recoverability는 dependency·process·network·State Store 장애를 가두고 중복·오연결 없이 확인 가능한 상태로 복구하는 능력을 다룬다.
 - Voice 연결, Conversation, Request, Task, Agent Execution의 수명을 분리한다.
 
 제품 요구의 근거는 [Mission & Boundary](../../01-system-mission-and-boundary.md), [Fixed Scope](../../03-fixed-architecture-scope.md), [Representative Use Cases](../../05-representative-use-cases.md)다. 용어는 [Terms](../../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../../08-quality-attributes/correctness-and-continuity.md)를 참고한다.
@@ -62,6 +62,7 @@
 4. 별도 작업 branch·PR을 매번 만들지 않고 현재 Architecture 흐름 안에서 본문·상세 계약·완결성 점검을 함께 갱신한다.
 5. 채팅에만 남은 제안을 구현 완료·성능 확인으로 바꾸지 않는다. 실제 근거가 생기기 전까지 성능은 가설이다.
 6. 목표 Architecture 그림은 `.drawio` 편집 원본과 같은 이름의 `.svg` preview를 함께 관리한다. Markdown에는 SVG를 삽입하고 draw.io 원본을 바로 연결한다.
+7. Component 참조는 `architecture.md` §4의 정식 명칭을 본문·표·상세 계약·그림에 동일하게 쓴다. 축약명·별칭을 쓰지 않으며, 그림 공간은 정식 명칭을 유지한 채 줄바꿈·배치로 확보한다.
 
 ## 현재 산출물의 한계
 

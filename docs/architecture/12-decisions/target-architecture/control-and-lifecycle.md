@@ -9,23 +9,23 @@
 
 | 사건 | 소유자와 전이 | 예외 |
 | --- | --- | --- |
-| Voice 연결 | IM이 device/connection epoch와 현재 Conversation의 Voice focus lease 발급; 음성 수집 상태를 UI에 표시 | microphone 권한 거부·장치 없음이면 Text 경로 유지; 연결 성공으로 표시하지 않음 |
-| 발화 시작 | IM이 Turn ID·sample start·Conversation·input sequence 고정, 즉시 local stop; Controller가 같은 대화의 미전송 admission hold | capture와 hold의 실제 시간 차이는 기록; 이미 전송된 업무를 막았다고 하지 않음 |
-| 종료 후보 | IM의 Turn-Taking Control이 speech activity·endpoint 신호로 `END_CANDIDATE` 기록; ASR final과 evidence producer watermark 요청 | 잠깐의 침묵만으로 업무를 전송하지 않음; 다시 말하면 같은 provisional Turn 연장 |
-| InputFinal | ASR final revision·audio 종료 범위·watermark 또는 명시적 gap을 결합해 Controller가 `SEALED` 입력 생성 | source가 응답하지 않아도 무한 대기하지 않음; 불완전 근거를 표시하고 필요한 지칭은 clarification |
+| Voice 연결 | Interaction Manager가 device/connection epoch와 현재 Conversation의 Voice focus lease 발급; 음성 수집 상태를 UI에 표시 | microphone 권한 거부·장치 없음이면 Text 경로 유지; 연결 성공으로 표시하지 않음 |
+| 발화 시작 | Interaction Manager가 Turn ID·sample start·Conversation·input sequence 고정, 즉시 local stop; Request Controller가 같은 대화의 미전송 admission hold | capture와 hold의 실제 시간 차이는 기록; 이미 전송된 업무를 막았다고 하지 않음 |
+| 종료 후보 | Interaction Manager의 Turn-Taking Control이 speech activity·endpoint 신호로 `END_CANDIDATE` 기록; ASR final과 evidence producer watermark 요청 | 잠깐의 침묵만으로 업무를 전송하지 않음; 다시 말하면 같은 provisional Turn 연장 |
+| InputFinal | ASR final revision·audio 종료 범위·watermark 또는 명시적 gap을 결합해 Request Controller가 `SEALED` 입력 생성 | source가 응답하지 않아도 무한 대기하지 않음; 불완전 근거를 표시하고 필요한 지칭은 clarification |
 | 늦은 전사·화면 근거 | 기존 입력을 덮지 않고 새 revision과 영향 field 기록; 현재 admission 무효화 | 전송 후라면 새 정정 요청으로 조정; 외부 Action rollback으로 해석하지 않음 |
-| Text 전송 | 제출한 본문·attachment·선택·Conversation을 고정하고 같은 Controller 경로 사용; 음성 중이면 local stop 및 새 input epoch | 단순 typing은 전송이 아님. 사용자가 미전송 요청 편집을 시작하면 명시적 edit hold |
-| 비언어 활동·중단된 입력 | 내용이 없고 ASR/IM 양쪽의 `NO_CONTENT`, gap 없음이 확인되면 `ABORTED_NO_CONTENT`; 이전 admission을 현재 조건으로 재검증 | 말을 했을 가능성·전사 실패·gap이 있으면 `WAIT_USER`; timeout만으로 Action hold 해제 금지 |
+| Text 전송 | 제출한 본문·attachment·선택·Conversation을 고정하고 같은 Request Controller 경로 사용; 음성 중이면 local stop 및 새 input epoch | 단순 typing은 전송이 아님. 사용자가 미전송 요청 편집을 시작하면 명시적 edit hold |
+| 비언어 활동·중단된 입력 | 내용이 없고 ASR/Interaction Manager 양쪽의 `NO_CONTENT`, gap 없음이 확인되면 `ABORTED_NO_CONTENT`; 이전 admission을 현재 조건으로 재검증 | 말을 했을 가능성·전사 실패·gap이 있으면 `WAIT_USER`; timeout만으로 Action hold 해제 금지 |
 
 Turn의 Conversation은 입력 시작 시 고정한다. UI에서 다른 대화로 이동해도 이미 시작한 입력을 새 대화에 끼워 넣지 않는다. Voice focus 변경은 이전 발화가 종료된 뒤 새 connection/focus epoch로 적용하며, 사용자가 즉시 전환을 선택하면 이전 미완성 입력은 보류하고 새 입력을 받는다. 하나의 PC에서 동시에 음성 출력할 Conversation은 하나다.
 
 Voice Process의 AEC와 보수적인 audio activity detector가 즉시 입력 시작/재생 중단을 담당하고, 종료는 activity 종료 후보와 ASR final의 결합으로 결정한다. 별도 학습된 endpoint/helper 모델은 기본 inventory에 추가하지 않는다. Detector 알고리즘·threshold는 교체 가능한 device adapter 설정이며 의미상 취소를 판단하지 않는다.
 
-`InputFinal`은 의미의 정확성 선언이 아니다. Endpoint가 일찍 닫혔으면 뒤 발화를 새 Turn으로 받아 Interpreter가 continuation/correction 관계를 복원한다. 원음·전사·당시 화면이 사라진 경우 현재 화면으로 대체하지 않는다. 사용자가 직접 선택하거나 다시 지칭하도록 질문한다.
+`InputFinal`은 의미의 정확성 선언이 아니다. Endpoint가 일찍 닫혔으면 뒤 발화를 새 Turn으로 받아 Request Interpreter가 continuation/correction 관계를 복원한다. 원음·전사·당시 화면이 사라진 경우 현재 화면으로 대체하지 않는다. 사용자가 직접 선택하거나 다시 지칭하도록 질문한다.
 
 ## 2. 최소 S2S 직접 응답 계약
 
-**선택: 같은 Omni Voice 호출의 제한된 제안 + Controller의 보수적인 허용 검사. 별도 classifier나 매번 semantic 재호출을 추가하지 않는다.** Voice 직접 역할은 현재 Turn의 원음·정규 전사와 언어/출력 형식 설정만 받는다. 이전 대화·Task·개인 기억·화면을 주지 않으며 Turn마다 직접 응답용 대화 KV를 초기화한다. 지속 audio encoder 상태와 이전 질문의 의미 이력은 구분한다.
+**선택: 같은 Omni Voice 호출의 제한된 제안 + Request Controller의 보수적인 허용 검사. 별도 classifier나 매번 semantic 재호출을 추가하지 않는다.** Voice 직접 역할은 현재 Turn의 원음·정규 전사와 언어/출력 형식 설정만 받는다. 이전 대화·Task·개인 기억·화면을 주지 않으며 Turn마다 직접 응답용 대화 KV를 초기화한다. 지속 audio encoder 상태와 이전 질문의 의미 이력은 구분한다.
 
 ![직접 응답과 Core 인계의 확정 경계](./diagrams/12-admission-and-control.svg)
 
@@ -42,7 +42,7 @@ Voice Process의 AEC와 보수적인 audio activity detector가 즉시 입력 �
 | dependencies | history / screen / personal / task / action / current_information / compound / uncertainty 각각 true·false·unknown |
 | response | 답변 Text, 문장별 audio handle·text 대응, 종료 상태; 게시 권한은 포함하지 않음 |
 
-Controller는 다음을 **모두** 만족할 때만 Direct Admission Record를 만든다.
+Request Controller는 다음을 **모두** 만족할 때만 Direct Admission Record를 만든다.
 
 1. 현재 Voice 입력이 SEALED이고 speech evidence gap·핵심 전사 불일치가 없다. `input_echo` 불일치는 보수적으로 Core에 넘긴다.
 2. 허용 knowledge class이며 모든 dependency가 false다. confidence 값으로 누락·unknown을 대신하지 않는다.
@@ -58,8 +58,8 @@ Controller는 다음을 **모두** 만족할 때만 Direct Admission Record를 �
 
 ## 3. Core 해석·읽기·응답 예산
 
-- Controller는 input revision당 **semantic 호출 총 2회**를 배정한다. 최초 해석, 추가 근거 후 refinement, 형식 repair, 원음 재확인 또는 stale 재해석에 쓰는 모든 semantic generation을 이 합계에 센다. 자동 repair용 숨은 세 번째 호출은 없다.
-- 기본 Context는 owner snapshot·현재 선택 등 값싼 읽기로 미리 준비한다. 모델이 요구한 추가 읽기는 한 묶음만 수행한다. 각 query의 source set·filter·page/byte 한도·deadline을 Controller가 고정하고 Context Manager가 실행한다. 한도에 걸리면 `TRUNCATED/UNKNOWN_COVERAGE`이지 전 후보 확인이 아니다.
+- Request Controller는 input revision당 **semantic 호출 총 2회**를 배정한다. 최초 해석, 추가 근거 후 refinement, 형식 repair, 원음 재확인 또는 stale 재해석에 쓰는 모든 semantic generation을 이 합계에 센다. 자동 repair용 숨은 세 번째 호출은 없다.
+- 기본 Context는 owner snapshot·현재 선택 등 값싼 읽기로 미리 준비한다. 모델이 요구한 추가 읽기는 한 묶음만 수행한다. 각 query의 source set·filter·page/byte 한도·deadline을 Request Controller가 고정하고 Context Manager가 실행한다. 한도에 걸리면 `TRUNCATED/UNKNOWN_COVERAGE`이지 전 후보 확인이 아니다.
 - 조회 재시도는 read-only이며 같은 query ID로 최대 한 번, 남은 deadline과 같은 전체 byte/page 예산 안에서만 허용한다. 새로운 source 탐색으로 무한 확장하지 않는다.
 - 2회 뒤 사용자가 풀 수 있는 모호함은 `WAIT_USER`, source·기능·시간 문제는 실패 이유와 재시도 선택으로 종료한다. 충분한 근거가 있는데도 무조건 질문하는 구조는 아니다.
 - 사용자 추가 답변·정정은 새 input revision으로 기존 Request를 보완한다. source 변경이나 provider retry만으로 input revision을 늘려 예산을 초기화하지 않는다.
@@ -70,7 +70,7 @@ Controller는 다음을 **모두** 만족할 때만 Direct Admission Record를 �
 
 ## 4. Request·질문·Task의 상태 전이
 
-### Request — Controller 소유
+### Request — Request Controller 소유
 
 | 상태 | 다음 전이와 조건 |
 | --- | --- |
@@ -84,11 +84,11 @@ Controller는 다음을 **모두** 만족할 때만 Direct Admission Record를 �
 
 Request의 `COMPLETED`는 VIA의 해당 처리 완료다. 사용자 업무 완료는 Task의 source-confirmed terminal 상태로만 표시한다. 직접 답변의 Voice는 `VOICE_PENDING/INTERRUPTED/DELIVERY_UNKNOWN` 등 별도 전달 상태로 남으므로 Text 게시 완료와 청취 완료를 혼동하지 않는다. 위임 접수 불명은 HANDLING + command UNKNOWN이며 COMPLETED가 아니다.
 
-### Pending User Interaction — Controller 소유
+### Pending User Interaction — Request Controller 소유
 
 `OPEN → PRESENTED → ANSWER_COMMITTED → CLOSED`를 기본으로 하고 `EXPIRED / REVOKED / SUPERSEDED`로도 닫힌다. 음성 일부만 전달되면 PRESENTED 범위에 실제 전달된 질문을 기록한다. 화면 카드의 명시적 답변은 interaction ID를 포함한다.
 
-답변은 (1) UI가 지정한 질문 ID, 또는 (2) Interpreter가 확인한 대상 + 유일한 유효 후보에만 결합한다. 자연어 “응”에는 현재 Conversation의 **마지막으로 실제 제시된 유일한 질문 focus**가 필요하다. 다른 대화/업무 질문이 동시에 답변 후보이면 질문 대상을 다시 묻는다. 가장 최근에 생성된 질문을 자동 선택하지 않는다. 실행 승인에는 Task·Execution·question·action payload digest·policy revision·expiry가 모두 일치해야 한다.
+답변은 (1) UI가 지정한 질문 ID, 또는 (2) Request Interpreter가 확인한 대상 + 유일한 유효 후보에만 결합한다. 자연어 “응”에는 현재 Conversation의 **마지막으로 실제 제시된 유일한 질문 focus**가 필요하다. 다른 대화/업무 질문이 동시에 답변 후보이면 질문 대상을 다시 묻는다. 가장 최근에 생성된 질문을 자동 선택하지 않는다. 실행 승인에는 Task·Execution·question·action payload digest·policy revision·expiry가 모두 일치해야 한다.
 
 답변 commit과 질문 종료는 같은 owner transaction으로 한 번만 적용한다. 늦은 답변, 이미 끝난 Execution의 승인, 변경된 action payload는 거절하고 현재 상황을 안내한다. VIA clarification은 Request가 유효하면 보관하고, Agent 질문·승인은 Agent expiry와 terminal 사건에 따라 만료한다. 사전 승인 기간이 없는 Action approval은 해당 연결/실행 revision에서만 유효하며 재시작·연결 복구 후 재조회한다. 침묵은 동의·거부·재개 허가가 아니다.
 
@@ -96,17 +96,17 @@ Request의 `COMPLETED`는 VIA의 해당 처리 완료다. 사용자 업무 완�
 
 Task에는 `phase`, `control_state`, `verification_state`를 따로 둔다. Phase는 `PREPARING/RUNNING/WAITING_USER/SUCCEEDED/PARTIAL/FAILED/CANCELLED`, control은 `NONE/CORRECTION_PENDING/CANCEL_REQUESTED`, verification은 `CONFIRMED/RECONCILING/UNKNOWN`이다. PARTIAL은 Agent가 이번 실행의 종료와 완료·실패 범위를 명시한 경우에만 terminal이다. 진행 중 중간 산출물은 RUNNING의 artifact다.
 
-Execution은 Agent가 돌려준 외부 identity에 결합한 projection이다. 접수 전 예약한 binding과 실제 접수된 execution ID를 구분한다. 동일 Agent의 독립 Task는 독립 execution correlation을 요구하며, Agent가 하나만 지원하면 Gateway에서 순차 admission하거나 다른 적합 Agent를 선택한다. 실행 ID를 재활용해 두 업무의 결과를 합치지 않는다.
+Execution은 Agent가 돌려준 외부 identity에 결합한 projection이다. 접수 전 예약한 binding과 실제 접수된 execution ID를 구분한다. 동일 Agent의 독립 Task는 독립 execution correlation을 요구하며, Agent가 하나만 지원하면 Agent Gateway에서 순차 admission하거나 다른 적합 Agent를 선택한다. 실행 ID를 재활용해 두 업무의 결과를 합치지 않는다.
 
 완료 Task의 같은 결과물 수정은 Task revision을 높이고 새 Execution을 연결한다. 이전 Execution의 terminal 이력은 불변이다. 이전 결과를 재료로 쓰는 별도 목표는 새 Task다. 완료와 취소가 교차하면 source에서 확인한 완료 범위·취소 불가/완료 상태를 둘 다 전달한다.
 
 ## 5. 전송과 정정의 원자적 경계
 
-### Command — 의미는 Task Manager, 전달 상태는 Gateway
+### Command — 의미는 Task Manager, 전달 상태는 Agent Gateway
 
 `PENDING → DISPATCHING → ACKNOWLEDGED`이며, 확정된 거부는 `REJECTED`, 전송 시작 후 응답 유실은 `UNKNOWN`, 미전송 철회는 `WITHDRAWN`이다. ACKNOWLEDGED는 업무 완료가 아니다. Agent event와 조회는 이후 Execution을 갱신한다. Start·follow-up·correct·cancel·question answer 모두 command identity와 현재 revision을 갖는다.
 
-단일 local State Store transaction에서 Controller가 만든 admission/hold 변경, Task Manager가 만든 command/epoch 변경, Gateway의 transmission CAS를 조합한다. 각 owner의 검증된 변경 집합을 Unit of Work에 전달하며 다른 owner 필드를 직접 수정하지 않는다. 네트워크·모델 호출은 transaction 밖이다.
+단일 local State Store transaction에서 Request Controller가 만든 admission/hold 변경, Task Manager가 만든 command/epoch 변경, Agent Gateway의 transmission CAS를 조합한다. 각 owner의 검증된 변경 집합을 Unit of Work에 전달하며 다른 owner 필드를 직접 수정하지 않는다. 네트워크·모델 호출은 transaction 밖이다.
 
 | 경쟁 | 먼저 확정된 사건에 따른 동작 |
 | --- | --- |
@@ -114,7 +114,7 @@ Execution은 Agent가 돌려준 외부 identity에 결합한 projection이다. �
 | Policy revoke / dispatch | 현재 policy revision 비교로 미전송 차단. 이미 제공된 Context는 회수했다고 주장하지 않고 Agent에 중단·삭제 지원 여부 확인 |
 | Answer / Agent terminal | 질문·Execution revision을 같은 transaction에서 확인; terminal이 먼저면 늦은 승인 전송 금지 |
 | Dependency result / correction | graph revision + node ID + result version으로 한 번만 후속 admission; 정정 뒤 오래된 event는 no-op |
-| Text/Voice publication / 새 발화 | durable publication admission과 별개로 IM의 output epoch 검사; 새 발화 후 옛 packet은 재생 금지 |
+| Text/Voice publication / 새 발화 | durable publication admission과 별개로 Interaction Manager의 output epoch 검사; 새 발화 후 옛 packet은 재생 금지 |
 
 화면의 미전송 요청 편집 UI와 명시적 취소 버튼은 의미 추론 없이 ID를 지정해 hold/cancel intent를 접수할 수 있다. 자연어 “그거 취소”는 대상 해석이 필요하다. 사용자 발화 중에는 같은 대화의 PENDING Action을 보류하지만 무관한 실행 중 Task를 중단하지 않는다.
 
@@ -156,7 +156,7 @@ Voice를 끄면 대기 결과는 Text로 남고 `TEXT_ONLY`로 전환한다. 다
 | 사건 | 주요 설계 동작 |
 | --- | --- |
 | Core 재시작 | 새 incarnation fence → owner/schema 복원 → inbox/domain event 재적용 → Task별 조회 → 질문·publication 복원 → 무관한 정상 경로 admission 개방 |
-| Store 용량/쓰기 장애 | 새 내구 command·memory 변경·publication 확정 중단, UI의 명시적 장애 배너와 local stop 유지. 접수된 업무 상태를 잃었다고 가정해 새로 start하지 않음 |
+| State Store 용량/쓰기 장애 | 새 내구 command·memory 변경·publication 확정 중단, UI의 명시적 장애 배너와 local stop 유지. 접수된 업무 상태를 잃었다고 가정해 새로 start하지 않음 |
 | durable publication은 있고 UI receipt 없음 | 같은 ID로 Text upsert; 음성은 마지막 확인 범위 밖 UNKNOWN, 자동 재생 금지 |
 | Source/Model deadline | Request attempt를 끝내고 원인·확인된 상태를 기록; 무한 자동 반복 없음. semantic 없이도 표시 가능한 상태 template 사용 |
 | sleep·resume / 장치 교체 | connection·clock mapping·Voice output epoch 갱신, 이전 audio 폐기, 미완성 입력 gap 표시, Agent 상태 재조회; sleep 기간을 실제 처리시간으로 숨기지 않음 |
@@ -164,6 +164,6 @@ Voice를 끄면 대기 결과는 Text로 남고 `TEXT_ONLY`로 전환한다. 다
 | schema / adapter 업데이트 | 새 admission drain·outbox fence 후 migration; durable schema version과 reader compatibility 검사. 미지원 구버전으로 자동 rollback해 중복 송신하지 않음 |
 | adapter 교체 | canonical 계약과 capability version을 유지/변환; 진행 중 실행은 기존 binding으로 종료·조회하거나 명시적 migration. ID·권한을 새 Agent에 자동 재사용하지 않음 |
 
-Store는 **Core가 소유하는 local embedded transactional DB + 관리되는 evidence 파일**로 선택한다. 별도 DB server를 기본 배치로 두지 않는다. DB engine 제품·직렬화 형식은 위 원자성·crash 계약을 만족하는 구현 선택이다. 모델 KV와 cache는 재구성 가능하며 authoritative state가 아니다.
+State Store는 **Core가 소유하는 local embedded transactional DB + 관리되는 evidence 파일**로 선택한다. 별도 DB server를 기본 배치로 두지 않는다. DB engine 제품·직렬화 형식은 위 원자성·crash 계약을 만족하는 구현 선택이다. 모델 KV와 cache는 재구성 가능하며 authoritative state가 아니다.
 
 이 계약은 모든 장애에서 성공한다고 약속하지 않는다. 확인할 수 없는 상태, 불가능한 제어, 유실된 근거와 다음 사용자 행동까지 정하는 것으로 기능 경로를 닫는다. 구현·성능 측정 없이 작성한 주요 설계이며 QA 점수 또는 실현 성능의 증거가 아니다.

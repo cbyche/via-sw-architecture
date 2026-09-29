@@ -5,10 +5,10 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="send" value="A · COMMAND — Controller의 admission → Task Manager의 intent → Gateway 전송" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+        <mxCell id="send" value="A · COMMAND — Request Controller의 admission → Task Manager의 intent → Agent Gateway 전송" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
           <mxGeometry x="45" y="150" width="1810" height="260" as="geometry" />
         </mxCell>
-        <mxCell id="event" value="B · EVENT — Agent source → Gateway inbox → Task state → Conversation에 전달" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+        <mxCell id="event" value="B · EVENT — Agent source → Agent Gateway inbox → Task state → Conversation에 전달" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
           <mxGeometry x="45" y="435" width="1810" height="260" as="geometry" />
         </mxCell>
         <mxCell id="publish" value="C · PUBLICATION — durable intent와 실제 사용자 전달은 다른 사실" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
@@ -32,10 +32,10 @@
         <mxCell id="event-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Projection + 후속 event&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;적용 cursor·Task state·domain outbox&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;관련 질문 종료도 owner별 원자 전이&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="540" y="500" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="event-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller 적용&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;원래 Conversation·Request로 결합&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;event ID dedupe + publication intent&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="event-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Request Controller 적용&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;원래 Conversation·Request로 결합&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;event ID dedupe + publication intent&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="990" y="500" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="event-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Response 인계&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;publication ID로 멱등 인계&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;새 발화 없이 결과·질문 전달&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="event-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Response Manager 인계&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;publication ID로 멱등 인계&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;새 발화 없이 결과·질문 전달&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="1440" y="500" width="340" height="132" as="geometry" />
         </mxCell>
         <mxCell id="publish-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;게시 계획 기록&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;내용·출처·identity·출력 세대&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;publication outbox와 내용 version&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">

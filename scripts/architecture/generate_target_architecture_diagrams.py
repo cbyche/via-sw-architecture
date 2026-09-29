@@ -429,12 +429,12 @@ def system_overview() -> Diagram:
     box(d, "user", 30, 545, 210, 145, "사용자", ("Voice · Text", "화면 지칭 · 선택"), COLORS["blue_fill"], COLORS["blue"])
     box(d, "interaction", 350, 545, 280, 145, "Interaction Manager", ("입력 · evidence timeline", "재생 · barge-in · S2S client", "M1 · 세부 모듈은 본문 §4"), COLORS["blue_fill"], COLORS["blue"])
     box(d, "controller", 830, 545, 300, 145, "Request Controller", ("Conversation · Request 소유", "의미·대상 검증 · 경로 확정", "dispatch / publication admission"), COLORS["purple_fill"], COLORS["purple"])
-    box(d, "task", 1310, 545, 270, 145, "Task Manager", ("Task · Execution 연결 소유", "command 생성 · 상태 반영", "Gateway의 요청 주체"), COLORS["green_fill"], COLORS["green"])
+    box(d, "task", 1310, 545, 270, 145, "Task Manager", ("Task · Execution 연결 소유", "command 생성 · 상태 반영", "Agent Gateway의 요청 주체"), COLORS["green_fill"], COLORS["green"])
     box(d, "gateway", 1700, 545, 260, 145, "Agent Gateway", ("protocol · capability adapter", "outbox 전송 · inbox 수신", "Agent 결과의 VIA 수신점"), COLORS["orange_fill"], COLORS["orange"])
     box(d, "agents", 2080, 545, 270, 145, "Downstream Agents", ("업무 추론 · 계획 · 도구", "실제 작업 실행", "progress · question · result"), COLORS["orange_fill"], COLORS["orange"])
     box(d, "context", 350, 285, 280, 135, "Context Manager", ("허용된 기본 Context 준비", "bounded read · 후보·근거", "cache · receipt · User Memory"), COLORS["cyan_fill"], COLORS["cyan"])
     box(d, "resolver", 830, 285, 300, 135, "Request Interpreter", ("목표 · 대상 · Task 후보 제안", "추가 근거 / clarification 제안", "M2 · 의미 확정 권한 없음"), COLORS["purple_fill"], COLORS["purple"])
-    box(d, "policy", 1310, 285, 270, 135, "Policy Manager", ("접근 · 외부 제공 · consent", "현재 policy revision", "Controller가 판단 적용"), COLORS["amber_fill"], COLORS["amber"])
+    box(d, "policy", 1310, 285, 270, 135, "Policy Manager", ("접근 · 외부 제공 · consent", "현재 policy revision", "Request Controller가 판단 적용"), COLORS["amber_fill"], COLORS["amber"])
     box(d, "sources", 2080, 285, 270, 135, "Context Sources", ("OS · App · File · Mail", "Calendar · Browser · Web", "허용된 범위의 읽기 전용"), COLORS["gray_fill"], COLORS["gray"])
     box(d, "response", 830, 825, 300, 145, "Response Manager", ("승인된 payload의 게시·기록", "Text · Voice · 알림 조정", "M3 · 실제 전달 receipt 보존"), COLORS["blue_fill"], COLORS["blue"])
 
@@ -473,10 +473,10 @@ def system_overview() -> Diagram:
     edge(d, "asr-provider", ((1760, 1340), (2080, 1340)), "model", "asr", "audio / timed transcript", 1920, 1327, COLORS["cyan"], bidirectional=True)
 
     caption(d, 1350, 815, "STREAMING: chunk와 Request를 구분", 19, COLORS["ink"], weight=700)
-    for y, t in [(851,"audio chunk는 Interaction Manager ↔ Model Access"), (881,"Controller에는 시작·정정·확정 이벤트 + evidence 참조"), (911,"Context는 기본 준비 + 변경 시 갱신 + 부족한 근거 조회"), (941,"barge-in은 즉시 로컬 재생 중단; Agent 취소는 의미 확인 후")]:
+    for y, t in [(851,"audio chunk는 Interaction Manager ↔ Model Access"), (881,"Request Controller에는 시작·정정·확정 + evidence 참조"), (911,"Context Manager는 기본 준비·갱신·추가 근거 조회"), (941,"barge-in은 즉시 로컬 재생 중단; Agent 취소는 의미 확인 후")]:
         caption(d, 1350, y, t, 16)
     caption(d, 370, 1025, "번호는 연결 계약 ID: 필수 직렬 단계가 아님 · ②~④는 필요에 따라 반복 · ⑦~⑩는 새 발화 없이도 진행", 16, COLORS["muted"])
-    caption(d, 350, 1118, "Controller · Context · Task · Gateway · Response · Policy", 15, COLORS["gray"])
+    caption(d, 350, 1118, "Request Controller · Context Manager · Task Manager · Agent Gateway · Response Manager · Policy Manager", 15, COLORS["gray"])
     caption(d, 980, 1383, "점선 S / M1~M3 = 위 Component의 접근 port 표기 · 추가 Component나 메시지 bus가 아님", 15)
     caption(d, 350, 1457, "State Store는 VIA 내부 기반이다. Core process 종료 후 데이터 보존은 필요하지만 별도 DB process를 강제하지 않는다.", 15)
 
@@ -529,9 +529,9 @@ def lifecycle() -> Diagram:
     d = detail('02-lifecycle-and-ownership', 'Identity와 수명 — 무엇이 이어지고 무엇이 새로 생기는가', '박스는 데이터 entity · 화살표는 관계이며 실행 순서가 아니다', 1110)
     lane(d, 'identity', 45, 150, 1810, 520, '관계 — Request Controller / Task Manager / 외부 Agent의 권위를 구분', fill='#F8FAFC')
     top = [
-        ('conv', 'Conversation', ('Controller 소유 · 대화와 실제 응답', 'Voice 연결이 끝나도 유지'), 'blue'),
-        ('turn', 'Turn', ('Controller 소유 · 제출한 입력', '원문·시점·input revision'), 'blue'),
-        ('request', 'Request', ('Controller 소유 · 논리적 요청', 'Request Graph의 node·의존 관계'), 'purple'),
+        ('conv', 'Conversation', ('Request Controller 소유 · 대화와 실제 응답', 'Voice 연결이 끝나도 유지'), 'blue'),
+        ('turn', 'Turn', ('Request Controller 소유 · 제출한 입력', '원문·시점·input revision'), 'blue'),
+        ('request', 'Request', ('Request Controller 소유 · 논리적 요청', 'Request Graph의 node·의존 관계'), 'purple'),
         ('task', 'Task', ('Task Manager 소유 · 사용자 업무', '직접 응답은 Task가 없어도 됨'), 'green')]
     for i, (ident, title, lines, color) in enumerate(top):
         card(d, ident, 90+i*450, 225, title, lines, color)
@@ -539,7 +539,7 @@ def lifecycle() -> Diagram:
     right(d, 'resolves-request', 'turn', 'request', '생성·보완', 'purple')
     right(d, 'binds-task', 'request', 'task', '선택적 연결', 'green')
     card(d, 'connection', 90, 490, 'Voice Connection', ('Interaction Manager 소유 · 연결 session', '같은 대화에 여러 번 재연결 가능'), 'gray')
-    card(d, 'question', 540, 490, 'Pending Interaction', ('Controller 소유 · 질문 identity', '새 Turn의 답을 기존 Request에 결합'), 'amber')
+    card(d, 'question', 540, 490, 'Pending Interaction', ('Request Controller 소유 · 질문 identity', '새 Turn의 답을 기존 Request에 결합'), 'amber')
     card(d, 'response-record', 990, 490, 'Response Record', ('Response Manager 소유 · 게시 identity', 'Text·실제 audible 범위를 분리 기록'), 'blue')
     card(d, 'execution', 1440, 490, 'Agent Execution', ('외부 실행 상태의 VIA projection', 'Task 하나에 후속 실행 0..N'), 'orange')
     down(d, 'connection-relation', 'conv', 'connection', '수명 분리', 'gray')
@@ -562,15 +562,15 @@ def request_resolution() -> Diagram:
     lane(d, 'primary', 45, 150, 1810, 255, '① 최초 해석 — 입력 중 기본 Context 준비는 finalization과 병렬 진행', fill='#F8FAFC')
     for ident, x, title, lines, col in [
         ('input',90,'Final Input + Evidence',('확정 입력·시점별 화면 근거','기본 Context·허용 source·Task 후보'),'blue'),
-        ('proposal',540,'Interpreter · 호출 1',('목표·대상·Task·handling 후보','field별 근거·충돌·추가 읽기 제안'),'purple'),
-        ('host',990,'Controller · 검증',('coverage·freshness·현재 policy','입력·Task·evidence revision 확인'),'amber'),
+        ('proposal',540,'Request Interpreter · 호출 1',('목표·대상·Task·handling 후보','field별 근거·충돌·추가 읽기 제안'),'purple'),
+        ('host',990,'Request Controller · 검증',('coverage·freshness·현재 policy','입력·Task·evidence revision 확인'),'amber'),
         ('commit',1440,'Semantic Commit',('필수 field 해결·불변 revision','직접 처리 / 내부 변경 / Agent 위임'),'green')]:
         card(d,ident,x,225,title,lines,col)
     right(d,'input-proposal','input','proposal',color='purple')
     right(d,'proposal-host','proposal','host',color='purple')
     right(d,'host-commit','host','commit','충족','green')
     lane(d,'outcomes',45,445,1810,335,'② 미해결 분기 — 업무 실행 허가 아님',fill='#FFFFFF')
-    card(d,'more',540,555,'Context 추가 조회',('허용된 read 묶음 → Interpreter 호출 2','조회 실패·budget 소진도 receipt에 기록'),'cyan')
+    card(d,'more',540,555,'Context 추가 조회',('허용된 read 묶음 → Request Interpreter 호출 2','조회 실패·budget 소진도 receipt에 기록'),'cyan')
     card(d,'clarify',990,555,'Clarification',('사용자만 구분할 후보·누락 조건','질문 등록·게시 후 새 Turn으로 보완'),'amber')
     card(d,'failure',1440,555,'확인 불가 / 보류',('source 실패·기능 미지원·deadline','이유와 다음 행동을 같은 요청에 기록'),'red')
     edge(d,'need-read',((1030,357),(1030,420),(740,420),(740,555)),'host','more','추가 근거',890,410,COLORS['cyan'])
@@ -602,24 +602,24 @@ def grounding_timeline() -> Diagram:
         down(d,ident+'-align',ident+'-speech',ident+'-evidence',color='cyan')
         down(d,ident+'-ground',ident+'-evidence',ident+'-resolve',color=col)
     caption(d,90,930,'발화 시작 전부터 유지된 선택도 유효 구간으로 참조한다. 관련 구간은 pin하고, 보관 한도 초과·capture gap은 명시한다.',18,COLORS['ink'],weight=700)
-    caption(d,90,972,'Timeline은 Interaction Manager, source 후보·조회 receipt는 Context Manager, 최종 referent와 dependency read set은 Controller가 소유한다.',16)
+    caption(d,90,972,'Timeline은 Interaction Manager, source 후보·조회 receipt는 Context Manager, 최종 referent와 dependency read set은 Request Controller가 소유한다.',16)
     caption(d,90,1012,'늦은 근거로 commit을 덮어쓰지 않는다. 전송 전이면 재검증하고, 전송 뒤면 실행 상태를 확인한 정정으로 처리한다.',16)
     return d
 
 
 def dispatch_recovery() -> Diagram:
     d = detail('05-dispatch-and-recovery', '내구 경계 — 명령·결과·알림 사이의 유실을 닫는다', '각 행은 다른 transaction / 전달 경로 · 네트워크와 물리적 재생은 DB transaction 밖', 1130)
-    strip(d,'send',150,'A · COMMAND — Controller의 admission → Task Manager의 intent → Gateway 전송','orange',[
+    strip(d,'send',150,'A · COMMAND — Request Controller의 admission → Task Manager의 intent → Agent Gateway 전송','orange',[
         ('의도·Outbox 원자 기록',('Request revision·Task·command ID','허용 범위·Agent·중복 방지 key')),
         ('전송 시작 CAS',('PENDING → DISPATCHING','hold·epoch·policy를 원자 확인')),
         ('Agent ingress',('동일 command key로 correlation','접수 / 거절 / 결과 불명 구분')),
         ('불명 상태 조정',('조회 + idempotency 지원 시 재전송','미지원이면 임의 재실행 금지')),
     ],'Crash 전후: outbox 미기록이면 보내지 않음 · DISPATCHING 이후에는 전송 여부 불명 가능 · 취소 접수는 외부 rollback이 아님.')
-    strip(d,'event',435,'B · EVENT — Agent source → Gateway inbox → Task state → Conversation에 전달','green',[
+    strip(d,'event',435,'B · EVENT — Agent source → Agent Gateway inbox → Task state → Conversation에 전달','green',[
         ('Inbox 내구 수신',('Agent·Execution·event identity','중복 key·source revision 보존')),
         ('Projection + 후속 event',('적용 cursor·Task state·domain outbox','관련 질문 종료도 owner별 원자 전이')),
-        ('Controller 적용',('원래 Conversation·Request로 결합','event ID dedupe + publication intent')),
-        ('Response 인계',('publication ID로 멱등 인계','새 발화 없이 결과·질문 전달')),
+        ('Request Controller 적용',('원래 Conversation·Request로 결합','event ID dedupe + publication intent')),
+        ('Response Manager 인계',('publication ID로 멱등 인계','새 발화 없이 결과·질문 전달')),
     ],'Task 저장 직후 crash해도 domain outbox를 재처리한다. Source gap·역순·재접속이면 snapshot으로 조정하고 확인 불가를 남긴다.')
     strip(d,'publish',720,'C · PUBLICATION — durable intent와 실제 사용자 전달은 다른 사실','blue',[
         ('게시 계획 기록',('내용·출처·identity·출력 세대','publication outbox와 내용 version')),
@@ -634,11 +634,11 @@ def dispatch_recovery() -> Diagram:
 def runtime_processes() -> Diagram:
     d = detail('06-runtime-and-fault-boundaries', '배치와 장애 경계 — 입력은 독립, Omni 가중치는 한 곳에', '공유 on-device Omni 주안 · process 색은 책임 · 모델 내부는 의존성 · 자원 수치는 미검증', 1470)
     lane(d,'pc',45,150,1810,1190,'USER PC — Voice / ASR / Core / Shared Inference / UI / Connector 경계',fill='#F8FAFC',stroke='#94A3B8')
-    card(d,'voice',90,235,'Voice Process',('IM: capture · playback · local stop','AEC · 활동 감지 · 짧은 buffer','Model Access client · weights 없음'),'blue',w=400,h=165)
+    card(d,'voice',90,235,'Voice Process',('Interaction Manager: capture · playback · local stop','AEC · 활동 감지 · 짧은 buffer','Model Access client · weights 없음'),'blue',w=400,h=165)
     card(d,'asr',650,235,'Speech Input Worker',('Streaming ASR × 1 · 전용 입력 근거','CPU 예산 · bounded queue · 시간/revision','Omni 장애·semantic 완료를 기다리지 않음'),'cyan',w=500,h=165)
     right(d,'voice-asr','voice','asr','audio ↔ evidence','cyan')
     card(d,'input-note',1340,235,'입력 보호 조건',('Capture + ASR 인식 + Omni Voice 진행','녹음만 쌓아 두는 것은 정상 동시 처리 아님','별도 process ≠ 물리 자원 완전 격리'),'amber',w=450,h=165)
-    card(d,'core',90,560,'Core Process',('Controller · Interpreter · Context · Task','Response · Policy · Gateway 상태 권위','IM timeline · Model Access client','semantic 가중치를 별도 적재하지 않음'),'purple',w=400,h=190)
+    card(d,'core',90,560,'Core Process',('Request Controller · Request Interpreter','Context Manager · Task Manager','Response Manager · Policy Manager','Agent Gateway · Model Access client','Interaction Manager timeline','semantic 가중치를 별도 적재하지 않음'),'purple',w=400,h=190)
     card(d,'service',650,530,'Shared Inference Service',('Model Access server · Omni adapter','단일 scheduler / weights owner','VOICE · SEMANTIC 별도 session/KV','Voice 예약 + semantic 최소 진행량','chunked prefill · deadline · cancel'),'gray',w=500,h=250)
     card(d,'weights',1340,530,'Omni Model × 1',('Thinker 약 10B + encoder / speech 모듈','같은 PC · 모듈별 한 번 적재','두 역할이 같은 weights를 사용','가중치 공유 ≠ 같은 Context / 권한'),'gray',w=450,h=250)
     right(d,'core-service','core','service','semantic / 생성','purple')
@@ -646,7 +646,7 @@ def runtime_processes() -> Diagram:
     edge(d,'voice-core',((290,400),(290,560)),'voice','core','input / hold / lease',385,495,COLORS['blue'],bidirectional=True)
     edge(d,'voice-service',((490,370),(580,370),(580,485),(800,485),(800,530)),'voice','service','VOICE stream / 출력',875,470,COLORS['blue'],bidirectional=True)
     card(d,'ui',90,945,'UI Process',('Text · 화면 evidence','Core 연결 문제 표시','명시적 local stop'),'blue',w=400,h=150)
-    card(d,'store',650,945,'Durable Store',('local embedded DB · evidence manifest','Core 종료 후에도 데이터 보존','모델 KV는 authoritative state 아님'),'gray',w=500,h=150)
+    card(d,'store',650,945,'State Store',('local embedded DB · evidence manifest','Core 종료 후에도 데이터 보존','모델 KV는 authoritative state 아님'),'gray',w=500,h=150)
     card(d,'worker',1340,945,'Connector Workers',('위험한 native·blocking 연동 격리','Context Source / Agent와 통신','외부 업무는 Downstream Agent'),'orange',w=450,h=150)
     edge(d,'core-ui',((290,750),(290,945)),'core','ui','bounded IPC',185,860,COLORS['blue'],bidirectional=True)
     edge(d,'core-store',((400,750),(400,850),(900,850),(900,945)),'core','store','repository',675,835,COLORS['gray'],bidirectional=True)
@@ -672,7 +672,7 @@ def four_asr_paths() -> Diagram:
     ],'QA-19는 frozen QA-11/12 field의 중복 없는 micro-average. 추가 Task binding·continuity 검사는 별도 회귀 의미를 유지한다.')
     strip(d,'latency',435,'2 · QA-09 RESPONSIVENESS — 사용자·Agent source의 실제 사건에서 의미 있는 반응까지','blue',[
         ('실제 시작 사건',('사용자 input end / status source','final transcript·VIA receive로 대체 금지')),
-        ('VIA 처리 경로',('잔여 해석·read·queue·Store·IPC','필요한 외부 연동·validation')),
+        ('VIA 처리 경로',('잔여 해석·read·queue·State Store·IPC','필요한 외부 연동·validation')),
         ('경로별 경계',('위임: Agent ingress까지 + 결과 이후','직접: Agent 실행 구간 없음')),
         ('실제 사용자 전달',('의미 있는 audible / UI endpoint','생성·enqueue·filler는 종료가 아님')),
     ],'입력 중 사전 준비는 종료 후 중복 합산하지 않는다. Barge-in QA-04는 별도 회귀이며 QA-09 평균에 넣지 않는다.')
@@ -683,7 +683,7 @@ def four_asr_paths() -> Diagram:
         ('기능 유지 확인',('영향 Element의 합집합','미해결 변경을 작은 수치로 포장 금지')),
     ],'Adapter가 있어도 canonical 계약 자체가 달라지면 여러 owner가 바뀔 수 있다. 그림의 박스 개수는 점수가 아니다.')
     strip(d,'recovery',1005,'4 · QA-39 RELIABILITY / RECOVERABILITY — 재기동이 아니라 올바른 사용자 상태 복원','green',[
-        ('Fault 발생',('Core·Voice·source·Agent·Store','영향 기능·Task 범위 식별')),
+        ('Fault 발생',('Core·Voice·source·Agent·State Store','영향 기능·Task 범위 식별')),
         ('격리·내구 복구',('queue·process·transaction 경계','command / event / publication')),
         ('Source와 조정',('외부 실행·결과·질문 재확인','중복 실행·stale state 방지')),
         ('복구 판정',('identity·상태·결과·control 복원','deadline·evidence·containment')),
@@ -696,12 +696,12 @@ def response_delivery() -> Diagram:
     d = detail('08-response-and-interruption', '응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권', '박스는 실행 단계 · 화면 상세와 Voice 요약은 같은 사실에서 별도로 구성한다', 1440)
     strip(d,'s2s',150,'A · S2S 직접 응답 — 명백한 자체 지식 질문만 허용','blue',[
         ('입력 stream',('Interaction Manager → Model Access','ASR 입력 근거 + 공유 Omni 음성 역할')),
-        ('Provisional generation',('IM buffer에 handle·audio 보류','input revision·출력 세대 결합')),
-        ('Controller admission',('좁은 direct 허용 / 나머지는 Core','VoiceProposal + host 허용 검사')),
-        ('Response Manager',('publication 기록 후 handle release','IM에서만 실제 표시·재생')),
+        ('Provisional generation',('Interaction Manager buffer에 handle·audio 보류','input revision·출력 세대 결합')),
+        ('Request Controller admission',('좁은 direct 허용 / 나머지는 Core','VoiceProposal + host 허용 검사')),
+        ('Response Manager',('publication 기록 후 handle release','Interaction Manager에서만 실제 표시·재생')),
     ],'단순 첫 질문도 허용한다. 과거 대화 지칭·자료·Task 해석은 Core 책임이며 S2S에 Context 탐색·업무 planning을 붙이지 않는다.')
     strip(d,'core-response',435,'B · CORE / AGENT 응답 — 확인된 사실과 질문을 같은 출력 계약으로 전달','blue',[
-        ('게시할 사실·질문',('Controller가 identity·scope admission','Task event는 새 발화 없이 도착')),
+        ('게시할 사실·질문',('Request Controller가 identity·scope admission','Task event는 새 발화 없이 도착')),
         ('필요한 응답 구성',('Response Manager → Model Access','template / Omni 해석·음성 역할')),
         ('Publication outbox',('내용·source·version·출력 세대','확정 payload와 생성 내용 검사')),
         ('Interaction Manager',('상세 Text 표시 · Voice는 차례 대기','채널별 실제 전달 receipt 반환')),
@@ -709,14 +709,14 @@ def response_delivery() -> Diagram:
     strip(d,'interrupt',720,'C · BARGE-IN — 의미 해석과 Agent 취소를 기다리지 않는 로컬 경로','red',[
         ('새 발화 감지',('acoustic onset과 감지 시각 구분','Interaction Manager의 local event')),
         ('즉시 재생 중단',('output epoch 증가·buffer 폐기','늦은 audio·이전 release 거절')),
-        ('중단 사실 전달',('Response에 실제 audible 범위','Controller에 새 입력·hold event')),
+        ('중단 사실 전달',('Response Manager에 실제 audible 범위','Request Controller에 새 입력·hold event')),
         ('새 요청 해석',('정정 / 새 질문 / 업무 취소 구분','재개 의도가 불명확할 때만 확인')),
     ],'Core 장애·포화 중에도 로컬 stop은 유지한다. 재시작 후 확인되지 않은 음성 구간은 UNKNOWN이며 자동으로 재생하지 않는다.')
     strip(d,'notification',1005,'D · 비동기 알림 — 화면에 먼저 표시하고 사용자 발화가 끝난 뒤 말한다','blue',[
-        ('Agent 결과 확인',('Task·Controller가 상태·결과 연결','실패·완료·입력 필요를 보존')),
+        ('Agent 결과 확인',('Task Manager → Request Controller','상태·결과 연결; 실패·입력 필요 보존')),
         ('상세 Text 게시',('결과·실패 항목·근거·파일 링크','Voice 생성·대기를 기다리지 않음')),
-        ('Response 발화 대기열',('사용자 발화 중 모든 음성 알림 보류','종료 뒤 새 입력과 충돌 여부 확인')),
-        ('짧은 Voice 요약',('IM이 재생 직전 차례·epoch 검사','중요한 실패·불확실성 생략 금지')),
+        ('Response Manager 발화 대기열',('사용자 발화 중 모든 음성 알림 보류','종료 뒤 새 입력과 충돌 여부 확인')),
+        ('짧은 Voice 요약',('Interaction Manager가 재생 직전 차례·epoch 검사','중요한 실패·불확실성 생략 금지')),
     ],'새 입력의 관계·제어를 먼저 반영하고 현재 답변 → 중요 결과 → 일반 진행 순서로 전달한다. 다시 말하면 즉시 멈춘다.')
     caption(d,90,1340,'Text 표시와 Voice 요약의 실제 전달을 따로 기록한다. “방금 말한 것”은 상세 Text 전체가 아닌 실제 들려준 내용에서 찾는다.',16,COLORS['ink'],weight=700)
     return d
@@ -726,7 +726,7 @@ def compound_requests() -> Diagram:
     d = detail('09-compound-and-task-routing', '업무 구분 — 독립 목표는 VIA Task, 업무 내부 단계는 Agent', '“요약해서 메일로 보내줘”는 하나의 목표 · “보고서와 일정 등록”은 독립된 두 업무', 1130)
     strip(d,'single-goal',150,'A · 하나의 업무 — 요약과 발송을 통째로 같은 Agent에 위임','orange',[
         ('요청 의미 확정',('자료·수신자·제약·완료 조건','목표: 요약한 내용을 메일로 전달')),
-        ('하나의 VIA Task',('Controller → Task Manager','요약·발송 전체 목표로 command')),
+        ('하나의 VIA Task',('Request Controller → Task Manager','요약·발송 전체 목표로 command')),
         ('Agent 내부 수행',('요약 → 발송의 순서·도구·재시도','VIA가 내부 단계별로 지휘하지 않음')),
         ('동일 Task 결과',('성공 / 부분 완료 / 실패 구분','요약만 됐으면 발송 완료가 아님')),
     ],'“조사해서 보고서를 만들어줘”도 같은 위임 경로다. Agent가 지원하지 못하면 VIA가 내부 계획을 대신 짜서 실행하지 않는다.')
@@ -749,7 +749,7 @@ def compound_requests() -> Diagram:
 def policy_memory() -> Diagram:
     d = detail('10-context-policy-and-memory', 'Context의 사용 수명 — 읽기·제공·기억을 각각 통제', 'Policy Manager가 권한 의미를 소유하고 실제 사용 port가 현재 revision을 강제한다', 1140)
     strip(d,'read',150,'A · CONTEXT READ — 읽을 수 있는 정보와 외부에 보낼 수 있는 정보는 다르다','cyan',[
-        ('Controller 요청',('source·범위·목적·consumer 지정','현재 policy / consent 확인')),
+        ('Request Controller 요청',('source·범위·목적·consumer 지정','현재 policy / consent 확인')),
         ('Context Manager',('허용 envelope 안에서 bounded read','source revision·receipt·후보 coverage')),
         ('Consumer view',('필요한 근거·출처만 구성','Conversation·Task는 owner read port')),
         ('실제 제공 직전 gate',('Model Access / Agent Gateway','recipient·scope·policy revision 검사')),
@@ -762,7 +762,7 @@ def policy_memory() -> Diagram:
     ],'사용자가 일반 질문을 할 때마다 승인하지 않는다. 현재 허용 범위가 충분하면 진행하고 필요한 새로운 범위만 확인한다.')
     strip(d,'memory',720,'C · USER MEMORY — 지속 선호를 대화 원문과 구분','green',[
         ('명시적 기억 요청',('확인 / 등록 / 수정 / 삭제','현재 요청의 지시가 저장 선호보다 우선')),
-        ('Context owner 전이',('memory ID·version·삭제 tombstone','허용 범위 안에서 내구 기록')),
+        ('Context Manager 상태 변경',('memory ID·version·삭제 tombstone','허용 범위 안에서 내구 기록')),
         ('파생 view 갱신',('cache·prompt·session·대기 생성 무효화','삭제된 선호를 history로 되살리지 않음')),
         ('결과와 한계 안내',('실제 적용·확인 범위를 Text로 기록','외부 제공 이력·보관 정책은 별도 관리')),
     ],'Memory 삭제는 원래 대화 전체 삭제와 같은 명령이 아니다. 보관기간·백업·외부 provider 삭제 보장은 제품 정책으로 별도 확정한다.')
@@ -775,8 +775,8 @@ def shared_omni() -> Diagram:
     strip(d,'input',150,'A · INPUT — 추론 결과를 기다리지 않고 수신·인식을 계속한다','cyan',[
         ('Voice capture',('microphone · sample sequence','AEC · 활동 감지 · local stop')),
         ('독립 Streaming ASR',('전용 CPU 예산 · partial / final','시간 근거 · 정정 revision · gap')),
-        ('IM timeline',('원음 + 당시 화면 + 전사 revision','Omni 불일치는 별도 proposal')),
-        ('Controller',('Final → 의미 해석 · host 검증','입력 시작 hold는 별도 즉시 경로')),
+        ('Interaction Manager timeline',('원음 + 당시 화면 + 전사 revision','Omni 불일치는 별도 proposal')),
+        ('Request Controller',('Final → 의미 해석 · host 검증','입력 시작 hold는 별도 즉시 경로')),
     ],'파랑 점선: InputStarted / hold는 ASR·Omni 완료를 기다리지 않는다. 같은 원음은 VOICE session에도 전달하며 ASR에는 의미 확정 권한이 없다.')
     edge(d,'input-start-bypass',((260,347),(260,366),(1610,366),(1610,347)),'input-0','input-3',color=COLORS['blue'],dashed=True)
     lane(d,'roles',45,435,1810,410,'B · SHARED MODEL — 별도 session / KV / 권한, 같은 가중치',fill='#F8FAFC')
@@ -801,22 +801,22 @@ def shared_omni() -> Diagram:
     return d
 
 def admission_control() -> Diagram:
-    d = detail('12-admission-and-control', '판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정', '행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Controller가 확정 · 모델은 제안만 반환', 1240)
+    d = detail('12-admission-and-control', '판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정', '행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Request Controller가 확정 · 모델은 제안만 반환', 1240)
     strip(d,'direct',150,'A · DIRECT — 현재 질문만으로 답할 수 있고 모든 host 조건을 통과한 경우','blue',[
         ('현재 Voice 질문',('원음 + final 전사만 제공','대화 · 화면 · Task 이력 없음')),
         ('Omni VoiceProposal',('일반 개념 / 안정된 일반 설명','dependency flags + text / audio')),
-        ('Controller 허용 검사',('전사 · 질문 focus · revision 검사','DIRECT_VOICE owner를 한 번 확정')),
-        ('Response → Interaction',('내구 publication + output epoch','승인 단위만 표시 · 재생')),
+        ('Request Controller 허용 검사',('전사 · 질문 focus · revision 검사','DIRECT_VOICE owner를 한 번 확정')),
+        ('응답 전달',('Response Manager → Interaction Manager','내구 publication + output epoch','승인 단위만 표시 · 재생')),
     ],'Confidence 하나로 허용하지 않는다. 모델의 분류 오류는 남는 위험이며 같은 모델의 자기 판단은 독립 검증이 아니다.')
     strip(d,'handoff',435,'B · CORE — 제외 조건 · unknown · 불일치 · 시간 초과 중 하나라도 있는 경우','purple',[
         ('직접 경로 미허용',('speculative audio 폐기','입력과 수집 근거는 유지')),
         ('같은 Request → CORE',('새 Request로 복제하지 않음','이전 route / generation 차단')),
-        ('Interpreter + Context',('총 2회 안에서 해석 · 보완','형식 repair도 같은 예산 사용')),
-        ('Controller 확정',('직접 응답 / 질문 / Agent 위임','불충분한 근거는 commit하지 않음')),
+        ('의미 해석·근거 보완',('Request Interpreter + Context Manager','총 2회 안에서 해석 · 보완','형식 repair도 같은 예산 사용')),
+        ('Request Controller 확정',('직접 응답 / 질문 / Agent 위임','불충분한 근거는 commit하지 않음')),
     ],'Core 인계는 S2S agent runtime을 추가하는 경로가 아니다. 사용자 입력을 다시 받거나 답변을 두 번 게시하지 않는다.')
     strip(d,'race',720,'C · 정정 / 취소 — 같은 대화의 미전송 업무와 실제 전송 경계를 구분','amber',[
-        ('새 발화 시작',('IM local stop · output epoch 증가','Controller에 InputStarted / hold')),
-        ('Store transaction',('hold · admission · command epoch','PENDING → DISPATCHING CAS')),
+        ('새 발화 시작',('Interaction Manager의 local stop','output epoch 증가','Request Controller에 InputStarted / hold')),
+        ('State Store transaction',('hold · admission · command epoch','PENDING → DISPATCHING CAS')),
         ('전송 전 / 전송 후',('hold 선행: 미전송 유지','전송 선행: 상태 조회 · 제어')),
         ('새 입력의 의미 반영',('정정 대상만 supersede / cancel','무관한 Task는 계속 유지')),
     ],'물리적인 발화 시작과 host hold 기록은 같은 시각이 아니다. 이미 나간 Action을 막았거나 되돌렸다고 주장하지 않는다.')
@@ -830,20 +830,20 @@ def memory_lifecycle() -> Diagram:
     d = detail('13-memory-lifecycle', '기억의 수명 — 원본을 보존하고 파생 view를 재구성', '행 A는 저장 책임 · B는 조회 경로 · C는 삭제 순서 · D는 evidence 파일의 crash 경계', 1530)
     lane(d,'layers',45,150,1810,260,'A · 기억 계층 — 서로 다른 수명이며 자동 승격 파이프라인이 아니다',fill='#F8FAFC')
     for i,(ident,title,lines,color) in enumerate([
-        ('raw','단기 입력 근거',('IM RAM timeline · 현재 요청 pin','raw 상시 디스크 저장 없음'),'blue'),
+        ('raw','단기 입력 근거',('Interaction Manager RAM timeline · 현재 요청 pin','raw 상시 디스크 저장 없음'),'blue'),
         ('view','중기 작업 view',('Context summary · cache · index','source revision으로 재구성'),'cyan'),
         ('memory','장기 User Memory',('명시적 등록 · 변경 · 삭제','현재 요청 우선 · 자동 승격 없음'),'purple'),
         ('records','내구 원본 기록',('대화 · Task · command · 응답','owner별 DB transaction'),'gray')]):
         card(d,ident,90+i*450,215,title,lines,color)
     caption(d,90,385,'진행 중 업무·대기 질문·미전달 결과는 cache가 아니다. 단기·중기·장기는 의미 수명이며 RAM·파일·DB와 구분한다.',16)
     strip(d,'read',435,'B · 조회 — 요약은 필요한 원문과 typed record를 대신하지 않는다','cyan',[
-        ('현재 요청 · 허용 범위',('Controller의 query scope','입력 · 대상 · 대기 질문')),
+        ('현재 요청 · 허용 범위',('Request Controller의 query scope','입력 · 대상 · 대기 질문')),
         ('Owner read / Source',('원본 · typed ID · source version','후보 coverage · 누락 receipt')),
         ('검증된 Context view',('VALID summary + 필요한 원문','DIRTY / INVALID는 재구성')),
         ('Semantic 해석',('목표 · 조건 · 지칭에 근거 연결','원본 없으면 재조회 / 확인')),
     ],'부정·수치·권한·대상·업무 상태는 정확한 기록을 유지한다. source 삭제 뒤 파생 요약만 남겨 사실처럼 사용하지 않는다.')
     strip(d,'delete',720,'C · 삭제 / 철회 — 사용 차단과 물리 정리의 완료를 구분한다','red',[
-        ('삭제 대상 확정',('Controller → Context owner','대화 삭제와 기억 삭제 구분')),
+        ('삭제 대상 확정',('Request Controller → Context Manager','대화 삭제와 기억 삭제 구분')),
         ('Tombstone + epoch',('DB commit과 새 사용 차단','invalidation / cleanup intent')),
         ('파생 상태 무효화',('summary · cache · KV · 생성 결과','진행 중 작업과 pin도 사용 금지')),
         ('파일 정리 · 확인',('PURGE_PENDING → 확인 상태','외부 복사본 삭제를 약속하지 않음')),
