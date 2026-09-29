@@ -1,5 +1,9 @@
 # VIA Software Architecture
 
+> **진행 중인 설계 논의:** [목표 VIA Architecture](docs/architecture/target-design/README.md)에서
+> 완성된 시스템 구조를 먼저 제안하고 대화하며 수정한다. 전체 구조는 **검토 중인 초안**이며,
+> 기존 승인 기준선·ADR·평가 결과를 대체하지 않는다. 합의 이후에 주요 구조 선택과 검증을 설계한다.
+
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 
 VIA는 사용자가 PC에서 Voice·Text·화면 interaction을 하나의 연속된 대화로 이어가도록 돕는다. 바로 답할 수 있는 요청은 직접 처리하고, 조사·문서 작성·Application 조작처럼 실제 업무 수행이 필요한 요청은 적절한 Downstream Agent에 위임한다. 사용자는 Agent별 대화창이나 실행 ID를 직접 관리하지 않고 VIA를 통해 질문, 진행 상황, 추가 지시, 취소, 결과를 주고받는다.

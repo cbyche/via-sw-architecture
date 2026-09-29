@@ -2,6 +2,11 @@
 
 > **Status: active and authoritative**
 
+> **현재 별도 설계 작업:** [Target Architecture 설계 공간](./target-design/README.md)은
+> responsiveness와 semantic accuracy를 우선하는 완성 구조를 먼저 설계하는 사용자 지정 작업이다.
+> 기존 결정의 분해·검토 순서와 독립적으로 논의하며, 전체 합의 전에는 새 Decision Package를 만들지 않는다.
+> 해당 문서는 제안 상태이고 이 기준선과 accepted ADR의 승인 상태를 자동 변경하지 않는다.
+
 이 디렉터리는 VIA의 시스템 정의, 공통 범위, 대표 Use Case, 변화 시나리오, 품질 속성, 측정 계약, Decision Point를 연결한 현재 Architecture 기준선이다. 이 기준선이 답하려는 질문은 다음과 같다.
 
 > 사용자 PC에서 연속적인 Voice interaction을 유지하면서 direct response와 여러 Downstream Agent 위임을 일관되게 연결하려면, VIA 내부의 책임·상태·계약·process boundary를 어떻게 나누어야 하는가?
