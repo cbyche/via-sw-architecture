@@ -1,92 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
-  <diagram id="03-request-resolution" name="Accuracy-first Request Resolution">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="910" math="0" shadow="0">
+  <diagram id="03-request-resolution" name="요청 확정 — 최소 근거로 시작하고 필요한 부분만 보완">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1060" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="resolution-main" value="PRIMARY FLOW" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="100" width="1520" height="440" as="geometry" />
+        <mxCell id="primary" value="① 최초 해석 — 입력 중 기본 Context 준비는 finalization과 병렬 진행" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="150" width="1810" height="255" as="geometry" />
         </mxCell>
-        <mxCell id="resolution-branches" value="BOUNDED OUTCOMES" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FCFCFD;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="565" width="1520" height="285" as="geometry" />
+        <mxCell id="outcomes" value="② 미해결 분기 — 업무 실행 허가 아님" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FFFFFF;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="445" width="1810" height="335" as="geometry" />
         </mxCell>
-        <mxCell id="input" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Input Revision&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;final transcript / text&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Interaction timeline&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="75" y="245" width="190" height="105" as="geometry" />
+        <mxCell id="rules" value="③ 변경·예외 — READY 형식만으로 실행하지 않는다" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F1F5F9;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="810" width="1810" height="175" as="geometry" />
         </mxCell>
-        <mxCell id="discover" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Candidate Discovery&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;bounded source search&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;coverage · truncation · failures&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="335" y="235" width="220" height="125" as="geometry" />
+        <mxCell id="input" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Final Input + Evidence&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;확정 입력·시점별 화면 근거&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;기본 Context·허용 source·Task 후보&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="225" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="proposal" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Semantic Proposal&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;goal · referent · Task · handling&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;경쟁 후보·배제 근거&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="630" y="230" width="230" height="135" as="geometry" />
+        <mxCell id="proposal" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Interpreter · 호출 1&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;목표·대상·Task·handling 후보&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;field별 근거·충돌·추가 읽기 제안&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="225" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="readiness" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Host Readiness&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;field status · coverage&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;conflict · freshness · policy&lt;/div&gt;&lt;div style='font-size:10px;color:#D97706;font-weight:bold'&gt;HOST&lt;/div&gt;" style="shape=rhombus;rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="955" y="215" width="220" height="165" as="geometry" />
+        <mxCell id="host" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller · 검증&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;coverage·freshness·현재 policy&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;입력·Task·evidence revision 확인&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="225" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="commit" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Semantic Commit&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;immutable resolution&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;dependency revision vector&lt;/div&gt;&lt;div style='font-size:10px;color:#059669;font-weight:bold'&gt;AUTHORITY&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1290" y="240" width="220" height="115" as="geometry" />
+        <mxCell id="commit" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Semantic Commit&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;필수 field 해결·불변 revision&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;직접 처리 / 내부 변경 / Agent 위임&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="225" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="more" value="&lt;div style='font-size:16px;font-weight:bold'&gt;More Evidence&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;한정된 read 묶음&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;영향 field만 재해석&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="170" y="640" width="240" height="105" as="geometry" />
+        <mxCell id="more" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Context 추가 조회&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;허용된 read 묶음 → Interpreter 호출 2&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;조회 실패·budget 소진도 receipt에 기록&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="555" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="clarify" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Clarification&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Pending User Interaction&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;사용자만 구분할 최소 차이&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="510" y="640" width="240" height="105" as="geometry" />
+        <mxCell id="clarify" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Clarification&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;사용자만 구분할 후보·누락 조건&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;질문 등록·게시 후 새 Turn으로 보완&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="555" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="failure" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Safe Failure&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;근거 부족 · 기능 미지원&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;확인 불가를 명시&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="850" y="640" width="240" height="105" as="geometry" />
+        <mxCell id="failure" value="&lt;div style='font-size:19px;font-weight:bold'&gt;확인 불가 / 보류&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;source 실패·기능 미지원·deadline&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;이유와 다음 행동을 같은 요청에 기록&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="555" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="handle" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Committed Handling&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Direct Response&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;VIA state / memory&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Task + Agent dispatch / control&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1210" y="605" width="280" height="175" as="geometry" />
-        </mxCell>
-        <mxCell id="r-e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.505;entryX=0.000;entryY=0.504;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input" target="discover">
+        <mxCell id="input-proposal" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="input" target="proposal">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="r-e2" value="Evidence Receipt" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.504;entryX=0.000;entryY=0.504;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="discover" target="proposal">
+        <mxCell id="proposal-host" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="proposal" target="host">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="r-e3" value="Resolution Record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.504;entryX=0.000;entryY=0.503;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="proposal" target="readiness">
+        <mxCell id="host-commit" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="host" target="commit">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="r-e4" value="all required fields resolved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.503;entryX=0.000;entryY=0.504;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="readiness" target="commit">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="host-commit-label" value="충족" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1359.0" y="259.0" width="52" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="r-e5" value="NEED EVIDENCE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="readiness" target="more">
+        <mxCell id="need-read" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.118;exitY=1.000;entryX=0.588;entryY=0.000;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="host" target="more">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1065" y="570" />
-              <mxPoint x="290" y="570" />
+              <mxPoint x="1030" y="420" />
+              <mxPoint x="740" y="420" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="r-e6" value="USER DECISION" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.591;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="readiness" target="clarify">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1085" y="590" />
-              <mxPoint x="630" y="590" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="need-read-label" value="추가 근거" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="845.5" y="395" width="89" height="22" as="geometry" />
         </mxCell>
-        <mxCell id="r-e7" value="CANNOT RESOLVE" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DC2626;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.682;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="readiness" target="failure">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1105" y="610" />
-              <mxPoint x="970" y="610" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r-e8" value="bounded refinement" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.000;entryX=0.500;entryY=1.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="more" target="proposal">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="410" y="500" />
-              <mxPoint x="745" y="500" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="r-e9" value="publish / dispatch" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.679;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="commit" target="handle">
+        <mxCell id="retry" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.235;exitY=0.000;entryX=0.235;entryY=1.000;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="more" target="proposal">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="caption-0" value="초기 정책: input revision당 semantic call 최대 2회. 미해결 field는 추측하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=13;fontColor=#7C3AED;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="80" y="807" width="420" height="25" as="geometry" />
+        <mxCell id="retry-label" value="bounded refinement" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="530.0" y="475" width="180" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="need-user" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="host" target="clarify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="need-user-label" value="사용자 판단" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1108.5" y="485" width="103" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="cannot" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DC2626;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.853;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="host" target="failure">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1280" y="425" />
+              <mxPoint x="1610" y="425" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cannot-label" value="해결 불가" style="rounded=1;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#E2E8F0;" vertex="1" parent="1">
+          <mxGeometry x="1475.5" y="455" width="89" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-0" value="→ 관계·전달  ·  점선 = 보조 관계" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="96" width="257" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-1" value="초기 resource policy: 같은 확정 input revision당 semantic 해석 최대 2회. 추가 모델이나 무한 tool loop를 만들지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="724" width="1075" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-2" value="정정 / 관련 source 변경 → 이전 proposal·admission 무효화 → 영향 field 재검증. 재시도는 전체 deadline 안에서만 허용." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=18;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="857" width="1184" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-3" value="Clarification·실패 안내는 미확정 정보를 보존한 publication admission으로 게시한다. 업무 dispatch에는 Semantic Commit이 필요하다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="904" width="1166" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="key-blue" value="입력·응답" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#EAF2FF;strokeColor=#2563EB;fontColor=#2563EB;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="48" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-purple" value="의미·요청" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F3ECFF;strokeColor=#7C3AED;fontColor=#7C3AED;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="233" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-cyan" value="Context·근거" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E6F8FB;strokeColor=#0891B2;fontColor=#0891B2;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="418" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-amber" value="정책·판정" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF8E1;strokeColor=#D97706;fontColor=#D97706;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="603" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-green" value="업무·상태" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E9F9F3;strokeColor=#059669;fontColor=#059669;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="788" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-orange" value="명령·Agent" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF1E8;strokeColor=#EA580C;fontColor=#EA580C;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="973" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-gray" value="저장·의존성" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F1F5F9;strokeColor=#475569;fontColor=#475569;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-red" value="중단·실패·불확실" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FDECEC;strokeColor=#DC2626;fontColor=#DC2626;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1343" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="page-title" value="요청 확정 — 최소 근거로 시작하고 필요한 부분만 보완" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=27;" vertex="1" parent="1">
+          <mxGeometry x="48" y="15" width="1804" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="page-subtitle" value="PROPOSED · Core semantic 경로 · S2S 출력 경로는 그림 08 · 모든 입력은 같은 revision 규칙 적용" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="48" y="49" width="1804" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

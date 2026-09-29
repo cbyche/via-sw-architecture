@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="10-context-policy-and-memory" name="Context의 사용 수명 — 읽기·제공·기억을 각각 통제">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1140" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="read" value="A · CONTEXT READ — 읽을 수 있는 정보와 외부에 보낼 수 있는 정보는 다르다" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="150" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke" value="B · REVOCATION — “그 정보는 더 이상 쓰지 마”" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="435" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="memory" value="C · USER MEMORY — 지속 선호를 대화 원문과 구분" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="720" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="read-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller 요청&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;source·범위·목적·consumer 지정&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;현재 policy / consent 확인&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="read-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Context Manager&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;허용 envelope 안에서 bounded read&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;source revision·receipt·후보 coverage&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="read-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Consumer view&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;필요한 근거·출처만 구성&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Conversation·Task는 owner read port&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="read-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;실제 제공 직전 gate&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Model Access / Agent Gateway&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;recipient·scope·policy revision 검사&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Policy revision 변경&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;새로운 사용·제공부터 차단&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;관련 request·consumer dependency 식별&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Cache·session 무효화&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Context view·모델 history 재사용 중단&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;진행 중 생성 취소 / 결과 폐기&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;미전송·미게시 보류&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;dispatch·release gate에서 재검사&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;오래된 admission으로 재개 금지&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;이미 제공된 정보&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;회수·외부 삭제 가능 범위 확인&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;지원되지 않는 회수를 성공으로 말하지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;명시적 기억 요청&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;확인 / 등록 / 수정 / 삭제&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;현재 요청의 지시가 저장 선호보다 우선&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Context owner 전이&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;memory ID·version·삭제 tombstone&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;허용 범위 안에서 내구 기록&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;파생 view 갱신&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;cache·prompt·session·대기 생성 무효화&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;삭제된 선호를 history로 되살리지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;결과와 한계 안내&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;실제 적용·확인 범위를 Text로 기록&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;외부 제공 이력·보관 정책은 별도 관리&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="read-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="read-0" target="read-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="read-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="read-1" target="read-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="read-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="read-2" target="read-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="revoke-0" target="revoke-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="revoke-1" target="revoke-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="revoke-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="revoke-2" target="revoke-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="memory-0" target="memory-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="memory-1" target="memory-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="memory-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="memory-2" target="memory-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-0" value="→ 관계·전달  ·  점선 = 보조 관계" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="96" width="257" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-1" value="Cache hit도 새 사용이다. Source identity·revision·권한 범위가 맞지 않으면 재사용하지 않고 재조회 또는 동의를 요청한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="369" width="1044" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-2" value="사용자가 일반 질문을 할 때마다 승인하지 않는다. 현재 허용 범위가 충분하면 진행하고 필요한 새로운 범위만 확인한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="654" width="945" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-3" value="Memory 삭제는 원래 대화 전체 삭제와 같은 명령이 아니다. 보관기간·백업·외부 provider 삭제 보장은 제품 정책으로 별도 확정한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="939" width="1065" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-4" value="Consent와 Agent Action Approval은 별도 계약이다. VIA는 질문·답을 정확히 중계하며 실제 업무 Action의 권한 강제는 Agent 책임이다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1034" width="1137" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="key-blue" value="입력·응답" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#EAF2FF;strokeColor=#2563EB;fontColor=#2563EB;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="48" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-purple" value="의미·요청" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F3ECFF;strokeColor=#7C3AED;fontColor=#7C3AED;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="233" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-cyan" value="Context·근거" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E6F8FB;strokeColor=#0891B2;fontColor=#0891B2;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="418" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-amber" value="정책·판정" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF8E1;strokeColor=#D97706;fontColor=#D97706;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="603" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-green" value="업무·상태" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E9F9F3;strokeColor=#059669;fontColor=#059669;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="788" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-orange" value="명령·Agent" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF1E8;strokeColor=#EA580C;fontColor=#EA580C;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="973" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-gray" value="저장·의존성" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F1F5F9;strokeColor=#475569;fontColor=#475569;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-red" value="중단·실패·불확실" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FDECEC;strokeColor=#DC2626;fontColor=#DC2626;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1343" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="page-title" value="Context의 사용 수명 — 읽기·제공·기억을 각각 통제" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=27;" vertex="1" parent="1">
+          <mxGeometry x="48" y="15" width="1804" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="page-subtitle" value="PROPOSED · Policy Manager가 권한 의미를 소유하고 실제 사용 port가 현재 revision을 강제한다" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="48" y="49" width="1804" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

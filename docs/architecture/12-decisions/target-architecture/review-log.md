@@ -47,6 +47,9 @@
 | S2S speculative 생성과 Controller direct admission | 독립 검토 후 보강·admission 기준 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
 | command epoch 기반 dispatch 선형화 | 독립 검토 후 보강·Agent capability 열림 | [동시성과 전송](./architecture.md#11-동시성정정취소전송) |
 | Agent inbox·Task projection·response publication 복구 | 독립 검토 후 보강·상태 전이 열림 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
+| domain event outbox·dispatch CAS·DELIVERY_UNKNOWN | 그림 기반 점검에서 주 설계 구체화·구현 미검증 | [설계 완결성 점검](./design-completeness.md) |
+| S2S adapter는 Voice, semantic adapter는 Core에 배치 | 제안·실제 dependency capability 확인 필요 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
+| S2S 직접 답변의 최초 semantic routing 확인 | 권고안·사용자에게 기본 정책 확인 중 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
 
 ## 다음 검토 주제
 
@@ -87,5 +90,6 @@
 | 2026-09-29 | 전체 구조 그림의 핵심 Component 배치와 edge routing을 재구성하고 Policy 판단의 Controller 적용, State Store의 durable infrastructure 위치, Controller가 중재하는 Context·Interpreter 관계를 명시 | 사용자 리뷰 반영; 구조는 계속 제안 상태 |
 | 2026-09-29 | Interaction Runtime을 Channel I/O·Evidence Capture·Timeline & Buffer로 펼치고 Model Access의 S2S client 관계와 직접 S2S 응답의 Response Manager publication protocol을 명시; 색상·화살표 legend 추가 | 사용자 리뷰 반영; 내부 모듈과 protocol은 제안 상태 |
 | 2026-09-29 | 전체 그림을 동일 수준 Component로 재배치하고 Interaction Manager로 명칭 변경; VIA 경계 안에 공유 Store·Model Access 배치, Task Manager의 Gateway 요청과 Gateway→Task→Controller→Response 결과 경로, raw audio와 요청 이벤트의 구분을 명시; publication admission의 근거와 M3 응답 생성 경로 보완 | 사용자 리뷰 반영; 전체 구조는 제안 상태이며 모델 기능·실제 성능 미검증 |
+| 2026-09-29 | 그림 02~07 재구성, 08 응답·중단 / 09 복합 요청 / 10 Context·권한·기억 추가; 알림 유실·dispatch 경쟁·전달 불명·Model Access 배치·실제 사용 시 권한 검사·queue 포화 동작 보강; 18개 UC의 경로와 열린 질문 점검 | 사용자 요청에 따른 자체 설계 검토; 문서 완결성 보강이며 실제 구현·모델·성능 검증 및 전체 구조 합의는 아님 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.

@@ -10,6 +10,7 @@
 | --- | --- |
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
 | [Architecture 그림](./diagrams/README.md) | 본문에 삽입한 SVG preview, draw.io 편집 원본과 색상 규칙 |
+| [설계 완결성 점검](./design-completeness.md) | 18개 UC 경로, 그림 검토 중 교정한 공백과 아직 확정하지 않은 질문 |
 | [독립 검토 결과](./independent-review-2026-09-29.md) | 사용자 검토 전 세 관점의 공통 결함, 본문 반영 내용과 열린 질문 |
 | [검토 기록](./review-log.md) | 사용자가 정한 방향, 제안 상태, 미합의 사항, 다음 검토 주제와 변경 기록 |
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-<title id="title">Runtime 배치와 Fault Boundary</title>
-<desc id="desc">logical Component와 process isolation을 구분하고 Voice control·durable state를 보존한다</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1240" viewBox="0 0 1900 1240" role="img" aria-labelledby="title desc">
+<title id="title">배치와 장애 경계 — 논리 Component를 process 수와 혼동하지 않는다</title>
+<desc id="desc">PROPOSED · 주 배치안 · VIA는 사용자 PC · 모델 / Agent의 local·remote 위치는 별도 binding</desc>
 <defs>
 <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/></marker>
 <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/></marker>
@@ -14,65 +14,73 @@
 <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626"/></marker>
 <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.10"/></filter>
 </defs>
-<rect width="1600" height="900" fill="#FFFFFF"/>
-<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">Runtime 배치와 Fault Boundary</text>
-<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">logical Component와 process isolation을 구분하고 Voice control·durable state를 보존한다</text>
-<rect x="45" y="100" width="1110" height="730" rx="18" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5"/>
-<text x="63" y="128" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">USER PC</text>
-<rect x="1190" y="100" width="365" height="730" rx="18" fill="#FCFCFD" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="8 6"/>
-<text x="1208" y="128" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">REMOTE / EXTERNAL</text>
-<polyline points="345,220 445,220" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<rect x="364.0" y="193" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="395" y="208" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">IPC</text>
-<polyline points="345,400 395,400 395,330 445,330" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
-<rect x="339.0" y="370" width="116" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="397" y="385" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">input / output</text>
-<polyline points="220,335 220,300 1245,210" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
-<rect x="749.5" y="260" width="81" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="790" y="275" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">streaming</text>
-<polyline points="915,360 1180,360 1180,360 1245,360" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)"/>
-<rect x="1029.0" y="333" width="102" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="1080" y="348" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">shared calls</text>
-<polyline points="915,240 965,230" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<polyline points="915,420 965,410" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<polyline points="1110,230 1180,230 1180,520 1245,520" fill="none" stroke="#0891B2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-cyan)"/>
-<rect x="1149.0" y="435" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="1180" y="450" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">read</text>
-<polyline points="1110,410 1160,410 1160,680 1245,680" fill="none" stroke="#EA580C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-orange)"/>
-<rect x="1119.5" y="585" width="137" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="1188" y="600" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">commands / events</text>
-<polyline points="680,520 680,600" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
-<rect x="682.5" y="545" width="95" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="730" y="560" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">transaction</text>
-<polyline points="960,520 960,600" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)"/>
-<rect x="979.0" y="545" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="1010" y="560" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">health</text>
-<polyline points="960,660 910,660 910,470 1037,470" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)" stroke-dasharray="8 6"/>
-<rect x="881.5" y="530" width="67" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
-<text x="915" y="545" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">restart</text>
-<rect x="95" y="165" width="250" height="115" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="220.0" y="203.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">UI Process</text><text x="220.0" y="228.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Chat · Task view · 알림</text><text x="220.0" y="248.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">명시적 사용자 control</text></g>
-<rect x="95" y="335" width="250" height="135" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="220.0" y="383.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Voice Process</text><text x="220.0" y="408.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">audio I/O · S2S session</text><text x="220.0" y="428.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">barge-in · playback buffer</text><rect x="240" y="344" width="95" height="22" rx="11" fill="#2563EB" opacity="0.12"/><text x="287.5" y="359" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">LOW LATENCY</text></g>
-<rect x="445" y="155" width="470" height="365" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="680.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Core Process</text><text x="680.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Request Controller · Context Manager</text><text x="680.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Request Interpreter · Task Manager</text><text x="680.0" y="373.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Response · Policy · Model Access</text><rect x="782" y="164" width="123" height="22" rx="11" fill="#7C3AED" opacity="0.12"/><text x="843.5" y="179" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED">LOGICAL MODULES</text></g>
-<rect x="965" y="170" width="145" height="120" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1037.5" y="211.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Context Worker</text><text x="1037.5" y="236.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">blocking / native</text><text x="1037.5" y="256.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">source adapter</text></g>
-<rect x="965" y="350" width="145" height="120" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1037.5" y="391.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Agent Worker</text><text x="1037.5" y="416.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">protocol adapter</text><text x="1037.5" y="436.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">restart / backoff</text></g>
-<rect x="445" y="600" width="300" height="125" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="595.0" y="643.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Durable State Store</text><text x="595.0" y="668.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Core crash와 독립된 persistence</text><text x="595.0" y="688.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">transactions · migration</text><rect x="668" y="609" width="67" height="22" rx="11" fill="#475569" opacity="0.12"/><text x="701.5" y="624" text-anchor="middle" font-size="11" font-weight="700" fill="#475569">DURABLE</text></g>
-<rect x="810" y="600" width="300" height="125" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="960.0" y="643.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Runtime Supervisor</text><text x="960.0" y="668.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">worker restart · queue budget</text><text x="960.0" y="688.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">health · circuit breaker</text></g>
-<rect x="1245" y="160" width="250" height="100" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1370.0" y="191.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">S2S Runtime</text><text x="1370.0" y="216.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">local 또는 remote</text><text x="1370.0" y="236.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">모델 instance 1개</text></g>
-<rect x="1245" y="310" width="250" height="100" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1370.0" y="341.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Semantic LLM Runtime</text><text x="1370.0" y="366.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">local 또는 remote</text><text x="1370.0" y="386.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">모델 instance 1개</text></g>
-<rect x="1245" y="470" width="250" height="100" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1370.0" y="511.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Context Sources</text><text x="1370.0" y="536.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">OS · App · file · service</text></g>
-<rect x="1245" y="630" width="250" height="100" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
-<g font-family="Inter, Arial, sans-serif"><text x="1370.0" y="671.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Downstream Agents</text><text x="1370.0" y="696.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">reasoning · planning · tools</text></g>
-<text x="930" y="145" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">FAULT ISOLATION</text>
-<text x="80" y="790" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#526178">Voice stop과 UI control은 Core·connector 포화 시에도 별도 process와 자원 경계로 보존한다.</text>
-<text x="1562" y="880" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 06-runtime-and-fault-boundaries.drawio</text>
+<rect width="1900" height="1240" fill="#FFFFFF"/>
+<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">배치와 장애 경계 — 논리 Component를 process 수와 혼동하지 않는다</text>
+<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">PROPOSED · 주 배치안 · VIA는 사용자 PC · 모델 / Agent의 local·remote 위치는 별도 binding</text>
+<rect x="45" y="150" width="1295" height="905" rx="18" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.5"/>
+<text x="63" y="178" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">VIA / USER PC — 상태 권위는 Core, 즉시 재생 중단은 Voice process</text>
+<rect x="1380" y="150" width="475" height="905" rx="18" fill="#FCFCFD" stroke="#CBD5E1" stroke-width="1.5" stroke-dasharray="8 6"/>
+<text x="1398" y="178" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">DEPENDENCY BINDINGS — local 또는 remote</text>
+<polyline points="630,302.5 835,302.5" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="1295,302.5 1420,302.5" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="630,557.5 835,557.5" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" marker-start="url(#arrow-purple)"/>
+<polyline points="1295,557.5 1420,557.5" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)" marker-start="url(#arrow-purple)"/>
+<polyline points="360,380 360,480" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<rect x="428.0" y="415" width="194" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="525" y="430" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="650" fill="#526178">bounded IPC ↔ lease</text>
+<polyline points="90,800 65,800 65,425 160,425 160,380" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<rect x="104.5" y="400" width="111" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="160" y="415" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="650" fill="#526178">local stop</text>
+<polyline points="215,635 215,745" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<rect x="190.0" y="682" width="50" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="215" y="697" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="650" fill="#526178">IPC</text>
+<polyline points="505,635 505,745" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-gray)" marker-start="url(#arrow-gray)"/>
+<rect x="449.5" y="682" width="111" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="505" y="697" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="650" fill="#526178">repository</text>
+<polyline points="630,600 730,600 730,822 835,822" fill="none" stroke="#EA580C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-orange)" marker-start="url(#arrow-orange)"/>
+<rect x="670.5" y="695" width="119" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="730" y="710" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="650" fill="#526178">bounded IPC</text>
+<polyline points="1295,822.5 1420,822.5" fill="none" stroke="#EA580C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-orange)" marker-start="url(#arrow-orange)"/>
+<rect x="90" y="225" width="540" height="155" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="360.0" y="273.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Voice Process</text><text x="360.0" y="298.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Interaction Manager: audio·barge-in</text><text x="360.0" y="318.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Model Access: S2S adapter·session</text><text x="360.0" y="338.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Core 승인 lease·출력 세대 검사</text></g>
+<rect x="835" y="225" width="460" height="155" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)" stroke-dasharray="7 5"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1065.0" y="283.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">S2S stream port</text><text x="1065.0" y="308.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">audio·transcript·generation</text><text x="1065.0" y="328.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">응답 생성도 같은 session owner 경유</text></g>
+<rect x="1420" y="225" width="390" height="155" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1615.0" y="283.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">S2S Runtime × 1</text><text x="1615.0" y="308.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">provider capability에 따라</text><text x="1615.0" y="328.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">local process / remote 연결</text></g>
+<rect x="90" y="480" width="540" height="155" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="360.0" y="518.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Core Process</text><text x="360.0" y="543.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Controller·Interpreter·Context·Task</text><text x="360.0" y="563.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Response·Policy·Gateway 상태 권위</text><text x="360.0" y="583.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Model Access: semantic queue·adapter</text><text x="360.0" y="603.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Interaction Manager: timeline 결합</text></g>
+<rect x="835" y="480" width="460" height="155" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)" stroke-dasharray="7 5"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1065.0" y="538.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Semantic call port</text><text x="1065.0" y="563.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">현재 입력 우선 · summary 예산</text><text x="1065.0" y="583.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">취소·deadline·versioned contract</text></g>
+<rect x="1420" y="480" width="390" height="155" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1615.0" y="538.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Semantic LLM × 1</text><text x="1615.0" y="563.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">모든 요청·요약이 같은 모델 공유</text><text x="1615.0" y="583.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">동시 처리·선점은 provider 기능</text></g>
+<rect x="90" y="745" width="250" height="155" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="215.0" y="793.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">UI Process</text><text x="215.0" y="818.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Chat·Task view·화면 capture</text><text x="215.0" y="838.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">IM: Text·evidence buffer</text><text x="215.0" y="858.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Core와 bounded IPC</text></g>
+<rect x="380" y="745" width="250" height="155" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="505.0" y="793.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Durable Store</text><text x="505.0" y="818.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">owner별 transaction</text><text x="505.0" y="838.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Core 종료 후에도 보존</text><text x="505.0" y="858.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">별도 DB process는 선택</text></g>
+<rect x="835" y="745" width="460" height="155" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1065.0" y="793.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Connector Workers</text><text x="1065.0" y="818.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">위험한 native·blocking 연동만 격리</text><text x="1065.0" y="838.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Context / Agent adapter별 restart</text><text x="1065.0" y="858.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Task별 process를 만들지 않음</text></g>
+<rect x="1420" y="745" width="390" height="155" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1615.0" y="803.5" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Sources / Agents</text><text x="1615.0" y="828.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">VIA Context는 bounded read</text><text x="1615.0" y="848.5" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">실제 업무 실행은 Agent 책임</text></g>
+<text x="1580" y="110" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">→ 관계·전달  ·  점선 = 보조 관계</text>
+<text x="90" y="957" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">Supervisor: process 재시작·health·backoff만 담당한다. Request·Task 의미 상태나 성공 여부를 결정하지 않는다.</text>
+<text x="90" y="994" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">Core 장애: 새 admission 중단 · Voice lease 만료 시 재생 중단 · UI는 마지막 확인 상태와 연결 문제 표시.</text>
+<text x="90" y="1120" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" fill="#172033">Model Access는 하나의 논리 계약이다. S2S adapter는 Voice, semantic adapter는 Core에 배치하며 모델을 복제하지 않는다.</text>
+<text x="90" y="1162" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">Voice stop은 Core 응답을 기다리지 않는다. Task 취소는 Core의 내구 접수·Agent 확인이 필요하며 Core 장애 중 성공 접수를 약속하지 않는다.</text>
+<rect x="48" y="92" width="172" height="25" rx="8" fill="#EAF2FF" stroke="#2563EB" stroke-width="1.5"/>
+<text x="134.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2563EB">입력·응답</text>
+<rect x="233" y="92" width="172" height="25" rx="8" fill="#F3ECFF" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="319.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#7C3AED">의미·요청</text>
+<rect x="418" y="92" width="172" height="25" rx="8" fill="#E6F8FB" stroke="#0891B2" stroke-width="1.5"/>
+<text x="504.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0891B2">Context·근거</text>
+<rect x="603" y="92" width="172" height="25" rx="8" fill="#FFF8E1" stroke="#D97706" stroke-width="1.5"/>
+<text x="689.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#D97706">정책·판정</text>
+<rect x="788" y="92" width="172" height="25" rx="8" fill="#E9F9F3" stroke="#059669" stroke-width="1.5"/>
+<text x="874.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#059669">업무·상태</text>
+<rect x="973" y="92" width="172" height="25" rx="8" fill="#FFF1E8" stroke="#EA580C" stroke-width="1.5"/>
+<text x="1059.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#EA580C">명령·Agent</text>
+<rect x="1158" y="92" width="172" height="25" rx="8" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+<text x="1244.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#475569">저장·의존성</text>
+<rect x="1343" y="92" width="172" height="25" rx="8" fill="#FDECEC" stroke="#DC2626" stroke-width="1.5"/>
+<text x="1429.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#DC2626">중단·실패·불확실</text>
+<text x="1862" y="1220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 06-runtime-and-fault-boundaries.drawio</text>
 </svg>
