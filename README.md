@@ -1,7 +1,7 @@
 # VIA Software Architecture
 
 > **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)를
-> 먼저 완성하고, 그 구조에서 네 core ASR을 만드는 핵심 선택을 역으로 추출한다.
+> 먼저 완성하고, 그 구조에서 중요한 품질 차이를 만드는 핵심 선택을 역으로 추출하고, steelman 후보 구체화와 함께 ASR을 재검토한다.
 > 전체 구조는 **주요 설계 완성안 / 사용자 최종 검토 전**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다. 구현·성능 측정은 설계 완료와 별개다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
@@ -82,14 +82,14 @@ Voice Connection이 끝나도 Conversation이나 Task는 끝나지 않는다. Di
 
 ## 이 저장소에서 Architecture를 만드는 방법
 
-01~11은 제품 목적·범위·사용자 행동·품질 기준과 검증 경계를 정의한다. 12에서는 이 전제를 만족하는 완성된 목표 Architecture를 먼저 설계하고, 네 core ASR에 중요한 구조적 선택을 역으로 추출한다.
+01~11은 제품 목적·범위·사용자 행동·품질 기준과 검증 경계를 정의한다. 12에서는 이 전제를 만족하는 완성된 목표 Architecture를 먼저 설계하고, 중요한 품질 차이를 만드는 구조적 선택을 역으로 추출한다.
 
 ```text
 System mission and fixed scope
   → representative Use Cases and change scenarios
   → quality attribute and metric definition
   → target Architecture definition
-  → structural choices critical to the four core ASRs
+  → structural choices, steelman candidates and ASR review
   → strong alternatives and falsifiable rationale
   → measurement and revalidation
 ```
@@ -97,8 +97,8 @@ System mission and fixed scope
 12번 작업은 다음 순서로 진행한다.
 
 1. **Target Architecture Definition** — QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability, QA-39 reliability/recoverability 순으로 우선하되 네 ASR을 모두 고려한 완성 구조를 설계하고 합의한다.
-2. **Decision Reconstruction** — 네 core ASR에 중요한 책임·계약·상태·호출·배치 선택만 추출한다.
-3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, 네 core ASR의 독립적인 결과와 trade-off, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
+2. **Decision Reconstruction** — 중요한 책임·계약·상태·호출·배치 선택과 steelman 후보를 구체화하면서 ASR의 추가·변경 및 비교 기준을 함께 정의한다. 현재 네 ASR은 최종 비교 목록으로 고정하지 않는다.
+3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, 재검토하여 정의한 ASR의 독립적인 결과와 trade-off, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
 4. **Measurement & Revalidation** — 결과 전에 계약을 동결하고 선택한 구조가 기대한 특성을 실제로 가지는지 검증한다.
 
 Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지할 수 있는지도 같은 기준으로 검토한다. 공통 비교 조건은 [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md), 변경 시나리오는 [Intentional Variables](docs/architecture/07-intentional-variables.md), 측정 원칙은 [Measurement Guide](docs/architecture/11-measurement/README.md)에 정의되어 있다.

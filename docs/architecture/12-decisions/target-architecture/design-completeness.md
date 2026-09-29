@@ -8,7 +8,7 @@
 
 사용자는 주요 설계를 스스로 구체화하여 완성하도록 위임했고, 구현·성능 측정은 요구하지 않았다. 이 문서의 설계 완료는 **고정된 UC·필수 변형에 대해 책임, 정상 흐름, 상태·계약, 동시성, 실패/보류/복구와 사용자 결과를 모두 정의했다**는 뜻이다. 구현 성공·모델 품질·실시간 성능 보장이나 사용자의 최종 구조 승인과 구분한다.
 
-설계 우선순위는 QA-19 accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability다. 추가 ASR 후보의 논의·승격은 이후 DP 발굴·후보 선정·비교 시점으로 보류한다. 기존 네 ASR의 정의·점수·측정 조건을 변경하지 않는다. 이번에 새 Decision Package나 측정 freeze를 만들지 않았다.
+설계 우선순위는 QA-19 accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability다. 이 네 ASR은 현재 설계 작업 기준이며 이후 비교의 고정 목록이 아니다. Decision Point와 steelman 후보를 구체화할 때 ASR의 추가·변경과 평가 기준을 함께 정의한다. 이번 수정에서는 기존 QA 정의·점수·측정 조건 자체를 바꾸지 않는다. 이번에 새 Decision Package나 측정 freeze를 만들지 않았다.
 
 완결성 기준은 다음과 같다.
 
@@ -92,6 +92,6 @@
 | 모델 학습·runtime 연동 | 요구 capability와 미지원 동작은 정해짐; 실제 build의 기능·품질 확보 |
 | Resource Profile 수치와 장비 적합성 | 유한 필드·예약·포화 처리는 정해짐; PC별 값과 실제 동시 진행 검증 |
 | 성능·오류율·복구 측정 | 아직 실행하지 않았으며 목표 설계 완료 요건에 포함하지 않음 |
-| Decision Package·steelman·추가 ASR 후보 | 이후 사용자가 진행하는 단계에서 논의; 지금 비교나 새 ASR 확정 없음 |
+| Decision Package·steelman·ASR 재정의 | 이후 후보 구체화 때 ASR 추가·변경과 비교 기준을 함께 정의; 지금 비교나 새 ASR 확정 없음 |
 
 별도의 승인된 ADR·이전 비교 조건·QA 정의를 이 설계 완료 표기로 변경하지 않는다. 주요 설계 완성안의 읽기 시작점은 [architecture.md](./architecture.md)다.

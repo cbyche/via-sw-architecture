@@ -13,7 +13,9 @@
 
 목표 Architecture를 설계할 때는 **QA-19 semantic accuracy를 1순위**, **QA-09 responsiveness를 2순위**, **QA-29 modifiability를 3순위**, **QA-39 reliability/recoverability를 4순위**로 둔다. 우선순위가 낮다는 이유로 해당 ASR을 설계에서 생략하거나 높은 ASR 점수로 상쇄하지 않는다.
 
-이 순위는 이후 Decision Package의 measurement eligibility 규칙이 아니다. 모든 package는 QA-19·09·29·39를 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED` 중 하나로 명시하고, 같은 문제를 해결하는 선택안과 steelman의 applicable 축을 결과 전에 동결한 동일 계약으로 측정·보고한다. 한 후보가 더 정확하지만 느리거나, 변경 범위가 작지만 복구율이 낮은 결과도 유효한 trade-off다. 후보를 한 축의 결과로 먼저 제거해 다른 applicable 축을 측정하지 않거나 여러 ASR을 가중 합산해 차이를 숨기지 않는다. Safety·evidence qualification 위반은 동결된 규칙에 따라 최종 선택을 막을 수 있지만 측정값과 실패 evidence를 보고서에서 제거하지 않는다.
+현재 네 ASR은 목표 설계의 작업 기준이며 이후 target-derived 비교의 고정 목록이 아니다. 전체 구조 합의 후 Decision Point와 steelman 후보를 구체화하면서 ASR의 추가·변경 여부와 의미·우선순위·적용 범위·평가 기준을 함께 정의한다. 이 문서의 기존 QA 정의와 이전 VIA-DP 적용 기록은 그대로 보존하며, 지금 새 ASR이나 metric을 확정하지 않는다.
+
+현재 설계 우선순위는 이후 Decision Package의 measurement eligibility 규칙이 아니다. 새 target-derived package는 위 과정에서 정의한 ASR 전체를 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED` 중 하나로 명시하고, 같은 문제를 해결하는 선택안과 steelman의 applicable 축을 결과 전에 동결한 동일 계약으로 측정·보고한다. 한 후보가 더 정확하지만 느리거나, 변경 범위가 작지만 복구율이 낮은 결과도 유효한 trade-off다. 후보를 한 축의 결과로 먼저 제거해 다른 applicable 축을 측정하지 않거나 여러 ASR을 가중 합산해 차이를 숨기지 않는다. Safety·evidence qualification 위반은 동결된 규칙에 따라 최종 선택을 막을 수 있지만 측정값과 실패 evidence를 보고서에서 제거하지 않는다.
 
 ## 1. 왜 네 개로 통합하는가
 
