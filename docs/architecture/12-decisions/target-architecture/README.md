@@ -9,6 +9,7 @@
 | 문서 | 역할 |
 | --- | --- |
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
+| [Interaction·업무 경계·기억 검토](./interaction-and-memory-design.md) | S2S 조건부 직접 경로, 사용자 합의, 모델 확인 책임, 복합 업무와 기억 계층 제안 |
 | [Architecture 그림](./diagrams/README.md) | 본문에 삽입한 SVG preview, draw.io 편집 원본과 색상 규칙 |
 | [설계 완결성 점검](./design-completeness.md) | 18개 UC 경로, 그림 검토 중 교정한 공백과 아직 확정하지 않은 질문 |
 | [독립 검토 결과](./independent-review-2026-09-29.md) | 사용자 검토 전 세 관점의 공통 결함, 본문 반영 내용과 열린 질문 |

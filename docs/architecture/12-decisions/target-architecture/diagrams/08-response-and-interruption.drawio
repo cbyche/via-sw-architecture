@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
   <diagram id="08-response-and-interruption" name="응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1150" math="0" shadow="0">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1440" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -14,13 +14,16 @@
         <mxCell id="interrupt" value="C · BARGE-IN — 의미 해석과 Agent 취소를 기다리지 않는 로컬 경로" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
           <mxGeometry x="45" y="720" width="1810" height="260" as="geometry" />
         </mxCell>
+        <mxCell id="notification" value="D · 비동기 알림 — 화면에 먼저 표시하고 사용자 발화가 끝난 뒤 말한다" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="1005" width="1810" height="260" as="geometry" />
+        </mxCell>
         <mxCell id="s2s-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;입력 stream&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Interaction Manager → Model Access&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;같은 S2S가 transcript·답변 생성&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="90" y="215" width="340" height="132" as="geometry" />
         </mxCell>
         <mxCell id="s2s-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Provisional generation&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;IM buffer에 handle·audio 보류&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;input revision·출력 세대 결합&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="540" y="215" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="s2s-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller admission&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;입력 의미·경로·답변 scope 확인&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;direct 허용 / Core 전환 결정&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="s2s-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller admission&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;direct 허용 / Core 전환 결정&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;semantic 생략 조건은 검토 중&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="990" y="215" width="340" height="132" as="geometry" />
         </mxCell>
         <mxCell id="s2s-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Response Manager&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;publication 기록 후 handle release&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;IM에서만 실제 표시·재생&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
@@ -35,7 +38,7 @@
         <mxCell id="core-response-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Publication outbox&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;내용·source·version·출력 세대&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;확정 payload와 생성 내용 검사&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="990" y="500" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="core-response-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Interaction Manager&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Text 표시 + Voice 활성 시 핵심 재생&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;채널별 실제 전달 receipt 반환&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="core-response-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Interaction Manager&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;상세 Text 표시 · Voice는 차례 대기&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;채널별 실제 전달 receipt 반환&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="1440" y="500" width="340" height="132" as="geometry" />
         </mxCell>
         <mxCell id="interrupt-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;새 발화 감지&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;acoustic onset과 감지 시각 구분&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Interaction Manager의 local event&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
@@ -47,8 +50,20 @@
         <mxCell id="interrupt-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;중단 사실 전달&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Response에 실제 audible 범위&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Controller에 새 입력·hold event&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="990" y="785" width="340" height="132" as="geometry" />
         </mxCell>
-        <mxCell id="interrupt-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;새 요청 해석&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;정정 / 새 질문 / 업무 취소 구분&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;다른 Task는 자동 취소하지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+        <mxCell id="interrupt-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;새 요청 해석&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;정정 / 새 질문 / 업무 취소 구분&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;재개 의도가 불명확하면 확인 제안&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FDECEC;strokeColor=#DC2626;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
           <mxGeometry x="1440" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Agent 결과 확인&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Task·Controller가 상태·결과 연결&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;실패·완료·입력 필요를 보존&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1070" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;상세 Text 게시&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;결과·실패 항목·근거·파일 링크&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Voice 생성·대기를 기다리지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="1070" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Response 발화 대기열&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;사용자 발화 중 모든 음성 알림 보류&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;종료 뒤 새 입력과 충돌 여부 확인&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="1070" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;짧은 Voice 요약&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;IM이 재생 직전 차례·epoch 검사&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;중요한 실패·불확실성 생략 금지&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="1070" width="340" height="132" as="geometry" />
         </mxCell>
         <mxCell id="s2s-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="s2s-0" target="s2s-1">
           <mxGeometry relative="1" as="geometry" />
@@ -77,20 +92,32 @@
         <mxCell id="interrupt-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#DC2626;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interrupt-2" target="interrupt-3">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="notification-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="notification-0" target="notification-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="notification-1" target="notification-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="notification-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="notification-2" target="notification-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="caption-0" value="→ 관계·전달  ·  점선 = 보조 관계" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="1580" y="96" width="257" height="26" as="geometry" />
         </mxCell>
         <mxCell id="caption-1" value="직접 경로에서도 승인 전 audio는 재생하지 않는다. Core로 전환하면 speculative generation을 버리고 중복 응답을 막는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="90" y="369" width="1024" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="caption-2" value="전체 생성물을 무조건 기다리는 구조는 아니다. 게시 가능한 의미 단위와 Text·audio 대응을 확보한 경우에만 bounded streaming release한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
-          <mxGeometry x="90" y="654" width="1170" height="28" as="geometry" />
+        <mxCell id="caption-2" value="상세 Text와 Voice 요약은 같은 문자열이 아니다. 대상·상태·중요한 실패는 일치시키고 Voice 요약문과 audio를 연결한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="654" width="989" height="28" as="geometry" />
         </mxCell>
         <mxCell id="caption-3" value="Core 장애·포화 중에도 로컬 stop은 유지한다. 재시작 후 확인되지 않은 음성 구간은 UNKNOWN이며 자동으로 재생하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
           <mxGeometry x="90" y="939" width="1007" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="caption-4" value="Text에 표시한 내용과 음성으로 들려준 범위는 다르다. 후속 “방금 말한 것”은 실제 전달 channel과 prefix를 근거로 연결한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="90" y="1034" width="1043" height="28" as="geometry" />
+        <mxCell id="caption-4" value="새 요청·기존 답변·대기 결과의 세부 순서는 제안 단계다. 짧은 침묵을 종료로 단정하지 않고 사용자가 다시 말하면 즉시 멈춘다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1224" width="1016" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-5" value="Text 표시와 Voice 요약의 실제 전달을 따로 기록한다. “방금 말한 것”은 상세 Text 전체가 아닌 실제 들려준 내용에서 찾는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1324" width="1039" height="28" as="geometry" />
         </mxCell>
         <mxCell id="key-blue" value="입력·응답" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#EAF2FF;strokeColor=#2563EB;fontColor=#2563EB;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
           <mxGeometry x="48" y="92" width="172" height="25" as="geometry" />
@@ -119,7 +146,7 @@
         <mxCell id="page-title" value="응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=27;" vertex="1" parent="1">
           <mxGeometry x="48" y="15" width="1804" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="page-subtitle" value="PROPOSED · 박스는 실행 단계 · 같은 Component가 여러 경로에 다시 등장해도 복제본이 아니다" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
+        <mxCell id="page-subtitle" value="PROPOSED · 박스는 실행 단계 · 화면 상세와 Voice 요약은 같은 사실에서 별도로 구성한다" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
           <mxGeometry x="48" y="49" width="1804" height="30" as="geometry" />
         </mxCell>
       </root>

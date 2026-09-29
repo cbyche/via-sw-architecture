@@ -52,7 +52,7 @@
 | 05 내구 경계 | command·event·publication과 crash 후 불명 상태 | [SVG](./05-dispatch-and-recovery.svg) · [draw.io](./05-dispatch-and-recovery.drawio) |
 | 06 배치·장애 경계 | Voice/Core 분리, 모델 adapter 배치, UI·Store·worker | [SVG](./06-runtime-and-fault-boundaries.svg) · [draw.io](./06-runtime-and-fault-boundaries.drawio) |
 | 07 네 품질 경로 | accuracy·responsiveness·modifiability·recoverability | [SVG](./07-four-asr-critical-paths.svg) · [draw.io](./07-four-asr-critical-paths.drawio) |
-| 08 응답·중단 | S2S와 Core 응답 게시, actual delivery, local barge-in | [SVG](./08-response-and-interruption.svg) · [draw.io](./08-response-and-interruption.drawio) |
+| 08 응답·중단 | S2S와 Core 게시, 상세 Text·Voice 요약, local barge-in·알림 대기 | [SVG](./08-response-and-interruption.svg) · [draw.io](./08-response-and-interruption.drawio) |
 | 09 복합 요청 | 결과 의존, 독립 업무, 조건별 분기와 실행 전 확인 | [SVG](./09-compound-and-task-routing.svg) · [draw.io](./09-compound-and-task-routing.drawio) |
 | 10 Context·권한·기억 | 읽기와 제공, 권한 철회, User Memory 변경·삭제 | [SVG](./10-context-policy-and-memory.svg) · [draw.io](./10-context-policy-and-memory.drawio) |
 

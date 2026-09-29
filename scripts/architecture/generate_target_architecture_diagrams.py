@@ -699,26 +699,32 @@ def four_asr_paths() -> Diagram:
 
 
 def response_delivery() -> Diagram:
-    d = detail('08-response-and-interruption', '응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권', '박스는 실행 단계 · 같은 Component가 여러 경로에 다시 등장해도 복제본이 아니다', 1150)
+    d = detail('08-response-and-interruption', '응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권', '박스는 실행 단계 · 화면 상세와 Voice 요약은 같은 사실에서 별도로 구성한다', 1440)
     strip(d,'s2s',150,'A · S2S 직접 응답 — 생성과 게시 허가를 분리','blue',[
         ('입력 stream',('Interaction Manager → Model Access','같은 S2S가 transcript·답변 생성')),
         ('Provisional generation',('IM buffer에 handle·audio 보류','input revision·출력 세대 결합')),
-        ('Controller admission',('입력 의미·경로·답변 scope 확인','direct 허용 / Core 전환 결정')),
+        ('Controller admission',('direct 허용 / Core 전환 결정','semantic 생략 조건은 검토 중')),
         ('Response Manager',('publication 기록 후 handle release','IM에서만 실제 표시·재생')),
     ],'직접 경로에서도 승인 전 audio는 재생하지 않는다. Core로 전환하면 speculative generation을 버리고 중복 응답을 막는다.')
     strip(d,'core-response',435,'B · CORE / AGENT 응답 — 확인된 사실과 질문을 같은 출력 계약으로 전달','blue',[
         ('게시할 사실·질문',('Controller가 identity·scope admission','Task event는 새 발화 없이 도착')),
         ('필요한 응답 구성',('Response Manager → Model Access','template / 공유 LLM 요약 / 같은 S2S')),
         ('Publication outbox',('내용·source·version·출력 세대','확정 payload와 생성 내용 검사')),
-        ('Interaction Manager',('Text 표시 + Voice 활성 시 핵심 재생','채널별 실제 전달 receipt 반환')),
-    ],'전체 생성물을 무조건 기다리는 구조는 아니다. 게시 가능한 의미 단위와 Text·audio 대응을 확보한 경우에만 bounded streaming release한다.')
+        ('Interaction Manager',('상세 Text 표시 · Voice는 차례 대기','채널별 실제 전달 receipt 반환')),
+    ],'상세 Text와 Voice 요약은 같은 문자열이 아니다. 대상·상태·중요한 실패는 일치시키고 Voice 요약문과 audio를 연결한다.')
     strip(d,'interrupt',720,'C · BARGE-IN — 의미 해석과 Agent 취소를 기다리지 않는 로컬 경로','red',[
         ('새 발화 감지',('acoustic onset과 감지 시각 구분','Interaction Manager의 local event')),
         ('즉시 재생 중단',('output epoch 증가·buffer 폐기','늦은 audio·이전 release 거절')),
         ('중단 사실 전달',('Response에 실제 audible 범위','Controller에 새 입력·hold event')),
-        ('새 요청 해석',('정정 / 새 질문 / 업무 취소 구분','다른 Task는 자동 취소하지 않음')),
+        ('새 요청 해석',('정정 / 새 질문 / 업무 취소 구분','재개 의도가 불명확하면 확인 제안')),
     ],'Core 장애·포화 중에도 로컬 stop은 유지한다. 재시작 후 확인되지 않은 음성 구간은 UNKNOWN이며 자동으로 재생하지 않는다.')
-    caption(d,90,1050,'Text에 표시한 내용과 음성으로 들려준 범위는 다르다. 후속 “방금 말한 것”은 실제 전달 channel과 prefix를 근거로 연결한다.',16,COLORS['ink'],weight=700)
+    strip(d,'notification',1005,'D · 비동기 알림 — 화면에 먼저 표시하고 사용자 발화가 끝난 뒤 말한다','blue',[
+        ('Agent 결과 확인',('Task·Controller가 상태·결과 연결','실패·완료·입력 필요를 보존')),
+        ('상세 Text 게시',('결과·실패 항목·근거·파일 링크','Voice 생성·대기를 기다리지 않음')),
+        ('Response 발화 대기열',('사용자 발화 중 모든 음성 알림 보류','종료 뒤 새 입력과 충돌 여부 확인')),
+        ('짧은 Voice 요약',('IM이 재생 직전 차례·epoch 검사','중요한 실패·불확실성 생략 금지')),
+    ],'새 요청·기존 답변·대기 결과의 세부 순서는 제안 단계다. 짧은 침묵을 종료로 단정하지 않고 사용자가 다시 말하면 즉시 멈춘다.')
+    caption(d,90,1340,'Text 표시와 Voice 요약의 실제 전달을 따로 기록한다. “방금 말한 것”은 상세 Text 전체가 아닌 실제 들려준 내용에서 찾는다.',16,COLORS['ink'],weight=700)
     return d
 
 

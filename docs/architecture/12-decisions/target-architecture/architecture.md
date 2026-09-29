@@ -78,7 +78,7 @@
 | Request Interpreter | 목표·대상·복합 관계·Task 관계·처리 방향의 후보와 field별 근거 제안 | 호출 중 임시 상태; `READY`·업무 상태·게시 권한의 권위는 없음 |
 | Task Manager | 지속 업무와 Agent Execution projection, 진행·제어·복구 | Task, Execution 연결, source-confirmed 업무 상태 |
 | Agent Gateway | Agent별 계약 변환, capability 확인, command 전송·event 수신·조회 | 연결 상태, capability profile, outbox 전송 상태, inbox cursor |
-| Response Manager | 하나의 확정 payload를 Text·Voice·알림으로 게시하고 실제 전달 범위를 기록 | publication outbox, 출력 소유권, 채널별 전달 상태 |
+| Response Manager | 확정 사실에서 상세 Text·짧은 Voice를 구성하고 게시·발화 차례·실제 전달 범위를 관리 | publication outbox, 출력 소유권, 채널별 전달 상태 |
 | Policy Manager | Context 접근·제공·기억 사용 통제 | 현재 권한, consent 범위·revision |
 | State Store | transaction, 송수신 기록, 근거 참조, 복구 저장 | 영속 데이터; 상태의 의미는 각 소유 Component가 결정 |
 | Model Access | S2S 1개와 semantic LLM 1개의 provider session·adapter, 호출 우선순위, timeout·취소·예산 | 모델별 queue, provider session·cache 관리 정보 |
@@ -92,6 +92,7 @@ Interaction Manager는 기존 Interaction Runtime의 이름을 바꾼 것이다.
 | Channel I/O | Voice·Text·UI 입출력, microphone·playback, barge-in, 실제 표시·재생 | 응답 내용·routing·Task 확정 |
 | Evidence Capture | 화면·window·focus·pointer·selection revision 수집 | 지칭 대상의 의미 확정 |
 | Timeline & Buffer | 입력 revision과 evidence 시각 결합, gap·clock mapping, S2S transcript·speculative generation handle 연결 | speculative 응답의 게시 허용 |
+| Turn-Taking Control | 사용자 발화·일시 멈춤·종료 후보와 현재 재생 상태, 발화 차례 검사·로컬 stop | 요청 의미·Task 확정, 임의의 출력 admission |
 
 S2S provider 연결 자체는 Model Access가 소유한다. Interaction Manager는 Model Access client로 audio·control stream을 주고 transcript·generation handle을 받는다. 이 구분으로 device·OS adapter 변화와 model provider 변화가 같은 모듈에 섞이지 않게 한다. Model Access는 모델을 복제하거나 내부에 새 모델을 정의하는 Component가 아니라 VIA와 모델 runtime 사이의 adapter다.
 
@@ -152,7 +153,7 @@ Interpreter는 목표·대상·Task 관계·처리 방향과 경쟁 후보를 �
 5. 해석이 의존한 Conversation·Task 후보·자료·policy revision이 바뀌었는가?
 6. 요청한 Agent capability와 실행 전제조건을 사용할 수 있는가?
 
-사용자 업무의 dispatch에는 `Semantic Commit`이 필요하다. Host 검증은 사용자의 진짜 의도를 증명하지 못하므로, 필수 field가 `RESOLVED`이고 admissible evidence가 있으며 충돌·미해결·coverage 불완전·stale dependency가 없을 때만 commit한다. 특히 외부 Action은 불완전한 후보 집합에서 기본값을 선택하지 않는다.
+사용자 업무의 dispatch에는 `Semantic Commit`이 필요하다. Host 검증은 사용자의 진짜 의도를 증명하지 못하므로, 필수 field가 `RESOLVED`이고 admissible evidence가 있으며 충돌·미해결·coverage 불완전·stale dependency가 없을 때만 commit한다. 특히 외부 Action은 불완전한 후보 집합에서 기본값을 선택하지 않는다. 제한된 추가 조회 후에도 동등한 대상 후보가 둘 이상이면 사용자에게 차이를 질문한다는 원칙은 사용자와 합의했다. 후보가 하나만 남았어도 근거·coverage가 부족하면 확정하지 않는다.
 
 응답 게시는 Controller의 publication admission을 요구한다. 그 근거는 확정 해석, §8의 Direct Admission, 또는 Task Manager가 확인한 Agent 상태·질문일 수 있다. Clarification·근거 확보 실패 안내는 미확정 field를 그대로 보존해 게시하며, 질문하려고 업무 의도를 억지로 commit하지 않는다. 이미 위임한 업무의 progress를 알릴 때에도 새 Semantic Commit을 만들지 않는다.
 
@@ -196,7 +197,9 @@ Controller는 모든 입력에 Request identity를 만들고 직접 경로의 �
 
 허용된 S2S 응답도 Text·audio generation과 사용한 근거를 같은 Response Record에 남긴다. 동일 Request에 S2S와 Core가 중복 응답하지 않으며 기록을 위해 재실행하지 않는다. Text 일반 질문에는 S2S 경유를 강제하지 않는다. 이 gate가 정확도를 지키면서 실제 latency 이점을 남기는지는 아직 검증되지 않았다.
 
-현재 기본 정책의 **제안**은 S2S 답변을 재생성하지 않되, 최초 semantic 호출에서 직접 처리 가능 여부·입력 의미·답변 scope를 확인하는 것이다. Host가 단순히 schema를 확인하거나 S2S의 자기 판정을 믿는 것만으로 routing 정확성을 보장하지 않는다. Semantic 확인을 생략하는 fast path는 별도의 admission 근거가 마련될 때 제한적으로 허용하는 방향이며, 이 기본 정책은 사용자에게 확인 중이다. 이 확인 호출은 §7의 해석 예산에 포함하고 latency에도 포함한다.
+S2S direct admission의 기본 정책은 **재검토 중**이다. 앞서 제안한 매 요청의 최초 semantic 확인은 사용자가 추가 지연을 우려했으며 합의되지 않았다. 현재 검토 제안은 Controller·Context Manager가 미리 구성한 제한된 대화 맥락과 응답 범위를 S2S에 제공하고, S2S가 같은 호출에서 직접 응답 또는 Core 인계를 제안하는 방식이다. Controller의 값싼 revision·권한·출력 소유권 검사는 유지하되, 허용한 직접 경로에는 Interpreter·semantic LLM 재호출을 생략할 수 있게 한다. Component 간 호출과 모델 추론 호출의 비용을 구분한다. 위 표와 그림은 두 admission 방식에 공통인 출력 제어 흐름이며 생략 조건을 확정한 것은 아니다.
+
+이 제안은 Interaction Manager에 두 번째 semantic engine을 추가하거나 S2S 자기 판정을 정확성 보장으로 삼는 구조가 아니다. 제공한 맥락의 누락·stale 여부, 범위 밖 요청과 주제 전환을 잘못 인식하는 위험이 남는다. 미해결 지칭·Task 제어·화면 변화·대기 질문·정정 등 알려진 조건에서는 Core로 전환하며, 단어 규칙만으로 모든 누락을 검출할 수 있다고 주장하지 않는다. 초기 권고는 Core가 확인한 설명의 후속 대화부터 직접 경로를 허용하는 것이다. 새로운 자유 질문까지 생략 범위를 넓힐지와 실제 모델의 인계 계약은 열려 있으며, 이 권고도 사용자 합의 전이다. 지원·정확성 근거가 없으면 semantic 확인 경로를 유지하며 그 비용을 숨기지 않는다. [구체 예시와 검토 제안](./interaction-and-memory-design.md)을 참고한다.
 
 ### 확보해야 하는 모델 기능
 
@@ -250,6 +253,8 @@ Policy Manager는 `source / recipient / purpose / scope / policy revision / expi
 
 User Memory 등록·수정·삭제는 Controller가 의미를 확정하고 Context Manager가 자기 aggregate를 변경한다. 삭제 tombstone·memory revision을 파생 view와 재시작 시에도 적용하여 과거 대화나 이전 model session에서 삭제된 선호를 자동 복원하지 않는다. 삭제 사실을 기록하는 audit에는 삭제한 원문을 복제하지 않는다. Memory 삭제와 원래 Conversation 삭제는 별도 요청이며 보관기간·백업 삭제·외부 삭제 보장은 아직 확정할 제품 정책이다.
 
+단기 작업 Context, 중기 Conversation·Task 작업집합, 장기 허용 User Memory의 세 가지 의미 수명을 구분하는 안을 검토한다. RAM·파일 DB는 이 수명과 별개인 저장 방식이다. 진행 중 Task와 미전달 결과·질문·command는 단기 cache처럼 만료시키지 않고 원래 owner의 내구 상태로 보존한다. 요약은 출처·revision이 있는 파생 view이며 확정 대상·수치·제약·권한·실행 상태의 원본을 대체하지 않는다. 구체 계층·승격·삭제 제안은 [기억 구조 검토](./interaction-and-memory-design.md#5-기억은-의미-수명과-저장-방식을-분리한다)에 있으며 사용자 합의 전이다.
+
 ## 10. 주요 데이터 계약
 
 아래는 필수 의미를 정의한 논리 계약이다. Machine-readable schema는 아직 작성하지 않았다.
@@ -264,8 +269,8 @@ User Memory 등록·수정·삭제는 Controller가 의미를 확정하고 Conte
 | Pending User Interaction | 질문·승인 유형, 결합할 Request·Task·Execution, unresolved field·후보, 허용 답변, revision·만료·응답 Turn |
 | Agent Command | Request·Task·command ID와 type, 목표·완료 조건·제약·대상, Execution·artifact version, approval·policy revision, precondition, epoch·중복 방지 key |
 | Agent Event | Agent·Execution·event ID, command correlation, source sequence/revision, emitted·received 시각, 상태·질문·artifact version·실패·확실성 |
-| Canonical Response Payload | 게시할 proposition·질문·불확실성, Request·Task·result identity, source·staleness, admission 근거·revision, notification disposition, 선택적 검증된 generation handle |
-| Response Record | payload·publication ID, Text 게시 내용, Voice generation과 실제 audible prefix/range, 표시·재생·중단·ack 상태 |
+| Canonical Response Payload | 게시할 proposition·질문·불확실성, Request·Task·result identity, source·staleness, admission 근거·revision, notification disposition, 상세 Text·Voice 요약별 view와 공통 사실 참조, 선택적 검증된 generation handle |
+| Response Record | payload·publication ID, 상세 Text와 Voice 요약의 별도 content version·source 연결, Voice generation과 실제 audible prefix/range, 채널별 표시·대기·재생·중단·ack 상태 |
 | Domain Event / Delivery Intent | event ID, owner aggregate·revision, 원래 Conversation·Request·Task, 원인 event, consumer 적용 상태와 publication ID |
 | Use Envelope | source·recipient·purpose·scope, policy revision·expiry, 요청·generation 결합; 실제 사용 port에서 검증 |
 | Model Call Envelope | call·Request·input revision, role·허용 Context view·출력 schema, deadline·cancel generation·budget |
@@ -304,7 +309,7 @@ Queue는 모두 유한하다. 로컬 재생 중단은 모델·Store queue를 기
 | 실행 중 | 지원되는 수정·취소 명령 전달 |
 | 이미 완료 | 완료 사실과 가능한 후속 수정 안내 |
 
-새 Voice 입력 시작은 현재 Conversation의 아직 보내지 않은 요청을 잠시 보류할 수 있다. 기존 모든 Task를 자동 중단하지 않는다. 선형화 지점 전에 들어온 정정·취소는 기존 command를 보내지 않고 새 semantic revision과 `supersedes_command_id`로 표현한다. 그 뒤에는 이미 막았다고 주장하지 않고 `UNKNOWN`, `CANCEL_REQUESTED`, `CORRECTION_PENDING` 중 실제 확인 상태를 기록한다.
+새 Voice 입력 시작은 현재 Conversation의 아직 보내지 않은 요청을 잠시 보류한다. 기존 모든 Task를 자동 중단하지 않는다. 선형화 지점 전에 들어온 정정·취소는 기존 command를 보내지 않고 새 semantic revision과 `supersedes_command_id`로 표현한다. 그 뒤에는 이미 막았다고 주장하지 않고 `UNKNOWN`, `CANCEL_REQUESTED`, `CORRECTION_PENDING` 중 실제 확인 상태를 기록한다.
 
 선형화의 구체적인 주 설계는 State Store에서 `PENDING → DISPATCHING`을 변경하는 조건부 transaction이다. Gateway는 동일 transaction에서 Controller의 admission revision·Conversation hold와 Task Manager의 command epoch·현재 policy revision을 검사한다. 새 입력 보류·정정도 같은 조건을 변경하므로 먼저 commit한 전이가 순서를 결정한다. 네트워크 전송은 transaction 밖에서 수행하고 crash 시 `DISPATCHING`을 접수 불명으로 취급한다. 실제 acoustic 입력 시작과 host의 hold 기록 사이에는 인식·IPC 지연이 있으므로 물리적으로 먼저 말하기 시작했다는 사실만으로 이미 나간 command를 막았다고 주장하지 않는다.
 
@@ -342,7 +347,9 @@ Task Manager는 확인된 변경을 Controller에 알린다. Controller는 원�
 
 Controller는 의존 node를 `WAIT_DEPENDENCY`로 두고, 실제 선행 결과 version·조건 사실·현재 권한이 확보되면 재검증해 해제한다. `graph revision + node ID + dependency result version`으로 해제 identity를 기록하여 같은 event 재처리가 후속 command를 중복 생성하지 않게 한다. 조건은 참·거짓·불명을 구분하며 업무 분석이 필요한 조건의 판단은 Agent에 맡긴다. 이미 해제한 결과가 나중에 바뀌면 이전 실행을 되돌린 것으로 취급하지 않고 정정 관계를 만든다.
 
-범위가 명확한 자료 요약은 VIA 직접 처리일 수 있고, 조사·업무 분석·파일 생성은 Agent 책임이다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
+범위가 명확한 자료 설명·요약은 VIA가 직접 처리하고, 조사·업무 분석·계획·파일 생성·외부 실행은 Agent가 담당한다는 방향은 사용자와 합의했다. 공유 semantic LLM이 대상·source 범위·요청 결과를 보고 handling을 제안하고 Controller가 고정 scope·권한·예산을 적용한다. “더 자세히”라는 말 자체는 위임 조건이 아니다. 같은 문단의 상세 설명은 VIA에 남을 수 있지만, 추가 조사를 통한 원인 분석이나 결과물 생성은 첫 요청부터 Agent로 보낸다. VIA가 먼저 답해 보고 사용자가 재요청할 때까지 위임을 미루는 규칙은 아니다.
+
+복합 요청은 독립 목표·사용자 명시 의존 관계를 VIA가 관리하고, 한 업무를 이루는 내부 단계·도구·재시도·보상은 Agent가 관리한다. 하나의 Agent가 명시된 관계 전체를 처리할 수 있으면 그 관계를 보존한 묶음으로 위임할 수 있으며 VIA가 내부 단계를 다시 실행하지 않는다. Agent가 구조화된 부분 결과를 제공하지 않으면 문장이나 접속사만으로 내부 단계의 완료를 추측하지 않는다. 상세 예시는 [복합 요청의 책임 경계](./interaction-and-memory-design.md#4-복합-요청의-실패는-두-수준으로-나눈다)를 따른다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
 
 Agent 질문·승인은 공통 Pending User Interaction에 Task + Execution + question ID + 요청 version으로 등록한다. 여러 질문 중 답변 대상을 특정하지 못하면 “응”을 임의 승인으로 사용하지 않는다.
 
@@ -356,17 +363,29 @@ Response Manager는 Controller가 admission한 Canonical Response Payload를 pub
 
 생성 결과는 승인된 proposition·질문·불확실성과 Request·Task·result identity·staleness를 유지해야 한다. 내용이 이를 바꾸거나 근거가 부족하면 게시를 보류하고 Controller로 반환한다. Interaction Manager는 유효한 출력 세대와 release를 가진 응답만 표시·재생하고 delivery receipt를 반환한다. Barge-in은 이 승인 흐름과 독립적으로 즉시 재생을 중단하며, 오래된 release가 중단한 출력을 다시 살릴 수 없다.
 
-Publication ID는 요청 전체와 별개이며 Text·Voice·알림에 공통으로 연결한다. Text는 같은 ID·내용 version으로 UI에 멱등 upsert한다. Voice는 generation·segment·output epoch로 중복과 오래된 packet을 거절한다. 전체 답변을 반드시 다 만든 뒤 재생하지는 않는다. source와 의미가 검증된 최소 문장 단위에서 Text·audio 대응과 내구 publication intent를 확보하면 순차 release할 수 있다. 이를 제공하지 않는 S2S는 완성 단위까지 buffer해야 하며 추가 지연을 숨기지 않는다. Audio를 먼저 재생하고 나중에 Text의 의미를 맞추는 경로는 허용하지 않는다.
+Publication ID는 요청 전체와 별개이며 Text·Voice·알림에 공통으로 연결한다. Text는 같은 ID·내용 version으로 UI에 멱등 upsert한다. Voice는 generation·segment·output epoch로 중복과 오래된 packet을 거절한다. 전체 답변을 반드시 다 만든 뒤 재생하지는 않는다. source와 의미가 검증된 최소 문장 단위에서 Voice 요약문·audio 대응과 내구 publication intent를 확보하면 순차 release할 수 있다. 이를 제공하지 않는 S2S는 완성 단위까지 buffer해야 하며 추가 지연을 숨기지 않는다. Audio를 먼저 재생하고 나중에 Text의 의미를 맞추는 경로는 허용하지 않는다.
 
-실제 재생과 receipt의 내구 기록은 원자적이지 않다. Crash 전에 저장된 마지막 확인 범위를 넘어선 구간은 `DELIVERY_UNKNOWN`으로 복원하고 이미 들었다거나 전혀 못 들었다고 단정하지 않는다. 확인 불가 음성을 자동 재생하지 않고 결과 Text를 복원하며 사용자가 요청하면 다시 읽는다. 생성된 전체 Text, UI에 실제 표시한 Text, 확인된 audible prefix, 전달 불명 구간을 별도로 남긴다.
+실제 재생과 receipt의 내구 기록은 원자적이지 않다. Crash 전에 저장된 마지막 확인 범위를 넘어선 구간은 `DELIVERY_UNKNOWN`으로 복원하고 이미 들었다거나 전혀 못 들었다고 단정하지 않는다. 확인 불가 음성을 자동 재생하지 않고 결과 Text를 복원하며 사용자가 요청하면 다시 읽는다. 생성된 상세 Text, UI에 실제 표시한 Text, 별도의 Voice 요약문, 확인된 audible prefix, 전달 불명 구간을 각각 남긴다.
 
 - 모든 사용자 응답은 Text와 Conversation에 남고, Voice 활성 시 핵심을 짧게 전달한다.
-- 사용자가 말하는 동안 일반 progress 음성이 끼어들지 않는다. 여러 결과를 동시에 재생하지 않는다.
+- 사용자가 말하는 동안 진행·완료·실패·승인 질문을 포함한 어떤 업무 알림도 음성으로 끼어들지 않는다. 결과·질문은 화면에 먼저 표시하고 음성은 대기한다. 여러 결과를 동시에 재생하지 않는다.
 - 반복 progress는 묶되 실패·완료·입력 필요 event는 보존한다.
 - 중단한 출력 세대의 늦은 audio packet을 버리고 자동으로 이어 재생하지 않는다.
 - Text 표시와 실제 Voice 전달을 별도로 기록한다. 화면에 전체 Text가 있어도 음성을 전부 들려준 것으로 기록하지 않는다.
 - Conversation은 실제 게시된 Text와 사용자가 들을 수 있었던 audible prefix를 참조한다. 중단된 뒤의 후속 지칭에 생성만 되고 전달되지 않은 내용을 사용하지 않는다.
 - OS 알림은 해당 Task와 상세 결과로 연결한다. 사용자를 별도 Agent 대화창으로 보내지 않는다.
+
+### 화면 상세와 음성 요약, 말할 차례
+
+**화면에는 상세 결과를, 음성에는 사람이 듣기 좋은 핵심 요약을 제공하며 사용자 발화를 가로막지 않는다는 원칙은 사용자 지정이다.** 두 채널의 문자열은 같을 필요가 없다. 공통으로 확인된 대상·상태·결론·중요한 실패와 불확실성은 일치해야 한다. 화면 표시를 Voice 생성·차례 대기 때문에 늦추지 않는다. 예를 들어 화면에는 성공·실패 항목과 파일 링크를 상세히 표시하고, Voice는 “보고서는 완성됐지만 메일은 아직 보내지 못했어요”라고 전달한다. 실패를 생략해 전부 완료한 것처럼 요약하지 않는다.
+
+Response Manager 안의 발화 대기열은 publication·Task·result version과 Voice 대기 이유를 유지한다. Interaction Manager의 Turn-Taking Control이 사용자 발화 여부와 출력 가능 상태를 제공하고 재생 직전에도 확인한다. 단순한 짧은 침묵을 발화 완료로 확정하지 않으며 종료 판정이 틀려 사용자가 다시 말하면 로컬 stop을 적용한다. 사용자가 계속 말하면 음성은 계속 대기하되 화면 결과는 남는다. endpoint 판정 방식·수치는 아직 검증 전이다.
+
+현재 scheduling 제안은 발화 종료 후 새 입력의 정정·취소·관련성을 먼저 반영하고, 현재 응답과 이전 업무의 핵심 결과를 한 발화 차례에 조정하는 것이다. 현재 응답을 기다리는 동안 이미 유효한 업무 결과는 별도로 짧게 안내할 수 있으나, 새 입력과 충돌할 가능성이 해소되지 않았다면 보류한다. 다른 VIA 음성을 중간에 끊어 알리지 않고 다음 경계에 전달한다. 재생 전에 최신 Task·policy·질문 revision을 확인하여 오래된 progress는 합치거나 대체하고, 완료·실패·사용자 입력 필요는 UI와 내구 대기 상태에 보존한다. Voice 비활성·재연결·다른 Conversation 중인 경우의 자동 음성 재개 범위는 추가 합의 대상이다. 사용자 비중단 원칙은 합의됐지만 이 scheduling 세부는 제안이다. 음성 대기 비용을 실제 responsiveness에서 임의로 제외하지 않는다.
+
+### 중단 뒤 이어 말할지 확인
+
+새 입력을 모두 들은 뒤 중단한 답변을 계속할지 확인하는 사용자의 아이디어를 다음과 같이 제안한다. “계속해”이면 남은 내용을 재검증해 이어 말하고, “짧게 말해”이면 새 요청에 맞게 요약하며, “그건 됐고…”이면 이전 음성 재개를 폐기한다. 재개 의도가 불명확할 때만 “아까 설명을 이어드릴까요?”라는 Pending User Interaction을 만든다. 모든 새 답변마다 발화 허가를 묻지는 않는다. 이는 사용자의 아이디어를 구체화한 제안이지 blanket 재확인에 합의한 것이 아니다. 음성 재개 확인은 미전송 외부 Action의 실행 승인과 별개이며, 침묵이나 다른 질문의 “응”을 재개·실행 허가로 재사용하지 않는다.
 
 ## 14. 프로세스 배치·fault boundary
 

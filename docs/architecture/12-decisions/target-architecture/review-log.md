@@ -49,7 +49,19 @@
 | Agent inbox·Task projection·response publication 복구 | 독립 검토 후 보강·상태 전이 열림 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
 | domain event outbox·dispatch CAS·DELIVERY_UNKNOWN | 그림 기반 점검에서 주 설계 구체화·구현 미검증 | [설계 완결성 점검](./design-completeness.md) |
 | S2S adapter는 Voice, semantic adapter는 Core에 배치 | 제안·실제 dependency capability 확인 필요 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
-| S2S 직접 답변의 최초 semantic routing 확인 | 권고안·사용자에게 기본 정책 확인 중 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
+| S2S 직접 답변의 최초 semantic routing 확인 | 사용자 overhead 우려로 재검토; 맥락·범위 기반 직접 경로와 함께 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
+
+## 이번 대화에서 확인한 제품 행동
+
+| 내용 | 상태 |
+| --- | --- |
+| 제한된 추가 조회 후 지칭 후보가 둘 이상이면 질문 | 합의 |
+| 새 발화 때 같은 대화의 미전송 요청을 잠시 보류 | 합의 |
+| 한정 자료 설명·요약은 VIA, 조사·업무 계획·실행은 Agent; semantic LLM이 handling 판단 | 합의; host가 고정 scope·권한을 적용하는 구조는 유지 |
+| 화면은 상세 결과, 음성은 듣기 좋은 핵심 요약 | 사용자 지정 |
+| 사용자 발화 중 음성 알림 금지; 결과 화면 표시 후 발화 종료 때 음성 전달 | 사용자 지정; 차례·새 요청 우선순위·Voice 재연결 세부는 제안 |
+| 중단된 답변을 계속할지 사용자 확인 | 사용자 아이디어; 불명확할 때만 확인하는 안으로 구체화 제안 |
+| Interaction Manager의 S2S 제어·단기/중기/장기 기억·복합 실패 책임 분리 | 논의 요청; [설계 검토안](./interaction-and-memory-design.md)에 제안, 아직 합의 아님 |
 
 ## 다음 검토 주제
 
@@ -91,5 +103,6 @@
 | 2026-09-29 | Interaction Runtime을 Channel I/O·Evidence Capture·Timeline & Buffer로 펼치고 Model Access의 S2S client 관계와 직접 S2S 응답의 Response Manager publication protocol을 명시; 색상·화살표 legend 추가 | 사용자 리뷰 반영; 내부 모듈과 protocol은 제안 상태 |
 | 2026-09-29 | 전체 그림을 동일 수준 Component로 재배치하고 Interaction Manager로 명칭 변경; VIA 경계 안에 공유 Store·Model Access 배치, Task Manager의 Gateway 요청과 Gateway→Task→Controller→Response 결과 경로, raw audio와 요청 이벤트의 구분을 명시; publication admission의 근거와 M3 응답 생성 경로 보완 | 사용자 리뷰 반영; 전체 구조는 제안 상태이며 모델 기능·실제 성능 미검증 |
 | 2026-09-29 | 그림 02~07 재구성, 08 응답·중단 / 09 복합 요청 / 10 Context·권한·기억 추가; 알림 유실·dispatch 경쟁·전달 불명·Model Access 배치·실제 사용 시 권한 검사·queue 포화 동작 보강; 18개 UC의 경로와 열린 질문 점검 | 사용자 요청에 따른 자체 설계 검토; 문서 완결성 보강이며 실제 구현·모델·성능 검증 및 전체 구조 합의는 아님 |
+| 2026-09-29 | 지칭 clarification·미전송 보류·VIA/Agent 경계·사용자 발화 비중단·화면 상세/음성 요약 원칙 반영; 그림 08에 알림 대기 경로 추가; S2S 조건부 직접 경로·중단 후 재개·복합 실패·기억 계층 검토안 기록 | 명시한 제품 행동만 합의/사용자 지정; 구조 제안과 실제 모델·성능은 열림 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.
