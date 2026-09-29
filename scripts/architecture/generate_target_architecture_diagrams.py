@@ -92,6 +92,17 @@ class Caption:
 
 
 @dataclass
+class LegendItem:
+    id: str
+    x: int
+    y: int
+    w: int
+    label: str
+    fill: str
+    stroke: str
+
+
+@dataclass
 class Diagram:
     slug: str
     title: str
@@ -102,6 +113,7 @@ class Diagram:
     boxes: list[Box] = field(default_factory=list)
     edges: list[Edge] = field(default_factory=list)
     captions: list[Caption] = field(default_factory=list)
+    legend_items: list[LegendItem] = field(default_factory=list)
 
 
 def lane(diagram: Diagram, *args, **kwargs) -> None:
@@ -118,6 +130,10 @@ def edge(diagram: Diagram, *args, **kwargs) -> None:
 
 def caption(diagram: Diagram, *args, **kwargs) -> None:
     diagram.captions.append(Caption(*args, **kwargs))
+
+
+def legend(diagram: Diagram, *args, **kwargs) -> None:
+    diagram.legend_items.append(LegendItem(*args, **kwargs))
 
 
 def svg_text_lines(item: Box) -> str:
@@ -234,6 +250,17 @@ def render_svg(diagram: Diagram) -> str:
             f'fill="{item.color}">{escape(item.text)}</text>'
         )
 
+    for item in diagram.legend_items:
+        out.append(
+            f'<rect x="{item.x}" y="{item.y}" width="{item.w}" height="25" rx="8" '
+            f'fill="{item.fill}" stroke="{item.stroke}" stroke-width="1.5"/>'
+        )
+        out.append(
+            f'<text x="{item.x + item.w / 2}" y="{item.y + 17}" text-anchor="middle" '
+            f'font-family="Inter, Arial, sans-serif" font-size="10.5" font-weight="700" '
+            f'fill="{item.stroke}">{escape(item.label)}</text>'
+        )
+
     out.append(
         f'<text x="{diagram.width - 38}" y="{diagram.height - 20}" text-anchor="end" '
         f'font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: {diagram.slug}.drawio</text>'
@@ -318,53 +345,78 @@ def render_drawio(diagram: Diagram) -> str:
         cell = ET.SubElement(root, "mxCell", {"id": f"caption-{index}", "value": item.text, "style": style, "vertex": "1", "parent": "1"})
         ET.SubElement(cell, "mxGeometry", {"x": str(item.x), "y": str(item.y - item.size), "width": "420", "height": str(item.size + 12), "as": "geometry"})
 
+    for item in diagram.legend_items:
+        style = (
+            "rounded=1;whiteSpace=wrap;html=1;shadow=0;"
+            f"fillColor={item.fill};strokeColor={item.stroke};fontColor={item.stroke};"
+            "strokeWidth=1.5;fontSize=10;fontStyle=1;align=center;verticalAlign=middle;"
+        )
+        cell = ET.SubElement(root, "mxCell", {"id": item.id, "value": item.label, "style": style, "vertex": "1", "parent": "1"})
+        ET.SubElement(cell, "mxGeometry", {"x": str(item.x), "y": str(item.y), "width": str(item.w), "height": "25", "as": "geometry"})
+
     ET.indent(mxfile, space="  ")
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + ET.tostring(mxfile, encoding="unicode") + "\n"
 
 
 def system_overview() -> Diagram:
-    d = Diagram("01-system-overview", "VIA Target Architecture — 전체 구조", "Controller가 evidence, semantic proposal, policy와 Task 경계를 중재한다", 1800, 1100)
-    lane(d, "lane-user", 40, 92, 1720, 165, "USER I/O & REAL-TIME DELIVERY", fill="#F5F9FF", stroke="#BFDBFE")
-    lane(d, "lane-core", 40, 280, 1720, 520, "VIA CONTROL PLANE — request authority와 Task orchestration", fill="#FAF8FF", stroke="#DDD6FE")
-    lane(d, "lane-infra", 40, 825, 1720, 225, "DURABLE INFRASTRUCTURE & EXTERNAL DEPENDENCIES", fill="#FCFCFD", stroke="#CBD5E1")
+    d = Diagram("01-system-overview", "VIA Target Architecture — 전체 구조", "Interaction modules, semantic authority, Task orchestration과 publication 경계", 1900, 1180)
+    lane(d, "lane-user", 40, 92, 1820, 220, "USER I/O & REAL-TIME DELIVERY", fill="#F5F9FF", stroke="#BFDBFE")
+    lane(d, "interaction-boundary", 320, 115, 520, 180, "Interaction Runtime — logical subsystem", fill="#EDF5FF", stroke=COLORS["blue"])
+    lane(d, "lane-core", 40, 335, 1820, 535, "VIA CONTROL PLANE — request authority와 Task orchestration", fill="#FAF8FF", stroke="#DDD6FE")
+    lane(d, "lane-infra", 40, 895, 1820, 230, "DURABLE INFRASTRUCTURE & EXTERNAL DEPENDENCIES", fill="#FCFCFD", stroke="#CBD5E1")
 
-    box(d, "user", 65, 135, 220, 75, "사용자", ("Voice · Text · 화면 지칭",), COLORS["white"], COLORS["blue"])
-    box(d, "interaction", 365, 125, 300, 100, "Interaction Runtime", ("입력·시점별 evidence", "S2S·barge-in·표시/재생"), COLORS["blue_fill"], COLORS["blue"], badge="REAL TIME")
-    box(d, "response", 790, 125, 300, 100, "Response Manager", ("Canonical response payload", "publication · delivery 상태"), COLORS["blue_fill"], COLORS["blue"])
+    box(d, "user", 60, 160, 210, 80, "사용자", ("Voice · Text · 화면 지칭",), COLORS["white"], COLORS["blue"])
+    box(d, "channel", 340, 150, 480, 62, "Channel I/O", ("Voice · Text · UI · playback · barge-in",), COLORS["blue_fill"], COLORS["blue"], badge="REAL TIME")
+    box(d, "evidence", 340, 225, 215, 50, "Evidence Capture", (), COLORS["white"], COLORS["blue"])
+    box(d, "timeline", 585, 225, 235, 50, "Timeline & Buffer", (), COLORS["white"], COLORS["blue"])
+    box(d, "response", 1000, 145, 280, 110, "Response Manager", ("Canonical payload consumer", "publication · delivery receipt"), COLORS["blue_fill"], COLORS["blue"])
 
-    box(d, "context", 80, 445, 270, 115, "Context Manager", ("후보 탐색 · bounded read", "receipt · cache · coverage"), COLORS["cyan_fill"], COLORS["cyan"])
-    box(d, "controller", 440, 360, 310, 125, "Request Controller", ("Request Graph · semantic commit", "질문 결합 · publish/dispatch admission"), COLORS["purple_fill"], COLORS["purple"], badge="AUTHORITY")
-    box(d, "resolver", 830, 445, 280, 115, "Request Interpreter", ("goal · referent · Task 후보", "field별 근거와 미해결"), COLORS["purple_fill"], COLORS["purple"], badge="PROPOSAL")
-    box(d, "policy", 440, 635, 310, 105, "Policy Manager", ("Context·Action 권한 · consent", "policy decision · revision"), COLORS["amber_fill"], COLORS["amber"])
-    box(d, "task", 1170, 360, 270, 125, "Task Manager", ("Task lifecycle", "Execution projection · 복구"), COLORS["green_fill"], COLORS["green"], badge="STATE OWNER")
-    box(d, "gateway", 1510, 360, 240, 125, "Agent Gateway", ("command outbox", "event inbox · adapter"), COLORS["orange_fill"], COLORS["orange"])
+    box(d, "context", 80, 500, 270, 115, "Context Manager", ("후보 탐색 · bounded read", "receipt · cache · coverage"), COLORS["cyan_fill"], COLORS["cyan"])
+    box(d, "controller", 460, 410, 310, 125, "Request Controller", ("Request Graph · semantic commit", "질문 결합 · publish/dispatch admission"), COLORS["purple_fill"], COLORS["purple"], badge="AUTHORITY")
+    box(d, "resolver", 850, 500, 280, 115, "Request Interpreter", ("goal · referent · Task 후보", "field별 근거와 미해결"), COLORS["purple_fill"], COLORS["purple"], badge="PROPOSAL")
+    box(d, "policy", 460, 690, 310, 105, "Policy Manager", ("Context·Action 권한 · consent", "policy decision · revision"), COLORS["amber_fill"], COLORS["amber"])
+    box(d, "task", 1210, 410, 270, 125, "Task Manager", ("Task lifecycle", "Execution projection · 복구"), COLORS["green_fill"], COLORS["green"], badge="STATE OWNER")
+    box(d, "gateway", 1580, 410, 250, 125, "Agent Gateway", ("command outbox", "event inbox · adapter"), COLORS["orange_fill"], COLORS["orange"])
 
-    box(d, "sources", 80, 895, 270, 105, "Context Sources", ("화면 · 대화 · 자료 · OS", "read-only adapter"), COLORS["gray_fill"], COLORS["gray"])
-    box(d, "store", 440, 885, 350, 125, "Durable State Store", ("Core crash와 분리된 persistence", "owner별 repository · transaction"), COLORS["gray_fill"], COLORS["gray"], badge="NOT REAL TIME")
-    box(d, "model", 880, 885, 350, 125, "Model Access", ("S2S 1개 · Semantic LLM 1개", "shared queue · timeout · cancellation"), COLORS["gray_fill"], COLORS["gray"])
-    box(d, "agents", 1480, 890, 270, 115, "Downstream Agents", ("domain reasoning · plan · tools", "실제 업무 실행"), COLORS["orange_fill"], COLORS["orange"])
+    box(d, "sources", 80, 965, 270, 105, "Context Sources", ("화면 · 대화 · 자료 · OS", "read-only adapter"), COLORS["gray_fill"], COLORS["gray"])
+    box(d, "store", 460, 955, 350, 125, "Durable State Store", ("Core crash와 분리된 persistence", "owner별 repository · transaction"), COLORS["gray_fill"], COLORS["gray"], badge="NOT REAL TIME")
+    box(d, "interaction-ref", 875, 925, 190, 55, "Interaction Runtime (ref)", (), COLORS["blue_fill"], COLORS["blue"], kind="dashed")
+    box(d, "resolver-ref", 1100, 925, 190, 55, "Request Interpreter (ref)", (), COLORS["purple_fill"], COLORS["purple"], kind="dashed")
+    box(d, "model", 920, 1010, 325, 90, "Model Access", ("S2S 1개 · Semantic LLM 1개", "provider session · queue · timeout"), COLORS["gray_fill"], COLORS["gray"])
+    box(d, "agents", 1560, 960, 270, 115, "Downstream Agents", ("domain reasoning · plan · tools", "실제 업무 실행"), COLORS["orange_fill"], COLORS["orange"])
 
-    edge(d, "e-user-in", ((285, 155), (365, 155)), "user", "interaction", "Voice / Text / UI", 325, 145, COLORS["blue"], width=3)
-    edge(d, "e-output", ((365, 200), (285, 200)), "interaction", "user", "표시 / 재생", 325, 226, COLORS["blue"], width=3)
-    edge(d, "e-i-r", ((515, 225), (515, 310), (595, 310), (595, 360)), "interaction", "controller", "Input + Evidence Record", 530, 340, COLORS["purple"], width=3)
-    edge(d, "e-r-o", ((650, 360), (650, 300), (940, 300), (940, 225)), "controller", "response", "Canonical payload", 805, 287, COLORS["blue"], width=3)
-    edge(d, "e-o-i", ((790, 175), (665, 175)), "response", "interaction", "channel delivery", 728, 165, COLORS["blue"], width=3)
+    edge(d, "e-user-channel", ((270, 185), (340, 185)), "user", "channel", "actual I/O", 305, 175, COLORS["blue"], bidirectional=True, width=3)
+    edge(d, "e-i-r", ((615, 275), (615, 410)), "timeline", "controller", "Input + Evidence Record", 535, 345, COLORS["purple"], width=3)
+    edge(d, "e-r-o", ((690, 410), (690, 330), (1140, 330), (1140, 255)), "controller", "response", "Canonical payload + publish/reject", 915, 322, COLORS["blue"], width=3)
+    edge(d, "e-o-i", ((1000, 185), (820, 185)), "response", "channel", "handle ↔ release/receipt", 910, 175, COLORS["blue"], bidirectional=True, width=3)
 
-    edge(d, "e-r-c", ((440, 415), (395, 415), (395, 500), (350, 500)), "controller", "context", color=COLORS["cyan"], bidirectional=True)
-    edge(d, "e-r-s", ((750, 415), (790, 415), (790, 500), (830, 500)), "controller", "resolver", color=COLORS["purple"], bidirectional=True)
-    edge(d, "e-r-policy", ((595, 485), (595, 635)), "controller", "policy", "authorize / policy decision", 680, 570, COLORS["amber"], bidirectional=True)
-    edge(d, "e-r-t", ((750, 385), (1170, 385)), "controller", "task", "semantic commit / confirmed Task state", 960, 376, COLORS["green"], bidirectional=True, width=3)
-    edge(d, "e-t-g", ((1305, 485), (1305, 585), (1630, 585), (1630, 485)), "task", "gateway", "command / event", 1468, 577, COLORS["orange"], bidirectional=True)
+    edge(d, "e-r-c", ((460, 465), (405, 465), (405, 555), (350, 555)), "controller", "context", color=COLORS["cyan"], bidirectional=True)
+    edge(d, "e-r-s", ((770, 465), (810, 465), (810, 555), (850, 555)), "controller", "resolver", color=COLORS["purple"], bidirectional=True)
+    edge(d, "e-r-policy", ((615, 535), (615, 690)), "controller", "policy", "authorize / policy decision", 700, 620, COLORS["amber"], bidirectional=True)
+    edge(d, "e-r-t", ((770, 435), (1210, 435)), "controller", "task", "semantic commit / confirmed Task state", 990, 426, COLORS["green"], bidirectional=True, width=3)
+    edge(d, "e-t-g", ((1345, 535), (1345, 640), (1705, 640), (1705, 535)), "task", "gateway", "command / event", 1525, 632, COLORS["orange"], bidirectional=True)
 
-    edge(d, "e-c-source", ((215, 560), (215, 895)), "context", "sources", "bounded read", 270, 770, COLORS["cyan"])
-    edge(d, "e-s-model", ((970, 560), (970, 885)), "resolver", "model", "structured inference", 1035, 770, COLORS["purple"])
-    edge(d, "e-g-a", ((1630, 485), (1630, 890)), "gateway", "agents", "typed protocol", 1690, 770, COLORS["orange"], bidirectional=True)
+    edge(d, "e-c-source", ((215, 615), (215, 965)), "context", "sources", "bounded read", 270, 825, COLORS["cyan"])
+    edge(d, "e-channel-model", ((970, 980), (970, 1010)), "interaction-ref", "model", "S2S session", 915, 1002, COLORS["blue"], bidirectional=True)
+    edge(d, "e-s-model", ((1195, 980), (1195, 995), (1170, 995), (1170, 1010)), "resolver-ref", "model", "semantic call", 1248, 1002, COLORS["purple"], bidirectional=True)
+    edge(d, "e-g-a", ((1705, 535), (1705, 960)), "gateway", "agents", "typed protocol", 1765, 825, COLORS["orange"], bidirectional=True)
 
-    caption(d, 215, 420, "read envelope ↔ evidence package", 11, COLORS["cyan"], "middle", 700)
-    caption(d, 970, 420, "input + evidence ↔ semantic proposal", 11, COLORS["purple"], "middle", 700)
-    caption(d, 610, 780, "Policy 판단은 Controller가 적용하고, Context Manager는 승인된 read envelope만 실행한다.", 12, COLORS["amber"], "middle", 700)
-    caption(d, 615, 1032, "Controller · Context · Task · Gateway · Response · Policy의 durable record", 11, COLORS["gray"], "middle", 600)
-    caption(d, 1055, 1032, "Interaction Runtime과 Interpreter가 공유", 11, COLORS["gray"], "middle", 600)
+    caption(d, 215, 475, "read envelope ↔ evidence package", 11, COLORS["cyan"], "middle", 700)
+    caption(d, 990, 475, "input + evidence ↔ semantic proposal", 11, COLORS["purple"], "middle", 700)
+    caption(d, 650, 850, "Policy 판단은 Controller가 적용하고 Context Manager는 승인된 read envelope만 실행한다.", 12, COLORS["amber"], "middle", 700)
+    caption(d, 635, 1102, "Controller · Context · Task · Gateway · Response · Policy의 durable record", 11, COLORS["gray"], "middle", 600)
+    caption(d, 1082, 910, "MODEL ACCESS CLIENTS — 위 Component의 선 교차 방지용 참조", 10, COLORS["muted"], "middle", 700)
+    caption(d, 1082, 1120, "두 client는 Model Access를 통해 S2S 1개와 Semantic LLM 1개를 공유", 11, COLORS["gray"], "middle", 600)
+
+    caption(d, 1315, 120, "LEGEND — 박스와 화살표 색은 책임·계약 영역", 11, COLORS["muted"], "start", 700)
+    legend(d, "legend-blue", 1315, 135, 125, "Interaction", COLORS["blue_fill"], COLORS["blue"])
+    legend(d, "legend-purple", 1450, 135, 125, "Semantic authority", COLORS["purple_fill"], COLORS["purple"])
+    legend(d, "legend-cyan", 1585, 135, 125, "Evidence / Context", COLORS["cyan_fill"], COLORS["cyan"])
+    legend(d, "legend-amber", 1720, 135, 120, "Policy / Consent", COLORS["amber_fill"], COLORS["amber"])
+    legend(d, "legend-green", 1315, 170, 125, "Task state", COLORS["green_fill"], COLORS["green"])
+    legend(d, "legend-orange", 1450, 170, 125, "Agent / Action", COLORS["orange_fill"], COLORS["orange"])
+    legend(d, "legend-gray", 1585, 170, 125, "Infra / Dependency", COLORS["gray_fill"], COLORS["gray"])
+    caption(d, 1315, 215, "→ data/control 방향   ↔ paired request/response protocol", 10, COLORS["muted"], "start", 600)
     return d
 
 

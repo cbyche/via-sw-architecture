@@ -27,3 +27,5 @@
 | 노랑 | policy, admission, fence와 사용자 결정 |
 | 회색 | shared dependency, durable infrastructure와 관측 상태 |
 | 빨강 | failure, uncertainty 또는 crash window |
+
+박스와 화살표에 같은 색 체계를 사용한다. 화살표 색은 그 선이 전달하는 주된 책임·계약 영역이며 수신 Component의 상태 소유권을 자동으로 뜻하지 않는다. `→`는 호출·데이터·제어의 주 방향이고 `↔`는 request/response, command/event, stream/control처럼 양쪽 메시지가 있는 protocol이다. 양방향 표시는 공동 상태 소유를 뜻하지 않는다.

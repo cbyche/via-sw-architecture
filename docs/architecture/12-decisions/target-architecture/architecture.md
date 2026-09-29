@@ -45,13 +45,15 @@
 
 화살표는 논리적 호출·데이터 관계다. 핵심 제어 구조는 Controller가 Interaction Runtime의 입력을 받고, Context Manager의 근거와 Interpreter의 semantic proposal을 결합하며, Policy Manager의 판단을 적용한 뒤 semantic commit을 Task Manager 또는 Response Manager로 보내는 형태다. Context 추가 읽기는 Interpreter가 제안하고 Controller가 Policy 확인 후 승인된 read envelope를 Context Manager에 실행시킨다. Policy Manager가 Response Manager를 직접 제어하지 않으며 Response Manager는 Controller가 admission한 canonical payload만 게시한다.
 
-State Store는 real-time interaction 경로의 Component가 아니다. Core process crash와 분리된 durable infrastructure이며, 각 상태 소유 Component가 repository·transaction port를 통해 기록한다. 그림에서는 sequence flow와 persistence 관계를 혼동하지 않도록 개별 Store 연결선을 생략하고 Store가 지원하는 owner를 상자 아래에 표시했다. 모델 호출은 공통 Model Access를 거친다. 각 상자가 별도 프로세스라는 뜻은 아니다.
+State Store는 real-time interaction 경로의 Component가 아니다. Core process crash와 분리된 durable infrastructure이며, 각 상태 소유 Component가 repository·transaction port를 통해 기록한다. 그림에서는 sequence flow와 persistence 관계를 혼동하지 않도록 개별 Store 연결선을 생략하고 Store가 지원하는 owner를 상자 아래에 표시했다. 모델 호출은 공통 Model Access를 거친다. Model Access 위 점선 `ref` 박스는 선 교차 없이 client 관계를 보여 주기 위한 위 Component의 참조이며 Component나 모델 복제본이 아니다. 각 상자가 별도 프로세스라는 뜻은 아니다.
+
+그림의 박스와 화살표 색은 같은 책임·계약 영역을 뜻한다. 파랑은 interaction·publication, 보라는 request·semantic authority, 청록은 evidence·Context, 노랑은 policy·consent, 초록은 확인된 Task state, 주황은 Agent·외부 Action, 회색은 infrastructure·dependency다. 단방향 화살표는 호출·데이터·제어의 주 방향이고 양방향 화살표는 request/response 또는 command/event처럼 양쪽 메시지가 있는 protocol이다. 양방향이라고 상태 권한을 공유한다는 뜻은 아니다.
 
 ## 4. Component와 상태 소유권
 
 | Component | 책임 | 소유 상태 |
 | --- | --- | --- |
-| Interaction Runtime | Voice/Text 입력, 화면·포인터·선택 수집, S2S 연결, 재생·중단 | Voice 연결, 입력 stream, 짧은 증거 buffer, 재생 상태 |
+| Interaction Runtime | Channel I/O, 화면 evidence capture, 입력·근거 timeline과 speculative generation handle 관리; Model Access의 S2S client | 사용자·device session, 입력 stream, 짧은 evidence buffer, clock mapping, playback·barge-in·generation handle 상태 |
 | Request Controller | Turn 수신, Request Graph, 의미 확정, 정정, 모든 사용자 질문·승인의 결합, 게시·dispatch admission | Conversation, Turn, Request Graph, semantic revision·commit, Pending User Interaction |
 | Context Manager | 후보 탐색, bounded read, 근거 package·coverage, cache, 허용된 User Memory | Context cache, query receipt, 관측한 source revision, 기억과 삭제 상태 |
 | Request Interpreter | 목표·대상·복합 관계·Task 관계·처리 방향의 후보와 field별 근거 제안 | 호출 중 임시 상태; `READY`·업무 상태·게시 권한의 권위는 없음 |
@@ -60,9 +62,19 @@ State Store는 real-time interaction 경로의 Component가 아니다. Core proc
 | Response Manager | 하나의 확정 payload를 Text·Voice·알림으로 게시하고 실제 전달 범위를 기록 | publication outbox, 출력 소유권, 채널별 전달 상태 |
 | Policy Manager | Context 접근·제공·기억 사용 통제 | 현재 권한, consent 범위·revision |
 | State Store | transaction, 송수신 기록, 근거 참조, 복구 저장 | 영속 데이터; 상태의 의미는 각 소유 Component가 결정 |
-| Model Access | 공유 모델 연결, 호출 우선순위, timeout·취소·예산 | 모델별 queue, session·cache 관리 정보 |
+| Model Access | S2S 1개와 semantic LLM 1개의 provider session·adapter, 호출 우선순위, timeout·취소·예산 | 모델별 queue, provider session·cache 관리 정보 |
 
 Turn Workspace는 Controller 내부의 요청별 작업 데이터다. Decision Validator는 Controller의 확정 절차에 포함한다. 별도 서비스로 분리해 매 요청에 추가 왕복을 강제하지 않는다.
+
+Interaction Runtime도 하나의 구현 모듈이 아니라 다음 내부 모듈을 갖는 논리적 subsystem이다.
+
+| 내부 모듈 | 책임 | 금지되는 권한 |
+| --- | --- | --- |
+| Channel I/O | Voice·Text·UI 입출력, microphone·playback, barge-in, 실제 표시·재생 | 응답 내용·routing·Task 확정 |
+| Evidence Capture | 화면·window·focus·pointer·selection revision 수집 | 지칭 대상의 의미 확정 |
+| Timeline & Buffer | 입력 revision과 evidence 시각 결합, gap·clock mapping, S2S transcript·speculative generation handle 연결 | speculative 응답의 게시 허용 |
+
+S2S provider 연결 자체는 Model Access가 소유한다. Interaction Runtime은 Model Access client로 audio·control stream을 주고 transcript·generation handle을 받는다. 이 구분으로 device·OS adapter 변화와 model provider 변화가 같은 모듈에 섞이지 않게 한다.
 
 State Store에 저장한다고 상태 소유권이 Store로 넘어가지 않는다. Aggregate별 단일 writer를 유지한다. Controller는 Task 변경을 Task Manager에 요청하고, Task Manager는 Gateway의 durable inbox event를 검증한 뒤 projection을 바꾼다. 여러 상태를 함께 확정해야 할 때는 owner가 State Store transaction을 요청한다.
 
@@ -138,7 +150,9 @@ LLM이 요청하는 도구는 bounded read-only Context 도구뿐이다. Host가
 | S2S 직접 응답 | 외부·개인·화면·과거 대화·Task·Action·최신성·복합 관계가 필요 없는 self-contained Voice 질문 | admission 판정 방식에 따라 생략 가능 |
 | Core 처리 후 음성 전달 | 화면·자료·Task 판단, clarification, 위임, 진행·결과 | 필요한 해석·구성에 사용 |
 
-S2S는 응답을 speculative buffer에서 생성할 수 있지만 스스로 게시 권한을 갖지 않는다. Controller는 모든 입력에 Request identity를 만들고 `Direct Admission Record`를 확정한 뒤 한 경로에만 응답 소유권을 부여한다. 외부 근거·개인 자료·화면 지칭·과거 대화·Task 관계·Action/control·최신성·복합 관계의 가능성이 하나라도 남으면 Core로 보낸다. admission 전 audio는 재생하지 않고, 기각한 generation은 폐기한다.
+S2S는 Model Access 안에서 응답을 speculative하게 생성할 수 있지만 스스로 게시 권한을 갖지 않는다. Channel I/O가 audio stream을 Model Access에 보내면 Model Access는 transcript revision과 speculative generation handle을 Timeline & Buffer로 돌려준다. Interaction Runtime은 이 handle을 Input + Evidence Record와 함께 Controller에 전달할 수 있지만 재생하지 않는다.
+
+Controller는 모든 입력에 Request identity를 만들고 `Direct Admission Record`를 확정한 뒤 한 경로에만 응답 소유권을 부여한다. 허용한 경우 generation handle과 확정 proposition을 Canonical Response Payload에 묶어 Response Manager에 보낸다. Response Manager가 handle·Request·input revision을 확인해 Channel I/O에 release 또는 cancel을 명령하고, Channel I/O는 실제 표시·재생·중단 receipt를 돌려준다. 따라서 직접 S2S 응답도 `Model Access ↔ Interaction Runtime ↔ Response Manager` 전달 protocol과 `Controller → Response Manager` admission을 모두 지난다. 외부 근거·개인 자료·화면 지칭·과거 대화·Task 관계·Action/control·최신성·복합 관계의 가능성이 하나라도 남으면 Core로 보낸다. admission 전 audio는 재생하지 않고, 기각한 generation은 폐기한다.
 
 허용된 S2S 응답도 Text·audio generation과 사용한 근거를 같은 Response Record에 남긴다. 동일 Request에 S2S와 Core가 중복 응답하지 않으며 기록을 위해 재실행하지 않는다. Text 일반 질문에는 S2S 경유를 강제하지 않는다. 이 gate가 정확도를 지키면서 실제 latency 이점을 남기는지는 아직 검증되지 않았다.
 
@@ -194,7 +208,7 @@ S2S는 응답을 speculative buffer에서 생성할 수 있지만 스스로 게�
 | Pending User Interaction | 질문·승인 유형, 결합할 Request·Task·Execution, unresolved field·후보, 허용 답변, revision·만료·응답 Turn |
 | Agent Command | Request·Task·command ID와 type, 목표·완료 조건·제약·대상, Execution·artifact version, approval·policy revision, precondition, epoch·중복 방지 key |
 | Agent Event | Agent·Execution·event ID, command correlation, source sequence/revision, emitted·received 시각, 상태·질문·artifact version·실패·확실성 |
-| Canonical Response Payload | 확정 proposition, Request·Task·result identity, source·staleness, notification disposition |
+| Canonical Response Payload | 확정 proposition, Request·Task·result identity, source·staleness, notification disposition, 선택적 검증된 generation handle |
 | Response Record | payload·publication ID, Text 게시 내용, Voice generation과 실제 audible prefix/range, 표시·재생·중단·ack 상태 |
 
 외부 문서·Agent 내용은 데이터이며 VIA 정책을 바꾸는 지시가 아니다. 현재 권한은 과거 대화의 동의 문장이 아니라 Policy State에서 확인한다. Agent Action Approval은 VIA가 해당 실행에 중계하고 실제 Action의 권한 강제는 Agent가 담당한다.
@@ -249,7 +263,7 @@ Agent 질문·승인은 공통 Pending User Interaction에 Task + Execution + qu
 
 ## 13. 응답 전달
 
-Response Manager는 하나의 Canonical Response Payload를 확정한 뒤 publication outbox에 기록하고 Text·Voice·알림을 렌더링한다. Text와 Voice는 같은 proposition·Task/result identity·staleness를 보존해야 한다.
+Response Manager는 Controller가 admission한 하나의 Canonical Response Payload를 publication outbox에 기록하고 Text·Voice·알림 publication을 조정한다. 미리 생성된 S2S 응답이면 payload의 generation handle을 검증해 Interaction Runtime에 release/cancel을 보내고, 새로 생성해야 하면 같은 Model Access를 통해 필요한 Voice generation을 요청한다. Interaction Runtime의 delivery receipt로 실제 표시·재생 범위를 기록한다. Text와 Voice는 같은 proposition·Task/result identity·staleness를 보존해야 한다.
 
 - 모든 사용자 응답은 Text와 Conversation에 남고, Voice 활성 시 핵심을 짧게 전달한다.
 - 사용자가 말하는 동안 일반 progress 음성이 끼어들지 않는다. 여러 결과를 동시에 재생하지 않는다.
