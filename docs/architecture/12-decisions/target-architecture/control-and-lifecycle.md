@@ -1,6 +1,6 @@
 # 요청 판단·제어·대화의 실행 계약
 
-> 상태: **주요 설계 완성안 / 사용자 최종 검토 전 / 구현·성능 측정 없음**
+> 상태: **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정 / 구현·성능 측정 없음**
 > [전체 구조](./architecture.md) · [기능 완결성](./design-completeness.md) · [기억·Context](./memory-and-context-lifecycle.md)
 
 이 문서는 “누가 판단하는가”에서 더 나아가 입력 확정, 직접 응답 허용, 질문의 답변 연결, 전송·정정 경쟁, 실제 전달과 재시작의 동작을 정한다. 수치형 기기 설정과 직렬화 코드는 후속 구현 항목이며 주요 동작 선택을 미루는 빈칸이 아니다.
@@ -22,6 +22,8 @@ Turn의 Conversation은 입력 시작 시 고정한다. UI에서 다른 대화�
 Voice Process의 AEC와 보수적인 audio activity detector가 즉시 입력 시작/재생 중단을 담당하고, 종료는 activity 종료 후보와 ASR final의 결합으로 결정한다. 별도 학습된 endpoint/helper 모델은 기본 inventory에 추가하지 않는다. Detector 알고리즘·threshold는 교체 가능한 device adapter 설정이며 의미상 취소를 판단하지 않는다.
 
 `InputFinal`은 의미의 정확성 선언이 아니다. Endpoint가 일찍 닫혔으면 뒤 발화를 새 Turn으로 받아 Request Interpreter가 continuation/correction 관계를 복원한다. 원음·전사·당시 화면이 사라진 경우 현재 화면으로 대체하지 않는다. 사용자가 직접 선택하거나 다시 지칭하도록 질문한다.
+
+화면·포인터·선택 관측은 전사 token 도착마다 시작하지 않는다. Interaction Manager의 OS/UI 사건·유한 sampling·pre-roll·발화 구간 pin과 Context Manager의 기본/추가 조회 trigger는 [전체 구조 §9](./architecture.md)에 따른다. Request Controller는 최종 입력·근거·예산을 결합해 Request Interpreter를 호출하며, 추가 조회 결과도 Request Controller를 거쳐 재해석한다.
 
 ## 2. 최소 S2S 직접 응답 계약
 

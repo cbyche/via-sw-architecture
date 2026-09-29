@@ -1,6 +1,6 @@
 # 12. Target Architecture and Architecture Rationale
 
-> 상태: **Target Architecture Definition / 주요 설계 완성안·사용자 최종 검토 전**
+> 상태: **Target Architecture 검토 기준선 확정 / 다음 작업: Decision Reconstruction 후보 목록**
 
 12번은 01~11에서 정의한 제품 경계·사용자 행동·품질 의미를 바탕으로 VIA의 목표 Architecture를 완성하고, 그 구조를 성립시키는 핵심 선택을 역으로 설명하는 단계다.
 
@@ -22,11 +22,11 @@
 | 순서 | 문서 | 목적 |
 | --- | --- | --- |
 | 1 | [Target Architecture 작업 공간](./target-architecture/README.md) | 접근법, 고정 경계, 현재 산출물의 한계 이해 |
-| 2 | [전체 Architecture 제안](./target-architecture/architecture.md) | Component, 상태, 계약, runtime, 동시성, 장애와 위험 검토 |
+| 2 | [전체 Architecture 기준선](./target-architecture/architecture.md) | 합의한 Component, 상태, 계약, runtime, 동시성, 장애와 위험 확인 |
 | 3 | [설계 완결성 점검](./target-architecture/design-completeness.md) | 필수 기능·예외 대응과 구체화한 주요 선택 확인 |
-| 4 | [Target-derived Decision Packages](./decision-packages/README.md) | 전체 구조 합의 이후의 package 도출 규칙 |
+| 4 | [Target-derived Decision Packages](./decision-packages/README.md) | 구조적 선택·steelman·ASR 후보 목록과 후속 package 도출 규칙 |
 
-현재는 1~3만 진행한다. 전체 Architecture가 충분히 합의되기 전에는 새 Decision Package나 측정 freeze를 만들지 않는다.
+1~3의 주요 설계와 사용자 검토는 완료했다. 다음 작업은 4의 지침에 따라 사용자와 후보 목록을 함께 구체화하는 것이다. 정식 package·ASR 재정의·검증 계약은 후보 검토를 거쳐 발전시키며 이번 기준선 확정에서 측정 freeze나 구현·실험을 시작하지 않는다.
 
 ## 목표 Architecture 이후의 Decision Package
 
@@ -40,7 +40,7 @@
 
 Component가 있다는 이유만으로 package를 만들지 않는다. 새 package는 기존 VIA-DP 번호를 이어받거나 기존 inventory에 다시 매핑하지 않는다.
 
-현재는 Target Architecture 완성에 집중하며 package를 구체화하지 않는다. 현재 네 ASR은 목표 설계의 작업 기준이다. 전체 구조 합의 후 Decision Point와 steelman 후보를 구체화하면서 ASR의 추가·변경 여부, 의미·우선순위·적용 범위·평가 기준을 함께 정의한다. 이후 package 비교에서는 그렇게 정한 ASR 전체를 다루고 각 축을 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`로 분류한다. 선택안과 steelman의 applicable 축은 같은 계약으로 독립 측정하며, 어느 한쪽을 먼저 탈락시켜 다른 축을 생략하지 않는다.
+현재 네 ASR은 목표 설계의 작업 기준이다. 다음 Decision Point와 steelman 후보 구체화에서 ASR의 추가·변경 여부, 의미·우선순위·적용 범위·평가 기준을 함께 정의한다. 메모리 사용량은 사용자 리뷰의 중요 후보이며 QA-41의 diagnostic 지위는 아직 변경하지 않았다. 이후 package 비교에서는 그렇게 정한 ASR 전체를 다루고 각 축을 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`로 분류한다. 선택안과 steelman의 applicable 축은 같은 계약으로 독립 측정하며, 어느 한쪽을 먼저 탈락시켜 다른 축을 생략하지 않는다.
 
 ## 기존 VIA-DP-01~18의 위치
 

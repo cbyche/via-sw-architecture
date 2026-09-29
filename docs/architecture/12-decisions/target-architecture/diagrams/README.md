@@ -1,6 +1,6 @@
 # Target Architecture diagrams
 
-이 디렉터리는 [VIA 목표 Architecture](../architecture.md)의 검토용 그림을 관리한다.
+이 디렉터리는 [VIA 목표 Architecture](../architecture.md)의 검토 완료 기준선 그림을 관리한다. `REVIEWED BASELINE`은 주요 설계의 사용자 검토 완료를 뜻하며 구현·모델 기능·성능 검증 완료 표기가 아니다.
 
 각 그림은 두 파일을 한 쌍으로 둔다.
 

@@ -1,14 +1,14 @@
 # VIA 목표 SW Architecture
 
-> 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전 / 구현·측정 없음**
-> 작성일: 2026-09-29
+> 상태: **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정 / 구현·측정 없음**
+> 작성일·검토 확정일: 2026-09-29
 > [읽기 안내와 합의 상태](./README.md) · [설계 완결성 점검](./design-completeness.md)
 
 ## 1. 한 문장 정의
 
 **VIA는 시간에 맞춰 수집한 근거로 사용자의 목표·대상·Task를 먼저 정확히 확정하고, 그 확정 경계를 지키면서 직접 응답과 장기 Agent 업무를 빠르게 이어 주는 PC interaction·orchestration 소프트웨어다.**
 
-세 부분은 동시에 움직이되 사용자에게 무엇을 답하고 어떤 업무를 시작할지는 검증된 요청과 확인된 상태를 기준으로 결정한다. 필수 기능의 정상·예외 경로와 주요 구조 선택을 완성한 설계안이며 사용자 최종 검토 전이다. 구현·성능 측정은 이번 완료 기준에 포함하지 않는다. 성능상 이점은 아직 검증되지 않은 가설이다.
+세 부분은 동시에 움직이되 사용자에게 무엇을 답하고 어떤 업무를 시작할지는 검증된 요청과 확인된 상태를 기준으로 결정한다. 필수 기능의 정상·예외 경로와 주요 구조 선택을 사용자 리뷰에 따라 정리하고 후속 Decision Reconstruction의 목표 설계 기준선으로 확정했다. 구현·성능 측정은 이번 완료 기준에 포함하지 않는다. 성능상 이점은 아직 검증되지 않은 가설이며, 기준선 확정은 대안 비교의 승자 판정이나 구조 변경 금지를 뜻하지 않는다.
 
 주요 계약은 [판단·제어·대화](./control-and-lifecycle.md), [Context·기억 수명](./memory-and-context-lifecycle.md), [공유 Omni 실행](./shared-omni-runtime.md)에 구체화했다. [완결성 점검](./design-completeness.md)은 UC 18개와 필수 변형의 반영 위치, 선택한 정책, 후속 구현 항목을 구분한다.
 
@@ -29,7 +29,7 @@
 
 이 문서에서 `invariant`가 필요한 경우에는 “유효한 host admission 없이 command를 전송하지 않는다”처럼 **현재 설계 안에서 유지해야 할 구체적인 상태·제어 규칙**을 뜻한다. 그 규칙의 책임 위치·검증 방식·보장 수단까지 모든 대안에서 고정한다는 뜻은 아니다. 설계를 변경하면 영향받는 규칙과 보장 범위도 함께 재검토한다.
 
-**이후 Decision Point 도출:** 위 처리 정책과 구조도 중요한 품질 차이를 만드는 경우 도출 대상이다. 대안에 현재 구조의 adapter·내구 기록·검증 순서를 그대로 요구하지 않는다. 공통 제품 요구와 사용자 합의를 유지하면서 다른 보장 수단과 비용을 비교한다. 현재의 accuracy 우선순위는 설계 방향이며, 이후 비교에서 accuracy가 낮은 후보의 responsiveness 측정을 생략하는 필터가 아니다. **현재의 네 ASR은 목표 설계를 위한 작업 기준이며, 이후 비교의 ASR 목록·개수·정의를 고정하지 않는다.** 전체 구조 합의 후 Decision Point와 steelman 후보를 구체화하면서 ASR의 추가·변경 여부, 의미·우선순위·적용 범위·평가 기준을 함께 정의한다. 그렇게 정한 ASR 전체의 적용 여부와 applicable 축의 trade-off를 드러내며, 실제 측정 전에 비교 계약을 동결한다. 지금은 새 ASR 선정이나 package 구성을 진행하지 않는다.
+**이후 Decision Point 도출:** 위 처리 정책과 구조도 중요한 품질 차이를 만드는 경우 도출 대상이다. 대안에 현재 구조의 adapter·내구 기록·검증 순서를 그대로 요구하지 않는다. 공통 제품 요구와 사용자 합의를 유지하면서 다른 보장 수단과 비용을 비교한다. 현재의 accuracy 우선순위는 설계 방향이며, 이후 비교에서 accuracy가 낮은 후보의 responsiveness 측정을 생략하는 필터가 아니다. **현재의 네 ASR은 목표 설계를 위한 작업 기준이며, 이후 비교의 ASR 목록·개수·정의를 고정하지 않는다.** 다음 단계에서 Decision Point와 steelman 후보를 구체화하면서 ASR의 추가·변경 여부, 의미·우선순위·적용 범위·평가 기준을 함께 정의한다. 메모리 사용량은 사용자 리뷰에서 중요 후보로 제기했으며 QA-41의 핵심 ASR 승격 여부와 정의는 그 과정에서 검토한다. 이번 기준선 확정으로 기존 QA-41의 diagnostic 지위나 QA 정의를 바꾸지 않는다. 그렇게 정한 ASR 전체의 적용 여부와 applicable 축의 trade-off를 드러내며, 실제 측정 전에 비교 계약을 동결한다.
 
 ## 2. 사용자 관점의 전체 흐름
 
@@ -130,6 +130,8 @@ Component 경계는 배포 단위가 아니라 변화와 상태 권한을 가두
 - 같은 목표·결과물의 수정은 기존 Task, 이전 결과를 참고한 별도 목표는 새 Task로 연결한다.
 - Task는 사용자 업무 identity, Execution은 실제 Agent 실행이다. 동일 Task에 후속 Execution을 연결할 수 있다.
 
+어느 Task에 연결할지의 의미 판단은 Request Interpreter가 제안하고, Request Controller가 근거·권한·관련 revision을 검증해 요청과 Task의 연결을 확정한다. Task Manager는 Task 상태와 Execution 관계를 관리한다. Context Manager는 Task Manager의 조회 인터페이스에서 활성·최근·명시 대상·자료 참조와 관련된 후보를 가져오며, 부족하면 제한된 추가 조회를 수행한다. 후보의 의미상 적합성은 Request Interpreter가 판단한다. Request Interpreter가 State Store를 직접 읽거나 전체 Task 이력을 매번 모델 입력에 넣는 구조가 아니다.
+
 Task 상태는 업무 단계(준비·실행·입력 대기·완료·실패·취소), 제어 요청(수정·취소 요청 중), 확인 상태(확인됨·재조회 중·확인 불가)를 구분한다. 취소 접수와 취소 완료, 연결 단절과 업무 실패를 혼동하지 않는다.
 
 VIA clarification, Agent 질문, Context consent와 Action approval은 모두 `Pending User Interaction`으로 등록한다. 이 기록은 interaction ID, Conversation·Turn·Request, 선택적 Task·Execution·question, 허용 답변, 생성 revision, policy revision과 만료 조건을 가진다. 짧은 답변을 어느 질문에 적용할지는 Request Controller 한 곳이 결정하며, 유일하게 결합할 수 없으면 다시 묻는다.
@@ -149,6 +151,8 @@ Request는 `RESOLVING`, `WAIT_CONTEXT`, `WAIT_USER`, `WAIT_DEPENDENCY`, `READY`,
 최초 해석의 호출 경로는 **Interaction Manager → Request Controller → Request Interpreter**다. Interaction Manager는 최종 입력과 발화·화면·선택의 시점별 근거 참조를 Request Controller에 전달한다. Request Controller는 Context Manager에 기본 Context 준비를 요청하고 반환된 대화·Task 후보·자료 근거를 입력 revision·허용 범위·호출 예산과 결합해 Request Interpreter를 호출한다. 기본 Context 준비는 입력 중 시작할 수 있으므로 그림의 논리적 전달 순서가 발화 종료 후 모든 조회를 직렬로 시작한다는 뜻은 아니다.
 
 추가 조회도 **Request Interpreter → Request Controller → Context Manager → Request Controller → Request Interpreter** 경로다. Request Controller는 추가 읽기 제안의 권한·범위·예산을 확인하고, 조회 결과를 받은 뒤 현재 revision과 남은 예산을 확인해 재해석을 요청한다. Interaction Manager나 Context Manager가 Request Interpreter를 직접 호출하지 않는다. 그림에 반복 등장하는 Request Controller는 같은 Component의 서로 다른 처리 단계이며, 해석 전 호출 제어와 해석 후 검증을 모두 소유한다.
+
+Request Controller의 호출·예산·권한·revision 제어와 Context Manager의 조회·cache·receipt 구성은 일반 코드로 수행한다. 기존 identity·metadata·keyword 규칙으로 후보를 찾는 것과 자연어의 목표·지칭·Task 관계를 판단하는 것은 구분한다. 후자는 Request Interpreter가 공유 Omni의 semantic 역할로 수행하며, host 검증을 두 번째 의미 판단 모델로 구현하지 않는다. 파생 요약의 생성·수명은 별도 기억 계약을 따른다.
 
 ### 음성 stream과 요청 이벤트의 경계
 
@@ -238,6 +242,27 @@ S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 �
 
 [draw.io 편집 원본](./diagrams/04-interaction-evidence-timeline.drawio)
 
+### 관측 근거의 수집과 Context 조회를 분리한다
+
+Interaction Manager는 발화 당시의 화면·포인터·선택·활성 앱·창·문서 식별 정보를 확보한다. Context Manager는 이를 포함해 요청 해석에 필요한 내부·외부 근거를 구성하고, 필요한 문서 본문·대화·Task 상세를 허용된 조회로 가져온다. 활성 창과 포인터는 관측 사실이며 사용자의 시선·의도를 확정한 사실이 아니다.
+
+**수집 trigger는 streamed text의 각 조각이 아니라 OS/UI 사건과 유한한 capture 예산이다.** 권한이 있고 interaction 입력이 활성화된 동안 현재 관측 상태와 짧은 pre-roll을 RAM에 유지한다. 발화가 시작되면 해당 구간과 직전 상태를 보존하고, 확정 전사 시각에 맞춰 실제 지칭 후보를 해석한다. 수집 여부를 매번 LLM에 묻거나 “이거”가 전사될 때까지 기다리지 않는다.
+
+| 관측 정보·사건 | Interaction Manager의 수집 규칙 | 비용·누락 처리 |
+| --- | --- | --- |
+| 앱·창·문서 identity | focus·창 전환·문서 전환 사건에서 시각·revision과 새 상태 기록 | 허용된 adapter가 제공한 metadata만 사용; 식별 불가는 unknown이며 모든 실행 앱의 내용을 읽지 않음 |
+| 선택·caret·클릭 | 변경 사건과 좌표계·대상·유효 구간 기록; 발화 전부터 유지된 선택도 연결 | 선택 전환을 최신 값 하나로 덮지 않음; 사건 유실·queue 초과는 gap |
+| 포인터 이동·drag 경로 | 유한 sampling 주기로 위치·시각 기록, 클릭·선택 전환 사건은 별도 보존 | 고빈도 raw move를 전부 전송하지 않음; sampling 간격·시각 오차 때문에 후보가 겹치면 모호함 유지 |
+| 화면 이미지 | 허용된 화면/창에서 변경 신호를 받아 최대 capture 빈도 안에서 snapshot 생성; 변경 신호가 없으면 제한된 주기 sampling; 동일 화면은 참조 재사용 | 연속 animation·scroll도 byte·frame·처리량 상한 적용; 관측되지 않은 중간 화면을 복원했다고 하지 않음 |
+| InputStarted / InputFinal | 시작 시 직전 관측 상태와 발화 구간 pin, 종료 시 producer watermark 또는 gap과 입력 revision 결합 | capture 완료를 무한 대기하지 않음; pin 상한·보존 기한 초과 시 근거 부족을 표시하고 재지칭/clarification |
+| 입력 비활성·OS lock·권한 철회 | 수집 중지와 해당 raw buffer 해제 | 해제된 근거를 다른 cache나 현재 화면으로 대체하지 않음 |
+
+Resource Profile은 pointer sampling 간격, 화면 최대 capture 빈도·fallback 주기, pre-roll 길이, RAM ring/pin byte 상한, producer queue 한도·watermark 대기 시간을 유한 값으로 가진다. 기본 capture는 일반 코드와 OS/UI adapter로 수행하며 전체 화면의 의미 분석이나 문서 본문 읽기를 매 frame에 붙이지 않는다. 값은 후속 기기 binding이며 여기서 임의의 Hz·MB 또는 무손실 보장을 선언하지 않는다. 상한 때문에 필요한 근거가 빠지면 그 범위를 명시하고 잘못된 대상에 자동 실행하지 않는다.
+
+Request Controller는 InputStarted에 기본 Context 준비를 요청하고 관련 문서·선택·source 변경에만 갱신한다. 중간 변경 알림을 묶어도 원본의 사건 시각·revision·gap을 없애지 않는다. Partial transcript 도착만으로 화면 capture·자료 검색·semantic 호출을 새로 시작하지 않는다. Context Manager의 추가 읽기는 Request Interpreter의 제안을 Request Controller가 허용한 뒤 수행한다.
+
+### 미리 준비할 근거와 필요한 경우의 추가 조회
+
 | 범위 | 기본 준비 | 필요 시 조회 |
 | --- | --- | --- |
 | 화면·선택 | foreground, 문서 identity, 선택, pointer·focus 시점 | 관련 영역, UI 구조, 원문 |
@@ -268,7 +293,7 @@ S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 �
 
 [draw.io 편집 원본](./diagrams/10-context-policy-and-memory.drawio)
 
-Context Manager는 Conversation·Task·capability를 임의로 소유하거나 변경하지 않는다. Request Controller·Task Manager·Agent Gateway의 versioned read port에서 snapshot을 읽어 Evidence Package를 만든다. snapshot마다 source revision을 남기며 여러 owner를 읽은 결과를 하나의 동시 snapshot이라고 가정하지 않는다. 관련 revision의 일관성은 commit에서 확인한다. State Store에 접근할 수 있다는 이유로 다른 owner의 내부 schema에 직접 의존하지 않는다.
+Context Manager는 Conversation·Task·capability를 임의로 소유하거나 변경하지 않는다. Interaction Manager의 시점별 입력 근거, Request Controller의 대화·요청, Task Manager의 업무, Response Manager의 실제 게시·전달 기록, Agent Gateway의 capability를 각각의 versioned read port로 조회해 Evidence Package를 만든다. snapshot마다 source revision을 남기며 여러 owner를 읽은 결과를 하나의 동시 snapshot이라고 가정하지 않는다. 관련 revision의 일관성은 commit에서 확인한다. State Store에 접근할 수 있다는 이유로 다른 owner의 내부 schema에 직접 의존하지 않는다.
 
 Policy Manager는 `source / recipient / purpose / scope / policy revision / expiry`로 허용 범위를 정의한다. Request Controller가 승인한 envelope를 Context Manager, Model Access, Agent Gateway, Response Manager가 **실제 읽기·제공·게시 직전**에 검사한다. 이는 각 Component에 별도 정책 엔진을 복제하는 것이 아니라 같은 versioned 정책 계약을 강제하는 것이다. 현재 revision을 확인할 수 없으면 보호정보를 새로 사용하지 않는다. 일반 질문마다 사용자 승인을 추가하지는 않는다.
 
@@ -361,6 +386,17 @@ Command의 불변 payload는 Task Manager, 전송 시도·접수 불명·재조�
 
 Agent 선택에 필요한 capability profile은 Agent Gateway가 소유한다. Request Interpreter는 요구 capability와 후보를 제안하고 Request Controller가 사용자 지정 Agent·기능·권한·제약·상태 조회·중복 방지·제어 지원 조건을 검증한다. 기능적으로 동등한 후보는 설정된 선호와 안정적인 우선순위로 선택한다. 비용·권한·완료 조건이 달라지는 대체는 사용자 확인 없이 조용히 적용하지 않는다. 적합한 후보가 없으면 미지원으로 안내하며 VIA가 업무 실행을 대신하지 않는다. 전송 후 접수 불명인 업무를 다른 Agent로 넘기기 전에는 기존 실행 상태부터 확인한다.
 
+**Agent 선택은 의미 판단과 결정적 조건 검사를 결합한다.** Task Manager는 확정된 선택으로 업무를 구성하는 주체이며, Agent를 고르기 위해 별도 LLM을 호출하지 않는다.
+
+| 단계 | 주체·방식 | 전달·확정하는 정보 |
+| --- | --- | --- |
+| 기능 정보 확보 | Agent Gateway가 소유한 versioned capability profile을 Context Manager가 조회 | Agent identity·기능·접근 범위·연결 상태·조회/중복 방지/제어 지원과 profile revision |
+| 의미상 적합성 제안 | Request Interpreter가 기존 요청 해석의 공유 semantic 호출에서 판단 | 업무 전체에 필요한 capability·사용자 제약·후보 Agent·선택 근거; 내부 수행 단계나 실행 tool 계획은 만들지 않음 |
+| 후보 검증·최종 선택 | Request Controller가 일반 코드로 조건 검사 | 등록 profile과 요구 기능·현재 권한·사용자 지정·제어 조건을 대조; 허용된 동등 후보는 설정된 선호·안정적인 우선순위로 확정 |
+| 업무 구성·전송 | Task Manager가 선택된 Agent binding과 명령을 기록하고 Agent Gateway가 전송 | 선택한 Agent·profile revision·admission·Task/Execution 관계; 전송 시 조건이 바뀌면 재검증하며 조용히 다른 Agent로 변경하지 않음 |
+
+예를 들어 “이 자료를 요약해서 김대리에게 메일로 보내줘”는 Request Interpreter가 요약·메일 발송을 포함한 전체 목표를 처리할 후보를 제안하고 Request Controller가 조건을 확인해 하나의 Task로 위임한다. 기존 Execution의 상태 조회·정정·취소는 원래 binding으로 전달하며 새 Agent 선택 문제로 바꾸지 않는다. 후보의 설명 문장은 권한이나 기능 지원의 증거를 대신하지 않는다. 등록된 기능이 있다는 사실은 실제 도메인 품질이 가장 높다는 보장이 아니며, VIA가 Agent 내부 업무 능력을 평가해 최적 성능을 보장한다고 주장하지 않는다.
+
 **Downstream Agent 결과를 직접 받는 곳은 Agent Gateway다.** Push event, stream 또는 polling 반환을 canonical Agent Event로 변환해 durable inbox에 먼저 기록한다. Task Manager가 correlation·중복·순서를 검증하고 `inbox 적용 상태 + source cursor + Task projection`을 한 transaction으로 반영한다. terminal event에 연결된 pending question이 있으면 Request Controller가 소유한 종료 전이도 같은 transaction에 참여시켜 오래된 질문을 닫는다. Task Manager가 Request Controller 상태를 임의로 쓰지 않으며, 뒤늦은 답변 admission도 현재 Task·question revision을 검사한다.
 
 Task Manager는 확인된 변경을 Request Controller에 알린다. Request Controller는 원래 Conversation·Request·Task에 결합하고, 질문 등록·알림 시점·공개 범위를 결정해 Response Manager에 publication admission과 payload를 보낸다. 이 경로는 새 발화가 없어도 동작하며 일반 progress에는 semantic LLM 호출이 필요 없다. 긴 결과를 요약해야 할 때만 Response Manager가 공유 모델에 별도 생성 요청을 한다.
@@ -437,9 +473,11 @@ Response Manager 안의 발화 대기열은 publication·Task·result version과
 
 Shared Inference Service는 Model Access의 Omni adapter·단일 scheduler·역할별 session/KV와 **한 번 적재한 Omni weights**를 소유한다. Voice와 Core의 요청이 여기서 함께 진행하며 서로 다른 session의 Context·권한을 합치지 않는다. 긴 native inference가 host 상태 전이를 막지 않게 service process로 분리한다. ASR worker와 Omni service의 분리는 process crash를 격리하지만 전력·열·메모리 대역폭의 물리적 경합은 여전히 device profile에서 확인한다.
 
+프로세스 분리 자체가 모델의 의미 판단 능력을 높이는 것은 아니다. Responsiveness에는 blocking 격리와 IPC·직렬화·복사 비용이 직접 작용하며, accuracy에는 근거 수집 지연·유실·이벤트 순서가 판단에 영향을 주는 경우에만 인과 경로가 생긴다. 충분한 thread·비동기·자원 제어를 갖춘 단일 process도 같은 입력 근거를 유지할 수 있다. 이후 배치 대안에서는 그 가능성을 보존하고 차이가 없는 ASR에 이점을 만들어내지 않는다. Process별 runtime·buffer와 공유 메모리의 비용도 공개한다.
+
 Interaction Manager의 Text·화면·pointer 수집은 UI process 쪽 OS adapter와 제한된 evidence buffer를 사용한다. 무거운 화면 읽기는 worker로 격리한다. Voice와 UI의 producer sequence·사건 시각·capture gap을 Core의 Interaction Manager timeline 모듈이 결합한 뒤 Request Controller에 넘긴다. Voice를 끈 상태에서도 Text·화면 경로는 유지된다. UI의 명시적 음성 stop은 Voice로 직접 전달하며 Task 제어는 Core를 거친다. 따라서 단일 논리 Component의 하위 모듈이 여러 process에 배치된다는 비용과 IPC 계약을 숨기지 않는다.
 
-Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. Core 안에는 State Store access module이 있지만 durable State Store의 데이터는 Core crash 후에도 복구 가능해야 한다. 주 배치는 local embedded transactional DB이며 별도 DB server는 두지 않는다. 큰 evidence는 DB manifest와 파일 정리 원장으로 연결한다. Supervisor는 health·restart·backoff를 담당하며 Request·Task의 의미 상태를 직접 변경하지 않는다. 이 배치도 제안이지 기존 배치 결정의 자동 변경이 아니다.
+Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. Core 안에는 State Store access module이 있지만 durable State Store의 데이터는 Core crash 후에도 복구 가능해야 한다. 주 배치는 local embedded transactional DB이며 별도 DB server는 두지 않는다. 큰 evidence는 DB manifest와 파일 정리 원장으로 연결한다. Supervisor는 health·restart·backoff를 담당하며 Request·Task의 의미 상태를 직접 변경하지 않는다. 이 배치는 목표 설계 기준선이며 기존 accepted/deferred ADR의 상태·비교 조건을 자동 변경하지 않는다.
 
 Core가 끊겨도 Voice의 로컬 stop은 동작한다. 새 응답의 admission은 중단하고 기존 playback도 lease 만료 또는 연결 단절 감지로 정지한다. Voice는 Core incarnation과 output epoch가 바뀐 이전 release를 거절한다. UI는 마지막 확인 상태와 Core 연결 문제를 표시하며 Task 취소를 내구 접수한 것처럼 보고하지 않는다. 명시적 UI stop과 실제 Task 취소의 보장 범위는 다르다.
 
@@ -479,7 +517,7 @@ Core가 끊겨도 Voice의 로컬 stop은 동작한다. 새 응답의 admission�
 
 ## 16. 네 ASR의 설계 우선순위와 critical path
 
-이 Architecture는 QA-19, QA-09, QA-29, QA-39 순으로 우선해 설계한다. 지금은 이 네 관점에서 목표 구조가 완결됐는지 검토하며, 구조 선택과 steelman 비교는 전체 Architecture 합의 뒤에 시작한다.
+이 Architecture는 QA-19, QA-09, QA-29, QA-39 순으로 우선해 설계한 검토 기준선이다. 아래는 설계 당시 네 관점의 인과 설명이며, 다음 단계의 구조 선택·steelman 검토에서 사용할 ASR 목록을 고정하는 표가 아니다.
 
 ![네 core ASR의 Architecture critical path](./diagrams/07-four-asr-critical-paths.svg)
 
@@ -511,6 +549,6 @@ Reliability/recoverability 경로는 fault 발생 → process·queue·transactio
 5. **지속적으로 바뀌는 자료:** 관련 근거가 계속 바뀌면 재검증으로 진행이 멈출 수 있다. 과거 대상으로 할 수 있는 요청과 현재 version이 필요한 Action을 구분해야 한다.
 6. **구현 비용:** 증거·revision·outbox·event 정합성·출력 전달 상태가 추가된다. IPC·저장·cache 비용을 성능 이점에서 빼놓지 않는다.
 
-반증 가능한 약점은 지금 보존하되 강한 대안, Decision Package, 구체 실험은 전체 구조 합의 이후에 설계한다. 주요 선택과 후속 검토 범위는 [설계 완결성 점검](./design-completeness.md)에 있다.
+반증 가능한 약점은 기준선에 보존하며, 다음 단계에서 중요한 구조적 선택·강한 대안·관련 ASR의 후보 목록을 함께 만든다. 후보 목록에서 실제 차이를 검토한 뒤 정식 Decision Package와 검증 설계로 발전시킨다. 주요 선택과 후속 검토 범위는 [설계 완결성 점검](./design-completeness.md)에 있다.
 
-대표 UC 18개·필수 변형과 cross-cutting 기능의 설계 대응, 자체 시나리오 검토와 후속 구현 항목을 [설계 완결성 점검](./design-completeness.md)에 모았다. 주요 기능 설계는 완성안이며 최종 사용자 검토와 이후의 구현·성능 검증은 별개다. ASR의 추가·변경과 비교 기준 정의는 사용자 지시에 따라 이후 Decision Point·steelman 후보 구체화 시점에 진행한다.
+대표 UC 18개·필수 변형과 cross-cutting 기능의 설계 대응, 자체 시나리오 검토와 후속 구현 항목을 [설계 완결성 점검](./design-completeness.md)에 모았다. 주요 기능 설계는 사용자 검토를 마친 기준선이며 구현·성능 검증은 별개다. ASR의 추가·변경과 비교 기준 정의는 다음 Decision Point·steelman 후보 구체화에서 진행한다.

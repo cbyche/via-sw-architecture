@@ -419,7 +419,7 @@ def render_drawio(diagram: Diagram) -> str:
 
 
 def system_overview() -> Diagram:
-    d = Diagram("01-system-overview", "VIA — 논리 Component와 요청·결과 흐름", "PROPOSED · Accuracy → Responsiveness → Modifiability → Recoverability · 논리 구조이며 process 배치도가 아니다", 2400, 1490)
+    d = Diagram("01-system-overview", "VIA — 논리 Component와 요청·결과 흐름", "REVIEWED BASELINE · Accuracy → Responsiveness → Modifiability → Recoverability · 논리 구조이며 process 배치도가 아니다", 2400, 1490)
     lane(d, "via-system", 300, 155, 1700, 1275, "VIA SOFTWARE — 사용자 PC에서 실행하는 설계 책임 범위", fill="#F8FAFC", stroke="#64748B")
     lane(d, "coordination", 325, 205, 1650, 835, "INTERACTION & ORCHESTRATION — 모든 실선 Component 박스는 동일한 논리 수준", fill="#FFFFFF", stroke="#D5DDE9")
     lane(d, "shared-services", 325, 1070, 1650, 335, "VIA SHARED SERVICES — 저장과 모델 연동도 VIA 내부 책임", fill="#F1F5F9", stroke="#CBD5E1")
@@ -489,7 +489,7 @@ def system_overview() -> Diagram:
 
 
 def detail(slug: str, title: str, subtitle: str, height: int = 1120) -> Diagram:
-    d = Diagram(slug, title, 'PROPOSED · ' + subtitle, 1900, height)
+    d = Diagram(slug, title, 'REVIEWED BASELINE · ' + subtitle, 1900, height)
     for i, (label, color) in enumerate([('입력·응답', 'blue'), ('의미·요청', 'purple'), ('Context·근거', 'cyan'), ('정책·판정', 'amber'), ('업무·상태', 'green'), ('명령·Agent', 'orange'), ('저장·의존성', 'gray'), ('중단·실패·불확실', 'red')]):
         legend(d, f'key-{color}', 48+i*185, 92, 172, label, COLORS[color+'_fill'], COLORS[color])
     caption(d, 1580, 110, '→ 관계·전달  ·  점선 = 보조 관계', 14)
@@ -625,6 +625,7 @@ def grounding_timeline() -> Diagram:
     caption(d,90,930,'발화 시작 전부터 유지된 선택도 유효 구간으로 참조한다. 관련 구간은 pin하고, 보관 한도 초과·capture gap은 명시한다.',18,COLORS['ink'],weight=700)
     caption(d,90,972,'Timeline은 Interaction Manager, source 후보·조회 receipt는 Context Manager, 최종 referent와 dependency read set은 Request Controller가 소유한다.',16)
     caption(d,90,1012,'늦은 근거로 commit을 덮어쓰지 않는다. 전송 전이면 재검증하고, 전송 뒤면 실행 상태를 확인한 정정으로 처리한다.',16)
+    caption(d,90,1052,'수집은 OS/UI 사건 + 제한된 sampling · 발화 구간 pin · partial token마다 capture·Context 조회·semantic 호출하지 않음',16)
     return d
 
 
@@ -843,7 +844,7 @@ def admission_control() -> Diagram:
     ],'물리적인 발화 시작과 host hold 기록은 같은 시각이 아니다. 이미 나간 Action을 막았거나 되돌렸다고 주장하지 않는다.')
     caption(d,90,1050,'짧은 “응”은 실제 제시한 질문의 ID · Task · Execution · revision에 유일하게 연결될 때만 적용한다.',19,COLORS['ink'],weight=700)
     caption(d,90,1095,'여러 질문이 경쟁하면 질문 대상을 확인한다. 침묵 · 오래된 승인 · 다른 대화의 답은 실행 허가가 아니다.',17)
-    caption(d,90,1160,'주요 설계 완성안 · 판정 정확도와 실제 runtime 성능은 미측정 · 자세한 상태 전이는 control-and-lifecycle.md',16)
+    caption(d,90,1160,'검토 완료 기준선 · 판정 정확도와 실제 runtime 성능은 미측정 · 자세한 상태 전이는 control-and-lifecycle.md',16)
     return d
 
 

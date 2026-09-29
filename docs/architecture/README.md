@@ -2,9 +2,9 @@
 
 > **Status: active and authoritative**
 
-> **현재 12번 작업:** [Target Architecture](./12-decisions/target-architecture/README.md)를 먼저 설계·합의한 뒤,
-> 그 구조에서 중요한 품질 차이를 만드는 핵심 선택을 역으로 추출하고, steelman 후보 구체화와 함께 ASR을 재검토한다.
-> 기존 VIA-DP 분해에 맞추거나 다시 매핑하지 않으며, 전체 구조 합의 전에는 새 Decision Package를 만들지 않는다.
+> **현재 12번 작업:** [Target Architecture](./12-decisions/target-architecture/README.md)는 사용자 검토를 마친 **REVIEWED_BASELINE**이다.
+> 다음은 **Decision Reconstruction**으로, 구조적 선택·steelman·관련 ASR의 후보 목록을 함께 만든다.
+> 기존 VIA-DP 분해에 맞추거나 다시 매핑하지 않는다. 메모리 ASR 승격 여부도 후보와 함께 검토하며, 구현·성능 측정이나 대안 비교 승자 확정은 아직 없다.
 
 이 디렉터리는 VIA의 시스템 정의, 공통 범위, 대표 Use Case, 변화 시나리오, 품질 속성, 측정 계약, Decision Point를 연결한 현재 Architecture 기준선이다. 이 기준선이 답하려는 질문은 다음과 같다.
 
@@ -38,7 +38,7 @@
 | 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA는 왜 존재하며 무엇을 책임지는가? |
 | 2 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md)와 [Representative Use Cases](./05-representative-use-cases.md) | 모든 후보가 제공해야 할 기능과 사용자 완료 조건은 무엇인가? |
 | 3 | [Core ASR Contract](./08-quality-attributes/core-asr-contract.md) | responsiveness·accuracy 등 품질을 어떻게 해석하는가? |
-| 4 | [Target Architecture](./12-decisions/target-architecture/README.md) | 현재 제안 구조와 열린 검토 항목은 무엇인가? |
+| 4 | [Target Architecture](./12-decisions/target-architecture/README.md) | 검토 완료 기준선의 확정 범위와 다음 작업은 무엇인가? |
 | 5 | [Architecture Decisions](./12-decisions/README.md) | 목표 구조에서 rationale와 검증을 어떤 순서로 만드는가? |
 
 세부 문서는 작업 목적에 따라 연다.
@@ -67,7 +67,7 @@
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
 | Mock/spine machine contract and harness | Mixed | 공통 target·score band proposal과 mock/spine 방법은 작성; freeze·active harness·full campaign은 미완료 |
 | Current evidence | Empty / `NOT_RUN` | 이전 VIA-DP-02·05·06·09·11·12·13 reference generation은 archive; current 결과로 대체하지 않음 |
-| Target Architecture | Major design complete / final review pending | 필수 기능·예외·주요 계약 완성안; 사용자 최종 수용과 구현·측정은 별도 |
+| Target Architecture | `REVIEWED_BASELINE` | 사용자 검토 완료·목표 설계 기준선 확정; 구현·측정 없음; 다음은 구조·steelman·ASR 후보 목록 |
 | Previous Core DP set | Preserved reference | VIA-DP-03·05·06·07·15·17; 새 구조의 reading order나 매핑 대상이 아님 |
 | Previous full DP inventory | Preserved reference | VIA-DP-01~18 독립 보고서; 새 package 도출 시 그대로 계승하지 않음 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |

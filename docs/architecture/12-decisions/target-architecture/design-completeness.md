@@ -1,12 +1,12 @@
 # Target Architecture 주요 설계 완결성 점검
 
-> 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전**
-> 점검일: 2026-09-29 · **구현·모델 실행·성능 측정 없음**
+> 상태: **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정**
+> 점검일·검토 확정일: 2026-09-29 · **구현·모델 실행·성능 측정 없음**
 > [전체 구조](./architecture.md) · [판단·제어](./control-and-lifecycle.md) · [기억·Context](./memory-and-context-lifecycle.md) · [Omni 실행](./shared-omni-runtime.md)
 
 ## 1. 완료의 의미와 범위
 
-사용자는 주요 설계를 스스로 구체화하여 완성하도록 위임했고, 구현·성능 측정은 요구하지 않았다. 이 문서의 설계 완료는 **고정된 UC·필수 변형에 대해 책임, 정상 흐름, 상태·계약, 동시성, 실패/보류/복구와 사용자 결과를 모두 정의했다**는 뜻이다. 구현 성공·모델 품질·실시간 성능 보장이나 사용자의 최종 구조 승인과 구분한다.
+사용자는 주요 설계를 스스로 구체화하여 완성하도록 위임했고, 전체 문서를 검토한 뒤 리뷰를 반영해 검토 기준선으로 확정하도록 요청했다. 이 문서의 설계 완료는 **고정된 UC·필수 변형에 대해 책임, 정상 흐름, 상태·계약, 동시성, 실패/보류/복구와 사용자 결과를 모두 정의하고 목표 구조를 후속 비교의 출발점으로 합의했다**는 뜻이다. 구현 성공·모델 품질·실시간 성능 보장이나 대안 비교의 승자 판정과 구분한다.
 
 설계 우선순위는 QA-19 accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability다. 이 네 ASR은 현재 설계 작업 기준이며 이후 비교의 고정 목록이 아니다. Decision Point와 steelman 후보를 구체화할 때 ASR의 추가·변경과 평가 기준을 함께 정의한다. 이번 수정에서는 기존 QA 정의·점수·측정 조건 자체를 바꾸지 않는다. 이번에 새 Decision Package나 측정 freeze를 만들지 않았다.
 
@@ -50,6 +50,8 @@
 | 최소 S2S admission | current-Turn-only VoiceProposal + 허용 분류·의존성·전사·질문/정정·revision host gate; Core로 같은 Request 인계 | 모델 분류의 실제 오류율·text/audio 의미 보존 |
 | 형식 repair와 refinement 예산 | 모든 semantic generation 총 2회, 추가 읽기 한 묶음, 별도 구성 1회; 예산 소진 종료 명시 | tokenizer·직렬화·기기별 deadline |
 | 입력 종료·시간 근거 | endpoint 후보 → ASR final + producer watermark/gap → SEALED; 늦은 근거는 새 revision | 실제 clock 오차·endpoint 정확도 |
+| 관측 수집과 Context 조회 | OS/UI 사건·유한 sampling·pre-roll·발화 pin; partial token과 분리; 기본 조회·추가 조회 모두 Request Controller 제어 | capture 빈도·RAM 상한·source별 OS adapter |
+| Task 연결·Agent 선택 | Request Interpreter의 통합 semantic 제안 + Request Controller의 코드 검증·동등 후보 선택; Task Manager가 업무 상태·Execution 관리 | 등록 capability의 실제 지원·의미 판단 오류율 |
 | 질문·승인·재개 | 실제 제시된 질문 focus, ID·Task·Execution·action digest·revision 검사, 침묵 미승인 | UI/adapter 구현 |
 | state transition과 race | Request/Task/Execution/Command/질문/Response 상태, owner별 Unit of Work·CAS·epoch | DB transaction과 crash 구현 시험 |
 | Agent capability별 보장 | 미지원 start/answer/precondition 거절, UNKNOWN submit 재전송 금지, 순서 없는 event 조회 | 실제 Agent adapter 기능 적합성 |
@@ -68,6 +70,8 @@
 
 | 사건 조합 | 계약상 결과 |
 | --- | --- |
+| 표 지칭 중 scroll·문서 전환, partial 전사 반복 | 당시 근거·선택 전환 보존, capture/조회는 사건·예산 기반; 마지막 화면 대체와 token별 재호출 없음 |
+| 기본 Task 후보 부족·Agent 후보 복수 | 제한된 추가 조회는 Request Controller 경유; 모호한 Task는 질문, 기능·비용·권한 동등 Agent만 설정 우선순위 적용 |
 | semantic 수행 중 새 발화 | capture·ASR·Omni Voice 진행; 옛 generation 무효화; 해당 대화 미전송만 hold |
 | 직접 후보 생성 중 ASR final 수정 | input_echo/revision 불일치로 폐기·같은 Request Core 인계; 중복 응답 없음 |
 | 새 질문이 기존 승인 “응”일 수 있음 | direct 제외·질문 focus 검사; 유일하지 않으면 질문 대상 clarification |
@@ -87,11 +91,11 @@
 
 | 후속 항목 | 왜 주요 설계의 빈칸과 다른가 |
 | --- | --- |
-| 사용자 최종 리뷰 | 완성한 설계의 제품 적합성·구조 수용 여부를 확인하는 단계이며 결정을 사용자에게 떠넘긴 미정 목록이 아님 |
+| 기준선 이후 발견한 설계 결함 | 전체 검토는 완료; 새 결함은 영향·이유를 남겨 관련 계약과 기준선 revision을 수정 |
 | schema/adapter/DB/IPC 구현 | 필수 field·상태·원자성·실패 행동은 문서에 선택되어 있음; 이를 코드로 구현하는 일 |
 | 모델 학습·runtime 연동 | 요구 capability와 미지원 동작은 정해짐; 실제 build의 기능·품질 확보 |
 | Resource Profile 수치와 장비 적합성 | 유한 필드·예약·포화 처리는 정해짐; PC별 값과 실제 동시 진행 검증 |
 | 성능·오류율·복구 측정 | 아직 실행하지 않았으며 목표 설계 완료 요건에 포함하지 않음 |
 | Decision Package·steelman·ASR 재정의 | 이후 후보 구체화 때 ASR 추가·변경과 비교 기준을 함께 정의; 지금 비교나 새 ASR 확정 없음 |
 
-별도의 승인된 ADR·이전 비교 조건·QA 정의를 이 설계 완료 표기로 변경하지 않는다. 주요 설계 완성안의 읽기 시작점은 [architecture.md](./architecture.md)다.
+별도의 승인된 ADR·이전 비교 조건·QA 정의를 이 기준선 확정으로 변경하지 않는다. QA-41의 메모리 ASR 승격 여부는 후속 후보 구체화에서 검토하며 아직 확정하지 않았다. 검토 기준선의 읽기 시작점은 [architecture.md](./architecture.md)다.

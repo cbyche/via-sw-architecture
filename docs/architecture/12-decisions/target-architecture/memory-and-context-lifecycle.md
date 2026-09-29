@@ -1,6 +1,6 @@
 # Context·기억·증거의 수명과 저장 계약
 
-> 상태: **주요 설계 완성안 / 사용자 최종 검토 전 / 구현·성능 측정 없음**
+> 상태: **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정 / 구현·성능 측정 없음**
 > [전체 구조](./architecture.md) · [판단·제어](./control-and-lifecycle.md) · [기능 완결성](./design-completeness.md)
 
 ## 1. 선택한 기억 구조
@@ -23,6 +23,8 @@ Memory routine은 참고 정보이며 무인 예약 실행을 만들지 않는�
 ## 2. Context 획득과 지칭의 정확성
 
 기본 Context는 현재 입력·당시 선택·window/document identity·최근 실제 응답·대기 질문·관련 Task 요약·명시적으로 허용된 선호다. 모든 파일·메일 본문을 미리 읽지 않는다. Request Controller가 현재 source/recipient/purpose scope를 정하고 Context Manager가 port별로 제한된 evidence를 만든다.
+
+시점별 관측은 Interaction Manager, 요청 해석용 내부·외부 근거 구성은 Context Manager가 담당한다. OS/UI 사건·capture 예산·발화 pin·stop 조건은 [전체 구조 §9](./architecture.md)의 수집 표를 따른다. Context Manager는 Task Manager의 Task, Request Controller의 대화·요청, Response Manager의 실제 전달 기록, Agent Gateway의 capability를 owner read port로 조회한다. 후보 검색은 의미상 정답의 확정이 아니며 그 판단은 Request Interpreter가 수행한다.
 
 | 근거 유형 | 확정 가능한 범위와 계약 |
 | --- | --- |

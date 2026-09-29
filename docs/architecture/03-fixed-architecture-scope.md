@@ -34,7 +34,7 @@ VIA 자체가 하나의 범용 업무 실행 Agent가 되는 구조가 아니라
 
 ## 3.3 Top-level Architecture
 
-![VIA 목표 구조 — 제안 상태](./12-decisions/target-architecture/diagrams/01-system-overview.svg)
+![VIA 목표 구조 — 검토 기준선](./12-decisions/target-architecture/diagrams/01-system-overview.svg)
 
 [draw.io 편집 원본](./12-decisions/target-architecture/diagrams/01-system-overview.drawio)
 

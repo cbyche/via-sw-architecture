@@ -1,8 +1,8 @@
 # VIA Software Architecture
 
-> **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)를
-> 먼저 완성하고, 그 구조에서 중요한 품질 차이를 만드는 핵심 선택을 역으로 추출하고, steelman 후보 구체화와 함께 ASR을 재검토한다.
-> 전체 구조는 **주요 설계 완성안 / 사용자 최종 검토 전**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다. 구현·성능 측정은 설계 완료와 별개다.
+> **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)는
+> **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정** 상태다.
+> 다음 단계는 **Decision Reconstruction**이며 구조적 선택·steelman·관련 ASR의 후보 목록을 함께 만든다. 메모리 사용량도 ASR 재검토 후보이며 아직 승격하지 않았다. 구현·성능 측정은 없고, 기준선 확정은 비교 우위 입증과 별개다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 
@@ -45,7 +45,7 @@ VIA는 사용자와 여러 Downstream Agent 사이의 **Agent-neutral Interactio
 
 ## Interaction과 업무가 연결되는 방식
 
-![VIA 목표 구조 — 제안 상태](docs/architecture/12-decisions/target-architecture/diagrams/01-system-overview.svg)
+![VIA 목표 구조 — 검토 기준선](docs/architecture/12-decisions/target-architecture/diagrams/01-system-overview.svg)
 
 [draw.io 편집 원본](docs/architecture/12-decisions/target-architecture/diagrams/01-system-overview.drawio)
 
@@ -106,7 +106,7 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 ## 현재 상태
 
 - `docs/architecture/`는 현재 시스템 정의와 Architecture 기준선이다.
-- 대표 Use Case와 고정 범위는 정의되어 있지만 내부 Component 배치와 여러 구조 선택은 아직 평가 대상이다.
+- 대표 Use Case와 고정 범위, 주요 내부 구조는 목표 설계 기준선으로 정리되어 있다. 구조 선택의 상대적 품질과 실제 장비 적합성은 아직 평가하지 않았다.
 - QA catalog는 네 core QA와 상세 measurement·diagnostic QA로 구성된다. Core QA의 system target과
   score band proposal을 작성했고 Shared Spine·mock profile·DP별 applicability와 함께 freeze 전이다.
 - QA-09, QA-19, QA-29, QA-39를 핵심 Architecture Significant Requirement(ASR)로 확정했다. 이 분류는 측정 완료나 특정 후보의 승리를 뜻하지 않는다.
@@ -123,7 +123,7 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 1. [Architecture Baseline](docs/architecture/README.md) — 현재 기준선과 문서 위계
 2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 VIA/Agent 책임 경계
 3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md)와 [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 모든 후보가 제공해야 할 기능과 사용자 완료 조건
-4. [Target Architecture](docs/architecture/12-decisions/target-architecture/README.md) — 현재 제안 구조와 검토 상태
+4. [Target Architecture](docs/architecture/12-decisions/target-architecture/README.md) — 검토 완료 기준선과 확정 범위·후속 작업
 5. [Architecture Decisions](docs/architecture/12-decisions/README.md) — 목표 구조에서 Decision Package를 도출하는 12번 작업 흐름
 
 다음 문서는 해당 작업을 할 때만 추가로 읽는다.

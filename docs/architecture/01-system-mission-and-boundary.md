@@ -63,9 +63,9 @@ VIA와 Downstream Agent의 기본 책임 경계는 다음과 같다.
 
 ### System Context Diagram
 
-아래는 현재 목표 구조의 draw.io 그림을 함께 보여준다. VIA 경계와 외부 책임을 읽기 위한 참조이며, 그림 안의 세부 Component 구성은 제안 상태다. 모델은 현재 on-device 주 배치지만 내부 구현 책임은 의존성으로 구분한다.
+아래는 현재 목표 구조의 draw.io 그림을 함께 보여준다. VIA 경계와 외부 책임을 읽기 위한 참조이며, 그림 안의 세부 Component 구성은 12번의 검토 완료 목표 설계 기준선이다. 이 그림의 구조적 선택을 모든 대안의 고정 제품 요구로 삼지는 않는다. 모델은 현재 on-device 주 배치지만 내부 구현 책임은 의존성으로 구분한다.
 
-![VIA 목표 구조 — 제안 상태](./12-decisions/target-architecture/diagrams/01-system-overview.svg)
+![VIA 목표 구조 — 검토 기준선](./12-decisions/target-architecture/diagrams/01-system-overview.svg)
 
 [draw.io 편집 원본](./12-decisions/target-architecture/diagrams/01-system-overview.drawio)
 

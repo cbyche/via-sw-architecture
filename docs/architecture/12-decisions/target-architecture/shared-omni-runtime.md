@@ -1,6 +1,6 @@
 # 공유 Omni와 끊기지 않는 음성 입력
 
-> 상태: **공유 Omni·동시 입력은 사용자 지정 / 배치·스케줄링 주요 설계 완성안 / 구현·측정 없음**
+> 상태: **REVIEWED_BASELINE / 공유 Omni·동시 입력·배치·스케줄링 검토 기준선 / 구현·측정 없음**
 > 갱신일: 2026-09-29 · [전체 구조](./architecture.md) · [모델 근거](./model-capability-review.md)
 
 ## 1. 선택한 구조
@@ -146,6 +146,7 @@ Service는 `LOADING → READY`, 오류 시 `DEGRADED/RESTARTING/UNAVAILABLE`로 
 | CPU 입력 | ASR threads/budget, continuous input service deadline, max transcript lag; Speech Input Worker |
 | 추론 연산 | Voice 예약/주기, semantic 최소 quantum/주기, 최대 non-preemptible work, admission cost bound; scheduler |
 | memory | Omni/ASR weights, Voice·semantic 최소 KV, job별 input/output token·image token 상한, workspace, RAM capture/pin·queue·State Store reserve; admission |
+| 관측 수집 | pointer sampling 간격, 화면 최대 capture 빈도·fallback 주기, pre-roll 길이, ring/pin byte 상한·producer queue 한도; Interaction Manager |
 | 시간 | endpoint settle, evidence watermark wait, job/request/read/recovery deadline, lease timeout, retry backoff 상한; 각 owner |
 | 동시성 | 최소 active VOICE 1 + SEMANTIC 1, speech output state, foreground queue bound, source concurrency; Model Access / Context Manager / Agent Gateway |
 | 환경 | device/runtime/build, 지원 audio/image 형식, clock mapping 방식, power/thermal mode; capability binding |
