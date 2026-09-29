@@ -17,12 +17,13 @@
 | 주제 | 내용 | 상태 |
 | --- | --- | --- |
 | 접근법 | 완성된 목표 Architecture를 먼저 설계하고 주요 구조 선택과 강한 대안은 그 이후 구성 | 사용자 지정 |
-| 품질 우선순위 | 목표 Architecture 설계는 1순위 QA-19 semantic accuracy, 2순위 QA-09 responsiveness. 이후 Decision Package에서는 후보별 두 축을 독립 측정하고 accuracy–responsiveness trade-off를 그대로 비교 | 사용자 지정 |
+| 품질 우선순위 | 목표 Architecture 설계는 1순위 QA-19 semantic accuracy, 2순위 QA-09 responsiveness, 3순위 QA-29 modifiability, 4순위 QA-39 reliability/recoverability. 네 ASR 모두 필수 | 사용자 지정 |
 | 경계 | VIA는 interaction·orchestration, Agent는 업무 추론·계획·도구·실행 | 사용자 지정 |
 | 모델 | S2S 1개와 공유 semantic LLM 1개; Component·Task별 복제 금지 | 사용자 지정 |
 | 기존 분해 | 기존 결정 번호·대안·순서에 구속되거나 다시 매핑하지 않음 | 사용자 지정 |
 | 이름 | 더 직관적인 Component 이름으로 변경 가능 | 사용자 지정 |
 | 진행 | 전체 구조부터 대화하며 수정하고, 합의 후에만 Decision Package·측정 근거 설계 | 사용자 지정 |
+| 이후 비교 | 모든 Decision Package는 네 core ASR을 모두 applicability 분류하고 applicable 축을 독립 측정 | 사용자 지정·Architecture 합의 이후 적용 |
 | 기록 | GitHub에서 문서를 정리하면서 계속 진행 | 사용자 지정 |
 | 저장소 위치 | 목표 Architecture와 이후 Decision Package는 12번 작업 안에서 관리 | 사용자 지정 |
 | Git 방식 | 이 Architecture 대화마다 새 branch와 PR을 만들지 않음 | 사용자 지정 |
@@ -58,7 +59,9 @@
 | 4 | 의미 해석 | 통합 해석과 최대 2회 예산이 사용자 시나리오를 충족하는가? 직접 답변 생성 비용은 적절한가? |
 | 5 | 정정·취소·확정 | 전송 시작과 새 입력의 순서를 어디서 확정하는가? source version 확인은 Agent와 어떻게 나누는가? |
 | 6 | 장기 업무·복구 | Agent event·조회 capability별로 무엇을 보장할 수 있는가? 중복 실행 불명 상태는 어떻게 처리하는가? |
-| 7 | 배치·자원 | local/remote 모델 배치, queue·memory·증거 보관·deadline 예산을 어떻게 정할 것인가? |
+| 7 | 변화 격리 | Model·Agent·Context source·schema 변화가 adapter 밖으로 얼마나 퍼지는가? canonical contract와 migration 경계가 충분한가? |
+| 8 | 장애·복구 | command·event·publication crash window와 process·Store 장애에서 중복·오연결 없이 수렴하는가? |
+| 9 | 배치·자원 | local/remote 모델 배치, queue·memory·증거 보관·deadline 예산을 어떻게 정할 것인가? |
 
 ## 아직 하지 않은 일
 
@@ -78,5 +81,6 @@
 | 2026-09-29 | 목표 Architecture 품질 우선순위를 QA-19 semantic accuracy 1순위, QA-09 responsiveness 2순위로 명시 | 사용자 지정; 세부 구조는 제안 상태 유지 |
 | 2026-09-29 | 세 독립 관점의 사전 검토를 기록하고, 공통으로 확인된 S2S admission·evidence coverage·dispatch 선형화·event/response 복구 공백을 본문에 보강 | reviewer 지적 반영; 보강 구조는 사용자 검토 전 제안 상태 |
 | 2026-09-29 | accuracy 우선순위를 목표 Architecture 설계 원칙과 후보 비교 방법으로 분리하고, Decision Package에서는 accuracy·responsiveness를 독립 측정하도록 정정 | 사용자 지정; 기존 blanket gate 철회 |
+| 2026-09-29 | 목표 Architecture 우선순위를 QA-19 → QA-09 → QA-29 → QA-39로 확장하고 네 ASR을 모두 설계에 반영; Decision Package 작업은 전체 구조 합의 이후로 유지 | 사용자 지정; 목표 Architecture 검토에 집중 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.

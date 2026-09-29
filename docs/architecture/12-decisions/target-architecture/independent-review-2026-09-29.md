@@ -1,8 +1,13 @@
 # VIA Target Architecture — 독립 검토 결과
 
-> 검토일: 2026-09-29  
-> 범위: [목표 Architecture](./architecture.md)  
-> 우선순위: QA-19 semantic accuracy 1순위, QA-09 responsiveness 2순위  
+> 검토일: 2026-09-29
+>
+> 범위: [목표 Architecture](./architecture.md)
+>
+> 검토 당시 중점: QA-19 semantic accuracy와 QA-09 responsiveness
+>
+> 현재 목표 Architecture 우선순위: QA-19 → QA-09 → QA-29 → QA-39
+>
 > 상태: reviewer pass 완료 / 사용자 검토 전 보강 반영 / 구현·측정 없음
 
 ## 검토 방식
@@ -28,7 +33,7 @@
 3. **dispatch 선형화:** 전송 직전 정정·취소와 기존 command 전송 사이 race를 막는 원자적 경계가 없었다.
 4. **복구 가능한 수신·게시:** Agent event 수신과 Task projection, 응답 계획과 실제 Text·Voice 전달을 crash 뒤 일관되게 복원할 계약이 없었다.
 
-이 네 항목은 목표 Architecture를 설계할 때 latency 최적화보다 먼저 닫는다. 이후 Decision Package에서는 이 우선순위를 steelman 제외 조건으로 사용하지 않고, 결함이 드러난 후보도 accuracy와 responsiveness 결과를 각각 보존해 trade-off와 failure evidence를 함께 평가한다.
+이 네 항목은 목표 Architecture의 accuracy·recoverability 기반을 닫는 데 우선 반영했다. 이 reviewer pass는 accuracy와 runtime fault를 중심으로 수행했으며, modifiability를 포함한 네 ASR 전체의 Architecture 검토는 현재 설계 본문에서 계속한다. Decision Package 비교는 전체 구조 합의 이후에 수행한다.
 
 ## 본문에 반영한 보강
 

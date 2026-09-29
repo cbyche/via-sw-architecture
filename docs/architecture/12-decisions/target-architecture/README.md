@@ -2,7 +2,7 @@
 
 > 상태: **설계 초안 / 전체 구조 합의 전 / 구현·측정 없음**
 > 시작일: 2026-09-29
-> 목적: VIA semantic accuracy를 1순위, responsiveness를 2순위로 두는 완성된 목표 Architecture를 먼저 설계하고, GitHub에서 대화와 함께 수정한다.
+> 목적: QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability, QA-39 reliability/recoverability 순으로 우선하되 네 ASR을 모두 고려한 목표 Architecture를 먼저 완성한다.
 
 ## 지금 읽을 문서
 
@@ -19,7 +19,7 @@
 ```text
 완성된 목표 Architecture 설계·대화·수정
     ↓ 전체 구조 합의 이후
-accuracy / responsiveness에 중요한 구조적 선택 추출
+네 core ASR에 중요한 구조적 선택 추출
     ↓
 강한 현실적 대안과 비용·유리한 조건 정리
     ↓
@@ -35,9 +35,11 @@ accuracy / responsiveness에 중요한 구조적 선택 추출
 - VIA는 PC의 Voice/Text/screen interaction과 orchestration을 담당한다.
 - Downstream Agent는 domain reasoning, planning, tool selection, 실제 업무 수행을 담당한다.
 - VIA는 S2S 1개와 공유 semantic LLM 1개를 사용한다. Component·Task별 모델 복제나 임의 helper 모델 추가는 하지 않는다.
-- accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이며 현재 목표 Architecture의 1순위 품질이다. Agent가 만든 도메인 결과의 품질과 구분한다.
+- 목표 Architecture의 품질 우선순위는 QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability, QA-39 reliability/recoverability 순이다. 낮은 순위도 설계에서 생략하지 않는다.
+- accuracy는 사용자 목표·대상·Task·처리 방향·위임 내용의 정확성이다. Agent가 만든 도메인 결과의 품질과 구분한다.
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
-- responsiveness는 목표 Architecture 설계의 2순위다. 이후 Decision Package에서는 steelman을 포함한 각 후보의 accuracy와 responsiveness를 독립적으로 측정하며, 더 정확하지만 느린 선택안과 더 빠르지만 덜 정확한 대안의 trade-off를 숨기지 않는다.
+- modifiability는 Agent·Model·Context source·계약 변화가 VIA의 책임·interface·state·runtime에 퍼지는 범위를 다룬다.
+- reliability/recoverability는 dependency·process·network·Store 장애를 가두고 중복·오연결 없이 확인 가능한 상태로 복구하는 능력을 다룬다.
 - Voice 연결, Conversation, Request, Task, Agent Execution의 수명을 분리한다.
 
 제품 요구의 근거는 [Mission & Boundary](../../01-system-mission-and-boundary.md), [Fixed Scope](../../03-fixed-architecture-scope.md), [Representative Use Cases](../../05-representative-use-cases.md)다. 용어는 [Terms](../../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../../08-quality-attributes/correctness-and-continuity.md)를 참고한다.
@@ -52,4 +54,4 @@ accuracy / responsiveness에 중요한 구조적 선택 추출
 
 ## 현재 산출물의 한계
 
-논리 구조와 runtime 동작을 제안한 상태다. 모델 capability 확보, 세부 schema, 수치형 resource/deadline 예산, 구현, 실제 responsiveness·accuracy 검증은 남아 있다. [검토 기록](./review-log.md)의 항목을 순서대로 좁혀가며 전체 구조 합의 여부를 판단한다.
+논리 구조와 runtime 동작을 제안한 상태다. 모델 capability 확보, 세부 schema, 수치형 resource/deadline 예산, 구현, 네 core ASR 검증은 남아 있다. [검토 기록](./review-log.md)의 항목을 순서대로 좁혀가며 전체 구조 합의 여부를 판단한다.

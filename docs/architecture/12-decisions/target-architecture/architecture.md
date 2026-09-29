@@ -10,11 +10,15 @@
 
 세 부분은 동시에 움직이되 사용자에게 무엇을 답하고 어떤 업무를 시작할지는 검증된 요청과 확인된 상태를 기준으로 결정한다. 이하의 구조는 주 설계안이며, 성능상 이점은 아직 검증되지 않은 가설이다.
 
-이 Architecture는 다음 순서를 invariant로 둔다.
+설계 우선순위는 **QA-19 semantic accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability**다. 낮은 순위도 선택 사항은 아니며, 상위 품질을 이유로 구조적 변경 파급이나 복구 실패를 숨기지 않는다.
+
+이 Architecture는 다음을 invariant로 둔다.
 
 1. 잘못된 대상·Task·승인·Agent command를 확정하거나 게시하지 않는다.
 2. 필요한 근거가 없거나 후보가 충분히 탐색되지 않았으면 추가 조회, clarification 또는 확인 불가로 끝낸다.
 3. 위 정확성 경계를 낮추지 않고 사전 준비·병렬 조회·speculative 생성·선택적 재검증으로 latency를 줄인다.
+4. Model·Agent·Context source별 차이는 versioned canonical contract와 adapter 뒤에 두고, 변경이 무관한 책임·상태로 번지지 않게 한다.
+5. 외부 장애와 process crash는 durable intent·inbox·projection·publication 기록으로 격리하고, 확인되지 않은 실행·상태·전달을 성공으로 복원하지 않는다.
 
 ## 2. 사용자 관점의 전체 흐름
 
@@ -85,6 +89,8 @@ flowchart TB
 Turn Workspace는 Controller 내부의 요청별 작업 데이터다. Decision Validator는 Controller의 확정 절차에 포함한다. 별도 서비스로 분리해 매 요청에 추가 왕복을 강제하지 않는다.
 
 State Store에 저장한다고 상태 소유권이 Store로 넘어가지 않는다. Aggregate별 단일 writer를 유지한다. Controller는 Task 변경을 Task Manager에 요청하고, Task Manager는 Gateway의 durable inbox event를 검증한 뒤 projection을 바꾼다. 여러 상태를 함께 확정해야 할 때는 owner가 State Store transaction을 요청한다.
+
+Component 경계는 배포 단위가 아니라 변화와 상태 권한을 가두는 논리적 port다. S2S·semantic model provider 차이는 Model Access, Context source 차이는 Context Manager의 source adapter, Agent protocol 차이는 Agent Gateway adapter에서 canonical contract로 변환한다. Canonical schema와 persisted state는 version·migration 규칙을 가지며, provider 교체가 Request·Task·Response 의미 계약까지 직접 바꾸지 않게 한다. 공통 contract 자체가 바뀌면 영향받는 Architecture Element를 숨기지 않고 migration과 compatibility 범위를 명시한다.
 
 ## 5. Conversation·Turn·Request·Task·Execution
 
@@ -336,9 +342,9 @@ Core Component는 같은 프로세스의 모듈로 시작한다. Connector Worke
 | Voice/Text 전환 | 동일 Conversation·대상·Task 유지; 음성 연결 수명과 분리 |
 | Memory 삭제·권한 철회 | 지속 상태와 관련 cache·session 사용 중단을 함께 반영 |
 
-## 16. Accuracy·latency critical path
+## 16. 네 ASR의 설계 우선순위와 critical path
 
-이 Architecture를 설계하는 선택 순서는 **semantic accuracy 우선, responsiveness 차순**이다. 이는 이후 구조 선택안과 steelman을 비교할 때 accuracy가 낮은 후보의 latency를 측정하지 않는다는 뜻이 아니다. 모든 applicable 후보의 accuracy와 responsiveness를 같은 동결 계약으로 독립 측정하고, 선택안이 더 정확하지만 느리거나 대안이 더 빠르지만 덜 정확한 결과를 그대로 보고한다. 두 품질을 하나의 가중 점수로 합치지 않으며 최종 rationale에서 어떤 손해를 감수했는지 명시한다.
+이 Architecture는 QA-19, QA-09, QA-29, QA-39 순으로 우선해 설계한다. 지금은 이 네 관점에서 목표 구조가 완결됐는지 검토하며, 구조 선택과 steelman 비교는 전체 Architecture 합의 뒤에 시작한다.
 
 ```text
 Core 직접 응답:
@@ -359,14 +365,18 @@ Context, queue, Store, IPC, network, speech generation, playback buffer 비용�
 
 Accuracy 경로는 입력·시점 → 당시 근거 → 대상·목표 → Task·처리 방향 → 최신 요청 확정 → Agent 계약 → 진행·결과 연결이다.
 
-| 영향 지점 | Responsiveness 인과 | Accuracy 인과 |
-| --- | --- | --- |
-| 기본 근거·Context Receipt | 조회 횟수·prompt 크기·재해석 | 지칭·자료·시점 혼동 방지 |
-| 통합 요청 해석 | 호출 수·출력 길이 | 목표·대상·Task·routing 일관성 |
-| revision 기반 확정 | 검증·저장 비용, 재시작 범위 | 정정 누락·늦은 결과·잘못된 위임 방지 |
-| Task·Agent event 계약 | 재조회·알림 지연 | 업무 연결·완료 상태·중복 실행 통제 |
+Modifiability 경로는 Model·Agent·Context·policy 변화 → 해당 port와 adapter → canonical contract·state migration → 영향받는 Component·Interface·State·Runtime이다. Provider별 차이를 Core semantic state나 Task lifecycle로 누출하면 변경 파급이 커진다.
 
-위 표는 구조적 가설이다. 실제 지연·정확도 수치나 다른 구조보다 우수하다는 측정 결과는 없다.
+Reliability/recoverability 경로는 fault 발생 → process·queue·transaction boundary에서 격리 → durable intent/event/publication 복원 → source 상태 재확인 → 중복·오연결 없는 사용자 상태 수렴이다. 재시작 자체가 아니라 확인 가능한 Task·Execution·응답 관계의 복원이 끝점이다.
+
+| 영향 지점 | QA-19 accuracy | QA-09 responsiveness | QA-29 modifiability | QA-39 reliability/recoverability |
+| --- | --- | --- | --- | --- |
+| Evidence·Context contract | 지칭·자료·시점·후보 coverage | 사전 준비·조회·prompt·재해석 비용 | source adapter와 canonical receipt가 변화 파급을 제한 | source fault·gap·stale evidence를 해당 요청에 격리 |
+| Semantic Commit | 목표·대상·Task·handling 일관성 | 호출·검증·clarification 비용 | model/prompt/schema 변화가 Resolver·contract에 집중 | timeout·늦은 결과가 확정 상태를 덮지 못함 |
+| Request·Task·Command state | 정정·승인·업무 binding 보존 | transaction·queue·dispatch 비용 | aggregate별 단일 writer와 versioned state migration | outbox·epoch·projection으로 crash와 중복 전송 복구 |
+| Agent·Response ports | 정확한 capability·event·사용자 결과 연결 | 변환·재조회·게시·재생 지연 | Agent/provider 변화가 Gateway·Publisher adapter에 집중 | inbox·cursor·publication receipt로 event·전달 복원 |
+
+위 표는 네 ASR을 목표 구조에 반영한 인과 가설이다. 실제 수치나 다른 구조보다 우수하다는 측정 결과는 없다.
 
 ## 17. 비용·약점·재검토 조건
 

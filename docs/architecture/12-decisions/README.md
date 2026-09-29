@@ -9,7 +9,7 @@
 ```text
 01~11의 고정 전제
   → 완성된 목표 Architecture 설계·합의
-  → 성능을 만드는 핵심 구조적 선택 추출
+  → 네 core ASR에 중요한 구조적 선택 추출
   → 각 선택의 강한 현실적 대안 구성
   → 선택 구조의 인과·비용·약점·반증 조건 설명
   → 결과 전 검증 계약과 revalidation
@@ -34,13 +34,13 @@
 
 - 목표 Architecture 안에 실제로 선택된 구조다.
 - responsibility, contract, state ownership, call graph, deployment, persistence 또는 fault boundary의 차이다.
-- semantic accuracy, responsiveness 또는 치명적인 failure behavior에 실질적인 인과 효과가 있다.
+- QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability 또는 QA-39 reliability/recoverability에 실질적인 인과 효과가 있다.
 - 같은 문제를 해결하는 강한 현실적 대안을 구성할 수 있다.
 - 선택 구조가 기대한 특성을 갖지 못했다고 판단할 반증 조건을 둘 수 있다.
 
 Component가 있다는 이유만으로 package를 만들지 않는다. 새 package는 기존 VIA-DP 번호를 이어받거나 기존 inventory에 다시 매핑하지 않는다.
 
-Target Architecture의 `accuracy 1순위, responsiveness 2순위`는 설계 방향이다. Package 비교에서는 선택안과 steelman의 accuracy·responsiveness를 같은 계약으로 독립 측정하고 어느 한쪽을 먼저 탈락시켜 다른 축을 생략하지 않는다. 선택안이 더 정확하지만 느린 경우를 포함해 trade-off를 그대로 설명한 뒤, 최종 선택이 우선순위를 어떻게 적용했는지 rationale에 남긴다.
+현재는 Target Architecture 완성에 집중하며 package를 구체화하지 않는다. 이후 package 비교에서는 네 core ASR을 모두 다루고 각 축을 `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, `UNRESOLVED`로 분류한다. 선택안과 steelman의 applicable 축은 같은 계약으로 독립 측정하며, 어느 한쪽을 먼저 탈락시켜 다른 축을 생략하지 않는다.
 
 ## 기존 VIA-DP-01~18의 위치
 
