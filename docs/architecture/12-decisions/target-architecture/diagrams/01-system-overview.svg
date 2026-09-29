@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="920" viewBox="0 0 1600 920" role="img" aria-labelledby="title desc">
+<title id="title">VIA Target Architecture — 전체 구조</title>
+<desc id="desc">Interaction, semantic commit, Task orchestration과 외부 실행의 책임 경계</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/></marker>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.10"/></filter>
+</defs>
+<rect width="1600" height="920" fill="#FFFFFF"/>
+<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">VIA Target Architecture — 전체 구조</text>
+<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">Interaction, semantic commit, Task orchestration과 외부 실행의 책임 경계</text>
+<rect x="40" y="92" width="1520" height="120" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+<text x="58" y="120" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">USER INTERACTION</text>
+<rect x="40" y="228" width="1520" height="210" rx="18" fill="#F5F9FF" stroke="#CBD5E1" stroke-width="1.5"/>
+<text x="58" y="256" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">REAL-TIME INTERACTION</text>
+<rect x="40" y="456" width="1520" height="255" rx="18" fill="#FAF8FF" stroke="#CBD5E1" stroke-width="1.5"/>
+<text x="58" y="484" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">VIA CORE — semantic authority와 durable state</text>
+<rect x="40" y="730" width="1520" height="145" rx="18" fill="#FCFCFD" stroke="#CBD5E1" stroke-width="1.5"/>
+<text x="58" y="758" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">DEPENDENCIES / EXTERNAL EXECUTION</text>
+<polyline points="300,153 355,153 355,328 345,328" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<rect x="324.0" y="190" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="355" y="205" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">입력</text>
+<polyline points="825,328 735,328 735,190 300,190" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<rect x="519.0" y="173" width="102" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="570" y="188" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">Text / Voice</text>
+<polyline points="345,328 440,328" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="341.0" y="301" width="102" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="392" y="316" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">Input Record</text>
+<polyline points="720,328 825,328" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="739.5" y="301" width="67" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="773" y="316" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">payload</text>
+<polyline points="560,385 560,455 220,455 220,520" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="329.0" y="430" width="102" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="380" y="445" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">bounded read</text>
+<polyline points="345,575 430,575" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="351.0" y="547" width="74" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="388" y="562" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">evidence</text>
+<polyline points="555,520 555,430 580,430 580,385" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="565.0" y="407" width="74" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="602" y="422" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">proposal</text>
+<polyline points="650,385 650,470 907,470 907,515" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="749.0" y="447" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="780" y="462" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">commit</text>
+<polyline points="1035,575 1140,575" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1026.5" y="547" width="123" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1088" y="562" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">command / event</text>
+<polyline points="1265,635 1265,755" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1257.0" y="689" width="116" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1315" y="704" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">typed protocol</text>
+<polyline points="555,630 555,760" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="555.5" y="689" width="95" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="603" y="704" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">shared call</text>
+<polyline points="220,380 220,760" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="220.5" y="685" width="95" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="268" y="700" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">one session</text>
+<polyline points="220,630 220,680 880,680 880,760" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="509.5" y="656" width="81" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="550" y="671" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">read only</text>
+<polyline points="1160,328 1075,328" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1086.0" y="301" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1117" y="316" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">policy</text>
+<polyline points="1405,328 1385,328 1385,670 910,670 910,635" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1205.5" y="647" width="109" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1260" y="662" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">durable state</text>
+<rect x="80" y="118" width="220" height="70" rx="16" fill="#FFFFFF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="190.0" y="144.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">사용자</text><text x="190.0" y="169.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Voice · Text · 화면 지칭</text></g>
+<rect x="95" y="275" width="250" height="105" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="220.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Interaction Runtime</text><text x="220.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">입력·시점별 evidence</text><text x="220.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">S2S 연결·barge-in·재생</text><rect x="254" y="284" width="81" height="22" rx="11" fill="#2563EB" opacity="0.12"/><text x="294.5" y="299" text-anchor="middle" font-size="11" font-weight="700" fill="#2563EB">REAL TIME</text></g>
+<rect x="440" y="270" width="280" height="115" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="580.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Request Controller</text><text x="580.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Request Graph · semantic commit</text><text x="580.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">질문 결합 · publish/dispatch admission</text><rect x="629" y="279" width="81" height="22" rx="11" fill="#7C3AED" opacity="0.12"/><text x="669.5" y="294" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED">AUTHORITY</text></g>
+<rect x="825" y="275" width="250" height="105" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="950.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Response Manager</text><text x="950.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Canonical payload</text><text x="950.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Text · Voice · 알림 delivery</text></g>
+<rect x="95" y="520" width="250" height="110" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="220.0" y="556.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Context Manager</text><text x="220.0" y="581.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">후보 탐색 · bounded read</text><text x="220.0" y="601.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">receipt · cache · coverage</text></g>
+<rect x="430" y="520" width="250" height="110" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="555.0" y="556.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Request Interpreter</text><text x="555.0" y="581.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">semantic proposal</text><text x="555.0" y="601.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">field별 후보·근거·미해결</text></g>
+<rect x="780" y="515" width="255" height="120" rx="16" fill="#E9F9F3" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="907.5" y="556.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Task Manager</text><text x="907.5" y="581.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Task lifecycle</text><text x="907.5" y="601.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Execution projection · 복구</text></g>
+<rect x="1140" y="515" width="250" height="120" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1265.0" y="556.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Agent Gateway</text><text x="1265.0" y="581.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">capability · command outbox</text><text x="1265.0" y="601.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">event inbox · protocol adapter</text></g>
+<rect x="1160" y="280" width="210" height="95" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1265.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Policy Manager</text><text x="1265.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">권한 · consent</text><text x="1265.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">policy revision</text></g>
+<rect x="1405" y="280" width="120" height="95" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1465.0" y="308.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">State Store</text><text x="1465.0" y="333.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">durable</text><text x="1465.0" y="353.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">transactions</text></g>
+<rect x="115" y="760" width="210" height="80" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="220.0" y="791.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">S2S 모델 1개</text><text x="220.0" y="816.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">streaming speech dependency</text></g>
+<rect x="450" y="760" width="220" height="80" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="560.0" y="791.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Semantic LLM 1개</text><text x="560.0" y="816.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">shared structured inference</text></g>
+<rect x="770" y="760" width="220" height="80" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="880.0" y="791.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Context Sources</text><text x="880.0" y="816.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">화면 · 대화 · 자료 · OS</text></g>
+<rect x="1160" y="755" width="270" height="90" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1295.0" y="781.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Downstream Agents</text><text x="1295.0" y="806.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">domain reasoning · plan · tools</text><text x="1295.0" y="826.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">실제 업무 실행</text></g>
+<text x="1495" y="409" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="700" fill="#7C3AED">LLM은 상태·권한·실행을 소유하지 않는다</text>
+<text x="1562" y="900" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 01-system-overview.drawio</text>
+</svg>

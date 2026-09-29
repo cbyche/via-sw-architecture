@@ -39,37 +39,11 @@
 
 ## 3. 전체 구조
 
-```mermaid
-flowchart TB
-    U["사용자<br/>Voice · Text · 화면 interaction"]
-    I["Interaction Runtime<br/>입력 · 시점별 증거 · 음성 제어"]
-    R["Request Controller<br/>요청 lifecycle · 검증 · 확정"]
-    C["Context Manager<br/>기본 근거 · 추가 조회 · cache"]
-    S["Request Interpreter<br/>목표 · 대상 · Task 관계 · 처리 방향"]
-    T["Task Manager<br/>장기 업무 · 의존 관계 · 확인된 상태"]
-    G["Agent Gateway<br/>위임 · 조회 · 제어 · event 변환"]
-    O["Response Manager<br/>Text · Voice · 알림"]
-    A["Downstream Agents<br/>업무 추론 · 계획 · 도구 · 실행"]
-    M["공유 Semantic LLM 1개"]
-    V["S2S 모델 1개"]
-    U --> I
-    I --> R
-    R <--> C
-    R --> S
-    C --> S
-    S --> R
-    S <--> M
-    R --> T
-    T <--> G
-    G <--> A
-    R --> O
-    T --> O
-    O --> I
-    I --> U
-    I <--> V
-```
+![VIA 전체 목표 Architecture](./diagrams/01-system-overview.svg)
 
-화살표는 논리적 호출·데이터 관계다. Context 추가 읽기는 Interpreter가 요청하고 Controller가 Policy 확인 후 Context Manager에 실행시킨다. 모델 호출은 공통 Model Access를 거친다. 그림에서 생략한 Policy Manager와 State Store는 각각 권한과 영속 기록을 제공한다. 각 상자가 별도 프로세스라는 뜻은 아니다.
+[draw.io 편집 원본](./diagrams/01-system-overview.drawio)
+
+화살표는 논리적 호출·데이터 관계다. Context 추가 읽기는 Interpreter가 요청하고 Controller가 Policy 확인 후 Context Manager에 실행시킨다. 모델 호출은 공통 Model Access를 거친다. 각 상자가 별도 프로세스라는 뜻은 아니다.
 
 ## 4. Component와 상태 소유권
 
@@ -94,16 +68,9 @@ Component 경계는 배포 단위가 아니라 변화와 상태 권한을 가두
 
 ## 5. Conversation·Turn·Request·Task·Execution
 
-```text
-Conversation
- ├─ Turn: “이 그래프 설명해줘”
- │   └─ Request → 직접 응답
- ├─ Turn: “그 설명을 발표자료에 넣어줘”
- │   └─ Request → Task A → Agent Execution A1
- └─ Turn: “발표자료는 계속하고, 보고서는 취소해”
-     ├─ Request → Task A 유지
-     └─ Request → Task B 취소 요청
-```
+![Conversation, Request, Task와 Agent Execution의 수명 및 소유권](./diagrams/02-lifecycle-and-ownership.svg)
+
+[draw.io 편집 원본](./diagrams/02-lifecycle-and-ownership.drawio)
 
 복합 Turn은 Controller가 소유하는 durable `Request Graph`가 된다. 각 node는 독립 Request ID·handling·상태·입력과 결과 version을 가지며, edge는 `independent`, `sequential`, `data-dependent`, `conditional`과 source result version을 기록한다. Task Manager는 node가 Task에 연결된 뒤의 Task lifecycle만 소유한다.
 
@@ -120,18 +87,9 @@ VIA clarification, Agent 질문, Context consent와 Action approval은 모두 `P
 
 ## 6. 요청 이해와 처리 확정
 
-```text
-입력·시점별 증거 수집 + bounded 후보 탐색
-    → semantic 후보와 field별 근거 제안
-    → host readiness 계산
-        → 추가 근거 필요: 제한된 추가 조회 → 재해석
-        → 사용자 결정 필요: Pending User Interaction 등록 → clarification
-        → 근거 불충분·기능 미지원: 안전한 실패
-        → 모든 필수 field 확정: semantic commit
-            → 직접 응답
-            → VIA 자체 상태·기억 관리
-            → Task 연결 → Agent 위임·조회·제어
-```
+![Evidence 수집부터 Semantic Commit까지의 요청 확정 흐름](./diagrams/03-request-resolution.svg)
+
+[draw.io 편집 원본](./diagrams/03-request-resolution.drawio)
 
 입력 중에는 근거 수집과 값싼 Context 준비를 겹쳐 수행한다. 주 semantic 해석은 확정된 입력 revision을 사용한다. 모든 partial마다 모델을 호출하지 않는다. 발화 종료 시점의 화면 하나로 전체 발화의 지칭을 처리하지 않고, 표현별 시점의 증거를 사용한다.
 
@@ -191,6 +149,10 @@ S2S는 응답을 speculative buffer에서 생성할 수 있지만 스스로 게�
 이 기능이 실제 dependency에 확보되었다는 주장이 아니다. 시각 입력이나 시간 근거를 제공하지 않는 모델로 전 기능이 가능한 것처럼 설명하지 않는다. 제품 모델 선정·연결 전 capability 확인이 필요하다.
 
 ## 9. Context·cache·stale 처리
+
+![발화와 화면 evidence를 연결하는 Interaction Evidence Timeline](./diagrams/04-interaction-evidence-timeline.svg)
+
+[draw.io 편집 원본](./diagrams/04-interaction-evidence-timeline.drawio)
 
 | 범위 | 기본 준비 | 필요 시 조회 |
 | --- | --- | --- |
@@ -254,14 +216,9 @@ Voice 수신과 기본 Context 준비, 독립 source 조회, 여러 Agent event 
 
 Model Access는 현재 입력·clarification을 우선하고, 무효 호출을 취소하거나 결과를 버린다. 백그라운드 요약은 길이를 제한하고 오래 대기한 작업의 우선순위를 올린다. 실행 중 선점·동시 추론은 실제 모델 capability에 종속된다.
 
-```text
-Semantic Commit
- → Request·Task 연결 + immutable command + outbox를 한 transaction으로 저장
- → command epoch·dependency revision·취소·권한을 확인하며 DISPATCHING으로 전이
- → 이 전이를 dispatch admission의 선형화 지점으로 기록
- → Agent ingress가 idempotency key·epoch·target version precondition 확인
- → ACCEPTED / REJECTED / UNKNOWN과 Execution 연결 기록
-```
+![Command dispatch, Agent event와 사용자 응답 게시의 내구 경계](./diagrams/05-dispatch-and-recovery.svg)
+
+[draw.io 편집 원본](./diagrams/05-dispatch-and-recovery.drawio)
 
 | 정정·취소 도착 시점 | 처리 |
 | --- | --- |
@@ -302,15 +259,11 @@ Response Manager는 하나의 Canonical Response Payload를 확정한 뒤 public
 
 ## 14. 프로세스 배치·fault boundary
 
-```text
-사용자 PC
- ├─ UI Process: Chat · Task 화면 · 알림
- ├─ Voice Process: audio 입출력 · S2S 연결 · barge-in · 재생
- ├─ Core Process: Request / Context / Task / Response / Policy / Model Access / Store
- └─ Connector Workers: source·Agent 연동의 blocking·장애 위험 격리
-```
+![VIA runtime process와 fault boundary](./diagrams/06-runtime-and-fault-boundaries.svg)
 
-Core Component는 같은 프로세스의 모듈로 시작한다. Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. 이 배치도 제안이지 기존 배치 결정의 자동 변경이 아니다.
+[draw.io 편집 원본](./diagrams/06-runtime-and-fault-boundaries.drawio)
+
+Core Component는 같은 프로세스의 모듈로 시작한다. Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. Core 안에는 Store access module이 있지만 durable State Store 자체는 Core crash와 독립적으로 복구 가능한 persistence여야 한다. 이 배치도 제안이지 기존 배치 결정의 자동 변경이 아니다.
 
 모델 local 배치 시 모델별 runtime 하나, remote 배치 시 연결 adapter를 사용한다. 배치별 지연·메모리·네트워크 비용은 다르며 실제 주 배치는 아직 정하지 않았다.
 
@@ -346,20 +299,9 @@ Core Component는 같은 프로세스의 모듈로 시작한다. Connector Worke
 
 이 Architecture는 QA-19, QA-09, QA-29, QA-39 순으로 우선해 설계한다. 지금은 이 네 관점에서 목표 구조가 완결됐는지 검토하며, 구조 선택과 steelman 비교는 전체 Architecture 합의 뒤에 시작한다.
 
-```text
-Core 직접 응답:
-입력 종료 → 입력 확정 → 근거 확보 → semantic 해석 → 검증
-→ 응답·음성 생성 → 실제 표시·재생
+![네 core ASR의 Architecture critical path](./diagrams/07-four-asr-critical-paths.svg)
 
-업무 위임:
-입력 종료 → 의미·대상 확정 → 검증·영속 기록 → 변환·전송 → Agent ingress
-
-진행·결과 전달:
-Agent source에 상태 준비 → 수신/조회 → Task 연결·검증 → 응답 구성 → 실제 표시·재생
-
-음성 중단:
-사용자 음성 시작 → 감지 → 재생 중단·buffer 폐기 → 마지막 기존 음성 sample
-```
+[draw.io 편집 원본](./diagrams/07-four-asr-critical-paths.drawio)
 
 Context, queue, Store, IPC, network, speech generation, playback buffer 비용도 경로에 포함된다. 입력 종료 전에 겹쳐 수행한 작업을 종료 후 비용에 다시 더하지 않는다. Agent 내부 업무 시간은 분리하되 전체 사용자 대기 시간은 유지한다. Filler·접수 인사를 유효 결과의 도착으로 취급하지 않는다. 이는 [event boundary 의미](../../11-measurement/event-boundary-contract.md)를 보존한 설계 설명이며 새 측정 계약은 아니다.
 

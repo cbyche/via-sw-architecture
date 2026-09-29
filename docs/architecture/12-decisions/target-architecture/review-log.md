@@ -27,6 +27,7 @@
 | 기록 | GitHub에서 문서를 정리하면서 계속 진행 | 사용자 지정 |
 | 저장소 위치 | 목표 Architecture와 이후 Decision Package는 12번 작업 안에서 관리 | 사용자 지정 |
 | Git 방식 | 이 Architecture 대화마다 새 branch와 PR을 만들지 않음 | 사용자 지정 |
+| 그림 | 목표 Architecture의 모든 구조 그림은 draw.io 원본과 GitHub용 SVG를 함께 두고 Markdown에 삽입; Mermaid는 사용하지 않음 | 사용자 지정 |
 
 초기에는 저장소 수정 없이 논의했고, 이후 사용자의 GitHub 정리 요청에 따라 이 문서를 추가했다. 그 요청은 전체 제안을 승인했다는 의미가 아니다.
 
@@ -82,5 +83,6 @@
 | 2026-09-29 | 세 독립 관점의 사전 검토를 기록하고, 공통으로 확인된 S2S admission·evidence coverage·dispatch 선형화·event/response 복구 공백을 본문에 보강 | reviewer 지적 반영; 보강 구조는 사용자 검토 전 제안 상태 |
 | 2026-09-29 | accuracy 우선순위를 목표 Architecture 설계 원칙과 후보 비교 방법으로 분리하고, Decision Package에서는 accuracy·responsiveness를 독립 측정하도록 정정 | 사용자 지정; 기존 blanket gate 철회 |
 | 2026-09-29 | 목표 Architecture 우선순위를 QA-19 → QA-09 → QA-29 → QA-39로 확장하고 네 ASR을 모두 설계에 반영; Decision Package 작업은 전체 구조 합의 이후로 유지 | 사용자 지정; 목표 Architecture 검토에 집중 |
+| 2026-09-29 | `architecture.md`의 Mermaid·ASCII 구조 그림을 7개 draw.io 그림과 SVG preview로 교체·보강하고, 동일한 시각 언어와 생성 절차를 추가 | 사용자 지정 표현 방식 반영; Architecture 내용은 제안 상태 유지 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="01-system-overview" name="VIA Target Architecture — 전체 구조">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="lane-user" value="USER INTERACTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="92" width="1520" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-realtime" value="REAL-TIME INTERACTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F5F9FF;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="228" width="1520" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-core" value="VIA CORE — semantic authority와 durable state" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FAF8FF;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="456" width="1520" height="255" as="geometry" />
+        </mxCell>
+        <mxCell id="lane-deps" value="DEPENDENCIES / EXTERNAL EXECUTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FCFCFD;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="730" width="1520" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="&lt;div style='font-size:16px;font-weight:bold'&gt;사용자&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Voice · Text · 화면 지칭&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="118" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="interaction" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Interaction Runtime&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;입력·시점별 evidence&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;S2S 연결·barge-in·재생&lt;/div&gt;&lt;div style='font-size:10px;color:#2563EB;font-weight:bold'&gt;REAL TIME&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="275" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="controller" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Controller&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Request Graph · semantic commit&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;질문 결합 · publish/dispatch admission&lt;/div&gt;&lt;div style='font-size:10px;color:#7C3AED;font-weight:bold'&gt;AUTHORITY&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="270" width="280" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="response" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Response Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Canonical payload&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Text · Voice · 알림 delivery&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="825" y="275" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="context" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Context Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;후보 탐색 · bounded read&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;receipt · cache · coverage&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="520" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="resolver" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Interpreter&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;semantic proposal&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;field별 후보·근거·미해결&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="520" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="task" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Task Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Task lifecycle&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Execution projection · 복구&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="780" y="515" width="255" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Agent Gateway&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;capability · command outbox&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;event inbox · protocol adapter&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1E8;strokeColor=#EA580C;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="515" width="250" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="policy" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Policy Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;권한 · consent&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;policy revision&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="280" width="210" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="store" value="&lt;div style='font-size:16px;font-weight:bold'&gt;State Store&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;durable&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;transactions&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1405" y="280" width="120" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="s2s" value="&lt;div style='font-size:16px;font-weight:bold'&gt;S2S 모델 1개&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;streaming speech dependency&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="115" y="760" width="210" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="semantic" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Semantic LLM 1개&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;shared structured inference&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="760" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Context Sources&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;화면 · 대화 · 자료 · OS&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="770" y="760" width="220" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="agents" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Downstream Agents&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;domain reasoning · plan · tools&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;실제 업무 실행&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1E8;strokeColor=#EA580C;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="755" width="270" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-in" value="입력" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="user" target="interaction">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="355" y="153" />
+              <mxPoint x="355" y="328" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-output" value="Text / Voice" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="response" target="user">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="735" y="328" />
+              <mxPoint x="735" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-i-r" value="Input Record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="controller">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-r-o" value="payload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-r-c" value="bounded read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="context">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="455" />
+              <mxPoint x="220" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-c-s" value="evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="context" target="resolver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-r" value="proposal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="resolver" target="controller">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="555" y="430" />
+              <mxPoint x="580" y="430" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-r-t" value="commit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="task">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="650" y="470" />
+              <mxPoint x="907" y="470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-t-g" value="command / event" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="task" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-g-a" value="typed protocol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gateway" target="agents">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-llm" value="shared call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="resolver" target="semantic">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-i-s2s" value="one session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="s2s">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-c-source" value="read only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="context" target="sources">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="220" y="680" />
+              <mxPoint x="880" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-policy" value="policy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="policy" target="response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-store" value="durable state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="store" target="task">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1385" y="328" />
+              <mxPoint x="1385" y="670" />
+              <mxPoint x="910" y="670" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="caption-0" value="LLM은 상태·권한·실행을 소유하지 않는다" style="text;html=1;strokeColor=none;fillColor=none;align=end;fontSize=12;fontColor=#7C3AED;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1495" y="397" width="420" height="24" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

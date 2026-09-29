@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="940" viewBox="0 0 1600 940" role="img" aria-labelledby="title desc">
+<title id="title">Dispatch, Event와 Response의 내구 경계</title>
+<desc id="desc">세 durable 경로와 dispatch 선형화 지점을 분리해 crash와 duplicate를 복구한다</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/></marker>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.10"/></filter>
+</defs>
+<rect width="1600" height="940" fill="#FFFFFF"/>
+<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">Dispatch, Event와 Response의 내구 경계</text>
+<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">세 durable 경로와 dispatch 선형화 지점을 분리해 crash와 duplicate를 복구한다</text>
+<rect x="45" y="100" width="1510" height="230" rx="18" fill="#FFF1E8" stroke="#FDBA74" stroke-width="1.5"/>
+<text x="63" y="128" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">1 — OUTBOUND COMMAND</text>
+<rect x="45" y="350" width="1510" height="230" rx="18" fill="#E9F9F3" stroke="#86EFAC" stroke-width="1.5"/>
+<text x="63" y="378" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">2 — INBOUND AGENT EVENT</text>
+<rect x="45" y="600" width="1510" height="270" rx="18" fill="#EAF2FF" stroke="#93C5FD" stroke-width="1.5"/>
+<text x="63" y="628" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="750" fill="#526178">3 — USER RESPONSE PUBLICATION</text>
+<polyline points="295,215 380,215" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="680,215 780,215" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="675.5" y="188" width="109" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="730" y="203" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">atomic intent</text>
+<polyline points="1040,215 1150,215" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1064.0" y="188" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1095" y="203" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">send</text>
+<polyline points="320,465 420,465" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="720,465 835,465" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="746.0" y="438" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="777" y="453" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">commit</text>
+<polyline points="1095,465 1200,465" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)" stroke-dasharray="8 6"/>
+<rect x="1116.0" y="438" width="62" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1147" y="453" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">if gap</text>
+<polyline points="1320,405 1320,340 965,340 965,405" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1071.5" y="317" width="137" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1140" y="332" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">verified snapshot</text>
+<polyline points="345,738 440,738" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<polyline points="730,738 835,738" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="748.5" y="711" width="67" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="782" y="726" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">publish</text>
+<polyline points="1095,738 1200,738" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="1113.5" y="711" width="67" height="22" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+<text x="1147" y="726" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="650" fill="#526178">receipt</text>
+<rect x="85" y="165" width="210" height="100" rx="16" fill="#FFFFFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="190.0" y="206.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Semantic Commit</text><text x="190.0" y="231.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">immutable revision vector</text></g>
+<rect x="380" y="145" width="300" height="140" rx="16" fill="#FFFFFF" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="530.0" y="196.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Domain Transaction</text><text x="530.0" y="221.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Task link + command</text><text x="530.0" y="241.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">+ outbox in one commit</text></g>
+<rect x="780" y="145" width="260" height="140" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="910.0" y="196.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">DISPATCHING</text><text x="910.0" y="221.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">epoch · precondition</text><text x="910.0" y="241.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">linearization point</text><rect x="968" y="154" width="62" height="22" rx="11" fill="#D97706" opacity="0.12"/><text x="999.0" y="169" text-anchor="middle" font-size="11" font-weight="700" fill="#D97706">FENCE</text></g>
+<rect x="1150" y="155" width="280" height="120" rx="16" fill="#FFF1E8" stroke="#EA580C" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1290.0" y="196.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Agent Ingress</text><text x="1290.0" y="221.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">idempotency key · target version</text><text x="1290.0" y="241.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">ACCEPTED / REJECTED / UNKNOWN</text></g>
+<rect x="90" y="415" width="230" height="100" rx="16" fill="#FFFFFF" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="205.0" y="456.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Agent Event</text><text x="205.0" y="481.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">source sequence / revision</text></g>
+<rect x="420" y="395" width="300" height="140" rx="16" fill="#FFFFFF" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="570.0" y="446.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Durable Inbox</text><text x="570.0" y="471.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">dedupe + source cursor</text><text x="570.0" y="491.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">+ Task projection transaction</text></g>
+<rect x="835" y="405" width="260" height="120" rx="16" fill="#E9F9F3" stroke="#059669" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="965.0" y="446.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Task Projection</text><text x="965.0" y="471.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">source-confirmed state</text><text x="965.0" y="491.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">question lifecycle</text></g>
+<rect x="1200" y="405" width="240" height="120" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1320.0" y="446.0" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Reconciliation</text><text x="1320.0" y="471.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">gap · reconnect · restart</text><text x="1320.0" y="491.0" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">snapshot query</text></g>
+<rect x="85" y="680" width="260" height="115" rx="16" fill="#FFFFFF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="215.0" y="718.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Canonical Payload</text><text x="215.0" y="743.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">facts · Task/result identity</text><text x="215.0" y="763.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">source · staleness</text></g>
+<rect x="440" y="665" width="290" height="145" rx="16" fill="#FFFFFF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="585.0" y="718.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Publication Outbox</text><text x="585.0" y="743.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">planned Text / Voice generation</text><text x="585.0" y="763.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">durable publication ID</text></g>
+<rect x="835" y="665" width="260" height="145" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="965.0" y="718.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Channel Delivery</text><text x="965.0" y="743.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">Text ack</text><text x="965.0" y="763.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">audible prefix / interrupted</text></g>
+<rect x="1200" y="680" width="250" height="115" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1325.0" y="718.5" text-anchor="middle" font-size="17" font-weight="700" fill="#172033">Conversation Record</text><text x="1325.0" y="743.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">사용자가 실제 접한 내용</text><text x="1325.0" y="763.5" text-anchor="middle" font-size="13" font-weight="500" fill="#526178">후속 referent의 근거</text></g>
+<text x="335" y="120" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">CRASH WINDOW A</text>
+<text x="745" y="120" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">CRASH WINDOW B</text>
+<text x="1120" y="120" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">CRASH WINDOW C</text>
+<text x="365" y="372" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">event 수신 후 projection 전</text>
+<text x="785" y="622" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="11" font-weight="700" fill="#DC2626">게시 계획 후 실제 전달 전</text>
+<text x="80" y="902" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="13" font-weight="700" fill="#DC2626">재시작은 완료가 아니다. command·event·publication이 확인 가능한 상태로 다시 연결되어야 복구다.</text>
+<text x="1562" y="920" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 05-dispatch-and-recovery.drawio</text>
+</svg>
