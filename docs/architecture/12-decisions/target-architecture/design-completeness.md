@@ -12,7 +12,7 @@
 
 | UC | 목표 Architecture의 경로 | 중요한 예외·보존할 조건 | 본문 / 그림 |
 | --- | --- | --- | --- |
-| UC-01 일반 질문·후속 대화 | S2S 직접 응답 + Controller admission + 실제 응답 기록 | 이중 응답 방지; 후속 지칭에 실제 전달 내용 사용; 기본 admission 정책 확인 중 | §8·13 / 08 |
+| UC-01 일반 질문·후속 대화 | 독립 자체 지식 질문은 S2S, 대화 지칭은 Core; 동일 응답 기록 | 이중 응답 방지; 후속 지칭에 실제 전달 내용 사용; 직접 범위 합의, admission 구현 계약 미확정 | §8·13 / 08 |
 | UC-02 한정 자료 조회·설명 | Context read → 해석 → Core 직접 응답 | source·기준 시각 보존; 조사·업무 분석으로 확장되면 Agent | §6·7·9 / 03·10 |
 | UC-03 먼저 선택하고 말하기 | 사전 선택의 유효 구간 + 입력 timeline | 발화 전 선택도 유지; pointer·selection 충돌은 미확정 | §6·9 / 04 |
 | UC-04 말하면서 지칭하기 | 표현별 acoustic interval과 당시 화면 결합 | 복수 대상·정정·전사 지연·capture gap을 마지막 화면으로 덮지 않음 | §6·9 / 04 |
@@ -20,7 +20,7 @@
 | UC-06 요청 보완 | Pending User Interaction → 새 Turn → 기존 Request revision | 이미 확정한 제약 보존; 짧은 답의 질문 binding이 모호하면 재확인 | §5·6·12 / 02·03 |
 | UC-07 직접 응답에서 위임 | Response Record 참조 → 새 Request·Task → Agent | Voice session이 끝나도 참조 보존; 미전달 음성은 들은 내용으로 사용 금지 | §5·13 / 02·08 |
 | UC-08 새 업무 위임 | Controller → Task Manager command → Gateway → Agent | capability·권한·precondition 확인; 적합한 Agent 없으면 미지원 | §11·12 / 01·05 |
-| UC-09 복합 요청 | Request Graph → 의존 결과 version → 조건별 node 해제 | 불명 조건은 거짓이 아님; 독립 업무 계속; Agent 내부 계획은 범위 밖 | §12 / 09 |
+| UC-09 복합 요청 | 단일 업무는 통째로 Agent, 독립 목표는 별도 Task; 실제 목표 간 의존만 Graph | 불명 조건은 거짓이 아님; 독립 업무 계속; Agent 내부 계획은 범위 밖 | §12 / 09 |
 | UC-10 기존 업무 조회·수정 | 기존 Task binding → 확인 상태 또는 후속 command | 완료 Execution 재사용 불가 시 같은 Task에 후속 Execution 연결 | §5·12 / 02·09 |
 | UC-11 음성 중단·정정 | Voice local stop → epoch 무효화 → 새 요청 해석 | Core·모델·Agent 취소를 기다리지 않음; 이전 release 거절 | §6·13·14 / 08 |
 | UC-12 특정 업무 취소 | 미전송 hold / 실행 중 취소 command / 상태 조정 | 취소 접수·완료·불가·불명 구분; 외부 rollback이라고 주장하지 않음 | §11·12 / 05 |
@@ -50,13 +50,13 @@
 
 | 항목 | 현재 제안·대응 | 확정에 필요한 것 |
 | --- | --- | --- |
-| S2S direct admission의 기본 방식 | 매 요청 semantic 확인의 overhead 우려로 재검토; 맥락·범위 기반 조건부 직접 경로 제안 | 직접 범위·S2S 인계 계약 합의; 실제 판정 정확도·지연 검증 |
-| S2S capability | time-aligned 입력, host 출력 제어, Text/audio 대응, 의미 보존 음성화, barge-in 필요 | 실제 모델 연결 확인; 미지원 기능을 숨겨 helper 모델을 추가하지 않음 |
+| S2S direct admission의 기본 방식 | 명백한 독립 자체 지식 질문만 허용; 나머지는 Core라는 범위 합의 | 최소 admission·S2S 인계 출력 계약; 실제 판정 정확도·지연 검증 |
+| S2S capability | time-aligned 입력, host 출력 제어, Text/audio 대응, 의미 보존 음성화, barge-in 필요 | 공식 문서 1차 확인에서 전사 helper 의존을 발견; 모델별 적합 계약과 실제 연결 확인 필요 |
 | 시각 근거 처리 | UI 구조가 없으면 공유 semantic LLM의 이미지 처리 필요 | 목표 모델 capability와 화면 입력 계약 |
 | Agent capability | 상태 조회·source revision·중복 방지·precondition·취소 지원을 profile로 노출 | 실제 Agent adapter 연결 확인; 미지원일 때의 보장 수준 표시 |
 | 자원·시간 예산 | 유한 queue·buffer·deadline, pin된 evidence의 한도 초과도 gap으로 처리 | 목표 PC·모델 배치·동시 workload에 맞춘 수치; 이번 작업에서 측정 freeze하지 않음 |
 | 개인정보 보관·삭제 | 최소 evidence 보존, memory tombstone, derived view 폐기, 외부 삭제 한계 명시 | 제품의 보관기간·백업 삭제·provider 정책; 현재 숫자나 법적 보장 미확정 |
-| 발화 차례·중단 후 재개 | 사용자 발화 중 음성 알림 금지와 채널별 요약은 사용자 지정; 불명확한 재개만 확인하는 안 | 새 요청/대기 결과의 순서, Voice 재연결·다른 Conversation의 음성 안내 범위 |
+| 발화 차례·중단 후 재개 | 사용자 발화 중 음성 알림 금지와 채널별 요약은 사용자 지정; 불명확한 재개만 확인하는 정책 합의 | 새 요청/대기 결과의 순서, Voice 재연결·다른 Conversation의 음성 안내 범위 |
 | 기억 계층 | 단기 작업 Context·중기 대화/업무 view·장기 허용 기억과 내구 원본을 분리하는 제안 | 기억 승격·보관·삭제 정책, 요약 누락·원본 복원·저장 계약 |
 | 실행 가능한 계약 | owner·revision·transaction·호출 경로를 문서로 지정 | schema, migration, provider adapter, crash/race 구현 검증 |
 
@@ -72,3 +72,17 @@
 4. 그림 07: 네 품질 경로의 비용과 약점이 빠짐없이 설명되는가?
 
 그 다음 전체 구조를 합의한다. Decision Package와 steelman 비교는 그 이후에 진행한다.
+
+## 5. 목표 Architecture 합의까지 남은 작업
+
+| 순서 | 설계 작업 | 담당·검토 산출물 | 닫는 기준 |
+| --- | --- | --- | --- |
+| 1 | 최소 S2S admission과 Core 인계 | 에이전트: 허용/제외 사례, 입력·출력·검증 책임 | 단순 첫 질문과 맥락 의존 질문을 구분하는 실제 계약; 모델 의존·실패 경로 명시 |
+| 2 | 모델·Agent 필수 capability 확인 | 에이전트: [모델 확인 원장](./model-capability-review.md), adapter 요구와 미지원 처리 | 문서상 기능·실측 필요·제약 충돌 구분; 설계에 필요한 기능 부재를 숨기지 않음 |
+| 3 | 기억·Context lifecycle 구체화 | 에이전트: 계층·소유권·저장·조회·요약·삭제·복원 설계 | 원본과 파생 요약의 일관성, Task 내구 기록 보존, 삭제 전파와 overflow 동작 |
+| 4 | 상태·동시성·장애 계약의 일관성 검토 | 에이전트: 정정/dispatch, 음성 차례/재개, 동일 Agent의 복수 Task, 결과/재시작 시나리오 | 각 상황의 owner·전이·근거·timeout·복구 경로가 본문과 그림에서 일치 |
+| 5 | 최종 사용자 시나리오 리뷰 | 사용자 + 에이전트: 보완한 architecture.md와 그림 | 요구 행동·전체 책임 구조 합의; 열린 제약과 후속 검증을 명시 |
+
+사용자에게 다시 결정받아야 하는 것은 기존 합의의 반복이 아니라 제품 선택이 필요한 차이다. 예: 원음·화면 보관 기본값/기간, Voice 재연결·다른 대화 중 대기 결과의 자동 발화 범위, 실제 모델의 필수 기능 부족 시 허용할 제품 변경. 먼저 에이전트가 구체 주안을 작성하고 필요한 항목만 질문한다.
+
+설계 완료는 구현·성능 검증 완료와 다르다. 핵심 기능 실현 방법이 불명확한 상태를 단순한 숫자 튜닝으로 미루지 않되, 전체 제품 구현·전체 QA 측정이 끝나야만 구조를 합의할 수 있는 것도 아니다. 구조·핵심 계약·실현 가능성의 중대한 공백을 닫은 뒤 Decision Package로 넘어간다.

@@ -700,12 +700,12 @@ def four_asr_paths() -> Diagram:
 
 def response_delivery() -> Diagram:
     d = detail('08-response-and-interruption', '응답 생성·게시·중단 — 한 요청에는 하나의 출력 소유권', '박스는 실행 단계 · 화면 상세와 Voice 요약은 같은 사실에서 별도로 구성한다', 1440)
-    strip(d,'s2s',150,'A · S2S 직접 응답 — 생성과 게시 허가를 분리','blue',[
+    strip(d,'s2s',150,'A · S2S 직접 응답 — 명백한 자체 지식 질문만 허용','blue',[
         ('입력 stream',('Interaction Manager → Model Access','같은 S2S가 transcript·답변 생성')),
         ('Provisional generation',('IM buffer에 handle·audio 보류','input revision·출력 세대 결합')),
-        ('Controller admission',('direct 허용 / Core 전환 결정','semantic 생략 조건은 검토 중')),
+        ('Controller admission',('좁은 direct 허용 / 나머지는 Core','최소 admission 계약은 설계 중')),
         ('Response Manager',('publication 기록 후 handle release','IM에서만 실제 표시·재생')),
-    ],'직접 경로에서도 승인 전 audio는 재생하지 않는다. Core로 전환하면 speculative generation을 버리고 중복 응답을 막는다.')
+    ],'단순 첫 질문도 허용한다. 과거 대화 지칭·자료·Task 해석은 Core 책임이며 S2S에 Context 탐색·업무 planning을 붙이지 않는다.')
     strip(d,'core-response',435,'B · CORE / AGENT 응답 — 확인된 사실과 질문을 같은 출력 계약으로 전달','blue',[
         ('게시할 사실·질문',('Controller가 identity·scope admission','Task event는 새 발화 없이 도착')),
         ('필요한 응답 구성',('Response Manager → Model Access','template / 공유 LLM 요약 / 같은 S2S')),
@@ -716,7 +716,7 @@ def response_delivery() -> Diagram:
         ('새 발화 감지',('acoustic onset과 감지 시각 구분','Interaction Manager의 local event')),
         ('즉시 재생 중단',('output epoch 증가·buffer 폐기','늦은 audio·이전 release 거절')),
         ('중단 사실 전달',('Response에 실제 audible 범위','Controller에 새 입력·hold event')),
-        ('새 요청 해석',('정정 / 새 질문 / 업무 취소 구분','재개 의도가 불명확하면 확인 제안')),
+        ('새 요청 해석',('정정 / 새 질문 / 업무 취소 구분','재개 의도가 불명확할 때만 확인')),
     ],'Core 장애·포화 중에도 로컬 stop은 유지한다. 재시작 후 확인되지 않은 음성 구간은 UNKNOWN이며 자동으로 재생하지 않는다.')
     strip(d,'notification',1005,'D · 비동기 알림 — 화면에 먼저 표시하고 사용자 발화가 끝난 뒤 말한다','blue',[
         ('Agent 결과 확인',('Task·Controller가 상태·결과 연결','실패·완료·입력 필요를 보존')),
@@ -729,26 +729,26 @@ def response_delivery() -> Diagram:
 
 
 def compound_requests() -> Diagram:
-    d = detail('09-compound-and-task-routing', '복합 요청 — 사용자가 말한 관계만 실행으로 연결', '“자료를 요약한 뒤 그 요약을 김대리에게 보내고, 발표자료는 계속 만들어”', 1130)
-    strip(d,'dependent',150,'A · DATA DEPENDENCY — Controller의 Request Graph가 해제 조건을 소유','purple',[
-        ('R1 · 자료 요약',('범위가 명확하면 VIA 직접 처리','조사·업무 분석이면 Agent 위임')),
-        ('결과 version 고정',('실제 summary ID·내용 version','실패 / 미완료이면 R2를 보류')),
-        ('R2 · 전송 준비',('수신자·허용 Context·최신 권한','입력 결과 version으로 재검증')),
-        ('Task + Agent Command',('해제 key로 중복 dispatch 방지','실제 발송·도구 계획은 Agent 책임')),
-    ],'후속 node의 목표는 미리 이해할 수 있어도 실제 결과가 생기기 전에 결과 의존 command를 확정·전송하지 않는다.')
-    strip(d,'independent',435,'B · INDEPENDENT TASK — 위 요청의 대기·실패가 별도 업무를 막지 않는다','green',[
-        ('R3 · 발표자료 계속',('기존 Task B와 Execution 연결','새 목표로 잘못 분리하지 않음')),
-        ('업무 상태 확인',('이미 실행 중이면 불필요한 재시작 없음','필요한 제어만 해당 Agent에 전달')),
-        ('별도 진행·결과',('다른 Agent 또는 같은 Agent여도','Task·Execution identity로 구분')),
-        ('원래 대화로 통지',('Task B 결과임을 명시','전체 요청의 부분 완료를 구분')),
-    ],'Task 질문에 “응”이라고 답해도 질문 ID·Request·Execution·revision을 유일하게 결합할 수 없으면 재확인한다.')
-    strip(d,'conditional',720,'C · CONDITIONAL — “3시가 비었으면 일정을 만들고, 아니면 알려줘”','amber',[
-        ('조건 근거 확보',('일정의 source revision·조회 시각','업무 분석 조건이면 Agent가 판단')),
-        ('참 / 거짓 / 불명',('불명을 거짓으로 간주하지 않음','모호하면 추가 근거·질문')),
-        ('선택한 분기만 해제',('생성은 Agent / 충돌 안내는 VIA','dependency version·조건 사실 기록')),
-        ('실행 전 재확인',('Agent가 외부 precondition 검증','일정 변경 경쟁 시 보류·재검증')),
-    ],'VIA는 명시된 조건·순서·결과 의존을 보존한다. 업무 내부 계획이나 Tool 단위 workflow를 새로 만들지 않는다.')
-    caption(d,90,1040,'Capability 불충족·접수 불명 상태에서 다른 Agent로 조용히 재위임하지 않는다. 기존 실행 확인과 사용자 목표·권한을 다시 맞춘다.',16,COLORS['ink'],weight=700)
+    d = detail('09-compound-and-task-routing', '업무 구분 — 독립 목표는 VIA Task, 업무 내부 단계는 Agent', '“요약해서 메일로 보내줘”는 하나의 목표 · “보고서와 일정 등록”은 독립된 두 업무', 1130)
+    strip(d,'single-goal',150,'A · 하나의 업무 — 요약과 발송을 통째로 같은 Agent에 위임','orange',[
+        ('요청 의미 확정',('자료·수신자·제약·완료 조건','목표: 요약한 내용을 메일로 전달')),
+        ('하나의 VIA Task',('Controller → Task Manager','요약·발송 전체 목표로 command')),
+        ('Agent 내부 수행',('요약 → 발송의 순서·도구·재시도','VIA가 내부 단계별로 지휘하지 않음')),
+        ('동일 Task 결과',('성공 / 부분 완료 / 실패 구분','요약만 됐으면 발송 완료가 아님')),
+    ],'“조사해서 보고서를 만들어줘”도 같은 위임 경로다. Agent가 지원하지 못하면 VIA가 내부 계획을 대신 짜서 실행하지 않는다.')
+    strip(d,'independent',435,'B · 독립된 두 업무 — 같은 Agent를 사용해도 Task identity는 분리','green',[
+        ('독립 목표 식별',('보고서 작성 + 일정 등록','Request Interpreter가 의미 구분')),
+        ('Task A / Task B',('각각 목표·결과·질문·제어 상태','동일 Agent 또는 서로 다른 Agent')),
+        ('각각 진행·실패',('Task·Execution identity로 event 결합','한쪽 실패가 다른 업무를 막지 않음')),
+        ('별도 결과 전달',('Task A 완료 / Task B 실패 등','전체 성공으로 뭉뚱그리지 않음')),
+    ],'독립된 지속 업무는 별도 Task다. 일회성 직접 답변은 Request만으로 충분하며 모든 질문에 장기 Task를 만들지 않는다.')
+    strip(d,'cross-goal',720,'C · 목표 사이 실제 의존 — 별도 Task의 확정 결과를 인계해야 할 때만 VIA가 연결','purple',[
+        ('명시된 목표 간 관계',('별도 Task B가 Task A 결과를 사용','한 업무의 내부 단계와 구분')),
+        ('선행 결과 확인',('실제 artifact ID·내용 version','실패·불명이면 후속 목표 보류')),
+        ('후속 admission',('조건·권한·최신 요청 재검증','graph·node·result로 중복 해제 방지')),
+        ('후속 Agent 수행',('Task B가 받은 결과 version 사용','내부 계획·실행은 해당 Agent 책임')),
+    ],'사용자가 명시한 조건은 보존한다. 한 업무 내부 조건은 Agent가 수행하고 VIA는 업무 경계에서 확인된 사실만 연결한다.')
+    caption(d,90,1040,'Task 개수는 동사나 Tool 개수가 아니라 독립된 사용자 업무로 정한다. 동일 Agent의 불투명한 실행 하나로 독립 Task를 합치지 않는다.',16,COLORS['ink'],weight=700)
     return d
 
 

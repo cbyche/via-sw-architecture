@@ -106,7 +106,7 @@ Component 경계는 배포 단위가 아니라 변화와 상태 권한을 가두
 
 [draw.io 편집 원본](./diagrams/02-lifecycle-and-ownership.drawio)
 
-복합 Turn은 Controller가 소유하는 durable `Request Graph`가 된다. 각 node는 독립 Request ID·handling·상태·입력과 결과 version을 가지며, edge는 `independent`, `sequential`, `data-dependent`, `conditional`과 source result version을 기록한다. Task Manager는 node가 Task에 연결된 뒤의 Task lifecycle만 소유한다.
+복합 Turn의 독립 사용자 목표와 목표 사이 관계는 Controller가 소유하는 durable `Request Graph`가 된다. 한 업무의 내부 수행 단계를 동사별 node로 분해하지 않는다. 각 node는 독립 Request ID·handling·상태·입력과 결과 version을 가지며, edge는 `independent`, `sequential`, `data-dependent`, `conditional`과 source result version을 기록한다. Task Manager는 node가 Task에 연결된 뒤의 Task lifecycle만 소유한다.
 
 - Conversation은 대화와 참조 관계를 유지한다. Voice 연결 종료나 새 대화 시작을 Task 종료로 취급하지 않는다.
 - Turn은 한 번의 사용자 입력이며, 여러 Request를 포함할 수 있다. 대상이 여럿이라는 이유만으로 Request를 나누지는 않는다.
@@ -197,9 +197,9 @@ Controller는 모든 입력에 Request identity를 만들고 직접 경로의 �
 
 허용된 S2S 응답도 Text·audio generation과 사용한 근거를 같은 Response Record에 남긴다. 동일 Request에 S2S와 Core가 중복 응답하지 않으며 기록을 위해 재실행하지 않는다. Text 일반 질문에는 S2S 경유를 강제하지 않는다. 이 gate가 정확도를 지키면서 실제 latency 이점을 남기는지는 아직 검증되지 않았다.
 
-S2S direct admission의 기본 정책은 **재검토 중**이다. 앞서 제안한 매 요청의 최초 semantic 확인은 사용자가 추가 지연을 우려했으며 합의되지 않았다. 현재 검토 제안은 Controller·Context Manager가 미리 구성한 제한된 대화 맥락과 응답 범위를 S2S에 제공하고, S2S가 같은 호출에서 직접 응답 또는 Core 인계를 제안하는 방식이다. Controller의 값싼 revision·권한·출력 소유권 검사는 유지하되, 허용한 직접 경로에는 Interpreter·semantic LLM 재호출을 생략할 수 있게 한다. Component 간 호출과 모델 추론 호출의 비용을 구분한다. 위 표와 그림은 두 admission 방식에 공통인 출력 제어 흐름이며 생략 조건을 확정한 것은 아니다.
+S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 질문에 최소한으로 허용한다는 사용자 지정 방향**으로 정한다. “광합성이 뭐야?” 같은 첫 질문은 직접 경로가 될 수 있다. “두 번째 것을 설명해줘”처럼 이전 대화의 지칭이 필요하면 Core로 보낸다. 질문 순서가 아니라 맥락 해석의 필요 여부가 기준이다. S2S 쪽에 자료·Task·기억 해석이나 read/tool/planning loop를 붙이지 않으며, 앞선 대화 view 기반 후속 대화 fast path 제안은 채택하지 않는다.
 
-이 제안은 Interaction Manager에 두 번째 semantic engine을 추가하거나 S2S 자기 판정을 정확성 보장으로 삼는 구조가 아니다. 제공한 맥락의 누락·stale 여부, 범위 밖 요청과 주제 전환을 잘못 인식하는 위험이 남는다. 미해결 지칭·Task 제어·화면 변화·대기 질문·정정 등 알려진 조건에서는 Core로 전환하며, 단어 규칙만으로 모든 누락을 검출할 수 있다고 주장하지 않는다. 초기 권고는 Core가 확인한 설명의 후속 대화부터 직접 경로를 허용하는 것이다. 새로운 자유 질문까지 생략 범위를 넓힐지와 실제 모델의 인계 계약은 열려 있으며, 이 권고도 사용자 합의 전이다. 지원·정확성 근거가 없으면 semantic 확인 경로를 유지하며 그 비용을 숨기지 않는다. [구체 예시와 검토 제안](./interaction-and-memory-design.md)을 참고한다.
+남은 것은 최소 admission의 구체 계약이다. 같은 S2S의 제한된 direct/Core 인계 제안과 host의 좁은 제외 조건을 결합하는 안을 검토하되, 단어 규칙·confidence만으로 숨은 맥락 의존성을 정확히 판별한다고 가정하지 않는다. Controller의 Request identity·revision·권한·출력 검사는 유지하며 이를 semantic LLM의 매 요청 재호출과 동일시하지 않는다. 판단 근거나 필요한 모델 출력이 없으면 Core로 넘기고 지연을 숨기지 않는다. [허용·제외 예시](./interaction-and-memory-design.md#2-s2s-직접-응답은-명백한-자체-지식-질문에-한정한다)와 [모델 기능 확인](./model-capability-review.md)을 참고한다. 자체 지식의 사실 정확성을 admission만으로 보장하는 것은 아니다.
 
 ### 확보해야 하는 모델 기능
 
@@ -339,17 +339,17 @@ Task Manager는 확인된 변경을 Controller에 알린다. Controller는 원�
 
 중복 event를 제거하고 오래된 progress가 terminal state를 되돌리지 못하게 한다. Source 순서·revision을 제공하지 않는 Agent는 event를 변경 hint로 사용하고 조회로 확정한다. 조회도 불가능하면 확인 불가를 보존한다.
 
-“자료를 요약한 다음 김대리에게 보내고, 발표자료는 계속 만들어”에서는 실제 요약 결과 version을 발송의 입력으로 연결한다. VIA는 사용자가 명시한 의존 관계의 후속 요청을 해제하고 독립 업무는 계속 진행한다. 업무 분석·발송의 계획과 도구는 Agent 책임이다. 앞 요청 실패 시 의존한 뒤 요청을 실행하지 않고 부분 완료를 구분한다.
+“자료를 요약한 다음 김대리에게 보내고, 발표자료는 계속 만들어”에서는 요약·발송 전체를 하나의 새 Task로 Agent에 넘기고, 발표자료는 별도 기존 Task로 유지한다. 요약 결과를 만드는 방법과 발송의 내부 의존·실패 처리는 해당 Agent 책임이다. VIA가 요약을 먼저 수행하거나 두 단계를 별도 Task로 쪼개지 않는다. Agent가 보고한 요약 완료·발송 실패는 같은 Task의 부분 결과이며, 독립된 발표자료 Task에는 전파하지 않는다.
 
-![복합 요청의 데이터 의존, 독립 Task와 조건 분기](./diagrams/09-compound-and-task-routing.svg)
+![단일 업무 위임, 독립 Task와 목표 사이 의존 관계](./diagrams/09-compound-and-task-routing.svg)
 
 [draw.io 편집 원본](./diagrams/09-compound-and-task-routing.drawio)
 
-Controller는 의존 node를 `WAIT_DEPENDENCY`로 두고, 실제 선행 결과 version·조건 사실·현재 권한이 확보되면 재검증해 해제한다. `graph revision + node ID + dependency result version`으로 해제 identity를 기록하여 같은 event 재처리가 후속 command를 중복 생성하지 않게 한다. 조건은 참·거짓·불명을 구분하며 업무 분석이 필요한 조건의 판단은 Agent에 맡긴다. 이미 해제한 결과가 나중에 바뀌면 이전 실행을 되돌린 것으로 취급하지 않고 정정 관계를 만든다.
+별도 사용자 목표 사이에 실제 의존 관계가 있을 때만 Controller는 의존 node를 `WAIT_DEPENDENCY`로 두고, 실제 선행 결과 version·조건 사실·현재 권한이 확보되면 재검증해 해제한다. `graph revision + node ID + dependency result version`으로 해제 identity를 기록하여 같은 event 재처리가 후속 command를 중복 생성하지 않게 한다. 조건은 참·거짓·불명을 구분하며 업무 분석이 필요한 조건의 판단은 Agent에 맡긴다. 이미 해제한 결과가 나중에 바뀌면 이전 실행을 되돌린 것으로 취급하지 않고 정정 관계를 만든다.
 
 범위가 명확한 자료 설명·요약은 VIA가 직접 처리하고, 조사·업무 분석·계획·파일 생성·외부 실행은 Agent가 담당한다는 방향은 사용자와 합의했다. 공유 semantic LLM이 대상·source 범위·요청 결과를 보고 handling을 제안하고 Controller가 고정 scope·권한·예산을 적용한다. “더 자세히”라는 말 자체는 위임 조건이 아니다. 같은 문단의 상세 설명은 VIA에 남을 수 있지만, 추가 조사를 통한 원인 분석이나 결과물 생성은 첫 요청부터 Agent로 보낸다. VIA가 먼저 답해 보고 사용자가 재요청할 때까지 위임을 미루는 규칙은 아니다.
 
-복합 요청은 독립 목표·사용자 명시 의존 관계를 VIA가 관리하고, 한 업무를 이루는 내부 단계·도구·재시도·보상은 Agent가 관리한다. 하나의 Agent가 명시된 관계 전체를 처리할 수 있으면 그 관계를 보존한 묶음으로 위임할 수 있으며 VIA가 내부 단계를 다시 실행하지 않는다. Agent가 구조화된 부분 결과를 제공하지 않으면 문장이나 접속사만으로 내부 단계의 완료를 추측하지 않는다. 상세 예시는 [복합 요청의 책임 경계](./interaction-and-memory-design.md#4-복합-요청의-실패는-두-수준으로-나눈다)를 따른다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
+복합 요청은 독립 목표·사용자 명시 의존 관계를 VIA가 관리하고, 한 업무를 이루는 내부 단계·도구·재시도·보상은 Agent가 관리한다. 하나의 업무를 구성하는 “요약 후 발송”·“조사 후 보고서 작성”은 목표·명시 조건을 보존해 통째로 Agent에 위임한다. 독립된 지속 업무는 같은 Agent를 선택해도 서로 다른 Task로 추적한다. 단독 자료 설명·요약이 VIA 범위라는 이유로 Agent 업무의 준비 단계까지 VIA로 끌어오지 않는다. Agent가 구조화된 부분 결과를 제공하지 않으면 문장이나 접속사만으로 내부 단계의 완료를 추측하지 않는다. 상세 예시는 [복합 요청의 책임 경계](./interaction-and-memory-design.md#4-복합-요청의-실패는-두-수준으로-나눈다)를 따른다. VIA의 조건 검증과 실제 외부 Action 사이에 source가 바뀔 수 있으므로 Agent에도 version precondition과 충돌 시 처리 조건을 전달한다.
 
 Agent 질문·승인은 공통 Pending User Interaction에 Task + Execution + question ID + 요청 version으로 등록한다. 여러 질문 중 답변 대상을 특정하지 못하면 “응”을 임의 승인으로 사용하지 않는다.
 
@@ -385,7 +385,7 @@ Response Manager 안의 발화 대기열은 publication·Task·result version과
 
 ### 중단 뒤 이어 말할지 확인
 
-새 입력을 모두 들은 뒤 중단한 답변을 계속할지 확인하는 사용자의 아이디어를 다음과 같이 제안한다. “계속해”이면 남은 내용을 재검증해 이어 말하고, “짧게 말해”이면 새 요청에 맞게 요약하며, “그건 됐고…”이면 이전 음성 재개를 폐기한다. 재개 의도가 불명확할 때만 “아까 설명을 이어드릴까요?”라는 Pending User Interaction을 만든다. 모든 새 답변마다 발화 허가를 묻지는 않는다. 이는 사용자의 아이디어를 구체화한 제안이지 blanket 재확인에 합의한 것이 아니다. 음성 재개 확인은 미전송 외부 Action의 실행 승인과 별개이며, 침묵이나 다른 질문의 “응”을 재개·실행 허가로 재사용하지 않는다.
+중단 후 재개는 사용자와 합의한 다음 정책을 따른다. Request Interpreter가 새 입력을 이전 응답·실제 전달 범위와 결합해 재개·정정·전환 의도를 해석하고 Controller가 적용한다. “계속해”이면 남은 내용을 재검증해 이어 말하고, “짧게 말해”이면 새 요청에 맞게 요약하며, “그건 됐고…”이면 이전 음성 재개를 폐기한다. 재개 의도가 불명확할 때만 “아까 설명을 이어드릴까요?”라는 Pending User Interaction을 만든다. 모든 새 답변마다 발화 허가를 묻지는 않는다. 모호한 경우에만 재확인한다는 행동 원칙을 합의했으며, 세부 출력·질문 상태 계약은 설계 대상이다. 음성 재개 확인은 미전송 외부 Action의 실행 승인과 별개이며, 침묵이나 다른 질문의 “응”을 재개·실행 허가로 재사용하지 않는다.
 
 ## 14. 프로세스 배치·fault boundary
 

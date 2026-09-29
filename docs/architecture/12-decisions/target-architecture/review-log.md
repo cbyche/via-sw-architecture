@@ -10,7 +10,7 @@
 - **합의:** 사용자가 명시적으로 수용한 설계 내용. 문서 작성·게시·merge만으로 승격하지 않는다.
 - **열림:** 세부 설계 또는 실제 dependency 확인이 필요한 항목.
 
-현재 전체 Architecture는 **제안**이다. 구현·측정·성능 검증은 하지 않았다.
+현재 전체 Architecture는 **제안**이다. 구현·측정·성능 검증은 하지 않았다. 모델 기능의 공식 문서 1차 확인은 [확인 원장](./model-capability-review.md)에 따로 기록한다.
 
 ## 사용자가 지정한 방향
 
@@ -49,7 +49,7 @@
 | Agent inbox·Task projection·response publication 복구 | 독립 검토 후 보강·상태 전이 열림 | [장기 업무](./architecture.md#12-장기-업무복합-요청agent-event) |
 | domain event outbox·dispatch CAS·DELIVERY_UNKNOWN | 그림 기반 점검에서 주 설계 구체화·구현 미검증 | [설계 완결성 점검](./design-completeness.md) |
 | S2S adapter는 Voice, semantic adapter는 Core에 배치 | 제안·실제 dependency capability 확인 필요 | [프로세스와 장애](./architecture.md#14-프로세스-배치fault-boundary) |
-| S2S 직접 답변의 최초 semantic routing 확인 | 사용자 overhead 우려로 재검토; 맥락·범위 기반 직접 경로와 함께 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
+| 최소 S2S 직접 응답 | 명백한 자체 지식 질문만 허용하는 방향 합의; 최소 admission 계약 열림 | [S2S 경로](./architecture.md#8-s2s와-직접-응답) |
 
 ## 이번 대화에서 확인한 제품 행동
 
@@ -60,8 +60,10 @@
 | 한정 자료 설명·요약은 VIA, 조사·업무 계획·실행은 Agent; semantic LLM이 handling 판단 | 합의; host가 고정 scope·권한을 적용하는 구조는 유지 |
 | 화면은 상세 결과, 음성은 듣기 좋은 핵심 요약 | 사용자 지정 |
 | 사용자 발화 중 음성 알림 금지; 결과 화면 표시 후 발화 종료 때 음성 전달 | 사용자 지정; 차례·새 요청 우선순위·Voice 재연결 세부는 제안 |
-| 중단된 답변을 계속할지 사용자 확인 | 사용자 아이디어; 불명확할 때만 확인하는 안으로 구체화 제안 |
-| Interaction Manager의 S2S 제어·단기/중기/장기 기억·복합 실패 책임 분리 | 논의 요청; [설계 검토안](./interaction-and-memory-design.md)에 제안, 아직 합의 아님 |
+| 중단된 답변을 계속할지 사용자 확인 | 불명확할 때만 확인하는 정책 합의; Request Interpreter가 의미 해석 |
+| S2S 자체 지식 질문만 직접 응답 | 사용자 지정; 첫 단순 질문도 허용, 대화 지칭·자료·Task 해석은 Core. 후속 대화 fast path 확장안은 미채택 |
+| 한 업무는 통째로 Agent, 독립 업무는 별도 Task | 합의; 요약 후 발송은 한 Task. 동일 Agent를 써도 독립 업무 identity는 분리 |
+| 기억 설계·모델 기능 확인 | 사용자 요청에 따라 진행; 기억 세부 정책·모델 적합성은 완료 아님 |
 
 ## 다음 검토 주제
 
@@ -104,5 +106,6 @@
 | 2026-09-29 | 전체 그림을 동일 수준 Component로 재배치하고 Interaction Manager로 명칭 변경; VIA 경계 안에 공유 Store·Model Access 배치, Task Manager의 Gateway 요청과 Gateway→Task→Controller→Response 결과 경로, raw audio와 요청 이벤트의 구분을 명시; publication admission의 근거와 M3 응답 생성 경로 보완 | 사용자 리뷰 반영; 전체 구조는 제안 상태이며 모델 기능·실제 성능 미검증 |
 | 2026-09-29 | 그림 02~07 재구성, 08 응답·중단 / 09 복합 요청 / 10 Context·권한·기억 추가; 알림 유실·dispatch 경쟁·전달 불명·Model Access 배치·실제 사용 시 권한 검사·queue 포화 동작 보강; 18개 UC의 경로와 열린 질문 점검 | 사용자 요청에 따른 자체 설계 검토; 문서 완결성 보강이며 실제 구현·모델·성능 검증 및 전체 구조 합의는 아님 |
 | 2026-09-29 | 지칭 clarification·미전송 보류·VIA/Agent 경계·사용자 발화 비중단·화면 상세/음성 요약 원칙 반영; 그림 08에 알림 대기 경로 추가; S2S 조건부 직접 경로·중단 후 재개·복합 실패·기억 계층 검토안 기록 | 명시한 제품 행동만 합의/사용자 지정; 구조 제안과 실제 모델·성능은 열림 |
+| 2026-09-29 | S2S를 명백한 독립 자체 지식 질문으로 축소; 후속 대화 fast path 제안 철회; 요약·발송을 한 Task로 위임하도록 본문·그림 09 교정; 재개 정책 합의 기록; 모델 기능 공식 문서 1차 확인 | 사용자 지정 범위 반영; 최소 admission·기억·실제 모델 연동은 계속 설계/확인 중 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.
