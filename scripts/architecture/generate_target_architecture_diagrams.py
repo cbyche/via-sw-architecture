@@ -558,29 +558,50 @@ def lifecycle() -> Diagram:
 
 
 def request_resolution() -> Diagram:
-    d = detail('03-request-resolution', '요청 확정 — 최소 근거로 시작하고 필요한 부분만 보완', 'Core semantic 경로 · S2S 출력 경로는 그림 08 · 모든 입력은 같은 revision 규칙 적용', 1060)
-    lane(d, 'primary', 45, 150, 1810, 255, '① 최초 해석 — 입력 중 기본 Context 준비는 finalization과 병렬 진행', fill='#F8FAFC')
+    d = detail('03-request-resolution', '요청 확정 — Request Controller가 조회와 해석을 제어', 'Core semantic 호출 흐름 · 같은 Component의 반복 표시는 실행 단계이며 복제본이 아님 · S2S 출력은 그림 08', 1350)
+    lane(d, 'prepare', 45, 150, 1810, 270, '① 입력 접수와 근거 준비 — 기본 Context 조회는 입력 중 미리 시작 가능', fill='#F8FAFC')
     for ident, x, title, lines, col in [
-        ('input',90,'Final Input + Evidence',('확정 입력·시점별 화면 근거','기본 Context·허용 source·Task 후보'),'blue'),
-        ('proposal',540,'Request Interpreter · 호출 1',('목표·대상·Task·handling 후보','field별 근거·충돌·추가 읽기 제안'),'purple'),
-        ('host',990,'Request Controller · 검증',('coverage·freshness·현재 policy','입력·Task·evidence revision 확인'),'amber'),
-        ('commit',1440,'Semantic Commit',('필수 field 해결·불변 revision','직접 처리 / 내부 변경 / Agent 위임'),'green')]:
+        ('input',90,'Interaction Manager',('InputFinal · 최종 전사 revision','발화 시각·화면·선택 근거 참조'),'blue'),
+        ('receive',540,'Request Controller',('입력 SEALED · Request에 연결','허용 범위 안에서 기본 Context 요청'),'purple'),
+        ('context',990,'Context Manager',('기본 Context 조회·구성','대화·Task 후보·자료 + source revision'),'cyan'),
+        ('prepared',1440,'Request Controller',('Evidence Package 수신','입력 revision과 근거·예산 결합'),'purple')]:
         card(d,ident,x,225,title,lines,col)
-    right(d,'input-proposal','input','proposal',color='purple')
+    right(d,'input-receive','input','receive',color='blue')
+    right(d,'basic-read','receive','context',color='cyan')
+    right(d,'basic-result','context','prepared',color='cyan')
+    caption(d,90,395,'입력 시점 근거는 Interaction Manager가 제공하고, 대화·Task·자료 근거는 Context Manager가 owner read port로 모은다.',16)
+
+    lane(d,'primary',45,470,1810,275,'② 최초 해석과 검증 — Request Interpreter는 제안하고 Request Controller가 확정한다',fill='#FFFFFF')
+    for ident, x, title, lines, col in [
+        ('invoke',90,'Request Controller',('현재 입력 revision·근거로 해석 요청','남은 semantic 호출·시간 예산 적용'),'purple'),
+        ('proposal',540,'Request Interpreter · 호출 1',('목표·대상·Task·handling 후보','field별 근거·충돌·추가 읽기 제안'),'purple'),
+        ('host',990,'Request Controller',('제안 수신 · 필수 field·권한 검증','coverage·freshness·관련 revision 확인'),'amber'),
+        ('outcome',1440,'검증 결과에 따른 처리',('충족: Semantic Commit 후 처리','모호: clarification · WAIT_USER','확인 불가: 이유를 남기고 종료 / 보류'),'amber')]:
+        card(d,ident,x,545,title,lines,col)
+    edge(d,'prepared-invoke',((1610,357),(1610,445),(25,445),(25,611),(90,611)),'prepared','invoke',color=COLORS['purple'])
+    right(d,'invoke-proposal','invoke','proposal',color='purple')
     right(d,'proposal-host','proposal','host',color='purple')
-    right(d,'host-commit','host','commit','충족','green')
-    lane(d,'outcomes',45,445,1810,335,'② 미해결 분기 — 업무 실행 허가 아님',fill='#FFFFFF')
-    card(d,'more',540,555,'Context 추가 조회',('허용된 read 묶음 → Request Interpreter 호출 2','조회 실패·budget 소진도 receipt에 기록'),'cyan')
-    card(d,'clarify',990,555,'Clarification',('사용자만 구분할 후보·누락 조건','질문 등록·게시 후 새 Turn으로 보완'),'amber')
-    card(d,'failure',1440,555,'확인 불가 / 보류',('source 실패·기능 미지원·deadline','이유와 다음 행동을 같은 요청에 기록'),'red')
-    edge(d,'need-read',((1030,357),(1030,420),(740,420),(740,555)),'host','more','추가 근거',890,410,COLORS['cyan'])
-    edge(d,'retry',((620,555),(620,357)),'more','proposal','bounded refinement',620,490,COLORS['cyan'])
-    edge(d,'need-user',((1160,357),(1160,555)),'host','clarify','사용자 판단',1160,500,COLORS['amber'])
-    edge(d,'cannot',((1280,357),(1280,425),(1610,425),(1610,555)),'host','failure','해결 불가',1520,470,COLORS['red'])
-    caption(d,90,740,'기본 정책: input revision당 semantic 총 2회 — refinement·형식 repair·원음 재확인도 포함. 추가 조회는 한 묶음이다.',16)
-    lane(d,'rules',45,810,1810,175,'③ 변경·예외 — READY 형식만으로 실행하지 않는다',fill='#F1F5F9')
-    caption(d,90,875,'정정 / 관련 source 변경 → 이전 proposal·admission 무효화 → 영향 field 재검증. 재시도는 전체 deadline 안에서만 허용.',18,COLORS['ink'],weight=700)
-    caption(d,90,920,'Clarification·실패 안내는 미확정 정보를 보존한 publication admission으로 게시한다. 업무 dispatch에는 Semantic Commit이 필요하다.',16)
+    right(d,'host-outcome','host','outcome',color='amber')
+    caption(d,90,720,'추가 조회가 필요하고 예산이 남은 경우에만 ③으로 진행한다. Request Interpreter의 제안 자체는 실행 허가가 아니다.',16)
+
+    lane(d,'refine',45,845,1810,260,'③ 제한된 추가 조회와 재해석 — 조회 결과도 Request Controller를 거친다',fill='#F8FAFC')
+    for ident, x, title, lines, col in [
+        ('read-admission',90,'Request Controller',('추가 읽기 제안의 권한·예산 확인','허용 source·조회 범위·한도 고정'),'amber'),
+        ('more',540,'Context Manager',('한 묶음의 제한된 읽기 실행','추가 근거 + 실패·누락·revision 반환'),'cyan'),
+        ('reinvoke',990,'Request Controller',('조회 결과 수신 · 현재 revision 확인','유효한 근거·남은 예산으로 재해석 요청'),'purple'),
+        ('refined',1440,'Request Interpreter · 호출 2',('추가 근거를 반영한 수정 제안','의미 판단 결과를 반환 · 직접 확정 없음'),'purple')]:
+        card(d,ident,x,915,title,lines,col)
+    edge(d,'need-read',((1050,677),(1050,810),(25,810),(25,981),(90,981)),'host','read-admission','추가 근거 필요 + 남은 예산',660,800,COLORS['cyan'])
+    right(d,'bounded-read','read-admission','more',color='cyan')
+    right(d,'read-result','more','reinvoke',color='cyan')
+    right(d,'retry','reinvoke','refined',color='purple')
+    edge(d,'refined-host',((1780,981),(1825,981),(1825,775),(1220,775),(1220,677)),'refined','host','수정 제안 반환 → ② 검증·분기',1560,765,COLORS['purple'])
+    caption(d,90,1080,'호출 2 이후에는 추가 semantic 호출 없이 ②에서 확정 / clarification / 확인 불가로 분기한다. 새 사용자 입력은 새 revision이다.',16)
+
+    lane(d,'rules',45,1140,1810,155,'변경·예외와 호출 한도',fill='#F1F5F9')
+    caption(d,90,1200,'input revision당 semantic 총 2회: 최초 해석·refinement·형식 repair·원음 재확인·stale 재해석을 모두 합산한다.',16,COLORS['ink'],weight=700)
+    caption(d,90,1235,'정정·관련 source 변경 시 이전 proposal·admission을 무효화한다. revision / budget 검사 실패 시 오래된 근거로 호출·확정하지 않는다.',16)
+    caption(d,90,1270,'Clarification·실패 안내도 publication admission 후 게시한다. 업무 dispatch에는 Semantic Commit이 필요하며 조회는 실행 허가가 아니다.',16)
     return d
 
 

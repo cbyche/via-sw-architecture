@@ -146,6 +146,10 @@ Request는 `RESOLVING`, `WAIT_CONTEXT`, `WAIT_USER`, `WAIT_DEPENDENCY`, `READY`,
 
 입력 중에는 근거 수집과 값싼 Context 준비를 겹쳐 수행한다. 주 semantic 해석은 확정된 입력 revision을 사용한다. 모든 partial마다 모델을 호출하지 않는다. 발화 종료 시점의 화면 하나로 전체 발화의 지칭을 처리하지 않고, 표현별 시점의 증거를 사용한다.
 
+최초 해석의 호출 경로는 **Interaction Manager → Request Controller → Request Interpreter**다. Interaction Manager는 최종 입력과 발화·화면·선택의 시점별 근거 참조를 Request Controller에 전달한다. Request Controller는 Context Manager에 기본 Context 준비를 요청하고 반환된 대화·Task 후보·자료 근거를 입력 revision·허용 범위·호출 예산과 결합해 Request Interpreter를 호출한다. 기본 Context 준비는 입력 중 시작할 수 있으므로 그림의 논리적 전달 순서가 발화 종료 후 모든 조회를 직렬로 시작한다는 뜻은 아니다.
+
+추가 조회도 **Request Interpreter → Request Controller → Context Manager → Request Controller → Request Interpreter** 경로다. Request Controller는 추가 읽기 제안의 권한·범위·예산을 확인하고, 조회 결과를 받은 뒤 현재 revision과 남은 예산을 확인해 재해석을 요청한다. Interaction Manager나 Context Manager가 Request Interpreter를 직접 호출하지 않는다. 그림에 반복 등장하는 Request Controller는 같은 Component의 서로 다른 처리 단계이며, 해석 전 호출 제어와 해석 후 검증을 모두 소유한다.
+
 ### 음성 stream과 요청 이벤트의 경계
 
 | 입력·이벤트 | 실제 경로와 동작 |
