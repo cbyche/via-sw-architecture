@@ -1,147 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
   <diagram id="01-system-overview" name="VIA Target Architecture — 전체 구조">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="920" math="0" shadow="0">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="lane-user" value="USER INTERACTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="92" width="1520" height="120" as="geometry" />
+        <mxCell id="lane-user" value="USER I/O &amp; REAL-TIME DELIVERY" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F5F9FF;strokeColor=#BFDBFE;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="92" width="1720" height="165" as="geometry" />
         </mxCell>
-        <mxCell id="lane-realtime" value="REAL-TIME INTERACTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F5F9FF;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="228" width="1520" height="210" as="geometry" />
+        <mxCell id="lane-core" value="VIA CONTROL PLANE — request authority와 Task orchestration" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FAF8FF;strokeColor=#DDD6FE;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="1720" height="520" as="geometry" />
         </mxCell>
-        <mxCell id="lane-core" value="VIA CORE — semantic authority와 durable state" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FAF8FF;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="456" width="1520" height="255" as="geometry" />
-        </mxCell>
-        <mxCell id="lane-deps" value="DEPENDENCIES / EXTERNAL EXECUTION" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FCFCFD;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
-          <mxGeometry x="40" y="730" width="1520" height="145" as="geometry" />
+        <mxCell id="lane-infra" value="DURABLE INFRASTRUCTURE &amp; EXTERNAL DEPENDENCIES" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#FCFCFD;strokeColor=#CBD5E1;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="40" y="825" width="1720" height="225" as="geometry" />
         </mxCell>
         <mxCell id="user" value="&lt;div style='font-size:16px;font-weight:bold'&gt;사용자&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Voice · Text · 화면 지칭&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="80" y="118" width="220" height="70" as="geometry" />
+          <mxGeometry x="65" y="135" width="220" height="75" as="geometry" />
         </mxCell>
-        <mxCell id="interaction" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Interaction Runtime&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;입력·시점별 evidence&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;S2S 연결·barge-in·재생&lt;/div&gt;&lt;div style='font-size:10px;color:#2563EB;font-weight:bold'&gt;REAL TIME&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="95" y="275" width="250" height="105" as="geometry" />
+        <mxCell id="interaction" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Interaction Runtime&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;입력·시점별 evidence&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;S2S·barge-in·표시/재생&lt;/div&gt;&lt;div style='font-size:10px;color:#2563EB;font-weight:bold'&gt;REAL TIME&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="365" y="125" width="300" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="controller" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Controller&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Request Graph · semantic commit&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;질문 결합 · publish/dispatch admission&lt;/div&gt;&lt;div style='font-size:10px;color:#7C3AED;font-weight:bold'&gt;AUTHORITY&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="440" y="270" width="280" height="115" as="geometry" />
-        </mxCell>
-        <mxCell id="response" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Response Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Canonical payload&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Text · Voice · 알림 delivery&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="825" y="275" width="250" height="105" as="geometry" />
+        <mxCell id="response" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Response Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Canonical response payload&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;publication · delivery 상태&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="790" y="125" width="300" height="100" as="geometry" />
         </mxCell>
         <mxCell id="context" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Context Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;후보 탐색 · bounded read&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;receipt · cache · coverage&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E6F8FB;strokeColor=#0891B2;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="95" y="520" width="250" height="110" as="geometry" />
+          <mxGeometry x="80" y="445" width="270" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="resolver" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Interpreter&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;semantic proposal&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;field별 후보·근거·미해결&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="430" y="520" width="250" height="110" as="geometry" />
+        <mxCell id="controller" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Controller&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Request Graph · semantic commit&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;질문 결합 · publish/dispatch admission&lt;/div&gt;&lt;div style='font-size:10px;color:#7C3AED;font-weight:bold'&gt;AUTHORITY&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="360" width="310" height="125" as="geometry" />
         </mxCell>
-        <mxCell id="task" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Task Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Task lifecycle&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Execution projection · 복구&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="780" y="515" width="255" height="120" as="geometry" />
+        <mxCell id="resolver" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Request Interpreter&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;goal · referent · Task 후보&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;field별 근거와 미해결&lt;/div&gt;&lt;div style='font-size:10px;color:#7C3AED;font-weight:bold'&gt;PROPOSAL&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="830" y="445" width="280" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="gateway" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Agent Gateway&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;capability · command outbox&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;event inbox · protocol adapter&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1E8;strokeColor=#EA580C;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1140" y="515" width="250" height="120" as="geometry" />
+        <mxCell id="policy" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Policy Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Context·Action 권한 · consent&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;policy decision · revision&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="635" width="310" height="105" as="geometry" />
         </mxCell>
-        <mxCell id="policy" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Policy Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;권한 · consent&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;policy revision&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="280" width="210" height="95" as="geometry" />
+        <mxCell id="task" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Task Manager&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Task lifecycle&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Execution projection · 복구&lt;/div&gt;&lt;div style='font-size:10px;color:#059669;font-weight:bold'&gt;STATE OWNER&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F9F3;strokeColor=#059669;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="360" width="270" height="125" as="geometry" />
         </mxCell>
-        <mxCell id="store" value="&lt;div style='font-size:16px;font-weight:bold'&gt;State Store&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;durable&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;transactions&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1405" y="280" width="120" height="95" as="geometry" />
+        <mxCell id="gateway" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Agent Gateway&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;command outbox&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;event inbox · adapter&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1E8;strokeColor=#EA580C;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="360" width="240" height="125" as="geometry" />
         </mxCell>
-        <mxCell id="s2s" value="&lt;div style='font-size:16px;font-weight:bold'&gt;S2S 모델 1개&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;streaming speech dependency&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="115" y="760" width="210" height="80" as="geometry" />
+        <mxCell id="sources" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Context Sources&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;화면 · 대화 · 자료 · OS&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;read-only adapter&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="80" y="895" width="270" height="105" as="geometry" />
         </mxCell>
-        <mxCell id="semantic" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Semantic LLM 1개&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;shared structured inference&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="450" y="760" width="220" height="80" as="geometry" />
+        <mxCell id="store" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Durable State Store&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;Core crash와 분리된 persistence&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;owner별 repository · transaction&lt;/div&gt;&lt;div style='font-size:10px;color:#475569;font-weight:bold'&gt;NOT REAL TIME&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="440" y="885" width="350" height="125" as="geometry" />
         </mxCell>
-        <mxCell id="sources" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Context Sources&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;화면 · 대화 · 자료 · OS&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="770" y="760" width="220" height="80" as="geometry" />
+        <mxCell id="model" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Model Access&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;S2S 1개 · Semantic LLM 1개&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;shared queue · timeout · cancellation&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F1F5F9;strokeColor=#475569;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="880" y="885" width="350" height="125" as="geometry" />
         </mxCell>
         <mxCell id="agents" value="&lt;div style='font-size:16px;font-weight:bold'&gt;Downstream Agents&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;domain reasoning · plan · tools&lt;/div&gt;&lt;div style='font-size:12px;color:#526178'&gt;실제 업무 실행&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF1E8;strokeColor=#EA580C;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
-          <mxGeometry x="1160" y="755" width="270" height="90" as="geometry" />
+          <mxGeometry x="1480" y="890" width="270" height="115" as="geometry" />
         </mxCell>
-        <mxCell id="e-user-in" value="입력" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="user" target="interaction">
+        <mxCell id="e-user-in" value="Voice / Text / UI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.267;entryX=0.000;entryY=0.300;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="user" target="interaction">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-output" value="표시 / 재생" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.000;exitY=0.750;entryX=1.000;entryY=0.867;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-i-r" value="Input + Evidence Record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="controller">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="355" y="153" />
-              <mxPoint x="355" y="328" />
+              <mxPoint x="515" y="310" />
+              <mxPoint x="595" y="310" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-output" value="Text / Voice" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="response" target="user">
+        <mxCell id="e-r-o" value="Canonical payload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.677;exitY=0.000;entryX=0.500;entryY=1.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="response">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="735" y="328" />
-              <mxPoint x="735" y="190" />
+              <mxPoint x="650" y="300" />
+              <mxPoint x="940" y="300" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-i-r" value="Input Record" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="controller">
+        <mxCell id="e-o-i" value="channel delivery" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=3;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.000;exitY=0.500;entryX=1.000;entryY=0.500;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="response" target="interaction">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-r-o" value="payload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="response">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-r-c" value="bounded read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="context">
+        <mxCell id="e-r-c" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=0.000;exitY=0.440;entryX=1.000;entryY=0.478;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="context">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="560" y="455" />
-              <mxPoint x="220" y="455" />
+              <mxPoint x="395" y="415" />
+              <mxPoint x="395" y="500" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-c-s" value="evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="context" target="resolver">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-s-r" value="proposal" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="resolver" target="controller">
+        <mxCell id="e-r-s" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.440;entryX=0.000;entryY=0.478;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="resolver">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="555" y="430" />
-              <mxPoint x="580" y="430" />
+              <mxPoint x="790" y="415" />
+              <mxPoint x="790" y="500" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-r-t" value="commit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="task">
+        <mxCell id="e-r-policy" value="authorize / policy decision" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="policy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-r-t" value="semantic commit / confirmed Task state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=3;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.200;entryX=0.000;entryY=0.200;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="controller" target="task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-t-g" value="command / event" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=1.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="task" target="gateway">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="650" y="470" />
-              <mxPoint x="907" y="470" />
+              <mxPoint x="1305" y="585" />
+              <mxPoint x="1630" y="585" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e-t-g" value="command / event" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="task" target="gateway">
+        <mxCell id="e-c-source" value="bounded read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0891B2;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.500;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="context" target="sources">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-g-a" value="typed protocol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gateway" target="agents">
+        <mxCell id="e-s-model" value="structured inference" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.257;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="resolver" target="model">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-s-llm" value="shared call" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="resolver" target="semantic">
+        <mxCell id="e-g-a" value="typed protocol" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EA580C;strokeWidth=2;dashed=0;startArrow=block;startFill=1;endArrow=block;endFill=1;exitX=0.500;exitY=1.000;entryX=0.556;entryY=0.000;exitPerimeter=1;entryPerimeter=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="gateway" target="agents">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-i-s2s" value="one session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="interaction" target="s2s">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="caption-0" value="read envelope ↔ evidence package" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontColor=#0891B2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="215" y="409" width="420" height="23" as="geometry" />
         </mxCell>
-        <mxCell id="e-c-source" value="read only" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="context" target="sources">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="220" y="680" />
-              <mxPoint x="880" y="680" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="caption-1" value="input + evidence ↔ semantic proposal" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontColor=#7C3AED;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="970" y="409" width="420" height="23" as="geometry" />
         </mxCell>
-        <mxCell id="e-policy" value="policy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="policy" target="response">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="caption-2" value="Policy 판단은 Controller가 적용하고, Context Manager는 승인된 read envelope만 실행한다." style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=12;fontColor=#D97706;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="768" width="420" height="24" as="geometry" />
         </mxCell>
-        <mxCell id="e-store" value="durable state" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=2;dashed=0;endArrow=block;endFill=1;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="store" target="task">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1385" y="328" />
-              <mxPoint x="1385" y="670" />
-              <mxPoint x="910" y="670" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="caption-3" value="Controller · Context · Task · Gateway · Response · Policy의 durable record" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontColor=#475569;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="615" y="1021" width="420" height="23" as="geometry" />
         </mxCell>
-        <mxCell id="caption-0" value="LLM은 상태·권한·실행을 소유하지 않는다" style="text;html=1;strokeColor=none;fillColor=none;align=end;fontSize=12;fontColor=#7C3AED;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="1495" y="397" width="420" height="24" as="geometry" />
+        <mxCell id="caption-4" value="Interaction Runtime과 Interpreter가 공유" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=11;fontColor=#475569;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1055" y="1021" width="420" height="23" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

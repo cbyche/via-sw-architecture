@@ -43,7 +43,9 @@
 
 [draw.io 편집 원본](./diagrams/01-system-overview.drawio)
 
-화살표는 논리적 호출·데이터 관계다. Context 추가 읽기는 Interpreter가 요청하고 Controller가 Policy 확인 후 Context Manager에 실행시킨다. 모델 호출은 공통 Model Access를 거친다. 각 상자가 별도 프로세스라는 뜻은 아니다.
+화살표는 논리적 호출·데이터 관계다. 핵심 제어 구조는 Controller가 Interaction Runtime의 입력을 받고, Context Manager의 근거와 Interpreter의 semantic proposal을 결합하며, Policy Manager의 판단을 적용한 뒤 semantic commit을 Task Manager 또는 Response Manager로 보내는 형태다. Context 추가 읽기는 Interpreter가 제안하고 Controller가 Policy 확인 후 승인된 read envelope를 Context Manager에 실행시킨다. Policy Manager가 Response Manager를 직접 제어하지 않으며 Response Manager는 Controller가 admission한 canonical payload만 게시한다.
+
+State Store는 real-time interaction 경로의 Component가 아니다. Core process crash와 분리된 durable infrastructure이며, 각 상태 소유 Component가 repository·transaction port를 통해 기록한다. 그림에서는 sequence flow와 persistence 관계를 혼동하지 않도록 개별 Store 연결선을 생략하고 Store가 지원하는 owner를 상자 아래에 표시했다. 모델 호출은 공통 Model Access를 거친다. 각 상자가 별도 프로세스라는 뜻은 아니다.
 
 ## 4. Component와 상태 소유권
 

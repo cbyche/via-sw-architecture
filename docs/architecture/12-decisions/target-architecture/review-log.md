@@ -84,5 +84,6 @@
 | 2026-09-29 | accuracy 우선순위를 목표 Architecture 설계 원칙과 후보 비교 방법으로 분리하고, Decision Package에서는 accuracy·responsiveness를 독립 측정하도록 정정 | 사용자 지정; 기존 blanket gate 철회 |
 | 2026-09-29 | 목표 Architecture 우선순위를 QA-19 → QA-09 → QA-29 → QA-39로 확장하고 네 ASR을 모두 설계에 반영; Decision Package 작업은 전체 구조 합의 이후로 유지 | 사용자 지정; 목표 Architecture 검토에 집중 |
 | 2026-09-29 | `architecture.md`의 Mermaid·ASCII 구조 그림을 7개 draw.io 그림과 SVG preview로 교체·보강하고, 동일한 시각 언어와 생성 절차를 추가 | 사용자 지정 표현 방식 반영; Architecture 내용은 제안 상태 유지 |
+| 2026-09-29 | 전체 구조 그림의 핵심 Component 배치와 edge routing을 재구성하고 Policy 판단의 Controller 적용, State Store의 durable infrastructure 위치, Controller가 중재하는 Context·Interpreter 관계를 명시 | 사용자 리뷰 반영; 구조는 계속 제안 상태 |
 
 이후 수정 때는 바뀐 구조·이유·합의 상태를 이 표에 남긴다. 과거 문구의 전체 이력은 Git으로 보존한다.
