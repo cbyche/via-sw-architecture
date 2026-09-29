@@ -1,6 +1,6 @@
 # VIA 목표 SW Architecture
 
-> 상태: **PROPOSED / 사용자 검토 중 / 구현·측정 없음**
+> 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전 / 구현·측정 없음**
 > 작성일: 2026-09-29
 > [설계 개요](./README.md) · [합의 상태와 검토 기록](./review-log.md)
 
@@ -8,7 +8,9 @@
 
 **VIA는 시간에 맞춰 수집한 근거로 사용자의 목표·대상·Task를 먼저 정확히 확정하고, 그 확정 경계를 지키면서 직접 응답과 장기 Agent 업무를 빠르게 이어 주는 PC interaction·orchestration 소프트웨어다.**
 
-세 부분은 동시에 움직이되 사용자에게 무엇을 답하고 어떤 업무를 시작할지는 검증된 요청과 확인된 상태를 기준으로 결정한다. 이하의 구조는 주 설계안이며, 성능상 이점은 아직 검증되지 않은 가설이다.
+세 부분은 동시에 움직이되 사용자에게 무엇을 답하고 어떤 업무를 시작할지는 검증된 요청과 확인된 상태를 기준으로 결정한다. 필수 기능의 정상·예외 경로와 주요 구조 선택을 완성한 설계안이며 사용자 최종 검토 전이다. 구현·성능 측정은 이번 완료 기준에 포함하지 않는다. 성능상 이점은 아직 검증되지 않은 가설이다.
+
+주요 계약은 [판단·제어·대화](./control-and-lifecycle.md), [Context·기억 수명](./memory-and-context-lifecycle.md), [공유 Omni 실행](./shared-omni-runtime.md)에 구체화했다. [완결성 점검](./design-completeness.md)은 UC 18개와 필수 변형의 반영 위치, 선택한 정책, 후속 구현 항목을 구분한다.
 
 설계 우선순위는 **QA-19 semantic accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability**다. 낮은 순위도 선택 사항은 아니며, 상위 품질을 이유로 구조적 변경 파급이나 복구 실패를 숨기지 않는다.
 
@@ -176,7 +178,7 @@ Interpreter는 목표·대상·Task 관계·처리 방향과 경쟁 후보를 �
 | Next Evidence Request | 부족한 field와 허용 source에서 읽어야 할 대상·범위; 실행 여부는 host가 결정 |
 | Clarification Proposal | 이미 확정된 내용과 사용자만 구분할 수 있는 최소 차이; 실제 질문 등록은 host가 결정 |
 
-**초기 운영 가설은 확정된 입력 revision당 semantic 호출 최대 2회**다. 첫 해석 후 필요한 bounded read를 한 묶음 수행하고 재해석한다. 두 번째에도 필수 field가 해결되지 않으면 clarification 또는 근거 확보 실패로 끝내며 추측해 commit하지 않는다. 이 횟수는 Architecture invariant가 아니라 accuracy·불필요한 clarification·latency를 함께 측정해 바꿀 수 있는 resource policy다. Constrained output 또는 형식 오류 처리는 semantic refinement와 구분하되 전체 deadline 안에서 제한한다.
+**주 설계의 기본 운영 정책은 확정된 입력 revision당 semantic 호출 총 2회**다. 첫 해석 후 필요한 bounded read를 한 묶음 수행하고 재해석한다. 두 번째에도 필수 field가 해결되지 않으면 clarification 또는 근거 확보 실패로 끝내며 추측해 commit하지 않는다. 이 횟수는 후속 검증에서 바꿀 수 있는 resource policy다. Refinement·형식 repair·원음 재확인·stale 재해석에 쓰는 모든 semantic generation을 합계에 포함한다. 사용자 새 입력 없이 revision을 늘려 예산을 초기화하지 않는다. 세부 종료·응답 구성 계약은 [호출 예산](./control-and-lifecycle.md#3-core-해석읽기응답-예산)을 따른다.
 
 직접 답변은 확정 전 speculative하게 생성할 수 있지만, decision envelope와 필수 proposition이 semantic commit에 일치한다고 확인한 뒤 게시한다. 긴 답변이 구조화 판단의 확정을 막거나 interactive 요청 queue를 점유하지 않도록 응답 생성 예산을 분리한다. Agent의 긴 결과 요약에는 별도 응답 생성 호출 1회를 허용하며 이를 해석 비용에 숨기지 않는다. 상태 template으로 충분한 progress·completion 안내에는 semantic LLM을 호출하지 않는다.
 
@@ -188,7 +190,7 @@ LLM이 요청하는 도구는 bounded read-only Context 도구뿐이다. Host가
 
 | 경로 | 대상 | Semantic LLM |
 | --- | --- | --- |
-| S2S 직접 응답 | 외부·개인·화면·과거 대화·Task·Action·최신성·복합 관계가 필요 없는 self-contained Voice 질문 | admission 판정 방식에 따라 생략 가능 |
+| S2S 직접 응답 | 외부·개인·화면·과거 대화·Task·Action·최신성·복합 관계가 필요 없는 self-contained Voice 질문 | 같은 VoiceProposal + host gate로 생략 |
 | Core 처리 후 음성 전달 | 화면·자료·Task 판단, clarification, 위임, 진행·결과 | 필요한 해석·구성에 사용 |
 
 S2S는 Model Access를 통해 speculative 응답 생성을 수행할 수 있지만 스스로 게시 권한을 갖지 않는다. Channel I/O가 audio stream을 Model Access에 보내면 Model Access는 ASR transcript revision, Omni의 입력 해석과 speculative generation handle을 출처별로 Timeline & Buffer에 돌려준다. Handle은 입력 revision·session·출력 세대에 결합하며 audio는 Interaction Manager의 buffer에 보류한다. Interaction Manager는 이 handle을 Input + Evidence Record와 함께 Controller에 전달할 수 있지만 승인 전에는 재생하지 않는다.
@@ -199,7 +201,11 @@ Controller는 모든 입력에 Request identity를 만들고 직접 경로의 �
 
 S2S 직접 응답은 **자체 지식으로 답할 수 있는 명백한 독립 질문에 최소한으로 허용한다는 사용자 지정 방향**으로 정한다. “광합성이 뭐야?” 같은 첫 질문은 직접 경로가 될 수 있다. “두 번째 것을 설명해줘”처럼 이전 대화의 지칭이 필요하면 Core로 보낸다. 질문 순서가 아니라 맥락 해석의 필요 여부가 기준이다. S2S 쪽에 자료·Task·기억 해석이나 read/tool/planning loop를 붙이지 않으며, 앞선 대화 view 기반 후속 대화 fast path 제안은 채택하지 않는다.
 
-남은 것은 최소 admission의 구체 계약이다. 같은 S2S의 제한된 direct/Core 인계 제안과 host의 좁은 제외 조건을 결합하는 안을 검토하되, 단어 규칙·confidence만으로 숨은 맥락 의존성을 정확히 판별한다고 가정하지 않는다. Controller의 Request identity·revision·권한·출력 검사는 유지하며 이를 semantic LLM의 매 요청 재호출과 동일시하지 않는다. 판단 근거나 필요한 모델 출력이 없으면 Core로 넘기고 지연을 숨기지 않는다. [허용·제외 예시](./interaction-and-memory-design.md#2-s2s-직접-응답은-명백한-자체-지식-질문에-한정한다)와 [모델 기능 확인](./model-capability-review.md)을 참고한다. 자체 지식의 사실 정확성을 admission만으로 보장하는 것은 아니다.
+최소 admission은 **현재 질문만 받는 Omni VoiceProposal + Controller의 좁은 host gate**로 선택했다. 허용 분류는 일반 개념 정의·안정된 일반 설명이며, 전사 일치·dependency flags·질문/정정 상태·현재 revision·Text/audio 대응을 검사한다. Direct 역할에는 과거 대화·Task·화면을 주지 않는다. 조건 미충족·unknown·형식 오류는 같은 Request의 Core 경로로 인계하고 speculative audio를 폐기한다. [구체 계약과 그림](./control-and-lifecycle.md#2-최소-s2s-직접-응답-계약)에 허용 조건·실패 경로를 정의했다. 단어 규칙·confidence나 같은 모델의 자기 판단만으로 숨은 맥락 의존성을 완벽히 판별한다고 가정하지 않는다. [허용·제외 예시](./interaction-and-memory-design.md#2-s2s-직접-응답은-명백한-자체-지식-질문에-한정한다)와 [모델 기능 확인](./model-capability-review.md)을 참고한다. 자체 지식의 사실 정확성을 admission만으로 보장하는 것은 아니다.
+
+![좁은 직접 응답 허용과 정정·전송 제어](./diagrams/12-admission-and-control.svg)
+
+[draw.io 편집 원본](./diagrams/12-admission-and-control.drawio)
 
 ### 확보해야 하는 모델 기능
 
@@ -251,13 +257,19 @@ Policy Manager는 `source / recipient / purpose / scope / policy revision / expi
 
 권한 철회는 새로운 사용을 차단하고 관련 cache·prompt view·model session을 무효화하며 진행 중 생성의 게시를 막는다. 이미 외부에 제공한 정보나 수행된 Action이 소급 회수되지는 않는다. 외부 provider의 삭제 지원 여부와 실제 확인 범위를 구분해 안내한다.
 
-User Memory 등록·수정·삭제는 Controller가 의미를 확정하고 Context Manager가 자기 aggregate를 변경한다. 삭제 tombstone·memory revision을 파생 view와 재시작 시에도 적용하여 과거 대화나 이전 model session에서 삭제된 선호를 자동 복원하지 않는다. 삭제 사실을 기록하는 audit에는 삭제한 원문을 복제하지 않는다. Memory 삭제와 원래 Conversation 삭제는 별도 요청이며 보관기간·백업 삭제·외부 삭제 보장은 아직 확정할 제품 정책이다.
+User Memory 등록·수정·삭제는 Controller가 의미를 확정하고 Context Manager가 자기 aggregate를 변경한다. 삭제 tombstone·memory revision을 파생 view와 재시작 시에도 적용하여 과거 대화나 이전 model session에서 삭제된 선호를 자동 복원하지 않는다. 삭제 사실을 기록하는 audit에는 삭제한 원문을 복제하지 않는다. Memory 삭제와 원래 Conversation 삭제는 별도 요청이다. [보관·삭제 계약](./memory-and-context-lifecycle.md#4-보관-기본값)은 raw 상시 저장 없음, 최소 evidence의 24시간 cache, 대화/Task의 명시 삭제, 논리 삭제와 실제 정리 상태, 외부 backup 한계를 정한다.
 
-단기 작업 Context, 중기 Conversation·Task 작업집합, 장기 허용 User Memory의 세 가지 의미 수명을 구분하는 안을 검토한다. RAM·파일 DB는 이 수명과 별개인 저장 방식이다. 진행 중 Task와 미전달 결과·질문·command는 단기 cache처럼 만료시키지 않고 원래 owner의 내구 상태로 보존한다. 요약은 출처·revision이 있는 파생 view이며 확정 대상·수치·제약·권한·실행 상태의 원본을 대체하지 않는다. 구체 계층·승격·삭제 제안은 [기억 구조 검토](./interaction-and-memory-design.md#5-기억은-의미-수명과-저장-방식을-분리한다)에 있으며 사용자 합의 전이다.
+단기 작업 Context, 중기 Conversation·Task 작업집합, 장기 허용 User Memory의 세 수명을 분리한다. Local embedded DB가 원본·revision·tombstone을 관리하고 큰 evidence는 manifest로 연결한 파일에 둔다. 활성 Task·미전달 질문·command는 cache가 아니라 내구 원본이다. 요약은 파생 view이며 대상·수치·부정·조건·권한·상태의 원본을 대체하지 않는다. 자동 장기 기억 승격은 하지 않는다.
+
+![기억의 원본·파생 view와 삭제 경계](./diagrams/13-memory-lifecycle.svg)
+
+[draw.io 편집 원본](./diagrams/13-memory-lifecycle.drawio)
+
+[기억·Context 수명](./memory-and-context-lifecycle.md)은 선택/포인터/복수 영역/이미지/숨은 자료의 후보 coverage, 원본 재조회, cache 무효화, raw 보관, 삭제 전파, DB와 evidence 파일의 crash 일관성을 정의한다.
 
 ## 10. 주요 데이터 계약
 
-아래는 필수 의미를 정의한 논리 계약이다. Machine-readable schema는 아직 작성하지 않았다.
+아래는 필수 의미를 정의한 논리 계약이다. 상태 전이·검사·실패 의미는 [판단·제어 계약](./control-and-lifecycle.md)에 정했다. 코드용 직렬화 schema는 후속 구현 항목이다.
 
 | 계약 | 핵심 내용 |
 | --- | --- |
@@ -303,7 +315,7 @@ Voice 수신과 기본 Context 준비, 독립 source 조회, 여러 Agent event 
 
 [공유 Omni 상세 설계](./shared-omni-runtime.md)는 역할별 계약·KV 분리, CPU ASR 예산, Omni Voice service 예약, semantic 최소 진행량, 취소·과부하·전사 불일치·모델 장애를 정의한다. 약 10B는 reference와 같은 Thinker 표기이며 전체 weights와 peak memory는 별도다. 지원 장비·workload의 수치 예산과 실측은 아직 없다. 녹음 backlog만 유지한 것을 정상 동시 처리로 보지 않는다.
 
-Queue는 모두 유한하다. 로컬 재생 중단은 모델·Store queue를 기다리지 않고, host의 명시적 제어 접수와 Agent terminal/question event는 일반 progress보다 먼저 처리한다. Progress는 Task별 최신 상태로 합칠 수 있지만 완료·실패·질문·정정 intent는 조용히 버리지 않는다. 내구 수신 여력이 없으면 지원되는 source에 backpressure를 걸고, 유실이 가능한 source는 gap을 기록해 재조회한다. 새 일반 요청을 수용할 수 없으면 바쁜 상태와 재시도 가능 여부를 명시하며 완료나 Agent 접수로 표시하지 않는다. 숫자 예산은 미정이어도 무제한 queue는 허용하지 않는다.
+Queue는 모두 유한하다. 로컬 재생 중단은 모델·Store queue를 기다리지 않고, host의 명시적 제어 접수와 Agent terminal/question event는 일반 progress보다 먼저 처리한다. Progress는 Task별 최신 상태로 합칠 수 있지만 완료·실패·질문·정정 intent는 조용히 버리지 않는다. 내구 수신 여력이 없으면 지원되는 source에 backpressure를 걸고, 유실이 가능한 source는 gap을 기록해 재조회한다. 새 일반 요청을 수용할 수 없으면 바쁜 상태와 재시도 가능 여부를 명시하며 완료나 Agent 접수로 표시하지 않는다. 수치 설정은 Resource Profile의 필수 binding이며 무제한 queue는 허용하지 않는다.
 
 ![Command dispatch, Agent event와 사용자 응답 게시의 내구 경계](./diagrams/05-dispatch-and-recovery.svg)
 
@@ -320,7 +332,7 @@ Queue는 모두 유한하다. 로컬 재생 중단은 모델·Store queue를 기
 
 선형화의 구체적인 주 설계는 State Store에서 `PENDING → DISPATCHING`을 변경하는 조건부 transaction이다. Gateway는 동일 transaction에서 Controller의 admission revision·Conversation hold와 Task Manager의 command epoch·현재 policy revision을 검사한다. 새 입력 보류·정정도 같은 조건을 변경하므로 먼저 commit한 전이가 순서를 결정한다. 네트워크 전송은 transaction 밖에서 수행하고 crash 시 `DISPATCHING`을 접수 불명으로 취급한다. 실제 acoustic 입력 시작과 host의 hold 기록 사이에는 인식·IPC 지연이 있으므로 물리적으로 먼저 말하기 시작했다는 사실만으로 이미 나간 command를 막았다고 주장하지 않는다.
 
-새 입력이 기존 요청과 무관하면 hold를 해제한다. 입력이 끊기거나 전체 deadline을 넘기면 `WAIT_USER`로 남기고 안내하며, timeout만으로 잠재적으로 수정된 Action을 자동 전송하지 않는다. 보류는 해당 Conversation의 미전송 command 범위에 한정하고 실행 중인 무관한 Task에는 전파하지 않는다.
+새 입력의 정정/기존 요청 관계를 먼저 확정한 뒤 영향을 받지 않는 기존 admission의 hold를 현재 revision으로 해제한다. 새 Turn 자신의 처리까지 hold 때문에 교착시키지 않으며, 해석 중에는 이전 PENDING command만 보류한다. 입력이 끊기거나 전체 deadline을 넘기면 `WAIT_USER`로 남기고 안내하며, timeout만으로 잠재적으로 수정된 Action을 자동 전송하지 않는다. 보류는 해당 Conversation의 미전송 command 범위에 한정하고 실행 중인 무관한 Task에는 전파하지 않는다.
 
 Outbox는 재시작 후 의도를 복구하지만 외부 exactly-once 실행을 단독 보장하지 않는다. Agent가 중복 방지 key·epoch precondition을 지원하면 같은 key로 재전송한다. 미지원이고 전송 결과가 불명이면 조회 없이 재실행하지 않는다. 취소 전송도 취소 완료나 외부 변경의 rollback을 뜻하지 않는다. 필요한 precondition이나 상태 조회가 없는 Agent에는 정정·취소 정확성이 필요한 Action을 맡기지 않거나 보장 수준을 사용자에게 낮춰 표시한다.
 
@@ -386,13 +398,13 @@ Publication ID는 요청 전체와 별개이며 Text·Voice·알림에 공통으
 
 **화면에는 상세 결과를, 음성에는 사람이 듣기 좋은 핵심 요약을 제공하며 사용자 발화를 가로막지 않는다는 원칙은 사용자 지정이다.** 두 채널의 문자열은 같을 필요가 없다. 공통으로 확인된 대상·상태·결론·중요한 실패와 불확실성은 일치해야 한다. 화면 표시를 Voice 생성·차례 대기 때문에 늦추지 않는다. 예를 들어 화면에는 성공·실패 항목과 파일 링크를 상세히 표시하고, Voice는 “보고서는 완성됐지만 메일은 아직 보내지 못했어요”라고 전달한다. 실패를 생략해 전부 완료한 것처럼 요약하지 않는다.
 
-Response Manager 안의 발화 대기열은 publication·Task·result version과 Voice 대기 이유를 유지한다. Interaction Manager의 Turn-Taking Control이 사용자 발화 여부와 출력 가능 상태를 제공하고 재생 직전에도 확인한다. 단순한 짧은 침묵을 발화 완료로 확정하지 않으며 종료 판정이 틀려 사용자가 다시 말하면 로컬 stop을 적용한다. 사용자가 계속 말하면 음성은 계속 대기하되 화면 결과는 남는다. endpoint 판정 방식·수치는 아직 검증 전이다.
+Response Manager 안의 발화 대기열은 publication·Task·result version과 Voice 대기 이유를 유지한다. Interaction Manager의 Turn-Taking Control이 사용자 발화 여부와 출력 가능 상태를 제공하고 재생 직전에도 확인한다. 단순한 짧은 침묵을 발화 완료로 확정하지 않으며 종료 판정이 틀려 사용자가 다시 말하면 로컬 stop을 적용한다. 사용자가 계속 말하면 음성은 계속 대기하되 화면 결과는 남는다. endpoint는 activity 종료 후보와 ASR final을 결합하며 실제 오차·시간 설정은 후속 검증 대상이다.
 
-현재 scheduling 제안은 발화 종료 후 새 입력의 정정·취소·관련성을 먼저 반영하고, 현재 응답과 이전 업무의 핵심 결과를 한 발화 차례에 조정하는 것이다. 현재 응답을 기다리는 동안 이미 유효한 업무 결과는 별도로 짧게 안내할 수 있으나, 새 입력과 충돌할 가능성이 해소되지 않았다면 보류한다. 다른 VIA 음성을 중간에 끊어 알리지 않고 다음 경계에 전달한다. 재생 전에 최신 Task·policy·질문 revision을 확인하여 오래된 progress는 합치거나 대체하고, 완료·실패·사용자 입력 필요는 UI와 내구 대기 상태에 보존한다. Voice 비활성·재연결·다른 Conversation 중인 경우의 자동 음성 재개 범위는 추가 합의 대상이다. 사용자 비중단 원칙은 합의됐지만 이 scheduling 세부는 제안이다. 음성 대기 비용을 실제 responsiveness에서 임의로 제외하지 않는다.
+선택한 scheduling은 발화 종료 후 새 입력의 정정·취소·관련성을 먼저 반영하고, 현재 응답과 이전 업무의 핵심 결과를 한 발화 차례에 조정하는 것이다. 현재 응답을 기다리는 동안 이미 유효한 업무 결과는 별도로 짧게 안내할 수 있으나, 새 입력과 충돌할 가능성이 해소되지 않았다면 보류한다. 다른 VIA 음성을 중간에 끊어 알리지 않고 다음 경계에 전달한다. 재생 전에 최신 Task·policy·질문 revision을 확인하여 오래된 progress는 합치거나 대체하고, 완료·실패·사용자 입력 필요는 UI와 내구 대기 상태에 보존한다. Voice off 시 대기는 Text로 남기고 옛 음성은 재연결 뒤 자동 재생하지 않는다. 재연결 때 미확인 중요 결과·질문이 있음을 안내한다. 다른 Conversation의 결과는 업무 이름·상태만 짧게 알리고 상세는 사용자가 선택한 뒤 현재 대화에 참조를 연결한다. [발화 정책](./control-and-lifecycle.md#6-출력과-대화-차례)에 차례·재연결·질문 focus를 정의했다. 음성 대기 비용을 실제 responsiveness에서 임의로 제외하지 않는다.
 
 ### 중단 뒤 이어 말할지 확인
 
-중단 후 재개는 사용자와 합의한 다음 정책을 따른다. Request Interpreter가 새 입력을 이전 응답·실제 전달 범위와 결합해 재개·정정·전환 의도를 해석하고 Controller가 적용한다. “계속해”이면 남은 내용을 재검증해 이어 말하고, “짧게 말해”이면 새 요청에 맞게 요약하며, “그건 됐고…”이면 이전 음성 재개를 폐기한다. 재개 의도가 불명확할 때만 “아까 설명을 이어드릴까요?”라는 Pending User Interaction을 만든다. 모든 새 답변마다 발화 허가를 묻지는 않는다. 모호한 경우에만 재확인한다는 행동 원칙을 합의했으며, 세부 출력·질문 상태 계약은 설계 대상이다. 음성 재개 확인은 미전송 외부 Action의 실행 승인과 별개이며, 침묵이나 다른 질문의 “응”을 재개·실행 허가로 재사용하지 않는다.
+중단 후 재개는 사용자와 합의한 다음 정책을 따른다. Request Interpreter가 새 입력을 이전 응답·실제 전달 범위와 결합해 재개·정정·전환 의도를 해석하고 Controller가 적용한다. “계속해”이면 남은 내용을 재검증해 이어 말하고, “짧게 말해”이면 새 요청에 맞게 요약하며, “그건 됐고…”이면 이전 음성 재개를 폐기한다. 재개 의도가 불명확할 때만 “아까 설명을 이어드릴까요?”라는 Pending User Interaction을 만든다. 모든 새 답변마다 발화 허가를 묻지는 않는다. 모호한 경우에만 재확인한다는 행동 원칙과 함께 SuspendedDelivery·질문 focus·재개 output epoch를 [상태 계약](./control-and-lifecycle.md)에 정했다. 음성 재개 확인은 미전송 외부 Action의 실행 승인과 별개이며, 침묵이나 다른 질문의 “응”을 재개·실행 허가로 재사용하지 않는다.
 
 ## 14. 프로세스 배치·fault boundary
 
@@ -406,7 +418,7 @@ Shared Inference Service는 Model Access의 Omni adapter·단일 scheduler·역�
 
 Interaction Manager의 Text·화면·pointer 수집은 UI process 쪽 OS adapter와 제한된 evidence buffer를 사용한다. 무거운 화면 읽기는 worker로 격리한다. Voice와 UI의 producer sequence·사건 시각·capture gap을 Core의 Interaction Manager timeline 모듈이 결합한 뒤 Controller에 넘긴다. Voice를 끈 상태에서도 Text·화면 경로는 유지된다. UI의 명시적 음성 stop은 Voice로 직접 전달하며 Task 제어는 Core를 거친다. 따라서 단일 논리 Component의 하위 모듈이 여러 process에 배치된다는 비용과 IPC 계약을 숨기지 않는다.
 
-Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. Core 안에는 Store access module이 있지만 durable State Store의 데이터는 Core crash 후에도 복구 가능해야 한다. Embedded database와 별도 DB process 모두 이 논리 경계를 구현할 수 있다. Supervisor는 health·restart·backoff를 담당하며 Request·Task의 의미 상태를 직접 변경하지 않는다. 이 배치도 제안이지 기존 배치 결정의 자동 변경이 아니다.
+Connector Worker는 실제 연동의 장애·접근 경계에 따라 나누며 Task별로 만들지 않는다. Core 안에는 Store access module이 있지만 durable State Store의 데이터는 Core crash 후에도 복구 가능해야 한다. 주 배치는 local embedded transactional DB이며 별도 DB server는 두지 않는다. 큰 evidence는 DB manifest와 파일 정리 원장으로 연결한다. Supervisor는 health·restart·backoff를 담당하며 Request·Task의 의미 상태를 직접 변경하지 않는다. 이 배치도 제안이지 기존 배치 결정의 자동 변경이 아니다.
 
 Core가 끊겨도 Voice의 로컬 stop은 동작한다. 새 응답의 admission은 중단하고 기존 playback도 lease 만료 또는 연결 단절 감지로 정지한다. Voice는 Core incarnation과 output epoch가 바뀐 이전 release를 거절한다. UI는 마지막 확인 상태와 Core 연결 문제를 표시하며 Task 취소를 내구 접수한 것처럼 보고하지 않는다. 명시적 UI stop과 실제 Task 취소의 보장 범위는 다르다.
 
@@ -423,7 +435,7 @@ Core가 끊겨도 Voice의 로컬 stop은 동작한다. 새 응답의 admission�
 | Core 재시작 | 영속 기록과 Agent 상태로 업무 연결 복원 |
 | Store 쓰기 실패 | 복구 근거가 필요한 새 위임·수정·취소 전송 중단 |
 
-모든 외부 호출에 deadline을 두고 요청 전체 deadline을 우선한다. 조회 재시도는 남은 예산 안에서 수행하며 반복 실패 connector의 새 호출을 잠시 제한한다. 수치형 deadline·보관·메모리·queue 예산은 아직 미확정이다. 무한 대기·무한 refinement·무조건 재전송은 허용하지 않는다.
+모든 외부 호출에 deadline을 두고 요청 전체 deadline을 우선한다. 조회 재시도는 남은 예산 안에서 수행하며 반복 실패 connector의 새 호출을 잠시 제한한다. 수치형 deadline·메모리·queue 예산은 유한한 배포 Resource Profile로 주입하며 필수 필드와 미지원/초과 처리는 [Omni 실행 계약](./shared-omni-runtime.md#8-주요-설계를-닫는-schedulerruntime-계약)에 정했다. 보관 기본값은 기억 계약을 따른다. 무한 대기·무한 refinement·무조건 재전송은 허용하지 않는다.
 
 재시작 시 command outbox, event inbox·cursor·Task projection, response publication outbox·delivery receipt를 각각 복원한다. 전송 대기·전송 불명·실행 중, event 반영 전·후, Text 게시·Voice 부분 전달을 구분해 상태를 확인한다. 결과·질문·허용 제어와 사용자가 실제 접한 응답이 다시 연결되어야 복구다. 프로세스가 재기동됐다는 이유만으로 복구 완료라고 하지 않는다.
 
@@ -480,4 +492,4 @@ Reliability/recoverability 경로는 fault 발생 → process·queue·transactio
 
 반증 가능한 약점은 지금 보존하되 강한 대안, Decision Package, 구체 실험은 전체 구조 합의 이후에 설계한다. 다음 검토 항목은 [검토 기록](./review-log.md)에 있다.
 
-대표 UC의 누락 여부와 이번 그림 검토에서 보강한 경계, 남은 dependency·제품 정책 질문은 [설계 완결성 점검](./design-completeness.md)에 모았다. 문서상의 경로 완결성과 실제 모델 기능·성능 검증은 별개다.
+대표 UC 18개·필수 변형과 cross-cutting 기능의 설계 대응, 자체 시나리오 검토와 후속 구현 항목을 [설계 완결성 점검](./design-completeness.md)에 모았다. 주요 기능 설계는 완성안이며 최종 사용자 검토와 이후의 구현·성능 검증은 별개다. 추가 ASR 후보 논의는 사용자 지시에 따라 이후 DP 발굴·대안 비교 시점까지 보류한다.

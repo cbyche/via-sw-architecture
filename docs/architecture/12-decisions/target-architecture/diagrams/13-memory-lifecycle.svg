@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1530" viewBox="0 0 1900 1530" role="img" aria-labelledby="title desc">
+<title id="title">기억의 수명 — 원본을 보존하고 파생 view를 재구성</title>
+<desc id="desc">PROPOSED · 행 A는 저장 책임 · B는 조회 경로 · C는 삭제 순서 · D는 evidence 파일의 crash 경계</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/></marker>
+<marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2"/></marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7C3AED"/></marker>
+<marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/></marker>
+<marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#EA580C"/></marker>
+<marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D97706"/></marker>
+<marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/></marker>
+<marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626"/></marker>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.10"/></filter>
+</defs>
+<rect width="1900" height="1530" fill="#FFFFFF"/>
+<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">기억의 수명 — 원본을 보존하고 파생 view를 재구성</text>
+<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">PROPOSED · 행 A는 저장 책임 · B는 조회 경로 · C는 삭제 순서 · D는 evidence 파일의 crash 경계</text>
+<rect x="45" y="150" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+<text x="63" y="178" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">A · 기억 계층 — 서로 다른 수명이며 자동 승격 파이프라인이 아니다</text>
+<rect x="45" y="435" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="463" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">B · 조회 — 요약은 필요한 원문과 typed record를 대신하지 않는다</text>
+<rect x="45" y="720" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="748" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">C · 삭제 / 철회 — 사용 차단과 물리 정리의 완료를 구분한다</text>
+<rect x="45" y="1005" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="1033" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">D · Evidence 파일 — DB 밖 파일을 같은 transaction이라고 부르지 않는다</text>
+<polyline points="430,566.0 540,566.0" fill="none" stroke="#0891B2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-cyan)"/>
+<polyline points="880,566.0 990,566.0" fill="none" stroke="#0891B2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-cyan)"/>
+<polyline points="1330,566.0 1440,566.0" fill="none" stroke="#0891B2" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-cyan)"/>
+<polyline points="430,851.0 540,851.0" fill="none" stroke="#DC2626" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-red)"/>
+<polyline points="880,851.0 990,851.0" fill="none" stroke="#DC2626" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-red)"/>
+<polyline points="1330,851.0 1440,851.0" fill="none" stroke="#DC2626" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-red)"/>
+<polyline points="430,1136.0 540,1136.0" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-gray)"/>
+<polyline points="880,1136.0 990,1136.0" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-gray)"/>
+<polyline points="1330,1136.0 1440,1136.0" fill="none" stroke="#475569" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-gray)"/>
+<rect x="90" y="215" width="340" height="132" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">단기 입력 근거</text><text x="260.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">IM RAM timeline · 현재 요청 pin</text><text x="260.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">raw 상시 디스크 저장 없음</text></g>
+<rect x="540" y="215" width="340" height="132" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">중기 작업 view</text><text x="710.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Context summary · cache · index</text><text x="710.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">source revision으로 재구성</text></g>
+<rect x="990" y="215" width="340" height="132" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">장기 User Memory</text><text x="1160.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">명시적 등록 · 변경 · 삭제</text><text x="1160.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">현재 요청 우선 · 자동 승격 없음</text></g>
+<rect x="1440" y="215" width="340" height="132" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">내구 원본 기록</text><text x="1610.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">대화 · Task · command · 응답</text><text x="1610.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">owner별 DB transaction</text></g>
+<rect x="90" y="500" width="340" height="132" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">현재 요청 · 허용 범위</text><text x="260.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Controller의 query scope</text><text x="260.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">입력 · 대상 · 대기 질문</text></g>
+<rect x="540" y="500" width="340" height="132" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Owner read / Source</text><text x="710.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">원본 · typed ID · source version</text><text x="710.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">후보 coverage · 누락 receipt</text></g>
+<rect x="990" y="500" width="340" height="132" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">검증된 Context view</text><text x="1160.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">VALID summary + 필요한 원문</text><text x="1160.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">DIRTY / INVALID는 재구성</text></g>
+<rect x="1440" y="500" width="340" height="132" rx="16" fill="#E6F8FB" stroke="#0891B2" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Semantic 해석</text><text x="1610.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">목표 · 조건 · 지칭에 근거 연결</text><text x="1610.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">원본 없으면 재조회 / 확인</text></g>
+<rect x="90" y="785" width="340" height="132" rx="16" fill="#FDECEC" stroke="#DC2626" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">삭제 대상 확정</text><text x="260.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Controller → Context owner</text><text x="260.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">대화 삭제와 기억 삭제 구분</text></g>
+<rect x="540" y="785" width="340" height="132" rx="16" fill="#FDECEC" stroke="#DC2626" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Tombstone + epoch</text><text x="710.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">DB commit과 새 사용 차단</text><text x="710.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">invalidation / cleanup intent</text></g>
+<rect x="990" y="785" width="340" height="132" rx="16" fill="#FDECEC" stroke="#DC2626" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">파생 상태 무효화</text><text x="1160.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">summary · cache · KV · 생성 결과</text><text x="1160.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">진행 중 작업과 pin도 사용 금지</text></g>
+<rect x="1440" y="785" width="340" height="132" rx="16" fill="#FDECEC" stroke="#DC2626" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">파일 정리 · 확인</text><text x="1610.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">PURGE_PENDING → 확인 상태</text><text x="1610.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">외부 복사본 삭제를 약속하지 않음</text></g>
+<rect x="90" y="1070" width="340" height="132" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="1117.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">임시 blob 기록</text><text x="260.0" y="1142.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">허용된 최소 crop / snapshot</text><text x="260.0" y="1162.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">쓰기 완료 · digest 확보</text></g>
+<rect x="540" y="1070" width="340" height="132" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="1117.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">최종 파일 rename</text><text x="710.0" y="1142.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">완성된 blob identity 확보</text><text x="710.0" y="1162.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">DB 참조 전 orphan일 수 있음</text></g>
+<rect x="990" y="1070" width="340" height="132" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="1117.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">DB manifest commit</text><text x="1160.0" y="1142.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">owner · scope · expiry · digest</text><text x="1160.0" y="1162.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">이 시점부터 참조 가능</text></g>
+<rect x="1440" y="1070" width="340" height="132" rx="16" fill="#F1F5F9" stroke="#475569" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="1117.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">복구 / 회수</text><text x="1610.0" y="1142.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">누락은 EVIDENCE_GAP</text><text x="1610.0" y="1162.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">orphan · cleanup intent 재처리</text></g>
+<text x="1580" y="110" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">→ 관계·전달  ·  점선 = 보조 관계</text>
+<text x="90" y="385" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">진행 중 업무·대기 질문·미전달 결과는 cache가 아니다. 단기·중기·장기는 의미 수명이며 RAM·파일·DB와 구분한다.</text>
+<text x="90" y="670" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">부정·수치·권한·대상·업무 상태는 정확한 기록을 유지한다. source 삭제 뒤 파생 요약만 남겨 사실처럼 사용하지 않는다.</text>
+<text x="90" y="955" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">재시작은 tombstone을 먼저 적용한다. 과거 대화나 KV에서 삭제한 기억을 자동 복원하지 않는다.</text>
+<text x="90" y="1240" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">삭제는 반대로 DB tombstone과 cleanup intent를 먼저 기록한다. 참조가 있으나 파일이 없으면 정상 evidence로 읽지 않는다.</text>
+<text x="90" y="1335" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" fill="#172033">기본값: raw는 RAM · 요청 evidence cache 24시간 · 내용 없는 진단 로그 7일 · 대화/Task와 허용 기억은 명시 삭제.</text>
+<text x="90" y="1380" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="500" fill="#526178">용량 상한을 넘기면 정리·재조회·입력 범위 안내로 처리한다. 활성 원본을 몰래 버리거나 무한히 저장하지 않는다.</text>
+<text x="90" y="1460" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">보관 설정은 변경 가능하며 QA target이 아니다. 주요 설계 계약: memory-and-context-lifecycle.md</text>
+<rect x="48" y="92" width="172" height="25" rx="8" fill="#EAF2FF" stroke="#2563EB" stroke-width="1.5"/>
+<text x="134.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2563EB">입력·응답</text>
+<rect x="233" y="92" width="172" height="25" rx="8" fill="#F3ECFF" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="319.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#7C3AED">의미·요청</text>
+<rect x="418" y="92" width="172" height="25" rx="8" fill="#E6F8FB" stroke="#0891B2" stroke-width="1.5"/>
+<text x="504.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0891B2">Context·근거</text>
+<rect x="603" y="92" width="172" height="25" rx="8" fill="#FFF8E1" stroke="#D97706" stroke-width="1.5"/>
+<text x="689.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#D97706">정책·판정</text>
+<rect x="788" y="92" width="172" height="25" rx="8" fill="#E9F9F3" stroke="#059669" stroke-width="1.5"/>
+<text x="874.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#059669">업무·상태</text>
+<rect x="973" y="92" width="172" height="25" rx="8" fill="#FFF1E8" stroke="#EA580C" stroke-width="1.5"/>
+<text x="1059.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#EA580C">명령·Agent</text>
+<rect x="1158" y="92" width="172" height="25" rx="8" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+<text x="1244.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#475569">저장·의존성</text>
+<rect x="1343" y="92" width="172" height="25" rx="8" fill="#FDECEC" stroke="#DC2626" stroke-width="1.5"/>
+<text x="1429.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#DC2626">중단·실패·불확실</text>
+<text x="1862" y="1510" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 13-memory-lifecycle.drawio</text>
+</svg>

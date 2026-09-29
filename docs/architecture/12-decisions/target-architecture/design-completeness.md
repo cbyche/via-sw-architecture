@@ -1,90 +1,97 @@
-# Target Architecture 설계 완결성 점검
+# Target Architecture 주요 설계 완결성 점검
 
-> 상태: **설계 검토 / 사용자 합의 전 / 구현·측정 없음**
-> 점검일: 2026-09-29
-> [Architecture 본문](./architecture.md) · [그림 목록](./diagrams/README.md) · [검토 기록](./review-log.md)
+> 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전**
+> 점검일: 2026-09-29 · **구현·모델 실행·성능 측정 없음**
+> [전체 구조](./architecture.md) · [판단·제어](./control-and-lifecycle.md) · [기억·Context](./memory-and-context-lifecycle.md) · [Omni 실행](./shared-omni-runtime.md)
 
-이 문서는 그림을 작성하며 확인한 기능 경로·상태 소유권·장애 경계를 정리한다. 아래의 “경로 있음”은 문서에 해당 동작을 설명했다는 의미다. 구현 성공, 모델 capability 확보 또는 ASR 검증을 뜻하지 않는다. 기존 Decision Package를 재구성하거나 새 비교 실험을 동결하는 문서도 아니다.
+## 1. 완료의 의미와 범위
 
-## 1. 대표 사용자 행동의 경로
+사용자는 주요 설계를 스스로 구체화하여 완성하도록 위임했고, 구현·성능 측정은 요구하지 않았다. 이 문서의 설계 완료는 **고정된 UC·필수 변형에 대해 책임, 정상 흐름, 상태·계약, 동시성, 실패/보류/복구와 사용자 결과를 모두 정의했다**는 뜻이다. 구현 성공·모델 품질·실시간 성능 보장이나 사용자의 최종 구조 승인과 구분한다.
 
-기준은 [확정된 대표 UC](../../05-representative-use-cases.md)다. 신규 필수 기능을 추가하지 않는다.
+설계 우선순위는 QA-19 accuracy → QA-09 responsiveness → QA-29 modifiability → QA-39 reliability/recoverability다. 추가 ASR 후보의 논의·승격은 이후 DP 발굴·후보 선정·비교 시점으로 보류한다. 기존 네 ASR의 정의·점수·측정 조건을 변경하지 않는다. 이번에 새 Decision Package나 측정 freeze를 만들지 않았다.
 
-| UC | 목표 Architecture의 경로 | 중요한 예외·보존할 조건 | 본문 / 그림 |
+완결성 기준은 다음과 같다.
+
+- UC 18개와 필수 변형이 실제 runtime 경로에 연결된다.
+- 모든 의미 상태에는 owner, 입력 사건, 허용 전이와 종료/보류 동작이 있다.
+- 중요한 race에는 revision·transaction·fence와 외부 한계를 명시한다.
+- 정보 부족·dependency 미지원·장애도 사용자에게 전달할 상태와 다음 행동이 있다.
+- 주요 선택을 여러 대안 중 미정으로 남기지 않는다. 배포별 숫자·코드/학습·실측은 별도 후속 항목으로 분리한다.
+
+## 2. 필수 기능과 변형의 설계 대응
+
+기준은 [Representative Use Cases](../../05-representative-use-cases.md)다. 아래 “설계됨”은 문서 대조 결과이며 실행 시험 PASS가 아니다. 미지원/실패 안내는 요구된 예외 행동으로 포함하되 정상 업무 성공으로 세지 않는다.
+
+| UC / 필수 변형 | 선택한 정상 경로 | 예외·관계·상태를 닫은 계약 | 설계 판정 |
 | --- | --- | --- | --- |
-| UC-01 일반 질문·후속 대화 | 독립 자체 지식 질문은 S2S, 대화 지칭은 Core; 동일 응답 기록 | 이중 응답 방지; 후속 지칭에 실제 전달 내용 사용; 직접 범위 합의, admission 구현 계약 미확정 | §8·13 / 08 |
-| UC-02 한정 자료 조회·설명 | Context read → 해석 → Core 직접 응답 | source·기준 시각 보존; 조사·업무 분석으로 확장되면 Agent | §6·7·9 / 03·10 |
-| UC-03 먼저 선택하고 말하기 | 사전 선택의 유효 구간 + 입력 timeline | 발화 전 선택도 유지; pointer·selection 충돌은 미확정 | §6·9 / 04 |
-| UC-04 말하면서 지칭하기 | 표현별 acoustic interval과 당시 화면 결합 | 복수 대상·정정·전사 지연·capture gap을 마지막 화면으로 덮지 않음 | §6·9 / 04 |
-| UC-05 숨은 자료·이전 대상 | bounded source 검색 + Conversation·Task owner read port | background identity와 현재 보이는 화면 구분; 후보 coverage 필요 | §9 / 03·10 |
-| UC-06 요청 보완 | Pending User Interaction → 새 Turn → 기존 Request revision | 이미 확정한 제약 보존; 짧은 답의 질문 binding이 모호하면 재확인 | §5·6·12 / 02·03 |
-| UC-07 직접 응답에서 위임 | Response Record 참조 → 새 Request·Task → Agent | Voice session이 끝나도 참조 보존; 미전달 음성은 들은 내용으로 사용 금지 | §5·13 / 02·08 |
-| UC-08 새 업무 위임 | Controller → Task Manager command → Gateway → Agent | capability·권한·precondition 확인; 적합한 Agent 없으면 미지원 | §11·12 / 01·05 |
-| UC-09 복합 요청 | 단일 업무는 통째로 Agent, 독립 목표는 별도 Task; 실제 목표 간 의존만 Graph | 불명 조건은 거짓이 아님; 독립 업무 계속; Agent 내부 계획은 범위 밖 | §12 / 09 |
-| UC-10 기존 업무 조회·수정 | 기존 Task binding → 확인 상태 또는 후속 command | 완료 Execution 재사용 불가 시 같은 Task에 후속 Execution 연결 | §5·12 / 02·09 |
-| UC-11 음성 중단·정정 | Voice local stop → epoch 무효화 → 새 요청 해석 | Core·모델·Agent 취소를 기다리지 않음; 이전 release 거절 | §6·13·14 / 08 |
-| UC-12 특정 업무 취소 | 미전송 hold / 실행 중 취소 command / 상태 조정 | 취소 접수·완료·불가·불명 구분; 외부 rollback이라고 주장하지 않음 | §11·12 / 05 |
-| UC-13 비동기 진행·결과 | inbox → projection·domain outbox → Controller → publication | 새 발화 없이 전달; 중간 crash에도 결과·질문 인계 복원 | §12·13 / 05·08 |
-| UC-14 여러 업무 관리 | Conversation별 Request 전이 + Task별 업무 전이 | 다른 Task의 대기·질문·실패가 새 입력과 독립 업무를 막지 않음 | §11·12 / 09 |
-| UC-15 채널 전환·재연결 | Voice Connection과 Conversation·Task 수명 분리 | 재연결·새 대화가 Task 취소·재실행을 유발하지 않음 | §5·14 / 02 |
-| UC-16 정보 동의·실행 승인 | 현재 Policy State + Pending User Interaction + 사용 port gate | Consent와 Agent Action Approval 구분; 오래된 “응” 재사용 금지 | §9·10·12 / 10 |
-| UC-17 User Memory 제어 | Controller 의미 확정 → Context owner 변경 → 파생 view 무효화 | 삭제 tombstone; 과거 history로 삭제 선호 재생 금지; 현재 요청 우선 | §9 / 10 |
-| UC-18 문제 안내·복구 | fault 격리 → durable state → source 조정 → 사용자 상태 복원 | 접수 불명 재실행 금지; 음성 전달 불명 보존; 실제 기능 복원까지 추적 | §11~14 / 05·06 |
+| UC-01.1~4 일반 질문·후속·주제 변경·Text | 좁은 S2S 직접 경로; 후속 지칭은 Core; Text는 Core에서 직접 구성 | direct owner 단일 확정, 실제 Response 참조, 늦은 직접 후보 폐기. [제어 §2](./control-and-lifecycle.md#2-최소-s2s-직접-응답-계약) | 설계됨 |
+| UC-02.1~6 파일/폴더·메일·일정·Browser·Web·기록/북마크 | Context adapter의 bounded query → 원문/근거 기반 설명 | 없음/권한 없음/미지원 구분, source 기준 시각·coverage·한도. [기억 §2~3](./memory-and-context-lifecycle.md#2-context-획득과-지칭의-정확성) | 설계됨 |
+| UC-03.1~6 사전 단일·복수·연속·분리 선택·pointer·caret | 선택 유효 구간·display/window/document·typed referent와 발화 결합 | 선택 충돌, 다중 모니터/좌표 변환, scroll, 구조 없는 이미지. [기억 §2](./memory-and-context-lifecycle.md#2-context-획득과-지칭의-정확성)·그림04 | 설계됨 |
+| UC-04.1~7 발화 중 지시·순차·원형·drag·집합/단일·정정·창 이동 | 표현별 acoustic interval·당시 evidence·최종 correction 관계 | 단순 이동은 후보, clock uncertainty/watermark/gap, late revision, 현재 화면 대체 금지. 제어 §1·기억 §2 | 설계됨 |
+| UC-05.1~4 background·닫힌 자료·이전 설명·업무 결과 | source identity/read, Response 전달 범위와 Task artifact 조회 | 열린 자료와 실제 보이는 화면 구분, 동명이인/동명 자료·권한·삭제 처리. 기억 §2~4 | 설계됨 |
+| UC-06.1~5 생략·후보 선택·형식/수신자·다중 질문·철회 | semantic 예산 안에서 보완, Pending Interaction ID에 새 Turn 결합 | 질문 focus·유일성, 기존 확정 제약 유지, 만료/철회/새 목표. [제어 §4](./control-and-lifecycle.md#4-request질문task의-상태-전이) | 설계됨 |
+| UC-07.1~5 S2S/Core/복수/끼어든 대화/Voice 종료 뒤 업무 | 게시된 답변·원래 자료를 참조해 새 Task·Agent 위임 | Task 없는 답변도 durable Response, 미청취 구간 구분, 다른 주제 뒤 검색·Text 지속. 본문 §5·12·13 | 설계됨 |
+| UC-08.1~5 조사·파일·메일/일정·앱·bounded 위임 | semantic 목표/완료 조건 → Controller 검증 → Task command → Gateway | 수행 가능한 Agent, 범위·권한 차이, 접수/완료 구분, 얇은 VIA 위임 시에도 같은 상태 계약. [제어 §5](./control-and-lifecycle.md#5-전송과-정정의-원자적-경계) | 설계됨 |
+| UC-09.1~5 독립·순차·데이터·조건·혼합 | 한 업무 내부 단계는 통째 Agent; 독립 목표만 Request Graph·Task 분리 | true/false/unknown, 선행 실패·버전 수정·부분 결과·중복 해제 방지. 본문 §12·그림09 | 설계됨 |
+| UC-10.1~5 최근/과거/동일 Agent 복수/완료 후 수정/별도 목표 | 기존 Task read/control, 같은 목표면 후속 Execution, 다른 목표는 새 Task | latest query와 마지막 확인 상태 구분, 실행 ID 재사용 금지. 제어 §4~5 | 설계됨 |
+| UC-11.1~5 S2S/Core 중단·발화 정정·위임 전/후 정정 | IM local stop + input hold → 새 의미 해석 | suspended delivery·output epoch, 재개/축약/폐기, 실제 전송 후 rollback 불가. 제어 §1·5·6 | 설계됨 |
+| UC-12.1~5 위임 전/중/완료 경쟁/이미 완료/취소 미지원 | WITHDRAWN 또는 cancel command와 source 확인 | 접수·완료·불가·불명 구분, 다른 Task 지속. 제어 §4~5 | 설계됨 |
+| UC-13.1~6 progress·질문·완료·부분 실패·다른 앱·다른 응답 중 | inbox → Task/domain outbox → Controller → publication | UI 즉시/Voice 차례, progress 병합, terminal/question 보존, OS 알림 연결. [제어 §6](./control-and-lifecycle.md#6-출력과-대화-차례) | 설계됨 |
+| UC-14.1~5 다른/같은 Agent 복수·다중 질문·역순 결과·모호한 지칭 | Task별 identity·execution correlation, Controller 질문 binding | Agent 동시 실행 미지원은 admission 직렬화, 역순 hint→query, 모호함 확인. 제어 §4~5 | 설계됨 |
+| UC-15.1~5 Voice→Text/Text→Voice/재연결/업무 중/새 대화 | Conversation/Voice/Task 별도 lifecycle, focus lease | 입력 시작 대화 고정, 옛 음성 재생 금지, 다른 대화의 상세 자동 발화 제한. 제어 §1·6 | 설계됨 |
+| UC-16.1~5 접근/제공/Action 승인/거부·축소/다중 대기 | 현재 Policy State와 실제 사용 port gate, typed Pending Interaction | question/action digest·Execution·revision, 철회 fence, 오래된 “응” 거절. 제어 §4~5·기억 §5 | 설계됨 |
+| UC-17.1~5 선호 사용/조회/등록·수정/삭제/현재 요청 우선 | Context Manager의 명시적 기억 변경, typed state | 자동 승격 없음, tombstone·파생 view/KV 무효화, 원문 삭제와 구분. [기억 §4~6](./memory-and-context-lifecycle.md#4-보관-기본값) | 설계됨 |
+| UC-18.1~6 source/모델/Agent 미지원/실패/불명/재시작 | source별 실패, runtime 상태, Task 재조회·내구 원장 복구 | capability fallback·무조건 재전송 금지·Store 실패·UNKNOWN Voice. [제어 §7](./control-and-lifecycle.md#7-장애재시작버전-변경)·Omni §8 | 설계됨 |
 
-## 2. 이번 점검에서 교정한 공백
+## 3. 이번에 닫은 주요 설계 선택
 
-| 발견한 공백 | 현재 주 설계 | 비용 또는 남는 한계 |
+| 이전의 열린 항목 | 이번에 선택한 구조·정책 | 남는 구현/검증 구분 |
 | --- | --- | --- |
-| Task 상태는 저장됐지만 Controller callback 전에 crash하면 알림 유실 | projection + domain outbox 원자 기록; consumer event ID와 publication ID로 멱등 인계 | transaction·outbox 관리 비용; schema·crash 검증 필요 |
-| “전송 직전 취소”의 실제 순서가 불분명 | PENDING→DISPATCHING CAS와 Conversation hold·command epoch·policy revision을 같은 Store 경계에서 검사 | acoustic 시작부터 hold 기록까지의 인식·IPC 지연은 남음 |
-| 물리적 음성 재생과 기록을 원자적으로 복구하는 듯한 설명 | 확인된 audible 범위와 DELIVERY_UNKNOWN 분리; 불명 구간 자동 재생 금지 | 완벽한 exactly-once 청취 보장은 없음 |
-| Model Access를 Core에만 그려 Voice 독립성이 불분명 | Voice/Core client + Shared Inference Service의 단일 Omni owner + 독립 Speech Input Worker로 개정 | bounded IPC·session owner·lease 및 실제 resource 예약 확인 필요 |
-| Core 장애 중 UI control의 보장 범위가 과도함 | local Voice stop은 유지; Task 취소는 내구 접수 전까지 접수 성공으로 표시하지 않음 | Core 장애 중 업무 제어 가용성 제한 |
-| Context가 다른 owner 상태를 어떻게 읽는지 불명확 | versioned owner read ports, source별 revision, commit 시 dependency 검증 | 여러 read를 하나의 동시 snapshot으로 가정할 수 없음 |
-| 권한 확인 후 실제 제공까지의 경쟁 | Use Envelope와 현재 revision을 read/model/Agent/publication port에서 검사 | 이미 외부로 나간 정보의 소급 회수 불가 |
-| 선행 결과가 바뀌거나 event가 재전달되면 후속 업무 중복 가능 | dependency result version + graph revision + node ID로 해제 identity 고정 | 외부 source 경쟁은 Agent precondition도 필요 |
-| 공유 모델·event queue가 포화될 때의 동작 부재 | 유한 queue·입력 우선·progress 병합·terminal/question 보존·backpressure | 실제 예산·선점 capability는 아직 미정 |
-| 긴 Core 답변 생성 비용이 해석 예산에 숨겨짐 | 해석 최대 2회와 별도 구성 최대 1회를 구분하고 총 deadline 적용 | 이는 초기 resource policy이며 성능 근거가 아님 |
+| 최소 S2S admission | current-Turn-only VoiceProposal + 허용 분류·의존성·전사·질문/정정·revision host gate; Core로 같은 Request 인계 | 모델 분류의 실제 오류율·text/audio 의미 보존 |
+| 형식 repair와 refinement 예산 | 모든 semantic generation 총 2회, 추가 읽기 한 묶음, 별도 구성 1회; 예산 소진 종료 명시 | tokenizer·직렬화·기기별 deadline |
+| 입력 종료·시간 근거 | endpoint 후보 → ASR final + producer watermark/gap → SEALED; 늦은 근거는 새 revision | 실제 clock 오차·endpoint 정확도 |
+| 질문·승인·재개 | 실제 제시된 질문 focus, ID·Task·Execution·action digest·revision 검사, 침묵 미승인 | UI/adapter 구현 |
+| state transition과 race | Request/Task/Execution/Command/질문/Response 상태, owner별 Unit of Work·CAS·epoch | DB transaction과 crash 구현 시험 |
+| Agent capability별 보장 | 미지원 start/answer/precondition 거절, UNKNOWN submit 재전송 금지, 순서 없는 event 조회 | 실제 Agent adapter 기능 적합성 |
+| 공유 Omni scheduling | Voice+semantic 각각 최소 예산/KV, Voice deadline·foreground round-robin, 유한 quantum·safe-point cancel | Resource Profile 값·장비·열·실제 처리량 |
+| 기억·Context 계층 | embedded DB + evidence files, 원본/파생 view 분리, metadata/keyword read, no automatic memory promotion | DB engine·schema·source별 binding |
+| 보관·삭제 정책 | raw RAM, evidence cache 24시간, 진단 7일, 대화/Task 명시 삭제; epoch 차단 후 purge·복구 | 용량 상한·OS 보호 연결·물리 purge 관측 |
+| 음성 차례·재연결 | 입력 관계/제어 먼저 → 현재 답변 → 중요 결과 → progress; 다른 대화 상세는 선택 후 | endpoint 시간·음성 rendering 품질 |
+| process/Store 배치 | UI·Voice·Core·Omni·ASR·connector 경계, embedded Store + managed blobs | OS process/IPC 구현과 장비 배치 |
+| sleep·lock·migration | 새 epoch·근거 gap·출력 정지·Task 재조회, schema fence·진행 실행 binding 보존 | 플랫폼별 API·migration code |
 
-## 3. 닫지 않은 질문과 책임
+정확도 우선으로 direct 범위·candidate coverage·삭제 후 사용·정정 경쟁을 보수적으로 닫았다. Responsiveness는 입력/해석/Agent event의 동시 진행, 사전 Context, 최소 호출과 template, UI/Voice 분리로 다뤘다. Modifiability는 adapter/canonical contract와 owner migration에, reliability는 내구 command/event/publication과 불명 상태 복구에 반영했다. 이 인과 설명은 비교 결과가 아니다.
 
-| 항목 | 현재 제안·대응 | 확정에 필요한 것 |
-| --- | --- | --- |
-| S2S direct admission의 기본 방식 | 명백한 독립 자체 지식 질문만 허용; 나머지는 Core라는 범위 합의 | 최소 admission·S2S 인계 출력 계약; 실제 판정 정확도·지연 검증 |
-| S2S capability | time-aligned 입력, host 출력 제어, Text/audio 대응, 의미 보존 음성화, barge-in 필요 | 공유 Omni·별도 ASR 허용으로 전제 개정; 우리가 요구 계약을 정하고 실제 build/runtime에서 확인 |
-| 시각 근거 처리 | UI 구조가 없으면 공유 semantic LLM의 이미지 처리 필요 | 목표 모델 capability와 화면 입력 계약 |
-| Agent capability | 상태 조회·source revision·중복 방지·precondition·취소 지원을 profile로 노출 | 실제 Agent adapter 연결 확인; 미지원일 때의 보장 수준 표시 |
-| 자원·시간 예산 | 공유 Omni의 동시 VOICE/SEMANTIC session, 독립 ASR, Voice 예약·chunked prefill·semantic 진행량 | 목표 PC·모델 배치·동시 workload에 맞춘 수치; 이번 작업에서 측정 freeze하지 않음 |
-| 개인정보 보관·삭제 | 최소 evidence 보존, memory tombstone, derived view 폐기, 외부 삭제 한계 명시 | 제품의 보관기간·백업 삭제·provider 정책; 현재 숫자나 법적 보장 미확정 |
-| 발화 차례·중단 후 재개 | 사용자 발화 중 음성 알림 금지와 채널별 요약은 사용자 지정; 불명확한 재개만 확인하는 정책 합의 | 새 요청/대기 결과의 순서, Voice 재연결·다른 Conversation의 음성 안내 범위 |
-| 기억 계층 | 단기 작업 Context·중기 대화/업무 view·장기 허용 기억과 내구 원본을 분리하는 제안 | 기억 승격·보관·삭제 정책, 요약 누락·원본 복원·저장 계약 |
-| 실행 가능한 계약 | owner·revision·transaction·호출 경로를 문서로 지정 | schema, migration, provider adapter, crash/race 구현 검증 |
+## 4. 상태와 기능을 가로지른 자체 검토
 
-문서에 경로가 있다는 이유로 위 질문을 `완료`로 바꾸지 않는다. 새 모델·Agent가 필수 capability를 충족하지 못하거나 그림의 내구·권한 경계를 구현할 수 없다면 해당 구조를 다시 설계한다.
+새 sub-agent나 모델을 실행한 검토가 아니다. 작성한 계약을 서로 대조하여 다음 사건 순서에서 owner와 결과가 정의되는지 점검했다.
 
-[이번 대화의 합의와 검토 제안](./interaction-and-memory-design.md)은 S2S·모델 확인 책임·복합 실패·기억을 구체화한다. 기능 경로가 문서에 있다는 이유만으로 제품 행동·상태 계약의 합의가 끝난 것은 아니다.
+| 사건 조합 | 계약상 결과 |
+| --- | --- |
+| semantic 수행 중 새 발화 | capture·ASR·Omni Voice 진행; 옛 generation 무효화; 해당 대화 미전송만 hold |
+| 직접 후보 생성 중 ASR final 수정 | input_echo/revision 불일치로 폐기·같은 Request Core 인계; 중복 응답 없음 |
+| 새 질문이 기존 승인 “응”일 수 있음 | direct 제외·질문 focus 검사; 유일하지 않으면 질문 대상 clarification |
+| action DISPATCHING 직후 취소·crash | UNKNOWN 기록·같은 command key 조회, 확인 전 새 start 금지 |
+| Task 결과 저장 직후 Controller 종료 | domain event outbox 재적용으로 publication intent 복원 |
+| Agent terminal과 늦은 approval | 질문/Execution revision 검사로 오래된 승인 전송 차단 |
+| 사용자가 말하는 중 다른 업무 실패 | 상세 UI·내구 알림 유지, 음성 대기; 다음 유효 차례에 실패 포함 요약 |
+| 재생 중 crash·Voice 재연결 | 마지막 확인 범위 밖 DELIVERY_UNKNOWN, Text 복원·옛 음성 자동 재생 금지 |
+| memory 삭제 중 summary/Omni 완료 | data/policy epoch mismatch로 결과 사용 차단, purge 재시도 |
+| blob rename 뒤 DB commit 전 crash | 참조 없는 orphan 회수; 거짓 evidence 생성 안 함 |
+| evidence 만료·화면 객체 삭제 뒤 follow-up | locator/source revision 재조회 또는 재지칭 요청; 마지막 화면으로 대체 금지 |
+| Store full·Omni crash·sleep resume | 새 내구 admission 중지 또는 해당 모델 경로 불가 표시; local stop/확인 가능한 UI 유지·재조회 |
 
-공유 모델 전환의 주안과 남은 resource 수치는 [공유 Omni 설계](./shared-omni-runtime.md)에 있다. 모델 공유·역할 분리·동시 발화 요구는 사용자 지정이고 ASR 배치·스케줄링 세부는 제안이다.
+설계 문서 대조에서 확인한 주요 미결 동작은 남겨두지 않았다. 이것이 미발견 결함이 없다는 수학적 증명이나 실제 동작 시험은 아니다. 추후 발견한 결함은 이 원장의 새 revision으로 수정한다.
 
-## 4. 다음 사용자 리뷰 순서
+## 5. 설계 완료 밖에 남는 일
 
-1. 그림 02·03·04: 사용자 입력, 요청·Task의 구분과 지칭 해석이 직관적인가?
-2. 그림 08·09: 직접 응답·중단·복합 업무가 기대한 제품 행동과 맞는가?
-3. 그림 05·06·10: 장애·권한 철회에서 어디까지 진행하고 어디서 보류하는가?
-4. 그림 07: 네 품질 경로의 비용과 약점이 빠짐없이 설명되는가?
+| 후속 항목 | 왜 주요 설계의 빈칸과 다른가 |
+| --- | --- |
+| 사용자 최종 리뷰 | 완성한 설계의 제품 적합성·구조 수용 여부를 확인하는 단계이며 결정을 사용자에게 떠넘긴 미정 목록이 아님 |
+| schema/adapter/DB/IPC 구현 | 필수 field·상태·원자성·실패 행동은 문서에 선택되어 있음; 이를 코드로 구현하는 일 |
+| 모델 학습·runtime 연동 | 요구 capability와 미지원 동작은 정해짐; 실제 build의 기능·품질 확보 |
+| Resource Profile 수치와 장비 적합성 | 유한 필드·예약·포화 처리는 정해짐; PC별 값과 실제 동시 진행 검증 |
+| 성능·오류율·복구 측정 | 아직 실행하지 않았으며 목표 설계 완료 요건에 포함하지 않음 |
+| Decision Package·steelman·추가 ASR 후보 | 이후 사용자가 진행하는 단계에서 논의; 지금 비교나 새 ASR 확정 없음 |
 
-그 다음 전체 구조를 합의한다. Decision Package와 steelman 비교는 그 이후에 진행한다.
-
-## 5. 목표 Architecture 합의까지 남은 작업
-
-| 순서 | 설계 작업 | 담당·검토 산출물 | 닫는 기준 |
-| --- | --- | --- | --- |
-| 1 | 최소 S2S admission과 Core 인계 | 에이전트: 허용/제외 사례, 입력·출력·검증 책임 | 단순 첫 질문과 맥락 의존 질문을 구분하는 실제 계약; 모델 의존·실패 경로 명시 |
-| 2 | 모델·Agent 필수 capability 확인 | 에이전트: [모델 확인 원장](./model-capability-review.md), adapter 요구와 미지원 처리 | 문서상 기능·실측 필요·제약 충돌 구분; 설계에 필요한 기능 부재를 숨기지 않음 |
-| 3 | 기억·Context lifecycle 구체화 | 에이전트: 계층·소유권·저장·조회·요약·삭제·복원 설계 | 원본과 파생 요약의 일관성, Task 내구 기록 보존, 삭제 전파와 overflow 동작 |
-| 4 | 상태·동시성·장애 계약의 일관성 검토 | 에이전트: 정정/dispatch, 음성 차례/재개, 동일 Agent의 복수 Task, 결과/재시작 시나리오 | 각 상황의 owner·전이·근거·timeout·복구 경로가 본문과 그림에서 일치 |
-| 5 | 최종 사용자 시나리오 리뷰 | 사용자 + 에이전트: 보완한 architecture.md와 그림 | 요구 행동·전체 책임 구조 합의; 열린 제약과 후속 검증을 명시 |
-
-사용자에게 다시 결정받아야 하는 것은 기존 합의의 반복이 아니라 제품 선택이 필요한 차이다. 예: 원음·화면 보관 기본값/기간, Voice 재연결·다른 대화 중 대기 결과의 자동 발화 범위, 실제 모델의 필수 기능 부족 시 허용할 제품 변경. 먼저 에이전트가 구체 주안을 작성하고 필요한 항목만 질문한다.
-
-설계 완료는 구현·성능 검증 완료와 다르다. 핵심 기능 실현 방법이 불명확한 상태를 단순한 숫자 튜닝으로 미루지 않되, 전체 제품 구현·전체 QA 측정이 끝나야만 구조를 합의할 수 있는 것도 아니다. 구조·핵심 계약·실현 가능성의 중대한 공백을 닫은 뒤 Decision Package로 넘어간다.
+별도의 승인된 ADR·이전 비교 조건·QA 정의를 이 설계 완료 표기로 변경하지 않는다. 주요 설계 완성안의 읽기 시작점은 [architecture.md](./architecture.md)다.

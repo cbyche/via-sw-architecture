@@ -1,11 +1,11 @@
 # 공유 Omni와 끊기지 않는 음성 입력
 
-> 상태: **공유 Omni·on-device·역할 분리·동시 입력은 사용자 지정 / 아래 배치·스케줄링은 주 설계안 / 구현·측정 없음**
+> 상태: **공유 Omni·동시 입력은 사용자 지정 / 배치·스케줄링 주요 설계 완성안 / 구현·측정 없음**
 > 갱신일: 2026-09-29 · [전체 구조](./architecture.md) · [모델 근거](./model-capability-review.md)
 
 ## 1. 선택한 구조
 
-**한 번 적재한 Omni를 음성·semantic 두 역할이 공유하고, 독립적인 경량 Streaming ASR이 사용자 발화의 지속적인 인식과 시간 근거를 담당한다.** 공유 추론 서비스는 두 역할의 동시 세션을 지원하며, 음성 처리 자원을 확보한 뒤 남은 예산으로 의미 해석·응답 구성·기억 요약을 진행한다. 요청·Task·권한·외부 실행의 소유권은 계속 VIA host에 있다.
+**한 번 적재한 Omni를 음성·semantic 두 역할이 공유하고, 독립적인 경량 Streaming ASR이 사용자 발화의 지속적인 인식과 시간 근거를 담당한다.** 공유 추론 서비스는 두 역할의 동시 세션을 지원하며, 음성과 foreground semantic 각각의 최소 연산·KV 예산을 확보하고 여유분에서 응답 구성·기억 요약을 조정한다. 요청·Task·권한·외부 실행의 소유권은 계속 VIA host에 있다.
 
 사용자가 알려준 reference는 약간 fine-tuning한 `Qwen3-Omni-30B-A3B-Instruct`다. 해당 조직 시험은 사용자 제공 배경이며 이 저장소에서 checkpoint·설정·원시 결과를 검증한 `MEASURED_MODEL` 근거가 아니다. 개발 목표는 이에 가까운 품질의 약 10B급 on-device Omni다. 품질 동등성, 압축 후 정확도, 목표 PC 성능은 아직 입증하지 않았다.
 
@@ -93,13 +93,13 @@ Model Access의 **server 측 단일 scheduler와 weight owner**를 별도 Shared
 
 ## 6. 우리가 정하는 모델·runtime 계약
 
-다음은 모델팀의 미래 결정으로 미루지 않는 **요구 계약 초안**이다. 일부는 모델 학습, 일부는 serving/runtime, 일부는 VIA host가 구현한다.
+다음은 모델팀의 미래 결정으로 미루지 않는 **선택한 기능 계약**이다. 일부는 모델 학습, 일부는 serving/runtime, 일부는 VIA host가 구현한다.
 
 | 계약 | 요구 입력·출력 | 구현 책임·미지원 시 처리 |
 | --- | --- | --- |
 | SpeechEvidence | sample sequence·clock → partial/final text, span timing·revision·gap | ASR + host timestamp 정규화. 필수 근거가 없으면 지칭 확정 금지 |
 | VoiceProposal | 입력 revision·제한된 역할 → `DIRECT_CANDIDATE / HANDOFF`, 의존성 표시·답변 text/audio 참조 | 공유 Omni. Context/tool 탐색 없음; unknown·형식 오류는 Core |
-| SemanticProposal | 원문·선택된 원음·화면·Task·receipt → field 상태·근거·bounded read/clarification 제안 | 같은 Omni semantic session. 최대 2회 refinement 주안·host 검증 유지 |
+| SemanticProposal | 원문·선택된 원음·화면·Task·receipt → field 상태·근거·bounded read/clarification 제안 | 같은 Omni semantic session. repair 포함 semantic 총 2회·host 검증 유지 |
 | SpeechRender | 승인된 Voice 요약문·publication/output epoch → segment ID·text 대응·audio·종료/오류 | Omni 음성 출력 모듈. 자율적으로 내용을 다시 판단·추가하지 않음; 대응 불가 구간 release 금지 |
 | InferenceJob | role/job/session ID·input/context/policy revision·deadline·resource class·token/KV 한도 | Model Access 검증, runtime scheduler admission·동시 처리·실제 비용 event |
 | Cancel/Pause | job/generation 지정 → host 무효화, cancel 접수, 계산 종료·KV 회수 상태 | runtime 안전 지점에서 처리; 즉시 GPU 중단을 약속하지 않음. 지원 안 하면 제한된 단위 재제출 |
@@ -117,3 +117,47 @@ Model Access의 **server 측 단일 scheduler와 weight owner**를 별도 Shared
 - native Omni만으로 같은 입력 지속성·시간 근거·fault 조건을 더 작은 총비용으로 충족한다는 근거가 생기면 별도 ASR의 필요성을 재검토한다. 현재 그 근거가 확보됐다고 보지는 않는다.
 
 이는 목표 설계의 약점과 실현 조건이다. 새 Decision Package, 상대 후보 순위, 수치형 ASR 검증 계약이나 결과는 아직 만들지 않는다.
+
+## 8. 주요 설계를 닫는 scheduler·runtime 계약
+
+이번 작업의 완료 기준은 기능·책임·상태·실패 경로의 정의다. 아래 정책을 선택하며 모델 실행, 장비 측정, 수치형 성능 freeze는 설계 완료의 선행 조건으로 두지 않는다. 실제 장비가 이 계약을 만족하는지는 후속 구현 검증이다.
+
+### 선택한 scheduling 알고리즘
+
+- 단일 scheduler가 Voice와 foreground semantic의 **각각의 최소 연산 예산·KV credit**를 함께 예약한다. Voice만 예약한 뒤 semantic에 운 좋게 남는 자원을 주는 방식이 아니다. Background는 두 예약을 침범하지 않는 여유분만 빌린다.
+- Voice queue 안에서는 다음 audio chunk·playback buffer의 기한이 가까운 작업부터 실행한다. Semantic queue는 현재 사용자 제어/clarification을 우선하고, 같은 등급에서는 Conversation별 round-robin과 job별 유한 quantum을 쓴다. 상위 등급에도 한 scheduling 주기당 유한 credit을 두고, 유효한 일반 foreground가 있으면 semantic 예약분의 최소 한 quantum을 남긴다. 따라서 control 우선순위 때문에 무관한 정상 foreground가 영구 기아 상태가 되지 않는다. 기한을 못 지키는 job은 명시적으로 종료하며 무한 대기시키지 않는다.
+- 새 input/output 취소·policy fence는 모델 계산 완료와 무관하게 host에서 즉시 결과 사용을 막는다. backend 취소는 다음 decode/prefill safe point에서 시행한다. 취소 완료 전까지 해당 KV를 재사용 가능한 credit으로 계산하지 않는다.
+- 각 dispatch 전에 가장 긴 비선점 encoder/prefill chunk의 허용 비용과 다음 Voice service 시점을 확인한다. 기한을 침해할 수 있는 작업은 더 작은 지원 단위로 나누거나 admission을 거절한다. 임의 kernel 중간 선점을 가정하지 않는다.
+- Queue가 짧으면 batch를 채우기 위해 기다리지 않는다. 양쪽 job이 이미 ready이고 각 기한·KV 한도 안에 있으면 microbatch한다. Context·attention mask·cache identity는 job별로 격리한다.
+- foreground가 대기하면 background summary를 safe point에서 취소/중단한다. 재개 가능한 상태가 없으면 버리고 원본에서 다시 만들며 단 한 개의 최신 source revision summary만 남긴다. 무한 background queue와 우선순위 역전을 허용하지 않는다.
+
+### Job과 service 상태
+
+`CREATED → ADMITTED → RUNNABLE → RUNNING ↔ YIELDED → COMPLETED`가 기본이다. `CANCEL_REQUESTED → CANCELLED`, `DEADLINE_EXCEEDED`, `FAILED`, `REJECTED_CAPACITY`도 terminal이다. Admission은 KV/token credit와 deadline을 확보한 뒤에만 성공한다. Control plane의 `result_invalidated`는 backend terminal보다 먼저 발생할 수 있다. Model Access는 stale job의 결과를 host 상태나 playback에 적용하지 않는다.
+
+Service는 `LOADING → READY`, 오류 시 `DEGRADED/RESTARTING/UNAVAILABLE`로 바뀐다. Supervisor가 crash와 bounded backoff를 관리하며 Core는 의미 상태를 보존한다. 새 runtime incarnation은 이전 session/KV/generation을 받지 않는다. Adapter handshake에는 model/build, modality, structured output, direct proposal, text/audio segment 대응, timed input source, concurrent session, chunk/cancel capability와 resource profile revision이 포함된다.
+
+필수 기능 미지원 또는 profile 부재이면 해당 경로를 `UNSUPPORTED`로 표시한다. 예를 들어 음성 합성만 불가하면 Text 응답·Task 추적을 유지하고, Omni 전체가 불가하면 ASR 입력 기록·UI 상태·명시적인 Task control은 가능한 범위에서 유지한다. 자연어 해석을 못 하는 동안 녹음만 접수하고 이해·위임 완료라고 표시하지 않는다. Local에서 부족한 기능을 몰래 cloud로 보내지 않는다.
+
+### Resource Profile의 완전한 필드와 사용처
+
+| 설정 묶음 | 필수 필드와 강제 지점 |
+| --- | --- |
+| CPU 입력 | ASR threads/budget, continuous input service deadline, max transcript lag; Speech Input Worker |
+| 추론 연산 | Voice 예약/주기, semantic 최소 quantum/주기, 최대 non-preemptible work, admission cost bound; scheduler |
+| memory | Omni/ASR weights, Voice·semantic 최소 KV, job별 input/output token·image token 상한, workspace, RAM capture/pin·queue·Store reserve; admission |
+| 시간 | endpoint settle, evidence watermark wait, job/request/read/recovery deadline, lease timeout, retry backoff 상한; 각 owner |
+| 동시성 | 최소 active VOICE 1 + SEMANTIC 1, speech output state, foreground queue bound, source concurrency; Model Access/Context/Gateway |
+| 환경 | device/runtime/build, 지원 audio/image 형식, clock mapping 방식, power/thermal mode; capability binding |
+
+모든 필드는 배포 설정에서 유한한 값을 가져야 하며 누락된 값을 infinity로 해석하지 않는다. 구성값 validation은 양 역할 예약·최대 단위·전체 메모리 예산의 일관성을 검사한다. 실제 cost bound의 타당성은 후속 검증이며 선언만으로 충족됐다고 주장하지 않는다. 목표 PC 종류나 token/sec를 여기서 임의로 확정하지 않는다.
+
+연속 입력에서 ring/pin 상한에 접근하면 먼저 background·unneeded speculation을 중단하고 의미 없는 옛 cache를 회수한다. 현재 필수 근거가 그래도 들어가지 않으면 자동 dispatch를 중단하고 입력 길이/자료 범위를 나누도록 UI에 안내한다. 음성 capture/local stop은 계속 서비스하되 이미 발생한 유실은 gap으로 남긴다. 지정 지원 부하에서 이런 실패가 반복되면 profile 부적합이며 “버퍼가 있으니 입력 지원”으로 해석하지 않는다.
+
+### 모델 출력과 host 계약의 경계
+
+Direct proposal과 상세 `SpeechEvidence`·해석 예산은 [판단·제어 계약](./control-and-lifecycle.md)을 따른다. ASR/Omni 전사 불일치는 semantic의 동일한 2회 예산 안에서 원음으로 재확인하거나 사용자에게 묻는다. 동일 weight의 두 역할 간 동의는 사실 정확성의 독립 증거가 아니다.
+
+SpeechRender는 승인 Text와 segment ID를 입력받아 연결된 audio를 만든다. 내용 보존·한국어 품질은 모델 요구이며 host의 문자열 비교가 실제 음성의 의미를 증명하지 않는다. 모델이 출력 Text/audio correspondence를 제공하지 못하면 해당 음성 게시 경로는 미지원이다. 별도 TTS/검증 모델을 숨겨 도입하지 않는다.
+
+본 절로 runtime의 주요 책임·우선순위·실패 동작은 결정했다. 실제 build의 기능 적합성, resource 값과 성능은 후속 검증으로 남기되, 그것을 이유로 목표 Architecture의 주요 설계가 미완료라고 표시하지 않는다.

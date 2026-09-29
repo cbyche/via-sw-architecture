@@ -50,7 +50,9 @@
 | 응답 crash·barge-in 이후 맥락 | Canonical Response Payload와 publication outbox, 실제 Text 게시·audible prefix/range receipt 추가 |
 | 고정 2회가 accuracy 규칙처럼 보임 | 최대 2회를 측정 가능한 초기 resource policy로 낮추고, 미해결 field를 추측하지 않는 종료 규칙을 invariant로 승격 |
 
-## 아직 닫히지 않은 항목
+## 당시 닫히지 않았던 항목
+
+다음 목록은 이전 독립 검토 당시의 기록이다. 이후 사용자 위임으로 주요 동작을 [판단·제어](./control-and-lifecycle.md), [기억·Context](./memory-and-context-lifecycle.md), [공유 Omni](./shared-omni-runtime.md)에 정했고 [완결성 점검](./design-completeness.md)에 disposition을 남겼다. 실제 모델·성능 확인은 후속 검증이며 아래 목록을 현재 미결 설계 목록으로 재사용하지 않는다. 직접 응답의 사실 오류 위험은 유지하되 이번 작업에서 QA-19 정의를 변경하지 않았다.
 
 다음은 Architecture 방향은 정했지만 schema·capability 또는 수치 계약이 더 필요하다.
 

@@ -2,7 +2,7 @@
 
 > **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)를
 > 먼저 완성하고, 그 구조에서 네 core ASR을 만드는 핵심 선택을 역으로 추출한다.
-> 전체 구조는 **검토 중인 초안**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다.
+> 전체 구조는 **주요 설계 완성안 / 사용자 최종 검토 전**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다. 구현·성능 측정은 설계 완료와 별개다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 

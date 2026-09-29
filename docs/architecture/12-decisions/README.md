@@ -1,6 +1,6 @@
 # 12. Target Architecture and Architecture Rationale
 
-> 상태: **Target Architecture Definition / 전체 구조 검토 중**
+> 상태: **Target Architecture Definition / 주요 설계 완성안·사용자 최종 검토 전**
 
 12번은 01~11에서 정의한 제품 경계·사용자 행동·품질 의미를 바탕으로 VIA의 목표 Architecture를 완성하고, 그 구조를 성립시키는 핵심 선택을 역으로 설명하는 단계다.
 

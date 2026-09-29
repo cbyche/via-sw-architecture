@@ -41,7 +41,7 @@
 
 ## 그림 목록과 관점
 
-그림마다 박스가 무엇을 나타내는지 구분한다. 01은 논리 Component, 02는 데이터 entity와 관계, 03~05·08~10은 runtime 단계·근거·내구 경계, 06은 process·모델 배치, 07은 품질 인과 경로, 11은 입력 경로·모델 공유·스케줄링 관점이다. 서로 다른 관점을 모두 Component 배치도로 읽지 않는다. 11의 역할 session은 모델 복제본이 아니다.
+그림마다 박스가 무엇을 나타내는지 구분한다. 01은 논리 Component, 02는 데이터 entity와 관계, 03~05·08~10은 runtime 단계·근거·내구 경계, 06은 process·모델 배치, 07은 품질 인과 경로, 11은 입력 경로·모델 공유·스케줄링, 12는 admission/제어, 13은 기억 수명·조회·삭제 관점이다. 서로 다른 관점을 모두 Component 배치도로 읽지 않는다. 11의 역할 session은 모델 복제본이 아니다.
 
 | 그림 | 확인할 내용 | Preview / 편집 원본 |
 | --- | --- | --- |
@@ -56,5 +56,7 @@
 | 09 복합 요청 | 단일 업무 통째 위임, 독립 Task, 실제 목표 간 의존 | [SVG](./09-compound-and-task-routing.svg) · [draw.io](./09-compound-and-task-routing.drawio) |
 | 10 Context·권한·기억 | 읽기와 제공, 권한 철회, User Memory 변경·삭제 | [SVG](./10-context-policy-and-memory.svg) · [draw.io](./10-context-policy-and-memory.drawio) |
 | 11 공유 Omni | 입력 ASR, 역할별 session, 자원 예약·계산 교대 | [SVG](./11-shared-omni-scheduling.svg) · [draw.io](./11-shared-omni-scheduling.drawio) |
+| 12 판단·제어 | 좁은 direct admission, 같은 Request의 Core 인계, 정정·전송 경계 | [SVG](./12-admission-and-control.svg) · [draw.io](./12-admission-and-control.drawio) |
+| 13 기억 수명 | 원본·파생 view, 삭제 epoch와 purge, blob/DB crash 경계 | [SVG](./13-memory-lifecycle.svg) · [draw.io](./13-memory-lifecycle.drawio) |
 
-11개 그림은 [Architecture 본문](../architecture.md)의 관련 절에 모두 삽입했다. [설계 완결성 점검](../design-completeness.md)에서 UC별 경로와 미확정 항목을 확인할 수 있다.
+13개 그림을 [Architecture 본문](../architecture.md)에 삽입했다. 그림12·13은 관련 [판단·제어](../control-and-lifecycle.md)·기억 계약에서도 볼 수 있다. [설계 완결성 점검](../design-completeness.md)에서 UC별 경로·주요 선택과 후속 구현 항목을 확인할 수 있다.

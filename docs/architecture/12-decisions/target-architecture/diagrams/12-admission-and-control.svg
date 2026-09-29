@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1240" viewBox="0 0 1900 1240" role="img" aria-labelledby="title desc">
+<title id="title">판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정</title>
+<desc id="desc">PROPOSED · 행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Controller가 확정 · 모델은 제안만 반환</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/></marker>
+<marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/></marker>
+<marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#0891B2"/></marker>
+<marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7C3AED"/></marker>
+<marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/></marker>
+<marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#EA580C"/></marker>
+<marker id="arrow-amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D97706"/></marker>
+<marker id="arrow-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/></marker>
+<marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#DC2626"/></marker>
+<filter id="shadow" x="-10%" y="-10%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.10"/></filter>
+</defs>
+<rect width="1900" height="1240" fill="#FFFFFF"/>
+<text x="48" y="43" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="750" fill="#172033">판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정</text>
+<text x="48" y="70" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">PROPOSED · 행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Controller가 확정 · 모델은 제안만 반환</text>
+<rect x="45" y="150" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="178" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">A · DIRECT — 현재 질문만으로 답할 수 있고 모든 host 조건을 통과한 경우</text>
+<rect x="45" y="435" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="463" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">B · CORE — 제외 조건 · unknown · 불일치 · 시간 초과 중 하나라도 있는 경우</text>
+<rect x="45" y="720" width="1810" height="260" rx="18" fill="#F8FAFC" stroke="#D5DDE9" stroke-width="1.5"/>
+<text x="63" y="748" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="750" fill="#526178">C · 정정 / 취소 — 같은 대화의 미전송 업무와 실제 전송 경계를 구분</text>
+<polyline points="430,281.0 540,281.0" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<polyline points="880,281.0 990,281.0" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1330,281.0 1440,281.0" fill="none" stroke="#2563EB" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<polyline points="430,566.0 540,566.0" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)"/>
+<polyline points="880,566.0 990,566.0" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)"/>
+<polyline points="1330,566.0 1440,566.0" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-purple)"/>
+<polyline points="430,851.0 540,851.0" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)"/>
+<polyline points="880,851.0 990,851.0" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)"/>
+<polyline points="1330,851.0 1440,851.0" fill="none" stroke="#D97706" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-amber)"/>
+<rect x="90" y="215" width="340" height="132" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">현재 Voice 질문</text><text x="260.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">원음 + final 전사만 제공</text><text x="260.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">대화 · 화면 · Task 이력 없음</text></g>
+<rect x="540" y="215" width="340" height="132" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Omni VoiceProposal</text><text x="710.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">일반 개념 / 안정된 일반 설명</text><text x="710.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">dependency flags + text / audio</text></g>
+<rect x="990" y="215" width="340" height="132" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Controller 허용 검사</text><text x="1160.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">전사 · 질문 focus · revision 검사</text><text x="1160.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">DIRECT_VOICE owner를 한 번 확정</text></g>
+<rect x="1440" y="215" width="340" height="132" rx="16" fill="#EAF2FF" stroke="#2563EB" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="262.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Response → Interaction</text><text x="1610.0" y="287.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">내구 publication + output epoch</text><text x="1610.0" y="307.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">승인 단위만 표시 · 재생</text></g>
+<rect x="90" y="500" width="340" height="132" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">직접 경로 미허용</text><text x="260.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">speculative audio 폐기</text><text x="260.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">입력과 수집 근거는 유지</text></g>
+<rect x="540" y="500" width="340" height="132" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">같은 Request → CORE</text><text x="710.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">새 Request로 복제하지 않음</text><text x="710.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">이전 route / generation 차단</text></g>
+<rect x="990" y="500" width="340" height="132" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Interpreter + Context</text><text x="1160.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">총 2회 안에서 해석 · 보완</text><text x="1160.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">형식 repair도 같은 예산 사용</text></g>
+<rect x="1440" y="500" width="340" height="132" rx="16" fill="#F3ECFF" stroke="#7C3AED" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="547.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Controller 확정</text><text x="1610.0" y="572.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">직접 응답 / 질문 / Agent 위임</text><text x="1610.0" y="592.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">불충분한 근거는 commit하지 않음</text></g>
+<rect x="90" y="785" width="340" height="132" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="260.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">새 발화 시작</text><text x="260.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">IM local stop · output epoch 증가</text><text x="260.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">Controller에 InputStarted / hold</text></g>
+<rect x="540" y="785" width="340" height="132" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="710.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">Store transaction</text><text x="710.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">hold · admission · command epoch</text><text x="710.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">PENDING → DISPATCHING CAS</text></g>
+<rect x="990" y="785" width="340" height="132" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1160.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">전송 전 / 전송 후</text><text x="1160.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">hold 선행: 미전송 유지</text><text x="1160.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">전송 선행: 상태 조회 · 제어</text></g>
+<rect x="1440" y="785" width="340" height="132" rx="16" fill="#FFF8E1" stroke="#D97706" stroke-width="2" filter="url(#shadow)"/>
+<g font-family="Inter, Arial, sans-serif"><text x="1610.0" y="832.0" text-anchor="middle" font-size="19" font-weight="700" fill="#172033">새 입력의 의미 반영</text><text x="1610.0" y="857.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">정정 대상만 supersede / cancel</text><text x="1610.0" y="877.0" text-anchor="middle" font-size="15" font-weight="500" fill="#526178">무관한 Task는 계속 유지</text></g>
+<text x="1580" y="110" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="500" fill="#526178">→ 관계·전달  ·  점선 = 보조 관계</text>
+<text x="90" y="385" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">Confidence 하나로 허용하지 않는다. 모델의 분류 오류는 남는 위험이며 같은 모델의 자기 판단은 독립 검증이 아니다.</text>
+<text x="90" y="670" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">Core 인계는 S2S agent runtime을 추가하는 경로가 아니다. 사용자 입력을 다시 받거나 답변을 두 번 게시하지 않는다.</text>
+<text x="90" y="955" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">물리적인 발화 시작과 host hold 기록은 같은 시각이 아니다. 이미 나간 Action을 막았거나 되돌렸다고 주장하지 않는다.</text>
+<text x="90" y="1050" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="19" font-weight="700" fill="#172033">짧은 “응”은 실제 제시한 질문의 ID · Task · Execution · revision에 유일하게 연결될 때만 적용한다.</text>
+<text x="90" y="1095" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="500" fill="#526178">여러 질문이 경쟁하면 질문 대상을 확인한다. 침묵 · 오래된 승인 · 다른 대화의 답은 실행 허가가 아니다.</text>
+<text x="90" y="1160" text-anchor="start" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="500" fill="#526178">주요 설계 완성안 · 판정 정확도와 실제 runtime 성능은 미측정 · 자세한 상태 전이는 control-and-lifecycle.md</text>
+<rect x="48" y="92" width="172" height="25" rx="8" fill="#EAF2FF" stroke="#2563EB" stroke-width="1.5"/>
+<text x="134.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#2563EB">입력·응답</text>
+<rect x="233" y="92" width="172" height="25" rx="8" fill="#F3ECFF" stroke="#7C3AED" stroke-width="1.5"/>
+<text x="319.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#7C3AED">의미·요청</text>
+<rect x="418" y="92" width="172" height="25" rx="8" fill="#E6F8FB" stroke="#0891B2" stroke-width="1.5"/>
+<text x="504.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#0891B2">Context·근거</text>
+<rect x="603" y="92" width="172" height="25" rx="8" fill="#FFF8E1" stroke="#D97706" stroke-width="1.5"/>
+<text x="689.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#D97706">정책·판정</text>
+<rect x="788" y="92" width="172" height="25" rx="8" fill="#E9F9F3" stroke="#059669" stroke-width="1.5"/>
+<text x="874.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#059669">업무·상태</text>
+<rect x="973" y="92" width="172" height="25" rx="8" fill="#FFF1E8" stroke="#EA580C" stroke-width="1.5"/>
+<text x="1059.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#EA580C">명령·Agent</text>
+<rect x="1158" y="92" width="172" height="25" rx="8" fill="#F1F5F9" stroke="#475569" stroke-width="1.5"/>
+<text x="1244.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#475569">저장·의존성</text>
+<rect x="1343" y="92" width="172" height="25" rx="8" fill="#FDECEC" stroke="#DC2626" stroke-width="1.5"/>
+<text x="1429.0" y="109" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700" fill="#DC2626">중단·실패·불확실</text>
+<text x="1862" y="1220" text-anchor="end" font-family="Inter, Arial, sans-serif" font-size="11" fill="#94A3B8">Editable source: 12-admission-and-control.drawio</text>
+</svg>

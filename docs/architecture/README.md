@@ -67,7 +67,7 @@
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
 | Mock/spine machine contract and harness | Mixed | 공통 target·score band proposal과 mock/spine 방법은 작성; freeze·active harness·full campaign은 미완료 |
 | Current evidence | Empty / `NOT_RUN` | 이전 VIA-DP-02·05·06·09·11·12·13 reference generation은 archive; current 결과로 대체하지 않음 |
-| Target Architecture | Proposed | 전체 구조 검토 중; 구현·측정·합의는 pending |
+| Target Architecture | Major design complete / final review pending | 필수 기능·예외·주요 계약 완성안; 사용자 최종 수용과 구현·측정은 별도 |
 | Previous Core DP set | Preserved reference | VIA-DP-03·05·06·07·15·17; 새 구조의 reading order나 매핑 대상이 아님 |
 | Previous full DP inventory | Preserved reference | VIA-DP-01~18 독립 보고서; 새 package 도출 시 그대로 계승하지 않음 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |

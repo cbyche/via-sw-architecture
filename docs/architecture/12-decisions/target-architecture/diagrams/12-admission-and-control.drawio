@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-09-29T00:00:00.000Z" agent="Codex" version="24.7.17" type="device">
+  <diagram id="12-admission-and-control" name="판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1900" pageHeight="1240" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="direct" value="A · DIRECT — 현재 질문만으로 답할 수 있고 모든 host 조건을 통과한 경우" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="150" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff" value="B · CORE — 제외 조건 · unknown · 불일치 · 시간 초과 중 하나라도 있는 경우" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="435" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="race" value="C · 정정 / 취소 — 같은 대화의 미전송 업무와 실제 전송 경계를 구분" style="rounded=1;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingTop=12;spacingLeft=12;fontStyle=1;fontSize=14;fillColor=#F8FAFC;strokeColor=#D5DDE9;dashed=0;arcSize=14;" vertex="1" parent="1">
+          <mxGeometry x="45" y="720" width="1810" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;현재 Voice 질문&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;원음 + final 전사만 제공&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;대화 · 화면 · Task 이력 없음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Omni VoiceProposal&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;일반 개념 / 안정된 일반 설명&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;dependency flags + text / audio&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller 허용 검사&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;전사 · 질문 focus · revision 검사&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;DIRECT_VOICE owner를 한 번 확정&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Response → Interaction&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;내구 publication + output epoch&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;승인 단위만 표시 · 재생&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF2FF;strokeColor=#2563EB;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="215" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;직접 경로 미허용&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;speculative audio 폐기&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;입력과 수집 근거는 유지&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;같은 Request → CORE&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;새 Request로 복제하지 않음&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;이전 route / generation 차단&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Interpreter + Context&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;총 2회 안에서 해석 · 보완&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;형식 repair도 같은 예산 사용&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Controller 확정&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;직접 응답 / 질문 / Agent 위임&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;불충분한 근거는 commit하지 않음&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#F3ECFF;strokeColor=#7C3AED;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="500" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="race-0" value="&lt;div style='font-size:19px;font-weight:bold'&gt;새 발화 시작&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;IM local stop · output epoch 증가&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;Controller에 InputStarted / hold&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="90" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="race-1" value="&lt;div style='font-size:19px;font-weight:bold'&gt;Store transaction&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;hold · admission · command epoch&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;PENDING → DISPATCHING CAS&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="540" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="race-2" value="&lt;div style='font-size:19px;font-weight:bold'&gt;전송 전 / 전송 후&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;hold 선행: 미전송 유지&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;전송 선행: 상태 조회 · 제어&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="990" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="race-3" value="&lt;div style='font-size:19px;font-weight:bold'&gt;새 입력의 의미 반영&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;정정 대상만 supersede / cancel&lt;/div&gt;&lt;div style='font-size:15px;color:#526178'&gt;무관한 Task는 계속 유지&lt;/div&gt;" style="shape=rectangle;rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#D97706;strokeWidth=2;fontColor=#172033;dashed=0;arcSize=14;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="1440" y="785" width="340" height="132" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="direct-0" target="direct-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="direct-1" target="direct-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="direct-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="direct-2" target="direct-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="handoff-0" target="handoff-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="handoff-1" target="handoff-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7C3AED;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="handoff-2" target="handoff-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="race-link-1" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="race-0" target="race-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="race-link-2" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="race-1" target="race-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="race-link-3" value="" style="edgeStyle=none;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D97706;strokeWidth=2;dashed=0;startArrow=none;startFill=1;endArrow=block;endFill=1;exitX=1.000;exitY=0.500;entryX=0.000;entryY=0.500;exitPerimeter=0;entryPerimeter=0;fontSize=11;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="race-2" target="race-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-0" value="→ 관계·전달  ·  점선 = 보조 관계" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=14;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="96" width="257" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-1" value="Confidence 하나로 허용하지 않는다. 모델의 분류 오류는 남는 위험이며 같은 모델의 자기 판단은 독립 검증이 아니다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="369" width="948" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-2" value="Core 인계는 S2S agent runtime을 추가하는 경로가 아니다. 사용자 입력을 다시 받거나 답변을 두 번 게시하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="654" width="967" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-3" value="물리적인 발화 시작과 host hold 기록은 같은 시각이 아니다. 이미 나간 Action을 막았거나 되돌렸다고 주장하지 않는다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="939" width="972" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-4" value="짧은 “응”은 실제 제시한 질문의 ID · Task · Execution · revision에 유일하게 연결될 때만 적용한다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=19;fontColor=#172033;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1031" width="1035" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-5" value="여러 질문이 경쟁하면 질문 대상을 확인한다. 침묵 · 오래된 승인 · 다른 대화의 답은 실행 허가가 아니다." style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=17;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1078" width="899" height="29" as="geometry" />
+        </mxCell>
+        <mxCell id="caption-6" value="주요 설계 완성안 · 판정 정확도와 실제 runtime 성능은 미측정 · 자세한 상태 전이는 control-and-lifecycle.md" style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=16;fontColor=#526178;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="1144" width="938" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="key-blue" value="입력·응답" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#EAF2FF;strokeColor=#2563EB;fontColor=#2563EB;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="48" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-purple" value="의미·요청" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F3ECFF;strokeColor=#7C3AED;fontColor=#7C3AED;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="233" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-cyan" value="Context·근거" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E6F8FB;strokeColor=#0891B2;fontColor=#0891B2;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="418" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-amber" value="정책·판정" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF8E1;strokeColor=#D97706;fontColor=#D97706;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="603" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-green" value="업무·상태" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#E9F9F3;strokeColor=#059669;fontColor=#059669;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="788" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-orange" value="명령·Agent" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FFF1E8;strokeColor=#EA580C;fontColor=#EA580C;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="973" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-gray" value="저장·의존성" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#F1F5F9;strokeColor=#475569;fontColor=#475569;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1158" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="key-red" value="중단·실패·불확실" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#FDECEC;strokeColor=#DC2626;fontColor=#DC2626;strokeWidth=1.5;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1343" y="92" width="172" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="page-title" value="판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=27;" vertex="1" parent="1">
+          <mxGeometry x="48" y="15" width="1804" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="page-subtitle" value="PROPOSED · 행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Controller가 확정 · 모델은 제안만 반환" style="text;html=1;align=left;verticalAlign=middle;strokeColor=none;fillColor=none;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="48" y="49" width="1804" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

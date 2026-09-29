@@ -1,6 +1,6 @@
 # VIA Target Architecture — 설계 작업 공간
 
-> 상태: **설계 초안 / 전체 구조 합의 전 / 구현·측정 없음**
+> 상태: **MAJOR_DESIGN_COMPLETE / 주요 설계 완성안 / 사용자 최종 검토 전 / 구현·측정 없음**
 > 시작일: 2026-09-29
 > 목적: QA-19 semantic accuracy, QA-09 responsiveness, QA-29 modifiability, QA-39 reliability/recoverability 순으로 우선하되 네 ASR을 모두 고려한 목표 Architecture를 먼저 완성한다.
 
@@ -9,15 +9,17 @@
 | 문서 | 역할 |
 | --- | --- |
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
-| [Interaction·업무 경계·기억 검토](./interaction-and-memory-design.md) | S2S 조건부 직접 경로, 사용자 합의, 모델 확인 책임, 복합 업무와 기억 계층 제안 |
+| [판단·제어·대화 계약](./control-and-lifecycle.md) | S2S admission, 입력 확정, 질문·승인·Task·Command·출력 상태, 정정·전송 경쟁, 재연결·복구 |
+| [Context·기억 수명 계약](./memory-and-context-lifecycle.md) | 후보 coverage, 원본·요약·cache, 보관 기본값, 기억 삭제·철회, 파일/DB 복구 |
+| [Interaction·업무 경계·기억 검토](./interaction-and-memory-design.md) | S2S 조건부 직접 경로, 사용자 합의, 모델 확인 책임, 복합 업무·기억 개요와 상세 계약 연결 |
 | [공유 Omni·동시 처리 설계](./shared-omni-runtime.md) | 역할 분리, 입력 ASR, 자원 예약·동시 세션·과부하·모델팀 요구 계약 |
 | [모델 기능 확인](./model-capability-review.md) | Qwen3-Omni 30B 표기의 의미, 공개 기능 근거, 실제 통합 확인이 필요한 항목 |
 | [Architecture 그림](./diagrams/README.md) | 본문에 삽입한 SVG preview, draw.io 편집 원본과 색상 규칙 |
-| [설계 완결성 점검](./design-completeness.md) | 18개 UC 경로, 그림 검토 중 교정한 공백과 아직 확정하지 않은 질문 |
+| [설계 완결성 점검](./design-completeness.md) | 18개 UC·필수 변형, 주요 선택과 사건 순서 점검, 설계 완료와 후속 구현의 구분 |
 | [독립 검토 결과](./independent-review-2026-09-29.md) | 사용자 검토 전 세 관점의 공통 결함, 본문 반영 내용과 열린 질문 |
 | [검토 기록](./review-log.md) | 사용자가 정한 방향, 제안 상태, 미합의 사항, 다음 검토 주제와 변경 기록 |
 
-이 디렉터리는 12번 작업의 첫 단계인 **목표 Architecture 제안**의 source of truth다. 문서에 포함되었다는 이유로 승인된 제품 Architecture나 구현된 기능이 되는 것은 아니다. [Architecture 기준선](../../README.md), accepted ADR, 기존 평가 상태를 이 초안이 자동으로 대체하지 않는다.
+이 디렉터리는 12번 작업의 첫 단계인 **목표 Architecture 제안**의 source of truth다. 문서에 포함되었다는 이유로 승인된 제품 Architecture나 구현된 기능이 되는 것은 아니다. [Architecture 기준선](../../README.md), accepted ADR, 기존 평가 상태를 이 설계안이 자동으로 대체하지 않는다.
 
 ## 작업 순서
 
@@ -60,4 +62,4 @@
 
 ## 현재 산출물의 한계
 
-논리 구조와 runtime 동작을 제안한 상태다. 모델 capability 확보, 세부 schema, 수치형 resource/deadline 예산, 구현, 네 core ASR 검증은 남아 있다. [검토 기록](./review-log.md)의 항목을 순서대로 좁혀가며 전체 구조 합의 여부를 판단한다.
+사용자가 위임한 주요 설계를 완성한 상태다. 필수 기능의 정상·예외 경로, owner·상태·제어·저장·대화 정책을 선택했으며 [완결성 점검](./design-completeness.md)에 대응을 남겼다. 사용자 최종 검토, 코드용 schema·adapter 구현, 실제 모델 기능·장비 적합성과 성능 검증은 별개다. 구현·측정을 하지 않았다는 이유로 주요 설계를 미완료로 분류하지 않으며, 문서 완성을 성능 입증으로 표현하지 않는다. 추가 ASR 후보는 이후 DP 발굴·대안 비교 때 다시 논의한다.

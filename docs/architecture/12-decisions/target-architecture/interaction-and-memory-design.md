@@ -1,6 +1,6 @@
 # Interaction・업무 경계・기억 구조 검토
 
-> 상태: **사용자 피드백 반영 / 구조 제안은 합의 전 / 구현·측정 없음**
+> 상태: **사용자 방향과 주요 설계 완성안 / 최종 검토 전 / 구현·측정 없음**
 > [Architecture 본문](./architecture.md) · [합의 기록](./review-log.md)
 
 ## 1. 합의한 행동과 아직 제안인 구조
@@ -13,7 +13,7 @@
 | 화면 상세 표시, 사용자 발화 중 음성 알림 금지, 종료 뒤 음성 핵심 요약 | 사용자 지정 |
 | 중단 뒤 재개 의도가 불명확할 때만 확인 | 사용자 합의; Request Interpreter가 새 입력의 재개·정정·전환 의미를 판단 |
 | S2S 직접 응답 최소화 | 사용자 지정; 맥락 없이 자체 지식으로 답할 수 있는 명백한 독립 질문만 허용, 나머지는 VIA 해석 |
-| 단기·중기·장기 기억과 저장 방식의 분리 | 설계 진행을 사용자에게 위임받음; 수명·승격·삭제의 세부안은 검토 중 |
+| 단기·중기·장기 기억과 저장 방식의 분리 | 사용자 위임에 따라 수명·승격·삭제의 주 설계 완성; 상세 계약 참조 |
 | 독립 업무는 별도 Task, 한 업무의 단계는 한 Agent에 통째로 위임 | 사용자 합의; 같은 Agent가 여러 Task를 담당해도 identity는 분리 |
 
 ## 2. S2S 직접 응답은 명백한 자체 지식 질문에 한정한다
@@ -29,7 +29,7 @@ S2S에 Task·자료·기억 해석, Context 검색, 업무 planning·tool loop�
 | “지금 날씨는?”, 개인 자료 질문 | VIA가 필요한 현재/개인 근거를 조회·해석하거나 위임 |
 | “요약해서 메일로 보내줘”, “아까 일 취소해” | VIA가 목표·Task·제약을 확정한 뒤 Agent 위임·제어 |
 
-**아직 닫아야 할 설계:** ‘명백한 독립 질문’임을 판정하는 최소 admission 계약. 새 범용 classifier나 S2S agent runtime을 두지 않고 같은 S2S의 제한된 direct/Core 제안과 host의 제외 조건 검사를 결합하는 안을 검토한다. 이 제안은 요청 전체의 referent·Task·계획을 S2S에서 만드는 계약이 아니다. 정보가 부족하거나 모델이 제한된 인계 출력을 지원하지 않으면 Core로 보낸다. 좁은 허용 범위에 대한 예시·제외 조건·지원 모델 계약은 추가로 구체화한다.
+**선택한 계약:** 현재 질문만 받는 Omni VoiceProposal과 Controller의 보수적 gate를 결합한다. 허용 knowledge class, dependency flags, canonical 전사 일치, 질문/정정 상태, revision·Text/audio 대응을 모두 검사하고 불충족은 같은 Request의 Core 경로로 인계한다. [판단·제어 계약](./control-and-lifecycle.md#2-최소-s2s-직접-응답-계약)에 전체 동작과 한계를 정했다. 별도 classifier 또는 S2S agent runtime을 추가하지 않는다.
 
 Controller는 Request identity와 현재 입력·권한·출력 세대 및 알려진 대기 질문·정정 여부를 확인한다. 이 host 검사는 semantic LLM 재호출과 다르다. 단어 규칙이나 S2S의 자신감만으로 숨은 맥락 의존성을 전부 판별한다고 주장하지 않는다. 허용되지 않은 speculative 답변은 재생하지 않는다. 판단 실패가 남는다는 사실과 매번 Core로 전환할 때의 지연 비용도 보존한다.
 
@@ -70,15 +70,15 @@ Agent가 실패했다고 VIA가 내부 plan을 새로 짜거나 전체 업무를
 
 단기·중기·장기는 “언제 어떤 의미로 재사용할 것인가”이고 RAM·파일·DB는 “어디에 어떤 내구성으로 저장할 것인가”다. 중기 기억도 재시작을 견디려면 디스크에 저장할 수 있다. 파일 DB 자체를 장기 기억과 동일시하지 않는다.
 
-| 계층 제안 | 예시 | 소유권·저장·수명 |
+| 선택한 계층 | 예시 | 소유권·저장·수명 |
 | --- | --- | --- |
 | 단기 작업 Context | 현재 발화, 당시 화면, 선택, 이번 해석에 필요한 원문 | IM evidence buffer·Controller workspace·Context cache; RAM 중심, 요청이 쓰는 evidence만 정책 범위에서 pin·필요 시 내구화 |
 | 중기 Conversation·Task 작업집합 | 최근 대화 요약, 확정 대상, 미해결 질문, 진행 업무와 결과 참조 | Context Manager가 원래 owner 기록에서 파생 view 생성; 필요 시 지속 저장하고 source revision으로 재구성 |
 | 장기 User Memory | 사용자가 허용한 답변 선호·지속 사실 | Context Manager owner, State Store 내구 기록; 확인·변경·삭제 가능; 현재 지시가 우선 |
 | 원본 업무·응답·복구 기록 | Task/Execution, command, 질문, 결과·전달 기록 | Controller·Task·Gateway·Response 각각의 권위; 기억 요약 계층과 별개, cache 만료로 삭제하지 않음 |
 
-저장 주안은 local embedded DB로 구조화 상태·참조·삭제 revision을 관리하고, 허용된 큰 evidence는 별도 파일로 두되 수명·참조를 함께 관리하는 것이다. 특정 DB 제품은 아직 선택하지 않는다. DB와 파일 사이 crash로 생기는 orphan·누락의 복구 계약도 필요하다. 추가 embedding 모델이나 vector DB를 자동 도입하지 않는다.
+저장 주안은 local embedded DB로 구조화 상태·참조·삭제 revision을 관리하고, 허용된 큰 evidence는 별도 파일로 두되 수명·참조를 함께 관리하는 것이다. 특정 DB 제품은 아직 선택하지 않는다. DB와 파일 사이 crash는 manifest·tombstone·cleanup intent로 복구한다. 추가 embedding 모델이나 vector DB를 자동 도입하지 않는다.
 
 요약에는 출처·version·범위·누락을 남긴다. 정확한 대상 ID·수치·제약·권한·업무 상태는 typed record와 필요한 원문을 유지하고, 요약이 부정·조건·정정을 지우면 원문으로 돌아간다. 원문이 삭제되거나 보관기간이 끝나면 복원한 척하지 않고 파생 요약도 해당 삭제 범위에 맞춰 갱신·폐기한다. 대화 요약을 자동 장기 선호로 승격하지 않는다. 백그라운드 요약이 필요하면 같은 semantic LLM의 제한된 예산을 쓰며 새 입력을 막지 않도록 관리한다.
 
-아직 정할 제품 정책은 raw audio·screen 저장 기본값, Conversation·evidence 보관기간, 사용자 동의에 따른 기억 승격 범위, 백업·외부 provider 삭제 범위다. 이는 보관 기술만으로 결정할 수 없다.
+사용자 위임에 따라 [기억·Context 수명 계약](./memory-and-context-lifecycle.md)에 raw 상시 디스크 저장 없음, evidence cache 24시간, 진단 7일, 대화/Task의 명시 삭제, 장기 기억의 명시적 등록, 삭제 전파와 외부 복사본 한계를 선택했다. 위 표는 개요이며 상세 수명·crash 복구·예외 동작은 그 계약을 따른다.

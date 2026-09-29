@@ -577,7 +577,7 @@ def request_resolution() -> Diagram:
     edge(d,'retry',((620,555),(620,357)),'more','proposal','bounded refinement',620,490,COLORS['cyan'])
     edge(d,'need-user',((1160,357),(1160,555)),'host','clarify','사용자 판단',1160,500,COLORS['amber'])
     edge(d,'cannot',((1280,357),(1280,425),(1610,425),(1610,555)),'host','failure','해결 불가',1520,470,COLORS['red'])
-    caption(d,90,740,'초기 resource policy: 같은 확정 input revision당 semantic 해석 최대 2회. 추가 모델이나 무한 tool loop를 만들지 않는다.',16)
+    caption(d,90,740,'기본 정책: input revision당 semantic 총 2회 — refinement·형식 repair·원음 재확인도 포함. 추가 조회는 한 묶음이다.',16)
     lane(d,'rules',45,810,1810,175,'③ 변경·예외 — READY 형식만으로 실행하지 않는다',fill='#F1F5F9')
     caption(d,90,875,'정정 / 관련 source 변경 → 이전 proposal·admission 무효화 → 영향 field 재검증. 재시도는 전체 deadline 안에서만 허용.',18,COLORS['ink'],weight=700)
     caption(d,90,920,'Clarification·실패 안내는 미확정 정보를 보존한 publication admission으로 게시한다. 업무 dispatch에는 Semantic Commit이 필요하다.',16)
@@ -646,7 +646,7 @@ def runtime_processes() -> Diagram:
     edge(d,'voice-core',((290,400),(290,560)),'voice','core','input / hold / lease',385,495,COLORS['blue'],bidirectional=True)
     edge(d,'voice-service',((490,370),(580,370),(580,485),(800,485),(800,530)),'voice','service','VOICE stream / 출력',875,470,COLORS['blue'],bidirectional=True)
     card(d,'ui',90,945,'UI Process',('Text · 화면 evidence','Core 연결 문제 표시','명시적 local stop'),'blue',w=400,h=150)
-    card(d,'store',650,945,'Durable Store',('owner별 transaction · 복구 기록','Core 종료 후에도 데이터 보존','모델 KV는 authoritative state 아님'),'gray',w=500,h=150)
+    card(d,'store',650,945,'Durable Store',('local embedded DB · evidence manifest','Core 종료 후에도 데이터 보존','모델 KV는 authoritative state 아님'),'gray',w=500,h=150)
     card(d,'worker',1340,945,'Connector Workers',('위험한 native·blocking 연동 격리','Context Source / Agent와 통신','외부 업무는 Downstream Agent'),'orange',w=450,h=150)
     edge(d,'core-ui',((290,750),(290,945)),'core','ui','bounded IPC',185,860,COLORS['blue'],bidirectional=True)
     edge(d,'core-store',((400,750),(400,850),(900,850),(900,945)),'core','store','repository',675,835,COLORS['gray'],bidirectional=True)
@@ -697,7 +697,7 @@ def response_delivery() -> Diagram:
     strip(d,'s2s',150,'A · S2S 직접 응답 — 명백한 자체 지식 질문만 허용','blue',[
         ('입력 stream',('Interaction Manager → Model Access','ASR 입력 근거 + 공유 Omni 음성 역할')),
         ('Provisional generation',('IM buffer에 handle·audio 보류','input revision·출력 세대 결합')),
-        ('Controller admission',('좁은 direct 허용 / 나머지는 Core','최소 admission 계약은 설계 중')),
+        ('Controller admission',('좁은 direct 허용 / 나머지는 Core','VoiceProposal + host 허용 검사')),
         ('Response Manager',('publication 기록 후 handle release','IM에서만 실제 표시·재생')),
     ],'단순 첫 질문도 허용한다. 과거 대화 지칭·자료·Task 해석은 Core 책임이며 S2S에 Context 탐색·업무 planning을 붙이지 않는다.')
     strip(d,'core-response',435,'B · CORE / AGENT 응답 — 확인된 사실과 질문을 같은 출력 계약으로 전달','blue',[
@@ -717,7 +717,7 @@ def response_delivery() -> Diagram:
         ('상세 Text 게시',('결과·실패 항목·근거·파일 링크','Voice 생성·대기를 기다리지 않음')),
         ('Response 발화 대기열',('사용자 발화 중 모든 음성 알림 보류','종료 뒤 새 입력과 충돌 여부 확인')),
         ('짧은 Voice 요약',('IM이 재생 직전 차례·epoch 검사','중요한 실패·불확실성 생략 금지')),
-    ],'새 요청·기존 답변·대기 결과의 세부 순서는 제안 단계다. 짧은 침묵을 종료로 단정하지 않고 사용자가 다시 말하면 즉시 멈춘다.')
+    ],'새 입력의 관계·제어를 먼저 반영하고 현재 답변 → 중요 결과 → 일반 진행 순서로 전달한다. 다시 말하면 즉시 멈춘다.')
     caption(d,90,1340,'Text 표시와 Voice 요약의 실제 전달을 따로 기록한다. “방금 말한 것”은 상세 Text 전체가 아닌 실제 들려준 내용에서 찾는다.',16,COLORS['ink'],weight=700)
     return d
 
@@ -800,6 +800,66 @@ def shared_omni() -> Diagram:
     caption(d,90,1410,'색은 책임 구분이며 우선순위 점수가 아니다. ASR과 speech 역할은 다른 기능; 실시간 예약도 의미 확정·dispatch 권한을 주지 않는다.',16)
     return d
 
+def admission_control() -> Diagram:
+    d = detail('12-admission-and-control', '판단과 제어 — 좁은 직접 응답, 한 번의 경로 확정', '행은 서로 다른 조건의 실행 흐름 · route owner와 revision을 Controller가 확정 · 모델은 제안만 반환', 1240)
+    strip(d,'direct',150,'A · DIRECT — 현재 질문만으로 답할 수 있고 모든 host 조건을 통과한 경우','blue',[
+        ('현재 Voice 질문',('원음 + final 전사만 제공','대화 · 화면 · Task 이력 없음')),
+        ('Omni VoiceProposal',('일반 개념 / 안정된 일반 설명','dependency flags + text / audio')),
+        ('Controller 허용 검사',('전사 · 질문 focus · revision 검사','DIRECT_VOICE owner를 한 번 확정')),
+        ('Response → Interaction',('내구 publication + output epoch','승인 단위만 표시 · 재생')),
+    ],'Confidence 하나로 허용하지 않는다. 모델의 분류 오류는 남는 위험이며 같은 모델의 자기 판단은 독립 검증이 아니다.')
+    strip(d,'handoff',435,'B · CORE — 제외 조건 · unknown · 불일치 · 시간 초과 중 하나라도 있는 경우','purple',[
+        ('직접 경로 미허용',('speculative audio 폐기','입력과 수집 근거는 유지')),
+        ('같은 Request → CORE',('새 Request로 복제하지 않음','이전 route / generation 차단')),
+        ('Interpreter + Context',('총 2회 안에서 해석 · 보완','형식 repair도 같은 예산 사용')),
+        ('Controller 확정',('직접 응답 / 질문 / Agent 위임','불충분한 근거는 commit하지 않음')),
+    ],'Core 인계는 S2S agent runtime을 추가하는 경로가 아니다. 사용자 입력을 다시 받거나 답변을 두 번 게시하지 않는다.')
+    strip(d,'race',720,'C · 정정 / 취소 — 같은 대화의 미전송 업무와 실제 전송 경계를 구분','amber',[
+        ('새 발화 시작',('IM local stop · output epoch 증가','Controller에 InputStarted / hold')),
+        ('Store transaction',('hold · admission · command epoch','PENDING → DISPATCHING CAS')),
+        ('전송 전 / 전송 후',('hold 선행: 미전송 유지','전송 선행: 상태 조회 · 제어')),
+        ('새 입력의 의미 반영',('정정 대상만 supersede / cancel','무관한 Task는 계속 유지')),
+    ],'물리적인 발화 시작과 host hold 기록은 같은 시각이 아니다. 이미 나간 Action을 막았거나 되돌렸다고 주장하지 않는다.')
+    caption(d,90,1050,'짧은 “응”은 실제 제시한 질문의 ID · Task · Execution · revision에 유일하게 연결될 때만 적용한다.',19,COLORS['ink'],weight=700)
+    caption(d,90,1095,'여러 질문이 경쟁하면 질문 대상을 확인한다. 침묵 · 오래된 승인 · 다른 대화의 답은 실행 허가가 아니다.',17)
+    caption(d,90,1160,'주요 설계 완성안 · 판정 정확도와 실제 runtime 성능은 미측정 · 자세한 상태 전이는 control-and-lifecycle.md',16)
+    return d
+
+
+def memory_lifecycle() -> Diagram:
+    d = detail('13-memory-lifecycle', '기억의 수명 — 원본을 보존하고 파생 view를 재구성', '행 A는 저장 책임 · B는 조회 경로 · C는 삭제 순서 · D는 evidence 파일의 crash 경계', 1530)
+    lane(d,'layers',45,150,1810,260,'A · 기억 계층 — 서로 다른 수명이며 자동 승격 파이프라인이 아니다',fill='#F8FAFC')
+    for i,(ident,title,lines,color) in enumerate([
+        ('raw','단기 입력 근거',('IM RAM timeline · 현재 요청 pin','raw 상시 디스크 저장 없음'),'blue'),
+        ('view','중기 작업 view',('Context summary · cache · index','source revision으로 재구성'),'cyan'),
+        ('memory','장기 User Memory',('명시적 등록 · 변경 · 삭제','현재 요청 우선 · 자동 승격 없음'),'purple'),
+        ('records','내구 원본 기록',('대화 · Task · command · 응답','owner별 DB transaction'),'gray')]):
+        card(d,ident,90+i*450,215,title,lines,color)
+    caption(d,90,385,'진행 중 업무·대기 질문·미전달 결과는 cache가 아니다. 단기·중기·장기는 의미 수명이며 RAM·파일·DB와 구분한다.',16)
+    strip(d,'read',435,'B · 조회 — 요약은 필요한 원문과 typed record를 대신하지 않는다','cyan',[
+        ('현재 요청 · 허용 범위',('Controller의 query scope','입력 · 대상 · 대기 질문')),
+        ('Owner read / Source',('원본 · typed ID · source version','후보 coverage · 누락 receipt')),
+        ('검증된 Context view',('VALID summary + 필요한 원문','DIRTY / INVALID는 재구성')),
+        ('Semantic 해석',('목표 · 조건 · 지칭에 근거 연결','원본 없으면 재조회 / 확인')),
+    ],'부정·수치·권한·대상·업무 상태는 정확한 기록을 유지한다. source 삭제 뒤 파생 요약만 남겨 사실처럼 사용하지 않는다.')
+    strip(d,'delete',720,'C · 삭제 / 철회 — 사용 차단과 물리 정리의 완료를 구분한다','red',[
+        ('삭제 대상 확정',('Controller → Context owner','대화 삭제와 기억 삭제 구분')),
+        ('Tombstone + epoch',('DB commit과 새 사용 차단','invalidation / cleanup intent')),
+        ('파생 상태 무효화',('summary · cache · KV · 생성 결과','진행 중 작업과 pin도 사용 금지')),
+        ('파일 정리 · 확인',('PURGE_PENDING → 확인 상태','외부 복사본 삭제를 약속하지 않음')),
+    ],'재시작은 tombstone을 먼저 적용한다. 과거 대화나 KV에서 삭제한 기억을 자동 복원하지 않는다.')
+    strip(d,'blob',1005,'D · Evidence 파일 — DB 밖 파일을 같은 transaction이라고 부르지 않는다','gray',[
+        ('임시 blob 기록',('허용된 최소 crop / snapshot','쓰기 완료 · digest 확보')),
+        ('최종 파일 rename',('완성된 blob identity 확보','DB 참조 전 orphan일 수 있음')),
+        ('DB manifest commit',('owner · scope · expiry · digest','이 시점부터 참조 가능')),
+        ('복구 / 회수',('누락은 EVIDENCE_GAP','orphan · cleanup intent 재처리')),
+    ],'삭제는 반대로 DB tombstone과 cleanup intent를 먼저 기록한다. 참조가 있으나 파일이 없으면 정상 evidence로 읽지 않는다.')
+    caption(d,90,1335,'기본값: raw는 RAM · 요청 evidence cache 24시간 · 내용 없는 진단 로그 7일 · 대화/Task와 허용 기억은 명시 삭제.',17,COLORS['ink'],weight=700)
+    caption(d,90,1380,'용량 상한을 넘기면 정리·재조회·입력 범위 안내로 처리한다. 활성 원본을 몰래 버리거나 무한히 저장하지 않는다.',17)
+    caption(d,90,1460,'보관 설정은 변경 가능하며 QA target이 아니다. 주요 설계 계약: memory-and-context-lifecycle.md',16)
+    return d
+
+
 def diagrams() -> list[Diagram]:
     return [
         system_overview(),
@@ -813,6 +873,8 @@ def diagrams() -> list[Diagram]:
         compound_requests(),
         policy_memory(),
         shared_omni(),
+        admission_control(),
+        memory_lifecycle(),
     ]
 
 

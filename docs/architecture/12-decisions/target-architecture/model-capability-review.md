@@ -44,9 +44,9 @@
 
 공개 자료는 기능별 실현 가능성의 근거이며, **공유 Omni + 입력 ASR + 실시간 예약 + 한국어 지칭 처리의 통합 성공 증거는 아니다.** 이 조사에서는 모델 다운로드·학습·API 호출·추론을 실행하지 않았다.
 
-## 4. 다음 구현 전에 닫을 항목
+## 4. 후속 구현·기능 검증 항목
 
-- 모델팀에 넘길 계약은 [공유 Omni 설계 §6](./shared-omni-runtime.md#6-우리가-정하는-모델runtime-계약)의 초안을 사용한다. 모델·serving·host의 구현 책임을 구분한다.
+- 모델팀에 넘길 기능 계약은 [공유 Omni 설계 §6](./shared-omni-runtime.md#6-우리가-정하는-모델runtime-계약)과 §8, [판단·제어 계약](./control-and-lifecycle.md)을 사용한다. 주요 기능 선택은 완료했으며 아래는 실제 build 연동의 후속 확인이다. 모델·serving·host의 구현 책임을 구분한다.
 - 정확한 checkpoint/build, encoder·Talker·ASR portfolio, quantization과 목표 PC 자원 profile을 기록한다. 기존 mock/reference evaluation profile을 새 제품 실측으로 해석하지 않는다.
 - 동시 입력에서 capture뿐 아니라 recognition·Omni Voice의 진행이 유지되는지, semantic도 기한 안에 진행하는지 확인해야 한다. 공개 서버 throughput만으로 PC 적합성을 판정하지 않는다.
 - 한국어/영문명·숫자·부정·정정·지칭의 전사와 시간 오차, 입력 revision 간 취소, text/audio 내용·전달 범위, crash 재연결을 실제 연동에서 확인해야 한다.
