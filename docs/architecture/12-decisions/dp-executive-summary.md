@@ -1,6 +1,8 @@
-# VIA Current Architecture Focus — Core ASRs and Core DPs
+# Previous Decision-first Focus — Core ASRs and Core DPs
 
-> **Status: active orientation document · 2026-09-28**
+> **Status: preserved active reference · superseded as the primary reading order on 2026-09-29**
+>
+> 현재 12번 작업은 [Target Architecture and Architecture Rationale](./README.md)에서 시작한다. 이 문서는 이전 Core DP 선정·정의·미완료 상태를 보존하며, 새 목표 Architecture의 구성이나 새 Decision Package를 구속하지 않는다.
 >
 > **Core ASRs:** QA-09, QA-19, QA-29, QA-39
 >

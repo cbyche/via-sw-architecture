@@ -14,11 +14,11 @@ For any non-trivial Architecture or measurement task, read these files in order:
 2. `docs/architecture/README.md`
 3. `docs/architecture/01-system-mission-and-boundary.md`
 4. `docs/architecture/03-fixed-architecture-scope.md` and `docs/architecture/05-representative-use-cases.md` for the fixed functional requirements
-5. `docs/architecture/12-decisions/dp-executive-summary.md` for the current Core ASRs, Core DPs, and next work
-6. the relevant quality-attribute or DP document
-7. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
-8. `docs/architecture/11-measurement/README.md` for measurement work
-9. `docs/architecture/12-decisions/README.md` and the relevant ADR for decision work
+5. `docs/architecture/08-quality-attributes/core-asr-contract.md` for the current quality semantics
+6. `docs/architecture/12-decisions/README.md` and `docs/architecture/12-decisions/target-architecture/README.md` for the current Architecture work
+7. the relevant target-Architecture or quality-attribute document
+8. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
+9. `docs/architecture/11-measurement/README.md` and the relevant ADR for measurement or accepted-decision work
 
 Do not infer the current project from filenames found by search alone.
 
@@ -42,18 +42,17 @@ Do not modify an approved baseline, an accepted ADR, or archived evidence unless
 
 - The authoritative branch is `main`.
 - The active Architecture baseline is `docs/architecture/`.
-- Current decision reports use VIA-DP-01~18; legacy IR/TASK/AGENT/EXEC IDs are provenance only, not the primary reading path. TASK-DP01 is carried forward as VIA-DP-14 without changing ADR-002's accepted B status or its revalidation caveats.
-- The current Core DP set is fixed to **VIA-DP-03, VIA-DP-05, VIA-DP-06, VIA-DP-07, VIA-DP-15, and VIA-DP-17**. These six receive the primary deep-definition, implementation, and measurement effort. Their A/B winners are not selected yet.
-- Use this default deep-review order: **03 → 05 → 17 → 06 → 07 → 15**. It follows the user interaction flow; it does not create winner dependencies between DPs. DP-05 and DP-17 remain independent axes.
-- VIA-DP-11 is a non-core supporting decision, not a seventh fallback if one of the six is weak. Revisit it only through an explicit scope change if a real VIA-side native SDK, plugin, browser/OS bridge, or other Process-fatal integration enters product scope. Preserve ADR-003 and existing reference assets with their caveats.
-- The current lifecycle stage for the six Core DPs is **Measurement Contract Definition**. Start with VIA-DP-03 capability qualification and A/B contract freeze; do not continue the old DP-11 runner sequence by inertia.
+- The current Architecture work is **Target Architecture Definition** under `docs/architecture/12-decisions/target-architecture/`. Complete and agree on the target structure before deriving new Decision Packages or measurement freezes.
+- After the target Architecture is agreed, extract only structural choices that materially affect responsiveness, VIA semantic accuracy, or critical failure behavior. Put new packages under `docs/architecture/12-decisions/decision-packages/`.
+- New packages are retrospective Architecture rationale. They must include a steelman alternative, costs, conditions favoring that alternative, and falsification conditions. Do not map them back to VIA-DP-01~18 or manufacture a package for every Component.
+- VIA-DP-01~18 and the previous Core set **VIA-DP-03, VIA-DP-05, VIA-DP-06, VIA-DP-07, VIA-DP-15, and VIA-DP-17** remain active reference artifacts for prior work, not the reading order or decomposition constraint for the target Architecture. Their A/B winners remain unselected.
+- Preserve previous DP reports, measurement drafts, ADR-003 and other accepted/deferred ADRs with their original status and caveats. Do not reinterpret them as evidence for the new target Architecture.
 - The active `benchmark/architecture/`, `prototypes/candidates/`, and `results/architecture-evaluation/current/` trees were reset after the Core ASR/Core DP selection. They contain no current runner, executable candidate, or Core-ASR result yet. The 2026-09-27 generation is historical provenance under the matching archive trees; do not resume it in place.
-- VIA's shared base uses exactly one S2S model and one semantic LLM. Never load or replicate models per Component, Task, or semantic stage. Role-specific prompts, calls, sessions and buffers may differ; they share the same models. VIA-DP-03 is the explicit exception under evaluation: candidate A adds one timestamp-capable Streaming ASR, while candidate B adds time-aligned final-text output to the single S2S and uses no separate ASR. This exception does not authorize arbitrary TTS/helper models or per-Component replication. Downstream Agent internals remain external.
-- Core evaluation is a direct A/B comparison for each DP with other DP conditions held fixed.
-- A 16-configuration full-factorial run is secondary interaction analysis, not the primary winner-selection method.
+- The target Architecture uses exactly one S2S model and one semantic LLM. Never load or replicate models per Component, Task, or semantic stage. Role-specific prompts, calls, sessions and buffers may differ; they share the same models. The extra timestamp-capable Streaming ASR in the preserved VIA-DP-03 A report belongs to that previous alternative and is not automatically part of the target Architecture. This does not authorize arbitrary TTS/helper models or per-Component replication. Downstream Agent internals remain external.
+- When target-derived validation begins, hold user goals, completion conditions and external conditions fixed, freeze the contract before results, and preserve failures. Validation tests the chosen structure's claimed property and its falsification condition; it is not neutral winner discovery.
 - QC-01~QC-10 are top-level quality concerns. The active QA catalog is organized by category ranges. Core IDs QA-09, QA-19, QA-29, and QA-39 coexist with detailed IDs QA-01~05, QA-11~15, QA-21~23, QA-31/32, QA-41, QA-51, and QA-61/62. Preserve the intentional gaps and do not describe pending targets or measurement freezes as final.
 - The previous-generation QA-04/06/10/12 definitions are preserved only in `docs/archive/qa-catalog-draft-v1/`. Previous-generation QA-05 migrated to QA-11. Current QA-04, QA-05, and QA-12 are new category-range definitions. Never mix the prior meanings with the active IDs.
-- QA-09, QA-19, QA-29, and QA-39 are the four confirmed core ASRs. Every VIA-DP-01~18 A/B package must report all four as `PRIMARY`, `REGRESSION_ONLY`, `NOT_APPLICABLE`, or `UNRESOLVED`; do not manufacture participation. Their targets, score bands, DP-specific populations, machine contract, harness, and results remain pending.
+- QA-09, QA-19, QA-29, and QA-39 remain the four confirmed core ASRs. Existing VIA-DP applicability records remain preserved; target-derived packages must state only the quality paths they physically affect and must not manufacture participation. Their targets, score bands, package-specific populations, machine contract, harness, and results remain pending.
 - QA-01~QA-04 are Voice responsiveness drafts defined by `docs/architecture/08-quality-attributes/voice-responsiveness.md`.
 - QA-09 is the arithmetic mean of VIA-attributable time across applicable QA-01/02/03/05 interaction trials; QA-04 remains a Voice interruption regression. QA-19 is the micro-average of non-duplicate applicable QA-11/12 oracle fields; QA-13~15 remain regression diagnostics. QA-29 is the simple mean changed Architecture Element count across the DP-specific applicable QA-21~23 change superset. QA-39 is the simple pooled success rate of applicable fault trials that satisfy containment, correct recovery, deadline, no-duplicate, and evidence conditions using QA-31/32 evidence.
 - QA-41 is a target-device memory diagnostic, not a core ASR. QA-51 and the action/access rules are safety qualifications; QA-61/62 are evidence qualifications. Their existing detailed semantics remain active, but the new core machine contract, targets, score bands, DP-specific populations, harness, and current results are not yet implemented or run. Never relabel predecessor reference results as QA-09/19/29/39 results.
@@ -66,7 +65,7 @@ Do not silently turn a pending definition into an implemented fact or a deferred
 
 | Change type | Active location |
 | --- | --- |
-| System definition, use cases, quality attributes, measurement contract, DP alternatives | `docs/architecture/` |
+| System definition, use cases, quality attributes, target Architecture, rationale packages, measurement contract | `docs/architecture/` |
 | Accepted or deferred decision record | `docs/adr/` |
 | External/internal source material | `docs/references/` |
 | Measurement fixtures, adapters, runners, analyzers | `benchmark/architecture/` |
@@ -75,19 +74,19 @@ Do not silently turn a pending definition into an implemented fact or a deferred
 | Active consistency and review scripts | `scripts/architecture/` |
 | Superseded generations | the matching `archive/` tree |
 
-The active lifecycle names are **Measurement Contract Definition → Candidate Implementation → A/B Measurement & Evaluation → Architecture Decision**. Do not introduce `Gate 1` or `Gate 2` as current phase names. Exact legacy names may appear only when identifying archived paths or historical evidence.
+The current solution-first lifecycle is **Target Architecture Definition → Decision Reconstruction → Rationale & Falsification → Measurement & Revalidation**. Existing DP documents may retain their original lifecycle terminology as preserved prior work. Do not introduce `Gate 1` or `Gate 2` as current phase names. Exact legacy names may appear only when identifying archived paths or historical evidence.
 
 Do not place new active files under a historical namespace. Do not overwrite prior result directories; create a new freeze/result directory when a new campaign is authorized.
 
 ## 5. Architecture and evaluation rules
 
-- Keep user goals, completion conditions, fixtures, and external dependency profiles equal across candidate A/B comparisons.
-- Compare one DP at a time. Record fixed context and `source_execution_key` when a result is reused for non-applicable axes; do not duplicate it as independent samples.
+- Keep user goals, completion conditions, fixtures, and external dependency profiles equal across comparisons and revalidation.
+- Validate one target-derived structural claim at a time where practical. Record fixed context and `source_execution_key` when a result is reused; do not duplicate it as independent samples.
 - Keep TASK and AGENT non-applicable to a QA path when they do not physically participate. Do not manufacture causality to fill a matrix.
 - Freeze definitions, fixtures, repetition counts, aggregation, failure treatment, target, and score boundaries before seeing candidate results.
 - Keep candidate input separate from evaluator-only oracle data.
 - Record failures and timeouts; never select only successful samples to improve percentiles.
-- A decision must trace to a structural difference such as authority, contract, state ownership, call graph, deployment, persistence, or fault boundary.
+- A package must trace from the target Architecture to a structural difference such as authority, contract, state ownership, call graph, deployment, persistence, or fault boundary.
 
 ## 6. Measurement integrity
 

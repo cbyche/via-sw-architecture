@@ -566,7 +566,11 @@ Action의 실제 실행과 권한 강제는 Downstream Agent 책임이다. VIA�
 | **Quality Concern (QC)** | ISO/IEC 25010 관점과 VIA 제품 문맥에서 도출한 상위 품질 관심사. coverage를 조직하지만 직접 점수를 만들지 않는다. |
 | **Quality Attribute (QA)** | stimulus, response와 하나의 대표 metric을 정의하여 Architecture 후보를 비교할 수 있게 만든 품질 속성. Catalog는 category range로 구성된 사용자 검토 초안이며 범위 안 번호 공백은 의도적으로 보존한다. |
 | **Architecture Significant Requirement (ASR)** | QA 중 책임 배치, interface, state authority, process/deployment boundary 또는 중요한 구조 trade-off에 중대한 영향을 주는 것으로 판정된 항목. 별도 번호를 만들지 않고 기존 QA ID에 분류를 표시한다. 현재 확정된 ASR은 없다. |
-| **Measurement Contract Definition** | QA별 stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정하는 현재 단계. |
+| **Target Architecture Definition** | 01~11의 전제를 만족하며 responsiveness와 semantic accuracy를 우선하는 완성 구조를 먼저 설계·합의하는 현재 단계. |
+| **Decision Reconstruction** | 합의된 목표 Architecture에서 성능·장애 특성에 중요한 구조적 선택만 역으로 추출하는 단계. |
+| **Rationale & Falsification** | 선택 구조, 강한 대안, 비용, 대안이 유리한 조건과 반증 조건을 설명하는 단계. |
+| **Measurement & Revalidation** | 결과 전에 검증 계약을 확정하고 선택 구조가 기대한 특성을 실제로 갖는지 확인하는 단계. |
+| **Measurement Contract Definition** | 기존 decision-first DP 작업에서 QA별 stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정하던 단계. |
 | **Candidate Implementation** | 확정된 계약에 맞춰 DP별 A/B 구조와 측정 가능한 실행 경로를 구현하는 단계. |
 | **A/B Measurement & Evaluation** | 다른 DP 조건을 고정하고 한 DP의 A/B를 직접 실행·비교하는 단계. |
 | **Architecture Decision** | 측정 결과와 구조적 인과를 근거로 선택, 약점과 재검증 조건을 ADR에 기록하는 단계. |

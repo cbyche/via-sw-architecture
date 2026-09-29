@@ -1,20 +1,57 @@
-# VIA Architecture Decisions
+# 12. Target Architecture and Architecture Rationale
 
-VIA-DP-01~18은 전체 decision inventory이며 번호는 우선순위가 아니다. 현재 보고서와 평가가 중점적으로 다룰 Core DP는 **VIA-DP-03·05·06·07·15·17의 6개로 확정**했다. QA-09·19·29·39는 네 Core ASR로 확정했지만, 여섯 DP의 상세 A/B Measurement Freeze와 새 계약에 따른 실측·winner 선정은 완료하지 않았다. VIA-DP-11은 6개 실패 시의 대체 후보가 아니다.
+> 상태: **Target Architecture Definition / 전체 구조 검토 중**
 
-## 어디부터 읽을까?
+12번은 01~11에서 정의한 제품 경계·사용자 행동·품질 의미를 바탕으로 VIA의 목표 Architecture를 완성하고, 그 구조를 성립시키는 핵심 선택을 역으로 설명하는 단계다.
 
-[Current Architecture Focus](./dp-executive-summary.md)를 먼저 읽고 현재 차례의 Core DP로 이동한다. 이 문서는 Core QA 4개, Core DP 6개, 심층 검토 순서와 미완료 작업을 현재 기준으로 설명한다.
+## 작업 흐름
 
-| 문서 | 목적 | 언제 읽는가 |
+```text
+01~11의 고정 전제
+  → 완성된 목표 Architecture 설계·합의
+  → 성능을 만드는 핵심 구조적 선택 추출
+  → 각 선택의 강한 현실적 대안 구성
+  → 선택 구조의 인과·비용·약점·반증 조건 설명
+  → 결과 전 검증 계약과 revalidation
+```
+
+이 작업은 Decision Package를 조합해 Architecture를 발견하는 중립적 exploration이 아니다. 먼저 가장 타당한 목표 Architecture를 세우고, 이후 그 구조를 방어하는 rationale를 만든다. 그렇더라도 대안을 일부러 약하게 만들거나 측정 결과를 결론에 맞추지 않는다.
+
+## 현재 읽기 순서
+
+| 순서 | 문서 | 목적 |
 | --- | --- | --- |
-| [Current Architecture Focus](./dp-executive-summary.md) | Core QA·Core DP·다음 작업 이해 | 처음 읽을 때 |
-| 아래 개별 VIA-DP | 배경·A/B 구현·사고실험·네 core ASR 적용과 상세 진단 | 해당 결정을 검토할 때 |
-| [검토 protocol](./dp-review-protocol.md) | 배타성·steelman·보고서·그림 작성 기준 | DP를 작성·수정·검토할 때 |
-| [평가 방법](./evaluation-method.md) | A/B 측정과 QA 판별·평가 왜곡 방지 | 실제 비교·평가를 준비할 때 |
-| [공통 계약](./common-contract.md) | 동일 모델·identity·메시지·상태·실패 처리 조건 | 대안을 구체화할 때 |
+| 1 | [Target Architecture 작업 공간](./target-architecture/README.md) | 접근법, 고정 경계, 현재 산출물의 한계 이해 |
+| 2 | [전체 Architecture 제안](./target-architecture/architecture.md) | Component, 상태, 계약, runtime, 동시성, 장애와 위험 검토 |
+| 3 | [검토 기록](./target-architecture/review-log.md) | 사용자 지정 방향, 제안·합의·열린 항목 확인 |
+| 4 | [Target-derived Decision Packages](./decision-packages/README.md) | 전체 구조 합의 이후의 package 도출 규칙 |
 
-## Core DP 보고서
+현재는 1~3만 진행한다. 전체 Architecture가 충분히 합의되기 전에는 새 Decision Package나 측정 freeze를 만들지 않는다.
+
+## 목표 Architecture 이후의 Decision Package
+
+새 package는 다음 조건을 모두 만족하는 선택만 다룬다.
+
+- 목표 Architecture 안에 실제로 선택된 구조다.
+- responsibility, contract, state ownership, call graph, deployment, persistence 또는 fault boundary의 차이다.
+- responsiveness, semantic accuracy 또는 치명적인 failure behavior에 실질적인 인과 효과가 있다.
+- 같은 문제를 해결하는 강한 현실적 대안을 구성할 수 있다.
+- 선택 구조가 기대한 특성을 갖지 못했다고 판단할 반증 조건을 둘 수 있다.
+
+Component가 있다는 이유만으로 package를 만들지 않는다. 새 package는 기존 VIA-DP 번호를 이어받거나 기존 inventory에 다시 매핑하지 않는다.
+
+## 기존 VIA-DP-01~18의 위치
+
+기존 문서는 이전 decision-first 작업의 active reference로 보존한다. 당시의 Core DP 선정, A/B 정의, measurement 초안과 ADR caveat를 왜곡하거나 현재 측정 결과인 것처럼 바꾸지 않는다.
+
+이 문서들은 새 목표 Architecture의 구성요소 목록이나 새 작업 순서가 아니다. 목표 구조를 만들기 전에 전체 inventory를 순회하지 않으며, 누락 확인·과거 근거·이미 승인된 ADR 제약을 확인할 때만 참고한다.
+
+- [이전 Current Architecture Focus](./dp-executive-summary.md)
+- [이전 검토 protocol](./dp-review-protocol.md)
+- [이전 평가 방법](./evaluation-method.md)
+- [이전 공통 계약](./common-contract.md)
+
+### 이전 Core DP 보고서
 
 - [VIA-DP-03 — 음성 입력 근거의 최종 기준](./via-dp-03-voice-evidence.md)
 - [VIA-DP-05 — 요청 Context의 획득 계획 확정 계약](./via-dp-05-context-contract.md)
@@ -23,9 +60,7 @@ VIA-DP-01~18은 전체 decision inventory이며 번호는 우선순위가 아니
 - [VIA-DP-07 — 복합 요청 graph의 dependency 실행 권한](./via-dp-07-compound-orchestration.md)
 - [VIA-DP-15 — Agent progress state의 유지 방식](./via-dp-15-agent-observation-authority.md)
 
-위 순서는 기본 심층 검토 순서다. DP-05와 DP-17은 독립 축이며 순서가 winner dependency를 뜻하지 않는다.
-
-## 그 밖의 DP inventory
+### 그 밖의 이전 DP inventory
 
 - [VIA-DP-01 — 범위가 정해진 정보 처리의 책임 경계](./via-dp-01-direct-handling.md)
 - [VIA-DP-02 — 대화와 Task 관계의 확정 경계](./via-dp-02-state-consistency.md)
@@ -40,8 +75,9 @@ VIA-DP-01~18은 전체 decision inventory이며 번호는 우선순위가 아니
 - [VIA-DP-16 — 모델 입력 이력의 구성·유지 책임](./via-dp-16-model-context-state.md)
 - [VIA-DP-18 — 보호정보·Action 사용 시 권한을 확인하는 위치](./via-dp-18-authorization-enforcement.md)
 
-## 현재 기준과 이력
+## 아직 바뀌지 않은 사실
 
-공통 기반인 S2S 1개·semantic LLM 1개를 유지하며 Component·Task별 모델을 복제하지 않는다. VIA-DP-03 A의 timestamp-capable Streaming ASR 1개는 해당 evidence-source topology 비교에만 허용된 예외다. VIA Client와 외부 Agent Runtime을 구별한다. QA는 [현행 catalog](../08-quality-attributes/quality-model.md), 기존 accepted/deferred 결정은 [ADR](../../adr/README.md)을 따른다. 새 보고서 작성은 재승인이나 실측 승자 선정을 뜻하지 않는다.
-
-역할이 끝난 중간 문서·이전 경로 안내는 제거했다. 원문과 당시 검증 기록은 [문서 통합 이력](../../archive/dp-document-consolidation-2026-09-25/README.md)에 보존하며 현재 요구의 근거로 사용하지 않는다.
+- 제품 경계, 대표 Use Case와 현재 QA 의미는 01~11의 active 문서를 따른다.
+- S2S 1개와 공유 semantic LLM 1개라는 기반을 유지한다. 목표 Architecture 문서가 실제 dependency capability 확보를 주장하지 않는다.
+- 기존 accepted/deferred ADR의 상태와 caveat는 유지한다. 새 목표 구조와 충돌하면 숨기지 않고 재검토 필요성을 기록한다.
+- 현재 새 후보 구현과 Core-ASR 결과는 없다. 기존 reference·archive evidence를 새 Architecture의 결과로 소급하지 않는다.

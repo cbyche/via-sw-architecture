@@ -1,6 +1,8 @@
 # Core DP Evaluation Plan
 
-> **Status: ACTIVE — Measurement Contract Definition**
+> **Status: PRESERVED PREVIOUS PLAN — 현재 실행 순서 아님**
+>
+> 현재 작업은 [목표 Architecture](../12-decisions/target-architecture/README.md)를 먼저 합의하는 것이다. 이 문서는 이전 Core DP 실행 계획과 미완료 상태를 보존하며 새 목표 구조의 Decision Package나 검증 순서를 미리 정하지 않는다.
 >
 > **Core ASRs:** QA-09, QA-19, QA-29, QA-39
 >

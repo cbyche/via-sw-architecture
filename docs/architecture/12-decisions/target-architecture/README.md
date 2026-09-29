@@ -11,7 +11,7 @@
 | [전체 Architecture](./architecture.md) | Component, 상태 소유권, 계약, 호출 흐름, 동시성, Context, 장애 복구와 위험 |
 | [검토 기록](./review-log.md) | 사용자가 정한 방향, 제안 상태, 미합의 사항, 다음 검토 주제와 변경 기록 |
 
-이 디렉터리는 현재 논의 중인 **제안**의 source of truth다. 문서에 포함되었다는 이유로 승인된 제품 Architecture나 구현된 기능이 되는 것은 아니다. [기존 Architecture 기준선](../README.md), accepted ADR, 기존 평가 상태를 이 초안이 자동으로 대체하지 않는다.
+이 디렉터리는 12번 작업의 첫 단계인 **목표 Architecture 제안**의 source of truth다. 문서에 포함되었다는 이유로 승인된 제품 Architecture나 구현된 기능이 되는 것은 아니다. [Architecture 기준선](../../README.md), accepted ADR, 기존 평가 상태를 이 초안이 자동으로 대체하지 않는다.
 
 ## 작업 순서
 
@@ -38,14 +38,14 @@ responsiveness / accuracy에 중요한 구조적 선택 추출
 - responsiveness는 유효한 응답·clarification·위임·진행·중단까지의 VIA 책임 경로를 다룬다. 모델 시간이나 접수 멘트만으로 설명하지 않는다.
 - Voice 연결, Conversation, Request, Task, Agent Execution의 수명을 분리한다.
 
-제품 요구의 근거는 [Mission & Boundary](../01-system-mission-and-boundary.md), [Fixed Scope](../03-fixed-architecture-scope.md), [Representative Use Cases](../05-representative-use-cases.md)다. 용어는 [Terms](../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../08-quality-attributes/correctness-and-continuity.md)를 참고한다.
+제품 요구의 근거는 [Mission & Boundary](../../01-system-mission-and-boundary.md), [Fixed Scope](../../03-fixed-architecture-scope.md), [Representative Use Cases](../../05-representative-use-cases.md)다. 용어는 [Terms](../../02-terms.md), 의미상 정확성의 범위는 [Correctness & Continuity](../../08-quality-attributes/correctness-and-continuity.md)를 참고한다.
 
-## GitHub에서 계속 정리하는 방식
+## 저장소에서 계속 정리하는 방식
 
 1. 설계 내용이 달라지면 `architecture.md`의 현재 제안을 수정한다.
 2. 사용자와 명시적으로 합의한 내용, 열린 쟁점과 변경 이유는 `review-log.md`에 남긴다.
-3. 문서화·PR 생성·merge를 Architecture의 의미상 승인과 혼동하지 않는다. 합의 상태는 별도로 표시한다.
-4. 각 변경은 기능 경계와 문서 링크·용어를 확인한 뒤 scoped commit과 PR로 검토한다.
+3. 문서화·commit을 Architecture의 의미상 승인과 혼동하지 않는다. 합의 상태는 별도로 표시한다.
+4. 별도 작업 branch·PR을 매번 만들지 않고 현재 Architecture 흐름 안에서 문서와 검토 기록을 함께 갱신한다.
 5. 채팅에만 남은 제안을 구현 완료·성능 확인으로 바꾸지 않는다. 실제 근거가 생기기 전까지 성능은 가설이다.
 
 ## 현재 산출물의 한계

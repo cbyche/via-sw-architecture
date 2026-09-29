@@ -2,7 +2,7 @@
 
 > **Current state:** QA-09·19·29·39는 confirmed core ASR이고 상세 QA는 input·diagnostic·qualification으로 유지한다. 새 Core-ASR generation의 active harness, candidate와 result는 아직 없으며 여섯 Core DP 결과는 모두 `NOT_RUN`이다.
 >
-> **Current focus:** Core DP는 VIA-DP-03·05·06·07·15·17의 6개로 확정했다. 현재 단계는 **Measurement Contract Definition**이며 DP-03부터 05→17→06→07→15 순으로 한 번에 하나씩 심층 정의한다. 기존 결과는 재사용 가능한 예비 증거일 뿐 새 Core ASR 결과나 최종 winner가 아니다.
+> **Current focus:** [목표 Architecture](../12-decisions/target-architecture/README.md)를 먼저 설계·합의한다. 기존 Core DP 6개의 계약과 실행 계획은 이전 decision-first 작업의 active reference로 보존하지만 현재 실행 순서가 아니다. 목표 구조 합의 후 새 구조에서 추출한 선택에 맞춰 검증 계약을 구성한다.
 
 여섯 Core DP의 공식 PoC는 실제 Model·Agent 제품 개발을 선행조건으로 두지 않는다. 공통 Shared
 Evaluation Spine과 근거가 동결된 deterministic dependency mock을 사용해
@@ -15,7 +15,8 @@ event/state patch로 표현한다.
 
 | Document | Role |
 | --- | --- |
-| [Current Architecture Focus](../12-decisions/dp-executive-summary.md) | Core QA 4개, Core DP 6개, 심층 검토 순서와 미완료 작업 |
+| [Target Architecture and Rationale](../12-decisions/README.md) | 현재 목표 구조와 합의 후 검증으로 이어지는 작업 순서 |
+| [Previous Decision Focus](../12-decisions/dp-executive-summary.md) | 이전 Core QA·Core DP 작업과 미완료 상태 보존 |
 | [Core ASR Contract](../08-quality-attributes/core-asr-contract.md) | QA-09/19/29/39 정의·집계·실패 처리와 VIA-DP-01~18 적용 원장 |
 | [Event & Boundary Contract](./event-boundary-contract.md) | 실제 사용자/source 사건, software 인식 event와 component 포함 규칙 |
 | [QA-01~15 Common Harness Contract](./qa01-15-harness-contract.md) | DP 공통 trace·oracle·audio endpoint·sentinel qualification gate |
@@ -44,7 +45,7 @@ event/state patch로 표현한다.
 
 외부 model 근거는 [Quality Attribute evidence](../08-quality-attributes/evidence/)에 둔다. 그 자료는 입력 profile이나 estimate를 정당화할 수 있지만 실행하지 않은 모델을 measured evidence로 만들지는 않는다.
 
-## Required sequence
+## 검증을 시작할 때의 공통 sequence
 
 측정 작업은 아래 순서를 지킨다.
 
@@ -59,7 +60,9 @@ event/state patch로 표현한다.
 9. source revision과 fixture digest를 Measurement Freeze로 고정한다.
 10. A/B paired run을 수행하고 raw trace에서 summary를 재생성한다.
 
-## Lifecycle names
+## 이전 decision-first lifecycle
+
+아래 이름은 기존 DP 문서와 기존 measurement 자산의 상태를 해석할 때 사용한다. 현재 전체 작업의 lifecycle은 12번의 solution-first 순서를 따른다.
 
 1. **Measurement Contract Definition** — QA별 의미, fixture, endpoint, 반복·집계, target과 evidence 범위를 확정한다.
 2. **Candidate Implementation** — 확정된 계약을 만족하는 DP별 A/B 후보와 harness를 구현한다.

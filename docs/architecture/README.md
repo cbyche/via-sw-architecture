@@ -2,10 +2,9 @@
 
 > **Status: active and authoritative**
 
-> **현재 별도 설계 작업:** [Target Architecture 설계 공간](./target-design/README.md)은
-> responsiveness와 semantic accuracy를 우선하는 완성 구조를 먼저 설계하는 사용자 지정 작업이다.
-> 기존 결정의 분해·검토 순서와 독립적으로 논의하며, 전체 합의 전에는 새 Decision Package를 만들지 않는다.
-> 해당 문서는 제안 상태이고 이 기준선과 accepted ADR의 승인 상태를 자동 변경하지 않는다.
+> **현재 12번 작업:** [Target Architecture](./12-decisions/target-architecture/README.md)를 먼저 설계·합의한 뒤,
+> 그 구조에서 responsiveness와 semantic accuracy를 만드는 핵심 선택을 역으로 추출한다.
+> 기존 VIA-DP 분해에 맞추거나 다시 매핑하지 않으며, 전체 구조 합의 전에는 새 Decision Package를 만들지 않는다.
 
 이 디렉터리는 VIA의 시스템 정의, 공통 범위, 대표 Use Case, 변화 시나리오, 품질 속성, 측정 계약, Decision Point를 연결한 현재 Architecture 기준선이다. 이 기준선이 답하려는 질문은 다음과 같다.
 
@@ -19,15 +18,15 @@
 - Downstream Agent는 업무 reasoning, planning, tool 선택·실행을 책임진다.
 - Voice Runtime은 VIA 안에 있고, S2S와 VIA semantic model runtime은 local/remote dependency가 될 수 있다.
 - 모든 후보는 동일한 기능 범위와 Use Case를 충족해야 한다.
-- Architecture 선택은 DP별 A/B 직접 비교로 수행한다. 기존 IR/TASK/AGENT/EXEC ADR과 새 VIA-DP 검토 제안을 구분한다.
+- 01~11의 전제 위에서 목표 Architecture를 먼저 설계한다. 이후 성능에 중요한 구조적 선택만 Decision Package로 추출한다.
 - QC-01~QC-10은 상위 품질 관심사다. QA catalog는 category range와 하나의 QA당 하나의 대표 metric 원칙을 유지하며, 네 통합 core QA와 상세 measurement·diagnostic QA를 함께 관리한다.
 - **QA-09·19·29·39를 핵심 `CONFIRMED_ASR`로 확정했다.** 정의와 VIA-DP-01~18 적용 원장은 [Core ASR Contract](./08-quality-attributes/core-asr-contract.md)에 있다. 공통 system target·score band proposal은 작성했고 DP별 Shared Spine patch·mock profile·모집단과 함께 freeze 전이다.
-- **VIA-DP-03·05·06·07·15·17을 현재 보고서와 평가의 Core DP set으로 확정했다.** 이는 A/B winner나 측정 완료가 아니다. VIA-DP-11은 여섯 DP의 대체 후보가 아니며 실제 fatal-risk integration이 제품 범위에 새로 들어올 때만 별도 scope decision으로 다시 검토한다.
+- 기존 VIA-DP-01~18과 Core DP 6개는 이전 decision-first 작업의 reference로 보존한다. 새 목표 Architecture의 구성요소나 선택을 이 번호에 맞추지 않는다.
 - QA-01/02/03/05는 QA-09 input, QA-11/12는 QA-19 field source, QA-21~23은 QA-29 change source, QA-31/32는 QA-39 fault evidence다. QA-04·13~15·41·51·61/62는 회귀·진단·qualification으로 유지한다. 이전 일곱 DP reference generation은 archive했으며 새 core ASR 결과가 아니다.
 
 모든 QA의 실제 stimulus/terminal event, software 인식 event와 component 포함 규칙은 [Measurement Event & Boundary Contract](./11-measurement/event-boundary-contract.md)의 공통 형식으로 관리한다.
 
-DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisions/dp-executive-summary.md)를 본다. Core QA 4개, Core DP 6개, 심층 검토 순서와 남은 작업을 현재 기준으로 설명한다. 전체 18개 inventory는 [Decision index](./12-decisions/README.md)에서 별도로 유지한다.
+12번 작업은 [Architecture Decisions](./12-decisions/README.md)에서 시작한다. 현재 목표 구조와 합의 상태를 먼저 읽고, 기존 Core DP와 전체 inventory는 이전 작업의 reference가 필요할 때만 확인한다.
 
 ## Minimum orientation path
 
@@ -37,9 +36,9 @@ DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisi
 | --- | --- | --- |
 | 1 | [System Mission & Boundary](./01-system-mission-and-boundary.md) | VIA는 왜 존재하며 무엇을 책임지는가? |
 | 2 | [Fixed Architecture Scope](./03-fixed-architecture-scope.md)와 [Representative Use Cases](./05-representative-use-cases.md) | 모든 후보가 제공해야 할 기능과 사용자 완료 조건은 무엇인가? |
-| 3 | [Current Architecture Focus](./12-decisions/dp-executive-summary.md) | 확정한 Core ASR·Core DP와 미완료 작업은 무엇인가? |
-| 4 | [Core ASR Contract](./08-quality-attributes/core-asr-contract.md) | 네 Core ASR을 정확히 어떻게 해석하는가? |
-| 5 | [Core DP Evaluation Plan](./11-measurement/major-dp-evaluation-plan.md) | 어떤 순서로 무엇을 동결·구현·측정하는가? |
+| 3 | [Core ASR Contract](./08-quality-attributes/core-asr-contract.md) | responsiveness·accuracy 등 품질을 어떻게 해석하는가? |
+| 4 | [Target Architecture](./12-decisions/target-architecture/README.md) | 현재 제안 구조와 열린 검토 항목은 무엇인가? |
+| 5 | [Architecture Decisions](./12-decisions/README.md) | 목표 구조에서 rationale와 검증을 어떤 순서로 만드는가? |
 
 세부 문서는 작업 목적에 따라 연다.
 
@@ -49,7 +48,8 @@ DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisi
 | A/B 고정 조건과 변화 시나리오 | [Fixed Assumptions](./06-fixed-assumptions.md), [Intentional Variables](./07-intentional-variables.md) |
 | 상세 QA와 요구 추적 | [Quality Attributes](./08-quality-attributes/README.md), [Traceability](./09-traceability.md), [Architecture Element Definition](./10-element-definition.md) |
 | 측정 endpoint와 evidence | [Measurement](./11-measurement/README.md) |
-| 전체 DP inventory와 기존 결정 | [Decisions](./12-decisions/README.md), [ADRs](../adr/README.md) |
+| 목표 Architecture와 새 rationale | [Architecture Decisions](./12-decisions/README.md) |
+| 기존 DP inventory와 결정 | [Previous Decision Focus](./12-decisions/dp-executive-summary.md), [ADRs](../adr/README.md) |
 
 부분 검색, 전체 18개 DP 순회, archive 열람으로 시작하지 않는다. Archive는 현재 요구·계약·결과가 아니라 필요할 때만 확인하는 provenance다.
 
@@ -66,24 +66,25 @@ DP 상세 보고서를 읽기 전에는 [Current Architecture Focus](./12-decisi
 | QA-01~QA-05 event-boundary contract | Draft | 실제 source 사건과 software 진단 event를 구분함 |
 | Mock/spine machine contract and harness | Mixed | 공통 target·score band proposal과 mock/spine 방법은 작성; freeze·active harness·full campaign은 미완료 |
 | Current evidence | Empty / `NOT_RUN` | 이전 VIA-DP-02·05·06·09·11·12·13 reference generation은 archive; current 결과로 대체하지 않음 |
-| Core DP set | Confirmed | VIA-DP-03·05·06·07·15·17; A/B winner와 measurement freeze는 pending |
-| Full DP inventory | Current supporting inventory | VIA-DP-01~18 독립 보고서; 비핵심 DP도 공통 계약·회귀·추적성을 위해 유지 |
+| Target Architecture | Proposed | 전체 구조 검토 중; 구현·측정·합의는 pending |
+| Previous Core DP set | Preserved reference | VIA-DP-03·05·06·07·15·17; 새 구조의 reading order나 매핑 대상이 아님 |
+| Previous full DP inventory | Preserved reference | VIA-DP-01~18 독립 보고서; 새 package 도출 시 그대로 계승하지 않음 |
 | ADRs | Mixed | 세 DP accepted with caveats; IR deferred |
 
-## How the baseline becomes a decision
+## How the baseline becomes an Architecture rationale
 
 ```text
 Mission and fixed scope
   → representative Use Cases and changes
   → quality attribute and metric definition
-  → pre-result measurement freeze
-  → one-DP-at-a-time A/B execution
-  → raw evidence and aggregation
-  → trade-off analysis
-  → ADR
+  → complete target Architecture
+  → performance-critical structural choices
+  → strong alternatives and trade-offs
+  → falsification conditions and measurement
+  → rationale / ADR
 ```
 
-같은 실행 결과를 TASK/AGENT 등 non-applicable 축으로 복제해 표본 수를 늘리지 않는다. 여러 DP 조합은 interaction 확인에 사용할 수 있지만 primary decision은 각 DP의 paired contrast다.
+Decision Package는 Architecture를 발견하기 위한 중립적 탐색 단위가 아니다. 이미 선택한 목표 구조의 핵심 선택을 설명하고 반증 가능한 방식으로 방어한다. 대안은 약하게 만들지 않고, 선택 구조의 비용과 대안이 더 유리한 조건을 함께 기록한다.
 
 ## Active authoring rules
 

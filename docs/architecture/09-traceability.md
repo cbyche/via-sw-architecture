@@ -4,7 +4,8 @@
 > 기준: 현재 Architecture baseline. 상세 provenance는 Git history로 보존한다.
 > 입력: [05 대표 UC](./05-representative-use-cases.md), [06 공통 조건](./06-fixed-assumptions.md), [07 변경 집합](./07-intentional-variables.md), [08 Quality Model](./08-quality-attributes/quality-model.md)
 > 함께 검토: [10 설계 요소와 변경량 집계](./10-element-definition.md)
-> 현재 Core QA·Core DP 선정 결과: [Current Architecture Focus](./12-decisions/dp-executive-summary.md)
+> 현재 Architecture 작업: [Target Architecture and Architecture Rationale](./12-decisions/README.md)
+> 이전 Core QA·Core DP 선정 결과: [Previous Decision Focus](./12-decisions/dp-executive-summary.md)
 
 ## 9.1 목적과 이번 작업의 경계
 
@@ -26,7 +27,7 @@ flowchart LR
     T["09 연결표<br/>무엇을 왜 확인하는가"]
     E["10 설계 요소·변경 원장"]
     R["09/10 사용자 검토 초안"]
-    NEXT["Measurement Contract Definition<br/>승인 후 Candidate A/B 비교"]
+    NEXT["Target Architecture Definition<br/>합의 후 핵심 선택 추출"]
     Q --> T
     U --> T
     X --> T
@@ -192,7 +193,7 @@ QA-23의 E-01~05는 07의 제품·외부 계약 24개를 바꾸지 않는 별도
 | QC-02/QC-03/QC-08의 관점이 구분되는가? | 현재 요청의 완료 / 전환 후 맥락 / 이벤트·장애 처리로 구분 |
 | 실제 점수까지 확정했는가? | 아니오. 11의 표본·정답·집계·목표·점수는 별도 리뷰 |
 
-**09와 10의 공동 리뷰는 사용자 승인으로 종료되었다.** 현재는 Measurement Contract Definition 단계이며, 표본·목표·채점표 승인 전에는 후보·DP 우열을 확정하지 않는다.
+**09와 10의 공동 리뷰는 사용자 승인으로 종료되었다.** 현재는 이 전제를 바탕으로 목표 Architecture를 정의한다. 이후 검증에서도 표본·목표·채점표를 결과 전에 승인하며, 미동결 조건으로 성능 주장을 만들지 않는다.
 
 ## 9.9 측정 자료 연결
 

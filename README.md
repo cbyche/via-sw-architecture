@@ -1,8 +1,8 @@
 # VIA Software Architecture
 
-> **진행 중인 설계 논의:** [목표 VIA Architecture](docs/architecture/target-design/README.md)에서
-> 완성된 시스템 구조를 먼저 제안하고 대화하며 수정한다. 전체 구조는 **검토 중인 초안**이며,
-> 기존 승인 기준선·ADR·평가 결과를 대체하지 않는다. 합의 이후에 주요 구조 선택과 검증을 설계한다.
+> **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)를
+> 먼저 완성하고, 그 구조에서 responsiveness와 semantic accuracy를 만드는 핵심 선택을 역으로 추출한다.
+> 전체 구조는 **검토 중인 초안**이며, 합의 이후에 새 Decision Package와 검증 근거를 작성한다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 
@@ -107,26 +107,26 @@ Voice Connection이 끝나도 Conversation이나 Task는 끝나지 않는다. Di
 - 재시작 후에는 확인 가능한 기록과 외부 상태를 사용해 업무를 재연결하고, 상태 확인 없이 변경 작업을 중복 실행하지 않는다.
 - 특정 Downstream Agent가 VIA의 Conversation, Task identity나 최상위 orchestration을 소유하지 않는다.
 
-## 이 저장소에서 Architecture를 결정하는 방법
+## 이 저장소에서 Architecture를 만드는 방법
 
-모든 후보는 동일한 시스템 범위, 사용자 목표와 완료 조건을 만족해야 한다. 비교 중에는 사용자 입력, Context, Model·Agent 기능과 외부 조건을 같게 유지하고, 구조가 실제로 바꾸는 책임·계약·상태·call graph·deployment·fault boundary의 차이를 관찰한다.
+01~11은 제품 목적·범위·사용자 행동·품질 기준과 검증 경계를 정의한다. 12에서는 이 전제를 만족하는 완성된 목표 Architecture를 먼저 설계하고, 그 구조의 성능을 만드는 핵심 선택을 역으로 추출한다.
 
 ```text
 System mission and fixed scope
   → representative Use Cases and change scenarios
   → quality attribute and metric definition
-  → pre-result measurement freeze
-  → one-DP-at-a-time A/B implementation and measurement
-  → trade-off analysis
-  → Architecture Decision Record
+  → target Architecture definition
+  → performance-critical structural choices
+  → strong alternatives and falsifiable rationale
+  → measurement and revalidation
 ```
 
-활성 lifecycle은 다음 네 단계다.
+12번 작업은 다음 순서로 진행한다.
 
-1. **Measurement Contract Definition** — stimulus, endpoint, fixture, oracle, 반복·집계, target과 evidence 범위를 결과 전에 확정한다.
-2. **Candidate Implementation** — 같은 계약을 만족하는 Architecture 대안을 구현한다.
-3. **A/B Measurement & Evaluation** — 다른 조건을 고정하고 한 Decision Point의 대안을 직접 비교한다.
-4. **Architecture Decision** — 측정 결과와 구조적 원인을 ADR에 기록한다.
+1. **Target Architecture Definition** — responsiveness와 semantic accuracy를 우선하는 완성 구조를 설계하고 합의한다.
+2. **Decision Reconstruction** — 그 성능을 만드는 중요한 책임·계약·상태·호출·배치 선택만 추출한다.
+3. **Rationale & Falsification** — 각 선택의 강한 현실적 대안, 비용, 대안이 유리한 조건과 반증 조건을 적는다.
+4. **Measurement & Revalidation** — 결과 전에 계약을 동결하고 선택한 구조가 기대한 특성을 실제로 가지는지 검증한다.
 
 Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지할 수 있는지도 같은 기준으로 검토한다. 공통 비교 조건은 [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md), 변경 시나리오는 [Intentional Variables](docs/architecture/07-intentional-variables.md), 측정 원칙은 [Measurement Guide](docs/architecture/11-measurement/README.md)에 정의되어 있다.
 
@@ -137,7 +137,7 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 - QA catalog는 네 core QA와 상세 measurement·diagnostic QA로 구성된다. Core QA의 system target과
   score band proposal을 작성했고 Shared Spine·mock profile·DP별 applicability와 함께 freeze 전이다.
 - QA-09, QA-19, QA-29, QA-39를 핵심 Architecture Significant Requirement(ASR)로 확정했다. 이 분류는 측정 완료나 특정 후보의 승리를 뜻하지 않는다.
-- VIA-DP-01~18은 구조적 선택의 전체 inventory다. 현재 보고서와 평가가 중점적으로 다룰 Core DP는 **VIA-DP-03·05·06·07·15·17의 6개로 확정**했다. 이 확정은 A/B winner나 측정 완료를 뜻하지 않는다.
+- 기존 VIA-DP-01~18과 Core DP 6개는 이전 decision-first 작업의 active reference로 보존한다. 새 목표 Architecture를 이 번호에 맞추거나 다시 매핑하지 않으며, 새 Decision Package는 전체 구조 합의 후 목표 Architecture에서 추출한다.
 - 새 Core-ASR generation의 active candidate와 result는 아직 없다. 이전 reference runner·candidate·result는 archive에 보존하며 현재 QA 값이나 winner로 해석하지 않는다.
 - 기존 ADR의 accepted/deferred 상태와 재검증 caveat는 유지한다.
 
@@ -150,8 +150,8 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 1. [Architecture Baseline](docs/architecture/README.md) — 현재 기준선과 문서 위계
 2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 VIA/Agent 책임 경계
 3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md)와 [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 모든 후보가 제공해야 할 기능과 사용자 완료 조건
-4. [Current Architecture Focus](docs/architecture/12-decisions/dp-executive-summary.md) — 확정한 Core ASR 4개, Core DP 6개와 심층 검토 순서
-5. [Core DP Evaluation Plan](docs/architecture/11-measurement/major-dp-evaluation-plan.md) — 현재 단계와 DP-03부터 시작할 실제 작업
+4. [Target Architecture](docs/architecture/12-decisions/target-architecture/README.md) — 현재 제안 구조와 검토 상태
+5. [Architecture Decisions](docs/architecture/12-decisions/README.md) — 목표 구조에서 Decision Package를 도출하는 12번 작업 흐름
 
 다음 문서는 해당 작업을 할 때만 추가로 읽는다.
 
@@ -160,10 +160,11 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 | 용어·논리 흐름 확인 | [Terms](docs/architecture/02-terms.md), [Canonical Interaction Flow](docs/architecture/04-canonical-interaction-flow.md) |
 | 비교 조건·변화 시나리오 확인 | [Fixed Assumptions](docs/architecture/06-fixed-assumptions.md), [Intentional Variables](docs/architecture/07-intentional-variables.md) |
 | QA 정의·요구 추적 | [Quality Attributes](docs/architecture/08-quality-attributes/README.md), [Traceability](docs/architecture/09-traceability.md), [Architecture Element Definition](docs/architecture/10-element-definition.md) |
-| 측정 계약 작성·실행 | [Measurement](docs/architecture/11-measurement/README.md) |
-| DP·기존 결정 검토 | [Architecture Decisions](docs/architecture/12-decisions/README.md), [ADRs](docs/adr/README.md) |
+| 측정 의미·기존 계약 확인 | [Measurement](docs/architecture/11-measurement/README.md) |
+| 목표 구조·새 rationale 작업 | [Architecture Decisions](docs/architecture/12-decisions/README.md) |
+| 이전 DP·기존 결정 확인 | [Previous Decision Inventory](docs/architecture/12-decisions/dp-executive-summary.md), [ADRs](docs/adr/README.md) |
 
-처음부터 전체 18개 DP, 상세 QA catalog 또는 archive를 순서대로 읽지 않는다. 이들은 현재 작업에서 필요할 때 찾는 참조다.
+처음부터 기존 18개 DP에 맞춰 목표 구조를 만들지 않는다. 기존 DP, 상세 QA catalog와 archive는 현재 설계의 누락·제약·provenance를 확인할 때만 읽는다.
 
 저장소를 수정하는 LLM과 automation은 먼저 [AGENTS.md](AGENTS.md)를 읽어야 한다.
 
@@ -183,9 +184,8 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 ## Development
 
 `architecture-ci`는 active 문서의 링크·용어·QA catalog를 검사한다. Active candidate
-workspace는 VIA-DP-03 Measurement Freeze 뒤 새로 만들며, 그때 해당 source에 맞는
-fmt·lint·test job을 CI에 함께 추가한다. 이 검사는 QA campaign이나 Architecture winner를
-자동으로 결정하지 않는다.
+workspace는 목표 Architecture 합의와 target-derived 검증 계약 승인 뒤 만든다. 그때 해당 source에 맞는
+fmt·lint·test job을 CI에 함께 추가한다. 이 검사는 Architecture 합의나 성능 주장을 자동으로 결정하지 않는다.
 
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
