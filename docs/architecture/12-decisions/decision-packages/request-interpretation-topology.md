@@ -21,7 +21,7 @@
 
 ## ASR·추가 QA 관점의 장단점과 예상 차이
 
-아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 구조 차이가 개선·악화에 직접 영향을 주는 축, `REGRESSION_ONLY`는 직접 바꾸지 않는 공통 경로의 기능 유지를 확인할 축이라는 **적용 제안**이다. 인과 범위를 정하지 못한 경우에는 `UNRESOLVED`로 남긴다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
 
 **직관적인 핵심:** 통합안은 서로 관련된 뜻을 한 자리에서 조정하고, 단계안은 잘 끝난 판단을 보관해 필요한 부분만 다시 한다. 의미가 서로 자주 바뀌면 통합의 이점이, 안정된 부분이 반복 재사용되면 단계화의 이점이 커진다.
 
@@ -30,7 +30,7 @@
 | QA-19 의미 정확성 · PRIMARY | **장점:** 표·보고서·기존 Task의 관계를 함께 보아 앞뒤 모순을 조정할 수 있다.<br>**단점:** 큰 입력과 복합 schema에서 일부 제약을 빠뜨리거나 잘못된 관계를 한꺼번에 확정할 수 있다. | **장점:** 좁은 field 계약·후보·단계별 근거로 누락 위치를 드러낸다.<br>**단점:** 앞 단계가 버린 후보·원문 관계는 뒤 단계가 복구하기 어렵고 오류가 전파된다. | 대상과 업무가 강하게 얽히면 1안에, 독립적인 중간 의미가 안정적이면 2안에 유리할 여지. 단계 수 자체는 정확도 보장이 아니다. |
 | QA-09 응답성 · PRIMARY | **장점:** 여러 판단의 순차 왕복을 줄인다.<br>**단점:** 큰 통합 입력·출력과 반복 재해석이 길어질 수 있다. | **장점:** 관련 stage만 다시 실행할 수 있다.<br>**단점:** 최초 요청은 지칭→업무→경로를 기다리고 correction은 추가 왕복을 만든다. | 처음부터 새로 이해하는 요청과 일부만 정정하는 요청을 나눠 본다. 호출 수뿐 아니라 입력량·공유 queue·실제 의미 있는 응답까지의 전체 대기를 본다. |
 | QA-29 변경 용이성 · PRIMARY | **장점:** 관계 변경을 통합 schema·해석 계약에서 함께 수정한다.<br>**단점:** 새로운 의미 field가 통합 prompt·검증·dependency에 퍼질 수 있다. | **장점:** 대상 추출만 바뀌고 중간 계약이 유지되면 해당 stage에 집중된다.<br>**단점:** vR schema가 바뀌면 vT·vH·coordinator·trace reader까지 수정한다. | 예: 새 지칭 근거 추가와 기존/새 Task 관계 변경은 파급이 다르다. 박스·함수 수가 아닌 변경된 Component·Interface·State·Runtime을 센다. |
-| QA-39 신뢰성·복구 · REGRESSION_ONLY | **장점:** 미완료 semantic 작업의 진행 상태가 비교적 단순하다.<br>**단점:** 실패한 큰 작업을 다시 실행해야 할 수 있다. | **장점:** 같은 attempt에서 성공한 stage를 재사용할 여지가 있다.<br>**단점:** stale stage·retry cycle·부분 실패의 조정 지점이 늘어난다. | 이번 대안은 stage를 RAM에 두므로 crash 뒤 단계 이어하기 우위는 주장하지 않는다. 양안 모두 미확정 결과로 dispatch하지 않아야 한다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 미완료 semantic 작업의 진행 상태가 비교적 단순하다.<br>**단점:** 실패한 큰 작업을 다시 실행해야 할 수 있다. | **장점:** 같은 attempt에서 성공한 stage를 재사용할 여지가 있다.<br>**단점:** stale stage·retry cycle·부분 실패의 조정 지점이 늘어난다. | 주입된 job 실패·timeout에 따른 정정 cycle·부분 재시도 후 deadline 내 올바른 복구를 직접 비교한다. 정상 사용자 정정은 QA-09·19에서 다룬다. RAM stage는 process crash 뒤 이어하지 않으므로 그 공통 재시작 경로는 회귀 확인이다. 양안 모두 미확정 결과로 dispatch하지 않는다. |
 | QA-41 메모리 · 추가 진단 | 큰 통합 prompt/KV peak가 생기지만 stage 산출물 여러 벌은 필요 없다. | 작은 stage별 KV를 순차 회수할 수 있지만 중간 후보·원문 참조·재시도 상태가 남는다. | 같은 Omni weights는 공통이다. 3단계라고 모델 메모리가 3배가 되는 것도, 반드시 감소하는 것도 아니다. |
 | QA-61 실행 추적 · 추가 qualification | field별 근거와 재해석 revision을 남겨야 실패 원인을 재구성할 수 있다. | stage ID·upstream version·correction 이유가 진단을 돕지만 관계 누락 가능성도 늘어난다. | 로그량이 아니라 입력→정정→결과의 연결 완전성이다. 중간 상태가 있다는 이유만으로 높은 점수를 보장하지 않는다. |
 
@@ -46,10 +46,12 @@
 | 중간 결과 | `SemanticProposal`의 각 field에 근거·dependency·불확실성 유지 | `ReferentSet vR → GoalTaskSet vT → HandlingProposal vH`; 각 결과에 소비한 앞 version과 source revision 기록 |
 | 수정 권한 | 통합 작업이 관계를 함께 다시 제안 | 뒤 단계는 앞 결과를 덮지 않고 `CorrectionRequest(stage, fields, evidence, expected_version)` 반환 |
 | 확정 | Request Controller가 입력·field·coverage·권한의 현재성을 검사한 뒤 Semantic Commit | 세 결과의 version 연결이 모두 유효할 때 동일 확정; 마지막에 전체 의미를 다시 판단하는 모델은 추가하지 않음 |
-| 임시 상태 수명 | attempt의 proposal·job handle·KV는 취소·종료 시 회수 | 단계 산출물은 attempt 범위 RAM에 보관; 별도 durable workflow engine은 도입하지 않음 |
+| 임시 상태 수명 | attempt의 proposal·job handle·KV는 취소·종료 시 회수 | 단계 산출물은 attempt 범위 RAM에 보관; 새 attempt에는 검증된 immutable 결과만 명시적 import; durable workflow engine은 도입하지 않음 |
 | crash / 늦은 결과 | durable 입력·확정 기록에서 새 attempt 시작; 이전 job 결과 거절 | 미확정 중간 stage는 재사용하지 않고 재해석; 확정 결과만 기존 복구 계약 적용 |
 
 **정정의 실제 효과:** `vR=4`가 보고서 용도에도 의존했다면 “새 보고서로” 정정 때 vR부터 무효화한다. 표 자체만으로 확정한 대상이고 dependency가 변하지 않았을 때만 vR을 유지하고 vT·vH를 다시 만든다. 이 차이를 기록하지 않으면 단계화의 재사용 주장은 성립하지 않는다.
+
+**attempt 전환과 재사용:** Request Controller는 이전 attempt를 종료·회수하기 전에 완료된 immutable stage 산출물을 새 attempt의 재사용 후보로 복사한다. Source attempt/version을 provenance로 남기고, 소비한 입력 field·source revision·policy·memory epoch와 upstream version을 모두 검사한다. 새 입력에서 해당 field와 의미 dependency가 변하지 않았다는 근거가 있어야 새 envelope로 import할 수 있다. 원문 전체를 소비한 stage, dependency가 불완전한 stage, 정정의 영향 범위를 판별하지 못한 stage는 다시 실행한다. Host가 임의로 “뜻은 같음”을 판단하거나 새 revision을 옛 결과에 붙이는 방식은 금지한다. 옛 job·KV·permit은 넘기지 않으며 copy 전에 crash하거나 검증에 실패하면 재계산한다.
 
 **처리 종료:** 모든 job에 부모 attempt·deadline을 결합한다. 정정 cycle은 원인 field와 새 evidence revision으로 구별하고, 새로운 근거 없이 같은 cycle을 반복하면 clarification으로 끝낸다. 호출·재처리 한도의 숫자는 후속 계약에서 고정하되 무한 반복을 허용하는 설계로 남기지 않는다.
 

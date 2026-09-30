@@ -21,7 +21,7 @@
 
 ## ASR·추가 QA 관점의 장단점과 예상 차이
 
-아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 구조 차이가 개선·악화에 직접 영향을 주는 축, `REGRESSION_ONLY`는 직접 바꾸지 않는 공통 경로의 기능 유지를 확인할 축이라는 **적용 제안**이다. 인과 범위를 정하지 못한 경우에는 `UNRESOLVED`로 남긴다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
 
 **직관적인 핵심:** 1안은 식사 주문을 듣는 동안 자주 쓰는 재료를 꺼내 놓는 쪽이고, 2안은 주문을 확정한 다음 재료 목록부터 만드는 쪽이다. 자주 맞는 준비는 시간을 벌지만 빗나간 준비는 읽기·메모리·공유 자원을 낭비한다.
 
@@ -30,7 +30,7 @@
 | QA-19 의미 정확성 · PRIMARY | **장점:** “아까 그 보고서”처럼 source도 모호한 요청에 최근 후보를 제공한다.<br>**단점:** 준비한 후보에 과도하게 기대면 다른 source나 최신 정정을 놓칠 수 있다. | **장점:** 명시적인 기간·source 조건을 계획으로 드러낸다.<br>**단점:** 자료를 보기 전 계획이 잘못되면 필요한 근거가 첫 해석에서 빠진다. | 지칭형 요청과 “지난주 견적 메일” 같은 명시형 요청을 구별한다. 읽기를 줄여 필수 후보를 누락한 결과는 효율 개선이 아니다. |
 | QA-09 응답성 · PRIMARY | **장점:** 발화 중 준비가 끝나면 Final 이후 대기가 짧다.<br>**단점:** 불필요한 선행 read가 필요한 query·semantic job과 경합할 수 있다. | **장점:** 비싼 source를 선택해 읽고 독립 query를 병렬화한다.<br>**단점:** 계획 모델→source→해석이 사용자 입력 종료 뒤 순차로 남는다. | 기본 준비 적중률·발화와 겹친 구간·source 읽기 비용이 방향을 바꾼다. 준비가 시작된 시각을 숨겨 비용을 0으로 보지 않는다. |
 | QA-29 변경 용이성 · PRIMARY | **장점:** 기본 Context 계약이 안정적이면 새 요청이 기존 근거를 쓴다.<br>**단점:** 새 source마다 준비 trigger·package 선택·cache invalidation을 조정할 수 있다. | **장점:** 새 source를 read adapter·capability로 노출해 선택적으로 사용한다.<br>**단점:** source별 filter·pagination·부분 실패 의미가 ReadPlan·validator에도 반영된다. | 새 calendar source 추가처럼 같은 변화에서 영향 계약을 비교한다. 계획이 있다고 adapter 변경이 사라지지는 않는다. |
-| QA-39 신뢰성·복구 · PRIMARY | **장점:** 일부 유효 근거가 이미 준비되어 source 장애 때 활용할 여지가 있다.<br>**단점:** 준비 결과의 stale·부분 실패를 잘못 재사용할 위험이 있다. | **장점:** query별 완료·실패·coverage가 명시적이다.<br>**단점:** 필수 source 실패가 계획 후 전체 해석을 막고 계획 상태 정리가 필요하다. | 한 source가 timeout일 때 올바른 partial 답변·clarification·보류로 끝나는지 본다. 질문을 했다는 사실만으로 원래 요청의 복구 성공을 대신하지 않는다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 현재 발화 중 선행 read가 source 단절 전에 끝났다면 유효 근거를 활용할 여지가 있다.<br>**단점:** 준비 결과의 stale·부분 실패를 잘못 재사용할 위험이 있다. | **장점:** plan의 query 의존 관계를 따라 실패 위치를 좁히고 재계획·보류를 조정할 수 있다.<br>**단점:** 필수 source 실패가 계획 후 전체 해석을 막고 계획 상태 정리가 필요하다. | ReadReceipt의 완료·실패·coverage와 warm cache·freshness 조건은 양안 공통이다. 차이는 이번 요청의 read 시점과 계획 상태다. 한 source가 timeout일 때 올바른 partial 답변·clarification·보류로 끝나는지 본다. 질문을 했다는 사실만으로 원래 요청의 복구 성공을 대신하지 않는다. |
 | QA-41 메모리 · 추가 진단 | provisional package·unused cache·발화 중 read buffer를 유지한다. | query plan·결과 join buffer·계획 job KV가 추가되지만 불필요한 본문을 덜 읽을 수 있다. | 실제 사용하는 source가 적고 본문이 클수록 2안 절약 여지. 계획에도 많은 근거가 필요하면 반대다. |
 | QA-51 노출 최소화 / QA-61 추적 · 추가 qualification | 사용하지 않을 허용 자료까지 사전 준비할 수 있어 최소 범위와 보관을 설명해야 한다. | 요청별 source·filter·receipt를 설명하기 쉽지만 잘못된 계획의 과도한 범위는 host가 차단해야 한다. | 로컬 cache가 많다는 것만으로 QA-51 외부 노출 증가라고 단정하지 않는다. 실제 외부 제공 경계와 필요한 최소 범위를 따로 확인한다. |
 

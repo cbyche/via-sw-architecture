@@ -21,7 +21,7 @@
 
 ## ASR·추가 QA 관점의 장단점과 예상 차이
 
-아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 구조 차이가 개선·악화에 직접 영향을 주는 축, `REGRESSION_ONLY`는 직접 바꾸지 않는 공통 경로의 기능 유지를 확인할 축이라는 **적용 제안**이다. 인과 범위를 정하지 못한 경우에는 `UNRESOLVED`로 남긴다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
 
 **직관적인 핵심:** 1안은 현재 장부와 미완료 전송 목록을 읽어 이어가고, 2안은 확정된 변경 이력으로 현재 장부를 다시 만든다. 이력은 관계 재구성에 도움이 되지만 과거 schema·삭제·재생 비용을 계속 유지해야 하며 원격 실행의 잃어버린 ACK까지 알려 주지는 않는다.
 
@@ -54,7 +54,7 @@
 
 **삭제와 schema 진화:** 복구 시작 시 현재 tombstone·deletion epoch를 먼저 적재해 옛 payload 사용을 막는다. 방안 2는 event metadata와 삭제 가능한 payload를 분리하고 payload redaction 뒤에도 동작하는 reader·checkpoint 무효화 계약을 유지한다. 호환 불가능한 schema나 권위 원본 손상은 해당 scope를 복구 실패로 남기며 조용한 best-effort 성공으로 처리하지 않는다.
 
-**수명·성능 비용:** 방안 1은 row migration·원장 repair가, 방안 2는 event schema·reader·checkpoint·tail retention이 추가 유지 대상이다. Snapshot 주기 하나를 바꾼 비교가 아니다. Event log를 무제한 쌓지 않고 지원하는 복구 범위·보관 계약에 맞춰 checkpoint와 tail을 보존해야 한다. 구체 용량·복구 deadline은 아직 측정 freeze가 아니다.
+**수명·성능 비용:** 방안 1은 row migration·원장 repair가, 방안 2는 event schema·reader·checkpoint·tail retention이 추가 유지 대상이다. Snapshot 주기 하나를 바꾼 비교가 아니다. 이 대안에서 checkpoint는 권위 원본이 아니므로 지원 중인 scope를 재구성하는 데 필요한 이력 prefix를 checkpoint만 믿고 제거하지 않는다. 현재 deletion epoch에 따라 payload를 redaction하되 재구성에 필요한 비민감 전이·관계 metadata는 보존한다. 저장 상한에 도달하면 기존 저장소 장애·admission 제한 계약으로 새 변경을 보류하며, 복구 원본을 몰래 폐기하지 않는다. 종료 scope의 보관 만료는 참조·삭제·복구 범위 계약에 따라 처리한다. Prefix compaction을 도입하려면 내구 base generation의 권위·검증·삭제 변환·원자 교체를 별도 설계해야 하며 이번 대안에 포함하지 않는다. 구체 용량·복구 deadline은 아직 측정 freeze가 아니다.
 
 **심사 질문 — “로그는 두 안 모두 있는데 차이가 뭔가?”** Audit·outbox가 존재하는지로 구별하지 않는다. 1안의 current row와 audit가 다르면 audit를 임의 replay하여 운영 상태를 덮지 않는다. 2안의 projection과 committed event batch가 다르면 event 쪽에서 다시 만든다. 권위 원본과 복원 알고리즘의 차이다.
 
@@ -143,7 +143,7 @@ Checkpoint나 이전 export가 현재 삭제 ledger보다 오래됐거나 검증
 
 **배경 1장:** ‘취소 요청 → 전송 시작 → ACK 미수신 → VIA 종료’와 ‘다른 Task 완료 → 사용자 전달 전 종료’의 두 갈래를 그린다. 재시작 화면에 필요한 사실과 모르는 사실을 분리한다. 질문은 **“중단된 interaction을 무엇을 근거로, 어디서부터 복원할 것인가?”**다.
 
-**비교 1장:** 같은 Agent query·owner·효과 ID·출력은 검정. 1안의 current state·pending ledger·loader, 2안의 event store·checkpoint·reducer·projection은 양쪽 파랑. Commit 전후 crash 위치, replay에서 외부 호출로 바로 나갈 수 없다는 경계, 양쪽 UNKNOWN 처리와 삭제 fence를 표시한다. `.drawio`/`.svg`는 공동 후보 검토 후 제작한다.
+**비교 1장:** 같은 Agent query·owner·효과 ID·출력은 검정. 1안의 current state·pending ledger·loader, 2안의 event store·checkpoint·reducer·projection은 양쪽 파랑. Commit 전후 crash 위치, replay에서 외부 호출로 바로 나갈 수 없다는 경계, 양쪽 UNKNOWN 처리와 삭제 fence를 표시한다. 상단의 배경·비교 SVG와 편집 가능한 draw.io 원본에 이 경로를 반영했다.
 
 ## 9. 바로 사용할 발표 요약
 

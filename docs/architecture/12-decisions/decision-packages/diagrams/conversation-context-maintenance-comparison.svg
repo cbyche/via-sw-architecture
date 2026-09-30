@@ -10,7 +10,7 @@
 <g id="b-right"><rect x="1962" y="437" width="526" height="383" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2"/><text x="1978" y="465" font-size="20" font-weight="700" fill="#1458C0">State Store · Context Manager 소유 파생 상태</text></g>
 <polyline id="a-edge-req" points="250,367 250,409 207,409 207,500" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="a-edge-owner" points="660,367 660,409 471,409 471,500" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="a-edge-delivery" points="1070,367 1070,413 1097,413 1097,500" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="a-edge-delivery" points="1070,367 1070,390 471,390 471,500" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
 <polyline id="a-edge-assemble" points="322,552 356,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="a-edge-materialize" points="586,552 718,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="a-edge-vector" points="948,552 982,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
@@ -21,12 +21,12 @@
 <polyline id="a-edge-current-view" points="833,605 833,625 334,625 334,720 322,720" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
 <polyline id="a-edge-summary" points="1097,795 1097,908" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
 <polyline id="b-edge-req" points="1514,367 1514,409 1471,409 1471,500" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="b-edge-owner" points="1924,367 1924,409 1735,409 1735,500" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="b-edge-delivery" points="2334,367 2334,413 2361,413 2361,500" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="b-edge-owner" points="1924,367 1924,390 1615,390 1615,526 1586,526" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="b-edge-delivery" points="2334,367 2334,419 1342,419 1342,552 1356,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="b-edge-request-read" points="1412,367 1412,390 1324,390 1324,670 1471,670 1471,690" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="b-edge-assemble" points="1586,552 1620,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="b-edge-materialize" points="1850,552 1982,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="b-edge-vector" points="2212,552 2246,552" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="b-edge-read" points="1471,605 1471,690" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
 <polyline id="b-edge-fence" points="1982,742 1912,742 1912,656 1471,656 1471,690" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
 <polyline id="b-edge-emit" points="1586,742 1620,742" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
 <polyline id="b-edge-result" points="1735,795 1735,908" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
@@ -62,7 +62,7 @@
 <g id="b-cost"><rect x="1312" y="1102" width="1200" height="190" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1328" y="1130" font-size="20" font-weight="700" fill="#171717">선택할 이유와 감수할 비용</text><text x="1328" y="1166" font-size="20" fill="#171717">선택 근거: 같은 대화·업무를 자주 읽으면 준비를 앞당길 수 있음</text><text x="1328" y="1191" font-size="20" fill="#171717">대가: delta 전달·cursor·view 메모리·미사용 갱신·gap rebuild</text><text x="1328" y="1216" font-size="20" fill="#171717">반증: lag 때문에 매번 rebuild하거나 기존 cache와 동일 계약으로 수렴</text></g>
 <text x="263" y="408" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① 요청</text>
 <text x="674" y="405" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">versioned read</text>
-<text x="1105" y="409" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">delivery rev</text>
+<text x="882" y="383" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">delivery read</text>
 <text x="633" y="540" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 유지</text>
 <text x="217" y="654" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 요청 시 확인</text>
 <text x="343" y="643" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">삭제 epoch: projector 지연과 무관하게 차단</text>
@@ -70,10 +70,10 @@
 <text x="468" y="616" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">revision / cache read</text>
 <text x="1107" y="875" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">유휴 작업 / 재구성</text>
 <text x="1527" y="408" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① owner 변경</text>
-<text x="1938" y="405" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">delta / snapshot</text>
-<text x="2369" y="409" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">delivery rev</text>
+<text x="1742" y="383" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">owner delta</text>
+<text x="2199" y="410" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">delivery delta</text>
+<text x="1342" y="685" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">요청 / required revisions</text>
 <text x="1897" y="540" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 유지</text>
-<text x="1481" y="654" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 요청 시 확인</text>
 <text x="1607" y="643" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">삭제 epoch: projector 지연과 무관하게 차단</text>
 <text x="1745" y="875" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④ 근거·read set</text>
 <text x="1732" y="616" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">revision / cache read</text>
@@ -84,6 +84,7 @@
 <text x="64" y="161" font-size="29" font-weight="700" fill="#171717">방안 1  요청 시 구성 / 유효 cache 재사용</text>
 <text x="1328" y="161" font-size="29" font-weight="700" fill="#171717">방안 2  변경마다 증분 view / revision barrier</text>
 <text x="80" y="1052" font-size="19" font-weight="400" fill="#171717">owner별 revision은 전역 원자 snapshot이 아님 · 삭제된 선호를 옛 summary·KV·checkpoint에서 복원 금지</text>
+<text x="1994" y="490" font-size="18" font-weight="400" fill="#1458C0">view + applied vector 원자 갱신</text>
 <text x="1344" y="1052" font-size="19" font-weight="400" fill="#171717">owner별 revision은 전역 원자 snapshot이 아님 · 삭제된 선호를 옛 summary·KV·checkpoint에서 복원 금지</text>
 <text x="64" y="1261" font-size="21" font-weight="700" fill="#1458C0">요청 → cache 검사 / 필요한 범위 재구성 → package</text>
 <text x="1328" y="1261" font-size="21" font-weight="700" fill="#1458C0">변경 → view 갱신 ∥ 요청 → revision barrier → package</text>

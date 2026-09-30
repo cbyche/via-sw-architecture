@@ -21,16 +21,16 @@
 
 ## ASR·추가 QA 관점의 장단점과 예상 차이
 
-아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 구조 차이가 개선·악화에 직접 영향을 주는 축, `REGRESSION_ONLY`는 직접 바꾸지 않는 공통 경로의 기능 유지를 확인할 축이라는 **적용 제안**이다. 인과 범위를 정하지 못한 경우에는 `UNRESOLVED`로 남긴다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
 
 **직관적인 핵심:** 1안은 “내가 답해도 되는가”를 확인하는 동안 답변도 준비한다. 2안은 허용을 받은 다음 답변을 만든다. 직접 답할 때는 중첩이 도움이 될 수 있고, Core로 넘기는 요청이 많으면 버릴 생성 작업을 피하는 쪽이 이로울 수 있다.
 
 | 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
 | --- | --- | --- | --- |
-| QA-19 의미·처리 정확성 · REGRESSION_ONLY | **장점:** 같은 VOICE 작업의 제안과 답변이 현재 입력에 함께 결합된다.<br>**단점:** 이미 만든 답변을 근거로 부적절한 direct를 허용하면 잘못된 경로가 된다. | **장점:** 분류 결과와 생성 결과를 따로 검사할 수 있다.<br>**단점:** 분류 오류·permit 이후 revision 변경·두 결과의 binding 오류가 가능하다. | 정확도 개선은 기본 주장이 아니다. 양안 모두 독립 질문만 direct로 허용하고 input echo·dependency·현재성을 검사한다. 분류-only 모델 계약이 더 정확하다는 가정도 하지 않는다. |
+| QA-19 의미·처리 정확성 · PRIMARY | **장점:** 같은 VOICE 작업의 제안과 답변이 현재 입력에 함께 결합된다.<br>**단점:** 이미 만든 답변을 근거로 부적절한 direct를 허용하면 잘못된 경로가 된다. | **장점:** 분류 결과와 생성 결과를 따로 검사할 수 있다.<br>**단점:** 분류 오류·permit 이후 revision 변경·두 결과의 binding 오류가 가능하다. | direct/Core disposition·dependency·request/input binding field에 한정해 비교한다. 동일 모델과 gate라도 결합 생성과 classification-only 과업의 정확도가 같다고 가정하지 않는다. 양안의 좁은 direct 조건은 같으며 우열은 미정이다. |
 | QA-09 응답성 · PRIMARY | **장점:** admission 때 유효 답변이 준비됐으면 의미 있는 첫 음성이 빠를 수 있다.<br>**단점:** 버릴 생성이 Core semantic을 기다리게 만들 수 있다. | **장점:** Core로 갈 요청에는 answer 생성 자원을 쓰지 않는다.<br>**단점:** direct 요청에는 분류→permit→generation의 대기가 추가된다. | 직접 응답과 Core 전환을 함께 봐야 한다. generic ack·earcon·아직 재생하지 않은 audio packet을 응답 완료로 세지 않는다. |
 | QA-29 변경 용이성 · PRIMARY | **장점:** proposal·generation handle의 통합 runtime 계약을 유지한다.<br>**단점:** provider가 held generation·취소를 지원하지 않으면 adapter 변경이 커진다. | **장점:** 분류와 generation의 입출력을 독립적으로 바꿀 수 있다.<br>**단점:** RoutePermit·expiry·후행 content admission·trace가 새 변경 대상이다. | runtime 교체가 classification-only를 지원하는지, speculative handle을 지원하는지에 따라 파급이 바뀐다. |
-| QA-39 신뢰성·복구 · REGRESSION_ONLY | **장점:** 한 작업에 결합된 결과를 일괄 폐기할 수 있다.<br>**단점:** held handle·audio·KV 회수 누락이 남을 수 있다. | **장점:** 허용 전 answer 자원은 없다.<br>**단점:** permit만 남거나 generation 중 crash하는 부분 상태가 늘어난다. | 두 안 모두 옛 incarnation의 handle·permit을 거절한다. 선생성을 없앴다고 공유 Omni 장애가 격리되는 것은 아니다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 한 작업에 결합된 결과를 일괄 폐기할 수 있다.<br>**단점:** held handle·audio·KV 회수 누락이 남을 수 있다. | **장점:** 허용 전 answer 자원은 없다.<br>**단점:** permit만 남거나 generation 중 crash하는 부분 상태가 늘어난다. | job 실패·취소·permit 부분 상태·KV 반환 실패 후 deadline 내 복구를 직접 비교한다. 양안 공통 incarnation 재기동은 회귀 확인이며 옛 handle·permit은 거절한다. 선생성 제거가 공유 Omni 장애 격리를 뜻하지 않는다. |
 | QA-41 메모리 · 추가 진단 | 허용 전부터 생성 KV와 held Text/audio가 peak를 키울 수 있다. | 허용 전 비용을 줄이지만 classification KV·permit은 남고 실제 direct 생성 중에는 answer KV도 필요하다. | 전체 workload의 동시 세션·기각 비율이 중요하다. 두 안 모두 같은 Omni weights 한 벌이다. |
 | QA-04 음성 중단 / QA-15 연속성 · 추가 회귀 | 이미 쌓인 audio buffer의 stale epoch 차단과 취소·회수가 중요하다. | 후행 generation 결과가 새 발화 뒤 늦게 돌아오는 경우를 차단해야 한다. | local stop은 공통이며 QA-04를 QA-09 평균에 포함하지 않는다. 직접 응답 뒤 follow-up에는 실제 전달한 내용만 남겨야 한다. |
 
