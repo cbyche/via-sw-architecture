@@ -95,8 +95,8 @@ Component 이름만 바꾸기, 기존 함수를 둘로 나누기, 호출 순서�
 - [x] J. 네 문서 재작성; 추가 항목 수를 맞추기보다 인과가 분명한 품질만 유지
 - [x] K. 작성자와 별도 에이전트의 ISO 분류·구조/steelman·전체 문서/그림 일치 검토 및 보완
 - [x] L. 링크·용어·QA·그림 생성 일치·표·diff 검사
-- [ ] M. commit/push 및 해당 SHA의 CI 확인
+- [x] M. commit/push 및 해당 SHA의 CI 확인
 
 재개 시 I~M의 실제 진행과 git diff를 먼저 확인한다. 이전 A~H를 반복하지 않으며 구현·모델 실행·성능 측정으로 넘어가지 않는다. 시작 커밋은 `5cdf8dfc5123ddcb52bb1b82d426bf9b854b0d1d`, 작업 시작 시 main은 clean이다.
 
-후속 체크포인트: ISO 분류 대응·네 문서 재작성 완료. 세 독립 검토자의 지적을 수정·재확인했고 미해결 P1/P2 없음. 링크 103개·QA registry·기존 그림 21쌍·표 구조·diff 검사 PASS. 남은 단계는 이 변경의 commit/push와 해당 SHA CI 확인이다.
+후속 완료: ISO 분류 대응·네 문서 재작성 완료. 세 독립 검토자의 지적을 수정·재확인했고 미해결 P1/P2 없음. 링크 103개·QA registry·기존 그림 21쌍·표 구조·diff 검사 PASS. 자료 커밋 `78d3ac3df6de0b205ddd5e9d9e87563f1577839c`를 origin/main에 push했고 [해당 architecture-ci](https://github.com/cbyche/via-sw-architecture/actions/runs/36757477256)의 SUCCESS를 확인했다. 이 완료 기록 외에 미완료 편집은 없다. 이후에는 사용자 검토에 대응하며 구현·측정으로 넘어가지 않는다.
