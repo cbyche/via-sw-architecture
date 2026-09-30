@@ -28,7 +28,7 @@
 
 1~3의 주요 설계와 사용자 검토는 완료했다. 다음 작업은 4의 지침에 따라 사용자와 후보 목록을 함께 구체화하는 것이다. 정식 package·ASR 재정의·검증 계약은 후보 검토를 거쳐 발전시키며 이번 기준선 확정에서 측정 freeze나 구현·실험을 시작하지 않는다.
 
-현재 공동 검토를 위한 [구조 후보와 비교 그림](./decision-packages/candidates/README.md), [선발 원칙](./decision-packages/candidates/selection-principles.md), [자체 검토 기록](./decision-packages/candidates/review-notes.md)을 마련했다. 사용자 요청에 따라 먼저 Component 수준의 구조 차이를 검토하고 ASR은 다음 논의에서 다룬다. 아직 정식 Decision Point 선정이나 기준선 변경은 아니다.
+현재 공동 검토를 위한 [구조 후보와 비교 그림](./decision-packages/README.md), [선발 원칙](./decision-packages/selection-principles.md), [자체 검토 기록](./decision-packages/review-notes.md)을 마련했다. 사용자 요청에 따라 먼저 Component 수준의 구조 차이를 검토하고 ASR은 다음 논의에서 다룬다. 아직 정식 Decision Point 선정이나 기준선 변경은 아니다.
 
 ## 목표 Architecture 이후의 Decision Package
 

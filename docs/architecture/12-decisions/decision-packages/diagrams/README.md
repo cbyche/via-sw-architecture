@@ -32,7 +32,7 @@ Senior SW Architect가 그림만 보고도 두 방안의 책임·상태·계약 
 
 각 후보는 같은 이름의 `.svg`와 `.drawio` 한 쌍을 가진다. Markdown에는 SVG를 삽입하고 draw.io 원본 링크를 함께 둔다. draw.io에는 Component별 실제 중첩과 편집 가능한 도형·연결선을 보존한다.
 
-현재 쌍은 [그림 생성 스크립트](../../../../../../scripts/architecture/generate_decision_candidate_diagrams.py)에서 동일한 노드·연결 정의로 생성한다. 저장소 반영 시 스크립트와 두 결과물을 함께 갱신한다. draw.io에서 먼저 수정했다면 같은 변경을 생성 정의에 반영한 뒤 재생성한다.
+현재 쌍은 [그림 생성 스크립트](../../../../../scripts/architecture/generate_decision_candidate_diagrams.py)에서 동일한 노드·연결 정의로 생성한다. 저장소 반영 시 스크립트와 두 결과물을 함께 갱신한다. draw.io에서 먼저 수정했다면 같은 변경을 생성 정의에 반영한 뒤 재생성한다.
 
 ```bash
 .venv/bin/python scripts/architecture/generate_decision_candidate_diagrams.py

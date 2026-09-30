@@ -45,4 +45,4 @@ VIA가 화면의 표를 설명하는 중에 보고서 완료와 다른 업무의
 - **후보로 남길 이유:** 공통 Component의 분리와 publication 상태 소유권 이동, Interaction Manager의 계약 확대가 그림에 드러난다. 알림 우선순위만 바꾸는 후보와 구분된다.
 - 공통 arbiter·shared library를 허용한 대안에서도 원장·복구 중복이 큰지, 공통 Response Manager가 서로 다른 기능의 변경을 과도하게 묶는지가 논점이다. 결과는 아직 없다.
 
-기준선 근거: [전체 구조 §8·13](../../target-architecture/architecture.md), [제어 계약 §6·7](../../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-01·07·11·13~15.
+기준선 근거: [전체 구조 §8·13](../target-architecture/architecture.md), [제어 계약 §6·7](../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-01·07·11·13~15.

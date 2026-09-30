@@ -45,4 +45,4 @@
 - 통합 대안이 내부 경계만으로 변경 통제와 잘못된 실행 차단을 충분히 유지한다면, 별도 Component의 필요성은 약해진다. 반대로 함께 바꿔야 하는 범위가 커지면 분리 근거가 강해진다. 이는 검토할 가설이다.
 - [Context 준비 후보](./context-preparation-ownership.md)는 누가 근거 view를 만드는지에 관한 별도 질문이다. 이 비교에서는 Context Manager의 현재 책임을 고정한다.
 
-기준선 근거: [전체 구조 §4·6·7](../../target-architecture/architecture.md), [제어 계약 §3·4](../../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-03~06·09~11.
+기준선 근거: [전체 구조 §4·6·7](../target-architecture/architecture.md), [제어 계약 §3·4](../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-03~06·09~11.

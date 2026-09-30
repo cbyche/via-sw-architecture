@@ -37,4 +37,4 @@ Core가 상태를 복구하거나 UI 연동 코드가 막혔을 때도 사용자
 - **후순위로 남긴 이유:** 설계적으로 중요한 runtime 선택이지만 사용자가 우선한 논리 Component 변화에는 해당하지 않는다. 심사에서 runtime view를 별도로 다룰지 결정한 후 채택한다.
 - host 통합이 필수 입출력·복구 요구를 충분히 만족하면서 경계 비용을 줄인다면 분리 범위를 재검토할 이유가 된다. 아직 그러한 결과는 없다.
 
-기준선 근거: [전체 구조 §14](../../target-architecture/architecture.md), [제어 계약 §7](../../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-11·13~15·18.
+기준선 근거: [전체 구조 §14](../target-architecture/architecture.md), [제어 계약 §7](../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-11·13~15·18.

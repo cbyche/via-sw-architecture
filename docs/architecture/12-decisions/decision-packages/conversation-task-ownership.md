@@ -46,4 +46,4 @@
 - 통합 구조가 독립 lifecycle과 변경 경계를 간결하게 유지한다면 별도 Task Manager의 필요성이 약해진다. 통합 후 업무 상태 변화가 대화 전반에 퍼진다면 분리 이유가 강해진다. 양쪽 모두 검토 가설이다.
 - [해석 경계 후보](./request-resolution-boundary.md)와는 독립 선택이다. 여기서는 Request Interpreter의 책임을 그대로 둔다.
 
-기준선 근거: [전체 구조 §5·11·12·14](../../target-architecture/architecture.md), [제어 계약 §4·5·7](../../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-06~10·12~16·18.
+기준선 근거: [전체 구조 §5·11·12·14](../target-architecture/architecture.md), [제어 계약 §4·5·7](../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-06~10·12~16·18.

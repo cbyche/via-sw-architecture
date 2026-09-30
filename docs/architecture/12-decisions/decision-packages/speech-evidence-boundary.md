@@ -37,4 +37,4 @@
 - Omni만으로 필수 입력 계약을 더 적은 전체 비용으로 충족한다면 독립 ASR의 필요성이 약해진다. 현재 그런 결과는 없다.
 - [프로세스 격리 후보](./runtime-isolation.md)는 ASR을 양쪽에 유지한 채 host 배치만 바꾸므로 이 선택과 구분한다.
 
-기준선 근거: [공유 Omni §1~4·6~8](../../target-architecture/shared-omni-runtime.md), [전체 구조 §6·11·14](../../target-architecture/architecture.md). 주요 사용자 상황: UC-03·04·11·14·18.
+기준선 근거: [공유 Omni §1~4·6~8](../target-architecture/shared-omni-runtime.md), [전체 구조 §6·11·14](../target-architecture/architecture.md). 주요 사용자 상황: UC-03·04·11·14·18.

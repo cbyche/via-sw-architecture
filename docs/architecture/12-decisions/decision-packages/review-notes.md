@@ -79,4 +79,4 @@
 
 각 후보의 문제 중요성, 두 방안의 설득력, 실제 Component 차이와 후보 간 독립성을 확인해 채택·통합·보류한다. 구조적 후보가 좁혀지면 메모리를 포함한 ASR의 추가·변경과 관련성을 논의한다. 지금은 metric·target·device budget이나 정식 package 개수를 정하지 않는다.
 
-근거: [Target Architecture](../../target-architecture/architecture.md), [제어 계약](../../target-architecture/control-and-lifecycle.md), [기억 계약](../../target-architecture/memory-and-context-lifecycle.md), [공유 Omni 계약](../../target-architecture/shared-omni-runtime.md), [설계 완결성](../../target-architecture/design-completeness.md).
+근거: [Target Architecture](../target-architecture/architecture.md), [제어 계약](../target-architecture/control-and-lifecycle.md), [기억 계약](../target-architecture/memory-and-context-lifecycle.md), [공유 Omni 계약](../target-architecture/shared-omni-runtime.md), [설계 완결성](../target-architecture/design-completeness.md).

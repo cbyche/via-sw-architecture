@@ -45,4 +45,4 @@
 - **후보로 남길 이유:** 공통 근거 구성 책임과 조회 연결이 실제로 이동한다. 동일한 통합 package를 소비자별 adapter로 이름만 바꾸는 대안은 제외한다.
 - 공통 구성이 소비자 변화까지 과도하게 묶거나 사용하지 않는 근거를 계속 운반한다면 방안 1을 재검토할 이유가 된다. 소비자별 구성이 서로 다른 revision·삭제 상태를 사용한다면 방안 2의 비용이 커진다. 아직 확인한 결과는 아니다.
 
-기준선 근거: [전체 구조 §9](../../target-architecture/architecture.md), [기억 계약 §1~5](../../target-architecture/memory-and-context-lifecycle.md). 주요 사용자 상황: UC-02~07·10·15~17.
+기준선 근거: [전체 구조 §9](../target-architecture/architecture.md), [기억 계약 §1~5](../target-architecture/memory-and-context-lifecycle.md). 주요 사용자 상황: UC-02~07·10·15~17.

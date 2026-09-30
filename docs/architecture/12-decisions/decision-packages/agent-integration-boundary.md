@@ -45,4 +45,4 @@
 - **후보로 남길 조건:** 단지 현재 adapter를 밖에 그리는 것이 아니라 전송·수신 lifecycle의 상태·버전·변경 책임이 실제로 이동해야 한다. 현재 adapter와 차이가 사라지면 독립 후보에서 제외한다.
 - 공통 계약이 Agent별 요구를 자연스럽게 수용한다면 분산 owner의 필요성이 약하다. 반대로 예외가 누적되어 모든 Agent 변경을 함께 조정해야 한다면 공통 owner를 재검토할 이유가 된다. 아직 확인된 결과는 아니다.
 
-기준선 근거: [전체 구조 §4·11·12](../../target-architecture/architecture.md), [제어 계약 §5](../../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-08·10·12~14·16·18.
+기준선 근거: [전체 구조 §4·11·12](../target-architecture/architecture.md), [제어 계약 §5](../target-architecture/control-and-lifecycle.md). 주요 사용자 상황: UC-08·10·12~14·16·18.

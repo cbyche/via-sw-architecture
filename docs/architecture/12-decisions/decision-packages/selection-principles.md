@@ -66,4 +66,4 @@ Component 통합은 내부 모듈·상태 타입까지 하나로 뭉갠다는 �
 
 기존 DP에 매핑하지 않고 정식 번호·선정 개수를 미리 정하지 않는다. 새 후보를 accepted 결정이나 구현·측정 결과로 취급하지 않으며, 검토 완료 target 문서와 기존 ADR은 변경하지 않는다.
 
-근거: [전체 Architecture §1·4·17](../../target-architecture/architecture.md), [후보 도출 안내](../README.md), [고정 범위](../../../03-fixed-architecture-scope.md), [대표 UC](../../../05-representative-use-cases.md).
+근거: [전체 Architecture §1·4·17](../target-architecture/architecture.md), [후보 도출 안내](./README.md), [고정 범위](../../03-fixed-architecture-scope.md), [대표 UC](../../05-representative-use-cases.md).

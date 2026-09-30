@@ -14,7 +14,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / 'docs/architecture/12-decisions/decision-packages/candidates/diagrams'
+OUTPUT = ROOT / 'docs/architecture/12-decisions/decision-packages/diagrams'
 BLACK = '#161616'
 BLUE = '#0057B8'
 WHITE = '#FFFFFF'
