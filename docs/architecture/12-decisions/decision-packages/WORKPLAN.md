@@ -1,6 +1,6 @@
 # 구조 중심 Decision Reconstruction 작업 계획
 
-> 상태: DOCUMENTS_COMPLETE · Git 전달 진행 · 시작: 2026-10-01 · 사용자 요청: 중간 승인 없이 최종 자료까지 수행
+> 상태: COMPLETE · 자료 작성·독립 검토·Git 전달 완료 · 시작: 2026-10-01 · 사용자 요청: 중간 승인 없이 최종 자료까지 수행
 > 재개 규칙: compaction·세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 완료한 단계를 반복하거나 기존의 동일 격자 그림으로 돌아가지 않는다.
 
 ## 1. 이번 작업의 목적과 고정 조건
@@ -42,7 +42,7 @@ Component 이름만 바꾸기, 기존 함수를 둘로 나누기, 호출 순서�
 - 같은 SW를 일부러 다른 위치에 옮겨 차이를 과장하지 않았는가?
 - process/Component/자료 저장소/모델 dependency의 의미를 구분했는가? 파랑은 양안 차이이지 2안 추천 표시가 아니다.
 
-## 5. 체크포인트 / 재개 메모
+## 5. 체크포인트 / 재개 메모 (진행 이력)
 
 - [x] 계획 저장 및 사용자 조건 명문화
 - [x] A–B: baseline 확인·후보 선발 근거 작성
@@ -50,11 +50,11 @@ Component 이름만 바꾸기, 기존 함수를 둘로 나누기, 호출 순서�
 - [x] E: 새 topology 비교 그림·배경 그림 완성
 - [x] F: 독립 검토·수정·재검토
 - [x] G: 전 렌더·일관성 검사
-- [ ] H: archive/navigation·commit/push·CI
+- [x] H: archive/navigation·commit/push·CI
 
 초기 탐색 기록: semantic retrieval 서브시스템, durable request workflow, conversation projection, event-sourced recovery, native speech evidence. 이 5개를 자동 확정하지 않는다. 기존 8개 및 추가 아이디어와 비교해 선발하고 근거를 남긴다. 현재 작업 시작 커밋은 `0e2d15f9e71c7d73b434831a021df16822ac939f`이며 작업 시작 시 main working tree는 clean이다.
 
-### 현재 체크포인트
+### 설계 단계 체크포인트 (당시 기록)
 
 - 선발: semantic-retrieval-subsystem, durable-request-orchestration, speech-evidence-source, recovery-state-source. 총 4개이며 사용자 최종 선택 또는 우열 확정이 아니다.
 - conversation projection은 기존 cache와의 독립 비용·가치가 충분하지 않아 주력에서 보류한다. 나머지 옛 후보도 discovery 문서에 판단 이유를 남긴다.
@@ -64,6 +64,14 @@ Component 이름만 바꾸기, 기존 함수를 둘로 나누기, 호출 순서�
 
 - 4개 개별 문서·공통 품질/선발/discovery/reference/README와 8개 SVG/draw.io 완성. 전 SVG 실제 렌더 확인. 독립 1차 그림 결함(검색 owner·embedding·gate·cache, 음성 호출 주체) 수정. 현재 세 검토자의 최종 재검토 및 저장소 검사 단계.
 
-### 문서 완료 체크포인트
+### 문서 완료 체크포인트 (당시 기록)
 
 세 검토자 최종 재검토에서 미해결 P1/P2 없음. 4개 상세 문서·배경/비교 8장·선발/보류/품질/검토 기록 완료. 102개 active 문서 링크·용어·QA·target 13쌍·후보 8쌍 검사 PASS. 보관 48파일 byte/SHA 확인. 다음 단계는 scoped commit → main push → 해당 SHA CI 확인이며, 구현·측정 작업으로 넘어가지 않는다.
+
+### 최종 완료 / 다음 세션의 시작점
+
+- 완성 자료 커밋: `e1570e789c4dbb7fbdd01efe03a92dad442e9032`, `origin/main` push 완료.
+- [해당 커밋 architecture-ci](https://github.com/cbyche/via-sw-architecture/actions/runs/36751466485): **SUCCESS** 확인.
+- 네 비교안과 8장 그림, 보관·선발·품질·검토 문서가 전달됐다. 마지막 변경은 이 완료 기록이다.
+- compaction·새 세션에서 A~H를 다시 시작하지 않는다. [README](./README.md)에서 네 문서를 읽고 사용자의 다음 검토에 대응한다. 사용자 최종 선정 전 DP 채택·target 변경으로 해석하지 않는다.
+- 구현·모델 실행·성능 측정·ASR 승격은 여전히 미수행이며 별도 승인 없는 다음 작업이 아니다.
