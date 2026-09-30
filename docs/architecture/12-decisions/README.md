@@ -30,6 +30,8 @@
 
 사용자 리뷰에 따라 Component 분할·통합 중심의 이전 일곱 후보는 추천에서 철회하고 archive로 보존했다. 현재는 target의 주요 기능을 구현할 때 선택한 방식과 합리적인 다른 구현 방식을 복원한 [새 후보 목록](./decision-packages/README.md), [수정한 선발 원칙](./decision-packages/selection-principles.md), [자체 반론·보류 기록](./decision-packages/review-notes.md)을 검토한다. 작동·상태·의존 경로의 차이를 먼저 확인하고 이후 Component 그림과 ASR을 구체화한다. 아직 정식 Decision Point 선정이나 기준선 변경은 아니다.
 
+현재 **개별 상세 후보는 8개**다. 최초 해석·Context 획득·Agent 상태·직접 응답 생성 4개에, 기존 자료를 재검토한 음성 근거·대화 Context 유지·자료 표현·복구 원본 4개를 추가했다. 각 문서는 배경·양안·예외·계약 변경·비용·반증 조건과 배경 5줄·비교 8줄을 제공한다. 개수는 최종 채택 수가 아니며 기존 VIA-DP의 ID·결과를 승계하지 않는다.
+
 ## 목표 Architecture 이후의 Decision Package
 
 새 package는 다음 조건을 모두 만족하는 선택만 다룬다.

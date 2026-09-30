@@ -1,6 +1,6 @@
 # Target Architecture에서 복원한 설계 선택 후보
 
-> 상태: **Decision Reconstruction / 새 후보 공동 검토 전 / 우열·정식 DP 미선정**
+> 상태: **Decision Reconstruction / 상세 후보 8개 공동 검토 / 우열·정식 DP 미선정**
 > 작성일: 2026-09-30 · 기준: [검토 완료 Target Architecture](../target-architecture/README.md)
 
 **주요 기능을 구현하면서 어떤 방식을 선택했는지, 그때 다른 설계자라면 어떤 합리적인 방식을 선택할 수 있었는지를 복원한다.** 현재 설계에 적힌 처리 방식은 근거이고, 아래 대안과 선택 이유의 해석은 이번에 재구성한 제안이다. 당시 두 안을 실제 비교했거나 현재 안의 우위를 검증했다는 기록은 아니다.
@@ -13,8 +13,14 @@
 | [요청을 이해하는 데 필요한 정보를 언제 어떻게 확보할까?](./context-acquisition-strategy.md) | 입력 중 기본 Context 사전 준비 → 통합 해석 → 부족한 정보만 추가 조회 | 최소 입력으로 조회 계획 → 필요한 source 조회 → 해석 | 첫 추론의 입력, 선행 조회, 대기 경로와 불필요한 읽기 | 우선 검토 |
 | [여러 Agent의 진행 상태를 어떻게 사용자에게 제공할까?](./agent-state-observation.md) | event를 적용해 로컬 진행 상태를 유지하고 gap·최신성 요구에 재조회 | snapshot 조회로 진행 상태를 구성하고 event는 조회 신호로 사용 | event reducer·진행 projection 유지와 query coordinator·snapshot cache의 차이 | 우선 검토; 같은 Agent의 조회 기능 전제 |
 | [S2S 직접 응답의 대기를 줄이기 위해 답변을 먼저 만들어 둘까?](./direct-response-generation.md) | 직접 경로 허용 전 답변을 선생성·보류하고 허용 시 release, 기각 시 폐기 | 짧은 직접/Core 분류 → host 경로 허용 → 선택된 경로에서 답변 생성 | 미승인 generation·보류 buffer·취소 경로와 분류→생성의 순차 의존 | 추가 검토; 적용 범위와 runtime 계약 확인 필요 |
+| [음성 입력 근거를 별도 recognizer로 만들까?](./speech-evidence-source.md) | 독립 Streaming ASR과 Omni의 이중 입력 처리·불일치 조정 | 공유 Omni의 native 전사·시각·revision stream | 모델 dependency·worker·증거 생산·장애 범위와 전체 자원 비용 | 확대 검토; native capability·장애 trade-off 명시 |
+| [다음 대화에 쓸 Context를 계속 갱신해 둘까?](./conversation-context-maintenance.md) | 요청 시 owner 조회·조합, 유효 cache·summary 재사용 | 활성 대화의 증분 working view + revision read barrier | projector·변경 전달·적용 위치·rebuild와 상시 메모리 | 확대 검토; 기존 cache와 수렴하는지 확인 |
+| [같은 자료에서 재사용할 구조화 근거를 먼저 만들까?](./context-representation-pipeline.md) | 원문·이미지·typed record 중심 package로 실제 요청 해석 | 구조화 사실 view materialization 후 여러 소비 경로에서 재사용 | 선행 추출 job·view 저장·원문 복귀·오류 전파 경로 | 확대 검토; 반복 사용 가치·정보 보존 검토 |
+| [재시작 후 무엇을 원본으로 상태를 복원할까?](./recovery-state-source.md) | 현재 owner 상태와 미완료 송수신·전달 원장 | 확정 domain 이력 + checkpoint·현재 projection | authoritative 저장·replay·migration·삭제·효과 조정 | 확대 검토; 복구 필요성과 전체 유지 비용 검토 |
 
-세 후보를 먼저 읽고, 음성 fast path에 실제로 중요한 비용 차이가 있는지 네 번째를 검토한다. 개수를 채우기 위한 추천이 아니다. **네 후보 모두 개별 상세 설명 페이지를 작성했다.** 각 문서에는 과제에서의 중요성·설계 난점, 양쪽 실행 흐름, 같은 상황의 추적, Component·계약 변경, 이점·대가·유리한 조건, 반증 조건과 발표 페이지 구성을 적었다. 끝에는 바로 읽을 수 있는 **배경 5줄·설계 비교 8줄**을 두었다.
+**현재 개별 상세 문서는 8개다.** 앞서 작성한 4개에 음성 근거·기억 유지·자료 표현·복구 원본 4개를 추가했다. 앞의 ‘우선 검토’는 최초 제안의 읽기 순서이며 새 후보보다 중요하다는 최종 순위가 아니다. 8개 모두 채택한 것도 아니고 발표 DP 개수를 확정한 것도 아니다. 미확인 능력·수렴 가능성은 후보를 만들지 않을 이유로 삼지 않고, 강한 대안을 작성한 뒤 함께 판단할 조건으로 남겼다.
+
+각 문서에는 과제에서의 중요성·설계 난점, 양쪽 실행 흐름, 같은 상황의 추적, Component·계약 변경, 이점·대가·유리한 조건, 반증 조건과 발표 페이지 구성을 적었다. 끝에는 바로 읽을 수 있는 **배경 5줄·설계 비교 8줄**을 두었다. 추가 자료 표현 후보는 target이 공통 의미 변환을 이미 강제한다고 가정하지 않고, 실제 원문 중심 근거 경로와 선행 materialization 대안을 비교하도록 질문을 다듬었다.
 
 **기존 일곱 후보는 현재 추천에서 철회했다.** Component를 묶거나 나누는 차이를 중심에 두어, 실제 작동 방식과 품질 영향의 설명이 부족했다. 다만 문제 상황·정정·근거·전달 계약까지 폐기하지 않았다. [기존 7개에서 살린 내용과 VIA-DP-01~18 아이디어 검토](./reference-idea-review.md)에 반영·유보 이유를 각각 남겼다. [archive의 철회 사유와 원본 목록](../../../archive/decision-reconstruction-component-boundaries-2026-09-30/README.md)은 역사 기록이며 새 후보의 규범 근거가 아니다. 새 목록은 이전 후보의 이름 변경이나 기존 DP 번호의 재배치가 아니다.
 
@@ -34,6 +40,8 @@
 - 한 on-device Omni의 가중치를 공유한다. 여러 단계 호출은 모델 복제가 아니다. 입력 수신·인식, 역할별 권한·session 분리, 좁은 S2S 직접 응답 범위를 유지한다.
 - 대상 모호함을 숨기거나 검증·중단·삭제·승인·장애 처리를 제거하여 대안을 빠르게 만들지 않는다. 다만 현재의 조회 순서·중간 표현·저장 수단·호출 횟수까지 대안의 불변 조건으로 강제하지 않는다.
 - 의미 해석 후보에서는 입력 근거를, Context 획득 후보에서는 통합 해석 방식을, Agent 상태 후보에서는 provider 기능을 맞춰 비교한다. 세부 범위는 [중복 검토](./review-notes.md#3-후보-간-중복과-고정할-조건)를 따른다.
+- Context 관련 세 후보는 각각 **읽기 시작 시점 / 내부 기록의 지속 갱신 / 확보한 자료의 변환·소비 방식**을 다룬다. 하나의 큰 Context 개선안으로 묶어 효과를 중복 주장하지 않는다.
+- 음성 근거 후보는 dependency 구성 자체를 바꾸므로 ASR 유무와 비용·오류·장애 범위를 드러낸다. 같은 fault가 두 구조에 같은 기능 손실을 주도록 강제하지 않되, 인식 중단·gap을 성공으로 바꾸지 않는다.
 
 ## 현재 검토의 범위
 
