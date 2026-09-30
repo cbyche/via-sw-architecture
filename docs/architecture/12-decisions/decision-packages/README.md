@@ -2,6 +2,8 @@
 
 > 상태: **목표 Architecture 검토 기준선 확정 / 다음 작업은 후보 목록 공동 작성 / 정식 package·비교 결과 없음**
 
+현재 검토 자료는 [구조적 Decision Point 후보](./candidates/README.md)에 있다. [선발 원칙](./candidates/selection-principles.md), 후보별 두 방안·비교 그림과 [자체 검토 기록](./candidates/review-notes.md)을 작성했다. 사용자 요청에 따라 Component 변화가 분명한 구조를 먼저 검토하며 ASR 논의는 후속으로 둔다. 후보는 아직 사용자 선정 전이다.
+
 이 디렉터리는 [검토 완료 목표 VIA Architecture](../target-architecture/README.md)에서 역으로 추출할 구조적 선택·steelman·관련 ASR 후보 목록과, 검토를 거쳐 발전시킬 Architecture Decision Package를 둔다.
 
 ## 다음 작업: 후보 목록부터 함께 작성한다

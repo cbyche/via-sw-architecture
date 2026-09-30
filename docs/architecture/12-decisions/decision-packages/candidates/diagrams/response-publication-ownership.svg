@@ -1,0 +1,205 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1710" viewBox="0 0 2600 1710" role="img" aria-labelledby="title desc">
+<title id="title">응답 게시와 실제 전달의 책임 경계</title><desc id="desc">상황  |  직접 설명 중 보고서 완료·승인 질문이 도착하고, 사용자가 끼어든 뒤 “방금 말한 것”을 참조한다. 검정은 공통, 파랑은 양쪽의 구조적 차이.</desc>
+<defs><marker id="arrow-black" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#161616"/></marker><marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#0057B8"/></marker></defs>
+<rect width="2600" height="1710" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, sans-serif">
+<text x="40" y="62" font-size="40" font-weight="700" fill="#161616" text-anchor="start">응답 게시와 실제 전달의 책임 경계</text>
+<text x="40" y="108" font-size="24" font-weight="400" fill="#161616" text-anchor="start">상황  |  직접 설명 중 보고서 완료·승인 질문이 도착하고, 사용자가 끼어든 뒤 “방금 말한 것”을 참조한다.</text>
+<text x="40" y="157" font-size="22" font-weight="700" fill="#161616" text-anchor="start">검정  공통 구조·기능·계약</text>
+<text x="430" y="157" font-size="22" font-weight="700" fill="#0057B8" text-anchor="start">파랑  양쪽 방안의 차이: 책임 경계·상태 owner·연결</text>
+<text x="1410" y="157" font-size="21" font-weight="400" fill="#161616" text-anchor="start">실선 → 호출·event    점선 → 상태 접근    원통 = 저장 기록</text>
+<rect x="40" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="40" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="60" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 1  |  응답 종류를 가로지르는 공통 publication owner</text>
+<rect x="1320" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="1320" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="1340" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 2  |  종류별 publication owner + 공통 장치 arbiter</text>
+<rect x="70" y="290" width="1180" height="100" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="660.0" y="334.5" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Controller</text>
+<text x="660.0" y="361.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">① Canonical Response Payload · publication admission · Request/Task/policy revision</text>
+<rect x="70" y="475" width="1180" height="385" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="84" y="500" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component»</text>
+<text x="84" y="526" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Response Manager</text>
+<rect x="100" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="215.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">직접 답변 구성</text>
+<text x="215.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">S2S handle / Core</text>
+<text x="215.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">확정 사실 보존</text>
+<rect x="730" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="845.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">업무 알림 구성</text>
+<text x="845.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">template / 결과 요약</text>
+<text x="845.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">실패·불확실성 보존</text>
+<rect x="360" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="475.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">게시·version 검사</text>
+<text x="475.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text 멱등 upsert</text>
+<text x="475.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Voice content version</text>
+<rect x="990" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1105.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">게시·version 검사</text>
+<text x="1105.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Task/result revision</text>
+<text x="1105.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">질문·완료 보존</text>
+<rect x="100" y="730" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="345.0" y="769.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">발화 차례·대기열</text>
+<text x="345.0" y="796.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">foreground · 질문/terminal · progress</text>
+<rect x="730" y="730" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="975.0" y="769.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">공통 전달 기록 조정</text>
+<text x="975.0" y="796.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">audible prefix · interrupted · UNKNOWN</text>
+<rect x="70" y="975" width="1180" height="185" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="84" y="1000" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component»</text>
+<text x="84" y="1026" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Interaction Manager</text>
+<rect x="100" y="1040" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="345.0" y="1067.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Turn-Taking Control</text>
+<text x="345.0" y="1094.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">단일 Voice lease · output epoch</text>
+<text x="345.0" y="1119.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">사용자 발화 검사 / 즉시 local stop</text>
+<rect x="730" y="1040" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="975.0" y="1079.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="975.0" y="1106.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text 표시 · audio 재생 · delivery receipt</text>
+<rect x="70" y="1220" width="800" height="140" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="84" y="1245" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="84" y="1271" font-size="24" font-weight="700" fill="#161616" text-anchor="start">State Store</text>
+<path d="M100,1292 C100,1276 840,1276 840,1292 L840,1338 C840,1354 100,1354 100,1338Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M100,1292 C100,1308 840,1308 840,1292" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="470.0" y="1323" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">publication outbox + 전달 receipt</text>
+<rect x="925" y="1220" width="325" height="120" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1087.5" y="1262.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Model Access</text>
+<text x="1087.5" y="1289.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">공유 Omni · 요약/음성</text>
+<text x="1087.5" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">가중치 복제 없음</text>
+<rect x="1350" y="290" width="1180" height="100" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1940.0" y="334.5" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Controller</text>
+<text x="1940.0" y="361.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">① Canonical Response Payload · publication admission · Request/Task/policy revision</text>
+<rect x="1350" y="475" width="550" height="385" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="1364" y="500" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component · 대안 전용»</text>
+<text x="1364" y="526" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Direct Response Delivery</text>
+<rect x="1980" y="475" width="550" height="385" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="1994" y="500" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component · 대안 전용»</text>
+<text x="1994" y="526" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Task Notification Delivery</text>
+<rect x="1380" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1495.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">직접 답변 구성</text>
+<text x="1495.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">S2S handle / Core</text>
+<text x="1495.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">확정 사실 보존</text>
+<rect x="2010" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2125.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">업무 알림 구성</text>
+<text x="2125.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">template / 결과 요약</text>
+<text x="2125.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">실패·불확실성 보존</text>
+<rect x="1640" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1755.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">게시·version 검사</text>
+<text x="1755.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text 멱등 upsert</text>
+<text x="1755.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Voice content version</text>
+<rect x="2270" y="550" width="230" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2385.0" y="577.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">게시·version 검사</text>
+<text x="2385.0" y="604.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Task/result revision</text>
+<text x="2385.0" y="629.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">질문·완료 보존</text>
+<rect x="1380" y="730" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="769.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">직접 응답 대기·receipt</text>
+<text x="1625.0" y="796.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">publication별 audible prefix / UNKNOWN</text>
+<rect x="2010" y="730" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="2255.0" y="769.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">업무 알림 대기·receipt</text>
+<text x="2255.0" y="796.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">Task별 보존 · 병합 · UNKNOWN</text>
+<rect x="1350" y="975" width="1180" height="185" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="1364" y="1000" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component»</text>
+<text x="1364" y="1026" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Interaction Manager</text>
+<rect x="1380" y="1040" width="490" height="90" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="1067.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">출력 arbiter + Turn-Taking Control</text>
+<text x="1625.0" y="1094.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">단일 Voice lease · output epoch</text>
+<text x="1625.0" y="1119.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">사용자 발화 검사 / 즉시 local stop</text>
+<rect x="2010" y="1040" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2255.0" y="1079.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="2255.0" y="1106.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text 표시 · audio 재생 · delivery receipt</text>
+<rect x="1350" y="1220" width="800" height="140" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="1364" y="1245" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="1364" y="1271" font-size="24" font-weight="700" fill="#161616" text-anchor="start">State Store</text>
+<path d="M1380,1292 C1380,1276 1710,1276 1710,1292 L1710,1338 C1710,1354 1380,1354 1380,1338Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M1380,1292 C1380,1308 1710,1308 1710,1292" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="1545.0" y="1323" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">직접 응답 원장</text>
+<path d="M1770,1292 C1770,1276 2120,1276 2120,1292 L2120,1338 C2120,1354 1770,1354 1770,1338Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M1770,1292 C1770,1308 2120,1308 2120,1292" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="1945.0" y="1323" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">업무 알림 원장</text>
+<rect x="2205" y="1220" width="325" height="120" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2367.5" y="1262.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Model Access</text>
+<text x="2367.5" y="1289.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">공유 Omni · 요약/음성</text>
+<text x="2367.5" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">가중치 복제 없음</text>
+<polyline points="595,390 595,535 215,535 215,550" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="595,390 595,535 215,535 215,550" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1215,390 1215,535 845,535 845,550" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1215,390 1215,535 845,535 845,550" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="330,595 360,595" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="330,595 360,595" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="960,595 990,595" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="960,595 990,595" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="475,640 475,730" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="475,640 475,730" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1105,640 1105,680 475,680 475,730" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1105,640 1105,680 475,680 475,730" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="730,775 590,775" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="730,775 590,775" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="345,820 345,1040" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="345,820 345,1040" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="980,1040 980,820" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="980,1040 980,820" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="590,1085 730,1085" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="590,1085 730,1085" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="100,775 55,775 55,1205 265,1205 265,1280" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="100,775 55,775 55,1205 265,1205 265,1280" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="845,640 845,685 1265,685 1265,1280 1250,1280" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="845,640 845,685 1265,685 1265,1280 1250,1280" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1875,390 1875,535 1495,535 1495,550" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1875,390 1875,535 1495,535 1495,550" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2495,390 2495,535 2125,535 2125,550" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2495,390 2495,535 2125,535 2125,550" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1610,595 1640,595" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1610,595 1640,595" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2240,595 2270,595" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2240,595 2270,595" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1755,640 1755,730" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1755,640 1755,730" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2385,640 2385,730" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2385,640 2385,730" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1625,820 1625,1040" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1625,820 1625,1040" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="2010,775 1940,775 1940,950 1755,950 1755,1040" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2010,775 1940,775 1940,950 1755,950 1755,1040" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="1870,1085 2010,1085" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1870,1085 2010,1085" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="1380,775 1335,775 1335,1205 1545,1205 1545,1280" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1380,775 1335,775 1335,1205 1545,1205 1545,1280" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="2500,775 2555,775 2555,1205 1945,1205 1945,1280" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2500,775 2555,775 2555,1205 1945,1205 1945,1280" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="2125,640 2125,685 2545,685 2545,1280 2530,1280" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2125,640 2125,685 2545,685 2545,1280 2530,1280" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<rect x="549.095" y="416" width="91.80999999999999" height="27" fill="white"/>
+<text x="595" y="435" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">payload</text>
+<rect x="1169.095" y="416" width="91.80999999999999" height="27" fill="white"/>
+<text x="1215" y="435" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">payload</text>
+<rect x="614.095" y="739" width="91.80999999999999" height="27" fill="white"/>
+<text x="660" y="758" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">receipt</text>
+<rect x="184.29500000000002" y="901" width="327.40999999999997" height="27" fill="white"/>
+<text x="348" y="920" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② release / cancel / receipt</text>
+<rect x="870.445" y="901" width="219.10999999999996" height="27" fill="white"/>
+<text x="980" y="920" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">③ delivery receipt</text>
+<rect x="578.85" y="1049" width="162.29999999999998" height="27" fill="white"/>
+<text x="660" y="1068" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">출력 / receipt</text>
+<rect x="1829.095" y="416" width="91.80999999999999" height="27" fill="white"/>
+<text x="1875" y="435" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">payload</text>
+<rect x="2449.095" y="416" width="91.80999999999999" height="27" fill="white"/>
+<text x="2495" y="435" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">payload</text>
+<rect x="1464.295" y="901" width="327.40999999999997" height="27" fill="white"/>
+<text x="1628" y="920" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② release / cancel / receipt</text>
+<rect x="1899.785" y="931" width="300.42999999999995" height="27" fill="white"/>
+<text x="2050" y="950" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② 후보 / release / receipt</text>
+<rect x="1858.85" y="1049" width="162.29999999999998" height="27" fill="white"/>
+<text x="1940" y="1068" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">출력 / receipt</text>
+<text x="70" y="1195" font-size="20" font-weight="400" fill="#161616" text-anchor="start">③ 응답 owner가 intent·receipt 저장 / 불명 음성 자동 재생 금지</text>
+<text x="925" y="1185" font-size="18" font-weight="400" fill="#161616" text-anchor="start">구성·SpeechRender 공통 경로</text>
+<text x="1350" y="1195" font-size="20" font-weight="400" fill="#161616" text-anchor="start">③ 응답 owner가 intent·receipt 저장 / 불명 음성 자동 재생 금지</text>
+<text x="2205" y="1185" font-size="18" font-weight="400" fill="#161616" text-anchor="start">구성·SpeechRender 공통 경로</text>
+<text x="40" y="1413" font-size="22" font-weight="400" fill="#161616" text-anchor="start">공통 조건  |  Request Controller의 admission·상세 Text/Voice 요약·단일 발화·local stop·전달 불명 보존은 동일하다.</text>
+<rect x="40" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="60" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  모든 응답의 원장·발화 차례·복구 계약을 한곳에서 관리</text>
+<text x="60" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  직접 답변과 업무 알림 기능 변경이 공통 owner에 모임</text>
+<text x="60" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">검토 질문  |  공통 계층이 전달 의미를 통일하는가, 변화만 묶는가?</text>
+<rect x="1320" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="1340" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  대화 응답과 업무 알림의 독립적인 변경·원장 관리</text>
+<text x="1340" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  전달 이력 조회·중단·복구가 두 원장과 arbiter에 걸침</text>
+<text x="1340" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">검토 질문  |  arbiter를 얇게 유지하면서 원장 정합성을 지킬 수 있는가?</text>
+<text x="40" y="1648" font-size="21" font-weight="400" fill="#161616" text-anchor="start">내부 블록은 책임의 설명용 분해이며 새 승인 Component가 아님 · 기대 효과는 가설 · ASR·측정 수치는 후속 검토</text>
+<text x="40" y="1680" font-size="19" font-weight="400" fill="#161616" text-anchor="start">검토 기준선과 논의용 대안의 비교 / 구현·성능 측정 없음</text>
+<text x="2560" y="1680" font-size="17" font-weight="400" fill="#161616" text-anchor="end">response-publication-ownership.drawio</text>
+</g></svg>

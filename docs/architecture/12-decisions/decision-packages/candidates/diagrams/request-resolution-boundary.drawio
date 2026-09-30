@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device" version="24.7.17">
+  <diagram name="요청 해석과 확정의 책임 경계" id="request-resolution-boundary">
+    <mxGraphModel page="1" pageWidth="2600" pageHeight="1710" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="page-title" value="요청 해석과 확정의 책임 경계" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=40;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="22" width="2400" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="scenario" value="상황  |  “이 그래프를 아까 자료에 넣어줘”를 해석하는 동안 “아니, 옆 표야”라는 정정이 들어온다." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=24;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="84" width="2400" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-common" value="검정  공통 구조·기능·계약" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="135" width="370" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-diff" value="파랑  양쪽 방안의 차이: 책임 경계·상태 owner·연결" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#0057B8;" vertex="1" parent="1">
+          <mxGeometry x="430" y="135" width="950" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-shape" value="실선 → 호출·event    점선 → 상태 접근    원통 = 저장 기록" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=21;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1410" y="136" width="1150" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="pane0" value="" style="fillColor=#FFFFFF;strokeColor=#161616;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="1240" height="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="pane-heading0" value="방안 1  |  의미 제안과 요청 제어를 별도 Component로 분리" style="html=1;align=left;spacingLeft=20;fontSize=25;fontStyle=1;fillColor=#F2F2F2;strokeColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="1240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="pane1" value="" style="fillColor=#FFFFFF;strokeColor=#161616;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="210" width="1240" height="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="pane-heading1" value="방안 2  |  요청 작업공간 안에 해석 orchestration 통합" style="html=1;align=left;spacingLeft=20;fontSize=25;fontStyle=1;fillColor=#F2F2F2;strokeColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="210" width="1240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="a-input" value="&lt;b&gt;Interaction Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;InputFinal · evidence refs&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;InputStarted → hold&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="70" y="300" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a-policy" value="&lt;b&gt;Policy Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;scope · policy revision&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="490" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a-context" value="&lt;b&gt;Context Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;bounded read · receipt&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="910" y="300" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="a-control" value="&lt;div style=&quot;font-size:16px&quot;&gt;«component»&lt;/div&gt;&lt;b style=&quot;font-size:24px&quot;&gt;Request Controller&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#0057B8;fontColor=#0057B8;fontSize=20;strokeWidth=3;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingTop=10;spacingLeft=14;" vertex="1" parent="1">
+          <mxGeometry x="70" y="490" width="560" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="a-interpret" value="&lt;div style=&quot;font-size:16px&quot;&gt;«component»&lt;/div&gt;&lt;b style=&quot;font-size:24px&quot;&gt;Request Interpreter&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#0057B8;fontColor=#0057B8;fontSize=20;strokeWidth=3;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingTop=10;spacingLeft=14;" vertex="1" parent="1">
+          <mxGeometry x="730" y="490" width="520" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="a-workspace" value="&lt;b&gt;Turn Workspace&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;입력·Context revision&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;요청별 임시 상태&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-control">
+          <mxGeometry x="30" y="80" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-read" value="&lt;b&gt;조회·예산 제어&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;기본 / 추가 읽기&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;deadline · revision&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-control">
+          <mxGeometry x="305" y="80" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-hold" value="&lt;b&gt;정정·hold 처리&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;늦은 제안 무효화&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;미전송 요청 보류&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-control">
+          <mxGeometry x="30" y="290" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-commit" value="&lt;b&gt;의미 확정·admission&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;field·coverage·권한&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Semantic Commit&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-control">
+          <mxGeometry x="305" y="290" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-prompt" value="&lt;b&gt;Prompt / Schema&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;근거·목표·제약 입력&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Model Call Envelope&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-interpret">
+          <mxGeometry x="30" y="80" width="215" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-proposal" value="&lt;b&gt;제안 해석&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;field별 근거·미해결&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;추가 읽기 제안&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-interpret">
+          <mxGeometry x="285" y="290" width="205" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-temp" value="&lt;b&gt;해석 임시 상태&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;권한·업무 상태 없음&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="a-interpret">
+          <mxGeometry x="285" y="80" width="205" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="a-store" value="&lt;div style=&quot;font-size:16px&quot;&gt;«component»&lt;/div&gt;&lt;b style=&quot;font-size:24px&quot;&gt;State Store&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=3;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingTop=10;spacingLeft=14;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1020" width="560" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="a-records" value="&lt;b&gt;Conversation · Request · Semantic Commit&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Request Controller 소유 / 내구 기록&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;shape=cylinder3;size=12;" vertex="1" parent="a-store">
+          <mxGeometry x="30" y="65" width="500" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a-model" value="&lt;b&gt;Model Access&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;구조화 추론 · session/KV 분리&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;공유 Omni 1회 적재&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1020" width="520" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a-task" value="&lt;b&gt;Task Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;확정 목표·대상·Task binding으로 업무 구성&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1230" width="560" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a-response" value="&lt;b&gt;Response Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;허용된 응답·clarification 게시&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="730" y="1230" width="520" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="b-input" value="&lt;b&gt;Interaction Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;InputFinal · evidence refs&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;InputStarted → hold&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="300" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="b-policy" value="&lt;b&gt;Policy Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;scope · policy revision&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="1770" y="300" width="300" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="b-context" value="&lt;b&gt;Context Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;bounded read · receipt&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="2190" y="300" width="340" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="b-control" value="&lt;div style=&quot;font-size:16px&quot;&gt;«component»&lt;/div&gt;&lt;b style=&quot;font-size:24px&quot;&gt;Request Controller&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#0057B8;fontColor=#0057B8;fontSize=20;strokeWidth=3;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingTop=10;spacingLeft=14;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="490" width="1180" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="b-workspace" value="&lt;b&gt;Turn Workspace&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;입력·Context revision&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;요청별 임시 상태&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="30" y="80" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-read" value="&lt;b&gt;조회·예산 제어&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;기본 / 추가 읽기&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;deadline · revision&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="305" y="80" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-hold" value="&lt;b&gt;정정·hold 처리&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;늦은 제안 무효화&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;미전송 요청 보류&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="30" y="290" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-commit" value="&lt;b&gt;의미 확정·admission&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;field·coverage·권한&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Semantic Commit&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="305" y="290" width="225" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-prompt" value="&lt;b&gt;Prompt / Schema&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;근거·목표·제약 입력&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Model Call Envelope&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="690" y="80" width="215" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-proposal" value="&lt;b&gt;제안 해석&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;field별 근거·미해결&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;추가 읽기 제안&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="945" y="290" width="205" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-temp" value="&lt;b&gt;해석 임시 상태&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;권한·업무 상태 없음&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="b-control">
+          <mxGeometry x="945" y="80" width="205" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="b-store" value="&lt;div style=&quot;font-size:16px&quot;&gt;«component»&lt;/div&gt;&lt;b style=&quot;font-size:24px&quot;&gt;State Store&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=3;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingTop=10;spacingLeft=14;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="1020" width="560" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="b-records" value="&lt;b&gt;Conversation · Request · Semantic Commit&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;Request Controller 소유 / 내구 기록&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;shape=cylinder3;size=12;" vertex="1" parent="b-store">
+          <mxGeometry x="30" y="65" width="500" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="b-model" value="&lt;b&gt;Model Access&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;구조화 추론 · session/KV 분리&lt;/div&gt;&lt;div style=&quot;font-size:18px&quot;&gt;공유 Omni 1회 적재&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="2010" y="1020" width="520" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="b-task" value="&lt;b&gt;Task Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;확정 목표·대상·Task binding으로 업무 구성&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="1230" width="560" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="b-response" value="&lt;b&gt;Response Manager&lt;/b&gt;&lt;div style=&quot;font-size:18px&quot;&gt;허용된 응답·clarification 게시&lt;/div&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#161616;fontColor=#161616;fontSize=20;strokeWidth=2;align=center;verticalAlign=middle;spacing=5;" vertex="1" parent="1">
+          <mxGeometry x="2010" y="1230" width="520" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-0" edge="1" source="a-input" target="a-workspace" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.8571428571428571;exitY=1.0;entryX=0.49777777777777776;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="555" />
+              <mxPoint x="212" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a-link-0-label" value="① 입력·정정" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="303.67" y="433" width="132.66" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-1" edge="1" source="a-read" target="a-context" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=block;startFill=1;exitX=0.49777777777777776;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="487" y="440" />
+              <mxPoint x="1080" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a-link-1-label" value="② bounded read / receipt" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="721.955" y="421" width="284.09" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-2" edge="1" source="a-policy" target="a-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.5;exitY=1.0;entryX=1.0;entryY=0.5789473684210527;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=7 5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="670" y="400" />
+              <mxPoint x="670" y="900" />
+              <mxPoint x="600" y="900" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a-link-3" edge="1" source="a-read" target="a-prompt" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#0057B8;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=block;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-3-label" value="③ 해석" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#0057B8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="638.085" y="578" width="83.83" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-4" edge="1" source="a-proposal" target="a-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#0057B8;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.0;exitY=0.5263157894736842;entryX=1.0;entryY=0.5263157894736842;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-4-label" value="④ Semantic Proposal" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#0057B8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="695.03" y="791" width="229.93999999999997" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-5" edge="1" source="a-workspace" target="a-read" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-6" edge="1" source="a-workspace" target="a-hold" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.49777777777777776;exitY=1.0;entryX=0.49777777777777776;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-6-label" value="revision" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220.68" y="701" width="102.63999999999999" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-7" edge="1" source="a-hold" target="a-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-8" edge="1" source="a-commit" target="a-records" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.49777777777777776;exitY=1.0;entryX=0.774;entryY=0.0;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=7 5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-8-label" value="⑤ 확정 기록" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="430.67" y="954" width="132.66" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-9" edge="1" source="a-prompt" target="a-model" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=1.0;entryY=0.4827586206896552;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="995" y="615" />
+              <mxPoint x="995" y="700" />
+              <mxPoint x="1265" y="700" />
+              <mxPoint x="1265" y="1090" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a-link-9-label" value="동일 semantic 호출" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="989.85" y="681" width="200.29999999999998" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="a-link-10" edge="1" source="a-model" target="a-proposal" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.75;exitY=0.0;entryX=0.5121951219512195;entryY=1.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-11" edge="1" source="b-input" target="b-workspace" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.8571428571428571;exitY=1.0;entryX=0.49777777777777776;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1650" y="555" />
+              <mxPoint x="1492" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b-link-11-label" value="① 입력·정정" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1583.67" y="433" width="132.66" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-12" edge="1" source="b-read" target="b-context" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=block;startFill=1;exitX=0.49777777777777776;exitY=0.0;entryX=0.5;entryY=1.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1767" y="440" />
+              <mxPoint x="2360" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b-link-12-label" value="② bounded read / receipt" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2001.955" y="421" width="284.09" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-13" edge="1" source="b-policy" target="b-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.5;exitY=1.0;entryX=1.0;entryY=0.5789473684210527;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=7 5;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1950" y="400" />
+              <mxPoint x="1950" y="900" />
+              <mxPoint x="1880" y="900" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b-link-14" edge="1" source="b-read" target="b-prompt" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#0057B8;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=block;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-14-label" value="③ 해석" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#0057B8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1918.085" y="578" width="83.83" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-15" edge="1" source="b-proposal" target="b-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#0057B8;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.0;exitY=0.5263157894736842;entryX=1.0;entryY=0.5263157894736842;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-15-label" value="④ 내부 해석 결과" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#0057B8;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1999.255" y="791" width="181.49" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-16" edge="1" source="b-workspace" target="b-read" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-17" edge="1" source="b-workspace" target="b-hold" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.49777777777777776;exitY=1.0;entryX=0.49777777777777776;entryY=0.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-17-label" value="revision" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1500.68" y="701" width="102.63999999999999" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-18" edge="1" source="b-hold" target="b-commit" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=0.0;entryY=0.47368421052631576;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-19" edge="1" source="b-commit" target="b-records" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.49777777777777776;exitY=1.0;entryX=0.774;entryY=0.0;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=7 5;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-19-label" value="⑤ 확정 기록" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1710.67" y="954" width="132.66" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-20" edge="1" source="b-prompt" target="b-model" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=1.0;exitY=0.47368421052631576;entryX=1.0;entryY=0.4827586206896552;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2275" y="615" />
+              <mxPoint x="2275" y="700" />
+              <mxPoint x="2545" y="700" />
+              <mxPoint x="2545" y="1090" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="b-link-20-label" value="동일 semantic 호출" style="html=1;align=center;verticalAlign=middle;fillColor=#FFFFFF;strokeColor=none;fontSize=19;fontColor=#161616;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="2269.85" y="681" width="200.29999999999998" height="27" as="geometry" />
+        </mxCell>
+        <mxCell id="b-link-21" edge="1" source="b-model" target="b-proposal" parent="1" style="edgeStyle=none;jumpStyle=arc;jumpSize=8;html=1;strokeColor=#161616;strokeWidth=2.3;endArrow=block;endFill=1;startArrow=none;startFill=1;exitX=0.75;exitY=0.0;entryX=0.5121951219512195;entryY=1.0;exitPerimeter=0;entryPerimeter=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="caption0" value="점선: 현재 policy 확인 / 내구 상태 접근" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=18;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="70" y="972" width="389.9" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="caption1" value="확정 뒤 인계: 업무는 Task Manager, 응답·질문은 Response Manager" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=19;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1186" width="667.7099999999999" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="caption2" value="점선: 현재 policy 확인 / 내구 상태 접근" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=18;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="972" width="389.9" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="caption3" value="확정 뒤 인계: 업무는 Task Manager, 응답·질문은 Response Manager" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=19;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1350" y="1186" width="667.7099999999999" height="31" as="geometry" />
+        </mxCell>
+        <mxCell id="common" value="공통 조건  |  같은 입력 근거·공유 Omni·host 검증·추가 조회 예산·정정 처리를 유지한다." style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1391" width="2400" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="notes-bg0" value="" style="fillColor=#F7F7F7;strokeColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1440" width="1240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="note-0-0" value="얻는 것  |  모델의 제안 계약과 확정 권한을 별도로 변경·검토" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1455" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="note-0-1" value="부담  |  proposal·읽기 제안·revision의 Component 간 정합성" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1499" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="note-0-2" value="검토 질문  |  독립 계약이 실제 변경 경계를 만드는가?" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1543" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="notes-bg1" value="" style="fillColor=#F7F7F7;strokeColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="1440" width="1240" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="note-1-0" value="얻는 것  |  조회·해석·정정을 한 요청 작업공간에서 조정" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="1455" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="note-1-1" value="부담  |  prompt/schema 변화와 요청 lifecycle 변경이 한 owner에 모임" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="1499" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="note-1-2" value="검토 질문  |  내부 모듈 경계만으로 같은 통제를 유지할 수 있는가?" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=22;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="1543" width="1200" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="scope" value="내부 블록은 책임의 설명용 분해이며 새 승인 Component가 아님 · 기대 효과는 가설 · ASR·측정 수치는 후속 검토" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=21;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1627" width="2400" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="status" value="검토 기준선과 논의용 대안의 비교 / 구현·성능 측정 없음" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=19;fontColor=#161616;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1661" width="2400" height="31" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

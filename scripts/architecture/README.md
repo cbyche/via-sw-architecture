@@ -9,6 +9,7 @@
 .venv/bin/python scripts/architecture/check_active_terminology.py
 .venv/bin/python scripts/architecture/check_qa_catalog.py
 .venv/bin/python scripts/architecture/generate_target_architecture_diagrams.py --check
+.venv/bin/python scripts/architecture/generate_decision_candidate_diagrams.py --check
 .venv/bin/python scripts/architecture/check_evaluation_package.py <result-directory>
 ```
 
@@ -16,6 +17,7 @@
 - `check_active_terminology.py`는 legacy metric ID과 과거 lifecycle 번호가 active 문서에 다시 섞이지 않는지 확인한다.
 - `check_qa_catalog.py`는 draft QA registry의 active/retired ID와 normative Markdown 표가 일치하는지 확인한다.
 - `generate_target_architecture_diagrams.py --check`는 파일을 변경하지 않고 target 그림의 선 교차·박스 관통, XML ID, 생성 source와 draw.io/SVG 쌍의 일치를 검사한다. 글자·화살촉 배치는 렌더링으로 별도 검토한다.
+- `generate_decision_candidate_diagrams.py --check`는 논의용 후보 그림의 XML·중첩·글자 폭 추정·연결 endpoint·leaf 박스 관통과 draw.io/SVG 쌍의 최신성을 검사한다. [후보 그림 규칙](../../docs/architecture/12-decisions/decision-packages/candidates/diagrams/README.md)을 따른다. 실행 후보나 측정 결과를 생성하지 않는다.
 - `check_evaluation_package.py`는 공식 DP result가 후보별 active QA 19행, raw evidence,
   독립 replay와 필수 보고서를 모두 갖췄는지 fail-closed로 검사한다.
 

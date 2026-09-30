@@ -1,0 +1,194 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1710" viewBox="0 0 2600 1710" role="img" aria-labelledby="title desc">
+<title id="title">음성 입력 근거와 공유 추론의 장애 경계</title><desc id="desc">상황  |  긴 semantic 추론 중 사용자가 표를 다시 가리킨다. 녹음뿐 아니라 인식·시간 근거도 계속 제공해야 한다. 검정은 공통, 파랑은 양쪽의 구조적 차이.</desc>
+<defs><marker id="arrow-black" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#161616"/></marker><marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#0057B8"/></marker></defs>
+<rect width="2600" height="1710" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, sans-serif">
+<text x="40" y="62" font-size="40" font-weight="700" fill="#161616" text-anchor="start">음성 입력 근거와 공유 추론의 장애 경계</text>
+<text x="40" y="108" font-size="24" font-weight="400" fill="#161616" text-anchor="start">상황  |  긴 semantic 추론 중 사용자가 표를 다시 가리킨다. 녹음뿐 아니라 인식·시간 근거도 계속 제공해야 한다.</text>
+<text x="40" y="157" font-size="22" font-weight="700" fill="#161616" text-anchor="start">검정  공통 구조·기능·계약</text>
+<text x="430" y="157" font-size="22" font-weight="700" fill="#0057B8" text-anchor="start">파랑  양쪽 방안의 차이: 책임 경계·상태 owner·연결</text>
+<text x="1410" y="157" font-size="21" font-weight="400" fill="#161616" text-anchor="start">실선 → 호출·event    점선 → 상태 접근    원통 = 저장 기록</text>
+<rect x="40" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="40" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="60" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 1  |  독립 Speech Input Worker + Omni 동시 session</text>
+<rect x="1320" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="1320" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="1340" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 2  |  Omni 입력 capability에 전사·시간 근거 통합</text>
+<rect x="70" y="290" width="1180" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="84" y="315" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="84" y="341" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="100" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="250.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="250.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">audio sample sequence</text>
+<text x="250.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">capture · RAM ring</text>
+<rect x="510" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="660.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Timeline &amp; Buffer</text>
+<text x="660.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">전사 revision · 시점·gap</text>
+<text x="660.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">화면·포인터 근거 결합</text>
+<rect x="920" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1070.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Turn-Taking Control</text>
+<text x="1070.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">playback · output epoch</text>
+<text x="1070.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">local stop / 추론 대기 없음</text>
+<rect x="70" y="560" width="1180" height="95" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="660.0" y="589.5" font-size="22" font-weight="700" fill="#0057B8" text-anchor="middle">Model Access</text>
+<text x="660.0" y="616.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">① audio/control stream → adapter · ② SpeechEvidence/revision → 입력 기록</text>
+<text x="660.0" y="641.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">아래 runtime에 client·adapter·session 관리 책임이 나뉘어 배치됨</text>
+<rect x="70" y="750" width="550" height="360" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="84" y="775" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="84" y="801" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Speech Input Worker</text>
+<rect x="100" y="825" width="490" height="80" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="345.0" y="859.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Model Access · ASR adapter</text>
+<text x="345.0" y="886.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">CPU 예산 · transcript revision · 시간 정규화</text>
+<rect x="100" y="965" width="225" height="110" rx="3" fill="white" stroke="#0057B8" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="212.5" y="1002.0" font-size="22" font-weight="700" fill="#0057B8" text-anchor="middle">Streaming ASR</text>
+<text x="212.5" y="1029.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">독립 경량 dependency</text>
+<text x="212.5" y="1054.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">weights · 인식 오류</text>
+<rect x="365" y="965" width="225" height="110" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="477.5" y="1002.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">입력 근거 buffer</text>
+<text x="477.5" y="1029.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">partial / final</text>
+<text x="477.5" y="1054.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">span timing · gap</text>
+<rect x="700" y="750" width="550" height="360" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="714" y="775" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="714" y="801" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Shared Inference Service</text>
+<rect x="730" y="825" width="490" height="80" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="975.0" y="859.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Model Access · scheduler</text>
+<text x="975.0" y="886.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Voice·semantic 최소 연산/KV · safe-point cancel</text>
+<rect x="730" y="965" width="225" height="110" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="842.5" y="1002.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">VOICE session</text>
+<text x="842.5" y="1029.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">Omni 입력 해석</text>
+<text x="842.5" y="1054.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">승인 음성 생성</text>
+<rect x="995" y="965" width="225" height="110" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1107.5" y="1002.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">SEMANTIC session</text>
+<text x="1107.5" y="1029.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">구조화 해석</text>
+<text x="1107.5" y="1054.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">역할별 context/KV</text>
+<rect x="70" y="1220" width="550" height="105" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="345.0" y="1254.5" font-size="22" font-weight="700" fill="#0057B8" text-anchor="middle">Request Controller</text>
+<text x="345.0" y="1281.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">③ 입력 revision 확정 · 정정/hold · 근거 부족 처리</text>
+<text x="345.0" y="1306.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">ASR/Omni 불일치 조정</text>
+<rect x="700" y="1220" width="550" height="105" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="975.0" y="1254.5" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">공유 Omni · resident weights</text>
+<text x="975.0" y="1281.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Thinker + encoder + Talker/decoder 별도 inventory</text>
+<text x="975.0" y="1306.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">두 역할의 KV·workspace는 별도 비용</text>
+<rect x="1350" y="290" width="1180" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="1364" y="315" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="1364" y="341" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="1380" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1530.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="1530.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">audio sample sequence</text>
+<text x="1530.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">capture · RAM ring</text>
+<rect x="1790" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1940.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Timeline &amp; Buffer</text>
+<text x="1940.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">전사 revision · 시점·gap</text>
+<text x="1940.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">화면·포인터 근거 결합</text>
+<rect x="2200" y="360" width="300" height="95" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2350.0" y="389.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Turn-Taking Control</text>
+<text x="2350.0" y="416.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">playback · output epoch</text>
+<text x="2350.0" y="441.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">local stop / 추론 대기 없음</text>
+<rect x="1350" y="560" width="1180" height="95" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1940.0" y="589.5" font-size="22" font-weight="700" fill="#0057B8" text-anchor="middle">Model Access</text>
+<text x="1940.0" y="616.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">① audio/control stream → adapter · ② SpeechEvidence/revision → 입력 기록</text>
+<text x="1940.0" y="641.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">아래 runtime에 client·adapter·session 관리 책임이 나뉘어 배치됨</text>
+<rect x="1350" y="750" width="1180" height="360" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="1364" y="775" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="1364" y="801" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Shared Inference Service</text>
+<rect x="1380" y="825" width="490" height="80" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="859.5" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">필수 Omni 입력 capability</text>
+<text x="1625.0" y="886.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">전사 revision · span timing·오차 · gap</text>
+<rect x="2010" y="825" width="490" height="80" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2255.0" y="859.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Model Access · scheduler</text>
+<text x="2255.0" y="886.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Voice·semantic 최소 연산/KV · safe-point cancel</text>
+<rect x="1380" y="965" width="490" height="110" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="1002.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">통합 입력 근거 상태</text>
+<text x="1625.0" y="1029.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">상세 SpeechEvidence 제공 필요</text>
+<text x="1625.0" y="1054.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">별도 ASR fallback을 숨겨 추가하지 않음</text>
+<rect x="2010" y="965" width="225" height="110" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="2122.5" y="1002.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">VOICE session</text>
+<text x="2122.5" y="1029.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">입력 근거까지 제공</text>
+<text x="2122.5" y="1054.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">승인 음성 생성</text>
+<rect x="2275" y="965" width="225" height="110" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2387.5" y="1002.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">SEMANTIC session</text>
+<text x="2387.5" y="1029.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">구조화 해석</text>
+<text x="2387.5" y="1054.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">역할별 context/KV</text>
+<rect x="1350" y="1220" width="550" height="105" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="1254.5" font-size="22" font-weight="700" fill="#0057B8" text-anchor="middle">Request Controller</text>
+<text x="1625.0" y="1281.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">③ 입력 revision 확정 · 정정/hold · 근거 부족 처리</text>
+<text x="1625.0" y="1306.5" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">통합 입력의 revision·gap 검증</text>
+<rect x="1980" y="1220" width="550" height="105" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2255.0" y="1254.5" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">공유 Omni · resident weights</text>
+<text x="2255.0" y="1281.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Thinker + encoder + Talker/decoder 별도 inventory</text>
+<text x="2255.0" y="1306.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">두 역할의 KV·workspace는 별도 비용</text>
+<polyline points="250,455 250,560" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="250,455 250,560" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="660,560 660,455" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="660,560 660,455" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="350,655 350,825" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="350,655 350,825" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="1080,655 1080,825" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1080,655 1080,825" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="212,905 212,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="212,905 212,965" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="325,1020 365,1020" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="325,1020 365,1020" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="477,965 477,905" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="477,965 477,905" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="510,405 490,405 490,500 55,500 55,1195 345,1195 345,1220" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="510,405 490,405 490,500 55,500 55,1195 345,1195 345,1220" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="842,905 842,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="842,905 842,965" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1107,905 1107,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1107,905 1107,965" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1160,1110 1160,1220" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1160,1110 1160,1220" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" stroke-dasharray="7 5"/>
+<polyline points="1530,455 1530,560" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1530,455 1530,560" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1940,560 1940,455" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1940,560 1940,455" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1920,655 1920,815 1630,815 1630,825" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1920,655 1920,815 1630,815 1630,825" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="2360,655 2360,825" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2360,655 2360,825" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="1620,905 1620,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1620,905 1620,965" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1790,405 1770,405 1770,500 1335,500 1335,1195 1625,1195 1625,1220" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1790,405 1770,405 1770,500 1335,500 1335,1195 1625,1195 1625,1220" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2122,905 2122,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2122,905 2122,965" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2387,905 2387,965" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2387,905 2387,965" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2440,1110 2440,1220" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2440,1110 2440,1220" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" stroke-dasharray="7 5"/>
+<rect x="214.925" y="501" width="70.14999999999999" height="27" fill="white"/>
+<text x="250" y="520" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">audio</text>
+<rect x="576.19" y="501" width="167.61999999999998" height="27" fill="white"/>
+<text x="660" y="520" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">SpeechEvidence</text>
+<rect x="298.585" y="686" width="102.83" height="27" fill="white"/>
+<text x="350" y="705" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">독립 입력</text>
+<rect x="1012.435" y="686" width="135.13" height="27" fill="white"/>
+<text x="1080" y="705" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">Omni stream</text>
+<rect x="78.28500000000003" y="1176" width="243.42999999999995" height="27" fill="white"/>
+<text x="200" y="1195" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">InputFinal + evidence</text>
+<rect x="1494.925" y="501" width="70.14999999999999" height="27" fill="white"/>
+<text x="1530" y="520" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">audio</text>
+<rect x="1856.19" y="501" width="167.61999999999998" height="27" fill="white"/>
+<text x="1940" y="520" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">SpeechEvidence</text>
+<rect x="1868.585" y="686" width="102.83" height="27" fill="white"/>
+<text x="1920" y="705" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">통합 입력</text>
+<rect x="2292.435" y="686" width="135.13" height="27" fill="white"/>
+<text x="2360" y="705" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">Omni stream</text>
+<rect x="1358.285" y="1176" width="243.42999999999995" height="27" fill="white"/>
+<text x="1480" y="1195" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">InputFinal + evidence</text>
+<text x="70" y="1160" font-size="20" font-weight="400" fill="#161616" text-anchor="start">③ 인식/시간 근거가 없으면 commit 금지 · gap·확인 불가 안내</text>
+<text x="1350" y="1160" font-size="20" font-weight="400" fill="#161616" text-anchor="start">③ 인식/시간 근거가 없으면 commit 금지 · gap·확인 불가 안내</text>
+<text x="40" y="1413" font-size="22" font-weight="400" fill="#161616" text-anchor="start">공통 조건  |  공유 Omni weights 1회 적재·동시 VOICE/SEMANTIC·유한 자원·capture/local stop·gap 보고는 유지한다.</text>
+<rect x="40" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="60" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  Omni 부하·재시작과 입력 근거 생성을 분리</text>
+<text x="60" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  ASR weights·CPU·buffer, 중복 인식·불일치 조정</text>
+<text x="60" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">검토 질문  |  독립 입력 경로가 그 전체 비용을 정당화하는가?</text>
+<rect x="1320" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="1340" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  별도 ASR·worker·전사 불일치 경로 제거 가능</text>
+<text x="1340" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  입력 인식과 semantic이 같은 runtime 장애에 묶임</text>
+<text x="1340" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">조건부  |  동시 입력·revision·시간 근거 capability는 아직 미확인</text>
+<text x="40" y="1648" font-size="21" font-weight="400" fill="#161616" text-anchor="start">내부 블록은 책임의 설명용 분해이며 새 승인 Component가 아님 · 기대 효과는 가설 · ASR·측정 수치는 후속 검토</text>
+<text x="40" y="1680" font-size="19" font-weight="400" fill="#161616" text-anchor="start">검토 기준선과 논의용 대안의 비교 / 구현·성능 측정 없음</text>
+<text x="2560" y="1680" font-size="17" font-weight="400" fill="#161616" text-anchor="end">speech-evidence-boundary.drawio</text>
+</g></svg>

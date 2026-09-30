@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1710" viewBox="0 0 2600 1710" role="img" aria-labelledby="title desc">
+<title id="title">Agent protocol과 실행 연동 상태의 경계</title><desc id="desc">상황  |  Agent A는 순서 있는 push event를, Agent B는 polling을 제공한다. submit 응답이 유실될 수도 있다. 검정은 공통, 파랑은 양쪽의 구조적 차이.</desc>
+<defs><marker id="arrow-black" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#161616"/></marker><marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#0057B8"/></marker></defs>
+<rect width="2600" height="1710" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, sans-serif">
+<text x="40" y="62" font-size="40" font-weight="700" fill="#161616" text-anchor="start">Agent protocol과 실행 연동 상태의 경계</text>
+<text x="40" y="108" font-size="24" font-weight="400" fill="#161616" text-anchor="start">상황  |  Agent A는 순서 있는 push event를, Agent B는 polling을 제공한다. submit 응답이 유실될 수도 있다.</text>
+<text x="40" y="157" font-size="22" font-weight="700" fill="#161616" text-anchor="start">검정  공통 구조·기능·계약</text>
+<text x="430" y="157" font-size="22" font-weight="700" fill="#0057B8" text-anchor="start">파랑  양쪽 방안의 차이: 책임 경계·상태 owner·연결</text>
+<text x="1410" y="157" font-size="21" font-weight="400" fill="#161616" text-anchor="start">실선 → 호출·event    점선 → 상태 접근    원통 = 저장 기록</text>
+<rect x="40" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="40" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="60" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 1  |  공통 Agent Gateway lifecycle + provider adapter</text>
+<rect x="1320" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="1320" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="1340" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 2  |  Agent별 integration Component가 lifecycle 소유</text>
+<rect x="70" y="290" width="1180" height="130" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="660.0" y="337.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Task Manager</text>
+<text x="660.0" y="364.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">① immutable Agent Command / Task·Execution binding / source-confirmed projection</text>
+<text x="660.0" y="389.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 payload의 의미와 상태는 이 Component가 소유</text>
+<rect x="70" y="550" width="1180" height="440" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="84" y="575" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component»</text>
+<text x="84" y="601" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Agent Gateway</text>
+<rect x="100" y="625" width="300" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="250.0" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">전송 상태·재조회</text>
+<text x="250.0" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">PENDING → DISPATCHING</text>
+<text x="250.0" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">ACK / UNKNOWN · key 조회</text>
+<rect x="510" y="625" width="300" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="660.0" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Inbox / cursor</text>
+<text x="660.0" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">중복·gap·source sequence</text>
+<text x="660.0" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">canonical Agent Event</text>
+<rect x="920" y="625" width="300" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1070.0" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Capability profile</text>
+<text x="1070.0" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">제어·query·idempotency</text>
+<text x="1070.0" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">profile revision</text>
+<rect x="100" y="860" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="345.0" y="899.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Agent A adapter</text>
+<text x="345.0" y="926.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">push event · protocol/schema 변환</text>
+<rect x="730" y="860" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="975.0" y="899.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Agent B adapter</text>
+<text x="975.0" y="926.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">polling · protocol/schema 변환</text>
+<rect x="70" y="1045" width="1180" height="150" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="84" y="1070" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="84" y="1096" font-size="24" font-weight="700" fill="#161616" text-anchor="start">State Store</text>
+<path d="M100,1122 C100,1106 1220,1106 1220,1122 L1220,1168 C1220,1184 100,1184 100,1168Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M100,1122 C100,1138 1220,1138 1220,1122" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="660.0" y="1153" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">공통 delivery attempt · inbox · cursor / command ID로 Task payload와 연결</text>
+<rect x="70" y="1250" width="550" height="85" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="345.0" y="1287.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Downstream Agent A</text>
+<text x="345.0" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 reasoning·planning·실행 / 외부 dependency</text>
+<rect x="700" y="1250" width="550" height="85" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="975.0" y="1287.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Downstream Agent B</text>
+<text x="975.0" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 reasoning·planning·실행 / 외부 dependency</text>
+<rect x="1350" y="290" width="1180" height="130" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1940.0" y="337.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Task Manager</text>
+<text x="1940.0" y="364.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">① immutable Agent Command / Task·Execution binding / source-confirmed projection</text>
+<text x="1940.0" y="389.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 payload의 의미와 상태는 이 Component가 소유</text>
+<rect x="1350" y="550" width="550" height="440" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="1364" y="575" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component · 대안 전용»</text>
+<text x="1364" y="601" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Agent Integration A</text>
+<rect x="1380" y="625" width="225" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1492.5" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">전송·재조회</text>
+<text x="1492.5" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">ACK / UNKNOWN</text>
+<text x="1492.5" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">command key</text>
+<rect x="1645" y="625" width="225" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1757.5" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Inbox / cursor</text>
+<text x="1757.5" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">sequence / gap</text>
+<text x="1757.5" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">canonical event</text>
+<rect x="1380" y="760" width="490" height="65" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="1625.0" y="787.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Capability · version · epoch</text>
+<text x="1625.0" y="814.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">공통 최소 port + 명시적 extension</text>
+<rect x="1380" y="860" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1625.0" y="899.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Agent A adapter</text>
+<text x="1625.0" y="926.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">push event · protocol/schema 변환</text>
+<rect x="1980" y="550" width="550" height="440" rx="0" fill="white" stroke="#0057B8" stroke-width="3"/>
+<text x="1994" y="575" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«component · 대안 전용»</text>
+<text x="1994" y="601" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Agent Integration B</text>
+<rect x="2010" y="625" width="225" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="2122.5" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">전송·재조회</text>
+<text x="2122.5" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">ACK / UNKNOWN</text>
+<text x="2122.5" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">command key</text>
+<rect x="2275" y="625" width="225" height="100" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="2387.5" y="657.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Inbox / cursor</text>
+<text x="2387.5" y="684.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">sequence / gap</text>
+<text x="2387.5" y="709.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">canonical event</text>
+<rect x="2010" y="760" width="490" height="65" rx="3" fill="white" stroke="#0057B8" stroke-width="2"/>
+<text x="2255.0" y="787.0" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Capability · version · epoch</text>
+<text x="2255.0" y="814.0" font-size="18" font-weight="400" fill="#0057B8" text-anchor="middle">공통 최소 port + 명시적 extension</text>
+<rect x="2010" y="860" width="490" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2255.0" y="899.5" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Agent B adapter</text>
+<text x="2255.0" y="926.5" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">polling · protocol/schema 변환</text>
+<rect x="1350" y="1045" width="1180" height="150" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="1364" y="1070" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="1364" y="1096" font-size="24" font-weight="700" fill="#161616" text-anchor="start">State Store</text>
+<path d="M1380,1122 C1380,1106 1870,1106 1870,1122 L1870,1168 C1870,1184 1380,1184 1380,1168Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M1380,1122 C1380,1138 1870,1138 1870,1122" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="1625.0" y="1153" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Agent A delivery · inbox · cursor</text>
+<path d="M2010,1122 C2010,1106 2500,1106 2500,1122 L2500,1168 C2500,1184 2010,1184 2010,1168Z" fill="white" stroke="#0057B8" stroke-width="2"/>
+<path d="M2010,1122 C2010,1138 2500,1138 2500,1122" fill="none" stroke="#0057B8" stroke-width="1.5"/>
+<text x="2255.0" y="1153" font-size="20" font-weight="700" fill="#0057B8" text-anchor="middle">Agent B delivery · inbox · cursor</text>
+<rect x="1350" y="1250" width="550" height="85" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1625.0" y="1287.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Downstream Agent A</text>
+<text x="1625.0" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 reasoning·planning·실행 / 외부 dependency</text>
+<rect x="1980" y="1250" width="550" height="85" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2255.0" y="1287.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Downstream Agent B</text>
+<text x="2255.0" y="1314.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">업무 reasoning·planning·실행 / 외부 dependency</text>
+<polyline points="430,420 430,610 250,610 250,625" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="430,420 430,610 250,610 250,625" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="660,625 660,420" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="660,625 660,420" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="370,625 370,610 1070,610 1070,625" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="370,625 370,610 1070,610 1070,625" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="250,725 250,860" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="250,725 250,860" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="400,680 430,680 430,785 975,785 975,860" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="400,680 430,680 430,785 975,785 975,860" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="590,905 660,905 660,725" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="590,905 660,905 660,725" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="975,860 975,810 755,810 755,725" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="975,860 975,810 755,810 755,725" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="610,990 610,1015 540,1015 540,1110" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="610,990 610,1015 540,1015 540,1110" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="100,905 55,905 55,1210 345,1210 345,1250" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="100,905 55,905 55,1210 345,1210 345,1250" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="1220,905 1265,905 1265,1210 975,1210 975,1250" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1220,905 1265,905 1265,1210 975,1210 975,1250" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="1615,420 1615,610 1495,610 1495,625" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1615,420 1615,610 1495,610 1495,625" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1790,625 1790,420" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1790,625 1790,420" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1495,725 1495,760" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1495,725 1495,760" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1495,825 1495,860" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1495,825 1495,860" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1870,905 1885,905 1885,740 1790,740 1790,725" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1870,905 1885,905 1885,740 1790,740 1790,725" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2245,420 2245,610 2125,610 2125,625" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2245,420 2245,610 2125,610 2125,625" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2420,625 2420,420" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2420,625 2420,420" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2125,725 2125,760" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2125,725 2125,760" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2125,825 2125,860" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2125,825 2125,860" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2500,905 2515,905 2515,740 2420,740 2420,725" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2500,905 2515,905 2515,740 2420,740 2420,725" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1890,990 1890,1015 1820,1015 1820,1110" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1890,990 1890,1015 1820,1015 1820,1110" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="2450,990 2450,1110" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2450,990 2450,1110" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" stroke-dasharray="7 5"/>
+<polyline points="1380,905 1335,905 1335,1210 1625,1210 1625,1250" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1380,905 1335,905 1335,1210 1625,1210 1625,1250" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="2500,905 2545,905 2545,1210 2255,1210 2255,1250" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2500,905 2545,905 2545,1210 2255,1210 2255,1250" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<rect x="317.69" y="469" width="224.61999999999998" height="27" fill="white"/>
+<text x="430" y="488" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② 공통 command port</text>
+<rect x="560.86" y="486" width="208.27999999999997" height="27" fill="white"/>
+<text x="665" y="505" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">④ canonical event</text>
+<rect x="818.435" y="591" width="173.13" height="27" fill="white"/>
+<text x="905" y="610" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">capability 검증</text>
+<rect x="635.36" y="766" width="189.27999999999997" height="27" fill="white"/>
+<text x="730" y="785" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">provider binding</text>
+<rect x="246.275" y="1191" width="197.45" height="27" fill="white"/>
+<text x="345" y="1210" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">③ submit / event</text>
+<rect x="881.69" y="1191" width="186.61999999999998" height="27" fill="white"/>
+<text x="975" y="1210" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">③ submit / poll</text>
+<rect x="1509.18" y="467" width="121.63999999999999" height="27" fill="white"/>
+<text x="1570" y="486" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② command</text>
+<rect x="1740.01" y="486" width="99.97999999999999" height="27" fill="white"/>
+<text x="1790" y="505" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">④ event</text>
+<rect x="2139.18" y="467" width="121.63999999999999" height="27" fill="white"/>
+<text x="2200" y="486" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② command</text>
+<rect x="2370.01" y="486" width="99.97999999999999" height="27" fill="white"/>
+<text x="2420" y="505" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">④ event</text>
+<rect x="1526.275" y="1191" width="197.45" height="27" fill="white"/>
+<text x="1625" y="1210" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">③ submit / event</text>
+<rect x="2161.69" y="1191" width="186.61999999999998" height="27" fill="white"/>
+<text x="2255" y="1210" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">③ submit / poll</text>
+<text x="690" y="1020" font-size="18" font-weight="400" fill="#0057B8" text-anchor="start">전송·수신 상태 owner만 변경 / 업무 의미는 Task Manager</text>
+<text x="1970" y="1020" font-size="18" font-weight="400" fill="#0057B8" text-anchor="start">전송·수신 상태 owner만 변경 / 업무 의미는 Task Manager</text>
+<text x="40" y="1413" font-size="22" font-weight="400" fill="#161616" text-anchor="start">공통 조건  |  VIA Task identity·업무 payload owner·capability 검증·UNKNOWN 보존·조회 전 재전송 금지는 동일하다.</text>
+<rect x="40" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="60" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  전송·inbox·cursor·capability 규칙을 공통 계약으로 관리</text>
+<text x="60" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  provider별 차이가 공통 lifecycle의 예외·확장으로 쌓일 수 있음</text>
+<text x="60" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">검토 질문  |  adapter만으로 Agent 차이를 충분히 가둘 수 있는가?</text>
+<rect x="1320" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="1340" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  provider별 상태·재접속·version의 독립 변경</text>
+<text x="1340" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  lifecycle·내구 원장·capability extension 관리가 분산</text>
+<text x="1340" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">검토 질문  |  기존 adapter와 달라진 소유권이 실제로 존재하는가?</text>
+<text x="40" y="1648" font-size="21" font-weight="400" fill="#161616" text-anchor="start">내부 블록은 책임의 설명용 분해이며 새 승인 Component가 아님 · 기대 효과는 가설 · ASR·측정 수치는 후속 검토</text>
+<text x="40" y="1680" font-size="19" font-weight="400" fill="#161616" text-anchor="start">검토 기준선과 논의용 대안의 비교 / 구현·성능 측정 없음</text>
+<text x="2560" y="1680" font-size="17" font-weight="400" fill="#161616" text-anchor="end">agent-integration-boundary.drawio</text>
+</g></svg>

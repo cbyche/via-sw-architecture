@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2600" height="1710" viewBox="0 0 2600 1710" role="img" aria-labelledby="title desc">
+<title id="title">실시간 입출력과 상태 처리의 process 경계</title><desc id="desc">상황  |  Core 또는 UI 코드가 멈추거나 종료될 때 음성 stop·입력 근거·Task 추적은 어디까지 유지되는가? 검정은 공통, 파랑은 양쪽의 구조적 차이.</desc>
+<defs><marker id="arrow-black" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#161616"/></marker><marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#0057B8"/></marker></defs>
+<rect width="2600" height="1710" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, sans-serif">
+<text x="40" y="62" font-size="40" font-weight="700" fill="#161616" text-anchor="start">실시간 입출력과 상태 처리의 process 경계</text>
+<text x="40" y="108" font-size="24" font-weight="400" fill="#161616" text-anchor="start">상황  |  Core 또는 UI 코드가 멈추거나 종료될 때 음성 stop·입력 근거·Task 추적은 어디까지 유지되는가?</text>
+<text x="40" y="157" font-size="22" font-weight="700" fill="#161616" text-anchor="start">검정  공통 구조·기능·계약</text>
+<text x="430" y="157" font-size="22" font-weight="700" fill="#0057B8" text-anchor="start">파랑  양쪽 방안의 차이: 책임 경계·상태 owner·연결</text>
+<text x="1410" y="157" font-size="21" font-weight="400" fill="#161616" text-anchor="start">실선 → 호출·event    점선 → 상태 접근    원통 = 저장 기록</text>
+<rect x="40" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="40" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="60" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 1  |  UI·Voice·Core process 분리 / IPC와 incarnation 검사</text>
+<rect x="1320" y="210" width="1240" height="1160" fill="white" stroke="#161616" stroke-width="2"/>
+<rect x="1320" y="210" width="1240" height="56" fill="#F2F2F2" stroke="#161616"/>
+<text x="1340" y="246" font-size="25" font-weight="700" fill="#161616" text-anchor="start">방안 2  |  host process 통합 / 독립 thread와 bounded queue</text>
+<rect x="70" y="290" width="550" height="295" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="84" y="315" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="84" y="341" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">UI process</text>
+<rect x="700" y="290" width="550" height="295" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="714" y="315" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="714" y="341" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Voice process</text>
+<rect x="70" y="720" width="1180" height="490" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="84" y="745" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="84" y="771" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Core process</text>
+<rect x="100" y="360" width="490" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="114" y="385" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="114" y="411" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="125" y="430" width="210" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="230.0" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Evidence Capture</text>
+<text x="230.0" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">화면·포인터·선택</text>
+<text x="230.0" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">producer time·gap</text>
+<rect x="365" y="430" width="195" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="462.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="462.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text·UI 입출력</text>
+<text x="462.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">명시 stop</text>
+<rect x="730" y="360" width="490" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="744" y="385" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="744" y="411" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="755" y="430" width="205" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="857.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="857.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">capture · playback</text>
+<text x="857.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">유한 audio buffer</text>
+<rect x="975" y="430" width="235" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1092.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Turn-Taking Control</text>
+<text x="1092.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">output epoch · lease</text>
+<text x="1092.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">즉시 local stop</text>
+<rect x="100" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="275.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Interaction Manager</text>
+<text x="275.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Timeline &amp; Buffer</text>
+<text x="275.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">clock mapping · revision</text>
+<rect x="500" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="675.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Controller</text>
+<text x="675.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Request·hold·admission</text>
+<text x="675.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Conversation 상태</text>
+<rect x="900" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1075.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Response Manager</text>
+<text x="1075.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">release·cancel·receipt</text>
+<text x="1075.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">publication 원장</text>
+<rect x="100" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="275.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Agent Gateway</text>
+<text x="275.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">command·inbox·cursor</text>
+<text x="275.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">connector client</text>
+<rect x="500" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="675.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Model Access</text>
+<text x="675.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">semantic client</text>
+<text x="675.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">동시 session 계약</text>
+<rect x="900" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1075.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">State Store</text>
+<text x="1075.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">embedded DB access</text>
+<text x="1075.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">데이터는 process 종료 후 유지</text>
+<rect x="100" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="235.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Context Manager</text>
+<text x="235.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">근거·read cache</text>
+<text x="235.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">User Memory</text>
+<rect x="390" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="525.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Task Manager</text>
+<text x="525.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Task·Execution 상태</text>
+<text x="525.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">command·reconcile</text>
+<rect x="680" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="815.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Interpreter</text>
+<text x="815.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">의미·추가 읽기 제안</text>
+<text x="815.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Model Call Envelope</text>
+<rect x="970" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1105.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Policy Manager</text>
+<text x="1105.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">scope·consent revision</text>
+<text x="1105.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">현재 권한</text>
+<rect x="70" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="250.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Speech Input Worker</text>
+<text x="250.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">독립 ASR process</text>
+<rect x="480" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="660.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Shared Inference Service</text>
+<text x="660.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">공유 Omni process</text>
+<rect x="890" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1070.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Connector Worker</text>
+<text x="1070.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">위험 연동 별도 process</text>
+<rect x="1350" y="290" width="1180" height="920" rx="0" fill="white" stroke="#0057B8" stroke-width="3" stroke-dasharray="10 7"/>
+<text x="1364" y="315" font-size="16" font-weight="400" fill="#0057B8" text-anchor="start">«process / runtime»</text>
+<text x="1364" y="341" font-size="24" font-weight="700" fill="#0057B8" text-anchor="start">Host process</text>
+<rect x="1380" y="360" width="490" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="1394" y="385" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="1394" y="411" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="1405" y="430" width="210" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1510.0" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Evidence Capture</text>
+<text x="1510.0" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">화면·포인터·선택</text>
+<text x="1510.0" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">producer time·gap</text>
+<rect x="1645" y="430" width="195" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1742.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="1742.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Text·UI 입출력</text>
+<text x="1742.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">명시 stop</text>
+<rect x="2010" y="360" width="490" height="190" rx="0" fill="white" stroke="#161616" stroke-width="3"/>
+<text x="2024" y="385" font-size="16" font-weight="400" fill="#161616" text-anchor="start">«component»</text>
+<text x="2024" y="411" font-size="24" font-weight="700" fill="#161616" text-anchor="start">Interaction Manager</text>
+<rect x="2035" y="430" width="205" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2137.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Channel I/O</text>
+<text x="2137.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">capture · playback</text>
+<text x="2137.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">유한 audio buffer</text>
+<rect x="2255" y="430" width="235" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2372.5" y="457.0" font-size="20" font-weight="700" fill="#161616" text-anchor="middle">Turn-Taking Control</text>
+<text x="2372.5" y="484.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">output epoch · lease</text>
+<text x="2372.5" y="509.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">즉시 local stop</text>
+<rect x="1380" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1555.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Interaction Manager</text>
+<text x="1555.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Timeline &amp; Buffer</text>
+<text x="1555.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">clock mapping · revision</text>
+<rect x="1780" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1955.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Controller</text>
+<text x="1955.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Request·hold·admission</text>
+<text x="1955.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Conversation 상태</text>
+<rect x="2180" y="795" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2355.0" y="822.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Response Manager</text>
+<text x="2355.0" y="849.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">release·cancel·receipt</text>
+<text x="2355.0" y="874.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">publication 원장</text>
+<rect x="1380" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1555.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Agent Gateway</text>
+<text x="1555.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">command·inbox·cursor</text>
+<text x="1555.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">connector client</text>
+<rect x="1780" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1955.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Model Access</text>
+<text x="1955.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">semantic client</text>
+<text x="1955.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">동시 session 계약</text>
+<rect x="2180" y="1095" width="350" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2355.0" y="1122.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">State Store</text>
+<text x="2355.0" y="1149.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">embedded DB access</text>
+<text x="2355.0" y="1174.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">데이터는 process 종료 후 유지</text>
+<rect x="1380" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1515.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Context Manager</text>
+<text x="1515.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">근거·read cache</text>
+<text x="1515.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">User Memory</text>
+<rect x="1670" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="1805.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Task Manager</text>
+<text x="1805.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Task·Execution 상태</text>
+<text x="1805.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">command·reconcile</text>
+<rect x="1960" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2095.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Request Interpreter</text>
+<text x="2095.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">의미·추가 읽기 제안</text>
+<text x="2095.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">Model Call Envelope</text>
+<rect x="2250" y="945" width="270" height="90" rx="3" fill="white" stroke="#161616" stroke-width="2"/>
+<text x="2385.0" y="972.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Policy Manager</text>
+<text x="2385.0" y="999.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">scope·consent revision</text>
+<text x="2385.0" y="1024.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">현재 권한</text>
+<rect x="1350" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1530.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Speech Input Worker</text>
+<text x="1530.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">독립 ASR process</text>
+<rect x="1760" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1940.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Shared Inference Service</text>
+<text x="1940.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">공유 Omni process</text>
+<rect x="2170" y="1270" width="360" height="65" rx="3" fill="white" stroke="#161616" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="2350.0" y="1297.0" font-size="22" font-weight="700" fill="#161616" text-anchor="middle">Connector Worker</text>
+<text x="2350.0" y="1324.0" font-size="18" font-weight="400" fill="#161616" text-anchor="middle">위험 연동 별도 process</text>
+<polyline points="225,520 225,695 290,695 290,795" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="225,520 225,695 290,695 290,795" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="855,520 855,670 380,670 380,795" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="855,520 855,670 380,670 380,795" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="1075,795 1075,520" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1075,795 1075,520" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="450,840 500,840" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="450,840 500,840" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="850,840 900,840" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="850,840 900,840" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="540,885 540,945" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="540,885 540,945" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="815,885 815,945" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="815,885 815,945" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="815,1035 815,1065 675,1065 675,1095" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="815,1035 815,1065 675,1065 675,1095" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="675,1185 675,1270" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="675,1185 675,1270" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1505,520 1505,695 1570,695 1570,795" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1505,520 1505,695 1570,695 1570,795" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2135,520 2135,670 1660,670 1660,795" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2135,520 2135,670 1660,670 1660,795" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)"/>
+<polyline points="2355,795 2355,520" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2355,795 2355,520" fill="none" stroke="#0057B8" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-blue)" marker-start="url(#arrow-blue)"/>
+<polyline points="1730,840 1780,840" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1730,840 1780,840" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2130,840 2180,840" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2130,840 2180,840" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="1820,885 1820,945" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1820,885 1820,945" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<polyline points="2095,885 2095,945" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2095,885 2095,945" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="2095,1035 2095,1065 1955,1065 1955,1095" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="2095,1035 2095,1065 1955,1065 1955,1095" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)" marker-start="url(#arrow-black)"/>
+<polyline points="1955,1185 1955,1270" fill="none" stroke="white" stroke-width="6" stroke-linejoin="round"/>
+<polyline points="1955,1185 1955,1270" fill="none" stroke="#161616" stroke-width="2.3" stroke-linejoin="round" marker-end="url(#arrow-black)"/>
+<rect x="137.10500000000002" y="616" width="175.78999999999996" height="27" fill="white"/>
+<text x="225" y="635" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">① evidence IPC</text>
+<rect x="549.35" y="651" width="181.29999999999998" height="27" fill="white"/>
+<text x="640" y="670" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② 입력·time·gap</text>
+<rect x="985.03" y="616" width="229.93999999999997" height="27" fill="white"/>
+<text x="1100" y="635" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">③ release / receipt</text>
+<rect x="626.34" y="1216" width="97.32" height="27" fill="white"/>
+<text x="675" y="1235" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">공통 IPC</text>
+<rect x="1406.275" y="616" width="197.45" height="27" fill="white"/>
+<text x="1505" y="635" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">① evidence queue</text>
+<rect x="1829.35" y="651" width="181.29999999999998" height="27" fill="white"/>
+<text x="1920" y="670" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">② 입력·time·gap</text>
+<rect x="2265.03" y="616" width="229.93999999999997" height="27" fill="white"/>
+<text x="2380" y="635" font-size="19" font-weight="600" fill="#0057B8" text-anchor="middle">③ release / receipt</text>
+<rect x="1906.34" y="1216" width="97.32" height="27" fill="white"/>
+<text x="1955" y="1235" font-size="19" font-weight="600" fill="#161616" text-anchor="middle">공통 IPC</text>
+<text x="70" y="1250" font-size="19" font-weight="400" fill="#161616" text-anchor="start">Voice의 ASR client 및 Agent/source connector 연결은 양쪽 동일</text>
+<text x="1350" y="1250" font-size="19" font-weight="400" fill="#161616" text-anchor="start">Voice의 ASR client 및 Agent/source connector 연결은 양쪽 동일</text>
+<text x="40" y="1413" font-size="22" font-weight="400" fill="#161616" text-anchor="start">공통 조건  |  논리 Component·비동기 처리·추론/ASR/위험 connector 격리·내구 복구 계약·동일 모델 구성은 유지한다.</text>
+<rect x="40" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="60" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  Core process-fatal 오류와 local stop의 운명 분리</text>
+<text x="60" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  IPC·복사·queue·clock mapping·lease·재연결 관리</text>
+<text x="60" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">실패 경계  |  Core 단절 → 새 admission 중단 / Voice는 로컬 stop 유지</text>
+<rect x="1320" y="1440" width="1240" height="160" fill="#F7F7F7" stroke="#161616"/>
+<text x="1340" y="1477" font-size="22" font-weight="400" fill="#161616" text-anchor="start">얻는 것  |  내부 전달·buffer 참조 공유와 host lifecycle 단순화</text>
+<text x="1340" y="1521" font-size="22" font-weight="400" fill="#161616" text-anchor="start">부담  |  host process-fatal 오류에서 UI·Voice·Core가 함께 중단</text>
+<text x="1340" y="1565" font-size="22" font-weight="400" fill="#161616" text-anchor="start">실패 경계  |  thread 격리는 blocking 제어이며 process crash 격리는 아님</text>
+<text x="40" y="1648" font-size="21" font-weight="400" fill="#161616" text-anchor="start">내부 블록은 책임의 설명용 분해이며 새 승인 Component가 아님 · 기대 효과는 가설 · ASR·측정 수치는 후속 검토</text>
+<text x="40" y="1680" font-size="19" font-weight="400" fill="#161616" text-anchor="start">검토 기준선과 논의용 대안의 비교 / 구현·성능 측정 없음</text>
+<text x="2560" y="1680" font-size="17" font-weight="400" fill="#161616" text-anchor="end">runtime-isolation.drawio</text>
+</g></svg>
