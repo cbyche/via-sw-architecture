@@ -1,98 +1,76 @@
-# 후보 도출과 자체 검토 기록
+# 설계 선택 복원과 자체 반론 검토
 
-> 상태: **문서·구조 대조에 의한 자체 검토 / 사용자 선정 전**
-> 기록일: 2026-09-30 · [선발 원칙](./selection-principles.md) · [후보 목록](./README.md)
+> **작성자의 문서 대조·사건 추적 / 독립 심사·실행 검증 아님 / 사용자 선정 전**
+> 2026-09-30 · [후보 표](./README.md) · [선발 원칙](./selection-principles.md)
 
-## 1. 어떻게 추렸는가
+## 1. 무엇을 다시 검토했는가
 
-먼저 검토 완료 기준선의 사용자 흐름·Component·상태 소유권과 제어·기억·공유 Omni 계약에서 구조적 선택을 찾았다. 이전 DP inventory에서 번호나 대안을 가져오지 않았다. 이어 같은 사용자 행동을 제공하는 대안을 만들고, Component 변화의 실질성·대안의 강도·후보 중복을 검토했다.
+출발점은 검토 완료 target의 [전체 구조](../target-architecture/architecture.md), [제어](../target-architecture/control-and-lifecycle.md), [기억](../target-architecture/memory-and-context-lifecycle.md), [공유 Omni](../target-architecture/shared-omni-runtime.md), [설계 완결성](../target-architecture/design-completeness.md)이다. 고정 UC와 사용자 합의를 구분한 뒤, 기능을 제공하는 현재 처리 방식에서 갈림길을 복원했다. 기존 Component별 후보나 이전 DP 번호에서 새 목록을 분해하지 않았다.
 
-아래 분류는 작성자의 제안이다. 사용자에게 이미 선정받았거나 독립 심사·실험을 통과했다는 뜻이 아니다. ASR 검토는 사용자가 요청한 후속 순서로 남긴다.
+후속 사용자 요청에 따라 기존 7개와 VIA-DP-01~18의 설계 아이디어·ADR을 다시 대조했다. [별도 검토 기록](./reference-idea-review.md)에 각 자료의 반영·유보 이유를 남겼다. 특히 의미 정정 계약, read-set 확장과 조회 시점의 구별, 필수 Agent 사건 보존, 생성 순서와 게시 권한의 구별을 네 상세 문서에 보강했다. 이전 자료와 관련이 없거나 전부 새 아이디어라고 주장하지 않는다.
 
-## 2. 약한 대안을 어떻게 보완했는가
+| 주요 기능 / 현재 선택 | 검토한 다른 구현 방식 | 이번 판단 |
+| --- | --- | --- |
+| 요청의 목표·대상·Task·처리 경로를 통합 semantic 작업으로 제안 | 중간 후보·의존 기록을 가진 단계별 해석 | **우선 검토:** 실제 추론·재처리 그래프가 달라짐 |
+| 입력 중 기본 Context 준비, 부족한 정보만 추가 읽기 | 최소 입력의 조회 계획 뒤 source 읽기·통합 해석 | **우선 검토:** 첫 판단의 정보와 source 대기가 달라짐 |
+| event inbox·순서 검사·진행 projection, gap에 query | snapshot으로 진행 상태 구성, 일반 event는 hint | **우선 검토:** 같은 source의 event·query 기능 전제와 필수 사건 보존 필요 |
+| 좁은 S2S 직접 경로의 speculative 생성·host release | 짧은 경로 분류 뒤 허용된 응답만 생성 | **추가 검토:** 순차 대기와 버린 생성 비용은 실재하나 적용 범위·build 계약 확인 필요 |
+| OS/UI 사건·유한 sampling·timeline으로 당시 화면 확보 | 발화 구간을 연속 media로 보존하고 나중에 추출 | **보류:** 무조건 현재 화면만 보는 안은 UC 위반. 강한 media 대안은 같은 timestamp·pointer·문서 identity도 필요하며, codec/빈도 차이를 넘는 기능적 이유를 아직 충분히 제시하지 못함 |
+| metadata/keyword 후보 검색·원문·typed state·파생 summary | 별도 의미 색인·embedding 검색 경로 | **보류:** 단어 검색 대 의미 검색의 알고리즘 차이만으로 선정하지 않음. 재표현된 과거 자료 탐색의 실제 필요와 색인 생성·갱신·삭제·추가 dependency 비용을 먼저 구체화해야 함 |
+| Context 변경 시 의존 read set만 재검증 | 전체 요청 snapshot 폐기·재구성 | **흡수:** 단독 후보보다 해석·Context 후보의 정정 비용/완결성에서 다룸. 무조건 오래된 근거를 사용하는 대안은 제외 |
+| 한 업무 전체를 Agent에, 독립 목표는 별도 추적 | VIA가 한 업무 내부 단계를 분해·계획·연결 | **제외:** 한 업무 전체 위임 합의와 domain planning 경계를 변경함 |
+| 한정 자료 설명은 VIA, 업무 조사·실행은 Agent | 정보성 요청을 모두 Agent에 위임 | **이번에는 제외:** 01~05의 넓은 범위에서는 가능한 구성이지만 target 리뷰에서 합의한 기본 직접 처리 방향을 다시 여는 문제. 이번 후보에 조용히 포함하지 않음 |
+| 직접 응답은 맥락 없는 자체 지식 질문에 제한 | S2S에 대화·화면·Task 도구를 주어 처리 범위 확대 | **제외:** 사용자 지정 범위를 바꿈. 생성 순서 후보는 범위 유지 |
+| 하나의 Omni·동시 session·입력 ASR | 역할별 큰 모델을 따로 적재하거나 whole-call 직렬화 | **제외:** 가중치 공유 또는 동시 입력 진행 요구 위반 |
+| 독립 Streaming ASR이 입력 시간 근거 생성 | 같은 공유 Omni의 native 전사·시간 근거 | **조건부 유보:** 실제 dependency 차이여서 살릴 가치가 있음. semantic 중 지속 인식·시간 근거·전체 Omni 장애 시 동작을 닫지 못한 상태에서 강한 대안으로 승격하지 않음. 이전 turn-final-only 제한도 그대로 강제하지 않음 |
+| Voice/semantic 자원 예약·bounded scheduling | priority·quantum·예약량만 조정 | **제외:** 현재는 정책·설정 차이. runtime 기능이 달라지는 대안을 이름만으로 만들지 않음 |
+| 내구 command/inbox/publication과 로컬 transaction | event sourcing 또는 owner별 journal | **보류:** 실질적인 저장·복구 대안이지만 핵심 interaction의 중요성과 비용을 좁히는 작업이 더 필요. 이번에는 개수를 늘리기 위해 포함하지 않음 |
+| UI·Voice·Core process 격리 | thread 기반 통합 host | **우선 목록에서 제외:** 실제 장애 차이는 있으나 이번 사용자 리뷰가 요구한 핵심 기능의 설계 갈림길보다 약함. 장애 격리의 의미 자체를 부정한 것은 아님 |
+| Text 상세·Voice 요약·공통 사실 연결 | Text 완성 후 일괄 음성 요약 | **보류:** 공통 사용자 행동은 가능하지만 생성·전달 단계 차이의 중요성을 먼저 좁혀야 함. 현재는 S2S 생성 후보와 별개 대형 후보로 늘리지 않음 |
 
-| 후보 | 배제한 약한 대안 | 현재 steelman에 반영한 보완 | 남은 핵심 질문 |
+기준선에 등장하는 모든 선택을 후보로 만들지 않았다. 메모리의 중요성도 전용 후보 개수를 만들 이유가 아니라, 실제로 추가·유지·폐기되는 데이터·KV·buffer 비용을 검토할 이유로 사용했다.
+
+## 2. 강한 대안을 만들기 위해 수정한 것
+
+| 후보 | 처음 떠올리기 쉬운 약한 대안 | 반론을 반영한 현재 대안 | 남은 약점 |
 | --- | --- | --- | --- |
-| [해석·확정 경계](./request-resolution-boundary.md) | 모델이 검증 없이 직접 실행 | 통합 Component 내부의 typed module·결정적 검증·권한 경계 유지 | 공개 계약을 내부화하는 실질적 효과가 있는가, 박스만 지웠는가 |
-| [Context 준비](./context-preparation-ownership.md) | 소비자가 원본 DB를 직접 읽고 stale 정보 사용 | owner read port, revision, provenance, 삭제·권한 무효화 유지 | 소비자별 요구가 공통 준비의 이점보다 크게 다른가 |
-| [대화·업무 owner](./conversation-task-ownership.md) | Conversation 종료와 함께 Task 종료 | 독립 aggregate·identity·mailbox·내구 기록 유지 | 한 owner로 교차 상태 전이가 단순해지는가, 변경 책임만 커지는가 |
-| [응답 전달](./response-publication-ownership.md) | 응답마다 마음대로 음성 재생 | 공통 Voice arbiter·epoch·admission과 응답별 내구 원장 유지 | 차례 조정과 전달 이력 조회의 분산 비용을 감수할 이유가 있는가 |
-| [Agent 연동](./agent-integration-boundary.md) | Task Manager에 vendor SDK 직접 결합 | 개별 연동 owner와 versioned 최소 port·명시적 extension·공통 library 허용 | 현재 adapter보다 독립된 책임이 실제로 생기는가 |
-| [음성 입력 근거](./speech-evidence-boundary.md) | semantic이 끝날 때까지 녹음만 보관 | Omni의 동시 입력 session·시간 근거·bounded service를 필수로 명시 | 그 기능을 제공할 runtime/build가 가능한가; 현재 미확인 |
-| [runtime 격리](./runtime-isolation.md) | 단일 thread와 blocking 호출 | 충분한 thread·비동기·bounded queue, 위험 dependency process 격리 유지 | host process-fatal 격리의 가치가 추가 경계 비용을 정당화하는가 |
+| 해석 단계 | 단계마다 결과 하나를 확정하고 뒤로만 진행 | 원문·후보·미해결을 전달, 의존 revision 기록, 필요한 되돌림 허용 | 되돌림·중간 계약이 커지면 통합보다 복잡하고 느릴 수 있음 |
+| Context 획득 | 발화가 끝나야 화면 capture까지 시작 | 당시 관측은 양쪽 공통, 해석용 source 조회의 순서만 변경 | 계획을 만들기 위해 기본 근거 전체가 필요하면 구조 차이가 줄어듦 |
+| Agent 상태 | 모든 이벤트를 버리고 가끔 polling | 필수 질문·승인·terminal은 내구 보존, 일반 progress만 hint, query 합치기·cache·연결 복구 | snapshot 기능과 필수 사건 보존이 약한 Agent에는 성립하지 않음 |
+| 직접 응답 생성 | 생성 전 host keyword 분류만으로 직접 경로 확정 | 같은 Omni의 구조화 제안 + host 조건 검사, generation 뒤 내용 검사 | 분류-only 호출·이어지는 generation의 실제 build 적합성은 확인 필요 |
 
-## 3. Component 변화의 강도를 검토한 결과
+현재 설계도 최선의 형태로 읽었다. 통합 해석은 field별 근거를 유지하고, 사전 Context는 모든 자료를 읽지 않으며, 이벤트 projection도 필요하면 query한다. 선생성도 이미 Core임을 아는 요청에서 무조건 끝까지 실행하지 않는다. 이런 최적화를 제거해야만 차이가 생긴다면 그 후보는 설득력이 없다.
 
-| 후보 | 눈에 보이는 변화 | 판정 |
+해석 단계는 호출 수만으로 구별하지 않는다. 대안의 후속 단계가 앞 의미를 바꿀 때 정정 계약·새 version·후속 무효화를 거쳐야 하며 마지막 전체 재판단을 붙이면 통합안으로 수렴한다. Context 계획은 조회 시점의 선택이지 최초 source 집합을 절대로 확장하지 못하게 하는 선택이 아니다. Agent 상태 후보는 일반 progress 공급 방식을 바꾸고 Task writer·event sourcing·Agent 계약까지 동시에 바꾸지 않는다.
+
+## 3. 후보 간 중복과 고정할 조건
+
+| 후보 쌍 | 겹치는 부분 | 분리해서 비교할 축 |
 | --- | --- | --- |
-| 해석·확정 경계 | Request Interpreter의 독립 경계가 Request Controller 내부로 이동 | 우선 검토. 내부 module로도 동일 경계가 유지되어 차이가 약해지면 탈락 가능 |
-| Context 준비 | Context Manager의 구성 책임·view 상태가 소비자 쪽으로 분산 | 우선 검토. Component 수가 같아도 책임·연결이 실질적으로 달라짐 |
-| 대화·업무 owner | Task Manager의 상태 권위가 Request Controller로 통합 | 우선 검토. 여러 lifecycle을 다루는 owner 계약의 선택 |
-| 응답 전달 | Response Manager를 응답 종류별 Component로 분리하고 공통 출력 계약 확대 | 우선 검토. publication·복구 owner와 연결이 달라짐 |
-| Agent 연동 | Agent Gateway의 전송·수신 lifecycle을 Agent별 Component가 소유 | 우선 검토. 기존 adapter를 다시 그린 수준이라면 탈락 가능 |
-| 음성 입력 근거 | 독립 ASR dependency와 worker·불일치 계약 제거 | 조건부. 최상위 Component 변화가 아니며 capability 공백 존재 |
-| runtime 격리 | UI·Voice·Core process 경계와 IPC 제거 | 조건부. 논리 Component 구성은 그대로 |
+| 해석 단계 / Context 획득 | 첫 모델 작업·추가 읽기·호출 수 | 해석 비교는 초기 근거·조회 수단을 같게 둔다. Context 비교는 최종 통합 해석을 유지하고 읽기 trigger·앞뒤 관계만 바꾼다. |
+| Context 획득 / Agent 상태 | Task 정보가 Context의 source | Context 비교는 같은 Task 조회 port·상태 공급 방식을 사용한다. 상태 비교는 같은 사용자 최신성 요구 아래 source event/query 적용을 바꾼다. |
+| 직접 응답 생성 / 해석 단계 | 같은 Omni의 호출·자원 | 직접 응답 후보는 좁은 S2S 경로에 한정하고 Core 해석을 바꾸지 않는다. Core 후보에서는 direct 처리 구조를 유지한다. |
+| 모든 후보 / 모델 scheduling | 공유 queue·KV·입력 보호 | 공통 입력·자원 계약을 유지한다. 새 작업이 늘어난 비용은 인정하되 scheduling 알고리즘을 함께 바꿔 이점으로 세지 않는다. |
 
-핵심 후보 다섯 개를 모두 정식 package로 만들자는 결론은 아니다. 특히 해석 경계와 Agent 연동은 그림의 경계를 바꾼 만큼 실제 독립 책임이 달라지는지 사용자 검토에서 엄격하게 확인한다.
+두 안의 모델 호출 수를 무조건 같게 만들면 구조 차이를 지울 수 있다. 반대로 모델/build·권한·필수 기능·Agent 능력을 바꿔서는 안 된다. 전체 자원·deadline 같은 공통 조건은 후속 검증 계약에서 정하며 현재 수치·동결 조건을 만들지 않는다. 정확한 같은 실행 결과를 양쪽에 강제하지 않고 같은 입력·목표·외부 조건에서의 오류와 실패를 모두 남기는 방향이다.
 
-## 4. 별도 후보로 올리지 않은 항목
+## 4. 문서에서 수행한 사건 추적
 
-| 논의 주제 | 이번 처리와 이유 | 다시 후보가 될 조건 |
-| --- | --- | --- |
-| 추론 예약량·우선순위·round-robin·quantum | 정책·알고리즘·설정. 동일 Model Access 책임 안의 차이만으로 독립 후보를 만들지 않음 | 자원 admission·session 관리 권한과 Component 계약을 바꾸는 현실적 대안이 생길 때 |
-| Agent 선택 순위·matching | 선택 알고리즘만으로는 구조 변화가 약함. 요청 해석 경계와 Agent 연동 문제로 구분 | 독립 선택 Component가 고유 상태·계약·변경 책임을 가져야 하는 근거가 생길 때 |
-| semantic 호출 2회·추가 읽기 한 묶음 | 현재 처리 정책. 횟수만 바꾼 비교는 제외 | orchestration 소유권과 Component 경계를 달리해야 해결되는 문제가 확인될 때 |
-| cache TTL·보관 기간·queue 크기 | 설정값 변경. Context 준비·수명 계약의 비용으로 남김 | 원본·파생 view의 owner나 저장 경계가 바뀌는 대안이 필요할 때 |
-| embedded DB 제품·저장 엔진 | 같은 원자성·복구 계약을 구현하는 제품 선택만으로는 부족 | 저장·복구 책임과 여러 owner의 확정 경계가 달라질 때 |
-| 공유 transaction 대 owner별 journal | 구조적 후보는 맞지만 Component 시각 변화가 상대적으로 약하고 업무 owner 후보와 섞일 위험이 있음. 별도 파일 승격 보류 | owner 배치를 고정한 상태에서 독립 persistence 질문으로 다룰 필요가 확인될 때 |
-| S2S 직접 응답의 허용 범위 확대 | 현재 사용자가 지정한 좁은 범위를 바꾸는 제품 정책. 이번 대안에 포함하지 않음 | 사용자 지정 변경과 별개로 admission owner의 구조 차이를 구체화할 때 |
-| 복합 업무를 단계별로 VIA가 계획·실행 | 한 업무를 통째로 Agent에 맡기는 합의 및 domain planning 경계를 위반 | 현재 범위에서는 제외. 명시된 독립 목표 간 관계 관리는 유지 |
-| 모델 weights의 역할별 복제 | 공유 on-device Omni 사용자 지정에 어긋남 | 이번 후보에서는 제외 |
-| Policy Manager의 존재 자체 | 필수 정보 통제를 근거로 Component별 후보를 자동 생성하지 않음 | 같은 권한 요구를 다른 상태·강제 경계로 충족하는 구체적인 대안이 필요할 때 |
-
-## 5. 후보 간 중복을 어떻게 통제하는가
-
-- **해석·확정 ↔ Context 준비:** 앞의 후보는 제안·제어 경계, 뒤의 후보는 근거 view 구성 owner다. 첫 비교에서는 Context 준비 위치를, 둘째 비교에서는 해석·확정 경계를 고정한다.
-- **해석·확정 ↔ 대화·업무 owner:** 둘 다 Request Controller가 커질 수 있지만 이동하는 책임이 다르다. 두 통합을 동시에 적용한 결과를 한 선택의 효과로 설명하지 않는다.
-- **대화·업무 owner ↔ Agent 연동:** 전자는 업무 상태의 의미 권위, 후자는 provider별 전송·수신 lifecycle이다. Agent 업무의 domain reasoning은 모두 외부에 남는다.
-- **응답 전달 ↔ Context 준비:** 응답 Component가 나뉘면 조회 소비자 수도 달라질 수 있다. Context 후보에서는 공통 Response Manager를 유지하고, 응답 후보에서는 현재의 근거 제공 계약을 유지한다.
-- **논리 구조 ↔ runtime 격리:** Component를 나누었다고 process-fatal 격리가 생기는 것으로 계산하지 않는다. runtime 비교에서는 논리 owner를 유지한다.
-- **음성 입력 근거 ↔ runtime 격리:** 입력 경로 후보만 ASR 유무를 바꾼다. runtime 후보는 ASR·추론 dependency 구성을 유지한다.
-
-## 6. 그림 상세화 재검토
-
-사용자의 Senior SW Architect 심사 관점과 제공한 비교 슬라이드를 반영해 일곱 그림을 다시 구성했다. 기존의 단순 Component 연결만으로는 상태·제어·복구 비용을 따라가기 어려웠다. 재작성에서는 각 그림의 시나리오, 내부 책임, 핵심 payload, 내구 기록 또는 파생 view, 번호 흐름과 예외 조건을 드러냈다.
-
-| 재검토 항목 | 반영 내용 |
+| 확인한 반례 | 검토 결과 / 문서에 남긴 조건 |
 | --- | --- |
-| 색의 의미 | 방안별 색 구분을 제거. 공통 검정 / 차이 파랑을 양쪽에 동일 적용 |
-| 책임과 상태 | 확정 상태·해석 임시 상태, 원본·view, 업무 payload·delivery 상태, publication·장치 receipt를 구분 |
-| 경계의 종류 | Component·내부 모듈·process·dependency·저장 기록을 분리 표기 |
-| 비교의 공정성 | 검증·독립 Task lifecycle·공통 arbiter·provider adapter·비동기 host를 대안에도 유지 |
-| 호출 정합성 | 입력 확정은 Interaction Manager를 경유, semantic은 Request Interpreter를 경유, publication 원장은 응답 owner가 변경 |
-| 그림과 근거 | 내부 블록은 기준선 책임의 설명용 분해. 승인된 새 내부 설계나 구현으로 취급하지 않음 |
-| 검토 방식 | 일곱 SVG 렌더링 확인, XML·중첩·화살표 endpoint·leaf 관통·원본/preview 일치 검사 |
+| 지칭 결과가 보고서 Context에 의존했는데 Task만 변경 | 단계화해도 지칭 결과 재사용 불가; 의존 기록과 앞 단계 무효화 필요 |
+| 조회 계획 없이 “그거”의 source조차 특정 불가 | 최소 식별 근거와 제한된 후보 조회 허용; 모호함을 자신 있게 추측하는 계획은 불가 |
+| 발화 중 화면 이동 뒤 final transcript 도착 | 두 Context 안 모두 당시 capture 유지; 조회 후행을 capture 후행으로 혼동하지 않음 |
+| snapshot 응답이 늦는 동안 Agent 질문 도착 | 질문 내구 원본 보존, snapshot revision으로 늦은 상태가 질문을 지우지 않도록 처리 |
+| “최신 상태를 다시 확인” 요청 | 이벤트 안도 query; 조회 비용을 대안에만 부과하지 않음 |
+| event/query를 모두 못 하는 Agent | 양쪽 모두 지원 한계·불명 처리; 대안의 일반 적용 범위에서 제외 |
+| direct 경로 허용 뒤 새 발화 시작 | 두 안 모두 새 revision으로 게시 차단; 생성 시작 전/후의 낭비량만 다름 |
+| current direct gate는 audio handle을 요구 | 대안은 경로 허용과 실제 게시 허용의 두 상태로 변경 필요. 기존 schema 그대로 가능하다고 적지 않음 |
 
-사용자 예시의 수치·점수는 옮기지 않았다. 본문과 그림의 이점·비용은 구조적 가설이며 ASR 선정이나 측정 결과가 아니다. 상세한 [그림 작성 규칙](./diagrams/README.md)을 남겼다.
+이는 문서상 정상·예외 경로를 따라간 검토이며 실행 시험이나 모델의 성공률 확인이 아니다.
 
-## 7. 배경 페이지와 설계 비교 페이지의 연결 검토
+## 5. 다음 공동 검토의 판단 기준
 
-일곱 후보에 배경 페이지용 원고를 보강했다. 각 문서는 구체적 사용자 상황, 과제에서의 중요성, 동시에 만족해야 할 요구와 구조적 충돌, 배경 슬라이드 문구·도식 구성·Challenge, 두 페이지의 발표 설명을 구분한다. 아래는 후보별로 설명하려는 난점과 다음 페이지의 구조적 선택이 연결되는지 대조한 결과다.
+먼저 각 후보가 과제의 핵심 기능을 설명하는 데 중요한지, 대안도 실제로 선택할 만한지, 그림에서 작동 차이가 드러나는지 확인한다. 특히 해석 단계가 prompt 분할에 그치지 않는지, Context 조회 계획이 사전 준비와 실질적으로 구분되는지, 상태 snapshot 기능의 전제가 현실적인지 비판적으로 검토해야 한다.
 
-| 후보 | 배경에서 드러낼 핵심 난점 | 비교 페이지로 이어지는 질문 |
-| --- | --- | --- |
-| 응답 전달 | 여러 생산 경로·하나의 발화 장치, 생성·표시·실제 전달의 다른 상태 | publication 원장·출력 조정의 공통 또는 종류별 소유권 |
-| 대화·업무 owner | 수명은 독립이지만 취소·완료·질문은 교차 변경 | 상태 의미의 owner를 나누거나 내부 조정으로 통합 |
-| Agent 연동 | provider별로 상태를 확인·제어·복구할 수 있는 보장이 다름 | adapter 위의 delivery·inbox·capability 상태를 누가 소유하는가 |
-| Context 준비 | 원본 owner·시점은 다양하고 소비 목적·무효화 범위도 다름 | 근거 결합과 파생 view의 공통 또는 소비자별 소유권 |
-| 해석·확정 경계 | 해석 중 근거·정정·권한이 변하며 의미 제안은 실행 권한이 아님 | 해석 계약의 독립 Component 경계와 요청 작업공간 통합 |
-| runtime 격리 | 비동기 실행과 process-fatal 격리는 다르고 경계 관리 비용도 존재 | 같은 논리 Component의 UI·Voice·Core process 분리 범위 |
-| 음성 입력 근거 | 공유 추론 중에도 인식·시간·revision 근거를 계속 제공해야 함 | 별도 입력 dependency·worker와 통합 runtime의 요구 capability |
-
-배경 사례를 실제 장애 통계나 성능 측정으로 표현하지 않았다. 기준선의 현재 수단을 모든 대안의 필수 구조로 강제하지 않았으며, 일곱 후보의 기존 상태와 ASR 후속 검토 순서를 유지했다. 이번 추가물은 문서·도식 구성 원고이며 새 배경 SVG·draw.io나 발표 파일은 생성하지 않았다.
-
-## 8. 다음 공동 검토에서 결정할 것
-
-각 후보의 문제 중요성, 두 방안의 설득력, 실제 Component 차이와 후보 간 독립성을 확인해 채택·통합·보류한다. 구조적 후보가 좁혀지면 메모리를 포함한 ASR의 추가·변경과 관련성을 논의한다. 지금은 metric·target·device budget이나 정식 package 개수를 정하지 않는다.
-
-근거: [Target Architecture](../target-architecture/architecture.md), [제어 계약](../target-architecture/control-and-lifecycle.md), [기억 계약](../target-architecture/memory-and-context-lifecycle.md), [공유 Omni 계약](../target-architecture/shared-omni-runtime.md), [설계 완결성](../target-architecture/design-completeness.md).
+후보 채택 후 메모리를 포함한 ASR의 관련성·정의·우선순위·평가 범위를 논의한다. 현재는 latency·오류·자원·변경·복구의 인과 가설만 기록했으며 ASR을 재정의하거나 모두 PRIMARY로 분류하지 않았다. 별도의 허가 없이 구현·측정으로 넘어가지 않는다.
