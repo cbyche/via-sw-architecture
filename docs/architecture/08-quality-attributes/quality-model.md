@@ -9,12 +9,14 @@
 
 ## 1. 분류 체계
 
+제품 품질 분류는 **ISO/IEC 25010:2023**을 기준으로 한다. [표준 품질속성과 VIA QA의 대응 근거](./iso-25010-quality-basis.md)에 특성·부특성, 기존 QA와의 연결 및 추가 비교 도출 규칙을 정리했다. 아래 category는 VIA의 관리용 분류이며 ISO의 특성 이름을 대체하지 않는다. 이 보충은 기존 ID·metric·ASR 지위의 변경이 아니다.
+
 **모든 QA의 현재 모델 전제:** 하나의 on-device Omni를 S2S·semantic 역할이 공유하고 Component·Task별로 weights를 복제하지 않는다. 역할별 세션·KV·호출은 분리하므로 지연에는 실제 자원 경합과 호출 graph를, 메모리에는 weights 외 cache·buffer·runtime을 포함한다. 주 설계안의 독립 Streaming ASR도 모델·호출·자원·장애 비용에 포함한다. 추가 helper는 명시적인 설계 근거와 전체 비용 기록이 필요하다. 이전 VIA-DP 비교는 당시 모델·ASR 가정을 보존하며 새 목표 구조의 측정으로 재해석하지 않는다. 정의는 [Model Boundary](../01-system-mission-and-boundary.md#13-ai-model-boundary), 비교 조건은 [FA-10](../06-fixed-assumptions.md#65-모델-비교-규칙)을 따른다.
 
 QA-41은 진단 QA로 유지한다. 현재 메모리 상한 요구가 없고 공유 local semantic model이 절대값을 지배하며, 현재 DP-11 reference path의 후보 차이는 약 3.7 MiB에 불과했다. 실측 없이 ‘모델 여러 개 절약’을 주장하지 않는다.
 
 ```text
-ISO/IEC 25010 기반 품질 관점
+ISO/IEC 25010:2023 제품 품질 특성·부특성
         ↓
 QC — 제품 수준의 상위 품질 관심사
         ↓

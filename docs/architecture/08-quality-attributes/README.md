@@ -9,6 +9,7 @@ population은 Measurement Freeze 전까지 미확정이다.**
 
 | Document | Role |
 | --- | --- |
+| [ISO/IEC 25010 품질 대응](./iso-25010-quality-basis.md) | 2023판 특성·부특성에 기존 QA와 DP별 추가 품질 질문을 연결한 근거 |
 | [Quality Model](./quality-model.md) | category range, active QA catalog, QA-11과 driver QA 관계, ASR 판정 계약 |
 | [Machine-readable QA Registry](./qa-catalog-draft.json) | active ID, category, single metric, legacy ID migration |
 | [Core ASR Contract](./core-asr-contract.md) | QA-09/19/29/39 정의·집계·실패 처리와 VIA-DP-01~18 적용 원장 |
