@@ -3,6 +3,58 @@
 > **우선 검토 후보 / 사용자 선정 전** · [목록](./README.md)
 > 현재 방식은 target에 명시되어 있고, 대안은 이번에 재구성했다. 양쪽 우열은 미검증이다.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![요청 해석: 사용자 사건·근거 변화·구조적 난점](./diagrams/request-interpretation-topology-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/request-interpretation-topology-background.svg) · [배경 draw.io 편집 원본](./diagrams/request-interpretation-topology-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![요청 해석: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/request-interpretation-topology-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/request-interpretation-topology-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/request-interpretation-topology-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 통합안은 서로 관련된 뜻을 한 자리에서 조정하고, 단계안은 잘 끝난 판단을 보관해 필요한 부분만 다시 한다. 의미가 서로 자주 바뀌면 통합의 이점이, 안정된 부분이 반복 재사용되면 단계화의 이점이 커진다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 의미 정확성 · PRIMARY | **장점:** 표·보고서·기존 Task의 관계를 함께 보아 앞뒤 모순을 조정할 수 있다.<br>**단점:** 큰 입력과 복합 schema에서 일부 제약을 빠뜨리거나 잘못된 관계를 한꺼번에 확정할 수 있다. | **장점:** 좁은 field 계약·후보·단계별 근거로 누락 위치를 드러낸다.<br>**단점:** 앞 단계가 버린 후보·원문 관계는 뒤 단계가 복구하기 어렵고 오류가 전파된다. | 대상과 업무가 강하게 얽히면 1안에, 독립적인 중간 의미가 안정적이면 2안에 유리할 여지. 단계 수 자체는 정확도 보장이 아니다. |
+| QA-09 응답성 · PRIMARY | **장점:** 여러 판단의 순차 왕복을 줄인다.<br>**단점:** 큰 통합 입력·출력과 반복 재해석이 길어질 수 있다. | **장점:** 관련 stage만 다시 실행할 수 있다.<br>**단점:** 최초 요청은 지칭→업무→경로를 기다리고 correction은 추가 왕복을 만든다. | 처음부터 새로 이해하는 요청과 일부만 정정하는 요청을 나눠 본다. 호출 수뿐 아니라 입력량·공유 queue·실제 의미 있는 응답까지의 전체 대기를 본다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** 관계 변경을 통합 schema·해석 계약에서 함께 수정한다.<br>**단점:** 새로운 의미 field가 통합 prompt·검증·dependency에 퍼질 수 있다. | **장점:** 대상 추출만 바뀌고 중간 계약이 유지되면 해당 stage에 집중된다.<br>**단점:** vR schema가 바뀌면 vT·vH·coordinator·trace reader까지 수정한다. | 예: 새 지칭 근거 추가와 기존/새 Task 관계 변경은 파급이 다르다. 박스·함수 수가 아닌 변경된 Component·Interface·State·Runtime을 센다. |
+| QA-39 신뢰성·복구 · REGRESSION_ONLY | **장점:** 미완료 semantic 작업의 진행 상태가 비교적 단순하다.<br>**단점:** 실패한 큰 작업을 다시 실행해야 할 수 있다. | **장점:** 같은 attempt에서 성공한 stage를 재사용할 여지가 있다.<br>**단점:** stale stage·retry cycle·부분 실패의 조정 지점이 늘어난다. | 이번 대안은 stage를 RAM에 두므로 crash 뒤 단계 이어하기 우위는 주장하지 않는다. 양안 모두 미확정 결과로 dispatch하지 않아야 한다. |
+| QA-41 메모리 · 추가 진단 | 큰 통합 prompt/KV peak가 생기지만 stage 산출물 여러 벌은 필요 없다. | 작은 stage별 KV를 순차 회수할 수 있지만 중간 후보·원문 참조·재시도 상태가 남는다. | 같은 Omni weights는 공통이다. 3단계라고 모델 메모리가 3배가 되는 것도, 반드시 감소하는 것도 아니다. |
+| QA-61 실행 추적 · 추가 qualification | field별 근거와 재해석 revision을 남겨야 실패 원인을 재구성할 수 있다. | stage ID·upstream version·correction 이유가 진단을 돕지만 관계 누락 가능성도 늘어난다. | 로그량이 아니라 입력→정정→결과의 연결 완전성이다. 중간 상태가 있다는 이유만으로 높은 점수를 보장하지 않는다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+그림의 상단은 양안의 동일 입력·권한·조회 창구다. 가운데 왼쪽은 **Request Controller의 진행·확정 책임**, 오른쪽은 **Request Interpreter의 실제 추론 작업**이다. 내부 모듈 이름은 이 후보의 구체화이며 승인된 최상위 Component를 새로 만든 것이 아니다. 1안의 통합 입력→job→proposal과 2안의 세 단계·정정선을 비교해서 설명한다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 작업 입력 | `request_id, input_revision, attempt_id, evidence_refs, read_set, policy_revision`을 한 통합 작업에 결합 | 같은 envelope에 `stage_id, upstream_versions` 추가; 원문·미해결 후보를 각 단계가 참조 가능 |
+| 중간 결과 | `SemanticProposal`의 각 field에 근거·dependency·불확실성 유지 | `ReferentSet vR → GoalTaskSet vT → HandlingProposal vH`; 각 결과에 소비한 앞 version과 source revision 기록 |
+| 수정 권한 | 통합 작업이 관계를 함께 다시 제안 | 뒤 단계는 앞 결과를 덮지 않고 `CorrectionRequest(stage, fields, evidence, expected_version)` 반환 |
+| 확정 | Request Controller가 입력·field·coverage·권한의 현재성을 검사한 뒤 Semantic Commit | 세 결과의 version 연결이 모두 유효할 때 동일 확정; 마지막에 전체 의미를 다시 판단하는 모델은 추가하지 않음 |
+| 임시 상태 수명 | attempt의 proposal·job handle·KV는 취소·종료 시 회수 | 단계 산출물은 attempt 범위 RAM에 보관; 별도 durable workflow engine은 도입하지 않음 |
+| crash / 늦은 결과 | durable 입력·확정 기록에서 새 attempt 시작; 이전 job 결과 거절 | 미확정 중간 stage는 재사용하지 않고 재해석; 확정 결과만 기존 복구 계약 적용 |
+
+**정정의 실제 효과:** `vR=4`가 보고서 용도에도 의존했다면 “새 보고서로” 정정 때 vR부터 무효화한다. 표 자체만으로 확정한 대상이고 dependency가 변하지 않았을 때만 vR을 유지하고 vT·vH를 다시 만든다. 이 차이를 기록하지 않으면 단계화의 재사용 주장은 성립하지 않는다.
+
+**처리 종료:** 모든 job에 부모 attempt·deadline을 결합한다. 정정 cycle은 원인 field와 새 evidence revision으로 구별하고, 새로운 근거 없이 같은 cycle을 반복하면 clarification으로 끝낸다. 호출·재처리 한도의 숫자는 후속 계약에서 고정하되 무한 반복을 허용하는 설계로 남기지 않는다.
+
+**심사 질문 — “결국 함수 세 개 아닌가?”** 세 단계는 versioned 의미 결과를 발행하는 별도 모델 작업이고, 후속 결과의 유효성이 앞 결과에 종속된다. 통합안에는 없는 순차 대기·중간 정보 손실·정정 전파·부분 재사용 계약이 실제로 생긴다. 단순 함수 분할로 구현했다면 이 대안에 해당하지 않는다.
+
 ## 1. 배경 — 하나의 요청 안에서 판단들이 서로 영향을 준다
 
 “이걸 아까 보고서에 넣어줘”에는 화면 대상, 어느 보고서인지, 기존 업무의 수정인지, 어느 실행에 전달할지가 함께 들어 있다. 보고서의 용도를 알면 화면의 어떤 대상을 뜻하는지 좁힐 수 있고, 대상을 확인하면 필요한 업무 기능이 달라질 수 있다. 잘못 연결한 요청을 Agent가 정확히 실행해도 사용자 목표는 실패한다.
@@ -75,7 +127,7 @@
 | Request Interpreter | 통합 SemanticProposal 생성 | 단계별 입력·결과·정정 port와 versioned 중간 의미 계약 |
 | Request Controller | proposal·field dependency 검사 및 확정 | 단계 진행·정정 요청·후속 무효화·재개 위치 관리 추가; 외부 확정 권한은 유지 |
 | Model Access | 통합 semantic job의 identity·취소·자원 관리 | 단계 job과 부모 Request·중간 version의 연결; 가중치·scheduler 계약은 공통 |
-| State Store | 기존 요청과 해석 근거 기록 | 중간 결과를 복구에 사용할 경우 단계·dependency 기록 필요; 쓰기마다 독립 영속화를 강제하지 않음 |
+| State Store | 기존 요청과 해석 근거 기록 | 확정 기록은 유지; 미확정 stage는 attempt 임시 상태로 두고 crash 시 재해석 |
 
 영향받는 기준선은 SemanticProposal, field dependency, 재해석 예산·요청 진행 상태다. 이 표는 대안을 채택한다면 바꿀 계약을 설명하며 target 본문을 변경한 것이 아니다. [선행 아이디어 검토](./reference-idea-review.md)의 의미 정정 계약을 참고했으며 ADR-004의 deferred 상태는 유지한다.
 
@@ -85,7 +137,7 @@
 
 **비교 1장:** 공통 Input/Evidence와 최종 Request Controller 검증은 검정으로 둔다. 1안은 통합 추론 작업·proposal, 2안은 단계별 작업·중간 저장·되돌림 연결을 양쪽 파랑으로 표시한다. Model Access와 단일 Omni를 공통으로 그려 단계마다 모델을 적재하는 것으로 보이지 않게 한다. 단계별 성공·보류·무효화와 Request revision을 함께 표시한다.
 
-발표에서는 박스 개수가 아니라 **앞 판단의 결과가 다음 판단을 어떻게 제한하고, 정정 때 무엇을 다시 해야 하는지**를 설명한다. 새로운 그림은 후보 공동 검토 후 제작한다.
+발표에서는 박스 개수가 아니라 **앞 판단의 결과가 다음 판단을 어떻게 제한하고, 정정 때 무엇을 다시 해야 하는지**를 설명한다. 위 비교 그림의 단계·정정 경로로 이를 설명한다.
 
 ## 7. 바로 사용할 발표 요약
 

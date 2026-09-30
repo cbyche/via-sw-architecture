@@ -3,6 +3,58 @@
 > **추가 검토 후보 / 사용자 선정 전 / 적용 범위·모델 계약 확인 필요** · [목록](./README.md)
 > 좁은 S2S 직접 응답 범위는 유지한다. 현재 허용된 speculative 생성 경로의 rationale를 검토하며 모든 입력에서 선생성을 강제한 기준선으로 해석하지 않는다.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![직접 응답 생성: 사용자 사건·근거 변화·구조적 난점](./diagrams/direct-response-generation-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/direct-response-generation-background.svg) · [배경 draw.io 편집 원본](./diagrams/direct-response-generation-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![직접 응답 생성: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/direct-response-generation-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/direct-response-generation-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/direct-response-generation-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 1안은 “내가 답해도 되는가”를 확인하는 동안 답변도 준비한다. 2안은 허용을 받은 다음 답변을 만든다. 직접 답할 때는 중첩이 도움이 될 수 있고, Core로 넘기는 요청이 많으면 버릴 생성 작업을 피하는 쪽이 이로울 수 있다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 의미·처리 정확성 · REGRESSION_ONLY | **장점:** 같은 VOICE 작업의 제안과 답변이 현재 입력에 함께 결합된다.<br>**단점:** 이미 만든 답변을 근거로 부적절한 direct를 허용하면 잘못된 경로가 된다. | **장점:** 분류 결과와 생성 결과를 따로 검사할 수 있다.<br>**단점:** 분류 오류·permit 이후 revision 변경·두 결과의 binding 오류가 가능하다. | 정확도 개선은 기본 주장이 아니다. 양안 모두 독립 질문만 direct로 허용하고 input echo·dependency·현재성을 검사한다. 분류-only 모델 계약이 더 정확하다는 가정도 하지 않는다. |
+| QA-09 응답성 · PRIMARY | **장점:** admission 때 유효 답변이 준비됐으면 의미 있는 첫 음성이 빠를 수 있다.<br>**단점:** 버릴 생성이 Core semantic을 기다리게 만들 수 있다. | **장점:** Core로 갈 요청에는 answer 생성 자원을 쓰지 않는다.<br>**단점:** direct 요청에는 분류→permit→generation의 대기가 추가된다. | 직접 응답과 Core 전환을 함께 봐야 한다. generic ack·earcon·아직 재생하지 않은 audio packet을 응답 완료로 세지 않는다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** proposal·generation handle의 통합 runtime 계약을 유지한다.<br>**단점:** provider가 held generation·취소를 지원하지 않으면 adapter 변경이 커진다. | **장점:** 분류와 generation의 입출력을 독립적으로 바꿀 수 있다.<br>**단점:** RoutePermit·expiry·후행 content admission·trace가 새 변경 대상이다. | runtime 교체가 classification-only를 지원하는지, speculative handle을 지원하는지에 따라 파급이 바뀐다. |
+| QA-39 신뢰성·복구 · REGRESSION_ONLY | **장점:** 한 작업에 결합된 결과를 일괄 폐기할 수 있다.<br>**단점:** held handle·audio·KV 회수 누락이 남을 수 있다. | **장점:** 허용 전 answer 자원은 없다.<br>**단점:** permit만 남거나 generation 중 crash하는 부분 상태가 늘어난다. | 두 안 모두 옛 incarnation의 handle·permit을 거절한다. 선생성을 없앴다고 공유 Omni 장애가 격리되는 것은 아니다. |
+| QA-41 메모리 · 추가 진단 | 허용 전부터 생성 KV와 held Text/audio가 peak를 키울 수 있다. | 허용 전 비용을 줄이지만 classification KV·permit은 남고 실제 direct 생성 중에는 answer KV도 필요하다. | 전체 workload의 동시 세션·기각 비율이 중요하다. 두 안 모두 같은 Omni weights 한 벌이다. |
+| QA-04 음성 중단 / QA-15 연속성 · 추가 회귀 | 이미 쌓인 audio buffer의 stale epoch 차단과 취소·회수가 중요하다. | 후행 generation 결과가 새 발화 뒤 늦게 돌아오는 경우를 차단해야 한다. | local stop은 공통이며 QA-04를 QA-09 평균에 포함하지 않는다. 직접 응답 뒤 follow-up에는 실제 전달한 내용만 남겨야 한다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+왼쪽 **Model Access** 영역은 같은 Omni에서 수행하는 작업 의존, 오른쪽 **Interaction Manager** 영역은 보류 content와 실제 I/O의 수명을 나타낸다. 하나의 Component를 두 instance로 배치했다는 뜻이 아니며 capture와 generation의 책임 부분을 확대했다. 하단 **Response Manager**가 승인된 publication을 내구 기록하고 release한다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 최초 작업 | 현재 Turn만 받는 VOICE 작업에서 VoiceProposal과 답변 segment 선생성 | 답변 segment 없는 Classification Job에서 dependency flags·input echo 제안 |
+| 미승인 상태 | `generation_id, request_id, input_revision, runtime_incarnation, output_epoch`에 결합한 held handle·Text/audio buffer | 동일 revision의 route 후보만 존재; 답변 buffer·generation KV는 아직 없음 |
+| 첫 host 결정 | SEALED 입력·현재 scope·질문 binding·독립 질문 조건·content 조건을 확인한 Direct Admission | 내용 없는 `RoutePermit(permit_id, request_id, input_revision, policy_revision, output_epoch, expiry)` 발행 |
+| 생성 시작 | 이미 진행 중; Core가 분명해지면 조기 cancel | 유효 permit을 소비한 뒤 별도 Generation Job 시작; current Turn 이외 Context를 추가하지 않음 |
+| 게시 경계 | 유효 admission·content handle로 publication intent 작성 후 release | 생성 뒤 content 검사를 통과한 별도 publication admission이 있어야 release; permit만으로 재생 불가 |
+| 중단·재시작 | local output fence가 즉시 stale 세대 사용 차단; runtime cancel은 safe point에서 회수 | 동일; 재시작 전 permit/handle로 generation·재생 재개 금지 |
+
+**상태 진행:** 방안 1은 `GENERATING_HELD → READY_HELD → ADMITTED → RELEASED`이며 어느 보류 상태에서도 `DISCARDED`로 끝날 수 있다. 방안 2는 `CLASSIFYING → PERMITTED → GENERATING_HELD → CONTENT_ADMITTED → RELEASED`다. Permit 이후에도 새 발화·권한 변경·전사 정정이 발생하면 생성 결과를 버린다.
+
+**메모리·취소 수명:** held segment는 유한 byte/duration budget으로 관리하며 초과 시 generation을 멈추거나 폐기하고 같은 Request의 Core 처리로 인계한다. Backend 취소 요청과 실제 KV 회수 완료를 구별한다. Response Manager에는 실제 게시 Text·audible receipt만 전달 기록으로 남긴다. 미승인 답변이나 단순 생성 완료를 대화 기억에 넣지 않는다.
+
+**심사 질문 — “별도 분류만 늘려 느린 대안을 만든 것 아닌가?”** Core 비율이 높고 선생성이 semantic 작업을 밀어내면 필요 없는 answer job을 시작하지 않는 구조가 합리적이다. 반대로 직접 응답 비율이 높고 분류도 비싸면 추가 직렬 경계가 손해다. 작은 classifier 모델을 몰래 추가하지 않으며 분류-only native 계약의 실제 제공 여부는 별도 확인 대상이다.
+
 ## 1. 배경 — 빨리 말하려면 미리 일해야 하지만 버릴 작업일 수 있다
 
 VIA는 “광합성이 뭐야?” 같은 명백한 자체 지식 질문에는 S2S로 직접 답하고, “아까 표를 설명해줘”처럼 근거가 필요한 요청에는 Core 처리를 거쳐야 한다. 경로를 확정한 뒤에만 답변을 만들면 그 생성 시간이 이후 대기에 놓인다. 먼저 만들면 유효한 직접 응답을 빨리 준비할 수 있지만 Core로 갈 요청에도 모델 계산과 음성 buffer를 쓸 수 있다.

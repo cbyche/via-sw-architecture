@@ -1,11 +1,32 @@
 # Target Architecture에서 복원한 설계 선택 후보
 
 > 상태: **Decision Reconstruction / 상세 후보 8개 공동 검토 / 우열·정식 DP 미선정**
-> 작성일: 2026-09-30 · 기준: [검토 완료 Target Architecture](../target-architecture/README.md)
+> 갱신일: 2026-10-01 · 기준: [검토 완료 Target Architecture](../target-architecture/README.md)
 
 **주요 기능을 구현하면서 어떤 방식을 선택했는지, 그때 다른 설계자라면 어떤 합리적인 방식을 선택할 수 있었는지를 복원한다.** 현재 설계에 적힌 처리 방식은 근거이고, 아래 대안과 선택 이유의 해석은 이번에 재구성한 제안이다. 당시 두 안을 실제 비교했거나 현재 안의 우위를 검증했다는 기록은 아니다.
 
-## 먼저 볼 후보 표
+## 먼저 읽을 곳
+
+각 후보 문서 맨 위에 **배경 1장 + 두 대안 SW 구조 비교 1장**을 넣었다. 그다음 **ASR·추가 QA 장단점 비교표 → 그림의 실행 계약 → 상세 근거·반례 → 발표 요약** 순서로 읽는다. SVG는 GitHub에서 바로 보이고 각 그림 아래에 크게 보기와 `.drawio` 편집 원본을 연결했다.
+
+- 전체 그림: [16페이지 목록·범례·편집 방법](./diagrams/README.md)
+- 브라우저에서 연속 검토: [review.html](./diagrams/review.html) — 로컬에서 열면 배경·비교 순서로 16페이지를 표시한다.
+- 품질 비교표는 **현재 ASR 네 축 + 관련 추가 QA**를 양안 장단점·유불리 조건으로 비교한다. 수치·별점·승자 없이 구조적 예상과 적용 제안을 표시했다.
+
+## 후보별 문서와 발표 그림
+
+| 후보 / 상세 문서 | 배경 페이지 | SW 구조 비교 페이지 |
+| --- | --- | --- |
+| [요청 의미 해석](./request-interpretation-topology.md) | [배경](./diagrams/request-interpretation-topology-background.svg) | [양안 구조도](./diagrams/request-interpretation-topology-comparison.svg) |
+| [Context 획득](./context-acquisition-strategy.md) | [배경](./diagrams/context-acquisition-strategy-background.svg) | [양안 구조도](./diagrams/context-acquisition-strategy-comparison.svg) |
+| [Agent 상태 관측](./agent-state-observation.md) | [배경](./diagrams/agent-state-observation-background.svg) | [양안 구조도](./diagrams/agent-state-observation-comparison.svg) |
+| [직접 응답 생성](./direct-response-generation.md) | [배경](./diagrams/direct-response-generation-background.svg) | [양안 구조도](./diagrams/direct-response-generation-comparison.svg) |
+| [음성 입력 근거](./speech-evidence-source.md) | [배경](./diagrams/speech-evidence-source-background.svg) | [양안 구조도](./diagrams/speech-evidence-source-comparison.svg) |
+| [대화 Context 유지](./conversation-context-maintenance.md) | [배경](./diagrams/conversation-context-maintenance-background.svg) | [양안 구조도](./diagrams/conversation-context-maintenance-comparison.svg) |
+| [자료 표현·소비](./context-representation-pipeline.md) | [배경](./diagrams/context-representation-pipeline-background.svg) | [양안 구조도](./diagrams/context-representation-pipeline-comparison.svg) |
+| [복구 상태 원본](./recovery-state-source.md) | [배경](./diagrams/recovery-state-source-background.svg) | [양안 구조도](./diagrams/recovery-state-source-comparison.svg) |
+
+## 후보 선정 검토표
 
 | 기능을 구현할 때의 질문 | 현재 설계에서 선택한 방식 | 재구성한 합리적 대안 | 그림의 테두리를 지워도 남는 차이 | 제안 상태 |
 | --- | --- | --- | --- | --- |
@@ -20,7 +41,7 @@
 
 **현재 개별 상세 문서는 8개다.** 앞서 작성한 4개에 음성 근거·기억 유지·자료 표현·복구 원본 4개를 추가했다. 앞의 ‘우선 검토’는 최초 제안의 읽기 순서이며 새 후보보다 중요하다는 최종 순위가 아니다. 8개 모두 채택한 것도 아니고 발표 DP 개수를 확정한 것도 아니다. 미확인 능력·수렴 가능성은 후보를 만들지 않을 이유로 삼지 않고, 강한 대안을 작성한 뒤 함께 판단할 조건으로 남겼다.
 
-각 문서에는 과제에서의 중요성·설계 난점, 양쪽 실행 흐름, 같은 상황의 추적, Component·계약 변경, 이점·대가·유리한 조건, 반증 조건과 발표 페이지 구성을 적었다. 끝에는 바로 읽을 수 있는 **배경 5줄·설계 비교 8줄**을 두었다. 추가 자료 표현 후보는 target이 공통 의미 변환을 이미 강제한다고 가정하지 않고, 실제 원문 중심 근거 경로와 선행 materialization 대안을 비교하도록 질문을 다듬었다.
+각 문서에는 배경·비교 SVG와 draw.io 원본, ASR·QA 장단점 비교표, 내부 모듈·입출력 field·중간 상태·정정/취소/복구 계약, 같은 상황의 추적, 이점·대가·유리한 조건과 반증 조건을 적었다. 끝에는 바로 읽을 수 있는 **배경 5줄·설계 비교 8줄**을 두었다. 추가 자료 표현 후보는 target이 공통 의미 변환을 이미 강제한다고 가정하지 않고, 실제 원문 중심 근거 경로와 선행 materialization 대안을 비교하도록 질문을 다듬었다.
 
 **기존 일곱 후보는 현재 추천에서 철회했다.** Component를 묶거나 나누는 차이를 중심에 두어, 실제 작동 방식과 품질 영향의 설명이 부족했다. 다만 문제 상황·정정·근거·전달 계약까지 폐기하지 않았다. [기존 7개에서 살린 내용과 VIA-DP-01~18 아이디어 검토](./reference-idea-review.md)에 반영·유보 이유를 각각 남겼다. [archive의 철회 사유와 원본 목록](../../../archive/decision-reconstruction-component-boundaries-2026-09-30/README.md)은 역사 기록이며 새 후보의 규범 근거가 아니다. 새 목록은 이전 후보의 이름 변경이나 기존 DP 번호의 재배치가 아니다.
 
@@ -32,7 +53,7 @@
 4. [기존 자료 검토](./reference-idea-review.md)에서 이전 7개 재사용 판단, 이전 18개 아이디어·ADR 상태, 보관 경로·방법을 확인한다.
 5. 현재 방식의 정확한 계약은 각 문서의 target 절·고정 UC 링크로 확인한다. 대안을 기준선에 반영한 것은 아니다.
 
-이번에는 작동 차이를 검토할 문서를 먼저 만들었다. 후보 채택 전에는 새로운 비교 그림을 완성본처럼 만들지 않는다. 개별 문서의 배경 1장·비교 1장 구성에 따라 후속 그림을 만들며, **공통은 검정, 서로 다른 경로·상태·계약은 양쪽 모두 파랑**으로 표시한다. `.drawio`와 `.svg`를 함께 관리한다.
+사용자 요청에 따라 후보 선정 전에 리뷰할 수 있도록 8개 모두 실제 배경·비교 그림을 작성했다. **공통은 검정, 서로 다른 경로·상태·계약은 양쪽 모두 파랑**이다. 구조도는 Component 내부 처리 모듈·데이터·실행 의존·보완/무효화·확정·복구 경계를 보여준다. 그림이 존재한다는 사실은 설계 채택이나 효과 검증을 뜻하지 않는다.
 
 ## 함께 유지할 조건
 
@@ -45,6 +66,6 @@
 
 ## 현재 검토의 범위
 
-구조 때문에 어떤 대기·오류·자원 비용이 생기는지 설명하되 ASR 목록·정의·우선순위·적용 분류는 아직 정하지 않는다. 메모리도 별도 모델, KV, 중간 결과, cache·buffer와 공유 자원 경합의 실제 경로를 통해 후속 검토한다. QA-41의 기존 지위와 QA 정의·결과는 유지한다.
+사용자 요청에 따라 QA-19·09·29·39와 추가 QA의 장단점을 표로 비교하고, core 축별 `PRIMARY`/`REGRESSION_ONLY` 적용을 제안했다. 동일 구조가 언제 유리하고 불리한지 조건을 적었으며 정식 모집단·역할·목표·ASR 변경을 동결하지 않았다. QA-41 메모리는 별도 모델·KV·중간 결과·cache·buffer의 전체 비용으로 설명하고 기존 diagnostic 지위를 유지한다. QA-04, QA-13~15, QA-31/32, QA-51, QA-61/62도 관련되는 후보에서 기존 의미에 맞춰 구별했다.
 
 현재 산출물은 문서 대조와 사건 흐름 추적에 의한 자체 검토다. 독립 리뷰·구현·모델 실행·성능 측정·freeze는 수행하지 않았다. 기준선·accepted/deferred ADR·과거 증거도 변경하지 않았다. 후보를 함께 좁힌 뒤 관련 ASR을 검토하고 정식 rationale·반증 조건·검증 계약으로 발전시킨다.

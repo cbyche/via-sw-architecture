@@ -100,4 +100,21 @@
 
 추가 네 후보도 같은 기준을 적용한다. 음성 dependency는 실제 capability와 장애 손실, 기억은 지속 갱신 계약과 cache 수렴, 자료 표현은 반복 소비와 정보 손실, 복구는 사용자 interaction을 다시 연결할 필요와 유지 비용을 본다. 8개를 모두 발표 DP로 선정하지 않으며, 기존 네 개를 자동 우선 채택하지도 않는다. 상세 문서 작성은 후보 검토를 가능하게 한 상태이지 효과 검증이나 설계 채택이 아니다.
 
-후보 채택 후 메모리를 포함한 ASR의 관련성·정의·우선순위·평가 범위를 논의한다. 현재는 latency·오류·자원·변경·복구의 인과 가설만 기록했으며 ASR을 재정의하거나 모두 PRIMARY로 분류하지 않았다. 별도의 허가 없이 구현·측정으로 넘어가지 않는다.
+후보 채택 후 메모리를 포함한 ASR의 관련성·정의·우선순위·평가 범위를 논의한다. 현재는 ASR·추가 QA의 인과 가설과 적용 제안을 표로 기록했다. ASR을 재정의하거나 모두 PRIMARY로 분류하지 않았다. 별도의 허가 없이 구현·측정으로 넘어가지 않는다.
+
+## 6. 2026-10-01 발표 그림·계약·품질 비교 보강
+
+사용자가 기존 원고 수준을 거절하고 실제 SW 구조도와 구체 대안을 요청했다. 이전의 “선정 뒤 그림 제작” 방침을 폐기하고 8개 후보에 배경·비교 16페이지를 작성했다. 이전 7개 자료는 도식의 상세 수준을 비교하는 역사 참고로만 열었고 원본을 바꾸지 않았다.
+
+| 검토 항목 | 반영한 내용 |
+| --- | --- |
+| 박스 분할을 넘어선 작동 차이 | 해석 stage version·ReadPlan·snapshot query·held generation·native evidence·working view·FactView·복구 권위 원본을 각각 표시 |
+| 승인·소유 경계 | Agent 상태는 Request Controller를 거쳐 게시; Context 반환·semantic 제안도 host 확정과 구별 |
+| 동시성·예외 | 선생성의 중첩, 독립 query, correction·stale 결과·late snapshot·gap·삭제·UNKNOWN·replay의 외부 효과 금지를 구체화 |
+| 상태 수명 | 미확정 해석 stage는 attempt RAM, query·view·buffer는 유한 수명, 삭제 fence·runtime incarnation을 명시 |
+| 품질 비교 | 현재 ASR 네 축과 관련 추가 QA를 양안 장단점·유불리 조건 표로 작성; 적용은 제안이며 수치·승자·freeze 없음 |
+| 표현 규칙 | 공통 검정·차이 양안 파랑, 동일 16:9 canvas, 내부 모듈·Component·명시적 runtime 범위를 구분 |
+| 편집·재생성 | 16개 `.drawio`와 16개 `.svg`를 공통 scene에서 생성; draw.io에 nested parent·source/target 연결·명시 waypoint 보존 |
+| 자체 시각 검토 | 로컬 Chrome으로 16개 SVG 렌더링, 실제 glyph overflow 확인, 구조도 연결과 원고 계약 대조; 선이 무관한 node 내부를 관통하면 생성 검사 실패 |
+
+이 검토는 작성자의 문서·도식 검토다. 독립 Senior Architect 심사, 실제 모델 native capability 확인, 제품 실행·메모리·성능·복구 측정은 아니다. 특히 QA-39와 QA-32의 필요 의존 범위, QA-19와 QA-13~15의 관계, QA-41과 디스크 저장량, QA-62와 운영 replay를 구별했다.

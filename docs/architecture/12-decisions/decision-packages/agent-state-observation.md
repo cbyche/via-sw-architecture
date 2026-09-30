@@ -3,6 +3,58 @@
 > **우선 검토 후보 / 사용자 선정 전 / 같은 Agent capability에서 비교** · [목록](./README.md)
 > 외부 업무 상태의 원천은 양쪽 모두 Agent다. VIA의 Task identity·제어 의도·질문·결과 전달 기록은 양쪽 모두 남는다.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![Agent 상태 관측: 사용자 사건·근거 변화·구조적 난점](./diagrams/agent-state-observation-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/agent-state-observation-background.svg) · [배경 draw.io 편집 원본](./diagrams/agent-state-observation-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![Agent 상태 관측: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/agent-state-observation-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/agent-state-observation-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/agent-state-observation-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 1안은 도착하는 소식을 계속 장부에 반영하고, 2안은 “변경됐다”는 신호를 받으면 원격의 현재 장부를 다시 읽는다. 소식이 충실하면 전자가 빠르고, 소식의 전이 의미가 복잡하고 현재 조회가 충실하면 후자가 단순해질 수 있다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 상태 처리 정확성 · PRIMARY | **장점:** 질문·진행 변화의 순서를 세밀하게 적용한다.<br>**단점:** event 누락·해석 오류가 projection을 틀리게 만들 수 있다. | **장점:** source가 만든 일관된 현재 snapshot으로 상태를 맞춘다.<br>**단점:** snapshot에 없는 짧은 사건이나 늦은 응답을 잘못 처리하면 상태를 놓친다. | phase·blocked·artifact·staleness의 정확성을 본다. 필수 질문·terminal은 양안 모두 내구 전달하며 snapshot이 지우지 못한다. |
+| QA-09 응답성 · PRIMARY | **장점:** 유효 projection이 있으면 원격 왕복 없이 상태 답변을 시작한다.<br>**단점:** event backlog·gap 보정 시 지연된다. | **장점:** 많은 hint를 한 query로 합칠 수 있다.<br>**단점:** query 대기·rate limit이 알림과 사용자 상태 조회를 늦출 수 있다. | 같은 최신성 요구를 사용한다. “지금 다시 확인”에는 1안도 query한다. QA-03 시작은 valid 상태의 source 시각이므로 수신 이후만 재어 query 대기를 숨기지 않는다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** 공통 event 계약이 안정적이면 source adapter에서 변환 가능하다.<br>**단점:** 새 lifecycle 전이가 reducer·cursor·보정에 퍼질 수 있다. | **장점:** 안정된 snapshot schema면 복잡한 progress 전이 처리를 줄인다.<br>**단점:** pagination·freshness·revision·query capability 변경은 coordinator·validator에 퍼진다. | Agent의 progress schema 변경과 snapshot API 변경을 각각 본다. 특정 provider를 한쪽에만 유리하게 바꾸지 않는다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 내구 inbox/cursor로 재연결 뒤 미적용 소식을 처리한다.<br>**단점:** 큰 gap·잘못된 projection에는 source 조정이 필요하다. | **장점:** 새 snapshot으로 현재 상태를 다시 세울 수 있다.<br>**단점:** query API 장애가 지속되면 상태 회복이 막힌다. | source 단절·역순·restart에서 correct binding과 terminal을 보존하는지 본다. local view가 있다는 것만으로 원격 업무가 복구된 것은 아니다. |
+| QA-14 상태 수렴 / QA-13 binding · 추가 회귀 | event 순서·중복·cancel/completion의 충돌 처리가 관건이다. | event로 받은 필수 질문과 늦은 snapshot의 merge·revision floor가 관건이다. | 과거 r13 snapshot이 r14 승인 질문을 지우는 사례가 직관적인 반례다. 이 회귀를 QA-19에 자동 중복 합산하지 않는다. |
+| QA-41 메모리 · 추가 진단 | inbox backlog·cursor·projection을 보존한다. | in-flight query·dirty 집합·snapshot cache를 보존하며 큰 snapshot도 비용이다. | event 빈도·관심 execution 수·snapshot 크기에 따라 역전된다. 필수 사건을 버려 메모리를 줄이는 안은 허용하지 않는다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+상단은 동일 Downstream Agent·사용자 조회·전달 창구다. 가운데 **Agent Gateway**는 외부 계약 변환과 송수신을, **Task Manager**는 VIA의 업무 binding·현재 view를 소유한다. 필수 사건은 검정 경로로 양안 모두 내구 보존하며, 일반 progress만 파란 경로로 달라진다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 일반 progress 수신 | `(provider, execution_id, source_revision, event_id)`로 중복·순서 검사 | 같은 수신 정보로 execution을 dirty로 표시; phase reducer를 호출하지 않음 |
+| 현재 view 생성 | event 적용·cursor·projection을 같은 local transaction으로 전진 | `SnapshotQuery(query_id, execution_id, expected_floor, reason)` 결과의 identity·revision 검증 후 snapshot view 교체 |
+| 순서 gap | gap 이후 값을 무조건 적용하지 않고 source query로 reconcile | dirty 상태를 유지하고 single-flight query; 진행 중 추가 hint는 dirty generation을 올림 |
+| query 경합 | 명시적인 최신성 조회나 gap에 query | query 시작 때 dirty generation 저장; 반환 뒤 더 새 hint가 있으면 현재 snapshot을 표시하되 한정 후속 조회 유지 |
+| 필수 사건 | question·approval·terminal·failure를 durable inbox와 Task binding에 등록 | 동일 경로 유지; snapshot 대기나 query 실패와 독립적으로 알림 intent 생성 |
+| 전달 | TaskUpdate를 Request Controller가 admission하고 Response Manager가 게시 | 동일; `publication_id`로 event·snapshot의 동일 질문/결과 중복 안내 차단 |
+
+**늦은 snapshot의 예:** query가 r12에서 시작한 뒤 question-Q r14가 도착했다면 Q는 즉시 내구 결합한다. r13 snapshot 반환이 Q를 없애지 못한다. 이미 확인한 terminal과 충돌하면 더 오래된 query를 폐기하거나 모순을 표시하고 source를 재확인한다. 최신성을 증명할 revision이 없는 provider는 별도의 capability 한계이며 현재 비교의 충실한 versioned profile과 혼동하지 않는다.
+
+**유한 비용:** query coordinator는 execution별 in-flight 1개와 최신 dirty generation을 유지한다. 동일 관심 상태의 조회를 합치고 deadline·backoff 안에서 재시도한다. Queue가 찼다고 질문·결과를 일반 progress와 같이 버리지 않는다. Task 종료 후 일반 progress cache·hint는 회수하고 필요한 binding·미전달 기록은 기존 보관 계약을 따른다.
+
+**심사 질문 — “두 안 다 query하는데 같은 것 아닌가?”** 1안은 event 의미를 접어 현재 phase를 만드는 reducer가 정상 경로이며 query는 보정이다. 2안은 원격 snapshot이 정상 현재성 공급원이며 event는 조회 필요성을 알린다. 따라서 source 전이 schema 결합과 원격 API 왕복·호출 한도의 비용이 서로 바뀐다.
+
 ## 1. 배경 — Agent에서 진행되는 업무를 VIA 대화의 현재 상태로 연결해야 한다
 
 사용자는 보고서를 맡긴 뒤 다른 질문을 하다가 “보고서 어디까지 됐어?”라고 묻는다. 질문하지 않아도 완료·실패·승인 요청을 받아야 한다. Agent 여러 개의 진행 이벤트가 교차하고 연결이 끊길 수도 있으므로, 단순히 마지막 메시지 문장을 화면에 붙이는 것으로는 업무 상태를 만들 수 없다.

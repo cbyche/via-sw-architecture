@@ -3,6 +3,58 @@
 > **상세 검토 후보 / 사용자 선정 전 / 기존 표현 아이디어를 target에 맞춰 재구성** · [목록](./README.md)
 > 현재 target은 원문·이미지·typed record·출처를 보존하는 Evidence Package를 선택했다. 모든 자료의 최종 의미를 공통 변환기가 확정하는 설계로 해석하지 않는다.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![자료 표현·소비: 사용자 사건·근거 변화·구조적 난점](./diagrams/context-representation-pipeline-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/context-representation-pipeline-background.svg) · [배경 draw.io 편집 원본](./diagrams/context-representation-pipeline-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![자료 표현·소비: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/context-representation-pipeline-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/context-representation-pipeline-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/context-representation-pipeline-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 1안은 원문을 필요한 목적과 함께 읽고, 2안은 원문에서 출처가 붙은 사실 카드를 먼저 만든 뒤 여러 곳에서 쓴다. 잘 만든 카드는 반복 해석을 줄이지만 카드에 빠진 각주나 잘못 옮긴 단위가 모든 소비자에게 퍼질 수 있다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 의미·내용 정확성 · PRIMARY | **장점:** 현재 질문과 원문의 풍부한 관계를 함께 해석한다.<br>**단점:** 같은 자료를 여러 번 읽을 때 값·단위·범위 해석이 서로 달라질 수 있다. | **장점:** 출처가 같은 fact를 여러 소비 경로에서 공유한다.<br>**단점:** 선행 추출의 누락·오류가 일관되게 전파되며 새 목적에 중요한 정보가 없을 수 있다. | 일관성과 정확성은 다르다. 견적 금액 “100”에 통화·세금·기간·각주가 보존되는지, 없으면 원문 복귀하는지로 비교한다. |
+| QA-09 응답성 · PRIMARY | **장점:** 일회성 자료는 별도 extraction을 기다리지 않는다.<br>**단점:** 같은 source의 구조 해석·큰 입력 비용이 반복된다. | **장점:** 유효 FactView 재사용이면 후속 소비의 입력·해석 부담을 줄인다.<br>**단점:** 첫 사용·변경 source는 추출→검사→소비의 대기를 추가한다. | 첫 사용과 반복 사용을 모두 포함한다. warm view만 골라 비교하면 구조의 초기 비용을 숨긴다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** 새 문서 형태·소비 목적을 원문과 소비 계약에서 처리할 수 있다.<br>**단점:** 소비자마다 같은 구조 대응이 중복될 수 있다. | **장점:** 안정된 사실 schema가 여러 소비자를 source format 변경에서 보호한다.<br>**단점:** 새로운 의미 field가 schema·extractor·migration·소비자 전반에 퍼질 수 있다. | 새 파일 형식과 새로운 업무 의미를 구별한다. 모든 자료를 하나의 만능 schema에 강제하는 대안으로 만들지 않는다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 별도 materializer 장애 경로가 적고 원문에서 다시 읽을 수 있다.<br>**단점:** 원문 해석 실패가 소비 때마다 반복될 수 있다. | **장점:** 유효 view로 반복 source 처리를 줄이고 view 손실은 원문에서 재구성한다.<br>**단점:** 추출 실패·손상 view·source 삭제의 dependency 조정이 새 실패 지점이다. | 오류 view가 발견되면 무효화·원문 복귀·재생성이 가능해야 한다. 같은 오류를 여러 Task에 배포한 뒤 재구성됐다고 피해까지 사라지는 것은 아니다. |
+| QA-41 메모리 · 추가 진단 | 큰 원문 prompt·이미지·parse buffer가 소비 중 필요할 수 있다. | 원문 외에 fact·provenance·dependency·추출 KV가 추가되지만 반복 소비 prompt를 줄일 여지가 있다. | 원문을 삭제해도 되는 것으로 비용을 낮추지 않는다. 최초 추출 peak와 재사용 peak를 구별한다. |
+| QA-51 노출 최소화 / QA-61 출처 추적 · 추가 qualification | 원문 범위를 제한해 전달하며 소비 결과와 source revision 연결을 남겨야 한다. | 목적에 필요한 field만 전달할 여지는 있으나 서로 다른 문맥의 민감정보를 한 view에 모을 위험도 있다. | 구조화만으로 최소 노출·완전 추적이 보장되지는 않는다. 실제 recipient·purpose·원문 참조·누락을 확인한다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+왼쪽 **Context Manager** 안의 선행 변환·저장 산출물이 비교 대상이다. 오른쪽의 Request Interpreter·Response Manager·Task Manager·Agent Gateway는 공통 소비 책임을 유지한다. Context Manager가 직접 업무나 응답을 승인하지 않으며 package/view는 Request Controller로 반환되어 허용된 소비에 전달된다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 기본 입력 | 원문·이미지·parse cache·typed field·출처를 묶은 Evidence Package | 같은 source revision을 고정해 Materialization Job 시작 |
+| 선행 산출물 | 별도 사실 산출물은 필수가 아님; 목적별 semantic 작업이 자료를 해석 | `FactView(view_id, source_id, source_revision, scope, transform_version, facts[], omissions[], uncertainty, provenance)` |
+| fact 항목 | 소비 시 필요한 의미와 근거를 연결 | 값·단위·범위·각주·원문 span/region을 연결; 자료 사실을 추출하며 사용자 목표·업무 계획은 만들지 않음 |
+| 재사용 key | source revision·scope에 결합한 원문/parse cache | source revision·허용 scope·변환 schema/build·dependency key가 같은 view만 재사용 |
+| 실패 / 보완 | 필요한 원문 범위를 추가 읽고 동일 해석 계약으로 처리 | 누락·확신 부족·새 목적의 미지원 field는 원문 한정 복귀 또는 view 확장 job; 불완전한 view를 완전한 사실로 승격하지 않음 |
+| 최종 승인 | Request Controller가 사용 evidence와 요청 의미·권한 검사 | 동일; view의 내용 자체가 Semantic Commit이나 외부 Action 허용이 아님 |
+
+**표의 예:** 견적서의 “100”을 추출했다면 통화·세금 포함 여부·견적 적용 기간·각주가 함께 있어야 한다. 1안은 현재 질문과 원문을 함께 보며 이 관계를 해석한다. 2안은 출처가 연결된 사실 view를 먼저 만들고 요약·비교·Agent 전달에 재사용한다. 같은 추출 오류가 여러 소비 경로로 퍼질 수 있으므로 중요한 field의 원문 참조와 누락 표시는 선택 사항이 아니다.
+
+**변경·삭제와 수명:** source revision이 달라지면 이전 view를 DIRTY로 만들고 새 view를 완성한 뒤 expected revision으로 교체한다. 취소·stale 추출 결과는 publish하지 않는다. 원문이 삭제·접근 철회되면 payload·파생 view를 use fence로 차단하고 purge한다. Unused view는 유한 cache budget에서 회수한다. 최초 변환의 모델 입력·KV·추출 시간과 이후 재사용 비용을 분리해 설명한다.
+
+**심사 질문 — “그냥 JSON 형태만 다른 것 아닌가?”** 별도 추출 job과 versioned 사실 산출물이 소비 전에 존재하고 여러 목적의 실행 의존을 바꾼다. 실제로는 매번 전체 원문을 다시 읽거나 목적마다 모든 사실을 재추출해야 한다면 재사용 경계가 없으며 대안의 비용만 남는다.
+
 ## 1. 배경 — 같은 자료를 가리키고 설명하고 업무에 넘길 때 무엇을 재사용할까?
 
 사용자가 PDF 표를 선택해 “이 표를 설명해줘”라고 묻고, 이어 “방금 설명한 수치로 보고서를 만들어줘”라고 한다. 표의 열 제목·단위·각주·선택 범위가 빠지면 숫자가 맞아도 뜻이 달라진다. VIA는 어떤 표인지 찾는 근거, 설명할 내용, Agent에 제공할 자료를 연결해야 한다. 그러나 최종 보고서 분석·작성은 Agent 책임이다.

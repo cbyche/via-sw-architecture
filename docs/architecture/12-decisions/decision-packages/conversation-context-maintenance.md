@@ -3,6 +3,58 @@
 > **상세 검토 후보 / 사용자 선정 전** · [목록](./README.md)
 > 원본 기억 저장이나 cache 유무가 아니라, 여러 owner의 기록을 모델 입력용 working view로 유지하는 정상 경로를 비교한다. 구현·성능 측정 없음.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![대화 Context 유지: 사용자 사건·근거 변화·구조적 난점](./diagrams/conversation-context-maintenance-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/conversation-context-maintenance-background.svg) · [배경 draw.io 편집 원본](./diagrams/conversation-context-maintenance-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![대화 Context 유지: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/conversation-context-maintenance-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/conversation-context-maintenance-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/conversation-context-maintenance-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 1안은 질문이 들어오면 필요한 기록을 확인해 묶고, 2안은 자주 볼 요약 장부를 계속 갱신한다. 반복 질문은 빨라질 수 있지만 아무도 읽지 않는 동안의 갱신·메모리와 장부가 뒤처졌을 때의 복구 비용이 생긴다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 의미 정확성 · PRIMARY | **장점:** 요청 시 원본 owner revision을 확인해 필요한 정보를 구성한다.<br>**단점:** 여러 owner를 읽는 사이 변경되어 서로 다른 시점의 근거가 섞일 수 있다. | **장점:** 일관된 view 계약과 적용 위치를 검사하고 누락을 드러낸다.<br>**단점:** projector lag·누락·오래된 summary가 새 상태를 가릴 수 있다. | 2안의 barrier도 전역 원자 snapshot은 아니다. “방금 취소한 업무를 계속 진행 중이라 말하는가”로 차이를 설명하고 최종 read-set 검사는 양안 유지한다. |
+| QA-09 응답성 · PRIMARY | **장점:** 요청이 뜸하면 백그라운드 준비를 거의 하지 않는다.<br>**단점:** 같은 owner 조합을 반복 조회·구성할 수 있다. | **장점:** view가 따라잡았으면 요청 시 조합 대기를 줄인다.<br>**단점:** lag가 있으면 barrier 대기·catch-up·rebuild가 오히려 추가된다. | 읽기 빈도가 변경 빈도보다 높고 view가 제때 따라갈 때 2안이 설득력 있다. 매 요청이 다른 대화라면 유지 비용만 남을 수 있다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** 새 field가 read port와 assembler에 머물 수 있다.<br>**단점:** 여러 요청별 구성 로직에 같은 조합이 반복되면 수정 범위가 커진다. | **장점:** 소비자가 안정된 view schema를 공유한다.<br>**단점:** 새 owner field에 delta schema·projector·revision vector·checkpoint·rebuild를 함께 바꿀 수 있다. | owner schema 변화와 단순 소비 목적 추가를 같은 변경으로 뭉뚱그리지 않는다. 공통 view가 모든 미래 요구를 흡수한다고 가정하지 않는다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** cache를 잃어도 원본에서 필요 범위 재구성한다.<br>**단점:** 재시작 후 여러 요청이 몰리면 cold read 부하가 생긴다. | **장점:** 유효 checkpoint가 있으면 갱신 위치부터 따라잡을 수 있다.<br>**단점:** delta gap·stale checkpoint·삭제 epoch를 잘못 처리하면 오래된 정보가 부활한다. | view 손실·gap 후 요청 기능을 언제 정확히 재개하는지 본다. projector process 재시작만으로 복구 완료가 아니다. |
+| QA-41 메모리 · 추가 진단 | 요청 package·유효 cache 중심이지만 burst 중 중복 조합이 peak를 키울 수 있다. | 활성 view·cursor·delta queue·checkpoint buffer가 상시 남는 대신 반복 임시 복사를 줄일 여지가 있다. | 활성 Conversation 수·변경 burst·cache 중복에 따라 peak가 달라진다. “상시 유지”와 “항상 더 큰 peak”는 같은 말이 아니다. |
+| QA-15 연속성 / QA-51 노출 최소화 · 추가 회귀·qualification | 전환 뒤 필요한 과거 대상·Task를 원본에서 정확히 다시 연결해야 한다. | 옛 대화의 view를 새 대화에 잘못 재사용하거나 삭제된 선호를 부활시키지 않아야 한다. | 기억 삭제·권한 철회는 우위로 교환할 기능이 아니다. 로컬 파생 사본 증가는 관리 부담이며 실제 외부 과다 노출은 별도로 확인한다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+상단 세 owner는 대화·Task·실제 전달 기록의 원본을 계속 소유한다. 왼쪽 **Context Manager**의 일시 조합·검사, 오른쪽 **State Store**의 파생 view·dependency를 구분한다. 오른쪽에 원본 writer를 옮긴 것이 아니다. 1안은 요청이, 2안은 owner 변경이 정상 갱신을 유발한다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 구성 시작 | 요청의 selected scope에 필요한 owner read를 수행하고 유효 cache를 재사용 | 활성 Conversation의 owner delta를 받아 typed working view를 갱신 |
+| 변경 계약 | source revision으로 dirty를 확인하고 필요한 범위만 재구성 | `OwnerDelta(owner, entity, from_revision, to_revision, changed_fields, refs, deletion_epoch)`; 중복 무시·gap 검출 |
+| 파생 상태 | cache key·dependency·expiry; 소비 전 원본 revision 확인 | view payload와 `applied_revision_vector`를 한 transaction으로 갱신; owner별 적용 위치 유지 |
+| 소비 계약 | read receipt의 revision·coverage·현재 epoch 검사 | `ReadContext(required_revision_vector, scope, deadline)`; 요청의 요구 위치에 도달한 view만 반환 |
+| lag / gap | stale cache 부분 재구성 | gap source를 dirty로 표시하고 한정 catch-up 또는 owner snapshot으로 rebuild; deadline 뒤 stale 성공 반환 금지 |
+| 삭제 | 현재 deletion epoch가 cache·summary·KV 사용을 즉시 차단 | 같은 use fence를 projector와 별도로 검사; 과거 delta·checkpoint가 삭제값을 부활시키지 못함 |
+
+**증분 view도 전역 snapshot은 아니다.** Task r8과 전달 r21을 결합해도 그 뒤 Task r9가 올 수 있다. Request Controller의 최종 semantic read-set 검사를 유지하며, 의미에 관련된 변경이면 확정 전 재검증한다. Barrier를 통과했다는 사실을 사용자의 의도가 정확하다는 증거로 삼지 않는다.
+
+**수명과 backpressure:** 활성 view만 메모리에 유지하고 비활성 대화는 회수한다. Rebuild에 필요한 owner 원본·opaque cursor와 현재 deletion fence만 계약에 따라 남긴다. Delta backlog가 상한을 넘으면 무한 적재 대신 해당 source를 dirty로 바꿔 snapshot 재구성한다. Typed 상태 변경은 모델 summary를 기다리지 않으며 늦은 summary는 생성 당시 dependency·epoch가 같을 때만 채택한다.
+
+**심사 질문 — “cache를 미리 갱신하자는 설정 아닌가?”** 2안은 요청이 없어도 owner 변경의 적용 위치와 gap 복구를 책임지고, 소비자가 required revision barrier를 요구한다. 기존 cache에 이 계약을 모두 부여하면 두 안은 수렴한다. 그런 경우 이름만 다른 독립 DP로 유지할 이유가 없다.
+
 ## 1. 배경 — 대화는 이어지지만 그 사이 업무와 기억은 계속 바뀐다
 
 사용자는 보고서와 메일 업무를 번갈아 다루고 “아까 말한 형식으로 이 결과도 정리해줘”라고 한다. 그 사이 Agent의 진행 상태, 실제로 보여준 결과, 대기 질문, 사용자가 수정한 선호가 바뀐다. VIA가 오래된 요약을 쓰면 취소한 업무나 삭제한 선호를 현재 맥락으로 적용할 수 있다. 모든 이력을 매번 읽는 것도 적절하지 않다.
@@ -75,7 +127,7 @@ View는 owner별 applied revision vector·source dependency·누락·삭제 epoc
 
 **배경 1장:** 위쪽에 여러 사용자 발화, 아래에 그 사이 변하는 Task·질문·전달 범위·기억을 시간축으로 놓는다. 오래된 view를 사용한 잘못된 후속 응답과 매번 여러 owner를 읽는 대기를 나란히 보여준다. 질문은 **“다음 대화에 필요한 맥락을 언제 구성하고 무엇으로 최신성을 보장할 것인가?”**다.
 
-**비교 1장:** owner 원본·read port·Policy Manager·최종 검증은 검정. 1안의 요청별 구성·cache 검증과 2안의 delta 입력·projector·revision barrier·rebuild는 양쪽 파랑. 실선 요청 경로와 별도의 변경 경로, 지속 view·일시 package·원본 DB를 구분하고 삭제 epoch가 양쪽으로 전달되는 선을 넣는다. `.drawio`/`.svg` 그림은 공동 검토 후 제작한다.
+**비교 1장:** owner 원본·read port·Policy Manager·최종 검증은 검정. 1안의 요청별 구성·cache 검증과 2안의 delta 입력·projector·revision barrier·rebuild는 양쪽 파랑. 실선 요청 경로와 별도의 변경 경로, 지속 view·일시 package·원본 DB를 구분하고 삭제 epoch가 양쪽으로 전달되는 선을 넣는다. 위 배경·비교 그림과 편집 원본에 갱신·검사·삭제 경로를 반영했다.
 
 ## 8. 바로 사용할 발표 요약
 

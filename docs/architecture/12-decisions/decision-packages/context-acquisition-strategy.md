@@ -3,6 +3,58 @@
 > **우선 검토 후보 / 사용자 선정 전** · [목록](./README.md)
 > 비교 대상은 Context Manager의 존재가 아니라 근거 획득의 trigger·순서·중간 상태다.
 
+## 발표용 2페이지
+
+**배경 — 이 과제에서 왜 어려운가**
+
+![Context 획득: 사용자 사건·근거 변화·구조적 난점](./diagrams/context-acquisition-strategy-background.svg)
+
+[배경 SVG 크게 보기](./diagrams/context-acquisition-strategy-background.svg) · [배경 draw.io 편집 원본](./diagrams/context-acquisition-strategy-background.drawio)
+
+**설계 비교 — 같은 완료 조건을 만드는 두 실행 구조**
+
+![Context 획득: 두 대안의 내부 모듈·상태·호출·예외 경로 비교](./diagrams/context-acquisition-strategy-comparison.svg)
+
+[비교 SVG 크게 보기](./diagrams/context-acquisition-strategy-comparison.svg) · [비교 draw.io 편집 원본](./diagrams/context-acquisition-strategy-comparison.drawio)
+
+검정은 양안 공통, 파랑은 **양안 각각에서 달라지는 모듈·상태·계약**이다. 큰 테두리는 논리 책임 묶음이며 모든 상자가 별도 process라는 뜻이 아니다. 같은 Component를 여러 위치에 확대 표기해도 instance·모델 가중치를 복제하지 않는다. 그림의 내부 모듈과 아래 계약은 대안을 검토하기 위한 구체 설계이며 target 기준선 변경·구현·측정 결과가 아니다.
+
+## ASR·추가 QA 관점의 장단점과 예상 차이
+
+아래는 **동일 기능·완료 조건에서의 구조적 예상**이며 측정 결과나 승자 선정이 아니다. `PRIMARY`는 차이를 직접 검토할 축, `REGRESSION_ONLY`는 개선을 주장하기보다 기능 유지를 확인할 축이라는 **적용 제안**이다. 정식 모집단·수치·역할은 아직 동결하지 않았다. [현재 ASR 정의](../../08-quality-attributes/core-asr-contract.md)와 [상세 QA 의미](../../08-quality-attributes/README.md)를 유지한다.
+
+**직관적인 핵심:** 1안은 식사 주문을 듣는 동안 자주 쓰는 재료를 꺼내 놓는 쪽이고, 2안은 주문을 확정한 다음 재료 목록부터 만드는 쪽이다. 자주 맞는 준비는 시간을 벌지만 빗나간 준비는 읽기·메모리·공유 자원을 낭비한다.
+
+| 관점 · 적용 제안 | 방안 1의 장단점 | 방안 2의 장단점 | 차이가 나는 조건·주의점 |
+| --- | --- | --- | --- |
+| QA-19 의미 정확성 · PRIMARY | **장점:** “아까 그 보고서”처럼 source도 모호한 요청에 최근 후보를 제공한다.<br>**단점:** 준비한 후보에 과도하게 기대면 다른 source나 최신 정정을 놓칠 수 있다. | **장점:** 명시적인 기간·source 조건을 계획으로 드러낸다.<br>**단점:** 자료를 보기 전 계획이 잘못되면 필요한 근거가 첫 해석에서 빠진다. | 지칭형 요청과 “지난주 견적 메일” 같은 명시형 요청을 구별한다. 읽기를 줄여 필수 후보를 누락한 결과는 효율 개선이 아니다. |
+| QA-09 응답성 · PRIMARY | **장점:** 발화 중 준비가 끝나면 Final 이후 대기가 짧다.<br>**단점:** 불필요한 선행 read가 필요한 query·semantic job과 경합할 수 있다. | **장점:** 비싼 source를 선택해 읽고 독립 query를 병렬화한다.<br>**단점:** 계획 모델→source→해석이 사용자 입력 종료 뒤 순차로 남는다. | 기본 준비 적중률·발화와 겹친 구간·source 읽기 비용이 방향을 바꾼다. 준비가 시작된 시각을 숨겨 비용을 0으로 보지 않는다. |
+| QA-29 변경 용이성 · PRIMARY | **장점:** 기본 Context 계약이 안정적이면 새 요청이 기존 근거를 쓴다.<br>**단점:** 새 source마다 준비 trigger·package 선택·cache invalidation을 조정할 수 있다. | **장점:** 새 source를 read adapter·capability로 노출해 선택적으로 사용한다.<br>**단점:** source별 filter·pagination·부분 실패 의미가 ReadPlan·validator에도 반영된다. | 새 calendar source 추가처럼 같은 변화에서 영향 계약을 비교한다. 계획이 있다고 adapter 변경이 사라지지는 않는다. |
+| QA-39 신뢰성·복구 · PRIMARY | **장점:** 일부 유효 근거가 이미 준비되어 source 장애 때 활용할 여지가 있다.<br>**단점:** 준비 결과의 stale·부분 실패를 잘못 재사용할 위험이 있다. | **장점:** query별 완료·실패·coverage가 명시적이다.<br>**단점:** 필수 source 실패가 계획 후 전체 해석을 막고 계획 상태 정리가 필요하다. | 한 source가 timeout일 때 올바른 partial 답변·clarification·보류로 끝나는지 본다. 질문을 했다는 사실만으로 원래 요청의 복구 성공을 대신하지 않는다. |
+| QA-41 메모리 · 추가 진단 | provisional package·unused cache·발화 중 read buffer를 유지한다. | query plan·결과 join buffer·계획 job KV가 추가되지만 불필요한 본문을 덜 읽을 수 있다. | 실제 사용하는 source가 적고 본문이 클수록 2안 절약 여지. 계획에도 많은 근거가 필요하면 반대다. |
+| QA-51 노출 최소화 / QA-61 추적 · 추가 qualification | 사용하지 않을 허용 자료까지 사전 준비할 수 있어 최소 범위와 보관을 설명해야 한다. | 요청별 source·filter·receipt를 설명하기 쉽지만 잘못된 계획의 과도한 범위는 host가 차단해야 한다. | 로컬 cache가 많다는 것만으로 QA-51 외부 노출 증가라고 단정하지 않는다. 실제 외부 제공 경계와 필요한 최소 범위를 따로 확인한다. |
+
+추가 QA는 기존 지위 그대로 진단·회귀·qualification으로 다룬다. 더 빠른 응답으로 잘못된 대상 실행·중복 실행·권한 위반을 상쇄하지 않는다. 메모리의 core ASR 승격이나 새 QA 정의는 이번 정성 비교에서 확정하지 않는다.
+
+## 그림을 따라 설명할 실행 계약
+
+상단의 capture는 양안 공통이다. 왼쪽 **Request Controller**에서 첫 작업이 시작되는 조건, 오른쪽 **Context Manager**에서 실제 읽기가 실행되는 조건을 비교한다. Request Interpreter의 반환은 항상 Request Controller를 거친다. Context Manager가 모델을 독자적으로 호출하거나 의미를 확정하지 않는다.
+
+| 경계 / 상태 | 방안 1의 구체 동작 | 방안 2의 구체 동작 |
+| --- | --- | --- |
+| 첫 trigger | `InputStarted(turn, capture_revision)`에서 권한 내 기본 준비 시작 | `InputFinal(request, input_revision)` 뒤 ReadPlan 요청; 그 전에도 당시 관측은 수집 |
+| 읽기 전 모델 입력 | 기본 Context와 확정 발화로 통합 해석 | 확정 발화·현재 대상 식별 정보·source 목록·질문 binding·scope로 조회 계획 |
+| 실행할 읽기 | 기본 source 집합 + 통합 해석이 제안한 한정 보완 | `ReadPlan(plan_id, input_revision, queries[], deadline)`; query별 source·filter·projection·page/byte 한도·dependency |
+| 실행 제어 | 기본 준비의 관련 revision을 Final에서 검증·재사용 | Request Controller가 query별 권한·bounded 범위를 승인하고 Context Manager가 독립 query를 fan-out |
+| 반환 계약 | `ReadReceipt(query_id, source_revision, covered_range, missing_range, failure)` + Evidence Package | 동일 receipt; query가 성공해도 source coverage가 부족하면 요청 전체의 근거 완료로 취급하지 않음 |
+| 무효화 | 입력 변경에 의존한 준비만 폐기; 유효 source cache는 유지 가능 | input revision이 바뀌면 옛 계획의 새 query 발행 중지; 이미 읽은 값은 같은 scope·source revision에서만 재사용 |
+
+**조회 상태:** `PLANNED → AUTHORIZED → RUNNING → COMPLETE / PARTIAL / FAILED / CANCELLED`. Query별 끝 상태를 보존하며 한 query의 timeout으로 이미 받은 다른 source를 성공 전체로 포장하지 않는다. 중간 결과는 request attempt에 결합하고 완료 후 cache로 승격할 때 별도 수명·접근 조건을 적용한다.
+
+**실행 의존:** 방안 1의 기본 준비는 발화와 겹칠 수 있다. 방안 2의 계획과 첫 source read는 순차지만, 계획 안의 독립 read까지 직렬로 만드는 것은 아니다. Source 응답이 느리면 공통 deadline에서 partial evidence 또는 clarification으로 종료하며 open-ended 재계획은 허용하지 않는다.
+
+**심사 질문 — “사전 준비 범위만 줄인 정책 아닌가?”** 차이는 첫 의미 모델 작업의 목적이다. 1안은 근거를 받아 요청 의미를 해석하고, 2안은 근거를 얻기 위한 실행 가능한 조회 계획을 먼저 발행한다. 계획 registry·query dependency·계획 완료를 기다리는 후행 해석 경계가 없어지면 독립 대안으로 볼 이유도 줄어든다.
+
 ## 1. 배경 — 필요한 정보를 알려면 요청을 알아야 하고, 요청을 알려면 정보가 필요하다
 
 “아까 그 자료로 정리해줘”는 과거 자료와 대화가 필요하고, “오늘 오후 일정은?”은 일정 조회가 필요하다. VIA가 모든 source를 먼저 읽으면 불필요한 조회와 메모리·입력 비용이 늘어난다. 반대로 아무 근거 없이 요청을 해석하면 필요한 source나 대상부터 잘못 잡을 수 있다.
