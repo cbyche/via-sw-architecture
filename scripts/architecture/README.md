@@ -24,7 +24,7 @@
 SHA-256 목록을 result의 `raw/audio-artifact-digests.json`으로 만든다. 구조화된 raw와
 digest는 Git에 보존하고 WAV 원본은 로컬 evidence로 유지한다.
 
-이전 일곱 후보의 그림 생성기는 [script archive](../archive/decision-reconstruction-component-boundaries-2026-09-30/README.md)로 옮겼다. 현재 [새 후보 목록](../../docs/architecture/12-decisions/decision-packages/README.md)의 16페이지는 `generate_decision_package_diagrams.py`로 생성한다. `--check`는 생성물 drift·XML ID·경계·연결선의 무관한 node 관통을 검사한다. 실제 glyph·가독성은 브라우저 렌더링으로 별도 확인한다. Target Architecture 그림 검사는 그대로 유지한다.
+이전 일곱 후보의 그림 생성기는 [script archive](../archive/decision-reconstruction-component-boundaries-2026-09-30/README.md)로 옮겼다. 현재 [새 후보 목록](../../docs/architecture/12-decisions/decision-packages/README.md)의 8페이지는 `generate_decision_package_diagrams.py`로 생성한다. `--check`는 생성물 drift·XML ID·경계·연결선의 무관한 node 관통을 검사한다. 실제 glyph·가독성은 브라우저 렌더링으로 별도 확인한다. 후보마다 실제 topology에 맞춰 배치하며 동일 격자 템플릿을 쓰지 않는다. 직전 여덟 후보 생성기는 [2026-10-01 script archive](../archive/decision-reconstruction-uniform-layouts-2026-10-01/README.md)에 보존했다. Target Architecture 그림 검사는 그대로 유지한다.
 
 ## Local model utility
 

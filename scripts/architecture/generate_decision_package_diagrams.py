@@ -67,13 +67,13 @@ class Page:
   a=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-labelledby="title desc">',f'<title id="title">{esc(self.title)}</title><desc id="desc">{esc(self.subtitle)}</desc>',f'<defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="{INK}"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="{BLUE}"/></marker></defs>',f'<rect width="{W}" height="{H}" fill="white"/><g font-family="{FONT}">']
   def shape(s):
    x,y,w,h=(s[k] for k in ('x','y','w','h')); c=BLUE if s['blue'] else INK; kind=s['kind']
-   process_node=self.slug=='speech-evidence-source-comparison' and s['id'] in ('a-recognize','a-omni')
+   process_node=False
    fill=PALE if s['blue'] else WHITE
    if kind in ('group','process'):fill=WHITE
    dash=' stroke-dasharray="10 7"' if kind in ('process','external') or process_node else ''
    out=[f'<g id="{s["id"]}"><rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{0 if kind in ("group","process") else 8}" fill="{fill}" stroke="{c}" stroke-width="{2 if kind in ("group","process") else 2.5}"{dash}/>']
    if kind=='store':
-    out.append(f'<path d="M{x} {y+20} Q{x+w/2} {y+48} {x+w} {y+20}" fill="none" stroke="{c}" stroke-width="2"/>')
+    out.append(f'<ellipse cx="{x+w/2}" cy="{y+16}" rx="{w/2}" ry="16" fill="{fill}" stroke="{c}" stroke-width="2"/>')
    if s['label']:
     ty=y+28 if kind!='store' else y+46
     out.append(f'<text x="{x+16}" y="{ty}" font-size="{18 if kind=='module' else 20}" font-weight="700" fill="{c}">{esc(s["label"])}</text>')
@@ -81,7 +81,8 @@ class Page:
     out.append(f'<path d="M{x} {y+45}H{x+w}" stroke="{c}" fill="none"/>')
    for i,line in enumerate(s['lines']):
     yy=(y+54+i*23 if kind=='module' else y+64+i*25+(15 if kind=='store' else 0))
-    out.append(f'<text x="{x+16}" y="{yy}" font-size="{18 if kind=='module' else 20}" fill="{c}">{esc(line)}</text>')
+    lc=INK if i in s.get('common_lines',[]) else c
+    out.append(f'<text x="{x+16}" y="{yy}" font-size="{18 if kind=='module' else 20}" fill="{lc}">{esc(line)}</text>')
    return ''.join(out)+ '</g>'
   for s in self.shapes:
    if s['kind'] in ('group','process'):a.append(shape(s))
@@ -119,13 +120,14 @@ class Page:
    if kind in ('group','process'):fill=WHITE
    g=parent(s);x=s['x']-(g['x'] if g else 0);y=s['y']-(g['y'] if g else 0)
    style=f'rounded={0 if kind in ("group","process") else 1};arcSize=8;html=1;fillColor={fill};strokeColor={c};strokeWidth=2.5;container=1;collapsible=0;recursiveResize=0;'
-   if kind in ('process','external') or (self.slug=='speech-evidence-source-comparison' and s['id'] in ('a-recognize','a-omni')):style+='dashed=1;dashPattern=10 7;'
+   if kind in ('process','external'):style+='dashed=1;dashPattern=10 7;'
+   if kind=='store':style+='shape=cylinder3;size=16;'
    cell(s['id'],x,y,s['w'],s['h'],'',style,g['id'] if g else '1')
    size=18 if kind=='module' else 20
    txt(s['id']+'-title',16,46 if kind=='store' else 28,s['w']-32,size,s['label'],c,True,s['id'])
    for i,line in enumerate(s['lines']):
     yy=54+i*23 if kind=='module' else 64+i*25+(15 if kind=='store' else 0)
-    txt(s['id']+'-text-'+str(i),16,yy,s['w']-32,size,line,c,False,s['id'])
+    txt(s['id']+'-text-'+str(i),16,yy,s['w']-32,size,line,INK if i in s.get('common_lines',[]) else c,False,s['id'])
    if kind=='component':cell(s['id']+'-divider',0,45,s['w'],0,'',f'shape=line;strokeColor={c};strokeWidth=1;connectable=0;',s['id'])
   for e in self.edges:
    c=BLUE if e['blue'] else INK
@@ -148,31 +150,6 @@ class Page:
   return ET.tostring(f,encoding='unicode')+'\n'
 
 PAGES=[]
-def comparison(slug,title,a,b):
- p=Page(slug+'-comparison',title+'  |  설계 비교','검정: 양안 공통 책임·경로   /   파랑: 양안에서 달라지는 모듈·상태·계약   /   점선 화살표: 보완·무효화·서비스 호출')
- for side,x,label in [('a',48,a),('b',1312,b)]:
-  p.text(side+'-title',x+16,161,label,29,bold=True)
-  p.group(side+'-boundary',x,187,1200,885,'VIA · 논리 Component / 내부 모듈 확대 · 외부 dependency는 명시')
- return p
-
-DEPENDENCY_STRIPS={
- 'request-interpretation-topology':('근거 → 통합 proposal → host 확정','지칭 vR → 업무 vT → 경로 vH → host 확정'),
- 'context-acquisition-strategy':('발화 ∥ 기본 준비 → 통합 해석 → 한정 보완','확정 입력 → 조회 계획 → source read → 통합 해석'),
- 'agent-state-observation':('progress → reducer → projection → host','hint → query → snapshot 검증 → host'),
- 'direct-response-generation':('제안 ∥ 선생성 → content admission → release','분류 → permit → 생성 → content admission → release'),
- 'speech-evidence-source':('capture → 독립 ASR → 근거 · Omni는 별도 진행','capture → 공유 Omni native 경로 → 근거'),
- 'conversation-context-maintenance':('요청 → cache 검사 / 필요한 범위 재구성 → package','변경 → view 갱신 ∥ 요청 → revision barrier → package'),
- 'context-representation-pipeline':('원문 package → 현재 목적에서 의미 해석','source → 사실 view 생성 → 목적별 재사용·해석'),
- 'recovery-state-source':('transaction → current records + intent → load','transaction → events + intent → checkpoint / tail replay'),
-}
-def costs(p,a,b,claim):
- strips=DEPENDENCY_STRIPS[p.slug.removesuffix('-comparison')]
- for i,(side,x,lines) in enumerate([('a',48,a),('b',1312,b)]):
-  p.node(side+'-cost',x,1102,1200,190,'선택할 이유와 감수할 비용',*lines,kind='box')
-  p.text(side+'-dependency',x+16,1261,strips[i],21,BLUE,True)
- p.text('takeaway',64,1345,claim,26,bold=True)
- PAGES.append(p)
-
 def background(slug,title,quote,uc,rows,pressures,challenge):
  p=Page(slug+'-background',title+'  |  배경',uc+'  ·  아래 사건은 설계를 설명하는 시나리오이며 측정 trace가 아님')
  p.node('scenario',48,142,2464,104,'사용자 상황',quote,kind='box')
@@ -190,51 +167,178 @@ def background(slug,title,quote,uc,rows,pressures,challenge):
  p.node('challenge',48,1170,2464,170,'Architecture Challenge',challenge,kind='box')
  PAGES.append(p)
 
-def interpretation():
- slug='request-interpretation-topology'
- background(slug,'요청 해석 · 서로 의존하는 의미를 어디서 결합할까?',
-  '“이 표를 아까 보고서에 넣어줘. 아니, 새 보고서로 만들어줘.”','UC-03 · UC-06 · UC-10 · UC-14',[
-  ('사용자 입력', [('최초 지칭','“이 표” + 선택 영역','당시 화면·원문 연결'),('업무 연결','“아까 보고서”','기존 Task 후보 2개'),('사용자 정정','“새 보고서로”','기존 Task 연결 취소'),('기대 결과','같은 표 + 새 목표','새 Task로 위임')]),
-  ('근거와 의미', [('대상 후보','표 A / 표 B','시점·범위·용도 확인'),('상호 의존','보고서 용도 → 대상 구분','대상 내용 → 업무 기능'),('영향 범위','목표·Task·Agent 후보 변경','대상도 의존했으면 재검토'),('확정할 묶음','대상·목표·제약·처리 경로','같은 revision으로 일치')]),
-  ('VIA 책임', [('입력·근거 확보','원문·후보·불확실성 보존','모델 판단 전 사실'),('의미 제안','모델이 후보 관계 해석','아직 실행 권한 없음'),('정정 처리','영향받은 결과 무효화','늦은 결과 거절'),('업무 admission','host가 근거·현재성 확인','잘못된 Task 전송 방지')])],
-  [('결합 판단의 이점',['관련 의미를 함께 조정할 수 있다.','큰 입력·출력과 결합 오류를 감수한다.','한 번의 호출이 무오류를 뜻하지 않는다.']),('단계화의 이점',['좁은 계약·부분 재사용이 가능하다.','중간 정보 손실과 순차 대기가 생긴다.','정정 시 되돌림 경로가 필요하다.']),('구조로 해결할 난점',['중간 의미를 누가 변경할 수 있는가?','앞 판단을 바꾸면 무엇을 폐기하는가?','최종 확정은 어떤 version에 결합되는가?'])],
-  '통합 proposal 안에서 관계를 조정할 것인가, versioned 중간 계약과 되돌림을 가진 파이프라인으로 연결할 것인가?')
 
+class Canvas:
+ """Coordinate freedom per alternative. No shared box count or grid."""
+ def __init__(self,p,s):self.p=p;self.s=s;self.x=48 if s=='a' else 1312
+ def n(self,id,x,y,w,h,title,*lines,blue=False,kind='component'):
+  return self.p.node(self.s+'-'+id,self.x+x,y,w,h,title,*lines,blue=blue,kind=kind)
+ def g(self,id,x,y,w,h,title,blue=False,process=False):
+  return self.p.group(self.s+'-'+id,self.x+x,y,w,h,title,blue,'process' if process else 'group')
+ def e(self,id,src,dst,sp='B',tp='T',via=(),label='',at=None,blue=False,dash=False):
+  self.p.edge(self.s+'-edge-'+id,self.s+'-'+src,self.s+'-'+dst,sp,tp,[(self.x+x,y) for x,y in via],label,(self.x+at[0],at[1]) if at else None,blue,dash)
+ def t(self,id,x,y,txt,size=20,blue=False):self.p.text(self.s+'-'+id,self.x+x,y,txt,size,BLUE if blue else INK)
 
-def acquisition():
- slug='context-acquisition-strategy'
- background(slug,'Context 획득 · 요청을 알려면 자료가, 자료를 고르려면 요청이 필요하다',
- '“아까 그 보고서 어디까지 됐어?”와 “지난주 견적 메일을 요약해줘”는 필요한 source가 다르다.','UC-02 · UC-05 · UC-06 · UC-10',[
- ('입력', [('발화 시작','화면·포인터 당시 상태','최근 대화가 관련될 수 있음'),('말하는 동안','문서·선택이 바뀔 수 있음','최종 목표는 아직 미확정'),('입력 확정','“지난주 견적 메일”','읽을 source·범위가 드러남'),('의미 해석','근거 + 사용자 목표','설명 또는 확인 질문')]),
- ('필요한 자료', [('기본 근거','현재 선택 · 최근 대화','Task 요약 · 연결 metadata'),('추가 근거 후보','파일 / 메일 / 일정 / Task','모두 읽을 수는 없음'),('실제 bounded read','source + filter + page 한도','실패·누락·revision 기록'),('사용 가능한 근거','원문 · typed record','coverage · 현재 권한')]),
- ('설계의 긴장', [('사전 준비','발화와 조회를 겹칠 여지','사용되지 않을 수도 있음'),('계획 선행','선택적 조회로 낭비 감소','계획 자체에 근거가 필요'),('source 대기','API / 파일 / owner read','병렬 query도 결과 대기 필요'),('동일 완료 조건','당시 화면·후보 누락 보존','빠른 잘못된 응답은 실패')])],
- [('입력 전에 할 수 있는 일',['당시 화면 관측은 두 안 모두 필요하다.','의미 기반 자료 읽기와 구분해야 한다.','현재 화면으로 과거 지칭을 복원할 수 없다.']),('응답 경로의 비용',['선행 준비의 적중과 폐기를 함께 본다.','조회 계획·query·해석의 의존이 생긴다.','cache·병렬 읽기는 두 안 모두 허용한다.']),('구조로 해결할 난점',['첫 읽기를 무엇이 trigger하는가?','첫 모델 입력에 어떤 근거가 있는가?','누락·source 실패를 어디서 종료하는가?'])],
- '기본 Context를 발화 중 준비할 것인가, 확정 입력에서 조회 계획을 만든 뒤 필요한 source를 읽을 것인가?')
+def pair(slug,title,one,two):
+ p=Page(slug+'-comparison',title+'  |  SW Architecture 비교','검정: 공통 구성·책임  /  파랑: 양안의 대체·추가·제거 대상  /  실선 경계: 논리 Component  /  점선 경계: process  /  원통: 저장소')
+ for s,x,t in [('a',48,one),('b',1312,two)]:
+  p.text(s+'-heading',x+8,161,t,27,bold=True)
+ p.rawedge('divider',[(1280,195),(1280,1310)],dash=True)
+ return p,Canvas(p,'a'),Canvas(p,'b')
 
+def conclusion(p,a,b,claim):
+ for s,x,lines in [('a',48,a),('b',1312,b)]:
+  p.node(s+'-cost',x,1110,1200,186,'구조 선택의 이득과 대가',*lines,kind='box')
+ p.text('claim',55,1354,claim,25,bold=True);PAGES.append(p)
 
-def observation():
- slug='agent-state-observation'
- background(slug,'Agent 상태 · 원격 업무의 현재 모습을 무엇으로 구성할까?',
- '보고서와 메일 업무가 동시에 진행된다. 사용자는 “보고서 어디까지 됐어?”라고 묻고, 다른 Agent는 승인을 요청한다.','UC-10 · UC-13 · UC-14 · UC-18',[
- ('외부 Agent', [('업무 실행','report run-A / mail run-B','각각 독립 identity'),('교차 event','progress r12 → r14 → r13','승인 question-Q 도착'),('현재 snapshot','phase / revision / artifact','대기 질문·terminal 확인'),('원격의 사실','완료와 취소 접수는 다름','실행 내부는 VIA 밖')]),
- ('연결·도착', [('정상 연결','event 구독 + query API','동일 capability 전제'),('지연·단절','중복 / gap / 재연결','과거 메시지가 늦게 도착'),('확인된 최신성','마지막 확인 시각 표시','필요하면 source 재조회'),('필수 사건 전달','질문·완료·실패 내구 보존','사용자 재질문 없이 안내')]),
- ('사용자 창구', [('같은 Conversation','Task identity 유지','Agent thread 선택 불필요'),('상태 질문','기존 업무만 선택','다른 Task와 혼동 금지'),('알림 구성','현재 사실 + 불확실성','낡은 상태 덮어쓰기 금지'),('동일한 결과','Text 기록 / Voice 차례','승인 응답을 정확한 Q에 결합')])],
- [('로컬 projection 유지',['query 없이 확인한 상태를 읽을 수 있다.','event 의미·순서·gap 보정 책임이 생긴다.','로컬 값이 원격의 지금을 보장하지 않는다.']),('snapshot 중심 구성',['원격이 만든 현재 상태를 활용한다.','API 지연·한도·snapshot 완전성에 의존한다.','cache·query 합치기로 과도한 조회를 줄인다.']),('공통으로 보존할 사실',['질문·승인·완료를 일시 hint로 버리지 않는다.','Task·Execution·command 결합은 VIA 책임이다.','새 snapshot이 확인된 terminal을 지우면 안 된다.'])],
- '일반 progress를 event reducer로 계속 구성할 것인가, 변경 신호와 사용자 조회에 따라 snapshot을 읽어 구성할 것인가?')
+def retrieval():
+ p,a,b=pair('semantic-retrieval-subsystem','자료·대화·Task의 후보 검색','방안 1 · target  |  owner 조회 중심','방안 2 · 대안  |  지속 색인 + 검색 서브시스템')
+ a.n('request',330,220,460,95,'Request Controller','허용 scope · 현재 입력 · 후보 요청')
+ a.g('cm',40,375,770,655,'Context Manager',True)
+ a.n('search',70,425,540,110,'Metadata / Keyword Search','이름 · 시간 · artifact · 최근 대화','bounded source 선택',blue=True)
+ a.n('cache',70,640,240,140,'Revision Cache','summary / index','기존 cache 재사용',blue=False,kind='store')
+ a.n('ports',355,640,255,140,'Owner Read Adapters','Task / 대화 / 자료','revision · receipt',blue=True)
+ a.n('source',840,630,310,150,'Owner / source ports','Task · 대화 · 게시 기록','허용된 자료 원본','source revision')
+ a.n('policy',840,390,310,110,'Policy Manager','read / 보관 / recipient','현재 epoch')
+ a.n('package',330,885,460,115,'Evidence Package Assembly','원문 · 출처 · 후보 coverage','근거 package → 의미 해석')
+ a.t('absent',62,1060,'별도 embedding runtime · vector index · 색인 worker 없음',20,True)
+ a.e('q','request','search',via=[(560,347),(340,347)])
+ a.e('cache','search','cache',via=[(340,582),(190,582)])
+ a.e('read','search','ports',via=[(340,565),(482.5,565)],blue=True)
+ a.e('source','ports','source','R','L',via=[(748,710),(748,705)],label='bounded read',at=(636,694),blue=True)
+ a.e('policy','policy','ports','L','R',via=[(700,445),(700,710)],dash=True)
+ a.e('package','ports','package',via=[(482.5,855),(560,855)],label='검증한 원문',at=(574,853))
+ a.e('reuse','cache','package',via=[(190,860),(445,860),(445,885)],tp='T',blue=True) # replaced below to keep exact port
+ # Owner/cache meet at the package port without inventing a persistent indexer.
+ p.edges[-1]['blue']=False
+ p.edges[-1]['points']=[(a.x+190,780),(a.x+190,869),(a.x+560,869),(a.x+560,885)]
+ b.n('sources',35,220,740,95,'Owner / source ports','같은 허용 자료 · source revision / 변경·삭제 알림')
+ b.n('policy',850,220,310,95,'Policy Manager','같은 read·보관 epoch')
+ b.g('indexer',35,350,1125,282,'Indexing Worker · local background process',True,True)
+ b.n('feed',65,410,290,125,'Change Collector','등록 collection만 수집','변경 feed / 유한 scan',blue=True)
+ b.n('chunk',412,410,295,125,'Chunk / Index Builder','source revision · span','유한 queue / generation',blue=True)
+ b.n('embedding',785,410,340,125,'Embedding Runtime','추가 helper weights','document / query encode',blue=True)
+ b.n('index',785,705,340,155,'Vector Index + Manifest','chunk · source revision','build / epoch / coverage','원본에서 재생성 가능',blue=True,kind='store')
+ b.g('service',35,667,680,355,'Semantic Retrieval Service',True)
+ b.n('query',65,730,280,120,'Query API / Use Gate','scope · lexical / exact','현재 policy · data epoch',blue=True)
+ b.n('resolve',390,870,295,120,'Evidence Resolver','후보 → 원문 재검증','stale / 누락 → 보완',blue=True)
+ b.n('request',35,1050,335,48,'Request Controller',kind='module')
+ b.n('cm',750,948,410,140,'Context Manager','Consume Gate / 현재 두 epoch','기억·조립·revision cache 유지','후보 생산 위임 / 삭제 전파',blue=True)
+ p.shapes[-1]['common_lines']=[1]
+ b.e('feed','sources','feed',via=[(405,335),(210,335)],blue=True)
+ b.e('split','feed','chunk','R','L',blue=True)
+ b.e('encode','chunk','embedding','R','L',blue=True)
+ b.e('publish','embedding','index',label='원자 generation 게시',at=(827,659),blue=True)
+ b.e('request','request','cm','R','L',via=[(700,1074),(700,1018)])
+ b.e('query','cm','query','L','L',via=[(725,1018),(725,1034),(20,1034),(20,790)],blue=True,label='query + 현재 data epoch',at=(48,1026))
+ b.e('query-encode','query','embedding','R','L',via=[(365,790),(365,650),(755,650),(755,472.5)],label='query / 같은 embedding build',at=(382,644),blue=True)
+ b.e('encoded','embedding','query','B','T',via=[(955,612),(380,612),(380,714),(205,714)],blue=True,dash=True)
+ b.e('lookup','query','index','B','L',via=[(205,858),(735,858),(735,782.5)],label='검색',at=(739,820),blue=True)
+ b.e('candidates','index','resolve','B','R',via=[(955,908),(685,908),(685,930)],blue=True)
+ b.e('raw','resolve','sources','L','L',via=[(15,930),(15,267.5)],label='원문 revision 확인',at=(48,646),dash=True)
+ b.e('result','resolve','cm','R','T',via=[(715,930),(955,930)])
+ b.e('revoke','policy','index','R','T',via=[(1183,267.5),(1183,683),(955,683)],label='비동기 purge',at=(1000,675),dash=True)
+ b.e('query-policy','policy','query','L','L',via=[(795,267.5),(795,328),(5,328),(5,790)],label='현재 Use Envelope',at=(45,344),dash=True)
+ b.e('consume-policy','policy','cm','R','R',via=[(1200,267.5),(1200,1018)],dash=True)
+ b.t('new',50,590,'변경 생산 경로가 요청과 독립적으로 유지됨',19,True)
+ conclusion(p,['이득: 기존 source·cache 활용, 별도 helper·색인 자산 없이 시작','대가: 표현이 다른 과거 자료의 후보 누락·반복 source 조회','QA: 정확한 후보·응답 대기·source 변경 파급'],['이득: 허용 corpus의 의미 후보를 여러 요청에서 재사용','대가: helper 메모리·지속 색인·최신성·삭제·재구축','조건: 같은 자료의 반복 의미 검색 가치가 유지 비용보다 큰가?'],'핵심 구조 차이: 요청별 원본 조회  ↔  독립 색인 생산체 + 검색 서비스 + 파생 검색 저장소')
 
-
-def direct():
- slug='direct-response-generation'
- background(slug,'직접 응답 · 먼저 만들면 빠르지만 버릴 답변일 수 있다',
- '“광합성이 뭐야?”는 직접 응답 후보지만, “아까 표의 두 번째는?”은 Context를 사용하는 Core 요청이다.','UC-01 · UC-11 · 공유 Omni 자원',[
- ('현재 입력', [('독립 질문 또는 지칭','같은 Voice 입력 창구','최종 전사·revision 확보'),('경로 판단','history / screen / task 등','dependency가 남으면 Core'),('직접 경로 허용','현재 revision + host 조건','분류는 게시 허가와 구분'),('사용자 전달','첫 유효 문장 + Text','새 발화 때 즉시 중단')]),
- ('생성 자원', [('단일 공유 Omni','VOICE / SEMANTIC session','가중치 ×1, KV는 별도'),('선생성 선택','답변 text/audio 준비','host 검사와 겹칠 여지'),('기각되면 폐기','이미 사용한 계산·KV','buffer와 취소 대기 비용'),('순차 생성 선택','분류 후 필요한 답변 생성','첫 문장까지 순차 경계 추가')]),
- ('정정·예외', [('입력 아직 provisional','확정 전에 재생 금지','handle은 권한이 아님'),('새 발화 시작','옛 output epoch 무효화','미승인 결과 사용 차단'),('backend 취소','다음 safe point에서 정리','즉시 GPU 중단 가정 금지'),('후속 처리','같은 Request로 Core 인계','중복 답변·중복 기록 금지')])],
- [('선생성이 줄일 수 있는 대기',['허용 시점에 유효 문장이 준비되어 있다.','실제 겹친 구간만 이득이다.','Core임을 이미 알면 조기 중지한다.']),('선생성이 늘리는 부담',['버릴 답변도 공유 모델을 점유한다.','KV·audio buffer·취소 처리가 필요하다.','다른 입력·해석의 대기로 번질 수 있다.']),('대안도 감수할 비용',['분류 job과 후행 generation의 두 경계','재입력·허용 record·stale 검사','별도 분류가 정확도를 보장하지 않는다.'])],
- '경로 허용과 답변 생성을 겹칠 것인가, 내용 없는 경로 허용을 먼저 확정한 뒤 필요한 답변만 생성할 것인가?')
-
+def workflow():
+ p,a,b=pair('durable-request-orchestration','사용자 질문·선행 결과의 대기와 재개','방안 1 · target  |  domain controller가 진행 소유','방안 2 · 대안  |  workflow runtime이 continuation 소유')
+ for q in (a,b):q.n('input',50,220,1100,90,'Interaction Manager / Task Manager','입력·사용자 답변 / 확인된 Task 질문·결과 — 같은 사건과 기능')
+ a.g('controller',160,385,880,330,'Request Controller',True)
+ a.n('semantic',190,435,360,115,'의미 / admission 검증','현재 input · policy','Semantic Commit')
+ a.n('resume',630,435,370,115,'Graph / Question Controller','Request Graph · 질문 lifecycle','대기·timer·재개·정정 제어',blue=True)
+ a.n('store',95,810,460,180,'State Store · 권위 current state','Request / 질문 / graph revision','inbox · domain outbox · intent','target도 이미 durable',blue=True,kind='store')
+ a.n('services',725,810,430,180,'기존 Component ports','Context Manager · Request Interpreter','Task Manager · Response Manager','Agent Gateway: 외부 command 전송')
+ a.e('input','input','semantic',via=[(600,350),(370,350)])
+ a.e('check','semantic','resume','R','L')
+ a.e('save','resume','store',via=[(815,760),(325,760)],label='owner UoW / CAS',at=(357,750),blue=True)
+ a.e('call','resume','services',via=[(815,735),(940,735)],label='직접 실행·재개',at=(952,761),blue=True)
+ a.t('target',200,616,'domain 전이 코드가 각 대기와 재개를 구현',22,True)
+ a.t('target2',200,658,'미완료 원장·교차 owner transaction·재시작 복구 포함',20)
+ b.n('controller',295,355,620,120,'Request Controller','입력·의미·질문 binding 검사 / admission','graph·질문 진행 writer는 runtime으로 이동',blue=True)
+ b.g('runtime',35,535,1125,315,'Interaction Workflow Runtime · Core 내부 논리 서브시스템',True)
+ b.n('inbox',65,590,260,115,'Signal Inbox','question / result key','중복 제거 · revision',blue=True)
+ b.n('engine',412,590,310,115,'Continuation Engine','step / waiting / version','Request 진행 단일 writer',blue=True)
+ b.n('timer',815,590,310,115,'Timer Service','내구 timer identity','만료 ≠ 사용자 승인',blue=True)
+ b.n('activity',412,745,310,90,'Activity Dispatcher','intent / attempt / 완료 CAS',blue=True)
+ b.n('store',40,910,460,170,'Continuation Store · State Store','workflow / signal / activity intent','기존 owner DB와 같은 transaction','새 event sourcing은 도입하지 않음',blue=True,kind='store')
+ b.n('services',715,910,445,170,'기존 Component ports','Context Manager · Request Interpreter','Task Manager · Response Manager','Agent Gateway: 외부 command 전송')
+ b.e('input','input','controller',via=[(600,333),(605,333)])
+ b.e('signal','controller','inbox',via=[(605,510),(195,510)],label='검증된 signal',at=(210,500),blue=True)
+ b.e('resume','inbox','engine','R','L',blue=True)
+ b.e('timer','timer','engine','L','R',blue=True)
+ b.e('dispatch','engine','activity',blue=True)
+ b.e('persist','engine','store','L','T',via=[(380,647.5),(380,880),(270,880)],blue=True)
+ b.e('call','activity','services',via=[(567,882),(937.5,882)],label='고정 VIA activity',at=(787,873),blue=True)
+ b.e('admit','activity','controller','R','R',via=[(1183,790),(1183,415)],label='실행·게시 전 admission',at=(830,512),dash=True)
+ conclusion(p,['이득: domain 상태·검증·교차 transaction에 가까운 직접 제어','대가: 대기 종류마다 전이·재개·복구 코드 유지','존재: Request Graph + 질문 + 내구 원장 / 별도 실행 엔진 없음'],['이득: 내구 signal·timer·activity로 재개 계약을 공통화','대가: engine 상태·queue·definition migration·adapter','대체: Request Controller의 진행 책임 → workflow runtime'],'핵심 구조 차이: domain 상태기계  ↔  별도 실행 substrate · Agent 업무 planning과 Task 소유권은 유지')
 
 def speech():
+ p,a,b=pair('speech-evidence-source','새 발화를 계속 인식하는 실행 구성','방안 1 · target  |  독립 ASR + Omni의 두 실행 경계','방안 2 · 대안  |  Omni native evidence · ASR worker 제거')
+ for q in (a,b):q.n('capture',235,220,730,115,'Interaction Manager','capture / local stop / sample clock / 화면 timeline','모델 계산·재시작과 별도로 동작')
+ a.g('asr',30,425,470,280,'Speech Input Worker',True,True)
+ a.n('recognizer',60,482,410,155,'Streaming ASR · 별도 dependency','ASR weights / decoder / CPU 예약','partial · final · span · revision','ASR adapter / producer incarnation',blue=True)
+ a.g('omni',660,425,500,280,'Shared Inference Service',True,True)
+ a.n('model',690,482,440,155,'Omni Runtime · weights ×1','VOICE / SEMANTIC session 격리','공유 scheduler / KV 예산','Omni adapter / echo / generation')
+ a.g('join',150,790,900,225,'Interaction Manager · 입력 근거 결합',True)
+ a.n('merge',180,840,385,125,'Evidence Join / Conflict','ASR 전사 + Omni echo','핵심 불일치 → 원음/질문',blue=True)
+ a.n('timeline',620,840,400,125,'Timeline / Input Record','당시 화면 · watermark / gap','canonical revision → host')
+ a.e('asr','capture','recognizer',via=[(600,378),(265,378)],label='audio',at=(279,401),blue=True)
+ a.e('omni','capture','model',via=[(600,395),(910,395)],label='같은 audio',at=(925,411),blue=True)
+ a.e('evidence','recognizer','merge',via=[(265,747),(372.5,747)],label='SpeechEvidence',at=(49,759),blue=True)
+ a.e('echo','model','merge',via=[(910,737),(587,737),(587,902.5)],tp='R',label='echo / conflict',at=(674,727),blue=True)
+ a.e('combine','merge','timeline','R','L')
+ a.t('fault',53,1060,'Omni 중단: capture·ASR·stop 유지 / 의미 이해·음성 생성 불가',20,True)
+ b.g('shared',120,415,960,410,'Shared Inference Service · 하나의 process',True,True)
+ b.n('omni',400,470,590,120,'Omni Runtime · weights ×1','공유 encoder / scheduler / session별 KV','인식·VOICE·SEMANTIC 진행 예산')
+ b.n('native',155,650,405,125,'Native Evidence Adapter','transcript / span / gap / final','Omni incarnation · input revision',blue=True)
+ b.n('roles',640,650,350,125,'VOICE / SEMANTIC Sessions','제안·생성 / 요청 의미 해석','역할별 Context·권한 분리')
+ b.n('timeline',235,910,730,115,'Interaction Manager','native revision + 당시 화면 → input record','단일 producer의 자기 동의는 독립 검증이 아님',blue=True)
+ b.e('audio','capture','omni',via=[(600,377),(695,377)],label='audio',at=(720,397),blue=True)
+ b.e('evidence','omni','native',via=[(695,618),(357.5,618)],blue=True)
+ b.e('role','omni','roles','R','R',via=[(1021,530),(1021,712.5)])
+ b.e('native','native','timeline',via=[(357.5,870),(600,870)],label='SpeechEvidence',at=(384,856),blue=True)
+ b.t('fault',83,1070,'Omni 중단: capture·stop만 유지 / 인식·이해·음성 생성 모두 불가',20,True)
+ conclusion(p,['이득: Omni 부하·재기동과 독립된 입력 근거 진행','대가: ASR 전체 메모리·CPU·IPC·중복 인식·전사 충돌','필수: canonical 근거 → Request Controller 확정은 공통'],['이득: 별도 ASR worker·weights·연동·복구 경로 제거','대가: 인식까지 공유 계산·장애 경계에 결합','조건: native timestamp·revision·동시 recognition 실제 지원'],'핵심 구조 차이: 독립 recognizer 서브시스템의 존재 / 부재 · capture 지속과 recognition 지속을 구별')
+
+def recovery():
+ p,a,b=pair('recovery-state-source','확정 상태를 보존하고 복원하는 저장 구조','방안 1 · target  |  current records에서 복원','방안 2 · 대안  |  domain journal에서 projection 재구성')
+ for q in (a,b):q.n('owners',40,220,1120,95,'Request Controller / Task Manager / Response Manager','각 owner가 의미·revision을 검증한 변경 집합 · 외부 호출은 transaction 밖')
+ a.g('store',95,395,980,285,'State Store · local embedded DB / 동일 transaction',True)
+ a.n('current',135,452,470,170,'Current Records · 권위 원본','Conversation / Request / Task','질문 · relation · publication','현재 row / schema / revision',blue=True,kind='store')
+ a.n('ledger',665,452,365,170,'Pending / Effect Ledger','inbox · command outbox','domain outbox · receipt','Audit 존재 ≠ 권위 replay',kind='store')
+ a.n('loader',135,770,470,125,'State Loader / Migration','현재 row · 관계 · 미완료 읽기','source 확인과 owner 복원',blue=True)
+ a.n('reconcile',725,770,350,125,'Agent Gateway','동일 command key 조회','UNKNOWN 재실행 금지')
+ a.n('open',135,960,940,100,'각 owner의 복구 개방','질문·Task·publication·현재 policy 검증 / 옛 음성 자동 재생 금지')
+ a.e('commit','owners','current',via=[(600,360),(370,360)],label='current + intent 원자 기록',at=(397,351),blue=True)
+ a.e('effects','current','ledger','R','L')
+ a.e('load','current','loader',label='restart load',at=(385,724),blue=True)
+ a.e('scan','ledger','reconcile',via=[(847.5,723),(900,723)])
+ a.e('restore','loader','open',via=[(370,932),(605,932)])
+ a.e('source','reconcile','open',via=[(900,929),(605,929)])
+ b.g('db',35,380,1125,670,'State Store · 같은 embedded DB / event authority',True)
+ b.n('journal',65,445,380,170,'Domain Journal · 권위 원본','committed batch / event schema','owner revision / log position','effect intent와 원자 commit',blue=True,kind='store')
+ b.n('projector',535,445,270,125,'Projection Engine','versioned reducer','정상 commit에 적용',blue=True)
+ b.n('projection',860,445,265,170,'Current Projection','재생성 가능한 view','applied log position','원본과 다르면 재구축',blue=True,kind='store')
+ b.n('replay',65,710,380,125,'Replay Engine','schema reader registry','checkpoint + tail / prefix',blue=True)
+ b.n('checkpoint',535,710,270,140,'Checkpoint Manager','position / digest','삭제 epoch 검증',blue=True)
+ b.n('snap',860,710,265,140,'Checkpoint Store','가속용 파생물','권위 원본 아님',blue=True,kind='store')
+ b.n('ledger',65,915,1060,100,'공통 Effect / Pending Ledger · 삭제 fence','원장·현재 deletion epoch 우선 / replay에서 모델·외부 Action·음성 재실행 금지')
+ b.e('append','owners','journal',via=[(600,352),(255,352)],label='batch + projection + intent',at=(625,351),blue=True)
+ b.e('reduce','journal','projector','R','L',via=[(489,530),(489,507.5)],blue=True)
+ b.e('view','projector','projection','R','L',via=[(832,507.5),(832,530)],blue=True)
+ b.e('replay','journal','replay',label='restart read',at=(269,672),blue=True)
+ b.e('rebuild','replay','projection','R','B',via=[(484,772.5),(484,665),(992.5,665)],label='再구성',at=(633,656),blue=True,dash=True)
+ p.edges[-1]['label']='projection 재구성'
+ b.e('checkpoint','projection','snap',blue=True,dash=True)
+ b.e('validate','snap','checkpoint','L','R',blue=True)
+ b.e('base','checkpoint','replay','L','R',via=[(470,780),(470,772.5)],blue=True,dash=True)
+ b.t('outside',50,1080,'복구 후 공통: Agent Gateway source 확인 → 각 owner admission 개방',20)
+ conclusion(p,['이득: 현재 상태·미완료 원장을 직접 읽는 복구','대가: current 관계 손상을 모든 audit로 재구성할 수는 없음','target도 inbox·outbox·domain event·transaction을 보유'],['이득: intact journal로 projection 손상·새 view 재구축','대가: reducer·reader·checkpoint·redaction·긴 replay','동일 DB / 별도 서버 도입 효과나 외부 ACK 복구를 주장하지 않음'],'핵심 구조 차이: 권위 current row + loader  ↔  권위 journal + projection / replay / checkpoint 체계')
+
+def bg_speech():
  slug='speech-evidence-source'
  background(slug,'음성 입력 근거 · 의미 추론 중에도 계속 듣고 당시 화면에 연결해야 한다',
  '이전 요청을 해석하는 동안 사용자가 그래프에서 표로 포인터를 옮기며 “이거, 아니 저걸 넣어줘”라고 말한다.','UC-03 · UC-04 · UC-11 · UC-18',[
@@ -245,29 +349,8 @@ def speech():
  'SpeechEvidence를 독립 recognizer에서 생산할 것인가, 동일 Omni의 native stream에 입력 근거까지 맡길 것인가?')
 
 
-def maintenance():
- slug='conversation-context-maintenance'
- background(slug,'대화 Context · 다음 발화 사이에도 업무·질문·기억은 변한다',
- '보고서와 메일 업무를 오가며 “아까 형식으로 정리해줘”라고 한다. 그 사이 취소·질문·선호 삭제가 발생한다.','UC-06 · UC-10 · UC-15 · UC-17',[
- ('대화', [('첫 요청','보고서 요약 + 표 우선 선호','허용된 기억 사용'),('다른 업무 대화','메일 질문에 답하는 중','보고서 상태 계속 변경'),('기억 변경','“그 선호는 잊어줘”','memory epoch 증가'),('후속 요청','“보고서 결과도 정리해줘”','삭제된 선호 재사용 금지')]),
- ('여러 owner', [('대화·전달 기록','Request Controller','Response Manager'),('업무 상태','Task Manager revision 증가','질문 / 결과 / 취소'),('기억·권한','Context Manager 삭제','Policy Manager 철회'),('필요한 입력 묶음','각 owner의 근거·revision','동시 snapshot으로 위장 금지')]),
- ('파생 Context', [('요청별 조합','필요 범위 read + cache','원문·typed field 보존'),('지속 view 갱신','변경 delta → projector','관심 없는 갱신 비용도 존재'),('lag 또는 누락','dirty / revision gap','read barrier 또는 rebuild'),('확정 전 검증','read set 최신성 확인','view는 운영 원본이 아님')])],
- [('요청 시 구성',['쓰는 범위만 읽고 조합한다.','유효 cache·summary는 재사용한다.','반복 조합 비용이 요청 경로에 남는다.']),('지속 갱신 view',['다음 요청 전에 준비할 수 있다.','변경 전달·적용 위치·회수 책임이 생긴다.','요청이 없어도 메모리·계산을 사용한다.']),('삭제·정정의 어려움',['epoch로 즉시 사용 차단해야 한다.','projector가 늦다고 사용을 허용할 수 없다.','늦은 summary·옛 checkpoint도 차단한다.'])],
- '여러 owner 기록을 요청 시 조합할 것인가, 활성 대화의 working view를 지속 갱신하고 revision barrier 뒤 소비할 것인가?')
 
-
-def representation():
- slug='context-representation-pipeline'
- background(slug,'자료 표현 · 같은 표를 여러 목적에 쓸 때 무엇을 재사용할까?',
- '“이 표를 설명해줘” 다음에 “방금 수치로 보고서를 만들어줘”라고 한다. 단위·기간·각주도 함께 전달되어야 한다.','UC-02 · UC-03 · UC-05 · UC-07',[
- ('선택된 원문', [('PDF 표 선택','제품 A: 12 / 제품 B: 8','단위: 백만원'),('각주와 범위','* 해외 매출 제외','2025년 4분기 / 연결 기준'),('source 변경','표 revision r7 → r8','값·각주가 바뀔 수 있음'),('근거 보존','값 + 단위 + 범위 + 출처','숫자만 복사하면 의미 손실')]),
- ('소비 목적', [('어느 표인가','지칭·선택 범위 연결','Request Interpreter'),('무엇을 뜻하나','자료와 현재 질문의 해석','필수 사실·불확실성 유지'),('업무로 이어가기','확정 목표 + 허용 근거','Agent 내부 분석은 외부'),('재사용 판단','동일 source revision인가','새 목적의 필드가 충분한가')]),
- ('구조적 긴장', [('원문 중심','선행 사실 추출 없이 소비','자료와 목적을 함께 해석'),('사실 view 선행','구조·출처·누락 추출','별도 job·저장·검증'),('정보 손실','각주 누락이 반복 전파','view 일치 ≠ 사실 정확성'),('필요한 복귀','원문 확인 / view 보완','없으면 질문·실패 명시')])],
- [('원문 중심이 유리한 상황',['일회성·다양한 자료, 목적 의존 해석','parse cache·이전 유효 결과 재사용 가능','모든 소비가 전체 PDF를 다시 읽지는 않는다.']),('사실 view가 유리한 상황',['안정된 자료를 여러 목적에서 반복 소비','자료 추출 책임·출처 구조 집중','첫 추출·schema·무효화 비용을 감수한다.']),('구조로 해결할 난점',['변환 산출물의 범위·권위는 무엇인가?','빠진 각주·불확실성을 어떻게 전달하는가?','source 삭제가 모든 파생 view에 닿는가?'])],
- '원문과 요청을 함께 해석할 것인가, source별 사실·구조·출처 view를 먼저 만들어 여러 소비 경로에 제공할 것인가?')
-
-
-def recovery():
+def bg_recovery():
  slug='recovery-state-source'
  background(slug,'복구 원본 · 다시 켜지는 것과 업무를 올바르게 이어가는 것은 다르다',
  '취소 command 전송 직후 ACK가 사라지고 VIA가 종료된다. 다른 Task의 결과는 저장됐지만 사용자에게 아직 전달되지 않았다.','UC-12 · UC-13 · UC-16 · UC-18',[
@@ -278,323 +361,31 @@ def recovery():
  '운영 상태를 현재 owner 기록에서 복원할 것인가, 확정 domain 이력에서 검증된 checkpoint와 tail로 재구성할 것인가?')
 
 
-class Pane:
- """Expanded component view; named ports and nested editable modules."""
- def __init__(self,p,side):self.p=p;self.s=side;self.x=48 if side=='a' else 1312
- def node(self,id,x,y,w,h,title,*lines,blue=False,kind='module'):
-  return self.p.node(self.s+'-'+id,self.x+x,y,w,h,title,*lines,blue=blue,kind=kind)
- def group(self,id,x,y,w,h,title,blue=False,kind='group'):
-  return self.p.group(self.s+'-'+id,self.x+x,y,w,h,title,blue,kind)
- def line(self,id,src,dst,points,label='',at=None,blue=False,dash=False):
-  pts=[(self.x+x,y) for x,y in points]
-  self.p.edges.append(dict(id=self.s+'-edge-'+id,source=self.s+'-'+src,target=self.s+'-'+dst,points=pts,label=label,at=(self.x+at[0],at[1]) if at else None,blue=blue,dash=dash))
- def text(self,id,x,y,text,blue=False,size=18):self.p.text(self.s+'-'+id,self.x+x,y,text,size,BLUE if blue else INK)
- def top(self,a,b,c):
-  for i,(title,l1,l2) in enumerate([a,b,c]):self.node('top'+str(i),24+i*410,259,356,108,title,l1,l2,kind='component')
- def groups(self,left,right,bl=False,br=False):
-  self.group('left',24,437,550,383,left,bl);self.group('right',650,437,526,383,right,br)
- def module(self,id,side,row,col,title,*lines,blue=False):
-  x=(44 if side=='l' else 670)+col*264;y=500+row*190
-  return self.node(id,x,y,230,105,title,*lines,blue=blue)
- def supports(self,left,right,bl=False,br=False):
-  for id,x,w,data,blue in [('supportL',24,550,left,bl),('supportR',650,526,right,br)]:
-   self.node(id,x,908,w,118,*data,blue=blue,kind='component')
- def footer(self,text):self.text('panenote',32,1052,text,size=19)
 
-def rich_interpretation():
- p=comparison('request-interpretation-topology','요청 의미의 결합·중간 계약·정정 경로','방안 1  통합 SemanticProposal','방안 2  versioned 단계 결과 + 제한된 되돌림')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Interaction Manager','InputFinal · evidence refs','InputStarted → hold'),('Policy Manager','scope · policy revision','사용 직전 현재 권한'),('Context Manager','후보 / 원문 / receipt','bounded read · source revision'))
-  q.groups('Request Controller','Request Interpreter',True,True)
-  q.module('workspace','l',0,0,'Turn Workspace','input · context revision','candidate dependencies')
-  q.module('orchestrate','l',0,1,'통합 job 제어' if s=='a' else 'Stage Coordinator','read / deadline' if s=='a' else 'stage / retry budget','proposal revision' if s=='a' else 'expected input versions',blue=True)
-  q.module('invalidate','l',1,0,'정정·hold 처리','영향 read set 무효화','미전송 admission 보류')
-  q.module('commit','l',1,1,'의미 확정·admission','field / coverage / policy','Semantic Commit')
-  if s=='a':
-   q.module('prompt','r',0,0,'통합 입력 조립','지칭·목표·Task·경로','원문·후보·제약',blue=True)
-   q.module('job','r',0,1,'통합 semantic job','서로 의존하는 field','동일 proposal에서 조정',blue=True)
-   q.module('parse','r',1,0,'결과·근거 해석','경쟁 후보 / 미해결','Next Evidence Request',blue=True)
-   q.module('intermediate','r',1,1,'SemanticProposal','field origin / deps','임시 결과 · 권한 없음',blue=True)
-   q.line('unify','prompt','job',[(900,552),(934,552)],blue=True)
-   q.line('job-result','job','intermediate',[(1049,605),(1049,690)],'구조화 결과',(1060,653),True)
-   q.line('parse','intermediate','parse',[(934,742),(900,742)],blue=True)
-  else:
-   q.module('prompt','r',0,0,'1. 지칭·근거 해석','ReferentSet vR','후보·불확실성·원문',blue=True)
-   q.module('job','r',0,1,'2. 목표·Task 연결','GoalTaskSet vT','vR + Task 근거 의존',blue=True)
-   q.module('parse','r',1,0,'3. 처리 경로 제안','HandlingProposal vH','vR / vT / capability',blue=True)
-   q.module('intermediate','r',1,1,'Correction Request','원인 field + evidence','앞 stage 새 version 요청',blue=True)
-   q.line('stage1','prompt','job',[(900,552),(934,552)],blue=True)
-   q.line('stage2','job','parse',[(1049,605),(1049,644),(785,644),(785,690)],'vT → 경로 판단',(839,633),True)
-   q.line('correction','intermediate','prompt',[(1164,742),(1188,742),(1188,478),(785,478),(785,500)],'정정 / 후속 무효화',(941,485),True,True)
-   q.line('issue','parse','intermediate',[(900,742),(934,742)],blue=True,dash=True)
-  q.supports(('State Store','Conversation · Request · Semantic Commit','중간 결과는 Request attempt 임시 상태; crash 시 재해석'),('Model Access','단일 Omni · role/session/KV 분리','모든 stage 호출·취소·재처리 비용 포함'))
-  q.line('input','top0','workspace',[(202,367),(202,407),(159,407),(159,500)],'① 입력',(213,407))
-  q.line('read','orchestrate','top2',[(423,500),(423,397),(1022,397),(1022,367)],'② read / receipt (host 경유)',(652,389),True)
-  q.line('run','orchestrate','prompt',[(538,552),(670,552)],'③ job',(583,542),True)
-  q.line('evidence','workspace','orchestrate',[(274,552),(308,552)])
-  q.line('hold','workspace','invalidate',[(159,605),(159,690)],'revision',(171,654))
-  q.line('guard','invalidate','commit',[(274,742),(308,742)])
-  q.line('proposal','parse','commit',[(670,742),(538,742)],'④ proposal',(558,731),True)
-  q.line('model','job','supportR',[(1049,605),(1200,605),(1200,964),(1176,964)],'InferenceJob',(1058,870),False,True)
-  q.line('persist','commit','supportL',[(423,795),(423,908)],'⑤ durable commit',(434,875),False,True)
-  q.line('policy','top1','commit',[(612,367),(612,856),(557,856),(557,770),(538,770)],'policy',(552,846),False,True)
-  q.footer('확정 뒤 Task Manager / Response Manager 인계 · 모델 결과 자체에는 dispatch·게시 권한 없음')
- costs(p,['선택 근거: 지칭·목표·Task가 서로 바뀌는 요청을 한 의미 묶음에서 조정','대가: 큰 입력·출력과 결합 오류; 관련 근거 변경 시 재해석','반증: 부분 재사용보다 전면 조정 부담이 반복적으로 큼'],['선택 근거: 안정된 중간 계약을 진단·재사용하고 영향 stage부터 처리','대가: 추가 호출·중간 정보 손실·version propagation·되돌림','반증: 매번 모든 stage를 다시 돌거나 마지막 통합 판단으로 수렴'],'핵심 차이: 의미를 한 proposal 안에서 함께 조정하는가, 앞 stage의 새 version과 후속 무효화를 거쳐 바꾸는가.')
+def bg_retrieval():
+ background('semantic-retrieval-subsystem','자료 검색 · 현재 표현과 과거 자료의 이름이 다를 때',
+ '“지난번 비용을 줄였던 제안서 찾아서 이번 보고서에 써줘.” 파일명·대화·Task 기록에는 서로 다른 표현이 남아 있다.','UC-05 중심 · UC-02 · UC-06 · UC-07 · UC-10 · UC-17',[
+ ('자료와 요청',[('기존 자료','보고서·대화·Task 결과','허용된 collection만 대상'),('새로운 표현','“비용을 줄였던 제안”','파일명은 운영 개선 r3'),('후보 발견','이름·기간·의미 근접 후보','찾음 ≠ 대상 확정'),('업무에 사용','현재 원문·고유 대상 확인','동명이면 사용자 선택')]),
+ ('변경과 권한',[('원본 revision','자료와 owner 기록 존재','동일 기능·scope 유지'),('수정·삭제·철회','r3 → r4 / 기억 삭제','파생 검색 자산도 영향'),('조회 시 검증','current policy + 삭제 epoch','오래된 후보 사용 차단'),('근거 package','원문 span·출처·coverage','후보 순위는 실행 권한 아님')]),
+ ('구조 선택',[('요청별 조회','Context Manager / owner port','기존 cache·summary 사용'),('지속 색인','별도 수집·embedding·index','요청이 없어도 관리 필요'),('후보 생산','source read 또는 index search','최신성·누락 확인 필요'),('실제 차이','검색 생산체·helper·저장소','조립·기억 owner는 유지')])],
+ [('왜 VIA에 중요한가',['대화 속 표현만으로 과거 자료를 다시 찾는다.','후보 누락은 재질문·잘못된 자료 전달로 이어진다.','검색 점수로 Action 대상을 확정할 수는 없다.']),('왜 Architecture 문제인가',['source 조회를 반복할지 검색 자산을 유지할지 결정한다.','추가 helper·worker·저장소·삭제 경로가 생긴다.','요청 속도와 상시 유지 비용을 교환한다.']),('공정한 대안의 조건',['동일 자료·권한·사용자 목표를 유지한다.','target의 기존 cache·summary를 제거하지 않는다.','embedding 지원·효과는 구현 전 설계 가정이다.'])],
+ '요청마다 owner의 자료를 조회할 것인가, 별도 색인 생산체와 검색 서비스를 유지하고 현재 원문을 다시 검증할 것인가?')
 
-def rich_acquisition():
- p=comparison('context-acquisition-strategy','Context 획득의 선행 작업·조회 계약·대기 구조','방안 1  InputStarted 기본 준비 → 통합 해석','방안 2  InputFinal 계획 → 선택적 조회 → 통합 해석')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Interaction Manager','당시 화면·음성·선택 capture','Started / Final / revision'),('Policy Manager','source / recipient / purpose','현재 scope · 읽기 허용'),('Request Interpreter','통합 해석 · 추가 근거 제안' if s=='a' else 'ReadPlan · 후행 통합 해석','모델 제안은 host를 경유'))
-  q.groups('Request Controller','Context Manager',True,True)
-  q.module('trigger','l',0,0,'기본 준비 trigger' if s=='a' else 'ReadPlan 승인','InputStarted / 관련 변경' if s=='a' else 'Final + 최소 식별 근거','현재 scope / 예산',blue=True)
-  q.module('workspace','l',0,1,'Provisional Context' if s=='a' else 'Query Plan Registry','기본 package revision' if s=='a' else 'source / filter / 한도','Final에서 유효 범위 선택' if s=='a' else 'query dependency / 상태',blue=True)
-  q.module('join','l',1,0,'해석·보완 제어','모델 제안 → 한정 read','deadline 내 재해석',blue=True)
-  q.module('commit','l',1,1,'근거·의미 확정','read set / coverage 검사','Commit / 질문 / 실패')
-  q.module('select','r',0,0,'기본 source 선택' if s=='a' else 'Plan Dispatcher','최근 대화·Task·metadata' if s=='a' else '승인 query만 fan-out','cache key / source rev',blue=True)
-  q.module('read','r',0,1,'Read Adapters','owner / file / mail 等','독립 query 병렬 실행')
-  q.module('receipt','r',1,0,'Receipt / Package','반환·누락·실패·범위','원문 / typed 근거')
-  q.module('cache','r',1,1,'Revision Cache','기본 준비·추가 읽기' if s=='a' else '계획별 선택적 재사용','dirty / invalid / expiry',blue=True)
-  q.supports(('Owner / source ports','Request Controller · Task Manager · Response Manager','자료 source: 허용된 file / mail / calendar / browser'),('Model Access','동일 Omni · 동일 최종 통합 해석','plan·추가 해석·KV·입력 중 작업 비용 모두 포함'))
-  q.line('input','top0','trigger',[(202,367),(202,405),(159,405),(159,500)],'① Started' if s=='a' else '① Final',(217,405),True)
-  if s=='b':
-   q.line('plan','trigger','top2',[(159,500),(159,418),(1022,418),(1022,367)],'② 최소 입력 → ReadPlan',(685,408),True)
-   q.line('plan-return','top2','workspace',[(844,339),(816,339),(816,389),(423,389),(423,500)],'plan → host 검사',(431,382),True)
-  next(n for n in p.shapes if n['id']==s+'-top2')['blue']=True
-  q.line('state','trigger','workspace',[(274,552),(308,552)],blue=True)
-  q.line('dispatch','workspace','select',[(538,552),(670,552)],'③ read',(578,539),True)
-  q.line('fanout','select','read',[(900,552),(934,552)])
-  q.line('source','read','supportL',[(1049,605),(1200,605),(1200,866),(300,866),(300,908)],'④ bounded query / source revision',(665,852))
-  q.line('cache','read','cache',[(1049,605),(1049,690)],'result',(1064,650))
-  q.line('package','cache','receipt',[(934,742),(900,742)])
-  q.line('join','receipt','join',[(670,770),(600,770),(600,838),(159,838),(159,795)],'⑤ receipt → host',(210,829),True)
-  q.line('semantic-call','join','top2',[(44,742),(12,742),(12,382),(866,382),(866,367)],'⑥ Final + 근거 → 통합 해석',(30,396))
-  q.line('semantic-return','top2','join',[(1160,367),(1160,429),(590,429),(590,665),(159,665),(159,690)],'⑦ proposal → host',(276,678))
-  q.line('final','join','commit',[(274,742),(308,742)])
-  q.line('policy','top1','trigger',[(612,367),(612,455),(286,455),(286,527),(274,527)],dash=True)
-  q.line('inference','top2','supportR',[(1022,367),(1188,367),(1188,893),(914,893),(914,908)],'model job',(1041,884),False,True)
-  q.footer('capture는 두 안에서 계속된다 · 조회 계획은 bounded read이며 업무 planning·외부 Action이 아님')
- costs(p,['선택 근거: 반복되는 최근 Context를 발화와 겹쳐 준비','대가: 실제로 쓰지 않은 읽기·cache와 변경 갱신','반증: 기본 준비의 낭비·경합이 중첩 이득보다 큼'],['선택 근거: source가 다양하고 조회가 비쌀 때 필요한 범위만 선택','대가: 계획 → query → 해석의 순차 의존·계획 오류','반증: 계획에도 기본 Context 전체가 필요해 같은 구조로 수렴'],'핵심 차이: Context Manager의 존재가 아니라 첫 read의 trigger·첫 모델 입력·중간 query 상태가 달라진다.')
+def bg_workflow():
+ background('durable-request-orchestration','대기와 재개 · 대화가 끊겨도 요청의 진행 관계는 이어져야 한다',
+ '“이 표로 보고서를 만들고 끝나면 메일을 준비해줘.” 수신인 질문에 답하기 전에 다른 업무로 전환하고 VIA가 재시작된다.','UC-06 · UC-09 · UC-11 · UC-14 · UC-16 · UC-17 · UC-18',[
+ ('사용자 대화',[('복합 요청','보고서 결과 → 메일 준비','VIA는 상호작용 진행만 소유'),('사용자 질문','수신인을 질문 / WAIT_USER','Omni KV 점유는 해제'),('교차 사건','다른 대화·정정·취소','현재 Request revision 증가'),('답변 후 재개','맞는 질문·Request에 연결','옛 조건의 실행은 차단')]),
+ ('진행 상태',[('graph 진행','선행 결과·질문·admission','Task 실행 자체는 Task Manager'),('durable wait','대기 이유·timer·effect intent','target도 이미 기록한다'),('crash / 재시작','signal 중복·timer 만료','같은 activity ID로 확인'),('계속할 위치','현재 revision의 continuation','모델을 replay해서 복원하지 않음')]),
+ ('책임의 위치',[('target controller','Request Controller가 graph 진행','domain UoW + outbox'),('대안 실행체','Interaction Workflow Runtime','진행·질문·대기 상태 소유'),('owner 협력','의미·Task·기억의 owner 유지','고정 VIA activity만 호출'),('구조적 대가','signal / timer / continuation','버전 호환·중복 계약 유지')])],
+ [('왜 VIA에 중요한가',['긴 Agent 업무와 짧은 사용자 대화가 겹친다.','잘못된 재개는 옛 요청·다른 질문을 실행한다.','재시작 후도 동일 대화와 업무 관계를 이어야 한다.']),('왜 Architecture 문제인가',['진행 상태를 domain controller가 직접 소유할지,','별도 실행체에 continuation을 맡길지 결정한다.','상태·수명·호출·버전 계약의 주체가 바뀐다.']),('공정한 대안의 조건',['양안 모두 durable wait·중복 방지·KV 해제를 갖춘다.','별도 서버나 자동 병렬화의 효과를 주장하지 않는다.','Agent의 업무 planning을 VIA로 옮기지 않는다.'])],
+ 'Request Controller가 진행·대기·재개를 직접 관리할 것인가, 별도 workflow 실행체가 continuation을 소유하고 owner들을 호출할 것인가?')
 
-def rich_observation():
- p=comparison('agent-state-observation','Agent 상태의 수신·조정·진행 view 구성','방안 1  일반 progress event 적용','방안 2  일반 progress는 hint / snapshot 교체')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Downstream Agent','event + versioned snapshot','같은 capability profile'),('Request Controller','사용자 상태 조회 / 최신성','질문 binding · 게시 admission'),('Response Manager','Text / Voice 상태·결과 전달','publication ID 중복 방지'))
-  q.groups('Agent Gateway','Task Manager',True,True)
-  q.module('ingress','l',0,0,'Event Adapter','identity / source revision','inbox durable 수신')
-  q.module('query','l',0,1,'Gap Query' if s=='a' else 'Query Coordinator','gap / 명시 최신 조회' if s=='a' else 'hint / user / poll trigger','source snapshot 확인' if s=='a' else 'single-flight / 유한 retry',blue=True)
-  q.module('critical','l',1,0,'필수 사건 inbox','question / approval','terminal / failure 보존')
-  q.module('progress','l',1,1,'Ordered Progress' if s=='a' else 'Dirty Hint Registry','중복·순서·cursor' if s=='a' else 'execution별 hint 합치기','유효 event 전달' if s=='a' else 'query demand 유지',blue=True)
-  q.module('binding','r',0,0,'Execution Binding','Task / run / command','known terminal 단조성')
-  q.module('reduce','r',0,1,'Event Reducer' if s=='a' else 'Snapshot Validator','projection + cursor CAS' if s=='a' else 'source rev / scope 검사','gap → reconcile' if s=='a' else '늦은 응답 교체 금지',blue=True)
-  q.module('criticalbind','r',1,0,'질문·결과 결합','question / artifact version','상태 query와 독립 보존')
-  q.module('view','r',1,1,'Progress Projection' if s=='a' else 'Snapshot View','phase / freshness / rev','확인됨·재조회·불명',blue=True)
-  q.supports(('State Store','공통: Task·command·질문·terminal·publication intent','event cursor · gap · progress projection' if s=='a' else 'query identity · dirty · snapshot'),('상태 전달 계약','TaskUpdate(task, run, source_revision, observed_at)','사용자 최신성 요구 동일 · 확인 불가를 성공으로 만들지 않음'))
-  q.line('event','top0','ingress',[(202,367),(202,407),(159,407),(159,500)],'① event',(216,407))
-  q.line('query-source','query','top0',[(423,500),(423,396),(380,396),(380,315)],'② query / snapshot',(426,414),True)
-  q.line('critical-route','ingress','critical',[(159,605),(159,690)],'필수 사건',(169,653))
-  q.line('progress-route','ingress','progress',[(274,577),(286,577),(286,660),(423,660),(423,690)],'일반 progress',(292,649),True)
-  if s=='a':
-   q.line('progress-target','progress','reduce',[(538,742),(612,742),(612,481),(1049,481),(1049,500)],'③ event 적용',(934,472),True)
-   q.line('gap-query','reduce','query',[(1049,605),(1049,633),(423,633),(423,605)],'gap / reconcile',(584,624),True,True)
-  else:
-   q.line('hint-query','progress','query',[(423,690),(423,605)],'dirty → query',(430,643),True)
-   q.line('query-result','query','reduce',[(538,552),(612,552),(612,481),(1049,481),(1049,500)],'③ snapshot 검증',(934,472),True)
-  q.line('query-demand','binding','query',[(785,605),(785,617),(556,617),(556,579),(538,579)],'최신성 요구',(623,611),False,True)
-  q.line('critical-bind','critical','criticalbind',[(159,795),(159,832),(637,832),(637,742),(670,742)],'필수 질문·결과',(318,822))
-  q.line('critical-notify','criticalbind','top1',[(785,690),(785,675),(625,675),(625,382),(667,382),(667,367)],'질문·결과 → host',(683,666))
-  q.line('binding','binding','reduce',[(900,552),(934,552)])
-  q.line('view','reduce','view',[(1049,605),(1049,690)],'④ 현재 view',(1060,651),True)
-  q.line('persist','critical','supportL',[(159,795),(159,908)],'내구 기록',(170,875),False,True)
-  q.line('deliver','view','top1',[(1164,742),(1193,742),(1193,393),(612,393),(612,367)],'⑤ 현재 상태 → host',(899,383))
-  q.line('publish','top1','top2',[(790,315),(844,315)])
-  q.line('read','top1','binding',[(612,367),(612,414),(785,414),(785,500)],'사용자 read',(674,402))
-  q.footer('일반 progress만 비교 · 질문·승인·완료를 hint로 폐기하지 않음 · snapshot은 과거 terminal을 지우지 못함')
- costs(p,['선택 근거: event가 충실하고 상태 조회가 잦으면 로컬 view 활용','대가: 전이 schema·event reducer·cursor·gap 복구','반증: 대부분 query로 보정하여 중복 유지 비용만 증가'],['선택 근거: 충실하고 저렴한 snapshot으로 전이 재구성 축소','대가: API 왕복·호출 한도·query 병합·freshness 관리','반증: 필수 알림 기한·snapshot 완전성을 충족하지 못함'],'핵심 차이: 외부 상태를 받아 현재 view를 만드는 방식이다. 전체 VIA event sourcing이나 Task writer 변경과 구분한다.')
-
-def rich_direct():
- p=comparison('direct-response-generation','직접 응답의 job 그래프·보류 상태·게시 경계','방안 1  제안과 답변 선생성 / host 허용 후 release','방안 2  분류 → route permit → 답변 생성')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Interaction Manager','capture / InputFinal / stop','InputFinal · local output epoch'),('Request Controller','좁은 direct 검사 · Core 인계','입력·질문·policy·route owner'),('Policy Manager','현재 권한 / policy revision','과거 Context는 direct에 미제공'))
-  q.groups('Model Access · 공유 Omni 실행 계약','Interaction Manager · generation 수명',True,True)
-  q.module('classify','l',0,0,'VoiceProposal Job' if s=='a' else 'Classification Job','current Turn only','dependency flags / echo',blue=True)
-  q.module('generate','l',0,1,'Speculative Generation' if s=='a' else 'Permitted Generation','제안과 답변 생성 중첩' if s=='a' else '유효 permit 뒤 시작','Text/audio segment',blue=True)
-  q.module('kv','l',1,0,'Shared Runtime','Omni weights ×1','VOICE / SEMANTIC 격리')
-  q.module('cancel','l',1,1,'Job Cancel / Reclaim','safe point cancel','KV 반환 확인 · deadline')
-  q.module('handle','r',0,0,'Held Generation' if s=='a' else 'Route Permit Binding','request / generation ID' if s=='a' else 'request / input / policy','미승인 Text/audio buffer' if s=='a' else '허용 전 답변 없음',blue=True)
-  q.module('fence','r',0,1,'Input / Output Fence','늦은 결과 사용 차단','새 발화 → local stop')
-  q.module('release','r',1,0,'Release / Discard','held buffer 선택' if s=='a' else '생성 결과 수신','유효 content / epoch 검사',blue=True)
-  q.module('device','r',1,1,'Channel I/O','Text 표시 / Voice 재생','실제 receipt / 중단')
-  q.supports(('Response Manager','Request Controller admission → content·epoch 검증','내구 publication intent → release / cancel'),('State Store','route owner / publication / delivery receipt','content 포함 admission · 보류 handle' if s=='a' else 'route permit · 후행 content admission'),False,True)
-  q.line('input','top0','classify',[(202,367),(202,407),(159,407),(159,500)],'① 입력',(218,407))
-  q.line('proposal','classify','top1',[(159,500),(159,416),(612,416),(612,367)],'② proposal → host',(298,404),True)
-  if s=='a':q.line('gen','top0','generate',[(202,367),(202,392),(423,392),(423,500)],'동일 VOICE 작업의 선생성',(286,382),True)
-  if s=='b':
-   q.line('permit','top1','generate',[(612,367),(612,472),(423,472),(423,500)],'③ permit 뒤 job',(327,491),True)
-   q.line('permit-bind','top1','handle',[(742,367),(742,390),(753,390),(753,500)],'permit',(659,432),True)
-  q.line('buffer','generate','handle',[(538,552),(670,552)],'④ handle',(570,539),True)
-  q.line('content','handle','top1',[(815,500),(815,332),(790,332)],'④ content → host',(823,431))
-  q.line('state','handle','fence',[(900,552),(934,552)])
-  q.line('fence-release','fence','release',[(1049,605),(1049,668),(870,668),(870,690)],'epoch / stop',(925,657),False,True)
-  q.line('ready','handle','release',[(785,605),(785,690)],'held / ready',(796,649),True)
-  q.line('audio','release','device',[(900,742),(934,742)])
-  q.line('cancel','cancel','generate',[(423,690),(423,605)],'취소',(433,650),False,True)
-  q.line('runtime','kv','cancel',[(274,742),(308,742)])
-  q.line('admission','top1','supportL',[(612,367),(612,865),(299,865),(299,908)],'⑤ admission / 기각',(320,854))
-  q.line('release-command','supportL','release',[(574,963),(629,963),(629,866),(785,866),(785,795)],'⑥ release / cancel',(680,855))
-  q.line('receipt','device','supportL',[(1164,742),(1196,742),(1196,893),(510,893),(510,908)],'⑦ 실제 receipt → Response Manager',(782,884),False,True)
-  q.line('durable','supportL','supportR',[(574,990),(650,990)])
-  q.line('epoch','top0','fence',[(340,367),(340,380),(1180,380),(1180,530),(1164,530)],'local output epoch',(978,393),False,True)
-  q.line('policy','top2','top1',[(844,315),(790,315)])
-  q.footer('기각/unknown이면 같은 Request의 Core 경로 · 생성 완료와 실제 사용자 전달은 별도 상태')
- costs(p,['선택 근거: 허용 순간 유효 문장이 준비되면 생성 대기를 중첩','대가: 기각된 답변 계산·KV·buffer·cancel 지연','반증: 폐기·공유 경합이 중첩 이득을 소모'],['선택 근거: Core 요청에 불필요한 직접 답변을 만들지 않음','대가: 분류·permit·generation 순차 경계와 재입력','반증: 분류 자체가 답변만큼 비싸거나 직접 경로 대기가 증가'],'핵심 차이: host 허용 전 생성된 content의 존재와 job 의존성. 어느 안도 승인 전 음성을 재생하지 않는다.')
-
-def rich_speech():
- p=comparison('speech-evidence-source','음성 근거의 process·dependency·clock·확정 경로','방안 1  독립 ASR worker + 공유 Omni','방안 2  공유 Omni의 native evidence stream')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Interaction Manager','Voice: AEC · capture · local stop','sample sequence · bounded ring'),('Interaction Manager','UI: 화면·선택 timeline','capture time / clock uncertainty'),('Request Interpreter','기존 semantic job 진행 중','동일 Omni · 다른 session'))
-  q.group('left',24,437,550,383,'모델 실행 · Model Access adapter',True)
-  q.group('right',650,437,526,383,'Interaction Manager · 입력 근거 결합',True)
-  if s=='a':
-   q.node('recognize',44,500,230,130,'Speech Input Worker','Streaming ASR','독립 CPU / weights','partial / final / span',blue=True,kind='module')
-   q.node('omni',291,500,265,130,'Omni Runtime','Shared Inference Service','weights ×1 / session 격리','VOICE + SEMANTIC',blue=True,kind='module')
-  else:
-   q.group('omni-boundary',40,487,510,181,'Shared Inference Service',True,kind='process')
-   q.node('recognize',56,541,218,108,'Native Evidence Path','transcript / span / gap','semantic 중에도 진행',blue=True)
-   q.node('omni',308,541,218,108,'VOICE / SEMANTIC','Omni weights ×1','session / KV 격리',blue=True)
-  q.module('adapter','l',1,0,'Model Access','ASR + Omni adapter' if s=='a' else 'native evidence adapter','source build / incarnation',blue=True)
-  q.module('scheduling','l',1,1,'자원 admission','독립 입력 + Omni 예약' if s=='a' else '공유 runtime 입력 예약','queue / gap / 유한 backlog',blue=True)
-  q.module('normalize','r',0,0,'Evidence Normalizer','ASR canonical revision' if s=='a' else 'native canonical revision','sample span / 불확실성',blue=True)
-  q.module('timeline','r',0,1,'Timeline Join','screen / pointer interval','producer watermark / gap')
-  q.module('conflict','r',1,0,'Transcript Conflict' if s=='a' else 'Evidence Revision','Omni echo와 충돌 보존' if s=='a' else '정정·대체 구간 보존','원음 한정 확인 / 질문' if s=='a' else '자기 echo는 독립 검증 아님',blue=True)
-  q.module('seal','r',1,1,'입력 근거 묶음','final / clock / gap','현재 화면 대체 금지')
-  q.supports(('Request Controller','SEALED 입력 → 해석 · 늦은 정정은 admission 무효화','핵심 불일치·gap이면 한정 재확인 또는 clarification'),('Omni crash 시 기능','a: capture·ASR·stop 유지, 의미·음성 생성 중단' if s=='a' else 'b: capture·stop 유지, 인식·의미·음성 생성 중단','미처리·overflow 명시 · 입력 접수와 이해 완료 구별'),False,True)
-  q.line('audio','top0','recognize',[(202,367),(202,407),(159,407),(159,500 if s=='a' else 541)],'① audio',(215,407),True)
-  q.line('native','recognize','normalize',[(159,630 if s=='a' else 649),(159,661),(588,661),(588,552),(670,552)],'② SpeechEvidence',(283,653),True)
-  if s=='a':
-   q.line('voice-audio','top0','omni',[(380,315),(402,315),(402,480),(423,480),(423,500)],'audio fan-out',(427,481),True)
-   q.line('echo','omni','conflict',[(556,575),(580,575),(580,679),(785,679),(785,690)],'Omni echo / conflict',(680,670),True,True)
-  q.line('screen','top1','timeline',[(612,367),(612,414),(1049,414),(1049,500)],'시점별 화면 근거',(821,402))
-  q.line('semantic','top2','omni',[(1022,367),(1022,389),(423,389),(423,500 if s=='a' else 541)],'semantic job',(669,381),False,True)
-  q.line('adapter-control','adapter','recognize',[(44,742),(32,742),(32,566),(44 if s=='a' else 56,566)],blue=True,dash=True)
-  q.line('schedule-control','scheduling','omni',[(538,742),(563,742),(563,596),(556 if s=='a' else 526,596)],blue=True,dash=True)
-  q.line('normalize','normalize','timeline',[(900,552),(934,552)])
-  q.line('conflict','normalize','conflict',[(785,605),(785,690)],'revision / echo',(791,656),True)
-  q.line('seal','timeline','seal',[(1049,605),(1049,690)],'watermark',(1054,655))
-  q.line('combine','conflict','seal',[(900,742),(934,742)])
-  q.line('input-record','seal','supportL',[(1049,795),(1049,866),(299,866),(299,908)],'③ final + evidence → host 입력 확정',(424,855))
-  q.footer('모델 내부 학습은 외부 · 두 안 모두 source-time·revision·동시 recognition 필수 · 실제 native 지원은 미검증')
- costs(p,['선택 근거: semantic 부하·Omni 재시작에서 입력 근거 진행을 분리','대가: ASR weights·CPU·worker·중복 인식·전사 충돌','반증: 독립 인식의 효용보다 전체 자원·오류 조정 부담이 큼'],['선택 근거: native 계약이 충족되면 중복 recognizer 제거 가능','대가: 인식까지 공유 계산·runtime 장애에 결합','반증: semantic 완료를 기다리거나 source-time·gap을 제공 못함'],'핵심 차이: dependency와 근거 생산 경로가 바뀐다. capture만 계속되는 상태를 동시 인식 성공으로 세지 않는다.')
-
-def rich_maintenance():
- p=comparison('conversation-context-maintenance','대화 working view의 갱신·삭제·현재성 검사','방안 1  요청 시 구성 / 유효 cache 재사용','방안 2  변경마다 증분 view / revision barrier')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Request Controller','Conversation / 질문 / Request','Context 요청·required revisions'),('Task Manager','확인된 Task / 결과 / 질문','versioned owner read port'),('Response Manager','실제 게시 Text / audible 범위','versioned delivery read port'))
-  q.groups('Context Manager','State Store · Context Manager 소유 파생 상태',True,True)
-  q.module('ingress','l',0,0,'Request Assembler' if s=='a' else 'Delta Consumer','필요 owner / 범위 선택' if s=='a' else 'owner event / cursor 검사','cache 현재성 확인' if s=='a' else 'gap → dirty / snapshot',blue=True)
-  q.module('update','l',0,1,'Partial Rebuild' if s=='a' else 'Working View Projector','사용 범위만 read·조합' if s=='a' else '활성 Conversation만 갱신','원문 / typed / summary',blue=True)
-  q.module('read','l',1,0,'Cache Validator' if s=='a' else 'Revision Read Barrier','source rev / epoch 확인','미충족 → 재조회' if s=='a' else 'lag → catch-up / rebuild',blue=True)
-  q.module('package','l',1,1,'Evidence Package','selected fields + read set','요약만으로 대상 확정 금지')
-  q.module('view','r',0,0,'Revision Cache' if s=='a' else 'Conversation View','source IDs / revisions','재구성 가능한 파생 입력',blue=True)
-  q.module('cursor','r',0,1,'Dependency Metadata' if s=='a' else 'Applied Revision Vector','dirty / expiry / source key' if s=='a' else 'owner별 적용 위치·누락','권한·memory epoch',blue=True)
-  q.module('delete','r',1,0,'Deletion / Use Fence','tombstone / epoch','사용 즉시 차단 → purge')
-  q.module('bound','r',1,1,'Lifetime / Rebuild','cache LRU + TTL' if s=='a' else '활성 view 회수·checkpoint','원본 owner 상태는 별도',blue=True)
-  q.supports(('Request Controller','package 수신 → 해석 → 최종 read-set 관련 revision 재검증','view의 최신성 검사 뒤에도 새 변경은 가능; commit 검사 유지'),('Model Access','같은 Omni · 유휴 summary 작업 · 임시 KV','typed 변경은 즉시 반영 · 늦은 summary는 CAS 폐기'))
-  q.line('req','top0','ingress',[(202,367),(202,409),(159,409),(159,500)],'① 요청' if s=='a' else '① owner 변경',(215,408),True)
-  if s=='a':
-   q.line('owner','top1','update',[(612,367),(612,409),(423,409),(423,500)],'versioned read',(626,405),True)
-   q.line('delivery','top2','update',[(1022,367),(1022,390),(423,390),(423,500)],'delivery read',(834,383))
-  else:
-   q.line('owner','top1','ingress',[(612,367),(612,390),(303,390),(303,526),(274,526)],'owner delta',(430,383),True)
-   q.line('delivery','top2','ingress',[(1022,367),(1022,419),(30,419),(30,552),(44,552)],'delivery delta',(887,410),True)
-   q.line('request-read','top0','read',[(100,367),(100,390),(12,390),(12,670),(159,670),(159,690)],'요청 / required revisions',(30,685),True)
-  q.line('assemble','ingress','update',[(274,552),(308,552)],blue=True)
-  q.line('materialize','update','view',[(538,552),(670,552)],'② 유지',(585,540),True)
-  q.line('vector','view','cursor',[(900,552),(934,552)],blue=True)
-  if s=='b':q.text('atomic-view',682,490,'view + applied vector 원자 갱신',True)
-  if s=='a':q.line('read','ingress','read',[(159,605),(159,690)],'③ 요청 시 확인',(169,654),True)
-  q.line('fence','delete','read',[(670,742),(600,742),(600,656),(159,656),(159,690)],'삭제 epoch: projector 지연과 무관하게 차단',(295,643),False,True)
-  q.line('emit','read','package',[(274,742),(308,742)])
-  q.line('result','package','supportL',[(423,795),(423,908)],'④ 근거·read set',(433,875))
-  q.line('current-view','view','read',[(785,605),(785,625),(286,625),(286,720),(274,720)],'revision / cache read',(420,616),True,True)
-  q.line('summary','bound','supportR',[(1049,795),(1049,908)],'유휴 작업 / 재구성',(1059,875),False,True)
-  q.footer('owner별 revision은 전역 원자 snapshot이 아님 · 삭제된 선호를 옛 summary·KV·checkpoint에서 복원 금지')
- costs(p,['선택 근거: 관심 업무가 자주 바뀌거나 요청이 뜸하면 필요한 범위만 구성','대가: 반복 요청에서 owner 조회·조합이 대기 경로에 남음','반증: 같은 조합 비용이 반복되고 cache로 충분히 줄지 않음'],['선택 근거: 같은 대화·업무를 자주 읽으면 준비를 앞당길 수 있음','대가: delta 전달·cursor·view 메모리·미사용 갱신·gap rebuild','반증: lag 때문에 매번 rebuild하거나 기존 cache와 동일 계약으로 수렴'],'핵심 차이: 원본 저장 방식이 아니라 파생 입력의 정상 유지 경로다. 삭제·원본 소유권·최종 의미 확정은 공통이다.')
-
-def rich_representation():
- p=comparison('context-representation-pipeline','자료의 변환·출처·재사용·소비 계약','방안 1  원문 중심 package / 소비 시 의미 해석','방안 2  source fact view 선행 생성 / 목적별 소비')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Source / parse cache','같은 identity·revision·선택 범위','원문 / 이미지 / typed field'),('Request Controller','source scope·소비·보완 제어','의미 확정 / 업무·게시 admission'),('Policy Manager','접근·보관·recipient 허용','변경·철회 시 사용 차단'))
-  q.groups('Context Manager','소비 Component · 공통 책임',True,False)
-  q.module('read','l',0,0,'Evidence Reader','원문·parse·typed record','coverage / receipt 보존')
-  q.module('transform','l',0,1,'Package Assembler' if s=='a' else 'Materialization Job','필요 원문·출처 선택' if s=='a' else '구조·사실·각주 추출','기존 summary는 보조' if s=='a' else 'parser + 필요 시 Omni',blue=True)
-  q.module('view','l',1,0,'Raw Evidence Package' if s=='a' else 'Versioned FactView','원문·이미지·typed data' if s=='a' else 'value / unit / range','source revision / refs' if s=='a' else 'provenance / omissions',blue=True)
-  q.module('repair','l',1,1,'Evidence Completion' if s=='a' else 'View Repair / 원문 복귀','부족 범위 추가 읽기','누락·불확실성 유지',blue=True)
-  q.module('interpret','r',0,0,'Request Interpreter','자료 + 요청 의미 해석','Task·handling 후보 제안')
-  q.module('respond','r',0,1,'Response Manager','허용 근거로 설명 구성','중요 수치·실패 보존')
-  q.module('task','r',1,0,'Task Manager','확정 목표·제약·자료','업무·command 구성')
-  q.module('gateway','r',1,1,'Agent Gateway','허용 자료·참조 제공','업무 reasoning은 외부')
-  q.supports(('State Store','원문 / parse cache · source revision' if s=='a' else 'FactView · 변환 version · source dependency','source 삭제 → 관련 payload·파생 view 무효화·purge'),('Model Access','소비 시 원문 해석 · 선행 추출 job 없음' if s=='a' else '선행 추출 job·KV·취소 비용 추가','같은 Omni ×1 · 각 소비 작업의 비용도 포함'),True,True)
-  q.line('source','top0','read',[(202,367),(202,405),(159,405),(159,500)],'① 확보',(216,405))
-  q.line('transform','read','transform',[(274,552),(308,552)],blue=True)
-  q.line('view','transform','view',[(423,605),(423,652),(159,652),(159,690)],'② 소비 근거 구성',(201,642),True)
-  q.line('storage','view','supportL',[(159,795),(159,908)],'source key / 재사용',(171,875),True,True)
-  q.line('host','view','top1',[(44,742),(12,742),(12,416),(612,416),(612,367)],'③ package / view → host',(299,406),True)
-  q.line('interpret','top1','interpret',[(612,367),(612,473),(785,473),(785,500)],'④ 해석 호출',(801,494))
-  q.line('respond','top1','respond',[(612,367),(612,390),(1194,390),(1194,482),(1049,482),(1049,500)],'⑤ 확정 후 구성',(935,409))
-  q.line('task','top1','task',[(612,367),(612,853),(785,853),(785,795)],'⑤ 확정 후 업무',(642,841))
-  q.line('gateway','task','gateway',[(900,742),(934,742)])
-  q.line('repair','repair','read',[(423,690),(423,672),(30,672),(30,553),(44,553)],'보완 / 원문 복귀',(46,663),True,True)
-  q.line('model','interpret','supportR',[(785,605),(785,646),(915,646),(915,876),(914,876),(914,908)],'소비 시 model job',(956,865),False,True)
-  if s=='b':q.line('extraction','transform','supportR',[(538,580),(589,580),(589,886),(700,886),(700,908)],'선행 extraction job',(661,878),True,True)
-  q.footer('소비자가 source view를 진실로 확정하지 않음 · 최종 요청 의미는 host 확정 · Action·업무 계획은 Agent 책임')
- costs(p,['선택 근거: 일회성·다양한 자료를 현재 목적과 함께 해석','대가: 반복 자료에서 구조 해석·입력 비용이 반복될 수 있음','반증: 유효 cache를 써도 동일 추출·불일치가 반복됨'],['선택 근거: 동일 source 구조·출처를 여러 소비 목적에서 재사용','대가: 추출 job·schema·dependency·첫 사용 대기·오류 전파','반증: 새 목적마다 view를 확장하거나 항상 전체 원문으로 복귀'],'핵심 차이: 자료를 소비하기 전에 별도 사실 산출물·재사용 계약을 만드는가. 보기 좋은 JSON만 만드는 차이는 제외한다.')
-
-def rich_recovery():
- p=comparison('recovery-state-source','복구 원본의 commit·load/replay·외부 효과 조정','방안 1  현재 owner 상태 + 미완료 원장','방안 2  확정 event batch + checkpoint / tail')
- for s in ('a','b'):
-  q=Pane(p,s)
-  q.top(('Request Controller','Request·질문·admission 변경','현재 revision / policy 검사'),('Task Manager','Task·command·effect identity','expected revision 검사'),('Response Manager','publication intent·실제 receipt','DELIVERY_UNKNOWN 보존'))
-  q.groups('State Store · 같은 embedded transactional DB','복구 모듈 · 각 owner가 자기 상태 재구성',True,True)
-  q.module('uow','l',0,0,'Owner Unit of Work','검증된 변경 집합 결합','외부 호출은 transaction 밖')
-  q.module('authority','l',0,1,'Current Records' if s=='a' else 'Domain Event Batch','row / revision / 관계' if s=='a' else 'event schema / log pos','운영 상태의 권위 원본',blue=True)
-  q.module('effects','l',1,0,'Effect / Pending Ledger','inbox / command outbox','publication ID / attempt')
-  q.module('projection','l',1,1,'Pending Index' if s=='a' else 'Checkpoint / Projection','미완료·전달·질문 조회' if s=='a' else '적용 위치 / schema version','audit는 임의 덮어쓰기 불가' if s=='a' else '빠른 현재 읽기 · 재생성 가능',blue=True)
-  q.module('fence','r',0,0,'Incarnation / Use Fence','새 전송 차단 / schema','현재 deletion epoch 먼저')
-  q.module('load','r',0,1,'State Loader' if s=='a' else 'Checkpoint / Tail','row migration·무결성' if s=='a' else 'version reader·reducer','owner state load' if s=='a' else 'side-effect 없는 replay',blue=True)
-  q.module('reconcile','r',1,0,'Effect Reconciliation','전송 시작 뒤 불명','동일 command key 조회')
-  q.module('restore','r',1,1,'Relation Restoration','질문·결과·publication','복구 scope admission 개방')
-  q.supports(('Agent Gateway','source query / command-key 확인 / capability별 처리','UNKNOWN: 확인 전 재전송·새 Agent start 금지'),('State Store · 삭제·보관','현재 tombstone 우선 · 삭제된 기록의 재사용 차단','row migration·삭제된 관계의 복원 검사' if s=='a' else 'event redaction·호환 reader 유지'),False,True)
-  q.line('request','top0','uow',[(202,367),(202,410),(159,410),(159,500)],'① 변경',(217,408))
-  q.line('task','top1','uow',[(612,367),(612,401),(290,401),(290,526),(274,526)])
-  q.line('response','top2','uow',[(1022,367),(1022,388),(296,388),(296,573),(274,573)])
-  q.line('commit','uow','authority',[(274,552),(308,552)],blue=True)
-  q.line('intent','uow','effects',[(159,605),(159,690)],'동일 transaction',(169,654))
-  q.line('project','authority','projection',[(423,605),(423,690)],'② current/index' if s=='a' else '② append + projection',(432,654),True)
-  q.line('start','authority','fence',[(538,552),(670,552)],'③ restart read',(576,537),True)
-  q.line('load','fence','load',[(900,552),(934,552)],blue=True)
-  q.line('read-source','projection','load',[(538,742),(600,742),(600,632),(1178,632),(1178,578),(1164,578)],'원본·미완료 기록 읽기' if s=='a' else 'checkpoint + committed tail',(637,623),True,True)
-  q.line('apply','load','reconcile',[(1049,605),(1049,650),(785,650),(785,690)],'④ load / replay → pending 調整'.replace('調整','조정'),(838,678),True)
-  q.line('query','reconcile','supportL',[(785,795),(785,860),(299,860),(299,908)],'⑤ source 상태 확인',(380,849))
-  q.line('restore','reconcile','restore',[(900,742),(934,742)])
-  q.line('delete','supportR','fence',[(914,908),(914,843),(637,843),(637,473),(785,473),(785,500)],'삭제 fence / payload 참조',(953,870),False,True)
-  q.footer('동일 DB·내구성·owner·Agent capability · replay로 모델 판단·메일 발송·과거 음성 재생을 실행하지 않음')
- costs(p,['선택 근거: 현재 관계·미완료 원장으로 필요한 재연결을 직접 수행','대가: row migration·원장 일관성·손상 repair 유지','반증: 상태·전송·전달 관계 조정 로직이 반복적으로 복잡해짐'],['선택 근거: 확정 이력에서 projection과 전이 관계를 재구성','대가: event schema·reducer·checkpoint·삭제 redaction·tail 비용','반증: 필요한 복구가 단순 조회로 충분하거나 권위 이력 자체 손상'],'핵심 차이: 현재 view와 기록이 충돌할 때 무엇이 권위 원본인가. 외부 ACK·실제 청취의 불명은 두 안 모두 남는다.')
-
-RICH_BUILDERS=[rich_interpretation,rich_acquisition,rich_observation,rich_direct,rich_speech,rich_maintenance,rich_representation,rich_recovery]
-
-BUILDERS=[interpretation,acquisition,observation,direct,speech,maintenance,representation,recovery]
+BUILDERS=[(bg_retrieval,retrieval),(bg_workflow,workflow),(bg_speech,speech),(bg_recovery,recovery)]
 
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args()
  if not args.check:OUT.mkdir(parents=True,exist_ok=True)
- for bg,compare in zip(BUILDERS,RICH_BUILDERS):
+ for bg,compare in BUILDERS:
   bg();compare()
  errors=[]
  for p in PAGES:
@@ -606,7 +397,7 @@ def main():
     if not path.exists() or path.read_text()!=data:errors.append(str(path.relative_to(ROOT)))
    else:path.write_text(data)
  slides='\n'.join(f'<section><img src="{p.slug}.svg" alt="{html.escape(p.title)}"><p><a href="{p.slug}.drawio">draw.io 원본</a></p></section>' for p in PAGES)
- review='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA 설계 비교 · 16페이지</title><style>body{margin:0;background:#ececec;font-family:Arial}nav{padding:18px;position:sticky;top:0;background:white;border-bottom:1px solid #aaa}section{max-width:1600px;margin:24px auto;background:white;break-after:page}img{display:block;width:100%;height:auto}p{padding:0 20px 16px}@media print{nav,p{display:none}section{margin:0;max-width:none}@page{size:16in 9in;margin:0}}</style><nav>VIA · 배경 / 설계 비교 16페이지 — 브라우저 확대 또는 SVG 원본으로 보기</nav>'+slides+'</html>'
+ review='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA 설계 비교 · 8페이지</title><style>body{margin:0;background:#ececec;font-family:Arial}nav{padding:18px;position:sticky;top:0;background:white;border-bottom:1px solid #aaa}section{max-width:1600px;margin:24px auto;background:white;break-after:page}img{display:block;width:100%;height:auto}p{padding:0 20px 16px}@media print{nav,p{display:none}section{margin:0;max-width:none}@page{size:16in 9in;margin:0}}</style><nav>VIA · 배경 / 설계 비교 8페이지 — 브라우저 확대 또는 SVG 원본으로 보기</nav>'+slides+'</html>'
  path=OUT/'review.html'
  if args.check:
   if not path.exists() or path.read_text()!=review:errors.append(str(path.relative_to(ROOT)))

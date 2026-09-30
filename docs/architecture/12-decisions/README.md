@@ -28,9 +28,9 @@
 
 1~3의 주요 설계와 사용자 검토는 완료했다. 다음 작업은 4의 지침에 따라 사용자와 후보 목록을 함께 구체화하는 것이다. 정식 package·ASR 재정의·검증 계약은 후보 검토를 거쳐 발전시키며 이번 기준선 확정에서 측정 freeze나 구현·실험을 시작하지 않는다.
 
-사용자 리뷰에 따라 Component 분할·통합 중심의 이전 일곱 후보는 추천에서 철회하고 archive로 보존했다. 현재는 target의 주요 기능을 구현할 때 선택한 방식과 합리적인 다른 구현 방식을 복원한 [새 후보 목록](./decision-packages/README.md), [수정한 선발 원칙](./decision-packages/selection-principles.md), [자체 반론·보류 기록](./decision-packages/review-notes.md)을 검토한다. 8개 후보의 실제 SW 구조도·배경 16페이지와 ASR·추가 QA 장단점 비교표로 작동·상태·의존 경로의 차이를 검토한다. 아직 정식 Decision Point 선정이나 기준선 변경은 아니다.
+사용자 리뷰에 따라 처음 7개 Component 경계 후보와 직전 8개 동일 배치 중심 후보 세대는 archive로 보존했다. 현재 [상세 비교안 4개](./decision-packages/README.md)는 **의미 검색 서브시스템, 내구 요청 workflow, 음성 입력 근거 실행 구성, 권위 복구 저장**이다. 각 문서는 target을 방안 1로 고정하고, 실제 Component·실행체·저장소의 존재·부재·책임 이동이 다른 방안 2를 제시한다.
 
-현재 **개별 상세 후보는 8개**다. 최초 해석·Context 획득·Agent 상태·직접 응답 생성 4개에, 기존 자료를 재검토한 음성 근거·대화 Context 유지·자료 표현·복구 원본 4개를 추가했다. 각 문서는 배경·비교 그림(SVG/draw.io), 실행 계약, ASR·추가 QA 장단점 표, 예외·비용·반증 조건과 배경 5줄·비교 8줄을 제공한다. 개수는 최종 채택 수가 아니며 기존 VIA-DP의 ID·결과를 승계하지 않는다.
+배경·비교 그림 총 8장(SVG/draw.io), 실행·정정·삭제·복구 계약, ASR/추가 QA 비교표와 발표 원고를 제공한다. [지속 작업 계획](./decision-packages/WORKPLAN.md), [발굴·선발 기록](./decision-packages/discovery-and-selection.md), [선발 원칙](./decision-packages/selection-principles.md), [검토 기록](./decision-packages/review-notes.md)에 작업 방법과 판정 근거를 남겼다. 자료 완성은 최종 DP 선정·대안 채택·기준선 변경·성능 우열 확정을 뜻하지 않는다.
 
 ## 목표 Architecture 이후의 Decision Package
 
