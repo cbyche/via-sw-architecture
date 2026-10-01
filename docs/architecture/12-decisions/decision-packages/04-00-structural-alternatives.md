@@ -1,7 +1,8 @@
 # 4단계 — 중요한 품질 차이를 만드는 SW 구조 탐색
 
-> 상태: **STAGE_4_DRAFT / 구조 탐색 초안** / 2026-10-01
+> 상태: **STAGE_4_REVIEW_READY / 독립 검토 및 수정 후 사용자 리뷰 대기** / 2026-10-01
 > 입력: [02 요구와 수단](./02-00-requirements-and-choices.md), [03 품질 시나리오](./03-00-quality-scenarios.md). 절차: [작업 계획](./00-workplan.md).
+> 검토 및 검사: [04-01 독립 검토 기록](./04-01-structural-review.md).
 > Target은 REVIEWED_BASELINE으로 보존한다. 여기의 S 번호는 탐색 질문을 가리킨다. DP 번호, 선정 결과 또는 방안 2의 확정이 아니다.
 
 ## 1. 이번 단계에서 한 일과 읽는 순서
@@ -48,7 +49,7 @@ V-01 기능 정확성, V-02 기능 적절성, V-03 기능 완전성을 공동 1�
 
 | 질문 | 실제 target T | 탐색한 대안 | 실제로 달라지는 구조 | 대안이 설득력 있는 조건 |
 | --- | --- | --- | --- | --- |
-| [S-01 근거를 보완하는 해석 실행](#s-01) | Request Controller가 제안과 읽기를 번갈아 실행 | A: 요청별 Semantic Resolution Worker와 Capability Read Broker | Worker가 해석 중간 상태와 한정 읽기 continuation을 소유. host는 최종 확정 권위 유지 | 읽은 결과에 따라 다음 근거가 달라지고 host 왕복이 의미 있는 비용인 요청 |
+| [S-01 근거를 보완하는 해석 실행](#s-01) | Request Controller가 제안과 읽기를 번갈아 실행 | A: 요청별 Semantic Resolution Worker와 Capability Read Broker | Worker가 중단 및 재개 가능한 모델 읽기 continuation을 소유. host는 최종 확정 권위 유지 | 중간 제안 종료와 Context 재조립 및 재호출이 의미 있는 비용인 요청, 해당 runtime 지원 필요 |
 | [S-02 당시 화면의 근거 생산](#s-02) | 원시 RAM timeline을 확보한 뒤 발화와 해석 시 결합 | A: Screen Grounding Service가 객체 이력을 미리 생산. B: 사용자가 명시적으로 만든 Capture Package만 사용 | 사전 의미 자료 생산과 보관이 생기거나, 연속 관측과 과거 복수 지칭 기능이 줄어듦 | A는 반복 지칭과 안정된 UI 구조, B는 명시 선택 위주의 제한된 사용 |
 | [S-03 보이지 않는 자료 발견](#s-03) | owner read port, metadata/keyword index와 cache | A: Semantic Retrieval Service, Indexing Worker, Embedding Runtime, Vector Index | 의미 후보 생산, 색인 갱신과 삭제를 위한 별도 자료 수명 | 이름보다 주제로 찾고 동일 자료를 반복 참조하는 환경 |
 | [S-04 목표와 질문의 대기 실행](#s-04) | Request Controller의 durable Request Graph와 Pending User Interaction | A: Interaction Workflow Runtime. B: 세션 한정 요청 coordinator | 내구 continuation이 실행 원본을 대체하거나 대기 그래프 내구 복구를 포기 | A는 복잡한 장기 대기, B는 짧고 단순한 대화와 제한된 복구 요구 |
@@ -64,35 +65,35 @@ A/B는 서로 자동 결합되는 완제품 안이 아니다. 하나의 질문�
 
 **문제와 기준선.** P-01/03의 “아까 그 자료를 김 팀장에게 보내줘”에서 대상 자료와 수신자 단서가 서로 영향을 줄 수 있다. Target은 Request Controller → Context Manager의 기본 준비 → Request Interpreter의 제안 → 필요 시 Request Controller → Context Manager → Request Interpreter 순이다. Request Interpreter는 도구와 확정 권한이 없는 제안자다. 기본 자료 준비는 입력과 겹칠 수 있으며, target이 모든 조회를 매번 처음부터 직렬 실행하는 것은 아니다. 현재 정책은 입력 revision당 semantic 총 2회와 추가 읽기 한 묶음이다. [구조 §6~7](../target-architecture/architecture.md), [제어 §3](../target-architecture/control-and-lifecycle.md#3-core-해석읽기응답-예산).
 
-**대안 A — 요청별 해석 실행체.** Semantic Resolution Worker가 하나의 요청에 대한 해석 session, 임시 field와 read set, 다음 읽기 continuation을 가진다. 공유 Omni의 구조화 읽기 제안을 받아 Capability Read Broker가 현재 Policy Manager의 권한과 읽기 예산을 검사한 뒤 Context Manager의 source/owner read port로 연결한다. Worker는 읽은 근거를 같은 해석 작업에 넣고 최종 제안과 receipt를 Request Controller에 반환한다. Request Controller는 현재 입력 revision, 질문과 권한을 확인하고 최종 commit한다. Worker에는 Agent 업무 실행, 외부 변경 또는 자체 승인의 권한이 없다. 이 스케치는 local Core 안의 독립 실행 수명과 계약을 가진 작업으로 두며, 별도 process의 장애 격리 이익을 가정하지 않는다.
+**대안 A — 읽기에서 중단하고 재개하는 해석 실행체.** Semantic Resolution Worker가 하나의 요청에 대한 임시 field와 read set, 모델 실행의 읽기 continuation을 가진다. 이 스케치에서는 Model Access를 통해 runtime이 최종 semantic proposal을 끝내기 전에 `READ_REQUIRED`와 재개 handle을 반환하는 계약을 제안한다. 실행은 그 지점에서 연산 점유를 양보하고, Capability Read Broker가 현재 Policy Manager의 권한과 읽기 예산을 검사한 뒤 Context Manager의 source/owner read port에서 근거를 가져온다. Worker는 동일 input revision과 receipt에 묶인 근거만 handle에 넣어 실행을 재개하고, 마지막에 최종 proposal을 Request Controller에 반환한다. 대기 중 KV를 유한 범위로 보관하며 회수되거나 handle이 무효하면 재개 실패로 처리한다. Request Controller는 현재 입력 revision, 질문과 권한을 확인하고 최종 commit한다. Worker에는 Agent 업무 실행, 외부 변경 또는 자체 승인의 권한이 없다. 이 스케치는 local Core 안의 독립 실행 수명과 계약을 가진 작업으로 두며, 별도 process의 장애 격리 이익을 가정하지 않는다.
 
 | 실행과 상태 | T와 다른 점 및 비용 |
 | --- | --- |
-| 정상 보완 | host가 해석 제안과 다음 호출을 번갈아 조정하는 대신 Worker가 근거 보완의 중간 실행을 지속한다. 읽기마다 필요한 host 확정 왕복을 줄일 여지가 있지만 broker 호출과 session 유지가 생긴다. |
-| 책임의 교체 | Request Interpreter의 단발 제안 계약을 Worker의 유한 실행 계약으로 대체한다. Request Controller의 최종 확정과 입력 hold는 유지하되 상세 읽기 continuation은 소유하지 않는다. 같은 함수를 다른 파일로 옮기는 안이 아니다. |
+| 정상 보완 | host가 해석 제안과 다음 호출을 번갈아 조정하는 대신 Worker가 근거 보완의 중간 실행을 지속한다. 중간 proposal 종료 → host의 다음 Context 조립 → 새 semantic 호출이라는 의존 경계를 runtime의 중단 및 근거 주입 후 재개로 대체한다. 읽기 권한 검사와 broker 호출은 남는다. |
+| 책임의 교체 | Request Interpreter의 단발 제안 계약을 Worker와 Model Access의 양방향 중단 및 재개 계약으로 대체한다. Request Controller의 최종 확정과 입력 hold는 유지하되 상세 읽기 continuation은 소유하지 않는다. 같은 함수를 다른 파일로 옮기는 안이 아니다. |
 | 정정과 철회 | 새 입력 revision이나 정책 epoch에서 Worker 결과를 폐기한다. Broker는 시작뿐 아니라 실제 읽기와 결과 사용 때 유효성을 확인한다. 이미 반환된 자료의 사용과 KV도 차단한다. 이전 session을 새 요청의 권한으로 재사용하지 않는다. |
-| 실패와 복구 | 임시 continuation은 권위 업무 상태가 아니다. Worker crash 뒤 현재 Request에서 읽기를 재시도하거나 사용자에게 한계를 알린다. 읽기 실패와 부분 coverage를 남기고 유한 예산에서 종료한다. 최종 commit과 Action 전송은 host의 내구 경계를 따른다. |
-| 지원 목표와 U | 조건 보완과 정정 기능은 유지 목표. 구조화 read callback, 격리 session, 취소와 receipt 전달은 U-03/04/07/08로 미확인이다. 기능 없는 runtime을 wrapper 이름만으로 보완했다고 하지 않는다. |
+| 실패와 복구 | 임시 continuation은 권위 업무 상태가 아니다. Worker crash 뒤 현재 Request에서 읽기를 재시도하거나 사용자에게 한계를 알린다. 읽기 실패와 부분 coverage를 남긴다. 동일 input revision의 누적 읽기 및 semantic 연산 예산과 deadline은 Request Controller와 Broker의 예산 기록에 남겨 Worker 재시도로 초기화하지 않는다. 유한 예산에서 종료한다. 최종 commit과 Action 전송은 host의 내구 경계를 따른다. |
+| 지원 목표와 U | 조건 보완과 정정 기능은 유지 목표. 중단 및 재개 가능한 read callback, 근거 주입, 격리 session, 취소와 receipt 전달은 U-03/04/07/08로 미확인이다. 기능 없는 runtime을 wrapper 이름만으로 보완했다고 하지 않는다. |
 
-이 안의 핵심은 읽기 횟수를 늘리는 것이 아니라 **근거를 읽는 실행체와 중간 상태의 소유권**이다. 05에서는 공통 읽기 및 연산 예산 조건을 두어 구조 효과와 예산 효과를 구별해야 한다. 같은 모델의 반복 검토는 독립 정답 검증이 아니다.
+이 안의 핵심은 **완료된 중간 제안과 새 호출 사이를 host가 잇는 구조를, 중단 및 재개 가능한 실행 계약으로 바꾸는 것**이다. session과 KV 격리는 target에도 있다. Target의 cache 및 prefix 재사용이 불가능하거나 A가 prefill을 반드시 줄인다고 가정하지 않는다. 동일한 호출, Context와 예산을 유지한 채 제어 코드만 Worker로 옮겼다면 별도 구조 효과의 근거가 없다. 제안한 runtime 계약을 확보하지 못하면 그 차이는 성립 미확인으로 남긴다. 05에서는 공통 읽기 및 연산 예산으로 구조와 예산 효과를 구별하며 API 호출 수가 줄었다고 연산 예산까지 줄었다고 세지 않는다. 같은 모델의 반복 검토는 독립 정답 검증이 아니다.
 
 | 관점 | A에서 확인할 품질 경로와 조건 |
 | --- | --- |
 | V-01 기능 정확성 | 읽기 결과를 잇는 중간 상태가 조건 보완을 도울 수 있다. 반대로 오래된 임시 field나 부적절한 읽기 계획이 오류를 이어갈 수 있어 최종 read set 검증이 필요하다. |
 | V-02 기능 적절성 | 필요한 추가 자료를 스스로 확보하면 사용자 재선택을 줄일 수 있다. 근거가 모호한 경우의 질문까지 없애지는 않는다. |
 | V-03 기능 완전성 | 02 P-01/03 기능을 유지하는 설계 목표. callback 미지원과 접근할 수 없는 source는 실제 지원 미확인 또는 제한으로 남긴다. |
-| V-04 상호작용 반응성 | host 왕복이 줄 수 있지만 Worker가 오래 점유하면 유효한 질문과 정정 응답이 늦어진다. 입력 stop은 이 실행체 밖에 둔다. |
-| V-05 VIA 귀속 요청 완료 시간 | 왕복 감소와 연속 추론, 추가 읽기, 취소 후 재처리 비용을 함께 본다. Agent 업무 시간을 단축한다는 주장은 없다. |
-| V-06 자원 활용성과 수용량 | 지속 KV와 Worker 동시 작업, broker 비용이 추가된다. weights는 공유하며 Worker마다 모델을 만들지 않는다. |
+| V-04 상호작용 반응성 | 중간 제안 종료와 host 재제출 대기를 줄일 가능성이 있으나 실제 이득은 미확인이다. Worker의 긴 실행이나 점유로 질문과 정정 응답이 늦어질 수 있다. 입력 stop은 이 실행체 밖에 둔다. |
+| V-05 VIA 귀속 요청 완료 시간 | 재개 계약이 줄이는 재조립 및 재호출 비용과 broker 읽기, KV 보관, handle 무효 뒤 재처리 비용을 함께 본다. Agent 업무 시간을 단축한다는 주장은 없다. |
+| V-06 자원 활용성과 수용량 | 읽기 대기 중의 pinned KV, 동시 Worker와 broker 비용을 본다. Target에도 session/KV가 있으므로 전체 KV를 A의 순증가로 세지 않는다. weights는 공유하며 Worker마다 모델을 만들지 않는다. |
 | V-07 결함 허용성과 복구성 | 임시 작업만 폐기할 수 있지만 긴 읽기 진행은 잃는다. 재시도 가능 읽기와 commit 이후 효과를 구별한다. |
 | V-08 변경 용이성과 모듈성 | read callback 형식 변경은 Worker, Broker와 Model Access에 걸친다. source 형식은 기존 Context Manager port로 흡수할 수 있으나 의미 변화까지 자동 격리되지는 않는다. |
-| V-09 분석 및 시험 용이성 | read plan, receipt, input revision과 최종 proposal 연결이 필요하다. 하나의 긴 모델 session 내부만 보이면 오히려 원인 분리가 어렵다. |
+| V-09 분석 및 시험 용이성 | read plan, receipt, input revision과 최종 proposal 연결이 필요하다. 하나의 긴 모델 session 내부만 보이면 오히려 원인 분리가 어렵다. Broker의 지연과 잘못된 revision, 재개 handle 무효를 통제할 시험 경계가 필요하며 runtime 지원은 미확인이다. |
 | V-10 기밀성 | 지속 session과 중간 읽기에 자료가 더 남을 수 있다. 현재 정책 검사, 철회와 KV 폐기까지 비용에 넣는다. |
 | V-11 상호운용성과 공존성 | callback 계약 의존성이 늘고 긴 추론이 다른 앱과 자원을 공유한다. 지원되지 않는 모델에 동등 연동을 가정하지 않는다. |
 | V-12 조작 용이성과 사용자 오류 방지 | 실제 제시된 질문에 답을 연결하는 host 규칙은 유지한다. 늦은 Worker 질문이 새 질문 focus를 덮지 않도록 한다. |
 | V-13 설치 용이성 | Worker와 Broker의 배포 및 호환 확인이 생긴다. 같은 제품에 묶을 수 있지만 설치 부담의 실제 크기는 미확인이다. |
 
-**05로 가져갈 판단:** 연쇄적인 근거 보완이 있는 조건과 기본 Context만으로 끝나는 조건을 나눈다. host 왕복이 작고 session 유지나 잘못된 읽기가 더 비싸다면 대안의 시간 및 정확성 이점 가설은 약해진다.
+**05로 가져갈 판단:** 연쇄적인 근거 보완이 있는 조건과 기본 Context만으로 끝나는 조건을 나눈다. target도 같은 정도로 상태를 재사용하거나 Context 재조립 비용이 작고 대기 KV 유지 및 잘못된 읽기가 더 비싸면 이점 가설은 약해진다. 실제 runtime이 같은 실행의 중단과 재개를 지원하지 않으면 이 구조 스케치는 그대로 실현되지 않는다.
 
 <a id="s-02"></a>
 ### S-02. 말한 당시의 화면을 나중에 해석할 것인가, 미리 구조화할 것인가
@@ -120,9 +121,9 @@ A는 발화 뒤 수행하던 지칭 준비의 일부를 별도 producer와 Deriv
 | V-04 상호작용 반응성 | 이미 준비된 객체면 결합이 짧아질 수 있으나 producer backlog이면 대기 | 선택 뒤 경로는 짧아질 수 있으나 사전 UI 준비는 사용자 수고. 미지원 안내는 유효 처리 성공이 아님 |
 | V-05 VIA 귀속 요청 완료 시간 | 준비 비용 이동과 요청 때 재확인, 추론 경합을 함께 봄 | 연속 관측 비용이 줄 수 있으나 패키지 검증과 재요청 비용을 포함. 사람의 선택 시간은 별도 |
 | V-06 자원 활용성과 수용량 | 객체 저장, 갱신, background vision과 raw fallback 비용 추가 | 연속 buffer와 producer 제거 여지, 패키지와 이미지 해석 비용은 남음 |
-| V-07 결함 허용성과 복구성 | producer 장애와 객체/raw 불일치 추가. 파생 상태를 재생산하는 비용 | 관측 process 감소. 보관되지 않은 선택은 잃고 정상 연속 지칭 복구는 못 함 |
+| V-07 결함 허용성과 복구성 | producer 장애와 객체/raw 불일치 추가. 파생 상태를 재생산하는 비용 | 연속 관측 작업과 임시 상태는 줄지만 UI/Core process와 그 장애 경계는 남음. 보관되지 않은 선택은 잃고 자연 연속 지칭은 미지원 |
 | V-08 변경 용이성과 모듈성 | UI schema 변경이 객체 변환과 저장 version까지 전파 | source의 selection/capture API 변화에 의존. 시간 추적 변환은 줄어듦 |
-| V-09 분석 및 시험 용이성 | 객체 생성 근거와 발화 결합을 구분해 남겨야 오류를 찾음 | 패키지 단위 시험은 가능하나 원래 자연 지칭의 실패 자료가 사라질 수 있음 |
+| V-09 분석 및 시험 용이성 | 객체 생성 근거와 발화 결합을 구분해 남기고 producer gap, 시각 오차와 늦은 객체 갱신을 통제할 시험 경계 필요 | 패키지 생성 뒤 source 변경과 권한 철회를 통제해 판정할 수 있어야 함. 원래 자연 지칭의 실패 자료가 사라지는 한계는 남음 |
 | V-10 기밀성 | 객체 이력도 보호자료이며 raw와 함께 철회 및 삭제 필요 | 수집 시점과 범위가 좁지만 선택 패키지의 보관과 제공 권한 검사는 필요 |
 | V-11 상호운용성과 공존성 | UI 구조 지원 차이, background vision의 다른 앱 경합 | 선택 API 지원과 수동 crop 대체 범위에 의존. 연속 부하는 줄어들 여지 |
 | V-12 조작 용이성과 사용자 오류 방지 | 오래된 객체를 현재 선택처럼 보여주지 않아야 함 | 선택 확정이 눈에 보이나 잘못 봉인한 대상을 그대로 쓸 위험 |
@@ -151,7 +152,7 @@ A는 발화 뒤 수행하던 지칭 준비의 일부를 별도 producer와 Deriv
 | V-06 자원 활용성과 수용량 | helper weights, vector와 manifest, 초기 색인, 재색인, 삭제와 fallback 유지 비용이 추가된다. 요청 밖 비용도 포함한다. |
 | V-07 결함 허용성과 복구성 | 원본과 index의 불일치, 부분 갱신과 손상을 처리해야 한다. fallback이 있더라도 의미 검색의 동일 기능 복구는 아니다. |
 | V-08 변경 용이성과 모듈성 | 새 source, embedding 차원 또는 청크 표현 변경이 adapter뿐 아니라 재색인, manifest와 검증에 영향을 준다. 검색 계약으로 호출부를 가릴 수 있는 범위와 구별한다. |
-| V-09 분석 및 시험 용이성 | 후보 목록, index/source version과 확정 근거가 연결되어야 발견 실패와 해석 실패를 구분할 수 있다. 전체 원문 로그는 필수가 아니다. |
+| V-09 분석 및 시험 용이성 | 후보 목록, index/source version과 확정 근거가 연결되어야 발견 실패와 해석 실패를 구분할 수 있다. 전체 원문 로그는 필수가 아니다. Worker 갱신을 멈추거나 삭제 뒤 늦은 색인 commit을 전달해 결과 사용 차단을 확인할 시험 경계도 필요하다. |
 | V-10 기밀성 | vector와 snippet도 파생 보호자료다. 읽기 허용과 지속 보관 허용을 구별하고 철회 이후 신규 사용 차단과 purge를 수행한다. |
 | V-11 상호운용성과 공존성 | source 열거 및 revision 지원과 embedding runtime 호환에 의존한다. background 색인이 다른 앱의 자원을 사용할 수 있다. |
 | V-12 조작 용이성과 사용자 오류 방지 | 의미 유사도를 유일 정답처럼 표시하지 않는다. 후보 출처와 구별 단서를 사용자에게 제시해야 한다. |
@@ -192,9 +193,9 @@ B의 재시작 뒤에는 확인 가능한 기존 Task와 결과를 보여주되 
 | V-06 자원 활용성과 수용량 | Runtime, timer, signal/continuation 기록과 조회 view 유지 비용 | 제거한 내구 그래프 비용 감소 가능. 열린 세션의 메모리와 Task 원장은 남음 |
 | V-07 결함 허용성과 복구성 | 대기 재개를 runtime 계약에 맡길 수 있으나 activity 전달과 외부 실행의 불일치는 별도 처리 | 그래프와 질문 복구 능력이 명시적으로 낮아짐. 프로세스 재시작은 정상 기능 복구가 아님 |
 | V-08 변경 용이성과 모듈성 | 새로운 대기 유형은 workflow로 표현 가능. 실행 중 continuation version과 activity 계약 이행 부담 추가 | 내구 그래프 migration은 없어지지만 변경 시 살아 있는 대기를 잃거나 drain해야 함 |
-| V-09 분석 및 시험 용이성 | signal, activity와 domain 사건의 연결로 재개 원인 분석 가능. runtime 이력만으로 실제 외부 효과 판정 불가 | 세션 종료 전 최소 원인 기록이 없으면 사후 분석 범위 축소. 임시 상태 전체 로그 저장으로 내구 그래프를 몰래 재도입하지 않음 |
+| V-09 분석 및 시험 용이성 | signal, activity와 domain 사건을 연결하고 답변, terminal, timeout의 순서를 통제할 시험 경계 필요. runtime 이력만으로 외부 효과 판정 불가 | 세션 종료 전 최소 기록이 없으면 사후 분석 범위 축소. 재시작을 주입해 잃은 그래프와 남은 Task를 구별해야 함. 임시 상태 전체 로그로 내구 그래프를 몰래 재도입하지 않음 |
 | V-10 기밀성 | signal/continuation에 민감한 payload를 복제하지 않고 참조 사용. 삭제 및 철회 전파 대상 증가 | 임시 자료 수명은 짧아질 수 있지만 남는 Conversation/Task 자료의 권한 및 삭제 의무는 동일 |
-| V-11 상호운용성과 공존성 | Agent event/질문을 signal로 바꾸는 계약 추가. 내부 timer가 Agent 기능을 대신하지 않음 | 동일 Agent 지원 수준. 메모리 절약 가능성은 대기 부하와 잔존 runtime에 따라 다름 |
+| V-11 상호운용성과 공존성 | Agent event/질문을 signal로 바꾸는 계약 추가. 내부 timer가 Agent 기능을 대신하지 않음. timer 및 signal/activity 재개가 공유 CPU와 IO를 사용하므로 다른 PC 앱과의 공존성도 미확인 | 동일 Agent 지원 수준. 메모리 절약 가능성은 대기 부하와 잔존 runtime에 따라 다름 |
 | V-12 조작 용이성과 사용자 오류 방지 | 실제 제시 focus와 유효 continuation을 표시해야 늦은 승인을 막음 | 재시작 뒤 남은 Task와 잃은 요청을 분명히 구별해야 중복 재요청을 줄임 |
 | V-13 설치 용이성 | 내장 가능한 runtime이라도 version 및 상태 호환 관리가 추가됨 | 별도 workflow dependency는 없으나 target도 원래 그런 dependency는 없음. 그래프 제거가 자동 설치 이익은 아님 |
 
@@ -213,15 +214,15 @@ B의 재시작 뒤에는 확인 가능한 기존 Task와 결과를 보여주되 
 
 | 관점 | A에서 확인할 품질 경로와 조건 |
 | --- | --- |
-| V-01 기능 정확성 | 경로별 불일치와 handoff 오류를 줄일 여지가 있지만 모든 직접 질문이 정규 전사와 Core 해석의 오류에 노출된다. 같은 모델 사용은 독립 검증이 아니다. |
+| V-01 기능 정확성 | 경로별 불일치와 handoff 오류를 줄일 여지가 있다. Target S2S도 정규 전사와 input_echo 대조를 사용하므로 ASR 의존성을 A만의 비용으로 세지 않는다. A는 VoiceProposal의 자체 분류와 원음 활용 경로를 정규 입력 기반 Request Interpreter의 semantic 처리로 바꾸므로 오류 유형과 음성 단서 보존의 차이를 확인해야 한다. 같은 모델 사용은 독립 검증이 아니다. |
 | V-02 기능 적절성 | 직접 답변에서 후속 업무로 이어지는 사용자 흐름은 유지 목표. 경로가 단일하다는 이유만으로 사용자 단계가 줄었다고 주장하지 않는다. |
 | V-03 기능 완전성 | 일반 질문 답변은 유지하되 B-03의 S2S 직접 응답은 포기한다. 음성의 풍부한 표현 보존 여부도 실제 SpeechRender 지원으로 확인한다. |
-| V-04 상호작용 반응성 | 단순 자체 지식 질문도 Core 확정을 거쳐 첫 Voice를 내므로 직접 S2S보다 대기가 늘 수 있다. 맥락 요청에서 불필요한 speculative 작업은 줄일 여지가 있다. |
+| V-04 상호작용 반응성 | 양안 모두 host 확정을 거친다. A는 단순 자체 지식 질문도 Request Interpreter의 semantic 호출 뒤 SpeechRender로 이어지므로 target의 speculative 직접 경로보다 첫 Voice 대기가 늘 수 있다. 맥락 요청에서 불필요한 speculative 작업은 줄일 여지가 있다. |
 | V-05 VIA 귀속 요청 완료 시간 | handoff와 미사용 생성 제거, 모든 질문의 Core 처리 및 SpeechRender 의존성을 함께 본다. 첫 음성이 빠른 것과 최종 내용 전달은 구별한다. |
 | V-06 자원 활용성과 수용량 | speculative generation/buffer가 줄지만 Core 부하가 늘 수 있다. 같은 weights를 쓰므로 Omni 모델 하나가 통째로 줄어드는 효과는 없다. |
-| V-07 결함 허용성과 복구성 | direct/Core 경로 전환 실패는 줄일 수 있으나 공통 Core 장애가 모든 답변을 막는다. publication 복구와 입력 경로는 별도다. |
+| V-07 결함 허용성과 복구성 | direct/Core 전환 실패는 줄일 수 있다. Core process 장애는 target의 S2S admission과 publication도 막는 공통 한계다. Request Interpreter의 의미 제안만 실패하고 host admission 및 게시가 살아 있는 국소 장애에서는 target의 좁은 직접 경로가 남을 가능성과 A의 전 경로 의존성을 구별한다. 실제 격리 가능성은 미확인이다. |
 | V-08 변경 용이성과 모듈성 | VoiceProposal와 direct admission 연동을 제거한다. SpeechRender의 Text/audio 대응 계약 변경은 여전히 Model Access, Response Manager와 전달 검증에 영향을 준다. |
-| V-09 분석 및 시험 용이성 | 한 semantic commit에서 게시까지 추적할 수 있다. 전사, 해석, 생성 및 실제 전달 원인은 계속 구분해야 한다. |
+| V-09 분석 및 시험 용이성 | 한 semantic commit에서 게시까지 추적할 수 있다. 전사, 해석, 생성 및 실제 전달 원인은 계속 구분해야 한다. semantic 실패, 늦은 generation과 receipt, 출력 중단을 각각 통제할 시험 경계가 필요하다. |
 | V-10 기밀성 | target의 직접 경로는 current-Turn-only다. Core 경로에 필요 이상의 개인 Context를 넣으면 노출 범위가 늘 수 있으므로 최소 자료 준비가 필요하다. |
 | V-11 상호운용성과 공존성 | VoiceProposal 없는 runtime의 연동 여지가 생기나 SpeechRender와 정규 근거 지원은 필요하다. Core 경합은 다른 앱 부하에 따라 다르다. |
 | V-12 조작 용이성과 사용자 오류 방지 | 사용자에게 경로 선택을 요구하지 않는다. 실제 게시와 audible 범위, 중단과 Task 취소 구별은 같은 UI 계약으로 유지한다. |
@@ -250,7 +251,7 @@ U-01/03/08의 native partial/final, revision, 실제 발화 시각과 취소 지
 | V-06 자원 활용성과 수용량 | ASR weights와 CPU 작업은 제거되지만 Omni의 인식 session, KV 및 연산 부담이 늘 수 있다. 총 메모리와 지원 부하의 이익은 미확인이다. |
 | V-07 결함 허용성과 복구성 | ASR 별도 고장은 없어지나 Omni 장애가 인식과 의미 처리를 함께 중단한다. backlog와 근거 gap을 복구해야 한다. |
 | V-08 변경 용이성과 모듈성 | ASR 교체 계약은 없어지지만 모델 교체 시 native evidence의 시각, revision, 해석과 Voice 계약을 함께 맞춰야 한다. |
-| V-09 분석 및 시험 용이성 | 인식과 의미 오류를 구분할 관측이 더 어려울 수 있다. native event와 sample 대응 자료가 실제 제공되는지 확인한다. |
+| V-09 분석 및 시험 용이성 | 인식과 의미 오류를 구분할 관측이 더 어려울 수 있다. native event와 sample 대응 자료가 실제 제공되는지 확인한다. Adapter 경계의 event 유실과 역순 시험만으로 실제 inference의 인식 진행을 입증할 수 없으므로 runtime 경합과 중단도 통제할 수 있는지 확인해야 한다. |
 | V-10 기밀성 | target도 원음을 Omni에 보낸다. Omni의 새 원음 노출이라는 가짜 차이는 없다. 제거된 ASR buffer와 native session 보관 및 철회 차이를 본다. |
 | V-11 상호운용성과 공존성 | native 계약 지원 모델로 선택 범위가 좁아질 수 있다. CPU 감소와 accelerator 경합 증가는 외부 앱 부하별로 다르다. |
 | V-12 조작 용이성과 사용자 오류 방지 | 지연된 인식 중 입력이 접수됐는지와 실제 제어 효력을 구별해야 한다. 녹음 표시만으로 정정이 반영됐다고 알리지 않는다. |
