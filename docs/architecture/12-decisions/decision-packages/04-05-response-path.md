@@ -28,11 +28,13 @@
 
 ## 4. 같은 요청을 따라가 보기
 
+양안의 Request Interpreter는 Model Access를 통해 semantic 모델을 사용한다. 구조도에서는 이 공통 왕복과 기본 Context 준비를 생략하고 응답 생성 경로를 확대했다. T의 ⑥~⑧은 직접 응답을 보류했다가 허용하는 경로다. Core로 넘어간 응답은 승인 Text의 SpeechRender와 실제 전달을 연결한다.
+
 | 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
 | 입력과 제안 | ① Interaction Manager가 원음을 Model Access에 보내 VoiceProposal을 요청한다. ② Model Access가 VoiceProposal과 보류한 generation handle을 반환한다. ③ Interaction Manager가 정규 입력과 VoiceProposal을 Request Controller에 전달한다. | ① Interaction Manager가 정규 입력을 Request Controller에 전달한다. ② Request Controller가 모든 요청을 Request Interpreter에 보낸다. ③ Request Interpreter가 semantic proposal을 Request Controller에 반환한다. |
 | Core가 필요한 경우 | ④a Request Controller가 직접 처리할 수 없는 요청을 Request Interpreter에 보낸다. ④b Request Interpreter가 semantic proposal을 반환한다. current-Turn-only 요청은 이 우회 없이 좁은 직접 경로를 사용할 수 있다. | 모든 요청이 ②와 ③의 Core 경로를 거친다. S2S 직접 기능은 미지원이다. |
-| 확정과 음성 생성 | ⑤ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑥ Response Manager가 보류 generation을 release하거나 SpeechRender를 요청한다. ⑦ Model Access가 음성 결과를 Response Manager에 반환한다. | ④ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑤ 승인 Text는 음성 생성을 기다리지 않고 게시할 수 있다. ⑥ Response Manager가 승인 Text로 SpeechRender를 요청한다. ⑦ Model Access가 음성 결과를 반환한다. |
+| 확정과 음성 생성 | ⑤ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑥ Response Manager가 허용된 response와 보류 handle을 확인한다. ⑦ Response Manager가 Interaction Manager에 해당 generation의 release를 지시한다. 직접 경로의 음성 스트림은 Interaction Manager의 Model Access 연동으로 이어진다. | ④ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑤ 승인 Text는 음성 생성을 기다리지 않고 게시할 수 있다. ⑥ Response Manager가 승인 Text로 SpeechRender를 요청한다. ⑦ Model Access가 음성 결과를 반환한다. |
 | 사용자 전달 | ⑧ Response Manager가 Text 게시와 Voice 재생을 Interaction Manager에 요청한다. Interaction Manager가 실제 전달 receipt를 남긴다. | ⑧ Response Manager가 검사한 Voice를 Interaction Manager에 전달한다. 게시된 Response는 같은 대화의 후속 업무 근거로 남는다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가

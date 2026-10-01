@@ -24,15 +24,15 @@
 
 [그림 크게 보기](./diagrams/stage4-s06-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s06-comparison.drawio)
 
-검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 인식 근거 생산자가 달라지는 구간이다. 박스 안에는 Component, 논리 실행체 또는 자료 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 점선은 생산자가 Model Access에 반환하는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-06의 음성 근거 생산 경계만 보여주며 전체 VIA 배치도가 아니다.
+큰 VIA 경계 안에는 연동 코드를, 밖에는 모델 의존성을 두었다. 모델 내부와 학습이 VIA 책임 밖이라는 뜻이며 원격 서버 배치를 뜻하지 않는다. Model Access는 연동 책임을 나타내며 하나의 process가 아니다. 그 안에 독립 Speech Input Worker와 Shared Inference Service의 실행 경계를 펼쳤다. 두 모델의 가중치는 PC 안에 배치될 수 있다. 공통 Component는 같은 위치에 놓았고, 파랑은 비교할 구조와 확대 대상이다. 점선 화살표는 모델에서 adapter로, adapter에서 Interaction Manager로 돌아오는 근거를 나타낸다.
 
 ## 4. 같은 요청을 따라가 보기
 
 | 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
 | 원음 전달 | Interaction Manager는 추론 밖에서 capture와 local stop을 수행한다. ① 원음을 Speech Input Worker의 독립 인식 경로에 보낸다. ② 같은 원음을 Shared Inference Service의 Omni 경로에도 보낸다. | Interaction Manager의 capture와 local stop은 동일하다. ① 원음을 Shared Inference Service의 Omni 경로에 보낸다. 독립 Speech Input Worker는 없다. |
-| 근거 반환 | ③ Speech Input Worker가 전사 revision, sample 시각과 gap을 Model Access에 반환한다. ④ Shared Inference Service가 Omni 해석 결과를 Model Access에 반환한다. | ② Native Evidence Producer가 native 전사 event와 시각을 Model Access에 반환한다. Native Evidence Adapter는 없는 시각 근거를 만들어내지 않는다. |
-| canonical 입력 | ⑤ Model Access가 두 producer의 근거, revision과 incarnation을 구별해 SpeechEvidence와 Input Record에 기록한다. 중요한 불일치는 보존하고 재확인한다. | ③ Model Access가 native event를 canonical 입력으로 변환해 기록한다. 단일 producer의 자기 일치는 독립 검증으로 보지 않는다. |
+| 근거 반환 | ③ Speech Input Worker의 adapter가 전사 revision, sample 시각과 gap을 Model Access 계약으로 Interaction Manager에 반환한다. ④ Shared Inference Service의 Omni adapter도 해석 결과를 같은 연동 계약으로 Interaction Manager에 반환한다. | ② Shared Inference Service의 Native Evidence Adapter가 native 전사 event와 시각을 Model Access 계약으로 Interaction Manager에 반환한다. 모델이 제공하지 않는 시각 근거를 만들어내지 않는다. |
+| canonical 입력 | ⑤ Interaction Manager가 두 producer의 근거, revision과 incarnation을 구별해 정규 입력 기록을 구성한다. 중요한 불일치는 보존하고 재확인하며, Request Controller가 입력 revision 변경을 최종 제어한다. | ③ Interaction Manager가 native event를 정규 입력 기록에 연결한다. Request Controller의 입력 revision 제어는 유지한다. 단일 producer의 자기 일치는 독립 검증으로 보지 않는다. |
 | Omni 장애 | 독립 ASR는 전사를 계속 만들 수 있지만 의미 이해와 Voice 생성은 불가하다. | capture는 계속되지만 recognition도 중단된다. 복구할 수 없는 구간은 gap으로 남긴다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가

@@ -58,7 +58,13 @@ InputStarted 뒤 값싼 기본 Context 준비는 사용자가 말하는 동안 �
 
 [그림 크게 보기](./diagrams/stage4-s01-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s01-comparison.drawio)
 
-그림에서 검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 Component와 화살표는 구조가 달라지는 구간이다. 박스 안에는 Component 또는 논리 실행체 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-01의 실행 경계만 보여주며 전체 VIA 배치도가 아니다.
+위 구조도는 같은 기본 Context에서 출발한 뒤 **누가 추가 읽기를 진행하고 해석 실행의 수명을 소유하는지** 비교한다. VIA의 비교 대상과 모델 의존성을 구분하고, 공통 Component는 같은 위치에 놓았다. 원본 소유자의 읽기 접점은 내부 owner와 외부 source를 묶어 펼친 참조이며, 모두 VIA 밖에 배치한다는 뜻이 아니다. 파랑은 구조 차이 또는 확대 대상이며 추천 표시가 아니다. 자세한 표현 규칙은 [설계도 작성 기준](./diagram-design-guide.md)에 있다.
+
+아래 실행 상세도는 구조도의 왕복 호출을 시간 순서로 펼친 것이다. 위쪽 ①~⑤는 두 안의 공통 준비다. 아래쪽은 T의 첫 호출 종료와 두 번째 호출, A의 한 작업 안에서 중단과 재개를 나란히 보여준다. 가는 세로 막대는 호출 또는 작업의 수명을 나타내며 실제 소요 시간을 측정한 길이가 아니다. 실선은 요청, 점선 화살표는 반환이다.
+
+![S-01 공통 준비와 호출 수명 실행 상세](./diagrams/stage4-s01-execution-detail.svg)
+
+[실행 상세 크게 보기](./diagrams/stage4-s01-execution-detail.svg) / [실행 상세 draw.io](./diagrams/stage4-s01-execution-detail.drawio)
 
 ### 4.1 T: 실제 target의 ⑥~⑱
 

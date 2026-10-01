@@ -1,63 +1,154 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
-<title id="title">S-05  |  응답을 어느 경로에서 만들고 사용자에게 전달하는가</title><desc id="desc">공통 Component는 같은 위치 / T는 좁은 S2S 직접 경로 보유 / A는 모든 응답을 Core에서 확정</desc>
-<defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#171717"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1458C0"/></marker></defs>
-<rect width="2560" height="1440" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
-<g id="panel0"><rect x="48" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<g id="panel1"><rect x="1312" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<polyline id="0-edge-audio" points="848,282.5 1048,282.5 1048,645 1018,645 1018.0,685" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-voice-proposal" points="1208,720.0 1223,720 1223,282.5 848,282.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="0-edge-canonical" points="648.0,315 648.0,430" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-core" points="448,465.0 278,465 278,645 278.0,685" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-core-return" points="468,720.0 498,720 498,465 448,465.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
-<polyline id="0-edge-admit" points="648.0,500 648.0,940" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-release" points="848,975.0 1018,975 1018.0,755" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-audio-return" points="828,720.0 798,720 798,975 848,975.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="0-edge-deliver" points="648.0,1010 648.0,1170" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-canonical" points="1912.0,315 1912.0,430" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-core" points="1712,465.0 1542,465 1542,645 1542.0,685" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-core-return" points="1732,720.0 1762,720 1762,465 1712,465.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="1-edge-admit" points="1912.0,500 1912.0,940" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-text" points="1712,975.0 1542,975 1542,1202.5 1712,1202.5" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-speech" points="2112,975.0 2282,975 2282.0,755" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-audio-return" points="2092,720.0 2062,720 2062,975 2112,975.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="1-edge-voice" points="1912.0,1010 1912.0,1170" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<g id="0-input"><rect x="448" y="250" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="278" font-size="20" font-weight="700" fill="#171717">Interaction Manager (입력)</text></g>
-<g id="0-rc"><rect x="448" y="430" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="458" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
-<g id="0-ri"><rect x="88" y="685" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="104" y="713" font-size="20" font-weight="700" fill="#171717">Request Interpreter</text></g>
-<g id="0-ma"><rect x="828" y="685" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="844" y="713" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
-<g id="0-rm"><rect x="448" y="940" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="968" font-size="20" font-weight="700" fill="#171717">Response Manager</text></g>
-<g id="0-output"><rect x="448" y="1170" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="1198" font-size="20" font-weight="700" fill="#171717">Interaction Manager (출력)</text></g>
-<g id="1-input"><rect x="1712" y="250" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="278" font-size="20" font-weight="700" fill="#171717">Interaction Manager (입력)</text></g>
-<g id="1-rc"><rect x="1712" y="430" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="458" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
-<g id="1-ri"><rect x="1352" y="685" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1368" y="713" font-size="20" font-weight="700" fill="#171717">Request Interpreter</text></g>
-<g id="1-ma"><rect x="2092" y="685" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="2108" y="713" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
-<g id="1-rm"><rect x="1712" y="940" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="968" font-size="20" font-weight="700" fill="#171717">Response Manager</text></g>
-<g id="1-output"><rect x="1712" y="1170" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="1198" font-size="20" font-weight="700" fill="#171717">Interaction Manager (출력)</text></g>
-<text x="863" y="600" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① 원음으로 VoiceProposal 요청</text>
-<text x="913" y="380" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② VoiceProposal와 보류 handle 반환</text>
-<text x="568" y="385" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">③ 정규 입력과 VoiceProposal 전달</text>
-<text x="103" y="590" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④a 직접 처리 불가 시 Core 호출</text>
-<text x="503" y="590" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④b semantic proposal 반환</text>
-<text x="533" y="875" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ 현재성 확인 뒤 게시 허용</text>
-<text x="833" y="900" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑥ 보류 generation release 또는 SpeechRender</text>
-<text x="633" y="820" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦ 음성 결과 반환</text>
-<text x="533" y="1135" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑧ Text 게시와 Voice 재생</text>
-<text x="1797" y="385" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 정규 입력 전달</text>
-<text x="1382" y="590" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 모든 요청을 Core에 호출</text>
-<text x="1767" y="590" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ semantic proposal 반환</text>
-<text x="1797" y="875" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④ 현재성 확인 뒤 게시 허용</text>
-<text x="1382" y="1100" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ 승인 Text 즉시 게시</text>
-<text x="2102" y="900" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑥ 승인 Text로 SpeechRender 요청</text>
-<text x="1897" y="820" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦ 음성 결과 반환</text>
-<text x="1797" y="1135" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑧ 검사 뒤 Voice 재생</text>
-<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-05  |  응답을 어느 경로에서 만들고 사용자에게 전달하는가</text>
-<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">공통 Component는 같은 위치 / T는 좁은 S2S 직접 경로 보유 / A는 모든 응답을 Core에서 확정</text>
-<text x="48" y="1414" font-size="18" font-weight="400" fill="#171717">VIA / Stage 4 / 구조 탐색, 미채택 대안 / 구현 및 측정 결과 아님</text>
-<text x="72" y="215" font-size="28" font-weight="700" fill="#171717">T  실제 reviewed target</text>
-<text x="1336" y="215" font-size="28" font-weight="700" fill="#171717">A  대안 구조</text>
-<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">박스: Component, 서브시스템, 논리 실행체 또는 저장소 이름 / 번호 화살표: 동작과 순서 / 검정: 공통 / 파랑: 달라지는 구조</text>
-<text x="88" y="1260" font-size="18" font-weight="400" fill="#1458C0">차이: current-Turn-only 요청은 S2S VoiceProposal을 좁은 직접 경로로 처리할 수 있다.</text>
-<text x="88" y="1288" font-size="18" font-weight="400" fill="#1458C0">개인 자료, 화면, Task 또는 과거 대화가 필요하면 ④의 Core 경로로 들어간다.</text>
-<text x="1352" y="1260" font-size="18" font-weight="400" fill="#1458C0">차이: VoiceProposal 직접 경로와 speculative S2S 생성을 제거한다.</text>
-<text x="1352" y="1288" font-size="18" font-weight="400" fill="#1458C0">S2S 직접 기능은 미지원이며, 승인 Text와 SpeechRender로 음성 응답을 만든다.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1660" viewBox="0 0 2560 1660" role="img" aria-labelledby="title">
+<title id="title">자체 지식 응답에 S2S 직접 경로를 남길 것인가?</title>
+<defs>
+<marker id="a233247" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#233247" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+</defs>
+<rect width="2560" height="1660" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<rect id="e1" x="0" y="0" width="2560" height="10" rx="8" fill="#233247" stroke="none" stroke-width="1.5"/>
+<rect id="e7" x="64" y="238" width="48" height="48" rx="6" fill="#233247" stroke="none" stroke-width="1.5"/>
+<rect id="0-via" x="64" y="335" width="1184" height="682" rx="10" fill="#F7F9FC" stroke="#C9D2DE" stroke-width="1.7"/>
+<rect id="0-direct" x="89" y="562" width="502" height="236" rx="10" fill="#EDF4FF" stroke="#195FBD" stroke-width="1.7"/>
+<rect id="e43" x="64" y="1230" width="1184" height="220" rx="8" fill="white" stroke="#C9D2DE" stroke-width="1.5"/>
+<rect id="e44" x="64" y="1230" width="5" height="220" rx="0" fill="#195FBD" stroke="none" stroke-width="1.5"/>
+<rect id="e48" x="1312" y="238" width="48" height="48" rx="6" fill="#195FBD" stroke="none" stroke-width="1.5"/>
+<rect id="1-via" x="1312" y="335" width="1184" height="682" rx="10" fill="#F7F9FC" stroke="#C9D2DE" stroke-width="1.7"/>
+<rect id="e74" x="1337" y="562" width="502" height="236" rx="8" fill="#FAFBFD" stroke="#C9D2DE" stroke-width="1.5" stroke-dasharray="7 5"/>
+<rect id="e81" x="1312" y="1230" width="1184" height="220" rx="8" fill="white" stroke="#C9D2DE" stroke-width="1.5"/>
+<rect id="e82" x="1312" y="1230" width="5" height="220" rx="0" fill="#195FBD" stroke="none" stroke-width="1.5"/>
+<rect id="e92" x="565" y="1552" width="20" height="20" rx="2" fill="#EDF4FF" stroke="#195FBD" stroke-width="1.5"/>
+<polyline id="e6" points="64,211 2496,211" fill="none" stroke="#C9D2DE" stroke-width="2" stroke-linejoin="round"/>
+<polyline id="e19" points="462,445.0 792,445.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e21" points="968.5,488 968.5,630" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e23" points="1020.5,630 1020.5,488" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a233247)"/>
+<polyline id="e25" points="1197,445.0 1214,445 1214,909 1197,909.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e27" points="792,909.0 656,909 656,458 462,458.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e30" points="265.0,952 265.0,1068" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e31" points="309.0,1068 309.0,952" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a233247)"/>
+<polyline id="e37" points="112,445.0 80,445 80,909 112,909.0" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" marker-end="url(#a195FBD)"/>
+<polyline id="e39" points="462,889.0 612,889 612,433 462,433.0" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a195FBD)"/>
+<polyline id="e41" points="287,488 287,624" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5"/>
+<polyline id="e60" points="1710,445.0 2040,445.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e62" points="2216.5,488 2216.5,630" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" marker-end="url(#a195FBD)"/>
+<polyline id="e64" points="2268.5,630 2268.5,488" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a233247)"/>
+<polyline id="e66" points="2445,445.0 2462,445 2462,909 2445,909.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e68" points="2040,909.0 1904,909 1904,458 1710,458.0" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e71" points="1513.0,952 1513.0,1068" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e72" points="1557.0,1068 1557.0,952" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a233247)"/>
+<polyline id="e77" points="2040,895.0 1710,895.0" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" marker-end="url(#a195FBD)"/>
+<polyline id="e79" points="1710,925.0 2040,925.0" fill="none" stroke="#195FBD" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a195FBD)"/>
+<polyline id="e86" points="64,1528 2496,1528" fill="none" stroke="#C9D2DE" stroke-width="2" stroke-linejoin="round"/>
+<polyline id="e88" points="130,1563 178,1563" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" marker-end="url(#a233247)"/>
+<polyline id="e90" points="345,1563 393,1563" fill="none" stroke="#233247" stroke-width="2" stroke-linejoin="round" stroke-dasharray="7 5" marker-end="url(#a233247)"/>
+<g id="0-im" data-node="true"><rect x="112" y="402" width="350" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="126" y="423.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M439 412h10v8h-10z M439 425h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="287.0" y="465.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Interaction Manager</text>
+</g>
+<g id="0-rc" data-node="true"><rect x="792" y="402" width="405" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="806" y="423.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M1174 412h10v8h-10z M1174 425h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="994.5" y="465.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Request Controller</text>
+</g>
+<g id="0-ri" data-node="true"><rect x="792" y="630" width="405" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="806" y="651.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M1174 640h10v8h-10z M1174 653h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="994.5" y="693.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Request Interpreter</text>
+</g>
+<g id="0-rm" data-node="true"><rect x="792" y="866" width="405" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="806" y="887.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M1174 876h10v8h-10z M1174 889h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="994.5" y="929.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Response Manager</text>
+</g>
+<g id="0-ma" data-node="true"><rect x="112" y="866" width="350" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="126" y="887.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M439 876h10v8h-10z M439 889h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="287.0" y="929.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Model Access</text>
+</g>
+<g id="0-omni" data-node="true"><rect x="112" y="1068" width="350" height="84" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="126" y="1089.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">MODEL DEPENDENCY</text>
+<text x="287.0" y="1130.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Shared Omni Model</text>
+</g>
+<g id="0-handle" data-node="true"><rect x="117" y="624" width="440" height="99" rx="5" fill="#EDF4FF" stroke="#195FBD" stroke-width="1.8"/>
+<text x="131" y="645.0" text-anchor="start" font-size="12" font-weight="700" fill="#195FBD">DATA</text>
+<text x="337.0" y="694.0" text-anchor="middle" font-size="23" font-weight="700" fill="#195FBD">VoiceProposal / Generation Handle</text>
+</g>
+<g id="1-im" data-node="true"><rect x="1360" y="402" width="350" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="1374" y="423.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M1687 412h10v8h-10z M1687 425h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="1535.0" y="465.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Interaction Manager</text>
+</g>
+<g id="1-rc" data-node="true"><rect x="2040" y="402" width="405" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="2054" y="423.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M2422 412h10v8h-10z M2422 425h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="2242.5" y="465.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Request Controller</text>
+</g>
+<g id="1-ri" data-node="true"><rect x="2040" y="630" width="405" height="86" rx="5" fill="#EDF4FF" stroke="#195FBD" stroke-width="1.8"/>
+<text x="2054" y="651.0" text-anchor="start" font-size="12" font-weight="700" fill="#195FBD">COMPONENT</text>
+<path d="M2422 640h10v8h-10z M2422 653h10v8h-10z" fill="#EDF4FF" stroke="#195FBD" stroke-width="1.3"/>
+<text x="2242.5" y="693.5" text-anchor="middle" font-size="23" font-weight="700" fill="#195FBD">Request Interpreter</text>
+</g>
+<g id="1-rm" data-node="true"><rect x="2040" y="866" width="405" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="2054" y="887.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M2422 876h10v8h-10z M2422 889h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="2242.5" y="929.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Response Manager</text>
+</g>
+<g id="1-ma" data-node="true"><rect x="1360" y="866" width="350" height="86" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="1374" y="887.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">COMPONENT</text>
+<path d="M1687 876h10v8h-10z M1687 889h10v8h-10z" fill="white" stroke="#233247" stroke-width="1.3"/>
+<text x="1535.0" y="929.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Model Access</text>
+</g>
+<g id="1-omni" data-node="true"><rect x="1360" y="1068" width="350" height="84" rx="5" fill="white" stroke="#233247" stroke-width="1.8"/>
+<text x="1374" y="1089.0" text-anchor="start" font-size="12" font-weight="700" fill="#233247">MODEL DEPENDENCY</text>
+<text x="1535.0" y="1130.5" text-anchor="middle" font-size="23" font-weight="700" fill="#233247">Shared Omni Model</text>
+</g>
+<g id="e2"><text x="64" y="63.0" text-anchor="start" font-size="18" font-weight="700" fill="#5E6D80">VIA  /  ARCHITECTURE REVIEW</text></g>
+<g id="e3"><text x="2496" y="63.0" text-anchor="end" font-size="18" font-weight="700" fill="#5E6D80">S-05   /   STAGE 04</text></g>
+<g id="e4"><text x="64" y="134.0" text-anchor="start" font-size="42" font-weight="700" fill="#233247">자체 지식 응답에 S2S 직접 경로를 남길 것인가?</text></g>
+<g id="e5"><text x="64" y="183.0" text-anchor="start" font-size="24" font-weight="400" fill="#5E6D80">T는 좁은 직접 경로와 Core 경로를 함께 갖는다. A는 모든 요청을 Core에서 해석하고 승인된 Text로 음성을 만든다.</text></g>
+<g id="e8"><text x="88" y="273.0" text-anchor="middle" font-size="27" font-weight="700" fill="white">T</text></g>
+<g id="e9"><text x="132" y="264.0" text-anchor="start" font-size="27" font-weight="700" fill="#233247">직접 경로 + Core 경로</text></g>
+<g id="e10"><text x="132" y="294.0" text-anchor="start" font-size="18" font-weight="400" fill="#5E6D80">실제 reviewed target / current-Turn-only 직접 admission</text></g>
+<g id="e12"><text x="88" y="371.0" text-anchor="start" font-size="18" font-weight="700" fill="#233247">VIA SOFTWARE</text></g>
+<g id="e13"><text x="1224" y="370.0" text-anchor="end" font-size="16" font-weight="400" fill="#5E6D80">논리적 책임 경계</text></g>
+<g id="e20" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="494" y="425.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">③ 정규 입력 + VoiceProposal</text></g>
+<g id="e22" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="826" y="552.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">④a Core 필요 시</text></g>
+<g id="e24" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1015" y="603.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">④b 제안 반환</text></g>
+<g id="e26" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1044" y="806.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">⑤ 게시 허용</text></g>
+<g id="e28" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="668" y="769.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">⑥~⑧ release</text><text x="668" y="793.3" text-anchor="start" font-size="18" font-weight="400" fill="#233247">게시와 재생</text></g>
+<g id="e32"><text x="510" y="1096.0" text-anchor="start" font-size="20" font-weight="400" fill="#5E6D80">공유 weights 한 벌 / Voice와 semantic session 분리</text><text x="510" y="1123.0" text-anchor="start" font-size="20" font-weight="400" fill="#5E6D80">Interaction Manager가 실제 표시, 재생과 local stop 소유</text></g>
+<g id="e34"><text x="113" y="598.0" text-anchor="start" font-size="18" font-weight="700" fill="#195FBD">직접 경로 확대</text></g>
+<g id="e35"><text x="567" y="597.0" text-anchor="end" font-size="16" font-weight="400" fill="#5E6D80">Model Access client</text></g>
+<g id="e38" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="94" y="828.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">① 원음</text></g>
+<g id="e40" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="465" y="523.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">② 제안 + handle</text></g>
+<g id="e42"><text x="119" y="763.0" text-anchor="start" font-size="17" font-weight="400" fill="#195FBD">입력 revision에 묶인 보류 자료 / 추가 실행체 아님</text></g>
+<g id="e45"><text x="89" y="1267.0" text-anchor="start" font-size="18" font-weight="700" fill="#195FBD">DESIGN FOCUS  /  직접 경로의 허용 경계</text></g>
+<g id="e46"><text x="89" y="1309" text-anchor="start" font-size="22" font-weight="400" fill="#233247">현재 질문의 일반 지식만 사용. 개인 자료, 화면, Task나 과거 대화는 Core로 보낸다.</text><text x="89" y="1342" text-anchor="start" font-size="22" font-weight="400" fill="#233247">Request Controller의 허용 뒤 Response Manager가 Interaction Manager에 release한다.</text><text x="89" y="1375" text-anchor="start" font-size="22" font-weight="400" fill="#233247">생성된 음성, 게시 기록, 사용자가 실제로 들은 범위를 구분한다.</text></g>
+<g id="e47"><text x="89" y="1417.0" text-anchor="start" font-size="18" font-weight="400" fill="#956016">정규 전사와 현재 revision 확인은 직접 경로에도 필요하다.</text></g>
+<g id="e49"><text x="1336" y="273.0" text-anchor="middle" font-size="27" font-weight="700" fill="white">A</text></g>
+<g id="e50"><text x="1380" y="264.0" text-anchor="start" font-size="27" font-weight="700" fill="#233247">Core 공통 경로 + SpeechRender</text></g>
+<g id="e51"><text x="1380" y="294.0" text-anchor="start" font-size="18" font-weight="400" fill="#5E6D80">제한 기능 탐색안 / S2S 직접 기능 미지원</text></g>
+<g id="e53"><text x="1336" y="371.0" text-anchor="start" font-size="18" font-weight="700" fill="#233247">VIA SOFTWARE</text></g>
+<g id="e54"><text x="2472" y="370.0" text-anchor="end" font-size="16" font-weight="400" fill="#5E6D80">논리적 책임 경계</text></g>
+<g id="e61" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1742" y="425.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">① 정규 입력</text></g>
+<g id="e63" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="2074" y="552.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">② 모든 요청 해석</text></g>
+<g id="e65" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="2263" y="603.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">③ 제안 반환</text></g>
+<g id="e67" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="2292" y="806.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">④ 게시 허용</text></g>
+<g id="e69" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1916" y="769.0" text-anchor="start" font-size="18" font-weight="400" fill="#233247">⑤ Text</text><text x="1916" y="793.3" text-anchor="start" font-size="18" font-weight="400" fill="#233247">⑧ Voice</text></g>
+<g id="e73"><text x="1758" y="1096.0" text-anchor="start" font-size="20" font-weight="400" fill="#5E6D80">공유 weights 한 벌 / Voice와 semantic session 분리</text><text x="1758" y="1123.0" text-anchor="start" font-size="20" font-weight="400" fill="#5E6D80">Interaction Manager가 실제 표시, 재생과 local stop 소유</text></g>
+<g id="e75"><text x="1367" y="607.0" text-anchor="start" font-size="18" font-weight="700" fill="#5E6D80">제거되는 경로</text></g>
+<g id="e76"><text x="1367" y="657" text-anchor="start" font-size="23" font-weight="400" fill="#5E6D80">VoiceProposal 직접 admission</text><text x="1367" y="694" text-anchor="start" font-size="23" font-weight="400" fill="#5E6D80">speculative S2S generation</text><text x="1367" y="731" text-anchor="start" font-size="23" font-weight="400" fill="#5E6D80">전용 보류 handle과 전환 상태</text></g>
+<g id="e78" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1726" y="859.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">⑥ 승인 Text → SpeechRender</text></g>
+<g id="e80" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1739" y="974.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">⑦ 음성 결과 반환</text></g>
+<g id="e83"><text x="1337" y="1267.0" text-anchor="start" font-size="18" font-weight="700" fill="#195FBD">DESIGN FOCUS  /  생성 경로 단순화와 기능 손실</text></g>
+<g id="e84"><text x="1337" y="1309" text-anchor="start" font-size="22" font-weight="400" fill="#233247">자체 지식 질문도 Request Interpreter를 거친다. Text는 음성 생성 전에 게시할 수 있다.</text><text x="1337" y="1342" text-anchor="start" font-size="22" font-weight="400" fill="#233247">Response Manager → Model Access → 공유 Omni SpeechRender → 음성 결과 반환</text><text x="1337" y="1375" text-anchor="start" font-size="22" font-weight="400" fill="#233247">출력 epoch, 실제 전달 receipt와 Task 후속 연결은 계속 유지한다.</text></g>
+<g id="e85"><text x="1337" y="1417.0" text-anchor="start" font-size="18" font-weight="400" fill="#956016">Core 부하와 SpeechRender 의존성이 늘 수 있다. S2S와 동등한 기능으로 표시하지 않는다.</text></g>
+<g id="e87"><text x="64" y="1569.0" text-anchor="start" font-size="17" font-weight="700" fill="#5E6D80">범례</text></g>
+<g id="e89"><text x="190" y="1568.0" text-anchor="start" font-size="17" font-weight="400" fill="#5E6D80">호출 / 전달</text></g>
+<g id="e91"><text x="405" y="1568.0" text-anchor="start" font-size="17" font-weight="400" fill="#5E6D80">결과 / 복원</text></g>
+<g id="e93"><text x="597" y="1568.0" text-anchor="start" font-size="17" font-weight="400" fill="#5E6D80">구조 차이 또는 확대 대상</text></g>
+<g id="e94"><text x="1020" y="1568.0" text-anchor="start" font-size="17" font-weight="400" fill="#5E6D80">외부 책임 경계 ≠ 원격 배치  |  모델은 on-device 의존성</text></g>
+<g id="e95"><text x="64" y="1615.0" text-anchor="start" font-size="18" font-weight="400" fill="#5E6D80">양안의 공통 semantic 모델 호출은 생략했다. 모든 모델 연동은 Model Access를 통하며 확대 표시는 추가 인스턴스가 아니다.</text></g>
+<g id="e96"><text x="2496" y="1615.0" text-anchor="end" font-size="17" font-weight="400" fill="#5E6D80">설계 탐색  /  미채택 대안  /  미측정</text></g>
 </g></svg>

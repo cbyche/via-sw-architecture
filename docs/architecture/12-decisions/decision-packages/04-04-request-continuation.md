@@ -31,7 +31,7 @@
 | 흐름 | T: 실제 target | 대안 A | 대안 B |
 | --- | --- | --- | --- |
 | 목표와 대기 생성 | ① 확정된 목표가 Request Controller에 도착한다. ② Request Controller가 durable Request Graph와 Pending User Interaction에 목표 관계와 대기 조건을 만든다. ③ graph, 질문 identity와 전이를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Interaction Workflow Runtime에 continuation 시작 signal을 보낸다. ③ runtime이 continuation, signal과 activity intent를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Session Request Coordinator의 메모리에 목표 관계를 만든다. 대기 graph는 State Store에 기록하지 않는다. |
-| 답변 또는 결과 도착 | ④ 사용자 답변 또는 Task 결과가 graph에 들어간다. ⑤ graph가 후속 요청 제안을 Request Controller에 반환한다. | ④ 답변 또는 결과 signal이 runtime에 들어간다. ⑤ runtime이 admission 요청을 Request Controller에 반환한다. | ③ 답변 또는 결과가 세션 coordinator에 들어간다. ④ coordinator가 후속 요청 제안을 Request Controller에 반환한다. |
+| 답변 또는 결과 도착 | ④ Request Controller가 사용자 답변 또는 Task Manager의 결과를 현재 graph와 결합한다. ⑤ Request Controller 내부 전이가 후속 요청을 결정한다. Request Graph는 이 Component가 소유하는 자료이며 별도 실행체가 아니다. | ④ 답변 또는 Task Manager의 결과 signal이 runtime에 들어간다. ⑤ runtime이 admission 요청을 Request Controller에 반환한다. | ③ Request Controller가 답변 또는 Task Manager의 결과를 세션 coordinator에 전달한다. ④ coordinator가 후속 요청 제안을 Request Controller에 반환한다. |
 | 후속 명령 | ⑥ Request Controller가 현재성을 확인한 뒤 Task Manager와 Agent Gateway로 명령을 전달한다. | ⑥ 동일하다. workflow runtime이 Agent 내부 계획이나 실행을 소유하지 않는다. | ⑤ Task, command와 publication 원장은 State Store에 남긴다. ⑥ 현재성을 확인한 뒤 명령을 전달한다. |
 | 재시작 | ⑦ State Store에서 graph를 복원한 뒤 source에서 외부 상태를 다시 확인한다. | ⑦ State Store에서 continuation을 복원한 뒤 current owner와 source를 조정한다. | 목표 관계와 질문은 복원하지 않는다. 기존 Task는 source와 원장으로 확인하고, 잃은 관계는 사용자에게 다시 묻는다. |
 
