@@ -217,7 +217,8 @@ class Plate:
                     vertex(id+'-icon',i['w']-31,9,20,24,'',f'shape=cylinder;fillColor={fill};strokeColor={c};strokeWidth=1.3;',id)
             else:
                 size=i['size'];lines=i['lines']; align=i.get('align','left')
-                width=i.get('width') or max(sum(size*(1 if ord(c)>=0x2E80 else .62) for c in line) for line in lines)+8
+                # Sum integer glyph units: float sum differs between Python versions.
+                width=i.get('width') or max(sum(100 if ord(c)>=0x2E80 else 62 for c in line)*size/100 for line in lines)+8
                 x=i['x']-(width/2 if align=='center' else width if align=='right' else 0)
                 vertex(id,x,i['y'],width,len(lines)*(i.get('leading') or size*1.35)+6,'<br>'.join(html.escape(s) for s in lines),f'text;html=1;whiteSpace=nowrap;overflow=visible;strokeColor=none;fillColor=none;labelBackgroundColor={"white" if k=="label" else "none"};fontColor={i["color"]};fontSize={size};fontFamily=Arial;fontStyle={int(i.get("bold",False))};align={align};verticalAlign=top;spacing=0;')
         return ET.tostring(root,encoding='unicode')+'\n'
