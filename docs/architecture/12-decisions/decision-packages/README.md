@@ -13,12 +13,12 @@
 
 | 질문 | 개별 문서 | 비교 |
 | --- | --- | --- |
-| S-01 | [해석 중 근거를 보완하는 실행](./04-02-semantic-execution.md) | T / A |
-| S-02 | [당시 화면의 근거 생산](./04-03-screen-evidence.md) | T / A / B |
-| S-03 | [숨은 자료의 의미 검색](./04-04-semantic-retrieval.md) | T / A |
-| S-04 | [목표와 질문의 대기 및 재개](./04-05-request-continuation.md) | T / A / B |
-| S-05 | [직접 응답 경로](./04-06-response-path.md) | T / A |
-| S-06 | [음성 입력 근거의 생산자](./04-07-speech-evidence.md) | T / A |
+| S-01 | [해석 중 근거를 보완하는 실행](./04-01-semantic-execution.md) | T / A |
+| S-02 | [당시 화면의 근거 생산](./04-02-screen-evidence.md) | T / A / B |
+| S-03 | [숨은 자료의 의미 검색](./04-03-semantic-retrieval.md) | T / A |
+| S-04 | [목표와 질문의 대기 및 재개](./04-04-request-continuation.md) | T / A / B |
+| S-05 | [직접 응답 경로](./04-05-response-path.md) | T / A |
+| S-06 | [음성 입력 근거의 생산자](./04-06-speech-evidence.md) | T / A |
 
 그림은 각 문서에서 바로 볼 수 있고 SVG 옆에 편집 가능한 draw.io 원본을 연결했다. [그림 여섯 장 모아 보기](./diagrams/stage4-review.html)는 내려받아 브라우저에서 열 수 있다. 대안 수를 맞추려고 새로운 B를 만들지는 않았다.
 
@@ -30,7 +30,7 @@
 
 **이번 리뷰 반영:** V-02 기능 적절성, V-03 기능 완전성, V-04 상호작용 반응성, V-05 VIA 귀속 요청 완료 시간을 각각 분리했다. 기능을 일부 포기한 안도 탐색과 비교에 남기고 지원 범위, 사용자 영향과 얻는 이익을 함께 적는다. 두 시간 관점 모두 Downstream Agent 내부 실행 시간을 외부 조건으로 제외한다. 분리 전 우선순위를 이어받은 전체 순위는 [03-00 §2.1](./03-00-quality-scenarios.md#21-이번-비교의-우선순위)에 있다.
 
-- [4단계 검토 기록](./04-01-structural-review.md): 별도 검토자 3명의 target 대조, 탐색 충분성과 품질 인과 검토. 초안 P2 3건과 이후 그림 P2 3건의 수정 및 재확인, 렌더링과 문서 검사 기록.
+- [4단계 검토 기록](./04-09-structural-review.md): 별도 검토자 3명의 target 대조, 탐색 충분성과 품질 인과 검토. 초안 P2 3건과 이후 그림 P2 3건의 수정 및 재확인, 렌더링과 문서 검사 기록.
 - [3단계 작성자 검토 기록](./03-01-quality-review.md): 요구 보존, 품질 분류, 미검증 지원과 QA 의미 대조. 별도 독립 리뷰를 수행한 기록은 아니다.
 - [2단계 요구와 현재 해결 수단](./02-00-requirements-and-choices.md): 사용자 승인 완료. §2 공통 경계와 §3 요약표가 이번 품질 시나리오의 입력이다.
 - [2단계 독립 검토 기록](./02-01-requirements-review.md): 분류 오류·요구 약화·capability 가정 점검과 보완.
@@ -65,7 +65,7 @@
 | 3. 품질 충돌 | [03-00-quality-scenarios.md](./03-00-quality-scenarios.md) | 사용자 리뷰 후 04 진행 승인 |
 | 3. 작성자 리뷰 | [03-01-quality-review.md](./03-01-quality-review.md) | 대조 및 문서 검사 기록 |
 | 4. 구조 대안 탐색 | [04-00-structural-alternatives.md](./04-00-structural-alternatives.md) | 독립 검토 및 수정 완료, 사용자 리뷰 대기 |
-| 4. 검토 기록 | [04-01-structural-review.md](./04-01-structural-review.md) | 작성자 대조, 독립 지적 반영 및 재확인 기록 |
+| 4. 검토 기록 | [04-09-structural-review.md](./04-09-structural-review.md) | 작성자 대조, 독립 지적 반영 및 재확인 기록 |
 | 5. 강한 대안 비교 | `05-00-comparison-and-selection.md` | 예정·미작성 |
 | 6. DP 선발·상세화 | `06-00-decision-packages.md`, `06-01-<topic>.md`부터 개별 자료 | 예정·미작성 |
 

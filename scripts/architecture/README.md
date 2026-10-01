@@ -27,7 +27,7 @@ digest는 Git에 보존하고 WAV 원본은 로컬 evidence로 유지한다.
 
 이전 일곱 후보의 그림 생성기는 [script archive](../archive/decision-reconstruction-component-boundaries-2026-09-30/README.md)로 옮겼다. 재평가 참고용 [기존 네 비교 자료](../../docs/architecture/12-decisions/decision-packages/README.md)의 8페이지는 `generate_decision_package_diagrams.py`로 생성한다. `--check`는 생성물 drift, XML ID, 경계, 연결선의 무관한 node 관통을 검사한다. 실제 glyph와 가독성은 브라우저 렌더링으로 별도 확인한다. 후보마다 실제 topology에 맞춰 배치하며 동일 격자 템플릿을 쓰지 않는다. 직전 여덟 후보 생성기는 [2026-10-01 script archive](../archive/decision-reconstruction-uniform-layouts-2026-10-01/README.md)에 보존했다. Target Architecture 그림 검사는 그대로 유지한다.
 
-현재 4단계의 S-01~06 비교 그림은 `generate_stage4_structure_diagrams.py`로 생성한다. 개별 04-02~07 문서에 SVG와 draw.io를 함께 연결하며, `--check`는 6쌍과 `stage4-review.html`의 생성물 일치, XML, 좌표 및 연결선을 검사한다. 기존 네 자료의 serializer만 재사용하며 그 설계나 QA 판단을 자동 승계하지 않는다. 실제 글자와 화살표 배치는 별도 렌더링으로 확인한다.
+현재 4단계의 S-01~06 비교 그림은 `generate_stage4_structure_diagrams.py`로 생성한다. 개별 04-01~06 문서에 SVG와 draw.io를 함께 연결하며, `--check`는 6쌍과 `stage4-review.html`의 생성물 일치, XML, 좌표 및 연결선을 검사한다. 기존 네 자료의 serializer만 재사용하며 그 설계나 QA 판단을 자동 승계하지 않는다. 실제 글자와 화살표 배치는 별도 렌더링으로 확인한다.
 
 ## Local model utility
 

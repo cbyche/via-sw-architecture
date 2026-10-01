@@ -2,7 +2,7 @@
 
 > 상태: **STAGE_4_REVIEW_READY / 개별 문서와 비교 그림 사용자 리뷰 대기** / 2026-10-01
 > 입력: [02 요구와 수단](./02-00-requirements-and-choices.md), [03 품질 시나리오](./03-00-quality-scenarios.md). 절차: [작업 계획](./00-workplan.md).
-> 검토 및 검사: [04-01 독립 검토 기록](./04-01-structural-review.md).
+> 검토 및 검사: [04-09 독립 검토 기록](./04-09-structural-review.md).
 > Target은 REVIEWED_BASELINE으로 보존한다. 여기의 S 번호는 탐색 질문을 가리킨다. DP 번호, 선정 결과 또는 방안 2의 확정이 아니다.
 
 ## 1. 이번 단계에서 한 일과 읽는 순서
@@ -65,32 +65,32 @@ A/B는 서로 자동 결합되는 완제품 안이 아니다. 하나의 질문�
 <a id="s-01"></a>
 ### S-01. 해석 중 근거를 보완하는 실행 구조
 
-**[04-02-semantic-execution.md](./04-02-semantic-execution.md)** — 추가 근거가 필요할 때 중간 해석 제안을 반환한 뒤 다시 호출할지, 읽기 지점에서 멈춘 실행을 이어갈지 비교한다.
+**[04-01-semantic-execution.md](./04-01-semantic-execution.md)** — 추가 근거가 필요할 때 중간 해석 제안을 반환한 뒤 다시 호출할지, 읽기 지점에서 멈춘 실행을 이어갈지 비교한다.
 
 <a id="s-02"></a>
 ### S-02. 말한 당시의 화면 근거를 만드는 구조
 
-**[04-03-screen-evidence.md](./04-03-screen-evidence.md)** — 과거 화면의 원시 관측을 나중에 해석하는 T, 객체 이력을 미리 만드는 A, 명시 선택만 받는 B를 비교한다.
+**[04-02-screen-evidence.md](./04-02-screen-evidence.md)** — 과거 화면의 원시 관측을 나중에 해석하는 T, 객체 이력을 미리 만드는 A, 명시 선택만 받는 B를 비교한다.
 
 <a id="s-03"></a>
 ### S-03. 숨은 자료를 발견하는 구조
 
-**[04-04-semantic-retrieval.md](./04-04-semantic-retrieval.md)** — T의 원본 조회와 기존 index/cache에, A의 지속 의미 후보 생산 서브시스템을 추가할 가치가 있는지 본다.
+**[04-03-semantic-retrieval.md](./04-03-semantic-retrieval.md)** — T의 원본 조회와 기존 index/cache에, A의 지속 의미 후보 생산 서브시스템을 추가할 가치가 있는지 본다.
 
 <a id="s-04"></a>
 ### S-04. 목표와 질문의 대기를 이어가는 구조
 
-**[04-05-request-continuation.md](./04-05-request-continuation.md)** — 대기 원본을 domain 상태로 둘지, workflow continuation으로 둘지, 세션 중에만 유지할지 비교한다.
+**[04-04-request-continuation.md](./04-04-request-continuation.md)** — 대기 원본을 domain 상태로 둘지, workflow continuation으로 둘지, 세션 중에만 유지할지 비교한다.
 
 <a id="s-05"></a>
 ### S-05. 직접 응답 경로를 유지하거나 줄이는 구조
 
-**[04-06-response-path.md](./04-06-response-path.md)** — 좁은 S2S 직접 경로와 Core 경로를 함께 가진 T, 모든 응답을 Core에서 확정하는 A를 비교한다.
+**[04-05-response-path.md](./04-05-response-path.md)** — 좁은 S2S 직접 경로와 Core 경로를 함께 가진 T, 모든 응답을 Core에서 확정하는 A를 비교한다.
 
 <a id="s-06"></a>
 ### S-06. 음성 입력 근거를 생산하는 구조
 
-**[04-07-speech-evidence.md](./04-07-speech-evidence.md)** — 독립 ASR가 입력 근거를 만드는 T와, 공유 Omni native 경로가 인식까지 맡는 A의 의존성을 비교한다.
+**[04-06-speech-evidence.md](./04-06-speech-evidence.md)** — 독립 ASR가 입력 근거를 만드는 T와, 공유 Omni native 경로가 인식까지 맡는 A의 의존성을 비교한다.
 
 ## 5. 연계 문제와 추가 탐색을 남긴 이유
 
