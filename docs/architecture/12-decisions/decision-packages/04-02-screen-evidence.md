@@ -1,7 +1,7 @@
 # S-02. 말한 당시의 화면 근거를 만드는 구조
 
-> 상태: **STAGE_4_REVIEW_READY / 사용자 리뷰 대기** / 2026-10-01
-> [04 전체 지도](./04-00-structural-alternatives.md#s-02) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> [04 전체 지도](./04-00-structural-alternatives.md#s-02) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-02; P-01, P-11, P-14 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
 ## 1. 어떤 상황에서 필요한 선택인가
@@ -24,16 +24,15 @@
 
 [그림 크게 보기](./diagrams/stage4-s02-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s02-comparison.drawio)
 
-파란색은 달라지는 책임, 자료 또는 실행 경로이며 추천 표시가 아니다. 검정은 공통으로 남는 책임이다. 박스는 논리 구성 또는 명시한 runtime이며 OS process와 같다는 뜻은 아니다. 점선 화살표의 의미는 그림의 개별 label을 따른다. 그림은 이 질문의 경계를 보여주며 전체 VIA 배치도가 아니다.
+검정 Component는 세 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 구조가 달라지는 구간이다. 박스 안에는 Component, 서브시스템 또는 저장소 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 파란색은 추천 표시가 아니다. 이 그림은 S-02의 근거 생산 경계만 보여주며 전체 VIA 배치도가 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-| 사건 | T: 실제 target | 대안 A | 대안 B |
+| 흐름 | T: 실제 target | 대안 A | 대안 B |
 | --- | --- | --- | --- |
-| 말하기 전 | 유한 pre-roll과 UI/선택 사건을 RAM에 보관 | 같은 종류 관측에서 객체 이력을 미리 생산 | 사용자가 먼저 영역/객체를 선택하고 패키지 확정 |
-| 발화와 화면 변화 | 발화 구간 관측을 pin하고 시간 오차 및 gap 보존 | 객체 version과 시각을 보존. 늦은 producer는 gap으로 표시 | 선택 패키지 밖의 화면 이동은 추적하지 않음 |
-| 늦은 전사 도착 | 당시 관측과 전사를 결합해 후보 해석 | 당시 객체 이력에 결합하고 필요한 원시 근거 확인 | 발화와 지정 패키지만 연결. 과거 복수 지칭은 미지원 |
-| 적용 전 | 과거 관측과 현재 Action 대상의 유효성을 따로 검사 | 객체 ID를 source 영구 ID로 오인하지 않고 현재성 검사 | 사용자가 선택한 자료도 source 변경과 권한을 재확인 |
+| 입력과 준비 | ① Interaction Manager가 발화 시각과 화면 사건을 수집한다. ② Raw Screen Timeline이 유한 pre-roll과 발화 구간의 원시 관측을 보존한다. | ① 같은 사건을 수집한다. ② Screen Grounding Service가 요청 전에 객체와 관계 후보를 만든다. ③ Derived Object Store에 객체 version과 source revision을 게시한다. | ① 사용자가 영역 또는 객체를 명시 선택한다. ② Interaction Manager가 선택 시점의 identity, revision과 crop을 Capture Package에 봉인한다. |
+| 요청 때 근거 반환 | ③ Raw Screen Timeline이 당시 관측을 Context Manager에 반환하며, Context Manager가 늦은 전사와 결합한다. | ④ Derived Object Store가 준비된 객체와 필요한 원시 근거를 Context Manager에 반환한다. | ③ Capture Package가 선택한 자료와 발화를 Context Manager에 반환한다. 선택 밖의 화면 이동은 복원하지 않는다. |
+| 적용 전 확인 | ④ Context Manager가 gap, source revision과 현재 적용 가능성을 확인한다. | ⑤ Context Manager가 늦은 전사와 결합하고 현재 원문을 다시 확인한다. 객체 ID를 source의 영구 ID로 간주하지 않는다. | ④ Context Manager가 현재 source와 권한을 다시 확인한다. 과거 복수 지칭은 미지원이다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

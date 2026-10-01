@@ -1,48 +1,55 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
-<title id="title">S-02  |  당시 화면의 근거를 언제 만드는가</title><desc id="desc">T: 원시 timeline / A: 사전 객체 이력 + raw fallback / B: 명시 선택만 지원</desc>
+<title id="title">S-02  |  말한 당시의 화면 근거를 어떻게 만드는가</title><desc id="desc">공통 Component는 같은 위치 / T는 원시 timeline / A는 사전 객체 이력 / B는 명시 선택 package만 지원</desc>
 <defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#171717"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1458C0"/></marker></defs>
 <rect width="2560" height="1440" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
 <g id="panel0"><rect x="48" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel1"><rect x="884" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel2"><rect x="1720" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<polyline id="0-edge-audio" points="243.0,400 243,470 444,470 444.0,555" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-screen" points="640.0,400 640,470 444,470 444.0,555" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-context" points="444.0,750 444.0,1030" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-produce" points="1476.0,400 1476,440 1280,440 1280.0,485" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-materialize" points="1280.0,650 1280.0,770" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-read" points="1280.0,925 1280.0,1060" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-timing" points="914,337.5 900,337.5 900,1135 934,1135.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
-<polyline id="2-edge-choose" points="2116.0,420 2116.0,575" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="2-edge-seal" points="2116.0,725 2116.0,860" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="2-edge-read" points="2116.0,1000 2116.0,1130" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<g id="0-speech"><rect x="78" y="275" width="330" height="125" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="94" y="303" font-size="20" font-weight="700" fill="#171717">SpeechEvidence</text><text x="94" y="339" font-size="20" fill="#171717">발화 sample 시각</text><text x="94" y="364" font-size="20" fill="#171717">revision, 오차와 gap</text></g>
-<g id="0-screen"><rect x="470" y="275" width="340" height="125" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="486" y="303" font-size="20" font-weight="700" fill="#171717">화면과 UI 사건</text><text x="486" y="339" font-size="20" fill="#171717">선택, 포인터, crop</text><text x="486" y="364" font-size="20" fill="#171717">window/document</text></g>
-<g id="0-im"><rect x="98" y="555" width="692" height="195" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="114" y="583" font-size="20" font-weight="700" fill="#1458C0">Interaction Manager</text><path d="M98 600H790" stroke="#1458C0" fill="none"/><text x="114" y="619" font-size="20" fill="#1458C0">OS/UI 사건 + 유한 sampling + pre-roll</text><text x="114" y="644" font-size="20" fill="#1458C0">발화 구간 pin, RAM 원시 timeline</text><text x="114" y="669" font-size="20" fill="#1458C0">늦은 전사를 당시 관측에 연결</text></g>
-<g id="0-cm"><rect x="98" y="1030" width="692" height="175" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="114" y="1058" font-size="20" font-weight="700" fill="#171717">Context Manager</text><path d="M98 1075H790" stroke="#171717" fill="none"/><text x="114" y="1094" font-size="20" fill="#171717">당시 원문, crop과 구조 자료 준비</text><text x="114" y="1119" font-size="20" fill="#171717">gap과 source revision을 함께 제공</text></g>
-<g id="1-speech"><rect x="914" y="275" width="330" height="125" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="930" y="303" font-size="20" font-weight="700" fill="#171717">SpeechEvidence</text><text x="930" y="339" font-size="20" fill="#171717">발화 sample 시각</text><text x="930" y="364" font-size="20" fill="#171717">revision, 오차와 gap</text></g>
-<g id="1-screen"><rect x="1306" y="275" width="340" height="125" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1322" y="303" font-size="20" font-weight="700" fill="#171717">화면과 UI 사건</text><text x="1322" y="339" font-size="20" fill="#171717">선택, 포인터, crop</text><text x="1322" y="364" font-size="20" fill="#171717">window/document</text></g>
-<g id="1-ground"><rect x="934" y="485" width="692" height="165" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="950" y="513" font-size="20" font-weight="700" fill="#1458C0">Screen Grounding Service</text><path d="M934 530H1626" stroke="#1458C0" fill="none"/><text x="950" y="549" font-size="20" fill="#1458C0">UI 구조 또는 Model Access의 공유 Omni vision</text><text x="950" y="574" font-size="20" fill="#1458C0">요청 전 객체와 관계 후보 생산</text></g>
-<g id="1-store"><rect x="934" y="770" width="692" height="155" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="1280.0" cy="786" rx="346.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="950" y="816" font-size="20" font-weight="700" fill="#1458C0">Derived Object Store</text><text x="950" y="849" font-size="20" fill="#1458C0">유한 RAM: 객체 ID, 시각, source revision</text><text x="950" y="874" font-size="20" fill="#1458C0">제한된 raw fallback + 채택한 최소 내구 근거</text></g>
-<g id="1-cm"><rect x="934" y="1060" width="692" height="150" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="950" y="1088" font-size="20" font-weight="700" fill="#171717">Context Manager</text><path d="M934 1105H1626" stroke="#171717" fill="none"/><text x="950" y="1124" font-size="20" fill="#171717">당시 객체와 늦은 전사를 결합</text><text x="950" y="1149" font-size="20" fill="#171717">원문 및 현재 Action 대상은 다시 확인</text></g>
-<g id="2-select"><rect x="1770" y="285" width="692" height="135" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1786" y="313" font-size="20" font-weight="700" fill="#1458C0">사용자의 명시 선택</text><text x="1786" y="349" font-size="20" fill="#1458C0">영역/객체 선택 후 “이 자료로 요청”</text><text x="1786" y="374" font-size="20" fill="#1458C0">선택 밖의 연속 지칭은 미지원</text></g>
-<g id="2-capture"><rect x="1770" y="575" width="692" height="150" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1786" y="603" font-size="20" font-weight="700" fill="#1458C0">Interaction Manager</text><path d="M1770 620H2462" stroke="#1458C0" fill="none"/><text x="1786" y="639" font-size="20" fill="#1458C0">선택 시점의 identity, revision과 crop 획득</text><text x="1786" y="664" font-size="20" fill="#1458C0">UI/Core process는 그대로 남음</text></g>
-<g id="2-package"><rect x="1770" y="860" width="692" height="140" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="2116.0" cy="876" rx="346.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="1786" y="906" font-size="20" font-weight="700" fill="#1458C0">Capture Package</text><text x="1786" y="939" font-size="20" fill="#1458C0">지정 자료와 발화의 결합</text><text x="1786" y="964" font-size="20" fill="#1458C0">허용 수명 안에서 보관</text></g>
-<g id="2-cm"><rect x="1770" y="1130" width="692" height="120" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1786" y="1158" font-size="20" font-weight="700" fill="#171717">Context Manager</text><path d="M1770 1175H2462" stroke="#171717" fill="none"/><text x="1786" y="1194" font-size="20" fill="#171717">패키지와 현재 source 적용 가능성 확인</text></g>
-<text x="93" y="510" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">시각 연결</text>
-<text x="518" y="510" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">관측 보존</text>
-<text x="168" y="900" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">요청 때 근거 조립</text>
-<text x="1024" y="710" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">파생 이력 게시</text>
-<text x="994" y="1000" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">준비된 객체 + 필요한 원시 근거</text>
-<text x="949" y="1040" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">SpeechEvidence 별도 결합</text>
-<text x="1875" y="505" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">수동 선택 부담</text>
-<text x="1890" y="805" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">패키지 봉인</text>
-<text x="1850" y="1075" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">선택한 자료만 읽기</text>
-<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-02  |  당시 화면의 근거를 언제 만드는가</text>
-<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">T: 원시 timeline / A: 사전 객체 이력 + raw fallback / B: 명시 선택만 지원</text>
+<polyline id="0-edge-capture" points="444.0,340 444.0,465" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-keep" points="444.0,535 444.0,745" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-read" points="444.0,825 444.0,1050" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-capture" points="1280.0,340 1280.0,465" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-derive" points="1280.0,535 1280.0,650" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-publish" points="1280.0,720 1280.0,835" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-read" points="1280.0,915 1280.0,1050" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="2-edge-select" points="2116.0,340 2116.0,465" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="2-edge-seal" points="2116.0,535 2116.0,745" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="2-edge-read" points="2116.0,825 2116.0,1050" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<g id="0-events"><rect x="218" y="270" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="298" font-size="20" font-weight="700" fill="#171717">발화와 화면 사건</text></g>
+<g id="0-im"><rect x="218" y="465" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="493" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="0-cm"><rect x="218" y="1050" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="1078" font-size="20" font-weight="700" fill="#171717">Context Manager</text></g>
+<g id="0-evidence"><rect x="218" y="745" width="452" height="80" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="444.0" cy="761" rx="226.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="234" y="791" font-size="20" font-weight="700" fill="#1458C0">Raw Screen Timeline</text></g>
+<g id="1-events"><rect x="1054" y="270" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="298" font-size="20" font-weight="700" fill="#171717">발화와 화면 사건</text></g>
+<g id="1-im"><rect x="1054" y="465" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="493" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="1-cm"><rect x="1054" y="1050" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="1078" font-size="20" font-weight="700" fill="#171717">Context Manager</text></g>
+<g id="1-ground"><rect x="1054" y="650" width="452" height="70" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1070" y="678" font-size="20" font-weight="700" fill="#1458C0">Screen Grounding Service</text></g>
+<g id="1-store"><rect x="1054" y="835" width="452" height="80" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="1280.0" cy="851" rx="226.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="1070" y="881" font-size="20" font-weight="700" fill="#1458C0">Derived Object Store</text></g>
+<g id="2-events"><rect x="1890" y="270" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="298" font-size="20" font-weight="700" fill="#171717">발화와 화면 사건</text></g>
+<g id="2-im"><rect x="1890" y="465" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="493" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="2-cm"><rect x="1890" y="1050" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="1078" font-size="20" font-weight="700" fill="#171717">Context Manager</text></g>
+<g id="2-package"><rect x="1890" y="745" width="452" height="80" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="2116.0" cy="761" rx="226.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="1906" y="791" font-size="20" font-weight="700" fill="#1458C0">Capture Package</text></g>
+<text x="268" y="410" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 발화 시각과 화면 사건 수집</text>
+<text x="128" y="665" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 유한 pre-roll과 발화 구간 원시 관측 보존</text>
+<text x="113" y="975" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 요청 때 당시 관측과 늦은 전사를 결합</text>
+<text x="1104" y="410" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 발화 시각과 화면 사건 수집</text>
+<text x="1014" y="605" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 요청 전에 객체와 관계 후보 생산</text>
+<text x="989" y="790" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 객체 version과 source revision 게시</text>
+<text x="954" y="1005" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">④ 준비된 객체와 필요한 원시 근거 반환</text>
+<text x="1905" y="410" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① 사용자가 영역 또는 객체를 명시 선택</text>
+<text x="1815" y="665" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 선택 시점의 identity, revision과 crop 봉인</text>
+<text x="1885" y="975" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 선택한 자료와 발화만 반환</text>
+<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-02  |  말한 당시의 화면 근거를 어떻게 만드는가</text>
+<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">공통 Component는 같은 위치 / T는 원시 timeline / A는 사전 객체 이력 / B는 명시 선택 package만 지원</text>
 <text x="48" y="1414" font-size="18" font-weight="400" fill="#171717">VIA / Stage 4 / 구조 탐색, 미채택 대안 / 구현 및 측정 결과 아님</text>
 <text x="72" y="215" font-size="28" font-weight="700" fill="#171717">T  실제 reviewed target</text>
 <text x="908" y="215" font-size="28" font-weight="700" fill="#171717">A  대안 구조</text>
 <text x="1744" y="215" font-size="28" font-weight="700" fill="#171717">B  기능을 제한한 대안</text>
-<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">파랑: 바뀌는 책임과 자료 / 검정: 공통 책임 / 박스는 명시한 논리 구성 또는 runtime / 화살표 label의 경계를 비교</text>
-<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">공통 후속: Context 근거 → Request Controller의 입력/예산 결합 → Request Interpreter 호출 및 제안 → Request Controller 확정.</text>
+<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">박스: Component, 서브시스템, 논리 실행체 또는 저장소 이름 / 번호 화살표: 동작과 순서 / 검정: 공통 / 파랑: 달라지는 구조</text>
+<text x="118" y="1185" font-size="18" font-weight="400" fill="#1458C0">④ Context Manager가 gap, source revision과 현재 적용 가능성을 확인한다.</text>
+<text x="118" y="1213" font-size="18" font-weight="400" fill="#1458C0">지원: 자연스러운 과거 지칭 / 비용: 원시 timeline 메모리와 요청 시 해석</text>
+<text x="954" y="1185" font-size="18" font-weight="400" fill="#1458C0">⑤ Context Manager가 늦은 전사와 결합하고 현재 원문을 다시 확인한다.</text>
+<text x="954" y="1213" font-size="18" font-weight="400" fill="#1458C0">조건: 객체 추적 지원 / 비용: 상시 producer, 저장과 삭제 경로</text>
+<text x="1790" y="1185" font-size="18" font-weight="400" fill="#1458C0">④ Context Manager가 현재 source와 권한을 다시 확인한다.</text>
+<text x="1790" y="1213" font-size="18" font-weight="400" fill="#1458C0">제한: 선택 밖의 연속 지칭과 과거 복수 지칭은 미지원</text>
+<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">공통 후속: Context Manager → Request Controller로 근거와 receipt 반환 → 입력과 예산 결합 → Request Interpreter 호출.</text>
 </g></svg>

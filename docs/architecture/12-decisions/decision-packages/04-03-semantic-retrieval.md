@@ -1,7 +1,7 @@
 # S-03. 숨은 자료를 발견하는 구조
 
-> 상태: **STAGE_4_REVIEW_READY / 사용자 리뷰 대기** / 2026-10-01
-> [04 전체 지도](./04-00-structural-alternatives.md#s-03) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> [04 전체 지도](./04-00-structural-alternatives.md#s-03) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-03; P-10~12, P-15 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
 ## 1. 어떤 상황에서 필요한 선택인가
@@ -24,16 +24,15 @@
 
 [그림 크게 보기](./diagrams/stage4-s03-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s03-comparison.drawio)
 
-파란색은 달라지는 책임, 자료 또는 실행 경로이며 추천 표시가 아니다. 검정은 공통으로 남는 책임이다. 박스는 논리 구성 또는 명시한 runtime이며 OS process와 같다는 뜻은 아니다. 점선 화살표의 의미는 그림의 개별 label을 따른다. 그림은 이 질문의 경계를 보여주며 전체 VIA 배치도가 아니다.
+검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 구조가 달라지는 구간이다. 박스 안에는 Component, 서브시스템, 논리 실행체 또는 저장소 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-03의 후보 발견과 원문 확인 경계만 보여주며 전체 VIA 배치도가 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-| 사건 | T: 실제 target | 대안 A |
+| 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
-| 요청 전 | 기존 metadata/keyword index와 cache 유지 | 허용 collection을 Worker가 읽어 embedding과 새 generation 생산 |
-| 요청 도착 | 최근 대화, Task, 이름과 기간으로 후보 조회 | 같은 embedding build로 query 변환 후 의미 및 exact/lexical 후보 조합 |
-| 후보 검증 | 원문, identity, 현재 권한과 coverage 확인 | 후보 source revision과 현재 원문 및 권한 재확인. top-1도 정답 확정 아님 |
-| 자료 변경 | 기존 read/cache 무효화 및 현재성 검사 | 같은 검사에 더해 old generation 사용 차단과 재색인. 실패하면 한계 명시 |
+| 요청 전 준비 | 별도 의미 색인을 만들지 않는다. 기존 metadata/keyword index와 cache는 유지한다. | ① Indexing Worker가 허용 source의 변경과 삭제를 수집한다. ② Embedding Runtime이 문서 표현을 만든다. ③ 완성된 Vector Index와 Source Manifest generation을 원자 게시한다. |
+| 후보 검색 | ① Request Controller가 Owner Read Adapter에 허용 scope와 이름, 기간, Task 단서를 보낸다. ② Adapter가 기존 index와 cache에서 후보를 조회한다. | ④ Request Controller가 Semantic Retrieval Service에 같은 허용 scope를 보낸다. ⑤ Service가 의미 후보와 lexical 후보를 조회한다. ⑥ Vector Index가 후보와 source revision을 Service에 반환한다. ⑦ Service가 후보, coverage와 manifest를 Context Manager에 반환한다. |
+| 원문 확인과 Context 조립 | ③ Owner Read Adapter가 후보 원문과 revision을 source에서 읽는다. ④ 원문, coverage와 receipt를 Context Manager에 반환한다. ⑤ Context Manager가 현재 권한과 identity를 확인해 Context를 조립한다. | ⑧ Context Manager가 후보 source에 현재 원문과 권한을 요청한다. ⑨ source가 원문, revision과 권한을 반환한다. ⑩ Context Manager가 검증된 원문으로 Context를 조립한다. 후보 1위도 대상 확정이나 실행 권한은 아니다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

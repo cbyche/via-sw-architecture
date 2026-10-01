@@ -1,37 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
-<title id="title">S-06  |  음성 근거 생산자의 실행 및 장애 경계</title><desc id="desc">capture/local stop은 양안 모두 추론 밖 / 공유 Omni weights는 양안 각각 한 벌</desc>
+<title id="title">S-06  |  사용자의 음성을 누가 인식 근거로 만드는가</title><desc id="desc">공통 Component는 같은 위치 / T는 독립 Streaming ASR / A는 공유 Omni의 native evidence에 의존</desc>
 <defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#171717"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1458C0"/></marker></defs>
 <rect width="2560" height="1440" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
 <g id="panel0"><rect x="48" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel1"><rect x="1312" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<g id="0-worker"><rect x="78" y="600" width="510" height="275" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2" stroke-dasharray="10 7"/><text x="94" y="628" font-size="20" font-weight="700" fill="#1458C0">Speech Input Worker</text></g>
-<g id="0-runtime"><rect x="728" y="600" width="490" height="275" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2" stroke-dasharray="10 7"/><text x="744" y="628" font-size="20" font-weight="700" fill="#171717">Shared Inference Service</text></g>
-<g id="1-runtime"><rect x="1432" y="555" width="990" height="440" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2" stroke-dasharray="10 7"/><text x="1448" y="583" font-size="20" font-weight="700" fill="#171717">Shared Inference Service</text></g>
-<polyline id="0-edge-asraudio" points="658.0,390 658,490 333,490 333.0,600" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-omniaudio" points="658.0,390 658,450 973,450 973.0,600" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-evidence" points="333.0,875 333,950 713,950 713.0,1050" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-omni" points="1218,737.5 1233,737.5 1233,1140 1108,1140.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
-<polyline id="1-edge-audio" points="1922.0,390 1922,480 1927,480 1927.0,555" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-evidence" points="1927.0,995 1927.0,1100" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<g id="0-input"><rect x="398" y="260" width="520" height="130" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="414" y="288" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text><path d="M398 305H918" stroke="#171717" fill="none"/><text x="414" y="324" font-size="20" fill="#171717">지속 capture와 local stop</text><text x="414" y="349" font-size="20" fill="#171717">같은 sample clock의 원음</text></g>
-<g id="1-input"><rect x="1662" y="260" width="520" height="130" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1678" y="288" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text><path d="M1662 305H2182" stroke="#171717" fill="none"/><text x="1678" y="324" font-size="20" fill="#171717">지속 capture와 local stop</text><text x="1678" y="349" font-size="20" fill="#171717">같은 sample clock의 원음</text></g>
-<g id="0-asr"><rect x="103" y="690" width="460" height="130" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="119" y="718" font-size="20" font-weight="700" fill="#1458C0">Streaming ASR</text><path d="M103 735H563" stroke="#1458C0" fill="none"/><text x="119" y="754" font-size="20" fill="#1458C0">독립 CPU 인식과 시각 근거</text><text x="119" y="779" font-size="20" fill="#1458C0">추가 helper weights</text></g>
-<g id="0-omni"><rect x="753" y="690" width="440" height="130" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="769" y="718" font-size="20" font-weight="700" fill="#171717">공유 Omni weights 한 벌</text><text x="769" y="754" font-size="20" fill="#171717">Voice / semantic session 격리</text><text x="769" y="779" font-size="20" fill="#171717">인식 중에도 semantic 진행</text></g>
-<g id="0-ma"><rect x="318" y="1050" width="790" height="180" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="334" y="1078" font-size="20" font-weight="700" fill="#1458C0">Model Access</text><path d="M318 1095H1108" stroke="#1458C0" fill="none"/><text x="334" y="1114" font-size="20" fill="#1458C0">ASR adapter → SpeechEvidence</text><text x="334" y="1139" font-size="20" fill="#1458C0">Omni 해석과 중요한 불일치는 보존</text><text x="334" y="1164" font-size="20" fill="#1458C0">두 producer의 revision과 incarnation 구별</text></g>
-<g id="1-omni"><rect x="1472" y="645" width="910" height="120" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1488" y="673" font-size="20" font-weight="700" fill="#171717">공유 Omni weights 한 벌</text><text x="1488" y="709" font-size="20" fill="#171717">Voice / semantic session 및 KV 격리는 유지</text></g>
-<g id="1-native"><rect x="1472" y="810" width="910" height="145" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1488" y="838" font-size="20" font-weight="700" fill="#1458C0">Omni native evidence producer</text><path d="M1472 855H2382" stroke="#1458C0" fill="none"/><text x="1488" y="874" font-size="20" fill="#1458C0">음성 session에서 transcript revision과 sample 시각 생산</text><text x="1488" y="899" font-size="20" fill="#1458C0">semantic과 실행 기회 공유, 지속 인식 지원 미확인</text></g>
-<g id="1-ma"><rect x="1512" y="1100" width="830" height="160" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1528" y="1128" font-size="20" font-weight="700" fill="#1458C0">Model Access</text><path d="M1512 1145H2342" stroke="#1458C0" fill="none"/><text x="1528" y="1164" font-size="20" fill="#1458C0">Native Evidence Adapter → SpeechEvidence</text><text x="1528" y="1189" font-size="20" fill="#1458C0">없는 시각 근거를 adapter가 만들지 않음</text></g>
-<text x="118" y="535" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">독립 인식 경로</text>
-<text x="798" y="535" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">Omni 원음 경로</text>
-<text x="123" y="995" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">전사 / 시각 / gap</text>
-<text x="1013" y="970" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">Omni 결과</text>
-<text x="1562" y="520" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">같은 runtime에 입력과 의미 처리 의존</text>
-<text x="1612" y="1055" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">native event와 incarnation</text>
-<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-06  |  음성 근거 생산자의 실행 및 장애 경계</text>
-<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">capture/local stop은 양안 모두 추론 밖 / 공유 Omni weights는 양안 각각 한 벌</text>
+<g id="0-runtime"><rect x="778" y="535" width="430" height="285" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2" stroke-dasharray="10 7"/><text x="794" y="563" font-size="20" font-weight="700" fill="#171717">Shared Inference Service</text></g>
+<g id="1-runtime"><rect x="2042" y="535" width="430" height="285" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2" stroke-dasharray="10 7"/><text x="2058" y="563" font-size="20" font-weight="700" fill="#171717">Shared Inference Service</text></g>
+<g id="0-worker"><rect x="88" y="535" width="430" height="285" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2" stroke-dasharray="10 7"/><text x="104" y="563" font-size="20" font-weight="700" fill="#1458C0">Speech Input Worker</text></g>
+<polyline id="0-edge-asr-audio" points="448,282.5 303,282.5 303,495 303.0,535" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-omni-audio" points="848,282.5 993,282.5 993,495 993.0,535" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-asr-evidence" points="303.0,820 303,875 408,875 408,960 448,960.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-omni-result" points="993.0,820 993,875 888,875 888,960 848,960.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-commit" points="648.0,995 648.0,1150" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-omni-audio" points="2112,282.5 2257,282.5 2257,495 2257.0,535" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-native" points="2257.0,820 2257,875 2152,875 2152,960 2112,960.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-commit" points="1912.0,995 1912.0,1150" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<g id="0-input"><rect x="448" y="250" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="278" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="0-omni"><rect x="803" y="630" width="380" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="819" y="658" font-size="18" font-weight="700" fill="#171717">Omni Voice / Semantic Session</text></g>
+<g id="0-ma"><rect x="448" y="925" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="953" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
+<g id="0-record"><rect x="448" y="1150" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><ellipse cx="648.0" cy="1166" rx="200.0" ry="16" fill="#FFFFFF" stroke="#171717" stroke-width="2"/><text x="464" y="1196" font-size="20" font-weight="700" fill="#171717">SpeechEvidence / Input Record</text></g>
+<g id="1-input"><rect x="1712" y="250" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="278" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="1-omni"><rect x="2067" y="630" width="380" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="2083" y="658" font-size="18" font-weight="700" fill="#171717">Omni Voice / Semantic Session</text></g>
+<g id="1-ma"><rect x="1712" y="925" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="953" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
+<g id="1-record"><rect x="1712" y="1150" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><ellipse cx="1912.0" cy="1166" rx="200.0" ry="16" fill="#FFFFFF" stroke="#171717" stroke-width="2"/><text x="1728" y="1196" font-size="20" font-weight="700" fill="#171717">SpeechEvidence / Input Record</text></g>
+<g id="0-asr"><rect x="113" y="630" width="380" height="75" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="129" y="658" font-size="18" font-weight="700" fill="#1458C0">Streaming ASR</text></g>
+<g id="1-native"><rect x="2067" y="730" width="380" height="65" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="2083" y="758" font-size="18" font-weight="700" fill="#1458C0">Native Evidence Producer</text></g>
+<text x="98" y="445" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① 원음을 독립 인식 경로에 전달</text>
+<text x="838" y="445" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">② 원음을 Omni 경로에도 전달</text>
+<text x="103" y="850" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 전사 revision, 시각과 gap 반환</text>
+<text x="878" y="850" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④ Omni 해석 결과 반환</text>
+<text x="488" y="1110" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ 근거를 구별해 canonical 입력 기록</text>
+<text x="2107" y="445" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">① 원음을 공유 Omni에 전달</text>
+<text x="2107" y="850" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② native 전사 event와 시각 반환</text>
+<text x="1742" y="1110" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ adapter가 canonical 입력으로 기록</text>
+<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-06  |  사용자의 음성을 누가 인식 근거로 만드는가</text>
+<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">공통 Component는 같은 위치 / T는 독립 Streaming ASR / A는 공유 Omni의 native evidence에 의존</text>
 <text x="48" y="1414" font-size="18" font-weight="400" fill="#171717">VIA / Stage 4 / 구조 탐색, 미채택 대안 / 구현 및 측정 결과 아님</text>
 <text x="72" y="215" font-size="28" font-weight="700" fill="#171717">T  실제 reviewed target</text>
 <text x="1336" y="215" font-size="28" font-weight="700" fill="#171717">A  대안 구조</text>
-<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">파랑: 바뀌는 책임과 자료 / 검정: 공통 책임 / 박스는 명시한 논리 구성 또는 runtime / 화살표 label의 경계를 비교</text>
-<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">Omni 장애 시 T는 독립 전사를 계속 만들 수 있지만 A의 recognition은 중단된다. 두 안 모두 의미 이해와 Voice 생성은 불가.</text>
+<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">박스: Component, 서브시스템, 논리 실행체 또는 저장소 이름 / 번호 화살표: 동작과 순서 / 검정: 공통 / 파랑: 달라지는 구조</text>
+<text x="88" y="1260" font-size="18" font-weight="400" fill="#1458C0">차이: Streaming ASR와 Omni가 서로 다른 실행 경로에서 근거를 만든다.</text>
+<text x="88" y="1288" font-size="18" font-weight="400" fill="#1458C0">Omni 장애 중에도 독립 전사는 계속될 수 있지만 의미 이해와 Voice 생성은 불가하다.</text>
+<text x="1352" y="650" font-size="18" font-weight="400" fill="#1458C0">독립 Speech Input Worker 없음</text>
+<text x="1352" y="678" font-size="18" font-weight="400" fill="#1458C0">인식과 의미 처리가 같은 runtime의 실행 기회와 장애 경계를 공유한다.</text>
+<text x="1352" y="1260" font-size="18" font-weight="400" fill="#1458C0">차이: 별도 ASR weights와 실행체를 제거한다.</text>
+<text x="1352" y="1288" font-size="18" font-weight="400" fill="#1458C0">Omni 장애 중 capture는 계속되지만 recognition도 중단되며 gap을 남겨야 한다.</text>
+<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">공통: capture와 local stop은 추론 밖에서 계속된다. 공유 Omni weights는 한 벌이며 Voice와 semantic session의 상태 및 권한은 격리한다.</text>
 </g></svg>

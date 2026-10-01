@@ -1,51 +1,77 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
-<title id="title">S-04  |  대기와 재개의 권위 원본을 선택한다</title><desc id="desc">T와 A는 내구 대기 복구 / B는 대기 graph 복구 포기, Task와 command 원장은 유지</desc>
+<title id="title">S-04  |  대기 중인 목표를 어디에 기록하고 어떻게 다시 잇는가</title><desc id="desc">공통 Component는 같은 위치 / T는 domain graph / A는 workflow continuation / B는 세션 메모리만 사용</desc>
 <defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#171717"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1458C0"/></marker></defs>
 <rect width="2560" height="1440" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
 <g id="panel0"><rect x="48" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel1"><rect x="884" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel2"><rect x="1720" y="165" width="792" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<g id="0-rc"><rect x="78" y="285" width="732" height="355" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2"/><text x="94" y="313" font-size="20" font-weight="700" fill="#1458C0">Request Controller</text></g>
-<g id="1-runtime"><rect x="914" y="480" width="732" height="415" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2"/><text x="930" y="508" font-size="20" font-weight="700" fill="#1458C0">Interaction Workflow Runtime</text></g>
-<polyline id="0-edge-persist" points="444.0,640 444.0,790" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-dispatch" points="78,462.5 64,462.5 64,1175 108,1175.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-start" points="1280.0,385 1280.0,480" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-persist" points="1280.0,895 1280.0,995" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-admit" points="944,800.0 900,800 900,325 944,325.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="2-edge-start" points="2116.0,385 2116.0,535" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="2-edge-command" points="1780,325.0 1736,325 1736,947.5 1780,947.5" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="2-edge-propose" points="2452,620.0 2470,620 2470,325 2452,325.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="2-edge-release" points="2452,325.0 2495,325 2495,1210 2452,1210.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<g id="0-graph"><rect x="108" y="370" width="672" height="100" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="124" y="398" font-size="18" font-weight="700" fill="#1458C0">durable Request Graph</text><text x="124" y="424" font-size="18" fill="#1458C0">사용자 목표 관계와 후속 해제</text></g>
-<g id="0-question"><rect x="108" y="505" width="672" height="100" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="124" y="533" font-size="18" font-weight="700" fill="#1458C0">Pending User Interaction</text><text x="124" y="559" font-size="18" fill="#1458C0">실제 제시 질문과 답변 binding</text></g>
-<g id="0-state"><rect x="108" y="790" width="672" height="155" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="444.0" cy="806" rx="336.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="124" y="836" font-size="20" font-weight="700" fill="#1458C0">State Store</text><text x="124" y="869" font-size="20" fill="#1458C0">current records + 미완료 원장</text><text x="124" y="894" font-size="20" fill="#1458C0">graph와 질문의 내구 원본</text></g>
-<g id="0-task"><rect x="108" y="1120" width="672" height="110" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="124" y="1148" font-size="20" font-weight="700" fill="#171717">Task Manager → Agent Gateway</text><text x="124" y="1184" font-size="20" fill="#171717">업무 lifecycle, 명령 전송과 source 확인</text></g>
-<g id="1-rc"><rect x="944" y="265" width="672" height="120" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="960" y="293" font-size="20" font-weight="700" fill="#171717">Request Controller</text><path d="M944 310H1616" stroke="#171717" fill="none"/><text x="960" y="329" font-size="20" fill="#171717">의미 확정, 현재성 검사와 admission</text></g>
-<g id="1-inbox"><rect x="944" y="565" width="312" height="115" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="960" y="593" font-size="18" font-weight="700" fill="#1458C0">Signal Inbox</text><text x="960" y="619" font-size="18" fill="#1458C0">내구 signal 수락</text><text x="960" y="642" font-size="18" fill="#1458C0">중복 제거</text></g>
-<g id="1-timer"><rect x="1304" y="565" width="312" height="115" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1320" y="593" font-size="18" font-weight="700" fill="#1458C0">Timer Service</text><text x="1320" y="619" font-size="18" fill="#1458C0">deadline과 timeout</text><text x="1320" y="642" font-size="18" fill="#1458C0">내구 재개 조건</text></g>
-<g id="1-activity"><rect x="944" y="745" width="672" height="110" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="960" y="773" font-size="18" font-weight="700" fill="#1458C0">Activity Dispatcher</text><text x="960" y="799" font-size="18" fill="#1458C0">고정 VIA 활동의 intent와 attempt</text></g>
-<g id="1-store"><rect x="944" y="995" width="672" height="150" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="1280.0" cy="1011" rx="336.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="960" y="1041" font-size="20" font-weight="700" fill="#1458C0">Continuation Store</text><text x="960" y="1074" font-size="20" fill="#1458C0">같은 State Store 안의 논리 영역</text><text x="960" y="1099" font-size="20" fill="#1458C0">continuation + signal + activity intent</text></g>
-<g id="2-rc"><rect x="1780" y="265" width="672" height="120" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1796" y="293" font-size="20" font-weight="700" fill="#171717">Request Controller</text><path d="M1780 310H2452" stroke="#171717" fill="none"/><text x="1796" y="329" font-size="20" fill="#171717">현재 입력과 최종 admission 유지</text></g>
-<g id="2-volatile"><rect x="1780" y="535" width="672" height="170" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1796" y="563" font-size="20" font-weight="700" fill="#1458C0">세션 한정 요청 coordinator</text><path d="M1780 580H2452" stroke="#1458C0" fill="none"/><text x="1796" y="599" font-size="20" fill="#1458C0">목표 관계와 질문 focus는 RAM</text><text x="1796" y="624" font-size="20" fill="#1458C0">Core 재시작 때 그래프 복원 없음</text></g>
-<g id="2-store"><rect x="1780" y="860" width="672" height="175" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><ellipse cx="2116.0" cy="876" rx="336.0" ry="16" fill="#F3F7FD" stroke="#1458C0" stroke-width="2"/><text x="1796" y="906" font-size="20" font-weight="700" fill="#1458C0">State Store</text><text x="1796" y="939" font-size="20" fill="#1458C0">Task, command와 publication 원장 유지</text><text x="1796" y="964" font-size="20" fill="#1458C0">대기 graph와 질문 continuation은 저장하지 않음</text></g>
-<g id="2-task"><rect x="1780" y="1160" width="672" height="100" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1796" y="1188" font-size="20" font-weight="700" fill="#171717">Task Manager → Agent Gateway</text><text x="1796" y="1224" font-size="20" fill="#171717">기존 실행의 source 확인 및 중복 방지 유지</text></g>
-<text x="148" y="725" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">owner 전이와 intent 원자 기록</text>
-<text x="138" y="1040" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">host admission 뒤 command</text>
-<text x="974" y="440" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">내구 시작 signal / 현재 Request</text>
-<text x="1009" y="960" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">전이와 intent 원자 기록</text>
-<text x="954" y="930" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">활동마다 현재 admission</text>
-<text x="1825" y="470" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">세션 중 대기와 후속 조정</text>
-<text x="1800" y="800" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">내구 command admission은 유지</text>
-<text x="2160" y="450" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">후속 제안 / 현재성 검사</text>
-<text x="1810" y="1110" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">현재 admission과 내구 원장 뒤 전달</text>
-<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-04  |  대기와 재개의 권위 원본을 선택한다</text>
-<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">T와 A는 내구 대기 복구 / B는 대기 graph 복구 포기, Task와 command 원장은 유지</text>
+<g id="1-owner"><rect x="1054" y="650" width="452" height="105" rx="0" fill="#FFFFFF" stroke="#1458C0" stroke-width="2" stroke-dasharray="10 7"/><text x="1070" y="678" font-size="20" font-weight="700" fill="#1458C0">Interaction Workflow Runtime</text></g>
+<polyline id="0-edge-initial" points="444.0,320 444.0,420" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-initial" points="1280.0,320 1280.0,420" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="2-edge-initial" points="2116.0,320 2116.0,420" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-start" points="444.0,490 444.0,650" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-persist" points="444.0,755 444.0,940" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-signal" points="218,285.0 118,285 118,702.5 218,702.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-propose" points="670,702.5 748,702.5 748,455 670,455.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-command" points="670,455.0 783,455 783,1170 670,1170.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-restore" points="218,977.5 158,977.5 158,702.5 218,702.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-start" points="1280.0,490 1280.0,650" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-persist" points="1280.0,755 1280.0,940" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-signal" points="1054,285.0 954,285 954,702.5 1054,702.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-propose" points="1506,702.5 1584,702.5 1584,455 1506,455.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-command" points="1506,455.0 1619,455 1619,1170 1506,1170.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-restore" points="1054,977.5 994,977.5 994,702.5 1054,702.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="2-edge-start" points="2116.0,490 2116.0,650" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="2-edge-signal" points="1890,285.0 1790,285 1790,702.5 1890,702.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="2-edge-propose" points="2342,702.5 2420,702.5 2420,455 2342,455.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="2-edge-ledger" points="1890,455.0 1835,455 1835,977.5 1890,977.5" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="2-edge-command" points="2342,455.0 2455,455 2455,1170 2342,1170.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<g id="0-source"><rect x="218" y="250" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="278" font-size="20" font-weight="700" fill="#171717">사용자 입력 / Task 결과 source</text></g>
+<g id="0-rc"><rect x="218" y="420" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="448" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
+<g id="0-store"><rect x="218" y="940" width="452" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><ellipse cx="444.0" cy="956" rx="226.0" ry="16" fill="#FFFFFF" stroke="#171717" stroke-width="2"/><text x="234" y="986" font-size="20" font-weight="700" fill="#171717">State Store</text></g>
+<g id="0-task"><rect x="218" y="1135" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="234" y="1163" font-size="20" font-weight="700" fill="#171717">Task Manager → Agent Gateway</text></g>
+<g id="1-source"><rect x="1054" y="250" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="278" font-size="20" font-weight="700" fill="#171717">사용자 입력 / Task 결과 source</text></g>
+<g id="1-rc"><rect x="1054" y="420" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="448" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
+<g id="1-store"><rect x="1054" y="940" width="452" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><ellipse cx="1280.0" cy="956" rx="226.0" ry="16" fill="#FFFFFF" stroke="#171717" stroke-width="2"/><text x="1070" y="986" font-size="20" font-weight="700" fill="#171717">State Store</text></g>
+<g id="1-task"><rect x="1054" y="1135" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1070" y="1163" font-size="20" font-weight="700" fill="#171717">Task Manager → Agent Gateway</text></g>
+<g id="2-source"><rect x="1890" y="250" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="278" font-size="20" font-weight="700" fill="#171717">사용자 입력 / Task 결과 source</text></g>
+<g id="2-rc"><rect x="1890" y="420" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="448" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
+<g id="2-store"><rect x="1890" y="940" width="452" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><ellipse cx="2116.0" cy="956" rx="226.0" ry="16" fill="#FFFFFF" stroke="#171717" stroke-width="2"/><text x="1906" y="986" font-size="20" font-weight="700" fill="#171717">State Store</text></g>
+<g id="2-task"><rect x="1890" y="1135" width="452" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1906" y="1163" font-size="20" font-weight="700" fill="#171717">Task Manager → Agent Gateway</text></g>
+<g id="0-owner"><rect x="218" y="650" width="452" height="105" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="234" y="678" font-size="18" font-weight="700" fill="#1458C0">durable Request Graph / Pending User Interaction</text></g>
+<g id="2-owner"><rect x="1890" y="650" width="452" height="105" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1906" y="678" font-size="18" font-weight="700" fill="#1458C0">Session Request Coordinator</text></g>
+<text x="253" y="380" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 확정된 목표 전달</text>
+<text x="1089" y="380" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 확정된 목표 전달</text>
+<text x="1925" y="380" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 확정된 목표 전달</text>
+<text x="148" y="600" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 목표 관계와 대기 조건 생성</text>
+<text x="133" y="885" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ graph, 질문 identity와 전이 저장</text>
+<text x="130" y="515" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">④ 사용자 답변 또는 Task 결과</text>
+<text x="518" y="560" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑤ 후속 요청 제안 반환</text>
+<text x="468" y="1095" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑥ 현재성 확인 뒤 명령 전달</text>
+<text x="168" y="825" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦ 재시작 뒤 graph 복원</text>
+<text x="1024" y="600" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② continuation 시작 signal</text>
+<text x="939" y="885" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ continuation, signal과 activity intent 저장</text>
+<text x="966" y="515" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">④ 답변 또는 결과 signal</text>
+<text x="1374" y="560" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑤ admission 요청 반환</text>
+<text x="1304" y="1095" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑥ 현재성 확인 뒤 명령 전달</text>
+<text x="989" y="825" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦ 재시작 뒤 continuation 복원</text>
+<text x="1815" y="600" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">② 세션 메모리에 목표 관계 생성</text>
+<text x="1802" y="515" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">③ 답변 또는 결과 수신</text>
+<text x="2195" y="560" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">④ 후속 요청 제안 반환</text>
+<text x="1845" y="835" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ Task, command와 publication 원장만 저장</text>
+<text x="2140" y="1095" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑥ 현재성 확인 뒤 명령 전달</text>
+<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-04  |  대기 중인 목표를 어디에 기록하고 어떻게 다시 잇는가</text>
+<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">공통 Component는 같은 위치 / T는 domain graph / A는 workflow continuation / B는 세션 메모리만 사용</text>
 <text x="48" y="1414" font-size="18" font-weight="400" fill="#171717">VIA / Stage 4 / 구조 탐색, 미채택 대안 / 구현 및 측정 결과 아님</text>
 <text x="72" y="215" font-size="28" font-weight="700" fill="#171717">T  실제 reviewed target</text>
 <text x="908" y="215" font-size="28" font-weight="700" fill="#171717">A  대안 구조</text>
 <text x="1744" y="215" font-size="28" font-weight="700" fill="#171717">B  기능을 제한한 대안</text>
-<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">파랑: 바뀌는 책임과 자료 / 검정: 공통 책임 / 박스는 명시한 논리 구성 또는 runtime / 화살표 label의 경계를 비교</text>
-<text x="949" y="1215" font-size="20" font-weight="400" fill="#171717">활동 → host admission → Task Manager → Agent Gateway</text>
-<text x="949" y="1245" font-size="20" font-weight="400" fill="#171717">Agent 내부 계획과 외부 실행은 이동하지 않음</text>
-<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">복구는 같은 업무의 상태 확인이다. 어떤 안도 workflow 재실행만으로 외부 exactly-once나 실제 청취를 보장하지 않는다.</text>
+<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">박스: Component, 서브시스템, 논리 실행체 또는 저장소 이름 / 번호 화살표: 동작과 순서 / 검정: 공통 / 파랑: 달라지는 구조</text>
+<text x="118" y="1240" font-size="18" font-weight="400" fill="#1458C0">차이: 대기와 질문의 권위 원본이 VIA domain 상태다.</text>
+<text x="118" y="1268" font-size="18" font-weight="400" fill="#1458C0">외부 실행 결과는 source에서 다시 확인한다.</text>
+<text x="954" y="1240" font-size="18" font-weight="400" fill="#1458C0">차이: 대기와 재개의 권위 원본이 workflow continuation이다.</text>
+<text x="954" y="1268" font-size="18" font-weight="400" fill="#1458C0">Task lifecycle과 Agent 실행 책임은 옮기지 않는다.</text>
+<text x="1790" y="1240" font-size="18" font-weight="400" fill="#1458C0">재시작: 기존 Task는 source와 원장으로 확인한다.</text>
+<text x="1790" y="1268" font-size="18" font-weight="400" fill="#1458C0">잃은 목표 관계와 질문은 복원하지 않고 사용자에게 다시 묻는다.</text>
+<text x="48" y="1380" font-size="20" font-weight="400" fill="#171717">공통: Request Controller가 의미와 현재성을 최종 확인한다. 저장된 상태를 재생하는 것만으로 외부 실행 또는 실제 전달 성공을 만들지 않는다.</text>
 </g></svg>

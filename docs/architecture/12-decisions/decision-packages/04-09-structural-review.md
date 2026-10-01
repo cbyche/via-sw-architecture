@@ -1,6 +1,6 @@
 # 4단계 — 구조 탐색 검토 기록
 
-> 상태: **독립 검토, 수정 및 재확인 완료 / 사용자 리뷰 대기** / 2026-10-01
+> 상태: **독립 검토, 수정 및 재확인 완료 / 04-01 사용자 리뷰 반영 후 재검토 대기** / 2026-10-01
 > 대상: [04-00 전체 지도](./04-00-structural-alternatives.md)와 04-01~06 개별 구조 설명 및 비교 그림.
 > §2~4는 최초 04-00 검토 기록이며, 개별 문서와 그림으로 정리한 후속 리뷰는 §5에 있다.
 
@@ -18,10 +18,10 @@ P-01/02/03/04/05/06/14를 집중 탐색하고, 중첩된 메커니즘을 6개 S 
 | --- | --- | --- |
 | 요구와 기능 손실 | 02의 완전 지원 전제를 되살려 제한된 대안을 사전 탈락시킬 위험 | 이후 사용자 합의가 탐색에 우선함을 명시. S-02 B의 자연 지칭, S-04 B의 요청과 질문 복구, S-05 A의 S2S 직접 기능 손실을 V-02/03에 기록 |
 | P별 노력 | 모든 P에 V-03/04/05가 연결됐다는 이유로 균등 탐색할 위험 | §2에 실제 인과와 깊이 기록. P-08/09/15는 낮은 중요도가 아니라 실행 경로를 공유하는 연계 대상으로 표시 |
-| S-01 target 표현 | target의 다음 semantic 호출이 항상 새 model session이라는 근거 없는 추정 가능 | ‘host가 해석 제안과 다음 호출을 번갈아 조정’으로 수정. 대안의 차이는 임시 continuation과 읽기 실행 소유권 |
+| S-01 target 표현 | target의 다음 semantic 호출이 항상 새 model session이라는 근거 없는 추정 가능 | Request Controller가 해석 제안과 다음 호출을 번갈아 조정한다고 수정. 대안의 차이는 임시 continuation과 읽기 실행 소유권 |
 | S-02 생산 비용 | 사전 객체 이력을 무료로 얻거나 객체 ID를 source의 영구 ID로 간주할 위험 | producer, 파생 저장, background vision, 제한된 raw fallback과 gap 명시. 객체 추적과 시간 정렬은 미확인 |
 | S-03 target 약화 | 기존 target에 index/cache/summary가 없는 것처럼 비교할 위험 | 현재 metadata/keyword index와 cache를 명시. 새 helper, 갱신, 삭제와 fallback 비용 포함 |
-| S-04 권위와 crash | workflow 이름만 추가하고 기존 graph도 별도 writer로 남기거나 signal/activity를 비내구 호출로 연결할 위험 | continuation과 질문 원본을 runtime으로 이동. 로컬 signal 수락, 전이, intent transaction과 host admission 재검사 명시. Task와 외부 효과 권위는 별개 |
+| S-04 권위와 crash | workflow 이름만 추가하고 기존 graph도 별도 writer로 남기거나 signal/activity를 비내구 호출로 연결할 위험 | continuation과 질문 원본을 runtime으로 이동. 로컬 signal 수락, 전이, intent transaction과 Request Controller admission 재검사 명시. Task와 외부 효과 권위는 별개 |
 | S-05 출력 | target이 전체 답을 기다린다고 가정하거나 Core-only를 같은 S2S 기능이라고 부를 위험 | target의 문장 단위 출력 가능성 보존. S2S 미지원과 publication/실제 전달의 비원자성 명시 |
 | S-06 음성 | native event adapter가 없는 시각을 만들어내거나 일치율을 정확성으로 오인할 위험 | 실제 native capability 미확인, 오류 상관, shared runtime 장애와 지속 인식 제한 명시. target도 이미 Omni에 원음을 보낸다는 사실 보존 |
 | 전역 QA와 시간 | 질문별 진단이 다른 QA 정의가 되거나 외부 Agent 시간이 VIA 성능에 포함될 위험 | 모든 S의 13개 관점 검토. 공통 정의와 측정 계약 원칙 유지. 미지원 안내와 최종 결과 전달, 사람 및 Agent 대기를 구별 |
@@ -45,9 +45,9 @@ P-01/02/03/04/05/06/14를 집중 탐색하고, 중첩된 메커니즘을 6개 S 
 
 | ID | 문제와 반례 | 수정 |
 | --- | --- | --- |
-| IR-01 / P2 | S-05가 정규 전사와 Core 전체 장애를 Core-only 대안에 새로 생긴 불이익처럼 설명했다. Target S2S도 정규 전사 및 input_echo 대조, Request Controller admission과 Response Manager 게시를 요구하므로 Core 종료는 양안에 영향을 준다. | S-05 V-01/04/07에 공통 ASR와 host 확정을 명시했다. VoiceProposal 기반 판단과 Request Interpreter의 semantic 처리 차이, semantic → SpeechRender 의존성, 국소 semantic 실패를 분리했다. 실제 국소 장애 격리는 미확인이다. |
+| IR-01 / P2 | S-05가 정규 전사와 Core 전체 장애를 Core-only 대안에 새로 생긴 불이익처럼 설명했다. Target S2S도 정규 전사 및 input_echo 대조, Request Controller admission과 Response Manager 게시를 요구하므로 Core 종료는 양안에 영향을 준다. | S-05 V-01/04/07에 공통 ASR와 Request Controller 확정을 명시했다. VoiceProposal 기반 판단과 Request Interpreter의 semantic 처리 차이, semantic → SpeechRender 의존성, 국소 semantic 실패를 분리했다. 실제 국소 장애 격리는 미확인이다. |
 | IR-02 / P2 | S-02 B의 ‘관측 process 감소’는 target의 UI/Core 배치와 맞지 않는다. 연속 화면 관측을 제거해도 UI/Core process 자체는 남는다. | V-07을 연속 관측 작업과 임시 상태 감소로 수정하고 UI/Core의 장애 경계를 보존했다. 선택 근거 손실과 자연 연속 지칭 미지원은 그대로 표시했다. |
-| IR-03 / P2 | S-01에서 동일한 generation, 읽기와 Context를 그대로 두고 loop만 Worker로 옮기면 ‘host 왕복 감소’는 실제 구조 이익이 아니다. Target에도 session/KV가 있다. | 중간 proposal 종료 및 host 재조립/재호출 경계를 `READ_REQUIRED`, 재개 handle, 근거 주입과 실행 재개 계약으로 바꾸는 스케치를 명시했다. 연산 양보, 유한 KV, handle 무효, 재시도 예산을 설명했다. 단순 wrapper는 구조 효과의 근거가 없고 실제 runtime 지원은 미확인이라고 밝혔다. 요약, V-04/05/06과 가설이 약해지는 조건을 동기화했다. |
+| IR-03 / P2 | S-01에서 동일한 generation, 읽기와 Context를 그대로 두고 loop만 Worker로 옮기면 ‘Request Controller 왕복 감소’는 실제 구조 이익이 아니다. Target에도 session/KV가 있다. | 중간 proposal 종료 및 Request Controller의 Context 재결합과 재호출 경계를 `READ_REQUIRED`, 재개 handle, 근거 주입과 실행 재개 계약으로 바꾸는 스케치를 명시했다. 연산 양보, 유한 KV, handle 무효, 재시도 예산을 설명했다. 단순 wrapper는 구조 효과의 근거가 없고 실제 runtime 지원은 미확인이라고 밝혔다. 요약, V-04/05/06과 가설이 약해지는 조건을 동기화했다. |
 
 명료화 권고도 함께 반영했다. S-01은 같은 input revision의 누적 읽기 및 연산 예산과 deadline을 재시도로 초기화하지 않는다. 각 대안의 V-09에는 분석용 기록과 별도로 지연, 사건 순서 또는 장애를 통제할 시험 경계를 적었다. S-04 A의 V-11에는 timer와 signal/activity 재개가 다른 PC 앱과 CPU 및 IO를 공유하는 공존성 비용을 보완했다. 시험 도구를 구현하거나 실행했다는 뜻은 아니다.
 
@@ -108,4 +108,19 @@ Target, 승인된 02/03 본문, 기존 QA 원본과 ADR, archive, 구현과 측�
 | 표현과 링크 | PASS — 04 문서의 표 열 수와 fragment, 가운데점 없음, archive 규범 링크 없음 |
 | 변경 경계 | Target, 승인된 02/03, 기존 네 참고 문서, QA 원본, ADR, archive와 실행 및 측정 자료 보존. 05 및 DP 선발 미착수 |
 
-다음은 개별 문서에 대한 사용자 리뷰다. 전달 SHA와 CI는 이 기록을 포함한 커밋의 Git 이력과 해당 workflow에서 확인한다.
+이 검사 뒤 개별 문서에 대한 사용자 리뷰를 시작했다. 04-01에서 받은 첫 리뷰와 전체 문서에 적용한 후속 수정은 §6에 기록한다. 전달 SHA와 CI는 각 커밋의 Git 이력과 해당 workflow에서 확인한다.
+
+## 6. 04-01 사용자 리뷰와 전체 설명 원칙 반영
+
+사용자는 04-01을 처음 읽는 사람이 `host`의 뜻, 공통 시작, 호출 및 반환 주체와 시간 순서를 알 수 없고, 그림과 글 어느 쪽도 독립적으로 흐름을 설명하지 못한다고 지적했다. 또한 이 문제를 04-01에만 고치지 말고 이후 모든 설명과 그림에 적용할 원칙으로 남기라고 요청했다.
+
+| 지적 | 반영 |
+| --- | --- |
+| 공통 시작이 생략됨 | 04-01 §2에 두 안이 함께 수행하는 기본 Context 구성부터 적었다. Interaction Manager가 최종 입력을 Request Controller에 보내고, Request Controller가 Context Manager에서 허용된 기본 Context와 receipt를 받아 최초 해석을 시작하는 순서를 ①~⑤로 고정했다. |
+| `host`가 누구인지 불명확함 | 04-01에서 target 문서가 넓은 의미로 사용한 표현임을 설명하고, 실제 흐름에서는 Request Controller, Context Manager처럼 책임을 가진 Component를 직접 썼다. 다른 04 문서와 전체 표의 모호한 용례도 같은 방식으로 고쳤다. |
+| “중간 제안 반환”의 송수신자가 없음 | T에서 Request Interpreter가 추가 읽기 제안을 Request Controller에 반환한다고 명시했다. A에서도 Semantic Resolution Worker, Capability Read Broker, Context Manager 사이의 요청과 반환을 각각 적었다. |
+| 화살표 방향과 순서가 부족함 | S-01 그림에 요청과 반환을 분리한 ①~⑱ 화살표를 넣고 글의 두 흐름 표와 번호를 맞췄다. 최초 입력, 기본 Context, 첫 해석, 추가 읽기, 두 번째 호출 또는 재개, 최종 제안과 Semantic Commit까지 순서대로 읽을 수 있다. |
+| 공통과 차이가 시각적으로 섞임 | 양안의 공통 Component를 같은 위치와 크기로 놓고 검정으로 표시했다. 달라지는 실행체와 경로만 파랑으로 표시했다. 박스 안에는 이름을, 동작은 번호 화살표 옆에 두었다. |
+| 같은 문제가 다른 문서와 그림에서 반복될 수 있음 | 04-00 §1.2와 저장소 AGENTS.md에 처음 읽는 사람을 위한 설명 및 그림 원칙을 기록했다. S-02~06도 공통 Component의 위치, 박스 이름, 번호가 붙은 요청과 반환, 글의 단계 번호를 같은 기준으로 다시 구성했다. |
+
+S-01~06의 SVG를 실제로 다시 렌더링해 글자 넘침과 배치를 확인했다. 생성기는 여섯 SVG와 draw.io 쌍이 같은 원본에서 만들어지고 XML, 좌표 경계, 직교 연결과 노드 관통 검사를 통과하는지 확인한다. 이 수정은 설명과 탐색안의 가독성을 높인 것이며, 대안 채택, target 변경, 구현 또는 측정의 승인이 아니다.

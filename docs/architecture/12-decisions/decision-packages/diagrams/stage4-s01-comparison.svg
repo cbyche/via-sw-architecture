@@ -1,50 +1,88 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title desc">
-<title id="title">S-01  |  근거 보완의 실행 경계를 바꾼다</title><desc id="desc">T: 중간 제안 종료 후 host 재호출 / A: READ_REQUIRED에서 연산 양보 후 같은 실행 재개 (runtime 지원 미확인)</desc>
+<title id="title">S-01  |  추가 근거가 필요할 때 해석을 어떻게 이어가는가</title><desc id="desc">①~⑤ 기본 Context 구성은 공통 / T는 첫 해석을 끝내고 다시 호출 / A는 실행을 멈췄다가 같은 실행을 재개 (지원 미확인)</desc>
 <defs><marker id="k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#171717"/></marker><marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#1458C0"/></marker></defs>
 <rect width="2560" height="1440" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
 <g id="panel0"><rect x="48" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
 <g id="panel1"><rect x="1312" y="165" width="1200" height="1130" rx="0" fill="#FFFFFF" stroke="#171717" stroke-width="2"/></g>
-<polyline id="0-edge-read" points="388,340.0 328,340 328.0,560" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-interpret" points="908,340.0 973,340 973.0,560" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-source" points="328.0,710 328.0,960" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="0-edge-model" points="973.0,710 973.0,810" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="0-edge-runtime" points="973.0,930 973.0,1060" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-request" points="1652,340.0 1602,340 1602.0,530" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-read" points="1862,612.5 2002,612.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-resume" points="1602.0,695 1602.0,870" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-yield" points="1342,932.5 1328,932.5 1328,612.5 1342,612.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
-<polyline id="1-edge-runtime" points="1602.0,995 1602.0,1110" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
-<polyline id="1-edge-cm" points="2242.0,695 2242.0,870" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<polyline id="1-edge-source" points="2242.0,995 2242.0,1110" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
-<g id="0-rc"><rect x="388" y="270" width="520" height="140" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="404" y="298" font-size="20" font-weight="700" fill="#1458C0">Request Controller</text><path d="M388 315H908" stroke="#1458C0" fill="none"/><text x="404" y="334" font-size="20" fill="#1458C0">읽기 조정, 입력 revision과 예산</text><text x="404" y="359" font-size="20" fill="#1458C0">최종 Semantic Commit</text></g>
-<g id="0-cm"><rect x="78" y="560" width="500" height="150" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="94" y="588" font-size="20" font-weight="700" fill="#171717">Context Manager</text><path d="M78 605H578" stroke="#171717" fill="none"/><text x="94" y="624" font-size="20" fill="#171717">현재 권한으로 한정 읽기</text><text x="94" y="649" font-size="20" fill="#171717">source revision과 receipt 반환</text></g>
-<g id="0-ri"><rect x="728" y="560" width="490" height="150" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="744" y="588" font-size="20" font-weight="700" fill="#1458C0">Request Interpreter</text><path d="M728 605H1218" stroke="#1458C0" fill="none"/><text x="744" y="624" font-size="20" fill="#1458C0">1차 중간 제안 종료</text><text x="744" y="649" font-size="20" fill="#1458C0">추가 근거 뒤 다음 semantic 호출</text></g>
-<g id="0-src"><rect x="78" y="960" width="500" height="145" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="94" y="988" font-size="20" font-weight="700" fill="#171717">원본 source와 owner read port</text><text x="94" y="1024" font-size="20" fill="#171717">허용된 자료와 현재 상태</text><text x="94" y="1049" font-size="20" fill="#171717">원본이 권위, cache는 재검증</text></g>
-<g id="0-ma"><rect x="728" y="810" width="490" height="120" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="744" y="838" font-size="20" font-weight="700" fill="#171717">Model Access</text><path d="M728 855H1218" stroke="#171717" fill="none"/><text x="744" y="874" font-size="20" fill="#171717">호출 및 역할별 session/KV</text></g>
-<g id="0-rt"><rect x="728" y="1060" width="490" height="150" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="744" y="1088" font-size="20" font-weight="700" fill="#171717">Shared Inference Service</text><path d="M728 1105H1218" stroke="#171717" fill="none"/><text x="744" y="1124" font-size="20" fill="#171717">공유 Omni weights 한 벌</text><text x="744" y="1149" font-size="20" fill="#171717">target도 KV/prefix 재사용 가능</text></g>
-<g id="1-rc"><rect x="1652" y="270" width="520" height="140" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1668" y="298" font-size="20" font-weight="700" fill="#171717">Request Controller</text><path d="M1652 315H2172" stroke="#171717" fill="none"/><text x="1668" y="334" font-size="20" fill="#171717">최종 proposal의 현재성 검사</text><text x="1668" y="359" font-size="20" fill="#171717">Worker에 외부 실행 권한 없음</text></g>
-<g id="1-worker"><rect x="1342" y="530" width="520" height="165" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1358" y="558" font-size="20" font-weight="700" fill="#1458C0">Semantic Resolution Worker</text><path d="M1342 575H1862" stroke="#1458C0" fill="none"/><text x="1358" y="594" font-size="20" fill="#1458C0">재개 handle, 임시 field와 read set</text><text x="1358" y="619" font-size="20" fill="#1458C0">누적 예산, revision 유지</text></g>
-<g id="1-broker"><rect x="2002" y="530" width="480" height="165" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="2018" y="558" font-size="20" font-weight="700" fill="#1458C0">Capability Read Broker</text><path d="M2002 575H2482" stroke="#1458C0" fill="none"/><text x="2018" y="594" font-size="20" fill="#1458C0">현재 권한 및 읽기 scope 검사</text><text x="2018" y="619" font-size="20" fill="#1458C0">receipt와 근거 반환</text></g>
-<g id="1-ma"><rect x="1342" y="870" width="520" height="125" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1358" y="898" font-size="20" font-weight="700" fill="#1458C0">Model Access</text><path d="M1342 915H1862" stroke="#1458C0" fill="none"/><text x="1358" y="934" font-size="20" fill="#1458C0">READ_REQUIRED / 근거 주입 / 재개</text></g>
-<g id="1-cm"><rect x="2002" y="870" width="480" height="125" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="2018" y="898" font-size="20" font-weight="700" fill="#171717">Context Manager</text><path d="M2002 915H2482" stroke="#171717" fill="none"/><text x="2018" y="934" font-size="20" fill="#171717">owner/source port로 실제 읽기</text></g>
-<g id="1-rt"><rect x="1342" y="1110" width="520" height="140" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1358" y="1138" font-size="20" font-weight="700" fill="#1458C0">Shared Inference Service</text><path d="M1342 1155H1862" stroke="#1458C0" fill="none"/><text x="1358" y="1174" font-size="20" fill="#1458C0">양보한 실행과 유한 KV</text><text x="1358" y="1199" font-size="20" fill="#1458C0">회수되면 handle 무효</text></g>
-<g id="1-src"><rect x="2002" y="1110" width="480" height="140" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="2018" y="1138" font-size="20" font-weight="700" fill="#171717">원본 source와 owner read port</text><text x="2018" y="1174" font-size="20" fill="#171717">권한 및 자료 revision</text><text x="2018" y="1199" font-size="20" fill="#171717">검색 방식 자체는 별도 선택</text></g>
-<text x="78" y="470" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">2  추가 읽기 요청 / 결과 수신</text>
-<text x="758" y="470" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">1, 3  제안 호출 / 반환</text>
-<text x="138" y="850" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">owner/source 조회</text>
-<text x="768" y="765" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">완료된 proposal 경계</text>
-<text x="763" y="990" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">semantic generation</text>
-<text x="1352" y="470" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">작업 시작 / 최종 제안 수신</text>
-<text x="1872" y="585" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">한정 읽기</text>
-<text x="1392" y="780" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">handle에 근거 주입</text>
-<text x="1357" y="830" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">READ_REQUIRED / 연산 양보</text>
-<text x="1382" y="1050" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">같은 실행 재개</text>
-<text x="2057" y="785" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">읽기 / receipt</text>
-<text x="2047" y="1050" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">실제 source 조회</text>
-<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-01  |  근거 보완의 실행 경계를 바꾼다</text>
-<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">T: 중간 제안 종료 후 host 재호출 / A: READ_REQUIRED에서 연산 양보 후 같은 실행 재개 (runtime 지원 미확인)</text>
+<polyline id="0-edge-input" points="648.0,325 648.0,400" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-base-request" points="448,437.5 298,437.5 298,560 278,560 278.0,600" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-source-read" points="278.0,670 278.0,850" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="0-edge-source-return" points="468,887.5 498,887.5 498,635 468,635.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-base-return" points="468,635.0 608,635 608,520 648,520 648.0,475" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-input" points="1912.0,325 1912.0,400" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-base-request" points="1712,437.5 1562,437.5 1562,560 1542,560 1542.0,600" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-source-read" points="1542.0,670 1542.0,850" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)"/>
+<polyline id="1-edge-source-return" points="1732,887.5 1762,887.5 1762,635 1732,635.0" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-base-return" points="1732,635.0 1872,635 1872,520 1912,520 1912.0,475" fill="none" stroke="#171717" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#k)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-first-call" points="848,437.5 968,437.5 968,560 1008,560 1008.0,600" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-model-call" points="1008.0,670 1008.0,850" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-model-return" points="808,885.0 748,885 748,635 808,635.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-intermediate" points="1208,635.0 1228,635 1228,437.5 848,437.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-extra-read" points="448,437.5 66,437.5 66,635 88,635.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-extra-return" points="468,635.0 548,635 548,500 648,500 648.0,475" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="0-edge-second-call" points="848,437.5 1188,437.5 1188,720 1008,720 1008.0,670" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="0-edge-final" points="1008.0,600 1008,540 888,540 888,437.5 848,437.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-start" points="2112,437.5 2232,437.5 2232,560 2272,560 2272.0,600" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-model-call" points="2272.0,670 2272.0,850" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-model-return" points="2472,885.0 2492,885 2492,635 2472,635.0" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-read-request" points="2072,635.0 2052,635 2052,752.5 2032,752.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-broker-request" points="1772,752.5 1662,752.5 1662,720 1542,720 1542.0,670" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-broker-return" points="1732,635.0 1902,635 1902.0,720" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<polyline id="1-edge-resume" points="1902.0,720 1902,690 2272,690 2272.0,670" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)"/>
+<polyline id="1-edge-final" points="2272.0,600 2272,540 2152,540 2152,437.5 2112,437.5" fill="none" stroke="#1458C0" stroke-width="2.5" stroke-linejoin="round" marker-end="url(#b)" stroke-dasharray="8 6"/>
+<g id="0-im"><rect x="448" y="260" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="288" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="0-rc"><rect x="448" y="400" width="400" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="464" y="428" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
+<g id="0-cm"><rect x="88" y="600" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="104" y="628" font-size="20" font-weight="700" fill="#171717">Context Manager</text></g>
+<g id="0-src"><rect x="88" y="850" width="380" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="104" y="878" font-size="20" font-weight="700" fill="#171717">원본 source / owner read port</text></g>
+<g id="0-ma"><rect x="808" y="850" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="824" y="878" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
+<g id="1-im"><rect x="1712" y="260" width="400" height="65" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="288" font-size="20" font-weight="700" fill="#171717">Interaction Manager</text></g>
+<g id="1-rc"><rect x="1712" y="400" width="400" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1728" y="428" font-size="20" font-weight="700" fill="#171717">Request Controller</text></g>
+<g id="1-cm"><rect x="1352" y="600" width="380" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1368" y="628" font-size="20" font-weight="700" fill="#171717">Context Manager</text></g>
+<g id="1-src"><rect x="1352" y="850" width="380" height="75" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="1368" y="878" font-size="20" font-weight="700" fill="#171717">원본 source / owner read port</text></g>
+<g id="1-ma"><rect x="2072" y="850" width="400" height="70" rx="8" fill="#FFFFFF" stroke="#171717" stroke-width="2.5"/><text x="2088" y="878" font-size="20" font-weight="700" fill="#171717">Model Access</text></g>
+<g id="0-executor"><rect x="808" y="600" width="400" height="70" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="824" y="628" font-size="20" font-weight="700" fill="#1458C0">Request Interpreter</text></g>
+<g id="1-executor"><rect x="2072" y="600" width="400" height="70" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="2088" y="628" font-size="20" font-weight="700" fill="#1458C0">Semantic Resolution Worker</text></g>
+<g id="1-broker"><rect x="1772" y="720" width="260" height="65" rx="8" fill="#F3F7FD" stroke="#1458C0" stroke-width="2.5"/><text x="1788" y="748" font-size="20" font-weight="700" fill="#1458C0">Capability Read Broker</text></g>
+<text x="668" y="365" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 최종 입력과 근거 전달</text>
+<text x="103" y="520" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">② 기본 Context 요청</text>
+<text x="103" y="785" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">③/⑪ 원본 읽기</text>
+<text x="508" y="790" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④/⑫ 원문, revision 반환</text>
+<text x="618" y="570" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ 기본 Context, receipt 반환</text>
+<text x="1932" y="365" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">① 최종 입력과 근거 전달</text>
+<text x="1367" y="520" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">② 기본 Context 요청</text>
+<text x="1367" y="785" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">③/⑪ 원본 읽기</text>
+<text x="1772" y="790" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">④/⑫ 원문, revision 반환</text>
+<text x="1882" y="570" font-size="19" fill="#171717" stroke="white" stroke-width="7" paint-order="stroke">⑤ 기본 Context, receipt 반환</text>
+<text x="983" y="520" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑥ 첫 해석 요청</text>
+<text x="818" y="785" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦/⑮ semantic 호출</text>
+<text x="548" y="810" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑧/⑯ model result</text>
+<text x="948" y="705" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑨ 추가 읽기 제안 반환</text>
+<text x="84" y="475" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑩ 범위와 예산 확인 후 추가 읽기</text>
+<text x="558" y="610" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑬ 추가 근거, receipt 반환</text>
+<text x="948" y="745" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑭ 두 번째 해석 요청</text>
+<text x="898" y="575" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑰ 최종 제안 반환</text>
+<text x="2267" y="520" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑥ Worker 시작</text>
+<text x="2102" y="785" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑦ 시작 / ⑮ 재개</text>
+<text x="2207" y="810" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑧ READ_REQUIRED / ⑯ 완료</text>
+<text x="1922" y="620" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑨ 읽기 요청</text>
+<text x="1457" y="745" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑩ 권한 확인 후 조회</text>
+<text x="1767" y="660" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑬ 근거, receipt 반환</text>
+<text x="2072" y="715" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑭ handle에 근거 주입</text>
+<text x="2162" y="575" font-size="19" fill="#1458C0" stroke="white" stroke-width="7" paint-order="stroke">⑰ 최종 제안 반환</text>
+<text x="48" y="58" font-size="38" font-weight="700" fill="#171717">S-01  |  추가 근거가 필요할 때 해석을 어떻게 이어가는가</text>
+<text x="48" y="104" font-size="22" font-weight="400" fill="#171717">①~⑤ 기본 Context 구성은 공통 / T는 첫 해석을 끝내고 다시 호출 / A는 실행을 멈췄다가 같은 실행을 재개 (지원 미확인)</text>
 <text x="48" y="1414" font-size="18" font-weight="400" fill="#171717">VIA / Stage 4 / 구조 탐색, 미채택 대안 / 구현 및 측정 결과 아님</text>
 <text x="72" y="215" font-size="28" font-weight="700" fill="#171717">T  실제 reviewed target</text>
 <text x="1336" y="215" font-size="28" font-weight="700" fill="#171717">A  대안 구조</text>
-<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">파랑: 바뀌는 책임과 자료 / 검정: 공통 책임 / 박스는 명시한 논리 구성 또는 runtime / 화살표 label의 경계를 비교</text>
+<text x="48" y="1345" font-size="21" font-weight="400" fill="#171717">박스: Component 또는 논리 실행체 이름 / 번호 화살표: 동작과 순서 / 검정: 공통 / 파랑: 달라지는 구조</text>
+<text x="88" y="1188" font-size="19" font-weight="400" fill="#171717">공통 ①~⑤: 두 안 모두 최초 해석 전에 같은 기본 Context를 구성한다.</text>
+<text x="88" y="1217" font-size="19" font-weight="400" fill="#171717">기본 Context는 현재 입력, 선택과 화면 근거, 최근 응답, 관련 Task 후보 등 허용된 최소 근거다.</text>
+<text x="1352" y="1188" font-size="19" font-weight="400" fill="#171717">공통 ①~⑤: 두 안 모두 최초 해석 전에 같은 기본 Context를 구성한다.</text>
+<text x="1352" y="1217" font-size="19" font-weight="400" fill="#171717">기본 Context는 현재 입력, 선택과 화면 근거, 최근 응답, 관련 Task 후보 등 허용된 최소 근거다.</text>
+<text x="608" y="1000" font-size="19" font-weight="400" fill="#1458C0">⑱ Request Controller가 현재 revision과 receipt를 확인한다.</text>
+<text x="608" y="1029" font-size="19" font-weight="400" fill="#1458C0">조건이 맞으면 Semantic Commit, 아니면 질문 또는 실패로 보낸다.</text>
+<text x="608" y="1058" font-size="19" font-weight="400" fill="#1458C0">차이: 첫 해석은 끝나며, 추가 근거를 넣은 새 호출이 시작된다.</text>
+<text x="1872" y="1000" font-size="19" font-weight="400" fill="#1458C0">⑱ Request Controller가 현재 revision과 receipt를 확인한다.</text>
+<text x="1872" y="1029" font-size="19" font-weight="400" fill="#1458C0">조건이 맞으면 Semantic Commit, 아니면 질문 또는 실패로 보낸다.</text>
+<text x="1872" y="1058" font-size="19" font-weight="400" fill="#1458C0">차이: 읽기 동안 연산을 양보하고, 근거를 받은 뒤 같은 실행을 재개한다.</text>
 </g></svg>

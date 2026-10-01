@@ -1,7 +1,7 @@
 # S-04. 목표와 질문의 대기를 이어가는 구조
 
-> 상태: **STAGE_4_REVIEW_READY / 사용자 리뷰 대기** / 2026-10-01
-> [04 전체 지도](./04-00-structural-alternatives.md#s-04) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> [04 전체 지도](./04-00-structural-alternatives.md#s-04) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-05, P-06; P-07/08/10/11/13/15 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
 ## 1. 어떤 상황에서 필요한 선택인가
@@ -24,16 +24,16 @@
 
 [그림 크게 보기](./diagrams/stage4-s04-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s04-comparison.drawio)
 
-파란색은 달라지는 책임, 자료 또는 실행 경로이며 추천 표시가 아니다. 검정은 공통으로 남는 책임이다. 박스는 논리 구성 또는 명시한 runtime이며 OS process와 같다는 뜻은 아니다. 점선 화살표의 의미는 그림의 개별 label을 따른다. 그림은 이 질문의 경계를 보여주며 전체 VIA 배치도가 아니다.
+검정 Component는 세 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 대기 권위와 복구 구조가 달라지는 구간이다. 박스 안에는 Component, 논리 실행체 또는 저장소 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과 또는 복원이다. 파란색은 추천 표시가 아니다. 이 그림은 S-04의 대기와 재개 경계만 보여주며 전체 VIA 배치도가 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-| 사건 | T: 실제 target | 대안 A | 대안 B |
+| 흐름 | T: 실제 target | 대안 A | 대안 B |
 | --- | --- | --- | --- |
-| 독립 목표 확정 | Request Controller가 graph node와 의존 관계 기록 | host가 의미를 확정한 뒤 runtime에 시작 signal을 내구 인계 | 같은 의미를 확정하되 관계는 메모리로 유지 |
-| 결과/답변 대기 | domain 상태와 질문 identity로 대기 | continuation과 Signal Inbox/Timer Service로 대기 | 세션의 graph와 실제 제시 질문 identity로 대기 |
-| 결과 도착 | 현재 result version과 권한을 검사하고 후속 admission | 유효 signal로 continuation 전이, activity intent를 기록한 뒤 host admission | 메모리 관계를 검사하고 후속 요청. 외부 전송 원장은 내구 유지 |
-| 재시작 | 같은 관계와 대기 복원 후 source 확인 | activity 재전송 전에 current owner 및 source와 조정 | 미완료 목표와 질문 연결은 복원하지 않음. 기존 Task 상태와 손실 범위 구별 |
+| 목표와 대기 생성 | ① 확정된 목표가 Request Controller에 도착한다. ② Request Controller가 durable Request Graph와 Pending User Interaction에 목표 관계와 대기 조건을 만든다. ③ graph, 질문 identity와 전이를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Interaction Workflow Runtime에 continuation 시작 signal을 보낸다. ③ runtime이 continuation, signal과 activity intent를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Session Request Coordinator의 메모리에 목표 관계를 만든다. 대기 graph는 State Store에 기록하지 않는다. |
+| 답변 또는 결과 도착 | ④ 사용자 답변 또는 Task 결과가 graph에 들어간다. ⑤ graph가 후속 요청 제안을 Request Controller에 반환한다. | ④ 답변 또는 결과 signal이 runtime에 들어간다. ⑤ runtime이 admission 요청을 Request Controller에 반환한다. | ③ 답변 또는 결과가 세션 coordinator에 들어간다. ④ coordinator가 후속 요청 제안을 Request Controller에 반환한다. |
+| 후속 명령 | ⑥ Request Controller가 현재성을 확인한 뒤 Task Manager와 Agent Gateway로 명령을 전달한다. | ⑥ 동일하다. workflow runtime이 Agent 내부 계획이나 실행을 소유하지 않는다. | ⑤ Task, command와 publication 원장은 State Store에 남긴다. ⑥ 현재성을 확인한 뒤 명령을 전달한다. |
+| 재시작 | ⑦ State Store에서 graph를 복원한 뒤 source에서 외부 상태를 다시 확인한다. | ⑦ State Store에서 continuation을 복원한 뒤 current owner와 source를 조정한다. | 목표 관계와 질문은 복원하지 않는다. 기존 Task는 source와 원장으로 확인하고, 잃은 관계는 사용자에게 다시 묻는다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 
@@ -45,9 +45,9 @@
 
 Interaction Workflow Runtime이 목표별 continuation, 의존 결과 version, 질문 대기와 timer를 내구 실행 원본으로 가진다. Signal Inbox는 source 사건과 사용자 답변을 중복 제거하며 Timer Service는 내구 deadline에 맞는 timeout signal을 만든다. Activity Dispatcher는 source 읽기, 질문 게시, 후속 admission 요청을 보낸다. Request Controller는 해석과 현재 권한의 최종 승인 경계를 유지하지만 같은 대기 그래프와 질문 상태를 별도 권위 원본으로 중복 보유하지 않는다. 조회용 view는 workflow 원본에서 만든다. Task Manager의 실제 업무 lifecycle과 Agent Gateway의 명령 전송은 유지한다.
 
-Continuation Store는 State Store의 별도 논리 영역으로 두고 signal 수락, continuation 전이와 activity intent를 하나의 로컬 transaction에 기록하는 안으로 잡았다. Task Manager가 확정한 사건은 내구 outbox에서 전달하고, runtime은 중복 제거 후 수락한다. Activity Dispatcher가 보낸 admission 요청은 host에서 identity와 현재 epoch를 다시 검사한다. 이 연결을 단순 함수 호출로만 두면 crash 때 유실 또는 중복이 생긴다.
+Continuation Store는 State Store의 별도 논리 영역으로 두고 signal 수락, continuation 전이와 activity intent를 하나의 로컬 transaction에 기록하는 안으로 잡았다. Task Manager가 확정한 사건은 내구 outbox에서 전달하고, runtime은 중복 제거 후 수락한다. Activity Dispatcher가 보낸 admission 요청은 Request Controller가 identity와 현재 epoch를 다시 검사한다. 이 연결을 단순 함수 호출로만 두면 crash 때 유실 또는 중복이 생긴다.
 
-답변은 실제 제시된 interaction ID, 현재 workflow version, Execution 및 승인 digest에 맞는 continuation에만 들어간다. 답변 수락과 해당 대기 종료도 같은 runtime transaction에서 처리한다. 선행 결과 version이 바뀌면 미해제 continuation을 무효화한다. 이미 해제한 외부 실행은 되감지 않고 새 정정으로 처리한다. Workflow의 재개 기록만으로 외부 Agent의 exactly-once를 보장하지 않는다. Activity의 stable identity와 host admission, command outbox, source 조회가 여전히 필요하다.
+답변은 실제 제시된 interaction ID, 현재 workflow version, Execution 및 승인 digest에 맞는 continuation에만 들어간다. 답변 수락과 해당 대기 종료도 같은 runtime transaction에서 처리한다. 선행 결과 version이 바뀌면 미해제 continuation을 무효화한다. 이미 해제한 외부 실행은 되감지 않고 새 정정으로 처리한다. Workflow의 재개 기록만으로 외부 Agent의 exactly-once를 보장하지 않는다. Activity의 stable identity와 Request Controller admission, command outbox, source 조회가 여전히 필요하다.
 
 ### 대안 B — 세션 한정 요청 coordinator
 
@@ -59,7 +59,7 @@ B의 재시작 뒤에는 확인 가능한 기존 Task와 결과를 보여주되 
 | --- | --- | --- | --- |
 | 정상 결과 도착 | current graph의 version과 조건 확인 후 후속 해제 | Signal Inbox 반영 후 해당 continuation의 activity 실행 | 메모리 관계 확인 후 후속 요청 생성 |
 | 질문 대기 중 새 목표 | 별도 Request와 질문 identity로 진행 | 별도 continuation 진행, 제시 focus를 결합 | 메모리 identity로 진행, 단일 ‘마지막 질문’만 두지 않음 |
-| 정정과 전송 경쟁 | host hold/epoch와 조건부 dispatch | workflow 취소 신호와 별개로 동일 host dispatch 경계 필요 | 내구 command admission 경계 유지. 그래프가 메모리라는 이유로 전송 검사 생략 불가 |
+| 정정과 전송 경쟁 | Request Controller의 hold/epoch와 조건부 dispatch | workflow 취소 신호와 별개로 동일한 Request Controller dispatch 경계 필요 | 내구 command admission 경계 유지. 그래프가 메모리라는 이유로 전송 검사 생략 불가 |
 | crash 뒤 대기 복원 | current records와 미완료 원장 및 source 확인 | 내구 continuation과 signal/activity 기록 복원 및 source 확인 | 해당 기능 미지원. 확인되는 Task 상태와 잃은 목표 관계를 구분 |
 | 저장 또는 이행 실패 | 새 외부 전송 차단, 상태 보존 및 실패 표시 | continuation version과 activity 이행 실패에서도 동일한 제한. 같은 저장소여도 activity 전달과 외부 실행은 별도 경계이므로 중복 및 유실 조정 필요 | 남아 있는 Task/command 저장 실패에서도 새 전송 금지. 제거한 저장만큼 전체 persistence가 사라진 것은 아님 |
 
@@ -69,7 +69,7 @@ B의 재시작 뒤에는 확인 가능한 기존 Task와 결과를 보여주되 
 | --- | --- |
 | 시작과 대기 | Request Controller의 내구 Request 기록과 시작 signal을 같은 State Store transaction에 남긴다. runtime은 signal ID로 중복 제거. 사용자 대기에는 Omni KV와 source 연결을 붙잡지 않음 |
 | 활동의 범위 | source 읽기, 의미 제안, 질문과 응답 게시, Task command 요청, typed 기억 변경 등 VIA 활동으로 한정. Agent 업무의 내부 도구 계획은 정의하지 않음 |
-| 답변과 terminal 경쟁 | host의 실제 제시 질문 binding 및 승인 digest 확인에 더해 runtime 질문 revision과 Task Manager의 Execution revision을 같은 Unit of Work로 검증. terminal이 먼저면 늦은 answer activity는 실행하지 않음 |
+| 답변과 terminal 경쟁 | Request Controller가 실제 제시 질문의 binding 및 승인 digest를 확인하고, runtime 질문 revision과 Task Manager의 Execution revision을 같은 Unit of Work로 검증. terminal이 먼저면 늦은 answer activity는 실행하지 않음 |
 | 기억 변경 | 원본 writer는 Context Manager. change ID, expected revision과 현재 epoch를 검사해 한 번 적용하고 재시도는 적용 여부 확인. workflow 성공 표시가 기억 원본을 대신하지 않음 |
 | 위임 수명 | Agent 접수 ACK는 위임 Request 처리의 완료 경계. Agent 업무 완료는 별도 Task lifecycle이며 이후 질문/결과는 같은 Task와 Conversation을 참조한 continuation으로 연결 |
 | 접수 불명과 재시작 | activity transport timeout을 새 Agent start로 재시도하지 않음. 새 incarnation 및 fence 뒤 같은 command key와 source를 확인하고 현재 owner revision과 미완료 activity를 조정 |

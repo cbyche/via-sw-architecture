@@ -1,7 +1,7 @@
 # S-06. 음성 입력 근거를 생산하는 구조
 
-> 상태: **STAGE_4_REVIEW_READY / 사용자 리뷰 대기** / 2026-10-01
-> [04 전체 지도](./04-00-structural-alternatives.md#s-06) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> [04 전체 지도](./04-00-structural-alternatives.md#s-06) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-14; P-01/02/08/15 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
 ## 1. 어떤 상황에서 필요한 선택인가
@@ -24,16 +24,16 @@
 
 [그림 크게 보기](./diagrams/stage4-s06-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s06-comparison.drawio)
 
-파란색은 달라지는 책임, 자료 또는 실행 경로이며 추천 표시가 아니다. 검정은 공통으로 남는 책임이다. 박스는 논리 구성 또는 명시한 runtime이며 OS process와 같다는 뜻은 아니다. 점선 화살표의 의미는 그림의 개별 label을 따른다. 그림은 이 질문의 경계를 보여주며 전체 VIA 배치도가 아니다.
+검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 인식 근거 생산자가 달라지는 구간이다. 박스 안에는 Component, 논리 실행체 또는 자료 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 점선은 생산자가 Model Access에 반환하는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-06의 음성 근거 생산 경계만 보여주며 전체 VIA 배치도가 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-| 사건 | T: 실제 target | 대안 A |
+| 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
-| 새 발화 | Interaction Manager가 capture와 local stop 수행 | 동일. 추론이 멎어도 capture와 local stop은 별도 |
-| 인식 근거 | 독립 ASR가 revision, 시각, gap 생산. Omni도 원음 처리 | Omni native evidence를 Native Evidence Adapter가 canonical 입력으로 변환 |
-| 화면 지칭 | 당시 화면과 sample 시각을 결합. 중요한 근거 충돌 재확인 | 같은 시간 결합 요구. 단일 producer의 자기 일치는 독립 검증 아님 |
-| Omni 장애 | 인식은 계속될 수 있으나 의미 이해와 음성 생성은 불가 | capture는 남지만 recognition도 중단. 유한 backlog와 gap을 명시 |
+| 원음 전달 | Interaction Manager는 추론 밖에서 capture와 local stop을 수행한다. ① 원음을 Speech Input Worker의 독립 인식 경로에 보낸다. ② 같은 원음을 Shared Inference Service의 Omni 경로에도 보낸다. | Interaction Manager의 capture와 local stop은 동일하다. ① 원음을 Shared Inference Service의 Omni 경로에 보낸다. 독립 Speech Input Worker는 없다. |
+| 근거 반환 | ③ Speech Input Worker가 전사 revision, sample 시각과 gap을 Model Access에 반환한다. ④ Shared Inference Service가 Omni 해석 결과를 Model Access에 반환한다. | ② Native Evidence Producer가 native 전사 event와 시각을 Model Access에 반환한다. Native Evidence Adapter는 없는 시각 근거를 만들어내지 않는다. |
+| canonical 입력 | ⑤ Model Access가 두 producer의 근거, revision과 incarnation을 구별해 SpeechEvidence와 Input Record에 기록한다. 중요한 불일치는 보존하고 재확인한다. | ③ Model Access가 native event를 canonical 입력으로 변환해 기록한다. 단일 producer의 자기 일치는 독립 검증으로 보지 않는다. |
+| Omni 장애 | 독립 ASR는 전사를 계속 만들 수 있지만 의미 이해와 Voice 생성은 불가하다. | capture는 계속되지만 recognition도 중단된다. 복구할 수 없는 구간은 gap으로 남긴다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

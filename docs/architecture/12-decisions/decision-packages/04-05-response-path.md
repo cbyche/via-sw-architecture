@@ -1,7 +1,7 @@
 # S-05. 직접 응답 경로를 유지하거나 줄이는 구조
 
-> 상태: **STAGE_4_REVIEW_READY / 사용자 리뷰 대기** / 2026-10-01
-> [04 전체 지도](./04-00-structural-alternatives.md#s-05) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> [04 전체 지도](./04-00-structural-alternatives.md#s-05) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-04; P-08/09/14 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
 ## 1. 어떤 상황에서 필요한 선택인가
@@ -24,16 +24,16 @@
 
 [그림 크게 보기](./diagrams/stage4-s05-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s05-comparison.drawio)
 
-파란색은 달라지는 책임, 자료 또는 실행 경로이며 추천 표시가 아니다. 검정은 공통으로 남는 책임이다. 박스는 논리 구성 또는 명시한 runtime이며 OS process와 같다는 뜻은 아니다. 점선 화살표의 의미는 그림의 개별 label을 따른다. 그림은 이 질문의 경계를 보여주며 전체 VIA 배치도가 아니다.
+검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 화살표는 응답 생성 경로가 달라지는 구간이다. 박스 안에는 Component 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-05의 응답 생성과 전달 경계만 보여주며 전체 VIA 배치도가 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-| 사건 | T: 실제 target | 대안 A |
+| 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
-| 발화 입력 | 정규 전사와 원음을 S2S 경로가 사용 | 정규 입력 근거를 Core가 사용 |
-| 답변 준비 | VoiceProposal과 보류 generation 준비. host가 좁은 범위 검사 | semantic handling과 허용 draft 또는 필요한 응답 구성 |
-| Voice 전달 | 허용된 generation을 Response Manager가 release | 승인 Text를 공유 Omni SpeechRender에 전달 |
-| 후속 업무 | 게시된 Response를 같은 대화의 업무 근거로 연결 | 동일. 사용자가 답을 다시 붙여넣는 구조로 바꾸지 않음 |
+| 입력과 제안 | ① Interaction Manager가 원음을 Model Access에 보내 VoiceProposal을 요청한다. ② Model Access가 VoiceProposal과 보류한 generation handle을 반환한다. ③ Interaction Manager가 정규 입력과 VoiceProposal을 Request Controller에 전달한다. | ① Interaction Manager가 정규 입력을 Request Controller에 전달한다. ② Request Controller가 모든 요청을 Request Interpreter에 보낸다. ③ Request Interpreter가 semantic proposal을 Request Controller에 반환한다. |
+| Core가 필요한 경우 | ④a Request Controller가 직접 처리할 수 없는 요청을 Request Interpreter에 보낸다. ④b Request Interpreter가 semantic proposal을 반환한다. current-Turn-only 요청은 이 우회 없이 좁은 직접 경로를 사용할 수 있다. | 모든 요청이 ②와 ③의 Core 경로를 거친다. S2S 직접 기능은 미지원이다. |
+| 확정과 음성 생성 | ⑤ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑥ Response Manager가 보류 generation을 release하거나 SpeechRender를 요청한다. ⑦ Model Access가 음성 결과를 Response Manager에 반환한다. | ④ Request Controller가 현재성을 확인한 뒤 Response Manager에 게시를 허용한다. ⑤ 승인 Text는 음성 생성을 기다리지 않고 게시할 수 있다. ⑥ Response Manager가 승인 Text로 SpeechRender를 요청한다. ⑦ Model Access가 음성 결과를 반환한다. |
+| 사용자 전달 | ⑧ Response Manager가 Text 게시와 Voice 재생을 Interaction Manager에 요청한다. Interaction Manager가 실제 전달 receipt를 남긴다. | ⑧ Response Manager가 검사한 Voice를 Interaction Manager에 전달한다. 게시된 Response는 같은 대화의 후속 업무 근거로 남는다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 
@@ -53,7 +53,7 @@ Target은 자체 지식으로 답할 수 있는 current-Turn-only 질문에서 V
 
 | 공통으로 남는 경계 | T와 A의 적용 |
 | --- | --- |
-| 입력과 확정 | T도 정규 전사와 input_echo 대조 및 host admission이 필요. A에만 ASR 또는 Core 의존성이 생긴 것이 아님 |
+| 입력과 확정 | T도 정규 전사와 input_echo 대조 및 Request Controller admission이 필요. A에만 ASR 또는 Core 의존성이 생긴 것이 아님 |
 | Text와 Voice | 공통 사실에서 상세 Text와 핵심 Voice를 만든다. T도 검증된 문장 단위 전달 가능. A의 SpeechRender는 승인 Text에 묶음 |
 | 실제 전달 | publication, UI 표시와 audible receipt는 다른 사건. 생성된 내용을 사용자가 들었다고 가정하지 않음 |
 | 중단과 복구 | local stop과 output epoch, 부분 전달/DELIVERY_UNKNOWN을 유지. Voice 중단을 Agent Task 취소로 바꾸지 않음 |
@@ -67,10 +67,10 @@ Target은 자체 지식으로 답할 수 있는 current-Turn-only 질문에서 V
 | V-01 기능 정확성 | 경로별 불일치와 handoff 오류를 줄일 여지가 있다. Target S2S도 정규 전사와 input_echo 대조를 사용하므로 ASR 의존성을 A만의 비용으로 세지 않는다. A는 VoiceProposal의 자체 분류와 원음 활용 경로를 정규 입력 기반 Request Interpreter의 semantic 처리로 바꾸므로 오류 유형과 음성 단서 보존의 차이를 확인해야 한다. 같은 모델 사용은 독립 검증이 아니다. |
 | V-02 기능 적절성 | 직접 답변에서 후속 업무로 이어지는 사용자 흐름은 유지 목표. 경로가 단일하다는 이유만으로 사용자 단계가 줄었다고 주장하지 않는다. |
 | V-03 기능 완전성 | 일반 질문 답변은 유지하되 B-03의 S2S 직접 응답은 포기한다. 음성의 풍부한 표현 보존 여부도 실제 SpeechRender 지원으로 확인한다. |
-| V-04 상호작용 반응성 | 양안 모두 host 확정을 거친다. A는 단순 자체 지식 질문도 Request Interpreter의 semantic 호출 뒤 SpeechRender로 이어지므로 target의 speculative 직접 경로보다 첫 Voice 대기가 늘 수 있다. 맥락 요청에서 불필요한 speculative 작업은 줄일 여지가 있다. |
+| V-04 상호작용 반응성 | 양안 모두 Request Controller의 확정을 거친다. A는 단순 자체 지식 질문도 Request Interpreter의 semantic 호출 뒤 SpeechRender로 이어지므로 target의 speculative 직접 경로보다 첫 Voice 대기가 늘 수 있다. 맥락 요청에서 불필요한 speculative 작업은 줄일 여지가 있다. |
 | V-05 VIA 귀속 요청 완료 시간 | handoff와 미사용 생성 제거, 모든 질문의 Core 처리 및 SpeechRender 의존성을 함께 본다. 첫 음성이 빠른 것과 최종 내용 전달은 구별한다. |
 | V-06 자원 활용성과 수용량 | speculative generation/buffer가 줄지만 Core 부하가 늘 수 있다. 같은 weights를 쓰므로 Omni 모델 하나가 통째로 줄어드는 효과는 없다. |
-| V-07 결함 허용성과 복구성 | direct/Core 전환 실패는 줄일 수 있다. Core process 장애는 target의 S2S admission과 publication도 막는 공통 한계다. Request Interpreter의 의미 제안만 실패하고 host admission 및 게시가 살아 있는 국소 장애에서는 target의 좁은 직접 경로가 남을 가능성과 A의 전 경로 의존성을 구별한다. 실제 격리 가능성은 미확인이다. |
+| V-07 결함 허용성과 복구성 | direct/Core 전환 실패는 줄일 수 있다. Core process 장애는 target의 S2S admission과 publication도 막는 공통 한계다. Request Interpreter의 의미 제안만 실패하고 Request Controller admission 및 게시가 살아 있는 국소 장애에서는 target의 좁은 직접 경로가 남을 가능성과 A의 전 경로 의존성을 구별한다. 실제 격리 가능성은 미확인이다. |
 | V-08 변경 용이성과 모듈성 | VoiceProposal와 direct admission 연동을 제거한다. SpeechRender의 Text/audio 대응 계약 변경은 여전히 Model Access, Response Manager와 전달 검증에 영향을 준다. |
 | V-09 분석 및 시험 용이성 | 한 semantic commit에서 게시까지 추적할 수 있다. 전사, 해석, 생성 및 실제 전달 원인은 계속 구분해야 한다. semantic 실패, 늦은 generation과 receipt, 출력 중단을 각각 통제할 시험 경계가 필요하다. |
 | V-10 기밀성 | target의 직접 경로는 current-Turn-only다. Core 경로에 필요 이상의 개인 Context를 넣으면 노출 범위가 늘 수 있으므로 최소 자료 준비가 필요하다. |
