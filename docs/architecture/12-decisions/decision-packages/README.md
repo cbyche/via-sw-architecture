@@ -1,24 +1,24 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **1단계 검토본 완료·공동 검토 대기** · 기존 4개는 재평가 입력 · 최종 DP 선정·대안 채택·성능 우열 미확정
+> 현재 상태: **2단계 리뷰 자료 완료 / 사용자 검토 대기** · 기존 4개는 재평가 입력 · 최종 DP 선정·대안 채택·성능 우열 미확정
 > 방안 1은 검토 완료 target, 방안 2는 같은 VIA 문제를 푸는 다른 SW Architecture다. 구현·모델 실행·성능 측정은 하지 않았다.
 
 ## 현재 작업부터 읽기
 
-먼저 **[1단계 중요 문제 원장](./01-00-problem-coverage.md)**의 요약 표와 초기 10개 변경 이유를 읽는다. 16개는 공동 검토할 문제 영역이며 DP 개수가 아니다. 사용자와 이 단계의 범위·중요성을 검토하기 전에는 2단계로 넘어가지 않는다.
+먼저 **[02-00-requirements-and-choices.md — 요구와 현재 해결 수단](./02-00-requirements-and-choices.md)**을 읽는다. §2의 공통 경계와 §3의 요약표를 본 뒤 관심 있는 P의 상세 표로 내려가면 된다. P-01~16마다 필수 결과·예외·현재 target·설계 자유도·미확인 지원 조건을 구분했다.
 
-- [UC 상세 추적](./01-01-problem-coverage-use-cases.md): 18개 UC·94개 필수 변형과 공통 경계.
-- [운영·변화·품질 점검](./01-02-problem-coverage-crosscutting.md): 16개 고정 가정·24+5개 변화·10개 QC·교차 예외.
-- [독립 검토 기록](./01-03-problem-coverage-review.md): 발견사항·수정·확인 범위.
+- [2단계 독립 검토 기록](./02-01-requirements-review.md): 분류 오류·요구 약화·capability 가정 점검과 보완.
+- [1단계 중요 문제 원장](./01-00-problem-coverage.md): 16개 문제와 VIA 특성. 사용자 검토 후 2단계 진행을 승인받았다. 16개는 DP 개수가 아니다.
+- [UC 상세 추적](./01-01-problem-coverage-use-cases.md), [운영·변화·품질 점검](./01-02-problem-coverage-crosscutting.md), [1단계 검토 기록](./01-03-problem-coverage-review.md): 문제 범위의 근거.
 - [WORKPLAN의 현재 6단계](./00-workplan.md): 순서·산출물·재개 지점.
 
-**이번 리뷰에서 확인할 세 가지**
+**이번 리뷰에서는 다음을 확인한다.**
 
-1. 16개 문제 영역에 VIA가 반드시 풀어야 할 중요한 문제가 빠져 있는가?
-2. 각 문제의 중요성과 실패 영향이 과제 목적에 비추어 타당한가?
-3. 문제를 불필요하게 나누거나 서로 다른 문제를 과도하게 묶은 부분이 있는가?
+1. 반드시 유지해야 할 사용자 행동을 ‘바꿀 수 있는 수단’으로 잘못 분류했는가?
+2. 현재 target의 구현 구조를 모든 대안의 필수 제약으로 묶었는가?
+3. 정상·실패·복구 조건 또는 실제 dependency 지원 한계가 빠졌는가?
 
-의견은 `P 번호 + 수정/추가/통합 의견`으로 남기면 해당 근거와 함께 반영한다. 아직 구조 대안이나 DP 선정을 승인받는 단계가 아니다.
+의견은 `P 번호 또는 B 번호 + 수정할 분류/빠진 조건`으로 남기면 된다. 이번에는 요구/수단의 분류를 검토한다. 품질 충돌은 3단계, 여러 구조 탐색은 4단계부터 진행하며 아직 착수하지 않았다.
 
 문제·요구·품질·여러 구조를 검토한 뒤 DP를 선발한다. 아래 네 문서는 재평가 입력으로 보존하며 새 문제 탐색의 최종 선발 결과가 아니다.
 
@@ -29,17 +29,18 @@
 | 단계 | 파일 | 상태 |
 | --- | --- | --- |
 | 전체 계획 | [00-workplan.md](./00-workplan.md) | 현재 진행·재개 기준 |
-| 1. 문제 범위 | [01-00-problem-coverage.md](./01-00-problem-coverage.md) | 공동 검토 대기 |
+| 1. 문제 범위 | [01-00-problem-coverage.md](./01-00-problem-coverage.md) | 사용자 검토 후 2단계 진행 승인 |
 | 1. UC 근거 | [01-01-problem-coverage-use-cases.md](./01-01-problem-coverage-use-cases.md) | 작성 완료 |
 | 1. 운영·변화·품질 근거 | [01-02-problem-coverage-crosscutting.md](./01-02-problem-coverage-crosscutting.md) | 작성 완료 |
 | 1. 독립 리뷰 | [01-03-problem-coverage-review.md](./01-03-problem-coverage-review.md) | 수정·재확인 완료 |
-| 2. 요구와 수단 | `02-00-requirements-and-choices.md` | 예정·미작성 |
+| 2. 요구와 수단 | [02-00-requirements-and-choices.md](./02-00-requirements-and-choices.md) | 작성·독립 재검토 완료, 사용자 리뷰 대기 |
+| 2. 독립 리뷰 | [02-01-requirements-review.md](./02-01-requirements-review.md) | 검토·검사 기록 |
 | 3. 품질 충돌 | `03-00-quality-scenarios.md` | 예정·미작성 |
 | 4. 구조 대안 탐색 | `04-00-structural-alternatives.md` | 예정·미작성 |
 | 5. 강한 대안 비교 | `05-00-comparison-and-selection.md` | 예정·미작성 |
 | 6. DP 선발·상세화 | `06-00-decision-packages.md`, `06-01-<topic>.md`부터 개별 자료 | 예정·미작성 |
 
-번호 없는 아래 문서들은 기존 비교·참고 자료다. 새 단계의 완료 산출물로 오인하지 않도록 구별한다. 이번 변경은 이름·탐색 경로 정리이며 2단계 착수를 뜻하지 않는다.
+번호 없는 아래 문서들은 기존 비교·참고 자료다. 새 단계의 완료 산출물로 오인하지 않도록 구별한다. 현재 2단계까지만 작성하며 아래 네 비교안은 3~6단계의 완료 증거로 취급하지 않는다.
 
 ## 기존 비교 자료
 
