@@ -30,7 +30,7 @@
 
 사용자 리뷰에 따라 처음 7개 Component 경계 후보와 직전 8개 동일 배치 중심 후보 세대는 archive로 보존했다. 현재 [상세 비교안 4개](./decision-packages/README.md)는 **의미 검색 서브시스템, 내구 요청 workflow, 음성 입력 근거 실행 구성, 권위 복구 저장**이다. 각 문서는 target을 방안 1로 고정하고, 실제 Component·실행체·저장소의 존재·부재·책임 이동이 다른 방안 2를 제시한다.
 
-배경·비교 그림 총 8장(SVG/draw.io), 실행·정정·삭제·복구 계약, ASR/추가 QA 비교표와 발표 원고를 제공한다. [지속 작업 계획](./decision-packages/WORKPLAN.md), [발굴·선발 기록](./decision-packages/discovery-and-selection.md), [선발 원칙](./decision-packages/selection-principles.md), [검토 기록](./decision-packages/review-notes.md)에 작업 방법과 판정 근거를 남겼다. 자료 완성은 최종 DP 선정·대안 채택·기준선 변경·성능 우열 확정을 뜻하지 않는다.
+배경·비교 그림 총 8장(SVG/draw.io), 실행·정정·삭제·복구 계약, ASR/추가 QA 비교표와 발표 원고를 제공한다. [지속 작업 계획](./decision-packages/00-workplan.md), [발굴·선발 기록](./decision-packages/discovery-and-selection.md), [선발 원칙](./decision-packages/selection-principles.md), [검토 기록](./decision-packages/review-notes.md)에 작업 방법과 판정 근거를 남겼다. 자료 완성은 최종 DP 선정·대안 채택·기준선 변경·성능 우열 확정을 뜻하지 않는다.
 
 ## 목표 Architecture 이후의 Decision Package
 

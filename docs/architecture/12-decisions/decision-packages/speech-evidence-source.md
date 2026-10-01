@@ -1,7 +1,7 @@
 # 음성 입력의 실행 구성 — 독립 인식 worker와 Omni native evidence
 
 > 상세 설계 비교안 / 방안 1 = REVIEWED_BASELINE / 방안 2 = 미채택 steelman / 구현·측정 없음
-> [전체 안내](./README.md) · [작업 계획](./WORKPLAN.md)
+> [전체 안내](./README.md) · [작업 계획](./00-workplan.md)
 
 **문제:** VIA가 화면을 이해하거나 길게 설명하는 동안에도 새 발화·정정을 인식하고, 그 말이 가리킨 당시 화면과 연결해야 한다. **선택:** 입력 근거를 독립 인식 실행체에서 생산할 것인가, 같은 Omni runtime의 native 입력 기능에 맡길 것인가?
 

@@ -5,12 +5,12 @@
 
 ## 현재 작업부터 읽기
 
-먼저 **[1단계 중요 문제 원장](./problem-coverage.md)**의 요약 표와 초기 10개 변경 이유를 읽는다. 16개는 공동 검토할 문제 영역이며 DP 개수가 아니다. 사용자와 이 단계의 범위·중요성을 검토하기 전에는 2단계로 넘어가지 않는다.
+먼저 **[1단계 중요 문제 원장](./01-00-problem-coverage.md)**의 요약 표와 초기 10개 변경 이유를 읽는다. 16개는 공동 검토할 문제 영역이며 DP 개수가 아니다. 사용자와 이 단계의 범위·중요성을 검토하기 전에는 2단계로 넘어가지 않는다.
 
-- [UC 상세 추적](./problem-coverage-use-cases.md): 18개 UC·94개 필수 변형과 공통 경계.
-- [운영·변화·품질 점검](./problem-coverage-crosscutting.md): 16개 고정 가정·24+5개 변화·10개 QC·교차 예외.
-- [독립 검토 기록](./problem-coverage-review.md): 발견사항·수정·확인 범위.
-- [WORKPLAN의 현재 6단계](./WORKPLAN.md): 순서·산출물·재개 지점.
+- [UC 상세 추적](./01-01-problem-coverage-use-cases.md): 18개 UC·94개 필수 변형과 공통 경계.
+- [운영·변화·품질 점검](./01-02-problem-coverage-crosscutting.md): 16개 고정 가정·24+5개 변화·10개 QC·교차 예외.
+- [독립 검토 기록](./01-03-problem-coverage-review.md): 발견사항·수정·확인 범위.
+- [WORKPLAN의 현재 6단계](./00-workplan.md): 순서·산출물·재개 지점.
 
 **이번 리뷰에서 확인할 세 가지**
 
@@ -21,6 +21,25 @@
 의견은 `P 번호 + 수정/추가/통합 의견`으로 남기면 해당 근거와 함께 반영한다. 아직 구조 대안이나 DP 선정을 승인받는 단계가 아니다.
 
 문제·요구·품질·여러 구조를 검토한 뒤 DP를 선발한다. 아래 네 문서는 재평가 입력으로 보존하며 새 문제 탐색의 최종 선발 결과가 아니다.
+
+## 단계별 파일 이름과 읽기 순서
+
+파일명은 **단계번호-읽기순서-주제**로 정렬한다. `00-workplan.md`는 전체 계획이고, 각 단계의 `00` 문서부터 읽는다. 이후 번호는 같은 단계의 상세 근거·검토 순서다.
+
+| 단계 | 파일 | 상태 |
+| --- | --- | --- |
+| 전체 계획 | [00-workplan.md](./00-workplan.md) | 현재 진행·재개 기준 |
+| 1. 문제 범위 | [01-00-problem-coverage.md](./01-00-problem-coverage.md) | 공동 검토 대기 |
+| 1. UC 근거 | [01-01-problem-coverage-use-cases.md](./01-01-problem-coverage-use-cases.md) | 작성 완료 |
+| 1. 운영·변화·품질 근거 | [01-02-problem-coverage-crosscutting.md](./01-02-problem-coverage-crosscutting.md) | 작성 완료 |
+| 1. 독립 리뷰 | [01-03-problem-coverage-review.md](./01-03-problem-coverage-review.md) | 수정·재확인 완료 |
+| 2. 요구와 수단 | `02-00-requirements-and-choices.md` | 예정·미작성 |
+| 3. 품질 충돌 | `03-00-quality-scenarios.md` | 예정·미작성 |
+| 4. 구조 대안 탐색 | `04-00-structural-alternatives.md` | 예정·미작성 |
+| 5. 강한 대안 비교 | `05-00-comparison-and-selection.md` | 예정·미작성 |
+| 6. DP 선발·상세화 | `06-00-decision-packages.md`, `06-01-<topic>.md`부터 개별 자료 | 예정·미작성 |
+
+번호 없는 아래 문서들은 기존 비교·참고 자료다. 새 단계의 완료 산출물로 오인하지 않도록 구별한다. 이번 변경은 이름·탐색 경로 정리이며 2단계 착수를 뜻하지 않는다.
 
 ## 기존 비교 자료
 
@@ -42,7 +61,7 @@
 - [선발 원칙](./selection-principles.md): Component가 바뀌는 **이유와 운영 메커니즘**을 함께 요구한다.
 - [품질 비교 규칙](./quality-comparison-contract.md): 현재 4 ASR의 적용과 메모리·추가 QA, 과장하면 안 되는 효과.
 - [검토·보완 기록](./review-notes.md): 독립 검토의 결함과 수정, 검사 범위.
-- [지속 작업 계획](./WORKPLAN.md): 작업 순서·완료 기준·재개 지점.
+- [지속 작업 계획](./00-workplan.md): 작업 순서·완료 기준·재개 지점.
 - [과거 아이디어 검토](./reference-idea-review.md): 기존 7개 및 VIA-DP 참고 범위.
 
 ## 기준선과 보관

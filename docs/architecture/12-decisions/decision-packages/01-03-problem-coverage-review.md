@@ -1,7 +1,7 @@
 # 1단계 독립 검토·보완 기록
 
 > 상태: **작성·독립 재검토 완료 / 사용자 공동 검토 대기** · 2026-10-01
-> 대상: [문제 원장](./problem-coverage.md), [UC 추적](./problem-coverage-use-cases.md), [횡단 점검](./problem-coverage-crosscutting.md)
+> 대상: [문제 원장](./01-00-problem-coverage.md), [UC 추적](./01-01-problem-coverage-use-cases.md), [횡단 점검](./01-02-problem-coverage-crosscutting.md)
 > 작성자의 문서 작성 완료와 검토자 확인, 사용자 공동 검토를 구별한다. 2~6단계는 미착수다.
 
 ## 검토 방법

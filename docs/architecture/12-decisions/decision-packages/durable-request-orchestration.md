@@ -1,7 +1,7 @@
 # 요청 대기·재개의 실행 구조 — domain controller와 workflow runtime
 
 > 상세 설계 비교안 / 방안 1 = REVIEWED_BASELINE / 방안 2 = 미채택 steelman / 구현·측정 없음
-> [전체 안내](./README.md) · [작업 계획](./WORKPLAN.md)
+> [전체 안내](./README.md) · [작업 계획](./00-workplan.md)
 
 **문제:** 사용자의 답변·선행 결과·자료 조회를 기다리던 요청을, 정정·Agent 질문·재시작이 교차해도 올바른 지점에서 이어야 한다. **선택:** Request Controller가 domain 상태와 재개 코드를 직접 소유할 것인가, 별도 Interaction Workflow Runtime이 내구 continuation과 활동 실행을 소유할 것인가?
 
