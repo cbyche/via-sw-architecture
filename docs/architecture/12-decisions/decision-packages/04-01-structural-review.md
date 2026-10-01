@@ -1,7 +1,8 @@
 # 4단계 — 구조 탐색 검토 기록
 
 > 상태: **독립 검토, 수정 및 재확인 완료 / 사용자 리뷰 대기** / 2026-10-01
-> 대상: [04-00 구조 탐색](./04-00-structural-alternatives.md)
+> 대상: [04-00 전체 지도](./04-00-structural-alternatives.md)와 04-02~07 개별 구조 설명 및 비교 그림.
+> §2~4는 최초 04-00 검토 기록이며, 개별 문서와 그림으로 정리한 후속 리뷰는 §5에 있다.
 
 ## 1. 범위와 진행
 
@@ -56,7 +57,7 @@ P-01/02/03/04/05/06/14를 집중 탐색하고, 중첩된 메커니즘을 6개 S 
 
 수정된 04-00의 실제 본문과 diff를 세 검토자가 다시 읽었다. target_review는 P2 2건, alternatives_review는 P2 1건, quality_review는 P2 1건의 해결을 각각 확인했다. **중복을 합친 P2 3건 모두 해결됐고, 최종 재검토에서 미해결 P1/P2 또는 새 중대 결함은 보고되지 않았다.** 독립 검토에서 결함을 찾지 못했다는 사실은 설계 공간을 망라했다거나 runtime 지원, 품질 우위가 입증됐다는 뜻이 아니다. S-01은 특히 미검증 실행 계약을 전제로 한 탐색안이며 강한 방안 2로 확정하지 않았다.
 
-## 4. 검사와 전달
+## 4. 최초 04-00 검사와 전달
 
 | 검사 | 결과 |
 | --- | --- |
@@ -72,3 +73,39 @@ P-01/02/03/04/05/06/14를 집중 탐색하고, 중첩된 메커니즘을 6개 S 
 Git 전달은 이 기록을 포함한 커밋의 push와 해당 SHA의 CI 상태로 확인한다. 다음 행동은 사용자의 04 문서 리뷰다.
 
 Target, 승인된 02/03 본문, 기존 QA 원본과 ADR, archive, 구현과 측정 자료는 수정하지 않았다. 05 비교와 DP 선발, QA freeze, 모델 실행과 측정은 미착수다.
+
+## 5. 사용자 리뷰 후 개별 문서와 비교 그림
+
+### 5.1 설명 구성과 참고 자료의 취사선택
+
+사용자는 S-01~06이 줄글 위주여서 이해하기 어렵다고 지적하고 개별 문서, 직접 대조할 그림, 기존 네 자료의 선택적 참고를 요청했다. 04-00은 탐색 깊이와 전체 지도, 조합 관계를 보존하고 상세 설명은 04-02~07로 이동했다. 기존 `s-01`~`s-06` anchor도 유지했다.
+
+각 문서는 사용자 상황, 핵심 차이표, T/A/B 구조도, 같은 사건의 처리 흐름, 상태와 실패, 13개 품질 관점, 성립 및 반증 조건, 참고 자료의 취사선택 순서다. A/B 수는 기존 탐색 결과를 유지했다. 여섯 SVG와 편집 가능한 draw.io 원본은 같은 생성기 좌표에서 만들며, 전체 그림을 보는 HTML도 추가했다.
+
+기존 네 자료에서 revision, 권한과 삭제 fence, 재개 identity, 활동과 외부 효과의 구별, 원자 색인 게시, producer incarnation 같은 계약을 대조했다. S-01의 runtime 재개와 S-03의 검색 자료 생산은 별개로 유지했다. S-04에 전체 domain event sourcing을 합치지 않았고, S-06의 native capability는 여전히 미확인이다. 이전 QA 수식과 선정 판단은 승계하지 않는다. 적용한 것과 제외한 것은 각 문서 §8에 기록했다.
+
+### 5.2 그림과 상세 계약의 독립 검토
+
+앞서 사용자 요청으로 시작한 세 독립 검토자에게 개별 문서와 생성 원본을 읽기 전용으로 검토하도록 했다. target_review는 실제 target 및 책임 경계를, alternatives_review는 강한 대안과 참고 자료의 취사선택을, quality_review는 품질 인과와 기능 손실을 검토했다. 그림의 새 발견사항은 중복 제외 **P2 3건**이며, §3의 최초 본문 발견사항과 별개다.
+
+| ID | 문제 | 수정 및 재확인 |
+| --- | --- | --- |
+| DG-01 / P2 | S-05 A 입력이 곧바로 Request Interpreter로 가는 그림은 초기 Request Controller의 입력, Context와 예산 결합을 생략했다. | 초기 호출과 proposal 반환을 Request Controller에 연결했다. 본문 축약 흐름도 같은 순서로 명료화했다. target_review와 quality_review가 그림의 해결을 확인했다. |
+| DG-02 / P2 | S-05 A의 단일 전달선은 Text도 음성 생성을 기다리는 것으로 보였다. | Response Manager에서 Text 직접 게시와 Model Access의 음성 생성, 결과 반환, 검사 후 Voice release를 구별했다. 실제 전달 receipt는 Interaction Manager에 표시했다. 세 검토자가 해결을 확인했다. |
+| DG-03 / P2 | S-04 B coordinator에서 Task로 직접 향하는 선은 후속 요청의 현재 admission을 우회하는 인상을 주었다. | 후속 제안을 Request Controller에 반환하고 현재 admission 및 내구 원장 뒤 Task Manager와 Agent Gateway로 전달하도록 수정했다. target_review와 alternatives_review가 해결을 확인했다. |
+
+추가 명료화로 S-05 T의 VoiceProposal 반환도 Interaction Manager를 경유하도록 고쳤다. S-02의 공통 후속 설명에 Request Controller의 입력 및 예산 결합과 Request Interpreter 호출을 적었다. 세 검토자는 수정된 실제 생성 원본과 SVG/draw.io를 다시 확인했고, **미해결 또는 신규 P1/P2를 보고하지 않았다.** 이는 runtime 지원이나 품질 우위의 입증이 아니다.
+
+### 5.3 렌더링과 최종 문서 검사
+
+| 검사 | 결과와 범위 |
+| --- | --- |
+| 실제 그림 렌더링 | PASS — headless Chrome으로 SVG 6장 렌더링 후 작성자가 전부 시각 확인. 노드의 글자 넘침 검사도 통과. PNG는 임시 검수용이며 측정 evidence가 아님 |
+| 편집 원본과 SVG | PASS — 새 생성기의 6쌍 및 gallery 생성물 일치, XML ID, 좌표 경계, 직교 연결과 무관한 node 관통 검사. CI에 같은 `--check` 추가 |
+| 기존 그림 보존 | PASS — target 13쌍과 기존 참고 자료 8쌍의 생성 일치 검사 |
+| Active 문서 | PASS — 119개 Markdown의 local link, canonical 용어, QA catalog |
+| 추적과 표 | PASS — P-01~16의 배분과 집중 P 7개, S anchor 6개, 개별 문서 6개. 기존 8개 대안의 13개 관점 전체 104개 셀 보존. 관점 이름이 03과 일치 |
+| 표현과 링크 | PASS — 04 문서의 표 열 수와 fragment, 가운데점 없음, archive 규범 링크 없음 |
+| 변경 경계 | Target, 승인된 02/03, 기존 네 참고 문서, QA 원본, ADR, archive와 실행 및 측정 자료 보존. 05 및 DP 선발 미착수 |
+
+다음은 개별 문서에 대한 사용자 리뷰다. 전달 SHA와 CI는 이 기록을 포함한 커밋의 Git 이력과 해당 workflow에서 확인한다.
