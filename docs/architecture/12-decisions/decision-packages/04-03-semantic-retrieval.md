@@ -24,11 +24,11 @@
 
 [그림 크게 보기](./diagrams/stage4-s03-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s03-comparison.drawio)
 
-검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 박스와 화살표는 구조가 달라지는 구간이다. 박스 안에는 Component, 서브시스템, 논리 실행체 또는 저장소 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-03의 후보 발견과 원문 확인 경계만 보여주며 전체 VIA 배치도가 아니다.
+검정은 공통, 파랑은 T 전용, 초록은 A/B 전용 구성과 경로다. 제목 칸이 있는 상자는 Component이며 내부의 둥근 상자는 그 Component의 Module이다. 원통은 저장소, 접힌 종이는 자료, 육각형은 내부를 펼치지 않은 연동 대상이나 모델이다. 실선은 요청과 전달, 점선 화살표는 결과와 복원이다. 색과 모양의 뜻은 [설계도 작성 기준](./diagram-design-guide.md)을 따른다. 이 그림은 비교할 책임을 펼친 것이며 전체 배치도나 구현 확정이 아니다.
 
 ## 4. 같은 요청을 따라가 보기
 
-두 안 모두 Request Controller가 Context Manager에 허용 scope와 자료 단서를 전달하고, Context Manager가 검증한 원문과 receipt를 반환한다. 아래 번호는 이 공통 호출 내부의 후보 발견과 원문 확인을 펼친 것이다. Owner Read Adapter는 Context Manager의 source 연동 모듈을 표현한 이름이며 별도 target Component가 아니다. 그림 아래의 원본은 내부 owner와 외부 source를 함께 펼친 참조다.
+두 안 모두 Request Controller가 Context Manager에 허용 scope와 자료 단서를 전달하고, Context Manager가 검증한 원문과 receipt를 반환한다. 아래 번호는 이 공통 호출 내부의 후보 발견과 원문 확인을 펼친 것이다. Owner Read Adapter는 Context Manager의 source 연동 Module을 표현한 이름이며 별도 target Component가 아니다. 그림에서는 이 Module을 Context Manager 안에 두고 쉬운 이름인 ‘원본 조회 연동’으로 표시한다. A의 점선 Subsystem은 Semantic Retrieval Service, Indexing Worker와 Embedding Runtime이라는 대안 Component를 묶는다. 각각의 내부 처리만 Module로 표시하며, 별도 process 배치는 전제하지 않는다. 그림 아래의 원본은 내부 owner와 외부 source를 함께 펼친 참조다.
 
 | 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |

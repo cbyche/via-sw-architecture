@@ -52,13 +52,19 @@ InputStarted 뒤 값싼 기본 Context 준비는 사용자가 말하는 동안 �
 | 최종 확정 | Request Controller가 최종 SemanticProposal의 현재성과 필수 field를 확인 | 동일. Worker와 모델은 실행 또는 게시를 승인할 수 없음 |
 | 새 상태와 비용 | 첫 번째 proposal, 두 번째 호출의 입력과 기존 Model Access session/KV | Worker 작업, 재개 handle, 대기 중 KV 수명과 Capability Read Broker가 추가됨 |
 
+### 3.1 이름 교체가 아닌 책임과 계약의 교체
+
+T의 Request Interpreter는 호출 한 번의 의미 제안을 반환하고 끝난다. 추가 읽기는 Request Controller 내부의 조회 조정이 진행한다. A의 Semantic Resolution Worker는 대안 Component이며, 읽기를 기다리는 동안 요청별 작업과 멈춘 실행 ID를 보유한다. Capability Read Broker도 대안 Component로서 읽기 검사와 위임 계약을 제공한다. 두 Component가 별도 process라는 뜻은 아니다.
+
+그림의 Worker 안에는 중단 상태 판별과 재개 Module, 임시 자료가 있고, Broker 안에는 읽기 범위와 예산 검사 Module이 있다. Model Access에도 같은 모델 실행을 멈췄다가 잇는 계약과 대기 상태 관리가 필요하다. 이 계약을 제공하지 못해 자료를 넣은 새 호출을 만드는 경우는 A의 구조가 성립한 것이 아니다. 최종 의미 확정은 두 안 모두 Request Controller에 남는다.
+
 ## 4. 그림과 글로 같은 흐름 따라가기
 
 ![S-01 target와 대안의 설계 비교](./diagrams/stage4-s01-comparison.svg)
 
 [그림 크게 보기](./diagrams/stage4-s01-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s01-comparison.drawio)
 
-위 구조도는 같은 기본 Context에서 출발한 뒤 **누가 추가 읽기를 진행하고 해석 실행의 수명을 소유하는지** 비교한다. VIA의 비교 대상과 모델 의존성을 구분하고, 공통 Component는 같은 위치에 놓았다. 원본 소유자의 읽기 접점은 내부 owner와 외부 source를 묶어 펼친 참조이며, 모두 VIA 밖에 배치한다는 뜻이 아니다. 파랑은 구조 차이 또는 확대 대상이며 추천 표시가 아니다. 자세한 표현 규칙은 [설계도 작성 기준](./diagram-design-guide.md)에 있다.
+위 구조도는 같은 기본 Context에서 출발한 뒤 **누가 추가 읽기를 진행하고 해석 실행의 수명을 소유하는지** 비교한다. VIA의 비교 대상과 모델 의존성을 구분하고, 공통 Component는 같은 위치에 놓았다. 원본 소유자의 읽기 접점은 내부 owner와 외부 source를 묶어 펼친 참조이며, 모두 VIA 밖에 배치한다는 뜻이 아니다. 검정은 공통, 파랑은 T 전용, 초록은 A 전용 구조와 경로다. 내부 Module은 소유 Component 안에 놓고 자료는 접힌 종이로 구분했다. 자세한 표현 규칙은 [설계도 작성 기준](./diagram-design-guide.md)에 있다.
 
 아래 실행 상세도는 구조도의 왕복 호출을 시간 순서로 펼친 것이다. 위쪽 ①~⑤는 두 안의 공통 준비다. 아래쪽은 T의 첫 호출 종료와 두 번째 호출, A의 한 작업 안에서 중단과 재개를 나란히 보여준다. 가는 세로 막대는 호출 또는 작업의 수명을 나타내며 실제 소요 시간을 측정한 길이가 아니다. 실선은 요청, 점선 화살표는 반환이다.
 

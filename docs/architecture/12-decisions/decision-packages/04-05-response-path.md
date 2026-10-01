@@ -24,11 +24,13 @@
 
 [그림 크게 보기](./diagrams/stage4-s05-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s05-comparison.drawio)
 
-검정 Component는 두 안에 공통이며 같은 위치에 놓았다. 파란 화살표는 응답 생성 경로가 달라지는 구간이다. 박스 안에는 Component 이름만 두고, 동작과 순서는 번호가 붙은 화살표 옆에 적었다. 실선은 요청이나 전달, 점선은 호출한 쪽으로 돌아오는 결과다. 파란색은 추천 표시가 아니다. 이 그림은 S-05의 응답 생성과 전달 경계만 보여주며 전체 VIA 배치도가 아니다.
+검정은 공통, 파랑은 T 전용, 초록은 A/B 전용 구성과 경로다. 제목 칸이 있는 상자는 Component이며 내부의 둥근 상자는 그 Component의 Module이다. 원통은 저장소, 접힌 종이는 자료, 육각형은 내부를 펼치지 않은 연동 대상이나 모델이다. 실선은 요청과 전달, 점선 화살표는 결과와 복원이다. 색과 모양의 뜻은 [설계도 작성 기준](./diagram-design-guide.md)을 따른다. 이 그림은 비교할 책임을 펼친 것이며 전체 배치도나 구현 확정이 아니다.
+
+A가 포기하는 것은 직접 S2S 경로이며 요청 이해나 음성 응답 전체가 아니다. Request Interpreter는 양안에서 같은 일반 해석 책임을 가지므로 검정으로 표시한다. T의 직접 음성 생성 기능이 이 Component로 옮겨 들어간 것은 아니다. A는 모든 요청을 일반 해석으로 보내고, Request Controller가 허용한 Text를 Response Manager와 Model Access가 음성으로 바꾼다. 그림에서 T 전용인 선생성, 보류 자료, 직접 허용과 해제는 파랑이고, A의 모든 요청이 따르는 경로는 초록이다.
 
 ## 4. 같은 요청을 따라가 보기
 
-양안의 Request Interpreter는 Model Access를 통해 semantic 모델을 사용한다. 구조도에서는 이 공통 왕복과 기본 Context 준비를 생략하고 응답 생성 경로를 확대했다. T의 ⑥~⑧은 직접 응답을 보류했다가 허용하는 경로다. Core로 넘어간 응답은 승인 Text의 SpeechRender와 실제 전달을 연결한다.
+양안의 Request Interpreter는 Model Access를 통해 semantic 모델을 사용한다. 구조도에서는 이 공통 모델 왕복도 표시하고, 기본 Context 준비는 생략해 응답 생성 경로를 확대했다. T의 ⑥~⑧은 직접 응답을 보류했다가 허용하는 경로다. Core로 넘어간 응답은 승인 Text의 SpeechRender와 실제 전달을 연결한다.
 
 | 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |

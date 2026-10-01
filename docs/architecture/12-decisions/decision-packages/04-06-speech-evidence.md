@@ -24,7 +24,9 @@
 
 [그림 크게 보기](./diagrams/stage4-s06-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s06-comparison.drawio)
 
-큰 VIA 경계 안에는 연동 코드를, 밖에는 모델 의존성을 두었다. 모델 내부와 학습이 VIA 책임 밖이라는 뜻이며 원격 서버 배치를 뜻하지 않는다. Model Access는 연동 책임을 나타내며 하나의 process가 아니다. 그 안에 독립 Speech Input Worker와 Shared Inference Service의 실행 경계를 펼쳤다. 두 모델의 가중치는 PC 안에 배치될 수 있다. 공통 Component는 같은 위치에 놓았고, 파랑은 비교할 구조와 확대 대상이다. 점선 화살표는 모델에서 adapter로, adapter에서 Interaction Manager로 돌아오는 근거를 나타낸다.
+큰 VIA 경계 안에는 연동 코드를, 밖에는 모델 의존성을 두었다. 모델 내부와 학습이 VIA 책임 밖이라는 뜻이며 원격 서버 배치를 뜻하지 않는다. Model Access는 연동 책임을 나타내며 하나의 process가 아니다. 그 안에 독립 Speech Input Worker와 Shared Inference Service의 실행 경계를 펼쳤다. 두 모델의 가중치는 PC 안에 배치될 수 있다. 공통 Component는 같은 위치에서 검정으로 표시한다. T 전용 ASR 경로는 파랑, A의 인식 역할을 옮겨 받는 경로와 새 변환 Module은 초록이다. Module은 Model Access 안에 있고 점선 process 경계로 실제 실행 위치를 구별한다. 점선 화살표는 모델에서 adapter로, adapter에서 Interaction Manager로 돌아오는 근거를 나타낸다.
+
+A에서는 공유 Omni 모델이 인식 근거를 생산하고 Native Evidence Adapter가 그 결과를 VIA 입력 형식으로 변환한다. Adapter가 음성을 스스로 인식하거나 모델이 주지 않은 시간을 만들어내는 구조가 아니다. 별도 ASR가 사라지는 대신 인식이 공유 추론 대기열과 같은 모델의 장애에 묶인다. 그림에서 삭제 영역뿐 아니라 새 생산자, 변환 Module과 결과 반환 경로를 함께 확인할 수 있다.
 
 ## 4. 같은 요청을 따라가 보기
 
