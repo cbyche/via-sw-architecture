@@ -28,13 +28,13 @@
 
 ## 4. 같은 요청을 따라가 보기
 
-두 안 모두 Request Controller가 Context Manager에 허용 scope와 자료 단서를 전달하고, Context Manager가 검증한 원문과 receipt를 반환한다. 아래 번호는 이 공통 호출 내부의 후보 발견과 원문 확인을 펼친 것이다. Owner Read Adapter는 Context Manager의 source 연동 Module을 표현한 이름이며 별도 target Component가 아니다. 그림에서는 이 Module을 Context Manager 안에 두고 쉬운 이름인 ‘원본 조회 연동’으로 표시한다. A의 점선 Subsystem은 Semantic Retrieval Service, Indexing Worker와 Embedding Runtime이라는 대안 Component를 묶는다. 각각의 내부 처리만 Module로 표시하며, 별도 process 배치는 전제하지 않는다. 그림 아래의 원본은 내부 owner와 외부 source를 함께 펼친 참조다.
+두 안 모두 Request Controller가 Context Manager에 허용 scope와 자료 단서를 전달하고, Context Manager가 검증한 원문과 receipt를 반환한다. 아래 번호는 사전 색인 준비와 요청 시 후보 발견, 원문 확인 및 Context 반환을 펼친 것이다. Owner Read Adapter는 Context Manager의 source 연동 Module을 표현한 이름이며 별도 target Component가 아니다. 그림에서는 이 Module을 Context Manager 안에 두고 쉬운 이름인 ‘원본 조회 연동’으로 표시한다. A의 점선 Subsystem은 Semantic Retrieval Service, Indexing Worker와 Embedding Runtime이라는 대안 Component를 묶는다. 각각의 내부 처리만 Module로 표시하며, 별도 process 배치는 전제하지 않는다. 그림 아래의 원본은 내부 owner와 외부 source를 함께 펼친 참조다.
 
 | 흐름 | T: 실제 target | 대안 A |
 | --- | --- | --- |
 | 요청 전 준비 | 별도 의미 색인을 만들지 않는다. 기존 metadata/keyword index와 cache는 유지한다. | ① Indexing Worker가 허용 source의 변경과 삭제를 수집한다. ② Embedding Runtime이 문서 표현을 만든다. ③ 완성된 Vector Index와 Source Manifest generation을 원자 게시한다. |
-| 후보 검색 | ① Context Manager가 내부 조회 모듈에 허용 scope와 이름, 기간, Task 단서를 전달한다. ② 조회 모듈이 기존 index와 cache에서 후보를 얻어 Owner Read Adapter의 원문 확인으로 연결한다. | ④ Context Manager가 Semantic Retrieval Service에 같은 허용 scope를 보낸다. ⑤ Service가 의미 후보와 lexical 후보를 조회한다. ⑥ Vector Index가 후보와 source revision을 Service에 반환한다. ⑦ Service가 후보, coverage와 manifest를 Context Manager에 반환한다. |
-| 원문 확인과 Context 조립 | ③ Owner Read Adapter가 후보 원문과 revision을 source에서 읽는다. ④ 원문, coverage와 receipt를 Context Manager에 반환한다. ⑤ Context Manager가 현재 권한과 identity를 확인해 Context를 조립한다. | ⑧ Context Manager가 후보 source에 현재 원문과 권한을 요청한다. ⑨ source가 원문, revision과 권한을 반환한다. ⑩ Context Manager가 검증된 원문으로 Context를 조립한다. 후보 1위도 대상 확정이나 실행 권한은 아니다. |
+| 후보 검색 | ① Request Controller가 Context Manager에 허용 scope와 이름, 기간, Task 단서를 전달하고 Context Manager가 내부 조회 모듈로 연결한다. ② 조회 모듈이 기존 index와 cache에서 후보를 얻어 Owner Read Adapter의 원문 확인으로 연결한다. | ④ Context Manager가 Semantic Retrieval Service에 같은 허용 scope를 보낸다. ⑤ Service가 의미 후보와 lexical 후보를 조회한다. ⑥ Vector Index가 후보와 source revision을 Service에 반환한다. ⑦ Service가 후보, coverage와 manifest를 Context Manager에 반환한다. |
+| 원문 확인과 Context 조립 | ③ Owner Read Adapter가 후보 원문과 revision을 source에서 읽는다. ④ 원문, coverage와 receipt를 Context Manager에 반환한다. ⑤ Context Manager가 현재 권한과 identity를 확인해 Context를 조립하고 Request Controller에 반환한다. | ⑧ Context Manager가 후보 source에 현재 원문과 권한을 요청한다. ⑨ source가 원문, revision과 권한을 반환한다. ⑩ Context Manager가 검증된 원문으로 Context를 조립하고 Request Controller에 반환한다. 후보 1위도 대상 확정이나 실행 권한은 아니다. |
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

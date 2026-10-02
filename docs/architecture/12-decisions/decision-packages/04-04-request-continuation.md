@@ -30,12 +30,17 @@
 
 ## 4. 같은 요청을 따라가 보기
 
+그림은 자연어 의미 해석이 필요한 목표와 후속 답변을 예로 든다. 공통 시작은 Interaction Manager의 사용자 입력 전달이다. Request Controller가 Context Manager에서 허용 근거를 받고 Request Interpreter에 해석을 요청한다. Request Interpreter가 Model Access를 통해 의미 제안을 만들고 Request Controller에 반환한다. 새 목표의 제안은 ①, 이미 제시된 질문에 대한 나중 답변의 제안은 ④a로 구별한다. Request Controller가 현재 입력, 근거와 질문 대상을 검증한다. 그림 상단은 이 공통 준비를, 각 안의 아래 부분은 그 뒤의 상태 소유와 실행을 보여준다. Task Manager의 결과는 사용자 입력과 별도로 도착한다.
+
 | 흐름 | T: 실제 target | 대안 A | 대안 B |
 | --- | --- | --- | --- |
-| 목표와 대기 생성 | ① 확정된 목표가 Request Controller에 도착한다. ② Request Controller가 durable Request Graph와 Pending User Interaction에 목표 관계와 대기 조건을 만든다. ③ graph, 질문 identity와 전이를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Interaction Workflow Runtime에 continuation 시작 signal을 보낸다. ③ runtime이 continuation, signal과 activity intent를 State Store에 기록한다. | ① 같은 목표가 도착한다. ② Request Controller가 Session Request Coordinator의 메모리에 목표 관계를 만든다. 대기 graph는 State Store에 기록하지 않는다. |
-| 답변 또는 결과 도착 | ④ Request Controller가 사용자 답변 또는 Task Manager의 결과를 현재 graph와 결합한다. ⑤ Request Controller 내부 전이가 후속 요청을 결정한다. Request Graph는 이 Component가 소유하는 자료이며 별도 실행체가 아니다. | ④ 답변 또는 Task Manager의 결과 signal이 runtime에 들어간다. ⑤ runtime이 admission 요청을 Request Controller에 반환한다. | ③ Request Controller가 답변 또는 Task Manager의 결과를 세션 coordinator에 전달한다. ④ coordinator가 후속 요청 제안을 Request Controller에 반환한다. |
-| 후속 명령 | ⑥ Request Controller가 현재성을 확인한 뒤 Task Manager와 Agent Gateway로 명령을 전달한다. | ⑥ 동일하다. workflow runtime이 Agent 내부 계획이나 실행을 소유하지 않는다. | ⑤ Task, command와 publication 원장은 State Store에 남긴다. ⑥ 현재성을 확인한 뒤 명령을 전달한다. |
-| 재시작 | ⑦ State Store에서 graph를 복원한 뒤 source에서 외부 상태를 다시 확인한다. | ⑦ State Store에서 continuation을 복원한 뒤 current owner와 source를 조정한다. | 목표 관계와 질문은 복원하지 않는다. 기존 Task는 source와 원장으로 확인하고, 잃은 관계는 사용자에게 다시 묻는다. |
+| 목표와 대기 생성 | ① Request Controller가 Request Interpreter의 목표 제안을 검증한다. ② 내부 전이가 Request Graph와 Pending User Interaction에 목표 관계와 대기 조건을 만든다. ③ Request Controller가 graph, 질문 identity와 전이를 State Store에 기록한다. | ① 같은 목표를 검증한다. ② Request Controller가 Interaction Workflow Runtime에 시작 signal을 보낸다. ③ Interaction Workflow Runtime이 continuation, 수신 signal과 다음 활동 의도를 State Store에 원자 기록한다. | ① 같은 목표를 검증한다. ② Request Controller가 Session Request Coordinator에 목표 관계 생성을 요청한다. Session Request Coordinator는 대기 graph를 RAM에만 두며 ③의 내구 기록은 없다. |
+| 나중 답변 도착 | ④a Request Interpreter가 답변 대상 제안을 Request Controller에 반환한다. ④b Request Controller가 현재 질문과 답변을 검증해 자기 graph에 반영한다. | ④a 뒤 Request Controller가 현재 질문과 답변을 검증한다. ④b 검증한 interaction ID와 답변을 Interaction Workflow Runtime에 전달한다. Interaction Workflow Runtime이 해당 대기에만 수락한다. | ④a 뒤 Request Controller가 현재 질문과 답변을 검증한다. ④b 검증한 답변을 Session Request Coordinator에 전달한다. |
+| 업무 결과 도착 | ④c Task Manager가 확인된 결과를 Request Controller에 전달한다. | ④c Task Manager가 내구 outbox를 통해 확인된 결과를 Interaction Workflow Runtime에 전달한다. | ④c Task Manager가 결과를 Request Controller에 전달한다. Request Controller가 ④b 경로로 현재 결과를 Session Request Coordinator에 전달한다. |
+| 다음 요청과 명령 | ⑤ Request Controller의 내부 전이가 후속 조건을 확인한다. ⑥ Request Controller가 현재 권한과 revision을 다시 확인하고 Task Manager에 명령을 요청한다. Task Manager의 업무와 command 원장을 내구 기록한 뒤 Agent Gateway로 전송한다. | ⑤ Interaction Workflow Runtime이 후속 admission 요청을 Request Controller에 반환한다. ⑥의 현재 조건 확인과 내구 명령 전달은 T와 같다. | ⑤ Session Request Coordinator가 후속 제안을 Request Controller에 반환한다. ⑥의 현재 조건 확인, Task와 command의 내구 기록 및 전달은 유지한다. |
+| 재시작 | ⑦ Request Controller가 State Store에서 graph와 질문을 복원한다. Task Manager와 Agent Gateway가 source에서 외부 상태를 다시 확인한 뒤 현재 조건에 맞는 처리만 재개한다. | ⑦ Interaction Workflow Runtime이 State Store에서 continuation과 미완료 활동을 복원하고 현재 owner 및 source와 조정한다. 후속 admission은 Request Controller가 검증한다. | 요청 관계와 질문의 ⑦ 복원은 없다. Task Manager와 Agent Gateway가 남은 원장과 source로 기존 Task를 확인한다. 사용자는 잃은 목표 관계를 다시 지정한다. |
+
+답변과 업무 결과는 같은 요청을 재개할 수 있는 서로 다른 사건이다. 그림의 ④a~④c는 모두 차례로 발생해야 하는 단계가 아니다. A는 수신과 전이 및 다음 활동 의도를 같은 내구 transaction으로 기록한다. T도 graph와 질문 변경을 내구 기록하며, 양안 모두 저장 완료 전에 외부 후속 명령을 보내지 않는다.
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

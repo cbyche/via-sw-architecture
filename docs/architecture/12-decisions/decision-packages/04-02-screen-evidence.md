@@ -28,17 +28,21 @@
 
 ### 3.1 T와 B의 실제 차이
 
-T는 Interaction Manager의 화면 변화 수집, 유한 RAM 이력, 발화 구간 고정으로 당시 관측을 보존한다. Context Manager가 늦게 도착한 전사를 발화 시각에 맞는 근거와 결합한다. A도 원시 근거를 남기면서 객체 생산 Component와 객체 이력을 추가한다.
+T의 Interaction Manager는 화면 변화를 수집하고 유한 RAM 이력과 발화 구간을 보존한다. 내부 Timeline & Buffer가 늦은 전사, 입력 revision과 당시 관측의 시각을 정렬하고 gap 및 시간 오차를 남긴다. Context Manager는 이 정렬된 근거를 Interaction Manager의 조회 port에서 받아 요청 해석용 Context를 구성한다. Request Interpreter가 그 근거로 지칭의 의미를 제안한다. A도 이 시간 정렬과 원시 근거를 유지하면서 Screen Grounding Service의 객체 생산과 이력을 추가한다.
 
 B는 사용자가 선택한 순간의 1회 캡처와 자료 묶음 생성으로 바꾼다. 연속 화면 수집과 이력, 발화 구간을 보존하고 찾아 연결하는 경로를 제거한다. 선택된 이미지의 의미 해석과 현재 원문 확인은 여전히 필요하다. 따라서 이는 단순 저장소 이름 교체가 아니라 데이터 획득 시점과 생산자, 보관 수명, 요청과 근거를 연결하는 메커니즘을 제한하는 안이다. 자연스러운 과거 복수 지칭은 포기하며, 같은 기능을 더 싸게 제공한다고 주장하지 않는다.
 
 ## 4. 같은 요청을 따라가 보기
 
+세 안 모두 Interaction Manager가 입력과 근거 참조를 Request Controller에 전달한다. Request Controller는 Context Manager에 기본 Context 준비를 요청하고, 반환된 근거와 입력을 Request Interpreter에 전달한다. 아래는 이 과정에 필요한 화면 근거의 생산과 조회를 펼친 것이다. 원시 timeline과 Derived Object Store는 저장 자료이며, 조회를 실행하고 반환하는 주체는 각각 Interaction Manager와 Screen Grounding Service다. Capture Package는 B가 선택 순간에 만드는 자료 묶음이다.
+
 | 흐름 | T: 실제 target | 대안 A | 대안 B |
 | --- | --- | --- | --- |
-| 입력과 준비 | ① Interaction Manager가 발화 시각과 화면 사건을 수집한다. ② Raw Screen Timeline이 유한 pre-roll과 발화 구간의 원시 관측을 보존한다. | ① 같은 사건을 수집한다. ② Screen Grounding Service가 요청 전에 객체와 관계 후보를 만든다. ③ Derived Object Store에 객체 version과 source revision을 게시한다. | ① 사용자가 영역 또는 객체를 명시 선택한다. ② Interaction Manager가 선택 시점의 identity, revision과 crop을 Capture Package에 봉인한다. |
-| 요청 때 근거 반환 | ③ Raw Screen Timeline이 당시 관측을 Context Manager에 반환하며, Context Manager가 늦은 전사와 결합한다. | ④ Derived Object Store가 준비된 객체와 필요한 원시 근거를 Context Manager에 반환한다. | ③ Capture Package가 선택한 자료와 발화를 Context Manager에 반환한다. 선택 밖의 화면 이동은 복원하지 않는다. |
-| 적용 전 확인 | ④ Context Manager가 gap, source revision과 현재 적용 가능성을 확인한다. | ⑤ Context Manager가 늦은 전사와 결합하고 현재 원문을 다시 확인한다. 객체 ID를 source의 영구 ID로 간주하지 않는다. | ④ Context Manager가 현재 source와 권한을 다시 확인한다. 과거 복수 지칭은 미지원이다. |
+| 입력과 준비 | ① Interaction Manager가 화면 사건과 발화 시각을 수집한다. ②a 시각을 붙여 유한 RAM 이력에 보관한다. ②b 발화 구간을 보존하고 늦은 전사와 관측 시각을 정렬한다. | ①, ②a와 ②b는 T와 같다. 별도 생산 경로에서 ②c Screen Grounding Service가 Interaction Manager의 허용 관측을 받아 객체와 관계 후보를 만든다. 필요하면 Model Access를 통해 공유 Omni를 호출하고 결과를 받는다. ③ Screen Grounding Service가 객체 version과 source revision을 유한 RAM 객체 이력에 게시한다. | ① 사용자가 명시 선택하면 Interaction Manager가 1회 캡처한다. ② 선택 시점의 identity, revision과 crop을 Capture Package에 봉인한다. 연속 이력과 발화 구간 정렬은 없다. |
+| 요청 때 근거 조회와 반환 | ③a Context Manager가 Interaction Manager에 해당 입력의 근거를 조회한다. ③b Interaction Manager가 정렬된 시각별 관측, gap과 revision을 반환한다. | ④a Context Manager가 Screen Grounding Service에 정렬된 입력 구간의 객체를 조회한다. ④b Screen Grounding Service가 당시 객체와 원본 version을 반환한다. 필요하면 ④c Context Manager가 Interaction Manager에 원시 근거를 조회하고 ④d Interaction Manager가 보존 범위의 근거를 반환한다. | ③a Context Manager가 Interaction Manager에 선택 자료를 조회한다. ③b Interaction Manager가 Capture Package를 반환한다. 자료 묶음이 스스로 호출하거나 반환하는 것은 아니다. |
+| 적용 전 확인 | ④ Context Manager가 gap, source revision, 권한과 현재 적용 가능성을 확인해 Context를 구성한다. | ⑤ Context Manager가 객체와 원시 근거로 Context를 구성하고 현재 원문을 다시 확인한다. 객체 ID를 source의 영구 ID로 간주하지 않는다. | ④ Context Manager가 선택 묶음의 현재 source와 권한을 확인해 Context를 구성한다. 선택 전 이동과 자연스러운 과거 복수 지칭은 미지원이다. |
+
+A의 객체 생산은 사용자 요청 전에 독립적으로 진행할 수 있다. ②b의 전사 정렬이 끝나야 ②c가 시작된다는 뜻은 아니다. 객체가 늦으면 보존한 원시 근거로 돌아가거나 사용자에게 재지칭을 요청한다.
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

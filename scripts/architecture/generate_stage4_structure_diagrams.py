@@ -109,11 +109,13 @@ def screen():
         a.n('capture',59,657,666,70,['화면 변화와 선택 사건 수집','화면 변화와 선택 사건 수집','선택 버튼 처리 + 선택 영역 1회 캡처'][i],color=INK if i<2 else GREEN,owner='im')
         a.n('raw',59,789,666,87,['유한 원시 화면 이력 / RAM\n시각별 화면, 포인터와 선택 사건','유한 원시 화면 이력 / RAM\n시각별 화면, 포인터와 선택 사건','선택 자료 묶음\n선택 시각 + 영역 + 원본 버전'][i],kind='store' if i<2 else 'data',color=INK if i<2 else GREEN,owner='im')
         if i<2:
-            a.n('pin',59,944,666,63,'발화 구간 고정 / 늦은 입력까지 해당 이력 보존',owner='im')
-            a.e('raw','pin',label='구간 선택과 보존',at=(419,911))
-        else:a.t(66,953,'발화 구간 선택과 이력 보존 단계가 없다.',21,GREEN)
+            a.n('pin',59,944,666,63,'발화 구간 보존 / 늦은 전사와 시각 정렬',owner='im')
+            a.e('raw','pin',label='②b 구간 보존과 정렬',at=(419,911))
+        else:
+            a.n('pin',59,944,666,63,'선택 자료 묶음 조회 / 과거 이력 복원 없음',owner='im')
+            a.e('raw','pin',label='선택한 묶음 사용',at=(419,911),color=GREEN)
         a.e('os','capture',label='① 관측 사건 수집' if i<2 else '① 사용자가 선택한 순간에만 수집',at=(104,437),color=INK if i<2 else GREEN)
-        a.e('capture','raw',label='② 시각을 붙여 보관' if i<2 else '② 선택 범위만 묶기',at=(418,744),color=INK if i<2 else GREEN)
+        a.e('capture','raw',label='②a 시각을 붙여 보관' if i<2 else '② 선택 범위만 묶기',at=(418,744),color=INK if i<2 else GREEN)
         if i==1:
             a.c('producer',26,1090,732,258,'Screen Grounding Service',GREEN,role='요청 전에 화면 속 객체와 관계를 생산')
             a.n('derive',59,1202,309,59,'객체 추출과 추적',color=GREEN,owner='producer')
@@ -122,21 +124,22 @@ def screen():
             a.e('derive','objects','R','L',via=[(406,1231.5),(406,1261.5)],label='③ 게시',at=(377,1155),color=GREEN)
             a.e('derive','modelport',sd=-15,td=-15,color=GREEN)
             a.e('modelport','derive','T','B',sd=15,td=15,color=GREEN,ret=True)
-            a.e('raw','derive','L','L',via=[(14,832.5),(14,1231.5)],color=GREEN,label='② 객체 생산',at=(60,1055))
+            a.e('raw','derive','L','L',via=[(14,832.5),(14,1231.5)],color=GREEN,label='②c 객체 생산',at=(60,1055))
         else:
             a.t(48,1105,['화면 A → 화면 B → 선택 이동','자료가 늦게 와도 발화 시각으로 찾는다.'] if i==0 else ['연속 화면 수집기 없음','이력 저장과 발화 시각 검색 없음','선택 이전의 화면은 복원할 수 없음'],23,c)
         a.c('cm',26,1390,732,268,'Context Manager',role='읽을 근거를 구성하고 현재 원문을 확인')
-        a.n('join',59,1510,666,65,['발화 시각 ↔ 당시 화면 구간 연결','발화 시각 ↔ 당시 객체 이력 연결','요청 ↔ 사용자가 선택한 묶음 연결'][i],color=c,owner='cm')
+        a.n('join',59,1510,666,65,['정렬된 입력 근거로 Context 구성','정렬된 구간의 객체와 원시 근거로 Context 구성','선택된 자료와 입력으로 Context 구성'][i],owner='cm')
         a.n('verify',59,1600,666,40,'현재 원본 버전과 권한 확인',owner='cm')
-        source='objects' if i==1 else 'pin' if i==0 else 'raw'
+        a.e('join','verify',label='⑤ 적용 전 확인' if i==1 else '④ 적용 전 확인',at=(430,1578))
+        source='objects' if i==1 else 'pin'
         if i==1:
-            a.e('join',source,'T','B',sd=40,via=[(432,1360),(586,1360)],td=0,color=GREEN)
-            a.e(source,'join','B','T',sd=20,td=80,via=[(606,1330),(472,1330)],color=GREEN,ret=True,label='④ 당시 객체와 원시 근거',at=(415,1360))
-            a.e('join','pin','L','L',sd=-12,td=-10,via=[(2,1530.5),(2,965.5)],color=GREEN,label='원시 근거 재조회',at=(66,1360))
-            a.e('pin','join','L','L',sd=10,td=12,via=[(6,985.5),(6,1554.5)],ret=True,color=GREEN)
+            a.e('join',source,'T','B',sd=40,via=[(432,1360),(586,1360)],td=0,color=GREEN,label='④a 객체 조회',at=(415,1382))
+            a.e(source,'join','B','T',sd=20,td=80,via=[(606,1330),(472,1330)],color=GREEN,ret=True,label='④b 당시 객체 반환',at=(415,1360))
+            a.e('join','pin','L','L',sd=-12,td=-10,via=[(2,1530.5),(2,965.5)],color=GREEN,label='④c 원시 근거 조회',at=(66,1360))
+            a.e('pin','join','L','L',sd=10,td=12,via=[(6,985.5),(6,1554.5)],ret=True,color=GREEN,label='④d 원시 근거 반환',at=(62,1489))
         else:
-            a.e('join',source,'T','B',sd=-210,td=-210,via=[(182,1346),(18,1346),(18,1048),(182,1048)],color=c)
-            a.e(source,'join','B','T',sd=210,td=210,via=[(602,1343)],ret=True,color=c,label='③ 시각별 이력 반환' if i==0 else '③ 선택 묶음만 반환',at=(376,1255))
+            a.e('join',source,'T','B',sd=-210,td=-210,via=[(182,1346),(18,1346),(18,1048),(182,1048)],color=c,label='③a 근거 조회',at=(55,1348))
+            a.e(source,'join','B','T',sd=210,td=210,via=[(602,1343)],ret=True,color=c,label='③b 정렬된 근거 반환' if i==0 else '③b 선택 묶음 반환',at=(376,1255))
         if i==1:
             a.c('ma',59,1702,666,109,'Model Access',role='공유 Omni 호출과 결과 반환 / 추가 모델 복제 없음')
             a.e('modelport','ma','L','L',via=[(20,1309),(20,1756.5)],color=GREEN)
@@ -144,12 +147,14 @@ def screen():
             a.n('model',160,1890,464,86,'공유 Omni 모델',kind='model')
             a.e('ma','model',sd=-20,td=-20)
             a.e('model','ma','T','B',sd=20,td=20,ret=True)
-        else:a.t(49,1710,['공통 후속: Request Controller가 근거를 받아','Request Interpreter에 화면 의미 해석을 요청한다.'],20,MUTED)
+        else:a.t(49,1710,['Context Manager는 정렬된 근거를 조회한다.','시간 정렬은 Interaction Manager 책임이다.'] if i==0 else ['선택 시각의 묶음만 조회한다.','당시 이동과 복수 지칭은 지원하지 않는다.'],20,MUTED)
         p.focus(x,2070,784,['수집과 결합이 SW의 책임','요청 전 계산과 저장이 추가됨','선택과 재선택이 사용자의 책임'][i],
                 [['말하면서 여러 화면을 지칭할 수 있는 설계','요청 때 당시 근거를 찾아 해석','원시 화면 메모리와 시간 결합 비용'],
                  ['객체 ID와 원본 ID를 계속 대조','화면 이해가 필요하면 공유 모델 사용','원시 근거도 남아 추가 비용 발생'],
                  ['선택한 자료에 대한 요청은 처리','선택 전 이동과 복수 지칭은 미지원','이미지 자체의 의미 해석은 계속 필요']][i],
                 ['상시 전체 화면 영구 저장을 뜻하지 않는다.','객체 추적과 모델 지원은 미확인이다.','자료를 미리 고르는 수고와 기능 손실이 있다.'][i],c)
+    p.text(64,1998,'공통: Interaction Manager → Request Controller에 입력과 근거 참조 전달. Request Controller ↔ Context Manager에서 Context 준비.',20,MUTED)
+    p.text(64,2030,'후속: Request Controller → Request Interpreter에 입력과 Context 전달. 지칭의 의미 판단은 Request Interpreter가 수행한다.',20,MUTED)
     p.footer('S-02의 저장은 입력 근거의 보관이다. 원본 문서의 소유권이나 외부 작업 실행 권한을 옮기지 않는다.')
     return p
 
@@ -169,16 +174,16 @@ def retrieval():
         a.n('cache',62,945,450,91,'기존 검색 색인과 캐시',kind='store',owner='cm')
         a.n('verify',690,790,432,70,'원문과 현재 권한 확인',owner='cm')
         a.n('read',690,945,432,70,'원본 조회 연동',owner='cm')
-        a.e('req','lookup',via=[(592,622),(287,622)],label='자료 단서 전달',at=(68,593))
-        a.e('verify','req','T','B',via=[(906,637),(592,637)],ret=True,label='검증된 자료 반환',at=(702,599))
-        a.e('lookup','cache',sd=-24,td=-24,label='② 기존 후보 조회',at=(78,880))
+        a.e('req','lookup',via=[(592,622),(287,622)],label='① 자료 단서 전달' if i==0 else '자료 단서 전달',at=(68,593))
+        a.e('verify','req','T','B',via=[(906,637),(592,637)],ret=True,label='⑤ 검증된 Context 반환' if i==0 else '⑩ 검증된 Context 반환',at=(702,599))
+        a.e('lookup','cache',sd=-24,td=-24,label='② 기존 후보 조회' if i==0 else '기존 후보 조회',at=(78,880))
         a.e('cache','lookup','T','B',sd=24,td=24,ret=True)
         a.e('lookup','verify','R','L',label='후보',at=(547,790))
         a.e('verify','read',sd=-25,td=-25)
         a.e('read','verify','T','B',sd=25,td=25,ret=True)
         a.n('source',768,1900,386,87,'문서 / 대화 / 업무 원본',kind='external')
-        a.e('read','source','R','T',via=[(1167,980),(1167,1875),(936,1875)],td=-25,label='현재 원문 읽기',at=(908,1818))
-        a.e('source','read','T','R',sd=25,td=20,via=[(986,1888),(1179,1888),(1179,1000)],ret=True)
+        a.e('read','source','R','T',via=[(1167,980),(1167,1875),(936,1875)],td=-25,label='③ 현재 원문 읽기' if i==0 else '⑧ 현재 원문 읽기',at=(908,1818))
+        a.e('source','read','T','R',sd=25,td=20,via=[(986,1888),(1179,1888),(1179,1000)],ret=True,label='④ 원문과 버전 반환' if i==0 else '⑨ 원문과 버전 반환',at=(889,1877))
         if i==0:
             a.t(70,1210,['이 경로는 A에도 남는다.','별도 검색 서비스나 의미 색인을 유지하지 않는다.'],25)
             a.t(70,1360,['요청할 때 조회 → 원문 확인 → 사용','정확한 파일명이나 단어가 없으면','후보를 찾지 못하거나 다시 물을 수 있다.'],24,BLUE)
@@ -200,7 +205,7 @@ def retrieval():
             a.e('worker','runtime',sd=-30,td=320,via=[(856,1651),(912,1651)],color=GREEN)
             a.e('runtime','worker','T','B',sd=370,td=30,via=[(962,1678),(916,1678)],ret=True,color=GREEN)
             a.e('lookup','service','L','L',sd=-12,td=-58,via=[(16,813),(16,1377.5)],color=GREEN,label='④ 의미 후보 검색',at=(68,1123))
-            a.e('service','lookup','L','L',sd=-25,td=16,via=[(8,1410.5),(8,841)],ret=True,color=GREEN)
+            a.e('service','lookup','L','L',sd=-25,td=16,via=[(8,1410.5),(8,841)],ret=True,color=GREEN,label='⑦ 후보와 조회 범위 반환',at=(68,1146))
             a.e('source','worker','R','R',via=[(1160,1943.5),(1160,1435.5)],color=GREEN,label='① 원본 변경 수집',at=(775,1847))
             a.n('model',62,1900,530,87,'추가 의미 표현 모델 (Embedding)',kind='model',color=GREEN)
             a.e('runtime','model',sd=-290,td=-25,via=[(302,1858)],color=GREEN,label='② 의미 표현 생성',at=(83,1854))
@@ -217,17 +222,20 @@ def retrieval():
 
 def workflow():
     p=plate(4,'끝나지 않은 요청을 누가 기억하고, 재시작 뒤 무엇을 복원하는가?',
-            '같은 예: “보고서가 끝나면 발표자료를 만들어줘.” 차이는 후속 조건의 소유자, 저장 내용과 복원 실행이다.',2450)
+            '같은 예: “보고서가 끝나면 발표자료를 만들어줘.” 차이는 후속 조건의 소유자, 저장 내용과 복원 실행이다.',2750)
+    layout_start=len(p.items)
     for i,x in enumerate((64,888,1712)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
         p.panel(x,784,['T','A','B'][i],['요청 상태를 직접 저장','실행 절차와 대기를 저장','열린 세션에서만 연결'][i],
                 ['실제 target / Request Controller가 재개 소유','탐색안 / 전용 Workflow Runtime이 재개 소유','제한 기능 탐색안 / 요청 관계 복원 포기'][i])
         a.b('via',0,335,784,1513)
         a.c('rc',26,401,732,407,'Request Controller',role='공통: 의미와 현재 권한 확인, 다음 요청 승인')
-        a.n('admit',59,516,666,63,'후속 요청의 현재 조건 확인',owner='rc')
+        a.n('admit',59,516,666,63,'입력과 답변 검증 / 후속 요청의 현재 조건 확인',owner='rc')
         if i==0:
             a.n('advance',59,630,666,64,'목표 관계 갱신 / 질문 대기 / 후속 조건 판단',color=BLUE,owner='rc')
             a.n('graph',59,723,666,61,'요청 관계 + 질문 상태',kind='data',color=BLUE,owner='rc')
+            a.e('admit','advance',sd=-180,td=-180,color=BLUE,label='② 목표 등록',at=(68,588))
+            a.e('admit','advance',sd=-30,td=-30,color=BLUE,label='④b 답변 반영',at=(239,603))
             a.e('advance','graph',sd=-18,td=-18,color=BLUE)
             a.e('graph','advance','T','B',sd=18,td=18,ret=True,color=BLUE)
             a.e('advance','admit','T','B',sd=20,td=20,color=BLUE,label='⑤ 후속 조건 충족',at=(430,588))
@@ -242,33 +250,34 @@ def workflow():
             a.n('waiting',59,1164,666,91,'현재 실행 위치 + 대기 질문 + 전송할 활동' if i==1 else '요청 관계와 질문 / RAM만 사용',kind='data',color=GREEN,owner='runtime')
             a.e('signal','step','R','L',color=GREEN)
             a.e('step','waiting',via=[(575.5,1130),(392,1130)],color=GREEN)
-            a.e('admit','runtime',sd=-40,td=-40,label='② 요청 시작 / 답변 전달',at=(93,852),color=GREEN)
-            a.e('runtime','admit','R','R',via=[(772,1099.5),(772,547.5)],ret=True,color=GREEN,label='⑤ 다음 요청 승인 요청' if i==1 else '④ 후속 요청 승인 요청',at=(444,843))
+            a.e('admit','runtime',sd=-40,td=-40,label='② 요청 시작',at=(93,852),color=GREEN)
+            a.e('rc','signal','B','L',sd=-240,td=-20,via=[(152,878),(11,878),(11,1038)],color=GREEN,label='④b 검증한 답변 전달',at=(47,883))
+            a.e('runtime','admit','R','R',via=[(772,1099.5),(772,547.5)],ret=True,color=GREEN,label='⑤ 후속 요청 승인 요청',at=(444,843))
         a.c('store',26,1400,732,228,'State Store',role='저장과 transaction 제공 / 요청 의미의 소유자는 아님')
         if i<2:
             a.n('record',59,1517,304,89,'현재 요청/질문 기록' if i==0 else '실행 위치/활동 기록',kind='store',color=c,owner='store')
         else:a.t(66,1533,['요청 관계와 질문은','저장하지 않음'],22,GREEN)
         a.n('taskrecord',426,1517,299,89,'업무/전송 원장',kind='store',owner='store')
         if i==0:
-            a.e('graph','record','L','T',via=[(16,743.5),(16,1364),(211,1364)],sd=-10,label='③ 상태 기록',at=(49,1299),color=BLUE)
+            a.e('advance','record','L','T',via=[(16,642),(16,1364),(211,1364)],sd=-20,label='③ 상태 기록',at=(49,1299),color=BLUE)
             a.e('record','advance','T','L',via=[(211,1382),(8,1382),(8,662)],ret=True,color=BLUE,label='⑦ 복원',at=(268,1348))
         elif i==1:
             a.e('waiting','record',sd=-181,td=0,label='③ 수신 + 전이 + 활동을 함께 기록',at=(49,1323),color=GREEN)
-            a.e('record','signal','T','L',sd=20,via=[(231,1382),(16,1382),(16,1058)],ret=True,color=GREEN)
+            a.e('record','signal','T','L',sd=20,via=[(231,1382),(16,1382),(16,1058)],ret=True,color=GREEN,label='⑦ 대기 상태 복원',at=(450,1368))
         else:a.t(49,1318,'재시작하면 위 RAM 상태를 잃는다.',22,GREEN)
         a.c('task',26,1694,347,115,'Task Manager',role='실제 업무 상태 소유')
         a.c('gateway',411,1694,347,115,'Agent Gateway',role='외부 업무 전송과 상태 수신')
         a.e('task','gateway','R','L',sd=-12,td=-12)
         a.e('gateway','task','L','R',sd=12,td=12,ret=True)
-        a.e('task','taskrecord','T','B',sd=-28,via=[(171.5,1664),(575.5,1664)],label='업무 원장',at=(267,1640))
+        a.e('task','taskrecord','T','B',sd=-28,via=[(171.5,1664),(575.5,1664)],label='⑥ 명령과 업무 원장',at=(267,1640))
         a.e('taskrecord','task','B','T',td=28,via=[(575.5,1680),(227.5,1680)],ret=True)
         a.e('admit','task','L','L',via=[(7,547.5),(7,1751.5)],label='⑥ 승인한 명령',at=(48,1638))
         recipient='advance' if i==0 else 'signal'
         # Task result returns to the owner of pending request relationships.
         if i==2:
-            a.e('task','rc','L','L',sd=23,td=110,via=[(19,1774.5),(19,714.5)],ret=True,color=c)
+            a.e('task','rc','L','L',sd=23,td=110,via=[(19,1774.5),(19,714.5)],ret=True,color=c,label='④c 업무 결과',at=(49,1351))
         else:
-            a.e('task',recipient,'L','L',sd=23,via=[(19,1774.5),(19,662 if i==0 else 1058)],ret=True,color=c)
+            a.e('task',recipient,'L','L',sd=23,via=[(19,1774.5),(19,662 if i==0 else 1058)],ret=True,color=c,label='④c 업무 결과',at=(49,1248 if i==0 else 1290))
         a.n('agent',411,1920,347,85,'외부 업무 Agent',kind='external')
         a.e('gateway','agent',sd=-20,td=-20,label='업무 실행 요청',at=(421,1852))
         a.e('agent','gateway','T','B',sd=20,td=20,ret=True)
@@ -277,6 +286,18 @@ def workflow():
                  ['현재 실행 위치와 대기 질문을 읽음','보내지 못한 활동과 실제 결과를 조정','Runtime이 진행하고 Controller가 승인'],
                  ['업무와 전송 원장은 계속 복원','보고서 다음 발표자료라는 관계는 유실','사용자가 후속 관계를 다시 지정']][i],
                 ['audit log 전체를 재실행하는 구조가 아니다.','별도 내구 timer와 활동 전달 계약이 필요하다.','복구 기능의 포기이며 빠른 정상 완료가 아니다.'][i],c)
+    for item in p.items[layout_start:]:
+        if 'y' in item:item['y']+=300
+        if 'points' in item:item['points']=[(x,y+300) for x,y in item['points']]
+    p.nodes={k:(x,y+300,w,h) for k,(x,y,w,h) in p.nodes.items()}
+    p.boundary('preparation',64,230,2432,287,'공통 입력과 의미 확인','새 목표와 나중에 도착한 답변은 서로 다른 사건')
+    for key,x,name,role in [('im',110,'Interaction Manager','새 목표 또는 후속 답변 전달'),('rc',711,'Request Controller','입력, 근거와 현재 질문 확인'),('cm',1312,'Context Manager','허용된 근거와 질문 후보 조회'),('ri',1913,'Request Interpreter','목표 또는 답변 대상의 의미 제안')]:
+        p.component('shared-'+key,x,321,440,110,name,role=role)
+    p.edge('shared-im','shared-rc','R','L',label='사용자 입력',at=(558,350))
+    p.edge('shared-rc','shared-cm','R','L',sd=-18,td=-18,label='기본 근거 요청',at=(1160,342))
+    p.edge('shared-cm','shared-rc','L','R',sd=18,td=18,ret=True,label='근거 반환',at=(1160,409))
+    p.edge('shared-rc','shared-ri','T','T',via=[(931,296),(2133,296)],label='입력과 근거로 해석 요청',at=(1370,266))
+    p.edge('shared-ri','shared-rc','B','B',via=[(2133,470),(931,470)],ret=True,label='① 목표 제안 / ④a 후속 답변의 대상 제안',at=(1310,475))
     p.footer('업무 결과는 대기 상태 소유자로 돌아간다. VIA는 요청 사이 관계를 다루며 외부 Agent의 내부 실행 계획은 소유하지 않는다.')
     return p
 
@@ -298,12 +319,12 @@ def response():
         if i==0:a.n('direct',62,950,422,122,'이번 발화의 일반 지식 질문인가?\n맞으면 직접 허용 / 아니면 일반 해석',color=BLUE,owner='rc')
         else:a.t(64,967,['모든 입력을 아래 일반 해석으로 전달','직접 경로를 따로 판단하지 않음'],22,GREEN)
         a.n('admit',700,965,422,77,'응답 내용과 현재 입력 확인',owner='rc')
-        a.e('input','rc',via=[(273,764),(592,764)],label='정규 입력 전달',at=(76,738))
+        a.e('input','rc',via=[(273,764),(592,764)],label='정규 입력 전달' if i==0 else '① 정규 입력 전달',at=(76,738))
         a.c('ri',30,1200,480,292,'Request Interpreter',role='T와 A 모두 같은 해석 책임')
         a.n('interpret',62,1313,416,64,'목표와 대상 해석',owner='ri')
         a.n('answer',62,1410,416,55,'응답 내용 제안',owner='ri')
-        a.e('rc','ri',sd=-340,td=-18,via=[(252,1152)],label='④ 외부 자료 등이 필요할 때' if i==0 else '② 모든 요청',at=(50,1148),color=BLUE if i==0 else GREEN)
-        a.e('ri','admit','R','B',sd=-40,via=[(568,1306),(568,1133),(911,1133)],label='해석과 응답 제안 반환',at=(585,1145),ret=True)
+        a.e('rc','ri',sd=-340,td=-18,via=[(252,1152)],label='④a 외부 자료 등이 필요할 때' if i==0 else '② 모든 요청',at=(50,1148),color=BLUE if i==0 else GREEN)
+        a.e('ri','admit','R','B',sd=-40,via=[(568,1306),(568,1133),(911,1133)],label='④b 해석과 응답 제안 반환' if i==0 else '③ 해석과 응답 제안 반환',at=(585,1165),ret=True)
         a.c('rm',674,1200,480,380,'Response Manager',role='공통: 허용된 내용을 게시하고 음성 생성 연결')
         a.n('render',705,1313,418,65,'승인된 Text의 음성 생성 요청',owner='rm')
         a.n('release',705,1412,418,56,'생성된 음성 전달 / 실제 전달 확인',color=INK,owner='rm')
@@ -312,8 +333,9 @@ def response():
             a.e('directrelease','output','R','R',td=-15,via=[(1187,1534.5),(1187,527.5)],color=BLUE,label='⑦ 보류 해제 지시',at=(973,1604))
         else:a.t(712,1521,'직접 응답 해제 단계 없음',20,GREEN)
         a.e('admit','rm',sd=-22,td=-25,label='⑤ 응답 허용' if i==0 else '④ 응답 허용',at=(746,1129))
-        a.e('rm','output','R','R',sd=-80,via=[(1169,1310),(1169,542.5)],label='Text 게시와 음성 재생',at=(841,759))
-        a.e('output','rm','R','R',sd=20,td=0,via=[(1179,562.5),(1179,1390)],ret=True)
+        a.e('rm','output','R','R',sd=-80,via=[(1169,1310),(1169,542.5)],label='⑧ Text 게시' if i==0 else '⑤ Text 먼저 게시',at=(841,759))
+        a.e('release','output','R','R',td=10,via=[(1158,1440),(1158,552.5)],label='일반 응답: 검사한 음성' if i==0 else '⑧ 검사한 음성 전달',at=(940,1580))
+        a.e('output','rm','R','R',sd=20,td=0,via=[(1179,562.5),(1179,1390)],ret=True,label='⑧ 실제 전달 기록',at=(938,1170))
         a.c('ma',30,1700,1124,200,'Model Access',role='공유 모델을 사용하되 역할별 실행을 구분')
         if i==0:a.n('voice',60,1820,282,55,'직접 음성 응답 생성',color=BLUE,owner='ma')
         else:a.t(62,1829,'직접 생성 경로 없음',20,GREEN)
@@ -352,7 +374,7 @@ def speech():
         a.n('capture',62,515,414,63,'원음 수집 / 즉시 재생 중단',owner='im')
         a.n('normalize',690,515,432,63,'전사와 시간 근거를 입력에 연결',owner='im')
         a.n('record',690,614,432,65,'정규 입력 기록 + 누락 구간',kind='data',owner='im')
-        a.e('normalize','record')
+        a.e('normalize','record',label='⑤ 입력 기록' if i==0 else '③ 입력 기록',at=(713,587))
         a.c('ma',30,847,1124,825,'Model Access',role='VIA의 모델 연동 책임 / 아래 점선은 실제 실행 경계')
         a.b('asrprocess',54,969,456,632,'Speech Input Worker' if i==0 else '제거되는 인식 전용 실행',
             '독립 process' if i==0 else 'A에는 없음',BLUE if i==0 else LINE,True)
@@ -411,23 +433,24 @@ def semantic_detail():
         c=BLUE if i==0 else GREEN
         p.box(x,552,1184,1276,'#FAFBFD',LINE)
         p.text(x+22,573,'T / 첫 호출 종료 → 자료를 넣어 새 호출' if i==0 else 'A / 작업 유지 → 읽기 → 같은 실행 재개',26,c,bold=True)
-        names=['Request\nController','Request\nInterpreter',None,'Context\nManager','Model\nAccess'] if i==0 else ['Request\nController','Semantic Resolution\nWorker','Capability\nRead Broker','Context\nManager','Model\nAccess']
-        centers=[x+32+224*(j+.5) for j in range(5)]
+        names=['Request\nController','Request\nInterpreter',None,'Context\nManager','원본 소유자','Model\nAccess'] if i==0 else ['Request\nController','Semantic\nResolution Worker','Capability\nRead Broker','Context\nManager','원본 소유자','Model\nAccess']
+        centers=[x+16+192*(j+.5) for j in range(6)]
         for j,(cx,name) in enumerate(zip(centers,names)):
             if name is None:p.text(cx,674,'별도 Broker 없음',16,MUTED,align='center');continue
-            p.component(f'{i}-lane{j}',cx-104,648,208,106,name,c if j==1 or i==1 and j==2 else INK)
+            if j==4:p.node(f'{i}-lane{j}',cx-91,648,182,106,name,kind='external')
+            else:p.component(f'{i}-lane{j}',cx-95,648,190,106,name,c if j==1 or i==1 and j==2 else INK)
             p.line([(cx,754),(cx,1710)],LINE,True,False,1.2)
-        p.box(centers[1]-5,820,10,225 if i==0 else 750,'white',c,0)
-        if i==0:p.box(centers[1]-5,1345,10,225,'white',c,0)
-        events=[(0,1,'⑥ 첫 번째 해석 호출',False),(1,4,'⑦ 모델 호출',False),(4,1,'⑧ 해석 결과',True),
+        p.box(centers[1]-5,820,10,225 if i==0 else 825,'white',c,0)
+        if i==0:p.box(centers[1]-5,1420,10,225,'white',c,0)
+        events=[(0,1,'⑥ 첫 번째 해석 호출',False),(1,5,'⑦ 모델 호출',False),(5,1,'⑧ 해석 결과',True),
                 (1,0,'⑨ 자료 부족 제안 / 호출 종료',True),(0,3,'⑩ 허용된 추가 읽기',False),
-                (3,3,'⑪~⑫ 원본 조회와 반환',False),(3,0,'⑬ 추가 자료와 읽은 버전',True),
-                (0,1,'⑭ 추가 자료를 넣어 새 호출',False),(1,4,'⑮ 모델 호출',False),(4,1,'⑯ 해석 결과',True),
+                (3,4,'⑪ 원본 조회',False),(4,3,'⑫ 원문과 버전',True),(3,0,'⑬ 추가 자료와 읽은 버전',True),
+                (0,1,'⑭ 추가 자료를 넣어 새 호출',False),(1,5,'⑮ 모델 호출',False),(5,1,'⑯ 해석 결과',True),
                 (1,0,'⑰ 최종 의미 제안',True)] if i==0 else [
-                (0,1,'⑥ 요청별 작업 시작',False),(1,4,'⑦ 해석 시작',False),(4,1,'⑧ 읽기 필요 + 멈춘 실행 ID',True),
+                (0,1,'⑥ 요청별 작업 시작',False),(1,5,'⑦ 해석 시작',False),(5,1,'⑧ 읽기 필요 + 멈춘 실행 ID',True),
                 (1,2,'⑨ 추가 자료 요청',False),(2,3,'⑩ 범위와 예산 검사 후 조회',False),
-                (3,3,'⑪~⑫ 원본 조회와 반환',False),(3,2,'⑬ 추가 자료와 읽은 버전',True),
-                (2,1,'⑭ 자료 반환',True),(1,4,'⑮ 같은 실행 ID로 이어가기',False),(4,1,'⑯ 최종 해석 결과',True),
+                (3,4,'⑪ 원본 조회',False),(4,3,'⑫ 원문과 버전',True),(3,2,'⑬ 추가 자료와 읽은 버전',True),
+                (2,1,'⑭ 자료 반환',True),(1,5,'⑮ 같은 실행 ID로 이어가기',False),(5,1,'⑯ 최종 해석 결과',True),
                 (1,0,'⑰ 최종 의미 제안',True)]
         for row,(s,t,label,ret) in enumerate(events):
             y=820+row*75;start,end=centers[s],centers[t]
@@ -439,6 +462,7 @@ def semantic_detail():
                 p.line([(start,y),(end,y)],ec,ret)
                 p.label(min(start,end)+8,y-31,label,ec,17)
         p.text(x+31,1748,'⑱ Request Controller가 입력 버전, 사용한 자료와 필수 항목을 확인해 의미 확정',20,bold=True)
+    p.text(64,1880,'원본 소유자는 내부 Component 또는 허용된 외부 source다. Context Manager가 조회하고 원본 소유자가 반환한다.',20,MUTED)
     p.footer('A는 모델 중단과 재개 기능이 실제로 필요하다. 미지원이면 단순 새 호출 구조로 바뀌므로 같은 대안으로 평가할 수 없다.')
     return p
 

@@ -161,12 +161,12 @@ R/B/T는 사실의 종류이고 U는 지원 확인 상태다. **선택된 계약
 
 | 구분 | 내용 |
 | --- | --- |
-| R — 정상 결과 | 가능한 Agent에 목표, 완료 조건, 제약, 허용 자료를 전달한다. 접수, 진행, 질문, 완료, 부분 실패, 결과물과 후속 실행을 올바른 VIA 업무에 연결한다. |
-| R/B — 예외와 경계 | 취소 요청 접수를 취소 완료로, 연결을 업무 성공으로 표시하지 않는다. capability 없는 Agent의 기능을 VIA가 지어내지 않는다. 같은 Agent의 복수 업무도 독립 identity를 유지한다. 도메인 실행 로직은 외부다. |
-| T — 현재 처리 | Agent Gateway의 adapter, versioned capability profile, durable outbox/inbox가 protocol을 변환한다. Task Manager가 event의 중복, 순서, correlation을 확인해 source-confirmed projection을 갱신한다. 필요한 경우 source snapshot을 조회한다. |
-| T — 구체 선택 | 전송 전 profile 재검사, command/Execution/question/artifact ID, source revision, cursor, UNKNOWN submit의 key 조회. event 순서도 조회도 없으면 UNKNOWN이며 자동 재위임하지 않는다. |
-| 다르게 설계할 지점 | capability와 실행 계약을 흡수하는 연동 계층, push/query 관측과 상태 권위, 보관 구조를 어떻게 만들 것인가. 비교에서는 같은 Agent 지원 수준을 사용한다. |
-| U / 근거 | U-05. [UC-08, 10, 12, 13, 18](../../05-representative-use-cases.md), [FA-13](../../06-fixed-assumptions.md), [제어 §5 capability 표](../target-architecture/control-and-lifecycle.md#5-전송과-정정의-원자적-경계) |
+| R — 정상 결과 | 기능, 권한, 사용자 지정과 요청 제약에 맞는 Agent를 선택해 목표, 완료 조건과 허용 자료를 전달한다. 접수, 진행, 질문, 완료, 부분 실패, 결과물과 후속 실행을 올바른 VIA 업무에 연결한다. |
+| R/B — 예외와 경계 | 취소 요청 접수를 취소 완료로, 연결을 업무 성공으로 표시하지 않는다. capability 없는 Agent의 기능을 VIA가 지어내지 않는다. 적합 후보가 없으면 미지원으로 알리고, 비용, 권한 또는 완료 조건이 다른 대체는 사용자 확인 없이 적용하지 않는다. 같은 Agent의 복수 업무도 독립 identity를 유지한다. 도메인 실행 로직은 외부다. |
+| T — 현재 처리 | Agent Gateway가 소유한 capability profile을 바탕으로 Request Interpreter가 요구 기능과 후보를 제안하고 Request Controller가 현재 조건을 검증해 선택한다. Agent Gateway의 adapter와 durable outbox/inbox가 protocol을 변환한다. Task Manager가 event의 중복, 순서, correlation을 확인해 source-confirmed projection을 갱신한다. 필요한 경우 source snapshot을 조회한다. |
+| T — 구체 선택 | 의미 후보 제안과 결정적 조건 검사를 결합하고, 기능적으로 동등한 후보에는 설정된 선호와 안정적인 우선순위를 적용한다. Task Manager는 선택용 LLM을 호출하지 않는다. 전송 전 profile 재검사, command/Execution/question/artifact ID, source revision, cursor, UNKNOWN submit의 key 조회. event 순서도 조회도 없으면 UNKNOWN이며 자동 재위임하지 않는다. |
+| 다르게 설계할 지점 | 선택 전에 어떤 capability 근거를 확보하고, 후보 제안과 검증을 어떤 실행 의존성으로 연결할 것인가. 선택 순위 설정과 구조 변경을 구별한다. capability와 실행 계약을 흡수하는 연동 계층, push/query 관측과 상태 권위 및 보관 구조도 검토한다. 비교에서는 같은 Agent 지원 수준을 사용한다. |
+| U / 근거 | U-05. [UC-08, 10, 12, 13, 18](../../05-representative-use-cases.md), [FA-13](../../06-fixed-assumptions.md), [구조 §12 Agent 선택](../target-architecture/architecture.md#12-장기-업무복합-요청agent-event), [제어 §5 capability 표](../target-architecture/control-and-lifecycle.md#5-전송과-정정의-원자적-경계) |
 
 <a id="p-08"></a>
 <a id="p-08-중단정정취소를-어디까지-반영했는가"></a>
