@@ -1,6 +1,7 @@
 # 4단계 — 중요한 품질 차이를 만드는 SW 구조 탐색
 
-> 상태: **STAGE_4_REVISED / 개별 문서와 비교 그림 사용자 재검토 대기** / 2026-10-01
+> 상태: **S-01~06의 기존 탐색 지도 / 주요 후보 자격 재검토** / 2026-10-02
+> 현재 실행은 [선발 원칙](./selection-principles.md)과 [WORKPLAN 맨 위](./00-workplan.md)를 따른다. 아래 설명과 이전 검토는 다른 구조 계열의 입증이 아니며 재평가 입력으로 보존한다.
 > 입력: [02 요구와 수단](./02-00-requirements-and-choices.md), [03 품질 시나리오](./03-00-quality-scenarios.md). 절차: [작업 계획](./00-workplan.md).
 > 검토 및 검사: [04-09 독립 검토 기록](./04-09-structural-review.md).
 > Target은 REVIEWED_BASELINE으로 보존한다. 여기의 S 번호는 탐색 질문을 가리킨다. DP 번호, 선정 결과 또는 방안 2의 확정이 아니다.
