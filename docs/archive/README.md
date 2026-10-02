@@ -18,6 +18,7 @@
 | Target Architecture review history | [2026-09-29 review history](./target-architecture-review-history-2026-09-29/README.md) | `94ef60a3`의 누적 검토 기록·이전 독립 검토를 현재 설계 문서와 분리하여 보존 |
 | Withdrawn Component-boundary candidates | [2026-09-30 candidate review](./decision-reconstruction-component-boundaries-2026-09-30/README.md) | `7094db96`의 일곱 후보·그림·선발 원칙을 사용자 리뷰에 따라 추천에서 철회하고 원본·탈락 사유 보존 |
 | Superseded uniform-layout decision candidates | [2026-10-01 structural rework](./decision-reconstruction-uniform-layouts-2026-10-01/README.md) | `0e2d15f`의 여덟 후보·그림·검토·생성기 48파일과 SHA-256 manifest; 구조 차이 리뷰 후 보관 |
+| Superseded decision selection principles | [2026-10-02 principles](./decision-selection-principles-2026-10-02/README.md) | `9d2e7248`의 원칙 원문과 SHA-256. 현재 구조 계열/전환 기준으로 대체, S-01~06은 활성 위치의 재평가 자료로 유지 |
 
 The current source of truth is [docs/architecture](../architecture/README.md).
 

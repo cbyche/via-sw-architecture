@@ -1,5 +1,7 @@
 # 4단계 — 중요한 품질 차이를 만드는 SW 구조 탐색
 
+> 2026-10-02 재발굴 결과는 [04-10](./04-10-mechanism-family-discovery.md) → [04-11](./04-11-mechanism-family-proposals.md) → [04-12](./04-12-mechanism-family-review.md) 순서로 읽는다. 아래 S-01~06은 주요 후보 자격이 입증되지 않은 기존 탐색 자료다.
+
 > 상태: **S-01~06의 기존 탐색 지도 / 주요 후보 자격 재검토** / 2026-10-02
 > 현재 실행은 [선발 원칙](./selection-principles.md)과 [WORKPLAN 맨 위](./00-workplan.md)를 따른다. 아래 설명과 이전 검토는 다른 구조 계열의 입증이 아니며 재평가 입력으로 보존한다.
 > 입력: [02 요구와 수단](./02-00-requirements-and-choices.md), [03 품질 시나리오](./03-00-quality-scenarios.md). 절차: [작업 계획](./00-workplan.md).

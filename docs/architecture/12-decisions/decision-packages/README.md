@@ -1,6 +1,6 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **STAGE_4_MECHANISM_RECONSTRUCTION / 구조 계열 재발굴 진행** / 2026-10-02
+> 현재 상태: **STAGE_4_MECHANISM_RECONSTRUCTION / 첫 재발굴 체크포인트, 주요 후보 미확정** / 2026-10-02
 > 방안 1은 검토 완료 target, 방안 2는 같은 VIA 문제를 푸는 다른 SW Architecture다. 구현·모델 실행·성능 측정은 하지 않았다.
 
 ## 현재 작업부터 읽기
@@ -8,6 +8,14 @@
 **2026-10-02 사용자 리뷰로 선발 기준과 탐색 방법을 수정했다.** 목적은 중요한 VIA 품질을 달성하는 구조 선택의 이유를 설명하는 것이다. 기능 추가나 제거로 쉽게 전환할 수 있는 T/A는 같은 계열로 묶고, 핵심 설계를 상당 부분 바꿔야 전환되는 다른 해결 메커니즘을 찾는다. 전환을 어렵게 만드는 것 자체가 목적은 아니다.
 
 현재는 [선발 원칙](./selection-principles.md)과 [WORKPLAN의 맨 위 실행 계획](./00-workplan.md)을 먼저 읽는다. 원칙을 먼저 GitHub에 게시한 뒤 기존 계열 분류, 새 대안과 저렴한 전환 시도, V-01~13 및 보류 이유까지 작성하여 보고한다. 이전 S-01~06은 재평가 입력이며, 이전 독립 검토가 새 기준 통과를 뜻하지 않는다. Stage 5와 DP 선정은 아직 시작하지 않는다.
+
+**이번 결과의 읽기 순서:**
+
+1. [04-10 — 문제와 구조 계열](./04-10-mechanism-family-discovery.md): 기존 여섯 비교의 국소 전환과 P-01~16 탐색 배분.
+2. [04-11 — 두 해결 메커니즘](./04-11-mechanism-family-proposals.md): 대화 사건별 모델 진행과 독립 상태 확정, 실제 T와 같은 사건 흐름 및 양방향 전환.
+3. [04-12 — 반론과 품질 판정](./04-12-mechanism-family-review.md): 기능 손실, V-01~13, 남은 반론과 보류 이유.
+
+**주요 후보는 아직 확정하지 않았다.** C-대화는 기존 graph 확장으로 같은 이익을 얻는지 미결이며, C-독립은 hold/철회 보장과 선택 가치 때문에 보류했다. 새 문서 세 개의 작성 완료를 구조 자격 통과로 읽지 않는다.
 
 아래는 이전 Stage 4 자료의 읽기 안내와 이력이다. 자료와 그림을 보존하되 새 후보 수나 구조 계열의 분해 기준으로 삼지 않는다.
 
@@ -72,6 +80,9 @@
 | 3. 작성자 리뷰 | [03-01-quality-review.md](./03-01-quality-review.md) | 대조 및 문서 검사 기록 |
 | 4. 구조 대안 탐색 | [04-00-structural-alternatives.md](./04-00-structural-alternatives.md) | S-01~06의 용어, 입력 자료, 비교 그림과 번호 순서 정리, 사용자 재검토 대기 |
 | 4. 검토 기록 | [04-09-structural-review.md](./04-09-structural-review.md) | 작성자 대조, 독립 지적 반영 및 재확인 기록 |
+| 4. 구조 계열 재발굴 | [04-10-mechanism-family-discovery.md](./04-10-mechanism-family-discovery.md) | 기존 여섯 주요 자격 재검토, 첫 탐색 |
+| 4. 메커니즘 구체화 | [04-11-mechanism-family-proposals.md](./04-11-mechanism-family-proposals.md) | 두 방향의 사건과 상태, 전환 반론 |
+| 4. 재발굴 판정 | [04-12-mechanism-family-review.md](./04-12-mechanism-family-review.md) | 작성자 검토. 주요 후보 미확정 |
 | 5. 강한 대안 비교 | `05-00-comparison-and-selection.md` | 예정·미작성 |
 | 6. DP 선발·상세화 | `06-00-decision-packages.md`, `06-01-<topic>.md`부터 개별 자료 | 예정·미작성 |
 

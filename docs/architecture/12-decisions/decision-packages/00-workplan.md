@@ -1,6 +1,6 @@
 # 구조 중심 Decision Reconstruction 작업 계획
 
-> 현재 상태: **STAGE_4_MECHANISM_RECONSTRUCTION / 원칙 명문화와 대안 재발굴 실행** / 2026-10-02
+> 현재 상태: **STAGE_4_MECHANISM_RECONSTRUCTION / 첫 재발굴 체크포인트 작성, 주요 후보 미확정** / 2026-10-02
 > 재개 규칙: compaction·세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
 
 ## 2026-10-02 현재 실행 — 품질 목적에서 다른 구조 계열을 발굴한다
@@ -13,14 +13,14 @@
 
 | 순서 | 실행 | 산출물과 다음 조건 | 진행 |
 | --- | --- | --- | --- |
-| 1 | 현재 지시, 목적, 비교 자격과 보고 경계를 기록하고 먼저 GitHub에 게시 | AGENTS.md, selection-principles.md, 이 계획과 진입 안내. 이전 원칙은 archive 보존. 문서 검사 후 commit/push | 기록 중 |
-| 2 | 기존 S-01~06의 T/A/B를 가장 쉽게 조합하는 구조와 공통 전제를 확인 | `04-10-mechanism-family-discovery.md`: 실제 T와 가상 확장 구별, 기능 개발비와 구조 전환비 구별, 계열 내부 선택 판정 | 예정 |
-| 3 | 01~03의 중요 문제와 품질 충돌에서 공통 전제를 바꾸는 해결 원리 발굴 | 같은 04-10: P별 집중/연계/보류 사유, 시도한 원리와 반론. 기존 S나 DP 수에 맞추지 않음 | 예정 |
-| 4 | 유력 후보를 같은 입력, 정상, 정정, 철회, 부분 실패와 재시작으로 구체화 | `04-11-mechanism-family-proposals.md`: 송수신자, 실행과 상태, 최종 결과. 가장 싼 양방향 전환과 병행 방법을 검토하고 남는 핵심 설계 변경 명시 | 예정 |
-| 5 | 양안 선택 조건, 기능 지원과 손실, V-01~13, 반증 및 자기 반론을 점검 | `04-12-mechanism-family-review.md`: 남길 후보와 보류, 수정한 지적, 미확인과 검증 범위. 이전 독립 리뷰를 새 결과의 검증으로 재사용하지 않음 | 예정 |
-| 6 | 문서 검사, 실제 diff, 활성 링크와 출처, GitHub 게시 및 CI 확인 뒤 보고 | 문제/품질 → 계열/대안 → 전환 근거 → 조건/손실 → 미결 사항의 읽기 경로와 commit/CI | 예정 |
+| 1 | 현재 지시, 목적, 비교 자격과 보고 경계를 기록하고 먼저 GitHub에 게시 | AGENTS.md, selection-principles.md, 이 계획과 진입 안내. 이전 원칙 archive 보존 | **게시 및 CI 통과**: `4e95bcf` |
+| 2 | 기존 S-01~06의 T/A/B를 가장 쉽게 조합하는 구조와 공통 전제를 확인 | [04-10](./04-10-mechanism-family-discovery.md) §2: 실제 T와 가상 확장 구별, 기능 개발비와 구조 전환비 구별 | **첫 분류 작성**. 기존 여섯 주요 자격 미입증 |
+| 3 | 01~03의 중요 문제와 품질 충돌에서 공통 전제를 바꾸는 해결 원리 발굴 | 04-10 §3~5: P별 집중/연계/보류 사유, 시도한 원리와 반론 | **첫 탐색 작성**. 대화 진행 및 독립 확정 두 방향 구체화 |
+| 4 | 유력 후보를 같은 입력, 정상, 정정, 철회, 부분 실패와 재시작으로 구체화 | [04-11](./04-11-mechanism-family-proposals.md): 송수신자, 실행과 상태, 저렴한 양방향 전환과 남는 핵심 변경 | **검토 자료 작성**. C-대화의 국소 전환 반론 미결, C-독립 보류 |
+| 5 | 양안 선택 조건, 기능 지원과 손실, V-01~13, 반증 및 자기 반론을 점검 | [04-12](./04-12-mechanism-family-review.md): 요구 지원, 13개 관점, 반론 수정과 미확인 | **작성자 검토 완료**. 주요 후보 확정 및 독립 검증 아님 |
+| 6 | 문서 검사, 실제 diff, 활성 링크와 출처, GitHub 게시 및 CI 확인 뒤 보고 | 현재 체크포인트의 검사 기록은 아래. 결과 commit과 CI는 Git 이력 및 최종 보고에서 확인 | 로컬 검사 통과, 게시/CI 확인 후 보고 |
 
-위 파일명은 예정 산출물이다. 실제 작성 전에는 링크나 완료로 표시하지 않는다. 첫 비교는 글과 표로 처리와 계약을 검토한다. 구조 자격 확인 전에 상세 그림 제작으로 작업량을 늘리지 않는다. 그림을 추가할 경우 paired SVG/draw.io와 렌더 검수 규칙을 적용한다.
+첫 비교는 글과 표로 처리와 계약을 검토했다. 구조 자격 확인 전에 상세 그림 제작으로 작업량을 늘리지 않았다. 그림을 추가할 경우 paired SVG/draw.io와 렌더 검수 규칙을 적용한다.
 
 ### 탐색과 반론의 운영 규칙
 
@@ -38,6 +38,29 @@
 이 보고는 Stage 4의 재발굴 체크포인트다. Stage 5의 정식 강한 대안 비교, Stage 6의 DP 선정, target 변경, 구현, 모델 실행, 측정과 QA freeze로 자동 진행하지 않는다. 기존 01~03을 다시 승인받는 절차도 시작하지 않는다. 새 요구 누락이 확인되면 그 영향과 이유를 기록한다.
 
 시작 commit: `9d2e7248c624bbc533ef64530e97e301aaf0c791`. 시작 시 `main...origin/main`은 clean이었다. 이후 진척과 게시 SHA는 이 절과 실제 Git 상태를 함께 확인한다.
+
+### 첫 재발굴 결과와 재개 위치
+
+- 원칙을 먼저 게시한 commit: [`4e95bcf`](https://github.com/cbyche/via-sw-architecture/commit/4e95bcfb1c2a5d94e218c1af33a74a54cad57af3). [CI 성공](https://github.com/cbyche/via-sw-architecture/actions/runs/37016723567)을 확인한 뒤 결과 문서를 작성했다.
+- 현재 결과: **주요 DP 후보 미확정**. C-대화는 다른 계열 가능성 검토 중이며 기존 Request Graph에 모델 재판단을 추가하는 싼 전환 반론이 남는다. C-독립은 공유 확정 제거의 구조 차이를 설명했지만 hold/철회 기능 손실과 VIA에서의 선택 가치 때문에 보류했다.
+- 다음 재개: [04-11 §2.5](./04-11-mechanism-family-proposals.md#25-가장-싼-전환을-실제로-구성해-본-결과)의 가장 강한 반론을 먼저 확인한다. T도 후속 사건 뒤 재해석할 수 있다는 사실을 유지한다. 이 결과를 강한 대안 두 개 확보 또는 Stage 4 전체 완료로 바꾸지 않는다.
+- 이번 보고는 기존 계획의 Stage 4 재발굴 체크포인트다. 후속 방향은 사용자 리뷰 후 판단하며 Stage 5, DP 선정, target 변경, 구현과 측정은 시작하지 않는다.
+
+### 문서 검증 기록
+
+다음 로컬 검사를 통과했다. 실제 diff와 변경 파일 목록을 확인했으며 target, QA 정의, ADR과 과거 측정 자료는 변경하지 않았다. 새 문서에서 archive를 현재 규범 근거로 사용하지 않았다. 원칙의 이전 원문은 byte 일치를 확인하여 보존했다.
+
+| 실행 | 결과 |
+| --- | --- |
+| `.venv/bin/python scripts/architecture/check_active_markdown_links.py` | PASS, 활성 Markdown 123개 링크 |
+| `.venv/bin/python scripts/architecture/check_active_terminology.py` | PASS, 활성 용어와 정식 Component 이름 |
+| `.venv/bin/python scripts/architecture/check_qa_catalog.py` | PASS, 기존 23 QA 및 4 ASR registry 보존 |
+| `.venv/bin/python scripts/architecture/generate_target_architecture_diagrams.py --check` | PASS, 기존 13쌍 |
+| `.venv/bin/python scripts/architecture/generate_decision_package_diagrams.py --check` | PASS, 기존 8쌍 |
+| `.venv/bin/python scripts/architecture/generate_stage4_structure_diagrams.py --check` | PASS, 기존 14쌍 |
+| `git diff --check` 및 실제 diff 검토 | 공백 오류 없음. 이번 지침, 탐색과 진입 안내 범위 확인 |
+
+검사 통과는 링크와 저장소 일관성의 근거다. 대안의 구조 자격, 모델 능력, 복구 구현이나 품질 우위를 입증하지 않는다. 게시 시 이 파일을 포함한 결과 commit의 GitHub Actions를 확인해 사용자에게 보고한다.
 
 ## 현재 작업 — 문제 범위부터 다시 검증하는 6단계
 
