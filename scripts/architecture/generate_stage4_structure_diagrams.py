@@ -97,65 +97,167 @@ def semantic():
 
 
 def screen():
-    p=plate(2,'화면을 계속 기록할 것인가, 선택할 때만 가져올 것인가?',
-            'T와 B는 저장소 이름이 다르기만 한 안이 아니다. 화면 이력 수집과 시간 결합 경로를 B에서는 제거한다.',2450)
-    for i,x in enumerate((64,888,1712)):
+    p=plate(2,'화면 대상을 요청할 때 파악할 것인가, 미리 파악해둘 것인가?',
+            '공통 관측은 유지한다. A는 요청과 독립적인 분석 작업과 화면 대상 기록을 소유한다. 번호가 있는 실행 흐름은 별도 그림에서 본다.',2800)
+    for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
-        p.panel(x,784,['T','A','B'][i],['원시 이력에서 당시 화면 찾기','객체 이력을 미리 만들기','사용자가 선택한 자료만 받기'][i],
-                ['실제 target / 발화 구간의 관측 보존','탐색안 / 화면 객체 생산과 저장 추가','제한 기능 탐색안 / 과거 지칭 결합 제거'][i])
-        a.n('os',70,336,644,74,'화면 / 창 변경 / 사용자 선택',kind='external')
-        a.b('via',0,476,784,1351)
-        a.c('im',26,538,732,500,'Interaction Manager',role='입력 수집과 짧은 화면 근거 보관')
-        a.n('capture',59,657,666,70,['화면 변화와 선택 사건 수집','화면 변화와 선택 사건 수집','선택 버튼 처리 + 선택 영역 1회 캡처'][i],color=INK if i<2 else GREEN,owner='im')
-        a.n('raw',59,789,666,87,['유한 원시 화면 이력 / RAM\n시각별 화면, 포인터와 선택 사건','유한 원시 화면 이력 / RAM\n시각별 화면, 포인터와 선택 사건','선택 자료 묶음\n선택 시각 + 영역 + 원본 버전'][i],kind='store' if i<2 else 'data',color=INK if i<2 else GREEN,owner='im')
-        if i<2:
-            a.n('pin',59,944,666,63,'발화 구간 보존 / 늦은 전사와 시각 정렬',owner='im')
-            a.e('raw','pin',label='②b 구간 보존과 정렬',at=(419,911))
+        p.panel(x,1184,'T' if i==0 else 'A','요청에 필요한 당시 화면 해석' if i==0 else '화면 대상 생산과 요청 처리 분리',
+                '실제 target / UI 정보와 기존 cache도 활용' if i==0 else '탐색안 / 생산 작업, 대상 기록과 준비 상태 관리')
+        a.n('os',58,335,450,80,'OS와 앱\n화면 변경 / 마우스 / 클릭과 선택',kind='external')
+        a.n('mic',674,335,450,80,'마이크\n사용자 음성',kind='external')
+        a.b('via',0,465,1184,1850)
+        a.c('im',35,530,1114,585,'Interaction Manager',role='화면과 음성 수집, 기록 보관과 발화 시간 연결')
+        for key,xx,yy,name in [('capture',58,650,'화면 관측 수집기'),('audio',674,650,'음성 입력 수집기'),('manager',58,795,'화면 기록 관리자'),('align',674,795,'입력 시각 연결기')]:
+            a.n(key,xx,yy,450,64,name,owner='im')
+        a.n('raw',58,962,450,105,'최근 화면 기록\n캡처 시각, 이미지와 조작 정보\n메모리에 임시 보관',kind='store',owner='im')
+        a.n('evidence',674,962,450,105,'발화와 연결된 근거 참조\n말한 시간 / 해당 화면 / 누락 범위',kind='data',owner='im')
+        a.e('os','capture',label='변경 알림 또는 주기 수집',at=(70,441))
+        a.e('mic','audio',label='음성 도착 / 발화 시작 감지',at=(687,441))
+        a.e('capture','manager',label='발생 시각과 관측 전달',at=(72,748))
+        a.e('manager','raw',sd=-20,td=-20,label='기록 보관과 조회',at=(72,896))
+        a.e('raw','manager','T','B',sd=20,td=20,ret=True)
+        a.e('audio','align',label='발화 시간 / ASR 결과 수신',at=(686,748))
+        a.e('align','manager','L','R',sd=-12,td=-12,label='해당 시간의 기록 요청',at=(520,755))
+        a.e('manager','align','R','L',sd=12,td=12,ret=True,label='근거 반환',at=(530,856))
+        a.e('align','evidence',label='시간 연결',at=(687,908))
+        a.t(58,1145,'음성 인식과 병행 S2S의 송수신 경로는 공통 입력 흐름도에 펼친다.',19,MUTED)
+        if i:
+            a.c('sgs',35,1260,1114,440,'Screen Grounding Service',GREEN,role='발화 시작과 독립적으로 화면 대상을 생산하고 관리')
+            a.n('jobs',58,1380,450,64,'분석 작업 관리자',color=GREEN,owner='sgs')
+            a.n('analyze',674,1380,450,64,'화면 대상 분석기',color=GREEN,owner='sgs')
+            a.n('records',58,1530,450,64,'화면 대상 기록 관리자',color=GREEN,owner='sgs')
+            a.n('objects',674,1530,450,130,'화면 대상 기록\n임시 ID / 위치 / 변경 관계\n캡처 시각 / 원래 화면 참조\n메모리에 임시 보관',kind='store',color=GREEN,owner='sgs')
+            a.e('manager','jobs','L','L',via=[(18,827),(18,1412)],color=GREEN,label='새 기록 준비 → 변경 알림',at=(65,1203))
+            a.e('jobs','analyze','R','L',label='범위와 예산 검사',at=(523,1337),color=GREEN)
+            a.e('analyze','records','B','R',via=[(899,1484),(548,1484),(548,1562)],label='구조 정보 또는 모델 분석 결과',at=(562,1454),color=GREEN)
+            a.e('records','objects','R','L',via=[(587,1562),(587,1595)],label='검증 후 보관',at=(536,1618),color=GREEN)
         else:
-            a.n('pin',59,944,666,63,'선택 자료 묶음 조회 / 과거 이력 복원 없음',owner='im')
-            a.e('raw','pin',label='선택한 묶음 사용',at=(419,911),color=GREEN)
-        a.e('os','capture',label='① 관측 사건 수집' if i<2 else '① 사용자가 선택한 순간에만 수집',at=(104,437),color=INK if i<2 else GREEN)
-        a.e('capture','raw',label='②a 시각을 붙여 보관' if i<2 else '② 선택 범위만 묶기',at=(418,744),color=INK if i<2 else GREEN)
-        if i==1:
-            a.c('producer',26,1090,732,258,'Screen Grounding Service',GREEN,role='요청 전에 화면 속 객체와 관계를 생산')
-            a.n('derive',59,1202,309,59,'객체 추출과 추적',color=GREEN,owner='producer')
-            a.n('objects',447,1202,278,119,'시각별 객체 이력\n+ 원본 버전',kind='store',color=GREEN,owner='producer')
-            a.n('modelport',59,1289,309,40,'공유 모델 호출 연동',color=GREEN,owner='producer')
-            a.e('derive','objects','R','L',via=[(406,1231.5),(406,1261.5)],label='③ 게시',at=(377,1155),color=GREEN)
-            a.e('derive','modelport',sd=-15,td=-15,color=GREEN)
-            a.e('modelport','derive','T','B',sd=15,td=15,color=GREEN,ret=True)
-            a.e('raw','derive','L','L',via=[(14,832.5),(14,1231.5)],color=GREEN,label='②c 객체 생산',at=(60,1055))
+            a.t(80,1320,['별도 화면 대상 생산 Component는 없다.','요청에 필요한 화면, UI 구조와 원문을 준비하고','Request Interpreter가 대상과 의도를 제안한다.'],25,BLUE,leading=42)
+            a.t(80,1520,['T도 UI 구조와 기존 cache를 사용한다.','매번 이미지를 처음부터 분석한다고 가정하지 않는다.'],23,MUTED,leading=38)
+        a.c('cm',35,1790,530,180,'Context Manager',role='허용 근거 구성과 현재 원문 확인')
+        a.n('context',58,1900,484,50,'화면 근거 구성기',owner='cm')
+        a.c('ma',654,1790,495,180,'Model Access',role='같은 공유 Omni의 호출과 결과 변환')
+        a.n('adapter',677,1900,448,50,'모델 연동기',owner='ma')
+        a.e('context','manager','L','L',sd=-12,td=-12,via=[(5,1913),(5,815)],color=c,label='당시 기록 조회' if i==0 else '필요 시 원래 기록 조회',at=(64,1744))
+        a.e('manager','context','L','L',sd=12,td=12,via=[(25,839),(25,1937)],color=c,ret=True)
+        if i:
+            a.e('context','records','T','B',sd=-18,td=-18,via=[(282,1730),(265,1730)],label='대상 정보 조회',at=(62,1708),color=GREEN)
+            a.e('records','context','B','T',sd=18,td=18,via=[(301,1765),(318,1765)],color=GREEN,ret=True)
+            a.e('analyze','adapter','R','R',sd=-10,td=-10,via=[(1162,1402),(1162,1915)],label='이미지 해석 필요 시 호출',at=(724,1715),color=GREEN)
+            a.e('adapter','analyze','R','R',sd=10,td=10,via=[(1177,1935),(1177,1422)],color=GREEN,ret=True)
+        a.c('rc',35,2070,530,160,'Request Controller',role='근거 준비 요청과 최종 의미 검증')
+        a.n('control',58,2170,484,45,'요청 해석 조정기',owner='rc')
+        a.c('ri',654,2070,495,160,'Request Interpreter',role='발화에서 대상과 의도를 제안')
+        a.n('interpret',677,2170,448,45,'요청 의미 해석기',owner='ri')
+        a.e('rc','cm','T','B',sd=-20,td=-20,label='근거 요청',at=(65,2004))
+        a.e('cm','rc',sd=20,td=20,ret=True,label='근거 반환',at=(330,2004))
+        a.e('rc','ri','R','L',sd=-12,td=-12,label='해석 요청',at=(566,2116))
+        a.e('ri','rc','L','R',sd=12,td=12,ret=True,label='의미 제안',at=(566,2210))
+        a.e('ri','ma','T','B',sd=-20,td=-20,label='의미 해석 호출',at=(678,2004))
+        a.e('ma','ri',sd=20,td=20,ret=True,label='결과',at=(997,2004))
+        a.n('omni',570,2390,565,85,'공유 Omni 모델 / 가중치 한 벌',kind='model')
+        a.e('ma','omni','R','T',sd=-28,td=-20,via=[(1164,1852),(1164,2340),(832.5,2340)])
+        a.e('omni','ma','T','R',sd=20,td=28,via=[(872.5,2360),(1180,2360),(1180,1908)],ret=True)
+        a.t(64,2502,['공통: 모호하면 질문 또는 선택 요청. 최종 확정은 Request Controller가 담당한다.',
+                       'A는 분석 결과가 준비됐어도 정확성을 보장하지 않는다. 원래 기록과 현재 권한을 확인한다.'],19,MUTED,leading=31)
+    p.footer('화면 기록과 대상 기록은 별개다. 모듈명은 설계상 책임 분해이며 구현 클래스나 별도 process의 확정이 아니다.')
+    return p
+
+
+def screen_sequence(p,key,y,title,actors,events,note='',color=INK,unique_steps=()):
+    """One independent event sequence; integer numbering matches its prose section."""
+    centers=[220+j*(2120/(len(actors)-1)) for j in range(len(actors))]
+    # Integer coordinates avoid cross-platform float rendering differences.
+    centers=[round(v) for v in centers]
+    end=y+200+len(events)*74
+    p.box(64,y,2432,end-y+90,'#FAFBFD',LINE)
+    p.text(88,y+18,title,26,color,bold=True)
+    for j,(name,kind) in enumerate(actors):
+        cx=centers[j]
+        if kind=='empty':
+            p.text(cx,y+112,name,18,MUTED,align='center');continue
+        if kind=='component':p.component(f'{key}-actor{j}',cx-115,y+80,230,104,name,GREEN if name=='Screen Grounding\nService' else INK)
+        else:p.node(f'{key}-actor{j}',cx-115,y+80,230,104,name,kind='external')
+        p.line([(cx,y+184),(cx,end)],LINE,True,False,1)
+    for row,(s,t,label,ret) in enumerate(events):
+        yy=y+235+row*74;start,stop=centers[s],centers[t]
+        ec=color if row+1 in unique_steps else INK
+        if s==t:
+            direction=-1 if s==len(actors)-1 else 1
+            p.line([(start,yy),(start+45*direction,yy),(start+45*direction,yy+20),(start,yy+20)],ec,ret)
+            p.label(start+55 if direction==1 else start-570,yy-25,label,ec,20)
         else:
-            a.t(48,1105,['화면 A → 화면 B → 선택 이동','자료가 늦게 와도 발화 시각으로 찾는다.'] if i==0 else ['연속 화면 수집기 없음','이력 저장과 발화 시각 검색 없음','선택 이전의 화면은 복원할 수 없음'],23,c)
-        a.c('cm',26,1390,732,268,'Context Manager',role='읽을 근거를 구성하고 현재 원문을 확인')
-        a.n('join',59,1510,666,65,['정렬된 입력 근거로 Context 구성','정렬된 구간의 객체와 원시 근거로 Context 구성','선택된 자료와 입력으로 Context 구성'][i],owner='cm')
-        a.n('verify',59,1600,666,40,'현재 원본 버전과 권한 확인',owner='cm')
-        a.e('join','verify',label='⑤ 적용 전 확인' if i==1 else '④ 적용 전 확인',at=(430,1578))
-        source='objects' if i==1 else 'pin'
-        if i==1:
-            a.e('join',source,'T','B',sd=40,via=[(432,1360),(586,1360)],td=0,color=GREEN,label='④a 객체 조회',at=(415,1382))
-            a.e(source,'join','B','T',sd=20,td=80,via=[(606,1330),(472,1330)],color=GREEN,ret=True,label='④b 당시 객체 반환',at=(415,1360))
-            a.e('join','pin','L','L',sd=-12,td=-10,via=[(2,1530.5),(2,965.5)],color=GREEN,label='④c 원시 근거 조회',at=(66,1360))
-            a.e('pin','join','L','L',sd=10,td=12,via=[(6,985.5),(6,1554.5)],ret=True,color=GREEN,label='④d 원시 근거 반환',at=(62,1489))
-        else:
-            a.e('join',source,'T','B',sd=-210,td=-210,via=[(182,1346),(18,1346),(18,1048),(182,1048)],color=c,label='③a 근거 조회',at=(55,1348))
-            a.e(source,'join','B','T',sd=210,td=210,via=[(602,1343)],ret=True,color=c,label='③b 정렬된 근거 반환' if i==0 else '③b 선택 묶음 반환',at=(376,1255))
-        if i==1:
-            a.c('ma',59,1702,666,109,'Model Access',role='공유 Omni 호출과 결과 반환 / 추가 모델 복제 없음')
-            a.e('modelport','ma','L','L',via=[(20,1309),(20,1756.5)],color=GREEN)
-            a.e('ma','modelport','L','L',sd=22,td=9,via=[(10,1778.5),(10,1318)],ret=True,color=GREEN)
-            a.n('model',160,1890,464,86,'공유 Omni 모델',kind='model')
-            a.e('ma','model',sd=-20,td=-20)
-            a.e('model','ma','T','B',sd=20,td=20,ret=True)
-        else:a.t(49,1710,['Context Manager는 정렬된 근거를 조회한다.','시간 정렬은 Interaction Manager 책임이다.'] if i==0 else ['선택 시각의 묶음만 조회한다.','당시 이동과 복수 지칭은 지원하지 않는다.'],20,MUTED)
-        p.focus(x,2070,784,['수집과 결합이 SW의 책임','요청 전 계산과 저장이 추가됨','선택과 재선택이 사용자의 책임'][i],
-                [['말하면서 여러 화면을 지칭할 수 있는 설계','요청 때 당시 근거를 찾아 해석','원시 화면 메모리와 시간 결합 비용'],
-                 ['객체 ID와 원본 ID를 계속 대조','화면 이해가 필요하면 공유 모델 사용','원시 근거도 남아 추가 비용 발생'],
-                 ['선택한 자료에 대한 요청은 처리','선택 전 이동과 복수 지칭은 미지원','이미지 자체의 의미 해석은 계속 필요']][i],
-                ['상시 전체 화면 영구 저장을 뜻하지 않는다.','객체 추적과 모델 지원은 미확인이다.','자료를 미리 고르는 수고와 기능 손실이 있다.'][i],c)
-    p.text(64,1998,'공통: Interaction Manager → Request Controller에 입력과 근거 참조 전달. Request Controller ↔ Context Manager에서 Context 준비.',20,MUTED)
-    p.text(64,2030,'후속: Request Controller → Request Interpreter에 입력과 Context 전달. 지칭의 의미 판단은 Request Interpreter가 수행한다.',20,MUTED)
-    p.footer('S-02의 저장은 입력 근거의 보관이다. 원본 문서의 소유권이나 외부 작업 실행 권한을 옮기지 않는다.')
+            p.line([(start,yy),(stop,yy)],ec,ret)
+            p.label(min(start,stop)+12,yy-29,label,ec,20)
+    if note:p.text(88,end+25,note,19,MUTED)
+    return end+130
+
+
+def screen_input():
+    p=Plate('stage4-s02-input-flow','S-02 / 공통 입력','화면 변화와 사용자 음성은 서로 다른 경로로 들어온다',
+            'T와 A의 공통 입력. 위아래 흐름은 병행하며 각 흐름의 번호는 독립적이다. 모델은 연동 대상이고 원격 배치를 뜻하지 않는다.',2100)
+    y=screen_sequence(p,'screen',240,'화면 수집 / 입력 활성 + 수집 권한이 있을 때',
+        [('OS와 앱','external'),('Interaction Manager','component')],
+        [(1,0,'1. 화면 변경과 사용자 조작 알림 구독',False),
+         (0,1,'2. 변경 알림 또는 주기 수집 → 화면 이미지와 조작 정보 확보',False),
+         (1,1,'3. 화면 기록 관리자가 발생 시각과 함께 보관',False)],
+        '같은 화면은 참조 재사용. A는 새 기록이 준비되면 Screen Grounding Service에 알린다.')
+    screen_sequence(p,'voice',y,'음성 입력 / 사용자가 말할 때',
+        [('마이크','external'),('Interaction\nManager','component'),('Speech Input Worker\n인식 실행 경계','external'),('Streaming ASR\n인식 모델','external'),('Model Access','component'),('공유 Omni\n음성 처리','external')],
+        [(0,1,'1. 음성 도착 → 발화 시작 감지, 관련 화면 기록 유지, Request Controller에 시작 알림',False),
+         (1,2,'2. 연속 음성 전달',False),(2,3,'3. 음성 인식 요청',False),
+         (3,2,'4. 인식 문장, 수정과 발화 시간 반환',True),
+         (2,1,'5. 인식 근거 전달 → 입력 시각 연결기가 당시 화면과 연결',True),
+         (1,4,'6. 같은 음성 참조 전달 / 2~5와 병행',False),(4,5,'7. 공유 Omni 음성 처리 / ASR 완료를 기다리지 않음',False)],
+        '1의 발화 시작은 ASR 문장이 나온 뒤가 아니다. S2S 결과와 불일치 처리는 별도 응답 계약을 따른다.')
+    p.footer('화면 수집은 발화 조각마다 시작되지 않는다. 관련 기록 유지와 시간 연결은 Interaction Manager의 서로 다른 내부 책임이다.')
+    return p
+
+
+def screen_target_flow():
+    p=Plate('stage4-s02-target-flow','S-02 / T 실행','T: 당시 화면 근거를 조회하고 요청에 맞게 해석한다',
+            '공통 입력 수집 뒤의 요청 처리 예. 발화 시작 때 준비한 기본 근거와 기존 UI 정보 및 cache는 유효한 범위에서 재사용한다.',1600)
+    screen_sequence(p,'target',240,'요청 처리 / 대상 의미 해석이 필요한 입력',
+        [('Interaction\nManager','component'),('별도 생산자 없음','empty'),('Context Manager','component'),('Request\nController','component'),('Request\nInterpreter','component'),('Model Access','component'),('공유 Omni\n의미 해석','external')],
+        [(0,3,'1. 인식 문장, 입력 버전과 당시 화면 근거 참조 전달',False),
+         (3,2,'2. 허용 근거 구성 요청',False),(2,0,'3. 발화 당시 화면과 조작 기록 조회',False),
+         (0,2,'4. 보관된 이미지, UI 정보, 시간 오차와 누락 범위 반환',True),
+         (2,3,'5. 필요한 현재 원문과 권한 확인 후 Context 반환',True),
+         (3,4,'6. 입력과 Context로 해석 요청',False),(4,5,'7. 필요한 화면을 포함해 의미 해석 요청',False),
+         (5,6,'8. 모델 입력 전달',False),(6,5,'9. 해석 결과 반환',True),(5,4,'10. 결과 반환',True),
+         (4,3,'11. 대상과 의도 제안 또는 확인 필요성 반환',True),
+         (3,3,'12. 현재 입력과 근거 검증 → 확정 또는 보류',False)],
+        '부족한 근거는 허용된 추가 조회 또는 사용자 확인으로 보완한다. 이 흐름은 외부 업무 실행이 아니다.',BLUE,(3,4))
+    p.footer('Context Manager의 현재 원문 조회는 해당 자료 소유자의 인터페이스를 사용한다. 최종 확정 주체는 Request Controller다.')
+    return p
+
+
+def screen_alternative_flow():
+    p=Plate('stage4-s02-alternative-flow','S-02 / A 실행','A: 화면 대상 생산은 요청과 독립적으로 진행한다',
+            '생산 흐름과 요청 흐름은 병행한다. 준비된 정보가 없거나 불확실하면 원래 화면 기록을 조회한다. 두 흐름은 각각 1부터 읽는다.',2750)
+    y=screen_sequence(p,'produce',240,'배경 생산 / Interaction Manager의 새 화면 기록 알림',
+        [('Interaction Manager','component'),('Screen Grounding\nService','component'),('Model Access','component'),('공유 Omni\n화면 분석','external')],
+        [(0,1,'1. 변경 알림과 허용된 화면 근거 참조 전달',False),
+         (1,1,'2. 변경 범위, 현재 권한과 처리 예산 확인',False),
+         (1,2,'3. 이미지 해석이 필요한 경우에만 분석 요청',False),
+         (2,3,'4. 항목 위치, 종류와 변경 관계 후보 요청',False),
+         (3,2,'5. 분석 후보 반환',True),(2,1,'6. 분석 결과 반환',True),
+         (1,1,'7. 원래 화면과 캡처 시각 연결 → 검증 후 보관',False)],
+        '앱의 구조 정보로 충분하면 모델 요청과 4~6을 생략한다. 발화 시작을 기다리지 않으며 단순 포인터 이동마다 모델을 호출하지 않는다.',GREEN,tuple(range(1,8)))
+    screen_sequence(p,'query',y,'요청 처리 / 발화 당시 대상 정보가 필요한 입력',
+        [('Interaction\nManager','component'),('Screen Grounding\nService','component'),('Context Manager','component'),('Request\nController','component'),('Request\nInterpreter','component'),('Model Access','component'),('공유 Omni\n의미 해석','external')],
+        [(0,3,'1. 인식 문장, 입력 버전과 당시 근거 참조 전달',False),
+         (3,2,'2. 허용 근거 구성 요청',False),(2,1,'3. 발화 시간과 창, 문서에 맞는 대상 정보 조회',False),
+         (1,2,'4. 항목, 변경 관계, 분석 범위와 준비 상태 반환',True),
+         (2,0,'5. 미준비, 불확실 또는 원래 이미지가 필요하면 당시 기록 조회',False),
+         (0,2,'6. 보관 범위의 화면과 조작 기록 반환 / 5를 생략하면 함께 생략',True),
+         (2,3,'7. 현재 원문과 권한 확인 후 Context 반환',True),
+         (3,4,'8. 입력과 Context로 해석 요청',False),(4,5,'9. 발화의 대상 역할과 의도 해석 요청',False),
+         (5,6,'10. 모델 입력 전달',False),(6,5,'11. 해석 결과 반환',True),(5,4,'12. 결과 반환',True),
+         (4,3,'13. 의미 제안 또는 확인 필요성 반환',True),
+         (3,3,'14. 현재 입력과 근거 검증 → 확정 또는 보류',False)],
+        '사전 분석은 사용자 의도를 확정하지 않는다. 생산 완료를 무한 대기하지 않으며 없는 과거는 확인 질문으로 처리한다.',GREEN,(3,4,5,6))
+    p.footer('A의 배경 분석도 같은 Omni 자원을 사용한다. 준비된 정보의 정확성과 실제 시간 및 자원 이익은 미확인이다.')
     return p
 
 
@@ -467,7 +569,7 @@ def semantic_detail():
     return p
 
 
-BUILDERS=[semantic,screen,retrieval,workflow,response,speech,semantic_detail]
+BUILDERS=[semantic,screen,screen_input,screen_target_flow,screen_alternative_flow,retrieval,workflow,response,speech,semantic_detail]
 
 
 def main():
