@@ -32,6 +32,9 @@
 | 음성 입력 수집기 | 마이크 음성을 받아 발화 시작을 알리고 음성 처리 경로로 전달하는 Interaction Manager 내부 모듈 |
 | 화면 기록 관리자 | 최근 화면 기록의 보관, 필요한 구간 유지, 조회와 해제를 담당하는 Interaction Manager 내부 모듈 |
 | 입력 시각 연결기 | 실제 발화 시간과 화면 및 조작 기록의 시간을 맞추는 Interaction Manager 내부 모듈 |
+| S2S 입력 연동기 | Interaction Manager 안에서 같은 음성을 Model Access에 전달하고 음성 해석과 응답 후보를 받는 모듈 |
+| 음성 인식 연동기 | Model Access의 ASR 연동 모듈. 별도 Speech Input Worker에서 실행하며 Streaming ASR의 문장과 발화 시간 정보를 Interaction Manager로 반환 |
+| S2S 모델 연동기와 의미 분석 연동기 | Model Access의 역할별 연동 모듈. 각각 음성 처리와 의미 및 화면 분석을 같은 공유 Omni에 요청하고 결과를 반환 |
 | 최근 화면 기록 | 캡처 시각이 기록된 화면 이미지와 마우스, 클릭, 선택 및 앱 정보. 메모리에 임시 보관하는 자료이며 실행 모듈이 아님 |
 | 화면 대상 기록 | A가 화면 속 항목에 붙인 임시 식별자, 위치, 종류, 변경 관계와 분석 근거. Screen Grounding Service가 소유하는 파생 자료 |
 
@@ -60,7 +63,7 @@ T도 UI 구조 정보, 기존 cache와 필요한 모델 해석을 사용할 수 
 
 [크게 보기](./diagrams/stage4-s02-comparison.svg) / [draw.io 원본](./diagrams/stage4-s02-comparison.drawio)
 
-검정은 공통, 파랑은 T 전용 경로, 초록은 A에서 추가하거나 달라지는 경로다. 색은 품질 우위를 뜻하지 않는다. 저장소는 수동 자료이고 조회와 반환의 주체는 소유 Component다. 구조도에는 실행 순서 번호를 붙이지 않으며 다음 흐름도에서 실제 순서를 설명한다. 공유 Omni와 Streaming ASR은 VIA가 연동하는 모델이며 VIA 경계 밖 표시는 원격 실행이라는 뜻이 아니다.
+검정은 공통, 파랑은 T 전용 경로, 초록은 A에서 추가하거나 달라지는 경로다. 색은 품질 우위를 뜻하지 않는다. 저장소는 수동 자료이고 조회와 반환의 주체는 소유 Component다. 메인 그림은 마이크와 화면 입력, Interaction Manager의 수집 및 시간 연결, Speech Input Worker와 Streaming ASR의 왕복, 병행 S2S, 화면 대상 생산과 최종 요청 해석까지 포함한다. 위쪽 입력, 가운데 화면 처리와 모델 연동, 아래쪽 요청 해석 순으로 읽는다. 추가 흐름도는 이 경로의 실행 순서와 조건을 확대해서 설명하며 메인 그림에서 빠진 경로를 대신하지 않는다. 공유 Omni와 Streaming ASR은 VIA가 연동하는 모델이며 VIA 경계 밖 표시는 원격 실행이라는 뜻이 아니다.
 
 ### 3.1 두 안의 공통 수집 과정
 
@@ -79,7 +82,7 @@ T도 UI 구조 정보, 기존 cache와 필요한 모델 해석을 사용할 수 
 **음성 입력 흐름**
 
 1. 사용자가 말하면 마이크가 Interaction Manager의 음성 입력 수집기에 음성을 전달한다. 발화 시작을 감지하면 화면 기록 관리자가 말하기 직전과 발화 중 기록을 처리에 필요한 동안 유지한다. Interaction Manager는 Request Controller에도 입력 시작을 알려 기본 Context 준비를 시작할 수 있게 한다.
-2. Interaction Manager가 Speech Input Worker에 연속 음성을 전달한다. Speech Input Worker는 별도 인식 실행 경계이며 Interaction Manager의 음성 입력 책임과 연결된다.
+2. Interaction Manager가 Speech Input Worker에 연속 음성을 전달한다. Speech Input Worker는 Model Access의 ASR 연동 모듈을 실행하는 별도 인식 실행 경계다. 논리적 Component 소유와 process 배치를 구별한다.
 3. Speech Input Worker가 Streaming ASR에 음성 인식을 요청한다.
 4. Streaming ASR이 인식 문장, 수정 결과와 발화 시간 근거를 Speech Input Worker에 반환한다.
 5. Speech Input Worker가 이 근거를 Interaction Manager에 전달한다. 입력 시각 연결기는 문장이 도착한 시간 대신 실제 발화 시간에 화면과 조작 기록을 연결한다. 시간 오차로 후보가 겹치면 여러 후보를 유지한다.
