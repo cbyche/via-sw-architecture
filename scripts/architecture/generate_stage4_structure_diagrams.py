@@ -30,7 +30,7 @@ def plate(n,title,thesis,height=2200):return Plate(f'stage4-s{n:02}-comparison',
 
 
 def semantic():
-    p=plate(1,'자료가 부족할 때, 누가 읽고 어디에서 해석을 이어가는가?',
+    p=plate(1,'요청 해석 정확성을 위한 추가 자료 확인 설계 — 해석을 끝내고 재호출할 것인가, 멈춘 해석을 이어갈 것인가?',
             'T는 호출을 끝내고 Request Controller로 돌아온다. A는 읽기를 기다리는 작업과 모델 재개 계약을 새로 갖는다.',2400)
     p.box(64,230,2432,142,'#F7F9FC',LINE)
     p.text(88,247,'공통 시작 ①~⑤',21,bold=True)
@@ -97,12 +97,12 @@ def semantic():
 
 
 def screen():
-    p=plate(2,'화면 대상을 요청할 때 파악할 것인가, 미리 파악해둘 것인가?',
-            '화면 수집, ASR와 S2S 입력부터 대상 해석까지 각 안에서 완결된다. A는 화면 대상 생산과 상태 관리를 별도로 추가한다.',2150)
+    p=plate(2,'화면 지칭 정확성을 위한 화면 정보 처리 설계 — 수집한 화면 정보를 활용할 것인가, 별도 분석 결과도 활용할 것인가?',
+            'A는 같은 관측에서 추가 해석 자료를 생산하고 관리한다. 조기 실행은 A만의 차이가 아니며, 품질 이익과 보강 방향은 미정이다.',2150)
     for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
-        p.panel(x,1184,'T' if i==0 else 'A','요청에 필요한 당시 화면 해석' if i==0 else '화면 대상 생산과 요청 처리 분리',
-                '실제 target / UI 정보와 기존 cache도 활용' if i==0 else '탐색안 / 준비 지연과 원래 기록 전환도 비용에 포함')
+        p.panel(x,1184,'T' if i==0 else 'A','요청에 필요한 당시 화면 해석' if i==0 else '별도 화면 해석 자료 생산과 관리',
+                '실제 target / UI 정보와 기존 cache도 활용' if i==0 else '후보 유지 / 구조적 가치 보강 필요')
         a.n('os',48,330,330,64,'OS와 앱 / 화면과 조작 정보',kind='external')
         a.n('mic',540,330,280,64,'마이크 / 사용자 음성',kind='external')
         a.b('via',0,412,874,1530,subtitle='')
@@ -264,7 +264,7 @@ def screen_target_flow():
 
 
 def screen_alternative_flow():
-    p=Plate('stage4-s02-alternative-flow','S-02 / A 실행','A: 화면 대상 생산은 요청과 독립적으로 진행한다',
+    p=Plate('stage4-s02-alternative-flow','S-02 / A 실행','A: 같은 화면 관측에서 추가 해석 자료를 생산한다',
             '생산 흐름과 요청 흐름은 병행한다. 준비된 정보가 없거나 불확실하면 원래 화면 기록을 조회한다. 두 흐름은 각각 1부터 읽는다.',2750)
     y=screen_sequence(p,'produce',240,'배경 생산 / Interaction Manager의 새 화면 기록 알림',
         [('Interaction Manager','component'),('Screen Grounding\nService','component'),('Model Access','component'),('공유 Omni\n화면 분석','external')],
@@ -287,13 +287,13 @@ def screen_alternative_flow():
          (5,6,'10. 모델 입력 전달',False),(6,5,'11. 해석 결과 반환',True),(5,4,'12. 결과 반환',True),
          (4,3,'13. 의미 제안 또는 확인 필요성 반환',True),
          (3,3,'14. 현재 입력과 근거 검증 → 확정 또는 보류',False)],
-        '사전 분석은 사용자 의도를 확정하지 않는다. 생산 완료를 무한 대기하지 않으며 없는 과거는 확인 질문으로 처리한다.',GREEN,(3,4,5,6))
-    p.footer('A의 배경 분석도 같은 Omni 자원을 사용한다. 준비된 정보의 정확성과 실제 시간 및 자원 이익은 미확인이다.')
+        '추가 해석 자료는 사용자 의도를 확정하지 않는다. 생산 완료를 무한 대기하지 않으며 없는 과거는 확인 질문으로 처리한다.',GREEN,(3,4,5,6))
+    p.footer('A는 보강 방향 미정인 후보로 유지한다. 조기 실행은 A만의 차이가 아니며, 추가 자료의 정확성과 시간 및 자원 이익은 미확인이다.')
     return p
 
 
 def retrieval():
-    p=plate(3,'원본 조회에, 별도 의미 검색 시스템을 더할 것인가?',
+    p=plate(3,'자료 검색 정확성을 위한 자료 찾기 설계 — 이름과 키워드로 검색할 것인가, 내용의 의미로도 검색할 것인가?',
             'A는 T의 조회 경로를 유지하면서 검색과 색인 생산을 추가한다. 검색 결과는 후보이며 현재 원문의 확인을 대신하지 않는다.',2450)
     for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
@@ -354,7 +354,7 @@ def retrieval():
 
 
 def workflow():
-    p=plate(4,'끝나지 않은 요청을 누가 기억하고, 재시작 뒤 무엇을 복원하는가?',
+    p=plate(4,'요청 복구성을 위한 대기 및 재개 설계 — 요청 관계와 상태를 저장할 것인가, 실행 위치와 상태를 저장할 것인가?',
             '같은 예: “보고서가 끝나면 발표자료를 만들어줘.” 차이는 후속 조건의 소유자, 저장 내용과 복원 실행이다.',2750)
     layout_start=len(p.items)
     for i,x in enumerate((64,888,1712)):
@@ -436,7 +436,7 @@ def workflow():
 
 
 def response():
-    p=plate(5,'음성 응답을 미리 만들 것인가, 승인된 문장으로 만들 것인가?',
+    p=plate(5,'응답성을 위한 음성 응답 생성 설계 — 직접 음성 생성도 사용할 것인가, 확정된 문장만 음성으로 바꿀 것인가?',
             'A도 요청 이해와 음성 응답을 수행한다. 포기하는 것은 자체 지식 질문에 대한 직접 S2S 경로이며, 생성 순서가 달라진다.',2550)
     for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
@@ -496,7 +496,7 @@ def response():
 
 
 def speech():
-    p=plate(6,'인식 전용 실행을 둘 것인가, 공유 모델에서 인식까지 수행할 것인가?',
+    p=plate(6,'음성 인식 정확성과 응답성을 위한 음성 입력 처리 설계 — 별도 인식 모델을 사용할 것인가, 공유 모델에 인식도 맡길 것인가?',
             'A의 인식 책임은 사라지지 않는다. Omni의 음성 실행과 새 결과 변환 모듈로 옮겨가며 같은 추론 자원과 장애에 의존한다.',2350)
     for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN

@@ -13,12 +13,12 @@
 
 | 질문 | 개별 문서 | 비교 |
 | --- | --- | --- |
-| S-01 | [해석 중 근거를 보완하는 실행](./04-01-semantic-execution.md) | T / A |
-| S-02 | [당시 화면의 근거 생산](./04-02-screen-evidence.md) | T / A, 공통 질문과 선택 tactic |
-| S-03 | [숨은 자료의 의미 검색](./04-03-semantic-retrieval.md) | T / A |
-| S-04 | [목표와 질문의 대기 및 재개](./04-04-request-continuation.md) | T / A / B |
-| S-05 | [직접 응답 경로](./04-05-response-path.md) | T / A |
-| S-06 | [음성 입력 근거의 생산자](./04-06-speech-evidence.md) | T / A |
+| S-01 | [요청 해석 정확성을 위한 추가 자료 확인 설계](./04-01-semantic-execution.md) | T / A |
+| S-02 | [화면 지칭 정확성을 위한 화면 정보 처리 설계](./04-02-screen-evidence.md) | T / A, A는 후보 유지 및 보강 방향 미정. 공통 질문과 선택 tactic |
+| S-03 | [자료 검색 정확성을 위한 자료 찾기 설계](./04-03-semantic-retrieval.md) | T / A |
+| S-04 | [요청 복구성을 위한 대기 및 재개 설계](./04-04-request-continuation.md) | T / A / B |
+| S-05 | [응답성을 위한 음성 응답 생성 설계](./04-05-response-path.md) | T / A |
+| S-06 | [음성 인식 정확성과 응답성을 위한 음성 입력 처리 설계](./04-06-speech-evidence.md) | T / A |
 
 그림은 각 문서에서 바로 볼 수 있고 SVG 옆에 편집 가능한 draw.io 원본을 연결했다. [구조 비교 6장과 S-01 실행 상세 모아 보기](./diagrams/stage4-review.html)는 내려받아 브라우저에서 열 수 있다. Component 안의 Module, 실제로 옮겨지는 책임과 경로, 서로 다른 자료/저장소 모양, 공통 검정/T 파랑/대안 초록을 적용하는 [설계도 작성 기준](./diagram-design-guide.md)을 함께 관리한다. 대안 수를 맞추려고 새로운 B를 만들지는 않았다.
 

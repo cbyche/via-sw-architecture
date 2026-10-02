@@ -31,8 +31,13 @@ class Plate:
         self.box(0, 0, W, 9, INK, 'none', 0)
         self.text(64, 42, 'VIA  /  ARCHITECTURE REVIEW', 18, MUTED, bold=True)
         self.text(2496, 42, number + '  /  STAGE 04', 18, MUTED, align='right', bold=True)
-        self.text(64, 87, title, 42, bold=True)
-        self.text(64, 151, thesis, 23, MUTED)
+        if ' — ' in title:
+            purpose, comparison = title.split(' — ', 1)
+            self.text(64, 75, [purpose, comparison], 34, bold=True, leading=44)
+            self.text(64, 166, thesis, 22, MUTED)
+        else:
+            self.text(64, 87, title, 42, bold=True)
+            self.text(64, 151, thesis, 23, MUTED)
         self.line([(64, 202), (2496, 202)], LINE, arrow=False)
 
     def _add(self, kind, **kw):
