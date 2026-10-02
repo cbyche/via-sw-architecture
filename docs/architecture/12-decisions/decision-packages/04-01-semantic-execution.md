@@ -1,6 +1,6 @@
 # S-01. 요청 해석 정확성을 위한 추가 자료 확인 설계 — 해석을 끝내고 재호출할 것인가, 멈춘 해석을 이어갈 것인가?
 
-> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-02
 > [04 전체 지도](./04-00-structural-alternatives.md#s-01) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-01, P-03**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
@@ -30,9 +30,21 @@
 
 기존 target 문서 일부에서 `host`는 모델 밖에서 호출, 권한, revision과 결과 사용을 제어하는 VIA 코드를 넓게 가리킨다. 어느 Component를 뜻하는지 모호하므로 이 문서에서는 `host`라고 줄이지 않고 **Request Controller, Context Manager, Model Access**처럼 실제 담당 이름을 쓴다.
 
+### 1.2 입력 자료와 처음 보는 용어
+
+| 자료 또는 말 | 처음 읽을 때의 뜻 | 소유자와 쓰는 때 |
+| --- | --- | --- |
+| 확정된 입력 | 사용자가 실제로 말하거나 보낸 내용과 정정 여부 | Interaction Manager가 Request Controller에 전달. 임시 인식 조각만으로 업무를 확정하지 않음 |
+| 기본 Context | 현재 입력을 이해하는 데 허용된 대화, 선택, 자료와 Task 단서 | Request Controller가 범위를 정하고 Context Manager가 원본 소유자에서 조회 |
+| 추가 자료 | 첫 해석에서 부족하다고 판정한 자료나 연락처 원문 | T는 Request Controller가 추가 조회를 요청. A는 Semantic Resolution Worker가 Capability Read Broker를 거쳐 조회 |
+| 읽은 자료의 버전 | 어떤 원본의 어느 시점을 읽었는지 나타내는 기록. 아래 `receipt`와 같은 뜻 | Context Manager가 반환하고 Request Controller가 확정 전 현재성을 검사 |
+| 멈춘 실행 ID | A가 모델 해석을 같은 작업에서 이어가기 위해 보관하는 식별자. 아래 `재개 handle`과 같은 뜻 | Semantic Resolution Worker가 관리. 모델의 중단 및 재개 지원은 미확인 |
+
+그림에서 제목 칸이 있는 상자는 Component, 그 안의 작은 상자는 내부 Module이나 자료다. 화살표는 그때 보내는 자료와 행동을 나타낸다. A의 Worker와 Broker는 새로운 책임을 제안한 Component이며 별도 프로세스나 별도 모델 가중치를 뜻하지 않는다.
+
 ## 2. 두 안에 공통인 시작: 기본 Context 구성
 
-최초 기본 Context 구성은 두 안이 동일하다. 그림의 ①~⑤와 아래 순서가 공통이다.
+최초 기본 Context 구성은 두 안이 동일하다. 그림의 1~5와 아래 순서가 공통이다.
 
 1. Interaction Manager가 확정된 사용자 입력과 발화, 화면, 선택의 시점별 근거 참조를 Request Controller에 전달한다.
 2. Request Controller가 현재 input revision, 허용 범위와 읽기 예산을 정한 뒤 Context Manager에 기본 Context를 요청한다.
@@ -40,7 +52,7 @@
 4. 각 source가 원문, 현재 revision과 읽기 결과를 Context Manager에 돌려준다.
 5. Context Manager가 기본 Context와 receipt를 Request Controller에 돌려준다.
 
-InputStarted 뒤 값싼 기본 Context 준비는 사용자가 말하는 동안 시작될 수 있다. 위 순서는 책임과 전달 관계를 설명하며, 발화가 끝난 뒤 ①~⑤를 모두 직렬로 시작한다는 뜻은 아니다. 두 안 모두 같은 입력, 기본 Context 범위, 권한과 총예산을 사용해야 한다.
+사용자가 말하기 시작했다는 알림 뒤 기본 Context 준비는 사용자가 말하는 동안 시작될 수 있다. 위 순서는 책임과 전달 관계를 설명하며, 발화가 끝난 뒤 1~5를 모두 직렬로 시작한다는 뜻은 아니다. 두 안 모두 같은 입력, 기본 Context 범위, 권한과 총예산을 사용해야 한다.
 
 ## 3. 먼저 볼 구조 차이
 
@@ -64,40 +76,45 @@ T의 Request Interpreter는 호출 한 번의 의미 제안을 반환하고 끝�
 
 [그림 크게 보기](./diagrams/stage4-s01-comparison.svg) / [편집 가능한 draw.io](./diagrams/stage4-s01-comparison.drawio)
 
-위 구조도는 같은 기본 Context에서 출발한 뒤 **누가 추가 읽기를 진행하고 해석 실행의 수명을 소유하는지** 비교한다. VIA의 비교 대상과 모델 의존성을 구분하고, 공통 Component는 같은 위치에 놓았다. 원본 소유자의 읽기 접점은 내부 owner와 외부 source를 묶어 펼친 참조이며, 모두 VIA 밖에 배치한다는 뜻이 아니다. 검정은 공통, 파랑은 T 전용, 초록은 A 전용 구조와 경로다. 내부 Module은 소유 Component 안에 놓고 자료는 접힌 종이로 구분했다. 자세한 표현 규칙은 [설계도 작성 기준](./diagram-design-guide.md)에 있다.
+위 메인 그림은 Interaction Manager의 확정 입력부터 Context Manager의 원본 조회, Request Interpreter 또는 Semantic Resolution Worker의 모델 호출, Request Controller의 최종 확정까지 보여준다. 요청 및 반환 화살표는 따로 그렸다. 같은 기본 Context에서 출발한 뒤 **누가 추가 읽기를 진행하고 해석 실행의 수명을 소유하는지** 비교한다. VIA의 비교 대상과 모델 의존성을 구분하고, 공통 Component는 같은 위치에 놓았다. 원본 소유자의 읽기 접점은 내부 owner와 외부 source를 묶어 펼친 참조이며, 모두 VIA 밖에 배치한다는 뜻이 아니다. 검정은 공통, 파랑은 T 전용, 초록은 A 전용 구조와 경로다. 내부 Module은 소유 Component 안에 놓고 자료는 접힌 종이로 구분했다. 자세한 표현 규칙은 [설계도 작성 기준](./diagram-design-guide.md)에 있다.
 
-아래 실행 상세도는 구조도의 왕복 호출을 시간 순서로 펼친 것이다. 위쪽 ①~⑤는 두 안의 공통 준비다. 아래쪽은 T의 첫 호출 종료와 두 번째 호출, A의 한 작업 안에서 중단과 재개를 나란히 보여준다. 가는 세로 막대는 호출 또는 작업의 수명을 나타내며 실제 소요 시간을 측정한 길이가 아니다. 실선은 요청, 점선 화살표는 반환이다.
+아래 실행 상세도는 구조도의 왕복 호출을 시간 순서로 펼친 것이다. 위쪽 1~5는 두 안의 공통 준비다. 아래쪽은 T의 첫 호출 종료와 두 번째 호출, A의 한 작업 안에서 중단과 재개를 나란히 보여준다. 가는 세로 막대는 호출 또는 작업의 수명을 나타내며 실제 소요 시간을 측정한 길이가 아니다. 실선은 요청, 점선 화살표는 반환이다.
 
 ![S-01 공통 준비와 호출 수명 실행 상세](./diagrams/stage4-s01-execution-detail.svg)
 
 [실행 상세 크게 보기](./diagrams/stage4-s01-execution-detail.svg) / [실행 상세 draw.io](./diagrams/stage4-s01-execution-detail.drawio)
 
-### 4.1 T: 실제 target의 ⑥~⑱
+### 4.1 T: 실제 target의 6~18
 
-| 순서 | 보내는 쪽 → 받는 쪽 | 전달하는 내용과 결과 |
-| --- | --- | --- |
-| ⑥ | Request Controller → Request Interpreter | 최종 입력, 기본 Context, input revision, 허용 범위와 semantic 예산으로 첫 해석을 요청한다. |
-| ⑦~⑧ | Request Interpreter ↔ Model Access | Request Interpreter가 semantic 모델을 호출하고 model result를 받는다. Model Access는 두 안 모두 같은 Shared Inference Service와 Omni weights 한 벌을 사용한다. |
-| ⑨ | Request Interpreter → Request Controller | 부족한 field와 제한된 추가 읽기 제안이 담긴 SemanticProposal을 반환한다. **반환하는 주체는 Request Interpreter이고, 받는 주체는 Request Controller다.** 첫 호출은 여기서 끝난다. |
-| ⑩ | Request Controller → Context Manager | 제안한 읽기가 현재 권한, scope와 남은 예산 안인지 확인한 뒤 추가 읽기를 요청한다. |
-| ⑪~⑬ | Context Manager ↔ 원본 source → Request Controller | Context Manager가 자료를 읽고 원문, revision과 receipt를 Request Controller에 반환한다. |
-| ⑭ | Request Controller → Request Interpreter | 같은 input revision에 추가 근거를 더해 두 번째 해석을 요청한다. |
-| ⑮~⑯ | Request Interpreter ↔ Model Access | 두 번째 semantic 호출과 model result 반환이 일어난다. 첫 호출과 별개의 호출이다. |
-| ⑰ | Request Interpreter → Request Controller | 최종 SemanticProposal을 반환한다. |
-| ⑱ | Request Controller 내부 | 현재 input revision, 실제 사용한 receipt와 필수 field를 확인한다. 조건이 맞으면 Semantic Commit하고, 부족하면 사용자 질문 또는 실패 경로로 보낸다. |
+6. Request Controller가 확정 입력, 기본 Context, 입력 버전, 허용 범위와 총예산을 Request Interpreter에 보내 첫 해석을 요청한다.
+7. Request Interpreter가 Model Access에 의미 해석을 요청한다. Model Access는 공유 Omni 모델 한 벌에 이 요청을 전달한다.
+8. Model Access가 모델 결과를 Request Interpreter에 반환한다.
+9. Request Interpreter가 부족한 항목과 제한된 추가 읽기 제안을 Request Controller에 반환한다. 첫 해석 호출은 여기서 끝난다.
+10. Request Controller가 제안한 읽기의 권한, 범위와 남은 예산을 확인한 뒤 Context Manager에 추가 자료를 요청한다.
+11. Context Manager가 자료 소유자에게 허용된 원문을 요청한다.
+12. 자료 소유자가 현재 원문과 버전을 Context Manager에 반환한다.
+13. Context Manager가 읽은 자료와 원본 버전 기록을 Request Controller에 반환한다.
+14. Request Controller가 같은 입력 버전에 추가 자료를 붙여 Request Interpreter에 두 번째 해석을 요청한다.
+15. Request Interpreter가 Model Access에 두 번째 모델 호출을 요청한다. 이는 7의 호출을 재개하는 것이 아니다.
+16. Model Access가 두 번째 모델 결과를 Request Interpreter에 반환한다.
+17. Request Interpreter가 최종 의미 제안을 Request Controller에 반환한다.
+18. Request Controller가 현재 입력 버전, 실제 읽은 원본의 버전과 필수 항목을 확인한다. 조건이 맞으면 의미를 확정하고, 부족하면 사용자에게 질문하거나 실패로 처리한다.
 
-### 4.2 A: 대안의 ⑥~⑱
+### 4.2 A: 대안의 6~18
 
-| 순서 | 보내는 쪽 → 받는 쪽 | 전달하는 내용과 결과 |
-| --- | --- | --- |
-| ⑥ | Request Controller → Semantic Resolution Worker | T와 같은 최종 입력과 기본 Context, 허용 scope와 총예산으로 요청별 작업을 시작한다. |
-| ⑦~⑧ | Worker ↔ Model Access | Worker가 semantic 실행을 시작한다. 실행 중 자료가 더 필요하면 Model Access가 READ_REQUIRED와 재개 handle을 Worker에 반환하고 모델 연산은 양보한다. |
-| ⑨ | Worker → Capability Read Broker | handle, 같은 input revision, 필요한 자료의 scope와 남은 예산을 보낸다. |
-| ⑩~⑬ | Broker → Context Manager ↔ 원본 source → Broker | Broker가 권한과 scope를 확인하고 읽기를 위임한다. Context Manager가 실제 source를 읽어 근거와 receipt를 반환한다. |
-| ⑭ | Broker → Worker | 같은 input revision에 묶인 근거와 receipt를 Worker에 반환한다. |
-| ⑮~⑯ | Worker ↔ Model Access | Worker가 근거를 handle에 넣어 같은 semantic 실행을 재개하고 최종 model result를 받는다. 이 재개 기능은 아직 지원 미확인이다. |
-| ⑰ | Worker → Request Controller | 최종 SemanticProposal을 반환한다. |
-| ⑱ | Request Controller 내부 | T와 같은 규칙으로 현재 input revision, receipt와 필수 field를 확인해 확정하거나 질문 및 실패 경로로 보낸다. |
+6. Request Controller가 T와 같은 입력, 기본 Context, 허용 범위와 총예산을 Semantic Resolution Worker에 보내 요청별 작업을 시작한다.
+7. Semantic Resolution Worker가 Model Access에 의미 해석을 요청한다. Model Access는 공유 Omni 모델을 사용한다.
+8. Model Access가 추가 자료가 필요한 시점에 읽기 요청과 멈춘 실행 ID를 Semantic Resolution Worker에 반환한다. 모델 연산은 양보하지만 요청별 작업은 끝내지 않는다.
+9. Semantic Resolution Worker가 필요한 자료, 입력 버전과 남은 예산을 Capability Read Broker에 보낸다.
+10. Capability Read Broker가 권한과 범위를 검사한 뒤 Context Manager에 읽기를 요청한다.
+11. Context Manager가 자료 소유자에게 현재 원문을 요청한다.
+12. 자료 소유자가 원문과 버전을 Context Manager에 반환한다.
+13. Context Manager가 읽은 자료와 원본 버전 기록을 Capability Read Broker에 반환한다.
+14. Capability Read Broker가 같은 입력 버전에 묶인 자료와 원본 버전 기록을 Semantic Resolution Worker에 반환한다.
+15. Semantic Resolution Worker가 멈춘 실행 ID에 자료를 넣고 Model Access에 같은 해석 실행의 재개를 요청한다.
+16. Model Access가 재개된 실행의 모델 결과를 Semantic Resolution Worker에 반환한다. 이 재개 기능의 실제 지원 여부는 아직 확인되지 않았다.
+17. Semantic Resolution Worker가 최종 의미 제안을 Request Controller에 반환한다.
+18. Request Controller가 T와 같은 입력 버전, 원본 버전과 필수 항목을 확인해 의미를 확정하거나 사용자 질문 및 실패로 처리한다.
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 

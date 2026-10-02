@@ -3,6 +3,7 @@
 from __future__ import annotations
 import argparse
 import html
+import re
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from stage4_diagram_design import Plate, INK, BLUE, GREEN, MUTED, LINE, AMBER
@@ -29,13 +30,49 @@ class Area:
 def plate(n,title,thesis,height=2200):return Plate(f'stage4-s{n:02}-comparison',f'S-{n:02}',title,thesis,height)
 
 
+
+def add_shared_entry(p, actors, actions, offset=220):
+    """Keep each comparison self-contained: show the trigger and common handoff.
+
+    The compared geometry and routes move together, so both option panels remain
+    aligned. The upper strip summarizes the same Components expanded below.
+    """
+    old_height=p.height
+    p.height=old_height+offset
+    for item in p.items:
+        if 'y' in item and item['y']>=230:item['y']+=offset
+        if 'points' in item:item['points']=[(x,y+offset if y>=230 else y) for x,y in item['points']]
+    p.nodes={key:(x,y+offset if y>=230 else y,w,h) for key,(x,y,w,h) in p.nodes.items()}
+    p.box(64,230,2432,offset-18,'#F7F9FC',LINE)
+    p.text(90,240,'두 안의 공통 시작 / 아래에는 같은 책임을 방안별로 펼쳐 표시',20,bold=True)
+    left=130;gap=(2280-310*len(actors))//(len(actors)-1)
+    keys=[]
+    for j,(name,kind) in enumerate(actors):
+        x=left+j*(310+gap);key=f'entry-{j}';keys.append(key)
+        if kind=='component':p.component(key,x,295,310,78,name)
+        elif kind=='process':
+            p.box(x,295,310,78,'#FFFFFF',LINE,dashed=True,id=key)
+            p.text(x+155,319,name,18,align='center')
+            p.nodes[key]=(x,295,310,78);p.meta[key]={'kind':'process','parent':None}
+        else:p.node(key,x,295,310,78,name,kind='external')
+    for j,label in enumerate(actions):
+        if not label:continue
+        p.edge(keys[j],keys[j+1],'R','L',label=label,at=(left+j*(310+gap)+320,318))
+    p.text(90,230+offset-35,'입력과 반환의 상세 순서는 아래 화살표와 실행 순서 그림에서 확인한다.',18,MUTED)
+    return p
+
+
 def semantic():
     p=plate(1,'요청 해석 정확성을 위한 추가 자료 확인 설계 — 해석을 끝내고 재호출할 것인가, 멈춘 해석을 이어갈 것인가?',
             'T는 호출을 끝내고 Request Controller로 돌아온다. A는 읽기를 기다리는 작업과 모델 재개 계약을 새로 갖는다.',2400)
-    p.box(64,230,2432,142,'#F7F9FC',LINE)
-    p.text(88,247,'공통 시작 ①~⑤',21,bold=True)
-    p.text(88,291,'Interaction Manager → Request Controller ↔ Context Manager ↔ 원본 소유자',24,bold=True)
-    p.text(1250,296,'같은 최종 입력과 기본 자료를 준비한 뒤 아래로 진행',21,MUTED)
+    p.box(64,230,2432,190,'#F7F9FC',LINE)
+    p.text(88,245,'공통 시작 1~5 / 최종 입력과 기본 자료를 준비한다',21,bold=True)
+    for key,x,name,kind in [('user',95,'사용자 입력','external'),('im',580,'Interaction Manager','component'),('rc',1065,'Request Controller','component'),('cm',1550,'Context Manager','component'),('source',2035,'원본 소유자','external')]:
+        (p.component if kind=='component' else p.node)('common-'+key,x,285,330,72,name,**({} if kind=='component' else {'kind':'external'}))
+    for source,target,label,x in [('user','im','사용자 발화 또는 Text',430),('im','rc','1. 확정 입력과 당시 근거',915),('rc','cm','2. 허용 범위의 기본 자료 요청',1400),('cm','source','3. 현재 원문 요청',1885)]:
+        p.edge('common-'+source,'common-'+target,'R','L',label=label,at=(x,269))
+    p.edge('common-source','common-cm','B','B',via=[(2200,374),(1715,374)],ret=True,label='4. 원문과 버전 반환',at=(1760,360))
+    p.edge('common-cm','common-rc','B','B',via=[(1715,400),(1230,400)],ret=True,label='5. 기본 Context와 읽지 못한 범위 반환',at=(1240,388))
     for i,x in enumerate((64,1312)):
         a=Area(p,i,x);c=BLUE if i==0 else GREEN
         p.panel(x,1184,'T' if i==0 else 'A','호출 종료 → 자료 보완 → 새 호출' if i==0 else '같은 작업에서 읽기 대기 → 재개',
@@ -76,7 +113,7 @@ def semantic():
             a.e('control','exec','L','T',td=-50,via=[(14,811.5),(14,976),(223,976)],label='⑭ 새 호출',at=(51,967),color=BLUE)
             a.e('exec','final','R','B',via=[(599,1140.5),(599,903),(949.5,903)],label='⑰ 최종 제안',at=(664,947),color=BLUE,ret=True)
         else:
-            a.e('exec','final','T','B',sd=50,via=[(323,897),(949.5,897)],label='⑰ 최종 제안만 반환',at=(372,949),color=GREEN,ret=True)
+            a.e('exec','final','T','B',sd=50,via=[(323,897),(949.5,897)],label='⑰ 최종 제안 반환',at=(215,919),color=GREEN,ret=True)
         a.c('ma',36,1596,1112,246,'Model Access',role='같은 Omni 모델 사용 / 최종 요청 확정 권한은 없음')
         a.n('adapter',64,1722,438,82,'새 해석 호출 / 결과 변환' if i==0 else '중단 알림 / 실행 ID / 재개',color=c,owner='ma')
         a.n('kv',656,1722,465,82,'기존 모델 세션과 작업 메모리' if i==0 else '대기 중 실행 상태 보관과 회수',kind='data',color=INK if i==0 else GREEN,owner='ma')
@@ -92,7 +129,12 @@ def semantic():
             'A는 이름 교체가 아니다: 읽기 대기 상태, 권한 검사 접점, 모델 재개 인터페이스가 필요하다.',
             '두 안 모두 Context Manager가 원본을 읽고 Request Controller가 최종 의미를 확정한다.'],
             '별도 호출도 기존 모델 세션을 재사용할 수 있다.' if i==0 else '모델의 중단 및 재개 지원은 미확인. 지원되지 않으면 이 대안은 성립하지 않는다.',c)
-    p.footer('⑪~⑫ 원본 조회 왕복과 전체 호출 순서는 다음 실행 상세도에 표시한다. 상자 분리는 별도 process를 뜻하지 않는다.')
+    p.footer('11~12의 원본 조회 왕복과 전체 호출 순서는 다음 실행 상세도에 표시한다. 상자 분리는 별도 process를 뜻하지 않는다.')
+    p.height+=50
+    for item in p.items:
+        if 'y' in item and item['y']>=410:item['y']+=50
+        if 'points' in item:item['points']=[(x,y+50 if y>=410 else y) for x,y in item['points']]
+    p.nodes={key:(x,y+50 if y>=410 else y,w,h) for key,(x,y,w,h) in p.nodes.items()}
     return p
 
 
@@ -203,12 +245,18 @@ def screen_sequence(p,key,y,title,actors,events,note='',color=INK,unique_steps=(
     end=y+200+len(events)*74
     p.box(64,y,2432,end-y+90,'#FAFBFD',LINE)
     p.text(88,y+18,title,26,color,bold=True)
+    half_width=95 if len(actors)>=8 else 115
     for j,(name,kind) in enumerate(actors):
         cx=centers[j]
         if kind=='empty':
             p.text(cx,y+112,name,18,MUTED,align='center');continue
-        if kind=='component':p.component(f'{key}-actor{j}',cx-115,y+80,230,104,name,GREEN if name=='Screen Grounding\nService' else INK)
-        else:p.node(f'{key}-actor{j}',cx-115,y+80,230,104,name,kind='external')
+        actor_key=f'{key}-actor{j}'
+        if kind=='component':p.component(actor_key,cx-half_width,y+80,half_width*2,104,name,GREEN if name=='Screen Grounding\nService' else INK)
+        elif kind=='process':
+            p.box(cx-half_width,y+80,half_width*2,104,'#FFFFFF',LINE,dashed=True,id=actor_key)
+            p.text(cx,y+111,name,18,align='center')
+            p.nodes[actor_key]=(cx-half_width,y+80,half_width*2,104);p.meta[actor_key]={'kind':'process','parent':None}
+        else:p.node(actor_key,cx-half_width,y+80,half_width*2,104,name,kind=kind)
         p.line([(cx,y+184),(cx,end)],LINE,True,False,1)
     for row,(s,t,label,ret) in enumerate(events):
         yy=y+235+row*74;start,stop=centers[s],centers[t]
@@ -350,7 +398,7 @@ def retrieval():
             '검색이 아직 준비되지 않으면 기존 조회 경로를 사용한다. 의미 검색과 같은 지원이라고 보지는 않는다.'],
             '이름을 모르는 자료의 발견 범위는 확인이 필요하다.' if i==0 else '추가 모델, 색인 갱신, 원본 삭제 전파와 손상 후 재구축 비용이 생긴다.',c)
     p.footer('추가 검색 경로는 초록, 그대로 유지하는 조회 경로는 검정이다. Subsystem 안의 각 Component는 독립된 책임을 표시한다.')
-    return p
+    return add_shared_entry(p,[('사용자 음성 또는 Text','external'),('Interaction Manager','component'),('Request Controller','component'),('Context Manager','component')],['입력 수집','확정 입력 전달','허용 범위와 자료 단서'])
 
 
 def workflow():
@@ -423,14 +471,25 @@ def workflow():
         if 'y' in item:item['y']+=300
         if 'points' in item:item['points']=[(x,y+300) for x,y in item['points']]
     p.nodes={k:(x,y+300,w,h) for k,(x,y,w,h) in p.nodes.items()}
-    p.boundary('preparation',64,230,2432,287,'공통 입력과 의미 확인','새 목표와 나중에 도착한 답변은 서로 다른 사건')
+    for item in p.items:
+        if 'y' in item and item['y']>=530:item['y']+=180
+        if 'points' in item:item['points']=[(x,y+180 if y>=530 else y) for x,y in item['points']]
+    p.nodes={k:(x,y+180 if y>=530 else y,w,h) for k,(x,y,w,h) in p.nodes.items()}
+    p.height+=180
+    p.boundary('preparation',64,230,2432,467,'공통 입력과 의미 확인','새 목표와 나중에 도착한 답변은 서로 다른 사건')
     for key,x,name,role in [('im',110,'Interaction Manager','새 목표 또는 후속 답변 전달'),('rc',711,'Request Controller','입력, 근거와 현재 질문 확인'),('cm',1312,'Context Manager','허용된 근거와 질문 후보 조회'),('ri',1913,'Request Interpreter','목표 또는 답변 대상의 의미 제안')]:
         p.component('shared-'+key,x,321,440,110,name,role=role)
     p.edge('shared-im','shared-rc','R','L',label='사용자 입력',at=(558,350))
     p.edge('shared-rc','shared-cm','R','L',sd=-18,td=-18,label='기본 근거 요청',at=(1160,342))
     p.edge('shared-cm','shared-rc','L','R',sd=18,td=18,ret=True,label='근거 반환',at=(1160,409))
     p.edge('shared-rc','shared-ri','T','T',via=[(931,296),(2133,296)],label='입력과 근거로 해석 요청',at=(1370,266))
-    p.edge('shared-ri','shared-rc','B','B',via=[(2133,470),(931,470)],ret=True,label='① 목표 제안 / ④a 후속 답변의 대상 제안',at=(1310,475))
+    p.edge('shared-ri','shared-rc','B','B',via=[(2133,470),(931,470)],ret=True,label='목표 또는 답변 대상의 의미 제안',at=(1310,475))
+    p.component('shared-ma',1360,532,430,92,'Model Access')
+    p.node('shared-omni',1980,532,430,92,'공유 Omni 모델',kind='model')
+    p.edge('shared-ri','shared-ma','L','T',via=[(1850,376),(1850,450),(1575,450)],label='의미 해석 요청',at=(1580,496))
+    p.edge('shared-ma','shared-omni','R','L',sd=-12,td=-12,label='모델 실행',at=(1830,555))
+    p.edge('shared-omni','shared-ma','L','R',sd=14,td=14,ret=True,label='모델 결과',at=(1830,610))
+    p.edge('shared-ma','shared-ri','T','L',via=[(1575,512),(1913,512)],ret=True,label='해석 결과 반환',at=(1580,630))
     p.footer('업무 결과는 대기 상태 소유자로 돌아간다. VIA는 요청 사이 관계를 다루며 외부 Agent의 내부 실행 계획은 소유하지 않는다.')
     return p
 
@@ -492,6 +551,10 @@ def response():
             'Text는 승인되면 음성 생성 완료를 기다리지 않고 게시할 수 있다. 실제 전달 기록은 별도다.'],
             '자료, 화면이나 이전 업무가 필요하면 T도 일반 해석 경로로 보낸다.' if i==0 else '직접 S2S 기능은 미지원. 입력 해석 뒤 음성을 생성하므로 실행 의존성과 지연이 달라진다.',c)
     p.footer('S2S는 음성 입력에서 직접 음성 답변을 만드는 경로다. 검정 해석 모듈은 공통이며 초록은 A의 요청 처리 경로다.')
+    p=add_shared_entry(p,[('마이크 / 사용자 음성','external'),('Interaction Manager','component'),('Speech Input Worker','process'),('Streaming ASR 모델','external'),('Request Controller','component')],['원음 도착','원음과 시각 전달','인식 요청',None],330)
+    p.edge('entry-3','entry-2','B','B',via=[(1761,407),(1269,407)],ret=True,label='문장과 발화 시각',at=(1360,405))
+    p.edge('entry-2','entry-1','B','B',via=[(1269,447),(777,447)],ret=True,label='인식 근거 반환',at=(870,446))
+    p.edge('entry-1','entry-4','B','B',via=[(777,487),(2253,487)],label='현재 입력 버전과 정규 문장 전달',at=(1300,486))
     return p
 
 
@@ -548,7 +611,7 @@ def speech():
             '모델은 VIA 밖의 책임이지만 PC 안에서 실행한다. Component 경계와 process 경계를 구별한다.'],
             '추가 모델과 인식 전용 CPU 비용. process 분리가 전력과 메모리 대역폭까지 격리하지는 않는다.' if i==0 else 'Omni의 전사, 발화 시각과 동시 인식 지원은 미확인. 녹음 지속을 인식 성공으로 보지 않는다.',c)
     p.footer('ASR는 음성을 글자로 바꾸는 인식이다. A는 모델 결과 변환을 추가하며 인식도 공통 실행 배분과 같은 모델에 의존한다.')
-    return p
+    return add_shared_entry(p,[('마이크 / 사용자 음성','external'),('Interaction Manager','component'),('Request Controller','component')],['원음 수집, 즉시 중단','인식 후 정규 입력 전달'])
 
 
 def semantic_detail():
@@ -600,13 +663,207 @@ def semantic_detail():
     return p
 
 
-BUILDERS=[semantic,screen,screen_input,screen_target_flow,screen_alternative_flow,retrieval,workflow,response,speech,semantic_detail]
+
+def retrieval_flow():
+    p=Plate('stage4-s03-execution-flow','S-03 / 실행 순서','자료 변경과 사용자 요청은 서로 다른 때 시작한다',
+            '각 흐름은 1부터 읽는다. 색인은 후보를 찾는 자료이며, 원본과 현재 권한 확인은 양안에 남는다.',4550)
+    y=screen_sequence(p,'produce',240,'A의 추가 자료 준비 / 허용된 원본이 변경되거나 삭제될 때',
+        [('원본 소유자','external'),('Indexing Worker','component'),('Embedding Runtime','component'),('추가 의미 표현 모델','external'),('의미 색인','store')],
+        [(0,1,'1. 변경 또는 삭제와 원본 버전 전달',False),
+         (1,0,'2. 현재 원문, 권한과 버전 요청',False),
+         (0,1,'3. 읽을 수 있는 원문과 버전 반환',True),
+         (1,2,'4. 문서의 검색 표현 요청',False),
+         (2,3,'5. 추가 의미 표현 모델 호출',False),
+         (3,2,'6. 검색 표현과 모델 버전 반환',True),
+         (2,1,'7. 검색 표현과 모델 버전 반환',True),
+         (1,4,'8. 완성된 색인과 원본 버전 목록 함께 게시',False)],
+        '자료 소유자의 변경 알림이 없으면 허용 범위의 버전을 확인한다. 게시 전에는 일부 생성물을 검색에 사용하지 않는다.',GREEN,tuple(range(1,9)))
+    y=screen_sequence(p,'target',y,'T의 요청 처리 / 확정된 사용자 입력과 허용 범위 도착',
+        [('Request Controller','component'),('Context Manager','component'),('원본 소유자','external'),('Request Interpreter','component'),('Model Access','component'),('공유 Omni','external')],
+        [(0,1,'1. 범위와 이름, 기간, 주제 단서 전달',False),
+         (1,1,'2. 기존 이름, 단어 색인과 캐시에서 후보 조회',False),
+         (1,2,'3. 후보의 현재 원문, 버전과 권한 요청',False),
+         (2,1,'4. 원문과 읽지 못한 범위 반환',True),
+         (1,0,'5. 검증한 Context 반환',True),
+         (0,3,'6. 현재 입력과 Context 해석 요청',False),
+         (3,4,'7. 의미 해석 모델 호출 요청',False),
+         (4,5,'8. 공유 Omni에 해석 요청',False),
+         (5,4,'9. 해석 결과 반환',True),
+         (4,3,'10. 모델 결과 반환',True),
+         (3,0,'11. 의미 제안 반환 / 현재 근거 검증',True)],
+        '후보가 모호하거나 원문이 없으면 확정하지 않는다.',BLUE,tuple(range(1,6)))
+    screen_sequence(p,'alternative',y,'A의 요청 처리 / 같은 입력과 허용 범위 도착',
+        [('Request Controller','component'),('Context Manager','component'),('Semantic Retrieval\nService','component'),('Embedding Runtime','component'),('의미 색인','store'),('원본 소유자','external'),('Request Interpreter','component'),('Model Access','component'),('공유 Omni','external'),('추가 의미 표현 모델','external')],
+        [(0,1,'1. T와 같은 범위와 자료 단서 전달',False),
+         (1,2,'2. 의미 후보 조회 요청',False),
+         (2,3,'3. 질문의 검색 표현 요청',False),
+         (3,9,'4. 추가 의미 표현 모델에 질문 전달',False),
+         (9,3,'5. 질문의 검색 표현 반환',True),
+         (3,2,'6. 검색 표현 반환',True),
+         (2,4,'7. 의미 색인에서 후보 조회',False),
+         (4,2,'8. 후보와 원본 버전 반환',True),
+         (2,1,'9. 후보, 준비 상태와 누락 범위 반환',True),
+         (1,5,'10. 후보 원본과 현재 권한 요청',False),
+         (5,1,'11. 현재 원문과 버전 반환',True),
+         (1,0,'12. 검증한 Context 반환',True),
+         (0,6,'13. 현재 입력과 Context의 의미 해석 요청',False),
+         (6,7,'14. 의미 해석 모델 호출 요청',False),
+         (7,8,'15. 공유 Omni에 해석 요청',False),
+         (8,7,'16. 해석 결과 반환',True),
+         (7,6,'17. 모델 결과 반환',True),
+         (6,0,'18. 제안 반환 / 현재 근거 검증',True)],
+        '색인이 없으면 기존 조회를 사용한다. 후보 한 건도 실제 대상의 확정은 아니다.',GREEN,tuple(range(2,13)))
+    p.footer('검색 후보가 충분하지 않으면 원본 조회 또는 사용자 확인으로 진행한다. 추가 의미 모델은 공유 Omni와 별도 비용이다.')
+    return p
+
+
+def workflow_flow():
+    p=Plate('stage4-s04-execution-flow','S-04 / 실행 순서','대기 중인 요청을 어디에 기록하고 무엇으로 다시 잇는가',
+            '공통 의미 해석 뒤의 흐름. 사용자 답변과 Task 결과는 서로 독립적인 시작 사건이다. 세 안은 각각 1부터 읽는다.',4450)
+    actors=[('Interaction Manager','component'),('Request Controller','component'),('Interaction\nWorkflow Runtime','component'),('Session Request\nCoordinator','component'),('State Store','component'),('Task Manager','component'),('Agent Gateway','component'),('외부 Agent','external')]
+    target_actors=[actors[0],actors[1],('Workflow Runtime 없음','empty'),('Session Coordinator 없음','empty'),*actors[4:]]
+    a_actors=[*actors[:3],('Session Coordinator 없음','empty'),*actors[4:]]
+    b_actors=[*actors[:2],('Workflow Runtime 없음','empty'),*actors[3:]]
+    y=screen_sequence(p,'target',240,'T / Request Controller가 요청 관계와 질문을 소유',target_actors,
+        [(1,1,'1. 검증한 목표와 기다리는 조건을 요청 관계에 기록',False),
+         (1,4,'2. 요청 관계와 질문을 내구 저장',False),
+         (0,1,'3. 사용자 답변과 질문 ID 전달 / 필요할 때',False),
+         (5,1,'4. 확인된 업무 결과와 버전 전달 / 독립 사건',True),
+         (1,5,'5. 현재 조건과 권한 확인 후 후속 명령 요청',False),
+         (5,4,'6. 업무와 전송 의도 저장',False),
+         (5,6,'7. 저장한 명령의 외부 전달 요청',False),
+         (6,7,'8. 외부 Agent에 명령 전달',False),
+         (7,6,'9. 외부 Agent 접수 결과 반환',True),
+         (6,5,'10. 접수 결과와 현재 상태 반환',True),
+         (4,1,'11. 재시작 뒤 관계와 질문 복원 / 외부 상태 확인',True)],
+        '3과 4는 필수 직렬 단계가 아니다. 저장이 끝나기 전에 새 외부 명령을 보내지 않는다.',BLUE,tuple(range(1,12)))
+    y=screen_sequence(p,'alternative',y,'A / Interaction Workflow Runtime이 대기 중 실행을 소유',a_actors,
+        [(1,2,'1. 검증한 목표와 조건을 시작 신호로 전달',False),
+         (2,4,'2. 실행 위치, 대기 질문과 다음 활동을 함께 저장',False),
+         (0,1,'3. 사용자 답변과 질문 ID 전달',False),
+         (1,2,'4. 검증한 답변을 해당 대기 작업에 전달',False),
+         (5,2,'5. 업무 결과 전달 / 답변과 독립 사건',True),
+         (2,1,'6. 조건을 확인하고 후속 요청 승인 검사 요청',True),
+         (1,5,'7. 현재 조건을 다시 확인해 허용한 명령 전달',False),
+         (5,4,'8. 업무와 전송 의도 저장',False),
+         (5,6,'9. 저장한 명령의 외부 전달 요청',False),
+         (6,7,'10. 외부 Agent에 명령 전달',False),
+         (7,6,'11. 외부 Agent 접수 결과 반환',True),
+         (6,5,'12. 접수 결과와 현재 상태 반환',True),
+         (4,2,'13. 재시작 뒤 실행 위치 복원 / 승인 재검사',True)],
+        'Runtime은 재개를 진행하지만 외부 실행 승인과 실제 업무 상태 확인은 Request Controller와 Task Manager에 남는다.',GREEN,tuple(range(1,14)))
+    screen_sequence(p,'limited',y,'B / Session Request Coordinator가 열린 세션에서만 관계를 소유',b_actors,
+        [(1,3,'1. 검증한 목표와 대기 조건 전달',False),
+         (3,3,'2. 관계와 질문을 현재 세션 RAM에만 보관',False),
+         (0,1,'3. 사용자 답변과 질문 ID 전달',False),
+         (1,3,'4. 검증한 답변을 현재 관계에 연결',False),
+         (5,1,'5. 업무 결과 전달 / 답변과 독립 사건',True),
+         (1,3,'6. 확인한 결과를 현재 관계에 연결',False),
+         (3,1,'7. 후속 조건이 맞으면 요청 제안 반환',True),
+         (1,5,'8. 현재 조건과 권한 확인 후 명령 전달',False),
+         (5,4,'9. 업무와 전송 의도 저장',False),
+         (5,6,'10. 저장한 명령의 외부 전달 요청',False),
+         (6,7,'11. 외부 Agent에 명령 전달',False),
+         (7,6,'12. 외부 Agent 접수 결과 반환',True),
+         (6,5,'13. 접수 결과와 현재 상태 반환',True),
+         (4,5,'14. 재시작 뒤 남은 업무 확인 / 관계 복원 없음',True)],
+        '재시작 뒤 잃은 후속 관계는 사용자가 다시 지정한다. Task와 전송 원장은 유지한다.',GREEN,tuple(range(1,15)))
+    p.footer('이 그림은 승인된 목표 이후의 대기를 확대한다. 공통 입력과 의미 해석은 메인 비교도 위쪽에 보인다.')
+    return p
+
+
+def response_flow():
+    p=Plate('stage4-s05-execution-flow','S-05 / 실행 순서','음성을 허가 전에 준비할 것인가, 허가한 Text에서 만들 것인가',
+            '공통 음성 수집과 정규 인식 뒤의 비교. 직접 경로의 음성은 허가 전까지 사용자에게 들리지 않는다.',3000)
+    actors=[('Interaction Manager','component'),('Model Access','component'),('공유 Omni','external'),('Request Controller','component'),('Request Interpreter','component'),('Response Manager','component')]
+    target_actors=[*actors[:4],('직접 경로에서 호출 없음','empty'),actors[5]]
+    y=screen_sequence(p,'target',240,'T의 직접 응답 / 자체 지식 질문이며 현재 입력 검사를 통과한 경우',target_actors,
+        [(0,1,'1. 원음 전달 → 직접 음성 후보 준비 요청',False),
+         (1,2,'2. 공유 Omni에 직접 음성 후보 요청',False),
+         (2,1,'3. 후보와 보류 음성 반환',True),
+         (1,0,'4. 후보와 보류 실행 ID 반환',True),
+         (0,3,'5. 정규 문장, 입력 버전과 후보 전달',False),
+         (3,3,'6. 문장 일치, 자료와 업무 의존성 검사',False),
+         (3,5,'7. 직접 응답 게시 허용',False),
+         (5,0,'8. 해당 Text 게시와 보류 음성 재생 요청',False),
+         (0,5,'9. 실제 표시와 들린 범위 반환',True)],
+        '6이 불분명하면 같은 Request를 아래 일반 경로로 보낸다. 허용 전 재생은 금지한다.',BLUE,tuple(range(1,10)))
+    screen_sequence(p,'core',y,'T의 일반 경로와 A의 모든 요청 / 직접 후보를 사용하지 않는 경우',actors,
+        [(3,4,'1. 확정 입력과 기본 Context 해석 요청',False),
+         (4,1,'2. 의미 해석 모델 호출 요청',False),
+         (1,2,'3. 공유 Omni에 의미 해석 요청',False),
+         (2,1,'4. 해석 결과 반환',True),
+         (1,4,'5. 모델 결과 반환',True),
+         (4,3,'6. 의미와 답변 제안 반환',True),
+         (3,5,'7. 현재 입력을 확인해 Text 게시 허용',False),
+         (5,0,'8. 허용된 Text 표시 요청',False),
+         (5,1,'9. 허용된 Text의 음성 생성 요청',False),
+         (1,2,'10. 공유 Omni에 음성 생성 요청',False),
+         (2,1,'11. 음성 결과 반환',True),
+         (1,5,'12. 음성 결과 반환 / 문장 대응 검사',True),
+         (5,0,'13. 검사한 음성 재생 요청',False),
+         (0,5,'14. 실제 들린 범위 반환',True)],
+        '승인된 Text는 조건이 맞으면 음성 생성을 기다리지 않고 게시한다. A에는 직접 S2S 기능이 없다.',GREEN,tuple(range(1,15)))
+    p.footer('S2S 직접 경로는 이번 발화만을 보는 제한 기능이다. 일반 경로는 자료 기반 답변과 업무 위임을 계속 지원한다.')
+    return p
+
+
+def speech_flow():
+    p=Plate('stage4-s06-execution-flow','S-06 / 실행 순서','같은 원음을 누가 글과 발화 시간 정보로 바꾸는가',
+            '원음 수집과 즉시 재생 중단은 공통. T는 ASR와 Omni에 병행 전달하고 A는 공유 Omni에서 인식한다.',2450)
+    actors=[('마이크','external'),('Interaction Manager','component'),('Speech Input Worker','component'),('Streaming ASR','external'),('Model Access','component'),('공유 Omni','external'),('Request Controller','component')]
+    y=screen_sequence(p,'target',240,'T / 독립 Streaming ASR가 인식 근거 생산',actors,
+        [(0,1,'1. 원음 도착 → 발화 시작과 즉시 재생 중단',False),
+         (1,2,'2. 원음과 시각을 독립 인식 경로에 전달',False),
+         (1,4,'3. 같은 원음을 공유 Omni 음성 역할에도 병행 전달',False),
+         (2,3,'4. 음성 인식 요청',False),
+         (3,2,'5. 인식 문장, 수정과 발화 시간 반환',True),
+         (2,1,'6. 인식 근거와 누락 범위 반환',True),
+         (4,5,'7. 공유 Omni 음성 역할에 원음 전달',False),
+         (5,4,'8. 공유 Omni 음성 결과 반환',True),
+         (4,1,'9. Omni 결과 전달 / ASR와 불일치 보존',True),
+         (1,6,'10. 당시 화면과 연결한 정규 입력 전달',False)],
+        'Omni 장애에도 녹음과 독립 ASR의 인식은 계속될 수 있다. 의미 해석과 음성 생성은 멈춘다.',BLUE,(2,4,5,6))
+    a_actors=[actors[0],actors[1],('별도 Worker 없음','empty'),('별도 ASR 없음','empty'),*actors[4:]]
+    screen_sequence(p,'alternative',y,'A / 공유 Omni가 인식 근거까지 생산',a_actors,
+        [(0,1,'1. 원음 도착 → 발화 시작과 즉시 재생 중단',False),
+         (1,4,'2. 원음을 Shared Inference Service에 전달',False),
+         (4,5,'3. 공유 Omni에 인식 요청',False),
+         (5,4,'4. 인식 결과 반환 → Adapter가 제공된 정보 변환',True),
+         (4,1,'5. 변환한 문장, 시각과 누락 범위 반환',True),
+         (1,6,'6. 당시 화면과 연결한 정규 입력 전달',False)],
+        'Omni 장애에는 녹음과 local stop만 계속된다. 인식이 멈춘 구간은 복구 가능 여부를 구별해 기록한다.',GREEN,(2,3,4,5))
+    p.footer('모델과 실행 경계를 구분한다. Native Evidence Adapter는 인식하지 않고 모델 결과를 VIA 입력 형식으로 변환한다.')
+    return p
+
+BUILDERS=[semantic,screen,screen_input,screen_target_flow,screen_alternative_flow,retrieval,workflow,response,speech,semantic_detail,retrieval_flow,workflow_flow,response_flow,speech_flow]
+
+
+def plain_step_labels(p):
+    """Use the same ordinary integer notation as the Stage 4 walkthroughs."""
+    if p.slug.startswith('stage4-s02-'):return
+    mapping={c:str(i) for i,c in enumerate('①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱',1)}
+    for item in p.items:
+        for field in ('name','lines','role','label'):
+            value=item.get(field)
+            if isinstance(value,list):
+                item[field]=[plain_step_text(v,p.slug,mapping) for v in value]
+            elif isinstance(value,str):item[field]=plain_step_text(value,p.slug,mapping)
+
+
+def plain_step_text(value,slug,mapping):
+    if slug=='stage4-s04-comparison':
+        value=value.replace('④a','후속 답변:').replace('④b','답변 확인:').replace('④c','업무 결과:')
+    if slug=='stage4-s05-comparison':
+        value=value.replace('④a','일반 경로:').replace('④b','일반 경로:')
+    return re.sub('['+''.join(mapping)+']',lambda m:mapping[m.group()],value)
 
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args()
     pages=[b() for b in BUILDERS];errors=[]
     for p in pages:
+        plain_step_labels(p)
         p.validate()
         for ext,data in [('svg',p.svg()),('drawio',p.drawio())]:
             root=ET.fromstring(data)

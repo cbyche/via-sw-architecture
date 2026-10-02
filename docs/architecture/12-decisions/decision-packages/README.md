@@ -1,6 +1,6 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **4단계 독립 검토 완료, 04-01 사용자 리뷰 반영 / 사용자 재검토 대기** / 기존 4개는 재평가 입력 / 최종 DP 선정, 대안 채택, 성능 우열 미확정
+> 현재 상태: **4단계 S-01~06 설명과 그림 정리 / 사용자 재검토 대기** / 기존 4개는 재평가 입력 / 최종 DP 선정, 대안 채택, 성능 우열 미확정
 > 방안 1은 검토 완료 target, 방안 2는 같은 VIA 문제를 푸는 다른 SW Architecture다. 구현·모델 실행·성능 측정은 하지 않았다.
 
 ## 현재 작업부터 읽기
@@ -64,7 +64,7 @@
 | 2. 독립 리뷰 | [02-01-requirements-review.md](./02-01-requirements-review.md) | 검토·검사 기록 |
 | 3. 품질 충돌 | [03-00-quality-scenarios.md](./03-00-quality-scenarios.md) | 사용자 리뷰 후 04 진행 승인 |
 | 3. 작성자 리뷰 | [03-01-quality-review.md](./03-01-quality-review.md) | 대조 및 문서 검사 기록 |
-| 4. 구조 대안 탐색 | [04-00-structural-alternatives.md](./04-00-structural-alternatives.md) | 독립 검토 및 04-01 사용자 리뷰 반영, 사용자 재검토 대기 |
+| 4. 구조 대안 탐색 | [04-00-structural-alternatives.md](./04-00-structural-alternatives.md) | S-01~06의 용어, 입력 자료, 비교 그림과 번호 순서 정리, 사용자 재검토 대기 |
 | 4. 검토 기록 | [04-09-structural-review.md](./04-09-structural-review.md) | 작성자 대조, 독립 지적 반영 및 재확인 기록 |
 | 5. 강한 대안 비교 | `05-00-comparison-and-selection.md` | 예정·미작성 |
 | 6. DP 선발·상세화 | `06-00-decision-packages.md`, `06-01-<topic>.md`부터 개별 자료 | 예정·미작성 |

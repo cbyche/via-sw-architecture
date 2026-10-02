@@ -1,6 +1,6 @@
 # S-06. 음성 인식 정확성과 응답성을 위한 음성 입력 처리 설계 — 별도 인식 모델을 사용할 것인가, 공유 모델에 인식도 맡길 것인가?
 
-> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-01
+> 상태: **STAGE_4_REVISED / 사용자 재검토 대기** / 2026-10-02
 > [04 전체 지도](./04-00-structural-alternatives.md#s-06) / [설명과 그림의 공통 원칙](./04-00-structural-alternatives.md#12-처음-읽는-사람을-위한-설명과-그림-원칙) / [품질의 공통 의미](./03-00-quality-scenarios.md#2-어떤-품질을-보고-있는가) / [검토 기록](./04-09-structural-review.md)
 > 연결 문제: **P-14; P-01/02/08/15 연결**. S는 탐색 질문이며 DP 선정이 아니다. T는 실제 REVIEWED_BASELINE, A/B는 미채택 탐색안이다.
 
@@ -8,15 +8,27 @@
 
 > 긴 문서를 해석하는 동안 사용자가 “아니, 옆 표만”이라고 말한다. 그 순간 Omni runtime에 장애가 생길 수도 있다.
 
-**독립 ASR가 입력 근거를 만드는 T와, 공유 Omni native 경로가 인식까지 맡는 A의 의존성을 비교한다.**
+**T는 별도 Streaming ASR가 음성을 글로 바꾸고, A는 공유 Omni 모델이 그 일까지 맡는다. 두 안에서 인식이 멈추는 조건과 필요한 자원이 달라진다.**
+
+### 1.1 들어오고 나가는 자료
+
+| 이름 | 처음 읽을 때의 뜻 |
+| --- | --- |
+| 원음 | 마이크가 받은 사용자의 실제 음성. Interaction Manager가 수집하고 발화가 시작하면 즉시 재생을 중단할 수 있음 |
+| 인식 근거 | 들은 문장, 수정 버전, 실제 발화 시간과 비어 있는 구간. 화면 지칭과 입력 정정에 필요 |
+| 정규 입력 기록 | Interaction Manager가 인식 근거를 현재 입력에 연결한 기록. Request Controller가 버전 변경과 처리 허용을 최종 제어 |
+| 별도 인식 모델 | T에서 Speech Input Worker가 실행하는 Streaming ASR. Omni의 음성 응답과 의미 해석이 바쁠 때도 인식을 계속할 수 있게 설계 |
+| 공유 모델의 인식 결과 | A에서 Omni가 직접 만든 전사와 시간 정보. Native Evidence Adapter는 제공된 정보만 정규 입력 형식으로 바꿈 |
+
+두 안 모두 같은 원음을 공유 Omni의 음성 역할에도 전달한다. A에서 인식 생산자가 바뀌어도 녹음과 즉시 재생 중단은 Interaction Manager가 계속 맡는다.
 
 ## 2. 먼저 볼 차이
 
 | 비교 지점 | T: 실제 target | 대안 A |
 | --- | --- | --- |
-| 입력 근거 | Speech Input Worker의 Streaming ASR | Shared Inference Service의 native evidence |
-| 실행과 장애 | ASR와 Omni의 진행 및 고장을 분리, PC 자원은 공유 | 별도 ASR 제거, 인식과 의미 처리의 runtime 및 자원 경합 결합 |
-| 가장 큰 교환 | 추가 recognizer 비용과 두 근거 충돌 처리 | 배포/자원 감소 여지, native 시각 및 동시 인식 capability 필요 |
+| 음성을 글로 바꾸는 주체 | Speech Input Worker가 별도 Streaming ASR를 사용 | Shared Inference Service가 공유 Omni 모델을 사용 |
+| 실행과 장애 | 별도 ASR가 Omni의 긴 작업이나 장애와 관계없이 인식을 계속할 수 있음. PC 자원은 함께 사용 | 별도 ASR가 없어지지만 인식이 공유 Omni의 대기, 자원 경합과 장애에 함께 묶임 |
+| 가장 큰 교환 | 모델과 인식 작업의 비용이 추가되고 두 결과가 다를 때 처리해야 함 | 모델 하나를 덜 배포할 여지가 있으나 Omni가 실제 발화 시각과 동시 인식을 제공해야 함 |
 
 ## 3. 구조를 나란히 보기
 
@@ -30,12 +42,35 @@ A에서는 공유 Omni 모델이 인식 근거를 생산하고 Native Evidence A
 
 ## 4. 같은 요청을 따라가 보기
 
-| 흐름 | T: 실제 target | 대안 A |
-| --- | --- | --- |
-| 원음 전달 | Interaction Manager는 추론 밖에서 capture와 local stop을 수행한다. ① 원음을 Speech Input Worker의 독립 인식 경로에 보낸다. ② 같은 원음을 Shared Inference Service의 Omni 경로에도 보낸다. | Interaction Manager의 capture와 local stop은 동일하다. ① 원음을 Shared Inference Service의 Omni 경로에 보낸다. 독립 Speech Input Worker는 없다. |
-| 근거 반환 | ③ Speech Input Worker의 adapter가 전사 revision, sample 시각과 gap을 Model Access 계약으로 Interaction Manager에 반환한다. ④ Shared Inference Service의 Omni adapter도 해석 결과를 같은 연동 계약으로 Interaction Manager에 반환한다. | ② Shared Inference Service의 Native Evidence Adapter가 native 전사 event와 시각을 Model Access 계약으로 Interaction Manager에 반환한다. 모델이 제공하지 않는 시각 근거를 만들어내지 않는다. |
-| canonical 입력 | ⑤ Interaction Manager가 두 producer의 근거, revision과 incarnation을 구별해 정규 입력 기록을 구성한다. 중요한 불일치는 보존하고 재확인하며, Request Controller가 입력 revision 변경을 최종 제어한다. | ③ Interaction Manager가 native event를 정규 입력 기록에 연결한다. Request Controller의 입력 revision 제어는 유지한다. 단일 producer의 자기 일치는 독립 검증으로 보지 않는다. |
-| Omni 장애 | 독립 ASR는 전사를 계속 만들 수 있지만 의미 이해와 Voice 생성은 불가하다. | capture는 계속되지만 recognition도 중단된다. 복구할 수 없는 구간은 gap으로 남긴다. |
+![S-06 두 인식 경로와 장애 시 동작 순서](./diagrams/stage4-s06-execution-flow.svg)
+
+[크게 보기](./diagrams/stage4-s06-execution-flow.svg) / [draw.io 원본](./diagrams/stage4-s06-execution-flow.drawio)
+
+사용자가 “아니, 옆 표만”이라고 말하면 마이크가 Interaction Manager에 원음을 전달한다. Interaction Manager는 시작 시각과 입력 버전을 잡고 재생 중인 음성을 즉시 멈춘다. 원음 수집과 이 중단은 두 안에서 같은 경로다. 아래 두 흐름의 번호는 각각 1부터 읽는다.
+
+**T: Streaming ASR가 인식 근거를 생산**
+
+1. 마이크가 원음을 Interaction Manager에 전달한다. Interaction Manager는 발화 시작 시각과 입력 버전을 잡고 재생 중인 음성을 즉시 멈춘다.
+2. Interaction Manager가 원음과 시각을 Speech Input Worker의 독립 인식 대기열에 보낸다.
+3. Interaction Manager가 같은 원음을 Model Access의 공유 Omni 음성 역할에도 병행해서 보낸다. 별도 ASR 완료를 기다리는 후속 호출이 아니다.
+4. Speech Input Worker가 Streaming ASR 모델에 음성 인식을 요청한다.
+5. Streaming ASR 모델이 문장, 정정과 실제 제공한 발화 시간을 Speech Input Worker에 반환한다.
+6. Speech Input Worker가 인식 근거와 누락 범위를 Interaction Manager에 반환한다.
+7. Model Access가 공유 Omni 모델의 음성 역할에 같은 원음을 전달한다. 이 경로는 ASR 완료를 기다리지 않고 병행한다.
+8. 공유 Omni 모델이 음성 결과를 Model Access에 반환한다.
+9. Model Access가 결과를 Interaction Manager에 전달한다. 별도 ASR 근거와의 중요한 불일치는 숨기지 않는다.
+10. Interaction Manager가 발화 시간에 맞는 화면 기록과 인식 문장을 연결해 정규 입력을 만들고 Request Controller에 보낸다. Omni가 멈춰도 녹음과 독립 ASR 인식은 계속될 수 있지만 의미 해석과 음성 생성은 멈춘 상태로 남긴다.
+
+**A: 공유 Omni가 인식 근거까지 생산**
+
+1. 마이크가 원음을 Interaction Manager에 전달한다. Interaction Manager는 T와 같이 발화 시작을 기록하고 재생을 즉시 멈춘다.
+2. Interaction Manager가 원음을 Model Access의 Shared Inference Service에 보낸다. 별도 Speech Input Worker와 Streaming ASR는 두지 않는다.
+3. Model Access가 공유 Omni 모델에 음성 인식과 결과 생성을 요청한다.
+4. 공유 Omni 모델이 실제 제공한 문장과 시각을 Model Access에 반환한다. 그 안의 Native Evidence Adapter가 결과를 VIA 입력 형식으로 변환한다.
+5. Model Access가 변환한 근거와 확인할 수 없는 구간을 Interaction Manager에 반환한다.
+6. Interaction Manager가 발화 시간의 화면 기록과 근거를 연결해 정규 입력을 만들고 Request Controller에 보낸다. Omni가 멈추면 녹음과 즉시 중단은 계속되지만 인식, 의미 해석과 음성 생성은 함께 멈춘다. 복구할 수 없는 구간은 누락으로 표시한다.
+
+A의 모델이 필요한 발화 시각이나 동시 인식을 제공하지 않으면 해당 화면 지칭 또는 지속 인식은 지원 미확인이나 제한으로 남긴다. 녹음이 이어졌다는 사실을 인식 완료로 바꾸지 않는다.
 
 ## 5. 누가 무엇을 소유하고 어떻게 실패하는가
 
