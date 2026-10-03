@@ -60,9 +60,9 @@ def semantic_workspace(d):
  d.comp('ri',40,680,480,140,'Request Interpreter',role='완성 실행안 대신 타입 있는 의미 변경 후보')
  d.comp('ma',790,680,350,140,'Model Access')
  d.comp('workspace',40,1020,620,770,'Meaning Workspace',role='여러 입력에 걸친 목표/후보/제약과 질문 소유',color=d.c)
- d.node('facts',80,1140,540,130,'채택한 의미 변경 / 질문 연결\nState Store에 내구 저장',kind='store',owner='workspace')
- d.node('update',80,1480,540,130,'의미 변경 반영 / 의존 사실 무효화',owner='workspace')
- d.comp('engine',790,1110,350,190,'Semantic Constraint Engine',role='후보/규칙에서 해 또는 미해결 반환',color=d.c)
+ d.node('facts',80,1140,540,130,'c1: 작년 표 / c2: 발송 금지\nq1: 어느 표인가? / 후보 L, R',kind='store',owner='workspace')
+ d.node('update',80,1480,540,130,'의미 변경 적용기\nNARROW q1: R / c2 보존',owner='workspace')
+ d.comp('engine',790,1110,350,190,'Semantic Constraint Engine',role='후보 교집합 / 충돌과 unknown 반환',color=d.c)
  d.comp('cm',790,1470,350,140,'Context Manager',role='허용 읽기 / source 버전 변경')
  d.comp('tm',790,1760,350,140,'Task Manager',role='실제 Task 사실 / 현재 버전')
  d.comp('rm',40,1950,620,140,'Response Manager',role='미해결 필드 질문 / 실제 게시 기록 반환')
@@ -116,7 +116,7 @@ def source_references(d):
  d.edge('provider','source',sp='L',tp='L',sd=-20,td=-20,via=[(16,885),(16,2215)])
  d.edge('source','provider',sp='L',tp='L',sd=20,td=20,via=[(28,2255),(28,925)],ret=True)
  d.text(80,2100,['Agent Gateway는 확정 명령의 자료만 해석해 외부 Agent에 전달.'],17)
- d.tail(['차이: 당시 화면 영역이 주 대상 ↔ source 참조를 입력/조회/해석/인계가 함께 소비.', '단순 객체 힌트 adapter만으로 충분하다면 이 구조의 주요 DP 자격은 약해진다.'])
+ d.tail(['차이: 당시 화면 영역이 주 대상 ↔ source 참조를 입력/조회/해석/인계가 함께 소비.', '공통 참조/resolver로 결합 가능: 주요 DP 자격 철회. 세 번째 그림에서 반례를 확인.'])
 
 def semantic(d):
  if d.s=='B':return semantic_workspace(d)
@@ -180,11 +180,11 @@ def dialogue(d):
   d.text(100,1880,['같은 중앙 해석 결과로 업무 간 참조와 상태 변경을 구성.', 'Task별 cache가 있어도 독립 대화 실행자는 없음.'],20)
  else:
   d.comp('rc',40,360,1100,140,'Request Controller',role='현재 질문/Task/권한 확인, 유효 제안만 적용 허용')
-  d.comp('coord',40,660,1100,150,'Dialogue Coordinator',role='참가 / 절별 제안 경쟁 / 누락 / 교차 참조 조정',color=d.c)
+  d.comp('coord',40,660,1100,150,'Dialogue Coordinator',role='참가 / 참조 연결 / 제안 채택. 로컬 의미를 다시 작성하지 않음',color=d.c)
   d.comp('runtime',40,1010,1100,720,'Task Dialogue Runtime',role='논리 실행 단위. 같은 process / 같은 모델 자원',color=d.c)
   for name,x,title in [('report',100,'보고서'),('mail',700,'메일')]:
    d.node(name,x,1120,390,120,title+' 대화 actor',owner='runtime')
-   d.node(name+'state',x,1450,390,140,'자기 질문 / 제약 / 우편함\n내구 상태',kind='store',owner='runtime')
+   d.node(name+'state',x,1450,390,140,('qR: 형식 / 결론 R.result@4\n자기 제약 / 우편함 / 내구 상태' if name=='report' else 'qM: 본문 / 다른 결론 참조 요청\n자기 제약 / 우편함 / 내구 상태'),kind='store',owner='runtime')
    d.edge(name,name+'state',sd=-20,td=-20,label='채택된 전이 / 상태 조회',at=(x+15,1310))
    d.edge(name+'state',name,sp='T',tp='B',sd=20,td=20,ret=True)
    offset=-295 if name=='report' else 305
@@ -345,7 +345,7 @@ def isolation(d):
 
 def structural(n):
  p=Plate(f'choice{n}-structure',f'04-{n}',TITLES[n],
-  '공통 조건은 유지하고 각 안의 실제 생산/상태/실행 관계를 펼침. 배열이나 색 차이 자체는 구조 자격의 증거가 아님.',height=2600)
+  ('기능 설계 비교로 유지 / 주요 구조 DP 자격 철회 / 공통 참조로 결합 가능한 경로는 세 번째 그림 참조' if n==32 else '공통 조건은 유지하고 각 안의 실제 생산/상태/실행 관계를 펼침. 배열이나 색 차이 자체는 구조 자격의 증거가 아님.'),height=2600)
  for x,s in [(64,'A'),(1312,'B')]:
   {31:semantic,32:grounding,33:dialogue,34:voice,35:state,36:isolation}[n](Drawing(p,x,s,n))
  footer(p,'실제 설계 차이와 전환 비용은 본문 §8~9. 이 그림은 구현/측정 또는 주요 DP 선정의 증거가 아니다.')
@@ -384,10 +384,84 @@ def event(n):
  footer(p,'실제 소요 시간/성능을 표시하지 않는다. 요청과 반환의 송수신 책임은 각 단계와 본문 표에 명시한다.')
  return p
 
+CASES={
+31:[
+ ('u1: 작년 표 / 메일은 초안만', 'Request Interpreter가 완성 P1 생성: source=L/R, year=2025, send=false. Request Controller가 질문 q1 게시 요청.', 'Meaning Workspace: c1=year 2025, c2=send false, source=L/R. Semantic Constraint Engine이 미해결 source를 반환, q1 게시.'),
+ ('u2: “오른쪽 것”', 'Request Interpreter가 P1/질문/원문으로 전체 P2 재생성: source=R@7, year=2025, send=false. 기존 조건과 비교 검사.', 'Request Interpreter: NARROW(q1,{R@7}) 제안. Meaning Workspace가 q1 버전 검사 후 source만 변경. c1/c2 유지.'),
+ ('u3: “표는 올해 것, 메일은 그대로”', '같은 재조회에서 올해 표 S@8 확인. Request Interpreter가 P3 생성: source=S@8, year=2026, send=false. 조건 검증.', 'Request Interpreter: REPLACE(c1,2025→2026). Meaning Workspace가 같은 재조회로 S@8 후보 평가. c2는 변경 대상이 아님.'),
+ ('새로 선택한 S@8 삭제', 'Context Manager의 근거 확인에서 삭제 발견. Request Controller가 해당 제안 보류, 새 대상 해석/질문 요청.', 'Context Manager가 무효 근거 반환. Meaning Workspace가 S@8의 의존 후보 제거. Engine 재평가. 메일 조건 c2 유지.'),
+ ('q1의 옛 답변이 늦게 도착', 'Request Controller가 현재 질문/입력 버전 확인. 옛 답으로 새 대상을 확정하지 않음.', 'Meaning Workspace가 expected 버전과 q1 수명 검사. 옛 변경 적용 거절. 현재 질문에 다시 연결.')],
+33:[
+ ('실제로 제시된 두 질문', '중앙 대화 상태: 보고서 qR=형식 질문, 메일 qM=본문 질문. 이전에 제시한 결론 R.result@4.', '보고서 actor: qR / R.result@4. 메일 actor: qM. Task Manager가 외부 질문/결과 사실의 원본.'),
+ ('“보고서는 PDF로, 메일에는 그 결론”', 'Request Interpreter가 두 업무 근거와 원문을 함께 읽고 qR=PDF, qM.content=R.result@4를 제안.', '보고서 actor → Coordinator: qR=PDF, export=R.result@4. 메일 actor → Coordinator: qM, need=보고서 결론.'),
+ ('결론 참조를 연결', '전체 제안에서 두 대상과 관계 검사. Context Manager로 현재 자료 확인.', 'Coordinator → 메일 actor: R.result@4 전달. 메일 actor가 허용 근거/질문 의미 확인 후 자기 변경 재제안. 중앙의 본문 재작성 없음.'),
+ ('채택 직전 메일 질문 취소가 확인됨', 'Task Manager의 qM 버전 변경 확인. Request Controller가 아직 보내지 않은 qM 답 적용을 보류.', 'Task Manager → 메일 actor: qM 종료. 메일 actor 상태 버전 변경. Coordinator가 옛 M 제안의 채택을 거절.'),
+ ('현재 검사 후 가능한 부분 적용', 'qR/자료/권한 검사 후 독립적인 PDF 선택만 저장/전달. M의 옛 답변은 보내지 않고 질문 종료 안내.', '같은 guard 후 Coordinator가 유효한 R 제안만 저장/전달하고 actor에 통지. M은 현재 질문 종료 상태를 알림.')]
+}
+
+def mechanism_case(n):
+ import textwrap
+ p=Plate(f'choice{n}-mechanism',f'04-{n}',TITLES[n],
+         '실제 자료를 사용한 설계 추적 / 본문 §4.1 / 모델 실행 또는 정확도 측정 결과가 아님',height=2260)
+ for x,side in [(64,'A'),(1312,'B')]:
+  color=BLUE if side=='A' else GREEN
+  p.text(x,250,side+'  '+NAMES[n][side=='B'],28,color,bold=True)
+  for j,(name,a,b) in enumerate(CASES[n],1):
+   y=345+(j-1)*305
+   p.box(x,y,1184,245,'white','#C7D1DD',8)
+   p.box(x,y,8,245,color,'none',0)
+   p.text(x+28,y+20,str(j)+'. '+name,26,color,bold=True)
+   value=a if side=='A' else b
+   if n==33:value=value.replace('Coordinator','Dialogue Coordinator')
+   lines=textwrap.wrap(value,width=61,break_long_words=False,break_on_hyphens=False)
+   p.text(x+28,y+85,lines,23,leading=33)
+   if j<5:p.line([(x+592,y+245),(x+592,y+305)],color)
+  note=(['A도 기존 조건을 검사할 수 있음. B의 이익은 올바른 변경만 적용하는 경로.', '잘못된 변경 해석은 B도 실패. 외부 실행 승인/동의는 같은 별도 검사.'] if n==31 else ['A도 업무별 버전 검사/부분 진행 가능. B만의 결과라고 주장하지 않음.', 'B의 차이는 상태 전이 작성자와 참조 협력. 모델/DB/프로세스 격리 아님.'])
+  p.text(x+20,1925,note,20,MUTED)
+ footer(p,'예시의 입력/근거는 양안에 동일. 실제 사용 빈도, 정확도와 시간 이익은 미측정.')
+ return p
+
+def reference_extension():
+ p=Plate('choice32-extension','04-32','화면 지칭의 두 경로를 결합하는 최소 확장 — 주요 구조 DP 자격을 철회한 이유',
+         '공통 대상 참조와 resolver를 사용하는 설계 반례 / 새 주요 대안 또는 구현 결과가 아님',height=2250)
+ p.node('screen',150,270,520,130,'같은 앱의 화면 / 포인터 / 선택',kind='model')
+ p.node('app',930,270,520,130,'같은 앱의 공개 객체 API',kind='model')
+ p.boundary('via',64,480,2432,1330,'VIA SOFTWARE','Context 획득/참조 부분만 확대',dashed=True)
+ p.component('cm',110,550,1430,1190,'Context Manager',role='화면/객체의 획득, 공통 참조와 현재 자료의 해석')
+ p.node('obs',170,720,490,130,'관측 조립 Module',owner='cm',color=BLUE)
+ p.node('obj',930,720,550,130,'객체 제공자 Module',owner='cm',color=GREEN)
+ p.node('ref',470,1090,710,160,'공통 대상 참조\n관측 근거 + 가능한 객체 ID/버전\n출처 / 유효 범위 / unknown',kind='data',owner='cm')
+ p.node('resolve',470,1480,710,150,'참조 해석 Module\n자료 읽기 / 재확인 필요 반환',owner='cm')
+ p.component('ri',1770,650,660,160,'Request Interpreter',role='같은 원문으로 지칭을 해석. 객체도 후보 근거')
+ p.component('rc',1770,1090,660,160,'Request Controller',role='현재 대상/의도/권한 확인. 기존 확정 경계 유지')
+ p.component('ag',1770,1510,660,160,'Agent Gateway',role='Agent capability에 맞는 자료로 변환/인계')
+ p.text(120,440,'관측 수집은 Interaction Manager 경유',18,BLUE)
+ p.edge('obs','screen',sp='T',tp='B',sd=-20,td=-20,via=[(395,480),(390,480)],color=BLUE)
+ p.edge('screen','obs',sd=20,td=20,via=[(430,460),(435,460)],ret=True,color=BLUE)
+ p.edge('obj','app',sp='T',tp='B',sd=-20,td=-20,via=[(1185,480),(1170,480)],color=GREEN)
+ p.edge('app','obj',sd=20,td=20,via=[(1210,460),(1225,460)],ret=True,color=GREEN)
+ p.edge('obs','ref',td=-170,via=[(415,980),(655,980)],color=BLUE,label='관측 참조 생성',at=(185,930))
+ p.edge('obj','ref',td=170,via=[(1205,980),(995,980)],color=GREEN,label='가능하면 객체 참조 보강',at=(1010,930))
+ p.edge('ref','resolve',label='같은 표현을 두 경로에서 사용',at=(490,1330))
+ for key,lane,delta in [('ri',1570,-35),('rc',1630,0),('ag',1690,35)]:
+  y=p.port(key,'L',-20)[1]
+  p.edge(key,'resolve',sp='L',tp='R',sd=-20,td=delta,via=[(lane,y),(lane,1555+delta)])
+  p.edge('resolve',key,sp='R',tp='L',sd=delta+12,td=20,via=[(lane+14,1567+delta),(lane+14,y+40)],ret=True)
+ p.edge('rc','ri',sp='T',tp='B',sd=-20,td=-20,label='의미 요청 / 대상 반환',at=(1810,940))
+ p.edge('ri','rc',sd=20,td=20,ret=True)
+ p.edge('rc','ag',sd=-20,td=-20,label='Task Manager 경유: 확정 인계',at=(1790,1370))
+ p.edge('ag','rc',sp='T',tp='B',sd=20,td=20,ret=True)
+ p.text(110,1870,['객체 API가 없는 영역은 관측 참조 유지. 객체가 있어도 시점/유효성 확인은 필요.',
+                   '추론은 기존 Model Access/공유 Omni를 사용. 외부 업무는 같은 Downstream Agent가 실행.',
+                   '제공자와 resolver의 개발량은 남지만, 대화/Task 원본과 확정 구조를 유지하며 점진 도입 가능.'],24,MUTED)
+ footer(p,'파랑 = 관측 경로 / 초록 = 객체 확장 / 검정 = 공통. 새 Component를 늘려야만 얻는 성질이 아니다.')
+ return p
+
 def main():
  ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');args=ap.parse_args();drift=[]
- for n in range(31,37):
-  for p in (structural(n),event(n)):
+ plates=[p for n in range(31,37) for p in (structural(n),event(n))]
+ plates += [mechanism_case(31),mechanism_case(33),reference_extension()]
+ for p in plates:
    p.validate()
    for edge in p.items:
     if edge['kind']=='line' and 'source' in edge:
@@ -405,5 +479,5 @@ def main():
      if not dest.exists() or dest.read_text()!=data:drift.append(dest.name)
     else:dest.write_text(data)
  if drift:raise SystemExit('Diagram drift: '+', '.join(drift))
- print('PASS: 12 pairs; SVG/draw.io source parity, XML references, ownership, bounds and routes')
+ print(f'PASS: {len(plates)} pairs; SVG/draw.io source parity, XML references, ownership, bounds and routes')
 if __name__=='__main__':main()

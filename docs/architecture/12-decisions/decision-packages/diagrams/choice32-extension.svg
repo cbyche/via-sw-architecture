@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="2250" viewBox="0 0 2560 2250" role="img" aria-labelledby="title"><title id="title">화면 지칭의 두 경로를 결합하는 최소 확장 — 주요 구조 DP 자격을 철회한 이유</title><defs>
+<marker id="a263445" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#263445" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+<marker id="a087A53" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#087A53" stroke-width="1.6"/></marker>
+</defs>
+<rect width="2560" height="2250" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<rect id="e1" x="0" y="0" width="2560" height="9" rx="0" fill="#263445" stroke="none" stroke-width="1.5"/>
+<rect id="via" x="64" y="480" width="2432" height="1330" rx="10" fill="#FAFBFD" stroke="#C7D1DD" stroke-width="1.5" stroke-dasharray="8 6"/>
+<g id="cm" data-component="true"><rect x="110" y="550" width="1430" height="1190" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M110 612H1540" stroke="#263445" stroke-width="1.4"/>
+<text x="128" y="588.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Context Manager</text>
+<text x="128" y="643.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">화면/객체의 획득, 공통 참조와 현재 자료의 해석</text>
+</g>
+<g id="ri" data-component="true"><rect x="1770" y="650" width="660" height="160" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1770 712H2430" stroke="#263445" stroke-width="1.4"/>
+<text x="1788" y="688.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Interpreter</text>
+<text x="1788" y="743.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">같은 원문으로 지칭을 해석. 객체도 후보 근거</text>
+</g>
+<g id="rc" data-component="true"><rect x="1770" y="1090" width="660" height="160" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1770 1152H2430" stroke="#263445" stroke-width="1.4"/>
+<text x="1788" y="1128.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Controller</text>
+<text x="1788" y="1183.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">현재 대상/의도/권한 확인. 기존 확정 경계 유지</text>
+</g>
+<g id="ag" data-component="true"><rect x="1770" y="1510" width="660" height="160" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1770 1572H2430" stroke="#263445" stroke-width="1.4"/>
+<text x="1788" y="1548.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Agent Gateway</text>
+<text x="1788" y="1603.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">Agent capability에 맞는 자료로 변환/인계</text>
+</g>
+<polyline id="e6" points="64,202 2496,202" fill="none" stroke="#C7D1DD" stroke-width="2"/>
+<polyline id="e21" points="395.0,720 395,480 390,480 390.0,400" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="e22" points="430.0,400 430,460 435,460 435.0,720" fill="none" stroke="#195FBD" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a195FBD)"/>
+<polyline id="e23" points="1185.0,720 1185,480 1170,480 1170.0,400" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e24" points="1210.0,400 1210,460 1225,460 1225.0,720" fill="none" stroke="#087A53" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a087A53)"/>
+<polyline id="e25" points="415.0,850 415,980 655,980 655.0,1090" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="e27" points="1205.0,850 1205,980 995,980 995.0,1090" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e29" points="825.0,1250 825.0,1480" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e31" points="1770,710.0 1570,710.0 1570,1520 1180,1520.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e32" points="1180,1532.0 1584,1532 1584,750.0 1770,750.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e33" points="1770,1150.0 1630,1150.0 1630,1555 1180,1555.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e34" points="1180,1567.0 1644,1567 1644,1190.0 1770,1190.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e35" points="1770,1570.0 1690,1570.0 1690,1590 1180,1590.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e36" points="1180,1602.0 1704,1602 1704,1610.0 1770,1610.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e37" points="2080.0,1090 2080.0,810" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e39" points="2120.0,810 2120.0,1090" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e40" points="2080.0,1250 2080.0,1510" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e42" points="2120.0,1510 2120.0,1250" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e44" points="64,2110 2496,2110" fill="none" stroke="#C7D1DD" stroke-width="2"/>
+<g id="screen" data-node="true" data-x="150" data-y="270" data-w="520" data-h="130">
+<path d="M174 270H646L670 335.0L646 400H174L150 335.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="410.0" y="341.25" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 앱의 화면 / 포인터 / 선택</text>
+</g>
+<g id="app" data-node="true" data-x="930" data-y="270" data-w="520" data-h="130">
+<path d="M954 270H1426L1450 335.0L1426 400H954L930 335.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="1190.0" y="341.25" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 앱의 공개 객체 API</text>
+</g>
+<g id="obs" data-node="true" data-x="170" data-y="720" data-w="490" data-h="130">
+<rect x="170" y="720" width="490" height="130" rx="12" fill="#EEF4FF" stroke="#195FBD" stroke-width="1.6"/>
+<text x="415.0" y="791.25" text-anchor="middle" font-size="22" font-weight="700" fill="#195FBD">관측 조립 Module</text>
+</g>
+<g id="obj" data-node="true" data-x="930" data-y="720" data-w="550" data-h="130">
+<rect x="930" y="720" width="550" height="130" rx="12" fill="#EDF9F2" stroke="#087A53" stroke-width="1.6"/>
+<text x="1205.0" y="791.25" text-anchor="middle" font-size="22" font-weight="700" fill="#087A53">객체 제공자 Module</text>
+</g>
+<g id="ref" data-node="true" data-x="470" data-y="1090" data-w="710" data-h="160">
+<path d="M470 1090H1160L1180 1110V1250H470Z M1160 1090V1110H1180" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="825.0" y="1148.75" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">공통 대상 참조</text><text x="825.0" y="1176.25" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">관측 근거 + 가능한 객체 ID/버전</text><text x="825.0" y="1203.75" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">출처 / 유효 범위 / unknown</text>
+</g>
+<g id="resolve" data-node="true" data-x="470" data-y="1480" data-w="710" data-h="150">
+<rect x="470" y="1480" width="710" height="150" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6"/>
+<text x="825.0" y="1547.5" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">참조 해석 Module</text><text x="825.0" y="1575.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">자료 읽기 / 재확인 필요 반환</text>
+</g>
+<g id="e2"><text x="64" y="60.0" text-anchor="start" font-size="18" font-weight="700" fill="#5B697B">VIA  /  ARCHITECTURE REVIEW</text></g>
+<g id="e3"><text x="2496" y="60.0" text-anchor="end" font-size="18" font-weight="700" fill="#5B697B">04-32  /  STAGE 04</text></g>
+<g id="e4"><text x="64" y="109" text-anchor="start" font-size="34" font-weight="700" fill="#263445">화면 지칭의 두 경로를 결합하는 최소 확장</text><text x="64" y="153" text-anchor="start" font-size="34" font-weight="700" fill="#263445">주요 구조 DP 자격을 철회한 이유</text></g>
+<g id="e5"><text x="64" y="188.0" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">공통 대상 참조와 resolver를 사용하는 설계 반례 / 새 주요 대안 또는 구현 결과가 아님</text></g>
+<g id="e10"><text x="86" y="514.0" text-anchor="start" font-size="18" font-weight="700" fill="#263445">VIA SOFTWARE</text></g>
+<g id="e11"><text x="2474" y="514.0" text-anchor="end" font-size="16" font-weight="400" fill="#5B697B">Context 획득/참조 부분만 확대</text></g>
+<g id="e20"><text x="120" y="458.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">관측 수집은 Interaction Manager 경유</text></g>
+<g id="e26" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="185" y="948.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">관측 참조 생성</text></g>
+<g id="e28" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1010" y="948.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">가능하면 객체 참조 보강</text></g>
+<g id="e30" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="490" y="1348.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">같은 표현을 두 경로에서 사용</text></g>
+<g id="e38" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1810" y="958.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">의미 요청 / 대상 반환</text></g>
+<g id="e41" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1790" y="1388.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">Task Manager 경유: 확정 인계</text></g>
+<g id="e43"><text x="110" y="1894.0" text-anchor="start" font-size="24" font-weight="400" fill="#5B697B">객체 API가 없는 영역은 관측 참조 유지. 객체가 있어도 시점/유효성 확인은 필요.</text><text x="110" y="1926.4" text-anchor="start" font-size="24" font-weight="400" fill="#5B697B">추론은 기존 Model Access/공유 Omni를 사용. 외부 업무는 같은 Downstream Agent가 실행.</text><text x="110" y="1958.8" text-anchor="start" font-size="24" font-weight="400" fill="#5B697B">제공자와 resolver의 개발량은 남지만, 대화/Task 원본과 확정 구조를 유지하며 점진 도입 가능.</text></g>
+<g id="e45"><text x="64" y="2147.0" text-anchor="start" font-size="19" font-weight="700" fill="#263445">검정 = 공통 / 파랑 = A 고유 / 초록 = B 고유 / 색은 우위가 아님</text></g>
+<g id="e46"><text x="2496" y="2146.0" text-anchor="end" font-size="18" font-weight="400" fill="#5B697B">실선 → 요청/전달 / 점선 → 반환/확인</text></g>
+<g id="e47"><text x="64" y="2183.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">제목 상자 = Component / 내부 둥근 상자 = Module / 원통 = 저장 / 접힌 종이 = 자료 / 육각형 = 연동 대상</text></g>
+<g id="e48"><text x="64" y="2219.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">파랑 = 관측 경로 / 초록 = 객체 확장 / 검정 = 공통. 새 Component를 늘려야만 얻는 성질이 아니다.</text></g>
+</g></svg>
