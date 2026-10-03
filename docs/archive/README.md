@@ -29,3 +29,5 @@ The current source of truth is [docs/architecture](../architecture/README.md).
 - Use an `archive/*` Git tag when exact original topology or byte-for-byte state is needed.
 - If an old idea becomes relevant again, cite its provenance but restate and approve it in the active baseline before implementation.
 - Do not patch archived evidence merely to make it look current. Add an archive notice or active cross-reference instead.
+
+- [04-30 이전 여섯 비교 문서](./decision-comparisons-before-0430-2026-10-03/README.md): 04-31~36 재작성 전 자료, 현재 후보 자격의 근거 아님.

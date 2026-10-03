@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1840" viewBox="0 0 2560 1840" role="img" aria-labelledby="title"><title id="title">허용 범위 내 자료 처리를 위한 구조 — 공유 처리와 권한별 격리</title><defs>
+<marker id="a263445" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#263445" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+<marker id="a087A53" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#087A53" stroke-width="1.6"/></marker>
+</defs>
+<rect width="2560" height="1840" fill="white"/><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<rect id="e1" x="0" y="0" width="2560" height="9" rx="0" fill="#263445" stroke="none" stroke-width="1.5"/>
+<rect id="e7" x="64" y="237" width="48" height="48" rx="5" fill="#195FBD" stroke="none" stroke-width="1.5"/>
+<rect id="Tvia" x="64" y="340" width="1184" height="1090" rx="10" fill="#FAFBFD" stroke="#C7D1DD" stroke-width="1.5"/>
+<rect id="Tcore" x="88" y="375" width="1136" height="955" rx="10" fill="#FAFBFD" stroke="#195FBD" stroke-width="1.5" stroke-dasharray="8 6"/>
+<rect id="e47" x="1312" y="237" width="48" height="48" rx="5" fill="#087A53" stroke="none" stroke-width="1.5"/>
+<rect id="Avia" x="1312" y="340" width="1184" height="1090" rx="10" fill="#FAFBFD" stroke="#C7D1DD" stroke-width="1.5"/>
+<rect id="Acore" x="1336" y="375" width="510" height="955" rx="10" fill="#FAFBFD" stroke="#C7D1DD" stroke-width="1.5" stroke-dasharray="8 6"/>
+<rect id="Acell" x="1916" y="375" width="556" height="955" rx="10" fill="#FAFBFD" stroke="#087A53" stroke-width="1.5" stroke-dasharray="8 6"/>
+<g id="Trc" data-component="true"><rect x="114" y="445" width="452" height="110" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M114 507H566" stroke="#263445" stroke-width="1.4"/>
+<text x="132" y="483.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Controller</text>
+<text x="132" y="538.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">유효 요청과 최종 의미 확정</text>
+</g>
+<g id="Tpolicy" data-component="true"><rect x="114" y="610" width="452" height="110" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M114 672H566" stroke="#263445" stroke-width="1.4"/>
+<text x="132" y="648.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Policy Manager</text>
+<text x="132" y="703.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">현재 범위 / 수신자 / policy epoch</text>
+</g>
+<g id="Tcm" data-component="true"><rect x="698" y="445" width="500" height="360" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M698 507H1198" stroke="#263445" stroke-width="1.4"/>
+<text x="716" y="483.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Context Manager</text>
+<text x="716" y="538.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">자료 처리 부분: 조립 및 읽은 범위/버전</text>
+</g>
+<g id="Tri" data-component="true"><rect x="698" y="965" width="500" height="120" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M698 1027H1198" stroke="#263445" stroke-width="1.4"/>
+<text x="716" y="1003.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Interpreter</text>
+<text x="716" y="1058.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">허용 근거에서 해석 후보 생성</text>
+</g>
+<g id="Tma" data-component="true"><rect x="114" y="1145" width="452" height="115" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M114 1207H566" stroke="#263445" stroke-width="1.4"/>
+<text x="132" y="1183.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Model Access</text>
+<text x="132" y="1238.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">동일한 공유 모델 service 연동</text>
+</g>
+<g id="Arc" data-component="true"><rect x="1362" y="445" width="452" height="110" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1362 507H1814" stroke="#263445" stroke-width="1.4"/>
+<text x="1380" y="483.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Controller</text>
+<text x="1380" y="538.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">유효 요청과 최종 의미 확정</text>
+</g>
+<g id="Apolicy" data-component="true"><rect x="1362" y="610" width="452" height="110" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1362 672H1814" stroke="#263445" stroke-width="1.4"/>
+<text x="1380" y="648.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Policy Manager</text>
+<text x="1380" y="703.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">현재 범위 / 수신자 / policy epoch</text>
+</g>
+<g id="Acm" data-component="true"><rect x="1946" y="445" width="500" height="360" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1946 507H2446" stroke="#263445" stroke-width="1.4"/>
+<text x="1964" y="483.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Context Manager</text>
+<text x="1964" y="538.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">자료 처리 부분: 조립 및 읽은 범위/버전</text>
+</g>
+<g id="Ari" data-component="true"><rect x="1946" y="965" width="500" height="120" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1946 1027H2446" stroke="#263445" stroke-width="1.4"/>
+<text x="1964" y="1003.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Interpreter</text>
+<text x="1964" y="1058.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">허용 근거에서 해석 후보 생성</text>
+</g>
+<g id="Ama" data-component="true"><rect x="1362" y="1145" width="452" height="115" rx="4" fill="white" stroke="#263445" stroke-width="2.2"/>
+<path d="M1362 1207H1814" stroke="#263445" stroke-width="1.4"/>
+<text x="1380" y="1183.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Model Access</text>
+<text x="1380" y="1238.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">동일한 공유 모델 service 연동</text>
+</g>
+<g id="Abroker" data-component="true"><rect x="1362" y="825" width="452" height="120" rx="4" fill="white" stroke="#087A53" stroke-width="2.2"/>
+<path d="M1362 887H1814" stroke="#087A53" stroke-width="1.4"/>
+<text x="1380" y="863.0" text-anchor="start" font-size="23" font-weight="700" fill="#087A53">Data Access Broker</text>
+<text x="1380" y="918.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">권한 검사, 자료 열기 및 참조 발급</text>
+</g>
+<polyline id="e6" points="64,202 2496,202" fill="none" stroke="#C7D1DD" stroke-width="2"/>
+<polyline id="e25" points="566,485.0 698,485.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e27" points="698,515.0 566,515.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e29" points="566,535.0 682,535 682,995 698,995.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e31" points="1198,1025.0 1216,1025 1216,420 340,420 340.0,445" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e33" points="566,690.0 698,690.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e35" points="698,1005.0 618,1005 618,1192.5 566,1192.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e37" points="566,1222.5 642,1222.5 642,1045 698,1045.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e38" points="948.0,805 948,865 1236,865 1236,1465 948,1465 948.0,1520" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="e40" points="983.0,1520 983,1490 1222,1490 1222,890 983,890 983.0,805" fill="none" stroke="#195FBD" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a195FBD)"/>
+<polyline id="e42" points="305.0,1260 305.0,1520" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e44" points="375.0,1520 375.0,1260" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e66" points="1814,485.0 1946,485.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e68" points="1946,515.0 1814,515.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e70" points="1814,535.0 1930,535 1930,995 1946,995.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e72" points="2446,1025.0 2464,1025 2464,420 1588,420 1588.0,445" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e75" points="1588.0,720 1588.0,825" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e77" points="1946,755.0 1866,755 1866,865 1814,865.0" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e79" points="1814,895.0 1890,895 1890,785 1946,785.0" fill="none" stroke="#087A53" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a087A53)"/>
+<polyline id="e81" points="1946,1005.0 1866,1005 1866,925 1814,925.0" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e83" points="1814,905.0 1902,905 1902,1045 1946,1045.0" fill="none" stroke="#087A53" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a087A53)"/>
+<polyline id="e84" points="1553.0,945 1553.0,1145" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e86" points="1623.0,1145 1623.0,945" fill="none" stroke="#087A53" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a087A53)"/>
+<polyline id="e87" points="1814,910.0 1892,910 1892,1465 2196,1465 2196.0,1520" fill="none" stroke="#087A53" stroke-width="2" marker-end="url(#a087A53)"/>
+<polyline id="e89" points="2231.0,1520 2231,1490 1922,1490 1922,930 1814,930.0" fill="none" stroke="#087A53" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a087A53)"/>
+<polyline id="e91" points="1553.0,1260 1553.0,1520" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="e93" points="1623.0,1520 1623.0,1260" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)"/>
+<polyline id="e96" points="64,1694 2496,1694" fill="none" stroke="#C7D1DD" stroke-width="2"/>
+<g id="Tcache" data-node="true" data-x="728" data-y="605" data-w="440" data-h="120">
+<path d="M728 619C728 600 1168 600 1168 619V711C1168 730 728 730 728 711Z M728 619C728 638 1168 638 1168 619" fill="#EEF4FF" stroke="#195FBD" stroke-width="1.7"/>
+<text x="948.0" y="681.25" text-anchor="middle" font-size="22" font-weight="700" fill="#195FBD">공유 Core의 자료/cache (RAM)</text>
+</g>
+<g id="Tomni" data-node="true" data-x="114" data-y="1520" data-w="452" data-h="110">
+<path d="M138 1520H542L566 1575.0L542 1630H138L114 1575.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="340.0" y="1567.5" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 Omni / 공유 inference service</text><text x="340.0" y="1595.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">양안 모두 신뢰 경계 안의 의존성</text>
+</g>
+<g id="Tsource" data-node="true" data-x="698" data-y="1520" data-w="500" data-h="110">
+<path d="M722 1520H1174L1198 1575.0L1174 1630H722L698 1575.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="948.0" y="1567.5" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 Context source</text><text x="948.0" y="1595.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">실제 조회는 허용된 adapter/worker 사용</text>
+</g>
+<g id="Acache" data-node="true" data-x="1976" data-y="605" data-w="440" data-h="120">
+<path d="M1976 619C1976 600 2416 600 2416 619V711C2416 730 1976 730 1976 711Z M1976 619C1976 638 2416 638 2416 619" fill="#EDF9F2" stroke="#087A53" stroke-width="1.7"/>
+<text x="2196.0" y="681.25" text-anchor="middle" font-size="22" font-weight="700" fill="#087A53">현재 범위의 자료/cache (RAM)</text>
+</g>
+<g id="Aomni" data-node="true" data-x="1362" data-y="1520" data-w="452" data-h="110">
+<path d="M1386 1520H1790L1814 1575.0L1790 1630H1386L1362 1575.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="1588.0" y="1567.5" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 Omni / 공유 inference service</text><text x="1588.0" y="1595.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">양안 모두 신뢰 경계 안의 의존성</text>
+</g>
+<g id="Asource" data-node="true" data-x="1946" data-y="1520" data-w="500" data-h="110">
+<path d="M1970 1520H2422L2446 1575.0L2422 1630H1970L1946 1575.0Z" fill="#F7F9FC" stroke="#263445" stroke-width="1.7"/>
+<text x="2196.0" y="1567.5" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">같은 Context source</text><text x="2196.0" y="1595.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">실제 조회는 허용된 adapter/worker 사용</text>
+</g>
+<g id="e2"><text x="64" y="60.0" text-anchor="start" font-size="18" font-weight="700" fill="#5B697B">VIA  /  ARCHITECTURE REVIEW</text></g>
+<g id="e3"><text x="2496" y="60.0" text-anchor="end" font-size="18" font-weight="700" fill="#5B697B">S-2  /  STAGE 04</text></g>
+<g id="e4"><text x="64" y="109" text-anchor="start" font-size="34" font-weight="700" fill="#263445">허용 범위 내 자료 처리를 위한 구조</text><text x="64" y="153" text-anchor="start" font-size="34" font-weight="700" fill="#263445">공유 처리와 권한별 격리</text></g>
+<g id="e5"><text x="64" y="188.0" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">자료 조회와 semantic 입력 구성의 권한 경계를 확대했다. Task 의미/최종 전송 확정과 한 개 Omni는 공유한다.</text></g>
+<g id="e8"><text x="88" y="271.0" text-anchor="middle" font-size="27" font-weight="700" fill="white">T</text></g>
+<g id="e9"><text x="132" y="264.0" text-anchor="start" font-size="28" font-weight="700" fill="#263445">공유 Core의 정책 검사</text></g>
+<g id="e10"><text x="132" y="294.0" text-anchor="start" font-size="18" font-weight="400" fill="#5B697B">정상 권한 port + 기존 위험 connector 격리</text></g>
+<g id="e12"><text x="86" y="374.0" text-anchor="start" font-size="18" font-weight="700" fill="#263445">VIA SOFTWARE</text></g>
+<g id="e13"><text x="1226" y="374.0" text-anchor="end" font-size="16" font-weight="400" fill="#5B697B">초점: 비교하는 내부 처리 구조</text></g>
+<g id="e15"><text x="110" y="409.0" text-anchor="start" font-size="18" font-weight="700" fill="#195FBD">Core process</text></g>
+<g id="e16"><text x="1202" y="409.0" text-anchor="end" font-size="16" font-weight="400" fill="#5B697B">비교하는 자료 처리 코드도 같은 신뢰 영역</text></g>
+<g id="e26" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="580" y="456.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">1 준비 요청</text></g>
+<g id="e28" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="580" y="573.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">2 자료 참조</text></g>
+<g id="e30" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="719" y="926.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">3 허용 자료로 해석 요청</text></g>
+<g id="e32" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="754" y="433.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">3 제안 반환 / 4 현재 조건 검증</text></g>
+<g id="e34" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="579" y="746.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">1 정책 적용</text></g>
+<g id="e36" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="476" y="1088.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">3 모델 요청</text></g>
+<g id="e39" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="694" y="1445.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">2 정책상 허용된 자료 조회</text></g>
+<g id="e41" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="724" y="1496.0" text-anchor="start" font-size="18" font-weight="400" fill="#195FBD">2 허용 자료 반환</text></g>
+<g id="e43" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="134" y="1385.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">추론 요청</text></g>
+<g id="e45" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="394" y="1478.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">결과</text></g>
+<g id="e46"><text x="694" y="1365.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">5 Task Manager / Agent Gateway: 현재 조건을 검증해 전송.</text><text x="694" y="1387.95" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">A의 자료 제공은 Data Access Broker가 다시 검사한다.</text><text x="694" y="1410.9" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">6 결과: Response Manager → Interaction Manager 및 receipt.</text></g>
+<g id="e48"><text x="1336" y="271.0" text-anchor="middle" font-size="27" font-weight="700" fill="white">A</text></g>
+<g id="e49"><text x="1380" y="264.0" text-anchor="start" font-size="28" font-weight="700" fill="#263445">중개자와 제한 process</text></g>
+<g id="e50"><text x="1380" y="294.0" text-anchor="start" font-size="18" font-weight="400" fill="#5B697B">처리 코드의 전역 자료/credential/임의 연동 권한 제거</text></g>
+<g id="e52"><text x="1334" y="374.0" text-anchor="start" font-size="18" font-weight="700" fill="#263445">VIA SOFTWARE</text></g>
+<g id="e53"><text x="2474" y="374.0" text-anchor="end" font-size="16" font-weight="400" fill="#5B697B">초점: 비교하는 내부 처리 구조</text></g>
+<g id="e55"><text x="1358" y="409.0" text-anchor="start" font-size="18" font-weight="700" fill="#263445">권한 있는 Core process</text></g>
+<g id="e57"><text x="1938" y="409.0" text-anchor="start" font-size="18" font-weight="700" fill="#087A53">제한된 자료 처리 process</text></g>
+<g id="e67" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1828" y="456.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">1 준비 요청</text></g>
+<g id="e69" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1828" y="573.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">2 자료 참조</text></g>
+<g id="e71" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1967" y="926.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">3 허용 자료로 해석 요청</text></g>
+<g id="e73" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="2002" y="433.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">3 제안 반환 / 4 현재 조건 검증</text></g>
+<g id="e76" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1407" y="773.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">1 현재 권한 적용</text></g>
+<g id="e78" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1737" y="800.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">2 조회 요청</text></g>
+<g id="e80" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1982" y="838.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">2 허용 자료 참조</text></g>
+<g id="e82" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1732" y="1076.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">3 모델 요청</text></g>
+<g id="e85" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1392" y="1048.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">3 검증 후 요청</text></g>
+<g id="e88" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1942" y="1445.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">2 중개자가 자료 조회</text></g>
+<g id="e90" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1972" y="1496.0" text-anchor="start" font-size="18" font-weight="400" fill="#087A53">2 허용 자료 반환</text></g>
+<g id="e92" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1382" y="1385.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">추론 요청</text></g>
+<g id="e94" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1642" y="1478.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">결과</text></g>
+<g id="e95"><text x="1942" y="1365.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">5 Task Manager / Agent Gateway: 현재 조건을 검증해 전송.</text><text x="1942" y="1387.95" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">A의 자료 제공은 Data Access Broker가 다시 검사한다.</text><text x="1942" y="1410.9" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">6 결과: Response Manager → Interaction Manager 및 receipt.</text></g>
+<g id="e97"><text x="64" y="1731.0" text-anchor="start" font-size="19" font-weight="700" fill="#263445">색:  검정 = 공통     파랑 = T 전용     초록 = A/B 전용</text></g>
+<g id="e98"><text x="2496" y="1730.0" text-anchor="end" font-size="18" font-weight="400" fill="#5B697B">실선 → 요청/전달     점선 → 결과/복원</text></g>
+<g id="e99"><text x="64" y="1767.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">모양:  제목 칸이 있는 박스 = Component   |   내부 둥근 박스 = Module   |   원통 = 저장소   |   접힌 종이 = 자료   |   육각형 = 연동 대상/모델</text></g>
+<g id="e100"><text x="64" y="1807.0" text-anchor="start" font-size="17" font-weight="400" fill="#5B697B">OS/중개자/공유 model은 여전히 신뢰 영역이다. 실제 외부 제공과 철회/삭제의 전체 흐름 및 보호 한계는 본문 §3~6.</text></g>
+<g id="e101"><text x="2496" y="1807.0" text-anchor="end" font-size="17" font-weight="400" fill="#5B697B">탐색안 / 미채택 / 미측정</text></g>
+</g></svg>

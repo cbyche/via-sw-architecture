@@ -2,7 +2,7 @@
 
 > **현재 작업 (2026-10-03):** 기존 `target-architecture/`는 기능 전반을 검토한 [Reference Architecture](docs/architecture/12-decisions/target-architecture/README.md)다. 최종 목표 구조로 선택한 상태가 아니다.
 > **Decision Reconstruction / Stage 4**에서 중요한 기능 문제를 서로 다른 두 구조로 비교한다. 두 안 모두 참조 구조와 달라도 된다.
-> 최신 결과는 [핵심 기능의 추가 설계 문제 세 개](docs/architecture/12-decisions/decision-packages/04-18-functional-priority-exploration.md)다. 구현, 측정 및 최종 DP 선정은 하지 않았다.
+> 최신 결과는 [여섯 구조 비교 가이드](docs/architecture/12-decisions/decision-packages/04-30-comparison-guide.md)다. 구현, 측정 및 최종 DP 선정은 하지 않았다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 

@@ -4,7 +4,7 @@
 
 > **현재 12번 작업 (2026-10-03):** `target-architecture/`는 검토 완료 [Reference Architecture](./12-decisions/target-architecture/README.md)이며 최종 목표 구조가 아니다.
 > Decision Reconstruction에서 VIA의 중요한 기능 문제를 서로 다른 구조로 비교한다. 두 안 모두 참조 구조와 달라도 된다.
-> 최신 결과: [상위 기능 품질의 추가 주제 세 개](./12-decisions/decision-packages/04-18-functional-priority-exploration.md). 구현, 측정 및 최종 DP 선정은 아직 없다. 현재 탐색은 13개 품질 관점과 부분 기능 대안 허용 규칙을 따른다.
+> 최신 결과: [여섯 구조 비교](./12-decisions/decision-packages/04-30-comparison-guide.md). 구현, 측정 및 최종 DP 선정은 아직 없다. 현재 탐색은 13개 품질 관점과 부분 기능 대안 허용 규칙을 따른다.
 
 이 디렉터리는 VIA의 시스템 정의, 공통 범위, 대표 Use Case, 변화 시나리오, 품질 속성, 측정 계약, Decision Point를 연결한 현재 Architecture 기준선이다. 이 기준선이 답하려는 질문은 다음과 같다.
 

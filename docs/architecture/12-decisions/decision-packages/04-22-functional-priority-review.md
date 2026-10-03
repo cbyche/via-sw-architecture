@@ -1,5 +1,7 @@
 # 핵심 기능 추가 탐색의 품질 손익과 반론 검토
 
+> 현재 비교는 [04-30 가이드와 04-31~36](./04-30-comparison-guide.md), 검토는 [04-37](./04-37-comparison-review.md)로 대체했다. 아래는 앞선 탐색 기록이며 현재 구조 자격 판단으로 사용하지 않는다.
+
 > 2026-10-03 / 작성자 설계 검토 / 독립 리뷰, 구현 및 측정 없음
 > [04-18 전체 결론](./04-18-functional-priority-exploration.md), [F-01 화면 지칭](./04-19-temporal-grounding.md), [F-02 업무 대화](./04-20-task-dialogue.md), [F-03 음성 처리](./04-21-voice-processing.md)
 

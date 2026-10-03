@@ -1,7 +1,7 @@
 # 12. Reference Architecture and Structural Choices
 
 > 상태: **Reference Architecture를 활용한 Decision Reconstruction / Stage 4 핵심 기능 대안 탐색** / 2026-10-03
-> [최신 결과: 추가 기능 주제 세 개](./decision-packages/04-18-functional-priority-exploration.md). 기존 target은 참조 구조이며 두 비교안 중 하나로 고정하지 않는다.
+> [최신 결과: 여섯 구조 비교](./decision-packages/04-30-comparison-guide.md). 기존 target은 참조 구조이며 두 비교안 중 하나로 고정하지 않는다.
 
 12번은 01~11의 제품 경계와 사용자 행동, 품질 의미를 바탕으로 중요한 문제를 서로 다른 구조로 해결하는 방법을 비교한다. 기존 target은 기능 전반을 살핀 참조 구조다. 아래 초기 작업 흐름과 target 유래 규칙은 설계 이력이며, 현재는 두 안 모두 참조 구조와 달라도 된다.
 

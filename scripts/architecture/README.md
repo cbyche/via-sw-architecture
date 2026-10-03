@@ -13,6 +13,7 @@
 .venv/bin/python scripts/architecture/generate_stage4_structure_diagrams.py --check
 .venv/bin/python scripts/architecture/generate_mechanism_family_diagrams.py --check
 .venv/bin/python scripts/architecture/generate_functional_choice_diagrams.py --check
+.venv/bin/python scripts/architecture/generate_six_comparison_diagrams.py --check
 .venv/bin/python scripts/architecture/check_evaluation_package.py <result-directory>
 ```
 
@@ -54,3 +55,5 @@ Alibaba S2S credential smoke test는 macOS Keychain의 `via-dashscope-api-key`, 
 확대 탐색 04-14~16의 세 비교 그림은 `generate_mechanism_family_diagrams.py`로 생성한다. `--check`는 SVG/draw.io 일치, XML 참조, 소유 경계와 연결 경로를 확인한다. 실제 글자 배치와 구조 의미는 별도로 검토하며 이 검사를 구현이나 품질 검증으로 취급하지 않는다.
 
 핵심 기능 탐색 04-19~21의 세 비교 그림은 `generate_functional_choice_diagrams.py`로 생성한다. 동일한 source로 SVG/draw.io, XML 참조와 연결 경로를 검사한다. A/B는 참조 구조에 고정되지 않으며 실제 글자 배치와 의미는 별도로 검토한다.
+
+현재 04-31~36의 구조와 사건 흐름 12쌍은 `generate_six_comparison_diagrams.py`로 생성한다. `--check`는 source 일치, XML, 소유 경계와 직교 경로 및 실제 연결 노드의 끝점을 검사한다. 본문/그림의 의미와 읽기 품질은 렌더로 별도 확인한다. 이전 두 생성기와 그림은 보존된 탐색의 재현 자료다.
