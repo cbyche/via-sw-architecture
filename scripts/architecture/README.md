@@ -11,6 +11,7 @@
 .venv/bin/python scripts/architecture/generate_target_architecture_diagrams.py --check
 .venv/bin/python scripts/architecture/generate_decision_package_diagrams.py --check
 .venv/bin/python scripts/architecture/generate_stage4_structure_diagrams.py --check
+.venv/bin/python scripts/architecture/generate_mechanism_family_diagrams.py --check
 .venv/bin/python scripts/architecture/check_evaluation_package.py <result-directory>
 ```
 
@@ -48,3 +49,5 @@ Alibaba S2S credential smoke test는 macOS Keychain의 `via-dashscope-api-key`, 
 응답 WAV와 secret을 제외한 event timing trace만 지정한 output directory에 쓴다. 이 결과는 provider 연결과 model audio packet을 확인하는 `MEASURED_MODEL` smoke evidence이며 physical speaker onset 또는 `PRODUCT_E2E`가 아니다.
 
 새 active README나 contract directory를 추가하면 link checker의 scan scope도 함께 검토한다. 이전 W12-G1 measurement/review scripts는 [script archive](../archive/README.md)에 보존한다.
+
+확대 탐색 04-14~16의 세 비교 그림은 `generate_mechanism_family_diagrams.py`로 생성한다. `--check`는 SVG/draw.io 일치, XML 참조, 소유 경계와 연결 경로를 확인한다. 실제 글자 배치와 구조 의미는 별도로 검토하며 이 검사를 구현이나 품질 검증으로 취급하지 않는다.
