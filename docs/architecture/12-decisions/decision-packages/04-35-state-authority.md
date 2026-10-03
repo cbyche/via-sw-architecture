@@ -32,6 +32,8 @@ projection은 사건으로 계산한 현재 값이다. 계산 함수인 **reduce
 
 정상 읽기는 journal 위치와 일치하는 projection을 사용한다. 재시작 시 유효 checkpoint와 이후 사건을 재생해 상태를 만들며, 새로운 조회 형태도 필요한 사실이 보존돼 있으면 같은 사건에서 구성할 수 있다. replay는 전송 intent의 상태를 복원할 뿐 외부 전송이나 음성 재생을 직접 실행하지 않는다.
 
+그림은 A의 현재 원본과 미완료 원장을 직접 읽는 경로, B의 사건 원본에서 상태를 만드는 경로 및 재시작 때 checkpoint와 후속 사건을 같은 전이 함수로 재생하는 경로를 구분한다. 단순히 DB 이름을 바꾸는 선택이 아니다.
+
 ![04-35 구조 비교](./diagrams/choice35-structure.svg)
 
 [편집용 draw.io](./diagrams/choice35-structure.drawio). B도 같은 local DB transaction을 사용할 수 있다. 분산 DB나 cloud 규모를 추가해 구조 차이를 만들지 않는다.

@@ -1,7 +1,9 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **STAGE_4_SIX_COMPARISONS_REVIEW / 여섯 구조 비교, 사용자 검토용** / 2026-10-03
+> 현재 상태: **STAGE_4_STRUCTURAL_CORRECTION_REVIEW / 구조 기준 재정립과 후속 설계 검토** / 2026-10-03
 > 기존 target은 참조 구조이며 두 비교안 모두 달라도 된다. 구현, 모델 실행 및 성능 측정은 하지 않았다.
+
+> `10f5546`의 구조 비교 완료 판단은 사용자 지적으로 재검토했다. [04-30 §4](./04-30-comparison-guide.md#4-sw-구조적으로-다른-대안의-정확한-의미)의 필수 기준과 [04-37](./04-37-comparison-review.md)의 수정/한계를 먼저 확인한다.
 
 ## 현재 읽기: 여섯 구조 비교
 
@@ -9,7 +11,7 @@
 
 | 번호 | 주제 |
 | --- | --- |
-| [04-31](./04-31-semantic-construction.md) | 전체 의미 생성과 제약 결합 |
+| [04-31](./04-31-semantic-construction.md) | 요청별 생성과 지속 의미 작업공간 |
 | [04-32](./04-32-screen-grounding.md) | 화면 관측과 source 객체 |
 | [04-33](./04-33-dialogue-coordination.md) | 중앙 대화와 업무별 actor 협력 |
 | [04-34](./04-34-incremental-voice.md) | 확정 발화와 수정 가능한 연속 처리 |

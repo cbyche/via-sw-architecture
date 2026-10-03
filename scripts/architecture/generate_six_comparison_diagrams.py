@@ -6,8 +6,8 @@ import xml.etree.ElementTree as ET
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/architecture/12-decisions/decision-packages/diagrams'
-TITLES={31:'요청 이해의 정확성을 위한 의미 구성 — 전체 의미 생성과 제약 결합',32:'화면 지칭의 정확성을 위한 대상 획득 — 관측 영역과 source 객체',33:'여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리',34:'음성 대화의 반응성과 정정 정확성을 위한 실행 — 발화 단위와 연속 수정',35:'대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력',36:'허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리'}
-NAMES={31:('전체 의미 생성','후보와 제약으로 구성'),32:('관측에서 영역 해석','source 객체를 지칭에 결합'),33:('중앙이 전체 대화 해석','업무 대화 actor가 협력'),34:('확정 발화 단위 처리','잠정 작업을 계속 수정'),35:('현재 상태가 원본','확정 사건이 원본'),36:('공유 권한의 처리 코드','Broker와 제한 process')}
+TITLES={31:'요청 이해의 정확성을 위한 의미 구성 — 요청별 생성과 지속 의미 작업공간',32:'화면 지칭의 정확성을 위한 대상 획득 — 관측 영역과 source 객체',33:'여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리',34:'음성 대화의 반응성과 정정 정확성을 위한 실행 — 발화 단위와 연속 수정',35:'대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력',36:'허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리'}
+NAMES={31:('요청별 완성 의미 생성','지속 의미 작업공간'),32:('관측에서 영역 해석','source 객체를 지칭에 결합'),33:('중앙이 전체 대화 해석','업무 대화 actor가 협력'),34:('확정 발화 단위 처리','잠정 작업을 계속 수정'),35:('현재 상태가 원본','확정 사건이 원본'),36:('공유 권한의 처리 코드','Broker와 제한 process')}
 
 def footer(p,note):
  y=p.height-140;p.line([(64,y),(2496,y)],'#C7D1DD',arrow=False)
@@ -26,167 +26,334 @@ def head(p,x,s,n):
  p.text(x+68,235,NAMES[n][s=='B'],28,bold=True)
  return c,lambda z:s+z
 
-def common(p,x,k,top='Request Controller',bottom='Request Controller',note_offset=800):
- p.boundary(k('via'),x,340,1184,1460,'VIA SOFTWARE','역할/논리 구조, OS process는 별도 명시')
- p.component(k('input'),x+36,400,720,135,top,role='같은 사용자 입력, 근거와 현재 허용 범위')
- p.component(k('commit'),x+36,1600,720,145,bottom,role='확정 사실의 Text/음성 게시, 실제 전달 기록' if bottom=='Response Manager' else '현재 입력/자료/권한 확인, 확정 사실만 전달')
- p.text(x+note_offset,1640,['외부 업무는 공통', 'Task Manager', '→ Agent Gateway', '→ Downstream Agent', '접수/결과는 같은 경로로 반환'],18,MUTED)
+# Each option has its own dependency graph. Only drawing primitives are shared.
+class Drawing:
+ def __init__(self,p,x,s,n):
+  self.p,self.x,self.s,self.c=p,x,s,BLUE if s=='A' else GREEN
+  head(p,x,s,n)
+ def comp(self,key,x,y,w,h,name,role='',color=INK):
+  return self.p.component(self.s+key,self.x+x,y,w,h,name,color=color,role=role)
+ def node(self,key,x,y,w,h,name,kind='module',owner=None,color=None):
+  return self.p.node(self.s+key,self.x+x,y,w,h,name,kind=kind,owner=self.s+owner if owner else None,color=self.c if color is None else color)
+ def bound(self,key,x,y,w,h,title,subtitle='',color=INK):
+  self.p.boundary(self.s+key,self.x+x,y,w,h,title,subtitle,color=color,dashed=True)
+ def edge(self,a,b,sp='B',tp='T',via=(),label='',at=None,ret=False,sd=0,td=0,color=None):
+  self.p.edge(self.s+a,self.s+b,sp=sp,tp=tp,via=[(self.x+x,y) for x,y in via],label=label,at=(self.x+at[0],at[1]) if at else None,ret=ret,sd=sd,td=td,color=self.c if color is None else color)
+ def text(self,x,y,lines,size=20):self.p.text(self.x+x,y,lines,size,MUTED)
+ def via(self):self.bound('via',0,320,1184,1790,'VIA SOFTWARE','논리 책임 / 실제 process는 별도 표시')
+ def model(self,y=1810):
+  self.comp('ma',790,y,350,130,'Model Access')
+  self.node('omni',790,2150,350,110,'공유 Omni 한 개\n모델 내부는 책임 밖',kind='model',color=INK)
+  self.edge('ma','omni',sd=-20,td=-20,color=INK,label='추론 요청',at=(835,2070))
+  self.edge('omni','ma',sp='T',tp='B',sd=20,td=20,ret=True,color=INK)
+ def model_call(self,a):
+  # The model dependency is routed outside the compared internal mechanism.
+  y=self.p.port(self.s+a,'R',-20)[1];my=self.p.port(self.s+'ma','R',-20)[1]
+  self.edge(a,'ma',sp='R',tp='R',sd=-20,td=-20,via=[(1160,y),(1160,my)],color=INK)
+  y=self.p.port(self.s+a,'R',20)[1];my=self.p.port(self.s+'ma','R',20)[1]
+  self.edge('ma',a,sp='R',tp='R',sd=20,td=20,via=[(1174,my),(1174,y)],ret=True,color=INK)
+ def tail(self,lines):self.text(40,2330,lines,20)
 
-def model(p,x,k,source,interpreter=False):
- if interpreter:
-  p.component(k('ri'),x+808,760,340,160,'Request Interpreter',role='범위별 의미 제안')
-  p.component(k('ma'),x+808,1140,340,140,'Model Access',role='역할별 요청 / 한 weights')
-  p.edge(k('ri'),k('ma'),sd=-25,td=-25,label='의미 요청',at=(x+815,1030))
-  p.edge(k('ma'),k('ri'),sp='T',tp='B',sd=25,td=25,ret=True)
-  target=k('ri')
+def semantic_workspace(d):
+ d.via()
+ d.comp('rc',40,360,1100,140,'Request Controller',role='새 입력 전달 / 현재 조건 검사 후 의미를 명령으로 확정')
+ d.comp('ri',40,680,480,140,'Request Interpreter',role='완성 실행안 대신 타입 있는 의미 변경 후보')
+ d.comp('ma',790,680,350,140,'Model Access')
+ d.comp('workspace',40,1020,620,770,'Meaning Workspace',role='여러 입력에 걸친 목표/후보/제약과 질문 소유',color=d.c)
+ d.node('facts',80,1140,540,130,'채택한 의미 변경 / 질문 연결\nState Store에 내구 저장',kind='store',owner='workspace')
+ d.node('update',80,1480,540,130,'의미 변경 반영 / 의존 사실 무효화',owner='workspace')
+ d.comp('engine',790,1110,350,190,'Semantic Constraint Engine',role='후보/규칙에서 해 또는 미해결 반환',color=d.c)
+ d.comp('cm',790,1470,350,140,'Context Manager',role='허용 읽기 / source 버전 변경')
+ d.comp('tm',790,1760,350,140,'Task Manager',role='실제 Task 사실 / 현재 버전')
+ d.comp('rm',40,1950,620,140,'Response Manager',role='미해결 필드 질문 / 실제 게시 기록 반환')
+ d.edge('rc','ri',via=[(590,585),(280,585)],label='새 발화 / 보완 / 정정',at=(80,570))
+ d.edge('ri','ma',sp='R',tp='L',sd=-20,td=-20,color=INK,label='변경 후보 생성 요청',at=(555,680))
+ d.edge('ma','ri',sp='L',tp='R',sd=20,td=20,ret=True,color=INK)
+ d.edge('ri','workspace',sp='R',tp='R',td=-315,via=[(710,750),(710,1090)],label='현재 의미/질문 조회',at=(550,840))
+ d.edge('workspace','ri',sp='R',tp='R',sd=-285,td=25,via=[(740,1120),(740,775)],ret=True)
+ d.edge('ri','update',sp='B',tp='L',via=[(280,920),(20,920),(20,1545)],label='이전 의미 버전에 적용할 변경',at=(80,920))
+ d.edge('update','facts',sp='T',tp='B',sd=-20,td=-20,label='조건 / 질문 / 의존 관계 갱신',at=(95,1355))
+ d.edge('facts','update',sd=20,td=20,ret=True)
+ d.edge('facts','engine',sp='R',tp='L',sd=-20,td=-20,label='현재 후보/제약',at=(650,1135))
+ d.edge('engine','update',sp='L',tp='R',sd=20,td=-20,via=[(710,1225),(710,1525)],ret=True)
+ d.edge('update','cm',sp='R',tp='L',sd=-35,td=-30,via=[(735,1510)],label='읽기 / 변경 사실 반영',at=(80,1675))
+ d.edge('cm','update',sp='L',tp='R',sd=0,td=-5,ret=True)
+ d.edge('update','tm',sp='R',tp='L',sd=35,via=[(745,1580),(745,1830)])
+ d.edge('tm','update',sp='L',tp='R',sd=25,td=55,via=[(765,1855),(765,1600)],ret=True)
+ d.edge('update','rm',sd=-20,td=-20,label='미해결 필드의 질문 / 실제 게시',at=(80,1840))
+ d.edge('rm','update',sp='T',tp='B',sd=20,td=20,ret=True)
+ d.edge('update','rc',sp='L',tp='L',sd=35,td=-20,via=[(8,1580),(8,410)],ret=True,label='Workspace가 현재 의미 반환',at=(50,975))
+ d.node('omni',790,2150,350,110,'공유 Omni 한 개\n모델 내부는 책임 밖',kind='model',color=INK)
+ d.edge('ma','omni',sp='R',tp='R',sd=-20,td=-20,via=[(1172,730),(1172,2185)],color=INK)
+ d.edge('omni','ma',sp='R',tp='R',sd=20,td=20,via=[(1182,2225),(1182,770)],ret=True,color=INK)
+ d.text(40,2155,['질문에 대한 답변'+'은 Interaction Manager → Request Controller로 새 입력.', '확정 명령은 Task Manager → Agent Gateway → Agent.'],18)
+ d.tail(['차이: 요청별 완성안 생성 ↔ 입력/자료/Task 변경이 지속 의미 상태를 갱신하는 처리망.', '언어 후보 추출의 오해는 제약 해법으로 해결되지 않는다. 단발 요청에서는 B가 과할 수 있다.'])
+
+def source_references(d):
+ d.via();d.comp('input',40,360,1100,140,'Interaction Manager',role='같은 화면/포인터/발화 시점 / 공개 객체와 당시 지칭을 결합')
+ d.comp('service',40,710,650,1150,'Source Reference Service',role='객체 참조의 획득 / 내용 해석 / 수명과 무효화',color=d.c)
+ d.node('provider',100,850,530,110,'객체 연동 / 시점 결합',owner='service')
+ d.node('refs',100,1170,530,140,'제공자 / 문서 / 객체 / 버전\n공유 참조 기록',kind='store',owner='service')
+ d.node('resolver',100,1520,530,130,'참조 해석 / 현재 유효성 확인',owner='service')
+ d.comp('cm',790,800,350,140,'Context Manager',role='내용 읽기의 참조 소비자')
+ d.comp('ri',790,1160,350,140,'Request Interpreter',role='지칭 후보의 참조 소비자')
+ d.comp('gateway',790,1580,350,140,'Agent Gateway',role='인계 내용의 참조 소비자')
+ d.comp('rc',40,1940,650,140,'Request Controller',role='현재 권한 / 입력 / 대상 검사 후 확정, Task Manager에 인계')
+ d.model(1870)
+ d.edge('input','provider',via=[(590,580),(365,580)],label='당시 지칭/선택 결합',at=(100,575))
+ d.edge('provider','refs',label='객체 identity와 시점 기록',at=(100,1060))
+ d.edge('refs','resolver',label='같은 참조로 후속 접근',at=(100,1400))
+ d.edge('resolver','provider',sp='L',tp='L',via=[(80,1585),(80,905)],label='제공자 재조회 / 무효화',at=(120,1735))
+ for key,lane,delta in [('cm',720,-35),('ri',740,0),('gateway',760,35)]:
+  y=d.p.port(d.s+key,'L',-20)[1]
+  d.edge(key,'resolver',sp='L',tp='R',sd=-20,td=delta,via=[(lane,y),(lane,1585+delta)])
+  d.edge('resolver',key,sp='R',tp='L',sd=delta+12,td=20,via=[(lane+8,1597+delta),(lane+8,y+40)],ret=True)
+ d.edge('ri','rc',sp='B',tp='R',via=[(965,1360),(775,1360),(775,2010)],ret=True,label='대상 후보 반환 / 현재 검사',at=(100,1865))
+ d.edge('input','rc',sp='L',tp='L',via=[(4,430),(4,2010)],color=INK)
+ d.edge('rc','ri',sp='R',tp='R',sd=35,td=-45,via=[(1182,2045),(1182,1185)],color=INK,label='원문 해석 요청',at=(790,2040))
+ d.model_call('ri')
+ d.node('source',40,2180,650,110,'같은 앱 / 문서 source\n객체 읽기 / 선택 및 버전 / 재확인',kind='model',color=INK)
+ d.edge('provider','source',sp='L',tp='L',sd=-20,td=-20,via=[(16,885),(16,2215)])
+ d.edge('source','provider',sp='L',tp='L',sd=20,td=20,via=[(28,2255),(28,925)],ret=True)
+ d.text(80,2100,['Agent Gateway는 확정 명령의 자료만 해석해 외부 Agent에 전달.'],17)
+ d.tail(['차이: 당시 화면 영역이 주 대상 ↔ source 참조를 입력/조회/해석/인계가 함께 소비.', '단순 객체 힌트 adapter만으로 충분하다면 이 구조의 주요 DP 자격은 약해진다.'])
+
+def semantic(d):
+ if d.s=='B':return semantic_workspace(d)
+ d.via();d.comp('rc',40,360,720,130,'Request Controller',role='같은 원문/근거 전달, 현재 조건 검사')
+ d.comp('ri',40,650,1100,1040,'Request Interpreter')
+ d.node('producer',100,770,480,120,'통합 의미 생성',owner='ri')
+ d.node('proposal',100,1040,480,110,'완성 관계 제안\n목표 / 대상 / Task / 조건',kind='data',owner='ri')
+ d.node('validator',100,1330,480,120,'제안 검증',owner='ri')
+ d.edge('rc','producer',via=[(400,580),(340,580)],label='근거를 함께 전달',at=(425,555))
+ d.edge('producer','proposal',label='모델이 전체 관계 생산',at=(355,955))
+ d.edge('proposal','validator',label='존재 / 현재 권한 / 모순 검사',at=(355,1230))
+ d.edge('validator','producer',sp='L',tp='L',via=[(75,1390),(75,830)],label='오류이면 제한된 재해석',at=(630,1440))
+ d.text(650,1090,['전체 관계를 만드는 주체: 모델','검증기는 완성안을 검사','실패: 재해석 또는 사용자 확인'],21)
+ d.model();d.model_call('producer')
+ d.comp('out',40,1810,620,140,'Request Controller',role='최종 의미 또는 질문을 받아 현재 조건 확인')
+ d.edge('validator','out',via=[(340,1730),(350,1730)],ret=True,label='검증 결과 반환',at=(380,1735))
+ d.text(40,2060,['확정 후 Task Manager → Agent Gateway → Downstream Agent', '접수/결과 반환 후 Response Manager가 사용자에게 전달'],19)
+ d.tail(['차이: 요청별 완성안 생성 ↔ 지속 의미 상태에서 해와 질문 도출.', '외부 포트가 같아도 내부 생산 체계는 다르다. 주요 결정의 규모는 본문에서 별도 판단.'])
+
+def grounding(d):
+ if d.s=='B':return source_references(d)
+ d.via();d.comp('input',40,360,1100,140,'Interaction Manager',role='같은 화면/포인터/발화 시점. B도 화면 보조 근거 사용 가능')
+ d.comp('cm',40,650,650,650,'Context Manager')
+ d.node('buffer',100,780,520,120,'시점별 화면 / 포인터\n유한 RAM 기록',kind='store',owner='cm')
+ d.node('align',100,1090,520,110,'관측 조립',owner='cm')
+ d.edge('input','buffer',via=[(590,565),(360,565)],label='당시 관측 전달',at=(120,575))
+ d.edge('buffer','align',label='발화 시점의 장면 선택',at=(380,990))
+ d.text(760,900,['이미지 속 영역을 대상으로 해석','ID 힌트도 사용할 수 있음','현재 문서와 같다는 확인은 별도'],20)
+ d.comp('ri',40,1460,620,150,'Request Interpreter',role='원문과 근거를 같은 모델로 해석, 대상 후보 반환')
+ src='align' if d.s=='A' else 'resolver'
+ sx=d.p.port(d.s+src,'B')[0]-d.x
+ d.edge(src,'ri',via=[(sx,1390),(350,1390)],label='Request Controller 경유: 지칭 근거',at=(80,1335))
+ d.model(1810)
+ d.edge('ri','ma',sp='R',tp='L',via=[(740,1535),(740,1875)],color=INK,label='의미 요청',at=(770,1665))
+ d.edge('ma','ri',sp='L',tp='R',sd=30,td=30,via=[(760,1905),(760,1565)],ret=True,color=INK)
+ d.comp('rc',40,1810,620,140,'Request Controller',role='현재 사용 가능한 대상인지 검사, 인계 또는 질문')
+ d.edge('ri','rc',ret=True,label='관측 영역' if d.s=='A' else '제공자/문서/범위 참조',at=(80,1720))
+ d.node('source',40,2150,620,110,'같은 앱 / 문서 환경\n화면 관측과 공개 객체 읽기',kind='model',color=INK)
+ src='input' if d.s=='A' else 'provider';sy=d.p.port(d.s+src,'L',-20)[1]
+ d.edge(src,'source',sp='L',tp='L',sd=-20,td=-20,via=[(16,sy),(16,2185)])
+ sy=d.p.port(d.s+src,'L',20)[1]
+ d.edge('source',src,sp='L',tp='L',sd=20,td=20,via=[(28,2225),(28,sy)],ret=True)
+ d.text(40,2060,['A: 당시 화면을 획득 / B: 제공자에 객체 읽기와 재확인 요청', '확정 대상 → Task Manager → Agent Gateway → Agent, 접수/결과 반환'],18)
+ d.tail(['차이: 화면 기록의 해석 경로 ↔ 제공자/참조의 지속 재조회 경로.', '공개 객체가 없는 영역은 B의 자동 인계가 제한된다. 혼합과 연동 개발의 규모를 별도 판단.'])
+
+def dialogue(d):
+ d.via()
+ if d.s=='A':
+  d.comp('owner',40,360,650,1450,'Request Controller',role='발화 수신 / 전체 대화 상태의 확정 owner')
+  d.node('state',100,650,520,150,'중앙의 대화 관계 / 질문\n내구 상태 + 관련 Task cache',kind='store',owner='owner')
+  d.node('gather',100,1030,520,120,'전체 발화 해석 조정',owner='owner')
+  d.node('apply',100,1530,520,120,'대화 상태 / 명령 확정',owner='owner')
+  d.comp('ri',790,1010,350,150,'Request Interpreter')
+  d.model(1590)
+  d.edge('state','gather',label='관련 대화 공동 회수',at=(380,900))
+  d.edge('gather','ri',sp='R',tp='L',sd=-5,label='전체 발화 요청',at=(650,1040))
+  d.edge('ri','apply',sp='L',tp='R',sd=35,via=[(735,1120),(735,1590)],ret=True,label='전체 의미/상태 제안',at=(755,1280))
+  d.edge('apply','state',sp='L',tp='L',via=[(75,1590),(75,725)],label='중앙 상태 갱신',at=(120,1435))
+  d.edge('ri','ma',sd=-20,td=-20,color=INK)
+  d.edge('ma','ri',sp='T',tp='B',sd=20,td=20,ret=True,color=INK)
+  d.text(100,1880,['같은 중앙 해석 결과로 업무 간 참조와 상태 변경을 구성.', 'Task별 cache가 있어도 독립 대화 실행자는 없음.'],20)
  else:
-  p.component(k('ma'),x+808,800,340,140,'Model Access',role='역할별 요청 / 한 weights');target=k('ma')
- p.node(k('omni'),x+808,1940,340,120,'공유 Omni 한 개\n모델 내부는 책임 밖',kind='model')
- # Route model dependency in the unused outer lane, avoiding the external-work note.
- mx=x+1160
- sy=p.port(k('ma'),'R',-20)[1]
- p.edge(k('ma'),k('omni'),sp='R',tp='R',sd=-20,td=-20,via=[(mx,sy),(mx,1980)],label='추론 요청',at=(x+835,1840))
- sy=p.port(k('ma'),'R',20)[1]
- p.edge(k('omni'),k('ma'),sp='R',tp='R',sd=20,td=20,via=[(x+1174,2020),(x+1174,sy)],ret=True)
- return target
+  d.comp('rc',40,360,1100,140,'Request Controller',role='현재 질문/Task/권한 확인, 유효 제안만 적용 허용')
+  d.comp('coord',40,660,1100,150,'Dialogue Coordinator',role='참가 / 절별 제안 경쟁 / 누락 / 교차 참조 조정',color=d.c)
+  d.comp('runtime',40,1010,1100,720,'Task Dialogue Runtime',role='논리 실행 단위. 같은 process / 같은 모델 자원',color=d.c)
+  for name,x,title in [('report',100,'보고서'),('mail',700,'메일')]:
+   d.node(name,x,1120,390,120,title+' 대화 actor',owner='runtime')
+   d.node(name+'state',x,1450,390,140,'자기 질문 / 제약 / 우편함\n내구 상태',kind='store',owner='runtime')
+   d.edge(name,name+'state',sd=-20,td=-20,label='채택된 전이 / 상태 조회',at=(x+15,1310))
+   d.edge(name+'state',name,sp='T',tp='B',sd=20,td=20,ret=True)
+   offset=-295 if name=='report' else 305
+   d.edge('coord',name,sd=offset-20,td=-20,label='입력/참조 전달',at=(x,900))
+   d.edge(name,'coord',sp='T',tp='B',sd=20,td=offset+20,ret=True)
+  d.edge('rc','coord',sd=-20,td=-20,color=INK,label='입력 / 현재 적용 허용',at=(615,560))
+  d.edge('coord','rc',sp='T',tp='B',sd=20,td=20,ret=True,color=INK)
+  d.comp('ri',40,1880,620,140,'Request Interpreter',role='actor가 자신의 맥락과 원문 구간을 제공')
+  d.model(1885)
+  # Each actor calls the common interpreter. Its mailbox, state and proposal are separate.
+  d.edge('report','ri',sp='L',tp='L',via=[(65,1180),(65,1810),(20,1810),(20,1950)])
+  d.edge('ri','report',sp='L',tp='L',sd=25,td=25,via=[(8,1975),(8,1790),(85,1790),(85,1205)],ret=True)
+  d.edge('mail','ri',sp='R',tp='R',via=[(1160,1180),(1160,1790),(730,1790),(730,1950)])
+  d.edge('ri','mail',sp='R',tp='R',sd=25,td=25,via=[(750,1975),(750,1810),(1174,1810),(1174,1205)],ret=True)
+  d.edge('ri','ma',sp='R',tp='L',sd=-20,td=-20,color=INK)
+  d.edge('ma','ri',sp='L',tp='R',sd=20,td=20,ret=True,color=INK)
+  d.text(40,2060,['actor 제안은 Coordinator로 반환. 참조 요청도 Coordinator 중개.', '현재 검사 후 채택 상태/명령을 local transaction으로 확정하고 통지.'],18)
+ d.tail(['확정 명령은 Task Manager → Agent Gateway → Agent. 외부 질문/결과와 실제 전달은 대화 owner로 복귀.', '차이: 중앙의 공동 해석/갱신 ↔ 여러 상태 보유 실행자의 제안/조정/채택.'])
 
-def call(p,src,dst,x,y,c=INK):
- # Right-facing request/return on separate horizontal lanes, offset to target centre.
- sx,sy,sw,sh=p.nodes[src];dx,dy,dw,dh=p.nodes[dst]
- yy=dy+dh/2
- p.edge(src,dst,sp='R',tp='L',sd=yy-25-(sy+sh/2),td=-25,label='요청',at=(x,y),color=c)
- p.edge(dst,src,sp='L',tp='R',sd=25,td=yy+25-(sy+sh/2),ret=True,color=c)
+def voice(d):
+ d.via();d.comp('input',40,360,1100,140,'Interaction Manager',role='Speech Input Worker의 연속 ASR / 재생 중 local stop은 양안 공통')
+ d.comp('ri',790,740,350,140,'Request Interpreter')
+ d.comp('cm',790,1080,350,140,'Context Manager')
+ d.comp('rm',790,1460,350,140,'Response Manager')
+ d.model(1840);d.model_call('ri')
+ d.edge('rm','ma',sd=-40,td=-40,color=INK,label='응답 준비 추론',at=(790,1740))
+ d.edge('ma','rm',sp='T',tp='B',sd=40,td=40,ret=True,color=INK)
+ if d.s=='A':
+  d.comp('rc',40,670,650,1290,'Request Controller')
+  for key,y,label in [('utterance',790,'확정 발화 / 요청 버전'),('read',1040,'근거 읽기 조정'),('interpret',1290,'확정 요청 해석'),('commit',1750,'현재 의미 / 권한 확정')]:
+   d.node(key,100,y,520,110,label,kind='data' if key=='utterance' else 'module',owner='rc')
+  d.edge('input','utterance',via=[(590,585),(360,585)],label='발화 확정 후 전달',at=(100,560))
+  d.edge('utterance','read',label='확정 전에는 이 요청을 시작하지 않음',at=(100,945))
+  d.edge('read','cm',sp='R',tp='L',via=[(735,1095),(735,1150)],label='근거 요청',at=(645,1050))
+  d.edge('cm','interpret',sp='L',tp='R',sd=25,via=[(755,1175),(755,1345)],ret=True)
+  d.edge('interpret','ri',sp='R',tp='L',via=[(710,1345),(710,810)],label='전체 해석',at=(640,920))
+  d.edge('ri','commit',sp='L',tp='R',sd=25,via=[(730,835),(730,1805)],ret=True)
+  d.edge('commit','rm',sp='R',tp='L',via=[(755,1805),(755,1530)],label='확정 응답 요청',at=(110,1670))
+ else:
+  d.comp('runtime',40,670,650,1080,'Incremental Interaction Runtime',color=d.c)
+  d.node('fragment',100,790,520,110,'부분 발화 / 수정 버전',kind='data',owner='runtime')
+  d.node('deps',100,1050,520,140,'잠정 의미 / 읽기 / 응답의\n의존 그래프 (RAM)',kind='store',owner='runtime')
+  d.node('jobs',100,1410,520,140,'의존 작업 배정 / 무효화 / 재사용',owner='runtime')
+  d.edge('input','fragment',via=[(590,585),(360,585)],label='부분 갱신마다 전달',at=(100,560))
+  d.edge('fragment','deps',label='새 입력으로 영향 범위 갱신',at=(100,945))
+  d.edge('deps','jobs',sd=-20,td=-20,label='유효 결과 / 필요한 작업',at=(100,1270))
+  d.edge('jobs','deps',sp='T',tp='B',sd=20,td=20,ret=True)
+  for key,lane in [('ri',710),('cm',735),('rm',760)]:
+   ty=d.p.port(d.s+key,'L',-15)[1]
+   delta={'ri':-35,'cm':0,'rm':35}[key]
+   d.edge('jobs',key,sp='R',tp='L',sd=delta,td=-15,via=[(lane,1480+delta),(lane,ty)])
+   d.edge(key,'jobs',sp='L',tp='R',sd=15,td=delta+10,via=[(lane+7,ty+30),(lane+7,1490+delta)],ret=True)
+  d.comp('rc',40,1840,650,130,'Request Controller',role='유효한 의미 / 현재 권한으로 확정 경계 갱신')
+  d.edge('jobs','rc',via=[(360,1780),(365,1780)],label='유효 결과만 확정 요청',at=(100,1770))
+  d.edge('rc','rm',sp='R',tp='B',via=[(745,1905),(745,1690),(965,1690)],color=INK,label='게시 허용',at=(790,1680))
+  d.text(100,1580,['정정: 관련 작업 폐기', '늦은 옛 결과는 무시'],20)
+ d.text(40,2070,['Response Manager → Interaction Manager: 허용된 Text/음성, 실제 전달 반환.', 'B의 응답 준비는 게시 허용과 다름. 승인 전 외부 변경은 양안 모두 금지.'],18)
+ d.tail(['차이: 확정 요청의 단계 진행 ↔ 수정 사건이 의미/읽기/응답 작업을 갱신하는 실행망.', '단순 ASR/TTS streaming이나 읽기 한 번의 prefetch만으로 B 전체를 정당화하지 않는다.'])
 
-def flow(p,a,b,label,x,y,c=INK):
- p.edge(a,b,sd=-22,td=-22,label=label,at=(x,y),color=c)
- p.edge(b,a,sp='T',tp='B',sd=22,td=22,ret=True,color=c)
+def state(d):
+ d.via();d.comp('rc',40,360,1100,140,'Request Controller',role='Task Manager 등 의미 owner도 같은 State Store 계약을 사용')
+ d.comp('ss',40,680,1100,1310,'State Store',role='한 local transaction으로 원본, 현재 view와 전송 intent의 일관성 유지')
+ if d.s=='A':
+  d.node('write',100,820,430,120,'현재 변경 집합 적용',owner='ss')
+  d.node('current',100,1160,430,140,'현재 owner record\n내구 원본',kind='store',owner='ss')
+  d.node('ledger',700,1160,390,140,'미완료 inbox/outbox\n내구 전송 원장',kind='store',owner='ss')
+  d.node('read',100,1590,430,120,'현재 상태 읽기 / 복원',owner='ss')
+  d.edge('rc','write',via=[(590,570),(315,570)],label='새 상태와 전송 intent',at=(100,555))
+  d.edge('write','current',label='원자 갱신',at=(335,1030))
+  d.edge('write','ledger',sp='R',tp='T',via=[(605,880),(605,1050),(895,1050)],label='같은 transaction',at=(680,1000))
+  d.edge('current','read',ret=True,label='현재 값을 그대로 복원',at=(335,1410))
+  d.edge('ledger','read',sp='B',tp='R',via=[(895,1470),(605,1470),(605,1650)],ret=True)
+  d.edge('read','rc',sp='L',tp='L',via=[(20,1650),(20,430)],ret=True)
+  d.text(700,1590,['감사 log와 backup은 추가 가능.', '현재 상태를 매번 사건에서', '다시 만들 필요는 없음.'],22)
+ else:
+  d.node('append',100,820,430,110,'의미 사건 확정',owner='ss')
+  d.node('journal',100,1060,430,130,'의미 사건 journal\n내구 원본',kind='store',owner='ss')
+  d.node('reduce',700,1060,390,130,'상태 전이 reducer',owner='ss')
+  d.node('replay',100,1410,430,110,'checkpoint + 후속 사건 재생',owner='ss')
+  d.node('view',700,1410,390,130,'현재 projection\n다시 만들 수 있는 view',kind='store',owner='ss')
+  d.node('checkpoint',100,1740,430,110,'검증된 checkpoint\n파생 snapshot',kind='store',owner='ss')
+  d.node('ledger',700,1740,390,110,'전송 intent / 원장',kind='store',owner='ss')
+  d.edge('rc','append',via=[(590,570),(315,570)],label='새 상태 값 대신 의미 전이',at=(100,555))
+  d.edge('append','journal',label='사건 append',at=(335,970))
+  d.edge('journal','reduce',sp='R',tp='L',label='순서 있는 사건',at=(555,1070))
+  d.edge('reduce','view',label='결정적 전이로 상태 생성',at=(720,1290))
+  d.edge('journal','replay',ret=True,label='재시작 시 후속 사건',at=(100,1290))
+  d.edge('checkpoint','replay',sp='T',tp='B',ret=True,label='검증된 시작점',at=(100,1600))
+  d.edge('replay','reduce',sp='R',tp='L',sd=-20,td=30,via=[(615,1445),(615,1155)],label='같은 전이 함수',at=(540,1340))
+  d.edge('view','checkpoint',sp='L',tp='R',sd=25,via=[(630,1500),(630,1795)],label='검증 후 주기적 보관',at=(690,1595))
+  d.edge('append','ledger',sp='R',tp='R',via=[(1110,875),(1110,1795)])
+  d.edge('view','rc',sp='R',tp='R',sd=-25,via=[(1160,1450),(1160,430)],ret=True)
+ d.text(40,2070,['Agent Gateway ↔ Downstream Agent: 전송 / 실제 접수 조회.', '현재 불명 접수는 양안 모두 외부 조회. replay는 외부 명령을 실행하지 않음.'],19)
+ d.tail(['차이: 현재 원본 직접 갱신/읽기 ↔ 사건 원본과 파생 view의 생산/재생.', 'B의 역전환은 더 쉬울 수 있다. 그 사실을 전환 비용 판단에 포함한다.'])
 
-def returned(p,a,b,label,x,y,c=INK):
- p.edge(a,b,label=label,at=(x,y),color=c,ret=True)
+def isolation(d):
+ d.via()
+ if d.s=='A':
+  d.bound('core',40,360,1100,1590,'신뢰 Core process','아래 자료 처리 코드도 같은 OS 권한',d.c)
+  d.comp('rc',100,480,430,140,'Request Controller')
+  d.comp('policy',700,480,390,140,'Policy Manager')
+  d.comp('cm',100,900,430,140,'Context Manager')
+  d.node('raw',700,900,390,140,'원문 / cache / DB\n공유 접근 영역',kind='store')
+  d.comp('ri',100,1300,430,140,'Request Interpreter')
+  d.comp('ma',700,1300,390,140,'Model Access')
+  d.comp('gateway',700,1760,390,130,'Agent Gateway')
+  d.edge('rc','policy',sp='R',tp='L',sd=-20,td=-20,color=INK,label='현재 정책 검사',at=(555,480))
+  d.edge('policy','rc',sp='L',tp='R',sd=20,td=20,ret=True,color=INK)
+  d.edge('rc','cm',sd=-20,td=-20,label='허용 자료 요청',at=(335,735))
+  d.edge('cm','rc',sp='T',tp='B',sd=20,td=20,ret=True)
+  d.edge('cm','raw',sp='R',tp='L',sd=-20,td=-20,label='직접 읽기 / 공유 참조',at=(555,890))
+  d.edge('raw','cm',sp='L',tp='R',sd=20,td=20,ret=True)
+  d.edge('rc','ri',sp='L',tp='L',sd=-20,td=-20,via=[(75,530),(75,1350)],label='근거 전달',at=(115,1160))
+  d.edge('ri','rc',sp='L',tp='L',sd=20,td=20,via=[(60,1390),(60,570)],ret=True)
+  d.edge('ri','ma',sp='R',tp='L',sd=-20,td=-20,color=INK,label='직접 모델 요청',at=(555,1290))
+  d.edge('ma','ri',sp='L',tp='R',sd=20,td=20,ret=True,color=INK)
+  d.edge('rc','gateway',via=[(315,700),(600,700),(600,1700),(895,1700)],label='Task Manager 경유 확정 명령',at=(100,1760))
+  d.node('source',100,2150,430,110,'앱 / 문서 source\nCore adapter 직접 읽기',kind='model',color=INK)
+  d.edge('cm','source',sp='L',tp='L',sd=-20,td=-20,via=[(16,950),(16,2185)])
+  d.edge('source','cm',sp='L',tp='L',sd=20,td=20,via=[(28,2225),(28,990)],ret=True)
+  d.node('omni',700,2150,390,110,'공유 Omni 한 개\n신뢰 의존성',kind='model',color=INK)
+  d.edge('ma','omni',sp='R',tp='R',sd=-20,td=-20,via=[(1150,1350),(1150,2185)],color=INK)
+  d.edge('omni','ma',sp='R',tp='R',sd=20,td=20,via=[(1166,2225),(1166,1390)],ret=True,color=INK)
+ else:
+  d.bound('restricted',40,770,550,940,'제한 process','전역 파일/DB/network 권한 제거',d.c)
+  d.bound('core',660,360,480,1590,'신뢰 Core process','Broker/정책/모델 연동',INK)
+  d.comp('rc',700,480,400,130,'Request Controller')
+  d.comp('policy',700,730,400,130,'Policy Manager')
+  d.comp('broker',700,1020,400,230,'Data Access Broker',role='허용 읽기 / 자료 handle / job 중개',color=d.c)
+  d.comp('ma',700,1460,400,130,'Model Access')
+  d.comp('gateway',700,1770,400,130,'Agent Gateway')
+  d.comp('cm',80,900,470,140,'Context Manager')
+  d.comp('ri',80,1360,470,140,'Request Interpreter')
+  d.edge('broker','policy',sp='T',tp='B',sd=-20,td=-20,label='정책 확인',at=(720,940),color=INK)
+  d.edge('policy','broker',sd=20,td=20,ret=True,color=INK)
+  d.edge('rc','broker',sp='R',tp='R',sd=-20,td=-20,via=[(1120,525),(1120,1115)],label='유효 요청/범위',at=(80,580),color=INK)
+  d.edge('rc','cm',sp='L',tp='T',via=[(315,545)],label='허용 근거 요청 / 반환',at=(80,670),color=INK)
+  d.edge('cm','rc',sp='T',tp='L',sd=25,td=25,via=[(340,570)],ret=True,color=INK)
+  d.edge('cm','broker',sp='R',tp='L',sd=-20,td=-40,via=[(610,950),(610,1095)],label='자료 요청',at=(570,880))
+  d.edge('broker','cm',sp='L',tp='R',sd=-10,td=20,via=[(625,1125),(625,990)],ret=True)
+  d.edge('rc','ri',sp='L',tp='T',sd=45,td=-20,via=[(645,590),(645,1280),(295,1280)])
+  d.edge('ri','rc',sp='T',tp='L',sd=20,td=55,via=[(335,1260),(650,1260),(650,600)],ret=True)
+  d.edge('ri','broker',sp='R',tp='L',sd=-20,td=45,via=[(610,1410),(610,1180)],label='모델 job 요청',at=(80,1580))
+  d.edge('broker','ri',sp='L',tp='R',sd=75,td=20,via=[(625,1210),(625,1450)],ret=True)
+  d.edge('broker','ma',sd=-20,td=-20,label='검증된 job만',at=(720,1350))
+  d.edge('ma','broker',sp='T',tp='B',sd=20,td=20,ret=True)
+  d.edge('gateway','broker',sp='R',tp='R',sd=-20,td=40,via=[(1160,1815),(1160,1175)])
+  d.edge('broker','gateway',sp='R',tp='R',sd=65,td=20,via=[(1174,1200),(1174,1855)],ret=True)
+  d.node('source',80,2150,470,110,'앱 / 문서 source\nBroker만 실제 읽기 권한 보유',kind='model',color=INK)
+  d.edge('broker','source',sp='L',tp='R',sd=100,td=-20,via=[(635,1235),(635,2185)])
+  d.edge('source','broker',sp='R',tp='L',sd=20,td=110,via=[(650,2225),(650,1245)],ret=True)
+  d.node('omni',700,2150,400,110,'공유 Omni 한 개\n신뢰 의존성',kind='model',color=INK)
+  d.edge('ma','omni',sp='R',tp='L',sd=20,td=-20,via=[(1148,1545),(1148,2070),(680,2070),(680,2185)],color=INK)
+  d.edge('omni','ma',sp='L',tp='R',sd=20,td=40,via=[(668,2225),(668,2050),(1130,2050),(1130,1565)],ret=True,color=INK)
+  d.text(80,1810,['제한 process에서 source/model로 직접 가는 경로 없음.', 'Agent Gateway의 자료 제공도 Broker에서 검증.'],18)
+ d.text(40,1995,['확정 명령은 Task Manager → Agent Gateway → Agent. 접수/결과는 같은 경로로 반환.'],18)
+ d.tail(['차이: 직접 접근 가능한 공유 주소/권한 공간 ↔ 실제 권한이 없는 처리 영역과 중개 통로.', 'Broker, Core와 공유 모델 자체의 침해는 이 격리의 보호 주장 밖이다.'])
 
 def structural(n):
- p=plate(n)
+ p=Plate(f'choice{n}-structure',f'04-{n}',TITLES[n],
+  '공통 조건은 유지하고 각 안의 실제 생산/상태/실행 관계를 펼침. 배열이나 색 차이 자체는 구조 자격의 증거가 아님.',height=2600)
  for x,s in [(64,'A'),(1312,'B')]:
-  c,k=head(p,x,s,n);common(p,x,k,'Interaction Manager' if n in (32,34) else 'Request Controller','Response Manager' if n==34 else 'Request Controller',note_offset=840 if n==36 else 800)
-  if n==31:
-   p.component(k('engine'),x+36,700,720,730,'Request Interpreter')
-   p.node(k('first'),x+70,810,652,100,'통합 의미 생성' if s=='A' else '표현 변환 / 후보 생산',color=c,owner=k('engine'))
-   p.node(k('ir'),x+70,1030,652,105,'완성된 전체 관계 제안 (임시)' if s=='A' else '타입 있는 의미 IR / 후보 표 (임시)',kind='data',color=c,owner=k('engine'))
-   p.node(k('last'),x+70,1250,652,105,'제안 검증' if s=='A' else '제약 해결 / 충돌 질문 생성',color=c,owner=k('engine'))
-   p.edge(k('first'),k('ir'),label='모델 결과',at=(x+435,950),color=c)
-   p.edge(k('ir'),k('last'),label='완성안 검사' if s=='A' else '관계의 해를 구성',at=(x+435,1170),color=c)
-   target=model(p,x,k,k('first'));call(p,k('first'),target,x+765,785)
-   flow(p,k('input'),k('engine'),'해석 요청 / 제안 반환',x+430,590)
-   returned(p,k('engine'),k('commit'),'의미 / 미해결 반환',x+430,1510,c)
-   p.text(x+36,1910,['A: 모델이 전체 관계 생산 → 코드가 실행 가능성 검사', 'B: 모델은 후보 생산 → 규칙/해법이 관계 구성', '같은 Request Interpreter 책임 안의 핵심 생산 구조 교체'],21,MUTED)
-  elif n==32:
-   p.component(k('cm'),x+36,680,720,470,'Context Manager')
-   p.node(k('prod'),x+70,795,652,105,'관측 조립' if s=='A' else '객체 연동 / 시점 결합 / 참조 해석',color=c,owner=k('cm'))
-   p.node(k('data'),x+70,990,652,110,'시점별 화면/지시 묶음 (RAM)' if s=='A' else '제공자/문서/객체/버전 참조 (RAM)',kind='store',color=c,owner=k('cm'))
-   p.edge(k('prod'),k('data'),label='근거 생산',at=(x+430,935),color=c)
-   p.component(k('mainri'),x+36,1280,720,150,'Request Interpreter',role='지칭 후보 반환 / source와 현재 사용 가능성 확인')
-   flow(p,k('input'),k('cm'),'관측 전달 / 수신 확인',x+430,595)
-   p.edge(k('cm'),k('mainri'),label='Request Controller 경유: 발화와 대상 근거',at=(x+180,1200),color=c)
-   target=model(p,x,k,k('prod'))
-   # Actual model interpretation is owned by Request Interpreter, not Context Manager.
-   p.items=[i for i in p.items if not (i.get('source') in (k('prod'),target) and i.get('target') in (k('prod'),target))]
-   p.edge(k('mainri'),k('ma'),sp='R',tp='L',sd=-30,td=0,via=[(x+782,1325),(x+782,870)],label='의미 요청',at=(x+800,1400))
-   p.edge(k('ma'),k('mainri'),sp='L',tp='R',sd=35,td=30,via=[(x+796,905),(x+796,1385)],ret=True)
-   returned(p,k('mainri'),k('commit'),'후보 반환 / 현재 유효성 확인',x+430,1500,c)
-   p.node(k('source'),x+36,1940,720,120,'같은 앱/문서 환경 (VIA 밖)\nA 화면 관측 / B 공개 객체 읽기와 재확인',kind='model')
-   src=k('input') if s=='A' else k('cm')
-   sy=p.port(src,'L',-25)[1]
-   p.edge(src,k('source'),sp='L',tp='L',sd=-25,td=-25,via=[(x+12,sy),(x+12,1975)],color=c)
-   sy=p.port(src,'L',25)[1]
-   p.edge(k('source'),src,sp='L',tp='L',sd=25,td=25,via=[(x+24,2025),(x+24,sy)],ret=True,color=c)
-   p.text(x+36,1830,'source 요청/반환: A 관측 획득 / B 객체 읽기, 유효성 재확인',19,MUTED)
-  elif n==33:
-   if s=='A':
-    p.component(k('owner'),x+36,700,720,415,'Request Controller',role='중앙 Conversation의 의미/질문 상태 소유')
-    p.node(k('state'),x+70,870,652,140,'관련 업무/질문 관계 (내구)\n업무별 요약/cache도 사용 가능',kind='store',color=c,owner=k('owner'))
-    p.node(k('engine'),x+36,1270,720,150,'전체 의미 / 대화 변경 제안\n중앙 해석 결과 (임시)',kind='data',color=c)
-    flow(p,k('input'),k('owner'),'같은 발화와 실제 제시 기록',x+430,590)
-    returned(p,k('owner'),k('engine'),'중앙 해석 결과를 확정 경로로',x+430,1190,c)
-   else:
-    p.component(k('owner'),x+36,700,720,200,'Dialogue Coordinator',color=c,role='참가자 / 절별 제안 / 충돌과 교차 참조 조정')
-    p.component(k('engine'),x+36,1040,720,460,'Task Dialogue Runtime',color=c,role='논리 actor의 사건 처리 / OS process 아님')
-    for j,off in enumerate((70,404)):
-     p.node(k('actor'+str(j)),x+off,1160,310,100,'보고서 대화 actor' if j==0 else '메일 대화 actor',color=c,owner=k('engine'))
-     p.node(k('state'+str(j)),x+off,1315,310,110,'자기 질문/제약\n내구 상태 + 우편함',kind='store',color=c,owner=k('engine'))
-    flow(p,k('input'),k('owner'),'입력 / 후보 참가자',x+430,590)
-    flow(p,k('owner'),k('engine'),'발화/참조 요청과 actor 제안 반환',x+430,955,c)
-   target=model(p,x,k,k('owner'),True)
-   # Request/return through right lane to interpreter; actor requests may finish at different times.
-   src=k('owner') if s=='A' else k('engine')
-   sy=p.port(src,'R',-20)[1]; ty=p.port(target,'L',-25)[1]
-   p.edge(src,target,sp='R',tp='L',sd=-20,td=-25,via=[(x+780,sy),(x+780,ty)],label='해석 요청',at=(x+804,990),color=c)
-   sy=p.port(src,'R',20)[1];ty=p.port(target,'L',25)[1]
-   p.edge(target,src,sp='L',tp='R',sd=25,td=20,via=[(x+794,ty),(x+794,sy)],ret=True,color=c)
-   if s=='A':returned(p,k('engine'),k('commit'),'변경 제안 / 유효성 검사와 확정',x+420,1530,c)
-   else:
-    p.edge(k('owner'),k('commit'),sp='L',tp='L',sd=0,td=0,via=[(x+16,800),(x+16,1672.5)],label='채택 제안 / 현재 guard',at=(x+65,1540),color=c)
-    p.edge(k('commit'),k('owner'),sp='L',tp='L',sd=25,td=25,via=[(x+28,1697.5),(x+28,825)],ret=True,color=c)
-   p.text(x+36,1880,['A: 중앙이 의미와 대화 변경을 구성', 'B: actor가 로컬 상태 전이를 제안, Coordinator가 채택', '양안 같은 단일 모델 / 질문 후보 경쟁을 도착 순서로 결정 금지'],20,MUTED)
-  elif n==34:
-   p.component(k('engine'),x+36,700,720,750,'Request Controller' if s=='A' else 'Incremental Interaction Runtime',color=INK if s=='A' else c)
-   p.node(k('in'),x+70,815,652,115,'확정 발화 / 요청 버전' if s=='A' else '부분 발화 / 수정 버전',kind='data',color=c,owner=k('engine'))
-   p.node(k('work'),x+70,1050,652,110,'확정 요청의 해석 진행' if s=='A' else '잠정 의미/읽기/응답 준비의 의존망',color=c,owner=k('engine'))
-   p.node(k('state'),x+70,1260,652,110,'완성 의미 또는 미해결 제안 (요청 RAM)' if s=='A' else '유효 결과 / 무효화 및 재사용 (임시 RAM)',kind='store',color=c,owner=k('engine'))
-   p.edge(k('in'),k('work'),label='확정 후 시작' if s=='A' else '갱신마다 필요한 작업',at=(x+435,975),color=c)
-   p.edge(k('work'),k('state'),label='결과 기록',at=(x+435,1190),color=c)
-   flow(p,k('input'),k('engine'),'같은 ASR, 연속 수신과 즉시 stop',x+405,590)
-   target=model(p,x,k,k('engine'),True);call(p,k('engine'),target,x+765,785,c)
-   flow(p,k('engine'),k('commit'),'Request Controller의 현재 확정 경계 통과 후',x+350,1510,c)
-   p.text(x+36,1860,['Context Manager의 허용된 읽기도 작업 결과로 연결.', 'Response Manager → Interaction Manager: Text/음성 게시.', 'Interaction Manager → Response Manager: 실제 전달 반환.', 'A도 입력 ASR와 출력 음성 chunk는 streaming 가능.'],20,MUTED)
-  elif n==35:
-   p.component(k('store'),x+36,700,720,750,'State Store',role='같은 local transaction, 저장 형태와 원본이 다름')
-   p.node(k('first'),x+70,820,652,110,'현재 변경 집합 확정' if s=='A' else 'Journal Append / 의미 사건 확정',color=c,owner=k('store'))
-   p.node(k('authority'),x+70,1030,652,110,'현재 owner record + 미완료 원장\n내구 원본' if s=='A' else '의미 사건 journal\n내구 원본',kind='store',color=c,owner=k('store'))
-   p.node(k('view'),x+70,1260,652,110,'현재 상태 읽기 / schema 변환' if s=='A' else 'Projection / Replay / Checkpoint',color=c,owner=k('store'))
-   p.edge(k('first'),k('authority'),label='원자 확정',at=(x+430,970),color=c)
-   p.edge(k('authority'),k('view'),label='복원 근거',at=(x+430,1190),color=c)
-   flow(p,k('input'),k('store'),'owner의 변경 / 확정 반환',x+430,590,c)
-   returned(p,k('store'),k('commit'),'검증된 현재 상태 반환',x+430,1510,c)
-   p.text(x+810,790,['A도 감사 이력,', 'inbox/outbox와', 'backup을 사용할 수 있음.', '', 'B replay는 모델 추론,', '외부 명령 전송이나', '음성 재생을 실행하지 않음.'],21,MUTED)
-   p.node(k('agent'),x+36,1940,720,120,'외부 Agent (VIA 밖)\n접수 불명은 현재 실행 사실 조회로 확인',kind='model')
-   p.edge(k('commit'),k('agent'),sd=-30,td=-30,label='Agent Gateway 경유 조회',at=(x+440,1850))
-   p.edge(k('agent'),k('commit'),sp='T',tp='B',sd=30,td=30,ret=True)
-  else:
-   p.boundary(k('process'),x+36,700,720,800,'Core process의 자료 처리 부분' if s=='A' else '제한 process','직접 권한 보유' if s=='A' else '전역 파일/DB/network 권한 없음',color=c,dashed=True)
-   p.component(k('cm'),x+70,790,652,185,'Context Manager',role='자료 조립/cache 부분; 정책 원본은 Core')
-   p.component(k('ri'),x+70,1150,652,175,'Request Interpreter',role='허용 근거의 의미 제안')
-   p.edge(k('cm'),k('ri'),label='Request Controller 경유: 원문/근거 전달',at=(x+180,1040),color=c)
-   p.component(k('broker'),x+808,775,340,210,'Policy Manager' if s=='A' else 'Data Access Broker',color=INK if s=='A' else c,role='현재 정책 확인' if s=='A' else '정책 owner는 Policy Manager')
-   p.component(k('ma'),x+808,1160,340,140,'Model Access',role='공유 신뢰 경계에 남음')
-   flow(p,k('input'),k('cm'),'유효한 자료 요청 / 근거 반환',x+420,590)
-   if s=='A':
-    call(p,k('cm'),k('broker'),x+765,760)
-    call(p,k('ri'),k('ma'),x+765,1135)
-   else:
-    call(p,k('cm'),k('broker'),x+765,760,c)
-    p.edge(k('ri'),k('broker'),sp='R',tp='L',sd=-25,td=50,via=[(x+774,1212.5),(x+774,930)],label='모델 job도 중개',at=(x+803,1030),color=c)
-    p.edge(k('broker'),k('ri'),sp='L',tp='R',sd=80,td=25,via=[(x+790,960),(x+790,1262.5)],ret=True,color=c)
-    flow(p,k('broker'),k('ma'),'허가 job / 반환',x+835,1000,c)
-   returned(p,k('ri'),k('commit'),'의미 반환 / 현재 근거 검증',x+430,1530)
-   p.node(k('dep'),x+36,1940,720,120,'source 자료 (VIA 밖)\nA adapter 직접 read / B Broker 경유 read',kind='model')
-   if s=='A':
-    p.edge(k('cm'),k('dep'),sp='L',tp='L',sd=-25,td=-25,via=[(x+12,857.5),(x+12,1975)],color=c)
-    p.edge(k('dep'),k('cm'),sp='L',tp='L',sd=25,td=25,via=[(x+24,2025),(x+24,907.5)],ret=True,color=c)
-   else:
-    src=k('broker');sy=p.port(src,'R',-40)[1]
-    p.edge(src,k('dep'),sp='R',tp='R',sd=-40,td=-20,via=[(x+1162,sy),(x+1162,1850),(x+770,1850),(x+770,1980)],label='자료 요청',at=(x+820,1830),color=c)
-    sy=p.port(src,'R',40)[1]
-    p.edge(k('dep'),src,sp='R',tp='R',sd=20,td=40,via=[(x+788,2020),(x+788,1880),(x+1176,1880),(x+1176,sy)],ret=True,color=c)
-   p.node(k('omni'),x+808,1940,340,120,'공유 Omni 한 개\n모델 내부는 책임 밖',kind='model')
-   p.edge(k('ma'),k('omni'),sd=-25,td=-25,via=[(x+953,1340),(x+796,1340),(x+796,1900),(x+953,1900)])
-   p.edge(k('omni'),k('ma'),sp='T',tp='B',sd=25,td=25,via=[(x+1003,1920),(x+802,1920),(x+802,1360),(x+1003,1360)],ret=True)
-   p.text(x+840,1410,['Model Access는 같은', '단일 Omni를 요청/반환.', 'Broker/Core/model', '침해 방어는 주장 밖.'],20,MUTED)
- footer(p,'설계안 / 미선정 / 미측정. Component 이름의 반복은 같은 owner의 다른 역할을 설명할 수 있다.')
+  {31:semantic,32:grounding,33:dialogue,34:voice,35:state,36:isolation}[n](Drawing(p,x,s,n))
+ footer(p,'실제 설계 차이와 전환 비용은 본문 §8~9. 이 그림은 구현/측정 또는 주요 DP 선정의 증거가 아니다.')
  return p
 
 EVENTS={
-31:[('입력과 두 표/Task 근거 확보','Interaction Manager → Request Controller ↔ Context Manager','같은 원문, 같은 근거'),('의미 생산','Request Interpreter ↔ Model Access: 전체 관계 제안','Request Interpreter ↔ Model Access: 표현/근거 후보'),('관계 구성과 반환','제안 검증 → Request Controller: 의미 또는 미해결','제약 해결 → Request Controller: 해 또는 질문 필드'),('현재 상태 확인과 확정','Request Controller: 자료/Task/권한과 입력 버전 확인','동일. 유일한 해도 사용자 의도의 증명은 아님'),('외부 인계와 결과','Task Manager → Agent Gateway → Agent / 접수와 결과 반환','동일. Response Manager → Interaction Manager: 사실 전달')],
-32:[('표를 가리킨 순간','Interaction Manager: 화면/포인터/발화 시점 수집','Context Manager ↔ source: 당시 객체/선택과 버전 획득'),('대상 근거 반환','Context Manager → Request Controller: 당시 관측 묶음','Context Manager → Request Controller: 객체/문서/범위 참조'),('문장의 지칭과 결합','Request Interpreter ↔ Model Access: 영역 후보','Request Interpreter ↔ Model Access: 객체 후보'),('스크롤 뒤 현재 사용 검사','Request Controller ↔ Context Manager: 같은 대상인지 대조','같은 경로: 제공자에 객체/버전 유효성 재확인'),('인계와 접수 확인','Task Manager → Agent Gateway → Agent: 확인 대상과 관측','동일 경로: 확인 객체 참조/내용. Agent 지원 확인 후 인계')],
+31:[('같은 복합 요청과 근거','Interaction Manager → Request Controller: 원문 / Context Manager와 Task Manager: 근거 반환','Request Interpreter → Meaning Workspace: 의미 변경 후보 / 같은 자료와 Task 사실'),('의미 생산','Request Interpreter ↔ Model Access: 전체 관계 생성 후 검사','Meaning Workspace ↔ Semantic Constraint Engine: 후보/제약에서 해 또는 미해결'),('표 확인 질문과 “오른쪽 것” 답변','Response Manager: 질문 / 새 답변과 앞 대화로 완성 의미 재생성','Meaning Workspace: 실제 게시 질문에 변경 후보 연결 / 제약 재평가'),('자료와 Task 변경, 최종 검사','Request Controller: 현재 근거 재검증 / 필요한 해석 재실행','Meaning Workspace: 의존 후보 무효화와 재조회 / Request Controller 최종 검사'),('외부 인계와 사용자 반환','Task Manager → Agent Gateway → Agent: 확정 명령 / 실제 결과 반환','동일. 의미 해의 생성과 실제 실행 접수/완료는 구별')],
+32:[('표를 가리킨 순간','Interaction Manager: 화면/포인터/발화 시점 수집','Source Reference Service ↔ source: 당시 객체/선택과 버전 획득'),('근거 읽기','Context Manager → Request Controller: 당시 관측 묶음','Context Manager ↔ Source Reference Service: 객체 참조의 허용 내용'),('문장의 지칭과 결합','Request Interpreter ↔ Model Access: 관측 영역 후보','Request Interpreter ↔ Source Reference Service: 객체 후보 확인 / 같은 모델 해석'),('현재 사용 가능성 검사','Request Controller ↔ Context Manager: 현재 source와 대상 대조','Request Controller: Source Reference Service의 현재 참조/자료 확인 후 확정'),('Agent 자료 인계와 확인','Task Manager → Agent Gateway → Agent: 관측/확인 대상과 명령','Agent Gateway ↔ Source Reference Service: 수신자별 참조 해석 / Agent에 확정 자료 전달')],
 33:[('두 업무 질문과 실제 게시','Task Manager → Request Controller: 질문 / 실제 게시 기록','Runtime → 각 actor: 같은 질문/실제 게시 사건'),('복합 후속 발화 해석','Request Interpreter ↔ Model Access: 관련 업무 공동 해석','Coordinator → actor ↔ Request Interpreter: 로컬 의미 제안'),('관계와 상태 변경 제안','Request Interpreter → Request Controller: 전체 관계','actor ↔ Coordinator: 담당 절, 결론 참조 요청/반환과 재제안'),('현재 조건 검사 후 적용','Request Controller: 중앙 상태와 명령 intent 확정','같은 guard, Coordinator: actor 예상 버전과 채택 변경 확정'),('외부 적용과 사용자 반환','Task Manager ↔ Agent Gateway ↔ Agent / 실제 상태 전달','동일. actor에는 적용 완료 및 실제 전달 사건 반환')],
 34:[('“이 표를 보내…” 부분 입력','Interaction Manager / Speech Input Worker: 연속 수신','동일 입력 → Runtime: 부분 발화 버전'),('발화 중 처리','입력 지속 / 발화 의미와 외부 명령은 확정 대기','Runtime ↔ Request Interpreter/Context Manager: 잠정 해석/읽기'),('“아니, 설명만” 정정','확정 발화 → Request Controller → Request Interpreter','Runtime: 옛 의미/응답 무효화, 유효 읽기 재사용 후 갱신'),('의미와 게시 허용','Request Controller: 최종 의미/현재 권한 확인','동일. Runtime의 유효 결과만 Response Manager에 전달'),('설명 중 “세 번째 열” 끼어들기','Interaction Manager 즉시 stop / 실제 전달 반환 / 새 요청','같은 stop / 해당 fragment의 의존 작업 수정, 옛 chunk 차단')],
 35:[('질문 답변을 이해','Request Controller: 질문/Task/현재 권한 검증','동일'),('한 local transaction 확정','owner → State Store: 현재 상태 변경 + 전송 intent','owner → State Store: 사건 append + projection + intent'),('외부 전송과 확인','Agent Gateway ↔ Agent / 확인 사실로 현재 상태 변경','동일 외부 확인을 event로 기록해 현재 view 갱신'),('VIA 재시작','State Store → owner: 현재 record와 미완료 원장','State Store: checkpoint + tail 재생 → owner: 검증된 view'),('불명 접수 확인과 실제 전달','Agent Gateway ↔ Agent: 조회 / Response Manager → 사용자','동일. replay는 외부 전송/음성 재생을 직접 실행하지 않음')],

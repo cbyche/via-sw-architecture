@@ -34,6 +34,8 @@ Coordinator는 제안이 덮는 원문 구간과 Task/질문 ID를 비교한다.
 
 최종 적용은 Request Controller의 공통 guard를 거친다. Coordinator는 actor의 예상 버전과 채택된 변경을 같은 local State Store transaction으로 확정하고, 이후 actor에 적용 완료를 통지한다. actor가 선택되기 전에 외부 명령을 보내거나 질문을 중복 게시하지 못한다. actor의 상태 전이를 중앙 코드가 다시 만들어 버리면 B의 의미 생산 구조는 사라진다.
 
+그림에서 확인할 차이는 중앙의 하나의 상태 갱신 loop와, 두 actor의 상태/우편함 및 Coordinator를 거치는 제안/채택 loop다. actor의 저장 화살표는 채택된 전이와 상태 조회를 뜻하며 최종 검사 전 외부 실행을 허용하지 않는다.
+
 ![04-33 구조 비교](./diagrams/choice33-structure.svg)
 
 [편집용 draw.io](./diagrams/choice33-structure.drawio). 논리 actor의 여러 우편함이 여러 Omni weights를 뜻하지 않는다. 모델 호출은 같은 Model Access의 유한 실행 예산을 공유한다.

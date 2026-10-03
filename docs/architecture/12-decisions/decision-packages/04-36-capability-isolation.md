@@ -32,6 +32,8 @@ Context Manager의 자료 조립/cache Module과 Request Interpreter는 요청 �
 
 Policy Manager, 권위 State Store, Request Controller와 Broker는 신뢰 Core에 남는다. Model Access의 단일 inference service도 여전히 모든 허용 세션을 처리하는 신뢰 의존성이다. 제한 process마다 모델을 적재하지 않는다. Broker 또는 공유 모델 자체 침해를 이 격리로 방어한다고 주장하지 않는다.
 
+그림은 A의 처리 코드와 자료/모델 접근이 같은 신뢰 Core에 있는 배치와 B의 실제 제한 process에서 Broker를 거쳐야 하는 배치를 구분한다. Process 경계를 그렸다는 사실만으로 OS 권한 제거가 구현됐다고 주장하지 않는다.
+
 ![04-36 구조 비교](./diagrams/choice36-structure.svg)
 
 [편집용 draw.io](./diagrams/choice36-structure.drawio). 이 문서의 점선 process 경계는 실제 OS 접근 제한을 의도한다. 04-33의 논리 actor 경계와 다르다.
