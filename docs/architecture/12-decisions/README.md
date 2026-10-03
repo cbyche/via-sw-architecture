@@ -1,8 +1,9 @@
-# 12. Target Architecture and Architecture Rationale
+# 12. Reference Architecture and Structural Choices
 
-> 상태: **Target Architecture 검토 기준선 확정 / 다음 작업: Decision Reconstruction 후보 목록**
+> 상태: **Reference Architecture를 활용한 Decision Reconstruction / Stage 4 핵심 기능 대안 탐색** / 2026-10-03
+> [최신 결과: 추가 기능 주제 세 개](./decision-packages/04-18-functional-priority-exploration.md). 기존 target은 참조 구조이며 두 비교안 중 하나로 고정하지 않는다.
 
-12번은 01~11에서 정의한 제품 경계·사용자 행동·품질 의미를 바탕으로 VIA의 목표 Architecture를 완성하고, 그 구조를 성립시키는 핵심 선택을 역으로 설명하는 단계다.
+12번은 01~11의 제품 경계와 사용자 행동, 품질 의미를 바탕으로 중요한 문제를 서로 다른 구조로 해결하는 방법을 비교한다. 기존 target은 기능 전반을 살핀 참조 구조다. 아래 초기 작업 흐름과 target 유래 규칙은 설계 이력이며, 현재는 두 안 모두 참조 구조와 달라도 된다.
 
 ## 작업 흐름
 
@@ -15,7 +16,7 @@
   → 결과 전 검증 계약과 revalidation
 ```
 
-이 작업은 Decision Package를 조합해 Architecture를 발견하는 중립적 exploration이 아니다. 먼저 가장 타당한 목표 Architecture를 세우고, 이후 그 구조를 방어하는 rationale를 만든다. 그렇더라도 대안을 일부러 약하게 만들거나 측정 결과를 결론에 맞추지 않는다.
+현재 탐색은 참조 구조를 방어하는 결론을 전제하지 않는다. 두 안의 의미 있는 기능 차이와 비용, 각각을 선택할 조건을 먼저 밝힌다. 대안을 일부러 약하게 만들거나 측정 결과를 결론에 맞추지 않는다.
 
 ## 현재 읽기 순서
 

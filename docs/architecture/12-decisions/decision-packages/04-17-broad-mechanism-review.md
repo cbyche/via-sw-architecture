@@ -1,5 +1,7 @@
 # 확대 탐색 검토 — 구조 판정, 13개 품질과 보고 결과
 
+> 후속 리뷰 (2026-10-03): 이 탐색 기록은 보존한다. 사용자는 target을 참조 구조로 명확히 하고 핵심 기능 주제의 추가 탐색을 요청했다. 새 결과와 현재 우선순위는 [04-18](./04-18-functional-priority-exploration.md), 품질 검토는 [04-22](./04-22-functional-priority-review.md)에 있다.
+
 > 2026-10-02 / Stage 4 작성자 검토 / 구조 후보 3개 유지, 최종 DP 미선정
 > [15개 탐색과 제외 이유](./04-13-broad-mechanism-discovery.md), [M-2](./04-14-staged-semantic-resolution.md), [S-1](./04-15-event-authoritative-state.md), [S-2](./04-16-capability-compartments.md).
 

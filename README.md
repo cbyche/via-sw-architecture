@@ -1,8 +1,8 @@
 # VIA Software Architecture
 
-> **현재 12번 Architecture 작업:** [목표 VIA Architecture](docs/architecture/12-decisions/target-architecture/README.md)는
-> **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정** 상태다.
-> 다음 단계는 **Decision Reconstruction**이며 구조적 선택·steelman·관련 ASR의 후보 목록을 함께 만든다. 메모리 사용량도 ASR 재검토 후보이며 아직 승격하지 않았다. 구현·성능 측정은 없고, 기준선 확정은 비교 우위 입증과 별개다.
+> **현재 작업 (2026-10-03):** 기존 `target-architecture/`는 기능 전반을 검토한 [Reference Architecture](docs/architecture/12-decisions/target-architecture/README.md)다. 최종 목표 구조로 선택한 상태가 아니다.
+> **Decision Reconstruction / Stage 4**에서 중요한 기능 문제를 서로 다른 두 구조로 비교한다. 두 안 모두 참조 구조와 달라도 된다.
+> 최신 결과는 [핵심 기능의 추가 설계 문제 세 개](docs/architecture/12-decisions/decision-packages/04-18-functional-priority-exploration.md)다. 구현, 측정 및 최종 DP 선정은 하지 않았다.
 
 이 저장소는 Samsung PC용 **Voice Interaction Agent(VIA)**의 소프트웨어 아키텍처를 정의하고 검증한다.
 
@@ -82,7 +82,7 @@ Voice Connection이 끝나도 Conversation이나 Task는 끝나지 않는다. Di
 
 ## 이 저장소에서 Architecture를 만드는 방법
 
-01~11은 제품 목적·범위·사용자 행동·품질 기준과 검증 경계를 정의한다. 12에서는 이 전제를 만족하는 완성된 목표 Architecture를 먼저 설계하고, 중요한 품질 차이를 만드는 구조적 선택을 역으로 추출한다.
+01~11은 제품 목적과 범위, 사용자 행동, 품질 기준과 검증 경계를 정의한다. 12에서는 기능 전반을 다룬 참조 구조를 활용하여 중요한 문제와 품질 충돌을 찾고, 서로 다른 실제 구조의 손익을 비교한다. 아래 target 설계 단계는 참조 구조를 만든 이력이며 이후 비교의 한 안을 고정하지 않는다.
 
 ```text
 System mission and fixed scope

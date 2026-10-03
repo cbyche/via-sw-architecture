@@ -1,5 +1,7 @@
 # 확대 탐색 — 15개 해결 원리의 구조 자격 판정
 
+> 후속 리뷰 (2026-10-03): 이 탐색 기록은 보존한다. 사용자는 target을 참조 구조로 명확히 하고 핵심 기능 주제의 추가 탐색을 요청했다. 새 결과와 현재 우선순위는 [04-18](./04-18-functional-priority-exploration.md), 품질 검토는 [04-22](./04-22-functional-priority-review.md)에 있다.
+
 > 2026-10-02 / Stage 4 사용자 검토용 / 최종 DP 및 target 변경 미승인
 > [원칙](./selection-principles.md), [현재 실행 계획](./00-workplan.md), [품질 원본](./03-00-quality-scenarios.md).
 

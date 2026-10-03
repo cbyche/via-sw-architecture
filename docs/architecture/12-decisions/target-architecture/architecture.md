@@ -1,6 +1,7 @@
-# VIA 목표 SW Architecture
+# VIA 참조 SW Architecture
 
-> 상태: **REVIEWED_BASELINE / 사용자 검토 완료·목표 설계 기준선 확정 / 구현·측정 없음**
+> 상태: **REVIEWED_REFERENCE_ARCHITECTURE / 검토 완료 참조 구조 / 구현과 측정 없음**
+> 2026-10-03: 사용자는 이 설계를 기능 전반을 지원하는 reference architecture로 명확히 했다. 아래 구조와 상세 계약은 보존하되, 새 비교의 어느 방안도 이 설계에 고정하지 않는다. 후속 목표 구조는 아직 선택하지 않았다.
 > 작성일·검토 확정일: 2026-09-29
 > [읽기 안내와 합의 상태](./README.md) · [설계 완결성 점검](./design-completeness.md)
 
