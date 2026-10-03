@@ -1,6 +1,15 @@
 # 04-36. 허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리
 
-> 구조 재작성안 / 2026-10-03 / [가이드](./04-30-comparison-guide.md) / 이전: [상태 원본](./04-35-state-authority.md) / 다음: [여섯 문서 검토](./04-37-comparison-review.md)
+> 발표용 설명과 도식 보완 / 2026-10-04 / [가이드](./04-30-comparison-guide.md) / 이전: [상태 원본](./04-35-state-authority.md) / 다음: [여섯 문서 검토](./04-37-comparison-review.md)
+
+**A는 권한을 가진 처리 코드가 정책을 지키는 구조이고, B는 처리 코드에서 권한을 제거한 뒤 중개자를 통해서만 자료를 받는 구조다.** B의 가치는 처리 코드에 결함이 생겼을 때 드러난다. 중개자 자체의 결함까지 해결하는 것은 아니다.
+
+읽는 순서는 **사용자 상황 → 구조도 → 같은 사례의 흐름 → 품질 손익 → 가장 싼 전환 반론**이다. 그림 없이 읽을 때도 §3의 생산 책임과 §4의 사건 표로 같은 결론에 도달하도록 작성했다.
+
+| 먼저 알아둘 말 | 쉬운 뜻 |
+| --- | --- |
+| Broker | 허용 범위를 확인하고 실제 자료 읽기와 모델 호출을 중개하는 신뢰 코드 |
+| capability handle | 특정 요청과 자료 범위에만 사용할 수 있는 참조. 제한 process에 원래 자격을 주지 않기 위한 수단 |
 
 ## 1. 왜 VIA에서 중요한가
 
@@ -20,7 +29,7 @@ Policy Manager가 현재 동의/목적/수신자 권한을 결정하고 Request 
 
 ### A. 공유 Core의 자료 처리와 정책 검사
 
-Context Manager의 자료 조립/cache와 Request Interpreter의 입력 구성은 신뢰하는 Core process에서 동작한다. source adapter의 read와 외부 제공 port에서 정책을 확인한다. 위험한 connector를 별도 worker에 두고 최소 범위로 읽을 수 있다. 필요한 native worker를 이미 격리한 참조 설계의 장점을 빼지 않는다.
+Context Manager의 자료 조립/cache와 Request Interpreter의 입력 구성은 신뢰하는 Core process에서 동작한다. Context Manager 내부의 자료 접근 Adapter가 source 읽기를 연결하며 읽기와 외부 제공 port에서 정책을 확인한다. 위험한 connector를 별도 worker에 두고 최소 범위로 읽을 수 있다. 필요한 native worker를 이미 격리한 참조 설계의 장점을 빼지 않는다.
 
 공유 자료/객체를 직접 전달하기 쉬우며 serialization과 process 운영 비용을 줄일 수 있다. 대신 이 Core 안의 처리 코드가 정책 경로를 우회해 접근하는 결함까지 OS 경계로 가둔다고 주장하지 않는다.
 
@@ -36,7 +45,11 @@ Policy Manager, 권위 State Store, Request Controller와 Broker는 신뢰 Core�
 
 ![04-36 구조 비교](./diagrams/choice36-structure.svg)
 
-[편집용 draw.io](./diagrams/choice36-structure.drawio). 이 문서의 점선 process 경계는 실제 OS 접근 제한을 의도한다. 04-33의 논리 actor 경계와 다르다.
+[편집용 draw.io](./diagrams/choice36-structure.drawio).
+
+**구조도 읽기:** 네모 안은 Component/Module 이름, 원통은 상태 이름이다. 화살표에서 요청/반환 자료와 조건을 읽는다. 구조도의 번호는 해당 안의 처리 흐름이며, §4 사건도의 번호는 같은 사용자 사건 순서다. 같은 이름을 위아래 반복하면 동일 Component의 요청/반환 위치를 펼친 것이다. 양안의 공통 최종 검사, Agent 인계와 사용자 전달도 그림 아래에 표시했다.
+
+이 문서의 점선 process 경계는 실제 OS 접근 제한을 의도한다. 04-33의 논리 actor 경계와 다르다.
 
 ## 4. 같은 자료 이해와 인계
 
@@ -46,11 +59,11 @@ Policy Manager, 권위 State Store, Request Controller와 Broker는 신뢰 Core�
 
 | 단계 | A | B |
 | --- | --- | --- |
-| 1 | Request Controller가 선택 문서와 허용 범위 확인 | 동일, Broker에 유효 요청/목적/범위 준비 요청 |
-| 2 | Context Manager → source adapter: read 요청. 원문과 읽은 근거 반환 | 제한 Context Manager client → Broker → source: 범위 read. Broker가 자료와 유효 handle을 제한 process에 반환 |
-| 3 | Request Interpreter → Model Access: 원문 기반 의미 요청/반환 | 제한 Request Interpreter → Broker: handle을 사용한 job. Broker → Model Access 요청/반환을 중개 |
-| 4 | Request Controller가 현재 제안/자료/권한을 확인해 확정 | 동일, 반환의 자료 근거를 Broker의 실제 발급 기록과 대조 |
-| 5 | Task Manager/Agent Gateway가 승인된 명령과 자료를 Agent에 전달, 접수/결과 반환 | 동일한 command. Agent Gateway가 수신자/명령에 결합된 제공을 Broker에 요청, 허용 자료를 받아 전달. 제한 process는 직접 외부 송신 불가 |
+| 1 | Request Controller가 Policy Manager에서 이번 목적/자료 범위 확인 | 같은 확인, Broker가 현재 요청/목적/범위에 결합한 handle 준비 |
+| 2 | Context Manager에 허용 자료 조립 요청 | 제한 process에 입력과 범위 handle 전달 |
+| 3 | Context Manager가 source adapter에 직접 읽기를 요청해 내용/버전 반환 | 제한 Context Manager가 IPC로 Broker에 읽기 요청. Broker가 현재 정책 확인 뒤 허용 내용만 반환 |
+| 4 | Request Interpreter가 Model Access에 의미 요청하고 결과 수신 | Request Interpreter가 Broker에 모델 job 요청, Broker가 같은 Model Access의 요청/반환을 중개 |
+| 5 | Request Controller가 제안/자료/권한 현재 검사 후 Task Manager/Agent Gateway로 인계 | 같은 현재 검사에서 Broker의 실제 발급 자료를 대조. 수신자별 자료도 Broker가 제공하며 제한 process의 직접 외부 송신은 불가 |
 
 일반 읽기마다 새 사용자 승인을 요구하지 않는다. 이미 유효한 동의 범위는 재사용하며 실제 범위 확대가 필요한 때 공통 동의 절차를 따른다.
 

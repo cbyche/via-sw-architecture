@@ -1,6 +1,15 @@
 # 04-33. 여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리
 
-> 협력 프로토콜 및 상태 소유 보완 / 2026-10-04 / [가이드](./04-30-comparison-guide.md) / 이전: [화면 대상](./04-32-screen-grounding.md) / 다음: [음성 처리](./04-34-incremental-voice.md)
+> 발표용 설명과 도식 보완 / 2026-10-04 / [가이드](./04-30-comparison-guide.md) / 이전: [화면 대상](./04-32-screen-grounding.md) / 다음: [음성 처리](./04-34-incremental-voice.md)
+
+**A는 중앙이 여러 업무의 대화 상태를 작성하고, B는 업무별 대화 처리자가 자기 다음 상태를 제안한다.** B의 중앙 조정자는 참가자와 참조 교환, 채택을 조정한다. 업무별 prompt만 나누고 중앙이 다시 전체 상태를 만드는 구조는 B가 아니다.
+
+읽는 순서는 **사용자 상황 → 구조도 → 같은 사례의 흐름 → 품질 손익 → 가장 싼 전환 반론**이다. 그림 없이 읽을 때도 §3의 생산 책임과 §4의 사건 표로 같은 결론에 도달하도록 작성했다.
+
+| 먼저 알아둘 말 | 쉬운 뜻 |
+| --- | --- |
+| 대화 actor | 자기 질문과 제약, 입력 우편함을 가진 논리 처리자. 별도 OS process나 모델이 아님 |
+| 제안과 채택 | actor가 다음 상태를 작성하고, 현재 검사를 통과한 제안만 공동 저장하는 두 단계 |
 
 ## 1. 왜 VIA에서 중요한가
 
@@ -38,7 +47,11 @@ Coordinator는 제안이 덮는 원문 구간과 Task/질문 ID를 비교한다.
 
 ![04-33 구조 비교](./diagrams/choice33-structure.svg)
 
-[편집용 draw.io](./diagrams/choice33-structure.drawio). 논리 actor의 여러 우편함이 여러 Omni weights를 뜻하지 않는다. 모델 호출은 같은 Model Access의 유한 실행 예산을 공유한다.
+[편집용 draw.io](./diagrams/choice33-structure.drawio).
+
+**구조도 읽기:** 네모 안은 Component/Module 이름, 원통은 상태 이름이다. 화살표에서 요청/반환 자료와 조건을 읽는다. 구조도의 번호는 해당 안의 처리 흐름이며, §4 사건도의 번호는 같은 사용자 사건 순서다. 같은 이름을 위아래 반복하면 동일 Component의 요청/반환 위치를 펼친 것이다. 양안의 공통 최종 검사, Agent 인계와 사용자 전달도 그림 아래에 표시했다.
+
+논리 actor의 여러 우편함이 여러 Omni weights를 뜻하지 않는다. 모델 호출은 같은 Model Access의 유한 실행 예산을 공유한다.
 
 ### 3.1 중앙 조정자는 어디까지 알고 무엇을 바꾸지 못하는가
 
@@ -83,19 +96,15 @@ B에서는 Task Dialogue Runtime이 같은 사건을 연결된 actor의 우편�
 
 | 단계 | A | B |
 | --- | --- | --- |
-| 1 | Agent Gateway → Task Manager → Request Controller: 두 질문. 실제 게시 기록을 받은 뒤 사용자 발화 수신 | 같은 외부 사실과 입력. Runtime이 각 actor에 질문/실제 게시 사건 전달 |
-| 2 | Context Manager에서 두 업무의 관련 대화 반환. Request Interpreter가 전체 발화 해석 | Coordinator → Runtime: 후보 actor에 입력 요청. 각 actor → Request Interpreter/Model Access: 자기 맥락 해석 요청/반환 |
-| 3 | 전체 관계와 대화 상태 변경 제안 → Request Controller | actor → Coordinator: 담당 절/참조/상태 제안. 보고서의 확정 결론 참조를 요청/반환받아 메일 actor에 전달하고 제안 수정 |
-| 4 | Request Controller가 현재 질문/Task/권한과 입력 버전을 검사해 중앙 상태 및 명령 intent 확정 | 같은 guard 뒤 Coordinator가 actor 예상 버전/채택 변경과 명령 intent를 한 local transaction으로 확정. 경쟁/누락이면 질문 |
-| 5 | Task Manager → Agent Gateway: 답변/수정 명령. 반환 → Response Manager → Interaction Manager | 같은 외부 전달. actor는 적용 완료와 실제 사용자 전달 사건을 받아 대화 상태 유지 |
+| 1 | Task Manager의 보고서/메일 질문과 실제 게시를 중앙 대화 상태에 연결 | 같은 사실을 각 actor의 상태에 연결. Coordinator가 같은 원문/버전을 참가 actor에 전달 |
+| 2 | Request Controller가 전체 발화와 관련 맥락을 Request Interpreter에 요청하고 두 업무의 의미 제안을 받음 | 각 actor가 자기 맥락으로 절/질문/다음 상태를 제안. 모델 호출은 같은 Request Interpreter/Model Access |
+| 3 | 중앙이 결론 참조와 두 절의 관계, 현재 질문을 확인 | Coordinator가 보고서 actor의 확정 결론 참조를 메일 actor에게 전달하고 재제안을 받음 |
+| 4 | 현재 의도/질문/Task/권한 검사 후 State Store에 상태/intent의 원자 저장 요청 | Coordinator가 Request Controller의 현재 검사를 받아 유효한 제안 집합의 채택 허용 확보 |
+| 5 | 채택된 명령을 Agent Gateway로 전달. 접수/결과와 실제 사용자 전달을 기록 | State Store가 actor 제안/intent를 함께 확정한 뒤 actor에 통지하고 공통 인계 수행. 채택 전 질문 취소이면 옛 제안은 거절 |
 
 메일에 넣을 결론이 아직 생성되지 않았다면 둘 다 이미 있는 자료로 위장하지 않는다. 명시된 의존 관계를 보존하여 실제 결과를 기다리거나 확인한다. 불명확한 “응”은 어느 actor도 먼저 가져갈 수 없다.
 
 ### 4.1 중앙이 다시 해석하지 않아도 이어지는 구체 사례
-
-![04-33 실제 의미 자료의 처리](./diagrams/choice33-mechanism.svg)
-
-[편집용 draw.io](./diagrams/choice33-mechanism.drawio). 구조 배치가 아닌 동일 사건의 자료 생산을 확대한 그림이다.
 
 설계 추적용 예시이며 모델 실행 결과가 아니다. 보고서 Task R은 `qR: PDF/슬라이드 중 어느 형식?`, 메일 Task M은 `qM: 본문에 무엇을 넣을까?`를 물었다. 두 질문 모두 실제로 제시됐고, 앞서 보여준 보고서의 결론 `R.result@4`가 존재한다. 사용자가 “보고서는 PDF로 하고, 메일에는 그 보고서 결론을 넣어줘”라고 한다.
 

@@ -1,6 +1,15 @@
 # 04-35. 대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력
 
-> 구조 재작성안 / 2026-10-03 / [가이드](./04-30-comparison-guide.md) / 이전: [음성 처리](./04-34-incremental-voice.md) / 다음: [권한 격리](./04-36-capability-isolation.md)
+> 발표용 설명과 도식 보완 / 2026-10-04 / [가이드](./04-30-comparison-guide.md) / 이전: [음성 처리](./04-34-incremental-voice.md) / 다음: [권한 격리](./04-36-capability-isolation.md)
+
+**A는 저장된 현재 상태를 읽어 이어가고, B는 확정된 사건을 적용해 현재 상태를 만들어 이어간다.** A도 감사 이력과 미완료 전송을 기록한다. B의 차이는 기록량이 아니라 사건이 상태의 원본이라는 점이다.
+
+읽는 순서는 **사용자 상황 → 구조도 → 같은 사례의 흐름 → 품질 손익 → 가장 싼 전환 반론**이다. 그림 없이 읽을 때도 §3의 생산 책임과 §4의 사건 표로 같은 결론에 도달하도록 작성했다.
+
+| 먼저 알아둘 말 | 쉬운 뜻 |
+| --- | --- |
+| 사건 원본 | 질문 답변 확정이나 Agent 접수 확인처럼 이미 일어난 의미 있는 변경의 기록 |
+| projection과 replay | projection은 사건으로 계산한 조회 상태, replay는 같은 계산을 다시 수행하는 복구 |
 
 ## 1. 왜 VIA에서 중요한가
 
@@ -36,7 +45,11 @@ projection은 사건으로 계산한 현재 값이다. 계산 함수인 **reduce
 
 ![04-35 구조 비교](./diagrams/choice35-structure.svg)
 
-[편집용 draw.io](./diagrams/choice35-structure.drawio). B도 같은 local DB transaction을 사용할 수 있다. 분산 DB나 cloud 규모를 추가해 구조 차이를 만들지 않는다.
+[편집용 draw.io](./diagrams/choice35-structure.drawio).
+
+**구조도 읽기:** 네모 안은 Component/Module 이름, 원통은 상태 이름이다. 화살표에서 요청/반환 자료와 조건을 읽는다. 구조도의 번호는 해당 안의 처리 흐름이며, §4 사건도의 번호는 같은 사용자 사건 순서다. 같은 이름을 위아래 반복하면 동일 Component의 요청/반환 위치를 펼친 것이다. 양안의 공통 최종 검사, Agent 인계와 사용자 전달도 그림 아래에 표시했다.
+
+B도 같은 local DB transaction을 사용할 수 있다. 분산 DB나 cloud 규모를 추가해 구조 차이를 만들지 않는다.
 
 ## 4. 같은 질문 답변과 재시작
 
