@@ -46,45 +46,57 @@ class D:
 
 def semantic(d):
  d.cpt('rc',30,410,650,90,'Request Controller')
- d.txt(30,350,'같은 새 발화, 이전 질문, 허용된 자료와 Task 사실')
+ d.txt(30,340,'입력: Interaction Manager의 새 발화. 새 업무/보완 여부도 해석 대상.',20)
  if d.s=='A':
+  d.store('read',810,410,350,90,'채택 제안과 질문')
+  d.e('rc','read','관련 기록 조회',sp='R',tp='L',sd=-20,td=-20,at=(685,411))
+  d.e('read','rc','이전 의미/질문',sp='L',tp='R',sd=20,td=20,at=(685,478),ret=True)
   d.cpt('ri',30,700,650,690,'Request Interpreter')
-  d.mod('gen',80,840,550,100,'전체 의미 생성기','ri')
-  d.mod('check',80,1150,550,100,'대상과 조건 검증기','ri')
-  d.e('rc','gen','1  원문 + 관련 대화/자료/조건',at=(60,580))
-  d.e('gen','check','2  목표/대상/금지 조건의 완성안',at=(90,1020))
-  d.e('check','gen','불일치: 근거를 모아 재해석',sp='L',tp='L',via=[(50,1200),(50,890)],at=(85,1300))
-  d.model(810,790);d.call('gen',at=(660,860))
+  d.mod('gen',140,840,490,100,'전체 의미 생성기','ri')
+  d.mod('check',140,1150,490,100,'대상과 조건 검증기','ri')
+  d.e('rc','gen','1  원문 + 관련 기록/근거. 새 업무이면 기존 조건 미승계',via=[(355,620),(385,620)],at=(65,563))
+  d.e('gen','check','2  목표/대상/조건/업무 관계의 완성안',at=(395,1020))
+  d.e('check','gen','수정 가능 오류\n근거 내 재생성\n횟수 제한',sp='L',tp='L',via=[(75,1200),(75,890)],at=(80,1020))
+  d.model(810,790);d.call('gen',at=(660,835))
   d.cpt('out',30,1580,650,90,'Request Controller')
-  d.e('check','out','3  검증한 의미 또는 확인할 질문',ret=True,at=(65,1460))
-  d.store('saved',30,1850,650,90,'채택 제안과 질문')
-  d.e('out','saved','4  검증한 제안/질문 저장; 부분 수정 허용',at=(60,1735))
-  d.e('saved','gen','Controller 경유: 이전 제안/조건 재사용',sp='L',tp='L',via=[(8,1895),(8,890)],at=(40,1985))
-  d.cpt('cm',810,1430,350,90,'Context Manager');d.cpt('tm',810,1710,350,90,'Task Manager')
-  d.e('cm','out','자료 변경/근거',sp='L',tp='R',td=-20,via=[(745,1475),(745,1605)],at=(780,1350))
-  d.e('tm','out','Task 변경/사실',sp='L',tp='R',td=20,via=[(770,1755),(770,1645)],at=(780,1820))
-  d.txt(805,1210,['Controller가 영향 요청 재검증','필요한 완성안만 재생성','보존 검사/필드 patch 포함'],20)
+  d.e('check','out','3  정상 의미 / 미해결 질문 / 거절 사유',via=[(385,1480),(355,1480)],ret=True,at=(65,1430))
+  d.cpt('cm',810,1390,350,90,'Context Manager')
+  d.cpt('tm',810,1690,350,90,'Task Manager')
+  for k,yy,dy in [('cm',1435,-25),('tm',1735,15)]:
+   d.e('out',k,'자료 조회' if k=='cm' else 'Task 조회',sp='R',tp='L',sd=dy,td=-15,via=[(730,1625+dy),(730,yy-15)],at=(735,yy-52))
+   d.e(k,'out','근거/변경' if k=='cm' else '사실/변경',sp='L',tp='R',sd=15,td=dy+15,via=[(760,yy+15),(760,1640+dy)],at=(765,yy+25),ret=True)
+  d.txt(810,1200,['같은 Controller가 근거 수집', '초기 해석 전 / 근거 변경 시', '최종 실행 전 현재 검사'],19)
+  d.store('saved',810,1900,350,90,'채택 제안과 질문')
+  d.e('out','saved','채택 의미/질문/실제 게시 기록 저장',sp='R',tp='L',sd=35,via=[(790,1660),(790,1945)],at=(800,1830))
+  d.txt(810,2010,['위와 아래 원통은 같은 상태', 'Controller 소유, State Store 보관'],18)
  else:
   d.cpt('ri',30,680,650,90,'Request Interpreter');d.model(810,620);d.call('ri',at=(660,625))
-  d.e('rc','ri','1  원문 + 현재 의미/질문 요약',at=(70,565))
+  d.e('rc','ri','1  원문 + 관계 후보. Workspace 요약을 조회해 해석',at=(65,560))
   d.cpt('ws',30,960,650,530,'Meaning Workspace',d.c)
-  d.mod('apply',80,1080,550,100,'의미 변경 적용기','ws')
-  d.store('state',80,1340,550,90,'채택 의미와 질문','ws')
+  d.mod('apply',140,1080,490,100,'의미 변경 적용기','ws')
+  d.store('state',140,1340,490,90,'채택 의미와 질문','ws')
   d.cpt('engine',810,1080,350,100,'Semantic Constraint Engine',d.c)
-  d.e('ri','apply','2  목표 추가 / 후보 제한 / 조건 교체',at=(65,845))
-  d.e('apply','state','채택한 조건 유지; 변경만 적용',at=(90,1230),sd=-20,td=-20)
-  d.e('state','apply','이전 버전',sp='T',tp='B',sd=20,td=20,ret=True,at=(410,1290))
-  d.e('apply','engine','3  후보/제약',sp='R',tp='L',sd=-20,td=-20,at=(655,1070))
-  d.e('engine','apply','가능 관계/미해결',sp='L',tp='R',sd=20,td=20,ret=True,at=(650,1185))
+  d.e('ri','apply','2  새 목표 생성 / 기존 목표의 후보 제한 / 조건 교체',via=[(355,870),(385,870)],at=(65,825))
+  d.e('ri','ws','의미/질문 조회',sp='L',tp='L',sd=-15,td=-35,via=[(8,710),(8,1190)],at=(35,905))
+  d.e('ws','ri','읽기 전용 요약',sp='L',tp='L',sd=0,td=15,via=[(20,1225),(20,740)],at=(35,785),ret=True)
+  d.e('apply','state','채택한 변경만 적용',at=(150,1235),sd=-115,td=-115)
+  d.e('state','apply','이전 버전',sp='T',tp='B',sd=115,td=115,ret=True,at=(510,1290))
+  d.e('apply','engine','3  후보/제약',sp='R',tp='L',sd=-20,td=-20,at=(650,1060))
+  d.e('engine','apply','관계/미해결',sp='L',tp='R',sd=20,td=20,ret=True,at=(650,1170))
+  d.txt(810,1240,['적용기와 Engine: 코드/명시 규칙', '말뜻 해석: Interpreter의 Omni', '상태 소유: Workspace Component'],18)
   d.cpt('out',30,1670,650,90,'Request Controller')
-  d.e('ws','out','4  현재 의미 또는 미해결 질문',ret=True,at=(65,1540))
+  d.e('ws','out','4  의미/질문/근거 버전',sd=-110,td=-110,ret=True,at=(55,1530))
+  d.e('out','ws','채택/실제 게시 기록',sp='T',tp='B',sd=110,td=110,at=(475,1600))
   d.cpt('cm',810,1430,350,90,'Context Manager')
   d.cpt('tm',810,1710,350,90,'Task Manager')
-  d.e('cm','ws','자료 변경/현재 근거',sp='L',tp='R',td=40,via=[(730,1475),(730,1265)],at=(805,1545))
-  d.e('tm','ws','Task 변경/현재 사실',sp='L',tp='R',td=95,via=[(755,1755),(755,1320)],at=(800,1830))
-  d.cpt('rm',30,1900,650,90,'Response Manager')
-  d.e('ws','rm','미해결 필드 질문 게시 요청',sp='L',tp='L',via=[(8,1225),(8,1945)],at=(40,1820))
-  d.e('rm','ws','실제 게시/답변 연결',sp='L',tp='L',sd=20,td=20,via=[(20,1965),(20,1245)],at=(40,2025),ret=True)
+  for k,yy,dy,lane in [('cm',1475,40,715),('tm',1755,95,765)]:
+   d.e('ws',k,'자료 조회' if k=='cm' else 'Task 조회',sp='R',tp='L',sd=dy-15,td=-15,via=[(lane,1210+dy),(lane,yy-15)],at=(lane+5,yy-53))
+   d.e(k,'ws','근거/변경' if k=='cm' else '사실/변경',sp='L',tp='R',sd=15,td=dy+15,via=[(lane+20,yy+15),(lane+20,1240+dy)],at=(lane+25,yy+25),ret=True)
+  d.txt(810,1850,['의미 구성 중 조회/변경 구독: Workspace', '실행 직전 검사: Request Controller', '원본 소유자는 양안 모두 동일'],18)
+ d.cpt('rm',30,1900,650,90,'Response Manager')
+ d.e('out','rm','미해결: 질문 전달 요청',sd=-110,td=-110,at=(55,1795),color=INK)
+ d.e('rm','out','실제 게시 기록 반환',sp='T',tp='B',sd=110,td=110,at=(475,1845),ret=True,color=INK)
+ d.txt(30,2010,['Response Manager → Interaction Manager: 질문 표시/음성; 실제 게시 기록 반환', '사용자 답변은 Interaction Manager → 상단 Request Controller로 새 입력'],18)
 
 def grounding(d):
  d.cpt('cm',30,410,1130,90,'Context Manager')
@@ -290,9 +302,9 @@ def structural(n):
 # One row = one visible message. Cases share outcomes, not an artificial common graph.
 TRACES={
 31:{'A':(['Interaction Manager','Request Controller','Request Interpreter','Model Access','Response Manager'],[
-(0,1,'1  “작년 표는 보고서에, 메일은 초안만”',False),(1,2,'관련 질문/Task/자료와 원문으로 전체 의미 요청',False),(2,3,'2  목표/대상/조건의 완성 의미 생성 요청',False),(3,2,'P1: 대상 미해결, send=false',True),(2,1,'검증된 P1과 미해결 대상 반환',True),(1,4,'3  “어느 표인가요?” 게시 요청',False),(4,0,'질문 표시/음성 전달',False),(0,1,'실제 게시 구간 반환',True),(0,1,'실제 질문을 본 뒤 “오른쪽 표”',False),(1,2,'질문 + 보완 + 이전 조건으로 재해석 요청',False),(2,1,'새 완성안 P2: source=R@7, send=false',True),(1,2,'4  자료가 바뀌면 현재 근거로 재검증/재해석',False),(2,1,'현재 조건을 만족하는 의미 반환',True),(1,1,'5  현재 검사 후 명령 채택; 발송 명령은 만들지 않음',False)]),
+(0,1,'1  “작년 표는 보고서에, 메일은 초안만”',False),(1,2,'관련 질문/Task/자료와 원문으로 전체 의미 요청',False),(2,3,'2  목표/대상/조건의 완성 의미 생성 요청',False),(3,2,'P1: 대상 미해결, send=false',True),(2,1,'검증된 P1과 미해결 대상 반환',True),(1,4,'3  “어느 표인가요?” 게시 요청',False),(4,0,'질문 표시/음성 전달',False),(0,4,'실제 게시 구간 반환',True),(4,1,'실제 게시 기록 전달',True),(0,1,'실제 질문을 본 뒤 “오른쪽 표”',False),(1,2,'질문 + 보완 + 이전 조건으로 재해석 요청',False),(2,1,'새 완성안 P2: source=R@7, send=false',True),(1,2,'4  자료가 바뀌면 현재 근거로 재검증/재해석',False),(2,1,'현재 조건을 만족하는 의미 반환',True),(1,1,'5  현재 검사 후 명령 채택; 발송 명령은 만들지 않음',False)]),
 'B':(['Request Controller','Request Interpreter','Meaning Workspace','Semantic Constraint Engine','Response Manager'],[
-(0,1,'1  같은 원문/근거 + 현재 의미/질문 요약',False),(1,2,'목표 추가, 표 후보 L/R, 메일 발송 금지 후보',False),(2,3,'2  현재 후보/제약/근거 버전으로 관계 계산 요청',False),(3,2,'표 대상 미해결; 발송 금지 유지',True),(2,4,'3  대상 필드 질문 게시 요청',False),(4,2,'Interaction Manager의 실제 게시 기록 반환',True),(0,1,'실제 질문을 본 뒤 같은 “오른쪽 표”',False),(1,2,'NARROW(q1, R@7, expected=12)',False),(2,3,'대상 후보만 제한; send=false는 변경하지 않음',False),(3,2,'관계 해 또는 충돌/미해결 반환',True),(2,2,'4  자료 변경: 의존 후보 무효화/재조회/재평가',False),(2,0,'현재 의미와 근거 버전 반환',True),(0,0,'5  현재 검사 후 명령 채택; 외부 승인과 의미 해는 별개',False)])},
+(0,1,'1  같은 원문 + 명시적인 연결 후보',False),(1,2,'관련 의미/질문과 허용된 근거 요약 조회',False),(2,1,'읽기 전용 요약 반환; 독립 요청에 기존 조건 상속 금지',True),(1,2,'목표 추가, 표 후보 L/R, 메일 발송 금지 후보',False),(2,3,'2  현재 후보/제약/근거 버전으로 관계 계산 요청',False),(3,2,'표 대상 미해결; 발송 금지 유지',True),(2,0,'3  미해결 필드/질문 제안 반환',True),(0,4,'현재 질문 확인 후 게시 요청',False),(4,0,'Interaction Manager에서 받은 실제 게시 기록',True),(0,2,'실제 게시 기록을 질문/의미 버전에 연결',False),(0,1,'실제 질문을 본 뒤 같은 “오른쪽 표”',False),(1,2,'NARROW(q1, R@7, expected=12)',False),(2,3,'대상 후보만 제한; send=false는 변경하지 않음',False),(3,2,'관계 해 또는 충돌/미해결 반환',True),(2,2,'4  자료 변경: 의존 후보 무효화/재조회/재평가',False),(2,0,'현재 의미와 근거 버전 반환',True),(0,0,'5  현재 검사 후 명령 채택; 외부 승인과 의미 해는 별개',False)])},
 32:{'A':(['Interaction Manager','Context Manager','Observation Grounding Interpreter','Model Access','Request Controller'],[
 (0,1,'1  화면 7/p1/t1 원본 저장',False),(0,1,'2  화면 8/p2/t2 원본 저장',False),(4,2,'원문/지시 시점으로 해석 요청',False),(2,1,'해당 원본 관측 조회',False),(1,2,'화면/포인터/시점 반환',True),(2,3,'3  말과 원본 화면 공동 해석',False),(3,2,'L@7/R@8 후보 반환',True),(2,4,'ID/시간 검증한 참조 또는 미해결',True),(4,2,'4  첫 표 정정: 원본 재해석 또는 검증된 patch',False),(2,4,'수정한 첫 참조와 유지할 둘째 참조',True),(4,4,'5  현재 검사 후 인계. 과거 좌표를 현재 대상으로 대체하지 않음',False)]),
 'B':(['Context Manager','Scene State Service','Scene Query Interpreter','Model Access','Request Controller'],[
