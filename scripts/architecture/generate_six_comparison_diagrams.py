@@ -9,7 +9,7 @@ from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/architecture/12-decisions/decision-packages/diagrams'
 TITLES={31:'요청 이해의 정확성을 위한 의미 구성 — 요청별 생성과 지속 의미 작업공간',32:'화면 지칭의 정확성을 위한 대상 결합 — 요청 시 관측 해석과 관측 시 화면 상태 구성',33:'여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리',34:'음성 대화의 반응성과 정정 정확성을 위한 실행 — 발화 단위와 연속 수정',35:'대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력',36:'허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리'}
-NAMES={31:('조회/추론 loop로 전체 의미 제안','조회/추론 뒤 지속 의미 상태 구성'),32:('요청 → 원본 관측 해석','관측 → 상태 생산 / 요청 → 조회'),33:('중앙이 대화 상태를 작성','업무별 처리자가 상태를 제안'),34:('확정 발화부터 처리','잠정 작업을 수정하며 처리'),35:('현재 값을 원본으로 저장','사건을 원본으로 상태 계산'),36:('공유 권한 안의 정책 검사','권한 없는 처리와 Broker')}
+NAMES={31:('매번 완성 의미를 생성','의미 상태에 변경을 적용'),32:('요청 → 원본 관측 해석','관측 → 상태 생산 / 요청 → 조회'),33:('중앙이 대화 상태를 작성','업무별 처리자가 상태를 제안'),34:('확정 발화부터 처리','잠정 작업을 수정하며 처리'),35:('현재 값을 원본으로 저장','사건을 원본으로 상태 계산'),36:('공유 권한 안의 정책 검사','권한 없는 처리와 Broker')}
 CASES={31:'“작년 표는 보고서에, 메일은 초안만” → “오른쪽 표”로 보완 → 발송 금지는 유지',32:'화면 7을 가리키며 “이 표와” → 스크롤 → 화면 8의 “저 표를 비교” → 첫 대상만 정정',33:'보고서와 메일이 각각 질문 → “보고서는 PDF, 메일에는 그 결론” → 다른 업무의 참조 연결',34:'“이 표를 보내…” → “아니, 설명만 해줘” → 준비는 재사용할 수 있지만 보내기는 실행 금지',35:'질문 답변을 확정 → Agent에 전송 → 접수 확인 전에 VIA 종료 → 중복 없이 이어가기',36:'허용된 보고서를 요약하는 처리 코드에 결함 → 무관한 파일 접근을 어디에서 막는가?'}
 BENEFITS={
 31:(["유리: 자유로운 새 의도를 전체 맥락에서 다시 구성","대가: 앞선 조건 누락을 검증해야 함; 관련 근거 재해석","선택: 짧거나 표현 범위가 넓은 대화"],["유리: 명시한 조건을 유지하며 필요한 관계만 갱신","대가: 변경 언어/의존성 설계; 표현 밖 뜻은 질문","선택: 여러 번 보완하고 조건을 이어가는 대화"]),
@@ -46,7 +46,7 @@ class D:
 
 def semantic(d):
  d.cpt('rc',30,410,650,90,'Request Controller')
- d.txt(30,340,'초기 안내는 같은 범위. 관련 업무는 미결정; 모든 과거 자료를 넣지 않음.',20)
+ d.txt(30,340,'입력: Interaction Manager의 새 발화. 새 업무/보완 여부도 해석 대상.',20)
  if d.s=='A':
   d.store('read',810,410,350,90,'채택 제안과 질문')
   d.e('rc','read','관련 기록 조회',sp='R',tp='L',sd=-20,td=-20,at=(685,411))
@@ -54,8 +54,7 @@ def semantic(d):
   d.cpt('ri',30,700,650,690,'Request Interpreter')
   d.mod('gen',140,840,490,100,'전체 의미 생성기','ri')
   d.mod('check',140,1150,490,100,'대상과 조건 검증기','ri')
-  d.e('rc','gen','1  원문/초기 안내 또는 읽기 결과로 추론',via=[(355,620),(385,620)],at=(65,563))
-  d.e('gen','rc','추가 조회 요청\n의미/자료/Task\n결과로 다시 추론',sp='L',tp='L',sd=-25,via=[(8,865),(8,455)],at=(20,600))
+  d.e('rc','gen','1  원문 + 관련 기록/근거. 새 업무이면 기존 조건 미승계',via=[(355,620),(385,620)],at=(65,563))
   d.e('gen','check','2  목표/대상/조건/업무 관계의 완성안',at=(395,1020))
   d.e('check','gen','수정 가능 오류\n근거 내 재생성\n횟수 제한',sp='L',tp='L',via=[(75,1200),(75,890)],at=(80,1020))
   d.model(810,790);d.call('gen',at=(660,835))
@@ -66,25 +65,25 @@ def semantic(d):
   for k,yy,dy in [('cm',1435,-25),('tm',1735,15)]:
    d.e('out',k,'자료 조회' if k=='cm' else 'Task 조회',sp='R',tp='L',sd=dy,td=-15,via=[(730,1625+dy),(730,yy-15)],at=(735,yy-52))
    d.e(k,'out','근거/변경' if k=='cm' else '사실/변경',sp='L',tp='R',sd=15,td=dy+15,via=[(760,yy+15),(760,1640+dy)],at=(765,yy+25),ret=True)
-  d.txt(810,1200,['모델이 고른 조회는 Controller 중개', '모델 결과: 읽기 요청 또는 완성안', '채택/외부 실행은 코드가 검사'],19)
+  d.txt(810,1200,['같은 Controller가 근거 수집', '초기 해석 전 / 근거 변경 시', '최종 실행 전 현재 검사'],19)
   d.store('saved',810,1900,350,90,'채택 제안과 질문')
   d.e('out','saved','채택 의미/질문/실제 게시 기록 저장',sp='R',tp='L',sd=35,via=[(790,1660),(790,1945)],at=(800,1830))
   d.txt(810,2010,['위와 아래 원통은 같은 상태', 'Controller 소유, State Store 보관'],18)
  else:
   d.cpt('ri',30,680,650,90,'Request Interpreter');d.model(810,620);d.call('ri',at=(660,625))
-  d.e('rc','ri','1  관계 미결정 원문 + 같은 초기 안내',at=(65,560))
+  d.e('rc','ri','1  원문 + 관계 후보. Workspace 요약을 조회해 해석',at=(65,560))
   d.cpt('ws',30,960,650,530,'Meaning Workspace',d.c)
   d.mod('apply',140,1080,490,100,'의미 변경 적용기','ws')
   d.store('state',140,1340,490,90,'채택 의미와 질문','ws')
   d.cpt('engine',810,1080,350,100,'Semantic Constraint Engine',d.c)
-  d.e('ri','apply','2  모델이 관계와 변경 제안; 신규/보완을 미리 정하지 않음',via=[(355,870),(385,870)],at=(65,825))
-  d.e('ri','ws','의미/자료/Task 조회',sp='L',tp='L',sd=-15,td=-35,via=[(8,710),(8,1190)],at=(35,905))
-  d.e('ws','ri','읽기 결과로 재추론',sp='L',tp='L',sd=0,td=15,via=[(20,1225),(20,740)],at=(35,785),ret=True)
+  d.e('ri','apply','2  새 목표 생성 / 기존 목표의 후보 제한 / 조건 교체',via=[(355,870),(385,870)],at=(65,825))
+  d.e('ri','ws','의미/질문 조회',sp='L',tp='L',sd=-15,td=-35,via=[(8,710),(8,1190)],at=(35,905))
+  d.e('ws','ri','읽기 전용 요약',sp='L',tp='L',sd=0,td=15,via=[(20,1225),(20,740)],at=(35,785),ret=True)
   d.e('apply','state','채택한 변경만 적용',at=(150,1235),sd=-115,td=-115)
   d.e('state','apply','이전 버전',sp='T',tp='B',sd=115,td=115,ret=True,at=(510,1290))
   d.e('apply','engine','3  후보/제약',sp='R',tp='L',sd=-20,td=-20,at=(650,1060))
   d.e('engine','apply','관계/미해결',sp='L',tp='R',sd=20,td=20,ret=True,at=(650,1170))
-  d.txt(810,1240,['적용기와 Engine: 코드/명시 규칙', '말뜻/조회 선택: Interpreter의 Omni', '상태 소유: Workspace Component'],18)
+  d.txt(810,1240,['적용기와 Engine: 코드/명시 규칙', '말뜻 해석: Interpreter의 Omni', '상태 소유: Workspace Component'],18)
   d.cpt('out',30,1670,650,90,'Request Controller')
   d.e('ws','out','4  의미/질문/근거 버전',sd=-110,td=-110,ret=True,at=(55,1530))
   d.e('out','ws','채택/실제 게시 기록',sp='T',tp='B',sd=110,td=110,at=(475,1600))
@@ -289,30 +288,23 @@ def isolation(d):
  d.txt(30,2050,'같은 필수선: 허용 범위/철회/외부 인계 검사. 처리 코드 침해 격리가 필수이면 A는 부적격.',19)
 
 def structural(n):
- p=Plate(f'choice{n}-structure',f'04-{n}',TITLES[n],CASES[n],height=2760 if n==31 else 2520)
- offset=240 if n==31 else 0
+ p=Plate(f'choice{n}-structure',f'04-{n}',TITLES[n],CASES[n],height=2520)
  for s in 'AB':
-  d=D(p,n,s);first=len(p.items)
-  [semantic,grounding,dialogue,voice,state,isolation][n-31](d)
-  if n==31:
-   for item in p.items[first:]:
-    if 'y' in item:item['y']+=offset
-    if 'points' in item:item['points']=[(x,y+offset) for x,y in item['points']]
-   for key,(x,y,w,h) in list(p.nodes.items()):
-    if key.startswith(s):p.nodes[key]=(x,y+offset,w,h)
-   d.cpt('im',30,410,650,90,'Interaction Manager')
-   d.e('im','rc','발화/시점 전달; 신규/보완 관계는 미결정',at=(65,530),color=INK)
-  y=2100+offset;p.line([(d.x,y),(d.x+1184,y)],'#C7D1DD',arrow=False)
+  d=D(p,n,s);[semantic,grounding,dialogue,voice,state,isolation][n-31](d)
+  y=2100;p.line([(d.x,y),(d.x+1184,y)],'#C7D1DD',arrow=False)
   p.text(d.x+15,y+25,BENEFITS[n][s=='B'],23,MUTED,leading=39)
- p.text(64,2270+offset,'공통 마무리: Request Controller 현재 검사 → Task Manager → Agent Gateway → Downstream Agent',22)
- p.text(64,2310+offset,'접수/결과 반환 → Response Manager → Interaction Manager의 실제 표시/음성. 미해결이면 실행 대신 질문.',22)
- p.text(64,2370+offset,'검정: 공통 / 파랑: A 고유 / 초록: B 고유. 실선: 요청/전달 / 점선: 결과. 네모: 이름 / 원통: 상태 / 육각형: 외부 의존.',19,MUTED)
- p.text(64,2410+offset,'같은 이름의 반복 상자는 동일 Component. 비교 부분의 책임을 펼친 그림. 별도 process 표기가 없으면 논리 분해. 모델 가중치는 한 벌; 이익은 조건부 설계 가설, 미측정.',19,MUTED)
- if n==31:p.text(64,2690,'양안의 응답 생성도 필요하면 Response Manager → Model Access → 같은 Omni를 사용한다. 사건도에 요청/반환을 함께 표시.',19,MUTED)
+ p.text(64,2270,'공통 마무리: Request Controller 현재 검사 → Task Manager → Agent Gateway → Downstream Agent',22)
+ p.text(64,2310,'접수/결과 반환 → Response Manager → Interaction Manager의 실제 표시/음성. 미해결이면 실행 대신 질문.',22)
+ p.text(64,2370,'검정: 공통 / 파랑: A 고유 / 초록: B 고유. 실선: 요청/전달 / 점선: 결과. 네모: 이름 / 원통: 상태 / 육각형: 외부 의존.',19,MUTED)
+ p.text(64,2410,'같은 이름의 반복 상자는 동일 Component. 비교 부분의 책임을 펼친 그림. 별도 process 표기가 없으면 논리 분해. 모델 가중치는 한 벌; 이익은 조건부 설계 가설, 미측정.',19,MUTED)
  return p
 
 # One row = one visible message. Cases share outcomes, not an artificial common graph.
 TRACES={
+31:{'A':(['Interaction Manager','Request Controller','Request Interpreter','Model Access','Response Manager'],[
+(0,1,'1  “작년 표는 보고서에, 메일은 초안만”',False),(1,2,'관련 질문/Task/자료와 원문으로 전체 의미 요청',False),(2,3,'2  목표/대상/조건의 완성 의미 생성 요청',False),(3,2,'P1: 대상 미해결, send=false',True),(2,1,'검증된 P1과 미해결 대상 반환',True),(1,4,'3  “어느 표인가요?” 게시 요청',False),(4,0,'질문 표시/음성 전달',False),(0,4,'실제 게시 구간 반환',True),(4,1,'실제 게시 기록 전달',True),(0,1,'실제 질문을 본 뒤 “오른쪽 표”',False),(1,2,'질문 + 보완 + 이전 조건으로 재해석 요청',False),(2,1,'새 완성안 P2: source=R@7, send=false',True),(1,2,'4  자료가 바뀌면 현재 근거로 재검증/재해석',False),(2,1,'현재 조건을 만족하는 의미 반환',True),(1,1,'5  현재 검사 후 명령 채택; 발송 명령은 만들지 않음',False)]),
+'B':(['Request Controller','Request Interpreter','Meaning Workspace','Semantic Constraint Engine','Response Manager'],[
+(0,1,'1  같은 원문 + 명시적인 연결 후보',False),(1,2,'관련 의미/질문과 허용된 근거 요약 조회',False),(2,1,'읽기 전용 요약 반환; 독립 요청에 기존 조건 상속 금지',True),(1,2,'목표 추가, 표 후보 L/R, 메일 발송 금지 후보',False),(2,3,'2  현재 후보/제약/근거 버전으로 관계 계산 요청',False),(3,2,'표 대상 미해결; 발송 금지 유지',True),(2,0,'3  미해결 필드/질문 제안 반환',True),(0,4,'현재 질문 확인 후 게시 요청',False),(4,0,'Interaction Manager에서 받은 실제 게시 기록',True),(0,2,'실제 게시 기록을 질문/의미 버전에 연결',False),(0,1,'실제 질문을 본 뒤 같은 “오른쪽 표”',False),(1,2,'NARROW(q1, R@7, expected=12)',False),(2,3,'대상 후보만 제한; send=false는 변경하지 않음',False),(3,2,'관계 해 또는 충돌/미해결 반환',True),(2,2,'4  자료 변경: 의존 후보 무효화/재조회/재평가',False),(2,0,'현재 의미와 근거 버전 반환',True),(0,0,'5  현재 검사 후 명령 채택; 외부 승인과 의미 해는 별개',False)])},
 32:{'A':(['Interaction Manager','Context Manager','Observation Grounding Interpreter','Model Access','Request Controller'],[
 (0,1,'1  화면 7/p1/t1 원본 저장',False),(0,1,'2  화면 8/p2/t2 원본 저장',False),(4,2,'원문/지시 시점으로 해석 요청',False),(2,1,'해당 원본 관측 조회',False),(1,2,'화면/포인터/시점 반환',True),(2,3,'3  말과 원본 화면 공동 해석',False),(3,2,'L@7/R@8 후보 반환',True),(2,4,'ID/시간 검증한 참조 또는 미해결',True),(4,2,'4  첫 표 정정: 원본 재해석 또는 검증된 patch',False),(2,4,'수정한 첫 참조와 유지할 둘째 참조',True),(4,4,'5  현재 검사 후 인계. 과거 좌표를 현재 대상으로 대체하지 않음',False)]),
 'B':(['Context Manager','Scene State Service','Scene Query Interpreter','Model Access','Request Controller'],[
@@ -338,86 +330,7 @@ def wrap_name(name):
  if ' ' in name:return name.replace(' ', '\n',1) if len(name)>18 else name
  return name
 
-def semantic_event():
- # Same start/end and same lane coordinates. Only absent A-specific participants are omitted.
- names=['Interaction Manager','Request Controller','Request Interpreter','Model Access','공유 Omni',
-        'Context Manager','Task Manager','Meaning Workspace','Semantic Constraint Engine','Response Manager']
- traces={}
- for option in 'AB':
-  owner=1 if option=='A' else 7
-  steps=[
-   (0,1,'1  “오른쪽 것으로 해줘” 수신. 신규/보완 여부와 연결 Task는 아직 미결정',False),
-   (1,2,'원문/시점 + 같은 최근 대화/게시 안내. 정답 질문 ID를 미리 붙이지 않음',False),
-   (2,3,'2  첫 해석 요청: 원문/초기 안내 + 사용할 수 있는 읽기 도구',False),
-   (3,4,'같은 모델에 입력 전달',False),
-   (4,3,'이번 예시의 모델 선택: 이전 질문, 화면 후보와 Task 사실을 더 읽기',True),
-   (3,2,'구조화된 읽기 요청 반환. 아직 신규/보완 결론 아님',True),
-   (2,owner,'3  meaning_retrieval / context_retrieval / task_retrieval 요청',False),
-   (owner,owner,'이전 의미/질문 조회: q1은 보고서 표를 묻던 실제 게시 질문',False),
-   (owner,5,'해당 관측 시점의 표 후보 조회',False),
-   (5,owner,'L@7/R@7의 자료 근거와 버전 또는 누락 반환',True),
-   (owner,6,'관련 보고서 Task의 현재 사실 조회',False),
-   (6,owner,'Task 상태/버전 또는 조회 불가 반환',True),
-   (owner,2,'질문/이전 의미/자료/Task 근거 반환. 누락을 정답으로 채우지 않음',True),
-   (2,3,'4  읽은 근거로 추가 추론. 더 읽을 필요가 있으면 3으로 반복',False),
-   (3,4,'조회 결과 + 원문 전달',False),
-   (4,3,'모델 제안: 보완(q1) + '+('전체 의미 P2' if option=='A' else 'NARROW(q1,R@7)'),True),
-   (3,2,'의미 제안 반환. 후보를 잘못 연결할 위험은 양안 공통',True)]
-  if option=='A':steps += [
-   (2,2,'5  전체 의미 P2의 ID/조건/버전 검증. 오류는 제한 재생성, 모호함은 질문',False),
-   (2,1,'검증한 전체 의미 또는 미해결 내용 반환',True)]
-  else:steps += [
-   (2,7,'5  관계/변경 제안 전달. 현재 q1과 의미 버전을 확인',False),
-   (7,8,'후보 제한 + 기존 발송 금지 등 조건으로 관계 계산 요청',False),
-   (8,7,'구성한 의미 또는 충돌/미해결 반환',True),
-   (7,1,'현재 의미/근거 버전 반환. 모델 완성안으로 상태를 덮어쓰지 않음',True)]
-  steps += [(1,1,'6  현재 권한/입력/근거 검사. 미해결이면 아래 업무 인계를 생략하고 질문',False)]
-  if option=='B':steps += [(1,7,'검증한 의미 채택 통지',False),(7,1,'채택 상태 저장 결과',True)]
-  else:steps += [(1,1,'검증한 의미/질문을 자기 소유 상태에 채택',False)]
-  steps += [
-   (1,6,'현재 버전 조건으로 허용된 Task 변경 인계',False),
-   (6,1,'접수/거절/불명 반환. 접수를 업무 완료로 표시하지 않음',True),
-   (1,9,'확인된 상태 또는 확인 질문의 전달 요청',False),
-   (9,3,'이번 예시의 응답 생성 요청: 확인된 상태 또는 질문',False),
-   (3,4,'같은 모델의 응답 session에 전달. 의미 해석 session과 구분',False),
-   (4,3,'Text/음성 응답 생성 결과 반환',True),
-   (3,9,'응답 결과 반환. 상태를 완료로 꾸미지 않음',True),
-   (9,0,'같은 사용자 출력: 반영/접수 상태 또는 질문을 표시/음성으로 전달',False),
-   (0,9,'실제 게시 구간 반환',True),
-   (9,1,'게시 기록 반환. 사용자 답변은 별도의 새 입력으로 1부터 처리',True)]
-  traces[option]=steps
- heights={key:380+len(value)*64 for key,value in traces.items()}
- total=290+sum(heights.values())+200
- p=Plate('choice31-event','04-31',TITLES[31],
-         '공통 사례: 관계 미결정 발화 → 근거 조회/추론 → 의미 채택 → 같은 사용자 전달. 모델 호출 수는 예시, 고정 상한 아님.',height=total)
- xs=[175+240*i for i in range(10)];top=270
- for option in 'AB':
-  color=BLUE if option=='A' else GREEN;steps=traces[option]
-  p.text(64,top,option+'  '+NAMES[31][option=='B'],30,color,bold=True)
-  p.text(64,top+50,'매 행의 화살표가 실제 송신/수신. A/B는 같은 열 배치와 시작/끝, 같은 조회 권한을 사용한다.',20,MUTED)
-  for i,name in enumerate(names):
-   if option=='A' and i in (7,8):continue
-   x=xs[i]
-   if i==4:p.node(option+'eventOmni',x-108,top+105,216,104,name,kind='model')
-   else:
-    p.box(x-108,top+105,216,104,'white',INK,4)
-    p.text(x,top+121,wrap_name(name),20,INK,'center',True,leading=28)
-   p.line([(x,top+210),(x,top+300+len(steps)*64)],'#C7D1DD',dashed=True,arrow=False)
-  if option=='A':p.text(xs[7]-90,top+125,['A에는 Workspace와 Engine 없음', '해당 두 열은 비워 둠'],18,MUTED)
-  for j,(a,b,label,ret) in enumerate(steps):
-   y=top+300+j*64
-   p.text(64,y-30,label,20,color)
-   points=[(xs[a],y),(xs[b],y)] if a!=b else [(xs[a],y),(xs[a]+45,y),(xs[a]+45,y+20),(xs[a],y+20)]
-   p.line(points,color,dashed=ret,width=2.5)
-  top+=heights[option]
-  p.line([(64,top-25),(2496,top-25)],'#C7D1DD',arrow=False)
- p.text(64,top+10,'A: 모델이 전체 의미 제안. B: 모델이 관계/변경을 제안하고 Workspace/Engine이 지속 상태에서 의미 구성.',22)
- p.text(64,top+52,'Task 외부 실행은 양안 모두 Task Manager → Agent Gateway → Downstream Agent. 이 그림의 끝은 인계 상태의 실제 사용자 전달이다.',20,MUTED)
- p.text(64,top+90,'채택/게시 상태는 각 owner가 State Store에 보관. 실선=요청/전달, 점선=반환. 논리 순서의 수작업 추적이며 실행/측정 결과 아님.',19,MUTED)
- return p
-
 def event(n):
- if n==31:return semantic_event()
  p=Plate(f'choice{n}-event',f'04-{n}',TITLES[n],CASES[n],height=2340)
  for s in 'AB':
   d=D(p,n,s);names,steps=TRACES[n][s];xs=[d.x+116+i*238 for i in range(5)]
