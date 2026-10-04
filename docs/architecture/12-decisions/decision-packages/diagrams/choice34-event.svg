@@ -22,7 +22,7 @@
 <polyline id="e20" points="894,504 894,2000" fill="none" stroke="#C7D1DD" stroke-width="2" stroke-dasharray="7 5"/>
 <polyline id="e23" points="1132,504 1132,2000" fill="none" stroke="#C7D1DD" stroke-width="2" stroke-dasharray="7 5"/>
 <polyline id="e25" points="180,620 225,620 225,645 180,645" fill="none" stroke="#195FBD" stroke-width="2.5" marker-end="url(#a195FBD)"/>
-<polyline id="e27" points="180,731 225,731 225,756 180,756" fill="none" stroke="#195FBD" stroke-width="2.5" marker-end="url(#a195FBD)"/>
+<polyline id="e27" points="180,731 656,731" fill="none" stroke="#195FBD" stroke-width="2.5" marker-end="url(#a195FBD)"/>
 <polyline id="e29" points="180,842 418,842" fill="none" stroke="#195FBD" stroke-width="2.5" marker-end="url(#a195FBD)"/>
 <polyline id="e31" points="418,953 656,953" fill="none" stroke="#195FBD" stroke-width="2.5" marker-end="url(#a195FBD)"/>
 <polyline id="e33" points="656,1064 418,1064" fill="none" stroke="#195FBD" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#a195FBD)"/>
@@ -60,9 +60,9 @@
 <g id="e19"><text x="894" y="435" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Request</text><text x="894" y="463" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Interpreter</text></g>
 <g id="e22"><text x="1132" y="435" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Response Manager</text></g>
 <g id="e24"><text x="74" y="601.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">1  “이 표를 보내…” 연속 수신; 아직 발화 미확정</text></g>
-<g id="e26"><text x="74" y="712.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">2  의미 처리는 기다리고 ASR 수신/재생 중단은 계속</text></g>
+<g id="e26"><text x="74" y="712.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">2  허용된 대상은 선행 읽기/cache 가능; 의미 처리는 확정 대기</text></g>
 <g id="e28"><text x="74" y="823.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">3  “아니 보내지 말고 설명만”까지 확정 입력</text></g>
-<g id="e30"><text x="74" y="934.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">현재 허용된 표 읽기 요청</text></g>
+<g id="e30"><text x="74" y="934.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">확정 후 유효 cache 재사용 또는 표 읽기 요청</text></g>
 <g id="e32"><text x="74" y="1045.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">표 내용/버전 반환</text></g>
 <g id="e34"><text x="74" y="1156.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">확정 입력과 근거의 전체 의미 요청</text></g>
 <g id="e36"><text x="74" y="1267.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">설명 의도; 발송 금지 반환</text></g>
@@ -70,7 +70,7 @@
 <g id="e40"><text x="74" y="1489.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">5  음성/Text 전달; 실제 재생 구간 반환</text></g>
 <g id="e42"><text x="74" y="1600.0" text-anchor="start" font-size="21" font-weight="400" fill="#195FBD">“세 번째 열” 정정: 먼저 재생 stop, 새 요청</text></g>
 <g id="e44"><text x="74" y="2092.0" text-anchor="start" font-size="22" font-weight="700" fill="#195FBD">읽을 결론: 최종 발화만 처리해 추론 낭비를 줄임</text></g>
-<g id="e45"><text x="74" y="2136.0" text-anchor="start" font-size="21" font-weight="400" fill="#5B697B">대가: 발화 종료 뒤 읽기/해석/응답 준비 대기</text></g>
+<g id="e45"><text x="74" y="2136.0" text-anchor="start" font-size="21" font-weight="400" fill="#5B697B">대가: 발화 종료 뒤 의미/응답 준비; 선행 읽기는 가능</text></g>
 <g id="e46"><text x="1312" y="315.0" text-anchor="start" font-size="30" font-weight="700" fill="#087A53">B  잠정 작업을 수정하며 처리</text></g>
 <g id="e47"><text x="1312" y="365.0" text-anchor="start" font-size="20" font-weight="400" fill="#5B697B">위에서 아래로 읽기. 가로 화살표의 시작/끝이 실제 송신자/수신자.</text></g>
 <g id="e49"><text x="1428" y="435" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Interaction</text><text x="1428" y="463" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Manager</text></g>

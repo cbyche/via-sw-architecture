@@ -8,14 +8,14 @@ import xml.etree.ElementTree as ET
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/architecture/12-decisions/decision-packages/diagrams'
-TITLES={31:'요청 이해의 정확성을 위한 의미 구성 — 요청별 생성과 지속 의미 작업공간',32:'화면 지칭의 정확성을 위한 대상 결합 — 통합 해석과 분리 생산 후 결합',33:'여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리',34:'음성 대화의 반응성과 정정 정확성을 위한 실행 — 발화 단위와 연속 수정',35:'대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력',36:'허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리'}
-NAMES={31:('매번 완성 의미를 생성','의미 상태에 변경을 적용'),32:('말과 화면을 함께 해석','두 근거를 생산한 뒤 결합'),33:('중앙이 대화 상태를 작성','업무별 처리자가 상태를 제안'),34:('확정 발화부터 처리','잠정 작업을 수정하며 처리'),35:('현재 값을 원본으로 저장','사건을 원본으로 상태 계산'),36:('공유 권한 안의 정책 검사','권한 없는 처리와 Broker')}
+TITLES={31:'요청 이해의 정확성을 위한 의미 구성 — 요청별 생성과 지속 의미 작업공간',32:'화면 지칭의 정확성을 위한 대상 결합 — 요청 시 관측 해석과 관측 시 화면 상태 구성',33:'여러 업무의 대화 정확성을 위한 협력 — 중앙 해석과 업무별 대화 처리',34:'음성 대화의 반응성과 정정 정확성을 위한 실행 — 발화 단위와 연속 수정',35:'대화와 업무의 복구 정확성을 위한 기록 — 현재 상태와 사건 이력',36:'허용된 자료만 처리하기 위한 권한 배치 — 공유 처리와 제한 처리'}
+NAMES={31:('매번 완성 의미를 생성','의미 상태에 변경을 적용'),32:('요청 → 원본 관측 해석','관측 → 상태 생산 / 요청 → 조회'),33:('중앙이 대화 상태를 작성','업무별 처리자가 상태를 제안'),34:('확정 발화부터 처리','잠정 작업을 수정하며 처리'),35:('현재 값을 원본으로 저장','사건을 원본으로 상태 계산'),36:('공유 권한 안의 정책 검사','권한 없는 처리와 Broker')}
 CASES={31:'“작년 표는 보고서에, 메일은 초안만” → “오른쪽 표”로 보완 → 발송 금지는 유지',32:'화면 7을 가리키며 “이 표와” → 스크롤 → 화면 8의 “저 표를 비교” → 첫 대상만 정정',33:'보고서와 메일이 각각 질문 → “보고서는 PDF, 메일에는 그 결론” → 다른 업무의 참조 연결',34:'“이 표를 보내…” → “아니, 설명만 해줘” → 준비는 재사용할 수 있지만 보내기는 실행 금지',35:'질문 답변을 확정 → Agent에 전송 → 접수 확인 전에 VIA 종료 → 중복 없이 이어가기',36:'허용된 보고서를 요약하는 처리 코드에 결함 → 무관한 파일 접근을 어디에서 막는가?'}
 BENEFITS={
 31:(["유리: 자유로운 새 의도를 전체 맥락에서 다시 구성","대가: 앞선 조건 누락을 검증해야 함; 관련 근거 재해석","선택: 짧거나 표현 범위가 넓은 대화"],["유리: 명시한 조건을 유지하며 필요한 관계만 갱신","대가: 변경 언어/의존성 설계; 표현 밖 뜻은 질문","선택: 여러 번 보완하고 조건을 이어가는 대화"]),
-32:(["유리: 복잡한 시각 표현과 말의 맥락을 함께 활용","대가: 시간/대상 오결합 가능; 관련 장면 재해석","선택: 낯선 화면과 자유로운 표현이 중요할 때"],["유리: 시간/위치 결합 근거와 정정 범위를 명시","대가: 두 생산의 누락/지연; 표현 밖 영역은 재지칭","선택: 순차 지칭과 반복 정정이 많을 때"]),
+32:(["유리: 복잡한 시각 표현과 말의 맥락을 함께 활용","대가: 시간/대상 오결합 가능; 관련 장면 재해석","선택: 낯선 화면과 자유로운 표현이 중요할 때"],["유리: 발행한 화면 상태를 여러 요청이 재조회","대가: 미사용 화면 처리/상태 누락/오류 전파/표현 손실","선택: 지원 관계가 안정적이고 반복 지칭이 많을 때"]),
 33:(["유리: 업무 간 생략/교차 참조를 한 번에 해석","대가: 중앙이 모든 대화 전이 규칙을 관리","선택: 짧고 서로 얽힌 업무 대화"],["유리: 업무별 대화 규칙/사건 처리를 해당 actor가 소유","대가: 참가 누락/제안 충돌/참조 왕복/모델 경합","선택: 독립적으로 오래 이어지는 여러 업무"]),
-34:(["유리: 최종 발화만 처리해 추론 낭비를 줄임","대가: 발화 종료 뒤 읽기/해석/응답 준비 대기","선택: 짧은 발화나 추론 자원이 부족한 환경"],["유리: 발화 중 준비; 정정 뒤 유효한 읽기 재사용","대가: 취소 낭비/버전 누락/공유 모델 backlog","선택: 긴 발화에서 재사용 가능한 준비가 많을 때"]),
+34:(["유리: 최종 발화만 처리해 추론 낭비를 줄임","대가: 발화 종료 뒤 의미/응답 준비; 선행 읽기는 가능","선택: 짧은 발화나 추론 자원이 부족한 환경"],["유리: 발화 중 준비; 정정 뒤 유효한 읽기 재사용","대가: 취소 낭비/버전 누락/공유 모델 backlog","선택: 긴 발화에서 재사용 가능한 준비가 많을 때"]),
 35:(["유리: 현재 record를 직접 읽어 단순하게 복구","대가: 새 조회/원인 분석은 보존된 기록에 제한","선택: 현재 상태 조회와 짧은 재시작이 중심"],["유리: 같은 사건으로 상태 재구성과 원인 추적","대가: 사건 schema/삭제/재생/검증 부담","선택: 과거 의미 전이의 재구성이 실제로 필요"]),
 36:(["유리: 직접 호출/공유 자료로 복사와 IPC를 줄임","대가: 처리 코드 결함이 넓은 process 권한에 도달","선택: 작은 신뢰 코드와 자원 제약을 우선"],["유리: 처리 코드가 잘못돼도 직접 자료 접근 차단","대가: IPC/복사/handle 수명; Broker는 여전히 신뢰","선택: 침해 범위를 줄이는 것이 중요한 환경"])}
 
@@ -57,7 +57,13 @@ def semantic(d):
   d.model(810,790);d.call('gen',at=(660,860))
   d.cpt('out',30,1580,650,90,'Request Controller')
   d.e('check','out','3  검증한 의미 또는 확인할 질문',ret=True,at=(65,1460))
-  d.txt(800,1220,['의미 원본: 채택한 완성안','보완/정정 때 새 완성안 생산','검증/부분 재시도도 가능'],21)
+  d.store('saved',30,1850,650,90,'채택 제안과 질문')
+  d.e('out','saved','4  검증한 제안/질문 저장; 부분 수정 허용',at=(60,1735))
+  d.e('saved','gen','Controller 경유: 이전 제안/조건 재사용',sp='L',tp='L',via=[(8,1895),(8,890)],at=(40,1985))
+  d.cpt('cm',810,1430,350,90,'Context Manager');d.cpt('tm',810,1710,350,90,'Task Manager')
+  d.e('cm','out','자료 변경/근거',sp='L',tp='R',td=-20,via=[(745,1475),(745,1605)],at=(780,1350))
+  d.e('tm','out','Task 변경/사실',sp='L',tp='R',td=20,via=[(770,1755),(770,1645)],at=(780,1820))
+  d.txt(805,1210,['Controller가 영향 요청 재검증','필요한 완성안만 재생성','보존 검사/필드 patch 포함'],20)
  else:
   d.cpt('ri',30,680,650,90,'Request Interpreter');d.model(810,620);d.call('ri',at=(660,625))
   d.e('rc','ri','1  원문 + 현재 의미/질문 요약',at=(70,565))
@@ -76,43 +82,51 @@ def semantic(d):
   d.cpt('tm',810,1710,350,90,'Task Manager')
   d.e('cm','ws','자료 변경/현재 근거',sp='L',tp='R',td=40,via=[(730,1475),(730,1265)],at=(805,1545))
   d.e('tm','ws','Task 변경/현재 사실',sp='L',tp='R',td=95,via=[(755,1755),(755,1320)],at=(800,1830))
-  d.txt(30,1810,'채택 의미는 State Store에 저장; 질문은 Response Manager가 게시')
+  d.cpt('rm',30,1900,650,90,'Response Manager')
+  d.e('ws','rm','미해결 필드 질문 게시 요청',sp='L',tp='L',via=[(8,1225),(8,1945)],at=(40,1820))
+  d.e('rm','ws','실제 게시/답변 연결',sp='L',tp='L',sd=20,td=20,via=[(20,1965),(20,1245)],at=(40,2025),ret=True)
 
 def grounding(d):
  d.cpt('cm',30,410,1130,90,'Context Manager')
- d.txt(30,350,'Interaction Manager가 기록한 화면/포인터/발화 시점')
+ d.txt(30,350,'같은 동의/활성 창/관측 예산; Interaction Manager가 화면/포인터/시점 수집')
  if d.s=='A':
-  d.cpt('joint',30,750,650,750,'Joint Grounding Interpreter',d.c)
-  d.mod('gen',80,900,550,100,'시각과 언어 공동 해석기','joint')
-  d.mod('check',80,1280,550,100,'관측 대상 검증기','joint')
-  d.e('cm','gen','1  원문 + 화면 7/8 + 포인터/시점',via=[(595,620),(355,620)],at=(75,575))
-  d.model(810,850);d.call('gen',at=(660,885))
-  d.e('gen','check','2  d1=L@7, d2=R@8 완성 대응',at=(95,1110))
-  d.cpt('out',30,1700,650,90,'Request Controller')
-  d.e('check','out','3  근거 검사 후 대응 관계 반환',ret=True,at=(60,1560))
-  d.txt(800,1280,['지칭 관계는 모델이 생성','틀린 ID/시점은 코드로 검사','정정: 관련 장면 다시 해석'],21)
+  d.store('raw',80,700,550,95,'원본 관측 버퍼')
+  d.cpt('rc',810,700,350,90,'Request Controller')
+  d.cpt('joint',30,1040,650,600,'Observation Grounding Interpreter',d.c)
+  d.mod('gen',80,1160,550,90,'시각과 언어 공동 해석기','joint')
+  d.mod('check',80,1460,550,90,'관측 대상 검증기','joint')
+  d.e('cm','raw','관측 1  화면/포인터/시점 보존',via=[(595,610),(355,610)],at=(80,565))
+  d.e('rc','gen','요청 1  원문/지시 시점',sp='L',tp='R',via=[(730,745),(730,1205)],at=(770,905))
+  d.e('raw','gen','요청 2  해당 시점 원본 반환',at=(120,900),ret=True)
+  d.e('gen','raw','원본 조회: Context Manager 경유',sp='L',tp='L',via=[(8,1205),(8,747.5)],at=(75,835))
+  d.model(810,1080);d.call('gen',at=(680,1145))
+  d.e('gen','check','요청 3  완성 대상 관계; ID/시점 검증',at=(90,1335))
+  d.cpt('out',30,1830,650,90,'Request Controller')
+  d.e('check','out','요청 4  참조 또는 미해결 반환',at=(65,1700),ret=True)
+  d.txt(780,1510,['화면 변화만으로 의미 생산 안 함','정정: 원본 재해석/검증한 patch','결과 cache도 허용'],20)
+  d.txt(30,1990,'요청 해석의 결과가 지칭을 결정. 관측 기록만으로 의미 상태를 유지하지 않음.',20)
  else:
-  d.cpt('coord',30,670,1130,90,'Grounding Coordinator',d.c)
-  d.cpt('scene',30,970,510,100,'Scene Candidate Producer',d.c)
-  d.cpt('anchor',650,970,510,100,'Deictic Anchor Producer',d.c)
-  d.cpt('join',300,1370,600,100,'Grounding Join Engine',d.c)
-  d.cpt('out',300,1700,600,90,'Request Controller')
-  d.e('cm','coord','1  같은 범위의 근거와 수정 버전',at=(65,555))
-  d.e('coord','scene','2  화면/포인터/시점',sd=-310,at=(45,830))
-  d.e('coord','anchor','2  발화/시점/이전 참조',sd=310,at=(670,830))
-  d.e('scene','join','3  Coordinator 경유: 화면 후보',td=-180,via=[(285,1220),(420,1220)],at=(50,1140),ret=True)
-  d.e('anchor','join','3  Coordinator 경유: 지시 조건',td=180,via=[(905,1220),(780,1220)],at=(800,1235),ret=True)
-  d.e('join','out','4  Coordinator 경유: 결합 결과/버전\n없음/복수/표현 밖 → 해당 지시 질문',at=(325,1510),ret=True)
-  d.e('join','coord','미해결: 질문 또는 필요한 근거 재생산',sp='L',tp='L',via=[(8,1420),(8,715)],at=(35,1280))
-  d.cpt('ma',425,850,350,75,'Model Access')
-  d.ext('omni',425,1110,350,90,'공유 Omni')
-  d.e('scene','ma','추론 요청',sp='T',tp='L',td=-12,via=[(285,875.5)],at=(295,925),color=INK)
-  d.e('ma','scene','후보 결과',sp='L',tp='T',sd=12,td=20,via=[(305,899.5)],at=(50,910),ret=True,color=INK)
-  d.e('anchor','ma','추론 요청',sp='T',tp='R',td=-12,via=[(905,875.5)],at=(785,925),color=INK)
-  d.e('ma','anchor','조건 결과',sp='R',tp='T',sd=12,td=20,via=[(925,899.5)],at=(965,910),ret=True,color=INK)
-  d.e('ma','omni','추론',sd=-20,td=-20,at=(550,1010),color=INK)
-  d.e('omni','ma','결과',sp='T',tp='B',sd=20,td=20,at=(605,1050),ret=True,color=INK)
-  d.txt(30,1850,['Coordinator가 두 결과의 버전 확인; Join Engine은 조건 결합만 수행', '원본 언어/시각 해석을 Join Engine으로 옮기거나 모델을 복제하지 않음'],20)
+  d.cpt('scene',30,700,650,980,'Scene State Service',d.c)
+  d.mod('update',80,840,550,90,'장면 갱신기','scene')
+  d.store('state',80,1140,550,100,'대상과 관계 저장소','scene')
+  d.mod('query',80,1490,550,90,'시점 조회기','scene')
+  d.model(810,770);d.call('update',at=(670,785))
+  d.e('cm','update','관측 1  화면 변화/원본 참조/철회',via=[(595,610),(355,610)],at=(80,560))
+  d.e('update','state','관측 2  대상/관계/버전/coverage 발행',at=(95,1015))
+  d.e('state','query','시점별 상태 + 누락 구간',at=(110,1320),ret=True,sd=-20,td=-20)
+  d.e('query','state','해당 버전 조회',sp='T',tp='B',sd=20,td=20,at=(390,1405))
+  d.cpt('rc',810,1240,350,90,'Request Controller')
+  d.cpt('qi',810,1550,350,90,'Scene Query Interpreter',d.c)
+  d.e('rc','qi','요청 1  원문/시점',at=(825,1400))
+  d.e('qi','query','요청 2  언어 조건으로 상태 조회',sp='L',tp='R',sd=-15,td=-15,via=[(730,1580),(730,1520)],at=(660,1435))
+  d.e('query','qi','참조/근거 버전 또는 미해결',sp='R',tp='L',sd=15,td=15,via=[(750,1550),(750,1610)],at=(660,1695),ret=True)
+  d.e('qi','ma','언어 조건 생성 요청',sp='R',tp='R',sd=-15,td=-15,via=[(1170,1580),(1170,797.5)],at=(810,1180),color=INK)
+  d.e('ma','qi','언어 조건 반환',sp='R',tp='R',sd=15,td=15,via=[(1185,827.5),(1185,1610)],at=(810,1130),ret=True,color=INK)
+  d.e('query','update','상태 공백: 재구성/대기 또는 재지칭',sp='L',tp='L',via=[(50,1535),(50,885)],at=(95,1720))
+  d.cpt('out',810,1870,350,90,'Request Controller')
+  d.e('qi','out','요청 3  조회 결과 반환',at=(825,1760),ret=True)
+  d.txt(30,1870,['개별 요청 밖에서 상태 생산; 여러 요청이 같은 발행 상태 소비','정상 조회는 원본 픽셀을 다시 해석하지 않음','표현 밖 관계는 재지칭. 원본 해석 fallback은 별도 혼합'],19)
+
 
 def dialogue(d):
  d.cpt('rc',30,410,1130,90,'Interaction Manager');d.txt(30,350,'같은 발화 + 보고서/메일의 질문과 실제 전달 기록')
@@ -134,13 +148,18 @@ def dialogue(d):
   d.cpt('runtime',30,1050,1130,580,'Task Dialogue Runtime',d.c)
   d.mod('r',75,1180,470,100,'보고서 대화 actor','runtime');d.mod('m',650,1180,470,100,'메일 대화 actor','runtime')
   d.store('rs',75,1490,470,90,'보고서 대화 상태','runtime');d.store('ms',650,1490,470,90,'메일 대화 상태','runtime')
-  d.e('rc','coord','1  입력 버전/참가 후보; 현재 조건 검사',at=(65,565))
+  d.e('rc','coord','1  원문/입력 버전',at=(425,520))
   for k,offset,x in [('r',-285,75),('m',290,660)]:
-   d.e('coord',k,'2  원문/허용 참조',sd=offset-20,td=-20,at=(x,865))
-   d.e(k,'coord','3  절/다음 상태/필요 참조',sp='T',tp='B',sd=20,td=offset+20,ret=True,at=(x,950))
+   d.e('coord',k,'2  원문 / 3  교환한 참조',sd=offset-20,td=-20,at=(x,865))
+   d.e(k,'coord','3  절/다음 상태/제공 또는 필요한 참조',sp='T',tp='B',sd=20,td=offset+20,ret=True,at=(x,950))
    d.e(k,k+'s','5  채택 통지 후 상태 반영',sd=-20,td=-20,at=(x,1360))
    d.e(k+'s',k,'이전 상태',sp='T',tp='B',sd=20,td=20,ret=True,at=(x+230,1420))
-  d.txt(40,1660,['4  Coordinator가 참조 교환/재제안을 중개 → Request Controller 현재 검사', '5  State Store가 채택된 변경/명령을 함께 확정 → 각 actor에 통지'],20)
+  d.cpt('guard',30,550,510,85,'Request Controller');d.cpt('commit',650,550,510,85,'State Store')
+  d.e('coord','guard','4  현재 검사 요청',sp='T',tp='B',sd=-325,td=-15,at=(45,655))
+  d.e('guard','coord','허용/거절',sp='B',tp='T',sd=15,td=-295,at=(350,655),ret=True)
+  d.e('coord','commit','5  상태/intent 원자 확정',sp='T',tp='B',sd=295,td=-15,at=(650,655))
+  d.e('commit','coord','저장 성공',sp='B',tp='T',sd=15,td=325,at=(980,655),ret=True)
+  d.txt(40,1660,'3  보고서 참조는 Coordinator의 반환/전달 경로로 메일 actor에 제공',20)
   d.cpt('ri',350,1830,500,90,'Request Interpreter')
   d.e('r','ri','자기 맥락으로 해석 요청',sp='L',tp='L',sd=-15,td=-15,via=[(8,1215),(8,1860)],at=(35,1770),color=INK)
   d.e('ri','r','자기 의미 결과',sp='L',tp='L',sd=15,td=15,via=[(20,1890),(20,1245)],at=(35,1930),ret=True,color=INK)
@@ -159,7 +178,11 @@ def voice(d):
   d.e('rc','ri','3  확정 발화/근거로 의미 요청',at=(65,980),sd=-20,td=-20)
   d.e('ri','rc','의미 반환',sp='T',tp='B',sd=20,td=20,ret=True,at=(385,1050))
   d.e('rc','rm','4  현재 검사 후 응답 허용',sp='L',tp='L',via=[(8,825),(8,1595)],at=(65,1410))
-  d.txt(800,1130,['부분 전사는 수신만 유지','발화 확정 뒤 의미 처리','후속 정정은 새 요청으로'],21)
+  d.store('prefetch',800,1170,360,100,'선행 읽기 cache')
+  d.e('im','cm','선행 1  허용된 지시 대상 읽기',sd=385,at=(810,600),color=INK)
+  d.e('cm','prefetch','내용/원본 버전 보관',at=(820,1000),color=INK)
+  d.e('prefetch','cm','확정 후 유효하면 재사용',sp='T',tp='B',sd=25,td=25,at=(820,1090),ret=True,color=INK)
+  d.txt(780,1380,['선행 읽기는 A에도 포함','잠정 의미/응답 작업망은 없음','정정 시 현재 요청 재해석'],20)
   d.txt(30,1770,['Request Interpreter/Response Manager → Model Access → 공유 Omni', '5  Response Manager → Interaction Manager: 음성/Text; 실제 전달 구간 반환'],20)
  else:
   d.cpt('run',30,720,640,810,'Incremental Interaction Runtime',d.c)
@@ -185,7 +208,10 @@ def state(d):
   d.e('rc','write','1  상태 변경 + 명령 intent',via=[(595,625),(345,625)],at=(65,590))
   d.e('write','record','2  상태/inbox/outbox를 한 transaction에 기록',at=(95,1070))
   d.e('record','restore','3  재시작: 현재 record',sp='R',tp='L',at=(635,1180))
-  d.txt(30,1970,'감사 log/backup도 가능. 정상 복구 원본은 현재 record.',21)
+  d.store('audit',750,880,350,100,'감사 기록','ss')
+  d.e('write','audit','동일 transaction: 진단 이력',sp='R',tp='L',at=(635,1000))
+  d.txt(75,2015,'backup 복원 뒤 미완료 원장 확인; 감사 이력은 상태 원본 아님',20)
+  d.txt(30,1970,'단순 재시작은 양안 모두 지원. 사건 재구성의 추가 가치가 있어야 B 선택.',21)
  else:
   d.mod('append',80,880,490,100,'Journal Append Module','ss');d.store('journal',80,1180,490,100,'확정 사건 원장','ss')
   d.mod('reduce',710,1180,390,100,'Projection Module','ss');d.store('view',710,1440,390,100,'조회 상태와 사건 위치','ss')
@@ -242,9 +268,12 @@ def isolation(d):
   d.e('omni','ma','결과',sp='T',tp='B',sd=20,td=20,ret=True,at=(970,1540),color=INK)
   d.e('broker','files','허용/철회 재검사 뒤 source 읽기',sp='R',tp='R',via=[(1180,1070),(1180,1925)],at=(685,1790))
   d.e('files','broker','읽은 자료/버전 반환',sp='L',tp='B',via=[(675,1925),(675,1770),(1145,1770),(1145,1165),(905,1165)],ret=True,at=(690,1730))
-  d.txt(30,1490,['제한 process에는 파일/네트워크/DB 자격 없음','모델도 직접 호출 불가; 요청은 Broker 경유','철회: handle 차단 + 늦은 결과 폐기'],19)
- d.txt(30,2000,'5  의미 제안은 Request Controller가 현재 검사; 외부 실행 승인 책임은 그대로',20)
- d.txt(30,2050,'상단 정책/요청 Component도 신뢰 Core 소속. 모델 런타임은 공통 의존성으로 표시.',19)
+  d.ext('os',65,1640,470,90,'OS 접근 제어')
+  d.e('cm','os','우회 시도: 직접 파일/네트워크 읽기',at=(80,1450),color=INK)
+  d.e('os','cm','권한 없음: 거절 반환',sp='T',tp='B',sd=25,td=25,at=(85,1530),ret=True,color=INK)
+  d.txt(35,1820,['제한 코드의 우회까지 막으려면 B가 필요','Broker/OS 침해는 보호 범위 밖','철회: handle 차단 + 늦은 결과 폐기'],19)
+ d.txt(30,2000,'5  의미 제안은 신뢰 Core의 Request Controller가 현재 검사; 상단 Policy Manager도 신뢰 Core 소속',19)
+ d.txt(30,2050,'같은 필수선: 허용 범위/철회/외부 인계 검사. 처리 코드 침해 격리가 필수이면 A는 부적격.',19)
 
 def structural(n):
  p=Plate(f'choice{n}-structure',f'04-{n}',TITLES[n],CASES[n],height=2520)
@@ -264,16 +293,16 @@ TRACES={
 (0,1,'1  “작년 표는 보고서에, 메일은 초안만”',False),(1,2,'관련 질문/Task/자료와 원문으로 전체 의미 요청',False),(2,3,'2  목표/대상/조건의 완성 의미 생성 요청',False),(3,2,'P1: 대상 미해결, send=false',True),(2,1,'검증된 P1과 미해결 대상 반환',True),(1,4,'3  “어느 표인가요?” 게시 요청',False),(4,0,'질문 표시/음성 전달',False),(0,1,'실제 게시 구간 반환',True),(0,1,'실제 질문을 본 뒤 “오른쪽 표”',False),(1,2,'질문 + 보완 + 이전 조건으로 재해석 요청',False),(2,1,'새 완성안 P2: source=R@7, send=false',True),(1,2,'4  자료가 바뀌면 현재 근거로 재검증/재해석',False),(2,1,'현재 조건을 만족하는 의미 반환',True),(1,1,'5  현재 검사 후 명령 채택; 발송 명령은 만들지 않음',False)]),
 'B':(['Request Controller','Request Interpreter','Meaning Workspace','Semantic Constraint Engine','Response Manager'],[
 (0,1,'1  같은 원문/근거 + 현재 의미/질문 요약',False),(1,2,'목표 추가, 표 후보 L/R, 메일 발송 금지 후보',False),(2,3,'2  현재 후보/제약/근거 버전으로 관계 계산 요청',False),(3,2,'표 대상 미해결; 발송 금지 유지',True),(2,4,'3  대상 필드 질문 게시 요청',False),(4,2,'Interaction Manager의 실제 게시 기록 반환',True),(0,1,'실제 질문을 본 뒤 같은 “오른쪽 표”',False),(1,2,'NARROW(q1, R@7, expected=12)',False),(2,3,'대상 후보만 제한; send=false는 변경하지 않음',False),(3,2,'관계 해 또는 충돌/미해결 반환',True),(2,2,'4  자료 변경: 의존 후보 무효화/재조회/재평가',False),(2,0,'현재 의미와 근거 버전 반환',True),(0,0,'5  현재 검사 후 명령 채택; 외부 승인과 의미 해는 별개',False)])},
-32:{'A':(['Interaction Manager','Context Manager','Joint Grounding Interpreter','Model Access','Request Controller'],[
-(0,1,'1  첫 지시: 화면 7, 포인터 p1, 시점 t1',False),(0,1,'2  스크롤 뒤 둘째 지시: 화면 8, p2, t2',False),(1,2,'같은 원문/관측 묶음; Request Controller가 해석 요청',False),(2,3,'3  말 + 화면 + 포인터/시점의 공동 해석',False),(3,2,'완성 대응 d1=L@7, d2=R@8 제안',True),(2,2,'관측 ID/창/시점 검증; 모호하면 재해석/질문',False),(2,4,'검증된 두 대상과 비교 관계 반환',True),(0,4,'4  “첫 표는 왼쪽 말고 오른쪽”',False),(4,2,'해당 관측과 정정 원문으로 대응 재해석',False),(2,4,'새 첫 참조 + 유지할 둘째 참조 반환',True),(4,4,'5  입력/자료/권한 현재 검사 후 인계',False)]),
-'B':(['Grounding Coordinator','Scene Candidate Producer','Deictic Anchor Producer','Grounding Join Engine','Request Controller'],[
-(0,0,'1  화면 7/p1/t1 기록을 Context Manager에서 수신',False),(0,0,'2  화면 8/p2/t2 및 최종 발화와 같은 범위로 고정',False),(0,1,'화면/포인터/시점 → 후보 생성 요청',False),(0,2,'발화/시점/이전 참조 → 지시 조건 생성 요청',False),(1,0,'3  L@7, R@8 등의 영역/종류/시점 후보',True),(2,0,'d1:t1의 표, d2:t2의 표, 관계=비교',True),(0,3,'호환되는 두 버전 확인 후 조건 결합 요청',False),(3,0,'d1=L@7, d2=R@8 또는 미해결',True),(0,2,'4  첫 표 정정: 언어 조건 수정 요청',False),(2,0,'수정한 첫 지시 조건 + 새 버전 반환',True),(0,3,'화면 후보가 충분하면 재사용; 없으면 재생산',False),(3,0,'새 결합 결과와 사용한 두 근거 버전 반환',True),(0,4,'5  새 결합 결과/버전 반환 → 현재 검사 후 인계',True)])},
+32:{'A':(['Interaction Manager','Context Manager','Observation Grounding Interpreter','Model Access','Request Controller'],[
+(0,1,'1  화면 7/p1/t1 원본 저장',False),(0,1,'2  화면 8/p2/t2 원본 저장',False),(4,2,'원문/지시 시점으로 해석 요청',False),(2,1,'해당 원본 관측 조회',False),(1,2,'화면/포인터/시점 반환',True),(2,3,'3  말과 원본 화면 공동 해석',False),(3,2,'L@7/R@8 후보 반환',True),(2,4,'ID/시간 검증한 참조 또는 미해결',True),(4,2,'4  첫 표 정정: 원본 재해석 또는 검증된 patch',False),(2,4,'수정한 첫 참조와 유지할 둘째 참조',True),(4,4,'5  현재 검사 후 인계. 과거 좌표를 현재 대상으로 대체하지 않음',False)]),
+'B':(['Context Manager','Scene State Service','Scene Query Interpreter','Model Access','Request Controller'],[
+(0,1,'1  화면 7 관측 사건; 개별 요청 밖에서 상태 생산 시작',False),(1,3,'화면 대상/관계 해석 요청',False),(3,1,'후보/관계 반환 → coverage/버전 발행',True),(0,1,'2  화면 8 관측 사건; 같은 생산 경로로 상태 발행',False),(4,2,'원문/시점으로 지칭 요청',False),(2,3,'언어 조회 조건 생성 요청; 원본 픽셀 사용 안 함',False),(3,2,'지시 시점/종류/관계 조건 반환',True),(2,1,'3  상태 7/8의 해당 조건 조회',False),(1,2,'참조/근거 또는 미해결. 미발행 구간은 대기/재구성',True),(4,2,'4  첫 표 정정',False),(2,1,'같은 관측 버전의 오른쪽 후보 재조회',False),(1,2,'수정한 참조 또는 coverage 부족 반환',True),(2,4,'5  현재 검사할 대상/버전 반환 → 인계',True)])},
 33:{'A':(['Task Manager','Request Controller','Request Interpreter','State Store','Agent Gateway'],[
 (0,1,'1  보고서 qR=형식?, 메일 qM=본문?; 실제 게시 연결',False),(1,2,'2  “보고서는 PDF, 메일에는 그 결론” 전체 해석 요청',False),(2,1,'qR=PDF; qM.content=R.result@4 제안',True),(1,1,'3  두 절의 관계/질문 버전/결론 참조 확인',False),(1,3,'4  현재 검사 후 두 변경 + 전송 intent를 원자 저장',False),(3,1,'채택 결과 반환',True),(1,4,'5  채택된 각 업무의 답변 전달',False),(4,0,'접수/결과 반환; 사용자 전달은 공통 응답 경로',True),(0,1,'별도 변형: 위 흐름의 채택 전에 qM 취소가 도착',False),(1,1,'옛 qM 답 거절; 독립 qR은 진행, 결합 조건이면 함께 보류',False)]),
 'B':(['Dialogue Coordinator','보고서 대화 actor','메일 대화 actor','Request Controller','State Store'],[
 (0,1,'1  같은 원문/버전 + 보고서의 허용 맥락',False),(0,2,'2  같은 원문/버전 + 메일의 허용 맥락',False),(1,0,'qR=PDF 변경 제안; 확정 결론 R.result@4 내보냄',True),(2,0,'내가 담당할 메일 절; 보고서 결론 참조 필요',True),(0,2,'3  허용된 결론 참조 전달 → actor가 본문 변경 재제안',False),(2,0,'qM.content=R.result@4 + 예상 버전',True),(0,3,'4  원문 절/관계/현재 질문/Task/권한 검사 요청',False),(3,0,'채택 허용 또는 변경된 의존 집합 거절',True),(0,4,'5  actor가 제안한 상태/intent를 원자 저장',False),(4,0,'채택된 버전/명령 intent 반환',True),(0,1,'저장 성공 후 채택 통지; 메일 actor에도 통지',False),(0,2,'별도 변형: 위 흐름의 채택 전 qM 취소 → 옛 제안 거절',False)])},
 34:{'A':(['Interaction Manager','Request Controller','Context Manager','Request Interpreter','Response Manager'],[
-(0,0,'1  “이 표를 보내…” 연속 수신; 아직 발화 미확정',False),(0,0,'2  의미 처리는 기다리고 ASR 수신/재생 중단은 계속',False),(0,1,'3  “아니 보내지 말고 설명만”까지 확정 입력',False),(1,2,'현재 허용된 표 읽기 요청',False),(2,1,'표 내용/버전 반환',True),(1,3,'확정 입력과 근거의 전체 의미 요청',False),(3,1,'설명 의도; 발송 금지 반환',True),(1,4,'4  현재 검사 후 설명 응답 허용',False),(4,0,'5  음성/Text 전달; 실제 재생 구간 반환',False),(0,1,'“세 번째 열” 정정: 먼저 재생 stop, 새 요청',False)]),
+(0,0,'1  “이 표를 보내…” 연속 수신; 아직 발화 미확정',False),(0,2,'2  허용된 대상은 선행 읽기/cache 가능; 의미 처리는 확정 대기',False),(0,1,'3  “아니 보내지 말고 설명만”까지 확정 입력',False),(1,2,'확정 후 유효 cache 재사용 또는 표 읽기 요청',False),(2,1,'표 내용/버전 반환',True),(1,3,'확정 입력과 근거의 전체 의미 요청',False),(3,1,'설명 의도; 발송 금지 반환',True),(1,4,'4  현재 검사 후 설명 응답 허용',False),(4,0,'5  음성/Text 전달; 실제 재생 구간 반환',False),(0,1,'“세 번째 열” 정정: 먼저 재생 stop, 새 요청',False)]),
 'B':(['Interaction Manager','Incremental Interaction Runtime','Context Manager','Request Interpreter','Request Controller'],[
 (0,1,'1  같은 부분 발화 + 수정 버전',False),(1,3,'2  잠정 의미 요청; 외부 실행 허용은 아님',False),(1,2,'이미 동의한 범위의 표 미리 읽기',False),(2,1,'표/버전 반환; 의존 관계에 기록',True),(3,1,'잠정 의미/의존 입력 버전 반환',True),(0,1,'3  “아니 보내지 말고 설명만” 수정',False),(1,1,'보내기 의미/응답 폐기; 유효한 표 읽기는 유지',False),(1,3,'설명 의미로 재해석; 취소 불가 job은 늦은 결과 폐기',False),(3,1,'설명 의미와 새 입력 버전 반환',True),(1,4,'4  유효 준비 결과 + 최종 입력; 현재 검사 요청',False),(4,0,'5  Response Manager를 통해 허용된 음성/Text 전달',False),(0,1,'새 정정: 먼저 stop; 관련 잠정 작업만 무효화',False)])},
 35:{'A':(['Request Controller','State Store','Agent Gateway','Downstream Agent','Response Manager'],[

@@ -12,7 +12,7 @@
 | 번호 | 주제 |
 | --- | --- |
 | [04-31](./04-31-semantic-construction.md) | 요청별 생성과 지속 의미 작업공간 |
-| [04-32](./04-32-screen-grounding.md) | 화면 지칭: 공동 해석과 분리 근거의 코드 결합 |
+| [04-32](./04-32-screen-grounding.md) | 화면 지칭: 요청 시 원본 해석과 관측 시 상태 생산/조회 |
 | [04-33](./04-33-dialogue-coordination.md) | 중앙 대화와 업무별 actor 협력 |
 | [04-34](./04-34-incremental-voice.md) | 확정 발화와 수정 가능한 연속 처리 |
 | [04-35](./04-35-state-authority.md) | 현재 상태와 사건 이력 원본 |
