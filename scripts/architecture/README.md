@@ -58,6 +58,8 @@ Alibaba S2S credential smoke test는 macOS Keychain의 `via-dashscope-api-key`, 
 
 현재 04-31~36의 구조와 사건 흐름 12쌍은 `generate_six_comparison_diagrams.py`로 생성한다. `--check`는 source 일치, XML, 소유 경계와 직교 경로 및 실제 연결 노드의 끝점을 검사한다. 본문/그림의 의미와 읽기 품질은 렌더로 별도 확인한다. 이전 두 생성기와 그림은 보존된 탐색의 재현 자료다.
 
+35/36의 메인 구조도는 `state_security_presentation.py`의 16:9 scene을 기존 `generate_six_comparison_diagrams.py`가 호출해 생성한다. 별도 중복 생성 경로는 없다. 다른 메인/사건도는 유지하며 동일 `--check`가 12쌍 전체를 검사한다. 발표용 PNG는 최종 SVG를 로컬 브라우저에서 2560×1440으로 렌더한 편의 산출물이다. 원본은 SVG/draw.io 공통 scene이며, 수정 후 PNG도 다시 내보내고 실제 글꼴/화살표를 확인한다.
+
 ## 04-41 요청 의미 확정 도식
 
 `generate_request_resolution_diagrams.py`는 41의 메인 구조도와 A/B 사건도 세 쌍을 생성한다. `--check`는 SVG/draw.io 일치, XML, 소유와 경로를 검사한다. 복원한 31의 생성기와 독립적으로 관리하며 설계 의미는 41 본문을 따른다.
