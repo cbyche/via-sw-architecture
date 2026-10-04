@@ -61,3 +61,7 @@ Alibaba S2S credential smoke test는 macOS Keychain의 `via-dashscope-api-key`, 
 ## 04-41 요청 의미 확정 도식
 
 `generate_request_resolution_diagrams.py`는 41의 메인 구조도와 A/B 사건도 세 쌍을 생성한다. `--check`는 SVG/draw.io 일치, XML, 소유와 경로를 검사한다. 복원한 31의 생성기와 독립적으로 관리하며 설계 의미는 41 본문을 따른다.
+
+## 04-42 대화와 업무 수명 발표 도식
+
+`python3 scripts/architecture/generate_lifecycle_ownership_diagrams.py`는 42의 16:9 메인 구조도, 수명 시간축, A/B 답변 처리 사건도, 변경 영향 비교도 다섯 쌍과 `choice42-review.html`을 생성한다. `--check`는 source 일치, XML ID/연결, owner 포함, canvas와 직교 경로를 검사한다. SVG/draw.io는 같은 scene으로 생성한다. 별도 브라우저 렌더링으로 한글·실제 글자 겹침·발표 크기 가독성을 확인한다. PNG는 최종 SVG를 브라우저에서 내보낸 편의 산출물이며 생성기 원본은 아니다. 기존 생성기와 설계는 변경하지 않는다.
