@@ -1,5 +1,11 @@
 # Decision Reconstruction 그림
 
+## 33 발표용 A/B/C 판단 책임 비교
+
+[메인 SVG](./choice33-structure.svg) / [draw.io](./choice33-structure.drawio) / [PNG](./choice33-structure.png) / [본문과 발표 대본](../04-33-dialogue-coordination.md). 2560×1440의 한 장에 같은 입력/정정, A의 통합 판단, B의 공통 대화와 Task별 담당, C의 기능별 부분 판단, 상태/교환/공통 채택 및 조건부 손익을 표시한다. 세 열은 동시에 실행하는 시스템이 아닌 대안이다.
+
+[보충 사건도 SVG](./choice33-event.svg) / [draw.io](./choice33-event.drawio)는 교차 사건과 예외를 확인하는 자료다. 메인 그림을 이해하기 위한 선행 자료가 아니다. 생성 scene은 `scripts/architecture/dialogue_abc_presentation.py`, 검사 entry point는 `generate_six_comparison_diagrams.py --check`다. 분해는 process/Omni 가중치 복제를 뜻하지 않으며 품질 우위는 미측정이다.
+
 ## 42 발표용 수명 구조 비교
 
 [전체 보기](./choice42-review.html) / [설계 문서](../04-42-lifecycle-ownership.md). 2560×1440의 16:9 다섯 장이며 각 SVG에 편집 가능한 draw.io를 짝으로 둔다.
