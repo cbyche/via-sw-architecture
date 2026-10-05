@@ -98,12 +98,15 @@ def structure():
     p.node('Adispatch',475,580,350,94,'Dialogue Dispatcher',owner='Aowner',color=BLUE)
     p.node('Astate',475,827,350,86,'Dialogue Progress State',kind='store',owner='Aowner',color=BLUE)
     p.comp('Arc',64,570,310,'Request Controller')
-    p.comp('Arm',925,570,310,'Response Manager')
+    p.comp('Arm',925,570,310,'Response Manager',h=365)
+    p.node('Acompose',945,645,270,60,'Response Composer',owner='Arm')
+    p.node('Apublish',945,740,270,60,'Publication Control',owner='Arm')
+    p.node('Apublication',945,845,270,64,'Publication Outbox',kind='store',owner='Arm')
     p.comp('Avoice',64,833,310,'Voice Runtime')
-    p.comp('Aarb',440,1075,420,'Output Arbiter',h=200)
-    p.node('Aguard',463,1147,374,38,'Publication Guard',owner='Aarb')
-    p.node('Afocus',463,1197,374,64,'Presentation State',kind='store',owner='Aarb')
-    p.comp('Aio',440,1330,420,'Interaction Manager')
+    p.comp('Aoutput',440,1075,420,'Interaction Manager',h=300)
+    p.node('Aturn',463,1147,374,42,'Turn-Taking Control',owner='Aoutput')
+    p.node('Achannel',463,1230,374,50,'Channel I/O',owner='Aoutput')
+    p.node('Aplayback',463,1293,374,64,'Playback State',kind='store',owner='Aoutput')
     p.arrow('Agate','Adispatch','1  InputFinal(u2)',(65,475),sp='B',tp='L',td=-32,
             via=[(795,445),(425,445),(425,595)],color=BLUE)
     p.arrow('Atask','Adispatch','2  Q1 / r1',(890,475),sp='B',tp='T',td=40,
@@ -112,80 +115,106 @@ def structure():
             via=[(413,610),(413,585)],color=BLUE)
     p.arrow('Arc','Adispatch','의미 / 질문 / Direct 통과',(65,682),sp='R',tp='L',sd=17,td=17,
             via=[(402,619),(402,644)],color=BLUE,ret=True)
-    p.arrow('Adispatch','Arm','4  확정 근거',(942,503),sp='R',tp='L',sd=-17,td=-17,
-            via=[(888,610),(888,585)],color=BLUE)
-    p.arrow('Arm','Adispatch','응답 후보 반환',(920,683),sp='L',tp='R',sd=17,td=17,
-            via=[(900,619),(900,644)],color=BLUE,ret=True)
+    p.arrow('Adispatch','Acompose','4  확정 근거',(942,503),sp='R',tp='L',sd=-17,td=-17,
+            via=[(888,610),(888,658)],color=BLUE)
+    p.arrow('Arm','Adispatch','후보 /\n게시 상태',(863,634),sp='L',tp='R',sd=-60,td=17,
+            via=[(900,692.5),(900,644)],color=BLUE,ret=True,size=21)
     p.arrow('Adispatch','Astate','5  대기·후속·후보',(494,715),color=BLUE,sd=-30,td=-30)
     p.arrow('Astate','Adispatch','revision / waiting IDs',(494,767),sp='T',tp='B',sd=30,td=30,color=BLUE,ret=True)
     p.arrow('Avoice','Arc','Direct 후보 → admission',(67,744),sp='T',tp='B',size=23)
-    p.arrow('Adispatch','Aguard','6  유효 후보 / P2·Q1',(905,1023),sp='R',tp='R',
-            via=[(883,627),(883,1166)],color=BLUE)
-    p.arrow('Afocus','Adispatch','실제 전달 / P2·Q1',(65,1010),sp='L',tp='L',
-            via=[(406,1229),(406,713),(475,713)],td=86,color=BLUE,ret=True)
-    p.arrow('Agate','Aguard','u2: output fence',(65,1102),sp='L',tp='L',
-            via=[(390,292),(390,250),(50,250),(50,1166)],size=23)
-    p.arrow('Aguard','Arc','v: 현재성 조회',(65,713),sp='L',tp='B',td=120,
-            via=[(417,1166),(417,692),(339,692)],size=23)
+    p.arrow('Adispatch','Apublish','6 게시\n요청',(867,717),sp='R',tp='L',sd=50,
+            via=[(878,677),(878,770)],color=BLUE,size=21)
+    p.arrow('Apublish','Aturn','7  release / P2·Q1',(925,1084),sp='L',tp='R',
+            via=[(883,770),(883,1168)],color=BLUE,size=23)
+    p.arrow('Aplayback','Adispatch','실제 전달 / P2·Q1',(65,1010),sp='L',tp='L',
+            via=[(406,1325),(406,713),(475,713)],td=86,color=BLUE,ret=True)
+    p.arrow('Agate','Aturn','u2: output fence',(65,1102),sp='L',tp='L',
+            via=[(390,292),(390,250),(50,250),(50,1168)],size=23)
+
 
     # B: input/notice producers activate subscribers; no central return dispatcher.
-    p.comp('Bruntime',1340,455,1170,'Reactive Interaction Runtime',GREEN,h=590)
+    p.comp('Bruntime',1340,455,1170,'Reactive Interaction Runtime',GREEN,h=605)
     p.comp('Binput',1366,560,310,'Input Resolution Stage',GREEN,h=165,parent='Bruntime')
     p.node('Biw',1386,644,270,64,'Input Window',kind='store',owner='Binput',color=GREEN)
-    p.comp('Bnotice',2190,560,310,'Task Notice Stage',GREEN,h=165,parent='Bruntime')
-    p.node('Bnw',2210,644,270,64,'Notice Window',kind='store',owner='Bnotice',color=GREEN)
+    p.comp('Bnotice',2190,526,310,'Task Notice Stage',GREEN,h=165,parent='Bruntime')
+    p.node('Bnw',2210,610,270,64,'Notice Window',kind='store',owner='Bnotice',color=GREEN)
     p.comp('Brc',1366,815,310,'Request Controller',parent='Bruntime')
-    p.comp('Brm',2190,815,310,'Response Manager',parent='Bruntime')
+    p.comp('Brm',2190,710,310,'Response Manager',h=335,parent='Bruntime')
+    p.node('Bcompose',2210,793,270,52,'Response Composer',owner='Brm')
+    p.node('Bpublish',2210,871,270,50,'Publication Control',owner='Brm')
+    p.node('Bpublication',2210,958,270,64,'Publication Outbox',kind='store',owner='Brm')
     p.comp('Bvoice',1366,957,310,'Voice Runtime',parent='Bruntime')
     p.comp('Bjoin',1765,865,320,'Publication Join',GREEN,h=172,parent='Bruntime')
     p.node('Bjw',1785,938,280,64,'Publication Window',kind='store',owner='Bjoin',color=GREEN)
-    p.comp('Barb',1715,1075,420,'Output Arbiter',h=200)
-    p.node('Bguard',1738,1147,374,38,'Publication Guard',owner='Barb')
-    p.node('Bfocus',1738,1197,374,64,'Presentation State',kind='store',owner='Barb')
-    p.comp('Bio',1715,1330,420,'Interaction Manager')
+    p.comp('Boutput',1715,1075,420,'Interaction Manager',h=300)
+    p.node('Bturn',1738,1147,374,42,'Turn-Taking Control',owner='Boutput')
+    p.node('Bchannel',1738,1230,374,50,'Channel I/O',owner='Boutput')
+    p.node('Bplayback',1738,1293,374,64,'Playback State',kind='store',owner='Boutput')
     p.arrow('Bgate','Binput','1  InputFinal(u2)',(1340,531),sp='B',tp='T',
             via=[(2071,440),(1328,440),(1328,540),(1521,540)],color=GREEN)
-    p.arrow('Btask','Bnotice','2  Q1 / r1',(2200,531),sp='B',tp='T',
-            via=[(1495,434),(2520,434),(2520,545),(2345,545)],color=GREEN)
+    p.arrow('Btask','Bnotice','2  Q1 / r1',(2200,492),sp='B',tp='T',
+            via=[(1495,434),(2520,434),(2520,512),(2345,512)],color=GREEN)
     p.arrow('Bgate','Bruntime','u2: control barrier',(1800,420),sp='B',tp='T',sd=80,td=-45,
             via=[(2151,445),(1880,445)],size=23)
     p.arrow('Binput','Brc','3  u2·근거',(1370,752),color=GREEN,sd=-50,td=-50)
-    p.arrow('Brc','Brm','4  의미·질문 / Direct 통과',(1712,746),sp='R',tp='L',
-            via=[(1700,847),(1700,780),(2160,780),(2160,847)],color=GREEN)
-    p.arrow('Bnotice','Brm','Q1 / r1',(2200,752),color=GREEN)
+    p.arrow('Brc','Bcompose','4  의미·질문 / Direct 통과',(1712,746),sp='R',tp='L',
+            via=[(1700,847),(1700,780),(2170,780),(2170,819)],color=GREEN)
+    p.arrow('Bnotice','Bcompose','Q1 / r1',(2425,690),sp='B',tp='R',
+            via=[(2345,700),(2515,700),(2515,819)],color=GREEN,size=23)
     p.arrow('Brc','Bjoin','u2 / 종류',(1670,924),sp='R',tp='L',sd=20,td=-15,
             via=[(1700,867),(1700,936)],color=GREEN,size=23)
-    p.arrow('Brm','Bjoin','5  응답 / Direct 통과',(2155,910),sp='B',tp='R',td=-15,
-            via=[(2345,936),(2110,936)],color=GREEN,size=23)
+    p.arrow('Bcompose','Bjoin','5 후보 /\nDirect 통과',(2100,790),sp='L',tp='R',td=-15,
+            via=[(2150,819),(2150,936)],color=GREEN,size=21)
     p.arrow('Bvoice','Brc','Direct 후보 → admission',(1368,930),sp='T',tp='B',size=23)
-    p.arrow('Bjoin','Bguard','6  P2 / Q1',(1340,1090),sp='B',tp='L',sd=-50,
-            via=[(1875,1058),(1695,1058),(1695,1166)],color=GREEN)
-    p.arrow('Bfocus','Bjoin','past snapshot',(2030,1046),sp='R',tp='B',td=70,
-            via=[(2146,1229),(2146,1065),(1995,1065)],color=GREEN,ret=True,size=23)
-    p.arrow('Bguard','Bjoin','credit',(2330,1050),sp='R',tp='R',td=73,
-            via=[(2164,1166),(2164,1044),(2100,1044),(2100,1024)],color=GREEN,ret=True,size=23)
-    p.arrow('Bjoin','Brm','credit / cancel',(2180,1015),sp='R',tp='B',sd=50,td=90,
-            via=[(2460,1001),(2460,910),(2435,910)],color=GREEN,ret=True,size=23)
+    p.arrow('Bjoin','Bpublish','6 게시\n요청',(2100,850),sp='R',tp='L',sd=40,
+            via=[(2120,991),(2120,896)],color=GREEN,size=21)
+    p.arrow('Bpublish','Bturn','7  release / P2·Q1',(1368,1100),sp='L',tp='R',
+            via=[(2153,896),(2153,1168)],color=GREEN,size=23)
+    p.arrow('Bplayback','Bjoin','receipt snapshot',(2020,1066),sp='R',tp='B',td=70,
+            via=[(2146,1325),(2146,1080),(1995,1080)],color=GREEN,ret=True,size=23)
+    p.arrow('Bchannel','Bjoin','credit',(2330,1064),sp='R',tp='R',td=73,
+            via=[(2164,1255),(2164,1053),(2100,1053),(2100,1024)],color=GREEN,ret=True,size=23)
+    p.arrow('Bjoin','Bcompose','credit / cancel',(1368,1027),sp='R',tp='B',sd=50,td=90,
+            via=[(2118,1001),(2118,1055),(2514,1055),(2514,860),(2435,860)],color=GREEN,ret=True,size=23)
     p.arrow('Bjoin','Binput','credit / cancel',(1710,567),sp='T',tp='R',sd=-75,td=-35,
             via=[(1850,540),(1710,540),(1710,607.5)],color=GREEN,ret=True,size=23)
-    p.arrow('Bnotice','Bjoin','Q1.rev / r1.rev',(2180,956),sp='L',tp='R',sd=5,td=34,
-            via=[(2134,647.5),(2134,985)],color=GREEN,size=23)
-    p.arrow('Bgate','Bguard','u2: output fence',(2190,1080),sp='R',tp='R',
-            via=[(2265,292),(2265,250),(2522,250),(2522,1166)],size=23)
-    p.arrow('Bguard','Brc','v: 현재성 조회',(1368,1148),sp='L',tp='B',td=120,
-            via=[(1680,1166),(1680,895),(1641,895)],size=23)
-
+    p.arrow('Bnotice','Bjoin','Q1.rev / r1.rev',(1720,704),sp='L',tp='R',sd=5,td=34,
+            via=[(2134,613.5),(2134,985)],color=GREEN,size=23)
+    p.arrow('Bgate','Bturn','u2: output fence',(1368,1140),sp='R',tp='R',
+            via=[(2265,292),(2265,250),(2522,250),(2522,1168)],size=23)
     # Repeat every common endpoint inside its own alternative, including model access.
-    for side,ax,mx,nx in [('A',440,925,910),('B',1715,2190,2180)]:
-        p.arrow(side+'arb',side+'io','7  Text / Voice',(ax,1284),sd=-95,td=-95)
-        p.arrow(side+'io',side+'arb','receipt',(ax+288,1284),sp='T',tp='B',sd=140,td=140,ret=True)
-        p.text(nx,1112,'v → Task Manager\nu2 / source.rev / permission',23,MUTED,leading=31)
-        p.text(nx,1190,'P1: interrupted\nQ1: presented / focus',24,MUTED,leading=31)
+    for side,mx,nx in [('A',925,925),('B',2190,2190)]:
+        p.arrow(side+'turn',side+'channel','8 Text / Voice',
+                (660 if side=='A' else 1935,1196),size=23)
+        p.arrow(side+'channel',side+'playback','receipt',
+                (660 if side=='A' else 1935,1278),size=23)
+        p.arrow(side+'publish',side+'publication','publication ID',
+                (945 if side=='A' else 2210,808 if side=='A' else 928),size=21)
+        for key in [side+'publish']:
+            x,y,w,h=p.nodes[key];p.text(x+w-10,y+7,'v',21,MUTED,'right')
+        p.text(nx,979 if side=='A' else 1094,'v → Request Controller\n     Task Manager\nu2 / source.rev / permission',22 if side=='A' else 20,MUTED,leading=28 if side=='A' else 24)
+        p.text(910 if side=='A' else 2190,1191,'P1: interrupted\nQ1: displayed / audible',23,MUTED,leading=28)
         p.comp(side+'modelaccess',mx,1255,310,'Model Access')
         p.node(side+'omni',mx,1340,310,64,'Shared on-device\nOmni',kind='model')
         p.arrow(side+'modelaccess',side+'omni','m',(mx-31,1320),size=23)
         left=64 if side=='A' else 1340
-        p.text(left,1407,'실선: 명령·자료   점선: 반환·credit   원통: 상태   m/t/v: 서비스 포트',21,MUTED)
+        p.text(left,1407,'실선: 명령·자료   점선: 반환·credit   原통: 상태   m/t/v/p: 서비스 포트'.replace('原통','원통'),21,MUTED)
+    p.arrow('Achannel','Apublish','receipt',(1100,919),sp='R',tp='R',ret=True,
+            via=[(900,1255),(900,945),(1228,945),(1228,770)],size=22)
+    p.arrow('Bchannel','Bpublish','receipt',(2435,1064),sp='R',tp='R',ret=True,
+            via=[(2178,1255),(2178,1070),(2518,1070),(2518,896)],size=22)
+    # Matched p ports carry durable presentation facts to the question owner.
+    # Stubs avoid a long common connection obscuring the two execution graphs.
+    p.line([(945,877),(920,877)],INK)
+    p.text(903,852,'p',21,MUTED)
+    p.line([(315,661),(315,634)],INK)
+    p.text(291,641,'p',21,MUTED)
+    p.line([(2210,990),(2188,990)],INK)
+    p.text(2167,974,'p',21,MUTED)
+    p.line([(1600,910),(1600,879)],INK)
+    p.text(1577,889,'p',21,MUTED)
+    p.text(65,946,'p: 실제 Q1 제시 / 전달 범위\n→ Request Controller: focus',21,MUTED,leading=27)
+    p.text(1368,1185,'p: 실제 Q1 제시 / 전달 범위\n→ Request Controller: focus',21,MUTED,leading=27)
     for key in ('Arc','Arm','Avoice','Brc','Brm','Bvoice'):
         x,y,w,h=p.nodes[key];p.text(x+w-17,y+17,'m',23,MUTED,'right')
     for key in ('Arc','Brc'):
@@ -204,7 +233,7 @@ def event():
     p.comp('Bqsource',2201,260,310,'Task Notice Stage',GREEN)
 
     def participants(side,specs):
-        x=64 if side=='A' else 1340;w=185 if side=='A' else 156;gap=8 if side=='A' else 9
+        x=64 if side=='A' else 1340;w=220 if side=='A' else 185;gap=8
         lanes={};c=BLUE if side=='A' else GREEN
         for key,name in specs:
             p.comp(side+key,x,365,w,name,c,h=112)
@@ -221,13 +250,13 @@ def event():
     a=participants('A',[
         ('gate','Input Control\nGate'),('hub','Interaction\nOrchestrator'),
         ('rc','Request\nController'),('rm','Response\nManager'),
-        ('arb','Output\nArbiter'),('io','Interaction\nManager')])
+        ('io','Interaction\nManager')])
     b=participants('B',[
         ('gate','Input Control\nGate'),('input','Input\nResolution\nStage'),
         ('rc','Request\nController'),('rm','Response\nManager'),
-        ('join','Publication\nJoin'),('arb','Output\nArbiter'),
+        ('join','Publication\nJoin'),
         ('io','Interaction\nManager')])
-    message(a,'gate','arb',525,'E3 u2: output fence',INK)
+    message(a,'gate','io',525,'E3 u2: output fence',INK)
     p.line([(1080,324),(1080,348),(1231,348),(1231,590),(a['hub'],590)],BLUE)
     p.label(a['hub']+10,560,'E2 Q1 / r1 확정 자료',BLUE,size=22)
     message(a,'gate','hub',655,'InputFinal(u2)',BLUE)
@@ -236,24 +265,26 @@ def event():
     message(a,'rc','hub',850,'의미 / 질문 / Direct 통과',BLUE,True)
     message(a,'hub','rm',915,'생성할 확정 근거만 준비 명령',BLUE)
     message(a,'rm','hub',980,'후보 반환',BLUE,True)
-    message(a,'hub','arb',1045,'현재 후보 → Publication Guard',BLUE)
-    message(a,'arb','io',1110,'E6 Text / Voice',INK)
-    message(a,'io','arb',1175,'receipt / actual-range',INK,True)
-    message(a,'arb','hub',1240,'실제 전달 / Q1 focus snapshot',BLUE,True)
+    message(a,'hub','rm',1045,'현재 후보 → 게시 요청',BLUE)
+    message(a,'rm','io',1110,'E6 release → 표시 / 재생',INK)
+    message(a,'io','rm',1165,'receipt → publication 상태',INK,True)
+    message(a,'rm','rc',1215,'p: 실제 Q1 제시 → focus 갱신',INK)
+    message(a,'io','hub',1265,'실제 전달 snapshot',BLUE,True)
 
-    message(b,'gate','arb',525,'E3 u2: control barrier / fence',INK)
+    message(b,'gate','io',525,'E3 u2: control barrier / fence',INK)
     p.line([(2356,324),(2356,348),(2520,348),(2520,590),(b['rm'],590)],GREEN)
-    p.label(b['rm']+10,560,'E2 Q1 / r1 확정 자료',GREEN,size=22)
+    p.label(b['rm']-60,560,'E2 Q1 / r1 확정 자료',GREEN,size=22)
     message(b,'gate','input',655,'InputFinal(u2)',GREEN)
     message(b,'rm','join',720,'E4 u1 → superseded 폐기',GREEN)
     message(b,'input','rc',785,'E5 u2 해석/채택',GREEN)
     message(b,'rc','rm',850,'의미 / 질문 / Direct 통과',GREEN)
     message(b,'rc','join',915,'종류별 admission(u2)',GREEN)
     message(b,'rm','join',980,'후보 / source refs',GREEN)
-    message(b,'join','arb',1045,'유효 P2 / Q1',GREEN)
-    message(b,'arb','io',1110,'E6 Text / Voice',INK)
-    message(b,'io','arb',1175,'receipt / actual-range',INK,True)
-    message(b,'arb','join',1240,'credit / past snapshot',GREEN,True)
+    message(b,'join','rm',1045,'유효 P2 / Q1 → 게시 요청',GREEN)
+    message(b,'rm','io',1110,'E6 release → 표시 / 재생',INK)
+    message(b,'io','rm',1165,'receipt → publication 상태',INK,True)
+    message(b,'rm','rc',1215,'p: 실제 Q1 제시 → focus 갱신',INK)
+    message(b,'io','join',1265,'credit / receipt snapshot',GREEN,True)
     for x in [64,1340]:
         p.text(x,1310,'E7 “응”: 실제 Q1 focus + 현재 질문 원본으로 연결. 모호하면 확인.',23)
         p.text(x,1360,'발화 시작 ≠ Task 취소   |   확인 질문은 업무 hold를 유지하며 게시',22,MUTED)

@@ -3,7 +3,19 @@
 > 2026-10-06 / 문서·구조·실제 MAIN 렌더 검토 / 구현·모델 실행·품질 측정 없음
 > [본문](./04-44-continuous-interaction.md) · [MAIN](./diagrams/choice44-structure.svg) · [확대 보기](./diagrams/choice44-review.html)
 
-## 0. 최신 사용자 수정 — 좌우 독립 블록 (2026-10-06)
+## 0. 최신 사용자 수정 — Interaction Manager 내부 출력 표현 (2026-10-06)
+
+사용자는 직관적이지 않은 `Output Arbiter` 이름을 사용하지 않고 해당 출력 쪽 부분을 Interaction Manager 안에 그리도록 요청했다. MAIN/사건도/본문에서 이 별도 이름을 제거했다. 아래 §0.1과 §3~5의 이전 명칭·판정은 당시 그림의 리뷰 이력이며 최신 소유/배치의 승인으로 읽지 않는다.
+
+- MAIN의 출력 쪽 Interaction Manager 안에 참조 구조의 Turn-Taking Control·Channel I/O와 장치 Playback State를 배치했다. 입력/출력 측의 같은 Component는 두 접점이며 별도 실행체가 아니다.
+- 이전 그림에서 한데 묶었던 게시/차례/내구 전달은 Response Manager의 Publication Control/Publication Outbox, 실제 질문 focus와 답변 연결은 Request Controller로 명확히 되돌렸다. Interaction Manager는 release/epoch 검사, 로컬 stop, 실제 입출력과 receipt를 담당한다. 추가 Module 표시는 공통 기능을 펼친 것이며 A/B 스타일 변경이 아니다.
+- A의 중앙 준비 명령→후보 반환→게시 요청과 B의 준비 port→Join→게시 port를 각각 표현했다. 게시 port는 응답을 재생성하지 않는다. credit은 실제 Channel I/O 소비자가 제공하고 Playback State는 raw receipt snapshot만 제공한다. 질문 focus/내구 전달의 원본을 장치 buffer로 이전하지 않았다.
+- 확인 질문의 제한 admission, known-empty/UNKNOWN 구별, 자기 receipt 후행, Direct passthrough와 외부 hold/CAS 경합 계약을 유지했다.
+- architecture_challenge와 presentation_critic가 최신 본문/실제 720p 그림을 읽기 전용으로 재검토했다. 두 리뷰의 공통 P2는 실제 제시 기록→Request Controller focus 경로 누락이었다. MAIN에 양안 Publication Outbox 출력 p와 Request Controller 수신 p 및 실제 Q1 제시/전달 범위 관계를 넣고, 사건도에 receipt 후 Response Manager→Request Controller 갱신을 추가했다. 본문은 Presented(question ID, publication ID, actual-range, revision)의 내구 사실 계약을 명시한다.
+- presentation_critic는 B output fence의 현재성 설명 문자 관통도 P2로 발견했다. 설명을 배선 사이 여백으로 재배치했다. 두 agent가 최신 실제 렌더/본문/생성물을 다시 확인해 해당 P2 해결과 이 수정 범위의 새 P1/P2 미발견을 회신했다. architecture_challenge는 명시된 수신 포트/소유 관계로 RC 원통 추가 없이도 경로가 닫힌다고 확인했다.
+- MAIN/사건도의 SVG·draw.io·2560×1440 PNG를 동기화하고 실제 720p를 재검수했다. 브라우저 text bounding boxes의 텍스트 겹침·canvas 밖·자기 블록 밖은 두 SVG 모두 0건이었다. 선의 문자 관통은 별도 눈으로 확인했다. 전용 생성기, 활성 용어·Markdown 링크·QA와 diff 검사를 통과했다. 이전 세 차례 리뷰를 최신 변경의 승인으로 자동 적용하지 않았다.
+
+## 0.1 이전 사용자 수정 — 좌우 독립 블록 (2026-10-06)
 
 사용자는 이전 MAIN의 공통 생산자와 모델이 양안 사이에 걸쳐 있는 배치를 거절하고 **A는 왼쪽 블록만, B는 오른쪽 블록만** 사용하도록 요청했다. 이전 세 차례 리뷰는 당시 배치에 대한 검토이며 이 후속 사용자 기준을 충족했다는 승인으로 읽지 않는다.
 

@@ -17,9 +17,9 @@
 
 1. **각 칸의 같은 두 생산자:** 사용자는 보고서 설명 P1을 듣다가 u2 “잠깐, 표부터 설명해줘”라고 말한다. 별도로 외부 Agent의 질문 Q1/결과 r1이 도착한다. Task Manager가 외부 사실을 확인해 제공한다. 어느 Task인지 정답을 미리 입력에 붙이지 않는다.
 2. **각 칸 위쪽의 입력 제어:** Interaction Manager는 계속 수신/인식하고 Input Control Gate는 새 입력 세대로 이전 음성 출력을 즉시 차단하고 미전송 효과를 보류한다. 이 경로는 해석이나 응답 준비 완료를 기다리지 않는다. 발화 시작은 업무 취소 명령이 아니다.
-3. **A의 중앙 왕복:** Interaction Orchestrator가 u2와 Q1/r1을 자기 진행 상태에 연결한다. Request Controller에 해석/처리를 요청하고, Response Manager에 확정 근거로 답변/질문 준비를 요청한다. 반환을 회수해 현재성과 후속 조건을 검사하고 Output Arbiter로 보낸다. 오래 걸리는 호출 동안 중앙 상태 전이를 잠그지 않는다.
-4. **B의 분기와 결합:** Input Resolution Stage는 확정 입력으로 Request Controller를 활성화한다. Task Notice Stage는 확인된 Q1/r1을 별도 경로로 공급한다. Response Manager는 준비 가능한 확정 근거를 소비하고 승인된 Direct 후보는 재생성 없이 통과시킨다. Publication Join은 후보 응답과 종류별 admission·자료/질문 revision·기존 실제 전달 snapshot을 결합한다. 내용 응답은 입력 해소를 기다리지만 현재 입력을 해결할 확인 질문은 제한적으로 먼저 나갈 수 있다. 결과가 중앙 명령자로 되돌아와 재배정되는 경로는 없다. 점선의 credit/cancel은 소비자가 수용 가능한 양과 폐기 조건을 상류에 전달하는 흐름이다. 최종 credit의 생산자는 Publication Guard이며 Presentation State는 과거 실제 전달 snapshot만 제공한다.
-5. **같은 마지막 경계:** Output Arbiter의 Publication Guard는 현재 입력 세대, 발화 여부, 원본 owner의 유효성, 중복 publication과 실제 질문 focus를 확인한다. Presentation State가 실제 전달 범위와 질문 focus를 소유한다. Interaction Manager의 Text 표시/음성 재생 receipt가 실제 전달 기록을 갱신한다. 생성된 Q1은 아직 질문 focus가 아니다. 같은 단일 Omni를 공유하므로 실행망의 병행이 모델 계산량 증가나 무료 병렬 추론을 뜻하지 않는다.
+3. **A의 중앙 왕복:** Interaction Orchestrator가 u2와 Q1/r1을 자기 진행 상태에 연결한다. Request Controller에 해석/처리를 요청하고, Response Manager에 확정 근거로 답변/질문 준비를 요청한다. 반환을 회수해 현재성과 후속 조건을 검사하고 Response Manager에 게시를 요청한다. Response Manager가 허용한 출력은 아래 Interaction Manager에서 실제 표시·재생한다. 오래 걸리는 호출 동안 중앙 상태 전이를 잠그지 않는다.
+4. **B의 분기와 결합:** Input Resolution Stage는 확정 입력으로 Request Controller를 활성화한다. Task Notice Stage는 확인된 Q1/r1을 별도 경로로 공급한다. Response Manager는 준비 가능한 확정 근거를 소비하고 승인된 Direct 후보는 재생성 없이 통과시킨다. Publication Join은 후보 응답과 종류별 admission·자료/질문 revision·기존 실제 전달 snapshot을 결합한다. 내용 응답은 입력 해소를 기다리지만 현재 입력을 해결할 확인 질문은 제한적으로 먼저 나갈 수 있다. 결과가 중앙 명령자로 되돌아와 재배정되는 경로는 없다. 점선의 credit/cancel은 소비자가 수용 가능한 양과 폐기 조건을 상류에 전달하는 흐름이다. 출력 소비자의 credit은 Interaction Manager의 Channel I/O가 제공하고 Playback State는 과거 실제 전달 receipt snapshot만 제공한다. 게시 상태와 질문 focus의 원본은 각각 Response Manager와 Request Controller에 남는다.
+5. **같은 마지막 경계:** Response Manager의 Publication Control은 Request Controller/Task Manager에 현재 입력·질문·원본·권한을 확인하고 게시 차례와 중복을 관리한다. 아래 Interaction Manager 안의 Turn-Taking Control은 현재 output epoch·발화 여부·release를 재생 직전에 검사하고, Channel I/O는 Text 표시·음성 재생과 실제 전달 receipt를 생산한다. receipt로 Response Manager의 Publication Outbox와 Request Controller의 실제 제시 질문 focus를 갱신한다. 생성된 Q1은 아직 질문 focus가 아니다. 같은 단일 Omni를 공유하므로 실행망의 병행이 모델 계산량 증가나 무료 병렬 추론을 뜻하지 않는다.
 
 품질을 설명할 때 A의 집중된 상태/왕복과 B의 직접 분기/결합/역방향 흐름을 짚는다. A의 짧은 제어 전이와 B의 여러 buffer·join 비용도 함께 읽는다. B가 항상 빠르거나 정확하다는 결론은 이 그림에서 도출하지 않는다.
 
@@ -48,17 +48,22 @@
 
 ### 3.1 공통 소유와 허용 경계
 
-아래 공통 역할 이름은 [참조 구조 §4](../target-architecture/architecture.md#4-component와-상태-소유권)를 따른다. Input Control Gate와 Output Arbiter는 이 비교에서 정의한 제어/전달 Module 책임이며 기존 Component의 개명이나 선택된 참조 설계 변경이 아니다. Input Control Gate는 Interaction Manager의 비차단 입력 제어와 Request Controller의 admission hold를 잇는다. Output Arbiter는 Response Manager의 게시 책임과 Interaction Manager의 실제 재생 직전 검사를 잇는다. 내부 Publication Guard는 원본 owner의 현재성을 검사하고 Presentation State는 publication별 실제 전달 범위·질문 focus를 소유한다. 그림의 m/t/v는 이름이 명시된 공통 모델/업무/현재성 서비스 연결 포트이며 구조별 사본을 뜻하지 않는다.
+아래 공통 Component와 Interaction Manager의 **Channel I/O**, **Turn-Taking Control** 이름은 [참조 구조 §4](../target-architecture/architecture.md#4-component와-상태-소유권)를 따른다. 입력 측과 출력 측에 그린 Interaction Manager는 **한 Component의 두 접점**이며 별도 실행체가 아니다. 출력 쪽은 이 Component 안에 재생 제어·입출력·Playback State를 넣어 그렸다. 별도의 출력 중재 Component를 추가하지 않는다.
+
+**게시 차례와 실제 재생은 책임이 다르다.** Response Manager 안의 Response Composer와 Publication Control은 각각 기존 응답 준비와 게시 제어 기능을 펼친 Module 이름이며 새 Component나 두 안의 차이가 아니다. Publication Control은 publication ID·출력 차례/lease·현재성 확인·중복 방지·내구 Publication Outbox를 관리하고, 현재성/권한의 판단 원본은 Request Controller/Task Manager에 조회한다. Interaction Manager는 허용된 release만 현재 장치/출력 epoch에 맞춰 표시·재생하고 로컬 stop와 실제 전달 receipt를 책임진다. Playback State는 장치 재생 상태와 확인된 receipt의 제한된 전달 buffer다. publication의 내구 원본과 질문 focus를 이 buffer로 옮기지 않는다.
+
+Input Control Gate는 이 비교에서 비차단 입력 제어와 Request Controller의 admission hold를 잇는 논리 Module이다. 그림의 m/t/v/p는 공통 모델/업무/현재성/실제 제시 서비스 연결 포트이며 별도 Component 사본을 뜻하지 않는다. 그림의 p 포트는 Response Manager의 확인된 실제 제시 기록을 Request Controller에 반영하는 같은 연결이다. `Presented(question ID, publication ID, actual-range, revision)`은 이름만 같은 임시 snapshot이 아니라 내구 전달 기록과 일치해야 한다. Request Controller가 PendingUserInteraction/질문 focus를 소유하고 답변을 연결한다. Interaction Manager가 “응”의 의미나 어느 질문에 대한 답인지 결정하지 않는다.
 
 | 사실/권한 | 공통 최종 소유자 | 두 안의 소비 조건 |
 | --- | --- | --- |
 | 원음·전사·현재 input epoch·발화 중 여부 | Interaction Manager / Speech Input Worker | 확정 전사는 무오류 선언이 아니다. 늦은 정정은 새 revision으로 전달한다. |
 | 의미 채택·Request·확인 질문·미전송 admission | Request Controller | Request Interpreter가 제안한 의미를 현재 근거/질문/권한으로 검사해 채택한다. 새 발화의 의미가 미해결이면 미전송 효과 hold를 해제하지 않는다. |
 | Task·Execution·Agent 질문·외부 접수/진행/결과 | Task Manager / Agent Gateway | Input Control Gate의 hold epoch를 command admission/dispatch에서 검사하고 acknowledgment를 남긴다. capture와 hold 적용 사이 이미 외부로 나간 명령은 실제 외부 상태를 확인한다. 작업/질문 revision과 확인 상태가 필요하다. 기존 실행을 token만으로 취소 완료라고 하지 않는다. |
-| Response 내용·publication 상태 | Response Manager | source와 의미 참조를 보존한다. Text와 음성의 대상·상태·결론·실패가 일치해야 한다. |
-| 단일 Voice 차례·실제 제시 질문 focus·실제 전달 범위 | Output Arbiter + Interaction Manager의 receipt | 생성 완료와 제시/재생은 별개다. 재생 직전 입력 세대/원본 owner를 다시 검사한다. |
+| Response 내용·publication/출력 차례·내구 전달 상태 | Response Manager | source와 의미 참조를 보존하고 원본 owner에 현재성/권한을 확인한다. Text와 음성의 대상·상태·결론·실패가 일치해야 한다. receipt로 Publication Outbox의 실제 전달 범위를 갱신한다. |
+| 실제 표시·재생·로컬 중단·device receipt | Interaction Manager | Turn-Taking Control이 재생 직전 발화/출력 epoch/release를 검사하고 Channel I/O가 실제 전달을 수행한다. Playback State는 재생 상태/receipt buffer이며 내구 publication 원본이 아니다. |
+| 실제 제시 질문 focus·질문 답변 연결 | Request Controller | 확인된 실제 전달 범위를 PendingUserInteraction에 반영한다. 생성 완료를 제시로 세지 않고 “응”은 실제 focus와 현재 질문 원본으로 연결한다. |
 
-외부 업무는 **Request Controller → Task Manager → Agent Gateway → Downstream Agent**의 동일한 검증/전달 계약을 따른다. **Request Controller의 admission/hold 변경, Task Manager의 command/epoch 변경, Agent Gateway의 transmission CAS를 같은 local State Store transaction으로 조합한다.** 각 owner의 검증한 변경 집합을 확정하며 다른 owner의 필드를 직접 쓰지 않는다. hold/권한 철회가 먼저 확정되면 PENDING 전송을 막고, DISPATCHING이 먼저 확정되면 이미 시작된 전송과 UNKNOWN 가능성을 보존해 실제 외부 상태를 조회·정정·취소한다. 네트워크/모델 호출은 transaction 밖이다. 이는 [참조 제어 §5](../target-architecture/control-and-lifecycle.md#5-전송과-정정의-원자적-경계)의 같은 경합 계약이며 B의 stream event 도착 순서로 대체하지 않는다. 음성 stop의 즉시성과 외부 Agent의 실제 cancel 효력은 다른 시간·사실이다. S2S 직접 후보는 Voice Runtime에서 생산하고 Request Controller가 동일한 좁은 direct admission을 검사한다. 승인된 `AdmittedDirectCandidate(u, Text/audio, source refs)`는 A에서 Dispatcher의 후보 반환으로, B에서 Response Manager stream adapter의 passthrough로 이어져 같은 sink에 도달한다. 둘 다 이미 만든 후보를 Core에서 다시 생성하지 않는다. admission 거절 시 같은 Request ID로 Core 처리에 인계하며 직접 후보를 게시하지 않는다.
+외부 업무는 **Request Controller → Task Manager → Agent Gateway → Downstream Agent**의 동일한 검증/전달 계약을 따른다. **Request Controller의 admission/hold 변경, Task Manager의 command/epoch 변경, Agent Gateway의 transmission CAS를 같은 local State Store transaction으로 조합한다.** 각 owner의 검증한 변경 집합을 확정하며 다른 owner의 필드를 직접 쓰지 않는다. hold/권한 철회가 먼저 확정되면 PENDING 전송을 막고, DISPATCHING이 먼저 확정되면 이미 시작된 전송과 UNKNOWN 가능성을 보존해 실제 외부 상태를 조회·정정·취소한다. 네트워크/모델 호출은 transaction 밖이다. 이는 [참조 제어 §5](../target-architecture/control-and-lifecycle.md#5-전송과-정정의-원자적-경계)의 같은 경합 계약이며 B의 stream event 도착 순서로 대체하지 않는다. 음성 stop의 즉시성과 외부 Agent의 실제 cancel 효력은 다른 시간·사실이다. S2S 직접 후보는 Voice Runtime에서 생산하고 Request Controller가 동일한 좁은 direct admission을 검사한다. 승인된 `AdmittedDirectCandidate(u, Text/audio, source refs)`는 A에서 Dispatcher의 후보 반환으로, B에서 Response Manager stream adapter의 passthrough로 이어져 같은 Response Manager의 게시 경계와 Interaction Manager의 실제 출력에 도달한다. 둘 다 이미 만든 후보를 Core에서 다시 생성하지 않는다. admission 거절 시 같은 Request ID로 Core 처리에 인계하며 직접 후보를 게시하지 않는다.
 
 ### 3.2 A — 중앙 비동기 Orchestration/Mediator
 
@@ -68,7 +73,7 @@
 
 A는 전체 대화 처리를 하나의 긴 lock/모델 호출로 묶지 않는다. 입력별 짧은 상태 전이, 우선순위 mailbox, 비동기 worker, cache·사전 준비·부분 수정, 후보 병행 준비, Task별 검색, handler 모듈을 모두 허용한다. 개별 job에 수용량 상한과 취소 token을 적용할 수 있다. 그림의 hub는 CPU 한 개/모델 호출 한 개가 아니라 **후속 실행을 명령하는 소유자**다.
 
-질문 Q1의 실제 제시 receipt는 Orchestrator가 진행 상태에 연결하고, 확정 질문 원본과 focus를 공통 owner가 갱신한다. 사용자의 “응”도 전체 입력과 실제 focus로 해석한다. 중앙에 관련 상태가 모여 원인을 추적하기 쉽지만, 여러 생산자/정정/차례 조건을 연결하는 전이와 dispatch 규칙이 조정 책임에 모인다.
+Orchestrator는 질문 Q1의 실제 제시 receipt를 진행 상태에 연결한다. Task Manager는 확정 질문 원본을 유지하며 Request Controller가 확인된 실제 제시 사실로 focus를 갱신한다. 사용자의 “응”도 전체 입력과 실제 focus로 해석한다. 중앙에 관련 상태가 모여 원인을 추적하기 쉽지만, 여러 생산자/정정/차례 조건을 연결하는 전이와 dispatch 규칙이 조정 책임에 모인다.
 
 ### 3.3 B — 반응형 Dataflow/Pipes-and-Filters
 
@@ -78,14 +83,14 @@ A는 전체 대화 처리를 하나의 긴 lock/모델 호출로 묶지 않는�
 | --- | --- | --- |
 | **Input Resolution Stage** | 확정 `Input(u)`·근거/실제 제시 참조 → Request Controller의 `AdoptedMeaning(u)` 또는 `Unresolved(u)` | Input Window: 실행 중 input/job ID, 대체 revision, 근거 read set. Request/의미 원본은 Request Controller 소유 |
 | **Task Notice Stage** | Task Manager의 확인된 `Question/Result(T,r)` → 응답 준비 가능한 `Notice(T,r)` | Notice Window: 원본 참조, 미전달 중요 항목, 준비 job, progress 최신값. 외부 질문/결과 원본은 Task Manager 소유 |
-| **Response Manager의 stream adapter** | 채택 의미, 허용된 확인 질문/실패·제어 안내 또는 유효 Notice → Text/audio candidate와 source refs. direct admission이 승인한 기존 S2S Text/audio candidate는 재생성 없이 passthrough | Response Manager의 기존 publication/generation 상태. 준비 실패는 명시적 error envelope |
-| **Publication Join** | 후보 + 후보 종류별 admission + 해당 source validity + 확정된 과거 delivery/focus snapshot → eligible candidate / hold / discard | Publication Window: 제한된 후보와 필요한 참조, dependency watermark, 중복 키. 실제 전달/질문 focus 원본은 공통 Output Arbiter 소유 |
+| **Response Manager의 stream adapter** | 채택 의미, 허용된 확인 질문/실패·제어 안내 또는 유효 Notice → Text/audio candidate와 source refs. direct admission이 승인한 기존 S2S Text/audio candidate는 재생성 없이 passthrough | Response Composer의 준비 상태와 Publication Control/Publication Outbox의 게시 상태. 준비 실패는 명시적 error envelope |
+| **Publication Join** | 후보 + 후보 종류별 admission + 해당 source validity + 확정된 과거 delivery/focus snapshot → eligible candidate / hold / discard | Publication Window: 제한된 후보와 필요한 참조, dependency watermark, 중복 키. publication/내구 실제 전달 원본은 Response Manager, 질문 focus 원본은 Request Controller 소유. Playback State는 receipt snapshot 제공 |
 
 InputSettled는 **새 입력이 없거나, 해당 입력의 의미·정정·제어 관계를 Request Controller가 해소했다는 확인**이다. 단순 ASR final이나 timeout으로 생산하지 않는다. Unresolved/WAIT_USER/WAIT_CONTEXT이면 기존 내용 응답과 관련 업무 Notice를 보류한다. **현재 u2를 해결하기 위한 확인 질문과 확인된 실패/제어 안내는 별도 `InteractionNotice(u, question ID, admission class)`로 반환한다.** 이 후보는 InputSettled를 요구하지 않고 현재 u2·유효 질문/사실·권한·발화 종료를 확인해 제한적으로 게시한다. 외부 효과 hold는 유지하며 질문 제시가 업무 실행 허가가 되지 않는다. 무관함이 채택 의미로 확인된 업무 결과는 기존 공통 정책대로 먼저 전달할 수 있다. Stage가 스스로 “무관하다”를 추측하지 않는다.
 
-B의 Request Controller 반환은 `AdoptedMeaning/InputSettled` 채널에 게시되고 Response Manager/Publication Join이 구독한다. Task Notice 결과도 연결된 소비자로 전달된다. **모든 반환을 중앙에 회수해 다음 worker 호출을 결정하는 Dialogue Dispatcher와 Dialogue Progress State는 없다.** 각 Stage는 자기 입력의 충족 여부로 활성화된다. 같은 프로그램·thread pool에서 구현할 수 있으며 process 분리의 이익을 주장하지 않는다.
+B의 Request Controller 반환은 `AdoptedMeaning/InputSettled` 채널에 게시되고 Response Manager/Publication Join이 구독한다. Task Notice 결과도 연결된 소비자로 전달된다. **모든 반환을 중앙에 회수해 다음 worker 호출을 결정하는 Dialogue Dispatcher와 Dialogue Progress State는 없다.** 각 Stage는 자기 입력의 충족 여부로 활성화된다. **Response Manager의 준비 입력과 게시 입력은 별도 typed port다.** Response Composer의 후보가 Publication Join으로 가고, Join의 eligible 후보는 Publication Control로 돌아간다. 이미 준비/승인된 Text/audio를 재생성하지 않으며 Publication Control은 다른 Stage의 다음 준비 job을 지시하지 않는다. 같은 프로그램·thread pool에서 구현할 수 있으며 process 분리의 이익을 주장하지 않는다.
 
-Stage가 적용하는 최신성/중복/순서/credit 규칙은 타입 계약에 포함한다. 입력 u2에 대한 느린 u1의 의미/응답 반환은 downstream eligibility를 얻지 못한다. backend가 취소 불가이면 계산은 계속 비용으로 남되 결과를 신규 게시에 사용하지 않는다. Publication Join의 delivery 입력은 **새 후보가 게시되기 전의 확정 snapshot**이다. 첫 대화의 `known-empty`도 유효한 초기 값이고, 연결/복구 후 실제 상태가 UNKNOWN이면 이를 명시하며 질문 답변 연결을 보류한다. 새 후보 자신의 receipt는 게시의 선행조건이 아니다. 게시 뒤 receipt가 동일 publication ID/revision의 actual-range를 갱신하고 다음 snapshot이 된다.
+Stage가 적용하는 최신성/중복/순서/credit 규칙은 타입 계약에 포함한다. 입력 u2에 대한 느린 u1의 의미/응답 반환은 downstream eligibility를 얻지 못한다. backend가 취소 불가이면 계산은 계속 비용으로 남되 결과를 신규 게시에 사용하지 않는다. Publication Join의 delivery 입력은 **새 후보가 게시되기 전의 확정 snapshot**이다. 첫 대화의 `known-empty`도 유효한 초기 값이고, 연결/복구 후 실제 상태가 UNKNOWN이면 이를 명시하며 질문 답변 연결을 보류한다. 새 후보 자신의 receipt는 게시의 선행조건이 아니다. 게시 뒤 Interaction Manager가 receipt를 생산하면 Response Manager가 동일 publication ID/revision의 actual-range를 내구 기록하고 Request Controller가 실제 질문 focus를 갱신한다. 다음 join은 이 확정 사실과 Playback State의 receipt snapshot을 참조한다. 불명 상태를 buffer의 빈 값으로 덮지 않는다.
 
 단순 Reactive Streams 라이브러리만으로 VIA의 의미 정확성, source validity, 내구 저장과 실제 전달 연결이 자동 제공되지는 않는다.
 
@@ -99,7 +104,7 @@ Stage가 적용하는 최신성/중복/순서/credit 규칙은 타입 계약에 
 | 외부 source를 늦출 수 없음 | 먼저 durable inbox 저장, 준비 admission 제한 | 동일 inbox 보존 후 Notice 준비를 늦춤. 외부 Agent에 credit 지원을 가정하지 않음 |
 | join과 순서 | 진행 상태의 waiting ID/revision으로 결합 | conversation/input/source ID와 revision으로 결합. 전역 도착 순서나 latest 값 하나로 여러 업무를 합치지 않음. 후보 종류(content / clarification / control / failure)별 admission을 구별 |
 | 내구 경계 | owner가 확정 Request/명령/publication을 저장 | 같은 owner가 저장. Stage 출력 자체는 명령 접수/실제 게시가 아님 |
-| 최종 현재성 | 원본 owner의 현재 검사 + arbiter/재생 직전 검사 | 동일 검사. 늦게 도착한 validity event만으로 최신 상태를 믿지 않음 |
+| 최종 현재성 | Response Manager의 원본 owner 현재성 확인 + Interaction Manager의 재생 직전 epoch/release 검사 | 동일 검사. 늦게 도착한 validity event만으로 최신 상태를 믿지 않음 |
 
 B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 아니다. cyclic feedback은 receipt/credit/revision 갱신으로 한정하고 이미 처리한 envelope ID를 반복 재활성화하지 않는다. delivery/focus는 known-empty로 초기화할 수 있지만 필수 source/admission 초기 값이 없는 join은 `not ready`이며 무한 대기 대신 Request/준비 deadline에 따라 명시적으로 보류/실패를 반환한다. 중요 항목이 상한을 넘으면 내구 원본을 유지하고 추가 준비 admission을 막으며 UI에 backlog/처리 불가를 드러낸다. 양안에서 메모리 무한 증가나 중요한 결과 유실을 정상 동작으로 허용하지 않는다.
 
@@ -160,7 +165,7 @@ Text 입력도 같은 revision/hold/채택 경로를 사용한다. 음성을 껐
 | --- | --- |
 | A에 priority queue·async worker·stop fast path를 추가하면 충분하지 않은가? | **충분할 수 있다.** 모두 강한 A에 포함했다. 이 정도로 중요한 부하에서 반응성과 정확성을 만족하면 B의 도입 이유는 줄어든다. |
 | A에 Event Bus/Rx를 붙이면 B인가? | 중앙이 모든 다음 실행을 명령하고 반환을 회수하면 A다. Bus/library는 운반 수단이다. B는 activation·return 연결·revision join·cancel/credit 책임을 실제 생산/소비 계약으로 옮긴다. |
-| B도 Output Arbiter가 있으니 중앙 구조 아닌가? | 단일 실제 제시/음성 차례라는 좁은 authority는 공통이다. Arbiter가 모든 Request/Notice 준비 순서를 정하고 worker를 호출하면 A+B 혼합이다. |
+| B도 Response Manager와 Interaction Manager로 모이니 중앙 구조 아닌가? | 게시 차례와 장치 출력이라는 마지막 경계는 공통이다. 준비 입력→Composer→Join→게시 입력은 정해진 자료 연결이며 중앙 후속 job 지시가 아니다. 이 경계가 모든 Request/Notice 준비 순서를 정해 worker를 호출하면 A+B 혼합이다. |
 | A의 handler를 각각 독립 구독자로 만들면? | 단순 handler 등록은 A. handler가 자신의 stream readiness와 반환 소비/유량을 소유하고 Dispatcher를 대체한다면 실제 B로의 재설계다. |
 | 일부 결과 경로만 stream으로 만들면? | 현실적인 혼합. 도입 범위의 activation/window/취소와 중앙 연결 비용을 공개한다. 작은 혼합으로 주요 이익을 얻으면 전체 B를 주요 필수 선택으로 주장하지 않는다. |
 
