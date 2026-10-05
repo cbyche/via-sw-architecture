@@ -173,7 +173,7 @@ def voice(d):
 
 def structural(n):
  if n==33:
-  from dialogue_abc_presentation import structure
+  from dialogue_ac_presentation import structure
   return structure()
  if n in (35,36):
   from state_security_presentation import state_structure, isolation_structure
@@ -218,7 +218,7 @@ def wrap_name(name):
 
 def event(n):
  if n==33:
-  from dialogue_abc_presentation import event as dialogue_event
+  from dialogue_ac_presentation import event as dialogue_event
   return dialogue_event()
  p=Plate(f'choice{n}-event',f'04-{n}',TITLES[n],CASES[n],height=2340)
  for s in 'AB':
