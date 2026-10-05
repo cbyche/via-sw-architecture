@@ -3,6 +3,17 @@
 > 2026-10-06 / 문서·구조·실제 MAIN 렌더 검토 / 구현·모델 실행·품질 측정 없음
 > [본문](./04-44-continuous-interaction.md) · [MAIN](./diagrams/choice44-structure.svg) · [확대 보기](./diagrams/choice44-review.html)
 
+## 0. 최신 사용자 수정 — 좌우 독립 블록 (2026-10-06)
+
+사용자는 이전 MAIN의 공통 생산자와 모델이 양안 사이에 걸쳐 있는 배치를 거절하고 **A는 왼쪽 블록만, B는 오른쪽 블록만** 사용하도록 요청했다. 이전 세 차례 리뷰는 당시 배치에 대한 검토이며 이 후속 사용자 기준을 충족했다는 승인으로 읽지 않는다.
+
+- MAIN의 Interaction Manager, Input Control Gate, Task Manager, Agent Gateway, Downstream Agent, Model Access와 Omni를 양안의 칸 안에 각각 배치했다. 각 안의 입력·명령·질문/결과·모델·실제 전달이 자기 블록 안에서 완결된다.
+- 보충 사건도도 기존 상하 비교에서 좌우 독립 참여자/sequence로 바꿨다. 칸 사이의 연결이나 공통 실행 노드는 없다.
+- 반복된 모델/Component는 서로 배타적인 대안의 같은 기능이며 모델 복제나 새로운 기능·process·권한·A/B 의미 변경이 아니다. Direct passthrough, currentness, actual receipt와 Guard credit/State snapshot 계약을 유지했다.
+- 전용 생성기에서 모든 participant가 A/B 자기 범위 안에 있고, 모든 연결의 양 끝과 중간 경로가 같은 칸 안에 있는지 검사한다. SVG/draw.io/PNG를 함께 갱신하고 두 실제 렌더와 720p 축소본을 확인했다. 실제 text bounding boxes에서 텍스트 겹침·canvas 밖·자기 블록 밖 텍스트는 두 SVG 모두 0건이었다.
+
+- presentation_critic가 최신 메인/사건도의 실제 720p를 먼저 읽고 본문·source와 대조해 새 좌우 독립 요구 충족과 주요 경로/명칭 보존을 확인했다. 이 수정 범위에서 새 P1/P2는 보고되지 않았다. 전용 생성기와 활성 용어/링크/QA 검사를 통과했다. 이전 세 리뷰의 판정을 이번 배치에 자동 적용한 것이 아니다.
+
 ## 1. 사용자 요청과 완료 범위
 
 사용자는 04-50 영역 6에서 계속 듣기, 현재 요청의 응답, 기존 업무의 질문/결과와 정정을 한 대화로 잇는 SW 구조를 44로 완성하도록 요청했다. A/B는 전략·알고리즘·정책 차이를 넘어 architectural style에서 달라야 하고, 실제 발표는 **메인 구조 비교 한 장**만으로 끝나야 한다. 완성 → 제3자 리뷰 → 수정 → 재리뷰와 이번 작업 파일만 commit/push하는 범위를 승인했다.

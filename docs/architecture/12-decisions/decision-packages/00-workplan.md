@@ -9,7 +9,7 @@
 사용자는 34의 처리 시점 A/B를 40번대로 승격하지 않고, 04-50 영역 6에서 지속 입력·현재 응답·기존 업무의 질문/결과를 한 대화로 이어가는 **architectural style 수준의 구조 결정**을 44로 완성하도록 요청했다. 완성 → 제3자 리뷰 → 보완 → 재리뷰를 거치고 이번 작업 파일만 commit/push하도록 승인했다.
 
 - [44 본문](./04-44-continuous-interaction.md): A 중앙 비동기 Orchestration/Mediator와 B 반응형 Dataflow/Pipes-and-Filters. 중앙 return→후속 명령과 typed producer→consumer 활성화·국소 window·join·credit/cancel의 실제 실행 조직 차이다. 양안에 비동기, 독립 입력, 즉시 stop, priority와 부분 재사용을 허용한다.
-- [MAIN](./diagrams/choice44-structure.svg)은 같은 u2 정정과 Q1/r1을 두 구조, 상태 소유, 원본 현재성, 실제 제시/receipt, 외부 hold와 공통 모델까지 한 장에 담는다. SVG/draw.io/PNG와 보충 참여자 사건도 및 확대 HTML을 함께 관리한다.
+- [MAIN](./diagrams/choice44-structure.svg)은 같은 u2 정정과 Q1/r1을 두 구조, 상태 소유, 원본 현재성, 실제 제시/receipt, 외부 hold와 공통 모델까지 한 장에 담는다. 후속 사용자 수정에 따라 왼쪽 A/오른쪽 B가 각각 입력·Agent·모델·출력 경로까지 자기 칸 안에서 완결하며 칸 사이 연결은 없다. 보충 사건도도 좌우 방식으로 맞췄다. SVG/draw.io/PNG와 보충 참여자 사건도 및 확대 HTML을 함께 관리한다.
 - 미해결 입력의 확인 질문 admission, known-empty 과거 전달 snapshot, 자기 receipt 후행, hold/전송 CAS 원자적 선후와 승인된 Direct 후보 passthrough를 명시했다. V-01~13, 비용·혼합·가장 싼 전환과 반증 조건을 공개한다.
 - [독립 리뷰 기록](./04-44-interaction-review.md)에 세 관점의 읽기 전용 리뷰, 실제 P2 발견, 보완과 최종 재검토 범위를 기록한다. 미측정 조건부 후보이며 B의 정상 반응성 우위나 최종 DP/A/B 선택은 아니다.
 - 34는 상세 설계 영역으로 유지한다. 41의 의미 해결, 42의 서비스 수명, 43의 의미 생산과 구별한다. 기존 본문/그림과 참조 Architecture, QA/ADR, 구현/측정 상태는 유지하며 다른 세션의 45 작업을 이번 커밋에 넣지 않는다.

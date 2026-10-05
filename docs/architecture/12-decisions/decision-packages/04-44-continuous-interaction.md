@@ -11,12 +11,12 @@
 
 [편집용 draw.io](./diagrams/choice44-structure.drawio) · [발표용 PNG](./diagrams/choice44-structure.png) · [확대 보기](./diagrams/choice44-review.html)
 
-메인 한 장으로 목적·공통 입력·다른 제어/상태·실제 전달을 설명한다. 파랑은 A의 조정 책임, 초록은 B의 실행망, 검정은 공통 기능이다. 상자는 구현할 Component/Module 이름이며 OS process나 모델 개수를 뜻하지 않는다. 원통은 상태다. 화살표의 번호와 자료 ID는 실행 관계이며 길이는 시간 수치가 아니다.
+**왼쪽 블록은 A만, 오른쪽 블록은 B만 사용한다.** 각 칸 안에서 같은 입력·Task/Agent·모델부터 다른 실행/상태 구조와 실제 전달까지 완결한다. 공통 기능도 각각 반복 표시하고 칸 사이에는 연결을 두지 않는다. 반복한 Component/Omni는 서로 배타적인 대안의 같은 의존성이며 한 구현에서 모델을 두 벌 사용한다는 뜻이 아니다. 메인 한 장으로 목적·공통 입력·다른 제어/상태·실제 전달을 설명한다. 파랑은 A의 조정 책임, 초록은 B의 실행망, 검정은 공통 기능이다. 상자는 구현할 Component/Module 이름이며 OS process나 모델 개수를 뜻하지 않는다. 원통은 상태다. 화살표의 번호와 자료 ID는 실행 관계이며 길이는 시간 수치가 아니다.
 
 ### 1.1 그림을 짚는 발표 대본
 
-1. **같은 두 생산자:** 사용자는 보고서 설명 P1을 듣다가 u2 “잠깐, 표부터 설명해줘”라고 말한다. 별도로 외부 Agent의 질문 Q1/결과 r1이 도착한다. Task Manager가 외부 사실을 확인해 제공한다. 어느 Task인지 정답을 미리 입력에 붙이지 않는다.
-2. **위쪽 공통 제어:** Interaction Manager는 계속 수신/인식하고 Input Control Gate는 새 입력 세대로 이전 음성 출력을 즉시 차단하고 미전송 효과를 보류한다. 이 경로는 해석이나 응답 준비 완료를 기다리지 않는다. 발화 시작은 업무 취소 명령이 아니다.
+1. **각 칸의 같은 두 생산자:** 사용자는 보고서 설명 P1을 듣다가 u2 “잠깐, 표부터 설명해줘”라고 말한다. 별도로 외부 Agent의 질문 Q1/결과 r1이 도착한다. Task Manager가 외부 사실을 확인해 제공한다. 어느 Task인지 정답을 미리 입력에 붙이지 않는다.
+2. **각 칸 위쪽의 입력 제어:** Interaction Manager는 계속 수신/인식하고 Input Control Gate는 새 입력 세대로 이전 음성 출력을 즉시 차단하고 미전송 효과를 보류한다. 이 경로는 해석이나 응답 준비 완료를 기다리지 않는다. 발화 시작은 업무 취소 명령이 아니다.
 3. **A의 중앙 왕복:** Interaction Orchestrator가 u2와 Q1/r1을 자기 진행 상태에 연결한다. Request Controller에 해석/처리를 요청하고, Response Manager에 확정 근거로 답변/질문 준비를 요청한다. 반환을 회수해 현재성과 후속 조건을 검사하고 Output Arbiter로 보낸다. 오래 걸리는 호출 동안 중앙 상태 전이를 잠그지 않는다.
 4. **B의 분기와 결합:** Input Resolution Stage는 확정 입력으로 Request Controller를 활성화한다. Task Notice Stage는 확인된 Q1/r1을 별도 경로로 공급한다. Response Manager는 준비 가능한 확정 근거를 소비하고 승인된 Direct 후보는 재생성 없이 통과시킨다. Publication Join은 후보 응답과 종류별 admission·자료/질문 revision·기존 실제 전달 snapshot을 결합한다. 내용 응답은 입력 해소를 기다리지만 현재 입력을 해결할 확인 질문은 제한적으로 먼저 나갈 수 있다. 결과가 중앙 명령자로 되돌아와 재배정되는 경로는 없다. 점선의 credit/cancel은 소비자가 수용 가능한 양과 폐기 조건을 상류에 전달하는 흐름이다. 최종 credit의 생산자는 Publication Guard이며 Presentation State는 과거 실제 전달 snapshot만 제공한다.
 5. **같은 마지막 경계:** Output Arbiter의 Publication Guard는 현재 입력 세대, 발화 여부, 원본 owner의 유효성, 중복 publication과 실제 질문 focus를 확인한다. Presentation State가 실제 전달 범위와 질문 focus를 소유한다. Interaction Manager의 Text 표시/음성 재생 receipt가 실제 전달 기록을 갱신한다. 생성된 Q1은 아직 질문 focus가 아니다. 같은 단일 Omni를 공유하므로 실행망의 병행이 모델 계산량 증가나 무료 병렬 추론을 뜻하지 않는다.
@@ -107,7 +107,7 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 ![44 — 동일 사건과 현재성 연결](./diagrams/choice44-event.svg)
 
-[사건도 draw.io](./diagrams/choice44-event.drawio). 보충 그림은 검토 확대용이며 메인 설명을 대신하지 않는다.
+[사건도 draw.io](./diagrams/choice44-event.drawio). 보충 그림도 왼쪽 A/오른쪽 B로 분리하며 각 칸의 참여자와 사건 경로만 사용한다. 검토 확대용이며 메인 설명을 대신하지 않는다.
 
 | 사건 | A의 경로 | B의 경로 | 공통 사용자 결과 |
 | --- | --- | --- | --- |
