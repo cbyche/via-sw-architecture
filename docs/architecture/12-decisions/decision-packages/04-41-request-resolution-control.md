@@ -72,7 +72,11 @@ B의 규칙을 계속 늘리면 자연어 전반을 구현하는 문제로 커�
 
 ![04-41 메인 구조 비교](./diagrams/choice41-structure.svg)
 
-[편집용 draw.io](./diagrams/choice41-structure.drawio). 검정은 공통, 파랑은 A, 초록은 B 고유 구조다. 이름이 반복된 Component는 같은 인스턴스다. VIA 경계는 논리 책임 경계이며 외부 Omni도 PC의 공유 모델이다. 그림의 단계 번호는 아래 §4의 흐름 번호와 대응한다. 세부 왕복은 다음 사건도에 펼친다.
+[편집용 draw.io](./diagrams/choice41-structure.drawio) · [발표용 PNG](./diagrams/choice41-structure.png) · [배치·내용 보존 검수](./04-41-diagram-review.md)
+
+**한 장에서 읽는 순서:** 위의 같은 사용자 입력 → 가운데 A/B의 서로 다른 해석 구조 → 아래의 공통 채택·위임·사용자 전달 → 장점·대가·선택 조건. 2560×1440의 16:9 그림이다. 위 입력에서 두 안으로 내려가는 선은 **비교할 때 선택하는 대체 경로**이며 같은 요청을 A/B에 동시에 실행한다는 뜻이 아니다. 공통 입출력과 채택 경로는 한 번만 펼쳤다.
+
+검정은 공통, 파랑은 A, 초록은 B 고유 구조다. 이름이 반복된 Component는 같은 인스턴스이며 공유 Omni도 가중치 한 벌이다. VIA의 논리 책임과 모델·Downstream Agent 의존성을 구분하며 별도 process를 가정하지 않는다. 그림의 단계 번호는 아래 §4의 흐름 번호와 대응한다. 잠정 상태는 각 해석 생산자가 소유하고, 채택·질문·실제 게시 연결은 Request Controller가 관리한다. B의 요청 해석 상태 소유자는 Request Resolution Engine이며 Controller가 그 원본을 복제하지 않는다. 세부 왕복과 버전 검사는 기존 사건도에 펼친다.
 
 ## 4. 같은 입력을 끝까지 처리하면
 

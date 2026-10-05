@@ -6,102 +6,11 @@ import argparse
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from stage4_diagram_design import Plate, INK, BLUE, GREEN, MUTED
+from request_resolution_presentation import structure
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/architecture/12-decisions/decision-packages/diagrams'
 TITLE='요청 의미 확정 — 모델 중심 ReAct와 모델 틀/코드 완성'
 
-
-def structure():
- p=Plate('choice41-structure','04-41',TITLE,'같은 발화와 자료: “이 표를 아까 보고서에 넣고, 메일은 초안만” → 업무 확인 → 같은 현재 검사와 위임',height=3340)
- for option,x in [('A',64),('B',1312)]:
-  c=BLUE if option=='A' else GREEN
-  p.text(x,235,option+'  '+('모델이 조회와 최종 관계를 결정' if option=='A' else '모델은 틀 제공, 코드는 조회와 관계 결합'),27,c,bold=True)
-  p.text(x,278,'유리: 열린 표현의 공동 해석 / 대가: 반복 추론과 잘못된 연결 검증' if option=='A' else '유리: 명시 관계의 추적/통제 / 대가: 표현 범위 제한과 엔진 확장',18,MUTED)
-  p.box(x,315,1184,2285,'#FAFBFD','none',0)
-  p.box(x,2600,760,575,'#FAFBFD','none',0)
-  p.line([(x,315),(x+1184,315),(x+1184,2600),(x+760,2600),(x+760,3175),(x,3175),(x,315)],'#C7D1DD',dashed=True,arrow=False)
-  p.text(x+22,330,'VIA SOFTWARE / 논리 책임 경계',18,INK,bold=True)
-  def cp(k,xx,y,w,h,name,color=INK):p.component(option+k,x+xx,y,w,h,name,color)
-  def mod(k,xx,y,w,h,name,owner):p.node(option+k,x+xx,y,w,h,name,owner=option+owner,color=c)
-  def st(k,xx,y,w,h,name,owner):p.node(option+k,x+xx,y,w,h,name,kind='store',owner=option+owner,color=c)
-  def edge(a,b,label,at,sp='B',tp='T',via=(),ret=False,sd=0,td=0,color=None):
-   p.edge(option+a,option+b,sp=sp,tp=tp,via=[(x+xx,y) for xx,y in via],label=label,at=(x+at[0],at[1]),ret=ret,sd=sd,td=td,color=color or c)
-  cp('im',30,390,630,85,'Interaction Manager')
-  cp('rc',30,565,630,90,'Request Controller')
-  edge('im','rc','1  발화/시점/버전; 신규/보완은 미결정',(65,505),color=INK)
-  cp('ma',800,830,350,85,'Model Access')
-  # Model is outside VIA software responsibility, even though on the same PC.
-  p.node(option+'omni',x+800,3185,350,85,'공유 Omni',kind='model')
-  p.text(x+800,3290,'모델 의존성 / PC에서 한 벌 공유',17,MUTED)
-  # Explicit MA/Omni pair is expanded in the sequence view; route on outside edge.
-  edge('ma','omni','추론 입력',(1045,1040),sp='R',tp='R',via=[(1160,872.5),(1160,3227.5)],sd=0,td=0,color=INK)
-  edge('omni','ma','추론 결과',(1045,1120),sp='R',tp='R',via=[(1175,3247.5),(1175,892.5)],sd=20,td=20,ret=True,color=INK)
-  cp('cm',800,1450,350,85,'Context Manager')
-  cp('tm',800,1780,350,85,'Task Manager')
-  if option=='A':
-   cp('ri',30,815,630,1215,'Request Interpreter')
-   mod('loop',110,970,470,105,'ReAct 해석 제어기','ri')
-   mod('tools',110,1260,470,105,'읽기 도구 실행기','ri')
-   st('temp',110,1530,470,85,'임시 해석 상태','ri')
-   mod('check',110,1820,470,100,'의미 제안 검증기','ri')
-   edge('rc','loop','2  같은 원문/최근 안내 + 읽기 도구 계약',(65,720))
-   edge('loop','ma','추론 요청',(670,957),sp='R',tp='L',via=[(720,1007.5),(720,857.5)],sd=-15,td=-15,color=INK)
-   edge('ma','loop','조회/질문/완성안',(670,1022),sp='L',tp='R',via=[(755,887.5),(755,1037.5)],sd=15,td=15,ret=True,color=INK)
-   edge('loop','tools','3  모델이 선택한 조회',(125,1135),sd=-95,td=-95)
-   edge('tools','loop','4  결과로 모델 재판단',(395,1200),sp='T',tp='B',sd=95,td=95,ret=True)
-   edge('tools','temp','근거/조회 기록 보관',(150,1430))
-   edge('temp','loop','유효 기록 회수',(40,1655),sp='L',tp='L',via=[(70,1572.5),(70,1022.5)],ret=True)
-   edge('loop','check','5  모델의 최종 관계\n또는 질문 제안',(45,1740),sp='L',tp='L',via=[(48,1002.5),(48,1850)],sd=-20,td=-20)
-   edge('check','loop','검증 오류: 제한 재생성',(575,1635),sp='R',tp='R',via=[(630,1870),(630,1022.5)],ret=True)
-   read='tools';readY=1312.5
-   result='check'
-  else:
-   cp('ri',30,815,630,150,'Request Interpreter')
-   edge('rc','ri','2  같은 원문/최근 안내 + 요청 틀 형식',(65,720))
-   edge('ri','ma','틀/부분 해석 요청',(670,800),sp='R',tp='L',via=[(735,875),(735,857.5)],sd=-15,td=-15,color=INK)
-   edge('ma','ri','틀/후보/미해석',(670,925),sp='L',tp='R',via=[(770,887.5),(770,905)],sd=15,td=15,ret=True,color=INK)
-   cp('engine',30,1130,630,900,'Request Resolution Engine',c)
-   mod('planner',110,1260,470,105,'미해결 항목 처리기','engine')
-   st('state',110,1530,470,85,'요청 해석 상태','engine')
-   mod('bind',110,1820,470,100,'관계 결합기','engine')
-   edge('ri','planner','3  모델의 요청 틀: 대상/Task/조건은 미결정 가능',(65,1030))
-   edge('planner','ri','4  부분 해석이 필요하면\n코드가 범위 지정 후 요청',(35,1055),sp='L',tp='L',via=[(10,1312.5),(10,890)])
-   edge('planner','state','조회한 후보/근거 버전',(130,1430))
-   edge('state','bind','허용된 관계/조건으로 결합',(130,1710))
-   edge('bind','planner','후보 부족/충돌: 코드가\n추가 조회 또는 질문 결정',(590,1680),sp='R',tp='R',via=[(630,1870),(630,1312.5)],ret=True)
-   read='planner';readY=1312.5;result='bind'
-  for k,yy,dy,lane in [('cm',1492.5,-20,705),('tm',1822.5,20,750)]:
-   edge(read,k,'4  자료 조회' if k=='cm' else '4  Task 조회',(lane+5,yy-55),sp='R',tp='L',via=[(lane,readY+dy),(lane,yy-15)],sd=dy,td=-15)
-   edge(k,read,'근거/버전' if k=='cm' else '사실/버전',(lane+25,yy+25),sp='L',tp='R',via=[(lane+20,yy+15),(lane+20,readY+dy+10)],sd=15,td=dy+10,ret=True)
-  p.text(x+800,1950,['동일 자료/권한', '추가 해석도 같은 Omni', '없는 근거는 미해결'],18,MUTED)
-  cp('out',30,2160,630,90,'Request Controller')
-  edge(result,'out','5  완성 의미 / 확인 질문 / 지원 한계',(60,2065),ret=True)
-
-  cp('tmout',800,2160,350,90,'Task Manager')
-  cp('ag',800,2440,350,85,'Agent Gateway')
-  p.node(option+'agent',x+800,2695,350,85,'Downstream Agent',kind='external')
-  # Inner boundary indicates external agent responsibility rather than a VIA component.
-  p.text(x+800,2805,'외부 업무 실행 책임',18,MUTED)
-  edge('out','tmout','7  현재 검사 후\n8  Task 생성/변경',(665,2110),sp='R',tp='L',sd=-15,td=-15,color=INK)
-  edge('tmout','out','접수/상태',(680,2255),sp='L',tp='R',sd=15,td=15,ret=True,color=INK)
-  edge('tmout','ag','8  채택한 요청 인계',(805,2320),sd=-35,td=-35,color=INK)
-  edge('ag','tmout','접수/결과',(1010,2370),sp='T',tp='B',sd=35,td=35,ret=True,color=INK)
-  edge('ag','agent','실제 작업 위임',(805,2590),sd=-35,td=-35,color=INK)
-  edge('agent','ag','접수/결과',(1010,2640),sp='T',tp='B',sd=35,td=35,ret=True,color=INK)
-  cp('rm',30,2550,630,85,'Response Manager')
-  cp('imout',30,2850,630,85,'Interaction Manager')
-  edge('out','rm','5  미해결이면 질문 / 8  확인된 상태 전달',(65,2320),sd=-95,td=-95,color=INK)
-  edge('rm','out','실제 게시 기록',(420,2470),sp='T',tp='B',sd=95,td=95,ret=True,color=INK)
-  edge('imout','rc','6  사용자 답변은 새 입력',(15,2410),sp='L',tp='L',via=[(4,2892.5),(4,610)],color=INK)
-  edge('rm','imout','질문/응답 Text와 음성',(65,2720),sd=-95,td=-95,color=INK)
-  edge('imout','rm','실제 전달 구간',(420,2800),sp='T',tp='B',sd=95,td=95,ret=True,color=INK)
-  p.text(x+30,2990,['A: 모델의 다음 판단을 코드가 실행. 완성안은 검사 후 채택.' if option=='A' else 'B: 코드가 틀을 해결. 표현 밖 관계는 질문/미지원으로 반환.',
-                         '현재 권한은 Policy Manager에 확인. 응답 추론은 Model Access 경유.',
-                         '채택 기록은 State Store 보관. 이 공통 왕복은 사건도에서 펼침.'],19,MUTED,leading=31)
- p.text(64,3200,'검정: 공통 / 파랑: A / 초록: B. 네모: Component/Module 이름.',18,MUTED)
- p.text(64,3235,'실선: 요청/전달 / 점선: 반환. 원통: 상태. 별도 process 가정 없음.',18,MUTED)
- p.text(64,3270,'같은 이름은 동일 인스턴스. 그림은 설계안이며 구현/측정 결과가 아님.',18,MUTED)
- return p
 
 NAMES=['Interaction\nManager','Request\nController','Request\nInterpreter','Model\nAccess','공유 Omni','Context\nManager','Task\nManager','Request\nResolution\nEngine','Policy\nManager','Agent\nGateway','Downstream\nAgent','Response\nManager']
 # Every arrow is one concrete message; notes are separate from component names.
