@@ -1,6 +1,6 @@
 """04-41 landscape main comparison; unchanged alternatives and event diagrams.
 
-A/B share the input and adoption/delivery rails, not their resolution mechanism.
+Each alternative is complete inside its own column, including common contracts.
 Every connector is also an editable edge in the companion draw.io scene.
 """
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN, LINE
@@ -19,6 +19,20 @@ class Slide(Plate):
         size = 26
         leading = size * 1.25
         return i['y'] + (i['h']-len(i['name'])*leading)/2-2+(7 if i['type']=='store' else 0), size, leading
+
+    def validate(self):
+        super().validate()
+        # A and B must be self-contained, including repeated common Components.
+        limits={'A': (64,1248), 'B': (1312,2496)}
+        for key,(x,y,w,h) in self.nodes.items():
+            lo,hi=limits[key[0]]
+            assert lo<=x and x+w<=hi, (key,'outside comparison column')
+        for item in self.items:
+            if item['kind']=='line' and 'source' in item:
+                prefix=item['source'][0]
+                assert prefix==item['target'][0], (item['id'],'cross-option edge')
+                lo,hi=limits[prefix]
+                assert all(lo<=x<=hi for x,y in item['points']), (item['id'],'edge leaves column')
 
     def svg(self):
         return super().svg().replace('font-size="23"', 'font-size="26"')
@@ -41,20 +55,18 @@ def structure():
     p.text(64, 126, '같은 사례  “이 표를 아까 보고서에 넣고, 메일은 보내지 말고 초안만 만들어.”', 29, bold=True)
     p.text(64, 164, '보고서 후보 2개 → “어느 보고서인가요?” → “예산 보고서” → 표 연결 + 발송 금지 유지 후 인계', 25, MUTED)
 
-    # Shared input rail. The branches are alternative paths, never a fan-out job.
-    p.component('input', 64, 220, 355, 62, 'Interaction Manager')
-    p.component('start', 825, 220, 405, 62, 'Request Controller')
-    p.arrow('input', 'start', '1·6  원문 / 시점 / 입력 버전', (446, 217), sp='R', tp='L')
-    p.text(1330, 222, '아래는 A 또는 B를 선택한 구조 비교', 28, bold=True)
-    p.text(1330, 261, '같은 최근 대화·게시 질문·허용 자료 / 정답 Task를 미리 주지 않음', 24, MUTED)
-    p.line([(64, 315), (2496, 315)], LINE, arrow=False)
-
-    # A/B columns are aligned only at the external contracts.
-    for x, c, title in [(64, BLUE, 'A  모델이 조회와 최종 관계를 결정'),
-                         (1312, GREEN, 'B  모델은 틀 제공, 코드는 조회와 관계 결합')]:
-        p.box(x, 332, 1184, 48, '#EEF4FF' if c == BLUE else '#EDF9F2', 'none', 0)
-        p.text(x+16, 338, title, 29, c, bold=True)
-    p.line([(1280, 332), (1280, 866)], LINE, arrow=False)
+    # Each column includes its own complete path; there are no A/B connectors.
+    for prefix, dx, color, title in [
+        ('A', 0, BLUE, 'A  모델이 조회와 최종 관계를 결정'),
+        ('B', 1248, GREEN, 'B  모델은 틀 제공, 코드는 조회와 관계 결합')]:
+        p.box(64+dx, 211, 1184, 1148, 'white', LINE, 0)
+        p.box(64+dx, 211, 1184, 48, '#EEF4FF' if prefix=='A' else '#EDF9F2', 'none', 0)
+        p.text(80+dx, 217, title, 29, color, bold=True)
+        p.component(prefix+'input', 80+dx, 290, 310, 62, 'Interaction Manager')
+        p.component(prefix+'start', 500+dx, 290, 335, 62, 'Request Controller')
+        p.arrow(prefix+'input', prefix+'start', '1·6  원문 / 시점 / 입력 버전',
+                (424+dx, 261), sp='R', tp='L', size=23)
+        p.text(80+dx, 356, '같은 최근 대화·게시 질문·허용 자료 / 대상 Task는 조회 후 판단', 22, MUTED)
 
     p.component('Ari', 80, 407, 755, 405, 'Request Interpreter', BLUE)
     p.node('Aloop', 110, 502, 305, 66, 'ReAct 해석 제어기', owner='Ari', color=BLUE)
@@ -66,8 +78,8 @@ def structure():
     p.component('Acm', 925, 694, 290, 62, 'Context Manager')
     p.component('Atm', 925, 800, 290, 62, 'Task Manager')
 
-    p.arrow('start', 'Aloop', '2  원문 + 읽기 도구 계약', (100, 385), sp='B', tp='T', sd=-120,
-            via=[(907.5, 301), (54, 301), (54, 478), (262.5, 478)], color=BLUE)
+    p.arrow('Astart', 'Aloop', '2  원문 + 읽기 도구 계약', (100, 385), sp='B', tp='T',
+            via=[(667.5, 389), (435, 389), (435, 478), (262.5, 478)], color=BLUE)
     p.arrow('Aloop', 'Atools', '3  모델이 선택한 조회', (480, 573), sp='R', tp='L', via=[(455, 535), (455, 639)], color=BLUE)
     p.arrow('Atools', 'Aloop', '4  조회 결과로 재판단', (116, 576), sp='T', tp='B',
             sd=-100, td=100, via=[(550, 602), (445, 602), (445, 612), (362.5, 612)], color=BLUE, ret=True)
@@ -90,8 +102,8 @@ def structure():
     p.node('Bomni', 2173, 550, 290, 62, '공유 Omni', kind='model')
     p.component('Bcm', 2173, 694, 290, 62, 'Context Manager')
     p.component('Btm', 2173, 800, 290, 62, 'Task Manager')
-    p.arrow('start', 'Bri', '2  원문 + 요청 틀 형식', sp='B', tp='T', sd=120,
-            at=(1450, 383), via=[(1147.5, 301), (1300, 301), (1300, 397), (1565, 397)], color=GREEN)
+    p.arrow('Bstart', 'Bri', '2  원문 + 요청 틀 형식', sp='B', tp='T',
+            at=(1350, 383), via=[(1915.5, 393), (1565, 393)], color=GREEN)
     p.arrow('Bri', 'Bma', '틀 / 부분 해석 요청', (1840, 403), sp='R', tp='L', sd=-10, td=-10, color=GREEN)
     p.arrow('Bma', 'Bri', '틀 / 후보 / 미해석 반환', (1830, 450), sp='L', tp='R', sd=15, td=15, color=GREEN, ret=True)
     p.arrow('Bri', 'Bplanner', '3  대상·Task·조건이 미결정인 틀', (1385, 490), sd=-50, via=[(1515, 527), (1907.5, 527)], color=GREEN)
@@ -127,61 +139,57 @@ def structure():
     p.text(86, 829, '구조화 출력 · 조건 보존 · 부분 수정 · cache 가능', 23, BLUE)
     p.text(1380, 822, '미지원 관계는 보류', 23, GREEN)
 
-    # Common adoption/output contract expanded once; repeated names denote the
-    # same logical instance. Both proposals return, neither is an execution permit.
-    p.text(64, 886, '공통 채택·위임·사용자 전달  —  A/B의 완성 의미·질문·지원 한계를 같은 Controller가 받음', 25, bold=True)
-    p.component('finish', 840, 967, 405, 62, 'Request Controller')
-    p.component('task', 1390, 967, 310, 62, 'Task Manager')
-    p.component('gateway', 1825, 967, 280, 62, 'Agent Gateway')
-    p.node('agent', 2220, 967, 300, 62, 'Downstream Agent', kind='external')
-    p.component('response', 440, 1070, 335, 62, 'Response Manager')
-    p.component('output', 64, 1070, 300, 62, 'Interaction Manager')
-    p.component('policy', 64, 967, 310, 62, 'Policy Manager')
-    p.node('saved', 447, 958, 310, 76, 'State Store', kind='store')
-    p.arrow('Acheck', 'finish', '5·7  의미 / 질문 제안', (432, 920), sp='B', tp='T', td=-100,
-            via=[(262.5, 867), (792, 867), (792, 953), (942.5, 953)], color=BLUE, ret=True)
-    p.arrow('Bbind', 'finish', '5·7  결합 결과 / 질문\n지원 한계', (1325, 867), sp='L', tp='T', td=100,
-            via=[(1300, 685), (1300, 909), (1142.5, 909)], color=GREEN, ret=True)
-    p.arrow('finish', 'Bengine', '7  채택 통지 / 질문 게시 연결', (1818, 885), sp='T', tp='B', sd=160, td=100,
-            via=[(1202.5, 916), (1807.5, 916)], color=GREEN)
-    p.arrow('finish', 'policy', '7  현재 권한 ↔ 검사 결과', (75, 931), sp='L', tp='T', sd=-10,
-            via=[(808, 988), (808, 955), (219, 955)])
-    p.arrow('policy', 'finish', sp='R', tp='L', sd=15, td=20,
-            via=[(395, 1013), (395, 1048), (816, 1048), (816, 1018)], ret=True)
-    p.arrow('finish', 'saved', '채택·질문 기록', (456, 1041), sp='L', tp='R', sd=-2)
-    p.arrow('saved', 'finish', sp='R', tp='L', sd=18, td=16, ret=True)
-    p.arrow('finish', 'task', '8  채택한 요청', (1255, 936), sp='R', tp='L', sd=-13, td=-13)
-    p.arrow('task', 'finish', '현재 사실 / 접수·상태', (1252, 1037), sp='L', tp='R', sd=15, td=15, ret=True, size=22)
-    p.arrow('task', 'gateway', 'command ID / 조건', (1696, 936), sp='R', tp='L', sd=-13, td=-13, size=22)
-    p.arrow('gateway', 'task', '접수·결과', (1712, 1037), sp='L', tp='R', sd=15, td=15, ret=True, size=22)
-    p.arrow('gateway', 'agent', '업무 위임', (2117, 936), sp='R', tp='L', sd=-13, td=-13, size=22)
-    p.arrow('agent', 'gateway', '접수·결과', (2120, 1037), sp='L', tp='R', sd=15, td=15, ret=True, size=22)
-    p.arrow('finish', 'response', '5·8  질문 / 직접 응답 / 확인된 상태', (842, 1060), sp='B', tp='R', sd=-80,
-            via=[(962.5, 1101)])
-    p.arrow('response', 'finish', '실제 게시 기록', (842, 1110), sp='R', tp='B', sd=20, td=110,
-            via=[(1152.5, 1121)], ret=True)
-    p.arrow('response', 'output', 'Text / 음성', (279, 1138), sp='L', tp='R', sd=-10, td=-10)
-    p.label(70, 1140, '반환: 실제 전달 기록', MUTED, size=22)
-    p.arrow('output', 'response', sp='R', tp='L', sd=15, td=15, ret=True)
-    p.text(70, 1042, '6  답변은 맨 위의 새 입력', 22, MUTED)
-    p.text(1387, 1090, '7  입력·자료·Task·질문 버전 확인 후 채택', 24, bold=True)
-    p.text(1387, 1124, '철회·변경은 재평가 / 저장 실패는 인계 보류 / 응답도 Model Access 경유', 22, MUTED)
-    p.text(2223, 1065, '외부 업무 계획·실행 책임', 22, MUTED)
+    # Repeat the equal adoption, storage and delivery contracts inside each panel.
+    for prefix, dx, color in [('A', 0, BLUE), ('B', 1248, GREEN)]:
+        def component(key, x, y, w, name):
+            p.component(prefix+key, x+dx, y, w, 62, name)
+        def arrow(a, b, label='', at=None, **kw):
+            if at:
+                at=(at[0]+dx, at[1])
+            if 'via' in kw:
+                kw['via']=[(x+dx, y) for x,y in kw['via']]
+            p.arrow(prefix+a, prefix+b, label, at, **kw)
+        component('finish', 485, 980, 350, 'Request Controller')
+        component('policy', 935, 980, 280, 'Policy Manager')
+        p.node(prefix+'saved', 80+dx, 973, 300, 76, 'State Store', kind='store')
+        component('response', 80, 1115, 310, 'Response Manager')
+        component('task', 485, 1115, 350, 'Task Manager')
+        component('gateway', 935, 1115, 280, 'Agent Gateway')
+        component('output', 80, 1260, 310, 'Interaction Manager')
+        p.node(prefix+'agent', 930+dx, 1260, 290, 62, 'Downstream Agent', kind='external')
+        if prefix=='A':
+            arrow('check','finish','5·7  완성 의미 / 확인 질문',
+                  (485,912), sp='B', tp='T', via=[(262.5,900),(660,900)], color=color,ret=True)
+        else:
+            arrow('bind','finish','5·7  결합 결과 / 질문 / 지원 한계',
+                  (75,910), sp='L',tp='T',td=-80,
+                  via=[(68,685),(68,953),(580,953)], color=color,ret=True)
+            arrow('finish','engine','7  채택 통지 / 질문 게시 연결',
+                  (455,870), sp='T',tp='B',sd=100,td=100,
+                  via=[(760,947),(559.5,947)], color=color)
+        arrow('finish','saved','채택·질문 기록', (92,945),sp='L',tp='R',sd=-12,td=-12)
+        arrow('saved','finish',sp='R',tp='L',sd=14,td=14,ret=True)
+        arrow('finish','policy','7  현재 권한 검사', (918,944),sp='R',tp='L',sd=-12,td=-12)
+        arrow('policy','finish','허용 / 거절', (895,1044),sp='L',tp='R',sd=14,td=14,ret=True,size=22)
+        arrow('finish','task','8  Task 생성/변경', (493,1068),sd=-90,td=-90,size=23)
+        arrow('task','finish','현재 사실 /\n접수·상태', (731,1060),sp='T',tp='B',sd=80,td=80,ret=True,size=22)
+        arrow('task','gateway','요청·조건', (836,1085),sp='R',tp='L',sd=-12,td=-12,size=22)
+        arrow('gateway','task','접수·결과', (836,1182),sp='L',tp='R',sd=14,td=14,ret=True,size=22)
+        arrow('gateway','agent','업무 위임', (932,1212),sd=-60,td=-60,size=22)
+        arrow('agent','gateway','접수·결과', (1124,1212),sp='T',tp='B',sd=60,td=60,ret=True,size=22)
+        arrow('finish','response','5·8  질문 / 응답 / 확인된 상태', (85,1078),sp='L',tp='R',sd=6,
+              via=[(414,1017),(414,1146)],size=23)
+        arrow('response','finish','실제 게시 기록', (397,1185),sp='R',tp='L',sd=20,td=25,
+              via=[(447,1166),(447,1036)],ret=True,size=22)
+        arrow('response','output','Text / 음성', (85,1212),sd=-60,td=-60,size=22)
+        arrow('output','response','실제 전달', (254,1212),sp='T',tp='B',sd=60,td=60,ret=True,size=22)
+        arrow('output','input','6  답변은 새 입력', (86,1330),sp='L',tp='L',
+              via=[(70,1291),(70,321)],size=22)
+        p.text(490+dx, 1226, ['7  입력·자료·Task·질문 버전 확인',
+                             '변경/철회는 재평가, 저장 실패는 인계 보류',
+                             '응답 추론도 Model Access 경유'],20,MUTED,leading=30)
+        p.text(932+dx,1330,'외부 업무 계획·실행 책임',21,MUTED)
 
-    # Short comparison rows, not invented quality scores.
-    p.line([(64, 1180), (2496, 1180)], LINE, arrow=False)
-    p.line([(1280, 1180), (1280, 1370)], LINE, arrow=False)
-    for x,c,lines in [(80,BLUE,[('장점', '열린 표현을 근거와 공동 해석; 새 맥락에 유연하게 조회'),
-                                 ('대가', '반복 추론·모델 경합, 잘못된 연결과 조건 누락의 검증'),
-                                 ('선택 조건', '작은 검증/슬롯 처리로 충분하고 열린 관계가 중요한 경우')]),
-                       (1330,GREEN,[('장점', '명시 관계의 결합·수정과 미해결 원인을 코드로 추적'),
-                                    ('대가', '표현 범위·엔진 확장·후보 상태 비용; 추가 해석/질문 가능'),
-                                    ('선택 조건', '한정된 표현이 주요 요청을 포괄하고 반복 결합 통제가 중요한 경우')])]:
-        for j,(label,value) in enumerate(lines):
-            yy=1196+j*58
-            p.text(x,yy,label,26,c,bold=True)
-            p.text(x+148,yy,value,25)
-    p.line([(64, 1377), (2496, 1377)], LINE, arrow=False)
-    p.text(64,1391,'검정: 공통 / 파랑: A / 초록: B · 네모: Component/Module · 원통: 상태 · 실선: 요청/전달 · 점선: 반환',21,MUTED)
-    p.text(2496,1410,'같은 이름은 같은 인스턴스 · VIA 논리 책임(별도 process 가정 없음) · Omni 한 벌, 역할별 세션 분리 · 음성 입력/인식 유지',20,MUTED,'right')
+    p.text(64,1379,'검정: 공통 / 파랑: A / 초록: B · 네모: Component/Module · 원통: 상태 · 실선: 요청/전달 · 점선: 반환',21,MUTED)
+    p.text(2496,1409,'각 칸은 독립 대안 · 같은 이름은 칸 안의 동일 인스턴스 · VIA 논리 책임, 별도 process 가정 없음 · Omni 한 벌/역할별 세션 · 음성 입력 유지',20,MUTED,'right')
     return p
