@@ -9,6 +9,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
+from lifecycle_ownership_presentation import structure
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'docs/architecture/12-decisions/decision-packages/diagrams'
@@ -54,114 +55,6 @@ class Slide(Plate):
         if label:
             self.label(*at, label, color, size=size)
 
-
-def structure():
-    p = Slide('choice42-structure', '서로 다른 수명, 누가 끝까지 관리하는가?',
-              '보고서 요청 → 다른 대화 → 복귀·답변 → 결과·수정.  같은 기능을 서로 다른 소유·협력 구조로 지원한다.')
-
-    # Layer I is shared behavior, not an advantage assigned to either option.
-    p.text(64, 224, 'Ⅰ  같은 기능 · 다른 수명', 30, bold=True)
-    events = [(650, '요청·접수'), (980, 'Agent 질문'), (1280, '다른 대화 C2'),
-              (1580, 'C1 복귀·답변'), (1900, '결과 도착'), (2240, '후속 수정')]
-    for x, title in events:
-        p.text(x, 228, title, 25, MUTED, 'center')
-        p.line([(x, 273), (x, 490)], LINE, dashed=True, arrow=False, width=1)
-
-    rows = [(278, '대화 C1'), (321, '요청 R1'), (364, 'Agent 질문 Q1'),
-            (407, '업무 T1'), (450, '외부 실행')]
-    for y, name in rows:
-        p.text(80, y-2, name, 27, bold=True)
-
-    def life(x1, x2, y, label, tx, ongoing=False):
-        p.line([(x1, y+22), (x2, y+22)], INK, width=3, arrow=ongoing)
-        p.line([(x1, y+14), (x1, y+30)], INK, arrow=False)
-        if not ongoing:
-            p.line([(x2, y+14), (x2, y+30)], INK, arrow=False)
-        p.label(tx, y-7, label, INK, size=25)
-
-    life(600, 2460, 278, 'C2로 전환해도 C1 기록·참조는 유지', 1040, True)
-    life(600, 650, 321, '위임 접수 후 종료', 705)
-    life(980, 1580, 364, '“상반기로?” 대화가 바뀌어도 답변 대기', 1000)
-    life(600, 2460, 407, 'T1은 결과 도착 후에도 보존 · 같은 업무 수정', 1420, True)
-    life(650, 1900, 450, 'X1 실행 → 질문 대기 → 재개 → 완료', 1010)
-    life(2240, 2460, 450, 'X2 시작', 2260, True)
-    p.text(80, 503, '양안 공통: 접수 ≠ 업무 완료 · 대화 전환 ≠ 취소 · 실행 완료 ≠ Task 삭제', 25, MUTED)
-    p.line([(64, 541), (2496, 541)], LINE, arrow=False)
-
-    p.text(80, 556, 'A   통합 Core', 38, BLUE, bold=True)
-    p.text(1330, 556, 'B   독립 대화·업무 서비스', 38, GREEN, bold=True)
-    p.text(80, 608, 'Ⅱ  소유·실행: 상태는 구분 · Core의 실행 수명은 공유', 26, BLUE)
-    p.text(1330, 608, 'Ⅱ  소유·실행: 서비스별 상태 권한 · 독립 실행 수명', 26, GREEN)
-    p.line([(1280, 556), (1280, 1325)], LINE, arrow=False)
-
-    # Same producers/dependencies on both sides; no new model-owning service.
-    for opt, dx in [('A', 0), ('B', 1250)]:
-        p.node(opt+'ui', 120+dx, 662, 300, 64, '사용자 입출력', kind='external')
-        p.node(opt+'omni', 475+dx, 662, 300, 64, '공유 Omni', kind='model')
-        p.node(opt+'agent', 850+dx, 662, 300, 64, 'Downstream Agent', kind='external')
-
-    p.box(64, 740, 1152, 506, 'none', BLUE, 12, dashed=True, thick=2.4)
-    p.component('core', 80, 752, 1120, 480, 'VIA Core', BLUE)
-    for k, x, name in [('dc', 1330, '대화 서비스'), ('tc', 2035, '업무 서비스')]:
-        p.box(x-12, 740, 434, 506, 'none', GREEN, 12, dashed=True, thick=2.4)
-        p.component(k, x, 752, 410, 480, name, GREEN)
-
-    for opt, dx, d_owner, t_owner in [('A', 0, 'core', 'core'), ('B', 1250, 'dc', 'tc')]:
-        p.node(opt+'d', 120+dx, 855, 300, 100, '대화 처리기', owner=d_owner)
-        p.node(opt+'t', 850+dx, 855, 300, 100, '업무 관리기', owner=t_owner)
-        p.arrow(opt+'ui', opt+'d', '1 발화', (130+dx, 805), sd=-90, td=-90,
-                via=[(180+dx, 735), (90+dx, 735), (90+dx, 832), (180+dx, 832)], size=22)
-        p.arrow(opt+'d', opt+'ui', '6 응답·질문', (290+dx, 805), sp='T', tp='B',
-                sd=80, td=80, ret=True, size=22)
-        p.arrow(opt+'d', opt+'omni', '해석 입력', (435+dx, 780), sp='T', tp='B',
-                sd=110, td=-60, via=[(380+dx, 822), (565+dx, 822)], size=22)
-        p.arrow(opt+'omni', opt+'d', '모델 결과', (700+dx, 812), sp='B', tp='T',
-                sd=60, td=130, via=[(685+dx, 842), (400+dx, 842)], ret=True, size=22)
-        p.arrow(opt+'t', opt+'agent', '확정 후 위임', (1010+dx, 775), sp='T', tp='B',
-                sd=70, td=70, size=22)
-        p.arrow(opt+'agent', opt+'t', '외부 접수·진행·질문·결과', (860+dx, 817), sp='B', tp='T',
-                sd=-70, td=-70, via=[(930+dx, 735), (1180+dx, 735), (1180+dx, 848), (930+dx, 848)], ret=True, size=22)
-        p.arrow(opt+'t', opt+'d', '조회 응답', (505+dx, 835), sp='L', tp='R',
-                sd=-40, td=-40, ret=True, size=24)
-        p.arrow(opt+'d', opt+'t', '2 '+('조회·변경 제안' if opt=='A' else '조회·업무 명령'),
-                (505+dx, 875), sp='R', tp='L', color=BLUE if opt=='A' else GREEN, size=24)
-        p.arrow(opt+'t', opt+'d', '5 외부 Agent 알림', (505+dx, 915), sp='L', tp='R',
-                sd=40, td=40, ret=True, size=24)
-
-    # A: module-owned records are managed within one Core and can commit together.
-    p.node('Ac', 480, 995, 270, 55, '트랜잭션 관리자', owner='core', color=BLUE)
-    p.node('As', 120, 1080, 1030, 75, '대화·업무 상태', kind='store', owner='core', color=BLUE)
-    p.arrow('Ad', 'Ac', '3 대화 변경', (300, 955), via=[(270, 983), (535, 983)], td=-80, color=BLUE, size=22)
-    p.arrow('At', 'Ac', '4 업무 변경', (765, 955), via=[(1000, 983), (695, 983)], td=80, color=BLUE, size=22)
-    p.arrow('Ac', 'Ad', '로컬 저장 결과', (260, 1000), sp='L', tp='B', td=100,
-            via=[(450, 1022.5), (450, 990), (370, 990)], color=BLUE, ret=True, size=22)
-    p.arrow('Ac', 'At', '로컬 저장 결과', (830, 1000), sp='R', tp='B', td=-100,
-            via=[(800, 1022.5), (800, 990), (900, 990)], color=BLUE, ret=True, size=22)
-    p.arrow('Ac', 'As', '관련 변경을 한 번에 저장', (750, 1052), td=-20, color=BLUE, size=22)
-    p.arrow('As', 'Ac', '', (0, 0), sp='T', tp='B', sd=60, td=80, color=BLUE, ret=True)
-
-    # B: independent work acceptance remains distinct from the common Agent facts.
-    for role, x, owner in [('d', 1370, 'dc'), ('t', 2100, 'tc')]:
-        p.node('B'+role+'s', x, 1080, 300, 75, '대화 상태' if role=='d' else '업무 상태',
-               kind='store', owner=owner, color=GREEN)
-        p.arrow('B'+role, 'B'+role+'s', '3 요청·내부 접수 반영' if role=='d' else '4 업무·명령·접수 저장',
-                (x+10, 1035), sd=-90, td=-90, color=GREEN, size=22)
-        p.arrow('B'+role+'s', 'B'+role, '', (0, 0), sp='T', tp='B', sd=90, td=90, color=GREEN, ret=True)
-    p.arrow('Bt', 'Bd', 'VIA 내부 접수 결과 (4 저장 후)', (1730, 957),
-            sp='B', tp='B', sd=-130, td=130,
-            via=[(2120, 992), (1650, 992)], color=GREEN, ret=True, size=22)
-
-    # Same record categories, visibly assigned to the same responsibility in both options.
-    for dx in [0, 1250]:
-        p.text(130+dx, 1168, ['대화 C1 · 요청 R1', 'VIA 질문 · 제시 기록'], 25, INK)
-        p.text(860+dx, 1168, ['업무 T1 · 실행 X1/X2', 'Agent 질문 Q1 · 명령'], 25, INK)
-    p.text(80, 1264, 'Ⅲ  협력: 내부 호출 + 관련 변경의 공동 저장', 28, BLUE, bold=True)
-    p.text(1330, 1264, 'Ⅲ  협력: 명령·접수 응답 + 각자 저장', 28, GREEN, bold=True)
-    p.text(80, 1305, '함께 반영 가능 · 저장 계약과 실행 환경은 결합', 24, MUTED)
-    p.text(1330, 1305, '독립 상태 권한 · 업무 접수 후 대화 반영까지 간극', 24, MUTED)
-    p.footer('수명 축: 사건 순서 / 점선 테두리: process / 같은 Omni 한 벌·외부 Agent / 내부 접수 ≠ 외부 접수 / 미선정·미측정',
-             flow='실선: 요청·변경  /  점선 화살표: 응답·결과·알림')
-    return p
 
 
 def lifetimes():
