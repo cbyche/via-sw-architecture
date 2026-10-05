@@ -52,6 +52,8 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 
 [편집 가능한 draw.io](./diagrams/choice45-structure.drawio) / [발표용 PNG](./diagrams/choice45-structure.png)
 
+**A는 왼쪽 블록만, B는 오른쪽 블록만 읽는다.** 현재 요청의 판단/채택, User Memory와 Model Access/Omni까지 각 블록 안에 완결되게 표시했다. 좌우를 연결하는 처리 경로는 없다. 두 안을 동시에 배치하거나 모델 가중치를 두 벌 사용하는 설계가 아니며, 각 안은 Omni 한 벌을 유지한다. 한 안 안에서 반복된 Request Controller와 Context Manager는 같은 주체의 책임을 확대해 표시한 것이다.
+
 ### 3.1 그림 한 장의 발표 순서
 
 1. 같은 과거 원본을 짚는다. R7은 “짧은 문장, 결론 먼저”라는 정정, D2와 D3는 수정 전후 결과, P4는 D3를 실제 제시한 기록이다. R9는 그 방식을 이번 보고서에 적용하라는 새 요청이다. 처음부터 ‘사용자 선호’라는 정답 기억을 제공하지 않는다.

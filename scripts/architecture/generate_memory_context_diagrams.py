@@ -59,6 +59,7 @@ def structure():
     p.text(64, 291, '요청의 질문 → 원본별 읽기 → 이번 요청의 근거 묶음', 25, BLUE)
     p.text(1340, 291, '확정된 변경 → 출처 있는 과거 관계 게시 → 여러 요청이 읽기', 25, GREEN)
 
+    body_start = len(p.items)
     for prefix, x in [('A', 84), ('B', 1360)]:
         for j, (key, name, data) in enumerate([
             ('request', 'Request Controller', 'R7 원문 / 정정 관계'),
@@ -136,35 +137,83 @@ def structure():
                 via=[(sx, 482), (1360, 482), (1360, 892), (1710, 892), (1710, 995)], color=INK)
     p.label(1390, 882, '변경 즉시 기존 근거 차단', INK, 22)
 
-    # One current interpretation/adoption path is fixed across both memory alternatives.
-    p.node('rc', 1020, 1170, 520, 76, 'Request Controller', kind='external')
-    p.node('ri', 120, 1170, 440, 76, 'Request Interpreter', kind='external')
-    p.arrow('rc', 'composer', '조회 / 근거 오류 신고', (440, 1104), sp='T', tp='B', sd=-190, td=-20,
-            via=[(1090, 1140), (624, 1140)], color=BLUE)
-    p.arrow('composer', 'rc', '근거 + 출처 + 버전 + 누락', (682, 1143), sp='B', tp='T', sd=20, td=-80,
-            via=[(664, 1155), (1200, 1155)], color=BLUE, ret=True, size=22)
-    p.arrow('rc', 'reader', '조회 / 근거 오류 신고', (1440, 1118), sp='T', tp='B', sd=120, td=30,
-            via=[(1400, 1140), (1800, 1140), (1800, 1100), (1990, 1100)], color=GREEN, size=22)
-    p.arrow('reader', 'rc', '출처 / 버전 / 누락 반환', (1570, 1144), sp='B', tp='T', sd=-30, td=210,
-            via=[(1930, 1102), (1818, 1102), (1818, 1155), (1490, 1155)], color=GREEN, ret=True, size=21)
-    p.arrow('rc', 'ri', '현재 요청 + 근거', (602, 1168), sp='L', tp='R', sd=-14, td=-14)
-    p.arrow('ri', 'rc', '추가 조회 / 최종 의미 제안', (600, 1220), sp='R', tp='L', sd=14, td=14, ret=True, size=22)
-    p.text(1020, 1262, '사용 / 채택: 권한과 버전 검사 + 허용 직렬화', 22, bold=True)
-    p.text(410, 1262, '이번 대상과 Task 판단', 23, bold=True)
-    p.component('common-cm', 1836, 1110, 660, 183, 'Context Manager')
-    p.node('user-memory', 1870, 1180, 580, 90, 'User Memory', kind='store', owner='common-cm')
-    p.arrow('rc', 'user-memory', '명시 저장 / 삭제 / 조회', (1575, 1170), sp='R', tp='L', sd=-14, td=-31, size=21)
-    p.arrow('user-memory', 'rc', '허용 선호 / 삭제 표식', (1575, 1231), sp='L', tp='R', sd=3, td=20, ret=True, size=21)
+    # Keep typography readable while reserving a complete consumer/model area per option.
+    def compact(y):
+        return round(350 + (y - 350) * 0.74, 2)
 
-    p.node('access', 1840, 1305, 260, 68, 'Model Access', kind='external')
-    p.node('omni', 2200, 1305, 295, 68, 'Shared Omni', kind='model')
-    p.duplex('ri', 'access', label='현재 의미 해석', at=(610, 1320), sp='B', tp='L',
-            via=[(340, 1339)], color=INK, size=23)
-    p.duplex('publisher', 'access', label='필요한 과거 관계 추론', at=(1440, 1094), sp='L', tp='T',
-            via=[(1390, 695), (1390, 1118), (1755, 1118), (1755, 1298), (1970, 1298)], color=GREEN, size=23)
-    p.duplex('access', 'omni', sp='R', tp='L')
-    p.text(64, 1366, '공통: 음성 입력과 ASR 계속 / Omni 1벌, 역할별 Context와 KV / User Memory는 명시 저장, 이번 지시는 임시 / 양방향 모델선은 호출과 반환', 21, MUTED)
-    p.text(64, 1400, '검정 공통 / 파랑 A / 초록 B | 실선 요청, 전달 / 점선 반환 | 원본 소유자는 VIA 내부. Request Controller와 Context Manager의 반복은 같은 주체의 확대. 별도 process가 아니다.', 21, MUTED)
+    for item in p.items[body_start:]:
+        if 'y' in item:
+            item['y'] = compact(item['y'])
+        if 'h' in item:
+            item['h'] = round(item['h'] * 0.74, 2)
+        if 'leading' in item:
+            item['leading'] = max(item['size'] + 3, item['leading'] * 0.74)
+        if 'points' in item:
+            item['points'] = [(x, compact(y)) for x, y in item['points']]
+    for key, (x, y, w, h) in p.nodes.items():
+        p.nodes[key] = (x, compact(y), w, round(h * 0.74, 2))
+
+    x, y, w, _ = p.nodes['repository']
+    p.nodes['repository'] = (x, y, w, 105)
+    for item in p.items[body_start:]:
+        if item.get('id') == 'repository':
+            item['h'] = 105
+        if item['kind'] == 'text' and item.get('x') == 2000:
+            item.update(y=687, size=21, leading=25)
+        if item['kind'] == 'text' and item.get('x') == 1430:
+            item.update(y=648, size=21, leading=26)
+        if item.get('source') == 'reader' and item.get('target') == 'repository':
+            item['points'] = [p.port('reader', 'R', -15), (2470, p.port('reader', 'R', -15)[1]),
+                              (2470, p.port('repository', 'R')[1]), p.port('repository', 'R')]
+        if item.get('source') == 'repository' and item.get('target') == 'reader':
+            item['points'] = [p.port('repository', 'L'), (1990, p.port('repository', 'L')[1]),
+                              (1990, 780), (1960, 780), p.port('reader', 'T')]
+        if item['kind'] == 'label' and item.get('lines') == ['범위 조회']:
+            item.update(x=2210, y=776, size=21)
+    p.items = [item for item in p.items if item.get('lines') != ['유효한 관계와 원문 참조']]
+    p.label(1998, 645, '반환', GREEN, 21)
+
+    p.line([(1280, 235), (1280, 1380)], LINE, arrow=False)
+    for prefix, dx, color, provider in [('A', 0, BLUE, 'composer'), ('B', 1276, GREEN, 'reader')]:
+        rc, ri = prefix+'current', prefix+'interpreter'
+        memory, cm = prefix+'memory', prefix+'memory-owner'
+        access, omni = prefix+'access', prefix+'omni'
+        p.node(rc, dx+84, 1010, 360, 70, 'Request Controller', kind='external')
+        p.node(ri, dx+84, 1190, 360, 70, 'Request Interpreter', kind='external')
+        p.component(cm, dx+784, 1010, 440, 200, 'Context Manager')
+        p.node(memory, dx+812, 1094, 384, 90, 'User Memory', kind='store', owner=cm)
+        px, py, pw, ph = p.nodes[provider]
+        center = px+pw/2
+        p.arrow(rc, provider, '조회 / 추가 조회 / 근거 오류 신고', (dx+170, 917),
+                sp='T', tp='B', sd=-20, td=-20,
+                via=[(dx+244, 951), (center-20, 951)], color=color, size=22)
+        p.arrow(provider, rc, '근거 + 출처 + 버전 + 누락 반환', (dx+570, 973),
+                sp='B', tp='T', sd=20, td=20,
+                via=[(center+20, 987), (dx+284, 987)], color=color, ret=True, size=22)
+        p.arrow(rc, ri, '현재 요청 + 근거', (dx+90, 1100), sd=-70, td=-70, size=22)
+        p.arrow(ri, rc, '추가 조회 / 의미 제안', (dx+290, 1148), sp='T', tp='B', sd=70, td=70, ret=True, size=22)
+        p.arrow(rc, memory, '명시 저장 / 삭제 / 조회', (dx+480, 1024), sp='R', tp='L', sd=-15, td=-10,
+                via=[(dx+650, 1030), (dx+650, 1129)], size=21)
+        p.arrow(memory, rc, '허용 선호 / 삭제 표식', (dx+480, 1074), sp='L', tp='R', sd=10, td=15,
+                via=[(dx+710, 1149), (dx+710, 1060)], ret=True, size=21)
+        p.text(dx+490, 1220, '사용 / 채택: 권한과 버전 검사 + 허용 직렬화', 21, bold=True)
+        p.text(dx+90, 1270, '이번 대상과 Task 판단', 21, bold=True)
+        p.node(access, dx+500, 1310, 300, 62, 'Model Access', kind='external')
+        p.node(omni, dx+920, 1310, 300, 62, 'Shared Omni', kind='model')
+        p.duplex(ri, access, label='현재 의미 해석', at=(dx+280, 1308), sp='B', tp='L',
+                via=[(dx+264, 1341)], size=22)
+        p.duplex(access, omni, sp='R', tp='L')
+        p.text(dx+790, 1259, '음성 입력 / ASR 계속, Omni 1벌', 21, MUTED)
+    p.duplex('publisher', 'Baccess', label='필요한 과거 관계 추론', at=(1760, 1276), sp='L', tp='L',
+            via=[(1390, compact(695)), (1390, 962), (1750, 962), (1750, 1341)], color=GREEN, size=21)
+    p.text(64, 1400, '좌우는 각각 완결된 대안이며 동시 배치가 아니다. 검정 공통 역할 / 파랑 A / 초록 B. 실선 요청, 점선 반환, 양방향 모델 호출/반환. 같은 안의 반복 이름은 동일 주체 확대.', 21, MUTED)
+    # Guard the presentation contract: no node or operational path may span both alternatives.
+    for key, (x, y, w, h) in p.nodes.items():
+        assert x+w <= 1240 or x >= 1340, (key, 'cross-option node')
+    for item in p.items:
+        if item['kind'] == 'line' and item.get('arrow'):
+            xs = [x for x, _ in item['points']]
+            assert max(xs) <= 1240 or min(xs) >= 1340, (item['id'], 'cross-option route')
     return p
 
 
