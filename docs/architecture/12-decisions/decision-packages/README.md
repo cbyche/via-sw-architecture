@@ -9,6 +9,10 @@
 
 14개는 아키텍처 종류나 확정된 DP의 개수가 아니다. 04-50은 기존 비교안들을 찾아보고 새 질문을 논의하는 탐색 지도이며, 아래 40번대 유력 후보와 구분한다. 기존 31~36, 41, 42와의 직접 대응 또는 부분 관련은 04-50의 §5에서 확인한다. 32의 주요 후보 제외와 기존 참조 설계는 유지한다.
 
+## 병행 44: 계속 듣고 응답하는 대화의 실행 구조
+
+[44 본문](./04-44-continuous-interaction.md)은 A 중앙 비동기 Orchestration/Mediator와 B 반응형 Dataflow/Pipes-and-Filters를 비교한다. 처리 시점 정책 대신 후속 실행·중간 상태·자료 결합·유량/취소 책임을 실제로 옮긴다. [MAIN](./diagrams/choice44-structure.svg), [편집 원본](./diagrams/choice44-structure.drawio), [발표 PNG](./diagrams/choice44-structure.png), [확대 보기](./diagrams/choice44-review.html), [독립 리뷰 기록](./04-44-interaction-review.md)을 제공한다. 34는 40번대로 승격하지 않고 설계 검토 자료로 유지한다. 44의 최종 DP/A/B는 미선정이며 구현·측정은 없다.
+
 ## 현재 45: 기억과 Context의 구성 구조
 
 [45 본문](./04-45-memory-and-context.md)은 A 원본 서비스 조합과 B 공통 파생 기억 저장소를 비교한다. 검색/요약/cache 유무가 아니라 요청별 원본 결합을 공통 과거 관계의 생산/게시/조회가 대체하는 구조다. [메인 그림](./diagrams/choice45-structure.svg), [편집 원본](./diagrams/choice45-structure.drawio), [발표 PNG](./diagrams/choice45-structure.png), [독립 리뷰 기록](./04-45-memory-and-context-review.md)을 제공한다. 일곱 같은 사건, V-01~13, 삭제/철회와 작은 확장 반론을 포함하며 최종 DP 또는 A/B는 미선정이다.
@@ -30,6 +34,7 @@
 - [04-41 요청 의미 확정](./04-41-request-resolution-control.md): 31 논의에서 정제한 모델 중심 ReAct / 모델 틀과 코드 완성. 본문과 도식은 유지한다.
 - [04-42 서로 다른 대화와 업무 수명](./04-42-lifecycle-ownership.md): 33 논의에서 파생한 통합 Core / 독립 대화·업무 서비스. [메인 그림](./diagrams/choice42-structure.svg), [전체 발표 그림](./diagrams/choice42-review.html), [작성자 검수](./04-42-lifecycle-review.md).
 - [04-43 요청 이해의 판단 책임](./04-43-request-interpretation.md): 33의 A 통합/C 기능별 의미 생산을 이관한 최신 정제 후보. [메인 그림](./diagrams/choice43-structure.svg), [이관 검수](./04-37-comparison-review.md#promotion-43).
+- [04-44 계속 듣고 응답하는 대화의 실행 구조](./04-44-continuous-interaction.md): 중앙 비동기 조정 / 반응형 실행망. 34의 처리 시점 정책과 42/43의 수명·의미 생산을 구별한다.
 - [04-45 기억과 Context](./04-45-memory-and-context.md): 원본 서비스 조합 / 공통 파생 기억 저장소. 작은 index/cache 확장으로 충분하면 독립 선택 이유가 약해진다는 반론을 유지한다.
 
 42의 여섯 작성 작업은 같은 사례, 상태/확정 설계, 강한 A와 혼합 반론, V-01~13, 고정 commit의 외부 코드 근거, 16:9 도식 작성이다. Stage 5/6이나 구현·측정으로 진행한 것이 아니다. 당시 31/33/41과 32 제외 및 참조 Architecture를 유지했으며, 33은 이후 별도 사용자 요청으로 ABC를 검토한 뒤 B를 제외하고 A/C를 재설계했다.
