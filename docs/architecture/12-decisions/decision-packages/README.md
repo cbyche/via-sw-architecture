@@ -1,6 +1,6 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **STAGE_4_REVIEW / 33 A/C 기능 책임과 한 장 비교, 기존 B 제외** / 2026-10-05
+> 현재 상태: **STAGE_4_REVIEW / 43 최신 A/C 비교 / 33 논의 이력 보존** / 2026-10-05
 > 기존 target은 참조 구조이며 비교 대안들은 이와 달라도 된다. 구현, 모델 실행 및 성능 측정은 하지 않았다.
 
 ## 구조 선택의 전체 범위를 볼 때: 04-50 탐색 지도
@@ -13,9 +13,11 @@
 
 35/36은 실제 다른 구조지만 VIA의 중요한 품질속성에 큰 영향을 미치는 주요 결정으로 보지 않아 40번대로 올리지 않는다. [35 §0](./04-35-state-authority.md#0-사용자-검토-결론과-다시-읽을-때의-핵심-2026-10-05)은 현재 상태/사건 원본, 이력과 LLM의 역할을, [36 §0](./04-36-capability-isolation.md#0-사용자-검토-결론과-다시-읽을-때의-핵심-2026-10-05)은 실제 권한, sandbox와 Broker의 범위 및 품질 한계를 설명한다. 기존 구조/도식은 참고로 보존하며 새 A/B 탐색을 미완료 작업으로 남기지 않는다. 이 결론은 A/B 채택이나 측정 결과가 아니다.
 
-## 현재 33: A/C 판단 책임
+## 현재 43: A/C 판단 책임
 
-[33 메인 그림과 발표 대본](./04-33-dialogue-coordination.md#1-발표용-메인-비교--이-그림-한-장으로-설명한다)은 같은 여섯 판단을 A 통합 Module과 C 기능별 Module로 생산하는 구조를 비교한다. 실제 Component/Module 이름, 부분 제안/상태와 협력 및 공통 채택을 [SVG](./diagrams/choice33-structure.svg), [draw.io](./diagrams/choice33-structure.drawio), [PNG](./diagrams/choice33-structure.png)에 표시한다. Task별 B는 제외하고 이유를 §0에 남긴다. V-01~13은 조건부 사고 실험이며 다른 비교와 최종 선택은 변경하지 않는다.
+[43 메인 그림과 발표 대본](./04-43-request-interpretation.md#1-발표용-메인-비교--이-그림-한-장으로-설명한다)은 같은 여섯 판단을 A 통합 Module과 C 기능별 Module로 생산하는 구조를 비교한다. 실제 Component/Module 이름, 부분 제안/상태와 협력 및 공통 채택을 [SVG](./diagrams/choice43-structure.svg), [draw.io](./diagrams/choice43-structure.drawio), [PNG](./diagrams/choice43-structure.png)에 표시한다. Task별 B는 제외하고 이유를 §0에 남긴다. V-01~13은 조건부 사고 실험이며 다른 비교와 최종 선택은 변경하지 않는다.
+
+[33](./04-33-dialogue-coordination.md)은 이관 당시의 논의/B 제외 이력으로 보존하며 이후 개선은 43에만 반영한다. 설계 내용은 동일하게 이관했고 최종 DP를 선정한 것은 아니다.
 
 ## 현재 읽기: 40번대 유력 Decision Point 후보
 
@@ -23,6 +25,7 @@
 
 - [04-41 요청 의미 확정](./04-41-request-resolution-control.md): 31 논의에서 정제한 모델 중심 ReAct / 모델 틀과 코드 완성. 본문과 도식은 유지한다.
 - [04-42 서로 다른 대화와 업무 수명](./04-42-lifecycle-ownership.md): 33 논의에서 파생한 통합 Core / 독립 대화·업무 서비스. [메인 그림](./diagrams/choice42-structure.svg), [전체 발표 그림](./diagrams/choice42-review.html), [작성자 검수](./04-42-lifecycle-review.md).
+- [04-43 요청 이해의 판단 책임](./04-43-request-interpretation.md): 33의 A 통합/C 기능별 의미 생산을 이관한 최신 정제 후보. [메인 그림](./diagrams/choice43-structure.svg), [이관 검수](./04-37-comparison-review.md#promotion-43).
 
 42의 여섯 작성 작업은 같은 사례, 상태/확정 설계, 강한 A와 혼합 반론, V-01~13, 고정 commit의 외부 코드 근거, 16:9 도식 작성이다. Stage 5/6이나 구현·측정으로 진행한 것이 아니다. 당시 31/33/41과 32 제외 및 참조 Architecture를 유지했으며, 33은 이후 별도 사용자 요청으로 ABC를 검토한 뒤 B를 제외하고 A/C를 재설계했다.
 
@@ -42,7 +45,7 @@
 | --- | --- |
 | [04-31](./04-31-semantic-construction.md) | 요청별 생성과 지속 의미 작업공간 |
 | [04-32](./04-32-screen-grounding.md) | 사라지는 화면과 사용자 행동의 관측 근거 확보/보존 — 후보 제외, 공통 설계 참고 |
-| [04-33](./04-33-dialogue-coordination.md) | A 통합 / C 기능별 의미 생산 — B 제외 |
+| [04-33](./04-33-dialogue-coordination.md) | A/C 논의와 B 제외 이력 — 최신 비교는 [43](./04-43-request-interpretation.md) |
 | [04-34](./04-34-incremental-voice.md) | 확정 발화와 수정 가능한 연속 처리 |
 | [04-35](./04-35-state-authority.md) | 현재 상태와 사건 이력 원본 — 35 유지, 승격하지 않음 |
 | [04-36](./04-36-capability-isolation.md) | 공유 권한과 제한 처리 — 36 유지, 승격하지 않음 |

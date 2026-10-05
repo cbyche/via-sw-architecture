@@ -1,9 +1,8 @@
-# 04-33. 요청 이해의 판단 책임 — A 통합 판단과 C 기능별 판단
+# 04-43. 요청 이해의 판단 책임 — A 통합 판단과 C 기능별 판단
 
-> **최신 비교는 [04-43 요청 이해의 판단 책임](./04-43-request-interpretation.md)에서 관리한다.** 이 문서와 33 도식은 43 이관 시점의 논의/B 제외 이력으로 보존하며 이후 설계·그림 수정은 43에만 반영한다. 아래 상태·판정은 당시 기록이다.
-
-> 상태: **STAGE_4_AC_REVIEW / 두 대안의 설계와 발표 그림 / 미선정 / 미측정** / 2026-10-05
+> 상태: **STAGE_4_REFINED_CANDIDATE_REVIEW / 정제된 유력 DP 후보 / 미선정 / 미측정** / 2026-10-05
 > [비교 가이드](./04-30-comparison-guide.md) / [분해 단위 지도](./04-50-agent-architecture-decision-map.md#area-02) / [현재 작업](./00-workplan.md)
+> **33에서 정리한 A/C를 그대로 이어받은 최신 비교 문서다.** [33](./04-33-dialogue-coordination.md)은 논의와 B 제외 이력으로 보존하며, 이후 본문과 그림은 43에서만 갱신한다. 40번대 이관은 대안 재설계, A/C 우열 확정 또는 최종 DP 선정을 뜻하지 않는다.
 > 사용자 지시에 따라 **A와 C만 남긴다.** 기존 C를 B로 재명명하지 않는다. [직전 A/B/C 문서와 도식](../../../archive/dialogue-coordination-before-ac-2026-10-05/README.md)은 검토 이력이다. 참조 Architecture, 다른 비교, QA/ADR와 최종 DP 선택은 변경하지 않는다.
 
 **같은 여섯 가지 의미 판단을 한 모듈이 함께 책임질 것인가, 기능별 모듈이 부분 의미를 책임지고 협력할 것인가?** 두 안 모두 Task 연결이 정해지지 않은 원문에서 시작한다. 보고서/메일은 처리할 데이터의 예시이며 Component나 Module 종류가 아니다. VIA는 사용자 의도 이해와 대화 및 위임을 담당하고, 실제 업무 계획, 도구 선택과 실행은 Downstream Agent가 담당한다.
@@ -18,9 +17,9 @@
 
 ## 1. 발표용 메인 비교 — 이 그림 한 장으로 설명한다
 
-![동일한 여섯 의미 판단의 A 통합 생산과 C 기능별 생산](./diagrams/choice33-structure.svg)
+![동일한 여섯 의미 판단의 A 통합 생산과 C 기능별 생산](./diagrams/choice43-structure.svg)
 
-[편집용 draw.io](./diagrams/choice33-structure.drawio) / [발표 삽입용 PNG](./diagrams/choice33-structure.png)
+[편집용 draw.io](./diagrams/choice43-structure.drawio) / [발표 삽입용 PNG](./diagrams/choice43-structure.png)
 
 2560×1440의 16:9 메인이다. 같은 외부 계약을 갖는 Request Interpreter Component 내부를 펼친다. A의 통합 모듈 하나와 C의 기능별 모듈 여섯 개 및 코드 조정 모듈이 실제 대체 관계다. 네모는 구현할 Component/Module의 설계명, 원통은 데이터 상태의 이름이다. 모델의 가중치나 OS process를 나타내지 않는다. 양쪽 Request Controller는 각 대안에서 같은 공통 역할이다.
 
@@ -119,13 +118,13 @@ Component는 SW 책임 경계, Module은 그 안의 구현 단위, Actor는 선�
 
 ### 4.2 04-31과 함께 선택할 때의 소유 경계
 
-31의 본문/그림은 유지한다. 31은 요청별 생성과 지속 의미 상태의 비교이고, 여기의 33은 같은 의미 기능의 생산 책임을 비교한다. A의 임시 상태와 C의 부분 제안 원장 자체는 31 B의 지속 Meaning Workspace가 아니다. 지속 Workspace를 조합하면 생산자가 만든 변경/질문을 공통 채택 뒤 반영하고 동일 의미의 독립 원본을 두지 않아야 한다. 기능별 제안과 지속 제약 변경의 상세 결합은 여기서 완성했다고 주장하지 않는다. 이전 Task별 B의 Workspace 조합 설명은 보존본의 이력이다.
+31의 본문/그림은 유지한다. 31은 요청별 생성과 지속 의미 상태의 비교이고, 여기의 43은 같은 의미 기능의 생산 책임을 비교한다. A의 임시 상태와 C의 부분 제안 원장 자체는 31 B의 지속 Meaning Workspace가 아니다. 지속 Workspace를 조합하면 생산자가 만든 변경/질문을 공통 채택 뒤 반영하고 동일 의미의 독립 원본을 두지 않아야 한다. 기능별 제안과 지속 제약 변경의 상세 결합은 여기서 완성했다고 주장하지 않는다. 이전 Task별 B의 Workspace 조합 설명은 보존본의 이력이다.
 
 ### 4.3 04-41과의 차이와 중복
 
 41은 다음 조회와 최종 대상/Task 결합을 모델이 주도할지, 모델의 제한된 표현을 코드가 해결할지를 비교한다. C의 Coordinator는 의미 값의 생산자가 아니며 F1~F6의 모델 생산 결과를 결합한다. 코드가 제한된 의미 규칙으로 대상/Task 관계 자체를 완성하는 41 B와 구별한다.
 
-그렇다고 33을 자동으로 독립 주요 DP로 인정하지 않는다. Task별 검색, 정정/조건 보존, 미해결 관리와 선택적 부분 모델 호출은 41에서도 가능하다. 33 C에 남는 주장은 **기능별로 맥락과 의미 생산 책임을 분리했을 때 강한 통합안/부분 해석 보완보다 중요한 이해 품질이 좋아지는가**다. 그 효과와 추가 비용은 미확인이다. 별도 비교 축이라는 이유로 품질 이익을 합산하거나 41을 변경하지 않는다.
+그렇다고 43을 자동으로 독립 주요 DP로 인정하지 않는다. Task별 검색, 정정/조건 보존, 미해결 관리와 선택적 부분 모델 호출은 41에서도 가능하다. 43 C에 남는 주장은 **기능별로 맥락과 의미 생산 책임을 분리했을 때 강한 통합안/부분 해석 보완보다 중요한 이해 품질이 좋아지는가**다. 그 효과와 추가 비용은 미확인이다. 별도 비교 축이라는 이유로 품질 이익을 합산하거나 41을 변경하지 않는다.
 
 ## 5. 정정, 취소, 철회, 실패와 재시작
 
@@ -139,9 +138,9 @@ Component는 SW 책임 경계, Module은 그 안의 구현 단위, Actor는 선�
 | 재시작 | 내구 채택/질문/실제 전달/명령 기록과 외부 사실을 복원 | A 임시 제안과 C 부분 원장은 재검증/재계산. KV를 업무 원본으로 사용하거나 미채택 제안을 명령으로 재실행하지 않음 |
 | 협력/추론 예산 소진 | 제한된 시간/라운드 뒤 질문 또는 실패로 종료 | C의 반복 재판단/중복 맥락을 비용에 포함. 새 revision으로 예산을 초기화하지 않음 |
 
-![A/C 같은 정정과 재판단의 보충 사건도](./diagrams/choice33-event.svg)
+![A/C 같은 정정과 재판단의 보충 사건도](./diagrams/choice43-event.svg)
 
-[편집용 draw.io](./diagrams/choice33-event.drawio). C에서 정정의 주된 변화인 F2/F5/F4를 확대했다. 생략된 기능이 사라졌거나 모든 요청에 그 순서로 실행한다는 뜻이 아니다. 메인 비교를 이해하기 위한 선행 그림으로 사용하지 않는다.
+[편집용 draw.io](./diagrams/choice43-event.drawio). C에서 정정의 주된 변화인 F2/F5/F4를 확대했다. 생략된 기능이 사라졌거나 모든 요청에 그 순서로 실행한다는 뜻이 아니다. 메인 비교를 이해하기 위한 선행 그림으로 사용하지 않는다.
 
 ## 6. 지원 범위와 미확인
 
@@ -203,4 +202,4 @@ Component는 SW 책임 경계, Module은 그 안의 구현 단위, Actor는 선�
 - [참조 Architecture §4~7, §10](../target-architecture/architecture.md): 목표/대상/Task/관계/처리 방향, Semantic Proposal과 상태 소유를 공통 기능 근거로 사용. 여기의 여섯 Module 분해를 참조 설계에 소급하지 않음.
 - [제어/수명](../target-architecture/control-and-lifecycle.md), [기억/맥락](../target-architecture/memory-and-context-lifecycle.md), [공유 Omni](../target-architecture/shared-omni-runtime.md): 정정/질문/취소/권한과 저장/입력 지속의 공통 경계. 기존 호출 수 정책을 이 탐색의 고정 상한으로 자동 채택하지 않음.
 - [04-50 영역 2](./04-50-agent-architecture-decision-map.md#area-02): 기능/Task/일시 보조와 조정/모델/상태 단위를 구별하는 출발점.
-- 생성 source는 `scripts/architecture/dialogue_ac_presentation.py`, 검사 entry point는 `generate_six_comparison_diagrams.py --check`. SVG/draw.io를 함께 생성하며 [04-37 검수 기록](./04-37-comparison-review.md)에 실제 수정/검사와 한계를 남긴다. 구현, 모델 실행, 성능 측정은 하지 않는다.
+- 생성 source는 `scripts/architecture/generate_request_interpretation_diagrams.py`, 검사 entry point는 `generate_request_interpretation_diagrams.py --check`. SVG/draw.io를 함께 생성하며 [04-37 이관 검수 기록](./04-37-comparison-review.md#promotion-43)에 실제 수정/검사와 한계를 남긴다. 구현, 모델 실행, 성능 측정은 하지 않는다.
