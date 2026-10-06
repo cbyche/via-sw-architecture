@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-44. 반응성을 위한 VIA 지속 입력과 Response 전달 설계 — 설계 비교</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1300" x="40" y="39.480000000000004" text-anchor="start" font-size="19" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 설계 비교</text>
+<text id="n3-0" data-width="450" x="1880" y="39.480000000000004" text-anchor="end" font-size="19" font-weight="400" fill="#5F6B77">구조 비교 / 장단점 / QA Trade-off</text>
+<text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-44. 반응성을 위한 VIA 지속 입력과 Response 전달 설계</text>
+<polyline id="n5" points="40,121 1880,121" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n6-0" data-width="1530" x="40" y="163.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">보고서 설명 도중 새 발화와 메일 질문 도착 / 표 설명 후 메일 질문 전달</text>
+<text id="n7-0" data-width="290" x="1880" y="162.48" text-anchor="end" font-size="19" font-weight="700" fill="#B63732">수치와 점수 / 예상 예시</text>
+<rect id="n8" fill="#D5E7C7" stroke="#CDD6DE" stroke-width="1.7" x="40" y="188" width="1840" height="55"/>
+<text id="n9-0" data-width="98" x="90" y="224.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">설계안</text>
+<rect id="n10" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="243" width="1840" height="494"/>
+<text id="n11-0" data-width="98" x="90" y="279.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">구조</text>
+<rect id="n12" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="737" width="1840" height="85"/>
+<text id="n13-0" data-width="98" x="90" y="773.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">장점</text>
+<rect id="n14" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="822" width="1840" height="85"/>
+<text id="n15-0" data-width="98" x="90" y="858.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">단점</text>
+<rect id="n16" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="907" width="1840" height="125"/>
+<text id="n17-0" data-width="98" x="90" y="943.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">QA</text>
+<text id="n17-1" data-width="98" x="90" y="969.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Trade-off</text>
+<polyline id="n18" points="140,188 140,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<polyline id="n19" points="1010,188 1010,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n20-0" data-width="838" x="575" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">A 중앙 비동기 Orchestration</text>
+<text id="n21-0" data-width="836" x="158" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 집중된 실행 상태로 전체 메모리 13.3 GB (메모리 효율성 ↑)</text>
+<text id="n22-0" data-width="836" x="158" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 반환 회수와 재배정으로 p95 반응 지연 0.85 s (응답 신속성 ↓)</text>
+<text id="n23-0" data-width="836" x="158" y="886.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 교차 사건의 중앙 전이 변경, 평균 4.0개 (변경 용이성 ↓)</text>
+<text id="n24-0" data-width="335" x="158" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-04 응답 신속성</text>
+<text id="n25-0" data-width="112" x="515" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n26-0" data-width="140" x="643" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">0.85 s</text>
+<text id="n27-0" data-width="206" x="792" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 반응 지연 ↓</text>
+<text id="n28-0" data-width="335" x="158" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n29-0" data-width="112" x="515" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n30-0" data-width="140" x="643" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">4.0개</text>
+<text id="n31-0" data-width="206" x="792" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n32-0" data-width="335" x="158" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-06 메모리 효율성</text>
+<text id="n33-0" data-width="112" x="515" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n34-0" data-width="140" x="643" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">13.3 GB</text>
+<text id="n35-0" data-width="206" x="792" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">최대 전체 메모리 ↓</text>
+<text id="n36-0" data-width="838" x="1445" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">B 반응형 Dataflow 실행</text>
+<text id="n37-0" data-width="836" x="1028" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 사건의 직접 활성화로 p95 반응 지연 0.62 s (응답 신속성 ↑)</text>
+<text id="n38-0" data-width="836" x="1028" y="801.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 동일 schema 안의 단계 조합 변경, 평균 2.5개 (변경 용이성 ↑)</text>
+<text id="n39-0" data-width="836" x="1028" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 다수 window와 buffer로 전체 메모리 13.8 GB (메모리 효율성 ↓)</text>
+<text id="n40-0" data-width="335" x="1028" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-04 응답 신속성</text>
+<text id="n41-0" data-width="112" x="1385" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n42-0" data-width="140" x="1513" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">0.62 s</text>
+<text id="n43-0" data-width="206" x="1662" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 반응 지연 ↓</text>
+<text id="n44-0" data-width="335" x="1028" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n45-0" data-width="112" x="1385" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n46-0" data-width="140" x="1513" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">2.5개</text>
+<text id="n47-0" data-width="206" x="1662" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n48-0" data-width="335" x="1028" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-06 메모리 효율성</text>
+<text id="n49-0" data-width="112" x="1385" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n50-0" data-width="140" x="1513" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">13.8 GB</text>
+<text id="n51-0" data-width="206" x="1662" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">최대 전체 메모리 ↓</text>
+<text id="n52-0" data-width="1520" x="40" y="1066.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">비교 예시 조건: 여러 사건의 집중 도착 / 양안의 입력 수신과 로컬 음성 중단은 동일</text>
+<text id="n53-0" data-width="315" x="1880" y="1066.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">● 많을수록 우수 / 미측정</text>
+<rect id="n54" fill="white" stroke="#18232E" stroke-width="1.7" x="169" y="279" width="331" height="48"/>
+<text id="n55-0" data-width="313" x="334.5" y="308.67" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Interaction Manager</text>
+<rect id="n56" fill="white" stroke="#18232E" stroke-width="1.7" x="615" y="279" width="350" height="48"/>
+<text id="n57-0" data-width="332" x="790.0" y="308.67" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Task Manager</text>
+<text id="n58-0" data-width="320" x="180" y="353.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">확정 입력 / 즉시 stop와 hold</text>
+<text id="n59-0" data-width="338" x="627" y="353.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">확인된 질문과 결과</text>
+<rect id="n60" fill="#FAFBFC" stroke="#2858A5" stroke-width="1.7" x="290" y="400" width="547" height="148"/>
+<text id="n61-0" data-width="521" x="303" y="429.32" text-anchor="start" font-size="21" font-weight="700" fill="#2858A5">Interaction Orchestrator</text>
+<rect id="n62" fill="white" stroke="#2858A5" stroke-width="1.7" x="314" y="445" width="246" height="53"/>
+<text id="n63-0" data-width="228" x="437.0" y="476.63" text-anchor="middle" font-size="19" font-weight="700" fill="#2858A5">Dialogue Dispatcher</text>
+<path id="n64" fill="#FFF7DE" stroke="#5F6B77" stroke-width="1.7" d="M603 446C603 430 814 430 814 446V496C814 512 603 512 603 496Z M603 446C603 462 814 462 814 446"/>
+<text id="n65-0" data-width="193" x="708.5" y="470.64" text-anchor="middle" font-size="17" font-weight="400" fill="#18232E">Dialogue Progress</text>
+<text id="n65-1" data-width="193" x="708.5" y="491.03999999999996" text-anchor="middle" font-size="17" font-weight="400" fill="#18232E">State</text>
+<polyline id="n66" points="169,303 155,303 155,377 270,377 270,471 314,471" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n67" points="790,327 790,384 683,384 683,400" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n68" points="560,461 603,461" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n69" points="603,490 560,490" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<rect id="n70" fill="white" stroke="#18232E" stroke-width="1.7" x="169" y="601" width="331" height="48"/>
+<text id="n71-0" data-width="313" x="334.5" y="630.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n72" fill="white" stroke="#18232E" stroke-width="1.7" x="615" y="601" width="350" height="48"/>
+<text id="n73-0" data-width="332" x="790.0" y="630.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Response Manager</text>
+<polyline id="n74" points="390,548 334,548 334,601" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n75" points="690,548 790,548 790,601" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n76-0" data-width="352" x="168" y="580.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">해석 요청 / 반환 회수</text>
+<text id="n77-0" data-width="350" x="616" y="580.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">후속 준비와 게시 요청</text>
+<polyline id="n78" points="965,624 991,624 991,470 837,470" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<text id="n79-0" data-width="125" x="853" y="485.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">반환</text>
+<rect id="n80" fill="white" stroke="#18232E" stroke-width="1.7" x="415" y="686" width="378" height="40"/>
+<text id="n81-0" data-width="360" x="604.0" y="711.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Interaction Manager</text>
+<polyline id="n82" points="790,649 790,673 604,673 604,686" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n83-0" data-width="175" x="815" y="672.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">현재성 확인과 게시</text>
+<text id="n84-0" data-width="235" x="170" y="715.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">실제 표시와 재생</text>
+<rect id="n85" fill="white" stroke="#18232E" stroke-width="1.7" x="1039" y="279" width="331" height="48"/>
+<text id="n86-0" data-width="313" x="1204.5" y="308.67" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Interaction Manager</text>
+<rect id="n87" fill="white" stroke="#18232E" stroke-width="1.7" x="1485" y="279" width="350" height="48"/>
+<text id="n88-0" data-width="332" x="1660.0" y="308.67" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Task Manager</text>
+<text id="n89-0" data-width="320" x="1050" y="353.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">확정 입력 / 즉시 stop와 hold</text>
+<text id="n90-0" data-width="338" x="1497" y="353.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">확인된 질문과 결과</text>
+<text id="n91-0" data-width="795" x="1042" y="402.56" text-anchor="start" font-size="18" font-weight="400" fill="#087E8B">Reactive Interaction Runtime / typed channel과 bounded credit</text>
+<rect id="n92" fill="white" stroke="#087E8B" stroke-width="1.7" x="1039" y="430" width="331" height="49"/>
+<text id="n93-0" data-width="313" x="1204.5" y="459.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">Input Resolution Stage</text>
+<rect id="n94" fill="white" stroke="#087E8B" stroke-width="1.7" x="1485" y="430" width="350" height="49"/>
+<text id="n95-0" data-width="332" x="1660.0" y="459.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">Task Notice Stage</text>
+<polyline id="n96" points="1039,303 1025,303 1025,454 1039,454" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n97" points="1660,327 1660,430" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<rect id="n98" fill="white" stroke="#18232E" stroke-width="1.7" x="1039" y="516" width="331" height="48"/>
+<text id="n99-0" data-width="313" x="1204.5" y="545.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n100" fill="white" stroke="#18232E" stroke-width="1.7" x="1485" y="516" width="350" height="48"/>
+<text id="n101-0" data-width="332" x="1660.0" y="545.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Response Manager</text>
+<polyline id="n102" points="1204,479 1204,516" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n103" points="1660,479 1660,516" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n104" points="1370,541 1485,541" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n105-0" data-width="380" x="1260" y="592.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">채택 의미와 유효한 Notice</text>
+<rect id="n106" fill="white" stroke="#087E8B" stroke-width="1.7" x="1303" y="605" width="367" height="44"/>
+<text id="n107-0" data-width="349" x="1486.5" y="632.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#087E8B">Publication Join</text>
+<polyline id="n108" points="1660,564 1660,588 1610,588 1610,605" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n109" points="1303,627 1022,627 1022,454 1039,454" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a087E8B)"/>
+<text id="n110-0" data-width="215" x="1040" y="616.64" text-anchor="start" font-size="17" font-weight="400" fill="#087E8B">credit / cancel</text>
+<rect id="n111" fill="white" stroke="#18232E" stroke-width="1.7" x="1510" y="684" width="325" height="42"/>
+<text id="n112-0" data-width="307" x="1672.5" y="710.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n113" fill="white" stroke="#18232E" stroke-width="1.7" x="1039" y="684" width="350" height="42"/>
+<text id="n114-0" data-width="332" x="1214.0" y="710.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Interaction Manager</text>
+<polyline id="n115" points="1670,627 1860,627 1860,673 1805,673 1805,684" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n116-0" data-width="275" x="1515" y="672.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">현재성 확인과 게시</text>
+<polyline id="n117" points="1510,705 1389,705" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n118-0" data-width="105" x="1400" y="695.72" text-anchor="start" font-size="16" font-weight="400" fill="#5F6B77">실제 전달</text>
+</g></svg>

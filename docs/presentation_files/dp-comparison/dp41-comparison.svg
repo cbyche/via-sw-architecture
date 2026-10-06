@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-41. 기능 정확성을 위한 VIA Request 해석 설계 — 설계 비교</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1300" x="40" y="39.480000000000004" text-anchor="start" font-size="19" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 설계 비교</text>
+<text id="n3-0" data-width="450" x="1880" y="39.480000000000004" text-anchor="end" font-size="19" font-weight="400" fill="#5F6B77">구조 비교 / 장단점 / QA Trade-off</text>
+<text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-41. 기능 정확성을 위한 VIA Request 해석 설계</text>
+<polyline id="n5" points="40,121 1880,121" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n6-0" data-width="1530" x="40" y="163.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.” / 보고서 Task 후보 2개</text>
+<text id="n7-0" data-width="290" x="1880" y="162.48" text-anchor="end" font-size="19" font-weight="700" fill="#B63732">수치와 점수 / 예상 예시</text>
+<rect id="n8" fill="#D5E7C7" stroke="#CDD6DE" stroke-width="1.7" x="40" y="188" width="1840" height="55"/>
+<text id="n9-0" data-width="98" x="90" y="224.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">설계안</text>
+<rect id="n10" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="243" width="1840" height="494"/>
+<text id="n11-0" data-width="98" x="90" y="279.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">구조</text>
+<rect id="n12" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="737" width="1840" height="85"/>
+<text id="n13-0" data-width="98" x="90" y="773.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">장점</text>
+<rect id="n14" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="822" width="1840" height="85"/>
+<text id="n15-0" data-width="98" x="90" y="858.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">단점</text>
+<rect id="n16" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="907" width="1840" height="125"/>
+<text id="n17-0" data-width="98" x="90" y="943.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">QA</text>
+<text id="n17-1" data-width="98" x="90" y="969.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Trade-off</text>
+<polyline id="n18" points="140,188 140,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<polyline id="n19" points="1010,188 1010,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n20-0" data-width="838" x="575" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">A 모델 중심 ReAct 해석</text>
+<text id="n21-0" data-width="836" x="158" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 열린 관계 표현의 지원 확대, 지원율 100% (기능 완전성 ↑)</text>
+<text id="n22-0" data-width="836" x="158" y="801.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 새 관계의 코드 변경 축소, 평균 2.0개 (변경 용이성 ↑)</text>
+<text id="n23-0" data-width="836" x="158" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 반복 조회와 모델 재판단으로 완료시간 6.0 s (요청 완료 신속성 ↓)</text>
+<text id="n24-0" data-width="335" x="158" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-03 기능 완전성</text>
+<text id="n25-0" data-width="112" x="515" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n26-0" data-width="140" x="643" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">100%</text>
+<text id="n27-0" data-width="206" x="792" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">기능 지원 달성률 ↑</text>
+<text id="n28-0" data-width="335" x="158" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-05 요청 완료 신속성</text>
+<text id="n29-0" data-width="112" x="515" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n30-0" data-width="140" x="643" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">6.0 s</text>
+<text id="n31-0" data-width="206" x="792" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 VIA 완료시간 ↓</text>
+<text id="n32-0" data-width="335" x="158" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n33-0" data-width="112" x="515" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n34-0" data-width="140" x="643" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">2.0개</text>
+<text id="n35-0" data-width="206" x="792" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n36-0" data-width="838" x="1445" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">B 모델 틀 생성과 코드 중심 의미 완성</text>
+<text id="n37-0" data-width="836" x="1028" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 지원 관계의 코드 결합으로 완료시간 4.5 s (요청 완료 신속성 ↑)</text>
+<text id="n38-0" data-width="836" x="1028" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 유한 표현 체계 밖 관계의 지원 제한, 지원율 87.2% (기능 완전성 ↓)</text>
+<text id="n39-0" data-width="836" x="1028" y="886.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 새 관계의 틀과 결합 규칙 확장, 평균 4.0개 (변경 용이성 ↓)</text>
+<text id="n40-0" data-width="335" x="1028" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-03 기능 완전성</text>
+<text id="n41-0" data-width="112" x="1385" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n42-0" data-width="140" x="1513" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">87.2%</text>
+<text id="n43-0" data-width="206" x="1662" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">기능 지원 달성률 ↑</text>
+<text id="n44-0" data-width="335" x="1028" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-05 요청 완료 신속성</text>
+<text id="n45-0" data-width="112" x="1385" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n46-0" data-width="140" x="1513" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">4.5 s</text>
+<text id="n47-0" data-width="206" x="1662" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 VIA 완료시간 ↓</text>
+<text id="n48-0" data-width="335" x="1028" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n49-0" data-width="112" x="1385" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●○○</text>
+<text id="n50-0" data-width="140" x="1513" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">4.0개</text>
+<text id="n51-0" data-width="206" x="1662" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n52-0" data-width="1520" x="40" y="1066.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">비교 예시 조건: 열린 관계 표현 포함 / 시간 비교는 양안 지원 범위의 같은 Request</text>
+<text id="n53-0" data-width="315" x="1880" y="1066.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">● 많을수록 우수 / 미측정</text>
+<rect id="n54" fill="white" stroke="#18232E" stroke-width="1.7" x="385" y="275" width="380" height="47"/>
+<text id="n55-0" data-width="362" x="575.0" y="304.17" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<polyline id="n56" points="575,322 575,374" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n57-0" data-width="315" x="590" y="349.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">원문과 후보 정보</text>
+<rect id="n58" fill="white" stroke="#18232E" stroke-width="1.7" x="805" y="399" width="180" height="49"/>
+<text id="n59-0" data-width="162" x="895.0" y="428.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Model Access</text>
+<text id="n60-0" data-width="170" x="814" y="478.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">공유 Omni 1벌</text>
+<rect id="n61" fill="#FAFBFC" stroke="#2858A5" stroke-width="1.7" x="165" y="374" width="590" height="220"/>
+<text id="n62-0" data-width="564" x="178" y="403.32" text-anchor="start" font-size="21" font-weight="700" fill="#2858A5">Request Interpreter</text>
+<rect id="n63" fill="white" stroke="#2858A5" stroke-width="1.7" x="190" y="421" width="250" height="53"/>
+<text id="n64-0" data-width="232" x="315.0" y="453.17" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">ReAct 해석 제어기</text>
+<rect id="n65" fill="white" stroke="#2858A5" stroke-width="1.7" x="475" y="421" width="255" height="53"/>
+<text id="n66-0" data-width="237" x="602.5" y="453.17" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">읽기 도구 실행기</text>
+<polyline id="n67" points="440,437 475,437" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n68" points="475,459 440,459" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n69-0" data-width="270" x="473" y="492.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">모델 선택 조회 / 정보 반환</text>
+<rect id="n70" fill="white" stroke="#2858A5" stroke-width="1.7" x="190" y="528" width="540" height="44"/>
+<text id="n71-0" data-width="522" x="460.0" y="555.6700000000001" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">의미 제안 검증기</text>
+<polyline id="n72" points="315,474 315,528" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n73-0" data-width="330" x="330" y="522.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">완성 의미 제안과 조건 검사</text>
+<polyline id="n74" points="805,423 770,423 770,408 315,408 315,421" fill="none" stroke="#5F6B77" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a5F6B77)"/>
+<polyline id="n75" points="730,447 770,447 770,626 665,626 665,652" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n76-0" data-width="205" x="782" y="566.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">허용 범위의</text>
+<text id="n76-1" data-width="205" x="782" y="587.04" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">정보 조회</text>
+<polyline id="n77" points="315,572 315,652" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n78-0" data-width="255" x="330" y="625.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">현재 검사와 의미 채택</text>
+<rect id="n79" fill="white" stroke="#18232E" stroke-width="1.7" x="180" y="652" width="270" height="45"/>
+<text id="n80-0" data-width="252" x="315.0" y="679.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n81" fill="white" stroke="#18232E" stroke-width="1.7" x="540" y="652" width="250" height="45"/>
+<text id="n82-0" data-width="232" x="665.0" y="679.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Context Manager</text>
+<rect id="n83" fill="white" stroke="#18232E" stroke-width="1.7" x="820" y="652" width="165" height="45"/>
+<text id="n84-0" data-width="147" x="902.5" y="679.63" text-anchor="middle" font-size="19" font-weight="700" fill="#18232E">Task Manager</text>
+<polyline id="n85" points="820,674 790,674" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<text id="n86-0" data-width="805" x="168" y="727.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">공통: 동일 정보와 권한 / 채택 후 응답 또는 Task Delegation</text>
+<rect id="n87" fill="white" stroke="#18232E" stroke-width="1.7" x="1255" y="275" width="380" height="47"/>
+<text id="n88-0" data-width="362" x="1445.0" y="304.17" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<polyline id="n89" points="1445,322 1445,374" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n90-0" data-width="315" x="1460" y="349.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">원문과 후보 정보</text>
+<rect id="n91" fill="white" stroke="#18232E" stroke-width="1.7" x="1675" y="399" width="180" height="49"/>
+<text id="n92-0" data-width="162" x="1765.0" y="428.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Model Access</text>
+<text id="n93-0" data-width="170" x="1684" y="478.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">공유 Omni 1벌</text>
+<rect id="n94" fill="white" stroke="#087E8B" stroke-width="1.7" x="1065" y="387" width="540" height="57"/>
+<text id="n95-0" data-width="522" x="1335.0" y="421.17" text-anchor="middle" font-size="21" font-weight="700" fill="#087E8B">Request Interpreter</text>
+<polyline id="n96" points="1605,416 1675,416" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<polyline id="n97" points="1335,444 1335,511" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n98-0" data-width="270" x="1350" y="486.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">미해결 항목을 포함한 요청 틀</text>
+<rect id="n99" fill="#FAFBFC" stroke="#087E8B" stroke-width="1.7" x="1035" y="511" width="590" height="112"/>
+<text id="n100-0" data-width="564" x="1048" y="540.32" text-anchor="start" font-size="21" font-weight="700" fill="#087E8B">Request Resolution Engine</text>
+<rect id="n101" fill="white" stroke="#087E8B" stroke-width="1.7" x="1060" y="551" width="250" height="51"/>
+<text id="n102-0" data-width="232" x="1185.0" y="581.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">미해결 항목 처리기</text>
+<rect id="n103" fill="white" stroke="#087E8B" stroke-width="1.7" x="1345" y="551" width="255" height="51"/>
+<text id="n104-0" data-width="237" x="1472.5" y="581.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">관계 결합기</text>
+<polyline id="n105" points="1310,576 1345,576" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n106" points="1060,576 1022,576 1022,415 1065,415" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a087E8B)"/>
+<text id="n107-0" data-width="260" x="1038" y="479.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">필요한 부분의 모델 해석</text>
+<polyline id="n108" points="1185,602 1185,613 1640,613 1640,638 1535,638 1535,652" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n109" points="1535,652 1535,645 1648,645 1648,582 1600,582" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a087E8B)"/>
+<polyline id="n110" points="1472,602 1472,635 1185,635 1185,652" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<rect id="n111" fill="white" stroke="#18232E" stroke-width="1.7" x="1050" y="652" width="270" height="45"/>
+<text id="n112-0" data-width="252" x="1185.0" y="679.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n113" fill="white" stroke="#18232E" stroke-width="1.7" x="1410" y="652" width="250" height="45"/>
+<text id="n114-0" data-width="232" x="1535.0" y="679.9" text-anchor="middle" font-size="20" font-weight="700" fill="#18232E">Context Manager</text>
+<rect id="n115" fill="white" stroke="#18232E" stroke-width="1.7" x="1690" y="652" width="165" height="45"/>
+<text id="n116-0" data-width="147" x="1772.5" y="679.63" text-anchor="middle" font-size="19" font-weight="700" fill="#18232E">Task Manager</text>
+<polyline id="n117" points="1690,674 1660,674" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<text id="n118-0" data-width="805" x="1038" y="727.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">공통: 동일 정보와 권한 / 채택 후 응답 또는 Task Delegation</text>
+</g></svg>

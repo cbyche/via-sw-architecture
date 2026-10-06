@@ -1,0 +1,50 @@
+// Render the editable SVG scenes without changing the Architecture source figures.
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const {chromium} = require(process.env.VIA_PLAYWRIGHT_MODULE || 'playwright');
+const folder = path.resolve(__dirname, '../../docs/presentation_files/dp-comparison');
+const digest = data => crypto.createHash('sha256').update(data).digest('hex');
+
+(async () => {
+  const executablePath = process.env.VIA_CHROMIUM_PATH ||
+    (process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : undefined);
+  const browser = await chromium.launch({headless: true, executablePath});
+  const page = await browser.newPage({viewport: {width: 1920, height: 1080}, deviceScaleFactor: 1});
+  const records = [];
+  try {
+    for (const n of [41,42,43,44,45]) {
+      const slug = `dp${n}-comparison`;
+      const svg = fs.readFileSync(path.join(folder, `${slug}.svg`));
+      await page.setContent(`<html lang="ko"><style>body{margin:0}</style>${svg.toString()}</html>`);
+      await page.evaluate(() => document.fonts.ready);
+      const issues = await page.evaluate(() => {
+        const rs = [...document.querySelectorAll('svg text')].map(e => ({
+          text: e.textContent, b: e.getBBox(), w: parseFloat(e.dataset.width)
+        }));
+        const problems = [];
+        for (const r of rs) {
+          const b = r.b;
+          if (b.x<0 || b.y<0 || b.x+b.width>1920 || b.y+b.height>1080)
+            problems.push({kind:'canvas', text:r.text});
+          if (b.width>r.w+2) problems.push({kind:'width', text:r.text});
+        }
+        for (let i=0;i<rs.length;i++) for (let j=i+1;j<rs.length;j++) {
+          const a=rs[i].b, b=rs[j].b;
+          if (a.x+1<b.x+b.width && b.x+1<a.x+a.width && a.y+1<b.y+b.height && b.y+1<a.y+a.height)
+            problems.push({kind:'text-overlap', a:rs[i].text, b:rs[j].text});
+        }
+        return problems;
+      });
+      if (issues.length) throw new Error(`${slug}: ${JSON.stringify(issues)}`);
+      const pngPath = path.join(folder, `${slug}.png`);
+      await page.screenshot({path: pngPath});
+      records.push({slug, svg_sha256: digest(svg), png_sha256: digest(fs.readFileSync(pngPath)),
+        width:1920, height:1080, text_geometry_issues:0});
+    }
+    fs.writeFileSync(path.join(folder, 'render-manifest.json'), JSON.stringify({slides:records},null,2)+'\n');
+    process.stdout.write('PASS: five 1920x1080 PNGs; text geometry issues 0; hashes recorded\n');
+  } finally {
+    await browser.close();
+  }
+})().catch(error => {process.stderr.write(error.message+'\n');process.exitCode=1;});

@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-42. 변경 용이성을 위한 VIA Conversation과 Task 관리 설계 — 설계 비교</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1300" x="40" y="39.480000000000004" text-anchor="start" font-size="19" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 설계 비교</text>
+<text id="n3-0" data-width="450" x="1880" y="39.480000000000004" text-anchor="end" font-size="19" font-weight="400" fill="#5F6B77">구조 비교 / 장단점 / QA Trade-off</text>
+<text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-42. 변경 용이성을 위한 VIA Conversation과 Task 관리 설계</text>
+<polyline id="n5" points="40,121 1880,121" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n6-0" data-width="1530" x="40" y="163.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">보고서와 메일 Request 접수 → Task 추적 → 같은 보고서 Task의 후속 수정</text>
+<text id="n7-0" data-width="290" x="1880" y="162.48" text-anchor="end" font-size="19" font-weight="700" fill="#B63732">수치와 점수 / 예상 예시</text>
+<rect id="n8" fill="#D5E7C7" stroke="#CDD6DE" stroke-width="1.7" x="40" y="188" width="1840" height="55"/>
+<text id="n9-0" data-width="98" x="90" y="224.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">설계안</text>
+<rect id="n10" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="243" width="1840" height="494"/>
+<text id="n11-0" data-width="98" x="90" y="279.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">구조</text>
+<rect id="n12" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="737" width="1840" height="85"/>
+<text id="n13-0" data-width="98" x="90" y="773.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">장점</text>
+<rect id="n14" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="822" width="1840" height="85"/>
+<text id="n15-0" data-width="98" x="90" y="858.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">단점</text>
+<rect id="n16" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="40" y="907" width="1840" height="125"/>
+<text id="n17-0" data-width="98" x="90" y="943.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">QA</text>
+<text id="n17-1" data-width="98" x="90" y="969.32" text-anchor="middle" font-size="21" font-weight="700" fill="#18232E">Trade-off</text>
+<polyline id="n18" points="140,188 140,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<polyline id="n19" points="1010,188 1010,1032" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n20-0" data-width="838" x="575" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">A 모듈형 통합 VIA Core</text>
+<text id="n21-0" data-width="836" x="158" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 관련 상태의 공동 확정으로 완료시간 3.2 s (요청 완료 신속성 ↑)</text>
+<text id="n22-0" data-width="836" x="158" y="801.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 추가 서비스 heap 축소로 전체 메모리 13.2 GB (메모리 효율성 ↑)</text>
+<text id="n23-0" data-width="836" x="158" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 공동 저장과 복구 경로의 변경 전파, 평균 4.0개 (변경 용이성 ↓)</text>
+<text id="n24-0" data-width="335" x="158" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-05 요청 완료 신속성</text>
+<text id="n25-0" data-width="112" x="515" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n26-0" data-width="140" x="643" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">3.2 s</text>
+<text id="n27-0" data-width="206" x="792" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 VIA 완료시간 ↓</text>
+<text id="n28-0" data-width="335" x="158" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n29-0" data-width="112" x="515" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n30-0" data-width="140" x="643" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">4.0개</text>
+<text id="n31-0" data-width="206" x="792" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n32-0" data-width="335" x="158" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-06 메모리 효율성</text>
+<text id="n33-0" data-width="112" x="515" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n34-0" data-width="140" x="643" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">13.2 GB</text>
+<text id="n35-0" data-width="206" x="792" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">최대 전체 메모리 ↓</text>
+<text id="n36-0" data-width="838" x="1445" y="228.76" text-anchor="middle" font-size="28" font-weight="700" fill="#18232E">B 독립 대화 서비스와 업무 서비스</text>
+<text id="n37-0" data-width="836" x="1028" y="770.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 업무 상태와 실행 경계의 독립 변경, 평균 2.5개 (변경 용이성 ↑)</text>
+<text id="n38-0" data-width="836" x="1028" y="855.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 명령 접수와 대화 반영의 왕복으로 3.8 s (요청 완료 신속성 ↓)</text>
+<text id="n39-0" data-width="836" x="1028" y="886.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">▪ 별도 heap과 대기열로 전체 메모리 13.6 GB (메모리 효율성 ↓)</text>
+<text id="n40-0" data-width="335" x="1028" y="939.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-05 요청 완료 신속성</text>
+<text id="n41-0" data-width="112" x="1385" y="942.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n42-0" data-width="140" x="1513" y="941.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">3.8 s</text>
+<text id="n43-0" data-width="206" x="1662" y="938.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">p95 VIA 완료시간 ↓</text>
+<text id="n44-0" data-width="335" x="1028" y="973.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-08 변경 용이성</text>
+<text id="n45-0" data-width="112" x="1385" y="976.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●●</text>
+<text id="n46-0" data-width="140" x="1513" y="975.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">2.5개</text>
+<text id="n47-0" data-width="206" x="1662" y="972.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">평균 변경 요소 수 ↓</text>
+<text id="n48-0" data-width="335" x="1028" y="1007.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">V-06 메모리 효율성</text>
+<text id="n49-0" data-width="112" x="1385" y="1010.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">●●○</text>
+<text id="n50-0" data-width="140" x="1513" y="1009.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">13.6 GB</text>
+<text id="n51-0" data-width="206" x="1662" y="1006.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">최대 전체 메모리 ↓</text>
+<text id="n52-0" data-width="1520" x="40" y="1066.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">비교 예시 조건: 업무 저장과 실행 수명의 독립 변경 / 일반 Agent adapter 변경은 제외</text>
+<text id="n53-0" data-width="315" x="1880" y="1066.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">● 많을수록 우수 / 미측정</text>
+<rect id="n54" fill="#FAFBFC" stroke="#2858A5" stroke-width="1.7" x="162" y="279" width="820" height="397"/>
+<text id="n55-0" data-width="794" x="175" y="308.32" text-anchor="start" font-size="21" font-weight="700" fill="#2858A5">VIA Core</text>
+<rect id="n56" fill="white" stroke="#2858A5" stroke-width="1.7" x="188" y="341" width="280" height="53"/>
+<text id="n57-0" data-width="262" x="328.0" y="373.17" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">대화 처리기</text>
+<rect id="n58" fill="white" stroke="#2858A5" stroke-width="1.7" x="511" y="341" width="280" height="53"/>
+<text id="n59-0" data-width="262" x="651.0" y="373.17" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">업무 관리기</text>
+<text id="n60-0" data-width="290" x="201" y="419.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Conversation과 Request</text>
+<text id="n61-0" data-width="265" x="526" y="419.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Task와 Agent Execution</text>
+<rect id="n62" fill="white" stroke="#2858A5" stroke-width="1.7" x="345" y="458" width="300" height="51"/>
+<text id="n63-0" data-width="282" x="495.0" y="489.17" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">트랜잭션 관리자</text>
+<polyline id="n64" points="188,367 176,367 176,442 418,442 418,458" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n65" points="770,394 770,442 574,442 574,458" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<path id="n66" fill="#FFF7DE" stroke="#5F6B77" stroke-width="1.7" d="M360 575C360 559 640 559 640 575V623C640 639 360 639 360 623Z M360 575C360 591 640 591 640 575"/>
+<text id="n67-0" data-width="262" x="500.0" y="600.56" text-anchor="middle" font-size="18" font-weight="400" fill="#18232E">통합 상태 저장소</text>
+<polyline id="n68" points="495,509 495,567" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n69-0" data-width="250" x="514" y="551.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">관련 변경의 공동 확정</text>
+<rect id="n70" fill="white" stroke="#2858A5" stroke-width="1.7" x="770" y="466" width="190" height="48"/>
+<text id="n71-0" data-width="172" x="865.0" y="495.67" text-anchor="middle" font-size="21" font-weight="700" fill="#2858A5">Agent 연동기</text>
+<polyline id="n72" points="791,367 865,367 865,466" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n73-0" data-width="169" x="796" y="426.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">저장 후 전송</text>
+<rect id="n74" fill="white" stroke="#18232E" stroke-width="1.7" x="770" y="692" width="205" height="35"/>
+<text id="n75-0" data-width="187" x="872.5" y="714.3599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#18232E">Downstream Agent</text>
+<polyline id="n76" points="865,514 865,692" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<text id="n77-0" data-width="560" x="178" y="705.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">공동 상태 확정 / 대화와 업무 owner의 같은 Core 수명</text>
+<rect id="n78" fill="#FAFBFC" stroke="#087E8B" stroke-width="1.7" x="1032" y="279" width="355" height="348"/>
+<text id="n79-0" data-width="329" x="1045" y="308.32" text-anchor="start" font-size="21" font-weight="700" fill="#087E8B">대화 서비스</text>
+<rect id="n80" fill="#FAFBFC" stroke="#087E8B" stroke-width="1.7" x="1433" y="279" width="419" height="348"/>
+<text id="n81-0" data-width="393" x="1446" y="308.32" text-anchor="start" font-size="21" font-weight="700" fill="#087E8B">업무 서비스</text>
+<rect id="n82" fill="white" stroke="#087E8B" stroke-width="1.7" x="1059" y="341" width="300" height="53"/>
+<text id="n83-0" data-width="282" x="1209.0" y="373.17" text-anchor="middle" font-size="21" font-weight="700" fill="#087E8B">대화 처리기</text>
+<rect id="n84" fill="white" stroke="#087E8B" stroke-width="1.7" x="1456" y="341" width="370" height="53"/>
+<text id="n85-0" data-width="352" x="1641.0" y="373.17" text-anchor="middle" font-size="21" font-weight="700" fill="#087E8B">업무 관리기</text>
+<text id="n86-0" data-width="288" x="1070" y="418.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Conversation과 Request</text>
+<text id="n87-0" data-width="350" x="1467" y="418.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Task와 Agent Execution</text>
+<polyline id="n88" points="1359,365 1456,365" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<text id="n89-0" data-width="100" x="1364" y="336.64" text-anchor="start" font-size="17" font-weight="400" fill="#087E8B">명령</text>
+<polyline id="n90" points="1456,378 1413,378 1413,441 1209,441 1209,394" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a087E8B)"/>
+<text id="n91-0" data-width="360" x="1175" y="474.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">접수 결과와 event /</text>
+<text id="n91-1" data-width="360" x="1175" y="495.03999999999996" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">대화 쪽 별도 반영</text>
+<path id="n92" fill="#FFF7DE" stroke="#5F6B77" stroke-width="1.7" d="M1075 549C1075 533 1342 533 1342 549V597C1342 613 1075 613 1075 597Z M1075 549C1075 565 1342 565 1342 549"/>
+<text id="n93-0" data-width="249" x="1208.5" y="574.56" text-anchor="middle" font-size="18" font-weight="400" fill="#18232E">대화 상태 저장소</text>
+<path id="n94" fill="#FFF7DE" stroke="#5F6B77" stroke-width="1.7" d="M1456 549C1456 533 1681 533 1681 549V597C1681 613 1456 613 1456 597Z M1456 549C1456 565 1681 565 1681 549"/>
+<text id="n95-0" data-width="207" x="1568.5" y="574.56" text-anchor="middle" font-size="18" font-weight="400" fill="#18232E">업무 상태 저장소</text>
+<polyline id="n96" points="1059,379 1047,379 1047,518 1209,518 1209,541" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<polyline id="n97" points="1826,378 1838,378 1838,525 1569,525 1569,541" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<rect id="n98" fill="white" stroke="#087E8B" stroke-width="1.7" x="1702" y="541" width="131" height="57"/>
+<text id="n99-0" data-width="113" x="1767.5" y="561.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">Agent</text>
+<text id="n99-1" data-width="113" x="1767.5" y="587.9" text-anchor="middle" font-size="20" font-weight="700" fill="#087E8B">연동기</text>
+<polyline id="n100" points="1681,573 1702,573" fill="none" stroke="#087E8B" stroke-width="2" marker-end="url(#a087E8B)"/>
+<rect id="n101" fill="white" stroke="#18232E" stroke-width="1.7" x="1609" y="692" width="236" height="35"/>
+<text id="n102-0" data-width="218" x="1727.0" y="714.3599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#18232E">Downstream Agent</text>
+<polyline id="n103" points="1767,598 1767,692" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<text id="n104-0" data-width="570" x="1048" y="665.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">독립 원본과 로컬 확정 / 독립 서비스 수명</text>
+<text id="n105-0" data-width="520" x="1048" y="703.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">서비스 접수와 외부 Agent 접수의 구분</text>
+</g></svg>
