@@ -1,117 +1,4 @@
-# VIA 품질 요구사항 발표자료
-
-> 작성일: 2026-10-06 / 근거 기반 목표 제안 / 구현 및 측정 결과 없음
-
-## 리뷰 반영 계획과 결과
-
-1. 각 품질 속성을 하나의 이름과 한 문장 설명 및 단일 수치 목표로 좁힌다.
-2. 외부 근거의 실제 사실과 VIA 목표를 선택한 계산 및 판단을 구분한다.
-3. 분모, 정답, 사건 endpoint, 실패 처리와 장치 조건을 측정 설계에 기록한다.
-4. V-11~13을 제외한 10개를 기존 순위대로 두 페이지에 배치한다.
-5. 문서와 편집 가능한 PPTX 및 발표자 노트의 내용을 대조하고 최종 렌더링을 확인한다.
-
-V 표식은 기존 품질 관점을 추적하기 위해 유지한다. 이번 명칭과 목표는 사용자의 발표 리뷰를 반영한 제안이며 기존 Architecture, QA, DP 선택이나 측정 계약을 변경하지 않는다. 공동 순위 내부의 추가 우열도 없다.
-
-## 우선순위별 품질 요구사항
-
-| 우선순위 | ID | QA명 | 한 문장 설명 | 단일 목표 수치 | 측정 방법 요약 |
-| --- | --- | --- | --- | --- | --- |
-| 공동 1순위 | V-01 | 기능 정확성 | 사용자 요청을 의도에 맞게 정확히 처리해야 한다. | 정확 처리율 ≥ 90% | 전체 1,880회 시험에서 요청 전체가 정답인 비율 |
-| 공동 1순위 | V-02 | 기능 적절성 | 사용자가 적은 추가 입력으로 요청을 마칠 수 있어야 한다. | 평균 사용자 개입 ≤ 1회/요청 | 요청 뒤 필요한 사용자 추가 입력 횟수의 평균 |
-| 공동 1순위 | V-03 | 기능 완전성 | 고정된 사용 시나리오의 필수 기능을 모두 지원해야 한다. | 기능 지원 달성률 = 100% | 필수 UC 변형 94개 중 완전 지원 비율 |
-| 공동 2순위 | V-04 | 응답 신속성 | 사용자 입력에 대한 유효한 반응이 빠르게 나타나야 한다. | p95 반응 지연 ≤ 1초 | 응답과 제어 종류별 p95 지연 중 최댓값 |
-| 공동 2순위 | V-05 | 요청 완료 신속성 | 필요한 최종 결과를 사용자에게 빠르게 전달해야 한다. | p95 VIA 완료시간 ≤ 10초 | 처리 경로별 p95 VIA 책임 시간 중 최댓값 |
-| 3순위 | V-08 | 변경 용이성 | 기능 변경이 적은 설계 요소에만 영향을 주어야 한다. | 평균 변경 요소 수 ≤ 3개/변경 | 공통 변경 과제별 수정 요소 수의 평균 |
-| 4순위 | V-06 | 메모리 효율성 | 상시 실행 중에도 다른 PC 작업을 위한 메모리를 남겨야 한다. | 최대 전체 메모리 ≤ 16GB | 8시간 부하 시험의 CPU와 GPU 메모리 합계 피크 |
-| 5순위 | V-07 | 복구 용이성 | 장애 뒤 기존 업무를 이어갈 수 있는 상태로 돌아와야 한다. | 최대 정상 복구시간 ≤ 10초 | 장애 12종의 주입부터 올바른 업무 재개까지 계측 |
-| 공동 6순위 | V-09 | 분석 용이성 | 실행 기록으로 요청의 처리 과정을 설명할 수 있어야 한다. | 실행 재구성률 = 100% | 전체 시험에서 필수 실행 관계를 복원한 비율 |
-| 공동 6순위 | V-10 | 기밀성 | 사용자 정보는 허용된 범위 안에서만 사용해야 한다. | 무단 정보 사용 = 0건 | 권한과 철회 및 삭제 시험 144회의 위반 사건 수 |
-
-모든 목표는 제안값이다. 논문의 타 시스템 결과를 VIA의 실적으로 옮기지 않는다. 특히 정확 처리율 90%, 변경 요소 3개, 메모리 16GB는 아래에 공개한 VIA의 목표 선택이다.
-
-## 발표 파일
-
-- [편집 가능한 PowerPoint](quality-attributes/VIA-quality-attributes.pptx)
-- [미리보기](quality-attributes/index.html)
-- [목표와 문안 데이터](quality-attributes/quality-attributes.json)
-- [94개 기능 단위 목록](quality-attributes/functional-coverage.json)
-- [측정 설계 편집 원본](quality-attributes/measurement-design.md)
-
-![품질 요구사항 1페이지](quality-attributes/quality-attributes-01.png)
-
-![품질 요구사항 2페이지](quality-attributes/quality-attributes-02.png)
-
-## 목표별 근거 요약
-
-### V-01 기능 정확성
-
-SNIPS의 문장 전체 의미 프레임 정확도 92.8%를 참고해 첫 통합 평가의 하한을 90%로 제안한다. VIA와 동일한 시험의 실적이라는 뜻은 아니다.
-
-S01: Chen et al., 2019, [BERT for Joint Intent Classification and Slot Filling, Table 2](https://arxiv.org/html/1902.10909)
-
-S02: Yao et al., 2024, [tau-bench](https://arxiv.org/abs/2406.12045)
-
-### V-02 기능 적절성
-
-CoA는 필요한 경우 한 번의 집중된 질문으로 모호성을 해소한다. 이를 VIA의 추가 개입 예산 1회로 제안하며 권한 확인도 비용에 포함한다.
-
-S03: Cao et al., 2026, [Clarify or Answer](https://arxiv.org/abs/2601.16400)
-
-### V-03 기능 완전성
-
-대표 UC의 필수 변형 94개가 공통 기능 계약이므로 완전 지원 목표를 94/94로 정한다. 상위 UC 18개를 다시 더하지 않는다.
-
-S00: [VIA 대표 UC](../architecture/05-representative-use-cases.md), [고정 범위](../architecture/03-fixed-architecture-scope.md), [03-00 품질 시나리오](../architecture/12-decisions/decision-packages/03-00-quality-scenarios.md)
-
-### V-04 응답 신속성
-
-Nielsen의 1초 반응 기준을 적용한다. p95와 종류별 최댓값 집계는 VIA의 긴 지연을 숨기지 않기 위한 설계 선택이다.
-
-S04: Jakob Nielsen, 2019, [The 3 Response Time Limits in Interaction Design](https://www.nngroup.com/videos/3-response-time-limits-interaction-design/)
-
-### V-05 요청 완료 신속성
-
-Nielsen의 10초 주의 유지 기준을 VIA가 책임지는 완료시간의 상한으로 제안한다. 외부 작업시간을 제외한 목표임을 함께 표시한다.
-
-S04: Jakob Nielsen, 2019, [The 3 Response Time Limits in Interaction Design](https://www.nngroup.com/videos/3-response-time-limits-interaction-design/)
-
-### V-08 변경 용이성
-
-SEI의 변경 전파와 수정 비용 분석을 바탕으로 책임 요소, 계약 요소, 소비 요소의 세 요소 이내를 VIA 변경 예산으로 제안한다. SEI가 3개를 규정한 것은 아니다.
-
-S05: SEI, 2003, [Deriving Architectural Tactics, Modifiability](https://www.sei.cmu.edu/documents/704/2003_005_001_14213.pdf)
-
-### V-06 메모리 효율성
-
-Galaxy Book6 Ultra 32GB RAM 구성에서 OS 6GB, 다른 앱 6GB, 여유 4GB를 예약해 VIA에 16GB를 배정한다. 예약량은 측정 사실이 아닌 공개한 설계 예산이다.
-
-S06: Samsung, [Galaxy Book6 Ultra NP960UJH-XG3IN 공식 사양](https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/)
-
-S07: Lin et al., [AWQ](https://arxiv.org/abs/2306.00978)
-
-### V-07 복구 용이성
-
-Nielsen의 10초 주의 유지 한계를 복구 예산으로 제안한다. microreboot 연구는 상태와 실행을 분리한 빠른 복구의 근거이며 VIA의 모델 재로딩 속도를 증명하지 않는다.
-
-S04: Jakob Nielsen, 2019, [The 3 Response Time Limits in Interaction Design](https://www.nngroup.com/videos/3-response-time-limits-interaction-design/)
-
-S08: Candea et al., OSDI 2004, [Microreboot: A Technique for Cheap Recovery](https://www.usenix.org/legacy/events/osdi04/tech/full_papers/candea/candea_html/index.html)
-
-### V-09 분석 용이성
-
-연구용 평가에서 전체 실행을 수집하도록 정하고 OpenTelemetry always_on 방식으로 전수 수집을 설계한다. 샘플링 설정만으로 재구성 완전성을 보장하지는 않는다.
-
-S09: OpenTelemetry, [General SDK Configuration](https://opentelemetry.io/docs/languages/sdk-configuration/general/)
-
-### V-10 기밀성
-
-NIST AC-3 접근 통제와 AC-6 최소 권한 원칙 및 VIA의 권한 계약을 적용해 금지된 사용의 허용 예산을 0건으로 정한다. 시험 통과가 모든 공격에 대한 보증은 아니다.
-
-S10: NIST, [SP 800-53 Rev. 5](https://doi.org/10.6028/NIST.SP.800-53r5), AC-3 및 AC-6
-
-S00: [VIA 대표 UC](../architecture/05-representative-use-cases.md), [고정 범위](../architecture/03-fixed-architecture-scope.md), [03-00 품질 시나리오](../architecture/12-decisions/decision-packages/03-00-quality-scenarios.md)
-
-## 상세 목표 근거와 측정 설계
+# 목표 근거와 측정 설계
 
 작성일: 2026-10-06. 이 문서는 사용자의 리뷰를 반영한 **근거 기반 목표 제안**이다. VIA의 실측 결과나 동결된 측정 계약으로 해석하지 않는다.
 
@@ -129,7 +16,7 @@ V-11은 발표에서 제외하고, PC 공존 비용 중 메모리 부분만 V-06
 
 ### 2.1 기능 모집단
 
-[대표 UC 원문](../architecture/05-representative-use-cases.md)은 UC 18개와 필수 변형 94개를 포함한다. 기능 단위는 가장 구체적인 필수 변형으로 잡는다. 상위 UC를 다시 합산한 112개를 분모로 쓰면 동일 기능을 두 번 센다.
+[대표 UC 원문](../../architecture/05-representative-use-cases.md)은 UC 18개와 필수 변형 94개를 포함한다. 기능 단위는 가장 구체적인 필수 변형으로 잡는다. 상위 UC를 다시 합산한 112개를 분모로 쓰면 동일 기능을 두 번 센다.
 
 | UC | 필수 변형 수 | UC | 필수 변형 수 | UC | 필수 변형 수 |
 | --- | ---: | --- | ---: | --- | ---: |
@@ -140,7 +27,7 @@ V-11은 발표에서 제외하고, PC 공존 비용 중 메모리 부분만 V-06
 | UC-05 | 4 | UC-11 | 5 | UC-17 | 5 |
 | UC-06 | 5 | UC-12 | 5 | UC-18 | 6 |
 
-[functional-coverage.json](quality-attributes/functional-coverage.json)에 94개 ID를 고정한다. 각 변형을 구체적인 상황 5개로 만들고 각 상황을 4회 반복하여 **94 × 5 × 4 = 1,880회**를 제안한다. 5개는 정답이 같은 단순 문장 복사 대신 표현, 참조 대상, 업무 이력, 화면 상황과 사건 순서를 바꾸되 해당 변형의 필수 동작을 유지한다. 변형 자체가 음성 전용이면 텍스트 사례를 억지로 추가하지 않는다. 오류나 예외가 원래 변형이면 기대되는 거절 또는 보류를 정답으로 정한다.
+[functional-coverage.json](functional-coverage.json)에 94개 ID를 고정한다. 각 변형을 구체적인 상황 5개로 만들고 각 상황을 4회 반복하여 **94 × 5 × 4 = 1,880회**를 제안한다. 5개는 정답이 같은 단순 문장 복사 대신 표현, 참조 대상, 업무 이력, 화면 상황과 사건 순서를 바꾸되 해당 변형의 필수 동작을 유지한다. 변형 자체가 음성 전용이면 텍스트 사례를 억지로 추가하지 않는다. 오류나 예외가 원래 변형이면 기대되는 거절 또는 보류를 정답으로 정한다.
 
 다섯 사례와 네 반복은 시험 규모 선택이며 논문이 규정한 값이 아니다. 동일 사례를 무작위 순서와 같은 seed 집합으로 모든 후보에 적용한다. 분석 시 94개 변형이 동일한 가중치를 갖는다. 아직 구체 입력 fixture나 실행 runner는 만들지 않았으며, JSON은 시험 목록 설계이다.
 
@@ -423,7 +310,7 @@ VIA가 장애를 감지한 시점 대신 harness의 실제 장애 주입 시점�
 
 | ID | 원문 출처 | 사용한 사실 또는 원칙 |
 | --- | --- | --- |
-| S00 | [VIA 대표 UC](../architecture/05-representative-use-cases.md), [고정 범위](../architecture/03-fixed-architecture-scope.md), [03-00 품질 시나리오](../architecture/12-decisions/decision-packages/03-00-quality-scenarios.md) | 필수 변형 94개, 책임 경계, V의 의미와 순위 및 정보 사용 계약 |
+| S00 | [VIA 대표 UC](../../architecture/05-representative-use-cases.md), [고정 범위](../../architecture/03-fixed-architecture-scope.md), [03-00 품질 시나리오](../../architecture/12-decisions/decision-packages/03-00-quality-scenarios.md) | 필수 변형 94개, 책임 경계, V의 의미와 순위 및 정보 사용 계약 |
 | S01 | Chen et al., 2019, [BERT for Joint Intent Classification and Slot Filling, Table 2](https://arxiv.org/html/1902.10909) | SNIPS의 문장 전체 semantic frame accuracy 92.8% |
 | S02 | Yao et al., 2024, [tau-bench](https://arxiv.org/abs/2406.12045) | 대화 종료 뒤 실제 상태와 정답 상태를 대조하는 성공 판정 |
 | S03 | Cao et al., 2026, [Clarify or Answer](https://arxiv.org/abs/2601.16400) | 필요할 때 단일 집중 질문을 사용하는 시각 질의 접근, preprint |
@@ -435,4 +322,4 @@ VIA가 장애를 감지한 시점 대신 harness의 실제 장애 주입 시점�
 | S09 | OpenTelemetry, [General SDK Configuration](https://opentelemetry.io/docs/languages/sdk-configuration/general/) | always_on 및 parentbased_always_on sampler 설정 |
 | S10 | NIST, [SP 800-53 Rev. 5](https://doi.org/10.6028/NIST.SP.800-53r5), AC-3 및 AC-6 | 승인된 접근의 집행과 최소 권한 |
 
-실제 시간 endpoint는 [event-boundary-contract](../architecture/11-measurement/event-boundary-contract.md), 기존 의미와 qualification은 [core-asr-contract](../architecture/08-quality-attributes/core-asr-contract.md)를 함께 읽는다. 이번 목표 제안이 기존 QA ID와 집계를 자동으로 대체하지 않는다.
+실제 시간 endpoint는 [event-boundary-contract](../../architecture/11-measurement/event-boundary-contract.md), 기존 의미와 qualification은 [core-asr-contract](../../architecture/08-quality-attributes/core-asr-contract.md)를 함께 읽는다. 이번 목표 제안이 기존 QA ID와 집계를 자동으로 대체하지 않는다.

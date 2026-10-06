@@ -1,21 +1,26 @@
 # 제작 검증 기록
 
-작성일: 2026-10-06. 검증 대상은 발표 문서와 슬라이드이며 VIA의 구현·품질 측정 결과가 아니다.
+작성일: 2026-10-06. 검증 대상은 발표 문서와 슬라이드이다. 실제 VIA 구현 또는 품질 목표 달성 여부를 측정하지 않았다.
 
 | 검사 | 결과 |
 | --- | --- |
-| 03-00의 V-01~13 이름 및 공동 순위 | 일치, 13개 누락 없음 |
-| 설명 한 문장, 목표·측정·책임 경계 | 모든 항목 존재 |
-| Markdown·JSON·PPTX 표·speaker notes | 문안·목표·방법 및 상세 경계 일치 |
-| PPTX 구조·관계·레이아웃·글꼴 정책 | 오류 0, 경고 0 |
-| 편집 가능한 native table | 1페이지 8개, 2페이지 5개 행 확인 |
-| Artifact Tool의 최종 PPTX 재가져오기 | 성공 |
-| 최종 파일 렌더링 | 두 페이지 각각 확인, 글자 잘림과 주석 겹침 수정 후 재확인 |
-| 발표 문서·README·갤러리의 로컬 링크 | 모두 존재 |
-| 기존 active 문서의 링크·용어·QA 카탈로그 | 검사 통과 |
+| 리뷰 후 유지 ID와 원본 이름 추적 및 공동 순위 | 10개 일치, V-11~13 제외 이유 기록 |
+| 단일 지표와 수치 목표 및 근거 ID | 항목별 하나씩 존재 |
+| 간결한 설명 한 문장 | 10개 확인 |
+| 가운데 점 | Markdown, JSON, HTML, 슬라이드 및 notes에서 없음 |
+| 기능 모집단 | 원본의 필수 변형 94개와 일치, 1880회 규모 계산 확인 |
+| 상세 측정 | 분모, oracle, endpoint, 실패 처리, 장치 및 부하 조건 기록 |
+| 보안 시험 및 장애 시험 | 각각 12종의 상황과 관측 또는 정상 복구 조건 기록 |
+| 문서, JSON, PPTX 표 및 notes | 문안, 목표, 방법과 근거 일치 |
+| PPTX 구조, layout 및 font policy | 오류 0, 경고 0 |
+| native table 및 최종 재가져오기 | 페이지별 편집 가능한 5행, 총 두 표, 재가져오기 성공 |
+| 최종 렌더링 | 두 페이지 각각 확인, 잘림과 겹침 없음 |
+| 로컬 링크 | 상세 측정 설계와 문서 및 갤러리의 파일 존재 확인 |
 
-일치 검사는 [check_quality_attributes.py](../../../scripts/presentations/check_quality_attributes.py)로 재실행할 수 있다. 생성은 [generate_quality_attributes.mjs](../../../scripts/presentations/generate_quality_attributes.mjs)를 사용했다.
+[일치 검사](../../../scripts/presentations/check_quality_attributes.py)와 [생성 스크립트](../../../scripts/presentations/generate_quality_attributes.mjs)로 재검증할 수 있다.
 
-최종 PPTX SHA-256: `fb4db8f2a729721904de853a19e1f7b6cd9e8c4fc9e3a147f2a58f710154508c`.
+최종 PPTX SHA-256: `9b0a65e3d55cab03741d8831d557973f48b92f011a1ca06b70a6ce157103c188`.
 
-V의 목표 숫자와 정확한 측정 계약은 미확정이다. 기존 금지 조건의 0건을 전체 정확성·복구율 목표로 확대하지 않았다. PowerPoint/Google Slides 앱의 직접 편집·저장·재열기는 확인하지 않았다. 현재 architecture-ci의 경로 필터에는 이번 발표 파일과 scripts/presentations가 포함되어 있지 않아 이 변경만으로 원격 CI가 실행되지는 않는다.
+외부 원문에서 확인한 사실과 VIA에 배정한 목표를 구분했다. 90%, 3개, 16GB를 논문이나 제품이 직접 규정한 값으로 표현하지 않았다. 시간의 p95 및 최댓값 집계도 VIA 측정 설계 선택이다. 목표 제안은 기존 QA나 측정 계약을 변경하지 않는다.
+
+실제 fixture, runner, 모델 실행, 장치 메모리 측정과 변경 과제 수행은 하지 않았다. PowerPoint 또는 Google Slides 앱에서 직접 편집, 저장 및 재열기는 확인하지 않았다. 현재 architecture-ci의 경로 필터에는 이번 발표 경로와 scripts/presentations가 포함되지 않는다.
