@@ -3,6 +3,14 @@
 > 상태: **구조 비교 제안 / 사용자 검토 전 / 미선정 / 미측정** / 2026-10-06
 > [04-50 영역 7](./04-50-agent-architecture-decision-map.md)에서 출발한 새 비교다. 45라는 번호는 독립 DP 선정이나 B 채택을 뜻하지 않는다. 구현, 모델 실행, 성능 측정과 참조 Architecture 변경은 포함하지 않는다.
 
+## DP 배경 — 발표용 1페이지
+
+![04-45 DP 배경](./diagrams/dp45-background.svg)
+
+[편집 가능한 draw.io](./diagrams/dp45-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp45-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+
+공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+
 ## 1. 사용자 문제와 이번 판단
 
 **긴 대화와 여러 업무에 흩어진 과거 근거 및 허용된 사용자 기억을, 현재 요청을 정확하게 이해하는 데 필요한 Context로 어떻게 유지하고, 찾아 구성하고, 제공할 것인가?**

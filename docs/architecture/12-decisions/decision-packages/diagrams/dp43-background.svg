@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-43. 요청 의미의 생산 책임 — DP 배경</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
+<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-43</text>
+<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-43. 요청 의미의 생산 책임</text>
+<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="52"/>
+<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">한 번의 정정이 대상·Task 연결·요청 관계를 함께 바꿀 수 있다</text>
+<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">VIA는 의도부터 처리 방향까지 판단하고, 기존 조건을 유지하면서 바뀐 부분을 반영해야 한다.</text>
+<polyline id="n9" points="1213,285 1213,852" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">구조 설계에서 어려운 점</text>
+<polyline id="n11" points="64,875 1856,875" fill="none" stroke="#2858A5" stroke-width="2"/>
+<text id="n12-0" data-width="165" x="64" y="931.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">설계 과제</text>
+<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">서로 얽힌 의미를 통합 생산할 것인가, 기능별 생산자가 협력할 것인가?</text>
+<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">A 통합 의미 생산 / C 여섯 기능의 의미 생산과 코드 조정</text>
+<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 의미 정확성·누락 방지와 부분 판단의 조정·추론 비용</text>
+<text id="n16-0" data-width="480" x="1856" y="1036.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
+<text id="n17-0" data-width="1120" x="64" y="313.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">“보고서는 PDF로, 메일에는 그 보고서의 결론을 넣어줘.”</text>
+<text id="n18-0" data-width="1120" x="64" y="358.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">정정  “메일에는 결론 대신 표만 넣어줘.”</text>
+<rect id="n19" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="64" y="402" width="1110" height="363" stroke-dasharray="7 6"/>
+<text id="n20-0" data-width="1060" x="88" y="439.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">Request Interpreter</text>
+<path id="n21" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M88 476H400L418 494V582H88Z M400 476V494H418"/>
+<text id="n22-0" data-width="290" x="104" y="511.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F1 요청 의도</text>
+<text id="n22-1" data-width="290" x="104" y="542.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">목표와 PDF 조건</text>
+<path id="n23" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M452 476H764L782 494V582H452Z M764 476V494H782"/>
+<text id="n24-0" data-width="290" x="468" y="511.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F2 지칭 대상</text>
+<text id="n24-1" data-width="290" x="468" y="542.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">보고서의 결론 / 표</text>
+<path id="n25" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M816 476H1128L1146 494V582H816Z M1128 476V494H1146"/>
+<text id="n26-0" data-width="290" x="832" y="511.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F3 대화·Task 연결</text>
+<text id="n26-1" data-width="290" x="832" y="542.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">보고서 / 메일 후보</text>
+<path id="n27" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M88 628H400L418 646V734H88Z M400 628V646H418"/>
+<text id="n28-0" data-width="290" x="104" y="663.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F4 요청 간 관계</text>
+<text id="n28-1" data-width="290" x="104" y="694.2800000000001" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">어느 결과를 사용할까</text>
+<path id="n29" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M452 628H764L782 646V734H452Z M764 628V646H782"/>
+<text id="n30-0" data-width="290" x="468" y="663.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F5 정정 범위</text>
+<text id="n30-1" data-width="290" x="468" y="694.2800000000001" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">교체할 내용과 유지 조건</text>
+<path id="n31" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M816 628H1128L1146 646V734H816Z M1128 628V646H1146"/>
+<text id="n32-0" data-width="290" x="832" y="663.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">F6 처리 방향</text>
+<text id="n32-1" data-width="290" x="832" y="694.2800000000001" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">직접 응답 / 위임 / 확인</text>
+<polyline id="n33" points="418,529 452,529" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n34" points="782,529 816,529" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n35" points="253,582 253,628" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n36" points="617,582 617,628" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n37" points="981,582 981,628" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6"/>
+<text id="n38-0" data-width="1120" x="64" y="817.92" text-anchor="start" font-size="26" font-weight="700" fill="#2858A5">메일 내용·결과 의존은 변경 / 보고서의 PDF 조건은 유지</text>
+<text id="n39-0" data-width="1120" x="64" y="854.24" text-anchor="start" font-size="22" font-weight="400" fill="#5F6B77">F1~F6은 공통 판단 기능이며, 고정 실행 순서나 모델 호출 수가 아니다.</text>
+<text id="n40-0" data-width="596" x="1260" y="389.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">01  Task 연결도 판단 결과</text>
+<text id="n41-0" data-width="596" x="1260" y="434.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">어느 업무인지 미리 정해 두면</text>
+<text id="n41-1" data-width="596" x="1260" y="469.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">새 요청·직접 대화를 놓친다.</text>
+<text id="n42-0" data-width="596" x="1260" y="540.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">02  부분 의미의 상호 의존</text>
+<text id="n43-0" data-width="596" x="1260" y="585.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">대상이 바뀌면 관계와 정정 범위도</text>
+<text id="n43-1" data-width="596" x="1260" y="620.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">다시 판단해야 할 수 있다.</text>
+<text id="n44-0" data-width="596" x="1260" y="691.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">03  집중 판단과 전체 일관성</text>
+<text id="n45-0" data-width="596" x="1260" y="736.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">기능별 집중은 개선의 후보지만,</text>
+<text id="n45-1" data-width="596" x="1260" y="771.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">불일치·왕복·맥락 중복도 생긴다.</text>
+</g></svg>

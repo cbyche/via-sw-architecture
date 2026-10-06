@@ -5,6 +5,14 @@
 
 **사용자의 말을 계속 들으면서 현재 요청의 답변과 이전 업무의 질문·결과를 빠르고 올바르게 같은 대화로 이어가는 SW 구조**를 비교한다. A는 중앙 조정자가 사건마다 다음 실행을 명령하고 반환을 회수하는 **비동기 Orchestration/Mediator**다. B는 타입이 정해진 사건과 결과를 연결한 소비자가 조건 충족 시 활성화되는 **반응형 Dataflow/Pipes-and-Filters**다. 둘 다 입력과 작업을 병행한다. 차이는 비동기 API의 유무가 아니라 실행을 이어가는 책임과 중간 상태의 조직이다.
 
+## DP 배경 — 발표용 1페이지
+
+![04-44 DP 배경](./diagrams/dp44-background.svg)
+
+[편집 가능한 draw.io](./diagrams/dp44-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp44-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+
+공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+
 ## 1. 발표용 메인 비교
 
 ![44 — 중앙 비동기 조정과 반응형 실행망](./diagrams/choice44-structure.svg)

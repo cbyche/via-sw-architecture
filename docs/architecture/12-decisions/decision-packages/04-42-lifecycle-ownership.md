@@ -7,6 +7,14 @@
 **B는 VIA 내부의 대화 서비스와 업무 서비스가 각자의 상태와 실행 수명을 소유하고, 변경 요청과 접수 결과를 교환한다.**
 **비교의 중심은 서로 다른 수명을 하나의 Core 안에서 관리할지, 독립된 상태·실행 소유자들이 협력하게 할지다. 공동 저장과 별도 접수는 이를 구현하는 구체적 협력 방식이다. B의 정상 사용상 주요 이익은 강한 A와의 추가 검토가 필요하다.**
 
+## DP 배경 — 발표용 1페이지
+
+![04-42 DP 배경](./diagrams/dp42-background.svg)
+
+[편집 가능한 draw.io](./diagrams/dp42-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp42-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+
+공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+
 ## 1. 발표의 중심: 같은 기능, 다른 상태 소유와 실행 경계
 
 ![42 메인 구조 비교: 같은 수명, 서로 다른 소유·실행 경계와 협력 방식](./diagrams/choice42-structure.svg)

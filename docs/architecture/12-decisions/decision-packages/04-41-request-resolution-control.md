@@ -17,6 +17,14 @@
 | 결합 | ‘이 표’와 실제 자료, ‘아까 보고서’와 실제 Task를 연결하고 조건/의존 관계를 구성하는 일 |
 | 채택 | 해석 제안을 현재 입력과 자료, 업무, 권한에 맞게 확인하여 VIA의 처리 상태로 받아들이는 일 |
 
+## DP 배경 — 발표용 1페이지
+
+![04-41 DP 배경](./diagrams/dp41-background.svg)
+
+[편집 가능한 draw.io](./diagrams/dp41-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp41-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+
+공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+
 ## 1. 왜 VIA에서 중요한가
 
 사용자는 Agent의 실행 ID나 파일 경로를 지정하기보다 “이 표를 아까 보고서에 넣고, 메일은 초안만 만들어”라고 말한다. VIA가 문장을 이해했더라도 다른 표나 다른 업무에 연결하면 실제로 다른 일을 시킨다. 올바른 대상, 기존 조건, 복합 요청의 관계를 정리하는 일은 VIA의 핵심 기능이다.

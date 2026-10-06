@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-41. 요청 의미 해결 제어 — DP 배경</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
+<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-41</text>
+<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-41. 요청 의미 해결 제어</text>
+<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="52"/>
+<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">사용자의 말만으로는 실제 대상과 업무를 확정할 수 없다</text>
+<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">VIA는 화면·대화·업무 근거를 조회해 요청을 정리하고, 실제 업무 수행은 Downstream Agent에 위임한다.</text>
+<polyline id="n9" points="1213,285 1213,852" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">구조 설계에서 어려운 점</text>
+<polyline id="n11" points="64,875 1856,875" fill="none" stroke="#2858A5" stroke-width="2"/>
+<text id="n12-0" data-width="165" x="64" y="931.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">설계 과제</text>
+<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">다음 조회와 최종 대상·Task 결합을 누가 결정할 것인가?</text>
+<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">A 모델 중심 ReAct / B 모델의 요청 틀을 코드가 해결</text>
+<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 정확성·기능 지원 범위와 조회/해석 왕복 시간</text>
+<text id="n16-0" data-width="480" x="1856" y="1036.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
+<text id="n17-0" data-width="1120" x="64" y="314.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”</text>
+<path id="n18" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M64 347H556L574 365V444H64Z M556 347V365H574"/>
+<text id="n19-0" data-width="470" x="80" y="383.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">화면 근거: 사용자가 가리킨 표</text>
+<text id="n19-1" data-width="470" x="80" y="415.5" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">업무 근거: 보고서 Task가 두 개</text>
+<text id="n20-0" data-width="475" x="665" y="382.0" text-anchor="start" font-size="25" font-weight="400" fill="#B63732">대상·업무는 아직 미확정</text>
+<text id="n20-1" data-width="475" x="665" y="414.5" text-anchor="start" font-size="25" font-weight="400" fill="#B63732">‘초안만’ 조건도 함께 보존</text>
+<rect id="n21" fill="white" stroke="#18232E" stroke-width="1.7" x="180" y="491" width="370" height="72"/>
+<text id="n22-0" data-width="354" x="365.0" y="533.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Request Interpreter</text>
+<rect id="n23" fill="white" stroke="#18232E" stroke-width="1.7" x="767" y="491" width="370" height="72"/>
+<text id="n24-0" data-width="354" x="952.0" y="533.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Context Manager</text>
+<rect id="n25" fill="white" stroke="#18232E" stroke-width="1.7" x="767" y="708" width="370" height="72"/>
+<text id="n26-0" data-width="354" x="952.0" y="750.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Task Manager</text>
+<polyline id="n27" points="574,398 625,398 625,462 365,462 365,491" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<polyline id="n28" points="550,511 767,511" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<rect id="n29" fill="white" stroke="none" stroke-width="1.7" x="547" y="468" width="224" height="31.3"/>
+<text id="n30-0" data-width="214" x="552" y="489.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">1 어떤 근거를 읽을까?</text>
+<polyline id="n31" points="767,547 550,547" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<rect id="n32" fill="white" stroke="none" stroke-width="1.7" x="547" y="571" width="235" height="31.3"/>
+<text id="n33-0" data-width="225" x="552" y="592.32" text-anchor="start" font-size="21" font-weight="400" fill="#2858A5">2 근거를 보고 재판단</text>
+<polyline id="n34" points="490,563 490,734 767,734" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<rect id="n35" fill="white" stroke="none" stroke-width="1.7" x="495" y="690" width="260" height="31.3"/>
+<text id="n36-0" data-width="250" x="500" y="711.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">3 기존 업무 후보 조회</text>
+<polyline id="n37" points="767,764 420,764 420,563" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n38-0" data-width="365" x="70" y="669.92" text-anchor="start" font-size="26" font-weight="700" fill="#2858A5">해석이 조회 범위를 정하고</text>
+<text id="n38-1" data-width="365" x="70" y="703.7199999999999" text-anchor="start" font-size="26" font-weight="700" fill="#2858A5">조회 결과가 해석을 바꾼다</text>
+<text id="n39-0" data-width="1120" x="64" y="832.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">완성 의미도 현재 입력·자료·질문·권한 검사 후 채택한다.</text>
+<text id="n40-0" data-width="1120" x="64" y="864.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">해석·조회 의존을 보여주는 도식이며, 두 안의 호출 구조는 설계 페이지에서 비교한다.</text>
+<text id="n41-0" data-width="596" x="1260" y="389.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">01  해석과 조회의 상호 의존</text>
+<text id="n42-0" data-width="596" x="1260" y="434.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">읽기 전에 필요한 자료를</text>
+<text id="n42-1" data-width="596" x="1260" y="469.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">전부 정하기 어렵다.</text>
+<text id="n43-0" data-width="596" x="1260" y="540.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">02  잘못된 결합의 실제 피해</text>
+<text id="n44-0" data-width="596" x="1260" y="585.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">다른 표나 Task를 고르면</text>
+<text id="n44-1" data-width="596" x="1260" y="620.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">Agent에 다른 일을 시킨다.</text>
+<text id="n45-0" data-width="596" x="1260" y="691.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">03  통제와 표현 범위의 긴장</text>
+<text id="n46-0" data-width="596" x="1260" y="736.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">모델 반복에는 범위·종료 통제,</text>
+<text id="n46-1" data-width="596" x="1260" y="771.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">코드 해결에는 표현 한계가 따른다.</text>
+</g></svg>

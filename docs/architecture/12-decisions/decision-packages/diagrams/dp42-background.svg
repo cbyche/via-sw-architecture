@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-42. 대화와 업무의 서로 다른 수명 — DP 배경</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
+<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-42</text>
+<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-42. 대화와 업무의 서로 다른 수명</text>
+<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="52"/>
+<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">대화가 바뀌거나 요청 처리가 끝나도, 업무와 대기 질문은 남아 있다</text>
+<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">같은 업무의 후속 수정은 Task를 유지하면서 새 실행으로 이어져야 한다.</text>
+<polyline id="n9" points="1213,285 1213,852" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">구조 설계에서 어려운 점</text>
+<polyline id="n11" points="64,875 1856,875" fill="none" stroke="#2858A5" stroke-width="2"/>
+<text id="n12-0" data-width="165" x="64" y="931.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">설계 과제</text>
+<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">서로 다른 수명의 상태와 실행을 어떤 소유 경계로 관리할 것인가?</text>
+<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">A 모듈형 통합 Core와 공동 확정 / B 독립 대화·업무 서비스의 명령·접수</text>
+<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 대화·업무 연결의 정확성, 변경 범위와 교차 상태 복구</text>
+<text id="n16-0" data-width="480" x="1856" y="1036.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
+<text id="n17-0" data-width="1120" x="64" y="313.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">보고서 위임 후 다른 대화로 이동하고, 돌아와 답한 뒤 수정</text>
+<text id="n18-0" data-width="150" x="340" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">위임 접수</text>
+<text id="n18-1" data-width="150" x="340" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">R1 종료</text>
+<polyline id="n19" points="340,420 340,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n20-0" data-width="150" x="486" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">질문 제시</text>
+<text id="n20-1" data-width="150" x="486" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">Q1 대기</text>
+<polyline id="n21" points="486,420 486,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n22-0" data-width="150" x="640" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">다른 대화</text>
+<text id="n22-1" data-width="150" x="640" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">C2 이동</text>
+<polyline id="n23" points="640,420 640,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n24-0" data-width="150" x="795" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">복귀·답변</text>
+<text id="n24-1" data-width="150" x="795" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">Q1 해소</text>
+<polyline id="n25" points="795,420 795,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n26-0" data-width="150" x="950" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">결과 도착</text>
+<text id="n26-1" data-width="150" x="950" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">X1 종료</text>
+<polyline id="n27" points="950,420 950,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n28-0" data-width="150" x="1100" y="374.24" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">후속 수정</text>
+<text id="n28-1" data-width="150" x="1100" y="402.84000000000003" text-anchor="middle" font-size="22" font-weight="400" fill="#5F6B77">X2 시작</text>
+<polyline id="n29" points="1100,420 1100,768" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n30-0" data-width="266" x="64" y="459.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">Conversation C1</text>
+<polyline id="n31" points="340,453 1135,453" fill="none" stroke="#18232E" stroke-width="5" marker-end="url(#a18232E)"/>
+<text id="n32-0" data-width="266" x="64" y="528.16" text-anchor="start" font-size="23" font-weight="700" fill="#2858A5">Request R1</text>
+<polyline id="n33" points="315,522 358,522" fill="none" stroke="#2858A5" stroke-width="5"/>
+<rect id="n34" fill="#2858A5" stroke="none" stroke-width="1.7" x="354" y="514" width="8" height="16"/>
+<text id="n35-0" data-width="266" x="64" y="597.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">Question Q1</text>
+<polyline id="n36" points="486,591 795,591" fill="none" stroke="#087E8B" stroke-width="5"/>
+<rect id="n37" fill="#087E8B" stroke="none" stroke-width="1.7" x="791" y="583" width="8" height="16"/>
+<text id="n38-0" data-width="266" x="64" y="666.16" text-anchor="start" font-size="23" font-weight="700" fill="#2858A5">Task T1</text>
+<polyline id="n39" points="340,660 1135,660" fill="none" stroke="#2858A5" stroke-width="5" marker-end="url(#a2858A5)"/>
+<text id="n40-0" data-width="266" x="64" y="735.16" text-anchor="start" font-size="23" font-weight="700" fill="#5F6B77">Execution X1 / X2</text>
+<polyline id="n41" points="340,729 950,729" fill="none" stroke="#5F6B77" stroke-width="5"/>
+<rect id="n42" fill="#5F6B77" stroke="none" stroke-width="1.7" x="946" y="721" width="8" height="16"/>
+<polyline id="n43" points="1100,729 1160,729" fill="none" stroke="#087E8B" stroke-width="5" marker-end="url(#a087E8B)"/>
+<text id="n44-0" data-width="1120" x="64" y="815.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">화살표는 계속 유지, 끝 막대는 처리 종료를 뜻한다. 종료 후에도 기록은 남는다.</text>
+<text id="n45-0" data-width="1120" x="64" y="849.24" text-anchor="start" font-size="22" font-weight="400" fill="#5F6B77">선의 길이는 측정 시간이 아니다.</text>
+<text id="n46-0" data-width="596" x="1260" y="389.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">01  유지할 관계가 서로 다름</text>
+<text id="n47-0" data-width="596" x="1260" y="434.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">위임 요청은 끝나도</text>
+<text id="n47-1" data-width="596" x="1260" y="469.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">Task와 질문의 연결은 유지한다.</text>
+<text id="n48-0" data-width="596" x="1260" y="540.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">02  답변·정정의 연결과 확정</text>
+<text id="n49-0" data-width="596" x="1260" y="585.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">“응”을 실제 제시 질문에 연결하고,</text>
+<text id="n49-1" data-width="596" x="1260" y="620.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">관련 대화·업무 변경을 맞춘다.</text>
+<text id="n50-0" data-width="596" x="1260" y="691.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">03  논리 수명과 실행 경계</text>
+<text id="n51-0" data-width="596" x="1260" y="736.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">양안 모두 다른 논리 수명을 지원.</text>
+<text id="n51-1" data-width="596" x="1260" y="771.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">독립 소유는 별도의 구조 선택이다.</text>
+</g></svg>

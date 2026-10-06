@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">04-45. 기억과 Context의 공급 구조 — DP 배경</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
+<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-45</text>
+<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-45. 기억과 Context의 공급 구조</text>
+<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="52"/>
+<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">과거에 무엇을 고쳤는지는 대화·결과 버전·실제 제시 기록에 흩어져 있다</text>
+<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”에는 기록 사이의 연결이 필요하다.</text>
+<polyline id="n9" points="1213,285 1213,852" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">구조 설계에서 어려운 점</text>
+<polyline id="n11" points="64,875 1856,875" fill="none" stroke="#2858A5" stroke-width="2"/>
+<text id="n12-0" data-width="165" x="64" y="931.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">설계 과제</text>
+<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">과거 관계를 요청마다 조합할 것인가, 공통 파생 기억으로 유지할 것인가?</text>
+<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">A 원본 서비스 조합 / B 공통 파생 기억 저장소</text>
+<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 과거 근거의 정확성·지원 범위, 반복 조회와 생산·저장·삭제 비용</text>
+<text id="n16-0" data-width="480" x="1856" y="1036.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
+<text id="n17-0" data-width="1120" x="64" y="313.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">같은 과거 사건을, 새 보고서 요청의 근거로 다시 사용</text>
+<path id="n18" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M64 362H396L414 380V469H64Z M396 362V380H414"/>
+<text id="n19-0" data-width="310" x="80" y="397.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">정정 R7</text>
+<text id="n19-1" data-width="310" x="80" y="428.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">“짧은 문장, 결론 먼저”</text>
+<rect id="n20" fill="white" stroke="#18232E" stroke-width="1.7" x="64" y="535" width="350" height="72"/>
+<text id="n21-0" data-width="334" x="239.0" y="577.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Request Controller</text>
+<polyline id="n22" points="239,469 239,535" fill="none" stroke="#5F6B77" stroke-width="2"/>
+<path id="n23" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M444 362H776L794 380V469H444Z M776 362V380H794"/>
+<text id="n24-0" data-width="310" x="460" y="397.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">결과 D2 / D3</text>
+<text id="n24-1" data-width="310" x="460" y="428.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">수정 전후의 결과 버전</text>
+<rect id="n25" fill="white" stroke="#18232E" stroke-width="1.7" x="444" y="535" width="350" height="72"/>
+<text id="n26-0" data-width="334" x="619.0" y="577.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Task Manager</text>
+<polyline id="n27" points="619,469 619,535" fill="none" stroke="#5F6B77" stroke-width="2"/>
+<path id="n28" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M824 362H1156L1174 380V469H824Z M1156 362V380H1174"/>
+<text id="n29-0" data-width="310" x="840" y="397.08" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">실제 제시 P4</text>
+<text id="n29-1" data-width="310" x="840" y="428.28" text-anchor="start" font-size="24" font-weight="400" fill="#18232E">수정 결과 D3의 전달 기록</text>
+<rect id="n30" fill="white" stroke="#18232E" stroke-width="1.7" x="824" y="535" width="350" height="72"/>
+<text id="n31-0" data-width="334" x="999.0" y="577.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Response Manager</text>
+<polyline id="n32" points="999,469 999,535" fill="none" stroke="#5F6B77" stroke-width="2"/>
+<rect id="n33" fill="white" stroke="#18232E" stroke-width="1.7" x="444" y="719" width="350" height="72"/>
+<text id="n34-0" data-width="334" x="619.0" y="761.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Context Manager</text>
+<polyline id="n35" points="239,607 239,669 570,669 570,719" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n36" points="619,607 619,719" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n37" points="999,607 999,669 670,669 670,719" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<text id="n38-0" data-width="400" x="64" y="705.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">각 소유자의 허용된 읽기 계약</text>
+<text id="n39-0" data-width="352" x="64" y="780.0" text-anchor="start" font-size="25" font-weight="700" fill="#2858A5">출처·버전·누락 범위를</text>
+<text id="n39-1" data-width="352" x="64" y="812.5" text-anchor="start" font-size="25" font-weight="700" fill="#2858A5">함께 확인해 공급</text>
+<text id="n40-0" data-width="350" x="824" y="780.0" text-anchor="start" font-size="25" font-weight="700" fill="#2858A5">이번 대상·Task는</text>
+<text id="n40-1" data-width="350" x="824" y="812.5" text-anchor="start" font-size="25" font-weight="700" fill="#2858A5">현재 요청에서 판단</text>
+<text id="n41-0" data-width="1120" x="64" y="853.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">과거 정정은 자동으로 장기 선호가 되지 않는다. 원본·파생 기억·현재 판단을 구별한다.</text>
+<text id="n42-0" data-width="596" x="1260" y="389.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">01  검색 일치와 관계의 차이</text>
+<text id="n43-0" data-width="596" x="1260" y="434.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">‘보고서’라는 단어만 찾아서는</text>
+<text id="n43-1" data-width="596" x="1260" y="469.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">정정의 전후와 실제 제시를 모른다.</text>
+<text id="n44-0" data-width="596" x="1260" y="540.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">02  반복 조합과 공통 생산 비용</text>
+<text id="n45-0" data-width="596" x="1260" y="585.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">요청별 결합 부담과 파생 기억의</text>
+<text id="n45-1" data-width="596" x="1260" y="620.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">생산·유지·미게시 범위를 비교한다.</text>
+<text id="n46-0" data-width="596" x="1260" y="691.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">03  압축·오류·삭제의 파급</text>
+<text id="n47-0" data-width="596" x="1260" y="736.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">요약이 조건을 잃거나 원본이 바뀌면</text>
+<text id="n47-1" data-width="596" x="1260" y="771.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">재사용 근거도 다시 확인해야 한다.</text>
+</g></svg>

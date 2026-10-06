@@ -7,6 +7,14 @@
 
 **같은 여섯 가지 의미 판단을 한 모듈이 함께 책임질 것인가, 기능별 모듈이 부분 의미를 책임지고 협력할 것인가?** 두 안 모두 Task 연결이 정해지지 않은 원문에서 시작한다. 보고서/메일은 처리할 데이터의 예시이며 Component나 Module 종류가 아니다. VIA는 사용자 의도 이해와 대화 및 위임을 담당하고, 실제 업무 계획, 도구 선택과 실행은 Downstream Agent가 담당한다.
 
+## DP 배경 — 발표용 1페이지
+
+![04-43 DP 배경](./diagrams/dp43-background.svg)
+
+[편집 가능한 draw.io](./diagrams/dp43-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp43-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+
+공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+
 ## 0. 비교를 다시 구성한 이유와 B의 제외
 
 직전 그림은 `보고서 대화 처리자`, `메일 대화 처리자`를 SW 모듈 이름처럼 그려 타입과 실행 인스턴스를 혼동시켰다. 실제 Task별 구현이라면 공통 처리 타입과 Task identity를 분리해야 한다. 더 중요한 문제는 특정 Task의 담당에게 맡기려면 **그 입력이 어느 Task와 관련되는지부터 이해해야 한다**는 점이다. 기존 업무와의 연결이 모호하거나 새 위임/직접 대화이면 해당 Task 담당만으로 시작할 수 없다.
