@@ -40,7 +40,8 @@ const references = Object.fromEntries(methods.split('\n').filter(line=>/^\| S\d\
 const rank = p => [1,2,6].includes(p) ? `공동 ${p}순위` : `${p}순위`;
 const table = rows.map(r => `| ${rank(r.priority)} | ${r.id} | ${r.name} | ${r.description} | ${r.target} | ${r.method} |`).join('\n');
 const methodsForMain = methods.replaceAll('../../architecture/','../architecture/')
-  .replaceAll('](functional-coverage.json)','](quality-attributes/functional-coverage.json)');
+  .replaceAll('](functional-coverage.json)','](quality-attributes/functional-coverage.json)')
+  .replaceAll('](evaluation-plan.json)','](quality-attributes/evaluation-plan.json)');
 const markdown = `# VIA 품질 요구사항 발표자료\n\n` +
 `> 작성일: ${data.date} / 근거 기반 목표 제안 / 구현 및 측정 결과 없음\n\n` +
 `## 리뷰 반영 계획과 결과\n\n` +
@@ -53,12 +54,13 @@ const markdown = `# VIA 품질 요구사항 발표자료\n\n` +
 `## 우선순위별 품질 요구사항\n\n` +
 `| 우선순위 | ID | QA명 | 한 문장 설명 | 단일 목표 수치 | 측정 방법 요약 |\n` +
 `| --- | --- | --- | --- | --- | --- |\n${table}\n\n` +
-`모든 목표는 제안값이다. 논문의 타 시스템 결과를 VIA의 실적으로 옮기지 않는다. 특히 정확 처리율 90%, 변경 요소 3개, 메모리 16GB는 아래에 공개한 VIA의 목표 선택이다.\n\n` +
+`모든 목표는 제안값이다. 타 시스템의 공개 결과와 VIA의 실제 성능은 구분한다. 정확 처리율 95%의 참조 근거와 VIA 자체 메모리 16GB의 계산 및 전체 시험 조건을 아래에 공개한다.\n\n` +
 `## 발표 파일\n\n` +
 `- [편집 가능한 PowerPoint](quality-attributes/VIA-quality-attributes.pptx)\n` +
 `- [미리보기](quality-attributes/index.html)\n` +
 `- [목표와 문안 데이터](quality-attributes/quality-attributes.json)\n` +
 `- [94개 기능 단위 목록](quality-attributes/functional-coverage.json)\n` +
+`- [공통 조건과 DP별 시험 설계](quality-attributes/evaluation-plan.json)\n` +
 `- [측정 설계 편집 원본](quality-attributes/measurement-design.md)\n\n` +
 `![품질 요구사항 1페이지](quality-attributes/quality-attributes-01.png)\n\n` +
 `![품질 요구사항 2페이지](quality-attributes/quality-attributes-02.png)\n\n` +

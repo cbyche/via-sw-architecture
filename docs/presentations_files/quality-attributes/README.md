@@ -11,7 +11,9 @@
 | [index.html](index.html) | 두 페이지 미리보기 |
 | [quality-attributes.json](quality-attributes.json) | 단일 목표, 문안, 원본 명칭과 근거 ID |
 | [functional-coverage.json](functional-coverage.json) | 기능 모집단 94개 ID와 1880회 시험 규모 제안 |
+| [evaluation-plan.json](evaluation-plan.json) | 공통 조건, 시험군, DP별 구체 8개 상황과 관측 oracle |
 | [measurement-design.md](measurement-design.md) | 상세 측정 설계의 편집 원본 |
+| [review-response.md](review-response.md) | 독립 심사 리뷰의 지적과 수정 및 재확인 범위 |
 | [verification.md](verification.md) | 제작 검사와 확인 범위 |
 | [생성 스크립트](../../../scripts/presentations/generate_quality_attributes.mjs) | 문서와 native table 및 notes 생성 |
 | [일치 검사](../../../scripts/presentations/check_quality_attributes.py) | 내용과 모집단 및 파일 구조 검사 |

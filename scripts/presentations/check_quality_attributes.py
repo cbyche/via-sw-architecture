@@ -44,8 +44,30 @@ def main():
             assert row[field].strip(), (row["id"], field)
         assert isinstance(row["metric"]["value"], (int, float))
         assert len(re.findall(r"[≤≥=]", row["target"])) == 1
-        assert len(re.findall(r"\d+(?:\.\d+)?", row["target"].replace("p95", ""))) == 1
+        assert len(re.findall(r"\d+(?:\.\d+)?", row["target"])) == 1
         assert row["sources"]
+
+    assert next(r for r in ROWS if r["id"] == "V-01")["metric"]["value"] == 95
+    for row in ROWS:
+        assert "p95" not in json.dumps(row, ensure_ascii=False)
+    for vid in ("V-04", "V-05", "V-07"):
+        assert next(r for r in ROWS if r["id"] == vid)["target"].startswith("평균")
+
+    plan = json.loads((OUT / "evaluation-plan.json").read_text())
+    assert plan["status"] == "PRESENTATION_EVALUATION_DESIGN_NOT_FROZEN_NOT_EXECUTED"
+    assert plan["populations"]["functional"]["accuracyRequiredSuccesses"] == 1786
+    assert sum(plan["populations"]["memory"]["phasesMinutes"]) == 480
+    assert plan["device"]["ramGB"] == 32 and plan["device"]["dedicatedVramGB"] == 8
+    assert len(plan["dpComparisons"]) == 5
+    assert {d["id"] for d in plan["dpComparisons"]} == {"04-41", "04-42", "04-43", "04-44", "04-45"}
+    for dp in plan["dpComparisons"]:
+        assert len(dp["scenarios"]) == 8 and dp["trials"] == 8 * 3 * 4 == 96
+        assert set(dp["directQualityPaths"] + dp["regressionQualityPaths"]) == {r["id"] for r in ROWS}
+        assert not set(dp["directQualityPaths"]) & set(dp["regressionQualityPaths"])
+        for case in dp["scenarios"]:
+            assert case["inputSituation"] and case["oracleAndObservation"]
+            assert len(case["conditions"]) == 3 and len(case["seeds"]) == 4
+            assert case["requiredCaseManifest"] == "PENDING_EXACT_FIXTURE_AND_ORACLE"
 
     population = json.loads((OUT / "functional-coverage.json").read_text())
     expected_variants = set("UC-" + a + "." + b for a, b in re.findall(
@@ -54,6 +76,8 @@ def main():
     assert set(population["variants"]) == expected_variants
     assert population["trialCount"] == 94 * 5 * 4 == 1880
     methods = (OUT / "measurement-design.md").read_text()
+    assert "p95" not in methods and "무한대 지연" not in methods
+    assert "목표 성공 수 = 1,786회 이상" in methods
     for row in ROWS:
         assert " " + row["id"] + " " + row["name"] in methods
         for source in row["sources"]:
@@ -84,6 +108,8 @@ def main():
             body = tables[0].findall("a:tr", NS)[1:]
             assert len(body) == 5
             notes = texts(ET.fromstring(pptx.read(f"ppt/notesSlides/notesSlide{number}.xml")))
+            # PPT paragraphs store line breaks as XML structure, not a:t characters.
+            assert re.sub(r"\s+", "", methods) in re.sub(r"\s+", "", notes), "Full current measurement source must be present in notes"
             assert not re.search(r"[\u00b7\u2027\u2219\u30fb]", texts(root) + notes)
             for native, row in zip(body, ROWS[:5] if number == 1 else ROWS[5:]):
                 cells = native.findall("a:tc", NS)
@@ -112,7 +138,7 @@ def main():
     Links().feed((OUT / "index.html").read_text())
     for number in (1, 2):
         assert (OUT / f"quality-attributes-0{number}.png").read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
-    print("PASS: 10 reviewed V IDs, source aliases/priorities, one scalar target per row, 94 variants/1880 trials, evidence, no middle dots, MD/PPT/notes agreement, 2 native tables and local links")
+    print("PASS: 10 reviewed V IDs, source aliases/priorities, one scalar target per row, 94 variants/1880 trials, five DP populations/480 trials, average time metrics, evidence, no middle dots, MD/PPT/notes agreement, 2 native tables and local links")
 
 
 if __name__ == "__main__":
