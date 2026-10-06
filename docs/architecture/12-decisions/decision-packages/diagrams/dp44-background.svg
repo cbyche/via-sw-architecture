@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
-<title id="title">04-44. 계속 듣고 응답하는 대화의 실행 구조 — DP 배경</title>
+<title id="title">04-44. 반응성을 위한 VIA 지속 입력과 Response 전달 설계 — DP 배경</title>
 <defs>
 <marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
 <marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
@@ -10,60 +10,73 @@
 <rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
 <text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
 <text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-44</text>
-<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-44. 계속 듣고 응답하는 대화의 실행 구조</text>
+<text id="n4-0" data-width="1780" x="64" y="107.32" text-anchor="start" font-size="46" font-weight="700" fill="#18232E">04-44. 반응성을 위한 VIA 지속 입력과 Response 전달 설계</text>
 <polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="52"/>
-<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">VIA가 생각하거나 말하는 동안에도 새 발화와 업무 사건이 도착한다</text>
-<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">입력은 계속 받고, 현재 정정과 기존 업무의 질문·결과를 같은 대화에서 올바르게 이어가야 한다.</text>
+<text id="n7-0" data-width="1756" x="82" y="186.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">설명 도중 겹치는 새 발화와 다른 Task의 질문</text>
+<text id="n8-0" data-width="1792" x="64" y="243.0" text-anchor="start" font-size="25" font-weight="400" fill="#5F6B77">현재 음성 중단과 Request 처리 중에도 이어지는 메일 Task의 질문 수신</text>
 <polyline id="n9" points="1213,285 1213,852" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">구조 설계에서 어려운 점</text>
+<text id="n10-0" data-width="596" x="1260" y="317.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">설계 고려 사항</text>
 <polyline id="n11" points="64,875 1856,875" fill="none" stroke="#2858A5" stroke-width="2"/>
 <text id="n12-0" data-width="165" x="64" y="931.76" text-anchor="start" font-size="28" font-weight="700" fill="#B63732">설계 과제</text>
-<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">겹쳐 도착하는 사건의 후속 실행과 중간 상태를 어떻게 조직할 것인가?</text>
-<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">A 중앙 비동기 Orchestration/Mediator / B 반응형 Dataflow/Pipes-and-Filters</text>
-<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 반응성·전달 정확성과 대기열·취소·자원 경합</text>
+<text id="n13-0" data-width="1616" x="240" y="928.6" text-anchor="start" font-size="30" font-weight="700" fill="#18232E">후속 처리, 대기 상태와 전달 차례를 이어가는 실행 구조 설계</text>
+<text id="n14-0" data-width="1616" x="240" y="971.08" text-anchor="start" font-size="24" font-weight="400" fill="#2858A5">사용자 발화 시작 시 현재 음성 중단 / Task 취소는 취소 의도 확인 후 별도 처리</text>
+<text id="n15-0" data-width="1260" x="64" y="1036.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">품질 쟁점: 반응성 / 기능 정확성 / 자원 활용성</text>
 <text id="n16-0" data-width="480" x="1856" y="1036.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
-<text id="n17-0" data-width="1120" x="64" y="313.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">보고서 설명을 듣다가  “잠깐, 표부터 설명해줘.”</text>
-<path id="n18" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M64 355H581L599 373V457H64Z M581 355V373H599"/>
-<text id="n19-0" data-width="495" x="80" y="391.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">사용자: 새 발화·정정 u2</text>
-<text id="n19-1" data-width="495" x="80" y="423.5" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">현재 음성 P1을 즉시 중단</text>
-<path id="n20" fill="#F2F6FA" stroke="#CDD6DE" stroke-width="1.7" d="M650 355H1156L1174 373V457H650Z M1156 355V373H1174"/>
-<text id="n21-0" data-width="484" x="666" y="391.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">별도 업무: 질문 Q1 / 결과 r1 도착</text>
-<text id="n21-1" data-width="484" x="666" y="423.5" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">현재 발화와 다른 시점에 발생</text>
-<rect id="n22" fill="white" stroke="#18232E" stroke-width="1.7" x="64" y="539" width="440" height="72"/>
-<text id="n23-0" data-width="424" x="284.0" y="581.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Interaction Manager</text>
-<rect id="n24" fill="white" stroke="#18232E" stroke-width="1.7" x="734" y="539" width="440" height="72"/>
-<text id="n25-0" data-width="424" x="954.0" y="581.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Task Manager</text>
-<rect id="n26" fill="white" stroke="#18232E" stroke-width="1.7" x="64" y="732" width="440" height="72"/>
-<text id="n27-0" data-width="424" x="284.0" y="774.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Request Controller</text>
-<rect id="n28" fill="white" stroke="#18232E" stroke-width="1.7" x="734" y="732" width="440" height="72"/>
-<text id="n29-0" data-width="424" x="954.0" y="774.92" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">Response Manager</text>
-<polyline id="n30" points="284,457 284,539" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
-<rect id="n31" fill="white" stroke="none" stroke-width="1.7" x="298" y="474" width="285" height="32.6"/>
-<text id="n32-0" data-width="275" x="303" y="496.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">1 지속 수신·인식</text>
-<polyline id="n33" points="954,457 954,539" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
-<rect id="n34" fill="white" stroke="none" stroke-width="1.7" x="672" y="474" width="280" height="32.6"/>
-<text id="n35-0" data-width="270" x="677" y="496.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">2 확인된 업무 사건</text>
-<polyline id="n36" points="284,611 284,732" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
-<rect id="n37" fill="white" stroke="none" stroke-width="1.7" x="298" y="650" width="285" height="32.6"/>
-<text id="n38-0" data-width="275" x="303" y="672.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">3 현재 입력 해소</text>
-<polyline id="n39" points="954,611 954,732" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
-<rect id="n40" fill="white" stroke="none" stroke-width="1.7" x="672" y="650" width="300" height="32.6"/>
-<text id="n41-0" data-width="290" x="677" y="672.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">4 질문·결과 전달 준비</text>
-<polyline id="n42" points="504,768 734,768" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
-<rect id="n43" fill="white" stroke="none" stroke-width="1.7" x="501" y="809" width="236" height="32.6"/>
-<text id="n44-0" data-width="226" x="506" y="831.24" text-anchor="start" font-size="22" font-weight="400" fill="#2858A5">현재 의미·허용</text>
-<polyline id="n45" points="1174,752 1192,752 1192,513 470,513 470,539" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
-<text id="n46-0" data-width="226" x="619" y="601.24" text-anchor="middle" font-size="22" font-weight="400" fill="#2858A5">게시 허용 후 실제 출력</text>
-<text id="n46-1" data-width="226" x="619" y="629.84" text-anchor="middle" font-size="22" font-weight="400" fill="#2858A5">전달 결과는 다시 기록</text>
-<text id="n47-0" data-width="1120" x="64" y="860.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">음성 중단은 업무 취소와 다르다. 생성 완료는 실제 전달과 다르다.</text>
-<text id="n48-0" data-width="596" x="1260" y="389.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">01  입력 보호와 처리 병행</text>
-<text id="n49-0" data-width="596" x="1260" y="434.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">긴 해석 중에도 입력과 중단을 받음.</text>
-<text id="n49-1" data-width="596" x="1260" y="469.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">비동기는 두 안의 공통 조건이다.</text>
-<text id="n50-0" data-width="596" x="1260" y="540.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">02  정정 전 효과와 전달 제어</text>
-<text id="n51-0" data-width="596" x="1260" y="585.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">미전송 효과·오래된 응답을 보류하고,</text>
-<text id="n51-1" data-width="596" x="1260" y="620.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">실제로 들은 범위에 맞게 이어간다.</text>
-<text id="n52-0" data-width="596" x="1260" y="691.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">03  분기·대기·합류의 조직</text>
-<text id="n53-0" data-width="596" x="1260" y="736.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">중앙의 명령·반환 관리와</text>
-<text id="n53-1" data-width="596" x="1260" y="771.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">소비자 활성화·국소 결합을 비교한다.</text>
+<text id="n17-0" data-width="310" x="80" y="307.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">1  처음 발화와 처리 시작</text>
+<text id="n18-0" data-width="310" x="464" y="307.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">2  보고서 설명 도중</text>
+<text id="n19-0" data-width="310" x="848" y="307.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">3  새 발화 해석 후</text>
+<polyline id="n20" points="410,303 441,303" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<polyline id="n21" points="794,303 825,303" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
+<rect id="n22" fill="#EAF0F8" stroke="none" stroke-width="1.7" x="64" y="330" width="342" height="153"/>
+<rect id="n23" fill="#FFF0EC" stroke="none" stroke-width="1.7" x="448" y="330" width="342" height="153"/>
+<rect id="n24" fill="#EAF0F8" stroke="none" stroke-width="1.7" x="832" y="330" width="342" height="153"/>
+<text id="n25-0" data-width="310" x="80" y="360.4" text-anchor="start" font-size="20" font-weight="700" fill="#2858A5">User Turn / 최초 발화</text>
+<text id="n26-0" data-width="310" x="80" y="399.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">“보고서 내용 설명해주고,</text>
+<text id="n26-1" data-width="310" x="80" y="428.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">내일 회의 안내 메일</text>
+<text id="n26-2" data-width="310" x="80" y="457.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">초안도 만들어줘.”</text>
+<text id="n27-0" data-width="310" x="464" y="360.4" text-anchor="start" font-size="20" font-weight="700" fill="#B63732">User Turn / 끼어들기</text>
+<text id="n28-0" data-width="310" x="464" y="406.84" text-anchor="start" font-size="27" font-weight="700" fill="#18232E">“잠깐, 표부터</text>
+<text id="n28-1" data-width="310" x="464" y="440.84" text-anchor="start" font-size="27" font-weight="700" fill="#18232E">설명해줘.”</text>
+<text id="n29-0" data-width="310" x="848" y="360.4" text-anchor="start" font-size="20" font-weight="700" fill="#2858A5">Response / 현재 Request</text>
+<text id="n30-0" data-width="310" x="848" y="406.84" text-anchor="start" font-size="27" font-weight="700" fill="#2858A5">표 설명으로 전환</text>
+<text id="n31-0" data-width="310" x="848" y="451.24" text-anchor="start" font-size="22" font-weight="400" fill="#5F6B77">Text 기록과 음성 전달</text>
+<rect id="n32" fill="#F3F6FA" stroke="#CDD6DE" stroke-width="1.7" x="64" y="503" width="1110" height="123"/>
+<text id="n33-0" data-width="1060" x="84" y="537.08" text-anchor="start" font-size="24" font-weight="700" fill="#2858A5">보고서 설명 / 계속 듣기와 현재 음성 제어</text>
+<text id="n34-0" data-width="310" x="80" y="583.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">Response 음성 전달 중</text>
+<polyline id="n35" points="89,609 89,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<polyline id="n36" points="111,603 111,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<polyline id="n37" points="133,594 133,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<polyline id="n38" points="155,606 155,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<polyline id="n39" points="177,599 177,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<polyline id="n40" points="199,608 199,617" fill="none" stroke="#2858A5" stroke-width="5"/>
+<text id="n41-0" data-width="310" x="464" y="583.16" text-anchor="start" font-size="23" font-weight="700" fill="#B63732">현재 음성 즉시 중단</text>
+<text id="n42-0" data-width="310" x="464" y="616.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">새 발화 수신 및 해석</text>
+<text id="n43-0" data-width="310" x="848" y="583.16" text-anchor="start" font-size="23" font-weight="700" fill="#2858A5">현재 발화에 맞춘 설명</text>
+<text id="n44-0" data-width="310" x="848" y="616.32" text-anchor="start" font-size="21" font-weight="400" fill="#5F6B77">이전 설명의 전달 범위 기록</text>
+<rect id="n45" fill="#F0F8F7" stroke="#087E8B" stroke-width="1.7" x="64" y="650" width="1110" height="185"/>
+<text id="n46-0" data-width="1060" x="84" y="686.08" text-anchor="start" font-size="24" font-weight="700" fill="#087E8B">별도 메일 초안 Task / Downstream Agent의 실행과 질문</text>
+<text id="n47-0" data-width="310" x="80" y="730.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">Delegation 후 초안 작성</text>
+<text id="n48-0" data-width="310" x="80" y="769.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">Agent Execution 진행 중</text>
+<text id="n49-0" data-width="310" x="80" y="810.32" text-anchor="start" font-size="21" font-weight="400" fill="#5F6B77">보고서 설명과 병행</text>
+<text id="n50-0" data-width="310" x="464" y="730.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">메일 Task의 질문 도착</text>
+<text id="n51-0" data-width="310" x="464" y="770.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">“메일 받는 사람은</text>
+<text id="n51-1" data-width="310" x="464" y="800.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">누구인가요?”</text>
+<text id="n52-0" data-width="310" x="848" y="729.24" text-anchor="start" font-size="22" font-weight="700" fill="#087E8B">전달 차례 결정 후 질문 전달</text>
+<text id="n53-0" data-width="310" x="848" y="762.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">“메일 초안의 받는 사람은</text>
+<text id="n53-1" data-width="310" x="848" y="790.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">누구인가요?”</text>
+<text id="n54-0" data-width="310" x="848" y="824.48" text-anchor="start" font-size="19" font-weight="400" fill="#5F6B77">사용자 답변까지 실행 대기</text>
+<polyline id="n55" points="426,550 426,617" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<polyline id="n56" points="426,702 426,826" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<polyline id="n57" points="810,550 810,617" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<polyline id="n58" points="810,702 810,826" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
+<text id="n59-0" data-width="596" x="1260" y="388.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">설명 중에도 계속 듣기</text>
+<text id="n60-0" data-width="596" x="1260" y="433.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">새 발화의 수신과 현재 음성 중단,</text>
+<text id="n60-1" data-width="596" x="1260" y="468.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">해석 지연에 따른 입력 누락 방지</text>
+<text id="n61-0" data-width="596" x="1260" y="551.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">겹친 사건의 후속 처리</text>
+<text id="n62-0" data-width="596" x="1260" y="596.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">표 설명 Request와 메일 질문의</text>
+<text id="n62-1" data-width="596" x="1260" y="631.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">진행 및 대기 상태 연결</text>
+<text id="n63-0" data-width="596" x="1260" y="714.76" text-anchor="start" font-size="28" font-weight="700" fill="#2858A5">전달 차례와 실제 전달</text>
+<text id="n64-0" data-width="596" x="1260" y="759.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">현재 발화에 맞는 Response 선택,</text>
+<text id="n64-1" data-width="596" x="1260" y="794.0" text-anchor="start" font-size="25" font-weight="400" fill="#18232E">질문 생성과 실제 전달의 구분</text>
 </g></svg>

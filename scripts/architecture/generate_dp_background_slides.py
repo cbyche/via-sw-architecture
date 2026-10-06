@@ -213,122 +213,258 @@ def slide41():
 
 
 def slide42():
-    s = Slide(42, '대화와 업무의 서로 다른 수명',
-        '대화가 바뀌거나 요청 처리가 끝나도, 업무와 대기 질문은 남아 있다',
-        '같은 업무의 후속 수정은 Task를 유지하면서 새 실행으로 이어져야 한다.',
-        '서로 다른 수명의 상태와 실행을 어떤 소유 경계로 관리할 것인가?',
-        'A 모듈형 통합 Core와 공동 확정 / B 독립 대화·업무 서비스의 명령·접수',
-        '대화·업무 연결의 정확성, 변경 범위와 교차 상태 복구')
-    s.text(64, 288, 1120, ['보고서 위임 후 다른 대화로 이동하고, 돌아와 답한 뒤 수정'], 28, INK, True)
-    xs = [340, 486, 640, 795, 950, 1100]
-    events = [('위임 접수', 'R1 종료'), ('질문 제시', 'Q1 대기'), ('다른 대화', 'C2 이동'), ('복귀·답변', 'Q1 해소'), ('결과 도착', 'X1 종료'), ('후속 수정', 'X2 시작')]
-    for x, (a, b) in zip(xs, events):
-        s.text(x, 354, 150, [a, b], 22, MUTED, align='center')
-        s.line([(x, 420), (x, 768)], color=LINE, arrow=False, dashed=True, width=1)
-    rows = [('Conversation C1', 453, 340, 1135, INK), ('Request R1', 522, 315, 358, BLUE),
-            ('Question Q1', 591, 486, 795, TEAL), ('Task T1', 660, 340, 1135, BLUE),
-            ('Execution X1 / X2', 729, 340, 950, MUTED)]
-    for name, y, start, end, color in rows:
-        s.text(64, y-15, 266, [name], 23, color, True)
-        ongoing = name in ('Conversation C1', 'Task T1')
-        s.line([(start, y), (end, y)], color=color, arrow=ongoing, width=5)
-        if not ongoing:
-            s.rect(end-4, y-8, 8, 16, color, 'none')
-    s.line([(1100, 729), (1160, 729)], color=TEAL, arrow=True, width=5)
-    s.text(64, 794, 1120, ['화살표는 계속 유지, 끝 막대는 처리 종료를 뜻한다. 종료 후에도 기록은 남는다.'], 23, MUTED)
-    s.text(64, 829, 1120, ['선의 길이는 측정 시간이 아니다.'], 22, MUTED)
-    s.challenge(364, '01  유지할 관계가 서로 다름', ['위임 요청은 끝나도', 'Task와 질문의 연결은 유지한다.'])
-    s.challenge(515, '02  답변·정정의 연결과 확정', ['“응”을 실제 제시 질문에 연결하고,', '관련 대화·업무 변경을 맞춘다.'])
-    s.challenge(666, '03  논리 수명과 실행 경계', ['양안 모두 다른 논리 수명을 지원.', '독립 소유는 별도의 구조 선택이다.'])
+    s = Slide(
+        42, '변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
+        '여러 Request의 처리 완료 이후에도 이어지는 Task 추적',
+        'Conversation 안의 발화 → Request 구분 → 새 Task 생성 또는 기존 Task 연결',
+        '서로 다른 수명의 기록과 상태를 관리하는 SW의 책임과 협력 설계',
+        'Delegation / Downstream Agent에 작업 전달     Agent Execution / 전달한 작업의 개별 실행',
+        '기능 정확성 / 변경 용이성 / 복구성',
+        considerations_title='설계 고려 사항')
+    xs, cw = [64, 448, 832], 342
+
+    # The entire chronological set of inputs and handling records belongs to
+    # the SAME Conversation. It is a record container, not a conversion step
+    # after speech and not an A/B process boundary.
+    s.rect(64, 283, 1110, 270, 'white', LINE)
+    s.rect(64, 283, 1110, 44, '#EAF0F8', 'none')
+    s.text(84, 292, 760, ['Conversation / 이어지는 입력과 응답 기록'], 26, BLUE, True)
+    s.text(1154, 297, 310, ['User Turn / 한 번의 발화'], 19, BLUE, align='right')
+    phases = ['1  처음 발화', '2  잠시 뒤 발화', '3  보고서 완료 후 발화']
+    quotes = [
+        ['“이번 달 매출보고서', '만들어주고, 내일 회의 안내', '메일 초안도 만들어줘.”'],
+        ['“보고서는 어디까지', '됐어?”'],
+        ['“결론 부분만 짧게', '바꿔줘.”'],
+    ]
+    for col, (x, phase, lines) in enumerate(zip(xs, phases, quotes)):
+        s.text(x+16, 336, 310, [phase], 23, INK, True)
+        s.text(x+16, 371, 310, lines, 24, INK, True, leading=29)
+        s.text(x+16, 462, 310, [f'해석한 Request {2 if col==0 else 1}개'], 19, MUTED)
+    s.line([(412, 350), (442, 350)], color=MUTED, width=2)
+    s.line([(796, 350), (826, 350)], color=MUTED, width=2)
+    s.rect(80, 491, 146, 32, '#E9EDF2', 'none')
+    s.text(90, 496, 126, ['보고서 작성'], 21, TEAL, True)
+    s.rect(238, 491, 152, 32, '#E9EDF2', 'none')
+    s.text(250, 496, 128, ['메일 초안'], 21, MUTED, True)
+    for x, text in [(464, '보고서 진행 확인'), (848, '보고서 결론 수정')]:
+        s.rect(x, 491, 310, 32, '#E9EDF2', 'none')
+        s.text(x+12, 496, 286, [text], 21, TEAL, True)
+    for x, status in zip(xs, ['Agent 접수 확인 후 처리 완료',
+                             '확인된 상태로 답변 완료',
+                             '수정 접수 확인 후 처리 완료']):
+        s.text(x+16, 531, 310, [status], 18, MUTED)
+
+    # Two continuous goal folders share the SAME time columns above. Their
+    # distinct terminal times and retained results stay visible, including mail.
+    # Delegation is an action leading to an external execution, not a long-lived
+    # identity parallel to Task. Labels show common behavior, not A/B authority.
+    s.rect(64, 566, 168, 20, '#E4F3F2', TEAL)
+    s.rect(64, 580, 1110, 133, '#F0F8F7', TEAL)
+    s.rect(64, 580, 1110, 35, '#E4F3F2', 'none')
+    s.text(84, 585, 1070, ['같은 보고서 Task / 계속 추적할 목표와 결과'], 24, TEAL, True)
+    s.text(80, 623, 310, ['Task 생성 후 Delegation'], 21, TEAL)
+    s.text(80, 654, 310, ['Agent Execution 1'], 22, INK, True)
+    s.text(80, 683, 310, ['보고서 작성 시작'], 21, TEAL)
+    s.text(464, 623, 310, ['작성 실행 진행 중'], 24, TEAL, True)
+    s.text(464, 664, 310, ['상태 조회 / 새 실행 없음'], 21, MUTED)
+    s.text(848, 623, 310, ['작성 실행 종료'], 21, MUTED)
+    s.text(848, 653, 310, ['결론 수정 Delegation'], 21, TEAL)
+    s.text(848, 683, 310, ['새 Agent Execution 2 진행 중'], 22, TEAL, True)
+
+    s.rect(64, 723, 168, 20, '#F0F2F5', MUTED)
+    s.rect(64, 737, 1110, 116, '#F6F7F9', MUTED)
+    s.rect(64, 737, 1110, 31, '#E9EDF2', 'none')
+    s.text(84, 741, 1070, ['메일 초안 Task / 별도 목표와 결과 추적'], 23, MUTED, True)
+    s.text(80, 779, 310, ['Task 생성 후 Delegation'], 21, MUTED)
+    s.text(80, 815, 310, ['Agent Execution / 초안 작성 시작'], 20, MUTED)
+    s.text(464, 779, 310, ['초안 작성 완료'], 24, MUTED, True)
+    s.text(464, 815, 310, ['결과 보관'], 21, MUTED)
+    s.text(848, 793, 310, ['완료 상태와 결과 유지'], 23, MUTED)
+
+    # Matching time columns explain evolving state; separators are visual
+    # alignment only, not Components, queues, transactions or measured time.
+    for x in [426, 810]:
+        s.line([(x, 336), (x, 546)], color=LINE, arrow=False, dashed=True, width=1)
+        s.line([(x, 621), (x, 704)], color=LINE, arrow=False, dashed=True, width=1)
+        s.line([(x, 776), (x, 846)], color=LINE, arrow=False, dashed=True, width=1)
+
+    s.challenge(363, '발화와 처리 기록의 연결', [
+        '한 발화의 Request 구분과',
+        'Conversation 기록의 유지'])
+    s.challenge(526, '서로 다른 완료 시점', [
+        'Request 처리 완료, Task 목표 완료와',
+        'Agent Execution 종료의 구분'])
+    s.challenge(689, '상태 관리와 연결 복구', [
+        '같은 Task의 후속 Request 및 실행 연결,',
+        '관리 SW 중단 후 기록과 상태 복구'])
     return s
 
 
 def slide43():
-    s = Slide(43, '요청 의미의 생산 책임',
-        '한 번의 정정이 대상·Task 연결·요청 관계를 함께 바꿀 수 있다',
-        'VIA는 의도부터 처리 방향까지 판단하고, 기존 조건을 유지하면서 바뀐 부분을 반영해야 한다.',
-        '서로 얽힌 의미를 통합 생산할 것인가, 기능별 생산자가 협력할 것인가?',
-        'A 통합 의미 생산 / C 여섯 기능의 의미 생산과 코드 조정',
-        '의미 정확성·누락 방지와 부분 판단의 조정·추론 비용')
-    s.text(64, 288, 1120, ['“보고서는 PDF로, 메일에는 그 보고서의 결론을 넣어줘.”'], 28, INK, True)
-    s.text(64, 333, 1120, ['정정  “메일에는 결론 대신 표만 넣어줘.”'], 28, RED, True)
-    s.rect(64, 402, 1110, 363, 'white', LINE, dashed=True)
-    s.text(88, 416, 1060, ['Request Interpreter'], 26, INK, True)
-    values = [(['F1 요청 의도', '목표와 PDF 조건'], 88, 476),
-              (['F2 지칭 대상', '보고서의 결론 / 표'], 452, 476),
-              (['F3 대화·Task 연결', '보고서 / 메일 후보'], 816, 476),
-              (['F4 요청 간 관계', '어느 결과를 사용할까'], 88, 628),
-              (['F5 정정 범위', '교체할 내용과 유지 조건'], 452, 628),
-              (['F6 처리 방향', '직접 응답 / 위임 / 확인'], 816, 628)]
-    for lines, x, y in values:
-        s.note(x, y, 330, 106, lines, 24)
-    s.line([(418, 529), (452, 529)], color=BLUE, arrow=False, dashed=True)
-    s.line([(782, 529), (816, 529)], color=BLUE, arrow=False, dashed=True)
-    s.line([(253, 582), (253, 628)], color=BLUE, arrow=False, dashed=True)
-    s.line([(617, 582), (617, 628)], color=BLUE, arrow=False, dashed=True)
-    s.line([(981, 582), (981, 628)], color=BLUE, arrow=False, dashed=True)
-    s.text(64, 794, 1120, ['메일 내용·결과 의존은 변경 / 보고서의 PDF 조건은 유지'], 26, BLUE, True)
-    s.text(64, 834, 1120, ['F1~F6은 공통 판단 기능이며, 고정 실행 순서나 모델 호출 수가 아니다.'], 22, MUTED)
-    s.challenge(364, '01  Task 연결도 판단 결과', ['어느 업무인지 미리 정해 두면', '새 요청·직접 대화를 놓친다.'])
-    s.challenge(515, '02  부분 의미의 상호 의존', ['대상이 바뀌면 관계와 정정 범위도', '다시 판단해야 할 수 있다.'])
-    s.challenge(666, '03  집중 판단과 전체 일관성', ['기능별 집중은 개선의 후보지만,', '불일치·왕복·맥락 중복도 생긴다.'])
+    s = Slide(
+        43, '기능 정확성을 위한 VIA Request 의미 판단 설계',
+        '정정한 내용뿐 아니라 관련 조건과 연결까지 함께 판단',
+        '메일의 결론을 표로 바꿀 때, 보고서 형식과 관련 Task도 함께 확인',
+        '서로 영향을 주는 의미 판단의 책임과 협력 설계',
+        '', '기능 정확성 / 기능 지원 범위 / 변경 용이성',
+        considerations_title='설계 고려 사항')
+    s.text(64, 282, 1110, ['상황 / 보고서 작성과 메일 초안 작성 진행 중'], 25, MUTED)
+
+    # User-visible conditions and their correction, not Modules or processing stages.
+    for x, w, fill in [(64, 540, '#EAF0F8'), (652, 522, '#FFF0EC')]:
+        s.rect(x, 328, w, 140, fill, 'none')
+    s.text(84, 340, 500, ['먼저 / User Turn'], 20, BLUE, True)
+    s.text(84, 375, 500, ['“보고서는 PDF로, 메일에는', '그 보고서의 결론을 넣어줘.”'], 27, INK, True, leading=32)
+    s.text(84, 440, 500, ['Request 해석 / PDF 조건과 메일 내용'], 19, BLUE)
+    s.text(672, 340, 482, ['잠시 뒤 / 정정 User Turn'], 20, RED, True)
+    s.text(672, 375, 482, ['“메일에는 결론 대신', '표만 넣어줘.”'], 27, INK, True, leading=32)
+    s.text(672, 440, 482, ['Request 해석 / 메일 내용 정정'], 19, RED)
+    s.line([(616, 390), (640, 390)], color=MUTED)
+
+    s.text(64, 476, 1110, ['정정으로 바뀌는 내용과 유지할 조건'], 26, INK, True)
+    # Conceptual documents show requested properties, not completed Agent facts.
+    s.note(64, 525, 350, 151, ['보고서 Task의 조건'], 25, '#F0F8F7', True, TEAL)
+    s.text(84, 578, 310, ['형식 / PDF 유지', '참조할 결과 / 결론과 표'], 24, INK, leading=34)
+    s.line([(426, 609), (686, 609)], color=BLUE)
+    s.text(441, 551, 235, ['보고서 결과 참조'], 23, BLUE, True)
+    s.text(441, 637, 235, ['결과 준비 후 사용'], 21, MUTED)
+    s.note(698, 525, 476, 151, ['메일 초안 Task의 조건'], 25, '#F3F6FA', True, BLUE)
+    s.text(718, 580, 436, ['기존 / 보고서 결론'], 24, MUTED)
+    s.line([(797, 595), (972, 595)], color=RED, arrow=False)
+    s.text(718, 624, 436, ['변경 / 같은 보고서의 표만 사용'], 24, RED, True)
+
+    s.text(64, 704, 1110, ['함께 판단할 의미 / SW 모듈이나 실행 순서가 아닌 판단 항목'], 22, MUTED)
+    values = [
+        (64, 744, '의도', 'PDF 보고서와 메일 초안'),
+        (448, 744, 'Referent', '같은 보고서의 표'),
+        (832, 744, 'Task Association', '관련 보고서 및 메일 Task'),
+        (64, 807, 'Request 관계', '보고서 결과를 메일에 사용'),
+        (448, 807, '정정 범위', 'PDF 유지 / 메일 내용 교체'),
+        (832, 807, '처리 방향', 'Delegation 및 자료 대기'),
+    ]
+    for x, y, name, value in values:
+        s.text(x, y, 342, [name], 23, BLUE, True)
+        s.text(x, y+29, 342, [value], 22, INK)
+    s.challenge(363, '현재 Request의 Task Association', [
+        '전체 발화와 이전 기록을 활용한',
+        '관련 Task의 판단'])
+    s.challenge(526, '변경과 유지 범위의 구분', [
+        '메일 내용과 보고서 참조의 변경,',
+        '기존 PDF 조건의 유지'])
+    s.challenge(689, '서로 관련된 판단의 일치', [
+        'Referent, Task Association과 결과 사용의',
+        '불일치 및 조건 누락 방지'])
     return s
 
 
 def slide44():
-    s = Slide(44, '계속 듣고 응답하는 대화의 실행 구조',
-        'VIA가 생각하거나 말하는 동안에도 새 발화와 업무 사건이 도착한다',
-        '입력은 계속 받고, 현재 정정과 기존 업무의 질문·결과를 같은 대화에서 올바르게 이어가야 한다.',
-        '겹쳐 도착하는 사건의 후속 실행과 중간 상태를 어떻게 조직할 것인가?',
-        'A 중앙 비동기 Orchestration/Mediator / B 반응형 Dataflow/Pipes-and-Filters',
-        '반응성·전달 정확성과 대기열·취소·자원 경합')
-    s.text(64, 288, 1120, ['보고서 설명을 듣다가  “잠깐, 표부터 설명해줘.”'], 28, INK, True)
-    s.note(64, 355, 535, 102, ['사용자: 새 발화·정정 u2', '현재 음성 P1을 즉시 중단'], 25)
-    s.note(650, 355, 524, 102, ['별도 업무: 질문 Q1 / 결과 r1 도착', '현재 발화와 다른 시점에 발생'], 25)
-    s.component(64, 539, 440, 'Interaction Manager')
-    s.component(734, 539, 440, 'Task Manager')
-    s.component(64, 732, 440, 'Request Controller')
-    s.component(734, 732, 440, 'Response Manager')
-    s.line([(284, 457), (284, 539)], '1 지속 수신·인식', (303, 476, 275), size=22)
-    s.line([(954, 457), (954, 539)], '2 확인된 업무 사건', (677, 476, 270), size=22)
-    s.line([(284, 611), (284, 732)], '3 현재 입력 해소', (303, 652, 275), size=22)
-    s.line([(954, 611), (954, 732)], '4 질문·결과 전달 준비', (677, 652, 290), size=22)
-    s.line([(504, 768), (734, 768)], '현재 의미·허용', (506, 811, 226), color=BLUE, size=22)
-    s.line([(1174, 752), (1192, 752), (1192, 513), (470, 513), (470, 539)], color=BLUE, dashed=True)
-    s.text(619, 581, 226, ['게시 허용 후 실제 출력', '전달 결과는 다시 기록'], 22, BLUE, align='center')
-    s.text(64, 839, 1120, ['음성 중단은 업무 취소와 다르다. 생성 완료는 실제 전달과 다르다.'], 23, MUTED)
-    s.challenge(364, '01  입력 보호와 처리 병행', ['긴 해석 중에도 입력과 중단을 받음.', '비동기는 두 안의 공통 조건이다.'])
-    s.challenge(515, '02  정정 전 효과와 전달 제어', ['미전송 효과·오래된 응답을 보류하고,', '실제로 들은 범위에 맞게 이어간다.'])
-    s.challenge(666, '03  분기·대기·합류의 조직', ['중앙의 명령·반환 관리와', '소비자 활성화·국소 결합을 비교한다.'])
+    s = Slide(
+        44, '반응성을 위한 VIA 지속 입력과 Response 전달 설계',
+        '설명 도중 겹치는 새 발화와 다른 Task의 질문',
+        '현재 음성 중단과 Request 처리 중에도 이어지는 메일 Task의 질문 수신',
+        '후속 처리, 대기 상태와 전달 차례를 이어가는 실행 구조 설계',
+        '사용자 발화 시작 시 현재 음성 중단 / Task 취소는 취소 의도 확인 후 별도 처리',
+        '반응성 / 기능 정확성 / 자원 활용성',
+        considerations_title='설계 고려 사항')
+    xs = [64, 448, 832]
+    for x, label in zip(xs, ['1  처음 발화와 처리 시작', '2  보고서 설명 도중', '3  새 발화 해석 후']):
+        s.text(x+16, 286, 310, [label], 23, INK, True)
+    s.line([(410, 303), (441, 303)], color=MUTED)
+    s.line([(794, 303), (825, 303)], color=MUTED)
+
+    # All panels describe occurrences and user-visible delivery. No scheduler,
+    # mediator, stream graph, queue or Component graph prejudges the A/B choice.
+    for x, fill in zip(xs, ['#EAF0F8', '#FFF0EC', '#EAF0F8']):
+        s.rect(x, 330, 342, 153, fill, 'none')
+    s.text(80, 342, 310, ['User Turn / 최초 발화'], 20, BLUE, True)
+    s.text(80, 377, 310, ['“보고서 내용 설명해주고,', '내일 회의 안내 메일', '초안도 만들어줘.”'], 24, INK, True, leading=29)
+    s.text(464, 342, 310, ['User Turn / 끼어들기'], 20, RED, True)
+    s.text(464, 382, 310, ['“잠깐, 표부터', '설명해줘.”'], 27, INK, True, leading=34)
+    s.text(848, 342, 310, ['Response / 현재 Request'], 20, BLUE, True)
+    s.text(848, 382, 310, ['표 설명으로 전환'], 27, BLUE, True)
+    s.text(848, 431, 310, ['Text 기록과 음성 전달'], 22, MUTED)
+
+    s.rect(64, 503, 1110, 123, '#F3F6FA', LINE)
+    s.text(84, 515, 1060, ['보고서 설명 / 계속 듣기와 현재 음성 제어'], 24, BLUE, True)
+    s.text(80, 562, 310, ['Response 음성 전달 중'], 23, INK, True)
+    for i,h in enumerate([8,14,23,11,18,9]):
+        s.line([(89+i*22,617-h), (89+i*22,617)], color=BLUE, arrow=False, width=5)
+    s.text(464, 562, 310, ['현재 음성 즉시 중단'], 23, RED, True)
+    s.text(464, 597, 310, ['새 발화 수신 및 해석'], 21, INK)
+    s.text(848, 562, 310, ['현재 발화에 맞춘 설명'], 23, BLUE, True)
+    s.text(848, 597, 310, ['이전 설명의 전달 범위 기록'], 21, MUTED)
+
+    s.rect(64, 650, 1110, 185, '#F0F8F7', TEAL)
+    s.text(84, 664, 1060, ['별도 메일 초안 Task / Downstream Agent의 실행과 질문'], 24, TEAL, True)
+    s.text(80, 709, 310, ['Delegation 후 초안 작성'], 23, TEAL, True)
+    s.text(80, 750, 310, ['Agent Execution 진행 중'], 21, INK)
+    s.text(80, 791, 310, ['보고서 설명과 병행'], 21, MUTED)
+    s.text(464, 709, 310, ['메일 Task의 질문 도착'], 23, TEAL, True)
+    s.text(464, 749, 310, ['“메일 받는 사람은', '누구인가요?”'], 23, INK, leading=30)
+    s.text(848, 709, 310, ['전달 차례 결정 후 질문 전달'], 22, TEAL, True)
+    s.text(848, 742, 310, ['“메일 초안의 받는 사람은', '누구인가요?”'], 22, INK, leading=28)
+    s.text(848, 807, 310, ['사용자 답변까지 실행 대기'], 19, MUTED)
+    for x in [426, 810]:
+        s.line([(x, 550), (x, 617)], color=LINE, arrow=False, dashed=True, width=1)
+        s.line([(x, 702), (x, 826)], color=LINE, arrow=False, dashed=True, width=1)
+    s.challenge(363, '설명 중에도 계속 듣기', [
+        '새 발화의 수신과 현재 음성 중단,',
+        '해석 지연에 따른 입력 누락 방지'])
+    s.challenge(526, '겹친 사건의 후속 처리', [
+        '표 설명 Request와 메일 질문의',
+        '진행 및 대기 상태 연결'])
+    s.challenge(689, '전달 차례와 실제 전달', [
+        '현재 발화에 맞는 Response 선택,',
+        '질문 생성과 실제 전달의 구분'])
     return s
 
 
 def slide45():
-    s = Slide(45, '기억과 Context의 공급 구조',
-        '과거에 무엇을 고쳤는지는 대화·결과 버전·실제 제시 기록에 흩어져 있다',
-        '“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”에는 기록 사이의 연결이 필요하다.',
-        '과거 관계를 요청마다 조합할 것인가, 공통 파생 기억으로 유지할 것인가?',
-        'A 원본 서비스 조합 / B 공통 파생 기억 저장소',
-        '과거 근거의 정확성·지원 범위, 반복 조회와 생산·저장·삭제 비용')
-    s.text(64, 288, 1120, ['같은 과거 사건을, 새 보고서 요청의 근거로 다시 사용'], 28, INK, True)
-    records = [(64, ['정정 R7', '“짧은 문장, 결론 먼저”'], 'Request Controller'),
-               (444, ['결과 D2 / D3', '수정 전후의 결과 버전'], 'Task Manager'),
-               (824, ['실제 제시 P4', '수정 결과 D3의 전달 기록'], 'Response Manager')]
-    for x, lines, owner in records:
-        s.note(x, 362, 350, 107, lines, 24)
-        s.component(x, 535, 350, owner)
-        s.line([(x+175, 469), (x+175, 535)], arrow=False, color=MUTED)
-    s.component(444, 719, 350, 'Context Manager')
-    s.line([(239, 607), (239, 669), (570, 669), (570, 719)], color=INK)
-    s.line([(619, 607), (619, 719)], color=INK)
-    s.line([(999, 607), (999, 669), (670, 669), (670, 719)], color=INK)
-    s.text(64, 684, 400, ['각 소유자의 허용된 읽기 계약'], 23, MUTED)
-    s.text(64, 757, 352, ['출처·버전·누락 범위를', '함께 확인해 공급'], 25, BLUE, True)
-    s.text(824, 757, 350, ['이번 대상·Task는', '현재 요청에서 판단'], 25, BLUE, True)
-    s.text(64, 832, 1120, ['과거 정정은 자동으로 장기 선호가 되지 않는다. 원본·파생 기억·현재 판단을 구별한다.'], 23, MUTED)
-    s.challenge(364, '01  검색 일치와 관계의 차이', ['‘보고서’라는 단어만 찾아서는', '정정의 전후와 실제 제시를 모른다.'])
-    s.challenge(515, '02  반복 조합과 공통 생산 비용', ['요청별 결합 부담과 파생 기억의', '생산·유지·미게시 범위를 비교한다.'])
-    s.challenge(666, '03  압축·오류·삭제의 파급', ['요약이 조건을 잃거나 원본이 바뀌면', '재사용 근거도 다시 확인해야 한다.'])
+    s = Slide(
+        45, '기능 정확성을 위한 VIA 기억과 Context 제공 설계',
+        '여러 기록에 흩어진 과거 정정 내용과 실제 결과',
+        '지난번의 표현 방식을 다시 사용하기 위한 정정, 결과 버전과 전달 기록의 연결',
+        '정확한 과거 정보 제공을 위한 조회, 보관과 갱신 책임 설계',
+        '이번 Request의 과거 정보 참조 / 장기 User Memory 등록은 별도 사용자 지시',
+        '기능 정확성 / 반응성 / 자원 활용성',
+        considerations_title='설계 고려 사항')
+    s.text(64, 283, 1110, ['지난번 / 보고서를 읽은 뒤의 정정 발화'], 23, MUTED, True)
+    s.rect(64, 324, 1110, 58, '#EAF0F8', 'none')
+    s.text(84, 336, 1070, ['“결론을 먼저 쓰고, 문장은 짧게 바꿔줘.”'], 29, INK, True)
+
+    # Document silhouettes and a user-visible delivery receipt show historical
+    # records only. No central repository, Context Manager or chosen read path.
+    s.note(64, 414, 300, 228, ['지난 보고서 / 수정 전'], 24, '#F6F7F9', True, MUTED)
+    s.text(84, 475, 260, ['배경 설명'], 22, MUTED, True)
+    for y in [511, 529, 547]: s.line([(84,y), (326,y)], color=LINE, arrow=False, width=4)
+    s.text(84, 580, 260, ['결론 / 마지막 단락'], 22, MUTED)
+    s.line([(377, 529), (429, 529)], color=BLUE)
+    s.text(379, 488, 55, ['수정'], 20, BLUE, True)
+    s.note(442, 414, 322, 228, ['같은 보고서 / 수정 후'], 24, '#F0F8F7', True, TEAL)
+    s.text(462, 475, 280, ['결론 / 첫 단락'], 24, TEAL, True)
+    for y, width in [(517, 175), (544, 150), (571, 183)]:
+        s.line([(462, y), (462+width, y)], color=TEAL, arrow=False, width=4)
+    s.text(462, 603, 280, ['짧은 문장으로 변경'], 21, TEAL)
+    s.line([(777, 529), (814, 529)], color=BLUE)
+    s.text(778, 488, 55, ['전달'], 20, BLUE, True)
+    s.note(828, 414, 346, 228, ['실제 전달 기록'], 24, '#F3F6FA', True, BLUE)
+    s.text(848, 475, 304, ['수정 후 보고서의', '사용자 전달 확인'], 24, INK, leading=35)
+    s.text(848, 576, 304, ['어느 결과 버전을', '실제로 받았는지 확인'], 21, MUTED, leading=29)
+
+    s.text(64, 675, 1110, ['이번 / 새 보고서의 Request'], 23, MUTED, True)
+    s.rect(64, 715, 1110, 79, '#EAF0F8', 'none')
+    s.text(84, 728, 1070, ['“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”'], 28, INK, True)
+    s.text(64, 819, 1110, ['필요한 Context / 정정 내용 + 수정된 결과 + 실제 전달 기록'], 25, BLUE, True)
+
+    s.challenge(363, '과거 기록 사이의 연결', [
+        '정정 발화, 수정 전후 결과와',
+        '실제 전달 버전의 연결'])
+    s.challenge(526, '재사용할 정보의 유효성', [
+        '요약의 조건 누락, 원본 수정과',
+        '삭제에 따른 사용 가능 여부 확인'])
+    s.challenge(689, '반복 참조와 유지 비용', [
+        '필요한 과거 정보의 조회와',
+        '보관, 갱신 비용의 균형'])
     return s
 
 

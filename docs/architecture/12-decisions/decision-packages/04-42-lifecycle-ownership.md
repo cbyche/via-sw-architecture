@@ -13,7 +13,11 @@
 
 [편집 가능한 draw.io](./diagrams/dp42-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp42-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
 
-공통 사용자 상황과 설계 과제를 설명하는 배경 페이지다. 구조 비교와 선택 조건은 아래 본문을 따른다.
+처음 발화, 잠시 뒤의 진행 확인 발화, 보고서 완료 후의 수정 발화를 시간 순서로 표시한다. 한 번의 발화는 User Turn이며, 첫 발화는 독립적인 보고서 작성과 회의 안내 메일 초안 작성 Request로 해석한다. 후속 발화는 각각 보고서 진행 확인과 결론 수정 Request다. 모든 발화와 처리 기록을 하나의 Conversation 틀에 보관하므로 Conversation은 발화의 변환 결과가 아닌 이어지는 기록이다.
+
+같은 시간 열 아래에 지속되는 보고서 Task와 별도 메일 Task를 배치한다. 최초 두 Task 생성 후 실제 작업을 Downstream Agent에 맡기는 Delegation과 개별 Agent Execution을 표시한다. 진행 확인은 이미 확인된 상태로 답변하는 사례이므로 새 실행이 없으며 보고서 작성 실행은 계속된다. 메일은 이 시점에 초안 작성이 완료되어 결과를 보관하고 마지막 시점에도 완료 상태와 결과를 유지한다. 보고서 작성 실행이 종료된 후 결론 수정 Delegation은 같은 보고서 Task의 새 Agent Execution에 연결되며 수정 Request 처리 완료 후에도 수정 실행은 진행 중이다.
+
+시간 표시는 설명용 사건 순서이며 측정 시간이 아니다. 폴더와 시간 열은 공통 데이터 및 수명의 개념 표현으로 Component, 서비스 또는 process 배치가 아니다. 서로 다른 완료 시점, 관련 상태 연결 및 관리 SW 중단 후 복구에서 42의 관리 책임과 협력 설계 주제로 이어진다. A/B의 소유, 실행 경계 및 확정 방식은 아래 비교에서 다룬다.
 
 ## 1. 발표의 중심: 같은 기능, 다른 상태 소유와 실행 경계
 
