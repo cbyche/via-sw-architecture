@@ -17,6 +17,7 @@
 | [verification.md](verification.md) | 제작 검사와 확인 범위 |
 | [생성 스크립트](../../../scripts/presentations/generate_quality_attributes.mjs) | 문서와 native table 및 notes 생성 |
 | [일치 검사](../../../scripts/presentations/check_quality_attributes.py) | 내용과 모집단 및 파일 구조 검사 |
+| [QA metric 부록](../quality-metrics.md) | QA별 목표 근거와 정확한 7단계 구간, 10장 PPTX 및 PNG |
 
 ## 재생성
 

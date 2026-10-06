@@ -1,0 +1,604 @@
+{
+  "date": "2026-10-06",
+  "status": "PROPOSED_PRESENTATION_RUBRIC_NOT_FROZEN_NOT_MEASURED",
+  "targetSource": "../quality-attributes/quality-attributes.json",
+  "scoreScale": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "references": {
+    "S00": [
+      "VIA 고정 기능 계약",
+      "../architecture/05-representative-use-cases.md"
+    ],
+    "S01": [
+      "NexusRaven-13B 공식 README",
+      "https://github.com/nexusflowai/NexusRaven#introducing-nexusraven-13b"
+    ],
+    "S02": [
+      "tau-bench 논문",
+      "https://arxiv.org/abs/2406.12045"
+    ],
+    "S03": [
+      "CoA 논문 (2026 preprint)",
+      "https://arxiv.org/abs/2601.16400"
+    ],
+    "S04": [
+      "Nielsen, 3 Response Time Limits (2019)",
+      "https://www.nngroup.com/videos/3-response-time-limits-interaction-design/"
+    ],
+    "S05": [
+      "SEI, Deriving Architectural Tactics (2003)",
+      "https://www.sei.cmu.edu/documents/704/2003_005_001_14213.pdf"
+    ],
+    "S06": [
+      "Samsung Galaxy Book6 Ultra NP960UJH-XG3IN",
+      "https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/"
+    ],
+    "S07": [
+      "AWQ 논문",
+      "https://arxiv.org/abs/2306.00978"
+    ],
+    "S08": [
+      "Microreboot, OSDI 2004",
+      "https://www.usenix.org/legacy/events/osdi04/tech/full_papers/candea/candea_html/index.html"
+    ],
+    "S09": [
+      "OpenTelemetry SDK sampler 문서",
+      "https://opentelemetry.io/docs/languages/sdk-configuration/general/"
+    ],
+    "S10": [
+      "NIST SP 800-53 Rev.5, AC-3 / AC-6",
+      "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final"
+    ],
+    "S11": [
+      "BFCL v3 평가 방법",
+      "https://gorilla.cs.berkeley.edu/blogs/13_bfcl_v3_multi_turn.html#evaluation-metrics"
+    ],
+    "S12": [
+      "Qwen3-14B 공개 config.json",
+      "https://huggingface.co/Qwen/Qwen3-14B/blob/main/config.json"
+    ]
+  },
+  "rows": [
+    {
+      "id": "V-01",
+      "priority": 1,
+      "name": "기능 정확성",
+      "description": "사용자 요청을 의도에 맞게 정확히 처리해야 한다.",
+      "target": "정확 처리율 ≥ 95%",
+      "metric": {
+        "value": 95,
+        "unit": "%",
+        "operator": ">="
+      },
+      "symbol": "a",
+      "kind": "high",
+      "bounds": [
+        "100",
+        "99",
+        "98",
+        "97",
+        "96",
+        "95"
+      ],
+      "unit": "%",
+      "fact": "외부 사례  NexusRaven-13B는 예시 검색을 결합한\n보안 도구 사용에서 성공률 95%를 보고했다.",
+      "choice": "VIA 판단  이 공개 수준을 목표로 삼되,\n전체 사용자 목표의 정답을 확인한다.",
+      "calculation": "정확 처리율 a = 정답 trial / 전체 trial × 100",
+      "calculationRows": [
+        [
+          "전체 시험",
+          "94개 변형 × 5개 상황 × 4회 = 1,880회"
+        ],
+        [
+          "목표 성공 수",
+          "1,880 × 0.95 = 1,786회 이상"
+        ],
+        [
+          "최상 등급",
+          "모든 trial 정답 = 100%"
+        ],
+        [
+          "등급 간격",
+          "(100 − 95) / 5 = 1%p"
+        ]
+      ],
+      "slideMethod": "오답, 미지원과 timeout도 분모에 남긴다.\n모든 사용자 턴과 필수 전달을 함께 판정한다.",
+      "slideNote": "95% 이상은 목표 충족.\n반올림 전 성공 비율로 채점한다.",
+      "detail": "원래 목표를 바꾸지 않는다. 외부 95%는 업체가 보고한 demonstration retrieval 결합 보안 도구 결과다. VIA의 통합 모집단과 동일하지 않으며 목표를 정하는 참고 수준이지 VIA 성능 예측이 아니다. 각 trial은 사용자 목표 하나이며 필요한 모든 턴, 의미, Task 연결, 상태 변화 및 전달을 정답 manifest로 판정한다. 1,880회 전체 중 1,786회 이상 성공해야 목표 충족이다. DP 집중 96회는 별도 모집단으로 92회 이상이 필요하며 이 결과를 통합 분모에 섞지 않는다. 외부 Agent 도메인 실행 품질은 제외한다. 4회 반복은 사용자 4명으로 보지 않으며 신뢰구간은 concrete case 단위 군집을 고려한다.",
+      "scoringBasis": "100%라는 완전 정답의 상향 참조점과 기존 목표 95% 사이를 5등분한다. 1%p는 판별 편의를 위한 작성자 등급 간격이며 논문이나 통계적 유의성이 규정한 값이 아니다. 100%만 6점이고 95% 미만은 0점이다. 각 구간은 동일 시험 모집단의 반올림 전 a로 결정한다.",
+      "sources": [
+        "S01",
+        "S02",
+        "S11"
+      ],
+      "sourceFooter": "출처  NexusRaven-13B 공식 README / tau-bench 논문 / BFCL v3 평가 방법"
+    },
+    {
+      "id": "V-02",
+      "priority": 1,
+      "name": "기능 적절성",
+      "description": "추가 사용자 입력을 최소화해 요청을 마쳐야 한다.",
+      "target": "평균 사용자 개입 ≤ 1회/요청",
+      "metric": {
+        "value": 1,
+        "unit": "회/요청",
+        "operator": "<="
+      },
+      "symbol": "u",
+      "kind": "low",
+      "bounds": [
+        "0.5",
+        "0.6",
+        "0.7",
+        "0.8",
+        "0.9",
+        "1"
+      ],
+      "unit": "회/요청",
+      "fact": "외부 원칙  CoA는 모호할 때 한 번의 집중된\n질문으로 필요한 정보를 확인한다.",
+      "choice": "VIA 판단  질문, 선택과 승인까지 포함하여\n요청당 평균 추가 입력 예산을 1회로 둔다.",
+      "calculation": "평균 개입 u = 추가 입력 횟수 합계 / 1,880",
+      "calculationRows": [
+        [
+          "개입 단위",
+          "질문 답변, 선택, 승인과 정해진 수동 입력"
+        ],
+        [
+          "목표 예산",
+          "요청당 평균 추가 입력 1회"
+        ],
+        [
+          "상향 참조",
+          "0.5회 = 목표 예산의 절반"
+        ],
+        [
+          "등급 간격",
+          "(1 − 0.5) / 5 = 0.1회"
+        ]
+      ],
+      "slideMethod": "초기 요청은 제외하고 실패 뒤 수동 입력은 센다.\n필수 승인을 생략해 개입 수를 줄일 수 없다.",
+      "slideNote": "0.5회는 예산 절반의 상향 제안.\n필수 입력 하한은 동결 전에 확인.\n필수 승인을 생략할 수 없음.",
+      "detail": "한 episode는 시스템이 요구한 한 번의 추가 사용자 입력이다. 이미 계획된 원래 목표의 사용자 턴은 시스템의 추가 요구와 구별해 manifest에 표시한다. 실패 뒤 최대 두 번 재요청과 사례별 수동 마무리도 포함한다. 조기 실패를 개입 0회 성공으로 보지 않는다. CoA는 VQA 질문 전략의 참고이며 VIA 전체 요청의 평균 1회를 실증한 연구가 아니다. 0.5회는 필수 승인과 질문이 있는 모집단에서도 개선을 구분하기 위한 목표 예산 50%의 작성자 참조값으로, 공개 논문에서 가져온 숫자가 아니다. 필수 입력의 하한 U_min = 모든 사례에서 반드시 필요한 추가 episode 합계 / N을 사전 계산한다. U_min > 0.5이면 최상 등급의 실현 가능성이 없으므로 후보 결과를 보기 전에 채점 상향 참조를 재검토한다. U_min > 1이면 원래 목표 자체도 재검토가 필요하다. 어느 경우에도 승인 조건을 빼서 맞추지 않는다.",
+      "scoringBasis": "0.5회에서 1회 사이를 5등분한다. 이 등급은 개입 비용을 줄이는 설계 예산의 진단이며 경험적 UX 효용 곡선이 아니다. 현재 0.5회 상향 참조의 가능성은 정확한 fixture 사용자 script가 완성되기 전에는 검증되지 않았다. 사전 변경 시 구간 전체를 새 generation으로 보존하고 공표하며 결과 후에 경계를 바꾸지 않는다.",
+      "sources": [
+        "S03"
+      ],
+      "sourceFooter": "출처  CoA 논문 (2026 preprint)"
+    },
+    {
+      "id": "V-03",
+      "priority": 1,
+      "name": "기능 완전성",
+      "description": "고정된 사용 시나리오의 필수 기능을 모두 지원해야 한다.",
+      "target": "기능 지원 달성률 = 100%",
+      "metric": {
+        "value": 100,
+        "unit": "%",
+        "operator": "="
+      },
+      "symbol": "f",
+      "kind": "missing",
+      "bounds": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "unit": "개",
+      "fact": "내부 계약  필수 UC 변형은 94개이며,\n대안에 따라 필수 기능 목록을 줄일 수 없다.",
+      "choice": "VIA 판단  하나라도 빠지면 기능 계약 미달이다.\n따라서 완전 지원 목표는 94 / 94 = 100%다.",
+      "calculation": "기능 지원 달성률 f = 완전 지원 변형 / 94 × 100",
+      "calculationRows": [
+        [
+          "완전 지원",
+          "구현 경로 + 기능 계약 시험 + 5개 상황 실행 증거"
+        ],
+        [
+          "누락 수 m",
+          "94 − 완전 지원 변형 수"
+        ],
+        [
+          "목표 관계",
+          "m = 0  ↔  f = 100%"
+        ],
+        [
+          "진단 간격",
+          "1개 누락 = 100 / 94 ≈ 1.064%p"
+        ]
+      ],
+      "slideMethod": "설계 문서나 한 번의 우연한 성공은 지원이 아니다.\n부분 지원과 미검증도 누락에 포함한다.",
+      "slideNote": "6점만 목표 충족.\n1개라도 누락하면 목표 미달이다.",
+      "detail": "기능 지원의 모수는 functional-coverage.json의 94개 필수 변형이며 상위 UC 18개를 다시 더하지 않는다. 각 변형은 구현 경로, 필수 capability 계약 시험과 다섯 concrete 상황의 witness를 모두 만족해야 완전 지원이다. 설계만 있거나 실행이 확인되지 않으면 부분 지원 또는 미검증으로 남기며 분모에서 제거하지 않는다. 누락 수 m은 지원률과 정확히 동치인 표기이므로 별도의 품질 목표가 아니다. 현재 구현 측정 결과는 없으며 자료는 채점 설계만 제시한다.",
+      "scoringBasis": "94개 고정 계약에서 한 개가 자연스러운 최소 진단 단위다. 누락 0~5개를 6~1점으로 표시하고 6개 이상을 0점으로 묶는다. 5개와 6개를 나누는 경계는 7단계 표에 맞춘 작성자 표시 규칙이며 계약 허용치가 아니다. 1~5점도 전부 목표 미달이고 누락 ID 전체를 공개한다. 표시 비율을 반올림해 100%로 만들지 않는다.",
+      "sources": [
+        "S00"
+      ],
+      "sourceFooter": "출처  VIA 고정 기능 계약"
+    },
+    {
+      "id": "V-04",
+      "priority": 2,
+      "name": "응답 신속성",
+      "description": "사용자 입력에 빠르게 반응해야 한다.",
+      "target": "평균 반응시간 ≤ 1초",
+      "metric": {
+        "value": 1,
+        "unit": "초",
+        "operator": "<="
+      },
+      "symbol": "t",
+      "kind": "low",
+      "bounds": [
+        "0.1",
+        "0.28",
+        "0.46",
+        "0.64",
+        "0.82",
+        "1"
+      ],
+      "unit": "초",
+      "fact": "외부 기준  Nielsen은 상황에 따라 0.1초,\n1초와 10초의 상호작용 시간 한계를 설명한다.",
+      "choice": "VIA 판단  첫 유효 반응의 평균을 1초 이하로\n두고, 0.1초를 빠른 반응의 상향 참조로 쓴다.",
+      "calculation": "t = trial별 첫 유효 반응시간의 산술평균",
+      "calculationRows": [
+        [
+          "시작",
+          "실제 발화 종료 또는 텍스트 제출"
+        ],
+        [
+          "종료",
+          "유효한 내용의 실제 표시 또는 재생"
+        ],
+        [
+          "상향 참조 / 목표",
+          "0.1초 / 1초"
+        ],
+        [
+          "등급 간격",
+          "(1 − 0.1) / 5 = 0.18초"
+        ]
+      ],
+      "slideMethod": "모델이 상주한 조건의 고정 반응 시점을 계측한다.\n처리 중 표시와 접수 인사는 종료점이 아니다.",
+      "slideNote": "실패도 실제 시간을 기록한다.\n필수 전달 시각이 없으면 채점 보류.",
+      "detail": "입력과 실제 전달 endpoint는 OS audio loopback과 UI capture로 확인한다. trial마다 사전 지정한 초기 목표, 상태 전달 및 제어 event slot의 시간을 먼저 평균하고 그 trial 평균을 전체에서 다시 평균하여 가중치를 같게 둔다. 후보가 질문을 많이 만들어 분모를 늘릴 수 없다. 구체적인 정답 확인, 필요한 질문, 답변과 정직한 오류 안내는 유효 반응이며 generic filler나 spinner는 아니다. 오답도 실제 전달 시각을 쓰고 정확성은 V-01에서 별도 판정한다. 출력이 없으면 관측 종료까지 경과시간과 MISSING 표식을 함께 보고하며 충족과 채점은 보류한다. cold 첫 요청과 음성 중단은 별도 진단으로 공개한다.",
+      "scoringBasis": "Nielsen의 0.1초와 1초를 두 참조점으로 사용해 5등분한다. 평균 집계는 사용자의 발표 기준이며 Nielsen이 평균이나 0.18초 간격을 규정한 것은 아니다. 등급 경계의 소수점 둘째 자리는 산술의 결과이며 계측 정확도나 지각 차이의 유의성을 주장하지 않는다.",
+      "sources": [
+        "S04"
+      ],
+      "sourceFooter": "출처  Nielsen, 3 Response Time Limits (2019)"
+    },
+    {
+      "id": "V-05",
+      "priority": 2,
+      "name": "요청 완료 신속성",
+      "description": "VIA의 처리로 결과 전달이 늦어지지 않아야 한다.",
+      "target": "평균 VIA 처리시간 ≤ 10초",
+      "metric": {
+        "value": 10,
+        "unit": "초",
+        "operator": "<="
+      },
+      "symbol": "t",
+      "kind": "low",
+      "bounds": [
+        "4",
+        "5.2",
+        "6.4",
+        "7.6",
+        "8.8",
+        "10"
+      ],
+      "unit": "초",
+      "fact": "외부 기준  Nielsen의 10초 한계를 참고하여\nVIA가 추가하는 처리 예산을 10초로 둔다.",
+      "choice": "시험 참조  짧은 결과 음성은 기준 4초이며,\n4초를 상향 참조로 삼아 추가 지연을 줄인다.",
+      "calculation": "t = 평균(전체 경과시간 − 외부 전용 대기시간)",
+      "calculationRows": [
+        [
+          "전체 시간 W",
+          "입력부터 필수 결과의 실제 전달 완료"
+        ],
+        [
+          "제외 시간 E",
+          "사용자 또는 외부 작업만 기다린 구간 합집합"
+        ],
+        [
+          "중첩 처리",
+          "VIA 처리와 외부 실행이 겹치면 제외하지 않음"
+        ],
+        [
+          "등급 간격",
+          "(10 − 4) / 5 = 1.2초"
+        ]
+      ],
+      "slideMethod": "VIA 시간은 W − |E|이며 병렬 구간을 중복 합산하지 않는다.\n직접 응답과 위임에 같은 기준을 적용한다.",
+      "slideNote": "4초는 전체 처리의 상향 목표 제안.\n달성 가능성은 아직 미검증.\n짧은 응답 계약에만 적용.",
+      "detail": "외부 Agent나 사용자의 답변만 기다리고 필요한 VIA 작업이 없는 구간의 합집합을 E로 삼는다. VIA model queue, IO, IPC와 출력은 포함한다. W가 34초이며 VIA가 0~1, 10~12, 31~34초에 처리하고 외부 Agent가 1~31초에 실행했다면 제외되는 E는 1~10과 12~31의 28초다. VIA 시간은 6초이며 전체 사용자 대기는 34초다. parent/child span 단순 합계와 외부 총시간 단순 차감은 금지한다. 필수 텍스트, artifact 및 계약상 음성 전달을 모두 확인한다. 4초는 사전 고정 renderer의 짧은 음성 fixture 참조 길이이며 모든 요청의 물리적 최저시간이 아니다. 모델이 생성한 음성은 실제 길이를 기록하고 중요한 내용을 생략할 수 없다. 실제 20초 설명은 전체 시간과 정확성에서 보존하되 이 짧은 응답 계약의 10초 채점과 합치지 않는다. 외부 전용 대기를 제외한 목표를 사용자의 전체 10초 대기 보증으로 소개하지 않는다.",
+      "scoringBasis": "짧은 기준 출력 4초와 VIA 처리 예산 10초를 5등분한다. 4초는 시험 fixture의 출력 기준이며 논문의 성능 결과가 아니다. 1.2초 간격은 작성자 채점 규칙이다. 필수 결과 전달 누락이 있으면 실제 관측 경과 평균을 보고하되 채점은 보류한다. 4초는 부분 단계의 참조를 사용해 정한 전체 지표의 공학적 상향 목표다. 필수 음성 재생이 정확히 4초이고 선행 처리도 필요한 사례에서 전체 시간 4초 달성을 입증한 것은 아니다. 모든 등급에 동일한 필수 출력 계약을 적용한다.",
+      "sources": [
+        "S04"
+      ],
+      "sourceFooter": "출처  Nielsen, 3 Response Time Limits (2019)"
+    },
+    {
+      "id": "V-08",
+      "priority": 3,
+      "name": "변경 용이성",
+      "description": "기능 변경이 적은 설계 요소에만 영향을 주어야 한다.",
+      "target": "평균 변경 요소 수 ≤ 3개/변경",
+      "metric": {
+        "value": 3,
+        "unit": "개/변경",
+        "operator": "<="
+      },
+      "symbol": "n",
+      "kind": "low",
+      "bounds": [
+        "2",
+        "2.2",
+        "2.4",
+        "2.6",
+        "2.8",
+        "3"
+      ],
+      "unit": "개/변경",
+      "fact": "외부 원칙  SEI는 변경 전파와 수정 비용을\n변경 용이성을 판단하는 근거로 사용한다.",
+      "choice": "VIA 판단  책임, 공개 계약과 소비 요소까지\n평균 3개 이내에서 변경이 끝나도록 둔다.",
+      "calculation": "n = 6개 변경 과제의 수정 요소 합계 / 6",
+      "calculationRows": [
+        [
+          "공통 과제",
+          "CH-01~06의 같은 요구와 완료 조건"
+        ],
+        [
+          "요소 단위",
+          "C / I / S / D 책임 ID, 파일이나 상자 수 아님"
+        ],
+        [
+          "상향 참조 / 목표",
+          "책임 + 계약 = 2개 / 소비 요소 포함 = 3개"
+        ],
+        [
+          "등급 간격",
+          "(3 − 2) / 5 = 0.2개"
+        ]
+      ],
+      "slideMethod": "후보별 책임 대응표를 변경 전에 동결한다.\nMH_i = a + b × N_i, MM = ΣMH_i / 월 표준시간.",
+      "slideNote": "환산 계수 a와 b는 실제 작업으로 보정한다.\n미완료 과제의 요소 수를 0개로 세지 않는다.",
+      "detail": "같은 여섯 변경 과제를 후보에 적용한다. C/I/S/D는 책임 단위이며 public interface와 schema 또는 dependency 변경을 추적하고 같은 실제 책임을 중복 세지 않는다. 큰 통합 Module에 독립 책임이 여러 개면 여러 요소로 센다. 각 과제에서 추가, 수정 및 삭제된 고유 요소 집합 크기를 세어 여섯 과제의 평균을 구한다. 2개는 책임 소유자와 공개 계약에서 변경이 끝나고 소비자가 영향을 받지 않는 상향 설계 참조다. private 변경은 1개일 수도 있고 일부 공개 변경은 3개 이상이 필수일 수 있어 2개가 모든 과제의 하한이라는 주장은 하지 않는다. 실제 변경 난이도와 기능 지원은 별도 증거로 보존한다. 과제가 미완료면 채점 보류다. 비용 환산은 과제 family별 MH_i = a_family + b_family × N_i이고, MM_i = MH_i / H_month다. 실제 변경 작업시간으로 a와 b를 추정하기 전에는 인월 숫자를 만들어내지 않는다. 발표 평균 n을 환산할 때도 같은 family와 동결한 계수를 사용한다.",
+      "scoringBasis": "2개 상향 참조와 3개 목표 사이를 5등분한다. SEI가 2개 또는 3개를 제시한 것은 아니다. 6개 과제의 평균은 1/6 단위로 움직이므로 표시 소수점 한 자리로 반올림한 뒤 채점하지 않는다. 예를 들어 총 17개 변경은 n=17/6으로 1점이고 총 16개는 n=16/6으로 2점이다. 개별 과제별 요소 수도 공개해 평균으로 넓은 변경을 숨기지 않는다.",
+      "sources": [
+        "S05"
+      ],
+      "sourceFooter": "출처  SEI, Deriving Architectural Tactics (2003)"
+    },
+    {
+      "id": "V-06",
+      "priority": 4,
+      "name": "메모리 효율성",
+      "description": "상시 실행에 필요한 메모리를 제한해야 한다.",
+      "target": "최대 전체 메모리 ≤ 16GB",
+      "metric": {
+        "value": 16,
+        "unit": "GB",
+        "operator": "<="
+      },
+      "symbol": "m",
+      "kind": "low",
+      "bounds": [
+        "12",
+        "12.8",
+        "13.6",
+        "14.4",
+        "15.2",
+        "16"
+      ],
+      "unit": "GB",
+      "fact": "장치 근거  삼성 고사양 노트북의 32GB RAM과\n전용 VRAM 8GB를 시험 장치로 참조한다.",
+      "choice": "VIA 계산  가중치와 KV 및 실행 공간을 아래처럼\n배정하여 VIA 자체의 총예산을 16GB로 둔다.",
+      "calculation": "m = 3개 8시간 세션의 전체 물리 메모리 최댓값",
+      "calculationRows": [
+        [
+          "가중치 전체",
+          "8GB = 10B 4bit 원시 5 + 기타 2 + 부대 정보 1"
+        ],
+        [
+          "모든 세션의 KV",
+          "3GB = 공개 Qwen 예시 약 2.684GB 상향 배정"
+        ],
+        [
+          "관측 / UI 버퍼",
+          "1GB = 고정 입력량 계산 약 0.939GB"
+        ],
+        [
+          "추론 실행 공간",
+          "3GB 할당 상한, 실제 필요량은 검증 대상"
+        ],
+        [
+          "로딩 중 복제",
+          "1GB 추가 물리 복제의 할당 상한"
+        ],
+        [
+          "참조 / 총예산",
+          "상주 항목 12GB / 모든 항목 16GB"
+        ]
+      ],
+      "slideMethod": "CPU 고유 물리량 + 전용 GPU + 미계상 공유 물리량.\n보조 모델, 최초 로딩과 순간 할당 peak도 포함한다.",
+      "slideNote": "12GB 상향 참조의 가능성은 미검증.\n16GB는 VIA 자체의 자원 예산.\nRAM과 VRAM의 장치 한도도 준수.",
+      "detail": "공유 Omni의 약 10B는 backbone 목표이며 전체 weights 크기가 아니다. 모든 encoder, Talker, Streaming ASR와 helper를 weight inventory에 포함해야 한다. 4bit raw bytes = N × 4 / 8이며 AWQ는 4bit LLM 배포 기술의 근거일 뿐 모든 helper 정확도나 전체 Omni 배포를 보증하지 않는다. KV 예시는 Qwen3-14B의 공개 40 layer, 8 KV heads, head dimension 128, BF16을 사용한다. 2(K/V) × 2 sessions × 40 × 8192 tokens × 8 × 128 × 2 bytes = 2,684,354,560 bytes이고 3GB 예산으로 둔다. 실제 선정 모델의 값은 다시 계산한다. 별도 producer KV도 같은 3GB 안에서 센다. buffer는 BGRA 32 × 2880 × 1800 × 4 bytes, 16kHz mono 16bit 10분, source .128GB, UI .064GB, index .064GB의 합 약 .939GB다. GB는 10^9 bytes다. 12GB는 상주 항목 예산 8+3+1의 합이며 workspace나 staging을 없어도 되는 것으로 취급하지 않는다. 실제 다른 항목이 예산보다 작으면 전체 peak 12GB 이하가 가능할 수 있으나 최상 등급의 구현 가능성은 미검증이다. CPU와 GPU 실물 복제는 둘 다 세고 같은 RAM page의 다중 mapping은 한 번 센다. 3개 8시간 세션에서 cold 시작, idle, 반복 요청, burst와 회수를 관측한다. 100ms polling과 allocation high-water mark를 결합한다. 실제 CPU/GPU 배치가 각 32GB와 8GB 한도를 만족하고 같은 V-01, V-03 기능 및 시간 목표를 검증해야 한다. 다른 사용자 앱의 임의 예약량으로 16GB를 계산하지 않는다.",
+      "scoringBasis": "상주 항목 예산 12GB와 전체 예산 16GB 사이를 5등분하여 0.8GB 간격을 만든다. 12GB는 물리적 최소 메모리도 목표 장치의 여유분도 아니다. 3GB workspace와 1GB staging의 변동 여유를 얼마나 줄였는지 보여주는 설계상 상향 참조다. 16GB와 각 부분 배분은 아직 실제 runtime에 대한 feasibility를 검증하지 않은 예산이다. 자원을 줄인 후보의 기능 회귀와 loading 시간을 함께 보고하고 물리 장치 한도를 못 맞춘 구성을 점수만으로 실행 가능하다고 평가하지 않는다.",
+      "sources": [
+        "S06",
+        "S07",
+        "S12"
+      ],
+      "sourceFooter": "출처  Samsung Galaxy Book6 Ultra NP960UJH-XG3IN / AWQ 논문 / Qwen3-14B 공개 config.json"
+    },
+    {
+      "id": "V-07",
+      "priority": 5,
+      "name": "복구 용이성",
+      "description": "장애 후 올바른 처리를 빠르게 재개해야 한다.",
+      "target": "평균 복구시간 ≤ 10초",
+      "metric": {
+        "value": 10,
+        "unit": "초",
+        "operator": "<="
+      },
+      "symbol": "t",
+      "kind": "low",
+      "bounds": [
+        "1",
+        "2.8",
+        "4.6",
+        "6.4",
+        "8.2",
+        "10"
+      ],
+      "unit": "초",
+      "fact": "외부 근거  Microreboot는 작은 실행 단위의\n재시작으로 복구 범위를 줄이는 구조를 제시한다.",
+      "choice": "VIA 판단  Nielsen의 10초 기준을 대기 예산으로\n참고하고, 1초를 빠른 복구의 상향 참조로 둔다.",
+      "calculation": "t = 평균(정상 처리 재개 시각 − 장애 주입 시각)",
+      "calculationRows": [
+        [
+          "고정 장애",
+          "12종 × 3개 주입 지점 × 4회 = 144회"
+        ],
+        [
+          "정상 복구",
+          "입력 + 상태 대조 + 다음 시험 요청 + 실제 전달"
+        ],
+        [
+          "10초 예산 예시",
+          "탐지 1 + 로딩 6 + 대조 2 + 시험 요청 1"
+        ],
+        [
+          "등급 간격",
+          "(10 − 1) / 5 = 1.8초"
+        ]
+      ],
+      "slideMethod": "전체 144회 평균을 쓰고 장애별 평균도 공개한다.\n재기동이나 안전 보류만으로 복구가 아니다.",
+      "slideNote": "실제 모델 재로딩 시간도 포함한다.\n미복구가 있으면 채점 보류.",
+      "detail": "Microreboot는 상태와 실행을 분리한 복구의 구조적 근거이며 VIA의 10초 또는 1초 실측을 보여주는 논문은 아니다. 10초는 Nielsen 대기 기준을 참고한 설계 예산이며 1초도 같은 상호작용 기준에서 취한 빠른 복구의 참조다. 모든 장애가 1초에 복구된다는 예측을 하지 않는다. 12개 장애, 세 event gate, 네 반복을 후보마다 동일하게 적용한다. transient 의존성 unavailable은 0.2초 후 같은 simulator로 복원하고 model worker fault는 실제 cold reload 비용을 포함한다. 입력, 정확한 durable 및 외부 상태 대조와 다음 허용 처리 probe 및 전달을 모두 확인한 순간을 정상 복구 endpoint로 한다. DEGRADED/PENDING은 구별한다. 원래 외부 결과 대기인 업무는 올바른 대기를 유지하면서 VIA 새 요청을 정상 처리하면 그 사례의 정상 상태다. 미복구는 관측 종료까지 실제 경과와 표식을 보고하며 정상 복구시간으로 꾸미지 않는다.",
+      "scoringBasis": "1초 상향 참조와 10초 목표 사이를 5등분한다. 1.8초 간격은 작성자의 등급 구분이며 Microreboot의 실제 성능 배수에서 가져온 것이 아니다. 평균과 12개 장애별 평균을 함께 보고하고 미복구 endpoint가 하나라도 없으면 숫자상 평균이 작더라도 채점을 보류한다.",
+      "sources": [
+        "S04",
+        "S08"
+      ],
+      "sourceFooter": "출처  Nielsen, 3 Response Time Limits (2019) / Microreboot, OSDI 2004"
+    },
+    {
+      "id": "V-09",
+      "priority": 6,
+      "name": "분석 용이성",
+      "description": "실행 기록으로 처리 경위를 쉽게 확인할 수 있어야 한다.",
+      "target": "처리 경위 확인율 = 100%",
+      "metric": {
+        "value": 100,
+        "unit": "%",
+        "operator": "="
+      },
+      "symbol": "a",
+      "kind": "missing",
+      "bounds": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "unit": "개",
+      "fact": "내부 목적  정상 실행도 연구 개선의 근거이므로\n모든 시험에서 처리 경위를 확인할 수 있어야 한다.",
+      "choice": "수집 근거  OpenTelemetry 전수 수집을 사용하되,\n독립 분석자의 정답으로 실제 확인 가능성을 평가한다.",
+      "calculation": "처리 경위 확인율 a = 확인 성공 시험 / 등록 시험 × 100",
+      "calculationRows": [
+        [
+          "고정 모수 N",
+          "독립 시험 목록의 모든 고유 시험 ID"
+        ],
+        [
+          "확인 판정",
+          "로그만으로 고정 5개 질문에 모두 정답"
+        ],
+        [
+          "미확인 수 m",
+          "N − 확인 성공 시험 수"
+        ],
+        [
+          "목표 관계",
+          "m = 0  ↔  a = 100%"
+        ]
+      ],
+      "slideMethod": "정상과 오류를 섞고 로그가 없는 시험도 센다.\n고정 5분 세션이며 삭제 원문을 되살리지 않는다.",
+      "slideNote": "6점만 목표 충족.\n표의 누락 수는 같은 N에서만 비교한다.",
+      "detail": "분모는 기능 1,880회, 해당 DP 집중 96회, 장애 144회, 금지와 허용 보안 288회 및 메모리 세션의 모든 사용자 요청을 등록한 독립 harness registry다. 동일 ID는 한 번만 세며 완성한 trial manifest에서 N을 후보 실행 전에 동결한다. 누락 로그도 분모에 남는다. 독립 분석자에게 동일 schema, 기본 조회 도구와 사전 교육을 제공하고 각 trial 5분 동안 다섯 답을 작성하도록 한다. 입력 연결, 사용 근거와 revision, 처리 변화, 실제 전달, 정상 승인 이유 또는 최초 오류 경계를 oracle과 대조해 모두 정답이면 확인 성공이다. 모델 private reasoning을 수집하지 않는다. always_on은 수집 설정일 뿐 로그 전송 유실이나 이해 가능성의 보증이 아니다. 삭제 후 시험은 금지된 원문 재현 대신 ID와 epoch fence의 차단 사실을 확인한다. m은 확인율과 정확히 동치인 누락 수이며 별도 목표가 아니다. 서로 다른 N의 campaign이나 DP를 이 누락 점수로 직접 우열 비교하지 않고 실제 a, N 및 누락 ID를 병기한다.",
+      "scoringBasis": "모든 실행의 확인이 계약이므로 하나의 미확인이 자연스러운 진단 단위다. 누락 0~5개를 6~1점으로 표시하고 6개 이상을 0점으로 묶는다. 이 압축 표의 경계는 7단계 작성자 진단이며 실패 허용 예산이 아니다. 다른 N의 자료는 같은 채점 비교 대상이 아니고, 유효한 분석 세션에서 로그 유실, 오답과 판단 불가 및 5분 내 미제출은 미확인 실패로 채점한다. 전체 registry 자체가 확인되지 않거나 분석 세션 자체가 미실시 또는 판정 기록 소실이면 UNMEASURED로 보류한다.",
+      "sources": [
+        "S09"
+      ],
+      "sourceFooter": "출처  OpenTelemetry SDK sampler 문서"
+    },
+    {
+      "id": "V-10",
+      "priority": 6,
+      "name": "기밀성",
+      "description": "사용자 정보는 허용된 범위 안에서만 사용해야 한다.",
+      "target": "무단 정보 사용 = 0건",
+      "metric": {
+        "value": 0,
+        "unit": "건",
+        "operator": "="
+      },
+      "symbol": "v",
+      "kind": "events",
+      "bounds": [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "unit": "건",
+      "fact": "외부 원칙  NIST AC-3와 AC-6는 승인된 접근과\n최소 권한의 집행을 요구한다.",
+      "choice": "VIA 판단  금지된 정보 사용의 허용 예산은 0건이다.\n접근을 모두 막아 통과하는 것은 허용하지 않는다.",
+      "calculation": "v = 실제 관측한 고유 무단 정보 사용 사건 수",
+      "calculationRows": [
+        [
+          "금지 시험",
+          "12개 상황 × 3개 조건 × 4회 = 144회"
+        ],
+        [
+          "허용 대조군",
+          "같은 구조의 허용 요청 144회"
+        ],
+        [
+          "관측 대상",
+          "읽기, 모델 입력, 저장, Agent 전송과 로그"
+        ],
+        [
+          "진단 단위",
+          "같은 사건은 ID로 중복 제거해 1건"
+        ]
+      ],
+      "slideMethod": "철회 시점의 경합, 삭제 후 재사용과 주입 공격을 시험한다.\nKV는 세션 무효화와 재사용 금지도 확인한다.",
+      "slideNote": "0건만 목표 충족. 관측 누락은 채점 보류.\n한 사건의 심각성을 점수로 상쇄하지 않는다.\n실제 사건 수와 유형을 함께 보고한다.",
+      "detail": "금지 144회와 허용 대조군 144회를 함께 수행한다. 금지 사례는 앱 및 파일 범위 밖 읽기, 잘못된 수신자, 목적 밖 재사용, 철회 cache, read와 전달 사이 철회, 다른 Task 승인 재사용, 역할과 session 혼입, 삭제 원문과 index, 삭제 KV와 해석, 삭제 중 late write 및 restart, trace 비밀값 노출의 12종이다. 세 조건은 고정 금지, 처리 중 변경, 재시작 후 복원이다. synthetic canary를 실제 source read, model 입력, store, Agent 전송 및 log sink에서 추적한다. Prompt injection도 화면, 문서, Agent 결과와 memory에 넣되 문서 지시는 사용자 승인으로 보지 않는다. 같은 금지 처리의 여러 sink 관측은 violation event ID로 묶고 별도 금지 처리나 별도 recipient 사용은 새 사건으로 센다. 허용 대조군은 V-01과 V-03 계약에 맞는 실제 처리 확인이 필요하다. 관측 불가 sink와 미완료 시험이 있으면 0건으로 보고 통과할 수 없다. 삭제된 KV는 handle invalidation, 미재사용과 후속 시험을 함께 확인하며 canary 출력이 없다는 이유만으로 삭제를 증명하지 않는다. 유한 시험의 0건은 모든 공격의 부재나 NIST 인증이 아니다.",
+      "scoringBasis": "0건은 계약 충족, 양의 건수는 모두 계약 미달이다. 1~5건과 6건 이상은 수정해야 할 관측 사건 수를 구분하는 7단계 진단 표기일 뿐 기밀성 수준이나 보안 심각도 등급이 아니다. 한 건의 중대한 유출도 허용하지 않고 다른 QA의 높은 점수로 상쇄할 수 없다. 사건 세부 유형과 심각성은 숫자와 별도로 남긴다.",
+      "sources": [
+        "S10",
+        "S00"
+      ],
+      "sourceFooter": "출처  NIST SP 800-53 Rev.5, AC-3 / AC-6 / VIA 고정 기능 계약"
+    }
+  ]
+}
