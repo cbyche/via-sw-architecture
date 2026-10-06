@@ -2,6 +2,8 @@
 
 [전체 미리보기](./index.html) / [5페이지 draw.io 편집 원본](./VIA-DP-comparison-41-45.drawio)
 
+[수정 가능한 설계 비교 5장 PPTX](./VIA-DP-comparison-41-45.pptx) / [배경과 설계 비교 통합 10장 PPTX](../VIA-DP-background-and-comparison-41-45.pptx) / [PPTX 구성과 편집 방법](../DP-PPTX.md)
+
 사용자가 제공한 DP01~DP04 방안 PNG의 **좌우 설계안, 구조, 장점, 단점, QA Trade-off** 행 구성을 따른 1920×1080 발표 자료다. 기존 배경과 제목 및 서체를 맞추고 설계안 행은 레퍼런스의 연녹색을 사용했다. 2026-10-06 보강판은 기존 40번대 MAIN 그림을 대조하여 판단 생산자, 상태 소유, 조회와 재판단, 확정 및 전달 경로를 복원했다. 43은 기존 A/C 표기를 유지한다. 모든 도형, 이름, 선, 수치와 원형 점수는 draw.io에서 편집 가능하다.
 
 | DP | 비교 | QA 세 항목 | 편집 원본 | SVG | PNG |

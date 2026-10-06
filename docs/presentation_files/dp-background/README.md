@@ -4,6 +4,8 @@
 
 [지도 포함 6페이지 draw.io](./VIA-DP-background-overview-41-45.drawio) / [배경만 5페이지](./VIA-DP-background-41-45.drawio) / [전체 미리보기](./index.html)
 
+[수정 가능한 배경 5장 PPTX](./VIA-DP-background-41-45.pptx) / [배경과 설계 비교 통합 10장 PPTX](../VIA-DP-background-and-comparison-41-45.pptx) / [PPTX 구성과 편집 방법](../DP-PPTX.md)
+
 [전체 지도 PNG](./dp-background-overview.png) / [지도 draw.io](../../architecture/12-decisions/decision-packages/diagrams/dp-background-overview.drawio) / [지도 SVG](../../architecture/12-decisions/decision-packages/diagrams/dp-background-overview.svg)
 
 대표이사 보고 관점의 리뷰를 반영하여 **핵심 위험 → 구체적 사례 → SW 구조의 결정** 순서로 여섯 장을 재구성했다. 지도에서 다섯 결정의 범위를 구분한 뒤 개별 배경과 후속 대안 비교로 이어간다. 노란색 문구는 예방할 설계 위험이며 관측된 결함이나 측정된 품질 차이가 아니다.
