@@ -22,6 +22,14 @@
 
 관련 DP는 직접적인 설계 영향의 연결이며 전체 준수 범위를 뜻하지 않는다. 단일 Omni 공유는 별도 입력 인식용 Streaming ASR을 금지한다는 뜻이 아니다.
 
+## 한 장 발표자료
+
+기능 요구사항 6개와 제약사항 2개를 관련 DP 열까지 포함한 한 장의 편집 가능한 표로 제공한다.
+
+- [편집 가능한 PowerPoint](./functional-requirements/VIA-functional-requirements-and-constraints.pptx)
+- [PNG 이미지](./functional-requirements/functional-requirements-and-constraints.png)
+- [발표자료 미리보기](./functional-requirements/index.html)
+
 ## 선택 사용 가능한 발표용 그림
 
 각 그림은 기능과 제약의 개념을 설명하는 선택 자료이며, 특정 설계 대안의 구조나 구현 결과를 나타내지 않는다. 그림의 문자 없이도 발표에서 축소해 사용할 수 있도록 제작했다.
