@@ -21,7 +21,8 @@ FONT = 'Apple SD Gothic Neo'
 
 
 class Slide:
-    def __init__(self, number, title, premise, explanation, question, alternatives, qualities):
+    def __init__(self, number, title, premise, explanation, question, alternatives, qualities,
+                 considerations_title='구조 설계에서 어려운 점'):
         self.number, self.title, self.items = number, title, []
         self.rect(0, 0, W, H, 'white', 'none')
         self.text(64, 25, 1250, ['VIA SOFTWARE ARCHITECTURE / DP 배경'], 20, TEAL, True)
@@ -32,11 +33,12 @@ class Slide:
         self.text(82, 158, 1756, [premise], 31, INK, True)
         self.text(64, 220, 1792, [explanation], 25, MUTED)
         self.line([(1213, 285), (1213, 852)], color=LINE, arrow=False)
-        self.text(1260, 291, 596, ['구조 설계에서 어려운 점'], 29, INK, True)
+        self.text(1260, 291, 596, [considerations_title], 29, INK, True)
         self.line([(64, 875), (1856, 875)], color=BLUE, arrow=False, width=2)
         self.text(64, 906, 165, ['설계 과제'], 28, RED, True)
         self.text(240, 901, 1616, [question], 30, INK, True)
-        self.text(240, 949, 1616, [alternatives], 24, BLUE)
+        if alternatives:
+            self.text(240, 949, 1616, [alternatives], 24, BLUE)
         self.text(64, 1018, 1260, [f'품질 쟁점: {qualities}'], 20, MUTED)
         self.text(1856, 1018, 480, ['구조 후보 / 미선정 / 미측정'], 20, MUTED, align='right')
 
@@ -141,29 +143,72 @@ class Slide:
 
 def slide41():
     s = Slide(
-        41, '요청 의미 해결 제어',
-        '사용자의 말만으로는 실제 대상과 업무를 확정할 수 없다',
-        'VIA는 화면·대화·업무 근거를 조회해 요청을 정리하고, 실제 업무 수행은 Downstream Agent에 위임한다.',
-        '다음 조회와 최종 대상·Task 결합을 누가 결정할 것인가?',
-        'A 모델 중심 ReAct / B 모델의 요청 틀을 코드가 해결',
-        '정확성·기능 지원 범위와 조회/해석 왕복 시간')
-    s.text(64, 288, 1120, ['“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”'], 29, INK, True)
-    s.note(64, 347, 510, 97, ['화면 근거: 사용자가 가리킨 표', '업무 근거: 보고서 Task가 두 개'], 25)
-    s.text(665, 359, 475, ['대상·업무는 아직 미확정', '‘초안만’ 조건도 함께 보존'], 25, RED)
-    s.component(180, 491, 370, 'Request Interpreter')
-    s.component(767, 491, 370, 'Context Manager')
-    s.component(767, 708, 370, 'Task Manager')
-    s.line([(574, 398), (625, 398), (625, 462), (365, 462), (365, 491)], arrow=True, color=MUTED)
-    s.line([(550, 511), (767, 511)], '1 어떤 근거를 읽을까?', (552, 470, 214), size=21)
-    s.line([(767, 547), (550, 547)], '2 근거를 보고 재판단', (552, 573, 225), color=BLUE, size=21)
-    s.line([(490, 563), (490, 734), (767, 734)], '3 기존 업무 후보 조회', (500, 692, 250), size=21)
-    s.line([(767, 764), (420, 764), (420, 563)], color=BLUE)
-    s.text(70, 646, 365, ['해석이 조회 범위를 정하고', '조회 결과가 해석을 바꾼다'], 26, BLUE, True)
-    s.text(64, 809, 1120, ['완성 의미도 현재 입력·자료·질문·권한 검사 후 채택한다.'], 25, MUTED)
-    s.text(64, 846, 1120, ['해석·조회 의존을 보여주는 도식이며, 두 안의 호출 구조는 설계 페이지에서 비교한다.'], 20, MUTED)
-    s.challenge(364, '01  해석과 조회의 상호 의존', ['읽기 전에 필요한 자료를', '전부 정하기 어렵다.'])
-    s.challenge(515, '02  잘못된 결합의 실제 피해', ['다른 표나 Task를 고르면', 'Agent에 다른 일을 시킨다.'])
-    s.challenge(666, '03  통제와 표현 범위의 긴장', ['모델 반복에는 범위·종료 통제,', '코드 해결에는 표현 한계가 따른다.'])
+        41, '기능 정확성을 위한 VIA Request 해석 설계',
+        '화면 정보와 이전 Task 정보를 활용한 Request 해석',
+        '사용자 표현, 화면 정보, 이전 Request 기록과 Task 상태의 연결',
+        '정확한 Request 해석을 위한 정보 확인과 SW 구조 설계',
+        '', '기능 정확성 / 기능 지원 범위 / 반응성',
+        considerations_title='설계 고려 사항')
+    s.text(64, 283, 1120, ['“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”'], 29, INK, True)
+
+    # Editable screen example: user-visible documents and records only.
+    # No Component graph, model/code owner, resolver, processing order or
+    # preselected report Task. Both A and B must understand this same situation.
+    s.rect(64, 349, 1110, 336, '#E6ECF2', INK)
+    s.rect(78, 362, 1082, 38, '#F5F7FA', 'none')
+    s.text(96, 368, 810, ['사용자 PC 화면 예시'], 22, MUTED, True)
+    s.text(1142, 369, 260, ['설명용 가상 화면'], 19, MUTED, align='right')
+
+    # Spreadsheet window and the selected table, not a VIA implementation box.
+    s.rect(78, 406, 648, 264, 'white', LINE)
+    s.rect(78, 406, 648, 35, '#F0F4F8', 'none')
+    s.text(94, 411, 500, ['매출 현황.xlsx'], 22, INK, True)
+    s.text(98, 453, 580, ['선택 범위 A1:D4'], 21, BLUE, True)
+    tx, ty, cw, rh = 100, 489, 151, 38
+    s.rect(tx, ty, 4*cw, 4*rh, '#F4F8FF', BLUE)
+    s.rect(tx, ty, 4*cw, rh, '#DFEAFB', 'none')
+    table = [['항목', '1분기', '2분기', '합계'],
+             ['제품 A', '120', '140', '260'],
+             ['제품 B', '80', '100', '180'],
+             ['합계', '200', '240', '440']]
+    for col in range(1, 4):
+        s.line([(tx+col*cw, ty), (tx+col*cw, ty+4*rh)], color=LINE, arrow=False, width=1)
+    for row in range(1, 4):
+        s.line([(tx, ty+row*rh), (tx+4*cw, ty+row*rh)], color=LINE, arrow=False, width=1)
+    for row, values in enumerate(table):
+        for col, value in enumerate(values):
+            s.text(tx+col*cw+cw/2, ty+row*rh+7, cw-12, [value], 22,
+                   INK, row==0, align='center')
+    s.rect(tx, ty, 4*cw, 4*rh, 'none', BLUE)
+
+    # Historical user requests plus two equally valid report Task candidates.
+    s.rect(738, 406, 422, 264, 'white', LINE)
+    s.rect(738, 406, 422, 35, '#F0F4F8', 'none')
+    s.text(754, 411, 390, ['VIA / 이전 Request와 Task 정보'], 22, INK, True)
+    s.text(755, 458, 388, ['“예산 보고서 만들어줘”'], 24, INK)
+    s.text(755, 494, 388, ['예산 보고서 Task / 진행 중'], 21, BLUE)
+    s.line([(754, 537), (1144, 537)], color=LINE, arrow=False, width=1)
+    s.text(755, 556, 388, ['“실적 보고서 만들어줘”'], 24, INK)
+    s.text(755, 592, 388, ['실적 보고서 Task / 진행 중'], 21, BLUE)
+    s.text(755, 634, 388, ['수정할 보고서 Task 미확정'], 21, RED, True)
+
+    s.text(64, 713, 1120, ['Request 해석에 필요한 Context'], 26, BLUE, True)
+    information = [
+        (64, '화면 정보', ['선택한 표의 범위와 내용'], 'Referent 식별'),
+        (452, '이전 Request와 Task 정보', ['관련 보고서 Task 후보'], 'Task Association'),
+        (840, '현재 Request의 조건', ['메일 초안 작성, 발송 제외'], '조건 보존'),
+    ]
+    for x, heading, details, purpose in information:
+        s.text(x, 762, 350, [heading], 24, INK, True)
+        s.text(x, 800, 350, details, 23, INK)
+        s.text(x, 835, 350, [purpose], 22, BLUE)
+
+    s.challenge(366, '필요한 Context의 선택', [
+        '화면 정보, 이전 Request 기록과', 'Task 상태에서 필요한 정보의 확인'])
+    s.challenge(527, 'Referent와 Task의 정확한 연결', [
+        '“이 표”에 해당하는 표의 식별,', '“아까 보고서”에 해당하는 Task의 구분'])
+    s.challenge(688, '정보 부족의 보완과 조건 보존', [
+        '보고서 미확정 시 Clarification,', '“초안만 작성” 조건의 유지'])
     return s
 
 
