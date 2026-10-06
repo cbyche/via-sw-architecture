@@ -99,26 +99,28 @@ class Comparison(Slide):
         self.text(1880,22,450,['구조 비교 / 장단점 / QA Trade-off'],19,MUTED,align='right')
         self.text(40,65,1840,[self.caption],39,INK,True)
         self.line([(40,121),(1880,121)],color=LINE,arrow=False)
-        self.text(40,142,1530,[DATA[n]['case']],23,INK)
+        self.text(40,133 if n==44 else 142,1530,[DATA[n]['case']],23,INK)
         self.text(1880,145,290,['수치와 점수 / 예상 예시'],19,RED,True,align='right')
+        if n==44:
+            self.text(40,168,1530,['양안 공통: Agent Gateway ↔ Downstream Agent / Model Access ↔ 공유 Omni 1벌'],14,MUTED)
         self.rect(40,188,1840,55,GREEN,LINE)
-        for y,h,label in [(188,55,'설계안'),(243,494,'구조'),(737,85,'장점'),(822,85,'단점'),(907,125,'QA\nTrade-off')]:
+        for y,h,label in [(188,55,'설계안'),(243,552,'구조'),(795,80,'장점'),(875,80,'단점'),(955,95,'QA\nTrade-off')]:
             if y!=188: self.rect(40,y,1840,h,'white',LINE)
             self.text(90,y+17,98,label.split('\n'),21,INK,True,'center',leading=26)
-        for x in [140,1010]: self.line([(x,188),(x,1032)],color=LINE,arrow=False)
+        for x in [140,1010]: self.line([(x,188),(x,1050)],color=LINE,arrow=False)
         for side,x in enumerate([140,1010]):
             self.text(x+435,203,838,[DATA[n]['options'][side]],28,INK,True,'center')
-            for label,y in [('pros',751),('cons',836)]:
+            for label,y in [('pros',808),('cons',888)]:
                 for i,line in enumerate(DATA[n][label][side]):
-                    self.text(x+18,y+i*31,836,['▪ '+line],21,INK)
+                    self.text(x+18,y+i*29,836,['▪ '+line],20,INK)
             for i,(qa,left,right,lc,rc) in enumerate(DATA[n]['rows']):
-                y=920+i*34;name,metric,direction=QA[qa]
-                self.text(x+18,y,335,[f'{qa} {name}'],21,INK)
-                self.text(x+375,y-1,112,['●'*(lc if side==0 else rc)+'○'*(3-(lc if side==0 else rc))],25,INK)
-                self.text(x+503,y,140,[left if side==0 else right],23,INK,True)
-                self.text(x+652,y+2,206,[f'{metric} {direction}'],18,MUTED)
-        self.text(40,1050,1520,[DATA[n]['condition']],18,MUTED)
-        self.text(1880,1050,315,['● 많을수록 우수 / 미측정'],18,MUTED,align='right')
+                y=964+i*27;name,metric,direction=QA[qa]
+                self.text(x+18,y,335,[f'{qa} {name}'],20,INK)
+                self.text(x+375,y-1,112,['●'*(lc if side==0 else rc)+'○'*(3-(lc if side==0 else rc))],23,INK)
+                self.text(x+503,y,140,[left if side==0 else right],21,INK,True)
+                self.text(x+652,y+2,206,[f'{metric} {direction}'],17,MUTED)
+        self.text(40,1057,1520,[DATA[n]['condition']],16,MUTED)
+        self.text(1880,1057,315,['● 많을수록 우수 / 미측정'],16,MUTED,align='right')
 
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)
@@ -163,208 +165,7 @@ class Comparison(Slide):
         return d
 
 
-def graph41(s,x,side):
-    c=BLUE if side==0 else TEAL
-    s.box(x+245,275,380,47,'Request Controller')
-    s.line([(x+435,322),(x+435,374)],color=c)
-    s.label(x+450,333,315,'원문과 후보 정보',18)
-    s.box(x+665,399,180,49,'Model Access',size=20)
-    s.label(x+674,462,170,'공유 Omni 1벌',18)
-    if side==0:
-        s.group(x+25,374,590,220,'Request Interpreter',c)
-        s.box(x+50,421,250,53,'ReAct 해석 제어기',c)
-        s.box(x+335,421,255,53,'읽기 도구 실행기',c)
-        s.line([(x+300,437),(x+335,437)],color=c)
-        s.line([(x+335,459),(x+300,459)],color=c)
-        s.label(x+333,477,270,'모델 선택 조회 / 정보 반환',17)
-        s.box(x+50,528,540,44,'의미 제안 검증기',c)
-        s.line([(x+175,474),(x+175,528)],color=c)
-        s.label(x+190,507,330,'완성 의미 제안과 조건 검사',17)
-        s.line([(x+665,423),(x+630,423),(x+630,408),(x+175,408),(x+175,421)],color=MUTED,dashed=True)
-        s.line([(x+590,447),(x+630,447),(x+630,626),(x+525,626),(x+525,652)],color=c)
-        s.label(x+642,551,205,'허용 범위의\n정보 조회',17)
-        s.line([(x+175,572),(x+175,652)],color=c)
-        s.label(x+190,610,255,'현재 검사와 의미 채택',17)
-    else:
-        s.box(x+55,387,540,57,'Request Interpreter',c)
-        s.line([(x+595,416),(x+665,416)],color=MUTED)
-        s.line([(x+325,444),(x+325,511)],color=c)
-        s.label(x+340,471,270,'미해결 항목을 포함한 요청 틀',17)
-        s.group(x+25,511,590,112,'Request Resolution Engine',c)
-        s.box(x+50,551,250,51,'미해결 항목 처리기',c,size=20)
-        s.box(x+335,551,255,51,'관계 결합기',c,size=20)
-        s.line([(x+300,576),(x+335,576)],color=c)
-        s.line([(x+50,576),(x+12,576),(x+12,415),(x+55,415)],color=c,dashed=True)
-        s.label(x+28,464,260,'필요한 부분의 모델 해석',17)
-        s.line([(x+175,602),(x+175,613),(x+630,613),(x+630,638),(x+525,638),(x+525,652)],color=c)
-        s.line([(x+525,652),(x+525,645),(x+638,645),(x+638,582),(x+590,582)],color=c,dashed=True)
-        s.line([(x+462,602),(x+462,635),(x+175,635),(x+175,652)],color=c)
-    s.box(x+40,652,270,45,'Request Controller',size=20)
-    s.box(x+400,652,250,45,'Context Manager',size=20)
-    s.box(x+680,652,165,45,'Task Manager',size=19)
-    s.line([(x+680,674),(x+650,674)],color=MUTED)
-    s.label(x+28,711,805,'공통: 동일 정보와 권한 / 채택 후 응답 또는 Task Delegation',18)
-
-
-def graph42(s,x,side):
-    c=BLUE if side==0 else TEAL
-    if side==0:
-        s.group(x+22,279,820,397,'VIA Core',c)
-        s.box(x+48,341,280,53,'대화 처리기',c)
-        s.box(x+371,341,280,53,'업무 관리기',c)
-        s.label(x+61,403,290,'Conversation과 Request',18)
-        s.label(x+386,403,265,'Task와 Agent Execution',18)
-        s.box(x+205,458,300,51,'트랜잭션 관리자',c)
-        s.line([(x+48,367),(x+36,367),(x+36,442),(x+278,442),(x+278,458)],color=c)
-        s.line([(x+630,394),(x+630,442),(x+434,442),(x+434,458)],color=c)
-        s.store(x+220,567,280,64,'통합 상태 저장소')
-        s.line([(x+355,509),(x+355,567)],color=c)
-        s.label(x+374,535,250,'관련 변경의 공동 확정',18)
-        s.box(x+630,466,190,48,'Agent 연동기',c)
-        s.line([(x+651,367),(x+725,367),(x+725,466)],color=c)
-        s.label(x+656,411,169,'저장 후 전송',17)
-        s.box(x+630,692,205,35,'Downstream Agent',size=18)
-        s.line([(x+725,514),(x+725,692)],color=MUTED)
-        s.label(x+38,690,560,'공동 상태 확정 / 대화와 업무 owner의 같은 Core 수명',17)
-    else:
-        s.group(x+22,279,355,348,'대화 서비스',c)
-        s.group(x+423,279,419,348,'업무 서비스',c)
-        s.box(x+49,341,300,53,'대화 처리기',c)
-        s.box(x+446,341,370,53,'업무 관리기',c)
-        s.label(x+60,402,288,'Conversation과 Request',18)
-        s.label(x+457,402,350,'Task와 Agent Execution',18)
-        s.line([(x+349,365),(x+446,365)],color=c)
-        s.label(x+354,321,100,'명령',17,c)
-        s.line([(x+446,378),(x+403,378),(x+403,441),(x+199,441),(x+199,394)],color=c,dashed=True)
-        s.label(x+165,459,360,'접수 결과와 event /\n대화 쪽 별도 반영',17)
-        s.store(x+65,541,267,64,'대화 상태 저장소')
-        s.store(x+446,541,225,64,'업무 상태 저장소')
-        s.line([(x+49,379),(x+37,379),(x+37,518),(x+199,518),(x+199,541)],color=c)
-        s.line([(x+816,378),(x+828,378),(x+828,525),(x+559,525),(x+559,541)],color=c)
-        s.box(x+692,541,131,57,'Agent\n연동기',c,size=20)
-        s.line([(x+671,573),(x+692,573)],color=c)
-        s.box(x+599,692,236,35,'Downstream Agent',size=18)
-        s.line([(x+757,598),(x+757,692)],color=MUTED)
-        s.label(x+38,649,570,'독립 원본과 로컬 확정 / 독립 서비스 수명',18)
-        s.label(x+38,688,520,'서비스 접수와 외부 Agent 접수의 구분',17)
-
-
-def graph43(s,x,side):
-    c=BLUE if side==0 else PURPLE
-    s.box(x+245,279,380,47,'Request Controller')
-    s.line([(x+435,326),(x+435,381 if side==0 else 431)],color=c)
-    s.label(x+451,336,360,'원문과 정보 / Task 연결은 판단 결과',17)
-    if side==1: s.label(x+451,359,360,'실선: 제안 / 점선: 재판단 요청',17)
-    s.group(x+22,381,820,259,'Request Interpreter',c)
-    if side==1: s.line([(x+435,381),(x+435,431)],color=c)
-    if side==0:
-        s.box(x+135,436,597,58,'Integrated Semantic Interpreter',c,size=23)
-        s.store(x+245,548,380,64,'Interpretation Attempt State')
-        s.line([(x+435,494),(x+435,548)],color=c)
-        s.label(x+39,520,785,'공동 판단 / 검색과 부분 수정 및 전문 보조 허용',18)
-    else:
-        names=['Request Intent\nInterpreter','Referent Resolver','Request Association\nResolver',
-               'Request Relation\nInterpreter','Request Revision\nInterpreter','Request Handling\nInterpreter']
-        for i,name in enumerate(names):
-            col=i//3;row=i%3;xx=x+40+col*551;yy=431+row*61
-            s.box(xx,yy,237,50,name,c,size=18)
-            if col==0:
-                s.line([(xx+237,yy+15),(x+310,yy+15)],color=c)
-                s.line([(x+310,yy+36),(xx+237,yy+36)],color=c,dashed=True)
-            else:
-                s.line([(xx,yy+15),(x+557,yy+15)],color=c)
-                s.line([(x+557,yy+36),(xx,yy+36)],color=c,dashed=True)
-        s.box(x+310,431,247,172,'Interpretation\nCoordinator',INK,size=22)
-        s.store(x+310,603,247,36,'Partial Interpretation Ledger',size=15)
-    s.box(x+30,679,205,45,'Model Access',size=20)
-    s.box(x+291,679,520,45,'Request Controller',size=21)
-    s.line([(x+22,432),(x+12,432),(x+12,701),(x+30,701)],color=MUTED,dashed=True)
-    s.label(x+31,650,246,'공유 Omni 1벌',17)
-    s.line([(x+551,640),(x+551,679)],color=c) if side==0 else s.line([(x+557,486),(x+850,486),(x+850,664),(x+551,664),(x+551,679)],color=c)
-    s.label(x+570,640,263,'현재 검사와 의미 채택',17)
-
-
-def graph44(s,x,side):
-    c=BLUE if side==0 else TEAL
-    s.box(x+29,279,331,48,'Interaction Manager',size=21)
-    s.box(x+475,279,350,48,'Task Manager',size=21)
-    s.label(x+40,338,320,'확정 입력 / 즉시 stop와 hold',17)
-    s.label(x+487,338,338,'확인된 질문과 결과',17)
-    if side==0:
-        s.group(x+150,400,547,148,'Interaction Orchestrator',c)
-        s.box(x+174,445,246,53,'Dialogue Dispatcher',c,size=19)
-        s.store(x+463,438,211,66,'Dialogue Progress\nState',size=17)
-        s.line([(x+29,303),(x+15,303),(x+15,377),(x+130,377),(x+130,471),(x+174,471)],color=c)
-        s.line([(x+650,327),(x+650,384),(x+543,384),(x+543,400)],color=c)
-        s.line([(x+420,461),(x+463,461)],color=c)
-        s.line([(x+463,490),(x+420,490)],color=c,dashed=True)
-        s.box(x+29,601,331,48,'Request Controller',size=21)
-        s.box(x+475,601,350,48,'Response Manager',size=21)
-        s.line([(x+250,548),(x+194,548),(x+194,601)],color=c)
-        s.line([(x+550,548),(x+650,548),(x+650,601)],color=c)
-        s.label(x+28,565,352,'해석 요청 / 반환 회수',17)
-        s.label(x+476,565,350,'후속 준비와 게시 요청',17)
-        s.line([(x+825,624),(x+851,624),(x+851,470),(x+697,470)],color=c,dashed=True)
-        s.label(x+713,470,125,'반환',17)
-    else:
-        s.label(x+32,386,795,'Reactive Interaction Runtime / typed channel과 bounded credit',18,c)
-        s.box(x+29,430,331,49,'Input Resolution Stage',c,size=20)
-        s.box(x+475,430,350,49,'Task Notice Stage',c,size=20)
-        s.line([(x+29,303),(x+15,303),(x+15,454),(x+29,454)],color=c)
-        s.line([(x+650,327),(x+650,430)],color=c)
-        s.box(x+29,516,331,48,'Request Controller',size=21)
-        s.box(x+475,516,350,48,'Response Manager',size=21)
-        s.line([(x+194,479),(x+194,516)],color=c)
-        s.line([(x+650,479),(x+650,516)],color=c)
-        s.line([(x+360,541),(x+475,541)],color=c)
-        s.label(x+250,577,380,'채택 의미와 유효한 Notice',17)
-        s.box(x+293,605,367,44,'Publication Join',c,size=21)
-        s.line([(x+650,564),(x+650,588),(x+600,588),(x+600,605)],color=c)
-        s.line([(x+293,627),(x+12,627),(x+12,454),(x+29,454)],color=c,dashed=True)
-        s.label(x+30,601,215,'credit / cancel',17,c)
-    if side==0:
-        s.box(x+275,686,378,40,'Interaction Manager',size=21)
-        s.line([(x+650,649),(x+650,673),(x+464,673),(x+464,686)],color=c)
-        s.label(x+675,657,175,'현재성 확인과 게시',17)
-        s.label(x+30,700,235,'실제 표시와 재생',17)
-    else:
-        s.box(x+500,684,325,42,'Response Manager',size=21)
-        s.box(x+29,684,350,42,'Interaction Manager',size=21)
-        s.line([(x+660,627),(x+850,627),(x+850,673),(x+795,673),(x+795,684)],color=c)
-        s.label(x+505,657,275,'현재성 확인과 게시',17)
-        s.line([(x+500,705),(x+379,705)],color=c)
-        s.label(x+390,681,105,'실제 전달',16)
-
-
-def graph45(s,x,side):
-    c=BLUE if side==0 else TEAL
-    s.box(x+245,279,380,47,'Request Controller')
-    s.label(x+452,339,347,'같은 원문과 현재 적용 목적',17)
-    s.group(x+22,381,820,128 if side==0 else 267,'Context Manager',c)
-    if side==0:
-        s.box(x+227,429,420,53,'Context Composer',c,size=23)
-        s.line([(x+435,326),(x+435,429)],color=c)
-        for xx,name in [(x+45,'Request Controller'),(x+306,'Task Manager'),(x+567,'Response Manager')]:
-            s.box(xx,557,240,43,name,size=19)
-            s.line([(x+435,482),(x+435,518),(xx+120,518),(xx+120,557)],color=c)
-        s.label(x+44,613,744,'요청별 원본 조회와 교차 결합 / index와 cache 허용',18)
-        s.line([(x+227,454),(x+12,454),(x+12,705),(x+245,705)],color=c)
-    else:
-        s.box(x+49,431,273,48,'Memory Publisher',c,size=21)
-        s.box(x+559,431,253,48,'Evidence Reader',c,size=21)
-        s.store(x+350,508,318,77,'Episodic Memory\nRepository',size=20)
-        s.line([(x+435,326),(x+435,367),(x+685,367),(x+685,431)],color=c)
-        s.line([(x+186,479),(x+186,547),(x+350,547)],color=c)
-        s.label(x+44,492,295,'원본별 허용 기록 → 생산과 게시',17)
-        s.line([(x+668,547),(x+685,547),(x+685,479)],color=c)
-        s.label(x+689,502,137,'조회',17,c)
-        s.label(x+48,607,770,'정정과 결과 버전 및 전달 관계 / coverage와 유효성 확인',18)
-        s.line([(x+812,456),(x+855,456),(x+855,705),(x+625,705)],color=c)
-        s.store(x+30,650,775,30,'원본 기록 / Request Controller, Task Manager, Response Manager',size=16)
-        s.line([(x+30,665),(x+8,665),(x+8,455),(x+49,455)],color=c)
-        s.label(x+28,346,405,'허용 기록 변경 또는 미생산 범위 보완',17)
-    s.box(x+245,684,380,42,'Request Interpreter',size=21)
-    s.label(x+640,687,210,'현재 의미 판단',18)
+from dp_comparison_structures import graph41, graph42, graph43, graph44, graph45
 
 
 def build():
