@@ -9,9 +9,11 @@
 
 ![04-44 DP 배경](./diagrams/dp44-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp44-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp44-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp44-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp44-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
 
 처음 발화는 보고서 설명과 회의 안내 메일 초안 작성의 두 목표다. VIA의 보고서 Response와 Downstream Agent의 메일 Task 실행이 병행되는 동안 사용자의 표 설명 발화와 메일 수신자 질문이 겹쳐 도착한다. 현재 음성의 즉시 중단, 새 발화 수신 및 해석, 표 설명으로의 전환을 위쪽에 표시한다. 아래쪽은 메일 Delegation과 Agent Execution, 질문 도착, 메일 Task를 명시한 실제 사용자 질문 전달과 답변까지의 실행 대기를 표시한다. 설명용 사건 순서이며 측정 시간이나 모든 상황의 고정 전달 우선순위를 뜻하지 않는다. 음성 중단은 Task 취소가 아니며, 현재 발화의 해석과 질문 생성은 실제 사용자 전달과 구별한다. 도형은 공통 사건과 전달 상태로 Component, 중앙 조정자 또는 반응형 실행망을 선택하지 않는다. 후속 처리, 대기 상태와 전달 차례를 이어가는 실행 구조는 아래 A/B 비교에서 다룬다.
+
+마지막 열은 표 설명 후 메일 질문 전달의 예시 순서를 표시한다. 모든 상황에 적용하는 고정 우선순위가 아니다. 겹친 사건의 후속 실행과 실제 전달을 이어가는 실행 구조가 이 장의 결정 범위다. 노란색 문구는 예방할 설계 위험이며 실제 관측된 실패나 측정 결과가 아니다. [다섯 설계 문제 지도](./diagrams/dp-background-overview.svg)에서 각 결정 범위를 먼저 구분한다.
 
 ## 1. 발표용 메인 비교
 

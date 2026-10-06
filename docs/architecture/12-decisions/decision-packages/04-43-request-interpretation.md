@@ -11,9 +11,11 @@
 
 ![04-43 DP 배경](./diagrams/dp43-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp43-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp43-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp43-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp43-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
 
 진행 중인 보고서와 메일 초안의 조건을 지정한 User Turn과 잠시 뒤의 정정 User Turn을 표시한다. 각 발화에서 해석할 Request를 표시하고, 정정 후 보고서의 PDF 조건 유지와 메일 내용의 결론에서 표로의 교체를 구분한다. 보고서 결과 참조는 결과 준비 후의 사용 관계이며 현재 결과가 이미 완성됐다는 뜻이 아니다. 의도, Referent, Task Association, Request 관계, 정정 범위와 처리 방향은 같은 상황에서 함께 판단할 의미 항목이다. 도형은 요청 조건과 자료의 관계이며 여섯 Module이나 실행 순서를 미리 선택하지 않는다. 관련 Task의 판단도 원문과 이전 기록으로 얻는 해석 결과다. 이 상호 의존에서 의미 판단의 책임과 협력 설계로 이어지며, 통합 A와 기능별 C의 실제 구조는 아래 비교에서 다룬다.
+
+연관된 의미 판단의 생산 책임과 조정 방식이 이 장의 결정 범위다. 그림은 Referent, Task Association과 정정 범위를 중심으로 표시하고, 다른 의미 항목은 사례와 설계 고려 사항에서 유지한다. 노란색 문구는 예방할 설계 위험이며 실제 관측된 실패나 측정 결과가 아니다. [다섯 설계 문제 지도](./diagrams/dp-background-overview.svg)에서 각 결정 범위를 먼저 구분한다.
 
 ## 0. 비교를 다시 구성한 이유와 B의 제외
 

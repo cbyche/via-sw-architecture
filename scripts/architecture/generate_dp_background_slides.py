@@ -1,4 +1,4 @@
-"""Five editable DP background slides, grounded in 04-41 through 04-45.
+"""An overview and five editable DP backgrounds, grounded in 04-41 through 04-45.
 
 One scene produces both native draw.io objects and the SVG preview. These
 backgrounds explain the common problem, rather than selecting an alternative.
@@ -24,23 +24,28 @@ class Slide:
     def __init__(self, number, title, premise, explanation, question, alternatives, qualities,
                  considerations_title='구조 설계에서 어려운 점'):
         self.number, self.title, self.items = number, title, []
+        overview = number == 'overview'
+        self.slug = 'dp-background-overview' if overview else f'dp{number}-background'
+        self.caption = title if overview else f'04-{number}. {title}'
         self.rect(0, 0, W, H, 'white', 'none')
         self.text(64, 25, 1250, ['VIA SOFTWARE ARCHITECTURE / DP 배경'], 20, TEAL, True)
-        self.text(1856, 25, 280, [f'04-{number}'], 20, MUTED, align='right')
-        self.text(64, 65, 1780, [f'04-{number}. {title}'], 46, INK, True)
+        self.text(1856, 25, 280, ['설계 문제 지도' if overview else f'04-{number}'], 20, MUTED, align='right')
+        self.text(64, 65, 1780, [self.caption], 40, INK, True)
         self.line([(64, 127), (1856, 127)], color=LINE, arrow=False, width=2)
-        self.rect(64, 151, 1792, 52, '#FFF4A8', 'none')
-        self.text(82, 158, 1756, [premise], 31, INK, True)
-        self.text(64, 220, 1792, [explanation], 25, MUTED)
-        self.line([(1213, 285), (1213, 852)], color=LINE, arrow=False)
-        self.text(1260, 291, 596, [considerations_title], 29, INK, True)
-        self.line([(64, 875), (1856, 875)], color=BLUE, arrow=False, width=2)
-        self.text(64, 906, 165, ['설계 과제'], 28, RED, True)
-        self.text(240, 901, 1616, [question], 30, INK, True)
+        self.rect(64, 151, 1792, 64, '#FFF4A8', 'none')
+        self.text(82, 165, 1756, [premise], 36, INK, True)
+        if explanation:
+            self.text(64, 236, 1792, [explanation], 24, MUTED)
+        if not overview:
+            self.line([(1213, 282), (1213, 859)], color=LINE, arrow=False)
+            self.text(1260, 283, 596, [considerations_title], 26, MUTED, True)
+        self.line([(64, 888), (1856, 888)], color=LINE, arrow=False, width=2)
+        self.text(64, 925, 165, ['설계 과제'], 26, RED, True)
+        self.text(240, 920, 1616, [question], 31, INK, True)
         if alternatives:
-            self.text(240, 949, 1616, [alternatives], 24, BLUE)
-        self.text(64, 1018, 1260, [f'품질 쟁점: {qualities}'], 20, MUTED)
-        self.text(1856, 1018, 480, ['구조 후보 / 미선정 / 미측정'], 20, MUTED, align='right')
+            self.text(240, 974, 1616, [alternatives], 21, MUTED)
+        self.text(64, 1035, 1260, [f'품질 관점: {qualities}'], 18, MUTED)
+        self.text(1856, 1035, 480, ['구조 후보 / 미선정 / 미측정'], 18, MUTED, align='right')
 
     def add(self, kind, **kw):
         kw.update(kind=kind, id=f'n{len(self.items)+1}')
@@ -70,17 +75,18 @@ class Slide:
 
     def note(self, x, y, w, h, lines, size=25, fill='#F2F6FA', bold=False, color=INK):
         ident = self.add('note', x=x, y=y, w=w, h=h, fill=fill, stroke=LINE)
-        self.text(x+16, y+13, w-40, lines, size, color, bold)
+        if lines:
+            self.text(x+16, y+13, w-40, lines, size, color, bold)
         return ident
 
     def challenge(self, y, heading, body):
-        self.text(1260, y, 596, [heading], 28, BLUE, True)
-        self.text(1260, y+47, 596, body, 25, INK, leading=35)
+        self.text(1260, y, 596, [heading], 24, INK, True)
+        self.text(1260, y+42, 596, body, 23, MUTED, leading=33)
 
     def svg(self):
         esc = html.escape
         out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-labelledby="title">',
-               f'<title id="title">04-{self.number}. {esc(self.title)} — DP 배경</title>', '<defs>']
+               f'<title id="title">{esc(self.caption)} — DP 배경</title>', '<defs>']
         for c in (INK, BLUE, RED, TEAL, MUTED):
             out.append(f'<marker id="a{c[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="{c}" stroke-width="1.6"/></marker>')
         out.append(f'</defs><g font-family="{FONT}, Arial, sans-serif">')
@@ -103,7 +109,7 @@ class Slide:
         return '\n'.join(out+['</g></svg>'])+'\n'
 
     def diagram(self):
-        d = ET.Element('diagram', id=f'dp{self.number}-background', name=f'04-{self.number} {self.title}')
+        d = ET.Element('diagram', id=self.slug, name=self.caption)
         model = ET.SubElement(d, 'mxGraphModel', dx=str(W), dy=str(H), grid='1', gridSize='10', page='1',
                               pageScale='1', pageWidth=str(W), pageHeight=str(H), background='#FFFFFF')
         root = ET.SubElement(model, 'root')
@@ -141,345 +147,245 @@ class Slide:
         return ET.tostring(root, encoding='unicode')+'\n'
 
 
-def slide41():
-    s = Slide(
-        41, '기능 정확성을 위한 VIA Request 해석 설계',
-        '화면 정보와 이전 Task 정보를 활용한 Request 해석',
-        '사용자 표현, 화면 정보, 이전 Request 기록과 Task 상태의 연결',
-        '정확한 Request 해석을 위한 정보 확인과 SW 구조 설계',
-        '', '기능 정확성 / 기능 지원 범위 / 반응성',
-        considerations_title='설계 고려 사항')
-    s.text(64, 283, 1120, ['“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”'], 29, INK, True)
-
-    # Editable screen example: user-visible documents and records only.
-    # No Component graph, model/code owner, resolver, processing order or
-    # preselected report Task. Both A and B must understand this same situation.
-    s.rect(64, 349, 1110, 336, '#E6ECF2', INK)
-    s.rect(78, 362, 1082, 38, '#F5F7FA', 'none')
-    s.text(96, 368, 810, ['사용자 PC 화면 예시'], 22, MUTED, True)
-    s.text(1142, 369, 260, ['설명용 가상 화면'], 19, MUTED, align='right')
-
-    # Spreadsheet window and the selected table, not a VIA implementation box.
-    s.rect(78, 406, 648, 264, 'white', LINE)
-    s.rect(78, 406, 648, 35, '#F0F4F8', 'none')
-    s.text(94, 411, 500, ['매출 현황.xlsx'], 22, INK, True)
-    s.text(98, 453, 580, ['선택 범위 A1:D4'], 21, BLUE, True)
-    tx, ty, cw, rh = 100, 489, 151, 38
-    s.rect(tx, ty, 4*cw, 4*rh, '#F4F8FF', BLUE)
-    s.rect(tx, ty, 4*cw, rh, '#DFEAFB', 'none')
-    table = [['항목', '1분기', '2분기', '합계'],
-             ['제품 A', '120', '140', '260'],
-             ['제품 B', '80', '100', '180'],
-             ['합계', '200', '240', '440']]
-    for col in range(1, 4):
-        s.line([(tx+col*cw, ty), (tx+col*cw, ty+4*rh)], color=LINE, arrow=False, width=1)
-    for row in range(1, 4):
-        s.line([(tx, ty+row*rh), (tx+4*cw, ty+row*rh)], color=LINE, arrow=False, width=1)
-    for row, values in enumerate(table):
-        for col, value in enumerate(values):
-            s.text(tx+col*cw+cw/2, ty+row*rh+7, cw-12, [value], 22,
-                   INK, row==0, align='center')
-    s.rect(tx, ty, 4*cw, 4*rh, 'none', BLUE)
-
-    # Historical user requests plus two equally valid report Task candidates.
-    s.rect(738, 406, 422, 264, 'white', LINE)
-    s.rect(738, 406, 422, 35, '#F0F4F8', 'none')
-    s.text(754, 411, 390, ['VIA / 이전 Request와 Task 정보'], 22, INK, True)
-    s.text(755, 458, 388, ['“예산 보고서 만들어줘”'], 24, INK)
-    s.text(755, 494, 388, ['예산 보고서 Task / 진행 중'], 21, BLUE)
-    s.line([(754, 537), (1144, 537)], color=LINE, arrow=False, width=1)
-    s.text(755, 556, 388, ['“실적 보고서 만들어줘”'], 24, INK)
-    s.text(755, 592, 388, ['실적 보고서 Task / 진행 중'], 21, BLUE)
-    s.text(755, 634, 388, ['수정할 보고서 Task 미확정'], 21, RED, True)
-
-    s.text(64, 713, 1120, ['Request 해석에 필요한 Context'], 26, BLUE, True)
-    information = [
-        (64, '화면 정보', ['선택한 표의 범위와 내용'], 'Referent 식별'),
-        (452, '이전 Request와 Task 정보', ['관련 보고서 Task 후보'], 'Task Association'),
-        (840, '현재 Request의 조건', ['메일 초안 작성, 발송 제외'], '조건 보존'),
+def overview():
+    s = Slide('overview', 'VIA 사용자 경험을 위한 다섯 설계 문제',
+        '정확한 Request 해석, 지속 대화와 과거 정보 재사용을 위한 설계',
+        '', '다섯 문제의 구조 대안과 품질 손익 비교', '',
+        '기능 정확성 / 반응성 / 변경 용이성 / 복구성')
+    s.text(64, 258, 1792, ['사용자 상황별로 구분할 다섯 설계 책임'], 27, MUTED)
+    s.rect(64, 317, 1792, 45, '#F1F4F7', 'none')
+    for x,w,t in [(84,115,'문서'),(224,285,'사용자 경험'),(554,566,'예방할 위험'),(1164,665,'비교할 SW 구조의 결정')]:
+        s.text(x, 326, w, [t], 23, MUTED, True)
+    rows = [
+        (41, '지금 요청의 이해', '선택 자료와 이전 Task의 오연결', ['정보 조회와 의미 완성의', '진행 책임']),
+        (42, '작업의 지속 추적', 'Request 완료와 Task 완료의 혼동', ['Conversation과 Task 상태의', '관리 책임 및 실행 경계']),
+        (43, '정정의 정확한 반영', '관련 참조 오류와 기존 조건 누락', ['연관된 의미 판단의', '생산 책임과 조정 방식']),
+        (44, '끊김 없는 대화', '새 발화 누락과 부적절한 Response 전달', ['겹친 사건의 후속 실행과', '전달을 이어가는 실행 구조']),
+        (45, '과거 정보의 활용', '과거 정정 누락과 유효하지 않은 결과 재사용', ['교차 기록 Context의', '생산, 조회와 갱신 책임']),
     ]
-    for x, heading, details, purpose in information:
-        s.text(x, 762, 350, [heading], 24, INK, True)
-        s.text(x, 800, 350, details, 23, INK)
-        s.text(x, 835, 350, [purpose], 22, BLUE)
+    for i,(n,experience,risk,decision) in enumerate(rows):
+        y=375+i*98
+        s.text(84,y+14,115,[f'04-{n}'],27,TEAL,True)
+        s.text(224,y+15,285,[experience],26,INK,True)
+        s.text(554,y+18,566,[risk],24,INK)
+        s.text(1164,y+9,665,decision,24,MUTED,leading=32)
+        s.line([(64,y+86),(1856,y+86)],color=LINE,arrow=False,width=1)
+    return s
 
-    s.challenge(366, '필요한 Context의 선택', [
-        '화면 정보, 이전 Request 기록과', 'Task 상태에서 필요한 정보의 확인'])
-    s.challenge(527, 'Referent와 Task의 정확한 연결', [
-        '“이 표”에 해당하는 표의 식별,', '“아까 보고서”에 해당하는 Task의 구분'])
-    s.challenge(688, '정보 부족의 보완과 조건 보존', [
-        '보고서 미확정 시 Clarification,', '“초안만 작성” 조건의 유지'])
+
+def slide41():
+    s = Slide(41, '기능 정확성을 위한 VIA Request 해석 설계',
+        '선택한 표와 이전 보고서의 오연결 위험', '',
+        '정보 조회와 의미 완성의 진행 책임 설계', '',
+        '기능 정확성 / 기능 지원 범위 / 반응성', considerations_title='설계 고려 사항')
+    s.text(64, 265, 1110, ['“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”'], 29, INK, True)
+    s.rect(64, 330, 1110, 411, '#E6ECF2', LINE)
+    s.text(86, 346, 1034, ['사용자 화면과 VIA 기록 / 설명용 가상 화면'], 21, MUTED)
+    s.rect(80, 389, 568, 333, 'white', LINE)
+    s.text(100, 406, 530, ['매출 현황.xlsx'], 25, INK, True)
+    s.text(100, 452, 530, ['선택 범위 A1:D4'], 23, BLUE, True)
+    tx,ty,cw,rh=100,505,132,43
+    s.rect(tx,ty,4*cw,4*rh,'#F3F7FC',BLUE)
+    s.rect(tx,ty,4*cw,rh,'#E4EDF8','none')
+    table=[['항목','1분기','2분기','합계'],['제품 A','120','140','260'],['제품 B','80','100','180'],['합계','200','240','440']]
+    for c in range(1,4): s.line([(tx+c*cw,ty),(tx+c*cw,ty+4*rh)],color=LINE,arrow=False,width=1)
+    for r in range(1,4): s.line([(tx,ty+r*rh),(tx+4*cw,ty+r*rh)],color=LINE,arrow=False,width=1)
+    for r,values in enumerate(table):
+        for c,value in enumerate(values):
+            s.text(tx+c*cw+cw/2,ty+r*rh+11,cw-12,[value],20,INK,r==0,align='center')
+    s.rect(670,389,488,333,'white',LINE)
+    s.text(690,406,448,['이전 Request와 Task 후보'],23,MUTED,True)
+    s.text(690,455,448,['예산 보고서 Task'],26,INK,True)
+    s.text(690,495,448,['“예산 보고서 만들어줘” / 진행 중'],20,MUTED)
+    s.line([(690,536),(1138,536)],color=LINE,arrow=False,width=1)
+    s.text(690,557,448,['실적 보고서 Task'],26,INK,True)
+    s.text(690,597,448,['“실적 보고서 만들어줘” / 진행 중'],20,MUTED)
+    s.text(690,665,448,['연결할 Task 미확정'],29,RED,True)
+    s.rect(64,778,1110,67,'#F1F4F7','none')
+    s.text(84,795,1068,['메일 Request의 고정 조건 / 초안 작성, 발송 제외'],27,INK,True)
+    s.challenge(355,'선택 자료의 확인',['화면 정보와 Referent 범위 확인'])
+    s.challenge(515,'관련 Task의 구분',['이전 Request와 현재 Task 상태 확인'])
+    s.challenge(675,'정보 보완과 조건 유지',['미확정 Task의 Clarification과','초안 조건의 보존'])
     return s
 
 
 def slide42():
-    s = Slide(
-        42, '변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
-        '여러 Request의 처리 완료 이후에도 이어지는 Task 추적',
-        'Conversation 안의 발화 → Request 구분 → 새 Task 생성 또는 기존 Task 연결',
-        '서로 다른 수명의 기록과 상태를 관리하는 SW의 책임과 협력 설계',
-        'Delegation / Downstream Agent에 작업 전달     Agent Execution / 전달한 작업의 개별 실행',
-        '기능 정확성 / 변경 용이성 / 복구성',
-        considerations_title='설계 고려 사항')
-    xs, cw = [64, 448, 832], 342
-
-    # The entire chronological set of inputs and handling records belongs to
-    # the SAME Conversation. It is a record container, not a conversion step
-    # after speech and not an A/B process boundary.
-    s.rect(64, 283, 1110, 270, 'white', LINE)
-    s.rect(64, 283, 1110, 44, '#EAF0F8', 'none')
-    s.text(84, 292, 760, ['Conversation / 이어지는 입력과 응답 기록'], 26, BLUE, True)
-    s.text(1154, 297, 310, ['User Turn / 한 번의 발화'], 19, BLUE, align='right')
-    phases = ['1  처음 발화', '2  잠시 뒤 발화', '3  보고서 완료 후 발화']
-    quotes = [
-        ['“이번 달 매출보고서', '만들어주고, 내일 회의 안내', '메일 초안도 만들어줘.”'],
-        ['“보고서는 어디까지', '됐어?”'],
-        ['“결론 부분만 짧게', '바꿔줘.”'],
-    ]
-    for col, (x, phase, lines) in enumerate(zip(xs, phases, quotes)):
-        s.text(x+16, 336, 310, [phase], 23, INK, True)
-        s.text(x+16, 371, 310, lines, 24, INK, True, leading=29)
-        s.text(x+16, 462, 310, [f'해석한 Request {2 if col==0 else 1}개'], 19, MUTED)
-    s.line([(412, 350), (442, 350)], color=MUTED, width=2)
-    s.line([(796, 350), (826, 350)], color=MUTED, width=2)
-    s.rect(80, 491, 146, 32, '#E9EDF2', 'none')
-    s.text(90, 496, 126, ['보고서 작성'], 21, TEAL, True)
-    s.rect(238, 491, 152, 32, '#E9EDF2', 'none')
-    s.text(250, 496, 128, ['메일 초안'], 21, MUTED, True)
-    for x, text in [(464, '보고서 진행 확인'), (848, '보고서 결론 수정')]:
-        s.rect(x, 491, 310, 32, '#E9EDF2', 'none')
-        s.text(x+12, 496, 286, [text], 21, TEAL, True)
-    for x, status in zip(xs, ['Agent 접수 확인 후 처리 완료',
-                             '확인된 상태로 답변 완료',
-                             '수정 접수 확인 후 처리 완료']):
-        s.text(x+16, 531, 310, [status], 18, MUTED)
-
-    # Two continuous goal folders share the SAME time columns above. Their
-    # distinct terminal times and retained results stay visible, including mail.
-    # Delegation is an action leading to an external execution, not a long-lived
-    # identity parallel to Task. Labels show common behavior, not A/B authority.
-    s.rect(64, 566, 168, 20, '#E4F3F2', TEAL)
-    s.rect(64, 580, 1110, 133, '#F0F8F7', TEAL)
-    s.rect(64, 580, 1110, 35, '#E4F3F2', 'none')
-    s.text(84, 585, 1070, ['같은 보고서 Task / 계속 추적할 목표와 결과'], 24, TEAL, True)
-    s.text(80, 623, 310, ['Task 생성 후 Delegation'], 21, TEAL)
-    s.text(80, 654, 310, ['Agent Execution 1'], 22, INK, True)
-    s.text(80, 683, 310, ['보고서 작성 시작'], 21, TEAL)
-    s.text(464, 623, 310, ['작성 실행 진행 중'], 24, TEAL, True)
-    s.text(464, 664, 310, ['상태 조회 / 새 실행 없음'], 21, MUTED)
-    s.text(848, 623, 310, ['작성 실행 종료'], 21, MUTED)
-    s.text(848, 653, 310, ['결론 수정 Delegation'], 21, TEAL)
-    s.text(848, 683, 310, ['새 Agent Execution 2 진행 중'], 22, TEAL, True)
-
-    s.rect(64, 723, 168, 20, '#F0F2F5', MUTED)
-    s.rect(64, 737, 1110, 116, '#F6F7F9', MUTED)
-    s.rect(64, 737, 1110, 31, '#E9EDF2', 'none')
-    s.text(84, 741, 1070, ['메일 초안 Task / 별도 목표와 결과 추적'], 23, MUTED, True)
-    s.text(80, 779, 310, ['Task 생성 후 Delegation'], 21, MUTED)
-    s.text(80, 815, 310, ['Agent Execution / 초안 작성 시작'], 20, MUTED)
-    s.text(464, 779, 310, ['초안 작성 완료'], 24, MUTED, True)
-    s.text(464, 815, 310, ['결과 보관'], 21, MUTED)
-    s.text(848, 793, 310, ['완료 상태와 결과 유지'], 23, MUTED)
-
-    # Matching time columns explain evolving state; separators are visual
-    # alignment only, not Components, queues, transactions or measured time.
-    for x in [426, 810]:
-        s.line([(x, 336), (x, 546)], color=LINE, arrow=False, dashed=True, width=1)
-        s.line([(x, 621), (x, 704)], color=LINE, arrow=False, dashed=True, width=1)
-        s.line([(x, 776), (x, 846)], color=LINE, arrow=False, dashed=True, width=1)
-
-    s.challenge(363, '발화와 처리 기록의 연결', [
-        '한 발화의 Request 구분과',
-        'Conversation 기록의 유지'])
-    s.challenge(526, '서로 다른 완료 시점', [
-        'Request 처리 완료, Task 목표 완료와',
-        'Agent Execution 종료의 구분'])
-    s.challenge(689, '상태 관리와 연결 복구', [
-        '같은 Task의 후속 Request 및 실행 연결,',
-        '관리 SW 중단 후 기록과 상태 복구'])
+    s = Slide(42, '변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
+        'Request 완료와 Task 완료의 혼동 위험', '',
+        'Conversation과 Task 상태의 관리 책임 및 실행 경계 설계',
+        'Delegation / Downstream Agent에 작업 전달     Agent Execution / 개별 작업 실행',
+        '기능 정확성 / 변경 용이성 / 복구성', considerations_title='설계 고려 사항')
+    xs=[64,448,832]
+    s.rect(64,275,1110,273,'white',LINE)
+    s.rect(64,275,1110,40,'#EAF0F8','none')
+    s.text(84,283,760,['Conversation / 입력과 Response 기록'],25,INK,True)
+    s.text(1154,288,290,['User Turn / 한 번의 발화'],18,MUTED,align='right')
+    quotes=[['“이번 달 매출보고서','만들어주고, 내일 회의 안내','메일 초안도 만들어줘.”'],['“보고서는 어디까지','됐어?”'],['“결론 부분만 짧게','바꿔줘.”']]
+    for i,(x,phase,lines) in enumerate(zip(xs,['처음 발화','잠시 뒤 / 진행 확인','보고서 완료 후 / 수정'],quotes)):
+        s.text(x+16,326,310,[phase],22,MUTED,True)
+        s.text(x+16,363,310,lines,24,INK,True,leading=28)
+        s.text(x+16,451,310,[f'Request {2 if i==0 else 1}개'],18,MUTED)
+    s.line([(411,337),(440,337)],color=MUTED)
+    s.line([(795,337),(824,337)],color=MUTED)
+    for x,w,t in [(80,150,'보고서 작성'),(242,148,'메일 초안'),(464,310,'보고서 진행 확인'),(848,310,'보고서 결론 수정')]:
+        s.rect(x,477,w,32,'#EFF2F5','none');s.text(x+10,483,w-20,[t],21,INK)
+    for x,lines in zip(xs,[['Downstream Agent 접수 확인 후','Request 처리 완료'],['상태 답변 후','Request 처리 완료'],['Downstream Agent 수정 접수 후','Request 처리 완료']]):
+        s.text(x+16,511,310,lines,17,MUTED,leading=22)
+    # The middle column makes the two completion times visible, without a
+    # service/process boundary or a measured time axis.
+    s.rect(64,575,1110,147,'#F0F8F7',TEAL)
+    s.rect(448,619,342,95,'#DCEFEA','none')
+    s.text(84,583,410,['보고서 Task'],26,TEAL,True)
+    s.text(1154,588,620,['Task / 목표, 상태와 결과의 추적'],20,MUTED,align='right')
+    s.text(80,627,310,['Task 생성 후 Delegation'],21,INK)
+    s.text(80,664,310,['Agent Execution 1'],23,INK,True)
+    s.text(80,698,310,['보고서 작성 시작'],20,MUTED)
+    s.text(464,634,310,['Task와 실행 계속'],29,TEAL,True)
+    s.text(464,681,310,['상태 조회 / 새 실행 없음'],20,INK)
+    s.text(848,627,310,['작성 종료 후 수정 Delegation'],21,INK)
+    s.text(848,664,310,['Agent Execution 2 시작'],22,TEAL,True)
+    s.text(848,698,310,['같은 Task의 결론 수정'],20,MUTED)
+    s.rect(64,746,1110,114,'#F5F6F8',LINE)
+    s.text(84,754,1068,['메일 초안 Task'],23,MUTED,True)
+    s.text(80,796,310,['Delegation / 초안 작성 시작'],21,INK)
+    s.text(80,829,310,['Agent Execution'],19,MUTED)
+    s.text(464,808,310,['초안 완료 / 결과 보관'],23,INK)
+    s.text(848,808,310,['완료 상태와 결과 유지'],23,INK)
+    for x in [426,810]:
+        for a,b in [(323,539),(623,712),(790,850)]: s.line([(x,a),(x,b)],color=LINE,arrow=False,dashed=True,width=1)
+    s.challenge(355,'서로 다른 완료 시점',['외부 접수와 답변 완료, Task 목표 완료의 구분'])
+    s.challenge(515,'후속 Request와 실행 연결',['같은 Task의 상태 조회와 새 수정 실행 연결'])
+    s.challenge(675,'관리 책임과 복구 범위',['기록과 상태의 관리 경계 및 중단 후 복구'])
     return s
 
 
 def slide43():
-    s = Slide(
-        43, '기능 정확성을 위한 VIA Request 의미 판단 설계',
-        '정정한 내용뿐 아니라 관련 조건과 연결까지 함께 판단',
-        '메일의 결론을 표로 바꿀 때, 보고서 형식과 관련 Task도 함께 확인',
-        '서로 영향을 주는 의미 판단의 책임과 협력 설계',
-        '', '기능 정확성 / 기능 지원 범위 / 변경 용이성',
-        considerations_title='설계 고려 사항')
-    s.text(64, 282, 1110, ['상황 / 보고서 작성과 메일 초안 작성 진행 중'], 25, MUTED)
-
-    # User-visible conditions and their correction, not Modules or processing stages.
-    for x, w, fill in [(64, 540, '#EAF0F8'), (652, 522, '#FFF0EC')]:
-        s.rect(x, 328, w, 140, fill, 'none')
-    s.text(84, 340, 500, ['먼저 / User Turn'], 20, BLUE, True)
-    s.text(84, 375, 500, ['“보고서는 PDF로, 메일에는', '그 보고서의 결론을 넣어줘.”'], 27, INK, True, leading=32)
-    s.text(84, 440, 500, ['Request 해석 / PDF 조건과 메일 내용'], 19, BLUE)
-    s.text(672, 340, 482, ['잠시 뒤 / 정정 User Turn'], 20, RED, True)
-    s.text(672, 375, 482, ['“메일에는 결론 대신', '표만 넣어줘.”'], 27, INK, True, leading=32)
-    s.text(672, 440, 482, ['Request 해석 / 메일 내용 정정'], 19, RED)
-    s.line([(616, 390), (640, 390)], color=MUTED)
-
-    s.text(64, 476, 1110, ['정정으로 바뀌는 내용과 유지할 조건'], 26, INK, True)
-    # Conceptual documents show requested properties, not completed Agent facts.
-    s.note(64, 525, 350, 151, ['보고서 Task의 조건'], 25, '#F0F8F7', True, TEAL)
-    s.text(84, 578, 310, ['형식 / PDF 유지', '참조할 결과 / 결론과 표'], 24, INK, leading=34)
-    s.line([(426, 609), (686, 609)], color=BLUE)
-    s.text(441, 551, 235, ['보고서 결과 참조'], 23, BLUE, True)
-    s.text(441, 637, 235, ['결과 준비 후 사용'], 21, MUTED)
-    s.note(698, 525, 476, 151, ['메일 초안 Task의 조건'], 25, '#F3F6FA', True, BLUE)
-    s.text(718, 580, 436, ['기존 / 보고서 결론'], 24, MUTED)
-    s.line([(797, 595), (972, 595)], color=RED, arrow=False)
-    s.text(718, 624, 436, ['변경 / 같은 보고서의 표만 사용'], 24, RED, True)
-
-    s.text(64, 704, 1110, ['함께 판단할 의미 / SW 모듈이나 실행 순서가 아닌 판단 항목'], 22, MUTED)
-    values = [
-        (64, 744, '의도', 'PDF 보고서와 메일 초안'),
-        (448, 744, 'Referent', '같은 보고서의 표'),
-        (832, 744, 'Task Association', '관련 보고서 및 메일 Task'),
-        (64, 807, 'Request 관계', '보고서 결과를 메일에 사용'),
-        (448, 807, '정정 범위', 'PDF 유지 / 메일 내용 교체'),
-        (832, 807, '처리 방향', 'Delegation 및 자료 대기'),
-    ]
-    for x, y, name, value in values:
-        s.text(x, y, 342, [name], 23, BLUE, True)
-        s.text(x, y+29, 342, [value], 22, INK)
-    s.challenge(363, '현재 Request의 Task Association', [
-        '전체 발화와 이전 기록을 활용한',
-        '관련 Task의 판단'])
-    s.challenge(526, '변경과 유지 범위의 구분', [
-        '메일 내용과 보고서 참조의 변경,',
-        '기존 PDF 조건의 유지'])
-    s.challenge(689, '서로 관련된 판단의 일치', [
-        'Referent, Task Association과 결과 사용의',
-        '불일치 및 조건 누락 방지'])
+    s = Slide(43, '기능 정확성을 위한 VIA Request 의미 판단 설계',
+        '메일 정정에 따른 관련 참조 오류와 기존 조건 누락 위험', '',
+        '연관된 의미 판단의 생산 책임과 조정 방식 설계', '',
+        '기능 정확성 / 기능 지원 범위 / 변경 용이성', considerations_title='설계 고려 사항')
+    for x,w,fill in [(64,540,'#EFF3F8'),(652,522,'#FFF0EC')]: s.rect(x,275,w,147,fill,'none')
+    s.text(84,287,500,['진행 중인 두 Task의 조건 지정'],20,MUTED)
+    s.text(84,324,500,['“보고서는 PDF로, 메일에는','그 보고서의 결론을 넣어줘.”'],27,INK,True,leading=32)
+    s.text(84,391,500,['Request / PDF 조건과 메일 내용'],19,MUTED)
+    s.text(672,287,482,['잠시 뒤 / 메일 내용 정정'],20,RED)
+    s.text(672,324,482,['“메일에는 결론 대신','표만 넣어줘.”'],27,INK,True,leading=32)
+    s.text(672,391,482,['Request / 메일 내용 교체'],19,MUTED)
+    s.line([(616,346),(640,346)],color=MUTED)
+    s.note(64,476,300,204,['보고서 Task'],26,'#F3F7F7',True,INK)
+    s.text(84,537,260,['PDF 조건 유지'],29,TEAL,True)
+    s.text(84,604,260,['결과 / 결론과 표'],22,MUTED)
+    s.note(752,476,422,204,['메일 초안 Task'],26,'#F3F6FA',True,INK)
+    s.text(772,537,382,['기존 / 보고서 결론'],24,MUTED)
+    s.line([(853,553),(1028,553)],color=RED,arrow=False)
+    s.text(772,605,382,['같은 보고서의 표만 사용'],28,TEAL,True)
+    # A semantic data relationship, not an invocation path or Module graph.
+    s.line([(380,578),(730,578)],color=TEAL,width=3)
+    s.text(399,495,322,['메일의 보고서 참조 변경'],24,RED,True)
+    s.text(399,626,322,['보고서 결과 준비 후 사용'],21,MUTED)
+    s.text(64,720,1110,['정정 시 함께 맞춰야 할 판단'],23,MUTED)
+    for x,name,value in [(80,'Referent','같은 보고서의 표'),(464,'Task Association','메일 초안 Task'),(848,'정정 범위','메일 내용만 교체')]:
+        s.text(x,763,310,[name],21,MUTED)
+        s.text(x,804,310,[value],26,INK,True)
+    s.line([(390,819),(434,819)],color=LINE,arrow=False,width=2)
+    s.line([(772,819),(818,819)],color=LINE,arrow=False,width=2)
+    s.challenge(355,'의도와 처리 방향',['요청 목표와 Delegation 및 자료 대기의 판단'])
+    s.challenge(515,'Referent와 Task Association',['자료와 관련 Task 및 결과 사용 관계의 일치'])
+    s.challenge(675,'정정 범위와 기존 조건',['메일 내용만 교체하고 PDF 조건 유지'])
     return s
 
 
 def slide44():
-    s = Slide(
-        44, '반응성을 위한 VIA 지속 입력과 Response 전달 설계',
-        '설명 도중 겹치는 새 발화와 다른 Task의 질문',
-        '현재 음성 중단과 Request 처리 중에도 이어지는 메일 Task의 질문 수신',
-        '후속 처리, 대기 상태와 전달 차례를 이어가는 실행 구조 설계',
-        '사용자 발화 시작 시 현재 음성 중단 / Task 취소는 취소 의도 확인 후 별도 처리',
-        '반응성 / 기능 정확성 / 자원 활용성',
-        considerations_title='설계 고려 사항')
-    xs = [64, 448, 832]
-    for x, label in zip(xs, ['1  처음 발화와 처리 시작', '2  보고서 설명 도중', '3  새 발화 해석 후']):
-        s.text(x+16, 286, 310, [label], 23, INK, True)
-    s.line([(410, 303), (441, 303)], color=MUTED)
-    s.line([(794, 303), (825, 303)], color=MUTED)
-
-    # All panels describe occurrences and user-visible delivery. No scheduler,
-    # mediator, stream graph, queue or Component graph prejudges the A/B choice.
-    for x, fill in zip(xs, ['#EAF0F8', '#FFF0EC', '#EAF0F8']):
-        s.rect(x, 330, 342, 153, fill, 'none')
-    s.text(80, 342, 310, ['User Turn / 최초 발화'], 20, BLUE, True)
-    s.text(80, 377, 310, ['“보고서 내용 설명해주고,', '내일 회의 안내 메일', '초안도 만들어줘.”'], 24, INK, True, leading=29)
-    s.text(464, 342, 310, ['User Turn / 끼어들기'], 20, RED, True)
-    s.text(464, 382, 310, ['“잠깐, 표부터', '설명해줘.”'], 27, INK, True, leading=34)
-    s.text(848, 342, 310, ['Response / 현재 Request'], 20, BLUE, True)
-    s.text(848, 382, 310, ['표 설명으로 전환'], 27, BLUE, True)
-    s.text(848, 431, 310, ['Text 기록과 음성 전달'], 22, MUTED)
-
-    s.rect(64, 503, 1110, 123, '#F3F6FA', LINE)
-    s.text(84, 515, 1060, ['보고서 설명 / 계속 듣기와 현재 음성 제어'], 24, BLUE, True)
-    s.text(80, 562, 310, ['Response 음성 전달 중'], 23, INK, True)
-    for i,h in enumerate([8,14,23,11,18,9]):
-        s.line([(89+i*22,617-h), (89+i*22,617)], color=BLUE, arrow=False, width=5)
-    s.text(464, 562, 310, ['현재 음성 즉시 중단'], 23, RED, True)
-    s.text(464, 597, 310, ['새 발화 수신 및 해석'], 21, INK)
-    s.text(848, 562, 310, ['현재 발화에 맞춘 설명'], 23, BLUE, True)
-    s.text(848, 597, 310, ['이전 설명의 전달 범위 기록'], 21, MUTED)
-
-    s.rect(64, 650, 1110, 185, '#F0F8F7', TEAL)
-    s.text(84, 664, 1060, ['별도 메일 초안 Task / Downstream Agent의 실행과 질문'], 24, TEAL, True)
-    s.text(80, 709, 310, ['Delegation 후 초안 작성'], 23, TEAL, True)
-    s.text(80, 750, 310, ['Agent Execution 진행 중'], 21, INK)
-    s.text(80, 791, 310, ['보고서 설명과 병행'], 21, MUTED)
-    s.text(464, 709, 310, ['메일 Task의 질문 도착'], 23, TEAL, True)
-    s.text(464, 749, 310, ['“메일 받는 사람은', '누구인가요?”'], 23, INK, leading=30)
-    s.text(848, 709, 310, ['전달 차례 결정 후 질문 전달'], 22, TEAL, True)
-    s.text(848, 742, 310, ['“메일 초안의 받는 사람은', '누구인가요?”'], 22, INK, leading=28)
-    s.text(848, 807, 310, ['사용자 답변까지 실행 대기'], 19, MUTED)
-    for x in [426, 810]:
-        s.line([(x, 550), (x, 617)], color=LINE, arrow=False, dashed=True, width=1)
-        s.line([(x, 702), (x, 826)], color=LINE, arrow=False, dashed=True, width=1)
-    s.challenge(363, '설명 중에도 계속 듣기', [
-        '새 발화의 수신과 현재 음성 중단,',
-        '해석 지연에 따른 입력 누락 방지'])
-    s.challenge(526, '겹친 사건의 후속 처리', [
-        '표 설명 Request와 메일 질문의',
-        '진행 및 대기 상태 연결'])
-    s.challenge(689, '전달 차례와 실제 전달', [
-        '현재 발화에 맞는 Response 선택,',
-        '질문 생성과 실제 전달의 구분'])
+    s = Slide(44, '반응성을 위한 VIA 지속 입력과 Response 전달 설계',
+        '새 발화 누락과 현재 대화에 맞지 않는 Response 전달 위험', '',
+        '겹친 사건의 후속 실행과 전달을 이어가는 실행 구조 설계', '',
+        '반응성 / 기능 정확성 / 자원 활용성', considerations_title='설계 고려 사항')
+    s.text(64,258,1110,['처음 / “보고서 내용 설명해주고, 내일 회의 안내 메일 초안도 만들어줘.”'],24,INK)
+    xs=[64,448,832]
+    for x,label,c in zip(xs,['처리 시작','설명 도중 / 두 사건 도착','발화 해석 후'],[MUTED,RED,MUTED]):
+        s.text(x+16,310,310,[label],23,c,True)
+    s.line([(411,326),(440,326)],color=MUTED)
+    s.line([(795,326),(824,326)],color=MUTED)
+    for x,fill in zip(xs,['#F2F5F9','#FFF0EC','#F2F5F9']): s.rect(x,356,342,189,fill,'none')
+    s.text(80,370,310,['Response'],20,MUTED)
+    s.text(80,415,310,['보고서 설명 중'],29,INK,True)
+    s.text(80,485,310,['사용자 발화 계속 수신'],21,MUTED)
+    for i,h in enumerate([8,14,23,11,18,9]): s.line([(89+i*22,532-h),(89+i*22,532)],color=BLUE,arrow=False,width=5)
+    s.text(464,370,310,['새 User Turn'],20,RED)
+    s.text(464,408,310,['“잠깐, 표부터','설명해줘.”'],28,INK,True,leading=34)
+    s.text(464,506,310,['현재 음성 중단과 발화 해석'],20,MUTED)
+    s.text(848,370,310,['현재 Request의 Response'],20,MUTED)
+    s.text(848,415,310,['표 설명으로 전환'],28,TEAL,True)
+    s.text(848,485,310,['Text 및 음성 전달'],21,MUTED)
+    s.text(64,591,1110,['메일 초안 Task / Downstream Agent의 작업 실행'],24,INK,True)
+    for x,fill in zip(xs,['#F3F7F7','#FFF0EC','#F3F7F7']): s.rect(x,638,342,164,fill,'none')
+    s.text(80,656,310,['Delegation 후 초안 작성'],23,INK,True)
+    s.text(80,705,310,['Agent Execution 진행 중'],21,MUTED)
+    s.text(464,656,310,['메일 Task의 질문 도착'],23,RED,True)
+    s.text(464,702,310,['“받는 사람은','누구인가요?”'],26,INK,True,leading=34)
+    s.text(848,656,310,['표 설명 후 메일 질문 전달'],23,TEAL,True)
+    s.text(848,702,310,['“메일 초안의 받는 사람은','누구인가요?”'],22,INK,leading=30)
+    s.text(848,814,310,['Agent Execution / 답변 대기'],20,MUTED)
+    s.text(64,847,1110,['음성 중단 / Task 취소 의도 확인은 별도'],20,MUTED)
+    for x in [426,810]: s.line([(x,350),(x,834)],color=LINE,arrow=False,dashed=True,width=1)
+    s.challenge(355,'수신과 중단의 우선 처리',['긴 해석 중에도 새 발화의 수신과 음성 중단'])
+    s.challenge(515,'후속 실행과 대기 상태',['현재 Request와 메일 질문의 처리 연결'])
+    s.challenge(675,'현재성 확인과 실제 전달',['정정 전 Response 보류와 전달 차례 결정'])
     return s
 
 
 def slide45():
-    s = Slide(
-        45, '기능 정확성을 위한 VIA 기억과 Context 제공 설계',
-        '여러 기록에 흩어진 과거 정정 내용과 실제 결과',
-        '지난번의 표현 방식을 다시 사용하기 위한 정정, 결과 버전과 전달 기록의 연결',
-        '정확한 과거 정보 제공을 위한 조회, 보관과 갱신 책임 설계',
-        '이번 Request의 과거 정보 참조 / 장기 User Memory 등록은 별도 사용자 지시',
-        '기능 정확성 / 반응성 / 자원 활용성',
-        considerations_title='설계 고려 사항')
-    s.text(64, 283, 1110, ['지난번 / 보고서를 읽은 뒤의 정정 발화'], 23, MUTED, True)
-    s.rect(64, 324, 1110, 58, '#EAF0F8', 'none')
-    s.text(84, 336, 1070, ['“결론을 먼저 쓰고, 문장은 짧게 바꿔줘.”'], 29, INK, True)
-
-    # Document silhouettes and a user-visible delivery receipt show historical
-    # records only. No central repository, Context Manager or chosen read path.
-    s.note(64, 414, 300, 228, ['지난 보고서 / 수정 전'], 24, '#F6F7F9', True, MUTED)
-    s.text(84, 475, 260, ['배경 설명'], 22, MUTED, True)
-    for y in [511, 529, 547]: s.line([(84,y), (326,y)], color=LINE, arrow=False, width=4)
-    s.text(84, 580, 260, ['결론 / 마지막 단락'], 22, MUTED)
-    s.line([(377, 529), (429, 529)], color=BLUE)
-    s.text(379, 488, 55, ['수정'], 20, BLUE, True)
-    s.note(442, 414, 322, 228, ['같은 보고서 / 수정 후'], 24, '#F0F8F7', True, TEAL)
-    s.text(462, 475, 280, ['결론 / 첫 단락'], 24, TEAL, True)
-    for y, width in [(517, 175), (544, 150), (571, 183)]:
-        s.line([(462, y), (462+width, y)], color=TEAL, arrow=False, width=4)
-    s.text(462, 603, 280, ['짧은 문장으로 변경'], 21, TEAL)
-    s.line([(777, 529), (814, 529)], color=BLUE)
-    s.text(778, 488, 55, ['전달'], 20, BLUE, True)
-    s.note(828, 414, 346, 228, ['실제 전달 기록'], 24, '#F3F6FA', True, BLUE)
-    s.text(848, 475, 304, ['수정 후 보고서의', '사용자 전달 확인'], 24, INK, leading=35)
-    s.text(848, 576, 304, ['어느 결과 버전을', '실제로 받았는지 확인'], 21, MUTED, leading=29)
-
-    s.text(64, 675, 1110, ['이번 / 새 보고서의 Request'], 23, MUTED, True)
-    s.rect(64, 715, 1110, 79, '#EAF0F8', 'none')
-    s.text(84, 728, 1070, ['“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”'], 28, INK, True)
-    s.text(64, 819, 1110, ['필요한 Context / 정정 내용 + 수정된 결과 + 실제 전달 기록'], 25, BLUE, True)
-
-    s.challenge(363, '과거 기록 사이의 연결', [
-        '정정 발화, 수정 전후 결과와',
-        '실제 전달 버전의 연결'])
-    s.challenge(526, '재사용할 정보의 유효성', [
-        '요약의 조건 누락, 원본 수정과',
-        '삭제에 따른 사용 가능 여부 확인'])
-    s.challenge(689, '반복 참조와 유지 비용', [
-        '필요한 과거 정보의 조회와',
-        '보관, 갱신 비용의 균형'])
+    s = Slide(45, '기능 정확성을 위한 VIA 기억과 Context 제공 설계',
+        '과거 정정의 누락과 유효하지 않은 결과 재사용 위험', '',
+        '과거 기록을 연결한 Context의 생산, 조회와 갱신 책임 설계',
+        '과거 정보 참조 / 장기 User Memory 등록은 별도 사용자 지시',
+        '기능 정확성 / 반응성 / 자원 활용성', considerations_title='설계 고려 사항')
+    s.text(64,263,1110,['지난번 / 서로 연결해야 할 세 종류의 기록'],25,MUTED)
+    for x,w in [(64,350),(444,350),(824,350)]: s.note(x,329,w,287,[],24,'#F4F6F8')
+    s.text(84,347,310,['정정 Request'],25,INK,True)
+    s.text(84,408,310,['“결론 먼저,','짧은 문장으로','바꿔줘.”'],29,INK,True,leading=37)
+    s.text(84,572,310,['사용자가 고친 내용'],21,MUTED)
+    s.text(464,347,310,['수정 전후 결과'],25,INK,True)
+    s.text(464,403,310,['수정 전'],19,MUTED)
+    s.text(464,437,310,['배경 설명 … 결론'],23,MUTED)
+    s.line([(464,481),(774,481)],color=LINE,arrow=False,width=1)
+    s.text(464,506,310,['수정 후'],19,TEAL)
+    s.text(464,548,310,['결론 먼저 / 짧은 문장'],25,TEAL,True)
+    s.text(844,347,310,['실제 전달 기록'],25,INK,True)
+    s.text(844,412,310,['수정 후 결과 전달'],27,TEAL,True)
+    s.text(844,491,310,['어느 결과 버전을','실제로 받았는지 확인'],23,MUTED,leading=34)
+    s.line([(423,471),(435,471)],color=MUTED)
+    s.line([(803,471),(815,471)],color=MUTED)
+    # These links identify the needed past Context, without a repository or
+    # a chosen production/read schedule. They do not pre-bind today's Task.
+    s.line([(239,622),(239,646),(999,646),(999,622)],color=LINE,arrow=False,width=2)
+    s.text(64,664,1110,['이번 / 새 보고서의 Request'],23,MUTED)
+    s.rect(64,708,1110,81,'#EAF0F8','none')
+    s.text(84,728,1070,['“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”'],28,INK,True)
+    s.rect(64,811,1110,55,'#F0F8F7','none')
+    s.line([(619,646),(1192,646),(1192,839),(1174,839)],color=TEAL,width=3)
+    s.text(84,825,1070,['이번 Request에 연결할 과거 Context / 정정 내용, 결과 버전과 실제 전달'],24,INK,True)
+    s.challenge(355,'기록 간 관계의 복원',['정정 내용과 결과 버전 및 실제 전달의 연결'])
+    s.challenge(515,'재사용 정보의 유효성',['원본 수정과 삭제 및 요약 누락의 확인'])
+    s.challenge(675,'반복 조회와 유지 비용',['Context 생산과 조회 및 갱신 비용의 균형'])
     return s
 
 
 def build():
-    slides = [slide41(), slide42(), slide43(), slide44(), slide45()]
+    slides = [overview(), slide41(), slide42(), slide43(), slide44(), slide45()]
     outputs = {}
     deck = ET.Element('mxfile', host='app.diagrams.net', type='device')
+    full_deck = ET.Element('mxfile', host='app.diagrams.net', type='device')
     for slide in slides:
-        slug = f'dp{slide.number}-background'
-        outputs[DIAGRAMS / f'{slug}.svg'] = slide.svg()
-        outputs[DIAGRAMS / f'{slug}.drawio'] = slide.drawio()
-        deck.append(copy.deepcopy(slide.diagram()))
+        outputs[DIAGRAMS / f'{slide.slug}.svg'] = slide.svg()
+        outputs[DIAGRAMS / f'{slide.slug}.drawio'] = slide.drawio()
+        full_deck.append(copy.deepcopy(slide.diagram()))
+        if slide.number != 'overview':
+            deck.append(copy.deepcopy(slide.diagram()))
     outputs[DECK / 'VIA-DP-background-41-45.drawio'] = ET.tostring(deck, encoding='unicode')+'\n'
-    sections = ''.join(f'<section id="dp{s.number}"><h2>04-{s.number}. {html.escape(s.title)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/dp{s.number}-background.svg" alt="04-{s.number} DP 배경"><p><a href="../../architecture/12-decisions/decision-packages/diagrams/dp{s.number}-background.drawio">draw.io 원본</a> / <a href="dp{s.number}-background.png">PNG</a></p></section>' for s in slides)
-    outputs[DECK / 'index.html'] = '<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 배경 41–45</title><style>body{margin:0;background:#ecf0f3;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:#18232e}header{padding:22px 4vw;background:white}h1{font-size:26px;margin:0 0 12px}nav{display:flex;gap:22px}a{color:#2858a5}main{max-width:1920px;margin:auto}section{padding:22px 2vw;scroll-margin-top:20px}h2{font-size:20px}img{display:block;width:100%;height:auto;background:white}p{font-size:16px}@media print{header,h2,p{display:none}section{padding:0;break-after:page}body{background:white}@page{size:16in 9in;margin:0}}</style><header><h1>VIA DP 배경 — 04-41~45</h1><nav><a href="VIA-DP-background-41-45.drawio">5페이지 draw.io</a>'+''.join(f'<a href="#dp{s.number}">04-{s.number}</a>' for s in slides)+'</nav></header><main>'+sections+'</main></html>\n'
+    outputs[DECK / 'VIA-DP-background-overview-41-45.drawio'] = ET.tostring(full_deck, encoding='unicode')+'\n'
+    sections = ''.join(f'<section id="{s.slug}"><h2>{html.escape(s.caption)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.svg" alt="{html.escape(s.caption)}"><p><a href="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.drawio">draw.io 원본</a> / <a href="{s.slug}.png">PNG</a></p></section>' for s in slides)
+    outputs[DECK / 'index.html'] = '<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 문제 지도와 배경 41–45</title><style>body{margin:0;background:#ecf0f3;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:#18232e}header{padding:22px 4vw;background:white}h1{font-size:26px;margin:0 0 12px}nav{display:flex;gap:22px;flex-wrap:wrap}a{color:#2858a5}main{max-width:1920px;margin:auto}section{padding:22px 2vw;scroll-margin-top:20px}h2{font-size:20px}img{display:block;width:100%;height:auto;background:white}p{font-size:16px}@media print{header,h2,p{display:none}section{padding:0;break-after:page}body{background:white}@page{size:16in 9in;margin:0}}</style><header><h1>VIA DP 설계 문제 지도와 배경 41–45</h1><nav><a href="VIA-DP-background-overview-41-45.drawio">전체 6페이지 draw.io</a><a href="VIA-DP-background-41-45.drawio">배경 5페이지 draw.io</a>'+''.join(f'<a href="#{s.slug}">'+('전체 지도' if s.number=='overview' else f'04-{s.number}')+'</a>' for s in slides)+'</nav></header><main>'+sections+'</main></html>\n'
     return outputs
 
 

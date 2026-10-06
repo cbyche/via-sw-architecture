@@ -21,9 +21,11 @@
 
 ![04-41 DP 배경](./diagrams/dp41-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp41-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp41-background.png) / [다섯 배경 슬라이드 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp41-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp41-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
 
 사용자 화면 예시와 Request 해석에 필요한 Context를 보여주는 중립적인 배경 페이지다. 선택한 표의 Referent 식별, 이전 Request 기록을 통한 Task Association, 정보 부족 시 Clarification과 조건 보존을 설명한다. Component 배치, 처리 순서와 A/B의 해석 제어 방식은 이 배경에서 미리 정하지 않으며 아래 설계 비교에서 다룬다.
+
+정보 조회와 의미 완성의 진행 책임이 이 장의 결정 범위이며, 43의 의미 생산 책임 구분과 다르다. 메일의 초안 작성과 발송 제외 조건도 보존한다. 노란색 문구는 예방할 설계 위험이며 실제 관측된 실패나 측정 결과가 아니다. [다섯 설계 문제 지도](./diagrams/dp-background-overview.svg)에서 각 결정 범위를 먼저 구분한다.
 
 ## 1. 왜 VIA에서 중요한가
 
