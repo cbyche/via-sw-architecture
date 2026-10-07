@@ -32,7 +32,7 @@ for n in range(41,46):
         s=getattr(bg,'slide'+str(n))() if kind=='background' else cmp.Comparison(n)
         if kind=='comparison':
             for side,x in enumerate([140,1010]):getattr(cmp,'graph'+str(n))(s,x,side)
-        prefix='docs/architecture/12-decisions/decision-packages/diagrams' if kind=='background' else 'docs/presentation_files/dp-comparison'
+        prefix='docs/architecture/12-decisions/decision-packages/diagrams' if kind=='background' else 'docs/presentations_files/dp-comparison'
         source=prefix+'/'+s.slug+'.svg'
         assert normalized_svg((root/source).read_text())==normalized_svg(s.svg()),source+' is out of sync'
         scenes.append(dict(number=n,kind=kind,slug=s.slug,title=s.caption,items=s.items,source=source,sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
@@ -101,9 +101,9 @@ function nativeScene(presentation,scene) {
 }
 
 const plans=[
-  {slug:'VIA-DP-background-and-comparison-41-45',scenes,destination:'docs/presentation_files/VIA-DP-background-and-comparison-41-45.pptx'},
-  {slug:'VIA-DP-background-41-45',scenes:scenes.filter(s=>s.kind==='background'),destination:'docs/presentation_files/dp-background/VIA-DP-background-41-45.pptx'},
-  {slug:'VIA-DP-comparison-41-45',scenes:scenes.filter(s=>s.kind==='comparison'),destination:'docs/presentation_files/dp-comparison/VIA-DP-comparison-41-45.pptx'},
+  {slug:'VIA-DP-background-and-comparison-41-45',scenes,destination:'docs/presentations_files/VIA-DP-background-and-comparison-41-45.pptx'},
+  {slug:'VIA-DP-background-41-45',scenes:scenes.filter(s=>s.kind==='background'),destination:'docs/presentations_files/dp-background/VIA-DP-background-41-45.pptx'},
+  {slug:'VIA-DP-comparison-41-45',scenes:scenes.filter(s=>s.kind==='comparison'),destination:'docs/presentations_files/dp-comparison/VIA-DP-comparison-41-45.pptx'},
 ];
 const checkPackage=String.raw`
 import sys,json,zipfile,re

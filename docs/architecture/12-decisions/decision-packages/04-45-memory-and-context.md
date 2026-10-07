@@ -7,7 +7,7 @@
 
 ![04-45 DP 배경](./diagrams/dp45-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp45-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp45-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp45-background.drawio) / [발표 삽입용 PNG](../../../presentations_files/dp-background/dp45-background.png) / [전체 지도와 배경 모아 보기](../../../presentations_files/dp-background/index.html)
 
 지난번 보고서의 수정 전 결과, 결론 우선과 짧은 문장을 요청한 정정 발화, 수정 후 결과와 실제 전달 기록을 구분한다. 이번 새 보고서 Request가 그 표현 방식을 참조하므로 정정 내용, 결과 버전과 실제 전달 기록을 연결한 Context가 필요하다. 문서 실루엣은 기록 종류의 개념 표현이며 실제 보고서 본문이나 측정 자료가 아니다. 원본별 서비스, 공통 기억 저장소 또는 Context Manager 배치를 미리 답으로 그리지 않는다. 사용이 허용된 과거 정보의 연결과 유효성, 조회 및 유지 비용에서 책임 설계로 이어진다. 과거 표현 방식 참조는 장기 User Memory의 자동 등록이 아니며 현재 Request의 적용 의미 판단은 그대로 남는다. 원본 조합과 공통 파생 기억의 구조 비교는 아래 본문에서 다룬다.
 

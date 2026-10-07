@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 DIAGRAMS = ROOT / 'docs/architecture/12-decisions/decision-packages/diagrams'
-DECK = ROOT / 'docs/presentation_files/dp-background'
+DECK = ROOT / 'docs/presentations_files/dp-background'
 W, H = 1920, 1080
 INK, MUTED, TEAL = '#18232E', '#5F6B77', '#087E8B'
 BLUE, RED, LINE = '#2858A5', '#B63732', '#CDD6DE'

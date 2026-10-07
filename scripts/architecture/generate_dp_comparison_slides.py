@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from generate_dp_background_slides import Slide, INK, MUTED, TEAL, BLUE, RED, LINE
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'docs/presentation_files/dp-comparison'
+OUT = ROOT / 'docs/presentations_files/dp-comparison'
 GREEN = '#D5E7C7'
 PURPLE = '#7155A4'
 

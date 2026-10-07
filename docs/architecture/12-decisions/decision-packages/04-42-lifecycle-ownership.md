@@ -11,7 +11,7 @@
 
 ![04-42 DP 배경](./diagrams/dp42-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp42-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp42-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp42-background.drawio) / [발표 삽입용 PNG](../../../presentations_files/dp-background/dp42-background.png) / [전체 지도와 배경 모아 보기](../../../presentations_files/dp-background/index.html)
 
 처음 발화, 잠시 뒤의 진행 확인 발화, 보고서 완료 후의 수정 발화를 시간 순서로 표시한다. 한 번의 발화는 User Turn이며, 첫 발화는 독립적인 보고서 작성과 회의 안내 메일 초안 작성 Request로 해석한다. 후속 발화는 각각 보고서 진행 확인과 결론 수정 Request다. 모든 발화와 처리 기록을 하나의 Conversation 틀에 보관하므로 Conversation은 발화의 변환 결과가 아닌 이어지는 기록이다.
 

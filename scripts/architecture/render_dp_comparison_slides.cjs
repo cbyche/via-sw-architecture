@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const {chromium} = require(process.env.VIA_PLAYWRIGHT_MODULE || 'playwright');
-const folder = path.resolve(__dirname, '../../docs/presentation_files/dp-comparison');
+const folder = path.resolve(__dirname, '../../docs/presentations_files/dp-comparison');
 const digest = data => crypto.createHash('sha256').update(data).digest('hex');
 
 (async () => {

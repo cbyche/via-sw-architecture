@@ -21,7 +21,7 @@
 
 ![04-41 DP 배경](./diagrams/dp41-background.svg)
 
-[편집 가능한 draw.io](./diagrams/dp41-background.drawio) / [발표 삽입용 PNG](../../../presentation_files/dp-background/dp41-background.png) / [전체 지도와 배경 모아 보기](../../../presentation_files/dp-background/index.html)
+[편집 가능한 draw.io](./diagrams/dp41-background.drawio) / [발표 삽입용 PNG](../../../presentations_files/dp-background/dp41-background.png) / [전체 지도와 배경 모아 보기](../../../presentations_files/dp-background/index.html)
 
 사용자 화면 예시와 Request 해석에 필요한 Context를 보여주는 중립적인 배경 페이지다. 선택한 표의 Referent 식별, 이전 Request 기록을 통한 Task Association, 정보 부족 시 Clarification과 조건 보존을 설명한다. Component 배치, 처리 순서와 A/B의 해석 제어 방식은 이 배경에서 미리 정하지 않으며 아래 설계 비교에서 다룬다.
 
