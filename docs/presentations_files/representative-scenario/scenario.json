@@ -1,0 +1,51 @@
+{
+  "title": "과제 소개 | 대표 시나리오",
+  "subtitle": "표를 설명받고, 보고서와 메일 초안을 맡긴 뒤 대화로 작업을 이어가는 상황",
+  "scenes": [
+    {
+      "heading": "① 화면을 짚어 질문",
+      "image": "fr2-contextual-interpretation.png",
+      "quote": "“이 표의 핵심을\n설명해줘.”",
+      "behavior": "당시 화면의 표를 지정\nVIA가 핵심을 직접 설명"
+    },
+    {
+      "heading": "② 두 업무를 위임",
+      "image": "fr3-compound-request.png",
+      "quote": "“이 내용으로 PDF\n보고서 만들어줘.\n회의 안내 메일은\n초안만 작성해줘.”",
+      "behavior": "앞선 설명으로 두 업무 위임\nPDF와 ‘초안만’ 조건 보존"
+    },
+    {
+      "heading": "③ 말하는 도중 정정",
+      "image": "fr6-past-context.png",
+      "quote": "“잠깐, 보고서는 지난번\n고친 형식으로 만들어줘.\n메일은 그대로 진행해.”",
+      "behavior": "음성 응답을 즉시 중단\n보고서의 형식만 변경"
+    },
+    {
+      "heading": "④ 해당 업무에 답변",
+      "image": "fr4-multiple-task-interaction.png",
+      "quote": "VIA “초안의\n받는 사람은?”\n사용자 “영업팀.”",
+      "behavior": "정정 중 도착한 질문을 보류\n발화 후 메일에 답변 연결"
+    },
+    {
+      "heading": "⑤ Text로 상태 확인",
+      "image": "fr1-continuous-dialogue.png",
+      "quote": "“아까 보고서\n어디까지 됐어?”",
+      "behavior": "음성을 끄고 Text로 전환\n기존 업무의 확인된 상태 전달"
+    }
+  ],
+  "taskFlow": [
+    ["업무 상태", "② 위임", "③ 부분 정정", "④ 질문·답변", "⑤ 상태 확인"],
+    ["보고서", "PDF 작성", "이전 형식 적용, PDF 유지", "작성 계속", "확인된 진행 상태 전달"],
+    ["메일 초안", "초안만 작성", "기존 지시 유지", "받는 사람: 영업팀", "초안 상태 유지"]
+  ],
+  "roleBoundary": "VIA: 요청 이해와 대화·업무 연결     Downstream Agent: 보고서·메일 초안의 실제 작성",
+  "notes": [
+    "하나의 대화 안에서 이어지는 다섯 장면이다. 화면의 표 설명은 VIA가 직접 응답하고, 보고서와 메일 초안의 도메인 계획 및 실제 작성은 Downstream Agent가 수행한다.",
+    "③은 음성 응답 중 끼어들기와 과거 정정 활용 및 부분 수정의 예다. 보고서만 이전에 고친 형식으로 변경하며 PDF 조건을 보존한다. 메일은 그대로 유지한다. 과거 정정의 재사용이 장기 User Memory 승격을 자동으로 뜻하지 않는다.",
+    "④는 메일 Agent의 질문이 사용자 정정 중 도착한 경우다. VIA는 사용자 발화가 끝난 뒤 질문을 전달하고, ‘영업팀’ 답변을 메일 업무에 연결한다. 보고서 업무는 계속 진행한다.",
+    "⑤는 정상적인 Voice 종료와 Text 전환이다. 기존 Task의 검증된 상태를 확인하는 예이며 재시작 또는 장애 복구 성공의 증거는 아니다.",
+    "원문: docs/architecture/05-representative-use-cases.md, docs/architecture/03-fixed-architecture-scope.md, docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md, 04-42-lifecycle-ownership.md, 04-43-request-interpretation.md, 04-44-continuous-interaction.md, 04-45-memory-and-context.md. 상세 연결은 docs/presentations_files/representative-scenario/README.md에 기록한다.",
+    "그림: docs/presentations_files/requirements-assets/의 기존 FR2, FR3, FR6, FR4, FR1 일러스트를 순서대로 재사용했다. 그림은 장면을 설명하는 독립 이미지 개체이고, 제목·발화·설명 및 업무 상태 표는 PowerPoint에서 편집할 수 있다.",
+    "V04는 평균 반응시간, V05는 평균 VIA 처리시간이다. 이 대표 시나리오는 기능과 설계 논점을 보여주는 발표 예시이며, 측정 결과나 대안 우열을 주장하지 않는다."
+  ]
+}

@@ -6,8 +6,9 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 
 // Run a copy in a private build directory linked to the bundled node_modules.
 // The existing draw.io/SVG scenes remain the content and geometry source.
-const [repoArg,buildArg] = process.argv.slice(2);
+const [repoArg,buildArg,scope] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
+if (scope && scope!=='--comparison-only') throw new Error('Optional scope: --comparison-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -96,7 +97,7 @@ function nativeScene(presentation,scene) {
   const documents={41:'04-41-request-resolution-control.md',42:'04-42-lifecycle-ownership.md',
     43:'04-43-request-interpretation.md',44:'04-44-continuous-interaction.md',45:'04-45-memory-and-context.md'};
   slide.speakerNotes.textFrame.setText(`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
-    (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.'));
+    (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.'));
   return slide;
 }
 
@@ -124,7 +125,7 @@ with zipfile.ZipFile(sys.argv[1]) as z:
     print(json.dumps(stats))
 `;
 const stats=[];
-for(const plan of plans) {
+for(const plan of plans.filter(p=>scope!=='--comparison-only'||p.scenes.some(s=>s.kind==='comparison'))) {
   const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
   for(const scene of plan.scenes)nativeScene(presentation,scene);
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);

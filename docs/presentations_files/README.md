@@ -4,6 +4,7 @@
 
 | 자료 | 설명 및 원문 | 편집 가능한 PPTX | 이미지 미리보기 |
 | --- | --- | --- | --- |
+| 과제 소개: 대표 시나리오 | [문안 및 QA·DP 연결](./representative-scenario/README.md) | [1장 PPTX](./VIA-representative-scenario.pptx) | [PNG 미리보기](./representative-scenario/representative-scenario.png) |
 | 과제 배경과 필요성 | [문구 수정 스크립트](../../scripts/presentations/revise_project_background.mjs) | [3장 PPTX (v4)](./VIA_과제배경_필요성_검토반영_v4.pptx) | — |
 | 기능 요구사항 및 제약사항 | [원문](./functional-requirements-and-constraints.md) / [파일 안내](./functional-requirements/README.md) | [1장 PPTX](./functional-requirements/VIA-functional-requirements-and-constraints.pptx) | [미리보기](./functional-requirements/index.html) |
 | 품질 요구사항 | [원문](./quality-attributes.md) / [파일 안내](./quality-attributes/README.md) | [2장 PPTX](./quality-attributes/VIA-quality-attributes.pptx) | [미리보기](./quality-attributes/index.html) |

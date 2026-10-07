@@ -18,6 +18,8 @@
 
 비교 페이지의 수치와 원형 점수는 사용자가 요청한 **형식 검토용 예상 예시**다. 실측 또는 대안 선정 결과가 아니다. 기존 A/B 및 43의 A/C 표기와 미선정 및 미측정 상태를 유지한다. [비교 자료 설명](./dp-comparison/README.md)의 조건과 해석 범위를 따른다.
 
+2026-10-07 사용자 확인에 따라 비교 페이지와 발표자 노트의 V-04는 **평균 반응시간**, V-05는 **평균 VIA 처리시간**으로 품질속성 페이지와 통일했다. 기존 시간 수치는 평균 시간의 형식 예시로 유지하며 p95 실측값을 평균으로 환산한 결과가 아니다.
+
 ## 생성과 확인
 
 생성기는 [generate_dp_editable_pptx.mjs](../../scripts/presentations/generate_dp_editable_pptx.mjs)다. [배경 생성기](../../scripts/architecture/generate_dp_background_slides.py)와 [비교 생성기](../../scripts/architecture/generate_dp_comparison_slides.py)의 장면을 읽고, 저장된 SVG와 일치하는지 확인한 뒤 PowerPoint 개체로 변환한다. PPTX를 직접 편집한 변경은 draw.io나 생성기에 자동 반영되지 않는다. 재생성 시에는 장면 원본에 수정 내용을 반영한다.
@@ -37,3 +39,5 @@ cp "$VIA_REPO_ROOT/scripts/presentations/generate_dp_editable_pptx.mjs" "$VIA_PP
 ```
 
 생성 시 슬라이드 수, 16:9 크기, 텍스트의 원본 일치, 개체의 편집 가능 여부와 이미지 개체 미사용을 검사한다. PPTX를 다시 불러와 렌더링한 결과와 검사 기록은 임시 빌드 폴더에 저장한다. 이번 산출물은 재가져오기 렌더 10장을 육안 확인했다. Microsoft PowerPoint에서 직접 열어 확인한 결과는 아니다.
+
+비교 페이지만 수정한 경우 생성기 마지막 인자에 `--comparison-only`를 추가하면 통합 10장과 비교 5장 PPTX만 갱신하고 배경 5장 PPTX는 유지한다.
