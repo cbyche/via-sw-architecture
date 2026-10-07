@@ -6,15 +6,26 @@ import { createHash } from 'node:crypto';
 import { FileBlob, PresentationFile } from '@oai/artifact-tool';
 
 // Run a copy in a private build directory linked to the bundled node_modules.
-const [repoArg, buildArg] = process.argv.slice(2);
-if (!repoArg || !buildArg) throw new Error('Usage: revise_project_background.mjs REPO BUILD_DIR');
+const [repoArg, buildArg, revision = 'v4'] = process.argv.slice(2);
+if (!repoArg || !buildArg || !['v4', 'v5'].includes(revision)) throw new Error('Usage: revise_project_background.mjs REPO BUILD_DIR [v4|v5]');
 const repo = await fs.realpath(repoArg), build = await fs.realpath(buildArg);
 const skill = process.env.VIA_PRESENTATION_SKILL_DIR;
 const python = process.env.VIA_RUNTIME_PYTHON;
 if (!path.isAbsolute(skill ?? '') || !path.isAbsolute(python ?? '')) throw new Error('Set skill and Python paths.');
-const source = path.join(repo, 'docs/presentations_files/VIA_과제배경_필요성_검토반영_v3.pptx');
-const filename = 'VIA_과제배경_필요성_검토반영_v4.pptx';
-const edits = [
+const sourceRevision = revision === 'v5' ? 'v4' : 'v3';
+const source = path.join(repo, `docs/presentations_files/VIA_과제배경_필요성_검토반영_${sourceRevision}.pptx`);
+const filename = `VIA_과제배경_필요성_검토반영_${revision}.pptx`;
+const edits = revision === 'v5' ? [
+  [3, 'r3-154', '판단 오류가 실제 업무에 영향을 줌'],
+  [3, 'r3-155', '취소 요청을 다른 업무에 적용하거나,\n일부 완료를 전체 완료로 안내할 수 있음'],
+  [3, 'r3-157', '처리 오류와 재작업으로 이어질 위험'],
+  [3, 'r3-184', '음성 대화에서는 짧은 대기도 반복'],
+  [3, 'r3-185', '진행 질문이나 정정, 취소에도\nVIA가 판단하고 답을 준비하는 시간이 필요', { top: 565, height: 60 }],
+  [3, 'r3-187', '대화가 이어질수록 사용자 대기가 누적'],
+  [3, 'r3-198', '기술 교체가 전체 수정으로 번질 위험'],
+  [3, 'r3-199', '음성 모델 하나를 바꾸는 데도\n업무 관리까지 수정하면 검증 범위가 커짐'],
+  [3, 'r3-201', '전체 수정과 재검증에 드는 비용 증가'],
+] : [
   [1, 'r3-23', '[ Anthropic computer use 공개 시연, 2024.10 / 발췌, 3배속 ]'],
   [1, 'r3-29', '파일과 앱의 자료로 보고서 작성\n자료를 비교해 표와 발표자료 생성'],
   [1, 'r3-37', '[ OpenAI GPT-6 Astra 공개 시연 / 발췌, 1.5배속 ]'],
@@ -45,7 +56,7 @@ const edits = [
   [3, 'r3-195', '업무 AI 추가 또는 교체\n연동 규약 변경', { height: 44 }],
   [3, 'r3-199', '하나의 모델이나 연동 방식을 바꿀 때\n대화와 업무 관리 전체의 수정을 줄여야 함'],
 ];
-const positions = [
+const positions = revision === 'v5' ? [] : [
   [2, 'r3-77', { top: 269 }], [2, 'r3-75', { top: 273 }], [2, 'r3-76', { top: 273 }],
   [2, 'r3-81', { top: 347 }], [2, 'r3-82', { top: 379 }],
   [2, 'r3-79', { top: 351 }], [2, 'r3-80', { top: 351 }],
