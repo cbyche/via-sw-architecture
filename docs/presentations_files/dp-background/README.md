@@ -16,7 +16,7 @@
 | [04-42](../../architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md) | Conversation, Request, Task와 Agent Execution의 수명 및 관리 책임 | [원본](../../architecture/12-decisions/decision-packages/diagrams/dp42-background.drawio) | [미리보기](../../architecture/12-decisions/decision-packages/diagrams/dp42-background.svg) | [삽입용](./dp42-background.png) |
 | [04-43](../../architecture/12-decisions/decision-packages/04-43-request-interpretation.md) | Request 정정에 함께 영향을 받는 의미 판단과 책임 | [원본](../../architecture/12-decisions/decision-packages/diagrams/dp43-background.drawio) | [미리보기](../../architecture/12-decisions/decision-packages/diagrams/dp43-background.svg) | [삽입용](./dp43-background.png) |
 | [04-44](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md) | 새 발화와 별도 Task 질문의 병행 처리 및 전달 | [원본](../../architecture/12-decisions/decision-packages/diagrams/dp44-background.drawio) | [미리보기](../../architecture/12-decisions/decision-packages/diagrams/dp44-background.svg) | [삽입용](./dp44-background.png) |
-| [04-45](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md) | 과거 정정, 결과와 실제 전달의 연결 및 Context 제공 | [원본](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.drawio) | [미리보기](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.svg) | [삽입용](./dp45-background.png) |
+| [04-45](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md) | VIA 직접 설명의 실제 전달과 두 업무 결과 참조의 Context 연결 | [원본](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.drawio) | [미리보기](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.svg) | [삽입용](./dp45-background.png) |
 
 draw.io에서 **File → Open from → Device**로 원본을 열면 텍스트, 도형, 연결선을 개별 편집할 수 있다. 지도 포함 파일은 여섯 페이지이고 배경 전용 파일은 다섯 페이지이며, 개별 파일과 SVG는 각 Architecture 문서에 연결했다. PNG는 발표자료 삽입용이다.
 
@@ -88,3 +88,9 @@ python3 scripts/architecture/generate_dp_background_slides.py --check
 ```
 
 PNG는 같은 SVG를 1920×1080으로 렌더링한 결과다. 수정 후 해당 PNG도 함께 갱신한다.
+
+## 45의 필요성과 대표 사례 — 2026-10-09
+
+VIA가 직접 전달한 평가 기준 P20/E20, 제품 비교 T21/D21@v2와 견적 T22/D22@v1을 현재 제안서 요청 R23의 Context에 연결한다. 실선은 시간 흐름이고 점선은 과거 근거 참조다. VIA는 허용된 발췌/참조를 연결하며 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 단순 실행 맥락 재사용과 A의 index/cache로 충분한 경우를 인정하고 공통 저장소를 배경의 답으로 미리 제시하지 않는다.
+
+PPTX 생성기의 `--dp45-only`는 통합 자료의 9/10번, 배경 5번, 비교 5번 및 필요한 notes/관계만 갱신한다. 다른 슬라이드와 공통 package 부분을 보존한다. 이번 사용자 지적과 검증은 [검수 기록](./REVIEW.md)에 추가했고 이전 리뷰는 당시 이력이다.

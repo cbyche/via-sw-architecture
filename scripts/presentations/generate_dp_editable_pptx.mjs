@@ -8,7 +8,7 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && !['--comparison-only','--dp41-42-only','--dp44-only'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only or --dp44-only');
+if (scope && !['--comparison-only','--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only, --dp44-only or --dp45-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -99,6 +99,7 @@ function nativeScene(presentation,scene) {
   let notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
     (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.');
   if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
+  if(scene.number===45) notesText+='\n공통 사례: C20/E20 VIA 직접 평가 기준 설명과 실제 전달 P20, C21/T21/D21@v2 제품 비교, C22/T22/D22@v1 견적. 현재 C23/R23의 제안서 작성 Task T23 연결은 현재 해석/채택의 결과다. VIA는 허용된 발췌와 참조를 연결하고, 평가 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조는 본문 전체 보관을 뜻하지 않으며 Agent 내부 reasoning/모든 tool 기록은 전제하지 않는다.\nA의 요약/index/cache/관계 cache/부분 갱신/병렬 조회와 기존 Agent 실행 맥락 재사용을 허용한다. B의 과거 관계는 검증/게시 범위만 읽고 원본 확인, 미게시/표현 미지원, 오류/갱신/삭제와 생산 비용을 유지한다. R23의 정답 관계를 미리 게시하지 않는다. 필요성과 사례 보완이며 최종 DP/A/B 선정 또는 새 사례의 품질 검증이 아니다. 기존 수치와 점수는 동일한 형식 예시다.';
   slide.speakerNotes.textFrame.setText(notesText);
   return slide;
 }
@@ -126,13 +127,13 @@ with zipfile.ZipFile(sys.argv[1]) as z:
         stats.append(dict(slug=scene['slug'],nativeShapes=native,nativeTextLines=len(texts),nativePaths=paths,images=0))
     print(json.dumps(stats))
 `;
-// A style-only update preserves every unselected slide and all common package
+// A scoped update preserves every unselected slide and all common package
 // parts byte-for-byte. Native scenes have no new media or package dependencies.
 const preserveUnselected=String.raw`
 import sys,json,zipfile,os
 candidate,original,indices=sys.argv[1],sys.argv[2],json.loads(sys.argv[3])
 parts={name for i in indices for name in [f'ppt/slides/slide{i}.xml',f'ppt/slides/_rels/slide{i}.xml.rels']}
-if len(sys.argv)>4 and sys.argv[4]=='--dp44-only':
+if len(sys.argv)>4 and sys.argv[4] in ('--dp44-only','--dp45-only'):
     parts.update(name for i in indices for name in [f'ppt/notesSlides/notesSlide{i}.xml',f'ppt/notesSlides/_rels/notesSlide{i}.xml.rels'])
 with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.ZipFile(candidate+'.scoped','w') as out:
     for info in old.infolist():
@@ -141,14 +142,14 @@ with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.
 os.replace(candidate+'.scoped',candidate)
 `;
 const stats=[];
-for(const plan of plans.filter(p=>!scope||p.scenes.some(s=>s.kind==='comparison'))) {
+for(const plan of plans.filter(p=>!scope||scope==='--dp45-only'||p.scenes.some(s=>s.kind==='comparison'))) {
   const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
   for(const scene of plan.scenes)nativeScene(presentation,scene);
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(['--dp41-42-only','--dp44-only'].includes(scope)) {
-    const indices=plan.scenes.flatMap((s,i)=>s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number)?[i+1]:[]);
+  if(['--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) {
+    const indices=plan.scenes.flatMap((s,i)=>(scope==='--dp45-only'?s.number===45:s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number))?[i+1]:[]);
     execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices),scope]);
   }
   await finalizePresentation({workspaceDir:build,candidatePath:draft,finalPath:final,explicitTotalSlideCount:plan.scenes.length,

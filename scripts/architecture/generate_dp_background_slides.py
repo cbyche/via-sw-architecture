@@ -161,7 +161,7 @@ def overview():
         (42, '작업의 지속 추적', 'Request 완료와 Task 완료의 혼동', ['Conversation과 Task 상태의', '관리 책임 및 실행 경계']),
         (43, '정정의 정확한 반영', '관련 참조 오류와 기존 조건 누락', ['연관된 의미 판단의', '생산 책임과 조정 방식']),
         (44, '끊김 없는 대화', '새 발화 누락과 부적절한 Response 전달', ['겹친 사건의 후속 실행과', '전달을 이어가는 실행 구조']),
-        (45, '과거 정보의 활용', '과거 정정 누락과 유효하지 않은 결과 재사용', ['교차 기록 Context의', '생산, 조회와 갱신 책임']),
+        (45, '과거 정보의 활용', '직접 설명과 여러 업무 결과의 과거 참조 누락', ['교차 기록 Context의', '생산, 조회와 갱신 책임']),
     ]
     for i,(n,experience,risk,decision) in enumerate(rows):
         y=375+i*98
@@ -336,38 +336,39 @@ def slide44():
 
 def slide45():
     s = Slide(45, '기능 정확성을 위한 VIA 기억과 Context 제공 설계',
-        '과거 정정의 누락과 유효하지 않은 결과 재사용 위험', '',
-        '과거 기록을 연결한 Context의 생산, 조회와 갱신 책임 설계',
-        '과거 정보 참조 / 장기 User Memory 등록은 별도 사용자 지시',
+        '여러 활동의 과거 근거 누락과 실제 전달 내용의 오연결 위험', '',
+        '과거 근거를 연결하는 Context의 생산, 조회와 갱신 책임 설계',
+        'VIA는 허용 근거를 연결 / 업무 판단과 제안서 작성은 Downstream Agent',
         '기능 정확성 / 반응성 / 자원 활용성', considerations_title='설계 고려 사항')
-    s.text(64,263,1110,['지난번 / 서로 연결해야 할 세 종류의 기록'],25,MUTED)
-    for x,w in [(64,350),(444,350),(824,350)]: s.note(x,329,w,287,[],24,'#F4F6F8')
-    s.text(84,347,310,['정정 Request'],25,INK,True)
-    s.text(84,408,310,['“결론 먼저,','짧은 문장으로','바꿔줘.”'],29,INK,True,leading=37)
-    s.text(84,572,310,['사용자가 고친 내용'],21,MUTED)
-    s.text(464,347,310,['수정 전후 결과'],25,INK,True)
-    s.text(464,403,310,['수정 전'],19,MUTED)
-    s.text(464,437,310,['배경 설명 … 결론'],23,MUTED)
-    s.line([(464,481),(774,481)],color=LINE,arrow=False,width=1)
-    s.text(464,506,310,['수정 후'],19,TEAL)
-    s.text(464,548,310,['결론 먼저 / 짧은 문장'],25,TEAL,True)
-    s.text(844,347,310,['실제 전달 기록'],25,INK,True)
-    s.text(844,412,310,['수정 후 결과 전달'],27,TEAL,True)
-    s.text(844,491,310,['어느 결과 버전을','실제로 받았는지 확인'],23,MUTED,leading=34)
-    s.line([(423,471),(435,471)],color=MUTED)
-    s.line([(803,471),(815,471)],color=MUTED)
-    # These links identify the needed past Context, without a repository or
-    # a chosen production/read schedule. They do not pre-bind today's Task.
-    s.line([(239,622),(239,646),(999,646),(999,622)],color=LINE,arrow=False,width=2)
-    s.text(64,664,1110,['이번 / 새 보고서의 Request'],23,MUTED)
-    s.rect(64,708,1110,81,'#EAF0F8','none')
-    s.text(84,728,1070,['“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”'],28,INK,True)
-    s.rect(64,811,1110,55,'#F0F8F7','none')
-    s.line([(619,646),(1192,646),(1192,839),(1174,839)],color=TEAL,width=3)
-    s.text(84,825,1070,['이번 Request에 연결할 과거 Context / 정정 내용, 결과 버전과 실제 전달'],24,INK,True)
-    s.challenge(355,'기록 간 관계의 복원',['정정 내용과 결과 버전 및 실제 전달의 연결'])
-    s.challenge(515,'재사용 정보의 유효성',['원본 수정과 삭제 및 요약 누락의 확인'])
-    s.challenge(675,'반복 조회와 유지 비용',['Context 생산과 조회 및 갱신 비용의 균형'])
+    s.text(64,263,1110,['과거 활동의 시간 흐름 / VIA가 받은 기록과 허용된 참조'],24,MUTED)
+    for x in [64,444,824]: s.note(x,329,350,287,[],24,'#F4F6F8')
+    s.text(84,347,310,['앞선 대화 C20'],24,INK,True)
+    s.text(84,402,310,['VIA의 직접 설명 E20','평가 기준'],26,INK,True,leading=37)
+    s.text(84,495,310,['실제 전달 P20의','설명 내용과 범위'],23,TEAL,True,leading=34)
+    s.text(84,580,310,['생성과 실제 전달 구별'],19,MUTED)
+    s.text(464,347,310,['이후 제품 조사 T21'],24,INK,True)
+    s.text(464,402,310,['한 Downstream Agent','제품 비교 수행'],25,INK,True,leading=37)
+    s.text(464,495,310,['VIA가 확인한 결과 참조','D21@v2'],23,TEAL,True,leading=34)
+    s.text(464,580,310,['C21 대화에 연결'],19,MUTED)
+    s.text(844,347,310,['이후 견적 업무 T22'],24,INK,True)
+    s.text(844,402,310,['다른 Downstream Agent','견적 업무 수행'],25,INK,True,leading=37)
+    s.text(844,495,310,['VIA가 확인한 결과 참조','D22@v1'],23,TEAL,True,leading=34)
+    s.text(844,580,310,['C22 대화에 연결'],19,MUTED)
+    s.line([(416,367),(442,367)],color=MUTED)
+    s.line([(796,367),(822,367)],color=MUTED)
+    # Dashed references converge on today's evidence, independently of time order.
+    for xx in [239,619,999]:
+        s.line([(xx,622),(xx,645)],color=TEAL,dashed=True,arrow=False)
+    s.line([(239,645),(1192,645),(1192,841),(1174,841)],color=TEAL,dashed=True,width=2)
+    s.text(64,662,1110,['이번 C23 / R23: 여러 활동을 참조하는 새 제안서 요청'],23,MUTED)
+    s.rect(64,702,1110,103,'#EAF0F8','none')
+    s.text(84,717,1070,['“지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와',
+                        '받아둔 견적을 이번 제안서에 반영해줘.”'],26,INK,True,leading=37)
+    s.rect(64,821,1110,46,'#F0F8F7','none')
+    s.text(84,831,1070,['VIA: P20 전달 범위와 D21/D22 발췌 또는 참조를 이번 Context에 연결'],23,INK,True)
+    s.challenge(355,'여러 활동의 근거 연결',['직접 설명과 두 업무 결과의 후보 및 버전 확인'])
+    s.challenge(515,'실제 전달과 자료 범위',['설명 원문과 실제 표시/재생 범위 구별', '결과 본문과 허용된 참조 구별'])
+    s.challenge(675,'제공 방식과 비용',['단순 실행 맥락이나 index/cache로 충분한지', '공통 파생 관계의 유지가 필요한지 검토'])
     return s
 
 
@@ -384,7 +385,7 @@ def build():
             deck.append(copy.deepcopy(slide.diagram()))
     outputs[DECK / 'VIA-DP-background-41-45.drawio'] = ET.tostring(deck, encoding='unicode')+'\n'
     outputs[DECK / 'VIA-DP-background-overview-41-45.drawio'] = ET.tostring(full_deck, encoding='unicode')+'\n'
-    sections = ''.join(f'<section id="{s.slug}"><h2>{html.escape(s.caption)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.svg" alt="{html.escape(s.caption)}"><p><a href="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.drawio">draw.io 원본</a> / <a href="{s.slug}.png">PNG</a></p></section>' for s in slides)
+    sections = ''.join(f'<section id="{s.slug}"><h2>{html.escape(s.caption)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.svg" alt="{html.escape(s.caption)}"><p>{'45: VIA 직접 설명의 실제 전달 범위와 제품 비교/견적 결과 참조를 새 제안서 Context에 연결. 업무 판단과 작성은 Agent 책임. ' if s.number==45 else ''}<a href="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.drawio">draw.io 원본</a> / <a href="{s.slug}.png">PNG</a></p></section>' for s in slides)
     outputs[DECK / 'index.html'] = '<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 문제 지도와 배경 41–45</title><style>body{margin:0;background:#ecf0f3;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:#18232e}header{padding:22px 4vw;background:white}h1{font-size:26px;margin:0 0 12px}nav{display:flex;gap:22px;flex-wrap:wrap}a{color:#2858a5}main{max-width:1920px;margin:auto}section{padding:22px 2vw;scroll-margin-top:20px}h2{font-size:20px}img{display:block;width:100%;height:auto;background:white}p{font-size:16px}@media print{header,h2,p{display:none}section{padding:0;break-after:page}body{background:white}@page{size:16in 9in;margin:0}}</style><header><h1>VIA DP 설계 문제 지도와 배경 41–45</h1><nav><a href="VIA-DP-background-overview-41-45.drawio">전체 6페이지 draw.io</a><a href="VIA-DP-background-41-45.drawio">배경 5페이지 draw.io</a>'+''.join(f'<a href="#{s.slug}">'+('전체 지도' if s.number=='overview' else f'04-{s.number}')+'</a>' for s in slides)+'</nav></header><main>'+sections+'</main></html>\n'
     return outputs
 

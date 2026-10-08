@@ -51,8 +51,8 @@ class Slide(Plate):
 
 def structure():
     p = Slide('choice45-structure', '과거 근거를 요청마다 조합할 것인가, 공통 기억으로 유지할 것인가?')
-    p.text(64, 131, '같은 현재 요청 R9   “지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”', 30, bold=True)
-    p.text(64, 178, '같은 이력: D2 보고서 → R7 “짧은 문장, 결론 먼저” → 수정 결과 D3 → 실제 제시 P4. 이 사례의 재사용은 선호 저장이 아니다.', 25, MUTED)
+    p.text(64, 131, 'R23  “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”', 28, bold=True)
+    p.text(64, 178, '같은 이력: C20/E20 평가 기준 설명 / P20 실제 전달, T21/D21@v2 제품 비교, T22/D22@v1 견적. 결과 본문과 참조는 구별한다.', 25, MUTED)
     p.line([(64, 225), (2496, 225)], LINE, arrow=False)
     p.text(64, 242, 'A  원본 서비스 조합', 35, BLUE, bold=True)
     p.text(1340, 242, 'B  공유 파생 기억 저장소', 35, GREEN, bold=True)
@@ -62,9 +62,9 @@ def structure():
     body_start = len(p.items)
     for prefix, x in [('A', 84), ('B', 1360)]:
         for j, (key, name, data) in enumerate([
-            ('request', 'Request Controller', 'R7 원문 / 정정 관계'),
-            ('response', 'Response Manager', 'P4 실제 전달 기록'),
-            ('task', 'Task Manager', 'D2 → D3 확정 결과'),
+            ('request', 'Request Controller', 'C20 입력 / 설명 연결'),
+            ('response', 'Response Manager', 'E20 / P20 실제 전달 범위'),
+            ('task', 'Task Manager', 'T21/D21@v2 / T22/D22@v1'),
         ]):
             xx = x + 370*j
             p.node(prefix+key, xx, 350, 330, 76, name, kind='external')
@@ -79,9 +79,9 @@ def structure():
     for j, key in enumerate(['request', 'response', 'task']):
         sx = 249 + 370*j
         p.arrow('composer', 'A'+key, sp='T', tp='B', sd=-30, td=-14,
-                via=[(614, 625), (sx-14, 625)], color=BLUE)
+                via=([(614, 625), (320, 625), (320, 482), (sx-14, 482)] if j == 0 else [(614, 625), (sx-14, 625)]), color=BLUE)
         p.arrow('A'+key, 'composer', sp='B', tp='T', sd=14, td=30,
-                via=[(sx+14, 684), (674, 684)], color=BLUE, ret=True)
+                via=([(sx+14, 482), (340, 482), (340, 684), (674, 684)] if j == 0 else [(sx+14, 684), (674, 684)]), color=BLUE, ret=True)
     p.label(90, 584, '읽기 범위, 질문, 권한 →', BLUE, 24)
     p.label(730, 686, '← 원문 / 버전 / 누락 범위', BLUE, 24)
     p.arrow('composer', 'cache', '읽기 / 오류 무효화', (138, 873), sp='L', tp='T',
@@ -91,7 +91,7 @@ def structure():
     p.arrow('composer', 'attempt', '이번 요청에 결합', (815, 873), sp='R', tp='T',
             via=[(991, 800)], color=BLUE)
     p.text(116, 1044, '원본별 요약, 색인, cache / 배경 갱신 가능', 22, BLUE)
-    p.text(814, 1044, 'R9의 근거 / 요청 범위', 22, BLUE)
+    p.text(814, 1044, 'R23의 발췌 / 참조 / 범위', 22, BLUE)
     for j, key in enumerate(['request', 'response', 'task']):
         sx = 249 + 370*j
         p.arrow('A'+key, 'cache', sp='B', tp='L',
@@ -104,16 +104,16 @@ def structure():
     for j, key in enumerate(['request', 'response', 'task']):
         sx = 1525 + 370*j
         p.arrow('B'+key, 'publisher', sp='B', tp='T', td=-30,
-                via=[(sx, 578), (1640, 578)], color=GREEN)
+                via=([(sx, 482), (1620, 482), (1620, 578), (1640, 578)] if j == 0 else [(sx, 578), (1640, 578)]), color=GREEN)
         p.arrow('publisher', 'B'+key, sp='T', tp='B', sd=30, td=16,
-                via=[(1700, 608), (sx+16, 608)], color=GREEN)
+                via=([(1700, 608), (1640, 608), (1640, 494), (sx+16, 494)] if j == 0 else [(1700, 608), (sx+16, 608)]), color=GREEN)
         p.arrow('B'+key, 'publisher', sp='B', tp='T', sd=-16,
-                via=[(sx-16, 632), (1670, 632)], color=GREEN, ret=True)
+                via=([(sx-16, 470), (1600, 470), (1600, 632), (1670, 632)] if j == 0 else [(sx-16, 632), (1670, 632)]), color=GREEN, ret=True)
     p.label(1400, 580, '변경 알림', GREEN, 22)
     p.label(2025, 582, '↑ 범위 읽기 / ↓ 원문 + 버전', GREEN, 22)
     p.arrow('publisher', 'repository', '검사 후 게시', (1885, 666), sp='R', tp='L',
             sd=12.5, color=GREEN, size=22)
-    p.text(2000, 789, ['R7→D2 정정 / D3→D2 개정', 'P4→D3 실제 제시 / 출처와 범위', '여러 요청에 남는 공통 읽기 상태'], 23, GREEN, leading=34)
+    p.text(2000, 789, ['P20→E20 실제 전달 범위', 'T21→D21@v2 / T22→D22@v1', '출처 있는 과거 후보 / R23 정답 아님'], 23, GREEN, leading=34)
     p.arrow('reader', 'repository', '범위 조회', (2210, 927), sp='R', tp='B', sd=-15,
             via=[(2240, 980)], td=-10, color=GREEN, size=23)
     p.arrow('repository', 'reader', '유효한 관계와 원문 참조', (1725, 901), sp='B', tp='T', sd=-70,
@@ -129,12 +129,12 @@ def structure():
     p.arrow('publisher', 'reader', sp='B', tp='T', sd=124, td=-166, color=GREEN, ret=True)
     p.label(1805, 786, '미게시 생산\n오류 재검증\n해당 버전 차단', GREEN, 21)
     p.text(1430, 785, ['과거 관계 후보 생성', '출처와 버전 검증', '영향 범위 재게시'], 23, GREEN, leading=32)
-    p.text(1415, 932, ['R9 / 이어지는 다른 요청 R10', '“수정 결과를 메일에도”'], 21, MUTED, leading=28)
+    p.text(1415, 932, ['R23 / 후속 재참조 R24', '같은 평가 기준과 결과 참조'], 21, MUTED, leading=28)
     p.text(1415, 1047, '표현 불가 → 미지원 반환', 22, GREEN)
     for j, key in enumerate(['request', 'response', 'task']):
         sx = 1525 + 370*j
         p.arrow('B'+key, 'reader', sp='B', tp='L',
-                via=[(sx, 482), (1360, 482), (1360, 892), (1710, 892), (1710, 995)], color=INK)
+                via=[(sx, 482), (1348, 482), (1348, 892), (1710, 892), (1710, 995)], color=INK)
     p.label(1390, 882, '변경 즉시 기존 근거 차단', INK, 22)
 
     # Keep typography readable while reserving a complete consumer/model area per option.
@@ -197,7 +197,7 @@ def structure():
         p.arrow(memory, rc, '허용 선호 / 삭제 표식', (dx+480, 1074), sp='L', tp='R', sd=10, td=15,
                 via=[(dx+710, 1149), (dx+710, 1060)], ret=True, size=21)
         p.text(dx+490, 1220, '사용 / 채택: 권한과 버전 검사 + 허용 직렬화', 21, bold=True)
-        p.text(dx+90, 1270, '이번 대상과 Task 판단', 21, bold=True)
+        p.text(dx+90, 1270, '현재 참조 / 새 T23 연결 판단', 21, bold=True)
         p.node(access, dx+500, 1310, 300, 62, 'Model Access', kind='external')
         p.node(omni, dx+920, 1310, 300, 62, 'Shared Omni', kind='model')
         p.duplex(ri, access, label='현재 의미 해석', at=(dx+280, 1308), sp='B', tp='L',
@@ -206,7 +206,7 @@ def structure():
         p.text(dx+790, 1259, '음성 입력 / ASR 계속, Omni 1벌', 21, MUTED)
     p.duplex('publisher', 'Baccess', label='필요한 과거 관계 추론', at=(1760, 1276), sp='L', tp='L',
             via=[(1390, compact(695)), (1390, 962), (1750, 962), (1750, 1341)], color=GREEN, size=21)
-    p.text(64, 1400, '좌우는 각각 완결된 대안이며 동시 배치가 아니다. 검정 공통 역할 / 파랑 A / 초록 B. 실선 요청, 점선 반환, 양방향 모델 호출/반환. 같은 안의 반복 이름은 동일 주체 확대.', 21, MUTED)
+    p.text(64, 1400, 'VIA: 발췌와 참조 연결 / Agent: 기준 적용과 제안서 작성. 검정 공통, 파랑 A, 초록 B. 실선 요청, 점선 반환, 양방향 모델. 반복 이름은 동일 주체 확대.', 21, MUTED)
     # Guard the presentation contract: no node or operational path may span both alternatives.
     for key, (x, y, w, h) in p.nodes.items():
         assert x+w <= 1240 or x >= 1340, (key, 'cross-option node')
@@ -219,7 +219,7 @@ def structure():
 
 def lifecycle():
     p = Slide('choice45-lifecycle', '정정과 삭제: 오래된 기억을 읽지 못하게 하고, 필요한 원문을 다시 확인한다', height=1920)
-    p.text(64, 138, '공통 사건: D3 수정 / 선호 삭제 / 자료 접근 철회. 같은 원본 보존 범위, 권한, 실제 삭제 시점을 적용한다.', 28)
+    p.text(64, 138, '공통 사건: D21@v2 → v3 수정 / 선호 삭제 / D21 접근 철회. 같은 원본 보존 범위, 권한, 실제 삭제 시점을 적용한다.', 28)
     p.text(64, 185, '유효하지 않은 근거의 신규 사용 차단은 배경 재생산이나 물리 삭제의 완료를 기다리지 않는다.', 25, bold=True)
     groups = [
         ('A', BLUE, ['Source Owner', 'Context\nComposer', 'Request\nInterpreter', 'Request\nController', 'Model Access'], [

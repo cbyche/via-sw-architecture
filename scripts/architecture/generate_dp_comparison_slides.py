@@ -77,7 +77,7 @@ DATA = {
           ['다수 window와 buffer로 전체 메모리 13.8 GB (메모리 효율성 ↓)']]),
   45: dict(title='기능 정확성을 위한 VIA 기억과 Context 제공 설계',
     options=('A 원본 서비스 조합', 'B 공통 파생 기억의 생산과 조회'),
-    case='“지난번에 내가 고친 표현 방식으로 이번 보고서도 정리해줘.”',
+    case='“지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
     condition='비교 예시 조건: 게시 범위 안 과거 관계의 반복 재사용 / A의 index와 cache도 허용',
     rows=[('V-01','90%','94%',2,3),('V-05','7.0 s','4.5 s',2,3),('V-06','13.2 GB','14.0 GB',3,2)],
     pros=[['필요한 요청 중심의 처리로 전체 메모리 13.2 GB (메모리 효율성 ↑)'],
@@ -99,7 +99,7 @@ class Comparison(Slide):
         self.text(1880,22,450,['구조 비교 / 장단점 / QA Trade-off'],19,MUTED,align='right')
         self.text(40,65,1840,[self.caption],39,INK,True)
         self.line([(40,121),(1880,121)],color=LINE,arrow=False)
-        self.text(40,133 if n==44 else 142,1530,[DATA[n]['case']],23,INK)
+        self.text(40,133 if n==44 else 142,1530,[DATA[n]['case']],21 if n==45 else 23,INK)
         self.text(1880,145,290,['수치와 점수 / 예상 예시'],19,RED,True,align='right')
         if n==44:
             self.text(40,168,1530,['양안 공통: Agent Gateway ↔ Downstream Agent / Model Access ↔ 공유 Omni 1벌'],14,MUTED)
@@ -201,7 +201,7 @@ def build():
     outputs[OUT/'VIA-DP-comparison-41-45.drawio']=ET.tostring(deck,encoding='unicode')+'\n'
     outputs[OUT/'comparison-data.json']=json.dumps(dict(status='FORMAT_HYPOTHESES_NOT_MEASURED',qa=QA,slides=DATA),ensure_ascii=False,indent=2)+'\n'
     blocks=''.join(f'<article><h2>04-{n} 설계'+f' 비교</h2><p><a href="dp{n}-comparison.drawio">draw.io</a> / <a href="dp{n}-comparison.svg">SVG</a> / <a href="dp{n}-comparison.png">PNG</a></p><img src="dp{n}-comparison.svg" alt="04-{n} 설계 비교"></article>' for n in DATA)
-    outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>수치와 동그라미 점수는 형식 검토용 예상 예시. 실측 결과 또는 대안 선정 아님.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
+    outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>수치와 동그라미 점수는 형식 검토용 예상 예시. 실측 결과 또는 대안 선정 아님.</p><p>45: 같은 평가 기준의 실제 전달과 제품 비교/견적 결과 참조에서 원본 조합과 공통 관계 생산/게시/조회를 비교한다. 새 사례의 실측이나 선정 결과가 아니다.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
     return outputs
 
 

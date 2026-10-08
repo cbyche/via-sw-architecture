@@ -455,12 +455,12 @@ def graph44(s,x,side):
 
 def graph45(s,x,side):
     g=Graph(s,x,BLUE if side==0 else TEAL)
-    g.text(25,253,819,'동일 이력: D2 보고서 → R7 “짧은 문장, 결론 먼저” → D3 수정 → P4 전달',size=17,color=INK)
-    for key,xx,name,record in [('source-request',25,'Request Controller','R7 원문과 정정 관계'),
-                             ('source-task',310,'Task Manager','D2 → D3 확정 결과'),
-                             ('source-response',595,'Response Manager','P4 실제 전달 기록')]:
+    g.text(25,253,819,'동일: E20/P20 평가 기준 설명 / T21/D21@v2 제품 비교 / T22/D22@v1 견적',size=17,color=INK)
+    for key,xx,name,record in [('source-request',25,'Request Controller','C20 입력과 설명 연결'),
+                             ('source-task',310,'Task Manager','T21/D21@v2 / T22/D22@v1'),
+                             ('source-response',595,'Response Manager','E20 / P20 실제 전달 범위')]:
         g.box(key,xx,284,250,39,name,size=18)
-        g.text(xx+3,329,248,record,size=17)
+        g.text(xx+3,329,248,record,size=14 if key=='source-task' else 17)
     g.group(25,392,819,242,'Context Manager')
     g.text(26,359,808,'원본 owner 유지 / 수정과 삭제 및 권한 철회',size=17)
     if side==0:
@@ -471,7 +471,7 @@ def graph45(s,x,side):
             xx=g.port(key,'B')[0]
             g.edge('composer',key,'T','B',via=[(421,381),(xx-9,381)],sd=-14,td=-9)
             g.edge(key,'composer','B','T',via=[(xx+9,441),(449,441)],sd=9,td=14,ret=True)
-        g.text(43,431,795,'1 R9의 범위 읽기 / 원문과 버전 및 누락 범위 반환',size=17,color=g.c)
+        g.text(43,431,795,'1 R23의 범위 읽기 / 원문과 버전 및 누락 범위 반환',size=17,color=g.c)
         g.edge('composer','cache','L','T',via=[(176,475)])
         g.edge('cache','composer','R','B',via=[(435,589)],ret=True)
         g.edge('composer','current','R','T',via=[(704,475)])
@@ -492,7 +492,7 @@ def graph45(s,x,side):
         g.edge('publisher','repo','R','L')
         g.edge('reader','repo','L','R',sd=-9,td=-9)
         g.edge('repo','reader','R','L',sd=11,td=11,ret=True)
-        g.text(342,513,284,'정정 / 결과 개정 / 실제 전달\n출처와 coverage / 지속 상태',size=16,color=g.c)
+        g.text(342,513,284,'설명 / Task 결과 / 실제 전달\n출처와 coverage / 지속 상태',size=16,color=g.c)
         g.text(646,517,177,'2 유효한 관계 조회',size=16,color=g.c)
         g.edge('reader','publisher','B','B',via=[(734,568),(171,568)],ret=True)
         g.text(45,577,778,'미게시 범위의 생산 요청 / 충돌 재검증 / 표현 밖 관계의 미지원',size=17)
@@ -507,9 +507,10 @@ def graph45(s,x,side):
     g.store('user-memory',668,664,176,47,'User Memory',size=17)
     g.edge('current-request','composer' if side==0 else 'reader','T','B',via=[(155,636),(435 if side==0 else 734,636)])
     g.edge(output,'current-request','B','T',via=[(704 if side==0 else 754,663),(176,663)],sd=0 if side==0 else 20,td=21,ret=True)
-    g.text(31,641,650,'R9 조회 / Context + 출처 + 버전 + 누락 범위 반환',size=17,color=g.c)
+    g.text(31,641,650,'R23 조회 / Context + 출처 + 버전 + 누락 범위 반환',size=17,color=g.c)
     g.edge('current-request','interpreter','R','L')
-    g.text(349,719,291,'현재 Referent와 Task의 판단',size=17)
+    g.text(349,713,291,'현재 참조 / 새 T23 연결 판단',size=16)
+    g.text(27,737,613,'VIA: 근거 연결 / Agent: 기준 적용과 제안서 작성',size=14)
     g.text(670,718,174,'Context Manager 소유\n명시 저장과 삭제',size=14)
     g.edge('current-request','user-memory','R','L',via=[(304,687),(304,738),(647,738),(647,687)],ret=True,color=MUTED)
     g.text(27,756,804,'사용과 채택: 현재 권한과 버전 검사 → State Store / Response 또는 Delegation',size=17)
