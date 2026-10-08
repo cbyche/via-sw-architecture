@@ -4,9 +4,16 @@ The MAIN view enlarges the structure without the presentation's assumed QA rows.
 This is documentation generation, not a candidate implementation.
 """
 import copy
+import re
 import xml.etree.ElementTree as ET
 from generate_dp_comparison_slides import Comparison, DATA
 from dp_comparison_structures import graph42
+
+
+def stable_numbers(xml):
+    """Keep subpixel XML coordinates identical across Python float summations."""
+    return re.sub(r'(?<![\w#])-?\d+\.\d{7,}(?!\w)',
+                  lambda m: f'{float(m[0]):.6f}'.rstrip('0').rstrip('.'), xml)
 
 
 class MainSlide(Comparison):
@@ -42,8 +49,11 @@ class MainSlide(Comparison):
             if 'points' in item:item['points']=[(x*4/3,y*4/3) for x,y in item['points']]
 
     def svg(self):
-        return super().svg().replace('width="1920" height="1080" viewBox="0 0 1920 1080"',
-                                     'width="2560" height="1440" viewBox="0 0 2560 1440"')
+        return stable_numbers(super().svg().replace('width="1920" height="1080" viewBox="0 0 1920 1080"',
+                                     'width="2560" height="1440" viewBox="0 0 2560 1440"'))
+
+    def drawio(self):
+        return stable_numbers(super().drawio())
 
     def diagram(self):
         d=super().diagram();m=d.find('mxGraphModel')

@@ -1,5 +1,9 @@
 # 04-42 작성자 설계·발표 검수 기록
 
+## CI 호환성 보완 (2026-10-08)
+
+최초 게시 CI에서 Python 3.12와 로컬 Python 3.14의 부동소수점 합산 차이로 MAIN SVG/draw.io의 좌표 문자열이 달라졌다. MAIN의 긴 소수 좌표를 소수점 여섯 자리로 직렬화하여 두 버전의 생성물이 같음을 확인했다. 내용·스타일·배치는 유지하며 PNG를 다시 렌더했다. 글자 겹침·canvas 이탈 검사와 시각 검사를 통과했다. 발표 비교와 PPTX의 scene은 바뀌지 않았다.
+
 > 2026-10-05 / 작성자 검토 / 독립 심사·사용자 수용·구현·측정 결과 아님
 > [42 본문](./04-42-lifecycle-ownership.md) / [메인 그림](./diagrams/choice42-structure.svg) / [그림 모음](./diagrams/choice42-review.html)
 
