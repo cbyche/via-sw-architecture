@@ -4,6 +4,19 @@
 > 이번 작업은 45 신규 설계/그림, 독립 리뷰와 수정 및 관련 안내에 한정한다. 다른 비교의 기존 사용자 결론과 진행 상태를 보존한다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
 
+## 전용 수정 세션 — 44 Component·Module·상태 소속 (2026-10-08)
+
+별도 리뷰에서 확정한 구성과 실행 흐름을 실제 자료에 반영한다. 같은 정식 10개 Component에서 A 중앙 조정 방식(중앙 비동기 Orchestration)과 B 이벤트 흐름을 연결하는 방식(반응형 Dataflow)을 비교한다. A도 사건 기반 비동기 처리이며 process·모델·참조 Architecture를 변경하지 않는다.
+
+- Request Controller: A Dialogue Dispatcher·Dialogue Progress State / B Input Resolution Stage·Input Window·Task Notice Stage·Notice Window.
+- Response Manager: 공통 Response Composer·Publication Control·Publication Outbox, B Publication Join·Publication Window. Playback State와 입력/출력/근거 기능은 한 Interaction Manager 안에 둔다.
+- 독립 Gate·Orchestrator·Voice Runtime·Reactive Runtime 박스를 제거하고 기능을 실제 owner 및 실행 조건 주석으로 표현한다. Task 알림은 Request Controller의 연결·질문 등록·admission을 거친다. 실제 receipt → Outbox → 질문 focus를 연결한다.
+- [공유 scene](../../../../scripts/architecture/continuous_interaction_scene.py)에서 MAIN과 발표 비교를 생성하고 사건도·확대 보기·SVG/draw.io/PNG·기존 두 PPTX를 동기화한다. 41/42의 표기와 같은 흰색/검정·살구색/짙은 테두리·직각 Component·둥근 Module·원통 상태를 쓰고 외부 의존성은 육각형이다.
+- 초기 미커밋 04-50과 `work/`, 다른 비교/슬라이드와 참조 Architecture·QA/ADR를 보존한다. `--dp44-only`로 PPTX와 PNG의 44 비교만 교체한다. 2026-10-08 후속 사용자 지시로 44 관련 문서·그림·생성기·발표 자료의 commit/push를 승인받았다. 별도 작업인 04-50과 `work/`는 게시 범위에서 제외한다.
+- 정식 소속과 실행 연결은 이번 확정 수정이다. 중요 품질에 대한 조건부 이익·비용·가장 싼 전환 및 미선정/미측정 상태는 기존 논의로 유지하며 신규 Architecture 결정을 만들지 않는다.
+
+검증 결과는 [44 검수](./04-44-interaction-review.md)와 [발표 검수](../../../presentations_files/dp-comparison/REVIEW.md)에 기록한다.
+
 ## 전용 수정 세션 — 41~45 리뷰 반영 (2026-10-08)
 
 사용자는 별도 리뷰 세션의 확정된 지침을 문서와 발표 자료에 순차 반영하도록 요청했다. 논의 중인 질문은 선정이나 Architecture 결정으로 바꾸지 않는다. 현재 파일과 작업 시작 시 미커밋 diff를 출발점으로 삼으며 기존 작업을 보존한다. commit/push는 별도 지시가 있을 때만 수행한다.

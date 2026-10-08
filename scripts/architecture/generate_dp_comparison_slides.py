@@ -65,7 +65,7 @@ DATA = {
           ['부분 의미 불일치와 오류 전파로 정확 처리율 91% (기능 정확성 ↓)',
            '제안 교환과 재판단으로 평균 VIA 처리시간 7.2 s (요청 완료 신속성 ↓)']]),
   44: dict(title='반응성을 위한 VIA 지속 입력과 Response 전달 설계',
-    options=('A 중앙 비동기 Orchestration', 'B 반응형 Dataflow 실행'),
+    options=('A 중앙 조정 방식', 'B 이벤트 흐름을 연결하는 방식'),
     case='보고서 설명 도중 새 발화와 메일 질문 도착 / 표 설명 후 메일 질문 전달',
     condition='비교 예시 조건: 여러 사건의 집중 도착 / 양안의 입력 수신과 로컬 음성 중단은 동일',
     rows=[('V-04','0.85 s','0.62 s',2,3),('V-08','4.0개','2.5개',2,3),('V-06','13.3 GB','13.8 GB',3,2)],
@@ -109,7 +109,11 @@ class Comparison(Slide):
             self.text(90,y+17,98,label.split('\n'),21,INK,True,'center',leading=26)
         for x in [140,1010]: self.line([(x,188),(x,1050)],color=LINE,arrow=False)
         for side,x in enumerate([140,1010]):
-            self.text(x+435,203,838,[DATA[n]['options'][side]],28,INK,True,'center')
+            if n==44:
+                self.text(x+435,192,838,[DATA[n]['options'][side]],25,INK,True,'center')
+                self.text(x+435,224,838,['중앙 비동기 Orchestration' if side==0 else '반응형 Dataflow'],14,INK,align='center')
+            else:
+                self.text(x+435,203,838,[DATA[n]['options'][side]],28,INK,True,'center')
             for label,y in [('pros',808),('cons',888)]:
                 for i,line in enumerate(DATA[n][label][side]):
                     self.text(x+18,y+i*29,836,['▪ '+line],20,INK)
@@ -147,7 +151,7 @@ class Comparison(Slide):
             self.items=self.transformed();result=super().svg().replace('— DP 배경','— 설계 비교')
             marker=f'<marker id="a{PURPLE[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="{PURPLE}" stroke-width="1.6"/></marker>'
             result=result.replace('</defs>',marker+'</defs>')
-            if self.number in (41,42):
+            if self.number in (41,42,44):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
@@ -157,9 +161,12 @@ class Comparison(Slide):
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
                 result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',restyle,result)
             if i['kind']!='store': continue
-            x,y,w,h=(i[k] for k in ('x','y','w','h'));r=8
+            x,y,w,h=(i[k] for k in ('x','y','w','h'));r=i.get('store_radius',8)
             path=f'<path id="{i["id"]}" fill="{i["fill"]}" stroke="{i["stroke"]}" stroke-width="{i.get("line_width",1.7)}" d="M{x} {y+r}C{x} {y-r} {x+w} {y-r} {x+w} {y+r}V{y+h-r}C{x+w} {y+h+r} {x} {y+h+r} {x} {y+h-r}Z M{x} {y+r}C{x} {y+3*r} {x+w} {y+3*r} {x+w} {y+r}"/>'
             result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',lambda _:path,result)
+        if self.number==44:
+            from continuous_interaction_scene import decorate_svg
+            result=decorate_svg(self,result)
         return result
 
     def diagram(self):
@@ -174,6 +181,9 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
+        if self.number==44:
+            from continuous_interaction_scene import decorate_diagram
+            d=decorate_diagram(self,d)
         return d
 
 

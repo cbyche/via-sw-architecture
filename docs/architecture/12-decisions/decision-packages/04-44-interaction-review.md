@@ -3,6 +3,25 @@
 > 2026-10-06 / 문서·구조·실제 MAIN 렌더 검토 / 구현·모델 실행·품질 측정 없음
 > [본문](./04-44-continuous-interaction.md) · [MAIN](./diagrams/choice44-structure.svg) · [확대 보기](./diagrams/choice44-review.html)
 
+## 최신 확정 구성 반영 — Component·Module·상태 수준 (2026-10-08)
+
+별도 리뷰 세션에서 전달된 사용자 지침을 자료에 반영했다. 이번 수정은 구성/실행 흐름의 설명과 표현이며 A/B 선정·참조 Architecture 변경·process/모델 추가·구현·측정이 아니다. 아래 이전 리뷰는 당시 그림의 이력이다.
+
+- MAIN과 발표 비교는 양안에 정식 10개 Component를 각각 한 번씩 둔다. Interaction Manager의 입력/출력 접점은 한 Component에 모았다. 실행 기반을 Component로 그린 Gate·Orchestrator·Voice Runtime·Reactive Runtime 박스를 제거하고 기능을 실제 owner에 배치했다.
+- A Dialogue Dispatcher·Dialogue Progress State, B Input Resolution Stage·Task Notice Stage·Input/Notice Window는 Request Controller 내부다. Response Composer·Publication Control·Publication Outbox 및 B Publication Join·Publication Window는 Response Manager 내부다. Playback State는 Interaction Manager 내부다. draw.io parent와 SVG owner metadata도 실제 포함 관계를 따른다.
+- Task 알림은 Gateway→Task Manager의 확인·저장 후 Request Controller의 연결·질문 등록·admission을 거친다. Direct 후보는 Interaction Manager의 client 경로로 분리했고 Request Interpreter의 의미 제안, Request Controller의 채택, 후보 준비·게시 허용·실제 전달을 구별했다.
+- A 준비 요청→완료 후보 반환→후속 게시 요청, B 채택/Notice→Composer 소비→Join→Publication Control과 단계별 credit/cancel을 그렸다. 최종 원본/권한 확인 및 receipt→Publication Outbox→질문 focus 경로를 공통으로 연결했다. 원통은 논리적 상태이며 별도 DB나 원본 권한 이전이 아니다.
+- 41/42와 같은 직각 Component·둥근 Module·원통 상태·실선 요청/전달·점선 응답/반환을 쓴다. 공통 요소는 흰색/검정, 실제 다른 작은 Module과 실행 상태만 살구색/짙은 주황갈색 테두리다. 44에는 새 process/서비스 경계를 그리지 않으며 외부 의존성은 육각형이다.
+- Voice Runtime의 부분 구현 배치, 공통 bounded executor/Blocking worker pool/Model Access scheduler, A 사건 대기열·작업·완료 반환 지원 및 B 채널·구독·수용량·취소 지원은 박스 밖 주석이다. 크기·우선순위 수치는 미정이고 즉시 stop·계속 capture/ASR·미전송 hold와 실제 업무 취소를 구별했다.
+
+**실제 검수:** MAIN·보충 사건도·발표 비교를 브라우저로 렌더하고 text bounding box의 겹침·폭 초과·canvas 이탈 0건을 확인했다. 실제 이름을 지나는 화살표도 0건이다. 라벨 배경이 Publication Window 이름을 가리던 문제, 작은 원통의 곡선/이름 관통과 제목을 지나는 배선을 보완했다. 실제 세 렌더를 눈으로 대조했다. 같은 scene의 SVG/draw.io 원본 일치, 정식 10개/Module·상태 부모·필수 실제 연결과 XML 참조 검사를 통과했다. 라벨 배경의 다른 문자 가림도 0건이며 저장소의 문서·도식 검사도 통과했다.
+
+두 기존 PPTX는 44 비교(10장 자료의 8번 / 5장 자료의 4번)와 해당 notes/관계만 교체했다. native 도형·텍스트·경로로 편집 가능하며 변경 슬라이드의 평면 이미지가 없다. package/layout 검증과 PPTX 재가져오기 렌더를 확인했다. PowerPoint 앱이나 draw.io 편집기의 직접 round-trip 확인을 뜻하지 않는다. 다른 슬라이드/package 부분, 41/42/43/45의 원본/PNG, 초기 04-50 및 `work/` 변경을 보존했다. 다른 PPTX package 부분과 보호 대상 원본의 해시를 작업 시작본과 대조했다.
+
+새 독립 심사나 구조 우위 판정을 수행한 기록이 아니다. 기존 V-01~13 비용·조건·가장 싼 전환/혼합, 미선정·미측정 상태는 유지한다. 구체 수용량·우선순위 값과 실제 품질 이익은 확정하지 않는다. commit/push는 별도 지시 전까지 수행하지 않는다.
+
+**게시 전 재확인 (2026-10-08):** 후속 사용자 지시로 관련 변경의 commit/push를 승인받았다. 문서 및 CI 도식 검사, 비교 생성물 검사와 PPTX 변경 범위를 재확인했다. 두 MAIN/사건 SVG의 실제 렌더에서 문자 겹침·라벨 배경 가림 0건을 확인했고, 사건도 PNG가 현재 SVG와 다른 것을 발견해 최신 렌더로 동기화했다. 04-50과 `work/`는 이번 게시 범위에서 제외한다.
+
 ## 0. 최신 사용자 수정 — Interaction Manager 내부 출력 표현 (2026-10-06)
 
 사용자는 직관적이지 않은 `Output Arbiter` 이름을 사용하지 않고 해당 출력 쪽 부분을 Interaction Manager 안에 그리도록 요청했다. MAIN/사건도/본문에서 이 별도 이름을 제거했다. 아래 §0.1과 §3~5의 이전 명칭·판정은 당시 그림의 리뷰 이력이며 최신 소유/배치의 승인으로 읽지 않는다.

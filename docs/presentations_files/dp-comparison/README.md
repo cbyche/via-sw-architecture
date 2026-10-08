@@ -53,6 +53,14 @@
 
 PNG 렌더러와 PPTX 생성기의 `--dp41-42-only` 옵션은 두 비교 슬라이드만 교체하고 나머지 슬라이드와 공통 package 부분을 보존한다. 범위 없는 재생성은 전체 자료를 만들 때 사용한다. 기존 예상 수치와 미선정/미측정 상태는 유지한다.
 
+## 44 소속과 실행 연결 — 2026-10-08
+
+A 중앙 조정 방식(중앙 비동기 Orchestration)과 B 이벤트 흐름을 연결하는 방식(반응형 Dataflow)은 같은 정식 10개 Component와 배치·원본·모델 조건을 사용한다. Request Controller 내부의 A Dispatcher/Progress State 또는 B Input Resolution Stage·Task Notice Stage/Window, Response Manager 내부의 공통 준비·게시·Outbox 및 B Publication Join/Window를 비교한다. 정식 Module·상태 이름과 포함 관계는 실제 그림에 표시한다. 실행 기반은 Component 박스가 아니다.
+
+[44 MAIN](../../architecture/12-decisions/decision-packages/diagrams/choice44-structure.svg)과 비교는 [공유 scene](../../../scripts/architecture/continuous_interaction_scene.py)을 사용한다. 41/42와 같은 기호 의미에 외부 의존성 육각형을 추가하고, 다른 실행 상태도 살구색과 짙은 테두리로 표시한다. 큰 Component는 흰색/검정이다. 동일 원본에서 Task Notice의 Request Controller 경유, A 완료 후보 회수와 B 직접 소비, 실제 receipt→Outbox→질문 focus를 읽는다.
+
+PNG/PPTX의 `--dp44-only`는 44 비교만 교체한다. PPTX에서는 해당 notes와 관계도 갱신하며 다른 슬라이드와 공통 package 부분을 보존한다. MAIN의 Voice Runtime·executor/worker pool·scheduler 및 실행 지원 주석은 변경 슬라이드의 발표자 노트에도 남긴다. 기존 수치와 점수는 형식 예시/미측정 상태를 유지한다.
+
 ## 편집과 재생성
 
 통합 draw.io에서 페이지를 골라 수정하거나 개별 파일을 복제해 같은 틀을 재사용한다. 보강판은 구조 영역을 494px에서 552px로 늘렸으며 하단에는 장점과 단점 각각 80px, QA 95px를 배정했다. 레퍼런스의 진행 단계 ribbon과 FR 번호는 VIA 자료에 해당 값이 없어 복사하지 않았다.

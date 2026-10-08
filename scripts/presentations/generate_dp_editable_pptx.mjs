@@ -8,7 +8,7 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && !['--comparison-only','--dp41-42-only'].includes(scope)) throw new Error('Optional scope: --comparison-only or --dp41-42-only');
+if (scope && !['--comparison-only','--dp41-42-only','--dp44-only'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only or --dp44-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -90,14 +90,16 @@ function nativeScene(presentation,scene) {
       slide.shapes.add({name,geometry:'can',position,fill:item.fill,line:stroke(item.stroke,item.line_width??1.7),
         adjustmentList:[{name:'adj',formula:'val 20000'}]});
     } else if(item.kind==='rect') {
-      slide.shapes.add({name,geometry:item.rounded?'roundRect':'rect',position,fill:item.fill,line:stroke(item.stroke,item.line_width??1.7,item.dashed)});
+      slide.shapes.add({name,geometry:item.external?'hexagon':item.rounded?'roundRect':'rect',position,fill:item.fill,line:stroke(item.stroke,item.line_width??1.7,item.dashed)});
     } else throw new Error(`Unsupported scene object: ${item.kind}`);
   }
   const base='https://github.com/cbyche/via-sw-architecture/blob/main/';
   const documents={41:'04-41-request-resolution-control.md',42:'04-42-lifecycle-ownership.md',
     43:'04-43-request-interpretation.md',44:'04-44-continuous-interaction.md',45:'04-45-memory-and-context.md'};
-  slide.speakerNotes.textFrame.setText(`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
-    (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.'));
+  let notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
+    (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.');
+  if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
+  slide.speakerNotes.textFrame.setText(notesText);
   return slide;
 }
 
@@ -130,6 +132,8 @@ const preserveUnselected=String.raw`
 import sys,json,zipfile,os
 candidate,original,indices=sys.argv[1],sys.argv[2],json.loads(sys.argv[3])
 parts={name for i in indices for name in [f'ppt/slides/slide{i}.xml',f'ppt/slides/_rels/slide{i}.xml.rels']}
+if len(sys.argv)>4 and sys.argv[4]=='--dp44-only':
+    parts.update(name for i in indices for name in [f'ppt/notesSlides/notesSlide{i}.xml',f'ppt/notesSlides/_rels/notesSlide{i}.xml.rels'])
 with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.ZipFile(candidate+'.scoped','w') as out:
     for info in old.infolist():
         data=new.read(info.filename) if info.filename in parts else old.read(info.filename)
@@ -143,9 +147,9 @@ for(const plan of plans.filter(p=>!scope||p.scenes.some(s=>s.kind==='comparison'
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(scope==='--dp41-42-only') {
-    const indices=plan.scenes.flatMap((s,i)=>s.kind==='comparison'&&[41,42].includes(s.number)?[i+1]:[]);
-    execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices)]);
+  if(['--dp41-42-only','--dp44-only'].includes(scope)) {
+    const indices=plan.scenes.flatMap((s,i)=>s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number)?[i+1]:[]);
+    execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices),scope]);
   }
   await finalizePresentation({workspaceDir:build,candidatePath:draft,finalPath:final,explicitTotalSlideCount:plan.scenes.length,
     pythonExecutable:python,integrityValidatorPath:path.join(skill,'container_tools/inspect_presentation_package_integrity.py'),
