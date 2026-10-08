@@ -8,7 +8,7 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && scope!=='--comparison-only') throw new Error('Optional scope: --comparison-only');
+if (scope && !['--comparison-only','--dp41-42-only'].includes(scope)) throw new Error('Optional scope: --comparison-only or --dp41-42-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -87,10 +87,10 @@ function nativeScene(presentation,scene) {
           {lineTo:{x:w,y:18}},{lineTo:{x:w,y:h}},{lineTo:{x:0,y:h}},{close:{}}]}]});
       polyline(slide,name+' / fold',[[item.x+item.w-18,item.y],[item.x+item.w-18,item.y+18],[item.x+item.w,item.y+18]],item.stroke,1.7);
     } else if(item.kind==='store') {
-      slide.shapes.add({name,geometry:'can',position,fill:item.fill,line:stroke(item.stroke),
+      slide.shapes.add({name,geometry:'can',position,fill:item.fill,line:stroke(item.stroke,item.line_width??1.7),
         adjustmentList:[{name:'adj',formula:'val 20000'}]});
     } else if(item.kind==='rect') {
-      slide.shapes.add({name,geometry:'rect',position,fill:item.fill,line:stroke(item.stroke,1.7,item.dashed)});
+      slide.shapes.add({name,geometry:item.rounded?'roundRect':'rect',position,fill:item.fill,line:stroke(item.stroke,item.line_width??1.7,item.dashed)});
     } else throw new Error(`Unsupported scene object: ${item.kind}`);
   }
   const base='https://github.com/cbyche/via-sw-architecture/blob/main/';
@@ -124,13 +124,29 @@ with zipfile.ZipFile(sys.argv[1]) as z:
         stats.append(dict(slug=scene['slug'],nativeShapes=native,nativeTextLines=len(texts),nativePaths=paths,images=0))
     print(json.dumps(stats))
 `;
+// A style-only update preserves every unselected slide and all common package
+// parts byte-for-byte. Native scenes have no new media or package dependencies.
+const preserveUnselected=String.raw`
+import sys,json,zipfile,os
+candidate,original,indices=sys.argv[1],sys.argv[2],json.loads(sys.argv[3])
+parts={name for i in indices for name in [f'ppt/slides/slide{i}.xml',f'ppt/slides/_rels/slide{i}.xml.rels']}
+with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.ZipFile(candidate+'.scoped','w') as out:
+    for info in old.infolist():
+        data=new.read(info.filename) if info.filename in parts else old.read(info.filename)
+        out.writestr(info,data)
+os.replace(candidate+'.scoped',candidate)
+`;
 const stats=[];
-for(const plan of plans.filter(p=>scope!=='--comparison-only'||p.scenes.some(s=>s.kind==='comparison'))) {
+for(const plan of plans.filter(p=>!scope||p.scenes.some(s=>s.kind==='comparison'))) {
   const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
   for(const scene of plan.scenes)nativeScene(presentation,scene);
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
+  if(scope==='--dp41-42-only') {
+    const indices=plan.scenes.flatMap((s,i)=>s.kind==='comparison'&&[41,42].includes(s.number)?[i+1]:[]);
+    execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices)]);
+  }
   await finalizePresentation({workspaceDir:build,candidatePath:draft,finalPath:final,explicitTotalSlideCount:plan.scenes.length,
     pythonExecutable:python,integrityValidatorPath:path.join(skill,'container_tools/inspect_presentation_package_integrity.py'),
     layoutValidatorPath:path.join(skill,'container_tools/inspect_presentation_layout_geometry.py'),

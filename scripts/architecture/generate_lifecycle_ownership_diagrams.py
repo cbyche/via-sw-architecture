@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
 from lifecycle_ownership_presentation import structure
+from dp_comparison_structures import COMMON, APRICOT, DIFFERENCE_STROKE, DIFFERENCE_WIDTH, BOUNDARY_WIDTH, append_plate_legend
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'docs/architecture/12-decisions/decision-packages/diagrams'
@@ -39,19 +40,35 @@ class Slide(Plate):
     def svg(self):
         # Component headings are intentionally larger than the older tall plates.
         svg = super().svg().replace('font-size="23"', 'font-size="28"')
+        svg=svg.replace('#263445',COMMON).replace('a263445','a000000').replace('#F7F9FC','white')
+        svg=svg.replace('stroke-width="2.2"','stroke-width="1.3"')
         return svg
 
     def drawio(self):
-        xml = super().drawio().replace('fontSize=23;', 'fontSize=28;')
+        xml = super().drawio().replace('fontSize=23;', 'fontSize=28;').replace('#263445',COMMON).replace('#F7F9FC','white')
+        xml=xml.replace('strokeWidth=2.2;','strokeWidth=1.3;')
+        # Plate.box does not serialize its explicit line width by default.
+        root=ET.fromstring(xml)
+        boxes={i['id']:i for i in self.items if i['kind']=='box'}
+        for cell in root.findall('.//mxCell'):
+            if cell.get('id') in boxes:
+                item=boxes[cell.get('id')];cell.set('style',cell.get('style')+f'strokeWidth={item["thick"]};'+('rounded=0;' if item['radius']==0 else ''))
+        xml=ET.tostring(root,encoding='unicode')+'\n'
         return xml
 
-    def footer(self, note='설계 가설 / 구현·측정 결과 아님', flow='실선: 요청·변경  /  점선 화살표: 반환·조회 결과'):
-        self.line([(64, 1342), (2496, 1342)], LINE, arrow=False)
-        self.text(64, 1360, '검정: 공통  ·  파랑: A  ·  초록: B     '+flow, 23, MUTED)
-        self.text(2496, 1399, note, 21, MUTED, 'right')
+    def footer(self, note='설계 가설 / 구현과 측정 결과 아님'):
+        if self.slug=='choice42-lifetimes':
+            self.line([(64,1342),(2496,1342)],LINE,arrow=False,width=1.3)
+            self.text(64,1360,'막대: 데이터의 존속 / 세로 점선: 사건 시점 / Component나 process 경계가 아님',23,MUTED)
+            self.text(2496,1399,note,21,MUTED,'right')
+            return
+        self.line([(64,1342),(2496,1342)],LINE,arrow=False,width=1.3)
+        self.text(2496,1346,note,17,COMMON,'right')
+        append_plate_legend(self)
 
     def arrow(self, a, b, label, at, sp='B', tp='T', via=(), color=INK, ret=False, sd=0, td=0, size=25):
-        self.edge(a, b, sp=sp, tp=tp, via=list(via), color=color, ret=ret, sd=sd, td=td)
+        self.edge(a,b,sp=sp,tp=tp,via=list(via),color=INK,ret=ret,sd=sd,td=td)
+        self.items[-1]['width']=1.3
         if label:
             self.label(*at, label, color, size=size)
 
@@ -93,72 +110,79 @@ def lifetimes():
 
 
 def sequence(option):
-    b = option == 'B'
-    c = GREEN if b else BLUE
-    p = Slide('choice42-event-'+option.lower(), option+'  같은 답변의 확정과 실제 전달',
-              'E4 확대: C1에서 “응, 상반기로” → Q1 현재 상태 검사 → 로컬 확정 → 외부 접수 → 사용자에게 전달')
-    xs = [165, 700, 1170, 1660, 2340]
-    names = ['사용자 입출력', '대화 서비스' if b else '대화 처리기', '트랜잭션 관리자', '업무 서비스' if b else '업무 관리기', 'Downstream Agent']
+    b=option=='B';c=DIFFERENCE_STROKE
+    p=Slide('choice42-event-'+option.lower(),option+' 같은 답변의 확정과 실제 전달',
+            'E4: u2 “상반기로” → R2/Q1/T1 연결 → K1 접수 → P2 실제 제시 / P1은 이미 제시된 질문 기록')
+    xs=[170,530,900,1260,1620,1980,2370]
+    names=['Interaction Manager','Request Controller','Response Manager','트랜잭션 관리자','Task Manager','Agent Gateway','Downstream Agent']
     if b:
-        for x in [xs[1], xs[3]]: p.box(x-190, 249, 380, 1025, MINT, GREEN, 8, dashed=True)
+        p.box(354,249,734,1025,'white',DIFFERENCE_STROKE,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
+        p.box(1444,249,720,1025,'white',DIFFERENCE_STROKE,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
+        p.text(374,264,'대화 서비스',24,DIFFERENCE_STROKE,bold=True)
+        p.text(1464,264,'업무 서비스',24,DIFFERENCE_STROKE,bold=True)
     else:
-        p.box(505, 249, 1350, 1025, PALE, BLUE, 8, dashed=True)
-        p.text(1170, 263, 'VIA Core / 공동 확정·저장', 25, BLUE, 'center', True)
-    for j, (x, name) in enumerate(zip(xs, names)):
-        if b and j == 2:
-            continue
-        p.box(x-160, 313, 320, 68, 'white', INK if j != 2 else c, 8, thick=2)
-        p.text(x, 326, name, 28, INK, 'center', True)
-        p.line([(x, 385), (x, 1260)], '#A5B3C3', dashed=True, arrow=False)
-    def msg(a, z, y, txt, ret=False, color=INK):
-        points = [(xs[a], y), (xs[z], y)] if a != z else [(xs[a], y), (xs[a]+46, y), (xs[a]+46, y+15), (xs[a], y+15)]
-        p.line(points, color, width=2.5, dashed=ret)
-        p.label(min(xs[a], xs[z])+18, y-31, txt, color, size=24)
-    steps = [(0, 1, 'E4  “응, 상반기로” / 실제 제시 P1 참조', False),
-             (1, 3, 'Q1·T1·X1 현재 상태 조회', False),
-             (3, 1, '질문·업무 상태와 revision', True)]
+        p.box(354,249,1810,1025,'white',DIFFERENCE_STROKE,0,thick=BOUNDARY_WIDTH*4/3)
+        p.text(374,264,'VIA Core',24,DIFFERENCE_STROKE,bold=True)
+    for j,(x,name) in enumerate(zip(xs,names)):
+        if b and j==3:continue
+        p.box(x-150,313,300,62,APRICOT if j==3 else 'white',DIFFERENCE_STROKE if j==3 else COMMON,7 if j==3 else 0,thick=DIFFERENCE_WIDTH*4/3 if j==3 else 1.3)
+        p.text(x,331,name,21,INK,'center',True)
+        p.line([(x,379),(x,1260)],'#A5B3C3',dashed=True,arrow=False,width=1)
+    def msg(a,z,y,text,ret=False,color=INK):
+        points=[(xs[a],y),(xs[z],y)] if a!=z else [(xs[a],y),(xs[a]+42,y),(xs[a]+42,y+13),(xs[a],y+13)]
+        p.line(points,COMMON,width=1.3,dashed=ret)
+        p.label(min(xs[a],xs[z])+14,y-28,text,color,size=21)
+    steps=[(0,1,'u2 원문 입력 / Conversation C1',False),
+           (1,4,'Q1/T1/X1 현재 상태 조회 / P1은 이미 제시된 기록',False),
+           (4,1,'Q1=OPEN / expected revision v7',True),
+           (1,1,'Request Interpreter의 의미 제안 채택 / u2는 Q1 답변',False)]
     if b:
-        steps += [(1, 1, '해석 후 Request·명령 의도 저장', False),
-                  (1, 3, '조건부 답변 명령 / 같은 command ID', False),
-                  (3, 3, '현재 검사 → 업무 상태·명령·접수 결과 저장', False),
-                  (3, 1, '로컬 접수 결과 / 외부 접수와 별개', True),
-                  (1, 1, '접수 결과를 대화 저장소에 반영', False)]
+        steps += [(1,1,'대화 저장: R2=접수 대기 / K1 / u2→Q1→T1',False),
+                  (1,4,'K1: Q1 답변=상반기 / v7 / 권한·입력 조건',False),
+                  (4,4,'업무 로컬 저장: Q1=ANSWERED,v8 / K1 / 내부 접수 결과',False),
+                  (4,1,'K1 내부 접수 확인 / 외부 접수는 아직 별개',True),
+                  (1,1,'대화 저장: R2에 K1 내부 접수 결과 반영',False)]
     else:
-        steps += [(1, 2, '해석 후 답변 연결·조건 제안', False),
-                  (2, 3, '업무 현재 검사·변경 집합 요청', False),
-                  (3, 2, '검증한 질문·업무·명령 변경', True),
-                  (2, 2, '관련 대화·업무 상태와 명령을 함께 저장', False),
-                  (2, 1, '로컬 저장 결과 / 대화·업무 함께 반영', True),
-                  (2, 3, '로컬 확정 성공 / 외부 접수와 별개', True)]
-    steps += [(3, 4, '현재 전송 조건 확인 후 답변 전달', False),
-              (4, 3, '외부 Agent 접수 확인', True),
-              (3, 1, '확인된 외부 접수 상태 전달', True),
-              (1, 0, '“상반기 조건을 전달했어요”', True),
-              (0, 1, '실제 전달 기록 P2 → 대화 상태에 보관', True)]
-    for j, (a, z, text, ret) in enumerate(steps):
-        msg(a, z, 435+j*(62 if b else 58), text, ret, c if 3 <= j <= (7 if b else 8) else INK)
-    p.text(64, 1290, '경쟁: Q1이 철회되거나 X1이 끝났으면 현재 검사에서 거절. 실패한 명령을 외부에 전달하지 않는다.', 26, MUTED)
-    p.footer('같은 의미 해석·자료·권한 조건 / 모델 호출과 Agent 연동 내부는 축약 / 선 간격은 소요시간이 아님')
+        steps += [(1,3,'R2/u2→Q1→T1 연결 / P1 참조의 변경 제안',False),
+                  (3,4,'업무 현재 검사 / 변경 집합 요청',False),
+                  (4,3,'검증한 Q1 답변·revision과 K1 전송 준비',True),
+                  (3,3,'State Store: 관련 연결·Q1 변경·K1을 하나의 transaction으로 저장',False),
+                  (3,1,'로컬 저장 결과 / 성공이면 관련 변경 함께 반영',True),
+                  (3,4,'같은 로컬 저장 결과 / 실패하면 모두 미반영',True)]
+    steps += [(4,5,'저장된 명령 K1 / 현재 전송 조건',False),
+              (5,6,'K1 외부 답변 전달',False),
+              (6,5,'K1 외부 접수 확인',True),
+              (5,4,'source-confirmed K1 접수 사실',True),
+              (4,1,'확인된 외부 접수 상태',True),
+              (1,2,'P2: “상반기 조건 전달 확인” / 게시 허용과 source 참조',False),
+              (2,0,'release(P2,output epoch) / Text·Voice',False),
+              (0,2,'receipt(P2,실제 표시·재생 범위)',True),
+              (2,2,'P2 publication/실제 전달 원장 저장',False),
+              (2,1,'P2 실제 제시 사실 / Conversation 참조 갱신',True)]
+    for j,(a,z,text,ret) in enumerate(steps):
+        msg(a,z,425+j*820/(len(steps)-1),text,ret,c if 4<=j<(9 if b else 10) else INK)
+    p.text(64,1290,'실제 제시 기록 원본: Response Manager / 답변·질문 연결: Request Controller / 모델·정책 호출은 공통 축약',23,MUTED)
+    p.footer('입력 수신/재생과 요청 의미·업무 확정 구별 / 같은 해석·모델 조건 / 선 간격은 소요시간이 아님')
     return p
 
 
 def change():
     p = Slide('choice42-change', '모듈화의 이익과 독립 운영의 이익을 구별한다',
               '같은 Agent 변화: 상태 조회를 polling에서 event stream으로 바꾸되 VIA의 사용자 의미는 유지')
-    for opt, dx, c in [('A', 0, BLUE), ('B', 1250, GREEN)]:
+    for opt, dx, c in [('A',0,DIFFERENCE_STROKE),('B',1250,DIFFERENCE_STROKE)]:
         p.text(80+dx, 253, opt+'  '+('통합 Core' if opt=='A' else '독립 서비스'), 39, c, bold=True)
         if opt=='A':
-            p.box(90, 365, 1090, 455, 'none', c, 12, dashed=True)
+            p.box(90,365,1090,455,'white',c,0,thick=BOUNDARY_WIDTH*4/3)
             p.text(120, 385, 'VIA Core process', 28, c, bold=True)
         else:
-            p.box(1340, 365, 420, 455, 'none', c, 12, dashed=True)
-            p.box(1880, 365, 550, 455, 'none', c, 12, dashed=True)
+            p.box(1340,365,420,455,'white',c,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
+            p.box(1880,365,550,455,'white',c,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
             p.text(1370, 385, '대화 서비스 process', 28, c, bold=True)
             p.text(1910, 385, '업무 서비스 process', 28, c, bold=True)
-        p.component(opt+'d', 130+dx, 493, 335, 150, '대화 처리기')
-        p.component(opt+'w', 680+dx, 493, 400, 225, '업무 관리기')
-        p.node(opt+'ad', 715+dx, 605, 330, 80, 'Agent 연동기', owner=opt+'w', color=c)
-        p.arrow(opt+'d', opt+'w', '같은 VIA 업무 계약', (480+dx, 522), sp='R', tp='L', td=-37.5, size=25)
+        p.component(opt+'d', 130+dx, 493, 335, 150, 'Request Controller')
+        p.component(opt+'w', 680+dx, 493, 400, 80, 'Task Manager')
+        p.component(opt+'ad', 715+dx, 605, 330, 80, 'Agent Gateway')
+        p.arrow(opt+'d', opt+'w', '같은 VIA 업무 계약', (480+dx, 522), sp='R', tp='L', td=35, size=25)
         p.text(130+dx, 747, '대화 코드 유지 가능', 29, bold=True)
         p.text(680+dx, 747, '연동·수신 경로 변경', 29, c, bold=True)
         p.text(100+dx, 880, '일반 protocol 변경은 양안 모두 국소화 가능', 29, INK, bold=True)
@@ -167,7 +191,7 @@ def change():
                  ['공개 계약이 호환되면 업무 서비스만 갱신.', '대화 서비스는 유지하며 업무 요청은 보류 가능.', '새 승인 의미 등 계약 변화는 양쪽으로 전파.'])
         p.text(100+dx, 1000, lines, 29, MUTED, leading=48)
     p.text(80, 1234, 'V-08  변경 범위 감소는 조건부  /  독립 갱신의 이익을 변경 요소 수 우위로 바꾸어 말하지 않는다.', 30, bold=True)
-    p.footer('검정: 유지하는 기능·계약 / 색: 각 안의 실행 경계와 변경 대상. 색은 우열이나 측정 점수가 아님')
+    p.footer('양안 공통 Agent Gateway / 배치 차이는 바깥 경계 / 미선정과 미측정')
     return p
 
 

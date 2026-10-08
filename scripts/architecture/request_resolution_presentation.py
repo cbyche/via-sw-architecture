@@ -4,6 +4,10 @@ Each alternative is complete inside its own column, including common contracts.
 Every connector is also an editable edge in the companion draw.io scene.
 """
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN, LINE
+import xml.etree.ElementTree as ET
+import copy
+import re
+from dp_comparison_structures import COMMON, APRICOT, DIFFERENCE_STROKE, DIFFERENCE_WIDTH, append_plate_legend
 
 TITLE = '요청 의미 확정 — 모델 중심 ReAct와 모델 틀/코드 완성'
 
@@ -35,10 +39,42 @@ class Slide(Plate):
                 assert all(lo<=x<=hi for x,y in item['points']), (item['id'],'edge leaves column')
 
     def svg(self):
-        return super().svg().replace('font-size="23"', 'font-size="26"')
+        root=ET.fromstring(super().svg().replace('font-size="23"','font-size="26"'))
+        ns={'s':'http://www.w3.org/2000/svg'}
+        marker=copy.deepcopy(root.find('.//s:marker',ns));marker.set('id','a000000')
+        marker.find('s:path',ns).set('stroke',COMMON)
+        root.find('s:defs',ns).append(marker)
+        for item in self.items:
+            if item['kind'] not in ('component','node'): continue
+            group=root.find('.//s:g[@id="'+item['id']+'"]',ns)
+            shape=next(child for child in group if child.tag.rsplit('}',1)[-1] in ('rect','path'))
+            different=item['kind']=='node' and item['type']=='module' or item['id']=='Bri'
+            shape.set('fill',APRICOT if different else 'white')
+            shape.set('stroke',DIFFERENCE_STROKE if different else COMMON)
+            shape.set('stroke-width',str(DIFFERENCE_WIDTH*4/3) if different else '1.3')
+            if item['kind']=='node' and item['type'] in ('external','model'):
+                shape.tag='{'+ns['s']+'}rect';shape.attrib.clear()
+                shape.attrib.update({k:str(item[v]) for k,v in [('x','x'),('y','y'),('width','w'),('height','h')]})
+                shape.attrib.update(fill='white',stroke=COMMON,**{'stroke-width':'1.3'})
+            for path in group.findall('s:path',ns):path.set('stroke-width','1.3')
+        ET.register_namespace('',ns['s'])
+        return ET.tostring(root,encoding='unicode')+'\n'
 
     def drawio(self):
-        return super().drawio().replace('fontSize=23;', 'fontSize=26;')
+        root=ET.fromstring(super().drawio().replace('fontSize=23;','fontSize=26;'))
+        items={i['id']:i for i in self.items}
+        for cell in root.findall('.//mxCell'):
+            item=items.get(cell.get('id'))
+            if not item or item['kind'] not in ('component','node'): continue
+            different=item['kind']=='node' and item['type']=='module' or item['id']=='Bri'
+            style=cell.get('style')
+            style=re.sub(r'fillColor=[^;]*;', 'fillColor='+ (APRICOT if different else 'white')+';',style)
+            style=re.sub(r'strokeWidth=[^;]*;',f'strokeWidth={DIFFERENCE_WIDTH*4/3 if different else 1.3};',style)
+            style=re.sub(r'strokeColor=[^;]*;',f'strokeColor={DIFFERENCE_STROKE if different else COMMON};',style)
+            style=style.replace('shape=hexagon;','rounded=0;')
+            cell.set('style',style)
+        return ET.tostring(root,encoding='unicode')+'\n'
+
 
     def arrow(self, a, b, label='', at=None, sp='B', tp='T', via=(), color=INK, ret=False, sd=0, td=0, size=24):
         self.edge(a, b, sp=sp, tp=tp, via=via, color=color, ret=ret, sd=sd, td=td)
@@ -88,7 +124,7 @@ def structure():
             via=[(435, 762), (435, 704), (312.5, 704)], color=BLUE, ret=True)
     p.arrow('Aloop', 'Acheck', '5  최종 관계 / 질문', (120, 632), color=BLUE, sd=-100, td=-100)
     p.arrow('Acheck', 'Aloop', '오류: 제한 재생성', (116, 680), sp='T', tp='B', sd=-15, td=-15, ret=True, color=BLUE)
-    p.arrow('Aloop', 'Ama', '추론 요청 / 조회·질문·완성안 반환', (495, 379), sp='T', tp='T', sd=135,
+    p.arrow('Aloop', 'Ama', '추론 요청 / 조회·질문·완성안 반환', (845, 376), sp='T', tp='T', sd=135, size=18,
             via=[(397.5, 396), (1070, 396)], color=BLUE)
     p.arrow('Ama', 'Aloop', sp='L', tp='T', td=80, sd=15,
             via=[(885, 453), (885, 491), (342.5, 491)], color=BLUE, ret=True)
@@ -190,6 +226,12 @@ def structure():
                              '응답 추론도 Model Access 경유'],20,MUTED,leading=30)
         p.text(932+dx,1330,'외부 업무 계획·실행 책임',21,MUTED)
 
-    p.text(64,1379,'검정: 공통 / 파랑: A / 초록: B · 네모: Component/Module · 원통: 상태 · 실선: 요청/전달 · 점선: 반환',21,MUTED)
-    p.text(2496,1409,'각 칸은 독립 대안 · 같은 이름은 칸 안의 동일 인스턴스 · VIA 논리 책임, 별도 process 가정 없음 · Omni 한 벌/역할별 세션 · 음성 입력 유지',20,MUTED,'right')
+    # Preserve topology and ownership, restyle the existing scene only.
+    for item in p.items:
+        if item['kind'] in ('component','node','text','label','line'):
+            item['color']=COMMON
+        if item['kind']=='line': item['width']=1.3
+        if item['kind']=='box' and item['y']==211 and item['h']==48: item['fill']='white'
+    p.text(64,194,'각 칸은 독립 대안 / 반복 이름은 동일 인스턴스 / 논리 책임이며 별도 process 가정 없음 / Omni 한 벌과 역할별 세션 / 음성 입력 유지',13,COMMON)
+    append_plate_legend(p)
     return p

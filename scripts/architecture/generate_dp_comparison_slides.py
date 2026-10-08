@@ -44,7 +44,7 @@ DATA = {
            '새 관계의 틀과 결합 규칙 확장, 평균 4.0개 (변경 용이성 ↓)']]),
   42: dict(title='변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
     options=('A 모듈형 통합 VIA Core', 'B 독립 대화 서비스와 업무 서비스'),
-    case='보고서와 메일 Request 접수 → Task 추적 → 같은 보고서 Task의 후속 수정',
+    case='보고서 질문 Q1을 실제 제시(P1) → “상반기로” 답변(u2) → 접수와 실제 전달 확인',
     condition='비교 예시 조건: 업무 저장과 실행 수명의 독립 변경 / 일반 Agent adapter 변경은 제외',
     rows=[('V-05','3.2 s','3.8 s',3,2),('V-08','4.0개','2.5개',2,3),('V-06','13.2 GB','13.6 GB',3,2)],
     pros=[['관련 상태의 공동 확정으로 평균 VIA 처리시간 3.2 s (요청 완료 신속성 ↑)',
@@ -147,11 +147,18 @@ class Comparison(Slide):
             self.items=self.transformed();result=super().svg().replace('— DP 배경','— 설계 비교')
             marker=f'<marker id="a{PURPLE[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="{PURPLE}" stroke-width="1.6"/></marker>'
             result=result.replace('</defs>',marker+'</defs>')
+            if self.number in (41,42):
+                result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
+            if i['kind']=='rect' and ('line_width' in i or i.get('rounded')):
+                def restyle(match):
+                    tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
+                    return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
+                result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',restyle,result)
             if i['kind']!='store': continue
             x,y,w,h=(i[k] for k in ('x','y','w','h'));r=8
-            path=f'<path id="{i["id"]}" fill="{i["fill"]}" stroke="{i["stroke"]}" stroke-width="1.7" d="M{x} {y+r}C{x} {y-r} {x+w} {y-r} {x+w} {y+r}V{y+h-r}C{x+w} {y+h+r} {x} {y+h+r} {x} {y+h-r}Z M{x} {y+r}C{x} {y+3*r} {x+w} {y+3*r} {x+w} {y+r}"/>'
+            path=f'<path id="{i["id"]}" fill="{i["fill"]}" stroke="{i["stroke"]}" stroke-width="{i.get("line_width",1.7)}" d="M{x} {y+r}C{x} {y-r} {x+w} {y-r} {x+w} {y+r}V{y+h-r}C{x+w} {y+h+r} {x} {y+h+r} {x} {y+h-r}Z M{x} {y+r}C{x} {y+3*r} {x+w} {y+3*r} {x+w} {y+r}"/>'
             result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',lambda _:path,result)
         return result
 
@@ -162,6 +169,11 @@ class Comparison(Slide):
         stores={i['id'] for i in original if i['kind']=='store'}
         for cell in d.findall('.//mxCell'):
             if cell.get('id') in stores: cell.set('style',cell.get('style')+'shape=cylinder;size=8;')
+            item=next((i for i in original if i['id']==cell.get('id')),None)
+            if item and 'line_width' in item:
+                cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
+            if item and item.get('rounded'):
+                cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
         return d
 
 

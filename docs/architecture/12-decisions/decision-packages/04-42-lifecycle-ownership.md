@@ -27,29 +27,21 @@
 
 [편집 가능한 draw.io](./diagrams/choice42-structure.drawio) / [발표 삽입용 PNG](./diagrams/choice42-structure.png)
 
-메인 그림은 **같은 사례의 서로 다른 수명 → 소유·실행 경계 → 정상 답변의 협력 방식**을 읽는 16:9 한 장이다. A는 왼쪽 칸, B는 오른쪽 칸 안에서 수명과 구조를 완결한다. 각 칸 위쪽에서 요청 R1은 위임 접수 후 끝나지만, 대화 C1 기록·답변 대기 Q1·Task T1·외부 실행 X1은 각각 유지되거나 종료된다. 후속 수정은 T1을 유지하면서 X2를 시작한다. 이는 양안 공통 요구이며 B만의 능력이 아니다. 선의 길이는 사건 순서를 설명하며 측정 시간이 아니고, R1/X1/Q1의 종료는 기록 삭제를 뜻하지 않는다. 장점·대가·선택조건은 본문에서 다루며 메인 그림에 넣지 않는다.
+메인 그림은 **같은 수명 → 같은 정식 Component → 다른 실행·확정 경계 → 예시 데이터와 실제 전달**을 한 장에서 읽는다. A/B는 같은 Interaction Manager, Request Controller, Request Interpreter, Response Manager, Task Manager, Agent Gateway와 Model Access를 사용한다. `대화 처리기`·`업무 관리기`라는 별도 Component를 추가하지 않는다. 공통 Component는 흰 바탕과 검정 테두리다. 다른 서비스에 배치된 공통 Component도 흰색으로 유지한다. 큰 Core/서비스 경계는 채우지 않고 A는 실선, B는 점선인 짙은 살구색 계열의 굵은 테두리로 실행과 상태 확정 범위를 구분한다. 책임과 동작이 다른 작은 내부 Module만 살구색으로 표시한다. 41과 같은 Legend를 사용하며 직각 박스는 논리 Component, 둥근 박스는 내부 Module, 원통은 저장 상태다. 실선 화살표는 요청과 전달, 점선 화살표는 응답과 반환이다. Component 포함 관계와 process 배치는 같은 개념이 아니다.
 
-하단에 같은 C1/R1/T1/X1·X2/Q1을 다시 적어 상단의 수명을 실제 소유자에 연결한다. **A는 대화·업무의 상태를 구분한 채 하나의 Core 실행 경계에서 관리하고, B는 각 서비스가 자기 상태 권한과 독립 실행 수명을 소유한다.** A의 내부 모듈화를 없애거나 B에 별도의 Omni 의미 해석기를 추가하지 않는다. 트랜잭션 관리자는 A의 공동 저장 수단으로 작게 배치하며, 소유 구조 전체를 대신하는 주인공으로 사용하지 않는다.
+위쪽은 대화 C1·세 요청 R1/R2/R3·보고서 업무 T1·외부 실행 X1/X2·질문 Q1의 서로 다른 수명을 나타낸다. R1은 최초 위임, R2는 Q1 답변, R3는 결과 수정이다. 수명 선은 개념적 사건 순서이며 측정 시간이나 기록 삭제 시점이 아니다. 상세 수명과 C2 전환은 §2의 보충 그림을 따른다.
 
-**검정은 같은 기능과 의존성, 파랑은 A의 통합 소유·협력 경계, 초록은 B의 독립 소유·협력 경계**다. 점선 테두리는 process 경계, 둥근 상자는 Module, 원통은 내구 상태다. 굵은 선은 답변 처리의 주요 경로이고, 가는 선은 조회·추론·반환이며 점선 화살표는 반환·외부 알림이다. 양쪽의 입력·모델·Agent 표시는 서로 배타적인 두 안에서 같은 의존성을 반복한 것이며, 한 실행에서 Omni를 복제한다는 뜻이 아니다. Model Access와 입력 인식 등의 공통 내부는 축약했다. 화살표의 1~6은 아래 처리 경로 번호다.
+**그림의 정상 사례는 E4 답변이다.** 질문 Q1 “상반기로 할까요?”는 publication P1로 실제 제시된 상태다. 사용자가 C1으로 돌아와 u2 “응, 상반기로”라고 답하면 Request Controller는 Request Interpreter의 제안을 현재 Q1/T1/X1·P1·권한과 결합해 R2의 연결을 확정한다. Task Manager는 조회 시 `Q1=OPEN,v7`을 반환하고 답변 접수 시 `Q1=ANSWERED,v8`과 전달 명령 K1을 생성한다. 조회 전·접수 후의 예시 값이며 저장 schema를 동결한 것이 아니다.
 
-메인 그림의 번호는 경로를 구분한다. 1 답변 입력, 2 답변 변경 제안/명령, 3 대화의 답변 연결·대기 상태 저장, 4 업무의 질문 상태와 전송 명령 저장, **5 외부 Agent의 접수·진행·질문·결과 알림**, 6 사용자 전달이다. **이 답변에서 A는 3·4를 같은 로컬 transaction으로 조합하고, B는 각 owner가 따로 확정한다.** 관련 질문·업무 조회는 가는 왕복 경로로 따로 표시한다. 조회 응답·VIA 내부 접수 결과·외부 Agent 알림도 서로 다른 반환 경로다. 번호는 모든 요청의 시간 순서나 전체 작업의 직렬화를 뜻하지 않는다. B는 명령 전에 대기를 저장하고 내부 접수 응답 후 다시 대화 상태를 갱신하므로 3번 경로를 둘 이상의 시점에 사용한다. 배경 Agent event도 새 발화 없이 5번 경로로 들어온다.
+A의 트랜잭션 관리자는 Request Controller의 `R2/u2→Q1→T1, P1 참조` 변경과 Task Manager의 `Q1 변경 + K1 전송 준비`를 같은 State Store transaction으로 확정한다. 성공이면 관련 변경 모두 반영, 충돌/실패이면 모두 미반영이다. B는 대화 저장소에 `R2=접수 대기, K1`을 먼저 저장하고 업무 서비스에 K1을 보낸다. 업무 측은 Q1 변경·K1·내부 접수 결과를 로컬 저장하고, 대화 측은 접수 결과를 자기 R2에 따로 반영한다. 같은 명령 ID로 접수 결과를 재조회하므로 응답 유실을 새 업무 시작으로 처리하지 않는다.
 
-| 그림의 반환 경로 | A | B | 의미·방향 |
-| --- | --- | --- | --- |
-| 조회 응답 | 업무 관리기 → 대화 처리기 | 업무 서비스 → 대화 서비스 | 관련 질문·업무 조회에 대한 현재 상태. B의 같은 명령 ID 접수 결과 재조회도 이 경로. 조회만으로 명령을 접수한 것은 아님 |
-| 로컬 저장 결과 / VIA 내부 접수 결과 | 트랜잭션 관리자 → 대화 처리기·업무 관리기 | 업무 서비스 → 대화 서비스, ‘VIA 내부 접수 결과 (4 저장 후)’ 별도 화살표 | A는 관련 변경의 공동 저장 결과를 직접 받으므로 동일 사실의 업무→대화 재통보를 필수로 추가하지 않음. B는 내부 접수 결과를 받아 대화 저장소에 따로 반영. 외부 접수를 뜻하지 않음 |
-| 5 Agent 알림 | 업무 관리기 → 대화 처리기 | 업무 서비스 → 대화 서비스 | 외부 Agent의 실제 접수·진행·질문·결과. 메인 답변 흐름에서는 ‘확인된 외부 Agent 접수’를 대표로 표시. 양안 공통 경로이며 내부 저장 결과와 다름 |
+**저장된 K1, VIA 내부 접수, 외부 Agent의 실제 접수는 서로 다른 사실이다.** Task Manager와 Agent Gateway가 확인한 외부 접수 사실이 Request Controller에 돌아온 후, 게시가 허용된 P2 “상반기 조건 전달 확인”이 Response Manager로 간다. Response Manager는 Text/Voice 구성·게시·전달 원장을 소유하고 Interaction Manager에 `release(P2,output epoch)`를 보낸다. Interaction Manager는 실제 표시·재생 결과인 `receipt(P2,actual range)`를 반환한다. Response Manager가 이를 내구 기록하고 Request Controller는 Conversation에 실제 제시 참조를 반영한다. 이미 제시된 P1은 Q1 답변 연결의 근거이고 P2는 이번 접수 안내의 새 publication이다.
 
-5번은 정보의 생산·전달 방향에 따라 업무→대화다. 사용자의 답변·정정·취소는 대화→업무의 2번 제안/명령 경로를 사용한다. 따라서 협력 전체는 양방향이며, 모든 입력이 5번 알림을 기다려야 하거나 모든 알림에 별도 발화가 선행해야 한다는 뜻은 아니다.
+그림에서 Request Controller→Response Manager의 게시 허용과 Response Manager→Request Controller의 실제 제시 반환, Response Manager↔Interaction Manager의 release/receipt를 구별한다. Task Manager↔Agent Gateway↔Downstream Agent의 명령/외부 확인도 별도다. 모델 해석은 Request Interpreter, 필요한 응답 구성·음성 생성은 Response Manager가 같은 Model Access를 사용한다. Context·현재 Policy 조회와 모든 예외 계약은 본문에 공통으로 두며 이 그림에서 축약한다. 모든 Agent 알림에 새 발화나 새 semantic 모델 호출이 필요한 것은 아니다.
 
-**그림의 정상 사례는 E4 답변이다.** 다른 대화에서 C1으로 돌아와 “응, 상반기로 해줘”라고 답한다. 양안 모두 실제 제시된 Q1과 T1/X1·권한의 현재 유효성을 확인한다. A의 대화 처리기는 답변과 제시 기록의 연결을, 업무 관리기는 Q1 변경과 답변 전송 명령을 제안한다. 트랜잭션 관리자는 검증한 두 변경을 함께 저장하며 전부 반영하거나 전부 미반영한다. B는 대화에 답변 전달 대기를 저장하고 업무 측에 조건부 명령을 보낸다. 업무 측이 Q1·전송 명령·VIA 내부 접수 결과를 자기 저장소에 반영한 뒤, 대화 측이 내부 접수 결과로 답변 요청을 갱신한다. 두 저장소의 반영 시점은 다르며, 응답 유실 때 같은 명령 ID의 접수 결과를 조회한다. E4의 답변 요청은 종료된 최초 요청 R1을 다시 여는 것이 아니다. 양안 모두 로컬 저장·내부 접수와 외부 Agent의 실제 접수는 별개이며, 확인된 외부 사실을 사용자에게 전달한 뒤 실제 게시 기록을 남긴다.
+**60초 설명 원고:** “같은 질문에 상반기로 답하는 장면입니다. 두 안 모두 Request Controller가 답변과 질문·업무를 연결하고, Task Manager가 업무 질문과 전달 명령을 관리합니다. A는 관련 변경을 하나의 Core에서 함께 저장합니다. B는 대화와 업무가 각자 저장하고 K1 접수 결과로 연결합니다. 그 뒤 외부 Agent가 실제로 받았다는 사실을 확인해야 합니다. Response Manager는 이를 응답 P2로 구성하고 게시하며, Interaction Manager는 실제 표시·재생 결과를 돌려줍니다. 실제 제시 원장은 Response Manager, 답변 관계는 Request Controller의 책임입니다. 서비스 분리가 자연어 이해를 더 잘하게 만드는 것은 아니며, 정상 처리 왕복과 중간 상태의 비용이 생깁니다.”
 
-**60초 설명 원고:** “보고서를 부탁하고 다른 대화로 이동해도, Agent의 질문과 보고서 업무는 남아 있어야 합니다. 두 안 모두 위쪽의 서로 다른 수명을 지원합니다. 이제 돌아와 ‘상반기로 해줘’라고 답하는 장면을 보겠습니다. 왼쪽 A는 하나의 Core 안에서 대화 담당과 업무 담당이 나뉩니다. 답변 연결과 질문·전송 명령의 변경을 함께 저장합니다. 오른쪽 B는 두 서비스가 자기 상태를 각각 소유합니다. 대화 쪽이 전달 대기를 남기고 명령하면, 업무 쪽이 검사하고 저장한 다음 내부 접수 결과를 돌려줍니다. 대화 쪽은 이를 자기 기록에 반영합니다. 양쪽 모두 외부 Agent가 실제로 받았다는 사실은 별도로 확인합니다. 비교할 것은 같은 기능을 한 Core의 공동 확정으로 연결할지, 독립된 소유자 사이의 명령과 접수로 연결할지입니다.”
-
-**2026-10-05 사용자 리뷰:** 갱신·재시작은 드문 조건부 사례이므로 B를 선택할 대표 이유로 앞세우지 않는다. 메인 그림은 정상 요청에서 발생하는 저장·접수 구조를 설명한다. 이를 더 명확하게 그렸다는 사실이 B의 중요한 정상 사용상 이익을 확보했다는 뜻은 아니다. 독립 상태 소유가 강한 A보다 어떤 반복적인 변경·운영에서 유리한지는 추가 설계 판단이 필요하며, 병행 처리·의미 정확도·반응성 이익을 새로 가정하지 않는다. §5의 갱신 사례는 조건부 참고로 유지한다.
-
-**후속 중심 확인:** 42는 중앙 Omni 해석과 분산 Omni 해석을 비교하는 주제가 아니다. 사용자의 질문을 근거로 A를 모든 일을 하는 단일 모듈로 다시 정의하려 한 답변은 철회했다. 현재 정의는 A의 내부 모듈화와 B의 독립 상태·실행 소유를 유지한다. 메인 그림의 수명·소유·협력 세 층은 이 정의를 설명하는 것이며 새로운 설계 대안을 도입한 것이 아니다.
+**2026-10-08 사용자 리뷰 반영:** 이전 포괄 명칭은 전체 Architecture와 41의 정식 책임에 대응하기 어려웠고 실제 제시 기록의 소유도 흐렸다. 정식 명칭과 Response Manager/Interaction Manager 경로, Voice Runtime의 의미 및 관계·명령·전달 예시를 복원했다. A/B의 상태 확정·실행 수명 차이와 미선정/미측정 상태는 유지한다. 드문 중단·갱신을 제외하면 B의 주요 선택 근거는 크게 약해지며, 정상 사용에서 추가 비용을 정당화할 독립 운영 요구는 여전히 입증되지 않았다. 42는 상태 원본·확정·실행 소유, 44는 다음 실행을 진행시키는 중앙 조정/반응형 연결을 비교한다.
 
 ### 1.1 이 문서의 지위와 범위
 
@@ -89,19 +81,50 @@
 
 A에는 내부 인터페이스, 업무별 요약·검색·cache, 부분 갱신, 비동기 event 처리, worker 격리, 내구 저장, background Core와 UI 재연결을 허용한다. **A의 의미 해석이 전체 업무 이력을 매번 입력받거나, 대화창을 닫으면 Task가 사라진다는 가정은 없다.** B에도 같은 최적화를 허용한다. A의 worker 분리는 Core의 최종 상태 권한을 자동으로 분리하지 않는다.
 
-### 3.2 A: 통합 Core, 모듈별 책임과 공동 확정
+### 3.1.1 Interaction Manager·Response Manager·Request Controller와 Voice Runtime
 
-VIA Core 안의 **대화 처리기**가 사용자 Request·대화 참조·VIA 확인 질문·실제 제시 기록을 관리한다. **업무 관리기**가 Task·Execution·Agent 질문·업무 명령을 관리하며, **Agent 연동기**가 외부 protocol을 번역하고 전송·event 수신·조회 결과를 제공한다. 업무 내부 reasoning은 하지 않는다.
+이 문서의 용어 정리는 [참조 Architecture §4](../target-architecture/architecture.md#4-component와-상태-소유권), [직접 S2S 경로 §8](../target-architecture/architecture.md#8-s2s와-직접-응답), [응답 §13](../target-architecture/architecture.md#13-응답-전달), [배치 §14](../target-architecture/architecture.md#14-프로세스-배치fault-boundary)와 [44 §3.1](./04-44-continuous-interaction.md#31-공통-소유와-허용-경계)에 근거한다. 참조 Architecture 자체를 수정하거나 전체 구조를 선택한 것이 아니다.
 
-**트랜잭션 관리자**는 각 owner가 검증한 관련 변경 집합을 하나의 로컬 트랜잭션으로 저장하는 Unit of Work다. 두 변경을 모두 반영하거나, 저장 실패 시 둘 다 반영하지 않는다. 이전 이름 ‘공동 확정기’보다 저장의 원자성을 직접 나타내도록 바꿨다. 하나의 Core라는 이유로 반드시 별도 모듈이 필요한 것은 아니며, 현재 A가 선택한 저장 책임을 도식화한 것이다. 업무 의미나 자연어를 다시 해석하는 중앙 모델이 아니다. 다른 owner의 변경 의미를 임의로 결정하지 않으며, 관련 revision이 바뀌면 전체 변경을 거절해 owner에게 돌려준다. 무관한 Task끼리 하나의 전역 잠금으로 직렬화하지 않는다. 네트워크·모델 호출은 transaction 밖이다. B에도 각 저장소의 로컬 트랜잭션이 있지만 두 저장소를 함께 확정하는 관리자는 없다.
+| 책임 | owner | 예시 입력·출력 / 보유 상태 |
+| --- | --- | --- |
+| Voice/Text/device I/O와 시점별 화면·pointer·selection 관측 | Interaction Manager의 Channel I/O, Evidence Capture, Timeline & Buffer | audio/입력 revision·capture gap·근거 시각. 입력/관측 사실을 Request Controller에 전달. 지칭 의미·Task 관계·권한을 확정하지 않음 |
+| 사용자 발화 여부·재생 세대·즉시 중단·실제 표시/재생 | Interaction Manager의 Turn-Taking Control와 Channel I/O | Response Manager의 release를 현재 epoch/발화 상태로 검사하고 receipt 반환. 새 발화 때 로컬 stop. 질문/Task 취소·답변 내용은 결정하지 않음 |
+| 응답 내용 구성·게시 차례·현재성 확인·Text/Voice/알림·내구 전달 원장 | Response Manager | Request Controller의 허용 payload/source → 필요시 모델 구성 → release. receipt로 publication의 실제 범위 저장. Task/요청 의미 원본은 해당 owner에서 확인 |
+| Conversation·Request Graph·의미 채택·정정·질문 답변 연결·게시/전송 admission | Request Controller | Request Interpreter 제안과 실제 제시 P1·질문 원본 Q1 → u2/R2→Q1→T1 연결. Response Manager의 actual receipt를 참조하며 원장을 대신 소유하지 않음 |
 
-예를 들어 Q1의 답변 처리에서 대화 처리기는 P1과 답변 연결을, 업무 관리기는 Q1·X1의 유효성과 답변 명령을 제안한다. 트랜잭션 관리자가 관련 로컬 상태와 전송 대기 명령을 함께 저장한다. Agent 연동기는 저장된 명령을 현재 조건에 맞게 전달한다. Agent 접수가 확인되어야 사용자에게 그 접수 사실을 알린다.
+**대화 처리기라는 새 Component를 두거나 그 기능을 Interaction Manager/Response Manager에 몰아주지 않는다.** 정식 Request Controller의 기존 관계·제어 책임을 유지하고, 그 협력자인 Request Interpreter·Response Manager·Interaction Manager를 표시한다. 대화 서비스는 B의 배치·상태 확정 경계이며 하나의 거대한 대화 Component가 아니다.
 
-Core가 계속 실행되면 UI/Voice 재연결과 관계없이 업무를 추적한다. Core process 전체가 중단되면 대화·업무의 소유 처리는 함께 멈추고 내구 상태에서 복구한다. 외부 Agent의 작업은 양안 모두 별도로 계속될 수 있다.
+**Voice Runtime은 필요하다.** 논리 Component와 다른 수준의 음성 실행 영역이다. microphone/playback·AEC·음성 활동 감지·즉시 stop 등 Interaction Manager의 음성 모듈과 Model Access client가 실행된다. 모델의 adapter·scheduler·한 벌의 weights는 공통 Shared Inference Service, 입력 근거용 ASR은 Speech Input Worker가 담당하는 참조 배치를 참고한다. Interaction Manager의 Text·화면 관측은 UI 쪽, timeline 결합은 Core 쪽에도 배치할 수 있다. 따라서 Interaction Manager 전체를 Voice Runtime과 동일시하거나 Voice Runtime을 대화 원본 owner로 취급하지 않는다. 42에서 새 음성 모델/Runtime 대안을 도입하지 않는다.
+
+### 3.1.2 로그와 관계 상태, 송수신·저장 예시
+
+시간순 UI와 내부 관계 관리는 함께 가능하다. 내용별 대화 자동 분류나 Task별 대화방 생성은 요구하지 않는다. 사용자의 명시적 새 Conversation 경계는 유지한다. 다음 값은 E4 설명용 제안 데이터이며 최종 schema/측정 fixture가 아니다.
+
+| producer → consumer / 저장 owner | 예시 데이터 | 의미 |
+| --- | --- | --- |
+| Interaction Manager → Request Controller | `C1,u2,input_revision,“응, 상반기로”,input_epoch` | 이번 답변 입력. 그 자체에 정답 Task를 붙이지 않음 |
+| Task Manager → Request Controller, Request Interpreter의 해석 근거 | `T1,X1,Q1=OPEN,question_revision=7`와 실제 제시 `P1→Q1` 참조 | 업무 질문의 현재 사실과 사용자에게 실제 제시된 근거를 구분 |
+| Request Interpreter → Request Controller | `answer_to=Q1,task=T1,answer=상반기,evidence=P1/u2` | 의미 후보. 현재 검사 후 채택 |
+| Request Controller의 상태 | `R2/input=u2/answer_to=Q1/task=T1/presented_ref=P1` | 원문 로그 외에 어떤 요청·질문·업무에 연결됐는지, revision과 현재 처리 상태 보유 |
+| Request Controller → Task Manager | `K1,R2,Q1,answer=상반기,expected_revision=7,input_epoch,permission_revision` | 조건부 답변 명령. 업무는 현재 원본으로 접수·거절·보류 |
+| Task Manager / Agent Gateway | `Q1=ANSWERED,v8,K1=PENDING_SEND` → `K1=EXTERNAL_ACCEPTED` | 내부 저장·전송 준비·외부 확인을 다른 시점과 필드로 관리 |
+| Request Controller → Response Manager | `P2,R2,T1,확인된 K1 외부 접수,“상반기 조건 전달 확인”,publication admission` | 허용한 사실과 응답 목표. 모델이 업무 사실을 새로 추측하지 않음 |
+| Response Manager ↔ Interaction Manager | `release(P2,epoch)` / `receipt(P2,displayed/audible range,revision)` | 허용한 출력과 실제 전달 결과. 물리 재생·내구 기록은 원자적이지 않음 |
+| Response Manager 저장 → Request Controller 참조 | `P1/Q1 실제 제시`, `P2 channel 상태/actual range` | 전달 원장은 Response Manager, Conversation/질문 focus 참조는 Request Controller 소유 |
+
+Request→Task, 답변→질문, publication→질문/Request 및 요청 간 의존 관계는 단순 문자열 로그로 대체되지 않는다. 의미 관계는 Request Interpreter가 제안하고 Request Controller가 채택하며, 그 관계와 현재 상태를 명시적으로 저장한다. 필요한 근거만 모델에 주는 검색·요약은 양안 공통으로 가능하다.
+
+### 3.2 A: 통합 Core, 정식 Component별 책임과 공동 확정
+
+VIA Core 안에서 **Request Controller**는 Conversation·Turn·Request Graph·의미 채택·확인 질문/답변 관계를, **Task Manager**는 Task·Execution·Agent 질문·업무 명령의 의미를 소유한다. **Agent Gateway**는 명령 전송·외부 event 수신/조회와 전달 상태를 담당한다. **Request Interpreter**는 의미 후보와 근거를 제안하고 **Response Manager**는 응답 구성·publication·내구 실제 전달 원장을 소유한다. 각 owner는 자기 필드의 변경을 만들며 다른 owner의 의미를 임의로 바꾸지 않는다.
+
+**트랜잭션 관리자**는 관련 owner의 검증된 변경 집합을 State Store의 한 로컬 transaction으로 조합하는 내부 Unit of Work다. 새 의미 판단 Component가 아니고 자연어를 해석하지 않는다. Q1 답변에서는 R2 연결과 Q1/명령 K1을 모두 반영하거나 모두 미반영한다. 관련 revision 충돌은 owner에게 돌려준다. 무관한 Task끼리 전역 잠금으로 직렬화하지 않으며 모델·네트워크 호출은 transaction 밖이다. 명령의 전송 직전 admission/hold 및 transmission 조건도 같은 원자 경계의 관련 owner 변경으로 조합한다.
+
+P1/P2의 실제 표시·재생 자체는 transaction에 포함할 수 없다. **Response Manager의 실제 전달 기록은 receipt를 받은 뒤 별도로 저장**하며, 마지막 확인 밖의 전달은 UNKNOWN일 수 있다. 같은 State Store 사용과 상태 의미의 공동 소유를 혼동하지 않는다. Core는 UI/Voice 연결과 관계없이 background에서 업무를 추적할 수 있고, Core 전체 중단 때는 owner 처리가 함께 멈춘 뒤 내구 상태에서 복구한다. 외부 Agent 작업의 지속은 양안 공통이다.
 
 ### 3.3 B: 독립된 대화 서비스와 업무 서비스
 
-**대화 서비스**가 대화 처리기와 대화 상태 저장소를, **업무 서비스**가 업무 관리기·Agent 연동기와 업무 상태 저장소를 소유한다. 두 서비스는 별도 process로 시작·종료할 수 있다. 저장소는 독립된 쓰기 권한·transaction·schema를 갖는 논리 저장소이며, 별도 장치·DB 서버가 필수라는 뜻은 아니다. 서로의 저장소에 직접 쓰거나 두 저장소를 하나의 transaction으로 묶지 않는다.
+**대화 서비스**에 Request Controller·Request Interpreter·Response Manager와 대화 상태 저장소를 배치하고, **업무 서비스**에 Task Manager·Agent Gateway와 업무 상태 저장소를 배치한다. 각 정식 Component의 상태 권한은 유지한다. Interaction Manager의 UI/음성 I/O와 Model Access의 공유 모델 연동은 공통이며, 입력 timeline과 서비스 간 입력 제어 계약은 배치에 맞게 연결한다. 두 서비스는 별도 process로 시작·종료할 수 있다. 저장소는 독립된 쓰기 권한·transaction·schema를 갖는 논리 저장소이며, 별도 장치·DB 서버가 필수라는 뜻은 아니다. 서로의 저장소에 직접 쓰거나 두 저장소를 하나의 transaction으로 묶지 않는다.
 
 대화 서비스는 관련 업무를 API로 조회하고, 해석한 의도와 관련 버전·근거를 포함한 명령을 전달한다. 업무 서비스는 Task·질문·권한·입력 제어의 현재 조건을 검사하고 명령을 **접수·거절·보류**한다. 업무 서비스의 접수는 로컬 책임 인수이며 외부 Agent의 접수와 구별한다. Task 생성 때도 Request/command identity로 같은 명령이 하나의 Task에만 연결되게 한다.
 
@@ -113,14 +136,16 @@ Core가 계속 실행되면 UI/Voice 재연결과 관계없이 업무를 추적�
 
 | 상태 | 의미와 종료 | A의 owner / 보관 | B의 owner / 보관 |
 | --- | --- | --- | --- |
-| Conversation·Turn·실제 제시 기록 | 대화·입력·실제 전달 근거. 연결 종료와 삭제는 다름 | 대화 처리기 / 통합 저장소의 대화 영역 | 대화 서비스 / 대화 저장소 |
-| Request와 요청 간 의존 관계 | 직접 답변, 위임 접수, 확인/의존 대기. Task 완료와 다름 | 대화 처리기 / 대화 영역 | 대화 서비스 / 대화 저장소 |
-| VIA 확인 질문 | Task가 없어도 생성 가능. 답변·철회·만료로 종료 | 대화 처리기 / 대화 영역 | 대화 서비스 / 대화 저장소 |
-| Task·revision·결과 참조 | 사용자 업무 identity. 같은 결과 수정은 revision 증가 | 업무 관리기 / 업무 영역 | 업무 서비스 / 업무 저장소 |
-| 외부 Execution 연결·관측 상태 | Agent source의 실행 사실과 확인 상태. X1/X2를 구별 | 업무 관리기 / 업무 영역 | 업무 서비스 / 업무 저장소 |
-| Agent 질문·허용 답변·만료 | Task/Execution에 연결. 실제 사용자 전달 사실과 다름 | 업무 관리기 / 업무 영역 | 업무 서비스 / 업무 저장소 |
-| 명령·외부 전송 상태 | 로컬 접수, 외부 접수, 불명, 철회, 결과를 구별 | 업무 관리기와 Agent 연동기의 각 필드 / 업무 영역 | 업무 서비스의 각 모듈 / 업무 저장소 |
-| 실제 제시와 Agent 질문의 연결 | 어느 질문을 어느 대화에서 실제로 제시했는지의 참조 | 관련 owner 변경을 공동 확정 가능 | 대화 쪽의 Q ID/revision 참조와 업무 쪽 질문 원본. 답변 접수 때 재검사 |
+| Conversation·Turn | 원문 입력·게시 참조·대화 연결. 연결 종료와 삭제는 다름 | Request Controller / 통합 저장소의 요청 영역 | Request Controller / 대화 저장소 |
+| Request와 요청 간 의존 관계 | 직접 답변, 위임 접수, 확인/의존 대기. Task 완료와 다름 | Request Controller / 요청 영역 | Request Controller / 대화 저장소 |
+| VIA 확인 질문·답변 관계·실제 질문 focus | Task가 없어도 가능. 실제 제시 확인과 유효 질문에만 답변 연결 | Request Controller / 요청 영역 | Request Controller / 대화 저장소 |
+| publication·실제 표시/재생 원장 | 생성·허용·실제 전달 구별. channel별 상태와 불명 범위 보존 | Response Manager / 응답 영역 | Response Manager / 대화 저장소의 별도 owner 영역 |
+| 장치 입력·출력 epoch·재생·로컬 stop | 현재 입출력과 짧은 근거/receipt buffer. 내구 publication 원본 아님 | Interaction Manager / 공통 입력·출력 구현 | 같은 Interaction Manager의 공통 구현 |
+| Task·revision·결과 참조 | 사용자 업무 identity. 같은 결과 수정은 revision 증가 | Task Manager / 업무 영역 | Task Manager / 업무 저장소 |
+| 외부 Execution 연결·관측 상태 | Agent source의 실행 사실과 확인 상태. X1/X2 구별 | Task Manager / 업무 영역 | Task Manager / 업무 저장소 |
+| Agent 질문·허용 답변·만료 | Task/Execution에 연결. 실제 사용자 전달 사실과 다름 | Task Manager / 업무 영역 | Task Manager / 업무 저장소 |
+| 명령·외부 전송 상태 | 로컬 접수, 외부 접수, 불명, 철회 구별 | Task Manager와 Agent Gateway의 각 필드 / 업무 영역 | 같은 두 owner의 각 필드 / 업무 저장소 |
+| 실제 제시와 Agent 질문 연결 | Response Manager의 P1 기록을 Request Controller가 Q1과 연결하고 Task Manager 원본을 재검사 | 관련 owner 변경을 공동 확정 가능 | 대화의 Q1/revision/P1 참조와 업무 질문 원본을 접수 때 재검사 |
 
 Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conversation_id, expected_task_revision, question_id/revision, input_epoch, permission_revision, intent/evidence_refs` 중 해당 필드를 갖는다. `ACCEPTED / REJECTED / HELD`와 현재 revision·이유를 반환한다. 전송 응답 유실은 `UNKNOWN`으로 별도 표시한다. 이 필드들은 제안 계약이며 실제 외부 Agent가 모두 지원한다고 가정하지 않는다.
 
@@ -134,7 +159,7 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 
 [B draw.io](./diagrams/choice42-event-b.drawio)
 
-사건도는 같은 E4 답변의 확정·외부 접수·실제 전달을 확대한다. E1~E6 전체는 수명 그림과 아래 표에서 추적한다. 공통 Model Access/Omni 호출과 Agent 연동기는 각 서비스/모듈의 내부 경로로 축약한다. 별도 모델이나 외부 Agent의 판단을 생략해 얻은 호출 수 비교가 아니다. 그림 속 현재 상태 조회는 후보 해석용이며, 최종 확정/접수와 전송 조건 검사가 뒤따른다.
+사건도는 같은 E4 답변의 확정·외부 접수·실제 전달을 확대한다. E1~E6 전체는 수명 그림과 아래 표에서 추적한다. 공통 Model Access/Omni 호출과 Agent Gateway는 각 서비스/모듈의 내부 경로로 축약한다. 별도 모델이나 외부 Agent의 판단을 생략해 얻은 호출 수 비교가 아니다. 그림 속 현재 상태 조회는 후보 해석용이며, 최종 확정/접수와 전송 조건 검사가 뒤따른다.
 
 | 사건 | A의 상태 처리 | B의 상태 처리 | 같은 사용자 결과 |
 | --- | --- | --- | --- |
@@ -180,10 +205,10 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 
 | 같은 변화/운영 조건 | 강한 A | B | 판정 |
 | --- | --- | --- | --- |
-| 상태 polling → event stream, 사용자 의미 동일 | Agent 연동기와 필요한 업무 내부 상태만 변경 가능 | 업무 서비스 내부의 같은 부분만 변경 가능 | B의 변경 요소 수 우세를 주장할 수 없음. 대화 코드는 양안 모두 유지 가능 |
+| 상태 polling → event stream, 사용자 의미 동일 | Agent Gateway와 필요한 업무 내부 상태만 변경 가능 | 업무 서비스 내부의 같은 부분만 변경 가능 | B의 변경 요소 수 우세를 주장할 수 없음. 대화 코드는 양안 모두 유지 가능 |
 | 외부 실행 ID·후속 요청 protocol 변경, VIA Task 의미 동일 | 내부 API 뒤로 숨기면 업무 영역에 국소화 가능 | 업무 서비스가 내부 binding/schema로 흡수 | B는 독립 상태 권한을 유지하지만, A도 모듈화되면 코드 변경 범위는 비슷할 수 있음 |
 | 업무 저장/런타임 교체 중 대화 owner를 계속 운영해야 함 | process 전체 재시작이 필요한 변경이면 대화도 영향. 동적 교체/worker로 줄이는 혼합 가능 | 계약 호환 시 업무 서비스만 교체, 대화는 업무 요청 보류를 안내하며 계속 동작 가능 | B의 독립 운영 이익. 모든 Agent 교체가 무중단이어야 한다는 새 요구는 아님 |
-| 대화 처리기의 갱신 중 기존 Task의 Agent event를 계속 수신해야 함 | Core 재시작이면 추적 중단 구간. UI만 바꾸는 경우는 영향 없음 | 업무 서비스와 그 저장소가 유지되면 수신·추적 계속 | B의 명확한 조건부 정상 운영 이익. 외부 Agent 작업 지속 자체는 공통 |
+| Request Controller의 갱신 중 기존 Task의 Agent event를 계속 수신해야 함 | Core 재시작이면 추적 중단 구간. UI만 바꾸는 경우는 영향 없음 | 업무 서비스와 그 저장소가 유지되면 수신·추적 계속 | B의 명확한 조건부 정상 운영 이익. 외부 Agent 작업 지속 자체는 공통 |
 | 새로운 승인 의미·질문 종류가 사용자 상호작용을 바꿈 | 대화·업무 계약을 함께 변경 | 공개 서비스 계약과 양쪽 상태/전달도 변경 | B도 변화가 전파됨. “모든 Agent 발전을 업무 안에 가둔다”는 주장은 기각 |
 
 **V-08은 process 수가 아니라 의미 있는 변경의 파급으로 평가한다.** 독립 배포·재시작의 이익은 운영 중 반응·완료·설치와도 연결되지만 같은 이익을 독립 점수처럼 중복 합산하지 않는다. 본 문서는 B의 모듈성 우위를 보장하지 않는다. 안정된 서비스 계약과 독립 상태 수명이 필요한 변화에서 그 효과를 검토할 수 있는 비교다.
@@ -212,6 +237,16 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 
 대화 기록과 현재 업무 사실을 구분해 필요한 맥락만 모델에 제공하는 것은 양안 공통으로 가능하다. 같은 Omni 입력과 추론 조건이면 process 분리 자체에 의미 정확도 이익을 부여하지 않는다. B의 마지막 검사가 잘못된 명령을 거절한 결과와 모델이 처음부터 올바르게 해석한 결과도 구별한다. 반대로 상태 owner·revision·전달 계약의 차이가 사용자에게 잘못된 상태를 보여주면 이는 V-01의 실제 회귀다.
 
+### 6.2 요청 이해 정확도·VIA 응답 시간·모델 호출 비용
+
+| 사용자 검토 축 | 물리적 영향 경로 | 현재 판단 |
+| --- | --- | --- |
+| 요청 이해 정확도 | 같은 원문·근거·모델 입력이면 해석 능력은 동일 조건. B의 업무 snapshot/접수 간 변경은 재검사·보류·필요한 재해석을 유발할 수 있음 | process/서비스 분리 자체의 이해 정확도 이익 없음. 잘못된 질문/Task 연결·오래된 승인/결과 게시·충돌 후 정정은 기능 정확성의 회귀로 평가 |
+| VIA 응답 시간 | A 내부 조회·관련 공동 commit 대 B IPC/직렬화·대기 저장·업무 접수·대화 반영·원본 재확인 | 직접 관련. 음성 최종 전달은 공통 Response Manager/Interaction Manager 대기까지 포함. 외부 Agent 작업 시간과 사용자 답변 대기는 VIA 계산 지연과 구분 |
+| 모델 호출 비용 | 같은 Request Interpreter/Response Manager와 한 벌의 Omni 사용. 접수·동기화·receipt 반영은 코드로 처리 가능 | 기본 호출 수/입력 토큰 감소 이익 없음. stale/충돌 재해석·폐기 및 동일 목표의 clarification/정정 반복이 생기면 추가 비용에 포함. B의 별도 process heap은 모델 호출 비용과 구별 |
+
+동일 입력 revision의 기본 해석/구성 조건은 맞추고, 사용자 목표와 완료 조건을 고정한 상태에서 추가 재해석·폐기·확인 질문·실제 게시까지의 왕복을 비교해야 한다. 무조건 B에서 모델을 다시 호출하거나 각 서비스가 자기 모델/KV를 갖는다고 가정하지 않는다. 이 분석은 새 모델 실행·호출 예산 동결·측정 결과가 아니다.
+
 ## 7. 실제 구현에서 확인한 것과 VIA에 새로 설계한 것
 
 공식 저장소를 2026-10-05에 읽고 아래 commit으로 고정했다. 실행·설치·벤치마크하지 않았다. 두 제품의 대화/실행 개념을 VIA의 Conversation/Task/Execution과 일대일 대응시키지 않는다. **독립 런타임의 실현 가능성과 접속 계약을 참고한 것이며 VIA의 두 업무 원본 분리나 품질 우위를 입증하지 않는다.**
@@ -232,7 +267,7 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 | --- | --- | --- |
 | A의 UI만 별도 실행하고 Core를 background로 유지 | 대화창/Voice 연결과 업무 수명 분리. 대화 owner와 업무 owner는 여전히 같은 Core | 이 요구만으로는 B 불필요. A의 정당한 기본 보완 |
 | A 내부에 업무 API와 protocol adapter 도입 | 일반 Agent 추가·교체를 국소화. shared-state transaction과 공동 process는 유지 | V-08의 상당 부분을 얻음. B의 변경 우위를 약화하는 강한 반론 |
-| A의 Agent 연동기만 worker로 분리 | 외부 SDK/native 연결 실패 격리. Task 원본과 최종 변경 권한은 Core에 남음 | 충분히 유력한 혼합안. 대화 owner 중단 중 Task 추적 owner가 계속되는 B와는 차이 |
+| A의 Agent Gateway만 worker로 분리 | 외부 SDK/native 연결 실패 격리. Task 원본과 최종 변경 권한은 Core에 남음 | 충분히 유력한 혼합안. 대화 owner 중단 중 Task 추적 owner가 계속되는 B와는 차이 |
 | A → B: 업무 원본/접수 권한을 독립 서비스로 이전 | 공동 확정 대신 명령 ID·접수 결과·독립 저장·projection·재연결·입력 게이트 계약 필요 | 단순 포장보다 실질적 처리 변경. 이미 이 계약을 갖춘 A라면 추출 비용은 작아짐 |
 | B 두 서비스를 같은 process에 배치 | IPC 비용 일부 감소. 별도 owner·접수·transaction 구조는 유지 가능 | 배치 혼합안. 공통 확정 구조 A로 자동 전환되는 것은 아님 |
 | B → A: 같은 transaction으로 조합 | 중간 접수 상태 일부 축소. owner 변경 집합과 공동 확정/복구 경로를 다시 연결 | 모듈·Agent adapter·의미 해석 재사용 가능. 대규모 재작성이나 비가역성은 보장하지 않음 |

@@ -3,6 +3,39 @@
 > 2026-10-05 / 작성자 검토 / 독립 심사·사용자 수용·구현·측정 결과 아님
 > [42 본문](./04-42-lifecycle-ownership.md) / [메인 그림](./diagrams/choice42-structure.svg) / [그림 모음](./diagrams/choice42-review.html)
 
+
+
+## 사용자 교정 — 살구색 강조와 테두리 두께 통일 (2026-10-08)
+
+사용자는 살구색 차이 요소와 다른 계열의 실행 경계 테두리가 일관되지 않고 가는 경계가 잘 보이지 않는다고 지적했다. 차이 요소의 테두리를 살구색 계열의 짙은 주황갈색 `#B8753F`로 통일했다. 1920px 발표 좌표 기준 큰 경계는 2.6px, 차이 요소의 작은 박스는 1.8px이며 공통 요소의 검정 1.0px 및 연결선 1.1px는 유지한다. 2560px MAIN은 비례 확대한다. 큰 영역은 흰색 무채움이고 A 실선/B 점선 구별은 유지한다. 이전 파랑/초록 경계 설명은 이 사용자 교정으로 대체한다.
+
+MAIN, 발표 비교와 42 보충 도식의 SVG/draw.io, 기존 PNG와 두 PPTX 및 공통 Legend를 동기화했다. 실제 렌더의 잘림/글자 겹침 검사, PPTX 재가져오기 및 편집 개체 검증을 통과했다. 구조, 이름, 데이터, 연결 방향, 상태 소유 및 예상 수치와 미선정/미측정 상태는 유지한다. 다른 슬라이드와 기존 미커밋 작업을 보존하며 commit/push는 수행하지 않는다.
+
+## 41/42 그림 스타일과 공통 Legend — 2026-10-08
+
+현재 파일과 작업 시작 시 미커밋 diff를 출발점으로 사용자 확정 지침을 반영했다. 큰 Component, Core 및 서비스 경계는 채우지 않는다. 42의 A는 파랑 실선, B는 초록 점선 실행/확정 경계이며 공통 Component는 배치가 달라도 흰색과 검정 선이다. 책임과 동작이 다른 작은 Component/Module만 살구색으로 표시한다. 저장 상태는 흰색 원통이다. Component, 내부 Module, 실행/서비스 경계, 상태, 실선 요청/전달 및 점선 응답/반환을 같은 Legend 함수에서 생성한다. 이전 ‘응답/재시도’ 및 큰 살구색 경계 표기는 이 수정으로 대체한다.
+
+41 MAIN의 기존 경로와 책임을 보존하고 같은 표기를 적용했다. 42 MAIN과 발표 비교는 기존 공통 scene을 유지하며 정식 Component 이름, Response Manager, u2/R2/Q1/T1/P1, Q1 v7→v8, K1 내부/외부 접수 및 P2 release/실제 전달을 보존한다. 42 보충 사건과 변경 그림의 큰 채움도 제거했다. 수명 막대는 데이터 개념이며 실행/Component 표기와 구별한다. MAIN 41에서 기존 설명 두 줄의 겹침은 위치를 조정했다.
+
+- MAIN 41/42와 발표 비교 PNG, 42 보충 4장의 실제 렌더를 확인했다. 텍스트 canvas 밖 잘림과 글자 간 겹침은 0건이다. 이름, 도형, 연결 방향과 범례를 육안 대조했다. 생성기에서 Module 포함/상태 소유, 직교 경로와 무관한 노드 관통 및 XML 참조를 검사한다.
+- SVG/draw.io 생성 일치, PNG 해시, 활성 Markdown 링크, 정식 용어/Component 이름, QA catalog와 diff 검사를 통과했다.
+- 두 PPTX를 다시 가져와 41/42 슬라이드를 렌더하고 native 도형/텍스트, 원문 텍스트 일치, slide 수, package 및 layout을 검증했다. 변경 슬라이드에 평면 이미지가 없으며 도형과 텍스트는 편집 가능하다. Microsoft PowerPoint 앱에서 직접 검증한 것은 아니다.
+- `--dp41-42-only` 범위 옵션으로 두 비교 슬라이드와 관계 파일만 교체했다. 다른 PPTX package 부분은 작업 시작본과 바이트 단위로 같다. PNG 렌더러에도 같은 범위 옵션을 추가해 43~45의 기존 미리보기와 해시를 유지한다. 04-50, 수치 데이터와 기존 writer 보완 및 다른 세션 작업을 보존했다.
+
+이번 작업은 확정된 설명/표현 수정이다. 42의 정상 사용상 독립 운영 이익과 비용 정당화는 기존 열린 리뷰 쟁점으로 남는다. 새 43~45 수정 지침은 아직 전달되지 않았다. A/B 또는 A/C 선정, 참조 Architecture 변경, 구현, 모델 실행이나 성능 측정은 없으며 commit/push도 수행하지 않는다.
+
+## 2026-10-08 발표 심사 후 책임·데이터 정정
+
+사용자는 전체 Architecture/41과 다른 포괄 이름, Interaction Manager와 Response Manager 및 Voice Runtime의 불명확한 경계, 중요한 관계·송수신·저장 데이터의 부재를 지적했다. 이전 검수 기록의 만족 판정은 그 당시 범위이며 이번 심사에서 드러난 설명 누락을 부정하지 않는다.
+
+- ‘대화 처리기/업무 관리기/Agent 연동기’를 별도 Component로 유지하지 않고 Request Controller/Task Manager/Agent Gateway를 사용한다. 같은 Request Interpreter·Response Manager·Interaction Manager·Model Access를 양안에 복원했다.
+- Request Controller의 Conversation/Request Graph/답변 관계·실제 제시 참조, Response Manager의 응답 구성/게시/내구 전달 원장, Interaction Manager의 시점별 입력/관측과 실제 장치 재생·stop을 구분했다. Voice Runtime은 음성 모듈 및 Model Access client의 실행 영역이다. 정식 논리 Component 하나가 여러 실행 영역에 걸칠 수 있음은 본문에 명시했다.
+- 같은 E4 사례의 R2/u2→Q1→T1/P1 관계, 조회 Q1=OPEN,v7와 접수 Q1=ANSWERED,v8, 명령 K1, 응답 P2의 게시 허용/release/실제 receipt를 표시했다. A 관련 변경 공동 확정, B의 대기 저장/업무 접수/대화 반영을 구분했다.
+- 물리 재생과 내구 전달 원장은 최초 공동 transaction 밖이다. publication의 실제 전달 원장은 Response Manager, 질문 답변과 focus는 Request Controller의 책임이다. 내부 접수·외부 접수·실제 사용자 제시를 합치지 않는다.
+- 요청 이해 정확도·VIA 시간·모델 호출 비용의 인과를 §6.2에 추가했다. 서비스 분리 자체의 semantic 정확도/기본 호출 감소 이익을 주장하지 않는다. 현재 revision 충돌과 보류/재해석·왕복·추가 자원 비용은 포함한다. 독립 운영 가치가 낮으면 B의 주요 선택 근거가 약해지는 한계는 유지한다.
+
+메인과 발표 비교 페이지는 같은 구조 scene을 사용한다. 메인·A/B 사건·변경 그림의 SVG/draw.io와 메인 PNG, 비교 SVG/draw.io/PNG·통합 draw.io 및 두 PPTX를 갱신했다. SVG 실제 렌더의 글자 canvas/폭/겹침 검사와 변경한 네 그림의 육안 확인, 원본 일치·XML·직교 경로 및 무관 Component 관통 검사를 수행했다. PPTX는 원문 텍스트와 native 개체/이미지 미사용, 패키지/레이아웃 검사 후 두 자료의 42 재가져오기 렌더를 확인했다. 이전 생성 scene과 대조해 42 비교만 변경되었고 최종 PPTX 해시와 검사 대상 해시가 일치함을 확인했다. 새 독립 심사나 Microsoft PowerPoint 직접 실행, 사용자 이해도 실험, 구현·모델 실행·실측 검증은 아니다. A/B와 최종 DP는 미선정이며 참조 Architecture/QA/ADR 및 다른 비교를 보존한다.
+
 ## 1. 여섯 작성 작업의 결과
 
 | 작업 | 산출물 | 확인한 범위 |

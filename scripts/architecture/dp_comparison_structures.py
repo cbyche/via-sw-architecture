@@ -7,6 +7,13 @@ from generate_dp_background_slides import INK, MUTED, BLUE, TEAL, RED, LINE
 import unicodedata
 
 PURPLE = '#7155A4'
+COMMON = '#000000'
+APRICOT = '#FFF0DD'
+DIFFERENCE_STROKE = '#B8753F'
+DIFFERENCE_WIDTH = 1.8
+BOUNDARY_WIDTH = 2.6
+BOUNDARY_A = DIFFERENCE_STROKE
+BOUNDARY_B = DIFFERENCE_STROKE
 
 
 class Graph:
@@ -79,131 +86,316 @@ def semantic_finish(g, proposal, via=()):
     g.finish()
 
 
+class ResolutionGraph(Graph):
+    """41 notation: logical Components, contained Modules and named state."""
+    def __init__(self, slide, x):
+        super().__init__(slide,x,'#000000')
+        self.first=len(slide.items)
+
+    def box(self,key,x,y,w,h,name,different=False,module=False,size=18):
+        self.nodes[key]=(x,y,w,h)
+        before=len(self.s.items)
+        self.s.box(self.x+x,y,w,h,name,self.c,fill=APRICOT if different else 'white',size=size)
+        self.s.items[before].update(stroke=DIFFERENCE_STROKE if different else COMMON,
+                                   line_width=DIFFERENCE_WIDTH if different else 1.0,rounded=module)
+
+    def group(self,x,y,w,h,name,execution=False,side=0):
+        before=len(self.s.items)
+        color=(BOUNDARY_A if side==0 else BOUNDARY_B) if execution else COMMON
+        self.s.group(self.x+x,y,w,h,name,color)
+        self.s.items[before].update(fill='white',stroke=color,line_width=BOUNDARY_WIDTH if execution else 1.0,
+                                   dashed=execution and side==1)
+        self.s.items[before+1]['color']=COMMON
+
+    def store(self,key,x,y,w,h,name,size=17,different=False):
+        self.nodes[key]=(x,y,w,h)
+        before=len(self.s.items)
+        self.s.store(self.x+x,y,w,h,name,size=size)
+        self.s.items[before].update(fill='white',stroke=self.c,line_width=1.0)
+        if h<36: self.s.items[before+1]['y']-=5
+
+    def text(self,x,y,w,text,color=None,size=16):
+        super().text(x,y,w,text,color or self.c,size)
+
+    def finish(self):
+        for item in self.s.items[self.first:]:
+            if item['kind']=='line': item['width']=1.1
+        super().finish()
+
+
+def resolution_legend(s, horizontal=False):
+    """One notation key for 41/42, independent of Architecture choice or rank."""
+    def symbol(x,y,w,h,name,kind='component',different=False):
+        if kind=='state':
+            s.store(x,y,w,h,name,size=13)
+            s.items[-2].update(fill='white',stroke=COMMON,line_width=1.0)
+            s.items[-1]['y']=y+9
+        else:
+            s.box(x,y,w,h,name,COMMON,fill=APRICOT if different else 'white',size=10)
+            s.items[-2].update(stroke=DIFFERENCE_STROKE if different else COMMON,
+                               line_width=DIFFERENCE_WIDTH if different else 1.0,rounded=kind=='module')
+    def boundary(x,y,w,h):
+        for xx,color,dashed,name in [(x,BOUNDARY_A,False,'A'),(x+w/2+3,BOUNDARY_B,True,'B')]:
+            s.rect(xx,y,w/2-3,h,'white',color,dashed=dashed)
+            s.items[-1]['line_width']=BOUNDARY_WIDTH
+            s.text(xx+(w/2-3)/2,y+5,w/2-7,[name],12,COMMON,align='center')
+    if horizontal:
+        # 2560px MAIN footer, same symbols and meanings as the vertical key.
+        s.text(64,1376,110,['Legend'],20,COMMON,True)
+        for x,w,name,label,kind,diff in [
+            (200,155,'Component','논리 책임 경계','component',False),
+            (400,140,'Module','내부 구현','module',False),
+            (925,130,'State','저장 상태','state',False),
+            (1620,165,'Component','공통: 흰색 / 검정','component',False),
+            (1890,165,'Module','설계 차이: 살구색','module',True)]:
+            symbol(x,1373,w,28,name,kind,diff)
+            s.text(x,1408,260,[label],17,COMMON)
+        boundary(600,1373,160,28)
+        s.text(578,1408,335,['실행 / 서비스: A 실선, B 점선'],17,COMMON)
+        for x,dashed,label in [(1120,False,'요청 / 전달'),(1360,True,'응답 / 반환')]:
+            s.line([(x,1387),(x+155,1387)],color=COMMON,width=1.1,dashed=dashed)
+            s.text(x,1408,220,[label],17,COMMON)
+        boundary(2210,1373,160,28)
+        s.text(2160,1408,330,['설계 차이: 강조 경계 / 채움 없음'],17,COMMON)
+        return
+    s.rect(47,277,86,512,'white',COMMON);s.items[-1]['line_width']=1.0
+    s.text(90,292,82,['Legend'],15,COMMON,True,'center')
+    for y,name,label,kind,diff in [
+        (313,'Component','논리 책임','component',False),
+        (370,'Module','내부 구현','module',False),
+        (477,'State','저장 상태','state',False),
+        (631,'Component','흰색 / 검정','component',False),
+        (687,'Module','차이: 살구색','module',True)]:
+        symbol(53,y,74,27,name,kind,diff)
+        s.label(54,y+33,76,label,12,COMMON)
+    boundary(53,426,74,27)
+    s.label(54,459,76,'실행 / 서비스',11,COMMON)
+    for y,dashed,label in [(548,False,'요청 / 전달'),(590,True,'응답 / 반환')]:
+        s.line([(54,y),(123,y)],color=COMMON,width=1.1,dashed=dashed)
+        s.label(54,y+9,76,label,12,COMMON)
+    s.label(54,743,76,'경계 A: 실선\n경계 B: 점선',11,COMMON)
+    s.label(54,774,76,'차이: 경계선',11,COMMON)
+
+
+def append_plate_legend(p):
+    """Use the same key on Plate-based MAIN and supplementary diagrams."""
+    from generate_dp_comparison_slides import Comparison
+    legend=Comparison(41);legend.items=[]
+    resolution_legend(legend,horizontal=True)
+    for item in legend.items:
+        data={k:v for k,v in item.items() if k not in ('id','kind')}
+        if item['kind']=='rect':
+            p.box(data['x'],data['y'],data['w'],data['h'],data['fill'],data['stroke'],
+                  7 if data.get('rounded') else 0,data.get('dashed',False),thick=data.get('line_width',1.0)*4/3)
+        elif item['kind']=='store':
+            p._add('node',x=data['x'],y=data['y'],w=data['w'],h=data['h'],name=[],
+                   type='store',color=COMMON,parent=None)
+        elif item['kind']=='text':
+            p.text(data['x'],data['y'],data['lines'],data['size'],data['color'],
+                   data['align'],data['bold'],width=data['w'],leading=data['leading'])
+        elif item['kind']=='line':
+            p.line(data['points'],data['color'],data['dashed'],data['arrow'],1.3)
+
+
 def graph41(s,x,side):
-    g=Graph(s,x,BLUE if side==0 else TEAL)
-    semantic_start(g)
-    # Containers precede all internal shapes and edges.
+    g=ResolutionGraph(s,x)
+    if side==0: resolution_legend(s)
+    g.box('input',30,278,245,35,'Interaction Manager')
+    g.box('model',650,278,195,35,'Model Access')
+    g.text(30,252,530,'확정 User Turn / 새 Request',size=16)
+    g.text(650,320,200,'공유 Omni 1벌 / 역할별 KV',size=14)
+    g.box('adopt',30,667,265,39,'Request Controller')
+    g.store('adopted',345,667,250,39,'State Store')
+    g.box('policy',650,667,195,39,'Policy Manager',size=17)
+    g.box('context',650,431,195,40,'Context Manager',size=17)
+    g.box('tasks',650,549,195,40,'Task Manager',size=17)
+    g.text(652,480,193,'화면 / 과거 정보 / 버전',size=14)
+    g.text(652,598,193,'Task 후보 / 상태 / 버전',size=14)
+    # One controller instance owns receipt, interpretation invocation and adoption.
+    g.edge('input','adopt','L','L',via=[(15,295),(15,686)])
+    g.text(30,319,300,'1 입력 접수 → 해석 요청',size=17)
     if side==0:
-        g.group(25,358,584,259,'Request Interpreter')
-        g.box('producer',45,405,243,48,'ReAct 해석 제어기',g.c,size=20)
-        g.box('tools',340,405,249,48,'읽기 도구 실행기',g.c,size=20)
-        g.box('check',45,538,243,46,'의미 제안 검증기',g.c,size=20)
-        g.store('temp',340,534,249,52,'임시 해석 상태',size=18)
-        g.edge('start','producer',via=[(452,345),(167,345)])
-        g.text(46,324,500,'1 모델의 읽기 선택과 의미 제안',g.c,size=18)
-        g.edge('producer','tools','R','L',sd=-10,td=-10)
-        g.edge('tools','producer','L','R',sd=11,td=11,ret=True)
-        g.text(45,468,535,'2 허용 읽기 → 정보 반환 → 모델 재판단',g.c,size=17)
-        g.edge('producer','check')
-        g.text(57,502,280,'의미 제안 / 부분 수정',size=17)
-        g.edge('tools','temp')
-        g.edge('temp','producer','L','R',via=[(312,560),(312,449)],ret=True)
-        g.text(343,594,245,'읽기 영수증과 원본 버전',size=16)
-        g.edge('check','producer','L','L',via=[(34,561),(34,429)],ret=True)
-        g.edge('producer','model','T','L',via=[(167,393),(622,393),(622,300)],ret=True,color=MUTED)
-        g.text(390,369,210,'모델 호출과 반환',size=16)
-        output='check'
+        g.group(30,394,565,211,'Request Interpreter')
+        g.box('producer',50,438,230,42,'ReAct 해석 제어기',True,True,size=18)
+        g.box('tools',340,438,235,42,'읽기 도구 실행기',True,True,size=18)
+        g.box('check',50,553,230,38,'의미 제안 검증기',True,True,size=18)
+        g.store('temp',340,549,235,43,'임시 해석 상태',different=True)
+        g.edge('adopt','producer','R','T',td=110,via=[(318,686),(318,632),(608,632),(608,382),(275,382)])
+        g.edge('producer','tools','R','L',sd=-9,td=-9)
+        g.edge('tools','producer','L','R',sd=10,td=10,ret=True)
+        g.text(291,431,49,'읽기',size=13)
+        g.text(291,469,49,'정보',size=13)
+        g.edge('producer','check','R','T',sd=16,via=[(300,475),(300,540),(165,540)])
+        g.text(53,496,233,'2 모델의 의미 제안 / 부분 수정',size=14)
+        g.edge('check','producer','L','L',via=[(40,572),(40,459)],ret=True)
+        g.text(55,524,230,'검증 결과 반환 / 실패 시 재판단',size=14)
+        g.edge('tools','temp',sd=30,td=30)
+        g.edge('temp','tools',sd=-30,td=-30,ret=True)
+        g.edge('producer','temp','R','T',sd=4,td=-60,via=[(325,463),(325,520),(397,520)])
+        g.edge('temp','producer','T','B',sd=-90,via=[(367,543),(32,543),(32,488),(165,488)],ret=True)
+        g.text(344,502,236,'해석과 조회 상태 / 보존 / 갱신',size=14)
+        producer='producer';output='check'
     else:
-        g.group(25,448,584,169,'Request Resolution Engine')
-        g.box('producer',45,358,544,45,'Request Interpreter',g.c,size=20)
-        g.box('tools',45,487,243,44,'미해결 항목 처리기',g.c,size=19)
-        g.box('check',340,487,249,44,'관계 결합기',g.c,size=19)
-        g.store('temp',153,560,328,43,'요청 해석 상태',size=17)
-        g.edge('start','producer',via=[(452,345),(317,345)])
-        g.text(48,324,510,'1 모델의 유한 요청 틀 생성',g.c,size=18)
-        g.edge('producer','tools',via=[(317,437),(166,437)])
-        g.text(45,414,529,'목표 / Referent 조건 / 관계 / 금지 / 미해결 항목',size=17)
-        g.edge('tools','check','R','L')
-        g.text(299,543,288,'2 코드의 조회 일정과 관계 결합',g.c,size=16)
-        g.edge('tools','temp',via=[(166,549),(216,549)],td=-101)
-        g.edge('check','temp',via=[(464,549),(418,549)],td=101)
-        g.edge('tools','producer','L','L',via=[(34,509),(34,381)],ret=True)
-        g.text(46,624,525,'필요한 부분의 모델 재해석 / 틀 밖 관계의 보류',size=17)
-        g.edge('producer','model','R','L',via=[(623,381),(623,300)],ret=True,color=MUTED)
-        output='check'
-    g.box('context',637,448,208,41,'Context Manager',size=18)
-    g.box('tasks',637,547,208,41,'Task Manager',size=18)
-    g.text(638,494,208,'화면과 과거 정보\n동일 권한과 조회 범위',size=16)
-    g.text(638,597,208,'Task 후보와 버전',size=16)
-    g.edge('tasks','context',sp='T',tp='B',ret=True,color=MUTED)
-    if side==0:
-        g.edge('tools','context','R','L',via=[(620,429),(620,463)],td=-6)
-    else:
-        g.edge('tools','context','B','L',via=[(166,539),(620,539),(620,463)],td=-6)
-    g.edge('context','tools' if side==0 else 'check','L','R',via=[(628,478),(628,527 if side else 441)],sd=10,td=20 if side else 12,ret=True)
-    g.text(640,408,205,'허용 읽기 / 버전 반환',size=16)
-    semantic_finish(g,output,via=[(166 if side==0 else 464,644),(155,644)])
+        g.box('producer',30,394,565,40,'Request Interpreter',True,size=20)
+        g.group(30,479,565,146,'Request Resolution Engine')
+        g.box('check',50,520,230,38,'관계 결합기',True,True,size=18)
+        g.box('tools',340,520,235,38,'미해결 항목 처리기',True,True,size=18)
+        g.store('temp',340,582,235,32,'요청 해석 상태',different=True,size=16)
+        g.edge('adopt','producer','R','T',via=[(318,686),(318,632),(608,632),(608,382),(312,382)])
+        g.edge('producer','tools',sd=145,td=20,via=[(457,470),(477,470)])
+        g.text(35,442,310,'2 유한 요청 틀: 목표 / 조건 / 관계 등',size=14)
+        g.edge('tools','producer','R','R',via=[(584,539),(584,414)],ret=False,td=0)
+        g.text(350,445,100,'부분 재해석\n요청 / 반환',size=12)
+        g.edge('producer','tools','B','T',sd=245,td=90,via=[(557,448),(548,448)],ret=True)
+        g.edge('tools','check','L','R',sd=-8,td=-8)
+        g.edge('check','tools','R','L',sd=9,td=9,ret=True)
+        g.text(54,566,275,'확인 후보 / 정보 / 버전 → 코드 결합',size=14)
+        g.text(53,602,275,'미해결 / 충돌 → 추가 조회',size=14)
+        g.edge('tools','temp',sd=25,td=25)
+        g.edge('temp','tools',sd=-25,td=-25,ret=True)
+        g.edge('check','temp','R','L',sd=16,td=-5,via=[(299,555),(299,593)])
+        g.edge('temp','check','L','R',sd=6,td=18,via=[(309,604),(309,557)],ret=True)
+        producer='producer';output='check'
+    # Both requests and model results are explicit, rather than a return-only edge.
+    call_offset=95 if side==0 else -35
+    return_offset=105 if side==0 else 35
+    px,py=g.port(producer,'T',call_offset)
+    g.edge(producer,'model','T','L',sd=call_offset,td=-8,via=[(px,352),(629,352),(629,290)])
+    g.edge('model',producer,'L','T',sd=9,td=return_offset,via=[(639,304),(639,372),(g.port(producer,'T',return_offset)[0],372)],ret=True)
+    g.text(292,340,324,'모델 호출 → / ← 해석 결과',size=15)
+    # Each executor talks directly to both owners. Providers return to that executor.
+    ty=g.port('tools','R',-9)[1]
+    g.edge('tools','context','R','L',sd=-9,td=-8,via=[(618,ty),(618,443)])
+    g.edge('context','tools','L','R',sd=9,td=8,via=[(628,460),(628,g.port('tools','R',8)[1])],ret=True)
+    g.edge('tools','tasks','R','L',sd=-2,td=-8,via=[(618,g.port('tools','R',-2)[1]),(618,561)])
+    g.edge('tasks','tools','L','R',sd=9,td=14,via=[(628,578),(628,g.port('tools','R',14)[1])],ret=True)
+    g.text(653,398,188,'허용 조회 → / ← 정보',size=14)
+    # Adoption checks use separate outer paths, not the interpreter's read bus.
+    g.edge('adopt','context','B','R',sd=90,td=-7,via=[(252,739),(852,739),(852,444)])
+    g.raw([(852,562),(845,562)])
+    g.edge('context','adopt','R','B',sd=8,td=103,via=[(858,459),(858,746),(265,746)],ret=True)
+    g.raw([(845,577),(858,577)],ret=True,arrow=False)
+    g.text(351,721,490,'현재 정보 / Task / 질문 연결 재확인 / 반환',size=14)
+    # Proposal and failure routes return to the same controller.
+    g.edge(output,'adopt')
+    g.text(32,630,280,'3 의미 제안 / 확인 질문\n틀 밖 관계는 보류',size=14)
+    g.edge('adopt','adopted','R','L',sd=-8,td=-8)
+    g.edge('adopted','adopt','L','R',sd=9,td=9,ret=True)
+    g.text(350,648,288,'채택 저장 → / ← 성공 / 실패',size=14)
+    g.edge('adopt','policy','B','B',sd=-42,td=-42,via=[(120,714),(705,714)])
+    g.edge('policy','adopt','B','B',sd=42,td=42,via=[(790,730),(205,730)],ret=True)
+    g.text(33,718,257,'권한 검사 → / ← 허용 / 거부',size=14)
+    g.text(31,759,810,'채택 후: Response Manager → Interaction Manager / Task Manager → Agent Gateway',size=16)
+    g.text(31,780,810,'Component는 논리적 책임 경계 / 포함된 Module은 내부 구현 / 별도 프로세스 의미 없음',size=14)
+    g.finish()
 
 
 def graph42(s,x,side):
-    g=Graph(s,x,BLUE if side==0 else TEAL)
-    g.text(24,253,820,'C1 최초 R1 보고서와 R2 메일 → 후속 R3 “보고서만 상반기로”',size=17,color=INK)
-    # Logical lifetimes repeat in each option, distinct from process lifetimes below.
-    rows=[('Conversation C1',285,827,'대화 기록과 연결 유지'),
-          ('Request R1 / R2 / R3',310,410,'각 입력의 해석과 접수 완료'),
-          ('Task T1 / T2',335,827,'보고서 T1 수정 / 메일 T2 계속'),
-          ('Agent Execution',360,660,'T1: X1 종료 → X2 / T2: Y1'),
-          ('질문 Q1',385,496,'제시 → 답변 연결 → 해소')]
-    for name,y,end,desc in rows:
-        g.text(24,y,220,name,size=17)
-        start=260
-        g.raw([(start,y+20),(end,y+20)],arrow=False,color=g.c)
-        if name.startswith('Request'):
-            g.text(280,y-2,175,'R1 / R2 접수 완료',size=16,color=g.c)
-            g.raw([(465,y+20),(615,y+20)],arrow=False,color=g.c)
-            g.text(627,y,217,'R3 후속 수정',size=16)
-        else:g.text(280,y-2,end-start-24,desc,size=16,color=g.c)
+    g=ResolutionGraph(s,x)
+    if side==0: resolution_legend(s)
+    g.text(24,251,820,'Q1 “상반기로 할까요?”를 P1로 제시 → u2 “응, 상반기로”',size=16)
+    for y,title,desc,end in [(278,'Conversation C1','입력과 실제 응답의 연결 유지',833),
+                             (297,'Request R1 / R2 / R3','최초 위임 / Q1 답변 / 결과 수정',740),
+                             (316,'Task T1','보고서 업무와 결과 유지',833),
+                             (335,'Execution / Question','X1 완료 → X2 / Q1 제시 → 답변',815)]:
+        g.text(24,y,230,title,size=15)
+        g.raw([(268,y+16),(end,y+16)],arrow=False)
+        g.text(281,y-1,555,desc,size=14)
+    g.text(281,353,555,'강조 경계: Core/서비스 실행 영역 / 박스: 논리 Component',size=12)
     if side==0:
-        g.group(24,427,819,293,'VIA Core')
-        g.text(238,438,585,'동일 실행 경계 / 모듈별 처리 책임',size=17)
-        g.box('dialogue',44,477,260,42,'대화 처리기',g.c,size=20)
-        g.box('work',528,477,292,42,'업무 관리기',g.c,size=20)
-        g.box('commit',342,570,225,42,'트랜잭션 관리자',g.c,size=19)
-        g.store('state',302,652,307,48,'통합 상태 저장소',size=18)
-        g.text(47,529,300,'C1 / R1~R3 / Q1 연결',size=17)
-        g.text(532,529,285,'T1 / T2 / Q1 / 명령',size=17)
-        g.edge('dialogue','work','R','L')
-        g.text(330,467,181,'1 검증 변경 제안',size=17)
-        g.edge('dialogue','commit',via=[(174,559),(454,559)])
-        g.edge('work','commit',via=[(674,629),(454,629)],sp='B',tp='B')
-        g.edge('commit','state')
-        g.text(44,589,279,'2 답변 연결과 명령의\n하나의 로컬 확정',g.c,size=18)
-        g.text(634,582,192,'모델과 네트워크\n대기 밖 트랜잭션',size=16)
-        g.edge('state','work',sp='R',tp='B',via=[(678,676),(678,519)],ret=True)
-        g.text(639,642,190,'3 저장 후 전송',g.c,size=17)
-        sender='work';route=[(851,498),(851,722)]
+        g.group(20,367,825,346,'VIA Core',execution=True,side=side)
+        g.text(292,376,540,'같은 실행 경계 / 관련 변경의 공동 확정',size=15)
     else:
-        g.group(24,427,354,293,'대화 서비스')
-        g.group(440,427,403,293,'업무 서비스')
-        g.text(203,440,172,'독립 실행 경계',size=16)
-        g.text(642,440,199,'독립 실행 경계',size=16)
-        g.box('dialogue',44,477,314,42,'대화 처리기',g.c,size=20)
-        g.box('work',459,477,364,42,'업무 관리기',g.c,size=20)
-        g.store('dialogue-state',44,642,314,57,'대화 상태 저장소',size=18)
-        g.store('work-state',459,642,364,57,'업무 상태 저장소',size=18)
-        g.text(48,529,308,'C1 / R1~R3 / Q1 연결',size=17)
-        g.text(464,529,345,'T1 / T2 / Q1 / command ID',size=17)
-        g.edge('dialogue','dialogue-state')
-        g.edge('work','work-state')
-        g.edge('dialogue','work','R','L')
-        g.text(329,468,122,'1 명령',size=17)
-        g.edge('work-state','dialogue','L','B',via=[(413,671),(413,574),(201,574)],ret=True)
-        g.text(467,566,342,'2 업무의 로컬 접수와 확정',g.c,size=18)
-        g.text(47,589,300,'3 내부 접수의 대화 반영\n같은 command ID의 재시도',g.c,size=17)
-        g.text(465,609,356,'외부 Agent 접수와 별도 사실',size=16)
-        sender='work';route=[(851,498),(851,722)]
-    g.box('gateway',42,732,210,39,'Agent Gateway',size=18)
-    g.box('agent',349,732,247,39,'Downstream Agent',size=18)
-    g.box('model',668,732,175,39,'Model Access',size=17)
-    g.edge(sender,'gateway','R','R',via=route+[(266,722),(266,752)])
-    g.edge('gateway','work','T','R',via=[(147,724),(838,724),(838,510)],td=12,ret=True,color=MUTED)
-    g.edge('gateway','agent','R','L',sd=-8,td=-8)
-    g.edge('agent','gateway','L','R',sd=10,td=10,ret=True,color=MUTED)
-    g.text(268,725,92,'명령',size=16)
-    g.text(264,771,380,'외부 접수 / X1 질문 / X2 결과',size=16)
-    g.text(669,772,175,'공유 Omni 1벌',size=16)
-    g.text(43,715,230,'Core 소속' if side==0 else '업무 서비스 소속',size=15)
+        g.group(20,367,420,346,'대화 서비스',execution=True,side=side)
+        g.group(490,367,355,346,'업무 서비스',execution=True,side=side)
+        g.text(190,377,230,'독립 상태 / 실행 수명',size=14)
+        g.text(650,377,190,'독립 상태 / 실행 수명',size=14)
+    g.box('controller',40,411,235,36,'Request Controller',size=18)
+    g.box('tasks',555,411,270,36,'Task Manager',size=18)
+    g.box('interpreter',40,485,235,34,'Request Interpreter',size=17)
+    g.box('response',40,559,235,36,'Response Manager',size=18)
+    g.box('gateway',555,559,270,36,'Agent Gateway',size=18)
+    g.text(43,450,300,'C1 / R2 / u2 → Q1 → T1 / P1 참조',size=14)
+    g.text(558,452,265,'조회: T1 / X1 / Q1=OPEN,v7',size=14)
+    # Same state owners and bounded semantic judgment in both options.
+    g.edge('controller','tasks','R','T',sd=-9,td=-100,via=[(295,420),(295,401),(590,401)])
+    g.edge('tasks','controller','T','R',sd=-85,td=-2,via=[(605,407),(285,407),(285,427)],ret=True)
+    g.text(301,400,238,'질문 조회 → / ← Q1,v7',size=13)
+    g.edge('controller','tasks','R','L',sd=10,td=10)
+    g.text(302,428,240,'K1: Q1 답변=상반기 / v7',size=13)
+    g.edge('tasks','controller','L','R',sd=-9,td=-9,via=[(533,420),(533,472),(292,472),(292,420)],ret=True)
+    g.text(302,454,240,'외부 접수 / 질문 / 결과',size=14)
+    g.edge('controller','interpreter',sd=-45,td=-45)
+    g.edge('interpreter','controller',sd=45,td=45,ret=True)
+    g.text(43,522,270,'u2 + 실제 제시 P1 → 답변 의미 제안',size=13)
+    # Output content/admission and delivery/focus are distinct contracts.
+    g.edge('controller','response','L','T',td=-60,via=[(30,429),(30,550),(97.5,550)])
+    g.edge('response','controller','R','R',sd=-10,td=2,via=[(315,567),(315,431)],ret=True)
+    g.text(321,506,218,'P2: 상반기 전달 확인\n게시 허용 / 실제 제시 반환',size=12)
+    g.text(44,600,290,'P1→Q1 실제 제시 / P2 전달 원장',size=14)
+    g.edge('tasks','gateway')
+    g.edge('gateway','tasks','L','L',via=[(542,577),(542,429)],ret=True)
+    g.text(558,490,265,'접수: Q1=ANSWERED,v8\nK1=전송 대기',size=14)
+    g.text(558,600,271,'K1 외부 접수 / X1 관측 상태',size=14)
+    if side==0:
+        g.box('commit',325,621,220,31,'트랜잭션 관리자',True,True,size=17)
+        g.store('saved',345,672,200,30,'State Store',size=16)
+        g.edge('controller','commit','R','T',sd=16,td=-55,via=[(305,445),(305,613),(380,613)])
+        g.edge('tasks','commit','L','T',sd=16,td=55,via=[(550,445),(550,613),(490,613)])
+        g.edge('commit','saved',via=[(435,661),(445,661)])
+        g.edge('saved','commit',sd=55,td=55,via=[(500,663),(490,663)],ret=True)
+        g.text(43,631,275,'R2↔Q1↔T1 연결과 K1을\n관련 owner 변경으로 함께 확정',size=14)
+        g.text(558,631,265,'성공: 둘 다 반영\n충돌 / 실패: 둘 다 미반영',size=14)
+        g.edge('commit','controller','L','R',td=15,via=[(299,636.5),(299,444)],ret=True)
+        g.edge('commit','tasks','R','L',td=15,via=[(552,636.5),(552,444)],ret=True)
+    else:
+        g.store('dsaved',40,672,380,30,'대화 상태 저장소',size=16)
+        g.store('tsaved',510,672,315,30,'업무 상태 저장소',size=16)
+        g.edge('controller','dsaved','R','T',sd=16,td=50,via=[(303,445),(303,661),(280,661)])
+        g.edge('tasks','tsaved','L','T',sd=16,td=-105,via=[(501,445),(501,661),(562.5,661)])
+        g.edge('tasks','controller','B','B',sd=-60,td=60,via=[(630,471),(460,471),(460,477),(217.5,477)],ret=True)
+        # Explicit intermediate state, followed by reflection of the receipt.
+        g.text(43,631,371,'선저장: R2=접수 대기 / K1\n후반영: K1 내부 접수 확인',size=14)
+        g.text(515,631,312,'Q1 변경 + K1 + 내부 접수 결과\n업무의 로컬 transaction',size=14)
+        g.text(322,486,215,'K1 내부 접수 결과 반환',size=13)
+    # Response Manager owns the publication journal, not the Controller log.
+    target='saved' if side==0 else 'dsaved'
+    g.edge('response',target,'L','T',td=-100,via=[(34,577),(34,657),(g.port(target,'T',-100)[0],657)])
+    g.box('interaction',40,737,235,32,'Interaction Manager',size=17)
+    g.box('model',345,737,230,32,'Model Access',size=17)
+    g.box('agent',600,737,245,32,'Downstream Agent',size=17)
+    g.edge('interaction','controller','L','L',via=[(10,753),(10,429)])
+    g.edge('response','interaction','L','T',sd=10,td=-30,via=[(24,587),(24,724),(127.5,724)])
+    if side==0:
+        g.edge('interaction','response','R','R',sd=7,td=10,via=[(284,760),(284,587)],ret=True)
+    else:
+        g.edge('interaction','response','R','L',sd=7,td=-10,via=[(286,760),(286,730),(28,730),(28,567)],ret=True)
+    g.text(302,705,534,'release(P2,epoch) / receipt(P2,실제 전달 범위)',size=13)
+    c1,c2,c3,c4=(318,323,310,312) if side==0 else (450,456,462,468)
+    g.edge('interpreter','model','R','T',td=-70,via=[(c1,502),(c1,725),(390,725)])
+    g.edge('model','interpreter','T','R',sd=-50,td=10,via=[(410,729),(c2,729),(c2,512)],ret=True)
+    g.edge('response','model','R','T',sd=4,td=30,via=[(c3,581),(c3,719),(490,719)])
+    g.edge('model','response','T','R',sd=50,td=10,via=[(510,723),(c4,723),(c4,587)],ret=True)
+    g.edge('gateway','agent','R','T',td=-25,via=[(851,577),(851,719),(697.5,719)])
+    g.edge('agent','gateway','T','R',sd=25,td=10,via=[(747.5,726),(858,726),(858,587)],ret=True)
+    g.text(43,716,231,'u2 입력 / Text / Voice 실제 전달',size=13)
+    g.text(347,772,230,'공유 Omni 1벌 / 같은 해석',size=13)
+    g.text(603,772,245,'K1 전송 / 외부 접수 확인',size=13)
+    g.text(43,772,235,'Voice Runtime: 음성 I/O 구현',size=12)
+    # Check straight routes and unrelated actor interiors before export.
+    for item in s.items[g.first:]:
+        if item['kind']!='line': continue
+        pts=[(xx-x,yy) for xx,yy in item['points']]
+        for start,end in zip(pts,pts[1:]):
+            assert start[0]==end[0] or start[1]==end[1],(side,item['id'],'non-orthogonal')
+            for key,(nx,ny,nw,nh) in g.nodes.items():
+                if any(nx<=px<=nx+nw and ny<=py<=ny+nh for px,py in (pts[0],pts[-1])): continue
+                vertical=start[0]==end[0] and nx+1<start[0]<nx+nw-1 and max(min(start[1],end[1]),ny+1)<min(max(start[1],end[1]),ny+nh-1)
+                horizontal=start[1]==end[1] and ny+1<start[1]<ny+nh-1 and max(min(start[0],end[0]),nx+1)<min(max(start[0],end[0]),nx+nw-1)
+                assert not(vertical or horizontal),(side,item['id'],'crosses',key)
     g.finish()
+    if not hasattr(s,'lifecycle_graphs'): s.lifecycle_graphs=[]
+    s.lifecycle_graphs.append(g)
 
 
 def graph43(s,x,side):
