@@ -229,7 +229,7 @@ InputStarted, END_CANDIDATE, InputFinal, MeaningReady, ResponsePrepared, Deliver
 
 2026-10-09에 active Markdown link 검사(152개 파일), 용어/정식 Component 이름 검사 및 `git diff --check`를 통과했다. [공통 그림 생성기](../../../../scripts/architecture/generate_common_execution_diagram.py)의 `--check`로 SVG/draw.io 일치와 내부 Module/상태의 owner 소속을 확인했다. 로컬 headless browser의 1920×1080 렌더에서 텍스트 범위/겹침 오류 0건을 확인하고 실제 렌더도 육안 검토했다.
 
-이는 첫 공통 문서·그림 검증이다. 이후 41 재구체화에서는 독립 본문/도식 대조와 관련 발표 자료 검증을 추가했고 [41 검수](./04-41-diagram-review.md)에 결과를 기록했다. 최종 전체 링크 검사에는 병행 신규 `input-evidence-timeline-review.md`의 미생성 그림/notes 네 링크가 남아 초기 통과 결과와 구별한다. cloud API 실행, VAD/전사/음성 의미 보존 검증, 교차 DP 프로토콜 구현과 품질/비용 측정은 수행하지 않았다. 이번 변경은 미커밋 상태이며 다른 세션의 04-50·`work/`·신규 입력 근거 문서는 수정하지 않는다.
+이는 첫 공통 문서·그림 검증이다. 이후 41 재구체화에서는 독립 본문/도식 대조와 관련 발표 자료 검증을 추가했고 [41 검수](./04-41-diagram-review.md)에 결과를 기록했다. 초기에는 병행 신규 입력 근거 문서의 미생성 링크 네 개가 남았으나, 병행 파일 완성 후 전체 활성 Markdown 154개 링크 검사를 통과했다. cloud API 실행, VAD/전사/음성 의미 보존 검증, 교차 DP 프로토콜 구현과 품질/비용 측정은 수행하지 않았다. 사용자의 후속 게시 지시에 따라 공통 계약·41 완료 단위를 `33d66f1e`로 commit/push했으며 다른 세션의 04-50·`work/`·신규 입력 근거 문서는 포함하지 않았다.
 
 ## 12. 각 DP 재구체화의 진행 순서와 완료 기준
 

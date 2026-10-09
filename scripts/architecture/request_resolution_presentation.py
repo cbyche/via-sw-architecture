@@ -127,7 +127,8 @@ def structure():
             # A note/document is an exchanged contract example, never a processing Module.
             doc=p._add('node',x=x+dx,y=y,w=w,h=h,name=[],type='data',color=COMMON,parent=None)
             header='교환 데이터 예시 · '+title
-            units=sum(1 if ord(c)>=0x2e80 else .55 for c in header)
+            # Integer accumulation avoids Python-version-dependent float sum output.
+            units=sum(100 if ord(c)>=0x2e80 else 55 for c in header)/100
             p.text(x+12+dx,y+8,header,min(16,(w-34)/units),COMMON,bold=True)
             p.items[-1]['data_note']=doc
             p.text(x+12+dx,y+33,lines,size,COMMON,leading=size*1.24)
