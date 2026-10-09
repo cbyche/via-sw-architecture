@@ -8,8 +8,8 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope,subset] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && !['--comparison-only','--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only, --dp44-only or --dp45-only');
-if (subset && !(scope==='--dp45-only' && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only --comparison-only');
+if (scope && !['--comparison-only','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only, --dp44-only, --dp45-only, --intro-flow-only or --list-selected');
+if (subset && !(['--dp45-only','--list-selected'].includes(scope) && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only (or --list-selected) --comparison-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -26,6 +26,10 @@ root=Path(sys.argv[1]);sys.path.insert(0,str(root/'scripts/architecture'))
 import generate_dp_background_slides as bg
 import generate_dp_comparison_slides as cmp
 scenes=[]
+# The introduction shares the existing background scene, not a new source.
+o=bg.overview();source='docs/architecture/12-decisions/decision-packages/diagrams/'+o.slug+'.svg'
+assert (root/source).read_text()==o.svg(),source+' is out of sync'
+scenes.append(dict(number='overview',kind='overview',slug=o.slug,title=o.caption,items=o.items,source=source,notes=o.notes,sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
 # Python 3.12's compensated sum changes last-bit annotation widths only.
 def normalized_svg(value):
     return re.sub(r'-?\d+\.\d+',lambda m:format(float(m[0]),'.8f').rstrip('0').rstrip('.'),value)
@@ -37,7 +41,7 @@ for n in range(41,46):
         prefix='docs/architecture/12-decisions/decision-packages/diagrams' if kind=='background' else 'docs/presentations_files/dp-comparison'
         source=prefix+'/'+s.slug+'.svg'
         assert normalized_svg((root/source).read_text())==normalized_svg(s.svg()),source+' is out of sync'
-        scenes.append(dict(number=n,kind=kind,slug=s.slug,title=s.caption,items=s.items,source=source,sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
+        scenes.append(dict(number=n,kind=kind,slug=s.slug,title=s.caption,items=s.items,source=source,transition=bg.TRANSITIONS.get(n),sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
 print(json.dumps(scenes,ensure_ascii=False))
 `;
 const scenes=JSON.parse(execFileSync(python,['-c',extraction,repo],{encoding:'utf8',maxBuffer:8*1024*1024}));
@@ -105,21 +109,27 @@ function nativeScene(presentation,scene) {
     notesText=notesText.replace('기존 수치와 점수는 동일한 형식 예시다.','45의 수치와 원형 점수는 조건별 정성 표로 교체했다.');
     notesText+='\nA: Context Composer가 owner 읽기와 cache를 조합하여 직접 EvidenceBundle/receipt를 반환한다. Request Evidence Set은 요청 수명의 데이터다. B: 변경 알림, 실제 원본 읽기, 조건부 과거 의미 생산, 출처/권한/지원 종류 검증, 관계+coverage 게시, Evidence Reader의 게시 계약 소비를 나눈다. 미래 R23의 정답이나 T23 binding을 미리 생산하지 않는다.\nNOT_COVERED는 지원 종류의 미생산으로 Publisher 생산 후 revision/상태를 반환하고 Reader가 Repository를 다시 읽는다. UNSUPPORTED_RELATION은 표현 변경 없이는 반복 생산으로 해결되지 않는다. NO_MATCH는 읽은 범위의 무일치다. DENIED/UNAVAILABLE도 분리한다. 현재 metadata 검사와 exact quote/조건/충돌 원문 확인은 남고, 원본 조합 우회는 명시적 B+다. 파생 오류 EvidenceDispute는 원본 revision 변화 없이도 차단/재검증한다. 삭제/철회 fence가 후속 정리보다 먼저이며 옛 job 게시를 거부한다.\n첫 요청/정정 직후: B 생산/갱신 대기가 추가될 수 있다. 반복 조회: 유효 게시가 owner 교차 조합을 실제 대체하면 B 요청 경로가 줄지만 A warm 관계 cache가 같은 효과를 낼 수 있다. 새 관계/미묘한 부정/예외: A 원문 구성이 유연하나 검색 누락 가능, B 표현/추출 한계가 남는다. 정확성의 전체 우열을 고정하지 않는다.\n전체 모델 호출: A cache 생산/유지+요청 구성/재검증, B 초기/갱신/backfill/미사용/실패 생산을 모두 포함한다. 현재 판단은 공통이고 명시 ID/위치 연결은 코드일 수 있다. 고정 우열 없음. Source 형식 변경은 adapter에 흡수할 수 있고, 관계 의미/schema 변경은 B producer/독자 호환/재생산, A cache 무효화도 함께 본다.\n공식 Reference (본문 §9):\nA https://docs.langchain.com/oss/python/deepagents/retrieval — 현재 질문의 원본 획득 선례. VIA Task/실제 전달/정정 계약 전체 구현 사례 아님.\nB https://langchain-ai.github.io/langmem/background_quickstart/ 및 https://langchain-ai.github.io/langmem/reference/memory/ — 기억 생산/저장/소비 분리 선례. 자동 선호 추출을 VIA User Memory 정책으로 채택하지 않고 revision/coverage/삭제 fence는 VIA 별도 계약.\n실행 https://langchain-ai.github.io/langmem/guides/delayed_processing/ — 대기 생산/재예약 선례. thread/지연값/배치를 채택하지 않는다.\n연결 참고 https://docs.mem0.ai/platform/features/graph-memory — 공통 개체 연결 선례이며 typed 정정/대체/실제 전달 관계 구현 증거 아님. cloud/embedding/helper를 도입하지 않는다. 공식 사례는 VIA 성능 우위의 증거가 아니다.';
   }
+  if(scene.kind==='overview') notesText=scene.notes+'\n\n본 발표: 도입 → 41 → 44 → 45 → 42. 43은 부록이며 후보 자격 변경을 뜻하지 않는다. 시간축은 상대적인 설명용이며 구간 길이는 측정값이 아니다. Agent 내부 기록 전체를 보유한다고 가정하지 않는다.\n'+base+scene.source;
+  if(scene.presentationTransition) notesText+='\n다음 주제로 연결\n'+scene.transition;
   slide.speakerNotes.textFrame.setText(notesText);
   return slide;
 }
 
+const mainOrder=[41,44,45,42,43];
+const integratedScenes=[scenes.find(s=>s.kind==='overview'),...mainOrder.flatMap(n=>['background','comparison'].map(kind=>({...scenes.find(s=>s.number===n&&s.kind===kind),presentationTransition:kind==='comparison'&&[41,44,45].includes(n)})))];
 const plans=[
-  {slug:'VIA-DP-background-and-comparison-41-45',scenes,destination:'docs/presentations_files/VIA-DP-background-and-comparison-41-45.pptx'},
+  {slug:'VIA-DP-background-and-comparison-41-45',scenes:integratedScenes,destination:'docs/presentations_files/VIA-DP-background-and-comparison-41-45.pptx'},
   {slug:'VIA-DP-background-41-45',scenes:scenes.filter(s=>s.kind==='background'),destination:'docs/presentations_files/dp-background/VIA-DP-background-41-45.pptx'},
   {slug:'VIA-DP-comparison-41-45',scenes:scenes.filter(s=>s.kind==='comparison'),destination:'docs/presentations_files/dp-comparison/VIA-DP-comparison-41-45.pptx'},
 ];
 const checkPackage=String.raw`
 import sys,json,zipfile,re
 import xml.etree.ElementTree as E
+sys.path.insert(0,sys.argv[3]);from dp_pptx_package import ordered_slides
 scenes=json.loads(open(sys.argv[2]).read());ns={'p':'http://schemas.openxmlformats.org/presentationml/2006/main','a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
 with zipfile.ZipFile(sys.argv[1]) as z:
-    files=sorted([n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml',n)],key=lambda n:int(re.search(r'(\d+)\.xml',n)[1]))
+    parts={n:z.read(n) for n in z.namelist()}
+    files=[s['part'] for s in ordered_slides(parts)]
     assert len(files)==len(scenes),(len(files),len(scenes))
     stats=[]
     for file,scene in zip(files,scenes):
@@ -132,31 +142,34 @@ with zipfile.ZipFile(sys.argv[1]) as z:
         stats.append(dict(slug=scene['slug'],nativeShapes=native,nativeTextLines=len(texts),nativePaths=paths,images=0))
     print(json.dumps(stats))
 `;
-// A scoped update preserves every unselected slide and all common package
-// parts byte-for-byte. Native scenes have no new media or package dependencies.
-const preserveUnselected=String.raw`
-import sys,json,zipfile,os
-candidate,original,indices=sys.argv[1],sys.argv[2],json.loads(sys.argv[3])
-parts={name for i in indices for name in [f'ppt/slides/slide{i}.xml',f'ppt/slides/_rels/slide{i}.xml.rels']}
-if len(sys.argv)>4 and sys.argv[4] in ('--dp44-only','--dp45-only'):
-    parts.update(name for i in indices for name in [f'ppt/notesSlides/notesSlide{i}.xml',f'ppt/notesSlides/_rels/notesSlide{i}.xml.rels'])
-with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.ZipFile(candidate+'.scoped','w') as out:
-    for info in old.infolist():
-        data=new.read(info.filename) if info.filename in parts else old.read(info.filename)
-        out.writestr(info,data)
-os.replace(candidate+'.scoped',candidate)
-`;
+// Scene identity is resolved through relationships by dp_pptx_package.py.
+function selectedScenes(plan, requested=scope) {
+  return plan.scenes.filter(s=>requested==='--intro-flow-only'?s.kind==='overview':
+    requested==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):
+    requested==='--dp44-only'?s.number===44&&s.kind==='comparison':
+    requested==='--dp41-42-only'?[41,42].includes(s.number)&&s.kind==='comparison':
+    requested==='--comparison-only'?s.kind==='comparison':true);
+}
+const activePlans=plans.filter(p=>scope==='--intro-flow-only'?p===plans[0]:
+  !scope||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'));
+if(scope==='--list-selected') {
+  console.log(JSON.stringify(plans.map(plan=>({file:plan.destination,selections:Object.fromEntries(
+    ['--intro-flow-only','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only'].map(option=>[option,selectedScenes(plan,option).map(s=>({slug:s.slug,position:plan.scenes.indexOf(s)+1}))]))})),null,2));
+  process.exit(0);
+}
 const stats=[];
-for(const plan of plans.filter(p=>!scope||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'))) {
+for(const plan of activePlans) {
   const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
   for(const scene of plan.scenes)nativeScene(presentation,scene);
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(['--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) {
-    const indices=plan.scenes.flatMap((s,i)=>(scope==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number))?[i+1]:[]);
-    execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices),scope]);
+  if(['--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {
+    const selected=scope==='--intro-flow-only'?[]:selectedScenes(plan).map(s=>s.slug);
+    execFileSync(python,[path.join(repo,'scripts/presentations/dp_pptx_package.py'),draft,
+      path.join(repo,plan.destination),JSON.stringify(selected),...(scope==='--intro-flow-only'?['--intro']:[])]);
   }
+  if(!scope && plan===plans[0]) execFileSync(python,[path.join(repo,'scripts/presentations/dp_pptx_package.py'),draft,draft,'[]','--sections-only']);
   await finalizePresentation({workspaceDir:build,candidatePath:draft,finalPath:final,explicitTotalSlideCount:plan.scenes.length,
     pythonExecutable:python,integrityValidatorPath:path.join(skill,'container_tools/inspect_presentation_package_integrity.py'),
     layoutValidatorPath:path.join(skill,'container_tools/inspect_presentation_layout_geometry.py'),
@@ -164,7 +177,7 @@ for(const plan of plans.filter(p=>!scope||(scope==='--dp45-only'&&!subset)||p.sc
     requiredNativeTableOwnerSlides:[],fontPolicy:{basis:'design',families:[font]},verifyArtifactToolImport:true,
     receiptPath:path.join(build,`${plan.slug}.validation.json`)});
   const selected=path.join(build,`${plan.slug}.scenes.json`);await fs.writeFile(selected,JSON.stringify(plan.scenes));
-  const editability=JSON.parse(execFileSync(python,['-c',checkPackage,final,selected],{encoding:'utf8'}));
+  const editability=JSON.parse(execFileSync(python,['-c',checkPackage,final,selected,path.join(repo,'scripts/presentations')],{encoding:'utf8'}));
   const imported=await PresentationFile.importPptx(await FileBlob.load(final));
   for(const [index,slide] of imported.slides.items.entries()) {
     const png=await imported.export({slide,format:'png',scale:1});

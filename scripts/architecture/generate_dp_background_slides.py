@@ -147,29 +147,99 @@ class Slide:
         return ET.tostring(root, encoding='unicode')+'\n'
 
 
+PRESENTATION_ORDER = (41, 44, 45, 42)
+OVERVIEW_SCRIPT = """사용자는 화면의 표를 가리키며 제안서에 넣고, 공유 메일은 초안만 만들어 달라고 합니다. VIA는 표가 무엇인지, 두 업무를 어떻게 나눌지, 초안이라는 조건을 이해해야 합니다.
+그런데 처리가 끝나기 전에 가격을 빼 달라는 정정이 들어오고, 메일 업무에서는 수신자를 묻습니다. VIA는 각각의 업무를 연결하고, 늦게 끝난 결과도 현재 조건에서 유효한지 확인해야 합니다.
+이어서 사용자는 VIA가 전에 설명한 기준과 제품 비교, 견적 결과를 함께 참조합니다. VIA는 실제 전달한 설명과 허용된 결과 참조를 연결하고, 분석과 제안서 작성은 업무 수행 Agent에 맡깁니다.
+위임 요청 처리가 끝나도 대화와 업무는 이어집니다. 음성 대화가 끝난 뒤 사용자가 돌아오면 같은 업무의 진행과 결과를 연결해야 합니다.
+먼저, 이처럼 대상과 조건이 섞인 요청을 VIA가 어떤 방식으로 이해하고 완성할지부터 설명하겠습니다."""
+TRANSITIONS = {
+    41: '요청을 이해하는 중에도 새 입력과 업무 알림은 계속 들어옵니다. 다음으로, 겹친 사건과 여러 처리를 이어가는 실행 구조를 설명하겠습니다.',
+    44: '들어온 사건을 처리하는 데 더해, 현재 요청이 가리키는 과거 설명과 업무 결과를 연결해야 합니다. 다음으로, 여러 활동의 과거 맥락을 제공하는 방식을 설명하겠습니다.',
+    45: '이 연결을 유지하려면 대화·요청·업무·실행의 상태를 각자의 수명에 맞게 관리해야 합니다. 마지막으로, 서로 다른 수명과 상태 관리 책임을 설명하겠습니다.',
+}
+
+
 def overview():
-    s = Slide('overview', 'VIA 사용자 경험을 위한 다섯 설계 문제',
-        '정확한 Request 해석, 지속 대화와 과거 정보 재사용을 위한 설계',
-        '', '다섯 문제의 구조 대안과 품질 손익 비교', '',
-        '기능 정확성 / 반응성 / 변경 용이성 / 복구성')
-    s.text(64, 258, 1792, ['사용자 상황별로 구분할 다섯 설계 책임'], 27, MUTED)
-    s.rect(64, 317, 1792, 45, '#F1F4F7', 'none')
-    for x,w,t in [(84,115,'문서'),(224,285,'사용자 경험'),(554,566,'예방할 위험'),(1164,665,'비교할 SW 구조의 결정')]:
-        s.text(x, 326, w, [t], 23, MUTED, True)
-    rows = [
-        (41, '지금 요청의 이해', '선택 자료와 이전 Task의 오연결', ['정보 조회와 의미 완성의', '진행 책임']),
-        (42, '작업의 지속 추적', 'Request 완료와 Task 완료의 혼동', ['Conversation과 Task 상태의', '관리 책임 및 실행 경계']),
-        (43, '정정의 정확한 반영', '관련 참조 오류와 기존 조건 누락', ['연관된 의미 판단의', '생산 책임과 조정 방식']),
-        (44, '끊김 없는 대화', '새 발화 누락과 부적절한 Response 전달', ['겹친 사건의 후속 실행과', '전달을 이어가는 실행 구조']),
-        (45, '과거 정보의 활용', '직접 설명과 여러 업무 결과의 과거 참조 누락', ['교차 기록 Context의', '생산, 조회와 갱신 책임']),
-    ]
-    for i,(n,experience,risk,decision) in enumerate(rows):
-        y=375+i*98
-        s.text(84,y+14,115,[f'04-{n}'],27,TEAL,True)
-        s.text(224,y+15,285,[experience],26,INK,True)
-        s.text(554,y+18,566,[risk],24,INK)
-        s.text(1164,y+9,665,decision,24,MUTED,leading=32)
-        s.line([(64,y+86),(1856,y+86)],color=LINE,arrow=False,width=1)
+    # User experience scene, deliberately independent of Architecture symbols.
+    s = Slide.__new__(Slide)
+    s.number, s.slug, s.items = 'overview', 'dp-background-overview', []
+    s.title = s.caption = '사용자가 계속 말하는 동안에도, VIA는 대화와 업무를 이어가야 합니다'
+    s.notes = OVERVIEW_SCRIPT
+    s.rect(0, 0, W, H, 'white', 'none')
+    s.text(64, 28, 1792, ['VIA 사용자 경험'], 20, MUTED, True)
+    s.text(64, 68, 1792, [s.title], 40, INK, True)
+    s.text(64, 126, 1792, ['한 번의 이해로 끝나지 않습니다. 새 입력, 업무 알림, 과거 정보와 서로 다른 종료 시점이 겹칩니다.'], 26, MUTED)
+    s.line([(64, 169), (1856, 169)], color=LINE, arrow=False)
+
+    s.text(64, 190, 160, ['이전에'], 24, MUTED, True)
+    for x, title, detail in [
+        (232, 'VIA의 직접 설명', '평가 기준 · 사용자에게 실제 전달'),
+        (770, '제품 조사 Agent의 확인된 결과', '제품 비교 · 결과 참조 / 필요한 발췌'),
+        (1340, '견적 Agent의 확인된 결과', '견적 · 결과 참조 / 필요한 발췌'),
+    ]:
+        s.text(x, 188, 500, [title], 24, INK, True)
+        s.text(x, 224, 500, [detail], 22, MUTED)
+    # References join the later context, not a fabricated single time sequence.
+    for x in (435, 985, 1540):
+        s.line([(x, 257), (x, 275), (1355, 275)], color=MUTED, arrow=False, dashed=True, width=1.7)
+    s.line([(1355, 275), (1490, 275), (1490, 672), (1320, 672)], color=MUTED, dashed=True, width=1.7)
+
+    s.text(64, 295, 130, ['시간 →'], 22, MUTED, True)
+    for x,w,t in [(225,390,'현재 요청'),(670,355,'처리 중 겹치는 사건'),(1080,410,'이후 과거 정보 재사용'),(1540,160,'음성 종료'),(1730,120,'돌아옴')]:
+        s.text(x, 295, w, [t], 22, MUTED, True)
+    s.line([(220, 330), (1850, 330)], color=LINE, width=1.7)
+    s.text(64, 359, 140, ['사용자', '입력·대화'], 25, INK, True)
+    s.text(225, 358, 400, ['“이 표를 제안서에 넣고,', '공유 메일은 초안만', '만들어줘.”'], 27, INK, True, leading=35)
+    s.text(225, 470, 400, ['화면의 표를 가리킴'], 22, MUTED)
+    s.text(670, 358, 390, ['“잠깐, 가격은', '비교에서 빼줘.”'], 27, INK, True, leading=35)
+    s.text(735, 468, 330, ['메일 업무의 질문', '“수신자는 누구인가요?”'], 24, INK, leading=31)
+    s.text(1080, 358, 410, ['“지난번 네가 설명한 기준으로,', '제품 비교 결과와 견적도', '반영해줘.”'], 25, INK, True, leading=34)
+    s.text(1530, 362, 150, ['대화는', '끝나도…'], 24, MUTED, leading=32)
+    s.text(1710, 390, 170, ['같은 업무의', '진행·결과'], 24, INK, leading=32)
+    s.line([(1540, 456), (1540, 890)], color=LINE, arrow=False, dashed=True, width=1.7)
+
+    s.text(64, 590, 140, ['VIA', '처리·연결'], 25, INK, True)
+    s.line([(225, 580), (1850, 580)], color=LINE, arrow=False, width=7)
+    s.text(225, 612, 395, ['표의 대상 확인 · 업무 구분', '메일은 초안만 조건 유지'], 25, INK, leading=34)
+    s.text(670, 612, 385, ['정정의 적용 업무 확인', '질문을 메일 업무에 연결'], 24, INK, leading=33)
+    s.text(1080, 612, 405, ['과거 설명·결과 참조 연결', '현재 제안서 업무에 제공'], 24, INK, leading=33)
+    s.text(1640, 612, 230, ['업무의 진행·결과를', '사용자에게 전달'], 23, INK, leading=32)
+    s.line([(280, 504), (280, 570)], width=1.7)
+    s.line([(695, 438), (695, 570)], width=1.7)
+    s.line([(855, 570), (855, 536)], width=1.7)
+    s.line([(1110, 471), (1110, 570)], width=1.7)
+    s.line([(1760, 570), (1760, 476)], width=1.7)
+    s.text(900, 693, 440, ['늦게 끝난 이전 조건의 후보 → 현재 유효성 확인'], 22, MUTED)
+
+    s.text(64, 785, 140, ['외부 Agent', '업무 수행'], 25, INK, True)
+    s.text(225, 756, 325, ['제안서 업무'], 23, INK, True)
+    s.line([(555, 790), (1850, 790)], color=LINE, arrow=False, width=7)
+    s.text(1110, 752, 410, ['기준 적용·분석·제안서 작성'], 23, MUTED)
+    s.line([(575, 680), (575, 780)], label='위임', at=(510, 717, 55), size=22, width=1.7)
+    s.line([(650, 780), (650, 682)], label='접수 확인', at=(604, 717, 102), size=20, width=1.7)
+    s.text(225, 698, 300, ['위임 요청의 처리 완료', '(외부 접수 확인 후)'], 21, MUTED, leading=28)
+    s.line([(1320, 688), (1320, 740)], width=1.7)
+    s.line([(1760, 780), (1760, 690)], width=1.7)
+    s.text(1550, 820, 325, ['대화가 끝나도 업무는 지속'], 22, MUTED)
+    s.text(225, 859, 320, ['공유 메일 초안 업무'], 23, INK, True)
+    s.line([(555, 900), (1450, 900)], color=LINE, arrow=False, width=7)
+    s.line([(555, 684), (555, 890)], width=1.7)
+    s.line([(725, 890), (725, 682)], width=1.7)
+    s.text(610, 813, 120, ['메일 질문'], 21, MUTED)
+    s.text(755, 850, 690, ['수신자 질문은 VIA로 → 답변 연결 후 초안 준비 (발송 없음)'], 22, MUTED)
+    s.line([(985, 780), (985, 725)], width=1.7)
+
+    s.line([(64, 930), (1856, 930)], color=LINE, arrow=False)
+    s.line([(64, 951), (117, 951)], width=1.7)
+    s.text(133, 936, 330, ['입력·위임·알림·전달'], 20, MUTED)
+    s.line([(485, 951), (538, 951)], color=MUTED, dashed=True, width=1.7)
+    s.text(554, 936, 200, ['과거 정보 참조'], 20, MUTED)
+    s.line([(780, 951), (833, 951)], color=LINE, arrow=False, width=7)
+    s.text(849, 936, 960, ['계속되는 처리·업무   /   위치·길이는 설명용이며 측정 시간이 아님'], 20, MUTED)
+    for x, lines in [(64,['① 지금 요청의 대상과', '조건 이해']), (516,['② 새 입력·업무 알림이', '겹쳐도 처리 이어가기']), (968,['③ 과거 설명과 여러', '업무 결과 연결']), (1420,['④ 대화와 업무의', '서로 다른 수명 관리'])]:
+        s.text(x, 972, 425, lines, 23, INK, True, leading=30)
+    s.text(64, 1041, 1792, ['VIA: 사용자 상호작용·요청 이해·업무 연결과 위임·결과 전달   /   업무 수행 Agent: 도메인 분석·계획·도구 선택·업무 실행'], 20, MUTED)
     return s
 
 
@@ -380,13 +450,18 @@ def build():
     for slide in slides:
         outputs[DIAGRAMS / f'{slide.slug}.svg'] = slide.svg()
         outputs[DIAGRAMS / f'{slide.slug}.drawio'] = slide.drawio()
-        full_deck.append(copy.deepcopy(slide.diagram()))
         if slide.number != 'overview':
             deck.append(copy.deepcopy(slide.diagram()))
+    presentation_slides = [slides[0]] + [next(s for s in slides if s.number == n) for n in (*PRESENTATION_ORDER, 43)]
+    for slide in presentation_slides:
+        page = copy.deepcopy(slide.diagram())
+        if slide.number == 43:
+            page.set('name', '보충 자료 — '+slide.caption)
+        full_deck.append(page)
     outputs[DECK / 'VIA-DP-background-41-45.drawio'] = ET.tostring(deck, encoding='unicode')+'\n'
     outputs[DECK / 'VIA-DP-background-overview-41-45.drawio'] = ET.tostring(full_deck, encoding='unicode')+'\n'
-    sections = ''.join(f'<section id="{s.slug}"><h2>{html.escape(s.caption)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.svg" alt="{html.escape(s.caption)}"><p>{'45: VIA 직접 설명의 실제 전달 범위와 제품 비교/견적 결과 참조를 새 제안서 Context에 연결. 업무 판단과 작성은 Agent 책임. ' if s.number==45 else ''}<a href="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.drawio">draw.io 원본</a> / <a href="{s.slug}.png">PNG</a></p></section>' for s in slides)
-    outputs[DECK / 'index.html'] = '<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 문제 지도와 배경 41–45</title><style>body{margin:0;background:#ecf0f3;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:#18232e}header{padding:22px 4vw;background:white}h1{font-size:26px;margin:0 0 12px}nav{display:flex;gap:22px;flex-wrap:wrap}a{color:#2858a5}main{max-width:1920px;margin:auto}section{padding:22px 2vw;scroll-margin-top:20px}h2{font-size:20px}img{display:block;width:100%;height:auto;background:white}p{font-size:16px}@media print{header,h2,p{display:none}section{padding:0;break-after:page}body{background:white}@page{size:16in 9in;margin:0}}</style><header><h1>VIA DP 설계 문제 지도와 배경 41–45</h1><nav><a href="VIA-DP-background-overview-41-45.drawio">전체 6페이지 draw.io</a><a href="VIA-DP-background-41-45.drawio">배경 5페이지 draw.io</a>'+''.join(f'<a href="#{s.slug}">'+('전체 지도' if s.number=='overview' else f'04-{s.number}')+'</a>' for s in slides)+'</nav></header><main>'+sections+'</main></html>\n'
+    sections = ''.join(f'<section id="{s.slug}"><h2>{html.escape(('보충 자료 — ' if s.number == 43 else '')+s.caption)}</h2><img src="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.svg" alt="{html.escape(s.caption)}"><p>{'45: VIA 직접 설명의 실제 전달 범위와 제품 비교/견적 결과 참조를 새 제안서 Context에 연결. 업무 판단과 작성은 Agent 책임. ' if s.number==45 else ''}<a href="../../architecture/12-decisions/decision-packages/diagrams/{s.slug}.drawio">draw.io 원본</a> / <a href="{s.slug}.png">PNG</a></p></section>' for s in presentation_slides)
+    outputs[DECK / 'index.html'] = '<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA 사용자 경험 도입과 발표 배경</title><style>body{margin:0;background:#ecf0f3;font-family:Arial,"Apple SD Gothic Neo",sans-serif;color:#18232e}header{padding:22px 4vw;background:white}h1{font-size:26px;margin:0 0 12px}nav{display:flex;gap:22px;flex-wrap:wrap}a{color:#2858a5}main{max-width:1920px;margin:auto}section{padding:22px 2vw;scroll-margin-top:20px}h2{font-size:20px}img{display:block;width:100%;height:auto;background:white}p{font-size:16px}@media print{header,h2,p{display:none}section{padding:0;break-after:page}body{background:white}@page{size:16in 9in;margin:0}}</style><header><h1>VIA 사용자 경험 도입과 발표 배경</h1><nav><a href="../VIA-DP-background-and-comparison-41-45.pptx">본 발표 9장 + 부록 2장 PPTX</a><a href="VIA-DP-background-overview-41-45.drawio">발표 흐름 6페이지 draw.io</a><a href="VIA-DP-background-41-45.drawio">번호순 배경 참조 5페이지 draw.io</a>'+''.join(f'<a href="#{s.slug}">'+('사용자 경험 도입' if s.number=='overview' else ('보충: 43' if s.number==43 else f'04-{s.number}'))+'</a>' for s in presentation_slides)+'</nav></header><p>본 발표: 도입 → 41 → 44 → 45 → 42. 43은 보충 자료이며 후보 자격이나 설계 선택의 변경이 아닙니다.</p><main>'+sections+'</main></html>\n'
     return outputs
 
 
