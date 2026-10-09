@@ -308,6 +308,14 @@ MAIN은 16:9에서 A/B 각 칸의 경로를 독립적으로 표시하되, **A의
 
 큰 Component는 흰 바탕, 차이 Module만 살구색이며 박스에는 이름, 화살표와 데이터 주석에는 동작·자료·조건을 넣는다. 원통은 owner의 상태이고 State Store Component와 다르다. 입력·근거 공급·최종 검사/저장·실제 전달·위임의 공통 경로는 주변에 작게 배치한다. 클라우드 의미/음성 모델과 외부 Agent는 VIA Component가 아니다. 이 배치와 overlay는 실제 동작·판단 책임·저장 계약을 바꾸거나 새로운 API schema·44 실행 방식·42 저장소 경계를 선정하지 않는다.
 
+### 3.8 추가 비교 그림 — Module 반복과 실제 출력 형식
+
+아래 그림은 기존 전체 구조 비교를 보완한다. Request Interpreter 내부의 반복 경로, A의 도구 호출 출력과 B의 고정 요청 표현, 별도 실행 순서도를 함께 보여준다. 위의 전체 구조 비교와 아래의 A/B 사건 흐름 그림은 그대로 유지한다.
+
+![04-41 추가 비교 — Module 반복과 실제 출력 형식](../../../presentations_files/dp-comparison/dp41-comparison.svg)
+
+[편집용 draw.io](../../../presentations_files/dp-comparison/dp41-comparison.drawio) · [확대 보기 PNG](../../../presentations_files/dp-comparison/dp41-comparison.png)
+
 **발표용 그림은 Module 협력 구조와 실행 순서도를 분리한다.** [발표 비교](../../../presentations_files/dp-comparison/dp41-comparison.svg)는 상단에 사용자 발화 → Interaction Manager → Request Controller → Request Interpreter 시작 경로를 간략히 표시한다. Request Interpreter 경계 안에는 기존 Module 간 호출·결과 반환과 교환 자료를 표시하고, 분기 도형을 넣지 않는다. Context Manager/Task Manager 직접 조회와 클라우드 LLM 연결도 이 구조도에 유지한다. 그 아래의 **별도 실행 순서도**에서 A의 모델 판단 → 조회 → 근거를 받은 모델 재판단 반복, B의 코드 항목 검사 → 조회 결과 반영 → 재검사와 조건부 부분 모델 호출을 설명한다. 순서도의 사각형은 동작, 마름모는 흐름 분기이며 Component/Module이 아니다. 두 그림 영역 사이에 실행 연결선을 추가하지 않는다. 반복은 완성 의미 제안, 확인 질문 대기, 실패, 취소 또는 한도 도달에서 종료한다. 공통 음성 처리 내부·권한·저장/채택·출력·Agent 위임은 아래 문장으로 요약한다. 이 문서의 MAIN과 사건도는 전체 경로를 유지하며 발표의 생략은 실제 Component 삭제가 아니다.
 
 Task1은 예산 보고서 업무, Task2는 실적 보고서 업무다. 자료는 ‘선택한 표’처럼 내용으로 표시한다. 상세 계약에서 쓰는 `revision`/`version`은 **자료나 상태가 바뀐 차수를 나타내는 변경 번호**다. 예를 들어 `v2`는 두 번째 버전이며 최신임을 자동 보증하지 않는다. 해석 중 자료가 변경되면 옛 자료로 만든 제안을 그대로 채택하지 않기 위해 변경 번호를 검사한다. 그림에는 이 목적을 ‘조회 시점’, ‘자료가 바뀌었는지 확인’으로 풀어 쓰고, 기술 계약의 변경 번호 검사는 유지한다.
