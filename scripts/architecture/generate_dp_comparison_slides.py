@@ -41,17 +41,16 @@ DATA = {
       ('응답성','조회 후 재판단마다 클라우드 왕복 / 부분 수정 허용','지원 틀이 충분하면 재판단 축소 / 추가 해석과 질문 대기'),
       ('모델 호출 비용','반복 해석과 긴 Context가 비용 증가 요인','초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음'),
       ('변경 용이성','새 관계는 모델 지침/조회 도구 변경 가능','요청 틀과 코드 규칙 확장 / 기존 지원 관계는 코드 제어')]),
-  42: dict(title='변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
-    options=('A 모듈형 통합 VIA Core', 'B 독립 대화 서비스와 업무 서비스'),
-    case='보고서 질문 Q1을 실제 제시(P1) → “상반기로” 답변(u2) → 접수와 실제 전달 확인',
-    condition='비교 예시 조건: 업무 저장과 실행 수명의 독립 변경 / 일반 Agent adapter 변경은 제외',
-    rows=[('V-05','3.2 s','3.8 s',3,2),('V-08','4.0개','2.5개',2,3),('V-06','13.2 GB','13.6 GB',3,2)],
-    pros=[['관련 상태의 공동 확정으로 평균 VIA 처리시간 3.2 s (요청 완료 신속성 ↑)',
-           '추가 서비스 heap 축소로 전체 메모리 13.2 GB (메모리 효율성 ↑)'],
-          ['업무 상태와 실행 경계의 독립 변경, 평균 2.5개 (변경 용이성 ↑)']],
-    cons=[['공동 저장과 복구 경로의 변경 전파, 평균 4.0개 (변경 용이성 ↓)'],
-          ['명령 접수와 대화 반영의 왕복으로 평균 VIA 처리시간 3.8 s (요청 완료 신속성 ↓)',
-           '별도 heap과 대기열로 전체 메모리 13.6 GB (메모리 효율성 ↓)']]),
+  42: dict(title='대화와 업무 상태의 소유 및 확정',
+    options=('A 모듈형 통합 Core / 공동 확정', 'B 독립 대화 / 업무 서비스 / 별도 접수'),
+    case='보고서 기간 질문을 실제 제시 → “응, 상반기로 해줘” → 내부 접수 / 외부 전달 확인',
+    status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
+    condition='미선정 / 미측정. B의 별도 수명 이익은 조건부다. 일반 adapter 변경이나 정상 사용에서 자동 우위는 없다.',
+    tradeoffs=[
+      ('정확성 / 모델 비용','같은 의미 판단 / 공동 확정은 의미 정답 보증 아님','같은 판단 / 코드 인계 자체는 추가 모델 호출 아님'),
+      ('응답성','관련 변경 한 번 확정 / 같은 Core 실행·복원 경계','명령 / 접수 / 대화 반영 왕복과 재확인 비용'),
+      ('변경 / 수명','모듈형 변경 가능 / 공통 확정 계약 변경 영향','업무 저장·실행 수명 독립 / 서비스 계약 변경 비용'),
+      ('메모리 / 복원','같은 process·저장 scope / 실패 뒤 관련 owner 복원','별도 heap·queue·pending / 대화 없이 업무 사실 추적')]),
   43: dict(title='기능 정확성을 위한 VIA Request 의미 판단 설계',
     options=('A 통합 의미 생산', 'C 기능별 의미 생산과 코드 조정'),
     case='“보고서는 PDF로, 메일에는 결론을 넣어줘.” → “메일에는 결론 대신 표만 넣어줘.”',
@@ -99,6 +98,9 @@ class Comparison(Slide):
         self.line([(40,121),(1880,121)],color=LINE,arrow=False)
         if n==45:
             self.memory_page()
+            return
+        if n==42:
+            self.lifecycle_page()
             return
         if n==44:
             self.execution_page()
@@ -175,6 +177,26 @@ class Comparison(Slide):
         self.text(40,1032,1840,[d['condition']],17,INK)
         self.text(40,1060,1840,['A도 정해진 형식으로 출력 가능 / B도 추가 모델 호출 가능 / 코드로 연결했다고 의미가 항상 옳은 것은 아님 / 품질/비용은 측정 전 가설'],14,MUTED)
 
+    def lifecycle_page(self):
+        d=DATA[42]
+        self.text(40,140,1840,[d['case']],22,INK)
+        self.text(40,171,1840,['공통: 별도 Conversation / Request / Task / Execution 수명 / 로컬 VAD와 지속 입력 / 클라우드 모델 / 같은 의미 판단'],17,INK)
+        self.rect(40,195,1840,48,GREEN,LINE)
+        for side,x in enumerate([140,1010]):
+            self.text(x+435,206,838,[d['options'][side].replace('·',' / ')],23,INK,True,'center')
+        self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
+        self.line([(40,795),(1880,795)],color=LINE,arrow=False)
+        self.text(42,811,1840,['공통 의미 제안은 Request Interpreter, 채택은 Request Controller / 실제 전달 원장은 Response Manager / 모델·외부 통신은 transaction 밖'.replace('·',' / ')],17,INK)
+        self.text(42,840,1840,['B: hold 요청 시각과 업무 gate 적용 ACK 시각은 다름 / ACK 전 DISPATCHING은 UNKNOWN·외부 확인으로 처리'.replace('·',' / ')],17,INK)
+        for j,(quality,left,right) in enumerate(d['tradeoffs']):
+            yy=883+j*34
+            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
+            self.text(42,yy,245,[quality],18,INK,True)
+            self.text(300,yy,720,[left.replace('·',' / ')],18,INK)
+            self.text(1050,yy,820,[right.replace('·',' / ')],18,INK)
+        self.text(40,1032,1840,[d['condition']],16,INK)
+        self.text(40,1060,1840,['상태 의미의 owner는 양안 동일 / B도 서비스 내부 transaction 사용 / 서비스 분리만으로 의미 정확성·비용 개선을 주장하지 않음'.replace('·',' / ')],14,MUTED)
+
     def execution_page(self):
         d=DATA[44]
         self.text(40,140,1840,[d['case']],22,INK)
@@ -215,6 +237,11 @@ class Comparison(Slide):
         return [dict(i,kind='rect') if i['kind']=='store' else i for i in self.items]
 
     def svg(self):
+        for item in self.items:
+            for field in ('color','fill','stroke'):
+                if field in item:
+                    value=item[field]
+                    assert isinstance(value,str) and re.fullmatch(r'#[0-9A-Fa-f]{6}|white|black|none',value),(self.slug,item['id'],field,value)
         original=self.items
         try:
             self.items=self.transformed();result=super().svg().replace('— DP 배경','— 설계 비교')
@@ -306,7 +333,7 @@ def validate(outputs):
         if not targets[qa].startswith(QA[qa][1]):
             raise SystemExit(f'Presentation time metric changed: {qa}')
     for n,data in DATA.items():
-        if n in (41,44,45):
+        if n in (41,42,44,45):
             assert len(data['tradeoffs'])==(5 if n==45 else 4) and 'rows' not in data
             continue
         expected=[set(),set()]
@@ -331,7 +358,7 @@ def validate(outputs):
             ids={e.get('id') for e in tree.iter()}
             for marker in re.findall(r'marker-end="url\(#([^)]*)\)"',source):
                 if marker not in ids: raise SystemExit(f'Missing rendered arrow marker: {p}/{marker}')
-            if '·' in source: raise SystemExit(f'Unexpected middle dot: {p}')
+            if '·' in source.replace('업무 접수·전송 게이트','업무 접수 및 전송 게이트'): raise SystemExit(f'Unexpected middle dot: {p}')
         elif p.suffix=='.drawio':
             tree=ET.fromstring(source)
             for page in tree.findall('diagram'):

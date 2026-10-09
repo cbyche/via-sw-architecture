@@ -1,5 +1,19 @@
 # 04-42 작성자 설계·발표 검수 기록
 
+## 재구체화 — cloud 모델 조건과 독립 인계 프로토콜 (2026-10-10)
+
+사용자가 44→45→42→46의 재구체화와 작업 단위별 게시를 승인했다. 이 항목은 42 본문과 고정 사례 JSON의 작성 범위다. 기존 작성/렌더 완료 기록은 당시 세대의 범위이며 아래 새 프로토콜의 구현 검증이 아니다.
+
+- 공통 조건을 로컬 VIA·Interaction Manager의 로컬 VAD·클라우드 음성/의미 모델·Model Access의 로컬 adapter로 맞췄다. 이전 참조 Architecture의 on-device Omni/로컬 ASR는 필수 조건으로 가져오지 않는다. Voice Runtime은 Component가 아닌 실행 주석이며 원본 상태 owner가 아니다.
+- 트랜잭션 관리자를 State Store 내부 Unit-of-Work Module로 명시했다. Task Manager의 업무 접수·전송 게이트, Agent Gateway의 명령 전송·확인과 확정 원본 소유를 구별한다. 서비스는 배치/실행/독립 transaction 경계이고 새 의미 판단 Component가 아니다.
+- 42A는 관련 RC/TM/AG 변경의 공동 로컬 확정, 42B는 대화의 의도 저장→업무 접수→대화 반영과 업무 저장소의 transmission CAS를 구분했다. 모델/네트워크 호출은 transaction 밖이다. A의 내부 API·비동기·worker·cache와 B의 조건부 독립 운영 이익/비용을 보존했다.
+- B의 Hold/HoldAck/CommandIntent/ReleaseAndReconcile/AcceptanceReceipt와 control session·단조 sequence·gate revision·명령 payload 중복 검사를 기록했다. 물리 발화 시작/RC hold 의도/업무 gate 적용은 다른 사건이며 전역 무지연 차단을 주장하지 않는다.
+- hold 먼저/K1 DISPATCHING 먼저의 두 정정 경합, RPC timeout·UNKNOWN·늦은 외부 접수·새 control 세대·snapshot/event 재연결을 고정 사례와 대조했다. control ID의 내부 중복 제거가 외부 idempotency를 대신하지 않으며, 외부 조회/동일 ID 접수 capability가 없으면 자동 재위임하지 않는다.
+- 44 중앙 continuation/단계별 window·join 어느 쪽에도 같은 owner handoff 완료 사건을 연결할 수 있음을 설명했다. 41 임시 해석/RC 채택 원본과 45 근거 읽기/업무 접수 권한도 유지한다. 다섯 QA 묶음과 V-01~13의 조건부 영향/반증을 기록하며 모델 호출 수를 금액 비용으로 대체하지 않는다.
+
+[고정 사례 JSON](./contracts/dp42-handoff-examples.json)은 설명용 데이터와 상태 순서를 기록한 파일이다. JSON parse·예시 ID/분기·재연결 세대·network/model transaction 제외·본문 주요 계약 대응의 정적 확인, 수정한 두 Markdown의 로컬 링크 검사와 scoped diff 공백 검사를 통과했다. 실행 엔진/의미 정확성/protocol race 테스트가 아니다. 새 Module/프로토콜에 대한 전체 MAIN·A/B 사건도와 별도 집중 비교를 동기화했다. 기존 전체 그림을 유지하고 원본 문서 §3.6에 집중 그림을 추가했다. 실제 Chrome 렌더에서 text bounding box 겹침/canvas 이탈 0건을 확인하고 PNG를 갱신했다. 두 통합 native PPTX는 42 slide/notes만 교체하여 비선택 ZIP parts를 보존했고, 재import 렌더 및 editable text/shape·no slide images 검사를 통과했다. 최종 v2 렌더의 정식 Module 이름도 직접 확인했다. 42/발표 생성기와 고정 사례 검사 PASS, 독립 검토 범위에서 미해결 P1/P2 없음. 독립 검토는 본문/JSON/MAIN/발표/첫 native 렌더, 최종 v2는 통합 writer의 시각 확인 범위다. 구현·모델 실행·측정·A/B 선정·기존 Architecture 전체 변경은 없다. 게시 여부와 CI는 최종 작업 단위의 Git 이력에서 확인한다.
+
+
 ## CI 호환성 보완 (2026-10-08)
 
 최초 게시 CI에서 Python 3.12와 로컬 Python 3.14의 부동소수점 합산 차이로 MAIN SVG/draw.io의 좌표 문자열이 달라졌다. MAIN의 긴 소수 좌표를 소수점 여섯 자리로 직렬화하여 두 버전의 생성물이 같음을 확인했다. 내용·스타일·배치는 유지하며 PNG를 다시 렌더했다. 글자 겹침·canvas 이탈 검사와 시각 검사를 통과했다. 발표 비교와 PPTX의 scene은 바뀌지 않았다.

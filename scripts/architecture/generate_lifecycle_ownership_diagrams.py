@@ -114,7 +114,7 @@ def sequence(option):
     p=Slide('choice42-event-'+option.lower(),option+' 같은 답변의 확정과 실제 전달',
             'E4: u2 “상반기로” → R2/Q1/T1 연결 → K1 접수 → P2 실제 제시 / P1은 이미 제시된 질문 기록')
     xs=[170,530,900,1260,1620,1980,2370]
-    names=['Interaction Manager','Request Controller','Response Manager','트랜잭션 관리자','Task Manager','Agent Gateway','Downstream Agent']
+    names=['Interaction Manager','Request Controller','Response Manager','State Store','Task Manager','Agent Gateway','Downstream Agent']
     if b:
         p.box(354,249,734,1025,'white',DIFFERENCE_STROKE,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
         p.box(1444,249,720,1025,'white',DIFFERENCE_STROKE,0,dashed=True,thick=BOUNDARY_WIDTH*4/3)
@@ -125,21 +125,29 @@ def sequence(option):
         p.text(374,264,'VIA Core',24,DIFFERENCE_STROKE,bold=True)
     for j,(x,name) in enumerate(zip(xs,names)):
         if b and j==3:continue
-        p.box(x-150,313,300,62,APRICOT if j==3 else 'white',DIFFERENCE_STROKE if j==3 else COMMON,7 if j==3 else 0,thick=DIFFERENCE_WIDTH*4/3 if j==3 else 1.3)
+        p.box(x-150,313,300,101 if j==3 else 62,'white',COMMON,0,thick=1.3)
         p.text(x,331,name,21,INK,'center',True)
-        p.line([(x,379),(x,1260)],'#A5B3C3',dashed=True,arrow=False,width=1)
+        if j==3:
+            p.box(x-132,377,264,29,APRICOT,DIFFERENCE_STROKE,7,thick=DIFFERENCE_WIDTH*4/3)
+            p.text(x,381,'트랜잭션 관리자',18,INK,'center',True)
+        p.line([(x,418 if j==3 else 379),(x,1260)],'#A5B3C3',dashed=True,arrow=False,width=1)
     def msg(a,z,y,text,ret=False,color=INK):
         points=[(xs[a],y),(xs[z],y)] if a!=z else [(xs[a],y),(xs[a]+42,y),(xs[a]+42,y+13),(xs[a],y+13)]
         p.line(points,COMMON,width=1.3,dashed=ret)
         p.label(min(xs[a],xs[z])+14,y-28,text,color,size=21)
-    steps=[(0,1,'u2 원문 입력 / Conversation C1',False),
+    steps=([(0,1,'u2 발화 시작 / 로컬 VAD·즉시 stop',False),
+            (1,4,'Hold(session, sequence, input epoch) / 업무 gate 적용 요청',False),
+            (4,1,'HoldAck: gate revision / HELD·DISPATCHING·UNKNOWN 명령',True)] if b else
+           [(0,1,'u2 발화 시작 / 로컬 VAD·즉시 stop',False),
+            (1,3,'보호 hold·input epoch 관련 변경 공동 확정',False)])
+    steps += [(0,1,'u2 final 전사·원문 입력 / Conversation C1',False),
            (1,4,'Q1/T1/X1 현재 상태 조회 / P1은 이미 제시된 기록',False),
            (4,1,'Q1=OPEN / expected revision v7',True),
            (1,1,'Request Interpreter의 의미 제안 채택 / u2는 Q1 답변',False)]
     if b:
         steps += [(1,1,'대화 저장: R2=접수 대기 / K1 / u2→Q1→T1',False),
-                  (1,4,'K1: Q1 답변=상반기 / v7 / 권한·입력 조건',False),
-                  (4,4,'업무 로컬 저장: Q1=ANSWERED,v8 / K1 / 내부 접수 결과',False),
+                  (1,4,'ReleaseAndReconcile: K1 답변=상반기 / v7 / gate·현재 의미',False),
+                  (4,4,'업무 local tx: Q1=ANSWERED,v8 / K1 / 접수·gate 해제',False),
                   (4,1,'K1 내부 접수 확인 / 외부 접수는 아직 별개',True),
                   (1,1,'대화 저장: R2에 K1 내부 접수 결과 반영',False)]
     else:
@@ -149,7 +157,7 @@ def sequence(option):
                   (3,3,'State Store: 관련 연결·Q1 변경·K1을 하나의 transaction으로 저장',False),
                   (3,1,'로컬 저장 결과 / 성공이면 관련 변경 함께 반영',True),
                   (3,4,'같은 로컬 저장 결과 / 실패하면 모두 미반영',True)]
-    steps += [(4,5,'저장된 명령 K1 / 현재 전송 조건',False),
+    steps += [(4,5,'K1 PENDING → DISPATCHING CAS / 현재 gate·권한·명령 조건',False),
               (5,6,'K1 외부 답변 전달',False),
               (6,5,'K1 외부 접수 확인',True),
               (5,4,'source-confirmed K1 접수 사실',True),
@@ -161,7 +169,7 @@ def sequence(option):
               (2,1,'P2 실제 제시 사실 / Conversation 참조 갱신',True)]
     for j,(a,z,text,ret) in enumerate(steps):
         msg(a,z,425+j*820/(len(steps)-1),text,ret,c if 4<=j<(9 if b else 10) else INK)
-    p.text(64,1290,'실제 제시 기록 원본: Response Manager / 답변·질문 연결: Request Controller / 모델·정책 호출은 공통 축약',23,MUTED)
+    p.text(64,1290,'DISPATCHING ≠ 외부 접수 / hold 요청과 업무 적용은 다른 시점 / cloud 모델·네트워크는 transaction 밖',22,MUTED)
     p.footer('입력 수신/재생과 요청 의미·업무 확정 구별 / 같은 해석·모델 조건 / 선 간격은 소요시간이 아님')
     return p
 

@@ -1,0 +1,406 @@
+{
+  "format_version": 1,
+  "status": "DESIGN_REVIEW_EXAMPLES_NOT_RUNTIME_API",
+  "purpose": "42 A joint local commit versus B independent dialogue/work authority. Same user-visible truth; different local atomicity and handoff costs.",
+  "labels": {
+    "C1": "대화",
+    "R2": "상반기 답변 요청",
+    "R3": "하반기 정정 요청",
+    "T1": "보고서 업무",
+    "Q1": "보고서 기간 질문",
+    "K1": "상반기 답변 전달 명령",
+    "K2": "하반기 답변 정정 명령",
+    "P1": "실제로 제시된 기간 질문",
+    "Input1": "응, 상반기로 해줘",
+    "Input2": "아니, 하반기로 해줘"
+  },
+  "owners": {
+    "dialogue_intent": "Request Controller",
+    "current_question_and_task": "Task Manager",
+    "work_gate": "Task Manager",
+    "transmission_state": "Agent Gateway",
+    "actual_publication": "Response Manager",
+    "input_and_local_stop": "Interaction Manager",
+    "unit_of_work_module": "State Store"
+  },
+  "common_assumptions": {
+    "via_location": "LOCAL_PC",
+    "vad_location": "Interaction Manager / Turn-Taking Control",
+    "voice_and_semantic_models": "CLOUD_DEPENDENCIES_VIA_MODEL_ACCESS",
+    "network_calls_inside_transaction": false,
+    "model_calls_inside_transaction": false,
+    "external_agent_idempotency": "CAPABILITY_DEPENDENT_NOT_ASSUMED",
+    "control_session": "WORK_AUTHORITY_ISSUED_FENCING_GENERATION",
+    "control_sequence": "MONOTONIC_WITHIN_SESSION",
+    "limits": "EXAMPLE_REVISIONS_NOT_FROZEN_QA_LIMITS"
+  },
+  "command_intent_example": {
+    "command_id": "K1",
+    "request_id": "R2",
+    "conversation_id": "C1",
+    "control_session": 1,
+    "expected_gate_revision": 7,
+    "input_epoch": 1,
+    "meaning_revision": 1,
+    "task_id": "T1",
+    "expected_task_revision": 4,
+    "question_id": "Q1",
+    "expected_question_revision": 7,
+    "permission_revision": 3,
+    "kind": "ANSWER_QUESTION",
+    "payload": {
+      "answer": "상반기"
+    },
+    "evidence_refs": [
+      "Input1",
+      "P1"
+    ]
+  },
+  "a_normal": [
+    {
+      "producer": "Request Controller",
+      "consumer": "State Store / 트랜잭션 관리자",
+      "data": {
+        "request_id": "R2",
+        "input_ref": "Input1",
+        "answer_to": "Q1",
+        "task_id": "T1",
+        "publication_ref": "P1",
+        "meaning_revision": 1
+      }
+    },
+    {
+      "producer": "Task Manager",
+      "consumer": "State Store / 트랜잭션 관리자",
+      "data": {
+        "question_id": "Q1",
+        "expected_question_revision": 7,
+        "next_question_revision": 8,
+        "next_local_answer_state": "ANSWERED",
+        "command_id": "K1",
+        "command_state": "PENDING"
+      }
+    },
+    {
+      "owner": "State Store",
+      "transaction": "A_related_owner_changes",
+      "effect": [
+        "Request Controller R2/link/admission fields",
+        "Task Manager Q1/local answer/K1 fields"
+      ],
+      "atomic_across_dialogue_and_work": true,
+      "result": "COMMITTED"
+    },
+    {
+      "owner": "Task Manager + Agent Gateway",
+      "transaction": "A_dispatch_CAS",
+      "checks": [
+        "current input hold/admission",
+        "command and question/task versions",
+        "current permission condition"
+      ],
+      "transmission_before": "PENDING",
+      "transmission_after": "DISPATCHING"
+    },
+    {
+      "producer": "Agent Gateway",
+      "consumer": "Downstream Agent",
+      "operation": "submit same external idempotency key when supported",
+      "outside_transaction": true
+    },
+    {
+      "producer": "Downstream Agent",
+      "consumer": "Agent Gateway",
+      "data": {
+        "command_id": "K1",
+        "external_status": "ACCEPTED"
+      }
+    },
+    {
+      "owner": "Agent Gateway",
+      "data": {
+        "command_id": "K1",
+        "transmission_state": "EXTERNAL_ACCEPTED"
+      }
+    }
+  ],
+  "b_normal": [
+    {
+      "owner": "Request Controller",
+      "transaction": "dialogue_local",
+      "data": {
+        "request_id": "R2",
+        "meaning_revision": 1,
+        "command_ref": "K1",
+        "handoff_state": "ACCEPTANCE_PENDING"
+      }
+    },
+    {
+      "producer": "Request Controller",
+      "consumer": "Task Manager",
+      "data": {
+        "command_id": "K1",
+        "request_id": "R2",
+        "conversation_id": "C1",
+        "control_session": 1,
+        "expected_gate_revision": 7,
+        "input_epoch": 1,
+        "meaning_revision": 1,
+        "task_id": "T1",
+        "expected_task_revision": 4,
+        "question_id": "Q1",
+        "expected_question_revision": 7,
+        "permission_revision": 3,
+        "kind": "ANSWER_QUESTION",
+        "payload": {
+          "answer": "상반기"
+        },
+        "evidence_refs": [
+          "Input1",
+          "P1"
+        ]
+      }
+    },
+    {
+      "owner": "Task Manager",
+      "transaction": "work_local_accept",
+      "data": {
+        "question_id": "Q1",
+        "local_answer_state": "ANSWERED",
+        "accepted_question_revision": 8,
+        "command_id": "K1",
+        "acceptance_status": "ACCEPTED",
+        "transmission_state": "PENDING",
+        "event_id": "WorkEvent1"
+      },
+      "atomic_with_dialogue_transaction": false
+    },
+    {
+      "producer": "Task Manager",
+      "consumer": "Request Controller",
+      "data": {
+        "kind": "AcceptanceReceipt",
+        "command_id": "K1",
+        "acceptance_status": "ACCEPTED",
+        "accepted_question_revision": 8,
+        "transmission_state": "PENDING",
+        "event_id": "WorkEvent1",
+        "conversation_id": "C1",
+        "request_id": "R2",
+        "task_id": "T1"
+      }
+    },
+    {
+      "owner": "Request Controller",
+      "transaction": "dialogue_receipt_reflection",
+      "data": {
+        "request_id": "R2",
+        "command_ref": "K1",
+        "handoff_state": "LOCALLY_ACCEPTED"
+      }
+    },
+    {
+      "owner": "Task Manager + Agent Gateway",
+      "transaction": "work_local_dispatch_CAS",
+      "checks": [
+        "gate OPEN/session 1/revision 7",
+        "command still PENDING",
+        "current accepted question/task dependency versions",
+        "current permission condition"
+      ],
+      "transmission_before": "PENDING",
+      "transmission_after": "DISPATCHING"
+    },
+    {
+      "producer": "Agent Gateway",
+      "consumer": "Downstream Agent",
+      "outside_transaction": true
+    },
+    {
+      "producer": "Downstream Agent",
+      "consumer": "Agent Gateway",
+      "data": {
+        "command_id": "K1",
+        "external_status": "ACCEPTED"
+      }
+    },
+    {
+      "owner": "Agent Gateway",
+      "transaction": "work_external_receipt",
+      "data": {
+        "command_id": "K1",
+        "transmission_state": "EXTERNAL_ACCEPTED",
+        "event_id": "WorkEvent2"
+      }
+    }
+  ],
+  "hold_request": {
+    "kind": "Hold",
+    "conversation_id": "C1",
+    "control_session": 1,
+    "control_sequence": 2,
+    "input_epoch": 2,
+    "reason": "INPUT_PENDING"
+  },
+  "hold_first": {
+    "precondition": "K1 is internally accepted but still PENDING; Q1 accepted revision is 8",
+    "work_transaction_result": {
+      "control_session": 1,
+      "applied_sequence": 2,
+      "gate_revision": 8,
+      "gate_state": "HOLD",
+      "command_states": {
+        "K1": "HELD"
+      }
+    },
+    "hold_ack": {
+      "kind": "HoldAck",
+      "control_session": 1,
+      "applied_sequence": 2,
+      "gate_revision": 8,
+      "pending_held_commands": [
+        "K1"
+      ],
+      "dispatch_started_commands": [],
+      "unknown_external_commands": [],
+      "conversation_id": "C1"
+    },
+    "reconciliation": {
+      "kind": "ReleaseAndReconcile",
+      "reconciliation_id": "Reconcile1",
+      "conversation_id": "C1",
+      "control_session": 1,
+      "control_sequence": 3,
+      "expected_gate_revision": 8,
+      "settled_input_epoch": 2,
+      "meaning_revision": 2,
+      "revoke_pending_commands": [
+        "K1"
+      ],
+      "retain_pending_commands": [],
+      "new_command_intents": [
+        {
+          "command_id": "K2",
+          "request_id": "R3",
+          "conversation_id": "C1",
+          "control_session": 1,
+          "expected_gate_revision": 8,
+          "input_epoch": 2,
+          "meaning_revision": 2,
+          "task_id": "T1",
+          "expected_task_revision": 4,
+          "question_id": "Q1",
+          "expected_question_revision": 8,
+          "permission_revision": 3,
+          "kind": "REVISE_ANSWER",
+          "payload": {
+            "answer": "하반기"
+          },
+          "evidence_refs": [
+            "Input2",
+            "P1"
+          ]
+        }
+      ]
+    },
+    "work_local_result": {
+      "gate_revision": 9,
+      "gate_state": "OPEN",
+      "command_states": {
+        "K1": "REVOKED",
+        "K2": "PENDING"
+      },
+      "accepted_question_revision": 9,
+      "atomic_with_dialogue_transaction": false
+    },
+    "transmission_rule": "K2 dispatch checks accepted dependency versions and current gate revision 9. Supplied expected revision 8 was the acceptance precondition, not a forever-valid dispatch snapshot."
+  },
+  "dispatch_first": {
+    "ordering": [
+      "K1 PENDING -> DISPATCHING CAS",
+      "Hold applied at work gate"
+    ],
+    "hold_ack": {
+      "kind": "HoldAck",
+      "control_session": 1,
+      "applied_sequence": 2,
+      "gate_revision": 8,
+      "pending_held_commands": [],
+      "dispatch_started_commands": [
+        "K1"
+      ],
+      "unknown_external_commands": [
+        "K1"
+      ],
+      "conversation_id": "C1"
+    },
+    "required_followup": [
+      "query original external command/execution when supported",
+      "attach late receipt to K1, not a new start",
+      "apply adopted correction through same execution control only if capability permits"
+    ],
+    "forbidden_claims": [
+      "K1 never sent",
+      "external cancellation completed",
+      "new task created to hide original unknown effect"
+    ]
+  },
+  "late_acceptance": {
+    "before": {
+      "command_id": "K1",
+      "attempt_id": "Attempt1",
+      "transmission_state": "UNKNOWN"
+    },
+    "late_receipt": {
+      "command_id": "K1",
+      "attempt_id": "Attempt1",
+      "external_status": "ACCEPTED"
+    },
+    "after": {
+      "command_id": "K1",
+      "transmission_state": "EXTERNAL_ACCEPTED",
+      "adopted_correction_pending": true
+    },
+    "new_task_created": false
+  },
+  "rebind": {
+    "previous_control_session": 1,
+    "new_control_session": 2,
+    "initial_gate_state": "HOLD",
+    "requires": [
+      "dialogue pending command reconciliation",
+      "work authority snapshot/event watermark",
+      "DISPATCHING/UNKNOWN external observation",
+      "actual publication references"
+    ],
+    "delayed_old_release": {
+      "control_session": 1,
+      "control_sequence": 3,
+      "result": "REJECTED_STALE_SESSION"
+    },
+    "automatic_release": false
+  },
+  "uncertainty_rules": [
+    "Capture time, RC hold-request time, work-gate application time, DISPATCHING CAS and socket send are different events.",
+    "No zero-latency global speech-onset fence.",
+    "Internal RPC timeout does not establish command rejection or external nonexecution.",
+    "Session/control deduplication does not establish external Agent idempotency.",
+    "DISPATCHING persisted before crash does not prove actual external receipt.",
+    "Permission revocation must distinguish applied gate revision/ack from already-started dispatch.",
+    "No model interpretation, workload timing or QA result has been executed by these examples."
+  ],
+  "b_initial_work_snapshot": {
+    "conversation_id": "C1",
+    "control_session": 1,
+    "applied_sequence": 1,
+    "gate_revision": 7,
+    "gate_state": "OPEN",
+    "input_epoch": 1,
+    "task_id": "T1",
+    "task_revision": 4,
+    "question_id": "Q1",
+    "question_revision": 7,
+    "question_local_state": "OPEN",
+    "permission_revision": 3
+  }
+}
