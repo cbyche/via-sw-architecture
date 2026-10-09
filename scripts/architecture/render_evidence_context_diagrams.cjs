@@ -12,7 +12,7 @@ const digest = data => crypto.createHash('sha256').update(data).digest('hex');
       (process.platform === 'darwin' ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' : undefined)});
   try {
     const page = await browser.newPage({viewport: {width:2560, height:1440}, deviceScaleFactor:1});
-    for (const stem of ['dp46-background', 'choice46-structure', 'choice46-timeline', 'choice46-lifecycle']) {
+    for (const stem of ['dp46-background', 'choice46-structure', 'choice46-timeline', 'choice46-lifecycle', 'choice46-quality']) {
       const svg = fs.readFileSync(path.join(folder, `${stem}.svg`));
       await page.setContent(`<html lang="ko"><style>body{margin:0}</style>${svg.toString()}</html>`);
       await page.evaluate(() => document.fonts.ready);
@@ -45,7 +45,7 @@ const digest = data => crypto.createHash('sha256').update(data).digest('hex');
     const remoteRequests = [];
     page.on('request', r => { if (/^https?:/.test(r.url())) remoteRequests.push(r.url()); });
     await page.goto('file://' + path.join(folder, 'choice46-review.html'));
-    for (const stem of ['dp46-background', 'choice46-structure', 'choice46-timeline', 'choice46-lifecycle']) {
+    for (const stem of ['dp46-background', 'choice46-structure', 'choice46-timeline', 'choice46-lifecycle', 'choice46-quality']) {
       await page.locator(`[data-stem="${stem}"]`).click();
       await page.waitForFunction(expected => {
         const f=document.getElementById('figure');
@@ -58,6 +58,6 @@ const digest = data => crypto.createHash('sha256').update(data).digest('hex');
     if (await page.locator('#figure').evaluate(e => e.getBoundingClientRect().width) !== 2560) throw new Error('Original-size zoom failed');
     await page.locator('#zoom').click();
     if (remoteRequests.length) throw new Error('Unexpected network request in local review');
-    process.stdout.write('PASS: local review HTML four tabs, image loading, source links and zoom; no remote requests\n');
+    process.stdout.write('PASS: local review HTML five tabs, image loading, source links and zoom; no remote requests\n');
   } finally { await browser.close(); }
 })().catch(e => { process.stderr.write(e.message+'\n'); process.exitCode=1; });

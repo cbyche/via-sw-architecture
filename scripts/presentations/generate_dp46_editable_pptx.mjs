@@ -16,7 +16,7 @@ import sys,json,hashlib
 from pathlib import Path
 r=Path(sys.argv[1]);sys.path.insert(0,str(r/'scripts/architecture'))
 import generate_evidence_context_diagrams as g
-sources=[g.background(),g.structure(),g.timeline(),g.lifecycle()]
+sources=[g.background(),g.structure(),g.quality(),g.timeline(),g.lifecycle()]
 result=[]
 for s in sources:
  p=r/'docs/architecture/12-decisions/decision-packages/diagrams'/f'{s.slug}.svg'
@@ -116,5 +116,5 @@ for(const [i,s] of imported.slides.items.entries()){
 }
 const out=path.join(repo,'docs/presentations_files/dp46-evidence');await fs.mkdir(out,{recursive:true});
 await fs.copyFile(final,path.join(out,slug+'.pptx'));
-await fs.writeFile(path.join(out,'native-source-manifest.json'),JSON.stringify({status:'DOCUMENTATION_NOT_IMPLEMENTED_NOT_MEASURED',slides:scenes.map(s=>({slug:s.slug,source:s.source,svg_sha256:s.sha256})),format:'4 editable slides: background, MAIN, timeline, lifecycle'},null,2)+'\n');
-console.log('PASS: 46 four native slides, imported renders and source manifest');
+await fs.writeFile(path.join(out,'native-source-manifest.json'),JSON.stringify({status:'DOCUMENTATION_NOT_IMPLEMENTED_NOT_MEASURED',slides:scenes.map(s=>({slug:s.slug,source:s.source,svg_sha256:s.sha256})),format:'5 editable slides: background, MAIN, qualitative QA, timeline, lifecycle'},null,2)+'\n');
+console.log('PASS: 46 five native slides, imported renders and source manifest');

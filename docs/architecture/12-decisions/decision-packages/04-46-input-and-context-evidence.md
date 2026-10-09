@@ -241,6 +241,25 @@ B는 IM temporal 게시와 CM historical 게시를 공동 transaction으로 묶�
 
 B repository의 disposable 성격은 **원본이 남아 있을 때만** 재생산 가능하다는 뜻이다. temporal RAM/원본이 사라지면 coverage/view도 불가로 만든다. 저장된 locator가 이미지를 복원하지 못한다. 원본 보존이 허용되는 경우에만 같은 조건의 durable spool을 둘 수 있으며, B의 복구 이익을 만들기 위해 보존 범위를 늘리지 않는다. restart는 새 generation을 사용하고 이전 job의 늦은 게시를 거부한다.
 
+### 8.3 같은 원본으로 확인하는 고정 시간 예시
+
+[시간 계약 JSON](./contracts/dp46-temporal-evidence-examples.json)은 문서 설명용 합성 자료다. 예시 시각/오차/샘플레이트는 실제 공급자의 지원 보장이나 측정 조건이 아니다. 발화 종료, 전사 수신, 단어 시간, 관측 시간과 사용 가능 상태를 서로 다른 필드로 보여준다.
+
+| 원본/반환 필드 | 이번 예시 값 | 읽을 때의 의미 |
+| --- | --- | --- |
+| `input.input_ref / revision / window_ref` | `u46 / 1 / W46` | 같은 입력·근거 창이며 현재 Task 연결 정답은 없음 |
+| `input.local_vad` / `transcript_received_ms` | 시작 1000ms, 종료 9000ms / final 수신 9400ms | VAD는 발화 경계. 9400ms를 단어가 말해진 시각으로 사용하지 않음 |
+| `clock_mapping` | 원음 48000Hz, provider sample 24000Hz, 같은 로컬 epoch·mapping error 4ms | provider sample을 원음·PC 시각으로 대응. epoch/오차가 다른 좌표를 무조건 합치지 않음 |
+| `acoustic_spans` | a “이 표와” `[2000,2800)`, b “저 표를” `[5000,5800)` | 설명용 acoustic timing. 전사 text offset과 원음 sample 범위를 함께 보존 |
+| `observations` | S1/P1, S2/P2의 capture 구간·document·viewport·좌표계 | 첫 화면과 이동 후 화면을 구별. 다음 capture까지 화면이 그대로였다고 추정하지 않음 |
+| `A.result` / `B.view` | 같은 r1 source vector와 시간 후보 4개 | A는 Q1 query 결과, B는 TE46 게시 view. 둘 다 지칭 대상 정답/전송 허가가 아님 |
+| `r2.corrected_span` / `source_vector` | b 시작 5280ms로 정정, 후보 3개 | text가 같아도 근거 변경. 이전 Q1/TE46을 사용 차단하고 재조회/재게시 |
+| `no_timing_variant` | acoustic span·단어 시간 `null`, `UNKNOWN_TIMING` | 전체 발화 창의 관측 후보만 반환. VAD/final 수신으로 단어 시간을 만들어내지 않음 |
+| `availability_cases` | `NOT_COVERED / UNSUPPORTED_RELATION / UNKNOWN_TIMING / SOURCE_GAP` | 미게시, 지원 밖, 시간 미지원, 원본 소실은 서로 다른 상태 |
+| `window.raw_expires_ms` / view·lease 만료 | raw 20000ms, view 24000ms | view가 남아도 raw 만료 뒤 이용 불가. lease/pin이 원본 보존을 늘리지 않음 |
+
+전사/화면 시각의 대응과 유한 overlap·순서·경로 후보는 **코드**의 책임이다. 자유문 과거 관계 추출은 필요할 때 **조건부 모델** 작업이며, 현재 지칭·Task·금지 조건 의미는 Request Interpreter가 판단한다. 정적 검사기는 동일 A/B 후보, r2 변경, 10개 사용 fence·2개 게시 사례·6개 availability 사례와 잘못된 예시 10건의 거부를 확인한다. 실제 OS/provider/실행 경합/의미 정확성을 검사한 결과는 아니다.
+
 ## 9. 실제 구현 가능한 방식과 공식 Reference의 한계
 
 | 구조 | 로컬 코드로 구현할 최소 단위 | 추가 계약과 실제 비용 |
@@ -306,6 +325,14 @@ A의 요청에서 여러 owner 결과를 모으는 부분은 [Gateway Aggregatio
 
 **현재 구조 판단:** A/B 모두 구현 가능한 구조지만 시간 범위 query가 충분히 작고 반복 사용이 적으면 B의 추가 단계는 이익 없이 비용을 만든다. B의 주요 후보 자격을 단순 구조/패턴명으로 확정하지 않는다. 같은 window의 반복 소비와 수정이 실제 정상 경로에서 중요하고 공통 relation 소비가 작업을 대체한다면 비교 가치가 커진다. 45의 과거 의미 trade-off는 별도로 유지하며 시간 범위의 효과가 작다는 이유로 기존 45를 격하하지 않는다.
 
+### 11.1 발표용 조건별 비교
+
+![46 조건별 QA 손익](./diagrams/choice46-quality.svg)
+
+[draw.io](./diagrams/choice46-quality.drawio) / [PNG](./diagrams/choice46-quality.png) / [편집 가능한 발표자료와 검수 안내](../../../presentations_files/dp46-evidence/README.md)
+
+원본 MAIN의 owner·Module·데이터 경로를 유지하고, QA 손익을 별도 페이지에서 읽도록 했다. 측정 숫자나 고정 승자를 넣지 않는다.
+
 ## 12. 강한 대안, tactic, 선택 조건과 반증
 
 A에 interval index, 공통 query library, 관계 cache, 원본별 요약, 부분 갱신과 비동기 prefetch를 허용한다. B에 선택적 생산 범위, 부분 view 갱신, 작고 유한한 refs 중심 view, 빠른 invalidation과 budget를 허용한다. 필수 현재성/권한/gap 검사를 제거해 빠른 안을 만들지 않는다. tactic으로 차이가 줄어드는 것은 정상 설계 과정이며 비교의 자동 무효화 사유가 아니다.
@@ -318,6 +345,8 @@ A에 interval index, 공통 query library, 관계 cache, 원본별 요약, 부�
 | A 시간 + B 과거 | 짧은 새 화면은 요청별 결합, 반복 과거 의미는 공통 생산/조회. 유력한 부분 도입이지만 전체 B의 무료 이익으로 합산하지 않음 |
 | B 시간 + A 과거 | 공통 시간 relation을 쓰되 새 자유문 과거 관계는 요청별 구성. 각 read/수정 경계와 비용 공개 |
 | B+ raw fallback | 미게시/미지원의 기능을 보완하지만 source 조합과 publication 두 계약의 시험/유지 비용 부담 |
+
+46 전체 A/B와 45 선택을 섞어 이름만 붙이지 않는다. **46 전체 A는 시간 A+과거 45A, 전체 B는 시간 B+과거 45B**의 묶음이다. 시간 A+45B 또는 시간 B+45A는 가능한 교차 조합이지만 두 owner의 반환·사용 조건을 따로 명시해야 한다. 45의 비용/효과는 같은 경로로 한 번만 계산하고 시간 근거의 추가 손익을 별도 설명한다.
 
 **A 선택 가설:** 일회성 화면/새 관계와 변경이 많고 필요한 범위를 작게 읽거나 cache/prefetch로 충분하며, 게시 의존과 유지 상태를 줄이는 것이 중요할 때. 대가는 query별 결합/재검증과 중복 처리다. 같은 조건의 B가 중요한 요청 정확성을 유지하며 실제 반복 작업을 줄이고 총비용도 감당한다면 이 이유를 뒤집는다.
 
@@ -373,7 +402,7 @@ QA는 03-02에서 정할 공통 사용자 결과/시간/요금/변경/메모리 
 | 44 | input/revision/evidence ready/실패/gap 반환. producer 완료가 InputSettled/MeaningAdopted/응답 release를 대신하지 않음 |
 | 45 | 과거 producer/조회와 QA 사고 실험/tactic 원칙을 유지. 46에서 temporal 손익은 별도 설명, 45 대체/격하 아님 |
 
-42B+44의 hold/ACK/CAS/reconciliation 설계 계약은 [42](./04-42-lifecycle-ownership.md)와 [40 §6](./04-40-common-execution-contract.md#6-네-dp가-실제-프로그램에서-결합되는-지점)의 병행 상세화 범위다. 이번 46 게시물은 해당 최신 변경을 포함하지 않으므로 두 문서의 게시된 원본과 검수 기록을 확인해야 한다. 실행 선후/복구의 구현 검증은 미수행이며 46이 이를 증명하지 않는다. provider word timing, 실제 OS coverage, budgets/기기 비용/모델 payload와 단가는 미검증이다. 핵심 QA 구성의 세부항목/지표/순위는 03-02 공동 작업이며 이 문서가 확정하지 않는다.
+42B+44의 hold/ACK/CAS/reconciliation 설계 계약은 [42 §4.2](./04-42-lifecycle-ownership.md#42-b의-입력-hold업무-접수전송복구-프로토콜)와 [40 §6](./04-40-common-execution-contract.md#6-네-dp가-실제-프로그램에서-결합되는-지점)에 상세화했다. 대화 측 hold 의도, 업무 gate의 실제 적용 ACK, 전송 CAS 선후를 구별하며 46의 게시 완료로 그 권한을 대신하지 않는다. 실행 선후/복구의 구현 검증은 미수행이며 46이 이를 증명하지 않는다. provider word timing, 실제 OS coverage, budgets/기기 비용/모델 payload와 단가는 미검증이다. 핵심 QA 구성의 세부항목/지표/순위는 03-02 공동 작업이며 이 문서가 확정하지 않는다.
 
 ## 15. 검토와 재개
 

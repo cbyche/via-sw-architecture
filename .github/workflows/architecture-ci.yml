@@ -55,3 +55,9 @@ jobs:
         run: python3 scripts/architecture/generate_continuous_interaction_diagrams.py --check
       - name: Check 04-45 memory and context comparison and lifecycle
         run: python3 scripts/architecture/generate_memory_context_diagrams.py --check
+      - name: Check 04-46 evidence structures and synthetic temporal examples
+        run: |
+          python3 scripts/architecture/generate_evidence_context_diagrams.py --check
+          python3 scripts/architecture/check_dp46_temporal_examples.py
+      - name: Check 04-46 editable presentation source
+        run: python3 scripts/presentations/check_dp46_presentation.py

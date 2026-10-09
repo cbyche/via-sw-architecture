@@ -253,17 +253,41 @@ def lifecycle():
 HTML='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>46 구조 검토</title>
 <style>body{margin:0;font:16px system-ui;background:#f5f5f5;color:#151515}header{position:sticky;top:0;background:#fff;padding:14px 22px;border-bottom:1px solid #bbb;z-index:1}button,a{margin-right:12px}button{padding:8px 12px;border:1px solid #aaa;border-radius:5px;background:white;cursor:pointer}button[aria-pressed=true]{background:#fce4d6;border-color:#9b502b}main{padding:20px;overflow:auto}img{display:block;width:100%;min-width:1000px;background:white}p{margin:8px 0}</style>
 <header><strong>46: 요청별 구성과 공통 생산/조회</strong><p>A/B 미선정. 문서/그림 검토용이며 구현/성능 측정 결과가 아닙니다.</p>
-<nav><button data-stem="dp46-background">문제와 같은 원본</button><button data-stem="choice46-structure" aria-pressed="true">MAIN 구조</button><button data-stem="choice46-timeline">정정 사건도</button><button data-stem="choice46-lifecycle">상태와 사용 경계</button><button id="zoom">원본 크기 / 폭 맞춤</button></nav>
+<nav><button data-stem="dp46-background">문제와 같은 원본</button><button data-stem="choice46-structure" aria-pressed="true">MAIN 구조</button><button data-stem="choice46-timeline">정정 사건도</button><button data-stem="choice46-lifecycle">상태와 사용 경계</button><button data-stem="choice46-quality" aria-pressed="false">QA 손익</button><button id="zoom">원본 크기 / 폭 맞춤</button></nav>
 <p><a href="../04-46-input-and-context-evidence.md">본문</a><a id="svg" href="choice46-structure.svg">SVG</a><a id="drawio" href="choice46-structure.drawio">편집 가능한 draw.io</a></p></header>
 <main><img id="figure" src="choice46-structure.svg" alt="46 A/B 구조 비교"></main><script>
 let full=false;const figure=document.getElementById('figure');document.querySelectorAll('[data-stem]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-stem]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));figure.src=b.dataset.stem+'.svg';document.getElementById('svg').href=figure.src;document.getElementById('drawio').href=b.dataset.stem+'.drawio';});document.getElementById('zoom').onclick=()=>{full=!full;figure.style.width=full?'2560px':'100%';};
 </script></html>\n'''
 
 
+
+def quality():
+    s = base('46 | 구조 차이가 만드는 조건별 QA 손익', 'choice46-quality',
+             '설명용 가설 / 미선정·미구현·미측정. 시간 관계는 코드이며 과거 의미 가공만 조건부 모델 호출이다.')
+    s.text(40,150,380,['QA 관점'],28,True)
+    s.text(430,150,990,['A 요청별 원본 결합'],28,True)
+    s.text(1500,150,1010,['B 공통 관계 생산 / 조회'],28,True)
+    rows=[
+      ('요청 처리 정확성', ['이번 요청의 원본·새 관계를 직접 검토', 'cache도 허용 / query 결합 오류 가능'], ['게시된 관계·coverage 범위에서 검토', '누락·낡은 view·공통 오류 전파 가능']),
+      ('응답속도', ['필요한 순간 시간·과거 근거 결합', 'prefetch/cache로 대기 줄일 수 있음'], ['유효 hit면 반복 결합을 줄일 수 있음', '첫 생산·정정·NOT_COVERED는 대기']),
+      ('모델 사용 비용', ['필요한 과거 의미만 가공', '재사용 시 cache / 반복 가공 비용'], ['과거 의미 생산비를 반복 사용에 상각', '미사용·재생산·실패·폐기 비용 포함']),
+      ('변경 용이성', ['query/result·원본 adapter가 변경 경계', '새 관계는 Resolver/Composer 지원 변경'], ['producer/schema/coverage·reader가 경계', '공통 생산 변경과 소비 호환 비용']),
+      ('로컬 메모리', ['같은 raw 예산 + 동시 query/set/cache', '동시 query가 적으면 상태 비용 축소'], ['같은 raw + view/index/dep/backlog/lease', '중복 query 축소량이 추가 상태보다 커야 이익'])
+    ]
+    for index,(q,a,b) in enumerate(rows):
+        y=250+index*185
+        s.text(40,y,380,[q],27,True)
+        s.text(430,y,990,a,27)
+        s.text(1500,y,1010,b,27)
+    s.text(40,1210,2480,['시간 overlap/순서의 생산·조회만으로 모델 요금 절감을 부여하지 않는다.',
+        '46 전체 A/B는 시간+과거 선택의 두 묶음이다. 시간 A+45B / 시간 B+45A는 별도 교차 조합이다.',
+        '상위 QA로 구조를 선택한 후 약한 축을 tactic으로 보완한다. 숫자 우열·선택 승자는 아직 없다.'],24)
+    return s
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()
     outputs={}
-    for scene in [background(),structure(),timeline(),lifecycle()]:
+    for scene in [background(),structure(),timeline(),lifecycle(),quality()]:
         for suffix,data in scene.render().items(): outputs[OUT / f'{scene.slug}.{suffix}']=data
     outputs[OUT / 'choice46-review.html']=HTML
     for path,data in outputs.items():

@@ -126,3 +126,16 @@ Timeline & Buffer 제목/공통 설명과 A의 query/결과 구성 주석 간 �
 게시 대상만 합친 별도 사본에서 46 생성 일치, 155개 활성 Markdown 링크, 용어/QA catalog와 기존 44/45 계약 예시 검사를 통과했다. 네 SVG/PNG render manifest의 hash도 일치한다. 전용 PPTX 소스는 구문 검사만 수행했다. 병행 42의 미게시 예시는 기존 공통 계약 검사에서 SKIP이며 이번 게시 범위에 포함하지 않았다. 이 결과는 위 작업 공간 전체 검사와 구별한다.
 
 재개 순서는 46 §2 MAIN → §3~6 책임/취득/두 실행 → §7~8 같은 사건/게시/사용 → §10~12 비용/QA/선택이다. 같은 window의 정상 재참조가 충분히 중요한지, 강한 A cache 이후에도 B의 반복 작업 대체와 대등한 QA 충돌이 남는지, 혼합 도입으로 충분한지는 사용자 검토 대상이다. 문서 완성을 주요 DP 또는 최종 A/B 선정으로 처리하지 않는다.
+
+
+## 6. 통합 writer 인수와 발표자료 완성 (2026-10-10)
+
+다른 세션의 46 원본 게시 `dd1350cd8` 이후, 사용자가 위임한 44→45→42→46 완성 범위로 인수했다. 위 네 장/구문 검사/미생성 PPTX 기록은 원본 게시 시점이며 아래 검사와 구별한다.
+
+- 독립 검토의 P2 두 건을 해결했다. 42B의 hold/ACK/CAS 설계 문서화를 미구현 상태와 구별하고, 조건부 cache/backfill을 점선으로 그리던 범례를 공통 실선 요청/점선 반환으로 맞췄다. 조건은 화살표 옆 문구다. MAIN의 같은 14개 참여자/source/query/output 좌표와 실제 owner/topology는 유지했다. 큰 경계는 흰색이며 살구색 내부 Module/상태와 공통 shape 범례를 사용한다.
+- 원본 §8.3에 고정 temporal JSON의 실제 필드/시각/후보·전사 정정·만료·미지원 예시와 코드/모델 구분을 추가했다. VAD·전사 수신만으로 단어 시각을 만들지 않는다. whole46A=시간A+45A, whole46B=시간B+45B이며 crossed 조합은 별도 계약임을 명시했다.
+- 원본 MAIN/사건/수명은 보존하고 다섯 QA의 조건별 손익을 별도 SVG/draw.io/PNG와 본문에 추가했다. 다섯 figure 및 확대 HTML 전환/소스 링크/zoom, text glyph/canvas/overlap 0건과 SVG/PNG hash를 확인했다.
+- native 발표는 배경→MAIN→조건별 QA→정정 사건→상태 수명의 다섯 editable slide로 만들었다. font/geometry/package integrity/first-party import 검사, 실제 재import 렌더 시각 확인, 원본의 모든 text 일치·slide raster image 0·notes·source hash 검사 PASS. 41~45 통합 PPTX를 다시 수정하지 않았다.
+- 시간 예시 정적 검사 PASS: 동일 r1 source/후보, r2 실제 후보 변경, fence 10·게시 2·availability 6·잘못된 예시 거부 10건. 독립 검토에서 본문/JSON/MAIN 및 native 네 구조 페이지에 미해결 P1/P2 없음. QA 추가 페이지와 최종 재import는 통합 writer가 직접 확인했다.
+
+전용 diagram/예시/PPTX 검사를 CI에 추가했다. 이 검사들은 doc/source 일치의 증거이며 OS coverage/provider word timing, 실행 경합·의미 정확성·실측 QA, 최종 DP 선정의 증명이 아니다. 현재 42와 공통 계약의 문서화된 hold 선후를 참조하며 구현 검증은 후속이다. draw.io native 편집기의 round-trip은 수행하지 않았다. 원본 46 게시와 이번 발표 완성의 commit/push는 Git 이력에서 구별한다.
