@@ -67,7 +67,7 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 
 ### 2.2 46과의 범위 및 중복 계산 경계
 
-46(별도 세션 작성 중)은 이 문서의 원본 조합/공통 관계 생산 원리를 발화와 화면/포인터/행동의 시간 관계까지 확장한 검토안이다. 45는 과거 설명, 실제 전달, Task 결과와 허용 기억의 공급 방식에 집중하고 acoustic/viewport overlap를 생산하지 않는다. 46의 시간 관계 owner는 Interaction Manager이며 Context Manager가 같은 시간 자료를 다시 게시하지 않는다. 45의 과거 관계 owner는 Context Manager다.
+[46](./04-46-input-and-context-evidence.md)은 이 문서의 원본 조합/공통 관계 생산 원리를 발화와 화면/포인터/행동의 시간 관계까지 확장한 검토안이다. 45는 과거 설명, 실제 전달, Task 결과와 허용 기억의 공급 방식에 집중하고 acoustic/viewport overlap를 생산하지 않는다. 46의 시간 관계 owner는 Interaction Manager이며 Context Manager가 같은 시간 자료를 다시 게시하지 않는다. 45의 과거 관계 owner는 Context Manager다.
 
 45A/B를 정리했다고 46의 시간 처리 A/B가 자동 선택되거나 별도 DP로 확정되는 것은 아니다. 함께 제시할 때 겹치는 과거 관계 생산/조회, cloud call과 정확성/응답성 손익을 한 경로로 추적한다. 46의 구조는 과거 근거와 시간 근거를 함께 다룬 확대안이라는 관계를 설명하고, 서로 겹치는 처리의 이익을 두 번 더하지 않는다. 최종 독립 DP 구분은 사용자 검토 대상이다.
 

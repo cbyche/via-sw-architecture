@@ -1,8 +1,21 @@
 # 구조 중심 Decision Reconstruction 작업 계획
 
-> 현재 상태: **STAGE_4_DP_REDETAILING / 첫 완료 단위: 공통 계약·41 재구체화 검토 준비** / 2026-10-09
-> 첫 완료 단위는 공통 책임 목록과 41의 실행 계약·관련 그림·검수다. 44→45→42와 전체 조합 검토를 순서대로 이어가며 기존 Architecture 전체 동기화는 후속 작업이다.
+> 현재 상태: **STAGE_4_DP_REDETAILING / 41·44·45·42·46 문서·도식·발표 완성** / 2026-10-10
+> 개별 대안과 조합 계약의 문서 검토를 마쳤다. 구현·측정·최종 선택과 기존 Architecture 전체 동기화는 별도 후속 작업이다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
+
+## 2026-10-10 위임 작업 완료 — 44 → 45 → 42 → 46
+
+사용자가 잠든 동안 진행하도록 위임한 문서·그림·발표 재구체화를 완료했다. [지속 작업 기록](./redetailing-workplan.md)에 41에서 얻은 아홉 작성/검수 지침과 단계별 게시를 보존한다. [조합 검토](./composition-review.md)는 41/44/45/42의 16개 조건부 연결과 46의 시간×과거 2×2를 설명한다. 이 완료는 문서/도식의 검토 가능성에 한정하며 구현·모델 실행·품질 측정·승자 선정·참조 Architecture 전체 동기화를 뜻하지 않는다.
+
+- 44: 중앙 continuation 회수/후속 지시와 Stage별 window/Publication Join의 실제 실행 의존성. 같은 네 사건·늦은 결과·확인 질문·flow control과 code/model 호출을 고정했다.
+- 45: 요청별 owner 원본 조합과 공통 관계 생산/조건부 게시/조회. 실제 원문·전달 범위·PARTIAL coverage/gap·source vector·생산/재조회 loop와 전체 비용을 명시했다.
+- 42: 모듈형 Core의 공동 확정과 독립 서비스의 의도/접수/반영. hold 의도·적용 ACK·전송 CAS·UNKNOWN/reconciliation을 구별하고 수명·owner·데이터의 세 층으로 그렸다.
+- 46: 다른 세션의 원본 dd1350cd8을 인수해 시간 query와 시간 생산/게시·조회, 과거 45 관계를 구별했다. [다섯 장 editable 발표](../../../presentations_files/dp46-evidence/README.md)와 합성 시간 예시 검사/CI를 추가했다.
+- 각 원본 MAIN을 유지하고 집중 비교를 추가했다. 같은 Component 이름·Module/State/Data 범례·흰 큰 경계·살구색 차이·얇은 선을 적용했으며 실제 SVG/native PPTX 렌더를 확인했다. 숫자 예상 점수를 정성 조건표로 바꾸고 강한 A의 cache/부분 갱신과 B의 추가 대기/비용을 유지했다.
+- 개별 commit/push와 원격 CI PASS: 44 a544fd50b, 45 41e949714 및 링크 정정 dd9444041, 42 469648469, 46 원본 dd1350cd8 및 발표 완성 fd282acc4. 최종 공통 연결 게시/CI는 이 체크포인트의 Git 이력에서 확인한다.
+
+게시할 파일만 분리한 사본에서 전체 CI source/link/QA/contract 검사가 통과했다. 다른 세션의 QA 초안/04-50/input-evidence-timeline/work 변경은 보존하며 임의 게시하지 않았다. 다음 리뷰는 중요한 QA 아래 대안의 자격·선택과 비용 가설을 평가하는 일이다. 수치·provider timing·실행 실패 복원은 아직 실험하지 않았다.
 
 ## 별도 입력 근거 작업 — 45를 보존한 46 재설계 (2026-10-10)
 

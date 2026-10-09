@@ -136,6 +136,6 @@ Timeline & Buffer 제목/공통 설명과 A의 query/결과 구성 주석 간 �
 - 원본 §8.3에 고정 temporal JSON의 실제 필드/시각/후보·전사 정정·만료·미지원 예시와 코드/모델 구분을 추가했다. VAD·전사 수신만으로 단어 시각을 만들지 않는다. whole46A=시간A+45A, whole46B=시간B+45B이며 crossed 조합은 별도 계약임을 명시했다.
 - 원본 MAIN/사건/수명은 보존하고 다섯 QA의 조건별 손익을 별도 SVG/draw.io/PNG와 본문에 추가했다. 다섯 figure 및 확대 HTML 전환/소스 링크/zoom, text glyph/canvas/overlap 0건과 SVG/PNG hash를 확인했다.
 - native 발표는 배경→MAIN→조건별 QA→정정 사건→상태 수명의 다섯 editable slide로 만들었다. font/geometry/package integrity/first-party import 검사, 실제 재import 렌더 시각 확인, 원본의 모든 text 일치·slide raster image 0·notes·source hash 검사 PASS. 41~45 통합 PPTX를 다시 수정하지 않았다.
-- 시간 예시 정적 검사 PASS: 동일 r1 source/후보, r2 실제 후보 변경, fence 10·게시 2·availability 6·잘못된 예시 거부 10건. 독립 검토에서 본문/JSON/MAIN 및 native 네 구조 페이지에 미해결 P1/P2 없음. QA 추가 페이지와 최종 재import는 통합 writer가 직접 확인했다.
+- 시간 예시 정적 검사 PASS: 동일 r1 source/후보, r2 실제 후보 변경, fence 10·게시 2·availability 6·잘못된 예시 거부 10건. 독립 검토에서 본문/JSON/MAIN 및 native 네 구조 페이지에 미해결 P1/P2 없음. QA 추가 페이지와 최종 재import는 통합 writer가 직접 확인했다. 이후 독립 검토자가 §8.3 실제 필드·§12 전체/교차 정의·조합 2×2와 native QA 추가 페이지를 대조했고 새 P1/P2 없음으로 확인했다.
 
 전용 diagram/예시/PPTX 검사를 CI에 추가했다. 이 검사들은 doc/source 일치의 증거이며 OS coverage/provider word timing, 실행 경합·의미 정확성·실측 QA, 최종 DP 선정의 증명이 아니다. 현재 42와 공통 계약의 문서화된 hold 선후를 참조하며 구현 검증은 후속이다. draw.io native 편집기의 round-trip은 수행하지 않았다. 원본 46 게시와 이번 발표 완성의 commit/push는 Git 이력에서 구별한다.

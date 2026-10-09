@@ -29,8 +29,8 @@ VIA와 상태 권위는 로컬이며 음성/전사와 의미 모델은 클라우
 - [x] 45: 현재 요청별 원본 조합과 공통 파생 관계 생산/조회. 생산 trigger·미게시 대기·현재 사용 검증·조건부 모델 호출·전체 비용을 명시.
 - [x] 42: 통합 Core 공동 확정과 독립 서비스 command/receipt. 실제 수명/상태 권위/복원 차이. 44의 공동 transaction 전제를 42B와 결합할 hold/ack·전송 권위 프로토콜 상세화.
 - [x] 46: 다른 세션 작업 완료 여부를 먼저 확인. 동일 파일 동시 수정 금지. 시간 원본/관계 생산의 실제 차이와 45 범위 구분, Module/contract/cloud/자료·발표 일치 검수 후 이어받아 게시.
-- [ ] 조합 검토: 41의 READ/CLARIFY/PROPOSE와 44의 실행,45의 근거,42의 저장·전송,46의 시간 근거 공급을 추적. 호환 조건/혼합/제한을 명시.
-- [ ] 최종 게시/검증 보고: 실제 Git SHA·CI·렌더·검수 범위/남은 실험 과제를 기록.
+- [x] 조합 검토: 41의 READ/CLARIFY/PROPOSE와 44의 실행,45의 근거,42의 저장·전송,46의 시간 근거 공급을 추적. 호환 조건/혼합/제한을 명시.
+- [x] 최종 게시/검증 보고: 실제 Git SHA·CI·렌더·검수 범위/남은 실험 과제를 기록.
 
 ## 병행 작업과 재개 규칙
 
@@ -48,4 +48,10 @@ QA 정의(03-02)는 별도 세션의 검토 중 자료다. 최신 정의를 읽�
 
 - 42 게시 단위: 같은 질문/답변의 수명·owner·공동 확정/별도 접수, hold/ACK/CAS와 전송 권위·UNKNOWN/reconciliation 계약. 전체 MAIN/사건도와 추가 집중 그림, 실제 데이터/4개 조건부 QA 행, 두 native PPTX의 42 part만 동기화. 실제 SVG/native 렌더·정적 예시·생성물 일치 PASS, 독립 검토 미해결 P1/P2 없음. 구현/측정/외부 exactly-once 보증 없음.
 
-- 46 인수/발표 게시 단위: 다른 세션 원본 dd1350cd8 이후 같은14anchors와 실제 원본/생산·조회 topology를 유지. 공통 Legend·42 계약 상태 정정, temporal 고정 JSON/정적 검사·조건별 QA 추가, 5장 native editable PPTX 및 source/hash/text 검사·실제 SVG/native 렌더. 45와 시간×과거 교차 조합을 구별하며 전체 효과를 중복 합산하지 않음. 독립 검토 미해결 P1/P2 없음(4개 구조 페이지); 추가 QA는 통합 writer 시각 확인.
+- 46 인수/발표 게시 단위: 다른 세션 원본 dd1350cd8 이후 같은 14개 기준 좌표와 실제 원본/생산·조회 topology를 유지. 공통 Legend·42 계약 상태 정정, temporal 고정 JSON/정적 검사·조건별 QA 추가, 5장 native editable PPTX 및 source/hash/text 검사·실제 SVG/native 렌더. 45와 시간×과거 교차 조합을 구별하며 전체 효과를 중복 합산하지 않음. 독립 검토 미해결 P1/P2 없음(4개 구조 페이지); 추가 QA는 통합 writer와 독립 검토자가 시각·본문 대조.
+
+- 공통 조합 완료: composition-review의 16개 조건부 연결과 46의 2×2, owner/port·모델 호출 지도·같은 경합을 문서 대조. 독립 P2 1건(ACK 미수신을 HOLD 적용과 혼동하는 문장)을 수정했다. 40은 42의 상세 계약과 연결하고 45의 46 링크를 복원. 게시 사본 전체 CI 검사 PASS; 원격 CI는 44 a544fd50b / 45 수정 dd9444041 / 42 469648469 / 46 원본 dd1350cd8·발표 fd282acc4까지 PASS. 최종 SHA/CI는 이 기록을 게시한 Git 이력과 GitHub Actions로 확인한다.
+
+## 완료 후 다시 읽을 자료
+
+[공통 40](./04-40-common-execution-contract.md) → [41](./04-41-request-resolution-control.md) → [44](./04-44-continuous-interaction.md) → [45](./04-45-memory-and-context.md) → [42](./04-42-lifecycle-ownership.md) → [46](./04-46-input-and-context-evidence.md) → [조합 검토](./composition-review.md). SVG/draw.io/PNG·native PPTX의 일치와 문서 예시 검사는 완료했고 각 review가 범위를 명시한다. 다음 단계는 사용자 리뷰/선택과 별도 승인하의 구현·QA 실험이다. 별도 QA 세션이나 기존 Architecture 전체 동기화는 이 완료 작업의 미처리 항목으로 재시작하지 않는다.

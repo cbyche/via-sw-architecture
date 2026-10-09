@@ -1,6 +1,6 @@
 # 네 구조 비교의 공통 실행 계약과 모델 호출 지도
 
-> 상태: **COMMON_EXECUTION_CONTRACT / 승인된 전제와 상세 계약 초안** / 2026-10-09
+> 상태: **COMMON_EXECUTION_CONTRACT / 승인된 전제와 상세 계약 초안** / 2026-10-10
 > 04-40은 새 Decision Point가 아니다. 41 → 44 → 45 → 42를 하나의 VIA 프로그램으로 설명하기 위한 공통 문서다. A/B 선택, 구현 및 품질 측정은 하지 않았다.
 
 ## 0. 이번에 합의한 것과 문서의 적용 범위
@@ -162,10 +162,11 @@ InputStarted, END_CANDIDATE, InputFinal, MeaningReady, ResponsePrepared, Deliver
 
 41A + 44A + 45A를 설명 예로 쓰면, **로컬 입력 → Dispatcher가 해석 job 시작 → 모델이 bounded read 제안 → 코드가 Context/Task 조회 → 모델 의미 제안 → 코드 채택 → 응답/위임 → 후속 사건과 실제 전달 연결**이다. 45B면 과거 조회의 정상 경로가 게시된 관계 읽기로 바뀌고, 44B면 실행 완료가 연결된 단계와 join의 입력이 된다. 이 교체가 새로운 발화를 기다리게 하거나 모델에게 State Store 쓰기 권한을 주지는 않는다.
 
-**모든 조합을 구현 가능한 완성 설계라고 선언하지 않는다.** 미결 전송 계약과 41의 경계 정리 결과를 구별한다.
+**공통 port를 이용해 조합할 수 있는 문서 설계를 구체화했으며 구현 가능성과 품질은 아직 검증하지 않았다.** 각 비교는 동일한 원본/권한과 채택 경계를 유지한다. 관련 계약이 실제로 연결되는 조건은 다음과 같다.
 
-1. **44의 전송 경합 계약과 42B:** 현행 44 §3.1은 Request Controller admission/hold, Task Manager command/epoch, Agent Gateway transmission CAS의 공동 local transaction을 전제한다. 42B의 독립 저장소에서는 이를 그대로 실행할 수 없다. 분리된 owner 사이 hold/ack와 전송 권위의 version 검사로 같은 선후 조건을 만족시키는 구체 프로토콜을 정해야 한다. 지연된 event만 받아 전송하거나 공유 transaction을 몰래 유지하면 42B의 대안이 설명되지 않는다. 현재 **UNRESOLVED**다.
-2. **41B의 Resolution Engine과 42B:** 41의 재구체화로 Engine/잠정 frame은 Request Interpreter 내부, 의미/질문 채택 원본은 Request Controller로 통일했다. 별도 Engine service 배치를 전제하지 않는다. 42B가 이 owner들을 배치하는 service 수명과 work service 실패 시 job의 보류/재시도는 42 재구체화에서 이어 설명한다. 이 경계 정리만으로 위 전송 경합까지 해결된 것은 아니다.
+1. **44의 전송 경합 계약과 42B:** [42 §4.2](./04-42-lifecycle-ownership.md#42-b의-입력-hold업무-접수전송복구-프로토콜)는 Task Manager의 업무 접수·전송 게이트와 Agent Gateway의 전송 CAS를 업무 저장소에서 확정하고, 대화 서비스의 hold/release를 control_session·sequence·gate revision으로 확인하는 설계다. 대화 서비스의 발화 시작 시각과 업무 게이트의 hold 적용/ACK 시각은 다르다. ACK 전 이미 DISPATCHING인 명령은 철회 완료로 숨기지 않고 전송 중/UNKNOWN을 보존한다. ACK 후 관련 새 전송은 차단하며 새 입력의 채택과 reconciliation 뒤에만 release한다. 따라서 42B가 공동 transaction을 몰래 유지하는 것은 아니다. timeout·재시작·늦은 ACK는 동일 명령 ID와 fencing으로 복원한다. 이는 **문서 수준 상세 프로토콜**이며 무지연 전역 중단, 외부 Agent의 무조건 exactly-once 또는 실제 구현 검증을 뜻하지 않는다. 44A Dispatcher와 44B Stage 모두 같은 업무 gate port를 사용한다.
+2. **41B의 Resolution Engine과 42B:** Engine/잠정 frame은 Request Interpreter 내부, 의미/질문 채택 원본은 Request Controller다. 대화 서비스는 그 job/입력 수명을 관리하고 업무 서비스의 확인 사실을 참조한다. 업무 조회가 불가하거나 오래된 결과면 보류/재조회/실패 상태를 반환하며 모델에게 없는 Task를 확정시키지 않는다. Engine을 별도 영속 서비스로 만들거나 업무 저장소에 의미 제안을 직접 확정하지 않는다.
+3. **45와 42B:** Context Manager의 근거 조회는 owner별 source vector·조회 범위/오류를 반환한다. 서비스 두 곳의 snapshot을 전역 공동 snapshot이라고 주장하지 않는다. Request Controller와 업무 gate가 실제 채택/전송 시점에 필요한 원본과 권한을 다시 검사한다. B의 공통 과거 관계는 Task Manager의 현재 업무 권위를 대체하지 않는다.
 
 45B는 현재 Task·권한·실제 전달 원본을 대체하지 않는다. covered 관계 조회도 현재 권한/revision 검사를 남긴다. NOT_COVERED는 지원 범위 생산/게시 후 재조회, UNSUPPORTED_RELATION은 표현 한계다. 원본 조합으로 우회하는 B+는 별도 혼합 경로와 비용으로 기록한다.
 
@@ -203,7 +204,7 @@ InputStarted, END_CANDIDATE, InputFinal, MeaningReady, ResponsePrepared, Deliver
 | 직접 음성 응답 | 네 비교 밖 경로의 허용, VIA 처리와 이중 응답 방지 및 기존 UC와의 정합성 |
 | model inventory | 음성/전사/LLM/helper별 정확한 역할·배치·자원/청구, 연결 복원과 최소 context |
 | 동시성·실패 | queue/buffer 한도, provider rate limit·retry, 연결 단절과 오래된 generation의 폐기 |
-| 42B와 44 | 분리 저장소에서도 hold/전송 경합이 안전한 실제 프로토콜과 실패/복원 |
+| 42B와 44 | 42 §4.2의 hold/ACK·전송 CAS·reconciliation 설계를 구현해 선후 경합과 timeout/복원 검증. 문서 상세화는 완료, 실행 검증은 후속 |
 | 비용 평가 | 적용 QA·우선순위와 전체 workload·단가·usage·시간 귀속의 freeze |
 
 위 항목은 미정 수치를 기존 정책 전체의 재검토 이유로 만들기 위한 목록이 아니다. 새로운 모델 배치가 실제로 바꾸는 계약과 결합 문제를 다음 리뷰에서 닫기 위한 목록이다.
@@ -240,3 +241,9 @@ InputStarted, END_CANDIDATE, InputFinal, MeaningReady, ResponsePrepared, Deliver
 병렬 작업은 책임을 분리한다. 주 작업자는 공통 목록·Component 경계·본문·교차 계약을 관리한다. sub-agent는 이름/소속의 읽기 검토, 합의된 scene 명세에 따른 그림/SVG/draw.io/PNG 갱신, 최종 독립 검토를 맡을 수 있다. shared generator와 통합 발표 package는 한 writer가 관리하고 scoped 갱신으로 다른 DP를 보존한다. Module 소속과 실행 계약이 바뀌는 중에 그림 담당자가 별도 설계를 만들거나 여러 writer가 같은 파일을 덮어쓰지 않는다.
 
 이번 단계의 완료는 **문서와 도식이 같은 실행 구조를 설명하며 근거·상태·판단·현재성 경계가 추적되는 것**이다. prototype, cloud model 실행, 측정, A/B 최종 선택과 repository 전체 동기화는 각 DP 재구체화에 포함시키지 않는다. 발표 자료의 관련 부분도 해당 DP의 본문/scene 확정 후 같은 내용으로 갱신하고 별도 검증한다.
+
+## 13. 2026-10-10 재구체화의 조합 경계
+
+사용자는 44 → 45 → 42 → 다른 세션의 46까지 문서·그림·발표를 완성하도록 위임했다. [지속 작업 기록](./redetailing-workplan.md)에 작성/그림/검수 원칙과 단위 게시를 유지한다. 개별 DP의 고정 데이터 JSON은 검토용 예시이며 문서 일관성 검사는 실제 모델/실행 정확성 시험이 아니다. §6의 42B 전송 미결을 최신 상세 프로토콜과 연결했으나 코드 실행·정량 품질 검증 상태는 바꾸지 않았다.
+
+46은 시간 근거 공급까지 A 요청별 구성/B 공통 생산·조회를 확장하는 별도 검토안이다. 시간 관계 처리와 45의 과거 관계 처리를 함께 바꾸는 전체 A/B는 두 독립 선택을 묶는다. 45B를 고르고 46 전체 A를 동시에 적용한다고 표현하지 말고, 시간 A + 과거 B 같은 교차 조합을 명시해야 한다. Component의 원본 권위와 현재 의미 해석/채택은 유지한다. 46이 명시하는 temporal view의 준비는 input final의 새 필수 선행조건이 아니며, 조회가 필요한 경우에만 근거 생산/재조회 대기가 생긴다. [조합 검토](./composition-review.md)에 네 선택의 16개 문서 연결, 공통 owner/port와 경합, 46의 2×2 교차 조건을 기록했다. 의미·프로토콜·품질의 실행 검증을 완료했다고 해석하지 않는다.
