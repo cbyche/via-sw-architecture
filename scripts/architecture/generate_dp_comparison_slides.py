@@ -33,14 +33,14 @@ QA = {
 DATA = {
   41: dict(title='VIA 요청 이해의 모델 주도와 코드 주도 완성',
     options=('A 모델 주도 해석', 'B 모델 요청 틀과 코드 주도 완성'),
-    case='“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.” / 보고서 Task 후보 2개',
+    case='“이 표를 아까 보고서에 넣고, 메일은 보내지 말고 결과를 바탕으로 초안만 만들어.”',
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. B도 부분 의미 판단을 다시 호출할 수 있다. 새 관계의 지원 범위와 질문 비용을 함께 비교한다.',
     tradeoffs=[
       ('정확성 / 지원 범위','열린 의미를 함께 판단 / 검색 누락과 모델 오판 가능','지원 관계의 코드 결합 / 틀 오류와 표현 밖 관계의 한계'),
       ('응답성','조회 후 재판단마다 클라우드 왕복 / 부분 수정 허용','지원 틀이 충분하면 재판단 축소 / 추가 해석과 질문 대기'),
       ('모델 호출 비용','반복 해석과 긴 Context가 비용 증가 요인','초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음'),
-      ('변경 용이성','새 관계는 prompt/tool 변경 가능 / 채택 계약 변경은 별도','schema와 Engine 규칙 확장 / 기존 지원 관계는 코드 제어')]),
+      ('변경 용이성','새 관계는 모델 지침/조회 도구 변경 가능','요청 틀과 코드 규칙 확장 / 기존 지원 관계는 코드 제어')]),
   42: dict(title='변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
     options=('A 모듈형 통합 VIA Core', 'B 독립 대화 서비스와 업무 서비스'),
     case='보고서 질문 Q1을 실제 제시(P1) → “상반기로” 답변(u2) → 접수와 실제 전달 확인',
@@ -155,15 +155,15 @@ class Comparison(Slide):
     def request_page(self):
         d=DATA[41]
         self.text(40,140,1840,[d['case']],23,INK)
-        self.text(40,169,1840,['공통: 로컬 VIA / 로컬 VAD / 클라우드 음성 + 의미 LLM / 채택은 코드 / 조회 예시: E7@v2 표, T7/T8 후보, M3 발송 금지'],17,INK)
+        self.text(40,169,1840,['Task1: 예산 보고서 / Task2: 실적 보고서 → “어느 보고서인가요?” → 사용자: “예산 보고서” / 결과: 수정된 보고서 → 메일 초안'],19,INK)
         self.rect(40,195,1840,48,GREEN,LINE)
         self.text(90,209,98,['설계안'],19,INK,True,'center')
         for side,x in enumerate([140,1010]):
             self.text(x+435,205,838,[d['options'][side]],26,INK,True,'center')
         self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
         self.line([(40,795),(1880,795)],color=LINE,arrow=False)
-        self.text(42,810,1840,['비교 대상: 다음 읽기와 전체 의미 결합의 결정권 / 임시 해석 상태는 Request Interpreter / 채택 의미/질문/출처/revision은 Request Controller'],17,INK)
-        self.text(42,836,1840,['음성/전사 비용은 공통. 재시도/폐기된 모델 호출도 집계. 도구 조회 자체는 모델 호출이 아니며 45의 의미 가공이 추가되면 별도 집계.'],17,INK)
+        self.text(42,810,1840,['양안 공통: 입력 수집 → 요청 해석 → Request Controller의 검증/저장/채택 → 응답 또는 업무 위임. 그림은 요청 해석 부분을 확대했다.'],18,INK)
+        self.text(42,840,1840,['자료 예시는 교환 내용이다. 질문은 실제 전달하고 답변을 받은 뒤 Task1을 연결한다. 자료가 바뀌지 않았는지도 채택 전에 확인한다.'],18,INK)
         for j,(quality,left,right) in enumerate(d['tradeoffs']):
             yy=883+j*34
             self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
@@ -171,7 +171,7 @@ class Comparison(Slide):
             self.text(300,yy,720,[left],18,INK)
             self.text(1050,yy,820,[right],18,INK)
         self.text(40,1032,1840,[d['condition']],17,INK)
-        self.text(40,1060,1840,['교환 자료/필드는 검토용 예시 / A도 구조화 출력 가능 / B의 BOUND는 정답 보증이 아님 / 품질 우열과 호출 비용은 측정 전 가설'],14,MUTED)
+        self.text(40,1060,1840,['A도 정해진 형식으로 출력 가능 / B도 추가 모델 호출 가능 / 코드로 연결했다고 의미가 항상 옳은 것은 아님 / 품질/비용은 측정 전 가설'],14,MUTED)
 
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)

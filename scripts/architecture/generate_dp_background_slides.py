@@ -244,11 +244,11 @@ def overview():
 
 
 def slide41():
-    s = Slide(41, '기능 정확성을 위한 VIA Request 해석 설계',
+    s = Slide(41, 'VIA 사용자 요청 이해 설계',
         '선택한 표와 이전 보고서의 오연결 위험', '',
         '정보 조회와 의미 완성의 진행 책임 설계', '',
         '기능 정확성 / 기능 지원 범위 / 반응성', considerations_title='설계 고려 사항')
-    s.text(64, 265, 1110, ['“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”'], 29, INK, True)
+    s.text(64, 255, 1110, ['“이 표를 아까 보고서에 넣고, 메일은 보내지 말고', '결과를 바탕으로 초안만 만들어.”'], 28, INK, True, leading=35)
     s.rect(64, 330, 1110, 411, '#E6ECF2', LINE)
     s.text(86, 346, 1034, ['사용자 화면과 VIA 기록 / 설명용 가상 화면'], 21, MUTED)
     s.rect(80, 389, 568, 333, 'white', LINE)
@@ -264,18 +264,18 @@ def slide41():
         for c,value in enumerate(values):
             s.text(tx+c*cw+cw/2,ty+r*rh+11,cw-12,[value],20,INK,r==0,align='center')
     s.rect(670,389,488,333,'white',LINE)
-    s.text(690,406,448,['이전 Request와 Task 후보'],23,MUTED,True)
-    s.text(690,455,448,['예산 보고서 Task'],26,INK,True)
+    s.text(690,406,448,['이전 요청과 업무(Task) 후보'],23,MUTED,True)
+    s.text(690,455,448,['Task1: 예산 보고서'],26,INK,True)
     s.text(690,495,448,['“예산 보고서 만들어줘” / 진행 중'],20,MUTED)
     s.line([(690,536),(1138,536)],color=LINE,arrow=False,width=1)
-    s.text(690,557,448,['실적 보고서 Task'],26,INK,True)
+    s.text(690,557,448,['Task2: 실적 보고서'],26,INK,True)
     s.text(690,597,448,['“실적 보고서 만들어줘” / 진행 중'],20,MUTED)
     s.text(690,665,448,['연결할 Task 미확정'],29,RED,True)
     s.rect(64,778,1110,67,'#F1F4F7','none')
-    s.text(84,795,1068,['메일 Request의 고정 조건 / 초안 작성, 발송 제외'],27,INK,True)
-    s.challenge(355,'선택 자료의 확인',['화면 정보와 Referent 범위 확인'])
-    s.challenge(515,'관련 Task의 구분',['이전 Request와 현재 Task 상태 확인'])
-    s.challenge(675,'정보 보완과 조건 유지',['미확정 Task의 Clarification과','초안 조건의 보존'])
+    s.text(84,795,1068,['수정된 보고서 결과로 메일 초안 작성 / 메일 발송 금지'],25,INK,True)
+    s.challenge(355,'선택 자료의 확인',['“이 표”가 가리킨 자료의 범위 확인'])
+    s.challenge(515,'관련 업무의 구분',['이전 요청과 현재 업무 상태 확인'])
+    s.challenge(675,'정보 보완과 조건 유지',['어느 보고서인지 확인 질문', '초안 작성과 발송 금지 조건 유지'])
     return s
 
 

@@ -8,7 +8,7 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope,subset] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && !['--comparison-only','--dp41-only','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only, --dp44-only, --dp45-only, --intro-flow-only or --list-selected');
+if (scope && !['--comparison-only','--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-only, --dp41-with-background, --dp41-42-only, --dp44-only, --dp45-only, --intro-flow-only or --list-selected');
 if (subset && !(['--dp45-only','--list-selected'].includes(scope) && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only (or --list-selected) --comparison-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
@@ -103,7 +103,18 @@ function nativeScene(presentation,scene) {
     43:'04-43-request-interpretation.md',44:'04-44-continuous-interaction.md',45:'04-45-memory-and-context.md'};
   let notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
     (scene.number===45 && scene.kind==='comparison'?'조건별 정성 trade-off이며 최종 선정 또는 품질 측정이 아니다. 첫 요청, 반복 R24, 정정 직후와 표현 밖 새 관계를 구별한다.':scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.');
-  if(scene.number===41 && scene.kind==='comparison') notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md\n${base}${scene.source}\n조건별 정성 비교 / 미선정 / 미측정`+'\nA는 모델이 다음 읽기와 전체 의미 제안을 선택한다. B는 Request Interpreter 내부 Request Resolution Engine이 조회와 전체 결합을 결정하며 요청 틀 해석기에 필요한 부분 의미만 다시 요청할 수 있다. 읽기 도구 실행기와 의미 제안 검증기는 양안 공통이다. Engine은 별도 Component와 저장 owner가 아니다. 임시 해석 상태는 Request Interpreter 내부이고, 채택 의미·질문·출처·revision의 영속 owner는 Request Controller다. 코드가 현재 입력·source·Task·질문·권한을 재검증하여 State Store에 채택한다. Model Access는 로컬 cloud adapter, 음성 모델과 의미 LLM은 외부 의존성이다. 로컬 VAD는 Interaction Manager의 Turn-Taking Control에 있다. 음성 모델 자율 응답은 이번 비교 범위 밖이다. 도구 조회 자체가 모델 호출은 아니고 Context 의미 가공에 모델이 필요하면 45의 비용으로 추가 집계한다. 음성·전사 비용은 공통이고 실패·재시도·폐기된 호출도 비용에 포함한다. B 한 번 호출과 정확성 고정 우열은 가정하지 않는다.\n문서형 overlay는 §3/5 계약의 설명용 교환 자료이며 Component나 영속 저장소 또는 확정 API schema가 아니다. A ReadRequest(tool=task_retrieval, selector=아까 보고서)와 EvidenceBundle(T7/T8, source revisions)의 순환에서 모델이 다음 조회와 전체 MeaningProposal을 선택한다. A도 구조화 출력과 부분 수정을 허용한다. B RequestFrame v1은 goal/target=UNRESOLVED/relation/send=false 예시다. Engine이 후보와 항목 상태를 처리하고 필요한 경우에만 field/candidateIds/evidenceVersions를 지정한 부분 요청과 field result를 교환한다. 두 Task 후보는 AMBIGUOUS이므로 질문을 실제 전달하고 새 답변 예산 보고서를 해석한 뒤 T7 BOUND로 결합한다. BOUND와 코드 전체 MeaningProposal은 정답 보증이 아니며 공통 검증과 현재성 채택이 남는다. 최종 MeaningProposal은 양안 같은 계약이고 차이는 생산 책임이다.';
+  if(scene.number===41 && scene.kind==='comparison') notesText=`${scene.title}
+${base}docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md
+${base}${scene.source}
+조건별 정성 비교 / 미선정 / 미측정
+사용자 요청은 “이 표를 아까 보고서에 넣고, 메일은 보내지 말고 결과를 바탕으로 초안만 만들어.”이다. 결과는 표를 추가한 보고서의 결과이며 그것으로 메일 초안을 작성한다. Task1은 예산 보고서 업무, Task2는 실적 보고서 업무다. “어느 보고서인가요?”라는 질문을 실제 전달하고 사용자의 “예산 보고서” 답변을 해석한 뒤 Task1을 연결한다. 초기 입력에 정답 Task를 미리 넣지 않는다.
+A는 모델이 조회 요청(ReadRequest)을 선택하고 조회 결과(EvidenceBundle)를 받아 재판단하여 전체 의미 제안(MeaningProposal)을 만든다. 모델 주도 해석 제어기는 클라우드 LLM을 호출하고 그 제안을 제한하여 실행하는 로컬 코드다. A도 정해진 형식의 출력, 부분 수정과 cache를 허용한다.
+B는 모델이 요청 틀(RequestFrame)을 만들고 Request Interpreter 내부 Request Resolution Engine이 필요한 조회와 항목 해결, 전체 의미 결합을 결정한다. 필요한 항목만 모델에 다시 해석시킬 수 있으므로 항상 한 번 호출로 끝나는 구조가 아니다. 전체 관계를 모델이 만들고 코드가 복사하는 경우는 순수 B가 아닌 혼합안이다. 코드로 연결했다고 의미가 항상 옳은 것은 아니다.
+읽기 도구 실행기는 Context Manager와 Task Manager에 각각 직접 조회한다. 화면/대화 근거와 업무 후보, 출처와 조회한 자료의 변경 번호를 받는다. 문서형 도형은 교환 내용의 설명용 예시이며 Component, Module, 저장 상태 또는 확정 API schema가 아니다.
+이 발표 그림은 요청 해석을 확대했다. 공통 Interaction Manager 입력/음성, Model Access adapter 내부, Policy Manager 권한, Request Controller 검증/저장/채택, State Store, Response Manager 출력과 실제 전달, Task Manager/Agent Gateway 위임은 전체 MAIN에 남아 있다. 발표에서 생략은 설계 삭제가 아니다. 임시 해석 상태는 Request Interpreter, 채택 의미/질문은 Request Controller, 실제 전달 원본은 Response Manager다. 입력/자료/업무/질문이 바뀌었는지와 권한을 검사하고 저장 성공 후 채택한다.
+revision/version은 자료나 상태의 변경 번호다. v2는 두 번째 버전이며 최신임을 보증하지 않는다. 그림은 이를 조회 시점과 자료 변경 확인으로 풀어 썼다. 자료가 바뀌면 옛 해석을 그대로 채택하지 않는 검사는 유지한다.
+도구 조회 자체는 모델 호출이 아니다. Context 의미 가공, 응답 구성, 음성/전사, 실패/재시도/폐기된 호출의 실제 사용량도 비용에 포함한다. 조건별 trade-off는 가설이며 품질 우열을 측정하지 않았다.`;
+  if(scene.number===41 && scene.kind==='background') notesText+='\nTask1은 예산 보고서, Task2는 실적 보고서 업무다. 선택한 표와 이전 업무 두 후보가 있으므로 아까라는 표현만으로 정답을 미리 결정하지 않는다. 보고서 수정 결과를 메일 초안에 사용하고 메일은 보내지 않는 조건을 유지한다. 보고서 수정과 메일 작성은 외부 업무 수행 Agent가 맡는다.';
   if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
   if(scene.number===45) notesText+='\n공통 사례: C20/E20 VIA 직접 평가 기준 설명과 실제 전달 P20, C21/T21/D21@v2 제품 비교, C22/T22/D22@v1 견적. 현재 C23/R23의 제안서 작성 Task T23 연결은 현재 해석/채택의 결과다. VIA는 허용된 발췌와 참조를 연결하고, 평가 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조는 본문 전체 보관을 뜻하지 않으며 Agent 내부 reasoning/모든 tool 기록은 전제하지 않는다.\nA의 요약/index/cache/관계 cache/부분 갱신/병렬 조회와 기존 Agent 실행 맥락 재사용을 허용한다. B의 과거 관계는 검증/게시 범위만 읽고 원본 확인, 미게시/표현 미지원, 오류/갱신/삭제와 생산 비용을 유지한다. R23의 정답 관계를 미리 게시하지 않는다. 필요성과 사례 보완이며 최종 DP/A/B 선정 또는 새 사례의 품질 검증이 아니다. 기존 수치와 점수는 동일한 형식 예시다.';
   if(scene.number===45 && scene.kind==='comparison') {
@@ -149,14 +160,15 @@ function selectedScenes(plan, requested=scope) {
     requested==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):
     requested==='--dp44-only'?s.number===44&&s.kind==='comparison':
     requested==='--dp41-only'?s.number===41&&s.kind==='comparison':
+    requested==='--dp41-with-background'?s.number===41:
     requested==='--dp41-42-only'?[41,42].includes(s.number)&&s.kind==='comparison':
     requested==='--comparison-only'?s.kind==='comparison':true);
 }
 const activePlans=plans.filter(p=>scope==='--intro-flow-only'?p===plans[0]:
-  !scope||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'));
+  !scope||scope==='--dp41-with-background'||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'));
 if(scope==='--list-selected') {
   console.log(JSON.stringify(plans.map(plan=>({file:plan.destination,selections:Object.fromEntries(
-    ['--intro-flow-only','--dp41-only','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only'].map(option=>[option,selectedScenes(plan,option).map(s=>({slug:s.slug,position:plan.scenes.indexOf(s)+1}))]))})),null,2));
+    ['--intro-flow-only','--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only'].map(option=>[option,selectedScenes(plan,option).map(s=>({slug:s.slug,position:plan.scenes.indexOf(s)+1}))]))})),null,2));
   process.exit(0);
 }
 const stats=[];
@@ -166,7 +178,7 @@ for(const plan of activePlans) {
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(['--dp41-only','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {
+  if(['--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {
     const selected=scope==='--intro-flow-only'?[]:selectedScenes(plan).map(s=>s.slug);
     execFileSync(python,[path.join(repo,'scripts/presentations/dp_pptx_package.py'),draft,
       path.join(repo,plan.destination),JSON.stringify(selected),...(scope==='--intro-flow-only'?['--intro']:[])]);

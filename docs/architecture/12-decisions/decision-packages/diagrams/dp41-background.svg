@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
-<title id="title">04-41. 기능 정확성을 위한 VIA Request 해석 설계 — DP 배경</title>
+<title id="title">04-41. VIA 사용자 요청 이해 설계 — DP 배경</title>
 <defs>
 <marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
 <marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
@@ -10,7 +10,7 @@
 <rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
 <text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
 <text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-41</text>
-<text id="n4-0" data-width="1780" x="64" y="101.80000000000001" text-anchor="start" font-size="40" font-weight="700" fill="#18232E">04-41. 기능 정확성을 위한 VIA Request 해석 설계</text>
+<text id="n4-0" data-width="1780" x="64" y="101.80000000000001" text-anchor="start" font-size="40" font-weight="700" fill="#18232E">04-41. VIA 사용자 요청 이해 설계</text>
 <polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="64"/>
 <text id="n7-0" data-width="1756" x="82" y="198.12" text-anchor="start" font-size="36" font-weight="700" fill="#18232E">선택한 표와 이전 보고서의 오연결 위험</text>
@@ -21,7 +21,8 @@
 <text id="n12-0" data-width="1616" x="240" y="948.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">정보 조회와 의미 완성의 진행 책임 설계</text>
 <text id="n13-0" data-width="1260" x="64" y="1051.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">품질 관점: 기능 정확성 / 기능 지원 범위 / 반응성</text>
 <text id="n14-0" data-width="480" x="1856" y="1051.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
-<text id="n15-0" data-width="1110" x="64" y="291.68" text-anchor="start" font-size="29" font-weight="700" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.”</text>
+<text id="n15-0" data-width="1110" x="64" y="280.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 보내지 말고</text>
+<text id="n15-1" data-width="1110" x="64" y="315.76" text-anchor="start" font-size="28" font-weight="700" fill="#18232E">결과를 바탕으로 초안만 만들어.”</text>
 <rect id="n16" fill="#E6ECF2" stroke="#CDD6DE" stroke-width="1.7" x="64" y="330" width="1110" height="411"/>
 <text id="n17-0" data-width="1034" x="86" y="365.32" text-anchor="start" font-size="21" font-weight="400" fill="#5F6B77">사용자 화면과 VIA 기록 / 설명용 가상 화면</text>
 <rect id="n18" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="80" y="389" width="568" height="333"/>
@@ -52,20 +53,20 @@
 <text id="n43-0" data-width="120" x="430.0" y="663.4" text-anchor="middle" font-size="20" font-weight="400" fill="#18232E">240</text>
 <text id="n44-0" data-width="120" x="562.0" y="663.4" text-anchor="middle" font-size="20" font-weight="400" fill="#18232E">440</text>
 <rect id="n45" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="670" y="389" width="488" height="333"/>
-<text id="n46-0" data-width="448" x="690" y="427.16" text-anchor="start" font-size="23" font-weight="700" fill="#5F6B77">이전 Request와 Task 후보</text>
-<text id="n47-0" data-width="448" x="690" y="478.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">예산 보고서 Task</text>
+<text id="n46-0" data-width="448" x="690" y="427.16" text-anchor="start" font-size="23" font-weight="700" fill="#5F6B77">이전 요청과 업무(Task) 후보</text>
+<text id="n47-0" data-width="448" x="690" y="478.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">Task1: 예산 보고서</text>
 <text id="n48-0" data-width="448" x="690" y="513.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">“예산 보고서 만들어줘” / 진행 중</text>
 <polyline id="n49" points="690,536 1138,536" fill="none" stroke="#CDD6DE" stroke-width="1"/>
-<text id="n50-0" data-width="448" x="690" y="580.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">실적 보고서 Task</text>
+<text id="n50-0" data-width="448" x="690" y="580.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">Task2: 실적 보고서</text>
 <text id="n51-0" data-width="448" x="690" y="615.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">“실적 보고서 만들어줘” / 진행 중</text>
 <text id="n52-0" data-width="448" x="690" y="691.68" text-anchor="start" font-size="29" font-weight="700" fill="#B63732">연결할 Task 미확정</text>
 <rect id="n53" fill="#F1F4F7" stroke="none" stroke-width="1.7" x="64" y="778" width="1110" height="67"/>
-<text id="n54-0" data-width="1068" x="84" y="819.84" text-anchor="start" font-size="27" font-weight="700" fill="#18232E">메일 Request의 고정 조건 / 초안 작성, 발송 제외</text>
+<text id="n54-0" data-width="1068" x="84" y="818.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">수정된 보고서 결과로 메일 초안 작성 / 메일 발송 금지</text>
 <text id="n55-0" data-width="596" x="1260" y="377.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">선택 자료의 확인</text>
-<text id="n56-0" data-width="596" x="1260" y="418.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">화면 정보와 Referent 범위 확인</text>
-<text id="n57-0" data-width="596" x="1260" y="537.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">관련 Task의 구분</text>
-<text id="n58-0" data-width="596" x="1260" y="578.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">이전 Request와 현재 Task 상태 확인</text>
+<text id="n56-0" data-width="596" x="1260" y="418.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">“이 표”가 가리킨 자료의 범위 확인</text>
+<text id="n57-0" data-width="596" x="1260" y="537.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">관련 업무의 구분</text>
+<text id="n58-0" data-width="596" x="1260" y="578.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">이전 요청과 현재 업무 상태 확인</text>
 <text id="n59-0" data-width="596" x="1260" y="697.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">정보 보완과 조건 유지</text>
-<text id="n60-0" data-width="596" x="1260" y="738.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">미확정 Task의 Clarification과</text>
-<text id="n60-1" data-width="596" x="1260" y="771.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">초안 조건의 보존</text>
+<text id="n60-0" data-width="596" x="1260" y="738.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">어느 보고서인지 확인 질문</text>
+<text id="n60-1" data-width="596" x="1260" y="771.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">초안 작성과 발송 금지 조건 유지</text>
 </g></svg>

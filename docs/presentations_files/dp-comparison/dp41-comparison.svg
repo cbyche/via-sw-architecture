@@ -12,16 +12,16 @@
 <text id="n3-0" data-width="450" x="1880" y="39.480000000000004" text-anchor="end" font-size="19" font-weight="400" fill="#5F6B77">구조 비교 / 장단점 / QA Trade-off</text>
 <text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-41. VIA 요청 이해의 모델 주도와 코드 주도 완성</text>
 <polyline id="n5" points="40,121 1880,121" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n6-0" data-width="1840" x="40" y="161.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.” / 보고서 Task 후보 2개</text>
-<text id="n7-0" data-width="1840" x="40" y="184.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">공통: 로컬 VIA / 로컬 VAD / 클라우드 음성 + 의미 LLM / 채택은 코드 / 조회 예시: E7@v2 표, T7/T8 후보, M3 발송 금지</text>
+<text id="n6-0" data-width="1840" x="40" y="161.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">“이 표를 아까 보고서에 넣고, 메일은 보내지 말고 결과를 바탕으로 초안만 만들어.”</text>
+<text id="n7-0" data-width="1840" x="40" y="186.48" text-anchor="start" font-size="19" font-weight="400" fill="#18232E">Task1: 예산 보고서 / Task2: 실적 보고서 → “어느 보고서인가요?” → 사용자: “예산 보고서” / 결과: 수정된 보고서 → 메일 초안</text>
 <rect id="n8" fill="#D5E7C7" stroke="#CDD6DE" stroke-width="1.7" x="40" y="195" width="1840" height="48"/>
 <text id="n9-0" data-width="98" x="90" y="226.48" text-anchor="middle" font-size="19" font-weight="700" fill="#18232E">설계안</text>
 <text id="n10-0" data-width="838" x="575" y="228.92000000000002" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">A 모델 주도 해석</text>
 <text id="n11-0" data-width="838" x="1445" y="228.92000000000002" text-anchor="middle" font-size="26" font-weight="700" fill="#18232E">B 모델 요청 틀과 코드 주도 완성</text>
 <polyline id="n12" points="1010,195 1010,795" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <polyline id="n13" points="40,795 1880,795" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n14-0" data-width="1840" x="42" y="825.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">비교 대상: 다음 읽기와 전체 의미 결합의 결정권 / 임시 해석 상태는 Request Interpreter / 채택 의미/질문/출처/revision은 Request Controller</text>
-<text id="n15-0" data-width="1840" x="42" y="851.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">음성/전사 비용은 공통. 재시도/폐기된 모델 호출도 집계. 도구 조회 자체는 모델 호출이 아니며 45의 의미 가공이 추가되면 별도 집계.</text>
+<text id="n14-0" data-width="1840" x="42" y="826.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">양안 공통: 입력 수집 → 요청 해석 → Request Controller의 검증/저장/채택 → 응답 또는 업무 위임. 그림은 요청 해석 부분을 확대했다.</text>
+<text id="n15-0" data-width="1840" x="42" y="856.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">자료 예시는 교환 내용이다. 질문은 실제 전달하고 답변을 받은 뒤 Task1을 연결한다. 자료가 바뀌지 않았는지도 채택 전에 확인한다.</text>
 <polyline id="n16" points="40,875 1880,875" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <text id="n17-0" data-width="245" x="42" y="899.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">정확성 / 지원 범위</text>
 <text id="n18-0" data-width="720" x="300" y="899.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">열린 의미를 함께 판단 / 검색 누락과 모델 오판 가능</text>
@@ -36,247 +36,134 @@
 <text id="n27-0" data-width="820" x="1050" y="967.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음</text>
 <polyline id="n28" points="40,977 1880,977" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <text id="n29-0" data-width="245" x="42" y="1001.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">변경 용이성</text>
-<text id="n30-0" data-width="720" x="300" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">새 관계는 prompt/tool 변경 가능 / 채택 계약 변경은 별도</text>
-<text id="n31-0" data-width="820" x="1050" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">schema와 Engine 규칙 확장 / 기존 지원 관계는 코드 제어</text>
+<text id="n30-0" data-width="720" x="300" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">새 관계는 모델 지침/조회 도구 변경 가능</text>
+<text id="n31-0" data-width="820" x="1050" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">요청 틀과 코드 규칙 확장 / 기존 지원 관계는 코드 제어</text>
 <text id="n32-0" data-width="1840" x="40" y="1047.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">미선정 / 미측정. B도 부분 의미 판단을 다시 호출할 수 있다. 새 관계의 지원 범위와 질문 비용을 함께 비교한다.</text>
-<text id="n33-0" data-width="1840" x="40" y="1072.88" text-anchor="start" font-size="14" font-weight="400" fill="#5F6B77">교환 자료/필드는 검토용 예시 / A도 구조화 출력 가능 / B의 BOUND는 정답 보증이 아님 / 품질 우열과 호출 비용은 측정 전 가설</text>
-<rect id="n34" fill="white" stroke="#000000" stroke-width="1.0" x="47" y="277" width="86" height="512"/>
-<text id="n35-0" data-width="82" x="90" y="305.8" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Legend</text>
-<rect id="n36" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="313" width="74" height="27"/>
-<text id="n37-0" data-width="56" x="90.0" y="329.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Component</text>
-<text id="n38-0" data-width="76" x="54" y="357.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">논리 책임</text>
-<rect id="n39" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="369" width="74" height="27" rx="7"/>
-<text id="n40-0" data-width="56" x="90.0" y="385.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
-<text id="n41-0" data-width="76" x="54" y="413.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">내부 구현</text>
-<path id="n42" fill="white" stroke="#000000" stroke-width="1.0" d="M53 425H109L127 443V452H53Z M109 425V443H127"/>
-<text id="n43-0" data-width="70" x="90" y="441.2" text-anchor="middle" font-size="10" font-weight="400" fill="#000000">Data</text>
-<text id="n44-0" data-width="76" x="54" y="469.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">교환 예시</text>
-<path id="n45" fill="white" stroke="#000000" stroke-width="1.0" d="M53 489C53 473 127 473 127 489V500C127 516 53 516 53 500Z M53 489C53 505 127 505 127 489"/>
-<text id="n46-0" data-width="56" x="90.0" y="497.2" text-anchor="middle" font-size="10" font-weight="400" fill="#18232E">State</text>
-<text id="n47-0" data-width="76" x="54" y="525.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">owner 상태</text>
-<polygon id="n48" points="62,537 118,537 127,550.5 118,564 62,564 53,550.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n49-0" data-width="56" x="90.0" y="553.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Service</text>
-<text id="n50-0" data-width="76" x="54" y="581.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">외부 의존성</text>
-<rect id="n51" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" x="53" y="692" width="74" height="27" rx="7"/>
-<text id="n52-0" data-width="56" x="90.0" y="708.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
-<text id="n53-0" data-width="76" x="54" y="736.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">차이: 살구색</text>
-<polyline id="n54" points="54,601 123,601" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<text id="n55-0" data-width="76" x="54" y="621.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">요청 / 전달</text>
-<polyline id="n56" points="54,648 123,648" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<text id="n57-0" data-width="76" x="54" y="668.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">응답 / 반환</text>
-<text id="n58-0" data-width="76" x="54" y="761.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">공통: 검정</text>
-<text id="n58-1" data-width="76" x="54" y="775.4399999999999" text-anchor="start" font-size="12" font-weight="400" fill="#000000">흰 바탕</text>
-<rect id="n59" fill="white" stroke="#000000" stroke-width="1.0" x="155" y="268" width="835" height="305"/>
-<text id="n60-0" data-width="809" x="168" y="297.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Interpreter</text>
-<rect id="n63" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="175" y="360" width="235" height="52" rx="7"/>
-<text id="n64-0" data-width="217" x="292.5" y="390.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">모델 주도 해석 제어기</text>
-<rect id="n65" fill="white" stroke="#000000" stroke-width="1.0" x="745" y="384" width="225" height="42" rx="7"/>
-<text id="n66-0" data-width="207" x="857.5" y="409.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">읽기 도구 실행기</text>
-<polyline id="n67" points="410,386.0 427,386 427,345 857,345 857.5,384" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n70" points="857.5,426 857,507 292,507 292.5,412" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<path id="n77" fill="white" stroke="#000000" stroke-width="1.0" d="M175 530C175 522 410 522 410 530V564C410 572 175 572 175 564Z M175 530C175 538 410 538 410 530"/>
-<text id="n78-0" data-width="217" x="292.5" y="553.88" text-anchor="middle" font-size="14" font-weight="400" fill="#18232E">임시 해석 상태</text>
-<rect id="n79" fill="white" stroke="#000000" stroke-width="1.0" x="745" y="532" width="225" height="30" rx="7"/>
-<text id="n80-0" data-width="207" x="857.5" y="551.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">의미 제안 검증기</text>
-<polyline id="n81" points="410,404.0 431,404 431,547 745,547.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n84" points="175,386.0 167,386 167,547 175,547.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n85" points="175,555.0 163,555 163,397 175,397.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<rect id="n88" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="596" width="230" height="28"/>
-<text id="n89-0" data-width="212" x="290.0" y="614.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Context Manager</text>
-<rect id="n90" fill="white" stroke="#000000" stroke-width="1.0" x="458" y="596" width="230" height="28"/>
-<text id="n91-0" data-width="212" x="573.0" y="614.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Task Manager</text>
-<rect id="n92" fill="white" stroke="#000000" stroke-width="1.0" x="760" y="636" width="220" height="28"/>
-<text id="n93-0" data-width="202" x="870.0" y="654.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Model Access</text>
-<rect id="n96" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="644" width="235" height="76"/>
-<text id="n97-0" data-width="209" x="188" y="673.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
-<path id="n98" fill="white" stroke="#000000" stroke-width="1.0" d="M187 681C187 673 398 673 398 681V709C398 717 187 717 187 709Z M187 681C187 689 398 689 398 681"/>
-<text id="n99-0" data-width="193" x="292.5" y="702.12" text-anchor="middle" font-size="11" font-weight="400" fill="#18232E">채택 의미 / 질문 / 출처</text>
-<rect id="n100" fill="white" stroke="#000000" stroke-width="1.0" x="458" y="638" width="230" height="27"/>
-<text id="n101-0" data-width="212" x="573.0" y="655.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Policy Manager</text>
-<rect id="n102" fill="white" stroke="#000000" stroke-width="1.0" x="458" y="680" width="230" height="27"/>
-<text id="n103-0" data-width="212" x="573.0" y="697.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">State Store</text>
-<rect id="n104" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="726" width="235" height="63"/>
-<text id="n105-0" data-width="209" x="188" y="755.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Interaction Manager</text>
-<rect id="n106" fill="white" stroke="#000000" stroke-width="1.0" x="187" y="759" width="90" height="17" rx="7"/>
-<text id="n107-0" data-width="72" x="232.0" y="769.93" text-anchor="middle" font-size="9" font-weight="700" fill="#000000">Channel I/O</text>
-<rect id="n108" fill="white" stroke="#000000" stroke-width="1.0" x="286" y="759" width="112" height="17" rx="7"/>
-<text id="n109-0" data-width="94" x="342.0" y="769.66" text-anchor="middle" font-size="8" font-weight="700" fill="#000000">Turn-Taking Control</text>
-<rect id="n112" fill="white" stroke="#000000" stroke-width="1.0" x="458" y="734" width="230" height="28"/>
-<text id="n113-0" data-width="212" x="573.0" y="752.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Response Manager</text>
-<rect id="n114" fill="white" stroke="#000000" stroke-width="1.0" x="760" y="734" width="220" height="28"/>
-<text id="n115-0" data-width="202" x="870.0" y="752.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Agent Gateway</text>
-<polygon id="n116" points="769,686 853,686 862,699.5 853,713 769,713 760,699.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n117-0" data-width="84" x="811.0" y="695.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">클라우드</text>
-<text id="n117-1" data-width="84" x="811.0" y="708.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">음성 모델</text>
-<polygon id="n118" points="887,686 971,686 980,699.5 971,713 887,713 878,699.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n119-0" data-width="84" x="929.0" y="695.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">클라우드</text>
-<text id="n119-1" data-width="84" x="929.0" y="708.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">의미 LLM</text>
-<polygon id="n120" points="769,774 971,774 980,782.5 971,791 769,791 760,782.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n121-0" data-width="202" x="870.0" y="785.47" text-anchor="middle" font-size="11" font-weight="700" fill="#000000">Downstream Agent</text>
-<polyline id="n122" points="970,399.0 994,399.0 994,585 290.0,585 290.0,596" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n123" points="299.0,596 299.0,588 986,588 986,412.0 970,412.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n124" points="970,399.0 994,399.0 994,588 573.0,588 573.0,596" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n125" points="582.0,596 582.0,591 986,591 986,412.0 970,412.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n126" points="175,386.0 158,386.0 158,632 996,632 996,650 980,650.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n127" points="980,658.0 998,658 998,629 150,629 150,398.0 175,398.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n128" points="820.0,664 820,674 811,674 811.0,686" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n129" points="820.0,686 820,679 829,679 829.0,664" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n130" points="925.0,664 925,674 929,674 929.0,686" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n131" points="938.0,686 938,679 934,679 934.0,664" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n132" points="175,660.0 156,655 156,377.0 175,377.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n133" points="857.5,562 857.5,640 292,640 292.5,644" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n134" points="410,659.0 458,647.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n135" points="458,659.5 410,670.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n136" points="410,697.0 458,688.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n137" points="458,699.5 410,708.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n138" points="227.5,726 227.5,720" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n139" points="410,687.0 427,682 427,720 573,720 573.0,734" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n140" points="458,742.0 410,751.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n141" points="410,765.5 458,756.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n142" points="688,739.0 707,739 707,718 162,718 162,681 175,686.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n143" points="688,749.0 722,749 722,645 760,645.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n144" points="760,658.0 730,658 730,758 688,758.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n145" points="232.0,776 232,792 992,792 992,648 980,648.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n146" points="980,661.0 989,661 989,788 243,788 243.0,776" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n147" points="410,653.0 428,648 428,618 458,618.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n148" points="688,610.0 706,610 706,725 870,725 870.0,734" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n149" points="870.0,762 870.0,774" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<rect id="n61" fill="white" stroke="none" stroke-width="1.7" x="173" y="309" width="366.0" height="26.0"/>
-<text id="n62-0" data-width="800" x="175" y="328.4" text-anchor="start" font-size="20" font-weight="400" fill="#000000">모델이 다음 읽기와 전체 의미를 결정</text>
-<path id="n68" fill="white" stroke="#000000" stroke-width="1.0" d="M460 339H712L730 357V412H460Z M712 339V357H730"/>
-<text id="n69-0" data-width="243" x="472" y="361.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">ReadRequest</text>
-<text id="n69-1" data-width="243" x="472" y="380.92" text-anchor="start" font-size="16" font-weight="400" fill="#000000">tool: task_retrieval</text>
-<text id="n69-2" data-width="243" x="472" y="400.12" text-anchor="start" font-size="16" font-weight="400" fill="#000000">selector: 아까 보고서</text>
-<path id="n71" fill="white" stroke="#000000" stroke-width="1.0" d="M465 434H729L747 452V503H465Z M729 434V452H747"/>
-<text id="n72-0" data-width="255" x="477" y="455.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">EvidenceBundle</text>
-<text id="n72-1" data-width="255" x="477" y="473.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">T7 / T8 + source revisions</text>
-<text id="n72-2" data-width="255" x="477" y="491.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">두 후보 → 질문 / 답변 후 재판단</text>
-<rect id="n73" fill="white" stroke="none" stroke-width="1.7" x="173" y="447" width="234.44" height="22.4"/>
-<text id="n74-0" data-width="277" x="175" y="463.64" text-anchor="start" font-size="17" font-weight="400" fill="#000000">근거를 받고 다시 모델 판단</text>
-<rect id="n75" fill="white" stroke="none" stroke-width="1.7" x="173" y="474" width="210.24" height="21.2"/>
-<text id="n76-0" data-width="270" x="175" y="489.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">“예산 보고서” 답변 뒤 T7</text>
-<path id="n82" fill="white" stroke="#000000" stroke-width="1.0" d="M465 518H717L735 536V565H465Z M717 518V536H735"/>
-<text id="n83-0" data-width="243" x="477" y="539.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">MeaningProposal (모델 생산)</text>
-<text id="n83-1" data-width="243" x="477" y="557.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">task: T7 / send: false</text>
-<rect id="n86" fill="white" stroke="none" stroke-width="1.7" x="173" y="575" width="456.5" height="17.6"/>
-<text id="n87-0" data-width="800" x="175" y="587.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">공통 조회/채택/전달 경로 / 10개 Component / 아래 자료 표기는 예시</text>
-<rect id="n94" fill="white" stroke="none" stroke-width="1.7" x="763" y="611" width="129.44" height="16.4"/>
-<text id="n95-0" data-width="205" x="765" y="623.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">로컬 cloud adapter</text>
-<rect id="n110" fill="white" stroke="none" stroke-width="1.7" x="284" y="778" width="46.879999999999995" height="12.799999999999999"/>
-<text id="n111-0" data-width="113" x="286" y="787.28" text-anchor="start" font-size="9" font-weight="400" fill="#000000">로컬 VAD</text>
-<rect id="n150" fill="white" stroke="none" stroke-width="1.7" x="458" y="711" width="204.6" height="14.0"/>
-<text id="n151-0" data-width="231" x="460" y="721.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">질문/focus / release / 실제 receipt</text>
-<rect id="n152" fill="white" stroke="none" stroke-width="1.7" x="758" y="718" width="152.79999999999998" height="14.0"/>
-<text id="n153-0" data-width="223" x="760" y="728.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">조건부 구성/음성 / 위임/접수</text>
-<rect id="n154" fill="white" stroke="#000000" stroke-width="1.0" x="1025" y="268" width="835" height="305"/>
-<text id="n155-0" data-width="809" x="1038" y="297.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Interpreter</text>
-<rect id="n158" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1045" y="344" width="220" height="37" rx="7"/>
-<text id="n159-0" data-width="202" x="1155.0" y="367.36" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">요청 틀 해석기</text>
-<rect id="n160" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1330" y="432" width="307" height="43" rx="7"/>
-<text id="n161-0" data-width="289" x="1483.5" y="458.36" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Request Resolution Engine</text>
-<rect id="n162" fill="white" stroke="#000000" stroke-width="1.0" x="1670" y="432" width="170" height="43" rx="7"/>
-<text id="n163-0" data-width="152" x="1755.0" y="457.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">읽기 도구 실행기</text>
-<polyline id="n164" points="1265,362.5 1595,362 1595,418 1483,418 1483.5,432" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n167" points="1637,446.5 1670,446.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n168" points="1670,462.5 1637,462.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n173" points="1330,453.5 1290,453 1290,395 1155,395 1155.0,381" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n174" points="1130.0,381 1130,403 1283,403 1283,465 1330,465.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<rect id="n177" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="532" width="232" height="30" rx="7"/>
-<text id="n178-0" data-width="214" x="1161.0" y="551.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">의미 제안 검증기</text>
-<polyline id="n179" points="1483.5,475 1483,547 1277,547.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<path id="n182" fill="white" stroke="#000000" stroke-width="1.0" d="M1670 533C1670 525 1840 525 1840 533V564C1840 572 1670 572 1670 564Z M1670 533C1670 541 1840 541 1840 533"/>
-<text id="n183-0" data-width="152" x="1755.0" y="555.96" text-anchor="middle" font-size="13" font-weight="400" fill="#18232E">요청 해석 상태</text>
-<polyline id="n184" points="1637,467.5 1651,468 1651,551 1670,548.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n185" points="1670,554.5 1648,557 1648,472 1637,472.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<rect id="n188" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="596" width="230" height="28"/>
-<text id="n189-0" data-width="212" x="1160.0" y="614.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Context Manager</text>
-<rect id="n190" fill="white" stroke="#000000" stroke-width="1.0" x="1328" y="596" width="230" height="28"/>
-<text id="n191-0" data-width="212" x="1443.0" y="614.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Task Manager</text>
-<rect id="n192" fill="white" stroke="#000000" stroke-width="1.0" x="1630" y="636" width="220" height="28"/>
-<text id="n193-0" data-width="202" x="1740.0" y="654.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Model Access</text>
-<rect id="n196" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="644" width="235" height="76"/>
-<text id="n197-0" data-width="209" x="1058" y="673.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
-<path id="n198" fill="white" stroke="#000000" stroke-width="1.0" d="M1057 681C1057 673 1268 673 1268 681V709C1268 717 1057 717 1057 709Z M1057 681C1057 689 1268 689 1268 681"/>
-<text id="n199-0" data-width="193" x="1162.5" y="702.12" text-anchor="middle" font-size="11" font-weight="400" fill="#18232E">채택 의미 / 질문 / 출처</text>
-<rect id="n200" fill="white" stroke="#000000" stroke-width="1.0" x="1328" y="638" width="230" height="27"/>
-<text id="n201-0" data-width="212" x="1443.0" y="655.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Policy Manager</text>
-<rect id="n202" fill="white" stroke="#000000" stroke-width="1.0" x="1328" y="680" width="230" height="27"/>
-<text id="n203-0" data-width="212" x="1443.0" y="697.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">State Store</text>
-<rect id="n204" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="726" width="235" height="63"/>
-<text id="n205-0" data-width="209" x="1058" y="755.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Interaction Manager</text>
-<rect id="n206" fill="white" stroke="#000000" stroke-width="1.0" x="1057" y="759" width="90" height="17" rx="7"/>
-<text id="n207-0" data-width="72" x="1102.0" y="769.93" text-anchor="middle" font-size="9" font-weight="700" fill="#000000">Channel I/O</text>
-<rect id="n208" fill="white" stroke="#000000" stroke-width="1.0" x="1156" y="759" width="112" height="17" rx="7"/>
-<text id="n209-0" data-width="94" x="1212.0" y="769.66" text-anchor="middle" font-size="8" font-weight="700" fill="#000000">Turn-Taking Control</text>
-<rect id="n212" fill="white" stroke="#000000" stroke-width="1.0" x="1328" y="734" width="230" height="28"/>
-<text id="n213-0" data-width="212" x="1443.0" y="752.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Response Manager</text>
-<rect id="n214" fill="white" stroke="#000000" stroke-width="1.0" x="1630" y="734" width="220" height="28"/>
-<text id="n215-0" data-width="202" x="1740.0" y="752.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Agent Gateway</text>
-<polygon id="n216" points="1639,686 1723,686 1732,699.5 1723,713 1639,713 1630,699.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n217-0" data-width="84" x="1681.0" y="695.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">클라우드</text>
-<text id="n217-1" data-width="84" x="1681.0" y="708.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">음성 모델</text>
-<polygon id="n218" points="1757,686 1841,686 1850,699.5 1841,713 1757,713 1748,699.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n219-0" data-width="84" x="1799.0" y="695.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">클라우드</text>
-<text id="n219-1" data-width="84" x="1799.0" y="708.7" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">의미 LLM</text>
-<polygon id="n220" points="1639,774 1841,774 1850,782.5 1841,791 1639,791 1630,782.5" fill="white" stroke="#000000" stroke-width="1"/>
-<text id="n221-0" data-width="202" x="1740.0" y="785.47" text-anchor="middle" font-size="11" font-weight="700" fill="#000000">Downstream Agent</text>
-<polyline id="n222" points="1840,447.5 1864,447.5 1864,585 1160.0,585 1160.0,596" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n223" points="1169.0,596 1169.0,588 1856,588 1856,460.5 1840,460.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n224" points="1840,447.5 1864,447.5 1864,588 1443.0,588 1443.0,596" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n225" points="1452.0,596 1452.0,591 1856,591 1856,460.5 1840,460.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n226" points="1045,362.5 1028,362.5 1028,632 1866,632 1866,650 1850,650.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n227" points="1850,658.0 1868,658 1868,629 1020,629 1020,374.5 1045,374.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n228" points="1690.0,664 1690,674 1681,674 1681.0,686" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n229" points="1690.0,686 1690,679 1699,679 1699.0,664" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n230" points="1795.0,664 1795,674 1799,674 1799.0,686" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n231" points="1808.0,686 1808,679 1804,679 1804.0,664" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n232" points="1045,660.0 1026,655 1026,353.5 1045,353.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n233" points="1161.0,562 1161.0,640 1162,640 1162.5,644" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n234" points="1280,659.0 1328,647.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n235" points="1328,659.5 1280,670.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n236" points="1280,697.0 1328,688.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n237" points="1328,699.5 1280,708.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n238" points="1097.5,726 1097.5,720" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n239" points="1280,687.0 1297,682 1297,720 1443,720 1443.0,734" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n240" points="1328,742.0 1280,751.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n241" points="1280,765.5 1328,756.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n242" points="1558,739.0 1577,739 1577,718 1032,718 1032,681 1045,686.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n243" points="1558,749.0 1592,749 1592,645 1630,645.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n244" points="1630,658.0 1600,658 1600,758 1558,758.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n245" points="1102.0,776 1102,792 1862,792 1862,648 1850,648.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n246" points="1850,661.0 1859,661 1859,788 1113,788 1113.0,776" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n247" points="1280,653.0 1298,648 1298,618 1328,618.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n248" points="1558,610.0 1576,610 1576,725 1740,725 1740.0,734" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n249" points="1740.0,762 1740.0,774" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<rect id="n156" fill="white" stroke="none" stroke-width="1.7" x="1043" y="307" width="400.15999999999997" height="24.8"/>
-<text id="n157-0" data-width="800" x="1045" y="325.48" text-anchor="start" font-size="19" font-weight="400" fill="#000000">모델은 틀 / 코드는 항목 해결과 전체 결합</text>
-<path id="n165" fill="white" stroke="#000000" stroke-width="1.0" d="M1298 343H1567L1585 361V421H1298Z M1567 343V361H1585"/>
-<text id="n166-0" data-width="260" x="1310" y="363.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">RequestFrame v1 (모델 생산)</text>
-<text id="n166-1" data-width="260" x="1310" y="380.68" text-anchor="start" font-size="14" font-weight="400" fill="#000000">goal: 표 추가 / target: UNRESOLVED</text>
-<text id="n166-2" data-width="260" x="1310" y="397.48" text-anchor="start" font-size="14" font-weight="400" fill="#000000">relation: 아까 보고서 / send: false</text>
-<rect id="n169" fill="white" stroke="none" stroke-width="1.7" x="1639" y="417" width="28" height="14.0"/>
-<text id="n170-0" data-width="35" x="1641" y="427.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">조회</text>
-<path id="n171" fill="white" stroke="#000000" stroke-width="1.0" d="M1662 480H1834L1852 498V523H1662Z M1834 480V498H1852"/>
-<text id="n172-0" data-width="163" x="1674" y="499.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">T7 / T8 → AMBIGUOUS</text>
-<text id="n172-1" data-width="163" x="1674" y="513.44" text-anchor="start" font-size="12" font-weight="400" fill="#000000">질문/답변 뒤 T7 → BOUND</text>
-<path id="n175" fill="white" stroke="#000000" stroke-width="1.0" d="M1045 407H1259L1277 425V491H1045Z M1259 407V425H1277"/>
-<text id="n176-0" data-width="205" x="1057" y="426.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">선택적 PartialInterpretation</text>
-<text id="n176-1" data-width="205" x="1057" y="440.44" text-anchor="start" font-size="12" font-weight="400" fill="#000000">field / candidateIds</text>
-<text id="n176-2" data-width="205" x="1057" y="454.84000000000003" text-anchor="start" font-size="12" font-weight="400" fill="#000000">evidenceVersions</text>
-<text id="n176-3" data-width="205" x="1057" y="469.24" text-anchor="start" font-size="12" font-weight="400" fill="#000000">부분 요청 → field result</text>
-<text id="n176-4" data-width="205" x="1057" y="483.64" text-anchor="start" font-size="12" font-weight="400" fill="#000000">전체 결합은 Engine 코드</text>
-<path id="n180" fill="white" stroke="#000000" stroke-width="1.0" d="M1330 490H1619L1637 508V559H1330Z M1619 490V508H1637"/>
-<text id="n181-0" data-width="280" x="1342" y="511.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">MeaningProposal (코드 생산)</text>
-<text id="n181-1" data-width="280" x="1342" y="529.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">질문 / “예산 보고서” 답변 뒤</text>
-<text id="n181-2" data-width="280" x="1342" y="547.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">task: T7 / send: false</text>
-<rect id="n186" fill="white" stroke="none" stroke-width="1.7" x="1043" y="575" width="456.5" height="17.6"/>
-<text id="n187-0" data-width="800" x="1045" y="587.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">공통 조회/채택/전달 경로 / 10개 Component / 아래 자료 표기는 예시</text>
-<rect id="n194" fill="white" stroke="none" stroke-width="1.7" x="1633" y="611" width="129.44" height="16.4"/>
-<text id="n195-0" data-width="205" x="1635" y="623.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">로컬 cloud adapter</text>
-<rect id="n210" fill="white" stroke="none" stroke-width="1.7" x="1154" y="778" width="46.879999999999995" height="12.799999999999999"/>
-<text id="n211-0" data-width="113" x="1156" y="787.28" text-anchor="start" font-size="9" font-weight="400" fill="#000000">로컬 VAD</text>
-<rect id="n250" fill="white" stroke="none" stroke-width="1.7" x="1328" y="711" width="204.6" height="14.0"/>
-<text id="n251-0" data-width="231" x="1330" y="721.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">질문/focus / release / 실제 receipt</text>
-<rect id="n252" fill="white" stroke="none" stroke-width="1.7" x="1628" y="718" width="152.79999999999998" height="14.0"/>
-<text id="n253-0" data-width="223" x="1630" y="728.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">조건부 구성/음성 / 위임/접수</text>
+<text id="n33-0" data-width="1840" x="40" y="1072.88" text-anchor="start" font-size="14" font-weight="400" fill="#5F6B77">A도 정해진 형식으로 출력 가능 / B도 추가 모델 호출 가능 / 코드로 연결했다고 의미가 항상 옳은 것은 아님 / 품질/비용은 측정 전 가설</text>
+<rect id="n34" fill="white" stroke="#000000" stroke-width="1.0" x="47" y="313" width="86" height="476"/>
+<text id="n35-0" data-width="82" x="90" y="341.8" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Legend</text>
+<rect id="n36" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="363" width="74" height="27"/>
+<text id="n37-0" data-width="56" x="90.0" y="379.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Component</text>
+<text id="n38-0" data-width="76" x="54" y="407.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">논리 책임</text>
+<rect id="n39" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="429" width="74" height="27" rx="7"/>
+<text id="n40-0" data-width="56" x="90.0" y="445.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
+<text id="n41-0" data-width="76" x="54" y="473.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">내부 구현</text>
+<path id="n42" fill="white" stroke="#000000" stroke-width="1.0" d="M53 495H109L127 513V522H53Z M109 495V513H127"/>
+<text id="n43-0" data-width="70" x="90" y="511.2" text-anchor="middle" font-size="10" font-weight="400" fill="#000000">Data</text>
+<text id="n44-0" data-width="76" x="54" y="539.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">교환 예시</text>
+<polygon id="n45" points="62,561 118,561 127,574.5 118,588 62,588 53,574.5" fill="white" stroke="#000000" stroke-width="1"/>
+<text id="n46-0" data-width="56" x="90.0" y="577.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Model</text>
+<text id="n47-0" data-width="76" x="54" y="605.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">외부 모델</text>
+<rect id="n48" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" x="53" y="701" width="74" height="27" rx="7"/>
+<text id="n49-0" data-width="56" x="90.0" y="717.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
+<text id="n50-0" data-width="76" x="54" y="745.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">차이: 살구색</text>
+<polyline id="n51" points="54,621 123,621" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<text id="n52-0" data-width="76" x="54" y="641.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">요청 / 전달</text>
+<polyline id="n53" points="54,660 123,660" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<text id="n54-0" data-width="76" x="54" y="680.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">응답 / 반환</text>
+<text id="n55-0" data-width="76" x="54" y="770.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">공통: 검정</text>
+<rect id="n56" fill="white" stroke="#000000" stroke-width="1.0" x="155" y="313" width="835" height="419"/>
+<text id="n57-0" data-width="809" x="168" y="342.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Interpreter</text>
+<polygon id="n58" points="184,259 416,259 425,278.0 416,297 184,297 175,278.0" fill="white" stroke="#000000" stroke-width="1"/>
+<text id="n59-0" data-width="232" x="300.0" y="283.4" text-anchor="middle" font-size="20" font-weight="700" fill="#000000">클라우드 LLM</text>
+<rect id="n62" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="175" y="382" width="250" height="60" rx="7"/>
+<text id="n63-0" data-width="232" x="300.0" y="417.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">모델 주도 해석 제어기</text>
+<rect id="n66" fill="white" stroke="#000000" stroke-width="1.0" x="745" y="414" width="225" height="46" rx="7"/>
+<text id="n67-0" data-width="207" x="857.5" y="442.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">읽기 도구 실행기</text>
+<polyline id="n68" points="425,412.0 440,412 440,374 857.5,374 857.5,414" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n71" points="857.5,460 857.5,600 300,600 300.0,442" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n78" fill="white" stroke="#000000" stroke-width="1.0" x="745" y="667" width="225" height="42" rx="7"/>
+<text id="n79-0" data-width="207" x="857.5" y="692.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">의미 제안 검증기</text>
+<polyline id="n80" points="175,412.0 165,412 165,718 735,718 735,688 745,688.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<rect id="n83" fill="white" stroke="#000000" stroke-width="1.0" x="458" y="759" width="230" height="30"/>
+<text id="n84-0" data-width="212" x="573.0" y="778.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Context Manager</text>
+<polyline id="n85" points="970,430.0 994,430.0 994,739 573.0,739 573.0,759" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n86" points="582.0,759 582.0,743 986,743 986,445.0 970,445.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n87" fill="white" stroke="#000000" stroke-width="1.0" x="745" y="759" width="230" height="30"/>
+<text id="n88-0" data-width="212" x="860.0" y="778.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
+<polyline id="n89" points="970,430.0 994,430.0 994,744 860.0,744 860.0,759" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n90" points="869.0,759 869.0,748 986,748 986,445.0 970,445.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<polyline id="n93" points="175,412.0 160,412.0 160,278 175,278.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n94" points="175,278.0 150,278 150,424.0 175,424.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n60" fill="white" stroke="none" stroke-width="1.7" x="446" y="268" width="290.59999999999997" height="23.599999999999998"/>
+<text id="n61-0" data-width="530" x="448" y="285.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">모델 호출은 Model Access 경유</text>
+<rect id="n64" fill="white" stroke="none" stroke-width="1.7" x="173" y="346" width="383.9" height="27.2"/>
+<text id="n65-0" data-width="800" x="175" y="366.32" text-anchor="start" font-size="21" font-weight="400" fill="#000000">모델이 다음 조회와 전체 의미를 판단</text>
+<path id="n69" fill="white" stroke="#000000" stroke-width="1.0" d="M465 388H712L730 406V471H465Z M712 388V406H730"/>
+<text id="n70-0" data-width="235" x="477" y="413.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">① 조회 요청 (ReadRequest)</text>
+<text id="n70-1" data-width="235" x="477" y="435.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">업무 조회: “아까 보고서”</text>
+<text id="n70-2" data-width="235" x="477" y="456.76" text-anchor="start" font-size="18" font-weight="400" fill="#000000">화면 조회: “이 표”</text>
+<path id="n72" fill="white" stroke="#000000" stroke-width="1.0" d="M465 487H729L747 505V591H465Z M729 487V505H747"/>
+<text id="n73-0" data-width="252" x="477" y="512.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">② 조회 결과 (EvidenceBundle)</text>
+<text id="n73-1" data-width="252" x="477" y="534.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">Task1: 예산 보고서</text>
+<text id="n73-2" data-width="252" x="477" y="555.76" text-anchor="start" font-size="18" font-weight="400" fill="#000000">Task2: 실적 보고서</text>
+<text id="n73-3" data-width="252" x="477" y="577.3599999999999" text-anchor="start" font-size="18" font-weight="400" fill="#000000">자료: 선택한 표</text>
+<rect id="n74" fill="white" stroke="none" stroke-width="1.7" x="173" y="495" width="240.2" height="23.599999999999998"/>
+<text id="n75-0" data-width="270" x="175" y="512.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">③ 근거를 보고 모델 재판단</text>
+<rect id="n76" fill="white" stroke="none" stroke-width="1.7" x="173" y="530" width="256.88" height="22.4"/>
+<text id="n77-0" data-width="270" x="175" y="546.64" text-anchor="start" font-size="17" font-weight="400" fill="#000000">추가 조회 / 확인 질문 / 완성</text>
+<path id="n81" fill="white" stroke="#000000" stroke-width="1.0" d="M175 623H707L725 641V709H175Z M707 623V641H725"/>
+<text id="n82-0" data-width="520" x="187" y="648.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">④ 모델이 만든 의미 제안 (MeaningProposal)</text>
+<text id="n82-1" data-width="520" x="187" y="670.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">예산 보고서(Task1)에 선택한 표 추가</text>
+<text id="n82-2" data-width="520" x="187" y="691.76" text-anchor="start" font-size="18" font-weight="400" fill="#000000">수정된 보고서 결과 → 메일 초안 / 메일 발송 금지</text>
+<rect id="n91" fill="white" stroke="none" stroke-width="1.7" x="173" y="758" width="223.68" height="21.2"/>
+<text id="n92-0" data-width="260" x="175" y="773.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">화면/대화 / 업무 기록 조회</text>
+<rect id="n95" fill="white" stroke="#000000" stroke-width="1.0" x="1025" y="313" width="835" height="419"/>
+<text id="n96-0" data-width="809" x="1038" y="342.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Interpreter</text>
+<polygon id="n97" points="1054,259 1286,259 1295,278.0 1286,297 1054,297 1045,278.0" fill="white" stroke="#000000" stroke-width="1"/>
+<text id="n98-0" data-width="232" x="1170.0" y="283.4" text-anchor="middle" font-size="20" font-weight="700" fill="#000000">클라우드 LLM</text>
+<rect id="n101" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1045" y="369" width="235" height="44" rx="7"/>
+<text id="n102-0" data-width="217" x="1162.5" y="396.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">요청 틀 해석기</text>
+<rect id="n105" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1330" y="495" width="300" height="45" rx="7"/>
+<text id="n106-0" data-width="282" x="1480.0" y="522.36" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Request Resolution Engine</text>
+<rect id="n107" fill="white" stroke="#000000" stroke-width="1.0" x="1670" y="495" width="170" height="45" rx="7"/>
+<text id="n108-0" data-width="152" x="1755.0" y="521.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">읽기 도구 실행기</text>
+<polyline id="n109" points="1280,391.0 1300,391 1300,484 1480,484 1480.0,495" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n112" points="1630,509.5 1670,509.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n113" points="1670,526.5 1630,526.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<polyline id="n116" points="1330,517.5 1300,517.5 1300,429 1162.5,429 1162.5,413" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n117" points="1137.5,413 1137.5,421 1289,421 1289,529.5 1330,529.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n126" fill="white" stroke="#000000" stroke-width="1.0" x="1615" y="667" width="225" height="42" rx="7"/>
+<text id="n127-0" data-width="207" x="1727.5" y="692.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">의미 제안 검증기</text>
+<polyline id="n128" points="1630,529.5 1652,529.5 1652,650 1727.5,650 1727.5,667" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<rect id="n131" fill="white" stroke="#000000" stroke-width="1.0" x="1328" y="759" width="230" height="30"/>
+<text id="n132-0" data-width="212" x="1443.0" y="778.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Context Manager</text>
+<polyline id="n133" points="1840,510.5 1864,510.5 1864,739 1443.0,739 1443.0,759" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n134" points="1452.0,759 1452.0,743 1856,743 1856,525.5 1840,525.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n135" fill="white" stroke="#000000" stroke-width="1.0" x="1615" y="759" width="230" height="30"/>
+<text id="n136-0" data-width="212" x="1730.0" y="778.8599999999999" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
+<polyline id="n137" points="1840,510.5 1864,510.5 1864,744 1730.0,744 1730.0,759" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n138" points="1739.0,759 1739.0,748 1856,748 1856,525.5 1840,525.5" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<polyline id="n141" points="1045,391.0 1030,391.0 1030,278 1045,278.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n142" points="1045,278.0 1020,278 1020,403.0 1045,403.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<rect id="n99" fill="white" stroke="none" stroke-width="1.7" x="1316" y="268" width="290.59999999999997" height="23.599999999999998"/>
+<text id="n100-0" data-width="530" x="1318" y="285.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">모델 호출은 Model Access 경유</text>
+<rect id="n103" fill="white" stroke="none" stroke-width="1.7" x="1043" y="346" width="201.32" height="23.599999999999998"/>
+<text id="n104-0" data-width="250" x="1045" y="363.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">모델은 요청 틀을 생산</text>
+<path id="n110" fill="white" stroke="#000000" stroke-width="1.0" d="M1330 349H1612L1630 367V474H1330Z M1612 349V367H1630"/>
+<text id="n111-0" data-width="270" x="1342" y="374.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">① 요청 틀 (RequestFrame)</text>
+<text id="n111-1" data-width="270" x="1342" y="396.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">목표: 표 추가 + 메일 초안</text>
+<text id="n111-2" data-width="270" x="1342" y="417.76" text-anchor="start" font-size="18" font-weight="400" fill="#000000">표 / 보고서: 아직 미확정</text>
+<text id="n111-3" data-width="270" x="1342" y="439.36" text-anchor="start" font-size="18" font-weight="400" fill="#000000">관계: 보고서 결과 → 메일</text>
+<text id="n111-4" data-width="270" x="1342" y="460.96" text-anchor="start" font-size="18" font-weight="400" fill="#000000">조건: 메일 발송 금지</text>
+<rect id="n114" fill="white" stroke="none" stroke-width="1.7" x="1643" y="468" width="173.12" height="21.2"/>
+<text id="n115-0" data-width="195" x="1645" y="483.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">② 코드가 조회를 선택</text>
+<path id="n118" fill="white" stroke="#000000" stroke-width="1.0" d="M1045 449H1262L1280 467V555H1045Z M1262 449V467H1280"/>
+<text id="n119-0" data-width="205" x="1057" y="473.64" text-anchor="start" font-size="17" font-weight="400" fill="#000000">필요할 때만 부분 해석</text>
+<text id="n119-1" data-width="205" x="1057" y="494.03999999999996" text-anchor="start" font-size="17" font-weight="400" fill="#000000">모델에 특정 항목을 질문</text>
+<text id="n119-2" data-width="205" x="1057" y="514.4399999999999" text-anchor="start" font-size="17" font-weight="400" fill="#000000">예: 답변이 가리킨 업무</text>
+<text id="n119-3" data-width="205" x="1057" y="534.84" text-anchor="start" font-size="17" font-weight="400" fill="#000000">모델 결과 → 코드에 반환</text>
+<path id="n120" fill="white" stroke="#000000" stroke-width="1.0" d="M1330 552H1612L1630 570V614H1330Z M1612 552V570H1630"/>
+<text id="n121-0" data-width="270" x="1342" y="577.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">③ 항목을 코드로 해결</text>
+<text id="n121-1" data-width="270" x="1342" y="599.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">보고서: Task1 / Task2 → 질문</text>
+<rect id="n122" fill="white" stroke="none" stroke-width="1.7" x="1668" y="557" width="152.6" height="20.0"/>
+<text id="n123-0" data-width="180" x="1670" y="571.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">답변 뒤 Task1 연결</text>
+<rect id="n124" fill="white" stroke="none" stroke-width="1.7" x="1668" y="585" width="169.1" height="20.0"/>
+<text id="n125-0" data-width="180" x="1670" y="599.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">코드가 전체 의미 결합</text>
+<path id="n129" fill="white" stroke="#000000" stroke-width="1.0" d="M1045 623H1577L1595 641V709H1045Z M1577 623V641H1595"/>
+<text id="n130-0" data-width="520" x="1057" y="648.56" text-anchor="start" font-size="18" font-weight="400" fill="#000000">④ 코드가 만든 의미 제안 (MeaningProposal)</text>
+<text id="n130-1" data-width="520" x="1057" y="670.16" text-anchor="start" font-size="18" font-weight="400" fill="#000000">예산 보고서(Task1)에 선택한 표 추가</text>
+<text id="n130-2" data-width="520" x="1057" y="691.76" text-anchor="start" font-size="18" font-weight="400" fill="#000000">수정된 보고서 결과 → 메일 초안 / 메일 발송 금지</text>
+<rect id="n139" fill="white" stroke="none" stroke-width="1.7" x="1043" y="758" width="223.68" height="21.2"/>
+<text id="n140-0" data-width="260" x="1045" y="773.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">화면/대화 / 업무 기록 조회</text>
 </g></svg>

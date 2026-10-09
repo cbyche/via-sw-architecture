@@ -6,6 +6,8 @@
 
 **현재 판본 안내 — 2026-10-09:** 41은 공통 실행 계약에 맞춰 로컬 VIA/로컬 VAD와 클라우드 음성·의미 모델로 재구체화했다. 41과 45의 품질 표는 조건별 정성 비교이며, 42~44의 수치/원형 점수와 Shared Omni 표기는 이전 판본이다. 이후 44→45→42를 재구체화할 예정이며 모든 자료의 모델·호출 계약이 이미 동기화됐다는 뜻은 아니다. 아래 날짜별 기록과 이전 수치 설명은 해당 판본의 이력으로 읽는다.
 
+**41의 첫 독자용 확대 보기:** 문서 MAIN은 전체 경로를 유지하고 발표 비교는 Request Interpreter의 해석 흐름, 클라우드 LLM, Context Manager/Task Manager 직접 조회에 집중한다. 공통 음성 입출력·권한·저장/채택·응답·외부 위임은 아래 설명 문장으로 요약했다. 생략은 실제 Component 삭제가 아니다. Task1은 예산 보고서, Task2는 실적 보고서이고 자료는 ‘선택한 표’로 쓴다. ReadRequest/EvidenceBundle/RequestFrame/MeaningProposal은 조회 요청/조회 결과/요청 틀/의미 제안이라는 한글 이름과 함께 표시한다. 불투명한 `T7/T8`, `E7@v2`, `BOUND`, `send=false` 대신 업무 내용·미확정/연결·발송 금지를 설명한다.
+
 이 디렉터리의 비교 전용 PPTX·draw.io·웹은 41~45 번호순 **참조 자료**다. 실제 본 발표는 통합 PPTX의 도입 → 41 → 44 → 45 → 42 순서이며 43 두 장은 부록으로 보존한다. 설명 순서 변경은 개별 설계 내용이나 후보 자격의 변경이 아니다.
 
 사용자가 제공한 DP01~DP04 방안 PNG의 **좌우 설계안, 구조, 장점, 단점, QA Trade-off** 행 구성을 따른 1920×1080 발표 자료다. 기존 배경과 제목 및 서체를 맞추고 설계안 행은 레퍼런스의 연녹색을 사용했다. 판단 생산자, 상태 소유, 조회와 재판단, 확정 및 전달 경로를 MAIN과 대조한다. 43은 기존 A/C 표기를 유지한다. 모든 도형, 이름과 선은 draw.io에서 편집 가능하다. 41과 45는 조건별 정성 비교이며, 42~44에 남은 수치/원형 점수는 이전 형식 예시다.
@@ -28,13 +30,13 @@
 | 44 | 중앙 반환 회수 및 재배정 대 typed 사건의 단계별 활성화와 window 및 credit/cancel. 양안 Direct 후보 통과, 후보 준비와 게시 Control, 실제 표시 및 후행 receipt | [44 본문](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md) / [MAIN](../../architecture/12-decisions/decision-packages/diagrams/choice44-structure.svg) |
 | 45 | 원본별 읽기와 요청 임시 조합 대 공통 과거 관계의 생산 및 지속 게시와 조회. 원본 owner, cache, 출처 및 coverage, 현재 버전과 권한 재확인, 미게시 범위 및 오류 재검증, 별도의 명시 User Memory | [45 본문](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md) / [MAIN](../../architecture/12-decisions/decision-packages/diagrams/choice45-structure.svg) |
 
-각 칸은 별도 대안이다. 반복된 Component 이름은 같은 역할의 확대 표시이며 별도 인스턴스나 모델 복제를 뜻하지 않는다. 일반 실선은 전달 및 요청, 점선은 반환 또는 재판단이며, 43의 회색 bus는 생산자의 공유 모델 호출과 반환이다. 흰색/검정은 공통 요소, 살구색/짙은 테두리는 실제 차이 기능이다. Component와 내부 Module/상태를 구별하며 Model Access는 VIA Component다. 41의 외부 의존성은 Cloud Voice Model/Cloud Semantic LLM이며, 42~45의 Shared Omni 표기는 이전 전제의 보존본이다. 그림의 숫자는 주요 설명 단계이며 전체 호출 순서가 아니다. 42의 배경은 보고서와 메일의 병행 사례, 구조 비교는 본문 E4의 보고서 질문 답변 확대 사례다. 후자의 R1/R2/R3는 최초 위임/질문 답변/결과 수정이며, 각 그림에 적은 사례 범위의 예시 ID다. 전체 실패 계약과 선택 조건은 링크한 본문을 따른다.
+각 칸은 별도 대안이다. 반복된 Component 이름은 같은 역할의 확대 표시이며 별도 인스턴스나 모델 복제를 뜻하지 않는다. 일반 실선은 전달 및 요청, 점선은 반환 또는 재판단이며, 43의 회색 bus는 생산자의 공유 모델 호출과 반환이다. 흰색/검정은 공통 요소, 살구색/짙은 테두리는 실제 차이 기능이다. Component와 내부 Module/상태를 구별하며 Model Access는 VIA Component다. 현재 41 발표는 클라우드 의미 LLM만 그리며 Model Access는 호출 경유 문장으로, 음성 모델은 공통 경로 요약으로 설명한다. 전체 외부 의존성과 연결은 41 MAIN을 따른다. 42~45의 Shared Omni 표기는 이전 전제의 보존본이다. 그림의 숫자는 주요 설명 단계이며 전체 호출 순서가 아니다. 42의 배경은 보고서와 메일의 병행 사례, 구조 비교는 본문 E4의 보고서 질문 답변 확대 사례다. 후자의 R1/R2/R3는 최초 위임/질문 답변/결과 수정이며, 각 그림에 적은 사례 범위의 예시 ID다. 전체 실패 계약과 선택 조건은 링크한 본문을 따른다.
 
 **41의 2026-10-09 재구체화:** 같은 10개 Component 안에서 A 모델 주도 해석 제어기와 B 요청 틀 해석기/Request Resolution Engine을 비교한다. Engine은 Request Interpreter 내부 Module이며 공통 읽기 도구 실행기·의미 제안 검증기는 흰색이다. 큰 경계는 흰색이고 차이 Module만 살구색이다. Legend의 직각 사각형은 Component, 둥근 사각형은 내부 Module, 원통은 owner 안의 상태, 육각형은 외부 모델 의존성이다. State Store는 저장 수단 Component이며 원통 상태와 구별한다. 포함 관계는 별도 프로세스나 서비스 배포를 뜻하지 않는다.
 
-**41 후속 표현 보완:** A는 조회 요청/근거를 받아 모델이 재판단하는 순환, B는 미해결 frame/항목 상태를 코드가 해결하여 전체 의미를 생산하는 흐름을 확대한다. 문서형 overlay는 연결에서 주고받는 데이터의 설명용 예시다. A의 ReadRequest/EvidenceBundle과 B의 RequestFrame/부분 해석을 구별하되, 두 안의 최종 MeaningProposal 형식은 같을 수 있다. A를 자유문장, B를 JSON으로 구별하지 않는다. 공통 경로는 각 칸에서 유지하며 실제 설계 변경이나 API schema 확정이 아니다.
+**41 후속 표현 보완:** A는 조회 요청/근거를 받아 모델이 재판단하는 순환, B는 미해결 frame/항목 상태를 코드가 해결하여 전체 의미를 생산하는 흐름을 확대한다. 문서형 overlay는 연결에서 주고받는 데이터의 설명용 예시다. A의 ReadRequest/EvidenceBundle과 B의 RequestFrame/부분 해석을 구별하되, 두 안의 최종 MeaningProposal 형식은 같을 수 있다. A를 자유문장, B를 JSON으로 구별하지 않는다. 처음에는 전체 공통 경로를 각 칸에 유지했으나, 후속 사용자 리뷰에 따라 현재 발표에서는 공통 후속 경로를 요약 문장으로 대체했다. 실제 설계 변경이나 API schema 확정이 아니다.
 
-41의 읽기 도구 실행기는 Context Manager와 Task Manager에 각각 직접 조회하고 응답을 받는다. A에서는 모델이 다음 조회와 전체 의미를 제안하고, B에서는 Engine 코드가 조회를 진행하고 부분 모델 해석을 받아 전체 관계를 결합한다. RI의 미채택 상태는 임시이며 RC가 현재성·권한 검사와 저장 성공 후 의미/질문을 채택한다. Response Manager의 실제 전달 기록과 RC 질문 focus 연결을 반환선으로 구별한다. 로컬 VAD는 Turn-Taking Control, cloud 역할 호출은 Model Access에 연결한다. B의 1회 호출이나 코드 결합의 정확성은 보장하지 않는다. 조건별 품질과 비용 및 전체 계약은 [41 본문](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md)을 따른다. `--dp41-only`로 비교 41과 해당 PPTX slide/notes만 갱신한다.
+41의 읽기 도구 실행기는 Context Manager와 Task Manager에 각각 직접 조회하고 응답을 받는다. A에서는 모델이 다음 조회와 전체 의미를 제안하고, B에서는 Engine 코드가 조회를 진행하고 부분 모델 해석을 받아 전체 관계를 결합한다. RI의 미채택 상태는 임시이며 RC가 현재성·권한 검사와 저장 성공 후 의미/질문을 채택한다. Response Manager의 실제 전달/질문 연결과 로컬 VAD/Model Access 연동은 문서 MAIN에 유지하며 발표 확대 보기에서는 생략한다. B의 1회 호출이나 코드 결합의 정확성은 보장하지 않는다. 조건별 품질과 비용 및 전체 계약은 [41 본문](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md)을 따른다. `--dp41-only`는 비교만, PPTX `--dp41-with-background`는 세 deck의 41 배경/비교 slide와 notes만 갱신한다.
 
 **42의 2026-10-08 수정:** 포괄적인 대화/업무 처리기 이름을 정식 Request Controller·Task Manager·Agent Gateway로 정리하고, Request Interpreter·Response Manager·Interaction Manager와 Model Access의 공통 협력을 표시한다. 별도 대화 처리 Component를 추가하지 않는다. Request Controller는 `R2/u2→Q1→T1` 관계와 실제 제시 P1 참조를, Response Manager는 P1/P2 publication·내구 전달 원장을, Task Manager/Agent Gateway는 Q1 변경·K1 전달·외부 확인을 소유한다. A의 관련 변경 공동 확정과 B의 접수 대기/업무 접수/대화 반영을 데이터 예시로 구분한다. `release(P2,epoch)`와 실제 전달 receipt는 별도 경계이며 최초 답변 transaction에 물리 재생을 포함하지 않는다. Voice Runtime은 Interaction Manager의 음성 모듈과 Model Access client가 실행되는 영역이며 새 의미 판단 Component가 아니다. 공통/차이 색과 얇은 선 및 Legend는 41과 같은 표기를 사용한다. 주요 Architecture MAIN과 비교 페이지는 같은 구조 scene을 재사용한다.
 
@@ -64,6 +66,8 @@
 PNG 렌더러와 PPTX 생성기의 `--dp41-42-only` 옵션은 두 비교 슬라이드만 교체하고 나머지 슬라이드와 공통 package 부분을 보존한다. 범위 없는 재생성은 전체 자료를 만들 때 사용한다. 기존 예상 수치와 미선정/미측정 상태는 유지한다.
 
 41만 재생성할 때는 생성기·PNG 렌더러·PPTX 생성기에 `--dp41-only`를 사용한다. 41의 SVG/draw.io·PNG, 합본 41 page와 JSON entry, 두 PPTX의 41 comparison slide/notes만 바꾸고 배경 및 다른 DP part를 보존한다. 현재 41의 예상 수치/원형 점수는 위 재구체화에서 제거했다.
+
+배경의 예시 발화·Task 이름도 함께 수정할 때는 배경 생성기를 실행하고 41 PNG만 렌더한 뒤 PPTX 생성기의 `--dp41-with-background`를 사용한다. 통합 deck의 41 두 장과 배경/비교 참조 deck의 41 한 장씩을 갱신하고 다른 슬라이드와 package part는 보존한다.
 
 ## 44 소속과 실행 연결 — 2026-10-08
 
