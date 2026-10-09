@@ -70,37 +70,57 @@ class Slide(Plate):
 
 
 def structure():
+    # Reuse only the native SVG/draw.io renderer, never presentation graph45
+    # or memory_page: the full document retains its own geometry and contracts.
     from generate_dp_comparison_slides import Comparison
-    from dp_comparison_structures import graph45
-    p=Comparison(45)
-    p.slug='choice45-structure'
-    for side,x in enumerate([140,1010]):graph45(p,x,side)
+    from memory_context_scene import draw_option, page_legend
+    p=Comparison.__new__(Comparison)
+    p.number,p.items,p.slug=45,[],'choice45-structure'
+    p.caption='04-45. 과거 근거: 요청별 원본 조합과 공통 관계 생산/조회'
+    p.rect(0,0,1920,1080,'white','none')
+    p.text(40,23,1400,['VIA / 04-45 / 전체 구조와 데이터 계약 v1'],19,INK,True)
+    p.text(1880,23,360,['미선정 / 미구현 / 미측정'],17,MUTED,align='right')
+    p.text(40,65,1840,[p.caption],37,INK,True)
+    p.line([(40,122),(1880,122)],color=LINE,arrow=False,width=1)
+    p.text(40,138,1840,['입력 Input1: “지난번 네가 설명한 평가 기준과 제품 비교 / 견적 결과를 이번 제안서에 반영해줘.”'],21,INK)
+    p.text(40,173,1840,['과거의 실제 전달 / 두 확인된 결과는 근거. 현재 T23 연결은 RI 판단 / RC 채택 뒤의 결과. 분석 / 작성은 Agent.'],17,INK)
+    for side,x in [('A',35),('B',1000)]:
+        p.text(x+15,207,840,[side+(' 요청별 owner read → Context Composer → Bundle' if side=='A' else '변경 → Publisher → 게시 / query → Reader → Bundle')],22,INK,True)
+        draw_option(p,x,250,.75,side)
+    p.line([(980,206),(980,817)],color=LINE,arrow=False,width=1)
+    page_legend(p)
+    p.line([(40,878),(1880,878)],color=LINE,arrow=False,width=1)
+    p.text(40,899,1840,['첫 요청: A 필요한 원본 구성 / B 지원 범위 미게시면 생산 후 재조회. 반복: A warm cache / B 유효 게시 재사용.'],19,INK)
+    p.text(40,932,1840,['정정: 영향 자료 사용부터 fence → 부분 갱신. 미지원: 반복 생산으로 해결하지 않음. 직접 원본 조합 우회는 명시 B+.'],18,INK)
+    p.text(40,965,1840,['Memory1은 실제 전달된 예외 문구 한 구간. 전체 평가 기준을 모두 생산한 예가 아니므로 Bundle1은 PARTIAL, Coverage에 gap.'],17,INK)
+    p.text(40,999,1840,['비용: 현재 판단은 공통 / 생산·갱신·미사용·retry·stale 청구 포함. cloud weights/KV는 PC RAM에 포함하지 않음.'],17,INK)
+    p.text(40,1044,1840,['큰 박스: Component / 안의 Module·State: owner 소속. Source View Cache는 공통. 서비스·process 분리를 이 그림에서 선택하지 않음.'],16,MUTED)
     return p
 
 
 def lifecycle():
     p = Slide('choice45-lifecycle', '정정과 삭제: 오래된 기억을 읽지 못하게 하고, 필요한 원문을 다시 확인한다', height=1920)
-    p.text(64, 138, '공통 사건: D21@v2 → v3 수정 / 선호 삭제 / D21 접근 철회. 같은 원본 보존 범위, 권한, 실제 삭제 시점을 적용한다.', 28)
+    p.text(64, 138, '공통 사건: 제품 결과 D21 개정 2 → 3 / 선호 삭제 / D21 접근 철회. 같은 원본 / 권한 / 삭제 시점.', 28)
     p.text(64, 185, '유효하지 않은 근거의 신규 사용 차단은 배경 재생산이나 물리 삭제의 완료를 기다리지 않는다.', 25, bold=True)
     groups = [
         ('A', INK, ['Source Owner', 'Context\nComposer', 'Request\nInterpreter', 'Request\nController', 'Model Access'], [
             (0, 1, '1  현재 원장 변경 + 동기 사용 승인 차단', False),
             (1, 1, '2  Source View Cache와 요청 근거를 무효화', False),
             (1, 3, '3  차단 버전 반영 / 영향 요청에 취소 전파', False),
-            (3, 4, '4  영향받은 Context/KV와 진행 중 생성 폐기', False),
+            (3, 4, '4  local context와 해당 cloud job 출력 사용 차단 / cancel 요청', False),
             (1, 0, '5  새 요청 / 재시도: 허용된 원본을 범위 읽기', False),
             (0, 1, '6  현재 자료 + 버전 + 누락 / 복구 불가 반환', True),
-            (1, 3, '7  다시 조합한 근거 / 미해결 범위 반환', True),
+            (1, 2, '7  Bundle / receipt를 같은 query의 RI 읽기 실행기로 반환', True),
             (2, 3, '8  원본은 그대로, 기억과 모순 발견 → EvidenceDispute', False),
             (3, 1, '9  기억 ID / 파생 버전 / 원문 모순을 회송', False),
             (1, 1, '10  해당 파생 버전 무효화 → 원본 재조합', False),
         ]),
         ('B', INK, ['Source Owner', 'Memory\nPublisher', 'Evidence\nReader', 'Request\nInterpreter', 'Request\nController'], [
             (0, 2, '1  읽기 차단 버전 / 삭제 / 권한 철회 먼저 반영', False),
-            (2, 4, '2  이전 근거 차단 → 영향 Context/KV 폐기 요청', False),
+            (2, 4, '2  이전 query/attempt 사용 차단 → local context / job 출력 fence', False),
             (0, 1, '3  변경 사건 + 원본 버전 + 영향 참조', False),
-            (1, 1, '4  파생 관계 무효화 / 허용된 원본으로 재생산', False),
-            (1, 2, '5  검증된 관계 + coverage 게시; revision/상태 반환 → Reader 재조회', True),
+            (1, 1, '4  관계 / coverage 차단 → 허용 범위 생산 / 필요 시 C-CONTEXT', False),
+            (1, 2, '5  관계 + coverage 같은 revision 게시 → 상태 반환 / Reader 재조회', True),
             (2, 0, '6  정확한 인용 / 모순 확인 → 원문 재확인', False),
             (0, 2, '7  현재 자료 / 누락 / 복구 불가 반환', True),
             (3, 4, '8  원본은 그대로, 기억과 모순 발견 → EvidenceDispute', False),
@@ -132,13 +152,13 @@ def lifecycle():
     p.text(64, 1515, '같은 계약, 다른 관리 대상', 30, bold=True)
     p.text(64, 1568, [
         '원본이 남아 있으면 재확인한다. 삭제되었거나 허용 범위 밖이면 “모름 / 자료 부재”로 반환하며 요약에서 사실을 복원하지 않는다.',
-        'Context Manager의 User Memory: 명시 저장만 허용. 이번 요청의 일회성 지시가 우선하며, 과거 사례 재사용은 장기 선호가 아니다.',
+        'Context Manager User Memory는 명시 저장만 허용한다. 과거 사례 재사용은 자동 선호 저장이 아니며 이번 일회성 지시를 보존한다.',
         '삭제 tombstone과 권한 버전은 재구축에도 적용한다. 옛 대화와 파생 관계에서 삭제된 선호를 다시 활성화하지 않는다.',
-        '최종 대상 / Task 판단은 Request Interpreter, 채택은 Request Controller 책임이다. 각 사용점의 검사와 실제 허용을 직렬화한다.',
-        '하나의 Model Access / Omni를 공유한다. 배경 기억 생산은 취소 가능한 낮은 우선순위이며 음성 입력과 ASR은 계속된다.',
-        '양안의 Source Owner는 실제 원본 생산자들을 묶은 생명선이다. B의 미게시 범위는 생산 후 게시를 기다리며, 직접 조합 우회는 B+ 혼합이다.'
+        '대상 / Task 의미는 RI, 채택은 RC다. 각 실제 사용점에서 epoch 검사와 승인/queue 등록을 fence하며 42 B의 별도 protocol을 적용한다.',
+        'Model Access가 cloud 의미 API를 사용한다. 생산은 유한 queue/quota 아래 수행하며 local VAD/capture는 생산을 기다리지 않는다.',
+        'Source Owner는 실제 원본 owner를 묶은 생명선이다. B는 지원 범위 생산 후 재조회하고, 직접 원본 조합 우회는 명시 B+다.'
     ], 25, leading=43)
-    p.text(64, 1858, '실선 요청 / 전달, 점선 반환. 8~10은 원본 수정 없이 발생한 별도 오류 사건. A의 원본별 배경 요약도 허용. B의 표현 불가는 미게시 범위와 구별한다.', 22, MUTED)
+    p.text(64, 1858, '실선 요청 / 전달, 점선 반환. 8~10은 source 변화 없는 오류 사건. model cancel 실패 비용도 남긴다. 부분검사는 의미 정답 보증이 아니다.', 22, MUTED)
     return p
 
 

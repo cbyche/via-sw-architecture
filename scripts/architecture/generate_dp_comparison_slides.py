@@ -82,7 +82,7 @@ DATA = {
       ('새 관계 / 미묘한 조건', '요청 목적에 맞춘 원문 구성의 유연성; 검색 누락 가능', '지원 표현 / 추출 조건에 제한; 정확성의 고정 우열 없음'),
       ('준비된 반복 조회 R24', 'warm 관계 cache로 조회 / 재해석 축소 가능', '유효 게시가 원본 교차 결합을 대체하면 경로 단축 가능'),
       ('첫 조회 / 정정 직후', '현재 원본으로 구성; fan-out / 해석 비용', '생산 / 갱신 게시 대기; NOT_COVERED와 미지원 구별'),
-      ('전체 모델 호출 / 자원', 'cache 생산 / 유지 + 요청 구성 / 재검증 포함', '초기 / 갱신 / backfill / 미사용 생산 포함; 고정 우열 없음'),
+      ('전체 모델 비용 / 자원', 'cache 생산 / 유지 + 요청 / 재검증 사용량', '초기 / 갱신 / backfill / 미사용 생산 사용량; 고정 우열 없음'),
       ('변경 용이성', 'Source adapter로 국소화; cache schema 변경은 무효화', 'Source 형식은 adapter; 관계 의미는 schema / 재생산 / 독자 변경')]),
 }
 
@@ -135,24 +135,24 @@ class Comparison(Slide):
 
     def memory_page(self):
         d=DATA[45]
-        self.text(40,135,1840,[d['case']],20,INK)
-        self.text(40,168,1840,['같은 원본 / 현재 T23 연결은 판단 결과 / VIA: 허용 근거 연결, Agent: 기준 적용과 제안서 작성'],17,INK)
+        self.text(40,137,1840,[d['case']],20,INK)
+        self.text(40,168,1840,['공통: VIA가 실제 설명한 내용 + 제품 조사와 견적의 결과 / 현재 제안서 업무 연결은 해석 결과 / 로컬 VIA + 클라우드 모델'],17,INK)
+        self.rect(40,195,1840,48,GREEN,LINE)
         for side,x in enumerate([140,1010]):
-            self.text(x+18,192,820,[d['options'][side]],25,INK,True)
-            self.text(x+18,226,820,['현재 요청의 owner 읽기 결과 조합 / 누락 해결' if side==0 else '과거 관계 생산・검증・게시 / 공통 읽기 계약 소비'.replace('・',' / ')],17,INK)
-        self.line([(990,195),(990,795)],color=LINE,arrow=False)
-        self.text(40,786,1840,['장면: 첫 요청 → 필요한 원본 / 미게시 생산 | 반복 R24 → warm cache / 유효 게시 | 정정 직후 → fence 후 갱신 | 표현 밖 새 관계 → 미지원'],16,INK)
-        from memory_context_scene import page_legend
-        page_legend(self)
+            self.text(x+435,206,838,[d['options'][side]],25,INK,True,'center')
+        self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
+        self.line([(40,795),(1880,795)],color=LINE,arrow=False)
+        self.text(40,809,1840,['PARTIAL: 실제 전달한 예외 문구 한 구간과 결과 참조의 예시 / 기준 전체의 완전 추출을 뜻하지 않음 / 과거 게시와 현재 의미 채택은 별개'],16,INK)
+        self.text(40,838,1840,['첫 요청 / 준비된 반복 조회 / 정정 직후 / 표현 밖 관계를 구분. A의 유효 관계 cache와 부분 갱신도 허용한다.'],16,INK)
         for j,(condition,left,right) in enumerate(d['tradeoffs']):
-            yy=871+j*29
+            yy=878+j*29
             self.line([(40,yy-5),(1880,yy-5)],color=LINE,arrow=False)
             self.text(42,yy,266,[condition],16,INK,True)
             self.text(315,yy,745,[left],16,INK)
             self.text(1080,yy,795,[right],16,INK)
-        self.text(40,1020,1840,[d['condition']],15,INK)
+        self.text(40,1023,1840,[d['condition']],15,INK)
         self.text(40,1046,1840,['Reference (§9): A LangChain Retrieval / B LangMem Background + Memory API / 실행 Delayed Processing / 연결 참고 Mem0 Graph (typed 관계 증거 아님)'],15,INK)
-        self.text(40,1067,1840,['공식 메커니즘 선례 / VIA 구현・성능 증거 아님 / 실행・서비스 경계 추가 없음'.replace('・',' / ')],10,MUTED)
+        self.text(40,1067,1840,['공식 메커니즘 선례 / VIA 구현 / 성능 증거 아님 / 모델 비용은 배경 생산 / 재시도 / 폐기된 작업도 포함'],10,MUTED)
 
     def request_page(self):
         d=DATA[41]

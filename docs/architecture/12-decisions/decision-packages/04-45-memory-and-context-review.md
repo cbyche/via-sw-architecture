@@ -3,6 +3,28 @@
 > 대상: [45 본문](./04-45-memory-and-context.md), 전용 생성기, 메인/수명 SVG와 draw.io 및 PNG / 2026-10-06
 > 독립 리뷰는 작성 작업을 맡지 않은 별도 에이전트의 문서/설계 검토다. 실제 사용자 심사, 실행 시험, 품질 우위나 최종 DP 선정이 아니다.
 
+## 2026-10-10 실행 계약 재구체화 — 본문과 데이터 예시
+
+사용자는 44 → 45 → 42 → 46의 본문/그림/발표를 단계별로 완성하고 작업 단위마다 commit/push하도록 요청했다. 이번 본문 작업은 04-40의 로컬 VIA, 로컬 VAD, cloud voice/semantic 조건과 41의 읽기 도구 실행기 직접 read를 45에 적용한다. 기본 A/B, 공식 Reference, 같은 사례와 강한 A의 cache/부분 갱신, B의 선택적 생산/미게시/미지원/명시 B+ 계약을 유지했다. 이 절은 이번 본문 작성자의 검수이며 아래 과거 독립 리뷰를 새 판본 전체에 소급하지 않는다.
+
+### 작성 범위와 수정 이유
+
+- 45 본문과 [dp45-evidence-examples.json](./contracts/dp45-evidence-examples.json), 이 검수 기록만 이 작업자가 작성했다. scene/생성기/발표/PPTX와 공통 문서/QA는 별도 통합 writer의 범위다.
+- 기존 Shared Omni/온디바이스 KV 전제가 새 cloud 계약과 충돌하여 현재 적용 조건을 수정했다. 참조 Architecture와 과거 QA/ADR를 변경하거나 실제 모델 사용량을 측정하지 않았다.
+- RC의 입력/scope/채택 권위와 RI 읽기 실행기의 CM 직접 caller를 구별했다. 동일 caller/job으로 read 반환, A의 추가 owner read 반복과 B의 게시 대기/재조회 및 두 trigger를 상세화했다.
+- 고정 필드/타입/유한 kind를 가진 Evidence Contract v1과 JSON 원본 snapshot, Query1, Bundle1/Receipt1, 생산/부분 의미 job, MemoryRecord/Coverage/PublishResult를 추가했다. 실제 Schema/런타임 API가 구현된 것으로 표현하지 않는다.
+- 과거 설명의 실제 전달 범위에서 조건/예외 한 구간을 추출하는 `MODEL_DERIVED` 예시와 TM의 `EXPLICIT` result 연결을 구별했다. 좁은 예시를 전체 평가 기준의 완전 생산으로 오해하지 않도록 양안 Bundle은 `PARTIAL`, B Coverage에는 미생산 구간을 기록했다.
+- 03-02 공통 QA 원본에 다섯 품질 묶음을 연결하되 DP 전용 대표 지표/분모/정량 우열을 만들지 않았다. 46의 시간 관계 owner는 IM, 과거 owner는 CM이며 중복 게시/청구/QA 이익 합산을 금지했다.
+- 독립 생산 수명과 현재 Request/attempt의 read 수명, 삭제/철회 fence와 local purge, 오래된 producer/caller 완료와 cloud 청구를 구별했다. 42 B의 cross-owner fence는 실제 배치 프로토콜을 참조해야 하며 CM transaction만으로 완료됐다고 하지 않는다.
+
+### 본문과 예시의 정적 검수
+
+2026-10-10 작성자가 임시 stdlib 검사로 JSON의 고정 key, 필드 대응, source span `[start,end)`와 원문 일치, 실제 전달 구간 안 포함, query/receipt correlation, 관계와 Coverage/PublishResult의 동일 게시 revision, 동일 A/B 자료와 PARTIAL 표시, 미생산/미지원 상태 구별을 확인했다. 명세 정적 검사이며 retrieval/producer 엔진, semantic oracle 또는 cloud 모델을 실행한 검증은 아니다.
+
+같은 시점에 활성 Markdown 링크 검사 158개, 정식 Component/용어 검사, `git diff --check`를 통과했다. 다른 세션이 공통/46 자료를 계속 편집하므로 최종 통합 시 다시 검사해야 한다.
+
+**그림/PPTX 최신 판본은 통합 writer가 이후 생성/렌더하고 이 기록에 실제 결과를 추가할 예정이다.** 이 본문 완료 시점에 새 MAIN/별도 순서도/PNG/native PPTX를 검증했다고 주장하지 않는다. 이번 작업자는 commit/push하지 않았으며 게시 SHA/CI는 최종 통합 검수와 Git 이력에서 확인한다. A/B 최종 선택, 구현과 모델 품질/성능/비용 측정은 하지 않았다.
+
 ## 사용자 심사 의견 반영 — 필요성과 대표 사례 교체 (2026-10-09)
 
 사용자가 전달한 Senior SW Architect 지적을 반영했다. 기존 “지난번 고친 표현 방식”은 Agent가 이전 수정/결과 맥락을 재사용할 수 있어 VIA의 복잡한 관계 복원을 입증하기에 약하다. 같은 Agent 선택과 실제 실행 맥락 연결을 구별하고, Agent 장애/교체/기억 소실을 주된 반박으로 삼지 않았다. 기존 사례는 본문 §1.2의 단순 Task/실행 참조로 충분할 수 있는 반례로 남겼다. 아래 독립 리뷰는 당시 원본과 그림의 이력이며 이번 판본을 새로 독립 심사한 기록이 아니다.
@@ -116,3 +138,15 @@ PNG는 설치된 Google Chrome의 headless renderer로 SVG를 직접 열어 만�
 PPTX는 `--dp45-only --comparison-only`로 생성하고 finalizer의 package/layout/font 및 Artifact Tool 재불러오기를 통과했다. 최종 통합 10번과 비교 5번 렌더를 각각 열어 확인했다. 슬라이드 수 10/5, 변경 슬라이드 각각 331개 native 도형과 0개 이미지, 노트의 공식 링크 다섯 개를 확인했다. 시작본과 ZIP entry를 비교하여 해당 slide/slide rel/notes/notes rel 네 파일씩만 바뀌고 다른 슬라이드, 배경과 공통 package가 byte 단위로 보존됐음을 확인했다. 합본 draw.io의 앞 네 페이지와 JSON의 41~44 레코드도 같다. 보호 대상 113개 tracked 파일과 초기 04-50/`work/` 파일이 보존됐다.
 
 **한계:** Chrome과 Artifact Tool의 실제 렌더/재불러오기 범위이며 Microsoft PowerPoint 앱이나 발표 거리에서 확인한 결과는 아니다. 모델 실행/성능 측정, 새로운 독립 심사와 최종 A/B/DP 판단은 하지 않았다. 공통 파생 관계 계약이 강한 A의 작은 확장보다 필요한지는 원래 리뷰 세션에서 계속 판단한다. 사용자 승인에 따라 이번 변경 파일만 main에 정상 commit/push한다.
+
+## 8. 2026-10-10 실행 계약과 집중 그림 재구체화
+
+§3.4~3.9에 정식 Component/Module 소속, 고정 Evidence Contract v1, 실제 원문/전달 source span과 코드·모델 생산의 경계, 요청별/변경별 두 trigger와 재조회, cloud 사용 비용을 추가했다. JSON의 Memory1은 MODEL_DERIVED이며 EXPLICIT인 결과 참조와 구별한다. source[27,52)의 예외 한 문구와 gap[0,27)은 PARTIAL 예시이며 전체 기준의 완전 추출이 아니다. 현재 Request/Task binding을 미리 기억에 넣지 않는다.
+
+전체 MAIN은 전용 memory_context_scene을 사용하고, 집중 발표 source는 dp45_comparison_scene으로 분리했다. 원본에는 집중 그림을 **추가**했으며 기존 MAIN/수명도는 유지했다. 집중 그림에 Query key, 원본 발췌/파생 관계, state owner, 원본 변경 생산과 현재 query 읽기, NOT_COVERED 생산·게시·재조회 loop 및 Reader의 원문/현재 revision 확인을 표시했다. 큰 owner 경계는 흰색, 차이 작은 Module·상태는 살구색이며 41/44와 같은 Legend를 사용한다. 전체 MAIN의 RI 직접 Task read와 Model Access의 클라우드 역할도 명시했다.
+
+전용 생성기/고정 예시/집중 생성물·render manifest/활성 링크·용어·diff 검사를 통과했다. 전체 MAIN/수명과 집중 그림은 Chrome에서 글자 canvas/폭/겹침 0건으로 렌더했고 PNG를 확인했다. native PPTX package/layout/font와 Artifact Tool 재import를 통과했으며 실제 45 렌더를 확인했다. 통합 11장/비교 5장의 기존 slide 순서를 유지하고 45의 slide XML/notes XML만 바뀌었다. 비선택 parts는 byte 단위로 보존했다.
+
+이 기록은 문서/자료의 검수이며 producer 구현, 모델 의미 성공률, 품질/비용 측정 또는 최종 대안 선정을 뜻하지 않는다. 독립 검토의 후속 발견/보완은 아래에 별도 기록한다.
+
+독립 agent가 최신 본문 §3.9/JSON, 전체 MAIN/집중 scene 및 PNG와 native 45 렌더를 읽기 전용 재검토했다. 원본/실제 전달/source span·PARTIAL/gap, A cache/부분 갱신, B 생산/게시/재조회와 조건부 모델 호출 및 현재 의미/채택 경계에서 남은 P1/P2를 찾지 못했다. 이는 이 자료 범위의 검토 결과이며 의미 정답·런타임·실측 검증이 아니다. 전체 조합의 40 미결 기록 갱신은 별도 통합 단위에 반영한다.

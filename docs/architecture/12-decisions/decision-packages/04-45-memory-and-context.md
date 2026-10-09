@@ -1,6 +1,6 @@
 # 04-45. 기억과 Context: 원본 서비스 조합과 공통 기억 저장소
 
-> 상태: **구조 비교 제안 / 사용자 검토 전 / 미선정 / 미측정** / 2026-10-06 / 필요성과 사례 보완: 2026-10-09
+> 상태: **구조 비교 제안 / 사용자 검토 전 / 미선정 / 미측정** / 2026-10-06 / 필요성과 사례 보완: 2026-10-09 / 실행 계약 재구체화: 2026-10-10
 > [04-50 영역 7](./04-50-agent-architecture-decision-map.md)에서 출발한 새 비교다. 45라는 번호는 독립 DP 선정이나 B 채택을 뜻하지 않는다. 구현, 모델 실행, 성능 측정과 참조 Architecture 변경은 포함하지 않는다.
 
 ## DP 배경 — 발표용 1페이지
@@ -12,6 +12,8 @@
 사용자는 VIA에서 평가 기준을 직접 설명받고, 제품 조사와 견적 확보를 서로 다른 Downstream Agent에게 맡긴다. 이후 “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”라고 요청한다. VIA가 실제 전달한 설명과 두 업무의 확인된 결과 참조를 이번 요청에 연결할 필요성이 배경의 주제다. 실선은 기록의 시간 흐름, 점선은 이번 Context에서 필요한 과거 참조를 뜻한다. 배경에는 A/B의 Component나 저장소를 해결책으로 미리 제시하지 않는다.
 
 VIA는 관련 과거 기록과 허용된 발췌, 결과/버전 참조를 찾아 연결한다. 평가 기준을 적용한 업무 판단과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조가 있다는 사실을 결과 본문 전체를 보관했다는 뜻으로 읽지 않는다. 원본 수정, 삭제와 실제 전달 범위의 확인은 두 안의 공통 요구다. 노란색 문구는 예방할 위험이며 관측된 실패나 측정 결과가 아니다. [다섯 설계 문제 지도](./diagrams/dp-background-overview.svg)에서 결정 범위를 먼저 구분한다.
+
+> 현재 실행 전제는 [04-40 공통 계약](./04-40-common-execution-contract.md)이다. VIA와 상태 owner는 로컬, 음성/전사와 의미 모델은 클라우드이며 로컬 VAD와 지속 입력을 유지한다. 기존 on-device 참조 설계와 당시 QA/ADR는 보존한다. 아래 실행 계약 v1은 검토 가능한 설계이며 구현된 API나 품질 측정 결과가 아니다.
 
 ## 1. 사용자 문제와 이번 판단
 
@@ -54,16 +56,22 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 | [41](./04-41-request-resolution-control.md) | 다음 조회와 최종 의미 완성을 모델 또는 코드 중 누가 주도하는가 | 양안 모두 근거 API를 제공한다. 41 B의 유한 표현에 없는 관계는 B의 기억에도 있다고 자동 실행 가능해지지 않는다. 모델이 최종 binding을 다시 만들면 41의 혼합안이다. |
 | [43](./04-43-request-interpretation.md) | 의도, 대상, Task 연결, 관계, 정정, 처리 방향을 통합 또는 기능별로 누가 생산하는가 | 과거 설명 순서나 정정 관계는 근거다. **이번 요청의** 최종 대상, Task, 정정 범위는 Request Interpreter가 생산한다. 43 C는 각 기능이 읽은 서로 다른 버전을 조정해야 한다. 제외된 Task별 B는 다시 도입하지 않는다. |
 | [42](./04-42-lifecycle-ownership.md) | 대화와 업무 상태의 실행 수명 및 확정 권한을 어떻게 나누는가 | B의 기억은 원본 업무 원장이 아니다. 42 B와 결합하면 독립 원본별 cursor와 장애 범위를 유지한다. 기억 게시를 여러 원본의 공동 transaction으로 간주하지 않는다. |
-| [34](./04-34-incremental-voice.md) | 확정 발화 뒤 처리할지, 발화 중 잠정 의미와 응답 준비를 진행할지 | 잠정 요청은 양안에 조회할 수 있지만 과거 사실로 게시하지 않는다. 정정된 잠정 결과와 KV를 버리는 책임은 남는다. 배경 기억 생산은 지속 음성 입력과 경쟁한다. |
+| [34](./04-34-incremental-voice.md) | 확정 발화 뒤 처리할지, 발화 중 잠정 의미와 응답 준비를 진행할지 | 잠정 요청은 양안에 조회할 수 있지만 과거 사실로 게시하지 않는다. 정정된 잠정 결과와 모델 호출의 후속 사용을 막는 책임은 남는다. 배경 기억 생산은 클라우드 API 동시 호출 한도, rate limit과 로컬 queue/context 자원을 사용한다. 지속 음성 입력은 생산 완료를 기다리지 않는다. |
 | [31](./04-31-semantic-construction.md) | 현재 요청의 의미를 요청별로 만들지, 지속 Meaning Workspace에서 갱신할지 | 45의 과거 공유 기억은 현재 요청의 미확정 조건이나 의미 Workspace가 아니다. 31의 독립 후보 여부는 이번 문서에서 결정하지 않는다. |
 
-**메인 비교에서는 41 A 모델 주도, 43 A 통합 판단, 42 A 모듈형 Core, 34 A 확정 발화 뒤 의미 처리를 양쪽에 동일하게 고정한다.** 이는 비교를 위한 설정이지 해당 문서의 선택 결과가 아니다. 검색 결과를 본 해석기가 추가 조회를 요구하는 반복은 두 안에 모두 남는다. Context가 항상 해석 전에 완성되는 일방향 pipeline이 아니다.
+**메인 비교에서는 41 A 모델 주도 해석, 42 A 모듈형 Core, 확정 발화 뒤 의미 처리와 같은 44 실행 방식을 양쪽에 동일하게 고정한다.** 43은 별도 의미 생산 책임의 참조이며 발표 부록의 지위를 바꾸지 않는다. 이는 비교를 위한 설정이지 해당 문서의 선택 결과가 아니다. 검색 결과를 본 해석기가 추가 조회를 요구하는 반복은 두 안에 모두 남는다. Context가 항상 해석 전에 완성되는 일방향 pipeline이 아니다.
 
-나머지 조합도 조건부로 가능하지만 자동 호환은 아니다. 특히 41 B의 표현 한계, 43 C의 근거 버전 불일치, 42 B의 원본별 가용성, 34 B의 잠정 입력과 확정 이력 혼동을 해결하지 않은 채 조합 완료라고 할 수 없다. 그림의 차이는 이 네 선택을 바꾸지 않아도 남는 기억 생산과 소비의 의존 구조다.
+나머지 조합도 조건부로 가능하지만 자동 호환은 아니다. 특히 41 B의 표현 한계, 43 C의 근거 버전 불일치, 42 B의 원본별 가용성, 34 B의 잠정 입력과 확정 이력 혼동을 해결하지 않은 채 조합 완료라고 할 수 없다. 그림의 차이는 인접 선택을 바꾸지 않아도 남는 기억 생산과 소비의 의존 구조다.
 
-작성 중 별도 세션의 `04-44-continuous-interaction.md` 초안도 읽기 전용으로 확인했다. 44는 34의 A/B 단순 승격이 아니라 중앙 비동기 조정과 반응형 실행망을 비교한다. 45는 그 후속 실행 방식도 양안 동일하게 유지할 수 있다. 44의 어느 안에서도 기억 조회의 미완료/거절, source revision과 삭제 epoch를 반환하고 실제 사용/게시 게이트에서 확인해야 한다. B 기억 생산의 완료를 현재 입력 해석 완료나 응답 게시 허가로 사용해서는 안 된다. 44는 병행 작업이므로 본문/그림/상태를 이번 작업에서 수정하거나 확정하지 않는다.
+[44](./04-44-continuous-interaction.md)는 계속 들어오는 입력과 완료 사건의 실행 연결을 다룬다. 44는 34의 A/B 단순 승격이 아니라 중앙 비동기 조정과 반응형 실행망을 비교한다. 45는 그 후속 실행 방식도 양안 동일하게 유지할 수 있다. 44의 어느 안에서도 기억 조회의 미완료/거절, source revision과 삭제 epoch를 반환하고 실제 사용/게시 게이트에서 확인해야 한다. B 기억 생산의 완료를 현재 입력 해석 완료나 응답 게시 허가로 사용해서는 안 된다. 44 A의 중앙 continuation 또는 B의 단계별 대기는 동일 read/job 결과를 소비할 수 있다. 공통 기억의 생산 완료가 현재 요청을 자동 채택하거나 후속 업무를 실행하지 않는다.
 
-### 2.2 탐색에서 무엇을 분리했는가
+### 2.2 46과의 범위 및 중복 계산 경계
+
+[46](./04-46-input-and-context-evidence.md)은 이 문서의 원본 조합/공통 관계 생산 원리를 발화와 화면/포인터/행동의 시간 관계까지 확장한 검토안이다. 45는 과거 설명, 실제 전달, Task 결과와 허용 기억의 공급 방식에 집중하고 acoustic/viewport overlap를 생산하지 않는다. 46의 시간 관계 owner는 Interaction Manager이며 Context Manager가 같은 시간 자료를 다시 게시하지 않는다. 45의 과거 관계 owner는 Context Manager다.
+
+45A/B를 정리했다고 46의 시간 처리 A/B가 자동 선택되거나 별도 DP로 확정되는 것은 아니다. 함께 제시할 때 겹치는 과거 관계 생산/조회, cloud call과 정확성/응답성 손익을 한 경로로 추적한다. 46의 구조는 과거 근거와 시간 근거를 함께 다룬 확대안이라는 관계를 설명하고, 서로 겹치는 처리의 이익을 두 번 더하지 않는다. 최종 독립 DP 구분은 사용자 검토 대상이다.
+
+### 2.3 탐색에서 무엇을 분리했는가
 
 | 출발 질문 | 이번 판단 |
 | --- | --- |
@@ -78,7 +86,7 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 
 [편집 가능한 draw.io](./diagrams/choice45-structure.drawio) / [발표용 PNG](./diagrams/choice45-structure.png)
 
-**A는 왼쪽 블록만, B는 오른쪽 블록만 읽는다.** 현재 요청의 판단/채택, User Memory와 Model Access/Omni까지 각 블록 안에 완결되게 표시했다. 좌우를 연결하는 처리 경로는 없다. 두 안을 동시에 배치하거나 모델 가중치를 두 벌 사용하는 설계가 아니며, 각 안은 Omni 한 벌을 유지한다. 각 안의 여섯 주요 Component는 한 번씩 표시하고, Context Manager 내부에 Module과 상태를 소속시켰다. 직각 Component, 둥근 내부 Module, 원통 상태, 육각 외부 모델을 구별한다. 공통 요소는 흰색/검정이며 실제 책임이 다른 작은 Module과 파생 상태만 살구색/짙은 테두리다. Source View Cache와 User Memory는 공통 표기이고 상태 도형이 모두 물리 DB라는 뜻은 아니다.
+**A는 왼쪽 블록만, B는 오른쪽 블록만 읽는다.** 현재 요청의 판단/채택, User Memory와 Model Access 및 클라우드 의미 LLM을 각 블록에서 구별한다. 좌우를 연결하는 처리 경로는 없다. 두 안을 동시에 배치하는 설계가 아니다. 같은 cloud model/API 조건을 사용하며 로컬 Component 안에 모델 weights를 설치하지 않는다. 각 안의 여섯 주요 Component는 한 번씩 표시하고, Context Manager 내부에 Module과 상태를 소속시켰다. 직각 Component, 둥근 내부 Module, 원통 상태, 육각 외부 모델을 구별한다. 공통 요소는 흰색/검정이며 실제 책임이 다른 작은 Module과 파생 상태만 살구색/짙은 테두리다. Source View Cache와 User Memory는 공통 표기이고 상태 도형이 모두 물리 DB라는 뜻은 아니다.
 
 ### 3.1 그림 한 장의 발표 순서
 
@@ -96,15 +104,15 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 2. A의 요청과 반환을 따라간다. Context Composer가 owner의 대화/결과/실제 전달 읽기를 조합하고 summary, index, 관계 cache를 재사용한다. Context Composer가 필요한 발췌와 참조 및 읽은 버전과 누락을 EvidenceBundle/query receipt로 직접 반환한다. Request Evidence Set은 요청 수명의 데이터이며 후속 처리를 실행하지 않는다. 전체 과거 대화를 매번 읽지 않으며 기존 Agent 맥락 참조만으로 충분한 구간도 허용한다.
 3. B의 생산 경로와 조회 경로를 나누어 짚는다. Memory Publisher가 같은 확정 원본에서 설명/실제 전달과 Task/결과 관계를 생산하고 검증한 범위만 Episodic Memory Repository에 게시한다. Evidence Reader는 관련 후보와 locator, coverage를 읽고 직접 Bundle/receipt를 반환한다. 변경 알림과 실제 본문 읽기를 분리하고, 의미가 필요한 과거 관계만 Model Access를 조건부 호출한다. 새 요청 R23의 정답 연결이 처음부터 게시돼 있다고 가정하지 않는다.
 4. B의 갱신과 원문 복귀를 짚는다. 미게시 범위, 표현 미지원, 잘못된 관계와 원본 변경을 구별한다. NOT_COVERED는 Publisher가 지원 범위를 생산/게시하고 revision과 상태를 반환한 뒤 Reader가 Repository를 다시 읽는다. UNSUPPORTED_RELATION, NO_MATCH, DENIED/UNAVAILABLE은 별개다. 원본 재확인, 대기/질문과 명시적 B+ 우회는 기존 계약과 비용을 유지한다.
-5. 공통 현재 의미 판단과 위임 경계를 짚는다. Request Interpreter가 이번 참조와 Task 연결을 제안하고 Request Controller가 채택한다. 필요한 발췌/참조를 새 T23의 Delegation Context로 연결하며 기준 적용과 제안서 작성은 Agent가 수행한다. 공통 User Memory와 Omni 조건은 유지하고 과거 재사용을 장기 선호로 자동 승격하지 않는다.
+5. 공통 현재 의미 판단과 위임 경계를 짚는다. Request Interpreter가 이번 참조와 Task 연결을 제안하고 Request Controller가 채택한다. 필요한 발췌/참조를 채택 후 새 T23의 Delegation Context로 연결하며 기준 적용과 제안서 작성은 Agent가 수행한다. 공통 User Memory와 클라우드 모델 조건은 유지하고 과거 재사용을 장기 선호로 자동 승격하지 않는다.
 
 ### 3.2 A: 원본 서비스 조합형
 
 **조직 원리:** 현재 요청이 필요로 하는 근거를 원본 소유자의 서비스 계약에서 모은다. Context Composer는 Context Manager 내부의 요청별 조합 책임이다. 공통 query helper, source adapter, 병렬 조회, 원본별 요약, 정정 링크 index, 재사용 cache와 부분 갱신을 모두 허용한다. 보유한 관련 자료를 매번 버리거나 전체 대화를 다시 읽지 않는다.
 
 - **생산과 상태:** 원본 소유자가 원문과 확정 상태를 갱신한다. Context Manager는 파생 summary/index/cache를 유지한다. 특정 요청이 여러 source를 읽은 결과는 Evidence Bundle과 query receipt에 묶이고 해당 요청 수명에 귀속된다. cache hit도 출처와 현재 유효성을 확인한다.
-- **조회와 반환:** Request Controller가 현재 요청과 허용 목적, 후보 source, 필요한 범위, 예산을 전달한다. Context Composer가 소유자의 bounded read를 호출하고 원문 발췌, 요약, stable ID, revision, 누락과 권한 거절을 반환한다. 41의 직접 Task Manager 조회가 필요한 현재 상태 확인은 남는다.
-- **의미:** 메타데이터로 명확한 정정 ID나 버전 연결은 코드로 얻을 수 있다. 자유로운 과거 표현의 의미는 현재 해석 중 공유 Omni가 읽는다. 요약 생성에 Omni를 썼다면 A의 배경 비용으로 포함한다. A도 검증된 파생 관계를 cache할 수 있다.
+- **조회와 반환:** Request Controller가 등록한 입력과 허용 범위 안에서 Request Interpreter의 읽기 도구 실행기가 query/read ID를 붙여 현재 목적, 후보 source, 필요한 범위와 예산을 전달한다. 선택적인 사전 preload는 이 정상 반복과 구별한다. Context Composer가 소유자의 bounded read를 호출하고 원문 발췌, 요약, stable ID, revision, 누락과 권한 거절을 반환한다. 41의 직접 Task Manager 조회가 필요한 현재 상태 확인은 남는다.
+- **의미:** 메타데이터로 명확한 정정 ID나 버전 연결은 코드로 얻을 수 있다. 자유로운 과거 표현의 의미는 현재 해석 중 클라우드 의미 LLM이 읽는다. 요약 생성에 같은 의미 API를 썼다면 A의 배경 비용으로 포함한다. A도 검증된 파생 관계를 cache할 수 있다.
 - **갱신과 재확인:** 원본 변경은 관련 cache를 dirty/invalid로 만들고, 같은 요청에서도 다시 읽은 버전을 영수증에 반영한다. 인용, 수치, 부정, 조건과 정확한 수정 내용은 원문을 확인한다. 서로 다른 source의 결과가 모두 같은 시점이라는 보장은 없다.
 - **잔여 의존:** 공통 관계가 선택적으로 재사용되더라도, source별 읽기 결과를 조합하고 누락을 해결하는 책임은 요청 경로에 남는다. 자주 쓰는 정정 링크 하나로 문제가 해결되면 B의 독점 이익이 아니다.
 
@@ -113,12 +121,106 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 **조직 원리:** 요청 소비자가 원본 서비스의 조합을 알기 전에, 생산 경로가 여러 원본을 공통 과거 기록과 관계로 조직한다. Episodic Memory Repository는 **파생 근거의 공통 읽기 모델**이며 원본 사실, 현재 Task 상태, 장기 선호 원본이 아니다. Context Manager 안의 Memory Publisher가 생산과 게시를, Evidence Reader가 목적별 조회와 반환을 담당한다. 별도 서버나 process, 별도 DB 제품은 필수가 아니다.
 
 1. **확정 변경 수신:** Request Controller의 정정 확정, Task Manager의 확인된 결과 버전, Response Manager의 실제 제시 확정 등에서 변경 ID와 원본 revision을 받는다. 신호에는 허용된 최소 locator만 싣고 본문은 원본 read port로 읽는다. 신뢰할 변경 알림이 없는 source는 같은 권한 아래 증분 열거와 검증을 쓰며, 그 비용과 최신성 한계를 숨기지 않는다.
-2. **공통 관계 생산:** 명시 ID, 설명 위치와 버전 관계는 코드가 연결한다. 의미 해석이 필요한 “아까 그 표현은 빼줘” 같은 연결은 공유 Omni에 근거 구간을 주어 가설을 만든다. 추출된 정정 범위와 요약은 `derived`로 표시한다. 모델이 본 적 없는 기록이나 미공개 자료를 보충하지 않는다.
+2. **공통 관계 생산:** 명시 ID, 설명 위치와 버전 관계는 코드가 연결한다. 실제 전달한 설명의 항목이나 예외 문구를 자유문에서 추출하는 경우는 Model Access를 통해 클라우드 의미 LLM에 허용된 근거 구간을 주어 파생값을 만든다. 과거 정정은 Request Controller가 이미 확정한 정정과 원문 범위를 출처로 읽는다. 현재 “아까 그 표현은 빼줘”의 대상과 변경 범위를 Memory Publisher가 새로 확정하지 않는다. 추출된 정정 범위와 요약은 `derived`로 표시한다. 모델이 본 적 없는 기록이나 미공개 자료를 보충하지 않는다.
 3. **검증과 게시:** 필요한 원본들의 dependency revision vector, 권한 epoch, producer/schema version과 coverage를 검사한다. 읽는 동안 원본이 바뀌었으면 stale 결과를 게시하지 않고 해당 범위를 재시도한다. 하나의 게시 transaction에서 관계와 coverage를 함께 바꾸지만 **여러 원본의 전역 atomic snapshot을 만들어내지는 않는다.** 원본 사이 연결이 아직 없으면 unresolved로 남긴다.
 4. **정상 조회 대체:** Evidence Reader는 repository의 공통 사건/관계 계약으로 후보를 찾고 관련 원문 locator, 요약과 근거 구간, 불확실성, 읽은 버전과 미게시 범위를 반환한다. 정상적인 covered 과거 조회는 source별 본문 fan-out과 교차 결합을 반복하지 않는다. 현재 권한, 원본 유효성 metadata 검사와 현재 Task 조회는 여전히 필요하다.
 5. **갱신:** 수정과 정정 사건은 dependency index로 관련 관계를 사용 불가로 만든다. Memory Publisher가 영향 구간을 부분 재생산하고 새 revision을 게시한다. 삭제/철회는 producer의 처리 순서를 기다리지 않고 공통 사용 차단부터 적용한다. 이전 생산 job은 게시 직전 epoch/revision 검사에서 탈락한다.
 
-B의 정상 경로는 repository를 읽는다. **NOT_COVERED일 때 원본 서비스 조합으로 즉시 우회하는 실용적 B는 명시적 혼합 B+다.** 본문 사례는 B의 대기/범위 생산 비용과 B+의 직접 원문 조합 비용을 구별한다. stale 값을 몰래 정상 hit로 사용하거나, 혼합 경로가 공짜라고 세지 않는다. 증분 backfill은 **지원하는 관계 종류의 미생산 범위**에만 Memory Publisher를 동기 실행하고 게시 후 읽는 경로이며, 현재 Request의 최종 의미를 게시하지 않는다. 스키마가 표현하지 못하는 관계는 `UNSUPPORTED_RELATION`으로 구별한다. 순수 B에서는 지원 제한을 알리고 표현 가능한 대상을 확인하며, 새 관계 구현은 V-08의 설계 변경이다. 반복 생산으로 해결됐다고 간주하지 않는다. B+는 이를 원본 기반 해석으로 보완할 수 있다.
+B의 정상 경로는 repository를 읽는다. **NOT_COVERED일 때 원본 서비스 조합으로 즉시 우회하는 실용적 B는 명시적 혼합 B+다.** 본문 사례는 B의 대기/범위 생산 비용과 B+의 직접 원문 조합 비용을 구별한다. stale 값을 몰래 정상 hit로 사용하거나, 혼합 경로가 공짜라고 세지 않는다. 증분 backfill은 **지원하는 관계 종류의 미생산 범위**에만 Memory Publisher를 동기 실행하고 게시 후 읽는 경로이며, 현재 Request의 최종 의미를 게시하지 않는다. 범위 생산 자체는 비동기 job이고 해당 read가 그 게시 완료를 기다리는 것이며, VIA 전체나 음성 입력을 blocking하는 동기 호출은 아니다. 스키마가 표현하지 못하는 관계는 `UNSUPPORTED_RELATION`으로 구별한다. 순수 B에서는 지원 제한을 알리고 표현 가능한 대상을 확인하며, 새 관계 구현은 V-08의 설계 변경이다. 반복 생산으로 해결됐다고 간주하지 않는다. B+는 이를 원본 기반 해석으로 보완할 수 있다.
+
+### 3.4 공통 Component, Module과 실행 상태
+
+| Component | 양안 공통 책임과 상태 | A의 내부 구성 | B의 내부 구성 |
+| --- | --- | --- | --- |
+| Interaction Manager | Channel I/O, Turn-Taking Control의 로컬 VAD, Evidence Capture, Timeline & Buffer, Playback State. 지속 입력과 실제 장치 출력 | 같은 입력 근거와 실제 receipt | 동일. 45는 발화와 화면의 시간 관계 생산 방식을 바꾸지 않음 |
+| Request Controller | input/revision, Conversation/Request와 질문, admission, 채택 의미와 사용한 근거 참조 | 같은 채택 owner. 선택적인 preload는 정상 read와 구별 | 동일. Memory 게시가 현재 의미 채택을 대신하지 않음 |
+| Request Interpreter | 현재 의미 제안과 읽기 도구 실행기. `context_retrieve`와 `interaction_retrieve`는 Context Manager, `task_retrieve`는 Task Manager 직접 조회 | 같은 caller와 결과 correlation | 동일. 41 B의 유한 연산 지원 범위는 기억 hit로 늘어나지 않음 |
+| Context Manager | User Memory 원본/삭제 원장, Source View Cache, 허용 읽기와 파생 사용 검사 | Context Composer, Request Evidence Set | Memory Publisher, Evidence Reader, Episodic Memory Repository, Coverage와 생산 job 상태 |
+| Response Manager | 생성 설명 원문과 실제 전달 범위의 원본, Publication Outbox | 과거 설명/실제 제시 read port | 같은 port와 확정 변경 알림. 미전달 초안은 과거 실제 설명으로 생산하지 않음 |
+| Task Manager | Task/Execution과 확인된 result/version 원본 | 관련 Task/result bounded read | 같은 원본과 확정 변경 알림. Repository가 현재 Task 권위를 인수하지 않음 |
+| Agent Gateway | 채택 후 위임, 외부 접수/결과 사건 | 같은 protocol | 동일. 제품 평가와 제안서 작성은 외부 Agent |
+| Model Access | Voice API Client, Semantic API Client, local call/session correlation, usage/timeout/cancel | 조건부 과거 의미 가공 및 현재 의미 호출 | 조건부 생산 의미 호출 및 같은 현재 의미 호출 |
+| Policy Manager / State Store | 권한/철회 원본, owner 검증 변경의 저장과 복원 | 동일한 필수 use fence | 같은 필수 fence. 관계와 Coverage의 CM 내부 조건부 확정은 다른 owner 전체의 transaction이 아님 |
+
+별도 Component를 추가하지 않는다. Module과 상태는 소속 Component 안에 표시하고 executor, thread pool, provider SDK는 실행 기반 주석으로 둔다. A의 Request Evidence Set은 한 query/attempt의 근거와 미결 항목을 보유하며 job/Request가 끝나면 해제한다. cache는 별도 재사용 수명이다. B의 Repository/Coverage는 생산자 version과 삭제/권한 dependency를 가진 지속 파생 상태다. 생산 job, read 대기와 게시된 revision은 서로 다르며 하나의 원통으로 뭉치지 않는다.
+
+### 3.5 Evidence Contract v1: 고정 형식과 실제 예시
+
+[전체 JSON 예시](./contracts/dp45-evidence-examples.json)는 같은 `Query1`, 원본 snapshot, A owner read/Bundle, B 생산 job/부분 의미 출력/MemoryRecord/Coverage/게시 결과와 정정/철회 사례를 제공한다. **DESIGN_REVIEW_V1**이며 transport Schema, 런타임 API 또는 정답 자료로 확정한 파일이 아니다. 설명용 locator는 실제 파일을 다운로드한 URL이 아니다.
+
+41의 읽기 실행기는 허용 도구 이름/인자를 받아 local query/read ID와 Request/attempt, 정책 scope, 예산을 붙인다. 모델이 permission, deadline, source 범위를 임의로 확장하지 않는다. 같은 query가 retry될 때 새 read/job ID를 부여하고 원래 Request와 query를 correlation한다. CM의 완료는 그 caller에게 돌아가며 44의 후속 실행에 연결된다. RC가 source scope와 의미 채택을 소유한다는 사실이 모든 read를 RC를 통한 순차 호출로 강제하지 않는다.
+
+| 고정 자료 | 필수 key와 타입 | 코드의 동작 |
+| --- | --- | --- |
+| `EvidenceQuery` | `schema_version:1`, `query_id/request_ref/attempt_ref:string`, `input_revision:int`, `purpose:enum`, `relation_kinds:enum[]`, `source_ranges:object[]`, `original_required:bool`, `budget_ref:string`, `policy_epoch:int` | 허용 목적/원본 범위와 버전, budget 검사. A의 owner read 또는 B의 게시 조회를 선택. 이번 Task binding은 Query의 정답 입력이 아님 |
+| `EvidenceBundle` | `schema_version:1`, `bundle_ref/query_id:string`, `status:enum`, `evidence:object[]`, `relations:object[]`, `source_vector:object[]`, `issues:object[]`, `receipt_ref:string`, `policy_epoch:int`, `acquisition:enum` | 같은 output 형태로 caller에 반환. 이력 hit/검색 점수는 이번 지칭 정답이 아님. source 변경이나 read 만료 시 재조회/보류 |
+| `EvidenceQueryReceipt` | `schema_version:1`, `receipt_ref/query_id:string`, `read_ranges:object[]`, `checked_revisions:object[]`, `source_cursors:object[]`, `gaps/excluded_ranges:object[]`, `deadline_outcome:enum` | 실제 읽고 확인한 범위와 중단/누락을 기록. 여러 source를 같은 시점에 읽었다고 간주하지 않음 |
+| B `ProductionJob` | `schema_version:1`, `producer_version/job_id:string`, `trigger:object`, `requested_relation_kinds:enum[]`, `input_source_vector:object[]`, `policy_epoch:int`, `publication_expected_revision:int` | 확정 변화 또는 지원 범위 backfill로 생성. 필요한 원문을 읽고 조건부 가공. 현재 요청이 없어도 생산 가능하며 생성된 기록에 미래 Request binding을 넣지 않음 |
+| B `MemoryRecord` | `schema_version:1`, `record_id/from_ref/to_ref:string`, `relation_kind:enum`, `source_spans:object[]`, `value:string|null`, `derivation:enum`, `uncertain:bool`, `producer_version:string`, `dependency_vector:object[]`, `policy_epoch/published_revision:int`, `validity:enum` | 명시 관계와 의미 추출을 구별. model-derived 자료는 원문 구간 필수. 허용 형식/출처/dependency를 확인해 저장하며 모델 의미의 정답을 보증하지 않음 |
+| B `Coverage` | `schema_version:1`, `coverage_ref:string`, `source_ranges/source_cursors/gaps/production_failures:object[]`, `published_revision:int` | 지원 종류와 확인한 source 범위, gap을 관리. 관계와 같은 게시 revision으로 확정. 원본 전체의 의미를 빠짐없이 추출했다는 보증이 아님 |
+| B `PublishResult` | `job_id:string`, `status:enum`, `published_revision:int|null`, `coverage_ref:string|null`, `rejected_dependencies:object[]` | 게시 성공/재시도/거절을 전달. Reader는 성공 revision을 확인한 뒤 Repository 재조회. 결과가 현재 MeaningReady나 Response release로 바뀌지 않음 |
+
+v1의 목적은 `REQUEST_UNDERSTANDING` 또는 `DELEGATION_CONTEXT`, 과거 관계 종류는 `PRESENTS`, `HAS_RESULT`, `REVISES`, `EXPLAINS_ITEM`으로 제한한다. `PRESENTS`와 명시 Task-result/version은 코드로 연결할 수 있다. 자유문 항목과 예외 문구의 `EXPLAINS_ITEM`은 조건부 의미 가공이며 미래 Task 선택이나 domain 평가 연산이 아니다. 원문 조합이 필요한 새로운 종류는 순수 B에서 `UNSUPPORTED_RELATION`이다. 반복 생산으로 새 종류가 지원되었다고 하지 않는다. A도 지원 read port와 의미 모델의 실제 capability 한계가 남는다.
+
+자료의 결과는 `OK`, `PARTIAL`, `NO_MATCH`, `NOT_COVERED`, `UNSUPPORTED_RELATION`, `DENIED`, `UNAVAILABLE`, `STALE`, `EXPIRED`를 구별한다. `PARTIAL`은 일부 근거만 제공했음을 뜻하며 원래 요청의 완전 달성으로 세지 않는다. 게시 결과는 `PUBLISHED`, `RETRY_REQUIRED`, `REJECTED`다. 파생 유효성은 `VALID`, `DIRTY`, `UNRESOLVED`, `REVOKED`, `PURGE_PENDING`이며 청구됐다는 이유로 `VALID`가 되지 않는다.
+
+각 object는 지정 key와 타입을 따르고 임의 실행 식이나 추가 권한 key를 처리하지 않는다. `SourceRef`는 `{owner, source_ref, revision}`이며 `SourceSpan`은 여기에 `start,end,unit,text`를 갖는다. JSON의 `UNICODE_CODEPOINT` 구간은 문자열의 `[start,end)` 예시다. 실제 채널별 전달 위치는 Response Manager의 확인된 원문/receipt mapping을 사용하고 코드포인트를 audio timestamp로 간주하지 않는다. source-span 문자열과 원문 구간의 일치, 실제 전달 범위 안 포함, dependency와 policy epoch를 검사한다. **형식/원문 대응 검사로 추출 의미가 옳다고 확정하지 않는다.** 인용 범위, 부정/예외 누락과 출처의 충분성은 원문 확인과 오류 보고 경로로 다룬다.
+
+### 3.6 실제 과거 정보: 코드 연결과 의미 추출의 차이
+
+공통 설명 E20의 원문은 “첫째는 가격입니다. 둘째는 유지보수 기간입니다. 가격이 같은 경우 유지보수 기간을 우선합니다. 셋째는 설치 편의입니다.”다. 실제 P20에는 첫째/둘째와 예외 문구까지만 표시/재생됐다고 둔다. 마지막 항목이 생성 원문에 있다고 사용자가 전달받았다고 기록하지 않는다. 실제 전달 범위는 Response Manager가 확인한 source span이고 이번 query의 정답으로 모델에 넣은 binding이 아니다.
+
+| 제공 자료 예 | A의 생성/획득 | B의 생성/획득 |
+| --- | --- | --- |
+| `Evidence1`: P20이 실제 전달한 E20 구간에서 “가격이 같은 경우 유지보수 기간을 우선합니다.” | Context Composer가 전달 범위와 원문을 읽어 반환. 필요한 현재 의미 판단은 RI가 같은 원문으로 수행 | Memory Publisher가 전달된 구간 안에서 `EXPLAINS_ITEM(P20,E20,source_span,value)`의 Memory1을 조건부 생산. Reader가 후보와 locator를 읽고 exact quote가 필요하면 해당 구간을 원본 port로 확인 |
+| `Evidence2`: T21의 확인된 D21 개정 2 참조 | Task Manager read에서 명시 ID/version 확보 | `HAS_RESULT(T21,D21)`의 Memory2를 코드로 생산. 현재 권한과 Task 상태는 owner 재확인 |
+| `Evidence3`: T22의 D22 개정 1 참조 | 동일한 bounded read | 같은 코드 연결 Memory3. 결과 본문 전체나 Agent 내부 reasoning 보관을 요구하지 않음 |
+
+Memory1의 좁은 의미 job 입력은 `schema_version`, `producer_version`, `job_id`, `role` 및 허용된 `source_spans`, `allowed_relation_kinds`, `allowed_from_refs`, `allowed_to_refs`, `policy_epoch`다. 모델은 `{relation_kind,from_ref,to_ref,source_spans,value,uncertain}`만 반환한다. 게시 revision, 권한, Coverage와 현재 Request binding을 모델이 생산하지 않는다. 후보/출처 밖 참조, 원문에 없는 값, 허용하지 않은 관계와 key는 거절하거나 재질문/재생산으로 연결한다. 불확실한 산출물은 `UNRESOLVED`로 남기며 정상 covered hit로 사용하지 않는다.
+
+JSON은 이 **예외 문구 한 구간의** 가공을 보여주는 bounded 예시다. 설명의 세 기준 전체나 모든 조건이 완전 생산됐다는 예제가 아니다. query가 다른 항목/전체 기준을 요구하면 읽은 범위와 제외/미게시 범위를 확대하여 반환하고, 현재 전달된 범위만으로 충분하지 않으면 `PARTIAL`, 추가 근거 조회 또는 확인으로 연결한다. B는 관계가 준비됐다는 이유로 실제 전달하지 않은 마지막 항목을 이 과거 설명에 포함하지 않는다.
+
+가격과 유지보수 자료를 분석해 최종 제품을 고르거나 제안서를 작성하는 업무는 Agent가 수행한다. “가격은 제외하고 비교해줘”라는 R24 조건은 RI가 현재 요청으로 판단한다. 같은 과거 발췌를 재사용해도 이전 요청의 적용 기준/Task binding을 그대로 복사하지 않는다.
+
+### 3.7 A의 요청 반복과 B의 두 시작점
+
+| 순서 | A: 요청이 필요한 원본을 조합 | B: 생산과 조회의 서로 다른 시작점 |
+| --- | --- | --- |
+| 요청 이전 | owner는 확정 원본을 유지. 공통 index/summary/cache 생산은 허용 | 확정 변경/지원 범위 작업이 Publisher를 시작. 원문 읽기와 필요한 의미 가공 후 관계/Coverage를 조건부 게시 |
+| Input1 확정 | RC가 input/revision과 scope를 등록하고 RI job 시작 | 동일. 게시 완료를 기다려 InputFinal을 막지 않음 |
+| Query1 | RI 읽기 실행기 → Context Composer. owner별 bounded read의 반환을 Request Evidence Set에 수집 | 같은 caller → Evidence Reader. 지원 종류/범위의 Repository 자료와 source 유효성 확인 |
+| 결과와 반복 | Composer가 Bundle1/Receipt1 반환. RI 모델 또는 41 B Engine이 추가 query/질문/의미 제안을 선택. 추가 원본이 필요하면 같은 read 경로 반복 | Reader가 Bundle/Receipt 반환. `NOT_COVERED`라면 제한된 생산 job을 요청하고 게시 revision/상태를 기다렸다가 다시 읽음. RI의 추가 query 반복도 동일하게 남음 |
+| 의미와 후속 실행 | RI의 MeaningProposal → RC의 currentness/권한 검사와 저장 후 채택 → Task/응답 처리 | 동일. Memory hit/PublishResult가 RC의 채택을 건너뛰지 않음 |
+| 요청 종료 | Request Evidence Set/read 대기는 끝나며 허용된 cache만 별도 수명 유지 | read 대기는 끝나지만 허용된 게시 관계는 재사용. 현재 request가 취소돼도 독립 생산의 목적/권한/source가 유효하면 지속 가능 |
+
+B 생산은 source change 또는 지원 범위 backfill로 시작하고, B 소비는 현재 query로 시작한다. 둘이 같은 call stack이나 같은 Request 수명이라는 뜻이 아니다. 생산 job이 오래된 source/권한/producer version을 쓰면 게시하지 않는다. 반면 현재 attempt만 오래됐고 source는 여전히 유효하면 현재 attempt 반환을 폐기하는 것과 공통 게시 자료 자체를 폐기하는 것을 구별한다. Reader는 오래된 query 완료를 새 요청에 전달하지 않는다.
+
+A와 B 모두 독립 read의 병렬 실행, 유한 budget, retry/cancel과 partial reuse를 허용한다. B의 backfill 대기는 UI/음성 입력 thread를 막지 않으며 44의 중앙 continuation 또는 stage window가 해당 job 결과를 기다린다. publisher thread, pub/sub 제품이나 queue 정책은 tactic/실행 기반 후보이지 새 Component 차이가 아니다.
+
+### 3.8 호출, 갱신과 사용 경계
+
+| 처리 | 코드 / 모델 / 비용 |
+| --- | --- |
+| 원본 조회, explicit ID/revision/구간 연결, cache/coverage lookup | local code. read 자체는 LLM 호출이 아님. 원본 dereference와 metadata 확인은 시간/IO 비용 |
+| A의 자유문 과거 근거 해석 | 현재 RI의 `C-INTERPRET`에서 처리할 수 있으면 별도 호출 불필요. CM의 추가 가공이 필요할 때만 `C-CONTEXT`. optional cache 생산도 비용 포함 |
+| B의 자유문 항목/관계 생산 | Memory Publisher → Model Access Semantic API Client → cloud 의미 LLM의 `C-CONTEXT`. explicit 관계는 code. backfill/정정/파생 오류 생산과 미사용 생산도 기록 |
+| 현재 목표/지칭/Task/조건 판단 | 양안 같은 RI `C-INTERPRET`. B에 MemoryRecord가 있어도 생략되는 호출로 자동 세지 않음 |
+| 내용 준비와 음성 출력 | 같은 Response Manager의 필요 시 `C-RESPONSE`, `C-VOICE-OUT`. 지속 `C-VOICE-IN`도 공통 비용. 생성/실제 전달은 별도 |
+| 저장/현재성/철회/삭제 | code owner 계약. source와 policy epoch 검사, queue 등록/사용 승인 및 조건부 게시 사이 fence. 의미 모델 confidence는 권한 아님 |
+
+모델 job에는 job/call ID, role, input/source vector, scope, producer/schema version, enqueue/send/first/terminal과 status/usage를 남긴다. 배경 생산 queue와 현재 요청 queue는 유한하며 수치·정책은 아직 미정이다. cloud quota/timeout이 발생하면 영향 job의 보류/실패/재시도를 반환한다. 로컬 VAD와 capture/stop는 이 queue를 기다리지 않는다. 요청별 client context/buffer는 로컬 자원이고 cloud server weights/KV는 PC 메모리에 포함하지 않는다.
+
+D21 개정 2가 개정 3으로 바뀌면 의존 Bundle/cache/record의 신규 사용부터 차단한다. A는 필요한 owner read/조합을 다시 수행하고 B는 영향 관계와 Coverage를 차단한 뒤 부분 재생산/게시한다. 명확하지 않은 dependency는 더 넓게 무효화한다. 원본이 그대로인데 추출 오류가 발견된 경우에도 `EvidenceDispute(record_id,published_revision,source_span,conflict)`를 통해 해당 파생 revision을 조건부 차단한다. 다른 새 revision을 오래된 이의로 덮어쓰지 않는다.
+
+삭제/철회는 policy epoch와 tombstone으로 사용부터 fence하며, purge는 후속 확인까지 `PURGE_PENDING`이다. source가 만료됐으면 새 snapshot으로 옛 사실을 복원하지 않는다. 이전 epoch의 늦은 producer 완료는 게시 거절, 이미 보낸 cloud cancel 실패는 후속 출력 사용 차단으로 처리하며 청구 사용량은 비용 원장에 남긴다. 사용 승인과 철회의 직렬화 경계는 42의 실제 저장/서비스 배치에서 설명해야 하고, 42 B에서는 CM 내부 transaction과 async 알림만으로 owner 전체 fence를 달성했다고 하지 않는다.
+
+현재 출력/Agent 전송/의미 채택에 사용하는 Bundle은 각 owner 게이트에서 현재 source/permission을 확인한다. 현재 request의 중단이 허용된 과거 source를 삭제한다는 뜻은 아니다. 반대로 공통 자료가 남아 있다는 이유로 중단된 request를 다시 실행하지 않는다.
+
+### 3.9 핵심 경로를 확대한 추가 발표 그림
+
+![45 요청별 원본 조합과 공통 관계 생산·조회](../../../presentations_files/dp-comparison/dp45-comparison.svg)
+
+[편집 원본](../../../presentations_files/dp-comparison/dp45-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp45-comparison.png). 위 전체 MAIN과 수명 그림을 유지하고 현재 요청의 조회/반환과 B의 별도 생산·게시·재조회 경로를 확대했다. Query1은 고정 JSON의 key를 축약해 표시한다. Memory1은 실제 전달된 예외 문구 한 구간이며 기준 전체가 아니다. 읽기 결과 PARTIAL, coverage와 gap을 표시하고 양안의 원문·현재 revision 검사도 남겼다. 현재 의미/Task 연결은 Request Interpreter와 Request Controller의 공통 후속 책임이다.
 
 ## 4. 자료와 계약: 무엇을 기억하며 무엇을 잃는가
 
@@ -159,7 +261,7 @@ B의 metadata 확인이 실패하면 repository에 본문이 있다는 이유로
 삭제와 철회는 양안 모두 다음 순서를 갖는다. **사용 차단은 동기 경계이고, 본문과 파생물의 물리 정리는 재시도 가능한 후속 작업이다.**
 
 1. User Memory 삭제는 Context Manager의 tombstone/epoch/cleanup intent를 함께 확정한다. 자료 권한 철회는 Policy Manager와 원본 계약의 현재 유효성에 반영한다. B의 변경 backlog보다 먼저 신규 사용이 차단돼야 한다.
-2. A의 summary/index/cache와 활성 Bundle, B의 관계/repository/view, 양안의 관련 모델 session/KV와 대기 generation을 무효화한다. 게시/제공 경계의 재검사로 이미 읽힌 결과도 막는다. 불변 snapshot에 남았다는 이유로 허용하지 않는다.
+2. A의 summary/index/cache와 활성 Bundle, B의 관계/repository/view, 양안의 관련 local session context, 대기 모델 job과 응답 generation을 무효화한다. 게시/제공 경계의 재검사로 이미 읽힌 결과도 막는다. 불변 snapshot에 남았다는 이유로 허용하지 않는다.
 3. 생산 중이던 오래된 job의 재게시를 거부한다. 중단/삭제 실패는 `PURGE_PENDING`으로 보존하고 재시작 후 계속한다. 사용 차단 완료와 local purge 완료를 구별한다. 외부 Agent에 이미 전달된 자료나 OS backup을 소급 회수했다고 말하지 않는다.
 4. 과거 대화가 남아도 삭제된 선호를 현재 선호로 재추출하지 않는다. 삭제 원장은 opaque identity/revision으로 유지한다. 과거 대화의 명시적 사실 조회와 현재 선호 적용은 다르다. 새 명시적 저장 요청 없이 재등록하지 않는다.
 
@@ -169,7 +271,7 @@ B의 metadata 확인이 실패하면 repository에 본문이 있다는 이유로
 
 ### 4.4 중단과 재시작
 
-A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 않은 cache만 재구성한다. B는 마지막 **게시된** source별 cursor에서 중복 가능한 변경을 다시 읽고 원본 ID/revision과 producer version으로 중복을 제거한다. 관계와 coverage를 함께 게시하기 전에 중단되면 그 범위는 미게시다. source 신호 누락은 cursor gap/증분 대조로 발견하고 해당 범위를 사용 불가로 둔다. 원본이 있어야 재생산할 수 있으며 신호만으로 원문을 복원하지 않는다.
+A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 않은 cache만 재구성한다. B는 마지막 **게시된** source별 cursor에서 중복 가능한 변경을 다시 읽고 원본 ID/revision과 producer version으로 중복을 제거한다. 관계와 coverage를 함께 게시하기 전에 중단되면 그 범위는 미게시다. source 신호 누락은 cursor gap/증분 대조로 발견하고 해당 범위를 사용 불가로 둔다. 원본이 있어야 재생산할 수 있으며 신호만으로 원문을 복원하지 않는다. Publisher의 중복 가능한 생산 job과 영속 게시 revision을 구별하고, cursor만 전진한 미완성 관계를 정상 hit로 반환하지 않는다.
 
 양안 모두 재시작 때 현재 삭제 원장을 먼저 적용한다. B의 저장소를 잃으면 과거 관계 재생산이 완료될 때까지 해당 조회는 제한되고 B+는 비용을 지불해 원본 조합으로 우회한다. 기억 복구가 Request/Task 실행 재시작이나 중복 Agent 명령을 유발해서는 안 된다. 별도 process 격리나 무중단 서비스를 이 비교의 자동 이익으로 세지 않는다.
 
@@ -202,7 +304,7 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 | 여러 업무 중 과거 제품 비교 D21@v2를 다른 업무에 사용 | Task Manager 결과와 Request Controller 연결, 필요 시 Response Manager 제시 기록을 조합 | 공통 결과/참조 관계로 후보 획득. 실제 최신 버전과 현재 사용 권한은 owner 확인 | 둘 다 부분 자료/권한 부족을 표시. B는 교차 업무 원문 검색을 줄일 여지. 지원 종류의 gap은 추가 생산, 표현 미지원은 제한 안내/설계 변경 또는 B+ 원문 조합. Downstream Agent 내부 업무 추론은 맡지 않음 |
 | 저장된 M1은 간결한 답, 이번에는 “자세히 설명해줘” | ACTIVE M1과 현재 명시 지시를 별도 반환. 현재 지시 우선 | 같은 User Memory 원본을 별도 읽음. 과거 관계 빈도가 M1이나 현재 지시보다 우선하지 않음 | 둘 다 지원, 본질적 우위 없음. M1을 변경/삭제하지 않음 |
 | 과거 D21@v2가 v3로 수정되거나 summary가 틀려 원문 필요 | source 버전과 cache dependency 불일치로 재조회, 해당 요약 재생성 | D21@v2 기반 관계 사용 차단 후 v3 영향 구간 재게시. ‘당시 v2’와 ‘현재 v3’를 섞지 않음 | 둘 다 원문 접근 가능 시 복구 경로 지원. 원문이 없어졌으면 확인 불가, B의 남은 파생물도 원문 대체 불가 |
-| M1 삭제 또는 D21 접근 철회 뒤 오래된 summary/Context 존재 | 공통 epoch 검사로 모델 입력/제공/게시 차단, cache/Bundle/KV 폐기 | 같은 즉시 차단 + 공유 관계와 소비자별 view 폐기, 늦은 producer 게시 거부 | 둘 다 필수 통제. B는 영향 범위와 삭제 작업이 더 클 수 있음. 삭제된 M1의 과거 발언 재추출은 금지 |
+| M1 삭제 또는 D21 접근 철회 뒤 오래된 summary/Context 존재 | 공통 epoch 검사로 모델 입력/제공/게시 차단, cache/Bundle/local model context 폐기 | 같은 즉시 차단 + 공유 관계와 소비자별 view 폐기, 늦은 producer 게시 거부 | 둘 다 필수 통제. B는 영향 범위와 삭제 작업이 더 클 수 있음. 삭제된 M1의 과거 발언 재추출은 금지 |
 | 짧은 일회성 “이 문장만 존댓말로 바꿔줘”, 과거 근거 불필요 | 현재 입력만으로 처리, 과거조회 생략. 공통 원본 기록 외 추가 유지 최소 | 조회를 생략할 수 있지만 앞선 원본 변화의 생산/저장 비용은 이미 발생할 수 있음. 유한 생산 범위 밖 사건은 미게시 | 기능상 동등. B에 재사용 이익이 없는 반례. 모든 일회성 사건을 모델로 기억화하는 정책은 요구하지 않지만 생산 제외로 생기는 coverage gap은 표시 |
 
 두 안 모두 필요한 원문이 없거나 두 과거 설명이 동등하게 맞으면 재선택을 요청할 수 있다. 이는 적절한 불확실성 처리이지 원래 목표의 완전한 자동 달성은 아니다. 검색과 관계 추출이 임의의 과거 지칭을 항상 해결한다는 지원 보장은 **미확인**이며, 구현 검증된 완전 지원으로 표시하지 않는다.
@@ -216,27 +318,42 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 | 1 / **V-01 정확성** | 요청의 구체적 표현에 맞춰 원문 범위와 결합을 바꿀 수 있음. 검색 누락, 여러 source/버전의 불완전 결합과 반복 해석 오류 위험. warm 관계 cache도 가능 | 과거 정정/제시/결과 연결을 공통으로 유지해 반복 교차조회에서 관계 누락을 줄일 가능성. 그러나 잘못 추출한 관계를 여러 요청이 공유하고 schema가 예외/부정을 잃을 수 있음. 원문 확인 뒤에도 A와 동일한 오류라면 정확성 우위 없음 |
 | 1 / **V-02 적절성** | 필요한 근거를 동적으로 넓혀 추가 설명 없이 해결할 수 있음. 반복 결합에 실패하면 이미 설명한 내용을 다시 묻게 됨 | 관련 과거 연결이 게시돼 있으면 재설명/수동 Task 연결을 줄일 여지. 미게시/모호한 관계는 추가 대기나 질문. 동일한 A index/cache로 같은 질문을 없애면 B의 고유 이익 아님 |
 | 1 / **V-03 완전성** | 지원 owner read 범위 안의 새로운 조합을 요청 중 시도. 정확히 복원할 원문이 없는 과거 지칭은 제한 | 게시 관계 종류와 coverage 안에서 공유 과거 참조. 미생산은 backfill 가능, 표현 미지원은 설계 변경 또는 B+ 필요. 저장소만으로 임의의 새 관계를 완전 지원하지 못함. 양안의 원문 부재/권한 한계는 동일 |
-| 2 / V-04 반응성 | 유효 cache hit나 과거 불필요 요청에서 추가 단계 작음. cold fan-out과 해석 반복이 유효 응답을 지연 | covered read가 원본별 검색/결합을 대체하면 빨라질 여지. 게시 지연, 권한 재확인, 오류 복구는 지연. 준비 작업의 공유 Omni 경합이 지속 입력과 상호작용을 방해할 수 있음 |
+| 2 / V-04 반응성 | 유효 cache hit나 과거 불필요 요청에서 추가 단계 작음. cold fan-out과 해석 반복이 유효 응답을 지연 | covered read가 원본별 검색/결합을 대체하면 빨라질 여지. 게시 지연, 권한 재확인, 오류 복구는 지연. 배경 생산의 cloud rate limit/동시 호출 경합과 local buffer/queue 부담이 현재 처리를 지연할 수 있음. 로컬 입력은 생산 대기를 하지 않음 |
 | 2 / V-05 VIA 귀속 완료 시간 | 현 요청에 필요한 만큼만 읽음. 근거 보완과 반복 질문은 완료 경로를 늘림 | 반복 재사용 때 VIA의 조회/구성 시간을 줄일 가능성. 사전 생산을 현재 요청 시간 밖으로 옮긴 것과 총비용 감소는 다름. backfill/재판단/재게시가 완료 경로에 들어오면 악화. 외부 Agent 실행 시간은 양안 동일 외부 조건 |
 | 3 / **V-08 변경 용이성과 모듈성** | 원본 adapter 변경은 이미 국소화 가능. 새 관계는 요청 조합에서 시도 가능하나 여러 소비 경로에 같은 결합이 퍼질 수 있음 | 원본별 차이는 생산 adapter에서 흡수하고 소비자는 공통 계약 유지 가능. 반대로 관계 schema/의미 변경은 기존 기억 재생산과 모든 해당 소비자 검증으로 전파. 단순 파일 수나 계약 수로 이익을 증명하지 않음 |
-| 4 / **V-06 자원 활용성과 수용량** | 재사용 적은 workload에서 필요한 조회/해석만 수행. 반복 결합은 모델 입력과 Context/KV를 다시 점유할 수 있음 | 여러 요청의 관계 재사용으로 중복 읽기/입력을 줄일 여지. 생산 호출, 미사용 기억, 중복 저장, dependency index, backlog, 재생산과 생산 session/KV를 추가. 작은 요청 위주이거나 변경이 잦으면 손해. RAM/저장/에너지와 동시 수용량은 별도 확인 |
+| 4 / **V-06 자원 활용성과 수용량** | 재사용 적은 workload에서 필요한 조회/해석만 수행. 반복 결합은 cloud 입력량과 local Context/buffer를 다시 점유할 수 있음 | 여러 요청의 관계 재사용으로 중복 읽기/입력을 줄일 여지. 생산 호출, 미사용 기억, 중복 저장, dependency index, backlog, 재생산과 클라우드 전송용 local context/queue와 결과 buffer를 추가. 작은 요청 위주이거나 변경이 잦으면 손해. RAM/저장/에너지와 동시 수용량은 별도 확인 |
 | 5 / V-07 결함 허용성과 복구성 | owner별 실패를 receipt에 드러내고 해당 범위 재시도. source 분산 조회 도중 부분 결과 처리 필요 | 게시된 유효 자료 재사용과 cursor 재생산 가능. publisher 실패, cursor gap, 잘못된 공동 관계의 넓은 영향, repository 손실에 대한 복구 경로 증가. 별도 장애 격리 효과는 process 변경 없이는 주장 불가 |
 | 6 / V-09 분석 및 시험 용이성 | 요청 receipt로 무엇을 읽었는지 추적. 요청마다 다른 검색과 결합의 재현 필요 | 기억 생산 실패와 조회/현재 해석 실패를 분리할 수 있음. producer version, 게시 전후 revision, gap과 삭제 race를 함께 재현해야 함. 생산 provenance 없으면 오히려 원인 은폐 |
-| 6 / V-10 기밀성 | 목적별 source 접근과 파생 사용 fence 필요. 임시 Context와 cache도 유출/삭제 대상 | 공통 기억의 교차 source 결합이 추가 노출면. 원본별 scope의 교집합, 즉시 use fence, 파생/KV 삭제 필요. 중앙 저장만으로 안전하거나 통제 쉬워진다고 주장하지 않음 |
-| 6 / V-11 상호운용성 / 공존성 | source별 의미 보존과 누락 보고 필요. on-demand burst가 다른 PC 앱과 경합 | 공통 형식이 소비를 통일하지만 외부 source의 의미/버전 계약 손실 위험. 배경 생산이 CPU/GPU/IO를 점유. 새 외부 protocol 지원 자체는 구조의 자동 이익 아님 |
+| 6 / V-10 기밀성 | 목적별 source 접근과 파생 사용 fence 필요. 임시 Context와 cache도 유출/삭제 대상 | 공통 기억의 교차 source 결합이 추가 노출면. 원본별 scope의 교집합, 즉시 use fence, 파생 자료와 local session context 삭제, remote cancel/출력 사용 차단 필요. 중앙 저장만으로 안전하거나 통제 쉬워진다고 주장하지 않음 |
+| 6 / V-11 상호운용성 / 공존성 | source별 의미 보존과 누락 보고 필요. on-demand read/결합의 local CPU/IO burst와 cloud 요청이 경합 | 공통 형식이 소비를 통일하지만 외부 source의 의미/버전 계약 손실 위험. 배경 생산이 local CPU/IO, context buffer와 cloud quota를 사용. 새 외부 protocol 지원 자체는 구조의 자동 이익 아님 |
 | 6 / V-12 조작 용이성 / 오류 방지 | 근거 부족을 보여 재선택. 사용자가 현재/과거 버전과 선호/일회성 구분 가능해야 함 | 공유 과거 근거의 잘못된 관계를 사용자 정정으로 추적하고 폐기할 수 있어야 함. 익숙한 기억이라는 이유로 잘못된 대상 자동 선택 금지. 사용자 제어 기능은 양안 공통 |
 | 6 / V-13 설치 용이성 | 기존 runtime과 local 저장을 유지할 수 있음 | 추가 모델/서버 필수 아님. 저장 schema migration, 생산 cursor와 잔여 자료 cleanup이 추가. 별도 runtime이 없으므로 설치 시간의 큰 차이는 현재 근거 없음 |
 
-### 6.1 한 벌의 Omni에서 부담하는 비용
+### 6.1 클라우드 모델과 로컬 VIA에서 부담하는 비용
 
-두 안은 같은 [공유 Omni 조건](../target-architecture/shared-omni-runtime.md)을 유지한다. 의미 추론과 S2S는 한 벌의 on-device Omni 가중치를 쓰고 지속 음성 capture/독립 Streaming ASR를 유지한다. 추가 embedding, reranker, helper 모델과 vector DB는 전제하지 않는다. 검색은 원본 메타데이터/키워드/ID와 게시된 관계를 사용할 수 있다. 새 learned helper가 필요해지면 별도 전제 변경과 전체 weights/runtime/KV/설치/경합 비용 검토가 필요하다.
+현재 비교는 [04-40](./04-40-common-execution-contract.md)의 같은 클라우드 voice/semantic model/API 조건이다. VIA의 로컬 VAD/capture/상태 owner를 유지하고, 음성 입력은 과거 근거 생산을 기다리지 않는다. [기존 공유 Omni 설계](../target-architecture/shared-omni-runtime.md)는 on-device 참조 세대의 근거이며 현재 cloud 모델의 weights/KV/설치 비용으로 읽지 않는다. 추가 embedding, reranker, helper 모델과 vector DB는 전제하지 않는다. 검색은 원본 메타데이터/키워드/ID와 게시 관계를 사용할 수 있다. 새 learned helper를 도입하면 배치와 실제 사용량/로컬 자원 비용을 별도 명시한다.
 
-- **A:** 요청 전 요약 생산 + 요청별 owner 조회 + 필요한 현재 해석/원문 확인 + cache 유지/무효화 비용. cache hit는 다시 만들지 않으며 요청 Context를 공유 가능한 원본 참조로 줄일 수 있다.
-- **B:** 원본 변경 획득 + 필요할 때 과거 관계 모델 추출 + 검증/게시 + 요청별 기억 조회/목적별 Context + 현재 해석 + 갱신/삭제/재생산 + 원문 확인 비용. 관계의 단순 ID 연결까지 모두 모델 호출이라고 가정하지 않는다.
-- **비용 비교 경계:** 시작 원본에서 기억을 만드는 비용, 사용되지 않은 생산, 변경으로 버린 생산, 요청 중 backfill, 전체 저장과 peak Context/KV를 모두 포함한다. 모델 호출 수만으로 token/메모리/시간을 대체하지 않는다.
-- **실행 우선권:** 배경 생산은 유한 queue와 저장/Context 예산 아래 idle budget에서 수행하고 음성/foreground 압력이 생기면 먼저 중단한다. 미완료 범위는 coverage에 남긴다. 동기 backfill도 foreground budget을 무한 점유하지 않으며 초과하면 보류/질문/B+로 전환한다. 실제 기기 수치는 미정이며 동시 실행을 측정했다고 주장하지 않는다.
+- **A:** 요청 전 요약/cache 생산 + 요청별 owner read/결합 + 필요한 현재 해석/원문 확인 + cache 유지/무효화. cache hit를 다시 생산하지 않으며 RI의 같은 의미 호출에서 과거 원문을 판단할 수 있다.
+- **B:** 초기/변경 원본 획득 + 필요한 과거 관계 의미 추출 + 검증/게시 + 요청별 읽기/현재 해석 + 갱신/삭제/재생산 + 원문 확인. 미사용 생산, stale 생산과 실패/재시도도 포함한다. 명시 ID 연결은 code라 추가 LLM 호출이 없다.
+- **금액과 시간:** provider/model별 input/output/cached token, audio 사용량과 단가 version으로 전체 기간 비용을 기록한다. 호출 수는 보조값이다. cloud upload/network/model 응답, queue, source read, condition-check와 실제 응답 전달 시간을 숨기지 않고 겹친 span을 단순 합산하지 않는다.
+- **로컬 메모리:** query/요청 근거, cache, repository의 resident 부분과 index, 생산/소비 queue, API client context/buffer, retry/cancel 기록을 포함한다. cloud 서버 weights/KV와 외부 Agent 메모리는 PC 사용량이 아니다. 저장공간과 RAM을 같은 숫자로 합치지 않는다.
+- **실행 조건:** 배경 생산은 유한 queue와 local context/저장 budget, cloud quota 아래 실행하고 foreground 압력이 생기면 admission을 줄이거나 보류/취소한다. 미완료 범위는 coverage gap이다. backfill도 budget을 무한 점유하지 않으며 순수 B는 대기/확인/제한으로 반환하고 원본 조합 우회는 명시 B+다. 수치/스케줄러·실제 생산 여력은 미측정이다.
 
-공통 repository는 공통 KV를 뜻하지 않는다. 생산 session과 요청 session은 분리하고, 소비자별 Context도 목적에 맞춰 구성한다. 원문이 철회되면 작은 요약으로 압축했다는 이유로 Context/KV의 삭제 의무가 사라지지 않는다.
+공통 repository는 모든 요청에 같은 prompt를 주거나 클라우드 session의 영속 업무 권위가 된다는 뜻이 아니다. 생산과 현재 해석의 context/call correlation을 분리하고 목적별 자료만 전송한다. 삭제/철회는 local context와 후속 output 사용을 차단하며 provider cancel 및 보존/삭제 API의 실제 확인 범위를 기록한다. 로컬 purge 완료를 원격 제공 자료의 소급 회수라고 말하지 않는다.
+
+### 6.2 현재 핵심 QA 원본에 연결하는 방법
+
+[03-02 공통 QA 정의](./03-02-quality-attribute-definitions.md)의 최신 합의와 평가 설계를 원본으로 사용한다. 이 문서에 별도 분모/목표나 DP 전용 정확성 지표를 만들지 않는다. §6의 V-01~13은 추가 인과와 기능/권한/실패 한계를 보존하는 검토이며 공통 QA 원본을 대체하지 않는다.
+
+| 공통 품질 묶음 | 45의 인과적 참여와 관측 | 조건부 손익 |
+| --- | --- | --- |
+| 요청 처리 정확성 | S2-02 과거 실제 설명과 두 업무 결과, S2-03 당시 version, 정정/삭제/접근 불가 변형. C2 대상/근거가 주 경로이며 잘못된 근거가 C3 업무 연결, C4 조건, C5 적용과 C6 전달로 이어지면 그 실제 결과도 기록 | A 원본 검색/현재 해석의 누락과 B 추출 손실/공유 오류. cache hit나 Memory recall을 대표 정확성으로 바꾸지 않음 |
+| 응답속도 | 첫/반복/정정 직후의 query 시작, owner read 또는 게시 대기, 추가 의미 호출, 실제 유효 응답/인계까지 공통 endpoint 연결 | 준비된 B read는 요청 중 원본 조합을 줄일 수 있음. 미게시/수정 대기는 더해짐. A warm cache도 허용 |
+| 모델 사용 비용 | 같은 시작 이력과 관찰 기간의 foreground/background/retry/stale usage. 음성/현재 의미의 공통 호출과 과거 의미의 추가 호출은 call ID로 한 번만 집계 | 반복된 안정 관계는 B 생산 비용을 나눌 수 있음. 사용 드문 기록/잦은 변경이면 A가 유리할 수 있음 |
+| 변경 용이성 | source adapter 변경과 관계 kind/schema 의미 변경을 구별. 기존 소비자 호환과 저장된 파생물 무효화/재생산의 실제 변경 범위 | 같은 관계 의미의 source 형식 변경은 양안 adapter로 흡수 가능. 새 관계는 A query/해석, B producer/schema/독자/재생산에 전파될 수 있음 |
+| 로컬 VIA 메모리 | source read/context peak와 지속 query/cache, B resident index/record/coverage/backlog, client buffer. 삭제와 장기 실행 포함 | B 지속 파생 관리가 증가할 수 있으나 A의 큰 원문 Context/cache와 반복 fan-out도 비용. 고정 우열 없음 |
+
+준비된 반복 조회만 선별하여 B를 평가하거나 원문을 읽지 못한 실패를 A 모집단에서 빼지 않는다. 시작 원본과 준비 기간, 허용 cache, 기능 목표와 외부 profile을 같게 두고 first/warm/변경/미지원 장면을 분리하여 원인을 설명한다. 46과 함께 쓸 때 동일 과거 가공 call이나 오류를 독립 이익/별도 청구로 중복 계산하지 않는다.
 
 ## 7. Tactic 보완, 작은 확장과 현실적 혼합
 
@@ -247,7 +364,7 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 | A에 정정 링크 index와 source별 요약 추가 | **허용하는 tactic 보완이다.** 새 메인 사례도 작은 결과/전달 index와 관계 cache만으로 충분할 수 있다. 이는 A 선택과 약점 보완의 근거가 될 수 있으며, 두 구조를 비교한 45의 의미가 사라진다는 뜻은 아니다. 여러 활동을 참조한다는 사실만으로 B의 선택을 확정하지 않는다. |
 | 기존 Agent의 실행 맥락 재사용 | 이전 Task와 실행/결과 참조로 충분한 경우 VIA가 구체 업무 맥락을 다시 추출하지 않는다. 같은 Agent 선택과 참조 연결을 구별한다. 이 경로와 A의 작은 확장으로 충분하면 B의 추가 계약 필요성은 약해짐 |
 | A의 공통 query library/cache로 여러 소비자의 중복 제거 | 강한 A이며 선택 후 보완으로도 사용할 수 있다. 같은 근거 품질과 사용자 수고를 달성한다면 B의 추가 생산/유지 비용을 피하는 A 선택 근거가 될 수 있다. 단, 생산자가 공통 관계의 coverage/게시/정정 책임을 지고 소비자 정상 읽기 계약이 그 관계로 바뀌면 B 또는 혼합 구조로 전환한 것 |
-| B에서 publisher만 끄고 요청마다 생성 | 게시 전까지 조회가 불가능하면 동기 backfill B이며 생산 시점만 바뀐다. 요청이 owner 계약을 다시 조합하고 자체 receipt/누락 해결을 책임져야 A로 전환된다. 이름 변경이나 producer 비활성화만으로 소비 의존이 복원되지 않음 |
+| B에서 publisher만 끄고 요청마다 생성 | 게시 전까지 조회가 불가능하면 해당 read가 범위 생산을 기다리는 backfill B이며 생산 시점만 바뀐다. 요청이 owner 계약을 다시 조합하고 자체 receipt/누락 해결을 책임져야 A로 전환된다. 이름 변경이나 producer 비활성화만으로 소비 의존이 복원되지 않음 |
 | B에 모든 경우 원본 fallback 추가 | B+라는 실용적 혼합. 기능 완전성과 복구를 보완하지만 두 경로의 계약/검증과 자원 비용을 부담한다. 대부분 요청이 fallback이면 공통 기억 중심의 정상 경로라는 선택 이유가 소멸 |
 | 관계 종류 일부만 B, 나머지는 A | 유력한 점진 도입 형태. 예: 실제 제시 순서/명시 버전 연결은 공통 읽기 모델, 자유로운 표현의 정정 의미는 요청 시 해석. 어디서 어떤 품질 이익이 남는지 관계별로 분리해야 함 |
 | 소비자별 별도 장기 기억을 복제 | 이번 주요 상대안으로 채택하지 않음. 현 요구에서 필요한 것은 같은 원본의 목적별 view이지 서로 다른 선호 원본이나 Task별 의미 권위가 아님. 목적별 view는 양안에 허용하고 별도 기억 권위를 만들지 않음 |
@@ -260,7 +377,7 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 
 **45는 이 A/B로 설계 검토를 진행할 가치가 있다.** 이유는 장기 대화와 여러 업무에서 흩어진 근거를 제대로 이어 제공하는 정상 사용 경로가 달라지고, 그에 따라 V-01~03과 시간/자원/변경 비용이 직접 충돌하기 때문이다. 원본 조합의 유연성을 택할지, 공통 과거 관계의 생산과 유지 의무를 부담할지가 핵심 결정이다. 중앙/분산이라는 이름이나 Component 수의 차이로 판단하지 않는다.
 
-**A를 우선할 조건:** 원본별 요약, 작은 관계 index/cache와 기존 Agent 맥락 재사용으로 필요한 과거 참조를 충분히 해결하거나, 반복 재사용이 적거나, 새로운 관계/원본 변화가 잦거나, 공유 Omni의 idle 여력이 작다. 이 경우 B를 독립된 큰 구조로 만드는 것보다 현재 참조의 검색/요약/정정 링크를 보강하는 것이 타당하다.
+**A를 우선할 조건:** 원본별 요약, 작은 관계 index/cache와 기존 Agent 맥락 재사용으로 필요한 과거 참조를 충분히 해결하거나, 반복 재사용이 적거나, 새로운 관계/원본 변화가 잦거나, 클라우드 quota/동시 호출 여력 또는 로컬 buffer 여력이 작다. 이 경우 B를 독립된 큰 구조로 만드는 것보다 현재 참조의 검색/요약/정정 링크를 보강하는 것이 타당하다.
 
 **B를 선택할 조건:** 여러 대화와 업무에서 같은 교차원본 관계가 반복적으로 필요하고, 강한 A의 공통 query/cache로도 필요한 연결 누락과 재설명 부담이 남으며, 원본 변경을 추적해 충분한 coverage를 유지할 수 있다. 소비자가 공통 관계를 읽어 실제로 요청별 결합을 대체해야 하고 생산 오류, 갱신/삭제와 자원 대가를 감수할 이유가 있어야 한다. B+ 또는 관계별 혼합은 기능 범위를 보완할 수 있지만 순수 B의 이익으로 합산하지 않는다.
 
@@ -269,11 +386,11 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 [04-30 §4.5](./04-30-comparison-guide.md#45-완료-보고-전-필수-판정)의 네 질문에 대한 현재 답은 다음과 같다.
 
 1. **목적을 달성하는 원리:** A는 현재 요청에 필요한 원본 계약들을 조합하고, B는 별도 생산/게시된 공통 과거 관계를 읽는다. 같은 허용 근거로 재설명/재선택을 줄이되 최종 현재 의미의 생산자는 바꾸지 않는다.
-2. **전환 시 유지와 재설계:** 원본 소유, 권한, 현재 의미/채택, 공유 Omni는 유지한다. 원본 간 연결을 책임지는 생산자와 소비자의 정상 읽기 계약, 미준비 범위 처리와 오류 복구는 §7의 방향별 설계로 전환해야 한다.
+2. **전환 시 유지와 재설계:** 원본 소유, 권한, 현재 의미/채택, 동일 클라우드 모델 조건은 유지한다. 원본 간 연결을 책임지는 생산자와 소비자의 정상 읽기 계약, 미준비 범위 처리와 오류 복구는 §7의 방향별 설계로 전환해야 한다.
 3. **가장 싼 확장/혼합의 판정:** 관계 index/cache로 A의 약점을 보완할 수 있으면 그 비용과 정확성 위험을 포함해 검토한다. 보완한 A가 우선순위 QA를 충족하면 A를 지지하는 근거가 된다. 공통 읽기 계약으로 옮겨야 이익이 남는 범위만 B로 만들고 나머지는 A로 두는 혼합도 유력하다. 보완 가능성과 45의 비교 자격을 혼동하지 않는다.
 4. **선택할 사용자 조건과 대가:** 짧은 일회성/새로운 관계가 많으면 A, 여러 업무의 교차원본 참조가 반복되고 게시 범위를 유지할 수 있으면 B를 검토한다. A의 요청별 결합 누락/비용과 B의 추출 손실, 공통 오류 확산, 게시 지연/유지 비용을 §5~6의 같은 사건/품질로 비교한다.
 
-후속 선택을 뒤집을 조건도 명확하다. **B에서 원문 우회/재생산이 지배하거나, 잘못된 관계의 공유가 정확성을 악화하거나, 지속 음성 조건에서 생산 여력이 없으면 B를 지지하지 않는다.** 반대로 같은 허용 원본으로 B가 반복적인 교차원본 누락을 줄이고 그 비용을 감당할 수 있다는 근거가 생기면 B를 지지할 수 있다. A의 작은 확장으로 같은 근거 누락과 사용자 수고를 해소하면 보완한 A의 선택 근거로 기록한다. 최종 판단에는 해당 비교에서 합의한 QA 우선순위와 각 안의 보완 비용을 적용한다. 이번에는 그 시험을 실행하거나 지표를 동결하지 않는다.
+후속 선택을 뒤집을 조건도 명확하다. **B에서 원문 우회/재생산이 지배하거나, 잘못된 관계의 공유가 정확성을 악화하거나, 같은 지속 입력과 cloud quota 조건에서 생산 여력이 없으면 B를 지지하지 않는다.** 반대로 같은 허용 원본으로 B가 반복적인 교차원본 누락을 줄이고 그 비용을 감당할 수 있다는 근거가 생기면 B를 지지할 수 있다. A의 작은 확장으로 같은 근거 누락과 사용자 수고를 해소하면 보완한 A의 선택 근거로 기록한다. 최종 판단에는 해당 비교에서 합의한 QA 우선순위와 각 안의 보완 비용을 적용한다. 이번에는 그 시험을 실행하거나 지표를 동결하지 않는다.
 
 ### 8.1 QA 비교·구조 선택·tactic 보완의 진행 순서
 
@@ -292,7 +409,7 @@ Tactic을 적용해 두 안의 일부 성능이 가까워지는 것은 구조 �
 | --- | --- | --- | --- |
 | A / [LangChain: Retrieval — Agentic RAG](https://docs.langchain.com/oss/python/deepagents/retrieval) | 현재 질문에 따라 도구로 필요한 Source를 조회한다. `fetch_documentation` 예제는 허용 URL의 실제 문서를 읽고 현재 응답의 근거로 사용한다. 기존 DB/내부 자료를 도구로 연결하는 방식도 설명한다. | 요청 → 필요한 원본 조회 → 요청에 맞는 근거 구성. 원본별 읽기 결과를 현재 요청에서 조합하는 Context Composer의 선례다. | 예제는 문서 Q&A이며 VIA의 실제 전달·Task·정정 관계를 구현한 사례는 아니다. 모델의 조회 선택은 41과도 관련되지만 여기서는 **원본을 요청 시 획득하는 경로**만 참고한다. Agentic RAG 전체가 A이거나 검색 index가 없는 구조라는 뜻은 아니다. |
 | B / [LangMem: Background Quickstart](https://langchain-ai.github.io/langmem/background_quickstart/)와 [Memory API](https://langchain-ai.github.io/langmem/reference/memory/) | 대화와 기존 기억에서 기억을 추출·통합하고 저장한 뒤 조회한다. `create_memory_manager`는 구조화된 산출물을 생산하고, `create_memory_store_manager`는 저장된 기억을 관리한다. 개발자가 schema와 생성 지침을 지정할 수 있다. | 원본 → Memory Publisher의 가공/검증 → 공통 기억 저장 → Evidence Reader의 조회. 생산과 소비의 계약을 나누는 B의 주된 선례다. | 기본 예제의 선호 추출을 VIA의 자동 User Memory 등록 정책으로 가져오지 않는다. VIA의 출처 revision, 실제 전달, coverage, 삭제 fence는 별도 설계다. 기본 Quickstart에는 생산을 `await`하는 코드도 있어 모든 예제가 응답과 독립 실행되는 것은 아니다. |
-| B의 실행 참고 / [LangMem: Delayed Background Memory Processing](https://langchain-ai.github.io/langmem/guides/delayed_processing/) | `ReflectionExecutor`가 대화별 대기 작업을 관리하고, 새 입력이 오면 이전 대기를 취소·다시 예약하여 입력이 안정된 뒤 기억을 생산한다. | 생산 queue와 요청 실행을 구별하고 미준비 범위를 관리할 수 있다는 선례다. | 지연 값이나 Python thread 구성을 VIA의 실행 계약으로 채택하지 않는다. 지연 생산은 준비되지 않은 구간을 늘리며, on-device Omni 경합이 없다는 보장도 아니다. 생산 시점 조정 자체는 tactic이다. |
+| B의 실행 참고 / [LangMem: Delayed Background Memory Processing](https://langchain-ai.github.io/langmem/guides/delayed_processing/) | `ReflectionExecutor`가 대화별 대기 작업을 관리하고, 새 입력이 오면 이전 대기를 취소·다시 예약하여 입력이 안정된 뒤 기억을 생산한다. | 생산 queue와 요청 실행을 구별하고 미준비 범위를 관리할 수 있다는 선례다. | 지연 값이나 Python thread 구성을 VIA의 실행 계약으로 채택하지 않는다. 지연 생산은 준비되지 않은 구간을 늘리며, 클라우드 호출과 로컬 queue 경합이 없다는 보장도 아니다. 생산 시점 조정 자체는 tactic이다. |
 | B의 교차기록 연결 참고 / [Mem0 Platform: Graph Memory](https://docs.mem0.ai/platform/features/graph-memory) | 기억 추가 시 개체를 추출하고 공통 개체를 가진 기억들을 연결한다. 이후 검색은 그 연결을 순위에 반영하여 여러 기록의 관련 사실을 찾는다. | 여러 기록의 연결을 생산·관리하고 이후 조회에 재사용하는 선례다. Mem0는 Agent용 기억 계층이며 이 항목은 Platform 기능이다. | 현재 문서는 개체의 공출현 연결이며 **typed/labeled 관계를 생산하지 않는다**고 명시한다. VIA의 정정·대체·실제 전달 관계가 구현돼 있다는 근거가 아니다. 이 기능의 embedding/검색 구성이나 cloud 배치를 VIA의 추가 dependency로 도입하지 않는다. |
 
 LangMem의 [Core Concepts](https://langchain-ai.github.io/langmem/concepts/conceptual_guide/)도 추출량이 지나치면 검색 precision을, 부족하면 recall을 해칠 수 있고 기존 기억의 갱신·통합이 필요하다고 설명한다. 이는 B의 품질 비용을 구체화하는 참고이며, B가 항상 더 정확하다는 근거가 아니다. Hot-path 기억 생성 역시 **가공한 기억을 저장하는 구조**이므로, 단지 요청 중 실행된다는 이유로 A로 분류하지 않는다.
@@ -305,9 +422,9 @@ LangMem의 [Core Concepts](https://langchain-ai.github.io/langmem/concepts/conce
 
 ### 10.1 강화할 핵심: 요청별 결합 책임과 지속 생산 책임
 
-**A는 요청에 맞춰 근거를 구성하는 구조다.** Request Controller가 `EvidenceQuery`를 보내면 Context Manager의 Context Composer가 원본 소유자의 읽기 결과를 모아 `EvidenceBundle`과 receipt를 완성한다. 현재 요청이 알려준 조건으로 조회 범위와 필요한 연결을 바꾸며, 불충분하면 예산 안에서 추가 원본을 읽는다. 현재 의미의 판단과 추가 조회 선택은 고정한 41/43의 책임에 남긴다. 요청이 끝나면 Request Evidence Set의 수명도 끝나며, 검증된 cache는 별도 수명으로 재사용할 수 있다. 새 요청이 잘 처리되기 위해 **모든 관련 과거 관계가 미리 게시될 필요는 없다**.
+**A는 요청에 맞춰 근거를 구성하는 구조다.** Request Interpreter의 읽기 도구 실행기가 `EvidenceQuery`를 보내면 Context Manager의 Context Composer가 원본 소유자의 읽기 결과를 모아 `EvidenceBundle`과 receipt를 완성한다. 현재 요청이 알려준 조건으로 조회 범위와 필요한 연결을 바꾸며, 불충분하면 예산 안에서 추가 원본을 읽는다. 현재 의미의 판단과 추가 조회 선택은 고정한 41/43의 책임에 남긴다. 요청이 끝나면 Request Evidence Set의 수명도 끝나며, 검증된 cache는 별도 수명으로 재사용할 수 있다. 새 요청이 잘 처리되기 위해 **모든 관련 과거 관계가 미리 게시될 필요는 없다**.
 
-**B는 가공한 과거 근거의 생산과 조회를 나눈 구조다.** 원본의 확정 변경을 받은 Context Manager의 Memory Publisher가 지원하는 사건/관계의 레코드를 생산하고, dependency revision·권한·coverage를 검증하여 Episodic Memory Repository에 게시한다. Evidence Reader는 그 공통 계약을 읽는다. 원본별 자료 형식과 과거 관계의 생산을 소비자가 매번 다시 조직하지 않는다. **정상 조회가 가능한 조건은 해당 종류와 범위의 기억이 유효하게 게시돼 있다는 것**이다. 게시 이전은 `NOT_COVERED`, 표현 밖 관계는 `UNSUPPORTED_RELATION`이며 §3.3의 생산/보류/명시적 B+ 경로로 처리한다.
+**B는 가공한 과거 근거의 생산과 조회를 나눈 구조다.** 원본의 확정 변경 또는 지원 범위 backfill 요구를 받은 Context Manager의 Memory Publisher가 지원하는 사건/관계의 레코드를 생산하고, dependency revision·권한·coverage를 검증하여 Episodic Memory Repository에 게시한다. Evidence Reader는 그 공통 계약을 읽는다. 원본별 자료 형식과 과거 관계의 생산을 소비자가 매번 다시 조직하지 않는다. **정상 조회가 가능한 조건은 해당 종류와 범위의 기억이 유효하게 게시돼 있다는 것**이다. 게시 이전은 `NOT_COVERED`, 표현 밖 관계는 `UNSUPPORTED_RELATION`이며 §3.3의 생산/보류/명시적 B+ 경로로 처리한다.
 
 같은 레코드가 여러 요청에서 쓰이더라도 이번 요청의 의도·대상·Task 연결을 대신 확정하지 않는다. Component는 추가하지 않는다. A는 Context Composer, B는 Memory Publisher와 Evidence Reader라는 기존 내부 Module 책임을 구체화한다. 상태는 Context Manager 소유 안에 표시하고 원본 소유 Component와 공통 현재 판단/채택 경계는 그대로 둔다.
 
@@ -319,19 +436,19 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 | --- | --- | --- |
 | E20 설명의 P20 실제 전달 구간과 항목 위치 | Response Manager의 실제 제시 기록 + 해당 설명 원본. 코드로 확인 가능한 위치와 의미로 추출한 항목을 구별 | “네가 설명한 두 번째 항목”의 과거 후보/원문 구간. 그 후보가 이번 지칭의 정답인지는 현재 해석에서 판단 |
 | T21의 확인된 D21@v2 결과와 이전 버전의 관계 | Task Manager의 확인된 결과/버전. 명시 ID 관계는 코드 생산 | 결과 후보와 유효 버전 참조. 사용자 요구가 현재 버전인지 당시 버전인지는 이번 요청에서 판단 |
-| 과거 정정이 어느 설명/결과 구간을 대체했는가 | Request Controller의 확정 정정과 해당 원본 구간. 해석이 필요한 관계는 공유 Omni의 출처 있는 파생값 | 유지/제외 후보와 정정 근거. 근거 불충분은 unresolved이며 추정으로 확정하지 않음 |
+| 과거 정정이 어느 설명/결과 구간을 대체했는가 | Request Controller의 확정 정정과 해당 원본 구간. 의미가 필요한 과거 관계는 클라우드 의미 LLM의 출처 있는 파생값 | 유지/제외 후보와 정정 근거. 근거 불충분은 unresolved이며 추정으로 확정하지 않음 |
 
 **생산하면 안 되는 것:** 앞으로 들어올 R23이 반드시 E20·D21·D22를 사용할 것이라는 예측, 새 T23의 binding, 제품 평가나 제안서 구성 같은 업무 판단. B는 지원하는 과거 사실/관계를 준비하며 미래의 모든 결합을 미리 계산하지 않는다. A도 동일한 종류를 코드/index/cache로 재사용할 수 있다. B의 차이는 레코드 형식 자체가 아니라 생산자가 그 범위의 게시/정정/폐기를 책임지고 소비자의 정상 조회가 그 계약에 의존하는 데 있다.
 
 ### 10.3 어떤 품질에서 어느 쪽이 유리한가
 
-아래는 **실행 의존성에서 도출한 조건부 예상**이다. 공식 사례의 측정 결과를 VIA 결과로 전용하지 않는다. 양안의 유효 cache, 동일한 원문 접근·현재성/권한 검사·공유 Omni와 기능 목표를 유지한다.
+아래는 **실행 의존성에서 도출한 조건부 예상**이다. 공식 사례의 측정 결과를 VIA 결과로 전용하지 않는다. 양안의 유효 cache, 동일한 원문 접근/현재성/권한 검사, cloud model/API와 기능 목표를 유지한다.
 
 | 비교 장면 / 품질 | 유리할 것으로 예상하는 안 | 이유와 뒤집히는 조건 |
 | --- | --- | --- |
 | 새로운 과거 관계, 미묘한 부정/예외를 처음 참조 — 정확성·완전성 | **A** | 현재 요청에 맞춰 원문 구간과 조합을 바꿀 수 있다. B가 추출하지 못한 조건이나 지원하지 않는 관계를 읽을 수는 없다. 다만 A도 검색에서 원문을 놓칠 수 있으며, B에 해당 구간/관계가 충분히 보존돼 있으면 이 우위는 줄어든다. |
 | 이미 검증·게시된 같은 과거 관계를 여러 요청이 반복 참조 — 관계 일관성 | **B의 가능성** | 유효한 과거 연결을 공유하여 요청마다 생기는 누락/해석 변동을 줄일 여지가 있다. 잘못된 추출을 공유하면 오히려 오류가 확산된다. A의 검증된 관계 cache가 같은 효과를 내면 B의 고유 정확성 우위는 없다. |
-| 필요한 관계가 준비된 반복 조회 — 응답성·VIA 처리 시간 | **B** | 원본별 검색과 교차 결합이 정상 경로에서 빠지는 범위에서 유리하다. 현재 의미 해석과 원문/권한 확인은 남는다. A warm cache로 같은 경로를 줄이거나 B 생산이 Omni를 점유하면 차이가 없어지거나 역전된다. |
+| 필요한 관계가 준비된 반복 조회 — 응답성·VIA 처리 시간 | **B** | 원본별 검색과 교차 결합이 정상 경로에서 빠지는 범위에서 유리하다. 현재 의미 해석과 원문/권한 확인은 남는다. A warm cache로 같은 경로를 줄이거나 B 생산이 cloud quota와 로컬 실행 자원을 점유하면 차이가 없어지거나 역전된다. |
 | 방금 바뀐 기록이나 첫 관계 조회 — 응답성 | **A의 가능성** | 원본을 직접 읽고 현재 요청의 근거를 구성할 수 있다. B는 먼저 유효 게시가 필요해 backfill/대기가 추가될 수 있다. A의 fan-out/해석이 더 비싸거나 B가 이미 갱신됐으면 역전된다. |
 | 사용이 드문 기록·새 조합 위주 — 전체 모델 호출 수·자원 | **A** | 실제 요청이 필요한 범위에만 추가 의미 생산을 할 수 있다. B는 읽히지 않은 기억, 갱신과 폐기된 생산에도 비용이 든다. 코드로만 생산되는 관계에는 추가 LLM 호출이 없으므로 그 부분의 호출 수 차이는 없다. |
 | 같은 안정된 의미 관계를 충분히 반복 사용 — 전체 모델 호출 수 | **B의 가능성** | 생산/갱신 비용을 여러 조회가 나누고 요청 중 과거 관계 재해석을 실제로 대체할 때만 유리하다. A cache 이후 재해석 호출이 없거나 B의 조회/현재 해석에서 같은 호출이 계속 필요하면 호출 감소가 없다. |
@@ -347,7 +464,7 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 
 - A: 요청 전 파생물/cache 생산·유지 호출 + 각 요청의 과거 근거 구성/재검증 호출 합계.
 - B: 초기 기억 생산 + 증분 갱신/재생산 + 각 요청의 backfill/과거 근거 재검증 호출 합계. 사용되지 않거나 폐기된 생산과 실패/재시도도 포함한다.
-- 코드 조회·ID 연결은 LLM 호출로 세지 않는다. 외부 Reference의 embedding을 채택한 것으로 가정하지 않으며, 도입한다면 embedding/helper 호출과 자원을 구별해 추가한다. 호출 수가 같아도 token 수·시간·peak KV가 다를 수 있다.
+- 코드 조회·ID 연결은 LLM 호출로 세지 않는다. 외부 Reference의 embedding을 채택한 것으로 가정하지 않으며, 도입한다면 embedding/helper 호출과 자원을 구별해 추가한다. 호출 수가 같아도 token 수, 시간과 local context/buffer peak가 다를 수 있다.
 
 한 안정된 범위의 단순한 손익 모델에서는, **같은 관찰 기간**의 생산·유지 호출을 A는 `P_A`, B는 `P_B`, 요청당 추가 호출을 각각 `a`, `b`, 재사용 요청 수를 `r`라 두면 전체 추가 호출은 `P_A + r × a`와 `P_B + r × b`다. B의 호출 감소 조건은 **`r × (a − b) > P_B − P_A`**다. A의 cache 생산/유지도 `P_A`에 포함하며 `a`와 `b`는 공통 현재 판단을 제외하고 cold/warm 비율을 동일하게 반영한다. B의 선생산이 추가 비용인 `P_B ≥ P_A` 조건에서 `a ≤ b`이면 전체 호출 감소는 없다. 이는 조건을 드러내는 식이며 수치 추정, 모델 실행 또는 측정 계약 동결이 아니다. 미사용 구간과 잦은 수정의 생산 비용은 `P_B`에서 숨기지 않으며, backfill/재시도가 섞인 경우에는 위의 요청별 전체 합계를 사용한다. 첫 생산 지연은 호출 수와 별도로 시간 축에서 비교한다.
 
@@ -369,7 +486,7 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 | 응답성 | A의 원본 조회·해석·조합이 현재 요청 경로에 들어간다. B는 관련 과거 근거가 준비된 범위에서 그 작업을 줄일 수 있다. | 첫 조회, 미게시 범위, 원본 정정 직후에는 B의 생산/갱신 대기가 추가된다. 준비된 범위와 미준비 범위를 나누어 설명한다. |
 | 호출 비용 | A는 실제 요청이 필요한 범위에 처리 비용을 쓰고 B는 생산·갱신 비용을 부담하면서 여러 요청에 재사용한다. 안정된 정보의 충분한 반복 사용에서는 B가 유리하다는 가설을 세울 수 있다. | 생산 후 읽히지 않은 기억, 잦은 수정과 재시도까지 포함한다. A가 원문 해석을 현재 요청 이해 호출에 함께 수행하면 B의 생산 호출 때문에 호출 횟수는 더 많을 수도 있다. |
 
-**호출 비용은 호출 횟수만이 아니다.** 호출당 입력/출력 token, 모델 점유 시간과 Context/KV 등 처리량·자원을 함께 구별한다. 호출 횟수가 같아도 B가 작은 가공 정보를 입력하여 비용을 낮출 수 있고, 생산 호출이 많아도 반복 처리의 누적 비용을 줄일 수 있다. on-device 모델에서는 실제 유료 API 요금이 있다고 가정하지 않는다. §10.4의 식은 호출 횟수의 단순 모델이며 시간·token·메모리의 우열을 대신하지 않는다.
+**호출 비용은 호출 횟수만이 아니다.** 호출당 input/output/cached token과 audio 청구 사용량, 모델 응답 시간 및 로컬 Context/buffer를 함께 구별한다. 호출 횟수가 같아도 B가 작은 가공 정보를 입력하여 비용을 낮출 수 있고, 생산 호출이 많아도 반복 처리의 누적 비용을 줄일 수 있다. 현재 클라우드 구성에서는 provider/model별 사용량과 적용 단가로 청구 비용을 기록한다. 과거 on-device 비교의 자원 비용을 유료 API 금액으로 소급 변환하지 않는다. §10.4의 식은 호출 횟수의 단순 모델이며 시간·token·메모리의 우열을 대신하지 않는다.
 
 정확성이 우선이고 위 가정대로 A가 우세했다면 A를 선택한 뒤 응답성·비용을 보완하는 설명이 가능하다. **구조 선택 이유는 우선순위 QA이고, tactic 적용 이유는 선택한 구조의 약점을 줄이기 위한 것**이다. 이 두 판단을 구별해 기록한다.
 
@@ -389,7 +506,7 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 
 **A 보완과 구조 전환의 경계:** 관계 cache와 부분 갱신을 넣어도 Context Composer가 이번 요청의 근거 조합·누락 해결을 책임지고 원본 읽기로 보완할 수 있으면 A의 tactic 적용이다. 공통 기억 생산자가 과거 관계의 coverage·게시·정정 책임을 맡고 그 게시가 정상 조회의 필수 계약이 되면 B 또는 명시적 혼합 구조로 바뀐 것이다. 이름이나 cache의 저장 기간만으로 전환을 판정하지 않는다.
 
-이 사고 실험과 보완 설명은 본문 리뷰의 기록이다. 병행 세션이 수정하는 MAIN·lifecycle 그림, 생성기와 발표자료의 편집·렌더 상태를 이번 본문 수정의 검증 결과로 기록하지 않는다.
+이 사고 실험과 보완 설명은 본문 리뷰의 기록이다. 2026-10-10 실행 계약과 연결한 새 MAIN/발표 자료의 실제 검증 범위는 최신 검수 기록에서 확인하며, 당시 병행 그림의 렌더 결과를 소급한 독립 검증으로 부르지 않는다.
 
 ## 11. 검수와 보존 범위
 
@@ -397,4 +514,4 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 
 [독립 리뷰와 수정 기록](./04-45-memory-and-context-review.md)에서 실제 지적, 조치, 재검토와 렌더 검증 범위를 확인한다. 메인 SVG와 draw.io는 [전용 생성기](../../../../scripts/architecture/generate_memory_context_diagrams.py)의 같은 scene에서 생성한다. 그림이 잘 렌더된다는 사실은 구조 자격이나 품질 우위의 검증이 아니다.
 
-31/32/34/35/36/41/42/43의 본문과 그림, 참조 Architecture, QA/ADR는 변경하지 않는다. 기존 후보의 제외/승격 결론을 새로 만들지 않는다. 이번 문서와 그림, 검수 기록 및 읽기 안내만 게시하며 최종 DP/A/B 선정은 사용자 검토 이후의 별도 일이다.
+이번 45 재구체화는 04-40/41 및 인접 44/42/46과 실행 경계를 맞추며 A/B의 기본 기제를 유지한다. 참조 Architecture, QA/ADR와 이전 결과는 변경하지 않고 최종 DP/A/B 선정이나 모델 실행을 시작하지 않는다. 본문/예시의 정적 일관성과 실제 그림/발표 렌더 확인을 구별하며, 게시 범위와 최종 검증/CI는 최신 검수 기록과 Git 이력으로 확인한다.

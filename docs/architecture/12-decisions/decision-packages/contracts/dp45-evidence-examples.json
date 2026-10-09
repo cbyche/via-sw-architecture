@@ -1,0 +1,659 @@
+{
+  "contract_status": "DESIGN_REVIEW_V1_NOT_IMPLEMENTED_NOT_MEASURED",
+  "utterance": "지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.",
+  "input_ref": "Input1",
+  "source_snapshot": {
+    "E20": {
+      "revision": 1,
+      "text": "첫째는 가격입니다. 둘째는 유지보수 기간입니다. 가격이 같은 경우 유지보수 기간을 우선합니다. 셋째는 설치 편의입니다."
+    },
+    "P20": {
+      "revision": 1,
+      "response_ref": "E20",
+      "actual_delivered_spans": [
+        [
+          0,
+          52
+        ]
+      ],
+      "channels": [
+        "TEXT",
+        "VOICE"
+      ]
+    },
+    "T21": {
+      "revision": 2,
+      "result_ref": "D21",
+      "result_revision": 2
+    },
+    "T22": {
+      "revision": 1,
+      "result_ref": "D22",
+      "result_revision": 1
+    }
+  },
+  "query": {
+    "schema_version": 1,
+    "query_id": "Query1",
+    "request_ref": "R23",
+    "attempt_ref": "Attempt1",
+    "input_revision": 1,
+    "purpose": "REQUEST_UNDERSTANDING",
+    "relation_kinds": [
+      "EXPLAINS_ITEM",
+      "HAS_RESULT"
+    ],
+    "source_ranges": [
+      {
+        "owner": "Response Manager",
+        "conversation_refs": [
+          "C20"
+        ],
+        "delivery_ref": "P20"
+      },
+      {
+        "owner": "Task Manager",
+        "task_candidates": [
+          "T21",
+          "T22"
+        ]
+      }
+    ],
+    "original_required": true,
+    "budget_ref": "Budget1",
+    "policy_epoch": 3
+  },
+  "a_owner_reads": [
+    {
+      "read_id": "Read1",
+      "query_id": "Query1",
+      "owner": "Response Manager",
+      "selector": {
+        "delivery_ref": "P20",
+        "include_delivered_excerpt": true
+      }
+    },
+    {
+      "read_id": "Read2",
+      "query_id": "Query1",
+      "owner": "Task Manager",
+      "selector": {
+        "task_candidates": [
+          "T21",
+          "T22"
+        ],
+        "include_result_refs": true
+      }
+    }
+  ],
+  "a_bundle": {
+    "schema_version": 1,
+    "bundle_ref": "Bundle1",
+    "query_id": "Query1",
+    "status": "PARTIAL",
+    "evidence": [
+      {
+        "evidence_ref": "Evidence1",
+        "source_ref": "E20",
+        "delivery_ref": "P20",
+        "source_span": {
+          "owner": "Response Manager",
+          "source_ref": "E20",
+          "revision": 1,
+          "start": 27,
+          "end": 52,
+          "unit": "UNICODE_CODEPOINT",
+          "text": "가격이 같은 경우 유지보수 기간을 우선합니다."
+        },
+        "representation": "ORIGINAL_EXCERPT"
+      },
+      {
+        "evidence_ref": "Evidence2",
+        "source_ref": "D21",
+        "revision": 2,
+        "task_ref": "T21",
+        "representation": "RESULT_REFERENCE",
+        "locator": "result-ref:D21:2"
+      },
+      {
+        "evidence_ref": "Evidence3",
+        "source_ref": "D22",
+        "revision": 1,
+        "task_ref": "T22",
+        "representation": "RESULT_REFERENCE",
+        "locator": "result-ref:D22:1"
+      }
+    ],
+    "relations": [
+      {
+        "kind": "HAS_RESULT",
+        "from_ref": "T21",
+        "to_ref": "D21",
+        "to_revision": 2
+      },
+      {
+        "kind": "HAS_RESULT",
+        "from_ref": "T22",
+        "to_ref": "D22",
+        "to_revision": 1
+      }
+    ],
+    "source_vector": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1
+      },
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T22",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D22",
+        "revision": 1
+      }
+    ],
+    "issues": [
+      {
+        "kind": "LIMITED_EXCERPT",
+        "source_ref": "P20",
+        "reason": "EXAMPLE_RETURNS_ONE_DELIVERED_EXCEPTION_SPAN_NOT_ALL_CRITERIA"
+      }
+    ],
+    "receipt_ref": "Receipt1",
+    "policy_epoch": 3,
+    "acquisition": "OWNER_COMPOSITION"
+  },
+  "query_receipt": {
+    "schema_version": 1,
+    "receipt_ref": "Receipt1",
+    "query_id": "Query1",
+    "read_ranges": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1,
+        "spans": [
+          [
+            0,
+            52
+          ]
+        ],
+        "delivery_ref": "P20"
+      },
+      {
+        "owner": "Task Manager",
+        "source_refs": [
+          "T21",
+          "D21",
+          "T22",
+          "D22"
+        ]
+      }
+    ],
+    "checked_revisions": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1
+      },
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T22",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D22",
+        "revision": 1
+      }
+    ],
+    "source_cursors": [
+      {
+        "owner": "Response Manager",
+        "cursor": "RM5"
+      },
+      {
+        "owner": "Task Manager",
+        "cursor": "TM8"
+      }
+    ],
+    "gaps": [],
+    "excluded_ranges": [
+      {
+        "source_ref": "E20",
+        "spans": [
+          [
+            52,
+            66
+          ]
+        ],
+        "reason": "NOT_DELIVERED"
+      }
+    ],
+    "deadline_outcome": "WITHIN_BUDGET"
+  },
+  "b_production_job": {
+    "job_id": "Production1",
+    "trigger": {
+      "kind": "SOURCE_CHANGED",
+      "change_id": "Change1",
+      "source_ref": "P20",
+      "revision": 1,
+      "cursor": "RM5"
+    },
+    "requested_relation_kinds": [
+      "EXPLAINS_ITEM",
+      "HAS_RESULT"
+    ],
+    "input_source_vector": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1
+      },
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T22",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D22",
+        "revision": 1
+      }
+    ],
+    "policy_epoch": 3,
+    "publication_expected_revision": 0,
+    "schema_version": 1,
+    "producer_version": "Publisher1"
+  },
+  "b_semantic_job": {
+    "job_id": "SemanticJob1",
+    "role": "C-CONTEXT",
+    "source_spans": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1,
+        "start": 27,
+        "end": 52,
+        "unit": "UNICODE_CODEPOINT",
+        "text": "가격이 같은 경우 유지보수 기간을 우선합니다."
+      }
+    ],
+    "allowed_relation_kinds": [
+      "EXPLAINS_ITEM"
+    ],
+    "allowed_from_refs": [
+      "P20"
+    ],
+    "allowed_to_refs": [
+      "E20"
+    ],
+    "policy_epoch": 3,
+    "schema_version": 1,
+    "producer_version": "Publisher1"
+  },
+  "b_semantic_output": {
+    "relation_kind": "EXPLAINS_ITEM",
+    "from_ref": "P20",
+    "to_ref": "E20",
+    "source_spans": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1,
+        "start": 27,
+        "end": 52,
+        "unit": "UNICODE_CODEPOINT",
+        "text": "가격이 같은 경우 유지보수 기간을 우선합니다."
+      }
+    ],
+    "value": "가격이 같은 경우 유지보수 기간을 우선합니다.",
+    "uncertain": false
+  },
+  "b_memory_records": [
+    {
+      "schema_version": 1,
+      "record_id": "Memory1",
+      "relation_kind": "EXPLAINS_ITEM",
+      "from_ref": "P20",
+      "to_ref": "E20",
+      "source_spans": [
+        {
+          "owner": "Response Manager",
+          "source_ref": "E20",
+          "revision": 1,
+          "start": 27,
+          "end": 52,
+          "unit": "UNICODE_CODEPOINT",
+          "text": "가격이 같은 경우 유지보수 기간을 우선합니다."
+        }
+      ],
+      "value": "가격이 같은 경우 유지보수 기간을 우선합니다.",
+      "derivation": "MODEL_DERIVED",
+      "uncertain": false,
+      "producer_version": "Publisher1",
+      "dependency_vector": [
+        {
+          "owner": "Response Manager",
+          "source_ref": "E20",
+          "revision": 1
+        },
+        {
+          "owner": "Response Manager",
+          "source_ref": "P20",
+          "revision": 1
+        }
+      ],
+      "policy_epoch": 3,
+      "published_revision": 1,
+      "validity": "VALID"
+    },
+    {
+      "schema_version": 1,
+      "record_id": "Memory2",
+      "relation_kind": "HAS_RESULT",
+      "from_ref": "T21",
+      "to_ref": "D21",
+      "source_spans": [],
+      "value": null,
+      "derivation": "EXPLICIT",
+      "uncertain": false,
+      "producer_version": "Publisher1",
+      "dependency_vector": [
+        {
+          "owner": "Task Manager",
+          "source_ref": "T21",
+          "revision": 2
+        },
+        {
+          "owner": "Task Manager",
+          "source_ref": "D21",
+          "revision": 2
+        }
+      ],
+      "policy_epoch": 3,
+      "published_revision": 1,
+      "validity": "VALID"
+    },
+    {
+      "schema_version": 1,
+      "record_id": "Memory3",
+      "relation_kind": "HAS_RESULT",
+      "from_ref": "T22",
+      "to_ref": "D22",
+      "source_spans": [],
+      "value": null,
+      "derivation": "EXPLICIT",
+      "uncertain": false,
+      "producer_version": "Publisher1",
+      "dependency_vector": [
+        {
+          "owner": "Task Manager",
+          "source_ref": "T22",
+          "revision": 1
+        },
+        {
+          "owner": "Task Manager",
+          "source_ref": "D22",
+          "revision": 1
+        }
+      ],
+      "policy_epoch": 3,
+      "published_revision": 1,
+      "validity": "VALID"
+    }
+  ],
+  "b_coverage": {
+    "schema_version": 1,
+    "coverage_ref": "Coverage1",
+    "source_ranges": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "spans": [
+          [
+            27,
+            52
+          ]
+        ],
+        "relation_kinds": [
+          "EXPLAINS_ITEM"
+        ]
+      },
+      {
+        "owner": "Task Manager",
+        "source_refs": [
+          "T21",
+          "T22"
+        ],
+        "relation_kinds": [
+          "HAS_RESULT"
+        ]
+      }
+    ],
+    "source_cursors": [
+      {
+        "owner": "Response Manager",
+        "cursor": "RM5"
+      },
+      {
+        "owner": "Task Manager",
+        "cursor": "TM8"
+      }
+    ],
+    "gaps": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "spans": [
+          [
+            0,
+            27
+          ]
+        ],
+        "relation_kind": "EXPLAINS_ITEM",
+        "reason": "NOT_COVERED"
+      }
+    ],
+    "production_failures": [],
+    "published_revision": 1
+  },
+  "b_publish_result": {
+    "job_id": "Production1",
+    "status": "PUBLISHED",
+    "published_revision": 1,
+    "coverage_ref": "Coverage1",
+    "rejected_dependencies": []
+  },
+  "b_bundle": {
+    "schema_version": 1,
+    "bundle_ref": "Bundle1",
+    "query_id": "Query1",
+    "status": "PARTIAL",
+    "evidence": [
+      {
+        "evidence_ref": "Evidence1",
+        "source_ref": "E20",
+        "delivery_ref": "P20",
+        "source_span": {
+          "owner": "Response Manager",
+          "source_ref": "E20",
+          "revision": 1,
+          "start": 27,
+          "end": 52,
+          "unit": "UNICODE_CODEPOINT",
+          "text": "가격이 같은 경우 유지보수 기간을 우선합니다."
+        },
+        "representation": "ORIGINAL_EXCERPT"
+      },
+      {
+        "evidence_ref": "Evidence2",
+        "source_ref": "D21",
+        "revision": 2,
+        "task_ref": "T21",
+        "representation": "RESULT_REFERENCE",
+        "locator": "result-ref:D21:2"
+      },
+      {
+        "evidence_ref": "Evidence3",
+        "source_ref": "D22",
+        "revision": 1,
+        "task_ref": "T22",
+        "representation": "RESULT_REFERENCE",
+        "locator": "result-ref:D22:1"
+      }
+    ],
+    "relations": [
+      {
+        "kind": "HAS_RESULT",
+        "from_ref": "T21",
+        "to_ref": "D21",
+        "to_revision": 2
+      },
+      {
+        "kind": "HAS_RESULT",
+        "from_ref": "T22",
+        "to_ref": "D22",
+        "to_revision": 1
+      }
+    ],
+    "source_vector": [
+      {
+        "owner": "Response Manager",
+        "source_ref": "E20",
+        "revision": 1
+      },
+      {
+        "owner": "Response Manager",
+        "source_ref": "P20",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D21",
+        "revision": 2
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "T22",
+        "revision": 1
+      },
+      {
+        "owner": "Task Manager",
+        "source_ref": "D22",
+        "revision": 1
+      }
+    ],
+    "issues": [
+      {
+        "kind": "LIMITED_EXCERPT",
+        "source_ref": "P20",
+        "reason": "EXAMPLE_RETURNS_ONE_DELIVERED_EXCEPTION_SPAN_NOT_ALL_CRITERIA"
+      }
+    ],
+    "receipt_ref": "Receipt1",
+    "policy_epoch": 3,
+    "acquisition": "PUBLISHED_MEMORY"
+  },
+  "not_covered": {
+    "query_id": "Query1",
+    "status": "NOT_COVERED",
+    "missing_ranges": [
+      {
+        "source_ref": "P20",
+        "relation_kind": "EXPLAINS_ITEM"
+      }
+    ],
+    "next_step": "REQUEST_SUPPORTED_RANGE_PRODUCTION_AND_REREAD"
+  },
+  "unsupported_relation": {
+    "query_id": "QueryNew",
+    "status": "UNSUPPORTED_RELATION",
+    "requested_kind": "UNBOUNDED_ARGUMENT_HISTORY",
+    "next_step": "CLARIFY_OR_EXPLICIT_HYBRID_B_PLUS"
+  },
+  "correction": {
+    "kind": "SOURCE_CHANGED",
+    "source_ref": "D21",
+    "from_revision": 2,
+    "to_revision": 3,
+    "a_next_step": "FENCE_DEPENDENT_BUNDLE_OR_CACHE_THEN_OWNER_REREAD",
+    "b_next_step": "FENCE_DEPENDENT_RECORD_AND_COVERAGE_THEN_REPUBLISH"
+  },
+  "delete_or_revoke": {
+    "source_ref": "D21",
+    "policy_epoch_before": 3,
+    "policy_epoch_after": 4,
+    "first_step": "FENCE_NEW_USE",
+    "old_job_step": "REJECT_OLD_EPOCH_PUBLICATION",
+    "cleanup_state": "PURGE_PENDING_UNTIL_CONFIRMED"
+  },
+  "new_request_condition": {
+    "request_ref": "R24",
+    "condition": "가격은 제외하고 비교해줘",
+    "reuse_allowed": "VALID_PAST_EVIDENCE_ONLY",
+    "reuse_forbidden": "PREVIOUS_REQUEST_BINDING_OR_DOMAIN_JUDGMENT"
+  },
+  "limits": [
+    "Records and queries are review examples, not executed API outputs.",
+    "Source-span matching and revision checks do not prove semantic correctness.",
+    "Result-reference locators are local logical references, not downloaded result bodies.",
+    "No future Request-to-Task binding is stored in MemoryRecord.",
+    "Both alternatives retain current task, permission and actual delivery owners."
+  ]
+}

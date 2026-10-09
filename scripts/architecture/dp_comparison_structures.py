@@ -364,5 +364,5 @@ def graph44(s,x,side):
 
 
 def graph45(s,x,side):
-    from memory_context_scene import draw_option
-    draw_option(s,x,260,.73,'A' if side==0 else 'B')
+    from dp45_comparison_scene import draw
+    draw(s,x,side)

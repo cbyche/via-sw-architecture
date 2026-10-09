@@ -26,7 +26,7 @@ VIA와 상태 권위는 로컬이며 음성/전사와 의미 모델은 클라우
 
 - [x] 41의 구체 출력과 반복, 원본 문서 추가 비교 그림 게시: 7e189129 / 5febf034.
 - [x] 44: 중앙 continuation 회수/재지시와 Stage별 입력·대기·Join을 같은 네 사건으로 비교. 둘 다 비동기·제한 executor. 공통 cloud/local 계약 적용.
-- [ ] 45: 현재 요청별 원본 조합과 공통 파생 관계 생산/조회. 생산 trigger·미게시 대기·현재 사용 검증·조건부 모델 호출·전체 비용을 명시.
+- [x] 45: 현재 요청별 원본 조합과 공통 파생 관계 생산/조회. 생산 trigger·미게시 대기·현재 사용 검증·조건부 모델 호출·전체 비용을 명시.
 - [ ] 42: 통합 Core 공동 확정과 독립 서비스 command/receipt. 실제 수명/상태 권위/복원 차이. 44의 공동 transaction 전제를 42B와 결합할 hold/ack·전송 권위 프로토콜 상세화.
 - [ ] 46: 다른 세션 작업 완료 여부를 먼저 확인. 동일 파일 동시 수정 금지. 시간 원본/관계 생산의 실제 차이와 45 범위 구분, Module/contract/cloud/자료·발표 일치 검수 후 이어받아 게시.
 - [ ] 조합 검토: 41의 READ/CLARIFY/PROPOSE와 44의 실행,45의 근거,42의 저장·전송,46의 시간 근거 공급을 추적. 호환 조건/혼합/제한을 명시.
@@ -43,3 +43,5 @@ QA 정의(03-02)는 별도 세션의 검토 중 자료다. 최신 정의를 읽�
 - 시작: 44 본문/scene 검토. 독립 agent가 45,42 조합,46 경계를 읽기 전용 검토한다. 구현이나 모델 실행은 하지 않는다.
 
 - 44 게시 단위: 고정 네 사건/continuation/Window와 집중 그림, 전체 MAIN 직접 Task 조회, cloud/local 계약, 42A/B 확정 연결. 독립 재검토 미해결 P1/P2 없음; SVG/font와 native PPTX 실제 렌더 검수. 두 PPTX는 44 slide/notes만 바꾸고 비선택 parts를 보존. 전체 비용/현재성/확인 질문 예외와 미구현·미측정 상태를 유지. 커밋 SHA는 Git 이력에서 이 기록의 게시 commit으로 확인한다.
+
+- 45 게시 단위: Evidence Contract v1/JSON의 실제 전달 원문 구간·PARTIAL/gap, code/model 생산 경계, 원본별/공통 생산·조회 graph와 NOT_COVERED loop, 원본에 추가 집중 그림, cloud 비용. 독립 읽기 검토 미해결 P1/P2 없음. Chrome 3종 실제 렌더와 두 native PPTX 검수/비선택 parts 보존 PASS. 전체 MAIN과 focused source를 분리했다.
