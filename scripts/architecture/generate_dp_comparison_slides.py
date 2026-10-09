@@ -31,17 +31,16 @@ QA = {
 
 # A row = QA, left/right value, left/right relative circle count.
 DATA = {
-  41: dict(title='기능 정확성을 위한 VIA Request 해석 설계',
-    options=('A 모델 중심 ReAct 해석', 'B 모델 틀 생성과 코드 중심 의미 완성'),
+  41: dict(title='VIA 요청 이해의 모델 주도와 코드 주도 완성',
+    options=('A 모델 주도 해석', 'B 모델 요청 틀과 코드 주도 완성'),
     case='“이 표를 아까 보고서에 넣고, 메일은 초안만 만들어.” / 보고서 Task 후보 2개',
-    condition='비교 예시 조건: 열린 관계 표현 포함 / 시간 비교는 양안 지원 범위의 같은 Request',
-    rows=[('V-03','100%','87.2%',3,2),('V-05','6.0 s','4.5 s',2,3),('V-08','2.0개','4.0개',3,1)],
-    pros=[['열린 관계 표현의 지원 확대, 지원율 100% (기능 완전성 ↑)',
-           '새 관계의 코드 변경 축소, 평균 2.0개 (변경 용이성 ↑)'],
-          ['지원 관계의 코드 결합으로 평균 VIA 처리시간 4.5 s (요청 완료 신속성 ↑)']],
-    cons=[['반복 조회와 모델 재판단으로 평균 VIA 처리시간 6.0 s (요청 완료 신속성 ↓)'],
-          ['유한 표현 체계 밖 관계의 지원 제한, 지원율 87.2% (기능 완전성 ↓)',
-           '새 관계의 틀과 결합 규칙 확장, 평균 4.0개 (변경 용이성 ↓)']]),
+    status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
+    condition='미선정 / 미측정. B도 부분 의미 판단을 다시 호출할 수 있다. 새 관계의 지원 범위와 질문 비용을 함께 비교한다.',
+    tradeoffs=[
+      ('정확성 / 지원 범위','열린 의미를 함께 판단 / 검색 누락과 모델 오판 가능','지원 관계의 코드 결합 / 틀 오류와 표현 밖 관계의 한계'),
+      ('응답성','조회 후 재판단마다 클라우드 왕복 / 부분 수정 허용','지원 틀이 충분하면 재판단 축소 / 추가 해석과 질문 대기'),
+      ('모델 호출 비용','반복 해석과 긴 Context가 비용 증가 요인','초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음'),
+      ('변경 용이성','새 관계는 prompt/tool 변경 가능 / 채택 계약 변경은 별도','schema와 Engine 규칙 확장 / 기존 지원 관계는 코드 제어')]),
   42: dict(title='변경 용이성을 위한 VIA Conversation과 Task 관리 설계',
     options=('A 모듈형 통합 VIA Core', 'B 독립 대화 서비스와 업무 서비스'),
     case='보고서 질문 Q1을 실제 제시(P1) → “상반기로” 답변(u2) → 접수와 실제 전달 확인',
@@ -102,6 +101,9 @@ class Comparison(Slide):
         if n==45:
             self.memory_page()
             return
+        if n==41:
+            self.request_page()
+            return
         self.text(40,133 if n==44 else 142,1530,[DATA[n]['case']],21 if n==45 else 23,INK)
         self.text(1880,145,290,['수치와 점수 / 예상 예시'],19,RED,True,align='right')
         if n==44:
@@ -150,6 +152,27 @@ class Comparison(Slide):
         self.text(40,1046,1840,['Reference (§9): A LangChain Retrieval / B LangMem Background + Memory API / 실행 Delayed Processing / 연결 참고 Mem0 Graph (typed 관계 증거 아님)'],15,INK)
         self.text(40,1067,1840,['공식 메커니즘 선례 / VIA 구현・성능 증거 아님 / 실행・서비스 경계 추가 없음'.replace('・',' / ')],10,MUTED)
 
+    def request_page(self):
+        d=DATA[41]
+        self.text(40,140,1840,[d['case']],23,INK)
+        self.text(40,169,1840,['공통: 로컬 VIA / 로컬 VAD / 클라우드 음성 + 의미 LLM / 채택은 코드 / 조회 예시: E7@v2 표, T7/T8 후보, M3 발송 금지'],17,INK)
+        self.rect(40,195,1840,48,GREEN,LINE)
+        self.text(90,209,98,['설계안'],19,INK,True,'center')
+        for side,x in enumerate([140,1010]):
+            self.text(x+435,205,838,[d['options'][side]],26,INK,True,'center')
+        self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
+        self.line([(40,795),(1880,795)],color=LINE,arrow=False)
+        self.text(42,810,1840,['비교 대상: 다음 읽기와 전체 의미 결합의 결정권 / 임시 해석 상태는 Request Interpreter / 채택 의미/질문/출처/revision은 Request Controller'],17,INK)
+        self.text(42,836,1840,['음성/전사 비용은 공통. 재시도/폐기된 모델 호출도 집계. 도구 조회 자체는 모델 호출이 아니며 45의 의미 가공이 추가되면 별도 집계.'],17,INK)
+        for j,(quality,left,right) in enumerate(d['tradeoffs']):
+            yy=883+j*34
+            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
+            self.text(42,yy,245,[quality],18,INK,True)
+            self.text(300,yy,720,[left],18,INK)
+            self.text(1050,yy,820,[right],18,INK)
+        self.text(40,1032,1840,[d['condition']],17,INK)
+        self.text(40,1060,1840,['교환 자료/필드는 검토용 예시 / A도 구조화 출력 가능 / B의 BOUND는 정답 보증이 아님 / 품질 우열과 호출 비용은 측정 전 가설'],14,MUTED)
+
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)
         lines=name.split('\n')
@@ -179,11 +202,15 @@ class Comparison(Slide):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
-            if i['kind']=='rect' and ('line_width' in i or i.get('rounded')):
+            if i['kind'] in ('rect','note') and ('line_width' in i or i.get('rounded')):
                 def restyle(match):
                     tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
-                result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',restyle,result)
+                result=re.sub(r'<(?:rect|path) id="'+i['id']+r'"[^>]*/>',restyle,result)
+            if self.number==41 and i['kind']=='rect' and i.get('external'):
+                x,y,w,h=(i[k] for k in ('x','y','w','h'))
+                poly=f'<polygon id="{i["id"]}" points="{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}" fill="white" stroke="#000000" stroke-width="1"/>'
+                result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',lambda _:poly,result)
             if i['kind']!='store': continue
             x,y,w,h=(i[k] for k in ('x','y','w','h'));r=i.get('store_radius',8)
             path=f'<path id="{i["id"]}" fill="{i["fill"]}" stroke="{i["stroke"]}" stroke-width="{i.get("line_width",1.7)}" d="M{x} {y+r}C{x} {y-r} {x+w} {y-r} {x+w} {y+r}V{y+h-r}C{x+w} {y+h+r} {x} {y+h+r} {x} {y+h-r}Z M{x} {y+r}C{x} {y+3*r} {x+w} {y+3*r} {x+w} {y+r}"/>'
@@ -205,6 +232,8 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
+            if self.number==41 and item and item.get('external'):
+                cell.set('style',cell.get('style')+'shape=hexagon;')
         if self.number in (44,45):
             from continuous_interaction_scene import decorate_diagram
             d=decorate_diagram(self,d)
@@ -214,18 +243,31 @@ class Comparison(Slide):
 from dp_comparison_structures import graph41, graph42, graph43, graph44, graph45
 
 
-def build():
+def build(dp41_only=False):
     outputs={};deck=ET.Element('mxfile',host='app.diagrams.net',type='device')
-    for n in DATA:
+    for n in ([41] if dp41_only else DATA):
         s=Comparison(n)
         for side,x in enumerate([140,1010]): globals()[f'graph{n}'](s,x,side)
         outputs[OUT/f'{s.slug}.svg']=s.svg()
         outputs[OUT/f'{s.slug}.drawio']=s.drawio()
         deck.append(copy.deepcopy(s.diagram()))
-    outputs[OUT/'VIA-DP-comparison-41-45.drawio']=ET.tostring(deck,encoding='unicode')+'\n'
-    outputs[OUT/'comparison-data.json']=json.dumps(dict(status='FORMAT_HYPOTHESES_NOT_MEASURED',qa=QA,slides=DATA),ensure_ascii=False,indent=2)+'\n'
+    deck_path=OUT/'VIA-DP-comparison-41-45.drawio'
+    data_path=OUT/'comparison-data.json'
+    if dp41_only:
+        old=deck_path.read_text()
+        page=ET.tostring(deck[0],encoding='unicode')
+        outputs[deck_path]=re.sub(r'<diagram id="dp41-comparison".*?</diagram>',lambda _:page,old,flags=re.S)
+        data=json.loads(data_path.read_text());data['slides']['41']=DATA[41]
+    else:
+        outputs[deck_path]=ET.tostring(deck,encoding='unicode')+'\n'
+        data=dict(status='FORMAT_HYPOTHESES_NOT_MEASURED',qa=QA,slides=DATA)
+    outputs[data_path]=json.dumps(data,ensure_ascii=False,indent=2)+'\n'
     blocks=''.join(f'<article><h2>04-{n} 설계'+f' 비교</h2><p><a href="dp{n}-comparison.drawio">draw.io</a> / <a href="dp{n}-comparison.svg">SVG</a> / <a href="dp{n}-comparison.png">PNG</a></p><img src="dp{n}-comparison.svg" alt="04-{n} 설계 비교"></article>' for n in DATA)
     outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교. 실측 결과 또는 대안 선정 아님.</p><p>45: 같은 평가 기준의 실제 전달과 제품 비교/견적 결과 참조에서 요청별 owner 읽기 조합과 공통 관계 생산/검증/게시/조회를 비교한다. 첫 요청, 반복, 정정 직후, 표현 밖 관계의 조건별 손익과 공식 Reference를 함께 제시한다. 새 사례의 실측이나 선정 결과가 아니다.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
+    if dp41_only:
+        outputs[OUT/'index.html']=(OUT/'index.html').read_text().replace('41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교.','42~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 41과 45는 조건별 정성 비교.')
+    else:
+        outputs[OUT/'index.html']=outputs[OUT/'index.html'].replace('41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교.','42~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 41과 45는 조건별 정성 비교.')
     return outputs
 
 
@@ -240,8 +282,8 @@ def validate(outputs):
         if not targets[qa].startswith(QA[qa][1]):
             raise SystemExit(f'Presentation time metric changed: {qa}')
     for n,data in DATA.items():
-        if n==45:
-            assert len(data['tradeoffs'])==5 and 'rows' not in data
+        if n in (41,45):
+            assert len(data['tradeoffs'])==(4 if n==41 else 5) and 'rows' not in data
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:
@@ -276,8 +318,8 @@ def validate(outputs):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()
-    outputs=build();validate(outputs)
+    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--dp41-only',action='store_true');args=parser.parse_args()
+    outputs=build(args.dp41_only);validate(outputs)
     for p,s in outputs.items():
         if args.check:
             if not p.exists() or p.read_text()!=s: raise SystemExit(f'Mismatch: {p}')

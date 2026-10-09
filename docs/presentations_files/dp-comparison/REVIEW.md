@@ -1,5 +1,22 @@
 # 설계 비교 발표 자료 검수 — 2026-10-06
 
+## 41 후속 표현 보완 — 교환 데이터 overlay (2026-10-09)
+
+사용자는 실제 동작을 바꾸지 않고 기존 설계 차이를 그림에 강하게 표현하라고 요청했다. A의 큰 ReadRequest/EvidenceBundle 재판단 순환과 B의 RequestFrame/항목 상태/Engine 전체 결합을 다른 배치로 확대했다. 문서형 데이터 예시를 Legend에서 실행 Module·상태와 구별하며 같은 최종 MeaningProposal의 생산자가 A 모델/B 코드임을 표시한다. 공통 경로는 각 칸에서 유지하고 기존 네 품질 비교 행은 보존한다. 사건도·실행/저장 계약·최종 선택이나 측정 결과를 새로 바꾸지 않는다.
+
+생성 source/PNG와 41 native PPTX 재렌더를 작성자와 독립 검토자가 직접 대조했다. 원통 이름의 타원/반환선 관통과 추상 selector를 보완했으며 최종 표현 범위에 미해결 P1/P2는 없다. scoped/전체 source 검사·PNG geometry·PPTX flow·다른 59/35 package part 및 42~45 assets/JSON/page 보존 검사를 통과했다. 실제 동작/책임 변경이나 사용자 수용·품질 측정의 증거는 아니다. 세부 검수는 [41 기록](../../architecture/12-decisions/decision-packages/04-41-diagram-review.md)을 따른다.
+
+## 41 공통 실행 계약 재구체화 — 2026-10-09
+
+41을 로컬 VIA/VAD, 클라우드 음성·의미 모델, 같은 10개 Component와 내부 Engine 구성으로 맞췄다. RI 임시 상태/RC 채택 원본/RM 실제 전달을 구별하고 검증되지 않은 지원율·시간·점수를 조건별 정확성·응답성·모델 비용·변경 용이성으로 교체했다. 42~45와 배경은 이전 판본을 보존하며 이후 개별 재구체화 대상이다.
+
+- 독립 검토에서 발표 출력/receipt/focus 및 RM 모델 연결 누락 P2를 발견해 실제 화살표로 보완했다. Engine→틀 해석기 요청은 실선, Turn-Taking Control은 이름만 쓰고 로컬 VAD는 주석으로 표시했다. 수정한 PNG/helper 재검토에서 미해결 P1/P2가 없었다.
+- scoped `--dp41-only` 및 전체 비교 생성 일치 검사, 41 PNG geometry, PPTX flow·native 도형/텍스트/경로·재가져오기 렌더를 확인했다. 41 슬라이드의 평면 이미지 수는 0이다. PowerPoint 앱에서 직접 실행한 검증은 아니다.
+- 두 PPTX의 41 comparison slide/notes만 변경했다. 비선택 통합 59개/comparison 35개 part, 배경 및 42~45의 SVG/draw.io/PNG·JSON entries·합본 draw.io page 원문은 시작본과 동일하다. 통합 deck의 기존 44/45 경고 두 개는 보존본에 남아 있다.
+- 상세 계약과 추가 사건도 P2 보완은 [41 검수 기록](../../architecture/12-decisions/decision-packages/04-41-diagram-review.md)을 따른다. 임의 수치를 검증된 QA 값으로 바꾸거나 모델 실행/측정/선정/commit/push를 수행한 것은 아니다.
+
+이하 이전 날짜의 Engine/Omni·수치·슬라이드 수·수정 범위 설명은 해당 판본의 이력이며 현재 41에 적용하지 않는다.
+
 ## 45의 필요성과 여러 활동 참조 사례 — 2026-10-09
 
 사용자가 전달한 Senior SW Architect 지적에 따라 기존 표현 방식 사례를 대표에서 내렸다. 새 사례는 VIA 직접 설명 E20의 실제 전달 P20, 제품 비교 T21/D21@v2, 견적 T22/D22@v1을 현재 제안서 요청 R23에 연결한다. ID는 [45 본문 §3.1](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md#31-그림-한-장의-발표-순서)의 공통 정의를 따른다. VIA는 발췌/참조를 연결하고 기준 적용과 제안서 작성은 Agent가 수행한다. 기존 실행 맥락 재사용과 A의 작은 index/cache로 충분할 수 있음을 인정한다. 기존 A/B와 비용, 미선정/미측정 상태 및 예상 수치는 유지한다.

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">로컬 VIA와 클라우드 모델: 공통 입력·출력 책임</title>
+<defs><marker id="end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="black" stroke-width="1.2"/></marker></defs>
+<rect width="1920" height="1080" fill="white"/>
+<g font-family="Apple SD Gothic Neo, Arial, sans-serif" fill="black">
+<text x="40" y="56.0" data-width="1820" font-size="34" font-weight="700">공통 실행 계약 / 로컬 VIA가 입력과 상태를 소유하고 클라우드 모델을 사용한다</text>
+<text x="40" y="100.0" data-width="1820" font-size="22" font-weight="400">로컬 VAD 승인 / 상세 계약 초안 / 공통 책임 확대도 / DP·A/B 선정이나 구현·측정 결과가 아님</text>
+<rect x="30" y="125" width="1440" height="855" fill="white" stroke="#777777" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="46" y="157" data-width="1408" text-anchor="start" font-size="22" font-weight="400">기기 내 VIA</text>
+<rect x="1510" y="125" width="380" height="855" fill="white" stroke="#777777" stroke-width="1.2" stroke-dasharray="8 6"/>
+<text x="1526" y="157" data-width="348" text-anchor="start" font-size="22" font-weight="400">클라우드 의존성</text>
+<rect x="55" y="205" width="610" height="440" fill="white" stroke="#000000" stroke-width="1.2"/>
+<text x="71" y="237" data-width="578" text-anchor="start" font-size="24" font-weight="700">Interaction Manager</text>
+<rect x="80" y="270" width="230" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="195.0" y="310.5" data-width="198" text-anchor="middle" font-size="22" font-weight="400">Channel I/O</text>
+<rect x="355" y="270" width="285" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="497.5" y="310.5" data-width="253" text-anchor="middle" font-size="22" font-weight="400">Turn-Taking Control</text>
+<text x="360" y="363.0" data-width="280" font-size="19" font-weight="400">로컬 VAD / 시작·종료 후보</text>
+<text x="360" y="388.65" data-width="280" font-size="19" font-weight="400">즉시 stop / 출력 세대 무효화</text>
+<rect x="80" y="430" width="230" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="195.0" y="470.5" data-width="198" text-anchor="middle" font-size="22" font-weight="400">Evidence Capture</text>
+<rect x="355" y="430" width="285" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="497.5" y="470.5" data-width="253" text-anchor="middle" font-size="22" font-weight="400">Timeline &amp; Buffer</text>
+<path d="M80,548C80,532 310,532 310,548V607C310,623 80,623 80,607Z M80,548C80,564 310,564 310,548" fill="white" stroke="black" stroke-width="1.2"/>
+<text x="195.0" y="585.5" data-width="198" text-anchor="middle" font-size="22" font-weight="400">Playback State</text>
+<text x="355" y="572.0" data-width="270" font-size="19" font-weight="400">권위 시각: 로컬 sample/time</text>
+<text x="355" y="597.65" data-width="270" font-size="19" font-weight="400">근거 gap·전사 revision 보존</text>
+<rect x="770" y="205" width="675" height="155" fill="white" stroke="#000000" stroke-width="1.2"/>
+<text x="786" y="237" data-width="643" text-anchor="start" font-size="24" font-weight="700">Model Access</text>
+<rect x="790" y="270" width="290" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="935.0" y="310.5" data-width="258" text-anchor="middle" font-size="22" font-weight="400">Voice API Client</text>
+<rect x="1105" y="270" width="315" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="1262.5" y="310.5" data-width="283" text-anchor="middle" font-size="22" font-weight="400">Semantic API Client</text>
+<text x="790" y="384.0" data-width="650" font-size="19" font-weight="400">provider/session 대응·제한·cancel·usage는 Model Access 책임</text>
+<rect x="770" y="430" width="300" height="110" fill="white" stroke="#000000" stroke-width="1.2"/>
+<text x="786" y="462" data-width="268" text-anchor="start" font-size="24" font-weight="700">Request Controller</text>
+<rect x="1130" y="430" width="315" height="110" fill="white" stroke="#000000" stroke-width="1.2"/>
+<text x="1146" y="462" data-width="283" text-anchor="start" font-size="24" font-weight="700">Request Interpreter</text>
+<polygon points="1558,235 1847,235 1865,300.0 1847,365 1558,365 1540,300.0" fill="white" stroke="black" stroke-width="1.2"/>
+<text x="1702.5" y="308.0" data-width="293" text-anchor="middle" font-size="22" font-weight="400">음성 모델 / 전사 의존성</text>
+<polygon points="1558,445 1847,445 1865,510.0 1847,575 1558,575 1540,510.0" fill="white" stroke="black" stroke-width="1.2"/>
+<text x="1702.5" y="518.0" data-width="293" text-anchor="middle" font-size="22" font-weight="400">의미 해석 LLM</text>
+<text x="1540" y="651.0" data-width="325" font-size="21" font-weight="400">서버 session은 임시 context</text>
+<text x="1540" y="679.35" data-width="325" font-size="21" font-weight="400">Request·Task·실제 전달의</text>
+<text x="1540" y="707.7" data-width="325" font-size="21" font-weight="400">영속 권위는 로컬 VIA에 있음</text>
+<rect x="770" y="715" width="675" height="240" fill="white" stroke="#000000" stroke-width="1.2"/>
+<text x="786" y="747" data-width="643" text-anchor="start" font-size="24" font-weight="700">Response Manager</text>
+<rect x="790" y="785" width="285" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="932.5" y="825.5" data-width="253" text-anchor="middle" font-size="22" font-weight="400">Response Composer</text>
+<rect x="1105" y="785" width="315" height="65" fill="white" stroke="#000000" stroke-width="1.2" rx="8"/>
+<text x="1262.5" y="825.5" data-width="283" text-anchor="middle" font-size="22" font-weight="400">Publication Control</text>
+<path d="M1105,883C1105,867 1420,867 1420,883V937C1420,953 1105,953 1105,937Z M1105,883C1105,899 1420,899 1420,883" fill="white" stroke="black" stroke-width="1.2"/>
+<text x="1262.5" y="918.0" data-width="283" text-anchor="middle" font-size="22" font-weight="400">Publication Outbox</text>
+<polyline points="80,302 65,302 65,180 745,180 745,302 790,302" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="320" y="159.0" data-width="480" font-size="19" font-weight="400">1 audio stream / 전사 결과 대응</text>
+<polyline points="310,302 355,302" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)"/>
+<text x="82" y="364.0" data-width="250" font-size="19" font-weight="400">로컬 audio → VAD</text>
+<polyline points="640,315 650,315 650,409 610,409 610,430" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)"/>
+<text x="360" y="417.0" data-width="255" font-size="19" font-weight="400">시작·종료 경계</text>
+<polyline points="310,462 355,462" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)"/>
+<text x="82" y="519.0" data-width="250" font-size="19" font-weight="400">화면·pointer 시각</text>
+<polyline points="640,462 770,462" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)"/>
+<text x="651" y="418.0" data-width="475" font-size="19" font-weight="400">2 InputStarted / 확정 입력 + 근거</text>
+<polyline points="1070,493 1130,493" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="840" y="569.0" data-width="590" font-size="19" font-weight="400">3 해석 job / 의미 제안·코드 채택</text>
+<polyline points="1285,430 1285,335" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="1110" y="422.0" data-width="335" font-size="19" font-weight="400">C-INTERPRET</text>
+<polyline points="1080,300 1090,300 1090,185 1485,185 1485,300 1540,300" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="1120" y="164.0" data-width="320" font-size="19" font-weight="400">audio / transcript</text>
+<polyline points="1420,315 1485,315 1485,510 1540,510" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="1498" y="423.0" data-width="390" font-size="19" font-weight="400">판단 요청 / 제안</text>
+<polyline points="1030,540 1030,680 1300,680 1300,715" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)"/>
+<text x="1050" y="636.0" data-width="380" font-size="19" font-weight="400">채택 의미 / 후속 응답 준비</text>
+<polyline points="935,715 935,610 710,610 710,298 770,298" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)" stroke-dasharray="6 5"/>
+<text x="718" y="604.0" data-width="690" font-size="19" font-weight="400">4 내용·음성 준비 / Model Access 호출</text>
+<polyline points="770,817 460,817 460,645" fill="none" stroke="black" stroke-width="1.2" marker-end="url(#end)" marker-start="url(#end)"/>
+<text x="73" y="770.0" data-width="680" font-size="19" font-weight="400">5 유효 release → 실제 표시·재생</text>
+<text x="73" y="866.0" data-width="675" font-size="22" font-weight="400">6 실제 receipt → Publication Outbox / 이후 질문 focus 연결</text>
+<text x="73" y="895.7" data-width="675" font-size="22" font-weight="400">모델 생성 완료 ≠ 실제 전달 완료</text>
+<text x="73" y="937.0" data-width="650" font-size="20" font-weight="400">Context·Task·Gateway·Policy·State Store 경로는 본문 참조</text>
+<text x="40" y="1022.0" data-width="1830" font-size="22" font-weight="400">Legend: 직각 Component / 둥근 내부 Module / 원통 owner의 상태 / 육각 외부 의존성 / 점선 큰 배치 영역</text>
+<text x="40" y="1058.0" data-width="1830" font-size="20" font-weight="400">모든 요소는 공통이므로 흰색·검정. Voice API Client·Semantic API Client는 adapter 역할명이며 독립 Component가 아니다.</text>
+</g></svg>

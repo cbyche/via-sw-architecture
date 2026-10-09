@@ -1,7 +1,11 @@
 # VIA 구조 선택 비교안
 
-> 현재 상태: **STAGE_4_REVIEW / 45 기억과 Context 구조 비교 / 43 및 다른 후보 상태 유지** / 2026-10-06
+> 현재 상태: **STAGE_4_DP_REDETAILING / 공통 실행 계약과 41 재구체화 검토** / 2026-10-09
 > 기존 target은 참조 구조이며 비교 대안들은 이와 달라도 된다. 구현, 모델 실행 및 성능 측정은 하지 않았다.
+
+## 네 비교를 함께 읽기 위한 공통 계약
+
+[04-40 공통 실행 계약과 모델 호출 지도](./04-40-common-execution-contract.md)는 로컬 VIA, 클라우드 음성/의미 모델, Interaction Manager의 Turn-Taking Control 안에 놓는 로컬 VAD, 입력 근거와 실제 전달의 책임을 정리한다. **새 DP가 아니다.** 41 → 44 → 45 → 42의 결합을 설명하고 모델 호출 위치·비용 및 42B/44 전송 경합의 미결 문제를 명시한다. 승인된 전제와 상세 계약 초안을 구별하며 기존 Architecture 전체의 동기화는 후속 작업이다. 아래 후보의 미선정 상태와 기존 참조 설계를 보존한다.
 
 ## 구조 선택의 전체 범위를 볼 때: 04-50 탐색 지도
 
@@ -31,7 +35,7 @@
 
 2026-10-05 사용자 지시에 따라 30번대 주제 문서는 논의 대상, 40번대 주제 문서는 논의를 정제한 유력 Decision Point 후보로 구분한다. 04-37은 기존 검토 기록이며 새 설계 주제가 아니다. 문서 번호나 작성 완료는 최종 DP 선정 또는 A/B 승인을 뜻하지 않는다.
 
-- [04-41 요청 의미 확정](./04-41-request-resolution-control.md): 31 논의에서 정제한 모델 중심 ReAct / 모델 틀과 코드 완성. 본문과 도식은 유지한다.
+- [04-41 요청 의미 확정](./04-41-request-resolution-control.md): 모델이 조회와 전체 의미 제안을 진행하는 A / 코드가 조회와 전체 결합을 진행하는 B. 공통 10개 Component에서 B Engine은 Request Interpreter 내부 Module이며, 첫 입력·조회 port·부분 모델 호출·질문 저장과 실제 전달·정정 계약을 새 로컬/클라우드 구성으로 재구체화했다. [MAIN](./diagrams/choice41-structure.svg), [검수 기록](./04-41-diagram-review.md).
 - [04-42 서로 다른 대화와 업무 수명](./04-42-lifecycle-ownership.md): 33 논의에서 파생한 통합 Core / 독립 대화·업무 서비스. [메인 그림](./diagrams/choice42-structure.svg), [전체 발표 그림](./diagrams/choice42-review.html), [작성자 검수](./04-42-lifecycle-review.md).
 - [04-43 요청 이해의 판단 책임](./04-43-request-interpretation.md): 33의 A 통합/C 기능별 의미 생산을 이관한 최신 정제 후보. [메인 그림](./diagrams/choice43-structure.svg), [이관 검수](./04-37-comparison-review.md#promotion-43).
 - [04-44 계속 듣고 응답하는 대화의 실행 구조](./04-44-continuous-interaction.md): 중앙 비동기 조정 / 반응형 실행망. 34의 처리 시점 정책과 42/43의 수명·의미 생산을 구별한다.

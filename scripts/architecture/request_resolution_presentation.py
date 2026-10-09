@@ -9,7 +9,7 @@ import copy
 import re
 from dp_comparison_structures import COMMON, APRICOT, DIFFERENCE_STROKE, DIFFERENCE_WIDTH, append_plate_legend
 
-TITLE = '요청 의미 확정 — 모델 중심 ReAct와 모델 틀/코드 완성'
+TITLE = '요청 의미 확정 — 모델 주도 해석과 모델 틀/코드 완성'
 
 
 class Slide(Plate):
@@ -20,9 +20,13 @@ class Slide(Plate):
 
     @staticmethod
     def text_geometry(i):
-        size = 26
+        units=max((sum(1 if ord(c)>=0x2e80 else 0.55 for c in line) for line in i['name']),default=1)
+        size=min(25,(i['w']-24)/units)
+        if i['type']=='store':
+            size=max(10,min(size,i['h']-43))
+            return i['y']+29,size,size*1.25
         leading = size * 1.25
-        return i['y'] + (i['h']-len(i['name'])*leading)/2-2+(7 if i['type']=='store' else 0), size, leading
+        return i['y'] + (i['h']-len(i['name'])*leading)/2-2, size, leading
 
     def validate(self):
         super().validate()
@@ -38,24 +42,38 @@ class Slide(Plate):
                 lo,hi=limits[prefix]
                 assert all(lo<=x<=hi for x,y in item['points']), (item['id'],'edge leaves column')
 
+        # Payload notes are not executable vertices, but routes must also avoid them.
+        docs=[i for i in self.items if i['kind']=='node' and i['type']=='data']
+        for edge in self.items:
+            if edge['kind']!='line':continue
+            for a,b in zip(edge['points'],edge['points'][1:]):
+                for doc in docs:
+                    x,y,w,h=doc['x'],doc['y'],doc['w'],doc['h']
+                    v=a[0]==b[0] and x+1<a[0]<x+w-1 and max(min(a[1],b[1]),y+1)<min(max(a[1],b[1]),y+h-1)
+                    z=a[1]==b[1] and y+1<a[1]<y+h-1 and max(min(a[0],b[0]),x+1)<min(max(a[0],b[0]),x+w-1)
+                    assert not (v or z),(edge['id'],'route crosses data note',doc['id'])
+
     def svg(self):
         root=ET.fromstring(super().svg().replace('font-size="23"','font-size="26"'))
         ns={'s':'http://www.w3.org/2000/svg'}
         marker=copy.deepcopy(root.find('.//s:marker',ns));marker.set('id','a000000')
         marker.find('s:path',ns).set('stroke',COMMON)
         root.find('s:defs',ns).append(marker)
+        if any(i.get('different') for i in self.items):
+            dm=copy.deepcopy(marker);dm.set('id','a'+DIFFERENCE_STROKE[1:]);dm.find('s:path',ns).set('stroke',DIFFERENCE_STROKE);root.find('s:defs',ns).append(dm)
         for item in self.items:
+            if item.get('data_note'):
+                root.find('.//s:g[@id="'+item['id']+'"]',ns).set('data-doc-ref',item['data_note'])
+            if item['kind']=='line' and item.get('different'):
+                line=root.find('.//s:polyline[@id="'+item['id']+'"]',ns);line.set('stroke',DIFFERENCE_STROKE);line.set('marker-end','url(#a'+DIFFERENCE_STROKE[1:]+')')
             if item['kind'] not in ('component','node'): continue
             group=root.find('.//s:g[@id="'+item['id']+'"]',ns)
             shape=next(child for child in group if child.tag.rsplit('}',1)[-1] in ('rect','path'))
-            different=item['kind']=='node' and item['type']=='module' or item['id']=='Bri'
+            different=item['id'] in ('Aloop','Bframe','Bengine')
             shape.set('fill',APRICOT if different else 'white')
             shape.set('stroke',DIFFERENCE_STROKE if different else COMMON)
-            shape.set('stroke-width',str(DIFFERENCE_WIDTH*4/3) if different else '1.3')
-            if item['kind']=='node' and item['type'] in ('external','model'):
-                shape.tag='{'+ns['s']+'}rect';shape.attrib.clear()
-                shape.attrib.update({k:str(item[v]) for k,v in [('x','x'),('y','y'),('width','w'),('height','h')]})
-                shape.attrib.update(fill='white',stroke=COMMON,**{'stroke-width':'1.3'})
+            shape.set('stroke-width','1.3')
+            if shape.tag.rsplit('}',1)[-1]=='rect': shape.set('rx','6' if item['kind']=='node' and item['type']=='module' else '0')
             for path in group.findall('s:path',ns):path.set('stroke-width','1.3')
         ET.register_namespace('',ns['s'])
         return ET.tostring(root,encoding='unicode')+'\n'
@@ -65,13 +83,16 @@ class Slide(Plate):
         items={i['id']:i for i in self.items}
         for cell in root.findall('.//mxCell'):
             item=items.get(cell.get('id'))
+            if item and item['kind']=='line' and item.get('different'):
+                cell.set('style',re.sub(r'strokeColor=[^;]*;','strokeColor='+DIFFERENCE_STROKE+';',cell.get('style')))
             if not item or item['kind'] not in ('component','node'): continue
-            different=item['kind']=='node' and item['type']=='module' or item['id']=='Bri'
+            different=item['id'] in ('Aloop','Bframe','Bengine')
             style=cell.get('style')
             style=re.sub(r'fillColor=[^;]*;', 'fillColor='+ (APRICOT if different else 'white')+';',style)
-            style=re.sub(r'strokeWidth=[^;]*;',f'strokeWidth={DIFFERENCE_WIDTH*4/3 if different else 1.3};',style)
+            style=re.sub(r'strokeWidth=[^;]*;','strokeWidth=1.3;',style)
             style=re.sub(r'strokeColor=[^;]*;',f'strokeColor={DIFFERENCE_STROKE if different else COMMON};',style)
-            style=style.replace('shape=hexagon;','rounded=0;')
+            # Preserve the shared external-model hexagon notation.
+            if item['kind']=='component': style=style.replace('swimlane;', 'swimlane;rounded=0;')
             cell.set('style',style)
         return ET.tostring(root,encoding='unicode')+'\n'
 
@@ -83,155 +104,143 @@ class Slide(Plate):
 
 
 def structure():
-    p = Slide()
-    p.box(0, 0, 2560, 8, INK, 'none', 0)
-    p.text(64, 25, 'VIA / 04-41 / 요청 해석의 제어와 생산 책임', 23, MUTED, bold=True)
-    p.text(2496, 25, '설계 비교 · 미선정 · 미측정', 23, MUTED, 'right')
-    p.text(64, 65, '요청의 뜻을 완성하는 다음 단계, 모델과 코드 중 누가 결정하는가?', 43, bold=True)
-    p.text(64, 126, '같은 사례  “이 표를 아까 보고서에 넣고, 메일은 보내지 말고 초안만 만들어.”', 29, bold=True)
-    p.text(64, 164, '보고서 후보 2개 → “어느 보고서인가요?” → “예산 보고서” → 표 연결 + 발송 금지 유지 후 인계', 25, MUTED)
-
-    # Each column includes its own complete path; there are no A/B connectors.
-    for prefix, dx, color, title in [
-        ('A', 0, BLUE, 'A  모델이 조회와 최종 관계를 결정'),
-        ('B', 1248, GREEN, 'B  모델은 틀 제공, 코드는 조회와 관계 결합')]:
-        p.box(64+dx, 211, 1184, 1148, 'white', LINE, 0)
-        p.box(64+dx, 211, 1184, 48, '#EEF4FF' if prefix=='A' else '#EDF9F2', 'none', 0)
-        p.text(80+dx, 217, title, 29, color, bold=True)
-        p.component(prefix+'input', 80+dx, 290, 310, 62, 'Interaction Manager')
-        p.component(prefix+'start', 500+dx, 290, 335, 62, 'Request Controller')
-        p.arrow(prefix+'input', prefix+'start', '1·6  원문 / 시점 / 입력 버전',
-                (424+dx, 261), sp='R', tp='L', size=23)
-        p.text(80+dx, 356, '같은 최근 대화·게시 질문·허용 자료 / 대상 Task는 조회 후 판단', 22, MUTED)
-
-    p.component('Ari', 80, 407, 755, 405, 'Request Interpreter', BLUE)
-    p.node('Aloop', 110, 502, 305, 66, 'ReAct 해석 제어기', owner='Ari', color=BLUE)
-    p.node('Atools', 500, 606, 300, 66, '읽기 도구 실행기', owner='Ari', color=BLUE)
-    p.node('Acheck', 110, 724, 305, 66, '의미 제안 검증기', owner='Ari', color=BLUE)
-    p.node('Atemp', 500, 730, 300, 64, '임시 해석 상태', kind='store', owner='Ari', color=BLUE)
-    p.component('Ama', 925, 407, 290, 62, 'Model Access')
-    p.node('Aomni', 925, 550, 290, 62, '공유 Omni', kind='model')
-    p.component('Acm', 925, 694, 290, 62, 'Context Manager')
-    p.component('Atm', 925, 800, 290, 62, 'Task Manager')
-
-    p.arrow('Astart', 'Aloop', '2  원문 + 읽기 도구 계약', (100, 385), sp='B', tp='T',
-            via=[(667.5, 389), (435, 389), (435, 478), (262.5, 478)], color=BLUE)
-    p.arrow('Aloop', 'Atools', '3  모델이 선택한 조회', (480, 573), sp='R', tp='L', via=[(455, 535), (455, 639)], color=BLUE)
-    p.arrow('Atools', 'Aloop', '4  조회 결과로 재판단', (116, 576), sp='T', tp='B',
-            sd=-100, td=100, via=[(550, 602), (445, 602), (445, 612), (362.5, 612)], color=BLUE, ret=True)
-    p.arrow('Atools', 'Atemp', '근거·조회 기록', (585, 688), sd=70, td=70, color=BLUE)
-    p.arrow('Atemp', 'Aloop', '유효 기록 회수', (340, 675), sp='L', tp='B', td=50,
-            via=[(435, 762), (435, 704), (312.5, 704)], color=BLUE, ret=True)
-    p.arrow('Aloop', 'Acheck', '5  최종 관계 / 질문', (120, 632), color=BLUE, sd=-100, td=-100)
-    p.arrow('Acheck', 'Aloop', '오류: 제한 재생성', (116, 680), sp='T', tp='B', sd=-15, td=-15, ret=True, color=BLUE)
-    p.arrow('Aloop', 'Ama', '추론 요청 / 조회·질문·완성안 반환', (845, 376), sp='T', tp='T', sd=135, size=18,
-            via=[(397.5, 396), (1070, 396)], color=BLUE)
-    p.arrow('Ama', 'Aloop', sp='L', tp='T', td=80, sd=15,
-            via=[(885, 453), (885, 491), (342.5, 491)], color=BLUE, ret=True)
-
-    p.component('Bri', 1330, 407, 470, 62, 'Request Interpreter', GREEN)
-    p.component('Bengine', 1330, 540, 755, 322, 'Request Resolution Engine', GREEN)
-    p.node('Bplanner', 1760, 652, 295, 66, '미해결 항목 처리기', owner='Bengine', color=GREEN)
-    p.node('Bbind', 1360, 652, 310, 66, '관계 결합기', owner='Bengine', color=GREEN)
-    p.node('Bstate', 1760, 774, 295, 72, '요청 해석 상태', kind='store', owner='Bengine', color=GREEN)
-    p.component('Bma', 2173, 407, 290, 62, 'Model Access')
-    p.node('Bomni', 2173, 550, 290, 62, '공유 Omni', kind='model')
-    p.component('Bcm', 2173, 694, 290, 62, 'Context Manager')
-    p.component('Btm', 2173, 800, 290, 62, 'Task Manager')
-    p.arrow('Bstart', 'Bri', '2  원문 + 요청 틀 형식', sp='B', tp='T',
-            at=(1350, 383), via=[(1915.5, 393), (1565, 393)], color=GREEN)
-    p.arrow('Bri', 'Bma', '틀 / 부분 해석 요청', (1840, 403), sp='R', tp='L', sd=-10, td=-10, color=GREEN)
-    p.arrow('Bma', 'Bri', '틀 / 후보 / 미해석 반환', (1830, 450), sp='L', tp='R', sd=15, td=15, color=GREEN, ret=True)
-    p.arrow('Bri', 'Bplanner', '3  대상·Task·조건이 미결정인 틀', (1385, 490), sd=-50, via=[(1515, 527), (1907.5, 527)], color=GREEN)
-    p.arrow('Bplanner', 'Bri', '4  필요 시\n범위 지정 해석', (1820, 482), sp='T', tp='B', sd=90, td=180,
-            via=[(1997.5, 510), (1745, 510)], color=GREEN)
-    p.arrow('Bplanner', 'Bstate', '후보·근거 버전', (1765, 736), color=GREEN)
-    p.arrow('Bstate', 'Bbind', '허용 관계로 결합', (1395, 757), sp='L', tp='B',
-            via=[(1515, 810)], color=GREEN)
-    p.arrow('Bbind', 'Bplanner', '부족·충돌: 추가 조회 / 질문 결정', (1385, 615), sp='T', tp='T',
-            via=[(1515, 645), (1907.5, 645)], color=GREEN, ret=True)
-
-    # Equal data/Task contracts. Semantic producers remain inside VIA, model weights
-    # are an on-device dependency outside VIA's implementation responsibility.
-    for s, c, read in [('A', BLUE, 'Atools'), ('B', GREEN, 'Bplanner')]:
-        dx = 0 if s == 'A' else 1248
-        p.arrow(s+'ma', s+'omni', '추론 / 반환', (945+dx, 496), sd=-30, td=-30)
-        p.arrow(s+'omni', s+'ma', sp='T', tp='B', sd=30, td=30, ret=True)
-        p.text(928+dx, 620, 'PC의 모델 의존성 · 가중치 한 벌', 22, MUTED)
-        if s == 'A':
-            for target, yy, sy, lane in [('cm', 710, -16, 854), ('tm', 816, 16, 878)]:
-                p.arrow(read, s+target, sp='R', tp='L', sd=sy, td=-15,
-                        via=[(lane, 639+sy), (lane, yy)], color=c)
-                p.arrow(s+target, read, sp='L', tp='R', sd=15, td=sy+8,
-                        via=[(lane+12, yy+30), (lane+12, 639+sy+8)], ret=True, color=c)
-            p.label(870, 660, '4  조회 ↔ 근거/버전', c, size=23)
-        else:
-            for target, yy, sy, lane in [('cm', 710, -16, 2110), ('tm', 816, 16, 2137)]:
-                p.arrow(read, s+target, sp='R', tp='L', sd=sy, td=-15,
-                        via=[(lane, 685+sy), (lane, yy)], color=c)
-                p.arrow(s+target, read, sp='L', tp='R', sd=15, td=sy+8,
-                        via=[(lane+12, yy+30), (lane+12, 685+sy+8)], color=c, ret=True)
-            p.label(2115, 660, '4  조회 ↔ 근거/버전', c, size=23)
-    p.text(86, 829, '구조화 출력 · 조건 보존 · 부분 수정 · cache 가능', 23, BLUE)
-    p.text(1380, 822, '미지원 관계는 보류', 23, GREEN)
-
-    # Repeat the equal adoption, storage and delivery contracts inside each panel.
-    for prefix, dx, color in [('A', 0, BLUE), ('B', 1248, GREEN)]:
-        def component(key, x, y, w, name):
-            p.component(prefix+key, x+dx, y, w, 62, name)
-        def arrow(a, b, label='', at=None, **kw):
-            if at:
-                at=(at[0]+dx, at[1])
-            if 'via' in kw:
-                kw['via']=[(x+dx, y) for x,y in kw['via']]
-            p.arrow(prefix+a, prefix+b, label, at, **kw)
-        component('finish', 485, 980, 350, 'Request Controller')
-        component('policy', 935, 980, 280, 'Policy Manager')
-        p.node(prefix+'saved', 80+dx, 973, 300, 76, 'State Store', kind='store')
-        component('response', 80, 1115, 310, 'Response Manager')
-        component('task', 485, 1115, 350, 'Task Manager')
-        component('gateway', 935, 1115, 280, 'Agent Gateway')
-        component('output', 80, 1260, 310, 'Interaction Manager')
-        p.node(prefix+'agent', 930+dx, 1260, 290, 62, 'Downstream Agent', kind='external')
+    p=Slide()
+    p.box(0,0,2560,8,COMMON,'none',0)
+    p.text(64,25,'VIA / 04-41 / 다음 조회와 의미 생산의 판단 주체',23,COMMON,bold=True)
+    p.text(2496,25,'설계 비교 · 미선정 · 미측정',23,COMMON,'right')
+    p.text(64,65,'모델이 근거를 읽고 전체 의미를 판단할까, 코드가 요청 틀의 항목을 해결할까?',40,bold=True)
+    p.text(64,122,'“이 표를 아까 보고서에 넣고, 메일은 보내지 말고 초안만 만들어.”',28,bold=True)
+    p.text(64,162,'예산/실적 보고서 후보 [T7,T8] → 확인 질문 → 새 답변 “예산 보고서” → 동일한 최종 의미 제안',24,COMMON)
+    p.text(64,196,'자료 예시는 초안 / 조회 전 정답 Task 없음 / VIA는 local, 모델은 cloud / 반복 RC·IM·TM은 동일 인스턴스 참조',17,COMMON)
+    for prefix,dx,title in [('A',0,'A  모델이 조회 선택 → 근거로 재판단 → 전체 의미 제안'),('B',1248,'B  모델의 요청 틀 → 코드의 항목 해결·전체 결합')]:
+        p.box(64+dx,226,1184,1131,'white',LINE,0)
+        p.text(80+dx,231,title,27,COMMON,bold=True)
+        def component(key,x,y,w,h,name): return p.component(prefix+key,x+dx,y,w,h,name,COMMON)
+        def node(key,x,y,w,h,name,owner=None,kind='module'): return p.node(prefix+key,x+dx,y,w,h,name,owner=prefix+owner if owner else None,kind=kind,color=COMMON)
+        def arrow(a,b,label='',at=None,different=False,**kw):
+            if 'via' in kw: kw['via']=[(x+dx,y) for x,y in kw['via']]
+            size=kw.pop('size',20)
+            p.edge(prefix+a,prefix+b,color=COMMON,**kw)
+            p.items[-1]['different']=different
+            if label:p.label(at[0]+dx,at[1],label,DIFFERENCE_STROKE if different else COMMON,size)
+        def datum(x,y,w,h,title,lines,size=20):
+            # A note/document is an exchanged contract example, never a processing Module.
+            doc=p._add('node',x=x+dx,y=y,w=w,h=h,name=[],type='data',color=COMMON,parent=None)
+            header='교환 데이터 예시 · '+title
+            units=sum(1 if ord(c)>=0x2e80 else .55 for c in header)
+            p.text(x+12+dx,y+8,header,min(16,(w-34)/units),COMMON,bold=True)
+            p.items[-1]['data_note']=doc
+            p.text(x+12+dx,y+33,lines,size,COMMON,leading=size*1.24)
+            p.items[-1]['data_note']=doc
+        component('input',80,275,335,62,'Interaction Manager')
+        component('start',500,275,335,62,'Request Controller')
+        node('voice',925,275,290,62,'Cloud Voice Model',kind='model')
+        component('ri',80,360,815,624,'Request Interpreter')
+        component('ma',925,360,290,62,'Model Access')
+        node('semantic',925,475,290,62,'Cloud Semantic LLM',kind='model')
+        component('cm',925,695,290,62,'Context Manager')
+        component('tm',925,820,290,62,'Task Manager')
+        p.text(925+dx,550,'실제 의미 판단: cloud LLM',18,COMMON)
+        p.text(925+dx,578,'코드/모델 구분은 책임의 구분',17,COMMON)
+        p.text(925+dx,626,['Interaction Manager:','로컬 VAD·지속 입력 / 시점 연결'],15,COMMON,leading=20)
+        arrow('input','start','발화·근거·버전',(419,263),sp='R',tp='L',size=17)
+        arrow('input','ma',sp='B',tp='L',sd=-50,td=0,via=[(197.5,346),(910,346),(910,391)])
+        arrow('ma','input',sp='L',tp='B',sd=15,td=70,via=[(915,406),(915,350),(317.5,350)],ret=True)
+        arrow('ma','voice',sp='T',tp='B',sd=-30,td=-30)
+        arrow('voice','ma',sp='B',tp='T',sd=30,td=30,ret=True)
+        arrow('ma','semantic','추론 요청 / 모델 결과',(925,435),sd=-30,td=-30,size=17)
+        arrow('semantic','ma',sp='T',tp='B',sd=30,td=30,ret=True)
+        node('check',110,905,330,64,'의미 제안 검증기','ri')
+        node('temp',500,905,300,64,'임시 해석 상태' if prefix=='A' else '요청 해석 상태','ri','store')
         if prefix=='A':
-            arrow('check','finish','5·7  완성 의미 / 확인 질문',
-                  (485,912), sp='B', tp='T', via=[(262.5,900),(660,900)], color=color,ret=True)
+            node('loop',180,455,375,66,'모델 주도 해석 제어기','ri')
+            node('tools',500,645,300,64,'읽기 도구 실행기','ri')
+            p.text(180+dx,426,'host 코드: 모델 제안을 실행·제한',19,COMMON)
+            arrow('start','loop',sp='B',tp='T',via=[(667.5,350),(907,350),(907,443),(367.5,443)])
+            arrow('loop','ma',sp='T',tp='B',sd=140,td=-70,via=[(507.5,448),(1000,448)],different=True)
+            arrow('ma','loop',sp='L',tp='T',sd=25,td=70,via=[(916,416),(916,450),(437.5,450)],ret=True,different=True)
+            arrow('loop','tools','1  모델의 다음 읽기 선택',(500,515),sp='R',tp='T',via=[(855,488),(855,632),(650,632)],different=True,size=22)
+            arrow('tools','loop','3  근거로 모델 재판단',(490,750),sp='L',tp='B',via=[(465,677),(465,548),(367.5,548)],ret=True,different=True,size=22)
+            datum(500,541,300,83,'ReadRequest', ['tool: task_retrieval','args: 관련 보고서 후보'],19)
+            datum(110,568,340,126,'EvidenceBundle', ['candidates: [T7,T8]','referent: E7@v2','source/version/coverage'],21)
+            arrow('loop','check','4  전체 관계 / 질문 제안',(115,721),sp='L',tp='L',via=[(100,488),(100,937)],different=True,size=22)
+            arrow('check','loop',sp='T',tp='B',sd=120,td=140,via=[(395,894),(475,894),(475,535),(507.5,535)],ret=True,different=True)
+            arrow('tools','temp','read set·조회 기록',(500,878),sp='B',tp='R',via=[(650,718),(835,718),(835,937)],size=18)
+            p.text(490+dx,789,['모델은 추가 읽기 / 질문 / 완성안을 선택','host는 범위·예산·형식·현재성을 제한'],18,COMMON,leading=27)
+            p.text(925+dx,928,['A도 구조화 출력 가능','부분 수정·cache 가능'],17,COMMON,leading=24)
         else:
-            arrow('bind','finish','5·7  결합 결과 / 질문 / 지원 한계',
-                  (75,910), sp='L',tp='T',td=-80,
-                  via=[(68,685),(68,953),(580,953)], color=color,ret=True)
-            arrow('finish','engine','7  채택 통지 / 질문 게시 연결',
-                  (455,870), sp='T',tp='B',sd=100,td=100,
-                  via=[(760,947),(559.5,947)], color=color)
-        arrow('finish','saved','채택·질문 기록', (92,945),sp='L',tp='R',sd=-12,td=-12)
-        arrow('saved','finish',sp='R',tp='L',sd=14,td=14,ret=True)
-        arrow('finish','policy','7  현재 권한 검사', (918,944),sp='R',tp='L',sd=-12,td=-12)
-        arrow('policy','finish','허용 / 거절', (895,1044),sp='L',tp='R',sd=14,td=14,ret=True,size=22)
-        arrow('finish','task','8  Task 생성/변경', (493,1068),sd=-90,td=-90,size=23)
-        arrow('task','finish','현재 사실 /\n접수·상태', (731,1060),sp='T',tp='B',sd=80,td=80,ret=True,size=22)
-        arrow('task','gateway','요청·조건', (836,1085),sp='R',tp='L',sd=-12,td=-12,size=22)
-        arrow('gateway','task','접수·결과', (836,1182),sp='L',tp='R',sd=14,td=14,ret=True,size=22)
-        arrow('gateway','agent','업무 위임', (932,1212),sd=-60,td=-60,size=22)
-        arrow('agent','gateway','접수·결과', (1124,1212),sp='T',tp='B',sd=60,td=60,ret=True,size=22)
-        arrow('finish','response','5·8  질문 / 응답 / 확인된 상태', (85,1078),sp='L',tp='R',sd=6,
-              via=[(414,1017),(414,1146)],size=23)
-        arrow('response','finish','실제 게시 기록', (397,1185),sp='R',tp='L',sd=20,td=25,
-              via=[(447,1166),(447,1036)],ret=True,size=22)
-        arrow('response','output','Text / 음성', (85,1212),sd=-60,td=-60,size=22)
-        arrow('output','response','실제 전달', (254,1212),sp='T',tp='B',sd=60,td=60,ret=True,size=22)
-        arrow('output','input','6  답변은 새 입력', (86,1330),sp='L',tp='L',
-              via=[(70,1291),(70,321)],size=22)
-        p.text(490+dx, 1226, ['7  입력·자료·Task·질문 버전 확인',
-                             '변경/철회는 재평가, 저장 실패는 인계 보류',
-                             '응답 추론도 Model Access 경유'],20,MUTED,leading=30)
-        p.text(932+dx,1330,'외부 업무 계획·실행 책임',21,MUTED)
-
-    # Preserve topology and ownership, restyle the existing scene only.
+            node('frame',110,455,330,66,'요청 틀 해석기','ri')
+            node('tools',520,455,280,66,'읽기 도구 실행기','ri')
+            node('engine',500,680,300,66,'Request Resolution Engine','ri')
+            p.text(110+dx,426,'모델: 초기 틀·지정 field 의미',19,COMMON)
+            arrow('start','frame',sp='B',tp='T',via=[(667.5,350),(907,350),(907,443),(275,443)])
+            arrow('frame','ma',sp='T',tp='B',sd=135,td=-70,via=[(410,449),(1000,449)],different=True)
+            arrow('ma','frame',sp='L',tp='T',sd=25,td=60,via=[(916,416),(916,450),(335,450)],ret=True,different=True)
+            arrow('frame','engine','1  초기 틀 / 부분 field 결과',(115,526),sp='R',tp='T',sd=10,via=[(460,498),(460,675),(650,675)],different=True,size=20)
+            datum(110,568,340,135,'RequestFrame v1', ['goal: 표 추가','target: UNRESOLVED','relation: 아까 보고서','constraint: send=false'],20)
+            arrow('engine','tools','2  코드가 다음 읽기 선택',(824,600),sp='R',tp='R',via=[(855,713),(855,488)],different=True,size=19)
+            arrow('tools','engine',sp='R',tp='R',sd=15,td=16,via=[(875,503),(875,729)],ret=True,different=True)
+            arrow('engine','frame','조건부 field 해석 요청',(116,548),sp='L',tp='B',via=[(470,713),(470,541),(275,541)],different=True,size=18)
+            datum(500,545,300,125,'선택적 부분 요청·반환', ['PartialInterpretationRequest','field: referent / [E7,E8]','evidenceVersions: [v2]','→ field result / uncertainty'],17.5)
+            p.text(500+dx,750,'코드: 항목 상태 → 전체 결합',19,COMMON)
+            datum(500,772,300,125,'항목 상태 (설명용)', ['referent: E7@v2','Task:[T7,T8] AMBIGUOUS','질문 → 새 답 “예산 보고서”','Task:T7 → BOUND'],18)
+            arrow('engine','check','3  코드 결합 / 질문 / 지원 한계',(112,723),sp='L',tp='T',via=[(460,713),(460,889),(275,889)],different=True,size=21)
+            arrow('check','engine',sp='T',tp='B',sd=100,td=-110,via=[(375,890),(480,890),(480,758),(540,758)],ret=True,different=True)
+            arrow('engine','temp',sp='B',tp='R',sd=95,via=[(745,747),(835,747),(835,937)])
+            p.text(925+dx,928,['B도 1회 호출 보장 없음','BOUND ≠ 의미 정답 보장'],17,COMMON,leading=24)
+        datum(110,768,340,109,'MeaningProposal', ['확인 질문·새 답변 뒤 최종 예시','task:T7 / referent:E7@v2','constraint: send=false'],20)
+        # Common reads remain direct to both authoritative source Components.
+        if prefix=='A':
+            yy=677
+            for target,cy,offset,lane in [('cm',726,-10,906),('tm',851,12,913)]:
+                arrow('tools',target,'2  같은 범위 read' if target=='cm' else '',(925,671),sp='R',tp='L',sd=offset,td=-10,via=[(lane,yy+offset),(lane,cy-10)],size=17)
+                arrow(target,'tools',sp='L',tp='R',sd=12,td=offset+10,via=[(lane+5,cy+12),(lane+5,yy+offset+10)],ret=True)
+        else:
+            yy=488
+            for target,cy,offset,lane in [('cm',726,-10,900),('tm',851,12,909)]:
+                arrow('tools',target,sp='R',tp='L',sd=offset,td=-10,via=[(lane,yy+offset),(lane,cy-10)])
+                arrow(target,'tools',sp='L',tp='R',sd=12,td=offset+10,via=[(lane+5,cy+12),(lane+5,yy+offset+10)],ret=True)
+        p.text(925+dx,776,'근거·후보·version·coverage',16,COMMON)
+        p.text(925+dx,891,'읽기 권한은공통 Policy 계약',17,COMMON)
+        # The shared authority/commit and delivery tail is deliberately subordinate.
+        component('finish',485,1005,350,132,'Request Controller')
+        node('adopted',515,1072,290,64,'채택 의미·질문·근거 버전','finish','store')
+        component('saved',110,1020,300,62,'State Store')
+        component('policy',925,1020,290,62,'Policy Manager')
+        component('response',110,1165,300,62,'Response Manager')
+        component('task',485,1165,350,62,'Task Manager')
+        component('gateway',925,1165,290,62,'Agent Gateway')
+        component('output',110,1280,300,62,'Interaction Manager')
+        node('agent',925,1280,290,62,'Downstream Agent',kind='external')
+        arrow('check','finish','공통 검증을 통과한 의미·질문 제안',(480,984),via=[(275,995),(660,995)],size=18)
+        arrow('finish','saved','레코드 저장 요청 / 성공·실패',(110,997),sp='L',tp='R',sd=-30,td=0,via=[(446,1041),(446,1051)],size=17)
+        arrow('saved','finish',sp='R',tp='L',sd=15,td=-5,ret=True)
+        arrow('finish','policy','현재 권한 조회 / 허용·거절',(892,997),sp='R',tp='L',sd=-30,td=0,via=[(875,1041),(875,1051)],size=16)
+        arrow('policy','finish',sp='L',tp='R',sd=15,td=-5,ret=True)
+        arrow('finish','task','저장 성공·현재 유효 시 인계',(485,1142),sd=-90,td=-90,size=17)
+        arrow('task','finish',sp='T',tp='B',sd=90,td=90,ret=True)
+        arrow('task','gateway','조건 / command ID',(832,1143),sp='R',tp='L',sd=-12,td=-12,size=16)
+        arrow('gateway','task',sp='L',tp='R',sd=14,td=14,ret=True)
+        arrow('gateway','agent','업무 위임 / 접수·결과',(925,1240),sd=-60,td=-60,size=16)
+        arrow('agent','gateway',sp='T',tp='B',sd=60,td=60,ret=True)
+        arrow('finish','response','저장 성공 후 질문/응답 게시 요청',(111,1102),sp='L',tp='T',sd=42,via=[(445,1113),(445,1155),(260,1155)],size=17)
+        arrow('response','finish',sp='R',tp='L',sd=15,td=52,via=[(455,1211),(455,1123)],ret=True)
+        arrow('response','output','승인 Text / 음성',(110,1240),sd=-70,td=-70,size=17)
+        arrow('output','response','실제 표시·재생·중단',(240,1240),sp='T',tp='B',sd=70,td=70,ret=True,size=16)
+        arrow('response','ma',sp='R',tp='R',via=[(430,1196),(430,1268),(1234,1268),(1234,391)])
+        p.text(485+dx,1280,['RC: 입력·source·Task·질문 revision 검사','저장 성공 후 채택 / 실제 전달 → 질문 focus','응답 구성·음성 생성은 Model Access 경유'],17,COMMON,leading=23)
+        p.text(925+dx,1340,'외부 업무 계획·실행 책임',16,COMMON)
     for item in p.items:
-        if item['kind'] in ('component','node','text','label','line'):
-            item['color']=COMMON
-        if item['kind']=='line': item['width']=1.3
-        if item['kind']=='box' and item['y']==211 and item['h']==48: item['fill']='white'
-    p.text(64,194,'각 칸은 독립 대안 / 반복 이름은 동일 인스턴스 / 논리 책임이며 별도 process 가정 없음 / Omni 한 벌과 역할별 세션 / 음성 입력 유지',13,COMMON)
+        if item['kind']=='line':item['width']=1.3
     append_plate_legend(p)
+    p._add('node',x=1530,y=1380,w=60,h=28,name=[],type='external',color=COMMON,parent=None)
+    p.text(1530,1408,'외부 대상',16,COMMON)
+    # Replace the redundant deployment sample in this scene's key with the data-note key.
+    p.items=[i for i in p.items if not (i['kind']=='box' and i.get('y')==1373 and (600<=i.get('x',0)<760 or 2210<=i.get('x',0)<2370)) and not (i['kind']=='text' and i.get('y')==1378 and i.get('x') in (638.5,721.5,2248.5,2331.5))]
+    p._add('node',x=600,y=1373,w=160,h=28,name=[],type='data',color=COMMON,parent=None)
+    for item in p.items:
+        if item['kind']=='text' and item['x']==578 and item['y']==1408:item['lines']=['교환 자료 예시 / 실행 Module 아님']
+        if item['kind']=='text' and item['x']==2160 and item['y']==1408:item['lines']=['설계 차이: 판단·생산 경로']
+    p.line([(2210,1387),(2370,1387)],COMMON,width=1.3)
+    p.items[-1]['different']=True
     return p
