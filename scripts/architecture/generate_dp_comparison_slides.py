@@ -75,17 +75,17 @@ DATA = {
     cons=[['반환 회수와 재배정으로 평균 반응시간 0.85 s (응답 신속성 ↓)',
            '교차 사건의 중앙 전이 변경, 평균 4.0개 (변경 용이성 ↓)'],
           ['다수 window와 buffer로 전체 메모리 13.8 GB (메모리 효율성 ↓)']]),
-  45: dict(title='기능 정확성을 위한 VIA 기억과 Context 제공 설계',
-    options=('A 원본 서비스 조합', 'B 공통 파생 기억의 생산과 조회'),
-    case='“지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
-    condition='비교 예시 조건: 게시 범위 안 과거 관계의 반복 재사용 / A의 index와 cache도 허용',
-    rows=[('V-01','90%','94%',2,3),('V-05','7.0 s','4.5 s',2,3),('V-06','13.2 GB','14.0 GB',3,2)],
-    pros=[['필요한 요청 중심의 처리로 전체 메모리 13.2 GB (메모리 효율성 ↑)'],
-          ['검증된 과거 관계 재사용으로 정확 처리율 94% (기능 정확성 ↑)',
-           '원본별 교차 결합 축소로 평균 VIA 처리시간 4.5 s (요청 완료 신속성 ↑)']],
-    cons=[['반복 교차 결합의 관계 누락으로 정확 처리율 90% (기능 정확성 ↓)',
-           '여러 원본 조회와 결합으로 평균 VIA 처리시간 7.0 s (요청 완료 신속성 ↓)'],
-          ['관계 생산 session과 KV로 전체 메모리 14.0 GB (메모리 효율성 ↓)']]),
+  45: dict(title='VIA 과거 근거의 요청별 구성과 공통 생산/조회',
+    options=('A 원본 서비스 조합형', 'B 공통 파생 기억 저장소형'),
+    case='R23 “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
+    status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
+    condition='미선정 / 미측정. A cache의 같은 효과는 B 고유 이익을 줄인다. B+ 원본 조합 우회는 명시적 혼합안.',
+    tradeoffs=[
+      ('새 관계 / 미묘한 조건', '요청 목적에 맞춘 원문 구성의 유연성; 검색 누락 가능', '지원 표현 / 추출 조건에 제한; 정확성의 고정 우열 없음'),
+      ('준비된 반복 조회 R24', 'warm 관계 cache로 조회 / 재해석 축소 가능', '유효 게시가 원본 교차 결합을 대체하면 경로 단축 가능'),
+      ('첫 조회 / 정정 직후', '현재 원본으로 구성; fan-out / 해석 비용', '생산 / 갱신 게시 대기; NOT_COVERED와 미지원 구별'),
+      ('전체 모델 호출 / 자원', 'cache 생산 / 유지 + 요청 구성 / 재검증 포함', '초기 / 갱신 / backfill / 미사용 생산 포함; 고정 우열 없음'),
+      ('변경 용이성', 'Source adapter로 국소화; cache schema 변경은 무효화', 'Source 형식은 adapter; 관계 의미는 schema / 재생산 / 독자 변경')]),
 }
 
 
@@ -99,6 +99,9 @@ class Comparison(Slide):
         self.text(1880,22,450,['구조 비교 / 장단점 / QA Trade-off'],19,MUTED,align='right')
         self.text(40,65,1840,[self.caption],39,INK,True)
         self.line([(40,121),(1880,121)],color=LINE,arrow=False)
+        if n==45:
+            self.memory_page()
+            return
         self.text(40,133 if n==44 else 142,1530,[DATA[n]['case']],21 if n==45 else 23,INK)
         self.text(1880,145,290,['수치와 점수 / 예상 예시'],19,RED,True,align='right')
         if n==44:
@@ -126,6 +129,27 @@ class Comparison(Slide):
         self.text(40,1057,1520,[DATA[n]['condition']],16,MUTED)
         self.text(1880,1057,315,['● 많을수록 우수 / 미측정'],16,MUTED,align='right')
 
+    def memory_page(self):
+        d=DATA[45]
+        self.text(40,135,1840,[d['case']],20,INK)
+        self.text(40,168,1840,['같은 원본 / 현재 T23 연결은 판단 결과 / VIA: 허용 근거 연결, Agent: 기준 적용과 제안서 작성'],17,INK)
+        for side,x in enumerate([140,1010]):
+            self.text(x+18,192,820,[d['options'][side]],25,INK,True)
+            self.text(x+18,226,820,['현재 요청의 owner 읽기 결과 조합 / 누락 해결' if side==0 else '과거 관계 생산・검증・게시 / 공통 읽기 계약 소비'.replace('・',' / ')],17,INK)
+        self.line([(990,195),(990,795)],color=LINE,arrow=False)
+        self.text(40,786,1840,['장면: 첫 요청 → 필요한 원본 / 미게시 생산 | 반복 R24 → warm cache / 유효 게시 | 정정 직후 → fence 후 갱신 | 표현 밖 새 관계 → 미지원'],16,INK)
+        from memory_context_scene import page_legend
+        page_legend(self)
+        for j,(condition,left,right) in enumerate(d['tradeoffs']):
+            yy=871+j*29
+            self.line([(40,yy-5),(1880,yy-5)],color=LINE,arrow=False)
+            self.text(42,yy,266,[condition],16,INK,True)
+            self.text(315,yy,745,[left],16,INK)
+            self.text(1080,yy,795,[right],16,INK)
+        self.text(40,1020,1840,[d['condition']],15,INK)
+        self.text(40,1046,1840,['Reference (§9): A LangChain Retrieval / B LangMem Background + Memory API / 실행 Delayed Processing / 연결 참고 Mem0 Graph (typed 관계 증거 아님)'],15,INK)
+        self.text(40,1067,1840,['공식 메커니즘 선례 / VIA 구현・성능 증거 아님 / 실행・서비스 경계 추가 없음'.replace('・',' / ')],10,MUTED)
+
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)
         lines=name.split('\n')
@@ -151,7 +175,7 @@ class Comparison(Slide):
             self.items=self.transformed();result=super().svg().replace('— DP 배경','— 설계 비교')
             marker=f'<marker id="a{PURPLE[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="{PURPLE}" stroke-width="1.6"/></marker>'
             result=result.replace('</defs>',marker+'</defs>')
-            if self.number in (41,42,44):
+            if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
@@ -164,7 +188,7 @@ class Comparison(Slide):
             x,y,w,h=(i[k] for k in ('x','y','w','h'));r=i.get('store_radius',8)
             path=f'<path id="{i["id"]}" fill="{i["fill"]}" stroke="{i["stroke"]}" stroke-width="{i.get("line_width",1.7)}" d="M{x} {y+r}C{x} {y-r} {x+w} {y-r} {x+w} {y+r}V{y+h-r}C{x+w} {y+h+r} {x} {y+h+r} {x} {y+h-r}Z M{x} {y+r}C{x} {y+3*r} {x+w} {y+3*r} {x+w} {y+r}"/>'
             result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',lambda _:path,result)
-        if self.number==44:
+        if self.number in (44,45):
             from continuous_interaction_scene import decorate_svg
             result=decorate_svg(self,result)
         return result
@@ -181,7 +205,7 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
-        if self.number==44:
+        if self.number in (44,45):
             from continuous_interaction_scene import decorate_diagram
             d=decorate_diagram(self,d)
         return d
@@ -201,7 +225,7 @@ def build():
     outputs[OUT/'VIA-DP-comparison-41-45.drawio']=ET.tostring(deck,encoding='unicode')+'\n'
     outputs[OUT/'comparison-data.json']=json.dumps(dict(status='FORMAT_HYPOTHESES_NOT_MEASURED',qa=QA,slides=DATA),ensure_ascii=False,indent=2)+'\n'
     blocks=''.join(f'<article><h2>04-{n} 설계'+f' 비교</h2><p><a href="dp{n}-comparison.drawio">draw.io</a> / <a href="dp{n}-comparison.svg">SVG</a> / <a href="dp{n}-comparison.png">PNG</a></p><img src="dp{n}-comparison.svg" alt="04-{n} 설계 비교"></article>' for n in DATA)
-    outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>수치와 동그라미 점수는 형식 검토용 예상 예시. 실측 결과 또는 대안 선정 아님.</p><p>45: 같은 평가 기준의 실제 전달과 제품 비교/견적 결과 참조에서 원본 조합과 공통 관계 생산/게시/조회를 비교한다. 새 사례의 실측이나 선정 결과가 아니다.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
+    outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교. 실측 결과 또는 대안 선정 아님.</p><p>45: 같은 평가 기준의 실제 전달과 제품 비교/견적 결과 참조에서 요청별 owner 읽기 조합과 공통 관계 생산/검증/게시/조회를 비교한다. 첫 요청, 반복, 정정 직후, 표현 밖 관계의 조건별 손익과 공식 Reference를 함께 제시한다. 새 사례의 실측이나 선정 결과가 아니다.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
     return outputs
 
 
@@ -216,6 +240,9 @@ def validate(outputs):
         if not targets[qa].startswith(QA[qa][1]):
             raise SystemExit(f'Presentation time metric changed: {qa}')
     for n,data in DATA.items():
+        if n==45:
+            assert len(data['tradeoffs'])==5 and 'rows' not in data
+            continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:
             lv=float(re.search(r'[0-9.]+',left)[0]);rv=float(re.search(r'[0-9.]+',right)[0])

@@ -6,9 +6,10 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 
 // Run a copy in a private build directory linked to the bundled node_modules.
 // The existing draw.io/SVG scenes remain the content and geometry source.
-const [repoArg,buildArg,scope] = process.argv.slice(2);
+const [repoArg,buildArg,scope,subset] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
 if (scope && !['--comparison-only','--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-42-only, --dp44-only or --dp45-only');
+if (subset && !(scope==='--dp45-only' && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only --comparison-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
 const python=process.env.VIA_RUNTIME_PYTHON;
@@ -97,9 +98,13 @@ function nativeScene(presentation,scene) {
   const documents={41:'04-41-request-resolution-control.md',42:'04-42-lifecycle-ownership.md',
     43:'04-43-request-interpretation.md',44:'04-44-continuous-interaction.md',45:'04-45-memory-and-context.md'};
   let notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/${documents[scene.number]}\n${base}${scene.source}\n`+
-    (scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.');
+    (scene.number===45 && scene.kind==='comparison'?'조건별 정성 trade-off이며 최종 선정 또는 품질 측정이 아니다. 첫 요청, 반복 R24, 정정 직후와 표현 밖 새 관계를 구별한다.':scene.kind==='comparison'?'수치와 원형 점수는 형식 검토용 예상 예시이며 실측 또는 대안 선정 결과가 아니다. V-04는 평균 반응시간, V-05는 평균 VIA 처리시간이다. V-05는 외부 작업이나 사용자 답변만 기다리는 구간을 제외한다. 기존 시간 수치는 평균 시간의 형식 예시이며 p95 측정값을 변환한 결과가 아니다. 양안 조건은 본문과 그림의 비교 예시 조건을 따른다.':'공통 문제와 설계 고려 사항의 배경이며 특정 설계안의 선택을 뜻하지 않는다.');
   if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
   if(scene.number===45) notesText+='\n공통 사례: C20/E20 VIA 직접 평가 기준 설명과 실제 전달 P20, C21/T21/D21@v2 제품 비교, C22/T22/D22@v1 견적. 현재 C23/R23의 제안서 작성 Task T23 연결은 현재 해석/채택의 결과다. VIA는 허용된 발췌와 참조를 연결하고, 평가 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조는 본문 전체 보관을 뜻하지 않으며 Agent 내부 reasoning/모든 tool 기록은 전제하지 않는다.\nA의 요약/index/cache/관계 cache/부분 갱신/병렬 조회와 기존 Agent 실행 맥락 재사용을 허용한다. B의 과거 관계는 검증/게시 범위만 읽고 원본 확인, 미게시/표현 미지원, 오류/갱신/삭제와 생산 비용을 유지한다. R23의 정답 관계를 미리 게시하지 않는다. 필요성과 사례 보완이며 최종 DP/A/B 선정 또는 새 사례의 품질 검증이 아니다. 기존 수치와 점수는 동일한 형식 예시다.';
+  if(scene.number===45 && scene.kind==='comparison') {
+    notesText=notesText.replace('기존 수치와 점수는 동일한 형식 예시다.','45의 수치와 원형 점수는 조건별 정성 표로 교체했다.');
+    notesText+='\nA: Context Composer가 owner 읽기와 cache를 조합하여 직접 EvidenceBundle/receipt를 반환한다. Request Evidence Set은 요청 수명의 데이터다. B: 변경 알림, 실제 원본 읽기, 조건부 과거 의미 생산, 출처/권한/지원 종류 검증, 관계+coverage 게시, Evidence Reader의 게시 계약 소비를 나눈다. 미래 R23의 정답이나 T23 binding을 미리 생산하지 않는다.\nNOT_COVERED는 지원 종류의 미생산으로 Publisher 생산 후 revision/상태를 반환하고 Reader가 Repository를 다시 읽는다. UNSUPPORTED_RELATION은 표현 변경 없이는 반복 생산으로 해결되지 않는다. NO_MATCH는 읽은 범위의 무일치다. DENIED/UNAVAILABLE도 분리한다. 현재 metadata 검사와 exact quote/조건/충돌 원문 확인은 남고, 원본 조합 우회는 명시적 B+다. 파생 오류 EvidenceDispute는 원본 revision 변화 없이도 차단/재검증한다. 삭제/철회 fence가 후속 정리보다 먼저이며 옛 job 게시를 거부한다.\n첫 요청/정정 직후: B 생산/갱신 대기가 추가될 수 있다. 반복 조회: 유효 게시가 owner 교차 조합을 실제 대체하면 B 요청 경로가 줄지만 A warm 관계 cache가 같은 효과를 낼 수 있다. 새 관계/미묘한 부정/예외: A 원문 구성이 유연하나 검색 누락 가능, B 표현/추출 한계가 남는다. 정확성의 전체 우열을 고정하지 않는다.\n전체 모델 호출: A cache 생산/유지+요청 구성/재검증, B 초기/갱신/backfill/미사용/실패 생산을 모두 포함한다. 현재 판단은 공통이고 명시 ID/위치 연결은 코드일 수 있다. 고정 우열 없음. Source 형식 변경은 adapter에 흡수할 수 있고, 관계 의미/schema 변경은 B producer/독자 호환/재생산, A cache 무효화도 함께 본다.\n공식 Reference (본문 §9):\nA https://docs.langchain.com/oss/python/deepagents/retrieval — 현재 질문의 원본 획득 선례. VIA Task/실제 전달/정정 계약 전체 구현 사례 아님.\nB https://langchain-ai.github.io/langmem/background_quickstart/ 및 https://langchain-ai.github.io/langmem/reference/memory/ — 기억 생산/저장/소비 분리 선례. 자동 선호 추출을 VIA User Memory 정책으로 채택하지 않고 revision/coverage/삭제 fence는 VIA 별도 계약.\n실행 https://langchain-ai.github.io/langmem/guides/delayed_processing/ — 대기 생산/재예약 선례. thread/지연값/배치를 채택하지 않는다.\n연결 참고 https://docs.mem0.ai/platform/features/graph-memory — 공통 개체 연결 선례이며 typed 정정/대체/실제 전달 관계 구현 증거 아님. cloud/embedding/helper를 도입하지 않는다. 공식 사례는 VIA 성능 우위의 증거가 아니다.';
+  }
   slide.speakerNotes.textFrame.setText(notesText);
   return slide;
 }
@@ -142,14 +147,14 @@ with zipfile.ZipFile(original) as old,zipfile.ZipFile(candidate) as new,zipfile.
 os.replace(candidate+'.scoped',candidate)
 `;
 const stats=[];
-for(const plan of plans.filter(p=>!scope||scope==='--dp45-only'||p.scenes.some(s=>s.kind==='comparison'))) {
+for(const plan of plans.filter(p=>!scope||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'))) {
   const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
   for(const scene of plan.scenes)nativeScene(presentation,scene);
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
   if(['--dp41-42-only','--dp44-only','--dp45-only'].includes(scope)) {
-    const indices=plan.scenes.flatMap((s,i)=>(scope==='--dp45-only'?s.number===45:s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number))?[i+1]:[]);
+    const indices=plan.scenes.flatMap((s,i)=>(scope==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):s.kind==='comparison'&&(scope==='--dp44-only'?[44]:[41,42]).includes(s.number))?[i+1]:[]);
     execFileSync(python,['-c',preserveUnselected,draft,path.join(repo,plan.destination),JSON.stringify(indices),scope]);
   }
   await finalizePresentation({workspaceDir:build,candidatePath:draft,finalPath:final,explicitTotalSlideCount:plan.scenes.length,

@@ -12,7 +12,7 @@
 | 42 | 통합 Core / 독립 대화 및 업무 서비스 | V-05 요청 완료 신속성, V-08 변경 용이성, V-06 메모리 효율성 | [draw.io](./dp42-comparison.drawio) | [SVG](./dp42-comparison.svg) | [PNG](./dp42-comparison.png) |
 | 43 | 통합 의미 생산 / 기능별 의미 생산과 코드 조정 | V-01 기능 정확성, V-05 요청 완료 신속성, V-08 변경 용이성 | [draw.io](./dp43-comparison.drawio) | [SVG](./dp43-comparison.svg) | [PNG](./dp43-comparison.png) |
 | 44 | 중앙 비동기 조정 / 반응형 Dataflow | V-04 응답 신속성, V-08 변경 용이성, V-06 메모리 효율성 | [draw.io](./dp44-comparison.drawio) | [SVG](./dp44-comparison.svg) | [PNG](./dp44-comparison.png) |
-| 45 | 원본 서비스 조합 / 공통 파생 기억 생산과 조회 | V-01 기능 정확성, V-05 요청 완료 신속성, V-06 메모리 효율성 | [draw.io](./dp45-comparison.drawio) | [SVG](./dp45-comparison.svg) | [PNG](./dp45-comparison.png) |
+| 45 | 원본 서비스 조합 / 공통 파생 기억 생산과 조회 | 조건별 정확성, 반복/첫 조회, 전체 모델 비용, 변경 용이성 | [draw.io](./dp45-comparison.drawio) | [SVG](./dp45-comparison.svg) | [PNG](./dp45-comparison.png) |
 
 ## 구조 보강 내용과 원문
 
@@ -24,13 +24,15 @@
 | 44 | 중앙 반환 회수 및 재배정 대 typed 사건의 단계별 활성화와 window 및 credit/cancel. 양안 Direct 후보 통과, 후보 준비와 게시 Control, 실제 표시 및 후행 receipt | [44 본문](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md) / [MAIN](../../architecture/12-decisions/decision-packages/diagrams/choice44-structure.svg) |
 | 45 | 원본별 읽기와 요청 임시 조합 대 공통 과거 관계의 생산 및 지속 게시와 조회. 원본 owner, cache, 출처 및 coverage, 현재 버전과 권한 재확인, 미게시 범위 및 오류 재검증, 별도의 명시 User Memory | [45 본문](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md) / [MAIN](../../architecture/12-decisions/decision-packages/diagrams/choice45-structure.svg) |
 
-각 칸은 완결된 별도 대안이다. 반복된 Component 이름은 같은 역할의 확대 표시이며 별도 인스턴스나 모델 복제를 뜻하지 않는다. 일반 실선은 전달 및 요청, 점선은 반환 또는 재판단이며, 43의 회색 bus는 생산자의 공유 모델 호출과 반환이다. 45의 붉은 경로는 원본 버전 및 권한 재확인이다. 그림의 숫자는 주요 설명 단계이며 전체 호출 순서가 아니다. 42의 배경은 보고서와 메일의 병행 사례, 구조 비교는 본문 E4의 보고서 질문 답변 확대 사례다. 후자의 R1/R2/R3는 최초 위임/질문 답변/결과 수정이며, 각 그림에 적은 사례 범위의 예시 ID다. 전체 실패 계약과 선택 조건은 링크한 본문을 따른다.
+각 칸은 완결된 별도 대안이다. 반복된 Component 이름은 같은 역할의 확대 표시이며 별도 인스턴스나 모델 복제를 뜻하지 않는다. 일반 실선은 전달 및 요청, 점선은 반환 또는 재판단이며, 43의 회색 bus는 생산자의 공유 모델 호출과 반환이다. 45는 공통 검정 실선 요청/전달과 점선 반환, 흰색 공통 및 살구색 차이 표기를 사용한다. Component와 내부 Module/상태를 구별하며 Model Access는 VIA Component, Shared Omni는 외부 모델이다. 그림의 숫자는 주요 설명 단계이며 전체 호출 순서가 아니다. 42의 배경은 보고서와 메일의 병행 사례, 구조 비교는 본문 E4의 보고서 질문 답변 확대 사례다. 후자의 R1/R2/R3는 최초 위임/질문 답변/결과 수정이며, 각 그림에 적은 사례 범위의 예시 ID다. 전체 실패 계약과 선택 조건은 링크한 본문을 따른다.
 
 **41의 2026-10-08 수정:** 얇은 검정 선과 흰 바탕은 공통 구조, 살구색 바탕은 비교하는 설계 차이를 나타낸다. 왼쪽 Legend에서 직각 사각형은 논리적 책임 경계인 Component, 둥근 사각형은 그 내부 구현인 Module, 원통은 저장 상태로 구분한다. 포함 관계는 별도 프로세스나 서비스 배포를 뜻하지 않는다. B의 Request Interpreter와 Request Resolution Engine은 각각 틀의 의미 생산과 코드의 해석 진행 및 결합을 맡는 별도 논리 Component다. 양안의 Request Controller는 각 한 번만 표시한다.
 
 41의 읽기 도구 실행기와 미해결 항목 처리기는 Context Manager와 Task Manager에 각각 직접 조회하고 응답을 받는다. B의 확인 후보와 정보 및 버전은 미해결 항목 처리기에서 관계 결합기로 전달하며, 미해결 및 충돌은 추가 조회로 되돌린다. 모델 호출 및 결과 반환, B의 부분 재해석, 임시 해석 상태의 보존과 갱신, 공통 Controller의 현재 정보 및 Task/질문 연결 재확인, 권한 검사와 채택 저장의 결과를 각각 표시한다. 오른쪽 외곽의 공통 검사선은 두 소유자에 분기하는 요청/응답 bus이며 해석 중 조회선과 구분한다. 입력 접수와 해석 요청, 의미 제안과 채택은 같은 Controller의 책임이다.
 
 **42의 2026-10-08 수정:** 포괄적인 대화/업무 처리기 이름을 정식 Request Controller·Task Manager·Agent Gateway로 정리하고, Request Interpreter·Response Manager·Interaction Manager와 Model Access의 공통 협력을 표시한다. 별도 대화 처리 Component를 추가하지 않는다. Request Controller는 `R2/u2→Q1→T1` 관계와 실제 제시 P1 참조를, Response Manager는 P1/P2 publication·내구 전달 원장을, Task Manager/Agent Gateway는 Q1 변경·K1 전달·외부 확인을 소유한다. A의 관련 변경 공동 확정과 B의 접수 대기/업무 접수/대화 반영을 데이터 예시로 구분한다. `release(P2,epoch)`와 실제 전달 receipt는 별도 경계이며 최초 답변 transaction에 물리 재생을 포함하지 않는다. Voice Runtime은 Interaction Manager의 음성 모듈과 Model Access client가 실행되는 영역이며 새 의미 판단 Component가 아니다. 공통/차이 색과 얇은 선 및 Legend는 41과 같은 표기를 사용한다. 주요 Architecture MAIN과 비교 페이지는 같은 구조 scene을 재사용한다.
+
+45의 2026-10-09 구조 보완: MAIN과 같은 [공유 scene](../../../scripts/architecture/memory_context_scene.py)에서 생성한다. A는 owner 읽기 조합과 직접 Bundle 반환, B는 변경 알림/본문 조회/생산/검증/게시/조회와 미게시 재조회 경로다. 45의 예상 수치와 원형 점수는 다섯 조건의 정성 비교로 교체했고 공식 Reference와 한계는 각주/발표 노트에 넣었다. 41~44의 표와 수치는 보존한다. 이번에는 45 비교 슬라이드만 갱신하며 `--dp45-only --comparison-only`는 기존 넓은 옵션을 유지하면서 배경을 제외한다.
 
 ## 수치와 원형 점수
 

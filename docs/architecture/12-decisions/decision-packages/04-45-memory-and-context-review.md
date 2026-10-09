@@ -100,3 +100,19 @@ PNG는 설치된 Google Chrome의 headless renderer로 SVG를 직접 열어 만�
 - 생성기에 모든 노드와 처리 화살표가 왼쪽 또는 오른쪽 하나에만 속하는 assertion을 추가했다. SVG/draw.io 동기화와 기존 소유/경로 검사를 함께 실행한다.
 - 2560×1440 PNG를 다시 렌더하고 작성자가 직접 열어 좌우 경계, 글자와 선의 겹침, 모델 호출/반환을 확인했다. 보충 수명 그림은 이미 좌우 흐름이 분리되어 있어 변경하지 않았다.
 - 이 후속 변경은 배치/표현 수정이며 앞선 독립 리뷰를 새 그림의 추가 제3자 리뷰라고 재표시하지 않는다. 변경 파일만 commit/push하고 원격 CI 결과를 최종 응답으로 연결한다.
+
+
+## 6. 사용자 지침의 구조 표현 보완과 실제 검수 (2026-10-09)
+
+30623a71의 새 대표 사례와 781a326c의 공식 Reference/§10을 유지하고, 사용자 지침을 생성 원본과 실제 자료에 반영했다. 새로운 독립 리뷰를 수행한 기록이 아니다.
+
+- MAIN/발표 비교는 [memory_context_scene.py](../../../../scripts/architecture/memory_context_scene.py)를 공유한다. 각 안에서 같은 정식 여섯 Component를 한 번씩 표시하고 Context Manager 안에 Module, Source View Cache, Request Evidence Set, Episodic Memory Repository와 User Memory를 해당 안의 소속으로 배치했다. 흰색/검정 공통, 살구색/짙은 테두리 차이, 둥근 Module/원통 상태/육각 외부 모델 및 Legend를 맞췄다. 요청/재사용/지속 관리 수명은 밖 주석이다.
+- A는 Task Manager를 포함한 직접 owner 읽기와 반환, 유효 cache 재사용, 요청 근거 기록 및 Context Composer의 직접 Bundle/receipt 반환이다. 데이터 상태를 실행 주체처럼 연결하던 발표 경로를 수정했다.
+- B는 변경 알림과 본문 읽기, 조건부 모델 생산, 출처/권한/지원 종류 검사, 관계+coverage 게시, Reader 조회/반환을 분리했다. 생산 revision/상태 반환 후 실제 Repository 재조회, 원문 재확인, 즉시 fence와 EvidenceDispute를 연결했다. 미래 R23의 정답이나 T23 binding은 게시하지 않는다.
+- 45 수치/원형 점수는 다섯 조건의 정성 표로 교체하고 첫 요청/반복/정정 직후/표현 밖 관계를 구별했다. §9 공식 Reference, 대응과 한계를 각주/발표 노트에 넣었다. A의 관계 cache와 B의 전체 생산/갱신/미사용 비용, 미선정/미측정 상태는 유지한다.
+
+**실제 확인:** MAIN/비교 1920×1080 및 수명 2560×1920 SVG를 Chrome에서 렌더하고 PNG를 열었다. 브라우저 글자 bbox의 잘림/겹침 및 주석 mask 가림 검사는 0건이다. scene 검사로 Module/상태의 부모, 여섯 정식 이름, A 직접 Task read/Module 반환, 현재 판단/모델 연결, 비관련 도형 관통 없는 직교 경로와 좌우 독립성을 확인했다. 수명 그림의 갱신/철회/원본 변화 없는 오류 및 부모 표기도 직접 확인했다. SVG/draw.io 생성 원본 일치, 비교 manifest의 SVG/PNG 해시, active Markdown 링크/용어/QA 및 git diff --check가 통과했다. CI에 있는 모든 그림 생성기의 --check도 로컬에서 통과했다.
+
+PPTX는 `--dp45-only --comparison-only`로 생성하고 finalizer의 package/layout/font 및 Artifact Tool 재불러오기를 통과했다. 최종 통합 10번과 비교 5번 렌더를 각각 열어 확인했다. 슬라이드 수 10/5, 변경 슬라이드 각각 331개 native 도형과 0개 이미지, 노트의 공식 링크 다섯 개를 확인했다. 시작본과 ZIP entry를 비교하여 해당 slide/slide rel/notes/notes rel 네 파일씩만 바뀌고 다른 슬라이드, 배경과 공통 package가 byte 단위로 보존됐음을 확인했다. 합본 draw.io의 앞 네 페이지와 JSON의 41~44 레코드도 같다. 보호 대상 113개 tracked 파일과 초기 04-50/`work/` 파일이 보존됐다.
+
+**한계:** Chrome과 Artifact Tool의 실제 렌더/재불러오기 범위이며 Microsoft PowerPoint 앱이나 발표 거리에서 확인한 결과는 아니다. 모델 실행/성능 측정, 새로운 독립 심사와 최종 A/B/DP 판단은 하지 않았다. 공통 파생 관계 계약이 강한 A의 작은 확장보다 필요한지는 원래 리뷰 세션에서 계속 판단한다. 사용자 승인에 따라 이번 변경 파일만 main에 정상 commit/push한다.

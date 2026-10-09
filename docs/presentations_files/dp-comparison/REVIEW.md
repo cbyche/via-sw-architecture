@@ -128,3 +128,12 @@ MAIN, 발표 비교와 42 보충 도식의 SVG/draw.io, 기존 PNG와 두 PPTX �
 - 활성 링크와 용어 검사, QA 카탈로그, 기존 배경 생성기 일치 및 diff 검사 수행.
 
 기존 참조 Architecture, QA/ADR, 대안 미선정 및 미측정 상태는 유지한다. PPT 제작은 이번 범위에 포함하지 않는다.
+
+
+## 45 구조 경로와 조건별 비교 반영 (2026-10-09)
+
+사용자가 §9 공식 Reference와 §10을 기존 A/B에 반영하도록 요청했다. 45만 MAIN과 같은 scene, 여섯 Component의 단일 표시와 Context Manager 내부 Module/상태, 공통 Legend/살구색 차이 표기, 직접 Bundle 반환 및 B 생산/게시/조회/원문 확인/오류 경로로 맞췄다. 45의 조건 없는 예상 수치와 원형 점수는 다섯 조건의 정성 비교로 교체했다. 41~44의 원래 표와 수치는 그대로다.
+
+Chrome의 1920×1080 최종 비교 PNG를 열어 확인했고 글자 bbox 겹침/잘림 검사 및 주석 mask 검사는 0건이다. 생성물 --check와 SVG/PNG manifest가 통과했다. 최종 PPTX를 Artifact Tool로 다시 불러와 통합 10번과 비교 5번 렌더를 각각 확인했다. 각 변경 슬라이드는 331 native 도형, 0 이미지이고 notes에는 공식 Reference 다섯 링크와 대응/한계가 있다. ZIP 비교에서 선택 슬라이드/관계/notes/notes 관계만 변경됐으며 배경, 나머지 슬라이드와 공통 package가 시작본과 같다. 합본 draw.io 앞 네 페이지와 JSON의 41~44 레코드도 보존됐다.
+
+상세 계약, 재현 및 한계는 [45 검수 기록](../../architecture/12-decisions/decision-packages/04-45-memory-and-context-review.md#6-사용자-지침의-구조-표현-보완과-실제-검수-2026-10-09)을 따른다. 이번 기록은 신규 독립 리뷰 또는 측정이 아니다. Microsoft PowerPoint 앱과 실제 발표 거리에서의 검수는 수행하지 않았다.
