@@ -1,6 +1,6 @@
 # 04-44. 계속 듣고 응답하는 대화의 실행 구조
 
-> 상태: **STAGE_4_REFINED_CANDIDATE_REVIEW / A·B 미선정 / 구현·측정 없음** / 2026-10-06
+> 상태: **STAGE_4_REFINED_CANDIDATE_REVIEW / A·B 미선정 / 구현·측정 없음** / 2026-10-10
 > [탐색 지도 영역 6](./04-50-agent-architecture-decision-map.md#area-06) · [비교 기준](./04-30-comparison-guide.md#4-sw-구조적으로-다른-대안의-정확한-의미) · [독립 리뷰 기록](./04-44-interaction-review.md)
 
 **사용자의 말을 계속 들으면서 현재 요청의 답변과 이전 업무의 질문·결과를 빠르고 올바르게 같은 대화로 이어가는 SW 구조**를 비교한다. A는 중앙 조정자가 사건마다 다음 실행을 명령하고 반환을 회수하는 **비동기 Orchestration/Mediator**다. B는 타입이 정해진 사건과 결과를 연결한 소비자가 조건 충족 시 활성화되는 **반응형 Dataflow/Pipes-and-Filters**다. 둘 다 입력과 작업을 병행한다. 차이는 비동기 API의 유무가 아니라 실행을 이어가는 책임과 중간 상태의 조직이다.
@@ -58,7 +58,7 @@
 
 왼쪽 A는 **중앙 조정 방식**(중앙 비동기 Orchestration), 오른쪽 B는 **이벤트 흐름을 연결하는 방식**(반응형 Dataflow)이다. 각 칸은 배치를 위한 영역이며 Component나 process가 아니다. 양안은 정식 10개 Component와 같은 배치·입력·의미 생산·원본 상태·권한·저장·모델 조건을 사용한다. A도 사건을 받고 비동기로 작업하며 완료를 기다리는 동안 입력 처리가 멈추지 않는다.
 
-Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 상태는 원통, 외부 Agent·Omni는 육각형이다. 모든 Module과 원통은 의미 소유 Component 안에 있다. 공통 기능은 흰색/검정이며 실제 차이인 작은 Module과 실행 상태만 살구색 채움과 같은 계열의 짙은 테두리다. 41/42와 같은 기호 의미를 쓰며 44에는 다른 process/서비스 경계를 추가하지 않는다. 포함 관계는 DB·thread·process 개수를 뜻하지 않는다. 박스에는 이름, 화살표에는 요청·제안·채택 결과·후보·실제 전달과 제어 자료를 표시한다.
+Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 상태는 원통, 외부 Agent·클라우드 모델는 육각형이다. 모든 Module과 원통은 의미 소유 Component 안에 있다. 공통 기능은 흰색/검정이며 실제 차이인 작은 Module과 실행 상태만 살구색 채움과 같은 계열의 짙은 테두리다. 41/42와 같은 기호 의미를 쓰며 44에는 다른 process/서비스 경계를 추가하지 않는다. 포함 관계는 DB·thread·process 개수를 뜻하지 않는다. 박스에는 이름, 화살표에는 요청·제안·채택 결과·후보·실제 전달과 제어 자료를 표시한다.
 
 ### 1.1 그림을 짚는 발표 대본
 
@@ -68,7 +68,7 @@ Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 
 4. **B의 연결된 소비:** Request Controller 안의 Input Resolution Stage·Task Notice Stage는 각각 입력 해소/채택 결과와 대화 연결·질문 등록·게시 admission을 마친 Notice를 게시한다. Response Composer가 이를 소비해 후보를 준비하고, 같은 Response Manager 안의 Publication Join이 후보·admission·source revision·과거 실제 전달 참조를 결합한다. Input/Notice/Publication Window는 제한된 실행 상태이며 원본을 대체하지 않는다. credit/cancel은 준비 작업량과 무효 결과 제어이며 Task 취소 의도가 아니다.
 5. **같은 실제 전달 경계:** Publication Control이 원본 현재성·권한·차례·중복을 최종 확인해 Interaction Manager에 release/identity를 보낸다. 실제 표시·재생·중단 receipt가 Publication Outbox를 갱신한 뒤 확인된 Q1 제시 기록이 Request Controller의 질문 focus로 돌아간다. 생성·게시 허용·실제 전달은 서로 다른 사실이다. 현재 입력을 해결할 확인 질문은 별도 admission을 사용하며 자기 후보 receipt는 게시의 선행조건이 아니다.
 
-공유 Omni 가중치는 한 벌이다. A의 중앙 전이/결과 회수 비용과 B의 단계별 Window·Join·취소/수용량 계약 비용을 함께 비교한다. B의 속도·정확성 우위나 고정 전달 우선순위를 이 예시로 확정하지 않는다.
+VIA는 로컬이며 음성/전사와 의미 모델은 같은 클라우드 의존성이다. 모델의 임시 세션은 업무 상태 권위가 아니다. A의 중앙 전이/결과 회수 비용과 B의 단계별 Window·Join·취소/수용량 계약 비용을 함께 비교한다. B의 속도·정확성 우위나 고정 전달 우선순위를 이 예시로 확정하지 않는다.
 
 ## 2. 사용자 문제와 설계 범위
 
@@ -76,7 +76,7 @@ Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 
 
 | 공통 기능 | 필요한 결과 |
 | --- | --- |
-| 계속 듣기와 끼어들기 | capture·Streaming ASR을 유지하고 음성은 로컬에서 즉시 멈춘다. 입력 누락이나 인식 backlog를 정상으로 숨기지 않는다. |
+| 계속 듣기와 끼어들기 | capture·클라우드 음성 입력/전사를 유지하고 음성은 로컬에서 즉시 멈춘다. 입력 누락이나 인식 backlog를 정상으로 숨기지 않는다. |
 | 현재 요청 처리 | 전체 원문과 관련 근거로 의도·대상·Task 연결을 판단하고 직접 응답/확인/위임으로 연결한다. |
 | 비동기 질문/결과 전달 | 확인된 업무 이름·질문·부분 실패·결과를 올바른 대화에서 전달한다. Agent 접수와 업무 완료는 구별한다. |
 | 정정과 대화 이어가기 | 정정 전 미전송 효과를 보류하고 실제 들은 범위를 기준으로 답변 재개/폐기/수정과 질문 답변 연결을 수행한다. |
@@ -89,7 +89,7 @@ Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 
 | 41: 의미 해결 제어 | 같은 의미 해결 방식을 양안에 적용한다. 실행망이 자연어 관계를 코드로 추측하지 않는다. |
 | 43: 의미 생산 책임 | 같은 Request Interpreter/F1~F6 생산 방식을 사용한다. Stage는 업무별 semantic actor가 아니며 이전 33의 제외된 B를 복원하지 않는다. |
 | 42: 서비스 수명/원본 | 같은 Core 배치, Conversation/Task 원본, 로컬 내구 저장과 외부 실행 수명을 사용한다. B에 별도 process나 독립 업무 서비스를 추가하지 않는다. |
-| 공유 모델 | 같은 on-device Omni 1벌, 역할별 Context/KV, 독립 Streaming ASR, bounded scheduler를 유지한다. 새 학습 helper는 없다. |
+| 공유 모델 | 같은 클라우드 음성/전사와 의미 LLM, 로컬 VAD·Model Access의 provider adapter·호출 수용량 제한을 유지한다. 모델 내부는 비교하지 않는다. |
 
 ## 3. 실제 설계: 누가 다음 처리를 진행시키는가
 
@@ -112,7 +112,7 @@ Component는 직각 박스, 내부 Module은 둥근 박스, 논리적 데이터 
 | Response Manager | 공통 Response Composer·Publication Control / B Publication Join | 공통 Publication Outbox / B Publication Window |
 | Policy Manager | 세부 Module을 추가하지 않음 | 현재 권한·consent 계약 |
 | State Store | 세부 Module을 추가하지 않음 | owner의 내구 저장·공동 확정 접근. 의미 소유권은 이전되지 않음 |
-| Model Access | 세부 Module을 추가하지 않음 | 같은 Omni·역할별 KV·scheduler 계약 |
+| Model Access | 세부 Module을 추가하지 않음 | 클라우드 API adapter·역할별 임시 session·호출 수용량 계약 |
 
 Progress State/Window는 실행 중 job·대기·후속 조건을 연결하는 임시 상태다. Request·Task·명령·질문·publication의 확정 원본을 대신하지 않는다. 원통은 논리적 상태이며 독립 DB나 코드 Module이 아니다. Publication Outbox는 Response Manager 안에 한 번만 그리고 State Store 접근을 연결한다. Playback State에 내구 publication 원장이나 질문 focus를 넣지 않는다.
 
@@ -120,14 +120,16 @@ Progress State/Window는 실행 중 job·대기·후속 조건을 연결하는 �
 
 | 사실/권한 | 공통 최종 소유자 | 두 안의 소비 조건 |
 | --- | --- | --- |
-| 원음·전사·현재 input epoch·발화 중 여부 | Interaction Manager / Speech Input Worker | 확정 전사는 무오류 선언이 아니다. 늦은 정정은 새 revision으로 전달한다. |
+| 원음·전사·현재 input epoch·발화 중 여부 | Interaction Manager / Turn-Taking Control·Timeline & Buffer | 확정 전사는 무오류 선언이 아니다. 늦은 정정은 새 revision으로 전달한다. |
 | 의미 채택·Request·확인 질문·미전송 admission | Request Controller | Request Interpreter가 제안한 의미를 현재 근거/질문/권한으로 검사해 채택한다. 새 발화의 의미가 미해결이면 미전송 효과 hold를 해제하지 않는다. |
 | Task·Execution·Agent 질문·외부 접수/진행/결과 | Task Manager / Agent Gateway | Request Controller의 hold epoch를 command admission/dispatch에서 검사하고 acknowledgment를 남긴다. capture와 hold 적용 사이 이미 외부로 나간 명령은 실제 외부 상태를 확인한다. 작업/질문 revision과 확인 상태가 필요하다. 기존 실행을 token만으로 취소 완료라고 하지 않는다. |
 | Response 내용·publication/출력 차례·내구 전달 상태 | Response Manager | source와 의미 참조를 보존하고 원본 owner에 현재성/권한을 확인한다. Text와 음성의 대상·상태·결론·실패가 일치해야 한다. receipt로 Publication Outbox의 실제 전달 범위를 갱신한다. |
 | 실제 표시·재생·로컬 중단·device receipt | Interaction Manager | Turn-Taking Control이 재생 직전 발화/출력 epoch/release를 검사하고 Channel I/O가 실제 전달을 수행한다. Playback State는 재생 상태/receipt buffer이며 내구 publication 원본이 아니다. |
 | 실제 제시 질문 focus·질문 답변 연결 | Request Controller | 확인된 실제 전달 범위를 PendingUserInteraction에 반영한다. 생성 완료를 제시로 세지 않고 “응”은 실제 focus와 현재 질문 원본으로 연결한다. |
 
-외부 업무는 **Request Controller → Task Manager → Agent Gateway → Downstream Agent**의 동일한 검증/전달 계약을 따른다. **Request Controller의 admission/hold 변경, Task Manager의 command/epoch 변경, Agent Gateway의 transmission CAS를 같은 local State Store transaction으로 조합한다.** 각 owner의 검증한 변경 집합을 확정하며 다른 owner의 필드를 직접 쓰지 않는다. hold/권한 철회가 먼저 확정되면 PENDING 전송을 막고, DISPATCHING이 먼저 확정되면 이미 시작된 전송과 UNKNOWN 가능성을 보존해 실제 외부 상태를 조회·정정·취소한다. 네트워크/모델 호출은 transaction 밖이다. 이는 [참조 제어 §5](../target-architecture/control-and-lifecycle.md#5-전송과-정정의-원자적-경계)의 같은 경합 계약이며 B의 stream event 도착 순서로 대체하지 않는다. 음성 stop의 즉시성과 외부 Agent의 실제 cancel 효력은 다른 시간·사실이다. S2S 직접 후보는 Interaction Manager의 S2S client가 Model Access를 통해 받아 Request Controller에 전달하고 Request Controller가 동일한 좁은 direct admission을 검사한다. 승인된 `AdmittedDirectCandidate(u, Text/audio, source refs)`는 A에서 Dispatcher의 후보 반환으로, B에서 Response Composer의 passthrough로 이어져 같은 Response Manager의 게시 경계와 Interaction Manager의 실제 출력에 도달한다. 둘 다 이미 만든 후보를 Core에서 다시 생성하지 않는다. admission 거절 시 같은 Request ID로 Core 처리에 인계하며 직접 후보를 게시하지 않는다.
+외부 업무는 **Request Controller → Task Manager → Agent Gateway → Downstream Agent**의 같은 검증/전달 경로를 따른다. 44는 이 후속 실행 조직을 비교하며 저장 경계는 42의 선택에 따른다. **42A**에서는 admission/hold·command/epoch·transmission CAS의 각 owner 검증 변경을 같은 local State Store transaction으로 확정한다. **42B**에서는 Request Controller의 intent와 Task Manager의 접수가 따로 확정되고, 업무 서비스의 gate/command/transmission CAS만 그 서비스에서 함께 확정한다. hold 요청 시각과 업무 gate 적용/ack 시각을 구별하며, CAS가 먼저 확정된 명령은 이미 전송을 시작한 것으로 보고 실제 외부 상태를 확인한다. 상세 command/control·재연결·UNKNOWN 계약은 [42](./04-42-lifecycle-ownership.md)에서 설명한다. 모델·네트워크 호출은 transaction 밖이고 발화 시작은 Task 취소 완료가 아니다.
+
+음성 모델의 자율 답변은 [04-40](./04-40-common-execution-contract.md)의 이번 네 비교에서 제외한다. 모든 확정 사용자 입력은 VIA의 이해 처리로 연결한다. 기존 직접 응답 UC를 제거한 것이 아니라 이번 실행 비교의 입력/의미 생산을 고정한 것이다. 41의 읽기 도구 실행기가 Context Manager와 Task Manager에 직접 bounded read를 요청할 수 있다. Request Controller의 선택적 사전 읽기는 읽기 독점 권한이 아니다.
 
 ### 3.2 A — 중앙 조정 방식 (중앙 비동기 Orchestration)
 
@@ -147,7 +149,7 @@ Dialogue Dispatcher는 질문 Q1의 실제 제시 receipt를 진행 상태에 �
 | --- | --- | --- |
 | **Request Controller / Input Resolution Stage** | 확정 `Input(u)`·근거/실제 제시 참조 → Request Controller의 `AdoptedMeaning(u)` 또는 `Unresolved(u)` | Input Window: 실행 중 input/job ID, 대체 revision, 근거 read set. Request/의미 원본은 Request Controller 소유 |
 | **Request Controller / Task Notice Stage** | Task Manager의 확인된 `Question/Result(T,r)` → 원래 대화·요청·Task 연결, Pending User Interaction 등록·공개 범위/게시 admission → `Notice(T,r)` | Notice Window: 원본 참조, 미전달 중요 항목, 준비 job, progress 최신값. 외부 질문/결과 원본은 Task Manager 소유 |
-| **Response Manager / Response Composer** | 채택 의미, 허용된 확인 질문/실패·제어 안내 또는 유효 Notice → Text/audio candidate와 source refs. direct admission이 승인한 기존 S2S Text/audio candidate는 재생성 없이 passthrough | Response Composer의 준비 상태와 Publication Control/Publication Outbox의 게시 상태. 준비 실패는 명시적 error envelope |
+| **Response Manager / Response Composer** | 채택 의미, 허용된 확인 질문/실패·제어 안내 또는 유효 Notice → Text/audio candidate와 source refs. 직접 응답 후보도 VIA가 준비한 내용 참조를 사용하며 음성 모델 자율 후보는 이번 비교에서 제외 | Response Composer의 준비 상태와 Publication Control/Publication Outbox의 게시 상태. 준비 실패는 명시적 error envelope |
 | **Response Manager / Publication Join** | 후보 + 후보 종류별 admission + 해당 source validity + 확정된 과거 delivery/focus snapshot → eligible candidate / hold / discard | Publication Window: 제한된 후보와 필요한 참조, dependency watermark, 중복 키. publication/내구 실제 전달 원본은 Response Manager, 질문 focus 원본은 Request Controller 소유. Playback State는 receipt snapshot 제공 |
 
 InputSettled는 **새 입력이 없거나, 해당 입력의 의미·정정·제어 관계를 Request Controller가 해소했다는 확인**이다. 단순 ASR final이나 timeout으로 생산하지 않는다. Unresolved/WAIT_USER/WAIT_CONTEXT이면 기존 내용 응답과 관련 업무 Notice를 보류한다. **현재 u2를 해결하기 위한 확인 질문과 확인된 실패/제어 안내는 별도 `InteractionNotice(u, question ID, admission class)`로 반환한다.** 이 후보는 InputSettled를 요구하지 않고 현재 u2·유효 질문/사실·권한·발화 종료를 확인해 제한적으로 게시한다. 외부 효과 hold는 유지하며 질문 제시가 업무 실행 허가가 되지 않는다. 무관함이 채택 의미로 확인된 업무 결과는 기존 공통 정책대로 먼저 전달할 수 있다. Stage가 스스로 “무관하다”를 추측하지 않는다.
@@ -172,6 +174,40 @@ Stage가 적용하는 최신성/중복/순서/credit 규칙은 타입 계약에 
 
 B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 아니다. cyclic feedback은 receipt/credit/revision 갱신으로 한정하고 이미 처리한 envelope ID를 반복 재활성화하지 않는다. delivery/focus는 known-empty로 초기화할 수 있지만 필수 source/admission 초기 값이 없는 join은 `not ready`이며 무한 대기 대신 Request/준비 deadline에 따라 명시적으로 보류/실패를 반환한다. 중요 항목이 상한을 넘으면 내구 원본을 유지하고 추가 준비 admission을 막으며 UI에 backlog/처리 불가를 드러낸다. 양안에서 메모리 무한 증가나 중요한 결과 유실을 정상 동작으로 허용하지 않는다.
 
+### 3.5 실행형 자료 계약과 실제 처리 예시
+
+[고정 JSON 예시](./contracts/dp44-execution-examples.json)는 version 1 설계 검토 계약이다. 실행 라이브러리나 모델을 구현한 결과가 아니다. Host가 event/job/input/source ID·revision·권한 범위를 붙이며 LLM은 continuation/credit/hold를 결정하지 않는다.
+
+| 자료 | 고정 key와 허용 의미 |
+| --- | --- |
+| EventEnvelope | `event_id:string`, `kind:INPUT_READY/TASK_NOTICE/JOB_COMPLETED/DELIVERY_RECEIPT`, `conversation_ref:string`, `source_ref:string`, `source_revision:int`, `input_generation:int 또는 null`, `payload:kind별 고정 자료`. receipt·질문·입력 event ID를 서로 바꾸지 않는다. |
+| JobResult | job ID, 시작 input/generation, source vector, `status:OK/FAILED/CANCELLED/TIMEOUT`, 산출물 참조. generation이 같아도 Task/권한/source 현재 검사를 생략하지 않는다. |
+| A Continuation | `job_ref`, `input_ref`, `input_generation`, `next:INTERPRET/PREPARE_RESPONSE/PUBLISH/WAIT_USER/END`, `waiting_refs`, `source_refs`, `status`. Dispatcher가 완료를 회수하고 다음 실행을 지시한다. |
+| B PublicationWindow | `candidate_ref`, `kind:CONTENT/CLARIFICATION/CONTROL/FAILURE`, `input_ref`, `input_generation`, `required_refs`, `source_vector`, `status:WAIT_DEPENDENCY/ELIGIBLE/DISCARDED`. 연결된 소비자가 자기 조건을 확인한다. |
+
+**겹친 동일 사건:** Input1의 표 설명 요청과 Task1 메일의 Question1이 들어오는 동안 Input0의 Candidate0 준비가 늦게 끝난다. A는 완료를 중앙에 회수해 현재 generation 2와 비교하고 Candidate0를 폐기하며 두 유효 흐름의 다음 job을 지시한다. B는 Input Stage와 Notice Stage가 각각 자기 입력을 준비하고 Candidate0는 window/join의 generation 조건에서 탈락한다. 현재 표 설명과 Question1은 같은 source가 아니며 Task1을 정정했다는 의미가 채택되기 전에는 cancel하지 않는다.
+
+**대기와 질문:** 내용 후보는 관련 InputSettled·admission·source·과거 실제 전달 snapshot을 기다린다. 현재 Input1의 모호함을 해결할 확인 질문은 별도 clarification admission을 사용하여 InputSettled를 기다리지 않는다. known-empty 과거 전달도 명시 값이며 UNKNOWN 전달을 빈 값으로 치환하지 않는다. 자기 후보 receipt는 게시 후 생산되므로 게시 선행조건으로 넣지 않는다.
+
+**실행 기반:** 양안 모두 제한된 async executor와 blocking worker pool을 쓴다. A는 짧은 per-conversation mailbox 전이에서 control/정정 처리를 먼저 수용하고 중요 질문·완료에 aging을 적용할 수 있다. B는 input/control 경로의 수용량을 후보 credit과 분리하고 Stage별 credit/deadline을 전파한다. progress 최신값은 합칠 수 있지만 입력·질문·중요 실패/완료·receipt는 내구 원본을 보존한다. 정책 숫자는 동결하지 않는다. 사건마다 thread를 만드는 설계가 아니다.
+
+**실패와 늦은 결과:** error envelope는 해당 job의 기다림을 FAILED/TIMEOUT으로 끝내고 확인된 안내만 준비한다. provider 취소 실패로 계산이 끝나도 시작 generation과 source가 무효이면 소비하지 않는다. 이미 청구된 호출은 비용에 포함한다. RC crash 후 임시 continuation/window는 저장된 Request·Task·question·publication 사실에서 재구성하며 외부 업무를 새 ID로 재위임하지 않는다.
+
+| 모델 호출 | A/B 공통과 차이 |
+| --- | --- |
+| 입력 음성/전사 | Interaction Manager → Model Access의 Voice API Client. 지속 입력과 로컬 stop는 해석 job 완료를 기다리지 않음 |
+| 요청 이해 | Request Interpreter → Semantic API Client. 41A/B의 같은 구현을 고정. 44는 호출 내용을 새로 판단하지 않음 |
+| 응답 내용/음성 준비 | Response Composer가 필요한 내용만 의미 호출, 음성은 Voice API Client. 준비 job의 중복·stale·retry는 실제 청구로 기록 |
+| dispatch/window/join/현재성/receipt 저장 | 일반 코드. Dispatcher/Stage 개수만으로 호출 수 차이를 만들지 않음 |
+
+### 3.6 추가 집중 비교 — 완료 회수와 연결된 실행
+
+기존 전체 구조와 사건 흐름을 유지하고 아래 그림에서 제어권과 실제 실행 자료를 확대한다. 이름만 다른 동일 queue로 구현하면 두 대안의 차이가 사라진다. A는 job 완료 후 중앙의 다음 지시를 기다리고, B는 연결된 소비자의 입력 조건이 후속 실행을 활성화한다. 두 안 모두 최종 게시 권한은 Response Manager, 실제 출력은 Interaction Manager에 남긴다.
+
+![44 추가 비교 — 중앙 continuation과 Stage 입력](../../../presentations_files/dp-comparison/dp44-comparison.svg)
+
+[draw.io](../../../presentations_files/dp-comparison/dp44-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp44-comparison.png)
+
 ## 4. 같은 정상·정정·교차 사건
 
 ![44 — 동일 사건과 현재성 연결](./diagrams/choice44-event.svg)
@@ -188,7 +224,7 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 | E6 설명 후 유효 Q1을 제시 | 중앙에서 후보를 전달하고 실제 receipt를 Q1에 연결 | Join에서 유효 Q1 후보 → sink → receipt feedback | 실제 제시된 Q1만 focus 후보 |
 | E7 사용자 “응” | 같은 Request Interpreter가 실제 제시/경쟁 질문을 해석; owner가 답변 채택 | Input Stage가 같은 해석을 요청; 결과가 공통 owner를 통해 채택 | 유일한 유효 대상일 때만 연결. 경쟁 후보면 확인 |
 
-Text 입력도 같은 revision/hold/채택 경로를 사용한다. 음성을 껐으면 Text-only 전달을 기록하고 옛 음성을 재연결 뒤 자동 재생하지 않는다. S2S 자체 지식 직접 후보는 좁은 admission을 만족할 때만 같은 sink로 들어온다. Core로 인계하면 동일 Request ID를 사용해 이중 응답을 막는다.
+기존 S2S 자율 응답 UC는 참조 범위로 보존한다. 이번 비교의 모든 확정 입력은 VIA가 해석하며, 준비된 direct/위임 응답은 같은 게시·실제 전달 경계를 따른다.
 
 ## 5. 변경·철회·실패·재시작
 
@@ -211,17 +247,17 @@ Text 입력도 같은 revision/hold/채택 경로를 사용한다. 음성을 껐
 | --- | --- | --- |
 | V-01 정확성 | 중앙에 입력/반환/질문 연결과 현재성 규칙을 모아 검토. 중앙 전이 누락/경합이 여러 경로에 영향 | typed revisions·join·최종 sink를 모든 경로에 적용할 기회. join key/초기 값/늦은 validity/취소 전파가 틀리면 stale 게시. 의미 정확성의 자동 이익 없음 |
 | V-02 적절성 | 집중된 대화 제어로 질문·결과를 묶고 같은 설명 반복을 피할 수 있음 | 동일 사용자 결과 가능. 부분 준비 실패/불명 join을 불필요한 질문으로 넘기면 사용자 수고 증가 |
-| V-03 완전성 | Voice/Text, S2S/Core 직접 응답, 위임, 교차 질문, 정정/재개를 공통 계약으로 지원하도록 설계 | 같은 범위. actual receipt, priority control, durable 중요 항목과 owner checks 없는 범용 stream 조합은 완전 지원으로 세지 않음 |
-| V-04 반응성 | local stop는 공통. 중앙 전이를 짧게 하고 priority/async로 대기 제한 가능. 많은 반환/교차 규칙의 dispatcher 부하가 조건부 비용 | local stop는 공통. source→consumer 직접 활성화·단계별 credit으로 준비 부하를 제한할 기회. 추가 join/buffer/공유 모델 대기로 오히려 늦어질 수 있음 |
+| V-03 완전성 | Voice/Text, VIA 직접 응답, 위임, 교차 질문, 정정/재개를 공통 계약으로 지원하도록 설계 | 같은 범위. actual receipt, priority control, durable 중요 항목과 owner checks 없는 범용 stream 조합은 완전 지원으로 세지 않음 |
+| V-04 반응성 | local stop는 공통. 중앙 전이를 짧게 하고 priority/async로 대기 제한 가능. 많은 반환/교차 규칙의 dispatcher 부하가 조건부 비용 | local stop는 공통. source→consumer 직접 활성화·단계별 credit으로 준비 부하를 제한할 기회. 추가 join/buffer/API 수용량 대기로 오히려 늦어질 수 있음 |
 | V-05 VIA 완료 시간 | 중앙 명령/반환/후속 dispatch의 비용. 짧은 요청은 적은 경유와 상태로 유리할 수 있음 | 독립 Notice 준비를 연결해 불필요한 중앙 재배정을 줄일 기회. fan-in 조건 대기·폐기 작업·재검증 비용. 빠른 접수 멘트로 완료를 대신하지 않음 |
 | V-06 자원/수용량 | 중앙 mailbox + 제한된 jobs, worker buffers. 같은 상한/포화 정책 구현 가능 | 다수 windows/pipes/subscriptions·credit bookkeeping·envelope 참조 비용. immutable 원문 참조를 공유하고 불필요한 모델 호출은 하지 않음. B만 자원 효율적이라는 주장 없음 |
 | V-07 결함/복구 | 중앙 실행 상태와 owner 기록의 복원이 비교적 집중 | 임시 실행망의 재구성과 재구독/중복 제어가 추가. 같은 process/model/storage에서 자동 장애 격리 없음 |
 | V-08 변경/모듈성 | handler별 국소 수정 가능. 여러 생산자 사이 activation/hold 규칙 변경은 중앙 dispatch 전이에 모임 | 같은 stream schema 안의 producer/consumer 조합 변경은 국소화 후보. schema·join·cancel 의미가 바뀌면 그래프 전체 영향. Stage 수만으로 변경성이 좋아지지 않음 |
 | V-09 분석/시험 | 중앙 transition/job trace로 인과 추적. worker 순서 역전도 시험 필요 | graph/envelope/credit/cancel trace와 가상 시간 시험 경계. 분산 window·order 역전·중복·초기 join 조합의 분석 부담 |
 | V-10 기밀성 | 중앙 후보/worker/model Context의 참조와 철회 정리 | 여러 pipe/window에 남은 참조/Context까지 철회 전파. envelope에 보호 원문을 매번 복제하지 않음. 입력 policy는 동일 |
-| V-11 연동/공존 | 외부 protocol 변화는 공통 Gateway/owner에서 흡수. 중앙 burst와 workers의 PC 자원 경합 | 외부 credit 지원을 가정하지 않고 inbox 경계 유지. 내부 stream/error 계약 연동과 여러 buffer가 공존 비용. Omni scheduler 보장은 동일 |
+| V-11 연동/공존 | 외부 protocol 변화는 공통 Gateway/owner에서 흡수. 중앙 burst와 workers의 PC 자원 경합 | 외부 credit 지원을 가정하지 않고 inbox 경계 유지. 내부 stream/error 계약 연동과 여러 buffer가 공존 비용. 클라우드 API 수용량·retry 조건은 동일 |
 | V-12 조작/오류 방지 | 같은 실제 제시/focus와 stop/cancel 표시. 잠정 준비를 완료로 표시하지 않음 | 동일 정책. Stage complete/stream end를 업무 완료/청취 완료로 오인하지 않도록 publication 상태 분리 |
-| V-13 설치 | 동일 Omni/ASR/배치. coordinator/handler 계약 갱신 | 동일 inventory. Reactive Runtime/adapter/graph 버전 호환 추가. 특정 framework 설치를 선택하지 않았으며 runtime 교체 비용은 남음 |
+| V-13 설치 | 동일 클라우드 음성·의미 모델과 로컬 배치. coordinator/handler 계약 갱신 | 동일 inventory. Reactive Runtime/adapter/graph 버전 호환 추가. 특정 framework 설치를 선택하지 않았으며 runtime 교체 비용은 남음 |
 
 ## 7. 가장 싼 변경과 혼합에 대한 판단
 
@@ -235,7 +271,7 @@ Text 입력도 같은 revision/hold/채택 경로를 사용한다. 음성을 껐
 
 | 비용 | A → B | B → A |
 | --- | --- | --- |
-| 유지할 수 있는 것 | 입력/ASR, 의미 생산, Context, Task/Agent 원본·권한, 실제 전달, 모델 API | 동일 |
+| 유지할 수 있는 것 | 입력/전사, 의미 생산, Context, Task/Agent 원본·권한, 실제 전달, 모델 API | 동일 |
 | 기능 개발 | stream envelopes, Stage adapters, joins, credit/error/cancel 계약 | coordinator handlers, 명령/반환 correlations, 중앙 continuation |
 | 임시 상태 이행 | 진행 준비 drain 후 전환하면 window 이행 대부분 불필요. 내구 owner 기록 재사용 | 동일. drain으로 migration 비용은 줄지만 제어 재설계는 남음 |
 | 핵심 재설계 | 중앙 return→다음 명령 체계를 producer→consumer 활성화와 국소 windows로 대체 | Stage readiness/feedback 상태를 중앙 전이/작업 관리로 모으고 소비 계약 변경 |
@@ -246,7 +282,7 @@ Text 입력도 같은 revision/hold/채택 경로를 사용한다. 음성을 껐
 
 **A를 선택할 이유:** 입력/Notice 경로가 비교적 적고 중앙 전이·우선순위·상한으로 반응성을 유지할 수 있으며, 교차 대화의 제어와 원인 추적을 집중시킬 이익이 큰 경우다. 내부 모듈화와 병행을 포기할 필요가 없다.
 
-**B를 선택할 이유:** 서로 다른 입력/질문/결과 생산 경로가 계속 조합되고, 중앙 continuation이 여러 경로의 준비·취소·유량·현재성 연결 부담을 반복적으로 떠안는 경우다. 그 책임을 typed flow의 Stage/pipe 계약으로 실제 이전할 때 조합과 유량 제어의 이익을 기대할 수 있다. 지연 개선은 추가 join과 buffer 및 단일 모델 비용을 포함해 확인해야 한다.
+**B를 선택할 이유:** 서로 다른 입력/질문/결과 생산 경로가 계속 조합되고, 중앙 continuation이 여러 경로의 준비·취소·유량·현재성 연결 부담을 반복적으로 떠안는 경우다. 그 책임을 typed flow의 Stage/pipe 계약으로 실제 이전할 때 조합과 유량 제어의 이익을 기대할 수 있다. 지연 개선은 추가 join과 buffer 및 공통 모델/API 수용량·호출 비용을 포함해 확인해야 한다.
 
 | 주장 | 주장을 반박하는 조건 |
 | --- | --- |

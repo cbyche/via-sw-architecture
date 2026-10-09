@@ -359,10 +359,8 @@ def graph43(s,x,side):
 
 
 def graph44(s,x,side):
-    # MAIN and presentation share the same ten owners and execution graph.
-    from continuous_interaction_scene import draw_option, compact_legend
-    if side==0:compact_legend(s)
-    draw_option(s,x+15,276,.67,'A' if side==0 else 'B')
+    from dp44_comparison_scene import draw
+    draw(s,x,side)
 
 
 def graph45(s,x,side):

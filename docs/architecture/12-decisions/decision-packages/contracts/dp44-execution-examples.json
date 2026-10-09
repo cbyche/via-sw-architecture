@@ -1,0 +1,103 @@
+{
+  "contract_version": 1,
+  "status": "DESIGN_REVIEW_EXAMPLES_NOT_RUNTIME",
+  "events": [
+    {
+      "event_id": "Event1",
+      "kind": "INPUT_READY",
+      "conversation_ref": "Conversation1",
+      "source_ref": "Input1",
+      "source_revision": 2,
+      "input_generation": 2,
+      "payload": {
+        "text": "잠깐, 표부터 설명해줘",
+        "evidence_refs": [
+          "Screen1"
+        ]
+      }
+    },
+    {
+      "event_id": "Event2",
+      "kind": "TASK_NOTICE",
+      "conversation_ref": "Conversation1",
+      "source_ref": "Question1",
+      "source_revision": 3,
+      "input_generation": null,
+      "payload": {
+        "task_ref": "Task1",
+        "notice_kind": "QUESTION",
+        "text": "메일 수신자를 누구로 할까요?"
+      }
+    },
+    {
+      "event_id": "Event3",
+      "kind": "JOB_COMPLETED",
+      "conversation_ref": "Conversation1",
+      "source_ref": "Job0",
+      "source_revision": 1,
+      "input_generation": 1,
+      "payload": {
+        "status": "OK",
+        "candidate_ref": "Candidate0",
+        "for_input": "Input0"
+      }
+    },
+    {
+      "event_id": "Event4",
+      "kind": "DELIVERY_RECEIPT",
+      "conversation_ref": "Conversation1",
+      "source_ref": "Publication1",
+      "source_revision": 1,
+      "input_generation": 2,
+      "payload": {
+        "actual_range": "text:all;audio:0..1200ms",
+        "status": "INTERRUPTED"
+      }
+    }
+  ],
+  "a_continuation": {
+    "job_ref": "Job1",
+    "input_ref": "Input1",
+    "input_generation": 2,
+    "next": "PREPARE_RESPONSE",
+    "waiting_refs": [
+      "AdoptedMeaning1"
+    ],
+    "source_refs": [
+      "Screen1"
+    ],
+    "status": "WAIT_JOB"
+  },
+  "b_publication_window": {
+    "candidate_ref": "Candidate1",
+    "kind": "CONTENT",
+    "input_ref": "Input1",
+    "input_generation": 2,
+    "required_refs": [
+      "AdoptedMeaning1",
+      "InputSettled1",
+      "Admission1",
+      "PriorDeliverySnapshot1"
+    ],
+    "source_vector": {
+      "Screen1": 1
+    },
+    "status": "WAIT_DEPENDENCY"
+  },
+  "b_clarification": {
+    "candidate_ref": "Clarify1",
+    "kind": "CLARIFICATION",
+    "input_ref": "Input1",
+    "input_generation": 2,
+    "required_refs": [
+      "Question2",
+      "ClarificationAdmission1"
+    ],
+    "requires_input_settled": false
+  },
+  "dispositions": {
+    "Event3": "DISCARD_SUPERSEDED",
+    "Event2": "KEEP_DURABLE_AND_PREPARE_WHEN_ADMITTED",
+    "Event4": "UPDATE_ACTUAL_DELIVERY_NOT_TASK_CANCEL"
+  }
+}

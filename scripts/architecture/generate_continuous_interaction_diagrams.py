@@ -42,11 +42,11 @@ def structure():
         s.text(x,1150,1160,[('Dialogue Progress State: job/revision/대기·후보·중단 참조 / 완료 검사·후속 요청 / 늦은 u1 폐기' if side=='A' else 'Publication Join: 입력 해소·admission·source.rev·과거 receipt / 확인 질문 별도 admission / 자기 receipt 후행')],18,'#000000')
         s.text(x,1182,1160,['권한: owner ↔ Policy Manager / 내구 확정: owner → State Store / 같은 Request·Task·질문·publication 원본'],17,'#000000')
         s.text(x,1212,1160,['Voice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다.'],18,'#000000')
-        s.text(x,1242,1160,['공통: 동시 실행 수가 제한된 비동기 executor. Blocking 작업은 제한된 worker pool. 모델은 Model Access의 별도 scheduler.'],17,'#000000')
+        s.text(x,1242,1160,['공통: 동시 실행 수가 제한된 비동기 executor. Blocking 작업은 제한된 worker pool. 모델은 Model Access의 API admission.'],17,'#000000')
         support=('사건 대기열·비동기 작업 실행·완료 결과 반환은 실행 기반이 지원한다. 짧은 상태 전이·중요 알림 기아 방지. 용량·우선순위 수치는 미정.' if side=='A' else
                  '이벤트 채널·구독·단계별 수용량 조절·취소 전달은 실행 라이브러리가 지원한다. credit/cancel은 Task 취소가 아니다.')
         s.text(x,1272,1160,[support],17,'#000000')
-        s.text(x,1302,1160,['capture·ASR·즉시 stop은 이해 완료와 무관 / hold는 Task 취소가 아님 / 공유 Omni 가중치 한 벌, 역할별 KV'],17,'#000000')
+        s.text(x,1302,1160,['capture·ASR·즉시 stop은 이해 완료와 무관 / hold는 Task 취소가 아님 / 로컬 VIA / 클라우드 음성·의미 API'],17,'#000000')
     legend(s)
     return s
 

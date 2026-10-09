@@ -114,3 +114,15 @@ P1은 보고되지 않았다. 아래는 중복 지적을 내용별로 모은 P2�
 - 저장소의 활성 용어/151개 Markdown의 local 링크/QA catalog, target·기존 package·Stage 4·mechanism·functional·여섯 비교·41/42/43/45 diagram checks와 새 44 check를 모두 통과했다. 새 44 check를 CI에 추가했다. 구체적 실행 결과는 최종 게시 응답과 GitHub CI에서 확인한다.
 
 다른 후보/참조 설계의 품질 결과를 가져오지 않았고 Architecture candidate를 실행하지 않았다. 후속 측정의 harness/freeze·수치·장비·승자 선정은 이번 요청의 범위가 아니다. 이번 게시 파일의 세부 범위는 해당 Git commit이 원본이다.
+
+## 7. 2026-10-10 공통 실행 계약과 집중 발표 그림 재구체화
+
+이번 사용자 위임에 따라 로컬 VIA·VAD와 클라우드 음성/의미 의존성으로 현재 비교 전제를 맞췄다. 과거 단일 on-device 참조 설명은 그 세대의 기록이며 현재 비교의 모델 배치 제약이 아니다. 현재 비교에서 음성 모델의 자율 직접 답변 경로는 제외하고, 확인 질문 admission과 실제 전달 원본은 유지했다.
+
+고정 EventEnvelope 네 종류와 continuation/Publication Window 예시를 [JSON](contracts/dp44-execution-examples.json)에 추가했다. A는 완료를 중앙에 반환해 다음 실행을 지시하고, B는 Stage별 입력/대기와 Join의 충족 조건으로 직접 활성화한다. 동일 의미 job의 모델 비용이 자동으로 달라진다고 주장하지 않는다. 42A 공동 확정과 42B 업무 gate/hold ACK를 각각 연결하며 네트워크 전송을 DB transaction 안에 넣지 않는다.
+
+집중 발표 그림은 본문 §3.6에 **추가**했다. 기존 전체 MAIN과 사건도는 유지하고, MAIN의 Request Interpreter가 Task Manager를 직접 읽는 연결도 명시했다. 큰 Component 경계는 흰색, 차이가 있는 내부 Module·상태는 살구색이며 공통 Legend로 구별한다.
+
+독립 agent 재검토에서 직접 Task 조회, 상태 Legend와 상태 높이, 채택 완료 표기, 과거 S2S/단일 모델 전제 및 Legend 필터의 footer 삭제를 보완했다. 최종 문서/그림 범위에 미해결 P1/P2는 보고되지 않았다. 이는 구현·모델 정확성·측정 결과 인증이 아니다. 전용 생성기, 고정 예시 검사, 집중 그림 생성물, PPTX flow와 diff 검사를 통과했다. 실제 Chrome 렌더의 텍스트 겹침/넘침은 0건이며 PNG와 native PPTX 렌더를 눈으로 검수했다.
+
+두 PPTX를 재import하여 이미지 없는 native 도형/텍스트로 확인했다. ZIP parts 비교에서 44의 slide XML과 notes XML만 바뀌고 다른 slide/notes/media parts는 byte 단위로 보존됐다. 발표 그림은 별도 source이며 전체 MAIN의 모든 공통 기능을 포함하지 않는다.

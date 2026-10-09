@@ -8,7 +8,7 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scope,subset] = process.argv.slice(2);
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
-if (scope && !['--comparison-only','--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-only, --dp41-with-background, --dp41-42-only, --dp44-only, --dp45-only, --intro-flow-only or --list-selected');
+if (scope && !['--comparison-only','--dp41-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Optional scope: --comparison-only, --dp41-only, --dp41-with-background, --dp41-42-only, --dp44-only, --dp45-only, --intro-flow-only or --list-selected');
 if (subset && !(['--dp45-only','--list-selected'].includes(scope) && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only (or --list-selected) --comparison-only');
 const repo=await fs.realpath(repoArg), build=await fs.realpath(buildArg);
 const skill=process.env.VIA_PRESENTATION_SKILL_DIR;
@@ -22,29 +22,46 @@ const font='Apple SD Gothic Neo';
 const extraction=String.raw`
 import sys,json,hashlib,re
 from pathlib import Path
-root=Path(sys.argv[1]);sys.path.insert(0,str(root/'scripts/architecture'))
+root=Path(sys.argv[1]);requested=sys.argv[2];subset=sys.argv[3];sys.path.insert(0,str(root/'scripts/architecture'))
 import generate_dp_background_slides as bg
 import generate_dp_comparison_slides as cmp
 scenes=[]
 # The introduction shares the existing background scene, not a new source.
 o=bg.overview();source='docs/architecture/12-decisions/decision-packages/diagrams/'+o.slug+'.svg'
 assert (root/source).read_text()==o.svg(),source+' is out of sync'
-scenes.append(dict(number='overview',kind='overview',slug=o.slug,title=o.caption,items=o.items,source=source,notes=o.notes,sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
+scenes.append(dict(number='overview',kind='overview',slug=o.slug,title=o.caption,items=o.items,selected=requested in ('','--intro-flow-only'),source=source,notes=o.notes,sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
 # Python 3.12's compensated sum changes last-bit annotation widths only.
 def normalized_svg(value):
     return re.sub(r'-?\d+\.\d+',lambda m:format(float(m[0]),'.8f').rstrip('0').rstrip('.'),value)
+def selected(n,kind):
+    if not requested:return True
+    if requested=='--comparison-only':return kind=='comparison'
+    if requested=='--intro-flow-only':return False
+    if requested=='--dp41-with-background':return n==41
+    if requested=='--dp41-42-only':return n in (41,42) and kind=='comparison'
+    if requested=='--dp45-only':return n==45 and (not subset or kind=='comparison')
+    if requested in ('--dp41-only','--dp42-only','--dp44-only'):return n==int(requested[4:6]) and kind=='comparison'
+    return True
 for n in range(41,46):
     for kind in ['background','comparison']:
-        s=getattr(bg,'slide'+str(n))() if kind=='background' else cmp.Comparison(n)
-        if kind=='comparison':
-            for side,x in enumerate([140,1010]):getattr(cmp,'graph'+str(n))(s,x,side)
+        active=selected(n,kind)
+        slug=f'dp{n}-{kind}'
         prefix='docs/architecture/12-decisions/decision-packages/diagrams' if kind=='background' else 'docs/presentations_files/dp-comparison'
-        source=prefix+'/'+s.slug+'.svg'
-        assert normalized_svg((root/source).read_text())==normalized_svg(s.svg()),source+' is out of sync'
-        scenes.append(dict(number=n,kind=kind,slug=s.slug,title=s.caption,items=s.items,source=source,transition=bg.TRANSITIONS.get(n),sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
+        source=prefix+'/'+slug+'.svg'
+        if active:
+            s=getattr(bg,'slide'+str(n))() if kind=='background' else cmp.Comparison(n)
+            if kind=='comparison':
+                for side,x in enumerate([140,1010]):getattr(cmp,'graph'+str(n))(s,x,side)
+            assert normalized_svg((root/source).read_text())==normalized_svg(s.svg()),source+' is out of sync'
+            items=s.items;title=s.caption
+        else:
+            # Only this temporary candidate page is empty. Package grafting
+            # preserves the original, unselected slide/notes/media byte-for-byte.
+            items=[dict(kind='rect',id='preserved-page-placeholder',x=0,y=0,w=1,h=1,fill='none',stroke='none')];title=f'04-{n}'
+        scenes.append(dict(number=n,kind=kind,slug=slug,title=title,items=items,selected=active,source=source,transition=bg.TRANSITIONS.get(n),sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
 print(json.dumps(scenes,ensure_ascii=False))
 `;
-const scenes=JSON.parse(execFileSync(python,['-c',extraction,repo],{encoding:'utf8',maxBuffer:8*1024*1024}));
+const scenes=JSON.parse(execFileSync(python,['-c',extraction,repo,scope??'',subset??''],{encoding:'utf8',maxBuffer:8*1024*1024}));
 await fs.writeFile(path.join(build,'source-scenes.json'),JSON.stringify(scenes,null,2));
 
 const stroke=(color,width=1.7,dashed=false)=>({fill:color==='none'?'none':color,width:color==='none'?0:width,style:dashed?'dashed':'solid'});
@@ -118,6 +135,7 @@ B Module 이름은 요청 구조화기다. 초기 출력 RequestFrame의 고정 
 revision/version은 자료나 상태의 변경 번호다. v2는 두 번째 버전이며 최신임을 보증하지 않는다. 그림은 이를 조회 시점과 자료 변경 확인으로 풀어 썼다. 자료가 바뀌면 옛 해석을 그대로 채택하지 않는 검사는 유지한다.
 도구 조회 자체는 모델 호출이 아니다. Context 의미 가공, 응답 구성, 음성/전사, 실패/재시도/폐기된 호출의 실제 사용량도 비용에 포함한다. 조건별 trade-off는 가설이며 품질 우열을 측정하지 않았다.`;
   if(scene.number===41 && scene.kind==='background') notesText+='\nTask1은 예산 보고서, Task2는 실적 보고서 업무다. 선택한 표와 이전 업무 두 후보가 있으므로 아까라는 표현만으로 정답을 미리 결정하지 않는다. 보고서 수정 결과를 메일 초안에 사용하고 메일은 보내지 않는 조건을 유지한다. 보고서 수정과 메일 작성은 외부 업무 수행 Agent가 맡는다.';
+  if(scene.number===44 && scene.kind==='comparison') notesText+='\n같은 Input1 표 설명,Task1 메일의 Question1,Input0의 늦은 Candidate0에서 A는 중앙 continuation/완료 회수/재지시, B는 입력/알림 Stage의 Window와 Candidate+AdoptedMeaning+InputSettled+admission+source+과거 전달 snapshot Join을 비교한다. Job ID와 input generation을 고정하며 현재 확인 질문은 InputSettled를 기다리지 않는 별도 admission이다. 로컬 VAD·VIA 상태 권위,클라우드 음성/의미 모델은 양안 공통. dispatch/join/credit는 코드이며 같은 모델 job에서 자동 비용 우위는 없다. 42A 공동 확정/42B 업무 gate 확정과hold ack를 각각 연결한다. schema/JSON 예시는 docs/architecture/12-decisions/decision-packages/contracts/dp44-execution-examples.json이며 미구현/미측정 설계 검토안이다.';
   if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
   if(scene.number===45) notesText+='\n공통 사례: C20/E20 VIA 직접 평가 기준 설명과 실제 전달 P20, C21/T21/D21@v2 제품 비교, C22/T22/D22@v1 견적. 현재 C23/R23의 제안서 작성 Task T23 연결은 현재 해석/채택의 결과다. VIA는 허용된 발췌와 참조를 연결하고, 평가 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조는 본문 전체 보관을 뜻하지 않으며 Agent 내부 reasoning/모든 tool 기록은 전제하지 않는다.\nA의 요약/index/cache/관계 cache/부분 갱신/병렬 조회와 기존 Agent 실행 맥락 재사용을 허용한다. B의 과거 관계는 검증/게시 범위만 읽고 원본 확인, 미게시/표현 미지원, 오류/갱신/삭제와 생산 비용을 유지한다. R23의 정답 관계를 미리 게시하지 않는다. 필요성과 사례 보완이며 최종 DP/A/B 선정 또는 새 사례의 품질 검증이 아니다. 기존 수치와 점수는 동일한 형식 예시다.';
   if(scene.number===45 && scene.kind==='comparison') {
@@ -150,7 +168,7 @@ with zipfile.ZipFile(sys.argv[1]) as z:
     for file,scene in zip(files,scenes):
         root=E.fromstring(z.read(file));texts=[n.text or '' for n in root.findall('.//a:t',ns)]
         required=[line for item in scene['items'] if item['kind']=='text' for line in item['lines']]
-        assert texts==required,(scene['slug'],'text order or content changed')
+        if scene.get('selected',True):assert texts==required,(scene['slug'],'text order or content changed')
         assert not root.findall('.//p:pic',ns),scene['slug']+' contains a flattened image'
         native=len(root.findall('.//p:sp',ns)); paths=len(root.findall('.//a:custGeom',ns))
         assert paths>0 and native>50,(scene['slug'],native,paths)
@@ -161,6 +179,7 @@ with zipfile.ZipFile(sys.argv[1]) as z:
 function selectedScenes(plan, requested=scope) {
   return plan.scenes.filter(s=>requested==='--intro-flow-only'?s.kind==='overview':
     requested==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):
+    requested==='--dp42-only'?s.number===42&&s.kind==='comparison':
     requested==='--dp44-only'?s.number===44&&s.kind==='comparison':
     requested==='--dp41-only'?s.number===41&&s.kind==='comparison':
     requested==='--dp41-with-background'?s.number===41:
@@ -171,7 +190,7 @@ const activePlans=plans.filter(p=>scope==='--intro-flow-only'?p===plans[0]:
   !scope||scope==='--dp41-with-background'||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'));
 if(scope==='--list-selected') {
   console.log(JSON.stringify(plans.map(plan=>({file:plan.destination,selections:Object.fromEntries(
-    ['--intro-flow-only','--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only'].map(option=>[option,selectedScenes(plan,option).map(s=>({slug:s.slug,position:plan.scenes.indexOf(s)+1}))]))})),null,2));
+    ['--intro-flow-only','--dp41-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only'].map(option=>[option,selectedScenes(plan,option).map(s=>({slug:s.slug,position:plan.scenes.indexOf(s)+1}))]))})),null,2));
   process.exit(0);
 }
 const stats=[];
@@ -181,7 +200,7 @@ for(const plan of activePlans) {
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(['--dp41-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {
+  if(['--dp41-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {
     const selected=scope==='--intro-flow-only'?[]:selectedScenes(plan).map(s=>s.slug);
     execFileSync(python,[path.join(repo,'scripts/presentations/dp_pptx_package.py'),draft,
       path.join(repo,plan.destination),JSON.stringify(selected),...(scope==='--intro-flow-only'?['--intro']:[])]);

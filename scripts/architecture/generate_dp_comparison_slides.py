@@ -63,17 +63,16 @@ DATA = {
     cons=[['통합 의미 생산 계약의 변경 전파, 평균 4.0개 (변경 용이성 ↓)'],
           ['부분 의미 불일치와 오류 전파로 정확 처리율 91% (기능 정확성 ↓)',
            '제안 교환과 재판단으로 평균 VIA 처리시간 7.2 s (요청 완료 신속성 ↓)']]),
-  44: dict(title='반응성을 위한 VIA 지속 입력과 Response 전달 설계',
-    options=('A 중앙 조정 방식', 'B 이벤트 흐름을 연결하는 방식'),
-    case='보고서 설명 도중 새 발화와 메일 질문 도착 / 표 설명 후 메일 질문 전달',
-    condition='비교 예시 조건: 여러 사건의 집중 도착 / 양안의 입력 수신과 로컬 음성 중단은 동일',
-    rows=[('V-04','0.85 s','0.62 s',2,3),('V-08','4.0개','2.5개',2,3),('V-06','13.3 GB','13.8 GB',3,2)],
-    pros=[['집중된 실행 상태로 전체 메모리 13.3 GB (메모리 효율성 ↑)'],
-          ['사건의 직접 활성화로 평균 반응시간 0.62 s (응답 신속성 ↑)',
-           '동일 schema 안의 단계 조합 변경, 평균 2.5개 (변경 용이성 ↑)']],
-    cons=[['반환 회수와 재배정으로 평균 반응시간 0.85 s (응답 신속성 ↓)',
-           '교차 사건의 중앙 전이 변경, 평균 4.0개 (변경 용이성 ↓)'],
-          ['다수 window와 buffer로 전체 메모리 13.8 GB (메모리 효율성 ↓)']]),
+  44: dict(title='VIA 지속 입력과 업무 알림의 후속 실행 구조',
+    options=('A 중앙에서 완료 회수와 다음 실행 지시', 'B 연결된 단계가 입력과 조건으로 실행'),
+    case='“잠깐, 표부터 설명해줘.” + 메일 수신자 질문 도착 + 이전 응답 준비가 늦게 완료',
+    status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
+    condition='미선정 / 미측정. A도 비동기 / 우선순위 / 동시 실행. B의 사건 채널만으로 정확성 / 속도 우위를 보장하지 않는다.',
+    tradeoffs=[
+      ('정확성','의미 판단은 41과 동일 / 중앙에서 세대 / 대기 참조 연결','같은 판단과 검사 / 단계 간 참조 / Join 오류 관리 필요'),
+      ('응답성','완료 회수 / 다음 지시 경로 / 중앙 전이 비용','조건 충족 소비자 직접 활성화 / 채널 / Join 비용'),
+      ('모델 사용 비용','같은 의미 / 응답 job이면 동일 / 폐기 / 재시도 포함','같은 job이면 동일 / 중복 생산 / 폐기 호출 포함'),
+      ('변경 / 메모리','조정 규칙 중앙 변경 / 하나의 진행 상태','단계 조합 국소 변경 조건 / 여러 Window / 채널 상태')]),
   45: dict(title='VIA 과거 근거의 요청별 구성과 공통 생산/조회',
     options=('A 원본 서비스 조합형', 'B 공통 파생 기억 저장소형'),
     case='R23 “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
@@ -100,6 +99,9 @@ class Comparison(Slide):
         self.line([(40,121),(1880,121)],color=LINE,arrow=False)
         if n==45:
             self.memory_page()
+            return
+        if n==44:
+            self.execution_page()
             return
         if n==41:
             self.request_page()
@@ -173,6 +175,26 @@ class Comparison(Slide):
         self.text(40,1032,1840,[d['condition']],17,INK)
         self.text(40,1060,1840,['A도 정해진 형식으로 출력 가능 / B도 추가 모델 호출 가능 / 코드로 연결했다고 의미가 항상 옳은 것은 아님 / 품질/비용은 측정 전 가설'],14,MUTED)
 
+    def execution_page(self):
+        d=DATA[44]
+        self.text(40,140,1840,[d['case']],22,INK)
+        self.text(40,171,1840,['공통: 계속 입력 수신 / 로컬 VAD와 즉시 음성 중단 / 클라우드 음성 / 의미 모델 / 같은 Request / Task / 실제 전달 원본'],17,INK)
+        self.rect(40,195,1840,48,GREEN,LINE)
+        for side,x in enumerate([140,1010]):
+            self.text(x+435,206,838,[d['options'][side]],23,INK,True,'center')
+        self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
+        self.line([(40,795),(1880,795)],color=LINE,arrow=False)
+        self.text(42,811,1840,['공통 후속 처리: source / 권한 / 입력 세대 검사 → Publication Control → Interaction Manager 실제 표시/재생 → receipt'],17,INK)
+        self.text(42,840,1840,['확인 질문은 별도 admission으로 현재 입력 해소를 기다리지 않고 제시 / 발화 시작은 업무 취소 완료가 아님'],17,INK)
+        for j,(quality,left,right) in enumerate(d['tradeoffs']):
+            yy=883+j*34
+            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
+            self.text(42,yy,245,[quality],18,INK,True)
+            self.text(300,yy,720,[left],18,INK)
+            self.text(1050,yy,820,[right],18,INK)
+        self.text(40,1032,1840,[d['condition']],16,INK)
+        self.text(40,1060,1840,['Module 구조와 후속 실행 자료를 비교 / 준비 완료 / 내부 접수 / 외부 접수 / 실제 전달을 구별 / 수치 우열은 측정 후 판단'],14,MUTED)
+
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)
         lines=name.split('\n')
@@ -245,9 +267,10 @@ class Comparison(Slide):
 from dp_comparison_structures import graph41, graph42, graph43, graph44, graph45
 
 
-def build(dp41_only=False):
+def build(dp41_only=False, only=None):
+    selected=41 if dp41_only else only
     outputs={};deck=ET.Element('mxfile',host='app.diagrams.net',type='device')
-    for n in ([41] if dp41_only else DATA):
+    for n in ([selected] if selected else DATA):
         s=Comparison(n)
         for side,x in enumerate([140,1010]): globals()[f'graph{n}'](s,x,side)
         outputs[OUT/f'{s.slug}.svg']=s.svg()
@@ -255,21 +278,20 @@ def build(dp41_only=False):
         deck.append(copy.deepcopy(s.diagram()))
     deck_path=OUT/'VIA-DP-comparison-41-45.drawio'
     data_path=OUT/'comparison-data.json'
-    if dp41_only:
+    if selected:
         old=deck_path.read_text()
         page=ET.tostring(deck[0],encoding='unicode')
-        outputs[deck_path]=re.sub(r'<diagram id="dp41-comparison".*?</diagram>',lambda _:page,old,flags=re.S)
-        data=json.loads(data_path.read_text());data['slides']['41']=DATA[41]
+        outputs[deck_path]=re.sub(rf'<diagram id="dp{selected}-comparison".*?</diagram>',lambda _:page,old,flags=re.S)
+        data=json.loads(data_path.read_text());data['slides'][str(selected)]=DATA[selected]
     else:
         outputs[deck_path]=ET.tostring(deck,encoding='unicode')+'\n'
         data=dict(status='FORMAT_HYPOTHESES_NOT_MEASURED',qa=QA,slides=DATA)
     outputs[data_path]=json.dumps(data,ensure_ascii=False,indent=2)+'\n'
     blocks=''.join(f'<article><h2>04-{n} 설계'+f' 비교</h2><p><a href="dp{n}-comparison.drawio">draw.io</a> / <a href="dp{n}-comparison.svg">SVG</a> / <a href="dp{n}-comparison.png">PNG</a></p><img src="dp{n}-comparison.svg" alt="04-{n} 설계 비교"></article>' for n in DATA)
     outputs[OUT/'index.html']='<!doctype html><html lang="ko"><meta charset="utf-8"><title>VIA DP 설계 비교</title><style>body{margin:30px auto;max-width:1440px;font-family:Arial,sans-serif;background:#f3f5f7;color:#18232e}article{margin:30px 0}img{width:100%;background:white}a{color:#087e8b}</style><h1>VIA DP 설계 비교 41~45</h1><p>41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교. 실측 결과 또는 대안 선정 아님.</p><p>45: 같은 평가 기준의 실제 전달과 제품 비교/견적 결과 참조에서 요청별 owner 읽기 조합과 공통 관계 생산/검증/게시/조회를 비교한다. 첫 요청, 반복, 정정 직후, 표현 밖 관계의 조건별 손익과 공식 Reference를 함께 제시한다. 새 사례의 실측이나 선정 결과가 아니다.</p><p><a href="VIA-DP-comparison-41-45.drawio">5페이지 편집 원본</a></p>'+blocks+'</html>\n'
-    if dp41_only:
-        outputs[OUT/'index.html']=(OUT/'index.html').read_text().replace('41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교.','42~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 41과 45는 조건별 정성 비교.')
-    else:
-        outputs[OUT/'index.html']=outputs[OUT/'index.html'].replace('41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교.','42~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 41과 45는 조건별 정성 비교.')
+    numeric=', '.join(str(n) for n,d in DATA.items() if 'rows' in d)
+    qualitative=', '.join(str(n) for n,d in DATA.items() if 'tradeoffs' in d)
+    outputs[OUT/'index.html']=outputs[OUT/'index.html'].replace('41~44의 수치와 동그라미 점수는 형식 검토용 예상 예시. 45는 조건별 정성 비교.',f'{numeric}의 수치와 점수는 형식 검토용 예상 예시. {qualitative}는 조건별 정성 비교.')
     return outputs
 
 
@@ -284,8 +306,8 @@ def validate(outputs):
         if not targets[qa].startswith(QA[qa][1]):
             raise SystemExit(f'Presentation time metric changed: {qa}')
     for n,data in DATA.items():
-        if n in (41,45):
-            assert len(data['tradeoffs'])==(4 if n==41 else 5) and 'rows' not in data
+        if n in (41,44,45):
+            assert len(data['tradeoffs'])==(5 if n==45 else 4) and 'rows' not in data
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:
@@ -320,8 +342,8 @@ def validate(outputs):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--dp41-only',action='store_true');args=parser.parse_args()
-    outputs=build(args.dp41_only);validate(outputs)
+    parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');parser.add_argument('--dp41-only',action='store_true');parser.add_argument('--only',type=int,choices=[41,42,43,44,45]);args=parser.parse_args()
+    outputs=build(args.dp41_only,args.only);validate(outputs)
     for p,s in outputs.items():
         if args.check:
             if not p.exists() or p.read_text()!=s: raise SystemExit(f'Mismatch: {p}')
