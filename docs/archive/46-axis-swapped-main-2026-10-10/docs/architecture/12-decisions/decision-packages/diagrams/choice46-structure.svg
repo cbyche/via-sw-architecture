@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title">
+<title id="title">46 | 조회가 원본 결합을 실행 vs 생산된 관계를 조회</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#333" stroke-width="1.2"/></marker></defs>
+<rect width="2560" height="1440" fill="white"/>
+<g font-family="Apple SD Gothic Neo, Arial, sans-serif" fill="#111">
+<rect x="40" y="235" width="360" height="100" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="55" y="268.0" data-width="330" font-size="25" font-weight="700" text-anchor="start">Request Interpreter</text>
+<rect x="450" y="235" width="250" height="100" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="465" y="268.0" data-width="220" font-size="25" font-weight="700" text-anchor="start">Response Manager</text>
+<rect x="725" y="235" width="250" height="100" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="740" y="268.0" data-width="220" font-size="25" font-weight="700" text-anchor="start">Task Manager</text>
+<rect x="1000" y="235" width="230" height="100" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1015" y="268.0" data-width="200" font-size="25" font-weight="700" text-anchor="start">Request</text>
+<text x="1015" y="300.5" data-width="200" font-size="25" font-weight="700" text-anchor="start">Controller</text>
+<path d="M465,287H667L685,305V322H465Z M667,287V305H685" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="575.0" y="311.85" data-width="196" font-size="21" font-weight="400" text-anchor="middle">E20 / P20</text>
+<path d="M740,287H942L960,305V322H740Z M942,287V305H960" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="850.0" y="311.85" data-width="196" font-size="21" font-weight="400" text-anchor="middle">D21@v2 / D22@v1</text>
+<rect x="40" y="380" width="1190" height="435" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="55" y="413.0" data-width="1160" font-size="25" font-weight="700" text-anchor="start">Context Manager</text>
+<path d="M570,435H1182L1200,453V530H570Z M1182,435V453H1200" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="885.0" y="462.55" data-width="606" font-size="21" font-weight="400" text-anchor="middle">EvidenceQuery Q46 / u46@r1</text>
+<text x="885.0" y="489.85" data-width="606" font-size="21" font-weight="400" text-anchor="middle">W46 + acoustic a,b + C20/T21/T22 후보</text>
+<text x="885.0" y="517.15" data-width="606" font-size="21" font-weight="400" text-anchor="middle">목적과 권한/예산 / 현재 Task 정답 없음</text>
+<rect x="90" y="460" width="365" height="65" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="272.5" y="499.85" data-width="341" font-size="21" font-weight="400" text-anchor="middle">Context Composer</text>
+<path d="M90,560H692L710,578V650H90Z M692,560V578H710" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="400.0" y="585.05" data-width="596" font-size="21" font-weight="400" text-anchor="middle">TemporalQuery Q1 / W46 / r1 / a,b</text>
+<text x="400.0" y="612.3499999999999" data-width="596" font-size="21" font-weight="400" text-anchor="middle">원본 refs와 필요한 구간 → 실제 join 요청</text>
+<text x="400.0" y="639.65" data-width="596" font-size="21" font-weight="400" text-anchor="middle">공통 관계가 이미 만들어졌다는 가정 없음</text>
+<path d="M90,699C90,681 455,681 455,699V746C455,764 90,764 90,746Z M90,699C90,717 455,717 455,699" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="272.5" y="737.85" data-width="341" font-size="21" font-weight="400" text-anchor="middle">Source View Cache</text>
+<path d="M795,634C795,616 1180,616 1180,634V696C1180,714 795,714 795,696Z M795,634C795,652 1180,652 1180,634" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="987.5" y="680.35" data-width="361" font-size="21" font-weight="400" text-anchor="middle">Request Evidence Set</text>
+<path d="M795,730H1162L1180,748V795H795Z M1162,730V748H1180" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="987.5" y="756.2" data-width="361" font-size="21" font-weight="400" text-anchor="middle">Bundle: Q1/r1 + E20/P20 refs</text>
+<text x="987.5" y="783.5" data-width="361" font-size="21" font-weight="400" text-anchor="middle">D21@v2, D22@v1 + vector/gap</text>
+<rect x="40" y="875" width="1190" height="375" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="55" y="908.0" data-width="1160" font-size="25" font-weight="700" text-anchor="start">Interaction Manager</text>
+<rect x="75" y="930" width="1130" height="305" rx="9" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="90" y="959.0" data-width="1100" font-size="21" font-weight="400" text-anchor="start">Timeline &amp; Buffer</text>
+<rect x="110" y="980" width="405" height="65" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="312.5" y="1019.85" data-width="381" font-size="21" font-weight="400" text-anchor="middle">Temporal Evidence Resolver</text>
+<path d="M720,979C720,961 1170,961 1170,979V1026C1170,1044 720,1044 720,1026Z M720,979C720,997 1170,997 1170,979" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="945.0" y="1017.85" data-width="426" font-size="21" font-weight="400" text-anchor="middle">Input Observation Window</text>
+<path d="M720,1040H1152L1170,1058V1085H720Z M1152,1040V1058H1170" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="945.0" y="1069.85" data-width="426" font-size="21" font-weight="400" text-anchor="middle">S1/P1 / S2/P2 / raw refs</text>
+<path d="M720,1109C720,1091 1170,1091 1170,1109V1156C1170,1174 720,1174 720,1156Z M720,1109C720,1127 1170,1127 1170,1109" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="945.0" y="1147.85" data-width="426" font-size="21" font-weight="400" text-anchor="middle">Transcript Revision State</text>
+<path d="M110,1094C110,1076 515,1076 515,1094V1141C515,1159 110,1159 110,1141Z M110,1094C110,1112 515,1112 515,1094" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="312.5" y="1132.85" data-width="381" font-size="21" font-weight="400" text-anchor="middle">Temporal Query State</text>
+<path d="M570,1184C570,1166 1170,1166 1170,1184V1221C1170,1239 570,1239 570,1221Z M570,1184C570,1202 1170,1202 1170,1184" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="870.0" y="1217.85" data-width="576" font-size="21" font-weight="400" text-anchor="middle">Temporal Query Cache</text>
+<path d="M110,1160H497L515,1178V1225H110Z M497,1160V1178H515" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="312.5" y="1186.2" data-width="381" font-size="21" font-weight="400" text-anchor="middle">Q1 Result(r1): a ↔ S1/P1</text>
+<text x="312.5" y="1213.5" data-width="381" font-size="21" font-weight="400" text-anchor="middle">b ↔ S2/P2 / 후보 / vector / gap</text>
+<rect x="1340" y="175" width="360" height="55" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1355" y="208.0" data-width="330" font-size="25" font-weight="700" text-anchor="start">Request Controller</text>
+<rect x="1750" y="175" width="360" height="55" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1765" y="208.0" data-width="330" font-size="25" font-weight="700" text-anchor="start">Response Manager</text>
+<rect x="2150" y="175" width="380" height="55" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2165" y="208.0" data-width="350" font-size="25" font-weight="700" text-anchor="start">Task Manager</text>
+<rect x="1340" y="260" width="565" height="915" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1355" y="293.0" data-width="535" font-size="25" font-weight="700" text-anchor="start">Interaction Manager</text>
+<rect x="1365" y="315" width="515" height="835" rx="9" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1380" y="344.0" data-width="485" font-size="21" font-weight="400" text-anchor="start">Timeline &amp; Buffer</text>
+<path d="M1390,384C1390,366 1855,366 1855,384V431C1855,449 1390,449 1390,431Z M1390,384C1390,402 1855,402 1855,384" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1622.5" y="422.85" data-width="441" font-size="21" font-weight="400" text-anchor="middle">Input Observation Window</text>
+<path d="M1390,445H1837L1855,463V475H1390Z M1837,445V463H1855" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1622.5" y="467.35" data-width="441" font-size="21" font-weight="400" text-anchor="middle">raw refs: S1/P1, S2/P2</text>
+<path d="M1390,489C1390,471 1855,471 1855,489V536C1855,554 1390,554 1390,536Z M1390,489C1390,507 1855,507 1855,489" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1622.5" y="527.85" data-width="441" font-size="21" font-weight="400" text-anchor="middle">Transcript Revision State</text>
+<rect x="1390" y="600" width="465" height="65" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="1622.5" y="639.85" data-width="441" font-size="21" font-weight="400" text-anchor="middle">Temporal Evidence Publisher</text>
+<path d="M1390,749C1390,731 1855,731 1855,749V796C1855,814 1390,814 1390,796Z M1390,749C1390,767 1855,767 1855,749" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="1622.5" y="787.85" data-width="441" font-size="21" font-weight="400" text-anchor="middle">Temporal Evidence Repository</text>
+<path d="M1390,825H1837L1855,843V915H1390Z M1837,825V843H1855" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1622.5" y="850.05" data-width="441" font-size="21" font-weight="400" text-anchor="middle">TEv1(r1): a ↔ S1/P1, b ↔ S2/P2</text>
+<text x="1622.5" y="877.3499999999999" data-width="441" font-size="21" font-weight="400" text-anchor="middle">relation + coverage + source vector</text>
+<text x="1622.5" y="904.65" data-width="441" font-size="21" font-weight="400" text-anchor="middle">현재 지칭/Task 정답은 아님</text>
+<rect x="1390" y="985" width="465" height="70" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="1622.5" y="1027.35" data-width="441" font-size="21" font-weight="400" text-anchor="middle">Temporal Evidence Reader</text>
+<rect x="1945" y="260" width="585" height="915" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1960" y="293.0" data-width="555" font-size="25" font-weight="700" text-anchor="start">Context Manager</text>
+<path d="M1985,384C1985,366 2490,366 2490,384V431C2490,449 1985,449 1985,431Z M1985,384C1985,402 2490,402 2490,384" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2237.5" y="422.85" data-width="481" font-size="21" font-weight="400" text-anchor="middle">Source View Cache</text>
+<path d="M1985,480H2472L2490,498V565H1985Z M2472,480V498H2490" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2237.5" y="502.55" data-width="481" font-size="21" font-weight="400" text-anchor="middle">E20/P20 실제 전달 범위</text>
+<text x="2237.5" y="529.85" data-width="481" font-size="21" font-weight="400" text-anchor="middle">T21/D21@v2, T22/D22@v1</text>
+<text x="2237.5" y="557.15" data-width="481" font-size="21" font-weight="400" text-anchor="middle">확정 source refs + revision</text>
+<rect x="1985" y="600" width="505" height="65" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="2237.5" y="639.85" data-width="481" font-size="21" font-weight="400" text-anchor="middle">Memory Publisher</text>
+<path d="M1985,749C1985,731 2490,731 2490,749V796C2490,814 1985,814 1985,796Z M1985,749C1985,767 2490,767 2490,749" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="2237.5" y="787.85" data-width="481" font-size="21" font-weight="400" text-anchor="middle">Episodic Memory Repository</text>
+<path d="M1985,825H2472L2490,843V915H1985Z M2472,825V843H2490" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2237.5" y="850.05" data-width="481" font-size="21" font-weight="400" text-anchor="middle">HMv7: P20 → E20 actual-range</text>
+<text x="2237.5" y="877.3499999999999" data-width="481" font-size="21" font-weight="400" text-anchor="middle">T21 → D21@v2 / T22 → D22@v1</text>
+<text x="2237.5" y="904.65" data-width="481" font-size="21" font-weight="400" text-anchor="middle">관계 + Historical Coverage + vector</text>
+<rect x="1975" y="985" width="525" height="70" rx="9" fill="#FCE4D6" stroke="#9B502B" stroke-width="2.4"/>
+<text x="2237.5" y="1027.35" data-width="501" font-size="21" font-weight="400" text-anchor="middle">Evidence Reader</text>
+<path d="M1975,1075H2197L2215,1093V1160H1975Z M2197,1075V1093H2215" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2095.0" y="1097.55" data-width="216" font-size="21" font-weight="400" text-anchor="middle">Q46 / r1</text>
+<text x="2095.0" y="1124.85" data-width="216" font-size="21" font-weight="400" text-anchor="middle">W46 + a,b</text>
+<text x="2095.0" y="1152.1499999999999" data-width="216" font-size="21" font-weight="400" text-anchor="middle">C20/T21/T22</text>
+<path d="M2240,1075H2482L2500,1093V1160H2240Z M2482,1075V1093H2500" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="2370.0" y="1097.55" data-width="236" font-size="21" font-weight="400" text-anchor="middle">Bundle: TEv1</text>
+<text x="2370.0" y="1124.85" data-width="236" font-size="21" font-weight="400" text-anchor="middle">HMv7 + refs</text>
+<text x="2370.0" y="1152.1499999999999" data-width="236" font-size="21" font-weight="400" text-anchor="middle">vector / gap</text>
+<rect x="1340" y="1225" width="565" height="80" rx="0" fill="#FFFFFF" stroke="#222222" stroke-width="1.6"/>
+<text x="1355" y="1258.0" data-width="535" font-size="25" font-weight="700" text-anchor="start">Request Interpreter</text>
+<polyline points="225,335 225,355 1220,355 1220,475 1200,475" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="570,490 455,490" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="225,525 225,560" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="700,650 700,960 370,960 370,980" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="515,1003 720,1003" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="515,1030 560,1030 560,1130 720,1130" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="420,1045 420,1085" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="420,1150 420,1160" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="570,1200 540,1200 540,1020 515,1020" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)" stroke-dasharray="7 5"/>
+<polyline points="110,1190 60,1190 60,495 90,495" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="380,460 380,420 575,420 575,335" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="410,460 410,430 850,430 850,335" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="445,460 445,400 1115,400 1115,335" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="90,720 75,720 75,515 90,515" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)" stroke-dasharray="7 5"/>
+<polyline points="455,510 505,510 505,545 750,545 750,680 795,680" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1005,705 1005,730" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1180,760 1205,760 1205,340 390,340 390,335" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="400,250 420,250 420,225 1115,225 1115,235" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1855,410 1870,410 1870,585 1520,585 1520,600" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1725,545 1725,600" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1820,665 1820,740" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1640,805 1640,825" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1930,230 1930,405 1985,405" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2420,230 2520,230 2520,405 2490,405" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1530,230 1530,245 2540,245 2540,425 2490,425" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2250,440 2250,480" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2250,565 2460,565 2460,600" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2460,665 2460,740" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2250,805 2250,825" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1820,915 1820,985" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2460,915 2460,985" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1975,1018 1855,1018" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<polyline points="1855,1035 1870,1035 1870,635 1855,635" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<polyline points="2500,1040 2510,1040 2510,635 2490,635" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<polyline points="1905,1265 1930,1265 1930,1115 1975,1115" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2095,1075 2095,1055" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2385,1055 2385,1075" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="2500,1115 2520,1115 2520,1300 1905,1300" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<polyline points="1340,1265 1325,1265 1325,235 1520,235 1520,230" fill="none" stroke="#333" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="40" y="56.0" data-width="2480" font-size="36" font-weight="700" text-anchor="start">46 | 조회가 원본 결합을 실행 vs 생산된 관계를 조회</text>
+<text x="40" y="99.0" data-width="2480" font-size="24" font-weight="400" text-anchor="start">같은 W46/r1, a와 b, S1/P1→S2/P2, E20/P20와 D21/D22 | 화살표는 발생 입력, 읽기, 구성, 쓰기와 반환을 구별</text>
+<text x="20" y="148.0" data-width="1210" font-size="28" font-weight="700" text-anchor="start">A  현재 요청에서 원본을 읽고 요청별 결과를 구성</text>
+<text x="40" y="197.0" data-width="1190" font-size="22" font-weight="400" text-anchor="start">입력 refs가 전달됨. 현재 의미/Task는 미확정. 유효 cache와 prefetch도 허용.</text>
+<text x="90" y="449.0" data-width="365" font-size="19" font-weight="400" text-anchor="start">1 Q46 요청 범위 결정</text>
+<text x="730" y="852.0" data-width="475" font-size="20" font-weight="400" text-anchor="start">2 Q1이 원본 결합을 요청</text>
+<text x="530" y="983.0" data-width="185" font-size="18" font-weight="400" text-anchor="start">3 원본 구간 read</text>
+<text x="570" y="1108.0" data-width="140" font-size="18" font-weight="400" text-anchor="start">r1/span read</text>
+<text x="115" y="1072.0" data-width="265" font-size="18" font-weight="400" text-anchor="start">4 이번 query의 후보 구성</text>
+<text x="470" y="729.0" data-width="260" font-size="19" font-weight="400" text-anchor="start">5 과거 owner read</text>
+<text x="470" y="753.7" data-width="260" font-size="19" font-weight="400" text-anchor="start">필요 시 의미 가공</text>
+<text x="95" y="786.0" data-width="620" font-size="18" font-weight="400" text-anchor="start">유효 cache로 같은 과거 owner read를 생략할 수 있음</text>
+<text x="795" y="605.0" data-width="385" font-size="18" font-weight="400" text-anchor="start">6 Q1 결과와 과거 refs를 조합</text>
+<text x="40" y="1292.0" data-width="1190" font-size="22" font-weight="400" text-anchor="start">준비 조건: 필요한 원본 read/join 또는 유효 cache + 요청별 Set 완료</text>
+<text x="40" y="1320.6" data-width="1190" font-size="22" font-weight="400" text-anchor="start">정정 r2: 영향 query/set/cache 차단 → 필요한 원본부터 다시 구성</text>
+<text x="40" y="1380.0" data-width="1190" font-size="18" font-weight="400" text-anchor="start">7 현재 의미/Task 제안과 Request Controller의 채택은 공통. 시간 후보 ≠ 지칭 정답.</text>
+<text x="1320" y="148.0" data-width="1210" font-size="28" font-weight="700" text-anchor="start">B  owner별 관계 생산 경로와 관계 소비 경로</text>
+<text x="1395" y="578.0" data-width="310" font-size="20" font-weight="400" text-anchor="start">1 원본/전사 revision 변화</text>
+<text x="1395" y="702.0" data-width="470" font-size="20" font-weight="400" text-anchor="start">2 지원 시간 관계 구성 → 조건부 게시</text>
+<text x="1985" y="595.0" data-width="510" font-size="20" font-weight="400" text-anchor="start">3 확정 기록 변화 → read/필요한 의미 추출</text>
+<text x="1985" y="705.0" data-width="510" font-size="20" font-weight="400" text-anchor="start">4 과거 관계 구성 → 조건부 게시</text>
+<text x="1400" y="950.0" data-width="455" font-size="20" font-weight="400" text-anchor="start">5 TEv1 유효성/coverage 확인 후 read</text>
+<text x="1985" y="950.0" data-width="510" font-size="20" font-weight="400" text-anchor="start">5 HMv7 유효성/coverage 확인 후 read</text>
+<text x="1400" y="975.0" data-width="455" font-size="18" font-weight="400" text-anchor="start">미게시면 2 생산/게시 후 재조회</text>
+<text x="1985" y="975.0" data-width="510" font-size="18" font-weight="400" text-anchor="start">미게시면 4 생산/게시 후 재조회</text>
+<text x="1975" y="1210.0" data-width="540" font-size="20" font-weight="400" text-anchor="start">6 게시된 두 자료를 선택해 Bundle 반환</text>
+<text x="1975" y="1236.0" data-width="540" font-size="20" font-weight="400" text-anchor="start">Reader는 raw 시간/과거 관계를 재구성하지 않음</text>
+<text x="1340" y="1350.0" data-width="1190" font-size="20" font-weight="400" text-anchor="start">미게시면 생산 요청 → 게시 후 재조회. NOT_COVERED와 UNSUPPORTED 구별.</text>
+<text x="1340" y="1380.0" data-width="1190" font-size="18" font-weight="400" text-anchor="start">7 현재 의미/Task 제안과 Request Controller의 채택은 공통. 시간 후보 ≠ 지칭 정답.</text>
+<text x="40" y="1407.0" data-width="2470" font-size="17" font-weight="400" text-anchor="start">범례: 직각 Component / 둥근 Module / 원통 owner 상태 / 문서형 실제 교환 자료 / 살구색 차이 / 점선 유효 cache 또는 미게시의 조건 경로</text>
+<text x="40" y="1429.1" data-width="2470" font-size="17" font-weight="400" text-anchor="start">공통: capture/시각 정규화. 시간 관계 구성은 코드 / 과거 의미 가공은 조건부 C-CONTEXT / 현재 의미는 C-INTERPRET → Model Access의 cloud 모델.</text>
+</g></svg>

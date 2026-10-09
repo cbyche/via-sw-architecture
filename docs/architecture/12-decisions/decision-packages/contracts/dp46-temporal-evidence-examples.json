@@ -1,0 +1,919 @@
+{
+  "contract_status": "DESIGN_REVIEW_ILLUSTRATION_NOT_IMPLEMENTED_NOT_MEASURED_NOT_FROZEN",
+  "schema_version": 1,
+  "illustration": {
+    "synthetic": true,
+    "units": "local monotonic milliseconds; half-open sample/time/codepoint ranges",
+    "timing_capability": "HYPOTHETICAL_PROVIDER_ACOUSTIC_SPANS",
+    "provider_guarantee": false,
+    "notes": [
+      "All times, bounds, clock errors and revisions are invented to explain the design; they are not measurements or retention settings.",
+      "A real provider may supply no word/span timing. VAD onset/end, transcript receipt time and text/token position cannot create acoustic word timing.",
+      "Capture intervals describe captured observations. A screenshot is not asserted to remain unchanged until the next screenshot.",
+      "Overlap/path candidates are time evidence, not intended tables, final referents, Task associations or permission to execute.",
+      "Only Interaction Manager temporal evidence is illustrated. Context Manager historical views are separate reads, not part of this owner-local snapshot."
+    ]
+  },
+  "input": {
+    "input_ref": "u46",
+    "revision": 1,
+    "window_ref": "W46",
+    "text": "이 표와 저 표를 아까 네가 설명한 평가 기준으로 비교해서 제안서 초안을 만들어줘. 메일은 보내지 마.",
+    "local_vad": {
+      "onset_ms": 1000,
+      "end_ms": 9000,
+      "word_timing_produced": false
+    },
+    "transcript_received_ms": 9400,
+    "transcript_final": true,
+    "provider_item_ref": "ProviderItem46",
+    "span_timing_source": "illustrative provider acoustic spans mapped back to original microphone samples"
+  },
+  "clock_mapping": {
+    "ref": "ClockMap1",
+    "revision": 1,
+    "local_clock_domain": "pc-monotonic",
+    "local_epoch": "PCBoot1",
+    "audio_device_epoch": "MicSession1",
+    "mapping_epoch": "AudioMap1",
+    "original_sample_rate_hz": 48000,
+    "original_sample_origin": 0,
+    "local_time_origin_ms": 1000,
+    "sample_mapping_error_ms": 4,
+    "provider_sample_rate_hz": 24000,
+    "original_to_provider_sample_ratio": 2,
+    "mapping_continuity": "KNOWN_WITHIN_THIS_EPOCH_ONLY"
+  },
+  "window": {
+    "ref": "W46",
+    "revision": 1,
+    "generation": 1,
+    "owner": "Interaction Manager",
+    "local_epoch": "PCBoot1",
+    "interval_ms": [
+      1000,
+      9000
+    ],
+    "original_sample_range": [
+      0,
+      384000
+    ],
+    "raw_expires_ms": 20000,
+    "source_watermark": "IMSeq8",
+    "gaps": [],
+    "raw_locator": "fixture://W46/audio-original",
+    "policy_epoch": 3,
+    "pin_extends_raw_expiry": false
+  },
+  "acoustic_spans": [
+    {
+      "ref": "a",
+      "input_ref": "u46",
+      "input_revision": 1,
+      "text_span": [
+        0,
+        4
+      ],
+      "text": "이 표와",
+      "original_sample_range": [
+        48000,
+        86400
+      ],
+      "provider_sample_range": [
+        24000,
+        43200
+      ],
+      "interval_ms": [
+        2000,
+        2800
+      ],
+      "clock_mapping_ref": "ClockMap1",
+      "mapping_epoch": "AudioMap1",
+      "local_epoch": "PCBoot1",
+      "error_ms": 4
+    },
+    {
+      "ref": "b",
+      "input_ref": "u46",
+      "input_revision": 1,
+      "text_span": [
+        5,
+        9
+      ],
+      "text": "저 표를",
+      "original_sample_range": [
+        192000,
+        230400
+      ],
+      "provider_sample_range": [
+        96000,
+        115200
+      ],
+      "interval_ms": [
+        5000,
+        5800
+      ],
+      "clock_mapping_ref": "ClockMap1",
+      "mapping_epoch": "AudioMap1",
+      "local_epoch": "PCBoot1",
+      "error_ms": 4
+    }
+  ],
+  "observations": [
+    {
+      "ref": "S1",
+      "revision": 1,
+      "kind": "SCREEN_CAPTURE",
+      "sequence": 3,
+      "capture_interval_ms": [
+        1995,
+        2005
+      ],
+      "received_ms": 2020,
+      "local_epoch": "PCBoot1",
+      "error_ms": 8,
+      "window_ref": "W46",
+      "display_ref": "Display1",
+      "app_window_ref": "WindowA",
+      "document_ref": "DocA",
+      "viewport_ref": "ViewportA1",
+      "coordinate_space_ref": "SpaceA1",
+      "coordinate_system": "VIEWPORT_PIXELS",
+      "viewport_rect_px": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "document_scroll_px": [
+        0,
+        0
+      ],
+      "raw_locator": "fixture://W46/S1.png"
+    },
+    {
+      "ref": "P1",
+      "revision": 1,
+      "kind": "POINTER_PATH",
+      "sequence": 4,
+      "capture_interval_ms": [
+        2050,
+        2450
+      ],
+      "received_ms": 2470,
+      "local_epoch": "PCBoot1",
+      "error_ms": 8,
+      "window_ref": "W46",
+      "display_ref": "Display1",
+      "app_window_ref": "WindowA",
+      "document_ref": "DocA",
+      "viewport_ref": "ViewportA1",
+      "coordinate_space_ref": "SpaceA1",
+      "coordinate_system": "VIEWPORT_PIXELS",
+      "viewport_rect_px": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "document_scroll_px": [
+        0,
+        0
+      ],
+      "points": [
+        {
+          "t_ms": 2050,
+          "xy_px": [
+            260,
+            220
+          ]
+        },
+        {
+          "t_ms": 2300,
+          "xy_px": [
+            430,
+            220
+          ]
+        },
+        {
+          "t_ms": 2449,
+          "xy_px": [
+            430,
+            310
+          ]
+        }
+      ],
+      "raw_locator": "fixture://W46/P1.events"
+    },
+    {
+      "ref": "S2",
+      "revision": 1,
+      "kind": "SCREEN_CAPTURE",
+      "sequence": 7,
+      "capture_interval_ms": [
+        5195,
+        5205
+      ],
+      "received_ms": 5220,
+      "local_epoch": "PCBoot1",
+      "error_ms": 8,
+      "window_ref": "W46",
+      "display_ref": "Display1",
+      "app_window_ref": "WindowB",
+      "document_ref": "DocB",
+      "viewport_ref": "ViewportB2",
+      "coordinate_space_ref": "SpaceB2",
+      "coordinate_system": "VIEWPORT_PIXELS",
+      "viewport_rect_px": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "document_scroll_px": [
+        0,
+        600
+      ],
+      "raw_locator": "fixture://W46/S2.png"
+    },
+    {
+      "ref": "P2",
+      "revision": 1,
+      "kind": "POINTER_PATH",
+      "sequence": 8,
+      "capture_interval_ms": [
+        5200,
+        5700
+      ],
+      "received_ms": 5720,
+      "local_epoch": "PCBoot1",
+      "error_ms": 8,
+      "window_ref": "W46",
+      "display_ref": "Display1",
+      "app_window_ref": "WindowB",
+      "document_ref": "DocB",
+      "viewport_ref": "ViewportB2",
+      "coordinate_space_ref": "SpaceB2",
+      "coordinate_system": "VIEWPORT_PIXELS",
+      "viewport_rect_px": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "document_scroll_px": [
+        0,
+        600
+      ],
+      "points": [
+        {
+          "t_ms": 5200,
+          "xy_px": [
+            320,
+            200
+          ]
+        },
+        {
+          "t_ms": 5480,
+          "xy_px": [
+            490,
+            200
+          ]
+        },
+        {
+          "t_ms": 5699,
+          "xy_px": [
+            490,
+            300
+          ]
+        }
+      ],
+      "raw_locator": "fixture://W46/P2.events"
+    }
+  ],
+  "relation_schema": {
+    "version": 1,
+    "supported_kinds": [
+      "ACOUSTIC_OBSERVATION_OVERLAP",
+      "OBSERVATION_BEFORE",
+      "POINTER_PATH"
+    ],
+    "candidate_classifications": [
+      "POSSIBLE",
+      "DEFINITE"
+    ],
+    "operators": "bounded interval overlap/before and ordered recorded path only; no arbitrary executable expressions",
+    "meaning": "DEFINITE means interval overlap under the declared error bounds, not a semantic referent answer"
+  },
+  "source_vector_r1": {
+    "u46": 1,
+    "W46": 1,
+    "ClockMap1": 1,
+    "S1": 1,
+    "P1": 1,
+    "S2": 1,
+    "P2": 1
+  },
+  "relations_r1": {
+    "candidate_edges": [
+      {
+        "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+        "span_ref": "a",
+        "observation_ref": "S1",
+        "classification": "POSSIBLE"
+      },
+      {
+        "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+        "span_ref": "a",
+        "observation_ref": "P1",
+        "classification": "DEFINITE"
+      },
+      {
+        "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+        "span_ref": "b",
+        "observation_ref": "S2",
+        "classification": "DEFINITE"
+      },
+      {
+        "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+        "span_ref": "b",
+        "observation_ref": "P2",
+        "classification": "DEFINITE"
+      }
+    ],
+    "before": [
+      {
+        "kind": "OBSERVATION_BEFORE",
+        "left_ref": "S1",
+        "right_ref": "S2"
+      }
+    ],
+    "paths": [
+      {
+        "kind": "POINTER_PATH",
+        "observation_ref": "P1",
+        "coordinate_space_ref": "SpaceA1",
+        "point_count": 3
+      },
+      {
+        "kind": "POINTER_PATH",
+        "observation_ref": "P2",
+        "coordinate_space_ref": "SpaceB2",
+        "point_count": 3
+      }
+    ]
+  },
+  "A": {
+    "query": {
+      "type": "TemporalQuery",
+      "ref": "Q1",
+      "owner": "Interaction Manager / Temporal Evidence Resolver",
+      "input_ref": "u46",
+      "input_revision": 1,
+      "window_ref": "W46",
+      "span_refs": [
+        "a",
+        "b"
+      ],
+      "interval_ms": [
+        1000,
+        9000
+      ],
+      "requested_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ],
+      "purpose": "REQUEST_UNDERSTANDING",
+      "policy_epoch": 3,
+      "max_observations": 4
+    },
+    "result": {
+      "type": "TemporalQueryResult",
+      "ref": "Q1Result",
+      "query_ref": "Q1",
+      "input_revision": 1,
+      "window_ref": "W46",
+      "source_vector_ref": "source_vector_r1",
+      "relations_ref": "relations_r1",
+      "status": "VALID",
+      "constructed_at_ms": 9450,
+      "query_lease": {
+        "ref": "QueryLease1",
+        "expires_ms": 12000
+      },
+      "source_watermark": "IMSeq8",
+      "gaps": [],
+      "policy_epoch": 3,
+      "local_epoch": "PCBoot1"
+    },
+    "normal_dependency": "Requested bounded raw reads and relationship construction, or a separately valid cache; this result is query-owned, not a required shared publication."
+  },
+  "B": {
+    "view": {
+      "type": "TemporalView",
+      "ref": "TE46@v1",
+      "owner": "Interaction Manager",
+      "input_ref": "u46",
+      "input_revision": 1,
+      "window_ref": "W46",
+      "source_vector_ref": "source_vector_r1",
+      "relations_ref": "relations_r1",
+      "producer": {
+        "module": "Temporal Evidence Publisher",
+        "version": 1,
+        "generation": 1
+      },
+      "schema_version": 1,
+      "status": "VALID",
+      "published_at_ms": 9500,
+      "view_expires_ms": 24000,
+      "source_watermark": "IMSeq8",
+      "gaps": [],
+      "policy_epoch": 3,
+      "local_epoch": "PCBoot1",
+      "coverage": {
+        "window_ref": "W46",
+        "input_revision": 1,
+        "interval_ms": [
+          1000,
+          9000
+        ],
+        "span_refs": [
+          "a",
+          "b"
+        ],
+        "kinds": [
+          "ACOUSTIC_OBSERVATION_OVERLAP",
+          "OBSERVATION_BEFORE",
+          "POINTER_PATH"
+        ],
+        "source_vector_ref": "source_vector_r1",
+        "atomic_with_relations": true
+      },
+      "view_expiry_is_not_raw_retention_extension": true
+    },
+    "normal_dependency": "Temporal Evidence Reader consumes valid published relations and coverage. A missing supported range goes to Publisher, then is re-read; Reader does not silently perform A's raw cross-source join."
+  },
+  "r2": {
+    "event": "Provider alignment revision arrives at 10000ms. Text stays identical; the acoustic mapping of b changes. This is a source/input-evidence revision, not a new user instruction.",
+    "received_ms": 10000,
+    "input_revision": 2,
+    "text_unchanged": true,
+    "corrected_span": {
+      "ref": "b",
+      "input_ref": "u46",
+      "input_revision": 2,
+      "text_span": [
+        5,
+        9
+      ],
+      "text": "저 표를",
+      "original_sample_range": [
+        205440,
+        230400
+      ],
+      "provider_sample_range": [
+        102720,
+        115200
+      ],
+      "interval_ms": [
+        5280,
+        5800
+      ],
+      "clock_mapping_ref": "ClockMap1",
+      "mapping_epoch": "AudioMap1",
+      "local_epoch": "PCBoot1",
+      "error_ms": 4
+    },
+    "source_vector": {
+      "u46": 2,
+      "W46": 1,
+      "ClockMap1": 1,
+      "S1": 1,
+      "P1": 1,
+      "S2": 1,
+      "P2": 1
+    },
+    "relations": {
+      "candidate_edges": [
+        {
+          "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+          "span_ref": "a",
+          "observation_ref": "S1",
+          "classification": "POSSIBLE"
+        },
+        {
+          "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+          "span_ref": "a",
+          "observation_ref": "P1",
+          "classification": "DEFINITE"
+        },
+        {
+          "kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+          "span_ref": "b",
+          "observation_ref": "P2",
+          "classification": "DEFINITE"
+        }
+      ],
+      "before": [
+        {
+          "kind": "OBSERVATION_BEFORE",
+          "left_ref": "S1",
+          "right_ref": "S2"
+        }
+      ],
+      "paths": [
+        {
+          "kind": "POINTER_PATH",
+          "observation_ref": "P1",
+          "coordinate_space_ref": "SpaceA1",
+          "point_count": 3
+        },
+        {
+          "kind": "POINTER_PATH",
+          "observation_ref": "P2",
+          "coordinate_space_ref": "SpaceB2",
+          "point_count": 3
+        }
+      ]
+    },
+    "A_requery": {
+      "type": "TemporalQueryResult",
+      "ref": "Q2Result",
+      "query_ref": "Q2",
+      "input_revision": 2,
+      "window_ref": "W46",
+      "source_vector_ref": "r2.source_vector",
+      "relations_ref": "r2.relations",
+      "status": "VALID",
+      "constructed_at_ms": 10120,
+      "query_lease": {
+        "ref": "QueryLease2",
+        "expires_ms": 12500
+      },
+      "source_watermark": "IMSeq9",
+      "gaps": [],
+      "policy_epoch": 3,
+      "local_epoch": "PCBoot1"
+    },
+    "B_republication": {
+      "type": "TemporalView",
+      "ref": "TE46@v2",
+      "owner": "Interaction Manager",
+      "input_ref": "u46",
+      "input_revision": 2,
+      "window_ref": "W46",
+      "source_vector_ref": "r2.source_vector",
+      "relations_ref": "r2.relations",
+      "producer": {
+        "module": "Temporal Evidence Publisher",
+        "version": 1,
+        "generation": 2
+      },
+      "schema_version": 1,
+      "status": "VALID",
+      "published_at_ms": 10140,
+      "view_expires_ms": 24000,
+      "source_watermark": "IMSeq9",
+      "gaps": [],
+      "policy_epoch": 3,
+      "local_epoch": "PCBoot1",
+      "coverage": {
+        "window_ref": "W46",
+        "input_revision": 2,
+        "interval_ms": [
+          1000,
+          9000
+        ],
+        "span_refs": [
+          "a",
+          "b"
+        ],
+        "kinds": [
+          "ACOUSTIC_OBSERVATION_OVERLAP",
+          "OBSERVATION_BEFORE",
+          "POINTER_PATH"
+        ],
+        "source_vector_ref": "r2.source_vector",
+        "atomic_with_relations": true
+      },
+      "view_expiry_is_not_raw_retention_extension": true
+    },
+    "effects": [
+      "Q1Result and dependent Set/job are stale at use even while QueryLease1 has time left.",
+      "TE46@v1 is DIRTY. A producer still expecting r1 cannot publish after r2.",
+      "A requery and B republish/re-read use the same corrected source vector. S2 is no longer an overlap candidate for b; P2 remains one.",
+      "Unchanged S1/P1/S2/P2 can be reused with their revisions. Neither path invents a replacement historical screenshot."
+    ],
+    "A_query": {
+      "type": "TemporalQuery",
+      "ref": "Q2",
+      "owner": "Interaction Manager / Temporal Evidence Resolver",
+      "input_ref": "u46",
+      "input_revision": 2,
+      "window_ref": "W46",
+      "span_refs": [
+        "a",
+        "b"
+      ],
+      "interval_ms": [
+        1000,
+        9000
+      ],
+      "requested_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ],
+      "purpose": "REQUEST_UNDERSTANDING",
+      "policy_epoch": 3,
+      "max_observations": 4
+    }
+  },
+  "usage_fence_cases": [
+    {
+      "name": "r1_initial_A",
+      "artifact": "A.result",
+      "at_ms": 9600,
+      "current_source_vector_ref": "source_vector_r1",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "VALID",
+      "use_boundary": "CLOUD_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "r1_initial_B",
+      "artifact": "B.view",
+      "at_ms": 9600,
+      "current_source_vector_ref": "source_vector_r1",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "VALID",
+      "use_boundary": "CLOUD_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "old_A_lease_still_live",
+      "artifact": "A.result",
+      "at_ms": 10010,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "DIRTY",
+      "use_boundary": "MEANING_ADOPTION",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "old_B_view_still_live",
+      "artifact": "B.view",
+      "at_ms": 10010,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "DIRTY",
+      "use_boundary": "AGENT_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "r2_requery_A",
+      "artifact": "r2.A_requery",
+      "at_ms": 10200,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "VALID",
+      "use_boundary": "MEANING_ADOPTION",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "r2_republication_B",
+      "artifact": "r2.B_republication",
+      "at_ms": 10200,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "VALID",
+      "use_boundary": "RESPONSE_PUBLICATION",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "permission_revoked_before_use",
+      "artifact": "r2.B_republication",
+      "at_ms": 11000,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 4,
+      "current_local_epoch": "PCBoot1",
+      "expected": "DENIED",
+      "use_boundary": "CLOUD_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "clock_epoch_changed",
+      "artifact": "r2.A_requery",
+      "at_ms": 11000,
+      "current_source_vector_ref": "r2.source_vector",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot2",
+      "expected": "DIRTY",
+      "use_boundary": "MEANING_ADOPTION",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "query_lease_expired",
+      "artifact": "A.result",
+      "at_ms": 12000,
+      "current_source_vector_ref": "source_vector_r1",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "EXPIRED",
+      "use_boundary": "CLOUD_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    },
+    {
+      "name": "raw_expired_despite_live_pin",
+      "artifact": "B.view",
+      "at_ms": 20000,
+      "current_source_vector_ref": "source_vector_r1",
+      "current_policy_epoch": 3,
+      "current_local_epoch": "PCBoot1",
+      "expected": "EXPIRED",
+      "retention_pin_expires_ms": 24000,
+      "use_boundary": "AGENT_PROVIDING",
+      "artifact_is_dependency_not_execution_permission": true
+    }
+  ],
+  "publication_cases": [
+    {
+      "name": "r1_production_completed_after_r2",
+      "expected_source_vector_ref": "source_vector_r1",
+      "current_source_vector_ref": "r2.source_vector",
+      "expected_generation": 1,
+      "current_generation": 2,
+      "expected": "REJECTED_STALE"
+    },
+    {
+      "name": "r2_current_production",
+      "expected_source_vector_ref": "r2.source_vector",
+      "current_source_vector_ref": "r2.source_vector",
+      "expected_generation": 2,
+      "current_generation": 2,
+      "expected": "PUBLISHED"
+    }
+  ],
+  "availability_cases": [
+    {
+      "name": "known_spans_and_published_range",
+      "requested_kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+      "range_published": true,
+      "timing_available": true,
+      "raw_available": true,
+      "expected": "VALID",
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ]
+    },
+    {
+      "name": "supported_kind_not_yet_published",
+      "requested_kind": "POINTER_PATH",
+      "range_published": false,
+      "timing_available": true,
+      "raw_available": true,
+      "expected": "NOT_COVERED",
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE"
+      ]
+    },
+    {
+      "name": "supported_kind_later_range_not_published",
+      "requested_kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        4000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ],
+      "range_published": false,
+      "timing_available": true,
+      "raw_available": true,
+      "expected": "NOT_COVERED"
+    },
+    {
+      "name": "provider_has_no_acoustic_span_timing",
+      "requested_kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+      "range_published": true,
+      "timing_available": false,
+      "raw_available": true,
+      "expected": "UNKNOWN_TIMING",
+      "returned_scope": "whole-utterance observation candidates only; acoustic a/b timing absent",
+      "invent_word_times": false,
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ]
+    },
+    {
+      "name": "requested_kind_outside_finite_schema",
+      "requested_kind": "INTENDED_TABLE_IDENTITY",
+      "range_published": false,
+      "timing_available": true,
+      "raw_available": true,
+      "expected": "UNSUPPORTED_RELATION",
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ]
+    },
+    {
+      "name": "captured_screen_lost",
+      "requested_kind": "ACOUSTIC_OBSERVATION_OVERLAP",
+      "range_published": true,
+      "timing_available": true,
+      "raw_available": false,
+      "expected": "SOURCE_GAP",
+      "fresh_capture_replaces_lost_raw": false,
+      "requested_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_interval_ms": [
+        1000,
+        9000
+      ],
+      "published_kinds": [
+        "ACOUSTIC_OBSERVATION_OVERLAP",
+        "OBSERVATION_BEFORE",
+        "POINTER_PATH"
+      ]
+    }
+  ],
+  "usage_fence_scope": "The static cases illustrate a check only. The implementation must serialize current source/permission validation with usage approval or queue registration at every use boundary; a later notification alone is insufficient. An already provided external value cannot be recalled.",
+  "checker_scope": "Static example consistency and selected malformed-example rejection, not a runtime resolver/publisher, model/semantic oracle, performance harness or frozen validation contract.",
+  "no_timing_variant": {
+    "type": "TemporalEvidenceLimit",
+    "input_ref": "u46",
+    "input_revision": 1,
+    "window_ref": "W46",
+    "text": "이 표와 저 표를 아까 네가 설명한 평가 기준으로 비교해서 제안서 초안을 만들어줘. 메일은 보내지 마.",
+    "provider_acoustic_spans": null,
+    "acoustic_word_intervals_ms": null,
+    "whole_utterance_interval_ms": [
+      1000,
+      9000
+    ],
+    "observation_candidate_refs": [
+      "S1",
+      "P1",
+      "S2",
+      "P2"
+    ],
+    "status": "UNKNOWN_TIMING",
+    "constructed_from_transcript_receipt_or_vad": false,
+    "notes": "Transcript text may mention a/b phrases, but no acoustic mapping for those phrases is provided. Whole-utterance candidates do not assign a/b to S1/S2."
+  }
+}

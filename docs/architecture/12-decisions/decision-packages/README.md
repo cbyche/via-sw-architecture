@@ -21,6 +21,12 @@
 
 [45 본문](./04-45-memory-and-context.md)은 A 원본 서비스 조합과 B 공통 파생 기억 저장소를 비교한다. 검색/요약/cache 유무가 아니라 요청별 원본 결합을 공통 과거 관계의 생산/게시/조회가 대체하는 구조다. [메인 그림](./diagrams/choice45-structure.svg), [편집 원본](./diagrams/choice45-structure.drawio), [발표 PNG](./diagrams/choice45-structure.png), [독립 리뷰 기록](./04-45-memory-and-context-review.md)을 제공한다. 일곱 같은 사건, V-01~13, 삭제/철회와 작은 확장 반론을 포함하며 최종 DP 또는 A/B는 미선정이다.
 
+## 별도 46 검토안: 시간 근거부터 과거 Context까지의 구조 비교
+
+[46 본문](./04-46-input-and-context-evidence.md)은 초기의 동일한 Interaction Manager + 45 구성을 다시 설계했다. A는 Interaction Manager의 요청별 시간 관계 구성과 Context Manager의 원본 owner 조합, B는 각 owner의 공통 관계 생산/게시와 조회를 비교한다. capture와 시각 정규화는 공통이지만 **발화-화면-행동 관계의 준비 조건과 정상 소비 경로부터 다르다.** 최신 MAIN은 공통 Component/원본/요청/반환 좌표를 양안 동일하게 고정하고, A의 원본 read와 요청 결과 쓰기 / B의 게시와 유효 관계 읽기를 같은 위치에서 비교한다. B의 시간 자료를 Context Manager에 다시 게시하지 않으며 현재 지칭/Task 판단과 채택은 공통 owner에 남긴다.
+
+[문제 그림](./diagrams/dp46-background.svg), [MAIN](./diagrams/choice46-structure.svg), [정정 사건도](./diagrams/choice46-timeline.svg), [상태/사용 경계](./diagrams/choice46-lifecycle.svg), [확대 보기](./diagrams/choice46-review.html)와 [작성자 검수](./04-46-evidence-review.md)를 제공한다. 04-40의 local/cloud 계약, 강한 A의 cache/prefetch, 순수 B와 raw fallback 혼합, 45의 과거 처리 손익과 46의 시간 처리 손익을 구별한다. **45는 보존하며 A/B 미선정, 구현/품질 측정 없음이다.**
+
 ## 최신 사용자 결론: 35/36은 구조 검토 자료로 유지
 
 35/36은 실제 다른 구조지만 VIA의 중요한 품질속성에 큰 영향을 미치는 주요 결정으로 보지 않아 40번대로 올리지 않는다. [35 §0](./04-35-state-authority.md#0-사용자-검토-결론과-다시-읽을-때의-핵심-2026-10-05)은 현재 상태/사건 원본, 이력과 LLM의 역할을, [36 §0](./04-36-capability-isolation.md#0-사용자-검토-결론과-다시-읽을-때의-핵심-2026-10-05)은 실제 권한, sandbox와 Broker의 범위 및 품질 한계를 설명한다. 기존 구조/도식은 참고로 보존하며 새 A/B 탐색을 미완료 작업으로 남기지 않는다. 이 결론은 A/B 채택이나 측정 결과가 아니다.

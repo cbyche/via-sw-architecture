@@ -4,6 +4,19 @@
 > 첫 완료 단위는 공통 책임 목록과 41의 실행 계약·관련 그림·검수다. 44→45→42와 전체 조합 검토를 순서대로 이어가며 기존 Architecture 전체 동기화는 후속 작업이다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
 
+## 별도 입력 근거 작업 — 45를 보존한 46 재설계 (2026-10-10)
+
+사용자는 초기 46의 Interaction Manager가 양안에서 동일하게 시간 대응을 끝내면 45의 앞에 같은 기능을 붙인 것뿐이라고 지적하고, 시간 대응까지 포함하는 구현 가능한 구조 A/B와 QA 손익을 요구했다. 41/42/44/45의 문서와 그림 수준을 검토해 [46](./04-46-input-and-context-evidence.md)을 다시 작성했다. 초기 세대는 [archive](../../../archive/46-observation-contract-only-2026-10-09/README.md)에 보존했다.
+
+- A: Interaction Manager의 Temporal Evidence Resolver가 필요한 raw 범위에서 요청별 시간 관계를 구성. Context Manager의 Context Composer가 이를 과거 owner read와 목적별로 조합한다.
+- B: Interaction Manager의 Temporal Evidence Publisher가 relation/coverage를 게시하고 Temporal Evidence Reader가 소비. Context Manager의 Memory Publisher는 과거 관계만 게시하고 Evidence Reader가 두 owner의 유효 자료를 조회한다. 시간 자료를 CM에 중복 게시하지 않는다.
+- capture/VAD/sample-clock mapping/원본 budget와 cloud 모델은 같다. 최종 referent/Task 의미와 채택은 Request Interpreter/Request Controller에 남는다. input 확정과 local stop는 게시 완료를 기다리지 않는다.
+- 본문, 문제/MAIN/정정 사건/상태 경계 네 SVG/draw.io/PNG, 확대 보기와 전용 생성/렌더 스크립트, [작성자 검수](./04-46-evidence-review.md)를 갱신한다. 45의 과거 의미 손익과 46의 code 시간 처리 손익, 첫/반복/정정 장면, 03-02의 다섯 QA 묶음과 V-01~13을 구별한다.
+- 강한 A의 index/cache/prefetch와 B의 선택적 생산/부분 갱신을 포함한다. temporal query가 작고 반복이 적으면 B 이익이 작을 수 있다는 반증을 공개한다. 구조 선택 뒤 tactic 보완이라는 원칙을 유지하며 주요 DP 자격이나 우열을 측정 없이 확정하지 않는다.
+- 45 문서/그림/생성기/개별 발표 자료 16개의 시작 hash로 보존을 확인한다. 다른 세션의 40/41 및 03-02, 통합 발표 자료, 04-50/work/는 이 작업의 write 대상이 아니다. 공유 읽기 안내와 이 기록의 46 블록만 수정한다.
+- **최신 MAIN 동일 배치 수정:** 사용자는 이름 중심 그림뿐 아니라 A 세로/B 가로 배치로 차이를 강조한 후속 그림도 반려했다. 현재 공통 Component/원본/요청/반환 14개 요소의 좌표/크기를 동일하게 고정하고 생성 시 assert한다. A의 요청→원본 read→Q1 Result/Set46 구성/기록과 B의 원본 변화→owner별 게시→Reader 소비를 같은 자료 칸의 읽기/쓰기 방향과 주체로 대조한다. 실제 A/B/QA와 다른 DP/보충 설계는 유지한다. §2와 검수 §3.2를 읽는다. 두 반려 MAIN 세대는 archive에 보존한다.
+- 재개 시 46 §2 → §3~6 → §7~8 → §10~12와 검수 기록을 읽는다. 2026-10-10 사용자는 별도 세션 리뷰를 위해 46 관련 파일의 commit/push를 지시했다. 문서/그림/전용 스크립트/계약 예시/이전 세대 보존본과 공용 안내의 46 블록만 게시하고 병행 작업은 제외한다. 구현/모델 실행/품질 측정/최종 선정은 승인하지 않았다. 원래 45와 어떤 범위로 합칠지는 사용자 검토 후 판단한다.
+
 ## 버전 관리 — 사용자 후속 지시 (2026-10-09)
 
 사용자는 데이터 예시를 표시한 41 그림이 이해를 돕는다고 확인했고, 이후에도 주기적으로 commit/push하여 버전을 남기라고 지시했다. 검토 가능한 문서/그림 작업 단위가 완성되고 해당 검증이 끝날 때마다 이번 작업 파일만 main에 commit/push한다. 다른 세션의 미완성 변경은 포함하지 않는다. 이번 게시 단위는 공통 실행 계약·41 재구체화·데이터 overlay와 관련 발표 자료이며, 04-50·`work/`·입력 근거 병행 작업은 제외한다. 게시 결과는 Git 이력과 사용자 보고로 확인한다. 이 지시는 구현·모델 실행·측정·최종 A/B 선정을 승인한 것이 아니다.
