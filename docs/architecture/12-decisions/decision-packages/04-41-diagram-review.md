@@ -1,5 +1,19 @@
 # 04-41 실행 계약과 그림 검수
 
+## 사용자 보완 — Module 반복과 고정 출력 계약 (2026-10-10)
+
+사용자는 구조도/순서도 분리를 유지하면서 내부 Module 관계에서 반복을 더 잘 표시하고, A의 실제 도구 호출 출력과 B의 코드 처리 가능한 고정 필드/예시를 함께 정의하라고 요청했다. B Module을 **요청 구조화기**로 정리하여 04-40/41·MAIN·사건도·발표 비교/노트를 동기화했다.
+
+- A는 모델이 선택한 `tool_calls.name/arguments`의 `task_retrieve(query=보고서,limit=5)`/`context_retrieve(INPUT_SELECTION)`와 필요한 다음 차례의 `interaction_retrieve`를 표시했다. 조회 결과는 굽은 반환선으로 제어기에 재진입하고 모델 재호출 뒤 다음 read를 고른다. B는 도구 결과가 Engine에 재진입해 코드가 다음 항목을 검사하는 경로를 표시하고 모델 재호출은 요청 구조화기에 지정 항목을 요청하는 조건부 연결로 유지했다. 구조도 안에 순서도 분기를 다시 넣지 않았다.
+- B의 일곱 고정 key·required/type·유한 goal/selector/relation/constraint op·원문 대응을 [Schema](./contracts/dp41-request-frame-v1.schema.json)와 [JSON 예시](./contracts/dp41-output-examples.json), 본문 §3.5.1에 정의했다. 그림은 같은 값의 축약 표기다. `report/table` 미해결 참조와 G1/G2 잠정 목표를 실제 Task ID와 구별하고 Task1은 실제 질문/새 답변 뒤에 연결한다. `USE_RESULT`는 수정 뒤 결과의 의존, `FORBID_ACTION`은 G2 발송 금지다. 조건·미해석·버전·형식 한계와 schema 확장/수정 비용을 유지했다.
+- `interaction_retrieve`는 Context Manager의 대화/실제 전달 읽기 view이며 별도 Component/마이크 조회가 아니다. 세 논리 tool은 양안 공통이고 Host가 scope·현재성·권한·예산을 부착한다. B의 부분 반환은 지정 field/candidate/evidence 범위만 허용하며 전체 frame 재작성은 혼합안이다.
+- 문서 계약 검사기는 정상 예시, 7개 frame 오류(새 필드/잘못된 op·selector·참조/순환/입력 불일치/원문 밖 표현), 2개 부분 반환 오류와 A의 임의 권한 인자를 검수한다. CI에 이 검사를 추가했다. JSON Schema vocabulary의 이번 부분집합만 검사하며 해석 Engine이나 모델 실행/정답률 시험은 구현하지 않았다.
+- 최종 MAIN/사건도와 발표 PNG의 실제 렌더에서 겹침·잘림·데이터 주석 범위 오류 0건을 확인했다. 직각/소속/생성 일치와 두 Python 버전의 41 생성/계약 검사를 통과했다. 두 PPTX의 편집 가능한 도형·텍스트·경로/평면 이미지 0개와 41 재가져오기 렌더를 확인했다. 해당 비교 slide/notes만 변경하고 비선택 59/35 part·배경/다른 DP 개별 assets/합본 페이지를 대조했다. PowerPoint 앱 실행 검증은 아니다.
+- 활성 용어/QA·전체 Architecture 생성/발표 생성·flow/diff 검사를 통과했다. 전체 작업 트리 링크 검사에는 병행 미완성 46의 누락 7개가 발견되어 이번 게시 대상인 Git 추적 Markdown 문서 152개를 별도로 검사하여 통과했다. 46/입력 근거/QA 초안/04-50와 공유 workplan/README·archive/work 변경은 수정·게시하지 않는다. 기존 44/45 PPTX 경고 두 개는 보존 슬라이드에 남아 있다.
+
+이번 변경은 구체적인 설계 검토 계약과 표현 보완이며 최종 API 채택·A/B 선택·참조 구조 변경·런타임 구현·모델 성능 검증은 아니다. 게시 및 CI 결과는 해당 Git/GitHub 이력과 사용자 보고로 확인한다.
+
+
 ## 사용자 교정 — 구조도와 순서도의 분리 (2026-10-09)
 
 사용자는 `c5541296`에서 Request Interpreter의 Module 연결에 분기 도형을 끼워 넣은 표현을 거부했다. 요청은 Module 간 협력 관계를 그대로 유지하면서 **별도 순서도를 삽입**하는 것이었다. 이 기록이 바로 아래 같은 날짜의 혼합 표현 설명을 대체하며, 이전 게시본은 Git 이력으로 보존한다.

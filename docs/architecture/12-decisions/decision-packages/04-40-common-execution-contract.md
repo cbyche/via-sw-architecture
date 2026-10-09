@@ -46,7 +46,7 @@ VAD는 Turn-Taking Control 내부 기능/의존성이다. 음성 인식 모델�
 | Component | 소유 책임 | 모델과 코드의 경계 |
 | --- | --- | --- |
 | **Request Controller** | 입력 등록/revision, Conversation·Request·질문 연결과 채택, admission/hold 및 후속 처리 | 코드가 최신성·정책·채택을 확인. 44의 중앙 Dispatcher 또는 단계별 실행 책임이 들어감 |
-| **Request Interpreter** | 현재 요청의 의미 제안. A 모델 주도 해석 / B 틀·부분 의미와 코드 전체 결합 | 41 재구체화의 공통 owner. B 요청 틀 해석기·Request Resolution Engine은 내부 Module. 공통 읽기 도구 실행기·의미 제안 검증기를 사용하며 채택·전송 권한은 갖지 않음 |
+| **Request Interpreter** | 현재 요청의 의미 제안. A 모델 주도 해석 / B 틀·부분 의미와 코드 전체 결합 | 41 재구체화의 공통 owner. B 요청 구조화기·Request Resolution Engine은 내부 Module. 공통 읽기 도구 실행기·의미 제안 검증기를 사용하며 채택·전송 권한은 갖지 않음 |
 | **Context Manager** | 목적별 허용 근거 공급과 파생 context 수명 | 45A Context Composer / 45B Memory Publisher·Evidence Reader. 의미가 필요한 가공에 한해 모델 호출 가능 |
 | **Task Manager** | Task·Execution·명령 및 외부 업무 사실의 로컬 권위 | 인증된 구조적 Agent 알림은 ID/revision으로 코드 처리. 자유문 의미 판단이 필요하면 명시적 별도 처리 |
 | **Agent Gateway** | Downstream Agent protocol, 명령 전송/receipt·event 대응·중복 방지 | 도메인 실행은 외부 Agent. VIA LLM이 전송 receipt를 추측하지 않음 |
@@ -61,7 +61,7 @@ VAD는 Turn-Taking Control 내부 기능/의존성이다. 음성 인식 모델�
 
 위 표는 참조 구조에서 가져온 공통 10개 Component의 책임을 정리한 것이다. 대안이 실제 계약/상태 권위를 추가하면 그 차이를 별도로 표시할 수 있다. 모든 대안의 Component 개수를 10개로 강제하지 않는다.
 
-**2026-10-09의 41 재구체화에서 Request Resolution Engine을 Request Interpreter 내부 Module로 정리했다.** 이전 독립 Component를 정당화할 별도 수명·권한·영속 원본 근거가 부족했고, 코드가 조회 진행과 전체 결합을 소유하는 기제는 내부 Module로 유지된다. B 요청 틀 해석기는 초기/부분 의미를 생산하고 Engine은 미해결 처리/결합을 수행한다. 별도 미해결 항목 처리기·관계 결합기 박스를 추가하지 않는다.
+**2026-10-09의 41 재구체화에서 Request Resolution Engine을 Request Interpreter 내부 Module로 정리했다.** 이전 독립 Component를 정당화할 별도 수명·권한·영속 원본 근거가 부족했고, 코드가 조회 진행과 전체 결합을 소유하는 기제는 내부 Module로 유지된다. B 요청 구조화기는 초기/부분 의미를 생산하고 Engine은 미해결 처리/결합을 수행한다. 별도 미해결 항목 처리기·관계 결합기 박스를 추가하지 않는다.
 
 잠정 A/B 해석 상태는 Request Interpreter, 채택 의미/질문과 필요한 artifact는 Request Controller 원본으로 통일한다. Engine의 별도 영속 상태·second commit을 기다리지 않는다. 이는 편입에 따른 호출·owner·저장 계약의 변경을 기록한 **검토용 설계안**이며 A/B 최종 선택이나 참조 Architecture 전체 개정이 아니다. 이름/Module 목록과 상세 port는 [41 §3](./04-41-request-resolution-control.md#3-공통-구성과-두-실행-구조)을 따른다.
 
@@ -127,7 +127,7 @@ Model Access는 audio chunk·생성 전사·terminal status를 publication/job/o
 | **C-VOICE-OUT** | Response Manager → Model Access | 준비한 응답의 음성 표현 | 코드가 release·장치 playback·실제 receipt 관리. text-only면 음성 생성 생략 |
 | **C-DECISION** | 판단을 소유한 Component → Model Access, 선택 시 | 유한 후보 선택/score 등 제한된 판단 | 필수 공통 호출 아님. 결정 불가·후보 누락 처리와 실제 호출 비용을 명시 |
 
-**모델이 호출할 tool과 모델을 호출하는 코드 경로는 다르다.** 41A에서 모델이 `context_retrieval`을 요청하면 로컬 읽기 실행기가 Context Manager를 호출한다. `task_retrieval`은 Task Manager를 직접 조회할 수 있다. 반드시 Context Manager를 경유시키지 않는다. 둘 다 허용 범위와 버전이 있는 코드 실행이며, 조회 자체가 LLM 호출인 것은 아니다. Context Manager가 의미 가공을 따로 요청하는 경우에만 그 추가 호출을 집계한다.
+**모델이 호출할 tool과 모델을 호출하는 코드 경로는 다르다.** 41A에서 모델이 `context_retrieve`를 요청하면 로컬 읽기 실행기가 Context Manager를 호출한다. `task_retrieve`는 Task Manager를 직접 조회할 수 있다. 반드시 Context Manager를 경유시키지 않는다. `interaction_retrieve`는 같은 Context Manager의 대화/실제 전달 읽기 view로 표현한다. 별도 Component나 마이크 입력 도구가 아니다. 모두 허용 범위와 버전이 있는 코드 실행이며, 조회 자체가 LLM 호출인 것은 아니다. Context Manager가 의미 가공을 따로 요청하는 경우에만 그 추가 호출을 집계한다.
 
 42의 저장·transaction·command/receipt 대응은 코드로 수행할 수 있다. 자유문 “방금 그 업무”의 Task 연결은 41의 의미 제안 책임이며 42의 별도 모델 책임으로 중복시키지 않는다. 45도 구조적 관계만 있으면 코드로 처리하지만, “아까 설명한 평가 기준”의 의미를 자유문에서 뽑는 일까지 항상 코드로만 해결된다고 주장하지 않는다.
 

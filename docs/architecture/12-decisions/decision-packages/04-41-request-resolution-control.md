@@ -1,6 +1,6 @@
 # 04-41. 요청 의미 확정 — 모델이 진행하는 해석과 코드가 진행하는 해석
 
-> 2026-10-09 / 로컬 VIA·클라우드 모델 전제로 재구체화한 설계안 / A/B 미선정·미구현·미측정
+> 2026-10-10 / 로컬 VIA·클라우드 모델 전제로 재구체화한 설계안 / A/B 미선정·미구현·미측정
 > [공통 실행 계약](./04-40-common-execution-contract.md) / [가이드](./04-30-comparison-guide.md) / [복원한 31](./04-31-semantic-construction.md)
 
 **A는 모델이 다음에 읽을 자료를 고르고, 조회 결과를 보며 요청의 뜻을 완성해 제안한다. B는 모델이 미해결 항목이 담긴 요청 틀을 만들고, 코드가 필요한 조회와 부분 해석을 진행하여 대상·업무·조건의 연결을 완성해 제안한다.** 두 안 모두 Request Controller가 최신 근거와 권한을 검사해 채택한다. 모델이나 해석 코드가 업무 실행 권한을 갖는 비교가 아니다.
@@ -75,7 +75,7 @@ VIA와 상태 owner는 로컬이고 음성/전사·의미 모델은 클라우드
 | --- | --- | --- | --- |
 | **Interaction Manager** | Channel I/O, Turn-Taking Control, Evidence Capture, Timeline & Buffer | 동일 | Playback State는 실제 재생/receipt buffer 상태. VAD는 Turn-Taking Control 내부 기능 |
 | **Request Controller** | 41에서는 기존 입력/revision·의미 채택·질문 기능을 사용. 44별 실행 Module은 고정하지 않음 | 동일 | 채택 의미, 질문/candidate snapshot, 보존 조건과 input/source revision. 실제 전달 원본은 Response Manager |
-| **Request Interpreter** | **모델 주도 해석 제어기**, 읽기 도구 실행기, 의미 제안 검증기 | **요청 틀 해석기**, **Request Resolution Engine**, 읽기 도구 실행기, 의미 제안 검증기 | A 임시 해석 상태 / B 요청 해석 상태. 둘 다 미채택 근거·후보·job의 transient 상태 |
+| **Request Interpreter** | **모델 주도 해석 제어기**, 읽기 도구 실행기, 의미 제안 검증기 | **요청 구조화기**, **Request Resolution Engine**, 읽기 도구 실행기, 의미 제안 검증기 | A 임시 해석 상태 / B 요청 해석 상태. 둘 다 미채택 근거·후보·job의 transient 상태 |
 | **Context Manager** | 45의 근거 제공 계약을 사용. 41에서 생산/조회 대안을 선택하지 않음 | 동일 | EvidenceBundle/QueryReceipt 공급. 원본 Request/Task/publication 권위를 가져오지 않음 |
 | **Task Manager** | 현재 Task·Execution·명령 조회/변경의 기존 기능 | 동일 | Task 사실·revision·command 상태 |
 | **Agent Gateway** | 외부 명령/receipt/event의 기존 연동 기능 | 동일 | 전송·외부 접수/결과 대응. 내부 도메인 실행은 외부 Agent |
@@ -103,8 +103,11 @@ VIA와 상태 owner는 로컬이고 음성/전사·의미 모델은 클라우드
 
 | 읽기 port | 입력 | 반환 | 실제 호출 대상 |
 | --- | --- | --- | --- |
-| `context_retrieval` | 목적, 허용 source kind, input/span/evidence ref 또는 대화/실제 전달 범위, 조건·limit/cursor | 허용 발췌/locator, source ID/revision·사용 범위, 불확실성·coverage/gap, QueryReceipt | Context Manager. 45A/B의 실제 근거 공급 구현을 감춤 |
-| `task_retrieval` | 업무 종류/시간/관련 요청 또는 결과 참조 등 후보 selector, 필요한 상태 필드·limit/cursor | 후보 Task/Execution ID, 확인된 상태/revision, 질문·결과 ref, 검색 범위·누락 | Task Manager **직접 조회**. Context Manager 경유를 필수로 하지 않음 |
+| `context_retrieve` | 목적, 허용 source kind, input/span/evidence ref 또는 대화/실제 전달 범위, 조건·limit/cursor | 허용 발췌/locator, source ID/revision·사용 범위, 불확실성·coverage/gap, QueryReceipt | Context Manager. 45A/B의 실제 근거 공급 구현을 감춤 |
+| `task_retrieve` | 업무 종류/시간/관련 요청 또는 결과 참조 등 후보 selector, 필요한 상태 필드·limit/cursor | 후보 Task/Execution ID, 확인된 상태/revision, 질문·결과 ref, 검색 범위·누락 | Task Manager **직접 조회**. Context Manager 경유를 필수로 하지 않음 |
+| `interaction_retrieve` | 최근 대화/실제로 전달한 질문·응답의 query와 limit | 원문 발췌, publication/질문 참조, 실제 전달 여부·출처/변경 번호 | Context Manager의 대화/전달 기록 읽기 view. 원본 owner인 Request Controller/Response Manager의 계약을 사용하며 Interaction Manager의 마이크를 직접 읽는 도구가 아님 |
+
+이 세 이름은 **이번 41의 논리적 읽기 도구 표기**다. 이전 `context_retrieval`/`task_retrieval` 표기를 통일하고 대화/실제 전달 조회를 `interaction_retrieve`로 명시했다. 실제 provider의 tool call envelope는 Model Access adapter가 대응한다. 도구 실행기에는 `query`, `selector`, `limit` 같은 허용 인자만 전달하고 job/read ID·현재 대화 범위·권한·입력 시점·예산은 VIA host가 부착한다. 모델이 scope나 권한을 늘리는 인자를 발명해도 실행하지 않는다.
 
 두 안의 읽기 도구 실행기는 같은 port를 실행한다. 각 조회에 request/job/read ID와 시작 revision을 붙이며 **자체 의미 판단이나 조회 전략을 만들지 않는다.** A는 모델이 조회를 선택하고 B는 Engine 코드가 선택한다. 같은 근거 조건을 만들기 위해 B에 정답 referent·Task를 pre-resolve해서 주지 않는다.
 
@@ -125,9 +128,36 @@ VIA와 상태 owner는 로컬이고 음성/전사·의미 모델은 클라우드
 
 **A도 구조화 출력, cache, 이전 조건 보존 검사, 검증 가능한 부분 수정이 가능하다.** 관련 요청을 매번 전부 새로 이해하거나 전체 이력을 읽는 약한 A로 비교하지 않는다. 다만 부분 수정의 의미와 전체 연결을 모델이 제안하는 정상 경로는 유지한다. 내부 사고 기록을 영속 저장하지 않으며 tool 선택/입출력·근거·결과와 예산을 추적한다.
 
+### 3.4.1 A의 Module 출력: 실행할 도구와 인자
+
+모델 주도 해석 제어기는 LLM 결과를 다음 형태의 **ReadRequest**로 정규화하여 읽기 도구 실행기에 전달한다. 아래는 provider 중립적인 검토 계약 예시이며 특정 API의 raw 응답 형식이 아니다.
+
+```json
+{
+  "kind": "READ",
+  "tool_calls": [
+    {
+      "name": "task_retrieve",
+      "arguments": {
+        "query": "보고서",
+        "limit": 5
+      }
+    },
+    {
+      "name": "context_retrieve",
+      "arguments": {
+        "selector": "INPUT_SELECTION"
+      }
+    }
+  ]
+}
+```
+
+모델은 `READ`(이 허용 도구 호출), `CLARIFY`(확인 질문 제안), `PROPOSE`(전체 MeaningProposal 제안) 중 다음 행동을 고른다. 조회 결과의 `read ID`, `status`, 후보/원문 발췌·출처/변경 번호·coverage를 받은 뒤 모델을 다시 호출한다. 보고서 두 후보가 남아 대화 근거가 더 필요하면 다음 차례에 `interaction_retrieve(query="보고서", limit=5)`를 제안할 수 있다. 이 세 도구를 매번 모두 호출한다는 뜻은 아니다. Host는 허용 이름·인자·권한·예산을 검사하며 도구 선택의 의미를 대신 판단하지 않는다. 최종 `PROPOSE`는 실제 보고서 Task·표 자료 참조·메일 초안과의 결과 의존·발송 금지를 포함해야 한다.
+
 ### 3.5 B: 모델의 틀을 코드가 해결하여 전체 의미 제안을 구성
 
-**요청 틀 해석기**는 Model Access로 초기 `RequestFrame v1`을 생산하고 Engine이 범위를 지정한 부분 해석을 요청할 때만 그 부분을 모델에 준다. **Request Resolution Engine**은 frame version·미해결 항목을 검사하고 유한 연산의 상태 전이로 다음 read, 부분 해석, 확인 질문과 전체 binding 제안을 구성한다.
+**요청 구조화기**는 Model Access로 초기 `RequestFrame v1`을 생산하고 Engine이 범위를 지정한 부분 해석을 요청할 때만 그 부분을 모델에 준다. **Request Resolution Engine**은 frame version·미해결 항목을 검사하고 유한 연산의 상태 전이로 다음 read, 부분 해석, 확인 질문과 전체 binding 제안을 구성한다.
 
 | 항목 상태 | Engine 코드의 처리 |
 | --- | --- |
@@ -141,6 +171,108 @@ VIA와 상태 owner는 로컬이고 음성/전사·의미 모델은 클라우드
 부분 모델 요청에는 `field ID`, 원문 span, 유한 candidate set, 해당 근거·version, 허용 반환 schema를 준다. 모델은 특정 후보/속성/부분 관계와 불확실성을 반환하고 Engine이 전체 결합에 반영한다. 모델이 전체 요청 관계를 완성한 뒤 Engine이 복사하는 경로는 **A형 혼합**이며 B의 비용/이익으로 숨기지 않는다. 임의 모델 생성 코드·expression은 실행하지 않는다.
 
 Engine의 결합 결과도 공통 읽기·검증 계약을 거쳐 Request Controller에 제안된다. 모델의 초기 신규/보완 추출 오류, 잘못된 유효 Task, 누락 후보와 잘못 구현한 결합 규칙은 남을 수 있다. **B도 1회 호출로 끝나지 않을 수 있다.** frame 생성과 필요한 부분 해석·답변 해석·재질문 비용을 모두 포함한다.
+
+### 3.5.1 B의 Module 출력: 고정 RequestFrame 계약
+
+Module 이름은 **요청 구조화기**로 정리한다. 사용자 원문을 코드가 처리할 정해진 표현으로 바꾸는 역할이며, 도구 실행기가 아니다. 초기 호출에는 `RequestFrame`, 조건부 호출에는 Engine이 지정한 항목의 `PartialInterpretation`을 반환한다. 이번 고정 필드 계약은 [JSON Schema](./contracts/dp41-request-frame-v1.schema.json)와 [같은 사례의 실제 JSON](./contracts/dp41-output-examples.json)을 원본으로 관리하는 **설계 검토용 v1**이다. 런타임 API 구현·최종 채택이나 모든 UC의 성공을 선언하지 않는다.
+
+| 고정 top-level key | 자료형 / 의미 | 누가 처리하는가 |
+| --- | --- | --- |
+| `schema_version` | 정수 `1`: 형식 버전. 자료가 최신이라는 의미가 아님 | Engine이 지원 버전인지 검사 |
+| `input_ref` | 제공받은 현재 입력의 식별자. 예: `Input1` | Host가 현재 job/input과 동일한지 검사. input revision/권한/예산은 별도 host envelope |
+| `goals` | `{id,kind,target_ref,input_refs,instruction,source_text}` 배열. 목표 종류·참조와 Agent에 줄 도메인 지시 | Engine은 종류별 처리를 선택하고 참조를 결합. 보고서 수정/메일 작성 방법을 계획하지 않음 |
+| `references` | `{id,source,mention,selector}` 배열. `report`/`table`은 **잠정 참조 이름**이며 실제 Task/자료 ID가 아님 | Engine이 허용 selector로 조회하고 후보/변경 번호를 별도 상태에 기록 |
+| `relations` | `op,from_goal,to_goal,source_text`의 관계 배열. `WHEN`만 제한된 predicate 추가 | Engine이 목표 간 독립·선후·결과 참조·지원되는 조건 관계를 구성 |
+| `constraints` | `op,scope`와 op별 필드. 발송 금지/유지 속성의 적용 목표를 명시 | Engine이 해당 목표에 붙이고 검증/인계까지 유지. 실행 승인으로 취급하지 않음 |
+| `unparsed_spans` | `{text,reason}` 배열. 표현 불가/역할 불확실 구간을 그대로 보존 | 비어 있지 않거나 `UNRESOLVED` 목표면 완성 의미로 인계하지 않음 |
+
+각 object는 **required key·타입·허용 enum을 고정하고 추가 필드를 거부**한다. Schema의 배열 32개/조회 limit 10개 상한은 검토용 형식 예시이며 최종 실행 예산이나 QA 목표를 동결한 값이 아니다. `instruction`은 도메인 작업 지시이며 VIA의 Task 연결·결과 의존·발송 금지를 이 자유 문자열 안에 숨기지 않는다. `source_text`와 `mention`은 현재 원문과의 대응을 검사하되, 그 대응만으로 모델의 의미 판단이 옳다는 보장은 없다. 모델이 `bindings`, 실제 Task ID, 임의 실행 식이나 새 op를 정해 전체 결합을 대신하는 것이 아니다. `KNOWN_REF`는 host가 제공/조회한 실제 참조의 현재성·허용 범위를 별도로 확인해야 한다.
+
+| 유한 표현 / Engine dispatch | 코드가 하는 일 |
+| --- | --- |
+| `RECENT_TASK(query,limit)` | `task_retrieve`로 현재 대화 범위의 후보 조회. 원문에 없는 ‘가장 최근 것이 정답’ 규칙은 적용하지 않음 |
+| `INPUT_SELECTION` | `context_retrieve`로 현재 입력 시점의 선택 근거 조회. 화면 내용 의미나 후보 구별이 필요하면 해당 항목만 모델에 요청 |
+| `RECENT_INTERACTION(query,limit)` | `interaction_retrieve`로 실제 대화/전달 근거 조회 |
+| `KNOWN_REF(source_ref)` | 공급된 read set/질문 후보에 있는 참조인지 검사. 임의 ID를 신뢰하지 않음 |
+| `UPDATE_TASK`, `NEW_TASK`, `DIRECT_RESPONSE`, `CANCEL_TASK`, `ANSWER_QUESTION`, `QUERY_STATUS`, `UNRESOLVED` | 목표 종류별 후보/질문/인계 표현. UPDATE/CANCEL은 실제 Task 후보가 필요하며 NEW_TASK는 새 업무 의도이지 이미 생성된 Task가 아님 |
+| `USE_RESULT`, `AFTER`, `INDEPENDENT`, `WHEN` | 현재 요청의 관계를 결합. `USE_RESULT(G1,G2)`는 **G1을 수정한 뒤 생기는 결과**를 G2에 사용한다는 의존 관계이지 과거 결과를 읽어 이미 완료한 것으로 보는 규칙이 아님 |
+| `WHEN` predicate | 제공 근거의 `STATE/KIND/YEAR`에 한해 `EQ/NE/IN` 검사. unknown은 참/거짓으로 확정하지 않음. ‘설득력 있으면’ 같은 도메인 판단은 이 비교 문법으로 바꾸지 않음 |
+| `FORBID_ACTION(scope,action)` | 지원 action `SEND/DELETE/OVERWRITE`의 금지를 목표에 붙임. scope 없는 전역 금지로 승격하지 않음 |
+| `KEEP_PROPERTY(scope,property,value)` | 지원 속성 `FORMAT/LANGUAGE/AUDIENCE`의 보존 의미. 임의 property나 실행 식은 지원하지 않음 |
+
+코드 경로는 **형식 검사 → selector dispatch → 결과/후보 상태 갱신 → 충분한 근거의 참조 연결 → 관계/조건 결합 → 공통 검증**이다. 복수/불충분 후보는 질문 또는 범위 지정 부분 모델 해석으로 돌린다. 지원 범위를 넘는 opcode/필드/조건은 거절 또는 미해석 구간으로 보존하며 자동 실행하지 않는다. 새 연산 지원에는 schema와 코드 처리 규칙을 함께 바꿔야 한다.
+
+같은 원문에서 생성할 RequestFrame의 예시는 다음과 같다. `G1`은 보고서 수정 목표, `G2`는 메일 초안 목표이며 Task1/Task2와 다른 잠정 목표 ID다. 그림은 이 JSON의 필드값을 축약한다.
+
+```json
+{
+  "schema_version": 1,
+  "input_ref": "Input1",
+  "goals": [
+    {
+      "id": "G1",
+      "kind": "UPDATE_TASK",
+      "target_ref": "report",
+      "input_refs": [
+        "table"
+      ],
+      "instruction": "선택한 표를 보고서에 추가",
+      "source_text": "이 표를 아까 보고서에 넣고"
+    },
+    {
+      "id": "G2",
+      "kind": "NEW_TASK",
+      "target_ref": null,
+      "input_refs": [],
+      "instruction": "수정된 보고서 결과로 메일 초안 작성",
+      "source_text": "결과를 바탕으로 초안만 만들어"
+    }
+  ],
+  "references": [
+    {
+      "id": "report",
+      "source": "TASK",
+      "mention": "아까 보고서",
+      "selector": {
+        "op": "RECENT_TASK",
+        "query": "보고서",
+        "limit": 5
+      }
+    },
+    {
+      "id": "table",
+      "source": "CONTEXT",
+      "mention": "이 표",
+      "selector": {
+        "op": "INPUT_SELECTION"
+      }
+    }
+  ],
+  "relations": [
+    {
+      "op": "USE_RESULT",
+      "from_goal": "G1",
+      "to_goal": "G2",
+      "source_text": "결과를 바탕으로"
+    }
+  ],
+  "constraints": [
+    {
+      "op": "FORBID_ACTION",
+      "scope": [
+        "G2"
+      ],
+      "action": "SEND",
+      "source_text": "메일은 보내지 말고"
+    }
+  ],
+  "unparsed_spans": []
+}
+```
+
+Engine은 `report`를 조회해 Task1/Task2 후보를 얻고 임의로 선택하지 않는다. ‘어느 보고서인가요?’를 실제 전달한 뒤 새 답변 ‘예산 보고서’를 받아 Task1을 연결한다. 부분 모델 반환은 예를 들어 `{field_ref:"report",candidate_ref:"Task1",evidence_refs:["Read1"],uncertain:false}`처럼 **요청한 항목·제공 후보·출처 안의 결과**다. Host는 현재 질문·후보·근거가 맞는지 다시 검사한다. 이 반환에는 전체 `goals/relations/constraints`를 다시 쓰는 권한이 없고, Engine이 기존 결과 의존과 SEND 금지를 유지하며 전체 의미를 구성한다. `uncertain`이나 검증 불일치가 있으면 그 후보로 확정하지 않는다.
+
+[문서 계약 검사기](../../../../scripts/architecture/dp41_output_contract.py)는 위 예시의 타입·enum·추가 필드·참조·관계 cycle·원문 대응과 7개 frame/2개 부분 반환 거절 사례를 검사한다. 이는 **필드값을 코드가 분기할 수 있다는 문서 일관성 검사**이며 Engine 구현·모델 성공률이나 자연어의 완전한 표현 가능성을 입증하는 실행 실험이 아니다.
 
 ### 3.6 잠정 상태, 채택 및 질문 복원의 저장 계약
 
@@ -161,7 +293,7 @@ Engine의 결합 결과도 공통 읽기·검증 계약을 거쳐 Request Contro
 
 | 호출 역할 | A | B | 공통/주의 |
 | --- | --- | --- | --- |
-| 현재 요청 의미 | 제어기가 모델의 read/의미 제안을 받고 조회 결과로 반복 | 틀 해석기가 초기 frame·Engine 지정 부분·사용자 보완을 해석 | Semantic API Client의 cloud 호출. code read/validator는 모델 호출이 아님 |
+| 현재 요청 의미 | 제어기가 모델의 read/의미 제안을 받고 조회 결과로 반복 | 구조화기가 초기 frame·Engine 지정 부분·사용자 보완을 해석 | Semantic API Client의 cloud 호출. code read/validator는 모델 호출이 아님 |
 | 과거 의미 가공 | 현재 의미 호출에서 근거를 해석하면 추가 호출 없음 | 필요 근거 공급 구현에 따라 추가 호출 가능 | Context Manager의 45 호출은 해당 실제 call ID로 한 번만 집계 |
 | 응답 내용 | 이미 만든 적합한 질문/의미를 재사용. 정형 접수 문구는 template 가능 | 동일 | Response Composer가 내용 준비에 모델을 사용하면 별도 semantic 호출 |
 | 음성 입출력 | 지속 audio/전사 및 준비한 발화의 음성 생성 | 동일 | Voice API Client cloud 호출. 입력 commit이 자율 답변을 만드는 경로는 이번 비교 밖 |
@@ -224,7 +356,7 @@ B의 틀 자체에 잘못된 신규/보완 판단이 들어갈 수 있다. 상�
 원래 요청의 표 후보가 두 개이고 구조화 UI metadata만으로 ‘빨간 선으로 표시된 표’를 구별할 수 없다고 하자. A/B에 같은 허용 화면 근거를 제공하며 정답 ID는 제공하지 않는다.
 
 - A 모델은 화면 근거 읽기를 선택하고 반환한 두 후보/화면으로 대상과 나머지 요청 관계를 함께 제안한다. 부족하면 추가 조회/질문을 선택한다.
-- B Engine은 지원되는 화면 조건으로 후보를 먼저 읽고, 틀 해석기에 **표 field·원문 span·두 candidate ID·허용 화면 crop·근거 revision**만 주어 부분 해석을 요청한다. 모델은 후보별 해당 조건의 의미 해석과 불확실성을 반환하고 Engine이 이 field를 다른 목표/Task/금지 조건에 결합한다.
+- B Engine은 지원되는 화면 조건으로 후보를 먼저 읽고, 구조화기에 **표 field·원문 span·두 candidate ID·허용 화면 crop·근거 revision**만 주어 부분 해석을 요청한다. 모델은 후보별 해당 조건의 의미 해석과 불확실성을 반환하고 Engine이 이 field를 다른 목표/Task/금지 조건에 결합한다.
 - crop이 없거나 식별이 불확실하면 후보 하나로 자동 채택하지 않는다. 필요한 근거/확인 질문으로 남긴다. 모델에게 “전체 요청을 알아서 완성하라”고 요청하여 반환 graph를 복사하면 B가 아닌 명시적 혼합 경로다.
 
 이 장면은 B도 초기 frame 외 모델 호출이 필요할 수 있음을 보여준다. 부분 scope가 작다는 이유만으로 비용/정확성 이익을 보증하지 않는다.
@@ -256,19 +388,7 @@ B의 틀 자체에 잘못된 신규/보완 판단이 들어갈 수 있다. 상�
 | 작업 지시 | “임원이 이해하기 쉽게” 같은 도메인 목표/설명 원문 | VIA가 소유하는 Task 연결, 순서, 조건, 금지를 이 필드에 숨기지 않음 |
 | 미해석 | 원문 구간과 미해결 이유, 지원하지 않는 관계 | 삭제하거나 성공으로 간주하지 않음 |
 
-예시 발화는 “이 표를 아까 보고서에 넣고, 임원들이 이해하기 쉽게 설명해줘. 메일은 보내지 마”다. 사람이 읽기 쉽게 적으면 다음과 같다.
-
-```text
-목표 g1: 보고서에 표 삽입
-자료 r1: 당시 선택/화면 구간에 해당하는 표 [미해결]
-업무 t1: 아까 만들던 보고서 [기존 Task 후보 조회 필요]
-관계: g1의 입력은 r1, 변경 대상은 t1
-작업 지시: "임원들이 이해하기 쉽게 설명"
-조건 c1: 이번 요청 범위의 메일 발송 금지
-미해석 구간: 없음이라는 모델 제안 [코드가 의미 정확성을 증명한 것은 아님]
-```
-
-모델은 실제 ID를 모르는 상태로 틀을 만들 수 있다. Engine은 r1과 t1을 조회해 결합하고, 질문이 필요하면 아직 완성하지 않는다. `c1`의 범위가 모호하면 질문한다. 이를 모든 미래 업무에 적용되는 영구 금지로 승격하지 않는다.
+구체적인 고정 key·허용 op·같은 발화의 전체 JSON은 [§3.5.1](#351-b의-module-출력-고정-requestframe-계약)을 따른다. `report`/`table`은 아직 미해결 참조이고 `goals`의 잠정 목표 ID는 실제 Task ID가 아니다. Engine이 자료와 후보를 조회해 결합하고 질문이 필요하면 완성 의미로 인계하지 않는다. 조건의 scope가 모호하면 질문하며 모든 미래 업무에 적용되는 영구 금지로 승격하지 않는다.
 
 ### 5.2 규칙, 추가 모델 해석, 사용자 질문의 역할
 
@@ -281,7 +401,9 @@ B의 틀 자체에 잘못된 신규/보완 판단이 들어갈 수 있다. 상�
 
 ### 5.3 틀과 연산은 누가 정의하고 바꾸는가
 
-VIA 설계/개발자가 고정 UC·명령/Agent capability·필요 품질을 근거로 frame schema와 코드 연산을 함께 정의하고 version을 관리한다. ‘목표/자료/업무/조건’은 설명용 예시이며 모델이 매번 필드 종류나 새 연산을 발명하는 것이 아니다. v1의 임의 JSON을 실행하는 것도 아니다.
+VIA 설계/개발자가 고정 UC·명령/Agent capability·필요 품질을 근거로 frame schema와 코드 연산을 함께 정의하고 version을 관리한다. ‘목표/자료/업무/조건’이라는 이전 사람용 설명을 이번 검토에서는 §3.5.1의 일곱 고정 key와 JSON Schema로 구체화했다. 모델이 필드 종류나 op를 발명할 수 없으며 알려진 형태의 JSON만 검사한다. JSON이 유효해도 그 뜻이나 연결이 정답이라는 보장은 없다.
+
+schema가 커지면 초기 모델 입력/출력 토큰과 형식 수정 재호출도 증가한다. B의 적은 반복 가능성을 이 비용 없이 비교하지 않는다. 형식 오류 재생성·부분 해석·질문 비용과 미지원도 같은 예산/품질 조건에서 기록한다.
 
 확장에는 새 필드/관계의 의미, 원문/근거 연결, 코드 조회·결합·정정 규칙, 부분 모델 반환, 검증/질문, old version 복원·삭제 영향을 함께 적는다. 같은 자료 계약을 연결하는 새 source adapter와 새로운 의미 관계 연산 추가를 구별한다. prompt만 바꿔 모델이 새 필드를 내보내게 해도 Engine이 처리할 수 없으면 지원이 늘어난 것이 아니다.
 

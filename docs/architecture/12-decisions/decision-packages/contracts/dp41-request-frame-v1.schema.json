@@ -1,0 +1,465 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:via:dp41:request-frame:1",
+  "title": "DP41 RequestFrame v1 — review contract, not an implemented API",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "input_ref",
+    "goals",
+    "references",
+    "relations",
+    "constraints",
+    "unparsed_spans"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "input_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "goals": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/goal"
+      },
+      "maxItems": 32,
+      "minItems": 1
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/reference"
+      },
+      "maxItems": 32
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      },
+      "maxItems": 32
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/constraint"
+      },
+      "maxItems": 32
+    },
+    "unparsed_spans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "UNSUPPORTED_RELATION",
+              "UNCERTAIN_ROLE"
+            ]
+          }
+        }
+      },
+      "maxItems": 32
+    }
+  },
+  "$defs": {
+    "goal": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "target_ref",
+        "input_refs",
+        "instruction",
+        "source_text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "UPDATE_TASK",
+            "NEW_TASK",
+            "DIRECT_RESPONSE",
+            "CANCEL_TASK",
+            "ANSWER_QUESTION",
+            "QUERY_STATUS",
+            "UNRESOLVED"
+          ]
+        },
+        "target_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512
+          },
+          "maxItems": 32
+        },
+        "instruction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "source_text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "required": [
+        "id",
+        "source",
+        "mention",
+        "selector"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "CONTEXT",
+            "TASK",
+            "INTERACTION"
+          ]
+        },
+        "mention": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "selector": {
+          "$ref": "#/$defs/selector"
+        }
+      }
+    },
+    "selector": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "INPUT_SELECTION"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "query",
+            "limit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "RECENT_TASK"
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "query",
+            "limit"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "RECENT_INTERACTION"
+            },
+            "query": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "source_ref"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "KNOWN_REF"
+            },
+            "source_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        }
+      ]
+    },
+    "predicate": {
+      "type": "object",
+      "required": [
+        "reference_id",
+        "field",
+        "comparison",
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "reference_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "field": {
+          "type": "string",
+          "enum": [
+            "STATE",
+            "KIND",
+            "YEAR"
+          ]
+        },
+        "comparison": {
+          "type": "string",
+          "enum": [
+            "EQ",
+            "NE",
+            "IN"
+          ]
+        },
+        "value": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "maxItems": 32
+            }
+          ]
+        }
+      }
+    },
+    "relation": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "from_goal",
+            "to_goal",
+            "source_text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "USE_RESULT",
+                "AFTER",
+                "INDEPENDENT"
+              ]
+            },
+            "from_goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "to_goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "source_text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "from_goal",
+            "to_goal",
+            "predicate",
+            "source_text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "WHEN"
+            },
+            "from_goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "to_goal": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "predicate": {
+              "$ref": "#/$defs/predicate"
+            },
+            "source_text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        }
+      ]
+    },
+    "constraint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "scope",
+            "action",
+            "source_text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "FORBID_ACTION"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "maxItems": 32
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                "SEND",
+                "DELETE",
+                "OVERWRITE"
+              ]
+            },
+            "source_text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "op",
+            "scope",
+            "property",
+            "value",
+            "source_text"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "const": "KEEP_PROPERTY"
+            },
+            "scope": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              "maxItems": 32
+            },
+            "property": {
+              "type": "string",
+              "enum": [
+                "FORMAT",
+                "LANGUAGE",
+                "AUDIENCE"
+              ]
+            },
+            "value": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "source_text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            }
+          }
+        }
+      ]
+    }
+  }
+}

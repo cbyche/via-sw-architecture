@@ -6,6 +6,8 @@
 
 **현재 판본 안내 — 2026-10-09:** 41은 공통 실행 계약에 맞춰 로컬 VIA/로컬 VAD와 클라우드 음성·의미 모델로 재구체화했다. 41과 45의 품질 표는 조건별 정성 비교이며, 42~44의 수치/원형 점수와 Shared Omni 표기는 이전 판본이다. 이후 44→45→42를 재구체화할 예정이며 모든 자료의 모델·호출 계약이 이미 동기화됐다는 뜻은 아니다. 아래 날짜별 기록과 이전 수치 설명은 해당 판본의 이력으로 읽는다.
 
+**41의 구체적인 Module 출력:** A는 `task_retrieve`/`context_retrieve`를 선택하는 `tool_calls.name/arguments`, 필요할 때의 `interaction_retrieve`를 표시한다. B의 **요청 구조화기**는 일곱 고정 key의 `RequestFrame`을 반환하며 Engine이 selector 조회·목표 관계·scope별 금지를 결합한다. `report`/`table`과 G1/G2는 실제 자료/Task ID가 아닌 잠정 참조/목표 ID다. 그림의 축약 값과 [전체 JSON/Schema 및 코드 처리 규칙](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md#351-b의-module-출력-고정-requestframe-계약)을 대조할 수 있다. 모델이 필드나 op를 발명하게 두지 않는다. A와 B 모두 JSON일 수 있으며 차이는 다음 조회와 전체 의미 결합의 결정 주체다. 구조도 안의 반환선을 굽은 순환으로 표시하고 반복 주체와 재진입을 설명한다.
+
 **41의 구조도와 별도 순서도:** 위쪽 Request Interpreter 안에는 Module 간 호출·결과 반환과 교환 데이터만 표시한다. 사용자 리뷰에 따라 구조도 안에 넣었던 분기 도형을 제거하고 아래쪽에 실행 순서도를 별도로 배치했다. A 순서도는 모델 판단/조회/모델 재판단 반복, B 순서도는 코드 항목 검사/조회 결과 반영 반복과 필요한 부분만 모델에 다시 묻는 경로를 보여준다. 순서도의 사각형/마름모는 동작/분기이며 Component/Module이 아니다. 구조도와 순서도 사이에는 연결선을 넣지 않는다. 완성 의미 제안·확인 질문 대기·실패·취소·한도 도달에서 반복을 끝내며 질문 답변 뒤 새 해석으로 이어간다. 데이터 글씨는 Module 이름보다 작게 유지한다.
 
 **41의 첫 독자용 확대 보기:** 문서 MAIN은 전체 경로를 유지하고 발표 비교는 Request Interpreter의 해석 흐름, 클라우드 LLM, Context Manager/Task Manager 직접 조회에 집중한다. 상단에 사용자 발화 → Interaction Manager → Request Controller → Request Interpreter 시작 경로를 간략히 표시한다. 공통 음성 입출력 내부·권한·저장/채택·응답·외부 위임은 아래 설명 문장으로 요약했다. 생략은 실제 Component 삭제가 아니다. Task1은 예산 보고서, Task2는 실적 보고서이고 자료는 ‘선택한 표’로 쓴다. ReadRequest/EvidenceBundle/RequestFrame/MeaningProposal은 조회 요청/조회 결과/요청 틀/의미 제안이라는 한글 이름과 함께 표시한다. 불투명한 `T7/T8`, `E7@v2`, `BOUND`, `send=false` 대신 업무 내용·미확정/연결·발송 금지를 설명한다.

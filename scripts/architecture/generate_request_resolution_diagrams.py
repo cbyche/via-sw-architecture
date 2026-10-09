@@ -25,7 +25,7 @@ def trace(option):
  (12,3,'전사 완료/실패와 item ID; 발화 종료와 별개',True),(3,0,'전사 + 입력 item 연결. 실제 음성/화면의 local 시점으로 근거 연결',True),
  (0,1,'1  확정 발화/근거/입력 버전. 대상 Task와 신규/보완 관계는 미결정',False),
  (1,2,'2  같은 최근 대화/실제 게시 질문 + 원문. '+('유한한 버전 지정 요청 틀' if b else '사용 가능한 제한 읽기 도구 계약'),False),
- (2,3,'요청 틀 해석기: 초기 틀 해석 요청' if b else '모델 주도 해석 제어기: 읽기/질문/완성 의미 추론 요청',False),
+ (2,3,'요청 구조화기: 초기 틀 해석 요청' if b else '모델 주도 해석 제어기: 읽기/질문/완성 의미 추론 요청',False),
  (3,4,'cloud semantic 추론. 음성 입력을 막는 전체 호출 mutex 없음',False),
  (4,3,'3  '+('목표·대상·Task·조건이 미결정인 typed frame' if b else '다음 행동 제안: 당시 표와 관련 업무 조회'),True),(3,2,'모델 결과 반환; 출력은 VIA 코드가 형식·범위 검사',True)]
  if b:steps +=[(2,2,'Engine 코드가 틀 검사 → 미해결 항목에 필요한 조회 구성',False)]
@@ -34,7 +34,7 @@ def trace(option):
  (2,5,'4  공통 읽기 도구 실행기: 당시 선택/화면과 관련 대화/질문 조회',False),(5,2,'근거/버전/coverage 또는 조회 실패',True),
  (2,6,'공통 읽기 도구 실행기: 관련 보고서 업무 후보 조회',False),(6,2,'예산/실적 보고서 후보와 현재 상태/버전',True)]
  if b:steps +=[(2,2,'조회 결과는 Engine으로. 코드가 표 연결; 보고서 둘은 아직 미해결',False),
- (2,2,'조건부: 범위 지정 해석이 필요하면 Engine → 요청 틀 해석기 → Model Access → semantic LLM → 역순 반환',False),
+ (2,2,'조건부: 범위 지정 해석이 필요하면 Engine → 요청 구조화기 → Model Access → semantic LLM → 역순 반환',False),
  (2,2,'이 사례는 추가 부분 추론 없이 질문. 임의 규칙 실행/모델의 전체 binding 생성은 순수 B가 아님',False)]
  else:steps +=[(2,3,'조회 근거로 다음 조회/질문/완성 의미 재판단 요청',False),(3,4,'semantic 추론 세션에 근거 제공',False),
  (4,3,'표 연결 + 보고서 두 후보 + 보고서 결과로 메일 초안/발송 금지 제안',True),(3,2,'전체 의미/질문 제안 반환',True)]
@@ -50,7 +50,7 @@ def trace(option):
  (1,2,'현재 질문/후보와 답변, 새 입력 버전; 앞선 발송 금지 유지',False),
  (2,3,'답변 의미 해석 요청',False),(3,4,'같은 cloud semantic API, 별도 요청 context',False),
  (4,3,'답변 의미: '+('예산 보고서라는 후보 제한 표현' if b else 'Task1 예산 보고서 + 표 삽입 + 결과로 메일 초안/발송 금지'),True),(3,2,'해석 결과 반환',True)]
- if b:steps +=[(2,2,'틀 해석기 → Engine. 코드가 질문/후보를 확인해 전체 binding 완성',False)]
+ if b:steps +=[(2,2,'구조화기 → Engine. 코드가 질문/후보를 확인해 전체 binding 완성',False)]
  else:steps +=[(2,2,'모델의 의미 제안 검사, 조건 보존과 검증 가능한 부분 수정',False)]
  steps +=[(2,2,'공통 검증기를 통과한 의미 제안. RI의 해석 상태는 transient',False),
  (2,1,'7  완성 의미 + 근거/Task/질문 버전 제안',True),
@@ -89,7 +89,7 @@ def trace(option):
  for item in p.items:
   if item['kind']=='line' and item['color']==INK:item['color']='#000000'
  p.text(64,h-135,'모든 Component와 상태 권한은 local VIA / 모델은 외부 cloud dependency / Task 계획·실행은 외부 Agent 책임.',19,MUTED)
- p.text(64,h-95,'B Engine과 틀 해석기는 Request Interpreter 내부 Module. 해석 상태는 임시이며 채택·질문 원본의 owner는 RC.',19,MUTED)
+ p.text(64,h-95,'B Engine과 구조화기는 Request Interpreter 내부 Module. 해석 상태는 임시이며 채택·질문 원본의 owner는 RC.',19,MUTED)
  p.text(64,h-55,'사각=Component / 육각=외부 모델·Agent / 실선=요청·전달 / 점선=반환. 호출 분기는 조건부, 수·시간은 측정값 아님.',19,MUTED)
  return p
 

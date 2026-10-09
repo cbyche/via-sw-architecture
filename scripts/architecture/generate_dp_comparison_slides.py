@@ -154,7 +154,7 @@ class Comparison(Slide):
 
     def request_page(self):
         d=DATA[41]
-        self.text(40,140,1840,[d['case']],23,INK)
+        self.text(40,140,1840,['입력 Input1: '+d['case']],23,INK)
         self.text(40,169,1840,['Task1: 예산 보고서 / Task2: 실적 보고서 → “어느 보고서인가요?” → 사용자: “예산 보고서” / 결과: 수정된 보고서 → 메일 초안'],19,INK)
         self.rect(40,195,1840,48,GREEN,LINE)
         self.text(90,209,98,['설계안'],19,INK,True,'center')
