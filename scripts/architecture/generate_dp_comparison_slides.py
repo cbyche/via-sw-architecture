@@ -162,8 +162,8 @@ class Comparison(Slide):
             self.text(x+435,205,838,[d['options'][side]],26,INK,True,'center')
         self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
         self.line([(40,795),(1880,795)],color=LINE,arrow=False)
-        self.text(42,810,1840,['양안 공통: 입력 수집 → 요청 해석 → Request Controller의 검증/저장/채택 → 응답 또는 업무 위임. 그림은 요청 해석 부분을 확대했다.'],18,INK)
-        self.text(42,840,1840,['자료 예시는 교환 내용이다. 질문은 실제 전달하고 답변을 받은 뒤 Task1을 연결한다. 자료가 바뀌지 않았는지도 채택 전에 확인한다.'],18,INK)
+        self.text(42,810,1840,['공통 후속 처리: Request Controller가 현재성/권한을 검증하고 저장 후 채택한다. 이어 응답 또는 업무 위임을 진행한다.'],18,INK)
+        self.text(42,840,1840,['반복 종료: 완성 의미 제안 / 확인 질문 대기 / 실패 / 취소 / 한도 도달. 질문 답변 뒤 다시 해석한다. 무한 반복을 허용하지 않는다.'],18,INK)
         for j,(quality,left,right) in enumerate(d['tradeoffs']):
             yy=883+j*34
             self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
@@ -207,9 +207,10 @@ class Comparison(Slide):
                     tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
                 result=re.sub(r'<(?:rect|path) id="'+i['id']+r'"[^>]*/>',restyle,result)
-            if self.number==41 and i['kind']=='rect' and i.get('external'):
+            if self.number==41 and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
                 x,y,w,h=(i[k] for k in ('x','y','w','h'))
-                poly=f'<polygon id="{i["id"]}" points="{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}" fill="white" stroke="#000000" stroke-width="1"/>'
+                points=(f'{x+w/2},{y} {x+w},{y+h/2} {x+w/2},{y+h} {x},{y+h/2}' if i.get('flow_decision') else f'{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}')
+                poly=f'<polygon id="{i["id"]}" points="{points}" fill="white" stroke="#000000" stroke-width="1"/>'
                 result=re.sub(r'<rect id="'+i['id']+r'"[^>]*/>',lambda _:poly,result)
             if i['kind']!='store': continue
             x,y,w,h=(i[k] for k in ('x','y','w','h'));r=i.get('store_radius',8)
@@ -232,8 +233,9 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
-            if self.number==41 and item and item.get('external'):
-                cell.set('style',cell.get('style')+'shape=hexagon;')
+            if self.number==41 and item and (item.get('external') or item.get('flow_decision')):
+                shape='rhombus' if item.get('flow_decision') else 'hexagon'
+                cell.set('style',cell.get('style')+f'shape={shape};')
         if self.number in (44,45):
             from continuous_interaction_scene import decorate_diagram
             d=decorate_diagram(self,d)

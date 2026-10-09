@@ -176,7 +176,7 @@ MAIN은 16:9에서 A/B 각 칸의 경로를 독립적으로 표시하되, **A의
 
 큰 Component는 흰 바탕, 차이 Module만 살구색이며 박스에는 이름, 화살표와 데이터 주석에는 동작·자료·조건을 넣는다. 원통은 owner의 상태이고 State Store Component와 다르다. 입력·근거 공급·최종 검사/저장·실제 전달·위임의 공통 경로는 주변에 작게 배치한다. 클라우드 의미/음성 모델과 외부 Agent는 VIA Component가 아니다. 이 배치와 overlay는 실제 동작·판단 책임·저장 계약을 바꾸거나 새로운 API schema·44 실행 방식·42 저장소 경계를 선정하지 않는다.
 
-**발표용 그림은 요청 해석 부분의 확대 보기다.** [발표 비교](../../../presentations_files/dp-comparison/dp41-comparison.svg)는 Request Interpreter의 차이 Module, 실제 판단을 하는 클라우드 LLM, Context Manager/Task Manager 직접 조회와 교환 자료만 표시한다. 공통 입력 수집·권한·저장/채택·출력·Agent 위임은 아래 문장으로 요약한다. 이 문서의 MAIN과 사건도는 전체 경로를 유지한다. 발표에서 생략한 Component가 실제 설계에서 삭제된 것은 아니다.
+**발표용 그림은 요청 해석 부분의 확대 보기다.** [발표 비교](../../../presentations_files/dp-comparison/dp41-comparison.svg)는 상단에 사용자 발화 → Interaction Manager → Request Controller → Request Interpreter 시작 경로를 간략히 표시하고, 내부 차이 Module·클라우드 LLM·Context Manager/Task Manager 직접 조회와 교환 자료를 확대한다. A는 모델의 다음 행동 선택 → 조회 → 근거를 받은 모델 재판단을 반복한다. B는 Engine 코드의 항목 검사 → 조회 결과 반영 → 재검사를 반복하며, 의미 해석이 필요한 항목은 요청 틀 해석기를 통해 모델을 재호출하고 코드 루프로 반환한다. 마름모는 제어 흐름 분기이며 Component/Module이 아니다. 반복은 완성 의미 제안, 확인 질문 대기, 실패, 취소 또는 한도 도달에서 종료한다. 공통 음성 처리 내부·권한·저장/채택·출력·Agent 위임은 아래 문장으로 요약한다. 이 문서의 MAIN과 사건도는 전체 경로를 유지한다. 발표에서 생략한 Component가 실제 설계에서 삭제된 것은 아니다.
 
 Task1은 예산 보고서 업무, Task2는 실적 보고서 업무다. 자료는 ‘선택한 표’처럼 내용으로 표시한다. 상세 계약에서 쓰는 `revision`/`version`은 **자료나 상태가 바뀐 차수를 나타내는 변경 번호**다. 예를 들어 `v2`는 두 번째 버전이며 최신임을 자동 보증하지 않는다. 해석 중 자료가 변경되면 옛 자료로 만든 제안을 그대로 채택하지 않기 위해 변경 번호를 검사한다. 그림에는 이 목적을 ‘조회 시점’, ‘자료가 바뀌었는지 확인’으로 풀어 쓰고, 기술 계약의 변경 번호 검사는 유지한다.
 
