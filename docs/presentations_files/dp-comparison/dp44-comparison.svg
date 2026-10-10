@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
-<title id="title">04-44. VIA 지속 입력과 업무 알림의 후속 실행 구조 — 설계 비교</title>
+<title id="title">04-44. VIA 지속 입력과 Task 알림의 후속 실행 구조 — 설계 비교</title>
 <defs>
 <marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
 <marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
 <marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
 <marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
 <marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
-<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker><marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker><marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker><marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
 <rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
 <text id="n2-0" data-width="1300" x="40" y="39.48" text-anchor="start" font-size="19" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 설계 비교</text>
 <text id="n3-0" data-width="450" x="1880" y="39.48" text-anchor="end" font-size="19" font-weight="400" fill="#5F6B77">구조 비교 / 장단점 / QA Trade-off</text>
-<text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-44. VIA 지속 입력과 업무 알림의 후속 실행 구조</text>
+<text id="n4-0" data-width="1840" x="40" y="100.88" text-anchor="start" font-size="39" font-weight="700" fill="#18232E">04-44. VIA 지속 입력과 Task 알림의 후속 실행 구조</text>
 <polyline id="n5" points="40,121 1880,121" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <text id="n6-0" data-width="1840" x="40" y="160.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">“잠깐, 표부터 설명해줘.” + 메일 수신자 질문 도착 + 이전 응답 준비가 늦게 완료</text>
 <text id="n7-0" data-width="1840" x="40" y="186.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">공통: 계속 입력 수신 / 로컬 VAD와 즉시 음성 중단 / 클라우드 음성 / 의미 모델 / 같은 Request / Task / 실제 전달 원본</text>
@@ -21,152 +21,219 @@
 <polyline id="n12" points="40,795 1880,795" fill="none" stroke="#CDD6DE" stroke-width="2"/>
 <text id="n13-0" data-width="1840" x="42" y="826.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">공통 후속 처리: source / 권한 / 입력 세대 검사 → Publication Control → Interaction Manager 실제 표시/재생 → receipt</text>
 <text id="n14-0" data-width="1840" x="42" y="855.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">확인 질문은 별도 admission으로 현재 입력 해소를 기다리지 않고 제시 / 발화 시작은 업무 취소 완료가 아님</text>
-<polyline id="n15" points="40,875 1880,875" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n16-0" data-width="245" x="42" y="899.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">정확성</text>
-<text id="n17-0" data-width="720" x="300" y="899.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">의미 판단은 41과 동일 / 중앙에서 세대 / 대기 참조 연결</text>
-<text id="n18-0" data-width="820" x="1050" y="899.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">같은 판단과 검사 / 단계 간 참조 / Join 오류 관리 필요</text>
-<polyline id="n19" points="40,909 1880,909" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n20-0" data-width="245" x="42" y="933.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">응답성</text>
-<text id="n21-0" data-width="720" x="300" y="933.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">완료 회수 / 다음 지시 경로 / 중앙 전이 비용</text>
-<text id="n22-0" data-width="820" x="1050" y="933.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">조건 충족 소비자 직접 활성화 / 채널 / Join 비용</text>
-<polyline id="n23" points="40,943 1880,943" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n24-0" data-width="245" x="42" y="967.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">모델 사용 비용</text>
-<text id="n25-0" data-width="720" x="300" y="967.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">같은 의미 / 응답 job이면 동일 / 폐기 / 재시도 포함</text>
-<text id="n26-0" data-width="820" x="1050" y="967.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">같은 job이면 동일 / 중복 생산 / 폐기 호출 포함</text>
-<polyline id="n27" points="40,977 1880,977" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n28-0" data-width="245" x="42" y="1001.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">변경 / 메모리</text>
-<text id="n29-0" data-width="720" x="300" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">조정 규칙 중앙 변경 / 하나의 진행 상태</text>
-<text id="n30-0" data-width="820" x="1050" y="1001.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">단계 조합 국소 변경 조건 / 여러 Window / 채널 상태</text>
-<text id="n31-0" data-width="1840" x="40" y="1046.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">미선정 / 미측정. A도 비동기 / 우선순위 / 동시 실행. B의 사건 채널만으로 정확성 / 속도 우위를 보장하지 않는다.</text>
-<text id="n32-0" data-width="1840" x="40" y="1072.88" text-anchor="start" font-size="14" font-weight="400" fill="#5F6B77">Module 구조와 후속 실행 자료를 비교 / 준비 완료 / 내부 접수 / 외부 접수 / 실제 전달을 구별 / 수치 우열은 측정 후 판단</text>
-<rect id="legend44_0" fill="white" stroke="#000000" stroke-width="1.0" x="47" y="342" width="86" height="447"/>
-<text id="legend44_1-0" data-width="82" x="90" y="364.8" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Legend</text>
-<rect id="legend44_2" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="379" width="74" height="27"/>
-<text id="legend44_3-0" data-width="56" x="90.0" y="395.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Component</text>
-<text id="legend44_4-0" data-width="76" x="54" y="420.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">논리 책임</text>
-<rect id="legend44_5" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="438" width="74" height="27" rx="7"/>
-<text id="legend44_6-0" data-width="56" x="90.0" y="454.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
-<text id="legend44_7-0" data-width="76" x="54" y="479.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">내부 구현</text>
-<path id="legend44_8" fill="white" stroke="#000000" stroke-width="1.0" d="M53 497H109L127 515V524H53Z M109 497V515H127"/>
-<text id="legend44_9-0" data-width="70" x="90" y="513.2" text-anchor="middle" font-size="10" font-weight="400" fill="#000000">Data</text>
-<text id="legend44_10-0" data-width="76" x="54" y="538.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">교환 예시</text>
-<path id="legend44_11" fill="white" stroke="#000000" stroke-width="1.0" d="M53 560C53 550 127 550 127 560V577C127 587 53 587 53 577Z M53 560C53 570 127 570 127 560"/>
-<text id="legend44_12-0" data-width="56" x="90.0" y="571.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">State</text>
-<text id="legend44_13-0" data-width="76" x="54" y="596.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">owner 상태</text>
-<rect id="legend44_14" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" x="53" y="614" width="74" height="27" rx="7"/>
-<text id="legend44_15-0" data-width="56" x="90.0" y="630.2" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
-<text id="legend44_16-0" data-width="76" x="54" y="655.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">차이: 살구색</text>
-<polyline id="legend44_17" points="54,674 95,674" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<text id="legend44_18-0" data-width="30" x="101" y="676.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">요청</text>
-<polyline id="legend44_19" points="54,695 95,695" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<text id="legend44_20-0" data-width="30" x="101" y="697.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">반환</text>
-<text id="n54-0" data-width="76" x="54" y="746.12" text-anchor="start" font-size="11" font-weight="400" fill="#000000">공통: 검정</text>
-<text id="n55-0" data-width="76" x="54" y="768.12" text-anchor="start" font-size="11" font-weight="400" fill="#000000">차이: 살구색</text>
-<rect id="n56" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="253" width="270" height="34"/>
-<text id="n57-0" data-width="252" x="310.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Interaction Manager</text>
-<rect id="n58" fill="white" stroke="#000000" stroke-width="1.0" x="665" y="253" width="300" height="34"/>
-<text id="n59-0" data-width="282" x="815.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
-<rect id="n64" fill="white" stroke="#000000" stroke-width="1.0" x="165" y="326" width="810" height="172"/>
-<text id="n65-0" data-width="784" x="178" y="355.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
-<rect id="n66" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="195" y="381" width="285" height="38" rx="7"/>
-<text id="n67-0" data-width="267" x="337.5" y="405.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">Dialogue Dispatcher</text>
-<path id="n68" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M615 389C615 373 940 373 940 389V416C940 432 615 432 615 416Z M615 389C615 405 940 405 940 389"/>
-<text id="n69-0" data-width="307" x="777.5" y="413.64" text-anchor="middle" font-size="17" font-weight="400" fill="#18232E">Dialogue Progress State</text>
-<polyline id="n70" points="310.0,287 310,317 337.5,317 337.5,381" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n71" points="815.0,287 815,313 422.5,313 422.5,381" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n72" points="480,400.0 615,400.0" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n73" points="615,412.0 595,412 595,432 500,432 500,412 480,412.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<rect id="n76" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="535" width="235" height="34"/>
-<text id="n77-0" data-width="217" x="292.5" y="556.59" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Request Interpreter</text>
-<rect id="n78" fill="white" stroke="#000000" stroke-width="1.0" x="435" y="518" width="540" height="118"/>
-<text id="n79-0" data-width="514" x="448" y="547.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Response Manager</text>
-<rect id="n80" fill="white" stroke="#000000" stroke-width="1.0" x="455" y="558" width="230" height="33" rx="7"/>
-<text id="n81-0" data-width="212" x="570.0" y="579.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Response Composer</text>
-<rect id="n82" fill="white" stroke="#000000" stroke-width="1.0" x="730" y="558" width="225" height="33" rx="7"/>
-<text id="n83-0" data-width="207" x="842.5" y="579.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Publication Control</text>
-<polyline id="n84" points="337.5,419 337.5,509 570,509 570.0,558" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n85" points="605.0,558 605,506 490,506 490,408 480,408.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n86" points="480,400.0 495,400 495,500 872.5,500 872.5,558" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n89" points="195,400.0 165,400 165,523 292.5,523 292.5,535" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n90" points="175,552.0 155,552 155,412 195,412.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n95" points="165,738 975,738" fill="none" stroke="#000000" stroke-width="1.1"/>
-<rect id="n60" fill="white" stroke="none" stroke-width="1.7" x="173" y="290" width="256.1" height="20.0"/>
-<text id="n61-0" data-width="365" x="175" y="304.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">Input1: “잠깐, 표부터 설명해줘”</text>
-<rect id="n62" fill="white" stroke="none" stroke-width="1.7" x="663" y="290" width="284.64" height="18.8"/>
-<text id="n63-0" data-width="315" x="665" y="303.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">Task1: 메일 / Question1: 수신자 질문</text>
-<rect id="n74" fill="white" stroke="none" stroke-width="1.7" x="193" y="450" width="504.32" height="21.2"/>
-<text id="n75-0" data-width="742" x="195" y="465.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">모든 완료 회수 → 중앙 대기 상태 갱신 → 다음 job / 게시 지시</text>
-<rect id="n87" fill="white" stroke="none" stroke-width="1.7" x="458" y="600" width="310.96" height="18.8"/>
-<text id="n88-0" data-width="494" x="460" y="613.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">후보도 중앙에 반환 / 유효 후보만 게시 지시</text>
-<rect id="n91" fill="white" stroke="none" stroke-width="1.7" x="173" y="577" width="158.48" height="16.4"/>
-<text id="n92-0" data-width="235" x="175" y="589.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">job 완료 → 시작한 owner</text>
-<path id="n93" fill="white" stroke="#000000" stroke-width="1.0" d="M175 648H947L965 666V727H175Z M947 648V666H965"/>
-<text id="n94-0" data-width="762" x="185" y="665.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">중앙 실행 자료: job=Job1, next=PREPARE_RESPONSE, waiting=[AdoptedMeaning1]</text>
-<text id="n94-1" data-width="762" x="185" y="681.56" text-anchor="start" font-size="13" font-weight="400" fill="#000000">Job1 완료: {input_ref:Input1, generation:2, status:OK, meaning_ref:AdoptedMeaning1}</text>
-<text id="n94-2" data-width="762" x="185" y="697.16" text-anchor="start" font-size="13" font-weight="400" fill="#000000">중앙이 generation / 원본 확인 후 다음 job을 호출하거나 늦은 결과 폐기</text>
-<text id="n94-3" data-width="762" x="185" y="712.76" text-anchor="start" font-size="13" font-weight="400" fill="#000000">질문 후보와 표 설명 후보도 중앙에서 대기를 연결한다.</text>
-<rect id="n96" fill="white" stroke="none" stroke-width="1.7" x="173" y="743" width="453.5" height="20.0"/>
-<text id="n97-0" data-width="790" x="175" y="757.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">같은 겹침: 새 입력 + 별도 업무 질문 + 이전 응답 준비 완료</text>
-<rect id="n98" fill="white" stroke="none" stroke-width="1.7" x="173" y="765" width="306.5" height="20.0"/>
-<text id="n99-0" data-width="790" x="175" y="779.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">완료마다 중앙으로 복귀해 다음 작업 지시</text>
-<rect id="n100" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="253" width="270" height="34"/>
-<text id="n101-0" data-width="252" x="1180.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Interaction Manager</text>
-<rect id="n102" fill="white" stroke="#000000" stroke-width="1.0" x="1535" y="253" width="300" height="34"/>
-<text id="n103-0" data-width="282" x="1685.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
-<rect id="n108" fill="white" stroke="#000000" stroke-width="1.0" x="1035" y="326" width="810" height="172"/>
-<text id="n109-0" data-width="784" x="1048" y="355.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
-<rect id="n110" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1065" y="381" width="285" height="38" rx="7"/>
-<text id="n111-0" data-width="267" x="1207.5" y="404.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Input Resolution Stage</text>
-<rect id="n112" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1485" y="381" width="325" height="38" rx="7"/>
-<text id="n113-0" data-width="307" x="1647.5" y="405.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">Task Notice Stage</text>
-<path id="n114" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1065 449C1065 433 1350 433 1350 449V469C1350 485 1065 485 1065 469Z M1065 449C1065 465 1350 465 1350 449"/>
-<text id="n115-0" data-width="267" x="1207.5" y="472.72" text-anchor="middle" font-size="16" font-weight="400" fill="#18232E">Input Window</text>
-<path id="n116" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1485 449C1485 433 1810 433 1810 449V469C1810 485 1485 485 1485 469Z M1485 449C1485 465 1810 465 1810 449"/>
-<text id="n117-0" data-width="307" x="1647.5" y="472.72" text-anchor="middle" font-size="16" font-weight="400" fill="#18232E">Notice Window</text>
-<polyline id="n118" points="1180.0,287 1180,317 1207.5,317 1207.5,381" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n119" points="1685.0,287 1685,317 1647.5,317 1647.5,381" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n120" points="1207.5,419 1207.5,441" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n121" points="1647.5,419 1647.5,441" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<rect id="n126" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="535" width="235" height="34"/>
-<text id="n127-0" data-width="217" x="1162.5" y="556.59" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Request Interpreter</text>
-<rect id="n128" fill="white" stroke="#000000" stroke-width="1.0" x="1305" y="518" width="540" height="118"/>
-<text id="n129-0" data-width="514" x="1318" y="547.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Response Manager</text>
-<rect id="n130" fill="white" stroke="#000000" stroke-width="1.0" x="1325" y="558" width="230" height="33" rx="7"/>
-<text id="n131-0" data-width="212" x="1440.0" y="579.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Response Composer</text>
-<rect id="n132" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1600" y="558" width="225" height="33" rx="7"/>
-<text id="n133-0" data-width="207" x="1712.5" y="579.36" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Publication Join</text>
-<path id="n134" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1600 608C1600 592 1825 592 1825 608V628C1825 644 1600 644 1600 628Z M1600 608C1600 624 1825 624 1825 608"/>
-<text id="n135-0" data-width="207" x="1712.5" y="628.96" text-anchor="middle" font-size="13" font-weight="400" fill="#18232E">Publication Window</text>
-<polyline id="n136" points="1647.5,419 1647.5,510 1475,510 1475.0,558" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n137" points="1207.5,419 1207.5,506 1440,506 1440.0,558" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n138" points="1555,574.5 1600,574.5" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n139" points="1350,400.0 1365,400 1365,501 1747.5,501 1747.5,558" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n142" points="1762.5,591 1762.5,600" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<rect id="n143" fill="white" stroke="#000000" stroke-width="1.0" x="1325" y="604" width="230" height="25" rx="7"/>
-<text id="n144-0" data-width="212" x="1440.0" y="620.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Publication Control</text>
-<polyline id="n145" points="1712.5,591 1712.5,597 1440,597 1440.0,604" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n146" points="1065,400.0 1035,400 1035,523 1162.5,523 1162.5,535" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
-<polyline id="n147" points="1045,552.0 1025,552 1025,412 1065,412.0" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
-<polyline id="n152" points="1035,738 1845,738" fill="none" stroke="#000000" stroke-width="1.1"/>
-<rect id="n104" fill="white" stroke="none" stroke-width="1.7" x="1043" y="290" width="256.1" height="20.0"/>
-<text id="n105-0" data-width="365" x="1045" y="304.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">Input1: “잠깐, 표부터 설명해줘”</text>
-<rect id="n106" fill="white" stroke="none" stroke-width="1.7" x="1533" y="290" width="284.64" height="18.8"/>
-<text id="n107-0" data-width="315" x="1535" y="303.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">Task1: 메일 / Question1: 수신자 질문</text>
-<rect id="n122" fill="white" stroke="none" stroke-width="1.7" x="1063" y="419" width="146.48" height="16.4"/>
-<text id="n123-0" data-width="300" x="1065" y="431.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">input/job / 정정 세대</text>
-<rect id="n124" fill="white" stroke="none" stroke-width="1.7" x="1483" y="419" width="138.8" height="16.4"/>
-<text id="n125-0" data-width="320" x="1485" y="431.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">질문 참조 / 준비/대기</text>
-<rect id="n140" fill="white" stroke="none" stroke-width="1.7" x="1598" y="489" width="175.04" height="16.4"/>
-<text id="n141-0" data-width="235" x="1600" y="501.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">InputSettled / admission</text>
-<rect id="n148" fill="white" stroke="none" stroke-width="1.7" x="1043" y="577" width="158.48" height="16.4"/>
-<text id="n149-0" data-width="235" x="1045" y="589.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">job 완료 → 시작한 owner</text>
-<path id="n150" fill="white" stroke="#000000" stroke-width="1.0" d="M1045 648H1817L1835 666V727H1045Z M1817 648V666H1835"/>
-<text id="n151-0" data-width="762" x="1055" y="665.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">연결된 입력: AdoptedMeaning{input_ref:Input1, generation:2, meaning_ref:AdoptedMeaning1}</text>
-<text id="n151-1" data-width="762" x="1055" y="681.56" text-anchor="start" font-size="13" font-weight="400" fill="#000000">NoticeReady{task_ref:Task1, question_ref:Question1, source_revision:3}</text>
-<text id="n151-2" data-width="762" x="1055" y="697.16" text-anchor="start" font-size="13" font-weight="400" fill="#000000">CandidateReady + 해당 admission / source / 과거 전달 snapshot → Join</text>
-<text id="n151-3" data-width="762" x="1055" y="712.76" text-anchor="start" font-size="13" font-weight="400" fill="#000000">조건 부족: 대기 / 정정으로 무효: 폐기 / 조건 충족: 게시 단계 활성화</text>
-<rect id="n153" fill="white" stroke="none" stroke-width="1.7" x="1043" y="743" width="453.5" height="20.0"/>
-<text id="n154-0" data-width="790" x="1045" y="757.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">같은 겹침: 새 입력 + 별도 업무 질문 + 이전 응답 준비 완료</text>
-<rect id="n155" fill="white" stroke="none" stroke-width="1.7" x="1043" y="765" width="440.0" height="20.0"/>
-<text id="n156-0" data-width="790" x="1045" y="779.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">완료가 연결된 소비자의 입력이 됨 / 중앙 회수 없이 이어감</text>
+<polyline id="n15" points="40,871 1880,871" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n16-0" data-width="245" x="42" y="891.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">요청 처리 정확성</text>
+<text id="n17-0" data-width="720" x="300" y="891.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">같은 의미 판단 / 중앙에서 현재 입력과 대기 참조 관리</text>
+<text id="n18-0" data-width="820" x="1050" y="891.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">같은 판단 / 각 Window와 Join의 참조 일치 필요</text>
+<polyline id="n19" points="40,896 1880,896" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n20-0" data-width="245" x="42" y="916.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">상호작용 응답시간</text>
+<text id="n21-0" data-width="720" x="300" y="916.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">중앙의 완료 회수와 다음 지시 / 짧은 dispatch 가능</text>
+<text id="n22-0" data-width="820" x="1050" y="916.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">준비된 소비자 활성화 / 채널과 Join 대기 비용</text>
+<polyline id="n23" points="40,921 1880,921" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n24-0" data-width="245" x="42" y="941.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">VIA 요청 처리시간</text>
+<text id="n25-0" data-width="720" x="300" y="941.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">단계마다 중앙 전이를 경유 / 병행 실행 허용</text>
+<text id="n26-0" data-width="820" x="1050" y="941.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">중앙 경유 축소 / 조건 대기와 단계 연결 비용</text>
+<polyline id="n27" points="40,946 1880,946" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n28-0" data-width="245" x="42" y="966.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">VIA 모델 사용 비용</text>
+<text id="n29-0" data-width="720" x="300" y="966.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">같은 의미 / 응답 작업이면 같음 / 폐기와 재시도 포함</text>
+<text id="n30-0" data-width="820" x="1050" y="966.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">같은 작업이면 같음 / 중복 생산과 폐기 포함</text>
+<polyline id="n31" points="40,971 1880,971" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n32-0" data-width="245" x="42" y="991.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">VIA 변경 용이성</text>
+<text id="n33-0" data-width="720" x="300" y="991.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">후속 실행 규칙을 Dispatcher에서 변경</text>
+<text id="n34-0" data-width="820" x="1050" y="991.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">단계 계약 안 조합 변경 / 교차 규칙은 여러 단계 영향</text>
+<polyline id="n35" points="40,996 1880,996" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n36-0" data-width="245" x="42" y="1016.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">로컬 VIA 메모리 사용량</text>
+<text id="n37-0" data-width="720" x="300" y="1016.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">중앙 진행 상태와 실행 대기열</text>
+<text id="n38-0" data-width="820" x="1050" y="1016.72" text-anchor="start" font-size="16" font-weight="400" fill="#18232E">여러 Window와 사건 채널 / 수용량 제한 필요</text>
+<text id="n39-0" data-width="1840" x="40" y="1043.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">미선정 / 미측정. A도 비동기 / 우선순위 / 동시 실행. B의 사건 채널만으로 정확성 / 속도 우위를 보장하지 않는다.</text>
+<text id="n40-0" data-width="1840" x="40" y="1069.88" text-anchor="start" font-size="14" font-weight="400" fill="#5F6B77">준비 완료 / VIA 내부 접수 / 외부 Agent 접수 / 사용자 실제 전달은 별도 확인</text>
+<rect id="legend_continuation_0" fill="white" stroke="#000000" stroke-width="1.0" x="47" y="342.0" width="86" height="441.0"/>
+<text id="legend_continuation_1-0" data-width="82" x="90" y="363.36" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Legend</text>
+<rect id="legend_continuation_2" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="373.08" width="74" height="22.68"/>
+<text id="legend_continuation_3-0" data-width="56" x="90.0" y="388.16" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Component</text>
+<text id="legend_continuation_4-0" data-width="76" x="54" y="409.32" text-anchor="start" font-size="12" font-weight="400" fill="#000000">논리 책임</text>
+<rect id="legend_continuation_5" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="422.64" width="74" height="22.68" rx="7"/>
+<text id="legend_continuation_6-0" data-width="56" x="90.0" y="437.72" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
+<text id="legend_continuation_7-0" data-width="76" x="54" y="458.88" text-anchor="start" font-size="12" font-weight="400" fill="#000000">내부 구현</text>
+<path id="legend_continuation_8" fill="white" stroke="#000000" stroke-width="1.0" d="M53 472.2H109L127 490.2V494.88H53Z M109 472.2V490.2H127"/>
+<text id="legend_continuation_9-0" data-width="70" x="90" y="487.28" text-anchor="middle" font-size="10" font-weight="400" fill="#000000">Data</text>
+<text id="legend_continuation_10-0" data-width="76" x="54" y="508.44" text-anchor="start" font-size="12" font-weight="400" fill="#000000">교환 예시</text>
+<polygon id="legend_continuation_11" points="62,520.92 118,520.92 127,532.26 118,543.6 62,543.6 53,532.26" fill="white" stroke="#000000" stroke-width="1"/>
+<text id="legend_continuation_12-0" data-width="56" x="90.0" y="536.0" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">LLM</text>
+<text id="legend_continuation_13-0" data-width="76" x="54" y="557.16" text-anchor="start" font-size="12" font-weight="400" fill="#000000">외부 모델</text>
+<rect id="legend_continuation_14" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" x="53" y="570.48" width="74" height="22.68" rx="7"/>
+<text id="legend_continuation_15-0" data-width="56" x="90.0" y="585.56" text-anchor="middle" font-size="10" font-weight="700" fill="#000000">Module</text>
+<text id="legend_continuation_16-0" data-width="76" x="54" y="606.72" text-anchor="start" font-size="12" font-weight="400" fill="#000000">차이: 살구색</text>
+<path id="legend_continuation_17" fill="white" stroke="#000000" stroke-width="1.0" d="M53 623.8399999999999C53 607.84 127 607.84 127 623.8399999999999V630.5199999999999C127 646.52 53 646.52 53 630.5199999999999Z M53 623.8399999999999C53 639.84 127 639.84 127 623.84"/>
+<text id="legend_continuation_18-0" data-width="56" x="90.0" y="635.12" text-anchor="middle" font-size="10" font-weight="400" fill="#18232E">State</text>
+<text id="legend_continuation_19-0" data-width="76" x="54" y="652.92" text-anchor="start" font-size="12" font-weight="400" fill="#000000">소유 상태</text>
+<polyline id="legend_continuation_20" points="54,666.24 95,666.24" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<text id="legend_continuation_21-0" data-width="30" x="101" y="669.56" text-anchor="start" font-size="10" font-weight="400" fill="#000000">요청</text>
+<polyline id="legend_continuation_22" points="54,683.88 95,683.88" fill="none" stroke="#000000" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#a000000)"/>
+<text id="legend_continuation_23-0" data-width="30" x="101" y="687.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">반환</text>
+<text id="legend_continuation_24-0" data-width="76" x="54" y="714.92" text-anchor="start" font-size="10" font-weight="400" fill="#000000">아래: 순서도</text>
+<rect id="legend_continuation_25" fill="white" stroke="#000000" stroke-width="1.0" x="53" y="724.2" width="30" height="15.12"/>
+<text id="legend_continuation_26-0" data-width="12" x="68.0" y="735.5" text-anchor="middle" font-size="10" font-weight="700" fill="#000000"></text>
+<text id="legend_continuation_27-0" data-width="35" x="89" y="735.92" text-anchor="start" font-size="10" font-weight="400" fill="#000000">동작</text>
+<polygon id="legend_continuation_28" points="68.0,751.92 83,759.48 68.0,767.04 53,759.48" fill="white" stroke="#000000" stroke-width="1"/>
+<text id="legend_continuation_29-0" data-width="12" x="68.0" y="763.22" text-anchor="middle" font-size="10" font-weight="700" fill="#000000"></text>
+<text id="legend_continuation_30-0" data-width="35" x="89" y="763.64" text-anchor="start" font-size="10" font-weight="400" fill="#000000">분기</text>
+<rect id="n72" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="253" width="270" height="34"/>
+<text id="n73-0" data-width="252" x="310.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Interaction Manager</text>
+<rect id="n74" fill="white" stroke="#000000" stroke-width="1.0" x="665" y="253" width="300" height="34"/>
+<text id="n75-0" data-width="282" x="815.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
+<rect id="n80" fill="white" stroke="#000000" stroke-width="1.0" x="165" y="323" width="810" height="148"/>
+<text id="n81-0" data-width="784" x="178" y="352.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
+<rect id="n82" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="195" y="365" width="285" height="40" rx="7"/>
+<text id="n83-0" data-width="267" x="337.5" y="390.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">Dialogue Dispatcher</text>
+<path id="n84" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M615 370C615 360 940 360 940 370V400C940 410 615 410 615 400Z M615 370C615 380 940 380 940 370"/>
+<text id="n85-0" data-width="307" x="777.5" y="390.44" text-anchor="middle" font-size="17" font-weight="400" fill="#18232E">Dialogue Progress State</text>
+<polyline id="n86" points="310.0,287 310,314 337.5,314 337.5,365" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n87" points="815.0,287 815,311 427.5,311 427.5,365" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n88" points="480,385.0 615,385.0" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n89" points="615,394.0 598,394 598,413 496,413 496,394 480,394.0" fill="none" stroke="#B8753F" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#aB8753F)"/>
+<rect id="n94" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="500" width="235" height="33"/>
+<text id="n95-0" data-width="217" x="292.5" y="521.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Request Interpreter</text>
+<rect id="n96" fill="white" stroke="#000000" stroke-width="1.0" x="450" y="494" width="525" height="157"/>
+<text id="n97-0" data-width="499" x="463" y="523.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Response Manager</text>
+<rect id="n98" fill="white" stroke="#000000" stroke-width="1.0" x="470" y="535" width="230" height="33" rx="7"/>
+<text id="n99-0" data-width="212" x="585.0" y="556.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Response Composer</text>
+<polyline id="n100" points="195,385.0 165,385 165,488 292.5,488 292.5,500" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n101" points="175,516.5 155,516.5 155,395 195,395.0" fill="none" stroke="#B8753F" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#aB8753F)"/>
+<rect id="n104" fill="white" stroke="#000000" stroke-width="1.0" x="735" y="535" width="220" height="33" rx="7"/>
+<text id="n105-0" data-width="202" x="845.0" y="555.82" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Publication Control</text>
+<polyline id="n106" points="357.5,405 357.5,479 585,479 585.0,535" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n107" points="620.0,535 620,484 490,484 490,394 480,394.0" fill="none" stroke="#B8753F" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#aB8753F)"/>
+<polyline id="n108" points="480,378.0 505,378 505,475 845,475 845.0,535" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n117" points="165,665 975,665" fill="none" stroke="#000000" stroke-width="1.1"/>
+<rect id="n120" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="695" width="235" height="27"/>
+<text id="n121-0" data-width="217" x="292.5" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Meaning1 완료</text>
+<rect id="n122" fill="white" stroke="#000000" stroke-width="1.0" x="455" y="695" width="235" height="27"/>
+<text id="n123-0" data-width="217" x="572.5" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Dispatcher: 준비 지시</text>
+<polyline id="n124" points="410,708.5 455,708.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n125" fill="white" stroke="#000000" stroke-width="1.0" x="735" y="695" width="230" height="27"/>
+<text id="n126-0" data-width="212" x="850.0" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Composer: 후보 반환</text>
+<polyline id="n127" points="690,708.5 735,708.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n128" points="850.0,722 850,736 572.5,736 572.5,722" fill="none" stroke="#B8753F" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#aB8753F)"/>
+<rect id="n133" fill="white" stroke="#000000" stroke-width="1.0" x="175" y="765" width="235" height="26"/>
+<text id="n134-0" data-width="217" x="292.5" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">옛 응답 준비 완료</text>
+<rect id="n135" fill="white" stroke="#000000" stroke-width="1.0" x="455" y="765" width="235" height="26"/>
+<text id="n136-0" data-width="217" x="572.5" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Dispatcher: 현재성 검사</text>
+<polyline id="n137" points="410,778.0 455,778.0" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n138" fill="white" stroke="#000000" stroke-width="1.0" x="735" y="765" width="230" height="26"/>
+<text id="n139-0" data-width="212" x="850.0" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">중앙에서 무효 후보 폐기</text>
+<polyline id="n140" points="690,778.0 735,778.0" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n76" fill="white" stroke="none" stroke-width="1.7" x="173" y="291" width="256.1" height="20.0"/>
+<text id="n77-0" data-width="410" x="175" y="305.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">Input1: “잠깐, 표부터 설명해줘”</text>
+<rect id="n78" fill="white" stroke="none" stroke-width="1.7" x="663" y="291" width="268.4" height="18.8"/>
+<text id="n79-0" data-width="320" x="665" y="304.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">Task1 메일 / Question1 수신자 질문</text>
+<rect id="n90" fill="white" stroke="none" stroke-width="1.7" x="193" y="424" width="278.3" height="22.4"/>
+<text id="n91-0" data-width="390" x="195" y="440.64" text-anchor="start" font-size="17" font-weight="400" fill="#000000">다음 실행 지시와 완료 결과 회수</text>
+<path id="n92" fill="white" stroke="#000000" stroke-width="1.0" d="M615 414H922L940 432V460H615Z M922 414V432H940"/>
+<text id="n93-0" data-width="297" x="625" y="429.66" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">Input1 / Job1: 표 설명 준비</text>
+<text id="n93-1" data-width="297" x="625" y="442.26" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">next:PREPARE_RESPONSE / waiting:Meaning1</text>
+<text id="n93-2" data-width="297" x="625" y="454.86" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">이전 Input0의 Candidate0: 무효</text>
+<rect id="n102" fill="white" stroke="none" stroke-width="1.7" x="173" y="539" width="158.02" height="17.6"/>
+<text id="n103-0" data-width="235" x="175" y="551.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">① 이해 완료: Meaning1</text>
+<rect id="n109" fill="white" stroke="none" stroke-width="1.7" x="528" y="460" width="240.56" height="16.4"/>
+<text id="n110-0" data-width="410" x="530" y="472.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">② 중앙의 준비 지시 / ③ 준비 결과 회수</text>
+<path id="n111" fill="white" stroke="#000000" stroke-width="1.0" d="M175 563H392L410 581V635H175Z M392 563V581H410"/>
+<text id="n112-0" data-width="207" x="185" y="579.12" text-anchor="start" font-size="11" font-weight="400" fill="#000000">준비 완료: Candidate1</text>
+<text id="n112-1" data-width="207" x="185" y="592.32" text-anchor="start" font-size="11" font-weight="400" fill="#000000">input_ref:Input1</text>
+<text id="n112-2" data-width="207" x="185" y="605.52" text-anchor="start" font-size="11" font-weight="400" fill="#000000">content_ref:표 설명</text>
+<text id="n112-3" data-width="207" x="185" y="618.72" text-anchor="start" font-size="11" font-weight="400" fill="#000000">이 후보도 Dispatcher로 반환</text>
+<rect id="n113" fill="white" stroke="none" stroke-width="1.7" x="483" y="589" width="280.96" height="21.2"/>
+<text id="n114-0" data-width="450" x="485" y="604.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">④ 현재성 검사 후 중앙의 게시 지시</text>
+<rect id="n115" fill="white" stroke="none" stroke-width="1.7" x="483" y="617" width="285.12" height="21.2"/>
+<text id="n116-0" data-width="450" x="485" y="632.72" text-anchor="start" font-size="16" font-weight="400" fill="#000000">완료마다 다음 실행을 중앙에서 결정</text>
+<rect id="n118" fill="white" stroke="none" stroke-width="1.7" x="173" y="670" width="296.96" height="18.8"/>
+<text id="n119-0" data-width="790" x="175" y="683.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">실행 순서도 / 같은 완료 결과의 다음 처리</text>
+<rect id="n129" fill="white" stroke="none" stroke-width="1.7" x="580" y="722" width="173.66" height="15.2"/>
+<text id="n130-0" data-width="385" x="582" y="733.12" text-anchor="start" font-size="11" font-weight="400" fill="#000000">중앙 회수 뒤 검사 / 게시 지시</text>
+<rect id="n131" fill="white" stroke="none" stroke-width="1.7" x="173" y="746" width="292.96" height="17.6"/>
+<text id="n132-0" data-width="790" x="175" y="758.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">늦은 Candidate0 / 이미 새 Input1 처리 중</text>
+<rect id="n141" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="253" width="270" height="34"/>
+<text id="n142-0" data-width="252" x="1180.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Interaction Manager</text>
+<rect id="n143" fill="white" stroke="#000000" stroke-width="1.0" x="1535" y="253" width="300" height="34"/>
+<text id="n144-0" data-width="282" x="1685.0" y="274.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Task Manager</text>
+<rect id="n149" fill="white" stroke="#000000" stroke-width="1.0" x="1035" y="323" width="810" height="148"/>
+<text id="n150-0" data-width="784" x="1048" y="352.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Request Controller</text>
+<rect id="n151" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1065" y="365" width="285" height="40" rx="7"/>
+<text id="n152-0" data-width="267" x="1207.5" y="389.86" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Input Resolution Stage</text>
+<rect id="n153" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1485" y="365" width="325" height="40" rx="7"/>
+<text id="n154-0" data-width="307" x="1647.5" y="390.13" text-anchor="middle" font-size="19" font-weight="700" fill="#000000">Task Notice Stage</text>
+<path id="n155" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1065 425C1065 415 1350 415 1350 425V449C1350 459 1065 459 1065 449Z M1065 425C1065 435 1350 435 1350 425"/>
+<text id="n156-0" data-width="267" x="1207.5" y="442.12" text-anchor="middle" font-size="16" font-weight="400" fill="#18232E">Input Window</text>
+<path id="n157" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1485 425C1485 415 1810 415 1810 425V449C1810 459 1485 459 1485 449Z M1485 425C1485 435 1810 435 1810 425"/>
+<text id="n158-0" data-width="307" x="1647.5" y="442.12" text-anchor="middle" font-size="16" font-weight="400" fill="#18232E">Notice Window</text>
+<polyline id="n159" points="1180.0,287 1180,314 1207.5,314 1207.5,365" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n160" points="1685.0,287 1685,314 1647.5,314 1647.5,365" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n161" points="1207.5,405 1207.5,420" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n162" points="1647.5,405 1647.5,420" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<rect id="n167" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="500" width="235" height="33"/>
+<text id="n168-0" data-width="217" x="1162.5" y="521.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Request Interpreter</text>
+<rect id="n169" fill="white" stroke="#000000" stroke-width="1.0" x="1320" y="494" width="525" height="157"/>
+<text id="n170-0" data-width="499" x="1333" y="523.32" text-anchor="start" font-size="21" font-weight="700" fill="#000000">Response Manager</text>
+<rect id="n171" fill="white" stroke="#000000" stroke-width="1.0" x="1340" y="535" width="230" height="33" rx="7"/>
+<text id="n172-0" data-width="212" x="1455.0" y="556.09" text-anchor="middle" font-size="17" font-weight="700" fill="#000000">Response Composer</text>
+<polyline id="n173" points="1065,385.0 1035,385 1035,488 1162.5,488 1162.5,500" fill="none" stroke="#000000" stroke-width="1.1" marker-end="url(#a000000)"/>
+<polyline id="n174" points="1045,516.5 1025,516.5 1025,395 1065,395.0" fill="none" stroke="#B8753F" stroke-width="1.1" stroke-dasharray="7 6" marker-end="url(#aB8753F)"/>
+<rect id="n177" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.8" x="1605" y="535" width="220" height="33" rx="7"/>
+<text id="n178-0" data-width="202" x="1715.0" y="556.36" text-anchor="middle" font-size="18" font-weight="700" fill="#000000">Publication Join</text>
+<path id="n179" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.0" d="M1605 599C1605 589 1825 589 1825 599V627C1825 637 1605 637 1605 627Z M1605 599C1605 609 1825 609 1825 599"/>
+<text id="n180-0" data-width="202" x="1715.0" y="617.16" text-anchor="middle" font-size="13" font-weight="400" fill="#18232E">Publication Window</text>
+<rect id="n181" fill="white" stroke="#000000" stroke-width="1.0" x="1340" y="605" width="230" height="28" rx="7"/>
+<text id="n182-0" data-width="212" x="1455.0" y="623.32" text-anchor="middle" font-size="16" font-weight="700" fill="#000000">Publication Control</text>
+<polyline id="n183" points="1227.5,405 1227.5,480 1312,480 1312,551.5 1340,551.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n184" points="1810,385.0 1855,385 1855,482 1490,482 1490.0,535" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n185" points="1570,551.5 1605,551.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n186" points="1350,378.0 1375,378 1375,476 1715,476 1715.0,535" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n189" points="1760.0,568 1760.0,594" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n190" points="1670.0,568 1670,582 1455,582 1455.0,605" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<polyline id="n199" points="1035,665 1845,665" fill="none" stroke="#000000" stroke-width="1.1"/>
+<rect id="n202" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="695" width="235" height="27"/>
+<text id="n203-0" data-width="217" x="1162.5" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Meaning1 완료</text>
+<rect id="n204" fill="white" stroke="#000000" stroke-width="1.0" x="1325" y="695" width="235" height="27"/>
+<text id="n205-0" data-width="217" x="1442.5" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Composer: 후보 생산</text>
+<polyline id="n206" points="1280,708.5 1325,708.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n207" fill="white" stroke="#000000" stroke-width="1.0" x="1605" y="695" width="230" height="27"/>
+<text id="n208-0" data-width="212" x="1720.0" y="712.55" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Join: 조건 검사 후 게시</text>
+<polyline id="n209" points="1560,708.5 1605,708.5" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n214" fill="white" stroke="#000000" stroke-width="1.0" x="1045" y="765" width="235" height="26"/>
+<text id="n215-0" data-width="217" x="1162.5" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">옛 응답 준비 완료</text>
+<rect id="n216" fill="white" stroke="#000000" stroke-width="1.0" x="1325" y="765" width="235" height="26"/>
+<text id="n217-0" data-width="217" x="1442.5" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Join: 현재 입력 조건 검사</text>
+<polyline id="n218" points="1280,778.0 1325,778.0" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n219" fill="white" stroke="#000000" stroke-width="1.0" x="1605" y="765" width="230" height="26"/>
+<text id="n220-0" data-width="212" x="1720.0" y="782.05" text-anchor="middle" font-size="15" font-weight="700" fill="#000000">Publication Window에서 폐기</text>
+<polyline id="n221" points="1560,778.0 1605,778.0" fill="none" stroke="#B8753F" stroke-width="1.1" marker-end="url(#aB8753F)"/>
+<rect id="n145" fill="white" stroke="none" stroke-width="1.7" x="1043" y="291" width="256.1" height="20.0"/>
+<text id="n146-0" data-width="410" x="1045" y="305.8" text-anchor="start" font-size="15" font-weight="400" fill="#000000">Input1: “잠깐, 표부터 설명해줘”</text>
+<rect id="n147" fill="white" stroke="none" stroke-width="1.7" x="1533" y="291" width="268.4" height="18.8"/>
+<text id="n148-0" data-width="320" x="1535" y="304.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">Task1 메일 / Question1 수신자 질문</text>
+<rect id="n163" fill="white" stroke="none" stroke-width="1.7" x="1063" y="408" width="146.6" height="14.0"/>
+<text id="n164-0" data-width="300" x="1065" y="418.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">Input1 / Job1 / 현재 입력</text>
+<rect id="n165" fill="white" stroke="none" stroke-width="1.7" x="1483" y="408" width="195.6" height="14.0"/>
+<text id="n166-0" data-width="325" x="1485" y="418.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">Task1 / Question1 / 정보 변경 확인</text>
+<rect id="n175" fill="white" stroke="none" stroke-width="1.7" x="1043" y="539" width="158.02" height="17.6"/>
+<text id="n176-0" data-width="235" x="1045" y="551.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">① 이해 완료: Meaning1</text>
+<rect id="n187" fill="white" stroke="none" stroke-width="1.7" x="1399" y="460" width="303.02" height="15.2"/>
+<text id="n188-0" data-width="429" x="1401" y="471.12" text-anchor="start" font-size="11" font-weight="400" fill="#000000">Meaning1 / NoticeReady / 입력 해소 또는 질문 허용</text>
+<rect id="n191" fill="white" stroke="none" stroke-width="1.7" x="1358" y="572" width="77.6" height="16.4"/>
+<text id="n192-0" data-width="210" x="1360" y="584.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">Candidate1</text>
+<path id="n193" fill="white" stroke="#000000" stroke-width="1.0" d="M1045 563H1262L1280 581V635H1045Z M1262 563V581H1280"/>
+<text id="n194-0" data-width="207" x="1055" y="578.66" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">단계 출력: Candidate1</text>
+<text id="n194-1" data-width="207" x="1055" y="591.26" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">input_ref:Input1 / required_refs</text>
+<text id="n194-2" data-width="207" x="1055" y="603.86" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">입력과 정보 조건 충족: ELIGIBLE</text>
+<text id="n194-3" data-width="207" x="1055" y="616.46" text-anchor="start" font-size="10.5" font-weight="400" fill="#000000">부족: 대기 / 옛 후보: DISCARDED</text>
+<rect id="n195" fill="white" stroke="none" stroke-width="1.7" x="1603" y="571" width="191.8" height="14.0"/>
+<text id="n196-0" data-width="220" x="1605" y="581.2" text-anchor="start" font-size="10" font-weight="400" fill="#000000">후보 + 해당 입력 / 정보 / 전달 상태</text>
+<rect id="n197" fill="white" stroke="none" stroke-width="1.7" x="1358" y="636" width="293.6" height="16.4"/>
+<text id="n198-0" data-width="460" x="1360" y="648.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">조건 충족 시 게시 단계 활성화 / 중앙 회수 없음</text>
+<rect id="n200" fill="white" stroke="none" stroke-width="1.7" x="1043" y="670" width="296.96" height="18.8"/>
+<text id="n201-0" data-width="790" x="1045" y="683.88" text-anchor="start" font-size="14" font-weight="400" fill="#000000">실행 순서도 / 같은 완료 결과의 다음 처리</text>
+<rect id="n210" fill="white" stroke="none" stroke-width="1.7" x="1328" y="727" width="314.48" height="16.4"/>
+<text id="n211-0" data-width="500" x="1330" y="739.04" text-anchor="start" font-size="12" font-weight="400" fill="#000000">알림 후보도 같은 Join으로 연결 / 입력별 상태 유지</text>
+<rect id="n212" fill="white" stroke="none" stroke-width="1.7" x="1043" y="746" width="292.96" height="17.6"/>
+<text id="n213-0" data-width="790" x="1045" y="758.96" text-anchor="start" font-size="13" font-weight="400" fill="#000000">늦은 Candidate0 / 이미 새 Input1 처리 중</text>
 </g></svg>

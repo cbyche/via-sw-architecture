@@ -204,6 +204,8 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 기존 전체 구조와 사건 흐름을 유지하고 아래 그림에서 제어권과 실제 실행 자료를 확대한다. 이름만 다른 동일 queue로 구현하면 두 대안의 차이가 사라진다. A는 job 완료 후 중앙의 다음 지시를 기다리고, B는 연결된 소비자의 입력 조건이 후속 실행을 활성화한다. 두 안 모두 최종 게시 권한은 Response Manager, 실제 출력은 Interaction Manager에 남긴다.
 
+2026-10-11 집중 그림 보완: 위쪽은 기존 Component 안의 Module 협력 구조이고 아래쪽은 설명용 실행 순서도다. A의 이해/준비 완료는 Dispatcher로 반환되며 다음 준비/게시 지시도 여기에서 나온다. B의 이해 완료와 알림 준비는 Composer 입력으로 연결되고 후보는 Publication Join으로 간다. Progress State와 세 Window의 수명/소속은 그대로다. Input1, Task1 메일의 Question1, 이전 Input0의 Candidate0를 양쪽에 동일하게 표시한다. 늦은 후보를 중앙에서 검사/폐기하는 경로와 Join에서 현재 입력 조건으로 폐기하는 경로를 별도로 읽을 수 있다. 하단은 최신 여섯 ASR의 조건부 영향이며 실제 측정 또는 선정 결과가 아니다.
+
 ![44 추가 비교 — 중앙 continuation과 Stage 입력](../../../presentations_files/dp-comparison/dp44-comparison.svg)
 
 [draw.io](../../../presentations_files/dp-comparison/dp44-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp44-comparison.png)

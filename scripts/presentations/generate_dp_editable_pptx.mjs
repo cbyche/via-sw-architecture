@@ -6,7 +6,9 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 
 // Run a copy in a private build directory linked to the bundled node_modules.
 // The existing draw.io/SVG scenes remain the content and geometry source.
-const [repoArg,buildArg,scope,subset] = process.argv.slice(2);
+const [repoArg,buildArg,scopeArg,subset] = process.argv.slice(2);
+const v3=/^--dp(42|44|45)-v3-only$/.test(scopeArg??'');
+const scope=v3?scopeArg.replace('-v3',''):scopeArg;
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
 if (scope && !['--comparison-only','--dp41-only','--dp41-v2-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Unknown presentation update scope');
 if (subset && !(['--dp45-only','--list-selected'].includes(scope) && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only (or --list-selected) --comparison-only');
@@ -61,7 +63,7 @@ for n in range(41,46):
         scenes.append(dict(number=n,kind=kind,slug=slug,title=title,items=items,selected=active,source=source,transition=bg.TRANSITIONS.get(n),sha256=hashlib.sha256((root/source).read_bytes()).hexdigest()))
 print(json.dumps(scenes,ensure_ascii=False))
 `;
-const scenes=JSON.parse(execFileSync(python,['-c',extraction,repo,scope==='--dp41-v2-only'?'--dp41-only':scope??'',subset??''],{encoding:'utf8',maxBuffer:8*1024*1024}));
+const scenes=JSON.parse(execFileSync(python,['-c',extraction,repo,scope==='--dp41-v2-only'?'--dp41-only':scope??'',v3?'--comparison-only':subset??''],{encoding:'utf8',maxBuffer:8*1024*1024}));
 await fs.writeFile(path.join(build,'source-scenes.json'),JSON.stringify(scenes,null,2));
 
 const stroke=(color,width=1.7,dashed=false)=>({fill:color==='none'?'none':color,width:color==='none'?0:width,style:dashed?'dashed':'solid'});
@@ -136,6 +138,7 @@ revision/version은 자료나 상태의 변경 번호다. v2는 두 번째 버�
 도구 조회 자체는 모델 호출이 아니다. Context 의미 가공, 응답 구성, 음성/전사, 실패/재시도/폐기된 호출의 실제 사용량도 비용에 포함한다. 조건별 trade-off는 가설이며 품질 우열을 측정하지 않았다.`;
   if(scene.number===41 && scene.kind==='background') notesText+='\nTask1은 예산 보고서, Task2는 실적 보고서 업무다. 선택한 표와 이전 업무 두 후보가 있으므로 아까라는 표현만으로 정답을 미리 결정하지 않는다. 보고서 수정 결과를 메일 초안에 사용하고 메일은 보내지 않는 조건을 유지한다. 보고서 수정과 메일 작성은 외부 업무 수행 Agent가 맡는다.';
   if(scene.number===42 && scene.kind==='comparison') notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md\n${base}${scene.source}\n조건별 정성 비교 / 미선정 / 미측정. 같은 Conversation/Request/Task/Execution 논리 수명은 양안 공통이다. A는 모듈형 통합 Core이며 State Store 안 트랜잭션 관리자가 검증된 Request 질문 연결+Task 질문 답변+명령 준비를 공동 확정한다. B는 대화와 업무가 독립 상태 권위/실행 수명/State Store scope를 갖고 대화 의도 저장→업무 접수/원본+명령+접수결과 저장→AcceptanceReceipt의 대화 반영을 별도로 확정한다. ACCEPTED는 내부 접수이고 실제 외부 Agent 접수와 실제 사용자 전달은 별도 확인한다. Request Controller의 관계, Task Manager 업무/전송gate, Agent Gateway transmission, Response Manager 실제 전달 원장을 구별한다. 새 대화 처리기 Component나 Voice Runtime Component를 만들지 않는다. Input1/Request1/Task1/Question1/Command1/Publication1은 u2/R2/T1/Q1/K1/P1의 설명용 ID다.\n고정 사례는 contracts/dp42-handoff-examples.json, 프로토콜 본문 §4.2다. B hold 요청 시각과 업무 gate의 적용 ACK 시각은 다르며 CAS가 먼저면 DISPATCHING/UNKNOWN과 실제 외부 상태 확인을 보존한다. hold가 먼저면 PENDING 명령을 차단하고 현재 의미 reconciliation 뒤 선택적 release한다. control_session/sequence/gate revision과 command ID+immutable payload, 늦은 ACK/유실/재시작을 구별한다. 모델/네트워크 호출은 transaction 밖이고 API 내부 접수로 외부 exactly-once를 보증하지 않는다.\n모델 사용 비용은 같은 의미 판단을 고정하면 코드 인계가 추가 LLM 호출이 아니다. B 정상 사용 자동 정확성·응답성·변경 우위는 없다. 독립 업무 수명/저장 계약 변경 조건의 이익과 왕복/pending/heap/복구 비용을 같이 본다. 로컬 VIA/VAD/원본과 클라우드 음성·의미 의존성은 공통이다. 전체 MAIN과 집중 scene은 별도 source이며 기존 전체 그림을 대체하지 않는다. 문서/고정 예시 검사는 구현·모델·품질 측정의 증명이 아니다.`;
+  if(scene.number===44 && scene.kind==='comparison') notesText=`${scene.title}\n${base}docs/architecture/12-decisions/decision-packages/04-44-continuous-interaction.md\n${base}${scene.source}\n조건별 정성 비교 / 미선정 / 미측정. 표는 최신 여섯 ASR의 조건부 영향이며 수치 점수 또는 우열 측정이 아니다.`;
   if(scene.number===44 && scene.kind==='comparison') notesText+='\n같은 Input1 표 설명,Task1 메일의 Question1,Input0의 늦은 Candidate0에서 A는 중앙 continuation/완료 회수/재지시, B는 입력/알림 Stage의 Window와 Candidate+AdoptedMeaning+InputSettled+admission+source+과거 전달 snapshot Join을 비교한다. Job ID와 input generation을 고정하며 현재 확인 질문은 InputSettled를 기다리지 않는 별도 admission이다. 로컬 VAD·VIA 상태 권위,클라우드 음성/의미 모델은 양안 공통. dispatch/join/credit는 코드이며 같은 모델 job에서 자동 비용 우위는 없다. 42A 공동 확정/42B 업무 gate 확정과hold ack를 각각 연결한다. schema/JSON 예시는 docs/architecture/12-decisions/decision-packages/contracts/dp44-execution-examples.json이며 미구현/미측정 설계 검토안이다.';
   if(scene.number===44 && scene.kind==='comparison') notesText+='\nA 중앙 조정 방식: Request Controller 내부 Dialogue Dispatcher와 Dialogue Progress State. B 이벤트 흐름을 연결하는 방식: Request Controller 내부 Input Resolution Stage·Task Notice Stage와 Window, Response Manager 내부 Publication Join·Publication Window. 같은 정식 10개 Component와 원본 owner, 흰색/검정 공통 및 살구색/짙은 테두리 차이 표기.\nVoice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다. 동시 실행 수가 제한된 비동기 executor와 Blocking worker pool, Model Access 별도 scheduler를 사용한다. A 사건 대기열·비동기 작업·완료 반환은 실행 기반이, B 이벤트 채널·구독·단계별 수용량·취소 전달은 실행 라이브러리가 지원한다. 수치·우선순위·pool 크기는 미정이며 별도 Component·process·모델을 추가하지 않는다.';
   if(scene.number===45) notesText+='\n공통 사례: C20/E20 VIA 직접 평가 기준 설명과 실제 전달 P20, C21/T21/D21@v2 제품 비교, C22/T22/D22@v1 견적. 현재 C23/R23의 제안서 작성 Task T23 연결은 현재 해석/채택의 결과다. VIA는 허용된 발췌와 참조를 연결하고, 평가 기준 적용과 제안서 작성은 Downstream Agent가 수행한다. 결과 참조는 본문 전체 보관을 뜻하지 않으며 Agent 내부 reasoning/모든 tool 기록은 전제하지 않는다.\nA의 요약/index/cache/관계 cache/부분 갱신/병렬 조회와 기존 Agent 실행 맥락 재사용을 허용한다. B의 과거 관계는 검증/게시 범위만 읽고 원본 확인, 미게시/표현 미지원, 오류/갱신/삭제와 생산 비용을 유지한다. R23의 정답 관계를 미리 게시하지 않는다. 필요성과 사례 보완이며 최종 DP/A/B 선정 또는 새 사례의 품질 검증이 아니다. 기존 수치와 점수는 동일한 형식 예시다.';
@@ -158,11 +161,17 @@ const plans=[
   {slug:'VIA-DP-background-41-45',scenes:scenes.filter(s=>s.kind==='background'),destination:'docs/presentations_files/dp-background/VIA-DP-background-41-45.pptx'},
   {slug:'VIA-DP-comparison-41-45',scenes:scenes.filter(s=>s.kind==='comparison'),destination:'docs/presentations_files/dp-comparison/VIA-DP-comparison-41-45.pptx'},
 ];
-if(scope==='--dp41-v2-only') {
+if(scope==='--dp41-v2-only'||v3) {
   plans[0]={slug:'VIA-DP-background-and-comparison-41-45_v2',
     scenes:[...['via-v2-responsibilities','via-v2-overlapping-events'].map(slug=>({slug,title:slug,kind:'overview',selected:false,
       items:[{kind:'rect',id:'preserved-page-placeholder',x:0,y:0,w:1,h:1,fill:'none',stroke:'none'}]})),...integratedScenes.slice(1)],
     destination:'docs/presentations_files/VIA-DP-background-and-comparison-41-45_v2.pptx'};
+}
+if(v3) {
+  plans[0].slug=plans[0].slug.replace('_v2','_v3');
+  plans[0].destination=plans[0].destination.replace('_v2','_v3');
+  plans[2].slug+='_v3';
+  plans[2].destination=plans[2].destination.replace('.pptx','_v3.pptx');
 }
 const checkPackage=String.raw`
 import sys,json,zipfile,re
@@ -186,7 +195,7 @@ with zipfile.ZipFile(sys.argv[1]) as z:
 `;
 // Scene identity is resolved through relationships by dp_pptx_package.py.
 function selectedScenes(plan, requested=scope) {
-  return plan.scenes.filter(s=>requested==='--intro-flow-only'?s.kind==='overview':
+  return plan.scenes.filter(s=>v3?s.number===Number(scope.slice(4,6))&&s.kind==='comparison':requested==='--intro-flow-only'?s.kind==='overview':
     requested==='--dp45-only'?s.number===45&&(!subset||s.kind==='comparison'):
     requested==='--dp42-only'?s.number===42&&s.kind==='comparison':
     requested==='--dp44-only'?s.number===44&&s.kind==='comparison':
@@ -195,7 +204,7 @@ function selectedScenes(plan, requested=scope) {
     requested==='--dp41-42-only'?[41,42].includes(s.number)&&s.kind==='comparison':
     requested==='--comparison-only'?s.kind==='comparison':true);
 }
-const activePlans=plans.filter(p=>scope==='--intro-flow-only'?p===plans[0]:
+const activePlans=plans.filter(p=>v3?p!==plans[1]:scope==='--intro-flow-only'?p===plans[0]:
   !scope||scope==='--dp41-with-background'||(scope==='--dp45-only'&&!subset)||p.scenes.some(s=>s.kind==='comparison'));
 if(scope==='--list-selected') {
   console.log(JSON.stringify(plans.map(plan=>({file:plan.destination,selections:Object.fromEntries(
@@ -209,7 +218,10 @@ for(const plan of activePlans) {
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(scope==='--dp41-v2-only') {
+  if(v3) {
+    execFileSync(python,[path.join(repo,'scripts/presentations/dp41_comparison_package.py'),draft,
+      path.join(repo,plan.destination),path.join(build,`${plan.slug}.preservation.json`),`dp${scope.slice(4,6)}-comparison`]);
+  } else if(scope==='--dp41-v2-only') {
     execFileSync(python,[path.join(repo,'scripts/presentations/dp41_comparison_package.py'),draft,
       path.join(repo,plan.destination),path.join(build,`${plan.slug}.preservation.json`)]);
   } else if(['--dp41-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--comparison-only','--intro-flow-only'].includes(scope)) {

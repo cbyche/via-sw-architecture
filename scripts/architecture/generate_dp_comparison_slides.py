@@ -62,16 +62,12 @@ DATA = {
     cons=[['통합 의미 생산 계약의 변경 전파, 평균 4.0개 (변경 용이성 ↓)'],
           ['부분 의미 불일치와 오류 전파로 정확 처리율 91% (기능 정확성 ↓)',
            '제안 교환과 재판단으로 평균 VIA 처리시간 7.2 s (요청 완료 신속성 ↓)']]),
-  44: dict(title='VIA 지속 입력과 업무 알림의 후속 실행 구조',
+  44: dict(title='VIA 지속 입력과 Task 알림의 후속 실행 구조',
     options=('A 중앙에서 완료 회수와 다음 실행 지시', 'B 연결된 단계가 입력과 조건으로 실행'),
     case='“잠깐, 표부터 설명해줘.” + 메일 수신자 질문 도착 + 이전 응답 준비가 늦게 완료',
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. A도 비동기 / 우선순위 / 동시 실행. B의 사건 채널만으로 정확성 / 속도 우위를 보장하지 않는다.',
-    tradeoffs=[
-      ('정확성','의미 판단은 41과 동일 / 중앙에서 세대 / 대기 참조 연결','같은 판단과 검사 / 단계 간 참조 / Join 오류 관리 필요'),
-      ('응답성','완료 회수 / 다음 지시 경로 / 중앙 전이 비용','조건 충족 소비자 직접 활성화 / 채널 / Join 비용'),
-      ('모델 사용 비용','같은 의미 / 응답 job이면 동일 / 폐기 / 재시도 포함','같은 job이면 동일 / 중복 생산 / 폐기 호출 포함'),
-      ('변경 / 메모리','조정 규칙 중앙 변경 / 하나의 진행 상태','단계 조합 국소 변경 조건 / 여러 Window / 채널 상태')]),
+    tradeoffs=[('요청 처리 정확성', '같은 의미 판단 / 중앙에서 현재 입력과 대기 참조 관리', '같은 판단 / 각 Window와 Join의 참조 일치 필요'), ('상호작용 응답시간', '중앙의 완료 회수와 다음 지시 / 짧은 dispatch 가능', '준비된 소비자 활성화 / 채널과 Join 대기 비용'), ('VIA 요청 처리시간', '단계마다 중앙 전이를 경유 / 병행 실행 허용', '중앙 경유 축소 / 조건 대기와 단계 연결 비용'), ('VIA 모델 사용 비용', '같은 의미 / 응답 작업이면 같음 / 폐기와 재시도 포함', '같은 작업이면 같음 / 중복 생산과 폐기 포함'), ('VIA 변경 용이성', '후속 실행 규칙을 Dispatcher에서 변경', '단계 계약 안 조합 변경 / 교차 규칙은 여러 단계 영향'), ('로컬 VIA 메모리 사용량', '중앙 진행 상태와 실행 대기열', '여러 Window와 사건 채널 / 수용량 제한 필요')]),
   45: dict(title='VIA 과거 근거의 요청별 구성과 공통 생산/조회',
     options=('A 원본 서비스 조합형', 'B 공통 파생 기억 저장소형'),
     case='R23 “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
@@ -207,14 +203,19 @@ class Comparison(Slide):
         self.line([(40,795),(1880,795)],color=LINE,arrow=False)
         self.text(42,811,1840,['공통 후속 처리: source / 권한 / 입력 세대 검사 → Publication Control → Interaction Manager 실제 표시/재생 → receipt'],17,INK)
         self.text(42,840,1840,['확인 질문은 별도 admission으로 현재 입력 해소를 기다리지 않고 제시 / 발화 시작은 업무 취소 완료가 아님'],17,INK)
+        self.quality_footer(d)
+
+    def quality_footer(self,d):
         for j,(quality,left,right) in enumerate(d['tradeoffs']):
-            yy=883+j*34
-            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
-            self.text(42,yy,245,[quality],18,INK,True)
-            self.text(300,yy,720,[left],18,INK)
-            self.text(1050,yy,820,[right],18,INK)
-        self.text(40,1032,1840,[d['condition']],16,INK)
-        self.text(40,1060,1840,['Module 구조와 후속 실행 자료를 비교 / 준비 완료 / 내부 접수 / 외부 접수 / 실제 전달을 구별 / 수치 우열은 측정 후 판단'],14,MUTED)
+            yy=877+j*25
+            self.line([(40,yy-6),(1880,yy-6)],color=LINE,arrow=False)
+            self.text(42,yy,245,[quality],16,INK,True)
+            self.text(300,yy,720,[left],16,INK)
+            self.text(1050,yy,820,[right],16,INK)
+        self.text(40,1030,1840,[d['condition'].replace('·',' / ')],15,INK)
+        footer=('Reference: A LangChain Retrieval / B LangMem Background + Memory API / 本文'.replace('本文','본문 §9의 적용 범위와 한계') if self.number==45 else
+                '준비 완료 / VIA 내부 접수 / 외부 Agent 접수 / 사용자 실제 전달은 별도 확인')
+        self.text(40,1057,1840,[footer],14,MUTED)
 
     def box(self,x,y,w,h,name,color=INK,fill='white',size=21):
         self.rect(x,y,w,h,fill,color)
@@ -248,7 +249,7 @@ class Comparison(Slide):
             result=result.replace('</defs>',marker+'</defs>')
             if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
-            if self.number==41:
+            if self.number in (41,44):
                 result=result.replace('</defs>','<marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
@@ -257,7 +258,7 @@ class Comparison(Slide):
                     tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
                 result=re.sub(r'<(?:rect|path) id="'+i['id']+r'"[^>]*/>',restyle,result)
-            if self.number==41 and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
+            if self.number in (41,44) and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
                 x,y,w,h=(i[k] for k in ('x','y','w','h'))
                 points=(f'{x+w/2},{y} {x+w},{y+h/2} {x+w/2},{y+h} {x},{y+h/2}' if i.get('flow_decision') else f'{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}')
                 poly=f'<polygon id="{i["id"]}" points="{points}" fill="white" stroke="#000000" stroke-width="1"/>'
@@ -283,7 +284,7 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
-            if self.number==41 and item and (item.get('external') or item.get('flow_decision')):
+            if self.number in (41,44) and item and (item.get('external') or item.get('flow_decision')):
                 shape='rhombus' if item.get('flow_decision') else 'hexagon'
                 cell.set('style',cell.get('style')+f'shape={shape};')
         if self.number in (44,45):
@@ -327,15 +328,21 @@ def validate(outputs):
     """Check comparisons, rather than assuming the circle counts tell the truth."""
     presentation=json.loads((ROOT/'docs/presentations_files/quality-attributes/quality-attributes.json').read_text())
     names={r['id']:r['name'] for r in presentation['rows']}
-    for qa,(name,_,_) in QA.items():
-        if names[qa]!=name: raise SystemExit(f'Presentation QA name changed: {qa}')
-    targets={r['id']:r['target'] for r in presentation['rows']}
-    for qa in ('V-04','V-05'):
-        if not targets[qa].startswith(QA[qa][1]):
-            raise SystemExit(f'Presentation time metric changed: {qa}')
+    if 'V-01' in names:
+        for qa,(name,_,_) in QA.items():
+            if names[qa]!=name: raise SystemExit(f'Presentation QA name changed: {qa}')
+        targets={r['id']:r['target'] for r in presentation['rows']}
+        for qa in ('V-04','V-05'):
+            if not targets[qa].startswith(QA[qa][1]):
+                raise SystemExit(f'Presentation time metric changed: {qa}')
+    else:
+        # The unmodified 43 appendix retains its historical V labels. Active
+        # qualitative rows use the six current ASRs, never a fabricated score.
+        assert set(names)=={f'ASR-QA-{i:02d}' for i in range(1,7)}, names
+        assert [r['priority'] for r in presentation['rows']]==list(range(1,7))
     for n,data in DATA.items():
         if n in (41,42,44,45):
-            assert len(data['tradeoffs'])==(5 if n==45 else 4) and 'rows' not in data
+            assert len(data['tradeoffs'])==({41:4,42:4,44:6,45:5}[n]) and 'rows' not in data
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:

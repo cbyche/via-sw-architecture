@@ -13,10 +13,9 @@ from dp_pptx_package import related, replace_related
 from dp_v2_intro_package import read, slides
 
 
-def graft(candidate, source, report):
+def graft(candidate, source, report, slug="dp41-comparison"):
     before, generated = read(source), read(candidate)
     parts = dict(before)
-    slug = 'dp41-comparison'
     def find(package):
         matches = [s for s in slides(package)
                    if any(n.startswith(slug+' / ') for n in s['names'])]
@@ -40,5 +39,5 @@ def graft(candidate, source, report):
 
 
 if __name__ == '__main__':
-    assert len(sys.argv)==4
-    graft(*map(Path,sys.argv[1:]))
+    assert len(sys.argv) in (4,5)
+    graft(*map(Path,sys.argv[1:4]), **({"slug":sys.argv[4]} if len(sys.argv)==5 else {}))

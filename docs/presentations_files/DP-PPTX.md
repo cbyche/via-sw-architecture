@@ -8,6 +8,12 @@
 | [배경 PPTX](./dp-background/VIA-DP-background-41-45.pptx) | 41~45 배경 5장. 번호순 참조 자료. 사용자 경험 도입은 미포함 |
 | [설계 비교 PPTX](./dp-comparison/VIA-DP-comparison-41-45.pptx) | 번호순 참조 자료. 41~45 설계 비교, 장점, 단점과 QA Trade-off 5장 |
 
+## v3 비교 그림 개선 — 2026-10-11
+
+[통합 발표 v3 (12장)](./VIA-DP-background-and-comparison-41-45_v3.pptx) / [비교 전용 v3 (5장)](./dp-comparison/VIA-DP-comparison-41-45_v3.pptx). 승인된 41과 두 도입, 각 배경, 부록 43은 이전 판본과 같다. 44 → 45 → 42는 기존 대안을 유지하면서 제어권, 자료 반환 경로, 상태, 별도 실행 순서도를 확대한다. 현재 완료: 44. 다른 두 장도 같은 v3에 순서대로 반영한다. 이전 v2와 비교 원본은 보존한다.
+
+선택 그림만 반영할 때 생성기 옵션은 `--dp44-v3-only`, `--dp45-v3-only`, `--dp42-v3-only`다. 각 v3에서 이름과 presentation 관계로 해당 slide/notes를 찾아 교체하고 비선택 package part는 보존한다. 최신 여섯 ASR의 영향은 조건별 정성 비교로 표시하며 수치 결과를 새로 만들지 않는다. 아래 구판의 V 번호/예상 수치 설명은 해당 판본에만 적용된다.
+
 ## 편집 방법
 
 - 텍스트, Component와 Module 도형, 저장소, 표의 칸, 선 및 화살표는 개별 PowerPoint 개체다. 슬라이드 전체를 PNG로 삽입하지 않았다.

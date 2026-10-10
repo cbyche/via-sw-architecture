@@ -126,3 +126,9 @@ P1은 보고되지 않았다. 아래는 중복 지적을 내용별로 모은 P2�
 독립 agent 재검토에서 직접 Task 조회, 상태 Legend와 상태 높이, 채택 완료 표기, 과거 S2S/단일 모델 전제 및 Legend 필터의 footer 삭제를 보완했다. 최종 문서/그림 범위에 미해결 P1/P2는 보고되지 않았다. 이는 구현·모델 정확성·측정 결과 인증이 아니다. 전용 생성기, 고정 예시 검사, 집중 그림 생성물, PPTX flow와 diff 검사를 통과했다. 실제 Chrome 렌더의 텍스트 겹침/넘침은 0건이며 PNG와 native PPTX 렌더를 눈으로 검수했다.
 
 두 PPTX를 재import하여 이미지 없는 native 도형/텍스트로 확인했다. ZIP parts 비교에서 44의 slide XML과 notes XML만 바뀌고 다른 slide/notes/media parts는 byte 단위로 보존됐다. 발표 그림은 별도 source이며 전체 MAIN의 모든 공통 기능을 포함하지 않는다.
+
+## 2026-10-11 v3 집중 그림 검수
+
+기존 대안/전체 MAIN을 유지하며 중앙 완료 반환과 재지시, 연결된 소비자와 Publication Join, 상태 예시 및 별도 정상/늦은 후보 순서도를 확대했다. 공통 Component는 검정/흰색, 차이 Module/상태는 살구색이며 상태는 실제 owner 안에 있다. 최신 여섯 ASR 행은 조건별 영향이다. 확인 질문의 별도 admission, 실제 전달 receipt, 같은 의미 모델 작업, 강한 A의 병행/우선순위 조건을 유지한다.
+
+SVG의 실제 Chrome 렌더에서 글자 폭/겹침/화면 범위 검사 0건, native PPTX 재import 렌더 눈 검수, 고정 예시/용어/로컬 링크/DP41 출력 계약 검사 통과. 두 v3의 이름 기반 교체에서 44 slide/notes 외 ZIP part가 보존됐다. 승인된 41 SVG/draw.io/PNG/scene와 두 구판 PPTX hash도 동일하다. 이 검수는 SW 실행 또는 품질 측정이 아니다.
