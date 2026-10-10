@@ -55,6 +55,16 @@
 - 설계 질문은 요청에서 원본 소유자의 기록을 조합할지, 생산자가 유지하는 공통 과거 관계의 읽기 계약을 사용할지다. A에도 요약·색인·cache·부분 갱신을 허용하며, 단순 사전 요약 유무의 비교가 아니다.
 - [슬라이드 미리보기](./dp45-background.png), [삽화](./assets/dp45-background-illustration.png).
 
+## 42 배경 — 대화와 업무의 서로 다른 수명
+
+헤드라인은 **“대화와 업무는 서로 다른 시점에 시작하고 끝납니다”**다.
+
+- 보고서 작성 요청 → 음성 연결을 잠시 종료 → 완료된 보고서의 결론 수정 요청이라는 정상 사용자 장면이다. 드문 장애나 업데이트를 대표 혜택으로 쓰지 않는다.
+- 음성 연결, 개별 요청 처리, 보고서 업무 이력, Agent 실행을 native 타임라인으로 나눴다. 위임 요청 처리가 끝나도 작성 실행은 계속되고, 음성 연결 종료가 Task 취소/삭제를 뜻하지 않는다. 보고서 결과와 정정 이력은 이어지고 수정은 새 요청/실행으로 시작한다.
+- 선 길이는 설명용으로 시간·성능 값이 아니다. 업무 이력의 연속선이 완료된 작성 실행이 계속 살아있다는 뜻은 아니다. 음성 연결 종료와 Conversation 종료도 구별한다.
+- 이 서로 다른 논리 수명은 A/B 공통 요구다. 설계 질문은 통합 Core의 대화/업무 상태 소유와 공동 확정, 독립 서비스의 상태 권한과 commands/receipts/events 협력이다. 이 정상 장면만으로 B의 정확성·응답성·호출비용 우위를 주장하지 않는다.
+- [슬라이드 미리보기](./dp42-background.png), [삽화](./assets/dp42-background-illustration.png).
+
 ## 표현과 보존 범위
 
 - 삽화는 builtin imagegen으로 만든 설명용 이미지이며 실제 제품 화면이 아니다. [두 이미지의 생성 프롬프트](./assets/illustration-prompts.json)를 보관한다. 제목·문구·참여자·메시지 경로는 native editable PPTX objects다.
@@ -72,4 +82,10 @@
 
 DP 배경은 전용 [native 배경 생성기](../../../scripts/presentations/generate_dp_v2_backgrounds.mjs)와 [범위 제한 조립기](../../../scripts/presentations/dp_v2_background_package.py)를 쓴다. 같은 runtime 환경으로 `generate_dp_v2_backgrounds.mjs REPO BUILD 41`처럼 DP를 명시한다. 최종 PPTX를 재import한 `dp41-background.png`로 검토한다. [배경 삽화 생성 프롬프트](./assets/background-illustration-prompts.json)를 보관한다.
 
-현재 41·44·45 배경을 반영했다. 승인된 다음 제작 대상은 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
+승인된 도입 두 장과 41 → 44 → 45 → 42 배경 네 장을 모두 반영했다. 위험 경고를 주 헤드라인으로 쓰지 않고, 사용자 장면과 VIA 책임/혜택으로 설계 질문을 소개한다. 다음 검토는 이 네 배경의 표현과 이어지는 기존 비교 페이지의 연결이다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
+
+## 결과 검증
+
+[검증 기록](./review-validation.json): 12장 package 구조와 first-party 재import가 통과했고, 새 배경의 최종 PPTX 렌더 네 장을 직접 확인했다. 기존 도입/비교/43 부록 8장의 slide·notes·관계 및 나머지 기존 package parts는 작업 전 `75a70a03e`와 byte-identical이다. 원본 PPTX도 변경되지 않았다. 텍스트·화살표·타임라인은 native objects이며 각 배경의 삽화 3개만 raster picture다.
+
+새 배경의 레이아웃 오류는 없다. 보존한 기존 8번째 비교 슬라이드의 도형 경계 경고 1개는 이번 범위에서 변경하지 않았다. 실제 PowerPoint 앱의 실행·렌더링 검증이나 Architecture 품질 측정을 수행했다는 의미는 아니다.

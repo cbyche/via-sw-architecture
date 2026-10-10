@@ -113,7 +113,7 @@ for(const dp of selected) {
     s.speakerNotes.textFrame.setText(commonNotes+`\nDP45 근거: docs/architecture/12-decisions/decision-packages/04-45-memory-and-context.md §1, §3. 평가 기준은 VIA의 직접 응답이고 제품 비교·견적은 서로 다른 Agent의 확인된 업무 결과다. 같은 Agent에게 예전 보고서 스타일을 다시 위임하는 예시는 여기서 근거로 쓰지 않는다. VIA는 수신한 기록, 허용된 발췌·결과/버전 참조와 실제 전달 기록을 연결한다. 결과 참조가 전체 본문 보관을 뜻하지 않는다. 모든 Agent 내부 reasoning/tool 이력이나 전달받지 않은 자료를 알고 있다고 가정하지 않는다. 기준 적용과 새 제안서의 업무 판단·작성은 Agent 책임이다. 이 페이지의 세 기록은 관련 근거의 예시이지 특정 저장 구조를 선택하지 않는다. A도 summary/index/cache/부분 갱신을 허용한다. 비교는 요청 소비자가 원본 소유자 읽기를 조합하는 책임과 생산자가 공통 과거 관계를 생산·게시·폐기하는 지속 읽기 계약이다. B의 파생 기록이 현재 요청의 정답 의미나 위임 Task를 미리 확정하지 않는다. 원본·현재성·권한·누락 확인은 공통이다. 과거 기록을 장기 사용자 선호로 자동 승격하지 않는다.`);
   }
   if(dp===42) {
-    const s=scene(dp,'대화와 업무는,\n서로 다른 시점에 시작하고 끝납니다',
+    const s=scene(dp,'대화와 업무는\n서로 다른 시점에 시작하고 끝납니다',
       '보고서를 맡기고 → 음성 연결을 잠시 끊고 → 다시 돌아와 결론을 수정',34);
     await art(s,dp,[[0,9000,67000,12000],[34500,13000,34500,16000],[67000,9000,0,12000]],[325,340,325],272,250);
     headings(s,['보고서 작성 요청','음성 연결을 잠시 종료','완료된 보고서 수정 요청'],542);
@@ -129,9 +129,9 @@ for(const dp of selected) {
     line(s,'voice-first',[[start,706],[715,706]],C.teal,4);
     line(s,'voice-return',[[1365,706],[end,706]],C.teal,4);
     text(s,'voice-off','연결 없음',860,679,325,24,C.muted,false,'center');
-    line(s,'request-one',[[start,763],[715,763]],C.teal,4);
+    line(s,'request-one',[[start,763],[650,763]],C.teal,4);
     line(s,'request-two',[[1365,763],[1650,763]],C.teal,4);
-    text(s,'request-one-label','위임 요청 처리',465,735,250,23,C.teal,false,'center');
+    text(s,'request-one-label','위임 요청 처리',460,735,200,23,C.teal,false,'center');
     text(s,'request-two-label','수정 요청 처리',1365,735,285,23,C.teal,false,'center');
     line(s,'task-history',[[start,820],[end,820]],C.teal,4);
     text(s,'task-record','같은 보고서의 업무·결과·정정 이력을 유지',730,792,940,24,C.teal,false,'center');
