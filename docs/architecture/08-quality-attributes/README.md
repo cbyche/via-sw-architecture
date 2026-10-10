@@ -53,3 +53,7 @@ population은 Measurement Freeze 전까지 미확정이다.**
 ## ID generation note
 
 2026-09-28 generation은 기존 ID를 옮기지 않고 비어 있던 category 끝 번호 QA-09/19/29/39를 통합 core ASR에 사용했다. 과거 archive의 old QA-09는 recovery time이었고 현재 QA-09와 의미가 다르다. 과거 번호와 문서는 변경하지 않는다.
+
+## 최신 설계 비교 QA 정의
+
+[03-02 ASR-QA-01~06](../12-decisions/decision-packages/03-02-quality-attribute-definitions.md)은 사용자 지정 새 설계 비교 정의다. 현재 v5는 기존 18개 사례에서 구성한 W100 사용자 100/Agent 30장면으로 정확성/시간 관측과 비용/메모리 전체 활동을 연결한다. 모든 정의/지표/목표/근거는 앞 표, 사용량은 §8.0, [교차 검수](../12-decisions/decision-packages/03-02-cross-review.md)를 따른다. 이 목록이 위 기존 QA catalog ID/ADR/참조 Architecture를 재번호화하거나 성능 결과를 만드는 것은 아니다.

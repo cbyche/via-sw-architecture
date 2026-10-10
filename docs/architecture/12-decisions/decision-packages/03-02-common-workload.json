@@ -1,0 +1,346 @@
+{
+  "contract_version": "ASR-QA-v5",
+  "workload_id": "W100",
+  "status": "DEFINED_SYNTHETIC_POC_ACTIVITY_NOT_USER_TELEMETRY_NOT_EXECUTED",
+  "source": "03-02-quality-attribute-definitions.md",
+  "definition_section": "8.0",
+  "independent_repeats": 3,
+  "blocks_per_activity": 5,
+  "user_input_scenes": 100,
+  "agent_triggered_scenes": 30,
+  "scored_run": "R1",
+  "primary_accuracy_trials": 90,
+  "primary_accuracy_conditions": 540,
+  "primary_reaction_trials": 30,
+  "primary_cycle_trials": 30,
+  "initial": {
+    "history_turns": 2000,
+    "completed_tasks": 200,
+    "context_sources": 30,
+    "source_payload_mib": 20,
+    "raw_rgba_frames": 15,
+    "raw_frame_width": 2880,
+    "raw_frame_height": 1800,
+    "cloud_call_ceiling": 4,
+    "active_task_ceiling": 10,
+    "background_source_ids": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12",
+      "B13",
+      "B14",
+      "B15",
+      "B16",
+      "B17",
+      "B18",
+      "B19",
+      "B20"
+    ],
+    "background_source_template": {
+      "title": "W100 background source Bnn",
+      "v1": "index=nn; value=100+nn",
+      "v2": "index=nn; value=101+nn",
+      "permission": "read/model-provide allowed until B20 final withdrawal"
+    },
+    "canonical_source_slots": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10"
+    ],
+    "history_template": "2000 chronological turns H0001..H2000, Korean text: 배경 기록 {id}: B{((id-1)%20)+1:02d}@v1의 값은 {100+((id-1)%20)+1}이다. Every turn has delivered receipt and allowed read/provide. No current request intent or derived relation injected.",
+    "completed_task_template": "200 completed Task HT001..HT200, source B{((id-1)%20)+1:02d}@v1, read-only value query, ACCEPTED then COMPLETED then delivered receipt in this order. Canonical S2/S6 facts supplied in scoped source slots separately, without overwriting current candidate outcomes.",
+    "payload_size_rule": "Original source plus turn plus Task UTF-8 payload total 20MiB. Pad unused background source text with U+0020 to exactly 20*1024*1024 bytes. No learned/derived output is padding. Physical DB/runtime/index overhead counted in addition."
+  },
+  "source_changes_per_block": 4,
+  "source_withdrawal": {
+    "block": 5,
+    "source": "B20",
+    "when": "after final update before drain"
+  },
+  "maintenance_ticks_per_block": 2,
+  "drain_deadline_seconds": 30,
+  "idle_probe_seconds": 10,
+  "capture_policy": "same bounded source evidence; no omitted helper or copy",
+  "primary_selection": "R1 CORE first occurrence of each of 18 cases in each of 5 blocks, fixed before outcomes",
+  "readiness_guard": "Every occurrence reaches required checkpoint and common lifecycle tail; extra runs/cases reported separately; any mandatory violation or unfinished workload prevents resource target qualification",
+  "episode_isolation": "Canonical case before-state in a scoped fixture, authoritative source hash/revision/permission checked; no oracle or derived semantic injection; case restoration costs and peak allocations included",
+  "block_lifecycle": "Restore before-state at start of block, preserve eligible caches within REUSE, all activation/invalidation/copy costs included, never count a reset as successful Task completion",
+  "voice_output_evidence": "POC_ASSUMPTION per required fact/lifecycle delivery, not model guarantees; live usage supersedes these estimates; input replay times are FIXTURE_FACT",
+  "cases": [
+    {
+      "case_id": "S1-01",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 3,
+      "reaction": null,
+      "cycle": "T-01"
+    },
+    {
+      "case_id": "S1-02",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reaction": null,
+      "cycle": "T-02"
+    },
+    {
+      "case_id": "S1-03",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S2-01",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S2-02",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 18,
+      "reaction": null,
+      "cycle": "T-03"
+    },
+    {
+      "case_id": "S2-03",
+      "occurrences": 8,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S3-01",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S3-02",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reaction": null,
+      "cycle": "T-04"
+    },
+    {
+      "case_id": "S3-03",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S4-01",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 9,
+      "reaction": "I-02",
+      "cycle": "T-05"
+    },
+    {
+      "case_id": "S4-02",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reaction": "I-01",
+      "cycle": null
+    },
+    {
+      "case_id": "S4-03",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reaction": "I-03",
+      "cycle": null
+    },
+    {
+      "case_id": "S5-01",
+      "occurrences": 15,
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reaction": "I-04",
+      "cycle": null
+    },
+    {
+      "case_id": "S5-02",
+      "occurrences": 15,
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reaction": "I-05",
+      "cycle": null
+    },
+    {
+      "case_id": "S5-03",
+      "occurrences": 7,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S6-01",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reaction": null,
+      "cycle": "T-06"
+    },
+    {
+      "case_id": "S6-02",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 1,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reaction": null,
+      "cycle": null
+    },
+    {
+      "case_id": "S6-03",
+      "occurrences": 5,
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reaction": "I-06",
+      "cycle": null
+    }
+  ],
+  "extra_user_by_block": [
+    [
+      "S1-01",
+      "S1-02",
+      "S2-01",
+      "S2-02"
+    ],
+    [
+      "S1-01",
+      "S1-03",
+      "S2-01",
+      "S2-03"
+    ],
+    [
+      "S1-02",
+      "S1-03",
+      "S2-02",
+      "S2-03"
+    ],
+    [
+      "S1-01",
+      "S1-02",
+      "S2-01",
+      "S2-02"
+    ],
+    [
+      "S1-03",
+      "S2-03",
+      "S5-03",
+      "S5-03"
+    ]
+  ],
+  "burst_cases": [
+    "S5-01",
+    "S5-02",
+    "S5-01",
+    "S5-02"
+  ],
+  "burst_offsets_seconds": [
+    "0",
+    "0.02",
+    "0.04",
+    "0.06"
+  ],
+  "history_growth_guard": {
+    "keep_completed_block_history_until_activity_end": true,
+    "no_new_input_after_final_update": true,
+    "shared_maintenance_ticks": 10
+  },
+  "reference_semantic_calls": [
+    {
+      "purpose": "USER interpretation and final response budget",
+      "count": 200,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "AGENT question/result interpretation and response budget",
+      "count": 60,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "source update budget",
+      "count": 20,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "initial/history preparation budget across all blocks",
+      "count": 20,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    }
+  ],
+  "reference_voice_text": {
+    "input_tokens": 50000,
+    "output_tokens": 10000
+  }
+}

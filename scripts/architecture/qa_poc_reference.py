@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce ASR-QA-v4 reference arithmetic, never execute a candidate or API."""
+"""Reproduce ASR-QA-v5 reference arithmetic, never execute a candidate or API."""
 import argparse
 from fractions import Fraction as F
 from pathlib import Path
@@ -71,10 +71,11 @@ def compact(x, digits=6):
 def calculate(data):
     p = data['llm_pricing']; a=data['assumptions']; v=data['voice_pricing']
     llm_unit=cost(2000,200,p)
-    semantic=cost(600000,60000,p)
-    voice=F(30)*F(str(v['audio_input_per_minute']))+F(10)*F(str(v['audio_output_per_minute']))
-    voice+=(F(50000)*F(str(v['text_input_per_million']))+F(10000)*F(str(v['text_output_per_million'])))/1_000_000
-    daily=semantic+voice
+    w=json.loads((DIR/data['common_workload']).read_text());manifest=json.loads((DIR/data['workload_manifest']).read_text());u=manifest['summary']
+    semantic=cost(sum(c['count']*c['input_tokens'] for c in w['reference_semantic_calls']),sum(c['count']*c['output_tokens'] for c in w['reference_semantic_calls']),p)
+    voice=F(u['voice_input_seconds'],60)*F(str(v['audio_input_per_minute']))+F(u['voice_output_reference_seconds'],60)*F(str(v['audio_output_per_minute']))
+    voice+=(F(w['reference_voice_text']['input_tokens'])*F(str(v['text_input_per_million']))+F(w['reference_voice_text']['output_tokens'])*F(str(v['text_output_per_million'])))/1_000_000
+    activity=semantic+voice
     profiles=[]
     for profile in data['latency_profiles']:
         call=F(str(profile['ttft_seconds']))+F(200)/F(str(profile['tokens_per_second']))
@@ -88,8 +89,9 @@ def calculate(data):
         examples.append({'dp':r['dp'],'A_mib':compact(base),'B_mib':compact(base+delta),'B_minus_A_mib':compact(delta),'evidence_level':'CALCULATED_REFERENCE','assumption':r['basis']})
     A_miss=cost(4000,200,p); B_prod=cost(6000,400,p)
     return {'contract_version':data['contract_version'],'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
+        'common_workload_sha256':manifest['input_sha256'],'workload_manifest_sha256':hashlib.sha256((DIR/data['workload_manifest']).read_bytes()).hexdigest(),'workload_summary':u,
         'evidence_level':'CALCULATED_REFERENCE','not_candidate_results':True,
-        'arithmetic':{'llm_2000_200_USD':compact(llm_unit),'generation_only_200_seconds':compact(F(200)/450),'semantic_daily_USD':compact(semantic),'voice_daily_USD':compact(voice),'daily_total_USD':compact(daily),'daily_headroom_USD':compact(F('1.50')-daily),'reference_reaction_seconds':compact(F('.10')+F('.30')+F(100)/450+F('.08')+F('.25'))},
+        'arithmetic':{'llm_2000_200_USD':compact(llm_unit),'generation_only_200_seconds':compact(F(200)/450),'semantic_activity_USD':compact(semantic),'voice_activity_USD':compact(voice),'activity_total_USD':compact(activity),'activity_headroom_USD':compact(F('1.50')-activity),'reference_reaction_seconds':compact(F('.10')+F('.30')+F(100)/450+F('.08')+F('.25'))},
         'dp41_sufficient_typed_evidence':profiles,
         'dp42_four_normal_handoffs_seconds':{'A':'.04','B':'.10','B_minus_A':'.06'},
         'dp44_six_normal_transitions_seconds':{'A':'.06','B':'.05','A_minus_B':'.01'},
@@ -99,12 +101,12 @@ def calculate(data):
 
 def render(report):
     a=report['arithmetic']
-    lines=['# ASR-QA-v4 참조 계산 검산', '', '> CALCULATED_REFERENCE / 공개 단가와 작성자 가정의 산술 검산 / 실제 모델/Windows/후보 실행 결과 없음', '',
+    lines=['# ASR-QA-v5 참조 계산 검산', '', '> CALCULATED_REFERENCE / 공개 단가와 작성자 가정의 산술 검산 / 실제 모델/Windows/후보 실행 결과 없음', '',
         '[정의 원본](./03-02-quality-attribute-definitions.md)과 [입력 원장](./03-02-poc-inputs.json)을 따른다. 재현 명령은 `.venv/bin/python scripts/architecture/qa_poc_reference.py --check`다.', '',
-        '## 기본 예산', '', '| 항목 | 계산값 |', '| --- | --- |',
+        '## 공통 활동과 기본 예산', '', 'W100은 18개 원본 사례에서 구성한 사용자 100/Agent 30장면이다. 110개 계획 발화의 입력 264초, 실제 전달 길이의 참조 출력 914초를 사용한다. 이 숫자는 합성 사용량/작성자 길이 예산이며 실제 일일 사용 통계가 아니다. 초기/갱신/폐기 청구를 전체 원장에 포함한다.', '', '| 항목 | 계산값 |', '| --- | --- |',
         f"| 의미 2,000/200 token 1호출 | ${a['llm_2000_200_USD']} |",f"| 200 token의 생성 부분만 | {a['generation_only_200_seconds']}초 |",
-        f"| 8시간 의미 비용 | ${a['semantic_daily_USD']} |", f"| 8시간 음성/audio/Text 비용 | ${a['voice_daily_USD']} |",
-        f"| 기본 총액 / $1.50 예산 여유 | ${a['daily_total_USD']} / ${a['daily_headroom_USD']} |",f"| QA-02 설명용 반응 예산 | {a['reference_reaction_seconds']}초 |", '',
+        f"| W100 의미 비용 | ${a['semantic_activity_USD']} |", f"| W100 음성/audio/Text 비용 | ${a['voice_activity_USD']} |",
+        f"| 기본 총액 / $1.50 예산 여유 | ${a['activity_total_USD']} / ${a['activity_headroom_USD']} |",f"| QA-02 설명용 반응 예산 | {a['reference_reaction_seconds']}초 |", '',
         '## 41의 충분한 typed 근거 조건', '', 'A 2호출/B 1호출이라는 명시적 call-plan이다. 실제 모델의 판단이나 정답률을 측정한 것이 아니다. B가 부분 해석을 추가하면 두 호출로 바뀔 수 있다.', '',
         '| profile | A (초) | B (초) | A-B (초) |', '| --- | --- | --- | --- |']
     for r in report['dp41_sufficient_typed_evidence']:
@@ -112,8 +114,8 @@ def render(report):
     d=report['dp45_past_processing_USD']
     lines += ['', '## 짧은 전이와 cache/생산 비용', '',
         '42의 정상 hand-off 4회는 A 0.04초/B 0.10초이며 차이 0.06초다. 44의 6회 전이는 A 0.06초/B 0.05초이며 차이 0.01초다. 두 차이는 대표 사이클의 0.5초 차이 기준에 못 미친다. 이 일부 구간을 전체 QA 평균으로 소개하지 않는다.', '',
-        f"45의 과거 처리만 보면 A 40회 cache miss ${d['A_40_misses']}, A 10회 miss ${d['A_10_misses']}, B 20회 관계 생산 ${d['B_20_productions']}다. A miss {d['break_even_A_misses']}회에서 비용이 같고 빈도에 따라 순위가 바뀐다. 현재 의미/음성 비용은 전체 원장에 추가해야 한다.", '',
-        '## 동시 메모리 가정', '', '| DP | A (MiB) | B (MiB) | B-A (MiB) | 가정 |', '| --- | --- | --- | --- | --- |']
+        f"45의 과거 처리만 보면 A 40회 cache miss ${d['A_40_misses']}, A 10회 miss ${d['A_10_misses']}, B가 실제 20회 관계 생산하는 별도 call-plan ${d['B_20_productions']}다. A miss {d['break_even_A_misses']}회에서 비용이 같고 빈도에 따라 순위가 바뀐다. 현재 의미/음성 비용은 전체 원장에 추가해야 한다.", '',
+        '## 같은 W100의 동시 메모리 가정', '', '| DP | A (MiB) | B (MiB) | B-A (MiB) | 가정 |', '| --- | --- | --- | --- | --- |']
     for r in report['memory_examples']:
         lines.append(f"| {r['dp']} | {r['A_mib']} | {r['B_mib']} | {r['B_minus_A_mib']} | {r['assumption']} |")
     lines += ['', '공통 1,792MiB는 예산 항목을 동시에 할당한 설명 예시다. 실제 최소 크기/peak를 확인한 수치가 아니다. 41/44의 차이는 128MiB 기준보다 작고, 42/45는 추가 크기에 대한 민감도를 확인해야 한다.', '',
@@ -125,6 +127,9 @@ def render(report):
 
 def self_check(data):
     assert cost(2000,200,data['llm_pricing']) == F('0.0024')
+    result=calculate(data);a=result['arithmetic']
+    assert a['activity_total_USD']=='1.0987' and a['activity_headroom_USD']=='0.4013'
+    assert result['workload_summary']['user_input_scenes']==100 and result['workload_summary']['agent_triggered_scenes']==30
     # Parallel agent work must not erase independently running VIA work.
     dag=[{'id':'start','parents':[],'seconds':'0.1','kind':'VIA'},
          {'id':'agent','parents':['start'],'seconds':'8','kind':'EXTERNAL_AGENT_WORK'},

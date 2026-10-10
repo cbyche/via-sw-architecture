@@ -1,8 +1,8 @@
 # VIA ASR-QA 품질 요구사항 요약
 
-[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 3개씩 두 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
+[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 3개씩 두 페이지와 공통 활동 한 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
 
-- [편집 가능한 PowerPoint, 2장](VIA-quality-attributes.pptx)
+- [편집 가능한 PowerPoint, 3장](VIA-quality-attributes.pptx)
 - [최종 PPTX에서 렌더링한 PNG](index.html)
 - [발표 문안과 원본 연결](../quality-attributes.md)
 - [투영 JSON](quality-attributes.json): 원본 SHA-256, 여섯 핵심 정의와 상세 평가 명세, 출처
@@ -16,6 +16,7 @@ PowerPoint native text와 table로 편집 가능하며 슬라이드 PNG를 붙�
 [03-02](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 수정한 뒤 아래 투영/검산을 재생성한다. 별도 발표 정의를 JSON에서 독립 개정하지 않는다.
 
 ```sh
+python3 scripts/architecture/qa_common_workload.py --write
 python3 scripts/architecture/qa_poc_reference.py --write
 python3 scripts/presentations/build_asr_qa_sources.py
 python3 scripts/presentations/build_asr_qa_sources.py --check

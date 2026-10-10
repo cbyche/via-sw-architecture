@@ -39,7 +39,7 @@
 | 1 / ◐○○ | 98% ≤ x < 98.4% | 충족 |
 | 0 / ○○○ | 0% ≤ x < 98% | 미달 |
 
-출처: [VIA 고정 기능/UC](../architecture/05-representative-use-cases.md), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §3 및 §8.9.
+출처: [VIA 고정 기능/UC](../architecture/05-representative-use-cases.md), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §3 및 §8.9.
 
 ![ASR-QA-01 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-01.png)
 
@@ -76,7 +76,7 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 | 1 / ◐○○ | .84 < x ≤ 1 초 | 충족 |
 | 0 / ○○○ | x > 1 초 | 미달 |
 
-출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.9.
+출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.9.
 
 ![ASR-QA-02 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-02.png)
 
@@ -101,7 +101,7 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 
 **보호 조건:** 29/30 ≤15초, 미전달 0건
 
-정확성 원본의 접수 완료와 시간 파생 장면의 최종 결과를 구별. 실제 wall-clock과 제외 구간/DAG도 함께 보고.
+같은 S 장면의 접수 checkpoint와 공통 최종 tail을 각각 관측. 실제 wall-clock과 제외 구간/DAG도 함께 보고.
 
 | 점수/표시 | 원지표 범위 | 대표 목표 |
 | --- | --- | --- |
@@ -113,7 +113,7 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 | 1 / ◐○○ | 8.4 < x ≤ 10 초 | 충족 |
 | 0 / ○○○ | x > 10 초 | 미달 |
 
-출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.9.
+출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.9.
 
 ![ASR-QA-03 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-03.png)
 
@@ -121,20 +121,20 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 
 **정의:** 동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액
 
-**대표 지표:** 8시간 평균 총 모델 비용(USD). 100개 목표/배경 생산/재시도/음성과 청구 context를 모두 합산
+**대표 지표:** 표준 활동 W100 1회 평균 총 모델 비용(USD/묶음). 사용자 입력 100건과 Agent 발신 30건의 전체 청구를 3회 독립 수행해 평균
 
-**목표:** $1.50/8시간 이하
+**목표:** $1.50/W100 이하
 
-**목표 근거:** 하루 100개 목표와 청구 음성 입력 30분/출력 10분의 공개 단가 계산 $1.1325에 추가 생산/재시도 여유 $0.3675를 둔 작성자 예산 (§5.3)
+**목표 근거:** 18개 대표 사례에서 구성한 동일 활동의 의미 300호출 예산/음성 입력 264초/출력 914초 참조 계산 $1.0987에 추가 생산/재시도 여유 $0.4013을 둔 작성자 예산 (§5.3, §8.0)
 
 | 항목 | 계산/평가 규칙 |
 | --- | --- |
 | 의미 모델 | 600k 입력 / 60k 출력 = $0.7200 |
-| 음성 audio | 입력 30분 / 출력 10분 = $0.3300 |
+| 음성 audio | 입력 264초 / 출력 예산 914초 = $0.2962 |
 | 음성 Text/context | 50k 입력 / 10k 출력 = $0.0825 |
-| 기본 총액 | $0.7200 + $0.3300 + $0.0825 = $1.1325 |
-| 추가 예산 | $1.5000 - $1.1325 = $0.3675 |
-| A/B 차이 | $0.15/8h 이상, cache miss/생산 빈도 민감도 |
+| 기본 총액 | $0.7200 + $0.2962 + $0.0825 = $1.0987 |
+| 추가 예산 | $1.5000 - $1.0987 = $0.4013 |
+| A/B 차이 | $0.15/W100 이상, cache miss/생산 빈도 민감도 |
 
 **보호 조건:** 재시도/폐기/배경/청구 context 누락 없음
 
@@ -142,15 +142,15 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 
 | 점수/표시 | 원지표 범위 | 대표 목표 |
 | --- | --- | --- |
-| 6 / ●●● | 0 ≤ x ≤ .5 USD/8h | 충족 |
-| 5 / ●●◐ | .5 < x ≤ .7 USD/8h | 충족 |
-| 4 / ●●○ | .7 < x ≤ .9 USD/8h | 충족 |
-| 3 / ●◐○ | .9 < x ≤ 1.1 USD/8h | 충족 |
-| 2 / ●○○ | 1.1 < x ≤ 1.3 USD/8h | 충족 |
-| 1 / ◐○○ | 1.3 < x ≤ 1.5 USD/8h | 충족 |
-| 0 / ○○○ | x > 1.5 USD/8h | 미달 |
+| 6 / ●●● | 0 ≤ x ≤ .5 USD/W100 | 충족 |
+| 5 / ●●◐ | .5 < x ≤ .7 USD/W100 | 충족 |
+| 4 / ●●○ | .7 < x ≤ .9 USD/W100 | 충족 |
+| 3 / ●◐○ | .9 < x ≤ 1.1 USD/W100 | 충족 |
+| 2 / ●○○ | 1.1 < x ≤ 1.3 USD/W100 | 충족 |
+| 1 / ◐○○ | 1.3 < x ≤ 1.5 USD/W100 | 충족 |
+| 0 / ○○○ | x > 1.5 USD/W100 | 미달 |
 
-출처: [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [Google Live 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.9.
+출처: [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [Google Live 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.9.
 
 ![ASR-QA-04 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-04.png)
 
@@ -187,7 +187,7 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 | 1 / ◐○○ | 2.6 < x ≤ 3 개/과제 | 충족 |
 | 0 / ○○○ | x > 3 개/과제 | 미달 |
 
-출처: [VIA 고정 기능/UC](../architecture/05-representative-use-cases.md), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §6 및 §8.9.
+출처: [VIA 고정 기능/UC](../architecture/05-representative-use-cases.md), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §6 및 §8.9.
 
 ![ASR-QA-05 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-05.png)
 
@@ -195,7 +195,7 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 
 **정의:** 동일한 활동과 동시 부하에서 VIA가 로컬 PC에 할당해 유지하는 메모리의 최대량
 
-**대표 지표:** 최대 전체 commit 메모리(MiB) = 모든 VIA process의 private commit + 고유 공유 anonymous commit의 동시 합 최대
+**대표 지표:** 최대 전체 commit 메모리(MiB) = 같은 W100 3회 중 모든 VIA process의 private commit + 고유 공유 anonymous commit의 동시 합 최대
 
 **목표:** 4,096MiB(4GiB) 이하
 
@@ -204,10 +204,10 @@ I-01 음성 중단, I-02 정정, I-03 취소, I-04 유효 질문, I-05 결과, I
 | 항목 | 계산/평가 규칙 |
 | --- | --- |
 | 대표 관측 | 전체 process private commit + 고유 shared commit |
-| 공통 부하 | 8시간, Task 10개, cloud call 4개, 동일 capture/원본 |
+| 공통 부하 | W100 130장면, Task 최대 10 / cloud call 최대 4 |
 | 기본 할당 예산 | 동시 8개 할당 항목의 합 = 1,792MiB (전체 내역 §7.3) |
 | 추가/변동 여유 | 4,096 - 1,792 = 2,304MiB |
-| 관측/보호 | 50ms + allocation event, 3session 최대 / working set 6GiB |
+| 관측/보호 | 50ms + allocation event, 3회 최대 / working set 6GiB |
 | A/B 차이 | 128MiB 이상, 동일 기능/보관과 process copy 포함 |
 
 **보호 조건:** working-set 합 ≤6GiB, 유휴 증가 ≤16MiB
@@ -224,7 +224,7 @@ commit과 실제 RAM residency/VRAM을 구별해 진단을 병기. 초기 생산
 | 1 / ◐○○ | 3481.6 < x ≤ 4096 MiB | 충족 |
 | 0 / ○○○ | x > 4096 MiB | 미달 |
 
-출처: [Samsung NP960UJH-XG3IN 공식 사양](https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/), [Microsoft PrivateUsage/commit 정의](https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex), [03-02 공통 QA 계약 v4](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §7 및 §8.9.
+출처: [Samsung NP960UJH-XG3IN 공식 사양](https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/), [Microsoft PrivateUsage/commit 정의](https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex), [03-02 공통 QA 계약 v5](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §7 및 §8.9.
 
 ![ASR-QA-06 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-06.png)
 

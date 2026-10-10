@@ -16,6 +16,7 @@ PowerPoint native text와 table로 편집 가능하며 슬라이드 PNG를 붙�
 [03-02](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 수정한 뒤 아래 투영/검산을 재생성한다. 별도 발표 정의를 JSON에서 독립 개정하지 않는다.
 
 ```sh
+python3 scripts/architecture/qa_common_workload.py --write
 python3 scripts/architecture/qa_poc_reference.py --write
 python3 scripts/presentations/build_asr_qa_sources.py
 python3 scripts/presentations/build_asr_qa_sources.py --check

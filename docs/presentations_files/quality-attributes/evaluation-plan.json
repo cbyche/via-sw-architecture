@@ -1,7 +1,7 @@
 {
   "source": "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md",
-  "source_sha256": "8235a96137f71406fbede7c2021ad6476f62e7009d2f645a5dbaaa48e9787d0e",
-  "contract_version": "ASR-QA-v4",
+  "source_sha256": "0e304faddf43b212900ce12f712a1d5cad5bd3cf601bc77a94f3f267d5fa2933",
+  "contract_version": "ASR-QA-v5",
   "status": "AUTHOR_DEFINED_POC_CONTRACT_NO_CANDIDATE_MEASUREMENT",
   "priority": [
     "ASR-QA-01",
@@ -29,9 +29,11 @@
       "trials": 30
     },
     "cost_memory": {
-      "hours": 8,
-      "sessions": 3,
-      "goals": 100
+      "workload": "W100",
+      "blocks": 5,
+      "user_scenes": 100,
+      "agent_scenes": 30,
+      "independent_runs": 3
     },
     "change": {
       "fixtures": 6,
@@ -78,9 +80,9 @@
       "id": "ASR-QA-04",
       "name": "VIA 모델 사용 비용",
       "description": "동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액",
-      "method": "8시간 평균 총 모델 비용(USD). 100개 목표/배경 생산/재시도/음성과 청구 context를 모두 합산",
-      "target": "$1.50/8시간 이하",
-      "targetBasis": "하루 100개 목표와 청구 음성 입력 30분/출력 10분의 공개 단가 계산 $1.1325에 추가 생산/재시도 여유 $0.3675를 둔 작성자 예산 (§5.3)",
+      "method": "표준 활동 W100 1회 평균 총 모델 비용(USD/묶음). 사용자 입력 100건과 Agent 발신 30건의 전체 청구를 3회 독립 수행해 평균",
+      "target": "$1.50/W100 이하",
+      "targetBasis": "18개 대표 사례에서 구성한 동일 활동의 의미 300호출 예산/음성 입력 264초/출력 914초 참조 계산 $1.0987에 추가 생산/재시도 여유 $0.4013을 둔 작성자 예산 (§5.3, §8.0)",
       "guards": "재시도/폐기/배경/청구 context 누락 없음"
     },
     {
@@ -96,7 +98,7 @@
       "id": "ASR-QA-06",
       "name": "로컬 VIA 메모리 사용량",
       "description": "동일한 활동과 동시 부하에서 VIA가 로컬 PC에 할당해 유지하는 메모리의 최대량",
-      "method": "최대 전체 commit 메모리(MiB) = 모든 VIA process의 private commit + 고유 공유 anonymous commit의 동시 합 최대",
+      "method": "최대 전체 commit 메모리(MiB) = 같은 W100 3회 중 모든 VIA process의 private commit + 고유 공유 anonymous commit의 동시 합 최대",
       "target": "4,096MiB(4GiB) 이하",
       "targetBasis": "32GB급 Windows PC에서 OS 8GiB/사용자 앱 16GiB/VIA 4GiB/여유 4GiB로 계획. 기본 allocation 예산 1,792MiB에 DP 추가 상태/변동 여유 2,304MiB. RAM residency와 commit 구별 (§7.3)",
       "guards": "working-set 합 ≤6GiB, 유휴 증가 ≤16MiB"

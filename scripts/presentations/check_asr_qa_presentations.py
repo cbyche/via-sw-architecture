@@ -32,13 +32,14 @@ def check_links(path):
         assert (path.parent/target).exists(),(path,target)
 
 def archive_check():
-    archive=ROOT/'docs/archive/qa-presentations-before-asr-20261011'
-    manifest=json.loads((archive/'manifest.json').read_text())
-    assert len(manifest)==32
-    for record in manifest:
-        p=archive/record['original_path']
-        assert p.stat().st_size==record['bytes'],p
-        assert hashlib.sha256(p.read_bytes()).hexdigest()==record['sha256'],p
+    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33)]:
+        archive=ROOT/'docs/archive'/name
+        manifest=json.loads((archive/'manifest.json').read_text())
+        assert len(manifest)==count
+        for record in manifest:
+            p=archive/record['original_path']
+            assert p.stat().st_size==record['bytes'],p
+            assert hashlib.sha256(p.read_bytes()).hexdigest()==record['sha256'],p
 
 
 def check(kind):
@@ -47,7 +48,7 @@ def check(kind):
     source=ROOT/data['source']
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
     assert digest==data['source_sha256']
-    assert data['contract_version']=='ASR-QA-v4'
+    assert data['contract_version']=='ASR-QA-v5'
     rows=data['rows']
     assert len(rows)==6
     assert [r['id'] for r in rows]==[f'ASR-QA-{n:02d}' for n in range(1,7)]
@@ -59,7 +60,7 @@ def check(kind):
         assert len(row['calculationRows'])==6
         assert row['sources'] and all(k in data['references'] for k in row['sources'])
     assert data==json.loads((BASE/f'quality-{"metrics" if kind=="attributes" else "attributes"}'/f'quality-{"metrics" if kind=="attributes" else "attributes"}.json').read_text())
-    count=2 if kind=='attributes' else 6
+    count=3 if kind=='attributes' else 6
     with ZipFile(out/f'VIA-quality-{kind}.pptx') as z:
         assert z.testzip() is None
         slides=[n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml',n)]
@@ -74,6 +75,8 @@ def check(kind):
             assert len(tables)==(1 if kind=='attributes' else 3)
             note=text(ET.fromstring(z.read(f'ppt/notesSlides/notesSlide{i}.xml')))
             assert digest in note and data['contract_version'] in note
+            assert data['common_workload_sha256'] in note
+            assert compact(data['common_workload_detail']) in compact(note)
             group=rows[(i-1)*3:i*3] if kind=='attributes' else [rows[i-1]]
             for row in group:
                 body=compact(text(node))
@@ -92,7 +95,7 @@ def check(kind):
                     cells=tr.findall('a:tc',NS)
                     assert text(cells[0])==SYMBOLS[6-j]
                     assert text(cells[2])==('충족' if j<6 else '미달')
-    expected=[f'quality-attributes-{n:02d}.png' for n in range(1,3)] if kind=='attributes' else [f'qa-metric-asr-qa-{n:02d}.png' for n in range(1,7)]
+    expected=[f'quality-attributes-{n:02d}.png' for n in range(1,4)] if kind=='attributes' else [f'qa-metric-asr-qa-{n:02d}.png' for n in range(1,7)]
     actual=sorted(p.name for p in out.glob('*.png'))
     assert actual==expected,(actual,expected)
     for name in expected:
@@ -109,6 +112,8 @@ def check(kind):
 
 
 def common_check():
+    subprocess.run([sys.executable,str(ROOT/'scripts/architecture/qa_common_workload.py'),'--check'],check=True)
+    subprocess.run([sys.executable,str(ROOT/'scripts/architecture/qa_poc_reference.py'),'--check'],check=True)
     subprocess.run([sys.executable,str(ROOT/'scripts/presentations/build_asr_qa_sources.py'),'--check'],check=True)
     archive_check()
     population=json.loads((BASE/'quality-attributes/functional-coverage.json').read_text())
@@ -126,7 +131,7 @@ def common_check():
     assert parsed==[Fraction(str(v)) for v in plan['targets'].values()], 'Front table and numerical contract goals diverged'
     assert plan['populations']['accuracy']==dict(cases=18,repeats=5,trials=90,denominator=540)
     assert plan['populations']['reaction']['trials']==plan['populations']['cycle']['trials']==30
-    assert plan['populations']['cost_memory']==dict(hours=8,sessions=3,goals=100)
+    assert plan['populations']['cost_memory']==dict(workload='W100',blocks=5,user_scenes=100,agent_scenes=30,independent_runs=3)
     assert plan['populations']['change']==dict(fixtures=6,responsibilities=18)
     sys.path.insert(0,str(ROOT/'scripts/architecture'))
     from qa_poc_reference import score,self_check
@@ -142,9 +147,27 @@ def common_check():
                 x=value+d
                 if x>=0 and (row['direction']!='high' or x<=100):
                     assert 0<=score(row,x)<=6
+    d=ROOT/'docs/architecture/12-decisions/decision-packages'
+    workload=json.loads((d/'03-02-common-workload.json').read_text())
+    manifest=json.loads((d/'03-02-workload-manifest.json').read_text())
+    projection=json.loads((BASE/'quality-attributes/quality-attributes.json').read_text())
+    assert projection['common_workload']==workload
+    assert projection['workload_summary']==manifest['summary']
+    assert projection['common_workload_sha256']==manifest['input_sha256']
+    assert projection['workload_manifest_sha256']==hashlib.sha256((d/'03-02-workload-manifest.json').read_bytes()).hexdigest()
+    archived_source=(ROOT/'docs/archive/qa-common-workload-before-v5-20261011'/projection['source']).read_text()
+    specs=lambda t:{cid:body.strip() for cid,body in re.findall(r'##### (S[1-6]-0[1-3]) [^\n]+\n(.*?)(?=\n<a id=|\n#### 3\.2\.3)',t,re.S)}
+    assert specs(archived_source)==specs((d/'03-02-quality-attribute-definitions.md').read_text()),'Canonical 18 case oracles changed'
+    for r in rows:
+        visible=' '.join(str(r[k]) for k in ['description','displayTarget','shortMetric','shortBasis','fact','choice','calculationRows','slideMethod','guards'])
+        assert not re.search(r'8시간|8h|3session|시간 전용 파생|1\.1325|0\.3675',visible)
+    assert 'USD/W100' in inputs['score_bands'][3]['unit']
+    assert '264초' in str(rows[3]['calculationRows']) and '914초' in str(rows[3]['calculationRows'])
+    assert 'W100' in rows[3]['shortMetric'] or '100 + Agent 30' in rows[3]['shortMetric']
+    assert 'W100' in rows[5]['shortMetric']
     check_links(BASE/'README.md')
     check_links(BASE/'quality-attributes/measurement-design.md')
-    print('PASS: six complete ASR definitions, 18 exact cases/540 conditions, all band boundaries and 32 archive hashes')
+    print('PASS: six complete ASR definitions, 18 exact cases/540 conditions, same W100 joins/cost units, all band boundaries and 65 archive hashes')
 
 if __name__=='__main__':
     common_check()

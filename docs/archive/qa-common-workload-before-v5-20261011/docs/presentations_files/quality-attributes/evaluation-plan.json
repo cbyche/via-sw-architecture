@@ -1,0 +1,105 @@
+{
+  "source": "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md",
+  "source_sha256": "8235a96137f71406fbede7c2021ad6476f62e7009d2f645a5dbaaa48e9787d0e",
+  "contract_version": "ASR-QA-v4",
+  "status": "AUTHOR_DEFINED_POC_CONTRACT_NO_CANDIDATE_MEASUREMENT",
+  "priority": [
+    "ASR-QA-01",
+    "ASR-QA-02",
+    "ASR-QA-03",
+    "ASR-QA-04",
+    "ASR-QA-05",
+    "ASR-QA-06"
+  ],
+  "populations": {
+    "accuracy": {
+      "cases": 18,
+      "repeats": 5,
+      "trials": 90,
+      "denominator": 540
+    },
+    "reaction": {
+      "events": 6,
+      "repeats": 5,
+      "trials": 30
+    },
+    "cycle": {
+      "cycles": 6,
+      "repeats": 5,
+      "trials": 30
+    },
+    "cost_memory": {
+      "hours": 8,
+      "sessions": 3,
+      "goals": 100
+    },
+    "change": {
+      "fixtures": 6,
+      "responsibilities": 18
+    }
+  },
+  "targets": {
+    "ASR-QA-01": 98,
+    "ASR-QA-02": 1,
+    "ASR-QA-03": 10,
+    "ASR-QA-04": 1.5,
+    "ASR-QA-05": 3,
+    "ASR-QA-06": 4096
+  },
+  "summary": [
+    {
+      "id": "ASR-QA-01",
+      "name": "요청 처리 정확성",
+      "description": "사용자의 의도와 확인된 사실에 맞게 요청을 처리하는 능력",
+      "method": "필수 정답 조건 충족률(%) = 정답 항목 수 ÷ 전체 540개 항목 × 100",
+      "target": "98% 이상, 보조 한도는 §3.5",
+      "targetBasis": "50개 필수 조건당 오류 1개 이하, 요청 전체의 사용자 수정 부담은 20회당 1회 이하로 제한하는 PoC 예산. 530/540개 정답, 완전 정답 86/90회와 각 S/C 95%, 필수 위반 0건을 함께 검사 (§3.5.1)",
+      "guards": "완전 정답/각 S/C ≥95%, 필수 위반 0건"
+    },
+    {
+      "id": "ASR-QA-02",
+      "name": "상호작용 응답시간",
+      "description": "사용자 입력이나 업무 상태 변화에 VIA가 알맞은 답변이나 동작으로 반응하기까지 걸리는 시간 (예: VIA가 말하는 중 사용자 끼어들기 → 음성 재생 중단, Agent의 확인 질문 도착 → 사용자에게 질문 제시)",
+      "method": "평균 유효 반응시간(초) = 6개 사건 × 5회, 30개 귀속 시간의 산술평균",
+      "target": "1.0초 이하, 음성 stop 0.1초 이하",
+      "targetBasis": "PC 작업 중 대화/제어 흐름 유지. Nielsen의 1초/즉각 제어 0.1초를 참고하고 모델/코드/음성 준비 예산 0.952초로 구체화. 2초 보호 한도와 미전달 0건도 검사 (§4.2)",
+      "guards": "stop ≤0.1초, 29/30 ≤2초, 미전달 0건"
+    },
+    {
+      "id": "ASR-QA-03",
+      "name": "VIA 요청 처리시간",
+      "description": "요청 접수부터 최종 결과 전달까지, VIA의 처리와 대기로 걸리는 시간 (예: 보고서 작성 요청 → 요청 해석 → Agent에 작성 업무 인계 → 결과 수신 → 사용자에게 보고서 전달)",
+      "method": "평균 VIA 귀속 사이클 시간(초) = 6개 전체 사이클 × 5회, 30개 값의 산술평균",
+      "target": "10초 이하",
+      "targetBasis": "외부 업무가 끝난 뒤에도 VIA 연결/전달 때문에 지연되지 않도록 의미 6초, 연결 1초, 전달 1초, 재검증 2초의 예산. 10초 주의 유지 참조와 연결하며 15초 보호 한도/미전달 0건 검사 (§4.3)",
+      "guards": "29/30 ≤15초, 미전달 0건"
+    },
+    {
+      "id": "ASR-QA-04",
+      "name": "VIA 모델 사용 비용",
+      "description": "동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액",
+      "method": "8시간 평균 총 모델 비용(USD). 100개 목표/배경 생산/재시도/음성과 청구 context를 모두 합산",
+      "target": "$1.50/8시간 이하",
+      "targetBasis": "하루 100개 목표와 청구 음성 입력 30분/출력 10분의 공개 단가 계산 $1.1325에 추가 생산/재시도 여유 $0.3675를 둔 작성자 예산 (§5.3)",
+      "guards": "재시도/폐기/배경/청구 context 누락 없음"
+    },
+    {
+      "id": "ASR-QA-05",
+      "name": "VIA 변경 용이성",
+      "description": "모델/Agent/정보원/기능 계약의 변화를 다른 사용자 기능을 유지하면서 수용하는 능력",
+      "method": "평균 변경 책임 단위 수(개/과제) = 여섯 공통 과제의 고유 수정 단위 수 합 ÷ 6",
+      "target": "3개 이하, 과제별 최대 5개",
+      "targetBasis": "외부/의미 계약 변경을 adapter/생산/소비의 약 3개 책임에 국소화하고 대화/업무/음성 전체 변경을 방지하는 과제 예산. 공통 18개 책임 registry와 완료 oracle로 검수 (§6.4)",
+      "guards": "과제별 ≤5개, 6개 완료/필수 회귀 충족"
+    },
+    {
+      "id": "ASR-QA-06",
+      "name": "로컬 VIA 메모리 사용량",
+      "description": "동일한 활동과 동시 부하에서 VIA가 로컬 PC에 할당해 유지하는 메모리의 최대량",
+      "method": "최대 전체 commit 메모리(MiB) = 모든 VIA process의 private commit + 고유 공유 anonymous commit의 동시 합 최대",
+      "target": "4,096MiB(4GiB) 이하",
+      "targetBasis": "32GB급 Windows PC에서 OS 8GiB/사용자 앱 16GiB/VIA 4GiB/여유 4GiB로 계획. 기본 allocation 예산 1,792MiB에 DP 추가 상태/변동 여유 2,304MiB. RAM residency와 commit 구별 (§7.3)",
+      "guards": "working-set 합 ≤6GiB, 유휴 증가 ≤16MiB"
+    }
+  ]
+}

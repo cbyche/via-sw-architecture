@@ -12,6 +12,11 @@ on:
       - 'prototypes/candidates/**'
       - 'results/architecture-evaluation/current/**'
       - 'scripts/architecture/**'
+      - 'scripts/presentations/**'
+      - 'docs/presentations_files/quality-attributes*'
+      - 'docs/presentations_files/quality-attributes/**'
+      - 'docs/presentations_files/quality-metrics*'
+      - 'docs/presentations_files/quality-metrics/**'
       - '.github/workflows/architecture-ci.yml'
   workflow_dispatch:
 
@@ -31,6 +36,7 @@ jobs:
           python3 scripts/architecture/check_qa_catalog.py
       - name: Check ASR-QA definitions, reference arithmetic and presentation projections
         run: |
+          python3 scripts/architecture/qa_common_workload.py --check
           python3 scripts/architecture/qa_poc_reference.py --check
           python3 scripts/presentations/check_quality_attributes.py
           python3 scripts/presentations/check_quality_metrics.py
