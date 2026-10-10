@@ -1,0 +1,158 @@
+{
+  "contract_version": "ASR-QA-v4",
+  "source": "03-02-quality-attribute-definitions.md",
+  "verified_source_date": "2026-10-11",
+  "evidence_level": "POC_ASSUMPTION_WITH_SOURCE_PRICES",
+  "llm_pricing": {
+    "model": "qwen/qwen3.8-27b",
+    "input_per_million": ".80",
+    "output_per_million": "4.00",
+    "source_url": "https://console.groq.com/docs/models"
+  },
+  "voice_pricing": {
+    "model": "gemini-3.1-flash-live-preview",
+    "audio_input_per_minute": ".005",
+    "audio_output_per_minute": ".018",
+    "text_input_per_million": ".75",
+    "text_output_per_million": "4.50",
+    "source_url": "https://ai.google.dev/gemini-api/docs/pricing"
+  },
+  "assumptions": {
+    "common_memory_mib": 1792,
+    "initial_history_turns": 2000,
+    "initial_completed_tasks": 200,
+    "active_tasks": 10,
+    "resource_hours": 8,
+    "daily_goals": 100,
+    "source_changes": 20,
+    "task_events": 30
+  },
+  "latency_profiles": [
+    {
+      "id": "fast-assumption",
+      "ttft_seconds": ".15",
+      "tokens_per_second": 900,
+      "voice_seconds": ".10"
+    },
+    {
+      "id": "base-reference",
+      "ttft_seconds": ".30",
+      "tokens_per_second": 450,
+      "voice_seconds": ".25"
+    },
+    {
+      "id": "slow-assumption",
+      "ttft_seconds": ".80",
+      "tokens_per_second": 225,
+      "voice_seconds": ".60"
+    }
+  ],
+  "memory_examples": [
+    {
+      "dp": "41",
+      "B_delta_mib": -32,
+      "basis": "4개 Context 16MiB 대신 frame/상태 8MiB라는 가정"
+    },
+    {
+      "dp": "42",
+      "B_delta_mib": 288,
+      "basis": "추가 process heap 256MiB와 접수/receipt 상태 32MiB 가정"
+    },
+    {
+      "dp": "44",
+      "B_delta_mib": 48,
+      "basis": "windows/credit 32MiB와 envelope copy 16MiB 가정"
+    },
+    {
+      "dp": "45",
+      "B_delta_mib": 128,
+      "basis": "생산/index 256MiB 추가와 원문 Context 128MiB 감소 가정"
+    }
+  ],
+  "score_bands": [
+    {
+      "id": "ASR-QA-01",
+      "direction": "high",
+      "bounds": [
+        "100",
+        "99.6",
+        "99.2",
+        "98.8",
+        "98.4",
+        "98"
+      ],
+      "unit": "%",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-02",
+      "direction": "low",
+      "bounds": [
+        ".2",
+        ".36",
+        ".52",
+        ".68",
+        ".84",
+        "1"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-03",
+      "direction": "low",
+      "bounds": [
+        "2",
+        "3.6",
+        "5.2",
+        "6.8",
+        "8.4",
+        "10"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-04",
+      "direction": "low",
+      "bounds": [
+        ".5",
+        ".7",
+        ".9",
+        "1.1",
+        "1.3",
+        "1.5"
+      ],
+      "unit": "USD/8h",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-05",
+      "direction": "low",
+      "bounds": [
+        "1",
+        "1.4",
+        "1.8",
+        "2.2",
+        "2.6",
+        "3"
+      ],
+      "unit": "개/과제",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-06",
+      "direction": "low",
+      "bounds": [
+        "1024",
+        "1638.4",
+        "2252.8",
+        "2867.2",
+        "3481.6",
+        "4096"
+      ],
+      "unit": "MiB",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    }
+  ]
+}
