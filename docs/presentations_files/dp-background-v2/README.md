@@ -2,7 +2,7 @@
 
 편집 대상은 [VIA-DP-background-and-comparison-41-45_v2.pptx](../VIA-DP-background-and-comparison-41-45_v2.pptx)다. 최초 생성 시 기존 원본과 byte-identical인 별도 복제본으로 시작했다. 기존 원본, 원본 generation scripts와 docs/architecture 도식은 이번 시안 작업에서 변경하지 않는다.
 
-사용자는 한꺼번에 전체를 바꾸는 대신, 도입 → 41 배경 → 44 → 45 → 42를 검토하는 방식을 요청했다. 2026-10-10 후속 리뷰에서 도입을 사용자 경험 두 장으로 나누도록 제안하고 그림 제작을 요청했다. 이번 작업은 이 두 장의 검토용 초안을 v2에 반영한다. 43/설계 비교의 내용·배치 변경은 별도 지시 없이 하지 않는다. 작업 단위별로 commit/push하여 검토·되돌리기 지점을 남긴다. 파일 게시를 시각 디자인 승인으로 해석하지 않는다.
+사용자는 처음에 도입 → 41 배경 → 44 → 45 → 42를 차례로 검토하는 방식을 요청했다. 2026-10-10 후속 리뷰에서 도입 두 장의 그림을 확인한 뒤, 같은 방식으로 다른 DP 배경도 제작하도록 승인했다. 사용자 장면 → VIA의 책임 → 사용자 혜택 → 다음 비교의 설계 질문으로 연결한다. 43/설계 비교의 내용·배치 변경은 이번 범위에 포함하지 않는다. 작업 단위별로 commit/push하여 검토·되돌리기 지점을 남긴다. 제작 승인을 개별 배경의 최종 디자인 승인으로 해석하지 않는다.
 
 ## 사용자 경험 1 — VIA의 책임
 
@@ -26,13 +26,22 @@
 - 사용자 혜택: Agent별 창을 오가거나 진행 중인 업무를 다시 설명할 필요가 없다.
 - [슬라이드 미리보기](./via-user-experience-2.png), [삽화](./assets/via-overlapping-events-illustration.png).
 
+## 41 배경 — 위임할 요청을 완성하기
+
+헤드라인은 **“말 속의 대상과 조건을 찾아, 위임할 요청을 완성하는 VIA”**다.
+
+- “이 표를 아까 보고서에 넣고, 메일은 보내지 말고 보고서 결과로 메일 초안만 만들어줘.”를 사용한다. 어느 표/보고서인지, 보고서 결과에 의존하는 메일 초안, 발송 금지 조건을 구별한다.
+- 발화·선택 화면 → VIA의 대상/순서/조건 해소 → 위임할 업무를 native 흐름으로 보여준다. 모호한 대상은 사용자에게 확인한다. 입력 전 정답 Task가 정해져 있다고 가정하지 않는다.
+- 설계 질문은 모델의 조회·해석 제어와 모델의 요청 틀을 받는 코드의 조회·결합 제어다. 실제 형식과 반복 호출은 다음 비교 슬라이드에서 설명한다.
+- [슬라이드 미리보기](./dp41-background.png), [삽화](./assets/dp41-background-illustration.png).
+
 ## 표현과 보존 범위
 
 - 삽화는 builtin imagegen으로 만든 설명용 이미지이며 실제 제품 화면이 아니다. [두 이미지의 생성 프롬프트](./assets/illustration-prompts.json)를 보관한다. 제목·문구·참여자·메시지 경로는 native editable PPTX objects다.
 - 화면·표 선택·포인터가 입력 근거다. 손을 든 동작은 설명용 끼어들기 표현이며 카메라 인식을 전제하지 않는다.
 - 이 페이지의 사용자/VIA/Agent는 사용자 경험의 참여자다. 세로 점선은 참여자의 역할이 이어짐을 뜻하며 Component·Module·process 경계가 아니다. 여러 업무를 서로 다른 Agent가 반드시 수행한다고 가정하지 않는다.
 - 도입에서는 ID/version·세부 Component·모델 배치·위험 목록·QA 계약·DP 번호를 펼치지 않는다. 다음 배경/비교 페이지에서 필요한 내용을 설명한다.
-- v2는 기존 도입 한 장을 위 두 장으로 바꾼 **12장**이다. 본 발표 10장과 43 부록 2장이다. 기존 DP 배경/비교 10장의 slide·notes·관련 기존 package parts는 그대로 보존한다. 원본 PPTX와 Architecture 문서·SVG/draw.io/PNG는 수정하지 않는다.
+- v2는 기존 도입 한 장을 위 두 장으로 바꾼 **12장**이다. 본 발표 10장과 43 부록 2장이다. 선택한 DP 배경의 slide·notes·image 관계만 갱신하며 나머지 package parts는 byte-identical로 보존한다. 원본 PPTX와 Architecture 문서·SVG/draw.io/PNG는 수정하지 않는다.
 - 초기 [구도 시안](./assets/intro-composition-study_v2.png)은 이전 검토용으로 보존한다. 그 시안의 약한 헤드라인과 목적이 불명확한 메일 예시는 현재 도입에서 사용하지 않는다.
 
 ## 재생성
@@ -41,4 +50,6 @@
 
 생성기를 private build directory에 복사하고 bundled node_modules를 연결한다. Presentations skill의 작업 시작 marker를 한 번 실행한 후, `VIA_PRESENTATION_SKILL_DIR`, bundled `VIA_RUNTIME_PYTHON`, `RUNTIME_NODE_MODULES`를 설정해 bundled Node로 `generate_dp_v2_intro.mjs REPO BUILD`를 실행한다. build마다 새 디렉터리를 사용한다. 최종 파일을 재import한 `intro-1.png`, `intro-2.png`로 시각 검토하고 이 디렉터리의 미리보기를 갱신한다.
 
-이번 결과는 사용자 피드백을 기다리는 검토용 초안이다. 실제 제품 구현·성능 측정이나 최종 디자인 승인을 뜻하지 않는다. 다음 작업은 두 도입 페이지 리뷰 후 **41 배경 한 장**이다.
+DP 배경은 전용 [native 배경 생성기](../../../scripts/presentations/generate_dp_v2_backgrounds.mjs)와 [범위 제한 조립기](../../../scripts/presentations/dp_v2_background_package.py)를 쓴다. 같은 runtime 환경으로 `generate_dp_v2_backgrounds.mjs REPO BUILD 41`처럼 DP를 명시한다. 최종 PPTX를 재import한 `dp41-background.png`로 검토한다. [배경 삽화 생성 프롬프트](./assets/background-illustration-prompts.json)를 보관한다.
+
+현재 41 배경을 반영했다. 승인된 다음 제작 순서는 44 → 45 → 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
