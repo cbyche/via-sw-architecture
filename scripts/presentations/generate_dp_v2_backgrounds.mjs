@@ -18,8 +18,23 @@ const presentation=Presentation.create({slideSize:{width:1920,height:1080}});
 const font='Apple SD Gothic Neo';
 const C={ink:'#202B30',muted:'#66777D',teal:'#397C80',apricot:'#A56237',guide:'#CDD7DA'};
 const manifest=[];
+// Jury-approved background endings describe the SW challenge, not A/B options.
+const challenges={
+  41:'발화만으로 알 수 없는 정보를 찾아 확인하고,\n조회 결과에 따라 추가 조회와 해석을 이어가며 Request를 완성하는 구조',
+  44:'사용자 입력과 Task 알림, 내부 처리 완료가 서로 다른 시점에 도착해도,\n입력을 계속 받으며 후속 처리와 대기, 응답 전달을 이어가는 실행 구조',
+  45:'과거 대화와 여러 Task에 흩어진 정보 중 현재 Request에 필요한 내용을 찾아,\n정정 이력과 실제 전달 내용을 반영해 제공하는 맥락 관리 구조',
+  42:'대화 연결과 Request 처리가 끝나도 Task의 진행 상태와 결과 기록을 유지하고,\n서로 다른 수명을 가진 상태와 연결 관계를 일관되게 관리하는 구조',
+};
+function visibleCopy(content) {
+  return content.replaceAll('업무','Task')
+    .replaceAll('요청을','Request를').replaceAll('요청은','Request는')
+    .replaceAll('요청이','Request가').replaceAll('요청과','Request와')
+    .replaceAll('요청으로','Request로').replaceAll('요청','Request')
+    .replaceAll('근거','정보').replace(/(?<!지칭 )대상/g,'지칭 대상')
+    .replace(/\s*·\s*/g,', ');
+}
 function text(s,name,content,x,y,w,size=30,color=C.ink,bold=false,align='left') {
-  for(const [i,t] of content.split('\n').entries()) {
+  for(const [i,t] of visibleCopy(content).split('\n').entries()) {
     const shape=s.shapes.add({name:`${s._scene} / ${name} / ${i+1}`,geometry:'textbox',
       position:{left:x,top:y+i*size*1.25,width:w,height:size*1.35},fill:'none',line:{fill:'none',width:0}});
     shape.text=t;shape.text.style={typeface:font,fontSize:size,bold,color,alignment:align,
@@ -63,10 +78,10 @@ function handoff(s) {
   line(s,'evidence-to-via',[[590,665],[705,665]],C.teal,2,true);
   line(s,'via-to-agent',[[1225,665],[1340,665]],C.teal,2,true);
 }
-function close(s,benefit,question,benefitY=868,questionY=961) {
+function close(s,benefit,challenge,benefitY=868,challengeY=961) {
   text(s,'user-benefit',benefit,95,benefitY,1730,29,C.ink,true,'center');
-  line(s,'question-divider',[[95,questionY-22],[1825,questionY-22]],C.guide,1.3);
-  text(s,'design-question',question,95,questionY,1730,32,C.teal,true,'center');
+  line(s,'challenge-divider',[[95,challengeY-22],[1825,challengeY-22]],C.guide,1.3);
+  text(s,'design-challenge',challenge,95,challengeY,1730,32,C.teal,true,'center');
 }
 const commonNotes=`삽화는 builtin imagegen 생성 설명용 이미지이며 실제 제품 UI나 측정 결과가 아니다. 사용자/VIA/Agent 또는 사건/시간 구간은 설명용 참여자·데이터이며 Component·Module·process 경계를 선택하지 않는다. 제목·문구·데이터 흐름·타임라인은 native editable objects다. A/B는 미선정·미측정이며 이 배경은 양안의 공통 요구를 설명한다. Architecture 문서의 SVG/draw.io와 기존 원본 PPTX는 수정하지 않는다. 근거: 사용자 2026-10-10 발표자료 리뷰, docs/architecture/01-system-mission-and-boundary.md 및 docs/architecture/05-representative-use-cases.md. `;
 
@@ -79,9 +94,8 @@ for(const dp of selected) {
     column(s,'input',0,'화면에서 선택한 표\n대화에 남아 있는 보고서');
     column(s,'resolve',1,'대상: 어느 표 · 어느 보고서?\n순서: 보고서 수정 → 메일 초안\n조건: 메일 발송 금지');
     column(s,'delegate',2,'보고서에 표 추가\n그 결과로 메일 초안 작성\n발송하지 않는 조건 유지');
-    text(s,'clarify','대상이 모호하면 VIA가 사용자에게 확인합니다',665,807,600,25,C.muted,false,'center');
-    close(s,'사용자는 파일·업무 번호를 외우지 않아도, 대상·순서·조건을 함께 말할 수 있습니다',
-      '모델이 필요한 조회와 해석을 이끌까,\n코드가 모델의 요청 틀을 받아 조회·결합을 완성할까?');
+    text(s,'clarify','지칭 대상이 모호하면 VIA가 사용자에게 확인합니다',635,807,660,25,C.muted,false,'center');
+    close(s,'사용자는 파일명이나 Task 번호를 외우지 않아도, 지칭 대상과 순서, 조건을 함께 말할 수 있습니다',challenges[dp]);
     s.speakerNotes.textFrame.setText(commonNotes+`\nDP41 근거: docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md. 선택 표, 기존 보고서의 후보와 연결 업무는 조회/의미 판단의 결과다. 입력에 정답 Task를 사전 지정하지 않는다. 보고서를 수정한 결과로 메일 초안을 쓰는 연속 업무이며 별도 독립 메일이나 발송 요청이 아니다. 대상·순서·조건은 설명용 개념이지 B의 실제 고정 key field를 정의한 schema가 아니다. A는 모델이 제한된 조회와 다음 해석을 반복하고 최종 의미를 제안한다. B는 유한한 typed 표현에 따라 코드가 조회/조건부 의미 호출과 결합을 완성한다. B도 여러 모델 호출이 가능하다. 메일 초안 작성·보고서 편집은 업무 수행 Agent 책임이다. 이 페이지는 의미 생산의 기능 분할(43), 실행 연결(44), 과거 정보 공급(45), 대화/업무 상태 권한(42)을 다시 선택하지 않는다.`);
   }
   if(dp===44) {
@@ -96,8 +110,7 @@ for(const dp of selected) {
     line(s,'event-join',[[330,803],[1590,803]],C.guide,1.8);
     line(s,'continuation',[[965,803],[965,832]],C.teal,2,true);
     text(s,'via-continuation','새 입력 처리 · 유효한 응답과 질문 연결 · 실제 전달 뒤 후속 처리',180,842,1560,28,C.ink,true,'center');
-    close(s,'사용자는 말을 이어가고, 업무 질문과 결과도 같은 대화에서 받습니다',
-      '여러 사건이 겹칠 때, 다음 처리를\n중앙에서 지시할까, 연결된 단계들이 이어갈까?',899);
+    close(s,'사용자는 말을 이어가고, 업무 질문과 결과도 같은 대화에서 받습니다',challenges[dp],899);
     s.speakerNotes.textFrame.setText(commonNotes+`\nDP44 근거: docs/architecture/12-decisions/decision-packages/04-44-continuous-interaction.md 배경 및 직접 다루는 네 종류의 사건. VIA는 보고서 설명을 직접 준비하고 Agent는 독립적인 회의 안내 메일 초안 업무를 수행한다. 그동안 새 표 설명 요청, 메일 수신자 질문, 이전 보고서 설명의 준비 완료가 겹친다. 중앙 삽화는 VIA라는 참여자이며 응답 준비가 별도 Component임을 뜻하지 않는다. 합류선은 사건들을 다뤄야 한다는 공통 요구이지 중앙 Dispatcher나 B의 join Module을 미리 선택한 구조가 아니다. 네 번째 사건인 실제 표시/재생/중단 receipt는 하단 후속 처리에 포함한다. 발화 시작 시 음성 중단과 지속 입력은 공통 기능이다. 발화 시작이 Task 취소는 아니며 응답 후보 준비가 사용자 전달 완료도 아니다. 기존 응답의 현재 유효성·권한·출력 차례를 확인하고 필요한 대기를 이어간다. 도착 순서가 고정 전달 우선순위를 정하지 않는다. A도 비동기이고 B도 협력이 필요하다. 비교는 중앙의 실행 명령·완료 회수·대기 관리와 연결된 단계의 입력/대기 상태·조건 충족 활성화다.`);
   }
   if(dp===45) {
@@ -108,8 +121,7 @@ for(const dp of selected) {
     column(s,'past-records',0,'VIA가 설명한 평가 기준\n제품 조사 Agent의 비교 결과\n견적 Agent의 견적 결과');
     column(s,'context',1,'관련 기록·실제 전달 범위 확인\n필요한 발췌·결과 참조 연결\n이번 요청에 필요한 맥락 제공',692,27);
     column(s,'domain-work',2,'평가 기준을 적용해 자료 분석\n새 제안서 작성',692,28);
-    close(s,'사용자는 이전 설명과 여러 업무의 결과를 다시 모아 전달할 필요가 없습니다',
-      '요청마다 원본 기록을 찾아 조합할까,\n공통으로 가공·관리한 과거 정보를 읽을까?');
+    close(s,'사용자는 이전 설명과 여러 업무의 결과를 다시 모아 전달할 필요가 없습니다',challenges[dp]);
     s.speakerNotes.textFrame.setText(commonNotes+`\nDP45 근거: docs/architecture/12-decisions/decision-packages/04-45-memory-and-context.md §1, §3. 평가 기준은 VIA의 직접 응답이고 제품 비교·견적은 서로 다른 Agent의 확인된 업무 결과다. 같은 Agent에게 예전 보고서 스타일을 다시 위임하는 예시는 여기서 근거로 쓰지 않는다. VIA는 수신한 기록, 허용된 발췌·결과/버전 참조와 실제 전달 기록을 연결한다. 결과 참조가 전체 본문 보관을 뜻하지 않는다. 모든 Agent 내부 reasoning/tool 이력이나 전달받지 않은 자료를 알고 있다고 가정하지 않는다. 기준 적용과 새 제안서의 업무 판단·작성은 Agent 책임이다. 이 페이지의 세 기록은 관련 근거의 예시이지 특정 저장 구조를 선택하지 않는다. A도 summary/index/cache/부분 갱신을 허용한다. 비교는 요청 소비자가 원본 소유자 읽기를 조합하는 책임과 생산자가 공통 과거 관계를 생산·게시·폐기하는 지속 읽기 계약이다. B의 파생 기록이 현재 요청의 정답 의미나 위임 Task를 미리 확정하지 않는다. 원본·현재성·권한·누락 확인은 공통이다. 과거 기록을 장기 사용자 선호로 자동 승격하지 않는다.`);
   }
   if(dp===42) {
@@ -139,8 +151,7 @@ for(const dp of selected) {
     line(s,'revise-execution',[[1480,877],[end,877]],C.apricot,4);
     text(s,'write-label','보고서 작성 실행',650,849,400,24,C.apricot,false,'center');
     text(s,'revise-label','보고서 수정 실행',1480,849,310,24,C.apricot,false,'center');
-    close(s,'사용자는 다시 돌아와, 이미 맡긴 보고서의 결과를 확인하고 수정을 이어갑니다',
-      '대화·업무 상태를 통합 Core가 함께 관리할까, 독립 서비스가 협력할까?',928,1000);
+    close(s,'사용자는 다시 돌아와, 이미 맡긴 보고서의 결과를 확인하고 수정을 이어갑니다',challenges[dp],913,975);
     s.speakerNotes.textFrame.setText(commonNotes+`\nDP42 근거: docs/architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md §1~3 및 main-figure review. 타임라인 길이는 설명용이며 시간·성능 측정 값이 아니다. 음성 연결 종료는 Conversation·Task 취소/삭제가 아니다. Conversation/Request/Task/Execution의 서로 다른 논리 수명은 양안 공통이다. 첫 Request 처리가 끝나는 것은 확인된 위임 접수 등 요청 처리의 종료이지 보고서 실행 완료가 아니다. 외부 Agent는 요청 처리와 음성 연결에 독립적으로 보고서 작성을 계속하고 결과를 VIA에 통지한다. 돌아온 사용자 정정은 새로운 Request이며 같은 보고서 업무에 연결되어 새 수정 실행을 만들 수 있다. 업무 이력의 연속 실선은 처음 작성 실행이 계속 살아있거나 완료 Task가 영원히 실행중이라는 뜻이 아니다. A는 모듈형 통합 Core의 대화/업무 상태 소유와 관련 로컬 변경의 공동 확정, B는 독립 대화/업무 서비스의 상태 권한과 commands/receipts/events 협력을 비교한다. 양안 모두 이 장면을 수행한다. 정상 장면의 정확성·응답성·호출비용에 B의 자동 이익을 주장하지 않으며 장애·업데이트를 대표 이익으로 쓰지 않는다. 조건부 독립 수명/장애 격리와 cross-service coordination 비용은 다음 비교에서 설명한다.`);
   }
 }
