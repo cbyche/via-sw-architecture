@@ -90,7 +90,7 @@ def draw(s,x,side):
         g.box('join',595,535,220,33,'Publication Join',True,True,size=18)
         state(g,'pw',595,594,220,38,'Publication Window',13)
         g.box('publish',330,605,230,28,'Publication Control',module=True,size=16)
-        g.edge('input','compose','B','L',sd=20,via=[(217.5,480),(302,480),(302,551.5)],color=DIFFERENCE_STROKE)
+        g.edge('input','compose','R','L',sd=9,via=[(350,394),(350,480),(302,480),(302,551.5)],color=DIFFERENCE_STROKE)
         g.edge('notice','compose','R','T',td=35,via=[(845,385),(845,482),(480,482)],color=DIFFERENCE_STROKE)
         g.edge('compose','join','R','L',color=DIFFERENCE_STROKE)
         g.edge('input','join','R','T',sd=-7,via=[(365,378),(365,476),(705,476)],color=DIFFERENCE_STROKE)
@@ -107,6 +107,7 @@ def draw(s,x,side):
         g.text(350,637,460,'조건 충족 시 게시 단계 활성화 / 중앙 회수 없음',size=12)
     trace(g,side)
     g.finish()
+    return g
 
 
 def trace(g,side):

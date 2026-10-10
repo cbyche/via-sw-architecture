@@ -68,17 +68,12 @@ DATA = {
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. A도 비동기 / 우선순위 / 동시 실행. B의 사건 채널만으로 정확성 / 속도 우위를 보장하지 않는다.',
     tradeoffs=[('요청 처리 정확성', '같은 의미 판단 / 중앙에서 현재 입력과 대기 참조 관리', '같은 판단 / 각 Window와 Join의 참조 일치 필요'), ('상호작용 응답시간', '중앙의 완료 회수와 다음 지시 / 짧은 dispatch 가능', '준비된 소비자 활성화 / 채널과 Join 대기 비용'), ('VIA 요청 처리시간', '단계마다 중앙 전이를 경유 / 병행 실행 허용', '중앙 경유 축소 / 조건 대기와 단계 연결 비용'), ('VIA 모델 사용 비용', '같은 의미 / 응답 작업이면 같음 / 폐기와 재시도 포함', '같은 작업이면 같음 / 중복 생산과 폐기 포함'), ('VIA 변경 용이성', '후속 실행 규칙을 Dispatcher에서 변경', '단계 계약 안 조합 변경 / 교차 규칙은 여러 단계 영향'), ('로컬 VIA 메모리 사용량', '중앙 진행 상태와 실행 대기열', '여러 Window와 사건 채널 / 수용량 제한 필요')]),
-  45: dict(title='VIA 과거 근거의 요청별 구성과 공통 생산/조회',
+  45: dict(title='VIA 과거 정보의 Request별 구성과 공통 생산 및 조회',
     options=('A 원본 서비스 조합형', 'B 공통 파생 기억 저장소형'),
-    case='R23 “지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
+    case='“지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와 받아둔 견적을 이번 제안서에 반영해줘.”',
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. A cache의 같은 효과는 B 고유 이익을 줄인다. B+ 원본 조합 우회는 명시적 혼합안.',
-    tradeoffs=[
-      ('새 관계 / 미묘한 조건', '요청 목적에 맞춘 원문 구성의 유연성; 검색 누락 가능', '지원 표현 / 추출 조건에 제한; 정확성의 고정 우열 없음'),
-      ('준비된 반복 조회 R24', 'warm 관계 cache로 조회 / 재해석 축소 가능', '유효 게시가 원본 교차 결합을 대체하면 경로 단축 가능'),
-      ('첫 조회 / 정정 직후', '현재 원본으로 구성; fan-out / 해석 비용', '생산 / 갱신 게시 대기; NOT_COVERED와 미지원 구별'),
-      ('전체 모델 비용 / 자원', 'cache 생산 / 유지 + 요청 / 재검증 사용량', '초기 / 갱신 / backfill / 미사용 생산 사용량; 고정 우열 없음'),
-      ('변경 용이성', 'Source adapter로 국소화; cache schema 변경은 무효화', 'Source 형식은 adapter; 관계 의미는 schema / 재생산 / 독자 변경')]),
+    tradeoffs=[('요청 처리 정확성', '새 관계를 현재 원문에서 구성 / 검색 누락 가능', '게시 표현과 추출 범위에 제한 / 원본 확인 유지'), ('상호작용 응답시간', '반복 조회도 원본 구성 / 유효 관계 cache로 축소', '유효 게시 재사용 시 단축 / 첫 생산과 갱신 대기'), ('VIA 요청 처리시간', '현재 목적에 맞춘 조회와 결합 / 병렬 읽기 허용', '준비된 관계 읽기 / 미생산 범위는 생산 후 재조회'), ('VIA 모델 사용 비용', 'Request 구성과 cache 유지 / 부분 갱신 비용 포함', '초기 / 변경 / 미사용 생산 포함 / 반복 사용 시 상각'), ('VIA 변경 용이성', '조회 지침과 adapter / cache 형식 변경 시 무효화', '관계 schema / producer와 reader 호환 / 재생산'), ('로컬 VIA 메모리 사용량', '원본 읽기 view와 Request 수명의 묶음 / 선택 cache', '공통 관계 저장소와 Coverage / 미사용 관계도 유지')]),
 }
 
 
@@ -142,15 +137,7 @@ class Comparison(Slide):
         self.line([(40,795),(1880,795)],color=LINE,arrow=False)
         self.text(40,809,1840,['PARTIAL: 실제 전달한 예외 문구 한 구간과 결과 참조의 예시 / 기준 전체의 완전 추출을 뜻하지 않음 / 과거 게시와 현재 의미 채택은 별개'],16,INK)
         self.text(40,838,1840,['첫 요청 / 준비된 반복 조회 / 정정 직후 / 표현 밖 관계를 구분. A의 유효 관계 cache와 부분 갱신도 허용한다.'],16,INK)
-        for j,(condition,left,right) in enumerate(d['tradeoffs']):
-            yy=878+j*29
-            self.line([(40,yy-5),(1880,yy-5)],color=LINE,arrow=False)
-            self.text(42,yy,266,[condition],16,INK,True)
-            self.text(315,yy,745,[left],16,INK)
-            self.text(1080,yy,795,[right],16,INK)
-        self.text(40,1023,1840,[d['condition']],15,INK)
-        self.text(40,1046,1840,['Reference (§9): A LangChain Retrieval / B LangMem Background + Memory API / 실행 Delayed Processing / 연결 참고 Mem0 Graph (typed 관계 증거 아님)'],15,INK)
-        self.text(40,1067,1840,['공식 메커니즘 선례 / VIA 구현 / 성능 증거 아님 / 모델 비용은 배경 생산 / 재시도 / 폐기된 작업도 포함'],10,MUTED)
+        self.quality_footer(d)
 
     def request_page(self):
         d=DATA[41]
@@ -249,7 +236,7 @@ class Comparison(Slide):
             result=result.replace('</defs>',marker+'</defs>')
             if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
-            if self.number in (41,44):
+            if self.number in (41,44,45):
                 result=result.replace('</defs>','<marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
@@ -258,7 +245,7 @@ class Comparison(Slide):
                     tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
                 result=re.sub(r'<(?:rect|path) id="'+i['id']+r'"[^>]*/>',restyle,result)
-            if self.number in (41,44) and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
+            if self.number in (41,44,45) and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
                 x,y,w,h=(i[k] for k in ('x','y','w','h'))
                 points=(f'{x+w/2},{y} {x+w},{y+h/2} {x+w/2},{y+h} {x},{y+h/2}' if i.get('flow_decision') else f'{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}')
                 poly=f'<polygon id="{i["id"]}" points="{points}" fill="white" stroke="#000000" stroke-width="1"/>'
@@ -284,7 +271,7 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
-            if self.number in (41,44) and item and (item.get('external') or item.get('flow_decision')):
+            if self.number in (41,44,45) and item and (item.get('external') or item.get('flow_decision')):
                 shape='rhombus' if item.get('flow_decision') else 'hexagon'
                 cell.set('style',cell.get('style')+f'shape={shape};')
         if self.number in (44,45):
@@ -342,7 +329,7 @@ def validate(outputs):
         assert [r['priority'] for r in presentation['rows']]==list(range(1,7))
     for n,data in DATA.items():
         if n in (41,42,44,45):
-            assert len(data['tradeoffs'])==({41:4,42:4,44:6,45:5}[n]) and 'rows' not in data
+            assert len(data['tradeoffs'])==({41:4,42:4,44:6,45:6}[n]) and 'rows' not in data
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:

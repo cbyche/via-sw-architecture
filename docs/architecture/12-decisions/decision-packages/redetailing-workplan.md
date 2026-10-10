@@ -7,7 +7,7 @@
 사용자 승인: 44 → 45 → 42 집중 비교 그림을 41의 제어권/반환 경로/상태 예시/별도 순서도 방식으로 개선한다. 통합 PPTX와 비교 전용 PPTX는 각각 `_v3`로 복사한다. 이전 PPTX, 승인된 41, 배경과 부록 43, 기존 전체 MAIN을 보존한다. 실제 대안의 책임과 계약을 바꾸거나 성능 우열을 만들어내지 않는다.
 
 - [x] 44: 중앙 완료 회수와 재지시 / 단계별 완료 입력과 Publication Join, 늦은 후보 처리.
-- [ ] 45: Request별 원본 구성 / 변경 시 공통 관계 게시와 Reader 조회, 미생산 재조회.
+- [x] 45: Request별 원본 구성 / 변경 시 공통 관계 게시와 Reader 조회, 미생산 재조회.
 - [ ] 42: 공통 논리 수명 / 같은 owner / 한 번의 공동 확정과 세 번의 서비스별 확정.
 - [ ] 두 v3의 선택 slide/notes 갱신, 비선택 part 보존, 실제 렌더 검수, 정적 계약 검사, 단계별 commit/push.
 
@@ -64,3 +64,5 @@ QA 정의(03-02)는 별도 세션의 검토 중 자료다. 최신 정의를 읽�
 ## 완료 후 다시 읽을 자료
 
 [공통 40](./04-40-common-execution-contract.md) → [41](./04-41-request-resolution-control.md) → [44](./04-44-continuous-interaction.md) → [45](./04-45-memory-and-context.md) → [42](./04-42-lifecycle-ownership.md) → [46](./04-46-input-and-context-evidence.md) → [조합 검토](./composition-review.md). SVG/draw.io/PNG·native PPTX의 일치와 문서 예시 검사는 완료했고 각 review가 범위를 명시한다. 다음 단계는 사용자 리뷰/선택과 별도 승인하의 구현·QA 실험이다. 별도 QA 세션이나 기존 Architecture 전체 동기화는 이 완료 작업의 미처리 항목으로 재시작하지 않는다.
+
+- v3 45 단계: 생산/조회 시작점과 공통 관계 계약, 현재 원본 확인 및 재조회를 확대. 기존 고정 JSON과 원문 구간을 보존. 44 Input→Composer 선의 Window 관통도 우회. 신규 그림 경로 검사에서 44/45/42 양안의 무관 박스 관통 0건과 실제 완료 반환 endpoint를 확인. 선택 native slide/notes만 교체; 이전 deck과 승인된 41 보존.

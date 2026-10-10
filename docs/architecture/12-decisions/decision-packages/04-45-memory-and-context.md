@@ -218,6 +218,10 @@ D21 개정 2가 개정 3으로 바뀌면 의존 Bundle/cache/record의 신규 �
 
 ### 3.9 핵심 경로를 확대한 추가 발표 그림
 
+2026-10-11 집중 그림 보완: A의 Query1은 Context Composer를 시작하고 원본 반환/유효 cache를 이번 Request Evidence Set에 모아 Bundle1/Receipt1을 반환한다. B는 원본 변경/생산 요청이 Publisher를 시작하는 경로와 현재 Query1이 Reader를 시작하는 경로를 구별한다. Publisher는 관계/Coverage를 같은 개정으로 게시하고 Reader는 그 계약을 읽는다. `NOT_COVERED`는 생산 후 게시 개정을 받고 저장소를 다시 읽으며 Publisher가 caller에 Bundle을 직접 반환하지 않는다. 지원 밖 관계와 현재 원본 확인은 그대로다. Module 협력 구조 아래에는 생산/조회 순서도를 별도로 둔다.
+
+첫 독자를 위해 그림의 Task1은 제품 조사 T21, Task2는 견적 T22의 표시용 별칭이다. 제품 결과/견적 결과는 각각 D21 개정 2/D22 개정 1, 설명 원문/실제 전달은 E20/P20을 가리킨다. 원문 구간과 JSON ID는 기존 계약을 유지한다. Memory1은 모델 가공된 실제 전달→설명 관계, 제품/견적의 HAS_RESULT는 확인된 명시 관계다. PARTIAL은 실제 전달한 예외 문구 한 구간과 결과 참조이며 평가 기준 전체를 얻었다는 뜻이 아니다. 하단 여섯 ASR 행은 조건별 구조 영향이며 고정 우열을 제시하지 않는다.
+
 ![45 요청별 원본 조합과 공통 관계 생산·조회](../../../presentations_files/dp-comparison/dp45-comparison.svg)
 
 [편집 원본](../../../presentations_files/dp-comparison/dp45-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp45-comparison.png). 위 전체 MAIN과 수명 그림을 유지하고 현재 요청의 조회/반환과 B의 별도 생산·게시·재조회 경로를 확대했다. Query1은 고정 JSON의 key를 축약해 표시한다. Memory1은 실제 전달된 예외 문구 한 구간이며 기준 전체가 아니다. 읽기 결과 PARTIAL, coverage와 gap을 표시하고 양안의 원문·현재 revision 검사도 남겼다. 현재 의미/Task 연결은 Request Interpreter와 Request Controller의 공통 후속 책임이다.
