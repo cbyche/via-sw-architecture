@@ -47,40 +47,50 @@ def draw(s,x,side):
     g.edge('input','controller','R','L')
     g.box('llm',35,303,265,32,'클라우드 LLM',size=20)
     g.s.items[-2]['external']=True
-    g.text(335,310,490,'Model Access 경유 / ① 모델 호출, 다음 행동 반환' if side==0 else
+    g.text(335,310,490,'Model Access 경유 / 조회 결과마다 모델 재판단' if side==0 else
            'Model Access 경유 / 초기 프레임과 조건부 부분 해석',size=13)
-    g.text(35,349,800,'A: 조회 결과를 받아 모델이 다음 행동 판단' if side==0 else
-           'B: 항목별 해결 상태를 보고 Engine 코드가 다음 처리 결정',size=19)
+    g.text(350 if side==0 else 35,349,480 if side==0 else 800,
+           'A: 모델이 결과를 보고 다음 조회 선택' if side==0 else
+           'B: 항목별 해결 상태를 보고 Engine 코드가 다음 처리 결정',size=18 if side==0 else 19)
     g.group(15,380,835,300,'Request Interpreter')
+    if side==0:
+        # Leave both model round-trip lanes visible across the Component header.
+        g.s.items[-1]['x']=g.x+350
     g.nodes['interpreter']=(15,380,835,300)
-    g.text(650,350,185,'해석 시작',size=15)
+    g.text(650,328 if side==0 else 350,185,'해석 시작',size=15)
     if side==0:
         g.box('producer',35,422,265,40,'모델 주도 해석 제어기',True,True,size=18)
         g.text(35,466,280,'코드: 모델 호출, 도구 결과 대응',size=12)
         g.box('tools',570,422,235,40,'읽기 도구 실행기',module=True,size=17)
         g.store('state',35,523,265,55,'모델에 제공할 해석 맥락',size=16)
         g.text(35,582,265,'발화, 조회 결과, 이전 조건 / 임시 상태',size=11)
-        # Real model invocation is separate from the local host Module.
-        g.edge('producer','llm','L','L',via=[(20,442),(20,319)],color=DIFFERENCE_STROKE)
-        g.edge('llm','producer','L','L',td=10,via=[(10,319),(10,452)],ret=True,color=DIFFERENCE_STROKE)
+        # The real model is part of every round, not a one-time initializer.
+        g.edge('producer','llm','T','B',sd=-100,td=-100,color=DIFFERENCE_STROKE)
+        g.edge('llm','producer','B','T',sd=110,td=110,ret=True,color=DIFFERENCE_STROKE)
+        g.text(80,350,182,'① 결과와 원문으로 재호출',size=12)
+        g.text(80,368,182,'모델: 조회 / 질문 / 의미 선택',size=11)
         g.edge('producer','tools','R','L',color=DIFFERENCE_STROKE)
         g.text(330,430,220,'② 모델이 선택한 조회',size=14)
-        g.edge('tools','state','B','R',via=[(687.5,493),(325,493),(325,550.5)],ret=True,color=DIFFERENCE_STROKE)
-        g.text(355,472,450,'③ 조회 결과를 해석 맥락에 반영',size=14)
+        # A large return path encloses the two successive output examples.
+        g.edge('tools','state','R','R',via=[(825,442),(825,611),(325,611),(325,550.5)],ret=True,color=DIFFERENCE_STROKE)
+        g.text(350,466,455,'모델 출력 예시 / 다음 조회는 결과를 본 뒤 선택',size=12)
         g.edge('state','producer','T','B',sd=110,td=110,color=DIFFERENCE_STROKE)
-        g.text(36,498,265,'④ 결과를 받아 모델 다시 호출',size=13)
-        document(g,'read',350,512,455,82,
-                 ['모델 선택: ReadRequest',
+        g.text(35,497,232,'③ 결과 반영 후 같은 모델 재호출',size=12)
+        document(g,'read',350,484,455,52,
+                 ['첫 모델 판단: 보고서와 표 조회',
                   'task_retrieve(query="보고서", limit=5)',
-                  'context_retrieve(selector="INPUT_SELECTION")',
-                  '추가 대화 조회: interaction_retrieve(query="보고서", limit=5)'],12)
-        g.text(350,599,455,'조회 결과: Task1 예산 보고서 / Task2 실적 보고서 / 선택한 표',size=11)
+                  'context_retrieve(selector="INPUT_SELECTION")'],11)
+        g.text(350,538,455,'조회 결과: Task1 예산 보고서 / Task2 실적 보고서 / 선택한 표',size=11)
+        document(g,'read_again',350,555,455,52,
+                 ['결과를 받은 다음 모델 판단: 추가 대화 조회',
+                  'interaction_retrieve(query="보고서", limit=5)',
+                  '추가 결과도 같은 맥락으로 반환 / 모델 재판단'],11)
         g.box('check',570,632,235,32,'의미 제안 검증기',module=True,size=17)
-        g.edge('producer','check','R','R',sd=12,via=[(835,454),(835,648)],color=DIFFERENCE_STROKE)
+        g.edge('producer','check','R','R',sd=12,via=[(835,454),(835,648)])
         document(g,'meaning',35,612,490,52,
                  ['⑤ 모델이 만든 MeaningProposal (사용자 확인 뒤)',
                   'Task1 보고서 + 표 / 보고서 결과로 메일 초안 / SEND 금지'],12)
-        g.text(350,384,465,'다음 행동 선택과 전체 의미 생산: 모델',size=13)
+        g.text(570,614,235,'④ 의미 또는 확인 질문 제안',size=12)
     else:
         g.box('producer',35,422,245,40,STRUCTURER,True,True,size=18)
         g.edge('producer','llm','L','L',via=[(20,442),(20,319)])
