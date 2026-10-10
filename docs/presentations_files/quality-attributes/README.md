@@ -1,32 +1,33 @@
-# VIA 품질 요구사항 발표 파일
+# VIA ASR-QA 품질 요구사항 요약
 
-사용자의 2026-10-06 리뷰에 따라 10개 품질 속성을 단일 지표와 수치 목표로 정리했다. V-11~13은 발표에서 제외하고 남은 ID와 원본의 공동 순위를 유지한다. 목표는 근거 기반 제안이며 구현 또는 실측 결과가 아니다.
+[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 3개씩 두 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
 
-| 파일 | 용도 |
-| --- | --- |
-| [발표 문서](../quality-attributes.md) | 표, 목표 근거, 상세 측정 설계 |
-| [VIA-quality-attributes.pptx](VIA-quality-attributes.pptx) | 16:9 편집 가능한 표 두 페이지 |
-| [quality-attributes-01.png](quality-attributes-01.png) | 기능과 시간 요구사항의 최종 렌더링 |
-| [quality-attributes-02.png](quality-attributes-02.png) | 변경, 메모리, 복구와 분석 요구사항의 최종 렌더링 |
-| [index.html](index.html) | 두 페이지 미리보기 |
-| [quality-attributes.json](quality-attributes.json) | 단일 목표, 문안, 원본 명칭과 근거 ID |
-| [functional-coverage.json](functional-coverage.json) | 기능 모집단 94개 ID와 1880회 시험 규모 제안 |
-| [evaluation-plan.json](evaluation-plan.json) | 공통 조건, 시험군, DP별 구체 8개 상황과 관측 oracle |
-| [measurement-design.md](measurement-design.md) | 상세 측정 설계의 편집 원본 |
-| [review-response.md](review-response.md) | 독립 심사 리뷰의 지적과 수정 및 재확인 범위 |
-| [verification.md](verification.md) | 제작 검사와 확인 범위 |
-| [생성 스크립트](../../../scripts/presentations/generate_quality_attributes.mjs) | 문서와 native table 및 notes 생성 |
-| [일치 검사](../../../scripts/presentations/check_quality_attributes.py) | 내용과 모집단 및 파일 구조 검사 |
-| [QA metric 부록](../quality-metrics.md) | QA별 목표 근거와 정확한 7단계 구간, 10장 PPTX 및 PNG |
+- [편집 가능한 PowerPoint, 2장](VIA-quality-attributes.pptx)
+- [최종 PPTX에서 렌더링한 PNG](index.html)
+- [발표 문안과 원본 연결](../quality-attributes.md)
+- [투영 JSON](quality-attributes.json): 원본 SHA-256, 여섯 핵심 정의와 상세 평가 명세, 출처
+- [확인 범위](verification.md)
+- [이전 발표 archive](../../archive/qa-presentations-before-asr-20261011/README.md): 원래 bytes/hash 보존
 
-## 재생성
+PowerPoint native text와 table로 편집 가능하며 슬라이드 PNG를 붙인 파일이 아니다. 16:9, 1920×1080이다. 한글은 Apple SD Gothic Neo, 등급 기호는 Arial Unicode MS를 사용했다. Microsoft PowerPoint 앱에서 저장/재열기는 확인하지 않았다. 글꼴이 다른 환경의 배치는 확인이 필요하다.
 
-Codex의 load_workspace_dependencies로 bundled Node, Python과 node_modules 경로를 확인하고 Presentations 스킬을 따른다. 새로운 임시 build 디렉터리에 생성 스크립트를 복사하고 그 디렉터리의 node_modules를 bundled node_modules에 연결한다. 기존 final 파일이 있는 build 디렉터리는 재사용하지 않는다.
+## 원본 관리와 재생성
 
-환경 변수 RUNTIME_NODE_MODULES, VIA_PRESENTATION_SKILL_DIR, VIA_RUNTIME_PYTHON을 절대 경로로 지정한다. bundled Node로 복사한 mjs를 실행하고 첫 번째 인자로 저장소, 두 번째 인자로 새 build 디렉터리의 절대 경로를 전달한다. 상세 측정 설계는 measurement-design.md에서 수정한다. 생성 스크립트가 그 내용을 발표 문서와 notes에 함께 반영한다.
+[03-02](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 수정한 뒤 아래 투영/검산을 재생성한다. 별도 발표 정의를 JSON에서 독립 개정하지 않는다.
+
+```sh
+python3 scripts/architecture/qa_poc_reference.py --write
+python3 scripts/presentations/build_asr_qa_sources.py
+python3 scripts/presentations/build_asr_qa_sources.py --check
+```
+
+Codex workspace dependency 도구로 bundled Node/Python/node_modules 경로를 확인한다. Presentations 스킬의 재생성 절차에 따라 새 임시 build 폴더에 [통합 생성기](../../../scripts/presentations/generate_asr_qa_presentations.mjs)를 복사하고 `node_modules`를 bundled modules에 연결한다. `RUNTIME_NODE_MODULES`, `VIA_PRESENTATION_SKILL_DIR`, `VIA_RUNTIME_PYTHON`을 각 환경의 절대 경로로 지정하고 bundled Node로 `generate_asr_qa_presentations.mjs REPO_ABSOLUTE BUILD_ABSOLUTE attributes`를 실행한다. candidate와 별도 final 파일을 사용하며 기존 final 폴더를 재사용하지 않는다. package/layout/native table/font/Artifact Tool 재가져오기를 검증하고 최종 파일에서 PNG를 렌더링한다.
 
 ```sh
 python3 scripts/presentations/check_quality_attributes.py
+python3 scripts/presentations/check_quality_metrics.py
 ```
 
-글꼴은 이 환경에서 확인한 Apple SD Gothic Neo다. 재생성 환경에서 다른 글꼴을 사용하면 생성 코드와 font policy를 함께 변경한다. PowerPoint 또는 Google Slides 앱에서 직접 편집, 저장 및 재열기는 확인하지 않았다.
+등급은 대표 지표의 목표를 표시한다. 보호 조건을 함께 검사하며 서로 다른 QA의 등급을 합산하지 않는다. 목표/계산의 작성자 가정과 공개 단가/장치 사양을 구별하며 실제 A/B 우열이나 제품 목표 달성을 주장하지 않는다.
+
+정확성은 [18개 상세 사례](functional-coverage.json), 평가 규모는 [evaluation-plan](evaluation-plan.json), 원문 절 연결은 [measurement-design](measurement-design.md)을 따른다.

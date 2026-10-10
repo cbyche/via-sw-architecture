@@ -7,8 +7,8 @@
 | 과제 소개: 대표 시나리오 | [문안 및 QA·DP 연결](./representative-scenario/README.md) | [1장 PPTX](./VIA-representative-scenario.pptx) | [PNG 미리보기](./representative-scenario/representative-scenario.png) |
 | 과제 배경과 필요성 | [필요성 페이지 생성 스크립트](../../scripts/presentations/rebuild_project_necessity.mjs) | [3장 PPTX (v7)](./VIA_과제배경_필요성_검토반영_v7.pptx) | [필요성 페이지](./project-necessity/necessity-v7.png) |
 | 기능 요구사항 및 제약사항 | [원문](./functional-requirements-and-constraints.md) / [파일 안내](./functional-requirements/README.md) | [1장 PPTX](./functional-requirements/VIA-functional-requirements-and-constraints.pptx) | [미리보기](./functional-requirements/index.html) |
-| 품질 요구사항 | [원문](./quality-attributes.md) / [파일 안내](./quality-attributes/README.md) | [2장 PPTX](./quality-attributes/VIA-quality-attributes.pptx) | [미리보기](./quality-attributes/index.html) |
-| QA 목표 근거와 7단계 채점표 | [원문](./quality-metrics.md) / [파일 안내](./quality-metrics/README.md) | [10장 PPTX](./quality-metrics/VIA-quality-metrics.pptx) | [미리보기](./quality-metrics/index.html) |
+| 품질 요구사항: ASR-QA-01~06 | [원문](./quality-attributes.md) / [파일 안내](./quality-attributes/README.md) | [2장 PPTX](./quality-attributes/VIA-quality-attributes.pptx) | [미리보기](./quality-attributes/index.html) |
+| QA 목표 근거와 7단계 채점표 | [원문](./quality-metrics.md) / [파일 안내](./quality-metrics/README.md) | [6장 PPTX](./quality-metrics/VIA-quality-metrics.pptx) | [미리보기](./quality-metrics/index.html) |
 | 설계 Overview와 DP 매핑 | [범위와 편집 안내](./design-overview/README.md) | [1장 PPTX](./design-overview/VIA-design-overview-DP41-45.pptx) | [PNG 미리보기](./design-overview/design-overview-DP41-45.png) |
 | DP 41~45 배경 | [파일 안내](./dp-background/README.md) | [5장 PPTX](./dp-background/VIA-DP-background-41-45.pptx) | [미리보기](./dp-background/index.html) |
 | DP 41~45 설계 비교 | [파일 안내](./dp-comparison/README.md) | [5장 PPTX](./dp-comparison/VIA-DP-comparison-41-45.pptx) | [미리보기](./dp-comparison/index.html) |

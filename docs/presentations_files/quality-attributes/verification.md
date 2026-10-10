@@ -1,28 +1,12 @@
-# 제작 검증 기록
+# ASR-QA 발표자료 확인 범위
 
-작성일: 2026-10-06. 검증 대상은 발표 문서와 슬라이드이다. 실제 VIA 구현 또는 품질 목표 달성 여부를 측정하지 않았다.
+2026-10-11, [03-02 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 ASR-QA-v4 발표 투영을 확인했다.
 
-| 검사 | 결과 |
-| --- | --- |
-| 리뷰 후 유지 ID와 원본 이름 추적 및 공동 순위 | 10개 일치, V-11~13 제외 이유 기록 |
-| 단일 지표와 수치 목표 및 근거 ID | 항목별 하나씩 존재 |
-| 간결한 설명 한 문장 | 10개 확인 |
-| 가운데 점 | Markdown, JSON, HTML, 슬라이드 및 notes에서 없음 |
-| 기능 모집단 | 원본의 필수 변형 94개와 일치, 1880회 규모 계산 확인 |
-| DP 시험 설계 | 비교 5개에 각각 8개 상황, 3개 조건과 4회 반복, 비교당 96회 |
-| 시간 집계 | 세 시간 목표 모두 평균, 실제 오답 시간과 미관측 endpoint 상태 구분 |
-| 상세 측정 | 분모, oracle, endpoint, 실패 처리, 장치 및 부하 조건 기록 |
-| 보안 시험 및 장애 시험 | 각각 12종의 상황과 관측 또는 정상 복구 조건 기록 |
-| 문서, JSON, PPTX 표 및 notes | 문안, 목표, 방법과 근거 일치 |
-| PPTX 구조, layout 및 font policy | 오류 0, 경고 0 |
-| native table 및 최종 재가져오기 | 페이지별 편집 가능한 5행, 총 두 표, 재가져오기 성공 |
-| 최종 렌더링 | 두 페이지 각각 확인, 잘림과 겹침 없음 |
-| 로컬 링크 | 상세 측정 설계와 문서 및 갤러리의 파일 존재 확인 |
+- 여섯 QA의 정의/대표 지표/목표/근거/보호 조건과 원본 SHA-256 일치.
+- 정확성 18개 상세 사례와 540개 채점 항목 규모, 시간 각 30개, 자원 8시간/3session과 변경 6과제 유지.
+- 최종 PPTX 2장, native table 2개, 슬라이드 래스터를 삽입한 페이지 없음.
+- finalizer package/layout/font/native table/Artifact Tool import 검사 통과, 지적 0건.
+- 최종 PPTX를 재가져와 만든 1920×1080 PNG 2장을 각각 육안 확인. 문구 누락, 잘림, 표 겹침 없음.
+- 이전 자료 32개 파일의 archive byte/hash 보존 확인. 새 표/문안/JSON/노트/PNG/링크 일치 검사.
 
-[일치 검사](../../../scripts/presentations/check_quality_attributes.py)와 [생성 스크립트](../../../scripts/presentations/generate_quality_attributes.mjs)로 재검증할 수 있다.
-
-최종 PPTX SHA-256: `4494c7fecec8990b077267c89625bf46652a587435f210a8ffac22319d758079`.
-
-외부 원문에서 확인한 사실과 VIA에 배정한 목표를 구분했다. 다른 구현의 95%는 참조 수준이며 VIA의 성능 예측이 아니다. 3개와 16GB는 공개한 VIA 예산이다. 시간은 평균을 사용하고 정답 실패를 무한대 시간으로 바꾸지 않는다. 목표 제안은 기존 QA나 측정 계약을 변경하지 않는다.
-
-실제 fixture, runner, 모델 실행, 장치 메모리 측정과 변경 과제 수행은 하지 않았다. PowerPoint 또는 Google Slides 앱에서 직접 편집, 저장 및 재열기는 확인하지 않았다. 현재 architecture-ci의 경로 필터에는 이번 발표 경로와 scripts/presentations가 포함되지 않는다.
+[자동 일치 검사](../../../scripts/presentations/check_quality_attributes.py)와 [원본 투영 재현](../../../scripts/presentations/build_asr_qa_sources.py)을 제공한다. 독립 심사/후보 모델 실행/Windows 실제 메모리 관측/Microsoft PowerPoint 앱 저장과 재열기는 수행하지 않았다. 구조와 렌더 검사는 목표 달성 또는 A/B 승자를 뜻하지 않는다.

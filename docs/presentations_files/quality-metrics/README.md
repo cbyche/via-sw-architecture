@@ -1,31 +1,31 @@
-# QA 목표 근거와 채점 부록
+# VIA ASR-QA 목표 근거와 등급 부록
 
-기존 [품질 요구사항 요약](../quality-attributes.md)의 10개 QA를 한 장씩 설명하는 발표용 부록이다. 기존 목표와 순위를 보존하며 Architecture baseline, 실제 측정 계약과 DP 선택을 변경하지 않는다.
+[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 각 QA별 한 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
 
-- [편집 가능한 PowerPoint, 10장](VIA-quality-metrics.pptx)
-- [각 장의 PNG와 미리보기](index.html)
-- [전체 근거와 정확한 범위 및 측정 규칙](../quality-metrics.md)
-- [문안과 구간의 편집 원본](quality-metrics.json)
-- [기존 상세 시험 설계](../quality-attributes/measurement-design.md)
-- [제작 검사와 독립 검토 기록](verification.md)
+- [편집 가능한 PowerPoint, 6장](VIA-quality-metrics.pptx)
+- [최종 PPTX에서 렌더링한 PNG](index.html)
+- [발표 문안과 원본 연결](../quality-metrics.md)
+- [투영 JSON](quality-metrics.json): 원본 SHA-256, 여섯 핵심 정의와 상세 평가 명세, 출처
+- [확인 범위](verification.md)
+- [이전 발표 archive](../../archive/qa-presentations-before-asr-20261011/README.md): 원래 bytes/hash 보존
 
-모든 표, 설명과 계산은 PowerPoint의 native text와 table이다. PPTX에 슬라이드 PNG를 붙인 방식이 아니다. PNG는 동일한 최종 PPTX를 다시 가져와 렌더링한 미리보기다. 16:9, 1920 × 1080이며 글꼴은 Apple SD Gothic Neo를 사용했다. 같은 글꼴이 없는 장치의 배치는 실제 PowerPoint에서 확인해야 한다.
+PowerPoint native text와 table로 편집 가능하며 슬라이드 PNG를 붙인 파일이 아니다. 16:9, 1920×1080이다. 한글은 Apple SD Gothic Neo, 등급 기호는 Arial Unicode MS를 사용했다. Microsoft PowerPoint 앱에서 저장/재열기는 확인하지 않았다. 글꼴이 다른 환경의 배치는 확인이 필요하다.
 
-## 읽는 방법
+## 원본 관리와 재생성
 
-개선형 지표의 1~6점은 목표 충족이다. V-03, V-09와 V-10은 6점만 목표 충족이며 나머지는 모두 실패 규모의 진단이다. 표의 붉은 칸과 목표 열이 이 차이를 나타낸다. 등급 수치를 QA 사이에서 직접 비교하거나 평균 및 가중합으로 합치지 않는다.
-
-목표의 출처와 등급 구간을 나누는 작성자 규칙은 구분했다. V-02의 0.5회, V-05의 4초, V-06의 12GB와 다른 상향 참조는 실제 달성 가능한 최저값으로 입증된 수치가 아니다. 논문이 정한 점수 경계로 소개하지 않는다. 시험 전에 하한과 자원 조건을 동결하며 이후 결과에 맞춰 구간을 이동하지 않는다.
-
-## 생성과 확인
-
-저장소 원본은 `scripts/presentations/generate_quality_metrics.mjs`다. Presentations 스킬의 bundled Node와 artifact-tool을 사용하는 새 private build 디렉터리에 생성기를 복사하고 `node_modules`를 연결한다. `VIA_PRESENTATION_SKILL_DIR`, `VIA_RUNTIME_PYTHON`과 `RUNTIME_NODE_MODULES`에 해당 환경의 절대 경로를 설정한 뒤 생성기에 저장소 경로와 build 경로를 전달한다. finalizer는 candidate와 별개의 최종 PPTX를 만들고 package, layout, fonts 및 재가져오기를 검증한다.
-
-다음 검사는 범위의 중복 및 누락, 목표 보존, 경계 반올림 사례, 실제 7개 행과 native table 및 발표자 노트와 이미지의 일치를 확인한다.
+[03-02](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 수정한 뒤 아래 투영/검산을 재생성한다. 별도 발표 정의를 JSON에서 독립 개정하지 않는다.
 
 ```sh
-python3 scripts/presentations/check_quality_metrics.py
-python3 scripts/presentations/check_quality_attributes.py
+python3 scripts/architecture/qa_poc_reference.py --write
+python3 scripts/presentations/build_asr_qa_sources.py
+python3 scripts/presentations/build_asr_qa_sources.py --check
 ```
 
-최종 10개 PNG를 각각 확인했다. 파일 구조와 렌더 검사는 실제 후보 성능, 목표의 실현 가능성 또는 Microsoft PowerPoint 앱에서의 동작을 입증하지 않는다. 현재 구현 및 측정 결과는 없다.
+Codex workspace dependency 도구로 bundled Node/Python/node_modules 경로를 확인한다. Presentations 스킬의 재생성 절차에 따라 새 임시 build 폴더에 [통합 생성기](../../../scripts/presentations/generate_asr_qa_presentations.mjs)를 복사하고 `node_modules`를 bundled modules에 연결한다. `RUNTIME_NODE_MODULES`, `VIA_PRESENTATION_SKILL_DIR`, `VIA_RUNTIME_PYTHON`을 각 환경의 절대 경로로 지정하고 bundled Node로 `generate_asr_qa_presentations.mjs REPO_ABSOLUTE BUILD_ABSOLUTE metrics`를 실행한다. candidate와 별도 final 파일을 사용하며 기존 final 폴더를 재사용하지 않는다. package/layout/native table/font/Artifact Tool 재가져오기를 검증하고 최종 파일에서 PNG를 렌더링한다.
+
+```sh
+python3 scripts/presentations/check_quality_attributes.py
+python3 scripts/presentations/check_quality_metrics.py
+```
+
+등급은 대표 지표의 목표를 표시한다. 보호 조건을 함께 검사하며 서로 다른 QA의 등급을 합산하지 않는다. 목표/계산의 작성자 가정과 공개 단가/장치 사양을 구별하며 실제 A/B 우열이나 제품 목표 달성을 주장하지 않는다.
