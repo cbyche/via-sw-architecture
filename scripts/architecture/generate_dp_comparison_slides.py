@@ -41,16 +41,12 @@ DATA = {
       ('응답성','조회 후 재판단마다 클라우드 왕복 / 부분 수정 허용','지원 틀이 충분하면 재판단 축소 / 추가 해석과 질문 대기'),
       ('모델 호출 비용','반복 해석과 긴 Context가 비용 증가 요인','초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음'),
       ('변경 용이성','새 관계는 모델 지침/조회 도구 변경 가능','요청 틀과 코드 규칙 확장 / 기존 지원 관계는 코드 제어')]),
-  42: dict(title='대화와 업무 상태의 소유 및 확정',
-    options=('A 모듈형 통합 Core / 공동 확정', 'B 독립 대화 / 업무 서비스 / 별도 접수'),
+  42: dict(title='대화와 Task 상태의 소유 및 확정',
+    options=('A 모듈형 통합 Core / 공동 확정', 'B 독립 대화 / Task 서비스 / 별도 접수'),
     case='보고서 기간 질문을 실제 제시 → “응, 상반기로 해줘” → 내부 접수 / 외부 전달 확인',
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. B의 별도 수명 이익은 조건부다. 일반 adapter 변경이나 정상 사용에서 자동 우위는 없다.',
-    tradeoffs=[
-      ('정확성 / 모델 비용','같은 의미 판단 / 공동 확정은 의미 정답 보증 아님','같은 판단 / 코드 인계 자체는 추가 모델 호출 아님'),
-      ('응답성','관련 변경 한 번 확정 / 같은 Core 실행·복원 경계','명령 / 접수 / 대화 반영 왕복과 재확인 비용'),
-      ('변경 / 수명','모듈형 변경 가능 / 공통 확정 계약 변경 영향','업무 저장·실행 수명 독립 / 서비스 계약 변경 비용'),
-      ('메모리 / 복원','같은 process·저장 scope / 실패 뒤 관련 owner 복원','별도 heap·queue·pending / 대화 없이 업무 사실 추적')]),
+    tradeoffs=[('요청 처리 정확성', '같은 의미 판단 / 공동 확정은 의미 정답 보증 아님', '같은 판단 / 접수와 대화 반영의 일치 관리 필요'), ('상호작용 응답시간', '한 번의 관련 변경 확정 / 음성 반응 경로 공통', '의도 / 접수 / 반영 왕복 / 음성 반응 경로 공통'), ('VIA 요청 처리시간', '같은 Core에서 공동 확정 뒤 명령 전송', '서비스 간 명령과 receipt 연결 / pending 확인 비용'), ('VIA 모델 사용 비용', '같은 의미 판단이면 동일 / 저장은 코드 처리', '같은 의미 판단이면 동일 / 인계는 모델 호출 아님'), ('VIA 변경 용이성', '내부 Module 변경 가능 / 공동 확정 계약 영향', '저장과 실행 수명 독립 / 서비스 계약의 호환 비용'), ('로컬 VIA 메모리 사용량', '같은 실행체의 상태 / 실행 대기열', '별도 실행체와 각 대기열 / 접수 대기 상태 유지')]),
   43: dict(title='기능 정확성을 위한 VIA Request 의미 판단 설계',
     options=('A 통합 의미 생산', 'C 기능별 의미 생산과 코드 조정'),
     case='“보고서는 PDF로, 메일에는 결론을 넣어줘.” → “메일에는 결론 대신 표만 넣어줘.”',
@@ -170,14 +166,7 @@ class Comparison(Slide):
         self.line([(40,795),(1880,795)],color=LINE,arrow=False)
         self.text(42,811,1840,['공통 의미 제안은 Request Interpreter, 채택은 Request Controller / 실제 전달 원장은 Response Manager / 모델·외부 통신은 transaction 밖'.replace('·',' / ')],17,INK)
         self.text(42,840,1840,['B: hold 요청 시각과 업무 gate 적용 ACK 시각은 다름 / ACK 전 DISPATCHING은 UNKNOWN·외부 확인으로 처리'.replace('·',' / ')],17,INK)
-        for j,(quality,left,right) in enumerate(d['tradeoffs']):
-            yy=883+j*34
-            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
-            self.text(42,yy,245,[quality],18,INK,True)
-            self.text(300,yy,720,[left.replace('·',' / ')],18,INK)
-            self.text(1050,yy,820,[right.replace('·',' / ')],18,INK)
-        self.text(40,1032,1840,[d['condition']],16,INK)
-        self.text(40,1060,1840,['상태 의미의 owner는 양안 동일 / B도 서비스 내부 transaction 사용 / 서비스 분리만으로 의미 정확성·비용 개선을 주장하지 않음'.replace('·',' / ')],14,MUTED)
+        self.quality_footer(d)
 
     def execution_page(self):
         d=DATA[44]
@@ -236,7 +225,7 @@ class Comparison(Slide):
             result=result.replace('</defs>',marker+'</defs>')
             if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
-            if self.number in (41,44,45):
+            if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
@@ -245,7 +234,7 @@ class Comparison(Slide):
                     tag=match[0].replace('stroke-width="1.7"',f'stroke-width="{i.get("line_width",1.7)}"')
                     return tag.replace('/>',' rx="7"/>') if i.get('rounded') else tag
                 result=re.sub(r'<(?:rect|path) id="'+i['id']+r'"[^>]*/>',restyle,result)
-            if self.number in (41,44,45) and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
+            if self.number in (41,42,44,45) and i['kind']=='rect' and (i.get('external') or i.get('flow_decision')):
                 x,y,w,h=(i[k] for k in ('x','y','w','h'))
                 points=(f'{x+w/2},{y} {x+w},{y+h/2} {x+w/2},{y+h} {x},{y+h/2}' if i.get('flow_decision') else f'{x+9},{y} {x+w-9},{y} {x+w},{y+h/2} {x+w-9},{y+h} {x+9},{y+h} {x},{y+h/2}')
                 poly=f'<polygon id="{i["id"]}" points="{points}" fill="white" stroke="#000000" stroke-width="1"/>'
@@ -271,7 +260,7 @@ class Comparison(Slide):
                 cell.set('style',cell.get('style').replace('strokeWidth=1.7;',f'strokeWidth={item["line_width"]};'))
             if item and item.get('rounded'):
                 cell.set('style',cell.get('style').replace('rounded=0;','rounded=1;arcSize=14;'))
-            if self.number in (41,44,45) and item and (item.get('external') or item.get('flow_decision')):
+            if self.number in (41,42,44,45) and item and (item.get('external') or item.get('flow_decision')):
                 shape='rhombus' if item.get('flow_decision') else 'hexagon'
                 cell.set('style',cell.get('style')+f'shape={shape};')
         if self.number in (44,45):
@@ -329,7 +318,7 @@ def validate(outputs):
         assert [r['priority'] for r in presentation['rows']]==list(range(1,7))
     for n,data in DATA.items():
         if n in (41,42,44,45):
-            assert len(data['tradeoffs'])==({41:4,42:4,44:6,45:6}[n]) and 'rows' not in data
+            assert len(data['tradeoffs'])==({41:4,42:6,44:6,45:6}[n]) and 'rows' not in data
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:

@@ -20,8 +20,19 @@ def inside(point,box):
     return x<=px<=x+w and y<=py<=y+h
 
 
+def endpoint_bounds(g,key):
+    x,y,w,h=g.nodes[key]
+    # Some owner ports are routed relative to their heading, while the actual
+    # Component boundary includes its state below that heading.
+    for item in g.s.items[g.first:]:
+        if item['kind'] not in ('rect','store','note'):continue
+        if item.get('x')==g.x+x and item.get('y')==y and item.get('w')==w:
+            h=max(h,item['h'])
+    return x,y,w,h
+
+
 def required_edge(g,a,b):
-    assert any(inside(p[0],g.nodes[a]) and inside(p[-1],g.nodes[b]) for p in connections(g)),('Missing path',a,b)
+    assert any(inside(p[0],endpoint_bounds(g,a)) and inside(p[-1],endpoint_bounds(g,b)) for p in connections(g)),('Missing path',a,b)
 
 
 def geometry(g,n,side):
@@ -71,6 +82,11 @@ def check(n,side):
         required_edge(g,producer,'ma');required_edge(g,'ma','cloud')
     else:
         lifecycle.validate(g,side)
+        required_edge(g,'gate','gateway')
+        if side==0:
+            for a,b in [('controller','commit'),('task','commit'),('commit','controller'),('commit','task')]:required_edge(g,a,b)
+        else:
+            for a,b in [('controller','task'),('task','controller'),('controller','dialogue_store'),('task','work_store')]:required_edge(g,a,b)
     print(f'PASS: {n}{"A" if side==0 else "B"} orthogonal paths, owner states and completion endpoints')
 
 

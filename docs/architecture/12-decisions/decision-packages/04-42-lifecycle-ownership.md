@@ -164,6 +164,10 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 
 ### 3.6 수명·소유·협력의 핵심을 확대한 추가 발표 그림
 
+2026-10-11 집중 그림 보완: 위쪽 수명 막대는 Conversation1의 대화 연결, 이번 답변 Request1의 종료, 보고서 Task1의 지속, 외부 Execution1의 별도 수명을 양안 공통으로 표현한다. 막대 길이는 설명용이며 측정된 시간이나 B만의 이익이 아니다. 가운데는 같은 Request Controller, Response Manager, Task Manager, Agent Gateway와 원본 상태를 유지하며 실행/확정 경계만 비교한다.
+
+아래에는 A의 두 owner 변경 집합과 B의 세 로컬 확정 자료를 각각 표시한다. A는 Request1의 질문/Task 연결과 Question1/Command1 상태를 함께 확정하고 충돌 시 함께 미반영한다. B는 CommandIntent 의도를 저장한 뒤 Task 원본/접수 결과를 확정하고 같은 Command1의 AcceptanceReceipt를 대화에 반영한다. 자료 예시는 고정 JSON의 R2/Q1/T1/K1을 설명용 Request1/Question1/Task1/Command1로 표시한 것이며 답변 상반기와 질문 예상 개정 7을 보존한다. Task 접수 뒤 외부 전송은 대화 반영과 별도로 시작할 수 있다. 외부 Agent 접수나 사용자 실제 전달은 내부 ACCEPTED와 다르다. 별도 순서도와 여섯 ASR 행은 구조의 조건별 영향을 설명하며 선정/측정 결과가 아니다.
+
 ![42 통합 공동 확정과 독립 업무 접수·대화 반영](../../../presentations_files/dp-comparison/dp42-comparison.svg)
 
 [편집 원본](../../../presentations_files/dp-comparison/dp42-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp42-comparison.png). 기존 전체 MAIN과 수명/사건도를 유지하고 추가했다. 양안에 같은 Conversation·Request·Task 수명을 먼저 보여준 뒤, 상태 owner와 실행/저장 확정 경계, 실제 변경 집합/CommandIntent/AcceptanceReceipt를 비교한다. A의 트랜잭션 관리자는 State Store 내부이며 B의 업무 게이트는 Task Manager 내부다. 내부 접수와 외부 Agent 접수/실제 전달은 구별한다.

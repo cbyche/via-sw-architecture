@@ -179,3 +179,11 @@ MAIN, 발표 비교와 42 보충 도식의 SVG/draw.io, 기존 PNG와 두 PPTX �
 | 파일 범위 | 42의 다른 네 보충 그림과 gallery는 변경 없음. 다른 세션 파일은 커밋 대상에서 제외 |
 
 SVG/draw.io는 `lifecycle_ownership_presentation.py`의 같은 scene에서 생성하며, 메인 PNG는 최종 SVG의 브라우저 렌더다. native draw.io 편집기의 round-trip과 구현·모델·품질 측정은 수행하지 않았다. commit/push와 원격 CI 결과는 Git 이력 및 최종 응답으로 확인한다. 이번 표현 개선은 A/B 선정이나 B의 정상 사용상 품질 우위 입증이 아니다.
+
+## 2026-10-11 v3 집중 그림 검수
+
+공통 Conversation/Request/Task/Execution 수명을 먼저 표시하고 같은 Component/상태 소유자를 실행/저장 확정 경계 안에 배치했다. A의 RC/TM 변경 집합 공동 확정과 B의 CommandIntent 의도 저장/Task 내부 접수/AcceptanceReceipt 대화 반영을 실제 고정 답변 자료로 표시했다. 아래 순서도는 설명용 동작이며 Module이 아니다. 내부 ACCEPTED와 외부 Agent 접수/실제 전달, 충돌의 함께 미반영, 접수 대기와 같은 Command ID 확인, 대화 반영과 별도인 외부 전송을 구별한다.
+
+Chrome 글자 폭/겹침/화면 범위 검사 0건, 직교 선/무관 박스 관통/owner 상태 및 공동 확정과 서비스 인계 endpoint 검사 통과. 기존 전체 MAIN/사건도와 JSON은 보존했다. 두 v3의 42 native 비교만 갱신하며 최신 여섯 ASR은 조건별 영향이고 품질 우열을 측정하지 않았다.
+
+두 native v3 재import 렌더 검수와 선택 42 slide/notes 보존 검사가 통과했다. 최종 두 deck은 41~45의 비교 text/geometry/style가 같고 Office 생성 ID만 다르다. 구판 PPTX와 승인된 41, 도입/배경/부록 및 모든 비선택 ZIP part가 보존됐다. 이번 변경 Markdown 링크와 DP41/42/44/45 계약 검사도 통과했다. 병행 QA 문서 작업 중 발견된 전체 active-link 오류는 v3 변경 범위 밖이며 이번 커밋에 포함하지 않는다.
