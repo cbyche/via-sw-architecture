@@ -31,7 +31,7 @@ QA = {
 
 # A row = QA, left/right value, left/right relative circle count.
 DATA = {
-  41: dict(title='VIA 요청 이해의 모델 주도와 코드 주도 완성',
+  41: dict(title='VIA Request 이해의 모델 판단 반복과 코드 해결 반복',
     options=('A 모델 주도 해석', 'B 모델 요청 틀과 코드 주도 완성'),
     case='“이 표를 아까 보고서에 넣고, 메일은 보내지 말고 결과를 바탕으로 초안만 만들어.”',
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
@@ -164,18 +164,17 @@ class Comparison(Slide):
         self.text(90,209,98,['설계안'],19,INK,True,'center')
         for side,x in enumerate([140,1010]):
             self.text(x+435,205,838,[d['options'][side]],26,INK,True,'center')
-        self.line([(1010,195),(1010,795)],color=LINE,arrow=False)
-        self.line([(40,795),(1880,795)],color=LINE,arrow=False)
-        self.text(42,810,1840,['공통 후속 처리: Request Controller가 현재성/권한을 검증하고 저장 후 채택한다. 이어 응답 또는 업무 위임을 진행한다.'],18,INK)
-        self.text(42,840,1840,['반복 종료: 완성 의미 제안 / 확인 질문 대기 / 실패 / 취소 / 한도 도달. 질문 답변 뒤 다시 해석한다. 무한 반복을 허용하지 않는다.'],18,INK)
+        self.line([(1010,195),(1010,872)],color=LINE,arrow=False)
+        self.line([(40,872),(1880,872)],color=LINE,arrow=False)
+        self.text(42,882,1840,['공통 채택: Request Controller의 현재 입력과 정보, 권한 검사 및 저장 성공 후 응답 또는 Task 위임'],17,INK)
+        self.text(42,907,1840,['반복 종료: 의미 완성, 확인 질문 대기, 실패, 취소, 한도 도달 / 질문을 실제 전달하고 새 답변을 받은 뒤 해석 재개'],16,INK)
         for j,(quality,left,right) in enumerate(d['tradeoffs']):
-            yy=883+j*34
+            yy=943+j*26
             self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
-            self.text(42,yy,245,[quality],18,INK,True)
-            self.text(300,yy,720,[left],18,INK)
-            self.text(1050,yy,820,[right],18,INK)
-        self.text(40,1032,1840,[d['condition']],17,INK)
-        self.text(40,1060,1840,['A도 정해진 형식으로 출력 가능 / B도 추가 모델 호출 가능 / 코드로 연결했다고 의미가 항상 옳은 것은 아님 / 품질/비용은 측정 전 가설'],14,MUTED)
+            self.text(42,yy,245,[quality],17,INK,True)
+            self.text(300,yy,720,[left],17,INK)
+            self.text(1050,yy,820,[right],17,INK)
+        self.text(40,1053,1840,['미선정 / 미측정 / A도 구조화 출력과 부분 수정 가능 / B도 조건부 추가 모델 호출 가능 / 코드 결합은 의미 정답 보증이 아님'],15,MUTED)
 
     def lifecycle_page(self):
         d=DATA[42]
@@ -249,6 +248,8 @@ class Comparison(Slide):
             result=result.replace('</defs>',marker+'</defs>')
             if self.number in (41,42,44,45):
                 result=result.replace('</defs>','<marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker></defs>')
+            if self.number==41:
+                result=result.replace('</defs>','<marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs>')
         finally: self.items=original
         for i in original:
             if i['kind'] in ('rect','note') and ('line_width' in i or i.get('rounded')):

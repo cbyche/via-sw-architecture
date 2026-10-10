@@ -4,6 +4,8 @@
 
 [수정 가능한 설계 비교 5장 PPTX](./VIA-DP-comparison-41-45.pptx) / [본 발표 9장과 부록 2장 PPTX](../VIA-DP-background-and-comparison-41-45.pptx) / [PPTX 구성과 편집 방법](../DP-PPTX.md)
 
+**DP41 최신 그림 — 2026-10-11:** [통합 발표 v2](../VIA-DP-background-and-comparison-41-45_v2.pptx)의 41 비교와 위 비교 전용 PPTX의 41 장을 갱신했다. 원본 통합 PPTX는 이전 판본으로 보존한다. A는 조회 결과를 모델에 제공할 해석 맥락에 반영한 뒤 모델이 다음 행동과 전체 의미를 판단하는 반복이다. B는 조회 결과를 항목별 해결 상태에 반영한 뒤 Engine 코드가 재검사하고 전체 의미를 결합하는 반복이다. B의 Request Resolution Engine 내부 프레임 / 항목 검사기, 미해결 항목 처리기, 관계 결합기는 기존 코드 책임의 상세 표현이며 새 Component가 아니다. 구조도 아래 순서도는 별도로 유지한다. B의 조건부 부분 모델 호출과 공통 검증/채택, Task1/Task2 확인 질문, 고정 RequestFrame 계약은 유지한다.
+
 **현재 판본 안내 — 2026-10-09:** 41은 공통 실행 계약에 맞춰 로컬 VIA/로컬 VAD와 클라우드 음성·의미 모델로 재구체화했다. 41과 45의 품질 표는 조건별 정성 비교이며, 42~44의 수치/원형 점수와 Shared Omni 표기는 이전 판본이다. 이후 44→45→42를 재구체화할 예정이며 모든 자료의 모델·호출 계약이 이미 동기화됐다는 뜻은 아니다. 아래 날짜별 기록과 이전 수치 설명은 해당 판본의 이력으로 읽는다.
 
 **41의 구체적인 Module 출력:** A는 `task_retrieve`/`context_retrieve`를 선택하는 `tool_calls.name/arguments`, 필요할 때의 `interaction_retrieve`를 표시한다. B의 **요청 구조화기**는 일곱 고정 key의 `RequestFrame`을 반환하며 Engine이 selector 조회·목표 관계·scope별 금지를 결합한다. `report`/`table`과 G1/G2는 실제 자료/Task ID가 아닌 잠정 참조/목표 ID다. 그림의 축약 값과 [전체 JSON/Schema 및 코드 처리 규칙](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md#351-b의-module-출력-고정-requestframe-계약)을 대조할 수 있다. 모델이 필드나 op를 발명하게 두지 않는다. A와 B 모두 JSON일 수 있으며 차이는 다음 조회와 전체 의미 결합의 결정 주체다. 구조도 안의 반환선을 굽은 순환으로 표시하고 반복 주체와 재진입을 설명한다.
