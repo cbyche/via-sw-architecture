@@ -35,6 +35,16 @@
 - 설계 질문은 모델의 조회·해석 제어와 모델의 요청 틀을 받는 코드의 조회·결합 제어다. 실제 형식과 반복 호출은 다음 비교 슬라이드에서 설명한다.
 - [슬라이드 미리보기](./dp41-background.png), [삽화](./assets/dp41-background-illustration.png).
 
+## 44 배경 — 처리 중에도 계속 들어오는 사건
+
+헤드라인은 **“VIA가 처리하는 동안에도, 새 발화와 업무 결과는 계속 들어옵니다”**다.
+
+- 보고서 설명은 VIA가 준비하고, 회의 안내 메일 초안은 Agent에게 맡긴다. 그동안 사용자의 표 설명 요청, 이전 설명의 늦은 준비 완료, Agent의 메일 수신자 질문이 겹친다.
+- 세 종류의 도착 경로를 native 화살표로 보여준다. 합류선은 사건을 함께 다뤄야 한다는 요구를 뜻하며 중앙 Dispatcher나 B의 join Module을 미리 선택한 구조가 아니다.
+- VIA는 입력을 계속 처리하며, 질문과 응답의 유효성·전달 차례를 확인하고 실제 전달 결과를 다음 처리에 연결한다. 준비 완료와 실제 전달 완료는 다르다. 발화 시작이 Agent Task 취소는 아니다.
+- 설계 질문은 다음 실행과 대기를 중앙에서 지시할지, 연결된 단계들이 각자의 조건으로 이어갈지다. A도 비동기로 동작한다.
+- [슬라이드 미리보기](./dp44-background.png), [삽화](./assets/dp44-background-illustration.png).
+
 ## 표현과 보존 범위
 
 - 삽화는 builtin imagegen으로 만든 설명용 이미지이며 실제 제품 화면이 아니다. [두 이미지의 생성 프롬프트](./assets/illustration-prompts.json)를 보관한다. 제목·문구·참여자·메시지 경로는 native editable PPTX objects다.
@@ -52,4 +62,4 @@
 
 DP 배경은 전용 [native 배경 생성기](../../../scripts/presentations/generate_dp_v2_backgrounds.mjs)와 [범위 제한 조립기](../../../scripts/presentations/dp_v2_background_package.py)를 쓴다. 같은 runtime 환경으로 `generate_dp_v2_backgrounds.mjs REPO BUILD 41`처럼 DP를 명시한다. 최종 PPTX를 재import한 `dp41-background.png`로 검토한다. [배경 삽화 생성 프롬프트](./assets/background-illustration-prompts.json)를 보관한다.
 
-현재 41 배경을 반영했다. 승인된 다음 제작 순서는 44 → 45 → 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
+현재 41·44 배경을 반영했다. 승인된 다음 제작 순서는 45 → 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
