@@ -45,6 +45,16 @@
 - 설계 질문은 다음 실행과 대기를 중앙에서 지시할지, 연결된 단계들이 각자의 조건으로 이어갈지다. A도 비동기로 동작한다.
 - [슬라이드 미리보기](./dp44-background.png), [삽화](./assets/dp44-background-illustration.png).
 
+## 45 배경 — 과거 설명과 여러 Agent 결과를 함께 활용하기
+
+헤드라인은 **“이전 설명과 여러 Agent의 결과를, 새 요청에 함께 활용하는 VIA”**다.
+
+- “지난번 네가 설명한 평가 기준으로, 제품 비교와 견적 결과를 함께 써서 제안서를 만들어줘.”를 사용한다. VIA가 직접 설명했던 기준과 제품 조사/견적 Agent의 확인된 결과를 함께 가리킨다.
+- 과거 기록 → VIA의 관련 기록/실제 전달 범위 확인 및 발췌·참조 연결 → 새 Agent의 평가 기준 적용과 제안서 작성으로 역할을 구별한다.
+- Agent의 모든 내부 이력이나 결과 본문 전체를 VIA가 보유한다고 가정하지 않는다. 허용된 기록·결과 참조와 실제 전달 기록을 사용한다. 같은 Agent에게 이전 스타일을 재위임하면 충분한 예시는 주 근거로 사용하지 않는다.
+- 설계 질문은 요청에서 원본 소유자의 기록을 조합할지, 생산자가 유지하는 공통 과거 관계의 읽기 계약을 사용할지다. A에도 요약·색인·cache·부분 갱신을 허용하며, 단순 사전 요약 유무의 비교가 아니다.
+- [슬라이드 미리보기](./dp45-background.png), [삽화](./assets/dp45-background-illustration.png).
+
 ## 표현과 보존 범위
 
 - 삽화는 builtin imagegen으로 만든 설명용 이미지이며 실제 제품 화면이 아니다. [두 이미지의 생성 프롬프트](./assets/illustration-prompts.json)를 보관한다. 제목·문구·참여자·메시지 경로는 native editable PPTX objects다.
@@ -62,4 +72,4 @@
 
 DP 배경은 전용 [native 배경 생성기](../../../scripts/presentations/generate_dp_v2_backgrounds.mjs)와 [범위 제한 조립기](../../../scripts/presentations/dp_v2_background_package.py)를 쓴다. 같은 runtime 환경으로 `generate_dp_v2_backgrounds.mjs REPO BUILD 41`처럼 DP를 명시한다. 최종 PPTX를 재import한 `dp41-background.png`로 검토한다. [배경 삽화 생성 프롬프트](./assets/background-illustration-prompts.json)를 보관한다.
 
-현재 41·44 배경을 반영했다. 승인된 다음 제작 순서는 45 → 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
+현재 41·44·45 배경을 반영했다. 승인된 다음 제작 대상은 42다. 실제 제품 구현·성능 측정이나 A/B 선정은 포함하지 않는다.
