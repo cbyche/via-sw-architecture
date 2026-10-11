@@ -1,26 +1,24 @@
 # Current Architecture Evaluation Results
 
-> **Status: empty for the Core-ASR generation — all Core DP results are `NOT_RUN`**
+> **Status: no current DP41/44/45/42 measurement results — `NOT_RUN`.**
 
-현재 Core ASR은 QA-09·QA-19·QA-29·QA-39이고, Core DP는
-VIA-DP-03·05·06·07·15·17이다. 이 계약으로 승인·실행된 A/B campaign은 아직 없다.
+현재 논의하는 QA는 ASR-QA-01~06이다. 정의, 목표, 보호 조건과 점수 경계는
+[현재 QA 문서](../../../docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 따른다.
+현재 후보 실행이나 모델 측정 결과는 없다. 문서 검산과 발표의 가정값을 이 디렉터리의
+실측 evidence로 옮기지 않는다.
 
-2026-09-26~27의 audio qualification과 VIA-DP-02/05/06/09/11/12/13 reference campaign은
-[pre-Core-ASR evidence archive](../archive/pre-core-asr-reference-20260927/README.md)로
-이동했다. 그 결과는 구현 가능성과 측정기 개발의 provenance일 뿐 현재 QA 값이나
-Architecture winner가 아니다.
+이전 실험의 결과와 코드 위치는
+[전체 보관 안내](../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 정리했다.
+기존 archive 결과는 이전 계약의 provenance이며 현재 QA 값이나 A/B 승자의 근거가 아니다.
 
-## 새 결과의 입장 조건
+새 실험이 시작되면 결과 전에 정한 DP/QA 계약, fixture/oracle과 source digest, 실제 실행
+환경, 모든 실패/timeout, raw trace와 집계 근거를 새 campaign directory에 함께 보존한다.
+mock 실행, 실제 모델 실행과 계산 추정은 구별하고 이전 결과를 덮어쓰지 않는다.
 
-이 디렉터리에는 다음 조건을 모두 충족한 evidence만 추가한다.
-
-1. 해당 DP의 A/B와 Core-ASR applicability가 active 문서에 확정됨
-2. machine-readable contract, fixture, oracle, target, 반복, timeout, 집계와 실패 처리가
-   결과 전에 동결됨
-3. source revision과 모든 input digest를 가진 Measurement Freeze가 존재함
-4. 정상 trace와 sentinel qualification이 통과함
-5. raw sample, failure/timeout, environment, summary와 replay receipt가 함께 보존됨
-6. evidence label이 실제 실행 범위와 일치함
-
-새 campaign은 `dpNN-<campaign>-vN-YYYYMMDD/` 형태의 immutable directory를 사용한다.
-동일 sample을 독립 실행처럼 복제하지 않으며 재사용 시 `source_execution_key`를 기록한다.
+2026-10-11 사용자 지정 보고 방식은
+[현재 harness의 보고 요구사항](../../../benchmark/architecture/README.md#poc-결과-보고-요구사항--2026-10-11-사용자-지정)을 따른다.
+QA-02는 cap 적용/정답만/오답 포함 실측의 세 평균, QA-03는 cap 적용/완료만의 두
+평균을 표본 수와 실패·누락 수와 함께 저장한다. cap으로 raw 시간을 덮어쓰지 않는다.
+QA-06은 실제 Mac 환경의 `phys_footprint`와 resident size/RSS를 모두 보존한다.
+Mac 관측을 Windows 실측이나 기존 commit 점수로 바꾸어 표시하지 않는다.
+이 요구사항은 아직 구현·실행되지 않았으며 결과 상태는 `NOT_RUN`이다.

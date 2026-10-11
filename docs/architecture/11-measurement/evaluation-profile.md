@@ -53,10 +53,10 @@ candidate나 winner가 아니다.
 | Endpoint | `http://127.0.0.1:18080/v1/chat/completions` |
 | Mode | non-thinking, temperature와 output schema는 case별 freeze |
 
-기동:
+이전 기동 script는 [실험 도구 archive](../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 보존했다. 아래는 이전 로컬 모델 reference의 경로이며 현재 DP41/44/45/42의 클라우드 모델 설정이 아니다.
 
 ```bash
-scripts/architecture/start_local_semantic_model.sh
+scripts/archive/pre-dp41-45-experiment-tools-20261011/start_local_semantic_model.sh
 ```
 
 2026-09-26 smoke test에서 43-token prompt와 37-token JSON-schema output이 정상 반환됐다. 관측값은

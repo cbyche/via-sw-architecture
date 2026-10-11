@@ -38,12 +38,12 @@ Official sources:
 
 ## 3. 설치와 기동
 
-Homebrew의 `llama.cpp`를 설치하고 공식 GGUF를 한 번 받았다. 이후 실행은 SHA-256을 확인하는 저장소 script를 사용한다.
+Homebrew의 `llama.cpp`를 설치하고 공식 GGUF를 한 번 받았다. 당시 사용한 SHA-256 확인 script는 [실험 도구 archive](../../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 보존했다. 아래는 과거 로컬 모델의 설치/기동 기록이며 현재 DP41/44/45/42의 클라우드 모델 설정이 아니다.
 
 ```bash
 brew install llama.cpp
 llama-server -hf Qwen/Qwen3-8B-GGUF:Q4_K_M
-scripts/architecture/start_local_semantic_model.sh
+scripts/archive/pre-dp41-45-experiment-tools-20261011/start_local_semantic_model.sh
 ```
 
 모델 파일은 local Hugging Face cache에 있으며 Git에 포함하지 않는다. `VIA_SEMANTIC_MODEL_PATH`로 같은 SHA-256의 다른 위치를 지정할 수 있다.

@@ -39,7 +39,7 @@ event/state patch로 표현한다.
 | [VIA-DP-03 A Mock Profile](./contracts/via-dp-03-a-streaming-asr-mock-profile.json) / [B Mock Profile](./contracts/via-dp-03-b-s2s-mock-profile.json) | A의 Streaming ASR와 B의 time-aligned S2S timing·behavior·근거·seed 초안 |
 | [VIA-DP-03 Candidate-visible Fixtures](./contracts/via-dp-03-fixture-inputs.json) / [Evaluator-only Oracles](./contracts/via-dp-03-hidden-oracles.json) | DP03-L-01~07의 동일 Voice/UI input과 물리적으로 분리한 QA-19 정답·금지 결과 초안 |
 | [VIA-DP-03 Change Ledger](./contracts/via-dp-03-change-ledger.json) / [Fault Registry](./contracts/via-dp-03-fault-registry.json) | QA-29 A/B Architecture Element baseline·독립 change patch와 QA-39 fault·necessary dependency closure 초안 |
-| [`check_via_dp03_contract.py`](../../../scripts/architecture/check_via_dp03_contract.py) | fixture/oracle 분리, detector offset, A/B timing 대칭, QA-29 element reference와 QA-39 closure를 검사하는 pre-freeze static validator |
+| [보존된 `check_via_dp03_contract.py`](../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/check_via_dp03_contract.py) | 이전 DP-03 pre-freeze static validator. fixture/oracle, detector offset, A/B timing과 이전 QA 계약을 검사하던 도구이며 현재 DP41/44/45/42 측정에 적용하지 않음 |
 | [Major DP Evaluation Plan](./major-dp-evaluation-plan.md) | Core DP 6개 실행 순서, 완결 조건과 전체 inventory의 보존 자산 원장 |
 | [Evaluation Method](../12-decisions/evaluation-method.md) | one-DP-at-a-time A/B comparison and differentiation criteria |
 

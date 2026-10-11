@@ -1,24 +1,17 @@
 # Current Architecture Candidates
 
-> **Status: no active candidate implementation — awaiting VIA-DP-03 Measurement Freeze**
+> **Status: no active candidate implementation.** 현재 DP41/44/45/42의 PoC 범위와 평가 방법을 논의 중이다.
 
-이 디렉터리는 현재 Core DP의 A/B candidate 구현 위치다. 이전 IR/TASK/AGENT/EXEC 및
-VIA-DP-02/05/06/09/11/12/13 reference workspace는 active baseline과 분리해 archive했다.
+이 디렉터리는 새 비교의 후보 구현 위치다. 현재 Cargo workspace나 executable candidate는
+없으며 구현, 모델 호출과 측정은 시작하지 않았다.
 
-현재는 Cargo workspace나 executable candidate가 없다. 먼저 VIA-DP-03에서 S2S native
-timestamp·revision capability를 확인하고, 동등 기능의 A/B 계약과 QA-09/19/29/39
-Measurement Freeze를 승인해야 한다. 그 뒤 해당 DP만 바뀌는 최소 candidate를 만든다.
+[공통 실행 계약](../../docs/architecture/12-decisions/decision-packages/04-40-common-execution-contract.md)과
+[QA 정의](../../docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)를 기준으로
+대안의 실제 처리 경로를 비교한다. 목표값 달성이나 이전 A/B 우열 재현을 구현 목표로 삼지 않는다.
 
-새 candidate는 다음 원칙을 지킨다.
+새 구현 위치와 순서는 [PoC 수행 계획](../../docs/architecture/12-decisions/decision-packages/poc-implementation-plan.md)을 따른다.
+현재 계획은 검토용이며 후보 코드나 모델 API 호출을 시작한 상태가 아니다.
 
-- S2S Model 1개와 semantic LLM 1개를 모든 대안에 동일하게 사용한다.
-- 다른 DP의 authority, fixture, Agent capability와 dependency profile을 고정한다.
-- 후보 입력과 evaluator-only oracle을 분리한다.
-- unit/smoke PASS를 Architecture measurement나 winner로 부르지 않는다.
-- 새 Cargo workspace가 생기면 그 source와 lockfile에 맞는 fmt·clippy·test 명령을 이
-  문서와 CI에 함께 추가한다.
-
-이전 candidate source와 미완성 VIA-DP-11 v5 source snapshot은
-[pre-Core-ASR prototype archive](../archive/pre-core-asr-reference-20260927/README.md)에
-보존했다. Archive code는 현재 candidate가 아니며 그 자리에서 실행해 현재 evidence를
-만들지 않는다.
+이전 Rust/Python 후보와 미완성 source는
+[이전 실험 전체 보관 안내](../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 연결된
+세대별 archive에 보존한다. 이전 후보를 새 DP 번호로 바꾸거나 기존 oracle/QA를 자동 승계하지 않는다.

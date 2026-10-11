@@ -112,7 +112,7 @@ Model Access는 audio chunk·생성 전사·terminal status를 publication/job/o
 
 `Qwen3-Omni-30B-A3B-Instruct`는 음성 입력과 text/audio 출력이 가능한 모델 reference다. checkpoint만으로 Realtime session·VAD·commit·cancel API가 제공되는 것은 아니다. 클라우드 서비스 adapter의 기능과 checkpoint의 기능을 구별한다. [Qwen 공식 모델 카드](https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Instruct), [Alibaba Model Studio Realtime](https://www.alibabacloud.com/help/en/model-studio/realtime)
 
-기존 [Alibaba smoke script](../../../../scripts/architecture/smoke_alibaba_s2s.py)와 [S2S evidence](../../08-quality-attributes/evidence/qwen3-omni-s2s-latency-evidence.md)는 연동 reference다. script의 hosted model 이름·전사 의존성·sample rate·이벤트 표기는 adapter별로 확인하며 OpenAI GA와 동일하다고 가정하지 않는다. 기존 smoke 자료는 새 구성의 정확성·응답성·비용 비교 결과가 아니다. 이번 작업에서 API를 실행하지 않았다.
+보존된 [이전 Alibaba smoke script](../../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/smoke_alibaba_s2s.py)와 [S2S evidence](../../08-quality-attributes/evidence/qwen3-omni-s2s-latency-evidence.md)는 과거 연동 reference다. script의 hosted model 이름·전사 의존성·sample rate·이벤트 표기는 adapter별로 확인하며 OpenAI GA와 동일하다고 가정하지 않는다. 기존 smoke 자료는 새 구성의 정확성·응답성·비용 비교 결과가 아니다. 이번 작업에서 API를 실행하지 않았다.
 
 ## 4. 모델 호출 지도: 누가 왜 호출하는가
 
