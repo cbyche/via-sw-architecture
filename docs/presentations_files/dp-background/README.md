@@ -1,6 +1,6 @@
 # VIA 사용자 경험 도입과 설계 문제 배경
 
-각 문서의 공통 사용자 상황, 설계 고려 사항과 설계 과제를 담은 **1920×1080 / 16:9 / 문서별 1페이지**다. `presentation_example1`과 `presentation_example2`의 배경 설명, 상황 도식과 핵심 설계 과제 구성을 참고했다.
+각 문서의 공통 사용자 상황, 설계 고려 사항과 설계 과제를 담은 **1920×1080 / 16:9 / 문서별 1페이지**다. [presentation_kjh](../reference_presentaion/presentation_kjh/)와 [presentation_jjh](../reference_presentaion/presentation_jjh/)의 배경 설명, 상황 도식과 핵심 설계 과제 구성을 참고했다.
 
 [도입 포함 발표 흐름 6페이지 draw.io](./VIA-DP-background-overview-41-45.drawio) / [번호순 배경 참조 5페이지](./VIA-DP-background-41-45.drawio) / [전체 미리보기](./index.html)
 

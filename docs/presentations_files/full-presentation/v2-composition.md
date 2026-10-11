@@ -14,7 +14,7 @@
 
 ## 참고 발표자료의 적용
 
-[presentation_example1](../presentation_example1/)의 PNG 파일을 제목 번호순으로 확인했다. 1~11번의 배경, 도메인 소개, 필요성, 요구사항, QA, driver, context와 설계 Overview 흐름을 따른다. 이해를 돕는 간단한 전체 흐름은 소개에서 먼저 제시한다.
+[presentation_kjh](../reference_presentaion/presentation_kjh/)의 PNG 파일을 제목 번호순으로 확인했다. 1~11번의 배경, 도메인 소개, 필요성, 요구사항, QA, driver, context와 설계 Overview 흐름을 따른다. 이해를 돕는 간단한 전체 흐름은 소개에서 먼저 제시한다.
 
 12~24번의 DP 배경 다음에 구조와 QA를 함께 보여주는 비교 방식을 적용한다. 25번의 설계 적용 범위 확인, 31번의 향후 확인 사항과 35번의 appendix 구분도 반영한다. 참고 자료의 채택 표시, 최종 설계, 구현 결과와 측정 결과는 VIA의 현재 사실로 전용하지 않는다.
 

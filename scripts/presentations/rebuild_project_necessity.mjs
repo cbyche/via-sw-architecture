@@ -196,7 +196,7 @@ const notes = [
   '오른쪽은 기술 발전의 범위와 연동 확장의 개념도다. 네 영역은 기술 범위이며 Component 배치, 독립 모델 수나 선택된 대안이 아니다. 연두색 기억 영역은 변경 영향의 범위를 설명하는 예시다. 학습과 모델 내부 알고리즘 개발은 본 과제의 Architecture 범위 밖이다. VIA 내부 기술의 발전과 Downstream Agent의 변화가 모두 설계 변경의 동기가 된다.',
   '배경의 세 축은 뒤에서 제시할 품질 요구사항 및 DP 검토의 배경이다. 현재 페이지에서는 품질 이름과 ID를 먼저 표시하지 않는다. 특정 구조의 우열이나 성능 수치, 대안 선택 결과를 주장하지 않는다.',
   '문안 근거: docs/architecture/03-fixed-architecture-scope.md; docs/architecture/05-representative-use-cases.md; docs/presentations_files/quality-attributes.md; docs/architecture/12-decisions/decision-packages/04-40-common-execution-contract.md; 04-41-request-resolution-control.md; 04-42-lifecycle-ownership.md; 04-44-continuous-interaction.md; 04-45-memory-and-context.md',
-  '레이아웃 참조: docs/presentations_files/presentation_example1/03-과제필요성.png',
+  '레이아웃 참조: docs/presentations_files/reference_presentaion/presentation_kjh/03-과제필요성.png',
 ].join('\n');
 slide.speakerNotes.textFrame.setText(notes);
 presentation.slides.items[1].speakerNotes.textFrame.setText(CURRENT_ROLES_NOTES);
