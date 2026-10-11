@@ -1,51 +1,54 @@
-# VIA 통합 발표자료와 부분 편집
+# VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 수정의 기준은 [VIA-architecture-presentation.pptx](../VIA-architecture-presentation.pptx) 하나다. 2026-10-11에 기존 일곱 자료의 32장을 발표 순서대로 통합했다. 이후 파일명은 유지하고 이력은 Git에서 관리한다. 통합에 사용한 개별 PPTX는 이전 구성의 참고본으로 보존하며, 통합본을 다시 만드는 입력으로 사용하지 않는다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v2.pptx](../VIA-architecture-presentation_v2.pptx)다. 2026-10-12에 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)를 종합했다. **본문 24장, appendix 안내 1장, 원본 보존 32장으로 총 57장**이다.
 
-[2026-10-11 독립 발표자료 리뷰](./review-2026-10-11.md)는 도메인 초심자 심사위원의 이해, storytelling과 고정 QA 연결, DP 구조 대비와 가독성의 보완안을 담는다. 리뷰 기준의 현재 32장에 대한 기록이며, 제안은 아직 PPTX나 QA 정의에 적용하지 않았다.
+[최초 통합본](../VIA-architecture-presentation.pptx)은 변경하지 않았다. 본문에서 대체하거나 이동한 내용도 원본 슬라이드와 발표자 노트, 이미지 및 두 시연 GIF 그대로 appendix에 보존했다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
 
-## 발표 순서
+## 현재 발표 순서
 
-| PowerPoint 슬라이드 위치 | 구역 | 내용 |
+| 실제 슬라이드 위치 | 구역 | 내용 |
 | --- | --- | --- |
-| 1~3 | 배경과 필요성 | 관련 동향, VIA의 역할과 범위, 과제 필요성 |
-| 4 | 대표 시나리오 | 표 설명부터 두 업무 위임, 부분 정정, 질문 답변과 Text 상태 확인 |
-| 5 | 기능 요구사항 | 기능 6개와 제약사항 2개 |
-| 6~11 | 품질 요구사항 | 여섯 QA, P21 공통 활동과 21개 사례 대응 |
-| 12~17 | QA 목표 근거 | QA-01~06의 목표 근거, 계산 및 7단계 등급 |
-| 18 | 설계 Overview | 최신 품질 목표, 모델 배치와 네 DP 매핑 |
-| 19~20 | 사용자 경험 | 업무 위임과 겹쳐 도착하는 사건 |
-| 21~23 | DP41 | 배경, 구조 비교, QA 상세 |
-| 24~26 | DP44 | 배경, 구조 비교, QA 상세 |
-| 27~29 | DP45 | 배경, 구조 비교, QA 상세 |
-| 30~32 | DP42 | 배경, 구조 비교, QA 상세 |
+| 1~6 | 배경과 소개 | 관련 동향 → 필요성 → VIA 역할 → 도메인과 전체 흐름 → 대표 시나리오 → 업무 위임 책임 |
+| 7~11 | 요구사항과 QA | 요구의 근거 → 기능 6개와 제약 2개 → 고정된 여섯 QA → 두 시간 지표의 경계 |
+| 12~14 | 설계 도입 | 요구/품질/설계 질문 연결 → 설계 Overview → 겹쳐 도착하는 사건 |
+| 15~16 | DP41 | 배경과 선택 질문 → A/B 구조와 여섯 QA 평가표 |
+| 17~18 | DP44 | 배경과 선택 질문 → A/B 구조와 여섯 QA 평가표 |
+| 19~20 | DP45 | 배경과 선택 질문 → A/B 구조와 여섯 QA 평가표 |
+| 21~22 | DP42 | 배경과 선택 질문 → A/B 구조와 여섯 QA 평가표 |
+| 23~24 | 검토 요약 | 기능 적용 범위와 공통 계약 → 선택 전 확인할 사항 |
+| 25 | Appendix 안내 | 본문과 원본 상세 자료의 위치 안내 |
+| 26~35 | Appendix / QA 상세 | 원본 8~17장: P21, 21개 사례 대응, QA-01~06 목표 근거와 등급 |
+| 36~42 | Appendix / 원본 보존 | 원본 1~7장: 배경, 역할, 필요성, 시나리오, 요구사항과 QA |
+| 43~57 | Appendix / 원본 보존 | 원본 18~32장: Overview, 책임과 겹침 장면, 네 DP의 배경/비교/QA 상세 |
 
-위 구역은 PowerPoint의 실제 Section으로도 저장했다. 여기서 페이지는 통합본의 슬라이드 위치다. 품질 두 구역의 `1 / 6` 표시는 각각의 구역 내 순서이며 전체 페이지 번호가 아니다. 대표 시나리오의 표시 번호는 통합 위치에 맞춰 4로 바꿨다. 43과 46은 포함하지 않았다.
+원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 원본 슬라이드 안의 번호와 제목은 당시 표기이며 현재 위치는 위 표와 [manifest-v2.json](./manifest-v2.json)을 따른다.
 
-전체 크기는 16:9, 1920×1080에 해당하는 20×11.25in이다. 처음 네 장의 1280×720 개체는 좌표, 크기와 서식을 1.5배로 맞췄다. 텍스트, 표와 도형은 기존 편집 가능한 개체로 유지했다. 원래 이미지 개체와 두 시연 GIF, 32장의 발표자 노트도 보존했다. 그림 내부의 래스터 요소는 이미지로 유지한다.
+도메인 용어는 소개에서 설명하고, 필요성에 모델 사용 비용과 PC 메모리의 원인을 추가했다. 요구사항에서 고정 QA를 거쳐 네 구조 질문으로 이어지는 연결과 DP 배경의 선택 질문을 보완했다. DP 제목은 `(주요 품질속성)을 위한 (기능) 설계` 형식을 따른다. 그림은 실제 판단, 생산, 상태 소유와 확정 방식의 차이를 보여주며 강한 A와 B의 비용을 함께 남긴다.
+
+여섯 QA의 정의, 목표, 모집단, 보호 조건과 등급은 변경하지 않았다. 비교 표의 `평가 전`, 메모리 예산과 지역 가정 계산을 구별한다. A/B 선정, 구현 또는 실측 결과를 추가하지 않았다. 43과 46은 본문에 포함하지 않았다. 전체 크기는 기존과 같은 16:9, 20×11.25in이다. 신규 텍스트, 도형과 표는 PowerPoint에서 편집할 수 있다. 검증 결과는 [v2-validation.md](./v2-validation.md)에 기록했다.
 
 ## 앞으로 수정하는 방법
 
-PowerPoint에서 통합본을 열어 해당 슬라이드를 직접 수정하고 같은 파일에 저장한다. Codex에 요청할 때도 “통합본 18장 설계 Overview 수정”, “DP41 비교와 QA 상세만 수정”처럼 대상과 변경 내용을 지정하면 된다. 항상 **현재 통합본의 사본에서 시작**하고 비대상 슬라이드와 노트를 보존한다. 일곱 개별 파일을 먼저 고친 뒤 전체를 재병합하면 통합 후 편집 내용이 사라질 수 있으므로 그 방식은 사용하지 않는다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v2.pptx`를 입력으로 `_v3.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다.
 
-Architecture 내용의 근거는 [활성 문서](../../architecture/README.md)다. 품질 정의를 바꾸면 해당 Markdown/JSON과 통합본의 관련 장을 함께 갱신한다. Architecture 그림이 바뀌면 대응하는 draw.io와 SVG 원본도 함께 유지한다. 발표의 문구와 배치만 편집할 때는 Architecture의 계약을 자동 개정하지 않는다. 개별 폴더의 PNG와 PPTX는 통합 시점의 참고본이며 통합본을 편집해도 자동 갱신되지 않는다.
+요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest.json](./manifest.json)에 최초 위치, 의미별 slide key와 원본 파일/hash를 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별할 수 있다. 슬라이드를 추가·삭제·재배치하면 이 안내의 위치 표와 manifest의 위치/구역 정보를 함께 갱신한다. `initial_*` 필드와 원본 hash는 최초 통합 이력으로 유지한다.
+[manifest-v2.json](./manifest-v2.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 보존 hash를 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest.json](./manifest.json)은 최초 32장 통합의 이력이다.
 
-[부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 통합본, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 수정한 PPTX의 페이지 번호는 1부터 시작한다. 예를 들어 그 파일의 1장을 통합본의 기능 요구사항으로 교체하려면 매핑 JSON을 다음과 같이 만든다.
+[부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
 ```json
-{"functional-requirements": 1}
+{"dp41-comparison-v2": 1}
 ```
 
 ```text
 python3 scripts/presentations/full_presentation_package.py replace CURRENT.pptx EDITED.pptx MAPPING.json CURRENT_SHA256 NEW_CANDIDATE.pptx REPORT.json
 ```
 
-`CURRENT_SHA256`는 편집 시작 시 현재 통합본 bytes의 SHA-256이다. 도구는 hash가 달라지면 중단하여 다른 편집을 덮지 않으며, 기존 candidate도 덮어쓰지 않는다. 선택한 장의 개체와 노트와 필요한 의존 자원만 가져온다. 비선택 슬라이드/노트와 기존 공용 자원 및 media가 bytes로 유지되는지 검사하고 슬라이드 ID, 순서와 Section은 보존한다. 수정 장을 재가져와 렌더링하고 package/layout/font 검사를 마친 후 candidate를 현재 통합본에 반영한다. 검수 산출물은 private build에 둔다.
+`CURRENT_SHA256`는 편집 시작 시 최신 파일의 SHA-256이다. 도구는 hash가 바뀌거나 candidate가 이미 있으면 중단한다. 선택한 장과 필요한 자원만 가져오고 비선택 슬라이드/노트 및 기존 media의 bytes 보존을 검사한다. 렌더링과 package/layout/font 검증 후 **새 버전 파일**로 발행한다.
 
-주요 key는 `design-overview`, `dp41-comparison`, `dp41-qa`, `dp44-comparison`, `dp45-comparison`, `dp42-comparison`이다. 여섯 목표 근거는 `qa01-metric`~`qa06-metric`, 품질 요약 두 장은 `quality-01-03`과 `quality-04-06`이다. 전체 32개는 manifest를 따른다.
+본문의 주요 key는 `overview-v2`, `dp41-comparison-v2`, `dp44-comparison-v2`, `dp45-comparison-v2`, `dp42-comparison-v2`, `quality-01-03-v2`, `quality-04-06-v2`다. 원본 보존 장은 최초 key를 유지한다. 예를 들어 `dp41-comparison`은 appendix 47장으로 본문 key와 다르다.
 
-[최초 통합 스크립트](../../../scripts/presentations/assemble_full_presentation.mjs)는 최초 이관의 재현용이다. 현재 통합본이 존재하면 실행을 거부한다. 이후 업데이트에는 현재 파일을 직접 편집하거나 위 부분 교체 도구를 사용한다.
+[v2 구성 스크립트](../../../scripts/presentations/rebuild_presentation_v2.mjs)와 [원본 보존 패키저](../../../scripts/presentations/package_presentation_v2.py)는 이번 32→57장 이관의 재현용이다. 최초 통합본의 hash를 확인하고 private build에 candidate를 만든다. 이후 부분 수정에는 최신본과 부분 교체 도구를 사용한다. [최초 통합 스크립트](../../../scripts/presentations/assemble_full_presentation.mjs)도 초기 이관 이력으로만 유지한다.
