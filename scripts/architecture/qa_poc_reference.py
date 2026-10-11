@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce ASR-QA-v5 reference arithmetic, never execute a candidate or API."""
+"""Reproduce ASR-QA-v6 reference arithmetic, never execute a candidate or API."""
 import argparse
 from fractions import Fraction as F
 from pathlib import Path
@@ -29,7 +29,7 @@ def dag_time(nodes, zero_external=False):
         duration = F(str(n['seconds']))
         if duration < 0:
             raise ValueError('Negative duration')
-        if zero_external and n['kind'] in ('EXTERNAL_AGENT_WORK', 'EXTERNAL_USER_WAIT'):
+        if zero_external and n['kind'] in ('EXTERNAL_AGENT_WORK', 'EXTERNAL_USER_WAIT', 'EXTERNAL_USER_SPEECH'):
             duration = F(0)
         ends[n['id']] = max((ends[p] for p in n['parents']), default=F(0)) + duration
     return max(ends.values(), default=F(0))
@@ -91,36 +91,36 @@ def calculate(data):
     return {'contract_version':data['contract_version'],'source_sha256':hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
         'common_workload_sha256':manifest['input_sha256'],'workload_manifest_sha256':hashlib.sha256((DIR/data['workload_manifest']).read_bytes()).hexdigest(),'workload_summary':u,
         'evidence_level':'CALCULATED_REFERENCE','not_candidate_results':True,
-        'arithmetic':{'llm_2000_200_USD':compact(llm_unit),'generation_only_200_seconds':compact(F(200)/450),'semantic_activity_USD':compact(semantic),'voice_activity_USD':compact(voice),'activity_total_USD':compact(activity),'activity_headroom_USD':compact(F('1.50')-activity),'reference_reaction_seconds':compact(F('.10')+F('.30')+F(100)/450+F('.08')+F('.25'))},
+        'arithmetic':{'llm_2000_200_USD':compact(llm_unit),'generation_only_200_seconds':compact(F(200)/450),'semantic_activity_USD':compact(semantic),'voice_activity_USD':compact(voice),'activity_total_USD':compact(activity),'activity_headroom_USD':compact(F(str(w['cost_target_usd']))-activity),'reference_reaction_seconds':compact(F('.10')+F('.30')+F(100)/450+F('.08')+F('.25'))},
         'dp41_sufficient_typed_evidence':profiles,
-        'dp42_four_normal_handoffs_seconds':{'A':'.04','B':'.10','B_minus_A':'.06'},
-        'dp44_six_normal_transitions_seconds':{'A':'.06','B':'.05','A_minus_B':'.01'},
-        'dp45_past_processing_USD':{'A_40_misses':compact(40*A_miss),'A_10_misses':compact(10*A_miss),'B_20_productions':compact(20*B_prod),'break_even_A_misses':compact(20*B_prod/A_miss),'A40_minus_B20':compact(40*A_miss-20*B_prod)},
+        'dp42_valid_answer_seconds':{'case_id':'S6-04','A':'.010','B':'.025','B_minus_A':'.015','assumption':'정상 ANSWER 한 번의 지역 확정/receipt 반영. 모델 호출/외부 접수 시간은 양안 공통.'},
+        'dp44_six_normal_transitions_seconds':{'case_id':'S5-04','A':'.06','B':'.05','A_minus_B':'.01','assumption':'A 중앙 callback 6회×0.010초, B stage 6회×0.005초+join 0.020초. 실제 trace로 전이 수/지연을 대체.'},
+        'dp45_past_processing_USD':{'case_ids':['S2-02','S2-04','S2-05'],'A_3_misses':compact(3*A_miss),'A_1_miss':compact(A_miss),'B_4_productions':compact(4*B_prod),'break_even_A_misses':compact(4*B_prod/A_miss),'A3_minus_B4':compact(3*A_miss-4*B_prod),'assumption':'P21 안 과거 근거의 추가 처리만 비교: A 3miss 또는 강한 cache 1miss, B 초기/새 근거/갱신을 합친 관계 생산 4회. 원천 변경4건이 생산4회를 강제하지 않음.'},
         'memory_examples':examples,'score_bands':data['score_bands']}
 
 
 def render(report):
     a=report['arithmetic']
-    lines=['# ASR-QA-v5 참조 계산 검산', '', '> CALCULATED_REFERENCE / 공개 단가와 작성자 가정의 산술 검산 / 실제 모델/Windows/후보 실행 결과 없음', '',
+    lines=['# ASR-QA-v6 참조 계산 검산', '', '> CALCULATED_REFERENCE / 공개 단가와 작성자 가정의 산술 검산 / 실제 모델/Windows/후보 실행 결과 없음', '',
         '[정의 원본](./03-02-quality-attribute-definitions.md)과 [입력 원장](./03-02-poc-inputs.json)을 따른다. 재현 명령은 `.venv/bin/python scripts/architecture/qa_poc_reference.py --check`다.', '',
-        '## 공통 활동과 기본 예산', '', 'W100은 18개 원본 사례에서 구성한 사용자 100/Agent 30장면이다. 110개 계획 발화의 입력 264초, 실제 전달 길이의 참조 출력 914초를 사용한다. 이 숫자는 합성 사용량/작성자 길이 예산이며 실제 일일 사용 통계가 아니다. 초기/갱신/폐기 청구를 전체 원장에 포함한다.', '', '| 항목 | 계산값 |', '| --- | --- |',
+        '## 공통 활동과 기본 예산', '', 'P21은 메커니즘별로 선정한 21개(사용자19/Agent단독2, 집중장면 내부Agent4사건)의 공통 묶음이다. 전체5회만 반복하며 정확성105/630, 반응135, 처리95의 모든 관측을 함께 읽는다. 계획 발화21개의 입력50초, 출력179초는 fixture/작성자 예산이고 실제 사용통계나 실행결과가 아니다.', '', '| 항목 | 계산값 |', '| --- | --- |',
         f"| 의미 2,000/200 token 1호출 | ${a['llm_2000_200_USD']} |",f"| 200 token의 생성 부분만 | {a['generation_only_200_seconds']}초 |",
-        f"| W100 의미 비용 | ${a['semantic_activity_USD']} |", f"| W100 음성/audio/Text 비용 | ${a['voice_activity_USD']} |",
-        f"| 기본 총액 / $1.50 예산 여유 | ${a['activity_total_USD']} / ${a['activity_headroom_USD']} |",f"| QA-02 설명용 반응 예산 | {a['reference_reaction_seconds']}초 |", '',
-        '## 41의 충분한 typed 근거 조건', '', 'A 2호출/B 1호출이라는 명시적 call-plan이다. 실제 모델의 판단이나 정답률을 측정한 것이 아니다. B가 부분 해석을 추가하면 두 호출로 바뀔 수 있다.', '',
+        f"| P21 의미 비용 | ${a['semantic_activity_USD']} |", f"| P21 음성/audio/Text 비용 | ${a['voice_activity_USD']} |",
+        f"| 기본 총액 / $0.30 예산 여유 | ${a['activity_total_USD']} / ${a['activity_headroom_USD']} |",f"| QA-02 설명용 반응 예산 | {a['reference_reaction_seconds']}초 |", '',
+        '## 41의 충분한 typed 근거 조건', '', 'S2-01의 충분한 typed 근거라는 조건에서 A 2호출/B 1호출을 둔 지역 call-plan이다. 실제 모델의 판단이나 정답률을 측정한 것이 아니다. B가 부분 해석을 추가하면 두 호출로 바뀔 수 있다.', '',
         '| profile | A (초) | B (초) | A-B (초) |', '| --- | --- | --- | --- |']
     for r in report['dp41_sufficient_typed_evidence']:
         lines.append(f"| {r['profile']} | {r['A_seconds']} | {r['B_seconds']} | {r['A_minus_B_seconds']} |")
     d=report['dp45_past_processing_USD']
     lines += ['', '## 짧은 전이와 cache/생산 비용', '',
-        '42의 정상 hand-off 4회는 A 0.04초/B 0.10초이며 차이 0.06초다. 44의 6회 전이는 A 0.06초/B 0.05초이며 차이 0.01초다. 두 차이는 대표 사이클의 0.5초 차이 기준에 못 미친다. 이 일부 구간을 전체 QA 평균으로 소개하지 않는다.', '',
-        f"45의 과거 처리만 보면 A 40회 cache miss ${d['A_40_misses']}, A 10회 miss ${d['A_10_misses']}, B가 실제 20회 관계 생산하는 별도 call-plan ${d['B_20_productions']}다. A miss {d['break_even_A_misses']}회에서 비용이 같고 빈도에 따라 순위가 바뀐다. 현재 의미/음성 비용은 전체 원장에 추가해야 한다.", '',
-        '## 같은 W100의 동시 메모리 가정', '', '| DP | A (MiB) | B (MiB) | B-A (MiB) | 가정 |', '| --- | --- | --- | --- | --- |']
+        '42의 S6-04 정상 답변 한 번은 A 0.010초/B 0.025초라는 지역 commit/receipt 가정이며 차이 0.015초다. 44의 S5-04 callback/stage 6회는 A 6×0.010=0.060초/B 6×0.005+join 0.020=0.050초이며 차이 0.010초다. 두 차이는 대표 사이클의 0.5초 차이 기준에 못 미친다. 이 일부 구간을 전체 QA 평균으로 소개하지 않는다.', '',
+        f"45의 S2-02/04/05 과거 근거 처리만 보면 A 3회 cache miss ${d['A_3_misses']}, 강한 cache의 A 1회 miss ${d['A_1_miss']}, B가 초기/새 근거/갱신을 합쳐 4회 관계 생산하는 가정 ${d['B_4_productions']}다. A miss {d['break_even_A_misses']}회에서 비용이 같고 실제 생산/재사용 빈도에 따라 순위가 바뀐다. 원천 갱신 수가 생산 수를 강제하지 않는다. 이 비용이 공통 예산 호출과 겹치면 교체하고, 별도 호출이면 추가하여 중복 계산하지 않는다.", '',
+        '## 같은 P21의 동시 메모리 가정', '', '| DP | A (MiB) | B (MiB) | B-A (MiB) | 가정 |', '| --- | --- | --- | --- | --- |']
     for r in report['memory_examples']:
         lines.append(f"| {r['dp']} | {r['A_mib']} | {r['B_mib']} | {r['B_minus_A_mib']} | {r['assumption']} |")
     lines += ['', '공통 1,792MiB는 예산 항목을 동시에 할당한 설명 예시다. 실제 최소 크기/peak를 확인한 수치가 아니다. 41/44의 차이는 128MiB 기준보다 작고, 42/45는 추가 크기에 대한 민감도를 확인해야 한다.', '',
         '## 검수 범위와 다음 평가의 입력', '',
-        '검산은 단가/합계/병렬 DAG/외부 대기/공유 allocation 중복/등급 경계의 재현성을 확인한다. 정확성 540개와 변경 6과제의 실제 결과는 생성하지 않는다. 후보 trace나 구체 변경 patch가 생기면 원지표로 평가하고 이 설명 예시를 결과로 재라벨하지 않는다.', '',
+        '검산은 단가/합계/병렬 DAG/외부 대기/공유 allocation 중복/등급 경계의 재현성을 확인한다. 정확성 630개와 변경 6과제의 실제 결과는 생성하지 않는다. 후보 trace나 구체 변경 patch가 생기면 원지표로 평가하고 이 설명 예시를 결과로 재라벨하지 않는다.', '',
         f"정의 원본 SHA-256: `{report['source_sha256']}`", '']
     return '\n'.join(lines)
 
@@ -128,14 +128,16 @@ def render(report):
 def self_check(data):
     assert cost(2000,200,data['llm_pricing']) == F('0.0024')
     result=calculate(data);a=result['arithmetic']
-    assert a['activity_total_USD']=='1.0987' and a['activity_headroom_USD']=='0.4013'
-    assert result['workload_summary']['user_input_scenes']==100 and result['workload_summary']['agent_triggered_scenes']==30
+    assert a['activity_total_USD']=='0.223167' and a['activity_headroom_USD']=='0.076833'
+    assert result['workload_summary']['user_input_scenes']==19 and result['workload_summary']['agent_triggered_scenes']==2
     # Parallel agent work must not erase independently running VIA work.
     dag=[{'id':'start','parents':[],'seconds':'0.1','kind':'VIA'},
          {'id':'agent','parents':['start'],'seconds':'8','kind':'EXTERNAL_AGENT_WORK'},
          {'id':'semantic','parents':['start'],'seconds':'2','kind':'VIA'},
          {'id':'join','parents':['agent','semantic'],'seconds':'.2','kind':'VIA'}]
     assert dag_time(dag)==F('8.3') and dag_time(dag,True)==F('2.3')
+    speech=[{'id':'speech','parents':[],'seconds':'2','kind':'EXTERNAL_USER_SPEECH'},{'id':'via','parents':[],'seconds':'.3','kind':'VIA'},{'id':'delivery','parents':['speech','via'],'seconds':'.2','kind':'VIA'}]
+    assert dag_time(speech)==F('2.2') and dag_time(speech,True)==F('.5')
     assert memory_peak([{'allocation_id':'shared','start':0,'end':2,'mib':100,'owners':['A','B']}, {'allocation_id':'copy','start':1,'end':3,'mib':50}])==150
     assert memory_peak([{'allocation_id':'first','start':0,'end':1,'mib':100},{'allocation_id':'next','start':1,'end':2,'mib':50}])==100
     try:
@@ -153,9 +155,9 @@ def self_check(data):
                 assert score(r,(x+b[i+1])/2)==5-i
         target=b[-1];epsilon=F(1,1_000_000)
         assert score(r,target-epsilon if r['direction']=='high' else target+epsilon)==0
-    assert F(530,540)*100>=98 and F(529,540)*100<98
-    assert F(86,90)*100>=95 and F(85,90)*100<95
-    assert F(11,540)*100>2
+    assert F(618,630)*100>=98 and F(617,630)*100<98
+    assert F(100,105)*100>=95 and F(99,105)*100<95
+    assert F(13,630)*100>2
     rows=[r for r in SOURCE.read_text().splitlines() if r.startswith('| **ASR-QA-')]
     assert len(rows)==6 and all(len(r.split('|'))==8 for r in rows)
     assert all(all(c.strip() for c in r.split('|')[1:-1]) for r in rows)

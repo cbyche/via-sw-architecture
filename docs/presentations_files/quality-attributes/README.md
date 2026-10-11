@@ -1,8 +1,8 @@
 # VIA ASR-QA 품질 요구사항 요약
 
-[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 3개씩 두 페이지와 공통 활동 한 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
+[03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 핵심 표 2장, 공통 활동 1장, 전체 사례 대응표 3장에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
 
-- [편집 가능한 PowerPoint, 3장](VIA-quality-attributes.pptx)
+- [편집 가능한 PowerPoint, 6장](VIA-quality-attributes.pptx)
 - [최종 PPTX에서 렌더링한 PNG](index.html)
 - [발표 문안과 원본 연결](../quality-attributes.md)
 - [투영 JSON](quality-attributes.json): 원본 SHA-256, 여섯 핵심 정의와 상세 평가 명세, 출처
@@ -31,4 +31,4 @@ python3 scripts/presentations/check_quality_metrics.py
 
 등급은 대표 지표의 목표를 표시한다. 보호 조건을 함께 검사하며 서로 다른 QA의 등급을 합산하지 않는다. 목표/계산의 작성자 가정과 공개 단가/장치 사양을 구별하며 실제 A/B 우열이나 제품 목표 달성을 주장하지 않는다.
 
-정확성은 [18개 상세 사례](functional-coverage.json), 평가 규모는 [evaluation-plan](evaluation-plan.json), 원문 절 연결은 [measurement-design](measurement-design.md)을 따른다.
+정확성은 [21개 상세 사례](functional-coverage.json), 평가 규모는 [evaluation-plan](evaluation-plan.json), 원문 절 연결은 [measurement-design](measurement-design.md)을 따른다.

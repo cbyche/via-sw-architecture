@@ -1,5 +1,5 @@
 {
-  "contract_version": "ASR-QA-v5",
+  "contract_version": "ASR-QA-v6",
   "source": "03-02-quality-attribute-definitions.md",
   "verified_source_date": "2026-10-11",
   "evidence_level": "POC_ASSUMPTION_WITH_SOURCE_PRICES",
@@ -19,7 +19,7 @@
   },
   "assumptions": {
     "common_memory_mib": 1792,
-    "workload_id": "W100",
+    "workload_id": "P21",
     "usage_conditions_source": "03-02-common-workload.json"
   },
   "latency_profiles": [
@@ -46,7 +46,7 @@
     {
       "dp": "41",
       "B_delta_mib": -32,
-      "basis": "4개 Context 16MiB 대신 frame/상태 8MiB라는 가정"
+      "basis": "4개의 16MiB Context 대신 4개의 8MiB frame/상태라는 가정"
     },
     {
       "dp": "42",
@@ -111,14 +111,14 @@
       "id": "ASR-QA-04",
       "direction": "low",
       "bounds": [
-        ".5",
-        ".7",
-        ".9",
-        "1.1",
-        "1.3",
-        "1.5"
+        ".10",
+        ".14",
+        ".18",
+        ".22",
+        ".26",
+        ".30"
       ],
-      "unit": "USD/W100",
+      "unit": "USD/P21",
       "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
     },
     {

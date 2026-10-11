@@ -39,7 +39,7 @@ function header(slide,title,page,total){
  text(slide,'page',`${page} / ${total}`,1744,53,128,35,25,muted);
 }
 function notes(slide,rows){
- slide.speakerNotes.textFrame.setText(`원본: ${data.source}\n계약: ${data.contract_version}\n공통 활동: W100 사용자 100/Agent 30장면, 5block, 3 독립 run\n활동 SHA-256: ${data.common_workload_sha256}\n작성일: ${data.date}\n원본 SHA-256: ${data.source_sha256}\n우선순위: ASR-QA-01부터 번호순. 목표는 작성자 PoC 예산이며 실제 제품/모델/Windows 성능 결과가 아님. 제공한 PNG 레퍼런스의 스타일만 적용하고 타 과제의 요구/수치는 가져오지 않음.\n\n`+rows.map(r=>`${r.id} ${r.name}\n정의: ${r.description}\n측정 지표: ${r.method}\n목표: ${r.target}\n목표 근거: ${r.targetBasis}\n보호 조건: ${r.guards}\n출처:\n`+r.sources.map(k=>`${data.references[k].title}: ${data.references[k].url}`).join('\n')+`\n\n상세 평가 원문 §${r.definitionSection}\n${r.detail}\n`).join('\n')+`\n공통 활동 상세 §8.0\n${data.common_workload_detail}\n`+'\n등급은 원지표를 표시하는 작성자 규칙이며 QA 간 합산하지 않음. 측정 전에는 점수를 생성하지 않음.');
+ slide.speakerNotes.textFrame.setText(`원본: ${data.source}\n계약: ${data.contract_version}\n공통 활동: P21 사용자 19/Agent 단독 2장면, 내부 Agent 4사건, 5회 독립 반복\n활동 SHA-256: ${data.common_workload_sha256}\n작성일: ${data.date}\n원본 SHA-256: ${data.source_sha256}\n우선순위: ASR-QA-01부터 번호순. 목표는 작성자 PoC 예산이며 실제 제품/모델/Windows 성능 결과가 아님. 제공한 PNG 레퍼런스의 스타일만 적용하고 타 과제의 요구/수치는 가져오지 않음.\n\n`+rows.map(r=>`${r.id} ${r.name}\n정의: ${r.description}\n측정 지표: ${r.method}\n목표: ${r.target}\n목표 근거: ${r.targetBasis}\n보호 조건: ${r.guards}\n출처:\n`+r.sources.map(k=>`${data.references[k].title}: ${data.references[k].url}`).join('\n')+`\n\n상세 평가 원문 §${r.definitionSection}\n${r.detail}\n`).join('\n')+`\n전체 사례의 QA 대응과 선정 근거\n${JSON.stringify(data.case_mapping,null,2)}\n공통 활동 상세 §8.0\n${data.common_workload_detail}\n`+'\n등급은 원지표를 표시하는 작성자 규칙이며 QA 간 합산하지 않음. 측정 전에는 점수를 생성하지 않음.');
 }
 const wrapNames={'ASR-QA-01':'요청 처리\n정확성','ASR-QA-02':'상호작용\n응답시간','ASR-QA-03':'VIA 요청\n처리시간','ASR-QA-04':'VIA 모델\n사용 비용','ASR-QA-05':'VIA 변경\n용이성','ASR-QA-06':'로컬 VIA\n메모리 사용량'};
 function ranges(row){
@@ -50,28 +50,41 @@ function ranges(row){
 }
 if(kind==='attributes'){
  for(const [index,group] of [data.rows.slice(0,3),data.rows.slice(3)].entries()){
-  const slide=p.slides.add();header(slide,'품질 요구사항',index+1,3);
+  const slide=p.slides.add();header(slide,'품질 요구사항',index+1,6);
   text(slide,'headline',index===0?'핵심 품질속성: 정확성과 응답시간':'핵심 품질속성: 비용, 변경 용이성과 메모리',48,135,1800,51,42,blue,true);
-  text(slide,'scope','같은 W100: 사용자 100 + Agent 30장면. QA 번호순 우선 선택, 낮은 순위 약점은 tactic으로 보완',48,191,1800,34,28,ink);
+  text(slide,'scope','같은 P21: 21개 사례를 5회 독립 반복. 번호순 우선 선택, 낮은 순위 약점은 tactic으로 보완',48,191,1800,34,28,ink);
   const values=[['ID','분류','Title','Scenario / 지표 / 목표 근거','우선순위'],...group.map(r=>[r.id,r.category.replace(' ','\n'),wrapNames[r.id],[paragraph(r.description,28),paragraph(r.displayTarget,31,cyan,true),paragraph('측정: '+r.shortMetric,26,ink),paragraph('근거: '+r.shortBasis,26,muted)],String(r.priority)])];
   const t=table(slide,values,48,240,1824,[155,215,290,1034,130],[50,245,245,245],28,blue,true);
   for(let row=0;row<values.length;row++)for(const col of [0,1,2,4])t.cells.block({row,column:col,rowCount:1,columnCount:1}).assign({textStyle:{typeface:font,fontSize:row===0?27:col===0?25:col===2?34:col===4?36:28,bold:row===0||col===2||col===4,color:row===0?'#FFFFFF':col===4?red:ink,alignment:'center'}});
-  text(slide,'footer','W100: 정확성 540개, 시간 각 30개 / 외부 업무와 사용자 답변 대기 제외 / 비용과 메모리는 같은 활동 3회',48,1040,1824,30,22,muted);
+  text(slide,'footer','P21: 정확성 630조건 / 반응 135관측 / 처리 95사이클 / 비용·메모리도 같은 5회 전체 활동',48,1040,1824,30,22,muted);
   notes(slide,group);
  }
- const slide=p.slides.add();header(slide,'공통 평가 활동',3,3);
- text(slide,'headline','W100: 같은 요청과 후속 사건으로 여섯 QA 평가',48,135,1824,51,42,blue,true);
- text(slide,'scope','기존 18개 사례를 재사용한 합성 PoC 부하. 실제 하루 사용량을 주장하는 수치는 아님',48,191,1824,36,29,ink);
+ const slide=p.slides.add();header(slide,'공통 평가 활동',3,6);
+ text(slide,'headline','P21: 모든 QA가 같은 사례와 후속 사건을 평가',48,135,1824,51,42,blue,true);
+ text(slide,'scope','DP-41/42/44/45의 실제 기제와 오류 경로로 선정한 사례를 동일 조건에서 평가',48,191,1824,36,29,ink);
  const values=[['활동 / 관측','고정 조건','QA에서 읽는 값'],
- ['입력 장면','사용자 100건 + Agent 발신 30건\n조회, 과거 재사용, 복합 요청, 정정, 질문과 결과','18개 사례의 같은 입력 / 원본 / 허용 / 후속 사건'],
- ['반복과 집중','5block × (CORE 18 + REUSE 4 + BURST 4)\nAgent burst는 0 / 0.02 / 0.04 / 0.06초에 제공','같은 원본 재사용 / 경쟁 / 추가 상태와 copy'],
- ['초기 자료와 동시 부하','과거 2,000turn / 완료 Task 200개 / 원본 30개\n활성 Task 최대 10개 / cloud call 최대 4개','복원, 초기 생산, 준비 비용과 동시 할당도 포함'],
- ['정확성과 시간','R1 CORE의 18개 × 5회 = 90회\n같은 장면의 첫 유효 반응과 최종 결과 관측','정확성 540조건 / I와 T 각각 30관측'],
- ['비용과 메모리','동일 W100을 3회 독립 수행\n입력 음성 264초 / 출력 참조 예산 914초','비용: 활동 총액의 평균 ≤ $1.50\n메모리: 모든 활동의 최대 commit ≤ 4GiB'],
- ['회수와 보호','원본 갱신 20건 / maintenance 10회 / 마지막 철회\n신규 입력 종료 후 drain ≤30초, idle probe 10초','완료/권한/중복 회귀 유지, 유휴 증가 ≤16MiB\n변경 QA는 별도 6과제에서 같은 기능 계약 유지']];
- table(slide,values,48,240,1824,[280,840,704],[50,122,122,122,122,142,106],28,blue,true);
- text(slide,'footer','03-02 §8.0에 사례별 횟수와 공통 사건 정의 / 비용은 USD/W100, 메모리는 MiB / 작성자 평가 예산',48,1040,1824,30,22,muted);
+ ['사례 선정','S1~S6: 2 / 5 / 3 / 3 / 4 / 4개 = 21개\n기존 17 유지, 선호 등록은 회귀, 민감 사례 4개 추가','DP-41/42/44/45의 실제 기제 경로\n공통 기준 경로와 차이를 활성화하는 경로 포함'],
+ ['같은 활동 5회','각 활동에서 21개를 한 번씩, 전체 5회 독립 초기화\nS2-02 → S2-04 실제 재사용의 선후는 고정','사용자 목표 19 + Agent 단독 2장면\n네 Agent 동시 사건은 S5-04 내부에 포함'],
+ ['모든 정확성과 시간','정확성: 모든 21사례의 6조건 × 5회\n시간: 같은 사례의 첫 반응과 전체 완료','정확성 105시나리오 / 630조건\n반응 27×5=135 / 처리 19×5=95'],
+ ['같은 비용과 메모리','P21 전체 5회: 비용 평균 / 메모리 최대\n음성 입력 50초 / 출력 179초 / 의미 62호출 예산','비용 ≤$0.30/P21 / commit ≤4GiB\n실제 호출·청구·할당은 후보 경로의 결과'],
+ ['초기 자료와 집중 부하','과거 2,000turn / 완료 Task 200 / 원본 30개\nTask 최대 10 / cloud 호출 최대 4','초기/미사용 생산, 재사용, 첫 사용, 집중 도착\n동일 원천·허용·외부 응답·모델/기능 조건'],
+ ['회수와 보호','원본 갱신 4건 / maintenance 2회 / B04 철회\ndrain ≤30초 + idle 10초, 실제 실패는 보존','일반 ≥110/115 ≤2초 / 집중 30/30 ≤5초\nlocal stop 모두 ≤0.1초 / 유휴 증가 ≤16MiB']];
+ table(slide,values,48,240,1824,[280,840,704],[50,122,122,122,142,122,106],27,blue,true);
+ text(slide,'footer','03-02 §3.2 선정/대응표, §8 공통 실행 / 다음 3장은 21개 전체 대응표 / 작성자 설계 PoC, 미실측',48,1040,1824,30,22,muted);
  notes(slide,[]);
+ const shortReaction={
+ 'S5-03':'결과 도착 → Text 전달 (1)\n재연결 발화 끝 → Voice 전달 (1)',
+ 'S5-04':'끼어들기 → local stop (1)\n정정 → 접수 (1), 질문 2 / 결과 2 → 제시 (4)'
+ };
+ for(let page=0;page<3;page++){
+  const group=data.case_mapping.slice(page*7,page*7+7),sl=p.slides.add();header(sl,'공통 사례와 QA 대응',page+4,6);
+  text(sl,'headline',`21개 전체 사례: ${page*7+1}~${page*7+7} / 21`,48,135,1824,51,42,blue,true);
+  text(sl,'scope','모든 행: QA-01의 C1~C6 + QA-04 비용 + QA-06 메모리 / QA-02는 첫 반응, QA-03는 목표 완료',48,191,1824,36,27,ink);
+  const vals=[['사례','주제 / 선정 이유','민감 DP','QA-02 유효 반응','QA-03 완료 / 적용 제외'],...group.map(c=>[c.case_id,c.name+'\n'+c.selection_reason,c.sensitive_dps.join('/')+'\n'+(c.selection_role==='CONTROL'?'공통 기준':'구조 민감'),shortReaction[c.case_id]??c.reactions.map(r=>r.start+' → '+r.end).join('\n'),c.cycle?c.cycle.end:'새 사용자 목표 없음\nQA-02로 도착→전달 관측'])];
+  table(sl,vals,48,245,1824,[140,510,160,550,464],[55,...group.map(()=>99)],25,blue,true);
+  text(sl,'footer','시작/종료의 전체 경계·초기 상태·Voice 입력·사건·정답 규칙: 03-02 §3.2 / 각 활동 내 사례 1회, 전체 5회',48,1040,1824,30,22,muted);
+  notes(sl,[]);
+ }
 }else{
  for(const [index,r] of data.rows.entries()){
   const slide=p.slides.add();header(slide,`QA Metric (●◐○) 기준`,index+1,6);
@@ -83,7 +96,8 @@ if(kind==='attributes'){
   text(slide,'fact',r.fact,48,435,1120,86,30,ink);
   text(slide,'choice',r.choice,48,533,1120,86,30,ink);
   text(slide,'calculation-title','계산과 평가 방법',48,636,1120,37,30,blue,true);
-  table(slide,[['항목','계산 또는 판정 기준'],...r.calculationRows],48,680,1120,[250,870],[42,...r.calculationRows.map(()=>43)],25,blue);
+  const calculation=table(slide,[['항목','계산 또는 판정 기준'],...r.calculationRows],48,680,1120,[250,870],[42,...r.calculationRows.map(()=>43)],25,blue);
+  calculation.cells.block({row:0,column:0,rowCount:7,columnCount:2}).assign({margins:{left:14,right:12,top:2,bottom:2}});
   text(slide,'method',r.slideMethod,48,992,1120,58,23,muted);
   text(slide,'score-label','7단계 등급과 목표 충족',1220,374,652,43,34,blue,true);
   const rubric=ranges(r);
@@ -95,7 +109,7 @@ if(kind==='attributes'){
   notes(slide,[r]);
  }
 }
-const total=kind==='attributes'?3:6,owners=Array.from({length:total},(_,i)=>i+1);
+const total=6,owners=Array.from({length:total},(_,i)=>i+1);
 const candidate=path.join(build,'candidate.pptx'),final=path.join(build,'final',`VIA-quality-${kind}.pptx`);
 await fs.mkdir(path.dirname(final),{recursive:true});
 await (await PresentationFile.exportPptx(p)).save(candidate);

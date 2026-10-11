@@ -56,4 +56,4 @@ population은 Measurement Freeze 전까지 미확정이다.**
 
 ## 최신 설계 비교 QA 정의
 
-[03-02 ASR-QA-01~06](../12-decisions/decision-packages/03-02-quality-attribute-definitions.md)은 사용자 지정 새 설계 비교 정의다. 현재 v5는 기존 18개 사례에서 구성한 W100 사용자 100/Agent 30장면으로 정확성/시간 관측과 비용/메모리 전체 활동을 연결한다. 모든 정의/지표/목표/근거는 앞 표, 사용량은 §8.0, [교차 검수](../12-decisions/decision-packages/03-02-cross-review.md)를 따른다. 이 목록이 위 기존 QA catalog ID/ADR/참조 Architecture를 재번호화하거나 성능 결과를 만드는 것은 아니다.
+[03-02 ASR-QA-01~06](../12-decisions/decision-packages/03-02-quality-attribute-definitions.md)은 사용자 지정 새 설계 비교 정의다. 현재 v6는 DP 기제/오류 경로로 선정한 P21을 5회 독립 반복하고 모든 105시나리오/630조건, 135반응/95사이클과 같은 활동의 비용/메모리를 연결한다. 모든 정의/지표/목표/근거는 앞 표, 사용량은 §8.0, [교차 검수](../12-decisions/decision-packages/03-02-cross-review.md)를 따른다. 이 목록이 위 기존 QA catalog ID/ADR/참조 Architecture를 재번호화하거나 성능 결과를 만드는 것은 아니다.

@@ -32,7 +32,7 @@ def check_links(path):
         assert (path.parent/target).exists(),(path,target)
 
 def archive_check():
-    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33)]:
+    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33),('qa-common-workload-before-v6-20261011',38)]:
         archive=ROOT/'docs/archive'/name
         manifest=json.loads((archive/'manifest.json').read_text())
         assert len(manifest)==count
@@ -40,6 +40,9 @@ def archive_check():
             p=archive/record['original_path']
             assert p.stat().st_size==record['bytes'],p
             assert hashlib.sha256(p.read_bytes()).hexdigest()==record['sha256'],p
+        for html in archive.rglob('index.html'):
+            for image in re.findall(r'<img[^>]+src="([^"]+)"',html.read_text()):
+                if image.endswith('.png'):assert (html.parent/image).exists(), (html,image)
 
 
 def check(kind):
@@ -48,7 +51,7 @@ def check(kind):
     source=ROOT/data['source']
     digest=hashlib.sha256(source.read_bytes()).hexdigest()
     assert digest==data['source_sha256']
-    assert data['contract_version']=='ASR-QA-v5'
+    assert data['contract_version']=='ASR-QA-v6'
     rows=data['rows']
     assert len(rows)==6
     assert [r['id'] for r in rows]==[f'ASR-QA-{n:02d}' for n in range(1,7)]
@@ -60,7 +63,14 @@ def check(kind):
         assert len(row['calculationRows'])==6
         assert row['sources'] and all(k in data['references'] for k in row['sources'])
     assert data==json.loads((BASE/f'quality-{"metrics" if kind=="attributes" else "attributes"}'/f'quality-{"metrics" if kind=="attributes" else "attributes"}.json').read_text())
-    count=3 if kind=='attributes' else 6
+    validation=json.loads((out/'validation-summary.json').read_text())
+    assert validation['source_sha256']==digest and validation['common_workload_sha256']==data['common_workload_sha256']
+    assert validation['final_pptx_sha256']==hashlib.sha256((out/f'VIA-quality-{kind}.pptx').read_bytes()).hexdigest()
+    assert validation['slide_count']==6 and validation['native_tables']==(6 if kind=='attributes' else 18)
+    assert validation['package_integrity_passed'] and validation['font_policy_passed'] and validation['artifact_tool_import_passed']
+    assert validation['layout_findings']==validation['layout_warnings']==0
+    assert not validation['native_powerpoint_execution_verified'] and not validation['candidate_measurements_executed']
+    count=6
     with ZipFile(out/f'VIA-quality-{kind}.pptx') as z:
         assert z.testzip() is None
         slides=[n for n in z.namelist() if re.fullmatch(r'ppt/slides/slide\d+\.xml',n)]
@@ -77,7 +87,12 @@ def check(kind):
             assert digest in note and data['contract_version'] in note
             assert data['common_workload_sha256'] in note
             assert compact(data['common_workload_detail']) in compact(note)
-            group=rows[(i-1)*3:i*3] if kind=='attributes' else [rows[i-1]]
+            group=(rows[(i-1)*3:i*3] if i<=2 else []) if kind=='attributes' else [rows[i-1]]
+            if kind=='attributes' and i>=4:
+                body=compact(text(node))
+                for c in data['case_mapping'][(i-4)*7:(i-3)*7]:
+                    assert c['case_id'] in body and compact(c['name']) in body
+                    assert c['case_id'] in note and c['selection_reason'] in note
             for row in group:
                 body=compact(text(node))
                 assert compact(row['name']) in body
@@ -95,7 +110,7 @@ def check(kind):
                     cells=tr.findall('a:tc',NS)
                     assert text(cells[0])==SYMBOLS[6-j]
                     assert text(cells[2])==('충족' if j<6 else '미달')
-    expected=[f'quality-attributes-{n:02d}.png' for n in range(1,4)] if kind=='attributes' else [f'qa-metric-asr-qa-{n:02d}.png' for n in range(1,7)]
+    expected=[f'quality-attributes-{n:02d}.png' for n in range(1,7)] if kind=='attributes' else [f'qa-metric-asr-qa-{n:02d}.png' for n in range(1,7)]
     actual=sorted(p.name for p in out.glob('*.png'))
     assert actual==expected,(actual,expected)
     for name in expected:
@@ -117,21 +132,22 @@ def common_check():
     subprocess.run([sys.executable,str(ROOT/'scripts/presentations/build_asr_qa_sources.py'),'--check'],check=True)
     archive_check()
     population=json.loads((BASE/'quality-attributes/functional-coverage.json').read_text())
-    assert population['trials']==90 and population['binary_conditions']==540
-    cases=population['cases'];assert len(cases)==18
-    assert {r['id'] for r in cases}=={f'S{s}-0{c}' for s in range(1,7) for c in range(1,4)}
+    assert population['trials']==105 and population['binary_conditions']==630
+    cases=population['cases'];assert len(cases)==21
+    assert {r['id'] for r in cases}=={f'S{s}-{c:02d}' for s,n in enumerate([2,5,3,3,4,4],1) for c in range(1,n+1)}
     for case in cases:
         assert case['required_conditions']==[f'C{i}' for i in range(1,7)]
         assert all(f'| C{i} ' in case['specification'] for i in range(1,7)),case['id']
         assert all(s in case['specification'] for s in ['**초기 상황:**','**입력:**','**사건 순서:**']),case['id']
     plan=json.loads((BASE/'quality-attributes/evaluation-plan.json').read_text())
-    assert list(plan['targets'].values())==[98,1,10,1.5,3,4096]
+    assert list(plan['targets'].values())==[98,1,10,0.30,3,4096]
     rows=json.loads((BASE/'quality-attributes/quality-attributes.json').read_text())['rows']
     parsed=[Fraction(re.search(r'[0-9,]+(?:\.[0-9]+)?',r['target'])[0].replace(',','')) for r in rows]
     assert parsed==[Fraction(str(v)) for v in plan['targets'].values()], 'Front table and numerical contract goals diverged'
-    assert plan['populations']['accuracy']==dict(cases=18,repeats=5,trials=90,denominator=540)
-    assert plan['populations']['reaction']['trials']==plan['populations']['cycle']['trials']==30
-    assert plan['populations']['cost_memory']==dict(workload='W100',blocks=5,user_scenes=100,agent_scenes=30,independent_runs=3)
+    assert plan['populations']['accuracy']==dict(cases=21,repeats=5,trials=105,denominator=630)
+    assert plan['populations']['reaction']==dict(events=27,repeats=5,trials=135)
+    assert plan['populations']['cycle']==dict(cycles=19,repeats=5,trials=95)
+    assert plan['populations']['cost_memory']==dict(workload='P21',user_scenes=19,agent_scenes=2,internal_agent_events=4,independent_runs=5)
     assert plan['populations']['change']==dict(fixtures=6,responsibilities=18)
     sys.path.insert(0,str(ROOT/'scripts/architecture'))
     from qa_poc_reference import score,self_check
@@ -156,18 +172,24 @@ def common_check():
     assert projection['common_workload_sha256']==manifest['input_sha256']
     assert projection['workload_manifest_sha256']==hashlib.sha256((d/'03-02-workload-manifest.json').read_bytes()).hexdigest()
     archived_source=(ROOT/'docs/archive/qa-common-workload-before-v5-20261011'/projection['source']).read_text()
-    specs=lambda t:{cid:body.strip() for cid,body in re.findall(r'##### (S[1-6]-0[1-3]) [^\n]+\n(.*?)(?=\n<a id=|\n#### 3\.2\.3)',t,re.S)}
-    assert specs(archived_source)==specs((d/'03-02-quality-attribute-definitions.md').read_text()),'Canonical 18 case oracles changed'
+    specs=lambda t:{cid:body.strip().replace("§3.6.3", "§3.5") for cid,body in re.findall(r'##### (S[1-6]-0[1-3]) [^\n]+\n(.*?)(?=\n<a id=|\n#### 3\.2\.3)',t,re.S)}
+    before=specs(archived_source);after=specs((d/'03-02-quality-attribute-definitions.md').read_text())
+    assert {k:v for k,v in before.items() if k!='S1-03'}=={k:v for k,v in after.items() if k in before},'Preserved 17 checkpoint oracles changed'
+    main=(d/'03-02-quality-attribute-definitions.md').read_text()
+    moved=re.search(r'#### M-06 [^\n]+\n(.*?)(?=\n### |\n## )',main,re.S)
+    assert moved and before['S1-03'] in moved[1], 'Preference registration regression omitted'
+    assert projection['case_mapping']==workload['cases']
+    assert len(projection['case_mapping'])==21
     for r in rows:
         visible=' '.join(str(r[k]) for k in ['description','displayTarget','shortMetric','shortBasis','fact','choice','calculationRows','slideMethod','guards'])
         assert not re.search(r'8시간|8h|3session|시간 전용 파생|1\.1325|0\.3675',visible)
-    assert 'USD/W100' in inputs['score_bands'][3]['unit']
-    assert '264초' in str(rows[3]['calculationRows']) and '914초' in str(rows[3]['calculationRows'])
-    assert 'W100' in rows[3]['shortMetric'] or '100 + Agent 30' in rows[3]['shortMetric']
-    assert 'W100' in rows[5]['shortMetric']
+    assert 'USD/P21' in inputs['score_bands'][3]['unit']
+    assert '50초' in str(rows[3]['calculationRows']) and '179초' in str(rows[3]['calculationRows'])
+    assert 'P21' in rows[3]['shortMetric']
+    assert 'P21' in rows[5]['shortMetric']
     check_links(BASE/'README.md')
     check_links(BASE/'quality-attributes/measurement-design.md')
-    print('PASS: six complete ASR definitions, 18 exact cases/540 conditions, same W100 joins/cost units, all band boundaries and 65 archive hashes')
+    print('PASS: six complete ASR definitions, 21 full case mappings/630 conditions, one P21 5-repeat population, all band boundaries and 103 archive hashes')
 
 if __name__=='__main__':
     common_check()

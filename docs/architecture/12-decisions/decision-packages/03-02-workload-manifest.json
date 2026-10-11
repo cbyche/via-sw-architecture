@@ -1,1590 +1,705 @@
 {
-  "contract_version": "ASR-QA-v5",
-  "workload_id": "W100",
+  "contract_version": "ASR-QA-v6",
+  "workload_id": "P21",
   "evidence_level": "DEFINED_INPUT_BLUEPRINT_NOT_EXECUTION_TRACE",
-  "source_sha256": "0e304faddf43b212900ce12f712a1d5cad5bd3cf601bc77a94f3f267d5fa2933",
-  "input_sha256": "911ce3ae13588c27b6902a5a0abb17714c4059a9a80bceaa890c1dfb3e26eb7f",
+  "source_sha256": "199a8277dcefdd94f2cd470355c800923e9c2653b110e873dc3ae2bda5246895",
+  "input_sha256": "cd2e5e9ff24e67a1c31326c95acc0f67d0466e64cd997b9d6ff642d56362bda9",
   "summary": {
-    "user_input_scenes": 100,
-    "agent_triggered_scenes": 30,
-    "total_scenes": 130,
-    "blocks": 5,
-    "independent_repeats": 3,
-    "accuracy_trials": 90,
-    "accuracy_conditions": 540,
-    "reaction_trials": 30,
-    "cycle_trials": 30,
-    "planned_voice_utterances": 110,
-    "voice_input_root_seconds": 234,
-    "voice_input_followup_seconds": 30,
-    "voice_input_seconds": 264,
-    "voice_input_minutes": "22/5",
-    "voice_output_reference_seconds": 914,
-    "voice_output_reference_minutes": "457/30",
-    "reference_semantic_calls": 300,
-    "source_changes": 20,
-    "maintenance_ticks": 10
+    "user_input_scenes": 19,
+    "agent_triggered_scenes": 2,
+    "internal_agent_events": 4,
+    "total_scenes": 21,
+    "independent_repeats": 5,
+    "total_scenario_trials": 105,
+    "accuracy_trials": 105,
+    "accuracy_conditions": 630,
+    "reactions_per_activity": 27,
+    "cycles_per_activity": 19,
+    "reaction_trials": 135,
+    "cycle_trials": 95,
+    "planned_voice_utterances": 21,
+    "voice_input_root_seconds": 44,
+    "voice_input_followup_seconds": 6,
+    "voice_input_seconds": 50,
+    "voice_input_minutes": "5/6",
+    "voice_output_reference_seconds": 179,
+    "voice_output_reference_minutes": "179/60",
+    "reference_semantic_calls": 62,
+    "source_changes": 4,
+    "maintenance_ticks": 2
+  },
+  "category_cases": {
+    "S1": 2,
+    "S2": 5,
+    "S3": 3,
+    "S4": 3,
+    "S5": 4,
+    "S6": 4
   },
   "occurrences": [
     {
-      "occurrence_id": "B1-CORE-01",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S1-01",
       "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-01",
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
+      "reaction_ids": [
+        "I-S1-01-1"
+      ],
+      "cycle_id": "T-S1-01"
     },
     {
-      "occurrence_id": "B1-CORE-02",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S1-02",
       "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
       "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-02",
-      "burst_offset_seconds": null
+      "reaction_ids": [
+        "I-S1-02-1"
+      ],
+      "cycle_id": "T-S1-02"
     },
     {
-      "occurrence_id": "B1-CORE-03",
-      "block": 1,
-      "phase": "CORE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B1-CORE-04",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S2-01",
       "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
+      "reaction_ids": [
+        "I-S2-01-1"
+      ],
+      "cycle_id": "T-S2-01"
     },
     {
-      "occurrence_id": "B1-CORE-05",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S2-02",
       "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-03",
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
+      "reaction_ids": [
+        "I-S2-02-1"
+      ],
+      "cycle_id": "T-S2-02"
     },
     {
-      "occurrence_id": "B1-CORE-06",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S2-03",
       "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
+      "reaction_ids": [
+        "I-S2-03-1"
+      ],
+      "cycle_id": "T-S2-03"
     },
     {
-      "occurrence_id": "B1-CORE-07",
-      "block": 1,
-      "phase": "CORE",
+      "case_id": "S2-04",
+      "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "924321f17288dd0ea33e91cbead9d5fffa0baa3ab405bf5f6c9f6878a20b9966",
+      "reaction_ids": [
+        "I-S2-04-1"
+      ],
+      "cycle_id": "T-S2-04"
+    },
+    {
+      "case_id": "S2-05",
+      "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "eca1fae98b93eb4868a501f45df64eac63ad6caa74a71d6e5a5c6a3f1e84ad4d",
+      "reaction_ids": [
+        "I-S2-05-1"
+      ],
+      "cycle_id": "T-S2-05"
+    },
+    {
       "case_id": "S3-01",
       "trigger": "USER",
-      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
+      "reaction_ids": [
+        "I-S3-01-1"
+      ],
+      "cycle_id": "T-S3-01"
     },
     {
-      "occurrence_id": "B1-CORE-08",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S3-02",
       "trigger": "USER",
-      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-04",
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
+      "reaction_ids": [
+        "I-S3-02-1"
+      ],
+      "cycle_id": "T-S3-02"
     },
     {
-      "occurrence_id": "B1-CORE-09",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S3-03",
       "trigger": "USER",
-      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
+      "reaction_ids": [
+        "I-S3-03-1"
+      ],
+      "cycle_id": "T-S3-03"
     },
     {
-      "occurrence_id": "B1-CORE-10",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S4-01",
       "trigger": "USER",
-      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
       "accuracy_sample": true,
-      "reaction": "I-02",
-      "cycle": "T-05",
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
+      "reaction_ids": [
+        "I-S4-01-1"
+      ],
+      "cycle_id": "T-S4-01"
     },
     {
-      "occurrence_id": "B1-CORE-11",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S4-02",
       "trigger": "USER",
-      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
       "accuracy_sample": true,
-      "reaction": "I-01",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
+      "reaction_ids": [
+        "I-S4-02-1"
+      ],
+      "cycle_id": "T-S4-02"
     },
     {
-      "occurrence_id": "B1-CORE-12",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S4-03",
       "trigger": "USER",
-      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
       "accuracy_sample": true,
-      "reaction": "I-03",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
+      "reaction_ids": [
+        "I-S4-03-1"
+      ],
+      "cycle_id": "T-S4-03"
     },
     {
-      "occurrence_id": "B1-CORE-13",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S5-01",
       "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
       "accuracy_sample": true,
-      "reaction": "I-04",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
+      "reaction_ids": [
+        "I-S5-01-1"
+      ],
+      "cycle_id": null
     },
     {
-      "occurrence_id": "B1-CORE-14",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S5-02",
       "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
       "accuracy_sample": true,
-      "reaction": "I-05",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
+      "reaction_ids": [
+        "I-S5-02-1"
+      ],
+      "cycle_id": null
     },
     {
-      "occurrence_id": "B1-CORE-15",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S5-03",
       "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "e8a6ea051f552935d5162f441009c486b8dc8f817e3de649d298323639aba997",
+      "reaction_ids": [
+        "I-S5-03-1",
+        "I-S5-03-2"
+      ],
+      "cycle_id": "T-S5-03"
     },
     {
-      "occurrence_id": "B1-CORE-16",
-      "block": 1,
-      "phase": "CORE",
+      "case_id": "S5-04",
+      "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "e6e07baec86b4f0269cda8caea478a5a6cbbb447b2dbe48b8423b5af89bc20b0",
+      "reaction_ids": [
+        "I-S5-04-1",
+        "I-S5-04-2",
+        "I-S5-04-3",
+        "I-S5-04-4",
+        "I-S5-04-5",
+        "I-S5-04-6"
+      ],
+      "cycle_id": "T-S5-04"
+    },
+    {
       "case_id": "S6-01",
       "trigger": "USER",
-      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-06",
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
+      "reaction_ids": [
+        "I-S6-01-1"
+      ],
+      "cycle_id": "T-S6-01"
     },
     {
-      "occurrence_id": "B1-CORE-17",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S6-02",
       "trigger": "USER",
-      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
       "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
+      "reaction_ids": [
+        "I-S6-02-1"
+      ],
+      "cycle_id": "T-S6-02"
     },
     {
-      "occurrence_id": "B1-CORE-18",
-      "block": 1,
-      "phase": "CORE",
       "case_id": "S6-03",
       "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
       "canonical_case_sha256": "ecf565a618e10a5ab181000a7043f5b8648fb58c21da8ed8b71e9e53acffc8d8",
-      "accuracy_sample": true,
-      "reaction": "I-06",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "reaction_ids": [
+        "I-S6-03-1"
+      ],
+      "cycle_id": "T-S6-03"
     },
     {
-      "occurrence_id": "B1-REUSE-01",
-      "block": 1,
-      "phase": "REUSE",
+      "case_id": "S6-04",
+      "trigger": "USER",
+      "accuracy_sample": true,
+      "conditions": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "canonical_case_sha256": "0faf0c52bb664f7656c1ab13235f098de9c91d309da838e605d533c25014b395",
+      "reaction_ids": [
+        "I-S6-04-1"
+      ],
+      "cycle_id": "T-S6-04"
+    }
+  ],
+  "reactions": [
+    {
       "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S1-01-1",
+      "start": "발화 종료",
+      "end": "D1의 정확한 날짜 답변 전달"
     },
     {
-      "occurrence_id": "B1-REUSE-02",
-      "block": 1,
-      "phase": "REUSE",
       "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S1-02-1",
+      "start": "발화 종료",
+      "end": "해당 보고서의 실제 접수/진행 안내"
     },
     {
-      "occurrence_id": "B1-REUSE-03",
-      "block": 1,
-      "phase": "REUSE",
       "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S2-01-1",
+      "start": "발화 종료",
+      "end": "발화 당시 두 표의 올바른 비교/위임 안내"
     },
     {
-      "occurrence_id": "B1-REUSE-04",
-      "block": 1,
-      "phase": "REUSE",
       "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S2-02-1",
+      "start": "발화 종료",
+      "end": "과거 근거/조건이 맞는 제안서 실제 접수 안내"
     },
     {
-      "occurrence_id": "B1-BURST-01",
-      "block": 1,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0"
-    },
-    {
-      "occurrence_id": "B1-BURST-02",
-      "block": 1,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.02"
-    },
-    {
-      "occurrence_id": "B1-BURST-03",
-      "block": 1,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.04"
-    },
-    {
-      "occurrence_id": "B1-BURST-04",
-      "block": 1,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.06"
-    },
-    {
-      "occurrence_id": "B2-CORE-01",
-      "block": 2,
-      "phase": "CORE",
-      "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-01",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-CORE-02",
-      "block": 2,
-      "phase": "CORE",
-      "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-02",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-CORE-03",
-      "block": 2,
-      "phase": "CORE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-CORE-04",
-      "block": 2,
-      "phase": "CORE",
-      "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-CORE-05",
-      "block": 2,
-      "phase": "CORE",
-      "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-03",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-CORE-06",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S2-03-1",
+      "start": "발화 종료",
+      "end": "과거 v1 값 지정이 맞는 실제 작성 접수 안내"
     },
     {
-      "occurrence_id": "B2-CORE-07",
-      "block": 2,
-      "phase": "CORE",
+      "case_id": "S2-04",
+      "id": "I-S2-04-1",
+      "start": "발화 종료",
+      "end": "두 번째 새 제안서의 실제 접수 안내"
+    },
+    {
+      "case_id": "S2-05",
+      "id": "I-S2-05-1",
+      "start": "발화 종료",
+      "end": "새 근거를 확보한 실제 제안서 접수 안내"
+    },
+    {
       "case_id": "S3-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S3-01-1",
+      "start": "발화 종료",
+      "end": "독립 두 목표의 구분된 유효 답변/실제 접수 안내"
     },
     {
-      "occurrence_id": "B2-CORE-08",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S3-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-04",
-      "burst_offset_seconds": null
+      "id": "I-S3-02-1",
+      "start": "발화 종료",
+      "end": "현재 요약/의존 메일의 유효 처리 사실 안내"
     },
     {
-      "occurrence_id": "B2-CORE-09",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S3-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S3-03-1",
+      "start": "발화 종료",
+      "end": "최신 BUSY와 일정 생성 안 함의 안내"
     },
     {
-      "occurrence_id": "B2-CORE-10",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S4-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
-      "accuracy_sample": true,
-      "reaction": "I-02",
-      "cycle": "T-05",
-      "burst_offset_seconds": null
+      "id": "I-S4-01-1",
+      "start": "발화 종료",
+      "end": "보고서 변경 접수와 메일 보존 안내"
     },
     {
-      "occurrence_id": "B2-CORE-11",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S4-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
-      "accuracy_sample": true,
-      "reaction": "I-01",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S4-02-1",
+      "start": "새 발화 acoustic onset",
+      "end": "옛 음성의 마지막 재생 sample"
     },
     {
-      "occurrence_id": "B2-CORE-12",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S4-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
-      "accuracy_sample": true,
-      "reaction": "I-03",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S4-03-1",
+      "start": "발화 종료",
+      "end": "메일 취소 전달/미확인 상태의 정직한 안내"
     },
     {
-      "occurrence_id": "B2-CORE-13",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": true,
-      "reaction": "I-04",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S5-01-1",
+      "start": "유효 메일 질문 source availability",
+      "end": "올바른 수신자 질문 실제 제시"
     },
     {
-      "occurrence_id": "B2-CORE-14",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": true,
-      "reaction": "I-05",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S5-02-1",
+      "start": "최신 유효 결과 source availability",
+      "end": "올바른 현재 결과 실제 전달"
     },
     {
-      "occurrence_id": "B2-CORE-15",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S5-03-1",
+      "start": "Voice OFF 결과 source availability",
+      "end": "실제 Text 결과 표시"
     },
     {
-      "occurrence_id": "B2-CORE-16",
-      "block": 2,
-      "phase": "CORE",
+      "case_id": "S5-03",
+      "id": "I-S5-03-2",
+      "start": "재연결 요청 발화 종료",
+      "end": "같은 보고서 결과의 실제 Voice 안내"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-1",
+      "start": "새 발화 acoustic onset",
+      "end": "옛 음성의 마지막 재생 sample"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-2",
+      "start": "정정 발화 종료",
+      "end": "올바른 보고서 변경 접수와 메일 보존 안내"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-3",
+      "start": "질문A source availability",
+      "end": "질문A 실제 제시"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-4",
+      "start": "결과A source availability",
+      "end": "결과A 실제 전달"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-5",
+      "start": "질문B source availability",
+      "end": "질문B 실제 제시"
+    },
+    {
+      "case_id": "S5-04",
+      "id": "I-S5-04-6",
+      "start": "결과B source availability",
+      "end": "결과B 실제 전달"
+    },
+    {
       "case_id": "S6-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-06",
-      "burst_offset_seconds": null
+      "id": "I-S6-01-1",
+      "start": "최초 발화 종료",
+      "end": "보고서 대상/수정 내용 확인 질문 실제 제시"
     },
     {
-      "occurrence_id": "B2-CORE-17",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S6-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S6-02-1",
+      "start": "최초 발화 종료",
+      "end": "현재 정보 동의의 재확인 질문 실제 제시"
     },
     {
-      "occurrence_id": "B2-CORE-18",
-      "block": 2,
-      "phase": "CORE",
       "case_id": "S6-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "ecf565a618e10a5ab181000a7043f5b8648fb58c21da8ed8b71e9e53acffc8d8",
-      "accuracy_sample": true,
-      "reaction": "I-06",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "I-S6-03-1",
+      "start": "발화 종료",
+      "end": "접근 권한 부족/금액 확인 불가 안내"
     },
     {
-      "occurrence_id": "B2-REUSE-01",
-      "block": 2,
-      "phase": "REUSE",
+      "case_id": "S6-04",
+      "id": "I-S6-04-1",
+      "start": "발화 종료",
+      "end": "상반기 답변의 실제 접수와 기간 안내"
+    }
+  ],
+  "cycles": [
+    {
       "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S1-01",
+      "start": "최초 사용자 발화 종료",
+      "end": "D1 마감일 최종 전달"
     },
     {
-      "occurrence_id": "B2-REUSE-02",
-      "block": 2,
-      "phase": "REUSE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-REUSE-03",
-      "block": 2,
-      "phase": "REUSE",
-      "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-REUSE-04",
-      "block": 2,
-      "phase": "REUSE",
-      "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B2-BURST-01",
-      "block": 2,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0"
-    },
-    {
-      "occurrence_id": "B2-BURST-02",
-      "block": 2,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.02"
-    },
-    {
-      "occurrence_id": "B2-BURST-03",
-      "block": 2,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.04"
-    },
-    {
-      "occurrence_id": "B2-BURST-04",
-      "block": 2,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.06"
-    },
-    {
-      "occurrence_id": "B3-CORE-01",
-      "block": 3,
-      "phase": "CORE",
-      "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-01",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-CORE-02",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-02",
-      "burst_offset_seconds": null
+      "id": "T-S1-02",
+      "start": "최초 사용자 발화 종료",
+      "end": "ReportQ3@v1 최종 결과 전달"
     },
     {
-      "occurrence_id": "B3-CORE-03",
-      "block": 3,
-      "phase": "CORE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-CORE-04",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S2-01",
+      "start": "최초 사용자 발화 종료",
+      "end": "지정 두 표 비교 결과 전달"
     },
     {
-      "occurrence_id": "B3-CORE-05",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-03",
-      "burst_offset_seconds": null
+      "id": "T-S2-02",
+      "start": "최초 사용자 발화 종료",
+      "end": "Proposal@v1 최종 전달"
     },
     {
-      "occurrence_id": "B3-CORE-06",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S2-03",
+      "start": "최초 사용자 발화 종료",
+      "end": "TablePast@v1 최종 전달"
     },
     {
-      "occurrence_id": "B3-CORE-07",
-      "block": 3,
-      "phase": "CORE",
+      "case_id": "S2-04",
+      "id": "T-S2-04",
+      "start": "최초 사용자 발화 종료",
+      "end": "ProposalRepeat@v1 최종 전달"
+    },
+    {
+      "case_id": "S2-05",
+      "id": "T-S2-05",
+      "start": "최초 사용자 발화 종료",
+      "end": "ProposalFresh@v1 최종 전달"
+    },
+    {
       "case_id": "S3-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S3-01",
+      "start": "최초 사용자 발화 종료",
+      "end": "독립 두 조회 결과 모두 전달"
     },
     {
-      "occurrence_id": "B3-CORE-08",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S3-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-04",
-      "burst_offset_seconds": null
+      "id": "T-S3-02",
+      "start": "최초 사용자 발화 종료",
+      "end": "현재 요약의 민수 메일 발송 확인 전달"
     },
     {
-      "occurrence_id": "B3-CORE-09",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S3-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S3-03",
+      "start": "최초 사용자 발화 종료",
+      "end": "최신 BUSY/미생성 확인 전달"
     },
     {
-      "occurrence_id": "B3-CORE-10",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S4-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
-      "accuracy_sample": true,
-      "reaction": "I-02",
-      "cycle": "T-05",
-      "burst_offset_seconds": null
+      "id": "T-S4-01",
+      "start": "최초 사용자 발화 종료",
+      "end": "ReportRevised@v2 최종 전달"
     },
     {
-      "occurrence_id": "B3-CORE-11",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S4-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
-      "accuracy_sample": true,
-      "reaction": "I-01",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S4-02",
+      "start": "최초 사용자 발화 종료",
+      "end": "지정 수치의 새 설명 전달"
     },
     {
-      "occurrence_id": "B3-CORE-12",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S4-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
-      "accuracy_sample": true,
-      "reaction": "I-03",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S4-03",
+      "start": "최초 사용자 발화 종료",
+      "end": "명세된 취소 접수/미확인 disposition 전달"
     },
     {
-      "occurrence_id": "B3-CORE-13",
-      "block": 3,
-      "phase": "CORE",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": true,
-      "reaction": "I-04",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-CORE-14",
-      "block": 3,
-      "phase": "CORE",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": true,
-      "reaction": "I-05",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-CORE-15",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S5-03",
+      "start": "재연결 요청 발화 종료",
+      "end": "재연결 요청에 기존 결과 안내"
     },
     {
-      "occurrence_id": "B3-CORE-16",
-      "block": 3,
-      "phase": "CORE",
+      "case_id": "S5-04",
+      "id": "T-S5-04",
+      "start": "최초 사용자 발화 종료",
+      "end": "ReportBurst@v2 전달 및 지정 독립 반응 유지"
+    },
+    {
       "case_id": "S6-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-06",
-      "burst_offset_seconds": null
+      "id": "T-S6-01",
+      "start": "최초 사용자 발화 종료",
+      "end": "ConfirmedRevision@v2 최종 전달"
     },
     {
-      "occurrence_id": "B3-CORE-17",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S6-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S6-02",
+      "start": "최초 사용자 발화 종료",
+      "end": "허용된 연락처 제공/발송 미승인 확인 전달"
     },
     {
-      "occurrence_id": "B3-CORE-18",
-      "block": 3,
-      "phase": "CORE",
       "case_id": "S6-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "ecf565a618e10a5ab181000a7043f5b8648fb58c21da8ed8b71e9e53acffc8d8",
-      "accuracy_sample": true,
-      "reaction": "I-06",
-      "cycle": null,
-      "burst_offset_seconds": null
+      "id": "T-S6-03",
+      "start": "최초 사용자 발화 종료",
+      "end": "접근 거부와 확인 불가의 정당한 처리 전달"
     },
     {
-      "occurrence_id": "B3-REUSE-01",
-      "block": 3,
-      "phase": "REUSE",
-      "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-REUSE-02",
-      "block": 3,
-      "phase": "REUSE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-REUSE-03",
-      "block": 3,
-      "phase": "REUSE",
-      "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-REUSE-04",
-      "block": 3,
-      "phase": "REUSE",
-      "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B3-BURST-01",
-      "block": 3,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0"
-    },
-    {
-      "occurrence_id": "B3-BURST-02",
-      "block": 3,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.02"
-    },
-    {
-      "occurrence_id": "B3-BURST-03",
-      "block": 3,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.04"
-    },
-    {
-      "occurrence_id": "B3-BURST-04",
-      "block": 3,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.06"
-    },
-    {
-      "occurrence_id": "B4-CORE-01",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-01",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-02",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-02",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-03",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-04",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-05",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-03",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-06",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-07",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S3-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-08",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S3-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-04",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-09",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S3-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-10",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S4-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
-      "accuracy_sample": true,
-      "reaction": "I-02",
-      "cycle": "T-05",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-11",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S4-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
-      "accuracy_sample": true,
-      "reaction": "I-01",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-12",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S4-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
-      "accuracy_sample": true,
-      "reaction": "I-03",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-13",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": true,
-      "reaction": "I-04",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-14",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": true,
-      "reaction": "I-05",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-15",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-16",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S6-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-06",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-17",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S6-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-CORE-18",
-      "block": 4,
-      "phase": "CORE",
-      "case_id": "S6-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "ecf565a618e10a5ab181000a7043f5b8648fb58c21da8ed8b71e9e53acffc8d8",
-      "accuracy_sample": true,
-      "reaction": "I-06",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-REUSE-01",
-      "block": 4,
-      "phase": "REUSE",
-      "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-REUSE-02",
-      "block": 4,
-      "phase": "REUSE",
-      "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-REUSE-03",
-      "block": 4,
-      "phase": "REUSE",
-      "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-REUSE-04",
-      "block": 4,
-      "phase": "REUSE",
-      "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B4-BURST-01",
-      "block": 4,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0"
-    },
-    {
-      "occurrence_id": "B4-BURST-02",
-      "block": 4,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.02"
-    },
-    {
-      "occurrence_id": "B4-BURST-03",
-      "block": 4,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.04"
-    },
-    {
-      "occurrence_id": "B4-BURST-04",
-      "block": 4,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.06"
-    },
-    {
-      "occurrence_id": "B5-CORE-01",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S1-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "c5334b5f1c8ef72ecf8f3de9f36444baa4e113a27a02f57ccb1dd9e25dcc69b6",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-01",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-02",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S1-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "59ed59836a81627fd902b529e9e83465fd30233858d98a281236208bd622c48b",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-02",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-03",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-04",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S2-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "6badc7830868b91d814446c7a3f7efa72fb5352f3866c79502119b99e374855a",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-05",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S2-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "772b5383bb352ffea017df81d62e182e33c006a8612fa84a19c7ce8d25310b66",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-03",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-06",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-07",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S3-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "bbdca0bc0ce859de8f24869f636d331f4d3b6cbeeb393ec6ec893bd21e7bcebc",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-08",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S3-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "ca47fb49a0eb94ec96986987aab045a15520686927dc58ea47c5dafaea4f61ec",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-04",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-09",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S3-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "e94624e89bd785f13f8668af3246a4761f970995e86d84d6dd8cb61de0ab67e9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-10",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S4-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "9526b05c09cb1c03f8857efd244c6b4dceb4d47e91bae27e248e69ce93905b42",
-      "accuracy_sample": true,
-      "reaction": "I-02",
-      "cycle": "T-05",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-11",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S4-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "a0e1de00f3eeed9cfffbc5cdcbb17c788311ef6d3d49505a4f303790540f46e5",
-      "accuracy_sample": true,
-      "reaction": "I-01",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-12",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S4-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "cacf60bf89736de950aef9afa43b842931d0336346bf8127e9923228532de8c4",
-      "accuracy_sample": true,
-      "reaction": "I-03",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-13",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": true,
-      "reaction": "I-04",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-14",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": true,
-      "reaction": "I-05",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-15",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-16",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S6-01",
-      "trigger": "USER",
-      "canonical_case_sha256": "7f6e50d4f7c581447d1efaf6818fe61beb9f53d8f4db337921b0d6ad259e5539",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": "T-06",
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-17",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S6-02",
-      "trigger": "USER",
-      "canonical_case_sha256": "7fbfcc6ad119f59d65a8410c0eabbc919e10d06fc186a81e259ae132b4e9b4f9",
-      "accuracy_sample": true,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-CORE-18",
-      "block": 5,
-      "phase": "CORE",
-      "case_id": "S6-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "ecf565a618e10a5ab181000a7043f5b8648fb58c21da8ed8b71e9e53acffc8d8",
-      "accuracy_sample": true,
-      "reaction": "I-06",
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-REUSE-01",
-      "block": 5,
-      "phase": "REUSE",
-      "case_id": "S1-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "26a550ec87a12b677adc00f2a0eb4c5d7f25db8c1060164873507a1681789def",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-REUSE-02",
-      "block": 5,
-      "phase": "REUSE",
-      "case_id": "S2-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "105a3c00bdf9babd41f30673c784c355b83f75a63894c2b88921404efe7224dc",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-REUSE-03",
-      "block": 5,
-      "phase": "REUSE",
-      "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-REUSE-04",
-      "block": 5,
-      "phase": "REUSE",
-      "case_id": "S5-03",
-      "trigger": "USER",
-      "canonical_case_sha256": "2f594b8b6689c74a0b055e3424498ef3de842de15ee98e42674ea69391df204d",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": null
-    },
-    {
-      "occurrence_id": "B5-BURST-01",
-      "block": 5,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0"
-    },
-    {
-      "occurrence_id": "B5-BURST-02",
-      "block": 5,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.02"
-    },
-    {
-      "occurrence_id": "B5-BURST-03",
-      "block": 5,
-      "phase": "BURST",
-      "case_id": "S5-01",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "1879f616d1b37550e12b84d3adbcb59816d8864c12b7874ddbec45024e3d11a6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.04"
-    },
-    {
-      "occurrence_id": "B5-BURST-04",
-      "block": 5,
-      "phase": "BURST",
-      "case_id": "S5-02",
-      "trigger": "AGENT",
-      "canonical_case_sha256": "529481e5270f681b9b440f4b15c190a02709a1d1d15e18df49cfd5a3e0b96ad6",
-      "accuracy_sample": false,
-      "reaction": null,
-      "cycle": null,
-      "burst_offset_seconds": "0.06"
+      "case_id": "S6-04",
+      "id": "T-S6-04",
+      "start": "최초 사용자 발화 종료",
+      "end": "유효 기간 답변의 접수/확정 안내"
     }
   ]
 }
