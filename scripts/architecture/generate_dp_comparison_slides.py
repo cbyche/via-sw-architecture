@@ -37,10 +37,12 @@ DATA = {
     status='CONDITIONAL_QUALITATIVE_NOT_MEASURED',
     condition='미선정 / 미측정. B도 부분 의미 판단을 다시 호출할 수 있다. 새 관계의 지원 범위와 질문 비용을 함께 비교한다.',
     tradeoffs=[
-      ('정확성 / 지원 범위','열린 의미를 함께 판단 / 검색 누락과 모델 오판 가능','지원 관계의 코드 결합 / 틀 오류와 표현 밖 관계의 한계'),
-      ('응답성','조회 후 재판단마다 클라우드 왕복 / 부분 수정 허용','지원 틀이 충분하면 재판단 축소 / 추가 해석과 질문 대기'),
-      ('모델 호출 비용','반복 해석과 긴 Context가 비용 증가 요인','초기 틀 + 필요한 부분 해석 / 항상 1회라는 전제 없음'),
-      ('변경 용이성','새 관계는 모델 지침/조회 도구 변경 가능','요청 틀과 코드 규칙 확장 / 기존 지원 관계는 코드 제어')]),
+      ('요청 처리 정확성','열린 의미를 함께 판단 / 검색 누락과 모델 오판 가능','지원 관계의 코드 결합 / 틀 오류와 표현 밖 관계의 한계'),
+      ('상호작용 응답시간','쉬운 Request는 바로 제안 / 추가 조회와 모델 재판단 대기','지원 틀은 코드 완성 / 부분 해석과 확인 질문 대기'),
+      ('VIA 요청 처리시간','조회와 모델 판단 반복 / cache와 부분 수정으로 축소 가능','항목 해결과 코드 결합 / 틀 수정과 추가 해석 비용'),
+      ('VIA 모델 사용 비용','반복 판단과 누적 Context / cache 재사용 가능','초기 틀 + 부분 해석 / 틀 수정과 추가 질문 비용 포함'),
+      ('VIA 변경 용이성','새 관계의 모델 지침 / 조회 도구와 검증 변경','RequestFrame과 Engine 규칙 확장 / 지원 연산은 코드 제어'),
+      ('로컬 VIA 메모리 사용량','모델 제공 맥락과 조회 결과 buffer / 선택 cache 유지','요청 틀과 후보 / 항목별 해결 상태 유지')]),
   42: dict(title='대화와 Task 상태의 소유 및 확정',
     options=('A 모듈형 통합 Core / 공동 확정', 'B 독립 대화 / Task 서비스 / 별도 접수'),
     case='보고서 기간 질문을 실제 제시 → “응, 상반기로 해줘” → 내부 접수 / 외부 전달 확인',
@@ -148,11 +150,11 @@ class Comparison(Slide):
         self.text(42,882,1840,['공통 채택: Request Controller의 현재 입력과 정보, 권한 검사 및 저장 성공 후 응답 또는 Task 위임'],17,INK)
         self.text(42,907,1840,['반복 종료: 의미 완성, 확인 질문 대기, 실패, 취소, 한도 도달 / 질문을 실제 전달하고 새 답변을 받은 뒤 해석 재개'],16,INK)
         for j,(quality,left,right) in enumerate(d['tradeoffs']):
-            yy=943+j*26
-            self.line([(40,yy-8),(1880,yy-8)],color=LINE,arrow=False)
-            self.text(42,yy,245,[quality],17,INK,True)
-            self.text(300,yy,720,[left],17,INK)
-            self.text(1050,yy,820,[right],17,INK)
+            yy=936+j*19
+            self.line([(40,yy-2),(1880,yy-2)],color=LINE,arrow=False)
+            self.text(42,yy,245,[quality],14,INK,True)
+            self.text(300,yy,720,[left],14,INK)
+            self.text(1050,yy,820,[right],14,INK)
         self.text(40,1053,1840,['미선정 / 미측정 / A도 구조화 출력과 부분 수정 가능 / B도 조건부 추가 모델 호출 가능 / 코드 결합은 의미 정답 보증이 아님'],15,MUTED)
 
     def lifecycle_page(self):
@@ -318,7 +320,9 @@ def validate(outputs):
         assert [r['priority'] for r in presentation['rows']]==list(range(1,7))
     for n,data in DATA.items():
         if n in (41,42,44,45):
-            assert len(data['tradeoffs'])==({41:4,42:6,44:6,45:6}[n]) and 'rows' not in data
+            assert len(data['tradeoffs'])==6 and 'rows' not in data
+            if 'ASR-QA-01' in names:
+                assert [row[0] for row in data['tradeoffs']]==[names[f'ASR-QA-{i:02d}'] for i in range(1,7)]
             continue
         expected=[set(),set()]
         for qa,left,right,lc,rc in data['rows']:

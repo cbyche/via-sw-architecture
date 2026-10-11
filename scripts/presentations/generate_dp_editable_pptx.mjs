@@ -7,8 +7,9 @@ import {Presentation, PresentationFile, FileBlob} from '@oai/artifact-tool';
 // Run a copy in a private build directory linked to the bundled node_modules.
 // The existing draw.io/SVG scenes remain the content and geometry source.
 const [repoArg,buildArg,scopeArg,subset] = process.argv.slice(2);
-const v3=/^--dp(42|44|45)-v3-only$/.test(scopeArg??'');
-const scope=v3?scopeArg.replace('-v3',''):scopeArg;
+const qaOnly=scopeArg==='--dp41-v3-qa-only';
+const v3=qaOnly||/^--dp(42|44|45)-v3-only$/.test(scopeArg??'');
+const scope=qaOnly?'--dp41-only':v3?scopeArg.replace('-v3',''):scopeArg;
 if (!repoArg || !buildArg) throw new Error('Usage: generate_dp_editable_pptx.mjs REPO BUILD_DIR');
 if (scope && !['--comparison-only','--dp41-only','--dp41-v2-only','--dp42-only','--dp41-with-background','--dp41-42-only','--dp44-only','--dp45-only','--intro-flow-only','--list-selected'].includes(scope)) throw new Error('Unknown presentation update scope');
 if (subset && !(['--dp45-only','--list-selected'].includes(scope) && subset==='--comparison-only')) throw new Error('Subset requires --dp45-only (or --list-selected) --comparison-only');
@@ -220,7 +221,10 @@ for(const plan of activePlans) {
   const draft=path.join(build,`${plan.slug}.candidate.pptx`),final=path.join(build,'final',`${plan.slug}.pptx`);
   await fs.mkdir(path.dirname(final),{recursive:true});
   await (await PresentationFile.exportPptx(presentation)).save(draft);
-  if(v3) {
+  if(qaOnly) {
+    execFileSync(python,[path.join(repo,'scripts/presentations/dp41_qa_table_package.py'),draft,
+      path.join(repo,plan.destination),path.join(build,`${plan.slug}.preservation.json`)]);
+  } else if(v3) {
     execFileSync(python,[path.join(repo,'scripts/presentations/dp41_comparison_package.py'),draft,
       path.join(repo,plan.destination),path.join(build,`${plan.slug}.preservation.json`),`dp${scope.slice(4,6)}-comparison`]);
   } else if(scope==='--dp41-v2-only') {
