@@ -1,6 +1,6 @@
 {
   "source": "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md",
-  "source_sha256": "e89c163288eaeceeeea3e8a44ef56f903278aefd9c997db8756bcdd27170d1fa",
+  "source_sha256": "d25a503005403e71d5811d61f20d9c227479bfeb04808ba868ce06adc463e4f8",
   "contract_version": "ASR-QA-v6",
   "date": "2026-10-11",
   "status": "AUTHOR_DEFINED_POC_CONTRACT_NO_CANDIDATE_MEASUREMENT",
@@ -201,34 +201,34 @@
       "name": "VIA 모델 사용 비용",
       "description": "동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액",
       "method": "P21 1묶음 평균 총 모델 비용(USD/P21) = 동일 활동 5회 총액의 평균",
-      "target": "$0.30/P21 이하",
-      "targetBasis": "동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.173567, 여유 $0.126433. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)",
+      "target": "$0.50/P21 이하",
+      "targetBasis": "동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 신규 audio·Text 포함 기본 $0.416320, 이력 audio/추가생산/재시도 여유 $0.083680. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)",
       "category": "Cost Efficiency",
-      "displayTarget": "P21 1묶음 평균 모델 비용 ≤ $0.30",
+      "displayTarget": "P21 1묶음 평균 모델 비용 ≤ $0.50",
       "shortMetric": "동일 P21 전체 5회 총 청구량의 평균 × 단가",
-      "shortBasis": "기본 $0.173567 + 추가 생산/재시도 여유 $0.126433",
-      "fact": "공식 단가: Gemini 3 Flash: 입력 $0.50 / 출력 $3.00, 1M token.\n음성 입력 $0.005 / 출력 $0.018, 1분 근사.",
-      "choice": "동일 P21 기본 $0.173567에 $0.126433 여유.\n초기/배경 생산, 재시도와 청구 context 모두 포함.",
+      "shortBasis": "신규 audio·Text 기본 $0.416320 + 추가 여유 $0.083680",
+      "fact": "공식 단가(1M token): 의미 Gemini $0.50 / $3.00.\n음성 GPT Realtime: audio $32 / $64, Text $4 / $16.",
+      "choice": "동일 P21 기본 소계 $0.416320에 $0.083680 여유.\n추가 audio 이력, 배경 생산·재시도까지 실제 청구.",
       "calculationRows": [
         [
           "의미 모델",
           "62호출 예산: 124k 입력 / 12.4k 출력 = $0.0992"
         ],
         [
-          "음성 audio",
-          "입력 50초 / 출력 179초 예산 = $0.057867"
+          "음성 신규 audio",
+          "입력 50초 / 출력 179초 예산 = $0.245120"
         ],
         [
           "음성 Text/context",
-          "10k 입력 / 2k 출력 = $0.0165"
+          "총 청구 입력 10k / 출력 2k = $0.072000"
         ],
         [
-          "기본 총액",
-          "$0.0992 + $0.057867 + $0.0165 = $0.173567"
+          "기본 소계",
+          "$0.0992 + $0.24512 + $0.072 = $0.416320"
         ],
         [
           "추가 예산",
-          "$0.300000 - $0.173567 = $0.126433"
+          "$0.50 - $0.41632 = $0.08368; 이력 audio 등"
         ],
         [
           "A/B 차이",
@@ -239,24 +239,25 @@
       "guards": "초기/재시도/폐기/배경/context 누락 없음",
       "sources": [
         "gemini",
-        "google",
+        "openai",
+        "voice-billing",
         "contract"
       ],
       "score": {
         "id": "ASR-QA-04",
         "direction": "low",
         "bounds": [
-          ".10",
-          ".14",
-          ".18",
-          ".22",
+          ".20",
           ".26",
-          ".30"
+          ".32",
+          ".38",
+          ".44",
+          ".50"
         ],
         "unit": "USD/P21",
         "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
       },
-      "detail": "모델 사용 비용\n\n### 5.1 정의와 대표 지표\n\n동일 P21 활동의 모든 VIA 모델 청구 총액을 USD/P21로 계산하고 다섯 독립 활동의 평균을 보고한다. 초기화·근거 준비·현재 처리·답변·Agent 사건·미사용 생산·폐기·철회·drain·idle 청구를 포함한다. 외부 Agent 내부 모델·tool 비용은 별도 원장이다. 단가와 모델명은 §8.4 및 입력 JSON의 날짜가 있는 참조로 고정한다.\n\n### 5.2 같은 활동의 사용량과 산식\n\nP21은 사용자 목표 장면 19개와 Agent 단독 장면 2개다. S5-04 내부의 Agent 사건 4개는 추가 원천 사건이며 별도 채점 시나리오가 아니다. 계획 Voice 입력은 최초 44초 + 지정 답변 6초 = 50초, 발화 21개(19+2답변)다. 출력 179초는 사례별 필요한 전달의 작성자 길이 예산이며 실제 생성·폐기·청구 길이가 우선한다. 초기 fixture에 이미 실제 전달된 내용은 이번 활동에서 다시 생성한 것으로 청구하지 않는다. S2-02의 준비·설명 재생 등 현재 후보 경로에서 발생한 사용량은 포함한다.\n\n의미 호출 62회는 양안의 기준 비용 예산을 위한 참조이고 양안을 62회 호출하도록 강제하지 않는다. 사용자 19×2=38, Agent 단독 2×2=4, 집중 도착 4×2=8, source 변경 4, 초기·과거 준비 8의 합이다. 실제 call·Context·reasoning·청구 cache hit·폐기 token을 사용한다. 코드의 owner read와 IPC에 모델 호출 비용을 임의 부여하지 않는다.\n\n### 5.3 목표값과 근거\n\n| P21 기준 계산 | USD |\n| --- | --- |\n| 의미62호출, 입력124,000/출력12,400 token | 0.099200 |\n| 음성audio 입력50초/출력예산179초 | 0.057867 |\n| 음성Text/context 입력10,000/출력2,000 token | 0.016500 |\n| 기본 총액 | **0.173567** |\n| 초기/추가생산/재시도 여유 | **0.126433** |\n| 목표 | **0.30/P21** |\n\nW100의 $1.50를 새 묶음에 그대로 적용하지 않고 동일 P21 사용량에서 다시 계산했다. 기본 대비 약 72.84%의 추가 여유를 둔 작성자 평가 예산이며 상품 가격이나 모델 성능 보장이 아니다. Source 변경 4건이 모델 생산 4호출을 강제하지 않는다. 실제 backfill·추가 질문·재시도가 많으면 목표 미달을 그대로 보고한다.\n\n### 5.4 수치 차이와 민감도\n\n$0.03/P21 이상을 차이 기준(목표의 10%)으로 두고 다섯 활동의 값·범위·차이 방향과 가정 민감도를 공개한다. S2-04의 cache miss, S2-05의 최초 생산, 미사용 source 4건의 실제 생산, 입출력 길이를 따로 검토한다. A의 cache를 삭제하거나 B에 ready hit를 주입하지 않는다. 기능 미완료·필수 위반을 동반한 낮은 청구는 목표 충족이 아니다.\n",
+      "detail": "모델 사용 비용\n\n### 5.1 정의와 대표 지표\n\n동일 P21 활동의 모든 VIA 모델 청구 총액을 USD/P21로 계산하고 다섯 독립 활동의 평균을 보고한다. 초기화·근거 준비·현재 처리·답변·Agent 사건·미사용 생산·폐기·철회·drain·idle 청구를 포함한다. 외부 Agent 내부 모델·tool 비용은 별도 원장이다. 단가와 모델명은 §8.4 및 입력 JSON의 날짜가 있는 참조로 고정한다.\n\n### 5.2 같은 활동의 사용량과 산식\n\nP21은 사용자 목표 장면 19개와 Agent 단독 장면 2개다. S5-04 내부의 Agent 사건 4개는 추가 원천 사건이며 별도 채점 시나리오가 아니다. 계획 Voice 입력은 최초 44초 + 지정 답변 6초 = 50초, 발화 21개(19+2답변)다. 출력 179초는 사례별 필요한 전달의 작성자 길이 예산이며 실제 생성·폐기·청구 길이가 우선한다. 초기 fixture에 이미 실제 전달된 내용은 이번 활동에서 다시 생성한 것으로 청구하지 않는다. S2-02의 준비·설명 재생 등 현재 후보 경로에서 발생한 사용량은 포함한다.\n\n의미 호출 62회는 양안의 기준 비용 예산을 위한 참조이고 양안을 62회 호출하도록 강제하지 않는다. 사용자 19×2=38, Agent 단독 2×2=4, 집중 도착 4×2=8, source 변경 4, 초기·과거 준비 8의 합이다. 실제 call·Context·reasoning·청구 cache hit·폐기 token을 사용한다. 코드의 owner read와 IPC에 모델 호출 비용을 임의 부여하지 않는다.\n\n### 5.3 목표값과 근거\n\n| P21 기준 계산 | USD |\n| --- | --- |\n| 의미62호출, 입력124,000/출력12,400 token | 0.099200 |\n| GPT Realtime 신규 audio 입력50초/출력예산179초 | 0.245120 |\n| GPT Realtime 청구 Text/context 입력10,000/출력2,000 token | 0.072000 |\n| 신규 audio·청구 Text를 포함한 기본 소계 | **0.416320** |\n| 이력 audio 재입력/추가생산/재시도 여유 | **0.083680** |\n| 목표 | **0.50/P21** |\n\n음성 기준을 GPT Realtime으로 바꾼 동일 P21에서 다시 계산했다. 기본 소계 대비 약 20.10%의 여유를 둔 $0.50/P21 작성자 평가 예산이며 상품 가격이나 모델 성능 보장이 아니다. 앞의 50/179초는 신규 audio 길이만이므로 이력 audio 재입력의 청구를 포함한 실제 총액이라고 주장하지 않는다. Text 10k/2k는 호출별 누적 청구량의 예산이다. 추가 audio 이력·초기/배경 생산·재시도는 여유에서 부담하며 실제 response usage로 모두 합산한다. 여유 전부를 할인 없는 audio 이력 입력에 쓰면 2,615 token($0.083680)이고 다른 추가 비용이 있으면 그만큼 줄어든다. 캐시 할인/음성 이력의 transcript 대체는 실제 확인된 사용량에만 적용한다. 목표를 맞추기 위해 대화를 매 사례 초기화하거나 VIA의 Task/근거 이력을 없애지 않는다. Source 변경 4건이 모델 생산 4호출을 강제하지 않는다. 실제 backfill·추가 질문·재시도가 많으면 목표 미달을 그대로 보고한다.\n\n### 5.4 수치 차이와 민감도\n\n$0.03/P21 이상을 기존 실용 차이 기준으로 유지하고(개정 목표의 6%) 다섯 활동의 값·범위·차이 방향과 가정 민감도를 공개한다. S2-04의 cache miss, S2-05의 최초 생산, 미사용 source 4건의 실제 생산, 입출력 길이를 따로 검토한다. A의 cache를 삭제하거나 B에 ready hit를 주입하지 않는다. 기능 미완료·필수 위반을 동반한 낮은 청구는 목표 충족이 아니다.\n",
       "definitionSection": 5
     },
     {
@@ -400,9 +401,13 @@
       "title": "Google Gemini 3 Flash 공식 단가",
       "url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview"
     },
-    "google": {
-      "title": "Google Live 공식 가격표",
-      "url": "https://ai.google.dev/gemini-api/docs/pricing"
+    "openai": {
+      "title": "OpenAI GPT Realtime 공식 단가",
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime"
+    },
+    "voice-billing": {
+      "title": "OpenAI Realtime 청구",
+      "url": "https://developers.openai.com/api/docs/guides/voice-latency-cost"
     },
     "samsung": {
       "title": "Samsung NP960UJH-XG3IN 공식 사양",
@@ -417,8 +422,8 @@
       "url": "../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md"
     }
   },
-  "common_workload_sha256": "cd2e5e9ff24e67a1c31326c95acc0f67d0466e64cd997b9d6ff642d56362bda9",
-  "workload_manifest_sha256": "acf068a32fc678c82d5f649eb16921c946d9145d2f5bcc2a47c448e95aff0375",
+  "common_workload_sha256": "00fedd21cfe33a3c35990f84af0610bef6fb2f7e9473404d2f935222c3ad084c",
+  "workload_manifest_sha256": "5093538435cdbc6b26dce89308f033c7d87acc0cbec0f2e0165923ad101c98d6",
   "common_workload": {
     "contract_version": "ASR-QA-v6",
     "workload_id": "P21",
@@ -1141,9 +1146,10 @@
     ],
     "reference_voice_text": {
       "input_tokens": 10000,
-      "output_tokens": 2000
+      "output_tokens": 2000,
+      "basis": "Budget of summed billed text across responses, including instructions/history; fresh audio is separate, additional audio history is counted against headroom."
     },
-    "cost_target_usd": ".30",
+    "cost_target_usd": ".50",
     "difference_usd": ".03",
     "cache_contract": "매 activity 독립 before-state, 묶음 내부 유효 cache/관계 허용, S2-04는 S2-02 실제 선행 처리, S2-05의 새 근거는 t2.97~2.99초에 공급; provider cache는 별도 관측",
     "accuracy_conditions": [

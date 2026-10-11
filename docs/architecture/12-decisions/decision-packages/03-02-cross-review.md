@@ -68,3 +68,11 @@ QA 문서/원장/두 발표자료는 `44d5d9230b6a9017f688e9eeb2542764580ff13d`�
 사용자 요청으로 Groq을 제외하고 Gemini 3 Flash Preview Standard 입력 $0.50/출력 $3.00 per 1M token으로 바꿨다. 공개 가격과 생성률 가정을 분리했고 100/200/400 token/s 민감도 입력을 사용한다. 기존 450 token/s를 대체 모델의 성능으로 이전하지 않는다. 100 token 직렬 반응의 1.23초 초과와 유효한 50 token 반응일 때의 0.98초를 구별한다. P21 사례/반복/목표/순서는 유지한다. Gemini 3.1 Live의 동기 함수 호출 제한과 GPT Realtime의 공통 기능·차이를 03-02 §8.4.2에 기록했다. 교체 전 37파일은 [보존본](../../../archive/qa-model-reference-before-gemini-20261011/README.md)에 bytes/hash 보존했다. 가격·계산·발표 원본·노트를 함께 재생성하며 실제 API 호출이나 성능 측정은 수행하지 않는다.
 
 개정 후 두 PPTX의 package/layout/font/native table/Artifact Tool import는 통과했고 layout finding/warning은 0이다. 바뀐 요약2장째·부록QA-02·부록QA-04의 최종 PNG를 각각 확인했다. 나머지 9개 PNG는 이전 육안 검수본과 bytes가 같았다. 원본/가격 입력/계산/투영/노트·source hash와 보존본 140개 hash를 대조한다. 이전 세대 GitHub 전체 CI의 DP42 그림 drift 기록은 그대로 보존하며 이번 개정의 QA 검수와 혼동하지 않는다.
+
+## 음성 reference 개정 — GPT Realtime (2026-10-11)
+
+사용자가 외부 업무 위임 중 대화 지속을 이유로 GPT Realtime을 음성 기준으로 지정했다. exact model/snapshot의 공식 audio $32/$64, Text $4/$16 per 1M token과 입력10/출력20 audio token/s 환산을 적용했다. 동일 P21의 의미 $0.0992 + 신규 audio $0.24512 + 청구 Text $0.072 = 기본 소계 $0.41632다. 이전 $0.30 목표는 이 비용 기준을 설명하지 못하므로 $0.50 목표/추가 여유 $0.08368로 개정했다. 추가 audio 이력 재입력·생산·재시도까지 actual usage로 포함하며 신규 발화 길이를 전체 다중 turn 청구로 주장하지 않는다. 기존 $0.03 차이는 목표의 6%라는 절대 실용 기준으로 유지한다.
+
+의미 Gemini의 선택은 공식 가격/화면 입력/함수 호출/structured output의 reference 편의이며 VIA 우월성 검증이 아니다. 출시일 2025-12-17을 공식 공지로 확인했다. 정확히 Qwen Instruct-2507의 Alibaba Singapore/International API 가격 $0.20/$0.80을 찾아 기존 설명을 교정하고 동일 의미 예산 $0.03472를 별도 계산했다. Qwen H20/SGLang benchmark는 원본 Qwen3-30B-A3B의 (입력+출력)/전체시간이며 Instruct-2507 API decode rate가 아니다. 이전 Groq 450+의 모델/전용 LPU 범위와 미공개 조건도 기록했다. Gemini 현행 계산에 Qwen 속도를 실측으로 혼합하지 않았다.
+
+교체 전 40파일을 [보존본](../../../archive/qa-voice-reference-before-realtime-20261011/README.md)에 남겼다. 두 발표자료의 표/목표/등급/노트/JSON/hash/PNG를 재생성했다. 변경된 요약2·3장과 부록QA-04의 최종 PNG를 각각 확인했고 나머지9개는 이전 검수본과 bytes가 같았다. package/layout/font/native table/Artifact Tool import를 통과했고 두 deck의 layout finding/warning은 0이다. 원장/계산/투영/QA 발표/활성 링크/용어/기존 catalog 검수와 archive 총180개 hash를 대조한다. 실제 API 호출/후보 성능/Windows 메모리/PowerPoint 앱 실행의 검증은 수행하지 않았다.

@@ -123,17 +123,17 @@
 
 **대표 지표:** P21 1묶음 평균 총 모델 비용(USD/P21) = 동일 활동 5회 총액의 평균
 
-**목표:** $0.30/P21 이하
+**목표:** $0.50/P21 이하
 
-**목표 근거:** 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.173567, 여유 $0.126433. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)
+**목표 근거:** 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 신규 audio·Text 포함 기본 $0.416320, 이력 audio/추가생산/재시도 여유 $0.083680. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)
 
 | 항목 | 계산/평가 규칙 |
 | --- | --- |
 | 의미 모델 | 62호출 예산: 124k 입력 / 12.4k 출력 = $0.0992 |
-| 음성 audio | 입력 50초 / 출력 179초 예산 = $0.057867 |
-| 음성 Text/context | 10k 입력 / 2k 출력 = $0.0165 |
-| 기본 총액 | $0.0992 + $0.057867 + $0.0165 = $0.173567 |
-| 추가 예산 | $0.300000 - $0.173567 = $0.126433 |
+| 음성 신규 audio | 입력 50초 / 출력 179초 예산 = $0.245120 |
+| 음성 Text/context | 총 청구 입력 10k / 출력 2k = $0.072000 |
+| 기본 소계 | $0.0992 + $0.24512 + $0.072 = $0.416320 |
+| 추가 예산 | $0.50 - $0.41632 = $0.08368; 이력 audio 등 |
 | A/B 차이 | ≥$0.03/P21; 실제 cache/생산/재시도 청구 비교 |
 
 **보호 조건:** 초기/재시도/폐기/배경/context 누락 없음
@@ -142,15 +142,15 @@
 
 | 점수/표시 | 원지표 범위 | 대표 목표 |
 | --- | --- | --- |
-| 6 / ●●● | 0 ≤ x ≤ .10 USD/P21 | 충족 |
-| 5 / ●●◐ | .10 < x ≤ .14 USD/P21 | 충족 |
-| 4 / ●●○ | .14 < x ≤ .18 USD/P21 | 충족 |
-| 3 / ●◐○ | .18 < x ≤ .22 USD/P21 | 충족 |
-| 2 / ●○○ | .22 < x ≤ .26 USD/P21 | 충족 |
-| 1 / ◐○○ | .26 < x ≤ .30 USD/P21 | 충족 |
-| 0 / ○○○ | x > .30 USD/P21 | 미달 |
+| 6 / ●●● | 0 ≤ x ≤ .20 USD/P21 | 충족 |
+| 5 / ●●◐ | .20 < x ≤ .26 USD/P21 | 충족 |
+| 4 / ●●○ | .26 < x ≤ .32 USD/P21 | 충족 |
+| 3 / ●◐○ | .32 < x ≤ .38 USD/P21 | 충족 |
+| 2 / ●○○ | .38 < x ≤ .44 USD/P21 | 충족 |
+| 1 / ◐○○ | .44 < x ≤ .50 USD/P21 | 충족 |
+| 0 / ○○○ | x > .50 USD/P21 | 미달 |
 
-출처: [Google Gemini 3 Flash 공식 단가](https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview), [Google Live 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.7.
+출처: [Google Gemini 3 Flash 공식 단가](https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview), [OpenAI GPT Realtime 공식 단가](https://developers.openai.com/api/docs/models/gpt-realtime), [OpenAI Realtime 청구](https://developers.openai.com/api/docs/guides/voice-latency-cost), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.7.
 
 ![ASR-QA-04 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-04.png)
 

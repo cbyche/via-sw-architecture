@@ -6,7 +6,7 @@
 
 ## 모델 근거와 공통 활동 예산
 
-의미 모델은 Google Gemini 3 Flash Preview Standard 입력 $0.50/출력 $3.00 per 1M token이며 출력 단가는 thinking을 포함한다. 생성률 100/200/400 token/s와 TTFT는 작성자 가정으로, 공개 보장/실측이 아니다. 음성은 Gemini 3.1 Flash Live Preview의 별도 단가다. 공통 모델/설정은 양안에서 동일하다.
+의미 모델은 Google Gemini 3 Flash Preview Standard 입력 $0.50/출력 $3.00 per 1M token이며 출력 단가는 thinking을 포함한다. 생성률 100/200/400 token/s와 TTFT는 작성자 가정으로, 공개 보장/실측이 아니다. 음성은 GPT Realtime의 별도 단가(audio 입력 $32/출력 $64, Text 입력 $4/출력 $16 per 1M token)다. 신규 audio 길이 환산은 이력 audio 재입력/특수 token을 포함한 총 청구가 아니므로 실제 modality별 usage를 합산한다. 공통 모델/설정은 양안에서 동일하다.
 
 P21은 메커니즘별로 선정한 21개(사용자19/Agent단독2, 집중장면 내부Agent4사건)의 공통 묶음이다. 전체5회만 반복하며 정확성105/630, 반응135, 처리95의 모든 관측을 함께 읽는다. 계획 발화21개의 입력50초, 출력179초는 fixture/작성자 예산이고 실제 사용통계나 실행결과가 아니다.
 
@@ -15,10 +15,16 @@ P21은 메커니즘별로 선정한 21개(사용자19/Agent단독2, 집중장면
 | 의미 2,000/200 token 1호출 | $0.0016 |
 | 200 token의 생성 부분만 | 1초 |
 | P21 의미 비용 | $0.0992 |
-| P21 음성/audio/Text 비용 | $0.074367 |
-| 기본 총액 / $0.30 예산 여유 | $0.173567 / $0.126433 |
+| P21 음성/audio/Text 비용 | $0.31712 |
+| 신규 audio/청구 Text 포함 기본 소계 / $0.50 예산 여유 | $0.41632 / $0.08368 |
 | QA-02 직렬 100 token 예시 (1초 초과) | 1.23초 |
 | 유효한 50 token 의미 출력일 때의 예시 | 0.98초 |
+
+## 비교 참고: 가격이 있는 Qwen과 공개 속도
+
+Alibaba Cloud Model Studio Singapore/International의 qwen3-30b-a3b-instruct-2507 공식 단가는 입력 $0.20/출력 $0.80 per 1M token이다. 같은 token 예산에서 P21 의미 비용 $0.03472, GPT Realtime 신규 audio/청구 Text 포함 기본 소계 $0.35184다. 의미 모델을 교체한 후보 실행 결과가 아니며 tokenizer/출력/호출/정확성 동등성도 주장하지 않는다.
+
+Qwen 공식 H20/SGLang benchmark는 Qwen3-30B-A3B 원본의 (입력+출력)/전체시간이다. 2048 출력과 BF16 입력1: 137.18로부터 전체 약14.94초/유효 출력률137.11을 복원하고, 입력6144: 490.10으로부터 약16.72초/유효 출력률122.53을 복원한다. Gemini 또는 Instruct-2507 API decode rate로 사용하지 않는다. 가격/속도 reference는 다른 배포 조건이다.
 
 ## 41의 충분한 typed 근거 조건
 
@@ -51,4 +57,4 @@ S2-01의 충분한 typed 근거라는 조건에서 A 2호출/B 1호출을 둔 �
 
 검산은 단가/합계/병렬 DAG/외부 대기/공유 allocation 중복/등급 경계의 재현성을 확인한다. 정확성 630개와 변경 6과제의 실제 결과는 생성하지 않는다. 후보 trace나 구체 변경 patch가 생기면 원지표로 평가하고 이 설명 예시를 결과로 재라벨하지 않는다.
 
-정의 원본 SHA-256: `e89c163288eaeceeeea3e8a44ef56f903278aefd9c997db8756bcdd27170d1fa`
+정의 원본 SHA-256: `d25a503005403e71d5811d61f20d9c227479bfeb04808ba868ce06adc463e4f8`

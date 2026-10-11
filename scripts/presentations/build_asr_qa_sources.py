@@ -21,28 +21,28 @@ for line in s.splitlines():
   c=[clean(x) for x in line.split('|')[1:-1]]
   rows.append(dict(id=c[0],priority=len(rows)+1,name=c[1],description=c[2],method=c[3],target=c[4],targetBasis=c[5]))
 cat=['Accuracy','Performance','Performance','Cost Efficiency','Maintainability','Resource Efficiency']
-shortgoal=['필수 정답 조건 충족률 ≥ 98%','평균 상호작용 응답시간 ≤ 1초','평균 VIA 요청 처리시간 ≤ 10초','P21 1묶음 평균 모델 비용 ≤ $0.30','평균 변경 책임 단위 수 ≤ 3개','최대 전체 commit 메모리 ≤ 4GiB']
+shortgoal=['필수 정답 조건 충족률 ≥ 98%','평균 상호작용 응답시간 ≤ 1초','평균 VIA 요청 처리시간 ≤ 10초','P21 1묶음 평균 모델 비용 ≤ $0.50','평균 변경 책임 단위 수 ≤ 3개','최대 전체 commit 메모리 ≤ 4GiB']
 shortmetric=['21개 Voice/Agent 사례 × 5회 × 6조건 = 630개','모든 사례의 지정 반응 27개 × 5회 = 135관측','사용자 목표 19개 × 5회 = 95사이클','동일 P21 전체 5회 총 청구량의 평균 × 단가','6개 변경 과제의 고유 수정 책임 수 평균','동일 P21 전체 5회 중 최대 동시 commit량']
-basis=['50개 조건당 오류 1개 이하, 전체 시나리오 실패 ≤5%','대화 흐름 1초, 끼어들기 local stop 0.1초 관리','의미 6초 + 연결 1초 + 전달 1초 + 재검증 2초','기본 $0.173567 + 추가 생산/재시도 여유 $0.126433','일상 변경을 adapter/생산/소비 약 3개 책임에 국소화','32GB급 PC의 사용자 앱과 공존하는 VIA 4GiB 예산']
+basis=['50개 조건당 오류 1개 이하, 전체 시나리오 실패 ≤5%','대화 흐름 1초, 끼어들기 local stop 0.1초 관리','의미 6초 + 연결 1초 + 전달 1초 + 재검증 2초','신규 audio·Text 기본 $0.416320 + 추가 여유 $0.083680','일상 변경을 adapter/생산/소비 약 3개 책임에 국소화','32GB급 PC의 사용자 앱과 공존하는 VIA 4GiB 예산']
 facts=[
 'VIA는 업무, 근거, 조건과 실제 전달을 연결한다.\n잘못 연결하면 사용자가 업무를 다시 식별하고 수정해야 한다.',
 'Nielsen 응답시간 참조: 즉각 제어 0.1초,\n대화 흐름 1초, 주의 유지 10초.',
 '외부 Agent 업무와 사람의 입력/답변 대기는 제외한다.\nVIA 해석, 연결, queue와 실제 전달 시간은 남긴다.',
-'공식 단가: Gemini 3 Flash: 입력 $0.50 / 출력 $3.00, 1M token.\n음성 입력 $0.005 / 출력 $0.018, 1분 근사.',
+'공식 단가(1M token): 의미 Gemini $0.50 / $3.00.\n음성 GPT Realtime: audio $32 / $64, Text $4 / $16.',
 '모델/Agent/source 교체와 의미/상태 계약 확장을 구별.\n같은 책임 registry로 양안의 실제 수정 범위를 센다.',
 '삼성 reference PC: Windows 11, RAM 32GB급.\nWindows commit과 실제 resident RAM을 구별한다.']
 choices=[
 '필수 조건 오류 ≤2%, 전체 시나리오 실패 ≤5%를 선택.\n21개 모든 사례와 재사용/집중 도착/최종 tail을 채점.',
 '평균 1초, local stop 0.1초를 과제 예산으로 선택.\n생성률 100/200/400 token/s는 가정, 목표 달성 미입증.',
 '의미 6 + 연결 1 + 전달 1 + 재검증 2 = 10초.\n첫 접수 안내 이후의 전체 후속 처리까지 포함.',
-'동일 P21 기본 $0.173567에 $0.126433 여유.\n초기/배경 생산, 재시도와 청구 context 모두 포함.',
+'동일 P21 기본 소계 $0.416320에 $0.083680 여유.\n추가 audio 이력, 배경 생산·재시도까지 실제 청구.',
 '평균 3개, 과제별 최대 5개로 변경 전파를 제한.\n파일/박스 수 대신 수정된 기능 책임으로 판정.',
 'OS 8 + 사용자 앱 16 + VIA 4 + 여유 4 = 32GiB 가정.\n장치의 실측 가용량이나 후보 peak가 아니다.']
 calcs=[
 [['대표 분모','21 × 5 × 6 = 630조건, 모든 필수 사실 통과 시 1'],['대표 목표','정답 618개 이상 / 오답 최대 12개'],['시나리오 보호','6조건 모두 정답인 시나리오 ≥100/105'],['S / C 보호','상황군별 / 조건 유형별 각각 ≥95%'],['필수 위반','무관 업무/중복 효과/잘못된 승인/무허용 사용 0건'],['A/B 차이','평균 ≥1pp + 5쌍 같은 방향; 원값/최소/최대 공개']],
 [['시작','발화 끝 / Agent 원천 도착 / 끼어들기 onset'],['종료','실제 제어 효과 또는 Text + 첫 핵심 음성'],['대표 집계','21개 사례의 27반응 × 5회 = 135관측'],['일반 / 집중','일반 ≥110/115회 ≤2초; 집중 30회 전부 ≤5초'],['실패 / stop','미전달 0건, 실패 5초 cap; stop 10회 모두 ≤0.1초'],['A/B 차이','평균 ≥0.10초 + 5쌍 같은 방향; 귀속 DAG 공개']],
 [['전체 사이클','요청 → 해석 → 인계 → 결과 수신 → 실제 전달'],['대표 집계','19개 사용자 목표 × 5회 = 95사이클'],['적용 제외','Agent 단독 S5-01/02: 새 사용자 목표 시작 없음'],['귀속 계산','같은 DAG의 외부 업무/사람 입력·대기만 0'],['실패 처리','30초 cap + 미전달 기록; ≥91/95회 ≤15초'],['A/B 차이','평균 ≥0.50초 + 5쌍 같은 방향; 최종 결과 관측']],
-[['의미 모델','62호출 예산: 124k 입력 / 12.4k 출력 = $0.0992'],['음성 audio','입력 50초 / 출력 179초 예산 = $0.057867'],['음성 Text/context','10k 입력 / 2k 출력 = $0.0165'],['기본 총액','$0.0992 + $0.057867 + $0.0165 = $0.173567'],['추가 예산','$0.300000 - $0.173567 = $0.126433'],['A/B 차이','≥$0.03/P21; 실제 cache/생산/재시도 청구 비교']],
+[['의미 모델','62호출 예산: 124k 입력 / 12.4k 출력 = $0.0992'],['음성 신규 audio','입력 50초 / 출력 179초 예산 = $0.245120'],['음성 Text/context','총 청구 입력 10k / 출력 2k = $0.072000'],['기본 소계','$0.0992 + $0.24512 + $0.072 = $0.416320'],['추가 예산','$0.50 - $0.41632 = $0.08368; 이력 audio 등'],['A/B 차이','≥$0.03/P21; 실제 cache/생산/재시도 청구 비교']],
 [['공통 과제','provider / Agent / source 교체, 관계/질문/철회'],['공통 단위','U01~18 기능 책임 registry, 동일 수정 중복 금지'],['대표 집계','여섯 수정 집합의 크기 합 / 6'],['설명 예시','M-04 A: U01/U03/U07, B: U01/U02/U03/U07'],['완료 조건','새 요구 충족 + P21/선호/권한/중복 회귀 유지'],['A/B 차이','평균 ≥0.5개, 여섯 과제 합계 차이 ≥3개']],
 [['대표 관측','전체 process private + 고유 shared commit'],['공통 부하','동일 P21, Task 최대 10 / cloud 호출 최대 4'],['기본 할당 예산','동시 8개 할당 항목 합 = 1,792MiB (§7.3)'],['추가/변동 여유','4,096 - 1,792 = 2,304MiB'],['관측/보호','50ms + allocation event, 5회 최대 / WS ≤6GiB'],['A/B 차이','≥128MiB; 동일 기능/보관, 실제 process copy 포함']]]
 methods=[
@@ -57,11 +57,12 @@ references={
  'scope':{'title':'VIA 고정 기능/UC','url':'../../architecture/05-representative-use-cases.md'},
  'nielsen':{'title':'Nielsen Norman Group 응답시간','url':'https://www.nngroup.com/articles/website-response-times/'},
  'gemini':{'title':'Google Gemini 3 Flash 공식 단가','url':'https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview'},
- 'google':{'title':'Google Live 공식 가격표','url':'https://ai.google.dev/gemini-api/docs/pricing'},
+ 'openai':{'title':'OpenAI GPT Realtime 공식 단가','url':'https://developers.openai.com/api/docs/models/gpt-realtime'},
+ 'voice-billing':{'title':'OpenAI Realtime 청구','url':'https://developers.openai.com/api/docs/guides/voice-latency-cost'},
  'samsung':{'title':'Samsung NP960UJH-XG3IN 공식 사양','url':'https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/'},
  'windows':{'title':'Microsoft PrivateUsage/commit 정의','url':'https://learn.microsoft.com/en-us/windows/win32/api/psapi/ns-psapi-process_memory_counters_ex'},
  'contract':{'title':'03-02 공통 QA 계약 v6','url':'../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md'}}
-refsets=[['scope','contract'],['nielsen','gemini','contract'],['nielsen','contract'],['gemini','google','contract'],['scope','contract'],['samsung','windows','contract']]
+refsets=[['scope','contract'],['nielsen','gemini','contract'],['nielsen','contract'],['gemini','openai','voice-billing','contract'],['scope','contract'],['samsung','windows','contract']]
 bands=json.loads((src.parent/'03-02-poc-inputs.json').read_text())['score_bands']
 chapters={i:s.split(f'## {i}. ',1)[1].split('\n## ',1)[0] for i in range(3,9)}
 for i,r in enumerate(rows):
@@ -73,7 +74,7 @@ caseblocks=re.findall(r'##### (S[1-6]-\d{2}) ([^\n]+)\n(.*?)(?=\n<a id=|\n#### 3
 assert len(caseblocks)==21,len(caseblocks)
 case_registry={'contract_version':'ASR-QA-v6','accuracy_version':'Voice-PoC-v4','source_sha256':h,'cases':[{'id':i,'name':name,'specification':text.strip(),'required_conditions':[f'C{j}' for j in range(1,7)]} for i,name,text in caseblocks],'trials':105,'binary_conditions':630}
 emit((root/'docs/presentations_files/quality-attributes/functional-coverage.json'), json.dumps(case_registry,ensure_ascii=False,indent=2)+'\n')
-plan={'source':data['source'],'source_sha256':h,'contract_version':'ASR-QA-v6','status':data['status'],'priority':[r['id'] for r in rows],'populations':{'accuracy':{'cases':21,'repeats':5,'trials':105,'denominator':630},'reaction':{'events':27,'repeats':5,'trials':135},'cycle':{'cycles':19,'repeats':5,'trials':95},'cost_memory':{'workload':'P21','user_scenes':19,'agent_scenes':2,'internal_agent_events':4,'independent_runs':5},'change':{'fixtures':6,'responsibilities':18}},'targets':dict(zip([r['id'] for r in rows],[98,1,10,0.30,3,4096])),'summary':[{k:r[k] for k in ['id','name','description','method','target','targetBasis','guards']} for r in rows]}
+plan={'source':data['source'],'source_sha256':h,'contract_version':'ASR-QA-v6','status':data['status'],'priority':[r['id'] for r in rows],'populations':{'accuracy':{'cases':21,'repeats':5,'trials':105,'denominator':630},'reaction':{'events':27,'repeats':5,'trials':135},'cycle':{'cycles':19,'repeats':5,'trials':95},'cost_memory':{'workload':'P21','user_scenes':19,'agent_scenes':2,'internal_agent_events':4,'independent_runs':5},'change':{'fixtures':6,'responsibilities':18}},'targets':dict(zip([r['id'] for r in rows],[98,1,10,0.50,3,4096])),'summary':[{k:r[k] for k in ['id','name','description','method','target','targetBasis','guards']} for r in rows]}
 emit((root/'docs/presentations_files/quality-attributes/evaluation-plan.json'), json.dumps(plan,ensure_ascii=False,indent=2)+'\n')
 emit((root/'docs/presentations_files/quality-attributes/measurement-design.md'), '# ASR-QA 평가 설계 안내\n\n이 파일은 [03-02 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 발표용 연결 안내다. 정의/정답/분모/목표를 이곳에서 독립 개정하지 않는다.\n\n| QA | 원본 | 평가 단위 |\n| --- | --- | --- |\n'+ '\n'.join(f'| {r["id"]} {r["name"]} | 03-02 §{r["definitionSection"]} | {r["shortMetric"]} |' for r in rows)+'\n\n정확성 21개 상세 명세는 [사례 투영 JSON](functional-coverage.json), 공통 규모/목표는 [평가 안내 JSON](evaluation-plan.json)에 원본 hash와 함께 수록했다. [검산 보고](../../architecture/12-decisions/decision-packages/03-02-poc-calculation-report.md)는 공개 단가/가정 계산이며 후보 성능 결과가 아니다.\n')
 

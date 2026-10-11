@@ -32,7 +32,7 @@ def check_links(path):
         assert (path.parent/target).exists(),(path,target)
 
 def archive_check():
-    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33),('qa-common-workload-before-v6-20261011',38),('qa-model-reference-before-gemini-20261011',37)]:
+    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33),('qa-common-workload-before-v6-20261011',38),('qa-model-reference-before-gemini-20261011',37),('qa-voice-reference-before-realtime-20261011',40)]:
         archive=ROOT/'docs/archive'/name
         manifest=json.loads((archive/'manifest.json').read_text())
         assert len(manifest)==count
@@ -140,7 +140,7 @@ def common_check():
         assert all(f'| C{i} ' in case['specification'] for i in range(1,7)),case['id']
         assert all(s in case['specification'] for s in ['**초기 상황:**','**입력:**','**사건 순서:**']),case['id']
     plan=json.loads((BASE/'quality-attributes/evaluation-plan.json').read_text())
-    assert list(plan['targets'].values())==[98,1,10,0.30,3,4096]
+    assert list(plan['targets'].values())==[98,1,10,0.50,3,4096]
     rows=json.loads((BASE/'quality-attributes/quality-attributes.json').read_text())['rows']
     parsed=[Fraction(re.search(r'[0-9,]+(?:\.[0-9]+)?',r['target'])[0].replace(',','')) for r in rows]
     assert parsed==[Fraction(str(v)) for v in plan['targets'].values()], 'Front table and numerical contract goals diverged'
@@ -189,7 +189,7 @@ def common_check():
     assert 'P21' in rows[5]['shortMetric']
     check_links(BASE/'README.md')
     check_links(BASE/'quality-attributes/measurement-design.md')
-    print('PASS: six complete ASR definitions, 21 full case mappings/630 conditions, one P21 5-repeat population, all band boundaries and 140 archive hashes')
+    print('PASS: six complete ASR definitions, 21 full case mappings/630 conditions, one P21 5-repeat population, all band boundaries and 180 archive hashes')
 
 if __name__=='__main__':
     common_check()
