@@ -71,7 +71,9 @@ Subject: The same uniquely identifiable teal report/task card remains on one con
 Subject: A tidy small archive of three history cards: a prior conversation bubble with a correction pencil, a completed report document, and a permitted preference represented by a small user profile card with a check. A magnifying glass selects a relevant history fragment, which is carried by a short arrow into one current request bubble beside a laptop. Show selective retrieval and reuse rather than dumping all history. Do not show a specific vector database, knowledge graph, central authoritative memory service or automatic permanent recording of every utterance.
 ```
 
-## C1: 온디바이스 Omni 공유
+## 이전 C1: 온디바이스 Omni 공유 (이력)
+
+현재 C1은 로컬 VIA 및 별도 클라우드 음성/의미 모델이다. 아래 프롬프트와 PNG는 당시 생성 이력이며 현재 제약을 설명하는 그림으로 사용하지 않는다.
 
 파일: `c1-shared-on-device-omni.png`
 

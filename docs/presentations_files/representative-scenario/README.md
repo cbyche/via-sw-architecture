@@ -1,11 +1,13 @@
 # 과제 소개: 대표 시나리오
 
+> **현재 발표 편집본:** [전체 통합 PPTX](../VIA-architecture-presentation.pptx)의 4장이다. 아래 개별 PPTX/PNG는 최초 통합 시점의 참고본이다. 발표 수정은 [부분 편집 안내](../full-presentation/README.md)를 따른다. 아래 생성 절차는 이전 구성의 재현 이력이다.
+
 - [편집 가능한 PPTX, 1장](../VIA-representative-scenario.pptx)
 - [PNG 미리보기](./representative-scenario.png)
 - [문안과 그림 목록](./scenario.json)
 - [생성 스크립트](../../../scripts/presentations/generate_representative_scenario.mjs)
 
-기존 [과제 소개 자료](../VIA_과제배경_필요성_검토반영_v3.pptx)의 ‘VIA의 역할과 범위’ 뒤에 삽입할 한 장이다. 같은 16:9 크기, Apple SD Gothic Neo 글꼴과 상단 탐색 표시를 사용한다. 페이지 번호는 삽입 위치에 맞춰 3으로 두었다. 기존 소개 PPTX는 별도로 유지한다.
+기존 [과제 소개 자료](../VIA_과제배경_필요성_검토반영_v3.pptx)의 ‘VIA의 역할과 범위’ 뒤에 삽입할 한 장이다. 같은 16:9 크기, Apple SD Gothic Neo 글꼴과 상단 탐색 표시를 사용한다. 개별 참고본의 표시 번호는 3이며, 현재 통합본에서는 실제 위치에 맞춰 4로 고쳤다.
 
 다섯 사례를 하나의 연속 대화로 구성했다. 표 설명을 요청한 뒤 그 설명으로 PDF 보고서와 메일 초안을 맡긴다. 음성 응답 도중 보고서 형식만 정정하고, 메일의 수신자 질문에 답한다. 마지막에는 음성을 끄고 Text로 기존 보고서의 상태를 확인한다. 실제 보고서 및 메일 작성은 Downstream Agent가 맡고 VIA는 요청 이해, 상호작용과 업무 연결을 맡는다.
 
@@ -15,19 +17,23 @@
 
 ## 뒤의 품질속성과 DP 연결
 
-아래 연결은 [품질 요구사항](../quality-attributes.md), [평가 설계](../quality-attributes/evaluation-plan.json), [필수 기능 변형 목록](../quality-attributes/functional-coverage.json) 및 설계 원문에서 확인한 문서상 연결이다. 이미 구현하거나 시험을 실행했다는 뜻은 아니다. 집중 시험은 같은 논점의 유사 사례를 포함하며 이 발표 대화 전체를 동일하게 실행하는 fixture는 아직 없다.
+[ASR-QA-v6 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 품질속성과 현재 네 DP에 연결한다. 아래 대응은 기능상 유사성이다. 이 다섯 장면은 P21의 21개 원천 입력과 동일한 fixture가 아니며 평가 결과를 대신하지 않는다.
 
-| 장면 | 확인할 품질속성 | 관련 설계 | 기존 평가 설계의 연결과 한계 |
+| 장면 | 확인할 품질속성 | 관련 설계 | P21의 유사 경로와 한계 |
 | --- | --- | --- | --- |
-| ① 화면의 표를 짚어 설명 요청 | V-01 기능 정확성, V-04 응답 신속성, V-05 요청 완료 신속성 | [41 요청 해소 제어](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md), [43 요청 해석](../../architecture/12-decisions/decision-packages/04-43-request-interpretation.md), [44 연속 상호작용](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md) | DP43-S07은 명확한 화면 표 설명을, DP41-S07은 조회 후 원본 변경을 다룬다. 같은 ‘표’를 정확히 지정하는 기능과 조회 비용을 연결한다. |
-| ② 앞선 설명으로 보고서와 메일 초안 위임 | V-01 기능 정확성, V-03 기능 완전성, V-05 요청 완료 신속성 | 41, [42 수명과 상태 소유](../../architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md), 43 | UC-07/09/14 관련 복합 요청, Task 연결과 위임 기능에 연결된다. 이 장면은 독립된 두 목표와 ‘초안만’ 조건을 보여준다. 순서, 결과 의존과 실행 조건의 모든 변형을 보여주지는 않는다. |
-| ③ 끼어들어 보고서 형식만 정정 | V-01 기능 정확성, V-04 응답 신속성, V-05 요청 완료 신속성 | 43, 44, [45 기억과 맥락](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md) | DP43-S04 부분 정정, DP44-S01 말하는 중 정정, DP45-S01 과거 정정 참조가 각각 연결된다. PDF 및 메일 지시 보존과 음성 중단을 구분한다. 과거 정정 활용은 장기 User Memory 승격을 자동으로 뜻하지 않는다. |
-| ④ 정정 중 도착한 메일 질문에 답변 | V-01 기능 정확성, V-02 기능 적절성, V-04 응답 신속성, V-05 요청 완료 신속성 | 42, 43, 44 | DP42-S01 정상 질문 답변, DP44-S02 입력과 메일 수신자 질문 중첩이 연결된다. 실제 제시한 질문에 답을 연결하고 다른 업무를 유지하는지 확인한다. |
-| ⑤ Voice 종료 후 Text로 보고서 상태 확인 | V-01 기능 정확성, V-03 기능 완전성, V-05 요청 완료 신속성 | 42, 44 | UC-15 Voice 종료 후 Task 재접근을 공통 기능 회귀 모집단에서 다룬다. 정상 채널 전환이며 V-07 장애 복구 성능의 증거는 아니다. |
+| ① 화면의 표를 짚어 설명 요청 | ASR-QA-01 요청 처리 정확성, 02 상호작용 응답시간, 03 VIA 요청 처리시간 | [41 요청 해소 제어](../../architecture/12-decisions/decision-packages/04-41-request-resolution-control.md), [44 연속 상호작용](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md) | S2-01 발화 중 표 지칭과 S1-01 제한 조회의 유사 경로. 화면 내용과 당시 지칭을 보존한다. |
+| ② 앞선 설명으로 보고서와 메일 초안 위임 | ASR-QA-01, 02, 03 | 41, 44, [45 과거 근거](../../architecture/12-decisions/decision-packages/04-45-memory-and-context.md), [42 수명과 상태 소유](../../architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md) | 독립 목표는 S3-01, 과거 설명 재사용은 S2-02와 유사하다. 보고서의 PDF와 메일의 초안 조건을 보존한다. 결과 의존을 가진 S3-02와는 구별한다. |
+| ③ 끼어들어 보고서 형식만 정정 | ASR-QA-01, 02, 03 | 41, 44, 45, 42 | S4-01 부분 정정과 S4-02 local stop에 연결한다. 과거 형식 활용은 S2-02/04/05의 근거 재사용과 유사하다. PDF와 메일 지시 보존, 즉시 음성 중단을 따로 확인한다. |
+| ④ 정정 중 도착한 메일 질문에 답변 | ASR-QA-01, 02, 03 | 41, 44, 42 | S5-01/S5-04 질문 도착과 집중 부하, S6-04 실제 제시된 유효 질문 답변의 유사 경로다. 질문 전달과 사용자 답변 처리의 endpoint는 다르다. |
+| ⑤ Voice 종료 후 Text로 보고서 상태 확인 | ASR-QA-01, 02, 03 | 42, 44 | S5-03의 Voice OFF 결과 전달 및 UC-15의 정상 채널 전환과 유사하다. VIA 재시작이나 장애 복구 성공의 증거는 아니다. |
 
-다섯 장면의 주요 기능은 뒤의 품질 요구사항과 41~45 설계에서 다뤄진다. **이 한 장만으로 모든 품질속성을 설명하지는 않는다.** V-08 변경 용이성, V-06 메모리 효율성, V-07 복구 용이성, V-09 분석 용이성과 V-10 기밀성은 별도의 변경, 메모리, 장애, 기록 및 권한 시험이 필요하다. 현재 평가 설계에 그 시험군을 제안해 두었으며 실행 결과는 없다. 비교안은 미선정 상태다.
+**ASR-QA-04 모델 비용과 06 로컬 메모리**는 다섯 장면을 포함한 전체 활동에서 평가한다. 준비, 초기/미사용 생산, 재사용, 원천 갱신, 폐기와 tail을 누락하지 않는다. **ASR-QA-05 변경 용이성**은 M-01~06의 여섯 변경 과제와 기능 회귀로 별도 평가한다. 이 대화만으로 변경 용이성이나 메모리 목표를 입증하지 않는다.
 
-V-04는 **평균 반응시간**, V-05는 **평균 VIA 처리시간**으로 발표자료의 집계를 통일한다. V-05는 외부 작업이나 사용자 답변만 기다린 구간을 제외한다. 설계 비교의 시간 수치는 작성자가 가정한 형식 예시이며 측정값을 다른 통계량으로 변환한 결과가 아니다.
+공통 P21은 21개 사례 전체를 5회 독립 초기화한다. 정확성은 630조건(목표 정답 618개 이상), 반응시간은 135개(평균 1초 이하와 모든 local stop 0.1초 이하), VIA 처리시간은 95개(평균 10초 이하)다. 비용은 전체 활동의 평균 $0.50/P21 이하, 변경은 평균 3개/과제 이하와 과제별 5개 이하, 메모리는 모든 로컬 VIA 할당의 동시 commit 최대 4,096MiB 이하다. 정확성의 필수 위반, 시간의 일반/집중 보호 조건, 비용의 전체 청구와 메모리의 working-set/idle 보호 조건도 원본대로 별도 판정한다.
+
+시간은 실제 유효 전달 endpoint까지 계산한다. 외부 Agent 업무, 사용자 답변 대기와 필수 사용자 발화 구간만 causal DAG에서 0으로 바꾸고 선후 관계와 경합을 유지한다. 전사 확정, 모델, queue, IPC, 저장과 음성 차례 대기는 VIA 시간에 포함한다. 후보 실측과 A/B 최종 선택은 아직 없다.
+
+모델 배치는 [04-40](../../architecture/12-decisions/decision-packages/04-40-common-execution-contract.md)의 로컬 VIA/로컬 VAD 및 별도 클라우드 음성 모델과 의미 LLM을 따른다. 발표용 공급자 reference와 기능 요구를 구별한다.
 
 ## 재생성
 

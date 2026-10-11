@@ -1,5 +1,7 @@
 # VIA DP 설계 비교 발표 틀 — 41~45
 
+> **현재 발표 편집본 — 2026-10-11:** [전체 통합 PPTX, 32장](../VIA-architecture-presentation.pptx)의 19~32장이 사용자 경험과 DP 부분이다. 이제 이 파일 하나에서 필요한 장만 갱신한다. [부분 편집 안내](../full-presentation/README.md)를 따른다. DP v5와 아래 이전 PPTX/PNG는 최초 통합 이력으로 보존한다. 43과 46은 현재 발표에서 제외한다. 비교 전용 v5는 만들지 않는다. 아래 날짜별 안내는 해당 판본의 작성 이력이다.
+
 [전체 미리보기](./index.html) / [5페이지 draw.io 편집 원본](./VIA-DP-comparison-41-45.drawio)
 
 [수정 가능한 설계 비교 5장 PPTX](./VIA-DP-comparison-41-45.pptx) / [본 발표 9장과 부록 2장 PPTX](../VIA-DP-background-and-comparison-41-45.pptx) / [PPTX 구성과 편집 방법](../DP-PPTX.md)

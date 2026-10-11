@@ -12,3 +12,5 @@
 [자동 일치 검사](../../../scripts/presentations/check_quality_metrics.py), [원본 투영 재현](../../../scripts/presentations/build_asr_qa_sources.py)과 [공통 활동 검사](../../../scripts/architecture/qa_common_workload.py)를 제공한다. 실제 모델/후보/Windows 실행과 Microsoft PowerPoint 앱 저장·재열기는 수행하지 않았다. 목표와 가정 계산은 측정 결과나 A/B 승자가 아니다.
 
 2026-10-11 Qwen/GPT 개정: 정확한 Instruct-2507/Singapore 단가와 130 token/s 작성자 가정을 원본·JSON·발표 노트에 반영했다. 변경된 요약2장/부록QA-02·04를 각각 확인했고 나머지9 PNG는 이전 검수본과 bytes가 같다. 최종 package/layout/font/native table/Artifact Tool import는 통과했으며 finding/warning은 0이다. 모델/API/Windows 성능 실측은 수행하지 않았다.
+
+2026-10-11 발표 정합성 갱신: 총135반응 = 일반105 + 집중30이며 일반 95% 보호 기준은 100/105다. 115/110 오기를 원본/입력/검산/투영/QA 두 발표와 통합 v5에서 정정했다. 평균/stop 목표와 P21 사례/정답/반복은 유지한다. 정정 전 원본과 native PPTX는 별도 archive에 보존했다.

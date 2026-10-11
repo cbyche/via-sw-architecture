@@ -34,9 +34,27 @@
     }
   ],
   "taskFlow": [
-    ["업무 상태", "② 위임", "③ 부분 정정", "④ 질문·답변", "⑤ 상태 확인"],
-    ["보고서", "PDF 작성", "이전 형식 적용, PDF 유지", "작성 계속", "확인된 진행 상태 전달"],
-    ["메일 초안", "초안만 작성", "기존 지시 유지", "받는 사람: 영업팀", "초안 상태 유지"]
+    [
+      "업무 상태",
+      "② 위임",
+      "③ 부분 정정",
+      "④ 질문·답변",
+      "⑤ 상태 확인"
+    ],
+    [
+      "보고서",
+      "PDF 작성",
+      "이전 형식 적용, PDF 유지",
+      "작성 계속",
+      "확인된 진행 상태 전달"
+    ],
+    [
+      "메일 초안",
+      "초안만 작성",
+      "기존 지시 유지",
+      "받는 사람: 영업팀",
+      "초안 상태 유지"
+    ]
   ],
   "roleBoundary": "VIA: 요청 이해와 대화·업무 연결     Downstream Agent: 보고서·메일 초안의 실제 작성",
   "notes": [
@@ -44,8 +62,10 @@
     "③은 음성 응답 중 끼어들기와 과거 정정 활용 및 부분 수정의 예다. 보고서만 이전에 고친 형식으로 변경하며 PDF 조건을 보존한다. 메일은 그대로 유지한다. 과거 정정의 재사용이 장기 User Memory 승격을 자동으로 뜻하지 않는다.",
     "④는 메일 Agent의 질문이 사용자 정정 중 도착한 경우다. VIA는 사용자 발화가 끝난 뒤 질문을 전달하고, ‘영업팀’ 답변을 메일 업무에 연결한다. 보고서 업무는 계속 진행한다.",
     "⑤는 정상적인 Voice 종료와 Text 전환이다. 기존 Task의 검증된 상태를 확인하는 예이며 재시작 또는 장애 복구 성공의 증거는 아니다.",
-    "원문: docs/architecture/05-representative-use-cases.md, docs/architecture/03-fixed-architecture-scope.md, docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md, 04-42-lifecycle-ownership.md, 04-43-request-interpretation.md, 04-44-continuous-interaction.md, 04-45-memory-and-context.md. 상세 연결은 docs/presentations_files/representative-scenario/README.md에 기록한다.",
+    "원문: docs/architecture/05-representative-use-cases.md, docs/architecture/03-fixed-architecture-scope.md, docs/architecture/12-decisions/decision-packages/04-40-common-execution-contract.md, 04-41-request-resolution-control.md, 04-42-lifecycle-ownership.md, 04-44-continuous-interaction.md, 04-45-memory-and-context.md. 품질 원본: 03-02-quality-attribute-definitions.md (ASR-QA-v6). 상세 연결은 docs/presentations_files/representative-scenario/README.md에 기록한다.",
     "그림: docs/presentations_files/requirements-assets/의 기존 FR2, FR3, FR6, FR4, FR1 일러스트를 순서대로 재사용했다. 그림은 장면을 설명하는 독립 이미지 개체이고, 제목·발화·설명 및 업무 상태 표는 PowerPoint에서 편집할 수 있다.",
-    "V04는 평균 반응시간, V05는 평균 VIA 처리시간이다. 이 대표 시나리오는 기능과 설계 논점을 보여주는 발표 예시이며, 측정 결과나 대안 우열을 주장하지 않는다."
+    "품질 연결은 ASR-QA-01 요청 처리 정확성, 02 상호작용 응답시간, 03 VIA 요청 처리시간을 중심으로 설명한다. 공통 P21은 21개 사례 전체를 5회 수행해 630조건, 135반응, 95처리를 관측한다. 이 다섯 장면은 P21의 원천 입력과 동일한 fixture가 아니며 사례 대응은 기능상 유사성이다. QA-04 모델 비용과 QA-06 로컬 메모리는 준비, 재사용, 갱신, 폐기와 tail을 포함한 전체 활동에서 평가한다. QA-05 변경 용이성은 별도 M-01~06 변경 과제로 평가한다. 평균과 보호 조건은 품질 원본을 따른다. 아직 후보 실측과 대안 선정은 없다.",
+    "장면 대응: ① 표 지칭은 S2-01과 제한 조회 S1-01의 유사 경로, ② 독립 업무는 S3-01과 과거 설명 재사용 S2-02의 유사 경로, ③ 부분 정정은 S4-01, local stop는 S4-02, 과거 근거는 S2-02/04/05, ④ 질문 전달/답변은 S5-01/S5-04/S6-04, ⑤ Voice 종료 후 Text 전달은 S5-03 및 UC-15의 정상 채널 전환이다. 41은 의미와 관계, 44는 실행 연결과 반응, 45는 과거 근거, 42는 업무 및 질문 상태의 수명을 비교한다.",
+    "모델 배치는 로컬 VIA 및 로컬 VAD, 별도 클라우드 음성 모델과 의미 LLM이다. 모델 서비스의 임시 session과 VIA의 영속 Request/Task/실제 전달 원장을 구별한다. 모델 선정이나 제품 구현 완료를 뜻하지 않는다."
   ]
 }

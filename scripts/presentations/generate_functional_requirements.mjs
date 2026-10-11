@@ -1,5 +1,6 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import {createHash} from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { Presentation, PresentationFile, FileBlob } from '@oai/artifact-tool';
 
@@ -25,6 +26,8 @@ if(functional.map(r=>r.id).join()!=='FR1,FR2,FR3,FR4,FR5,FR6' || constraints.map
 if(/[\u00b7\u2027\u2219\u30fb]/u.test(JSON.stringify([...functional,...constraints]))) throw new Error('Middle dots prohibited.');
 const out=path.join(repo,'docs/presentations_files/functional-requirements');
 await fs.mkdir(out,{recursive:true});
+const reference=path.join(out,'VIA-functional-requirements-and-constraints.pptx');
+const referenceSha256=createHash('sha256').update(await fs.readFile(reference)).digest('hex');
 const wraps={
   FR1:'VIA가 요청을 처리하거나 응답하는 동안에도 사용자의 음성 또는 텍스트 입력을 받아\n대화를 이어갈 수 있어야 한다.',
   FR2:'화면, 자료와 대화 맥락을 이용해 사용자 입력을 목표, 대상, 조건과 관련 업무가\n식별된 요청으로 해석할 수 있어야 한다.',
@@ -32,7 +35,7 @@ const wraps={
   FR4:'여러 업무의 질문, 진행 상황, 결과와 사용자 후속 지시를 각각\n해당 업무에 연결할 수 있어야 한다.',
   FR5:'음성 연결 종료, 대화 전환 또는 VIA 재시작 이후에도 기존 업무를\n중복 실행 없이 확인 가능한 상태로 이어갈 수 있어야 한다.',
   FR6:'이전 대화의 정정 내용, 업무 결과와 허용된 사용자 기억을\n현재 요청에 필요한 맥락으로 활용할 수 있어야 한다.',
-  C1:'음성 대화와 요청 의미 해석은 사용자 PC에 적재된 하나의\nOmni 모델 가중치를 공유해야 한다.',
+  C1:'VIA와 VAD는 사용자 PC에서 실행하고, 음성과 의미 해석은 별도 클라우드 모델을\nModel Access를 통해 사용해야 한다.',
   C2:'실제 업무 수행에 필요한 도메인 추론, 계획, 도구 선택과 실행은\nDownstream Agent에 위임해야 한다.',
 };
 const compact=s=>s.replace(/\s+/g,'');
@@ -70,8 +73,8 @@ text('functional-heading','기능 요구사항',48,133,1824,46,36,blue,true);
 table(functional,190,79,blue,'기능 요구사항명');
 text('constraints-heading','제약사항',48,752,1824,46,36,orange,true);
 table(constraints,807,84,orange,'제약사항명');
-text('mapping-boundary','관련 DP는 직접 설계 영향만 표시하며, Omni 공유는 별도 Streaming ASR을 금지하지 않는다.',48,1040,1824,30,23,'#586878');
-slide.speakerNotes.textFrame.setText('VIA 기능 요구사항 및 제약사항\n원문: docs/presentations_files/functional-requirements-and-constraints.md\n04-41~45와 직접 연결되는 발표용 요구사항이다. 관련 DP는 직접적인 설계 영향의 연결이며 전체 준수 범위를 뜻하지 않는다. 단일 Omni 공유는 별도 입력 인식용 Streaming ASR을 금지한다는 뜻이 아니다. 특정 설계 대안의 선택 또는 구현 및 측정 결과를 나타내지 않는다.\n\n'+
+text('mapping-boundary','관련 DP는 직접 설계 영향만 표시한다. 로컬 VAD와 업무 상태의 권위는 VIA에 있으며 모델 공급자는 별도 reference다.',48,1040,1824,30,23,'#586878');
+slide.speakerNotes.textFrame.setText('VIA 기능 요구사항 및 제약사항\n원문: docs/presentations_files/functional-requirements-and-constraints.md\n현재 네 DP의 발표용 요구사항이다. 관련 DP는 직접적인 설계 영향의 연결이며 전체 준수 범위를 뜻하지 않는다. 모델 배치는 04-40 공통 실행 계약을 따른다. 로컬 VAD는 Interaction Manager의 Turn-Taking Control에 있고 Request, Task와 실제 전달의 권위는 로컬 VIA에 남는다. 음성 모델과 의미 LLM은 별도 클라우드 의존성이며 Model Access가 공급자 연동을 담당한다. 공급자 및 checkpoint를 기능 요구사항으로 고정하지 않는다. 특정 설계 대안의 선택 또는 구현 및 측정 결과를 나타내지 않는다.\n\n'+
   [...functional,...constraints].map(r=>`${r.id} ${r.name}\n${r.description}\n관련 DP: ${r.dp}`).join('\n\n')+
   '\n\n관련 설계 문서\n'+source.split('## 관련 설계 문서\n')[1]+
   '\n디자인 참고: 사용자 제공 조제현_09_기능요구사항및제약사항.png의 기능 요구사항 상단 표와 제약사항 하단 표. 관련 DP 열을 추가하여 한 장에 배치했다.');
@@ -82,7 +85,7 @@ await(await PresentationFile.exportPptx(p)).save(candidate);
 await finalizePresentation({workspaceDir:build,candidatePath:candidate,finalPath:final,explicitTotalSlideCount:1,
   pythonExecutable:python,integrityValidatorPath:path.join(skill,'container_tools/inspect_presentation_package_integrity.py'),layoutValidatorPath:path.join(skill,'container_tools/inspect_presentation_layout_geometry.py'),
   layoutArgs:['--expected-slide-size-emu','18288000,10287000','--validate-heading-fit','--validate-bullet-geometry','--require-native-table-slide','1'],
-  requiredNativeTableOwnerSlides:[1],fontPolicy:{basis:'design',families:[font]},verifyArtifactToolImport:true,receiptPath:path.join(build,'validation.json')});
+  requiredNativeTableOwnerSlides:[1],fontPolicy:{basis:'reference',families:[font],referencePath:reference,referenceSha256},verifyArtifactToolImport:true,receiptPath:path.join(build,'validation.json')});
 await fs.copyFile(final,path.join(out,path.basename(final)));
 const loaded=await PresentationFile.importPptx(await FileBlob.load(final));
 const png=await loaded.export({slide:loaded.slides.items[0],format:'png',scale:1});

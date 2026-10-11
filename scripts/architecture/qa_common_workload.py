@@ -25,7 +25,6 @@ def compile_workload(data,source):
  for a,b in data['dependency_edges']:assert data['sequence'].index(a)<data['sequence'].index(b)
  assert data['accuracy_conditions']==[f'C{i}' for i in range(1,7)]
  assert data['attribution_exclusions']==['EXTERNAL_AGENT_WORK','EXTERNAL_USER_WAIT','EXTERNAL_USER_SPEECH']
- assert data['reaction_guards']==dict(ordinary_trials=115,ordinary_within_2_seconds_min=110,burst_trials=30,burst_within_5_seconds_min=30,local_stop_trials=10,local_stop_max_seconds=0.1,missing_max=0)
  reactions=[];cycles=[];occurrences=[]
  for cid in data['sequence']:
   c=cases[cid];name,spec=specs[cid]
@@ -47,6 +46,16 @@ def compile_workload(data,source):
  assert len(reactions)==27 and len(cycles)==19
  assert len({r['id'] for r in reactions})==27 and len({r['id'] for r in cycles})==19
  assert sum('acoustic onset' in r['start'] for r in reactions)==2
+ repeats=data['independent_repeats']
+ ordinary=sum(r['case_id']!='S5-04' for r in reactions)*repeats
+ burst=sum(r['case_id']=='S5-04' for r in reactions)*repeats
+ stops=sum('acoustic onset' in r['start'] for r in reactions)*repeats
+ # The ordinary 95% guard uses this population, rather than copied counts.
+ assert ordinary+burst==len(reactions)*repeats
+ assert data['reaction_guards']==dict(ordinary_trials=ordinary,
+  ordinary_within_2_seconds_min=(ordinary*95+99)//100,burst_trials=burst,
+  burst_within_5_seconds_min=burst,local_stop_trials=stops,
+  local_stop_max_seconds=0.1,missing_max=0)
  for dp in ['41','42','44','45']:assert any(dp in c['sensitive_dps'] and c['selection_role']=='SENSITIVE' for c in cases.values())
  root=sum(c['root_voice_seconds'] for c in cases.values());answers=sum(c['planned_followup_seconds'] for c in cases.values());voice_out=sum(c['voice_output_reference_seconds'] for c in cases.values())
  assert (root,answers,voice_out)==(44,6,179)
@@ -59,7 +68,7 @@ def self_check(data,source):
  compile_workload(data,source)
  # Meaningful negative checks: an omitted load, missing reaction, unscored reuse,
  # changed before-state ceiling, duplicate or invalid dependence must fail.
- for mutate in [lambda d:d.update(independent_repeats=15),lambda d:d['cases'].pop(),lambda d:d['cases'][0]['reactions'].clear(),lambda d:d['initial'].update(cloud_call_ceiling=8),lambda d:d['sequence'].reverse(),lambda d:d['cases'][0].update(trigger='AGENT'),lambda d:d['reaction_guards'].update(burst_trials=25),lambda d:d['attribution_exclusions'].append('VIA')]:
+ for mutate in [lambda d:d.update(independent_repeats=15),lambda d:d['cases'].pop(),lambda d:d['cases'][0]['reactions'].clear(),lambda d:d['initial'].update(cloud_call_ceiling=8),lambda d:d['sequence'].reverse(),lambda d:d['cases'][0].update(trigger='AGENT'),lambda d:d['reaction_guards'].update(burst_trials=25),lambda d:d['reaction_guards'].update(ordinary_trials=115),lambda d:d['reaction_guards'].update(ordinary_within_2_seconds_min=99),lambda d:d['attribution_exclusions'].append('VIA')]:
   d=copy.deepcopy(data);mutate(d)
   try:compile_workload(d,source)
   except (AssertionError,KeyError):pass

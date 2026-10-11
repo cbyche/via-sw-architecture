@@ -1,4 +1,18 @@
-# VIA DP 41~45 수정 가능한 PowerPoint
+# VIA DP 발표자료: 41, 44, 45, 42
+
+## 현재 유지본: 전체 통합 발표 — 2026-10-11
+
+[전체 통합 PPTX, 32장](./VIA-architecture-presentation.pptx) 하나에서 발표를 유지한다. 사용자 경험은 19~20장이고 네 DP의 배경/비교/QA 상세는 21~32장이다. 앞으로 수정은 [부분 편집 안내](./full-presentation/README.md)를 따른다. 아래 DP v5와 이전 판본의 생성·갱신 절차는 최초 통합 이력이다.
+
+## 통합 직전의 DP 구성본 v5 — 2026-10-11
+
+[DP 발표 v5, 14장](./VIA-DP-background-and-comparison-41-45_v5.pptx)를 최초 이관 참고본으로 보존한다. 도입 2장 뒤 41, 44, 45, 42의 배경/비교/QA 상세를 각각 3장씩 배치한다. 43과 DP46 및 별도 이전 배경본은 현재 발표에서 제외한다. 비교 전용 v4의 내용과 geometry는 통합 v4의 부분집합이므로 비교 전용 v5는 만들지 않는다. 이전 파일은 이력으로 보존한다.
+
+현재 QA 영역은 ASR-QA-v6/P21의 630조건, 135반응, 95요청 처리와 여섯 목표를 따른다. 이전 가정 오류 수, W100 비용, 전체 시간/등급은 폐기하고 후보값/점수를 평가 전으로 표시한다. 최신 Qwen Instruct-2507 및 GPT Realtime의 P21 공통 비용 예산 소계는 $0.35184, 잔여는 $0.14816이다. 지역 call-plan과 메모리 예산은 작성자 가정이며 전체 평균·실측·승자 결과가 아니다. [현재 QA 데이터와 PNG](./dp-comparison/v5/README.md)를 따른다.
+
+현재 v5의 QA 갱신은 `build_dp_v5_qa_scenes.py` → `refresh_dp_v5_qa.mjs` → `dp_v5_qa_package.py`를 사용한다. source는 현재 v5이고 구조 영역과 나머지 package part는 bytes로 보존한다. v4에서 최초 43 제거본을 다시 만들 때만 `generate_dp_v5.mjs`와 `dp_v5_package.py`를 사용하며, 이후 반드시 현재 QA 갱신기를 새 build에서 실행한다. 아래 날짜별 문서는 이전 작성 이력이다.
+
+## 이전 판본의 생성과 편집 이력
 
 2026-10-06의 배경과 보강된 설계 비교 페이지를 PowerPoint 기본 개체로 변환한 파일이다. 기존 draw.io, SVG와 PNG의 문구 및 배치를 유지한다.
 

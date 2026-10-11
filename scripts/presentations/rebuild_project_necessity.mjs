@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { FileBlob, PresentationFile } from '@oai/artifact-tool';
+import { CURRENT_ROLES_NOTES } from './refresh_project_necessity_notes.mjs';
 
 // Run a copy in a private build directory with the bundled node_modules link.
 const [repoArg, buildArg, attempt = '01'] = process.argv.slice(2);
@@ -194,15 +195,17 @@ const notes = [
   '첫 반응과 준비된 결과의 전달에는 VIA의 해석, 조회, 검증 및 출력 시간이 필요하다. 외부 업무만 기다리는 시간은 VIA 처리시간과 구별한다. 입력과 인식의 지속은 해석 및 외부 실행과 병행해야 한다.',
   '오른쪽은 기술 발전의 범위와 연동 확장의 개념도다. 네 영역은 기술 범위이며 Component 배치, 독립 모델 수나 선택된 대안이 아니다. 연두색 기억 영역은 변경 영향의 범위를 설명하는 예시다. 학습과 모델 내부 알고리즘 개발은 본 과제의 Architecture 범위 밖이다. VIA 내부 기술의 발전과 Downstream Agent의 변화가 모두 설계 변경의 동기가 된다.',
   '배경의 세 축은 뒤에서 제시할 품질 요구사항 및 DP 검토의 배경이다. 현재 페이지에서는 품질 이름과 ID를 먼저 표시하지 않는다. 특정 구조의 우열이나 성능 수치, 대안 선택 결과를 주장하지 않는다.',
-  '문안 근거: docs/architecture/03-fixed-architecture-scope.md; docs/architecture/05-representative-use-cases.md; docs/presentations_files/quality-attributes.md; docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md; 04-42-lifecycle-ownership.md; 04-43-request-interpretation.md; 04-44-continuous-interaction.md; 04-45-memory-and-context.md',
+  '문안 근거: docs/architecture/03-fixed-architecture-scope.md; docs/architecture/05-representative-use-cases.md; docs/presentations_files/quality-attributes.md; docs/architecture/12-decisions/decision-packages/04-40-common-execution-contract.md; 04-41-request-resolution-control.md; 04-42-lifecycle-ownership.md; 04-44-continuous-interaction.md; 04-45-memory-and-context.md',
   '레이아웃 참조: docs/presentations_files/presentation_example1/03-과제필요성.png',
 ].join('\n');
 slide.speakerNotes.textFrame.setText(notes);
+presentation.slides.items[1].speakerNotes.textFrame.setText(CURRENT_ROLES_NOTES);
 const authoredPath = path.join(build, `artifact-authored-${attempt}.pptx`);
 await (await PresentationFile.exportPptx(presentation)).save(authoredPath);
 
 // Transplant only new slide-3 objects and notes into the original package.
-// All other pages, GIF bytes, masters, fonts and relationships remain intact.
+// All other page objects, GIF bytes, masters, fonts and relationships remain intact.
+// Page 2 notes follow the current model contract.
 const JSZip = createRequire(import.meta.url)('jszip');
 const original = await JSZip.loadAsync(await fs.readFile(source));
 const authored = await JSZip.loadAsync(await fs.readFile(authoredPath));
@@ -225,13 +228,14 @@ sourceXML = sourceXML.replace(blockRE, block => {
   return keepNames.has(name) ? block : '';
 }).replace('</p:spTree>', newBlocks.join('') + '</p:spTree>');
 original.file(slidePath, sourceXML, { createFolders: false });
-const notesPath = 'ppt/notesSlides/notesSlide3.xml';
+for (const [number, noteText] of [[2, CURRENT_ROLES_NOTES], [3, notes]]) {
+const notesPath = `ppt/notesSlides/notesSlide${number}.xml`;
 let notesXML = await original.file(notesPath).async('string');
 const escapeXML = s => s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 let updatedNotes = false;
 notesXML = notesXML.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, block => {
   if (!/<p:ph\b[^>]*type="body"/.test(block)) return block;
-  const paragraphs = notes.split('\n').map(value => `<a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:r><a:t>${escapeXML(value)}</a:t></a:r></a:p>`).join('');
+  const paragraphs = noteText.split('\n').map(value => `<a:p xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:r><a:t>${escapeXML(value)}</a:t></a:r></a:p>`).join('');
   const updated = block.replace(/(<p:txBody>[\s\S]*?<a:lstStyle\b[^>]*\/>)[\s\S]*?(<\/p:txBody>)/, `$1${paragraphs}$2`);
   if (updated === block) throw new Error('Notes replacement failed');
   updatedNotes = true;
@@ -239,6 +243,7 @@ notesXML = notesXML.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, block => {
 });
 if (!updatedNotes) throw new Error('Missing notes placeholder');
 original.file(notesPath, notesXML, { createFolders: false });
+}
 const candidate = path.join(build, `candidate-${attempt}.pptx`);
 await fs.writeFile(candidate, await original.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' }));
 const final = path.join(build, `final-${attempt}`, filename);

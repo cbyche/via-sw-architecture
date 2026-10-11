@@ -1,5 +1,7 @@
 # VIA ASR-QA 목표 근거와 등급 부록
 
+> **현재 발표 편집본:** [전체 통합 PPTX](../VIA-architecture-presentation.pptx)의 12~17장이다. 아래 개별 PPTX/PNG는 최초 통합 시점의 참고본이다. 발표 수정은 [부분 편집 안내](../full-presentation/README.md)를 따른다. 아래 재생성 절차는 개별 구성의 재현 이력이며 통합본을 자동 갱신하지 않는다.
+
 [03-02 정의 원본](../../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)의 여섯 QA를 각 QA별 한 페이지에 정리했다. 정의/지표/목표/과제 근거, 보호 조건과 번호순 우선순위를 유지한다. 후보 성능은 아직 측정하지 않았다.
 
 - [편집 가능한 PowerPoint, 6장](VIA-quality-metrics.pptx)

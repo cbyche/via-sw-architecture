@@ -1,0 +1,607 @@
+{
+  "status": "CURRENT_P21_CRITERIA_WITH_CALCULATED_REFERENCES_NOT_MEASURED",
+  "qa_snapshot": {
+    "contract_version": "ASR-QA-v6",
+    "source": "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md",
+    "source_sha256": "ab76bfc813e1f5c8bb72894a705cfcc9495f7f92e021d566dfcbf8224d8d7d65",
+    "projection_sha256": "dae450c96bb8e8be155d2d880ff02f1be06e4c8a0789e8b9ea9facb331866e81",
+    "rows": [
+      {
+        "id": "ASR-QA-01",
+        "name": "요청 처리 정확성",
+        "method": "필수 정답 조건 충족률(%) = P21의 21개 × 5회 × C1~C6, 630조건",
+        "target": "98% 이상, 정답 618/630 이상",
+        "guards": "전체/S/C ≥95%, 필수 위반 0건",
+        "score": {
+          "id": "ASR-QA-01",
+          "direction": "high",
+          "bounds": [
+            "100",
+            "99.6",
+            "99.2",
+            "98.8",
+            "98.4",
+            "98"
+          ],
+          "unit": "%",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      },
+      {
+        "id": "ASR-QA-02",
+        "name": "상호작용 응답시간",
+        "method": "평균 유효 반응시간(초) = 전 21개 사례의 지정 반응 27개 × 5회, 135관측",
+        "target": "1.0초 이하, 모든 local stop 0.1초 이하",
+        "guards": "일반 ≥100/105 ≤2초; 집중 30/30 ≤5초; stop ≤0.1초",
+        "score": {
+          "id": "ASR-QA-02",
+          "direction": "low",
+          "bounds": [
+            ".2",
+            ".36",
+            ".52",
+            ".68",
+            ".84",
+            "1"
+          ],
+          "unit": "초",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      },
+      {
+        "id": "ASR-QA-03",
+        "name": "VIA 요청 처리시간",
+        "method": "평균 VIA 귀속 사이클 시간(초) = 사용자 목표가 있는 19개 × 5회, 95관측",
+        "target": "10초 이하",
+        "guards": "≥91/95 ≤15초, 미전달 0건",
+        "score": {
+          "id": "ASR-QA-03",
+          "direction": "low",
+          "bounds": [
+            "2",
+            "3.6",
+            "5.2",
+            "6.8",
+            "8.4",
+            "10"
+          ],
+          "unit": "초",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      },
+      {
+        "id": "ASR-QA-04",
+        "name": "VIA 모델 사용 비용",
+        "method": "P21 1묶음 평균 총 모델 비용(USD/P21) = 동일 활동 5회 총액의 평균",
+        "target": "$0.50/P21 이하",
+        "guards": "초기/재시도/폐기/배경/context 누락 없음",
+        "score": {
+          "id": "ASR-QA-04",
+          "direction": "low",
+          "bounds": [
+            ".20",
+            ".26",
+            ".32",
+            ".38",
+            ".44",
+            ".50"
+          ],
+          "unit": "USD/P21",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      },
+      {
+        "id": "ASR-QA-05",
+        "name": "VIA 변경 용이성",
+        "method": "평균 변경 기능 책임 단위 수(개/과제) = 6개 변경의 고유 수정 책임 수 합/6",
+        "target": "평균 3개 이하, 과제별5개 이하",
+        "guards": "과제별 ≤5개, 6개 완료/필수 회귀 충족",
+        "score": {
+          "id": "ASR-QA-05",
+          "direction": "low",
+          "bounds": [
+            "1",
+            "1.4",
+            "1.8",
+            "2.2",
+            "2.6",
+            "3"
+          ],
+          "unit": "개/과제",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      },
+      {
+        "id": "ASR-QA-06",
+        "name": "로컬 VIA 메모리 사용량",
+        "method": "최대 전체 commit 메모리(MiB) = 동일 P21 5회 중 전체 process/고유 공유 allocation 동시 합 최대",
+        "target": "4,096MiB(4GiB) 이하",
+        "guards": "working-set ≤6GiB, 유휴 증가 ≤16MiB",
+        "score": {
+          "id": "ASR-QA-06",
+          "direction": "low",
+          "bounds": [
+            "1024",
+            "1638.4",
+            "2252.8",
+            "2867.2",
+            "3481.6",
+            "4096"
+          ],
+          "unit": "MiB",
+          "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+        }
+      }
+    ]
+  },
+  "workload": {
+    "user_input_scenes": 19,
+    "agent_triggered_scenes": 2,
+    "internal_agent_events": 4,
+    "total_scenes": 21,
+    "independent_repeats": 5,
+    "total_scenario_trials": 105,
+    "accuracy_trials": 105,
+    "accuracy_conditions": 630,
+    "reactions_per_activity": 27,
+    "cycles_per_activity": 19,
+    "reaction_trials": 135,
+    "cycle_trials": 95,
+    "planned_voice_utterances": 21,
+    "voice_input_root_seconds": 44,
+    "voice_input_followup_seconds": 6,
+    "voice_input_seconds": 50,
+    "voice_input_minutes": "5/6",
+    "voice_output_reference_seconds": 179,
+    "voice_output_reference_minutes": "179/60",
+    "reference_semantic_calls": 62,
+    "source_changes": 4,
+    "maintenance_ticks": 2
+  },
+  "reference_source": "docs/architecture/12-decisions/decision-packages/03-02-poc-reference-calculations.json",
+  "reference_sha256": "891bf1d88102a54e51305fc4b32be44eb138e2f4e3a1e864d6b51573153859bf",
+  "common_budget": {
+    "semantic_USD": "0.03472",
+    "fresh_audio_USD": "0.24512",
+    "voice_text_USD": "0.072",
+    "subtotal_USD": "0.35184",
+    "remaining_USD": "0.14816",
+    "target_USD": "0.50",
+    "evidence_level": "CALCULATED_REFERENCE_NOT_CANDIDATE_RESULT"
+  },
+  "regional_references": {
+    "dp41_sufficient_typed_evidence": [
+      {
+        "profile": "fast-assumption",
+        "A_seconds": "3.17",
+        "B_seconds": "1.81",
+        "A_minus_B_seconds": "1.36",
+        "evidence_level": "CALCULATED_REFERENCE"
+      },
+      {
+        "profile": "base-assumption",
+        "A_seconds": "4.196923",
+        "B_seconds": "2.398462",
+        "A_minus_B_seconds": "1.798462",
+        "evidence_level": "CALCULATED_REFERENCE"
+      },
+      {
+        "profile": "slow-assumption",
+        "A_seconds": "6.47",
+        "B_seconds": "3.71",
+        "A_minus_B_seconds": "2.76",
+        "evidence_level": "CALCULATED_REFERENCE"
+      }
+    ],
+    "dp42_valid_answer_seconds": {
+      "case_id": "S6-04",
+      "A": ".010",
+      "B": ".025",
+      "B_minus_A": ".015",
+      "assumption": "정상 ANSWER 한 번의 지역 확정/receipt 반영. 모델 호출/외부 접수 시간은 양안 공통."
+    },
+    "dp44_six_normal_transitions_seconds": {
+      "case_id": "S5-04",
+      "A": ".06",
+      "B": ".05",
+      "A_minus_B": ".01",
+      "assumption": "A 중앙 callback 6회×0.010초, B stage 6회×0.005초+join 0.020초. 실제 trace로 전이 수/지연을 대체."
+    },
+    "dp45_past_processing_USD": {
+      "case_ids": [
+        "S2-02",
+        "S2-04",
+        "S2-05"
+      ],
+      "A_3_misses": "0.00288",
+      "A_1_miss": "0.00096",
+      "B_4_productions": "0.00608",
+      "break_even_A_misses": "6.333333",
+      "A3_minus_B4": "-0.0032",
+      "assumption": "P21 안 과거 근거의 추가 처리만 비교: A 3miss 또는 강한 cache 1miss, B 초기/새 근거/갱신을 합친 관계 생산 4회. 원천 변경4건이 생산4회를 강제하지 않음."
+    },
+    "memory_examples": [
+      {
+        "dp": "41",
+        "A_mib": "1792",
+        "B_mib": "1760",
+        "B_minus_A_mib": "-32",
+        "evidence_level": "CALCULATED_REFERENCE",
+        "assumption": "4개의 16MiB Context 대신 4개의 8MiB frame/상태라는 가정"
+      },
+      {
+        "dp": "42",
+        "A_mib": "1792",
+        "B_mib": "2080",
+        "B_minus_A_mib": "288",
+        "evidence_level": "CALCULATED_REFERENCE",
+        "assumption": "추가 process heap 256MiB와 접수/receipt 상태 32MiB 가정"
+      },
+      {
+        "dp": "44",
+        "A_mib": "1792",
+        "B_mib": "1840",
+        "B_minus_A_mib": "48",
+        "evidence_level": "CALCULATED_REFERENCE",
+        "assumption": "windows/credit 32MiB와 envelope copy 16MiB 가정"
+      },
+      {
+        "dp": "45",
+        "A_mib": "1792",
+        "B_mib": "1920",
+        "B_minus_A_mib": "128",
+        "evidence_level": "CALCULATED_REFERENCE",
+        "assumption": "생산/index 256MiB 추가와 원문 Context 128MiB 감소 가정"
+      }
+    ]
+  },
+  "candidate_values_and_grades": "NOT_EVALUATED",
+  "dps": {
+    "41": {
+      "title": "모델 판단 반복과 코드 해결 반복",
+      "options": [
+        "모델 주도 해석",
+        "모델 요청 틀과 코드 주도 완성"
+      ],
+      "cases": [
+        "S2-01",
+        "S2-02",
+        "S2-03",
+        "S2-05",
+        "S3-02",
+        "S3-03",
+        "S4-01",
+        "S6-01",
+        "S6-02"
+      ],
+      "reasons": [
+        [
+          "전체 의미 결합과 부분 갱신",
+          "요청 틀의 표현 범위와 부분 결합"
+        ],
+        [
+          "조회 후 재판단과 실제 첫 반응",
+          "지원 항목의 코드 해결과 추가 해석"
+        ],
+        [
+          "조회와 전체 판단의 반복 경로",
+          "항목별 해결과 코드 결합 경로"
+        ],
+        [
+          "실제 재판단 token과 폐기 청구",
+          "부분 해석 호출과 전체 청구"
+        ],
+        [
+          "모델 지침과 검증의 실제 수정",
+          "요청 틀과 Engine 규칙의 실제 수정"
+        ],
+        [
+          "Context와 조회 buffer의 동시 할당",
+          "요청 틀과 해결 상태의 동시 할당"
+        ]
+      ],
+      "condition": "충분한 typed 근거에서만 A 2호출/B 1호출. B의 추가 해석 또는 A의 cache로 차이가 줄어든다.",
+      "results": [
+        {
+          "qa_id": "ASR-QA-01",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-02",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-03",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-04",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-05",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-06",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        }
+      ]
+    },
+    "44": {
+      "title": "중앙 후속 지시와 단계별 실행 연결",
+      "options": [
+        "중앙에서 다음 실행 지시",
+        "연결된 단계가 조건으로 실행"
+      ],
+      "cases": [
+        "S3-02",
+        "S4-01",
+        "S4-02",
+        "S5-01",
+        "S5-02",
+        "S5-04"
+      ],
+      "reasons": [
+        [
+          "현재성 검사와 올바른 후속 지시",
+          "window와 Join의 현재성 검사"
+        ],
+        [
+          "중앙 queue와 회수 대기",
+          "credit와 Stage 및 Join 대기"
+        ],
+        [
+          "완료 회수와 다음 실행의 연결",
+          "Stage 활성화와 publication Join"
+        ],
+        [
+          "실제 호출과 retry 및 폐기 청구",
+          "실제 호출과 retry 및 폐기 청구"
+        ],
+        [
+          "후속 규칙과 사건 계약의 수정",
+          "단계와 Join 계약의 실제 수정"
+        ],
+        [
+          "중앙 진행 상태와 실행 대기열",
+          "window와 credit 및 envelope copy"
+        ]
+      ],
+      "condition": "양안의 async, 우선순위와 병렬 실행을 허용한다. S5-04의 실제 queue와 Join 경합을 확인한다.",
+      "results": [
+        {
+          "qa_id": "ASR-QA-01",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-02",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-03",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-04",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-05",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-06",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        }
+      ]
+    },
+    "45": {
+      "title": "원본 조합과 공통 가공 정보 조회",
+      "options": [
+        "Request별 원본 조합",
+        "공통 가공 정보 생산과 조회"
+      ],
+      "cases": [
+        "S2-02",
+        "S2-03",
+        "S2-04",
+        "S2-05",
+        "S6-01"
+      ],
+      "reasons": [
+        [
+          "원문과 유효 cache의 조건 보존",
+          "게시 관계의 coverage와 예외 보존"
+        ],
+        [
+          "최초 조합과 재사용 cache 대기",
+          "준비된 조회와 미게시 backfill 대기"
+        ],
+        [
+          "첫 사용과 반복 및 갱신 후 조합",
+          "조회와 원문검증 및 동기 backfill"
+        ],
+        [
+          "cache miss와 실제 추가 해석 청구",
+          "초기와 미사용 갱신 및 철회 청구"
+        ],
+        [
+          "조합과 cache의 철회 처리 수정",
+          "생산자와 조회자의 철회 처리 수정"
+        ],
+        [
+          "원문 Context와 선택 cache",
+          "관계 index와 생산 상태 및 원문"
+        ]
+      ],
+      "condition": "A의 유효 cache와 부분 갱신을 인정한다. B의 초기/미사용 생산과 backfill도 같은 P21에 포함한다.",
+      "results": [
+        {
+          "qa_id": "ASR-QA-01",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-02",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-03",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-04",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-05",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-06",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        }
+      ]
+    },
+    "42": {
+      "title": "공동 상태 확정과 독립 상태 접수",
+      "options": [
+        "통합 Core의 공동 확정",
+        "독립 대화와 Task 서비스의 접수"
+      ],
+      "cases": [
+        "S6-04",
+        "S4-03",
+        "S5-01",
+        "S6-02",
+        "S5-03",
+        "S5-04"
+      ],
+      "reasons": [
+        [
+          "의미와 접수 및 현재성 검사",
+          "동일 검사와 receipt의 올바른 반영"
+        ],
+        [
+          "공동 commit과 대화 반영 대기",
+          "독립 접수와 receipt 반영 대기"
+        ],
+        [
+          "관련 상태의 공동 확정 경로",
+          "인계와 reconciliation의 전체 경로"
+        ],
+        [
+          "코드 저장 외 실제 모델 청구",
+          "IPC 외 실제 모델 청구"
+        ],
+        [
+          "공동 상태 계약의 실제 수정",
+          "독립 인계 계약의 실제 수정"
+        ],
+        [
+          "통합 실행체의 상태와 대기열",
+          "추가 process와 receipt 상태"
+        ]
+      ],
+      "condition": "독립 process만으로 정확성이나 모델 비용 이익을 부여하지 않는다. 정상 접수와 경합을 함께 본다.",
+      "results": [
+        {
+          "qa_id": "ASR-QA-01",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-02",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-03",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-04",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-05",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        },
+        {
+          "qa_id": "ASR-QA-06",
+          "A": null,
+          "B": null,
+          "A_grade": null,
+          "B_grade": null
+        }
+      ]
+    }
+  }
+}
