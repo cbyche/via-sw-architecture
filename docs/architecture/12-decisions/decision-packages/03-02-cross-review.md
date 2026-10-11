@@ -30,7 +30,7 @@
 | 변경된 정확성 분모에 이전 문턱이 남을 위험 | 618/630, 전체/조건100/105와 상황군별 정수 목표 | 정수 경계와 등급 검산 |
 | 동시에 도착한 사건을 2초 안에 모두 음성 제시하도록 요구하면 모순 | 일반115관측 중110개 ≤2초, 집중30개 전부 ≤5초 | 평균1초는 유지, stop10개 모두0.1초, 순차 voice queue 포함 |
 | 사용자가 말하는 중 제시 금지와 Agent 도착 경계 충돌 | 현재 필수 사용자 발화 구간을 외부 입력으로 표시 | DAG에서 VIA 병렬 처리/전사/queue는 유지, wall-clock 병기 |
-| 이전 W100 빈도와 비용 목표를 새 활동에 그대로 적용할 위험 | P21 입력50초/출력179초/의미62호출 예산 | 기본$0.223167+여유$0.076833=$0.30/P21, 실제 청구 우선 |
+| 이전 W100 빈도와 비용 목표를 새 활동에 그대로 적용할 위험 | P21 입력50초/출력179초/의미62호출 예산 | 기본$0.173567+여유$0.126433=$0.30/P21, 실제 청구 우선 |
 | 45의 예시40/10miss·20생산이 P21과 다름 | S2-02/04/05의 A3miss/강한cache1miss, B4생산 지역 가정 | 원천갱신4가 모델생산4를 강제하지 않음, 비용 중복 방지 |
 | 5회만으로 95% 확증을 요구하는 해석 | 실측5쌍의 방향과 평균/최소/최대 공개 | 실용 차이+5쌍 같은 방향의 PoC 기준, 통계적 확증 아님 |
 | 41 메모리의 frame 수가 모호 | 4×16MiB 대4×8MiB 명시 | -32MiB 산술과 할당 가정 구별 |
@@ -62,3 +62,9 @@ python3 scripts/architecture/check_qa_catalog.py
 ## GitHub 게시와 전체 CI
 
 QA 문서/원장/두 발표자료는 `44d5d9230b6a9017f688e9eeb2542764580ff13d`로 main에 push했다. [해당 CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38124471022)는 기존 04-42의 `choice42-structure.svg`/`.drawio` 재생성 drift에서 실패했다. [직전 기준선 3e503646c의 CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38123466339)도 같은 단계/같은 두 파일에서 실패했다. 해당 생성기/그림은 이번 QA 커밋의 변경 목록에 없으며 두 커밋 간 변경이 없다. 이번 QA 범위의 로컬 검사 통과와 저장소 전체 CI 성공을 구별한다. 기존 DP 그림을 이 QA 작업에서 자동 재작성하지 않았다.
+
+## 모델 reference 개정 — Gemini (2026-10-11)
+
+사용자 요청으로 Groq을 제외하고 Gemini 3 Flash Preview Standard 입력 $0.50/출력 $3.00 per 1M token으로 바꿨다. 공개 가격과 생성률 가정을 분리했고 100/200/400 token/s 민감도 입력을 사용한다. 기존 450 token/s를 대체 모델의 성능으로 이전하지 않는다. 100 token 직렬 반응의 1.23초 초과와 유효한 50 token 반응일 때의 0.98초를 구별한다. P21 사례/반복/목표/순서는 유지한다. Gemini 3.1 Live의 동기 함수 호출 제한과 GPT Realtime의 공통 기능·차이를 03-02 §8.4.2에 기록했다. 교체 전 37파일은 [보존본](../../../archive/qa-model-reference-before-gemini-20261011/README.md)에 bytes/hash 보존했다. 가격·계산·발표 원본·노트를 함께 재생성하며 실제 API 호출이나 성능 측정은 수행하지 않는다.
+
+개정 후 두 PPTX의 package/layout/font/native table/Artifact Tool import는 통과했고 layout finding/warning은 0이다. 바뀐 요약2장째·부록QA-02·부록QA-04의 최종 PNG를 각각 확인했다. 나머지 9개 PNG는 이전 육안 검수본과 bytes가 같았다. 원본/가격 입력/계산/투영/노트·source hash와 보존본 140개 hash를 대조한다. 이전 세대 GitHub 전체 CI의 DP42 그림 drift 기록은 그대로 보존하며 이번 개정의 QA 검수와 혼동하지 않는다.

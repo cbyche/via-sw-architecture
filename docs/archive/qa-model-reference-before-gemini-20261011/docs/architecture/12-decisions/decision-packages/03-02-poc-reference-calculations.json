@@ -1,0 +1,211 @@
+{
+  "contract_version": "ASR-QA-v6",
+  "source_sha256": "199a8277dcefdd94f2cd470355c800923e9c2653b110e873dc3ae2bda5246895",
+  "common_workload_sha256": "cd2e5e9ff24e67a1c31326c95acc0f67d0466e64cd997b9d6ff642d56362bda9",
+  "workload_manifest_sha256": "910f8364b54c35de87d7e49b6f4e6370cba947b186b593ae430b502ee9380a58",
+  "workload_summary": {
+    "user_input_scenes": 19,
+    "agent_triggered_scenes": 2,
+    "internal_agent_events": 4,
+    "total_scenes": 21,
+    "independent_repeats": 5,
+    "total_scenario_trials": 105,
+    "accuracy_trials": 105,
+    "accuracy_conditions": 630,
+    "reactions_per_activity": 27,
+    "cycles_per_activity": 19,
+    "reaction_trials": 135,
+    "cycle_trials": 95,
+    "planned_voice_utterances": 21,
+    "voice_input_root_seconds": 44,
+    "voice_input_followup_seconds": 6,
+    "voice_input_seconds": 50,
+    "voice_input_minutes": "5/6",
+    "voice_output_reference_seconds": 179,
+    "voice_output_reference_minutes": "179/60",
+    "reference_semantic_calls": 62,
+    "source_changes": 4,
+    "maintenance_ticks": 2
+  },
+  "evidence_level": "CALCULATED_REFERENCE",
+  "not_candidate_results": true,
+  "arithmetic": {
+    "llm_2000_200_USD": "0.0024",
+    "generation_only_200_seconds": "0.444444",
+    "semantic_activity_USD": "0.1488",
+    "voice_activity_USD": "0.074367",
+    "activity_total_USD": "0.223167",
+    "activity_headroom_USD": "0.076833",
+    "reference_reaction_seconds": "0.952222"
+  },
+  "dp41_sufficient_typed_evidence": [
+    {
+      "profile": "fast-assumption",
+      "A_seconds": "1.114444",
+      "B_seconds": "0.782222",
+      "A_minus_B_seconds": "0.332222",
+      "evidence_level": "CALCULATED_REFERENCE"
+    },
+    {
+      "profile": "base-reference",
+      "A_seconds": "2.008889",
+      "B_seconds": "1.304444",
+      "A_minus_B_seconds": "0.704444",
+      "evidence_level": "CALCULATED_REFERENCE"
+    },
+    {
+      "profile": "slow-assumption",
+      "A_seconds": "4.247778",
+      "B_seconds": "2.598889",
+      "A_minus_B_seconds": "1.648889",
+      "evidence_level": "CALCULATED_REFERENCE"
+    }
+  ],
+  "dp42_valid_answer_seconds": {
+    "case_id": "S6-04",
+    "A": ".010",
+    "B": ".025",
+    "B_minus_A": ".015",
+    "assumption": "정상 ANSWER 한 번의 지역 확정/receipt 반영. 모델 호출/외부 접수 시간은 양안 공통."
+  },
+  "dp44_six_normal_transitions_seconds": {
+    "case_id": "S5-04",
+    "A": ".06",
+    "B": ".05",
+    "A_minus_B": ".01",
+    "assumption": "A 중앙 callback 6회×0.010초, B stage 6회×0.005초+join 0.020초. 실제 trace로 전이 수/지연을 대체."
+  },
+  "dp45_past_processing_USD": {
+    "case_ids": [
+      "S2-02",
+      "S2-04",
+      "S2-05"
+    ],
+    "A_3_misses": "0.012",
+    "A_1_miss": "0.004",
+    "B_4_productions": "0.0256",
+    "break_even_A_misses": "6.4",
+    "A3_minus_B4": "-0.0136",
+    "assumption": "P21 안 과거 근거의 추가 처리만 비교: A 3miss 또는 강한 cache 1miss, B 초기/새 근거/갱신을 합친 관계 생산 4회. 원천 변경4건이 생산4회를 강제하지 않음."
+  },
+  "memory_examples": [
+    {
+      "dp": "41",
+      "A_mib": "1792",
+      "B_mib": "1760",
+      "B_minus_A_mib": "-32",
+      "evidence_level": "CALCULATED_REFERENCE",
+      "assumption": "4개의 16MiB Context 대신 4개의 8MiB frame/상태라는 가정"
+    },
+    {
+      "dp": "42",
+      "A_mib": "1792",
+      "B_mib": "2080",
+      "B_minus_A_mib": "288",
+      "evidence_level": "CALCULATED_REFERENCE",
+      "assumption": "추가 process heap 256MiB와 접수/receipt 상태 32MiB 가정"
+    },
+    {
+      "dp": "44",
+      "A_mib": "1792",
+      "B_mib": "1840",
+      "B_minus_A_mib": "48",
+      "evidence_level": "CALCULATED_REFERENCE",
+      "assumption": "windows/credit 32MiB와 envelope copy 16MiB 가정"
+    },
+    {
+      "dp": "45",
+      "A_mib": "1792",
+      "B_mib": "1920",
+      "B_minus_A_mib": "128",
+      "evidence_level": "CALCULATED_REFERENCE",
+      "assumption": "생산/index 256MiB 추가와 원문 Context 128MiB 감소 가정"
+    }
+  ],
+  "score_bands": [
+    {
+      "id": "ASR-QA-01",
+      "direction": "high",
+      "bounds": [
+        "100",
+        "99.6",
+        "99.2",
+        "98.8",
+        "98.4",
+        "98"
+      ],
+      "unit": "%",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-02",
+      "direction": "low",
+      "bounds": [
+        ".2",
+        ".36",
+        ".52",
+        ".68",
+        ".84",
+        "1"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-03",
+      "direction": "low",
+      "bounds": [
+        "2",
+        "3.6",
+        "5.2",
+        "6.8",
+        "8.4",
+        "10"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-04",
+      "direction": "low",
+      "bounds": [
+        ".10",
+        ".14",
+        ".18",
+        ".22",
+        ".26",
+        ".30"
+      ],
+      "unit": "USD/P21",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-05",
+      "direction": "low",
+      "bounds": [
+        "1",
+        "1.4",
+        "1.8",
+        "2.2",
+        "2.6",
+        "3"
+      ],
+      "unit": "개/과제",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-06",
+      "direction": "low",
+      "bounds": [
+        "1024",
+        "1638.4",
+        "2252.8",
+        "2867.2",
+        "3481.6",
+        "4096"
+      ],
+      "unit": "MiB",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    }
+  ]
+}

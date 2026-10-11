@@ -28,6 +28,10 @@
 
 21개 상세 입력/사건/정답/선정·QA 대응을 완성하고 동일 P21 5회 계약을 원본/JSON/검산/두 발표자료에 반영했다. 요약6장(핵심2/공통1/전체 대응3), 부록6장의 최종 렌더를 각각 확인했다. 표 행 확장 경고를 수정한 최종 파일의 layout finding/warning은 0이다. QA 전용/활성 링크·용어·catalog 검사, 103개 archive hash가 통과했다. [교차 리뷰](./03-02-cross-review.md)와 각 발표 폴더 validation-summary.json에 확인 범위를 기록했다. 사용자에게 P21 사례안과 목표 개정을 리뷰할 수 있는 상태이며 후보 실측/승자 선정은 하지 않았다. 과거 W100 v5는 archive와 Git 이력이고 현재 계약으로 복원하지 않는다.
 
+## QA 모델 reference 개정 — Gemini (2026-10-11)
+
+사용자가 Groq 제외 및 30B급 Qwen 또는 Gemini 사용을 요청했다. 의미 비용 reference는 `gemini-3-flash-preview` Standard $0.50/$3.00 per 1M token, 음성은 기존 `gemini-3.1-flash-live-preview`로 기록한다. Qwen3-30B-A3B-Instruct-2507은 대체 범위로만 명시하고 API 단가를 섞지 않는다. 기존 450 token/s를 제거하고 100/200/400 token/s 작성자 민감도 가정으로 분리한다. 기본 비용 $0.173567/여유 $0.126433으로 계산/두 발표자료를 함께 갱신했다. Gemini Live의 동기 tool 대기를 긴 Agent 실행에 연결하면 대화가 막히므로 VIA 별도 업무관리와 provider 제어 검증의 필요성을 03-02 §8.4.2에 남긴다. P21 사례·반복5회·QA 목표/순서, 실제 미실측 상태는 유지한다. 교체 전 37파일 archive를 보존하고 병행 입력 근거 작업은 건드리지 않았다. 개정 후 바뀐 3개 슬라이드를 확인했고 나머지 9개 렌더는 이전 검수본과 bytes가 동일했다. 원본/계산/투영/링크·용어·catalog와 두 PPTX 검수 및 140 archive hash 검수를 수행했다.
+
 ## 별도 입력 근거 작업 — 45를 보존한 46 재설계 (2026-10-10)
 
 사용자는 초기 46의 Interaction Manager가 양안에서 동일하게 시간 대응을 끝내면 45의 앞에 같은 기능을 붙인 것뿐이라고 지적하고, 시간 대응까지 포함하는 구현 가능한 구조 A/B와 QA 손익을 요구했다. 41/42/44/45의 문서와 그림 수준을 검토해 [46](./04-46-input-and-context-evidence.md)을 다시 작성했다. 초기 세대는 [archive](../../../archive/46-observation-contract-only-2026-10-09/README.md)에 보존했다.

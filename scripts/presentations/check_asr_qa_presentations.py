@@ -32,7 +32,7 @@ def check_links(path):
         assert (path.parent/target).exists(),(path,target)
 
 def archive_check():
-    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33),('qa-common-workload-before-v6-20261011',38)]:
+    for name,count in [('qa-presentations-before-asr-20261011',32),('qa-common-workload-before-v5-20261011',33),('qa-common-workload-before-v6-20261011',38),('qa-model-reference-before-gemini-20261011',37)]:
         archive=ROOT/'docs/archive'/name
         manifest=json.loads((archive/'manifest.json').read_text())
         assert len(manifest)==count
@@ -189,7 +189,7 @@ def common_check():
     assert 'P21' in rows[5]['shortMetric']
     check_links(BASE/'README.md')
     check_links(BASE/'quality-attributes/measurement-design.md')
-    print('PASS: six complete ASR definitions, 21 full case mappings/630 conditions, one P21 5-repeat population, all band boundaries and 103 archive hashes')
+    print('PASS: six complete ASR definitions, 21 full case mappings/630 conditions, one P21 5-repeat population, all band boundaries and 140 archive hashes')
 
 if __name__=='__main__':
     common_check()

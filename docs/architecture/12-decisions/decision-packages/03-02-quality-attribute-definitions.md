@@ -9,7 +9,7 @@
 | **ASR-QA-01** | [요청 처리 정확성](#3-정확성) | 사용자의 의도와 확인된 사실에 맞게 요청을 처리하는 능력 | **필수 정답 조건 충족률(%)** = P21의 21개 × 5회 × C1~C6, 630조건 | **98% 이상**, 정답 618/630 이상 | 조건 오류 50개당 1개 이내. 전체 시나리오/상황군/조건 유형 ≥95%, 필수 위반 0건. 재사용·동시 부하·최종 tail도 채점 (§3) |
 | **ASR-QA-02** | [상호작용 응답시간](#4-응답속도) | 사용자 입력이나 업무 상태 변화에 VIA가 알맞은 답변이나 동작으로 반응하기까지 걸리는 시간 (예: VIA가 말하는 중 사용자 끼어들기 → 음성 재생 중단, Agent의 확인 질문 도착 → 사용자에게 질문 제시) | **평균 유효 반응시간(초)** = 전 21개 사례의 지정 반응 27개 × 5회, 135관측 | **1.0초 이하**, 모든 local stop 0.1초 이하 | 대화 흐름 유지의 1초/즉각 제어 0.1초 참조. 일반 반응 2초 이내 ≥95%, 집중 도착 5초 이내, 미전달 0건. 모든 사례의 적용 경계를 대응표로 공개 (§4) |
 | **ASR-QA-03** | [VIA 요청 처리시간](#4-응답속도) | 요청 접수부터 최종 결과 전달까지, VIA의 처리와 대기로 걸리는 시간 (예: 보고서 작성 요청 → 요청 해석 → Agent에 작성 업무 인계 → 결과 수신 → 사용자에게 보고서 전달) | **평균 VIA 귀속 사이클 시간(초)** = 사용자 목표가 있는 19개 × 5회, 95관측 | **10초 이하** | 의미6 + 연결1 + 전달1 + 재검증2초의 작성자 예산. 15초 이내 ≥95%, 미전달 0건. Agent 발신 두 사례는 QA-02에 적용 (§4) |
-| **ASR-QA-04** | [VIA 모델 사용 비용](#5-모델-사용-비용) | 동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액 | **P21 1묶음 평균 총 모델 비용(USD/P21)** = 동일 활동 5회 총액의 평균 | **$0.30/P21 이하** | 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.223167, 여유 $0.076833. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5) |
+| **ASR-QA-04** | [VIA 모델 사용 비용](#5-모델-사용-비용) | 동일한 사용자 활동을 처리하는 동안 VIA의 음성/의미 모델 사용에 드는 금액 | **P21 1묶음 평균 총 모델 비용(USD/P21)** = 동일 활동 5회 총액의 평균 | **$0.30/P21 이하** | 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.173567, 여유 $0.126433. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5) |
 | **ASR-QA-05** | [VIA 변경 용이성](#6-변경-용이성) | 모델/Agent/정보원/기능 계약의 변화를 다른 사용자 기능을 유지하면서 수용하는 능력 | **평균 변경 기능 책임 단위 수(개/과제)** = 6개 변경의 고유 수정 책임 수 합/6 | **평균 3개 이하**, 과제별5개 이하 | adapter/생산/소비 약3개 책임에 일상 변경을 국소화. 동일 U01~18 registry와 기존 기능/권한/P21 회귀 유지 (§6) |
 | **ASR-QA-06** | [로컬 VIA 메모리 사용량](#7-메모리-사용량) | 동일한 활동과 동시 부하에서 VIA가 로컬 PC에 할당해 유지하는 메모리의 최대량 | **최대 전체 commit 메모리(MiB)** = 동일 P21 5회 중 전체 process/고유 공유 allocation 동시 합 최대 | **4,096MiB(4GiB) 이하** | 32GB급 Windows PC의 OS8/업무앱16/VIA4/여유4GiB 계획. 공통 allocation1792 + 추가여유2304MiB, 실제 RAM residency와 구별 (§7) |
 
@@ -568,7 +568,7 @@ DP마다 최소 한 SENSITIVE경로를 공통 모집단에 포함했다. 실제 
 
 목표는 평균 1초 이하, 일반 반응(S5-04 제외) 115개 중 110개 이상이 2초 이내, 집중 도착 S5-04의 30개 반응은 모두 5초 이내, 미전달 0건이다. S4-02/S5-04의 local stop 총 10개 관측은 모두 0.1초 이내여야 한다. 집중 장면은 같은 소리를 겹쳐 재생하지 않고 짧은 업무별 핵심 안내와 상세 Text를 사용하며, 순차 전달의 차례 비용을 포함한다. 5초 보호 한도는 여러 사건을 전달할 여유를 둔 작성자 예산이며 평균 1초 목표를 완화하지 않는다.
 
-Nielsen의 0.1/1초는 참고 기준이며 평균과 95% 규칙은 작성자 예산이다. 예시 계산은 전사 0.10 + 첫 출력 0.30 + 100/450 생성 + 코드·읽기·확정 0.08 + 음성 0.25 = 0.9522초다. 450 token/s만 외부 참조이고 나머지는 가정이다. 의미 처리가 필요한 정정·질문·거부를 local stop로 대체하지 않는다.
+Nielsen의 0.1/1초는 참고 기준이며 평균과 95% 규칙은 작성자 예산이다. Gemini 생성률 200 token/s를 비롯한 지연은 모두 작성자 가정이다. 전사 0.10 + 첫 출력 0.30 + 의미 출력 100/200 + 코드·읽기·확정 0.08 + 음성 0.25 = 1.23초로, 이 직렬 경로는 1초 예산을 넘는다. 유효한 반응에 필요한 의미 출력이 50 token인 경우에만 같은 가정에서 0.98초다. 따라서 필요한 의미를 유지한 짧은 출력, 입력 중 선행 처리 또는 병렬 경로가 목표를 충족하는지 실제 사례에서 확인해야 한다. 50 token은 전체 200 token 호출 예산을 일괄 축소하거나 placeholder를 정답으로 인정하는 규칙이 아니다. 의미 처리가 필요한 정정·질문·거부를 local stop로 대체하지 않는다.
 
 ### 4.3 VIA 요청 처리시간
 
@@ -598,14 +598,14 @@ P21은 사용자 목표 장면 19개와 Agent 단독 장면 2개다. S5-04 내�
 
 | P21 기준 계산 | USD |
 | --- | --- |
-| 의미62호출, 입력124,000/출력12,400 token | 0.148800 |
+| 의미62호출, 입력124,000/출력12,400 token | 0.099200 |
 | 음성audio 입력50초/출력예산179초 | 0.057867 |
 | 음성Text/context 입력10,000/출력2,000 token | 0.016500 |
-| 기본 총액 | **0.223167** |
-| 초기/추가생산/재시도 여유 | **0.076833** |
+| 기본 총액 | **0.173567** |
+| 초기/추가생산/재시도 여유 | **0.126433** |
 | 목표 | **0.30/P21** |
 
-W100의 $1.50를 새 묶음에 그대로 적용하지 않고 동일 P21 사용량에서 다시 계산했다. 기본 대비 약 34.43%의 추가 여유를 둔 작성자 평가 예산이며 상품 가격이나 모델 성능 보장이 아니다. Source 변경 4건이 모델 생산 4호출을 강제하지 않는다. 실제 backfill·추가 질문·재시도가 많으면 목표 미달을 그대로 보고한다.
+W100의 $1.50를 새 묶음에 그대로 적용하지 않고 동일 P21 사용량에서 다시 계산했다. 기본 대비 약 72.84%의 추가 여유를 둔 작성자 평가 예산이며 상품 가격이나 모델 성능 보장이 아니다. Source 변경 4건이 모델 생산 4호출을 강제하지 않는다. 실제 backfill·추가 질문·재시도가 많으면 목표 미달을 그대로 보고한다.
 
 ### 5.4 수치 차이와 민감도
 
@@ -797,15 +797,37 @@ S1-01 한정 조회는 원본의 접수+0.2초를 유지한다. S2-01/S3-01/S4-0
 | 용도 | 선택 reference / 값 | 출처와 적용 범위 |
 | --- | --- | --- |
 | Windows PC | **Galaxy Book6 Ultra NP960UJH-XG3IN**, Windows 11 Home, Core Ultra 7 356H, RAM 32GB LPDDR5X, RTX 5070 Laptop GPU 8GB, SSD 1TB | [삼성 공식 SKU 사양](https://www.samsung.com/in/computers/galaxy-book/galaxy-book6-ultra-ultra-7-32gb-1tb-np960ujh-xg3in/). RAM과 VRAM을 같은 자원으로 합치지 않음. 모델은 클라우드이므로 GPU 가중치 적재를 로컬 비용에 가산하지 않음 |
-| 의미 LLM의 비용 | **Groq Qwen/Qwen3.8-27B**, `qwen/qwen3.8-27b`: 입력 **$0.80**, 출력 **$4.00** / 1M token | [Groq 공식 모델/단가 표](https://console.groq.com/docs/models). PoC reference로 Preview를 사용. 호출별 실제 또는 가정한 입력/출력/reasoning 사용량을 적용하며 future 모델 단가로 주장하지 않음 |
-| 의미 LLM의 생성 속도 | 같은 모델의 공개 **약 450+ token/s**. 기준 계산에서는 **450 token/s** 사용 | [Groq 공식 모델 설명](https://console.groq.com/docs/model/qwen/qwen3.8-27b). Text/이미지 입력, tool/JSON 지원. 단일 생성률 reference이며 한국어/입력 길이별 보장이나 첫 출력 지연이 아님 |
+| 의미 LLM의 비용 | **Google Gemini 3 Flash Preview**, `gemini-3-flash-preview`: Standard 입력 **$0.50**, 출력 **$3.00** / 1M token (thinking 포함) | [Google 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview), [모델 설명](https://ai.google.dev/gemini-api/docs/models/gemini-3-flash-preview). Text/이미지 입력, 함수 호출/structured output 지원. 공개 API 비용을 가진 의미 해석 reference이며 제품 모델 선정이나 Qwen 30B와의 규모/정확성 동등성을 뜻하지 않음 |
+| 의미 LLM의 생성 속도 | **작성자 가정 200 token/s**, 민감도 **100 / 200 / 400 token/s** | 확인한 Google 공식 가격/모델 문서는 이 요청 조건의 절대 생성률을 보장하지 않는다. Groq의 450 token/s를 Gemini/Qwen에 이전하지 않는다. TTFT·출력·thinking·queue·통신을 호출별로 따로 기록하며 실제 배포의 수치로 대체한다. 여기의 계산은 Gemini 속도 측정 결과가 아니다 |
 | 음성 비용 | **Gemini 3.1 Flash Live Preview**, `gemini-3.1-flash-live-preview`: audio 입력 **$3.00**/1M token 또는 공개 근사 **$0.005/분**, audio 출력 **$12.00**/1M token 또는 **$0.018/분**. Text 입력 **$0.75**, 출력 **$4.50**/1M token | [Google 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [모델 설명](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview). 분당 환산은 공개 근사값. 현재 역할은 음성 입출력 reference이며 현재 요청/Task 판단을 음성 모델에 옮기지 않음 |
 | 시간 목표의 사용자 근거 | 즉각 제어 **0.1초**, 대화 흐름 **1초**, 주의 유지 **10초**의 상호작용 참조 | [Nielsen Norman Group 원문](https://www.nngroup.com/articles/website-response-times/). VIA의 평균/모집단/추가 지연 예산은 작성자가 선택하며 문헌이 VIA의 평균 목표를 직접 규정했다고 하지 않음 |
 
 음성 비용은 실제로 보내거나 청구되는 audio/context의 양을 사용한다. VAD가 앞단에 있다는 사실만으로 silence/context 재사용 청구가 0이라고 가정하지 않는다. Text prompt/context, 재시도, 취소 불가인 폐기 출력과 미사용 배경 생산도 포함한다. 같은 사용량을 token 요금과 분 요금으로 이중 계산하지 않는다. 모델 제공자가 사용량을 반환한 실측은 그 사용량을 우선하고, 공개 reference 계산은 음성 길이 기반의 근사임을 남긴다.
 
-검산 예시: 의미 호출의 입력 2,000 token/출력 200 token은 `2,000×0.80/1M + 200×4.00/1M = $0.0024`, 출력 생성 부분은 `200/450 = 약 0.444초`다. 음성 입력 1분/출력 1분은 공개 분당 근사로 `$0.005 + $0.018 = $0.023`이며 text/context 비용은 별도다. 0.444초는 첫 출력/입력 처리/통신/queue를 포함한 호출 완료 시간으로 쓰지 않는다.
+검산 예시: 의미 호출의 입력 2,000 token/청구 출력 200 token은 `2,000×0.50/1M + 200×3.00/1M = $0.0016`, 작성자 생성률 가정에서 생성 부분은 `200/200 = 1초`다. 출력 200은 thinking을 포함한 총 청구 출력 예산이며 실제 answer/thinking 내역으로 대체한다. 음성 입력 1분/출력 1분은 공개 분당 근사로 `$0.005 + $0.018 = $0.023`이며 text/context 비용은 별도다. 생성 부분 1초를 첫 출력/입력 처리/통신/queue가 포함된 호출 완료 시간으로 쓰지 않는다. Gemini 명시적 cache를 사용하면 입력 $0.05/1M과 저장 $1.00/1M token·hour 등 실제 청구를 추가 원장에 반영하며 기본 예산은 할인 없는 Standard다.
 
+
+### 8.4.1 모델 역할과 Qwen 대체 범위
+
+의미 해석은 Gemini 3 Flash Preview, 실시간 음성 입출력은 Gemini 3.1 Flash Live Preview로 분리해 공개 API 단가를 계산한다. Gemini 3 Flash는 Live/음성 생성 모델이 아니며 Live 모델은 structured output을 지원하지 않아 41B의 유한 frame 의미 판단 모델로 그대로 바꾸지 않는다. 같은 P21과 A/B에서 동일한 역할별 모델/설정/입출력 계약을 사용한다. 공개 모델 선택은 QA 계산의 의존성 reference이며 실제 제품 모델/구조 채택이 아니다.
+
+사용자가 허용한 30B급 Qwen 후보로 [Qwen/Qwen3-30B-A3B-Instruct-2507 공식 카드](https://huggingface.co/Qwen/Qwen3-30B-A3B-Instruct-2507)를 기록한다. MoE의 전체 가중치와 활성 연산 규모를 구별한다. 공개 가중치 모델 자체에는 단일 API 단가나 배포 독립적인 token/s가 없으므로 Gemini 요금을 Qwen 비용으로 쓰지 않는다. Qwen을 선택하는 후속 비교에서는 실제 클라우드 GPU·runtime·동시성·가동률의 비용/속도 원장을 적용한다. 이번 가격이 있는 기준 계산은 Gemini로 완결하며 Groq은 고려 대상에서 제외한다.
+
+### 8.4.2 Gemini Live와 GPT Realtime의 기능 비교
+
+2026-10-11 확인한 공식 문서 기준으로 같은 실시간 음성 대화 역할을 제공하지만 API/실행 제약은 다르다. 아래 GPT는 사용자가 지칭한 `gpt-realtime` 모델 기준이며 다른 GPT Realtime 모델의 제한으로 확대하지 않는다. 현재 공식 모델 페이지는 해당 모델을 Deprecated로 표시하므로 실제 제품 적용 권고가 아니라 요청한 기능 비교 기준으로만 쓴다.
+
+| 비교 항목 | Gemini 3.1 Flash Live Preview | OpenAI gpt-realtime | VIA에 주는 의미 |
+| --- | --- | --- | --- |
+| 실시간 음성 입출력, 입력/출력 전사, 발화 중 끼어들기 | 지원 | 지원 | 양쪽 모두 음성 역할의 reference가 될 수 있다. 실제 한국어 품질·지연·중단 시간 동등성은 입증하지 않음 |
+| 화면/멀티모달 입력 | Text·이미지·audio·video 입력 | Text·이미지·audio 입력, video 미지원 | GPT에서는 화면 snapshot의 이미지 입력과 video stream 지원을 구별 |
+| 함수 호출 | 동기만 지원, tool response 전 응답 대기 | 비동기 tool 흐름 지원 | 긴 Agent 실행을 Gemini Live tool response로 끝날 때까지 기다리게 하지 않음 |
+| 직접 연결 | Live API WebSocket | WebRTC / WebSocket / SIP | provider adapter·세션 재연결·audio queue/취소 이벤트를 별도로 구현/계산 |
+| structured output | 미지원 | 미지원 | 함수 인자 JSON과 schema 제약 출력 보장을 구별, 의미 모델의 frame 검증은 별도 |
+
+근거: [Gemini Live 모델/제약](https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-live-preview), [Live 도구의 동기 제한](https://ai.google.dev/gemini-api/docs/live-api/tools), [Live API 연결](https://ai.google.dev/gemini-api/docs/live-api), [Live VAD/중단](https://ai.google.dev/gemini-api/docs/live-api/capabilities), [OpenAI gpt-realtime](https://developers.openai.com/api/docs/models/gpt-realtime), [Realtime 대화/중단](https://developers.openai.com/api/docs/guides/realtime-conversations), [Realtime 도구](https://developers.openai.com/api/docs/guides/realtime-mcp), [GPT Realtime 비동기 함수 호출 설명](https://developers.openai.com/blog/realtime-api).
+
+VIA는 요청/Task의 권위를 갖고 음성 모델의 임시 session과 구별한다. 긴 업무는 로컬 VIA가 외부 Agent에 비동기로 위임하고, 음성 모델에는 유효한 접수·질문·결과를 제시할 입력을 따로 전달하는 방향으로 reference를 해석한다. 이것은 긴 Agent 결과를 Live 동기 함수 응답으로 기다리는 것과 다르다. 실제 provider의 forced response, cancel, 재연결, 출력 내용 준수와 local playback stop은 adapter/API 검증에서 확인해야 한다. 특히 Gemini 3.1의 proactive audio/affective dialogue 미지원과 `turn_complete=true`의 활성 generation 중단을 고려해 배경 사건을 무조건 완결 turn으로 보내지 않는다. 모델 이름만으로 연속 입력/여러 Task 처리 계약이 충족됐다고 하지 않는다.
 
 ### 8.5 계산 가능한 구조 차이와 한계
 
@@ -831,6 +853,8 @@ S1-01 한정 조회는 원본의 접수+0.2초를 유지한다. S2-01/S3-01/S4-0
 | 06 | ≤1024MiB | ≤1638.4 / 2252.8 / 2867.2 / 3481.6 / 4096MiB | >4096MiB |
 
 ## 9. 합의/변경 이력
+
+2026-10-11 모델 reference 개정: 사용자가 Groq 제외, 30B급 Qwen 또는 Gemini 사용과 Gemini Live/GPT Realtime 비교를 요청했다. 의미 비용은 Gemini 3 Flash Preview Standard로 교체하고 생성률은 100/200/400 token/s 작성자 민감도 가정으로 분리했다. P21 사례/횟수·QA 우선순위·목표는 유지하며 기본 비용 $0.173567과 여유 $0.126433을 재계산했다. 기존 450 token/s와 1초 달성 설명을 제거하고 직렬 100 token 예시의 1.23초 초과를 공개했다. Gemini Live의 동기 함수 호출 제약과 VIA 별도 업무 관리의 함의를 §8.4.2에 기록했다. 교체 전 파일은 [모델 근거 보존본](../../../archive/qa-model-reference-before-gemini-20261011/README.md)에 보존했다. 실제 API/모델/후보 실측은 하지 않았다.
 
 2026-10-11: 사용자가 6개 상황군과 6조건 유지, DP 민감 사례 필수, 전체 QA 대응표, 모든 채점 대상의 정확성 포함, 전체 묶음 5회 반복을 승인했다. 균등 3개·시간 각 6개·첫 활동만 채점·5×3의 불충분한 근거를 교정하고 P21로 개정했다. 이전 원본·발표·스크립트 38개를 bytes/hash로 보존했다. 기존 17개 checkpoint 정답은 유지하고 S1-03은 회귀로 이동, 4개 민감 사례를 추가했다. 공통 tail을 C5/C6까지 적용하고 비용을 $0.30/P21로 계산했다. 집중 도착의 실제 순차 음성 제시 때문에 일반 115관측 중 110개는 2초, 집중 30관측 전부는 5초 한계를 적용한다. 입력 중 Agent 사건은 현재 사용자 발화의 남은 시간을 외부 입력 구간으로 표시하되 VIA가 병렬로 수행한 처리 시간과 음성 queue는 남긴다. 우선순위 추천은 미채택이며 기존 번호순을 유지한다. 구현·실측·승자 선정은 하지 않았다.
 

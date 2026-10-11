@@ -76,7 +76,7 @@
 | 1 / ◐○○ | .84 < x ≤ 1 초 | 충족 |
 | 0 / ○○○ | x > 1 초 | 미달 |
 
-출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.7.
+출처: [Nielsen Norman Group 응답시간](https://www.nngroup.com/articles/website-response-times/), [Google Gemini 3 Flash 공식 단가](https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §4 및 §8.7.
 
 ![ASR-QA-02 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-02.png)
 
@@ -125,15 +125,15 @@
 
 **목표:** $0.30/P21 이하
 
-**목표 근거:** 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.223167, 여유 $0.076833. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)
+**목표 근거:** 동일 21사례의 의미 62호출/음성 입력 50초/출력 179초 예산에서 기본 $0.173567, 여유 $0.126433. 호출·출력은 작성자 가정이며 실제 사용량으로 대체 (§5)
 
 | 항목 | 계산/평가 규칙 |
 | --- | --- |
-| 의미 모델 | 62호출 예산: 124k 입력 / 12.4k 출력 = $0.1488 |
+| 의미 모델 | 62호출 예산: 124k 입력 / 12.4k 출력 = $0.0992 |
 | 음성 audio | 입력 50초 / 출력 179초 예산 = $0.057867 |
 | 음성 Text/context | 10k 입력 / 2k 출력 = $0.0165 |
-| 기본 총액 | $0.1488 + $0.057867 + $0.0165 = $0.223167 |
-| 추가 예산 | $0.300000 - $0.223167 = $0.076833 |
+| 기본 총액 | $0.0992 + $0.057867 + $0.0165 = $0.173567 |
+| 추가 예산 | $0.300000 - $0.173567 = $0.126433 |
 | A/B 차이 | ≥$0.03/P21; 실제 cache/생산/재시도 청구 비교 |
 
 **보호 조건:** 초기/재시도/폐기/배경/context 누락 없음
@@ -150,7 +150,7 @@
 | 1 / ◐○○ | .26 < x ≤ .30 USD/P21 | 충족 |
 | 0 / ○○○ | x > .30 USD/P21 | 미달 |
 
-출처: [Groq 공식 모델 단가/생성률](https://console.groq.com/docs/models), [Google Live 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.7.
+출처: [Google Gemini 3 Flash 공식 단가](https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview), [Google Live 공식 가격표](https://ai.google.dev/gemini-api/docs/pricing), [03-02 공통 QA 계약 v6](../architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md). 숫자/목표 선택과 상세 경계는 03-02 §5 및 §8.7.
 
 ![ASR-QA-04 목표 근거와 등급](quality-metrics/qa-metric-asr-qa-04.png)
 
