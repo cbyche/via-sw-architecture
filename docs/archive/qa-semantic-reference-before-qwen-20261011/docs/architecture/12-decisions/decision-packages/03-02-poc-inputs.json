@@ -1,0 +1,225 @@
+{
+  "contract_version": "ASR-QA-v6",
+  "source": "03-02-quality-attribute-definitions.md",
+  "verified_source_date": "2026-10-11",
+  "evidence_level": "POC_ASSUMPTION_WITH_SOURCE_PRICES",
+  "llm_pricing": {
+    "provider": "Google Gemini API",
+    "model": "gemini-3-flash-preview",
+    "input_per_million": ".50",
+    "output_per_million": "3.00",
+    "cached_input_per_million": ".05",
+    "cache_storage_per_million_token_hour": "1.00",
+    "output_includes_thinking": true,
+    "source_url": "https://ai.google.dev/gemini-api/docs/pricing#gemini-3-flash-preview",
+    "model_source_url": "https://ai.google.dev/gemini-api/docs/models/gemini-3-flash-preview"
+  },
+  "voice_pricing": {
+    "provider": "OpenAI Realtime API",
+    "model": "gpt-realtime",
+    "snapshot": "gpt-realtime-2025-08-28",
+    "audio_input_per_million": "32",
+    "audio_output_per_million": "64",
+    "audio_input_tokens_per_second": 10,
+    "audio_output_tokens_per_second": 20,
+    "audio_input_per_minute": ".0192",
+    "audio_output_per_minute": ".0768",
+    "text_input_per_million": "4",
+    "text_output_per_million": "16",
+    "cached_audio_input_per_million": ".40",
+    "cached_text_input_per_million": ".40",
+    "source_url": "https://developers.openai.com/api/docs/models/gpt-realtime",
+    "billing_source_url": "https://developers.openai.com/api/docs/guides/voice-latency-cost",
+    "audio_duration_conversion": "CONTENT_ONLY_APPROXIMATION_EXCLUDES_SPECIAL_AND_REPEATED_HISTORY_TOKENS",
+    "history_billing": "All billed response input modality/history/cache tokens counted; base is fresh audio plus budgeted billed text, remaining audio history uses headroom."
+  },
+  "assumptions": {
+    "common_memory_mib": 1792,
+    "workload_id": "P21",
+    "usage_conditions_source": "03-02-common-workload.json"
+  },
+  "latency_profiles": [
+    {
+      "id": "fast-assumption",
+      "ttft_seconds": ".15",
+      "tokens_per_second": 400,
+      "voice_seconds": ".10",
+      "evidence_level": "AUTHOR_ASSUMPTION"
+    },
+    {
+      "id": "base-assumption",
+      "ttft_seconds": ".30",
+      "tokens_per_second": 200,
+      "voice_seconds": ".25",
+      "evidence_level": "AUTHOR_ASSUMPTION"
+    },
+    {
+      "id": "slow-assumption",
+      "ttft_seconds": ".80",
+      "tokens_per_second": 100,
+      "voice_seconds": ".60",
+      "evidence_level": "AUTHOR_ASSUMPTION"
+    }
+  ],
+  "memory_examples": [
+    {
+      "dp": "41",
+      "B_delta_mib": -32,
+      "basis": "4개의 16MiB Context 대신 4개의 8MiB frame/상태라는 가정"
+    },
+    {
+      "dp": "42",
+      "B_delta_mib": 288,
+      "basis": "추가 process heap 256MiB와 접수/receipt 상태 32MiB 가정"
+    },
+    {
+      "dp": "44",
+      "B_delta_mib": 48,
+      "basis": "windows/credit 32MiB와 envelope copy 16MiB 가정"
+    },
+    {
+      "dp": "45",
+      "B_delta_mib": 128,
+      "basis": "생산/index 256MiB 추가와 원문 Context 128MiB 감소 가정"
+    }
+  ],
+  "score_bands": [
+    {
+      "id": "ASR-QA-01",
+      "direction": "high",
+      "bounds": [
+        "100",
+        "99.6",
+        "99.2",
+        "98.8",
+        "98.4",
+        "98"
+      ],
+      "unit": "%",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-02",
+      "direction": "low",
+      "bounds": [
+        ".2",
+        ".36",
+        ".52",
+        ".68",
+        ".84",
+        "1"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-03",
+      "direction": "low",
+      "bounds": [
+        "2",
+        "3.6",
+        "5.2",
+        "6.8",
+        "8.4",
+        "10"
+      ],
+      "unit": "초",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-04",
+      "direction": "low",
+      "bounds": [
+        ".20",
+        ".26",
+        ".32",
+        ".38",
+        ".44",
+        ".50"
+      ],
+      "unit": "USD/P21",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-05",
+      "direction": "low",
+      "bounds": [
+        "1",
+        "1.4",
+        "1.8",
+        "2.2",
+        "2.6",
+        "3"
+      ],
+      "unit": "개/과제",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    },
+    {
+      "id": "ASR-QA-06",
+      "direction": "low",
+      "bounds": [
+        "1024",
+        "1638.4",
+        "2252.8",
+        "2867.2",
+        "3481.6",
+        "4096"
+      ],
+      "unit": "MiB",
+      "basis": "작성자 상향 reference와 목표 사이 5등분, 보호 조건 별도"
+    }
+  ],
+  "common_workload": "03-02-common-workload.json",
+  "workload_manifest": "03-02-workload-manifest.json",
+  "reference_revision": "2026-10-11-gemini",
+  "generation_rate_assumption": {
+    "model": "gemini-3-flash-preview",
+    "base_tokens_per_second": 200,
+    "evidence_level": "AUTHOR_ASSUMPTION_NOT_MEASURED_OR_VENDOR_GUARANTEE",
+    "basis": "100/200/400 token/s sensitivity inputs, not a published Gemini throughput; actual output/thinking token ledger and deployment timing supersede these assumptions"
+  },
+  "semantic_alternative": {
+    "provider": "Alibaba Cloud Model Studio",
+    "region": "Singapore",
+    "scope": "International",
+    "model": "qwen3-30b-a3b-instruct-2507",
+    "input_per_million": ".20",
+    "output_per_million": ".80",
+    "source_url": "https://docs.modelstudio.console.alibabacloud.com/en/model-studio/qwen3-30b-a3b-instruct-2507",
+    "evidence_level": "PUBLISHED_PRICE_NOT_SELECTED_MODEL"
+  },
+  "qwen_speed_reference": {
+    "model": "Qwen3-30B-A3B",
+    "hardware": "1 NVIDIA H20 96GB",
+    "runtime": "SGLang 0.4.6.post1",
+    "pytorch": "2.6.0+cu124",
+    "batch_size": 1,
+    "output_tokens": 2048,
+    "speed_formula": "(input_tokens + output_tokens) / total_seconds",
+    "rows": [
+      {
+        "input_tokens": 1,
+        "precision": "BF16",
+        "reported_tokens_per_second": "137.18"
+      },
+      {
+        "input_tokens": 1,
+        "precision": "FP8",
+        "reported_tokens_per_second": "155.55"
+      },
+      {
+        "input_tokens": 6144,
+        "precision": "BF16",
+        "reported_tokens_per_second": "490.10"
+      },
+      {
+        "input_tokens": 6144,
+        "precision": "FP8",
+        "reported_tokens_per_second": "551.34"
+      }
+    ],
+    "source_url": "https://qwen.readthedocs.io/en/latest/getting_started/speed_benchmark.html",
+    "not_api_speed": true,
+    "not_instruct_2507_measurement": true
+  }
+}

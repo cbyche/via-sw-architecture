@@ -1,0 +1,751 @@
+{
+  "contract_version": "ASR-QA-v6",
+  "workload_id": "P21",
+  "status": "DEFINED_SYNTHETIC_POC_NOT_EXECUTED",
+  "source": "03-02-quality-attribute-definitions.md",
+  "independent_repeats": 5,
+  "cases": [
+    {
+      "case_id": "S1-01",
+      "name": "제한된 정보 조회",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 3,
+      "reactions": [
+        {
+          "id": "I-S1-01-1",
+          "start": "발화 종료",
+          "end": "D1의 정확한 날짜 답변 전달"
+        }
+      ],
+      "cycle": {
+        "id": "T-S1-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "D1 마감일 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "단순 직접/위임의 공통 기준 경로",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "CONTROL"
+    },
+    {
+      "case_id": "S1-02",
+      "name": "새 보고서 업무 위임",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reactions": [
+        {
+          "id": "I-S1-02-1",
+          "start": "발화 종료",
+          "end": "해당 보고서의 실제 접수/진행 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S1-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportQ3@v1 최종 결과 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "신규 업무 인계와 정상 접수의 기준 경로",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "CONTROL"
+    },
+    {
+      "case_id": "S2-01",
+      "name": "발화 중 두 표 지칭",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S2-01-1",
+          "start": "발화 종료",
+          "end": "발화 당시 두 표의 올바른 비교/위임 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "지정 두 표 비교 결과 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "동일 발화의 복수 지칭을 실제 근거에 결합",
+      "sensitive_dps": [
+        "41"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S2-02",
+      "name": "과거 설명과 두 업무 결과 재사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 18,
+      "reactions": [
+        {
+          "id": "I-S2-02-1",
+          "start": "발화 종료",
+          "end": "과거 근거/조건이 맞는 제안서 실제 접수 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "Proposal@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "예외를 포함하는 세 과거 원본의 실제 연결",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S2-03",
+      "name": "갱신된 원본의 과거 값 지정",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reactions": [
+        {
+          "id": "I-S2-03-1",
+          "start": "발화 종료",
+          "end": "과거 v1 값 지정이 맞는 실제 작성 접수 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "TablePast@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "원본 갱신 뒤 과거 revision의 보존/검증",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S2-04",
+      "name": "같은 과거 근거의 두 번째 사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S2-04-1",
+          "start": "발화 종료",
+          "end": "두 번째 새 제안서의 실제 접수 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "ProposalRepeat@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "같은 원본 재사용의 cache/관계 hit와 전체 생산 비용",
+      "sensitive_dps": [
+        "45"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S2-05",
+      "name": "새로 도착한 과거 근거의 첫 사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S2-05-1",
+          "start": "발화 종료",
+          "end": "새 근거를 확보한 실제 제안서 접수 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-05",
+        "start": "최초 사용자 발화 종료",
+        "end": "ProposalFresh@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "새 원본 첫 사용의 조합/미게시 backfill 대기",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S3-01",
+      "name": "독립된 두 조회 요청",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S3-01-1",
+          "start": "발화 종료",
+          "end": "독립 두 목표의 구분된 유효 답변/실제 접수 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "독립 두 조회 결과 모두 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "독립 read의 병렬 진행을 양안에 허용하는 기준",
+      "sensitive_dps": [
+        "41",
+        "44"
+      ],
+      "selection_role": "CONTROL"
+    },
+    {
+      "case_id": "S3-02",
+      "name": "요약 산출물에 의존하는 메일",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S3-02-1",
+          "start": "발화 종료",
+          "end": "현재 요약/의존 메일의 유효 처리 사실 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "현재 요약의 민수 메일 발송 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "결과 의존/중복 반환의 전체 continuation",
+      "sensitive_dps": [
+        "41",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S3-03",
+      "name": "일정 조건의 변경 재확인",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S3-03-1",
+          "start": "발화 종료",
+          "end": "최신 BUSY와 일정 생성 안 함의 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "최신 BUSY/미생성 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "해석 뒤 조건 변경의 재조회/재확정",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S4-01",
+      "name": "부분 정정과 늦은 후보",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 9,
+      "reactions": [
+        {
+          "id": "I-S4-01-1",
+          "start": "발화 종료",
+          "end": "보고서 변경 접수와 메일 보존 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportRevised@v2 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "부분 정정과 옛 후보의 늦은 반환",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S4-02",
+      "name": "음성 중단 뒤 지정 수치 설명",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reactions": [
+        {
+          "id": "I-S4-02-1",
+          "start": "새 발화 acoustic onset",
+          "end": "옛 음성의 마지막 재생 sample"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "지정 수치의 새 설명 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "local stop와 새 설명의 분리, input 지속",
+      "sensitive_dps": [
+        "44"
+      ],
+      "selection_role": "CONTROL"
+    },
+    {
+      "case_id": "S4-03",
+      "name": "특정 업무 취소와 접수 미확인",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S4-03-1",
+          "start": "발화 종료",
+          "end": "메일 취소 전달/미확인 상태의 정직한 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "명세된 취소 접수/미확인 disposition 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "hold/취소 접수/외부 미확인의 실제 순서",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S5-01",
+      "name": "교차 질문과 철회",
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S5-01-1",
+          "start": "유효 메일 질문 source availability",
+          "end": "올바른 수신자 질문 실제 제시"
+        }
+      ],
+      "cycle": null,
+      "cycle_exclusion": "Agent 발신 질문/결과 처리이며 새 사용자 목표 시작이 아님; 전달 지연은 QA-02로 관측",
+      "selection_reason": "질문 교차/철회와 실제 제시의 연결",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S5-02",
+      "name": "결과 역전과 중복",
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S5-02-1",
+          "start": "최신 유효 결과 source availability",
+          "end": "올바른 현재 결과 실제 전달"
+        }
+      ],
+      "cycle": null,
+      "cycle_exclusion": "Agent 발신 질문/결과 처리이며 새 사용자 목표 시작이 아님; 전달 지연은 QA-02로 관측",
+      "selection_reason": "결과 역전/중복의 현재성 및 publication",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S5-03",
+      "name": "음성 종료 중 결과와 재연결",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reactions": [
+        {
+          "id": "I-S5-03-1",
+          "start": "Voice OFF 결과 source availability",
+          "end": "실제 Text 결과 표시"
+        },
+        {
+          "id": "I-S5-03-2",
+          "start": "재연결 요청 발화 종료",
+          "end": "같은 보고서 결과의 실제 Voice 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S5-03",
+        "start": "재연결 요청 발화 종료",
+        "end": "재연결 요청에 기존 결과 안내"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "Voice Connection과 Task/결과의 독립 수명",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S5-04",
+      "name": "발화 중 네 Agent 사건과 보고서 정정",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 24,
+      "reactions": [
+        {
+          "id": "I-S5-04-1",
+          "start": "새 발화 acoustic onset",
+          "end": "옛 음성의 마지막 재생 sample"
+        },
+        {
+          "id": "I-S5-04-2",
+          "start": "정정 발화 종료",
+          "end": "올바른 보고서 변경 접수와 메일 보존 안내"
+        },
+        {
+          "id": "I-S5-04-3",
+          "start": "질문A source availability",
+          "end": "질문A 실제 제시"
+        },
+        {
+          "id": "I-S5-04-4",
+          "start": "결과A source availability",
+          "end": "결과A 실제 전달"
+        },
+        {
+          "id": "I-S5-04-5",
+          "start": "질문B source availability",
+          "end": "질문B 실제 제시"
+        },
+        {
+          "id": "I-S5-04-6",
+          "start": "결과B source availability",
+          "end": "결과B 실제 전달"
+        }
+      ],
+      "cycle": {
+        "id": "T-S5-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportBurst@v2 전달 및 지정 독립 반응 유지"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "입력+네 Agent 사건의 queue/join/폐기/동시 할당",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S6-01",
+      "name": "모호한 과거 보고서 확인",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reactions": [
+        {
+          "id": "I-S6-01-1",
+          "start": "최초 발화 종료",
+          "end": "보고서 대상/수정 내용 확인 질문 실제 제시"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "ConfirmedRevision@v2 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "모호한 대상의 확인과 후속 변경 전체 cycle",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S6-02",
+      "name": "철회된 질문 답변과 승인 범위",
+      "trigger": "USER",
+      "root_voice_seconds": 1,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reactions": [
+        {
+          "id": "I-S6-02-1",
+          "start": "최초 발화 종료",
+          "end": "현재 정보 동의의 재확인 질문 실제 제시"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "허용된 연락처 제공/발송 미승인 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "미제시/철회 질문의 답변과 승인 scope 분리",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE"
+    },
+    {
+      "case_id": "S6-03",
+      "name": "필요한 자료의 접근 거부",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S6-03-1",
+          "start": "발화 종료",
+          "end": "접근 권한 부족/금액 확인 불가 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "접근 거부와 확인 불가의 정당한 처리 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "허용 부족에서 조기 차단되는 공통 기준",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "45"
+      ],
+      "selection_role": "CONTROL"
+    },
+    {
+      "case_id": "S6-04",
+      "name": "실제 제시된 유효 질문에 답변",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S6-04-1",
+          "start": "발화 종료",
+          "end": "상반기 답변의 실제 접수와 기간 안내"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "유효 기간 답변의 접수/확정 안내"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "유효 질문 답변의 정상 조회/확정/receipt 비용",
+      "sensitive_dps": [
+        "42"
+      ],
+      "selection_role": "SENSITIVE"
+    }
+  ],
+  "initial": {
+    "history_turns": 2000,
+    "completed_tasks": 200,
+    "context_sources": 30,
+    "source_payload_mib": 20,
+    "raw_rgba_frames": 15,
+    "raw_frame_width": 2880,
+    "raw_frame_height": 1800,
+    "cloud_call_ceiling": 4,
+    "active_task_ceiling": 10,
+    "background_source_ids": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12",
+      "B13",
+      "B14",
+      "B15",
+      "B16",
+      "B17",
+      "B18",
+      "B19",
+      "B20"
+    ],
+    "background_source_template": {
+      "title": "P21 background source Bnn",
+      "v1": "index=nn; value=100+nn",
+      "v2": "index=nn; value=101+nn",
+      "permission": "read/model-provide allowed; B04 is withdrawn at final maintenance"
+    },
+    "canonical_source_slots": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10"
+    ],
+    "history_template": "2000 chronological turns H0001..H2000, Korean text: 배경 기록 {id}: B{((id-1)%20)+1:02d}@v1의 값은 {100+((id-1)%20)+1}이다. Every turn has delivered receipt and allowed read/provide. No current request intent or derived relation injected.",
+    "completed_task_template": "200 completed Task HT001..HT200, source B{((id-1)%20)+1:02d}@v1, read-only value query, ACCEPTED then COMPLETED then delivered receipt in this order. Canonical S2/S6 facts supplied in scoped source slots separately, without overwriting current candidate outcomes.",
+    "payload_size_rule": "Original source plus turn plus Task UTF-8 payload total 20MiB. Pad unused background source text with U+0020 to exactly 20*1024*1024 bytes. No learned/derived output is padding. Physical DB/runtime/index overhead counted in addition.",
+    "active_task_definition": "동시에 실행/사건 처리 대상으로 활성화한 Task 슬롯. P21 이전 사례의 추가 원천 사건이 없는 scope는 상태/이력/메모리를 보존하며 정지 보관; 논리적으로 미답변/미확인을 완료로 바꾸지 않음. S5-04 동시 7개. 준비/회수와 retained allocation은 모두 원장에 포함."
+  },
+  "source_changes_per_activity": 4,
+  "maintenance_ticks_per_activity": 2,
+  "drain_deadline_seconds": 30,
+  "idle_probe_seconds": 10,
+  "sequence": [
+    "S1-01",
+    "S1-02",
+    "S2-01",
+    "S2-02",
+    "S2-03",
+    "S2-04",
+    "S2-05",
+    "S3-01",
+    "S3-02",
+    "S3-03",
+    "S4-01",
+    "S4-02",
+    "S4-03",
+    "S5-01",
+    "S5-02",
+    "S5-03",
+    "S5-04",
+    "S6-01",
+    "S6-02",
+    "S6-03",
+    "S6-04"
+  ],
+  "dependency_edges": [
+    [
+      "S2-02",
+      "S2-04"
+    ]
+  ],
+  "source_update_schedule": "S2-04 종료 뒤 B01~B04를 v1→v2 갱신, 원천 간격 0.01초. 갱신 뒤 maintenance 1회, 활동 끝 maintenance 1회에 B04 제공 철회. 원래 사례 안 갱신과 별개.",
+  "reference_semantic_calls": [
+    {
+      "purpose": "19 USER 목표 해석/최종 안내 예산",
+      "count": 38,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "2 AGENT 단독 장면의 해석/안내 예산",
+      "count": 4,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "S5-04의 네 추가 Agent 사건 예산",
+      "count": 8,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "사용되지 않을 수 있는 source 갱신 예산",
+      "count": 4,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    },
+    {
+      "purpose": "활동 초기/기존 과거 준비 예산",
+      "count": 8,
+      "input_tokens": 2000,
+      "output_tokens": 200
+    }
+  ],
+  "reference_voice_text": {
+    "input_tokens": 10000,
+    "output_tokens": 2000,
+    "basis": "Budget of summed billed text across responses, including instructions/history; fresh audio is separate, additional audio history is counted against headroom."
+  },
+  "cost_target_usd": ".50",
+  "difference_usd": ".03",
+  "cache_contract": "매 activity 독립 before-state, 묶음 내부 유효 cache/관계 허용, S2-04는 S2-02 실제 선행 처리, S2-05의 새 근거는 t2.97~2.99초에 공급; provider cache는 별도 관측",
+  "accuracy_conditions": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6"
+  ],
+  "attribution_exclusions": [
+    "EXTERNAL_AGENT_WORK",
+    "EXTERNAL_USER_WAIT",
+    "EXTERNAL_USER_SPEECH"
+  ],
+  "reaction_guards": {
+    "ordinary_trials": 115,
+    "ordinary_within_2_seconds_min": 110,
+    "burst_trials": 30,
+    "burst_within_5_seconds_min": 30,
+    "local_stop_trials": 10,
+    "local_stop_max_seconds": 0.1,
+    "missing_max": 0
+  }
+}

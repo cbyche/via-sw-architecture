@@ -7,6 +7,8 @@
 - 최종 PPTX6장, native table 18개, 슬라이드 래스터 삽입 없음. 요약은 모든 사례 대응표3장 포함.
 - [최종 파일 확인 기록](validation-summary.json): package/layout/font/native table/Artifact Tool import 통과.
 - 최종 PPTX에서 렌더링한 1920×1080 PNG6장을 각각 육안 확인, 최종 잘림/겹침 문제 발견 없음.
-- 32+33+38=103개 archive 파일 bytes/hash 보존. 기존17개 checkpoint 사실과 S1-03 별도 기능 회귀 보존.
+- 32+33+38+37+40+40=220개 archive 파일 bytes/hash 보존. 기존17개 checkpoint 사실과 S1-03 별도 기능 회귀 보존.
 
 [자동 일치 검사](../../../scripts/presentations/check_quality_metrics.py), [원본 투영 재현](../../../scripts/presentations/build_asr_qa_sources.py)과 [공통 활동 검사](../../../scripts/architecture/qa_common_workload.py)를 제공한다. 실제 모델/후보/Windows 실행과 Microsoft PowerPoint 앱 저장·재열기는 수행하지 않았다. 목표와 가정 계산은 측정 결과나 A/B 승자가 아니다.
+
+2026-10-11 Qwen/GPT 개정: 정확한 Instruct-2507/Singapore 단가와 130 token/s 작성자 가정을 원본·JSON·발표 노트에 반영했다. 변경된 요약2장/부록QA-02·04를 각각 확인했고 나머지9 PNG는 이전 검수본과 bytes가 같다. 최종 package/layout/font/native table/Artifact Tool import는 통과했으며 finding/warning은 0이다. 모델/API/Windows 성능 실측은 수행하지 않았다.

@@ -76,3 +76,12 @@ QA 문서/원장/두 발표자료는 `44d5d9230b6a9017f688e9eeb2542764580ff13d`�
 의미 Gemini의 선택은 공식 가격/화면 입력/함수 호출/structured output의 reference 편의이며 VIA 우월성 검증이 아니다. 출시일 2025-12-17을 공식 공지로 확인했다. 정확히 Qwen Instruct-2507의 Alibaba Singapore/International API 가격 $0.20/$0.80을 찾아 기존 설명을 교정하고 동일 의미 예산 $0.03472를 별도 계산했다. Qwen H20/SGLang benchmark는 원본 Qwen3-30B-A3B의 (입력+출력)/전체시간이며 Instruct-2507 API decode rate가 아니다. 이전 Groq 450+의 모델/전용 LPU 범위와 미공개 조건도 기록했다. Gemini 현행 계산에 Qwen 속도를 실측으로 혼합하지 않았다.
 
 교체 전 40파일을 [보존본](../../../archive/qa-voice-reference-before-realtime-20261011/README.md)에 남겼다. 두 발표자료의 표/목표/등급/노트/JSON/hash/PNG를 재생성했다. 변경된 요약2·3장과 부록QA-04의 최종 PNG를 각각 확인했고 나머지9개는 이전 검수본과 bytes가 같았다. package/layout/font/native table/Artifact Tool import를 통과했고 두 deck의 layout finding/warning은 0이다. 원장/계산/투영/QA 발표/활성 링크/용어/기존 catalog 검수와 archive 총180개 hash를 대조한다. 실제 API 호출/후보 성능/Windows 메모리/PowerPoint 앱 실행의 검증은 수행하지 않았다.
+
+
+## 의미 reference 확정 — Qwen/GPT (2026-10-11)
+
+사용자 지시에 따라 의미 기준을 Qwen3-30B-A3B-Instruct-2507로 교체했다. Alibaba Cloud Model Studio Singapore/International non-thinking 입력 $0.20/출력 $0.80 per 1M token과 GPT Realtime을 같은 A/B 기준으로 사용한다. 동일 P21 의미 비용 $0.03472 + 신규 audio $0.24512 + 청구 Text $0.072 = 기본 소계 $0.35184다. 기존 $0.50 목표는 유지하며 추가 audio 이력/생산/재시도 여유는 $0.14816으로 갱신했다. 이전 Gemini 비용과 선택 이유는 변경 이력으로 보존한다.
+
+Qwen 공식 H20 원본 계열 benchmark는 입력+출력/전체시간이며 API decode rate가 아니다. 수치 규모를 참고한 130 token/s의 독립적인 작성자 가정과 100/130/160 민감도, 별도 TTFT를 명시했다. 직렬 100/50 token 반응 1.499231/1.114615초가 1초 목표를 넘는다는 한계를 유지한다. Qwen은 Text 모델이므로 P21 공통 원천 observation의 내용/span/시각/포인터를 직렬화하고 정답 지칭/Task 연결을 미리 채우지 않는다. 픽셀 인식/추가 OCR·vision 모델을 이 예산에 숨겨 포함하지 않는다. 실제 모델/provider API의 엄격한 schema 보장도 가정하지 않는다.
+
+03-02, 입력/검산 원장과 두 발표자료의 정의·목표·계산·원본 hash·출처·노트를 교차 대조했다. 변경된 요약2장과 부록QA-02/04의 최종 PNG를 각각 확인했고 나머지9개는 이전 검수본과 bytes가 같다. exact revision/가격 지역/화면 입력 범위/속도 한계는 두 PPTX의 발표자 노트에도 포함했다. 최종 package/layout/font/native table/Artifact Tool import를 통과했고 두 deck의 layout finding/warning은 0이다. 이전40파일은 [보존본](../../../archive/qa-semantic-reference-before-qwen-20261011/README.md)에 보존했다. 원장·검산·발표·활성 링크·용어·기존 catalog 검사와 archive 총220개 hash를 확인한다. 실제 API 호출/후보 성능/Windows 메모리/PowerPoint 앱 실행은 수행하지 않았다.

@@ -105,13 +105,13 @@ def render(report):
     a=report['arithmetic']
     lines=['# ASR-QA-v6 참조 계산 검산', '', '> CALCULATED_REFERENCE / 공개 단가와 작성자 가정의 산술 검산 / 실제 모델/Windows/후보 실행 결과 없음', '',
         '[정의 원본](./03-02-quality-attribute-definitions.md)과 [입력 원장](./03-02-poc-inputs.json)을 따른다. 재현 명령은 `.venv/bin/python scripts/architecture/qa_poc_reference.py --check`다.', '',
-        '## 모델 근거와 공통 활동 예산', '', '의미 모델은 Google Gemini 3 Flash Preview Standard 입력 $0.50/출력 $3.00 per 1M token이며 출력 단가는 thinking을 포함한다. 생성률 100/200/400 token/s와 TTFT는 작성자 가정으로, 공개 보장/실측이 아니다. 음성은 GPT Realtime의 별도 단가(audio 입력 $32/출력 $64, Text 입력 $4/출력 $16 per 1M token)다. 신규 audio 길이 환산은 이력 audio 재입력/특수 token을 포함한 총 청구가 아니므로 실제 modality별 usage를 합산한다. 공통 모델/설정은 양안에서 동일하다.', '', 'P21은 메커니즘별로 선정한 21개(사용자19/Agent단독2, 집중장면 내부Agent4사건)의 공통 묶음이다. 전체5회만 반복하며 정확성105/630, 반응135, 처리95의 모든 관측을 함께 읽는다. 계획 발화21개의 입력50초, 출력179초는 fixture/작성자 예산이고 실제 사용통계나 실행결과가 아니다.', '', '| 항목 | 계산값 |', '| --- | --- |',
+        '## 모델 근거와 공통 활동 예산', '', '의미 모델은 Alibaba Cloud Model Studio Singapore/International의 Qwen3-30B-A3B-Instruct-2507 non-thinking 입력 $0.20/출력 $0.80 per 1M token이다. 생성률 100/130/160 token/s와 별도 TTFT는 작성자 가정으로, 공개 API 보장/실측이 아니다. 화면 사례는 공통 observation 사실의 Text 직렬화를 입력하며 별도 픽셀 인식 모델은 이 예산에 포함하지 않는다. 음성은 GPT Realtime의 별도 단가(audio 입력 $32/출력 $64, Text 입력 $4/출력 $16 per 1M token)다. 신규 audio 길이 환산은 이력 audio 재입력/특수 token을 포함한 총 청구가 아니므로 실제 modality별 usage를 합산한다. 공통 모델/설정은 양안에서 동일하다.', '', 'P21은 메커니즘별로 선정한 21개(사용자19/Agent단독2, 집중장면 내부Agent4사건)의 공통 묶음이다. 전체5회만 반복하며 정확성105/630, 반응135, 처리95의 모든 관측을 함께 읽는다. 계획 발화21개의 입력50초, 출력179초는 fixture/작성자 예산이고 실제 사용통계나 실행결과가 아니다.', '', '| 항목 | 계산값 |', '| --- | --- |',
         f"| 의미 2,000/200 token 1호출 | ${a['llm_2000_200_USD']} |",f"| 200 token의 생성 부분만 | {a['generation_only_200_seconds']}초 |",
         f"| P21 의미 비용 | ${a['semantic_activity_USD']} |", f"| P21 음성/audio/Text 비용 | ${a['voice_activity_USD']} |",
-        f"| 신규 audio/청구 Text 포함 기본 소계 / $0.50 예산 여유 | ${a['activity_total_USD']} / ${a['activity_headroom_USD']} |",f"| QA-02 직렬 100 token 예시 (1초 초과) | {a['reference_reaction_seconds']}초 |",f"| 유효한 50 token 의미 출력일 때의 예시 | {a['reference_short_reaction_seconds']}초 |", '',
-        '## 비교 참고: 가격이 있는 Qwen과 공개 속도', '',
-        'Alibaba Cloud Model Studio Singapore/International의 qwen3-30b-a3b-instruct-2507 공식 단가는 입력 $0.20/출력 $0.80 per 1M token이다. 같은 token 예산에서 P21 의미 비용 $0.03472, GPT Realtime 신규 audio/청구 Text 포함 기본 소계 $0.35184다. 의미 모델을 교체한 후보 실행 결과가 아니며 tokenizer/출력/호출/정확성 동등성도 주장하지 않는다.', '',
-        'Qwen 공식 H20/SGLang benchmark는 Qwen3-30B-A3B 원본의 (입력+출력)/전체시간이다. 2048 출력과 BF16 입력1: 137.18로부터 전체 약14.94초/유효 출력률137.11을 복원하고, 입력6144: 490.10으로부터 약16.72초/유효 출력률122.53을 복원한다. Gemini 또는 Instruct-2507 API decode rate로 사용하지 않는다. 가격/속도 reference는 다른 배포 조건이다.', '',
+        f"| 신규 audio/청구 Text 포함 기본 소계 / $0.50 예산 여유 | ${a['activity_total_USD']} / ${a['activity_headroom_USD']} |",f"| QA-02 직렬 100 token 예시 (1초 초과) | {a['reference_reaction_seconds']}초 |",f"| 유효한 50 token 의미 출력 예시 (1초 초과) | {a['reference_short_reaction_seconds']}초 |", '',
+        '## 선택한 Qwen의 공개 속도와 이전 단가 비교', '',
+        '현재 Qwen의 같은 token 예산은 P21 의미 비용 $0.03472, GPT Realtime 신규 audio/청구 Text 포함 기본 소계 $0.35184다. 이전 Gemini 단가로는 의미 $0.09920/기본 $0.41632였으며 단가 민감도 비교만 보존한다. tokenizer/출력/호출/정확성 동등성이나 후보 실행 결과를 주장하지 않는다.', '',
+        'Qwen 공식 H20/SGLang benchmark는 Qwen3-30B-A3B 원본의 (입력+출력)/전체시간이다. 2048 출력과 BF16 입력1: 137.18로부터 전체 약14.94초/유효 출력률137.11을 복원하고, 입력6144: 490.10으로부터 약16.72초/유효 출력률122.53을 복원한다. 이 합산율을 Instruct-2507 API decode rate로 사용하지 않는다. 수치 규모를 참고하여 130 token/s의 별도 decode 가정과 100/130/160 민감도를 둔다. TTFT는 benchmark에서 분리해 추출한 값이 아니며 입력 처리 시간을 중복 합산하지 않는다. 가격/속도 reference는 다른 배포 조건이다.', '',
         '## 41의 충분한 typed 근거 조건', '', 'S2-01의 충분한 typed 근거라는 조건에서 A 2호출/B 1호출을 둔 지역 call-plan이다. 실제 모델의 판단이나 정답률을 측정한 것이 아니다. B가 부분 해석을 추가하면 두 호출로 바뀔 수 있다.', '',
         '| profile | A (초) | B (초) | A-B (초) |', '| --- | --- | --- | --- |']
     for r in report['dp41_sufficient_typed_evidence']:
@@ -131,14 +131,16 @@ def render(report):
 
 
 def self_check(data):
-    assert cost(2000,200,data['llm_pricing']) == F('0.0016')
+    assert cost(2000,200,data['llm_pricing']) == F('0.00056')
     result=calculate(data);a=result['arithmetic']
-    assert a['activity_total_USD']=='0.41632' and a['activity_headroom_USD']=='0.08368'
+    assert a['activity_total_USD']=='0.35184' and a['activity_headroom_USD']=='0.14816'
+    assert a['generation_only_200_seconds']=='1.538462'
+    assert a['reference_reaction_seconds']=='1.499231' and a['reference_short_reaction_seconds']=='1.114615'
     v=data['voice_pricing']
     assert F(v['audio_input_per_minute'])==F(v['audio_input_per_million'])*v['audio_input_tokens_per_second']*60/1_000_000
     assert F(v['audio_output_per_minute'])==F(v['audio_output_per_million'])*v['audio_output_tokens_per_second']*60/1_000_000
-    assert result['semantic_alternative']['P21_semantic_USD']=='0.03472'
-    assert result['semantic_alternative']['P21_base_with_voice_USD']=='0.35184'
+    assert result['semantic_alternative']['P21_semantic_USD']=='0.0992'
+    assert result['semantic_alternative']['P21_base_with_voice_USD']=='0.41632'
     assert result['workload_summary']['user_input_scenes']==19 and result['workload_summary']['agent_triggered_scenes']==2
     # Parallel agent work must not erase independently running VIA work.
     dag=[{'id':'start','parents':[],'seconds':'0.1','kind':'VIA'},
