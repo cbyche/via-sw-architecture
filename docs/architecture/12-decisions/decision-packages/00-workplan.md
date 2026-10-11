@@ -4,6 +4,10 @@
 > 개별 대안과 조합 계약의 문서 검토를 마쳤다. 구현·측정·최종 선택과 기존 Architecture 전체 동기화는 별도 후속 작업이다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
 
+## 2026-10-12 초기 관측 타임라인 초안 archive 이동
+
+사용자는 46 이전 관측 초안이 활성 경로에 untracked로 남아 다른 세션을 혼동시킨다고 확인하고 archive 이동과 commit/push를 요청했다. [보존 안내와 manifest](../../../archive/input-evidence-timeline-before-46-2026-10-12/README.md)에 문서 2개, 도식/렌더 기록 4개와 전용 도구 2개를 원래 경로 구조와 bytes/SHA-256으로 보존했다. 중앙 기록/생산자별 기록 조합은 별도 주요 DP로 진행하지 않은 초기 탐색이며 현재 46이 사용하는 자료가 아니다. 현재 46 문서/그림/생성기와 다른 세션의 PoC/04-50/work 변경은 이번 정리 대상이 아니다.
+
 ## 2026-10-11 PoC 시작 전 보관과 수행 계획
 
 사용자는 새 PoC 코드가 이전 실험과 섞이지 않도록 보관하고, 코드 작업 전에 현재 변경을 commit/push하도록 요청했다. 활성 script 경로에 남아 있던 이전 도구 여섯 개와 개정 전 안내 다섯 개를 [보관 안내와 hash manifest](../../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 보존했으며 기존 후보, benchmark와 결과 archive는 유지한다. 새 QA-02의 cap 적용/정답만/오답 포함 실측 평균, QA-03의 cap 적용/완료만 평균과 Mac의 phys_footprint/resident size 요구사항을 [현재 측정 안내](../../../../benchmark/architecture/README.md)에 기록했다.

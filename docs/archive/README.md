@@ -19,6 +19,7 @@
 | Withdrawn Component-boundary candidates | [2026-09-30 candidate review](./decision-reconstruction-component-boundaries-2026-09-30/README.md) | `7094db96`의 일곱 후보·그림·선발 원칙을 사용자 리뷰에 따라 추천에서 철회하고 원본·탈락 사유 보존 |
 | Superseded uniform-layout decision candidates | [2026-10-01 structural rework](./decision-reconstruction-uniform-layouts-2026-10-01/README.md) | `0e2d15f`의 여덟 후보·그림·검토·생성기 48파일과 SHA-256 manifest; 구조 차이 리뷰 후 보관 |
 | Superseded decision selection principles | [2026-10-02 principles](./decision-selection-principles-2026-10-02/README.md) | `9d2e7248`의 원칙 원문과 SHA-256. 현재 구조 계열/전환 기준으로 대체, S-01~06은 활성 위치의 재평가 자료로 유지 |
+| Initial observation timeline exploration before 46 | [2026-10-12 archive](./input-evidence-timeline-before-46-2026-10-12/README.md) | 2026-10-09 초안과 도식/도구 8개를 untracked 활성 경로에서 이동. 원본 bytes/SHA-256 보존, 현재 설계 아님 |
 
 The current source of truth is [docs/architecture](../architecture/README.md).
 
