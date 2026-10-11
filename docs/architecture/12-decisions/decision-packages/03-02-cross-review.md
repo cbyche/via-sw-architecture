@@ -58,3 +58,7 @@ python3 scripts/architecture/check_qa_catalog.py
 ```
 
 위 검사는 통과했다. 실제 후보/유료 모델 API/Windows 메모리/Microsoft PowerPoint 앱 저장·재열기는 수행하지 않았다. 녹음·화면 fixture 파일과 후보 trace는 정의 이후 실행 작업이며 현재 측정 결과로 만들지 않는다. 우선순위 변경 추천은 미채택 상태로 보존했고 기존 번호순을 유지했다. 기존 DP/참조 Architecture/QA catalog/ADR와 병행 작업은 수정하지 않았다. 저장소 전체 CI의 결과는 이 QA 범위 검수와 구별한다.
+
+## GitHub 게시와 전체 CI
+
+QA 문서/원장/두 발표자료는 `44d5d9230b6a9017f688e9eeb2542764580ff13d`로 main에 push했다. [해당 CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38124471022)는 기존 04-42의 `choice42-structure.svg`/`.drawio` 재생성 drift에서 실패했다. [직전 기준선 3e503646c의 CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38123466339)도 같은 단계/같은 두 파일에서 실패했다. 해당 생성기/그림은 이번 QA 커밋의 변경 목록에 없으며 두 커밋 간 변경이 없다. 이번 QA 범위의 로컬 검사 통과와 저장소 전체 CI 성공을 구별한다. 기존 DP 그림을 이 QA 작업에서 자동 재작성하지 않았다.
