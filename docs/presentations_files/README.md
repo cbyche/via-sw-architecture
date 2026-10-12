@@ -1,6 +1,8 @@
 # VIA 발표자료
 
-현재 발표자료는 **[VIA-architecture-presentation.pptx, 32장](./VIA-architecture-presentation.pptx)** 하나다. 기존 일곱 파일을 발표 순서대로 합쳤으며, 앞으로는 이 파일에서 필요한 장만 수정한다. [구역별 위치와 부분 편집 안내](./full-presentation/README.md), [슬라이드 목록과 최초 통합 이력](./full-presentation/manifest.json)을 따른다.
+현재 발표자료는 **[VIA-architecture-presentation_v5.pptx, 61장](./VIA-architecture-presentation_v5.pptx)**이다. 본문 24장, appendix 안내 1장과 보존 자료 36장으로 구성한다. v4의 내용과 순서를 유지하며 Windows 사용을 위한 Calibri 글꼴, 정수 pt와 한국어 기본 언어를 적용했다. 앞으로도 이 기준을 따르며 최신본에서 필요한 장을 수정하고 새 버전으로 저장한다. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v5 슬라이드 목록과 서식 정책](./full-presentation/manifest-v5.json)을 따른다.
+
+[최초 통합본](./VIA-architecture-presentation.pptx), [v2](./VIA-architecture-presentation_v2.pptx), [v3](./VIA-architecture-presentation_v3.pptx)와 [v4](./VIA-architecture-presentation_v4.pptx)는 이전 버전으로 보존한다. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 발표 순서는 위 안내를 따른다.
 
 | 통합본 위치 | 발표 내용 |
 | --- | --- |
@@ -20,7 +22,7 @@
 
 ## 통합 전 구성파일 — 최초 이관 참고본
 
-아래 일곱 PPTX와 PNG는 2026-10-11 최초 통합에 사용한 자료다. 파일은 보존하며 이후 발표 수정은 위 통합본 하나에 적용한다. 아래의 개별 생성·갱신 설명은 해당 판본의 작성 이력이다. Architecture Markdown/JSON과 그림의 원본은 계속 근거 자료로 사용하되, 일곱 PPTX를 재병합하여 현재 통합본을 덮어쓰지 않는다.
+아래 일곱 PPTX와 PNG는 2026-10-11 최초 통합에 사용한 자료다. 파일은 보존하며 이후 발표 수정은 최신 통합본의 새 버전에 적용한다. 아래의 개별 생성·갱신 설명은 해당 판본의 작성 이력이다. Architecture Markdown/JSON과 그림의 원본은 계속 근거 자료로 사용하되, 일곱 PPTX를 재병합하여 현재 통합본을 덮어쓰지 않는다.
 
 | 자료 | 설명 및 원문 | 편집 가능한 PPTX | 이미지 미리보기 |
 | --- | --- | --- | --- |

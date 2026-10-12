@@ -213,3 +213,16 @@ with that workspace; do not run the archived workspace as a substitute.
 - Do not create, delete, or merge branches merely as cleanup unless the user explicitly asks.
 - Honor explicit requests to leave changes uncommitted or not pushed.
 - After any push, report the commit SHA and CI status with a link when available.
+
+## 9. PPTX authoring policy
+
+The user specified these requirements on 2026-10-12 for all future PPTX work:
+
+- The delivery application is Microsoft PowerPoint on Windows.
+- Use `Calibri` for every declared font, including Latin, East Asian and complex-script text, tables, notes, masters, layouts and theme fonts. Do not retain Mac-specific font names.
+- Use integer font sizes in PowerPoint points, not merely integer CSS pixels. Avoid automatic shrink settings that introduce fractional effective sizes.
+- Set the document language and presentation text defaults to Korean (`ko-KR`), and apply the same language to existing text and new-text insertion defaults. This is a document setting; do not claim to change the receiving application's UI language.
+- Preserve earlier versions. Start from the latest unified deck and publish a new numbered version without deleting existing content.
+- Run `python3 scripts/presentations/presentation_windows_policy.py check NEW.pptx`, then render and inspect all affected slides. Package validation does not establish native Windows rendering.
+
+See [the unified presentation guide](docs/presentations_files/full-presentation/README.md) for the latest deck, slide keys and editing workflow. Historical source decks and their reproducibility scripts keep their original settings unless the user requests an update.
