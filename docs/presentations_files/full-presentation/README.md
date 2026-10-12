@@ -36,6 +36,8 @@
 
 Windows cloud의 Microsoft Open XML SDK로 v5를 검사해 원래 통합본의 마스터 등록 오류 3건을 확인했다. v6에서는 `slideMasterId`를 표준 `sldMasterId`로 바꾸고, presentation의 notes master를 하나로 등록하며 각 notes slide를 그 master에 연결했다. 기존 노트와 다른 마스터 자원은 보존한다. [Windows 검사 workflow](../../../.github/workflows/presentation-windows-check.yml)는 글꼴과 한국어 정책, 61장의 package 열기와 Office2021 스키마를 검사하고 PowerPoint 설치 여부도 기록한다. SDK 검증과 PowerPoint의 직접 실행 및 렌더링 검증은 구별한다.
 
+최종 v6는 [Windows cloud 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/38207406108)를 통과했다. Calibri가 설치된 Windows Server 2022에서 Microsoft Open XML SDK 3.3.0으로 61장을 열었으며 Office2021 스키마 오류는 0건이다. 검사한 파일의 SHA-256은 `78eabff07ee0ba6c98e8abacf3e50bb055f1d526bf47b705a48c8d7f8ede2bf8`로 로컬 완성본과 일치한다. Calibri, 정수 pt와 한국어 정책도 통과했다. Cloud 환경에는 PowerPoint가 설치되어 있지 않아 직접 실행, native 글꼴 배치와 GIF 재생은 미검증이다. 로컬에서는 61장 모두를 렌더링해 확인했으며 package, geometry와 native 표 검사에서 오류나 경고는 없었다. [v6 변경의 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38207386475)도 통과했다.
+
 ### v5와 이후 PPTX의 작성 기준
 
 사용자가 지정한 다음 기준은 [저장소 에이전트 지침](../../../AGENTS.md)의 PPTX 정책에도 기록했다.
