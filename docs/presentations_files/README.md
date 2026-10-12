@@ -1,8 +1,8 @@
 # VIA 발표자료
 
-현재 발표자료는 **[VIA-architecture-presentation_v5.pptx, 61장](./VIA-architecture-presentation_v5.pptx)**이다. 본문 24장, appendix 안내 1장과 보존 자료 36장으로 구성한다. v4의 내용과 순서를 유지하며 Windows 사용을 위한 Calibri 글꼴, 정수 pt와 한국어 기본 언어를 적용했다. 앞으로도 이 기준을 따르며 최신본에서 필요한 장을 수정하고 새 버전으로 저장한다. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v5 슬라이드 목록과 서식 정책](./full-presentation/manifest-v5.json)을 따른다.
+현재 발표자료는 **[VIA-architecture-presentation_v6.pptx, 61장](./VIA-architecture-presentation_v6.pptx)**이다. 본문 24장, appendix 안내 1장과 보존 자료 36장으로 구성한다. 참조 발표자료의 검정색 제목과 본문, 회색 구분선, 상단 진행 표시와 연한 초록색 표 스타일을 적용했다. 도형 라벨을 도형 자체의 텍스트로 옮기고, 본문에서는 화면 지칭보다 요청 조건, 순서와 정정 범위를 강조한다. Calibri, 정수 pt와 한국어 기본 언어도 유지했다. 최신본에서 필요한 장을 수정하고 새 버전으로 저장한다. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v6 슬라이드 목록과 서식 정책](./full-presentation/manifest-v6.json)을 따른다.
 
-[최초 통합본](./VIA-architecture-presentation.pptx), [v2](./VIA-architecture-presentation_v2.pptx), [v3](./VIA-architecture-presentation_v3.pptx)와 [v4](./VIA-architecture-presentation_v4.pptx)는 이전 버전으로 보존한다. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 발표 순서는 위 안내를 따른다.
+[최초 통합본](./VIA-architecture-presentation.pptx), [v2](./VIA-architecture-presentation_v2.pptx), [v3](./VIA-architecture-presentation_v3.pptx), [v4](./VIA-architecture-presentation_v4.pptx)와 [v5](./VIA-architecture-presentation_v5.pptx)는 이전 버전으로 보존한다. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 발표 순서는 위 안내를 따른다.
 
 | 통합본 위치 | 발표 내용 |
 | --- | --- |

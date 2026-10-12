@@ -1,8 +1,8 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v5.pptx](../VIA-architecture-presentation_v5.pptx)다. 2026-10-12에 v4의 내용과 구성을 유지하며 Windows 사용을 위한 Calibri 글꼴과 한국어 언어 설정을 적용했다. 정수 pt 글자 크기도 유지한다. **본문 24장, appendix 안내 1장, 최초 원본 보존 32장, v2 배경 보존 4장으로 총 61장**이다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v6.pptx](../VIA-architecture-presentation_v6.pptx)다. 2026-10-12에 v5를 기준으로 참조 발표자료의 서식, 검정색 본문과 도형 자체의 텍스트를 적용했다. 화면 지칭의 강조를 줄이고 요청의 조건, 순서와 정정 범위를 중심으로 설명한다. Windows 사용을 위한 Calibri, 정수 pt와 한국어 언어 설정도 유지한다. **본문 24장, appendix 안내 1장, 최초 원본 보존 32장, v2 배경 보존 4장으로 총 61장**이다.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx)와 [v4](../VIA-architecture-presentation_v4.pptx)는 변경하지 않았다. v2에서 종합한 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)의 발표 순서를 유지한다. 본문에서 대체하거나 이동한 내용과 기존 발표자 노트, 이미지 및 두 시연 GIF는 appendix와 이전 버전에 보존한다. v5의 서식과 언어 변경은 appendix에도 적용한다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx)와 [v5](../VIA-architecture-presentation_v5.pptx)는 변경하지 않았다. v2에서 종합한 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)의 발표 순서를 유지한다. 본문에서 대체하거나 이동한 내용과 기존 발표자 노트, 이미지 및 두 시연 GIF는 appendix와 이전 버전에 보존한다. v6의 서식 변경은 appendix에도 적용한다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
 
 ## 현재 발표 순서
 
@@ -22,7 +22,19 @@
 | 43~57 | Appendix / 원본 보존 | 원본 18~32장: Overview, 책임과 겹침 장면, 네 DP의 배경/비교/QA 상세 |
 | 58~61 | Appendix / v2 배경 보존 | v2의 15, 17, 19, 21장: DP41, DP44, DP45, DP42의 기존 배경 |
 
-원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 보존한 슬라이드 안의 번호, 버전과 제목은 당시 표기이며 현재 위치는 위 표와 [manifest-v5.json](./manifest-v5.json)을 따른다.
+원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기다. 상단 제목과 서식은 v6에 맞췄으며 현재 위치는 위 표와 [manifest-v6.json](./manifest-v6.json)을 따른다.
+
+### v6의 참조 스타일과 도형 텍스트
+
+참조 자료의 실제 저장 경로는 [reference_presentaion/presentation_kjh](../reference_presentaion/presentation_kjh/)다. 제공된 58개 PNG를 확인하고 공통 서식을 편집 가능한 객체로 다시 작성했다. 흰 배경, 검정색 제목과 본문, 회색 구분선, 회색 진행 단계와 청록색 현재 단계, 연한 초록색 표 머리글을 적용한다. 품질 요구사항 표의 본문은 연한 크림색이다. `설계 질문` 표지만 빨간색으로 강조하고 질문 문장은 검정색으로 유지한다. 상단 진행 표시의 흰 글자는 대비를 위한 탐색 서식이다.
+
+기존 도형의 별도 라벨을 도형 자체의 `p:txBody`로 옮겼다. 모듈, 저장소, 실행 경계와 강조 상자는 자신의 텍스트를 가지며 도형과 라벨을 따로 움직일 필요가 없다. 부록의 비교표 머리글도 25개의 native 도형 셀로 작성했다. 동작이나 전달 데이터의 설명은 원래 화살표 근처에 유지한다. 배치가 다른 설명들을 하나의 도형 제목으로 합치지 않는다. 좁은 마름모의 글자는 가운데 정렬하고 내부 여백을 조정해 잘림을 방지했다.
+
+본문 1, 3~6, 8, 12, 15~16장에서 화면 지칭의 강조를 줄였다. 시나리오의 표와 화면은 남기되, DP41의 예는 매출 자료, 이전 보고서와 조건 및 결과 의존 관계를 중심으로 설명한다. DP44의 사건 겹침, DP45의 과거 근거, DP42의 상태 수명은 유지한다. 여섯 QA의 정의, 목표값, 모집단과 등급 표의 문구는 변경하지 않았다. 슬라이드 순서와 ID, key, 노트 내용과 25개 media part의 원본 bytes도 보존한다.
+
+[v6 작성 스크립트](../../../scripts/presentations/restyle_presentation_v6.mjs)는 Artifact Tool에서 기존 텍스트와 표를 편집하고 공통 머리글을 작성한다. [native 패키지 보존 도구](../../../scripts/presentations/restyle_presentation_v6.py)가 기존 도형의 텍스트를 합치고 원본 자원을 보존한다. `prepare SOURCE.pptx PLAN.json`으로 변경 계획을 만들고, v5 작성 스크립트와 같은 bundled 환경을 설정한 private build에서 v6 스크립트의 사본에 저장소와 build 절대 경로를 전달한다. 이 도구는 v5→v6 재현용이며 이후 수정은 최신 통합본을 입력으로 한다.
+
+Windows cloud의 Microsoft Open XML SDK로 v5를 검사해 원래 통합본의 마스터 등록 오류 3건을 확인했다. v6에서는 `slideMasterId`를 표준 `sldMasterId`로 바꾸고, presentation의 notes master를 하나로 등록하며 각 notes slide를 그 master에 연결했다. 기존 노트와 다른 마스터 자원은 보존한다. [Windows 검사 workflow](../../../.github/workflows/presentation-windows-check.yml)는 글꼴과 한국어 정책, 61장의 package 열기와 Office2021 스키마를 검사하고 PowerPoint 설치 여부도 기록한다. SDK 검증과 PowerPoint의 직접 실행 및 렌더링 검증은 구별한다.
 
 ### v5와 이후 PPTX의 작성 기준
 
@@ -32,6 +44,8 @@
 - 글꼴: 모든 텍스트, 표, 노트, master/layout/theme의 영문, 동아시아와 복합 문자 글꼴을 `Calibri`로 통일한다. 제목의 Calibri Light와 Mac 전용 글꼴도 남기지 않는다.
 - 글자 크기: PowerPoint pt 단위의 정수만 사용한다. CSS pixel 정수 여부와 구별하고, 자동 축소로 소수점 크기를 만들지 않는다.
 - 언어: 문서와 전체 텍스트의 언어를 한국어 `ko-KR`로 설정한다. 새 텍스트 입력의 기본 서식과 문단 끝 서식도 같은 언어를 사용한다.
+- 본문과 제목의 기본 글자 색은 검정색으로 하고 다른 색은 강조에만 사용한다.
+- 도형의 글자는 도형 자체에 넣는다. 참조 자료의 공통 서식을 적용하며 화면 지칭보다 주요 QA와 DP의 문제를 강조한다.
 
 v5는 61장의 문구, QA 정의와 수치, 도형 배치, 노트 내용과 페이지 순서를 v4와 같게 유지한다. 이미지, GIF와 관계 파일은 bytes까지 보존한다. 글꼴 변경 후 두 줄이 된 9, 10, 41, 42장의 QA ID 셀 12개만 19pt에서 17pt로 조정해 한 줄 표시를 유지했다. 문서 기본 텍스트 스타일의 기본 수준과 1~9 수준, 노트와 기존 run에도 한국어를 명시했다. 이것은 PPTX 문서의 언어 설정이며 PowerPoint 프로그램의 메뉴 언어를 바꾸는 설정은 아니다. 구현은 Microsoft의 [기본 텍스트 스타일 설명](https://learn.microsoft.com/en-us/office/open-xml/presentation/working-with-presentations)과 [문자 속성의 언어 정의](https://learn.microsoft.com/en-us/dotnet/api/documentformat.openxml.drawing.textcharacterpropertiestype.language?view=openxml-3.0.1)를 따른다.
 
@@ -68,13 +82,13 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v5.pptx`를 입력으로 `_v6.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v6.pptx`를 입력으로 `_v7.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
 요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v5.json](./manifest-v5.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, Windows 서식과 한국어 정책 검사 결과를 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v6.json](./manifest-v6.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책, 도형 텍스트 변경과 마스터 등록 수정 내역을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
 [부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
