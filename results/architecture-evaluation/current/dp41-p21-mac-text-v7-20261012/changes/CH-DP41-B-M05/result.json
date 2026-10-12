@@ -1,0 +1,286 @@
+{
+  "job_id": "CH-DP41-B-M05",
+  "variant": "B",
+  "task_id": "M05",
+  "registry_version": "ASR-QA-v6-U01-U18",
+  "requirement": {
+    "requirement": "Task owner creates/checks allowed-answer-scope token; dialogue returns only the token actually presented for current question ID/revision.",
+    "completion": [
+      "current_presented_token_accepted_once",
+      "wrong_task_token_rejected",
+      "stale_token_rejected",
+      "restore_keeps_binding"
+    ],
+    "regressions": [
+      "P21",
+      "S6-04",
+      "S6-02",
+      "duplicate_answer",
+      "reverse_event",
+      "input_hold",
+      "restored_initial_question_with_token"
+    ],
+    "baseline_overlap_audit": false
+  },
+  "baseline_source_hash": "935fab8816a88ca514572ffe83c61015b291a343eaf71304126f3c9862845f5c",
+  "baseline_source_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/frozen-source",
+  "status": "AWAITING_RESPONSIBILITY_REVIEW",
+  "evidence_level": "MEASURED_CHANGE_EXPERIMENT",
+  "completion_passed": true,
+  "regression_passed": true,
+  "patch_verified": true,
+  "responsibility_review_passed": false,
+  "baseline_support_audit_passed": false,
+  "changed_unit_set": [
+    "U04",
+    "U07"
+  ],
+  "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M05/result.json",
+  "evaluator_source_hashes": {
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_experiments.py": "ace1893fad7318bd8ff5d0677f96a1fd0b0b18b36a314b7f6e084ea29224021a",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_patches.py": "a2f36fd73a7737b34c650c3e01c1b61b56956af6dd356d82e256a858ac9db918",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_runtime_checks.py": "18ac7a8bd03d8bd042978347bceba3156134b8f9c1131dcc760fd5a0c8472818",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/replay.py": "15655bd09c1b77e5288cb2c234093171d4b58b70dc6dba8e91978f4c69f95b7d"
+  },
+  "after_source_hash": "b774772a60551298e9a0eb44d31b589557765a28928893a9bed7f578b5980724",
+  "changed_paths": [
+    "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+    "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+  ],
+  "patch_sha256": "5e366340ad48d93905416b636fb8734455d2a951e6538c616185aa35ad33278e",
+  "patch_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M05/patch.diff",
+  "responsibility_claims": {
+    "U07": {
+      "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding.",
+      "before_contract": "question identity/revision/scope authority without token",
+      "after_contract": "Task-issued token required in addition to existing checks",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    },
+    "U04": {
+      "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore.",
+      "before_contract": "actually presented identity/revision reflection",
+      "after_contract": "actually presented identity/revision/token reflection",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    }
+  },
+  "responsibility_assessment": {
+    "U01": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Natural-language semantic production prompts and interpretation rules",
+      "after_contract": "Natural-language semantic production prompts and interpretation rules",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U02": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Finite representation dispatch, item resolution and code binding",
+      "after_contract": "Finite representation dispatch, item resolution and code binding",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U03": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Common meaning/frame/condition validation contract",
+      "after_contract": "Common meaning/frame/condition validation contract",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U04": {
+      "status": "CHANGED",
+      "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore.",
+      "before_contract": "actually presented identity/revision reflection",
+      "after_contract": "actually presented identity/revision/token reflection",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    },
+    "U05": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Input/delivery clocks and actual playback control",
+      "after_contract": "Input/delivery clocks and actual playback control",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U06": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Response content, publication and delivery ledger",
+      "after_contract": "Response content, publication and delivery ledger",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U07": {
+      "status": "CHANGED",
+      "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding.",
+      "before_contract": "question identity/revision/scope authority without token",
+      "after_contract": "Task-issued token required in addition to existing checks",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    },
+    "U08": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Central continuation or Stage/window execution flow",
+      "after_contract": "Central continuation or Stage/window execution flow",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U09": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Source adapter and normalized original-source port",
+      "after_contract": "Source adapter and normalized original-source port",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U10": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Request-wise original composition/search/cache semantics",
+      "after_contract": "Request-wise original composition/search/cache semantics",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U11": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Common past-relation production/coverage/invalidation",
+      "after_contract": "Common past-relation production/coverage/invalidation",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U12": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Published relation reading and uncovered-range completion",
+      "after_contract": "Published relation reading and uncovered-range completion",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U13": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Dialogue/work command, acceptance and reflection contract",
+      "after_contract": "Dialogue/work command, acceptance and reflection contract",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U14": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Persistent schema migration and restore",
+      "after_contract": "Persistent schema migration and restore",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U15": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Cloud-provider wire, usage and cancellation adapter",
+      "after_contract": "Cloud-provider wire, usage and cancellation adapter",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U16": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "External Agent protocol/capability adapter",
+      "after_contract": "External Agent protocol/capability adapter",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U17": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Permission/consent/deletion policy decisions",
+      "after_contract": "Permission/consent/deletion policy decisions",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U18": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Cross-owner derived-consumer deletion/correction completion contract",
+      "after_contract": "Cross-owner derived-consumer deletion/correction completion contract",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    }
+  },
+  "count": null,
+  "original_baseline_unchanged": true
+}

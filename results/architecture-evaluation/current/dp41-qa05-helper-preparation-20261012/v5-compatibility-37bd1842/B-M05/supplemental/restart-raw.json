@@ -1,0 +1,1651 @@
+{
+  "record": {
+    "passed": true,
+    "same_published_token": true,
+    "corrupt_dialogue_token_rejected": true,
+    "one_actual_answer_command": true,
+    "duplicate_rejected": true,
+    "owner_status": "ANSWERED",
+    "token_sha256": "059681869a7f557eae6ae8b80c3c083bb521cb6680a48e6277c7f875c232206d",
+    "snapshot_sha256": "7ddc5dd54117a441a5f129f3f30cde7baeeebabdf5303d6b7dc1d0f2f480beb9",
+    "pid": 80142,
+    "variant": "B",
+    "events": [
+      {
+        "table": "events",
+        "references": [],
+        "roles": [
+          "read",
+          "agent"
+        ],
+        "context": "agent_payload",
+        "policy_epoch": 1,
+        "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "scene_key": "",
+        "scene_seconds": 0.0008277918677777052,
+        "kind": "SOURCE_COMPOSITION_READ",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N1",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "GOAL_PREPARATION",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0008922920096665621,
+        "end_s": 0.0009200000204145908,
+        "duration": 2.7708010748028755e-05,
+        "parents": [],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "goal_id": "answer",
+          "source_refs": []
+        }
+      },
+      {
+        "table": "events",
+        "references": [],
+        "roles": [
+          "read",
+          "agent"
+        ],
+        "context": "agent_payload",
+        "policy_epoch": 1,
+        "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "scene_key": "",
+        "scene_seconds": 0.0009846249595284462,
+        "kind": "SOURCE_COMPOSITION_READ",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N2",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "GOAL_PREPARATION",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0010635419748723507,
+        "end_s": 0.0010759590659290552,
+        "duration": 1.2417091056704521e-05,
+        "parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N1"
+        ],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "goal_id": "answer",
+          "source_refs": []
+        }
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "COMMAND_INGRESS",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0010883749928325415,
+        "end_s": 0.0011911250185221434,
+        "duration": 0.0001027500256896019,
+        "parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N2"
+        ],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+          "goal_id": "answer"
+        }
+      },
+      {
+        "table": "effects",
+        "scene_key": "",
+        "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+        "task_id": "work",
+        "execution_id": "work-exec",
+        "request_revision": 1,
+        "operation": "ANSWER_QUESTION",
+        "payload": {
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "relations": [],
+          "constraints": [],
+          "preservations": [],
+          "sources": [],
+          "question": {
+            "question_id": "published-q",
+            "revision": 2,
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "ANSWERED",
+            "text": "상반기 범위를 사용합니까?",
+            "scope": {
+              "property": "PERIOD",
+              "proposed_value": "H1"
+            },
+            "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+            "text_presented": true,
+            "presentation_status": "PRESENTED",
+            "delivered_receipt": true,
+            "voice_presented": false,
+            "answer_status": "ACCEPTED",
+            "answer": "yes"
+          },
+          "before_task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "Q3"
+            }
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          }
+        },
+        "request_id": "answer-after-restart",
+        "goal_id": "answer",
+        "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+        "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+        "send_s": 0.0010438328608870506,
+        "ingress_accepted_s": 0.0011024579871445894,
+        "accepted_s": 0.0011025830172002316,
+        "status": "INGRESS_ACCEPTED",
+        "wire": {
+          "protocol": "agent-wire-v1",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            }
+          }
+        },
+        "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3"
+      },
+      {
+        "table": "events",
+        "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+        "task_id": "work",
+        "execution_id": "work-exec",
+        "request_revision": 1,
+        "operation": "ANSWER_QUESTION",
+        "payload": {
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "relations": [],
+          "constraints": [],
+          "preservations": [],
+          "sources": [],
+          "question": {
+            "question_id": "published-q",
+            "revision": 2,
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "ANSWERED",
+            "text": "상반기 범위를 사용합니까?",
+            "scope": {
+              "property": "PERIOD",
+              "proposed_value": "H1"
+            },
+            "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+            "text_presented": true,
+            "presentation_status": "PRESENTED",
+            "delivered_receipt": true,
+            "voice_presented": false,
+            "answer_status": "ACCEPTED",
+            "answer": "yes"
+          },
+          "before_task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "Q3"
+            }
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          }
+        },
+        "request_id": "answer-after-restart",
+        "goal_id": "answer",
+        "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+        "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+        "send_s": 0.0010438328608870506,
+        "ingress_accepted_s": 0.0011024579871445894,
+        "accepted_s": 0.0011025830172002316,
+        "status": "INGRESS_ACCEPTED",
+        "wire": {
+          "protocol": "agent-wire-v1",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            }
+          }
+        },
+        "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+        "scene_key": "",
+        "scene_seconds": 0.001132250064983964,
+        "kind": "COMMAND_SENT",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "events",
+        "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+        "accepted_s": 0.0011025830172002316,
+        "causal_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+        "scene_key": "",
+        "scene_seconds": 0.0011530830524861813,
+        "kind": "AGENT_INGRESS_ACCEPTED",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "AGENT_RECEIPT_DELIVERY",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0011911250185221434,
+        "end_s": 0.002535874955356121,
+        "duration": 0.0013447499368339777,
+        "parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N3"
+        ],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+          "receipt": "ACCEPTED"
+        }
+      },
+      {
+        "table": "events",
+        "receipt": "ACCEPTED",
+        "command": {
+          "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "published-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "실제 제시 질문 응답"
+            },
+            "relations": [],
+            "constraints": [],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "question_id": "published-q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false,
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "실제 Task",
+              "source_refs": [],
+              "properties": {
+                "PERIOD": "Q3"
+              }
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "실제 Task",
+              "source_refs": [],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          },
+          "request_id": "answer-after-restart",
+          "goal_id": "answer",
+          "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+          "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+          "send_s": 0.0010438328608870506,
+          "ingress_accepted_s": 0.0011024579871445894,
+          "accepted_s": 0.0011025830172002316,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "published-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "실제 제시 질문 응답"
+                },
+                "relations": [],
+                "constraints": [],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "published-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "실제 Task",
+                  "source_refs": [],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "실제 Task",
+                  "source_refs": [],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+          "receipt_s": 0.002447916893288493,
+          "receipt_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+        },
+        "task": {
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "status": "RUNNING",
+          "instruction": "실제 Task",
+          "source_refs": [],
+          "properties": {
+            "PERIOD": "H1"
+          }
+        },
+        "goal": {
+          "id": "answer",
+          "kind": "ANSWER_QUESTION",
+          "operation": "ANSWER_QUESTION",
+          "target": "work",
+          "arguments": {
+            "question_ref": "published-q",
+            "question_revision": 2,
+            "answer": "yes",
+            "properties": {
+              "PERIOD": "H1"
+            }
+          },
+          "instruction": "실제 제시 질문 응답"
+        },
+        "_causal_parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+        ],
+        "preserved_tasks": [
+          {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          }
+        ],
+        "completion_confirmed": false,
+        "receipt_received_s": 0.002447916893288493,
+        "scene_key": "",
+        "scene_seconds": 0.0024800419341772795,
+        "kind": "COMMAND_ACCEPTED",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N5",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "MODEL_CALL",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0026859589852392673,
+        "end_s": 0.002690583933144808,
+        "duration": 4.624947905540466e-06,
+        "parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+        ],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "role": "CRESPONSE",
+          "mock_provider": true
+        }
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "TEXT_PRESENTED",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.00271612498909235,
+        "end_s": 0.00271612498909235,
+        "duration": 0.0,
+        "parents": [
+          "TL:13c07d74f2f04ae299aa21584e778bfa:N5"
+        ],
+        "request_id": "answer-after-restart",
+        "evidence": [],
+        "metadata": {
+          "publication_id": "P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f"
+        }
+      },
+      {
+        "table": "events",
+        "kind": "TEXT_PRESENTED",
+        "publication_id": "P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f",
+        "text": "상반기 범위를 사용합니까?",
+        "facts": {
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            },
+            "request_id": "answer-after-restart",
+            "goal_id": "answer",
+            "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+            "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+            "send_s": 0.0010438328608870506,
+            "ingress_accepted_s": 0.0011024579871445894,
+            "accepted_s": 0.0011025830172002316,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "operation": "ANSWER_QUESTION",
+                "payload": {
+                  "goal": {
+                    "id": "answer",
+                    "kind": "ANSWER_QUESTION",
+                    "operation": "ANSWER_QUESTION",
+                    "target": "work",
+                    "arguments": {
+                      "question_ref": "published-q",
+                      "question_revision": 2,
+                      "answer": "yes",
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    },
+                    "instruction": "실제 제시 질문 응답"
+                  },
+                  "relations": [],
+                  "constraints": [],
+                  "preservations": [],
+                  "sources": [],
+                  "question": {
+                    "question_id": "published-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "ANSWERED",
+                    "text": "상반기 범위를 사용합니까?",
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    },
+                    "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                    "text_presented": true,
+                    "presentation_status": "PRESENTED",
+                    "delivered_receipt": true,
+                    "voice_presented": false,
+                    "answer_status": "ACCEPTED",
+                    "answer": "yes"
+                  },
+                  "before_task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "Q3"
+                    }
+                  },
+                  "task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+            "receipt_s": 0.002447916893288493,
+            "receipt_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          },
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "_causal_parents": [
+            "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "실제 Task",
+              "source_refs": [],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          ],
+          "completion_confirmed": false
+        },
+        "request_id": "answer-after-restart",
+        "source_event_id": null,
+        "generation": 0,
+        "text_presented_s": 0.0026285829953849316,
+        "voice_on": false,
+        "voice_onset_s": null,
+        "voice_end_s": null,
+        "voice_text": "",
+        "voice_char_events": [],
+        "delivered_receipt": false,
+        "evidence_level": "MEASURED_MOCK_E2E",
+        "text_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "causal_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "text_presented": true,
+        "payload_kind": "RESPONSE",
+        "scene_key": "",
+        "scene_seconds": 0.0026353748980909586,
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "deliveries",
+        "scene_key": "",
+        "kind": "RESPONSE",
+        "publication_id": "P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f",
+        "text": "상반기 범위를 사용합니까?",
+        "facts": {
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            },
+            "request_id": "answer-after-restart",
+            "goal_id": "answer",
+            "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+            "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+            "send_s": 0.0010438328608870506,
+            "ingress_accepted_s": 0.0011024579871445894,
+            "accepted_s": 0.0011025830172002316,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "operation": "ANSWER_QUESTION",
+                "payload": {
+                  "goal": {
+                    "id": "answer",
+                    "kind": "ANSWER_QUESTION",
+                    "operation": "ANSWER_QUESTION",
+                    "target": "work",
+                    "arguments": {
+                      "question_ref": "published-q",
+                      "question_revision": 2,
+                      "answer": "yes",
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    },
+                    "instruction": "실제 제시 질문 응답"
+                  },
+                  "relations": [],
+                  "constraints": [],
+                  "preservations": [],
+                  "sources": [],
+                  "question": {
+                    "question_id": "published-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "ANSWERED",
+                    "text": "상반기 범위를 사용합니까?",
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    },
+                    "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                    "text_presented": true,
+                    "presentation_status": "PRESENTED",
+                    "delivered_receipt": true,
+                    "voice_presented": false,
+                    "answer_status": "ACCEPTED",
+                    "answer": "yes"
+                  },
+                  "before_task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "Q3"
+                    }
+                  },
+                  "task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+            "receipt_s": 0.002447916893288493,
+            "receipt_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          },
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "_causal_parents": [
+            "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "실제 Task",
+              "source_refs": [],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          ],
+          "completion_confirmed": false
+        },
+        "request_id": "answer-after-restart",
+        "source_event_id": null,
+        "generation": 0,
+        "text_presented_s": 0.0026285829953849316,
+        "voice_on": false,
+        "voice_onset_s": null,
+        "voice_end_s": null,
+        "voice_text": "",
+        "voice_char_events": [],
+        "delivered_receipt": true,
+        "evidence_level": "MEASURED_MOCK_E2E",
+        "text_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "causal_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "text_presented": true,
+        "end_s": 0.0026285829953849316
+      },
+      {
+        "table": "events",
+        "references": [],
+        "roles": [
+          "read",
+          "agent"
+        ],
+        "context": "agent_payload",
+        "policy_epoch": 1,
+        "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "scene_key": "",
+        "scene_seconds": 0.0027899169363081455,
+        "kind": "SOURCE_COMPOSITION_READ",
+        "owner": "LOCAL_VIA"
+      },
+      {
+        "table": "causal-nodes",
+        "node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N7",
+        "timeline_id": "TL:13c07d74f2f04ae299aa21584e778bfa",
+        "kind": "GOAL_PREPARATION",
+        "owner": "LOCAL_VIA",
+        "start_s": 0.0028702090494334698,
+        "end_s": 0.002880458952859044,
+        "duration": 1.0249903425574303e-05,
+        "parents": [],
+        "request_id": "duplicate-after-restart",
+        "evidence": [],
+        "metadata": {
+          "goal_id": "answer",
+          "source_refs": []
+        }
+      }
+    ],
+    "effects": [
+      {
+        "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+        "task_id": "work",
+        "execution_id": "work-exec",
+        "request_revision": 1,
+        "operation": "ANSWER_QUESTION",
+        "payload": {
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "relations": [],
+          "constraints": [],
+          "preservations": [],
+          "sources": [],
+          "question": {
+            "question_id": "published-q",
+            "revision": 2,
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "ANSWERED",
+            "text": "상반기 범위를 사용합니까?",
+            "scope": {
+              "property": "PERIOD",
+              "proposed_value": "H1"
+            },
+            "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+            "text_presented": true,
+            "presentation_status": "PRESENTED",
+            "delivered_receipt": true,
+            "voice_presented": false,
+            "answer_status": "ACCEPTED",
+            "answer": "yes"
+          },
+          "before_task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "Q3"
+            }
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          }
+        },
+        "request_id": "answer-after-restart",
+        "goal_id": "answer",
+        "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+        "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+        "send_s": 0.0010438328608870506,
+        "ingress_accepted_s": 0.0011024579871445894,
+        "accepted_s": 0.0011025830172002316,
+        "status": "INGRESS_ACCEPTED",
+        "wire": {
+          "protocol": "agent-wire-v1",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            }
+          }
+        },
+        "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+        "receipt_s": 0.002447916893288493,
+        "receipt_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+      }
+    ],
+    "owner_questions": {
+      "published-q": {
+        "question_id": "published-q",
+        "revision": 2,
+        "task_id": "work",
+        "execution_id": "work-exec",
+        "request_revision": 1,
+        "status": "ANSWERED",
+        "text": "상반기 범위를 사용합니까?",
+        "scope": {
+          "property": "PERIOD",
+          "proposed_value": "H1"
+        },
+        "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+        "text_presented": true,
+        "presentation_status": "PRESENTED",
+        "delivered_receipt": true,
+        "voice_presented": false,
+        "answer_status": "ACCEPTED",
+        "answer": "yes"
+      }
+    },
+    "binding": {
+      "published-q": {
+        "question": {
+          "question_id": "published-q",
+          "revision": 2,
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "status": "VALID",
+          "text": "상반기 범위를 사용합니까?",
+          "scope": {
+            "property": "PERIOD",
+            "proposed_value": "H1"
+          },
+          "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+          "text_presented": true,
+          "presentation_status": "PRESENTED",
+          "delivered_receipt": true,
+          "voice_presented": false
+        },
+        "receipt": {
+          "kind": "QUESTION",
+          "publication_id": "P:1:3f518271-aecd-4f52-b62b-306738ba1a81",
+          "text": "상반기 범위를 사용합니까?",
+          "facts": {
+            "question": {
+              "question_id": "published-q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "VALID",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false
+            },
+            "_causal_parents": [
+              "TL:3ac814a27d09416bb6fe1f7e9838044e:N1"
+            ]
+          },
+          "request_id": "event:new-owner-question",
+          "source_event_id": "new-owner-question",
+          "generation": 0,
+          "text_presented_s": 0.0007828751113265753,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:3ac814a27d09416bb6fe1f7e9838044e:N3",
+          "causal_node_id": "TL:3ac814a27d09416bb6fe1f7e9838044e:N3",
+          "text_presented": true
+        }
+      }
+    },
+    "deliveries": [
+      {
+        "kind": "RESPONSE",
+        "publication_id": "P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f",
+        "text": "상반기 범위를 사용합니까?",
+        "facts": {
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "published-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "실제 제시 질문 응답"
+              },
+              "relations": [],
+              "constraints": [],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "published-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "실제 Task",
+                "source_refs": [],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            },
+            "request_id": "answer-after-restart",
+            "goal_id": "answer",
+            "payload_sha256": "c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30",
+            "command_input_sha256": "0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c",
+            "send_s": 0.0010438328608870506,
+            "ingress_accepted_s": 0.0011024579871445894,
+            "accepted_s": 0.0011025830172002316,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f",
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "operation": "ANSWER_QUESTION",
+                "payload": {
+                  "goal": {
+                    "id": "answer",
+                    "kind": "ANSWER_QUESTION",
+                    "operation": "ANSWER_QUESTION",
+                    "target": "work",
+                    "arguments": {
+                      "question_ref": "published-q",
+                      "question_revision": 2,
+                      "answer": "yes",
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    },
+                    "instruction": "실제 제시 질문 응답"
+                  },
+                  "relations": [],
+                  "constraints": [],
+                  "preservations": [],
+                  "sources": [],
+                  "question": {
+                    "question_id": "published-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "ANSWERED",
+                    "text": "상반기 범위를 사용합니까?",
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    },
+                    "allowed_answer_scope_token": "12e77fa5c256d9d3aca30eace59a45ca",
+                    "text_presented": true,
+                    "presentation_status": "PRESENTED",
+                    "delivered_receipt": true,
+                    "voice_presented": false,
+                    "answer_status": "ACCEPTED",
+                    "answer": "yes"
+                  },
+                  "before_task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "Q3"
+                    }
+                  },
+                  "task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "실제 Task",
+                    "source_refs": [],
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N3",
+            "receipt_s": 0.002447916893288493,
+            "receipt_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "실제 Task",
+            "source_refs": [],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          },
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "published-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "실제 제시 질문 응답"
+          },
+          "_causal_parents": [
+            "TL:13c07d74f2f04ae299aa21584e778bfa:N4"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "실제 Task",
+              "source_refs": [],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          ],
+          "completion_confirmed": false
+        },
+        "request_id": "answer-after-restart",
+        "source_event_id": null,
+        "generation": 0,
+        "text_presented_s": 0.0026285829953849316,
+        "voice_on": false,
+        "voice_onset_s": null,
+        "voice_end_s": null,
+        "voice_text": "",
+        "voice_char_events": [],
+        "delivered_receipt": true,
+        "evidence_level": "MEASURED_MOCK_E2E",
+        "text_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "causal_node_id": "TL:13c07d74f2f04ae299aa21584e778bfa:N6",
+        "text_presented": true,
+        "end_s": 0.0026285829953849316
+      }
+    ],
+    "model_calls": [
+      {
+        "role": "CRESPONSE",
+        "messages": [
+          {
+            "role": "system",
+            "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+          },
+          {
+            "role": "user",
+            "content": "{\"_causal_parents\":[\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"],\"command\":{\"accepted_s\":0.0011025830172002316,\"command_id\":\"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\",\"command_input_sha256\":\"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\",\"execution_id\":\"work-exec\",\"goal_id\":\"answer\",\"ingress_accepted_s\":0.0011024579871445894,\"ingress_node_id\":\"TL:13c07d74f2f04ae299aa21584e778bfa:N3\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"Q3\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"published-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"실제 제시 질문 응답\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"12e77fa5c256d9d3aca30eace59a45ca\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"presentation_status\":\"PRESENTED\",\"question_id\":\"published-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기 범위를 사용합니까?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"payload_sha256\":\"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\",\"receipt_node_id\":\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\",\"receipt_s\":0.002447916893288493,\"request_id\":\"answer-after-restart\",\"request_revision\":1,\"send_s\":0.0010438328608870506,\"status\":\"INGRESS_ACCEPTED\",\"task_id\":\"work\",\"wire\":{\"command\":{\"command_id\":\"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\",\"execution_id\":\"work-exec\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"Q3\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"published-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"실제 제시 질문 응답\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"12e77fa5c256d9d3aca30eace59a45ca\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"presentation_status\":\"PRESENTED\",\"question_id\":\"published-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기 범위를 사용합니까?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"request_revision\":1,\"task_id\":\"work\"},\"protocol\":\"agent-wire-v1\"}},\"completion_confirmed\":false,\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"published-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"실제 제시 질문 응답\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preserved_tasks\":[{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"}],\"receipt\":\"ACCEPTED\",\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"실제 Task\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[],\"status\":\"RUNNING\",\"task_id\":\"work\"}}"
+          }
+        ]
+      }
+    ],
+    "api_calls": 0,
+    "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION",
+    "imported_runtime": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-qa05-helper-preparation-20261012/v5-compatibility-37bd1842/B-M05/source/prototypes/candidates/dp41_45_poc/shared/runtime.py",
+    "imported_adapters": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-qa05-helper-preparation-20261012/v5-compatibility-37bd1842/B-M05/source/prototypes/candidates/dp41_45_poc/shared/adapters.py",
+    "source_sha256": {
+      "prototypes/candidates/dp41_45_poc/shared/runtime.py": "696ac314b7e4c1ae1c7e266bb07f76cb5fccb43b55d3962829f2cd1e87c8dd36",
+      "prototypes/candidates/dp41_45_poc/shared/adapters.py": "498e029beea79d0817f9f7f199f3efb4177375904978508eecdf1c94f9e4e143"
+    }
+  },
+  "stdout": "{\"passed\": true, \"same_published_token\": true, \"corrupt_dialogue_token_rejected\": true, \"one_actual_answer_command\": true, \"duplicate_rejected\": true, \"owner_status\": \"ANSWERED\", \"token_sha256\": \"059681869a7f557eae6ae8b80c3c083bb521cb6680a48e6277c7f875c232206d\", \"snapshot_sha256\": \"7ddc5dd54117a441a5f129f3f30cde7baeeebabdf5303d6b7dc1d0f2f480beb9\", \"pid\": 80142, \"variant\": \"B\", \"events\": [{\"table\": \"events\", \"references\": [], \"roles\": [\"read\", \"agent\"], \"context\": \"agent_payload\", \"policy_epoch\": 1, \"payload_sha256\": \"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\", \"scene_key\": \"\", \"scene_seconds\": 0.0008277918677777052, \"kind\": \"SOURCE_COMPOSITION_READ\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N1\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"GOAL_PREPARATION\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0008922920096665621, \"end_s\": 0.0009200000204145908, \"duration\": 2.7708010748028755e-05, \"parents\": [], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"goal_id\": \"answer\", \"source_refs\": []}}, {\"table\": \"events\", \"references\": [], \"roles\": [\"read\", \"agent\"], \"context\": \"agent_payload\", \"policy_epoch\": 1, \"payload_sha256\": \"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\", \"scene_key\": \"\", \"scene_seconds\": 0.0009846249595284462, \"kind\": \"SOURCE_COMPOSITION_READ\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N2\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"GOAL_PREPARATION\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0010635419748723507, \"end_s\": 0.0010759590659290552, \"duration\": 1.2417091056704521e-05, \"parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N1\"], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"goal_id\": \"answer\", \"source_refs\": []}}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"COMMAND_INGRESS\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0010883749928325415, \"end_s\": 0.0011911250185221434, \"duration\": 0.0001027500256896019, \"parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N2\"], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"goal_id\": \"answer\"}}, {\"table\": \"effects\", \"scene_key\": \"\", \"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\"}, {\"table\": \"events\", \"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"scene_key\": \"\", \"scene_seconds\": 0.001132250064983964, \"kind\": \"COMMAND_SENT\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"events\", \"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"accepted_s\": 0.0011025830172002316, \"causal_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"scene_key\": \"\", \"scene_seconds\": 0.0011530830524861813, \"kind\": \"AGENT_INGRESS_ACCEPTED\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"AGENT_RECEIPT_DELIVERY\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0011911250185221434, \"end_s\": 0.002535874955356121, \"duration\": 0.0013447499368339777, \"parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N3\"], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"receipt\": \"ACCEPTED\"}}, {\"table\": \"events\", \"receipt\": \"ACCEPTED\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"receipt_s\": 0.002447916893288493, \"receipt_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}, \"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"_causal_parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"], \"preserved_tasks\": [{\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}], \"completion_confirmed\": false, \"receipt_received_s\": 0.002447916893288493, \"scene_key\": \"\", \"scene_seconds\": 0.0024800419341772795, \"kind\": \"COMMAND_ACCEPTED\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N5\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"MODEL_CALL\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0026859589852392673, \"end_s\": 0.002690583933144808, \"duration\": 4.624947905540466e-06, \"parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"role\": \"CRESPONSE\", \"mock_provider\": true}}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"TEXT_PRESENTED\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.00271612498909235, \"end_s\": 0.00271612498909235, \"duration\": 0.0, \"parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N5\"], \"request_id\": \"answer-after-restart\", \"evidence\": [], \"metadata\": {\"publication_id\": \"P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f\"}}, {\"table\": \"events\", \"kind\": \"TEXT_PRESENTED\", \"publication_id\": \"P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f\", \"text\": \"상반기 범위를 사용합니까?\", \"facts\": {\"receipt\": \"ACCEPTED\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"receipt_s\": 0.002447916893288493, \"receipt_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}, \"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"_causal_parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"], \"preserved_tasks\": [{\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}], \"completion_confirmed\": false}, \"request_id\": \"answer-after-restart\", \"source_event_id\": null, \"generation\": 0, \"text_presented_s\": 0.0026285829953849316, \"voice_on\": false, \"voice_onset_s\": null, \"voice_end_s\": null, \"voice_text\": \"\", \"voice_char_events\": [], \"delivered_receipt\": false, \"evidence_level\": \"MEASURED_MOCK_E2E\", \"text_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"causal_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"text_presented\": true, \"payload_kind\": \"RESPONSE\", \"scene_key\": \"\", \"scene_seconds\": 0.0026353748980909586, \"owner\": \"LOCAL_VIA\"}, {\"table\": \"deliveries\", \"scene_key\": \"\", \"kind\": \"RESPONSE\", \"publication_id\": \"P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f\", \"text\": \"상반기 범위를 사용합니까?\", \"facts\": {\"receipt\": \"ACCEPTED\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"receipt_s\": 0.002447916893288493, \"receipt_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}, \"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"_causal_parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"], \"preserved_tasks\": [{\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}], \"completion_confirmed\": false}, \"request_id\": \"answer-after-restart\", \"source_event_id\": null, \"generation\": 0, \"text_presented_s\": 0.0026285829953849316, \"voice_on\": false, \"voice_onset_s\": null, \"voice_end_s\": null, \"voice_text\": \"\", \"voice_char_events\": [], \"delivered_receipt\": true, \"evidence_level\": \"MEASURED_MOCK_E2E\", \"text_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"causal_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"text_presented\": true, \"end_s\": 0.0026285829953849316}, {\"table\": \"events\", \"references\": [], \"roles\": [\"read\", \"agent\"], \"context\": \"agent_payload\", \"policy_epoch\": 1, \"payload_sha256\": \"4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945\", \"scene_key\": \"\", \"scene_seconds\": 0.0027899169363081455, \"kind\": \"SOURCE_COMPOSITION_READ\", \"owner\": \"LOCAL_VIA\"}, {\"table\": \"causal-nodes\", \"node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N7\", \"timeline_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa\", \"kind\": \"GOAL_PREPARATION\", \"owner\": \"LOCAL_VIA\", \"start_s\": 0.0028702090494334698, \"end_s\": 0.002880458952859044, \"duration\": 1.0249903425574303e-05, \"parents\": [], \"request_id\": \"duplicate-after-restart\", \"evidence\": [], \"metadata\": {\"goal_id\": \"answer\", \"source_refs\": []}}], \"effects\": [{\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"receipt_s\": 0.002447916893288493, \"receipt_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"}], \"owner_questions\": {\"published-q\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}}, \"binding\": {\"published-q\": {\"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"VALID\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false}, \"receipt\": {\"kind\": \"QUESTION\", \"publication_id\": \"P:1:3f518271-aecd-4f52-b62b-306738ba1a81\", \"text\": \"상반기 범위를 사용합니까?\", \"facts\": {\"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"VALID\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false}, \"_causal_parents\": [\"TL:3ac814a27d09416bb6fe1f7e9838044e:N1\"]}, \"request_id\": \"event:new-owner-question\", \"source_event_id\": \"new-owner-question\", \"generation\": 0, \"text_presented_s\": 0.0007828751113265753, \"voice_on\": false, \"voice_onset_s\": null, \"voice_end_s\": null, \"voice_text\": \"\", \"voice_char_events\": [], \"delivered_receipt\": true, \"evidence_level\": \"MEASURED_MOCK_E2E\", \"text_node_id\": \"TL:3ac814a27d09416bb6fe1f7e9838044e:N3\", \"causal_node_id\": \"TL:3ac814a27d09416bb6fe1f7e9838044e:N3\", \"text_presented\": true}}}, \"deliveries\": [{\"kind\": \"RESPONSE\", \"publication_id\": \"P:1:6c8ceae7-d835-437a-92aa-7aaae4ec795f\", \"text\": \"상반기 범위를 사용합니까?\", \"facts\": {\"receipt\": \"ACCEPTED\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}, \"request_id\": \"answer-after-restart\", \"goal_id\": \"answer\", \"payload_sha256\": \"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\", \"command_input_sha256\": \"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\", \"send_s\": 0.0010438328608870506, \"ingress_accepted_s\": 0.0011024579871445894, \"accepted_s\": 0.0011025830172002316, \"status\": \"INGRESS_ACCEPTED\", \"wire\": {\"protocol\": \"agent-wire-v1\", \"command\": {\"command_id\": \"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\", \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"operation\": \"ANSWER_QUESTION\", \"payload\": {\"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"relations\": [], \"constraints\": [], \"preservations\": [], \"sources\": [], \"question\": {\"question_id\": \"published-q\", \"revision\": 2, \"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"ANSWERED\", \"text\": \"상반기 범위를 사용합니까?\", \"scope\": {\"property\": \"PERIOD\", \"proposed_value\": \"H1\"}, \"allowed_answer_scope_token\": \"12e77fa5c256d9d3aca30eace59a45ca\", \"text_presented\": true, \"presentation_status\": \"PRESENTED\", \"delivered_receipt\": true, \"voice_presented\": false, \"answer_status\": \"ACCEPTED\", \"answer\": \"yes\"}, \"before_task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"Q3\"}}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}}}}, \"ingress_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N3\", \"receipt_s\": 0.002447916893288493, \"receipt_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"}, \"task\": {\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}, \"goal\": {\"id\": \"answer\", \"kind\": \"ANSWER_QUESTION\", \"operation\": \"ANSWER_QUESTION\", \"target\": \"work\", \"arguments\": {\"question_ref\": \"published-q\", \"question_revision\": 2, \"answer\": \"yes\", \"properties\": {\"PERIOD\": \"H1\"}}, \"instruction\": \"실제 제시 질문 응답\"}, \"_causal_parents\": [\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\"], \"preserved_tasks\": [{\"task_id\": \"work\", \"execution_id\": \"work-exec\", \"request_revision\": 1, \"status\": \"RUNNING\", \"instruction\": \"실제 Task\", \"source_refs\": [], \"properties\": {\"PERIOD\": \"H1\"}}], \"completion_confirmed\": false}, \"request_id\": \"answer-after-restart\", \"source_event_id\": null, \"generation\": 0, \"text_presented_s\": 0.0026285829953849316, \"voice_on\": false, \"voice_onset_s\": null, \"voice_end_s\": null, \"voice_text\": \"\", \"voice_char_events\": [], \"delivered_receipt\": true, \"evidence_level\": \"MEASURED_MOCK_E2E\", \"text_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"causal_node_id\": \"TL:13c07d74f2f04ae299aa21584e778bfa:N6\", \"text_presented\": true, \"end_s\": 0.0026285829953849316}], \"model_calls\": [{\"role\": \"CRESPONSE\", \"messages\": [{\"role\": \"system\", \"content\": \"VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\\\"text\\\": \\\"사용자에게 전달할 문장\\\"}뿐이다.\"}, {\"role\": \"user\", \"content\": \"{\\\"_causal_parents\\\":[\\\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\\\"],\\\"command\\\":{\\\"accepted_s\\\":0.0011025830172002316,\\\"command_id\\\":\\\"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\\\",\\\"command_input_sha256\\\":\\\"0ebebfbafc445bc69c51940ef29be953b8c5c55ed114348140eb996ec09d3f3c\\\",\\\"execution_id\\\":\\\"work-exec\\\",\\\"goal_id\\\":\\\"answer\\\",\\\"ingress_accepted_s\\\":0.0011024579871445894,\\\"ingress_node_id\\\":\\\"TL:13c07d74f2f04ae299aa21584e778bfa:N3\\\",\\\"operation\\\":\\\"ANSWER_QUESTION\\\",\\\"payload\\\":{\\\"before_task\\\":{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"Q3\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"},\\\"constraints\\\":[],\\\"goal\\\":{\\\"arguments\\\":{\\\"answer\\\":\\\"yes\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"question_ref\\\":\\\"published-q\\\",\\\"question_revision\\\":2},\\\"id\\\":\\\"answer\\\",\\\"instruction\\\":\\\"실제 제시 질문 응답\\\",\\\"kind\\\":\\\"ANSWER_QUESTION\\\",\\\"operation\\\":\\\"ANSWER_QUESTION\\\",\\\"target\\\":\\\"work\\\"},\\\"preservations\\\":[],\\\"question\\\":{\\\"allowed_answer_scope_token\\\":\\\"12e77fa5c256d9d3aca30eace59a45ca\\\",\\\"answer\\\":\\\"yes\\\",\\\"answer_status\\\":\\\"ACCEPTED\\\",\\\"delivered_receipt\\\":true,\\\"execution_id\\\":\\\"work-exec\\\",\\\"presentation_status\\\":\\\"PRESENTED\\\",\\\"question_id\\\":\\\"published-q\\\",\\\"request_revision\\\":1,\\\"revision\\\":2,\\\"scope\\\":{\\\"property\\\":\\\"PERIOD\\\",\\\"proposed_value\\\":\\\"H1\\\"},\\\"status\\\":\\\"ANSWERED\\\",\\\"task_id\\\":\\\"work\\\",\\\"text\\\":\\\"상반기 범위를 사용합니까?\\\",\\\"text_presented\\\":true,\\\"voice_presented\\\":false},\\\"relations\\\":[],\\\"sources\\\":[],\\\"task\\\":{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"}},\\\"payload_sha256\\\":\\\"c0793ce69b4c7b1946fdc37ada6225868f22e2bb9be79d5bc229501989e42d30\\\",\\\"receipt_node_id\\\":\\\"TL:13c07d74f2f04ae299aa21584e778bfa:N4\\\",\\\"receipt_s\\\":0.002447916893288493,\\\"request_id\\\":\\\"answer-after-restart\\\",\\\"request_revision\\\":1,\\\"send_s\\\":0.0010438328608870506,\\\"status\\\":\\\"INGRESS_ACCEPTED\\\",\\\"task_id\\\":\\\"work\\\",\\\"wire\\\":{\\\"command\\\":{\\\"command_id\\\":\\\"CMD:258fde81-d0cd-49f0-9804-e78b717c6b7f\\\",\\\"execution_id\\\":\\\"work-exec\\\",\\\"operation\\\":\\\"ANSWER_QUESTION\\\",\\\"payload\\\":{\\\"before_task\\\":{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"Q3\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"},\\\"constraints\\\":[],\\\"goal\\\":{\\\"arguments\\\":{\\\"answer\\\":\\\"yes\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"question_ref\\\":\\\"published-q\\\",\\\"question_revision\\\":2},\\\"id\\\":\\\"answer\\\",\\\"instruction\\\":\\\"실제 제시 질문 응답\\\",\\\"kind\\\":\\\"ANSWER_QUESTION\\\",\\\"operation\\\":\\\"ANSWER_QUESTION\\\",\\\"target\\\":\\\"work\\\"},\\\"preservations\\\":[],\\\"question\\\":{\\\"allowed_answer_scope_token\\\":\\\"12e77fa5c256d9d3aca30eace59a45ca\\\",\\\"answer\\\":\\\"yes\\\",\\\"answer_status\\\":\\\"ACCEPTED\\\",\\\"delivered_receipt\\\":true,\\\"execution_id\\\":\\\"work-exec\\\",\\\"presentation_status\\\":\\\"PRESENTED\\\",\\\"question_id\\\":\\\"published-q\\\",\\\"request_revision\\\":1,\\\"revision\\\":2,\\\"scope\\\":{\\\"property\\\":\\\"PERIOD\\\",\\\"proposed_value\\\":\\\"H1\\\"},\\\"status\\\":\\\"ANSWERED\\\",\\\"task_id\\\":\\\"work\\\",\\\"text\\\":\\\"상반기 범위를 사용합니까?\\\",\\\"text_presented\\\":true,\\\"voice_presented\\\":false},\\\"relations\\\":[],\\\"sources\\\":[],\\\"task\\\":{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"}},\\\"request_revision\\\":1,\\\"task_id\\\":\\\"work\\\"},\\\"protocol\\\":\\\"agent-wire-v1\\\"}},\\\"completion_confirmed\\\":false,\\\"goal\\\":{\\\"arguments\\\":{\\\"answer\\\":\\\"yes\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"question_ref\\\":\\\"published-q\\\",\\\"question_revision\\\":2},\\\"id\\\":\\\"answer\\\",\\\"instruction\\\":\\\"실제 제시 질문 응답\\\",\\\"kind\\\":\\\"ANSWER_QUESTION\\\",\\\"operation\\\":\\\"ANSWER_QUESTION\\\",\\\"target\\\":\\\"work\\\"},\\\"preserved_tasks\\\":[{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"}],\\\"receipt\\\":\\\"ACCEPTED\\\",\\\"task\\\":{\\\"execution_id\\\":\\\"work-exec\\\",\\\"instruction\\\":\\\"실제 Task\\\",\\\"properties\\\":{\\\"PERIOD\\\":\\\"H1\\\"},\\\"request_revision\\\":1,\\\"source_refs\\\":[],\\\"status\\\":\\\"RUNNING\\\",\\\"task_id\\\":\\\"work\\\"}}\"}]}], \"api_calls\": 0, \"evidence_level\": \"SCRIPTED_FUNCTIONAL_REGRESSION\", \"imported_runtime\": \"/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-qa05-helper-preparation-20261012/v5-compatibility-37bd1842/B-M05/source/prototypes/candidates/dp41_45_poc/shared/runtime.py\", \"imported_adapters\": \"/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-qa05-helper-preparation-20261012/v5-compatibility-37bd1842/B-M05/source/prototypes/candidates/dp41_45_poc/shared/adapters.py\", \"source_sha256\": {\"prototypes/candidates/dp41_45_poc/shared/runtime.py\": \"696ac314b7e4c1ae1c7e266bb07f76cb5fccb43b55d3962829f2cd1e87c8dd36\", \"prototypes/candidates/dp41_45_poc/shared/adapters.py\": \"498e029beea79d0817f9f7f199f3efb4177375904978508eecdf1c94f9e4e143\"}}\n",
+  "stderr": ""
+}

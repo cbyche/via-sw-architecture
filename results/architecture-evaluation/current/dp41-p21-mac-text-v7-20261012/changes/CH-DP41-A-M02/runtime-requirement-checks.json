@@ -1,0 +1,1797 @@
+{
+  "checks": {
+    "duplicate_command": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#duplicate_command"
+      ]
+    },
+    "reverse_receipt": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#reverse_receipt"
+      ]
+    },
+    "cancel_unknown": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#cancel_unknown"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "probe": "duplicate_command",
+      "events": [
+        {
+          "table": "events",
+          "references": [
+            "doc@v1"
+          ],
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "308e09b4f9fb3cd4e0f1490602b250d742ea8216851f756fba015a9282f1cad6",
+          "scene_key": "",
+          "scene_seconds": 0.0008487079758197069,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.003291917033493519,
+          "end_s": 0.0034280840773135424,
+          "duration": 0.00013616704382002354,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "report",
+            "source_refs": [
+              "doc@v1"
+            ]
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "COMMAND_INGRESS",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0034411249216645956,
+          "end_s": 0.0035280839074403048,
+          "duration": 8.695898577570915e-05,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+            "goal_id": "report"
+          }
+        },
+        {
+          "table": "effects",
+          "scene_key": "",
+          "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+          "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+          "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+          "request_revision": 1,
+          "operation": "CREATE_REPORT",
+          "payload": {
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "report"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "doc",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "doc",
+                "text": "실제 원문 문장.",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {}
+              }
+            ]
+          },
+          "request_id": "probe-request",
+          "goal_id": "report",
+          "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+          "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+          "send_s": 0.0009072078391909599,
+          "ingress_accepted_s": 0.0009531248360872269,
+          "accepted_s": 0.0009532908443361521,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "version": "agent-wire-v2",
+            "routing": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1
+            },
+            "action": "CREATE_REPORT",
+            "input": {
+              "goal": {
+                "id": "report",
+                "kind": "NEW_TASK",
+                "operation": "CREATE_REPORT",
+                "target": null,
+                "arguments": {
+                  "source_refs": [
+                    "doc@v1"
+                  ]
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "report"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [
+                {
+                  "source_id": "doc",
+                  "revision": 1,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "실제 원문 문장.",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                }
+              ]
+            },
+            "extensions": {}
+          },
+          "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+          "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+          "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+          "request_revision": 1,
+          "operation": "CREATE_REPORT",
+          "payload": {
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "report"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "doc",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "doc",
+                "text": "실제 원문 문장.",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {}
+              }
+            ]
+          },
+          "request_id": "probe-request",
+          "goal_id": "report",
+          "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+          "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+          "send_s": 0.0009072078391909599,
+          "ingress_accepted_s": 0.0009531248360872269,
+          "accepted_s": 0.0009532908443361521,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "version": "agent-wire-v2",
+            "routing": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1
+            },
+            "action": "CREATE_REPORT",
+            "input": {
+              "goal": {
+                "id": "report",
+                "kind": "NEW_TASK",
+                "operation": "CREATE_REPORT",
+                "target": null,
+                "arguments": {
+                  "source_refs": [
+                    "doc@v1"
+                  ]
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "report"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [
+                {
+                  "source_id": "doc",
+                  "revision": 1,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "실제 원문 문장.",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                }
+              ]
+            },
+            "extensions": {}
+          },
+          "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+          "scene_key": "",
+          "scene_seconds": 0.0009779578540474176,
+          "kind": "COMMAND_SENT",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+          "accepted_s": 0.0009532908443361521,
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+          "scene_key": "",
+          "scene_seconds": 0.000992707908153534,
+          "kind": "AGENT_INGRESS_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "AGENT_RECEIPT_DELIVERY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0035280839074403048,
+          "end_s": 0.0049374999944120646,
+          "duration": 0.0014094160869717598,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+            "receipt": "ACCEPTED"
+          }
+        },
+        {
+          "table": "events",
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+            "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+            "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+            "request_revision": 1,
+            "operation": "CREATE_REPORT",
+            "payload": {
+              "goal": {
+                "id": "report",
+                "kind": "NEW_TASK",
+                "operation": "CREATE_REPORT",
+                "target": null,
+                "arguments": {
+                  "source_refs": [
+                    "doc@v1"
+                  ]
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "report"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [
+                {
+                  "source_id": "doc",
+                  "revision": 1,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "실제 원문 문장.",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                }
+              ]
+            },
+            "request_id": "probe-request",
+            "goal_id": "report",
+            "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+            "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+            "send_s": 0.0009072078391909599,
+            "ingress_accepted_s": 0.0009531248360872269,
+            "accepted_s": 0.0009532908443361521,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "version": "agent-wire-v2",
+              "routing": {
+                "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+                "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                "request_revision": 1
+              },
+              "action": "CREATE_REPORT",
+              "input": {
+                "goal": {
+                  "id": "report",
+                  "kind": "NEW_TASK",
+                  "operation": "CREATE_REPORT",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "doc@v1"
+                    ]
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "report"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "doc",
+                    "revision": 1,
+                    "kind": "DOCUMENT",
+                    "title": "doc",
+                    "text": "실제 원문 문장.",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {}
+                  }
+                ]
+              },
+              "extensions": {}
+            },
+            "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+            "receipt_s": 0.0023617499973624945,
+            "receipt_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+          },
+          "task": {
+            "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+            "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+            "request_revision": 1,
+            "request_id": "probe-request",
+            "status": "RUNNING",
+            "operation": "CREATE_REPORT",
+            "instruction": "구조 계약 검증 입력",
+            "source_refs": [
+              "doc@v1"
+            ],
+            "properties": {}
+          },
+          "goal": {
+            "id": "report",
+            "kind": "NEW_TASK",
+            "operation": "CREATE_REPORT",
+            "target": null,
+            "arguments": {
+              "source_refs": [
+                "doc@v1"
+              ]
+            },
+            "instruction": "구조 계약 검증 입력"
+          },
+          "_causal_parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {}
+            }
+          ],
+          "completion_confirmed": false,
+          "receipt_received_s": 0.0023617499973624945,
+          "scene_key": "",
+          "scene_seconds": 0.0023979158140718937,
+          "kind": "COMMAND_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N4",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.005077499896287918,
+          "end_s": 0.005082791903987527,
+          "duration": 5.292007699608803e-06,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.00512275006622076,
+          "end_s": 0.00512275006622076,
+          "duration": 0.0,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N4"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:1:3a4b8308-f798-4f80-886f-053299735cf2"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:1:3a4b8308-f798-4f80-886f-053299735cf2",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "operation": "CREATE_REPORT",
+              "payload": {
+                "goal": {
+                  "id": "report",
+                  "kind": "NEW_TASK",
+                  "operation": "CREATE_REPORT",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "doc@v1"
+                    ]
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "report"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "doc",
+                    "revision": 1,
+                    "kind": "DOCUMENT",
+                    "title": "doc",
+                    "text": "실제 원문 문장.",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {}
+                  }
+                ]
+              },
+              "request_id": "probe-request",
+              "goal_id": "report",
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+              "send_s": 0.0009072078391909599,
+              "ingress_accepted_s": 0.0009531248360872269,
+              "accepted_s": 0.0009532908443361521,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "version": "agent-wire-v2",
+                "routing": {
+                  "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+                  "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                  "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                  "request_revision": 1
+                },
+                "action": "CREATE_REPORT",
+                "input": {
+                  "goal": {
+                    "id": "report",
+                    "kind": "NEW_TASK",
+                    "operation": "CREATE_REPORT",
+                    "target": null,
+                    "arguments": {
+                      "source_refs": [
+                        "doc@v1"
+                      ]
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "report"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [
+                    {
+                      "source_id": "doc",
+                      "revision": 1,
+                      "kind": "DOCUMENT",
+                      "title": "doc",
+                      "text": "실제 원문 문장.",
+                      "permission": {
+                        "read": true,
+                        "model": true,
+                        "agent": true
+                      },
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "extensions": {}
+              },
+              "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+              "receipt_s": 0.0023617499973624945,
+              "receipt_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            },
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CREATE_REPORT",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002548791002482176,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.002555290935561061,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:1:3a4b8308-f798-4f80-886f-053299735cf2",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "operation": "CREATE_REPORT",
+              "payload": {
+                "goal": {
+                  "id": "report",
+                  "kind": "NEW_TASK",
+                  "operation": "CREATE_REPORT",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "doc@v1"
+                    ]
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "report"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "doc",
+                    "revision": 1,
+                    "kind": "DOCUMENT",
+                    "title": "doc",
+                    "text": "실제 원문 문장.",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {}
+                  }
+                ]
+              },
+              "request_id": "probe-request",
+              "goal_id": "report",
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+              "send_s": 0.0009072078391909599,
+              "ingress_accepted_s": 0.0009531248360872269,
+              "accepted_s": 0.0009532908443361521,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "version": "agent-wire-v2",
+                "routing": {
+                  "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+                  "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                  "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                  "request_revision": 1
+                },
+                "action": "CREATE_REPORT",
+                "input": {
+                  "goal": {
+                    "id": "report",
+                    "kind": "NEW_TASK",
+                    "operation": "CREATE_REPORT",
+                    "target": null,
+                    "arguments": {
+                      "source_refs": [
+                        "doc@v1"
+                      ]
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "report"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [
+                    {
+                      "source_id": "doc",
+                      "revision": 1,
+                      "kind": "DOCUMENT",
+                      "title": "doc",
+                      "text": "실제 원문 문장.",
+                      "permission": {
+                        "read": true,
+                        "model": true,
+                        "agent": true
+                      },
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "extensions": {}
+              },
+              "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+              "receipt_s": 0.0023617499973624945,
+              "receipt_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            },
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CREATE_REPORT",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002548791002482176,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "text_presented": true,
+          "end_s": 0.002548791002482176
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N6",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "EXTERNAL_AGENT_WORK",
+          "owner": "EXTERNAL_AGENT",
+          "start_s": 0.0035280839074403048,
+          "end_s": 0.019100625067949295,
+          "duration": 0.01557254116050899,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+            "goal_id": "report"
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "ARTIFACT_READY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.019136416958644986,
+          "end_s": 0.019136416958644986,
+          "duration": 0.0,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N6"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "report",
+            "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8"
+          }
+        },
+        {
+          "table": "events",
+          "artifact": {
+            "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+            "revision": 1,
+            "text": "실제 원문 문장.",
+            "properties": {},
+            "request_id": "probe-request",
+            "producer_goal_id": "report",
+            "source_refs": [
+              "doc@v1"
+            ],
+            "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+            "external_status": "COMPLETED"
+          },
+          "ready_s": 0.01657220791094005,
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7",
+          "scene_key": "",
+          "scene_seconds": 0.016572832828387618,
+          "kind": "ARTIFACT_PRODUCED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "references": [
+            "doc@v1"
+          ],
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "308e09b4f9fb3cd4e0f1490602b250d742ea8216851f756fba015a9282f1cad6",
+          "scene_key": "",
+          "scene_seconds": 0.01662654080428183,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N8",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.019168166909366846,
+          "end_s": 0.01920454204082489,
+          "duration": 3.637513145804405e-05,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "report",
+            "source_refs": [
+              "doc@v1"
+            ]
+          }
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+          "scene_key": "",
+          "scene_seconds": 0.01667020795866847,
+          "kind": "COMMAND_DUPLICATE_SUPPRESSED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N9",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.019335499964654446,
+          "end_s": 0.01934054191224277,
+          "duration": 5.041947588324547e-06,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.019398416858166456,
+          "end_s": 0.019398416858166456,
+          "duration": 0.0,
+          "parents": [
+            "TL:9978af3c809f49d09ca2dbb727a0ed7c:N9"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:2:5399eaf2-f604-458a-a0ca-8aad8398cc46"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:2:5399eaf2-f604-458a-a0ca-8aad8398cc46",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+                "revision": 1,
+                "text": "실제 원문 문장.",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "report",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+              "revision": 1,
+              "text": "실제 원문 문장.",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "report",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01682445779442787,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "text_presented": true,
+          "payload_kind": "RESULT",
+          "scene_key": "",
+          "scene_seconds": 0.016832249937579036,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESULT",
+          "publication_id": "P:2:5399eaf2-f604-458a-a0ca-8aad8398cc46",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+                "revision": 1,
+                "text": "실제 원문 문장.",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "report",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+              "revision": 1,
+              "text": "실제 원문 문장.",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "report",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01682445779442787,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "text_presented": true,
+          "end_s": 0.01682445779442787
+        }
+      ],
+      "effects": [
+        {
+          "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+          "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+          "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+          "request_revision": 1,
+          "operation": "CREATE_REPORT",
+          "payload": {
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "report"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "doc",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "doc",
+                "text": "실제 원문 문장.",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {}
+              }
+            ]
+          },
+          "request_id": "probe-request",
+          "goal_id": "report",
+          "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+          "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+          "send_s": 0.0009072078391909599,
+          "ingress_accepted_s": 0.0009531248360872269,
+          "accepted_s": 0.0009532908443361521,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "version": "agent-wire-v2",
+            "routing": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1
+            },
+            "action": "CREATE_REPORT",
+            "input": {
+              "goal": {
+                "id": "report",
+                "kind": "NEW_TASK",
+                "operation": "CREATE_REPORT",
+                "target": null,
+                "arguments": {
+                  "source_refs": [
+                    "doc@v1"
+                  ]
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "report"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [
+                {
+                  "source_id": "doc",
+                  "revision": 1,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "실제 원문 문장.",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                }
+              ]
+            },
+            "extensions": {}
+          },
+          "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+          "receipt_s": 0.0023617499973624945,
+          "receipt_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+        }
+      ],
+      "tasks": {
+        "T:20618694-e0c7-4c00-9782-2667f70542d2": {
+          "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+          "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+          "request_revision": 1,
+          "request_id": "probe-request",
+          "status": "COMPLETED",
+          "operation": "CREATE_REPORT",
+          "instruction": "구조 계약 검증 입력",
+          "source_refs": [
+            "doc@v1"
+          ],
+          "properties": {},
+          "result": {
+            "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+            "revision": 1,
+            "text": "실제 원문 문장.",
+            "properties": {},
+            "request_id": "probe-request",
+            "producer_goal_id": "report",
+            "source_refs": [
+              "doc@v1"
+            ],
+            "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+            "external_status": "COMPLETED"
+          }
+        }
+      },
+      "deliveries": [
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:1:3a4b8308-f798-4f80-886f-053299735cf2",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "operation": "CREATE_REPORT",
+              "payload": {
+                "goal": {
+                  "id": "report",
+                  "kind": "NEW_TASK",
+                  "operation": "CREATE_REPORT",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "doc@v1"
+                    ]
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "report"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "doc",
+                    "revision": 1,
+                    "kind": "DOCUMENT",
+                    "title": "doc",
+                    "text": "실제 원문 문장.",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {}
+                  }
+                ]
+              },
+              "request_id": "probe-request",
+              "goal_id": "report",
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "command_input_sha256": "22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d",
+              "send_s": 0.0009072078391909599,
+              "ingress_accepted_s": 0.0009531248360872269,
+              "accepted_s": 0.0009532908443361521,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "version": "agent-wire-v2",
+                "routing": {
+                  "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+                  "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                  "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                  "request_revision": 1
+                },
+                "action": "CREATE_REPORT",
+                "input": {
+                  "goal": {
+                    "id": "report",
+                    "kind": "NEW_TASK",
+                    "operation": "CREATE_REPORT",
+                    "target": null,
+                    "arguments": {
+                      "source_refs": [
+                        "doc@v1"
+                      ]
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "report"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [
+                    {
+                      "source_id": "doc",
+                      "revision": 1,
+                      "kind": "DOCUMENT",
+                      "title": "doc",
+                      "text": "실제 원문 문장.",
+                      "permission": {
+                        "read": true,
+                        "model": true,
+                        "agent": true
+                      },
+                      "metadata": {}
+                    }
+                  ]
+                },
+                "extensions": {}
+              },
+              "ingress_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+              "receipt_s": 0.0023617499973624945,
+              "receipt_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            },
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "report",
+              "kind": "NEW_TASK",
+              "operation": "CREATE_REPORT",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "doc@v1"
+                ]
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+                "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CREATE_REPORT",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002548791002482176,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+          "text_presented": true,
+          "end_s": 0.002548791002482176
+        },
+        {
+          "kind": "RESULT",
+          "publication_id": "P:2:5399eaf2-f604-458a-a0ca-8aad8398cc46",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:20618694-e0c7-4c00-9782-2667f70542d2",
+              "execution_id": "X:5713375c-472a-4264-8857-4e8198752c61",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CREATE_REPORT",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+                "revision": 1,
+                "text": "실제 원문 문장.",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "report",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8",
+              "revision": 1,
+              "text": "실제 원문 문장.",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "report",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "payload_sha256": "b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01682445779442787,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "causal_node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+          "text_presented": true,
+          "end_s": 0.01682445779442787
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:9978af3c809f49d09ca2dbb727a0ed7c:N3\"],\"command\":{\"accepted_s\":0.0009532908443361521,\"command_id\":\"CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e\",\"command_input_sha256\":\"22aeeb79d2ae904ab56f0e4512a026c1ed95c25f65ce383d5acf0c8afc8c3e5d\",\"execution_id\":\"X:5713375c-472a-4264-8857-4e8198752c61\",\"goal_id\":\"report\",\"ingress_accepted_s\":0.0009531248360872269,\"ingress_node_id\":\"TL:9978af3c809f49d09ca2dbb727a0ed7c:N2\",\"operation\":\"CREATE_REPORT\",\"payload\":{\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"report\"]}],\"goal\":{\"arguments\":{\"source_refs\":[\"doc@v1\"]},\"id\":\"report\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"NEW_TASK\",\"operation\":\"CREATE_REPORT\",\"target\":null},\"preservations\":[],\"relations\":[],\"sources\":[{\"kind\":\"DOCUMENT\",\"metadata\":{},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":1,\"source_id\":\"doc\",\"text\":\"실제 원문 문장.\",\"title\":\"doc\"}]},\"payload_sha256\":\"b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516\",\"receipt_node_id\":\"TL:9978af3c809f49d09ca2dbb727a0ed7c:N3\",\"receipt_s\":0.0023617499973624945,\"request_id\":\"probe-request\",\"request_revision\":1,\"send_s\":0.0009072078391909599,\"status\":\"INGRESS_ACCEPTED\",\"task_id\":\"T:20618694-e0c7-4c00-9782-2667f70542d2\",\"wire\":{\"action\":\"CREATE_REPORT\",\"extensions\":{},\"input\":{\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"report\"]}],\"goal\":{\"arguments\":{\"source_refs\":[\"doc@v1\"]},\"id\":\"report\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"NEW_TASK\",\"operation\":\"CREATE_REPORT\",\"target\":null},\"preservations\":[],\"relations\":[],\"sources\":[{\"kind\":\"DOCUMENT\",\"metadata\":{},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":1,\"source_id\":\"doc\",\"text\":\"실제 원문 문장.\",\"title\":\"doc\"}]},\"routing\":{\"command_id\":\"CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e\",\"execution_id\":\"X:5713375c-472a-4264-8857-4e8198752c61\",\"request_revision\":1,\"task_id\":\"T:20618694-e0c7-4c00-9782-2667f70542d2\"},\"version\":\"agent-wire-v2\"}},\"completion_confirmed\":false,\"goal\":{\"arguments\":{\"source_refs\":[\"doc@v1\"]},\"id\":\"report\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"NEW_TASK\",\"operation\":\"CREATE_REPORT\",\"target\":null},\"preserved_tasks\":[{\"execution_id\":\"X:5713375c-472a-4264-8857-4e8198752c61\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CREATE_REPORT\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"T:20618694-e0c7-4c00-9782-2667f70542d2\"}],\"receipt\":\"ACCEPTED\",\"task\":{\"execution_id\":\"X:5713375c-472a-4264-8857-4e8198752c61\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CREATE_REPORT\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"T:20618694-e0c7-4c00-9782-2667f70542d2\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:9978af3c809f49d09ca2dbb727a0ed7c:N7\"],\"artifact\":{\"artifact_id\":\"A:5fa7fa0e-669a-4b50-964b-614a2e6088a8\",\"external_status\":\"COMPLETED\",\"payload_sha256\":\"b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516\",\"producer_goal_id\":\"report\",\"properties\":{},\"request_id\":\"probe-request\",\"revision\":1,\"source_refs\":[\"doc@v1\"],\"text\":\"실제 원문 문장.\"},\"completion_confirmed\":true,\"receipt\":\"COMPLETED\",\"task\":{\"execution_id\":\"X:5713375c-472a-4264-8857-4e8198752c61\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CREATE_REPORT\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"result\":{\"artifact_id\":\"A:5fa7fa0e-669a-4b50-964b-614a2e6088a8\",\"external_status\":\"COMPLETED\",\"payload_sha256\":\"b9af3a3283827df3ff10e70685439246b976e8623614729d277ec2f853bf2516\",\"producer_goal_id\":\"report\",\"properties\":{},\"request_id\":\"probe-request\",\"revision\":1,\"source_refs\":[\"doc@v1\"],\"text\":\"실제 원문 문장.\"},\"source_refs\":[\"doc@v1\"],\"status\":\"COMPLETED\",\"task_id\":\"T:20618694-e0c7-4c00-9782-2667f70542d2\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.003291917033493519,
+            "end_s": 0.0034280840773135424,
+            "duration": 0.00013616704382002354,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "report",
+              "source_refs": [
+                "doc@v1"
+              ]
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "COMMAND_INGRESS",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0034411249216645956,
+            "end_s": 0.0035280839074403048,
+            "duration": 8.695898577570915e-05,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "goal_id": "report"
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "AGENT_RECEIPT_DELIVERY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0035280839074403048,
+            "end_s": 0.0049374999944120646,
+            "duration": 0.0014094160869717598,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "receipt": "ACCEPTED"
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N4",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.005077499896287918,
+            "end_s": 0.005082791903987527,
+            "duration": 5.292007699608803e-06,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N3"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N5",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.00512275006622076,
+            "end_s": 0.00512275006622076,
+            "duration": 0.0,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N4"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:1:3a4b8308-f798-4f80-886f-053299735cf2"
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N6",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "EXTERNAL_AGENT_WORK",
+            "owner": "EXTERNAL_AGENT",
+            "start_s": 0.0035280839074403048,
+            "end_s": 0.019100625067949295,
+            "duration": 0.01557254116050899,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:27103122-d7d4-4b0f-8970-675b7e60ec8e",
+              "goal_id": "report"
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "ARTIFACT_READY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.019136416958644986,
+            "end_s": 0.019136416958644986,
+            "duration": 0.0,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N6"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "report",
+              "artifact_id": "A:5fa7fa0e-669a-4b50-964b-614a2e6088a8"
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N8",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.019168166909366846,
+            "end_s": 0.01920454204082489,
+            "duration": 3.637513145804405e-05,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "report",
+              "source_refs": [
+                "doc@v1"
+              ]
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N9",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.019335499964654446,
+            "end_s": 0.01934054191224277,
+            "duration": 5.041947588324547e-06,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N7"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c:N10",
+            "timeline_id": "TL:9978af3c809f49d09ca2dbb727a0ed7c",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.019398416858166456,
+            "end_s": 0.019398416858166456,
+            "duration": 0.0,
+            "parents": [
+              "TL:9978af3c809f49d09ca2dbb727a0ed7c:N9"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:2:5399eaf2-f604-458a-a0ca-8aad8398cc46"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "probe": [
+        "test_post_cancel_original_receipt_does_not_claim_termination_or_restore_running"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    },
+    {
+      "probe": [
+        "test_post_cancel_original_receipt_does_not_claim_termination_or_restore_running"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    }
+  ],
+  "variant": "A",
+  "task_id": "M02",
+  "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION",
+  "source_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M02/source",
+  "imported_runtime": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M02/source/prototypes/candidates/dp41_45_poc/shared/runtime.py",
+  "api_calls": 0,
+  "stderr": "QA05 probe start duplicate_command\nQA05 probe end duplicate_command\nQA05 probe start reverse_receipt\nQA05 probe end reverse_receipt\nQA05 probe start cancel_unknown\nQA05 probe end cancel_unknown\n"
+}

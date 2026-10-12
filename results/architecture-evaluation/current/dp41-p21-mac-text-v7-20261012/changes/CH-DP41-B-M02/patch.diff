@@ -1,0 +1,46 @@
+--- before/prototypes/candidates/dp41_45_poc/shared/adapters.py
++++ after/prototypes/candidates/dp41_45_poc/shared/adapters.py
+@@ -71,7 +71,7 @@
+ class AgentWireAdapter:
+     """Lossless baseline command/receipt transport, including cancellation uncertainty."""
+ 
+-    protocol = "agent-wire-v1"
++    protocol = "agent-wire-v2"
+ 
+     def _validate(self, value, *, command):
+         if not isinstance(value, dict):
+@@ -88,20 +88,28 @@
+         return copy.deepcopy(value)
+ 
+     def encode_command(self, normalized):
+-        return {"protocol": self.protocol, "command": self._validate(normalized, command=True)}
++        value = self._validate(normalized, command=True)
++        route = {key: value[key] for key in ("command_id", "task_id", "execution_id", "request_revision")}
++        return {"version": self.protocol, "routing": route, "action": value["operation"], "input": value["payload"],
++                "extensions": {k: v for k, v in value.items() if k not in {*route, "operation", "payload"}}}
+ 
+     def decode_command(self, wire):
+-        if not isinstance(wire, dict) or wire.get("protocol") != self.protocol:
++        if not isinstance(wire, dict) or wire.get("version") != self.protocol:
+             raise AdapterError("Agent command protocol mismatch")
+-        return self._validate(wire.get("command"), command=True)
++        value = {**wire.get("extensions", {}), **wire.get("routing", {}),
++                 "operation": wire.get("action"), "payload": wire.get("input")}
++        return self._validate(value, command=True)
+ 
+     def encode_receipt(self, normalized):
+-        return {"protocol": self.protocol, "receipt": self._validate(normalized, command=False)}
++        value = self._validate(normalized, command=False)
++        route = {key: value[key] for key in ("command_id", "task_id", "execution_id", "request_revision")}
++        return {"version": self.protocol, "routing": route,
++                "result": {k: v for k, v in value.items() if k not in route}}
+ 
+     def decode_receipt(self, wire):
+-        if not isinstance(wire, dict) or wire.get("protocol") != self.protocol:
++        if not isinstance(wire, dict) or wire.get("version") != self.protocol:
+             raise AdapterError("Agent receipt protocol mismatch")
+-        return self._validate(wire.get("receipt"), command=False)
++        return self._validate({**wire.get("result", {}), **wire.get("routing", {})}, command=False)
+ 
+ 
+ class CalendarSourceAdapter:

@@ -1,0 +1,15 @@
+{
+  "status": "INTERRUPTED_QUERY_FORWARDING_DEFECT_AUDIT",
+  "excluded_from_final_qa_population": true,
+  "preserve_all_raw_and_frozen_source": true,
+  "reason": "A valid selector.query in the finite RequestFrame was replaced by the mention fallback in the common reference-to-read-port adapter. The current prompt, validator and DP41 example all support selector.query. This is an integration defect rather than the model's retrieval choice. A separate candidate-label presentation mapping defect is also being checked before a fresh freeze.",
+  "confirmed_contract_locations": [
+    "prototypes/candidates/dp41_45_poc/dp41/prompts.py COMMON bounded selector shapes and B reference selector args",
+    "prototypes/candidates/dp41_45_poc/dp41/contract.py reference_spec",
+    "prototypes/candidates/dp41_45_poc/shared/owners.py Owner.read query precedence",
+    "docs/architecture/12-decisions/decision-packages/04-41-request-resolution-control.md Frame example"
+  ],
+  "observed_cases": ["B1/S2-02", "B1/S2-05"],
+  "candidate_algorithm_and_prompt_tuning": false,
+  "replacement_campaign": "dp41-p21-mac-text-v5-20261012"
+}

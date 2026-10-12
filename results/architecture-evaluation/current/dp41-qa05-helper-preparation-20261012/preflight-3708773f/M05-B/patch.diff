@@ -1,0 +1,52 @@
+--- before/prototypes/candidates/dp41_45_poc/shared/adapters.py
++++ after/prototypes/candidates/dp41_45_poc/shared/adapters.py
+@@ -6,6 +6,7 @@
+ from __future__ import annotations
+ 
+ import copy
++import secrets
+ from datetime import date, datetime
+ from zoneinfo import ZoneInfo
+ 
+@@ -170,6 +171,7 @@
+             if result.get("execution_id", execution_id) != execution_id:
+                 raise AdapterError("question belongs to a different Execution")
+             result["execution_id"] = execution_id
++        result.setdefault("allowed_answer_scope_token", secrets.token_hex(16))
+         return result
+ 
+     def validate_answer(self, question, answer, *, task_id, execution_id=None, consume=False):
+@@ -177,6 +179,8 @@
+         if not isinstance(question, dict) or not isinstance(answer, dict):
+             return {"accepted": False, "reason": "INVALID_QUESTION_OR_ANSWER"}
+         qid = question.get("question_id")
++        if not question.get("allowed_answer_scope_token") or answer.get("allowed_answer_scope_token") != question["allowed_answer_scope_token"]:
++            return {"accepted": False, "reason": "INVALID_SCOPE_TOKEN", "question_id": qid}
+         if question.get("task_id") != task_id:
+             reason = "WRONG_TASK"
+         elif execution_id is not None and question.get("execution_id") != execution_id:
+@@ -235,7 +239,10 @@
+         question = record["question"]
+         if question.get("revision") != revision or question.get("task_id") != task_id:
+             raise AdapterError("presented question revision/Task mismatch")
++        if not question.get("allowed_answer_scope_token"):
++            raise AdapterError("presented question lacks Task-issued scope token")
+         return {"question_ref": question_id, "question_revision": revision,
++                "allowed_answer_scope_token": question["allowed_answer_scope_token"],
+                 "answer": copy.deepcopy(answer), "properties": copy.deepcopy(properties or {})}
+ 
+     def withdraw(self, question_id, revision):
+--- before/prototypes/candidates/dp41_45_poc/shared/runtime.py
++++ after/prototypes/candidates/dp41_45_poc/shared/runtime.py
+@@ -124,7 +124,10 @@
+         self.external_intervals = []
+         self.input_evidence = {}
+         self.last_delivery_s = None
+-        for question in self.owners.questions.values():
++        for question_id, stored_question in list(self.owners.questions.items()):
++            question = self.question_authority.issue(stored_question, task_id=stored_question.get("task_id"),
++                execution_id=stored_question.get("execution_id"))
++            self.owners.questions[question_id] = question
+             if question.get("delivered_receipt") and question.get("text_presented"):
+                 receipt = {"publication_id": "OWNER_RECEIPT:" + identity(question),
+                            "text_presented": True, "voice_on": bool(question.get("voice_presented")),

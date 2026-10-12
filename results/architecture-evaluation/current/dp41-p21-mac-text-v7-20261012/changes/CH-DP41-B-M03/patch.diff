@@ -1,0 +1,20 @@
+--- before/prototypes/candidates/dp41_45_poc/shared/adapters.py
++++ after/prototypes/candidates/dp41_45_poc/shared/adapters.py
+@@ -125,6 +125,17 @@
+         return instant.astimezone(ZoneInfo(timezone)).isoformat()
+ 
+     def normalize(self, raw_source):
++        if raw_source.get("resource_type") == "CALENDAR_V2":
++            envelope = raw_source["calendar"]
++            metadata = {**copy.deepcopy(envelope.get("metadata_extension", {})), "date": envelope["day"],
++                        "timezone": envelope["zone"], "start": envelope.get("start_utc"), "end": envelope.get("end_utc"),
++                        "state": envelope.get("availability"), "interval_state": envelope.get("availability"),
++                        "events": [{"start": e["begins_at"], "end": e["ends_at"], "title": e["label"]}
++                                   for e in envelope.get("appointments", [])]}
++            raw_source = {"source_id": raw_source["calendar_uid"], "revision": raw_source["etag_revision"],
++                          "kind": "CALENDAR", "title": raw_source.get("label", raw_source["calendar_uid"]),
++                          "text": raw_source["original_text"], "permission": copy.deepcopy(raw_source["access"]),
++                          "metadata": metadata}
+         result = copy.deepcopy(raw_source)
+         if result.get("kind") != "CALENDAR":
+             return result

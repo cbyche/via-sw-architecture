@@ -1,0 +1,29 @@
+{
+  "responsibility_claims": {
+    "U07": {
+      "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding.",
+      "before_contract": "question identity/revision/scope authority without token",
+      "after_contract": "Task-issued token required in addition to existing checks",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    },
+    "U04": {
+      "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore.",
+      "before_contract": "actually presented identity/revision reflection",
+      "after_contract": "actually presented identity/revision/token reflection",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/adapters.py"
+      ],
+      "functional_evidence": [
+        "adapter-runtime-checks.json",
+        "regression.json"
+      ]
+    }
+  }
+}

@@ -1,0 +1,202 @@
+--- before/prototypes/candidates/dp41_45_poc/dp41/contract.py
++++ after/prototypes/candidates/dp41_45_poc/dp41/contract.py
+@@ -138,6 +138,23 @@
+             edges[source].append(target)
+         if relation["op"] == "WHEN":
+             p = relation.get("predicate", {})
++            if not isinstance(p, dict):
++                raise ContractError("WHEN predicate must be an object")
++            if "producer_goal_id" in p:
++                raise ContractError("producer identity belongs inside the typed reference_id")
++            ref = p.get("reference_id")
++            if isinstance(ref, dict):
++                if (set(ref) != {"producer_goal_id"} or not isinstance(ref.get("producer_goal_id"), str)
++                        or ref["producer_goal_id"] != source or p.get("field") != "STATE"):
++                    raise ContractError("typed producer reference must name its own current finite goal")
++                terminal = ("FAILED", "COMPLETED")
++                expected, comparison = p.get("value"), p.get("comparison")
++                valid = comparison == "EQ" and expected in terminal
++                if comparison == "IN":
++                    valid = (isinstance(expected, list) and 1 <= len(expected) <= 2
++                             and all(v in terminal for v in expected) and len(set(expected)) == len(expected))
++                if set(p) != {"reference_id", "field", "comparison", "value"} or not valid:
++                    raise ContractError("unsupported typed producer terminal predicate")
+             if (not isinstance(p, dict) or not isinstance(p.get("field"), str)
+                     or not isinstance(p.get("comparison"), str)
+                     or p["field"] not in {"STATE", "KIND", "YEAR"}
+@@ -277,9 +294,10 @@
+                 raise ContractError("preservation requires declared reference and NO_NEW_COMMAND")
+         for relation in document.get("relations", []):
+             if (relation["op"] == "WHEN" and "reference_id" in relation["predicate"]
+-                    and not isinstance(relation["predicate"]["reference_id"], str)):
++                    and not isinstance(relation["predicate"]["reference_id"], (str, dict))):
+                 raise ContractError("WHEN reference_id must be a reference ID string")
+-            if relation["op"] == "WHEN" and relation["predicate"].get("reference_id") not in reference_ids:
++            if (relation["op"] == "WHEN" and not isinstance(relation["predicate"].get("reference_id"), dict)
++                    and relation["predicate"].get("reference_id") not in reference_ids):
+                 raise ContractError("WHEN requires declared frame reference")
+     return document
+ 
+--- before/prototypes/candidates/dp41_45_poc/dp41/prompts.py
++++ after/prototypes/candidates/dp41_45_poc/dp41/prompts.py
+@@ -34,6 +34,12 @@
+ preservation={{reference_id:mail_ref,mode:'NO_NEW_COMMAND'}}, not cancellation or another SEND.
+ Relations={{op:USE_RESULT|AFTER|INDEPENDENT|WHEN,from_goal,to_goal,predicate?}}; WHEN predicate
+ uses reference_id,field:STATE|KIND|YEAR,comparison:EQ|NE|IN,value. UNKNOWN is not true or false.
++For a current goal's terminal state, use reference_id:{{producer_goal_id:from_goal}}.
++This is an exact singleton tagged object naming this relation's current goal, never an owner string or Frame reference ID.
++field:STATE,comparison:EQ,value:FAILED|COMPLETED, or comparison:IN,value:[FAILED,COMPLETED].
++To continue a draft even if its producer fails, use IN both terminal states; successful and failed branches both run.
++A failed goal has no successful artifact. WHEN including FAILED may continue from original allowed sources;
++AFTER/USE_RESULT still require successful results.
+ constraints={{op:FORBID_ACTION,scope:[goal_ids],action:SEND|DELETE|OVERWRITE}} or
+ {{op:KEEP_PROPERTY,scope:[goal_ids],property,value}}. No executable expressions or code.
+ A current producer's future result is symbolic, not an old Task result. Meaning can be adopted
+--- before/prototypes/candidates/dp41_45_poc/shared/runtime.py
++++ after/prototypes/candidates/dp41_45_poc/shared/runtime.py
+@@ -112,6 +112,7 @@
+         self.seen_events, self.sent_commands, self.jobs = set(), {}, set()
+         self.artifacts, self.goal_results, self.result_ready = {}, {}, {}
+         self.memory_records = {}
++        self.goal_tasks, self.task_failures = {}, {}
+         self.model_contexts = {}
+         self.state_changed = asyncio.Event()
+         self.output_counter, self.event_counter = 0, 0
+@@ -637,8 +638,14 @@
+             self.result_ready[key] = asyncio.get_running_loop().create_future()
+         return self.result_ready[key]
+ 
+-    def _predicate(self, predicate):
+-        item = self.owners.lookup(predicate.get("reference_id"))
++    def _predicate(self, predicate, request_scope=None):
++        ref = predicate.get("reference_id")
++        producer = ref.get("producer_goal_id") if isinstance(ref, dict) else None
++        binding = self.goal_tasks.get((*request_scope, producer)) if producer and request_scope else None
++        item = self.owners.lookup(binding["task_id"]) if binding else (None if producer else self.owners.lookup(ref))
++        if binding and item and (item.get("execution_id") != binding["execution_id"]
++                or item.get("request_revision", 1) != binding["request_revision"]):
++            return None  # A later Task execution/revision is not this producer terminal.
+         if not item:
+             return None
+         field = predicate.get("field")
+@@ -671,7 +678,13 @@
+ 
+         async def perform(gid):
+             for dependency in dependencies[gid]:
+-                await tasks[dependency]
++                outcome = await tasks[dependency]
++                when_failure = any(isinstance(p.get("reference_id"), dict) and p["reference_id"].get("producer_goal_id") == dependency and p.get("field") == "STATE"
++                    and ((p.get("comparison") == "EQ" and p.get("value") == "FAILED")
++                         or (p.get("comparison") == "IN" and isinstance(p.get("value"), list)
++                             and "FAILED" in p["value"])) for p in conditions[gid])
++                if isinstance(outcome, dict) and outcome.get("failed") and not when_failure:
++                    raise ValueError("Dependent goal needs a successful producer result")
+             goal_parents = [*self.request_frontiers.get(ports.request_id, []),
+                 *[self.goal_result_nodes[(ports.request_id, dep)] for dep in dependencies[gid]
+                   if (ports.request_id, dep) in self.goal_result_nodes]]
+@@ -679,14 +692,14 @@
+                 request_id=ports.request_id, metadata={"goal_id": gid})
+             self.goal_frontiers[(ports.request_id, gid)] = [goal_node]
+             for predicate in conditions[gid]:
+-                value = self._predicate(predicate)
++                value = self._predicate(predicate, (ports.request_id, ports.revision))
+                 while value is None:
+                     self.emit("CONDITION_HELD", {"request_id": ports.request_id, "goal_id": gid, "predicate": predicate})
+                     self.state_changed.clear()
+-                    value = self._predicate(predicate)
++                    value = self._predicate(predicate, (ports.request_id, ports.revision))
+                     if value is None:
+                         await self.state_changed.wait()
+-                        value = self._predicate(predicate)
++                        value = self._predicate(predicate, (ports.request_id, ports.revision))
+                 if value is False:
+                     self.emit("CONDITION_FALSE", {"request_id": ports.request_id, "goal_id": gid, "predicate": predicate})
+                     self.goal_result_nodes[(ports.request_id, gid)] = self.timeline.point("CONDITION_FALSE",
+@@ -1031,6 +1044,9 @@
+             self.owners.provided.add(task_id)
+         self.scene_task_ids.add(target)
+         self.pending_task_ids.add(target)
++        self.goal_tasks[(ports.request_id, ports.revision, goal["id"])] = {"task_id": target,
++            "execution_id": task["execution_id"], "request_revision": task.get("request_revision", 1)}
++        self.task_failures.setdefault(target, asyncio.get_running_loop().create_future())
+         command_id, command_time = "CMD:" + str(uuid.uuid4()), self.now()
+         command = {"command_id": command_id, "task_id": target, "execution_id": task["execution_id"],
+                    "request_revision": task.get("request_revision", 1), "operation": operation, "payload": payload}
+@@ -1062,7 +1078,8 @@
+             self.timeline.now(), parents=[ingress_node], request_id=ports.request_id,
+             metadata={"command_id": command_id, "receipt": receipt["status"]})
+         effect["receipt_node_id"] = receipt_node
+-        task["status"] = "CANCEL_ACCEPTED_TERMINATION_UNKNOWN" if operation == "CANCEL_TASK" else "RUNNING"
++        if task.get("status") != "FAILED":
++            task["status"] = "CANCEL_ACCEPTED_TERMINATION_UNKNOWN" if operation == "CANCEL_TASK" else "RUNNING"
+         self.pending_task_ids.discard(target)
+         facts = {"receipt": receipt["status"], "command": effect, "task": copy.deepcopy(task), "goal": goal,
+                  "_causal_parents": [receipt_node],
+@@ -1088,7 +1105,21 @@
+             if not ready.done():
+                 ready.set_result(facts)
+             return facts
+-        await asyncio.sleep(max(0., effect["ingress_accepted_s"] + final_delay - self.now()))
++        failure_future = self.task_failures[target]
++        try:
++            failure = await asyncio.wait_for(asyncio.shield(failure_future),
++                timeout=max(0., effect["ingress_accepted_s"] + final_delay - self.now()))
++        except asyncio.TimeoutError:
++            failure = None
++        if failure is not None or task.get("status") == "FAILED":
++            failed = {"failed": True, "task": copy.deepcopy(task), "failure": copy.deepcopy(failure)}
++            key = (ports.request_id, goal["id"])
++            self.goal_result_nodes[key] = self.timeline.point("PRODUCER_FAILED_READY",
++                parents=[failure["causal_node_id"]] if failure else [ingress_node], request_id=ports.request_id)
++            ready = self._ready(*key)
++            if not ready.done():
++                ready.set_result(failed)
++            return failed
+         agent_work_node = self.timeline.add_node("EXTERNAL_AGENT_WORK", "EXTERNAL_AGENT", ingress_absolute,
+             self.timeline.now(), parents=[ingress_node], request_id=ports.request_id,
+             metadata={"command_id": command_id, "goal_id": goal["id"]})
+@@ -1247,7 +1278,7 @@
+             self.emit("QUESTION_REGISTERED", {"question": question, "source_event_id": event_id})
+             if kind == "QUESTION" and payload.get("presentation_requested", True):
+                 await self.response({"question": question, "_causal_parents": [source_node]}, kind="QUESTION", source_event=event_id)
+-        elif kind in ("RESULT", "ACCEPTED", "CANCEL_RECEIPT"):
++        elif kind in ("RESULT", "FAILURE", "ACCEPTED", "CANCEL_RECEIPT"):
+             task = self.owners.tasks.get(payload.get("task_id"))
+             if task is None or task.get("execution_id") != payload.get("execution_id"):
+                 self.emit("RESULT_REJECTED", {"source_event_id": event_id, "reason": "OWNER_MISMATCH"})
+@@ -1255,9 +1286,35 @@
+             if task.get("request_revision", 1) != payload.get("request_revision", 1):
+                 self.emit("RESULT_REJECTED", {"source_event_id": event_id, "reason": "STALE_REVISION"})
+                 return
++            if kind == "FAILURE":
++                if task.get("status") in ("FAILED", "COMPLETED"):
++                    self.emit("RESULT_REJECTED", {"source_event_id": event_id, "reason": "ALREADY_TERMINAL"})
++                    return
++                task["status"], task["failure"] = "FAILED", {"reason": payload.get("reason", "EXTERNAL_FAILURE"), "event_id": event_id}
++                task.pop("result", None)
++                effect = next((e for e in self.effects if e["task_id"] == payload["task_id"] and e["execution_id"] == payload["execution_id"]), None)
++                parents = list(event.get("causal_parents", []))
++                if effect:
++                    ingress = effect["ingress_node_id"]
++                    work = self.timeline.add_node("EXTERNAL_AGENT_WORK", "EXTERNAL_AGENT", self.timeline.nodes[ingress]["end_s"],
++                        self.timeline.now(), parents=[ingress], metadata={"terminal_event_id": event_id})
++                    parents.append(work)
++                node = self.timeline.point("TASK_FAILED", parents=parents, metadata={"task_id": payload["task_id"], "event_id": event_id})
++                failure = {**copy.deepcopy(task["failure"]), "causal_node_id": node}
++                future = self.task_failures.get(payload["task_id"])
++                if future is not None and not future.done():
++                    future.set_result(failure)
++                self.emit("TASK_FAILED", {"task": copy.deepcopy(task), "source_event_id": event_id, "causal_node_id": node})
++                self.state_changed.set()
++                self.track(self.response({"task": copy.deepcopy(task), "receipt": "FAILED", "completion_confirmed": False,
++                    "_causal_parents": [node]}, kind="FAILURE", source_event=event_id))
++                return
+             if kind != "RESULT":
+                 self.emit("EXTERNAL_RECEIPT_RECORDED", {"source_event_id": event_id, "type": kind,
+                           "payload": payload, "task_status_preserved": task["status"]})
++                return
++            if task.get("status") == "FAILED":
++                self.emit("RESULT_REJECTED", {"source_event_id": event_id, "reason": "FAILED_EXECUTION_TERMINAL"})
+                 return
+             if task.get("status") == "COMPLETED" and task.get("result"):
+                 self.emit("RESULT_REJECTED", {"source_event_id": event_id, "reason": "ALREADY_CURRENT_COMPLETED"})

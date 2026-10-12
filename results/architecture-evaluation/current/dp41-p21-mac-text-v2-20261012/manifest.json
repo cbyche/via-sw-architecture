@@ -1,0 +1,206 @@
+{
+  "campaign_contract": "DP41-P21-MAC-TEXT-v2",
+  "created_utc": "2026-10-11T17:08:46.411126+00:00",
+  "qa_contract_version": "ASR-QA-v6",
+  "variants": [
+    "A",
+    "B"
+  ],
+  "repeat_ids": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "sequence": [
+    "S1-01",
+    "S1-02",
+    "S2-01",
+    "S2-02",
+    "S2-03",
+    "S2-04",
+    "S2-05",
+    "S3-01",
+    "S3-02",
+    "S3-03",
+    "S4-01",
+    "S4-02",
+    "S4-03",
+    "S5-01",
+    "S5-02",
+    "S5-03",
+    "S5-04",
+    "S6-01",
+    "S6-02",
+    "S6-03",
+    "S6-04"
+  ],
+  "case_ids": [
+    "S1-01",
+    "S1-02",
+    "S2-01",
+    "S2-02",
+    "S2-03",
+    "S2-04",
+    "S2-05",
+    "S3-01",
+    "S3-02",
+    "S3-03",
+    "S4-01",
+    "S4-02",
+    "S4-03",
+    "S5-01",
+    "S5-02",
+    "S5-03",
+    "S5-04",
+    "S6-01",
+    "S6-02",
+    "S6-03",
+    "S6-04"
+  ],
+  "independent_repeats": 5,
+  "pair_order": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "A"
+    ],
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B",
+      "A"
+    ],
+    [
+      "A",
+      "B"
+    ]
+  ],
+  "configuration": {
+    "A": "41A+44A+45A+42A",
+    "B": "41B+44A+45A+42A"
+  },
+  "strict_coverage": true,
+  "speech_mode": "SIMULATED_PROFILE",
+  "input_mode": "TRANSCRIPT",
+  "evidence_level": "MEASURED_MODEL_WITH_SIMULATED_SPEECH",
+  "qa04_primary_metric": "ACTUAL_VIA_PROVIDER_USAGE_X_PRICE",
+  "memory_scoring_metric": "phys_footprint",
+  "memory_scope": "ONE_ISOLATED_WORKER_VIA_COMMON_STUB_AND_RAW_RECORDER",
+  "memory_sample_interval_seconds": 0.05,
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "macos": "26.5.1",
+    "machine": "arm64",
+    "python": "3.14.7"
+  },
+  "python_executable": "/Users/changbae/Workspace/via-sw-architecture/.venv/bin/python",
+  "prices": {
+    "qwen": {
+      "input": 0.375,
+      "output": 2.25,
+      "cached": 0.375,
+      "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
+      "date": "2026-10-12",
+      "region": "Singapore/International"
+    },
+    "openai": {
+      "input": 0.1,
+      "output": 0.5,
+      "cached": 0.01,
+      "cache_write": 0.125,
+      "source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+      "date": "2026-10-12",
+      "tier": "default/standard"
+    }
+  },
+  "semantic_model": {
+    "id": "qwen3.6-35b-a3b",
+    "temperature": 0,
+    "enable_thinking": false,
+    "max_request_calls": 8,
+    "max_concurrency": 4
+  },
+  "judge_model": {
+    "id": "gpt-6-luna",
+    "reasoning": "high",
+    "protocol": "16_CALIBRATIONS_THEN_TWO_BLIND_PASSES_THIRD_ON_DISAGREEMENT_AND_TRACE_REVIEW"
+  },
+  "budget_usd": {
+    "qwen": 100,
+    "openai": 100
+  },
+  "canonical_sources": {
+    "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md": "ab76bfc813e1f5c8bb72894a705cfcc9495f7f92e021d566dfcbf8224d8d7d65",
+    "docs/architecture/12-decisions/decision-packages/03-02-common-workload.json": "53f2b332fa7a1a197855765d7755465a096b9cecb8426068ae366e9cd9413102",
+    "docs/architecture/12-decisions/decision-packages/03-02-workload-manifest.json": "26410d9883aa34494131dbb4606dfe862537bf40af246c2c295f2d4191b94e4c",
+    "docs/architecture/12-decisions/decision-packages/03-02-poc-inputs.json": "734b4d862475344aad25b90fb974af3a49628222fc479ccaf4278ac07153a352"
+  },
+  "frozen_source_hashes": {
+    "benchmark/architecture/dp41_45_poc/README.md": "9fc40f94f8f802d8738bc74cc248e311876f46bfb3899c21375348372cc28305",
+    "benchmark/architecture/dp41_45_poc/__init__.py": "7b2b680b4a2d9d0831c71be8e8a4f6dd9cb00d7e644d384fe609b00d07cee972",
+    "benchmark/architecture/dp41_45_poc/campaign.py": "d2ad5bbfb6542a0ef13a2f2a7ac2d275137729e1efb88cd4e0ad21b8330ddeb0",
+    "benchmark/architecture/dp41_45_poc/change_experiments.py": "ace1893fad7318bd8ff5d0677f96a1fd0b0b18b36a314b7f6e084ea29224021a",
+    "benchmark/architecture/dp41_45_poc/change_patches.py": "c7d9aa76cfd5df8c40cb6512611b5b8ab6a4a45d79f53b163165acf4cc333574",
+    "benchmark/architecture/dp41_45_poc/change_runtime_checks.py": "e1e1e9ca37dd7a57d0dee8d3c928a698b84906ccdde790539d0794f039942b6e",
+    "benchmark/architecture/dp41_45_poc/evaluate.py": "4d48c7f78b8464f726df0cb524cff4af28f5cf051ea682cd7a8b0b3e247e8e31",
+    "benchmark/architecture/dp41_45_poc/finalize.py": "e2b7329875e02883a5881a19759f65214f6a5fc2bb1098af6ccc99bc28040c82",
+    "benchmark/architecture/dp41_45_poc/fixtures/README.md": "a306da2582c54aad479fdc42780a030bc13b81b0292fe98c82f0f6750391a72a",
+    "benchmark/architecture/dp41_45_poc/fixtures/inputs.json": "8024baf9ecefdc797bce532268ccb3f789fe788cdfaa418765dc730587728bd4",
+    "benchmark/architecture/dp41_45_poc/fixtures/manifest.json": "7da00d534dc3dd24bc916fc72c7a82f5f59f75d2a544e3a5b6501c14015ece31",
+    "benchmark/architecture/dp41_45_poc/fixtures/oracles.json": "80461f5ef25f921f2d4e180c9adce29f3fc1fe7b22de22c5a8f70f5325a25690",
+    "benchmark/architecture/dp41_45_poc/fixtures.py": "c0bd936b7c1b49559313eaf3afecc09d15fc9df3c1164cba54faf3e67ee643d2",
+    "benchmark/architecture/dp41_45_poc/judge.py": "e96fee7a06176fdbc53fef1c7e9a3cfbfe8cb4485382432e5e6d152f89902119",
+    "benchmark/architecture/dp41_45_poc/metrics.py": "fe7aadac13ab74e36222eae951c9d0199c9e9b61a13229bf9a2cb4893a11ccc1",
+    "benchmark/architecture/dp41_45_poc/normalize.py": "e172fcfafea6700cfd4e9e774b5f0289de51dc3df28965e6f8f1346d214fdb83",
+    "benchmark/architecture/dp41_45_poc/replay.py": "15655bd09c1b77e5288cb2c234093171d4b58b70dc6dba8e91978f4c69f95b7d",
+    "benchmark/architecture/dp41_45_poc/smoke.py": "efd3f3fa8604b58f9709a71c804d34e41ba1708ba1b18a4f4e483b97af0a903c",
+    "benchmark/architecture/dp41_45_poc/tests/test_changes.py": "eb6974d4450097db856af922b6932f4558633dd7108e0f544734e7f25701195f",
+    "benchmark/architecture/dp41_45_poc/tests/test_fixtures.py": "4b100a08efaf1c26f6abd622cbcfed681e55bacc75620a0e73210050e10f2f4c",
+    "benchmark/architecture/dp41_45_poc/tests/test_metrics.py": "ebcc9312f584d48541786dcf9676c5dcf9cfc24429346bb0066ad90fd3c2b8da",
+    "benchmark/architecture/dp41_45_poc/tests/test_normalize.py": "4cc66c2b225f34ef26592afc731a05989dfe10c767a3dc211fabbb627e712fe2",
+    "benchmark/architecture/dp41_45_poc/tests/test_worker.py": "09887fb174115232f1dfda35226c8cd4ceea416478df85c7927318b6d21974e9",
+    "benchmark/architecture/dp41_45_poc/worker.py": "f144078d212a159e3a3827266bc74aa54fcfef2b2fd126e635efec9ea0ad4dfa",
+    "docs/architecture/12-decisions/decision-packages/03-02-common-workload.json": "53f2b332fa7a1a197855765d7755465a096b9cecb8426068ae366e9cd9413102",
+    "docs/architecture/12-decisions/decision-packages/03-02-poc-inputs.json": "734b4d862475344aad25b90fb974af3a49628222fc479ccaf4278ac07153a352",
+    "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md": "ab76bfc813e1f5c8bb72894a705cfcc9495f7f92e021d566dfcbf8224d8d7d65",
+    "docs/architecture/12-decisions/decision-packages/03-02-workload-manifest.json": "26410d9883aa34494131dbb4606dfe862537bf40af246c2c295f2d4191b94e4c",
+    "prototypes/candidates/dp41_45_poc/__init__.py": "be58296c47604d22a25ef450c669f2e40a48b3dadb2bab9cb7d2352bf63c3543",
+    "prototypes/candidates/dp41_45_poc/dp41/__init__.py": "4fbed072a16043871948a76f05463b64fbdcb76d4f56e725647d84184dc804a3",
+    "prototypes/candidates/dp41_45_poc/dp41/a.py": "b351057d152788bcb11b6e7d5f8451f6f3c9ce5df38096d569deb14955b256be",
+    "prototypes/candidates/dp41_45_poc/dp41/b.py": "d16c3694bc3e94cf451b21fde20ea4ce80562a2292e944236273cefa42d2e5b8",
+    "prototypes/candidates/dp41_45_poc/dp41/contract.py": "43e180fdd95c6e57978b58d7f849a6123933144af6f177bf16c3e4fcfd81999b",
+    "prototypes/candidates/dp41_45_poc/dp41/prompts.py": "d18124ba58709d59301471230828a49e50058f378ca391efa9c58c7297549e54",
+    "prototypes/candidates/dp41_45_poc/dp41/tests/test_dp41.py": "b34b8eb9153d8e3f1a2b2527182279b9f9e31a182db0d8240419e3020db083e5",
+    "prototypes/candidates/dp41_45_poc/shared/__init__.py": "f680cf1b305161dfece595cf747d26001285547c87b5888c62a7a8eeab33e877",
+    "prototypes/candidates/dp41_45_poc/shared/adapters.py": "9c1247328c6c33082efa13012e4cbad0aba55d1d72a2e9b1449698edd11ca187",
+    "prototypes/candidates/dp41_45_poc/shared/evidence.py": "fd04c635d1e4279b636fd5175f5a250708ad8380c84cd0f4fa85da5d6239dba7",
+    "prototypes/candidates/dp41_45_poc/shared/memory.py": "9092a854b516a60c89e315f1244ad59603fbd9e86254db3cb1e4574121d0f4b0",
+    "prototypes/candidates/dp41_45_poc/shared/owners.py": "268a172ddc85d6188bd00f89e14ae84726a3dfa96964d50b976cfd3e02e6adae",
+    "prototypes/candidates/dp41_45_poc/shared/providers.py": "3651c2a9fffa0cc2aad7f507d15f702e034591eb25676065fb00d43cb9b9bd57",
+    "prototypes/candidates/dp41_45_poc/shared/runtime.py": "182e6f7537117a1216e9e50766b12e5a2cc30888632e1190c9489da7d5aecfe5",
+    "prototypes/candidates/dp41_45_poc/shared/tests/test_adapters.py": "c96c537545fdf0820662c69bd64762cac27662fd4344499120f681029286cc7b",
+    "prototypes/candidates/dp41_45_poc/shared/tests/test_providers.py": "a237bae6fa47d941d0c0f8be114abc8a9d0a4e62fbbed6d6b902fdd083959ce4",
+    "prototypes/candidates/dp41_45_poc/shared/tests/test_runtime.py": "8fff6a71ed7eee9b9414112c89edea8fd342409642b5a74287b02569e802a657",
+    "prototypes/candidates/dp41_45_poc/shared/tests/test_timing.py": "363902e389d0aa1d55cef06fde8309815b66d82cd844d8d20067dea5f7ff6614",
+    "prototypes/candidates/dp41_45_poc/shared/timing.py": "6f5275313103926dbbc701bef691f5fc5fb649c48dca2e98aa41b97371b59356"
+  },
+  "frozen_source_digest": "119b3344337d1f1fd3732df9e6cd3110cca38c574f73b6ce1c649a032227952c",
+  "qa_input_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v2-20261012/frozen-source/docs/architecture/12-decisions/decision-packages/03-02-poc-inputs.json",
+  "workload_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v2-20261012/frozen-source/docs/architecture/12-decisions/decision-packages/03-02-common-workload.json",
+  "timeouts": {
+    "automatic_episode_s": 60,
+    "whole_watchdog_s": 600,
+    "qa02_failure_cap_s": 5,
+    "qa03_failure_cap_s": 30
+  },
+  "execution": "SEQUENTIAL_ISOLATED_WORKERS_ALTERNATING_PAIR_ORDER_NO_JUDGE_CONTENDING_WITH_TIMING",
+  "response_endpoint": "EXACT_JUDGE_CORE_CLAUSE_START_AT_OBSERVED_SIMULATED_CHARACTER_SINK_NODE"
+}

@@ -1,9 +1,15 @@
 # Current Architecture Measurement Harness
 
-> **Status: no active candidate measurement runner.** 현재 DP41/44/45/42와 ASR-QA-01~06의 PoC 범위와 평가 방법을 논의 중이다.
+> **Status: DP41 A/B P21 six-QA PoC complete — 2026-10-12.**
 
-이 디렉터리는 새 실험의 fixture, candidate adapter, runner, raw trace 검증과 analyzer를
-구현할 위치다. 현재 README만 있으며 코드 작성, 모델 호출과 측정은 시작하지 않았다.
+[최종 비교 보고서](../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/final/report.md)와
+[raw 재사용 안내](../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/raw-audits/raw-data-guide.md)에
+실제 210건, 독립 변경 12개와 여섯 QA의 원값·보호 조건·실패·paired 차이를 보존했다.
+
+실행 코드는 [dp41_45_poc](./dp41_45_poc/README.md)에 있다. 별도 입력/정답 fixture,
+격리 runner, 모델 호출 원장, blind judge, 인과 시간 재계산, 독립 변경 실험과
+Mac 메모리 수집기를 구현했다. C0(41A+44A+45A+42A)와 C41(41B+44A+45A+42A)을
+P21 각 5회 비교하며, 다른 DP의 B 구현과 전체 제품 구현은 이 실험의 범위 밖이다.
 
 현재 비교의 기준은 [공통 실행 계약](../../docs/architecture/12-decisions/decision-packages/04-40-common-execution-contract.md),
 [QA 정의](../../docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md)와
@@ -12,18 +18,22 @@
 
 [PoC 수행 순서와 검토 시점](../../docs/architecture/12-decisions/decision-packages/poc-implementation-plan.md)에
 대표 세 사례에서 시작하는 단계별 구현, 완료 기준과 사용자 검토 묶음을 기록한다.
+[1단계 구현 전 검토 묶음](../../docs/architecture/12-decisions/decision-packages/poc-preimplementation-review/README.md)에
+세 사례/정답, 실행 계약, 여섯 QA의 수집/판정, 30개 변경 job과 raw 형식 초안을 정리했다.
+이 묶음은 구현 전 검토 이력이며 현재 실행/결과의 상태는 캠페인 원장을 따른다.
+현재 QA 원문의 목표와 보호 조건을 달성하도록 후보 출력을 보정하지 않는다.
 
 이전 runner, fixture/oracle, evaluator와 결과는
 [이전 실험 전체 보관 안내](../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에서 찾는다.
 기존 archive는 유지하며 이전 DP/QA 계약, 기본값과 점수 산출을 새 실험에 자동 적용하지 않는다.
 
-향후 구현에서는 후보 입력과 평가 전용 정답을 분리하고, mock 실행, 실제 모델 실행과
-계산 추정을 구별한다. raw result는 [현재 결과 위치](../../results/architecture-evaluation/current/README.md)의
+후보 입력과 평가 전용 정답을 분리하고, 실제 Qwen 의미 호출, 실제 OpenAI 판정,
+Agent/음성 모사 및 지정 의미 회귀 재생을 구별한다. raw result는 [현재 결과 위치](../../results/architecture-evaluation/current/README.md)의
 새 campaign directory에 보존한다. 이전 result directory를 덮어쓰지 않는다.
 
 ## PoC 결과 보고 요구사항 — 2026-10-11 사용자 지정
 
-아래는 향후 구현할 수집·집계 요구사항이며 실행 결과나 측정 freeze가 아니다.
+아래는 사용자가 지정한 수집·집계 요구사항이다. 실행값과 freeze는 각 캠페인에 보존한다.
 현재 QA의 cap 적용 평균과 보호 조건을 유지하면서 실패를 포함하는 방법에 따른
 차이를 함께 보고한다. 작은 대표 사례의 관측은 해당 사례의 실제 표본 수로 표시하며
 P21 전체를 실행한 최종 QA 값으로 표시하지 않는다.
@@ -33,7 +43,7 @@ P21 전체를 실행한 최종 QA 값으로 표시하지 않는다.
 | 보고 값 | 산출 방법 | 분모 |
 | --- | --- | --- |
 | cap 적용 평균 — 현재 QA 주 지표 | 유효 반응은 현재 QA 경계의 시간, 오답·미전달은 5초를 사용 | 전체 지정 관측. P21 5회는 135개 |
-| 정답 반응만의 실측 평균 | 해당 반응의 필수 내용/동작 조건을 충족한 관측의 실제 시간만 평균 | 정답이며 시간이 관측된 수. 오답·미전달 제외 |
+| 정답 첫 반응만의 실측 평균 | 최초 핵심 반응이 필수 내용/동작 조건을 충족한 관측의 실제 시간만 평균 | 정답 첫 반응이며 시간이 관측된 수. 최초 오답·미전달 제외 |
 | 오답 포함 실측 평균 | 정답 여부와 관계없이 실제 핵심 반응/동작이 관측된 시간을 평균 | 실제 시간이 있는 수. 미전달·시간 누락 제외 |
 
 접수 인사·earcon·모델의 첫 packet·outbox 등록을 핵심 반응으로 세지 않는다.
@@ -41,7 +51,8 @@ P21 전체를 실행한 최종 QA 값으로 표시하지 않는다.
 QA의 유효 종료 판정과 구별한다. 오답 후 정정이 오면 최초 실제 반응과 최초 유효
 반응의 시각, 각 응답 ID·내용·판정과 전체 전달 순서를 모두 보존한다.
 오답 포함 실측 평균에는 최초 실제 핵심 반응의 시간을 사용하며,
-정답 반응 평균에는 유효 반응의 시간을 사용한다. cap 적용 여부와 보호 조건은
+정답 첫 반응 평균에는 처음부터 유효했던 반응의 시간을 사용한다. 오답 후 정정은
+별도 건수와 최초 유효 반응 시각으로 보존한다. cap 적용 여부와 보호 조건은
 현재 QA 계약으로 판정하고, 뒤늦은 정정으로 앞선 오답 기록을 지우지 않는다.
 
 각 평균에 분자·분모, 정답/오답/미전달/시간 누락 수를 붙인다. 실제 시간이 없는

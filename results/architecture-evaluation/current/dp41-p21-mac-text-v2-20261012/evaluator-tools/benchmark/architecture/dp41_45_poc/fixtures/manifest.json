@@ -1,0 +1,236 @@
+{
+  "fixture_version": "dp41-p21-fixtures-v1",
+  "contract_version": "ASR-QA-v6",
+  "workload_id": "P21",
+  "status": "IMPLEMENTED_FIXTURES_NO_MODEL_RUN",
+  "sequence": [
+    "S1-01",
+    "S1-02",
+    "S2-01",
+    "S2-02",
+    "S2-03",
+    "S2-04",
+    "S2-05",
+    "S3-01",
+    "S3-02",
+    "S3-03",
+    "S4-01",
+    "S4-02",
+    "S4-03",
+    "S5-01",
+    "S5-02",
+    "S5-03",
+    "S5-04",
+    "S6-01",
+    "S6-02",
+    "S6-03",
+    "S6-04"
+  ],
+  "counts": {
+    "cases": 21,
+    "conditions_per_repeat": 126,
+    "reactions_per_repeat": 27,
+    "cycles_per_repeat": 19,
+    "independent_repeats": 5
+  },
+  "canonical_sources": {
+    "docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md": "ab76bfc813e1f5c8bb72894a705cfcc9495f7f92e021d566dfcbf8224d8d7d65",
+    "docs/architecture/12-decisions/decision-packages/03-02-common-workload.json": "53f2b332fa7a1a197855765d7755465a096b9cecb8426068ae366e9cd9413102",
+    "docs/architecture/12-decisions/decision-packages/03-02-workload-manifest.json": "26410d9883aa34494131dbb4606dfe862537bf40af246c2c295f2d4191b94e4c"
+  },
+  "initial_workload": {
+    "history_turns": 2000,
+    "completed_tasks": 200,
+    "context_sources": 30,
+    "source_payload_mib": 20,
+    "raw_rgba_frames": 15,
+    "raw_frame_width": 2880,
+    "raw_frame_height": 1800,
+    "cloud_call_ceiling": 4,
+    "active_task_ceiling": 10,
+    "background_source_ids": [
+      "B01",
+      "B02",
+      "B03",
+      "B04",
+      "B05",
+      "B06",
+      "B07",
+      "B08",
+      "B09",
+      "B10",
+      "B11",
+      "B12",
+      "B13",
+      "B14",
+      "B15",
+      "B16",
+      "B17",
+      "B18",
+      "B19",
+      "B20"
+    ],
+    "background_source_template": {
+      "title": "P21 background source Bnn",
+      "v1": "index=nn; value=100+nn",
+      "v2": "index=nn; value=101+nn",
+      "permission": "read/model-provide allowed; B04 is withdrawn at final maintenance"
+    },
+    "canonical_source_slots": [
+      "C01",
+      "C02",
+      "C03",
+      "C04",
+      "C05",
+      "C06",
+      "C07",
+      "C08",
+      "C09",
+      "C10"
+    ],
+    "history_template": "2000 chronological turns H0001..H2000, Korean text: 배경 기록 {id}: B{((id-1)%20)+1:02d}@v1의 값은 {100+((id-1)%20)+1}이다. Every turn has delivered receipt and allowed read/provide. No current request intent or derived relation injected.",
+    "completed_task_template": "200 completed Task HT001..HT200, source B{((id-1)%20)+1:02d}@v1, read-only value query, ACCEPTED then COMPLETED then delivered receipt in this order. Canonical S2/S6 facts supplied in scoped source slots separately, without overwriting current candidate outcomes.",
+    "payload_size_rule": "Original source plus turn plus Task UTF-8 payload total 20MiB. Pad unused background source text with U+0020 to exactly 20*1024*1024 bytes. No learned/derived output is padding. Physical DB/runtime/index overhead counted in addition.",
+    "active_task_definition": "동시에 실행/사건 처리 대상으로 활성화한 Task 슬롯. P21 이전 사례의 추가 원천 사건이 없는 scope는 상태/이력/메모리를 보존하며 정지 보관; 논리적으로 미답변/미확인을 완료로 바꾸지 않음. S5-04 동시 7개. 준비/회수와 retained allocation은 모두 원장에 포함."
+  },
+  "activity_events": [
+    {
+      "event_id": "B01-v2",
+      "at_seconds": 0,
+      "type": "SOURCE_CHANGE",
+      "payload": {
+        "source": {
+          "source_id": "B01",
+          "revision": 2,
+          "kind": "DOCUMENT",
+          "title": "B01",
+          "text": "index=01; value=102",
+          "permission": {
+            "read": "ALLOWED",
+            "model": "ALLOWED",
+            "agent": "ALLOWED"
+          },
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "event_id": "B02-v2",
+      "at_seconds": 0.01,
+      "type": "SOURCE_CHANGE",
+      "payload": {
+        "source": {
+          "source_id": "B02",
+          "revision": 2,
+          "kind": "DOCUMENT",
+          "title": "B02",
+          "text": "index=02; value=103",
+          "permission": {
+            "read": "ALLOWED",
+            "model": "ALLOWED",
+            "agent": "ALLOWED"
+          },
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "event_id": "B03-v2",
+      "at_seconds": 0.02,
+      "type": "SOURCE_CHANGE",
+      "payload": {
+        "source": {
+          "source_id": "B03",
+          "revision": 2,
+          "kind": "DOCUMENT",
+          "title": "B03",
+          "text": "index=03; value=104",
+          "permission": {
+            "read": "ALLOWED",
+            "model": "ALLOWED",
+            "agent": "ALLOWED"
+          },
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "event_id": "B04-v2",
+      "at_seconds": 0.03,
+      "type": "SOURCE_CHANGE",
+      "payload": {
+        "source": {
+          "source_id": "B04",
+          "revision": 2,
+          "kind": "DOCUMENT",
+          "title": "B04",
+          "text": "index=04; value=105",
+          "permission": {
+            "read": "ALLOWED",
+            "model": "ALLOWED",
+            "agent": "ALLOWED"
+          },
+          "metadata": {}
+        }
+      }
+    },
+    {
+      "event_id": "maintenance-after-updates",
+      "at_seconds": 0.04,
+      "type": "MAINTENANCE",
+      "payload": {}
+    }
+  ],
+  "activity_event_anchor": "AFTER_S2_04",
+  "final_activity_events": [
+    {
+      "event_id": "final-maintenance",
+      "at_seconds": 0,
+      "type": "MAINTENANCE",
+      "payload": {}
+    },
+    {
+      "event_id": "B04-revocation",
+      "at_seconds": 0,
+      "type": "SOURCE_PERMISSION",
+      "payload": {
+        "source_id": "B04",
+        "read": "DENIED",
+        "model": "DENIED",
+        "agent": "DENIED"
+      }
+    }
+  ],
+  "drain_deadline_seconds": 30,
+  "idle_probe_seconds": 10,
+  "runtime_profile_proposals": {
+    "duplicate_current_summary_after_seconds": 0.001,
+    "mock_transcript_final_same_as_speech_end": true,
+    "guard_task_details": "explicit unrelated before-state source record; no current request binding",
+    "unplanned_no_hint_reply_voice_seconds": 3,
+    "unplanned_reply_duration_basis": "common assumed length; canonical text is fixed, canonical duration is unspecified"
+  },
+  "privacy": {
+    "candidate_entrypoint": "public_inputs",
+    "case_oracle_future_events_in_model_context": false,
+    "private_denied_body_in_inputs": false
+  },
+  "candidate_metadata_contract": {
+    "owner_record_bodies": "OWNER_READ_REQUIRED",
+    "active_task_metadata": "ALL_ACTIVE_TASKS",
+    "completed_task_metadata_recent_limit": 10,
+    "interaction_metadata_recent_limit": 10,
+    "original_history_turns_retained": 2000,
+    "original_completed_tasks_retained": 200,
+    "original_source_slots_retained": 30,
+    "bounded_read_default_consumer": "model",
+    "bounded_read_permission_rule": "read AND caller consumer role; wire spec cannot change consumer role",
+    "metadata_handles_are_body_read_evidence": false,
+    "question_register_is_presentation_receipt": false,
+    "pre_input_question_registration": "QUESTION_REGISTER with presentation_requested=false; actual re-confirmation remains candidate-controlled",
+    "background_updates_count": 4,
+    "background_update_anchor": "AFTER_S2_04",
+    "background_revocation_source": "B04",
+    "background_revocation_anchor": "FINAL_MAINTENANCE"
+  }
+}

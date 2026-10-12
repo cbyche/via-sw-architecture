@@ -1,0 +1,330 @@
+{
+  "job_id": "CH-DP41-B-M04",
+  "variant": "B",
+  "task_id": "M04",
+  "registry_version": "ASR-QA-v6-U01-U18",
+  "requirement": {
+    "requirement": "Continue mail-draft goal after report failure; test both terminal outcomes and preserve SEND prohibition without inventing a successful report result.",
+    "completion": [
+      "failure_continues_draft_once",
+      "success_branch_preserved",
+      "SEND_zero"
+    ],
+    "regressions": [
+      "P21",
+      "AFTER",
+      "USE_RESULT",
+      "duplicate_failure",
+      "late_success",
+      "unrelated_task",
+      "strict_typed_reference_and_frame_disjointness",
+      "actual_request_goal_disjoint_mapping",
+      "actual_request_revision_and_owner_execution_lineage",
+      "legacy_GOAL_literal_owner_when_binder_regression",
+      "b_binder_byte_identical",
+      "same_request_two_revisions",
+      "actual_owner_revision_and_stale_execution",
+      "source_unchanged"
+    ],
+    "baseline_overlap_audit": true
+  },
+  "baseline_source_hash": "935fab8816a88ca514572ffe83c61015b291a343eaf71304126f3c9862845f5c",
+  "baseline_source_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/frozen-source",
+  "status": "COMPLETED",
+  "evidence_level": "MEASURED_CHANGE_EXPERIMENT",
+  "completion_passed": true,
+  "regression_passed": true,
+  "patch_verified": true,
+  "responsibility_review_passed": true,
+  "baseline_support_audit_passed": false,
+  "changed_unit_set": [
+    "U01",
+    "U03",
+    "U07",
+    "U08"
+  ],
+  "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/reviewed-result.json",
+  "evaluator_source_hashes": {
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_experiments.py": "ace1893fad7318bd8ff5d0677f96a1fd0b0b18b36a314b7f6e084ea29224021a",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_patches.py": "a2f36fd73a7737b34c650c3e01c1b61b56956af6dd356d82e256a858ac9db918",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/change_runtime_checks.py": "18ac7a8bd03d8bd042978347bceba3156134b8f9c1131dcc760fd5a0c8472818",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/replay.py": "15655bd09c1b77e5288cb2c234093171d4b58b70dc6dba8e91978f4c69f95b7d"
+  },
+  "after_source_hash": "e4a03f5f4eebce1db12b9603b9cc0692274d664472f17c4098f2a511f792bd5d",
+  "changed_paths": [
+    "prototypes/candidates/dp41_45_poc/dp41/contract.py",
+    "prototypes/candidates/dp41_45_poc/dp41/prompts.py",
+    "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+  ],
+  "patch_sha256": "37cf8880af419ec8b1de9921c1caf8ae9c3114ac02a77b8663615baba91013dc",
+  "patch_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/patch.diff",
+  "responsibility_claims": {
+    "U01": {
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite tagged reference_id producer terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U03": {
+      "reason": "Exact singleton producer tag, own from_goal, terminal enum and existing owner-string/frame disjointness validation.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "owner string or exact typed producer reference, STATE terminal EQ/IN only for producers",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U07": {
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U08": {
+      "reason": "Resolve the actual producer Task/Execution from Request revision and goal; preserve UNKNOWN for absent/superseded producers and success-result dependencies.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "typed producer readiness bound to actual Request-revision dispatch lineage",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    }
+  },
+  "responsibility_assessment": {
+    "U01": {
+      "status": "CHANGED",
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite tagged reference_id producer terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U02": {
+      "status": "UNCHANGED",
+      "reason": "Existing recursive B binding preserves the producer tag because goal IDs and Frame reference IDs are disjoint; binder byte hash is unchanged.",
+      "before_contract": "Finite representation dispatch, item resolution and code binding",
+      "after_contract": "Finite representation dispatch, item resolution and code binding",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U03": {
+      "status": "CHANGED",
+      "reason": "Exact singleton producer tag, own from_goal, terminal enum and existing owner-string/frame disjointness validation.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "owner string or exact typed producer reference, STATE terminal EQ/IN only for producers",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U04": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Request adoption, presented-question focus and input hold",
+      "after_contract": "Request adoption, presented-question focus and input hold",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U05": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Input/delivery clocks and actual playback control",
+      "after_contract": "Input/delivery clocks and actual playback control",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U06": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Response content, publication and delivery ledger",
+      "after_contract": "Response content, publication and delivery ledger",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U07": {
+      "status": "CHANGED",
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U08": {
+      "status": "CHANGED",
+      "reason": "Resolve the actual producer Task/Execution from Request revision and goal; preserve UNKNOWN for absent/superseded producers and success-result dependencies.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "typed producer readiness bound to actual Request-revision dispatch lineage",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U09": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Source adapter and normalized original-source port",
+      "after_contract": "Source adapter and normalized original-source port",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U10": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Request-wise original composition/search/cache semantics",
+      "after_contract": "Request-wise original composition/search/cache semantics",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U11": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Common past-relation production/coverage/invalidation",
+      "after_contract": "Common past-relation production/coverage/invalidation",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U12": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Published relation reading and uncovered-range completion",
+      "after_contract": "Published relation reading and uncovered-range completion",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U13": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Dialogue/work command, acceptance and reflection contract",
+      "after_contract": "Dialogue/work command, acceptance and reflection contract",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U14": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Persistent schema migration and restore",
+      "after_contract": "Persistent schema migration and restore",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U15": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Cloud-provider wire, usage and cancellation adapter",
+      "after_contract": "Cloud-provider wire, usage and cancellation adapter",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U16": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "External Agent protocol/capability adapter",
+      "after_contract": "External Agent protocol/capability adapter",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U17": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Permission/consent/deletion policy decisions",
+      "after_contract": "Permission/consent/deletion policy decisions",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    },
+    "U18": {
+      "status": "UNCHANGED",
+      "reason": "Same responsibility contract retained; independent diff and regression review required.",
+      "before_contract": "Cross-owner derived-consumer deletion/correction completion contract",
+      "after_contract": "Cross-owner derived-consumer deletion/correction completion contract",
+      "evidence": [
+        "baseline-manifest.json",
+        "after-source-manifest.json",
+        "regression.json"
+      ]
+    }
+  },
+  "count": 4,
+  "original_baseline_unchanged": true,
+  "initial_result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/result.json"
+}

@@ -1,0 +1,71 @@
+{
+  "responsibility_claims": {
+    "U01": {
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite current-producer terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "producer-lineage-checks.json",
+        "regression.json"
+      ]
+    },
+    "U03": {
+      "reason": "Validate producer identity and the bounded terminal-state predicate without arbitrary expressions.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "exclusive owner/producer references and terminal enum validation",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "producer-lineage-checks.json",
+        "regression.json"
+      ]
+    },
+    "U07": {
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "producer-lineage-checks.json",
+        "regression.json"
+      ]
+    },
+    "U08": {
+      "reason": "Bind failed producer readiness to current Request revision and actual Task/Execution/Task revision, preserving UNKNOWN for absent or superseded dispatches and successful-result dependencies.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "original finite producer_goal_id continuation with actual Request-revision dispatch lineage",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "producer-lineage-checks.json",
+        "regression.json"
+      ]
+    }
+  },
+  "representation_alternative": "ORIGINAL-A-LINEAGE-v1",
+  "a_semantic_sha256": {
+    "before": "b351057d152788bcb11b6e7d5f8451f6f3c9ce5df38096d569deb14955b256be",
+    "after": "b351057d152788bcb11b6e7d5f8451f6f3c9ce5df38096d569deb14955b256be",
+    "identical": true
+  },
+  "correction_relative_to_original_a_m04": {
+    "responsibilities": [
+      "U08"
+    ],
+    "original_delta_runtime_sha256": "5505a3f0ebdd2bcd8b2eab430c7f71f70dabf1dea782f975e45fd0d0fa8bf0ff",
+    "corrected_runtime_sha256": "d4ab8aa04e36db78da71175fb1a55d412c9ae701cd503b9ffafa41bd57cd8d2c",
+    "representation": "original producer_goal_id",
+    "candidate_algorithm_changed": false
+  }
+}

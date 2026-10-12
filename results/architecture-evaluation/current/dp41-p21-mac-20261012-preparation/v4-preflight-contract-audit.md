@@ -1,0 +1,71 @@
+# v4 freeze 전 공통 실행 계약 정적 감사
+
+상태: **READ_ONLY_STATIC_AUDIT / NOT_RUN / NO_QA_VERDICT**. 21 fixture의 before-state/source/preparation/events/followups/stub-profile을 live 공통 runtime/owner/adapter/worker와 대조했다. 모델 선택을 정답으로 바꾸지 않았으며 API/후보/테스트 실행, 재채점, 기존 v3 review 또는 코드 수정은 하지 않았다. 해석 기준은 current ASR-QA-v6 P21과 현재 사용자의 local Mac/text-input 범위다. 준비 초안의 향후 음성/SQLite 계획을 이미 구현했다고 주장하지 않는다.
+
+검토 시점: 2026-10-11T19:28:58.976746+00:00. 아래 byte hash는 마지막 읽은 live source snapshot이다. owners delivery scope 수정은 병렬로 진행 중이므로 **그 이후 버전의 통과 확인이 아니다**. 새로운 freeze의 정확한 source digest를 다시 확인해야 한다.
+
+## 우선 쟁점
+
+**P2-1, known 공통 delivery scope 결함:** S2-02/S2-04의 E1 source와 actual interaction이 같은 ID/revision이다. OWNER_READ는 whole text와 delivered_voice_text를 구분하지만 executable binding은 identity만 보존한다. current source_payload→lookup의 source-first 동률 경로는 heard span/receipt를 Agent payload에 넘기지 않는다. 이는 실제 read를 정확히 선택한 합법 경로에도 존재한다. 수정 중인 scope/type/provenance materialization을 새 freeze 전에 실제 received payload까지 확인해야 한다. v3 B1의 wrong Task/input_ref 오류와 이 잠재 결함은 별개이며 QA 실패의 직접 원인을 바꾸지 않는다. S2-05는 whole=heard text다.
+
+**P2-2, 공통 Task capacity 상한 미집행:** QA §8.1은 현재 scene의 활성 Task 슬롯 최대 10개를 명시한다. 마지막 읽은 LocalVIA.__init__/track에는 Task capacity 상태/guard가 없고 _dispatch else(897~904행)는 새 Task를 바로 owners.tasks에 추가한다. frame/Meaning이 최대 4 Goal을 허용하므로 S5-04 초기 7 Task에 NEW_TASK 4개를 선택하면 11개의 scene 활성 Task가 만들어질 수 있다. 모델의 잘못된 extra Task 선택 자체는 측정할 오류다. 그러나 의미를 고쳐 주는 것과 별도로 10-slot 자원 상한은 queue/hold/capacity rejection으로 집행해야 한다. 정상 S5-04 정정 경로의 7 Task에 문제가 생겼다는 관측은 아니다. 과거 200 완료 Task와 보관 scope를 용량에 넣지 않는 §8.1 정의도 유지해야 한다. 해당 조건을 재실행하지 않은 정적 결함이다.
+
+그 외에는 아래 21개 정상 요구를 공통 연산으로 표현/실행하는 **경로**가 있다. 정적 경로 확인은 실제 모델 성공이나 전부 QA 통과를 뜻하지 않는다. 독립 검토 범위에서 새 P1은 찾지 못했다.
+
+## 21개 경로 대조
+
+| case | 합법 경로와 실제 소비 경계 | 오류/제한의 귀속 |
+| --- | --- | --- |
+| S1-01 | D1 bounded READ_FIELD, actual source를 CRESPONSE에 제공 | 잘못된 ANSWER_QUESTION/빈 Task 선택은 모델 오류 |
+| S1-02 | SalesQ3 actual source + NEW_TASK CREATE_REPORT/FORMAT TABLE, 접수/8초 tail | stub은 실제 payload/source/properties 보존. 보고서 도메인 작성 품질 미측정 |
+| S2-01 | OBSERVATION + INPUT_SELECTION으로 두 포인터/원천 text 조회, COMPARE | owner는 span의 semantic binding을 선택하지 않음. selector/선택 오류는 측정 |
+| S2-02 | actual 준비 E1/D2v2/D3v1, CREATE_PROPOSAL | heard-scope 공통 P2가 수정/검증되어야 함. reference-only B partial의 조건 값 추출 한계 구분 |
+| S2-03 | PAST_DELIVERED/SOURCE_AT_REV D1v1 보존 + CREATE_TABLE | current v2로 치환한 후보 선택은 오류. historical v1 자체는 권한만 재검사해 허용 |
+| S2-04 | 실제 S2-02 owners/cache 인계 후 별도 새 Task | 성공 snapshot 주입 없음. E1 scope P2가 같이 적용 |
+| S2-05 | 실제 도착한 E새/D새비교/D새견적 조회 후 CREATE_PROPOSAL | E새 whole text=heard text. wrong RECENT_TASK/TASK_RESULT selector는 모델 오류 |
+| S3-01 | 독립 SUMMARIZE/READ_CALENDAR Goal의 async 실행 | A 순차 강제 없음. direct와 Agent 경로의 actual facts 범위 구분 |
+| S3-02 | current GOAL_RESULT producer→SEND_MAIL, 실제 artifact/body/recipient 조합 | old RESULT/duplicate identity와 current lineage 검사. 도메인 summary/SMTP 품질 미측정 |
+| S3-03 | CALENDAR_CONDITIONAL 실행 gate에서 latest calendar 재조회/정규화 | BUSY면 미생성 안내. arbitrary WHEN expression은 선언된 지원 대상 아님 |
+| S4-01 | 기존 T보고서 SET_PROPERTY FORMAT=TABLE + T메일 preservation | incremented Task revision/8초 tail. actual old model job이 있을 때만 late return probe |
+| S4-02 | input onset local stop/generation fence + EXPLAIN actual D매출 | stop는 Task cancel이 아님. old OUTPUT_READY generation rejection |
+| S4-03 | T메일 CANCEL_TASK, 접수/termination UNKNOWN, 후기 ACCEPTED/duplicate | 확인되지 않은 실행 종료를 성공으로 바꾸지 않음. 기존 Task 유지 |
+| S5-01 | external QUESTION registration/presentation, withdrawal fence, same-event dedup | Agent 질문에 계획 답변 없음. 의미 후보 호출 대상이 아닌 공통 사건 처리 |
+| S5-02 | external RESULT Task/Execution/revision gate, 중복/옛 결과 거부 | current artifacts 실제 Task.result로 저장. completion response가 실제 artifact를 소비 |
+| S5-03 | Voice OFF Text receipt 후 actual reconnect input→RESULT_DELIVERY/TASK_RESULT | 새 Voice connection에서 같은 결과 안내. 음성 자동 재생을 완료로 선주입하지 않음 |
+| S5-04 | 정정과 4 external 질문/결과 동시 주입, async jobs/serialized publication | 초기 7 Task. 최대 4 NEW_TASK 입력의 capacity 상한 공통 P2 아래 참고 |
+| S6-01 | actual 대상/변경 clarification receipt 후 planned 후속 발화, 기존 Task patch | B는 새 unbound Frame+actual read_evidence. 잘못된 scope 질문/선택은 모델 오류 |
+| S6-02 | withdraw Q1v1/Q1v2 미제시→QUESTION_PRESENT→actual consent→source release | read/share scope와 SEND 분리, actual contact를 Agent payload의 provided_information에 포함 |
+| S6-03 | 권한 거부 owner read, 금액 확인 불가/정당 거절 CRESPONSE | denied source body 없음. 모델이 금액을 만들어 말하면 모델 오류 |
+| S6-04 | actual Q기간v7/presented scope→ANSWER_QUESTION/PERIOD H1/ACK | 명세상 보고서 완료가 아니라 답변 접수 완료. final_result=None 적합 |
+
+## 주요 공통 경계의 확인
+
+- SOURCE_AT_REV는 retained history를 조회한다. pinned history를 최신 body로 바꾸지 않으며 실제 소비에서 latest permission을 검사한다. TASK_RESULT explicit task_id/source_ref는 현재 Task.result의 actual artifact를 반환한다. query는 lexical candidate retrieval이며 Task 의미 검색의 보장이 없다. wrong query나 irrelevant candidate selection을 공통 코드 버그로 단정하지 않는다.
+- Consent는 actually presented question identity/revision/Task/Execution/scope를 검사하며, 연락처 제공 동의는 SEND를 승인하지 않는다. source release는 actual consent scope와 일치한 뒤에만 수행된다. Source read/model/agent 권한이 별개이며 denied source body가 metadata/read에 노출되는 경로를 이 snapshot에서 찾지 못했다.
+- S3-02 current generatedartifact는 runtime.goal_results/result_ready의 actual artifact identity를 통해 소비된다. ready artifact를 evaluator가 넣지 않는다. same external event ID는 dedup하고 Task/Execution/revision mismatch와 이미 current completion은 거부한다. actual old model job이 생기지 않은 branch를 성공/실패 또는 0초 probe로 채우지 않는다.
+- S5 external QUESTION/RESULT의 injected payload는 canonical 외부 사실이다. runtime이 후보 의미를 정답으로 덮는 경로가 아니다. 질문 withdrawal은 presentation/answer guard에 반영되고 결과는 actual Task.result 및 CRESPONSE facts에 들어간다. S5-01/02에는 새 사용자 Goal이 없어 QA03가 N/A다.
+- 실제 Agent wire는 normalized command를 encode/decode해 동일성을 확인한다. downstream stub은 actual received sources/properties/recipient/body_artifact를 사용하고 oracle를 읽지 않는다. stub이 domain instruction을 이해해 완전한 보고서/표/제안서를 작성한다고 주장하지 않는다. 따라서 VIA 목표/참조/제약/실제 command와 결과 연결은 평가하지만 Agent 도메인 품질은 별도다.
+
+## 선언된 범위와 측정 오류를 보존할 부분
+
+B_PARTIAL_SELECT는 reference identity만 선택한다. 일반 Goal/condition/value extraction partial은 없다. clarification 뒤 새로운 unbound Frame이 실제 read_evidence를 볼 수 있으나 추가 질문/호출 비용이 든다. source-scoped payload 수정만으로 이 B 지원 범위가 넓어졌다고 쓰지 않는다. A의 read→모델 재판단과 B의 field binding/재질문 경로 차이는 그대로 측정한다. 잘못된 Task/selector/input_ref/관계/권한 확대, 불필요 질문, frame budget 소진, 빠른 잘못된 응답은 후보 오류로 남긴다.
+
+v6 checkpoint+§8.2 final tail을 같이 사용한다. S2-02의 8초 final은 적합하며 이전 checkpoint 문장만 읽어 제거하지 않는다. S6-04/취소/권한 거절 등은 명세한 처리 결과에서 끝나며 외부 업무 전체 완료를 기다리도록 확장하지 않는다. 현재 Text/Voice는 simulation이므로 실제 음성 모델 endpoint 품질이나 Windows 측정으로 표시하지 않는다.
+
+## 마지막 읽은 source hash
+
+| file | SHA-256 |
+| --- | --- |
+| [inputs.json](../../../../benchmark/architecture/dp41_45_poc/fixtures/inputs.json) | `8024baf9ecefdc797bce532268ccb3f789fe788cdfaa418765dc730587728bd4` |
+| [oracles.json](../../../../benchmark/architecture/dp41_45_poc/fixtures/oracles.json) | `80461f5ef25f921f2d4e180c9adce29f3fc1fe7b22de22c5a8f70f5325a25690` |
+| [worker.py](../../../../benchmark/architecture/dp41_45_poc/worker.py) | `f144078d212a159e3a3827266bc74aa54fcfef2b2fd126e635efec9ea0ad4dfa` |
+| [runtime.py](../../../../prototypes/candidates/dp41_45_poc/shared/runtime.py) | `9eddbcdeaaa248acaae14cfdd1c60b0cf64e93ce445ce8f32112a526a0e81591` |
+| [owners.py](../../../../prototypes/candidates/dp41_45_poc/shared/owners.py) | `b106fc71961e87030ef0dfe961875448899c7363a244bf1029e47648912fb142` |
+| [adapters.py](../../../../prototypes/candidates/dp41_45_poc/shared/adapters.py) | `9c1247328c6c33082efa13012e4cbad0aba55d1d72a2e9b1449698edd11ca187` |
+| [a.py](../../../../prototypes/candidates/dp41_45_poc/dp41/a.py) | `b351057d152788bcb11b6e7d5f8451f6f3c9ce5df38096d569deb14955b256be` |
+| [b.py](../../../../prototypes/candidates/dp41_45_poc/dp41/b.py) | `4637588c85e745c290334c3bf7471e752d2c1946bd2c1baee649c6f60b2b73e2` |
+| [contract.py](../../../../prototypes/candidates/dp41_45_poc/dp41/contract.py) | `5415d2ed95b55dccb62740d3dc7b5502be3567c31add4f9a14a7820938bb392f` |
+| [prompts.py](../../../../prototypes/candidates/dp41_45_poc/dp41/prompts.py) | `be366f35926aebc73ba6ce9f1c9ba526366145518090b99d2aa28eee4ee8590c` |
+| [03-02-quality-attribute-definitions.md](../../../../docs/architecture/12-decisions/decision-packages/03-02-quality-attribute-definitions.md) | `ab76bfc813e1f5c8bb72894a705cfcc9495f7f92e021d566dfcbf8224d8d7d65` |
+
+상한/범위 수정 후 실제 unit/probe와 source freeze는 root가 수행한다. 본 문서는 이를 실행하거나 통과했다고 표시하지 않는다.

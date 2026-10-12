@@ -1,18 +1,89 @@
 # 구조 중심 Decision Reconstruction 작업 계획
 
 > 현재 상태: **STAGE_4_DP_REDETAILING / 41·44·45·42·46 문서·도식·발표 완성** / 2026-10-10
-> 개별 대안과 조합 계약의 문서 검토를 마쳤다. 구현·측정·최종 선택과 기존 Architecture 전체 동기화는 별도 후속 작업이다.
+> 개별 대안과 조합 계약의 문서 검토를 마쳤다. DP41 PoC는 아래 별도 승인으로 완료했다. 다른 DP의 구현·측정, 최종 선택과 기존 Architecture 전체 동기화는 후속 작업이다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
+
+## 2026-10-12 DP41 A/B 여섯 QA 측정·검수 완료
+
+[최종 비교 보고서](../../../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/final/report.md)는
+`DP41-P21-MAC-TEXT-v7`의 실제 210건, 1,260조건/270반응/190사이클과 독립 변경 12개를 집계했다.
+QA01 A400/630=63.492%·B359/630=56.984%, QA02 실패 cap 평균6.420/6.144초,
+QA03 미완료 cap 평균23.534/25.639초, QA04 P21당$0.132040/$0.143066,
+QA05 양안1.5책임, QA06 Mac footprint peak1014.408/648.532MiB다.
+양안 점수는 [0,0,0,6,4,6]이며 QA01~04의 보호 조건은 실패했다. 높은 비용·메모리 점수로 실패를 상쇄하지 않는다.
+
+원래 OpenAI 판정은 보존하고 실제 payload/Task 상태/발화 구절을 검수해 별도 override120건에
+반영했다. 코드·정답·경계의 본 실행 재조정은 없고 평가기 사본의 참조 검증 결함만 이력과 함께 수정했다.
+[독립 재계산](../../../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/raw-audits/final-independent-review.json)은
+174,750개 검사 실패0으로 여섯 지표·분모·guards·paired 값과 raw 연결을 확인했다.
+QA05는 실제 코드 책임 범위에서 동점이며 추가 M04 자연어 Qwen 실행은 양안 FAIL이다.
+모든 paired 축은 고정한 실용 차이와 일관성 조건을 함께 충족하지 않았다. 승자는 선택하지 않았다.
+
+실제 Mac/전사·공통 음성 모형/Qwen 의미 호출/OpenAI judge 범위를 유지한다.
+원시 Context·출력·usage·payload·사건·DAG·메모리와 실패·준비 비용의
+[재가공 안내](../../../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/raw-audits/raw-data-guide.md)를 보존했다.
+후속 DP44/45/42의 B와 나머지 변경18개, 참조 Architecture/발표자료 갱신은 이번 완료에 포함하지 않는다.
+
+## 2026-10-12 DP41 A/B 여섯 QA 실제 PoC 수행 승인
+
+사용자가 Qwen 의미 API와 OpenAI 판정 API를 제공하고 DP41 A/B의 여섯 QA 측정·집계·raw 증거까지 완료하도록 명시적으로 지시했다. Qwen/OpenAI 각각 총 $100 이내의 준비·본 실행 비용을 허용하며 필요한 확인 시점 외에는 중단하지 않는다. 아래 이전 체크포인트의 구현/API/비용 미승인 문장은 해당 시점의 이력이다.
+
+현재 실행은 C0(41A+44A+45A+42A)와 C41(41B+44A+45A+42A)의 P21 각 5회, 630 정확성 조건/135 반응/95 사이클 및 두 구성의 독립 변경 실험 12개다. 실제 Qwen 의미 호출과 OpenAI judge를 사용한다. 음성은 전사와 공통 출력·대기·중단 사건 모형으로 실행하며 실제 음성 API 품질을 주장하지 않는다. 실제 환경은 Mac이며 phys_footprint와 resident size를 모두 수집한다. Windows 실행으로 표시하지 않는다. 기존 QA 경계의 시간·비용·MiB 점수는 이 축소된 PoC 모집단의 비교 척도로 적용하고 전체 제품/Windows 검증과 구분한다.
+
+예비 실행은 `results/architecture-evaluation/current/dp41-p21-mac-20261012-preparation/`에 보존했다. 후보 오류는 보존하고 공통 실행·측정기 결함만 수정한다. 본 실행 직전 코드·입력·정답·QA·가격·모형을 별도 freeze에 고정하고 원시 호출 Context/출력/usage/재시도/폐기, source, 명령 payload, 전달 영수증, 인과 DAG와 OS 메모리 기록에서 결과를 산출한다. v4 가정 점수와 이전 archive 실행 코드는 사용하지 않는다.
 
 ## 2026-10-12 초기 관측 타임라인 초안 archive 이동
 
 사용자는 46 이전 관측 초안이 활성 경로에 untracked로 남아 다른 세션을 혼동시킨다고 확인하고 archive 이동과 commit/push를 요청했다. [보존 안내와 manifest](../../../archive/input-evidence-timeline-before-46-2026-10-12/README.md)에 문서 2개, 도식/렌더 기록 4개와 전용 도구 2개를 원래 경로 구조와 bytes/SHA-256으로 보존했다. 중앙 기록/생산자별 기록 조합은 별도 주요 DP로 진행하지 않은 초기 탐색이며 현재 46이 사용하는 자료가 아니다. 현재 46 문서/그림/생성기와 다른 세션의 PoC/04-50/work 변경은 이번 정리 대상이 아니다.
+
+## 2026-10-12 DP41 PoC의 입력 전사와 음성 모사 검토
+
+사용자가 반복 WAV 전사 대신 전사 입력과 소수 지연 보정/공통 모형을 제안했다.
+[음성 경계 축소안](./poc-preimplementation-review/05-speech-boundary-simulation.md)은 같은 전사에서
+실제 의미 LLM/후보의 해석/조회/결합을 비교하고 onset/end/전사 도착과 출력 제어를
+공통 사건/device profile로 모사하는 것을 권고한다. 평균 지연은 사용할 수 있지만
+A/B별 임의 가감과 사후 일괄 덧셈으로 경합을 대신하지 않는다. 실제 추가 질문/출력
+횟수/길이와 queue를 유지하고 음성 포함 시간/비용은 추정으로 분리한다.
+현재 Voice ON 전체 QA 점수와 실제 음성 품질/장치 성능/전체 메모리는 이 모사만으로
+검증됐다고 표시하지 않는다. API 호출/보정 측정/후보 코드 작성과 QA 원문 개정은 아직 없다.
 
 ## 2026-10-11 PoC 시작 전 보관과 수행 계획
 
 사용자는 새 PoC 코드가 이전 실험과 섞이지 않도록 보관하고, 코드 작업 전에 현재 변경을 commit/push하도록 요청했다. 활성 script 경로에 남아 있던 이전 도구 여섯 개와 개정 전 안내 다섯 개를 [보관 안내와 hash manifest](../../../../scripts/archive/pre-dp41-45-experiment-tools-20261011/README.md)에 보존했으며 기존 후보, benchmark와 결과 archive는 유지한다. 새 QA-02의 cap 적용/정답만/오답 포함 실측 평균, QA-03의 cap 적용/완료만 평균과 Mac의 phys_footprint/resident size 요구사항을 [현재 측정 안내](../../../../benchmark/architecture/README.md)에 기록했다.
 
 [PoC 수행 순서와 검토 시점](./poc-implementation-plan.md)은 구현 전 세 사례/계약 검토 → DP41 mock 실행 → 승인 범위의 실제 모델 pilot → 44/45/42 추가 → 전체 평가 계약 확정 → P21 측정과 30개 변경 실험으로 진행하는 제안이다. 첫 실행 구성은 공통 A 기준과 네 단일 B 교체다. 사용자 검토 시점과 완료 기준을 기록했으며 코드 작성, 모델 API 호출, 유료 실행과 품질 측정은 아직 시작하지 않았다. 이번 게시가 구현/유료 측정을 자동 승인하는 것은 아니다. 다른 세션의 04-50, 입력 근거 도식과 work 변경은 포함하지 않는다.
+
+### 1단계 구현 전 검토 묶음 — 작성 완료와 후속 수행 원칙
+
+사용자가 첫 단계 진행과 sub-agent 활용을 지시했다. [요약과 상세 부록](./poc-preimplementation-review/README.md)에
+S1-01/S3-02/S4-01의 원천/정답/checkpoint/final tail, 별도 DP41 runtime draft,
+여섯 QA의 수집/판정과30개 독립 변경 job, 공통 owner/port와raw 형식을 작성했다.
+세 sub-agent의 분업 후 읽기 전용 교차 검토에서 발견한 두 P2(미래 사건 계획 공개,
+job/Request 예산 단위 불일치)는 수정과 재확인을 마쳤다. [검수 기록](./poc-preimplementation-review/review-notes.md)을 따른다.
+
+검토 ①의 핵심은 기존 Frame v1을 보존한 새 실행 연산/지원 범위, S3-02 핵심 반응 endpoint,
+QA02 오답 후 정정의 세 평균 membership, M04/M06의 기존 지원과 실제 신규 delta다.
+Mac의 footprint/RSS 두 원지표를 보고하며 Windows commit 점수로 자동 환산하지 않는다.
+정답과 미래 사건 계획은 후보/stub에서 분리하고 잘못된 payload를 정답으로 고치지 않는다.
+이번 단계는 문서 검토 준비이며 후보/harness 코드, API 호출, 유료 실행과 측정은 시작하지 않았다.
+다른 세션의 발표/04-50/입력 근거/work 변경은 보존한다.
+
+사용자는 이후 필요한 확인 시점에서만 멈추고, 완전한 VIA 대신 DP별 QA tradeoff를
+비교하는 PoC를 수행하라고 재확인했다. mock/stub은 허용하되 비교 기제를 지우면 안 된다.
+[수행 계획의 후속 원칙](./poc-implementation-plan.md#2026-10-11-후속-지시-비교-기제-보존과-필요한-확인만-수행)에
+실제 후보에 남길 DP별 경로와 모사 가능 범위, trace에 의한 기제 검증과 확인 시점을 기록했다.
+검토 ①의 일괄 승인 대기는 없애며 routine 구현/무상 구조 검증을 진행한다. 유료 실행 전
+비용 상한, 본 측정 전 중요한 채점 계약과 비교 기제를 바꾸는 범위 변경은 사용자 확인이 필요하다.
+실제 동등 경로의 동점은 인정하고 인위적인 지연/호출/할당으로 숫자 차이를 만들지 않는다.
+
+**다음 완료 목표 요청:** 사용자는 DP41 A/B의 모든 QA가 정리될 때 확인하는 방식을
+원한다. [DP41 결과 우선 범위 제안](./poc-implementation-plan.md#다음-완료-목표-제안-dp41-ab의-여섯-qa-결과를-먼저-묶음)에
+C0/C41 P21 각5회와 두 구성의12개 독립 변경 job, Mac 두 원지표, raw/판정/집계와
+실패 분석을 묶었다. 작업 예상은18~30시간이며 기존3~5시간은 mock 세 사례만의 예상이다.
+다른 DP의 B를 먼저 모두 만들 필요는 없다. 유료 실행/총 지출 상한은 미정이다.
+별도 설정 세션에서 실제 Qwen ID와 OpenAI 텍스트 호출은 확인됐으나 음성 I/O는 미확인이며,
+현재 QA 가격 reference와 실제 모델이 다른 부분은 본 측정 manifest/price 고정 전에 검증한다.
 
 ## 2026-10-11 전체 발표 32장 통합 — 현재 편집 기준
 

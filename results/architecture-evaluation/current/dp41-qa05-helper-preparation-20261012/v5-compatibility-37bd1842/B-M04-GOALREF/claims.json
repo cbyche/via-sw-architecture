@@ -1,0 +1,65 @@
+{
+  "responsibility_claims": {
+    "U01": {
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite GOAL:<from_goal> typed terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U03": {
+      "reason": "Strict reserved GOAL namespace, own producer identity, terminal enum and Frame reference collision rejection.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "finite GOALREF terminal predicate with disjoint owner/Frame namespaces",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U07": {
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U08": {
+      "reason": "Map current Request/goal to actual dispatched producer Task; reject actual owner collision and preserve successful-result dependencies.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "actual Request-scoped producer readiness resolved from finite GOALREF",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    }
+  },
+  "unchanged_responsibilities": {
+    "U02": "Existing WHEN reference binding preserves undeclared strings; reserved namespace is checked in U03 and resolved by common U08. B binder byte hash is unchanged."
+  },
+  "representation_alternative": "GOALREF-v1",
+  "b_binder_sha256": {
+    "before": "4d5ae5fbc7f94692bfbc1eddac391800b0ca4a72808c9d5d265ce7e4874b778f",
+    "after": "4d5ae5fbc7f94692bfbc1eddac391800b0ca4a72808c9d5d265ce7e4874b778f",
+    "identical": true
+  }
+}

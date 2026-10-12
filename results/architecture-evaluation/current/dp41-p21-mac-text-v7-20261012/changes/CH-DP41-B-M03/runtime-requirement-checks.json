@@ -1,0 +1,2942 @@
+{
+  "checks": {
+    "new_calendar_port_busy_and_free": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#new_calendar_port_busy_and_free"
+      ]
+    },
+    "S3-03_BUSY_NO_CREATE": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#S3-03_BUSY_NO_CREATE"
+      ]
+    },
+    "stale_source": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#stale_source"
+      ]
+    },
+    "permission_denied": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#permission_denied"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "probe": "new_calendar_port",
+      "raw": {
+        "resource_type": "CALENDAR_V2",
+        "calendar_uid": "calendar",
+        "etag_revision": 2,
+        "original_text": "실제 원천 일정 정보",
+        "access": {
+          "read": true,
+          "model": true,
+          "agent": true
+        },
+        "calendar": {
+          "day": "2026-10-16",
+          "zone": "Asia/Seoul",
+          "availability": "BUSY",
+          "start_utc": "2026-10-16T06:00:00+00:00",
+          "end_utc": "2026-10-16T07:00:00+00:00",
+          "appointments": []
+        }
+      },
+      "candidate_normalized": {
+        "source_id": "calendar",
+        "revision": 2,
+        "kind": "CALENDAR",
+        "title": "calendar",
+        "text": "실제 원천 일정 정보",
+        "permission": {
+          "read": true,
+          "model": true,
+          "agent": true
+        },
+        "metadata": {
+          "date": "2026-10-16",
+          "timezone": "Asia/Seoul",
+          "start": "2026-10-16T15:00:00+09:00",
+          "end": "2026-10-16T16:00:00+09:00",
+          "state": "BUSY",
+          "interval_state": "BUSY",
+          "events": []
+        }
+      }
+    },
+    {
+      "probe": "new_calendar_BUSY",
+      "events": [
+        {
+          "table": "events",
+          "requested_references": [
+            "calendar@v2"
+          ],
+          "current_references": [
+            "calendar@v2"
+          ],
+          "scene_key": "",
+          "scene_seconds": 0.000834417063742876,
+          "kind": "CALENDAR_FRESHNESS_CHECK",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "references": [
+            "calendar@v2"
+          ],
+          "roles": [
+            "read",
+            "model"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "28b357e47f39d25aefd475f6f855ee1752264c76a9d625dfeef98222cb24145b",
+          "scene_key": "",
+          "scene_seconds": 0.0008741670753806829,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N1",
+          "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0007589999586343765,
+          "end_s": 0.0009022078011184931,
+          "duration": 0.00014320784248411655,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "calendar",
+            "source_refs": [
+              "calendar@v2"
+            ]
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2",
+          "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+          "kind": "BOUNDED_RESPONSE_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0009144998621195555,
+          "end_s": 0.0022554579190909863,
+          "duration": 0.0013409580569714308,
+          "parents": [
+            "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "calendar"
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N3",
+          "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0023759999312460423,
+          "end_s": 0.002380749909207225,
+          "duration": 4.749977961182594e-06,
+          "parents": [
+            "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.002415957860648632,
+          "end_s": 0.002415957860648632,
+          "duration": 0.0,
+          "parents": [
+            "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N3"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:1:64d4878d-974e-4539-8a74-f2c2eedad6e7"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:1:64d4878d-974e-4539-8a74-f2c2eedad6e7",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "BUSY",
+                  "interval_state": "BUSY",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "BUSY",
+            "creation_status": "NOT_CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002392499940469861,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "causal_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.0024016250390559435,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:1:64d4878d-974e-4539-8a74-f2c2eedad6e7",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "BUSY",
+                  "interval_state": "BUSY",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "BUSY",
+            "creation_status": "NOT_CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002392499940469861,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "causal_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "text_presented": true,
+          "end_s": 0.002392499940469861
+        }
+      ],
+      "effects": [],
+      "tasks": {},
+      "deliveries": [
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:1:64d4878d-974e-4539-8a74-f2c2eedad6e7",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "BUSY",
+                  "interval_state": "BUSY",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "BUSY",
+            "creation_status": "NOT_CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.002392499940469861,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "causal_node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+          "text_presented": true,
+          "end_s": 0.002392499940469861
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2\"],\"condition\":{\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\"},\"condition_state\":\"BUSY\",\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"calendar\"]}],\"creation_status\":\"NOT_CREATED\",\"existing_tasks\":[],\"goal\":{\"arguments\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\",\"source_refs\":[\"calendar@v2\"],\"start\":\"15:00\"},\"id\":\"calendar\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"DIRECT_RESPONSE\",\"operation\":\"CALENDAR_CONDITIONAL\",\"target\":null},\"permission_epoch\":1,\"sources\":[{\"kind\":\"CALENDAR\",\"metadata\":{\"date\":\"2026-10-16\",\"end\":\"2026-10-16T16:00:00+09:00\",\"events\":[],\"interval_state\":\"BUSY\",\"start\":\"2026-10-16T15:00:00+09:00\",\"state\":\"BUSY\",\"timezone\":\"Asia/Seoul\"},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":2,\"source_id\":\"calendar\",\"text\":\"실제 원천 일정 정보\",\"title\":\"calendar\"}]}"
+            }
+          ],
+          "role": "CRESPONSE"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N1",
+            "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0007589999586343765,
+            "end_s": 0.0009022078011184931,
+            "duration": 0.00014320784248411655,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "calendar",
+              "source_refs": [
+                "calendar@v2"
+              ]
+            }
+          },
+          {
+            "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2",
+            "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+            "kind": "BOUNDED_RESPONSE_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0009144998621195555,
+            "end_s": 0.0022554579190909863,
+            "duration": 0.0013409580569714308,
+            "parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "calendar"
+            }
+          },
+          {
+            "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N3",
+            "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0023759999312460423,
+            "end_s": 0.002380749909207225,
+            "duration": 4.749977961182594e-06,
+            "parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N4",
+            "timeline_id": "TL:c6d4c98ce57742148dd5ab2f64b5b35b",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.002415957860648632,
+            "end_s": 0.002415957860648632,
+            "duration": 0.0,
+            "parents": [
+              "TL:c6d4c98ce57742148dd5ab2f64b5b35b:N3"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:1:64d4878d-974e-4539-8a74-f2c2eedad6e7"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "probe": "new_calendar_port",
+      "raw": {
+        "resource_type": "CALENDAR_V2",
+        "calendar_uid": "calendar",
+        "etag_revision": 2,
+        "original_text": "실제 원천 일정 정보",
+        "access": {
+          "read": true,
+          "model": true,
+          "agent": true
+        },
+        "calendar": {
+          "day": "2026-10-16",
+          "zone": "Asia/Seoul",
+          "availability": "FREE",
+          "start_utc": "2026-10-16T06:00:00+00:00",
+          "end_utc": "2026-10-16T07:00:00+00:00",
+          "appointments": []
+        }
+      },
+      "candidate_normalized": {
+        "source_id": "calendar",
+        "revision": 2,
+        "kind": "CALENDAR",
+        "title": "calendar",
+        "text": "실제 원천 일정 정보",
+        "permission": {
+          "read": true,
+          "model": true,
+          "agent": true
+        },
+        "metadata": {
+          "date": "2026-10-16",
+          "timezone": "Asia/Seoul",
+          "start": "2026-10-16T15:00:00+09:00",
+          "end": "2026-10-16T16:00:00+09:00",
+          "state": "FREE",
+          "interval_state": "FREE",
+          "events": []
+        }
+      }
+    },
+    {
+      "probe": "new_calendar_FREE",
+      "events": [
+        {
+          "table": "events",
+          "requested_references": [
+            "calendar@v2"
+          ],
+          "current_references": [
+            "calendar@v2"
+          ],
+          "scene_key": "",
+          "scene_seconds": 1.8292106688022614e-05,
+          "kind": "CALENDAR_FRESHNESS_CHECK",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "references": [
+            "calendar@v2"
+          ],
+          "roles": [
+            "read",
+            "model"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "ce3347ad0765c340683fe900d362ee4536d7967843b8c30ff9d5d12328be3057",
+          "scene_key": "",
+          "scene_seconds": 4.016701132059097e-05,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N1",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 2.750009298324585e-05,
+          "end_s": 6.125005893409252e-05,
+          "duration": 3.374996595084667e-05,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "calendar",
+            "source_refs": [
+              "calendar@v2"
+            ]
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N2",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "BOUNDED_RESPONSE_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 7.079099304974079e-05,
+          "end_s": 0.0013995000626891851,
+          "duration": 0.0013287090696394444,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "calendar"
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "COMMAND_INGRESS",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0014342081267386675,
+          "end_s": 0.0015221249777823687,
+          "duration": 8.791685104370117e-05,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+            "goal_id": "calendar"
+          }
+        },
+        {
+          "table": "effects",
+          "scene_key": "",
+          "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+          "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+          "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+          "request_revision": 1,
+          "operation": "CALENDAR_CONDITIONAL",
+          "payload": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "calendar_event": {
+              "date": "2026-10-16",
+              "start": "15:00",
+              "end": "16:00"
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "calendar",
+          "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+          "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+          "send_s": 0.0014537079259753227,
+          "ingress_accepted_s": 0.001503207953646779,
+          "accepted_s": 0.001503292005509138,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+          "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+          "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+          "request_revision": 1,
+          "operation": "CALENDAR_CONDITIONAL",
+          "payload": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "calendar_event": {
+              "date": "2026-10-16",
+              "start": "15:00",
+              "end": "16:00"
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "calendar",
+          "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+          "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+          "send_s": 0.0014537079259753227,
+          "ingress_accepted_s": 0.001503207953646779,
+          "accepted_s": 0.001503292005509138,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+          "scene_key": "",
+          "scene_seconds": 0.0016555420588701963,
+          "kind": "COMMAND_SENT",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+          "accepted_s": 0.001503292005509138,
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+          "scene_key": "",
+          "scene_seconds": 0.0016742500010877848,
+          "kind": "AGENT_INGRESS_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N4",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "AGENT_RECEIPT_DELIVERY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0015221249777823687,
+          "end_s": 0.0029975001234561205,
+          "duration": 0.0014753751456737518,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N3"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+            "receipt": "ACCEPTED"
+          }
+        },
+        {
+          "table": "events",
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+            "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+            "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+            "request_revision": 1,
+            "operation": "CALENDAR_CONDITIONAL",
+            "payload": {
+              "goal": {
+                "id": "calendar",
+                "kind": "DIRECT_RESPONSE",
+                "operation": "CALENDAR_CONDITIONAL",
+                "target": null,
+                "arguments": {
+                  "source_refs": [
+                    "calendar@v2"
+                  ],
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00",
+                  "if_free": "CREATE_EVENT",
+                  "otherwise": "AVAILABLE_ONLY"
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "calendar"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [
+                {
+                  "source_id": "calendar",
+                  "revision": 2,
+                  "kind": "CALENDAR",
+                  "title": "calendar",
+                  "text": "실제 원천 일정 정보",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {
+                    "date": "2026-10-16",
+                    "timezone": "Asia/Seoul",
+                    "start": "2026-10-16T15:00:00+09:00",
+                    "end": "2026-10-16T16:00:00+09:00",
+                    "state": "FREE",
+                    "interval_state": "FREE",
+                    "events": []
+                  }
+                }
+              ],
+              "calendar_event": {
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00"
+              }
+            },
+            "request_id": "probe-request",
+            "goal_id": "calendar",
+            "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+            "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+            "send_s": 0.0014537079259753227,
+            "ingress_accepted_s": 0.001503207953646779,
+            "accepted_s": 0.001503292005509138,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+                "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                "request_revision": 1,
+                "operation": "CALENDAR_CONDITIONAL",
+                "payload": {
+                  "goal": {
+                    "id": "calendar",
+                    "kind": "DIRECT_RESPONSE",
+                    "operation": "CALENDAR_CONDITIONAL",
+                    "target": null,
+                    "arguments": {
+                      "source_refs": [
+                        "calendar@v2"
+                      ],
+                      "date": "2026-10-16",
+                      "start": "15:00",
+                      "end": "16:00",
+                      "if_free": "CREATE_EVENT",
+                      "otherwise": "AVAILABLE_ONLY"
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "calendar"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [
+                    {
+                      "source_id": "calendar",
+                      "revision": 2,
+                      "kind": "CALENDAR",
+                      "title": "calendar",
+                      "text": "실제 원천 일정 정보",
+                      "permission": {
+                        "read": true,
+                        "model": true,
+                        "agent": true
+                      },
+                      "metadata": {
+                        "date": "2026-10-16",
+                        "timezone": "Asia/Seoul",
+                        "start": "2026-10-16T15:00:00+09:00",
+                        "end": "2026-10-16T16:00:00+09:00",
+                        "state": "FREE",
+                        "interval_state": "FREE",
+                        "events": []
+                      }
+                    }
+                  ],
+                  "calendar_event": {
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00"
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+            "receipt_s": 0.0029789169784635305,
+            "receipt_node_id": "TL:fb30b2af90e543419a7ae723683df287:N4"
+          },
+          "task": {
+            "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+            "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+            "request_revision": 1,
+            "request_id": "probe-request",
+            "status": "RUNNING",
+            "operation": "CALENDAR_CONDITIONAL",
+            "instruction": "구조 계약 검증 입력",
+            "source_refs": [
+              "calendar@v2"
+            ],
+            "properties": {}
+          },
+          "goal": {
+            "id": "calendar",
+            "kind": "DIRECT_RESPONSE",
+            "operation": "CALENDAR_CONDITIONAL",
+            "target": null,
+            "arguments": {
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "date": "2026-10-16",
+              "start": "15:00",
+              "end": "16:00",
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            },
+            "instruction": "구조 계약 검증 입력"
+          },
+          "_causal_parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N4"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {}
+            }
+          ],
+          "completion_confirmed": false,
+          "receipt_received_s": 0.0029789169784635305,
+          "scene_key": "",
+          "scene_seconds": 0.003016458125784993,
+          "kind": "COMMAND_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N5",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0031776251271367073,
+          "end_s": 0.00318320794031024,
+          "duration": 5.582813173532486e-06,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N4"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0032564159482717514,
+          "end_s": 0.0032564159482717514,
+          "duration": 0.0,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N5"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:1:294a24ef-dea2-450b-8a64-697056b0e424"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:1:294a24ef-dea2-450b-8a64-697056b0e424",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "calendar",
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+              "send_s": 0.0014537079259753227,
+              "ingress_accepted_s": 0.001503207953646779,
+              "accepted_s": 0.001503292005509138,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+                  "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                  "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                  "request_revision": 1,
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "payload": {
+                    "goal": {
+                      "id": "calendar",
+                      "kind": "DIRECT_RESPONSE",
+                      "operation": "CALENDAR_CONDITIONAL",
+                      "target": null,
+                      "arguments": {
+                        "source_refs": [
+                          "calendar@v2"
+                        ],
+                        "date": "2026-10-16",
+                        "start": "15:00",
+                        "end": "16:00",
+                        "if_free": "CREATE_EVENT",
+                        "otherwise": "AVAILABLE_ONLY"
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "calendar"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [
+                      {
+                        "source_id": "calendar",
+                        "revision": 2,
+                        "kind": "CALENDAR",
+                        "title": "calendar",
+                        "text": "실제 원천 일정 정보",
+                        "permission": {
+                          "read": true,
+                          "model": true,
+                          "agent": true
+                        },
+                        "metadata": {
+                          "date": "2026-10-16",
+                          "timezone": "Asia/Seoul",
+                          "start": "2026-10-16T15:00:00+09:00",
+                          "end": "2026-10-16T16:00:00+09:00",
+                          "state": "FREE",
+                          "interval_state": "FREE",
+                          "events": []
+                        }
+                      }
+                    ],
+                    "calendar_event": {
+                      "date": "2026-10-16",
+                      "start": "15:00",
+                      "end": "16:00"
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+              "receipt_s": 0.0029789169784635305,
+              "receipt_node_id": "TL:fb30b2af90e543419a7ae723683df287:N4"
+            },
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N4"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CALENDAR_CONDITIONAL",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.003238457953557372,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.0032481669913977385,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:1:294a24ef-dea2-450b-8a64-697056b0e424",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "calendar",
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+              "send_s": 0.0014537079259753227,
+              "ingress_accepted_s": 0.001503207953646779,
+              "accepted_s": 0.001503292005509138,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+                  "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                  "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                  "request_revision": 1,
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "payload": {
+                    "goal": {
+                      "id": "calendar",
+                      "kind": "DIRECT_RESPONSE",
+                      "operation": "CALENDAR_CONDITIONAL",
+                      "target": null,
+                      "arguments": {
+                        "source_refs": [
+                          "calendar@v2"
+                        ],
+                        "date": "2026-10-16",
+                        "start": "15:00",
+                        "end": "16:00",
+                        "if_free": "CREATE_EVENT",
+                        "otherwise": "AVAILABLE_ONLY"
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "calendar"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [
+                      {
+                        "source_id": "calendar",
+                        "revision": 2,
+                        "kind": "CALENDAR",
+                        "title": "calendar",
+                        "text": "실제 원천 일정 정보",
+                        "permission": {
+                          "read": true,
+                          "model": true,
+                          "agent": true
+                        },
+                        "metadata": {
+                          "date": "2026-10-16",
+                          "timezone": "Asia/Seoul",
+                          "start": "2026-10-16T15:00:00+09:00",
+                          "end": "2026-10-16T16:00:00+09:00",
+                          "state": "FREE",
+                          "interval_state": "FREE",
+                          "events": []
+                        }
+                      }
+                    ],
+                    "calendar_event": {
+                      "date": "2026-10-16",
+                      "start": "15:00",
+                      "end": "16:00"
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+              "receipt_s": 0.0029789169784635305,
+              "receipt_node_id": "TL:fb30b2af90e543419a7ae723683df287:N4"
+            },
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N4"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CALENDAR_CONDITIONAL",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.003238457953557372,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "text_presented": true,
+          "end_s": 0.003238457953557372
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N7",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "EXTERNAL_AGENT_WORK",
+          "owner": "EXTERNAL_AGENT",
+          "start_s": 0.0015221249777823687,
+          "end_s": 0.018558915937319398,
+          "duration": 0.01703679095953703,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N3"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+            "goal_id": "calendar"
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N8",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "ARTIFACT_READY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.01858783303759992,
+          "end_s": 0.01858783303759992,
+          "duration": 0.0,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N7"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "calendar",
+            "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744"
+          }
+        },
+        {
+          "table": "events",
+          "artifact": {
+            "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+            "revision": 1,
+            "text": "실제 원천 일정 정보",
+            "properties": {},
+            "request_id": "probe-request",
+            "producer_goal_id": "calendar",
+            "source_refs": [
+              "calendar@v2"
+            ],
+            "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+            "external_status": "COMPLETED"
+          },
+          "ready_s": 0.01857870793901384,
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N8",
+          "scene_key": "",
+          "scene_seconds": 0.018579374998807907,
+          "kind": "ARTIFACT_PRODUCED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N9",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.018694665981456637,
+          "end_s": 0.018699041102081537,
+          "duration": 4.375120624899864e-06,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N8"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.01875900011509657,
+          "end_s": 0.01875900011509657,
+          "duration": 0.0,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N9"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:2:46f7079d-9066-48c3-817a-c764ac0969f9"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:2:46f7079d-9066-48c3-817a-c764ac0969f9",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+                "revision": 1,
+                "text": "실제 원천 일정 정보",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "calendar",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+              "revision": 1,
+              "text": "실제 원천 일정 정보",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "calendar",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N8"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01874104212038219,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "text_presented": true,
+          "payload_kind": "RESULT",
+          "scene_key": "",
+          "scene_seconds": 0.018747833091765642,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESULT",
+          "publication_id": "P:2:46f7079d-9066-48c3-817a-c764ac0969f9",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+                "revision": 1,
+                "text": "실제 원천 일정 정보",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "calendar",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+              "revision": 1,
+              "text": "실제 원천 일정 정보",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "calendar",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N8"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01874104212038219,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "text_presented": true,
+          "end_s": 0.01874104212038219
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N11",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.018858083058148623,
+          "end_s": 0.01886162511073053,
+          "duration": 3.5420525819063187e-06,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.018907207995653152,
+          "end_s": 0.018907207995653152,
+          "duration": 0.0,
+          "parents": [
+            "TL:fb30b2af90e543419a7ae723683df287:N11"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:3:c3a8fe00-0079-4595-ba87-135c11b1cc3c"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:3:c3a8fe00-0079-4595-ba87-135c11b1cc3c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "FREE",
+            "creation_status": "CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.018889250000938773,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.018895416986197233,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:3:c3a8fe00-0079-4595-ba87-135c11b1cc3c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "FREE",
+            "creation_status": "CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.018889250000938773,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "text_presented": true,
+          "end_s": 0.018889250000938773
+        }
+      ],
+      "effects": [
+        {
+          "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+          "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+          "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+          "request_revision": 1,
+          "operation": "CALENDAR_CONDITIONAL",
+          "payload": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "calendar_event": {
+              "date": "2026-10-16",
+              "start": "15:00",
+              "end": "16:00"
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "calendar",
+          "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+          "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+          "send_s": 0.0014537079259753227,
+          "ingress_accepted_s": 0.001503207953646779,
+          "accepted_s": 0.001503292005509138,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+          "receipt_s": 0.0029789169784635305,
+          "receipt_node_id": "TL:fb30b2af90e543419a7ae723683df287:N4"
+        }
+      ],
+      "tasks": {
+        "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172": {
+          "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+          "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+          "request_revision": 1,
+          "request_id": "probe-request",
+          "status": "COMPLETED",
+          "operation": "CALENDAR_CONDITIONAL",
+          "instruction": "구조 계약 검증 입력",
+          "source_refs": [
+            "calendar@v2"
+          ],
+          "properties": {},
+          "result": {
+            "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+            "revision": 1,
+            "text": "실제 원천 일정 정보",
+            "properties": {},
+            "request_id": "probe-request",
+            "producer_goal_id": "calendar",
+            "source_refs": [
+              "calendar@v2"
+            ],
+            "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+            "external_status": "COMPLETED"
+          }
+        }
+      },
+      "deliveries": [
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:1:294a24ef-dea2-450b-8a64-697056b0e424",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "operation": "CALENDAR_CONDITIONAL",
+              "payload": {
+                "goal": {
+                  "id": "calendar",
+                  "kind": "DIRECT_RESPONSE",
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "target": null,
+                  "arguments": {
+                    "source_refs": [
+                      "calendar@v2"
+                    ],
+                    "date": "2026-10-16",
+                    "start": "15:00",
+                    "end": "16:00",
+                    "if_free": "CREATE_EVENT",
+                    "otherwise": "AVAILABLE_ONLY"
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "calendar"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [
+                  {
+                    "source_id": "calendar",
+                    "revision": 2,
+                    "kind": "CALENDAR",
+                    "title": "calendar",
+                    "text": "실제 원천 일정 정보",
+                    "permission": {
+                      "read": true,
+                      "model": true,
+                      "agent": true
+                    },
+                    "metadata": {
+                      "date": "2026-10-16",
+                      "timezone": "Asia/Seoul",
+                      "start": "2026-10-16T15:00:00+09:00",
+                      "end": "2026-10-16T16:00:00+09:00",
+                      "state": "FREE",
+                      "interval_state": "FREE",
+                      "events": []
+                    }
+                  }
+                ],
+                "calendar_event": {
+                  "date": "2026-10-16",
+                  "start": "15:00",
+                  "end": "16:00"
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "calendar",
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "command_input_sha256": "a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b",
+              "send_s": 0.0014537079259753227,
+              "ingress_accepted_s": 0.001503207953646779,
+              "accepted_s": 0.001503292005509138,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+                  "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                  "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                  "request_revision": 1,
+                  "operation": "CALENDAR_CONDITIONAL",
+                  "payload": {
+                    "goal": {
+                      "id": "calendar",
+                      "kind": "DIRECT_RESPONSE",
+                      "operation": "CALENDAR_CONDITIONAL",
+                      "target": null,
+                      "arguments": {
+                        "source_refs": [
+                          "calendar@v2"
+                        ],
+                        "date": "2026-10-16",
+                        "start": "15:00",
+                        "end": "16:00",
+                        "if_free": "CREATE_EVENT",
+                        "otherwise": "AVAILABLE_ONLY"
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "calendar"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [
+                      {
+                        "source_id": "calendar",
+                        "revision": 2,
+                        "kind": "CALENDAR",
+                        "title": "calendar",
+                        "text": "실제 원천 일정 정보",
+                        "permission": {
+                          "read": true,
+                          "model": true,
+                          "agent": true
+                        },
+                        "metadata": {
+                          "date": "2026-10-16",
+                          "timezone": "Asia/Seoul",
+                          "start": "2026-10-16T15:00:00+09:00",
+                          "end": "2026-10-16T16:00:00+09:00",
+                          "state": "FREE",
+                          "interval_state": "FREE",
+                          "events": []
+                        }
+                      }
+                    ],
+                    "calendar_event": {
+                      "date": "2026-10-16",
+                      "start": "15:00",
+                      "end": "16:00"
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+              "receipt_s": 0.0029789169784635305,
+              "receipt_node_id": "TL:fb30b2af90e543419a7ae723683df287:N4"
+            },
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "RUNNING",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {}
+            },
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N4"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+                "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+                "request_revision": 1,
+                "request_id": "probe-request",
+                "status": "RUNNING",
+                "operation": "CALENDAR_CONDITIONAL",
+                "instruction": "구조 계약 검증 입력",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "properties": {}
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.003238457953557372,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+          "text_presented": true,
+          "end_s": 0.003238457953557372
+        },
+        {
+          "kind": "RESULT",
+          "publication_id": "P:2:46f7079d-9066-48c3-817a-c764ac0969f9",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "task": {
+              "task_id": "T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172",
+              "execution_id": "X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c",
+              "request_revision": 1,
+              "request_id": "probe-request",
+              "status": "COMPLETED",
+              "operation": "CALENDAR_CONDITIONAL",
+              "instruction": "구조 계약 검증 입력",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "properties": {},
+              "result": {
+                "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+                "revision": 1,
+                "text": "실제 원천 일정 정보",
+                "properties": {},
+                "request_id": "probe-request",
+                "producer_goal_id": "calendar",
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+                "external_status": "COMPLETED"
+              }
+            },
+            "artifact": {
+              "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744",
+              "revision": 1,
+              "text": "실제 원천 일정 정보",
+              "properties": {},
+              "request_id": "probe-request",
+              "producer_goal_id": "calendar",
+              "source_refs": [
+                "calendar@v2"
+              ],
+              "payload_sha256": "4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab",
+              "external_status": "COMPLETED"
+            },
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N8"
+            ],
+            "receipt": "COMPLETED",
+            "completion_confirmed": true
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.01874104212038219,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+          "text_presented": true,
+          "end_s": 0.01874104212038219
+        },
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:3:c3a8fe00-0079-4595-ba87-135c11b1cc3c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "goal": {
+              "id": "calendar",
+              "kind": "DIRECT_RESPONSE",
+              "operation": "CALENDAR_CONDITIONAL",
+              "target": null,
+              "arguments": {
+                "source_refs": [
+                  "calendar@v2"
+                ],
+                "date": "2026-10-16",
+                "start": "15:00",
+                "end": "16:00",
+                "if_free": "CREATE_EVENT",
+                "otherwise": "AVAILABLE_ONLY"
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "sources": [
+              {
+                "source_id": "calendar",
+                "revision": 2,
+                "kind": "CALENDAR",
+                "title": "calendar",
+                "text": "실제 원천 일정 정보",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {
+                  "date": "2026-10-16",
+                  "timezone": "Asia/Seoul",
+                  "start": "2026-10-16T15:00:00+09:00",
+                  "end": "2026-10-16T16:00:00+09:00",
+                  "state": "FREE",
+                  "interval_state": "FREE",
+                  "events": []
+                }
+              }
+            ],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "calendar"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "_causal_parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N2"
+            ],
+            "existing_tasks": [],
+            "permission_epoch": 1,
+            "condition_state": "FREE",
+            "creation_status": "CREATED",
+            "condition": {
+              "if_free": "CREATE_EVENT",
+              "otherwise": "AVAILABLE_ONLY"
+            }
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.018889250000938773,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "causal_node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+          "text_presented": true,
+          "end_s": 0.018889250000938773
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:fb30b2af90e543419a7ae723683df287:N4\"],\"command\":{\"accepted_s\":0.001503292005509138,\"command_id\":\"CMD:1eb3a0b2-b165-422f-8999-62cefb619443\",\"command_input_sha256\":\"a5d74081b8cbcb3c09bc1be9b18d275aa8595a281fa9e02eec12ba3c76a19a1b\",\"execution_id\":\"X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c\",\"goal_id\":\"calendar\",\"ingress_accepted_s\":0.001503207953646779,\"ingress_node_id\":\"TL:fb30b2af90e543419a7ae723683df287:N3\",\"operation\":\"CALENDAR_CONDITIONAL\",\"payload\":{\"calendar_event\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"start\":\"15:00\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"calendar\"]}],\"goal\":{\"arguments\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\",\"source_refs\":[\"calendar@v2\"],\"start\":\"15:00\"},\"id\":\"calendar\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"DIRECT_RESPONSE\",\"operation\":\"CALENDAR_CONDITIONAL\",\"target\":null},\"preservations\":[],\"relations\":[],\"sources\":[{\"kind\":\"CALENDAR\",\"metadata\":{\"date\":\"2026-10-16\",\"end\":\"2026-10-16T16:00:00+09:00\",\"events\":[],\"interval_state\":\"FREE\",\"start\":\"2026-10-16T15:00:00+09:00\",\"state\":\"FREE\",\"timezone\":\"Asia/Seoul\"},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":2,\"source_id\":\"calendar\",\"text\":\"실제 원천 일정 정보\",\"title\":\"calendar\"}]},\"payload_sha256\":\"4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab\",\"receipt_node_id\":\"TL:fb30b2af90e543419a7ae723683df287:N4\",\"receipt_s\":0.0029789169784635305,\"request_id\":\"probe-request\",\"request_revision\":1,\"send_s\":0.0014537079259753227,\"status\":\"INGRESS_ACCEPTED\",\"task_id\":\"T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172\",\"wire\":{\"command\":{\"command_id\":\"CMD:1eb3a0b2-b165-422f-8999-62cefb619443\",\"execution_id\":\"X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c\",\"operation\":\"CALENDAR_CONDITIONAL\",\"payload\":{\"calendar_event\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"start\":\"15:00\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"calendar\"]}],\"goal\":{\"arguments\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\",\"source_refs\":[\"calendar@v2\"],\"start\":\"15:00\"},\"id\":\"calendar\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"DIRECT_RESPONSE\",\"operation\":\"CALENDAR_CONDITIONAL\",\"target\":null},\"preservations\":[],\"relations\":[],\"sources\":[{\"kind\":\"CALENDAR\",\"metadata\":{\"date\":\"2026-10-16\",\"end\":\"2026-10-16T16:00:00+09:00\",\"events\":[],\"interval_state\":\"FREE\",\"start\":\"2026-10-16T15:00:00+09:00\",\"state\":\"FREE\",\"timezone\":\"Asia/Seoul\"},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":2,\"source_id\":\"calendar\",\"text\":\"실제 원천 일정 정보\",\"title\":\"calendar\"}]},\"request_revision\":1,\"task_id\":\"T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172\"},\"protocol\":\"agent-wire-v1\"}},\"completion_confirmed\":false,\"goal\":{\"arguments\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\",\"source_refs\":[\"calendar@v2\"],\"start\":\"15:00\"},\"id\":\"calendar\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"DIRECT_RESPONSE\",\"operation\":\"CALENDAR_CONDITIONAL\",\"target\":null},\"preserved_tasks\":[{\"execution_id\":\"X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CALENDAR_CONDITIONAL\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"source_refs\":[\"calendar@v2\"],\"status\":\"RUNNING\",\"task_id\":\"T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172\"}],\"receipt\":\"ACCEPTED\",\"task\":{\"execution_id\":\"X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CALENDAR_CONDITIONAL\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"source_refs\":[\"calendar@v2\"],\"status\":\"RUNNING\",\"task_id\":\"T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:fb30b2af90e543419a7ae723683df287:N8\"],\"artifact\":{\"artifact_id\":\"A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744\",\"external_status\":\"COMPLETED\",\"payload_sha256\":\"4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab\",\"producer_goal_id\":\"calendar\",\"properties\":{},\"request_id\":\"probe-request\",\"revision\":1,\"source_refs\":[\"calendar@v2\"],\"text\":\"실제 원천 일정 정보\"},\"completion_confirmed\":true,\"receipt\":\"COMPLETED\",\"task\":{\"execution_id\":\"X:fdf7b13f-25c5-44df-b7f2-2c9d21d2a93c\",\"instruction\":\"구조 계약 검증 입력\",\"operation\":\"CALENDAR_CONDITIONAL\",\"properties\":{},\"request_id\":\"probe-request\",\"request_revision\":1,\"result\":{\"artifact_id\":\"A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744\",\"external_status\":\"COMPLETED\",\"payload_sha256\":\"4b58291c59899bb6c9c56b3f94035b4a650f3cfaeb425debe9300be4088c0dab\",\"producer_goal_id\":\"calendar\",\"properties\":{},\"request_id\":\"probe-request\",\"revision\":1,\"source_refs\":[\"calendar@v2\"],\"text\":\"실제 원천 일정 정보\"},\"source_refs\":[\"calendar@v2\"],\"status\":\"COMPLETED\",\"task_id\":\"T:7c7eaeb7-a95a-4a2f-b8bb-8d868793d172\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:fb30b2af90e543419a7ae723683df287:N2\"],\"condition\":{\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\"},\"condition_state\":\"FREE\",\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"calendar\"]}],\"creation_status\":\"CREATED\",\"existing_tasks\":[],\"goal\":{\"arguments\":{\"date\":\"2026-10-16\",\"end\":\"16:00\",\"if_free\":\"CREATE_EVENT\",\"otherwise\":\"AVAILABLE_ONLY\",\"source_refs\":[\"calendar@v2\"],\"start\":\"15:00\"},\"id\":\"calendar\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"DIRECT_RESPONSE\",\"operation\":\"CALENDAR_CONDITIONAL\",\"target\":null},\"permission_epoch\":1,\"sources\":[{\"kind\":\"CALENDAR\",\"metadata\":{\"date\":\"2026-10-16\",\"end\":\"2026-10-16T16:00:00+09:00\",\"events\":[],\"interval_state\":\"FREE\",\"start\":\"2026-10-16T15:00:00+09:00\",\"state\":\"FREE\",\"timezone\":\"Asia/Seoul\"},\"permission\":{\"agent\":true,\"model\":true,\"read\":true},\"revision\":2,\"source_id\":\"calendar\",\"text\":\"실제 원천 일정 정보\",\"title\":\"calendar\"}]}"
+            }
+          ],
+          "role": "CRESPONSE"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N1",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 2.750009298324585e-05,
+            "end_s": 6.125005893409252e-05,
+            "duration": 3.374996595084667e-05,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "calendar",
+              "source_refs": [
+                "calendar@v2"
+              ]
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N2",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "BOUNDED_RESPONSE_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 7.079099304974079e-05,
+            "end_s": 0.0013995000626891851,
+            "duration": 0.0013287090696394444,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "calendar"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N3",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "COMMAND_INGRESS",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0014342081267386675,
+            "end_s": 0.0015221249777823687,
+            "duration": 8.791685104370117e-05,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "goal_id": "calendar"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N4",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "AGENT_RECEIPT_DELIVERY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0015221249777823687,
+            "end_s": 0.0029975001234561205,
+            "duration": 0.0014753751456737518,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N3"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "receipt": "ACCEPTED"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N5",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0031776251271367073,
+            "end_s": 0.00318320794031024,
+            "duration": 5.582813173532486e-06,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N4"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N6",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0032564159482717514,
+            "end_s": 0.0032564159482717514,
+            "duration": 0.0,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N5"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:1:294a24ef-dea2-450b-8a64-697056b0e424"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N7",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "EXTERNAL_AGENT_WORK",
+            "owner": "EXTERNAL_AGENT",
+            "start_s": 0.0015221249777823687,
+            "end_s": 0.018558915937319398,
+            "duration": 0.01703679095953703,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N3"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:1eb3a0b2-b165-422f-8999-62cefb619443",
+              "goal_id": "calendar"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N8",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "ARTIFACT_READY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.01858783303759992,
+            "end_s": 0.01858783303759992,
+            "duration": 0.0,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N7"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "calendar",
+              "artifact_id": "A:c928c5ee-8806-4a86-8ff7-e31eb1aaa744"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N9",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.018694665981456637,
+            "end_s": 0.018699041102081537,
+            "duration": 4.375120624899864e-06,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N8"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N10",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.01875900011509657,
+            "end_s": 0.01875900011509657,
+            "duration": 0.0,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N9"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:2:46f7079d-9066-48c3-817a-c764ac0969f9"
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N11",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.018858083058148623,
+            "end_s": 0.01886162511073053,
+            "duration": 3.5420525819063187e-06,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:fb30b2af90e543419a7ae723683df287:N12",
+            "timeline_id": "TL:fb30b2af90e543419a7ae723683df287",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.018907207995653152,
+            "end_s": 0.018907207995653152,
+            "duration": 0.0,
+            "parents": [
+              "TL:fb30b2af90e543419a7ae723683df287:N11"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:3:c3a8fe00-0079-4595-ba87-135c11b1cc3c"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "probe": [
+        "test_calendar_guard_uses_actual_current_owner_after_source_change"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    },
+    {
+      "probe": [
+        "test_calendar_guard_uses_actual_current_owner_after_source_change"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    },
+    {
+      "probe": [
+        "test_model_prohibition_cannot_be_bypassed_by_execution_source_read"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    }
+  ],
+  "variant": "B",
+  "task_id": "M03",
+  "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION",
+  "source_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M03/source",
+  "imported_runtime": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M03/source/prototypes/candidates/dp41_45_poc/shared/runtime.py",
+  "api_calls": 0,
+  "stderr": "QA05 probe start new_calendar_port_busy_and_free\nQA05 probe end new_calendar_port_busy_and_free\nQA05 probe start S3-03_BUSY_NO_CREATE\nQA05 probe end S3-03_BUSY_NO_CREATE\nQA05 probe start stale_source\nQA05 probe end stale_source\nQA05 probe start permission_denied\nQA05 probe end permission_denied\n"
+}

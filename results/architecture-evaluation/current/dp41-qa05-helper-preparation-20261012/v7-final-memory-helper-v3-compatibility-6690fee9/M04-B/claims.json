@@ -1,0 +1,65 @@
+{
+  "responsibility_claims": {
+    "U01": {
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite tagged reference_id producer terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U03": {
+      "reason": "Exact singleton producer tag, own from_goal, terminal enum and existing owner-string/frame disjointness validation.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "owner string or exact typed producer reference, STATE terminal EQ/IN only for producers",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U07": {
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    },
+    "U08": {
+      "reason": "Resolve the actual producer Task/Execution from Request revision and goal; preserve UNKNOWN for absent/superseded producers and success-result dependencies.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "typed producer readiness bound to actual Request-revision dispatch lineage",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "goalref-runtime-checks.json",
+        "regression.json",
+        "b-binder-integrity.json"
+      ]
+    }
+  },
+  "unchanged_responsibilities": {
+    "U02": "Existing recursive B binding preserves the producer tag because goal IDs and Frame reference IDs are disjoint; binder byte hash is unchanged."
+  },
+  "representation_alternative": "TYPED-GOALREF-v2",
+  "b_binder_sha256": {
+    "before": "49c69506ef737fb4335ca3649ba25165f689f9f110a3a169fc169c842bed0e19",
+    "after": "49c69506ef737fb4335ca3649ba25165f689f9f110a3a169fc169c842bed0e19",
+    "identical": true
+  }
+}

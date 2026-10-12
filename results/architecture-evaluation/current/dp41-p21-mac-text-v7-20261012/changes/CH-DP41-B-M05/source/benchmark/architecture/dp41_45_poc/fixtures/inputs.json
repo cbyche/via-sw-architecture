@@ -1,0 +1,4835 @@
+{
+  "fixture_version": "dp41-p21-fixtures-v1",
+  "cases": [
+    {
+      "case_id": "S1-01",
+      "name": "제한된 정보 조회",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 3,
+      "reactions": [
+        {
+          "id": "I-S1-01-1",
+          "start": "발화 종료",
+          "end": "D1의 정확한 날짜 답변 전달",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S1-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "D1 마감일 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "단순 직접/위임의 공통 기준 경로",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "CONTROL",
+      "transcript": "D1에 적힌 마감일 알려줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "하늘 프로젝트 안내",
+            "text": "제출 마감일은 2026년 10월 15일입니다. 담당자는 민수입니다.",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S1-02",
+      "name": "새 보고서 업무 위임",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reactions": [
+        {
+          "id": "I-S1-02-1",
+          "start": "발화 종료",
+          "end": "해당 보고서의 실제 접수/진행 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S1-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportQ3@v1 최종 결과 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "신규 업무 인계와 정상 접수의 기준 경로",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "CONTROL",
+      "transcript": "올해 3분기 매출 보고서를 표 형식으로 작성해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "Sales2026Q3",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "2026년 3분기 매출",
+            "text": "2026년 7월 매출 100억원, 8월 매출 120억원, 9월 매출 80억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "year": 2026,
+              "quarter": 3
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S2-01",
+      "name": "발화 중 두 표 지칭",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S2-01-1",
+          "start": "발화 종료",
+          "end": "발화 당시 두 표의 올바른 비교/위임 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "지정 두 표 비교 결과 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "동일 발화의 복수 지칭을 실제 근거에 결합",
+      "sensitive_dps": [
+        "41"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "이 표와 저 표를 비교해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "A",
+            "revision": 1,
+            "kind": "SCREEN_OBJECT",
+            "title": "A",
+            "text": "2026년 3분기 매출 300억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "B",
+            "revision": 1,
+            "kind": "SCREEN_OBJECT",
+            "title": "B",
+            "text": "2026년 3분기 매출 240억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "C",
+            "revision": 1,
+            "kind": "SCREEN_OBJECT",
+            "title": "C",
+            "text": "2026년 4분기 매출 900억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "pointer-A",
+          "at_seconds": 0,
+          "type": "OBSERVATION",
+          "payload": {
+            "source_id": "A",
+            "revision": 1,
+            "pointer": true
+          }
+        },
+        {
+          "event_id": "pointer-B",
+          "at_seconds": 0.9,
+          "type": "OBSERVATION",
+          "payload": {
+            "source_id": "B",
+            "revision": 1,
+            "pointer": true
+          }
+        },
+        {
+          "event_id": "pointer-C",
+          "at_seconds": 1.7,
+          "type": "OBSERVATION",
+          "payload": {
+            "source_id": "C",
+            "revision": 1,
+            "pointer": true
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "mentions": [
+          {
+            "text": "이 표",
+            "start_seconds": 0.4,
+            "end_seconds": 0.8
+          },
+          {
+            "text": "저 표",
+            "start_seconds": 1.1,
+            "end_seconds": 1.5
+          }
+        ],
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S2-02",
+      "name": "과거 설명과 두 업무 결과 재사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 18,
+      "reactions": [
+        {
+          "id": "I-S2-02-1",
+          "start": "발화 종료",
+          "end": "과거 근거/조건이 맞는 제안서 실제 접수 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "Proposal@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "예외를 포함하는 세 과거 원본의 실제 연결",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "아까 들은 기준과 두 업무 결과로 새 제안서를 만들어줘.",
+      "initial": {
+        "sources": [],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [
+          {
+            "event_id": "P0",
+            "at_seconds": 0,
+            "type": "PUBLICATION_ORIGINAL",
+            "payload": {
+              "source": {
+                "source_id": "E1",
+                "revision": 1,
+                "kind": "PUBLICATION_ORIGINAL",
+                "title": "E1",
+                "text": "평가 기준은 연간 유지비와 설치 기간입니다. 가격은 평가에서 제외합니다. 보안 등급도 최우선 기준으로 추가할 수 있습니다.",
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "metadata": {}
+              },
+              "publication": {
+                "publication_id": "E1",
+                "text": "평가 기준은 연간 유지비와 설치 기간입니다. 가격은 평가에서 제외합니다. 보안 등급도 최우선 기준으로 추가할 수 있습니다.",
+                "delivered_voice_text": "",
+                "text_presented": true,
+                "delivered_receipt": true,
+                "source_refs": [],
+                "at_seconds": -1
+              }
+            }
+          },
+          {
+            "event_id": "P1",
+            "at_seconds": 0.01,
+            "type": "DELIVERY_RECEIPT",
+            "payload": {
+              "publication_id": "E1",
+              "text_presented": true,
+              "delivered_voice_text": "평가 기준은 연간 유지비와 설치 기간입니다. 가격은 평가에서 제외합니다.",
+              "interrupted": true
+            }
+          },
+          {
+            "event_id": "P2",
+            "at_seconds": 0.02,
+            "type": "TASK_SOURCE_RECORD",
+            "payload": {
+              "task": {
+                "task_id": "T비교",
+                "execution_id": "X비교",
+                "request_revision": 1,
+                "status": "COMPLETED",
+                "operation": "COMPARE",
+                "instruction": "제품 설치 기간 비교",
+                "source_refs": [
+                  {
+                    "source_id": "D2",
+                    "revision": 1
+                  }
+                ],
+                "properties": {},
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "external_acceptance_confirmed": true,
+                "result": {
+                  "artifact_id": "D2",
+                  "revision": 1,
+                  "text": "A: 설치 3일, B: 설치 4일"
+                }
+              },
+              "source": {
+                "source_id": "D2",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "D2",
+                "text": "A: 설치 3일, B: 설치 4일",
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "metadata": {}
+              }
+            }
+          },
+          {
+            "event_id": "P3",
+            "at_seconds": 0.03,
+            "type": "TASK_SOURCE_RECORD",
+            "payload": {
+              "task": {
+                "task_id": "T비교",
+                "execution_id": "X비교",
+                "request_revision": 2,
+                "status": "COMPLETED",
+                "operation": "COMPARE",
+                "instruction": "제품 설치 기간 비교",
+                "source_refs": [
+                  {
+                    "source_id": "D2",
+                    "revision": 2
+                  }
+                ],
+                "properties": {},
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "external_acceptance_confirmed": true,
+                "result": {
+                  "artifact_id": "D2",
+                  "revision": 2,
+                  "text": "A: 설치 2일, B: 설치 4일"
+                }
+              },
+              "source": {
+                "source_id": "D2",
+                "revision": 2,
+                "kind": "DOCUMENT",
+                "title": "D2",
+                "text": "A: 설치 2일, B: 설치 4일",
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "metadata": {}
+              }
+            }
+          },
+          {
+            "event_id": "P4",
+            "at_seconds": 0.04,
+            "type": "TASK_SOURCE_RECORD",
+            "payload": {
+              "task": {
+                "task_id": "T견적",
+                "execution_id": "X견적",
+                "request_revision": 1,
+                "status": "COMPLETED",
+                "operation": "QUOTE",
+                "instruction": "제품 견적",
+                "source_refs": [
+                  {
+                    "source_id": "D3",
+                    "revision": 1
+                  }
+                ],
+                "properties": {},
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "external_acceptance_confirmed": true,
+                "result": {
+                  "artifact_id": "D3",
+                  "revision": 1,
+                  "text": "A: 가격 100백만원/연간 유지비 3백만원, B: 가격 120백만원/연간 유지비 5백만원"
+                }
+              },
+              "source": {
+                "source_id": "D3",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "D3",
+                "text": "A: 가격 100백만원/연간 유지비 3백만원, B: 가격 120백만원/연간 유지비 5백만원",
+                "permission": {
+                  "read": "ALLOWED",
+                  "model": "ALLOWED",
+                  "agent": "ALLOWED"
+                },
+                "metadata": {}
+              }
+            }
+          }
+        ],
+        "settle_seconds": 5,
+        "settle_after_event_id": "P4",
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S2-03",
+      "name": "갱신된 원본의 과거 값 지정",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reactions": [
+        {
+          "id": "I-S2-03-1",
+          "start": "발화 종료",
+          "end": "과거 v1 값 지정이 맞는 실제 작성 접수 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "TablePast@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "원본 갱신 뒤 과거 revision의 보존/검증",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "그때 보여준 값으로 표를 만들어줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "계약 기준값=100",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T원본",
+            "execution_id": "X원본",
+            "request_revision": 1,
+            "status": "COMPLETED",
+            "operation": "READ_FIELD",
+            "instruction": "계약 기준값 조회",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "result": {
+              "artifact_id": "D1",
+              "revision": 1,
+              "text": "계약 기준값=100"
+            }
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [
+          {
+            "publication_id": "P1",
+            "text": "계약 기준값=100",
+            "delivered_voice_text": "계약 기준값=100",
+            "text_presented": true,
+            "delivered_receipt": true,
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "at_seconds": -1
+          }
+        ],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "D1-v2",
+          "at_seconds": 0.5,
+          "type": "SOURCE_CHANGE",
+          "payload": {
+            "source": {
+              "source_id": "D1",
+              "revision": 2,
+              "kind": "DOCUMENT",
+              "title": "D1",
+              "text": "계약 기준값=120",
+              "permission": {
+                "read": "ALLOWED",
+                "model": "ALLOWED",
+                "agent": "ALLOWED"
+              },
+              "metadata": {}
+            },
+            "retain_previous_revision": true
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S2-04",
+      "name": "같은 과거 근거의 두 번째 사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S2-04-1",
+          "start": "발화 종료",
+          "end": "두 번째 새 제안서의 실제 접수 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "ProposalRepeat@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "같은 원본 재사용의 cache/관계 hit와 전체 생산 비용",
+      "sensitive_dps": [
+        "45"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "같은 평가 기준, 제품 비교와 견적으로 새 제안서 하나 더 만들어줘. 메일은 보내지 마.",
+      "initial": {
+        "sources": [],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [
+          "S2-02"
+        ],
+        "restore": false,
+        "preserve_actual_source_cache_history": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S2-05",
+      "name": "새로 도착한 과거 근거의 첫 사용",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S2-05-1",
+          "start": "발화 종료",
+          "end": "새 근거를 확보한 실제 제안서 접수 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S2-05",
+        "start": "최초 사용자 발화 종료",
+        "end": "ProposalFresh@v1 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "새 원본 첫 사용의 조합/미게시 backfill 대기",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "전에 들은 기준과 방금 도착한 제품 비교, 견적으로 제안서 만들어줘. 가격은 평가하지 마.",
+      "initial": {
+        "sources": [],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "fresh-explanation",
+          "at_seconds": 2.97,
+          "type": "PUBLICATION_ORIGINAL",
+          "payload": {
+            "source": {
+              "source_id": "E새",
+              "revision": 1,
+              "kind": "PUBLICATION_ORIGINAL",
+              "title": "E새",
+              "text": "납기 2주 이내가 우선이고 가격은 평가에서 제외",
+              "permission": {
+                "read": "ALLOWED",
+                "model": "ALLOWED",
+                "agent": "ALLOWED"
+              },
+              "metadata": {}
+            },
+            "publication": {
+              "publication_id": "E새",
+              "text": "납기 2주 이내가 우선이고 가격은 평가에서 제외",
+              "delivered_voice_text": "납기 2주 이내가 우선이고 가격은 평가에서 제외",
+              "text_presented": true,
+              "delivered_receipt": true,
+              "source_refs": [
+                {
+                  "source_id": "E새",
+                  "revision": 1
+                }
+              ],
+              "at_seconds": -1
+            }
+          }
+        },
+        {
+          "event_id": "fresh-comparison",
+          "at_seconds": 2.98,
+          "type": "SOURCE_CHANGE",
+          "payload": {
+            "source": {
+              "source_id": "D새비교",
+              "revision": 1,
+              "kind": "DOCUMENT",
+              "title": "D새비교",
+              "text": "제품 A의 납기는 10일, 제품 B의 납기는 20일",
+              "permission": {
+                "read": "ALLOWED",
+                "model": "ALLOWED",
+                "agent": "ALLOWED"
+              },
+              "metadata": {}
+            }
+          }
+        },
+        {
+          "event_id": "fresh-quote",
+          "at_seconds": 2.99,
+          "type": "SOURCE_CHANGE",
+          "payload": {
+            "source": {
+              "source_id": "D새견적",
+              "revision": 1,
+              "kind": "DOCUMENT",
+              "title": "D새견적",
+              "text": "제품 A는 30백만원, 제품 B는 40백만원",
+              "permission": {
+                "read": "ALLOWED",
+                "model": "ALLOWED",
+                "agent": "ALLOWED"
+              },
+              "metadata": {}
+            }
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S3-01",
+      "name": "독립된 두 조회 요청",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S3-01-1",
+          "start": "발화 종료",
+          "end": "독립 두 목표의 구분된 유효 답변/실제 접수 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "독립 두 조회 결과 모두 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "독립 read의 병렬 진행을 양안에 허용하는 기준",
+      "sensitive_dps": [
+        "41",
+        "44"
+      ],
+      "selection_role": "CONTROL",
+      "transcript": "D1 요약해주고, 내일 일정도 알려줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "하늘 프로젝트의 마감일은 2026년 10월 15일이고 담당자는 민수입니다.",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "Cal13",
+            "revision": 1,
+            "kind": "CALENDAR",
+            "title": "Cal13",
+            "text": "2026-10-13 09:00~09:30 팀 회의",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "date": "2026-10-13",
+              "events": [
+                {
+                  "start": "09:00",
+                  "end": "09:30",
+                  "title": "팀 회의"
+                }
+              ]
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S3-02",
+      "name": "요약 산출물에 의존하는 메일",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 10,
+      "reactions": [
+        {
+          "id": "I-S3-02-1",
+          "start": "발화 종료",
+          "end": "현재 요약/의존 메일의 유효 처리 사실 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "현재 요약의 민수 메일 발송 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "결과 의존/중복 반환의 전체 continuation",
+      "sensitive_dps": [
+        "41",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "D1을 요약한 다음, 그 요약을 민수에게 메일로 보내줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "하늘 프로젝트는 10월 15일까지 제출하며 담당자는 민수입니다.",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D1",
+            "revision": 0,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "마감 10월 1일",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T옛",
+            "execution_id": "X옛",
+            "request_revision": 1,
+            "status": "COMPLETED",
+            "operation": "SUMMARIZE",
+            "instruction": "D1 요약",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 0
+              }
+            ],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "result": {
+              "artifact_id": "K옛",
+              "revision": 0,
+              "text": "마감 10월 1일"
+            },
+            "request_id": "R옛"
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "old-summary-result",
+          "at_seconds": 3.1,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T옛",
+            "execution_id": "X옛",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "K옛",
+              "revision": 0,
+              "text": "마감 10월 1일"
+            },
+            "status": "COMPLETED",
+            "request_id": "R옛"
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.5,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY",
+        "duplicate_current_summary_event": true,
+        "duplicate_delivery_after_seconds": 0.001
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S3-03",
+      "name": "일정 조건의 변경 재확인",
+      "trigger": "USER",
+      "root_voice_seconds": 3,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S3-03-1",
+          "start": "발화 종료",
+          "end": "최신 BUSY와 일정 생성 안 함의 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 3,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S3-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "최신 BUSY/미생성 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "해석 뒤 조건 변경의 재조회/재확정",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "금요일 3시가 비어 있으면 회의 잡고, 아니면 가능한 시간만 알려줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "Cal16",
+            "revision": 1,
+            "kind": "CALENDAR",
+            "title": "Cal16",
+            "text": "2026-10-16 15:00~16:00 FREE; 16:00~17:00 FREE",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "date": "2026-10-16",
+              "interval_state": "FREE",
+              "alternative_start": "16:00",
+              "alternative_end": "17:00",
+              "events": []
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "calendar-busy",
+          "at_seconds": 1,
+          "type": "SOURCE_CHANGE",
+          "payload": {
+            "source": {
+              "source_id": "Cal16",
+              "revision": 2,
+              "kind": "CALENDAR",
+              "title": "Cal16",
+              "text": "2026-10-16 15:00~16:00 기존 고객 미팅 BUSY; 16:00~17:00 FREE",
+              "permission": {
+                "read": "ALLOWED",
+                "model": "ALLOWED",
+                "agent": "ALLOWED"
+              },
+              "metadata": {
+                "date": "2026-10-16",
+                "interval_state": "BUSY",
+                "alternative_start": "16:00",
+                "alternative_end": "17:00",
+                "events": [
+                  {
+                    "start": "15:00",
+                    "end": "16:00",
+                    "title": "기존 고객 미팅"
+                  }
+                ]
+              }
+            },
+            "retain_previous_revision": true
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 3,
+        "speech_end_at_seconds": 3
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY",
+        "calendar_version_guard": true
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 3
+      }
+    },
+    {
+      "case_id": "S4-01",
+      "name": "부분 정정과 늦은 후보",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 9,
+      "reactions": [
+        {
+          "id": "I-S4-01-1",
+          "start": "발화 종료",
+          "end": "보고서 변경 접수와 메일 보존 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportRevised@v2 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "부분 정정과 옛 후보의 늦은 반환",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "보고서는 표로 바꾸고 메일은 그대로.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "release-old-job",
+          "at_seconds": 2.1,
+          "type": "RELEASE_HELD_JOB",
+          "payload": {
+            "request_id": "R옛",
+            "only_if_actual_job_exists": true
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true,
+        "pending_interpretation": {
+          "request_id": "R옛",
+          "transcript": "보고서는 문장 형식을 유지하고 메일 지시는 그대로 둬.",
+          "hold_provider_return_until_seconds": 2.1,
+          "require_actual_candidate_job": true
+        }
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S4-02",
+      "name": "음성 중단 뒤 지정 수치 설명",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 8,
+      "reactions": [
+        {
+          "id": "I-S4-02-1",
+          "start": "새 발화 acoustic onset",
+          "end": "옛 음성의 마지막 재생 sample",
+          "start_kind": "SPEECH_ONSET",
+          "start_at_seconds": 0,
+          "endpoint_kind": "LOCAL_OUTPUT_STOP",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "endpoint_ref": "O옛"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "지정 수치의 새 설명 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "local stop와 새 설명의 분리, input 지속",
+      "sensitive_dps": [
+        "44"
+      ],
+      "selection_role": "CONTROL",
+      "transcript": "잠깐, 그 수치부터 설명해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D매출",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D매출",
+            "text": "2026년 3분기 매출 150억원, 전년 같은 분기 매출 125억원, 증가율 20%",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "3분기 매출 보고서 작성",
+            "source_refs": [
+              {
+                "source_id": "D매출",
+                "revision": 1
+              }
+            ],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [
+          {
+            "publication_id": "O옛",
+            "text": "3분기 매출은 150억원입니다. 전년보다 20% 증가했습니다.",
+            "delivered_voice_text": "3분기 매출은 150억원입니다. 전년보다",
+            "text_presented": true,
+            "delivered_receipt": true,
+            "source_refs": [
+              {
+                "source_id": "D매출",
+                "revision": 1
+              }
+            ],
+            "at_seconds": -1
+          }
+        ],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": true,
+          "generation": 1,
+          "publication_id": "O옛",
+          "text": "3분기 매출은 150억원입니다. 전년보다 20% 증가했습니다.",
+          "delivered_voice_text": "3분기 매출은 150억원입니다. 전년보다",
+          "remaining_voice_seconds": 1.5,
+          "pending_segments": [
+            {
+              "start_seconds": 0.5,
+              "end_seconds": 1.5,
+              "text": "20% 증가했습니다."
+            }
+          ]
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "old-output-ready",
+          "at_seconds": 2.1,
+          "type": "OUTPUT_READY",
+          "payload": {
+            "publication_id": "O옛",
+            "generation": 1,
+            "text": "전년보다 20% 증가했습니다."
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S4-03",
+      "name": "특정 업무 취소와 접수 미확인",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S4-03-1",
+          "start": "발화 종료",
+          "end": "메일 취소 전달/미확인 상태의 정직한 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S4-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "명세된 취소 접수/미확인 disposition 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "hold/취소 접수/외부 미확인의 실제 순서",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "메일 업무만 취소해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "local_acceptance_receipt_received": false
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY",
+        "cancel_terminal_status": "UNKNOWN",
+        "post_cancel_receipts": [
+          {
+            "after_cancel_receipt_seconds": 0.1,
+            "type": "ACCEPTED",
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "original_execution": true
+          },
+          {
+            "after_cancel_receipt_seconds": 0.1,
+            "type": "DUPLICATE_CANCEL_ACCEPTED",
+            "same_event_id": true
+          }
+        ]
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S5-01",
+      "name": "교차 질문과 철회",
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S5-01-1",
+          "start": "유효 메일 질문 source availability",
+          "end": "올바른 수신자 질문 실제 제시",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.02,
+          "endpoint_kind": "QUESTION_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "mail-question",
+          "endpoint_ref": "Q메일"
+        }
+      ],
+      "cycle": null,
+      "cycle_exclusion": "Agent 발신 질문/결과 처리이며 새 사용자 목표 시작이 아님; 전달 지연은 QA-02로 관측",
+      "selection_reason": "질문 교차/철회와 실제 제시의 연결",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": null,
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "report-question",
+          "at_seconds": 0,
+          "type": "QUESTION",
+          "payload": {
+            "question": {
+              "question_id": "Q보고서",
+              "revision": 1,
+              "text": "보고서 기간을 상반기로 할까요, 하반기로 할까요?",
+              "task_id": "T보고서",
+              "execution_id": "X보고서",
+              "status": "VALID",
+              "kind": "CLARIFICATION",
+              "presentation_status": "PRESENTATION_PENDING",
+              "text_presented": false,
+              "voice_presented": false,
+              "scope": {},
+              "delivered_receipt": false,
+              "origin": "AGENT"
+            }
+          }
+        },
+        {
+          "event_id": "mail-question",
+          "at_seconds": 0.02,
+          "type": "QUESTION",
+          "payload": {
+            "question": {
+              "question_id": "Q메일",
+              "revision": 1,
+              "text": "받는 사람은 민수인가요, 지수인가요?",
+              "task_id": "T메일",
+              "execution_id": "X메일",
+              "status": "VALID",
+              "kind": "CLARIFICATION",
+              "presentation_status": "PRESENTATION_PENDING",
+              "text_presented": false,
+              "voice_presented": false,
+              "scope": {},
+              "delivered_receipt": false,
+              "origin": "AGENT"
+            }
+          }
+        },
+        {
+          "event_id": "withdraw-report-question",
+          "at_seconds": 0.04,
+          "type": "QUESTION_WITHDRAWN",
+          "payload": {
+            "question_id": "Q보고서",
+            "revision": 1,
+            "task_id": "T보고서",
+            "execution_id": "X보고서"
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": null,
+        "speech_end_at_seconds": null
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": null
+    },
+    {
+      "case_id": "S5-02",
+      "name": "결과 역전과 중복",
+      "trigger": "AGENT",
+      "root_voice_seconds": 0,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 6,
+      "reactions": [
+        {
+          "id": "I-S5-02-1",
+          "start": "최신 유효 결과 source availability",
+          "end": "올바른 현재 결과 실제 전달",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.02,
+          "endpoint_kind": "RESULT_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "Ereport2",
+          "endpoint_ref": "D보고서결과",
+          "endpoint_revision": 2
+        }
+      ],
+      "cycle": null,
+      "cycle_exclusion": "Agent 발신 질문/결과 처리이며 새 사용자 목표 시작이 아님; 전달 지연은 QA-02로 관측",
+      "selection_reason": "결과 역전/중복의 현재성 및 publication",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": null,
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 2,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "Email1",
+          "at_seconds": 0,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "D메일결과",
+              "revision": 1,
+              "text": "민수에게 전달된 안내문, 외부 상태 완료"
+            },
+            "status": "COMPLETED"
+          }
+        },
+        {
+          "event_id": "Ereport2",
+          "at_seconds": 0.02,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 2,
+            "artifact": {
+              "artifact_id": "D보고서결과",
+              "revision": 2,
+              "text": "3분기 표 보고서, 완료"
+            },
+            "status": "COMPLETED"
+          }
+        },
+        {
+          "event_id": "Email1",
+          "at_seconds": 0.04,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "D메일결과",
+              "revision": 1,
+              "text": "민수에게 전달된 안내문, 외부 상태 완료"
+            },
+            "status": "COMPLETED"
+          },
+          "delivery_index": 2
+        },
+        {
+          "event_id": "Ereport1",
+          "at_seconds": 0.06,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "D보고서결과",
+              "revision": 1,
+              "text": "문장 보고서"
+            },
+            "status": "COMPLETED"
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": null,
+        "speech_end_at_seconds": null
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": null
+    },
+    {
+      "case_id": "S5-03",
+      "name": "음성 종료 중 결과와 재연결",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 4,
+      "reactions": [
+        {
+          "id": "I-S5-03-1",
+          "start": "Voice OFF 결과 source availability",
+          "end": "실제 Text 결과 표시",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 1,
+          "endpoint_kind": "TEXT_RESULT_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "report-off-result",
+          "endpoint_ref": "D보고서결과"
+        },
+        {
+          "id": "I-S5-03-2",
+          "start": "재연결 요청 발화 종료",
+          "end": "같은 보고서 결과의 실제 Voice 안내",
+          "start_kind": "FOLLOWUP_SPEECH_END",
+          "start_at_seconds": null,
+          "endpoint_kind": "VOICE_RESULT_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "followup_index": 0,
+          "endpoint_ref": "D보고서결과"
+        }
+      ],
+      "cycle": {
+        "id": "T-S5-03",
+        "start": "재연결 요청 발화 종료",
+        "end": "재연결 요청에 기존 결과 안내"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "Voice Connection과 Task/결과의 독립 수명",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": null,
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "voice-off",
+          "at_seconds": 0,
+          "type": "VOICE_STATE",
+          "payload": {
+            "on": false,
+            "connection_id": "V이전"
+          }
+        },
+        {
+          "event_id": "report-off-result",
+          "at_seconds": 1,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "D보고서결과",
+              "revision": 1,
+              "text": "2026년 3분기 표 보고서"
+            },
+            "status": "COMPLETED"
+          }
+        }
+      ],
+      "followups": [
+        {
+          "trigger": "TEXT_PRESENTED",
+          "match": {
+            "task_id": "T보고서",
+            "artifact_id": "D보고서결과",
+            "revision": 1
+          },
+          "wait_seconds": 1,
+          "speech_seconds": 2,
+          "transcript": "방금 도착한 보고서 결과 알려줘.",
+          "voice_state": {
+            "on": true,
+            "connection_id": "V새",
+            "conversation_id": "C현재"
+          },
+          "only_after_actual_receipt": true
+        }
+      ],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": null,
+        "speech_end_at_seconds": null
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "FOLLOWUP_SPEECH_END",
+        "followup_index": 0
+      }
+    },
+    {
+      "case_id": "S5-04",
+      "name": "발화 중 네 Agent 사건과 보고서 정정",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 24,
+      "reactions": [
+        {
+          "id": "I-S5-04-1",
+          "start": "새 발화 acoustic onset",
+          "end": "옛 음성의 마지막 재생 sample",
+          "start_kind": "SPEECH_ONSET",
+          "start_at_seconds": 0,
+          "endpoint_kind": "LOCAL_OUTPUT_STOP",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "endpoint_ref": "P옛설명"
+        },
+        {
+          "id": "I-S5-04-2",
+          "start": "정정 발화 종료",
+          "end": "올바른 보고서 변경 접수와 메일 보존 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        },
+        {
+          "id": "I-S5-04-3",
+          "start": "질문A source availability",
+          "end": "질문A 실제 제시",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.1,
+          "endpoint_kind": "QUESTION_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "burst-question-A",
+          "endpoint_ref": "Q수신자A"
+        },
+        {
+          "id": "I-S5-04-4",
+          "start": "결과A source availability",
+          "end": "결과A 실제 전달",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.12,
+          "endpoint_kind": "RESULT_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "burst-result-A",
+          "endpoint_ref": "ResultA"
+        },
+        {
+          "id": "I-S5-04-5",
+          "start": "질문B source availability",
+          "end": "질문B 실제 제시",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.14,
+          "endpoint_kind": "QUESTION_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "burst-question-B",
+          "endpoint_ref": "Q범위B"
+        },
+        {
+          "id": "I-S5-04-6",
+          "start": "결과B source availability",
+          "end": "결과B 실제 전달",
+          "start_kind": "SOURCE_EVENT_AVAILABLE",
+          "start_at_seconds": 0.16,
+          "endpoint_kind": "RESULT_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "source_event_id": "burst-result-B",
+          "endpoint_ref": "ResultB"
+        }
+      ],
+      "cycle": {
+        "id": "T-S5-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "ReportBurst@v2 전달 및 지정 독립 반응 유지"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "입력+네 Agent 사건의 queue/join/폐기/동시 할당",
+      "sensitive_dps": [
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "잠깐, 보고서는 표로 바꾸고 메일은 그대로 둬.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T질문A",
+            "execution_id": "X질문A",
+            "request_revision": 1,
+            "status": "WAITING_ANSWER",
+            "operation": "DRAFT_MAIL",
+            "instruction": "초안 수신자 확인",
+            "source_refs": [],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "questions": [
+              {
+                "question_id": "Q수신자A",
+                "revision": 1,
+                "text": "초안 수신자를 민수로 할까요, 지수로 할까요?",
+                "task_id": "T질문A",
+                "execution_id": "X질문A",
+                "status": "VALID",
+                "kind": "CLARIFICATION",
+                "presentation_status": "PRESENTATION_PENDING",
+                "text_presented": false,
+                "voice_presented": false,
+                "scope": {},
+                "delivered_receipt": false,
+                "origin": "AGENT"
+              }
+            ]
+          },
+          {
+            "task_id": "T질문B",
+            "execution_id": "X질문B",
+            "request_revision": 1,
+            "status": "WAITING_ANSWER",
+            "operation": "WRITE_REPORT",
+            "instruction": "자료 범위 확인",
+            "source_refs": [],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "questions": [
+              {
+                "question_id": "Q범위B",
+                "revision": 1,
+                "text": "자료 범위를 2026년 3분기로 한정할까요?",
+                "task_id": "T질문B",
+                "execution_id": "X질문B",
+                "status": "VALID",
+                "kind": "CLARIFICATION",
+                "presentation_status": "PRESENTATION_PENDING",
+                "text_presented": false,
+                "voice_presented": false,
+                "scope": {},
+                "delivered_receipt": false,
+                "origin": "AGENT"
+              }
+            ]
+          },
+          {
+            "task_id": "T결과A",
+            "execution_id": "X결과A",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "READ_FIELD",
+            "instruction": "납기 조회",
+            "source_refs": [],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T결과B",
+            "execution_id": "X결과B",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "READ_FIELD",
+            "instruction": "수량 조회",
+            "source_refs": [],
+            "properties": {},
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": true,
+          "generation": 1,
+          "publication_id": "P옛설명",
+          "text": "이전에 진행하던 설명",
+          "delivered_voice_text": "이전에",
+          "remaining_voice_seconds": 4
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "burst-question-A",
+          "at_seconds": 0.1,
+          "type": "QUESTION",
+          "payload": {
+            "question": {
+              "question_id": "Q수신자A",
+              "revision": 1,
+              "text": "초안 수신자를 민수로 할까요, 지수로 할까요?",
+              "task_id": "T질문A",
+              "execution_id": "X질문A",
+              "status": "VALID",
+              "kind": "CLARIFICATION",
+              "presentation_status": "PRESENTATION_PENDING",
+              "text_presented": false,
+              "voice_presented": false,
+              "scope": {},
+              "delivered_receipt": false,
+              "origin": "AGENT"
+            }
+          }
+        },
+        {
+          "event_id": "burst-result-A",
+          "at_seconds": 0.12,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T결과A",
+            "execution_id": "X결과A",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "ResultA",
+              "revision": 1,
+              "text": "납기 조회 완료: 14일"
+            },
+            "status": "COMPLETED"
+          }
+        },
+        {
+          "event_id": "burst-question-B",
+          "at_seconds": 0.14,
+          "type": "QUESTION",
+          "payload": {
+            "question": {
+              "question_id": "Q범위B",
+              "revision": 1,
+              "text": "자료 범위를 2026년 3분기로 한정할까요?",
+              "task_id": "T질문B",
+              "execution_id": "X질문B",
+              "status": "VALID",
+              "kind": "CLARIFICATION",
+              "presentation_status": "PRESENTATION_PENDING",
+              "text_presented": false,
+              "voice_presented": false,
+              "scope": {},
+              "delivered_receipt": false,
+              "origin": "AGENT"
+            }
+          }
+        },
+        {
+          "event_id": "burst-result-B",
+          "at_seconds": 0.16,
+          "type": "RESULT",
+          "payload": {
+            "task_id": "T결과B",
+            "execution_id": "X결과B",
+            "request_revision": 1,
+            "artifact": {
+              "artifact_id": "ResultB",
+              "revision": 1,
+              "text": "수량 조회 완료: 20개"
+            },
+            "status": "COMPLETED"
+          }
+        }
+      ],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S6-01",
+      "name": "모호한 과거 보고서 확인",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reactions": [
+        {
+          "id": "I-S6-01-1",
+          "start": "최초 발화 종료",
+          "end": "보고서 대상/수정 내용 확인 질문 실제 제시",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "CLARIFICATION_PRESENTED",
+          "endpoint_scope": "TASK_OR_REVISION_SCOPE"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-01",
+        "start": "최초 사용자 발화 종료",
+        "end": "ConfirmedRevision@v2 최종 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "모호한 대상의 확인과 후속 변경 전체 cycle",
+      "sensitive_dps": [
+        "41",
+        "45"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "아까 보고서 수정해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "SalesQ3",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "SalesQ3",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "SalesQ4",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "SalesQ4",
+            "text": "2026년 4분기 매출 180억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T3분기",
+            "execution_id": "X3분기",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출 보고서",
+            "source_refs": [
+              {
+                "source_id": "SalesQ3",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH",
+              "last_mentioned_at": -1
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T4분기",
+            "execution_id": "X4분기",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 4분기 매출 보고서",
+            "source_refs": [
+              {
+                "source_id": "SalesQ4",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 4,
+              "FORMAT": "PARAGRAPH",
+              "last_mentioned_at": -1
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [
+        {
+          "trigger": "QUESTION_PRESENTED",
+          "match": {
+            "purpose": "CLARIFY_TASK_OR_REVISION_SCOPE"
+          },
+          "wait_seconds": 1,
+          "speech_seconds": 3,
+          "transcript": "3분기 매출 보고서만 표로 바꿔줘. 기간은 그대로 두고 4분기 보고서는 건드리지 마.",
+          "only_after_actual_receipt": true,
+          "max_occurrences": 1
+        }
+      ],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": 8,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S6-02",
+      "name": "철회된 질문 답변과 승인 범위",
+      "trigger": "USER",
+      "root_voice_seconds": 1,
+      "planned_followup_seconds": 3,
+      "voice_output_reference_seconds": 14,
+      "reactions": [
+        {
+          "id": "I-S6-02-1",
+          "start": "최초 발화 종료",
+          "end": "현재 정보 동의의 재확인 질문 실제 제시",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 1,
+          "endpoint_kind": "CONSENT_QUESTION_PRESENTED",
+          "endpoint_scope": "CURRENT_REQUEST",
+          "endpoint_ref": "Q1",
+          "endpoint_revision": 2
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-02",
+        "start": "최초 사용자 발화 종료",
+        "end": "허용된 연락처 제공/발송 미승인 확인 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "미제시/철회 질문의 답변과 승인 scope 분리",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "44"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "응.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수 연락처",
+            "text": "",
+            "permission": {
+              "read": "DENIED",
+              "model": "DENIED",
+              "agent": "DENIED"
+            },
+            "metadata": {}
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "메일의 민수 연락처 확인",
+            "source_refs": [],
+            "properties": {
+              "RECIPIENT_NAME": "민수",
+              "RECIPIENT_ADDRESS": null,
+              "send_approval": "DENIED"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "questions": [
+              {
+                "question_id": "Q1",
+                "revision": 1,
+                "text": "민수의 연락처를 조회해 메일 업무에 제공할까요?",
+                "task_id": "T메일",
+                "execution_id": "X메일",
+                "status": "VALID",
+                "kind": "INFORMATION_CONSENT",
+                "presentation_status": "PRESENTED",
+                "text_presented": true,
+                "voice_presented": true,
+                "scope": {
+                  "source_id": "민수",
+                  "uses": [
+                    "READ_CONTACT",
+                    "PROVIDE_TO_TASK"
+                  ],
+                  "task_id": "T메일"
+                },
+                "delivered_receipt": true,
+                "origin": "VIA_POLICY"
+              },
+              {
+                "question_id": "Q2",
+                "revision": 1,
+                "text": "이 메일을 발송할까요?",
+                "task_id": "T메일",
+                "execution_id": "X메일",
+                "status": "VALID",
+                "kind": "ACTION_APPROVAL",
+                "presentation_status": "PRESENTATION_PENDING",
+                "text_presented": false,
+                "voice_presented": false,
+                "scope": {
+                  "action": "SEND",
+                  "task_id": "T메일"
+                },
+                "delivered_receipt": false,
+                "origin": "VIA_POLICY"
+              }
+            ]
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [
+          {
+            "publication_id": "Q1-v1-presented",
+            "text": "민수의 연락처를 조회해 메일 업무에 제공할까요?",
+            "delivered_voice_text": "민수의 연락처를 조회해 메일 업무에 제공할까요?",
+            "text_presented": true,
+            "delivered_receipt": true,
+            "source_refs": [],
+            "at_seconds": -1
+          }
+        ],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": false
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [
+        {
+          "event_id": "withdraw-Q1-v1",
+          "at_seconds": -0.1,
+          "type": "QUESTION_WITHDRAWN",
+          "payload": {
+            "question_id": "Q1",
+            "revision": 1,
+            "task_id": "T메일",
+            "execution_id": "X메일"
+          }
+        },
+        {
+          "event_id": "publish-Q1-v2",
+          "at_seconds": -0.1,
+          "type": "QUESTION_REGISTER",
+          "payload": {
+            "question": {
+              "question_id": "Q1",
+              "revision": 2,
+              "text": "민수의 연락처를 조회해 메일 업무에 제공할까요?",
+              "task_id": "T메일",
+              "execution_id": "X메일",
+              "status": "VALID",
+              "kind": "INFORMATION_CONSENT",
+              "presentation_status": "PRESENTATION_PENDING",
+              "text_presented": false,
+              "voice_presented": false,
+              "scope": {
+                "source_id": "민수",
+                "uses": [
+                  "READ_CONTACT",
+                  "PROVIDE_TO_TASK"
+                ],
+                "task_id": "T메일"
+              },
+              "delivered_receipt": false,
+              "origin": "VIA_POLICY"
+            },
+            "presentation_requested": false
+          }
+        }
+      ],
+      "followups": [
+        {
+          "trigger": "QUESTION_PRESENTED",
+          "match": {
+            "question_id": "Q1",
+            "revision": 2,
+            "kind": "INFORMATION_CONSENT"
+          },
+          "wait_seconds": 1,
+          "speech_seconds": 3,
+          "transcript": "민수 연락처 조회와 이 메일 업무에 주소 제공만 동의해. 메일 발송은 승인하지 않아.",
+          "only_after_actual_receipt": true,
+          "max_occurrences": 1
+        }
+      ],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 1,
+        "speech_end_at_seconds": 1
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "consent_source_release": {
+        "source": {
+          "source_id": "민수",
+          "revision": 1,
+          "kind": "CONTACT",
+          "title": "민수",
+          "text": "minsu@example.invalid",
+          "permission": {
+            "read": "ALLOWED",
+            "model": "ALLOWED",
+            "agent": "ALLOWED"
+          },
+          "metadata": {
+            "email": "minsu@example.invalid"
+          }
+        },
+        "only_after_actual_consent_scope": {
+          "question_id": "Q1",
+          "revision": 2,
+          "task_id": "T메일",
+          "uses": [
+            "READ_CONTACT",
+            "PROVIDE_TO_TASK"
+          ]
+        },
+        "send_permission": "DENIED"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 1
+      }
+    },
+    {
+      "case_id": "S6-03",
+      "name": "필요한 자료의 접근 거부",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S6-03-1",
+          "start": "발화 종료",
+          "end": "접근 권한 부족/금액 확인 불가 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-03",
+        "start": "최초 사용자 발화 종료",
+        "end": "접근 거부와 확인 불가의 정당한 처리 전달"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "허용 부족에서 조기 차단되는 공통 기준",
+      "sensitive_dps": [
+        "41",
+        "42",
+        "45"
+      ],
+      "selection_role": "CONTROL",
+      "transcript": "D1의 계약 금액을 알려줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "계약서",
+            "text": "",
+            "permission": {
+              "read": "DENIED",
+              "model": "DENIED",
+              "agent": "DENIED"
+            },
+            "metadata": {
+              "exists": true,
+              "content_state": "ACCESS_DENIED"
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    },
+    {
+      "case_id": "S6-04",
+      "name": "실제 제시된 유효 질문에 답변",
+      "trigger": "USER",
+      "root_voice_seconds": 2,
+      "planned_followup_seconds": 0,
+      "voice_output_reference_seconds": 5,
+      "reactions": [
+        {
+          "id": "I-S6-04-1",
+          "start": "발화 종료",
+          "end": "상반기 답변의 실제 접수와 기간 안내",
+          "start_kind": "SPEECH_END",
+          "start_at_seconds": 2,
+          "endpoint_kind": "MEANINGFUL_RESPONSE",
+          "endpoint_scope": "CURRENT_REQUEST"
+        }
+      ],
+      "cycle": {
+        "id": "T-S6-04",
+        "start": "최초 사용자 발화 종료",
+        "end": "유효 기간 답변의 접수/확정 안내"
+      },
+      "cycle_exclusion": null,
+      "selection_reason": "유효 질문 답변의 정상 조회/확정/receipt 비용",
+      "sensitive_dps": [
+        "42"
+      ],
+      "selection_role": "SENSITIVE",
+      "transcript": "응, 상반기로 해줘.",
+      "initial": {
+        "sources": [
+          {
+            "source_id": "D1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D1",
+            "text": "2026년 3분기 매출 150억원",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "D메일",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "D메일",
+            "text": "회의는 10월 14일 10시",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {}
+          },
+          {
+            "source_id": "민수",
+            "revision": 1,
+            "kind": "CONTACT",
+            "title": "민수",
+            "text": "minsu@example.invalid",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "email": "minsu@example.invalid"
+            }
+          },
+          {
+            "source_id": "SalesH1",
+            "revision": 1,
+            "kind": "DOCUMENT",
+            "title": "SalesH1",
+            "text": "2026년 1월~6월 매출 자료",
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "metadata": {
+              "year": 2026,
+              "start_month": 1,
+              "end_month": 6
+            }
+          }
+        ],
+        "tasks": [
+          {
+            "task_id": "T보고서",
+            "execution_id": "X보고서",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "2026년 3분기 매출을 문장 형식으로 작성",
+            "source_refs": [
+              {
+                "source_id": "D1",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "YEAR": 2026,
+              "QUARTER": 3,
+              "FORMAT": "PARAGRAPH"
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true,
+            "questions": [
+              {
+                "question_id": "Q기간",
+                "revision": 7,
+                "text": "보고서 기간을 2026년 상반기로 할까요?",
+                "task_id": "T보고서",
+                "execution_id": "X보고서",
+                "status": "VALID",
+                "kind": "CLARIFICATION",
+                "presentation_status": "PRESENTED",
+                "text_presented": true,
+                "voice_presented": true,
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "2026-H1"
+                },
+                "delivered_receipt": true,
+                "origin": "AGENT"
+              }
+            ]
+          },
+          {
+            "task_id": "T메일",
+            "execution_id": "X메일",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "SEND_MAIL",
+            "instruction": "안내문을 민수에게 보내기",
+            "source_refs": [
+              {
+                "source_id": "D메일",
+                "revision": 1
+              }
+            ],
+            "properties": {
+              "RECIPIENT": "minsu@example.invalid",
+              "send_pending": true
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          },
+          {
+            "task_id": "T보호",
+            "execution_id": "X보호",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "operation": "WRITE_REPORT",
+            "instruction": "별도 보관 자료 정리 보고서 작성",
+            "source_refs": [],
+            "properties": {
+              "FORMAT": "PARAGRAPH",
+              "YEAR": 2025
+            },
+            "permission": {
+              "read": "ALLOWED",
+              "model": "ALLOWED",
+              "agent": "ALLOWED"
+            },
+            "external_acceptance_confirmed": true
+          }
+        ],
+        "interactions": [
+          {
+            "publication_id": "Q기간-v7-presented",
+            "text": "보고서 기간을 2026년 상반기로 할까요?",
+            "delivered_voice_text": "보고서 기간을 2026년 상반기로 할까요?",
+            "text_presented": true,
+            "delivered_receipt": true,
+            "source_refs": [],
+            "at_seconds": -1
+          }
+        ],
+        "observations": [],
+        "voice": {
+          "on": true,
+          "connection_id": "V이전",
+          "conversation_id": "C현재"
+        },
+        "output": {
+          "playing": false,
+          "generation": 0
+        },
+        "policy": {
+          "epoch": 1,
+          "send_allowed": true
+        },
+        "agent_capabilities": {
+          "bounded_read": true,
+          "bounded_summary": true,
+          "compare": true,
+          "write_report": true,
+          "write_proposal": true,
+          "write_table": true,
+          "draft_mail": true,
+          "send_mail": true,
+          "cancel": true,
+          "answer_question": true,
+          "compound_after_use_result": true,
+          "execution_simulated": true
+        }
+      },
+      "events": [],
+      "followups": [],
+      "preparation": {
+        "events": [],
+        "settle_seconds": 0,
+        "depends_on": [],
+        "restore": true
+      },
+      "input_evidence": {
+        "transcript_final_at_seconds": 2,
+        "speech_end_at_seconds": 2
+      },
+      "stub_profile": {
+        "acceptance_receipt_seconds": 0.2,
+        "bounded_result_seconds": 0.2,
+        "summary_result_seconds": 0.2,
+        "final_result_seconds": null,
+        "simulate_only": true,
+        "domain_output_rule": "ACTUAL_RECEIVED_PAYLOAD_AND_SOURCE_ONLY"
+      },
+      "unexpected_question_reply": {
+        "max_occurrences": 2,
+        "trigger": "QUESTION_PRESENTED",
+        "wait_seconds": 1,
+        "speech_seconds": 3,
+        "transcript": "새로운 조건이나 권한은 추가하지 않았어. 처음 요청대로 처리해줘.",
+        "adds_permission": false,
+        "adds_target_hint": false,
+        "speech_duration_basis": "COMMON_PROFILE_ASSUMPTION_NOT_CANONICAL_FIXED_DURATION",
+        "only_for_origin": "VIA_CLARIFICATION",
+        "never_answer_agent_questions": true
+      },
+      "source_clock": {
+        "epoch": "2026-10-12T09:00:00+09:00",
+        "relative_origin": "SCENE_SPEECH_ONSET",
+        "units": "seconds"
+      },
+      "episode_limits": {
+        "post_terminal_observation_seconds": 5,
+        "automatic_episode_seconds": 60,
+        "whole_episode_seconds": 600
+      },
+      "cycle_start": {
+        "kind": "SPEECH_END",
+        "at_seconds": 2
+      }
+    }
+  ]
+}

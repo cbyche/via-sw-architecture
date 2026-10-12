@@ -1,0 +1,4664 @@
+{
+  "checks": {
+    "duplicate_answer": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#duplicate_answer"
+      ]
+    },
+    "restored_initial_question_with_token": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#restored_initial_question_with_token"
+      ]
+    },
+    "reverse_event": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#reverse_event"
+      ]
+    },
+    "input_hold": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#input_hold"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "probe": "duplicate_answer_actual_owner_token",
+      "events": [
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N1",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "EXTERNAL_SOURCE",
+          "start_s": 0.00497175008058548,
+          "end_s": 0.00497175008058548,
+          "duration": 0.0,
+          "parents": [],
+          "request_id": "",
+          "evidence": [],
+          "metadata": {
+            "source_event_id": "question",
+            "type": "QUESTION"
+          }
+        },
+        {
+          "table": "events",
+          "source_event_id": "question",
+          "external_type": "QUESTION",
+          "payload": {
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "VALID",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              }
+            }
+          },
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N1",
+          "scene_key": "",
+          "scene_seconds": 0.0008606670890003443,
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "question": {
+            "question_id": "q",
+            "revision": 2,
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "VALID",
+            "text": "상반기 범위를 사용합니까?",
+            "scope": {
+              "property": "PERIOD",
+              "proposed_value": "H1"
+            },
+            "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8"
+          },
+          "source_event_id": "question",
+          "scene_key": "",
+          "scene_seconds": 0.000874584075063467,
+          "kind": "QUESTION_REGISTERED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N2",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.00502304220572114,
+          "end_s": 0.005028167041018605,
+          "duration": 5.124835297465324e-06,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+          ],
+          "request_id": "event:question",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.005046709207817912,
+          "end_s": 0.005046709207817912,
+          "duration": 0.0,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N2"
+          ],
+          "request_id": "event:question",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "VALID",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8"
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+            ]
+          },
+          "request_id": "event:question",
+          "source_event_id": "question",
+          "generation": 0,
+          "text_presented_s": 0.0009235842153429985,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "text_presented": true,
+          "payload_kind": "QUESTION",
+          "scene_key": "",
+          "scene_seconds": 0.0009308750741183758,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "question": {
+            "question_id": "q",
+            "revision": 2,
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "VALID",
+            "text": "상반기 범위를 사용합니까?",
+            "scope": {
+              "property": "PERIOD",
+              "proposed_value": "H1"
+            },
+            "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+            "text_presented": true,
+            "presentation_status": "PRESENTED",
+            "delivered_receipt": true,
+            "voice_presented": false
+          },
+          "delivery": {
+            "kind": "QUESTION",
+            "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c",
+            "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+            "facts": {
+              "question": {
+                "question_id": "q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "VALID",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false
+              },
+              "_causal_parents": [
+                "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+              ]
+            },
+            "request_id": "event:question",
+            "source_event_id": "question",
+            "generation": 0,
+            "text_presented_s": 0.0009235842153429985,
+            "voice_on": false,
+            "voice_onset_s": null,
+            "voice_end_s": null,
+            "voice_text": "",
+            "voice_char_events": [],
+            "delivered_receipt": true,
+            "evidence_level": "MEASURED_MOCK_E2E",
+            "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+            "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+            "text_presented": true
+          },
+          "scene_key": "",
+          "scene_seconds": 0.000962334219366312,
+          "kind": "QUESTION_PRESENTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "QUESTION",
+          "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "VALID",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+            ]
+          },
+          "request_id": "event:question",
+          "source_event_id": "question",
+          "generation": 0,
+          "text_presented_s": 0.0009235842153429985,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "text_presented": true,
+          "end_s": 0.0009235842153429985
+        },
+        {
+          "table": "events",
+          "references": [],
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "scene_key": "",
+          "scene_seconds": 0.000999875133857131,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N4",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.00510708405636251,
+          "end_s": 0.005126667208969593,
+          "duration": 1.958315260708332e-05,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "answer",
+            "source_refs": []
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "COMMAND_INGRESS",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.005136667052283883,
+          "end_s": 0.005323084071278572,
+          "duration": 0.000186417018994689,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N4"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+            "goal_id": "answer"
+          }
+        },
+        {
+          "table": "effects",
+          "scene_key": "",
+          "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false,
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              }
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+          "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+          "send_s": 0.0011381669901311398,
+          "ingress_accepted_s": 0.0011990421917289495,
+          "accepted_s": 0.0011991250794380903,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false,
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              }
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+          "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+          "send_s": 0.0011381669901311398,
+          "ingress_accepted_s": 0.0011990421917289495,
+          "accepted_s": 0.0011991250794380903,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+          "scene_key": "",
+          "scene_seconds": 0.0012297499924898148,
+          "kind": "COMMAND_SENT",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+          "accepted_s": 0.0011991250794380903,
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+          "scene_key": "",
+          "scene_seconds": 0.0012512921821326017,
+          "kind": "AGENT_INGRESS_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "AGENT_RECEIPT_DELIVERY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.005323084071278572,
+          "end_s": 0.006753042107447982,
+          "duration": 0.0014299580361694098,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N5"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+            "receipt": "ACCEPTED"
+          }
+        },
+        {
+          "table": "events",
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "answer"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "question_id": "q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기 범위를 사용합니까?",
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                "text_presented": true,
+                "presentation_status": "PRESENTED",
+                "delivered_receipt": true,
+                "voice_presented": false,
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "Q3"
+                }
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            },
+            "request_id": "probe-request",
+            "goal_id": "answer",
+            "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+            "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+            "send_s": 0.0011381669901311398,
+            "ingress_accepted_s": 0.0011990421917289495,
+            "accepted_s": 0.0011991250794380903,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "operation": "ANSWER_QUESTION",
+                "payload": {
+                  "goal": {
+                    "id": "answer",
+                    "kind": "ANSWER_QUESTION",
+                    "operation": "ANSWER_QUESTION",
+                    "target": "work",
+                    "arguments": {
+                      "question_ref": "q",
+                      "question_revision": 2,
+                      "answer": "yes",
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "answer"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [],
+                  "question": {
+                    "question_id": "q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "ANSWERED",
+                    "text": "상반기 범위를 사용합니까?",
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    },
+                    "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                    "text_presented": true,
+                    "presentation_status": "PRESENTED",
+                    "delivered_receipt": true,
+                    "voice_presented": false,
+                    "answer_status": "ACCEPTED",
+                    "answer": "yes"
+                  },
+                  "before_task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "업무",
+                    "source_refs": [
+                      "doc@v1"
+                    ],
+                    "properties": {
+                      "PERIOD": "Q3"
+                    }
+                  },
+                  "task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "업무",
+                    "source_refs": [
+                      "doc@v1"
+                    ],
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+            "receipt_s": 0.002629375085234642,
+            "receipt_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "업무",
+            "source_refs": [
+              "doc@v1"
+            ],
+            "properties": {
+              "PERIOD": "H1"
+            }
+          },
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "구조 계약 검증 입력"
+          },
+          "_causal_parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          ],
+          "completion_confirmed": false,
+          "receipt_received_s": 0.002629375085234642,
+          "scene_key": "",
+          "scene_seconds": 0.0026737921871244907,
+          "kind": "COMMAND_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "references": [],
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "scene_key": "",
+          "scene_seconds": 0.0027377090882509947,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N7",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.006839500041678548,
+          "end_s": 0.006865292089059949,
+          "duration": 2.5792047381401062e-05,
+          "parents": [],
+          "request_id": "another-answer-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "answer",
+            "source_refs": []
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N8",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.00699533405713737,
+          "end_s": 0.006999875186011195,
+          "duration": 4.541128873825073e-06,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.007024792023003101,
+          "end_s": 0.007024792023003101,
+          "duration": 0.0,
+          "parents": [
+            "TL:a2b1fe1f932b4da2953872f8b75c9542:N8"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:2:bf6b0254-31fb-4371-96dc-1db383f8b374"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:2:bf6b0254-31fb-4371-96dc-1db383f8b374",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+              "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+              "send_s": 0.0011381669901311398,
+              "ingress_accepted_s": 0.0011990421917289495,
+              "accepted_s": 0.0011991250794380903,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "question_id": "q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기 범위를 사용합니까?",
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                      "text_presented": true,
+                      "presentation_status": "PRESENTED",
+                      "delivered_receipt": true,
+                      "voice_presented": false,
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      }
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+              "receipt_s": 0.002629375085234642,
+              "receipt_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.0029016670305281878,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.0029077092185616493,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:2:bf6b0254-31fb-4371-96dc-1db383f8b374",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+              "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+              "send_s": 0.0011381669901311398,
+              "ingress_accepted_s": 0.0011990421917289495,
+              "accepted_s": 0.0011991250794380903,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "question_id": "q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기 범위를 사용합니까?",
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                      "text_presented": true,
+                      "presentation_status": "PRESENTED",
+                      "delivered_receipt": true,
+                      "voice_presented": false,
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      }
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+              "receipt_s": 0.002629375085234642,
+              "receipt_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.0029016670305281878,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "text_presented": true,
+          "end_s": 0.0029016670305281878
+        }
+      ],
+      "effects": [
+        {
+          "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false,
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              }
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+          "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+          "send_s": 0.0011381669901311398,
+          "ingress_accepted_s": 0.0011990421917289495,
+          "accepted_s": 0.0011991250794380903,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+          "receipt_s": 0.002629375085234642,
+          "receipt_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+        }
+      ],
+      "tasks": {
+        "work": {
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "status": "RUNNING",
+          "instruction": "업무",
+          "source_refs": [
+            "doc@v1"
+          ],
+          "properties": {
+            "PERIOD": "H1"
+          }
+        }
+      },
+      "deliveries": [
+        {
+          "kind": "QUESTION",
+          "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "question": {
+              "question_id": "q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기 범위를 사용합니까?",
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+              "text_presented": true,
+              "presentation_status": "PRESENTED",
+              "delivered_receipt": true,
+              "voice_presented": false,
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+            ]
+          },
+          "request_id": "event:question",
+          "source_event_id": "question",
+          "generation": 0,
+          "text_presented_s": 0.0009235842153429985,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+          "text_presented": true,
+          "end_s": 0.0009235842153429985
+        },
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:2:bf6b0254-31fb-4371-96dc-1db383f8b374",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "question_id": "q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기 범위를 사용합니까?",
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                  "text_presented": true,
+                  "presentation_status": "PRESENTED",
+                  "delivered_receipt": true,
+                  "voice_presented": false,
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  }
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba",
+              "command_input_sha256": "ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a",
+              "send_s": 0.0011381669901311398,
+              "ingress_accepted_s": 0.0011990421917289495,
+              "accepted_s": 0.0011991250794380903,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "question_id": "q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기 범위를 사용합니까?",
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "cba8f3b34430218b2d811d614b7647f8",
+                      "text_presented": true,
+                      "presentation_status": "PRESENTED",
+                      "delivered_receipt": true,
+                      "voice_presented": false,
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      }
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+              "receipt_s": 0.002629375085234642,
+              "receipt_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.0029016670305281878,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "causal_node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+          "text_presented": true,
+          "end_s": 0.0029016670305281878
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:a2b1fe1f932b4da2953872f8b75c9542:N1\"],\"question\":{\"allowed_answer_scope_token\":\"cba8f3b34430218b2d811d614b7647f8\",\"execution_id\":\"work-exec\",\"question_id\":\"q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기 범위를 사용합니까?\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        },
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:a2b1fe1f932b4da2953872f8b75c9542:N6\"],\"command\":{\"accepted_s\":0.0011991250794380903,\"command_id\":\"CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e\",\"command_input_sha256\":\"ccade18826f9f20b675b893bdecf9ce3022e4349905ffb91f0abbda46f38939a\",\"execution_id\":\"work-exec\",\"goal_id\":\"answer\",\"ingress_accepted_s\":0.0011990421917289495,\"ingress_node_id\":\"TL:a2b1fe1f932b4da2953872f8b75c9542:N5\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"Q3\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"answer\"]}],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"cba8f3b34430218b2d811d614b7647f8\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"presentation_status\":\"PRESENTED\",\"question_id\":\"q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기 범위를 사용합니까?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"payload_sha256\":\"c0353f2768d3ee4e74b5104d657cf93a0514a91bd3488ccdd624850734c7ffba\",\"receipt_node_id\":\"TL:a2b1fe1f932b4da2953872f8b75c9542:N6\",\"receipt_s\":0.002629375085234642,\"request_id\":\"probe-request\",\"request_revision\":1,\"send_s\":0.0011381669901311398,\"status\":\"INGRESS_ACCEPTED\",\"task_id\":\"work\",\"wire\":{\"command\":{\"command_id\":\"CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e\",\"execution_id\":\"work-exec\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"Q3\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"answer\"]}],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"cba8f3b34430218b2d811d614b7647f8\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"presentation_status\":\"PRESENTED\",\"question_id\":\"q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기 범위를 사용합니까?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"request_revision\":1,\"task_id\":\"work\"},\"protocol\":\"agent-wire-v1\"}},\"completion_confirmed\":false,\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preserved_tasks\":[{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}],\"receipt\":\"ACCEPTED\",\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N1",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "EXTERNAL_EVENT_AVAILABLE",
+            "owner": "EXTERNAL_SOURCE",
+            "start_s": 0.00497175008058548,
+            "end_s": 0.00497175008058548,
+            "duration": 0.0,
+            "parents": [],
+            "request_id": "",
+            "evidence": [],
+            "metadata": {
+              "source_event_id": "question",
+              "type": "QUESTION"
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N2",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.00502304220572114,
+            "end_s": 0.005028167041018605,
+            "duration": 5.124835297465324e-06,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N1"
+            ],
+            "request_id": "event:question",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N3",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.005046709207817912,
+            "end_s": 0.005046709207817912,
+            "duration": 0.0,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N2"
+            ],
+            "request_id": "event:question",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:1:ee4c5886-60f4-40c7-98a8-fdb03872084c"
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N4",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.00510708405636251,
+            "end_s": 0.005126667208969593,
+            "duration": 1.958315260708332e-05,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "answer",
+              "source_refs": []
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N5",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "COMMAND_INGRESS",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.005136667052283883,
+            "end_s": 0.005323084071278572,
+            "duration": 0.000186417018994689,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N4"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "goal_id": "answer"
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N6",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "AGENT_RECEIPT_DELIVERY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.005323084071278572,
+            "end_s": 0.006753042107447982,
+            "duration": 0.0014299580361694098,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N5"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:f88be47c-3d42-4d14-aa08-c20cbc9f8c5e",
+              "receipt": "ACCEPTED"
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N7",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.006839500041678548,
+            "end_s": 0.006865292089059949,
+            "duration": 2.5792047381401062e-05,
+            "parents": [],
+            "request_id": "another-answer-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "answer",
+              "source_refs": []
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N8",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.00699533405713737,
+            "end_s": 0.006999875186011195,
+            "duration": 4.541128873825073e-06,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N6"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:a2b1fe1f932b4da2953872f8b75c9542:N9",
+            "timeline_id": "TL:a2b1fe1f932b4da2953872f8b75c9542",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.007024792023003101,
+            "end_s": 0.007024792023003101,
+            "duration": 0.0,
+            "parents": [
+              "TL:a2b1fe1f932b4da2953872f8b75c9542:N8"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:2:bf6b0254-31fb-4371-96dc-1db383f8b374"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "probe": "restore_existing_actual_presented_question",
+      "events": [
+        {
+          "table": "events",
+          "references": [],
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 1,
+          "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "scene_key": "",
+          "scene_seconds": 2.9416987672448158e-05,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N1",
+          "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 4.537496715784073e-05,
+          "end_s": 5.574990063905716e-05,
+          "duration": 1.037493348121643e-05,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "answer",
+            "source_refs": []
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+          "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+          "kind": "COMMAND_INGRESS",
+          "owner": "LOCAL_VIA",
+          "start_s": 6.445799954235554e-05,
+          "end_s": 0.00017175008542835712,
+          "duration": 0.00010729208588600159,
+          "parents": [
+            "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+            "goal_id": "answer"
+          }
+        },
+        {
+          "table": "effects",
+          "scene_key": "",
+          "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "task_id": "work",
+              "question_id": "restored-q",
+              "revision": 2,
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기로 바꿀까요?",
+              "delivered_receipt": true,
+              "text_presented": true,
+              "voice_presented": false,
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+          "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+          "send_s": 7.766694761812687e-05,
+          "ingress_accepted_s": 0.0001473750453442335,
+          "accepted_s": 0.00014750007539987564,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "task_id": "work",
+              "question_id": "restored-q",
+              "revision": 2,
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기로 바꿀까요?",
+              "delivered_receipt": true,
+              "text_presented": true,
+              "voice_presented": false,
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+          "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+          "send_s": 7.766694761812687e-05,
+          "ingress_accepted_s": 0.0001473750453442335,
+          "accepted_s": 0.00014750007539987564,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+          "scene_key": "",
+          "scene_seconds": 0.00018270802684128284,
+          "kind": "COMMAND_SENT",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+          "accepted_s": 0.00014750007539987564,
+          "causal_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+          "scene_key": "",
+          "scene_seconds": 0.0002102081198245287,
+          "kind": "AGENT_INGRESS_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3",
+          "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+          "kind": "AGENT_RECEIPT_DELIVERY",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.00017175008542835712,
+          "end_s": 0.001591457985341549,
+          "duration": 0.0014197078999131918,
+          "parents": [
+            "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+            "receipt": "ACCEPTED"
+          }
+        },
+        {
+          "table": "events",
+          "receipt": "ACCEPTED",
+          "command": {
+            "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "operation": "ANSWER_QUESTION",
+            "payload": {
+              "goal": {
+                "id": "answer",
+                "kind": "ANSWER_QUESTION",
+                "operation": "ANSWER_QUESTION",
+                "target": "work",
+                "arguments": {
+                  "question_ref": "restored-q",
+                  "question_revision": 2,
+                  "answer": "yes",
+                  "properties": {
+                    "PERIOD": "H1"
+                  }
+                },
+                "instruction": "구조 계약 검증 입력"
+              },
+              "relations": [],
+              "constraints": [
+                {
+                  "op": "FORBID_ACTION",
+                  "scope": [
+                    "answer"
+                  ],
+                  "action": "SEND"
+                }
+              ],
+              "preservations": [],
+              "sources": [],
+              "question": {
+                "task_id": "work",
+                "question_id": "restored-q",
+                "revision": 2,
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "ANSWERED",
+                "text": "상반기로 바꿀까요?",
+                "delivered_receipt": true,
+                "text_presented": true,
+                "voice_presented": false,
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                },
+                "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                "answer_status": "ACCEPTED",
+                "answer": "yes"
+              },
+              "before_task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "Q3"
+                },
+                "questions": [
+                  {
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "VALID",
+                    "text": "상반기로 바꿀까요?",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    }
+                  }
+                ]
+              },
+              "task": {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                },
+                "questions": [
+                  {
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "VALID",
+                    "text": "상반기로 바꿀까요?",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    }
+                  }
+                ]
+              }
+            },
+            "request_id": "probe-request",
+            "goal_id": "answer",
+            "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+            "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+            "send_s": 7.766694761812687e-05,
+            "ingress_accepted_s": 0.0001473750453442335,
+            "accepted_s": 0.00014750007539987564,
+            "status": "INGRESS_ACCEPTED",
+            "wire": {
+              "protocol": "agent-wire-v1",
+              "command": {
+                "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "operation": "ANSWER_QUESTION",
+                "payload": {
+                  "goal": {
+                    "id": "answer",
+                    "kind": "ANSWER_QUESTION",
+                    "operation": "ANSWER_QUESTION",
+                    "target": "work",
+                    "arguments": {
+                      "question_ref": "restored-q",
+                      "question_revision": 2,
+                      "answer": "yes",
+                      "properties": {
+                        "PERIOD": "H1"
+                      }
+                    },
+                    "instruction": "구조 계약 검증 입력"
+                  },
+                  "relations": [],
+                  "constraints": [
+                    {
+                      "op": "FORBID_ACTION",
+                      "scope": [
+                        "answer"
+                      ],
+                      "action": "SEND"
+                    }
+                  ],
+                  "preservations": [],
+                  "sources": [],
+                  "question": {
+                    "task_id": "work",
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "ANSWERED",
+                    "text": "상반기로 바꿀까요?",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    },
+                    "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                    "answer_status": "ACCEPTED",
+                    "answer": "yes"
+                  },
+                  "before_task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "업무",
+                    "source_refs": [
+                      "doc@v1"
+                    ],
+                    "properties": {
+                      "PERIOD": "Q3"
+                    },
+                    "questions": [
+                      {
+                        "question_id": "restored-q",
+                        "revision": 2,
+                        "task_id": "work",
+                        "execution_id": "work-exec",
+                        "request_revision": 1,
+                        "status": "VALID",
+                        "text": "상반기로 바꿀까요?",
+                        "delivered_receipt": true,
+                        "text_presented": true,
+                        "voice_presented": false,
+                        "scope": {
+                          "property": "PERIOD",
+                          "proposed_value": "H1"
+                        }
+                      }
+                    ]
+                  },
+                  "task": {
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "RUNNING",
+                    "instruction": "업무",
+                    "source_refs": [
+                      "doc@v1"
+                    ],
+                    "properties": {
+                      "PERIOD": "H1"
+                    },
+                    "questions": [
+                      {
+                        "question_id": "restored-q",
+                        "revision": 2,
+                        "task_id": "work",
+                        "execution_id": "work-exec",
+                        "request_revision": 1,
+                        "status": "VALID",
+                        "text": "상반기로 바꿀까요?",
+                        "delivered_receipt": true,
+                        "text_presented": true,
+                        "voice_presented": false,
+                        "scope": {
+                          "property": "PERIOD",
+                          "proposed_value": "H1"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+            "receipt_s": 0.0015662920195609331,
+            "receipt_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+          },
+          "task": {
+            "task_id": "work",
+            "execution_id": "work-exec",
+            "request_revision": 1,
+            "status": "RUNNING",
+            "instruction": "업무",
+            "source_refs": [
+              "doc@v1"
+            ],
+            "properties": {
+              "PERIOD": "H1"
+            },
+            "questions": [
+              {
+                "question_id": "restored-q",
+                "revision": 2,
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "VALID",
+                "text": "상반기로 바꿀까요?",
+                "delivered_receipt": true,
+                "text_presented": true,
+                "voice_presented": false,
+                "scope": {
+                  "property": "PERIOD",
+                  "proposed_value": "H1"
+                }
+              }
+            ]
+          },
+          "goal": {
+            "id": "answer",
+            "kind": "ANSWER_QUESTION",
+            "operation": "ANSWER_QUESTION",
+            "target": "work",
+            "arguments": {
+              "question_ref": "restored-q",
+              "question_revision": 2,
+              "answer": "yes",
+              "properties": {
+                "PERIOD": "H1"
+              }
+            },
+            "instruction": "구조 계약 검증 입력"
+          },
+          "_causal_parents": [
+            "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+          ],
+          "preserved_tasks": [
+            {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            }
+          ],
+          "completion_confirmed": false,
+          "receipt_received_s": 0.0015662920195609331,
+          "scene_key": "",
+          "scene_seconds": 0.0016152500174939632,
+          "kind": "COMMAND_ACCEPTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N4",
+          "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0017781660426408052,
+          "end_s": 0.0017820000648498535,
+          "duration": 3.834022209048271e-06,
+          "parents": [
+            "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CRESPONSE",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+          "kind": "TEXT_PRESENTED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.001812665956094861,
+          "end_s": 0.001812665956094861,
+          "duration": 0.0,
+          "parents": [
+            "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N4"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "publication_id": "P:1:9869a551-321c-4321-b0e6-f87aba13d0b8"
+          }
+        },
+        {
+          "table": "events",
+          "kind": "TEXT_PRESENTED",
+          "publication_id": "P:1:9869a551-321c-4321-b0e6-f87aba13d0b8",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+              "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+              "send_s": 7.766694761812687e-05,
+              "ingress_accepted_s": 0.0001473750453442335,
+              "accepted_s": 0.00014750007539987564,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "restored-q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "task_id": "work",
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+              "receipt_s": 0.0015662920195609331,
+              "receipt_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                },
+                "questions": [
+                  {
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "VALID",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    }
+                  }
+                ]
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.00178920803591609,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "causal_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "text_presented": true,
+          "payload_kind": "RESPONSE",
+          "scene_key": "",
+          "scene_seconds": 0.001794750103726983,
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:1:9869a551-321c-4321-b0e6-f87aba13d0b8",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+              "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+              "send_s": 7.766694761812687e-05,
+              "ingress_accepted_s": 0.0001473750453442335,
+              "accepted_s": 0.00014750007539987564,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "restored-q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "task_id": "work",
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+              "receipt_s": 0.0015662920195609331,
+              "receipt_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                },
+                "questions": [
+                  {
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "VALID",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    }
+                  }
+                ]
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.00178920803591609,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "causal_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "text_presented": true,
+          "end_s": 0.00178920803591609
+        }
+      ],
+      "effects": [
+        {
+          "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "operation": "ANSWER_QUESTION",
+          "payload": {
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "relations": [],
+            "constraints": [
+              {
+                "op": "FORBID_ACTION",
+                "scope": [
+                  "answer"
+                ],
+                "action": "SEND"
+              }
+            ],
+            "preservations": [],
+            "sources": [],
+            "question": {
+              "task_id": "work",
+              "question_id": "restored-q",
+              "revision": 2,
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "ANSWERED",
+              "text": "상반기로 바꿀까요?",
+              "delivered_receipt": true,
+              "text_presented": true,
+              "voice_presented": false,
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              },
+              "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+              "answer_status": "ACCEPTED",
+              "answer": "yes"
+            },
+            "before_task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "Q3"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            }
+          },
+          "request_id": "probe-request",
+          "goal_id": "answer",
+          "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+          "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+          "send_s": 7.766694761812687e-05,
+          "ingress_accepted_s": 0.0001473750453442335,
+          "accepted_s": 0.00014750007539987564,
+          "status": "INGRESS_ACCEPTED",
+          "wire": {
+            "protocol": "agent-wire-v1",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+          "receipt_s": 0.0015662920195609331,
+          "receipt_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+        }
+      ],
+      "tasks": {
+        "work": {
+          "task_id": "work",
+          "execution_id": "work-exec",
+          "request_revision": 1,
+          "status": "RUNNING",
+          "instruction": "업무",
+          "source_refs": [
+            "doc@v1"
+          ],
+          "properties": {
+            "PERIOD": "H1"
+          },
+          "questions": [
+            {
+              "question_id": "restored-q",
+              "revision": 2,
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "VALID",
+              "text": "상반기로 바꿀까요?",
+              "delivered_receipt": true,
+              "text_presented": true,
+              "voice_presented": false,
+              "scope": {
+                "property": "PERIOD",
+                "proposed_value": "H1"
+              }
+            }
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:1:9869a551-321c-4321-b0e6-f87aba13d0b8",
+          "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용",
+          "facts": {
+            "receipt": "ACCEPTED",
+            "command": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "operation": "ANSWER_QUESTION",
+              "payload": {
+                "goal": {
+                  "id": "answer",
+                  "kind": "ANSWER_QUESTION",
+                  "operation": "ANSWER_QUESTION",
+                  "target": "work",
+                  "arguments": {
+                    "question_ref": "restored-q",
+                    "question_revision": 2,
+                    "answer": "yes",
+                    "properties": {
+                      "PERIOD": "H1"
+                    }
+                  },
+                  "instruction": "구조 계약 검증 입력"
+                },
+                "relations": [],
+                "constraints": [
+                  {
+                    "op": "FORBID_ACTION",
+                    "scope": [
+                      "answer"
+                    ],
+                    "action": "SEND"
+                  }
+                ],
+                "preservations": [],
+                "sources": [],
+                "question": {
+                  "task_id": "work",
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "ANSWERED",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  },
+                  "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                  "answer_status": "ACCEPTED",
+                  "answer": "yes"
+                },
+                "before_task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "Q3"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                },
+                "task": {
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "RUNNING",
+                  "instruction": "업무",
+                  "source_refs": [
+                    "doc@v1"
+                  ],
+                  "properties": {
+                    "PERIOD": "H1"
+                  },
+                  "questions": [
+                    {
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "VALID",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      }
+                    }
+                  ]
+                }
+              },
+              "request_id": "probe-request",
+              "goal_id": "answer",
+              "payload_sha256": "e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c",
+              "command_input_sha256": "1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654",
+              "send_s": 7.766694761812687e-05,
+              "ingress_accepted_s": 0.0001473750453442335,
+              "accepted_s": 0.00014750007539987564,
+              "status": "INGRESS_ACCEPTED",
+              "wire": {
+                "protocol": "agent-wire-v1",
+                "command": {
+                  "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "operation": "ANSWER_QUESTION",
+                  "payload": {
+                    "goal": {
+                      "id": "answer",
+                      "kind": "ANSWER_QUESTION",
+                      "operation": "ANSWER_QUESTION",
+                      "target": "work",
+                      "arguments": {
+                        "question_ref": "restored-q",
+                        "question_revision": 2,
+                        "answer": "yes",
+                        "properties": {
+                          "PERIOD": "H1"
+                        }
+                      },
+                      "instruction": "구조 계약 검증 입력"
+                    },
+                    "relations": [],
+                    "constraints": [
+                      {
+                        "op": "FORBID_ACTION",
+                        "scope": [
+                          "answer"
+                        ],
+                        "action": "SEND"
+                      }
+                    ],
+                    "preservations": [],
+                    "sources": [],
+                    "question": {
+                      "task_id": "work",
+                      "question_id": "restored-q",
+                      "revision": 2,
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "ANSWERED",
+                      "text": "상반기로 바꿀까요?",
+                      "delivered_receipt": true,
+                      "text_presented": true,
+                      "voice_presented": false,
+                      "scope": {
+                        "property": "PERIOD",
+                        "proposed_value": "H1"
+                      },
+                      "allowed_answer_scope_token": "3fffe44d1bc16935b2176ef0f92a6a94",
+                      "answer_status": "ACCEPTED",
+                      "answer": "yes"
+                    },
+                    "before_task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "Q3"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    },
+                    "task": {
+                      "task_id": "work",
+                      "execution_id": "work-exec",
+                      "request_revision": 1,
+                      "status": "RUNNING",
+                      "instruction": "업무",
+                      "source_refs": [
+                        "doc@v1"
+                      ],
+                      "properties": {
+                        "PERIOD": "H1"
+                      },
+                      "questions": [
+                        {
+                          "question_id": "restored-q",
+                          "revision": 2,
+                          "task_id": "work",
+                          "execution_id": "work-exec",
+                          "request_revision": 1,
+                          "status": "VALID",
+                          "text": "상반기로 바꿀까요?",
+                          "delivered_receipt": true,
+                          "text_presented": true,
+                          "voice_presented": false,
+                          "scope": {
+                            "property": "PERIOD",
+                            "proposed_value": "H1"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "ingress_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+              "receipt_s": 0.0015662920195609331,
+              "receipt_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            },
+            "task": {
+              "task_id": "work",
+              "execution_id": "work-exec",
+              "request_revision": 1,
+              "status": "RUNNING",
+              "instruction": "업무",
+              "source_refs": [
+                "doc@v1"
+              ],
+              "properties": {
+                "PERIOD": "H1"
+              },
+              "questions": [
+                {
+                  "question_id": "restored-q",
+                  "revision": 2,
+                  "task_id": "work",
+                  "execution_id": "work-exec",
+                  "request_revision": 1,
+                  "status": "VALID",
+                  "text": "상반기로 바꿀까요?",
+                  "delivered_receipt": true,
+                  "text_presented": true,
+                  "voice_presented": false,
+                  "scope": {
+                    "property": "PERIOD",
+                    "proposed_value": "H1"
+                  }
+                }
+              ]
+            },
+            "goal": {
+              "id": "answer",
+              "kind": "ANSWER_QUESTION",
+              "operation": "ANSWER_QUESTION",
+              "target": "work",
+              "arguments": {
+                "question_ref": "restored-q",
+                "question_revision": 2,
+                "answer": "yes",
+                "properties": {
+                  "PERIOD": "H1"
+                }
+              },
+              "instruction": "구조 계약 검증 입력"
+            },
+            "_causal_parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            ],
+            "preserved_tasks": [
+              {
+                "task_id": "work",
+                "execution_id": "work-exec",
+                "request_revision": 1,
+                "status": "RUNNING",
+                "instruction": "업무",
+                "source_refs": [
+                  "doc@v1"
+                ],
+                "properties": {
+                  "PERIOD": "H1"
+                },
+                "questions": [
+                  {
+                    "question_id": "restored-q",
+                    "revision": 2,
+                    "task_id": "work",
+                    "execution_id": "work-exec",
+                    "request_revision": 1,
+                    "status": "VALID",
+                    "delivered_receipt": true,
+                    "text_presented": true,
+                    "voice_presented": false,
+                    "scope": {
+                      "property": "PERIOD",
+                      "proposed_value": "H1"
+                    }
+                  }
+                ]
+              }
+            ],
+            "completion_confirmed": false
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": 0.00178920803591609,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": true,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "text_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "causal_node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+          "text_presented": true,
+          "end_s": 0.00178920803591609
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "VIA의 한국어 응답 문장을 생성한다. 제공된 실제 사실만 간결히 말한다. 일반 답변은 100자 이내로 핵심 사실을 전달한다. 실제 receipt가 있으면 어떤 대상 업무/operation의 어떤 상태인지 밝혀라. ACCEPTED는 접수이며 완료가 아니다. CANCEL_ACCEPTED는 취소 명령 접수이며 실제 실행 종료 확인이 아니다. completion_confirmed와 actual 외부 status가 완료를 확인할 때만 완료했다고 말한다. SENT가 실제 확인되면 실제 recipient와 어떤 결과가 발송됐는지 포함하라. 원문/결과 body만 낭독하여 접수나 완료 상태를 빠뜨리지 마라. 질문의 선택지를 합치거나 임의 답변하지 않는다. 출처와 대상 업무를 구별한다. 거절 사실이면 그 거절을 명확히 전달한다. 반환은 JSON {\"text\": \"사용자에게 전달할 문장\"}뿐이다."
+            },
+            {
+              "role": "user",
+              "content": "{\"_causal_parents\":[\"TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3\"],\"command\":{\"accepted_s\":0.00014750007539987564,\"command_id\":\"CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6\",\"command_input_sha256\":\"1d6d246b8d3b0a02128451c1c6f5603b5eed4bac6ad7833fb11fee70e9508654\",\"execution_id\":\"work-exec\",\"goal_id\":\"answer\",\"ingress_accepted_s\":0.0001473750453442335,\"ingress_node_id\":\"TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"Q3\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"answer\"]}],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"restored-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"3fffe44d1bc16935b2176ef0f92a6a94\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"payload_sha256\":\"e001fa15a79f7e90e797b41d04603acfcf61a297f1cd60ae0f3d301972fc722c\",\"receipt_node_id\":\"TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3\",\"receipt_s\":0.0015662920195609331,\"request_id\":\"probe-request\",\"request_revision\":1,\"send_s\":7.766694761812687e-05,\"status\":\"INGRESS_ACCEPTED\",\"task_id\":\"work\",\"wire\":{\"command\":{\"command_id\":\"CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6\",\"execution_id\":\"work-exec\",\"operation\":\"ANSWER_QUESTION\",\"payload\":{\"before_task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"Q3\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"},\"constraints\":[{\"action\":\"SEND\",\"op\":\"FORBID_ACTION\",\"scope\":[\"answer\"]}],\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"restored-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preservations\":[],\"question\":{\"allowed_answer_scope_token\":\"3fffe44d1bc16935b2176ef0f92a6a94\",\"answer\":\"yes\",\"answer_status\":\"ACCEPTED\",\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"ANSWERED\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false},\"relations\":[],\"sources\":[],\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}},\"request_revision\":1,\"task_id\":\"work\"},\"protocol\":\"agent-wire-v1\"}},\"completion_confirmed\":false,\"goal\":{\"arguments\":{\"answer\":\"yes\",\"properties\":{\"PERIOD\":\"H1\"},\"question_ref\":\"restored-q\",\"question_revision\":2},\"id\":\"answer\",\"instruction\":\"구조 계약 검증 입력\",\"kind\":\"ANSWER_QUESTION\",\"operation\":\"ANSWER_QUESTION\",\"target\":\"work\"},\"preserved_tasks\":[{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}],\"receipt\":\"ACCEPTED\",\"task\":{\"execution_id\":\"work-exec\",\"instruction\":\"업무\",\"properties\":{\"PERIOD\":\"H1\"},\"questions\":[{\"delivered_receipt\":true,\"execution_id\":\"work-exec\",\"question_id\":\"restored-q\",\"request_revision\":1,\"revision\":2,\"scope\":{\"property\":\"PERIOD\",\"proposed_value\":\"H1\"},\"status\":\"VALID\",\"task_id\":\"work\",\"text\":\"상반기로 바꿀까요?\",\"text_presented\":true,\"voice_presented\":false}],\"request_revision\":1,\"source_refs\":[\"doc@v1\"],\"status\":\"RUNNING\",\"task_id\":\"work\"}}"
+            }
+          ],
+          "role": "CRESPONSE"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N1",
+            "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 4.537496715784073e-05,
+            "end_s": 5.574990063905716e-05,
+            "duration": 1.037493348121643e-05,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "answer",
+              "source_refs": []
+            }
+          },
+          {
+            "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2",
+            "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+            "kind": "COMMAND_INGRESS",
+            "owner": "LOCAL_VIA",
+            "start_s": 6.445799954235554e-05,
+            "end_s": 0.00017175008542835712,
+            "duration": 0.00010729208588600159,
+            "parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "goal_id": "answer"
+            }
+          },
+          {
+            "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3",
+            "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+            "kind": "AGENT_RECEIPT_DELIVERY",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.00017175008542835712,
+            "end_s": 0.001591457985341549,
+            "duration": 0.0014197078999131918,
+            "parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N2"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "command_id": "CMD:46962212-b4ca-4a38-9176-7d9a8ef12cf6",
+              "receipt": "ACCEPTED"
+            }
+          },
+          {
+            "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N4",
+            "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0017781660426408052,
+            "end_s": 0.0017820000648498535,
+            "duration": 3.834022209048271e-06,
+            "parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N3"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CRESPONSE",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N5",
+            "timeline_id": "TL:705a870fc73d4e708ee4df5dc2f3d7b9",
+            "kind": "TEXT_PRESENTED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.001812665956094861,
+            "end_s": 0.001812665956094861,
+            "duration": 0.0,
+            "parents": [
+              "TL:705a870fc73d4e708ee4df5dc2f3d7b9:N4"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "publication_id": "P:1:9869a551-321c-4321-b0e6-f87aba13d0b8"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "probe": [
+        "test_question_withdrawn_during_input_hold_has_no_presentation_receipt"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    },
+    {
+      "probe": [
+        "test_question_withdrawn_during_input_hold_has_no_presentation_receipt"
+      ],
+      "tests_run": 1,
+      "errors": [],
+      "failures": []
+    }
+  ],
+  "variant": "A",
+  "task_id": "M05",
+  "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION",
+  "source_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/source",
+  "imported_runtime": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/source/prototypes/candidates/dp41_45_poc/shared/runtime.py",
+  "api_calls": 0,
+  "stderr": "QA05 probe start duplicate_answer\nQA05 probe end duplicate_answer\nQA05 probe start restored_initial_question_with_token\nQA05 probe end restored_initial_question_with_token\nQA05 probe start reverse_event\nQA05 probe end reverse_event\nQA05 probe start input_hold\nQA05 probe end input_hold\n"
+}

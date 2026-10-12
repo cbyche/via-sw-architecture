@@ -1,0 +1,162 @@
+{
+  "variant": "B",
+  "status": "PASS",
+  "required": [
+    "failure_continues_draft_once",
+    "success_branch_preserved",
+    "SEND_zero",
+    "AFTER",
+    "USE_RESULT",
+    "duplicate_failure",
+    "late_success",
+    "unrelated_task"
+  ],
+  "checks": {
+    "failure_continues_draft_once": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#failure_continues_draft_once"
+      ]
+    },
+    "SEND_zero": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#SEND_zero"
+      ]
+    },
+    "duplicate_failure": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#duplicate_failure"
+      ]
+    },
+    "late_success": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#late_success"
+      ]
+    },
+    "unrelated_task": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#unrelated_task"
+      ]
+    },
+    "success_branch_preserved": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#success_branch_preserved"
+      ]
+    },
+    "failure_only_success_suppressed": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#failure_only_success_suppressed"
+      ]
+    },
+    "failure_only_continuation": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#failure_only_continuation"
+      ]
+    },
+    "completed_only_continuation": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#completed_only_continuation"
+      ]
+    },
+    "completed_only_failure_blocked": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#completed_only_failure_blocked"
+      ]
+    },
+    "AFTER": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#AFTER"
+      ]
+    },
+    "USE_RESULT": {
+      "passed": true,
+      "evidence": [
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-preflight-m04-guard-20261012-aa6bb760/B/runtime-requirement-checks.json#USE_RESULT"
+      ]
+    }
+  },
+  "responsibility_claims": {
+    "responsibility_claims": {
+      "U01": {
+        "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+        "before_contract": "existing owner-state WHEN",
+        "after_contract": "finite current-producer terminal WHEN",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+        ],
+        "functional_evidence": [
+          "runtime-requirement-checks.json",
+          "regression.json"
+        ]
+      },
+      "U03": {
+        "reason": "Validate producer identity and the bounded terminal-state predicate without arbitrary expressions.",
+        "before_contract": "owner reference predicates",
+        "after_contract": "exclusive owner/producer references and terminal enum validation",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+        ],
+        "functional_evidence": [
+          "runtime-requirement-checks.json",
+          "regression.json"
+        ]
+      },
+      "U07": {
+        "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+        "before_contract": "successful RESULT and receipt ingress",
+        "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+        ],
+        "functional_evidence": [
+          "runtime-requirement-checks.json",
+          "regression.json"
+        ]
+      },
+      "U08": {
+        "reason": "Dispatcher resolves actual failed producer readiness and runs failure continuation once while blocking success-dependent paths.",
+        "before_contract": "successful producer completion readiness",
+        "after_contract": "failure readiness and typed failure continuation scheduling",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+        ],
+        "functional_evidence": [
+          "runtime-requirement-checks.json",
+          "regression.json"
+        ]
+      },
+      "U02": {
+        "reason": "Frame binder preserves symbolic producer identity instead of requiring a pre-existing owner reference.",
+        "before_contract": "all WHEN predicates bind reference_id",
+        "after_contract": "only owner predicates bind reference_id; producer identity is finite and retained",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/dp41/b.py"
+        ],
+        "functional_evidence": [
+          "runtime-requirement-checks.json",
+          "regression.json"
+        ]
+      }
+    }
+  },
+  "changed_paths": [
+    "prototypes/candidates/dp41_45_poc/dp41/b.py",
+    "prototypes/candidates/dp41_45_poc/dp41/contract.py",
+    "prototypes/candidates/dp41_45_poc/dp41/prompts.py",
+    "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+  ],
+  "before_source_hash": "823588be86d0c473effa0ed34e63eb85d27068b342f98e7b26607edfb3f329c7",
+  "after_source_hash": "de7bce2c041c55db76adcfe5ff17aebd109903c394eb11c1f11f36bbfc130c15",
+  "api_calls": 0,
+  "scope": "PRE_FREEZE_LOCAL_PATCH_VALIDATION_NOT_FORMAL_QA05"
+}

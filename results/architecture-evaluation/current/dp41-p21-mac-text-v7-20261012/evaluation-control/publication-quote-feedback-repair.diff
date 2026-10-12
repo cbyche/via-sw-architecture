@@ -1,0 +1,60 @@
+--- evaluator-tools-v3/benchmark/architecture/dp41_45_poc/judge.py
++++ evaluator-tools-v4/benchmark/architecture/dp41_45_poc/judge.py
+@@ -150,8 +150,6 @@
+             result.get('cycle', {}), *result.get('critical_violations', [])]
+     invalid = sorted({ref for row in rows for ref in row.get('evidence', [])
+                       if isinstance(ref, str) and ref not in allowed})
+-    if not invalid:
+-        return feedback
+     def contains(value, needle):
+         if isinstance(value, dict):
+             return any(contains(child, needle) for child in value.values())
+@@ -161,11 +159,47 @@
+     locations = {ref: [{key: row[key] for key in ('evidence_id', 'command_id', 'publication_id', 'request_id')
+                        if row.get(key) in allowed}
+                       for row in supplied if contains(row, ref)][:8] for ref in invalid}
++    publications = {row['publication_id']: row for row in view['deliveries'] if row.get('publication_id')}
++    endpoint_issues = []
++    endpoints = [(f'reactions[{index}]', row) for index, row in enumerate(result.get('reactions', []))]
++    endpoints.append(('cycle', result.get('cycle', {})))
++    for path, row in endpoints:
++        for publication_field, quote_field in (
++                ('first_actual_publication_id', 'first_actual_core_quote'),
++                ('valid_publication_id', 'valid_core_quote')):
++            if publication_field not in row and quote_field not in row:
++                continue
++            publication_id, quote = row.get(publication_field), row.get(quote_field)
++            if publication_id is None:
++                if quote is not None:
++                    endpoint_issues.append({'field': f'{path}.{quote_field}', 'issue': 'NULL_PUBLICATION_HAS_QUOTE',
++                                            'supplied_publication_id': None, 'supplied_quote': quote})
++                continue
++            if not isinstance(publication_id, str) or publication_id not in publications:
++                endpoint_issues.append({'field': f'{path}.{publication_field}', 'issue': 'UNKNOWN_PUBLICATION_ID',
++                                        'supplied_publication_id': publication_id,
++                                        'paired_quote_field': f'{path}.{quote_field}', 'supplied_quote': quote})
++                continue
++            delivery = publications[publication_id]
++            emitted = delivery.get('voice_text', '') if delivery.get('voice_on') else delivery.get('text', '')
++            if not isinstance(quote, str) or not quote or quote not in emitted:
++                endpoint_issues.append({'field': f'{path}.{quote_field}', 'issue': 'NOT_EXACT_ACTUALLY_EMITTED_QUOTE',
++                                        'supplied_publication_id': publication_id, 'supplied_quote': quote,
++                                        'actual_emitted_text': emitted})
++    if not invalid and not endpoint_issues:
++        return feedback
+     return feedback + '\n' + canonical({
+         'invalid_evidence_references': invalid,
+         'actual_supplied_records_containing_those_values': locations,
+         'allowed_evidence_references': sorted(allowed),
+-        'instruction': 'Business/source/Task/input/causal-node IDs are values inside evidence, not event evidence IDs. Cite the enclosing actual supplied event, command, publication or adopted-meaning request. Do not change passed/wrong_first decisions or invent facts while repairing these references.'})
++        'invalid_endpoint_reference_or_quote_fields': endpoint_issues,
++        'actual_publications_for_schema_reference': [
++            {'publication_id': publication_id,
++             **{key: delivery[key] for key in ('kind', 'request_id', 'generation', 'source_event_id',
++                                               'voice_on', 'actual_text_display', 'actual_voice_onset') if key in delivery},
++             'actual_emitted_text': delivery.get('voice_text', '') if delivery.get('voice_on') else delivery.get('text', '')}
++            for publication_id, delivery in sorted(publications.items())],
++        'instruction': 'Business/source/Task/input/causal-node IDs are values inside evidence, not event evidence IDs. Cite the enclosing actual supplied event, command, publication or adopted-meaning request. Repair only identifiers and exact quoting for the same semantic claim; listed publications are not automatically valid endpoints. For Voice ON quote only an exact substring actually emitted in voice_text; for Voice OFF use displayed text. Do not change passed/wrong_first/uncertain decisions, choose an endpoint merely because it is listed, or invent facts while repairing these references.'})
+ 
+ 
+ async def grade(trial, oracle, client, evidence, *, independent_pass=1):

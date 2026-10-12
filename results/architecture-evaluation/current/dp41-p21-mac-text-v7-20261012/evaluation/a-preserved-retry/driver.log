@@ -1,0 +1,38 @@
+{"calibration": 16, "total": 16}
+{"case_id": "S2-01", "variant": "A", "repeat": 2, "status": "RETRY_REQUIRED", "error": "ValueError: Core quote is not an exact actually emitted clause"}
+{"case_id": "S2-03", "variant": "A", "repeat": 1, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case": "S4-02", "variant": "A", "repeat": 1, "passed": 2, "audits": 2}
+{"case_id": "S5-04", "variant": "A", "repeat": 1, "status": "RETRY_REQUIRED", "error": "KeyError: 'publication_id'"}
+{"case_id": "S2-03", "variant": "A", "repeat": 2, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S2-04", "variant": "A", "repeat": 2, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S2-03", "variant": "A", "repeat": 3, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S4-02", "variant": "A", "repeat": 2, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S5-04", "variant": "A", "repeat": 2, "status": "RETRY_REQUIRED", "error": "KeyError: 'publication_id'"}
+{"case": "S2-03", "variant": "A", "repeat": 4, "passed": 0, "audits": 2}
+{"case_id": "S5-04", "variant": "A", "repeat": 3, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S4-02", "variant": "A", "repeat": 3, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case": "S2-04", "variant": "A", "repeat": 3, "passed": 3, "audits": 3}
+{"case_id": "S4-02", "variant": "A", "repeat": 4, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S5-04", "variant": "A", "repeat": 4, "status": "RETRY_REQUIRED", "error": "KeyError: 'publication_id'"}
+{"case_id": "S4-02", "variant": "A", "repeat": 5, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case_id": "S2-03", "variant": "A", "repeat": 5, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+{"case": "S2-04", "variant": "A", "repeat": 5, "passed": 6, "audits": 2}
+{"case_id": "S5-04", "variant": "A", "repeat": 5, "status": "RETRY_REQUIRED", "error": "ValueError: Judge fabricated an evidence ID"}
+Traceback (most recent call last):
+  File "<frozen runpy>", line 203, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/evaluate.py", line 127, in <module>
+    asyncio.run(main(parser.parse_args()))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/runners.py", line 205, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/runners.py", line 128, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/evaluator-tools/benchmark/architecture/dp41_45_poc/evaluate.py", line 115, in main
+    raise RuntimeError(f'{failed} grading records require another preserved attempt')
+RuntimeError: 15 grading records require another preserved attempt

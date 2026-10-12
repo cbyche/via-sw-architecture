@@ -1,0 +1,77 @@
+{
+  "passed": true,
+  "observations": [
+    {
+      "version": "agent-wire-v2",
+      "routing": {
+        "command_id": "C1",
+        "task_id": "T1",
+        "execution_id": "X1",
+        "request_revision": 2
+      },
+      "action": "SEND_MAIL",
+      "input": {
+        "recipient": "wrong@example.invalid",
+        "body": "original wrong payload"
+      },
+      "extensions": {}
+    },
+    {
+      "reverse_duplicate_and_cancel_receipts": [
+        {
+          "version": "agent-wire-v2",
+          "routing": {
+            "command_id": "C1",
+            "task_id": "T1",
+            "execution_id": "X1",
+            "request_revision": 2
+          },
+          "result": {
+            "status": "COMPLETED",
+            "terminated": false
+          }
+        },
+        {
+          "version": "agent-wire-v2",
+          "routing": {
+            "command_id": "C1",
+            "task_id": "T1",
+            "execution_id": "X1",
+            "request_revision": 2
+          },
+          "result": {
+            "status": "ACCEPTED",
+            "terminated": false
+          }
+        },
+        {
+          "version": "agent-wire-v2",
+          "routing": {
+            "command_id": "C1",
+            "task_id": "T1",
+            "execution_id": "X1",
+            "request_revision": 2
+          },
+          "result": {
+            "status": "ACCEPTED",
+            "terminated": false
+          }
+        },
+        {
+          "version": "agent-wire-v2",
+          "routing": {
+            "command_id": "C1",
+            "task_id": "T1",
+            "execution_id": "X1",
+            "request_revision": 2
+          },
+          "result": {
+            "status": "CANCEL_ACCEPTED_TERMINATION_UNKNOWN",
+            "terminated": false
+          }
+        }
+      ]
+    }
+  ],
+  "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION"
+}

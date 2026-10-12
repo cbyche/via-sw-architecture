@@ -1,0 +1,1798 @@
+{
+  "reviewed_utc": "2026-10-11T23:58:00.629708+00:00",
+  "frozen_source_digest": "44f725057e7589c35aa59cb23537a9a8c59f48a40944b70f03e3906e931f08ce",
+  "source_snapshot_digest": "935fab8816a88ca514572ffe83c61015b291a343eaf71304126f3c9862845f5c",
+  "reviewer_script_sha256": "2f1579a9ba787f2bff688aeff815fa0f10a1eeda9d5a71aee244221c34484eb6",
+  "jobs": [
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M01",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M01/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U15"
+      ],
+      "reason": "Actual request/text/usage wire changed; the normalized interpretation port and cancellation disposition are preserved. One provider-adapter responsibility, regardless of method or file count.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-A-M01/result.json",
+          "sha256": "f83bb90b442b2e9cfbf7198ff8fd56772e98f3f3d8541e0f1df5e66505eb7f6d"
+        },
+        {
+          "path": "changes/CH-DP41-A-M01/patch.diff",
+          "sha256": "1f13cc8ad46c01b19e378923f3d61e7145d0db43c1a30c43f8936c32f3817a21"
+        },
+        {
+          "path": "changes/CH-DP41-A-M01/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M01/after-source-manifest.json",
+          "sha256": "eddcc8b23ae4c618adb6f997d46c2ab9642f6026905f2bbe136c3ae1b806c499"
+        },
+        {
+          "path": "changes/CH-DP41-A-M01/regression.json",
+          "sha256": "156327fefe3272bf9ae9d402fd2971bb82c7c6ae91b9727d1b8f25feb12119da"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": true,
+          "reason": "Provider API serialization and usage normalization changed while upper messages/text/usage port is stable."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M02",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M02/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U16"
+      ],
+      "reason": "Actual routing/action/input/result wire changed, preserving command identity, original payload and receipt uncertainty. One Agent-adapter responsibility; no new Task authority or semantic responsibility.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-A-M02/result.json",
+          "sha256": "0154d7ea12de47d7de0d374d3d6ec26f702d09a439b148b3dcd02bd7d790852c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M02/patch.diff",
+          "sha256": "62e25f79c1724f3c504e31847ac24357cb7b905e62f9392413ebda9ae659f0b8"
+        },
+        {
+          "path": "changes/CH-DP41-A-M02/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M02/after-source-manifest.json",
+          "sha256": "8ada8b5a0ea6283366ad9e1e25ba6376aacd9a89317cacea4fd0197c906fa268"
+        },
+        {
+          "path": "changes/CH-DP41-A-M02/regression.json",
+          "sha256": "796540edd0e66a69077fa07ff6f83feb69857824b6598743f191f846d225df2e"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": true,
+          "reason": "Gateway transport contract changes; original command routing, operation, payload and receipt status are preserved."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M03",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M03/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U09"
+      ],
+      "reason": "Calendar source fields and UTC/timezone envelope changed; normalization retains source/version/access and busy/free facts. One source-adapter responsibility; no new permission decision.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-A-M03/result.json",
+          "sha256": "d89ad40e5f061e2d733b1f23e2bc7a996f4cc7a8939df18d0dba2456f9859dae"
+        },
+        {
+          "path": "changes/CH-DP41-A-M03/patch.diff",
+          "sha256": "2b578b42df919b9bbf771ff51d954bdf88c0a3e170d613eabfc8634d9141021d"
+        },
+        {
+          "path": "changes/CH-DP41-A-M03/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M03/after-source-manifest.json",
+          "sha256": "ac5e042c09048c0fd30ef0fbd46b28e37d3291d4a1bbd9dc7795415dcb1ba89e"
+        },
+        {
+          "path": "changes/CH-DP41-A-M03/regression.json",
+          "sha256": "46b362ec81761c2fe7a453e8a7b0ae110affc401c263e16a5c3ef01bece7c147"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": true,
+          "reason": "Calendar source adapter accepts changed external fields/timezone envelope without changing stable original-source meaning."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M04",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U01",
+        "U03",
+        "U07",
+        "U08"
+      ],
+      "reason": "New finite terminal-state semantics require a model contract, validation contract, Task failure/currentness authority and actual producer continuation. Request revision and Task/Execution lineage belong to the continuation responsibility. Existing publication, storage, policy and downstream transport contracts are reused. The typed B binder is byte-identical, so U02 is not added merely because its representation differs.",
+      "evidence": [
+        {
+          "path": "changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/result.json",
+          "sha256": "a5f7dfee4c725c671dab2c271fd845592e113f8e8c06cd81b00959e46a364acd"
+        },
+        {
+          "path": "changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/patch.diff",
+          "sha256": "1a6c77fda5af8f62eb0433fea0ace37728c6b931010a4a6a8026f770ba3ccec6"
+        },
+        {
+          "path": "changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/after-source-manifest.json",
+          "sha256": "b217ddd2081c4f99f71be080b315e638c92de34c8a06dc5ec3fc603b70f1e52e"
+        },
+        {
+          "path": "changes-alternatives/ORIGINAL-A-LINEAGE-v1/CH-DP41-A-M04/regression.json",
+          "sha256": "84cb4f28580e1e2c567f2f2f244c40623dfe8fc7f637944efb5ac7d1bf019677"
+        },
+        {
+          "path": "changes-semantic/M04-A-attempt1/change-semantic-validation.jsonl",
+          "sha256": "f22a859daf058d38bec499985ace6de350822600e36220773b93023855d77575"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": true,
+          "reason": "Natural-language producer-failure condition is explicit in both model contracts."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": true,
+          "reason": "Validate producer identity and the bounded terminal-state predicate without arbitrary expressions."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": true,
+          "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": true,
+          "reason": "Bind failed producer readiness to current Request revision and actual Task/Execution/Task revision, preserving UNKNOWN for absent or superseded dispatches and successful-result dependencies."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "FAIL_PRESERVED_SEPARATELY"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M05",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U04",
+        "U07"
+      ],
+      "reason": "The actual Task question owner issues and validates a scope token, and the dialogue adoption reflects the actually presented token. Fresh-process restoration reuses unchanged generic serialization; issuing a token for pre-existing owner questions belongs to U07, with no separate persistent migration U14.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-A-M05/result.json",
+          "sha256": "3fe5e95292840ea6dcfc727711dec7a73c0259a4f1908be64a07344bd5627931"
+        },
+        {
+          "path": "changes/CH-DP41-A-M05/patch.diff",
+          "sha256": "5e366340ad48d93905416b636fb8734455d2a951e6538c616185aa35ad33278e"
+        },
+        {
+          "path": "changes/CH-DP41-A-M05/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M05/after-source-manifest.json",
+          "sha256": "ec486dc1582ff5a6b9269a5a6a0205d1e71c91d7fad51e857fc88f2e881f8c79"
+        },
+        {
+          "path": "changes/CH-DP41-A-M05/regression.json",
+          "sha256": "fbec4b1863ecbabf4f68740680179e3f2708e5c423219b6805a81bfea980f540"
+        },
+        {
+          "path": "changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+          "sha256": "ae61d4dc7754732eece3a90cc32f0a03fc6e7e92a67519e402ac2032cb601843"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": true,
+          "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": true,
+          "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "A",
+      "task_id": "M06",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M06/result.json",
+      "accepted": true,
+      "changed_unit_set": [],
+      "reason": "The measured baseline already supports the full use fence and actual original-owner preference registration. Both independent unchanged sources pass the exact S1-03 preservation oracle and revocation regressions. A prior baseline implementation correction is not a change-experiment delta. There is no patch and no new responsibility.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-A-M06/result.json",
+          "sha256": "808050343b0ff8f696b15d307c790f4407e441a3bb8763a4be4bfdcd134202a5"
+        },
+        {
+          "path": "changes/CH-DP41-A-M06/patch.diff",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "changes/CH-DP41-A-M06/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M06/after-source-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-A-M06/regression.json",
+          "sha256": "5fc5816a53a15fdc4de0f0adcdd473e50a8486433bac32b1c7a2b0340ab412b7"
+        },
+        {
+          "path": "changes-supplemental/M06-EXACT-S103-v3/A-before/result.json",
+          "sha256": "93b8c976e9852fdb62e62b6245733cfb4585f8cc7d432bd169169c4a6c4aa736"
+        },
+        {
+          "path": "changes-supplemental/M06-EXACT-S103-v3/A-after/result.json",
+          "sha256": "fff240fbc210014aaec46e3a504ae9159da1e2849200a463d1f8e755aa04d84e"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M01",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M01/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U15"
+      ],
+      "reason": "Actual request/text/usage wire changed; the normalized interpretation port and cancellation disposition are preserved. One provider-adapter responsibility, regardless of method or file count.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-B-M01/result.json",
+          "sha256": "7dcc575bf76edb14b7555ae34e49257c3a14afe7a905e3ba7298a26ca5685a25"
+        },
+        {
+          "path": "changes/CH-DP41-B-M01/patch.diff",
+          "sha256": "1f13cc8ad46c01b19e378923f3d61e7145d0db43c1a30c43f8936c32f3817a21"
+        },
+        {
+          "path": "changes/CH-DP41-B-M01/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M01/after-source-manifest.json",
+          "sha256": "eddcc8b23ae4c618adb6f997d46c2ab9642f6026905f2bbe136c3ae1b806c499"
+        },
+        {
+          "path": "changes/CH-DP41-B-M01/regression.json",
+          "sha256": "6e4b3d92e626b936c0b358d6e3228d6b4b82afdd9fe8faa4f268fa0482c93c1d"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": true,
+          "reason": "Provider API serialization and usage normalization changed while upper messages/text/usage port is stable."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M02",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M02/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U16"
+      ],
+      "reason": "Actual routing/action/input/result wire changed, preserving command identity, original payload and receipt uncertainty. One Agent-adapter responsibility; no new Task authority or semantic responsibility.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-B-M02/result.json",
+          "sha256": "2358f846f8f47387288292ce6ca39185400003093325601a2691dad7d0dce2a1"
+        },
+        {
+          "path": "changes/CH-DP41-B-M02/patch.diff",
+          "sha256": "62e25f79c1724f3c504e31847ac24357cb7b905e62f9392413ebda9ae659f0b8"
+        },
+        {
+          "path": "changes/CH-DP41-B-M02/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M02/after-source-manifest.json",
+          "sha256": "8ada8b5a0ea6283366ad9e1e25ba6376aacd9a89317cacea4fd0197c906fa268"
+        },
+        {
+          "path": "changes/CH-DP41-B-M02/regression.json",
+          "sha256": "1d50f3a2bf54302a15b745066f0f942e4cdae56396a57938cecd570ff76fa7a7"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": true,
+          "reason": "Gateway transport contract changes; original command routing, operation, payload and receipt status are preserved."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M03",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M03/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U09"
+      ],
+      "reason": "Calendar source fields and UTC/timezone envelope changed; normalization retains source/version/access and busy/free facts. One source-adapter responsibility; no new permission decision.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-B-M03/result.json",
+          "sha256": "1803654270cb9b46ce3e22b9ab1d5f60e5d4bc760e7f1828814865c67751e03a"
+        },
+        {
+          "path": "changes/CH-DP41-B-M03/patch.diff",
+          "sha256": "2b578b42df919b9bbf771ff51d954bdf88c0a3e170d613eabfc8634d9141021d"
+        },
+        {
+          "path": "changes/CH-DP41-B-M03/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M03/after-source-manifest.json",
+          "sha256": "ac5e042c09048c0fd30ef0fbd46b28e37d3291d4a1bbd9dc7795415dcb1ba89e"
+        },
+        {
+          "path": "changes/CH-DP41-B-M03/regression.json",
+          "sha256": "3e069566b9517d335b53869b12a52781253ee8ec028b73e901d98019f17aff54"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": true,
+          "reason": "Calendar source adapter accepts changed external fields/timezone envelope without changing stable original-source meaning."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M04",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U01",
+        "U03",
+        "U07",
+        "U08"
+      ],
+      "reason": "New finite terminal-state semantics require a model contract, validation contract, Task failure/currentness authority and actual producer continuation. Request revision and Task/Execution lineage belong to the continuation responsibility. Existing publication, storage, policy and downstream transport contracts are reused. The typed B binder is byte-identical, so U02 is not added merely because its representation differs.",
+      "evidence": [
+        {
+          "path": "changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/result.json",
+          "sha256": "81b5085d4301d420411c185328e9dc6d1b98c91a615544b21f75987e5e5fc6c7"
+        },
+        {
+          "path": "changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/patch.diff",
+          "sha256": "37cf8880af419ec8b1de9921c1caf8ae9c3114ac02a77b8663615baba91013dc"
+        },
+        {
+          "path": "changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/after-source-manifest.json",
+          "sha256": "f8e4bc95374efa676de798fb3bd9ca25f66968b14565c2fab2e61f58885b236b"
+        },
+        {
+          "path": "changes-alternatives/TYPED-GOALREF-v2/CH-DP41-B-M04/regression.json",
+          "sha256": "aac23a4935108d6f0502abc502e27f2ab26cb68d7a0790787f3f342cae5c6966"
+        },
+        {
+          "path": "changes-semantic/M04-B-attempt1/change-semantic-validation.jsonl",
+          "sha256": "ad3c26a94c956c1349d8388f922115388c43631fb3ffcb923db184cce41eff6c"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": true,
+          "reason": "Natural-language producer-failure condition is explicit in both model contracts."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": true,
+          "reason": "Exact singleton producer tag, own from_goal, terminal enum and existing owner-string/frame disjointness validation."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": true,
+          "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": true,
+          "reason": "Resolve the actual producer Task/Execution from Request revision and goal; preserve UNKNOWN for absent/superseded producers and success-result dependencies."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "FAIL_PRESERVED_SEPARATELY"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M05",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M05/result.json",
+      "accepted": true,
+      "changed_unit_set": [
+        "U04",
+        "U07"
+      ],
+      "reason": "The actual Task question owner issues and validates a scope token, and the dialogue adoption reflects the actually presented token. Fresh-process restoration reuses unchanged generic serialization; issuing a token for pre-existing owner questions belongs to U07, with no separate persistent migration U14.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-B-M05/result.json",
+          "sha256": "770a3d5b7d96a6bbb8079675bdb97a1e72b863348245d125d150186ca6ebe8e9"
+        },
+        {
+          "path": "changes/CH-DP41-B-M05/patch.diff",
+          "sha256": "5e366340ad48d93905416b636fb8734455d2a951e6538c616185aa35ad33278e"
+        },
+        {
+          "path": "changes/CH-DP41-B-M05/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M05/after-source-manifest.json",
+          "sha256": "ec486dc1582ff5a6b9269a5a6a0205d1e71c91d7fad51e857fc88f2e881f8c79"
+        },
+        {
+          "path": "changes/CH-DP41-B-M05/regression.json",
+          "sha256": "6b2bb9728534d7f2822006bc12e45fc09798708b3afe94e185885ddedf287ba7"
+        },
+        {
+          "path": "changes-supplemental/CH-DP41-B-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+          "sha256": "4335b3259721f162c5d20d9ada42cdea8b5e24dd29875a483d74c4e523a0b00a"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": true,
+          "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": true,
+          "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    },
+    {
+      "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+      "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+      "is_human_review": false,
+      "variant": "B",
+      "task_id": "M06",
+      "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M06/result.json",
+      "accepted": true,
+      "changed_unit_set": [],
+      "reason": "The measured baseline already supports the full use fence and actual original-owner preference registration. Both independent unchanged sources pass the exact S1-03 preservation oracle and revocation regressions. A prior baseline implementation correction is not a change-experiment delta. There is no patch and no new responsibility.",
+      "evidence": [
+        {
+          "path": "changes/CH-DP41-B-M06/result.json",
+          "sha256": "15ea10d99592f0e55ed52b192e4386f853fcff974d051530639a3774be57b9fe"
+        },
+        {
+          "path": "changes/CH-DP41-B-M06/patch.diff",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "changes/CH-DP41-B-M06/baseline-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M06/after-source-manifest.json",
+          "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+        },
+        {
+          "path": "changes/CH-DP41-B-M06/regression.json",
+          "sha256": "646cf1d8f1125b4428058fa0c2c8344547e240fdeba8543bc2a9692434b6a8ca"
+        },
+        {
+          "path": "changes-supplemental/M06-EXACT-S103-v3/B-before/result.json",
+          "sha256": "953643207031cd4eb31d58f84c522d185cd593c24c40f3c53e8105f2f839173f"
+        },
+        {
+          "path": "changes-supplemental/M06-EXACT-S103-v3/B-after/result.json",
+          "sha256": "04dde7260b7616222b97d00a8f1e4ec476689c4b6fa79603fda92ff1d783e04d"
+        }
+      ],
+      "all_18_assessment": [
+        {
+          "unit": "U01",
+          "responsibility": "Natural-language semantic production prompts and interpretation rules",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U02",
+          "responsibility": "Finite representation dispatch, item resolution and code binding",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U03",
+          "responsibility": "Common meaning/frame/condition validation contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U04",
+          "responsibility": "Request adoption, presented-question focus and input hold",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U05",
+          "responsibility": "Input/delivery clocks and actual playback control",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U06",
+          "responsibility": "Response content, publication and delivery ledger",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U07",
+          "responsibility": "Task/Execution/command/question currentness",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U08",
+          "responsibility": "Central continuation or Stage/window execution flow",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U09",
+          "responsibility": "Source adapter and normalized original-source port",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U10",
+          "responsibility": "Request-wise original composition/search/cache semantics",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U11",
+          "responsibility": "Common past-relation production/coverage/invalidation",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U12",
+          "responsibility": "Published relation reading and uncovered-range completion",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U13",
+          "responsibility": "Dialogue/work command, acceptance and reflection contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U14",
+          "responsibility": "Persistent schema migration and restore",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U15",
+          "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U16",
+          "responsibility": "External Agent protocol/capability adapter",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U17",
+          "responsibility": "Permission/consent/deletion policy decisions",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        },
+        {
+          "unit": "U18",
+          "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+          "changed": false,
+          "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+        }
+      ],
+      "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+    }
+  ],
+  "selected_jobs": 12,
+  "source_and_raw_modified": false
+}

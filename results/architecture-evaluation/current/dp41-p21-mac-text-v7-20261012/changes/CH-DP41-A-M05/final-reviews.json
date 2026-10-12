@@ -1,0 +1,442 @@
+[
+  {
+    "reviewer_id": "ROOT_SOURCE_AND_TRACE_REVIEW_20261012",
+    "review_type": "LLM_AGENT_CODE_AND_RECORDED_FUNCTIONAL_TRACE_REVIEW",
+    "is_human_review": false,
+    "variant": "A",
+    "task_id": "M05",
+    "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+    "accepted": true,
+    "changed_unit_set": [
+      "U04",
+      "U07"
+    ],
+    "reason": "The actual Task question owner issues and validates a scope token, and the dialogue adoption reflects the actually presented token. Fresh-process restoration reuses unchanged generic serialization; issuing a token for pre-existing owner questions belongs to U07, with no separate persistent migration U14.",
+    "evidence": [
+      {
+        "path": "changes/CH-DP41-A-M05/result.json",
+        "sha256": "3fe5e95292840ea6dcfc727711dec7a73c0259a4f1908be64a07344bd5627931"
+      },
+      {
+        "path": "changes/CH-DP41-A-M05/patch.diff",
+        "sha256": "5e366340ad48d93905416b636fb8734455d2a951e6538c616185aa35ad33278e"
+      },
+      {
+        "path": "changes/CH-DP41-A-M05/baseline-manifest.json",
+        "sha256": "f9471659c1f33c4ed16789dac306f9e0d3ad8ec0fa2d04d963c4c1315866e10c"
+      },
+      {
+        "path": "changes/CH-DP41-A-M05/after-source-manifest.json",
+        "sha256": "ec486dc1582ff5a6b9269a5a6a0205d1e71c91d7fad51e857fc88f2e881f8c79"
+      },
+      {
+        "path": "changes/CH-DP41-A-M05/regression.json",
+        "sha256": "fbec4b1863ecbabf4f68740680179e3f2708e5c423219b6805a81bfea980f540"
+      },
+      {
+        "path": "changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+        "sha256": "ae61d4dc7754732eece3a90cc32f0a03fc6e7e92a67519e402ac2032cb601843"
+      }
+    ],
+    "all_18_assessment": [
+      {
+        "unit": "U01",
+        "responsibility": "Natural-language semantic production prompts and interpretation rules",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U02",
+        "responsibility": "Finite representation dispatch, item resolution and code binding",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U03",
+        "responsibility": "Common meaning/frame/condition validation contract",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U04",
+        "responsibility": "Request adoption, presented-question focus and input hold",
+        "changed": true,
+        "reason": "Dialogue adoption reflects only the token in the actually presented question and preserves it across restore."
+      },
+      {
+        "unit": "U05",
+        "responsibility": "Input/delivery clocks and actual playback control",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U06",
+        "responsibility": "Response content, publication and delivery ledger",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U07",
+        "responsibility": "Task/Execution/command/question currentness",
+        "changed": true,
+        "reason": "Task question owner issues/checks token tied to its current question identity/revision/scope. Existing owner question records are issued the new token before restored presentation binding."
+      },
+      {
+        "unit": "U08",
+        "responsibility": "Central continuation or Stage/window execution flow",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U09",
+        "responsibility": "Source adapter and normalized original-source port",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U10",
+        "responsibility": "Request-wise original composition/search/cache semantics",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U11",
+        "responsibility": "Common past-relation production/coverage/invalidation",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U12",
+        "responsibility": "Published relation reading and uncovered-range completion",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U13",
+        "responsibility": "Dialogue/work command, acceptance and reflection contract",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U14",
+        "responsibility": "Persistent schema migration and restore",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U15",
+        "responsibility": "Cloud-provider wire, usage and cancellation adapter",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U16",
+        "responsibility": "External Agent protocol/capability adapter",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U17",
+        "responsibility": "Permission/consent/deletion policy decisions",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      },
+      {
+        "unit": "U18",
+        "responsibility": "Cross-owner derived-consumer deletion/correction completion contract",
+        "changed": false,
+        "reason": "No separate before/after responsibility delta in the inspected patch and executed ports; reused generic behavior is not counted again."
+      }
+    ],
+    "actual_model_extension_validation": "NOT_AN_ACTUAL_MODEL_ACCURACY_EXPERIMENT"
+  },
+  {
+    "reviewer_id": "dp41-contract-independent-reviewer",
+    "accepted": true,
+    "changed_unit_set": [
+      "U04",
+      "U07"
+    ],
+    "count": 2,
+    "reason": "고정한 U01~U18 책임을 실제 기준/변경 source, patch와 완료/회귀 증거에 대조하여 중복 없이 판정했다. 실제 모델의 신규 자연어 성공 여부는 별도 관측이다.",
+    "evidence": [
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-manifest.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/regression.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-audit.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/publish-raw.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/restart-raw.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/published-owner-and-binding-snapshot.json"
+    ],
+    "result_ref": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+    "result_sha256": "3fe5e95292840ea6dcfc727711dec7a73c0259a4f1908be64a07344bd5627931",
+    "baseline_source_hash": "935fab8816a88ca514572ffe83c61015b291a343eaf71304126f3c9862845f5c",
+    "after_source_hash": "b774772a60551298e9a0eb44d31b589557765a28928893a9bed7f578b5980724",
+    "patch_sha256": "5e366340ad48d93905416b636fb8734455d2a951e6538c616185aa35ad33278e",
+    "changed_paths": [
+      "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+      "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+    ],
+    "functional_completion_accepted": true,
+    "responsibility_assessment": {
+      "U01": {
+        "status": "UNCHANGED",
+        "responsibility": "자연어 의미 생산 prompt와 해석 규칙",
+        "reason": "기존 A 제어와 B Frame/부분 선택의 의미 prompt 및 해석 규칙을 바꾸지 않았다.",
+        "before_contract": "자연어 의미 생산 prompt와 해석 규칙",
+        "after_contract": "자연어 의미 생산 prompt와 해석 규칙",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U02": {
+        "status": "UNCHANGED",
+        "responsibility": "유한 항목 해결과 코드 binding",
+        "reason": "유한 selector dispatch, 항목 상태 갱신과 declared-position binding 코드가 byte 동일하다. A에는 이 B 전용 책임이 새로 생기지 않는다.",
+        "before_contract": "유한 항목 해결과 코드 binding",
+        "after_contract": "유한 항목 해결과 코드 binding",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U03": {
+        "status": "UNCHANGED",
+        "responsibility": "공통 Meaning, Frame, 조건 검증",
+        "reason": "공통 Meaning/Frame 형식, 유한 Goal 및 관계 validation 계약을 바꾸지 않았다.",
+        "before_contract": "공통 Meaning, Frame, 조건 검증",
+        "after_contract": "공통 Meaning, Frame, 조건 검증",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U04": {
+        "status": "CHANGED",
+        "responsibility": "Request 채택, 실제 질문 focus와 input hold",
+        "reason": "Dialogue의 PresentedQuestionBinding이 실제 presentation token만 반환한다. 모델의 answer 의미나 사용자가 허용한 scope를 고치지 않는다.",
+        "before_contract": "실제로 제시한 질문의 ID/revision/scope를 반영",
+        "after_contract": "실제로 제시한 질문 record에 있는 token을 답변 port에 반영",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/shared/adapters.py"
+        ],
+        "source_anchors": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/source/prototypes/candidates/dp41_45_poc/shared/adapters.py:215"
+        ],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-manifest.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/regression.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-audit.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/publish-raw.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/restart-raw.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/published-owner-and-binding-snapshot.json"
+        ]
+      },
+      "U05": {
+        "status": "UNCHANGED",
+        "responsibility": "입력과 전달 시점, 실제 playback",
+        "reason": "입력 사건, 실제 Text/모사 Voice onset, playback과 중단 시점 계약을 바꾸지 않았다.",
+        "before_contract": "입력과 전달 시점, 실제 playback",
+        "after_contract": "입력과 전달 시점, 실제 playback",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U06": {
+        "status": "UNCHANGED",
+        "responsibility": "응답 내용, publication과 실제 전달 원장",
+        "reason": "actual facts를 기존 응답 port로 전달하고 publication/receipt를 남기는 계약을 유지했다. 새 도메인 정답 생성이나 별도 응답 책임은 추가하지 않았다.",
+        "before_contract": "응답 내용, publication과 실제 전달 원장",
+        "after_contract": "응답 내용, publication과 실제 전달 원장",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U07": {
+        "status": "CHANGED",
+        "responsibility": "Task, Execution, 작업 명령과 질문의 현재성",
+        "reason": "QuestionAuthority의 token 발급/검사 및 초기 owner 질문 발급 경로가 바뀌었다. 토큰은 기존 identity/revision/Task/scope 검사를 대체하지 않는다.",
+        "before_contract": "Task 질문 ID/revision/scope authority",
+        "after_contract": "Task가 현재 질문 token을 발급하고 실제 answer ingress에서 일치를 요구",
+        "changed_paths": [
+          "prototypes/candidates/dp41_45_poc/shared/adapters.py",
+          "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+        ],
+        "source_anchors": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/source/prototypes/candidates/dp41_45_poc/shared/adapters.py:159"
+        ],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/result.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-manifest.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/regression.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/baseline-audit.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/result.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/publish-raw.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/restart-raw.json",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes-supplemental/CH-DP41-A-M05-PUBLISHED-TOKEN-RESTART-v1/published-owner-and-binding-snapshot.json"
+        ]
+      },
+      "U08": {
+        "status": "UNCHANGED",
+        "responsibility": "중앙 후속 실행과 대기 흐름",
+        "reason": "후속 실행의 의존, 성공 결과 대기, 조건 hold와 재개 정책을 바꾸지 않았다.",
+        "before_contract": "중앙 후속 실행과 대기 흐름",
+        "after_contract": "중앙 후속 실행과 대기 흐름",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U09": {
+        "status": "UNCHANGED",
+        "responsibility": "정보원 adapter와 정규화 원본 port",
+        "reason": "외부 정보원을 stable 원본 record로 정규화하는 계약을 바꾸지 않았다.",
+        "before_contract": "정보원 adapter와 정규화 원본 port",
+        "after_contract": "정보원 adapter와 정규화 원본 port",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U10": {
+        "status": "UNCHANGED",
+        "responsibility": "현재 Request별 원본 조합, 검색과 유효 cache",
+        "reason": "원본 조회, Request별 조합과 유효 cache의 소비 및 갱신 계약을 바꾸지 않았다.",
+        "before_contract": "현재 Request별 원본 조합, 검색과 유효 cache",
+        "after_contract": "현재 Request별 원본 조합, 검색과 유효 cache",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U11": {
+        "status": "UNCHANGED",
+        "responsibility": "공통 파생 관계 생산, coverage와 무효화",
+        "reason": "이 비교는 DP45A 공통 기준이며 DP45B 공통 파생 생산 책임을 추가하거나 변경하지 않았다.",
+        "before_contract": "공통 파생 관계 생산, coverage와 무효화",
+        "after_contract": "공통 파생 관계 생산, coverage와 무효화",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U12": {
+        "status": "UNCHANGED",
+        "responsibility": "게시 관계 조회와 미지원 coverage 보완",
+        "reason": "이 비교는 DP45A 공통 기준이며 DP45B 게시 관계 조회 책임을 추가하거나 변경하지 않았다.",
+        "before_contract": "게시 관계 조회와 미지원 coverage 보완",
+        "after_contract": "게시 관계 조회와 미지원 coverage 보완",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U13": {
+        "status": "UNCHANGED",
+        "responsibility": "대화와 작업 사이 명령, 접수와 반영",
+        "reason": "정규화된 대화와 작업 사이 command, acceptance와 reflection port가 동일하다. 외부 wire 변화와 이 내부 책임을 중복 세지 않았다.",
+        "before_contract": "대화와 작업 사이 명령, 접수와 반영",
+        "after_contract": "대화와 작업 사이 명령, 접수와 반영",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U14": {
+        "status": "UNCHANGED",
+        "responsibility": "영속 schema, 이행과 복원",
+        "reason": "snapshot/restore는 기존 질문과 receipt 전체 deepcopy를 그대로 쓴다. 새 field는 U07 owner 발급과 U04 presented projection에서 추가되며 schema 이행/restore 코드 diff가 없다. 실제 발급/제시 후 서로 다른 PID 복원에서 같은 token과 snapshot hash를 보존했다.",
+        "before_contract": "영속 schema, 이행과 복원",
+        "after_contract": "영속 schema, 이행과 복원",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U15": {
+        "status": "UNCHANGED",
+        "responsibility": "클라우드 provider wire, usage와 cancellation adapter",
+        "reason": "ProviderModelClient의 정규화 messages/text/usage/cancel port와 provider adapter 계약을 바꾸지 않았다.",
+        "before_contract": "클라우드 provider wire, usage와 cancellation adapter",
+        "after_contract": "클라우드 provider wire, usage와 cancellation adapter",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U16": {
+        "status": "UNCHANGED",
+        "responsibility": "외부 Agent protocol과 capability adapter",
+        "reason": "Downstream Agent의 정규화 command/receipt port 및 외부 protocol adapter 계약을 바꾸지 않았다.",
+        "before_contract": "외부 Agent protocol과 capability adapter",
+        "after_contract": "외부 Agent protocol과 capability adapter",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U17": {
+        "status": "UNCHANGED",
+        "responsibility": "권한, 동의와 삭제 policy",
+        "reason": "기존 허용 범위, 실제 사용자 동의, permission과 삭제 policy의 의미를 유지했다. 식별/질문 authority 검사를 policy 책임으로 중복 세지 않았다.",
+        "before_contract": "권한, 동의와 삭제 policy",
+        "after_contract": "권한, 동의와 삭제 policy",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      },
+      "U18": {
+        "status": "UNCHANGED",
+        "responsibility": "여러 owner의 파생 소비자 삭제와 정정 완료 계약",
+        "reason": "여러 owner 사이의 철회 전달과 소비 fence 완료 계약 자체의 diff가 없다. 기존 삭제 계약을 시험한 것만으로 새 변경을 세지 않았다.",
+        "before_contract": "여러 owner의 파생 소비자 삭제와 정정 완료 계약",
+        "after_contract": "여러 owner의 파생 소비자 삭제와 정정 완료 계약",
+        "changed_paths": [],
+        "evidence": [
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/patch.diff",
+          "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-A-M05/after-source-manifest.json"
+        ]
+      }
+    },
+    "regression_observation": {
+      "recorded_p21_cases": 21,
+      "recorded_semantic_sessions": 20,
+      "external_only_cases": [
+        "S5-01",
+        "S5-02"
+      ],
+      "port_errors": 0,
+      "api_calls": 0,
+      "semantic_accuracy_remeasured": false,
+      "recorded_artifacts_hash_checked": 169
+    }
+  }
+]

@@ -1,0 +1,869 @@
+{
+  "checks": {
+    "original_derived_pending_late_use_blocked": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#original_derived_pending_late_use_blocked"
+      ]
+    },
+    "honest_processing_receipt": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#honest_processing_receipt"
+      ]
+    },
+    "other_data_retained": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#other_data_retained"
+      ]
+    },
+    "cache_invalidation": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#cache_invalidation"
+      ]
+    },
+    "late_publication": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#late_publication"
+      ]
+    },
+    "explicit_preference_registration": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#explicit_preference_registration"
+      ]
+    },
+    "consent_restore": {
+      "passed": true,
+      "evidence": [
+        "runtime-requirement-checks.json#consent_restore"
+      ]
+    }
+  },
+  "observations": [
+    {
+      "probe": "baseline-use-fence-and-restore",
+      "events": [
+        {
+          "table": "events",
+          "spec": {
+            "tool": "context_retrieve",
+            "selector": {
+              "op": "KNOWN_REF",
+              "source_ref": "doc@v1"
+            }
+          },
+          "receipt": {
+            "status": "OK",
+            "read_id": "456d31ae-81fe-4ca9-b0bc-fbbccd2bfe05",
+            "items": [
+              {
+                "ref": "doc@v1",
+                "kind": "DOCUMENT",
+                "revision": 1,
+                "content": "실제 원문 문장.",
+                "metadata": {
+                  "source_id": "doc",
+                  "revision": 1,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "실제 원문 문장.",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                },
+                "cache_hit": false,
+                "policy_epoch": 1
+              }
+            ],
+            "coverage": "BOUNDED",
+            "gaps": [],
+            "scope": "context_retrieve",
+            "consumer_role": "model",
+            "limit": 10,
+            "candidate_count": 1
+          },
+          "scene_key": "",
+          "scene_seconds": 0.0008280831389129162,
+          "kind": "OWNER_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N1",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "OWNER_READ",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0031993750017136335,
+          "end_s": 0.0033225829247385263,
+          "duration": 0.0001232079230248928,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [
+            "456d31ae-81fe-4ca9-b0bc-fbbccd2bfe05"
+          ],
+          "metadata": {
+            "spec": {
+              "tool": "context_retrieve",
+              "selector": {
+                "op": "KNOWN_REF",
+                "source_ref": "doc@v1"
+              }
+            }
+          }
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N2",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "INPUT_STARTED",
+          "owner": "USER",
+          "start_s": 0.0033353751059621572,
+          "end_s": 0.0033353751059621572,
+          "duration": 0.0,
+          "parents": [],
+          "request_id": "",
+          "evidence": [],
+          "metadata": {
+            "input_id": "hold-publication"
+          }
+        },
+        {
+          "table": "events",
+          "input_id": "hold-publication",
+          "generation": 0,
+          "causal_node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N2",
+          "scene_key": "",
+          "scene_seconds": 0.0008578330744057894,
+          "kind": "INPUT_STARTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N3",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "EXTERNAL_SOURCE",
+          "start_s": 0.006951458053663373,
+          "end_s": 0.006951458053663373,
+          "duration": 0.0,
+          "parents": [],
+          "request_id": "",
+          "evidence": [],
+          "metadata": {
+            "source_event_id": "revoke",
+            "type": "PERMISSION_REVOKED"
+          }
+        },
+        {
+          "table": "events",
+          "source_event_id": "revoke",
+          "external_type": "PERMISSION_REVOKED",
+          "payload": {
+            "source_id": "doc"
+          },
+          "causal_node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N3",
+          "scene_key": "",
+          "scene_seconds": 0.004477833164855838,
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "source_id": "doc",
+          "policy_epoch": 2,
+          "scene_key": "",
+          "scene_seconds": 0.004489124985411763,
+          "kind": "SOURCE_REVOKED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "source_id": "doc",
+          "policy_epoch": 2,
+          "model_contexts_invalidated": 1,
+          "derived_records_invalidated": 3,
+          "cache_entries": 0,
+          "raw_evidence_policy": "RESTRICTED_AUDIT_RETENTION",
+          "receipt": "LOCAL_CONSUMERS_FENCED_REMOTE_SENT_COPIES_NOT_RETRACTED",
+          "scene_key": "",
+          "scene_seconds": 0.004515375010669231,
+          "kind": "REVOCATION_FENCE_APPLIED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N4",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "MODEL_CALL",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0034115000162273645,
+          "end_s": 0.007023083046078682,
+          "duration": 0.0036115830298513174,
+          "parents": [
+            "TL:fe03638231e94ec2a5935f56ec7d086b:N1"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "role": "CINTERPRET",
+            "mock_provider": true
+          }
+        },
+        {
+          "table": "events",
+          "reference": "doc@v1",
+          "roles": [
+            "read",
+            "model"
+          ],
+          "context": "model_return",
+          "policy_epoch": 2,
+          "scene_key": "",
+          "scene_seconds": 0.004555291961878538,
+          "kind": "POLICY_CONSUMER_REJECTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "request_id": "probe-request",
+          "role": "CINTERPRET",
+          "reason": "POLICY_REVOCATION",
+          "policy_epoch": 2,
+          "output": {
+            "text": "모사 모델 문장: 실제 제공된 실행 사실만 사용"
+          },
+          "scene_key": "",
+          "scene_seconds": 0.004559917142614722,
+          "kind": "MODEL_DISCARDED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N5",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "EXTERNAL_USER_SPEECH",
+          "owner": "USER",
+          "start_s": 0.0033353751059621572,
+          "end_s": 0.007067665923386812,
+          "duration": 0.003732290817424655,
+          "parents": [
+            "TL:fe03638231e94ec2a5935f56ec7d086b:N2"
+          ],
+          "request_id": "",
+          "evidence": [],
+          "metadata": {
+            "input_id": "hold-publication"
+          }
+        },
+        {
+          "table": "events",
+          "input_id": "hold-publication",
+          "causal_node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N5",
+          "scene_key": "",
+          "scene_seconds": 0.0045906249433755875,
+          "kind": "SPEECH_ENDED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "deliveries",
+          "scene_key": "",
+          "kind": "RESPONSE",
+          "publication_id": "P:1:452e8fc6-9841-446e-a695-fd883c372183",
+          "text": "철회 전 준비 문장",
+          "facts": {
+            "sources": [
+              {
+                "source_id": "doc",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "doc",
+                "text": "실제 원문 문장.",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {}
+              }
+            ]
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": null,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "discard_reason": "SUPERSEDED_OUTPUT",
+          "end_s": 0.00461029214784503
+        },
+        {
+          "table": "events",
+          "reference": "doc@v1",
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "read",
+          "policy_epoch": 2,
+          "scene_key": "",
+          "scene_seconds": 0.004647375084459782,
+          "kind": "POLICY_CONSUMER_REJECTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "reference": "doc@v1",
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "agent",
+          "policy_epoch": 2,
+          "scene_key": "",
+          "scene_seconds": 0.004656708100810647,
+          "kind": "POLICY_CONSUMER_REJECTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "reference": "doc@v1",
+          "roles": [
+            "read",
+            "agent"
+          ],
+          "context": "publication",
+          "policy_epoch": 2,
+          "scene_key": "",
+          "scene_seconds": 0.004663417115807533,
+          "kind": "POLICY_CONSUMER_REJECTED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "references": [],
+          "roles": [
+            "read",
+            "model"
+          ],
+          "context": "agent_payload",
+          "policy_epoch": 2,
+          "payload_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+          "scene_key": "",
+          "scene_seconds": 0.004677542019635439,
+          "kind": "SOURCE_COMPOSITION_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N6",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "GOAL_PREPARATION",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0071530831046402454,
+          "end_s": 0.007165540941059589,
+          "duration": 1.2457836419343948e-05,
+          "parents": [],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "goal_id": "preference",
+            "source_refs": []
+          }
+        },
+        {
+          "table": "events",
+          "source": {
+            "source_id": "via-user-memory:LOCAL_CURRENT_USER:explicit",
+            "revision": 1,
+            "kind": "USER_MEMORY",
+            "title": "explicit",
+            "key": "explicit",
+            "value": "짧은 문장",
+            "text": "짧은 문장",
+            "user_id": "LOCAL_CURRENT_USER",
+            "scope": "PERSISTENT",
+            "persistent": true,
+            "source_refs": [],
+            "instruction": "구조 계약 검증 입력",
+            "registration_provenance": {
+              "request_id": "probe-request",
+              "request_revision": 1,
+              "input_id": "probe-input",
+              "goal_id": "preference",
+              "source_span_ids": [],
+              "input_sha256": "fb1048fee8b8ec9786bebbf0446878ac89a1367ef9983e122404faca9e46e461",
+              "origin": "ADOPTED_USER_INPUT"
+            },
+            "metadata": {
+              "key": "explicit",
+              "user_id": "LOCAL_CURRENT_USER",
+              "scope": "PERSISTENT",
+              "persistent": true
+            },
+            "permission": {
+              "read": true,
+              "model": true,
+              "agent": true
+            }
+          },
+          "consumed_slot_id": null,
+          "logical_source_count": 3,
+          "source_version_records": 3,
+          "scene_key": "",
+          "scene_seconds": 0.004718624986708164,
+          "kind": "SOURCE_PUBLISHED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N7",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "MEMORY_REGISTERED",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.0072168330661952496,
+          "end_s": 0.0072168330661952496,
+          "duration": 0.0,
+          "parents": [
+            "TL:fe03638231e94ec2a5935f56ec7d086b:N6"
+          ],
+          "request_id": "probe-request",
+          "evidence": [],
+          "metadata": {
+            "source_ref": "via-user-memory:LOCAL_CURRENT_USER:explicit@v1",
+            "goal_id": "preference"
+          }
+        },
+        {
+          "table": "events",
+          "key": "explicit",
+          "value": "짧은 문장",
+          "source_refs": [],
+          "memory": {
+            "source_id": "via-user-memory:LOCAL_CURRENT_USER:explicit",
+            "revision": 1,
+            "kind": "USER_MEMORY",
+            "title": "explicit",
+            "key": "explicit",
+            "value": "짧은 문장",
+            "text": "짧은 문장",
+            "user_id": "LOCAL_CURRENT_USER",
+            "scope": "PERSISTENT",
+            "persistent": true,
+            "source_refs": [],
+            "instruction": "구조 계약 검증 입력",
+            "registration_provenance": {
+              "request_id": "probe-request",
+              "request_revision": 1,
+              "input_id": "probe-input",
+              "goal_id": "preference",
+              "source_span_ids": [],
+              "input_sha256": "fb1048fee8b8ec9786bebbf0446878ac89a1367ef9983e122404faca9e46e461",
+              "origin": "ADOPTED_USER_INPUT"
+            },
+            "metadata": {
+              "key": "explicit",
+              "user_id": "LOCAL_CURRENT_USER",
+              "scope": "PERSISTENT",
+              "persistent": true
+            },
+            "permission": {
+              "read": true,
+              "model": true,
+              "agent": true
+            }
+          },
+          "request_id": "probe-request",
+          "input_id": "probe-input",
+          "source_ref": "via-user-memory:LOCAL_CURRENT_USER:explicit@v1",
+          "causal_node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N7",
+          "scene_key": "",
+          "scene_seconds": 0.004752208013087511,
+          "kind": "MEMORY_REGISTERED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N8",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "EXTERNAL_SOURCE",
+          "start_s": 0.007254833122715354,
+          "end_s": 0.007254833122715354,
+          "duration": 0.0,
+          "parents": [],
+          "request_id": "",
+          "evidence": [],
+          "metadata": {
+            "source_event_id": "restore-consent",
+            "type": "SOURCE_CHANGE"
+          }
+        },
+        {
+          "table": "events",
+          "source_event_id": "restore-consent",
+          "external_type": "SOURCE_CHANGE",
+          "payload": {
+            "source": {
+              "source_id": "doc",
+              "revision": 2,
+              "kind": "DOCUMENT",
+              "title": "doc",
+              "text": "재허용 원문",
+              "permission": {
+                "read": true,
+                "model": true,
+                "agent": true
+              },
+              "metadata": {}
+            }
+          },
+          "causal_node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N8",
+          "scene_key": "",
+          "scene_seconds": 0.00477487500756979,
+          "kind": "EXTERNAL_EVENT_AVAILABLE",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "source": {
+            "source_id": "doc",
+            "revision": 2,
+            "kind": "DOCUMENT",
+            "title": "doc",
+            "text": "재허용 원문",
+            "permission": {
+              "read": true,
+              "model": true,
+              "agent": true
+            },
+            "metadata": {}
+          },
+          "consumed_slot_id": null,
+          "logical_source_count": 3,
+          "source_version_records": 4,
+          "scene_key": "",
+          "scene_seconds": 0.004783250158652663,
+          "kind": "SOURCE_PUBLISHED",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "events",
+          "spec": {
+            "tool": "context_retrieve",
+            "selector": {
+              "op": "KNOWN_REF",
+              "source_ref": "doc@v2"
+            }
+          },
+          "receipt": {
+            "status": "OK",
+            "read_id": "005773c3-2f13-4430-89a3-169f606ac45c",
+            "items": [
+              {
+                "ref": "doc@v2",
+                "kind": "DOCUMENT",
+                "revision": 2,
+                "content": "재허용 원문",
+                "metadata": {
+                  "source_id": "doc",
+                  "revision": 2,
+                  "kind": "DOCUMENT",
+                  "title": "doc",
+                  "text": "재허용 원문",
+                  "permission": {
+                    "read": true,
+                    "model": true,
+                    "agent": true
+                  },
+                  "metadata": {}
+                },
+                "cache_hit": false,
+                "policy_epoch": 2
+              }
+            ],
+            "coverage": "BOUNDED",
+            "gaps": [],
+            "scope": "context_retrieve",
+            "consumer_role": "model",
+            "limit": 10,
+            "candidate_count": 1
+          },
+          "scene_key": "",
+          "scene_seconds": 0.004809750011190772,
+          "kind": "OWNER_READ",
+          "owner": "LOCAL_VIA"
+        },
+        {
+          "table": "causal-nodes",
+          "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N9",
+          "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+          "kind": "OWNER_READ",
+          "owner": "LOCAL_VIA",
+          "start_s": 0.007274165982380509,
+          "end_s": 0.007301833014935255,
+          "duration": 2.7667032554745674e-05,
+          "parents": [],
+          "request_id": "restored-request",
+          "evidence": [
+            "005773c3-2f13-4430-89a3-169f606ac45c"
+          ],
+          "metadata": {
+            "spec": {
+              "tool": "context_retrieve",
+              "selector": {
+                "op": "KNOWN_REF",
+                "source_ref": "doc@v2"
+              }
+            }
+          }
+        }
+      ],
+      "effects": [],
+      "tasks": {},
+      "deliveries": [
+        {
+          "kind": "RESPONSE",
+          "publication_id": "P:1:452e8fc6-9841-446e-a695-fd883c372183",
+          "text": "철회 전 준비 문장",
+          "facts": {
+            "sources": [
+              {
+                "source_id": "doc",
+                "revision": 1,
+                "kind": "DOCUMENT",
+                "title": "doc",
+                "text": "실제 원문 문장.",
+                "permission": {
+                  "read": true,
+                  "model": true,
+                  "agent": true
+                },
+                "metadata": {}
+              }
+            ]
+          },
+          "request_id": "probe-request",
+          "source_event_id": null,
+          "generation": 0,
+          "text_presented_s": null,
+          "voice_on": false,
+          "voice_onset_s": null,
+          "voice_end_s": null,
+          "voice_text": "",
+          "voice_char_events": [],
+          "delivered_receipt": false,
+          "evidence_level": "MEASURED_MOCK_E2E",
+          "discard_reason": "SUPERSEDED_OUTPUT",
+          "end_s": 0.00461029214784503
+        }
+      ],
+      "model_calls": [
+        {
+          "messages": [
+            {
+              "role": "system",
+              "content": "규칙"
+            },
+            {
+              "role": "user",
+              "content": "실제 원문 문장. doc@v1"
+            }
+          ],
+          "role": "CINTERPRET"
+        }
+      ],
+      "timing": {
+        "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+        "clock_basis": "EVIDENCE_SECONDS_COMMON_ABSOLUTE",
+        "excluded_kinds": [
+          "EXTERNAL_AGENT_WORK",
+          "EXTERNAL_USER_SPEECH",
+          "EXTERNAL_USER_WAIT"
+        ],
+        "nodes": [
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N1",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "OWNER_READ",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0031993750017136335,
+            "end_s": 0.0033225829247385263,
+            "duration": 0.0001232079230248928,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [
+              "456d31ae-81fe-4ca9-b0bc-fbbccd2bfe05"
+            ],
+            "metadata": {
+              "spec": {
+                "tool": "context_retrieve",
+                "selector": {
+                  "op": "KNOWN_REF",
+                  "source_ref": "doc@v1"
+                }
+              }
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N2",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "INPUT_STARTED",
+            "owner": "USER",
+            "start_s": 0.0033353751059621572,
+            "end_s": 0.0033353751059621572,
+            "duration": 0.0,
+            "parents": [],
+            "request_id": "",
+            "evidence": [],
+            "metadata": {
+              "input_id": "hold-publication"
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N3",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "EXTERNAL_EVENT_AVAILABLE",
+            "owner": "EXTERNAL_SOURCE",
+            "start_s": 0.006951458053663373,
+            "end_s": 0.006951458053663373,
+            "duration": 0.0,
+            "parents": [],
+            "request_id": "",
+            "evidence": [],
+            "metadata": {
+              "source_event_id": "revoke",
+              "type": "PERMISSION_REVOKED"
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N4",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "MODEL_CALL",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0034115000162273645,
+            "end_s": 0.007023083046078682,
+            "duration": 0.0036115830298513174,
+            "parents": [
+              "TL:fe03638231e94ec2a5935f56ec7d086b:N1"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "role": "CINTERPRET",
+              "mock_provider": true
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N5",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "EXTERNAL_USER_SPEECH",
+            "owner": "USER",
+            "start_s": 0.0033353751059621572,
+            "end_s": 0.007067665923386812,
+            "duration": 0.003732290817424655,
+            "parents": [
+              "TL:fe03638231e94ec2a5935f56ec7d086b:N2"
+            ],
+            "request_id": "",
+            "evidence": [],
+            "metadata": {
+              "input_id": "hold-publication"
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N6",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "GOAL_PREPARATION",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0071530831046402454,
+            "end_s": 0.007165540941059589,
+            "duration": 1.2457836419343948e-05,
+            "parents": [],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "goal_id": "preference",
+              "source_refs": []
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N7",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "MEMORY_REGISTERED",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.0072168330661952496,
+            "end_s": 0.0072168330661952496,
+            "duration": 0.0,
+            "parents": [
+              "TL:fe03638231e94ec2a5935f56ec7d086b:N6"
+            ],
+            "request_id": "probe-request",
+            "evidence": [],
+            "metadata": {
+              "source_ref": "via-user-memory:LOCAL_CURRENT_USER:explicit@v1",
+              "goal_id": "preference"
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N8",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "EXTERNAL_EVENT_AVAILABLE",
+            "owner": "EXTERNAL_SOURCE",
+            "start_s": 0.007254833122715354,
+            "end_s": 0.007254833122715354,
+            "duration": 0.0,
+            "parents": [],
+            "request_id": "",
+            "evidence": [],
+            "metadata": {
+              "source_event_id": "restore-consent",
+              "type": "SOURCE_CHANGE"
+            }
+          },
+          {
+            "node_id": "TL:fe03638231e94ec2a5935f56ec7d086b:N9",
+            "timeline_id": "TL:fe03638231e94ec2a5935f56ec7d086b",
+            "kind": "OWNER_READ",
+            "owner": "LOCAL_VIA",
+            "start_s": 0.007274165982380509,
+            "end_s": 0.007301833014935255,
+            "duration": 2.7667032554745674e-05,
+            "parents": [],
+            "request_id": "restored-request",
+            "evidence": [
+              "005773c3-2f13-4430-89a3-169f606ac45c"
+            ],
+            "metadata": {
+              "spec": {
+                "tool": "context_retrieve",
+                "selector": {
+                  "op": "KNOWN_REF",
+                  "source_ref": "doc@v2"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "variant": "B",
+  "task_id": "M06",
+  "evidence_level": "SCRIPTED_FUNCTIONAL_REGRESSION",
+  "source_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M06/source",
+  "imported_runtime": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/changes/CH-DP41-B-M06/source/prototypes/candidates/dp41_45_poc/shared/runtime.py",
+  "api_calls": 0,
+  "stderr": "QA05 probe start original_derived_pending_late_use_blocked\nQA05 probe end original_derived_pending_late_use_blocked\n"
+}

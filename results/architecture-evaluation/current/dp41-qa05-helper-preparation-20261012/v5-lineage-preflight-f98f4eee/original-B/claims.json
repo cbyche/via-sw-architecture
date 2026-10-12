@@ -1,0 +1,64 @@
+{
+  "responsibility_claims": {
+    "U01": {
+      "reason": "Natural-language producer-failure condition is explicit in both model contracts.",
+      "before_contract": "existing owner-state WHEN",
+      "after_contract": "finite current-producer terminal WHEN",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/prompts.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "regression.json"
+      ]
+    },
+    "U03": {
+      "reason": "Validate producer identity and the bounded terminal-state predicate without arbitrary expressions.",
+      "before_contract": "owner reference predicates",
+      "after_contract": "exclusive owner/producer references and terminal enum validation",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/contract.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "regression.json"
+      ]
+    },
+    "U07": {
+      "reason": "Task owner accepts actual terminal FAILURE with revision/Execution checks and fences duplicate/late success.",
+      "before_contract": "successful RESULT and receipt ingress",
+      "after_contract": "terminal FAILURE ingress and one-way FAILED state",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "regression.json"
+      ]
+    },
+    "U08": {
+      "reason": "Dispatcher resolves actual failed producer readiness and runs failure continuation once while blocking success-dependent paths.",
+      "before_contract": "successful producer completion readiness",
+      "after_contract": "failure readiness and typed failure continuation scheduling",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/shared/runtime.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "regression.json"
+      ]
+    },
+    "U02": {
+      "reason": "Frame binder preserves symbolic producer identity instead of requiring a pre-existing owner reference.",
+      "before_contract": "all WHEN predicates bind reference_id",
+      "after_contract": "only owner predicates bind reference_id; producer identity is finite and retained",
+      "changed_paths": [
+        "prototypes/candidates/dp41_45_poc/dp41/b.py"
+      ],
+      "functional_evidence": [
+        "runtime-requirement-checks.json",
+        "regression.json"
+      ]
+    }
+  }
+}
