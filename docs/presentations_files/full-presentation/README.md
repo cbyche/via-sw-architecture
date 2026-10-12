@@ -1,8 +1,8 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v6.pptx](../VIA-architecture-presentation_v6.pptx)다. 2026-10-12에 v5를 기준으로 참조 발표자료의 서식, 검정색 본문과 도형 자체의 텍스트를 적용했다. 화면 지칭의 강조를 줄이고 요청의 조건, 순서와 정정 범위를 중심으로 설명한다. Windows 사용을 위한 Calibri, 정수 pt와 한국어 언어 설정도 유지한다. **본문 24장, appendix 안내 1장, 최초 원본 보존 32장, v2 배경 보존 4장으로 총 61장**이다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v7.pptx](../VIA-architecture-presentation_v7.pptx)다. 2026-10-12에 v6의 첫 장만 갱신해 Claude Cowork 내장 브라우저의 2026-08-26 공개 시연을 넣었다. v6에서 적용한 참조 발표자료의 서식, 검정색 본문과 도형 자체의 텍스트를 유지한다. 화면 지칭의 강조를 줄이고 요청의 조건, 순서와 정정 범위를 중심으로 설명한다. Windows 사용을 위한 Calibri, 정수 pt와 한국어 언어 설정도 유지한다. **본문 24장, appendix 안내 1장, 최초 원본 보존 32장, v2 배경 보존 4장으로 총 61장**이다.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx)와 [v5](../VIA-architecture-presentation_v5.pptx)는 변경하지 않았다. v2에서 종합한 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)의 발표 순서를 유지한다. 본문에서 대체하거나 이동한 내용과 기존 발표자 노트, 이미지 및 두 시연 GIF는 appendix와 이전 버전에 보존한다. v6의 서식 변경은 appendix에도 적용한다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx)와 [v6](../VIA-architecture-presentation_v6.pptx)는 변경하지 않았다. v2에서 종합한 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)의 발표 순서를 유지한다. 본문에서 대체하거나 이동한 내용과 기존 발표자 노트, 이미지 및 두 시연 GIF는 appendix와 이전 버전에 보존한다. v6의 서식 변경은 appendix에도 적용한다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
 
 ## 현재 발표 순서
 
@@ -22,7 +22,17 @@
 | 43~57 | Appendix / 원본 보존 | 원본 18~32장: Overview, 책임과 겹침 장면, 네 DP의 배경/비교/QA 상세 |
 | 58~61 | Appendix / v2 배경 보존 | v2의 15, 17, 19, 21장: DP41, DP44, DP45, DP42의 기존 배경 |
 
-원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기다. 상단 제목과 서식은 v6에 맞췄으며 현재 위치는 위 표와 [manifest-v6.json](./manifest-v6.json)을 따른다.
+원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기다. 상단 제목과 서식은 v6에 맞췄으며 현재 위치는 위 표와 [manifest-v7.json](./manifest-v7.json)을 따른다.
+
+### v7의 Claude 브라우저 시연
+
+첫 장 왼쪽을 [Claude Cowork 내장 브라우저 공식 발표](https://claude.com/resources/articles/cowork-built-in-browser)의 [공개 시연](https://www.youtube.com/watch?v=63GVebZvqok)으로 교체했다. “요금 조사 요청 → 웹사이트 열기 → 요금제 확인”을 설명한다. 원래 영상에서 Northwind의 요금제를 확인하는 장면을 사용하며, 비교 결과 작성이나 모든 데스크톱 앱 조작을 시연한 것으로 설명하지 않는다. 첫 장의 네 설명 문구와 왼쪽 GIF, 관련 출처 노트만 변경했다. 오른쪽 음성 수정 사례와 첫 장의 나머지 객체도 유지한다.
+
+[무음 반복 GIF](./assets/claude-cowork-browser-20260826.gif)는 공식 기사에 삽입된 플레이어의 실제 브라우저 화면을 캡처한 것이다. 약 6.5~19.2초를 원래 재생 시점으로 발췌하고 첫 요금제 화면 1초와 마지막 화면 1.8초를 더해 약 15.4초로 구성했다. 68프레임, 552×310px이며 [자원 출처와 발췌 정보](./assets/claude-cowork-browser-20260826.json)를 함께 보관한다. 기존 2024 시연 GIF는 다른 media part로 남겨 appendix 36장에서 계속 사용한다.
+
+[v7 작성 스크립트](../../../scripts/presentations/update_claude_first_slide_v7.mjs)는 v6를 Artifact Tool로 열어 첫 장의 텍스트와 이미지만 편집한다. 원본 package에 해당 문구, 이미지 관계와 노트를 반영하고 새 GIF의 content type을 등록한다. 변경 가능한 기존 part 네 개는 첫 slide XML, 해당 관계, 해당 notes XML과 media 등록용 `[Content_Types].xml`이다. 나머지 package part, 원래 25개 media part, 2~61장의 slide XML 및 노트는 bytes까지 동일하게 유지한다. [manifest-v7.json](./manifest-v7.json)에 이전 파일 hash, 변경 범위와 각 장의 hash를 기록한다. bundled `node_modules`를 연결한 private build에 작성 스크립트를 복사하고 v6 작성과 같은 환경 변수 및 저장소와 build 절대 경로를 전달하면 재현할 수 있다.
+
+로컬 검증에서 package, geometry와 native 표 검사를 통과했고 Calibri, 정수 pt와 한국어 정책 위반은 0건이다. 61장을 모두 렌더링해 첫 장의 배치를 확인하고, 2~61장의 렌더링 결과가 v6와 픽셀까지 동일함을 확인했다. GIF의 68프레임 중 67개가 서로 다른 이미지이며 반복 설정과 15.38초 재생 시간을 확인했다. 이는 파일의 애니메이션 데이터 검사이며 PowerPoint 자체의 재생 검증은 아니다.
 
 ### v6의 참조 스타일과 도형 텍스트
 
@@ -84,13 +94,13 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v6.pptx`를 입력으로 `_v7.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v7.pptx`를 입력으로 `_v8.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
 요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v6.json](./manifest-v6.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책, 도형 텍스트 변경과 마스터 등록 수정 내역을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v7.json](./manifest-v7.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 첫 장의 변경 범위를 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
 [부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
