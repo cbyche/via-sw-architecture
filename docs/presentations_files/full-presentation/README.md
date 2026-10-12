@@ -1,8 +1,8 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v7.pptx](../VIA-architecture-presentation_v7.pptx)다. 2026-10-12에 v6의 첫 장만 갱신해 Claude Cowork 내장 브라우저의 2026-08-26 공개 시연을 넣었다. v6에서 적용한 참조 발표자료의 서식, 검정색 본문과 도형 자체의 텍스트를 유지한다. 화면 지칭의 강조를 줄이고 요청의 조건, 순서와 정정 범위를 중심으로 설명한다. Windows 사용을 위한 Calibri, 정수 pt와 한국어 언어 설정도 유지한다. **본문 24장, appendix 안내 1장, 최초 원본 보존 32장, v2 배경 보존 4장으로 총 61장**이다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v8.pptx](../VIA-architecture-presentation_v8.pptx)다. v7에서 시작해 공통 요청 장면과 44·45·42의 문제 소개를 다시 작성하고, 45의 기본 구조와 보완 택틱 및 새 화면·음성 지칭 문제를 추가했다. 41은 주요 DP에서 제외하고 기존 배경과 비교를 Appendix로 옮겼다. 참조 발표자료의 서식, 검정색 본문, 도형 자체의 텍스트와 Windows용 Calibri·정수 pt·한국어 설정을 유지한다. **본문 24장, Appendix 안내 1장과 보존 자료 38장으로 총 63장**이다.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx)와 [v6](../VIA-architecture-presentation_v6.pptx)는 변경하지 않았다. v2에서 종합한 [독립 리뷰](./review-2026-10-11.md)와 [사용자 구성 지시](./v2-composition.md)의 발표 순서를 유지한다. 본문에서 대체하거나 이동한 내용과 기존 발표자 노트, 이미지 및 두 시연 GIF는 appendix와 이전 버전에 보존한다. v6의 서식 변경은 appendix에도 적용한다. 처음 통합에 사용한 일곱 개별 PPTX도 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다.
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx)와 [v7](../VIA-architecture-presentation_v7.pptx)는 변경하지 않았다. 44·45·42의 기존 비교 본문, QA 정의·목표·평가 상태, 시연 GIF 및 비대상 페이지의 본문과 노트를 보존한다. 처음 통합에 사용한 일곱 개별 PPTX는 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다. 변경 범위와 검증 한계는 [v8 검수 기록](./review-v8-2026-10-13.md), 현재 위치와 hash는 [manifest-v8.json](./manifest-v8.json)을 따른다.
 
 ## 현재 발표 순서
 
@@ -10,19 +10,28 @@
 | --- | --- | --- |
 | 1~6 | 배경과 소개 | 관련 동향 → 필요성 → VIA 역할 → 도메인과 전체 흐름 → 대표 시나리오 → 업무 위임 책임 |
 | 7~11 | 요구사항과 QA | 요구의 근거 → 기능 6개와 제약 2개 → 고정된 여섯 QA → 두 시간 지표의 경계 |
-| 12~14 | 설계 도입 | 요구/품질/설계 질문 연결 → 설계 Overview → 겹쳐 도착하는 사건 |
-| 15~16 | DP41 | 배경과 설계 질문 → A/B 구조와 여섯 QA 평가표 |
-| 17~18 | DP44 | 배경과 설계 질문 → A/B 구조와 여섯 QA 평가표 |
-| 19~20 | DP45 | 배경과 설계 질문 → A/B 구조와 여섯 QA 평가표 |
-| 21~22 | DP42 | 배경과 설계 질문 → A/B 구조와 여섯 QA 평가표 |
+| 12~14 | 설계 도입 | 요구/품질/설계 질문 연결 → 설계 Overview → 화면·업무·정정을 섞은 공통 요청 |
+| 15~16 | DP44 | 정정·업무 질문·늦은 후보의 배경 → 기존 A/B 구조와 여섯 QA 평가표 |
+| 17~19 | DP45 | 과거 설명·결과·정정의 배경 → 기본 구조와 보완 택틱 → 기존 A/B 구조와 여섯 QA 평가표 |
+| 20~21 | DP42 | 보고서 요청·업무·실행·질문의 다른 수명 → 기존 A/B 구조와 여섯 QA 평가표 |
+| 22 | 새 화면·음성 주제 | 두 화면의 지칭, 늦은 전사와 정정의 문제 소개. 번호와 A/B 미정 |
 | 23~24 | 검토 요약 | 기능 적용 범위와 공통 계약 → 선택 전 확인할 사항 |
 | 25 | Appendix 안내 | 본문과 원본 상세 자료의 위치 안내 |
 | 26~35 | Appendix / QA 상세 | 원본 8~17장: P21, 21개 사례 대응, QA-01~06 목표 근거와 등급 |
 | 36~42 | Appendix / 원본 보존 | 원본 1~7장: 배경, 역할, 필요성, 시나리오, 요구사항과 QA |
 | 43~57 | Appendix / 원본 보존 | 원본 18~32장: Overview, 책임과 겹침 장면, 네 DP의 배경/비교/QA 상세 |
 | 58~61 | Appendix / v2 배경 보존 | v2의 15, 17, 19, 21장: DP41, DP44, DP45, DP42의 기존 배경 |
+| 62~63 | Appendix / 제외 주제 41 보존 | v7의 15~16장: 주요 DP에서 제외한 41의 기존 배경과 비교 |
 
-원본 22, 25, 28, 31장에 해당하는 본문 비교는 **16, 18, 20, 22장**이다. 각 페이지에 설계 비교와 여섯 QA를 함께 배치했다. 원래 비교 페이지는 각각 47, 50, 53, 56장에 보존했고, DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기다. 상단 제목과 서식은 v6에 맞췄으며 현재 위치는 위 표와 [manifest-v7.json](./manifest-v7.json)을 따른다.
+44·45·42의 본문 비교는 **16, 19, 21장**이다. 설계 비교와 여섯 QA를 함께 배치한 기존 본문은 유지한다. 원본의 비교 페이지는 각각 50, 53, 56장에 보존했고, 41의 원본 비교는 47장에 있다. DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기이며 현재 위치는 위 표를 따른다.
+
+### v8의 문제 소개와 편집 원본
+
+사용자 장면 → 잘못 처리했을 때의 피해 → 구체적인 SW 어려움 → 설계 질문 순서로 문장을 다듬었다. 45는 A의 요청별 원본 구성과 B의 가공 기억 유지·조회라는 기본 구조를 먼저 설명하고, 요약·색인·cache와 갱신 택틱을 별도로 둔다. 42의 논리 수명 차이로 B의 서비스 분리 우위를 주장하지 않는다. 새 화면·음성 페이지는 32/46의 대안을 계승하지 않으며 시간 겹침만으로 지칭 의도를 확정하지 않는다.
+
+[현재 6장 모아 보기](../dp-background/index.html)와 [편집 가능한 draw.io](../dp-background/VIA-problem-intros-v8.drawio)를 제공한다. [공통 장면 정의](../../../scripts/architecture/via_problem_intro_scenes.py)에서 SVG, draw.io와 PPTX native 도형을 작성해 같은 문구와 배치를 사용한다. [v8 작성 스크립트](../../../scripts/presentations/update_problem_intros_v8.mjs), [패키지 보존 도구](../../../scripts/presentations/package_problem_intros_v8.py)와 [렌더링 도구](../../../scripts/presentations/verify_problem_intros_v8.mjs)가 재현 원본이다. bundled runtime의 환경 변수와 private build 사용법은 아래 기존 작성 기록 및 검수 기록을 따른다.
+
+63장 전체를 렌더링하고 변경 페이지를 확인했다. 파일 구조, geometry, native 표, Calibri·정수 pt·한국어 정책을 검사했다. v7의 Windows cloud 검증은 v8의 검증으로 인용하지 않는다. **v8은 Windows Open XML SDK와 PowerPoint 자체 실행·글꼴 배치·GIF 재생을 미검증**이다. 모델 실행, 품질 측정이나 A/B 최종 선정은 하지 않았다. 후속 사용자 요청에 따라 발표자료와 관련 그림·생성 원본을 commit/push 대상으로 지정했다.
 
 ### v7의 Claude 브라우저 시연
 
@@ -96,13 +105,13 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v7.pptx`를 입력으로 `_v8.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v8.pptx`를 입력으로 `_v9.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
 요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v7.json](./manifest-v7.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 첫 장의 변경 범위를 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v8.json](./manifest-v8.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v8의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
 [부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
@@ -116,7 +125,7 @@ python3 scripts/presentations/full_presentation_package.py replace CURRENT.pptx 
 
 `CURRENT_SHA256`는 편집 시작 시 최신 파일의 SHA-256이다. 도구는 hash가 바뀌거나 candidate가 이미 있으면 중단한다. 선택한 장과 필요한 자원만 가져오고 비선택 슬라이드/노트 및 기존 media의 bytes 보존을 검사한다. 렌더링과 package/layout/font 검증 후 **새 버전 파일**로 발행한다.
 
-본문의 주요 key는 `overview-v2`, `dp41-comparison-v2`, `dp44-comparison-v2`, `dp45-comparison-v2`, `dp42-comparison-v2`, `quality-01-03-v2`, `quality-04-06-v2`다. 원본 보존 장은 최초 key를 유지한다. 예를 들어 `dp41-comparison`은 appendix 47장으로 본문 key와 다르다.
+본문의 주요 key는 `overview-v2`, `via-common-request-background-v8`, `dp44-comparison-v2`, `dp45-basic-v8`, `dp45-comparison-v2`, `dp42-comparison-v2`, `screen-grounding-background-v8`, `quality-01-03-v2`, `quality-04-06-v2`다. 원본 보존 장은 최초 key를 유지한다. 예를 들어 `dp41-comparison`은 appendix 47장으로 본문 key와 다르다.
 
 새 배경 key는 `dp41-background-v3`, `dp44-background-v3`, `dp45-background-v3`, `dp42-background-v3`다. 기존 `*-background-v2`는 appendix 58~61장으로 이동했다. [v3 배경 작성 스크립트](../../../scripts/presentations/update_dp_backgrounds.mjs)와 [배경 보존 패키저](../../../scripts/presentations/package_background_revision.py)는 v2→v3 변경을 재현하며 v2의 57장과 기존 자원의 보존을 검사한다.
 

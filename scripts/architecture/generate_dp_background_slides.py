@@ -468,8 +468,18 @@ def build():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--current-intros', action='store_true',
+                        help='Only current problem intros; preserve legacy decks and other figures')
     args = parser.parse_args()
-    outputs = build()
+    if args.current_intros:
+        from via_problem_intro_scenes import outputs as current_intro_outputs
+        outputs = current_intro_outputs()
+    else:
+        outputs = build()
+        # Keep the historical bundles reproducible, while current individual
+        # backgrounds and the current preview follow the v8 scene source.
+        from via_problem_intro_scenes import outputs as current_intro_outputs
+        outputs.update(current_intro_outputs())
     for path, content in outputs.items():
         if args.check:
             assert path.exists() and path.read_text() == content, f'Out of sync: {path}'

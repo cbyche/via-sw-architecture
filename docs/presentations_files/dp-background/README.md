@@ -1,5 +1,24 @@
 # VIA 사용자 경험 도입과 설계 문제 배경
 
+## 현재 문제 소개 — 2026-10-13 / v8
+
+현재 발표는 [통합 v8 PPTX](../VIA-architecture-presentation_v8.pptx)의 공통 요청 → 44 → 45 → 42 → 새 화면·음성 문제 순서다. [현재 6장 draw.io](./VIA-problem-intros-v8.drawio)와 [전체 미리보기](./index.html)를 제공한다. 41은 주요 DP에서 제외했으며 기존 문서·구현·측정 근거는 이전 작업으로 보존한다. 아래의 41 포함 발표 구성과 대본은 이전 생성 이력이다.
+
+| 현재 페이지 | 설명 | SVG와 편집 원본 | PNG |
+| --- | --- | --- | --- |
+| 공통 요청 | “이 표를 아까 보고서에… 두 번째 표만… 메일은 보내지 말고” | [SVG](../../architecture/12-decisions/decision-packages/diagrams/via-common-request-background.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/via-common-request-background.drawio) | [PNG](./via-common-request-background.png) |
+| 44 배경 | 설명 중 정정, 별도 업무 질문과 늦은 옛 후보 | [SVG](../../architecture/12-decisions/decision-packages/diagrams/dp44-background.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/dp44-background.drawio) | [PNG](./dp44-background.png) |
+| 45 배경 | 직접 설명·여러 Agent 결과·정정·실제 전달의 재사용 | [SVG](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/dp45-background.drawio) | [PNG](./dp45-background.png) |
+| 45 기본 구조 | A의 요청별 원본 구성, B의 가공 기억 유지·조회와 보완 택틱 | [SVG](../../architecture/12-decisions/decision-packages/diagrams/dp45-basic-structures.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/dp45-basic-structures.drawio) | [PNG](./dp45-basic-structures.png) |
+| 42 배경 | 요청·Voice 종료 뒤에도 이어지는 업무·실행·질문 | [SVG](../../architecture/12-decisions/decision-packages/diagrams/dp42-background.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/dp42-background.drawio) | [PNG](./dp42-background.png) |
+| 화면·음성 문제 | 두 화면의 지칭, 늦은 전사와 “아니, 여기” 정정 | [SVG](../../architecture/12-decisions/decision-packages/diagrams/screen-voice-grounding-background.svg) / [draw.io](../../architecture/12-decisions/decision-packages/diagrams/screen-voice-grounding-background.drawio) | [PNG](./screen-voice-grounding-background.png) |
+
+배경의 문장과 그림을 사용자 장면 → 피해 → SW 어려움 → 설계 질문으로 다듬었다. 기존 44·45·42의 A/B 구조와 QA 정의·목표·평가 상태는 유지한다. 45의 요약·색인·cache나 갱신 택틱은 기본 구조와 구별하며 양안 모두 정정·삭제를 반영한다. 42의 다른 논리 수명만으로 서비스 분리의 우위를 주장하지 않는다. 새 화면·음성 주제에는 DP 번호와 A/B가 없으며 32/46의 대안을 계승하지 않는다.
+
+[장면 생성 원본](../../../scripts/architecture/via_problem_intro_scenes.py)에서 개별 SVG/draw.io, 통합 draw.io, 미리보기와 PPTX 도형의 내용을 함께 관리한다. 현재 배경만 갱신하려면 `python3 scripts/architecture/generate_dp_background_slides.py --current-intros`를 쓰고, `--check`를 추가해 동기화를 확인한다. PNG는 같은 SVG의 1920×1080 렌더링이다. 변경 범위, 검증과 부모 세션의 남은 설계 논의는 [v8 검수 기록](../full-presentation/review-v8-2026-10-13.md)에 기록했다. Architecture 본문과 공용 workplan은 이 편집에서 변경하지 않았다.
+
+## 이전 배경 구성과 작성 이력
+
 각 문서의 공통 사용자 상황, 설계 고려 사항과 설계 과제를 담은 **1920×1080 / 16:9 / 문서별 1페이지**다. [presentation_kjh](../reference_presentaion/presentation_kjh/)와 [presentation_jjh](../reference_presentaion/presentation_jjh/)의 배경 설명, 상황 도식과 핵심 설계 과제 구성을 참고했다.
 
 [도입 포함 발표 흐름 6페이지 draw.io](./VIA-DP-background-overview-41-45.drawio) / [번호순 배경 참조 5페이지](./VIA-DP-background-41-45.drawio) / [전체 미리보기](./index.html)

@@ -1,88 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
-<title id="title">04-42. 변경 용이성을 위한 VIA Conversation과 Task 관리 설계 — DP 배경</title>
-<defs>
-<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
-<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
-<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
-<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
-<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
-</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
-<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
-<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
-<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-42</text>
-<text id="n4-0" data-width="1780" x="64" y="101.80000000000001" text-anchor="start" font-size="40" font-weight="700" fill="#18232E">04-42. 변경 용이성을 위한 VIA Conversation과 Task 관리 설계</text>
-<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="64"/>
-<text id="n7-0" data-width="1756" x="82" y="198.12" text-anchor="start" font-size="36" font-weight="700" fill="#18232E">Request 완료와 Task 완료의 혼동 위험</text>
-<polyline id="n8" points="1213,282 1213,859" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n9-0" data-width="596" x="1260" y="306.92" text-anchor="start" font-size="26" font-weight="700" fill="#5F6B77">설계 고려 사항</text>
-<polyline id="n10" points="64,888 1856,888" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n11-0" data-width="165" x="64" y="948.92" text-anchor="start" font-size="26" font-weight="700" fill="#B63732">설계 과제</text>
-<text id="n12-0" data-width="1616" x="240" y="948.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">Conversation과 Task 상태의 관리 책임 및 실행 경계 설계</text>
-<text id="n13-0" data-width="1616" x="240" y="993.32" text-anchor="start" font-size="21" font-weight="400" fill="#5F6B77">Delegation / Downstream Agent에 작업 전달     Agent Execution / 개별 작업 실행</text>
-<text id="n14-0" data-width="1260" x="64" y="1051.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">품질 관점: 기능 정확성 / 변경 용이성 / 복구성</text>
-<text id="n15-0" data-width="480" x="1856" y="1051.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
-<rect id="n16" fill="white" stroke="#CDD6DE" stroke-width="1.7" x="64" y="275" width="1110" height="273"/>
-<rect id="n17" fill="#EAF0F8" stroke="none" stroke-width="1.7" x="64" y="275" width="1110" height="40"/>
-<text id="n18-0" data-width="760" x="84" y="306.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">Conversation / 입력과 Response 기록</text>
-<text id="n19-0" data-width="290" x="1154" y="304.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">User Turn / 한 번의 발화</text>
-<text id="n20-0" data-width="310" x="80" y="346.24" text-anchor="start" font-size="22" font-weight="700" fill="#5F6B77">처음 발화</text>
-<text id="n21-0" data-width="310" x="80" y="385.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">“이번 달 매출보고서</text>
-<text id="n21-1" data-width="310" x="80" y="413.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">만들어주고, 내일 회의 안내</text>
-<text id="n21-2" data-width="310" x="80" y="441.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">메일 초안도 만들어줘.”</text>
-<text id="n22-0" data-width="310" x="80" y="467.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Request 2개</text>
-<text id="n23-0" data-width="310" x="464" y="346.24" text-anchor="start" font-size="22" font-weight="700" fill="#5F6B77">잠시 뒤 / 진행 확인</text>
-<text id="n24-0" data-width="310" x="464" y="385.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">“보고서는 어디까지</text>
-<text id="n24-1" data-width="310" x="464" y="413.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">됐어?”</text>
-<text id="n25-0" data-width="310" x="464" y="467.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Request 1개</text>
-<text id="n26-0" data-width="310" x="848" y="346.24" text-anchor="start" font-size="22" font-weight="700" fill="#5F6B77">보고서 완료 후 / 수정</text>
-<text id="n27-0" data-width="310" x="848" y="385.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">“결론 부분만 짧게</text>
-<text id="n27-1" data-width="310" x="848" y="413.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">바꿔줘.”</text>
-<text id="n28-0" data-width="310" x="848" y="467.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">Request 1개</text>
-<polyline id="n29" points="411,337 440,337" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
-<polyline id="n30" points="795,337 824,337" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
-<rect id="n31" fill="#EFF2F5" stroke="none" stroke-width="1.7" x="80" y="477" width="150" height="32"/>
-<text id="n32-0" data-width="130" x="90" y="502.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">보고서 작성</text>
-<rect id="n33" fill="#EFF2F5" stroke="none" stroke-width="1.7" x="242" y="477" width="148" height="32"/>
-<text id="n34-0" data-width="128" x="252" y="502.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">메일 초안</text>
-<rect id="n35" fill="#EFF2F5" stroke="none" stroke-width="1.7" x="464" y="477" width="310" height="32"/>
-<text id="n36-0" data-width="290" x="474" y="502.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">보고서 진행 확인</text>
-<rect id="n37" fill="#EFF2F5" stroke="none" stroke-width="1.7" x="848" y="477" width="310" height="32"/>
-<text id="n38-0" data-width="290" x="858" y="502.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">보고서 결론 수정</text>
-<text id="n39-0" data-width="310" x="80" y="526.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Downstream Agent 접수 확인 후</text>
-<text id="n39-1" data-width="310" x="80" y="548.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Request 처리 완료</text>
-<text id="n40-0" data-width="310" x="464" y="526.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">상태 답변 후</text>
-<text id="n40-1" data-width="310" x="464" y="548.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Request 처리 완료</text>
-<text id="n41-0" data-width="310" x="848" y="526.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Downstream Agent 수정 접수 후</text>
-<text id="n41-1" data-width="310" x="848" y="548.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Request 처리 완료</text>
-<rect id="n42" fill="#F0F8F7" stroke="#087E8B" stroke-width="1.7" x="64" y="575" width="1110" height="147"/>
-<rect id="n43" fill="#DCEFEA" stroke="none" stroke-width="1.7" x="448" y="619" width="342" height="95"/>
-<text id="n44-0" data-width="410" x="84" y="606.92" text-anchor="start" font-size="26" font-weight="700" fill="#087E8B">보고서 Task</text>
-<text id="n45-0" data-width="620" x="1154" y="606.4" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">Task / 목표, 상태와 결과의 추적</text>
-<text id="n46-0" data-width="310" x="80" y="646.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">Task 생성 후 Delegation</text>
-<text id="n47-0" data-width="310" x="80" y="685.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">Agent Execution 1</text>
-<text id="n48-0" data-width="310" x="80" y="716.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">보고서 작성 시작</text>
-<text id="n49-0" data-width="310" x="464" y="660.68" text-anchor="start" font-size="29" font-weight="700" fill="#087E8B">Task와 실행 계속</text>
-<text id="n50-0" data-width="310" x="464" y="699.4" text-anchor="start" font-size="20" font-weight="400" fill="#18232E">상태 조회 / 새 실행 없음</text>
-<text id="n51-0" data-width="310" x="848" y="646.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">작성 종료 후 수정 Delegation</text>
-<text id="n52-0" data-width="310" x="848" y="684.24" text-anchor="start" font-size="22" font-weight="700" fill="#087E8B">Agent Execution 2 시작</text>
-<text id="n53-0" data-width="310" x="848" y="716.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">같은 Task의 결론 수정</text>
-<rect id="n54" fill="#F5F6F8" stroke="#CDD6DE" stroke-width="1.7" x="64" y="746" width="1110" height="114"/>
-<text id="n55-0" data-width="1068" x="84" y="775.16" text-anchor="start" font-size="23" font-weight="700" fill="#5F6B77">메일 초안 Task</text>
-<text id="n56-0" data-width="310" x="80" y="815.32" text-anchor="start" font-size="21" font-weight="400" fill="#18232E">Delegation / 초안 작성 시작</text>
-<text id="n57-0" data-width="310" x="80" y="846.48" text-anchor="start" font-size="19" font-weight="400" fill="#5F6B77">Agent Execution</text>
-<text id="n58-0" data-width="310" x="464" y="829.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">초안 완료 / 결과 보관</text>
-<text id="n59-0" data-width="310" x="848" y="829.16" text-anchor="start" font-size="23" font-weight="400" fill="#18232E">완료 상태와 결과 유지</text>
-<polyline id="n60" points="426,323 426,539" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<polyline id="n61" points="426,623 426,712" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<polyline id="n62" points="426,790 426,850" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<polyline id="n63" points="810,323 810,539" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<polyline id="n64" points="810,623 810,712" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<polyline id="n65" points="810,790 810,850" fill="none" stroke="#CDD6DE" stroke-width="1" stroke-dasharray="7 6"/>
-<text id="n66-0" data-width="596" x="1260" y="377.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">서로 다른 완료 시점</text>
-<text id="n67-0" data-width="596" x="1260" y="418.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">외부 접수와 답변 완료, Task 목표 완료의 구분</text>
-<text id="n68-0" data-width="596" x="1260" y="537.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">후속 Request와 실행 연결</text>
-<text id="n69-0" data-width="596" x="1260" y="578.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">같은 Task의 상태 조회와 새 수정 실행 연결</text>
-<text id="n70-0" data-width="596" x="1260" y="697.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">관리 책임과 복구 범위</text>
-<text id="n71-0" data-width="596" x="1260" y="738.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">기록과 상태의 관리 경계 및 중단 후 복구</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<g font-family="Calibri, sans-serif">
+<text id="dp42-background-1-text-0" x="60" y="73.6" font-size="40.0" text-anchor="start" font-weight="700" fill="#000000" data-width="1040">DP42. 요청이 끝나도 이어지는 보고서 업무</text>
+<polyline id="dp42-background-2" points="52,104 1872,104" fill="none" stroke="#A6A6A6" stroke-width="1.5"/>
+<polyline id="dp42-background-3" points="52,908 1868,908" fill="none" stroke="#A6A6A6" stroke-width="1.5"/>
+<text id="dp42-background-4-text-0" x="52" y="970.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#C00000" data-width="180">설계 질문</text>
+<text id="dp42-background-5-text-0" x="260" y="974.0266666666668" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="1608">대화·요청·질문·업무·실행의 서로 다른 수명을</text>
+<text id="dp42-background-5-text-1" x="260" y="1010.8266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="1608">어떻게 관리하고 연결할까?</text>
+<text id="dp42-background-6-text-0" x="52" y="190.78666666666666" font-size="34.666666666666664" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">“보고서 만들어줘”를 전달한 뒤에도, 보고서 작성은 계속됩니다.</text>
+<text id="dp42-background-7-text-0" x="52" y="253.97333333333333" font-size="29.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="1816">“어디까지 했어?”는 새 요청이고, 완료 후 “결론만 고쳐줘”는 같은 업무의 새 실행이 될 수 있습니다.</text>
+<text id="dp42-background-8-text-0" x="277" y="346.9733333333333" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="386">“보고서 만들어줘”</text>
+<text id="dp42-background-9-text-0" x="277" y="399.61333333333334" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="386">외부 접수 확인</text>
+<text id="dp42-background-10-text-0" x="687" y="346.9733333333333" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="386">“어디까지 했어?”</text>
+<text id="dp42-background-11-text-0" x="687" y="399.61333333333334" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="386">진행 상태로 답변</text>
+<text id="dp42-background-12-text-0" x="1097" y="346.9733333333333" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="386">Voice 끄기</text>
+<text id="dp42-background-13-text-0" x="1097" y="399.61333333333334" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="386">업무·대기 질문 유지</text>
+<text id="dp42-background-14-text-0" x="1507" y="346.9733333333333" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="386">“결론만 고쳐줘”</text>
+<text id="dp42-background-15-text-0" x="1507" y="399.61333333333334" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="386">최초 작성 완료 후</text>
+<text id="dp42-background-16-text-0" x="52" y="476.9733333333333" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="230">대화</text>
+<text id="dp42-background-17-text-0" x="52" y="549.9733333333334" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="230">개별 요청</text>
+<text id="dp42-background-18-text-0" x="52" y="626.9733333333334" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="230">보고서 업무</text>
+<text id="dp42-background-19-text-0" x="52" y="710.9733333333334" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="230">외부 실행</text>
+<polyline id="dp42-background-20" points="340,465 1820,465" fill="none" stroke="#00889A" stroke-width="5"/>
+<text id="dp42-background-21-text-0" x="867" y="460.61333333333334" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="800">Voice를 꺼도 기록과 연결은 유지</text>
+<polyline id="dp42-background-22" points="340,538 550,538" fill="none" stroke="#00889A" stroke-width="7"/>
+<polyline id="dp42-background-23" points="750,538 960,538" fill="none" stroke="#00889A" stroke-width="7"/>
+<polyline id="dp42-background-24" points="1570,538 1790,538" fill="none" stroke="#00889A" stroke-width="7"/>
+<text id="dp42-background-25-text-0" x="330" y="582.16" font-size="24.0" text-anchor="start" font-weight="400" fill="#000000" data-width="300">위임 처리 종료</text>
+<text id="dp42-background-26-text-0" x="750" y="582.16" font-size="24.0" text-anchor="start" font-weight="400" fill="#000000" data-width="340">새 작성 실행 없음</text>
+<polyline id="dp42-background-27" points="340,615 1820,615" fill="none" stroke="#00889A" stroke-width="7"/>
+<text id="dp42-background-28-text-0" x="1310" y="667.6133333333332" font-size="25.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="500">같은 보고서 업무로 연결</text>
+<polyline id="dp42-background-29" points="340,699 1400,699" fill="none" stroke="#00889A" stroke-width="7"/>
+<polyline id="dp42-background-30" points="1565,699 1820,699" fill="none" stroke="#00889A" stroke-width="7"/>
+<text id="dp42-background-31-text-0" x="340" y="745.6133333333332" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="310">최초 작성 실행</text>
+<text id="dp42-background-32-text-0" x="1565" y="745.6133333333332" font-size="25.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="260">새 수정 실행</text>
+<rect x="1060" y="750" width="460" height="74" fill="#F2F2F2" stroke="#A6A6A6" stroke-width="2"/>
+<text id="dp42-background-33-text-0" x="1290.0" y="780.4133333333334" font-size="25.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="460">대기 질문 유지</text>
+<text id="dp42-background-33-text-1" x="1290.0" y="810.8133333333334" font-size="25.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="460">답변·만료로 종료</text>
+<text id="dp42-background-34-text-0" x="52" y="877.9733333333334" font-size="29.333333333333332" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">요청·Voice 종료를 업무 종료로 다루면, 연결을 잃거나 같은 작성을 다시 시작할 수 있습니다.</text>
 </g></svg>

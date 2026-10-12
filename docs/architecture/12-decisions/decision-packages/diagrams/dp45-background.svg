@@ -1,67 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
-<title id="title">04-45. 기능 정확성을 위한 VIA 기억과 Context 제공 설계 — DP 배경</title>
-<defs>
-<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
-<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
-<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
-<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
-<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
-</defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
-<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
-<text id="n2-0" data-width="1250" x="64" y="43.400000000000006" text-anchor="start" font-size="20" font-weight="700" fill="#087E8B">VIA SOFTWARE ARCHITECTURE / DP 배경</text>
-<text id="n3-0" data-width="280" x="1856" y="43.400000000000006" text-anchor="end" font-size="20" font-weight="400" fill="#5F6B77">04-45</text>
-<text id="n4-0" data-width="1780" x="64" y="101.80000000000001" text-anchor="start" font-size="40" font-weight="700" fill="#18232E">04-45. 기능 정확성을 위한 VIA 기억과 Context 제공 설계</text>
-<polyline id="n5" points="64,127 1856,127" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<rect id="n6" fill="#FFF4A8" stroke="none" stroke-width="1.7" x="64" y="151" width="1792" height="64"/>
-<text id="n7-0" data-width="1756" x="82" y="198.12" text-anchor="start" font-size="36" font-weight="700" fill="#18232E">여러 활동의 과거 근거 누락과 실제 전달 내용의 오연결 위험</text>
-<polyline id="n8" points="1213,282 1213,859" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n9-0" data-width="596" x="1260" y="306.92" text-anchor="start" font-size="26" font-weight="700" fill="#5F6B77">설계 고려 사항</text>
-<polyline id="n10" points="64,888 1856,888" fill="none" stroke="#CDD6DE" stroke-width="2"/>
-<text id="n11-0" data-width="165" x="64" y="948.92" text-anchor="start" font-size="26" font-weight="700" fill="#B63732">설계 과제</text>
-<text id="n12-0" data-width="1616" x="240" y="948.52" text-anchor="start" font-size="31" font-weight="700" fill="#18232E">과거 근거를 연결하는 Context의 생산, 조회와 갱신 책임 설계</text>
-<text id="n13-0" data-width="1616" x="240" y="993.32" text-anchor="start" font-size="21" font-weight="400" fill="#5F6B77">VIA는 허용 근거를 연결 / 업무 판단과 제안서 작성은 Downstream Agent</text>
-<text id="n14-0" data-width="1260" x="64" y="1051.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">품질 관점: 기능 정확성 / 반응성 / 자원 활용성</text>
-<text id="n15-0" data-width="480" x="1856" y="1051.56" text-anchor="end" font-size="18" font-weight="400" fill="#5F6B77">구조 후보 / 미선정 / 미측정</text>
-<text id="n16-0" data-width="1110" x="64" y="285.08" text-anchor="start" font-size="24" font-weight="400" fill="#5F6B77">과거 활동의 시간 흐름 / VIA가 받은 기록과 허용된 참조</text>
-<path id="n17" fill="#F4F6F8" stroke="#CDD6DE" stroke-width="1.7" d="M64 329H396L414 347V616H64Z M396 329V347H414"/>
-<path id="n18" fill="#F4F6F8" stroke="#CDD6DE" stroke-width="1.7" d="M444 329H776L794 347V616H444Z M776 329V347H794"/>
-<path id="n19" fill="#F4F6F8" stroke="#CDD6DE" stroke-width="1.7" d="M824 329H1156L1174 347V616H824Z M1156 329V347H1174"/>
-<text id="n20-0" data-width="310" x="84" y="369.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">앞선 대화 C20</text>
-<text id="n21-0" data-width="310" x="84" y="425.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">VIA의 직접 설명 E20</text>
-<text id="n21-1" data-width="310" x="84" y="462.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">평가 기준</text>
-<text id="n22-0" data-width="310" x="84" y="516.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">실제 전달 P20의</text>
-<text id="n22-1" data-width="310" x="84" y="550.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">설명 내용과 범위</text>
-<text id="n23-0" data-width="310" x="84" y="597.48" text-anchor="start" font-size="19" font-weight="400" fill="#5F6B77">생성과 실제 전달 구별</text>
-<text id="n24-0" data-width="310" x="464" y="369.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">이후 제품 조사 T21</text>
-<text id="n25-0" data-width="310" x="464" y="425.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">한 Downstream Agent</text>
-<text id="n25-1" data-width="310" x="464" y="462.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">제품 비교 수행</text>
-<text id="n26-0" data-width="310" x="464" y="516.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">VIA가 확인한 결과 참조</text>
-<text id="n26-1" data-width="310" x="464" y="550.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">D21@v2</text>
-<text id="n27-0" data-width="310" x="464" y="597.48" text-anchor="start" font-size="19" font-weight="400" fill="#5F6B77">C21 대화에 연결</text>
-<text id="n28-0" data-width="310" x="844" y="369.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">이후 견적 업무 T22</text>
-<text id="n29-0" data-width="310" x="844" y="425.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">다른 Downstream Agent</text>
-<text id="n29-1" data-width="310" x="844" y="462.0" text-anchor="start" font-size="25" font-weight="700" fill="#18232E">견적 업무 수행</text>
-<text id="n30-0" data-width="310" x="844" y="516.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">VIA가 확인한 결과 참조</text>
-<text id="n30-1" data-width="310" x="844" y="550.16" text-anchor="start" font-size="23" font-weight="700" fill="#087E8B">D22@v1</text>
-<text id="n31-0" data-width="310" x="844" y="597.48" text-anchor="start" font-size="19" font-weight="400" fill="#5F6B77">C22 대화에 연결</text>
-<polyline id="n32" points="416,367 442,367" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
-<polyline id="n33" points="796,367 822,367" fill="none" stroke="#5F6B77" stroke-width="2" marker-end="url(#a5F6B77)"/>
-<polyline id="n34" points="239,622 239,645" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6"/>
-<polyline id="n35" points="619,622 619,645" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6"/>
-<polyline id="n36" points="999,622 999,645" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6"/>
-<polyline id="n37" points="239,645 1192,645 1192,841 1174,841" fill="none" stroke="#087E8B" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a087E8B)"/>
-<text id="n38-0" data-width="1110" x="64" y="683.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">이번 C23 / R23: 여러 활동을 참조하는 새 제안서 요청</text>
-<rect id="n39" fill="#EAF0F8" stroke="none" stroke-width="1.7" x="64" y="702" width="1110" height="103"/>
-<text id="n40-0" data-width="1070" x="84" y="740.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">“지난번 네가 설명한 평가 기준에 맞춰, 앞서 조사한 제품 비교 결과와</text>
-<text id="n40-1" data-width="1070" x="84" y="777.92" text-anchor="start" font-size="26" font-weight="700" fill="#18232E">받아둔 견적을 이번 제안서에 반영해줘.”</text>
-<rect id="n41" fill="#F0F8F7" stroke="none" stroke-width="1.7" x="64" y="821" width="1110" height="46"/>
-<text id="n42-0" data-width="1070" x="84" y="852.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">VIA: P20 전달 범위와 D21/D22 발췌 또는 참조를 이번 Context에 연결</text>
-<text id="n43-0" data-width="596" x="1260" y="377.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">여러 활동의 근거 연결</text>
-<text id="n44-0" data-width="596" x="1260" y="418.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">직접 설명과 두 업무 결과의 후보 및 버전 확인</text>
-<text id="n45-0" data-width="596" x="1260" y="537.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">실제 전달과 자료 범위</text>
-<text id="n46-0" data-width="596" x="1260" y="578.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">설명 원문과 실제 표시/재생 범위 구별</text>
-<text id="n46-1" data-width="596" x="1260" y="611.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">결과 본문과 허용된 참조 구별</text>
-<text id="n47-0" data-width="596" x="1260" y="697.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">제공 방식과 비용</text>
-<text id="n48-0" data-width="596" x="1260" y="738.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">단순 실행 맥락이나 index/cache로 충분한지</text>
-<text id="n48-1" data-width="596" x="1260" y="771.16" text-anchor="start" font-size="23" font-weight="400" fill="#5F6B77">공통 파생 관계의 유지가 필요한지 검토</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<rect width="1920" height="1080" fill="#FFFFFF"/>
+<g font-family="Calibri, sans-serif">
+<text id="dp45-background-1-text-0" x="60" y="73.6" font-size="40.0" text-anchor="start" font-weight="700" fill="#000000" data-width="1040">DP45. 과거 설명과 업무 결과의 재사용</text>
+<polyline id="dp45-background-2" points="52,104 1872,104" fill="none" stroke="#A6A6A6" stroke-width="1.5"/>
+<polyline id="dp45-background-3" points="52,908 1868,908" fill="none" stroke="#A6A6A6" stroke-width="1.5"/>
+<text id="dp45-background-4-text-0" x="52" y="970.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#C00000" data-width="180">설계 질문</text>
+<text id="dp45-background-5-text-0" x="260" y="974.0266666666668" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="1608">VIA의 설명, 여러 Agent 결과와 정정·실제 전달 기록을</text>
+<text id="dp45-background-5-text-1" x="260" y="1010.8266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="1608">나중 요청에서 어떻게 다시 연결해 사용할까?</text>
+<text id="dp45-background-6-text-0" x="52" y="195.64000000000001" font-size="36.0" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">“지난번 네가 설명한 기준으로,</text>
+<text id="dp45-background-6-text-1" x="52" y="238.84" font-size="36.0" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">제품 비교와 견적도 이번 제안서에 반영해줘.”</text>
+<text id="dp45-background-7-text-0" x="52" y="345.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="568">VIA에게 들은 설명</text>
+<rect x="52" y="382" width="568" height="117" fill="#FFFFFF" stroke="#A6A6A6" stroke-width="2"/>
+<text id="dp45-background-8-text-0" x="336.0" y="432.87333333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">평가 기준</text>
+<text id="dp45-background-8-text-1" x="336.0" y="468.0733333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">원문과 실제 전달 범위</text>
+<text id="dp45-background-9-text-0" x="676" y="345.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="568">제품 조사 Agent 결과</text>
+<rect x="676" y="382" width="568" height="117" fill="#FFFFFF" stroke="#A6A6A6" stroke-width="2"/>
+<text id="dp45-background-10-text-0" x="960.0" y="432.87333333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">제품 비교</text>
+<text id="dp45-background-10-text-1" x="960.0" y="468.0733333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">확인된 결과와 자료 참조</text>
+<text id="dp45-background-11-text-0" x="1300" y="345.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="568">견적 Agent 결과</text>
+<rect x="1300" y="382" width="568" height="117" fill="#FFFFFF" stroke="#A6A6A6" stroke-width="2"/>
+<text id="dp45-background-12-text-0" x="1584.0" y="432.87333333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">견적</text>
+<text id="dp45-background-12-text-1" x="1584.0" y="468.0733333333333" font-size="29.333333333333332" text-anchor="middle" font-weight="400" fill="#000000" data-width="568">확인된 결과와 버전</text>
+<polyline id="dp45-background-13" points="336,503 336,523" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline id="dp45-background-14" points="336,590 336,605" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline points="329.7674679981454,593.5914266954252 336,605 342.2325320018546,593.5914266954252" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline id="dp45-background-15" points="960,503 960,523" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline id="dp45-background-16" points="960,590 960,605" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline points="953.7674679981453,593.5914266954252 960,605 966.2325320018547,593.5914266954252" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline id="dp45-background-17" points="1584,503 1584,523" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline id="dp45-background-18" points="1584,590 1584,605" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<polyline points="1577.7674679981453,593.5914266954252 1584,605 1590.2325320018547,593.5914266954252" fill="none" stroke="#00889A" stroke-width="2.5"/>
+<text id="dp45-background-19-text-0" x="52" y="570.88" font-size="32.0" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">그 뒤 “가격은 비교에서 빼줘”라고 조건을 고쳤습니다.</text>
+<rect x="52" y="627" width="1816" height="109" fill="#F2F2F2" stroke="#A6A6A6" stroke-width="2"/>
+<text id="dp45-background-20-text-0" x="960.0" y="673.5266666666668" font-size="30.666666666666668" text-anchor="middle" font-weight="700" fill="#000000" data-width="1816">이번 요청의 과거 맥락</text>
+<text id="dp45-background-20-text-1" x="960.0" y="710.3266666666667" font-size="30.666666666666668" text-anchor="middle" font-weight="700" fill="#000000" data-width="1816">실제 전달한 기준 · 정정한 조건 · 사용 가능한 결과</text>
+<text id="dp45-background-21-text-0" x="52" y="803.4266666666667" font-size="30.666666666666668" text-anchor="start" font-weight="700" fill="#000000" data-width="1816">옛 조건이나 전달하지 않은 설명을 쓰면, 이번 업무를 다른 뜻으로 맡기게 됩니다.</text>
+<text id="dp45-background-22-text-0" x="52" y="870.9733333333334" font-size="29.333333333333332" text-anchor="start" font-weight="400" fill="#000000" data-width="1816">기록이 여러 곳에 흩어져 있고, 수정·삭제 후 사용할 수 있는 범위도 바뀝니다.</text>
 </g></svg>
