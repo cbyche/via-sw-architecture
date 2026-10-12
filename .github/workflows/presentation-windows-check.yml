@@ -1,0 +1,56 @@
+name: presentation-windows-check
+
+on:
+  workflow_dispatch:
+    inputs:
+      pptx_path:
+        description: Repository PPTX to validate without changing it
+        required: true
+        default: docs/presentations_files/VIA-architecture-presentation_v5.pptx
+
+permissions:
+  contents: read
+
+jobs:
+  windows-package-check:
+    runs-on: windows-2022
+    timeout-minutes: 15
+    env:
+      PPTX_PATH: ${{ inputs.pptx_path }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/presentations/windows-validator
+            scripts/presentations/presentation_windows_policy.py
+            scripts/presentations/full_presentation_package.py
+            ${{ inputs.pptx_path }}
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Record Windows fonts and PowerPoint availability
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path validation | Out-Null
+          $fonts = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'
+          $calibri = @($fonts.PSObject.Properties.Name | Where-Object { $_ -like 'Calibri*' })
+          $powerPointType = [Type]::GetTypeFromProgID('PowerPoint.Application')
+          @{
+            windows = [Environment]::OSVersion.VersionString
+            calibri_fonts = $calibri
+            powerpoint_installed = ($null -ne $powerPointType)
+            native_powerpoint_verified = $false
+          } | ConvertTo-Json | Set-Content validation/environment.json
+      - name: Check typography and Korean language
+        shell: pwsh
+        run: python scripts/presentations/presentation_windows_policy.py check "$env:PPTX_PATH"
+      - name: Open and validate using Microsoft Open XML SDK
+        shell: pwsh
+        run: dotnet run --project scripts/presentations/windows-validator --configuration Release -- "$env:PPTX_PATH" validation/openxml.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: windows-pptx-validation
+          path: validation/
+          retention-days: 14
