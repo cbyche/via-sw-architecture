@@ -34,6 +34,8 @@
 
 로컬 검증에서 package, geometry와 native 표 검사를 통과했고 Calibri, 정수 pt와 한국어 정책 위반은 0건이다. 61장을 모두 렌더링해 첫 장의 배치를 확인하고, 2~61장의 렌더링 결과가 v6와 픽셀까지 동일함을 확인했다. GIF의 68프레임 중 67개가 서로 다른 이미지이며 반복 설정과 15.38초 재생 시간을 확인했다. 이는 파일의 애니메이션 데이터 검사이며 PowerPoint 자체의 재생 검증은 아니다.
 
+최종 v7는 [Windows cloud 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/38231504590)를 통과했다. Calibri가 설치된 Windows Server 2022에서 Microsoft Open XML SDK 3.3.0으로 61장을 열었으며 Office2021 스키마 오류는 0건이다. SHA-256 `80f5762b962da0d732f973a11eda706b6d66f52e530bacdd05a8d98c3519e44e`는 로컬 최종 파일과 일치한다. Cloud에는 PowerPoint가 설치되어 있지 않아 프로그램 자체의 실행, native 글꼴 배치와 GIF 재생은 미검증이다. [v7 변경의 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38231484234)도 통과했다.
+
 ### v6의 참조 스타일과 도형 텍스트
 
 참조 자료의 실제 저장 경로는 [reference_presentaion/presentation_kjh](../reference_presentaion/presentation_kjh/)다. 제공된 58개 PNG를 확인하고 공통 서식을 편집 가능한 객체로 다시 작성했다. 흰 배경, 검정색 제목과 본문, 회색 구분선, 회색 진행 단계와 청록색 현재 단계, 연한 초록색 표 머리글을 적용한다. 품질 요구사항 표의 본문은 연한 크림색이다. `설계 질문` 표지만 빨간색으로 강조하고 질문 문장은 검정색으로 유지한다. 상단 진행 표시의 흰 글자는 대비를 위한 탐색 서식이다.
