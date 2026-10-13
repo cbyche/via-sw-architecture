@@ -3,6 +3,21 @@
 > 상태: **구조 비교 제안 / 사용자 검토 중 / 미선정 / 미측정** / 2026-10-06 / 실행 계약 재구체화: 2026-10-10 / 과거 이력과 설명 설계 구체화: 2026-10-13
 > [04-50 영역 7](./04-50-agent-architecture-decision-map.md)에서 출발한 새 비교다. 45라는 번호는 독립 DP 선정이나 B 채택을 뜻하지 않는다. 구현, 모델 실행, 성능 측정과 참조 Architecture 변경은 포함하지 않는다.
 
+## 그림을 읽는 순서
+
+DP-45의 현행 설명 그림은 아래 일곱 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다.
+
+| 그림 | 이 본문에서 볼 위치 |
+| --- | --- |
+| 과거 이력의 범위 | [§0.2 원본과 파생 자료](#dp45-fig-history-definition) |
+| 같은 기록의 A/B 사용 | [§0.6 같은 사건의 흐름](#dp45-fig-history-walkthrough) |
+| VIA에서 생기는 문제 | [DP 배경](#dp45-fig-background) |
+| A/B 기본 구조와 보완 방법 | [§1.3 기본 구조](#dp45-fig-basic-structures) |
+| 상세 구조 비교 | [§3 메인 비교](#dp45-fig-main-structure) |
+| 생산과 조회의 확대 경로 | [§3.9 확대 비교](#dp45-fig-comparison) |
+| 정정과 삭제의 처리 | [§4.5 수명 그림](#dp45-fig-lifecycle) |
+| 이전 발표 시안 | [§12 이전 판본](#dp45-fig-previous) |
+
 ## 0. 먼저 정의할 것: 과거 이력에서 현재 Context까지
 
 **45의 설명은 이 절에서 시작한다.** 과거 이력의 정의 → 같은 기록의 실제 예 → A/B의 생산과 조회 → 정정과 누락 처리 → 품질 충돌 순서다. §3 이후는 상세 계약과 기존 검토 근거다. 아래는 이번 비교안의 구체적인 설계 제안이며 제품 기준선의 변경, 구현 완료나 대안 채택을 뜻하지 않는다.
@@ -37,6 +52,8 @@
 | User Memory | 사용자가 지속 저장을 허용한 preference/routine/stable fact. Context Manager의 별도 원본 | 명시적으로 저장한 “답변은 표부터 보여줘”. 과거 표현의 반복만으로 등록하지 않음 |
 
 **공통 과거 이력 → A/B의 서로 다른 근거 공급 → 이번 요청의 Context → 현재 의미 판단과 채택**의 순서다. 원본 이력은 양안에 있고, 파생 기억도 양안에 허용한다. 차이는 공통 관계의 생산/게시가 정상 조회의 필수 계약인가에 있다. 현재 Context를 만들었다는 사실과 이번 요청을 올바르게 이해했다는 사실도 구별한다.
+
+<a id="dp45-fig-history-definition"></a>
 
 ![과거 이력의 다섯 종류와 파생 기억, 현재 Context의 구별](./diagrams/dp45-history-definition.svg)
 
@@ -100,6 +117,8 @@ A의 요청 시 작업은 **이 원본들이 이번 목적에 충분한지 확�
 
 **미준비 처리도 설계에 포함한다.** 지원 관계의 `NOT_COVERED`는 Publisher의 범위 생산 → 게시 revision 확인 → Reader의 재조회다. 읽기 deadline 전에 게시되지 않으면 부족한 범위를 `PARTIAL` 또는 `NOT_COVERED`로 반환한다. 필수 근거가 부족한 현재 요청은 완료 Context처럼 채택하지 않고 추가 조회/확인/보류한다. `UNSUPPORTED_RELATION`은 반복 생산으로 해결하지 않는다. 순수 B는 지원 제한을 알리고, 원본을 직접 검색/조합하는 보완은 **명시적 B+**로 구별한다. 음성 입력과 다른 요청은 이 read의 생산 대기를 하지 않는다.
 
+<a id="dp45-fig-history-walkthrough"></a>
+
 ![같은 설명과 두 업무 결과를 A와 B가 현재 Context로 만드는 과정](./diagrams/dp45-history-walkthrough.svg)
 
 [편집 가능한 draw.io](./diagrams/dp45-history-walkthrough.drawio)
@@ -143,6 +162,8 @@ A의 요청 시 작업은 **이 원본들이 이번 목적에 충분한지 확�
 
 **발표에서 먼저 말할 질문:** “VIA가 연결한 여러 대화와 업무의 과거를 나중에도 자연스럽게 사용할 수 있도록, 필요한 맥락을 요청마다 구성할 것인가, 미리 가공하고 계속 갱신해 재사용할 것인가?”
 
+<a id="dp45-fig-background"></a>
+
 ![04-45 DP 배경](./diagrams/dp45-background.svg)
 
 [편집 가능한 draw.io](./diagrams/dp45-background.drawio) / [발표 삽입용 PNG](../../../presentations_files/dp-background/dp45-background.png) / [전체 지도와 배경 모아 보기](../../../presentations_files/dp-background/index.html)
@@ -180,6 +201,12 @@ A의 요청 시 작업은 **이 원본들이 이번 목적에 충분한지 확�
 참조 설계에는 이미 단기 입력 근거, 중기 요약과 검색 view, cache, 장기 User Memory, 원본 버전과 누락 범위, 삭제와 철회에 따른 무효화가 있다. A에도 이 기능을 모두 허용한다. B를 ‘검색이 있는 안’, ‘기억이 있는 안’, ‘요약을 미리 만드는 안’으로 설명하면 비교가 성립하지 않는다. [참조 기억 수명 설계](../target-architecture/memory-and-context-lifecycle.md)와 [Architecture §9](../target-architecture/architecture.md#9-contextcachestale-처리)의 기능을 약화하지 않는다.
 
 이번에 더하는 질문은 **여러 원본을 잇는 과거 관계를 공통 읽기 모델의 지속 계약으로 삼을 것인가**다. B에서는 그 계약이 정상 조회의 원본별 검색과 교차 결합을 대체한다. A의 뒤에 같은 저장소를 선택적 cache로 붙인 정도라면 A의 확장이지 이번 B가 아니다. 양안은 같은 기능 목표를 갖지만, B의 게시 범위 밖 의미를 처리하려면 기다림, 추가 생산 또는 원본 조합 경로가 필요하다. 이 제약도 비교한다.
+
+<a id="dp45-fig-basic-structures"></a>
+
+![DP-45의 A와 B 기본 구조 및 양안의 보완 방법](./diagrams/dp45-basic-structures.svg)
+
+[편집 가능한 draw.io](./diagrams/dp45-basic-structures.drawio) / [발표용 PNG](../../../presentations_files/dp-background/dp45-basic-structures.png). 이 그림은 두 안의 공통 원본과 차이가 나는 공급 경로를 먼저 보여준다. 실제 Component, 생산 조건과 실패 처리는 아래 §3과 §4에서 상세히 설명한다.
 
 ## 2. 기존 후보와의 경계
 
@@ -219,6 +246,8 @@ B는 Context Manager에 **공통 과거 관계의 생산, 게시, 폐기 책임*
 | 원문 vs 요약 vs 사실 vs 관계 | 네 표현을 양안에 허용한다. 정보 손실, 출처와 수명을 구별하는 설계이지 vector DB, 검색 알고리즘, prompt 길이의 비교가 아니다. |
 
 ## 3. 강한 두 구조와 메인 비교
+
+<a id="dp45-fig-main-structure"></a>
 
 ![같은 과거 기록을 요청에서 조합하는 A와 공통 기억으로 게시하는 B](./diagrams/choice45-structure.svg)
 
@@ -360,7 +389,9 @@ D21 개정 2가 개정 3으로 바뀌면 의존 Bundle/cache/record의 신규 �
 
 첫 독자를 위해 그림의 Task1은 제품 조사 T21, Task2는 견적 T22의 표시용 별칭이다. 제품 결과/견적 결과는 각각 D21 개정 2/D22 개정 1, 설명 원문/실제 전달은 E20/P20을 가리킨다. 원문 구간과 JSON ID는 기존 계약을 유지한다. Memory1은 모델 가공된 실제 전달→설명 관계, 제품/견적의 HAS_RESULT는 확인된 명시 관계다. PARTIAL은 실제 전달한 예외 문구 한 구간과 결과 참조이며 평가 기준 전체를 얻었다는 뜻이 아니다. 하단 여섯 ASR 행은 조건별 구조 영향이며 고정 우열을 제시하지 않는다.
 
-![45 요청별 원본 조합과 공통 관계 생산·조회](../../../presentations_files/dp-comparison/dp45-comparison.svg)
+<a id="dp45-fig-comparison"></a>
+
+![45 요청별 원본 조합과 공통 관계 생산 및 조회](../../../presentations_files/dp-comparison/dp45-comparison.svg)
 
 [편집 원본](../../../presentations_files/dp-comparison/dp45-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp45-comparison.png). 위 전체 MAIN과 수명 그림을 유지하고 현재 요청의 조회/반환과 B의 별도 생산·게시·재조회 경로를 확대했다. Query1은 고정 JSON의 key를 축약해 표시한다. Memory1은 실제 전달된 예외 문구 한 구간이며 기준 전체가 아니다. 읽기 결과 PARTIAL, coverage와 gap을 표시하고 양안의 원문·현재 revision 검사도 남겼다. 현재 의미/Task 연결은 Request Interpreter와 Request Controller의 공통 후속 책임이다.
 
@@ -418,6 +449,8 @@ A는 요청 receipt와 남아 있는 원본으로 재조회하고, 유효하지 
 양안 모두 재시작 때 현재 삭제 원장을 먼저 적용한다. B의 저장소를 잃으면 과거 관계 재생산이 완료될 때까지 해당 조회는 제한되고 B+는 비용을 지불해 원본 조합으로 우회한다. 기억 복구가 Request/Task 실행 재시작이나 중복 Agent 명령을 유발해서는 안 된다. 별도 process 격리나 무중단 서비스를 이 비교의 자동 이익으로 세지 않는다.
 
 ### 4.5 정정과 삭제 경로 확대
+
+<a id="dp45-fig-lifecycle"></a>
 
 ![원본 수정과 철회의 사용 차단, 원본 변화 없는 파생 오류 보고](./diagrams/choice45-lifecycle.svg)
 
@@ -657,3 +690,33 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 [독립 리뷰와 수정 기록](./04-45-memory-and-context-review.md)에서 실제 지적, 조치, 재검토와 렌더 검증 범위를 확인한다. 메인 SVG와 draw.io는 [전용 생성기](../../../../scripts/architecture/generate_memory_context_diagrams.py)의 같은 scene에서 생성한다. 그림이 잘 렌더된다는 사실은 구조 자격이나 품질 우위의 검증이 아니다.
 
 이번 45 재구체화는 04-40/41 및 인접 44/42/46과 실행 경계를 맞추며 A/B의 기본 기제를 유지한다. 참조 Architecture, QA/ADR와 이전 결과는 변경하지 않고 최종 DP/A/B 선정이나 모델 실행을 시작하지 않는다. 본문/예시의 정적 일관성과 실제 그림/발표 렌더 확인을 구별하며, 게시 범위와 최종 검증/CI는 최신 검수 기록과 Git 이력으로 확인한다.
+
+## 12. 이전 발표 그림 자료
+
+<a id="dp45-fig-previous"></a>
+
+아래 여섯 미리보기는 DP-45를 설명하면서 만든 이전 발표 판본이다. 현재 설계의 일곱 그림과 구별해 보존한다. 특히 v4의 QA 숫자와 점수는 당시 사고 실험의 가정이며 측정 결과가 아니다. v5의 지역 예산도 전체 QA 판정이나 A/B 선택 결과가 아니다. 현재 설명에는 위 §0부터 §4까지의 그림과 계약을 사용한다.
+
+### 12.1 배경 발표 v2
+
+![이전 배경 발표 v2의 DP-45 슬라이드](../../../presentations_files/dp-background-v2/dp45-background.png)
+
+![이전 배경 발표 v2에서 사용한 DP-45 삽화](../../../presentations_files/dp-background-v2/assets/dp45-background-illustration.png)
+
+[v2 설명과 편집 대상](../../../presentations_files/dp-background-v2/README.md). 삽화는 사용자 장면을 설명하기 위한 이미지이며 실제 제품 화면이나 SW 구조도가 아니다.
+
+### 12.2 비교 발표 v4
+
+![이전 비교 발표 v4의 DP-45 구조와 QA 요약](../../../presentations_files/dp-comparison/v4/dp45-comparison_v4.png)
+
+![이전 비교 발표 v4의 DP-45 QA 상세](../../../presentations_files/dp-comparison/v4/dp45-qa-detail_v4.png)
+
+[v4 판본과 수치의 상태](../../../presentations_files/dp-comparison/v4/README.md).
+
+### 12.3 비교 발표 v5
+
+![이전 비교 발표 v5의 DP-45 구조와 QA 요약](../../../presentations_files/dp-comparison/v5/dp45-comparison_v5.png)
+
+![이전 비교 발표 v5의 DP-45 QA 상세](../../../presentations_files/dp-comparison/v5/dp45-qa-detail_v5.png)
+
+[v5 판본과 계산 범위](../../../presentations_files/dp-comparison/v5/README.md).
