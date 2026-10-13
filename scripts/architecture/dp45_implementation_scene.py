@@ -132,7 +132,8 @@ class MemoryScene:
         root=ET.SubElement(g,'root');ET.SubElement(root,'mxCell',id='0');ET.SubElement(root,'mxCell',id='1',parent='0')
         def vertex(key,x,y,w,h,value,style,parent='1'):
             c=ET.SubElement(root,'mxCell',id=key,parent=parent,vertex='1',value=value,style=style)
-            ET.SubElement(c,'mxGeometry',x=str(x),y=str(y),width=str(w),height=str(h),attrib={'as':'geometry'})
+            coord = lambda v: format(v, '.3f').rstrip('0').rstrip('.')
+            ET.SubElement(c,'mxGeometry',x=coord(x),y=coord(y),width=coord(w),height=coord(h),attrib={'as':'geometry'})
         for key,n in self.nodes.items():
             x,y,w,h=(n[k] for k in ('x','y','w','h'));parent=n['owner'] or '1'
             if parent!='1':x-=self.nodes[parent]['x'];y-=self.nodes[parent]['y']
@@ -158,7 +159,8 @@ class MemoryScene:
             for x,y in e['points'][1:-1]:ET.SubElement(arr,'mxPoint',x=str(x),y=str(y),attrib={'as':'point'})
         for i,n in enumerate(self.notes):
             value='<br>'.join(html.escape(t) for t in n['lines'])
-            width=min(W-2, max(sum(1 if ord(c)>255 else .66 for c in t)*n['size']+8 for t in n['lines']))
+            # Integer font units avoid Python-version-dependent float summation.
+            width=min(W-2, max(sum(100 if ord(c)>255 else 66 for c in t)*n['size']/100+8 for t in n['lines']))
             if n['align']=='right':x=n['x']-width
             elif n['align']=='center':x=n['x']-width/2
             else:x=n['x']
