@@ -1,144 +1,406 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2560" height="1440" viewBox="0 0 2560 1440" role="img" aria-labelledby="title"><title id="title">A 구현 구조 — 완료를 중앙에 반환하고 다음 작업을 지시</title><defs>
-<marker id="a263445" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#263445" stroke-width="1.6" /></marker>
-<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6" /></marker>
-<marker id="a087A53" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#087A53" stroke-width="1.6" /></marker>
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160" role="img"><title>A: 중앙 Dispatcher가 완료를 회수하고 다음 실행을 지시</title><defs>
+<marker id="a263445" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#263445" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a758294" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#758294" stroke-width="1.6"/></marker>
 </defs>
-<rect width="2560" height="1440" fill="white" /><g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
-<rect id="e1" x="0" y="0" width="2560" height="9" rx="0" fill="#263445" stroke="none" stroke-width="1.5" />
-<g id="ri" data-component="true"><rect x="64" y="280" width="480" height="305" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M64 342H544" stroke="#263445" stroke-width="1.4" />
-<text x="82" y="318.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Interpreter</text>
+<rect width="3840" height="2160" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<g id="im" data-kind="component" data-owner="">
+<rect x="64" y="240" width="3712" height="200" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 288H3776" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="274" data-width="3676" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Interaction Manager</text>
 </g>
-<g id="model" data-component="true"><rect x="64" y="625" width="480" height="160" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M64 687H544" stroke="#263445" stroke-width="1.4" />
-<text x="82" y="663.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Model Access</text>
+<g id="turn" data-kind="code" data-owner="im" data-node="true" data-x="104" data-y="308" data-w="560" data-h="112">
+<rect x="104" y="308" width="560" height="112" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="384.0" y="340" data-width="524" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Turn-Taking Control</text>
+<text x="122" y="375" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">onInputStarted: local stop / epoch++</text>
+<text x="122" y="404" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">입력 감지만으로 Task 취소를 확정하지 않음</text>
 </g>
-<g id="tm" data-component="true"><rect x="64" y="835" width="480" height="355" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M64 897H544" stroke="#263445" stroke-width="1.4" />
-<text x="82" y="873.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Task Manager</text>
+<g id="input_emit" data-kind="code" data-owner="im" data-node="true" data-x="720" data-y="308" data-w="560" data-h="112">
+<rect x="720" y="308" width="560" height="112" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="1000.0" y="340" data-width="524" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Timeline &amp; Buffer</text>
+<text x="738" y="375" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">전사와 evidence refs → InputReady</text>
+<text x="738" y="404" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">capture / ASR는 긴 Job과 무관하게 계속</text>
 </g>
-<g id="rc" data-component="true"><rect x="604" y="280" width="680" height="910" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M604 342H1284" stroke="#263445" stroke-width="1.4" />
-<text x="622" y="318.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Request Controller</text>
+<g id="playback" data-kind="store" data-owner="im" data-node="true" data-x="2520" data-y="308" data-w="560" data-h="112">
+<path d="M2520 321C2520 305 3080 305 3080 321V407C3080 423 2520 423 2520 407Z M2520 321C2520 337 3080 337 3080 321" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2800.0" y="350" data-width="524" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Playback State (RAM)</text>
+<text x="2538" y="385" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">현재 output epoch / 실제 재생 범위</text>
 </g>
-<g id="rm" data-component="true"><rect x="1344" y="280" width="620" height="910" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M1344 342H1964" stroke="#263445" stroke-width="1.4" />
-<text x="1362" y="318.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Response Manager</text>
+<g id="io" data-kind="code" data-owner="im" data-node="true" data-x="3140" data-y="308" data-w="580" data-h="112">
+<rect x="3140" y="308" width="580" height="112" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3430.0" y="340" data-width="544" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Channel I/O</text>
+<text x="3158" y="375" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">release + epoch 검사 → 실제 표시 / 재생</text>
+<text x="3158" y="404" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">실제 전달 뒤 ActualReceipt callback</text>
 </g>
-<g id="im" data-component="true"><rect x="2024" y="280" width="472" height="910" rx="4" fill="white" stroke="#263445" stroke-width="2.2" />
-<path d="M2024 342H2496" stroke="#263445" stroke-width="1.4" />
-<text x="2042" y="318.0" text-anchor="start" font-size="23" font-weight="700" fill="#263445">Interaction Manager</text>
+<g id="tm" data-kind="component" data-owner="">
+<rect x="64" y="540" width="500" height="775" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 588H564" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="574" data-width="464" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Task Manager</text>
 </g>
-<polyline id="e6" points="64,202 2496,202" fill="none" stroke="#C7D1DD" stroke-width="2" />
-<polyline id="e11" points="304.0,495 304.0,702" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e22" points="2260.0,1060 2260.0,1080" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e28" points="1654.0,1060 1654.0,1080" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e29" points="1924,1000.0 2064,1000.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e31" points="2145.0,1060 2145,1070 1984,1070 1984,1132.5 1924,1132.5" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)" />
-<polyline id="e34" points="64,1255 2496,1255" fill="none" stroke="#C7D1DD" stroke-width="2" />
-<polyline id="e45" points="2410.0,370 2410,235 884,235 884.0,370" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e47" points="2430.0,370 2430,257 1104,257 1104.0,370" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e49" points="504,1122.5 568,1122.5 568,552 944,552 944,432.5 964,432.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e51" points="784.0,495 784,566 814,566 814.0,590" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e52" points="1104.0,495 1104,566 1074,566 1074.0,590" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e54" points="714,635.0 584,635 584,447.5 504,447.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e56" points="504,412.5 562,412.5 562,352 1104,352 1104.0,370" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)" />
-<polyline id="e58" points="1174,635.0 1304,635 1304,447.5 1384,447.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e60" points="1384,412.5 1320,412.5 1244,412.5" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)" />
-<polyline id="e61" points="1654.0,495 1654.0,570" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e62" points="1174,685.0 1312,685 1312,1000 1384,1000.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e65" points="814.0,720 814,795 784,795 784.0,895" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e66" points="1104.0,720 1104.0,895" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e68" points="724.0,720 724,780 584,780 584,1015 504,1015.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)" />
-<polyline id="e70" points="1654.0,1185 1654,1215 586,1215 586,700 714,700.0" fill="none" stroke="#263445" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#a263445)" />
-<g id="interpret" data-node="true" data-x="104" data-y="370" data-w="400" data-h="125" data-owner="ri">
-<rect x="104" y="370" width="400" height="125" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="304.0" y="409.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">InterpretAsync</text><text x="304.0" y="438.20000000000005" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">근거 조회 / 의미 제안</text><text x="304.0" y="466.8" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">긴 작업은 제어 루프 밖</text>
+<g id="task_facts" data-kind="store" data-owner="tm" data-node="true" data-x="104" data-y="650" data-w="420" data-h="190">
+<path d="M104 663C104 647 524 647 524 663V827C524 843 104 843 104 827Z M104 663C104 679 524 679 524 663" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="314.0" y="692" data-width="384" font-size="25" font-weight="700" text-anchor="middle" fill="#263445">Task 원본 / Inbox (DURABLE)</text>
+<text x="122" y="727" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Task / question / command ID</text>
+<text x="122" y="756" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">확인된 상태와 source revision</text>
+<text x="122" y="785" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Agent Gateway 사건 확인 / 저장</text>
 </g>
-<g id="api" data-node="true" data-x="104" data-y="702" data-w="400" data-h="60" data-owner="model">
-<rect x="104" y="702" width="400" height="60" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="304.0" y="737.7" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">API adapter / bounded admission</text>
+<g id="task_emit" data-kind="code" data-owner="tm" data-node="true" data-x="104" data-y="910" data-w="420" data-h="130">
+<rect x="104" y="910" width="420" height="130" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="314.0" y="942" data-width="384" font-size="25" font-weight="700" text-anchor="middle" fill="#263445">ConfirmedTaskEvent emit</text>
+<text x="122" y="977" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">durable 사실의 참조를 enqueue</text>
+<text x="122" y="1006" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">대화 연결과 질문은 Request Controller</text>
 </g>
-<g id="task_handler" data-node="true" data-x="104" data-y="925" data-w="400" data-h="110" data-owner="tm">
-<rect x="104" y="925" width="400" height="110" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="304.0" y="959.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Task command handler</text><text x="304.0" y="985.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Agent Gateway → Downstream Agent</text><text x="304.0" y="1011.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">취소 요청과 실제 종료를 구별</text>
+<g id="task_command" data-kind="code" data-owner="tm" data-node="true" data-x="104" data-y="1100" data-w="420" data-h="175">
+<rect x="104" y="1100" width="420" height="175" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="314.0" y="1132" data-width="384" font-size="25" font-weight="700" text-anchor="middle" fill="#263445">Task command handler</text>
+<text x="122" y="1167" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">미전송 철회 또는 외부 cancel 요청</text>
+<text x="122" y="1196" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Agent Gateway 경유 외부 cancel</text>
+<text x="122" y="1225" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Downstream Agent 요청</text>
+<text x="122" y="1254" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">접수 / 실제 종료 / UNKNOWN 구별</text>
 </g>
-<g id="task_facts" data-node="true" data-x="104" data-y="1070" data-w="400" data-h="105" data-owner="tm">
-<path d="M104 1084C104 1065 504 1065 504 1084V1161C504 1180 104 1180 104 1161Z M104 1084C104 1103 504 1103 504 1084" fill="#F7F9FC" stroke="#263445" stroke-width="1.7" />
-<text x="304.0" y="1126.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">확인된 Task 원본 / durable inbox</text><text x="304.0" y="1154.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">질문 / 결과 / command 상태</text>
+<g id="ri" data-kind="component" data-owner="">
+<rect x="64" y="1380" width="500" height="300" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 1428H564" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="1414" data-width="464" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Request Interpreter</text>
 </g>
-<g id="turn" data-node="true" data-x="2064" data-y="370" data-w="392" data-h="125" data-owner="im">
-<rect x="2064" y="370" width="392" height="125" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="2260.0" y="409.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Turn-Taking Control</text><text x="2260.0" y="438.20000000000005" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">입력 감지 → 즉시 local stop</text><text x="2260.0" y="466.8" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">현재 input / 출력 epoch</text>
+<g id="interpret" data-kind="code" data-owner="ri" data-node="true" data-x="104" data-y="1460" data-w="420" data-h="160">
+<rect x="104" y="1460" width="420" height="160" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="314.0" y="1492" data-width="384" font-size="25" font-weight="700" text-anchor="middle" fill="#263445">InterpretAsync</text>
+<text x="122" y="1527" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Context Manager / Model Access</text>
+<text x="122" y="1556" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">immutable input + source refs</text>
+<text x="122" y="1585" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">callback: MeaningProposal 반환</text>
 </g>
-<g id="io" data-node="true" data-x="2064" data-y="940" data-w="392" data-h="120" data-owner="im">
-<rect x="2064" y="940" width="392" height="120" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="2260.0" y="977.1" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Channel I/O</text><text x="2260.0" y="1005.7" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">release / epoch 재검사</text><text x="2260.0" y="1034.3000000000002" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">실제 표시 / 재생 / receipt</text>
+<g id="rc" data-kind="component" data-owner="">
+<rect x="620" y="540" width="1120" height="1140" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M620 588H1740" stroke="#263445" stroke-width="1.5"/>
+<text x="638" y="574" data-width="1084" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Request Controller</text>
 </g>
-<g id="playback" data-node="true" data-x="2064" data-y="1080" data-w="392" data-h="105" data-owner="im">
-<path d="M2064 1094C2064 1075 2456 1075 2456 1094V1171C2456 1190 2064 1190 2064 1171Z M2064 1094C2064 1113 2456 1113 2456 1094" fill="#F7F9FC" stroke="#263445" stroke-width="1.7" />
-<text x="2260.0" y="1136.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Playback State</text><text x="2260.0" y="1164.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">장치 상태 / receipt buffer</text>
+<g id="rm" data-kind="component" data-owner="">
+<rect x="1800" y="540" width="1976" height="1140" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M1800 588H3776" stroke="#263445" stroke-width="1.5"/>
+<text x="1818" y="574" data-width="1940" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Response Manager</text>
 </g>
-<g id="composer" data-node="true" data-x="1384" data-y="370" data-w="540" data-h="125" data-owner="rm">
-<rect x="1384" y="370" width="540" height="125" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="1654.0" y="409.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Response Composer</text><text x="1654.0" y="438.20000000000005" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">PrepareAsync: 내용 / 음성 준비</text><text x="1654.0" y="466.8" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">동일 Model Access / 준비 Job 상태</text>
+<g id="publication" data-kind="group" data-owner="rm">
+<rect x="3140" y="595" width="580" height="1060" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M3140 643H3720" stroke="#263445" stroke-width="1.5"/>
+<text x="3158" y="629" data-width="544" font-size="27" font-weight="700" text-anchor="start" fill="#263445">Publication Control</text>
 </g>
-<g id="publish" data-node="true" data-x="1384" data-y="940" data-w="540" data-h="120" data-owner="rm">
-<rect x="1384" y="940" width="540" height="120" rx="12" fill="#F7F9FC" stroke="#263445" stroke-width="1.6" />
-<text x="1654.0" y="977.1" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Publication Control</text><text x="1654.0" y="1005.7" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">7 owner 현재성 / 권한 / 차례 / 중복 검사</text><text x="1654.0" y="1034.3000000000002" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">이 Module은 다른 Stage의 작업을 지시하지 않음</text>
+<g id="pub_q" data-kind="queue" data-owner="publication" data-node="true" data-x="3180" data-y="660" data-w="500" data-h="110">
+<rect x="3180" y="660" width="500" height="110" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M3470 748H3655" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="3490" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3528" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3566" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3604" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<text x="3430.0" y="692" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Publish Request Queue</text>
+<text x="3198" y="727" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">candidate ref / admission refs</text>
 </g>
-<g id="outbox" data-node="true" data-x="1384" data-y="1080" data-w="540" data-h="105" data-owner="rm">
-<path d="M1384 1094C1384 1075 1924 1075 1924 1094V1171C1924 1190 1384 1190 1384 1171Z M1384 1094C1384 1113 1924 1113 1924 1094" fill="#F7F9FC" stroke="#263445" stroke-width="1.7" />
-<text x="1654.0" y="1136.0" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Publication Outbox (내구 원본)</text><text x="1654.0" y="1164.6" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">publication ID / 실제 전달 범위</text>
+<g id="receipt_q" data-kind="queue" data-owner="publication" data-node="true" data-x="3180" data-y="795" data-w="500" data-h="110">
+<rect x="3180" y="795" width="500" height="110" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M3470 883H3655" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="3490" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3528" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3566" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3604" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<text x="3430.0" y="827" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Actual Receipt Queue</text>
+<text x="3198" y="862" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">publication ID / actual range</text>
 </g>
-<g id="control_q" data-node="true" data-x="644" data-y="370" data-w="280" data-h="125" data-owner="rc">
-<path d="M644 384C644 365 924 365 924 384V481C924 500 644 500 644 481Z M644 384C644 403 924 403 924 384" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.7" />
-<text x="784.0" y="424.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Control Lane (RAM)</text><text x="784.0" y="450.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">onset / hold / invalidate</text><text x="784.0" y="476.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">일반 event와 분리 수용</text>
+<g id="pub_control" data-kind="queue" data-owner="publication" data-node="true" data-x="3180" data-y="940" data-w="500" data-h="110">
+<rect x="3180" y="940" width="500" height="110" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M3470 1028H3655" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="3490" y="1012" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3528" y="1012" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3566" y="1012" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="3604" y="1012" width="30" height="30" fill="white" stroke="#263445"/>
+<text x="3430.0" y="972" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Control Queue</text>
+<text x="3198" y="1007" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">hold / adopted invalidation</text>
 </g>
-<g id="event_q" data-node="true" data-x="964" data-y="370" data-w="280" data-h="125" data-owner="rc">
-<path d="M964 384C964 365 1244 365 1244 384V481C1244 500 964 500 964 481Z M964 384C964 403 1244 403 1244 384" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.7" />
-<text x="1104.0" y="424.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Event Mailbox (RAM)</text><text x="1104.0" y="450.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Input / Task / JobDone</text><text x="1104.0" y="476.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">receipt / 우선순위 + seq</text>
+<g id="pub_handler" data-kind="code" data-owner="publication" data-node="true" data-x="3180" data-y="1100" data-w="500" data-h="175">
+<rect x="3180" y="1100" width="500" height="175" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3430.0" y="1132" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Pump / Handle(event)</text>
+<text x="3198" y="1167" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">control 우선 / owner current check</text>
+<text x="3198" y="1196" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">권한 / 차례 / 중복 → commit → release</text>
+<text x="3198" y="1225" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">receipt → durable actual → Presented</text>
 </g>
-<g id="dispatcher" data-node="true" data-x="714" data-y="590" data-w="460" data-h="130" data-owner="rc">
-<rect x="714" y="590" width="460" height="130" rx="12" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.6" />
-<text x="944.0" y="632.1" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Dialogue Dispatcher</text><text x="944.0" y="660.7" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Pump → 짧은 Handle(event)</text><text x="944.0" y="689.3000000000001" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">채택 / 유효성 / 다음 Job 지시</text>
+<g id="outbox" data-kind="store" data-owner="publication" data-node="true" data-x="3180" data-y="1305" data-w="500" data-h="190">
+<path d="M3180 1318C3180 1302 3680 1302 3680 1318V1482C3680 1498 3180 1498 3180 1482Z M3180 1318C3180 1334 3680 1334 3680 1318" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3430.0" y="1347" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Publication Outbox (DURABLE)</text>
+<text x="3198" y="1382" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">publication ID → release identity</text>
+<text x="3198" y="1411" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">actual range / status / Presented</text>
+<text x="3198" y="1440" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">원본 저장: State Store</text>
 </g>
-<g id="progress" data-node="true" data-x="644" data-y="895" data-w="280" data-h="190" data-owner="rc">
-<path d="M644 909C644 890 924 890 924 909V1071C924 1090 644 1090 644 1071Z M644 909C644 928 924 928 924 909" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.7" />
-<text x="784.0" y="965.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Dialogue Progress State</text><text x="784.0" y="991.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">RAM / waiting IDs</text><text x="784.0" y="1017.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">후속 실행 / 후보 참조</text><text x="784.0" y="1043.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">확정 원본은 복제하지 않음</text>
+<g id="pub_result" data-kind="data" data-owner="publication" data-node="true" data-x="3180" data-y="1530" data-w="500" data-h="95">
+<path d="M3180 1530H3660L3680 1550V1625H3180Z M3660 1530V1550H3680" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3430.0" y="1562" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Presented (immutable)</text>
+<text x="3198" y="1597" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">질문 ID / publication ID / actual range</text>
 </g>
-<g id="jobs" data-node="true" data-x="964" data-y="895" data-w="280" data-h="190" data-owner="rc">
-<path d="M964 909C964 890 1244 890 1244 909V1071C1244 1090 964 1090 964 1071Z M964 909C964 928 1244 928 1244 909" fill="#FFF0DD" stroke="#B8753F" stroke-width="1.7" />
-<text x="1104.0" y="965.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">Job Index (RAM)</text><text x="1104.0" y="991.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">job ID / Request revision</text><text x="1104.0" y="1017.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">source refs / cancel handle</text><text x="1104.0" y="1043.0" text-anchor="middle" font-size="20" font-weight="700" fill="#263445">RUNNING → terminal</text>
+<g id="control" data-kind="queue" data-owner="rc" data-node="true" data-x="660" data-y="650" data-w="490" data-h="145">
+<rect x="660" y="650" width="490" height="145" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M940 773H1125" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="960" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="998" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1036" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1074" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<text x="905.0" y="682" data-width="454" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Control Lane (bounded)</text>
+<text x="678" y="717" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">InputStarted / adopted Invalidate</text>
+<text x="678" y="746" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">별도 수용량 / 제어를 먼저 소비</text>
 </g>
-<g id="candidate" data-node="true" data-x="1384" data-y="570" data-w="540" data-h="140" data-owner="rm">
-<path d="M1384 584C1384 565 1924 565 1924 584V696C1924 715 1384 715 1384 696Z M1384 584C1384 603 1924 603 1924 584" fill="#F7F9FC" stroke="#263445" stroke-width="1.7" />
-<text x="1654.0" y="626.1" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">Prepared Candidate (RAM)</text><text x="1654.0" y="654.7" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">내용 / 음성 / 시작 source refs</text><text x="1654.0" y="683.3000000000001" text-anchor="middle" font-size="22" font-weight="700" fill="#263445">중앙에는 이 자료의 참조를 반환</text>
+<g id="events" data-kind="queue" data-owner="rc" data-node="true" data-x="1200" data-y="650" data-w="500" data-h="145">
+<rect x="1200" y="650" width="500" height="145" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M1490 773H1675" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="1510" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1548" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1586" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1624" y="757" width="30" height="30" fill="white" stroke="#B8753F"/>
+<text x="1450.0" y="682" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Event Mailbox (bounded)</text>
+<text x="1218" y="717" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Input / TaskEvent / JobDone / Presented</text>
+<text x="1218" y="746" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">priority + seq + aging; causal order 유지</text>
 </g>
-<g id="e2"><text x="64" y="60.0" text-anchor="start" font-size="18" font-weight="700" fill="#5B697B">VIA  /  ARCHITECTURE REVIEW</text></g>
-<g id="e3"><text x="2496" y="60.0" text-anchor="end" font-size="18" font-weight="700" fill="#5B697B">DP-44  /  STAGE 04</text></g>
-<g id="e4"><text x="64" y="109" text-anchor="start" font-size="34" font-weight="700" fill="#263445">A 구현 구조</text><text x="64" y="153" text-anchor="start" font-size="34" font-weight="700" fill="#263445">완료를 중앙에 반환하고 다음 작업을 지시</text></g>
-<g id="e5"><text x="64" y="188.0" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">대기열 + 짧은 Dispatcher 루프 + 비동기 Job. priority queue의 순서와 실행 중 작업의 취소는 별도다.</text></g>
-<g id="e12" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="114" y="611.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">같은 Context Manager / 의미 API</text></g>
-<g id="e23"><text x="2068" y="567" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">capture / ASR는 계속 진행</text><text x="2068" y="607" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">전사 확정 ≠ 의미 해소</text><text x="2068" y="647" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">발화 감지 ≠ Task 취소</text><text x="2068" y="687" text-anchor="start" font-size="22" font-weight="400" fill="#5B697B">새 입력은 미전송 효과 hold</text></g>
-<g id="e24"><text x="2068" y="796" text-anchor="start" font-size="21" font-weight="400" fill="#263445">8 허용 release를 실제 전달</text><text x="2068" y="832" text-anchor="start" font-size="21" font-weight="400" fill="#263445">9 receipt는 전달 이후 생성</text></g>
-<g id="e30" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1953" y="984.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">8 release</text></g>
-<g id="e32" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1950" y="1163.0" text-anchor="start" font-size="20" font-weight="400" fill="#263445">9</text></g>
-<g id="e33"><text x="64" y="1233.0" text-anchor="start" font-size="18" font-weight="400" fill="#5B697B">State Store: 각 owner의 확정 기록 저장</text></g>
-<g id="e35"><text x="64" y="1297" text-anchor="start" font-size="23" font-weight="400" fill="#263445">공통 실행 기반: bounded async executor + blocking worker pool. Module마다 전용 thread나 process를 두지 않는다.</text><text x="64" y="1336" text-anchor="start" font-size="23" font-weight="400" fill="#263445">짧은 제어 루프는 긴 API 작업을 기다리지 않는다. 취소는 먼저 결과를 무효화하고 provider에 중단을 요청한다.</text></g>
-<g id="e36"><text x="64" y="1385.0" text-anchor="start" font-size="20" font-weight="400" fill="#5B697B">직각 = Component  /  둥근 박스 = 코드 Module  /  원통 = Queue 또는 상태  /  살구색 = A/B 실행 조직의 차이</text></g>
-<g id="e37"><text x="64" y="1418.0" text-anchor="start" font-size="18" font-weight="400" fill="#5B697B">실선 → 요청 / 자료 전달    점선 → 완료 / 확정 사실 반환    번호는 본문 실행 표와 대응</text></g>
-<g id="e38"><text x="2496" y="1418.0" text-anchor="end" font-size="18" font-weight="400" fill="#5B697B">구현을 가정한 설계안 / 미선정 / 미측정</text></g>
-<g id="e46" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="900" y="230.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">1 onset / 제어 event</text></g>
-<g id="e48" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1470" y="254.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">1 확정 Input</text></g>
-<g id="e50" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="112" y="823.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">1 확인된 질문 / 결과 / 상태</text></g>
-<g id="e53" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="803" y="565.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">2 우선 처리 / fairness</text></g>
-<g id="e55" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="620" y="769.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">3 InterpretAsync 시작</text></g>
-<g id="e57" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="605" y="357.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">4 JobDone → Mailbox</text></g>
-<g id="e59" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1390" y="759.0" text-anchor="start" font-size="19" font-weight="400" fill="#263445">5 Prepare / cancel → / 6 JobDone ←</text></g>
-<g id="e63" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="1390" y="835.0" text-anchor="start" font-size="20" font-weight="400" fill="#263445">7 유효 후보의 게시 요청</text></g>
-<g id="e64"><text x="1390" y="879.0" text-anchor="start" font-size="21" font-weight="400" fill="#5B697B">준비 완료만으로 재생하지 않음</text></g>
-<g id="e67" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="729" y="858.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">짧은 루프에서 조회 / 갱신</text></g>
-<g id="e69" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="114" y="1058.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">채택한 취소 / 변경 명령</text></g>
-<g id="e71" paint-order="stroke" stroke="white" stroke-width="7" stroke-linejoin="round"><text x="708" y="1241.0" text-anchor="start" font-size="18" font-weight="400" fill="#263445">10 내구 Presented → Request Controller 질문 focus</text></g>
+<g id="dispatcher" data-kind="group" data-owner="rc">
+<rect x="660" y="890" width="1040" height="355" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M660 938H1700" stroke="#B8753F" stroke-width="1.5"/>
+<text x="678" y="924" data-width="1004" font-size="27" font-weight="700" text-anchor="start" fill="#263445">Dialogue Dispatcher</text>
+</g>
+<g id="pump" data-kind="code" data-owner="dispatcher" data-node="true" data-x="690" data-y="955" data-w="420" data-h="250">
+<rect x="690" y="955" width="420" height="250" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="900.0" y="987" data-width="384" font-size="25" font-weight="700" text-anchor="middle" fill="#263445">Pump</text>
+<text x="708" y="1022" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">select(Control, Event)</text>
+<text x="708" y="1051" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">짧은 Handle(event) 호출</text>
+<text x="708" y="1080" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">긴 Job 완료를 await하지 않음</text>
+<text x="708" y="1109" data-width="384" font-size="23" font-weight="400" text-anchor="start" fill="#263445">다음 사건을 계속 소비</text>
+</g>
+<g id="handle" data-kind="code" data-owner="dispatcher" data-node="true" data-x="1160" data-y="955" data-w="510" data-h="250">
+<rect x="1160" y="955" width="510" height="250" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1415.0" y="987" data-width="474" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Handle(event)</text>
+<text x="1178" y="1022" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Input → Interpret Job 시작</text>
+<text x="1178" y="1051" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Meaning → 채택 / Prepare Job 지시</text>
+<text x="1178" y="1080" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Prepared → 조건 확인 / Publish 지시</text>
+<text x="1178" y="1109" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Invalidate → mark unusable / cancel</text>
+<text x="1178" y="1138" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">stale Done → discard / ref release</text>
+<text x="1178" y="1167" data-width="474" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Presented → 실제 질문 focus 갱신</text>
+</g>
+<g id="jobs" data-kind="store" data-owner="rc" data-node="true" data-x="660" data-y="1305" data-w="490" data-h="215">
+<path d="M660 1318C660 1302 1150 1302 1150 1318V1507C1150 1523 660 1523 660 1507Z M660 1318C660 1334 1150 1334 1150 1318" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="905.0" y="1347" data-width="454" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Job Index (RAM)</text>
+<text x="678" y="1382" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">job ID → input / Request revision</text>
+<text x="678" y="1411" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read set / Future / CancelHandle</text>
+<text x="678" y="1440" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">RUNNING / CANCEL_REQUESTED</text>
+<text x="678" y="1469" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">terminal status + result ref</text>
+<text x="678" y="1498" data-width="454" font-size="23" font-weight="400" text-anchor="start" fill="#263445">이 Map은 Handle(event)만 갱신</text>
+</g>
+<g id="progress" data-kind="store" data-owner="rc" data-node="true" data-x="1200" data-y="1305" data-w="500" data-h="215">
+<path d="M1200 1318C1200 1302 1700 1302 1700 1318V1507C1700 1523 1200 1523 1200 1507Z M1200 1318C1200 1334 1700 1334 1700 1318" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1450.0" y="1347" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Dialogue Progress State (RAM)</text>
+<text x="1218" y="1382" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Request ID → continuation / waiting IDs</text>
+<text x="1218" y="1411" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">candidate ref / admission / source refs</text>
+<text x="1218" y="1440" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">후속 실행과 대기 조건을 중앙에 연결</text>
+<text x="1218" y="1469" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">확정 Request와 Task 원본을 대체하지 않음</text>
+</g>
+<g id="job_msg" data-kind="data" data-owner="rc" data-node="true" data-x="660" data-y="1550" data-w="1040" data-h="105">
+<path d="M660 1550H1680L1700 1570V1655H660Z M1680 1550V1570H1700" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="1180.0" y="1582" data-width="1004" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">JobDescriptor (immutable)</text>
+<text x="678" y="1617" data-width="1004" font-size="23" font-weight="400" text-anchor="start" fill="#263445">job ID / Request revision / read set / replyTo: Event Mailbox</text>
+</g>
+<g id="compose" data-kind="group" data-owner="rm">
+<rect x="1850" y="595" width="600" height="1060" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M1850 643H2450" stroke="#263445" stroke-width="1.5"/>
+<text x="1868" y="629" data-width="564" font-size="27" font-weight="700" text-anchor="start" fill="#263445">Response Composer</text>
+</g>
+<g id="prepare_q" data-kind="queue" data-owner="compose" data-node="true" data-x="1890" data-y="660" data-w="520" data-h="110">
+<rect x="1890" y="660" width="520" height="110" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M2200 748H2385" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2220" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2258" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2296" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2334" y="732" width="30" height="30" fill="white" stroke="#263445"/>
+<text x="2150.0" y="692" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Prepare Command Queue</text>
+<text x="1908" y="727" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Dispatcher가 승인한 JobDescriptor</text>
+</g>
+<g id="cancel_q" data-kind="queue" data-owner="compose" data-node="true" data-x="1890" data-y="795" data-w="520" data-h="110">
+<rect x="1890" y="795" width="520" height="110" rx="0" fill="white" stroke="#263445" stroke-width="2"/>
+<path d="M2200 883H2385" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2220" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2258" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2296" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<rect x="2334" y="867" width="30" height="30" fill="white" stroke="#263445"/>
+<text x="2150.0" y="827" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Cancel Control Queue</text>
+<text x="1908" y="862" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">중앙에서 지정한 job ID / CancelHandle</text>
+</g>
+<g id="prepare_adapter" data-kind="code" data-owner="compose" data-node="true" data-x="1890" data-y="965" data-w="520" data-h="240">
+<rect x="1890" y="965" width="520" height="240" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2150.0" y="997" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Job adapter</text>
+<text x="1908" y="1032" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Prepare → executor.start(PrepareAsync)</text>
+<text x="1908" y="1061" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Cancel → provider에 중단 요청</text>
+<text x="1908" y="1090" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Future callback → 중앙 JobDone enqueue</text>
+<text x="1908" y="1119" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">이 코드는 다음 이해 / 게시를 지시하지 않음</text>
+<text x="1908" y="1148" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">제어 처리는 긴 Job / output credit과 분리</text>
+</g>
+<g id="prepare_msg" data-kind="data" data-owner="compose" data-node="true" data-x="1890" data-y="1240" data-w="520" data-h="160">
+<path d="M1890 1240H2390L2410 1260V1400H1890Z M2390 1240V1260H2410" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2150.0" y="1272" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Job invocation (immutable)</text>
+<text x="1908" y="1307" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">J1 / R1 rev1 / source vector</text>
+<text x="1908" y="1336" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">captured replyTo + payload ref</text>
+<text x="1908" y="1365" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">중앙 Job Index의 handle로 취소 요청</text>
+</g>
+<g id="prepare" data-kind="code" data-owner="compose" data-node="true" data-x="1890" data-y="1460" data-w="520" data-h="165">
+<rect x="1890" y="1460" width="520" height="165" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2150.0" y="1492" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">PrepareAsync</text>
+<text x="1908" y="1527" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Context Manager / Model Access</text>
+<text x="1908" y="1556" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">내용과 음성 준비; 긴 I/O는 await</text>
+<text x="1908" y="1585" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">완료 자료는 candidate ref로 반환</text>
+</g>
+<g id="candidate" data-kind="data" data-owner="rm" data-node="true" data-x="2520" data-y="1305" data-w="550" data-h="215">
+<path d="M2520 1305H3050L3070 1325V1520H2520Z M3050 1305V1325H3070" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2795.0" y="1337" data-width="514" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Prepared Candidate (immutable)</text>
+<text x="2538" y="1372" data-width="514" font-size="23" font-weight="400" text-anchor="start" fill="#263445">candidate ID / Request revision</text>
+<text x="2538" y="1401" data-width="514" font-size="23" font-weight="400" text-anchor="start" fill="#263445">content ref / audio ref / read set</text>
+<text x="2538" y="1430" data-width="514" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Response Manager가 자료를 보유</text>
+<text x="2538" y="1459" data-width="514" font-size="23" font-weight="400" text-anchor="start" fill="#263445">중앙에는 ref를 반환; 불필요하면 해제</text>
+</g>
+<g id="trace0" data-kind="trace" data-owner="" data-node="true" data-x="64" data-y="1785" data-w="710" data-h="190">
+<path d="M64 1785H754L774 1805V1975H64Z M754 1785V1805H774" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="419.0" y="1817" data-width="674" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">1 InputStarted</text>
+<text x="82" y="1852" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Interaction Manager: 즉시 stop / epoch++</text>
+<text x="82" y="1881" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Dispatcher: 미전송과 관련 게시 hold</text>
+<text x="82" y="1910" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Task 취소 여부는 아직 미확정</text>
+</g>
+<g id="trace1" data-kind="trace" data-owner="" data-node="true" data-x="814" data-y="1785" data-w="710" data-h="190">
+<path d="M814 1785H1504L1524 1805V1975H814Z M1504 1785V1805H1524" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1169.0" y="1817" data-width="674" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">2 R1 rev2 채택</text>
+<text x="832" y="1852" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Handle: J1을 unusable로 표시</text>
+<text x="832" y="1881" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">중앙 Job Index의 handle로 Cancel 요청</text>
+<text x="832" y="1910" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">provider 종료 확인까지 J1 추적</text>
+</g>
+<g id="trace2" data-kind="trace" data-owner="" data-node="true" data-x="1564" data-y="1785" data-w="710" data-h="190">
+<path d="M1564 1785H2254L2274 1805V1975H1564Z M2254 1785V1805H2274" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1919.0" y="1817" data-width="674" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">3 늦은 JobDone(J1)</text>
+<text x="1582" y="1852" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">완료는 Event Mailbox로 돌아온다</text>
+<text x="1582" y="1881" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Handle: rev1 결과 폐기 / ref 해제</text>
+<text x="1582" y="1910" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">이미 청구한 비용과 terminal 상태 보존</text>
+</g>
+<g id="trace3" data-kind="trace" data-owner="" data-node="true" data-x="2314" data-y="1785" data-w="710" data-h="190">
+<path d="M2314 1785H3004L3024 1805V1975H2314Z M3004 1785V1805H3024" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="2669.0" y="1817" data-width="674" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">4 새 Prepare Job J2</text>
+<text x="2332" y="1852" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Handle이 rev2로 J2 시작을 지시</text>
+<text x="2332" y="1881" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">완료 회수 → 중앙 조건 확인</text>
+<text x="2332" y="1910" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">유효 candidate의 PublishRequest 지시</text>
+</g>
+<g id="trace4" data-kind="trace" data-owner="" data-node="true" data-x="3064" data-y="1785" data-w="710" data-h="190">
+<path d="M3064 1785H3754L3774 1805V1975H3064Z M3754 1785V1805H3774" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3419.0" y="1817" data-width="674" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">5 공통 최종 전달</text>
+<text x="3082" y="1852" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Publication Control: current check / commit</text>
+<text x="3082" y="1881" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Interaction Manager: epoch 재검사 / 전달</text>
+<text x="3082" y="1910" data-width="674" font-size="23" font-weight="400" text-anchor="start" fill="#263445">ActualReceipt 저장 뒤 Presented 반환</text>
+</g>
+<polyline id="wire1" data-flow="state" data-source="task_facts" data-target="task_emit" points="314.0,840 314.0,910" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire2" data-flow="state" data-source="pub_handler" data-target="outbox" points="3430.0,1275 3430.0,1305" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire3" data-flow="call" data-source="pub_handler" data-target="io" points="3680,1187.5 3750,1187.5 3750,465 3430,465 3430.0,420" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire4" data-flow="done" data-source="io" data-target="receipt_q" points="3720,364.0 3794,364 3794,850 3680,850.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire5" data-flow="state" data-source="io" data-target="playback" points="3140,364.0 3080,364.0" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire6" data-flow="call" data-source="pub_q" data-target="pub_handler" points="3680,715.0 3700,715.0 3700,1187.5 3680,1187.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire7" data-flow="call" data-source="receipt_q" data-target="pub_handler" points="3680,850.0 3700,850.0 3700,1187.5 3680,1187.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire8" data-flow="call" data-source="pub_control" data-target="pub_handler" points="3680,995.0 3700,995.0 3700,1187.5 3680,1187.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire9" data-flow="call" data-source="control" data-target="pump" points="890.0,795 890,850 1000,850 1000.0,955" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire10" data-flow="call" data-source="events" data-target="pump" points="1450.0,795 1450,850 1130,850 1130,1080 1110,1080.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire11" data-flow="call" data-source="pump" data-target="handle" points="1110,1080.0 1160,1080.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire12" data-flow="state" data-source="handle" data-target="jobs" points="1245.0,1205 1245,1260 905,1260 905.0,1305" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire13" data-flow="state" data-source="handle" data-target="progress" points="1515.0,1205 1515,1278 1450,1278 1450.0,1305" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire14" data-flow="call" data-source="handle" data-target="interpret" points="1335.0,955 1335,862 584,862 584,1540 524,1540.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire15" data-flow="done" data-source="interpret" data-target="events" points="524,1540.0 596,1540 596,818 1180,818 1180,722.5 1200,722.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire16" data-flow="post" data-source="handle" data-target="prepare_q" points="1670,1015.0 1760,1015 1760,715 1890,715.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire17" data-flow="cancel" data-source="handle" data-target="cancel_q" points="1670,1125.0 1772,1125 1772,850 1890,850.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire18" data-flow="post" data-source="handle" data-target="pub_q" points="1670,1170.0 1750,1170 1750,520 3130,520 3130,715 3180,715.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire19" data-flow="call" data-source="prepare_q" data-target="prepare_adapter" points="2410,715.0 2430,715.0 2430,1085 2410,1085.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire20" data-flow="call" data-source="cancel_q" data-target="prepare_adapter" points="2410,850.0 2430,850.0 2430,1085 2410,1085.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire21" data-flow="call" data-source="prepare_adapter" data-target="prepare" points="1890,1160.0 1866,1160 1866,1542.5 1890,1542.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire22" data-flow="done" data-source="prepare" data-target="events" points="1890,1577.5 1784,1577.5 1784,505 1720,505 1720,762.5 1700,762.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire23" data-flow="call" data-source="prepare" data-target="candidate" points="2410,1542.5 2490,1542.5 2490,1412.5 2520,1412.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire24" data-flow="post" data-source="task_emit" data-target="events" points="524,975.0 576,975 576,830 1188,830 1188,722.5 1200,722.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire25" data-flow="post" data-source="input_emit" data-target="events" points="1000.0,420 1000,486 1450,486 1450.0,650" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire26" data-flow="cancel" data-source="turn" data-target="control" points="384.0,420 384,470 604,470 604,722.5 660,722.5" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire27" data-flow="cancel" data-source="turn" data-target="pub_control" points="384.0,420 384,470 3120,470 3120,995 3180,995.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire28" data-flow="cancel" data-source="handle" data-target="pub_control" points="1670,1105.0 1758,1105 1758,532 3104,532 3104,995 3180,995.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire29" data-flow="call" data-source="handle" data-target="task_command" points="1265.0,1205 1265,1250 606,1250 606,1187.5 524,1187.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire30" data-flow="done" data-source="pub_handler" data-target="events" points="3680,1237.5 3758,1237.5 3758,1698 1794,1698 1794,503 1728,503 1728,682.5 1700,682.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<g id="note0">
+<text x="64" y="45.0" font-size="26" font-weight="700" text-anchor="start" fill="#263445">VIA / DP-44 / 구현을 가정한 실행 구조</text>
+</g>
+<g id="note1">
+<text x="3776" y="45.0" font-size="24" font-weight="400" text-anchor="end" fill="#263445">문서 설계안 / A/B 미선정 / 제품 실행과 측정 없음</text>
+</g>
+<g id="note2">
+<text x="64" y="112.0" font-size="43" font-weight="700" text-anchor="start" fill="#263445">A: 중앙 Dispatcher가 완료를 회수하고 다음 실행을 지시</text>
+</g>
+<g id="note3">
+<text x="64" y="172.0" font-size="29" font-weight="400" text-anchor="start" fill="#263445">같은 기능과 공통 실행 기반. 차이는 완료의 수신자, 다음 실행의 결정 코드, Job과 대기 조건의 소유 위치다.</text>
+</g>
+<g id="note4" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="3630" y="465.0" font-size="21" font-weight="400" text-anchor="start" fill="#263445">release</text>
+</g>
+<g id="note5" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="3550" y="780.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">ActualReceipt</text>
+</g>
+<g id="note6">
+<text x="64" y="1740.0" font-size="27" font-weight="700" text-anchor="start" fill="#263445">같은 정정: R1 rev1의 전체 요약 Job J1 실행 중 → “아니, 결론만” → R1 rev2 채택. J1은 취소 요청 뒤에도 늦게 완료할 수 있다.</text>
+</g>
+<g id="note7">
+<text x="64" y="2030.0" font-size="25" font-weight="400" text-anchor="start" fill="#263445">실행 가정: 공통 bounded async executor와 blocking worker pool. 각 Pump는 자기 상태를 순차 갱신하고 긴 Job을 기다리지 않는다.</text>
+</g>
+<g id="note8">
+<text x="64" y="2070.0" font-size="23" font-weight="400" text-anchor="start" fill="#263445">검정 실선 = 직접 호출 / dequeue    파랑 실선 = enqueue    파랑 점선 = 완료 callback의 enqueue    빨강 점선 = 제어 / 취소    회색 점선 = 상태 읽기와 갱신</text>
+</g>
+<g id="note9">
+<text x="64" y="2110.0" font-size="23" font-weight="400" text-anchor="start" fill="#263445">칸이 있는 박스 = queue    둥근 박스 = 코드    원통 = RAM 상태 또는 DURABLE 기록    접힌 문서 = immutable 메시지. Port는 typed 계약이며 queue와 구별한다.</text>
+</g>
+<g id="note10">
+<text x="64" y="2145.0" font-size="22" font-weight="400" text-anchor="start" fill="#758294">Context Manager, Policy Manager, State Store, Model Access 및 Agent Gateway의 공통 계약 유지. 별도 thread / process 수와 라이브러리는 미선정.</text>
+</g>
+<g id="note11">
+<text x="2520" y="700.0" font-size="28" font-weight="700" text-anchor="start" fill="#263445">A의 후속 실행 권한</text>
+</g>
+<g id="note12">
+<text x="2520" y="750.0" font-size="25" font-weight="400" text-anchor="start" fill="#263445">완료와 조건은 중앙에 반환한다.</text>
+<text x="2520" y="782.5" font-size="25" font-weight="400" text-anchor="start" fill="#263445">Response Composer는 Job을 실행하고</text>
+<text x="2520" y="815.0" font-size="25" font-weight="400" text-anchor="start" fill="#263445">Publication Control은 최종 게시만 맡는다.</text>
+</g>
+<g id="note13">
+<text x="2520" y="960.0" font-size="25" font-weight="400" text-anchor="start" fill="#263445">대기 / 정정 / 늦은 완료의 연결은</text>
+<text x="2520" y="992.5" font-size="25" font-weight="400" text-anchor="start" fill="#263445">Dialogue Progress State와</text>
+<text x="2520" y="1025.0" font-size="25" font-weight="400" text-anchor="start" fill="#263445">Job Index를 갱신하는 중앙 코드에 있다.</text>
+</g>
+<g id="note14" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="645" y="1270.0" font-size="21" font-weight="400" text-anchor="start" fill="#263445">InterpretAsync / cancel(handle)</text>
+</g>
+<g id="note15" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="675" y="815.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">JobDone: MeaningProposal</text>
+</g>
+<g id="note16" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1750" y="605.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">Prepare Job</text>
+</g>
+<g id="note17" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1810" y="795.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">Cancel(J1)</text>
+</g>
+<g id="note18" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2700" y="505.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">PublishRequest: 중앙이 지시</text>
+</g>
+<g id="note19" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2030" y="500.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">JobDone: candidate ref</text>
+</g>
+<g id="note20" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="645" y="860.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">확인된 TaskEvent</text>
+</g>
+<g id="note21" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1190" y="485.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">InputReady</text>
+</g>
+<g id="note22" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="670" y="475.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">InputStarted</text>
+</g>
+<g id="note23" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2600" y="565.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">채택한 Invalidate / 관련 게시 hold</text>
+</g>
+<g id="note24" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2370" y="1708.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">durable Presented → 중앙 focus 갱신</text>
+</g>
 </g></svg>

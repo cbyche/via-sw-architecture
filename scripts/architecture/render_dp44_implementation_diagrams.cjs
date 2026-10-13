@@ -6,7 +6,9 @@ const { chromium } = require('playwright');
 const dir = path.resolve(__dirname, '../../docs/architecture/12-decisions/decision-packages/diagrams');
 const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const all = process.argv.includes('--all');
-const diagrams = ['dp44-common-path', 'dp44-implementation-a', 'dp44-implementation-b']
+const implementationsOnly = process.argv.includes('--implementations-only');
+const diagrams = (implementationsOnly ? ['dp44-implementation-a', 'dp44-implementation-b'] :
+  ['dp44-common-path', 'dp44-implementation-a', 'dp44-implementation-b'])
   .map(stem => ({ stem, dir, width: 2560, height: 1440 }));
 if (all) diagrams.push(
   ...['choice44-structure', 'choice44-event'].map(stem => ({ stem, dir, width: 2560, height: 1440 })),
@@ -20,10 +22,13 @@ if (all) diagrams.push(
   try {
     const records = [];
     for (const spec of diagrams) {
-      const { stem, width, height } = spec;
+      const { stem } = spec;
       const pngPath = path.join(spec.pngDir || spec.dir, stem + '.png');
-      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
       const svg = fs.readFileSync(path.join(spec.dir, stem + '.svg'));
+      const dimensions = svg.toString().match(/<svg[^>]*width="(\d+)"[^>]*height="(\d+)"/);
+      if (!dimensions) throw new Error('Missing SVG dimensions: ' + stem);
+      const width = Number(dimensions[1]), height = Number(dimensions[2]);
+      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
       await page.setContent(`<html lang="ko"><style>body{margin:0;background:white}</style>${svg.toString()}</html>`);
       await page.evaluate(() => document.fonts.ready);
       const issues = await page.evaluate(({ width, height }) => {
@@ -80,13 +85,22 @@ if (all) diagrams.push(
         svg_sha256: digest(svg), png_sha256: digest(fs.readFileSync(pngPath)) });
       process.stdout.write('PASS: ' + stem + '\n');
     }
+    const mergeRecords = filename => {
+      const prior = JSON.parse(fs.readFileSync(path.join(dir, filename))).records;
+      const byStem = new Map(records.map(row => [row.stem, row]));
+      return prior.map(row => byStem.get(row.stem) || row);
+    };
     fs.writeFileSync(path.join(dir, all ? 'dp44-document-render.json' : 'dp44-implementation-render.json'), JSON.stringify({
       scope: 'Documentation rendering only; not VIA runtime execution, API validation or QA evidence',
-      records
+      records: implementationsOnly ? mergeRecords('dp44-implementation-render.json') : records
     }, null, 2) + '\n');
     if (all) fs.writeFileSync(path.join(dir, 'dp44-implementation-render.json'), JSON.stringify({
       scope: 'Documentation rendering only; not VIA runtime execution, API validation or QA evidence',
       records: records.slice(0, 3)
+    }, null, 2) + '\n');
+    if (implementationsOnly) fs.writeFileSync(path.join(dir, 'dp44-document-render.json'), JSON.stringify({
+      scope: 'Documentation rendering only; not VIA runtime execution, API validation or QA evidence',
+      records: mergeRecords('dp44-document-render.json')
     }, null, 2) + '\n');
     process.stdout.write('PASS: DP44 PNG, text bounds/overlap and SVG/PNG hashes\n');
   } finally { await browser.close(); }

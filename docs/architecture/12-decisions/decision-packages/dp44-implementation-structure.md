@@ -13,7 +13,7 @@ DP-44는 자연스러운 대화를 위한 청취와 발화의 실행 구조를 �
 
 Agent의 질문 및 결과는 Downstream Agent → Agent Gateway → Task Manager → Request Controller → Response Manager → Interaction Manager 경로를 따른다. Task Manager의 확인 및 원본 저장, Request Controller의 대화 연결과 질문 등록을 거친다. Request Controller와 Task Manager의 업무 제어 및 사건 교환은 A/B 공통이며, 완료와 대기를 연결하는 코드 조직이 다르다.
 
-원통의 RAM 표시는 대기열이나 실행 상태다. 독립 DB, thread 또는 process를 뜻하지 않는다. Publication Outbox와 Task 원본은 내구 기록이다. 각 owner가 State Store에 저장하며 저장소가 의미나 업무를 판단하지 않는다. Context Manager와 Policy Manager는 기존 조회 및 현재 권한 port로 사용한다. Agent Gateway와 Downstream Agent는 Task command handler가 호출하는 기존 전달 경로다. 전체 10개 Component의 배치는 [기존 MAIN](./diagrams/choice44-structure.svg)을 따른다.
+칸이 있는 직사각형은 bounded queue, 원통의 RAM 표시는 임시 실행 상태, 접힌 문서는 변경하지 않는 메시지다. 원통 자체가 독립 DB, thread 또는 process를 뜻하지 않는다. Publication Outbox와 Task 원본은 내구 기록이다. 각 owner가 State Store에 저장하며 저장소가 의미나 업무를 판단하지 않는다. Context Manager와 Policy Manager는 기존 조회 및 현재 권한 port로 사용한다. Agent Gateway와 Downstream Agent는 Task command handler가 호출하는 기존 전달 경로다. 전체 10개 Component의 배치는 [기존 MAIN](./diagrams/choice44-structure.svg)을 따른다.
 
 Module 안의 `Pump`는 대기열에서 사건을 꺼내 짧은 handler를 실행하는 코드다. `InterpretAsync`, `NoticeAsync`, `PrepareAsync`는 근거 조회나 API 처럼 오래 걸릴 수 있는 작업이다. handler는 이 작업의 완료를 기다리는 대신 job ID와 취소 handle을 등록하고 돌아온다. 완료 callback은 해당 Done port에 결과를 넣는다. 이 구조에서는 새 입력을 처리하는 루프가 긴 모델 호출에 붙잡히지 않는다.
 
@@ -92,7 +92,7 @@ Pump:
 
 **fan-out은 각 필요한 소비자에게 별도로 전달하는 코드다.** 예를 들어 채택 의미는 Composer의 준비 입력에, InputSettled와 admission은 Join의 조건 입력에 각각 게시한다. 하나의 queue를 여러 소비자가 읽게 하는 것만으로는 두 소비자가 같은 event를 모두 받는다고 보장하지 않는다. 둘 중 하나만 받은 채 다음 단계가 진행되지 않도록 각각의 전달 및 실패를 추적한다.
 
-Composer에도 짧은 Pump, Control lane, 준비 Job Index와 Done port가 있다. 그림에서는 공통 Response Composer 내부로 묶었다. 긴 PrepareAsync가 끝나면 자기 Done port로 돌아오고, 유효한 결과만 Candidate Queue에 넣는다. 각 Stage의 Control 처리는 긴 작업이나 가득 찬 출력 queue를 기다리지 않는다. 출력은 credit이 생길 때 배출하며 별도 pending 항목도 상한 안에서 추적한다.
+Composer에도 짧은 Pump, Control Queue, Prepare Input Queue, Done Queue, 준비 Job Index가 있다. 그림에 이 요소를 각각 표시했다. 긴 PrepareAsync가 끝나면 자기 Done Queue로 돌아오고, 유효한 결과만 Candidate Queue에 넣는다. 각 Stage의 Control 처리는 긴 작업이나 가득 찬 출력 queue를 기다리지 않는다. 출력은 credit이 생길 때 배출하며 별도 pending 항목도 상한 안에서 추적한다.
 
 ### 3.2 Publication Join은 무엇을 구현하는가
 
