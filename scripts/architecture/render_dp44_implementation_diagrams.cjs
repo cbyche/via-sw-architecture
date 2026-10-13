@@ -1,30 +1,41 @@
-// Render proposed code diagrams only; no model calls or architecture measurements.
+// Render documentation diagrams only; no model calls or architecture measurements.
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { chromium } = require('playwright');
 const dir = path.resolve(__dirname, '../../docs/architecture/12-decisions/decision-packages/diagrams');
 const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const all = process.argv.includes('--all');
+const diagrams = ['dp44-common-path', 'dp44-implementation-a', 'dp44-implementation-b']
+  .map(stem => ({ stem, dir, width: 2560, height: 1440 }));
+if (all) diagrams.push(
+  ...['choice44-structure', 'choice44-event'].map(stem => ({ stem, dir, width: 2560, height: 1440 })),
+  { stem: 'dp44-background', dir, pngDir: path.resolve(dir, '../../../../presentations_files/dp-background'), width: 1920, height: 1080 },
+  { stem: 'dp44-comparison', dir: path.resolve(dir, '../../../../presentations_files/dp-comparison'), width: 1920, height: 1080 }
+);
 
 (async () => {
   const browser = await chromium.launch({ headless: true,
     executablePath: process.env.DP44_CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
   try {
     const records = [];
-    for (const side of ['a', 'b']) {
-      const stem = 'dp44-implementation-' + side;
-      const page = await browser.newPage({ viewport: { width: 2560, height: 1440 }, deviceScaleFactor: 1 });
-      const svg = fs.readFileSync(path.join(dir, stem + '.svg'));
+    for (const spec of diagrams) {
+      const { stem, width, height } = spec;
+      const pngPath = path.join(spec.pngDir || spec.dir, stem + '.png');
+      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+      const svg = fs.readFileSync(path.join(spec.dir, stem + '.svg'));
       await page.setContent(`<html lang="ko"><style>body{margin:0;background:white}</style>${svg.toString()}</html>`);
       await page.evaluate(() => document.fonts.ready);
-      const issues = await page.evaluate(() => {
+      const issues = await page.evaluate(({ width, height }) => {
         const txt = [...document.querySelectorAll('svg text')].map(e => ({
-          t: e.textContent, b: e.getBBox(), parent: e.parentElement
+          t: e.textContent, b: e.getBBox(), parent: e.parentElement, element: e
         }));
         const found = [];
         for (const e of txt) {
-          if (e.b.x < 0 || e.b.y < 0 || e.b.x + e.b.width > 2560 || e.b.y + e.b.height > 1440)
+          if (e.b.x < 0 || e.b.y < 0 || e.b.x + e.b.width > width || e.b.y + e.b.height > height)
             found.push({ kind: 'canvas', text: e.t });
+          if (e.element.dataset.width && e.b.width > Number(e.element.dataset.width) + 1)
+            found.push({ kind: 'text-width', text: e.t, width: e.b.width, allowed: Number(e.element.dataset.width) });
           if (e.parent.dataset.node) {
             const x = Number(e.parent.dataset.x), y = Number(e.parent.dataset.y);
             const w = Number(e.parent.dataset.w), h = Number(e.parent.dataset.h);
@@ -40,7 +51,15 @@ const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
         for (const line of document.querySelectorAll('svg polyline')) {
           const points = [...line.points].map(p => ({ x: p.x, y: p.y }));
           for (const e of txt) {
-            if (e.parent.hasAttribute('paint-order')) continue; // Intentional edge labels.
+            const masks = [...document.querySelectorAll('svg rect')].filter(m => {
+              const fill = m.getAttribute('fill');
+              return fill && fill !== 'none' && (line.compareDocumentPosition(m) & 4) &&
+                (m.compareDocumentPosition(e.element) & 4);
+            });
+            if (e.parent.hasAttribute('paint-order') || masks.some(m => {
+              const b = m.getBBox();
+              return b.x <= e.b.x && b.y <= e.b.y && b.x + b.width >= e.b.x + e.b.width && b.y + b.height >= e.b.y + e.b.height;
+            })) continue; // Intentional edge labels with a white background.
             const b = e.b;
             for (let k = 1; k < points.length; k++) {
               const a = points[k - 1], z = points[k];
@@ -53,17 +72,22 @@ const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
           }
         }
         return found;
-      });
-      await page.screenshot({ path: path.join(dir, stem + '.png') });
+      }, { width, height });
+      await page.screenshot({ path: pngPath });
       await page.close();
       if (issues.length) throw new Error(stem + ':\n' + JSON.stringify(issues, null, 2));
-      records.push({ stem, width: 2560, height: 1440, text_geometry_issues: 0,
-        svg_sha256: digest(svg), png_sha256: digest(fs.readFileSync(path.join(dir, stem + '.png'))) });
+      records.push({ stem, width, height, text_geometry_issues: 0,
+        svg_sha256: digest(svg), png_sha256: digest(fs.readFileSync(pngPath)) });
+      process.stdout.write('PASS: ' + stem + '\n');
     }
-    fs.writeFileSync(path.join(dir, 'dp44-implementation-render.json'), JSON.stringify({
+    fs.writeFileSync(path.join(dir, all ? 'dp44-document-render.json' : 'dp44-implementation-render.json'), JSON.stringify({
       scope: 'Documentation rendering only; not VIA runtime execution, API validation or QA evidence',
       records
     }, null, 2) + '\n');
-    process.stdout.write('PASS: DP44 A/B PNG, text bounds/overlap and SVG/PNG hashes\n');
+    if (all) fs.writeFileSync(path.join(dir, 'dp44-implementation-render.json'), JSON.stringify({
+      scope: 'Documentation rendering only; not VIA runtime execution, API validation or QA evidence',
+      records: records.slice(0, 3)
+    }, null, 2) + '\n');
+    process.stdout.write('PASS: DP44 PNG, text bounds/overlap and SVG/PNG hashes\n');
   } finally { await browser.close(); }
 })().catch(e => { process.stderr.write(e.message + '\n'); process.exitCode = 1; });

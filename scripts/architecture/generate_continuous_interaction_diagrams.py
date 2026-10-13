@@ -14,10 +14,10 @@ class Slide(Comparison):
     def __init__(self,slug,title):
         self.number=44;self.slug=slug;self.caption=title;self.items=[]
         self.rect(0,0,2560,1440,'white','none')
-        self.text(64,28,1900,['VIA / 04-44 / 지속 입력과 업무 질문·결과의 실행 연결'],22,'#000000',True)
+        self.text(64,28,1900,['VIA / 04-44 / 자연스러운 대화를 위한 청취와 발화의 실행 연결'],22,'#000000',True)
         self.text(2496,28,520,['A/B 미선정 / 미측정'],22,'#000000',align='right')
         self.text(64,77,2432,[title],42,'#000000',True)
-        self.text(64,143,2432,['VIA가 요청 이해·업무 위임·응답 처리를 하는 중에도 계속 들어오는 사용자 입력과 Agent의 질문·결과를 어떤 SW 구조로 처리할 것인가?'],24,'#000000')
+        self.text(64,143,2432,['사용자와 계속 대화하면서 새 입력과 Agent의 질문 및 결과를 자연스럽게 이어갈 청취와 발화 실행을 어떻게 설계할 것인가?'],24,'#000000')
         self.line([(1280,195),(1280,1328)],color='#DDDDDD',arrow=False,width=1)
         for side,x in [('A',64),('B',1340)]:
             self.text(x,198,1156,[side+' '+('중앙 조정 방식' if side=='A' else '이벤트 흐름을 연결하는 방식')],31,'#000000',True)
@@ -35,24 +35,24 @@ class Slide(Comparison):
 
 
 def structure():
-    s=Slide('choice44-structure','계속 들어오는 입력과 질문·결과를 처리하는 SW 구조')
+    s=Slide('choice44-structure','자연스러운 대화를 이어가는 청취와 발화 실행 구조')
     for side,x in [('A',64),('B',1340)]:
         draw_option(s,x,345,1,side)
-        s.text(x,1118,1160,['C1 대화 / R2: u2 “잠깐, 표부터 설명해줘” / T1 메일 업무·Q1 수신자 질문 / P1 보고서 재생·P2 표 설명 후보'],18,'#000000')
-        s.text(x,1150,1160,[('Dialogue Progress State: job/revision/대기·후보·중단 참조 / 완료 검사·후속 요청 / 늦은 u1 폐기' if side=='A' else 'Publication Join: 입력 해소·admission·source.rev·과거 receipt / 확인 질문 별도 admission / 자기 receipt 후행')],18,'#000000')
-        s.text(x,1182,1160,['권한: owner ↔ Policy Manager / 내구 확정: owner → State Store / 같은 Request·Task·질문·publication 원본'],17,'#000000')
-        s.text(x,1212,1160,['Voice Runtime에는 Interaction Manager의 음성 입출력·즉시 중단 기능과 Model Access client가 배치된다.'],18,'#000000')
+        s.text(x,1118,1160,['C1 대화 / R2: u2 “잠깐, 표부터 설명해줘” / T1 메일 업무 / Q1 수신자 질문 / P1 보고서 재생 / P2 표 설명 후보'],18,'#000000')
+        s.text(x,1150,1160,[('Dialogue Progress State: job/revision/대기 / 후보 / 중단 참조 / 완료 검사 / 후속 요청 / 늦은 u1 폐기' if side=='A' else 'Publication Join: 입력 해소 / admission / source.rev / 과거 receipt / 확인 질문 별도 admission / 자기 receipt 후행')],18,'#000000')
+        s.text(x,1182,1160,['권한: owner ↔ Policy Manager / 내구 확정: owner → State Store / 같은 Request / Task / 질문 / publication 원본'],17,'#000000')
+        s.text(x,1212,1160,['Voice Runtime에는 Interaction Manager의 음성 입출력 / 즉시 중단 기능과 Model Access client가 배치된다.'],18,'#000000')
         s.text(x,1242,1160,['공통: 동시 실행 수가 제한된 비동기 executor. Blocking 작업은 제한된 worker pool. 모델은 Model Access의 API admission.'],17,'#000000')
-        support=('사건 대기열·비동기 작업 실행·완료 결과 반환은 실행 기반이 지원한다. 짧은 상태 전이·중요 알림 기아 방지. 용량·우선순위 수치는 미정.' if side=='A' else
-                 '이벤트 채널·구독·단계별 수용량 조절·취소 전달은 실행 라이브러리가 지원한다. credit/cancel은 Task 취소가 아니다.')
+        support=('사건 대기열 / 비동기 작업 실행 / 완료 결과 반환은 실행 기반이 지원한다. 짧은 상태 전이 / 중요 알림 기아 방지. 용량 / 우선순위 수치는 미정.' if side=='A' else
+                 '이벤트 채널 / 구독 / 단계별 수용량 조절 / 취소 전달은 실행 라이브러리가 지원한다. credit/cancel은 Task 취소가 아니다.')
         s.text(x,1272,1160,[support],17,'#000000')
-        s.text(x,1302,1160,['capture·ASR·즉시 stop은 이해 완료와 무관 / hold는 Task 취소가 아님 / 로컬 VIA / 클라우드 음성·의미 API'],17,'#000000')
+        s.text(x,1302,1160,['capture / ASR / 즉시 stop은 이해 완료와 무관 / hold는 Task 취소가 아님 / 로컬 VIA / 클라우드 음성 / 의미 API'],17,'#000000')
     legend(s)
     return s
 
 
 def event():
-    s=Slide('choice44-event','같은 u2·Q1 사례의 실제 소유자와 후속 실행')
+    s=Slide('choice44-event','같은 u2 / Q1 사례의 실제 소유자와 후속 실행')
     for side,x in [('A',64),('B',1340)]:
         g=Option(s,x,0,1,side)
         lanes={}
@@ -83,25 +83,28 @@ def event():
             left=min(lanes[a],lanes[b])+12; width=x+1160-left
             s.rect(left-5,y-32,width,27,'white','none')
             s.text(left,y-31,width,[label],19,'#000000')
-        s.text(x,455,1160,['P1 실제 재생 중. u2 시작 즉시 Turn-Taking Control → Channel I/O stop, output epoch 무효화.'],19,'#000000')
+        def note(xx,y,width,lines,size):
+            s.rect(xx-3,y-3,width+6,len(lines)*size*1.17+8,'white','none')
+            s.text(xx,y,width,lines,size,'#000000')
+        note(x,455,1160,['P1 실제 재생 중. u2 시작 즉시 Turn-Taking Control → Channel I/O stop, output epoch 무효화.'],19)
         msg('im','rc',530,'InputStarted(u2) / revision → 관련 미전송 admission hold')
-        msg('rc','tm',590,'hold·권한·명령 확인 → Agent Gateway 전송 제어')
-        msg('tm','rc',650,'Q1 확인·저장 → 원래 대화 연결 / Pending User Interaction / 게시 admission',True)
-        msg('im','rc',710,'Input(u2,evidence refs) → Context Manager 조회·Request Interpreter 제안·채택')
-        s.text(x+228,740,927,['늦은 u1 job/candidate는 revision 검사로 폐기. Q1 원본 보존, 준비·게시 조건 대기.'],18,'#000000')
-        msg('rc','rm',815,'Dialogue Dispatcher: 준비 요청 / job ID' if side=='A' else '채택 의미·허용 Notice 게시 → Response Composer 소비')
+        msg('rc','tm',590,'hold / 권한 / 명령 확인 → Agent Gateway 전송 제어')
+        msg('tm','rc',650,'Q1 확인 / 저장 → 원래 대화 연결 / Pending User Interaction / 게시 admission',True)
+        msg('im','rc',710,'Input(u2,evidence refs) → Context Manager 조회 / Request Interpreter 제안 / 채택')
+        note(x+228,740,927,['늦은 u1 job/candidate는 revision 검사로 폐기. Q1 원본 보존, 준비 / 게시 조건 대기.'],18)
+        msg('rc','rm',815,'Dialogue Dispatcher: 준비 요청 / job ID' if side=='A' else '채택 의미 / 허용 Notice 게시 → Response Composer 소비')
         if side=='A':
             msg('rm','rc',880,'준비 후보 반환 → Dialogue Progress State에서 후속 조건 연결',True)
             msg('rc','rm',945,'Dialogue Dispatcher → Publication Control: 유효 P2 / Q1 게시 요청')
         else:
-            s.text(x+840,849,320,['Response Composer → Publication Join','후보·관련 admission·ID/revision 결합'],15,'#000000')
-            s.text(x+840,905,320,['Publication Window: 대기·폐기','조건 충족 → Publication Control'],17,'#000000')
-        s.text(x+228,982,930,['원본 현재성·권한·차례·중복 최종 검사. 현재 입력의 확인 질문은 별도 admission.'],18,'#000000')
-        msg('rm','im',1045,'release / publication identity → 유효 Q1 실제 표시·재생')
-        msg('im','rm',1110,'실제 표시·재생·중단 receipt / actual range → Publication Outbox 갱신',True)
+            note(x+840,849,320,['Response Composer → Publication Join','후보 / 관련 admission / ID/revision 결합'],15)
+            note(x+840,905,320,['Publication Window: 대기 / 폐기','조건 충족 → Publication Control'],17)
+        note(x+228,982,930,['원본 현재성 / 권한 / 차례 / 중복 최종 검사. 현재 입력의 확인 질문은 별도 admission.'],18)
+        msg('rm','im',1045,'release / publication identity → 유효 Q1 실제 표시 / 재생')
+        msg('im','rm',1110,'실제 표시 / 재생 / 중단 receipt / actual range → Publication Outbox 갱신',True)
         msg('rm','rc',1175,'확인된 실제 Q1 제시 기록 → 질문 focus / 후속 답변 연결 근거',True)
-        s.text(x,1237,1160,['자기 후보 receipt는 게시 뒤 생성 / 과거 snapshot은 known-empty·UNKNOWN 구분 / 예시는 고정 우선순위 아님'],18,'#000000')
-        s.text(x,1280,1160,['실행 기반·배치 조건·모델 조건은 MAIN과 같음. 사건 간격과 선 길이는 측정 시간이 아님.'],18,'#000000')
+        note(x,1237,1160,['자기 후보 receipt는 게시 뒤 생성 / 과거 snapshot은 known-empty / UNKNOWN 구분 / 예시는 고정 우선순위 아님'],18)
+        s.text(x,1280,1160,['실행 기반 / 배치 조건 / 모델 조건은 MAIN과 같음. 사건 간격과 선 길이는 측정 시간이 아님.'],18,'#000000')
     legend(s)
     return s
 

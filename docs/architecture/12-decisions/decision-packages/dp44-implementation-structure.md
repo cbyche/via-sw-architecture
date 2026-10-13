@@ -7,7 +7,11 @@
 
 ## 1. 그림의 범위와 읽는 법
 
-두 그림에서 같은 위치의 Component는 같은 책임을 맡는다. 왼쪽 Request Interpreter는 의미를 제안하고, Task Manager는 확인된 업무 사실을 제공한다. 중앙 Request Controller는 의미 채택과 요청 제어, 오른쪽 Response Manager는 응답 준비와 게시, Interaction Manager는 입력과 실제 출력을 소유한다. 살구색은 A/B에서 실행 조직이 다른 코드와 임시 상태다.
+DP-44는 자연스러운 대화를 위한 청취와 발화의 실행 구조를 비교한다. 핵심 협력은 Interaction Manager의 입력과 실제 출력, Request Controller의 의미 채택 및 대화 제어, Response Manager의 준비와 게시다. [공통 경로와 전체 일곱 그림은 44 본문](./04-44-continuous-interaction.md#0-먼저-확인할-dp의-범위와-전체-그림)에 직접 표시한다. 이 문서는 코드 조직의 보충 설명이다.
+
+두 구현 그림에서 같은 위치의 Component는 같은 책임을 맡는다. 왼쪽 Request Interpreter는 의미를 제안하고, Task Manager는 확인된 업무 사실을 제공한다. 중앙 Request Controller는 의미 채택과 요청 제어, 오른쪽 Response Manager는 응답 준비와 게시, Interaction Manager는 입력과 실제 출력을 소유한다. 살구색은 A/B에서 실행 조직이 다른 코드와 임시 상태다.
+
+Agent의 질문 및 결과는 Downstream Agent → Agent Gateway → Task Manager → Request Controller → Response Manager → Interaction Manager 경로를 따른다. Task Manager의 확인 및 원본 저장, Request Controller의 대화 연결과 질문 등록을 거친다. Request Controller와 Task Manager의 업무 제어 및 사건 교환은 A/B 공통이며, 완료와 대기를 연결하는 코드 조직이 다르다.
 
 원통의 RAM 표시는 대기열이나 실행 상태다. 독립 DB, thread 또는 process를 뜻하지 않는다. Publication Outbox와 Task 원본은 내구 기록이다. 각 owner가 State Store에 저장하며 저장소가 의미나 업무를 판단하지 않는다. Context Manager와 Policy Manager는 기존 조회 및 현재 권한 port로 사용한다. Agent Gateway와 Downstream Agent는 Task command handler가 호출하는 기존 전달 경로다. 전체 10개 Component의 배치는 [기존 MAIN](./diagrams/choice44-structure.svg)을 따른다.
 
@@ -164,4 +168,4 @@ StagePump:
 
 A에서 검토할 비용은 중앙 전이 규칙과 continuation 관리가 늘어나는 것이다. B에서 검토할 비용은 각 port의 전달 실패, 국소 Job/Window, 조건의 version 결합, credit과 무효화 전파를 함께 관리하는 것이다. 이 조직 차이가 VIA의 대표 교차 사건에서 의미 있는 품질 차이를 만드는지는 아직 확인하지 않았다.
 
-[생성기](../../../../scripts/architecture/generate_dp44_implementation_diagrams.py)는 두 SVG와 draw.io를 같은 scene에서 생성한다. [렌더 도구](../../../../scripts/architecture/render_dp44_implementation_diagrams.cjs)는 PNG와 [렌더 기록](./diagrams/dp44-implementation-render.json)을 만든다. 도식 검수는 Component 포함, 배선, 글자 배치와 생성물 일치를 확인하며 제품 실행이나 A/B 품질을 검증하지 않는다.
+[생성기](../../../../scripts/architecture/generate_dp44_implementation_diagrams.py)는 공통 경로와 두 구현 구조의 SVG 및 draw.io를 같은 scene에서 생성한다. [렌더 도구](../../../../scripts/architecture/render_dp44_implementation_diagrams.cjs)는 PNG와 [렌더 기록](./diagrams/dp44-implementation-render.json)을 만든다. 도식 검수는 Component 포함, 배선, 글자 배치와 생성물 일치를 확인하며 제품 실행이나 A/B 품질을 검증하지 않는다.

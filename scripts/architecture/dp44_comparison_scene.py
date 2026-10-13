@@ -46,7 +46,7 @@ def draw(s,x,side):
     if side==0:
         g.box('dispatch',55,365,285,40,'Dialogue Dispatcher',True,True,size=19)
         state(g,'wait',475,365,325,40,'Dialogue Progress State',17)
-        g.edge('im','dispatch','B','T',via=[(170,314),(197.5,314)])
+        g.edge('im','dispatch','B','L',td=-8,via=[(170,314),(10,314),(10,377)])
         g.edge('task','dispatch','B','T',td=90,via=[(675,311),(287.5,311)])
         g.edge('dispatch','wait','R','L',color=DIFFERENCE_STROKE)
         g.edge('wait','dispatch','L','R',sd=9,td=9,via=[(458,394),(458,413),(356,413),(356,394)],ret=True,color=DIFFERENCE_STROKE)
@@ -61,7 +61,7 @@ def draw(s,x,side):
         g.box('notice',475,365,325,40,'Task Notice Stage',True,True,size=19)
         state(g,'iw',55,420,285,34,'Input Window',16)
         state(g,'nw',475,420,325,34,'Notice Window',16)
-        g.edge('im','input','B','T',via=[(170,314),(197.5,314)])
+        g.edge('im','input','B','L',td=-8,via=[(170,314),(10,314),(10,377)])
         g.edge('task','notice','B','T',via=[(675,314),(637.5,314)])
         g.edge('input','iw','B','T');g.edge('notice','nw','B','T')
         g.text(55,409,300,'Input1 / Job1 / 현재 입력',size=10)
@@ -75,8 +75,8 @@ def draw(s,x,side):
     g.text(35,540,235,'① 이해 완료: Meaning1',size=13)
     if side==0:
         g.box('publish',595,535,220,33,'Publication Control',module=True,size=16)
-        g.edge('dispatch','compose','B','T',sd=20,via=[(217.5,479),(445,479)],color=DIFFERENCE_STROKE)
-        g.edge('compose','dispatch','T','R',sd=35,td=9,via=[(480,484),(350,484),(350,394)],ret=True,color=DIFFERENCE_STROKE)
+        g.edge('dispatch','compose','B','L',sd=20,via=[(217.5,479),(302,479),(302,551.5)],color=DIFFERENCE_STROKE)
+        g.edge('compose','dispatch','L','R',sd=9,td=9,via=[(296,560.5),(296,484),(350,484),(350,394)],ret=True,color=DIFFERENCE_STROKE)
         g.edge('dispatch','publish','R','T',sd=-7,via=[(365,378),(365,475),(705,475)],color=DIFFERENCE_STROKE)
         g.text(390,461,410,'② 중앙의 준비 지시 / ③ 준비 결과 회수',size=12)
         document(g,'candidate',35,563,235,72,
@@ -91,7 +91,7 @@ def draw(s,x,side):
         state(g,'pw',595,594,220,38,'Publication Window',13)
         g.box('publish',330,605,230,28,'Publication Control',module=True,size=16)
         g.edge('input','compose','R','L',sd=9,via=[(350,394),(350,480),(302,480),(302,551.5)],color=DIFFERENCE_STROKE)
-        g.edge('notice','compose','R','T',td=35,via=[(845,385),(845,482),(480,482)],color=DIFFERENCE_STROKE)
+        g.edge('notice','compose','R','R',td=-6,via=[(845,385),(845,482),(575,482),(575,545.5)],color=DIFFERENCE_STROKE)
         g.edge('compose','join','R','L',color=DIFFERENCE_STROKE)
         g.edge('input','join','R','T',sd=-7,via=[(365,378),(365,476),(705,476)],color=DIFFERENCE_STROKE)
         g.text(391,461,429,'Meaning1 / NoticeReady / 입력 해소 또는 질문 허용',size=11)

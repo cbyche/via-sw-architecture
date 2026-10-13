@@ -30,11 +30,11 @@ class Option:
     def text(self, x, y, w, value, size=18, bold=False, owner=None, center=False):
         background=None
         if not owner:
-            lines=value.replace('·',' / ').split('\n')
+            lines=value.replace(chr(0x00B7),' / ').split('\n')
             width=min(w,max(math.fsum(size*(1 if unicodedata.east_asian_width(ch) in 'WF' else .58) for ch in line) for line in lines)+4)
             background=self.s.rect(self.x+((x-width/2 if center else x)-2)*self.scale,self.y+(y-1)*self.scale,width*self.scale,(len(lines)*size*1.17+3)*self.scale,'white','none')
         self.s.text(self.x+x*self.scale, self.y+y*self.scale, w*self.scale,
-                    value.replace('·',' / ').split('\n'), size*self.scale, COMMON, bold,
+                    value.replace(chr(0x00B7),' / ').split('\n'), size*self.scale, COMMON, bold,
                     'center' if center else 'left', leading=size*1.17*self.scale)
         if background:
             next(i for i in self.s.items if i['id']==background)['label_for']=self.s.items[-1]['id']
@@ -178,49 +178,49 @@ def draw_option(s,x,y,scale,side):
     g.node('policy',20,582,260,54,'Policy Manager',size=22)
     g.node('state',20,677,260,54,'State Store',size=22)
     g.node('ma',950,642,190,54,'Model Access',size=22)
-    g.node('omni',950,720,190,42,'클라우드 음성·LLM','external',size=15)
+    g.node('omni',950,720,190,42,'클라우드 음성 / LLM','external',size=15)
     # The same ordinary input, interpretation, task and delivery contracts.
     g.edge('user','channel',sp='B',tp='T')
     g.edge('turn','channel',sp='L',tp='R')
+    g.edge('channel','playback')
     g.text(36,127,320,'InputStarted: 즉시 stop / epoch 무효화',16)
     g.edge('evidence','timeline',sp='R',tp='L')
     g.text(35,211,300,'시점별 evidence ↔ 입력 revision',16)
-    g.edge('channel','playback')
     receiver='dispatch' if side=='A' else 'input'
-    g.edge('timeline',receiver,'1 입력·revision·evidence',sp='R',tp='L',at=(35,308,345))
+    g.edge('timeline',receiver,'1 입력 / revision / evidence',sp='R',tp='L',at=(35,308,345))
     g.edge('channel',receiver,'InputStarted',sp='R',tp='L',sd=-7,td=-12,at=(365,-20,300))
     g.edge('im',receiver,'InputStarted → 보호 hold',sp='R',tp='L',sd=-1,td=7,at=(366,159,330))
     g.edge(receiver,'cm','선택적 근거 사전 읽기',sp='L',tp='T',sd=12,at=(22,335,240))
     g.edge('cm',receiver,sp='R',tp='L',ret=True,td=18)
-    g.edge(receiver,'ri','입력·scope·revision·예산',sp='L',tp='T',sd=23,at=(22,437,335))
+    g.edge(receiver,'ri','입력 / scope / revision / 예산',sp='L',tp='T',sd=23,at=(22,437,335))
     g.edge('ri','cm',sp='L',tp='R',sd=6)
     g.edge('cm','ri',sp='R',tp='L',ret=True,sd=8,td=8)
     g.edge('ri','task',sp='R',tp='B',sd=-8,td=-20)
     g.edge('task','ri',sp='B',tp='R',ret=True,sd=20,td=8)
     g.edge('ri',receiver,'의미 제안 / 질문 제안',sp='R',tp='L',ret=True,td=24,at=(22,531,340))
-    g.edge('rc','task','4 채택 의미 / hold·admission',sp='R',tp='T',sd=90,at=(817,341,338))
-    g.edge('task','gateway','명령·hold / 반환 사건',at=(916,436,240))
-    g.edge('gateway','agent','전송 / 외부 접수·질문·결과',at=(924,523,228))
+    g.edge('rc','task','4 채택 의미 / hold / admission',sp='R',tp='T',sd=90,at=(817,341,338))
+    g.edge('task','gateway','명령 / hold / 반환 사건',at=(916,436,240))
+    g.edge('gateway','agent','전송 / 외부 접수 / 질문 / 결과',at=(924,523,228))
     g.edge('gateway','task',sp='T',tp='B',ret=True,sd=40,td=40)
     g.edge('agent','gateway',sp='T',tp='B',ret=True,sd=40,td=40)
     notice='dispatch' if side=='A' else 'notice'
-    g.edge('task',notice,'Q1: 확인·저장 후 대화 연결',sp='L',tp='R',ret=True,td=15,at=(847,313,308))
-    g.edge('publish','turn','7 release / P2·Q1 identity',sp='L',tp='B',at=(410,643,345))
-    g.edge('channel','publish','실제 전달·중단 receipt / actual range',sp='L',tp='L',ret=True,td=15,at=(18,649,600))
+    g.edge('task',notice,'Q1: 확인 / 저장 후 대화 연결',sp='L',tp='R',ret=True,td=15,at=(847,313,308))
+    g.edge('publish','turn','7 release / P2 / Q1 identity',sp='L',tp='B',at=(410,643,345))
+    g.edge('channel','publish','실제 전달 / 중단 receipt / actual range',sp='L',tp='L',ret=True,td=15,at=(18,649,600))
     g.edge('publish','outbox','전달 기록 갱신',sp='R',tp='L',at=(653,621,213))
     g.edge('outbox','rc','8 확인된 제시 → 질문 focus',sp='R',tp='B',ret=True,td=30,at=(451,351,345))
     if side=='A':
         g.edge('dispatch','progress','job / revision / 대기 참조',sp='R',tp='L',at=(770,162,365))
         g.edge('progress','dispatch',sp='L',tp='R',ret=True,sd=15,td=15)
-        g.edge('dispatch','compose','5 채택 의미·허용 사실 / job ID',at=(448,323,315))
+        g.edge('dispatch','compose','5 채택 의미 / 허용 사실 / job ID',at=(448,323,315))
         g.edge('compose','dispatch','후보 반환 / 시작 revision',sp='T',tp='B',ret=True,sd=40,td=40,at=(446,493,330))
         g.edge('dispatch','publish','6 유효 후보 → 게시 요청',sp='B',tp='L',sd=-90,at=(447,536,332))
     else:
         g.edge('input','iw','입력 / job / revision',sp='R',tp='L',at=(818,151,310))
         g.edge('iw','input',sp='L',tp='R',ret=True,sd=13,td=13)
-        g.edge('notice','nw','Q1 참조 / 준비·대기',sp='R',tp='L',at=(818,261,300))
+        g.edge('notice','nw','Q1 참조 / 준비 / 대기',sp='R',tp='L',at=(818,261,300))
         g.edge('nw','notice',sp='L',tp='R',ret=True,sd=13,td=13)
-        g.edge('input','compose','5 채택 의미·허용 Notice 소비',at=(448,323,315))
+        g.edge('input','compose','5 채택 의미 / 허용 Notice 소비',at=(448,323,315))
         g.edge('notice','compose',sp='B',tp='T',sd=70,td=45)
         g.edge('compose','join','CandidateReady',sp='R',tp='L',at=(660,408,225))
         g.edge('join','pw',sp='B',tp='T')
@@ -296,7 +296,7 @@ def legend(s,x=64,y=1368,scale=1):
                                 ('ext',1750,'Dependency','external',False)]:
         g.node(key,xx,0,150,32,name,kind,diff,size=16)
     g.text(0,3,110,'Legend',20,True)
-    for xx,label in [(120,'논리 책임'),(325,'내부 Module'),(520,'데이터 상태'),(1250,'차이: 살구색 / 짙은 테두리'),(1750,'외부 Agent·모델')]:
+    for xx,label in [(120,'논리 책임'),(325,'내부 Module'),(520,'데이터 상태'),(1250,'차이: 살구색 / 짙은 테두리'),(1750,'외부 Agent / 모델')]:
         g.text(xx,39,420,label,17)
     s.line([(x+740*scale,y+16*scale),(x+890*scale,y+16*scale)],color=COMMON,width=1.1*scale)
     g.text(740,39,220,'요청 / 전달',17)
@@ -304,7 +304,7 @@ def legend(s,x=64,y=1368,scale=1):
     g.text(980,39,220,'응답 / 반환',17)
     g.text(1500,3,235,'공통: 흰색 / 검정',17)
     g.text(2010,3,420,'좌우 칸: 배치용 레이아웃',17)
-    g.text(2010,39,420,'실행·서비스 경계 추가 없음',17)
+    g.text(2010,39,420,'실행 / 서비스 경계 추가 없음',17)
 
 
 def compact_legend(s):
