@@ -247,6 +247,9 @@ def main():
     if drift:
         raise SystemExit('Diagram drift: '+', '.join(drift))
     print('PASS: 04-42 five 16:9 SVG/draw.io pairs; gallery; XML, IDs, ownership, bounds, orthogonal routes, source parity')
+    if args.check:
+        from generate_dp42_implementation_diagrams import main as check_implementation_views
+        check_implementation_views(['--check'])
 
 
 if __name__ == '__main__':

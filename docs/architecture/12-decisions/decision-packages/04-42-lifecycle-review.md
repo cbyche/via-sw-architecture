@@ -1,5 +1,19 @@
 # 04-42 작성자 설계·발표 검수 기록
 
+## 2026-10-13 A/B 구현 수준 구조와 전체 흐름 상세화
+
+사용자는 44 §3.7을 참고해 42의 각 방안을 구현 단위까지 펼친 상세 SW Architecture와 주요 flow를 요청하고 commit/push를 승인했다. 본문 §3.7에 A/B 구조도 두 장과 같은 Q1 답변을 추적하는 전체 흐름도 두 장을 추가했다. 각 그림은 3840×2160 SVG, 편집 가능한 draw.io와 PNG를 갖고 주 문서에 직접 표시한다. 기존 본문 그림도 유지하며 맨 앞 그림 차례에서 현행 상세와 이전 판본을 구분한다.
+
+- A의 내부 Module, owner별 RequestWriteSet/TaskWriteSet, State Store의 공동 A1, 별도 전송 CAS A2, 외부 inbox I1/사실 반영 A3, 실제 전달 기록 A4를 구분했다. 하나의 Core나 공동 transaction이 단일 의미 Module, 전역 Task 잠금, 네트워크/물리 출력까지의 원자성을 뜻하지 않도록 했다.
+- B의 대화/업무 process와 저장 권한, D1 의도, W1 업무 접수, D2 접수 반영, D2와 독립인 W2 전송, W3/D3 외부 사실 반영, D4 실제 전달 원장을 연결했다. same-ID 재조회, payload 중복 제약, gate session/sequence, cursor와 snapshot 재결합의 책임을 내부 Module과 상태 표에 적었다.
+- 공통 사례는 u2에 Task ID가 주어지지 않는 상태에서 시작한다. 질문 원본과 P1 actual 근거를 읽은 의미 제안 이후 채택하며, 로컬 접수와 외부 접수 및 사용자 실제 전달을 구별한다. 그림의 정상 순서는 A 27단계, B 29단계다. 정정 hold/CAS 경합, revision 충돌, 내구 inbox 재처리, 외부 UNKNOWN, actual receipt 유실의 처리도 본문에 대조했다.
+- 과정에서 process 제목과 입력 라벨의 겹침, 공통 조회선의 Component 제목 관통, 원통 상단 곡선과 글자의 간섭을 수정했다. sequence draw.io의 메시지는 header 바깥 좌표 대신 편집 가능한 lifeline에 연결했다. 구조도의 실제 출력/receipt와 hold 연결, B의 접수 결과/재연결 경로를 보강했다.
+
+검증 범위는 네 장의 최종 Chrome 렌더, 글자 겹침/상자 이탈/canvas 이탈/선의 글자 관통 0건, 직접 PNG 시각 확인, SVG/draw.io source parity와 XML ID/연결 및 Module 포함과 직교 경로 검사다. 렌더 기록은 네 SVG와 PNG의 hash를 저장하고 전용 `--check`가 본문 inline preview/원본/PNG 링크와 함께 검사한다. 기존 42 도식 `--check`에 새 상세 검사를 연결해 기존 CI가 함께 확인하게 했다. 기존 42 도식 검사, redetailing 계약 예시 검사, 활성 Markdown 링크와 정식 용어 검사도 통과했다. draw.io native 편집기의 round-trip, 제품 실행, 프로토콜 경합 실행 시험, 모델 호출, 품질 측정이나 독립 심사를 수행한 기록은 아니다.
+
+기존 A/B와 미선정 상태를 유지한다. 메모리 회수와 드문 restart를 주요 우위로 제시하지 않으며 B의 정상 사용상 품질 우위를 입증했다고 주장하지 않는다. 44의 조정 구조, 45/47, reference Architecture, QA/ADR 및 통합 PPTX는 이번 42 상세화의 변경 대상이 아니다. commit/push와 CI 결과는 Git 이력과 최종 응답에서 확인한다.
+
+
 ## 재구체화 — cloud 모델 조건과 독립 인계 프로토콜 (2026-10-10)
 
 사용자가 44→45→42→46의 재구체화와 작업 단위별 게시를 승인했다. 이 항목은 42 본문과 고정 사례 JSON의 작성 범위다. 기존 작성/렌더 완료 기록은 당시 세대의 범위이며 아래 새 프로토콜의 구현 검증이 아니다.

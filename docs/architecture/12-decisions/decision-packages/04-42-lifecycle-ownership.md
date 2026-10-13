@@ -7,6 +7,19 @@
 
 **그림 열람과 관리:** DP-42의 현재 배경, 구조, 수명, 사건, 변경 영향 그림은 아래 관련 설명 바로 옆에 모두 표시한다. 별도 폴더에 남은 이전 발표 판본의 그림은 §11에서 상태를 구분해 직접 볼 수 있다. 같은 그림의 SVG와 PNG는 한 번만 표시하고 편집 원본과 다른 형식은 옆에 연결한다. 앞으로 DP-42 그림을 추가하거나 갱신할 때도 이 본문에 미리보기와 원본 링크를 함께 반영한다. [현재 통합 발표](../../../presentations_files/VIA-architecture-presentation_v8.pptx)의 DP-42 장도 여기서 찾을 수 있다.
 
+
+**그림 차례**
+
+| 볼 내용 | 본문 위치 |
+| --- | --- |
+| DP 배경 / 전체 A/B 비교 / 서로 다른 수명 | 아래 배경 / §1 / §2 |
+| 수명과 소유를 확대한 발표 그림 | §3.6 |
+| A 상세 SW Architecture와 27단계 전체 흐름 | [§3.7.1](#dp42-detail-a) |
+| B 상세 SW Architecture와 29단계 전체 흐름 | [§3.7.2](#dp42-detail-b) |
+| 저장 레코드와 확정 계약 / 정정과 실패 비교 | §3.7.3 / §3.7.4 |
+| 기존 A/B 사건도 / 변경 영향 비교 | §4 / §5 |
+| 이전 발표 판본 여섯 그림 | §11 |
+
 ## DP 배경 — VIA 특성과 SW 구조 선택의 가치
 
 **배경의 중심 주장: VIA는 사용자의 대화와 외부 업무 실행을 연결하지만 두 활동의 시작과 종료는 일치하지 않는다. 서로 다른 수명의 요청, 질문, 업무와 실행이 같은 목표에 연결되도록 상태 권한과 협력 경계를 설계할 가치가 있다.**
@@ -181,6 +194,104 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 [편집 원본](../../../presentations_files/dp-comparison/dp42-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp42-comparison.png). 기존 전체 MAIN과 수명/사건도를 유지하고 추가했다. 양안에 같은 Conversation·Request·Task 수명을 먼저 보여준 뒤, 상태 owner와 실행/저장 확정 경계, 실제 변경 집합/CommandIntent/AcceptanceReceipt를 비교한다. A의 트랜잭션 관리자는 State Store 내부이며 B의 업무 게이트는 Task Manager 내부다. 내부 접수와 외부 Agent 접수/실제 전달은 구별한다.
 
 첫 독자를 위해 그림은 Input1/Request1/Task1/Question1/Command1/Publication1로 표시한다. 각각 본문 고정 Q1 답변 사례의 u2/R2/T1/Q1/K1/P1에 대응하는 설명용 ID이며 새로운 Component나 다른 의미가 아니다. 원통에는 상태 이름만 두고 관계/값은 접힌 데이터 예시에 표시한다. 공통 Request Interpreter/Model Access의 상세와 전체 호출/권한 경로는 MAIN과 공통 계약에 남겨 두었다. 하단 hold/ACK/CAS는 인계 제어의 보조 설명이고 세 층 비교를 대신하지 않는다.
+
+### 3.7 구현 단위로 펼친 A/B 구조와 전체 처리 흐름
+
+이 절은 각 안을 구현한다면 **어떤 Module을 만들고, 어느 owner가 어떤 상태를 확정하며, 다음 처리를 무엇이 가능하게 하는지**를 보여주는 상세 SW Architecture다. 제품 구현 완료를 뜻하지 않는다. 기존 A/B를 유지하면서 §3.5와 §4.2의 계약을 내부 호출, repository 접근, 내구 메시지와 복구 동작으로 펼쳤다. 네 장 모두 3840×2160의 16:9이며 각 안의 구조도와 번호 있는 전체 흐름도를 따로 제공한다.
+
+비교 사례는 양안에서 같다. 보고서 업무 T1의 외부 실행 X1이 Q1 “상반기로 할까요?”를 보냈고, publication P1이 실제로 사용자에게 제시됐다. 사용자는 “응, 상반기로”라는 u2를 입력한다. **u2에 Task ID가 들어 있다고 가정하지 않는다.** Request Interpreter가 현재 질문과 실제 제시 근거를 읽고 Q1/T1 연결을 제안하며 Request Controller가 현재성을 검사한다. 내부 명령 K1의 접수, Downstream Agent의 실제 접수 확인, 사용자에게 P2를 실제로 전달한 사실은 끝까지 서로 다른 상태다. 여기서 P2는 확인 가능한 외부 접수가 있을 때의 “답변 전달 확인”이며 보고서 완료를 뜻하지 않는다.
+
+<a id="dp42-detail-a"></a>
+
+#### 3.7.1 A: owner별 변경 집합을 한 Core에서 공동 확정
+
+![DP-42 A 상세 SW Architecture: 내부 Module, 상태 저장, 공동 확정과 외부 전달](./diagrams/dp42-implementation-a.svg)
+
+[편집 가능한 draw.io](./diagrams/dp42-implementation-a.drawio) / [3840×2160 PNG](./diagrams/dp42-implementation-a.png)
+
+A의 Core는 여러 책임 Module로 구성된다. Request Controller의 **요청 채택기**는 해석 결과, 실제 제시 P1, 현재 업무 질문과 권한을 확인하고 **관계 변경 준비기**에 자기 변경을 넘긴다. Task Manager의 **답변 접수기**는 Q1의 유효성과 revision을 검사해 별도의 업무 변경 집합을 만든다. State Store의 **트랜잭션 관리자**는 두 owner가 제출한 변경과 조건을 같은 local transaction A1으로 확정한다. 하나의 중앙 Module이 대화와 업무 의미를 모두 판단하는 구조가 아니다.
+
+예를 들어 A1에는 Request Controller가 만든 `R2 → Q1/T1` 연결, Task Manager가 만든 `Q1 OPEN v7 → ANSWERED v8`, 명령 K1의 `PENDING` 생성, 이번 입력과 관련된 hold의 선택적 해소가 들어간다. 준비와 commit 사이에 질문이나 gate가 바뀌면 expected revision 검사에서 관련 변경이 모두 미반영된다. 원본을 다시 읽어 owner가 변경 집합을 다시 만들며 트랜잭션 관리자가 의미를 임의로 고치지 않는다.
+
+A1 뒤에도 외부 전송은 별도 단계다. Agent Gateway의 **명령 전송 및 확인**과 Task Manager의 **업무 접수 및 전송 게이트**가 현재 Task, gate, 권한 조건을 확인하고 A2에서 `PENDING → DISPATCHING`을 조건부로 확정한다. 전송 복구기는 내구 명령을 다시 조회하고, 전송이 시작된 명령의 응답이 불명확하면 외부 상태를 확인한다. A는 내부 queue, repository, retry와 중복 방지가 필요하며 비동기 처리나 worker 분리를 사용할 수 있다. 관련 레코드의 공동 transaction이 무관한 Task를 모두 잠그는 전역 잠금을 요구하지는 않는다.
+
+아래 그림에서 A1/A2/A3/A4는 서로 다른 commit이다. 숫자 01~27은 실제 호출과 사실 반환을 읽는 순서다. State Store에서 Agent Gateway로 돌아오는 claim 결과는 Task Manager의 게이트 호출을 통해 전달되는 결과로 축약했다. 저장소가 스스로 업무 전송을 시작하는 구조가 아니다.
+
+![DP-42 A 전체 흐름: 입력, 해석, 변경 집합, 공동 commit, 외부 확인, 실제 출력](./diagrams/dp42-flow-a.svg)
+
+[편집 가능한 draw.io](./diagrams/dp42-flow-a.drawio) / [3840×2160 PNG](./diagrams/dp42-flow-a.png)
+
+| 흐름 | 실행과 확정 | 그 뒤에 가능한 일 |
+| --- | --- | --- |
+| 01~09 | 입력 시작과 hold 적용 확인, Q1/T1 원본과 P1 실제 제시 조회, u2 의미 제안 | 현재 근거에 맞는 답변 관계를 채택할 수 있음. 모델 결과만으로 명령이 전송되지는 않음 |
+| 10~13 | Task Manager의 검증된 변경 집합과 Request Controller의 변경 집합을 A1으로 공동 확정 | R2 관계와 업무 접수 사이에 한쪽만 확정된 정상 저장 상태를 만들지 않음. 외부 접수는 아직 아님 |
+| 14~17 | 현재 gate와 권한을 확인하고 A2의 transmission CAS 성공 뒤 K1 외부 전송 | 전송을 시도할 권한을 얻음. socket 전송 성공은 외부 접수 증거가 아님 |
+| 18~22 | 외부 receipt를 I1 inbox에 먼저 저장하고 A3에서 원본 event ID와 revision에 따라 실행 관측과 명령 사실 반영 | 확인된 외부 접수 사실을 Request Controller에 반환. 중간 장애는 저장된 inbox로 재처리 |
+| 23~27 | 현재성이 맞는 P2 게시 허용, Interaction Manager의 실제 출력, A4에 actual receipt 저장, 실제 제시 참조 반환 | 사용자에게 확인된 전달 범위만 기록. 물리 출력과 DB 저장은 한 transaction이 아님 |
+
+<a id="dp42-detail-b"></a>
+
+#### 3.7.2 B: 각 서비스의 확정과 내구 인계를 분리
+
+![DP-42 B 상세 SW Architecture: 독립 서비스와 저장 권한, 명령 의도, 접수 receipt와 event 반환](./diagrams/dp42-implementation-b.svg)
+
+[편집 가능한 draw.io](./diagrams/dp42-implementation-b.drawio) / [3840×2160 PNG](./diagrams/dp42-implementation-b.png)
+
+B는 같은 Request Controller, Request Interpreter, Response Manager를 대화 서비스에, Task Manager와 Agent Gateway를 업무 서비스에 배치한다. 두 State Store 상자는 **서비스별 저장 접근과 transaction 범위**다. 별도 DB 서버 두 대를 요구하지 않으며, 다른 서비스의 원본에 직접 쓰거나 한 transaction으로 두 원본을 함께 확정하지 않는다.
+
+Request Controller의 **명령 의도 기록기**는 D1에서 R2를 `ACCEPTANCE_PENDING`으로 두고 K1 payload와 outbox를 함께 저장한다. **재연결 조정기**는 미확인 K1을 같은 ID로 재전달하거나 접수 결과를 조회한다. Task Manager의 **답변 접수기**는 W1에서 command ID/payload 중복 검사, Q1과 Task revision, control session과 gate 조건을 확인하고 업무 변경, 접수 결과와 event outbox를 함께 저장한다. 명령 전달 Module이 새로운 의미를 판단하지는 않는다.
+
+W1 이후 대화 서비스에 응답이 도착하지 않더라도 업무 원본에는 접수 결과가 남는다. Request Controller의 **진행 사실 반영기**가 receipt를 받으면 D2로 자기 Request에 반영한다. **Agent Gateway의 W2 전송은 D2 반영 완료를 기다리지 않는다.** 따라서 D2 유실은 명령을 새로 생성해야 하는 이유가 아니라 같은 K1의 현재 상태를 재확인해야 하는 이유다. 반대로 D1만 끝나고 W1이 끝나지 않았다면 대화의 의도만 있으며 업무가 접수했다고 표시할 수 없다.
+
+B 그림의 실선 서비스 횡단 경로는 논리 API/명령 전달이고 점선은 반환 사실이다. outbox의 durable enqueue 후 전송, 수신측 inbox/dedup, 결과 저장 후 ACK가 그 경로를 뒷받침한다. 전용 메시지 Broker 제품이나 특정 RPC 기술을 선택한 것은 아니다. 업무 event 전달이 끊기면 cursor와 revision으로 재결합하고, event gap이 있으면 업무 원본 snapshot으로 보완한다.
+
+![DP-42 B 전체 흐름: D1 의도, W1 업무 접수, D2 반영, 독립 전송, 외부 사실과 실제 출력](./diagrams/dp42-flow-b.svg)
+
+[편집 가능한 draw.io](./diagrams/dp42-flow-b.drawio) / [3840×2160 PNG](./diagrams/dp42-flow-b.png)
+
+| 흐름 | 실행과 확정 | 원본이 엇갈릴 수 있는 구간 |
+| --- | --- | --- |
+| 01~09 | 같은 입력, hold ACK, 질문 원본과 실제 제시 조회, 의미 제안 | 조회 불가나 revision 변경이면 현재 의미를 확정하지 않고 필요한 범위를 다시 읽음 |
+| 10~14 | D1 의도와 outbox 저장 → W1 업무 원본 접수 → D2 접수 사실 반영 | D1 뒤 W1 전에는 업무 미접수. W1 뒤 D2 전에는 업무 접수 완료와 대화 접수 대기가 공존할 수 있음 |
+| 15~18 | 업무 서비스가 현재 조건으로 W2 CAS를 확정하고 외부 전송 | 그림의 순서는 정상 실행 한 예다. 이 구간은 D2보다 먼저 진행될 수도 있음 |
+| 19~24 | I1 외부 inbox 저장 → W3 업무 사실과 event 저장 → D3 대화 projection과 cursor 반영 | 외부 사실이 업무 원본에 먼저 반영되고 대화 표시가 뒤따를 수 있음. 오래된 표시는 확인 시점과 revision을 유지 |
+| 25~29 | P2 현재성 검사와 게시 허용 → 실제 출력 → D4 actual receipt 저장 → 실제 제시 참조 반환 | 명령 접수와 사용자 전달은 별개. receipt가 없는 범위를 실제로 들었다고 확정하지 않음 |
+
+#### 3.7.3 구현할 상태와 저장 계약
+
+이 도식의 상태는 Conversation과 Task만이 아니다. 다음은 repository/API 설계에 필요한 **제안 레코드 형태와 제약**이며 DB 제품이나 migration schema를 동결한 것은 아니다. 물리 저장 원통에 여러 레코드가 함께 있어도 각 필드의 의미 owner는 바뀌지 않는다.
+
+| 레코드와 의미 owner | 최소 식별과 현재성 정보 | A의 저장 경계 | B의 저장 경계와 추가 계약 |
+| --- | --- | --- | --- |
+| Conversation/Turn/Request 관계 — Request Controller | `conversation_id, turn_id, request_id, input_epoch, adopted_meaning_revision, question_ref, task_ref, dependency_refs, status` | 요청 영역. 관련 답변 관계를 A1에 포함 | 대화 영역. D1 접수 대기와 D2 접수 반영을 구분. 접수 뒤에도 외부 위임 확인 전 Request 완료를 주장하지 않음 |
+| Task/Execution/Agent 질문 — Task Manager | `task_id, task_revision, execution_id, source_revision, question_id, question_revision, question_status, answer_command_ref` | 업무 영역. Q1과 K1 생성이 A1에 참여 | 업무 영역의 W1이 권위. 대화에 있는 Q1 복사나 cursor는 업무 원본을 대체하지 않음 |
+| 명령 의미 / 전송 — Task Manager / Agent Gateway의 각 필드 | `command_id, request_id, payload_hash, expected_revisions, acceptance_status, transmission_status, source_receipt_ref` | 명령 의미를 A1, transmission을 A2, 확인 사실을 A3에 반영 | 업무 W1/W2/W3. 같은 ID와 같은 payload는 저장된 처리 결과, 같은 ID와 다른 payload는 거절. 정정된 payload는 새 K2와 K1 대체 관계 |
+| 입력 제어와 admission — Request Controller의 의도 / Task Manager의 업무 gate | `control_session_id, control_seq, gate_revision, hold_scope, input_epoch, reconcile_command_ref` | 현재 gate와 관련 owner 변경을 함께 조건 검사 | 대화에 hold 의도를 기록한 것과 업무 gate 적용을 구별. HoldAck가 적용 revision을 반환하고 늦은 release가 새 hold를 해제하지 못함 |
+| publication과 actual receipt — Response Manager | `publication_id, source_refs, output_epoch, channel, delivered_range, receipt_id, unknown_range` | 실제 출력 뒤 A4. Request Controller는 이 원장의 참조를 저장 | 대화 D4. 서비스 접수 receipt와 별도 원장. 중단 시 확인 밖의 출력은 UNKNOWN 보존 |
+| raw 외부 inbox — Agent Gateway | `source_id, event_id, execution_id, source_revision, raw_payload_ref, received_at, applied_marker` | I1 저장 뒤 A3 적용. 재처리와 중복 방지 필요 | 업무 I1 저장 뒤 W3 적용. 외부 ACK를 제공하는 프로토콜이면 inbox 내구 저장 뒤 ACK |
+| 명령 의도 / 수신 중복 / 반환 outbox / projection cursor — 각 원본 owner | `command_id, payload_hash, receipt_ref, event_id, stream_id, revision, cursor, delivery_status` | 외부 전송 대기와 inbox는 필요. 대화/업무 사이 별도 영속 인계는 요구하지 않음 | D1 명령 outbox, W1 수신 중복과 receipt, W1/W3 event outbox, D2/D3 대화 반영. 원본 적용과 관련 outbox를 같은 local transaction에 저장 |
+| 해석 작업 상태 — Request Interpreter | `attempt_id, evidence_refs, read_revisions, proposal, unresolved_fields` | RAM 작업 상태. 채택한 의미 원본은 Request Controller에 있음 | 같은 책임. 업무 API 응답 cache가 질문 원본이 되지 않으며 모델 session에 업무 원본을 맡기지 않음 |
+
+**조회, 판단, 확정을 분리한다.** `prepare_answer`는 검증한 변경 집합을 돌려주며 그 자체가 commit은 아니다. B의 `ReleaseAndReconcile`은 해석이 끝난 입력 범위의 hold만 풀고 새 명령을 관련 조건과 함께 W1에서 검사한다. 아직 의미가 불명확한 입력이나 사용자 답 대기는 hold를 유지한다. 두 안 모두 최초 조회 이후 원본이 달라질 수 있으므로 접수와 전송 시 현재 조건을 다시 확인한다.
+
+**commit 결과를 확인한 뒤 다음 외부 동작을 한다.** 흐름도의 저장 화살표는 성공적으로 반환된 local transaction을 포함한다. I1 뒤 A3/W3 적용과 inbox 처리 표식을 동일 업무 transaction으로 묶어 재처리의 중복 효과를 막는다. 반환 event가 필요하면 같은 transaction에 event를 기록한다. B의 D2/D3는 해당 사실과 소비 cursor를 함께 반영하되, 앞선 event gap을 건너뛰어 cursor를 전진시키지 않는다. 저장 실패 때 전송이나 외부 ACK를 앞서 완료한 것으로 취급하지 않는다.
+
+**현재 권한과 물리 출력은 별도 제어 경계를 갖는다.** Policy Manager 조회 불가면 신규 제공과 전송을 보류한다. 권한을 조회한 순간과 외부 효과 사이의 경합은 §4.2.5의 revision/ACK와 이미 전송 중인 명령 규칙으로 다룬다. Interaction Manager는 발화 시작에 로컬 출력을 즉시 멈추고 output epoch를 바꾸며, 업무 hold는 별도 전달/적용 사실이다. 그림 위 Model Access 경로는 의미 호출의 예다. 공통 음성/전사 입력과 필요한 응답 구성/음성 생성은 §3.1.1을 따르며 모든 Agent event에 모델을 호출하지 않는다. Context Manager, Policy Manager, Model Access의 상단 위치는 공통 논리 의존성 표시이며 새 process 배치를 선택하지 않는다.
+
+#### 3.7.4 같은 정정과 실패가 어디에서 처리되는가
+
+| 상황 | A의 원본과 재개 경로 | B의 원본과 재개 경로 |
+| --- | --- | --- |
+| Q1을 읽은 뒤 외부에서 질문이 만료됨 | A1 expected revision 불일치. R2 연결과 Q1/K1 변경 모두 미반영, 현재 질문 다시 조회 | W1이 거절. D1의 의도는 남고 대화가 거절 사실을 반영. Task/질문 cache를 사실로 승격하지 않음 |
+| local commit 직후 호출 결과가 유실됨 | 같은 K1로 공동 확정 결과 조회. 새 명령을 무조건 만들지 않음 | W1 결과가 유실돼도 같은 K1로 receipt 조회/재전달. W1이 끝난 업무를 D2 지연 때문에 다시 실행하지 않음 |
+| “아니, 하반기로”라는 u3의 hold가 transmission CAS보다 먼저 적용됨 | K1 전송 차단. owner가 K1 대체와 새 K2 변경 집합을 현재 revision으로 준비 | 업무 gate에서 K1 보류. 새 입력을 해소한 ReleaseAndReconcile에서 K2와 대체 조건을 함께 검사 |
+| K1이 이미 DISPATCHING인 뒤 정정 hold 적용 | 미전송이었다고 되돌리지 않음. 외부 효력을 확인하고 지원되는 정정/취소 경로 사용 | 같은 규칙. 서비스 분리나 늦은 HoldAck가 이미 발생한 외부 효과를 소급 취소하지 않음 |
+| 외부 전송 timeout / receipt 지연 | Agent Gateway가 UNKNOWN을 보존하고 내구 K1로 외부 상태 확인 | 업무 서비스의 Agent Gateway가 같은 처리. 외부 조회/idempotency capability가 없으면 자동 재전송으로 새 실행을 만들지 않음 |
+| 외부 event 적용 중 장애 | I1 inbox에서 A3 재처리. event ID/source revision으로 중복과 역순을 구별 | I1에서 W3 재처리, 반환 event 재전달. D3는 cursor와 필요시 snapshot으로 업무 원본에 재결합 |
+| 대화 처리 영역 중단 | Core 전체 중단이면 업무 owner도 정지 후 내구 상태로 복구. UI 연결만 끊기면 Core는 계속 업무 추적 가능 | 업무 서비스와 공통 필수 의존성이 살아 있으면 접수된 Task의 event 수신과 결과/질문 보관 계속. 대화 원본의 미해석 의도, 새 사용자 질문 제시, Request 의존 해제는 대기 |
+| P2 출력 후 actual receipt 저장 전 장애 | 마지막 확인 밖의 전달 범위를 UNKNOWN으로 보존 | 동일. 업무 서비스의 접수 사실로 사용자 실제 전달을 추정하지 않음 |
+
+정상 답변 한 건에서 남는 구조 차이는 **A의 관계와 업무 접수 공동 확정** 대 **B의 의도, 업무 접수, 대화 반영 사이 내구 인계**다. B의 독립 실행 범위는 구체적이지만 그 대가로 접수 중 상태, 명령 중복 검사, event 재전달과 원본 재결합을 관리한다. A 역시 내부 모듈화, 비동기 처리, background 업무 추적과 외부 event 복구를 제공한다. 이 상세화는 B가 의미 정확도나 정상 응답 시간에서 유리하다는 증거가 아니며, 메모리 회수나 드문 restart를 주요 선택 근거로 바꾸지 않는다. 44의 다음 실행을 깨우는 방식은 양안 안에서 선택할 수 있고, 여기의 명령/원본 소유와 commit 완료 사건을 존중해야 한다.
 
 ## 4. 같은 사건을 끝까지 추적하기
 
@@ -419,6 +530,8 @@ RM의 내구 실제 전달 원장은 대화 서비스에 남는다. 업무 접�
 여섯 작성 작업은 동일 사례와 범위 정의, owner/확정/실행 설계, 싼 전환·혼합 반론, V-01~13 인과 검토, 실제 코드 근거 고정, 발표 도식·본문 작성이다. 이는 프로젝트 전체의 Stage 5/6 진행이나 구현·측정 승인이 아니다.
 
 도식은 [전용 생성기](../../../../scripts/architecture/generate_lifecycle_ownership_diagrams.py)에서 같은 좌표·문자·연결 모델로 SVG/draw.io를 만든다. 메인 비교도는 16:9 2560×1440, 나머지도 발표에 옮기기 쉬운 16:9로 작성한다. [작성자 검수 기록](./04-42-lifecycle-review.md)에 실제 발견한 문제, 수정, 검증 한계와 완료 결과를 남긴다. 사용자 수용·독립 심사·측정된 우위는 별개다.
+
+§3.7의 상세 네 장은 [상세 도식 생성기](../../../../scripts/architecture/generate_dp42_implementation_diagrams.py)가 같은 scene에서 편집 가능한 SVG/draw.io를 생성한다. [PNG 렌더와 글자 검사](../../../../scripts/architecture/render_dp42_implementation_diagrams.cjs)는 별도 실행하며 [렌더 기록](./diagrams/dp42-implementation-render.json)으로 최종 SVG/PNG hash를 연결한다. `--check`는 본문 미리보기와 원본/PNG 링크, XML 연결, Module 포함, 직교 경로와 생성물/렌더 일치를 확인한다.
 
 ## 11. 이전 발표 판본의 DP-42 그림
 
