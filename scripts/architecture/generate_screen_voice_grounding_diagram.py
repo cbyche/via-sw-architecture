@@ -245,6 +245,12 @@ def check_figure_registration():
         source = Path(name).with_suffix('.drawio').name
         assert (OUT / source).exists(), f'Missing editable source: {source}'
         assert f'./diagrams/{source}' in body, f'Missing source link in main document: {source}'
+        png_name = Path(name).with_suffix('.png').name
+        links = re.findall(r'\]\(([^\s)]+\.png)\)', body)
+        png_links = [link for link in links if Path(link).name == png_name]
+        assert png_links, f'Missing PNG link in main document: {png_name}'
+        assert all((main_path.parent / link).exists() for link in png_links), f'Missing PNG: {png_name}'
+    assert not any(chr(c) in body for c in (0xB7,0x2022,0x2027,0x318D,0x30FB,0x22C5,0x2219)), 'DP-47 middle-dot punctuation'
     return len(figures)
 
 
@@ -257,9 +263,11 @@ def main():
             assert path.read_text()==value, f'Out of sync: {path}'
         else:
             path.write_text(value)
+    from generate_dp47_implementation_diagrams import generate
+    generate(check=args.check)
     if args.check:
         count = check_figure_registration()
-        print(f'PASS: all {count} DP-47 figures embedded in main document with editable-source links')
+        print(f'PASS: all {count} DP-47 figures embedded with editable-source and PNG links; punctuation')
     print('PASS: DP-47 SVG/draw.io; deterministic source, XML, bounds, ownership, IDs and edge endpoints')
 
 

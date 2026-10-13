@@ -7,7 +7,7 @@
 
 핵심 선택은 **현재 지칭 판단의 정상 경로에 별도 생산자가 관리하는 중간 후보 계약을 둘 것인가**다. 하나는 관계 전체를 같이 보기 쉽고 조정이 적으며, 다른 하나는 후보별 재사용과 오류 추적을 구조로 만든다. 반대로 A는 모델에 전달하는 media 범위와 재판단 부담, B는 후보 누락과 불일치와 추가 왕복을 감수한다. 품질 우위는 아직 가설이다.
 
-읽는 순서: 아래 문제와 핵심 주장 → [MAIN §6](#6-main-같은-관측에서-다른-해석-구조) → [동일 장면 §9](#9-같은-사용자-장면을-두-구조로-따라간다) → 품질, 전환, 반증. 조사와 탐색의 근거는 [공식 구조 자료](./dp47-structure-references.md), [16개 사고실험과 8개 탐색 방향](./dp47-design-experiments.md), [반복 리뷰 기록](./dp47-design-review.md)에 둔다.
+읽는 순서: 아래 문제와 핵심 주장 → [MAIN §6](#6-main-같은-관측에서-다른-해석-구조) → [구현 수준 상세도 §8.5](#85-구현을-가정한-상세-구조와-실행-계약) → [동일 장면 §9](#9-같은-사용자-장면을-두-구조로-따라간다) → 품질, 전환, 반증. 조사와 탐색의 근거는 [공식 구조 자료](./dp47-structure-references.md), [16개 사고실험과 8개 탐색 방향](./dp47-design-experiments.md), [반복 리뷰 기록](./dp47-design-review.md)에 둔다.
 
 ## 0. 이 문서에서 모든 DP-47 그림을 확인한다
 
@@ -17,6 +17,10 @@ DP-47의 모든 그림은 아래 본문에 직접 표시한다. 편집용 draw.i
 | --- | --- | --- |
 | 초기 문제 설명 | [§1 문제 배경](#1-via에서-왜-중요한가) | 화면이 바뀐 뒤 전사가 도착하고 지칭을 정정하는 상황 |
 | 두 설계의 전체 비교 | [§6 MAIN](#6-main-같은-관측에서-다른-해석-구조) | 공통 입력 취득, A/B 내부 판단과 공통 채택 및 위임 |
+| A 구현 수준 구조 | [§8.5.2](#852-a-원본에서-binding을-생산하는-실행-구조) | 원본 read, 공동 의미 호출과 반환, 상태 patch와 채택 |
+| B 구현 수준 구조 | [§8.5.3](#853-b-후보-생산과-결합을-분리한-실행-구조) | 생산자별 후보 게시, 결합의 준비 조건, 원 생산자 재판단 |
+| A 정상 생성과 정정 사건도 | [§8.5.4](#854-같은-정정의-실행-순서와-늦은-결과) | 원본에서 직접 만든 binding의 부분 patch와 옛 결과 폐기 |
+| B 정상 생성과 정정 사건도 | [§8.5.4](#854-같은-정정의-실행-순서와-늦은-결과) | 후보 누락의 확장, peer revision 갱신과 재결합 |
 
 **앞으로의 관리 규칙:** 새 DP-47 그림을 만들면 이 표에 등록하고 해당 본문에 SVG를 삽입한다. draw.io와 PNG가 있으면 같은 자리에서 링크한다. 보조 문서나 그림 폴더에만 추가한 상태로 완료하지 않는다. `generate_screen_voice_grounding_diagram.py --check`는 관련 SVG가 본문에서 빠지지 않았는지도 검사한다.
 
@@ -210,6 +214,98 @@ candidate key는 `producer generation + 후보 ID + revision`이다. native obje
 예를 들어 실제 producer가 “이 두 graph”의 mention `m3`과 frame `o17`에 근거한 visual target 후보 `t7`, `t8`을 생산했다고 하자. B의 결합 `b3`는 `m3 → {t7, t8}`과 사용한 revision을 기록한다. “아래 것만”으로 `m4`가 오면 screen/mention 후보를 다시 판단하고 `b3`의 교체와 다른 binding의 유지를 제안한다. A는 `o17`의 pixels/path와 두 표현을 공동 해석하여 같은 최종 연결을 직접 생산할 수 있다. **이 키와 연결은 생산 이후 자료의 예이며 후보 입력에 정답으로 제공하지 않는다.** 두 안 모두 내용, extent가 잘못되었을 가능성을 원본과 확인을 통해 다룬다.
 
 최종 schema/serialize 방식, SDK, matcher나 지칭 분류 알고리즘은 선택하지 않았다. 이 계약은 어떤 처리의 결과가 다른 처리의 준비 조건인지, 누가 수정해야 하는지와 어떤 정보 손실을 공개해야 하는지를 정한다.
+
+### 8.5 구현을 가정한 상세 구조와 실행 계약
+
+[DP-44 §3.7](./04-44-continuous-interaction.md#37-구현을-가정한-코드-조직과-취소-경로)의 코드 조직과 비동기 반환 표현을 참고하여, 여기서는 **실행 모듈, 읽고 쓰는 상태, 호출과 반환, 결과 수용 조건을 각각 연결**한다. 네 그림은 제품을 구현했을 때 필요한 계약을 구체화한 설계다. 제품 구현이나 실행 trace를 보고하는 그림은 아니다.
+
+구조도는 같은 3840×2160 화면에서 공통 27개 요소의 위치와 크기를 고정했다. A/B 모두 왼쪽에서 입력을 받고 가운데에서 지칭을 해석하며, 오른쪽의 같은 Model Access와 Policy Manager 및 Context Manager를 사용한다. 차이는 Request Interpreter 내부의 **원본 → binding** 경로와 **원본 → 생산자별 후보 → 결합 → binding** 경로에 있다. 구조도 뒤의 사건도는 정상 생성, 후보 부족, 부분 정정과 늦은 결과를 실제 메시지 순서로 확대한다.
+
+#### 8.5.1 공통 실행 기반과 그림의 읽는 법
+
+큰 테두리는 Component, 내부 사각형은 실행 Module, 원통은 소유 상태, 접힌 종이는 교환 자료다. 살구색은 안별로 달라지는 Module과 상태다. 검정 실선은 직접 호출, 파랑 실선은 요청이나 자료, 파랑 점선은 결과, 빨강 점선은 정정과 재판단 및 취소, 회색 점선은 상태 접근이다. 이 기호로 process나 thread 수를 정하지 않는다.
+
+| 공통 owner와 내부 구현 단위 | 처리와 반환 | 기다림 및 수명 계약 |
+| --- | --- | --- |
+| Interaction Manager의 Channel I/O, Turn-Taking Control, Evidence Capture | 원음 sample, 발화 시작/종료, frame, pointer/button/path, 실제 노출된 native selection을 취득한다 | 로컬 발화 제어와 capture는 의미 모델 완료를 기다리지 않는다. 시작 전 확보하지 못한 관측은 공백으로 남긴다 |
+| Interaction Manager의 Timeline & Buffer, Raw Evidence Window | source 시각과 도착 시각, 오차, window/viewport, transcript revision을 연결해 보존한다. `ReadEvidence`는 실제 refs와 coverage, gap, 사용 가능 기간을 반환한다 | 유한 원본 보존이다. 시간 정규화가 의도한 target을 확정하지 않는다. 입력 revision 등록은 의미 해석용 read 완료를 기다리지 않는다 |
+| Request Controller의 Input Revision Control과 Input Revision State | `requestId/inputRev`, 관측 범위, 정정 원문과 이전 채택 binding으로 GroundingInput을 등록한다 | r2는 해당 의미 결과의 사용을 hold하고 r1의 진행 중 작업을 무효화한다. 모든 capture나 외부 Task를 종료하는 동작은 아니다 |
+| Model Access의 Voice API Client, Semantic API Client, Model Use Gate와 Model Call Registry | 음성 전사와 의미 작업을 구별해 비동기 시작하고, `jobId/role/inputRev`로 결과를 호출자에게 돌려준다. 외부 전송은 Model Use Gate가 Policy Manager의 허용 범위와 현재 epoch를 확인한 뒤 수행한다 | `cancel`은 provider 취소 요청이다. 취소 후에도 callback이 올 수 있다. 실행 owner의 현재성 검사와 분리한다. 실제 provider의 입력 capability와 동시성은 §7 조건을 따른다 |
+| Context Manager의 Context Read Port | 현재 요청과 관련한 기존 Context를 같은 조건으로 제공한다 | DP-45의 기억 설계를 선택하지 않는다. 과거의 관련 기록과 현재 관측 원본을 구별하고, 조회한 Context로 지칭 정답을 미리 만들어 공급하지 않는다 |
+| Request Controller의 Adoption Control, Adopted Binding Records | 최신 입력, hold, source 사용권, 근거 유효성, base binding version을 검사해 제안을 수용하거나 돌려보낸다. B에서는 사용한 candidate read-set도 검사한다 | 채택 기록의 저장은 기존 State Store 계약이다. 그림의 원통은 논리 owner를 나타낸다. 이후 전체 요청 해석과 admission을 거쳐 Response Manager 또는 Task Manager로 연결한다. grounding 완료만으로 외부 업무가 시작되는 것은 아니다 |
+
+`sourceVector`는 읽은 source 참조와 revision의 집합이고 `useLease`는 해당 자료의 사용 가능 범위와 만료를 나타내는 설계 필드다. lease가 살아 있어도 권한 철회가 우선한다. 최신 화면의 같은 좌표나 새 transcript revision을 옛 source 참조에 조용히 덮어쓰지 않는다. Model Use Gate와 Adoption Control은 각각 **외부 전송 전**과 **결과 사용 전**의 경계다. 중간 원본 조회와 후보 재사용에도 같은 사용권 검사가 적용된다.
+
+#### 8.5.2 A: 원본에서 binding을 생산하는 실행 구조
+
+![DP-47 A 구현 수준 구조: 원본 조회, 직접 binding 생산, 부분 patch와 현재 채택](./diagrams/dp47-implementation-a.svg)
+
+[편집 원본](./diagrams/dp47-implementation-a.drawio) / [PNG 3840×2160](./diagrams/dp47-implementation-a.png)
+
+Grounding Attempt Control은 작업의 시작과 무효화를 관리하는 코드다. Grounding Evidence Reader는 bounded 원본과 관련 Context를 조회하는 코드다. **두 모듈은 지칭 후보의 의미를 생산하지 않는다.** 새 target extent, 여러 지칭의 관계와 keep/replace의 의미는 Joint Grounding Interpreter가 직접 생산한다. crop/cache나 선택적인 helper를 추가해도 별도 생산자 후보를 최종 판단의 필수 관문으로 만들지 않는 한 이 책임은 같다.
+
+| 구조도 번호 | 실제 실행과 반환 | 상태 변화와 다음 실행의 조건 |
+| --- | --- | --- |
+| 1 | Timeline & Buffer → Input Revision Control: 입력/전사 revision과 관측 refs 등록 | 원본 취득은 계속된다. 최종 전사가 올 때까지 현재 확보된 범위를 구별한다 |
+| 2 | GroundingInput → Grounding Attempt Control: 새 시도 등록 | Grounding Attempt Registry에 `attemptId, expectedInputRev, sourceVector, policyEpoch, jobId`를 기록하고 대체된 시도를 무효화한다 |
+| 3 | Grounding Evidence Reader → Timeline & Buffer / Context Read Port → Reader | 실제 read 결과를 `EvidenceReadReceipt`로 받는다. 모르는 span, 빠진 frame, 사용할 수 없는 선택을 성공 자료처럼 채우지 않는다 |
+| 4 | Reader와 Attempt Control → Joint Grounding Interpreter → Semantic API Client | 원음/전사, 당시 pixels/path/native, 이전 binding과 정정 원문을 함께 제공한다. 원본 refs를 모델 입력으로 materialize할 때 crop의 좌표 기준과 staging 수명을 유지한다 |
+| 5 | Model Access → Joint Grounding Interpreter의 `onDone` | 직접 binding, keep/replace, `NeedEvidence`, `Ambiguous` 등의 의미 결과를 받는다. registry의 현재 attempt와 맞지 않는 결과는 상태 변경 전에 폐기한다 |
+| 6 | Joint Grounding Interpreter ↔ Joint Grounding State | raw dependency와 잠정 binding version을 조건부 갱신한다. 추가 read 요구는 Attempt Control과 Reader로 돌아간다. 새 근거를 읽고 같은 해석 책임을 재실행할 수 있다 |
+| 7 | Joint Grounding Interpreter → GroundingProposal → Adoption Control | 새 target extent와 근거, 기존 binding에 대한 patch를 직접 반환한다. 해결하지 못한 지칭은 미결정/확인으로 반환한다 |
+| 8 | Adoption Control → 채택 기록 → 기존 후속 경로 | 현재 조건을 다시 검사한 뒤 적용한다. 실패한 stale 검사는 새 의미 판단이 아니며 최신 입력에서 다시 판단하거나 기다린다 |
+
+그림의 `b1=매출 범위`, `b2=작년 실적 표`, `b3=두 그래프`는 해석 **이후**의 설명용 결과다. r2에서 Joint Grounding Interpreter는 유효한 O17/P3와 정정 원문, 이전 binding을 읽어 `KEEP b1,b2 / REPLACE b3 → lower extent`를 제안할 수 있다. 이 과정에 speech 후보 version이나 target 후보 version을 반드시 먼저 게시해야 하는 조건은 없다. 유지 범위가 불명확하면 공동 판단 범위를 넓히며, 코드가 “나머지 전부 유지”를 자동 확정하지 않는다.
+
+#### 8.5.3 B: 후보 생산과 결합을 분리한 실행 구조
+
+![DP-47 B 구현 수준 구조: 생산자별 후보와 상태, 결합 호출과 반환, 원 생산자 재판단](./diagrams/dp47-implementation-b.svg)
+
+[편집 원본](./diagrams/dp47-implementation-b.drawio) / [PNG 3840×2160](./diagrams/dp47-implementation-b.png)
+
+Grounding Coordinator는 read와 실행을 조정하고 완료한 후보의 호환되는 version 집합을 전달한다. **Speech Reference Producer만 지칭 표현 후보를, Screen Target Producer만 화면 target와 extent 후보를, Multimodal Binding Resolver만 후보 사이 binding을 생산한다.** 각 producer와 resolver의 Model Access 요청과 반환을 별도로 그린 이유는 이들이 독립된 의미 산출물을 만들고 다음 실행의 준비 조건이 되기 때문이다. API 요청을 batch할 수 있어도 이 자료 의존은 없어지지 않는다.
+
+| 구조도 번호 | 실제 실행과 반환 | 상태 변화와 다음 실행의 조건 |
+| --- | --- | --- |
+| 1–2 | 공통 입력 → GroundingInput → Grounding Coordinator | 현재 input revision과 생산자별 generation, 진행 중 job을 등록한다 |
+| 3 | Coordinator → bounded raw/Context read → 두 producer 요청 | 확보한 원음/전사와 화면/path/native를 필요한 역할에 전달한다. 양쪽은 peer 없이 시작할 수 있고, 처음부터 불명확한 값을 남길 수 있다 |
+| 4 | 각 producer → Semantic API Client → 해당 producer의 `onDone` | speech는 표현, 수와 정정 역할을, screen은 extent와 집합 및 navigation/designation의 경쟁 후보를 생산한다. code native read는 별도의 의미 모델 호출로 세지 않는다 |
+| 5 | producer → 자기 Candidate Revisions에 조건부 게시 → Coordinator에 완료 통지 | `inputRev, generation, sourceVector, peerVersions`를 확인한다. 화면 결과가 음성 후보를 덮어쓰거나 Coordinator가 누락 의미를 대신 채우지 않는다 |
+| 6 | Coordinator → Multimodal Binding Resolver → Semantic API Client → Resolver | 호환된 candidate read-set, 이전 binding과 허용 excerpt를 사용한다. 판단에 필요한 후보가 없으면 미결정 또는 재판단 요구를 낼 수 있으며, 모든 후보가 확정될 때까지 무조건 기다리는 구조는 아니다 |
+| 7 | Resolver → Binding Revision State 및 GroundingProposal, 또는 RejudgeRequest → Coordinator → 원 producer | 결과에는 사용한 candidate versions를 기록한다. 후보 부족은 원 producer의 새 read와 의미 생산, 새 version 게시, 새 read-set 결합으로 돌아간다. source gap은 후보 재생산 성공으로 위장하지 않는다 |
+| 8 | GroundingProposal → Adoption Control | 공통 현재성/사용권/base 검사와 더불어 후보 read-set이 여전히 사용 가능한지 확인한다. ID나 version 일치가 의미 정답을 보장하지 않는다 |
+
+예를 들어 speech가 `m3@v1: count=2`를 생산했는데 screen은 `t0@v1: figure 하나`만 냈다면, Resolver는 부족한 두 extent를 직접 만들어 최종 binding에 넣지 않는다. `RejudgeRequest(owner=Screen, peer=m3@v1, rawScope=O17/P3)`를 돌려준다. Screen Target Producer가 원본과 peer 근거로 `t7,t8@v2`를 생산해야 다음 결합이 가능하다. 반대로 잘못된 표현이나 정정 역할은 Speech Reference Producer에 돌려준다. 그림은 화면 후보 부족 사례를 확대했으며 재판단 대상이 항상 screen으로 고정되는 것은 아니다.
+
+Candidate Exchange State 안의 두 원통은 **하나의 공용 정답 저장소가 아니라 생산자별 수정 권한을 가진 임시 자료**다. Resolver의 Binding Revision State도 따로 있다. 후보에 peer 의존이 생기면 source 참조와 peer version을 함께 남긴다. 이는 B의 재사용과 오류 추적을 가능하게 하는 자료인 동시에, A에는 필수로 존재하지 않는 정상 실행의 게시/호환성/재생산 비용이다.
+
+#### 8.5.4 같은 정정의 실행 순서와 늦은 결과
+
+두 사건도는 같은 입력을 다룬다. D 번호는 각 그림의 메시지 순서이며 A/B의 호출 수나 실행시간을 측정한 번호가 아니다. 설명용으로 잠정 graph binding을 만든 뒤 추가 판단이 진행되는 동안 r2가 도착하도록 했다. 추가 작업은 항상 발생하는 고정 단계가 아니며 늦은 완료가 어디로 돌아가는지 보여주기 위한 겹침이다.
+
+![DP-47 A 사건도: 직접 binding 생성과 부분 재판단, 늦은 공동 해석 결과 폐기](./diagrams/dp47-revision-a.svg)
+
+[편집 원본](./diagrams/dp47-revision-a.drawio) / [PNG 3840×2160](./diagrams/dp47-revision-a.png)
+
+A의 D7에서 시작한 추가 판단 `j1b`가 r2 뒤에 완료되어도, D11의 callback을 받은 Joint Grounding Interpreter는 옛 attempt임을 확인하고 Joint Grounding State에 반영하지 않는다. D12의 현재 `j2` 결과만 조건부 patch를 거쳐 반환한다. D2–D3은 Reader의 왕복을 축약했으며 별도 원본 owner가 생긴다는 뜻이 아니다. r2용 raw가 추가로 필요하면 같은 read 계약을 다시 사용한다.
+
+![DP-47 B 사건도: 부족한 target 후보 확장, 정정 후보 갱신, 새 read-set 결합과 늦은 생산 결과 거절](./diagrams/dp47-revision-b.svg)
+
+[편집 원본](./diagrams/dp47-revision-b.drawio) / [PNG 3840×2160](./diagrams/dp47-revision-b.png)
+
+B의 D7–D10은 **결합 → 원 생산자 → 원본 재조회와 후보 확장 → 새 결합**이라는 추가 dependency다. D13의 r2 뒤에는 speech가 새 정정 후보를 게시하고 screen이 그 peer를 반영한 target 후보를 준비한 뒤 D19에서 재결합한다. 예시 D18은 extent 자체는 재사용하되 새 판단의 peer 의존을 version에 남긴다. 추가 화면 의미 판단이 불필요함을 계약상 확인할 수 있으면 불필요한 호출을 강제하지 않는다. 반대로 영향이 불명확하면 원본부터 넓게 재판단한다. D17의 옛 generation 결과는 후보 저장소를 갱신하지 않고 Coordinator에 폐기 완료만 알린다.
+
+| 실행 경계 | A에서 확인하고 수정하는 것 | B에서 확인하고 수정하는 것 |
+| --- | --- | --- |
+| 입력 revision 변경 | 해당 공동 해석 attempt와 결과 사용을 무효화하고 새 입력으로 재판단 | 영향을 받는 producer generation과 binding 시도를 무효화한다. 영향 밖의 후보 재사용은 source/peer 의존과 함께 명시한다 |
+| 비동기 결과가 돌아옴 | 현재 attempt, 입력, 원본과 사용권을 확인한 뒤 Joint Grounding State 갱신 | producer별 조건부 게시 검사 후 자기 후보만 갱신. Resolver는 읽었던 후보 집합과 base binding version을 검사한 뒤 결합 상태 갱신 |
+| r2 뒤 r1이 늦게 완료됨 | 오래된 callback으로 최신 patch를 덮어쓰지 않음 | 오래된 producer 결과로 새 후보를 덮어쓰거나 오래된 read-set으로 binding을 게시하지 않음 |
+| 후보나 근거가 부족함 | 같은 해석 책임이 추가 read와 재판단을 요청 | candidate miss는 원 생산자의 확장으로 되돌림. source gap은 원본 조회에서 별도로 드러내고 확인 질문으로 연결 |
+| 권한 철회, 만료 또는 반복 예산 소진 | 해당 근거와 patch의 사용을 차단하고 미해결 범위를 반환 | 해당 raw뿐 아니라 파생 candidate와 binding의 사용도 차단. 같은 peer version의 무한 왕복을 끝내고 미해결 범위를 반환 |
+
+조건부 게시 검사는 **검사와 상태 갱신 사이에 revision이 바뀌어도 옛 결과가 들어가지 않도록** owner가 한 번에 수행해야 한다. lock, actor, transaction 등 구현 수단은 여기서 선택하지 않는다. Request Controller의 마지막 채택 검사는 이미 중간 상태가 잘못 덮어써진 문제를 대신 해결하지 못하므로 양쪽 모두 결과 owner의 수용 경계가 필요하다.
+
+구조 차이는 이 수용 검사를 어느 쪽이 더 많이 하느냐가 아니다. A에서는 새 target과 binding patch가 같은 의미 책임에서 나오고, B에서는 생산자별 후보의 생성과 revision이 결합의 준비 조건이다. B의 Resolver에 raw-to-final 생성을 추가하면 이 의존을 우회할 수 있지만 §12에서 설명한 hybrid다. 그림의 모듈 수나 D 메시지 수만으로 정확성, 속도 또는 비용의 우위를 판정하지 않는다.
 
 ## 9. 같은 사용자 장면을 두 구조로 따라간다
 

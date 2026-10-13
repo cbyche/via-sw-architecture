@@ -75,3 +75,24 @@ MAIN은 [SVG](./diagrams/choice47-structure.svg), [draw.io](./diagrams/choice47-
 사용자 요청에 따라 [47 본문 §0](./04-47-screen-voice-grounding.md#0-이-문서에서-모든-dp-47-그림을-확인한다)에 전체 그림 목록과 추가 규칙을 기록했다. 초기 문제 그림은 §1, MAIN은 §6에 직접 삽입하고 각각 draw.io와 PNG를 연결했다. 새 관련 SVG가 본문에서 빠지면 생성기의 `--check`가 실패한다. AGENTS.md에도 같은 관리 규칙을 반영했다.
 
 DP-47 본문, 다섯 보조 문서, 그림과 생성 원본의 가운데 점을 제거했다. 초기 문제 그림의 번호와 A/B 미정 문구를 현재 본문 참조로 바꾸고 SVG, draw.io와 PNG 및 통합 편집 원본의 해당 페이지를 맞췄다. 두 PNG를 열어 확인하고 위 문서 검사와 생성 검사를 통과했다. 이는 표기와 문서 일치 검사이며 SW 구현이나 API 검증은 아니다.
+
+## 8. 구현 수준의 안별 구조와 사건도 검수 / 2026-10-13
+
+사용자는 DP-44 §3.7보다 구체적인 안별 실행 구조와 주요 flow를 DP-47 본문에 넣고 commit/push하도록 요청했다. [47 §8.5](./04-47-screen-voice-grounding.md#85-구현을-가정한-상세-구조와-실행-계약)에 별도 A/B 구조도와 별도 A/B 사건도, 총 네 장의 SVG/draw.io와 3840×2160 PNG를 추가했다. 기존 MAIN과 배경 그림은 유지했다.
+
+| 작성 중 검토한 문제 | 최종 반영 |
+| --- | --- |
+| Module 이름만 달라지고 실제 실행 준비 조건은 같아 보임 | A의 원본 → 직접 binding/patch와 B의 producer별 게시 → version 결합 → candidate miss → 원 producer 확장을 상태와 실제 왕복으로 연결 |
+| A를 한 번의 큰 모델 호출, B를 항상 정확한 후보 구조로 약화/강화할 위험 | A의 bounded read, cache와 부분 patch 및 추가 판단을 유지. B는 t0 하나로 부족한 경우 원본을 다시 읽어 t7/t8을 생산해야 하는 사건을 포함 |
+| 입력 등록이 의미 해석용 read 반환 이후로 오해될 수 있음 | Timeline & Buffer에서 Input Revision Control로 직접 등록. `EvidenceReadReceipt`는 안별 read 호출자에게 별도 반환 |
+| 취소 요청으로 늦은 callback까지 없어지는 것처럼 보임 | 실제 반환 owner에서 attempt/generation을 검사해 상태 게시 전에 거절. 마지막 채택 검사와 중간 상태의 조건부 게시를 구별 |
+| 후보 갱신의 peer 의존과 결합 재시작이 사라짐 | B 사건도에 생산 완료, m3/t0 충돌, 확장 후 새 read-set, r2의 m4와 target revision, 재결합을 순서대로 표시 |
+| raw를 cloud에 바로 제공한 뒤 최종 채택에서만 사용권 검사 | 공통 Model Use Gate와 Policy Manager 호출/반환을 표시. 원본 조회, 전송 전, 결과 사용 전의 사용권 조건을 본문에서 구별 |
+| 구조를 다르게 보이게 하려고 공통 배치를 바꾸거나 callback 선이 Module 안을 통과함 | 공통 27개 요소의 좌표와 크기를 일치 검사. source/target도 내부 관통을 허용하지 않고 포트에서 바깥으로 출입하도록 배선 수정 |
+| grounding 결과에서 바로 외부 업무 실행으로 읽힘 | 그림과 본문에 전체 요청 해석과 admission을 거친 후속 응답/업무 경계 명시. Task Manager 내부나 Agent 실행 구조를 이번 비교로 다시 설계하지 않음 |
+
+전용 생성기는 XML, owner 포함 관계, 직교 배선과 node 관통, 동일 공통 좌표, SVG/draw.io 재생성 일치를 검사한다. 전용 renderer로 네 PNG를 생성하고 실제 글자 폭, 겹침과 canvas 이탈 오류 0을 확인했다. PNG를 열어 호출/반환, 자료 수명과 정정 경로를 본문과 대조했다. render manifest의 SVG/PNG 해시를 검사해 source만 바뀐 뒤 옛 PNG가 남는 것을 막는다.
+
+기존 `generate_screen_voice_grounding_diagram.py --check`에서 상세도 검사를 함께 실행한다. 여섯 관련 그림의 본문 삽입, draw.io 및 PNG 링크, 본문 가운데 점 금지도 검사한다. 이 검사를 architecture CI에 추가했다. active Markdown 링크, 용어, QA registry 검사를 통과했다. whitespace 검사는 DP-47 commit 대상으로 범위를 제한하며 다른 세션의 미완료 변경은 포함하지 않는다.
+
+이 기록은 작성자의 문서/도식 검수다. 새 독립 리뷰, Windows/앱/API 실험, 제품 구현, 모델 실행, 비용 측정이나 A/B 선택을 수행하지 않았다. 42/45의 동시 작업, 44 원본과 기존 PPTX, 참조 Architecture와 QA/ADR은 이번 commit 범위에서 제외한다.
