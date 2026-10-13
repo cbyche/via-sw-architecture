@@ -3,6 +3,16 @@
 > 2026-10-06 / 문서·구조·실제 MAIN 렌더 검토 / 구현·모델 실행·품질 측정 없음
 > [본문](./04-44-continuous-interaction.md) · [MAIN](./diagrams/choice44-structure.svg) · [확대 보기](./diagrams/choice44-review.html)
 
+## 구현 가정 구조 보완과 작성자 검수 (2026-10-13)
+
+사용자는 기존 구조도가 실제 구현을 이해하기에는 추상적이라고 지적했다. [구현 가정 설명](./dp44-implementation-structure.md)에 A의 mailbox/Dispatcher/Job Index와 B의 typed port/Stage Pump/Done/Window/Join을 펼쳤다. 기존 MAIN과 발표 자료는 보존하고 [A SVG](./diagrams/dp44-implementation-a.svg)/[draw.io](./diagrams/dp44-implementation-a.drawio)/[PNG](./diagrams/dp44-implementation-a.png), [B SVG](./diagrams/dp44-implementation-b.svg)/[draw.io](./diagrams/dp44-implementation-b.drawio)/[PNG](./diagrams/dp44-implementation-b.png)를 보충한다.
+
+작성자 검수에서 Task Manager 제목과 취소 라벨의 겹침, 두 Queue의 낮은 높이, Component 제목을 지나는 입력 배선과 원통 상단에 붙은 이름을 수정했다. SVG/draw.io를 같은 scene에서 생성하며 owner 포함, XML 참조, canvas, 직교 배선과 다른 node 관통을 검사한다. 브라우저 렌더에서 글자 겹침, node/canvas 이탈과 배선의 문자 관통을 검사하고 실제 두 PNG를 대조한다. [렌더 기록](./diagrams/dp44-implementation-render.json)은 문서 렌더 범위의 해시와 검수 결과다.
+
+구현 의미는 같은 정정으로 대조했다. 입력 onset만으로 Task 취소를 확정하지 않고, R1 개정 2를 채택한 뒤 관련 J1을 무효화하며 취소를 요청한다. provider 취소 실패의 늦은 완료는 두 안 모두 사용하지 않는다. B의 fan-out, keyed Join, 별도 clarification admission과 게시 후 receipt를 명시했다. 원본 현재성 및 최종 게시 권한, 무관한 업무 보존과 실제 외부 종료 확인을 유지한다.
+
+새 독립 리뷰, 제품 실행 또는 품질 비교 결과가 아니다. 구체 언어/라이브러리/수용량과 A/B 선택은 미정이며, 아래 이전 독립 검토의 판정을 이번 새 도식의 승인으로 적용하지 않는다.
+
 ## 최신 확정 구성 반영 — Component·Module·상태 수준 (2026-10-08)
 
 별도 리뷰 세션에서 전달된 사용자 지침을 자료에 반영했다. 이번 수정은 구성/실행 흐름의 설명과 표현이며 A/B 선정·참조 Architecture 변경·process/모델 추가·구현·측정이 아니다. 아래 이전 리뷰는 당시 그림의 이력이다.

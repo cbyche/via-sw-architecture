@@ -210,6 +210,12 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 [draw.io](../../../presentations_files/dp-comparison/dp44-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp44-comparison.png)
 
+### 3.7 구현을 가정한 코드 조직과 취소 경로
+
+2026-10-13 사용자 검토에서 기존 그림만으로 실제 구현을 이해하기 어렵다는 지적을 받았다. [구현 가정 구조 설명](./dp44-implementation-structure.md)에 A의 priority mailbox, 짧은 Dispatcher, Job Index와 완료 반환 및 B의 typed port, Stage별 Pump/Done, 국소 Window와 Publication Join을 펼친 두 구조도를 추가했다. 입력 감지의 local stop, 채택한 정정의 결과 무효화, provider 취소 요청과 외부 업무 종료 확인을 구별하고 “전체 요약 → 결론만”을 같은 시작 상태에서 끝까지 추적한다.
+
+[A 구현 구조 SVG](./diagrams/dp44-implementation-a.svg) / [draw.io](./diagrams/dp44-implementation-a.drawio) / [B 구현 구조 SVG](./diagrams/dp44-implementation-b.svg) / [draw.io](./diagrams/dp44-implementation-b.drawio). 기존 A/B를 구체화하는 문서 설계안이며 언어, 실행 라이브러리, 수용량 숫자, 제품 구현 또는 승자를 확정하지 않는다.
+
 ## 4. 같은 정상·정정·교차 사건
 
 ![44 — 동일 사건과 현재성 연결](./diagrams/choice44-event.svg)

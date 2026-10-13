@@ -4,6 +4,12 @@
 > 개별 대안과 조합 계약의 문서 검토를 마쳤다. DP41 PoC는 아래 별도 승인으로 완료했다. 다른 DP의 구현·측정, 최종 선택과 기존 Architecture 전체 동기화는 후속 작업이다.
 > 재개 규칙: compaction 또는 세션 재개 시 AGENTS.md 다음으로 이 파일을 읽고, 아래 체크포인트와 실제 git diff를 확인한다. 현재 6단계와 이전 세대 완료 기록을 구별하고, 문제별로 근거와 실제 구조 차이를 확인한다.
 
+## 2026-10-13 DP-44 구현을 가정한 실행 구조 구체화
+
+사용자는 기존 DP-44 구조도가 추상적이라 실제 구현을 이해하기 어렵다고 지적했다. [44 §3.7](./04-44-continuous-interaction.md#37-구현을-가정한-코드-조직과-취소-경로)과 [구현 가정 구조 설명](./dp44-implementation-structure.md)에 두 코드 조직 구조도와 번호별 실행, 상태 소유, 정정 및 취소 처리를 추가했다. A는 priority mailbox와 짧은 Dispatcher가 긴 Job의 완료를 중앙에서 회수하고 다음 실행을 지시한다. B는 typed port와 Stage별 Pump/Done, 국소 Window 및 Publication Join을 연결한다. 같은 bounded 실행 기반, 의미 채택, 최종 게시와 실제 전달 권한을 유지한다.
+
+“전체 요약 → 결론만”을 같은 시작 상태에서 추적하며 local stop, 결과 무효화, provider 취소 요청과 외부 업무 종료 확인을 분리한다. 두 SVG/draw.io와 PNG는 전용 생성/렌더 도구로 동기화했다. 작성자 도식 검수이며 새 독립 심사, 제품 구현, 모델 호출, 품질 측정, Stage 5 또는 A/B 선택을 뜻하지 않는다. 기존 MAIN, 발표/PPTX와 다른 DP의 도식은 이번 보완에서 변경하지 않는다.
+
 ## 2026-10-12 DP41 A/B 여섯 QA 측정·검수 완료
 
 [최종 비교 보고서](../../../../results/architecture-evaluation/current/dp41-p21-mac-text-v7-20261012/final/report.md)는

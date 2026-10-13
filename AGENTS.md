@@ -207,6 +207,7 @@ with that workspace; do not run the archived workspace as a substitute.
 
 - Inspect status before and after work.
 - `main` is the authoritative default branch. Do not push directly to it unless the user explicitly requests that action and repository protection permits it.
+- Standing user instruction (2026-10-13): after completing work in this repository, commit and push the scoped changes, including documentation and design work, once relevant checks pass. This is ongoing authorization to push to the current branch, including `main` where protection permits. Stage only changes from the current task and preserve unrelated working-tree changes. A later request to leave work uncommitted or unpushed takes precedence.
 - On a non-default feature branch, commit and push completed, scoped implementation work by default only after relevant checks pass and no unrelated user changes would be included.
 - Do not commit or push review-only, diagnosis-only, exploratory, incomplete, or failing work unless the user explicitly asks for that exact state.
 - Never force-push, rewrite published history, amend another author's commit, or use destructive reset/checkout to discard user work.
