@@ -5,6 +5,8 @@
 
 **VIA에서는 대화와 개별 요청, 대기 질문, 사용자 업무와 외부 실행의 시작과 종료가 서로 다르다. 그 관계와 상태를 유지하는 관리 경계가 이 DP의 문제다.** 2026-10-12에는 이 중요성과 SW 설계의 가치를 배경의 출발점으로 재정립했다. 기존 A/B의 기제와 계약은 유지한다.
 
+**그림 열람과 관리:** DP-42의 현재 배경, 구조, 수명, 사건, 변경 영향 그림은 아래 관련 설명 바로 옆에 모두 표시한다. 별도 폴더에 남은 이전 발표 판본의 그림은 §11에서 상태를 구분해 직접 볼 수 있다. 같은 그림의 SVG와 PNG는 한 번만 표시하고 편집 원본과 다른 형식은 옆에 연결한다. 앞으로 DP-42 그림을 추가하거나 갱신할 때도 이 본문에 미리보기와 원본 링크를 함께 반영한다. [현재 통합 발표](../../../presentations_files/VIA-architecture-presentation_v8.pptx)의 DP-42 장도 여기서 찾을 수 있다.
+
 ## DP 배경 — VIA 특성과 SW 구조 선택의 가치
 
 **배경의 중심 주장: VIA는 사용자의 대화와 외부 업무 실행을 연결하지만 두 활동의 시작과 종료는 일치하지 않는다. 서로 다른 수명의 요청, 질문, 업무와 실행이 같은 목표에 연결되도록 상태 권한과 협력 경계를 설계할 가치가 있다.**
@@ -184,11 +186,11 @@ Task 조회는 후보 탐색용이다. 명령은 `command_id, request_id, conver
 
 ![A의 같은 사용자 사건과 공동 확정 경로](./diagrams/choice42-event-a.svg)
 
-[A draw.io](./diagrams/choice42-event-a.drawio)
+[A draw.io](./diagrams/choice42-event-a.drawio) / [A PNG](./diagrams/choice42-event-a.png)
 
 ![B의 같은 사용자 사건과 독립 접수 경로](./diagrams/choice42-event-b.svg)
 
-[B draw.io](./diagrams/choice42-event-b.drawio)
+[B draw.io](./diagrams/choice42-event-b.drawio) / [B PNG](./diagrams/choice42-event-b.png)
 
 사건도는 같은 E4 답변의 확정·외부 접수·실제 전달을 확대한다. E1~E6 전체는 수명 그림과 아래 표에서 추적한다. 공통 Model Access의 클라우드 모델 호출과 Agent Gateway는 각 서비스/모듈의 내부 경로로 축약한다. 별도 모델이나 외부 Agent의 판단을 생략해 얻은 호출 수 비교가 아니다. 그림 속 현재 상태 조회는 후보 해석용이며, 최종 확정/접수와 전송 조건 검사가 뒤따른다.
 
@@ -417,3 +419,31 @@ RM의 내구 실제 전달 원장은 대화 서비스에 남는다. 업무 접�
 여섯 작성 작업은 동일 사례와 범위 정의, owner/확정/실행 설계, 싼 전환·혼합 반론, V-01~13 인과 검토, 실제 코드 근거 고정, 발표 도식·본문 작성이다. 이는 프로젝트 전체의 Stage 5/6 진행이나 구현·측정 승인이 아니다.
 
 도식은 [전용 생성기](../../../../scripts/architecture/generate_lifecycle_ownership_diagrams.py)에서 같은 좌표·문자·연결 모델로 SVG/draw.io를 만든다. 메인 비교도는 16:9 2560×1440, 나머지도 발표에 옮기기 쉬운 16:9로 작성한다. [작성자 검수 기록](./04-42-lifecycle-review.md)에 실제 발견한 문제, 수정, 검증 한계와 완료 결과를 남긴다. 사용자 수용·독립 심사·측정된 우위는 별개다.
+
+## 11. 이전 발표 판본의 DP-42 그림
+
+아래는 별도 발표 폴더에 보존된 **이전 판본**이다. 현재 배경과 구조 설명은 위 본문과 그림을 따른다. 이전 QA 그림의 숫자와 점수는 작성 당시의 가정 또는 과거 기준이며 실제 측정값, 현재 평가 결과나 A/B 선정 근거가 아니다.
+
+### 11.1 이전 v2 배경 슬라이드와 삽화
+
+![이전 v2 발표의 DP-42 수명 배경 슬라이드](../../../presentations_files/dp-background-v2/dp42-background.png)
+
+[v2 발표 설명](../../../presentations_files/dp-background-v2/README.md)
+
+![이전 v2 배경 슬라이드에 사용한 보고서 업무 삽화](../../../presentations_files/dp-background-v2/assets/dp42-background-illustration.png)
+
+### 11.2 이전 v4 구조 비교와 QA 상세
+
+![이전 v4 발표의 DP-42 A/B 구조 비교](../../../presentations_files/dp-comparison/v4/dp42-comparison_v4.png)
+
+![이전 v4 발표의 DP-42 QA 가정 비교](../../../presentations_files/dp-comparison/v4/dp42-qa-detail_v4.png)
+
+[v4 발표 설명](../../../presentations_files/dp-comparison/v4/README.md)
+
+### 11.3 이전 v5 구조 비교와 QA 상세
+
+![이전 v5 발표의 DP-42 A/B 구조 비교](../../../presentations_files/dp-comparison/v5/dp42-comparison_v5.png)
+
+![이전 v5 발표의 DP-42 QA 평가 전 가정](../../../presentations_files/dp-comparison/v5/dp42-qa-detail_v5.png)
+
+[v5 발표 설명](../../../presentations_files/dp-comparison/v5/README.md)
