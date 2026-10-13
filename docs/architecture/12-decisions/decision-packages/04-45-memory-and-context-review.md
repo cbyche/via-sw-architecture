@@ -176,3 +176,18 @@ PPTX는 `--dp45-only --comparison-only`로 생성하고 finalizer의 package/lay
 현재 Query와 독립된 원본 변경 시작점, 요청별 구성 상태/공통 게시 상태, Bundle/MemoryRecord 예시 및 별도 순서도를 표시했다. 표현 밖 관계, 미생산의 게시 후 Reader 재조회, B의 실제 원문/개정 확인, A의 유효 cache/부분 갱신과 같은 현재 의미 판단을 유지한다. Task1/Task2는 본문에 기존 JSON ID 대응을 기록한 표시용 별칭이다. 고정 예외 문구/부분 범위를 유지하고 새로운 성능 수치나 승자를 만들지 않았다.
 
 Chrome 글자 폭/겹침/화면 범위 검사 및 직교 선/무관 박스 관통/owner 안 상태/실제 결과 반환 경로 검사 통과. native PPTX는 두 v3의 45 slide/notes만 바꾼다. 기존 전체 MAIN/사건도와 구판 PPTX/승인된 41은 보존한다. 검수는 그림/문서 일치이며 모델 의미 판단이나 런타임 검증은 아니다.
+
+## 2026-10-13 방안별 구현 수준의 설계도
+
+사용자가 DP-44 §3.7보다 자세한 A/B별 SW Architecture와 주요 흐름, 본문 삽입 및 commit/push를 요청했다. [45 본문 §3.10](./04-45-memory-and-context.md#310-구현-수준의-sw-architecture-두-안을-각각-따라가기)에 별도 3840×2160 구현 설계도 두 장과 번호별 호출/완료 표, 상태 수명과 복원, 같은 사건 여덟 가지의 경로 및 발표 설명을 추가했다. 현행 그림은 아홉 장이며 모두 본문에서 확인한다.
+
+- A는 Context Composer의 접수/계획/원본 I/O/근거 조합, 요청별 RAM 상태와 재사용 cache를 구별했다. 유효 cache, 병렬 원본 읽기와 부분 재조회는 유지한다.
+- B는 생산 접수/claim/원본 읽기/조건부 의미 추출/임시 후보/검증/조건부 게시, 영속 Journal과 Repository, 현재 read의 대기 상태를 구별했다. 미생산은 권한/예산 접수 후 생산하고 게시 revision을 재조회한다. B+ 우회를 정상 B로 표현하지 않았다.
+- 두 안의 공통 Component는 같은 위치다. Request Controller, Response Manager, Task Manager의 read/return, 현재 의미와 Model Access, source와 epoch의 사용 검사를 표시했다. 저장소는 실행 주체가 아니며 B의 worker가 Journal을 claim한다.
+- relations/Coverage/cursor와 job 게시 결과/outbox의 함께 확정, wait 등록 후 revision 재검사, 중복/유실 통지, 취소와 늦은 완료, 원본 변경 없는 추출 오류와 재시작 계약을 본문에 명시했다. Context Manager 내부 transaction을 다른 원본 owner 전체의 원자성이나 철회 보장으로 확대하지 않았다.
+
+전용 scene은 `dp45_implementation_scene.py`, 생성기는 `generate_dp45_implementation_diagrams.py`, Chrome 렌더 검사는 `render_dp45_implementation_diagrams.cjs`다. SVG와 draw.io는 같은 scene에서 생성한다. draw.io는 native 도형의 label, 부모와 연결 endpoint를 갖는 편집 원본이다. PNG와 SVG의 SHA-256 및 글자 검수 결과는 `diagrams/dp45-implementation-render.json`에 기록한다. CI에는 생성물과 본문 삽입/렌더 해시 검사도 추가했다.
+
+작성자 검수에서 제목과 경로의 겹침을 수정한 뒤 두 장 모두 Chrome 글자 폭/도형 경계/상호 겹침/선의 글자 관통 0건으로 렌더했다. scene의 소유 포함, 직교 경로와 무관 도형 관통, XML ID/부모/endpoint 검사도 통과했다. PNG를 직접 열어 공통 위치와 A의 원본 반환, B의 두 시작점과 게시 후 재조회, 원본 검증과 실제 전달 범위를 확인했다.
+
+이 기록은 작성자에 의한 문서/그림 검수다. 새로운 독립 agent 리뷰, draw.io 앱 자체의 렌더 검사, VIA 제품 구현/실행, API나 모델 검증, QA 측정 또는 대안 선정을 뜻하지 않는다. 실제 게시 commit과 CI 결과는 Git 이력과 최종 응답에서 확인한다. 병행 세션의 DP-42/47, AGENTS와 workplan 변경은 이 작업에서 게시하지 않는다.

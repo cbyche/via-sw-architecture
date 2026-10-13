@@ -5,7 +5,7 @@
 
 ## 그림을 읽는 순서
 
-DP-45의 현행 설명 그림은 아래 일곱 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다.
+DP-45의 현행 설명 그림은 아래 아홉 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다. 앞으로 추가하거나 개정하는 DP-45 그림도 이 표에 등록하고 본문의 해당 설명 옆에 SVG를 직접 표시한다.
 
 | 그림 | 이 본문에서 볼 위치 |
 | --- | --- |
@@ -15,6 +15,8 @@ DP-45의 현행 설명 그림은 아래 일곱 장이며 모두 이 본문에 �
 | A/B 기본 구조와 보완 방법 | [§1.3 기본 구조](#dp45-fig-basic-structures) |
 | 상세 구조 비교 | [§3 메인 비교](#dp45-fig-main-structure) |
 | 생산과 조회의 확대 경로 | [§3.9 확대 비교](#dp45-fig-comparison) |
+| A의 코드, 상태와 호출 경로 | [§3.10.2 A 구현 설계](#dp45-fig-implementation-a) |
+| B의 생산, 게시와 조회 경로 | [§3.10.3 B 구현 설계](#dp45-fig-implementation-b) |
 | 정정과 삭제의 처리 | [§4.5 수명 그림](#dp45-fig-lifecycle) |
 | 이전 발표 시안 | [§12 이전 판본](#dp45-fig-previous) |
 
@@ -395,6 +397,113 @@ D21 개정 2가 개정 3으로 바뀌면 의존 Bundle/cache/record의 신규 �
 
 [편집 원본](../../../presentations_files/dp-comparison/dp45-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp45-comparison.png). 위 전체 MAIN과 수명 그림을 유지하고 현재 요청의 조회/반환과 B의 별도 생산·게시·재조회 경로를 확대했다. Query1은 고정 JSON의 key를 축약해 표시한다. Memory1은 실제 전달된 예외 문구 한 구간이며 기준 전체가 아니다. 읽기 결과 PARTIAL, coverage와 gap을 표시하고 양안의 원문·현재 revision 검사도 남겼다. 현재 의미/Task 연결은 Request Interpreter와 Request Controller의 공통 후속 책임이다.
 
+### 3.10 구현 수준의 SW Architecture: 두 안을 각각 따라가기
+
+이 절은 [DP-44 §3.7](./04-44-continuous-interaction.md)의 구현 구조 설명에 대응한다. **Component 안의 코드, 보유 상태, 호출과 완료, 저장 확정과 재시작을 구체화한 설계안**이다. 아래 Module 이름은 이 설계의 내부 코드 책임이며 작성 완료된 제품 클래스나 실행 결과가 아니다. §3.5의 자료 계약을 유지하고 내부 job과 저장 확정 절차를 구체화한다. A/B는 미선정이며 성능도 미측정이다.
+
+#### 3.10.1 먼저 고정하는 공통 실행 조건
+
+두 그림은 같은 3840×2160 크기이며 공통 Component를 같은 위치에 둔다. 왼쪽은 입력 등록과 현재 의미 판단, 오른쪽은 원본과 권한의 소유자, 가운데는 차이가 나는 Context Manager 내부다. 둥근 상자는 실행 코드, 원통은 RAM 또는 영속 상태, 작은 칸이 붙은 상자는 접수 queue다. 번호가 있는 화살표는 아래 표와 대응한다. 선 교차는 접속점이 아니며 검정은 호출, 파랑은 비동기 요청/완료, 회색은 상태 접근, 빨강은 무효화 경로다.
+
+| 공통 조건 | 구현 설계의 구체적인 의미 |
+| --- | --- |
+| 현재 입력과 과거 원본 | R23의 입력 revision과 허용 범위를 Request Controller에 등록한다. E20/P20/T21/T22/D21/D22는 검색으로 발견하는 과거 후보이며 R23의 정답 binding으로 주어지지 않는다. Request Interpreter가 Bundle에서 현재 의미를 판단한다. |
+| 논리 소유와 물리 실행 | 상자는 process, thread 또는 DB 제품의 개수가 아니다. worker는 bounded async executor를 사용한다. 원본과 지속 파생 자료는 State Store에 저장하되 변경 권위는 해당 Component에 남는다. 이 선택만으로 42의 통합/서비스 배치를 확정하지 않는다. |
+| 원본 읽기 | owner는 검색 조건/시간 범위/cursor와 read ID를 받고 실제 읽은 source revision, 발췌와 gap을 반환한다. 여러 원본을 서로 다른 시각에 읽을 수 있다. source vector는 읽은 버전 목록이며 전역 동시 snapshot이 아니다. |
+| 독립적인 I/O 수명 | read마다 ID와 Request/attempt, deadline을 갖는다. 하나의 원본 I/O나 생산 대기가 지속 입력이나 다른 read를 막지 않는다. 자원 상한에 도달하면 해당 read의 대기/제한을 반환한다. 수치 상한은 아직 미정이다. |
+| 동일한 출력과 후속 | EvidenceBundle과 EvidenceQueryReceipt를 같은 caller로 반환한다. Request Interpreter의 추가 읽기/질문/MeaningProposal과 Request Controller의 현재 검사/채택이 뒤따른다. 업무 실행은 채택 후 Task Manager, Agent Gateway, 외부 Downstream Agent로 이어진다. |
+| 모델 호출 경계 | 현행 DP 실행 조건인 로컬 VIA와 cloud Model Access를 따른다. B의 EXPLAINS_ITEM은 조건부 C-CONTEXT, 현재 의미 판단은 양안 공통 역할이다. 명시 관계는 코드로 연결한다. A도 필요한 요약/의미 가공과 cache를 허용한다. 전송 전에 source 허용 범위를 검사하고 호출별 timeout/cancel/usage를 추적한다. |
+| 유효성 검사 | source revision과 permission epoch를 따로 확인한다. Bundle 반환 직전에는 읽은 source의 현재성, 살아 있는 attempt와 사용 허용을 확인한다. 의미 채택, 실제 출력, Agent 전송 시 해당 owner가 다시 검사한다. 앞선 검사는 이후 모든 사용의 영구 허가가 아니다. |
+
+#### 3.10.2 A: 요청별 읽기 작업이 원본과 cache를 조합한다
+
+<a id="dp45-fig-implementation-a"></a>
+
+![A 구현 설계: 원본 읽기와 callback, 요청별 근거 집합, cache와 사용 검사](./diagrams/dp45-implementation-a.svg)
+
+[확대 SVG](./diagrams/dp45-implementation-a.svg) / [편집 가능한 draw.io](./diagrams/dp45-implementation-a.drawio) / [PNG](./diagrams/dp45-implementation-a.png)
+
+**A의 중심은 하나의 read를 끝내는 Context Composer다.** 필요한 후보를 찾고 유효한 재사용 자료와 원본 읽기 완료를 Request Evidence Set에 모은 뒤 직접 Bundle을 반환한다. 독립적인 source 작업은 병렬로 시작할 수 있으며 완료를 read ID로 합친다.
+
+| 그림 번호 | 실행 코드와 전달 자료 | 완료 조건과 상태 변화 |
+| --- | --- | --- |
+| 1 | Read Tool Runner → Read Inbox / Admission: EvidenceQuery, read ID, Request/attempt와 deadline | 허용 목적, source scope와 자원 상한을 검사한다. 거절된 입력을 job으로 실행하지 않는다. |
+| 2 | Read Pump / Planner: 검색 단서와 범위로 owner별 search/read/validate 계획 | Request Evidence Set과 Read Job Index를 만든다. 검색 완료 후 발견한 refs로 계획을 좁힌다. |
+| 3 | Read Pump / Planner ↔ Source View Cache: source refs, scope, 목적과 형식 version | 유효성 metadata와 hit/miss를 받는다. hit도 source의 현재성을 확인한다. 검증한 재사용 항목은 같은 adapter로 저장한다. cache 쓰기 실패가 이미 확보한 원본 근거의 반환을 막지는 않는다. |
+| 4 | Read Pump / Planner → Owner Read Broker → Request Controller / Response Manager / Task Manager의 read port | 후보 검색, 부족한 원문/결과 참조 읽기, cache dependency 확인을 시작한다. Broker가 job과 cancel handle을 등록한다. 필요한 source만 읽는다. |
+| 5 | Owner Read Broker callback: read/job ID, source revision, snapshot/refs/gaps | Read Pump가 살아 있는 read와 맞는 input revision인지 검사해 Request Evidence Set에 반영한다. source 변경 시 해당 부분만 재조회한다. |
+| 6 | Bundle Builder / Use Guard: Request Evidence Set의 후보와 발췌 조합 | E20의 전달 범위는 P20으로 제한한다. D21/D22는 확인된 결과 참조다. 원본 내용, 명시 관계, 파생 의미와 누락을 구별해 Bundle/receipt 후보를 만든다. |
+| 7 | Bundle Builder / Use Guard → Policy Manager: expected epoch의 사용 검사/등록 | source 검사 결과와 현재 attempt도 확인한다. source 변화는 해당 부분 재조회, 철회는 사용 거절이다. 긴 I/O를 이 직렬화 구간 안에서 수행하지 않는다. |
+| 8 | Bundle Builder / Use Guard → Read Tool Runner: EvidenceBundle + EvidenceQueryReceipt | 해당 read에 terminal reply를 한 번만 반환한다. Request Interpreter가 현재 목표와 Task 연결을 제안한다. hit 자체로 채택하지 않는다. |
+| 9 | 확정 변경/철회/이의 → Change / Control Inbox → Invalidation Handler | dependency 역참조로 cache와 활성 read를 무효화한다. queue는 정리와 재조회를 돕는다. 사용 차단은 현재 검사와 권한 gate로 보장해야 하며 queue 완료를 기다리지 않는다. Request Controller의 확정 변경도 같은 접수 계약이다. |
+
+그림의 cache 저장은 **요청에서 확보한 유효 자료의 재사용**이다. A는 공통 index/summary의 선행 갱신도 허용한다. 그래도 정상 계약은 cache miss와 부족한 관계를 요청의 Context Composer가 원본 읽기로 해결하는 것이다. A가 매번 모든 의미를 재생산한다는 비교가 아니다.
+
+#### 3.10.3 B: 생산 작업이 관계를 게시하고 현재 read는 게시 계약을 조회한다
+
+<a id="dp45-fig-implementation-b"></a>
+
+![B 구현 설계: 생산 job과 임시 후보, 조건부 게시, Coverage 조회와 생산 후 재조회](./diagrams/dp45-implementation-b.svg)
+
+[확대 SVG](./diagrams/dp45-implementation-b.svg) / [편집 가능한 draw.io](./diagrams/dp45-implementation-b.drawio) / [PNG](./diagrams/dp45-implementation-b.png)
+
+**B에는 생산을 끝내는 Memory Publisher와 현재 read를 끝내는 Evidence Reader가 따로 있다.** 둘은 Episodic Memory Repository의 게시 revision과 Coverage로 협력한다. Candidate Batch는 게시 전 임시 상태다. 생산 job의 진행 상태, 게시된 자료, 기다리는 현재 read를 별도로 표시했다. 생산 완료 통지는 조회 결과가 아니며 Reader가 해당 revision을 다시 읽는다.
+
+| 그림 번호 | 실행 코드와 전달 자료 | 완료 조건과 상태 변화 |
+| --- | --- | --- |
+| 1 | 확정 변경 → Change Admission / Planner: owner/source revision/epoch 또는 지원 범위 backfill | 변경 dependency를 DIRTY로 표시하고 허용 범위/예산을 검사한다. Request Controller의 확정 입력/정정도 같은 접수 계약이며 그림은 Response Manager와 Task Manager의 대표 신호를 표시한다. |
+| 2 | Change Admission / Planner가 Production Journal에 등록하고 Source Read Worker가 job을 claim | job key는 범위, source refs/version과 producer version을 포함한다. 중복 요청은 호환 작업에 연결한다. Journal은 실행 주체가 아니며 worker가 기록을 claim하고 실행한다. |
+| 3 | Source Read Worker → 원본 read port → Relation Builder | 실제 원문/전달 receipt/결과 참조를 읽는다. PRESENTS, HAS_RESULT, 명시 REVISES는 코드로 생산한다. EXPLAINS_ITEM이 필요할 때만 허용 source span을 Model Access로 보낸다. |
+| 4 | Relation Builder → Candidate Batch: proposed relations, source spans, uncertainty와 dependency | 아직 Reader에게 보이지 않는다. 형식/원문 span 일치는 의미 정답의 보증이 아니다. 불확실하거나 실패한 범위는 gap/UNRESOLVED로 남긴다. |
+| 5 | Candidate Batch → Publish Guard / Commit: job/source/producer version과 expected published revision | Source Read Worker를 통해 source를 재확인하고 현재 epoch, tombstone, dispute와 예상 게시 revision을 검사한다. 오래된 생산이 최신 게시본을 덮어쓸 수 없다. |
+| 6 | Publish Guard / Commit → Repository: 조건부 transaction | relations, 같은 범위 Coverage와 source별 committed cursor를 함께 확정한다. 불확실한 범위는 여전히 gap이다. 게시 통지 outbox와 job의 게시 결과도 같은 확정에 연결한다. 충돌은 RETRY_REQUIRED, 철회/허용 밖 결과는 REJECTED다. |
+| 7 | Read Tool Runner → Read Pump / Bundle Builder: A와 같은 query/read/attempt | 현재 read의 scope와 deadline을 등록한다. 별도 생산 job이 실행 중이어도 입력 전체를 막지 않는다. |
+| 8 | Index / Coverage Resolver ↔ Repository: topic/owner/시간 후보 색인, 관계 종류와 범위 | relations와 Coverage를 동일 published revision에서 읽는다. 지원 범위를 실제 조사했는지와 관계가 나왔는지는 별개다. NO_MATCH와 NOT_COVERED를 혼동하지 않는다. |
+| 9 | 게시된 후보 → Origin Verifier → 해당 원본 소유자 | 현재 source/권한을 확인한다. 정확한 인용이나 더 넓은 전달 범위가 필요하면 게시 locator로 허용 원문을 읽는다. 이 원문 확인과 **미지원 관계를 원본 전체에서 새로 조합하는 B+ 우회**를 구별한다. |
+| 10 | Read Pump / Bundle Builder → Read Tool Runner: 검증한 후보/원문과 누락을 담은 Bundle/receipt | 최종 사용 gate와 attempt를 검사한 후 한 번 반환한다. 현재 의미 판단/채택은 A와 같다. PARTIAL을 전체 기준 확보로 바꾸지 않는다. |
+| 11 | NOT_COVERED → Read Wait Registry 및 Change Admission / Planner | 필요한 범위/min publish revision과 deadline을 등록하고 제한된 backfill을 접수한다. 권한/예산 검사를 통과해야 생산된다. 등록 후 게시 revision을 다시 확인해 등록 직전의 완료 통지를 놓치는 경합을 해소한다. 미지원 관계는 이 loop로 해결하지 않는다. |
+| 12 | PublishResult → waiter 재개 → 8의 Repository 재조회 | 통지가 유실되어도 deadline 안에서 revision을 재확인한다. 중복 통지는 read/revision으로 병합한다. Publisher가 caller에게 직접 Bundle을 반환하지 않는다. |
+
+Repository의 논리 저장 구조는 relation 레코드, Coverage, published revision, source별 cursor, dependency 역색인과 무효화 상태다. Journal은 job/claim/retry와 통지 outbox를 보관한다. **게시 자료와 outbox를 따로 성공 처리한 뒤 둘 다 확정되었다고 간주하지 않는다.** 이 그림의 내부 구현 설계에서는 State Store의 같은 transaction으로 함께 확정한다. 저장소가 분리되는 배치라면 게시 revision을 권위로 삼아 미반영 journal/outbox를 복원하는 확정 프로토콜이 필요하다. 어느 경우도 다른 원본 소유자의 transaction까지 포함하지 않는다.
+
+#### 3.10.4 자료의 수명과 실패 시 복원 단위
+
+| 상태 | 소유와 수명 | 확정/복원 규칙 |
+| --- | --- | --- |
+| 공통 확정 이력 | Request Controller, Response Manager, Task Manager의 원본. 각 owner가 State Store에 저장 | source revision과 실제 receipt를 보존한다. 다운스트림 내부 생각이나 전체 외부 문서를 자동 보관하는 계약이 아니다. |
+| 공통 User Memory | Context Manager의 명시 저장/삭제 원장 | 양안 동일. 과거 관계 생산의 부작용으로 사용자 선호를 자동 확정하지 않는다. |
+| A Source View Cache | Context Manager의 재사용 수명. RAM, 선택적으로 영속화 | 원본이 아니며 소실 시 허용 원본에서 재조회한다. 영속 cache도 재시작 후 dependency/epoch를 확인한다. |
+| A Request Evidence Set / Read Job Index | Context Composer의 한 read. RAM | terminal reply 이후 근거 집합을 해제한다. 미종료 I/O의 최소 job/cancel/usage tombstone은 완료 회수 또는 정해진 만료까지 남긴다. 이전 callback을 새 read에 합치지 않는다. |
+| B Production Journal | Memory Publisher의 생산 수명. DURABLE | QUEUED → RUNNING → PUBLISHED 또는 RETRY_REQUIRED/REJECTED. 실행 claim이 사라지면 source/epoch와 이미 게시된 job key를 확인하고 재시도한다. 모델 호출의 중복 비용 가능성도 추적한다. |
+| B Candidate Batch | Memory Publisher의 생산 attempt. RAM | 유실 시 재검사/재생산한다. 미확정 관계를 복구 과정에서 VALID로 승격하지 않는다. |
+| B Repository / Coverage | Context Manager의 지속 파생 자료. DURABLE | 같은 published revision의 관계와 범위를 함께 사용한다. DIRTY/UNRESOLVED/REVOKED는 정상 hit가 아니다. 원본이 없으면 재생산이 불가능할 수 있다. |
+| B Read Wait Registry | Evidence Reader의 현재 read. RAM | read ID, 소비자, 범위와 deadline을 보유한다. 재시작 시 caller가 살아 있는 attempt를 확인하고 새 read ID로 재발행한다. 이미 게시된 revision부터 확인한다. |
+
+권한 철회의 직렬화는 단순한 “조회 후 나중에 사용” 코드로 구현할 수 없다. 그림의 `checkAndRegisterUse(expected epoch)`는 **권한 확인과 사용 등록을 철회 확정과 같은 순서로 결정하는 계약**이다. source 원본 변경도 해당 owner의 사용 검사에서 다시 확인한다. 철회 이후 출력/전송/채택은 각 실제 사용 gate에서 막는다. 이미 외부로 전송한 자료의 회수나 청구 취소를 보장하지 않는다. 42 B처럼 authority가 분리된 배치에서는 서비스별 gate와 등록/철회 확인 프로토콜이 필요하며 Context Manager의 transaction 하나로 해결했다고 하지 않는다.
+
+read의 정상 내부 상태는 `ADMITTED → READING → CHECKING → REPLIED`, B의 미생산 분기는 `READING → WAITING_PUBLICATION → READING`이다. 취소/시간 초과는 terminal 상태이며 같은 read ID에 두 번째 완료를 반환하지 않는다. 이 내부 상태명은 §3.5의 Bundle status나 wire schema를 교체하지 않는다. 일부 근거만 사용 가능하면 PARTIAL과 gap을 남기고, 사용할 근거가 없으면 NOT_COVERED/UNAVAILABLE/EXPIRED 등 원인에 맞는 상태를 반환한다.
+
+#### 3.10.5 같은 장면에서 달라지는 실행과 비용
+
+| 입력 사건 | A의 경로 | B의 경로 | 비교할 영향 |
+| --- | --- | --- | --- |
+| R23의 첫 요청, 재사용 자료 없음 | 1~8. 후보 검색과 원문/결과 읽기로 현재 read 안에서 조합 | 7~8이 NOT_COVERED면 11 → 생산 2~6 → 12 → 8~10. 미지원이면 제한 반환 | B의 첫 조회에는 생산과 게시 의존성이 추가된다. A는 원본 가용성과 이번 조합 비용에 의존한다. |
+| 자료가 준비된 반복 요청 | 3의 유효 cache 활용, 변경/누락만 4로 읽기 | 7~10의 게시 조회, source 검증과 필요한 원문 읽기 | B의 반복 이득은 실제 요청이 준비된 관계를 재사용할 때만 남는다. A의 cache도 같은 원문/관계를 재사용할 수 있다. |
+| P20에는 E20 [0,52)만 실제 전달 | P20과 원문을 읽고 해당 범위만 근거로 조합 | PRESENTS와 Coverage를 확인하고 필요한 원문 읽기 | 양안 모두 미전달 설치 편의 항목을 포함하지 않는다. 고정 JSON의 Memory1은 [27,52) 예외 한 문구다. 전체 기준 query에는 추가 범위 읽기 또는 PARTIAL이 필요하다. |
+| read 도중 D21 개정 3 확정 | 관련 cache/read 무효화, 영향 부분만 4~7 반복 | records/Coverage 사용 차단, 2~6 재생산 후 8~10 재조회 | 영향 read 재구성 비용과 공통 갱신/게시 지연을 비교한다. 서로 다른 source의 원자적 시점 일치는 보장하지 않는다. |
+| source는 같지만 추출 오류 신고 | 해당 파생 cache revision 차단, 원문 재확인 | 해당 published record revision 차단, Coverage gap 표시 후 재생산 | source revision 불변이 의미 정답을 보증하지 않는다. 부정/예외와 원문을 다시 확인한다. |
+| 대기하던 R23 취소 | read set 사용 중지, I/O cancel, 늦은 완료는 회수만 | waiter 해제. 공유 생산은 다른 소비자/재사용, 권한/예산을 재검사해 유지 또는 취소 | read 수명과 생산 수명의 차이다. 막연한 미래 유용성으로 무제한 생산하지 않는다. |
+| 처리 도중 재시작 | 미완료 read 재발행, cache/원본 재검증 | 미확정 생산 재시도. 재생산 전에 게시 revision 확인. read는 새 ID로 재조회 | B는 관계/Coverage, claim, outbox와 중복 생산 비용까지 복원해야 한다. |
+| 삭제 또는 권한 철회 | use gate에서 차단, cache/read 무효화와 purge 재시도 | 같은 차단 후 records/Coverage/jobs 무효화. 구 epoch의 완료는 게시 거절 | 어느 안도 backlog가 비워질 때까지 구 epoch 사용을 허용하지 않는다. 물리 삭제 완료는 별도 확인한다. |
+
+#### 3.10.6 심사위원에게 비교를 설명하는 순서
+
+먼저 **“같은 과거 원본을 이번 요청의 근거로 공급하는 책임을 어디에 두는가”**를 설명한다. A에서는 1의 현재 read가 출발점이다. 3의 재사용과 4~5의 원본 완료를 6에서 합쳐 8로 반환한다. B에서는 1~6의 별도 생산이 관계와 Coverage를 남기고 현재 요청은 7~10으로 조회한다. 이어 B의 11~12를 따라가며 미생산 상태가 즉시 hit가 되지 않는 비용을 설명한다.
+
+그 다음 같은 R23과 D21 개정 사건을 두 그림에 넣는다. A는 요청별 근거를 부분 재구성하고 B는 공통 관계를 다시 게시한 뒤 소비자가 재조회한다. 비교할 구조는 **요청 경로에서 누락을 해결하는 조합 계약과 생산/게시 계약에 의존하는 조회 구조**다. 품질은 지원 범위, 원문 확인, gap 처리와 현재 의미 판단에 달려 있다. B가 관계를 보유한다는 사실만으로 정확도, 호출 수나 응답 시간의 우위를 선언하지 않는다.
+
+[전용 생성기](../../../../scripts/architecture/generate_dp45_implementation_diagrams.py)는 같은 scene에서 SVG/draw.io를 만들고, [렌더 검사](../../../../scripts/architecture/render_dp45_implementation_diagrams.cjs)는 PNG를 생성한다. `--check`는 소유 관계, 직교 경로, 무관 노드 관통, 생성물 일치, 본문 삽입과 SVG/PNG 해시를 검사한다. 문서 그림 검수와 제품/모델 검증은 [검수 기록](./04-45-memory-and-context-review.md)에서 구분한다.
+
 ## 4. 자료와 계약: 무엇을 기억하며 무엇을 잃는가
 
 ### 4.1 같은 자료, 다른 사용 수명
@@ -695,7 +804,7 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 
 <a id="dp45-fig-previous"></a>
 
-아래 여섯 미리보기는 DP-45를 설명하면서 만든 이전 발표 판본이다. 현재 설계의 일곱 그림과 구별해 보존한다. 특히 v4의 QA 숫자와 점수는 당시 사고 실험의 가정이며 측정 결과가 아니다. v5의 지역 예산도 전체 QA 판정이나 A/B 선택 결과가 아니다. 현재 설명에는 위 §0부터 §4까지의 그림과 계약을 사용한다.
+아래 여섯 미리보기는 DP-45를 설명하면서 만든 이전 발표 판본이다. 현재 설계의 아홉 그림과 구별해 보존한다. 특히 v4의 QA 숫자와 점수는 당시 사고 실험의 가정이며 측정 결과가 아니다. v5의 지역 예산도 전체 QA 판정이나 A/B 선택 결과가 아니다. 현재 설명에는 위 §0부터 §4까지의 그림과 계약을 사용한다.
 
 ### 12.1 배경 발표 v2
 

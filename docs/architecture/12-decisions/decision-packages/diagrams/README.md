@@ -47,3 +47,12 @@
 - 현재 본문·그림은 구조 설명이다. 구현 실행·성능 측정·native model capability 검증 결과가 아니다.
 
 생성: `.venv/bin/python scripts/architecture/generate_decision_package_diagrams.py` (저장소 root). 검사: 같은 명령의 `--check`. 단일 scene에서 양 파일을 만들며 draw.io의 부모·연결 endpoint를 보존한다. generator 수정 시 양 파일을 재생성하고 전 SVG를 렌더링한다. 브라우저 glyph·시각 검토와 구조 독립 검토는 자동 geometry 검사와 별개다. draw.io 편집기 자체의 화면 렌더 호환은 별도 확인 대상이다.
+
+## 45 방안별 구현 수준의 설계도
+
+[45 본문 §3.10](../04-45-memory-and-context.md#310-구현-수준의-sw-architecture-두-안을-각각-따라가기)에 두 그림을 직접 표시하고 번호별 호출/완료와 상태/복원 계약을 설명한다.
+
+- [A SVG](./dp45-implementation-a.svg) / [draw.io](./dp45-implementation-a.drawio) / [PNG](./dp45-implementation-a.png): 요청별 원본 조회/완료, 유효 cache, 근거 집합과 사용 검사.
+- [B SVG](./dp45-implementation-b.svg) / [draw.io](./dp45-implementation-b.drawio) / [PNG](./dp45-implementation-b.png): 독립 생산 job/후보/게시 상태, Coverage 조회와 미생산 후 재조회.
+
+두 장은 3840×2160이며 `generate_dp45_implementation_diagrams.py`가 같은 scene으로 SVG/draw.io를 생성한다. `render_dp45_implementation_diagrams.cjs`는 Chrome 글자/경로 배치 검사와 PNG, `dp45-implementation-render.json`을 만든다. 생성기의 `--check`는 생성물, 소유/경로, 본문 preview와 렌더 해시를 함께 검사한다. 제품 실행이나 모델 검증 자료가 아니다.

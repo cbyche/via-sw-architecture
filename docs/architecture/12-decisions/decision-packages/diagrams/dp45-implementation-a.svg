@@ -1,0 +1,368 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160" role="img"><title>A: 요청별 원본 조회와 근거 조합</title><defs>
+<marker id="a263445" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#263445" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a758294" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#758294" stroke-width="1.6"/></marker>
+</defs>
+<rect width="3840" height="2160" fill="white"/>
+<g font-family="Arial, Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<g id="im" data-kind="component" data-owner="">
+<rect x="64" y="238" width="600" height="170" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 286H664" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="272" data-width="564" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Interaction Manager</text>
+</g>
+<g id="input" data-kind="code" data-owner="im" data-node="true" data-x="104" data-y="310" data-w="520" data-h="88">
+<rect x="104" y="310" width="520" height="88" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="342" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">InputReady</text>
+<text x="122" y="377" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">R23 / input revision / evidence refs</text>
+</g>
+<g id="scenario" data-kind="trace" data-owner="" data-node="true" data-x="744" data-y="238" data-w="2360" data-h="170">
+<path d="M744 238H3084L3104 258V408H744Z M3084 238V258H3104" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="1924.0" y="270" data-width="2324" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">같은 사용자 장면과 원본</text>
+<text x="762" y="305" data-width="2324" font-size="23" font-weight="400" text-anchor="start" fill="#263445">R23: “지난번 설명한 기준에 제품 비교와 견적을 맞춰 제안서를 만들어줘.”</text>
+<text x="762" y="334" data-width="2324" font-size="23" font-weight="400" text-anchor="start" fill="#263445">과거 원본: E20 설명 / P20 실제 전달 [0,52) / T21 → D21 개정 2 / T22 → D22 개정 1</text>
+<text x="762" y="363" data-width="2324" font-size="23" font-weight="400" text-anchor="start" fill="#263445">검색 시작 전에는 위 ID가 target binding으로 주어지지 않는다. 검색 결과로 후보를 얻는다.</text>
+</g>
+<g id="legend" data-kind="trace" data-owner="" data-node="true" data-x="3184" data-y="238" data-w="592" data-h="170">
+<path d="M3184 238H3756L3776 258V408H3184Z M3756 238V258H3776" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3480.0" y="270" data-width="556" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">도형과 실행 범위</text>
+<text x="3202" y="305" data-width="556" font-size="23" font-weight="400" text-anchor="start" fill="#263445">직각 상자: Component / 내부 둥근 상자: 코드</text>
+<text x="3202" y="334" data-width="556" font-size="23" font-weight="400" text-anchor="start" fill="#263445">원통: RAM 또는 DURABLE 상태</text>
+<text x="3202" y="363" data-width="556" font-size="23" font-weight="400" text-anchor="start" fill="#263445">살구색: A/B에서 달라지는 내부 조직</text>
+</g>
+<g id="rc" data-kind="component" data-owner="">
+<rect x="64" y="470" width="600" height="450" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 518H664" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="504" data-width="564" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Request Controller</text>
+</g>
+<g id="scope" data-kind="code" data-owner="rc" data-node="true" data-x="104" data-y="550" data-w="520" data-h="175">
+<rect x="104" y="550" width="520" height="175" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="582" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Scope / Adoption Gate</text>
+<text x="122" y="617" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">입력 개정, 허용 source 범위와 budget 등록</text>
+<text x="122" y="646" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">MeaningProposal의 현재성 검사와 채택</text>
+<text x="122" y="675" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">채택 후 Task Manager에 위임 요청</text>
+<text x="122" y="704" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">확정 Request와 사용 refs는 State Store</text>
+</g>
+<g id="history" data-kind="code" data-owner="rc" data-node="true" data-x="104" data-y="780" data-w="520" data-h="110">
+<rect x="104" y="780" width="520" height="110" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="812" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">History Read Port</text>
+<text x="122" y="847" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">주제 / 입력 / 채택 정정의 검색과 읽기</text>
+<text x="122" y="876" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">명시 REVISES / 당시 revision 반환</text>
+</g>
+<g id="ri" data-kind="component" data-owner="">
+<rect x="64" y="1030" width="600" height="410" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 1078H664" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="1064" data-width="564" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Request Interpreter</text>
+</g>
+<g id="read_tool" data-kind="code" data-owner="ri" data-node="true" data-x="104" data-y="1110" data-w="520" data-h="125">
+<rect x="104" y="1110" width="520" height="125" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="1142" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Read Tool Runner</text>
+<text x="122" y="1177" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">query_id / read_id / Request / attempt</text>
+<text x="122" y="1206" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">EvidenceQuery → async 완료를 같은 caller로</text>
+</g>
+<g id="meaning" data-kind="code" data-owner="ri" data-node="true" data-x="104" data-y="1290" data-w="520" data-h="115">
+<rect x="104" y="1290" width="520" height="115" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="1322" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Current Meaning Job</text>
+<text x="122" y="1357" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Bundle로 현재 목표와 Task 연결 제안</text>
+<text x="122" y="1386" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">추가 읽기 또는 질문 / 자동 채택 아님</text>
+</g>
+<g id="model" data-kind="component" data-owner="">
+<rect x="64" y="1520" width="600" height="195" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M64 1568H664" stroke="#263445" stroke-width="1.5"/>
+<text x="82" y="1554" data-width="564" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Model Access</text>
+</g>
+<g id="api" data-kind="code" data-owner="model" data-node="true" data-x="104" data-y="1590" data-w="520" data-h="115">
+<rect x="104" y="1590" width="520" height="115" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="1622" data-width="484" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Semantic API Client</text>
+<text x="122" y="1657" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">scope / call ID / timeout / cancel / usage</text>
+<text x="122" y="1686" data-width="484" font-size="23" font-weight="400" text-anchor="start" fill="#263445">현재 의미와 조건부 생산의 역할 분리</text>
+</g>
+<g id="cloud" data-kind="external" data-owner="" data-node="true" data-x="64" data-y="1785" data-w="600" data-h="115">
+<path d="M82 1785H646L664 1842.5L646 1900H82L64 1842.5Z" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="364.0" y="1817" data-width="564" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Cloud semantic model</text>
+<text x="82" y="1852" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">외부 dependency / 입력 허용 범위만 전송</text>
+<text x="82" y="1881" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">취소 실패 후 완료와 청구도 추적</text>
+</g>
+<g id="cm" data-kind="component" data-owner="">
+<rect x="744" y="470" width="2360" height="1250" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M744 518H3104" stroke="#263445" stroke-width="1.5"/>
+<text x="762" y="504" data-width="2324" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Context Manager</text>
+</g>
+<g id="rm" data-kind="component" data-owner="">
+<rect x="3184" y="470" width="592" height="360" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M3184 518H3776" stroke="#263445" stroke-width="1.5"/>
+<text x="3202" y="504" data-width="556" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Response Manager</text>
+</g>
+<g id="response_read" data-kind="code" data-owner="rm" data-node="true" data-x="3224" data-y="550" data-w="512" data-h="225">
+<rect x="3224" y="550" width="512" height="225" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3480.0" y="582" data-width="476" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Response History Port</text>
+<text x="3242" y="617" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">search(topic, range, cursor)</text>
+<text x="3242" y="646" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read(E20, revision, span)</text>
+<text x="3242" y="675" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read(P20, actual Text / Voice spans)</text>
+<text x="3242" y="704" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">초안과 실제 전달을 구별</text>
+<text x="3242" y="733" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">원문과 actual receipt: DURABLE</text>
+</g>
+<g id="tm" data-kind="component" data-owner="">
+<rect x="3184" y="910" width="592" height="360" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M3184 958H3776" stroke="#263445" stroke-width="1.5"/>
+<text x="3202" y="944" data-width="556" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Task Manager</text>
+</g>
+<g id="task_read" data-kind="code" data-owner="tm" data-node="true" data-x="3224" data-y="990" data-w="512" data-h="225">
+<rect x="3224" y="990" width="512" height="225" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3480.0" y="1022" data-width="476" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Task History Port</text>
+<text x="3242" y="1057" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">search(topic, range, cursor)</text>
+<text x="3242" y="1086" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read(T21 / T22, result refs)</text>
+<text x="3242" y="1115" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">D21@v2 / D22@v1 / source revision</text>
+<text x="3242" y="1144" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Agent Gateway의 확인 사건에서 저장</text>
+<text x="3242" y="1173" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Task / 결과 참조: DURABLE</text>
+</g>
+<g id="pm" data-kind="component" data-owner="">
+<rect x="3184" y="1350" width="592" height="370" rx="0" fill="white" stroke="#263445" stroke-width="2.5"/>
+<path d="M3184 1398H3776" stroke="#263445" stroke-width="1.5"/>
+<text x="3202" y="1384" data-width="556" font-size="30" font-weight="700" text-anchor="start" fill="#263445">Policy Manager</text>
+</g>
+<g id="policy" data-kind="code" data-owner="pm" data-node="true" data-x="3224" data-y="1430" data-w="512" data-h="210">
+<rect x="3224" y="1430" width="512" height="210" rx="9" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="3480.0" y="1462" data-width="476" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Use Authorization Port</text>
+<text x="3242" y="1497" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">현재 scope와 permission epoch</text>
+<text x="3242" y="1526" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">checkAndRegisterUse(expected epoch)</text>
+<text x="3242" y="1555" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">철회 commit → 구 epoch 사용 차단</text>
+<text x="3242" y="1584" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">긴 read / 모델 완료를 기다리지 않음</text>
+<text x="3242" y="1613" data-width="476" font-size="23" font-weight="400" text-anchor="start" fill="#263445">권한 및 삭제 상태: DURABLE</text>
+</g>
+<g id="cache" data-kind="store" data-owner="cm" data-node="true" data-x="824" data-y="565" data-w="750" data-h="260">
+<path d="M824 578C824 562 1574 562 1574 578V812C1574 828 824 828 824 812Z M824 578C824 594 1574 594 1574 578" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1199.0" y="607" data-width="714" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Source View Cache / 관계 cache</text>
+<text x="842" y="642" data-width="714" font-size="23" font-weight="400" text-anchor="start" fill="#263445">재사용 상태 / RAM + 선택적 영속화</text>
+<text x="842" y="671" data-width="714" font-size="23" font-weight="400" text-anchor="start" fill="#263445">key: source refs + 목적 / scope + 형식 version</text>
+<text x="842" y="700" data-width="714" font-size="23" font-weight="400" text-anchor="start" fill="#263445">값: 허용 발췌 / 요약 / 명시 또는 파생 관계</text>
+<text x="842" y="729" data-width="714" font-size="23" font-weight="400" text-anchor="start" fill="#263445">dependency vector / policy epoch / 유효성</text>
+<text x="842" y="758" data-width="714" font-size="23" font-weight="400" text-anchor="start" fill="#263445">hit에도 원본 확인 / 누락은 요청 경로에서 해결</text>
+</g>
+<g id="invalidate" data-kind="code" data-owner="cm" data-node="true" data-x="1744" data-y="565" data-w="580" data-h="260">
+<rect x="1744" y="565" width="580" height="260" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="2034.0" y="597" data-width="544" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Invalidation Handler</text>
+<text x="1762" y="632" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">원본 변경 / 철회 / EvidenceDispute 수용</text>
+<text x="1762" y="661" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">dependency로 cache와 활성 read 표시</text>
+<text x="1762" y="690" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">원본 변경 → DIRTY / 재조회</text>
+<text x="1762" y="719" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">철회 → 사용 차단 / purge 재시도</text>
+<text x="1762" y="748" data-width="544" font-size="23" font-weight="400" text-anchor="start" fill="#263445">old job 완료는 현재 read에 합치지 않음</text>
+</g>
+<g id="changes" data-kind="queue" data-owner="cm" data-node="true" data-x="2464" data-y="565" data-w="560" data-h="260">
+<rect x="2464" y="565" width="560" height="260" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M2814 803H2999" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2834" y="787" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="2872" y="787" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="2910" y="787" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="2948" y="787" width="30" height="30" fill="white" stroke="#B8753F"/>
+<text x="2744.0" y="597" data-width="524" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Change / Control Inbox</text>
+<text x="2482" y="632" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">owner ID / source revision / epoch</text>
+<text x="2482" y="661" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">일반 cache 정리는 bounded queue</text>
+<text x="2482" y="690" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">철회 gate는 이 backlog를 기다리지 않음</text>
+<text x="2482" y="719" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">신호 gap은 사용 전 원본 검사로 탐지</text>
+<text x="2482" y="748" data-width="524" font-size="23" font-weight="400" text-anchor="start" fill="#263445">cache 복구를 위한 변경이며 필수 생산 아님</text>
+</g>
+<g id="composer" data-kind="group" data-owner="cm">
+<rect x="784" y="990" width="2280" height="690" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M784 1038H3064" stroke="#B8753F" stroke-width="1.5"/>
+<text x="802" y="1024" data-width="2244" font-size="27" font-weight="700" text-anchor="start" fill="#263445">Context Composer / 요청별 조합 작업</text>
+</g>
+<g id="query" data-kind="queue" data-owner="composer" data-node="true" data-x="824" data-y="1110" data-w="500" data-h="155">
+<rect x="824" y="1110" width="500" height="155" rx="0" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<path d="M1114 1243H1299" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="1134" y="1227" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1172" y="1227" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1210" y="1227" width="30" height="30" fill="white" stroke="#B8753F"/>
+<rect x="1248" y="1227" width="30" height="30" fill="white" stroke="#B8753F"/>
+<text x="1074.0" y="1142" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Read Inbox / Admission</text>
+<text x="842" y="1177" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">query + read ID / 목적 / deadline</text>
+<text x="842" y="1206" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">scope와 자원 상한 검사</text>
+<text x="842" y="1235" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Cancel(read_id) / terminal reply 1회</text>
+</g>
+<g id="planner" data-kind="code" data-owner="composer" data-node="true" data-x="1474" data-y="1110" data-w="700" data-h="185">
+<rect x="1474" y="1110" width="700" height="185" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1824.0" y="1142" data-width="664" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Read Pump / Planner</text>
+<text x="1492" y="1177" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">검색 단서 → owner별 bounded search</text>
+<text x="1492" y="1206" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">cache 확인 → 누락된 read만 병렬 시작</text>
+<text x="1492" y="1235" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">완료를 read set에 반영 / 추가 조회 결정</text>
+<text x="1492" y="1264" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">자유문 현재 의미는 Request Interpreter</text>
+</g>
+<g id="broker" data-kind="code" data-owner="composer" data-node="true" data-x="2424" data-y="1110" data-w="600" data-h="185">
+<rect x="2424" y="1110" width="600" height="185" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="2724.0" y="1142" data-width="564" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Owner Read Broker</text>
+<text x="2442" y="1177" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">owner adapter / bounded executor</text>
+<text x="2442" y="1206" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">search / read / validate async 작업</text>
+<text x="2442" y="1235" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">서로 다른 source의 전역 snapshot 없음</text>
+<text x="2442" y="1264" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read_id + dependency + 결과를 callback</text>
+</g>
+<g id="bundle" data-kind="code" data-owner="composer" data-node="true" data-x="824" data-y="1450" data-w="500" data-h="180">
+<rect x="824" y="1450" width="500" height="180" rx="9" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1074.0" y="1482" data-width="464" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Bundle Builder / Use Guard</text>
+<text x="842" y="1517" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">실제 전달 span과 원문 일치 검사</text>
+<text x="842" y="1546" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">EvidenceBundle + QueryReceipt</text>
+<text x="842" y="1575" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">누락 / source vector / read 범위</text>
+<text x="842" y="1604" data-width="464" font-size="23" font-weight="400" text-anchor="start" fill="#263445">현재 권한과 attempt 확인 후 reply</text>
+</g>
+<g id="evidence" data-kind="store" data-owner="composer" data-node="true" data-x="1474" data-y="1450" data-w="700" data-h="180">
+<path d="M1474 1463C1474 1447 2174 1447 2174 1463V1617C2174 1633 1474 1633 1474 1617Z M1474 1463C1474 1479 2174 1479 2174 1463" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="1824.0" y="1492" data-width="664" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Request Evidence Set (RAM)</text>
+<text x="1492" y="1527" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read_id → 후보 refs / source vector</text>
+<text x="1492" y="1556" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">발췌 / 명시 관계 / gaps / pending reads</text>
+<text x="1492" y="1585" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">일부 source 변경 시 해당 부분만 재조회</text>
+<text x="1492" y="1614" data-width="664" font-size="23" font-weight="400" text-anchor="start" fill="#263445">현재 Task binding의 확정 원본 아님</text>
+</g>
+<g id="jobs" data-kind="store" data-owner="composer" data-node="true" data-x="2424" data-y="1450" data-w="600" data-h="180">
+<path d="M2424 1463C2424 1447 3024 1447 3024 1463V1617C3024 1633 2424 1633 2424 1617Z M2424 1463C2424 1479 3024 1479 3024 1463" fill="#FFF3E5" stroke="#B8753F" stroke-width="2"/>
+<text x="2724.0" y="1492" data-width="564" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">Read Job Index (RAM)</text>
+<text x="2442" y="1527" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">read_id / job_id / input revision</text>
+<text x="2442" y="1556" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">pending / done / cancelled / dependency</text>
+<text x="2442" y="1585" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">cancel handle / 실제 종료 / usage</text>
+<text x="2442" y="1614" data-width="564" font-size="23" font-weight="400" text-anchor="start" fill="#263445">재시작은 원본으로 read 재개 또는 재발행</text>
+</g>
+<g id="trace" data-kind="trace" data-owner="" data-node="true" data-x="744" data-y="1850" data-w="1110" data-h="205">
+<path d="M744 1850H1834L1854 1870V2055H744Z M1834 1850V1870H1854" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="1299.0" y="1882" data-width="1074" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">같은 요청의 정상 경로</text>
+<text x="762" y="1917" data-width="1074" font-size="23" font-weight="400" text-anchor="start" fill="#263445">1~4 후보 검색 → 유효 cache 활용 / 필요한 원본만 읽기</text>
+<text x="762" y="1946" data-width="1074" font-size="23" font-weight="400" text-anchor="start" fill="#263445">5~8 E20 [0,52), D21@v2, D22@v1 + 실제 읽은 범위 반환</text>
+<text x="762" y="1975" data-width="1074" font-size="23" font-weight="400" text-anchor="start" fill="#263445">같은 R24에서는 검증한 cache 재사용. 새 관계는 새 조회로 조합.</text>
+<text x="762" y="2004" data-width="1074" font-size="23" font-weight="400" text-anchor="start" fill="#263445">단순 코드 조합에 C-CONTEXT 호출을 강제하지 않는다.</text>
+</g>
+<g id="failure" data-kind="trace" data-owner="" data-node="true" data-x="1924" data-y="1850" data-w="1180" data-h="205">
+<path d="M1924 1850H3084L3104 1870V2055H1924Z M3084 1850V1870H3104" fill="white" stroke="#263445" stroke-width="2"/>
+<text x="2514.0" y="1882" data-width="1144" font-size="27" font-weight="700" text-anchor="middle" fill="#263445">변경과 취소에서 실행하는 코드</text>
+<text x="1942" y="1917" data-width="1144" font-size="23" font-weight="400" text-anchor="start" fill="#263445">D21 개정 3 도착 → 관련 cache / read DIRTY → 그 부분 재조회</text>
+<text x="1942" y="1946" data-width="1144" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Cancel(read_id) → read set 사용 중지 → I/O cancel 요청</text>
+<text x="1942" y="1975" data-width="1144" font-size="23" font-weight="400" text-anchor="start" fill="#263445">늦은 callback은 Job Index에서 종료만 회수. 새 요청에 합치지 않음.</text>
+<text x="1942" y="2004" data-width="1144" font-size="23" font-weight="400" text-anchor="start" fill="#263445">공통 사용 gate가 변경 이후 사용을 다시 검사한다.</text>
+</g>
+<polyline id="wire1" data-flow="post" data-source="input" data-target="scope" points="544.0,398 544.0,550" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire2" data-flow="call" data-source="scope" data-target="read_tool" points="104,637.5 34,637.5 34,1172.5 104,1172.5" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire3" data-flow="done" data-source="read_tool" data-target="meaning" points="364.0,1235 364.0,1290" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire4" data-flow="done" data-source="meaning" data-target="scope" points="624,1347.5 684,1347.5 684,637.5 624,637.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire5" data-flow="call" data-source="meaning" data-target="api" points="284.0,1405 284.0,1590" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire6" data-flow="done" data-source="api" data-target="meaning" points="624,1647.5 650,1647.5 650,1367.5 624,1367.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire7" data-flow="call" data-source="api" data-target="cloud" points="284.0,1705 284.0,1785" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire8" data-flow="done" data-source="cloud" data-target="api" points="444.0,1785 444.0,1705" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire9" data-flow="post" data-source="read_tool" data-target="query" points="624,1187.5 714,1187.5 824,1187.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire10" data-flow="post" data-source="query" data-target="planner" points="1324,1187.5 1474,1187.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire11" data-flow="call" data-source="planner" data-target="cache" points="1644.0,1110 1644,870 1099,870 1099.0,825" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire12" data-flow="done" data-source="cache" data-target="planner" points="1329.0,825 1329,903 2004,903 2004.0,1110" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire13" data-flow="post" data-source="planner" data-target="broker" points="2174,1182.5 2424,1182.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire14" data-flow="call" data-source="broker" data-target="response_read" points="3024,1180.0 3124,1180 3124,620 3224,620.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire15" data-flow="done" data-source="response_read" data-target="broker" points="3224,700.0 3144,700 3144,1220 3024,1220.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire16" data-flow="call" data-source="broker" data-target="task_read" points="3024,1200.0 3164,1200 3164,1080 3224,1080.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire17" data-flow="done" data-source="task_read" data-target="broker" points="3224,1140.0 3180,1140 3180,1240 3024,1240.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire18" data-flow="call" data-source="broker" data-target="history" points="2659.0,1110 2659.0,938 714,938 714,820 624,820.0" fill="none" stroke="#263445" stroke-width="2" marker-end="url(#a263445)"/>
+<polyline id="wire19" data-flow="done" data-source="history" data-target="broker" points="624,850.0 704,850 704,958 2699.0,958 2699.0,1110" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire20" data-flow="state" data-source="broker" data-target="jobs" points="2864.0,1295 2864.0,1450" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire21" data-flow="done" data-source="broker" data-target="evidence" points="2614.0,1295 2614,1365 1824,1365 1824.0,1450" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire22" data-flow="state" data-source="planner" data-target="evidence" points="1624.0,1295 1624.0,1450" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire23" data-flow="state" data-source="evidence" data-target="bundle" points="1474,1540.0 1324,1540.0" fill="none" stroke="#758294" stroke-width="2" marker-end="url(#a758294)" stroke-dasharray="9 6"/>
+<polyline id="wire24" data-flow="done" data-source="bundle" data-target="read_tool" points="824,1560.0 734,1560 734,1207.5 624,1207.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire25" data-flow="cancel" data-source="changes" data-target="invalidate" points="2464,695.0 2324,695.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire26" data-flow="cancel" data-source="invalidate" data-target="cache" points="1744,695.0 1574,695.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire27" data-flow="cancel" data-source="invalidate" data-target="jobs" points="2324,770.0 2360,770 2360,1570 2424,1570.0" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire28" data-flow="done" data-source="response_read" data-target="changes" points="3224,587.5 3094,587.5 3094,620 3024,620.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire29" data-flow="done" data-source="task_read" data-target="changes" points="3224,1177.5 3080,1177.5 3080,770 3024,770.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire30" data-flow="post" data-source="bundle" data-target="policy" points="1154.0,1630 1154,1756 3120,1756 3120,1535 3224,1535.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire31" data-flow="done" data-source="policy" data-target="bundle" points="3224,1580.0 3140,1580 3140,1796 994,1796 994.0,1630" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<g id="note0">
+<text x="64" y="44.0" font-size="26" font-weight="700" text-anchor="start" fill="#263445">VIA / DP-45 / IMPLEMENTATION DESIGN</text>
+</g>
+<g id="note1">
+<text x="3776" y="44.0" font-size="24" font-weight="400" text-anchor="end" fill="#263445">구현 설계 / 제품 구현 및 모델 실행 아님</text>
+</g>
+<g id="note2">
+<text x="64" y="112.0" font-size="44" font-weight="700" text-anchor="start" fill="#263445">A: 요청별 원본 조회와 근거 조합</text>
+</g>
+<g id="note3">
+<text x="64" y="168.0" font-size="28" font-weight="400" text-anchor="start" fill="#263445">같은 원본, 권한과 요청. 긴 I/O와 모델 호출은 비동기 작업이며 실제 읽은 버전과 누락을 반환한다.</text>
+</g>
+<g id="note4" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="390" y="451.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">입력 등록</text>
+</g>
+<g id="note5">
+<text x="64" y="982.0" font-size="24" font-weight="700" text-anchor="start" fill="#263445">0  허용된 현재 요청에서 조회 시작</text>
+</g>
+<g id="note6" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="365" y="1270.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">현재 요청 해석</text>
+</g>
+<g id="note7" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="64" y="1484.0" font-size="24" font-weight="400" text-anchor="start" fill="#263445">공통 후속: 의미 제안 → 현재 검사 → 채택</text>
+</g>
+<g id="note8">
+<text x="64" y="1960.0" font-size="26" font-weight="700" text-anchor="start" fill="#263445">위임은 채택 후에만 수행</text>
+</g>
+<g id="note9">
+<text x="64" y="2003.0" font-size="24" font-weight="400" text-anchor="start" fill="#263445">Task Manager → Agent Gateway</text>
+<text x="64" y="2034.2" font-size="24" font-weight="400" text-anchor="start" fill="#263445">→ Downstream Agent: 제안서 작성</text>
+</g>
+<g id="note10">
+<text x="64" y="2106.0" font-size="24" font-weight="400" text-anchor="start" fill="#263445">실선 = 요청 / 점선 파랑 = 완료 / 빨강 = 사용 차단 / 회색 = 상태 접근. 선 교차는 접속점이 아니다.</text>
+</g>
+<g id="note11">
+<text x="64" y="2145.0" font-size="24" font-weight="400" text-anchor="start" fill="#263445">양안 공통: 로컬 VIA, owner별 State Store 저장, bounded async executor. 상자 수는 thread / process / DB 제품 수가 아니다.</text>
+</g>
+<g id="note12" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="678" y="1168.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">1  Query</text>
+</g>
+<g id="note13" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1342" y="1168.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">2 시작</text>
+</g>
+<g id="note14" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1120" y="861.0" font-size="21" font-weight="400" text-anchor="start" fill="#263445">3 cache 조회 / 검증한 항목 저장</text>
+</g>
+<g id="note15" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1610" y="891.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">hit + 유효성 / miss</text>
+</g>
+<g id="note16" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2190" y="1164.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">4 누락 read 시작</text>
+</g>
+<g id="note17" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="3190" y="858.0" font-size="21" font-weight="400" text-anchor="start" fill="#263445">원문 / 실제 전달 읽기</text>
+</g>
+<g id="note18" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="900" y="928.0" font-size="22" font-weight="400" text-anchor="start" fill="#758294">원본별 read port / 완료는 read_id와 source revision으로 연결</text>
+</g>
+<g id="note19" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2868" y="1385.0" font-size="21" font-weight="400" text-anchor="start" fill="#758294">job 등록 / 종료</text>
+</g>
+<g id="note20" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1920" y="1352.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">5 완료: snapshot / refs / gaps</text>
+</g>
+<g id="note21" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1490" y="1375.0" font-size="21" font-weight="400" text-anchor="start" fill="#758294">read set 갱신</text>
+</g>
+<g id="note22" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1346" y="1520.0" font-size="21" font-weight="400" text-anchor="start" fill="#758294">6 조합</text>
+</g>
+<g id="note23" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="743" y="1417.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">8 Bundle / receipt</text>
+</g>
+<g id="note24" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2338" y="680.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">9 변화</text>
+</g>
+<g id="note25" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1600" y="680.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">dirty</text>
+</g>
+<g id="note26" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2200" y="1738.0" font-size="21" font-weight="400" text-anchor="start" fill="#B63732">활성 read 무효화 / cancel</text>
+</g>
+<g id="note27" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1530" y="1750.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">7 use check + register / source 검사 결과 동반</text>
+</g>
+<g id="note28" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1830" y="1787.0" font-size="21" font-weight="400" text-anchor="start" fill="#195FBD">허용 / 철회 / 만료 → reply 또는 보류</text>
+</g>
+<g id="note29">
+<text x="3184" y="1322.0" font-size="22" font-weight="400" text-anchor="start" fill="#758294">원본은 owner별로 State Store에 저장</text>
+</g>
+<g id="note30">
+<text x="3184" y="1810.0" font-size="26" font-weight="700" text-anchor="start" fill="#263445">공통 User Memory</text>
+</g>
+<g id="note31">
+<text x="3184" y="1854.0" font-size="23" font-weight="400" text-anchor="start" fill="#263445">Context Manager의 명시 저장과 삭제 원장</text>
+<text x="3184" y="1883.9" font-size="23" font-weight="400" text-anchor="start" fill="#263445">양안 동일 / 과거 관계에서 자동 등록하지 않음</text>
+<text x="3184" y="1913.8" font-size="23" font-weight="400" text-anchor="start" fill="#263445">그림은 과거 기록 read 경로를 확대함</text>
+</g>
+</g></svg>
