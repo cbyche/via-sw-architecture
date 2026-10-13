@@ -1,5 +1,13 @@
 # Decision Reconstruction 그림
 
+## 47 화면과 음성의 지칭 결합 구조
+
+[MAIN SVG](./choice47-structure.svg) / [draw.io](./choice47-structure.drawio) / [PNG](./choice47-structure.png) / [설계](../04-47-screen-voice-grounding.md). 같은 음성, Windows 관측에서 A의 공동 원본 지칭 해석과 B의 생산자별 후보, Coordinator, 의미 결합, 재판단을 비교한다. 원본과 부분 정정은 양안 공통이며 process 수, 모델 수나 승자 비교가 아니다.
+
+모든 DP-47 그림은 [47 본문](../04-47-screen-voice-grounding.md#0-이-문서에서-모든-dp-47-그림을-확인한다)에 직접 표시한다. 새 그림도 본문 목록과 해당 절에 함께 등록한다.
+
+생성기는 `scripts/architecture/generate_screen_voice_grounding_diagram.py`, 동기화 및 본문 삽입 검사는 동일 명령의 `--check`, renderer는 `render_screen_voice_grounding_diagram.cjs`다. 동일 scene에서 editable SVG/draw.io를 생성하며 2560×1440 PNG를 Chrome에서 검사한다. 자세한 확인 범위는 [작성자 리뷰](../dp47-design-review.md)를 따른다. 기존 PPTX나 다른 DP 그림을 교체하지 않는다.
+
 ## 45 과거 이력 정의와 같은 기록의 재사용 설명
 
 [45 본문 §0](../04-45-memory-and-context.md#0-먼저-정의할-것-과거-이력에서-현재-context까지)에서 설명을 시작한다.
