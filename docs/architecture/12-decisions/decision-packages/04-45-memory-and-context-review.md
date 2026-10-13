@@ -3,6 +3,26 @@
 > 대상: [45 본문](./04-45-memory-and-context.md), 전용 생성기, 메인/수명 SVG와 draw.io 및 PNG / 2026-10-06
 > 독립 리뷰는 작성 작업을 맡지 않은 별도 에이전트의 문서/설계 검토다. 실제 사용자 심사, 실행 시험, 품질 우위나 최종 DP 선정이 아니다.
 
+## 2026-10-13 과거 이력 정의와 설명 설계 — 작성자 검수
+
+사용자는 과거 이력의 정의를 DP-45에 넣고, 모호한 설명과 설계를 심사위원에게 설명할 수 있도록 구체화하라고 요청했다. 이번 작업은 작성자 한 명이 문서와 데이터/그림을 대조한 검수이며 아래 과거 독립 리뷰를 새 판본에 소급하지 않는다.
+
+### 반영한 내용
+
+- 본문 §0.1~0.3: 사용자 입력, 채택 요청과 정정, 업무 연결과 수신 사건, 응답 준비/실제 전달, 사용 자료/결과 참조의 다섯 종류를 정의했다. owner, 기록 시점과 의미 한계, 당시/현재 상태 및 원본/파생/Context/User Memory를 구별했다.
+- §0.4~0.6와 [설명 JSON](./contracts/dp45-history-walkthrough.json): 입력에 정답 ID를 넣지 않는 후보 발견 → 좁힌 조회 → 같은 전달 원문/결과 참조를 반환하는 장면을 작성했다. B의 네 관계 종류와 생산 정책, 검색 metadata, 조건부 의미 가공, 게시/조회와 미준비 처리를 구체화했다. 과거 이력을 새 중앙 DB나 현재 Task 권위로 바꾸지 않았다.
+- §0.7~0.8: 첫/반복/변경/파생 오류/철회 사건, 설명 원고와 미검증 품질 가설을 분리했다. 새 충분 범위 예시는 양안의 현재 의미 입력이 같으므로 B의 호출/token 감소를 주장하지 않는다.
+- [정의 그림](./diagrams/dp45-history-definition.svg)과 [같은 기록의 흐름 그림](./diagrams/dp45-history-walkthrough.svg): 각 SVG와 draw.io, 실제 렌더 PNG를 추가했다. 생성기는 [generate_dp45_history_diagrams.py](../../../../scripts/architecture/generate_dp45_history_diagrams.py)다. 기존 MAIN/수명과 Evidence v1 PARTIAL JSON, PPTX는 보존했다. workplan과 그림 안내에 읽기 경로를 연결했다.
+
+### 확인한 범위와 한계
+
+1. 설명 JSON을 정적으로 대조했다. 최초 입력/조회에 확정 target ID가 없고, A/B의 발췌/결과 version/출처 vector가 같으며, 문구가 실제 원문 `[0,52)` 및 각 채널 전달 구간 안에 있음을 확인했다. B의 게시 revision/producer version, 네 kind, 미래 R23/T23 미게시와 별도 정정 variant를 확인했다. 기존 `[27,52)` PARTIAL 예시는 바꾸지 않았다. timestamp와 record는 작성 예시이며 실행 기록이 아니다.
+2. 새 생성기의 `--check`로 두 SVG/draw.io 쌍의 source 일치, XML ID/참조, owner 포함, canvas와 직교 경로를 확인했다. Module과 상태는 Context Manager 안에 있고 원본 종류 그림의 접힌 종이는 자료 구분이다.
+3. Chrome으로 2560×1440 PNG 두 장을 렌더하고 직접 열었다. 글자 겹침, canvas 밖 잘림과 자료 도형 내부 글자 넘침은 0건이다. 처음 렌더에서 B의 원본 읽기 선이 Context Manager 제목을 지나고 원통 첫 줄이 윗곡선과 겹쳐 보이는 것을 발견해 경로와 여백을 수정했고 재렌더를 확인했다. draw.io 앱, Microsoft PowerPoint와 발표 거리 가독성은 확인하지 않았다.
+4. 이번 변경 문서의 local 링크, active terminology, 정식 target Component 이름, QA catalog와 `git diff --check`를 통과했다. 공유 작업공간 전체 링크 검사에는 병행 작성 중인 DP-47의 `dp47-design-review.md`와 `choice47-structure.png` 미생성 참조가 남아 있었다. 해당 파일을 수정하거나 검사에서 숨기지 않았으며 이번 DP-45의 scoped 링크 통과와 구별한다.
+
+재생성/검사: `.venv/bin/python scripts/architecture/generate_dp45_history_diagrams.py`와 동일 명령의 `--check`. PNG는 생성한 로컬 SVG를 Chrome headless의 2560×1440 viewport에서 렌더한 preview다. 검수는 정의, 데이터와 그림의 정적 일치이며 생산자/retrieval 구현, 의미 정확도, 성능/비용/자원 측정, 독립 심사나 최종 A/B 선택을 확인하지 않는다. 사용자 검토를 위한 설계 제안이다.
+
 ## 2026-10-10 실행 계약 재구체화 — 본문과 데이터 예시
 
 사용자는 44 → 45 → 42 → 46의 본문/그림/발표를 단계별로 완성하고 작업 단위마다 commit/push하도록 요청했다. 이번 본문 작업은 04-40의 로컬 VIA, 로컬 VAD, cloud voice/semantic 조건과 41의 읽기 도구 실행기 직접 read를 45에 적용한다. 기본 A/B, 공식 Reference, 같은 사례와 강한 A의 cache/부분 갱신, B의 선택적 생산/미게시/미지원/명시 B+ 계약을 유지했다. 이 절은 이번 본문 작성자의 검수이며 아래 과거 독립 리뷰를 새 판본 전체에 소급하지 않는다.

@@ -1,5 +1,14 @@
 # Decision Reconstruction 그림
 
+## 45 과거 이력 정의와 같은 기록의 재사용 설명
+
+[45 본문 §0](../04-45-memory-and-context.md#0-먼저-정의할-것-과거-이력에서-현재-context까지)에서 설명을 시작한다.
+
+- [과거 이력 정의 SVG](./dp45-history-definition.svg) / [draw.io](./dp45-history-definition.drawio) / [PNG](./dp45-history-definition.png): 다섯 원본 기록 종류, 파생 자료, 현재 Context와 별도 User Memory를 구별한다. 자료의 분류이며 새로운 Component나 물리 DB 세 개가 아니다.
+- [같은 기록의 A/B 흐름 SVG](./dp45-history-walkthrough.svg) / [draw.io](./dp45-history-walkthrough.drawio) / [PNG](./dp45-history-walkthrough.png): 같은 실제 설명 구간과 두 결과 참조에서 A의 현재 조합과 B의 별도 관계 생산/게시/조회를 보여준다. 현재 의미와 채택은 양안 공통이며 생산 대기/미지원도 표시한다.
+
+생성: `.venv/bin/python scripts/architecture/generate_dp45_history_diagrams.py`. 검사: 같은 명령의 `--check`. 두 그림은 2560×1440이며 같은 scene에서 SVG/draw.io를 생성한다. PNG는 Chrome의 실제 렌더 preview다. 기존 MAIN과 수명, 통합 PPTX는 이 보충 설명 작업으로 교체하지 않는다. 작성자 검수는 렌더와 문서 일치 범위이며 모델 의미, 품질 우위나 최종 선택의 검증은 아니다.
+
 ## 43 발표용 A/C 판단 책임 비교
 
 [메인 SVG](./choice43-structure.svg) / [draw.io](./choice43-structure.drawio) / [PNG](./choice43-structure.png) / [본문과 대본](../04-43-request-interpretation.md). 2560×1440의 한 장에서 F1 의도, F2 대상, F3 연결, F4 관계, F5 정정, F6 처리 방향을 A는 통합 Module, C는 기능별 Module로 생산한다. 실제 SW 설계 이름과 임시 상태/교환/공통 채택을 표시한다. 기존 Task별 B는 제외하며 예시 업무명을 Module 이름으로 사용하지 않는다.
