@@ -15,7 +15,7 @@ GLYPHS = ['○○○', '◐○○', '●○○', '●◐○', '●●○', '●�
 
 def interval(raw):
     text = raw.replace(',', '').replace('`', '')
-    text = re.sub(r'MiB|ms|초|%', '', text)
+    text = re.sub(r'MiB|MB|ms|초|%', '', text)
     chain = re.search(rf'({NUMBER})\s*([<≤])\s*[A-Za-z]+\s*([<≤])\s*({NUMBER})', text)
     if chain:
         lo, left, right, hi = chain.groups()
@@ -119,7 +119,7 @@ def check_common_population():
         'QA01': ['28', '120', '5'], 'QA02': ['28', '44', '5'],
         'QA03': ['28', '76', '5'], 'QA04': ['3', '28'],
         'QA05': ['28', '5', '$2.55', '$2.54604'],
-        'QA06': ['28', '5'], 'QA07': ['S05/S11/S18/S19', '5'],
+        'QA06': ['28', '5', '512 MB'], 'QA07': ['S05/S11/S18/S19', '5'],
         'QA08': ['6'], 'QA09': ['28', '109', '5'],
     }
     for qa, tokens in expected_tokens.items():
@@ -132,18 +132,54 @@ def check_common_population():
     print('PASS: common population, generated catalogs, cost arithmetic and both QA tables.')
 
 
+def score_cells(body):
+    rows = {}
+    for line in body.splitlines():
+        if re.match(r'^\|\s*[0-6]\s*\|', line):
+            cells = [part.strip() for part in line.split('|')[1:-1]][:3]
+            assert int(cells[0]) not in rows, 'Duplicate score in page projection'
+            rows[int(cells[0])] = cells
+    return rows
+
+
+def check_page_projection(docs):
+    pages = (PACKAGE / 'slide-page-plan.md').read_text()
+    compact = (PACKAGE / 'quality-requirements-table.md').read_text().split(
+        '<a id="presentation-table"></a>')[1]
+    for index, path in enumerate(docs, 1):
+        anchor = f'<a id="qa{index:02}"></a>'
+        assert pages.count(anchor) == 1, path.name
+        page = pages.split(anchor)[1].split('<a id=')[0]
+        assert score_cells(page) == score_cells(path.read_text()), path.name
+        row = next(line for line in compact.splitlines()
+                   if line.startswith(f'| [QA{index:02}]'))
+        cells = [part.strip() for part in row.split('|')[1:-1]]
+        expected = '| ' + ' | '.join(cells[1:4]) + ' |'
+        assert expected in page, f'{path.name}: compact requirement mismatch'
+        for label in ['측정 산식', '설명용 예시', '구간 도출', '출처 각주', '발표자 노트', 'DP 설명']:
+            assert label in page, f'{path.name}: missing page field {label}'
+    print('PASS: 9 self-contained page projections match requirement and score tables.')
+
+
 def main():
     check_common_population()
     docs = sorted(PACKAGE.glob('qa[0-9][0-9]-*.md'))
     assert len(docs) == 9, f'Expected nine QA specs; found {len(docs)}'
-    # The RAM target was withdrawn because its references did not support it.
-    # This checks honest proposal status, not completion of all nine targets.
+    # The new decimal-MB target is user-defined, not inferred from older studies.
     ram = PACKAGE / 'qa06-local-memory.md'
     ram_body = ram.read_text()
-    assert 'TARGET_EVIDENCE_UNRESOLVED' in ram_body
+    assert 'USER_DEFINED_SYSTEM_REQUIREMENT' in ram_body
     assert 'MEASUREMENT_METHOD_PENDING' in ram_body
-    assert not re.search(r'^\|\s*[0-6]\s*\|', ram_body, re.MULTILINE)
-    probes = sum(check_scores(path) for path in docs if path != ram)
+    assert 'RAM-v3-MB' in ram_body and '/ 1,000,000  [MB]' in ram_body
+    source = (PACKAGE / 'targets-source-qa06-platform.md').read_text()
+    assert 'SR-PC-MEM-01' in source and '512,000,000바이트' in source
+    assert Fraction(512000000, 2**20) == Fraction('488.28125')
+    ram_scores = score_cells(ram_body)
+    for value, expected in [(256, 6), (400, 3), (512, 1), (Fraction('512.000001'), 0)]:
+        actual = [n for n, cells in ram_scores.items() if contains(interval(cells[2]), value)]
+        assert actual == [expected], (value, actual)
+    probes = sum(check_scores(path) for path in docs)
+    check_page_projection(docs)
     links = sum(check_links(path) for path in PACKAGE.rglob('*.md'))
     # Verify illustrative arithmetic independently of any future measured data.
     assert max(Fraction('.8'), Fraction('.6'), 1, Fraction('.8')) == 1
@@ -151,13 +187,13 @@ def main():
     assert Fraction('5.4') * Fraction('.6') == Fraction('3.24')
     assert (Fraction('5.4') - 3) / Fraction('5.4') == Fraction(4, 9)
     assert Fraction(2 + 2 + 3 + 4 + 3 + 4, 6) == 3
-    # Simultaneous RAM example only; no active absolute target or score.
+    # Simultaneous RAM example in decimal MB; these are illustrative, not measured.
     assert 120 + 140 + 30 + 90 == 380
     assert 110 + 180 + 30 + 80 == 400
     assert max(380, 400) == 400
     assert max(120, 110) + max(140, 180) + 30 + max(90, 80) == 420
-    print(f'PASS: 9 QA specs, 8 score tables, {probes} score probes, {links} local file links.')
-    print('Incomplete: QA06 absolute target evidence and measurement method; no active score bands.')
+    print(f'PASS: 9 QA specs, 9 score tables, {probes} score probes, {links} local file links.')
+    print('QA06: user-defined 512 MB target; Windows measurement method remains unverified.')
     print('Scope: documented population, projection arithmetic, score intervals/glyphs/monotonicity, local file existence and examples.')
     print('Not checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results.')
 
