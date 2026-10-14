@@ -1,0 +1,2839 @@
+{
+  "slug": "dp44-implementation-comparison",
+  "title": "DP44. 중앙 회수와 단계별 완료 처리의 구현 구조",
+  "items": [
+    {
+      "x": 0,
+      "y": 0,
+      "w": 1920,
+      "h": 1080,
+      "fill": "white",
+      "stroke": "none",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n1"
+    },
+    {
+      "x": 54,
+      "y": 30,
+      "w": 1770,
+      "h": 54.6,
+      "lines": [
+        "DP44. 중앙 회수와 단계별 완료 처리의 구현 구조"
+      ],
+      "size": 42,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 54.6,
+      "kind": "text",
+      "id": "n2"
+    },
+    {
+      "points": [
+        [
+          54,
+          103
+        ],
+        [
+          1866,
+          103
+        ]
+      ],
+      "color": "#CDD6DE",
+      "arrow": false,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n3"
+    },
+    {
+      "x": 54,
+      "y": 123,
+      "w": 1812,
+      "h": 28.6,
+      "lines": [
+        "같은 사건: R1 rev1의 응답 Job J1 실행 중 새 발화와 메일 질문 도착, 이후 J1이 늦게 완료"
+      ],
+      "size": 22,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 28.6,
+      "kind": "text",
+      "id": "n4"
+    },
+    {
+      "x": 54,
+      "y": 158,
+      "w": 1812,
+      "h": 26.0,
+      "lines": [
+        "공통: Interaction Manager가 입력을 계속 받고 즉시 출력을 멈춘다. Task Manager는 확인된 업무 사건을 제공한다."
+      ],
+      "size": 20,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 26.0,
+      "kind": "text",
+      "id": "n5"
+    },
+    {
+      "x": 54,
+      "y": 207,
+      "w": 870,
+      "h": 55,
+      "fill": "#EAF2FB",
+      "stroke": "#CDD6DE",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n6"
+    },
+    {
+      "x": 996,
+      "y": 207,
+      "w": 870,
+      "h": 55,
+      "fill": "#FFF5DB",
+      "stroke": "#CDD6DE",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n7"
+    },
+    {
+      "x": 491.0,
+      "y": 220,
+      "w": 850,
+      "h": 32.5,
+      "lines": [
+        "A  중앙 Mailbox와 Dispatcher가 다음 실행을 결정"
+      ],
+      "size": 25,
+      "color": "#18232E",
+      "bold": true,
+      "align": "center",
+      "leading": 32.5,
+      "kind": "text",
+      "id": "n8"
+    },
+    {
+      "x": 1433.0,
+      "y": 220,
+      "w": 850,
+      "h": 32.5,
+      "lines": [
+        "B  각 Stage가 자기 Done을 처리하고 다음 Queue로 전달"
+      ],
+      "size": 25,
+      "color": "#18232E",
+      "bold": true,
+      "align": "center",
+      "leading": 32.5,
+      "kind": "text",
+      "id": "n9"
+    },
+    {
+      "x": 60,
+      "y": 282,
+      "w": 865,
+      "h": 325,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n10"
+    },
+    {
+      "x": 77,
+      "y": 291,
+      "w": 830,
+      "h": 27.3,
+      "lines": [
+        "Request Controller"
+      ],
+      "size": 21,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 27.3,
+      "kind": "text",
+      "id": "n11"
+    },
+    {
+      "x": 84,
+      "y": 315,
+      "w": 310,
+      "h": 20.8,
+      "lines": [
+        "InputStarted"
+      ],
+      "size": 16,
+      "color": "#B63732",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n12"
+    },
+    {
+      "x": 428,
+      "y": 315,
+      "w": 470,
+      "h": 20.8,
+      "lines": [
+        "InputReady / TaskEvent / JobDone / Presented"
+      ],
+      "size": 16,
+      "color": "#2858A5",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n13"
+    },
+    {
+      "x": 83,
+      "y": 338,
+      "w": 320,
+      "h": 70,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n14"
+    },
+    {
+      "x": 92,
+      "y": 345,
+      "w": 302,
+      "h": 23.400000000000002,
+      "lines": [
+        "Control Lane"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n15"
+    },
+    {
+      "x": 92,
+      "y": 371,
+      "w": 302,
+      "h": 19.5,
+      "lines": [
+        "onset / adopted Invalidate"
+      ],
+      "size": 15,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n16"
+    },
+    {
+      "x": 307,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n17"
+    },
+    {
+      "x": 329,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n18"
+    },
+    {
+      "x": 351,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n19"
+    },
+    {
+      "x": 373,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n20"
+    },
+    {
+      "x": 428,
+      "y": 338,
+      "w": 470,
+      "h": 70,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n21"
+    },
+    {
+      "x": 437,
+      "y": 345,
+      "w": 452,
+      "h": 23.400000000000002,
+      "lines": [
+        "Event Mailbox"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n22"
+    },
+    {
+      "x": 437,
+      "y": 371,
+      "w": 452,
+      "h": 19.5,
+      "lines": [
+        "priority + seq + aging"
+      ],
+      "size": 15,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n23"
+    },
+    {
+      "x": 802,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n24"
+    },
+    {
+      "x": 824,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n25"
+    },
+    {
+      "x": 846,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n26"
+    },
+    {
+      "x": 868,
+      "y": 383,
+      "w": 18,
+      "h": 18,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n27"
+    },
+    {
+      "points": [
+        [
+          73,
+          327
+        ],
+        [
+          73,
+          373
+        ],
+        [
+          83,
+          373
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n28"
+    },
+    {
+      "x": 220,
+      "y": 460,
+      "w": 540,
+      "h": 73,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n29"
+    },
+    {
+      "x": 230,
+      "y": 469,
+      "w": 520,
+      "h": 27.3,
+      "lines": [
+        "Dialogue Dispatcher: Pump / Handle(event)"
+      ],
+      "size": 21,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 27.3,
+      "kind": "text",
+      "id": "n30"
+    },
+    {
+      "x": 230,
+      "y": 496,
+      "w": 520,
+      "h": 22.1,
+      "lines": [
+        "짧은 전이에서 의미 채택, 다음 Job 지시, 오래된 결과 폐기"
+      ],
+      "size": 17,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n31"
+    },
+    {
+      "x": 83,
+      "y": 548,
+      "w": 350,
+      "h": 51,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n32"
+    },
+    {
+      "x": 92,
+      "y": 571,
+      "w": 332,
+      "h": 22.1,
+      "lines": [
+        "Job Index: revision / Future / CancelHandle"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n33"
+    },
+    {
+      "x": 465,
+      "y": 548,
+      "w": 433,
+      "h": 51,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n34"
+    },
+    {
+      "x": 474,
+      "y": 571,
+      "w": 415,
+      "h": 22.1,
+      "lines": [
+        "Dialogue Progress State: 대기 ID / 후보 참조"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n35"
+    },
+    {
+      "points": [
+        [
+          243,
+          408
+        ],
+        [
+          243,
+          437
+        ],
+        [
+          335,
+          437
+        ],
+        [
+          335,
+          460
+        ]
+      ],
+      "color": "#18232E",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n36"
+    },
+    {
+      "points": [
+        [
+          663,
+          408
+        ],
+        [
+          663,
+          437
+        ],
+        [
+          640,
+          437
+        ],
+        [
+          640,
+          460
+        ]
+      ],
+      "color": "#18232E",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n37"
+    },
+    {
+      "points": [
+        [
+          342,
+          533
+        ],
+        [
+          342,
+          541
+        ],
+        [
+          260,
+          541
+        ],
+        [
+          260,
+          548
+        ]
+      ],
+      "color": "#5F6B77",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n38"
+    },
+    {
+      "points": [
+        [
+          640,
+          533
+        ],
+        [
+          640,
+          541
+        ],
+        [
+          680,
+          541
+        ],
+        [
+          680,
+          548
+        ]
+      ],
+      "color": "#5F6B77",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n39"
+    },
+    {
+      "points": [
+        [
+          285,
+          533
+        ],
+        [
+          285,
+          548
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n40"
+    },
+    {
+      "x": 83,
+      "y": 648,
+      "w": 245,
+      "h": 74,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n41"
+    },
+    {
+      "x": 93,
+      "y": 657,
+      "w": 225,
+      "h": 23.400000000000002,
+      "lines": [
+        "Request Interpreter"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n42"
+    },
+    {
+      "x": 93,
+      "y": 684,
+      "w": 225,
+      "h": 20.8,
+      "lines": [
+        "InterpretAsync"
+      ],
+      "size": 16,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n43"
+    },
+    {
+      "x": 340,
+      "y": 619,
+      "w": 573,
+      "h": 123,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n44"
+    },
+    {
+      "x": 354,
+      "y": 624,
+      "w": 540,
+      "h": 26.0,
+      "lines": [
+        "Response Manager"
+      ],
+      "size": 20,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 26.0,
+      "kind": "text",
+      "id": "n45"
+    },
+    {
+      "x": 355,
+      "y": 648,
+      "w": 245,
+      "h": 74,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n46"
+    },
+    {
+      "x": 365,
+      "y": 657,
+      "w": 225,
+      "h": 23.400000000000002,
+      "lines": [
+        "Response Composer"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n47"
+    },
+    {
+      "x": 365,
+      "y": 684,
+      "w": 225,
+      "h": 20.8,
+      "lines": [
+        "PrepareAsync"
+      ],
+      "size": 16,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n48"
+    },
+    {
+      "x": 627,
+      "y": 648,
+      "w": 270,
+      "h": 74,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n49"
+    },
+    {
+      "x": 637,
+      "y": 657,
+      "w": 250,
+      "h": 23.400000000000002,
+      "lines": [
+        "Publication Control"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n50"
+    },
+    {
+      "x": 637,
+      "y": 684,
+      "w": 250,
+      "h": 20.8,
+      "lines": [
+        "현재성 검사 후 게시"
+      ],
+      "size": 16,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n51"
+    },
+    {
+      "points": [
+        [
+          220,
+          497
+        ],
+        [
+          192,
+          497
+        ],
+        [
+          192,
+          636
+        ],
+        [
+          205,
+          636
+        ],
+        [
+          205,
+          648
+        ]
+      ],
+      "color": "#18232E",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n52"
+    },
+    {
+      "points": [
+        [
+          442,
+          533
+        ],
+        [
+          442,
+          611
+        ],
+        [
+          477,
+          611
+        ],
+        [
+          477,
+          648
+        ]
+      ],
+      "color": "#18232E",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n53"
+    },
+    {
+      "points": [
+        [
+          760,
+          497
+        ],
+        [
+          913,
+          497
+        ],
+        [
+          913,
+          637
+        ],
+        [
+          762,
+          637
+        ],
+        [
+          762,
+          648
+        ]
+      ],
+      "color": "#18232E",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n54"
+    },
+    {
+      "points": [
+        [
+          83,
+          686
+        ],
+        [
+          69,
+          686
+        ],
+        [
+          69,
+          430
+        ],
+        [
+          416,
+          430
+        ],
+        [
+          416,
+          373
+        ],
+        [
+          428,
+          373
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n55"
+    },
+    {
+      "points": [
+        [
+          600,
+          686
+        ],
+        [
+          613,
+          686
+        ],
+        [
+          613,
+          755
+        ],
+        [
+          917,
+          755
+        ],
+        [
+          917,
+          419
+        ],
+        [
+          907,
+          419
+        ],
+        [
+          907,
+          373
+        ],
+        [
+          898,
+          373
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n56"
+    },
+    {
+      "x": 87,
+      "y": 790,
+      "w": 800,
+      "h": 23.400000000000002,
+      "lines": [
+        "J1 취소 요청 뒤 늦은 완료: Event Mailbox 수신, Dispatcher가 rev1 결과 폐기"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n57"
+    },
+    {
+      "x": 87,
+      "y": 818,
+      "w": 800,
+      "h": 22.1,
+      "lines": [
+        "Queue 순서와 실행 중 Job의 CancelHandle은 별개"
+      ],
+      "size": 17,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n58"
+    },
+    {
+      "x": 996,
+      "y": 282,
+      "w": 870,
+      "h": 247,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n59"
+    },
+    {
+      "x": 1012,
+      "y": 291,
+      "w": 838,
+      "h": 27.3,
+      "lines": [
+        "Request Controller"
+      ],
+      "size": 21,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 27.3,
+      "kind": "text",
+      "id": "n60"
+    },
+    {
+      "x": 1013,
+      "y": 316,
+      "w": 830,
+      "h": 20.8,
+      "lines": [
+        "InputStarted와 채택된 Invalidate는 관련 Control Queue마다 복사"
+      ],
+      "size": 16,
+      "color": "#B63732",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n61"
+    },
+    {
+      "points": [
+        [
+          1005,
+          335
+        ],
+        [
+          1430,
+          335
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": false,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n62"
+    },
+    {
+      "points": [
+        [
+          1005,
+          335
+        ],
+        [
+          1005,
+          653
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": false,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n63"
+    },
+    {
+      "points": [
+        [
+          1430,
+          335
+        ],
+        [
+          1430,
+          653
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": false,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n64"
+    },
+    {
+      "points": [
+        [
+          1005,
+          407
+        ],
+        [
+          1022,
+          407
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n65"
+    },
+    {
+      "points": [
+        [
+          1430,
+          407
+        ],
+        [
+          1452,
+          407
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n66"
+    },
+    {
+      "points": [
+        [
+          1005,
+          655
+        ],
+        [
+          1022,
+          655
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n67"
+    },
+    {
+      "points": [
+        [
+          1430,
+          655
+        ],
+        [
+          1452,
+          655
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n68"
+    },
+    {
+      "x": 1012,
+      "y": 340,
+      "w": 408,
+      "h": 182,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n69"
+    },
+    {
+      "x": 1022,
+      "y": 348,
+      "w": 388,
+      "h": 24.7,
+      "lines": [
+        "Input Resolution Stage"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n70"
+    },
+    {
+      "x": 1022.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n71"
+    },
+    {
+      "x": 1031.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Control"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n72"
+    },
+    {
+      "x": 1060.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n73"
+    },
+    {
+      "x": 1079.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n74"
+    },
+    {
+      "x": 1098.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n75"
+    },
+    {
+      "x": 1117.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n76"
+    },
+    {
+      "x": 1155.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n77"
+    },
+    {
+      "x": 1164.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Input"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n78"
+    },
+    {
+      "x": 1193.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n79"
+    },
+    {
+      "x": 1212.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n80"
+    },
+    {
+      "x": 1231.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n81"
+    },
+    {
+      "x": 1250.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n82"
+    },
+    {
+      "x": 1288.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n83"
+    },
+    {
+      "x": 1297.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Done"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n84"
+    },
+    {
+      "x": 1326.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n85"
+    },
+    {
+      "x": 1345.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n86"
+    },
+    {
+      "x": 1364.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n87"
+    },
+    {
+      "x": 1383.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n88"
+    },
+    {
+      "x": 1022,
+      "y": 439,
+      "w": 388,
+      "h": 35,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n89"
+    },
+    {
+      "x": 1032,
+      "y": 448,
+      "w": 368,
+      "h": 22.1,
+      "lines": [
+        "Pump / InterpretAsync"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n90"
+    },
+    {
+      "x": 1022,
+      "y": 482,
+      "w": 388,
+      "h": 40,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n91"
+    },
+    {
+      "x": 1031,
+      "y": 500,
+      "w": 370,
+      "h": 19.5,
+      "lines": [
+        "Input Window (RAM)"
+      ],
+      "size": 15,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n92"
+    },
+    {
+      "points": [
+        [
+          1410,
+          464
+        ],
+        [
+          1415,
+          464
+        ],
+        [
+          1415,
+          409
+        ],
+        [
+          1410.0,
+          409
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 1.7,
+      "kind": "line",
+      "id": "n93"
+    },
+    {
+      "x": 1442,
+      "y": 340,
+      "w": 408,
+      "h": 182,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n94"
+    },
+    {
+      "x": 1452,
+      "y": 348,
+      "w": 388,
+      "h": 24.7,
+      "lines": [
+        "Task Notice Stage"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n95"
+    },
+    {
+      "x": 1452.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n96"
+    },
+    {
+      "x": 1461.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Control"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n97"
+    },
+    {
+      "x": 1490.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n98"
+    },
+    {
+      "x": 1509.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n99"
+    },
+    {
+      "x": 1528.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n100"
+    },
+    {
+      "x": 1547.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n101"
+    },
+    {
+      "x": 1585.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n102"
+    },
+    {
+      "x": 1594.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Task"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n103"
+    },
+    {
+      "x": 1623.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n104"
+    },
+    {
+      "x": 1642.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n105"
+    },
+    {
+      "x": 1661.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n106"
+    },
+    {
+      "x": 1680.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n107"
+    },
+    {
+      "x": 1718.0,
+      "y": 382,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n108"
+    },
+    {
+      "x": 1727.0,
+      "y": 389,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Done"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n109"
+    },
+    {
+      "x": 1756.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n110"
+    },
+    {
+      "x": 1775.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n111"
+    },
+    {
+      "x": 1794.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n112"
+    },
+    {
+      "x": 1813.0,
+      "y": 412,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n113"
+    },
+    {
+      "x": 1452,
+      "y": 439,
+      "w": 388,
+      "h": 35,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n114"
+    },
+    {
+      "x": 1462,
+      "y": 448,
+      "w": 368,
+      "h": 22.1,
+      "lines": [
+        "Pump / NoticeAsync"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n115"
+    },
+    {
+      "x": 1452,
+      "y": 482,
+      "w": 388,
+      "h": 40,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n116"
+    },
+    {
+      "x": 1461,
+      "y": 500,
+      "w": 370,
+      "h": 19.5,
+      "lines": [
+        "Notice Window (RAM)"
+      ],
+      "size": 15,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n117"
+    },
+    {
+      "points": [
+        [
+          1840,
+          464
+        ],
+        [
+          1845,
+          464
+        ],
+        [
+          1845,
+          409
+        ],
+        [
+          1840.0,
+          409
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 1.7,
+      "kind": "line",
+      "id": "n118"
+    },
+    {
+      "x": 996,
+      "y": 549,
+      "w": 870,
+      "h": 259,
+      "fill": "white",
+      "stroke": "#18232E",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n119"
+    },
+    {
+      "x": 1012,
+      "y": 558,
+      "w": 838,
+      "h": 27.3,
+      "lines": [
+        "Response Manager"
+      ],
+      "size": 21,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 27.3,
+      "kind": "text",
+      "id": "n120"
+    },
+    {
+      "x": 1012,
+      "y": 588,
+      "w": 408,
+      "h": 182,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n121"
+    },
+    {
+      "x": 1022,
+      "y": 596,
+      "w": 388,
+      "h": 24.7,
+      "lines": [
+        "Response Composer"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n122"
+    },
+    {
+      "x": 1022.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n123"
+    },
+    {
+      "x": 1031.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Control"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n124"
+    },
+    {
+      "x": 1060.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n125"
+    },
+    {
+      "x": 1079.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n126"
+    },
+    {
+      "x": 1098.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n127"
+    },
+    {
+      "x": 1117.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n128"
+    },
+    {
+      "x": 1155.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n129"
+    },
+    {
+      "x": 1164.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Prepare"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n130"
+    },
+    {
+      "x": 1193.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n131"
+    },
+    {
+      "x": 1212.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n132"
+    },
+    {
+      "x": 1231.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n133"
+    },
+    {
+      "x": 1250.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n134"
+    },
+    {
+      "x": 1288.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n135"
+    },
+    {
+      "x": 1297.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Done"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n136"
+    },
+    {
+      "x": 1326.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n137"
+    },
+    {
+      "x": 1345.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n138"
+    },
+    {
+      "x": 1364.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n139"
+    },
+    {
+      "x": 1383.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n140"
+    },
+    {
+      "x": 1022,
+      "y": 687,
+      "w": 388,
+      "h": 35,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n141"
+    },
+    {
+      "x": 1032,
+      "y": 696,
+      "w": 368,
+      "h": 22.1,
+      "lines": [
+        "Pump / PrepareAsync"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n142"
+    },
+    {
+      "x": 1022,
+      "y": 730,
+      "w": 388,
+      "h": 40,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n143"
+    },
+    {
+      "x": 1031,
+      "y": 748,
+      "w": 370,
+      "h": 19.5,
+      "lines": [
+        "Prepare Job Index (RAM)"
+      ],
+      "size": 15,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n144"
+    },
+    {
+      "points": [
+        [
+          1410,
+          712
+        ],
+        [
+          1415,
+          712
+        ],
+        [
+          1415,
+          657
+        ],
+        [
+          1410.0,
+          657
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 1.7,
+      "kind": "line",
+      "id": "n145"
+    },
+    {
+      "x": 1442,
+      "y": 588,
+      "w": 408,
+      "h": 182,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n146"
+    },
+    {
+      "x": 1452,
+      "y": 596,
+      "w": 388,
+      "h": 24.7,
+      "lines": [
+        "Publication Join"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n147"
+    },
+    {
+      "x": 1452.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n148"
+    },
+    {
+      "x": 1461.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Control"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n149"
+    },
+    {
+      "x": 1490.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n150"
+    },
+    {
+      "x": 1509.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n151"
+    },
+    {
+      "x": 1528.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n152"
+    },
+    {
+      "x": 1547.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n153"
+    },
+    {
+      "x": 1585.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n154"
+    },
+    {
+      "x": 1594.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Candidate"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n155"
+    },
+    {
+      "x": 1623.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n156"
+    },
+    {
+      "x": 1642.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n157"
+    },
+    {
+      "x": 1661.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n158"
+    },
+    {
+      "x": 1680.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n159"
+    },
+    {
+      "x": 1718.0,
+      "y": 630,
+      "w": 122.0,
+      "h": 52,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n160"
+    },
+    {
+      "x": 1727.0,
+      "y": 637,
+      "w": 104.0,
+      "h": 20.8,
+      "lines": [
+        "Condition"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n161"
+    },
+    {
+      "x": 1756.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n162"
+    },
+    {
+      "x": 1775.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n163"
+    },
+    {
+      "x": 1794.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n164"
+    },
+    {
+      "x": 1813.0,
+      "y": 660,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n165"
+    },
+    {
+      "x": 1452,
+      "y": 687,
+      "w": 388,
+      "h": 35,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n166"
+    },
+    {
+      "x": 1462,
+      "y": 696,
+      "w": 368,
+      "h": 22.1,
+      "lines": [
+        "Pump / match ID and revision"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n167"
+    },
+    {
+      "x": 1452,
+      "y": 730,
+      "w": 388,
+      "h": 40,
+      "fill": "#FFF3E5",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n168"
+    },
+    {
+      "x": 1461,
+      "y": 748,
+      "w": 370,
+      "h": 19.5,
+      "lines": [
+        "Publication Window (RAM)"
+      ],
+      "size": 15,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n169"
+    },
+    {
+      "points": [
+        [
+          1216,
+          522
+        ],
+        [
+          1216,
+          588
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n170"
+    },
+    {
+      "points": [
+        [
+          1646,
+          522
+        ],
+        [
+          1646,
+          539
+        ],
+        [
+          1310,
+          539
+        ],
+        [
+          1310,
+          588
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n171"
+    },
+    {
+      "points": [
+        [
+          1420,
+          656
+        ],
+        [
+          1442,
+          656
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n172"
+    },
+    {
+      "points": [
+        [
+          1646,
+          522
+        ],
+        [
+          1646,
+          588
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n173"
+    },
+    {
+      "points": [
+        [
+          1646,
+          770
+        ],
+        [
+          1646,
+          791
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n174"
+    },
+    {
+      "x": 1330,
+      "y": 783,
+      "w": 300,
+      "h": 20.8,
+      "lines": [
+        "eligible → Publication Control"
+      ],
+      "size": 16,
+      "color": "#2858A5",
+      "bold": false,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n175"
+    },
+    {
+      "x": 1015,
+      "y": 824,
+      "w": 835,
+      "h": 23.400000000000002,
+      "lines": [
+        "J1 늦은 완료: Composer Done Queue에서 자기 Job 무효 검사 후 폐기"
+      ],
+      "size": 18,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 23.400000000000002,
+      "kind": "text",
+      "id": "n176"
+    },
+    {
+      "x": 1015,
+      "y": 850,
+      "w": 835,
+      "h": 22.1,
+      "lines": [
+        "후보와 조건은 Join의 별도 Queue에 도착하며 ID와 revision으로 결합"
+      ],
+      "size": 17,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n177"
+    },
+    {
+      "x": 54,
+      "y": 880,
+      "w": 1812,
+      "h": 67,
+      "fill": "#F4F7FA",
+      "stroke": "#CDD6DE",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n178"
+    },
+    {
+      "x": 70,
+      "y": 891,
+      "w": 230,
+      "h": 24.7,
+      "lines": [
+        "양안 공통 최종 전달"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n179"
+    },
+    {
+      "x": 315,
+      "y": 891,
+      "w": 1535,
+      "h": 24.7,
+      "lines": [
+        "Publication Control 현재성 및 권한 확인 → Interaction Manager 실제 표시와 재생 → ActualReceipt → Presented"
+      ],
+      "size": 19,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 24.7,
+      "kind": "text",
+      "id": "n180"
+    },
+    {
+      "x": 70,
+      "y": 918,
+      "w": 1775,
+      "h": 22.1,
+      "lines": [
+        "발화 감지는 즉시 출력 중단과 관련 게시 hold를 유발한다. Task나 Job 취소는 정정 의도 채택 후 별도로 판단한다."
+      ],
+      "size": 17,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n181"
+    },
+    {
+      "x": 54,
+      "y": 975,
+      "w": 178,
+      "h": 46,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n182"
+    },
+    {
+      "x": 63,
+      "y": 982,
+      "w": 160,
+      "h": 20.8,
+      "lines": [
+        "Queue"
+      ],
+      "size": 16,
+      "color": "#18232E",
+      "bold": true,
+      "align": "left",
+      "leading": 20.8,
+      "kind": "text",
+      "id": "n183"
+    },
+    {
+      "x": 148,
+      "y": 999,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n184"
+    },
+    {
+      "x": 167,
+      "y": 999,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n185"
+    },
+    {
+      "x": 186,
+      "y": 999,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n186"
+    },
+    {
+      "x": 205,
+      "y": 999,
+      "w": 15,
+      "h": 15,
+      "fill": "white",
+      "stroke": "#5F6B77",
+      "dashed": false,
+      "kind": "rect",
+      "id": "n187"
+    },
+    {
+      "x": 260,
+      "y": 975,
+      "w": 178,
+      "h": 46,
+      "fill": "white",
+      "stroke": "#B8753F",
+      "dashed": false,
+      "store_radius": 7,
+      "kind": "store",
+      "id": "n188"
+    },
+    {
+      "x": 269,
+      "y": 993,
+      "w": 160,
+      "h": 19.5,
+      "lines": [
+        "상태 원통"
+      ],
+      "size": 15,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 19.5,
+      "kind": "text",
+      "id": "n189"
+    },
+    {
+      "points": [
+        [
+          470,
+          998
+        ],
+        [
+          535,
+          998
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": false,
+      "width": 2,
+      "kind": "line",
+      "id": "n190"
+    },
+    {
+      "x": 545,
+      "y": 982,
+      "w": 130,
+      "h": 22.1,
+      "lines": [
+        "enqueue"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n191"
+    },
+    {
+      "points": [
+        [
+          690,
+          998
+        ],
+        [
+          755,
+          998
+        ]
+      ],
+      "color": "#2858A5",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n192"
+    },
+    {
+      "x": 765,
+      "y": 982,
+      "w": 175,
+      "h": 22.1,
+      "lines": [
+        "완료 callback"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n193"
+    },
+    {
+      "points": [
+        [
+          970,
+          998
+        ],
+        [
+          1035,
+          998
+        ]
+      ],
+      "color": "#B63732",
+      "arrow": true,
+      "dashed": true,
+      "width": 2,
+      "kind": "line",
+      "id": "n194"
+    },
+    {
+      "x": 1045,
+      "y": 982,
+      "w": 185,
+      "h": 22.1,
+      "lines": [
+        "제어와 취소"
+      ],
+      "size": 17,
+      "color": "#18232E",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n195"
+    },
+    {
+      "x": 1270,
+      "y": 982,
+      "w": 575,
+      "h": 22.1,
+      "lines": [
+        "A/B 미선정, 제품 구현과 품질 측정 없음"
+      ],
+      "size": 17,
+      "color": "#5F6B77",
+      "bold": false,
+      "align": "left",
+      "leading": 22.1,
+      "kind": "text",
+      "id": "n196"
+    }
+  ]
+}

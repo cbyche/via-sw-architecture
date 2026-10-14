@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">DP44. 중앙 회수와 단계별 완료 처리의 구현 구조 — 설계 비교</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker><marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker><marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1770" x="54" y="68.64" text-anchor="start" font-size="42" font-weight="700" fill="#18232E">DP44. 중앙 회수와 단계별 완료 처리의 구현 구조</text>
+<polyline id="n3" points="54,103 1866,103" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<text id="n4-0" data-width="1812" x="54" y="143.24" text-anchor="start" font-size="22" font-weight="400" fill="#18232E">같은 사건: R1 rev1의 응답 Job J1 실행 중 새 발화와 메일 질문 도착, 이후 J1이 늦게 완료</text>
+<text id="n5-0" data-width="1812" x="54" y="176.4" text-anchor="start" font-size="20" font-weight="400" fill="#5F6B77">공통: Interaction Manager가 입력을 계속 받고 즉시 출력을 멈춘다. Task Manager는 확인된 업무 사건을 제공한다.</text>
+<rect id="n6" fill="#EAF2FB" stroke="#CDD6DE" stroke-width="1.7" x="54" y="207" width="870" height="55"/>
+<rect id="n7" fill="#FFF5DB" stroke="#CDD6DE" stroke-width="1.7" x="996" y="207" width="870" height="55"/>
+<text id="n8-0" data-width="850" x="491.0" y="243.0" text-anchor="middle" font-size="25" font-weight="700" fill="#18232E">A  중앙 Mailbox와 Dispatcher가 다음 실행을 결정</text>
+<text id="n9-0" data-width="850" x="1433.0" y="243.0" text-anchor="middle" font-size="25" font-weight="700" fill="#18232E">B  각 Stage가 자기 Done을 처리하고 다음 Queue로 전달</text>
+<rect id="n10" fill="white" stroke="#18232E" stroke-width="1.7" x="60" y="282" width="865" height="325"/>
+<text id="n11-0" data-width="830" x="77" y="310.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<text id="n12-0" data-width="310" x="84" y="329.72" text-anchor="start" font-size="16" font-weight="700" fill="#B63732">InputStarted</text>
+<text id="n13-0" data-width="470" x="428" y="329.72" text-anchor="start" font-size="16" font-weight="700" fill="#2858A5">InputReady / TaskEvent / JobDone / Presented</text>
+<rect id="n14" fill="white" stroke="#B8753F" stroke-width="1.7" x="83" y="338" width="320" height="70"/>
+<text id="n15-0" data-width="302" x="92" y="361.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Control Lane</text>
+<text id="n16-0" data-width="302" x="92" y="384.8" text-anchor="start" font-size="15" font-weight="400" fill="#5F6B77">onset / adopted Invalidate</text>
+<rect id="n17" fill="white" stroke="#5F6B77" stroke-width="1.7" x="307" y="383" width="18" height="18"/>
+<rect id="n18" fill="white" stroke="#5F6B77" stroke-width="1.7" x="329" y="383" width="18" height="18"/>
+<rect id="n19" fill="white" stroke="#5F6B77" stroke-width="1.7" x="351" y="383" width="18" height="18"/>
+<rect id="n20" fill="white" stroke="#5F6B77" stroke-width="1.7" x="373" y="383" width="18" height="18"/>
+<rect id="n21" fill="white" stroke="#B8753F" stroke-width="1.7" x="428" y="338" width="470" height="70"/>
+<text id="n22-0" data-width="452" x="437" y="361.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Event Mailbox</text>
+<text id="n23-0" data-width="452" x="437" y="384.8" text-anchor="start" font-size="15" font-weight="400" fill="#5F6B77">priority + seq + aging</text>
+<rect id="n24" fill="white" stroke="#5F6B77" stroke-width="1.7" x="802" y="383" width="18" height="18"/>
+<rect id="n25" fill="white" stroke="#5F6B77" stroke-width="1.7" x="824" y="383" width="18" height="18"/>
+<rect id="n26" fill="white" stroke="#5F6B77" stroke-width="1.7" x="846" y="383" width="18" height="18"/>
+<rect id="n27" fill="white" stroke="#5F6B77" stroke-width="1.7" x="868" y="383" width="18" height="18"/>
+<polyline id="n28" points="73,327 73,373 83,373" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<rect id="n29" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="220" y="460" width="540" height="73"/>
+<text id="n30-0" data-width="520" x="230" y="488.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Dialogue Dispatcher: Pump / Handle(event)</text>
+<text id="n31-0" data-width="520" x="230" y="511.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">짧은 전이에서 의미 채택, 다음 Job 지시, 오래된 결과 폐기</text>
+<path id="n32" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M83 555C83 541 433 541 433 555V592C433 606 83 606 83 592Z M83 555C83 569 433 569 433 555"/>
+<text id="n33-0" data-width="332" x="92" y="586.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">Job Index: revision / Future / CancelHandle</text>
+<path id="n34" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M465 555C465 541 898 541 898 555V592C898 606 465 606 465 592Z M465 555C465 569 898 569 898 555"/>
+<text id="n35-0" data-width="415" x="474" y="586.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">Dialogue Progress State: 대기 ID / 후보 참조</text>
+<polyline id="n36" points="243,408 243,437 335,437 335,460" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n37" points="663,408 663,437 640,437 640,460" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n38" points="342,533 342,541 260,541 260,548" fill="none" stroke="#5F6B77" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a5F6B77)"/>
+<polyline id="n39" points="640,533 640,541 680,541 680,548" fill="none" stroke="#5F6B77" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a5F6B77)"/>
+<polyline id="n40" points="285,533 285,548" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<rect id="n41" fill="white" stroke="#18232E" stroke-width="1.7" x="83" y="648" width="245" height="74"/>
+<text id="n42-0" data-width="225" x="93" y="673.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Interpreter</text>
+<text id="n43-0" data-width="225" x="93" y="698.72" text-anchor="start" font-size="16" font-weight="400" fill="#5F6B77">InterpretAsync</text>
+<rect id="n44" fill="white" stroke="#18232E" stroke-width="1.7" x="340" y="619" width="573" height="123"/>
+<text id="n45-0" data-width="540" x="354" y="642.4" text-anchor="start" font-size="20" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n46" fill="white" stroke="#18232E" stroke-width="1.7" x="355" y="648" width="245" height="74"/>
+<text id="n47-0" data-width="225" x="365" y="673.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Response Composer</text>
+<text id="n48-0" data-width="225" x="365" y="698.72" text-anchor="start" font-size="16" font-weight="400" fill="#5F6B77">PrepareAsync</text>
+<rect id="n49" fill="white" stroke="#18232E" stroke-width="1.7" x="627" y="648" width="270" height="74"/>
+<text id="n50-0" data-width="250" x="637" y="673.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Publication Control</text>
+<text id="n51-0" data-width="250" x="637" y="698.72" text-anchor="start" font-size="16" font-weight="400" fill="#5F6B77">현재성 검사 후 게시</text>
+<polyline id="n52" points="220,497 192,497 192,636 205,636 205,648" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n53" points="442,533 442,611 477,611 477,648" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n54" points="760,497 913,497 913,637 762,637 762,648" fill="none" stroke="#18232E" stroke-width="2" marker-end="url(#a18232E)"/>
+<polyline id="n55" points="83,686 69,686 69,430 416,430 416,373 428,373" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<polyline id="n56" points="600,686 613,686 613,755 917,755 917,419 907,419 907,373 898,373" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<text id="n57-0" data-width="800" x="87" y="806.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">J1 취소 요청 뒤 늦은 완료: Event Mailbox 수신, Dispatcher가 rev1 결과 폐기</text>
+<text id="n58-0" data-width="800" x="87" y="833.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">Queue 순서와 실행 중 Job의 CancelHandle은 별개</text>
+<rect id="n59" fill="white" stroke="#18232E" stroke-width="1.7" x="996" y="282" width="870" height="247"/>
+<text id="n60-0" data-width="838" x="1012" y="310.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Request Controller</text>
+<text id="n61-0" data-width="830" x="1013" y="330.72" text-anchor="start" font-size="16" font-weight="700" fill="#B63732">InputStarted와 채택된 Invalidate는 관련 Control Queue마다 복사</text>
+<polyline id="n62" points="1005,335 1430,335" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n63" points="1005,335 1005,653" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n64" points="1430,335 1430,653" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6"/>
+<polyline id="n65" points="1005,407 1022,407" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<polyline id="n66" points="1430,407 1452,407" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<polyline id="n67" points="1005,655 1022,655" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<polyline id="n68" points="1430,655 1452,655" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<rect id="n69" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1012" y="340" width="408" height="182"/>
+<text id="n70-0" data-width="388" x="1022" y="365.48" text-anchor="start" font-size="19" font-weight="700" fill="#18232E">Input Resolution Stage</text>
+<rect id="n71" fill="white" stroke="#B8753F" stroke-width="1.7" x="1022.0" y="382" width="122.0" height="52"/>
+<text id="n72-0" data-width="104.0" x="1031.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Control</text>
+<rect id="n73" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1060.0" y="412" width="15" height="15"/>
+<rect id="n74" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1079.0" y="412" width="15" height="15"/>
+<rect id="n75" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1098.0" y="412" width="15" height="15"/>
+<rect id="n76" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1117.0" y="412" width="15" height="15"/>
+<rect id="n77" fill="white" stroke="#B8753F" stroke-width="1.7" x="1155.0" y="382" width="122.0" height="52"/>
+<text id="n78-0" data-width="104.0" x="1164.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Input</text>
+<rect id="n79" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1193.0" y="412" width="15" height="15"/>
+<rect id="n80" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1212.0" y="412" width="15" height="15"/>
+<rect id="n81" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1231.0" y="412" width="15" height="15"/>
+<rect id="n82" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1250.0" y="412" width="15" height="15"/>
+<rect id="n83" fill="white" stroke="#B8753F" stroke-width="1.7" x="1288.0" y="382" width="122.0" height="52"/>
+<text id="n84-0" data-width="104.0" x="1297.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Done</text>
+<rect id="n85" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1326.0" y="412" width="15" height="15"/>
+<rect id="n86" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1345.0" y="412" width="15" height="15"/>
+<rect id="n87" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1364.0" y="412" width="15" height="15"/>
+<rect id="n88" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1383.0" y="412" width="15" height="15"/>
+<rect id="n89" fill="white" stroke="#B8753F" stroke-width="1.7" x="1022" y="439" width="388" height="35"/>
+<text id="n90-0" data-width="368" x="1032" y="463.64" text-anchor="start" font-size="17" font-weight="700" fill="#18232E">Pump / InterpretAsync</text>
+<path id="n91" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M1022 489C1022 475 1410 475 1410 489V515C1410 529 1022 529 1022 515Z M1022 489C1022 503 1410 503 1410 489"/>
+<text id="n92-0" data-width="370" x="1031" y="513.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">Input Window (RAM)</text>
+<polyline id="n93" points="1410,464 1415,464 1415,409 1410.0,409" fill="none" stroke="#2858A5" stroke-width="1.7" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<rect id="n94" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1442" y="340" width="408" height="182"/>
+<text id="n95-0" data-width="388" x="1452" y="365.48" text-anchor="start" font-size="19" font-weight="700" fill="#18232E">Task Notice Stage</text>
+<rect id="n96" fill="white" stroke="#B8753F" stroke-width="1.7" x="1452.0" y="382" width="122.0" height="52"/>
+<text id="n97-0" data-width="104.0" x="1461.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Control</text>
+<rect id="n98" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1490.0" y="412" width="15" height="15"/>
+<rect id="n99" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1509.0" y="412" width="15" height="15"/>
+<rect id="n100" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1528.0" y="412" width="15" height="15"/>
+<rect id="n101" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1547.0" y="412" width="15" height="15"/>
+<rect id="n102" fill="white" stroke="#B8753F" stroke-width="1.7" x="1585.0" y="382" width="122.0" height="52"/>
+<text id="n103-0" data-width="104.0" x="1594.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Task</text>
+<rect id="n104" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1623.0" y="412" width="15" height="15"/>
+<rect id="n105" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1642.0" y="412" width="15" height="15"/>
+<rect id="n106" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1661.0" y="412" width="15" height="15"/>
+<rect id="n107" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1680.0" y="412" width="15" height="15"/>
+<rect id="n108" fill="white" stroke="#B8753F" stroke-width="1.7" x="1718.0" y="382" width="122.0" height="52"/>
+<text id="n109-0" data-width="104.0" x="1727.0" y="403.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Done</text>
+<rect id="n110" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1756.0" y="412" width="15" height="15"/>
+<rect id="n111" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1775.0" y="412" width="15" height="15"/>
+<rect id="n112" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1794.0" y="412" width="15" height="15"/>
+<rect id="n113" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1813.0" y="412" width="15" height="15"/>
+<rect id="n114" fill="white" stroke="#B8753F" stroke-width="1.7" x="1452" y="439" width="388" height="35"/>
+<text id="n115-0" data-width="368" x="1462" y="463.64" text-anchor="start" font-size="17" font-weight="700" fill="#18232E">Pump / NoticeAsync</text>
+<path id="n116" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M1452 489C1452 475 1840 475 1840 489V515C1840 529 1452 529 1452 515Z M1452 489C1452 503 1840 503 1840 489"/>
+<text id="n117-0" data-width="370" x="1461" y="513.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">Notice Window (RAM)</text>
+<polyline id="n118" points="1840,464 1845,464 1845,409 1840.0,409" fill="none" stroke="#2858A5" stroke-width="1.7" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<rect id="n119" fill="white" stroke="#18232E" stroke-width="1.7" x="996" y="549" width="870" height="259"/>
+<text id="n120-0" data-width="838" x="1012" y="577.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n121" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1012" y="588" width="408" height="182"/>
+<text id="n122-0" data-width="388" x="1022" y="613.48" text-anchor="start" font-size="19" font-weight="700" fill="#18232E">Response Composer</text>
+<rect id="n123" fill="white" stroke="#B8753F" stroke-width="1.7" x="1022.0" y="630" width="122.0" height="52"/>
+<text id="n124-0" data-width="104.0" x="1031.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Control</text>
+<rect id="n125" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1060.0" y="660" width="15" height="15"/>
+<rect id="n126" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1079.0" y="660" width="15" height="15"/>
+<rect id="n127" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1098.0" y="660" width="15" height="15"/>
+<rect id="n128" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1117.0" y="660" width="15" height="15"/>
+<rect id="n129" fill="white" stroke="#B8753F" stroke-width="1.7" x="1155.0" y="630" width="122.0" height="52"/>
+<text id="n130-0" data-width="104.0" x="1164.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Prepare</text>
+<rect id="n131" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1193.0" y="660" width="15" height="15"/>
+<rect id="n132" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1212.0" y="660" width="15" height="15"/>
+<rect id="n133" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1231.0" y="660" width="15" height="15"/>
+<rect id="n134" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1250.0" y="660" width="15" height="15"/>
+<rect id="n135" fill="white" stroke="#B8753F" stroke-width="1.7" x="1288.0" y="630" width="122.0" height="52"/>
+<text id="n136-0" data-width="104.0" x="1297.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Done</text>
+<rect id="n137" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1326.0" y="660" width="15" height="15"/>
+<rect id="n138" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1345.0" y="660" width="15" height="15"/>
+<rect id="n139" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1364.0" y="660" width="15" height="15"/>
+<rect id="n140" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1383.0" y="660" width="15" height="15"/>
+<rect id="n141" fill="white" stroke="#B8753F" stroke-width="1.7" x="1022" y="687" width="388" height="35"/>
+<text id="n142-0" data-width="368" x="1032" y="711.64" text-anchor="start" font-size="17" font-weight="700" fill="#18232E">Pump / PrepareAsync</text>
+<path id="n143" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M1022 737C1022 723 1410 723 1410 737V763C1410 777 1022 777 1022 763Z M1022 737C1022 751 1410 751 1410 737"/>
+<text id="n144-0" data-width="370" x="1031" y="761.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">Prepare Job Index (RAM)</text>
+<polyline id="n145" points="1410,712 1415,712 1415,657 1410.0,657" fill="none" stroke="#2858A5" stroke-width="1.7" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<rect id="n146" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1442" y="588" width="408" height="182"/>
+<text id="n147-0" data-width="388" x="1452" y="613.48" text-anchor="start" font-size="19" font-weight="700" fill="#18232E">Publication Join</text>
+<rect id="n148" fill="white" stroke="#B8753F" stroke-width="1.7" x="1452.0" y="630" width="122.0" height="52"/>
+<text id="n149-0" data-width="104.0" x="1461.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Control</text>
+<rect id="n150" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1490.0" y="660" width="15" height="15"/>
+<rect id="n151" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1509.0" y="660" width="15" height="15"/>
+<rect id="n152" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1528.0" y="660" width="15" height="15"/>
+<rect id="n153" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1547.0" y="660" width="15" height="15"/>
+<rect id="n154" fill="white" stroke="#B8753F" stroke-width="1.7" x="1585.0" y="630" width="122.0" height="52"/>
+<text id="n155-0" data-width="104.0" x="1594.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Candidate</text>
+<rect id="n156" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1623.0" y="660" width="15" height="15"/>
+<rect id="n157" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1642.0" y="660" width="15" height="15"/>
+<rect id="n158" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1661.0" y="660" width="15" height="15"/>
+<rect id="n159" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1680.0" y="660" width="15" height="15"/>
+<rect id="n160" fill="white" stroke="#B8753F" stroke-width="1.7" x="1718.0" y="630" width="122.0" height="52"/>
+<text id="n161-0" data-width="104.0" x="1727.0" y="651.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Condition</text>
+<rect id="n162" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1756.0" y="660" width="15" height="15"/>
+<rect id="n163" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1775.0" y="660" width="15" height="15"/>
+<rect id="n164" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1794.0" y="660" width="15" height="15"/>
+<rect id="n165" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1813.0" y="660" width="15" height="15"/>
+<rect id="n166" fill="white" stroke="#B8753F" stroke-width="1.7" x="1452" y="687" width="388" height="35"/>
+<text id="n167-0" data-width="368" x="1462" y="711.64" text-anchor="start" font-size="17" font-weight="700" fill="#18232E">Pump / match ID and revision</text>
+<path id="n168" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" d="M1452 737C1452 723 1840 723 1840 737V763C1840 777 1452 777 1452 763Z M1452 737C1452 751 1840 751 1840 737"/>
+<text id="n169-0" data-width="370" x="1461" y="761.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">Publication Window (RAM)</text>
+<polyline id="n170" points="1216,522 1216,588" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n171" points="1646,522 1646,539 1310,539 1310,588" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n172" points="1420,656 1442,656" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n173" points="1646,522 1646,588" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<polyline id="n174" points="1646,770 1646,791" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n175-0" data-width="300" x="1330" y="797.72" text-anchor="start" font-size="16" font-weight="400" fill="#2858A5">eligible → Publication Control</text>
+<text id="n176-0" data-width="835" x="1015" y="840.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">J1 늦은 완료: Composer Done Queue에서 자기 Job 무효 검사 후 폐기</text>
+<text id="n177-0" data-width="835" x="1015" y="865.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">후보와 조건은 Join의 별도 Queue에 도착하며 ID와 revision으로 결합</text>
+<rect id="n178" fill="#F4F7FA" stroke="#CDD6DE" stroke-width="1.7" x="54" y="880" width="1812" height="67"/>
+<text id="n179-0" data-width="230" x="70" y="908.48" text-anchor="start" font-size="19" font-weight="700" fill="#18232E">양안 공통 최종 전달</text>
+<text id="n180-0" data-width="1535" x="315" y="908.48" text-anchor="start" font-size="19" font-weight="400" fill="#18232E">Publication Control 현재성 및 권한 확인 → Interaction Manager 실제 표시와 재생 → ActualReceipt → Presented</text>
+<text id="n181-0" data-width="1775" x="70" y="933.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">발화 감지는 즉시 출력 중단과 관련 게시 hold를 유발한다. Task나 Job 취소는 정정 의도 채택 후 별도로 판단한다.</text>
+<rect id="n182" fill="white" stroke="#B8753F" stroke-width="1.7" x="54" y="975" width="178" height="46"/>
+<text id="n183-0" data-width="160" x="63" y="996.72" text-anchor="start" font-size="16" font-weight="700" fill="#18232E">Queue</text>
+<rect id="n184" fill="white" stroke="#5F6B77" stroke-width="1.7" x="148" y="999" width="15" height="15"/>
+<rect id="n185" fill="white" stroke="#5F6B77" stroke-width="1.7" x="167" y="999" width="15" height="15"/>
+<rect id="n186" fill="white" stroke="#5F6B77" stroke-width="1.7" x="186" y="999" width="15" height="15"/>
+<rect id="n187" fill="white" stroke="#5F6B77" stroke-width="1.7" x="205" y="999" width="15" height="15"/>
+<path id="n188" fill="white" stroke="#B8753F" stroke-width="1.7" d="M260 982C260 968 438 968 438 982V1014C438 1028 260 1028 260 1014Z M260 982C260 996 438 996 438 982"/>
+<text id="n189-0" data-width="160" x="269" y="1006.8" text-anchor="start" font-size="15" font-weight="400" fill="#18232E">상태 원통</text>
+<polyline id="n190" points="470,998 535,998" fill="none" stroke="#2858A5" stroke-width="2" marker-end="url(#a2858A5)"/>
+<text id="n191-0" data-width="130" x="545" y="997.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">enqueue</text>
+<polyline id="n192" points="690,998 755,998" fill="none" stroke="#2858A5" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#a2858A5)"/>
+<text id="n193-0" data-width="175" x="765" y="997.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">완료 callback</text>
+<polyline id="n194" points="970,998 1035,998" fill="none" stroke="#B63732" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n195-0" data-width="185" x="1045" y="997.64" text-anchor="start" font-size="17" font-weight="400" fill="#18232E">제어와 취소</text>
+<text id="n196-0" data-width="575" x="1270" y="997.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">A/B 미선정, 제품 구현과 품질 측정 없음</text>
+</g></svg>

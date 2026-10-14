@@ -1,5 +1,7 @@
 # VIA DP 설계 비교 발표 틀 — 41~45
 
+**DP44 구현 구조 확대 비교, 2026-10-15:** [통합 발표 v14의 21장](../VIA-architecture-presentation_v14.pptx)에 새 1페이지를 추가했다. 기존 DP44 비교 20장과 아래 [기존 그림](./dp44-comparison.svg)은 유지한다. 새 [PNG](./dp44-implementation-comparison.png), [SVG](./dp44-implementation-comparison.svg), [draw.io 편집 원본](./dp44-implementation-comparison.drawio), [한 장 PPTX](./VIA-DP44-implementation-comparison.pptx)를 제공한다. A의 중앙 Dispatcher와 Event Mailbox, B의 Stage별 Queue, Done 처리와 Publication Join을 같은 사건에서 비교한다. [생성 스크립트](../../../scripts/architecture/generate_dp44_implementation_comparison_slide.py)와 [통합 패키지 스크립트](../../../scripts/presentations/package_dp44_implementation_v14.py)로 재생성할 수 있다. 구현이나 품질 측정 결과는 아니다.
+
 > **현재 발표 편집본 — 2026-10-11:** [전체 통합 PPTX, 32장](../VIA-architecture-presentation.pptx)의 19~32장이 사용자 경험과 DP 부분이다. 이제 이 파일 하나에서 필요한 장만 갱신한다. [부분 편집 안내](../full-presentation/README.md)를 따른다. DP v5와 아래 이전 PPTX/PNG는 최초 통합 이력으로 보존한다. 43과 46은 현재 발표에서 제외한다. 비교 전용 v5는 만들지 않는다. 아래 날짜별 안내는 해당 판본의 작성 이력이다.
 
 [전체 미리보기](./index.html) / [5페이지 draw.io 편집 원본](./VIA-DP-comparison-41-45.drawio)

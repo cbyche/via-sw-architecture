@@ -52,6 +52,7 @@ DP-44의 개별 그림은 모두 이 본문에 직접 표시한다. 상세 구�
 | 집중 A/B 비교 | 완료가 도착한 뒤 누가 다음 처리를 시작하는가 | §3.6 |
 | A 구현 구조 | priority mailbox, Dispatcher, Job Index와 취소 및 반환 | §3.7.1 |
 | B 구현 구조 | Stage별 Pump/Done, typed port, Window와 Publication Join | §3.7.2 |
+| 구현 구조 한 장 비교 | 같은 사건에서 A/B의 Queue, 상태, 완료 반환과 폐기 위치 | §3.7.3 |
 | 같은 사건의 실행 | 정정과 업무 질문에서 실제 참여자의 순서 | §4 |
 
 ## DP 배경 — VIA 특성과 SW 구조 선택의 가치
@@ -290,6 +291,14 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 ![B 구현 구조](./diagrams/dp44-implementation-b.svg)
 
 [B draw.io](./diagrams/dp44-implementation-b.drawio) / [PNG](./diagrams/dp44-implementation-b.png)
+
+#### 3.7.3 구현 구조 한 장 비교
+
+기존 §1과 §3.6의 비교 그림은 그대로 둔다. 아래 한 장은 §3.7.1과 §3.7.2의 실행 책임을 같은 사건에서 나란히 보여 준다. A는 완료가 Event Mailbox로 반환되어 Dialogue Dispatcher가 다음 실행을 결정한다. B는 생산 Stage의 Done Queue에서 완료를 처리하고, 후보와 조건이 Publication Join의 별도 Queue에 도착한다. Queue는 칸이 있는 대기열로, 일시 상태는 원통으로 구분했다. 붉은 점선은 새 입력 감지에 따른 hold, 채택된 정정의 invalidate, 실행 중 Job의 취소 요청이다. 일반 사용자 발화의 내용은 파란 입력 경로로 전달된다.
+
+![DP44 A/B 구현 구조 한 장 비교](../../../presentations_files/dp-comparison/dp44-implementation-comparison.svg)
+
+[draw.io](../../../presentations_files/dp-comparison/dp44-implementation-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp44-implementation-comparison.png) / [한 장 PPTX](../../../presentations_files/dp-comparison/VIA-DP44-implementation-comparison.pptx) / [통합 발표 v14](../../../presentations_files/VIA-architecture-presentation_v14.pptx)
 
 긴 작업의 완료는 시작한 Stage의 Done port로 돌아온다. 유효한 산출물이 고정 port를 통해 연결된 소비자에게 전달되고, Publication Join이 candidate별 참조와 revision으로 게시 조건을 결합한다. 각 Stage는 자기 Job과 Window를 관리하며 전체 완료를 회수해 다음 Job을 지시하는 Dispatcher를 두지 않는다.
 
