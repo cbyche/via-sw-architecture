@@ -2,9 +2,11 @@
 
 > **2026-10-14 기능 요구사항 갱신:** [현재 원문](./functional-requirements-and-constraints.md)은 대화 지속성 제공, 음성-화면 지칭 연결, 과거 이력 맥락 제공, 대화-업무 관계 연결의 네 항목이다. 각각 DP-44, DP-47, DP-45, DP-42에 연결한다. 원문에 새 FR별 투명 배경 PNG 네 장을 첨부했다. 기존 발표 파일과 이전 FR 그림은 새 정의를 아직 반영하지 않았다.
 
-현재 발표자료는 **[VIA-architecture-presentation_v10.pptx, 63장](./VIA-architecture-presentation_v10.pptx)**. v9의 사용자 검토 주석을 반영한 판본. [두 장 전용 PPTX](./VIA-project-introduction_v10.pptx)와 [미리보기 및 근거 자료](./project-introduction-v10/README.md) 제공. 관련 동향의 양방향 관계와 시연 날짜 및 시장 범위를 보완하고 필요성의 그림을 정보 도식으로 교체. 나머지 61장과 발표자 노트, 기존 GIF 보존. 기존 FR 및 QA 상세 페이지의 최신 정의 반영은 이번 편집 범위 밖. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v10 슬라이드 목록과 변경 범위](./full-presentation/manifest-v10.json) 참조.
+현재 통합 발표자료는 **[VIA-architecture-presentation_v11.pptx, 33장](./VIA-architecture-presentation_v11.pptx)**. 최신 QA 페이지와 본문 QA 인용을 갱신한 판본. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v11 슬라이드 목록](./full-presentation/manifest-v11.json) 참조.
 
-v1~v9는 이전 버전으로 보존. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 순서는 위 안내 기준.
+**필요성 시각 대안 검토:** v11의 2장을 기준으로 서로 다른 그림 구성 5안을 작성한 [비교 PPTX v12](./VIA-necessity-options_v12.pptx), [확대 미리보기](./necessity-options-v12/index.html), [안별 설명](./necessity-options-v12/README.md). v12는 선택용 비교본이며 v11 통합본은 유지. 이전 소개 편집의 [두 장 전용 v10](./VIA-project-introduction_v10.pptx)과 [근거 자료](./project-introduction-v10/README.md)는 이력으로 보존.
+
+v1~v10 통합본은 이전 버전으로 보존. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 순서는 위 안내 기준.
 
 | 통합본 위치 | 발표 내용 |
 | --- | --- |

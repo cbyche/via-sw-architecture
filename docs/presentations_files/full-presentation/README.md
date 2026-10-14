@@ -2,6 +2,8 @@
 
 현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v11.pptx](../VIA-architecture-presentation_v11.pptx). v10을 기반으로 QA 상세 페이지를 교체한 2026-10-15 판본이다. **본문 24장과 QA Appendix 9장으로 총 33장**이다. [QA 미리보기와 편집 원본](../qa-metrics-v11/README.md), [v11 검수 기록](./review-v11-2026-10-15.md), [manifest-v11.json](./manifest-v11.json)을 제공한다.
 
+**필요성 시각 대안:** v11의 2장을 기준으로 한 [5장 비교 PPTX v12](../VIA-necessity-options_v12.pptx)와 [확대 미리보기](../necessity-options-v12/index.html) 제공. 3열 장면형, PC 중심 통합형, 가로 3단형, 확대 장면형, 정보 레이어형의 다섯 안이며 사용자 선택 전까지 통합본은 v11 유지.
+
 기존 Appendix 25~63장 39개를 모두 제거하고 QA01~QA09를 한 장씩 작성했다. 각 장에는 정의, 목표, 측정 조건, 목표 근거, 산식과 예시, 0~6점 기준표 및 DP 관계를 넣었다. 본문 9~11장과 12/13/16/19/21/23/24장의 QA 인용도 최신 패키지와 맞췄다. QA01과 QA03은 산술평균이며 QA06의 목표는 사용자 지정 512 MB다.
 
 본문의 기존 소개와 기능 표 및 DP 구조 그림은 유지한다. 기존 FR 분류와 화면/음성 주제의 구조 그림을 최신 Architecture 전체와 다시 맞추는 작업은 이번 QA 페이지 제작에 포함되지 않는다. [현재 QA 원문](../../architecture/12-decisions/decision-packages/qa-candidate-package/README.md)과 [Architecture 문서](../../architecture/README.md)를 함께 확인한다. DP 관계 문장은 가설이며 수치 예시는 실측 결과가 아니다.
