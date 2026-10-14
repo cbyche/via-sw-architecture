@@ -1,6 +1,6 @@
 # 필요성 페이지의 시각 대안 5개
 
-2026-10-15. 사용자 요청에 따라 [v11 통합본](../VIA-architecture-presentation_v11.pptx)의 2장 필요성을 서로 다른 시각 구성으로 작성. [5장 비교 PPTX](../VIA-necessity-options_v12.pptx)와 [확대 가능한 미리보기](./index.html) 제공. 최신 통합본은 v11이며 이번 v12는 선택용 비교본. v11의 33장과 QA 내용은 변경하지 않음.
+2026-10-15. 사용자 요청에 따라 [v11 통합본](../VIA-architecture-presentation_v11.pptx)의 2장 필요성을 서로 다른 시각 구성으로 작성. [5장 비교 PPTX](../VIA-necessity-options_v12.pptx)와 [확대 가능한 미리보기](./index.html) 제공. v12 작성 시 v11의 33장과 QA 내용은 변경하지 않음. 이후 사용자 요청에 따라 **[v13 통합본](../VIA-architecture-presentation_v13.pptx)의 2~6장에 다섯 안 모두 수록**. 최신 통합본은 v13, 총 37장.
 
 | 안 | 구성 | 설명 방식 |
 | --- | --- | --- |
@@ -46,4 +46,4 @@
 2. 저장소 Python으로 `package_necessity_options_v12.py REPO BUILD`
 3. bundled Node로 `finalize_necessity_options_v12.mjs BUILD`
 
-[파일 구성과 기준 해시](./manifest.json), [검수 기록](./review.md) 참조. 선택한 안을 v11 이후 최신 통합본에 반영하는 작업은 선택 후 별도 진행.
+[파일 구성과 기준 해시](./manifest.json), [검수 기록](./review.md) 참조. 다섯 안의 통합 이력과 현재 위치는 [통합본 안내](../full-presentation/README.md) 참조.
