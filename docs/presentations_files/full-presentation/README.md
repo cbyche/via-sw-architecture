@@ -1,8 +1,12 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v8.pptx](../VIA-architecture-presentation_v8.pptx)다. v7에서 시작해 공통 요청 장면과 44·45·42의 문제 소개를 다시 작성하고, 45의 기본 구조와 보완 택틱 및 새 화면·음성 지칭 문제를 추가했다. 41은 주요 DP에서 제외하고 기존 배경과 비교를 Appendix로 옮겼다. 참조 발표자료의 서식, 검정색 본문, 도형 자체의 텍스트와 Windows용 Calibri·정수 pt·한국어 설정을 유지한다. **본문 24장, Appendix 안내 1장과 보존 자료 38장으로 총 63장**이다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v9.pptx](../VIA-architecture-presentation_v9.pptx). v8의 관련 동향과 과제 필요성 두 장만 다시 작성한 2026-10-14 판본. **총 63장, 실제 교체 위치 1~2장**. [두 장 전용 PPTX](../VIA-project-introduction_v9.pptx), [미리보기와 출처](../project-introduction-v9/README.md), [v9 검수 기록](./review-v9-2026-10-14.md), [manifest-v9.json](./manifest-v9.json) 제공.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx)와 [v7](../VIA-architecture-presentation_v7.pptx)는 변경하지 않았다. 44·45·42의 기존 비교 본문, QA 정의·목표·평가 상태, 시연 GIF 및 비대상 페이지의 본문과 노트를 보존한다. 처음 통합에 사용한 일곱 개별 PPTX는 이전 구성의 참고본이며 후속 업데이트의 입력이 아니다. 변경 범위와 검증 한계는 [v8 검수 기록](./review-v8-2026-10-13.md), 현재 위치와 hash는 [manifest-v8.json](./manifest-v8.json)을 따른다.
+관련 동향은 왼쪽의 두 시연 GIF, 오른쪽 상단의 시장 전망 및 주요 기업 사례, 오른쪽 하단의 CTO 메시지와 VIA 역할 관계로 구성. 삼성 Bixby를 제외하고 Google, Amazon, Apple, OpenAI 사례 활용. 필요성은 대화 경험, 맥락 이해, 지속적인 서비스와 확장을 개념 그림과 짧은 명사형 문구로 표현.
+
+v8의 나머지 61장과 노트, 기존 GIF, 마스터 및 서식 보존. 기존 FR/QA/DP 상세 페이지의 최신 정의 반영은 이번 두 장 편집 범위 밖. [현재 FR 원문](../functional-requirements-and-constraints.md) 및 Architecture의 현재 논의와 기존 발표 내용을 구별할 필요. 아래 순서 표는 보존된 v8의 내용을 포함한 실제 슬라이드 목록.
+
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx) 보존. v8의 공통 요청 장면과 문제 소개 및 41의 Appendix 이동 이력은 [v8 검수 기록](./review-v8-2026-10-13.md)과 [manifest-v8.json](./manifest-v8.json) 참조.
 
 ## 현재 발표 순서
 

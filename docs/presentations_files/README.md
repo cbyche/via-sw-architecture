@@ -2,9 +2,9 @@
 
 > **2026-10-14 기능 요구사항 갱신:** [현재 원문](./functional-requirements-and-constraints.md)은 대화 지속성 제공, 음성-화면 지칭 연결, 과거 이력 맥락 제공, 대화-업무 관계 연결의 네 항목이다. 각각 DP-44, DP-47, DP-45, DP-42에 연결한다. 원문에 새 FR별 투명 배경 PNG 네 장을 첨부했다. 기존 발표 파일과 이전 FR 그림은 새 정의를 아직 반영하지 않았다.
 
-현재 발표자료는 **[VIA-architecture-presentation_v7.pptx, 61장](./VIA-architecture-presentation_v7.pptx)**이다. v6에서 첫 장의 왼쪽 시연만 2026-08-26에 공개된 Claude Cowork 내장 브라우저 사례로 갱신했다. GIF와 관련 설명, 날짜와 출처 노트를 변경했으며 나머지 60장은 그대로 보존했다. 본문 24장, appendix 안내 1장과 보존 자료 36장으로 구성한다. 참조 발표자료의 검정색 제목과 본문, 회색 구분선, 상단 진행 표시와 연한 초록색 표 스타일을 적용했다. 도형 라벨을 도형 자체의 텍스트로 옮기고, 본문에서는 화면 지칭보다 요청 조건, 순서와 정정 범위를 강조한다. Calibri, 정수 pt와 한국어 기본 언어도 유지했다. 최신본에서 필요한 장을 수정하고 새 버전으로 저장한다. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v7 슬라이드 목록과 변경 범위](./full-presentation/manifest-v7.json)을 따른다.
+현재 발표자료는 **[VIA-architecture-presentation_v9.pptx, 63장](./VIA-architecture-presentation_v9.pptx)**. v8의 관련 동향과 과제 필요성인 실제 1~2장만 교체한 판본. [두 장 전용 PPTX](./VIA-project-introduction_v9.pptx)와 [미리보기 및 근거 자료](./project-introduction-v9/README.md) 제공. 나머지 61장과 발표자 노트, 기존 GIF 보존. 기존 FR 및 QA 상세 페이지의 최신 정의 반영은 이번 편집 범위 밖. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v9 슬라이드 목록과 변경 범위](./full-presentation/manifest-v9.json) 참조.
 
-[최초 통합본](./VIA-architecture-presentation.pptx), [v2](./VIA-architecture-presentation_v2.pptx), [v3](./VIA-architecture-presentation_v3.pptx), [v4](./VIA-architecture-presentation_v4.pptx), [v5](./VIA-architecture-presentation_v5.pptx)와 [v6](./VIA-architecture-presentation_v6.pptx)는 이전 버전으로 보존한다. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 발표 순서는 위 안내를 따른다.
+v1~v8은 이전 버전으로 보존. 아래 표는 기존 일곱 파일을 합친 **최초 통합본 v1의 32장 구성**이며 현재 순서는 위 안내 기준.
 
 | 통합본 위치 | 발표 내용 |
 | --- | --- |
