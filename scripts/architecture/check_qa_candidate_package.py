@@ -96,7 +96,13 @@ def main():
     assert Fraction('1.2') + max(0, 3) + Fraction('.6') == Fraction('4.8')
     assert (3 * 1 + 3 * 5) / 6 == 3
     assert Fraction(20, 20 * 40) * 20 == Fraction('.5')
-    assert sum((512, 512, 256, 128, 128, 64, 128, 64, 2304)) == 4096
+    # MEM-v2: specified Samsung screen payload and explicit VIA capacity budgets.
+    frame_pool = Fraction(2880 * 1800 * 4 * 15, 2**20)
+    audio_pool = Fraction(48000 * 2 * 60 * 2, 2**20)
+    assert 296 < frame_pool < 297 and frame_pool < 320
+    assert 10 < audio_pool < 11 and audio_pool < 16
+    assert sum((320, 128, 256, 64, 32, 16, 32, 64)) == 912
+    assert 912 + 112 == 1024
     print(f'PASS: 9 QA specs, {probes} score probes, {links} local file links, illustrative arithmetic.')
     print('Scope: score intervals/glyphs/monotonicity, local file existence and examples only.')
     print('Not checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results.')
