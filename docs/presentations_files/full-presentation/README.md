@@ -1,12 +1,12 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v9.pptx](../VIA-architecture-presentation_v9.pptx). v8의 관련 동향과 과제 필요성 두 장만 다시 작성한 2026-10-14 판본. **총 63장, 실제 교체 위치 1~2장**. [두 장 전용 PPTX](../VIA-project-introduction_v9.pptx), [미리보기와 출처](../project-introduction-v9/README.md), [v9 검수 기록](./review-v9-2026-10-14.md), [manifest-v9.json](./manifest-v9.json) 제공.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v10.pptx](../VIA-architecture-presentation_v10.pptx). v9의 사용자 주석 10건을 반영한 2026-10-15 판본. **총 63장, 실제 수정 위치 1~2장**. [두 장 전용 PPTX](../VIA-project-introduction_v10.pptx), [미리보기와 출처](../project-introduction-v10/README.md), [v10 검수 기록](./review-v10-2026-10-15.md), [manifest-v10.json](./manifest-v10.json) 제공.
 
-관련 동향은 왼쪽의 두 시연 GIF, 오른쪽 상단의 시장 전망 및 주요 기업 사례, 오른쪽 하단의 CTO 메시지와 VIA 역할 관계로 구성. 삼성 Bixby를 제외하고 Google, Amazon, Apple, OpenAI 사례 활용. 필요성은 대화 경험, 맥락 이해, 지속적인 서비스와 확장을 개념 그림과 짧은 명사형 문구로 표현.
+관련 동향의 사용자와 VIA 및 Agent 관계를 양방향으로 수정하고 OpenAI 공식 발표일 추가. 시장을 VIA 관련 상위 시장으로 명확화. 필요성의 세 개념 일러스트를 중첩 시간축과 관계도, 맥락 근거 결합도, 운영 부담의 원인 관계도로 교체하고 각 영역의 설명 세 항목 추가.
 
-v8의 나머지 61장과 노트, 기존 GIF, 마스터 및 서식 보존. 기존 FR/QA/DP 상세 페이지의 최신 정의 반영은 이번 두 장 편집 범위 밖. [현재 FR 원문](../functional-requirements-and-constraints.md) 및 Architecture의 현재 논의와 기존 발표 내용을 구별할 필요. 아래 순서 표는 보존된 v8의 내용을 포함한 실제 슬라이드 목록.
+v9의 나머지 61장과 노트, 기존 GIF, 마스터 및 서식 보존. 기존 FR/QA/DP 상세 페이지의 최신 정의 반영은 이번 두 장 편집 범위 밖. [현재 FR 원문](../functional-requirements-and-constraints.md) 및 Architecture의 현재 논의와 기존 발표 내용을 구별할 필요. 아래 순서 표는 보존된 기존 내용을 포함한 실제 슬라이드 목록.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx) 보존. v8의 공통 요청 장면과 문제 소개 및 41의 Appendix 이동 이력은 [v8 검수 기록](./review-v8-2026-10-13.md)과 [manifest-v8.json](./manifest-v8.json) 참조.
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx), [v9](../VIA-architecture-presentation_v9.pptx) 보존. v8의 공통 요청 장면과 문제 소개 및 41의 Appendix 이동 이력은 [v8 검수 기록](./review-v8-2026-10-13.md)과 [manifest-v8.json](./manifest-v8.json) 참조.
 
 ## 현재 발표 순서
 
@@ -109,13 +109,13 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v8.pptx`를 입력으로 `_v9.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v10.pptx`를 입력으로 `_v11.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
 요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v8.json](./manifest-v8.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v8의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v10.json](./manifest-v10.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v10의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
 [부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
