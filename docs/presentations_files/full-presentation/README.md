@@ -8,6 +8,8 @@
 
 [최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx), [v9](../VIA-architecture-presentation_v9.pptx), [v10](../VIA-architecture-presentation_v10.pptx)은 이전 버전으로 보존한다.
 
+[v11 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38602750338)와 [Windows Open XML SDK 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/38602763042)를 통과했다. Windows에서 33장 파일 열기와 스키마 오류 0건을 확인했으며 PowerPoint 프로그램 자체의 렌더링 검증은 별도다.
+
 ## 현재 발표 순서
 
 | 실제 슬라이드 위치 | 구역 | 내용 |
