@@ -182,7 +182,7 @@ def main():
     check_page_projection(docs)
     links = sum(check_links(path) for path in PACKAGE.rglob('*.md'))
     # Verify illustrative arithmetic independently of any future measured data.
-    assert max(Fraction('.8'), Fraction('.6'), 1, Fraction('.8')) == 1
+    assert sum([Fraction('.8'), Fraction('.6'), 1, Fraction('.8')]) / 4 == Fraction('.8')
     assert Fraction('1.2') + max(0, 3) + Fraction('.6') == Fraction('4.8')
     assert Fraction('5.4') * Fraction('.6') == Fraction('3.24')
     assert (Fraction('5.4') - 3) / Fraction('5.4') == Fraction(4, 9)
