@@ -4,6 +4,8 @@ import argparse
 import html
 from pathlib import Path
 import re
+import subprocess
+import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -265,6 +267,8 @@ def main():
             path.write_text(value)
     from generate_dp47_implementation_diagrams import generate
     generate(check=args.check)
+    subprocess.run([sys.executable,str(Path(__file__).with_name('generate_dp47_comparison_page.py')),
+                    *(['--check'] if args.check else [])],check=True)
     if args.check:
         count = check_figure_registration()
         print(f'PASS: all {count} DP-47 figures embedded with editable-source and PNG links; punctuation')

@@ -4,7 +4,9 @@ const path = require('path');
 const crypto = require('crypto');
 const {chromium} = require('playwright');
 const dir = path.resolve(__dirname, '../../docs/architecture/12-decisions/decision-packages/diagrams');
-const figures = ['dp47-implementation-a','dp47-implementation-b','dp47-revision-a','dp47-revision-b'].map(stem=>({stem,width:3840,height:2160,pngDir:dir}));
+const stems = process.argv.includes('--comparison') ? ['dp47-implementation-comparison-v1'] :
+  ['dp47-implementation-a','dp47-implementation-b','dp47-revision-a','dp47-revision-b'];
+const figures = stems.map(stem=>({stem,width:3840,height:2160,pngDir:dir}));
 const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 (async () => {
   const browser = await chromium.launch({headless:true,
@@ -32,8 +34,11 @@ const digest = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
     const pngPath = path.join(pngDir,stem+'.png');
     await page.screenshot({path:pngPath});
     if(issues.length) {process.stderr.write(stem+' '+JSON.stringify(issues,null,2)+'\n');process.exitCode=1;await page.close();continue;}
+    const noteBounds = process.argv.includes('--comparison') ? await page.evaluate(() =>
+      [...document.querySelectorAll('g[id^="note"]')].map(e=>{const b=e.getBBox();return {x:b.x,y:b.y,width:b.width,height:b.height};})) : undefined;
     fs.writeFileSync(path.join(dir,stem+'-render.json'), JSON.stringify({
       stem,width,height,text_geometry_issues:0,
+      ...(noteBounds?{note_bounds:noteBounds}:{}),
       svg_sha256:digest(svg),png_sha256:digest(fs.readFileSync(pngPath)),
       scope:'Documentation rendering only; not API capability, architecture execution or QA evidence'
     },null,2)+'\n');

@@ -1,0 +1,330 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3840" height="2160" viewBox="0 0 3840 2160" role="img"><title>DP-47 화면과 음성 지칭의 구현 구조 비교</title><defs>
+<marker id="a111111" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#111111" stroke-width="1.6"/></marker>
+<marker id="a195FBD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#195FBD" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a777777" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#777777" stroke-width="1.6"/></marker>
+<marker id="reply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="#111111" stroke-width="1.6"/></marker>
+</defs>
+<rect width="3840" height="2160" fill="white"/>
+<g font-family="Calibri, Malgun Gothic, Apple SD Gothic Neo, sans-serif">
+<g id="inputs" data-kind="component" data-owner="">
+<rect x="60" y="190" width="1240" height="250" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M60 238H1300" stroke="#111111" stroke-width="1.5"/>
+<text x="84" y="233" data-width="1204" font-size="38" font-weight="700" text-anchor="start" fill="#111111">Interaction Manager</text>
+</g>
+<g id="raw" data-kind="memory" data-owner="inputs" data-node="true" data-x="85" data-y="260" data-w="1190" data-h="155">
+<rect x="85" y="260" width="1190" height="155" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M93 421H1281V268" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="680.0" y="306" data-width="1154" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Timeline &amp; Buffer / Raw Evidence Window</text>
+<text x="107" y="349" data-width="1154" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM ring + 시간 index: 원음, 전사, frame, path, 선택</text>
+<text x="107" y="388" data-width="1154" font-size="32" font-weight="400" text-anchor="start" fill="#111111">과거 화면 유지 / bounded read / 누락과 시간 오차 보존</text>
+</g>
+<g id="request" data-kind="component" data-owner="">
+<rect x="1370" y="190" width="1070" height="250" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M1370 238H2440" stroke="#111111" stroke-width="1.5"/>
+<text x="1394" y="233" data-width="1034" font-size="38" font-weight="700" text-anchor="start" fill="#111111">Request Controller</text>
+</g>
+<g id="input" data-kind="data" data-owner="request" data-node="true" data-x="1395" data-y="260" data-w="1020" data-h="155">
+<path d="M1395 260H2395L2415 280V415H1395Z M2395 260V280H2415" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="1905.0" y="306" data-width="984" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">1  GroundingInput / immutable DTO</text>
+<text x="1417" y="349" data-width="984" font-size="32" font-weight="400" text-anchor="start" fill="#111111">requestId + inputRev + raw refs + prior + budget</text>
+<text x="1417" y="388" data-width="984" font-size="32" font-weight="400" text-anchor="start" fill="#111111">BeginRevision: 먼저 fence 갱신, 이어서 입력 전달</text>
+</g>
+<g id="adapters" data-kind="component" data-owner="">
+<rect x="2510" y="190" width="1270" height="250" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M2510 238H3780" stroke="#111111" stroke-width="1.5"/>
+<text x="2534" y="233" data-width="1234" font-size="38" font-weight="700" text-anchor="start" fill="#111111">Request Interpreter / 공통 read 및 model adapter</text>
+</g>
+<g id="ports" data-kind="code" data-owner="adapters" data-node="true" data-x="2535" data-y="260" data-w="1220" data-h="155">
+<rect x="2535" y="260" width="1220" height="155" rx="9" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="3145.0" y="306" data-width="1184" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">R: Grounding Evidence Reader / M: Grounding Model Port</text>
+<text x="2557" y="349" data-width="1184" font-size="32" font-weight="400" text-anchor="start" fill="#111111">R은 원본과 허용 Context 조회 / M은 Model Access 호출</text>
+<text x="2557" y="388" data-width="1184" font-size="32" font-weight="400" text-anchor="start" fill="#111111">아래 R/M 표기는 같은 adapter 사용 / 호출한 worker로 반환</text>
+</g>
+<g id="a" data-kind="component" data-owner="">
+<rect x="60" y="560" width="1810" height="1210" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M60 608H1870" stroke="#111111" stroke-width="1.5"/>
+<text x="84" y="603" data-width="1774" font-size="38" font-weight="700" text-anchor="start" fill="#111111">Request Interpreter / local async tasks</text>
+</g>
+<g id="a_inbox" data-kind="queue" data-owner="a" data-node="true" data-x="90" data-y="645" data-w="300" data-h="185">
+<rect x="90" y="645" width="300" height="185" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M180 808H365" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="200" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="238" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="276" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="314" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<text x="240.0" y="691" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Control</text>
+<text x="240.0" y="734" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Inbox</text>
+<text x="112" y="777" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">bounded FIFO</text>
+</g>
+<g id="a_ctl" data-kind="code" data-owner="a" data-node="true" data-x="460" data-y="645" data-w="650" data-h="145">
+<rect x="460" y="645" width="650" height="145" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="785.0" y="691" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Grounding Attempt Control</text>
+<text x="482" y="734" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">CODE / job 제어와 완료 회수</text>
+</g>
+<g id="a_registry" data-kind="memory" data-owner="a" data-node="true" data-x="1190" data-y="645" data-w="650" data-h="145">
+<rect x="1190" y="645" width="650" height="145" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M1198 796H1846V653" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="1515.0" y="691" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Grounding Attempt Registry</text>
+<text x="1212" y="734" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / inputRev, job, 예산</text>
+<text x="1212" y="773" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RevisionGate / 요청별 짧은 lock</text>
+</g>
+<g id="a_done" data-kind="queue" data-owner="a" data-node="true" data-x="90" data-y="1100" data-w="300" data-h="235">
+<rect x="90" y="1100" width="300" height="235" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M180 1313H365" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="200" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="238" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="276" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="314" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<text x="240.0" y="1146" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Completion</text>
+<text x="240.0" y="1189" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Inbox</text>
+<text x="112" y="1232" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">bounded FIFO</text>
+<text x="112" y="1271" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">job outcome</text>
+</g>
+<g id="b" data-kind="component" data-owner="">
+<rect x="1970" y="560" width="1810" height="1210" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M1970 608H3780" stroke="#111111" stroke-width="1.5"/>
+<text x="1994" y="603" data-width="1774" font-size="38" font-weight="700" text-anchor="start" fill="#111111">Request Interpreter / local async tasks</text>
+</g>
+<g id="b_inbox" data-kind="queue" data-owner="b" data-node="true" data-x="2000" data-y="645" data-w="300" data-h="185">
+<rect x="2000" y="645" width="300" height="185" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M2090 808H2275" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2110" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2148" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2186" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2224" y="792" width="30" height="30" fill="white" stroke="#111111"/>
+<text x="2150.0" y="691" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Control</text>
+<text x="2150.0" y="734" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Inbox</text>
+<text x="2022" y="777" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">bounded FIFO</text>
+</g>
+<g id="b_ctl" data-kind="code" data-owner="b" data-node="true" data-x="2370" data-y="645" data-w="650" data-h="145">
+<rect x="2370" y="645" width="650" height="145" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="2695.0" y="691" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Grounding Coordinator</text>
+<text x="2392" y="734" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">CODE / 생산 지시와 결합 실행 관리</text>
+</g>
+<g id="b_registry" data-kind="memory" data-owner="b" data-node="true" data-x="3100" data-y="645" data-w="650" data-h="145">
+<rect x="3100" y="645" width="650" height="145" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M3108 796H3756V653" fill="none" stroke="#111111" stroke-width="2"/>
+<text x="3425.0" y="691" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Grounding Attempt Registry</text>
+<text x="3122" y="734" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / inputRev, job, 예산</text>
+<text x="3122" y="773" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RevisionGate / 요청별 짧은 lock</text>
+</g>
+<g id="b_done" data-kind="queue" data-owner="b" data-node="true" data-x="2000" data-y="1100" data-w="300" data-h="235">
+<rect x="2000" y="1100" width="300" height="235" rx="0" fill="white" stroke="#111111" stroke-width="2"/>
+<path d="M2090 1313H2275" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2110" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2148" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2186" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<rect x="2224" y="1297" width="30" height="30" fill="white" stroke="#111111"/>
+<text x="2150.0" y="1146" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Completion</text>
+<text x="2150.0" y="1189" data-width="264" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Inbox</text>
+<text x="2022" y="1232" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">bounded FIFO</text>
+<text x="2022" y="1271" data-width="264" font-size="32" font-weight="400" text-anchor="start" fill="#111111">job outcome</text>
+</g>
+<g id="a_q" data-kind="queue" data-owner="a" data-node="true" data-x="460" data-y="890" data-w="650" data-h="135">
+<rect x="460" y="890" width="650" height="135" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M900 1003H1085" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="920" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="958" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="996" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="1034" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<text x="785.0" y="936" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Joint Work Queue</text>
+<text x="482" y="979" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">JointJob / refs + prior + correction</text>
+</g>
+<g id="a_worker" data-kind="code" data-owner="a" data-node="true" data-x="460" data-y="1130" data-w="650" data-h="190">
+<rect x="460" y="1130" width="650" height="190" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="785.0" y="1176" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Joint Grounding Interpreter</text>
+<text x="482" y="1219" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">ASYNC WORKER / R read, M invoke</text>
+<text x="482" y="1258" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">원음과 화면을 함께 해석</text>
+<text x="482" y="1297" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">새 target과 binding delta 직접 생산</text>
+</g>
+<g id="a_state" data-kind="memory" data-owner="a" data-node="true" data-x="1190" data-y="1130" data-w="650" data-h="190">
+<rect x="1190" y="1130" width="650" height="190" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M1198 1326H1846V1138" fill="none" stroke="#238176" stroke-width="2"/>
+<text x="1515.0" y="1176" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Joint Grounding State</text>
+<text x="1212" y="1219" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / bindingId, revision</text>
+<text x="1212" y="1258" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">원본 의존 + base version</text>
+<text x="1212" y="1297" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">writer: Joint Grounding Interpreter</text>
+</g>
+<g id="a_result" data-kind="data" data-owner="a" data-node="true" data-x="460" data-y="1490" data-w="1380" data-h="190">
+<path d="M460 1490H1820L1840 1510V1680H460Z M1820 1490V1510H1840" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="1150.0" y="1536" data-width="1344" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">5  InterpretGrounding result / typed union</text>
+<text x="482" y="1579" data-width="1344" font-size="32" font-weight="400" text-anchor="start" fill="#111111">Ready(delta) / NeedEvidence(scope) / Ambiguous / Failed</text>
+<text x="482" y="1618" data-width="1344" font-size="32" font-weight="400" text-anchor="start" fill="#111111">추가 근거가 필요하면 동일 workflow로 복귀</text>
+<text x="482" y="1657" data-width="1344" font-size="32" font-weight="400" text-anchor="start" fill="#111111">부분 patch: 처음 매출 범위와 표 유지, 아래 graph만 교체</text>
+</g>
+<g id="speech_q" data-kind="queue" data-owner="b" data-node="true" data-x="2370" data-y="890" data-w="650" data-h="135">
+<rect x="2370" y="890" width="650" height="135" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M2810 1003H2995" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2830" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2868" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2906" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2944" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<text x="2695.0" y="936" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Speech Work Queue</text>
+<text x="2392" y="979" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">SpeechJob / refs + peer + generation</text>
+</g>
+<g id="speech" data-kind="code" data-owner="b" data-node="true" data-x="2370" data-y="1100" data-w="650" data-h="185">
+<rect x="2370" y="1100" width="650" height="185" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="2695.0" y="1146" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Speech Reference Producer</text>
+<text x="2392" y="1189" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">ASYNC WORKER / R read, M 필요 시</text>
+<text x="2392" y="1228" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">표현, 개수, 정정 역할의 후보</text>
+<text x="2392" y="1267" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">TryPublishSpeech</text>
+</g>
+<g id="speech_state" data-kind="memory" data-owner="b" data-node="true" data-x="2370" data-y="1360" data-w="650" data-h="145">
+<rect x="2370" y="1360" width="650" height="145" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M2378 1511H3026V1368" fill="none" stroke="#238176" stroke-width="2"/>
+<text x="2695.0" y="1406" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Speech Candidate Revisions</text>
+<text x="2392" y="1449" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / candidateId, revision</text>
+<text x="2392" y="1488" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">source refs + peer versions + coverage</text>
+</g>
+<g id="screen_q" data-kind="queue" data-owner="b" data-node="true" data-x="3100" data-y="890" data-w="650" data-h="135">
+<rect x="3100" y="890" width="650" height="135" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M3540 1003H3725" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="3560" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="3598" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="3636" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="3674" y="987" width="30" height="30" fill="white" stroke="#238176"/>
+<text x="3425.0" y="936" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Screen Work Queue</text>
+<text x="3122" y="979" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">ScreenJob / refs + peer + generation</text>
+</g>
+<g id="screen" data-kind="code" data-owner="b" data-node="true" data-x="3100" data-y="1100" data-w="650" data-h="185">
+<rect x="3100" y="1100" width="650" height="185" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="3425.0" y="1146" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Screen Target Producer</text>
+<text x="3122" y="1189" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">ASYNC WORKER / R read, M 필요 시</text>
+<text x="3122" y="1228" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">영역, 집합, 동작 해석의 후보</text>
+<text x="3122" y="1267" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">TryPublishScreen</text>
+</g>
+<g id="screen_state" data-kind="memory" data-owner="b" data-node="true" data-x="3100" data-y="1360" data-w="650" data-h="145">
+<rect x="3100" y="1360" width="650" height="145" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M3108 1511H3756V1368" fill="none" stroke="#238176" stroke-width="2"/>
+<text x="3425.0" y="1406" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Screen Candidate Revisions</text>
+<text x="3122" y="1449" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / candidateId, revision</text>
+<text x="3122" y="1488" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">source refs + peer versions + coverage</text>
+</g>
+<g id="binding_q" data-kind="queue" data-owner="b" data-node="true" data-x="2010" data-y="1560" data-w="570" data-h="145">
+<rect x="2010" y="1560" width="570" height="145" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M2370 1683H2555" stroke="#195FBD" marker-end="url(#a195FBD)"/>
+<rect x="2390" y="1667" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2428" y="1667" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2466" y="1667" width="30" height="30" fill="white" stroke="#238176"/>
+<rect x="2504" y="1667" width="30" height="30" fill="white" stroke="#238176"/>
+<text x="2295.0" y="1606" data-width="534" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Binding Work Queue</text>
+<text x="2032" y="1649" data-width="534" font-size="32" font-weight="400" text-anchor="start" fill="#111111">BindingJob / candidate read-set</text>
+<text x="2032" y="1688" data-width="534" font-size="32" font-weight="400" text-anchor="start" fill="#111111">prior + deadline</text>
+</g>
+<g id="resolver" data-kind="code" data-owner="b" data-node="true" data-x="2660" data-y="1560" data-w="650" data-h="145">
+<rect x="2660" y="1560" width="650" height="145" rx="9" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<text x="2985.0" y="1606" data-width="614" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Multimodal Binding Resolver</text>
+<text x="2682" y="1649" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">ASYNC WORKER / M / 후보와 excerpt</text>
+<text x="2682" y="1688" data-width="614" font-size="32" font-weight="400" text-anchor="start" fill="#111111">TryApplyBinding / 부족하면 Rejudge</text>
+</g>
+<g id="b_state" data-kind="memory" data-owner="b" data-node="true" data-x="3390" data-y="1560" data-w="350" data-h="145">
+<rect x="3390" y="1560" width="350" height="145" rx="0" fill="#F0F6F5" stroke="#238176" stroke-width="2"/>
+<path d="M3398 1711H3746V1568" fill="none" stroke="#238176" stroke-width="2"/>
+<text x="3565.0" y="1606" data-width="314" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Binding Revision</text>
+<text x="3565.0" y="1649" data-width="314" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">State</text>
+<text x="3412" y="1692" data-width="314" font-size="32" font-weight="400" text-anchor="start" fill="#111111">RAM Map / read-set</text>
+</g>
+<g id="adopt" data-kind="component" data-owner="">
+<rect x="60" y="1845" width="3720" height="190" rx="0" fill="white" stroke="#111111" stroke-width="2.5"/>
+<path d="M60 1893H3780" stroke="#111111" stroke-width="1.5"/>
+<text x="84" y="1888" data-width="3684" font-size="38" font-weight="700" text-anchor="start" fill="#111111">공통 결과 채택 / Request Controller와 State Store</text>
+</g>
+<g id="proposal" data-kind="data" data-owner="adopt" data-node="true" data-x="90" data-y="1910" data-w="1600" data-h="100">
+<path d="M90 1910H1670L1690 1930V2010H90Z M1670 1910V1930H1690" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="890.0" y="1956" data-width="1564" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">GroundingProposal: binding delta + 근거 + revision</text>
+</g>
+<g id="adoption" data-kind="code" data-owner="adopt" data-node="true" data-x="1780" data-y="1910" data-w="1050" data-h="100">
+<rect x="1780" y="1910" width="1050" height="100" rx="9" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="2305.0" y="1956" data-width="1014" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">Adoption Control: 최신 입력, 사용권, base 검사</text>
+</g>
+<g id="db" data-kind="db" data-owner="adopt" data-node="true" data-x="2920" data-y="1910" data-w="830" data-h="100">
+<path d="M2920 1923C2920 1907 3750 1907 3750 1923V1997C3750 2013 2920 2013 2920 1997Z M2920 1923C2920 1939 3750 1939 3750 1923" fill="white" stroke="#111111" stroke-width="2"/>
+<text x="3335.0" y="1970" data-width="794" font-size="36" font-weight="700" text-anchor="middle" fill="#111111">State Store / 채택 결과 영속 DB</text>
+</g>
+<polyline id="wire1" data-flow="post" data-source="input" data-target="a_inbox" points="1905.0,415 1905.0,621 240.0,621 240.0,645" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire2" data-flow="post" data-source="a_inbox" data-target="a_ctl" points="390,737.5 436,737.5 436,717.5 460,717.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire3" data-flow="state" data-source="a_ctl" data-target="a_registry" points="1110,717.5 1190,717.5" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire4" data-flow="done" data-source="a_done" data-target="a_ctl" points="240.0,1100 240.0,854 785.0,854 785.0,790" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire5" data-flow="post" data-source="input" data-target="b_inbox" points="1913.0,415 1913.0,621 2150.0,621 2150.0,645" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire6" data-flow="post" data-source="b_inbox" data-target="b_ctl" points="2300,737.5 2346,737.5 2346,717.5 2370,717.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire7" data-flow="state" data-source="b_ctl" data-target="b_registry" points="3020,717.5 3100,717.5" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire8" data-flow="done" data-source="b_done" data-target="b_ctl" points="2150.0,1100 2150.0,854 2695.0,854 2695.0,790" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire9" data-flow="post" data-source="a_ctl" data-target="a_q" points="793.0,790 793.0,866 785.0,866 785.0,890" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire10" data-flow="post" data-source="a_q" data-target="a_worker" points="785.0,1025 785.0,1130" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire11" data-flow="state" data-source="a_worker" data-target="a_state" points="1110,1225.0 1190,1225.0" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire12" data-flow="done" data-source="a_worker" data-target="a_result" points="1110,1225.0 1150,1225 1150,1360 1815,1360 1815.0,1490" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire13" data-flow="done" data-source="a_result" data-target="a_done" points="460,1585.0 240.0,1585.0 240.0,1335" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire14" data-flow="post" data-source="b_ctl" data-target="speech_q" points="2703.0,790 2703.0,866 2695.0,866 2695.0,890" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire15" data-flow="post" data-source="speech_q" data-target="speech" points="2695.0,1025 2695.0,1100" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire16" data-flow="state" data-source="speech" data-target="speech_state" points="2695.0,1285 2695.0,1360" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire17" data-flow="done" data-source="speech" data-target="b_done" points="2370,1192.5 2324,1192.5 2324,1217.5 2300,1217.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire18" data-flow="post" data-source="b_ctl" data-target="screen_q" points="2687.0,790 2687.0,814 3425.0,814 3425.0,890" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire19" data-flow="post" data-source="screen_q" data-target="screen" points="3425.0,1025 3425.0,1100" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire20" data-flow="state" data-source="screen" data-target="screen_state" points="3425.0,1285 3425.0,1360" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire21" data-flow="done" data-source="screen" data-target="b_done" points="3750,1192.5 3774,1192.5 3774,1309 2324,1309 2324,1225.5 2300,1225.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire22" data-flow="post" data-source="b_ctl" data-target="binding_q" points="2370,725.5 2324,725.5 2324,1076 1986,1076 1986,1632.5 2010,1632.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire23" data-flow="post" data-source="binding_q" data-target="resolver" points="2580,1632.5 2660,1632.5" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire24" data-flow="state" data-source="speech_state" data-target="resolver" points="2695.0,1505 2695.0,1536 2985.0,1536 2985.0,1560" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire25" data-flow="state" data-source="screen_state" data-target="resolver" points="3425.0,1505 3425.0,1536 2993.0,1536 2993.0,1560" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire26" data-flow="state" data-source="resolver" data-target="b_state" points="3310,1632.5 3390,1632.5" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<polyline id="wire27" data-flow="cancel" data-source="resolver" data-target="b_done" points="2660,1640.5 2604,1640.5 2604,1529 2150.0,1529 2150.0,1335" fill="none" stroke="#B63732" stroke-width="2" marker-end="url(#aB63732)" stroke-dasharray="9 6"/>
+<polyline id="wire28" data-flow="done" data-source="a_result" data-target="proposal" points="1150.0,1680 1150.0,1886 890.0,1886 890.0,1910" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire29" data-flow="done" data-source="resolver" data-target="proposal" points="2985.0,1705 2985,1720 3766,1720 3766,1835 1550,1835 1550.0,1910" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)" stroke-dasharray="9 6"/>
+<polyline id="wire30" data-flow="post" data-source="proposal" data-target="adoption" points="1690,1960.0 1780,1960.0" fill="none" stroke="#195FBD" stroke-width="2" marker-end="url(#a195FBD)"/>
+<polyline id="wire31" data-flow="state" data-source="adoption" data-target="db" points="2830,1960.0 2920,1960.0" fill="none" stroke="#777777" stroke-width="2" marker-end="url(#a777777)" stroke-dasharray="9 6"/>
+<g id="note0" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="60" y="72.0" font-size="58" font-weight="700" text-anchor="start" fill="#111111">DP-47  화면과 음성 지칭의 구현 구조 비교</text>
+</g>
+<g id="note1" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="60" y="132.0" font-size="38" font-weight="400" text-anchor="start" fill="#111111">A는 원본에서 binding을 직접 갱신한다. B는 생산자별 후보를 게시한 뒤 결합한다.</text>
+</g>
+<g id="note2" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="80" y="508.0" font-size="44" font-weight="700" text-anchor="start" fill="#195FBD">A  원본 공동 해석</text>
+</g>
+<g id="note3" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1990" y="508.0" font-size="44" font-weight="700" text-anchor="start" fill="#195FBD">B  후보 생산과 결합</text>
+</g>
+<g id="note4" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="570" y="508.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">비동기 workflow / 단일 binding aggregate</text>
+</g>
+<g id="note5" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2510" y="508.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">Fork–Join + feedback / 생산자별 repository</text>
+</g>
+<g id="note6" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="480" y="857.0" font-size="32" font-weight="400" text-anchor="start" fill="#195FBD">2  실행 지시</text>
+</g>
+<g id="note7" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="480" y="1088.0" font-size="32" font-weight="400" text-anchor="start" fill="#195FBD">3  원본 read 및 공동 의미 판단</text>
+</g>
+<g id="note8" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="1175" y="1088.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">4  TryApply / 현재 revision만 게시</text>
+</g>
+<g id="note9" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="480" y="1432.0" font-size="35" font-weight="700" text-anchor="start" fill="#195FBD">직접 target 생산과 binding 갱신이 하나의 의미 책임</text>
+</g>
+<g id="note10" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2390" y="857.0" font-size="32" font-weight="400" text-anchor="start" fill="#195FBD">2  생산 job dispatch / 자원이 허용하면 병행</text>
+</g>
+<g id="note11" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2390" y="1070.0" font-size="32" font-weight="400" text-anchor="start" fill="#195FBD">3  역할별 원본 해석</text>
+</g>
+<g id="note12" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2390" y="1332.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">4  생산자별 게시 후 완료 통지</text>
+</g>
+<g id="note13" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2010" y="1540.0" font-size="31" font-weight="400" text-anchor="start" fill="#195FBD">5  호환 snapshot + 응답/deadline으로 결합 지시</text>
+</g>
+<g id="note14" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="2010" y="1744.0" font-size="30" font-weight="400" text-anchor="start" fill="#B63732">6  후보 부족: 완료 inbox로 Rejudge 반환, Coordinator가 원 producer에 재지시</text>
+</g>
+<g id="note15" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="90" y="1818.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">공통 정정: BeginRevision(r2)와 TryApply/TryPublish가 같은 RevisionGate 사용 / 늦은 r1은 상태 반영 전 거절</text>
+</g>
+<g id="note16" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="60" y="2090.0" font-size="32" font-weight="400" text-anchor="start" fill="#111111">사각형: 실행 코드   칸 상자: bounded RAM FIFO   겹친 카드: RAM data model   접힌 종이: DTO   원통: 영속 DB</text>
+</g>
+<g id="note17" paint-order="stroke" stroke="white" stroke-width="8" stroke-linejoin="round">
+<text x="60" y="2140.0" font-size="30" font-weight="400" text-anchor="start" fill="#111111">실선: 작업 전달   점선: 완료 반환   회색: 상태 접근   빨강: 재판단   /   설계 가정, 미구현, 미측정</text>
+</g>
+</g></svg>

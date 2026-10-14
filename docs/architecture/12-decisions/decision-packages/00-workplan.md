@@ -138,6 +138,12 @@ Rust의 `mod`와 crate root가 만드는 모듈 경로를 식별 단위로 삼�
 
 미응답·오답을 평균에서 삭제하지 않는다. 사전 공통 평가 상한까지 유효 응답이 없으면 상한값과 실패를 함께 기록하는 방식으로 구체화한다. 응답 유형별 사례 비율, 필수 내용, 상한값, 합격선과 차이 판정값은 평가 전 합의할 항목이며 아직 수치를 정하지 않았다. 기존 [사건 경계 원칙](../../11-measurement/event-boundary-contract.md)의 실제 사건·실제 재생 관측 원칙을 따르되 이전 QA ID와 집계 계약을 소급 변경하지 않는다.
 
+## 2026-10-15 DP-47 구현 구조의 한 페이지 비교 추가
+
+사용자는 §8.5의 상세 구현 구조를 바탕으로 설계비교 1페이지를 다시 만들고, 기존 그림을 삭제하지 않은 채 commit/push하도록 요청했다. [47 §6.2](./04-47-screen-voice-grounding.md#62-구현-구조를-한-페이지에서-비교)에 새 SVG, draw.io와 PNG 및 편집 가능한 PPTX 한 장을 추가한다. 기존 MAIN, 배경 그림, 네 상세도와 기존 통합 발표자료는 보존한다.
+
+새 페이지는 공통 원본과 입력 등록을 상단에, A의 Joint Work Queue와 직접 binding 갱신을 왼쪽에, B의 생산자별 queue/repository와 결합 및 Rejudge 경로를 오른쪽에 배치한다. 공통 inbox와 registry를 같은 상대 위치에 놓고 queue, 코드, RAM data model, DTO와 영속 DB를 구별한다. 세부 의미와 실행 계약은 §8.5를 유지하며 새로운 A/B, 구현이나 품질 측정으로 표시하지 않는다. 본문의 그림 등록 검사에 새 페이지의 생성 및 렌더 동기화 검사를 연결했다.
+
 ## 2026-10-14 DP-47 reference를 반영한 실제 구현 요소와 pattern 구체화
 
 사용자는 §8.5의 그림만으로 실행 흐름, SW 구성요소의 실체와 architectural style/pattern을 이해할 수 있도록 구체화해 달라고 요청했다. [47 §8.5](./04-47-screen-voice-grounding.md#85-구현을-가정한-상세-구조와-실행-계약)의 A/B 구조도와 두 사건도를 갱신했다. A는 비동기 workflow와 하나의 binding aggregate, B는 coordinator가 제어하는 Fork–Join/feedback dataflow와 생산자별 candidate repository다. 공통 30개 요소는 같은 좌표에 두었다.

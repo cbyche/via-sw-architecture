@@ -115,3 +115,13 @@ DP-47 본문, 다섯 보조 문서, 그림과 생성 원본의 가운데 점을 
 `generate_screen_voice_grounding_diagram.py --check`가 네 상세도의 SVG/draw.io 및 렌더 해시, 공통 30개 요소의 같은 배치, owner/직교 배선과 여섯 그림의 본문 등록을 통과했다. Chrome으로 네 3840×2160 PNG를 렌더링하여 text width/overlap/bounds 오류 0을 확인하고 각각 열어 읽었다. active Markdown 397개 local link, 용어와 QA registry 검사도 통과했다. DP-47 관련 원본과 editable figure 13개에서 가운데 점이 없음을 확인했고 대상 diff의 whitespace 검사도 통과했다.
 
 구현 가능한 실행 계약을 설명하는 문서 작업이다. queue 용량, worker 수와 실제 provider capability를 측정하거나 SDK/DB engine을 최종 선정하지 않았다. local in-process task 가정은 Request Interpreter 내부에 적용하며 DP-42의 주변 서비스 수명을 결정하지 않는다. 제품 코드, Windows 연동, 모델 실행, 독립 리뷰나 품질 우위의 실증은 없다.
+
+## 10. 구현 구조 한 페이지 비교와 기존 그림 보존 / 2026-10-15
+
+사용자는 기존 비교 페이지에서 SW 구조가 충분히 보이지 않는다고 지적하고, §8.5의 구현 수준 A/B를 한 장에서 비교하도록 요청했다. 이전 그림을 지우지 말라는 후속 지시에 따라 `dp47-implementation-comparison-v1`을 별도 추가했다. 기존 MAIN, 배경과 네 상세도의 SVG/draw.io/PNG는 변경하지 않는다. 통합 PPTX의 기존 페이지도 수정하지 않고 편집 가능한 독립 PPTX 한 장을 추가한다.
+
+상단의 같은 원본과 GroundingInput, 중단의 같은 위치에 놓인 제어 inbox 및 registry, 하단의 공통 채택을 기준으로 두 실행 경로를 비교한다. A의 직접 binding aggregate와 B의 생산자별 후보 repository가 정상 실행의 다른 중간 자료임을 보인다. B의 Coordinator를 의미 판단자로 읽지 않도록 코드의 실행 관리와 Resolver의 판단을 구별했다. 저장소 의존 선은 pub/sub가 아니며 완료 inbox와 Coordinator가 후속 실행을 지시한다.
+
+기존 상세 생성물과의 동기화 검사, 새 scene의 owner 및 배선 검사, SVG/PNG 렌더 해시와 본문 삽입 검사를 적용한다. PPTX는 같은 scene에서 native 도형과 도형 자체 텍스트를 만들며 Calibri, 정수 pt와 한국어 설정을 적용한다. 실제 생성 및 렌더 확인은 문서 표현의 검증이다. 새로운 API 실험, 모델 호출, 구현, QA 측정이나 독립 설계 리뷰를 수행한 기록은 아니다.
+
+로컬 검증에서 일곱 그림의 본문 등록과 생성물 동기화, 링크, 용어와 QA registry 검사가 통과했다. 새 SVG의 text width/overlap/bounds 오류는 0건이며, 최종 PPTX를 다시 읽어 3840×2160으로 렌더링하고 직접 확인했다. PPTX의 package와 geometry 검사 및 Calibri/정수 pt/한국어 검사도 통과했다. 그림을 통째로 붙인 raster picture 없이 실행 모듈 이름이 native 텍스트로 남는지 확인했다. 기존 DP-47 자산과 PPTX 61개가 이 변경 직전 `6901a1deb`의 파일과 byte 단위로 동일했다. PowerPoint 프로그램 자체의 실행 및 native 배치는 이 로컬 검사에 포함하지 않는다.

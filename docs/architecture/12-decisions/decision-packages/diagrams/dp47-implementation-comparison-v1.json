@@ -1,0 +1,1368 @@
+{
+  "width": 3840,
+  "height": 2160,
+  "title": "DP-47 화면과 음성 지칭의 구현 구조 비교",
+  "nodes": [
+    {
+      "id": "inputs",
+      "x": 60,
+      "y": 190,
+      "w": 1240,
+      "h": 250,
+      "title": "Interaction Manager",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "raw",
+      "x": 85,
+      "y": 260,
+      "w": 1190,
+      "h": 155,
+      "title": "Timeline & Buffer / Raw Evidence Window",
+      "lines": [
+        "RAM ring + 시간 index: 원음, 전사, frame, path, 선택",
+        "과거 화면 유지 / bounded read / 누락과 시간 오차 보존"
+      ],
+      "kind": "memory",
+      "owner": "inputs",
+      "different": false
+    },
+    {
+      "id": "request",
+      "x": 1370,
+      "y": 190,
+      "w": 1070,
+      "h": 250,
+      "title": "Request Controller",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "input",
+      "x": 1395,
+      "y": 260,
+      "w": 1020,
+      "h": 155,
+      "title": "1  GroundingInput / immutable DTO",
+      "lines": [
+        "requestId + inputRev + raw refs + prior + budget",
+        "BeginRevision: 먼저 fence 갱신, 이어서 입력 전달"
+      ],
+      "kind": "data",
+      "owner": "request",
+      "different": false
+    },
+    {
+      "id": "adapters",
+      "x": 2510,
+      "y": 190,
+      "w": 1270,
+      "h": 250,
+      "title": "Request Interpreter / 공통 read 및 model adapter",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "ports",
+      "x": 2535,
+      "y": 260,
+      "w": 1220,
+      "h": 155,
+      "title": "R: Grounding Evidence Reader / M: Grounding Model Port",
+      "lines": [
+        "R은 원본과 허용 Context 조회 / M은 Model Access 호출",
+        "아래 R/M 표기는 같은 adapter 사용 / 호출한 worker로 반환"
+      ],
+      "kind": "code",
+      "owner": "adapters",
+      "different": false
+    },
+    {
+      "id": "a",
+      "x": 60,
+      "y": 560,
+      "w": 1810,
+      "h": 1210,
+      "title": "Request Interpreter / local async tasks",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "a_inbox",
+      "x": 90,
+      "y": 645,
+      "w": 300,
+      "h": 185,
+      "title": "Control\nInbox",
+      "lines": [
+        "bounded FIFO"
+      ],
+      "kind": "queue",
+      "owner": "a",
+      "different": false
+    },
+    {
+      "id": "a_ctl",
+      "x": 460,
+      "y": 645,
+      "w": 650,
+      "h": 145,
+      "title": "Grounding Attempt Control",
+      "lines": [
+        "CODE / job 제어와 완료 회수"
+      ],
+      "kind": "code",
+      "owner": "a",
+      "different": true
+    },
+    {
+      "id": "a_registry",
+      "x": 1190,
+      "y": 645,
+      "w": 650,
+      "h": 145,
+      "title": "Grounding Attempt Registry",
+      "lines": [
+        "RAM Map / inputRev, job, 예산",
+        "RevisionGate / 요청별 짧은 lock"
+      ],
+      "kind": "memory",
+      "owner": "a",
+      "different": false
+    },
+    {
+      "id": "a_done",
+      "x": 90,
+      "y": 1100,
+      "w": 300,
+      "h": 235,
+      "title": "Completion\nInbox",
+      "lines": [
+        "bounded FIFO",
+        "job outcome"
+      ],
+      "kind": "queue",
+      "owner": "a",
+      "different": false
+    },
+    {
+      "id": "b",
+      "x": 1970,
+      "y": 560,
+      "w": 1810,
+      "h": 1210,
+      "title": "Request Interpreter / local async tasks",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "b_inbox",
+      "x": 2000,
+      "y": 645,
+      "w": 300,
+      "h": 185,
+      "title": "Control\nInbox",
+      "lines": [
+        "bounded FIFO"
+      ],
+      "kind": "queue",
+      "owner": "b",
+      "different": false
+    },
+    {
+      "id": "b_ctl",
+      "x": 2370,
+      "y": 645,
+      "w": 650,
+      "h": 145,
+      "title": "Grounding Coordinator",
+      "lines": [
+        "CODE / 생산 지시와 결합 실행 관리"
+      ],
+      "kind": "code",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "b_registry",
+      "x": 3100,
+      "y": 645,
+      "w": 650,
+      "h": 145,
+      "title": "Grounding Attempt Registry",
+      "lines": [
+        "RAM Map / inputRev, job, 예산",
+        "RevisionGate / 요청별 짧은 lock"
+      ],
+      "kind": "memory",
+      "owner": "b",
+      "different": false
+    },
+    {
+      "id": "b_done",
+      "x": 2000,
+      "y": 1100,
+      "w": 300,
+      "h": 235,
+      "title": "Completion\nInbox",
+      "lines": [
+        "bounded FIFO",
+        "job outcome"
+      ],
+      "kind": "queue",
+      "owner": "b",
+      "different": false
+    },
+    {
+      "id": "a_q",
+      "x": 460,
+      "y": 890,
+      "w": 650,
+      "h": 135,
+      "title": "Joint Work Queue",
+      "lines": [
+        "JointJob / refs + prior + correction"
+      ],
+      "kind": "queue",
+      "owner": "a",
+      "different": true
+    },
+    {
+      "id": "a_worker",
+      "x": 460,
+      "y": 1130,
+      "w": 650,
+      "h": 190,
+      "title": "Joint Grounding Interpreter",
+      "lines": [
+        "ASYNC WORKER / R read, M invoke",
+        "원음과 화면을 함께 해석",
+        "새 target과 binding delta 직접 생산"
+      ],
+      "kind": "code",
+      "owner": "a",
+      "different": true
+    },
+    {
+      "id": "a_state",
+      "x": 1190,
+      "y": 1130,
+      "w": 650,
+      "h": 190,
+      "title": "Joint Grounding State",
+      "lines": [
+        "RAM Map / bindingId, revision",
+        "원본 의존 + base version",
+        "writer: Joint Grounding Interpreter"
+      ],
+      "kind": "memory",
+      "owner": "a",
+      "different": true
+    },
+    {
+      "id": "a_result",
+      "x": 460,
+      "y": 1490,
+      "w": 1380,
+      "h": 190,
+      "title": "5  InterpretGrounding result / typed union",
+      "lines": [
+        "Ready(delta) / NeedEvidence(scope) / Ambiguous / Failed",
+        "추가 근거가 필요하면 동일 workflow로 복귀",
+        "부분 patch: 처음 매출 범위와 표 유지, 아래 graph만 교체"
+      ],
+      "kind": "data",
+      "owner": "a",
+      "different": false
+    },
+    {
+      "id": "speech_q",
+      "x": 2370,
+      "y": 890,
+      "w": 650,
+      "h": 135,
+      "title": "Speech Work Queue",
+      "lines": [
+        "SpeechJob / refs + peer + generation"
+      ],
+      "kind": "queue",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "speech",
+      "x": 2370,
+      "y": 1100,
+      "w": 650,
+      "h": 185,
+      "title": "Speech Reference Producer",
+      "lines": [
+        "ASYNC WORKER / R read, M 필요 시",
+        "표현, 개수, 정정 역할의 후보",
+        "TryPublishSpeech"
+      ],
+      "kind": "code",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "speech_state",
+      "x": 2370,
+      "y": 1360,
+      "w": 650,
+      "h": 145,
+      "title": "Speech Candidate Revisions",
+      "lines": [
+        "RAM Map / candidateId, revision",
+        "source refs + peer versions + coverage"
+      ],
+      "kind": "memory",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "screen_q",
+      "x": 3100,
+      "y": 890,
+      "w": 650,
+      "h": 135,
+      "title": "Screen Work Queue",
+      "lines": [
+        "ScreenJob / refs + peer + generation"
+      ],
+      "kind": "queue",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "screen",
+      "x": 3100,
+      "y": 1100,
+      "w": 650,
+      "h": 185,
+      "title": "Screen Target Producer",
+      "lines": [
+        "ASYNC WORKER / R read, M 필요 시",
+        "영역, 집합, 동작 해석의 후보",
+        "TryPublishScreen"
+      ],
+      "kind": "code",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "screen_state",
+      "x": 3100,
+      "y": 1360,
+      "w": 650,
+      "h": 145,
+      "title": "Screen Candidate Revisions",
+      "lines": [
+        "RAM Map / candidateId, revision",
+        "source refs + peer versions + coverage"
+      ],
+      "kind": "memory",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "binding_q",
+      "x": 2010,
+      "y": 1560,
+      "w": 570,
+      "h": 145,
+      "title": "Binding Work Queue",
+      "lines": [
+        "BindingJob / candidate read-set",
+        "prior + deadline"
+      ],
+      "kind": "queue",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "resolver",
+      "x": 2660,
+      "y": 1560,
+      "w": 650,
+      "h": 145,
+      "title": "Multimodal Binding Resolver",
+      "lines": [
+        "ASYNC WORKER / M / 후보와 excerpt",
+        "TryApplyBinding / 부족하면 Rejudge"
+      ],
+      "kind": "code",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "b_state",
+      "x": 3390,
+      "y": 1560,
+      "w": 350,
+      "h": 145,
+      "title": "Binding Revision\nState",
+      "lines": [
+        "RAM Map / read-set"
+      ],
+      "kind": "memory",
+      "owner": "b",
+      "different": true
+    },
+    {
+      "id": "adopt",
+      "x": 60,
+      "y": 1845,
+      "w": 3720,
+      "h": 190,
+      "title": "공통 결과 채택 / Request Controller와 State Store",
+      "lines": [],
+      "kind": "component",
+      "owner": null,
+      "different": false
+    },
+    {
+      "id": "proposal",
+      "x": 90,
+      "y": 1910,
+      "w": 1600,
+      "h": 100,
+      "title": "GroundingProposal: binding delta + 근거 + revision",
+      "lines": [],
+      "kind": "data",
+      "owner": "adopt",
+      "different": false
+    },
+    {
+      "id": "adoption",
+      "x": 1780,
+      "y": 1910,
+      "w": 1050,
+      "h": 100,
+      "title": "Adoption Control: 최신 입력, 사용권, base 검사",
+      "lines": [],
+      "kind": "code",
+      "owner": "adopt",
+      "different": false
+    },
+    {
+      "id": "db",
+      "x": 2920,
+      "y": 1910,
+      "w": 830,
+      "h": 100,
+      "title": "State Store / 채택 결과 영속 DB",
+      "lines": [],
+      "kind": "db",
+      "owner": "adopt",
+      "different": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "wire1",
+      "source": "input",
+      "target": "a_inbox",
+      "points": [
+        [
+          1905.0,
+          415
+        ],
+        [
+          1905.0,
+          621
+        ],
+        [
+          240.0,
+          621
+        ],
+        [
+          240.0,
+          645
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire2",
+      "source": "a_inbox",
+      "target": "a_ctl",
+      "points": [
+        [
+          390,
+          737.5
+        ],
+        [
+          436,
+          737.5
+        ],
+        [
+          436,
+          717.5
+        ],
+        [
+          460,
+          717.5
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire3",
+      "source": "a_ctl",
+      "target": "a_registry",
+      "points": [
+        [
+          1110,
+          717.5
+        ],
+        [
+          1190,
+          717.5
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire4",
+      "source": "a_done",
+      "target": "a_ctl",
+      "points": [
+        [
+          240.0,
+          1100
+        ],
+        [
+          240.0,
+          854
+        ],
+        [
+          785.0,
+          854
+        ],
+        [
+          785.0,
+          790
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire5",
+      "source": "input",
+      "target": "b_inbox",
+      "points": [
+        [
+          1913.0,
+          415
+        ],
+        [
+          1913.0,
+          621
+        ],
+        [
+          2150.0,
+          621
+        ],
+        [
+          2150.0,
+          645
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire6",
+      "source": "b_inbox",
+      "target": "b_ctl",
+      "points": [
+        [
+          2300,
+          737.5
+        ],
+        [
+          2346,
+          737.5
+        ],
+        [
+          2346,
+          717.5
+        ],
+        [
+          2370,
+          717.5
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire7",
+      "source": "b_ctl",
+      "target": "b_registry",
+      "points": [
+        [
+          3020,
+          717.5
+        ],
+        [
+          3100,
+          717.5
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire8",
+      "source": "b_done",
+      "target": "b_ctl",
+      "points": [
+        [
+          2150.0,
+          1100
+        ],
+        [
+          2150.0,
+          854
+        ],
+        [
+          2695.0,
+          854
+        ],
+        [
+          2695.0,
+          790
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire9",
+      "source": "a_ctl",
+      "target": "a_q",
+      "points": [
+        [
+          793.0,
+          790
+        ],
+        [
+          793.0,
+          866
+        ],
+        [
+          785.0,
+          866
+        ],
+        [
+          785.0,
+          890
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire10",
+      "source": "a_q",
+      "target": "a_worker",
+      "points": [
+        [
+          785.0,
+          1025
+        ],
+        [
+          785.0,
+          1130
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire11",
+      "source": "a_worker",
+      "target": "a_state",
+      "points": [
+        [
+          1110,
+          1225.0
+        ],
+        [
+          1190,
+          1225.0
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire12",
+      "source": "a_worker",
+      "target": "a_result",
+      "points": [
+        [
+          1110,
+          1225.0
+        ],
+        [
+          1150,
+          1225
+        ],
+        [
+          1150,
+          1360
+        ],
+        [
+          1815,
+          1360
+        ],
+        [
+          1815.0,
+          1490
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire13",
+      "source": "a_result",
+      "target": "a_done",
+      "points": [
+        [
+          460,
+          1585.0
+        ],
+        [
+          240.0,
+          1585.0
+        ],
+        [
+          240.0,
+          1335
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire14",
+      "source": "b_ctl",
+      "target": "speech_q",
+      "points": [
+        [
+          2703.0,
+          790
+        ],
+        [
+          2703.0,
+          866
+        ],
+        [
+          2695.0,
+          866
+        ],
+        [
+          2695.0,
+          890
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire15",
+      "source": "speech_q",
+      "target": "speech",
+      "points": [
+        [
+          2695.0,
+          1025
+        ],
+        [
+          2695.0,
+          1100
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire16",
+      "source": "speech",
+      "target": "speech_state",
+      "points": [
+        [
+          2695.0,
+          1285
+        ],
+        [
+          2695.0,
+          1360
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire17",
+      "source": "speech",
+      "target": "b_done",
+      "points": [
+        [
+          2370,
+          1192.5
+        ],
+        [
+          2324,
+          1192.5
+        ],
+        [
+          2324,
+          1217.5
+        ],
+        [
+          2300,
+          1217.5
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire18",
+      "source": "b_ctl",
+      "target": "screen_q",
+      "points": [
+        [
+          2687.0,
+          790
+        ],
+        [
+          2687.0,
+          814
+        ],
+        [
+          3425.0,
+          814
+        ],
+        [
+          3425.0,
+          890
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire19",
+      "source": "screen_q",
+      "target": "screen",
+      "points": [
+        [
+          3425.0,
+          1025
+        ],
+        [
+          3425.0,
+          1100
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire20",
+      "source": "screen",
+      "target": "screen_state",
+      "points": [
+        [
+          3425.0,
+          1285
+        ],
+        [
+          3425.0,
+          1360
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire21",
+      "source": "screen",
+      "target": "b_done",
+      "points": [
+        [
+          3750,
+          1192.5
+        ],
+        [
+          3774,
+          1192.5
+        ],
+        [
+          3774,
+          1309
+        ],
+        [
+          2324,
+          1309
+        ],
+        [
+          2324,
+          1225.5
+        ],
+        [
+          2300,
+          1225.5
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire22",
+      "source": "b_ctl",
+      "target": "binding_q",
+      "points": [
+        [
+          2370,
+          725.5
+        ],
+        [
+          2324,
+          725.5
+        ],
+        [
+          2324,
+          1076
+        ],
+        [
+          1986,
+          1076
+        ],
+        [
+          1986,
+          1632.5
+        ],
+        [
+          2010,
+          1632.5
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire23",
+      "source": "binding_q",
+      "target": "resolver",
+      "points": [
+        [
+          2580,
+          1632.5
+        ],
+        [
+          2660,
+          1632.5
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire24",
+      "source": "speech_state",
+      "target": "resolver",
+      "points": [
+        [
+          2695.0,
+          1505
+        ],
+        [
+          2695.0,
+          1536
+        ],
+        [
+          2985.0,
+          1536
+        ],
+        [
+          2985.0,
+          1560
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire25",
+      "source": "screen_state",
+      "target": "resolver",
+      "points": [
+        [
+          3425.0,
+          1505
+        ],
+        [
+          3425.0,
+          1536
+        ],
+        [
+          2993.0,
+          1536
+        ],
+        [
+          2993.0,
+          1560
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire26",
+      "source": "resolver",
+      "target": "b_state",
+      "points": [
+        [
+          3310,
+          1632.5
+        ],
+        [
+          3390,
+          1632.5
+        ]
+      ],
+      "kind": "state"
+    },
+    {
+      "id": "wire27",
+      "source": "resolver",
+      "target": "b_done",
+      "points": [
+        [
+          2660,
+          1640.5
+        ],
+        [
+          2604,
+          1640.5
+        ],
+        [
+          2604,
+          1529
+        ],
+        [
+          2150.0,
+          1529
+        ],
+        [
+          2150.0,
+          1335
+        ]
+      ],
+      "kind": "cancel"
+    },
+    {
+      "id": "wire28",
+      "source": "a_result",
+      "target": "proposal",
+      "points": [
+        [
+          1150.0,
+          1680
+        ],
+        [
+          1150.0,
+          1886
+        ],
+        [
+          890.0,
+          1886
+        ],
+        [
+          890.0,
+          1910
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire29",
+      "source": "resolver",
+      "target": "proposal",
+      "points": [
+        [
+          2985.0,
+          1705
+        ],
+        [
+          2985,
+          1720
+        ],
+        [
+          3766,
+          1720
+        ],
+        [
+          3766,
+          1835
+        ],
+        [
+          1550,
+          1835
+        ],
+        [
+          1550.0,
+          1910
+        ]
+      ],
+      "kind": "done"
+    },
+    {
+      "id": "wire30",
+      "source": "proposal",
+      "target": "adoption",
+      "points": [
+        [
+          1690,
+          1960.0
+        ],
+        [
+          1780,
+          1960.0
+        ]
+      ],
+      "kind": "post"
+    },
+    {
+      "id": "wire31",
+      "source": "adoption",
+      "target": "db",
+      "points": [
+        [
+          2830,
+          1960.0
+        ],
+        [
+          2920,
+          1960.0
+        ]
+      ],
+      "kind": "state"
+    }
+  ],
+  "notes": [
+    {
+      "x": 60,
+      "y": 72,
+      "lines": [
+        "DP-47  화면과 음성 지칭의 구현 구조 비교"
+      ],
+      "size": 58,
+      "color": "#111111",
+      "bold": true,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 60,
+      "y": 132,
+      "lines": [
+        "A는 원본에서 binding을 직접 갱신한다. B는 생산자별 후보를 게시한 뒤 결합한다."
+      ],
+      "size": 38,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 80,
+      "y": 508,
+      "lines": [
+        "A  원본 공동 해석"
+      ],
+      "size": 44,
+      "color": "#195FBD",
+      "bold": true,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 1990,
+      "y": 508,
+      "lines": [
+        "B  후보 생산과 결합"
+      ],
+      "size": 44,
+      "color": "#195FBD",
+      "bold": true,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 570,
+      "y": 508,
+      "lines": [
+        "비동기 workflow / 단일 binding aggregate"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2510,
+      "y": 508,
+      "lines": [
+        "Fork–Join + feedback / 생산자별 repository"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 480,
+      "y": 857,
+      "lines": [
+        "2  실행 지시"
+      ],
+      "size": 32,
+      "color": "#195FBD",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 480,
+      "y": 1088,
+      "lines": [
+        "3  원본 read 및 공동 의미 판단"
+      ],
+      "size": 32,
+      "color": "#195FBD",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 1175,
+      "y": 1088,
+      "lines": [
+        "4  TryApply / 현재 revision만 게시"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 480,
+      "y": 1432,
+      "lines": [
+        "직접 target 생산과 binding 갱신이 하나의 의미 책임"
+      ],
+      "size": 35,
+      "color": "#195FBD",
+      "bold": true,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2390,
+      "y": 857,
+      "lines": [
+        "2  생산 job dispatch / 자원이 허용하면 병행"
+      ],
+      "size": 32,
+      "color": "#195FBD",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2390,
+      "y": 1070,
+      "lines": [
+        "3  역할별 원본 해석"
+      ],
+      "size": 32,
+      "color": "#195FBD",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2390,
+      "y": 1332,
+      "lines": [
+        "4  생산자별 게시 후 완료 통지"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2010,
+      "y": 1540,
+      "lines": [
+        "5  호환 snapshot + 응답/deadline으로 결합 지시"
+      ],
+      "size": 31,
+      "color": "#195FBD",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 2010,
+      "y": 1744,
+      "lines": [
+        "6  후보 부족: 완료 inbox로 Rejudge 반환, Coordinator가 원 producer에 재지시"
+      ],
+      "size": 30,
+      "color": "#B63732",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 90,
+      "y": 1818,
+      "lines": [
+        "공통 정정: BeginRevision(r2)와 TryApply/TryPublish가 같은 RevisionGate 사용 / 늦은 r1은 상태 반영 전 거절"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 60,
+      "y": 2090,
+      "lines": [
+        "사각형: 실행 코드   칸 상자: bounded RAM FIFO   겹친 카드: RAM data model   접힌 종이: DTO   원통: 영속 DB"
+      ],
+      "size": 32,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    },
+    {
+      "x": 60,
+      "y": 2140,
+      "lines": [
+        "실선: 작업 전달   점선: 완료 반환   회색: 상태 접근   빨강: 재판단   /   설계 가정, 미구현, 미측정"
+      ],
+      "size": 30,
+      "color": "#111111",
+      "bold": false,
+      "align": "left",
+      "mask": true
+    }
+  ]
+}
