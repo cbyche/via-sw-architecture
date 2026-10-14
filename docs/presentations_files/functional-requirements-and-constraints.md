@@ -13,6 +13,22 @@
 
 이 네 항목은 현재 DP 논의를 위한 기능 요구사항 정리다. 기존 고정 UC의 기능 범위를 삭제하거나 QA 정의와 대안 선택을 변경하지 않는다. 이전 FR 번호와 의미는 [6개 FR 이력](../archive/functional-requirements-before-four-fr-2026-10-14.md)에 보존하며 현재 번호로 해석하지 않는다.
 
+## 발표용 아이콘 그림
+
+현재 네 가지 FR을 위해 각각 만든 그림이다. 모두 **1254 × 1254 투명 배경 PNG**이며 발표자료에서 제목과 설명을 별도로 붙일 수 있도록 그림 안에 문자를 넣지 않았다. 이미지를 클릭하면 원본 PNG를 열 수 있다.
+
+| FR1. 대화 지속성 제공 / DP-44 | FR2. 음성-화면 지칭 연결 / DP-47 |
+|---|---|
+| [![사용자의 정정 발화와 Agent 질문 또는 결과가 겹쳐도 이어지는 대화](./requirements-assets/four-fr/fr1-dialogue-continuity.png)](./requirements-assets/four-fr/fr1-dialogue-continuity.png) | [![음성 지칭을 마우스로 가리킨 화면의 그래프에 연결](./requirements-assets/four-fr/fr2-voice-screen-grounding.png)](./requirements-assets/four-fr/fr2-voice-screen-grounding.png) |
+| 사용자 발화와 정정, Agent 질문과 결과가 겹쳐도 다음 대화로 이어진다. | 음성 말풍선이 포인터와 선택 범위로 지정한 그래프에 연결된다. |
+
+| FR3. 과거 이력 맥락 제공 / DP-45 | FR4. 대화-업무 관계 연결 / DP-42 |
+|---|---|
+| [![과거 대화와 완료 기록에서 필요한 내용을 현재 요청의 맥락으로 제공](./requirements-assets/four-fr/fr3-history-context.png)](./requirements-assets/four-fr/fr3-history-context.png) | [![대화, 요청, 질문, 업무와 Agent 실행을 하나의 관계로 연결](./requirements-assets/four-fr/fr4-dialogue-work-linkage.png)](./requirements-assets/four-fr/fr4-dialogue-work-linkage.png) |
+| 과거 대화와 업무 결과 중 필요한 내용을 현재 요청의 맥락으로 가져온다. | 대화 말풍선, 요청 문서, 확인 질문, 업무 목록과 Agent 실행의 연결을 유지한다. |
+
+내장 ImageGen으로 생성했으며 [최종 프롬프트](./requirements-assets/four-fr/prompts.md)를 함께 보관한다. 그림은 기능을 설명하는 비유이며 특정 Component 구조나 실행 순서를 규정하지 않는다.
+
 ## 기존 제약사항 기록
 
 | ID | 제약사항명 | 설명 | 관련 DP |
@@ -32,19 +48,7 @@
 
 ## 이전 FR 기준 발표용 그림
 
-아래 그림과 FR 번호는 이전 6개 정의의 이력이다. 현재 네 가지 FR과 번호가 일치하지 않으므로 현재 요구사항 그림으로 그대로 사용하지 않는다. 각 그림은 개념 설명용이며 특정 설계 대안의 구현 결과를 나타내지 않는다. 그림의 문자 없이도 발표에서 축소해 사용할 수 있도록 제작했다.
-
-| ID | 그림 | 시각적 의미 |
-|---|---|---|
-| FR1 | ![지속 대화 처리](./requirements-assets/fr1-continuous-dialogue.png) | 응답 중에도 열린 음성 및 텍스트 입력 |
-| FR2 | ![맥락 기반 요청 해석](./requirements-assets/fr2-contextual-interpretation.png) | 화면의 지칭 대상과 사용자 요청의 연결 |
-| FR3 | ![복합 요청 처리](./requirements-assets/fr3-compound-request.png) | 복수 요청의 순서, 조건과 결과 의존 |
-| FR4 | ![다중 업무 상호작용](./requirements-assets/fr4-multiple-task-interaction.png) | 서로 섞이지 않는 업무별 질문과 결과 |
-| FR5 | ![업무 연속성 유지](./requirements-assets/fr5-task-continuity.png) | 연결 또는 대화가 바뀌어도 이어지는 같은 업무 |
-| FR6 | ![과거 맥락 활용](./requirements-assets/fr6-past-context.png) | 과거 정정, 결과와 사용자 기억의 현재 활용 |
-| C2 | ![업무 실행 위임](./requirements-assets/c2-downstream-work-delegation.png) | 사용자 요청 연결과 실제 업무 실행의 책임 경계 |
-
-[그림 모아 보기](./requirements-assets/index.html) / [이미지 생성 프롬프트](./requirements-assets/prompts.md)
+이전 6개 FR 그림과 파일은 [이전 그림 모아 보기](./requirements-assets/index.html), [이전 프롬프트](./requirements-assets/prompts.md), [6개 FR 이력](../archive/functional-requirements-before-four-fr-2026-10-14.md)에 보존한다. 현재 네 가지 FR과 번호가 일치하지 않으므로 현재 요구사항에는 위의 새 그림을 사용한다.
 
 현재 C1의 모델 배치는 [설계 Overview](./design-overview/design-overview-DP41-45.png)를 사용한다. 이전 C1 공유 Omni 일러스트는 이력 파일로만 보존한다.
 
