@@ -1,5 +1,7 @@
 # VIA 핵심 QA와 DP 평가 계획
 
+> **2026-10-15 현재 수치 판본 v2:** 사용자가 무관한 사례를 평균에서 제외하고 구조를 보고 납득할 수 있는 우열 이유를 한 줄씩 붙이도록 지시했다. [72개 예상값과 36개 이유](./qa-candidate-package/qa-dp-thought-experiment.md)는 [DP별 관련 모집단](./qa-candidate-package/thought-experiment/population.md)과 단계별 의존 계산을 사용한다. QA01/03은 평균과 오답 원시간을 유지한다. 숫자 배점 경계는 바꾸지 않았으며 QA05는 $2.55의 전체 28개 묶음 단위를 유지한다. 기존 공통 전체 평균과 v1은 이력으로 구별한다. 모델 / PoC 실행이나 대안 선택이 아니다.
+
 > **2026-10-15 수치 사고 실험:** [DP-44/47/45/42 × A/B × QA01~09의 72개 예상값과 점수](./qa-candidate-package/qa-dp-thought-experiment.md). QA01/03은 사용자 정정대로 산술평균이고 오답도 실제 시간을 포함한다. 실패 시간 벌점은 적용하지 않는다. 기존 정성 방향보다 이 문서의 명시적 조건과 수치를 우선해 읽는다. 실측이나 최종 대안 선택은 아니다.
 
 > **최신 논의: 공통 평가 입력 작성 완료.** [공통 28개 목록](./qa-candidate-package/common-scenarios.md)을 5회 반복하며 같은 실행에서 응답 120건과 목표 76개 및 지칭 44개와 음성 109건을 추출한다. [통합 기록](./qa-candidate-package/common-evaluation-population-plan.md)에 선정 근거와 변경 내역을 남긴다. 실제 자료 제작과 측정은 아직 하지 않았다.

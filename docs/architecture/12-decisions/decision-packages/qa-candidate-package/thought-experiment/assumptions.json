@@ -1,8 +1,7 @@
 {
-  "version": "QA-DP-THOUGHT-v1-20261015",
+  "version": "QA-DP-THOUGHT-v2-20261015",
   "status": "AUTHOR_THOUGHT_EXPERIMENT_NOT_MEASURED",
-  "population": "COMMON-28-v1",
-  "repetitions": 5,
+  "population": "DP-RELATED-v2",
   "comparison": {
     "dps": [
       44,
@@ -33,121 +32,1008 @@
     "completed_tasks": 20,
     "ongoing_tasks_max": 5
   },
-  "first_response_ms": {
-    "input_tail_by_mode": {
-      "voice": 180,
-      "text": 15,
-      "agent": 20
+  "repetitions": 5,
+  "population_rules": {
+    "same_ids_for_A_B": true,
+    "include_correct_and_wrong_times": true,
+    "first_and_goal_arithmetic_mean": true,
+    "whole_goal_causal_closure": true,
+    "cross_dp_absolute_comparison": false,
+    "cost_unit": "USD per COMMON-28-v1 whole bundle; selected activity subtotal is separately disclosed, not scored against the whole-bundle budget",
+    "ram_scope": "peak during related episodes including their setup",
+    "no_synthetic_observed_repetitions": true,
+    "case_specific_source_timing": "S05 final transcript at +300ms; S12 source v2 supplied 2 seconds before input, so B update is prepared before t0 and still charged."
+  },
+  "populations": {
+    "44": {
+      "reason": "입력과 Agent 알림, 정정, 취소, 음성 중단 또는 채널 전환이 실행 연결과 게시 조건을 갱신하는 사건",
+      "changes": [
+        "C04",
+        "C06"
+      ],
+      "loads": [
+        "S05",
+        "S11",
+        "S18",
+        "S19"
+      ],
+      "events": [
+        "S05-A01",
+        "S05-A02",
+        "S05-U01",
+        "S08-A01",
+        "S08-U01",
+        "S08-U02",
+        "S11-A01",
+        "S11-A02",
+        "S11-U01",
+        "S11-U02",
+        "S11-U03",
+        "S18-A01",
+        "S18-A02",
+        "S18-A03",
+        "S18-A04",
+        "S18-U01",
+        "S18-U02",
+        "S18-U03",
+        "S19-A01",
+        "S19-A02",
+        "S19-U01",
+        "S20-A01",
+        "S20-A02",
+        "S20-A03",
+        "S20-U01",
+        "S20-U02",
+        "S21-U01",
+        "S21-U02",
+        "S22-A01",
+        "S22-A02",
+        "S22-U01",
+        "S22-U02",
+        "S22-U03",
+        "S22-U04",
+        "S22-U05",
+        "S23-A01",
+        "S23-A02",
+        "S23-U01",
+        "S24-A01",
+        "S24-U01",
+        "S24-U02",
+        "S24-U03"
+      ],
+      "goals": [
+        "S05-G01",
+        "S08-G01",
+        "S11-G01",
+        "S11-G02",
+        "S11-G03",
+        "S18-G01",
+        "S18-G02",
+        "S18-G03",
+        "S19-G01",
+        "S20-G01",
+        "S21-G01",
+        "S21-G02",
+        "S22-G01",
+        "S22-G02",
+        "S22-G03",
+        "S22-G04",
+        "S22-G05",
+        "S23-G01",
+        "S24-G01",
+        "S24-G02"
+      ],
+      "bindings": [
+        "S05-B01",
+        "S05-B02",
+        "S08-B01",
+        "S08-B02",
+        "S08-B03",
+        "S08-B04",
+        "S11-B01",
+        "S11-B02",
+        "S11-B03",
+        "S11-B04",
+        "S18-B01",
+        "S18-B02",
+        "S21-B01",
+        "S21-B02",
+        "S24-B01"
+      ],
+      "episodes": [
+        "S05",
+        "S08",
+        "S11",
+        "S18",
+        "S19",
+        "S20",
+        "S21",
+        "S22",
+        "S23",
+        "S24"
+      ],
+      "change_pairs": [
+        [
+          "C04",
+          "C06"
+        ]
+      ],
+      "qa02_class": "REGRESSION_ONLY",
+      "qa09_class": "REGRESSION_ONLY",
+      "excluded_event_ids": [
+        "S01-U01",
+        "S01-U02",
+        "S01-U03",
+        "S01-U04",
+        "S02-U01",
+        "S02-U02",
+        "S02-U03",
+        "S02-U04",
+        "S02-U05",
+        "S02-U06",
+        "S03-U01",
+        "S03-U02",
+        "S03-U03",
+        "S03-U04",
+        "S04-U01",
+        "S04-U02",
+        "S06-U01",
+        "S06-U02",
+        "S06-U03",
+        "S07-U01",
+        "S07-U02",
+        "S09-U01",
+        "S09-U02",
+        "S10-U01",
+        "S10-U02",
+        "S12-U01",
+        "S12-U02",
+        "S13-U01",
+        "S13-U02",
+        "S14-U01",
+        "S14-U02",
+        "S14-U03",
+        "S15-A01",
+        "S15-U01",
+        "S15-U02",
+        "S15-U03",
+        "S16-A01",
+        "S16-A02",
+        "S16-A03",
+        "S16-A04",
+        "S16-U01",
+        "S16-U02",
+        "S16-U03",
+        "S16-U04",
+        "S17-A01",
+        "S17-A02",
+        "S17-A03",
+        "S17-A04",
+        "S17-A05",
+        "S17-A06",
+        "S17-A07",
+        "S17-A08",
+        "S17-A09",
+        "S17-A10",
+        "S17-U01",
+        "S17-U02",
+        "S17-U03",
+        "S17-U04",
+        "S17-U05",
+        "S25-U01",
+        "S25-U02",
+        "S26-A01",
+        "S26-A02",
+        "S26-U01",
+        "S26-U02",
+        "S26-U03",
+        "S26-U04",
+        "S26-U05",
+        "S26-U06",
+        "S27-U01",
+        "S27-U02",
+        "S27-U03",
+        "S27-U04",
+        "S27-U05",
+        "S28-U01",
+        "S28-U02",
+        "S28-U03",
+        "S28-U04"
+      ]
     },
-    "profiles": {
-      "simple": {
-        "read": 30,
-        "semantic_to_first_content": 350,
-        "scheduler": 20,
-        "wiring": 20,
-        "adoption": 30,
-        "ui": 40
-      },
-      "screen": {
-        "read": 70,
-        "semantic_to_first_content": 650,
-        "scheduler": 20,
-        "wiring": 20,
-        "adoption": 30,
-        "ui": 40
-      },
-      "history": {
-        "read": 180,
-        "semantic_to_first_content": 820,
-        "scheduler": 20,
-        "wiring": 20,
-        "adoption": 30,
-        "ui": 40
-      },
-      "task": {
-        "read": 30,
-        "semantic_to_first_content": 400,
-        "scheduler": 20,
-        "wiring": 20,
-        "adoption": 30,
-        "ui": 40
-      },
-      "lookup": {
-        "read": 100,
-        "semantic_to_first_content": 550,
-        "scheduler": 20,
-        "wiring": 20,
-        "adoption": 30,
-        "ui": 40
-      }
+    "47": {
+      "events": [
+        "S03-U01",
+        "S03-U02",
+        "S03-U03",
+        "S03-U04",
+        "S04-U01",
+        "S04-U02",
+        "S05-U01",
+        "S06-U01",
+        "S06-U02",
+        "S06-U03",
+        "S07-U01",
+        "S07-U02",
+        "S08-U01",
+        "S08-U02",
+        "S09-U01",
+        "S09-U02",
+        "S15-U01",
+        "S17-U05"
+      ],
+      "reason": "현재 화면의 선택, 포인터, 궤적, 드래그, 화면 전환 또는 그 대상 정정을 해석하는 입력",
+      "changes": [
+        "C03",
+        "C06"
+      ],
+      "loads": [
+        "S05"
+      ],
+      "goals": [
+        "S03-G01",
+        "S03-G02",
+        "S03-G03",
+        "S03-G04",
+        "S04-G01",
+        "S04-G02",
+        "S05-G01",
+        "S06-G01",
+        "S06-G02",
+        "S07-G01",
+        "S07-G02",
+        "S08-G01",
+        "S09-G01",
+        "S15-G01",
+        "S17-G05"
+      ],
+      "bindings": [
+        "S03-B01",
+        "S03-B02",
+        "S03-B03",
+        "S03-B04",
+        "S04-B01",
+        "S04-B02",
+        "S05-B01",
+        "S05-B02",
+        "S06-B01",
+        "S06-B02",
+        "S07-B01",
+        "S07-B02",
+        "S07-B03",
+        "S08-B01",
+        "S08-B02",
+        "S08-B03",
+        "S08-B04",
+        "S09-B01",
+        "S15-B01",
+        "S17-B01"
+      ],
+      "episodes": [
+        "S03",
+        "S04",
+        "S05",
+        "S06",
+        "S07",
+        "S08",
+        "S09",
+        "S15",
+        "S17"
+      ],
+      "change_pairs": [
+        [
+          "C03",
+          "C06"
+        ]
+      ],
+      "qa02_class": "STRUCTURAL_HYPOTHESIS",
+      "qa09_class": "REGRESSION_ONLY",
+      "excluded_event_ids": [
+        "S01-U01",
+        "S01-U02",
+        "S01-U03",
+        "S01-U04",
+        "S02-U01",
+        "S02-U02",
+        "S02-U03",
+        "S02-U04",
+        "S02-U05",
+        "S02-U06",
+        "S05-A01",
+        "S05-A02",
+        "S08-A01",
+        "S10-U01",
+        "S10-U02",
+        "S11-A01",
+        "S11-A02",
+        "S11-U01",
+        "S11-U02",
+        "S11-U03",
+        "S12-U01",
+        "S12-U02",
+        "S13-U01",
+        "S13-U02",
+        "S14-U01",
+        "S14-U02",
+        "S14-U03",
+        "S15-A01",
+        "S15-U02",
+        "S15-U03",
+        "S16-A01",
+        "S16-A02",
+        "S16-A03",
+        "S16-A04",
+        "S16-U01",
+        "S16-U02",
+        "S16-U03",
+        "S16-U04",
+        "S17-A01",
+        "S17-A02",
+        "S17-A03",
+        "S17-A04",
+        "S17-A05",
+        "S17-A06",
+        "S17-A07",
+        "S17-A08",
+        "S17-A09",
+        "S17-A10",
+        "S17-U01",
+        "S17-U02",
+        "S17-U03",
+        "S17-U04",
+        "S18-A01",
+        "S18-A02",
+        "S18-A03",
+        "S18-A04",
+        "S18-U01",
+        "S18-U02",
+        "S18-U03",
+        "S19-A01",
+        "S19-A02",
+        "S19-U01",
+        "S20-A01",
+        "S20-A02",
+        "S20-A03",
+        "S20-U01",
+        "S20-U02",
+        "S21-U01",
+        "S21-U02",
+        "S22-A01",
+        "S22-A02",
+        "S22-U01",
+        "S22-U02",
+        "S22-U03",
+        "S22-U04",
+        "S22-U05",
+        "S23-A01",
+        "S23-A02",
+        "S23-U01",
+        "S24-A01",
+        "S24-U01",
+        "S24-U02",
+        "S24-U03",
+        "S25-U01",
+        "S25-U02",
+        "S26-A01",
+        "S26-A02",
+        "S26-U01",
+        "S26-U02",
+        "S26-U03",
+        "S26-U04",
+        "S26-U05",
+        "S26-U06",
+        "S27-U01",
+        "S27-U02",
+        "S27-U03",
+        "S27-U04",
+        "S27-U05",
+        "S28-U01",
+        "S28-U02",
+        "S28-U03",
+        "S28-U04"
+      ]
     },
-    "warm_history_events": [
+    "45": {
+      "events": [
+        "S01-U02",
+        "S01-U04",
+        "S10-U01",
+        "S10-U02",
+        "S11-U01",
+        "S11-U02",
+        "S11-U03",
+        "S12-U01",
+        "S12-U02",
+        "S13-U01",
+        "S13-U02",
+        "S15-U03",
+        "S18-U02",
+        "S18-U03",
+        "S21-U01",
+        "S21-U02",
+        "S24-U03"
+      ],
+      "reason": "실제 전달한 설명, 과거 결과 및 버전을 현재 요청과 연결하는 입력. 직접 파일 조회와 공통 UserMemory 선호는 제외",
+      "changes": [
+        "C03",
+        "C05",
+        "C06"
+      ],
+      "loads": [
+        "S11"
+      ],
+      "goals": [
+        "S01-G02",
+        "S01-G04",
+        "S10-G01",
+        "S10-G02",
+        "S11-G01",
+        "S11-G02",
+        "S11-G03",
+        "S12-G01",
+        "S12-G02",
+        "S13-G01",
+        "S13-G02",
+        "S15-G03",
+        "S18-G02",
+        "S18-G03",
+        "S21-G01",
+        "S21-G02",
+        "S24-G01"
+      ],
+      "bindings": [
+        "S01-B01",
+        "S01-B02",
+        "S10-B01",
+        "S10-B02",
+        "S11-B01",
+        "S11-B02",
+        "S11-B03",
+        "S11-B04",
+        "S12-B01",
+        "S12-B02",
+        "S13-B01",
+        "S13-B02",
+        "S13-B03",
+        "S13-B04",
+        "S15-B02",
+        "S18-B01",
+        "S18-B02",
+        "S21-B01",
+        "S21-B02",
+        "S24-B01"
+      ],
+      "episodes": [
+        "S01",
+        "S10",
+        "S11",
+        "S12",
+        "S13",
+        "S15",
+        "S18",
+        "S21",
+        "S24"
+      ],
+      "change_pairs": [
+        [
+          "C03",
+          "C05"
+        ],
+        [
+          "C03",
+          "C06"
+        ],
+        [
+          "C05",
+          "C06"
+        ]
+      ],
+      "qa02_class": "STRUCTURAL_HYPOTHESIS",
+      "qa09_class": "REGRESSION_ONLY",
+      "excluded_event_ids": [
+        "S01-U01",
+        "S01-U03",
+        "S02-U01",
+        "S02-U02",
+        "S02-U03",
+        "S02-U04",
+        "S02-U05",
+        "S02-U06",
+        "S03-U01",
+        "S03-U02",
+        "S03-U03",
+        "S03-U04",
+        "S04-U01",
+        "S04-U02",
+        "S05-A01",
+        "S05-A02",
+        "S05-U01",
+        "S06-U01",
+        "S06-U02",
+        "S06-U03",
+        "S07-U01",
+        "S07-U02",
+        "S08-A01",
+        "S08-U01",
+        "S08-U02",
+        "S09-U01",
+        "S09-U02",
+        "S11-A01",
+        "S11-A02",
+        "S14-U01",
+        "S14-U02",
+        "S14-U03",
+        "S15-A01",
+        "S15-U01",
+        "S15-U02",
+        "S16-A01",
+        "S16-A02",
+        "S16-A03",
+        "S16-A04",
+        "S16-U01",
+        "S16-U02",
+        "S16-U03",
+        "S16-U04",
+        "S17-A01",
+        "S17-A02",
+        "S17-A03",
+        "S17-A04",
+        "S17-A05",
+        "S17-A06",
+        "S17-A07",
+        "S17-A08",
+        "S17-A09",
+        "S17-A10",
+        "S17-U01",
+        "S17-U02",
+        "S17-U03",
+        "S17-U04",
+        "S17-U05",
+        "S18-A01",
+        "S18-A02",
+        "S18-A03",
+        "S18-A04",
+        "S18-U01",
+        "S19-A01",
+        "S19-A02",
+        "S19-U01",
+        "S20-A01",
+        "S20-A02",
+        "S20-A03",
+        "S20-U01",
+        "S20-U02",
+        "S22-A01",
+        "S22-A02",
+        "S22-U01",
+        "S22-U02",
+        "S22-U03",
+        "S22-U04",
+        "S22-U05",
+        "S23-A01",
+        "S23-A02",
+        "S23-U01",
+        "S24-A01",
+        "S24-U01",
+        "S24-U02",
+        "S25-U01",
+        "S25-U02",
+        "S26-A01",
+        "S26-A02",
+        "S26-U01",
+        "S26-U02",
+        "S26-U03",
+        "S26-U04",
+        "S26-U05",
+        "S26-U06",
+        "S27-U01",
+        "S27-U02",
+        "S27-U03",
+        "S27-U04",
+        "S27-U05",
+        "S28-U01",
+        "S28-U02",
+        "S28-U03",
+        "S28-U04"
+      ]
+    },
+    "42": {
+      "reason": "Request와 Task의 연결, 업무 제어, Agent 사실 반영 및 대화 재연결이 상태 소유 경계를 통과하는 사건",
+      "changes": [
+        "C02",
+        "C04",
+        "C06"
+      ],
+      "loads": [
+        "S05",
+        "S11",
+        "S18",
+        "S19"
+      ],
+      "events": [
+        "S08-A01",
+        "S08-U01",
+        "S08-U02",
+        "S13-U01",
+        "S13-U02",
+        "S15-A01",
+        "S15-U03",
+        "S16-A01",
+        "S16-A02",
+        "S16-A03",
+        "S16-A04",
+        "S16-U01",
+        "S16-U02",
+        "S16-U03",
+        "S16-U04",
+        "S17-A01",
+        "S17-A02",
+        "S17-A03",
+        "S17-A04",
+        "S17-A05",
+        "S17-A06",
+        "S17-A07",
+        "S17-A08",
+        "S17-A09",
+        "S17-A10",
+        "S17-U01",
+        "S17-U02",
+        "S17-U03",
+        "S17-U04",
+        "S17-U05",
+        "S18-A01",
+        "S18-A02",
+        "S18-A03",
+        "S18-A04",
+        "S18-U01",
+        "S18-U02",
+        "S18-U03",
+        "S19-A01",
+        "S19-A02",
+        "S20-A01",
+        "S20-A02",
+        "S20-A03",
+        "S20-U01",
+        "S20-U02",
+        "S22-A01",
+        "S22-A02",
+        "S22-U01",
+        "S22-U02",
+        "S22-U03",
+        "S22-U04",
+        "S22-U05",
+        "S23-A01",
+        "S23-A02",
+        "S23-U01",
+        "S24-A01",
+        "S24-U01",
+        "S24-U02",
+        "S24-U03",
+        "S25-U01",
+        "S25-U02",
+        "S26-A01",
+        "S26-A02",
+        "S26-U01",
+        "S26-U03",
+        "S26-U04",
+        "S26-U05",
+        "S26-U06",
+        "S28-U03",
+        "S28-U04"
+      ],
+      "goals": [
+        "S08-G01",
+        "S13-G01",
+        "S13-G02",
+        "S15-G03",
+        "S16-G01",
+        "S16-G02",
+        "S16-G03",
+        "S16-G04",
+        "S17-G01",
+        "S17-G02",
+        "S17-G03",
+        "S17-G04",
+        "S17-G05",
+        "S18-G01",
+        "S18-G02",
+        "S18-G03",
+        "S20-G01",
+        "S22-G01",
+        "S22-G02",
+        "S22-G03",
+        "S22-G04",
+        "S22-G05",
+        "S23-G01",
+        "S24-G01",
+        "S24-G02",
+        "S25-G01",
+        "S25-G02",
+        "S26-G01",
+        "S26-G02",
+        "S26-G03",
+        "S28-G03",
+        "S28-G04"
+      ],
+      "bindings": [
+        "S08-B01",
+        "S08-B02",
+        "S08-B03",
+        "S08-B04",
+        "S13-B01",
+        "S13-B02",
+        "S13-B03",
+        "S13-B04",
+        "S15-B02",
+        "S17-B01",
+        "S18-B01",
+        "S18-B02",
+        "S24-B01",
+        "S26-B01"
+      ],
+      "episodes": [
+        "S08",
+        "S13",
+        "S15",
+        "S16",
+        "S17",
+        "S18",
+        "S19",
+        "S20",
+        "S22",
+        "S23",
+        "S24",
+        "S25",
+        "S26",
+        "S28"
+      ],
+      "change_pairs": [
+        [
+          "C02",
+          "C04"
+        ],
+        [
+          "C02",
+          "C06"
+        ],
+        [
+          "C04",
+          "C06"
+        ]
+      ],
+      "qa02_class": "REGRESSION_ONLY",
+      "qa09_class": "REGRESSION_ONLY",
+      "excluded_event_ids": [
+        "S01-U01",
+        "S01-U02",
+        "S01-U03",
+        "S01-U04",
+        "S02-U01",
+        "S02-U02",
+        "S02-U03",
+        "S02-U04",
+        "S02-U05",
+        "S02-U06",
+        "S03-U01",
+        "S03-U02",
+        "S03-U03",
+        "S03-U04",
+        "S04-U01",
+        "S04-U02",
+        "S05-A01",
+        "S05-A02",
+        "S05-U01",
+        "S06-U01",
+        "S06-U02",
+        "S06-U03",
+        "S07-U01",
+        "S07-U02",
+        "S09-U01",
+        "S09-U02",
+        "S10-U01",
+        "S10-U02",
+        "S11-A01",
+        "S11-A02",
+        "S11-U01",
+        "S11-U02",
+        "S11-U03",
+        "S12-U01",
+        "S12-U02",
+        "S14-U01",
+        "S14-U02",
+        "S14-U03",
+        "S15-U01",
+        "S15-U02",
+        "S19-U01",
+        "S21-U01",
+        "S21-U02",
+        "S26-U02",
+        "S27-U01",
+        "S27-U02",
+        "S27-U03",
+        "S27-U04",
+        "S27-U05",
+        "S28-U01",
+        "S28-U02"
+      ]
+    }
+  },
+  "screen_classes": {
+    "native": [
+      "S03-U01",
+      "S03-U03",
+      "S04-U02",
+      "S09-U02"
+    ],
+    "partial": [
+      "S06-U03",
+      "S08-U02"
+    ],
+    "expansion": [
+      "S06-U01",
+      "S07-U02",
+      "S08-U01"
+    ],
+    "fresh": [
+      "S03-U02",
+      "S03-U04",
+      "S04-U01",
+      "S05-U01",
+      "S06-U02",
+      "S07-U01",
+      "S09-U01",
+      "S15-U01",
+      "S17-U05"
+    ]
+  },
+  "history_classes": {
+    "explicit": [
+      "S01-U02",
+      "S10-U01",
+      "S13-U01",
+      "S15-U03",
+      "S18-U02",
+      "S18-U03",
+      "S24-U03"
+    ],
+    "cache": [
       "S01-U04",
       "S10-U02",
       "S11-U02",
-      "S12-U02",
       "S13-U02",
-      "S21-U02",
-      "S27-U03",
-      "S27-U04"
+      "S21-U02"
     ],
-    "warm_history_delta_ms": -170,
-    "base_load_added_ms": {
-      "S05": 70,
-      "S11": 90,
-      "S18": 50,
-      "S19": 70
-    },
-    "dp44_b_wiring_delta_ms": -4,
-    "dp47_b": {
-      "native_events": [
-        "S03-U01",
-        "S03-U03",
-        "S04-U02",
-        "S09-U02"
-      ],
-      "partial_reuse_events": [
-        "S06-U03",
-        "S08-U02"
-      ],
-      "fresh_extra_ms": 230,
-      "native_extra_ms": 60,
-      "reuse_extra_ms": 100,
-      "expansion_events": [
-        "S06-U01",
-        "S07-U02",
-        "S08-U01"
-      ],
-      "expansion_extra_ms": 180
-    },
-    "dp45_b": {
-      "ready_history_delta_ms": -420,
-      "fresh_events": [
-        "S11-U03",
-        "S12-U02"
-      ],
-      "fresh_delta_ms": 150,
-      "warm_extra_delta_ms": 170
-    },
-    "dp42_b_agent_delta_ms": 6,
-    "baseline_extra_read_ms": 450
+    "semantic": [
+      "S11-U01",
+      "S12-U01",
+      "S21-U01"
+    ],
+    "new_relation": [],
+    "updated_ready": [
+      "S12-U02"
+    ],
+    "current_comparison": [
+      "S11-U03"
+    ]
   },
-  "complete_response_ms": {
-    "semantic_tail_by_profile": {
-      "simple": 750,
-      "screen": 1100,
-      "history": 1000,
-      "task": 900,
-      "lookup": 1000
+  "timing_model": {
+    "kind": "author analytic stage budget, not vendor performance data",
+    "voice_tail_ms": 180,
+    "text_tail_ms": 15,
+    "agent_tail_ms": 20,
+    "response_adopt_and_ui_ms": 70,
+    "semantic_call_fixed_ms": 140,
+    "prefill_ms_per_1000_tokens": 10,
+    "decode_ms_per_token": 2,
+    "first_content_tokens": 48,
+    "audio_all_ready_tail_ms": 900,
+    "local_handoff_ms": 100,
+    "b42_handoff_extra_ms": 24,
+    "b42_agent_projection_extra_ms": 18,
+    "dispatcher_wiring_ms": 12,
+    "b44_stage_and_join_wiring_ms": 24,
+    "screen_read_ms": 20,
+    "context_read_ms": 30,
+    "other_read_ms": 30,
+    "fresh_screen_prework_ms": 180,
+    "new_screen_prework_ms": 0,
+    "b45_publish_readback_ms": 40,
+    "voice_tail_overrides_ms": {
+      "S05-U01": 300
     },
-    "audio_full_after_content_ms": 900,
-    "text_full_after_content_ms": 40,
-    "local_agent_handoff_ms": 100,
-    "dp42_b_handoff_extra_ms": 12,
-    "dp44_b_completion_extra_ms": -4,
-    "dp47_b_tail_delta_ms": -100,
-    "dp45_b_ready_tail_delta_ms": -120,
-    "dp45_b_fresh_tail_delta_ms": 80
+    "interrupt_after_first_content_ms": 500
+  },
+  "call_budgets": {
+    "simple": {
+      "text": 2000,
+      "image": 0,
+      "out": 400
+    },
+    "task": {
+      "text": 8000,
+      "image": 0,
+      "out": 600
+    },
+    "lookup": {
+      "text": 8000,
+      "image": 0,
+      "out": 600
+    },
+    "screen_joint": {
+      "text": 4000,
+      "out": 96
+    },
+    "screen_native_joint": {
+      "text": 2500,
+      "out": 64
+    },
+    "screen_patch_joint": {
+      "text": 3000,
+      "out": 64
+    },
+    "speech_producer": {
+      "text": 3000,
+      "image": 0,
+      "out": 180
+    },
+    "screen_producer": {
+      "text": 4000,
+      "out": 240
+    },
+    "binding": {
+      "text": 3500,
+      "image": 0,
+      "out": 64
+    },
+    "screen_raw_expansion": {
+      "text": 4000,
+      "image": 6000,
+      "out": 160
+    },
+    "screen_rebinding": {
+      "text": 5000,
+      "image": 0,
+      "out": 96
+    },
+    "history_relation": {
+      "text": 24000,
+      "image": 0,
+      "out": 500
+    },
+    "history_response": {
+      "text": 8000,
+      "image": 0,
+      "out": 650
+    },
+    "history_initial_publisher": {
+      "text": 14000,
+      "image": 0,
+      "out": 500
+    },
+    "history_update_publisher": {
+      "text": 16000,
+      "image": 0,
+      "out": 500
+    },
+    "binding_proposal": {
+      "text": 3500,
+      "image": 0,
+      "out": 180
+    },
+    "history_joint": {
+      "text": 24000,
+      "image": 0,
+      "out": 1100
+    },
+    "history": {
+      "text": 8000,
+      "image": 0,
+      "out": 650
+    },
+    "screen_detailed_response": {
+      "text": 4000,
+      "image": 0,
+      "out": 650
+    }
   },
   "goal_dependencies": {
     "S17-G01": "parallel",
@@ -159,44 +1045,61 @@
     "S08-G01": "interrupt_after_first_content",
     "S24-G01": "include_intervening_S24-U02"
   },
-  "accuracy": {
-    "denominator": 220,
-    "baseline_errors": [
-      {
-        "binding": "S06-B01",
-        "expected_wrong_of_5": 1,
-        "reason": "원형 궤적의 경계 항목 하나를 추가"
-      },
-      {
-        "binding": "S07-B03",
-        "expected_wrong_of_5": 1,
-        "reason": "문서 전환 직후 뒤 지칭의 frame 연결 혼동"
-      },
-      {
-        "binding": "S08-B04",
-        "expected_wrong_of_5": 1,
-        "reason": "부분 정정에서 보존 집합의 두 번째 항목 혼동"
-      },
-      {
-        "binding": "S11-B04",
-        "expected_wrong_of_5": 1,
-        "reason": "비용 비교와 일정 설명의 관계 혼동"
-      },
-      {
-        "binding": "S21-B02",
-        "expected_wrong_of_5": 1,
-        "reason": "중단된 실제 전달 범위의 다음 부분 경계 혼동"
-      }
-    ],
-    "dp47_b_replace": {
-      "remove": "S07-B03",
-      "add": "S05-B02",
-      "reason": "producer의 문서 revision 구별 이익 대신 두 지시의 producer 후보 대응 손실 1건을 가정. 동일 총 오류수"
+  "accuracy_rules": {
+    "native": {
+      "A": "99.5",
+      "B": "99.5",
+      "reason": "실제 native 선택 범위가 공통 원본이므로 의미 추정 손실이 작음"
     },
-    "dp45_b_extra": {
-      "binding": "S12-B02",
-      "expected_wrong_of_5": 1,
-      "reason": "유효성 검사는 통과했으나 갱신된 구간과 과거 설명 사이 의미 관계를 잘못 게시하는 경우. 낡은 revision 무검사 사용을 가정하지 않음"
+    "fresh": {
+      "A": "98.5",
+      "B": "96.5",
+      "reason": "B의 후보화에서 빠진 교차 단서를 최종 결합이 자동으로 복구하지 못할 잔여 위험"
+    },
+    "expansion": {
+      "A": "96",
+      "B": "92",
+      "reason": "집합 경계와 화면 전환은 원본 재판단 뒤에도 후보 범위와 발화의 대응을 잘못 유지할 위험"
+    },
+    "partial": {
+      "A": "97",
+      "B": "98.5",
+      "reason": "B의 생산자별 revision과 부분 후보 교체가 정정하지 않은 항목 보존에 유리하다는 가설; A도 patch 허용"
+    },
+    "history_explicit": {
+      "A": "99",
+      "B": "99",
+      "reason": "실제 전달과 Task ID 관계는 양안 모두 원본의 명시 관계로 조회"
+    },
+    "history_cache": {
+      "A": "99",
+      "B": "99",
+      "reason": "같은 유효 관계의 재조회는 A cache와 B 게시 관계 모두 재사용"
+    },
+    "history_semantic": {
+      "A": "97",
+      "B": "96",
+      "reason": "B의 과거에 게시한 의미 관계는 현재 요청에서 원본을 읽어도 잘못된 연결을 남길 수 있음"
+    },
+    "history_new_relation": {
+      "A": "97",
+      "B": "94",
+      "reason": "B는 새 관계 생산 결과를 게시한 뒤 현재 해석에 다시 전달해 의미 연결 오류 지점이 추가됨"
+    },
+    "other": {
+      "A": "99",
+      "B": "99",
+      "reason": "해당 DP는 지칭 의미 생산자를 바꾸지 않음"
+    },
+    "history_updated_ready": {
+      "A": "97",
+      "B": "96",
+      "reason": "변경 원본은 양안 모두 읽지만 B의 갱신된 파생 의미 연결에는 잔여 게시 오류 위험이 있음"
+    },
+    "history_current_comparison": {
+      "A": "97",
+      "B": "97",
+      "reason": "새 질문의 비용과 일정 관계는 게시 관계 종류를 새로 만들지 않고 양안 모두 현재 요청에서 같은 원본으로 해석"
     }
   },
   "module_sets": {
@@ -225,7 +1128,8 @@
       "C06": [
         "via / lib / via::access::policy",
         "via / lib / via::context::compose",
-        "via / lib / via::response::content"
+        "via / lib / via::response::content",
+        "via / lib / via::grounding::joint"
       ]
     },
     "44B": {
@@ -244,7 +1148,8 @@
         "via / lib / via::response::composer",
         "via / lib / via::response::publication_join",
         "via / lib / via::response::speech_segments",
-        "via / lib / via::ui::response_view"
+        "via / lib / via::ui::response_view",
+        "via / lib / via::dialogue::stage_ports"
       ],
       "C05": [
         "via / lib / via::context::compose",
@@ -255,7 +1160,9 @@
         "via / lib / via::access::policy",
         "via / lib / via::context::compose",
         "via / lib / via::response::composer",
-        "via / lib / via::response::publication_join"
+        "via / lib / via::response::publication_join",
+        "via / lib / via::dialogue::stage_ports",
+        "via / lib / via::grounding::joint"
       ]
     },
     "47B": {
@@ -283,6 +1190,10 @@
       "C06": [
         "via / lib / via::access::policy",
         "via / lib / via::context::compose",
+        "via / lib / via::grounding::speech_producer",
+        "via / lib / via::grounding::screen_producer",
+        "via / lib / via::grounding::candidate_repository",
+        "via / lib / via::grounding::binding",
         "via / lib / via::response::content"
       ]
     },
@@ -314,7 +1225,8 @@
         "via / lib / via::memory::publisher",
         "via / lib / via::memory::evidence_reader",
         "via / lib / via::memory::repository",
-        "via / lib / via::response::content"
+        "via / lib / via::response::content",
+        "via / lib / via::grounding::joint"
       ]
     },
     "42B": {
@@ -332,7 +1244,9 @@
         "via / lib / via::task::result_sections",
         "via / lib / via::response::content",
         "via / lib / via::response::speech_segments",
-        "via / lib / via::ui::response_view"
+        "via / lib / via::ui::response_view",
+        "via / lib / via::work::event_contract",
+        "via / lib / via::dialogue::task_projection"
       ],
       "C05": [
         "via / lib / via::context::compose",
@@ -342,7 +1256,10 @@
       "C06": [
         "via / lib / via::access::policy",
         "via / lib / via::context::compose",
-        "via / lib / via::response::content"
+        "via / lib / via::response::content",
+        "via / lib / via::work::event_contract",
+        "via / lib / via::dialogue::task_projection",
+        "via / lib / via::grounding::joint"
       ]
     }
   },
@@ -355,53 +1272,16 @@
     "C06": "부분 허용 정책과 Context 사용 필터 및 대기 응답 read-set 재검증 확장"
   },
   "cost": {
-    "snapshot": "repository 2026-10-14 COST-COMMON-v4, not a live price claim",
-    "luna_input_usd_per_million": 0.25,
-    "luna_output_usd_per_million": 1.2,
-    "warm_history_input_tokens": 12000,
-    "baseline_extra_reads": {
-      "events": [
-        "S06-U01",
-        "S07-U02",
-        "S08-U01",
-        "S11-U03",
-        "S12-U02",
-        "S21-U02"
-      ],
-      "calls_each": 1,
-      "text_input_each": 6000,
-      "image_input_tokens_each": 0,
-      "output_each": 80,
-      "reason": "bounded source reread / partial rejudgment after rejected internal proposal; before first adoption"
-    },
-    "dp47_b": {
-      "producer_input_each": 5000,
-      "producer_output_each": 140,
-      "binder_input_each": 2500,
-      "binder_output_each": 200,
-      "expansion_input_each": 4000,
-      "expansion_image_tokens_each": 3000,
-      "expansion_output_each": 100
-    },
-    "dp45_b": {
-      "initial_calls_per_scenario": 2,
-      "initial_input_each": 14000,
-      "initial_output_each": 200,
-      "request_history_input_each": 6000,
-      "update_events": [
-        "S01-U02",
-        "S08-U02",
-        "S10-U01",
-        "S11-U03",
-        "S12-U02",
-        "S15-U03",
-        "S21-U02",
-        "S24-U03"
-      ],
-      "update_input_each": 5000,
-      "update_output_each": 120
-    },
-    "expected_output_fraction_of_reference": "1/4"
+    "snapshot": "repository 2026-10-14 COST-COMMON-v4; not a live price quote",
+    "luna_input_usd_per_million": ".25",
+    "luna_output_usd_per_million": "1.2",
+    "b45_initial_calls_per_episode": 2,
+    "b45_update_events": [
+      "S12-U02"
+    ],
+    "include_all_28_initial_preparation": true,
+    "b45_initial_production_reason": "200턴 원본 중 명시 ID만으로 EXPLAINS_ITEM 관계를 만들 수 없는 설명을 두 batch로 처리한다는 가정. PRESENTS/HAS_RESULT/REVISES와 명시 source link는 코드로 게시하고 새 모델 호출을 부과하지 않음.",
+    "b45_update_production_reason": "S12 원본 변경의 의미 관계 갱신만 학습 생산으로 예상. 나머지 ID/전달 receipt 갱신은 코드 경로다. S11-U03의 비용과 일정 비교는 임의 새 관계 타입을 게시하지 않고 양안 현재 요청 모델이 답한다."
   },
   "ram": {
     "unit": "decimal MB",
@@ -455,30 +1335,96 @@
       "ipc_and_pending_receipts": 10
     }
   },
-  "load_added_deltas_b_ms": {
-    "44": {
-      "S05": -2,
-      "S11": -2,
-      "S18": -2,
-      "S19": -2
+  "load_components": {
+    "common": {
+      "S05": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 16
+      },
+      "S11": {
+        "model_admission": 60,
+        "output_cpu": 14,
+        "state_queue": 16
+      },
+      "S18": {
+        "model_admission": 20,
+        "output_cpu": 14,
+        "state_queue": 16
+      },
+      "S19": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 16
+      }
     },
-    "47": {
-      "S05": 20,
-      "S11": 0,
-      "S18": 0,
-      "S19": 0
+    "44B": {
+      "S05": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 10,
+        "join_validation": 4
+      },
+      "S11": {
+        "model_admission": 60,
+        "output_cpu": 14,
+        "state_queue": 10,
+        "join_validation": 4
+      },
+      "S18": {
+        "model_admission": 20,
+        "output_cpu": 14,
+        "state_queue": 10,
+        "join_validation": 4
+      },
+      "S19": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 10,
+        "join_validation": 4
+      }
     },
-    "45": {
-      "S05": 0,
-      "S11": 10,
-      "S18": 0,
-      "S19": 0
+    "47B": {
+      "S05": {
+        "model_admission": 140,
+        "output_cpu": 14,
+        "state_queue": 16,
+        "producer_commit": 10
+      }
     },
-    "42": {
-      "S05": 0,
-      "S11": 0,
-      "S18": 0,
-      "S19": 0
+    "45B": {
+      "S11": {
+        "model_admission": 60,
+        "output_cpu": 14,
+        "state_queue": 16,
+        "publisher_readback": 20
+      }
+    },
+    "42B": {
+      "S05": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 8,
+        "ipc_projection": 12
+      },
+      "S11": {
+        "model_admission": 60,
+        "output_cpu": 14,
+        "state_queue": 8,
+        "ipc_projection": 12
+      },
+      "S18": {
+        "model_admission": 20,
+        "output_cpu": 14,
+        "state_queue": 8,
+        "ipc_projection": 12
+      },
+      "S19": {
+        "model_admission": 40,
+        "output_cpu": 14,
+        "state_queue": 8,
+        "ipc_projection": 12
+      }
     }
   },
   "audio_eligible_delay_ms": {
@@ -490,11 +1436,20 @@
     "blocked_user_or_previous_playback_excluded": true
   },
   "scope_notes": [
-    "All timing constants are author assumptions; no benchmark, model call, PoC or random samples were run.",
-    "Five repetitions carry the same point expectation; they do not establish variance or confidence.",
-    "Correctness and time stay separate. Expected binding errors do not alter QA01/QA03 latencies.",
-    "QA09 estimates the delivery path of adopted content only; this thought experiment does not impose a correctness/failure timing penalty. Canonical audio functional checks remain separate.",
-    "The all-A analysis reference is not the reviewed target or a chosen winner.",
-    "Exact decimals support arithmetic, not empirical precision."
-  ]
+    "Numerical priors are author forecasts, not sampled or measured outcomes.",
+    "Stage costs use the same input/decode budget for every option; intermediate results must complete before dependent calls.",
+    "A may cache and patch; B may overlap producer work and expand original evidence.",
+    "Canonical scoring thresholds are unchanged. Cost uses the original full bundle because its dollar budget is defined for that unit.",
+    "QA04/08 planned Rust module ownership is DESIGN_CHANGE_REVIEW, not an actual implementation diff.",
+    "No automatic failure timing penalty. No weighted overall winner.",
+    "Screen first response requires the COMPLETE adopted GroundingProposal, displayed as a substantive target/scope Request card. It never exposes a partial binding token as an adopted answer. Detailed explanation has a separate common model call after grounding, fully charged in QA03/05."
+  ],
+  "module_impact_notes": {
+    "common": "같은 C 과제의 전체 A 변경 집합은 모든 DP에서 동일하다. 다른 DP는 A로 고정하므로 부분 철회에서 공통 JointGroundingState 변경도 44/45/42 집합에 포함한다.",
+    "44": "C04/C06의 section/extent 세분화는 Response Composer 작성과 Publication Join의 대기 후보 보존 및 stage_ports의 부분 무효화 전달 계약을 함께 확장한다. 기존 source 원본을 복제하는 변경은 없다.",
+    "47": "C06은 whole-source 철회에서 extent mask 철회로 확장하는 과제다. joint의 부분 read-set 검증 또는 두 producer와 candidate_repository 및 binding의 일부 보존 처리가 바뀐다는 계획이다. 기존 부분 정정 지원을 삭제하거나 새 기능이라고 다시 세지 않는다.",
+    "45": "C05 source 목록 반환과 C06 partial extent 사용 차단은 publisher/evidence_reader가 같은 반환 및 유효 범위 계약을 다룬다. C06은 저장소의 부분 관계 무효화도 변경한다.",
+    "42": "C04의 affected_sections와 C06의 revoked_source_extents를 업무 사실에서 대화 반영으로 전달하는 내부 계약과 projection을 확장한다는 계획이다. 외부 Agent wire 변경 C02는 공통 adapter에 한정된다.",
+    "falsification": "기존 generic 계약과 사용권 gate가 새 section/extent 세분화까지 이미 처리하면 해당 module은 변경 집합에서 제거해야 한다. 별도 service나 producer라는 이름만으로 모듈을 추가하지 않는다."
+  }
 }

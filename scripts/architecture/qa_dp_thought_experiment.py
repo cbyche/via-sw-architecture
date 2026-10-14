@@ -1,83 +1,137 @@
 #!/usr/bin/env python3
-"""Recompute authored assumptions and score tables only. No VIA/model/PoC execution."""
+"""Deterministic arithmetic of authored forecasts. Never runs VIA, models or a PoC."""
 from pathlib import Path
 from fractions import Fraction as F
 import argparse
 import hashlib
 import json
-import re
 import qa_candidate_population as population
 import check_qa_candidate_package as qa
 
 P=population.P
 A_PATH=P/'thought-experiment/assumptions.json'
-PAIRS=[('C01','C02'),('C01','C03'),('C02','C03'),('C04','C05'),('C04','C06'),('C05','C06')]
 NAMES=['첫 응답 지연시간','지칭 대상 식별 정확도','VIA 처리시간','변경 범위','모델 사용 비용','최대 RAM 사용량','부하 추가 지연','병행 수정 중복','음성 전달 지연']
-UNITS=['s','%','s','modules/change','USD/bundle','MB','ms','modules/pair','ms']
+UNITS=['s','%','s','modules/change','USD/COMMON-28 bundle','MB','ms','modules/pair','ms']
+DOTS=['○○○','◐○○','●○○','●◐○','●●○','●●◐','●●●']
 
 def rational(value):
     value=F(value)
     return {'numerator':value.numerator,'denominator':value.denominator,'decimal':float(value)}
 
-def fmt(value,places=4):
+def fmt(value,places=3):
     return f'{float(value):.{places}f}'.rstrip('0').rstrip('.')
 
 def readable_json(value,level=0):
-    """Keep small numerical records on one line; preserve standard JSON."""
     flat=json.dumps(value,ensure_ascii=False)
-    if not isinstance(value,(dict,list)) or len(flat)<=180:
-        return flat
+    if not isinstance(value,(dict,list)) or len(flat)<=200:return flat
     pad='  '*(level+1);close='  '*level
     if isinstance(value,dict):
-        parts=[pad+json.dumps(k,ensure_ascii=False)+': '+readable_json(v,level+1) for k,v in value.items()]
-        return '{\n'+',\n'.join(parts)+'\n'+close+'}'
+        return '{\n'+',\n'.join(pad+json.dumps(k,ensure_ascii=False)+': '+readable_json(v,level+1) for k,v in value.items())+'\n'+close+'}'
     return '[\n'+',\n'.join(pad+readable_json(v,level+1) for v in value)+'\n'+close+']'
 
 def score(index,value):
     path=next(P.glob(f'qa{index:02d}-*.md'))
-    scores=qa.score_cells(path.read_text())
-    hits=[k for k,v in scores.items() if qa.contains(qa.interval(v[2]),value)]
+    cells=qa.score_cells(path.read_text())
+    hits=[k for k,v in cells.items() if qa.contains(qa.interval(v[2]),value)]
     assert len(hits)==1,(index,value,hits)
     return hits[0]
 
+def class_for(a,eid,which):
+    return next((k for k,v in a[which].items() if eid in v),None)
+
+def load_parts(a,dp,opt,sid):
+    return a['load_components'].get(f'{dp}{opt}',{}).get(sid,a['load_components']['common'][sid])
+
 def event_record(a,e,dp,opt):
-    t=a['first_response_ms']; profile=e['reference_semantic_call']['profile'];sid=e['id'].split('-')[0]
-    components=dict(t['profiles'][profile])
+    """Call outputs are dependencies, not a uniform delta pasted on a common latency."""
+    t=a['timing_model'];eid=e['id'];sid=eid[:3];screen=class_for(a,eid,'screen_classes');history=class_for(a,eid,'history_classes')
+    profile=e['reference_semantic_call']['profile'];nodes=[];fin={};calls=[]
+    def node(name,duration,parents=()):
+        assert duration>=0
+        assert all(p in fin for p in parents)
+        finish=duration+max([fin[x] for x in parents] or [0]);fin[name]=finish
+        nodes.append({'id':name,'duration_ms':duration,'parents':list(parents),'finish_ms':finish})
+        return name
+    def model(name,budget,parents,final=False,overlap=0,first_tokens=None):
+        b=dict(a['call_budgets'][budget]);b['image']=b.get('image',e['reference_semantic_call']['image_count']*3000)
+        b['call_id']=eid+':'+name;b['kind']=budget;b['overlap_before_t0_ms']=overlap
+        b['first_content_tokens']=first_tokens or t['first_content_tokens']
+        fixed=t['semantic_call_fixed_ms']+(b['text']+b['image'])*t['prefill_ms_per_1000_tokens']//1000
+        full=fixed+b['out']*t['decode_ms_per_token'];b['full_duration_ms']=full
+        assert 0<=overlap<=full
+        calls.append(b)
+        if final:
+            first=fixed+b['first_content_tokens']*t['decode_ms_per_token'];assert first<=full
+            f=node(name+':first',first,parents);done=node(name+':full',full-first,[f]);return f,done
+        return node(name,full-overlap,parents)
     mode='agent' if e['kind']=='agent' else e['input_mode']
-    components['input_tail']=t['input_tail_by_mode'][mode]
-    warm=e['id'] in t['warm_history_events']
-    if warm:components['valid_source_cache']=t['warm_history_delta_ms']
-    if e['id'] in a['cost']['baseline_extra_reads']['events']:
-        components['bounded_rejudgment']=t['baseline_extra_read_ms']
-    if sid in t['base_load_added_ms'] and e['id']==sid+'-U01':
-        components['background_interference']=t['base_load_added_ms'][sid]
-        if opt=='B':components['background_interference']+=a['load_added_deltas_b_ms'][str(dp)][sid]
-    if opt=='B':
-        if dp==44:components['structural_delta']=t['dp44_b_wiring_delta_ms']
-        if dp==42 and e['kind']=='agent':components['structural_delta']=t['dp42_b_agent_delta_ms']
-        if dp==47 and profile=='screen':
-            b=t['dp47_b']
-            components['producer_binding_delta']=b['native_extra_ms'] if e['id'] in b['native_events'] else (b['reuse_extra_ms'] if e['id'] in b['partial_reuse_events'] else b['fresh_extra_ms'])
-            if e['id'] in b['expansion_events']:components['producer_expansion_delta']=b['expansion_extra_ms']
-        if dp==45 and profile=='history':
-            b=t['dp45_b'];components['published_relation_delta']=b['fresh_delta_ms'] if e['id'] in b['fresh_events'] else b['ready_history_delta_ms']
-            if warm and e['id'] not in b['fresh_events']:components['already_warm_adjustment']=b['warm_extra_delta_ms']
-    first=sum(components.values());assert first>=0
-    c=a['complete_response_ms'];tail=c['semantic_tail_by_profile'][profile]
-    if opt=='B' and dp==47 and profile=='screen':tail+=c['dp47_b_tail_delta_ms']
-    if opt=='B' and dp==45 and profile=='history':tail+=(c['dp45_b_fresh_tail_delta_ms'] if e['id'] in t['dp45_b']['fresh_events'] else c['dp45_b_ready_tail_delta_ms'])
-    # Summary speech streams from the adopted short content while full detailed text continues.
-    text_tail=tail+c['text_full_after_content_ms']
-    audio_tail=c['audio_full_after_content_ms'] if e['response']['voice_required'] else 0
-    completion_tail=max(text_tail,audio_tail)+(c['dp44_b_completion_extra_ms'] if opt=='B' and dp==44 else 0)
-    return {'event_id':e['id'],'profile':profile,'first_ms_components':components,'first_ms':first,'full_text_tail_ms':text_tail,'full_audio_tail_ms':audio_tail,'completion_tail_ms':completion_tail,'voice_required':e['response']['voice_required'],'correctness_used_to_modify_time':False}
+    start=node('input_tail',t.get('voice_tail_overrides_ms',{}).get(eid,t[mode+'_tail_ms']))
+    read=t['screen_read_ms'] if screen else t['context_read_ms'] if history else t['other_read_ms']
+    if history=='cache':read=15
+    start=node('bounded_source_read',read,[start])
+    wire=t['b44_stage_and_join_wiring_ms'] if dp==44 and opt=='B' else t['dispatcher_wiring_ms']
+    start=node('execution_wiring',wire,[start])
+    if sid in a['load_components']['common'] and eid==sid+'-U01':
+        start=node('background_resource_wait',sum(load_parts(a,dp,opt,sid).values()),[start])
+    if screen:
+        if dp==47 and opt=='B':
+            if screen in ['native','partial']:
+                ready=node('native_or_valid_partial_candidates',10,[start])
+            else:
+                speech=model('SpeechReferenceProducer','speech_producer',[start])
+                # Screen source can be prepared before final speech evidence; both options retain raw input.
+                overlap=t['new_screen_prework_ms'] if screen=='expansion' else t['fresh_screen_prework_ms']
+                visual_source=node('independent_screen_read',t['screen_read_ms'])
+                visual=model('ScreenTargetProducer','screen_producer',[visual_source],overlap=overlap)
+                ready=node('candidate_revision_commit',12,[speech,visual])
+            if screen=='expansion':
+                proposal=model('binding_needs_expansion','binding_proposal',[ready])
+                expanded=model('producer_raw_expansion','screen_raw_expansion',[proposal])
+                ready=node('candidate_revision_republish',12,[expanded])
+                grounded=model('MultimodalBindingResolver','screen_rebinding',[ready])
+            else:grounded=model('MultimodalBindingResolver','binding',[ready])
+        else:
+            ready=start
+            if screen=='expansion':ready=model('joint_bounded_raw_expansion','screen_raw_expansion',[ready])
+            budget={'native':'screen_native_joint','partial':'screen_patch_joint'}.get(screen,'screen_joint')
+            grounded=model('JointGroundingInterpreter',budget,[ready])
+        # A whole GroundingProposal is required before the adopted target/scope card.
+        # The common detailed response remains a real additional model call and completion cost.
+        first=grounded
+        _,full=model('common_detailed_screen_response','screen_detailed_response',[grounded],final=True)
+    elif history:
+        if dp==45 and opt=='B':
+            ready=start
+            if history=='new_relation':
+                ready=model('MemoryPublisher_update','history_update_publisher',[ready])
+                ready=node('publish_and_readback',t['b45_publish_readback_ms'],[ready])
+            else:ready=node('published_relation_readback',12,[ready])
+            if history=='current_comparison':
+                first,full=model('current_comparison_with_originals','history_joint',[ready],final=True,first_tokens=500)
+            else:first,full=model('current_request_with_originals','history_response',[ready],final=True)
+        elif history in ['semantic','new_relation','updated_ready','current_comparison']:
+            # Strong A combines relation interpretation and current response in one model call.
+            first,full=model('joint_history_and_current_request','history_joint',[start],final=True,first_tokens=500)
+        else:first,full=model('current_request_with_originals','history_response',[start],final=True)
+    else:
+        first,full=model('current_response',profile,[start],final=True)
+    if dp==42 and opt=='B' and e['kind']=='agent':
+        first=node('work_fact_ipc_and_dialogue_projection',t['b42_agent_projection_extra_ms'],[first])
+        full=node('full_work_fact_projection',t['b42_agent_projection_extra_ms'],[full])
+    displayed=node('first_content_ui',t['response_adopt_and_ui_ms'],[first])
+    detailed=node('full_text_ui',t['response_adopt_and_ui_ms'],[full])
+    finish_parents=[detailed]
+    if e['response']['voice_required']:
+        finish_parents.append(node('all_summary_audio_ready',t['audio_all_ready_tail_ms'],[displayed]))
+    complete=node('response_complete',0,finish_parents)
+    return {'event_id':eid,'profile':profile,'mechanism_class':screen or history or profile,'first_ms':fin[displayed],'completion_tail_ms':fin[complete]-fin[displayed],'first_and_completion_nodes':nodes,'semantic_calls':calls,'voice_required':e['response']['voice_required'],'correctness_used_to_modify_time':False}
 
 def goal_record(a,s,g,events,dp,opt):
     # Authored precedence algebra. External domain, user speech and playback durations are zero.
     ids=list(g['member_events']); rule=a['goal_dependencies'].get(g['id'],'serial_user_then_agent')
     if rule=='include_intervening_S24-U02':ids.insert(1,'S24-U02')
     byid={e['id']:e for e in s['events']}; nodes=[];fin={};last_user=None;last_agent=None
-    handoff=a['complete_response_ms']['local_agent_handoff_ms']+(a['complete_response_ms']['dp42_b_handoff_extra_ms'] if opt=='B' and dp==42 else 0)
+    handoff=a['timing_model']['local_handoff_ms']+(a['timing_model']['b42_handoff_extra_ms'] if opt=='B' and dp==42 else 0)
     def node(name,duration,parents):
         finish=duration+max([fin[x] for x in parents] or [0]);fin[name]=finish
         nodes.append({'id':name,'duration_ms':duration,'parents':parents,'finish_ms':finish})
@@ -87,7 +141,7 @@ def goal_record(a,s,g,events,dp,opt):
         if e['kind']=='user':
             parents=[previous_output] if previous_output else []
             node(eid+':first',er['first_ms'],parents)
-            tail=460 if rule=='interrupt_after_first_content' and ix==0 else er['completion_tail_ms']
+            tail=min(er['completion_tail_ms'],a['timing_model']['interrupt_after_first_content_ms']) if rule=='interrupt_after_first_content' and ix==0 else er['completion_tail_ms']
             node(eid+':output',tail,[eid+':first']);last_user=eid;previous_output=eid+':output'
         else:
             if rule=='independent_existing_tasks' or (g['id']=='S17-G05' and eid=='S17-A10'):
@@ -102,153 +156,161 @@ def goal_record(a,s,g,events,dp,opt):
     total=max(fin[eid+':output'] for eid in ids)
     return {'goal_id':g['id'],'member_events':g['member_events'],'additional_causal_events':[x for x in ids if x not in g['member_events']],'precedence_assumption':rule,'nodes':nodes,'via_ms':total}
 
-def cost_rows(a,data,dp,opt):
+def cost_rows(a,data,all_events,dp,opt):
     quoted,_,_,_,_=population.quote(data)
-    rows=[{'label':n,'calls':None,'input_text_tokens':None,'input_image_tokens':None,'output_tokens':None,'cost_usd':str(v)} for n,_,_,v in quoted[:6]]
-    c=a['cost'];input_price=F(str(c['luna_input_usd_per_million']));out_price=F(str(c['luna_output_usd_per_million']))
-    def add(label,calls,txt,img,out):
-        val=(input_price*(txt+img)+out_price*out)/1000000
-        rows.append({'label':label,'calls':calls,'input_text_tokens':txt,'input_image_tokens':img,'output_tokens':out,'cost_usd':str(float(val)),'cost_exact':rational(val)})
-    for s in data['scenarios']:
-        for e in s['events']:
-            ec=e['reference_semantic_call'];profile=ec['profile'];txt=ec['text_input_tokens'];img=ec['image_count']*ec['image_tokens_each_max'];out=int(F(ec['total_output_including_reasoning_tokens'])*F(c['expected_output_fraction_of_reference']))
-            if e['id'] in a['first_response_ms']['warm_history_events']:txt=c['warm_history_input_tokens']
-            if opt=='B' and dp==47 and profile=='screen':
-                b=c['dp47_b'];native=e['id'] in a['first_response_ms']['dp47_b']['native_events'];reuse=e['id'] in a['first_response_ms']['dp47_b']['partial_reuse_events']
-                # Native or reused speech/screen candidates need no model producer on this request.
-                if not (native or reuse):add(e['id']+' producer',1,b['producer_input_each'],img,b['producer_output_each'])
-                add(e['id']+' binding',1,b['binder_input_each'],0,b['binder_output_each'])
-                if e['id'] in a['first_response_ms']['dp47_b']['expansion_events']:add(e['id']+' raw-source expansion',1,b['expansion_input_each'],b['expansion_image_tokens_each'],b['expansion_output_each'])
-            else:
-                if opt=='B' and dp==45 and profile=='history':txt=c['dp45_b']['request_history_input_each']
-                add(e['id']+' semantic',1,txt,img,out)
-    extra=c['baseline_extra_reads']
-    for eid in extra['events']:
-        if opt=='B' and dp==47 and eid in a['first_response_ms']['dp47_b']['expansion_events']:continue
-        if opt=='B' and dp==45 and eid in c['dp45_b']['update_events']:continue
-        add(eid+' bounded source reread',1,extra['text_input_each'],extra['image_input_tokens_each'],extra['output_each'])
-    if opt=='B' and dp==45:
-        b=c['dp45_b']
+    rows=[{'label':n,'scope':'common_voice','cost_usd':str(v)} for n,_,_,v in quoted[:6]]
+    c=a['cost'];pi=F(c['luna_input_usd_per_million']);po=F(c['luna_output_usd_per_million'])
+    calls=[call for e in all_events.values() for call in e['semantic_calls']]
+    if dp==45 and opt=='B':
         for s in data['scenarios']:
-            n=b['initial_calls_per_scenario'];add(s['id']+' initial publisher',n,n*b['initial_input_each'],0,n*b['initial_output_each'])
-        for eid in b['update_events']:add(eid+' publisher update',1,b['update_input_each'],0,b['update_output_each'])
+            for i in range(c['b45_initial_calls_per_episode']):
+                b=dict(a['call_budgets']['history_initial_publisher']);b['call_id']=s['id']+f':initial_publisher_{i+1}';b['kind']='initial_preparation';calls.append(b)
+        # New relation calls already appear in the foreground DAG and must not be charged twice.
+        for eid in c['b45_update_events']:
+            if any(x['call_id']==eid+':MemoryPublisher_update' for x in calls):continue
+            b=dict(a['call_budgets']['history_update_publisher']);b['call_id']=eid+':background_publisher_update';b['kind']='background_update';calls.append(b)
+    for call in calls:
+        value=(pi*(call['text']+call['image'])+po*call['out'])/1000000
+        rows.append({'label':call['call_id'],'scope':call['kind'],'calls':1,'input_text_tokens':call['text'],'input_image_tokens':call['image'],'output_including_reasoning_tokens':call['out'],'cost_usd':str(float(value)),'cost_exact':rational(value)})
+    return rows
+
+def accuracy_rows(a,data,dp,opt,pop):
+    rows=[]
+    for s in data['scenarios']:
+        for b in s['bindings']:
+            if b['id'] not in pop['bindings']:continue
+            eid=b['event_id'];screen=class_for(a,eid,'screen_classes');history=class_for(a,eid,'history_classes')
+            key=screen or ('history_'+history if history else 'other')
+            choice=opt if (screen and dp==47) or (history and dp==45) else 'A'
+            rule=a['accuracy_rules'][key]
+            assert 0<=F(rule[choice])<=100
+            rows.append({'binding_id':b['id'],'event_id':eid,'expected_correct_percent':rule[choice],'risk_class':key,'reason':rule['reason']})
     return rows
 
 def build(a,data):
-    records=[];summaries=[];byvariant={}
-    binding_ids={b['id'] for s in data['scenarios'] for b in s['bindings']}
+    summary=[];alternatives=[];byvariant={};allids={e['id'] for s in data['scenarios'] for e in s['events']}
+    for group in ['screen_classes','history_classes']:
+        ids=[eid for values in a[group].values() for eid in values]
+        assert len(ids)==len(set(ids)) and set(ids)<=allids
+    assert set(sum(a['screen_classes'].values(),[]))==set(a['populations']['47']['events'])
+    assert set(sum(a['history_classes'].values(),[]))==set(a['populations']['45']['events'])
+    assert a['comparison']['timing_correctness_penalty'] is False
     for dp in a['comparison']['dps']:
+        pop=a['populations'][str(dp)];assert set(pop['events'])<=allids
+        assert set(pop['events']).isdisjoint(pop['excluded_event_ids'])
+        assert set(pop['events'])|set(pop['excluded_event_ids'])==allids
         for opt in ['A','B']:
-            tag=f'{dp}{opt}';events={e['id']:event_record(a,e,dp,opt) for s in data['scenarios'] for e in s['events']}
-            goals=[goal_record(a,s,g,events,dp,opt) for s in data['scenarios'] for g in s['goals']]
-            errors=list(a['accuracy']['baseline_errors'])
-            if opt=='B' and dp==47:
-                repl=a['accuracy']['dp47_b_replace'];errors=[x for x in errors if x['binding']!=repl['remove']]+[{'binding':repl['add'],'expected_wrong_of_5':1,'reason':repl['reason']}]
-            if opt=='B' and dp==45:errors.append(a['accuracy']['dp45_b_extra'])
-            assert len({x['binding'] for x in errors})==len(errors)
-            assert all(x['binding'] in binding_ids and 0<=x['expected_wrong_of_5']<=5 for x in errors)
-            modules=a['module_sets']['reference' if opt=='A' else tag]
-            intersections=[{'pair':list(pair),'modules':sorted(set(modules[pair[0]])&set(modules[pair[1]]))} for pair in PAIRS]
-            costs=cost_rows(a,data,dp,opt)
+            tag=f'{dp}{opt}'
+            all_events={e['id']:event_record(a,e,dp,opt) for s in data['scenarios'] for e in s['events']}
+            events=[all_events[eid] for eid in pop['events']]
+            goals=[goal_record(a,s,g,all_events,dp,opt) for s in data['scenarios'] for g in s['goals'] if g['id'] in pop['goals']]
+            # Unscored events still appear in complete goal graphs if causally required.
+            closure={eid for g in goals for eid in g['member_events']+g['additional_causal_events']}
+            accuracy=accuracy_rows(a,data,dp,opt,pop);assert len(accuracy)==len(pop['bindings'])
+            key=tag if tag in a['module_sets'] else 'reference'
+            modules={cid:a['module_sets'][key][cid] for cid in pop['changes']}
+            overlaps=[{'pair':pair,'modules':sorted(set(modules[pair[0]])&set(modules[pair[1]]))} for pair in pop['change_pairs']]
+            costs=cost_rows(a,data,all_events,dp,opt)
             ram=[]
-            for s in data['scenarios']:
-                r=a['ram'];c=dict(r['baseline_components']);c['screen_decoded_and_compressed_cache']=r['screen_by_scenario'].get(s['id'],r['default_screen_mb']);c['history_source_cache']=r['history_by_scenario'].get(s['id'],r['default_history_mb'])
+            for sid in pop['episodes']:
+                r=a['ram'];c=dict(r['baseline_components']);c['screen_decoded_and_compressed_cache']=r['screen_by_scenario'].get(sid,r['default_screen_mb']);c['history_source_cache']=r['history_by_scenario'].get(sid,r['default_history_mb'])
                 if opt=='B':
                     if dp in [44,45,42]:c.update(r[f'dp{dp}_b_extra'])
-                    if dp==47 and any(e['reference_semantic_call']['profile']=='screen' for e in s['events']):c.update(r['dp47_b_extra_screen'])
-                ram.append({'scenario':s['id'],'simultaneous_components_mb':c,'total_mb':sum(c.values())})
+                    if dp==47:c.update(r['dp47_b_extra_screen'])
+                ram.append({'scenario':sid,'simultaneous_components_mb':c,'total_mb':sum(c.values())})
             loads=[]
-            for sid,base in a['first_response_ms']['base_load_added_ms'].items():
-                added=base+(a['load_added_deltas_b_ms'][str(dp)][sid] if opt=='B' else 0)
-                loaded=events[sid+'-U01']['first_ms'];loads.append({'event':sid+'-U01','loaded_ms':loaded,'idle_ms':loaded-added,'added_ms':added,'repetitions':5})
-            values=[F(sum(e['first_ms'] for e in events.values()),120000),F(220-sum(x['expected_wrong_of_5'] for x in errors),220)*100,F(sum(g['via_ms'] for g in goals),76000),F(sum(len(v) for v in modules.values()),6),sum(F(r['cost_usd']) for r in costs),F(max(r['total_mb'] for r in ram)),F(sum(x['added_ms'] for x in loads),4),F(sum(len(x['modules']) for x in intersections),6),F(a['audio_eligible_delay_ms']['total'])]
-            assert len(events)==120 and len(goals)==76
-            assert sum(e['voice_required'] for e in events.values())==109
+            for sid in pop['loads']:
+                parts=load_parts(a,dp,opt,sid);added=sum(parts.values());loaded=all_events[sid+'-U01']['first_ms']
+                loads.append({'event':sid+'-U01','loaded_ms':loaded,'idle_ms':loaded-added,'added_ms':added,'components_ms':parts})
+            values=[F(sum(e['first_ms'] for e in events),1000*len(events)),sum(F(x['expected_correct_percent']) for x in accuracy)/len(accuracy),F(sum(g['via_ms'] for g in goals),1000*len(goals)),F(sum(len(x) for x in modules.values()),len(modules)),sum(F(x['cost_usd']) for x in costs),F(max(x['total_mb'] for x in ram)),F(sum(x['added_ms'] for x in loads),len(loads)),F(sum(len(x['modules']) for x in overlaps),len(overlaps)),F(a['audio_eligible_delay_ms']['total'])]
             assert all(len(ms)==len(set(ms)) for ms in modules.values())
-            assert all(e['correctness_used_to_modify_time'] is False for e in events.values())
-            one={'dp':dp,'option':opt,'evidence':'THOUGHT_EXPERIMENT','events':list(events.values()),'goals':goals,'hypothetical_errors':errors,'change_sets':modules,'overlaps':intersections,'model_cost_ledger':costs,'simultaneous_ram_ledger':ram,'load_pairs':loads,'audio_eligible_delay_ms':a['audio_eligible_delay_ms']}
-            records.append(one);byvariant[tag]=(one,values)
-            for index,value in enumerate(values,1):
-                summaries.append({'dp':dp,'option':opt,'qa':f'QA{index:02}','name':NAMES[index-1],'unit':UNITS[index-1],'point_estimate':rational(value),'score_0_to_6':score(index,value),'status':'THOUGHT_EXPERIMENT_NOT_MEASURED','timing_failure_penalty_applied':False})
-    assert all(byvariant[f'{dp}A'][1]==byvariant['44A'][1] for dp in a['comparison']['dps'])
+            selected_semantic_cost=sum(F(x['cost_usd']) for x in costs[6:] if x['label'].split(':')[0] in pop['events'])
+            one={'dp':dp,'option':opt,'evidence':'THOUGHT_EXPERIMENT_NOT_MEASURED','population':pop,'events':events,'additional_goal_events':[all_events[eid] for eid in sorted(closure-set(pop['events']))],'goals':goals,'accuracy_priors':accuracy,'change_sets':modules,'overlaps':overlaps,'model_cost_ledger':costs,'related_foreground_semantic_cost_usd':rational(selected_semantic_cost),'simultaneous_ram_ledger':ram,'load_pairs':loads,'audio_eligible_delay_ms':a['audio_eligible_delay_ms'],'audio_count_per_pass':sum(e['voice_required'] for e in events)}
+            alternatives.append(one);byvariant[tag]=(one,values)
+            for i,v in enumerate(values,1):
+                applicability='STRUCTURAL_HYPOTHESIS'
+                if i==2:applicability=pop['qa02_class']
+                if i==9 or i==5 and dp in [44,42]:applicability='REGRESSION_ONLY'
+                summary.append({'dp':dp,'option':opt,'qa':f'QA{i:02}','name':NAMES[i-1],'unit':UNITS[i-1],'point_estimate':rational(v),'score_0_to_6':score(i,v),'rating':DOTS[score(i,v)],'applicability':applicability,'status':'THOUGHT_EXPERIMENT_NOT_MEASURED','timing_failure_penalty_applied':False})
+    # The control structure is identical even though selected populations differ.
+    controls=[one for one in alternatives if one['option']=='A']
+    for left in controls:
+        for right in controls:
+            lm={e['event_id']:e for e in left['events']};rm={e['event_id']:e for e in right['events']}
+            assert all(lm[eid]==rm[eid] for eid in set(lm)&set(rm))
+            assert left['model_cost_ledger']==right['model_cost_ledger']
+            for cid in set(left['change_sets'])&set(right['change_sets']):
+                assert left['change_sets'][cid]==right['change_sets'][cid]
     paths=[A_PATH,P/'thought-experiment/rationale.json',P/'common-scenarios.json',*sorted(P.glob('qa[0-9][0-9]-*.md'))]
-    # The four A controls are identical. Store their detailed ledger once.
-    exported=[r if r['option']=='B' or r['dp']==44 else {
-        'dp':r['dp'],'option':'A','evidence':'THOUGHT_EXPERIMENT','detail_reference':'44A'
-    } for r in records]
-    result={'version':a['version'],'status':a['status'],'provenance':{str(f.relative_to(P)):hashlib.sha256(f.read_bytes()).hexdigest() for f in paths},'summary':summaries,'alternatives':exported}
-    out=['# 사고 실험 수치 원장','',f'> {a["version"]} / **전 항목 작성자 예상값. 실측 아님.**', '', '이 문서는 [가정 원본](./assumptions.json)과 공통 시나리오를 산술 집계한 결과다. [해석과 DP별 대응](../qa-dp-thought-experiment.md)을 먼저 읽는다. [전체 사건 / 목표 / 비용 / 메모리 JSON](./predictions.json)은 72개 점추정과 그 분자 및 분모를 보존한다. 소수 자릿수는 계산 재현용이며 측정 정밀도가 아니다.','', '## 1. 72개 예상값과 점수','', '| QA / 단위 | 44A | 44B | 47A | 47B | 45A | 45B | 42A | 42B |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
+    result={'version':a['version'],'status':a['status'],'provenance':{str(f.relative_to(P)):hashlib.sha256(f.read_bytes()).hexdigest() for f in paths},'summary':summary,'alternatives':alternatives}
+    matrix=['| QA / 단위 | 44A | 44B | 47A | 47B | 45A | 45B | 42A | 42B |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
     for i,name in enumerate(NAMES,1):
-        cells=[]
-        for _,v in byvariant.values():cells.append(f'{fmt(v[i-1],6)} ({score(i,v[i-1])}점)')
-        out.append(f'| QA{i:02} {name} / {UNITS[i-1]} | '+' | '.join(cells)+' |')
-    out+=['','모든 A 열은 같은 분석 기준 구조다. B는 해당 DP만 바꾼 조건이며 여러 B의 차이를 합산하지 않는다. 점수는 canonical QA 문서의 구간으로 반올림 전에 계산한다.','', '## 2. 시나리오별 시간 원장','', '각 셀은 **QA01 평균 초 / QA03 평균 초**다. 전체 값은 시나리오 평균 28개의 단순평균이 아니라 사건 120개 / 목표 76개의 원값 평균이다. 5회는 동일 점추정을 반복한 기대값이며 실행 관측 5회를 꾸며낸 것이 아니다.','', '| S | 사건 / 목표 | 공통 A | 44B | 47B | 45B | 42B |','| --- | ---: | ---: | ---: | ---: | ---: | ---: |']
-    for s in data['scenarios']:
-        cells=[]
-        for key in ['44A','44B','47B','45B','42B']:
-            one,_=byvariant[key];es=[e['first_ms'] for e in one['events'] if e['event_id'].startswith(s['id']+'-')];gs=[g['via_ms'] for g in one['goals'] if g['goal_id'].startswith(s['id']+'-')]
-            cells.append(f'{fmt(F(sum(es),1000*len(es)))} / {fmt(F(sum(gs),1000*len(gs)))}')
-        out.append(f'| {s["id"]} | {len(s["events"])} / {len(s["goals"])} | '+' | '.join(cells)+' |')
-    out+=['','## 3. QA02 예상 오답 위치','', '각 항목은 5회 중 1회 틀린다는 정수 근사 가정이다. 실제 실패 기록 / 특정 반복의 관측이 아니다. 나머지 binding은 5/5로 가정한다. 오답의 시간을 삭제하거나 정답 시간으로 바꾸지 않는다.','']
-    for key in ['44A','47B','45B']:
-        one,values=byvariant[key];out += [f'### {key}'+(' (47A/45A/42A/44B/42B와 동일)' if key=='44A' else ''),'',f'예상 {220-sum(e["expected_wrong_of_5"] for e in one["hypothetical_errors"])}/220 정답 = {fmt(values[1],6)}%, {score(2,values[1])}점.','']
-        out += [f'- `{e["binding"]}`: {e["reason"]}.' for e in one['hypothetical_errors']]
-        out.append('')
-    out+=['## 4. QA04 / QA08 변경 모듈과 교집합','', '**DESIGN_CHANGE_REVIEW**다. 아래 ID는 앞으로 Rust 구현에서 대응시킬 계획 식별자이며 저장소에 실재하는 Rust 파일이라고 주장하지 않는다. `via / lib / via::...`의 세 부분은 package / crate-target / 전체 module path다. 어댑터, 상태, 출력 소유권 기준으로 분리했다. 부모 module의 자체 연결 코드가 바뀌지 않는다고 가정하며 실제 바뀌면 가산해야 한다.','']
-    for key in ['44A','44B','47B','45B','42B']:
-        one,v=byvariant[key];out += [f'### {key}'+(' (모든 A 공통)' if key=='44A' else ''),'',f'변경 합 {sum(len(z) for z in one["change_sets"].values())}/6 = {fmt(v[3],6)}개, {score(4,v[3])}점. 교집합 합 {sum(len(z["modules"]) for z in one["overlaps"])}/6 = {fmt(v[7],6)}개, {score(8,v[7])}점.','', '| 변경 | 모듈 수 | 계획 모듈 ID |','| --- | ---: | --- |']
-        out += [f'| {cid} | {len(ms)} | '+'<br>'.join(f'`{m}`' for m in ms)+' |' for cid,ms in one['change_sets'].items()]
-        out+=['', '| 독립 변경 쌍 | 교집합 |','| --- | --- |']+[f'| {" / ".join(z["pair"])} | '+('<br>'.join(f'`{m}`' for m in z['modules']) or '없음')+' |' for z in one['overlaps']]+['']
-    out+=['## 5. QA05 토큰 비용 원장 요약','', '같은 28개 묶음 5회의 예상 평균이다. 이전 참조 견적은 출력 예산을 모두 사용했으나 이번 기대 사용량은 총 출력 예산의 1/4이다. reasoning을 제외한 것이 아니며 전체 출력 사용량의 가정이다. Realtime 6개 청구 항목은 참조 원장과 같다. 오류 후 자동 재시도는 가정하지 않지만 채택 전 재판단과 B 생산 / 갱신은 모두 포함한다.','', '| 안 | 의미 호출 수 | 의미 Text 입력 | 의미 이미지 입력 토큰 | 의미 총 출력 | Realtime USD | 의미 USD | 총 USD / 점수 |','| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
-    for key in ['44A','44B','47B','45B','42B']:
-        one,v=byvariant[key];rs=one['model_cost_ledger'];semantic=rs[6:];rt=sum(F(x['cost_usd']) for x in rs[:6]);sc=v[4]-rt
-        out.append(f'| {key} | {sum(r["calls"] for r in semantic)} | {sum(r["input_text_tokens"] for r in semantic)} | {sum(r["input_image_tokens"] for r in semantic)} | {sum(r["output_tokens"] for r in semantic)} | {fmt(rt,6)} | {fmt(sc,6)} | {fmt(v[4],6)} / {score(5,v[4])}점 |')
-    out+=['','개별 호출의 토큰 / 단가 산식은 predictions.json의 `model_cost_ledger`에 있다. 준비부터 마지막 후속 청구까지 범위이며 별도 무상 초기 B 결과를 주지 않는다. 가격은 기존 저장소의 2026-10-14 snapshot이다.','', '## 6. QA06 같은 순간 RAM 최고 구성','', '| 안 | 최고 시나리오 | 같은 순간 구성 MB | 합 / 점수 |','| --- | --- | --- | ---: |']
-    for key in ['44A','44B','47B','45B','42B']:
-        one,v=byvariant[key];peak=max(one['simultaneous_ram_ledger'],key=lambda x:x['total_mb']);out.append(f'| {key} | {peak["scenario"]} | '+'<br>'.join(f'{k}: {x}' for k,x in peak['simultaneous_components_mb'].items())+f' | {peak["total_mb"]} MB / {score(6,v[5])}점 |')
-    out+=['','모든 S의 동시 최고 가정을 JSON에 보존했다. 서로 다른 시점의 프로세스 최고값을 더하지 않는다. UI와 공용 라이브러리의 공유 페이지는 한 번만 세고 외부 앱과 클라우드 가중치는 제외한다. 실제 Windows RAM 계측값이 아니다.','', '## 7. QA07 부하 / 무부하 짝','', '| 안 | S05 loaded / idle | S11 loaded / idle | S18 loaded / idle | S19 loaded / idle | 평균 증가 ms / 점수 |','| --- | ---: | ---: | ---: | ---: | ---: |']
-    for key in ['44A','44B','47B','45B','42B']:
-        one,v=byvariant[key];out.append(f'| {key} | '+' | '.join(f'{x["loaded_ms"]} / {x["idle_ms"]}' for x in one['load_pairs'])+f' | {fmt(v[6])} / {score(7,v[6])}점 |')
-    out+=['','loaded는 QA01의 같은 사건 원값이다. 네 조건 각각 5회 동일 기대값을 사용하고 `max(0, mean_loaded−mean_idle)`를 네 조건에 평균한다.','', '## 8. QA09 음성 전달','', '모든 안에서 109개 의무 음성 × 5회 = 545건에 **300ms**를 가정한다. 채택 후 요약 준비 110ms + 첫 음성 생성 / 전송 150ms + 장치 출력 40ms = 300ms → **3점**. 사용자 발화와 앞 음성이 차지한 시간은 제외한다. 전체 음성 데이터 준비 900ms는 QA03의 경계이며 첫 음성 300ms와 다르다. 원본 grounding 이전 시간은 여기에 더하지 않는다. 내용 오류에 시간 벌점을 넣지 않는 사고 실험 원값이며 기능 검사나 실제 음향 관측 통과를 주장하지 않는다.','']
-    return result,'\n'.join(out)
+        matrix.append(f'| QA{i:02} {name} / {UNITS[i-1]} | '+' | '.join(f'{fmt(v[i-1],6)} ({score(i,v[i-1])}점)' for _,v in byvariant.values())+' |')
+    ledger=['# 구조별 사고 실험 계산 원장','',f'> **{a["version"]} / 작성자 예상치 / 실측 아님**','', '[발표용 비교표](../qa-dp-thought-experiment.md) / [가정 원본](./assumptions.json) / [모든 계산 JSON](./predictions.json)','', '시간과 정확도는 DP별 관련 사건을 사용한다. QA03은 선택 목표의 전체 인과 경로를 보존한다. QA05는 기존 배점 단위인 전체 COMMON-28 묶음의 비용이며 관련 전경 의미 호출 비용도 따로 표시한다. 5회 반복은 같은 기대값이며 실제 관측 5개가 아니다.','', '## 1. 전체 결과','',*matrix,'']
+    for dp in a['comparison']['dps']:
+        pop=a['populations'][str(dp)];ao,av=byvariant[f'{dp}A'];bo,bv=byvariant[f'{dp}B']
+        ledger += [f'## DP-{dp}','',f'응답 {len(pop["events"])}개, 목표 {len(pop["goals"])}개, 지칭 {len(pop["bindings"])}개. 선정 이유: {pop["reason"]}.','', '### QA01 사건별 처리 단계','', '모델 호출의 전송 / 첫 토큰 고정 140ms + 입력 1,000토큰당 10ms + 총 출력 토큰당 2ms를 동일 가정한다. 모두 설계용 예산이며 모델 성능 실측이 아니다. 일반 현재 응답의 첫 내용에는 48토큰, 원본 이력의 의미 관계를 함께 푸는 호출에는 500토큰을 예상한다. 화면 지칭은 A/B 모두 64~96토큰의 최종 GroundingProposal 전체가 완성되고 채택된 후 대상과 처리 범위 카드를 표시하며, 그 뒤 공통 상세 설명 호출 650토큰을 별도로 센다. 이 500은 강제 API 제한이 아닌 의미 판단량의 가정이다. producer 중간 결과는 전체 출력 후 결합에 전달한다. A는 원본 이력과 현재 요청을 한 호출로 해석하며 유효 cache와 부분 patch를 허용한다. B도 native 후보와 부분 재사용, 화면 선행 작업을 허용한다.','', '| 사건 | 구조 경로 | A ms | B ms | B−A ms |','| --- | --- | ---: | ---: | ---: |']
+        am={x['event_id']:x for x in ao['events']};bm={x['event_id']:x for x in bo['events']}
+        for eid in pop['events']:
+            ledger.append(f'| {eid} | {am[eid]["mechanism_class"]} | {am[eid]["first_ms"]} | {bm[eid]["first_ms"]} | {bm[eid]["first_ms"]-am[eid]["first_ms"]} |')
+        ledger+=['',f'평균: A {sum(x["first_ms"] for x in ao["events"])}/{len(am)} = {fmt(av[0]*1000,6)}ms; B {sum(x["first_ms"] for x in bo["events"])}/{len(bm)} = {fmt(bv[0]*1000,6)}ms. 오답 시간 가산 / 제외 없음.','', '### QA03 목표별 전체 인과 경로','', '| 목표 | A ms | B ms |','| --- | ---: | ---: |']
+        for ag,bg in zip(ao['goals'],bo['goals']):
+            assert ag['goal_id']==bg['goal_id'];ledger.append(f'| {ag["goal_id"]} | {ag["via_ms"]} | {bg["via_ms"]} |')
+        ledger+=['',f'목표 {len(ao["goals"])}개의 원값 평균: A {fmt(av[2],6)}초 / B {fmt(bv[2],6)}초. 선택한 응답 이외의 같은 목표 후속 사건은 JSON의 additional_goal_events와 goal nodes에 보존한다.','', '### QA02 지칭별 정답률 가정','', '아래는 반복 실행의 성공 횟수가 아니라 각 지칭이 최종 대상 집합과 정확히 맞을 주관적 예상 확률이다. 어려운 사례를 따로 구분하고 단순 평균한다. 후보 확장 뒤 잔여 오류 위험이며 첫 판단 오류를 최종 오답으로 세지 않는다.','', '| 지칭 | 위험 유형 | A % | B % |','| --- | --- | ---: | ---: |']
+        for ar,br in zip(ao['accuracy_priors'],bo['accuracy_priors']):ledger.append(f'| {ar["binding_id"]} | {ar["risk_class"]} | {ar["expected_correct_percent"]} | {br["expected_correct_percent"]} |')
+        for opt,one,v in [('A',ao,av),('B',bo,bv)]:
+            ledger += ['',f'### {opt}: QA04 / QA08 계획 변경 집합','', '**DESIGN_CHANGE_REVIEW**. 아래 package / crate / module ID는 계획 식별자다. 실제 Rust 코드 diff가 아니다. 관련 변경 과제의 공통 UI / adapter 수정도 모두 센다.','', '| 과제 | 수 | 계획 module ID |','| --- | ---: | --- |']
+            ledger += [f'| {cid} | {len(ms)} | '+'<br>'.join(f'`{m}`' for m in ms)+' |' for cid,ms in one['change_sets'].items()]
+            ledger += ['', '| 독립 변경 쌍 | 공통 모듈 |','| --- | --- |']+[f'| {" / ".join(x["pair"])} | '+('<br>'.join(f'`{m}`' for m in x['modules']) or '없음')+' |' for x in one['overlaps']]
+            ledger += ['',f'변경 평균 {fmt(v[3],6)}개; 교집합 평균 {fmt(v[7],6)}개.','']
+        ledger+=['### QA05 비용과 QA06 RAM','', '| 안 | 전경 관련 의미 호출 USD | 전체 의미 USD | 공통 음성 USD | 전체 USD / 점수 | 최고 RAM / 점수 |','| --- | ---: | ---: | ---: | ---: | ---: |']
+        for opt,one,v in [('A',ao,av),('B',bo,bv)]:
+            rt=sum(F(x['cost_usd']) for x in one['model_cost_ledger'][:6]);sub=one['related_foreground_semantic_cost_usd']['decimal']
+            ledger.append(f'| {opt} | {fmt(sub,6)} | {fmt(v[4]-rt,6)} | {fmt(rt,6)} | {fmt(v[4],6)} / {score(5,v[4])}점 | {fmt(v[5])} MB / {score(6,v[5])}점 |')
+            peak=max(one['simultaneous_ram_ledger'],key=lambda x:x['total_mb']);ledger+=[]
+        ledger+=['','전체 비용에는 28개 각 초기 상태의 준비와 갱신을 모두 포함한다. DP-45 B는 초기 56회 의미 관계 생산과 S12 원본 변경의 1회 갱신을 센다. 명시 ID와 전달 receipt 게시에는 모델 호출을 강제하지 않는다. 초기 작업은 2회 × 1.28초 = 2.56초로 입력 제공 전 5초 안에 완료된다는 가정이며 무료 ready store가 아니다. foreground에서 이미 센 갱신은 중복 청구하지 않는다. 원본 가격은 2026-10-14 저장소 snapshot이다.','']
+        for opt,one in [('A',ao),('B',bo)]:
+            peak=max(one['simultaneous_ram_ledger'],key=lambda x:x['total_mb']);ledger.append(f'- {opt} RAM 최고 시점 {peak["scenario"]}: '+ ' + '.join(f'{k} {v}MB' for k,v in peak['simultaneous_components_mb'].items())+f' = {peak["total_mb"]}MB.')
+        ledger+=['','### QA07 부하 증가와 QA09 음성 전달','', '| 안 / 사건 | idle ms | loaded ms | 추가 ms | 부하 지연 구성 ms |','| --- | ---: | ---: | ---: | --- |']
+        for opt,one in [('A',ao),('B',bo)]:
+            ledger += [f'| {opt} / {x["event"]} | {x["idle_ms"]} | {x["loaded_ms"]} | {x["added_ms"]} | '+', '.join(f'{k} {v}' for k,v in x['components_ms'].items())+' |' for x in one['load_pairs']]
+        ledger+=['',f'QA09: 양안 {ao["audio_count_per_pass"]}개 의무 음성 각각 요약 준비 110ms + 생성 / 전송 150ms + 장치 40ms = 300ms, 3점. 화면 / 이력 해석은 채택 전이므로 다시 더하지 않는다. 청취 불가능 시간과 오답 시간 벌점을 제외한다.','']
+    return result,'\n'.join(ledger),'\n'.join(matrix),byvariant
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--write',action='store_true');parser.add_argument('--check',action='store_true');args=parser.parse_args()
     a=json.loads(A_PATH.read_text());data=population.load();population.validate(data)
-    result,md=build(a,data)
-    assert len(result['summary'])==72
-    for r in result['summary']:assert 0<=r['score_0_to_6']<=6
-    report=P/'qa-dp-thought-experiment.md'
-    body=report.read_text()
-    matrix=md.split('## 1. 72개 예상값과 점수\n\n')[1].split('\n\n모든 A 열')[0]
-    rationale=json.loads((P/'thought-experiment/rationale.json').read_text())
-    details=[]
-    summary={(r['dp'],r['option'],r['qa']):r for r in result['summary']}
+    result,ledger,matrix,variants=build(a,data);assert len(result['summary'])==72
+    rationale=json.loads((P/'thought-experiment/rationale.json').read_text());details=[]
     for dp in a['comparison']['dps']:
-        r=rationale[str(dp)]
-        details += [f'### DP-{dp}', '', f'[비교 설계 원본](../{r["source"]}). '+r['structure'], '',
-                    '| QA | A 예상값 / 점수 | B 예상값 / 점수 | 예상 우열 | 경로와 조건 |',
-                    '| --- | ---: | ---: | --- | --- |']
-        assert len(r['qas'])==9
+        r=rationale[str(dp)];pop=a['populations'][str(dp)];assert len(r['qas'])==9
+        details += [f'### DP-{dp}','',f'[설계 원문](../{r["source"]}). '+r['structure'],'',f'관련 모집단: 응답 {len(pop["events"])}개 / 완료 목표 {len(pop["goals"])}개 / 지칭 {len(pop["bindings"])}개.','', '| QA | A 예상값 / 점수 | B 예상값 / 점수 | 예상 우열 | 구조를 보고 이해하는 한 줄 |','| --- | ---: | ---: | --- | --- |']
         for i,(judgment,reason) in enumerate(r['qas'],1):
-            cells=[]
+            av=variants[f'{dp}A'][1][i-1];bv=variants[f'{dp}B'][1][i-1]
+            if judgment.startswith('동점'):assert av==bv,(dp,i,judgment,av,bv)
+            if judgment.startswith('A'):assert av>=bv if i==2 else av<=bv
+            if judgment.startswith('B'):assert bv>=av if i==2 else bv<=av
+            for row in result['summary']:
+                if row['dp']==dp and row['qa']==f'QA{i:02}':
+                    row['expected_order']=judgment;row['structural_reason']=reason
+                    row['comparison_population_id']=f'DP-{dp}-RELATED-v2'
+            vals=[]
             for opt in ['A','B']:
-                row=summary[(dp,opt,f'QA{i:02}')];point=row['point_estimate']
-                cells.append(f'{fmt(F(point["numerator"],point["denominator"]),6)} {row["unit"]} / {row["score_0_to_6"]}점')
-            details.append(f'| QA{i:02} {NAMES[i-1]} | '+ ' | '.join(cells)+f' | {judgment} | {reason} |')
+                value=variants[f'{dp}{opt}'][1][i-1];s=score(i,value)
+                vals.append(f'{fmt(value,4)} {UNITS[i-1]}<br>{DOTS[s]} **{s}/6**')
+            details.append(f'| QA{i:02} {NAMES[i-1]} | '+' | '.join(vals)+f' | {judgment} | {reason} |')
         details.append('')
+    report=P/'qa-dp-thought-experiment.md';body=report.read_text()
     for label,content in [('MATRIX',matrix),('DETAILS','\n'.join(details).rstrip())]:
         begin=f'<!-- BEGIN FORECAST {label} -->';end=f'<!-- END FORECAST {label} -->'
         assert body.count(begin)==body.count(end)==1
-        before,tail=body.split(begin);_,after=tail.split(end)
-        body=before+begin+'\n'+content+'\n'+end+after
-    serialized=readable_json(result)+'\n'
-    assert json.loads(serialized)==result
-    outputs={P/'thought-experiment/predictions.json':serialized,P/'thought-experiment/calculation-ledger.md':md,report:body}
-    for path,body in outputs.items():
-        if args.write:path.write_text(body)
-        else:assert path.read_text()==body,f'Out of sync: {path}'
-    print('PASS: 72 authored point estimates, canonical scoring, 120 event and 76 goal expectations per option, change-set intersections, cost/RAM/load arithmetic.')
-    print('This recalculates document assumptions only. No PoC, models, OS measurement or empirical validation ran.')
+        before,tail=body.split(begin);_,after=tail.split(end);body=before+begin+'\n'+content+'\n'+end+after
+    serialized=readable_json(result)+'\n';assert json.loads(serialized)==result
+    outputs={P/'thought-experiment/predictions.json':serialized,P/'thought-experiment/calculation-ledger.md':ledger,report:body}
+    for path,content in outputs.items():
+        if args.write:path.write_text(content)
+        else:assert path.read_text()==content,f'Out of sync: {path}'
+    print('PASS: 72 authored forecasts; same A/B related populations; canonical score boundaries; stage DAGs; complete goal closure; full-bundle costs; module intersections; RAM/load arithmetic.')
+    print('No model call, PoC, measured timing, measured accuracy or implementation diff was produced.')
 
 if __name__=='__main__':main()
