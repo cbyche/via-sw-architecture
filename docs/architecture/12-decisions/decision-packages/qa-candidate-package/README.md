@@ -4,7 +4,7 @@
 
 **기존 6개 QA와 추가 3개 후보를 같은 형식으로 정리한다.** 각 문서에 정의, 하나의 지표, 목표 수치의 도출, 점수, 이해 예시, DP별 예상과 최소 PoC를 둔다. 현재 논의의 중심은 [QA·DP 평가 계획](../03-03-qa-dp-evaluation-plan.md)이며 이 폴더는 그 상세 명세다.
 
-**[품질 요구사항 표와 발표용 요약](./quality-requirements-table.md):** 대화에서 제공한 QA 9개 표와 중요도·난이도 판단 근거를 보존했다. 같은 파일의 [발표용 축약 표](./quality-requirements-table.md#presentation-table)는 Scenario를 정의·목표·측정 조건·목표 근거 각 한 줄로 정리한다.
+**[품질 요구사항 표와 발표용 요약](./quality-requirements-table.md):** 대화에서 제공한 QA 9개 Scenario를 보존하고 중요도·난이도를 `H(10) / H(9)` 형식의 10점 척도로 정리했다. 판단 근거에는 사용자 지정 stakeholder 8개 역할의 요구를 연결했다. 중요도는 평가 우선도이며 필수 검증 여부와 구별한다. 같은 파일의 [발표용 축약 표](./quality-requirements-table.md#presentation-table)는 Scenario를 정의·목표·측정 조건·목표 근거 각 한 줄로 정리한다.
 
 ## 1. 먼저 읽을 결론
 
