@@ -1,0 +1,4807 @@
+{
+  "version": "COMMON-28-v1",
+  "status": "DOCUMENTED_EVALUATION_DESIGN_NOT_RUN",
+  "repetitions": 5,
+  "scenarios": [
+    {
+      "id": "S01",
+      "title": "일반 질문과 후속 질문 및 주제 전환",
+      "uc_ids": [
+        "UC-01.1",
+        "UC-01.2",
+        "UC-01.3",
+        "UC-01.4"
+      ],
+      "selection_reason": "직접 응답과 Text 입력의 공통 경로",
+      "initial_state": "기존 Task를 참조하지 않는 새 Conversation. H01의 TCP/UDP 설명은 첫 입력으로 새 생성",
+      "affected_dps": [
+        44
+      ],
+      "events": [
+        {
+          "id": "S01-U01",
+          "kind": "user",
+          "input": "TCP를 첫째 UDP를 둘째로 두고 각각 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 5,
+          "goal_id": "S01-G01",
+          "response": {
+            "id": "S01-RU01",
+            "required_content": "첫째 TCP와 둘째 UDP 순서로 전달 방식 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S01-U02",
+          "kind": "user",
+          "input": "방금 두 번째 방식은 언제 써?",
+          "trigger": "S01-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 4,
+          "goal_id": "S01-G02",
+          "response": {
+            "id": "S01-RU02",
+            "required_content": "앞 응답의 UDP 사용 사례",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S01-U03",
+          "kind": "user",
+          "input": "주제를 바꿀게. 무지개는 왜 생겨?",
+          "trigger": "S01-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 5,
+          "goal_id": "S01-G03",
+          "response": {
+            "id": "S01-RU03",
+            "required_content": "빛의 굴절과 분산 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S01-U04",
+          "kind": "user",
+          "input": "같은 설명을 세 줄로 적어줘.",
+          "trigger": "S01-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "text",
+          "input_audio_seconds": 0,
+          "goal_id": "S01-G04",
+          "response": {
+            "id": "S01-RU04",
+            "required_content": "무지개 설명을 세 줄로 표시",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "이 입력과 응답 동안 Voice OFF. Text만 제공"
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S01-G01",
+          "start_event": "S01-U01",
+          "member_events": [
+            "S01-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S01-G02",
+          "start_event": "S01-U02",
+          "member_events": [
+            "S01-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S01-G03",
+          "start_event": "S01-U03",
+          "member_events": [
+            "S01-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S01-G04",
+          "start_event": "S01-U04",
+          "member_events": [
+            "S01-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S01-B01",
+          "event_id": "S01-U02",
+          "expression": "두 번째 방식",
+          "revision": "final",
+          "expected_set": [
+            "S01:answer01:UDP"
+          ]
+        },
+        {
+          "id": "S01-B02",
+          "event_id": "S01-U04",
+          "expression": "같은 설명",
+          "revision": "final",
+          "expected_set": [
+            "S01:answer03:rainbow"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S02",
+      "title": "범위가 정해진 자료 조회",
+      "uc_ids": [
+        "UC-02.1",
+        "UC-02.2",
+        "UC-02.3",
+        "UC-02.4",
+        "UC-02.5",
+        "UC-02.6"
+      ],
+      "selection_reason": "파일과 메일 및 일정과 웹의 허용된 조회 경계",
+      "initial_state": "허용된 파일 F01, 메일 M01, 일정 CAL01, 페이지 WEB01, 공개 자료 PUB01, 북마크 BK01의 고정 내용",
+      "affected_dps": [
+        44
+      ],
+      "events": [
+        {
+          "id": "S02-U01",
+          "kind": "user",
+          "input": "F01 결론을 두 문장으로 요약해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G01",
+          "response": {
+            "id": "S02-RU01",
+            "required_content": "F01 결론의 두 문장 요약",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S02-U02",
+          "kind": "user",
+          "input": "어제 민수가 보낸 M01 메일의 제목을 알려줘.",
+          "trigger": "S02-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G02",
+          "response": {
+            "id": "S02-RU02",
+            "required_content": "M01 제목과 발신 시각",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S02-U03",
+          "kind": "user",
+          "input": "오늘 오후 CAL01 일정을 알려줘.",
+          "trigger": "S02-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G03",
+          "response": {
+            "id": "S02-RU03",
+            "required_content": "CAL01 시간과 제목",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S02-U04",
+          "kind": "user",
+          "input": "WEB01 가격과 기준 시각을 읽어줘.",
+          "trigger": "S02-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G04",
+          "response": {
+            "id": "S02-RU04",
+            "required_content": "WEB01에 표시된 가격과 기준 시각",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S02-U05",
+          "kind": "user",
+          "input": "PUB01에 게시된 오늘 운영 시간을 확인해줘.",
+          "trigger": "S02-U04의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G05",
+          "response": {
+            "id": "S02-RU05",
+            "required_content": "PUB01의 운영 시간과 출처",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S02-U06",
+          "kind": "user",
+          "input": "북마크 BK01의 제품 설명을 알려줘.",
+          "trigger": "S02-U05의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S02-G06",
+          "response": {
+            "id": "S02-RU06",
+            "required_content": "허용한 BK01의 지정 제품 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S02-G01",
+          "start_event": "S02-U01",
+          "member_events": [
+            "S02-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S02-G02",
+          "start_event": "S02-U02",
+          "member_events": [
+            "S02-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S02-G03",
+          "start_event": "S02-U03",
+          "member_events": [
+            "S02-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S02-G04",
+          "start_event": "S02-U04",
+          "member_events": [
+            "S02-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S02-G05",
+          "start_event": "S02-U05",
+          "member_events": [
+            "S02-U05"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S02-G06",
+          "start_event": "S02-U06",
+          "member_events": [
+            "S02-U06"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S03",
+      "title": "사전 선택과 범위 지정",
+      "uc_ids": [
+        "UC-03.1",
+        "UC-03.2",
+        "UC-03.3",
+        "UC-03.4"
+      ],
+      "selection_reason": "선택 집합과 연속 및 분리 영역을 구분",
+      "initial_state": "DOC-A v1의 P1/P2/P3와 표 T1의 R1C1:R3C2. 각 입력 직전 지정 선택을 적용",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S03-U01",
+          "kind": "user",
+          "input": "이 문단을 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S03-G01",
+          "response": {
+            "id": "S03-RU01",
+            "required_content": "선택한 P1 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S03-U02",
+          "kind": "user",
+          "input": "이 도형들을 비교해줘.",
+          "trigger": "S03-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S03-G02",
+          "response": {
+            "id": "S03-RU02",
+            "required_content": "선택한 D1과 D2 비교",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S03-U03",
+          "kind": "user",
+          "input": "이 범위 합계를 확인해줘.",
+          "trigger": "S03-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S03-G03",
+          "response": {
+            "id": "S03-RU03",
+            "required_content": "선택한 표 범위의 합계",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S03-U04",
+          "kind": "user",
+          "input": "이 두 부분을 비교해줘.",
+          "trigger": "S03-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S03-G04",
+          "response": {
+            "id": "S03-RU04",
+            "required_content": "분리 선택 P1과 P3 비교",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S03-G01",
+          "start_event": "S03-U01",
+          "member_events": [
+            "S03-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S03-G02",
+          "start_event": "S03-U02",
+          "member_events": [
+            "S03-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S03-G03",
+          "start_event": "S03-U03",
+          "member_events": [
+            "S03-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S03-G04",
+          "start_event": "S03-U04",
+          "member_events": [
+            "S03-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S03-B01",
+          "event_id": "S03-U01",
+          "expression": "이 문단",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1"
+          ]
+        },
+        {
+          "id": "S03-B02",
+          "event_id": "S03-U02",
+          "expression": "이 도형들",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:D1",
+            "DOC-A:v1:D2"
+          ]
+        },
+        {
+          "id": "S03-B03",
+          "event_id": "S03-U03",
+          "expression": "이 범위",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:T1:R1C1-R3C2"
+          ]
+        },
+        {
+          "id": "S03-B04",
+          "event_id": "S03-U04",
+          "expression": "이 두 부분",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1",
+            "DOC-A:v1:P3"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S04",
+      "title": "선택 없는 포인터와 입력 위치",
+      "uc_ids": [
+        "UC-03.5",
+        "UC-03.6"
+      ],
+      "selection_reason": "선택이 없어도 포인터와 focus를 구별",
+      "initial_state": "모니터 M1과 M2 같은 좌표의 CHART-A/B. M2 CHART-B는 native 객체 ID 없음. 다음 입력은 caret FIELD1",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S04-U01",
+          "kind": "user",
+          "input": "여기 수치를 읽어줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S04-G01",
+          "response": {
+            "id": "S04-RU01",
+            "required_content": "M2 CHART-B의 가리킨 구간 값",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 2,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S04-U02",
+          "kind": "user",
+          "input": "이 칸에 들어갈 문구를 제안해줘.",
+          "trigger": "S04-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S04-G02",
+          "response": {
+            "id": "S04-RU02",
+            "required_content": "focus FIELD1에 맞는 문구만 제안",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S04-G01",
+          "start_event": "S04-U01",
+          "member_events": [
+            "S04-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S04-G02",
+          "start_event": "S04-U02",
+          "member_events": [
+            "S04-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S04-B01",
+          "event_id": "S04-U01",
+          "expression": "여기",
+          "revision": "final",
+          "expected_set": [
+            "M2:CHART-B:v1:region1"
+          ]
+        },
+        {
+          "id": "S04-B02",
+          "event_id": "S04-U02",
+          "expression": "이 칸",
+          "revision": "final",
+          "expected_set": [
+            "FORM:v1:FIELD1"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S05",
+      "title": "말하면서 두 대상을 순서대로 지시",
+      "uc_ids": [
+        "UC-04.1",
+        "UC-04.2"
+      ],
+      "selection_reason": "지칭 시점과 마지막 포인터 위치의 차이",
+      "initial_state": "발화 1초에 CHART-A, 3초에 CHART-B 지시 후 4초에 빈 곳으로 이동. 마지막 전사는 발화 종료 300ms 후 도착",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S05-U01",
+          "kind": "user",
+          "input": "이 그래프와 저 그래프를 비교해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S05-G01",
+          "response": {
+            "id": "S05-RU01",
+            "required_content": "첫 지칭 A와 두 번째 지칭 B의 차이",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 3,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S05-A01",
+          "kind": "agent",
+          "input": "다른 Task BG의 확인된 진행 50%",
+          "trigger": "S05-U01 발화 종료 -100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S05-RA01",
+            "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        },
+        {
+          "id": "S05-A02",
+          "kind": "agent",
+          "input": "다른 Task BG의 최종 파일 완료",
+          "trigger": "S05-U01 발화 종료 +100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S05-RA02",
+            "required_content": "다른 Task BG의 최종 파일 완료",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "S05-G01",
+          "start_event": "S05-U01",
+          "member_events": [
+            "S05-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S05-B01",
+          "event_id": "S05-U01",
+          "expression": "이 그래프",
+          "revision": "final",
+          "expected_set": [
+            "CHART-A:v1"
+          ]
+        },
+        {
+          "id": "S05-B02",
+          "event_id": "S05-U01",
+          "expression": "저 그래프",
+          "revision": "final",
+          "expected_set": [
+            "CHART-B:v1"
+          ]
+        }
+      ],
+      "ambiguous_events": [],
+      "load_probe_event": "S05-U01"
+    },
+    {
+      "id": "S06",
+      "title": "원형 집합과 우연한 포인터 이동",
+      "uc_ids": [
+        "UC-04.3",
+        "UC-06.2"
+      ],
+      "selection_reason": "원형으로 지정한 집합과 의미 없는 이동을 구별",
+      "initial_state": "D1/D2/D3를 둘러 그린 경로. 다음 입력은 같은 도형 사이 우연한 왕복 경로로 어느 대상인지 구별 불가",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S06-U01",
+          "kind": "user",
+          "input": "이것들의 공통점을 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S06-G01",
+          "response": {
+            "id": "S06-RU01",
+            "required_content": "원 안 D1/D2/D3의 공통점",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 4,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S06-U02",
+          "kind": "user",
+          "input": "이걸 설명해줘.",
+          "trigger": "S06-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S06-G02",
+          "response": {
+            "id": "S06-RU02",
+            "required_content": "D1인지 D2인지 확인 질문",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 3,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S06-U03",
+          "kind": "user",
+          "input": "D2를 말한 거야.",
+          "trigger": "S06-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 3,
+          "goal_id": "S06-G02",
+          "response": {
+            "id": "S06-RU03",
+            "required_content": "D2 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S06-G01",
+          "start_event": "S06-U01",
+          "member_events": [
+            "S06-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S06-G02",
+          "start_event": "S06-U02",
+          "member_events": [
+            "S06-U02",
+            "S06-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S06-B01",
+          "event_id": "S06-U01",
+          "expression": "이것들",
+          "revision": "final",
+          "expected_set": [
+            "D1:v1",
+            "D2:v1",
+            "D3:v1"
+          ]
+        },
+        {
+          "id": "S06-B02",
+          "event_id": "S06-U03",
+          "expression": "D2",
+          "revision": "final",
+          "expected_set": [
+            "D2:v1"
+          ]
+        }
+      ],
+      "ambiguous_events": [
+        "S06-U02"
+      ]
+    },
+    {
+      "id": "S07",
+      "title": "드래그 범위와 문서 전환",
+      "uc_ids": [
+        "UC-04.4",
+        "UC-04.7"
+      ],
+      "selection_reason": "스크롤과 문서 전환 전후 원본 범위를 유지",
+      "initial_state": "발화 1~3초 DOC-A v1 P2-P3 드래그 중 페이지 스크롤. 다음 입력은 DOC-A P2와 DOC-B P5를 각 창에서 지시",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S07-U01",
+          "kind": "user",
+          "input": "이 문장들만 요약해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S07-G01",
+          "response": {
+            "id": "S07-RU01",
+            "required_content": "DOC-A P2-P3의 선택 범위만 요약",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 4,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S07-U02",
+          "kind": "user",
+          "input": "이 부분과 저 부분의 차이를 말해줘.",
+          "trigger": "S07-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S07-G02",
+          "response": {
+            "id": "S07-RU02",
+            "required_content": "DOC-A P2와 DOC-B P5 비교",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 4,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S07-G01",
+          "start_event": "S07-U01",
+          "member_events": [
+            "S07-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S07-G02",
+          "start_event": "S07-U02",
+          "member_events": [
+            "S07-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S07-B01",
+          "event_id": "S07-U01",
+          "expression": "이 문장들",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P2-P3"
+          ]
+        },
+        {
+          "id": "S07-B02",
+          "event_id": "S07-U02",
+          "expression": "이 부분",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P2"
+          ]
+        },
+        {
+          "id": "S07-B03",
+          "event_id": "S07-U02",
+          "expression": "저 부분",
+          "revision": "final",
+          "expected_set": [
+            "DOC-B:v1:P5"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S08",
+      "title": "집합 보존과 부분 대상 정정",
+      "uc_ids": [
+        "UC-04.5",
+        "UC-04.6",
+        "UC-11.4",
+        "UC-11.3"
+      ],
+      "selection_reason": "유지할 집합과 바꿀 단일 대상 및 정정 범위 구분",
+      "initial_state": "표 T1/T2와 문단 P1/P2. 한 발화에서 P1을 가리킨 뒤 P2로 정정. 수정은 Agent에게 위임 첫 수행 안내 채택 후 후속 발화에서 T3를 가리켜 보존 집합 일부만 정정",
+      "affected_dps": [
+        47,
+        44,
+        42
+      ],
+      "events": [
+        {
+          "id": "S08-U01",
+          "kind": "user",
+          "input": "이 표들은 그대로 두고 이 문단 아니 저 문단만 고쳐줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 9,
+          "goal_id": "S08-G01",
+          "response": {
+            "id": "S08-RU01",
+            "required_content": "T1/T2를 보존하고 최종 P2만 수정한다는 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 4,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S08-U02",
+          "kind": "user",
+          "input": "보존할 표는 첫째와 이 표로 바꿔. 문단 수정은 유지해.",
+          "trigger": "S08-U01의 첫 올바른 UI 표시와 첫 내용 음성 재생 시작 중 늦은 시각 +200ms에 발화 시작. 30초까지 선행 응답이 없으면 공통 실패 fallback 적용",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S08-G01",
+          "response": {
+            "id": "S08-RU02",
+            "required_content": "보존 집합을 T1/T3로 변경하고 P2 수정 요청은 그대로 유지",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 2,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S08-A01",
+          "kind": "agent",
+          "input": "정정 후 P2 수정 완료. T1/T3는 보존. 이전 보존 집합 T1/T2를 재사용하지 않음",
+          "trigger": "S08-U02의 최종 revision Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S08-G01",
+          "response": {
+            "id": "S08-RA01",
+            "required_content": "P2 수정 완료와 원본 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S08-G01",
+          "start_event": "S08-U01",
+          "member_events": [
+            "S08-U01",
+            "S08-U02",
+            "S08-A01"
+          ],
+          "completion": "두 입력의 정정 관계를 유지한 최종 요청에서 T1/T3 보존과 P2 수정 완료를 확인하고 자료를 표시 및 음성 준비. 이전 revision 결과는 현재 결과로 표시하지 않음 최종 revision의 P2/T1/T3을 기준으로 완료한다. U01에서 대체된 T2 설명의 미생성 음성 나머지는 준비 의무가 없으며 이미 수행한 처리와 폐기 비용은 남긴다."
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S08-B01",
+          "event_id": "S08-U01",
+          "expression": "이 표들",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:T1",
+            "DOC-A:v1:T2"
+          ]
+        },
+        {
+          "id": "S08-B02",
+          "event_id": "S08-U01",
+          "expression": "저 문단",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P2"
+          ]
+        },
+        {
+          "id": "S08-B03",
+          "event_id": "S08-U02",
+          "expression": "첫째",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:T1"
+          ]
+        },
+        {
+          "id": "S08-B04",
+          "event_id": "S08-U02",
+          "expression": "이 표",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:T3"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S09",
+      "title": "선택과 포인터가 충돌한 요청 확인",
+      "uc_ids": [
+        "UC-06.1",
+        "UC-06.2",
+        "UC-06.3",
+        "UC-06.5"
+      ],
+      "selection_reason": "정답이 없는 입력을 임의 단정하지 않고 필요한 정보만 확인",
+      "initial_state": "P1 선택과 P2 포인터가 충돌. 사용자는 아직 대상을 말하지 않음",
+      "affected_dps": [
+        47,
+        44
+      ],
+      "events": [
+        {
+          "id": "S09-U01",
+          "kind": "user",
+          "input": "이 부분을 정리해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S09-G01",
+          "response": {
+            "id": "S09-RU01",
+            "required_content": "P1과 P2 중 대상과 답변 또는 파일 형식 확인",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S09-U02",
+          "kind": "user",
+          "input": "P1을 답변으로 요약해줘. 파일은 만들지 마.",
+          "trigger": "S09-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S09-G01",
+          "response": {
+            "id": "S09-RU02",
+            "required_content": "P1 요약 답변과 파일 미생성",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S09-G01",
+          "start_event": "S09-U01",
+          "member_events": [
+            "S09-U01",
+            "S09-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S09-B01",
+          "event_id": "S09-U02",
+          "expression": "P1",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1"
+          ]
+        }
+      ],
+      "ambiguous_events": [
+        "S09-U01"
+      ]
+    },
+    {
+      "id": "S10",
+      "title": "실제로 전달한 설명과 들리지 않은 부분",
+      "uc_ids": [
+        "UC-05.3"
+      ],
+      "selection_reason": "생성한 내용과 실제 표시 및 청취한 내용을 구별",
+      "initial_state": "H01 상세 Text에는 A/B/C, 실제 음성은 A까지만 전달. B/C 음성은 중단. H02에는 다른 주제 설명 U02 직전에 원래 H01의 A/B/C Text 카드를 다시 활성화하고 B 위치를 보존",
+      "affected_dps": [
+        45,
+        44
+      ],
+      "events": [
+        {
+          "id": "S10-U01",
+          "kind": "user",
+          "input": "아까 들려준 설명만 다시 보여줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S10-G01",
+          "response": {
+            "id": "S10-RU01",
+            "required_content": "실제 청취한 H01 A만 표시",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S10-U02",
+          "kind": "user",
+          "input": "화면에 적어둔 두 번째 항목을 설명해줘.",
+          "trigger": "S10-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S10-G02",
+          "response": {
+            "id": "S10-RU02",
+            "required_content": "Text에 표시된 H01 B의 상세 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S10-G01",
+          "start_event": "S10-U01",
+          "member_events": [
+            "S10-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S10-G02",
+          "start_event": "S10-U02",
+          "member_events": [
+            "S10-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S10-B01",
+          "event_id": "S10-U01",
+          "expression": "들려준 설명",
+          "revision": "final",
+          "expected_set": [
+            "H01:v1:audio-delivered:A"
+          ]
+        },
+        {
+          "id": "S10-B02",
+          "event_id": "S10-U02",
+          "expression": "두 번째 항목",
+          "revision": "final",
+          "expected_set": [
+            "H01:v1:text:B"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S11",
+      "title": "과거 답변의 반복 조회와 새로운 관계",
+      "uc_ids": [
+        "UC-05.3",
+        "UC-07.3",
+        "UC-07.4"
+      ],
+      "selection_reason": "유효 이력 재사용과 새로운 관계 생성의 차이",
+      "initial_state": "H10 비용 비교와 H11 일정 설명은 과거에 실제 표시. 중간에 관계없는 H12 대화 존재",
+      "affected_dps": [
+        45,
+        44
+      ],
+      "events": [
+        {
+          "id": "S11-U01",
+          "kind": "user",
+          "input": "아까 비용 비교 결과를 다시 보여줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S11-G01",
+          "response": {
+            "id": "S11-RU01",
+            "required_content": "H10 실제 전달 결과",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S11-U02",
+          "kind": "user",
+          "input": "그 비교 결과를 한 번 더 보여줘.",
+          "trigger": "S11-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S11-G02",
+          "response": {
+            "id": "S11-RU02",
+            "required_content": "같은 H10 결과",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S11-U03",
+          "kind": "user",
+          "input": "그 결과와 아까 일정 설명의 관계를 정리해줘.",
+          "trigger": "S11-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S11-G03",
+          "response": {
+            "id": "S11-RU03",
+            "required_content": "H10과 H11에 근거한 관계 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S11-A01",
+          "kind": "agent",
+          "input": "다른 Task BG의 확인된 진행 50%",
+          "trigger": "S11-U01 발화 종료 -100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S11-RA01",
+            "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        },
+        {
+          "id": "S11-A02",
+          "kind": "agent",
+          "input": "다른 Task BG의 최종 파일 완료",
+          "trigger": "S11-U01 발화 종료 +100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S11-RA02",
+            "required_content": "다른 Task BG의 최종 파일 완료",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "S11-G01",
+          "start_event": "S11-U01",
+          "member_events": [
+            "S11-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S11-G02",
+          "start_event": "S11-U02",
+          "member_events": [
+            "S11-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S11-G03",
+          "start_event": "S11-U03",
+          "member_events": [
+            "S11-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S11-B01",
+          "event_id": "S11-U01",
+          "expression": "비용 비교 결과",
+          "revision": "final",
+          "expected_set": [
+            "H10:v1:delivered"
+          ]
+        },
+        {
+          "id": "S11-B02",
+          "event_id": "S11-U02",
+          "expression": "그 비교 결과",
+          "revision": "final",
+          "expected_set": [
+            "H10:v1:delivered"
+          ]
+        },
+        {
+          "id": "S11-B03",
+          "event_id": "S11-U03",
+          "expression": "그 결과",
+          "revision": "final",
+          "expected_set": [
+            "H10:v1:delivered"
+          ]
+        },
+        {
+          "id": "S11-B04",
+          "event_id": "S11-U03",
+          "expression": "일정 설명",
+          "revision": "final",
+          "expected_set": [
+            "H11:v1:delivered"
+          ]
+        }
+      ],
+      "ambiguous_events": [],
+      "load_probe_event": "S11-U01"
+    },
+    {
+      "id": "S12",
+      "title": "원본 변경 전후의 과거 설명",
+      "uc_ids": [
+        "UC-05.3"
+      ],
+      "selection_reason": "원본 갱신 뒤 과거 설명과 최신 자료를 혼동하지 않음",
+      "initial_state": "H20은 DOC-A v1 P1을 설명. 두 입력 사이 같은 원본이 v2로 바뀌며 값이 10에서 12로 변경",
+      "affected_dps": [
+        45,
+        44
+      ],
+      "events": [
+        {
+          "id": "S12-U01",
+          "kind": "user",
+          "input": "아까 설명했던 원본 부분을 보여줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S12-G01",
+          "response": {
+            "id": "S12-RU01",
+            "required_content": "H20이 참조한 DOC-A v1 P1",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S12-U02",
+          "kind": "user",
+          "input": "지금 바뀐 그 부분을 다시 설명해줘.",
+          "trigger": "S12-U01 완료 후 원본 v2 변경을 제공하고 2초 후 입력",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S12-G02",
+          "response": {
+            "id": "S12-RU02",
+            "required_content": "DOC-A v2 P1의 최신 값 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S12-G01",
+          "start_event": "S12-U01",
+          "member_events": [
+            "S12-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S12-G02",
+          "start_event": "S12-U02",
+          "member_events": [
+            "S12-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S12-B01",
+          "event_id": "S12-U01",
+          "expression": "설명했던 원본 부분",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1"
+          ]
+        },
+        {
+          "id": "S12-B02",
+          "event_id": "S12-U02",
+          "expression": "바뀐 그 부분",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v2:P1"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S13",
+      "title": "서로 다른 업무 결과와 수정 전후 버전",
+      "uc_ids": [
+        "UC-05.4"
+      ],
+      "selection_reason": "업무와 결과 버전 및 두 지칭 역할을 구분",
+      "initial_state": "Task TA 결과 RA v1/v2와 TB 결과 RB v1이 모두 과거에 표시. RA v2는 RA v1의 수정본",
+      "affected_dps": [
+        45,
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S13-U01",
+          "kind": "user",
+          "input": "처음 만든 보고서와 나중에 고친 보고서의 차이를 보여줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S13-G01",
+          "response": {
+            "id": "S13-RU01",
+            "required_content": "RA v1과 RA v2 차이",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S13-U02",
+          "kind": "user",
+          "input": "수정본과 메일 검색 결과를 함께 정리해줘.",
+          "trigger": "S13-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S13-G02",
+          "response": {
+            "id": "S13-RU02",
+            "required_content": "RA v2와 TB RB v1을 구별한 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S13-G01",
+          "start_event": "S13-U01",
+          "member_events": [
+            "S13-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S13-G02",
+          "start_event": "S13-U02",
+          "member_events": [
+            "S13-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S13-B01",
+          "event_id": "S13-U01",
+          "expression": "처음 만든 보고서",
+          "revision": "final",
+          "expected_set": [
+            "TA:RA:v1"
+          ]
+        },
+        {
+          "id": "S13-B02",
+          "event_id": "S13-U01",
+          "expression": "나중에 고친 보고서",
+          "revision": "final",
+          "expected_set": [
+            "TA:RA:v2"
+          ]
+        },
+        {
+          "id": "S13-B03",
+          "event_id": "S13-U02",
+          "expression": "수정본",
+          "revision": "final",
+          "expected_set": [
+            "TA:RA:v2"
+          ]
+        },
+        {
+          "id": "S13-B04",
+          "event_id": "S13-U02",
+          "expression": "메일 검색 결과",
+          "revision": "final",
+          "expected_set": [
+            "TB:RB:v1"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S14",
+      "title": "가려진 자료와 닫힌 자료 찾기",
+      "uc_ids": [
+        "UC-05.1",
+        "UC-05.2"
+      ],
+      "selection_reason": "현재 화면에 없는 자료를 현재 화면으로 가장하지 않음",
+      "initial_state": "뒤쪽 탭 QUOTE1과 최소화 PDF1 및 닫힌 메일 M02의 허용된 식별 정보와 조회 내용",
+      "affected_dps": [
+        45,
+        44
+      ],
+      "events": [
+        {
+          "id": "S14-U01",
+          "kind": "user",
+          "input": "다른 탭에 열어둔 견적서 핵심을 알려줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S14-G01",
+          "response": {
+            "id": "S14-RU01",
+            "required_content": "QUOTE1의 허용된 내용",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S14-U02",
+          "kind": "user",
+          "input": "최소화해 둔 PDF의 결론을 읽어줘.",
+          "trigger": "S14-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S14-G02",
+          "response": {
+            "id": "S14-RU02",
+            "required_content": "PDF1 결론",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S14-U03",
+          "kind": "user",
+          "input": "지난주 민수가 보낸 M02 메일을 찾아줘.",
+          "trigger": "S14-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S14-G03",
+          "response": {
+            "id": "S14-RU03",
+            "required_content": "조건에 일치하는 M02",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S14-G01",
+          "start_event": "S14-U01",
+          "member_events": [
+            "S14-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S14-G02",
+          "start_event": "S14-U02",
+          "member_events": [
+            "S14-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S14-G03",
+          "start_event": "S14-U03",
+          "member_events": [
+            "S14-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S14-B01",
+          "event_id": "S14-U01",
+          "expression": "다른 탭의 견적서",
+          "revision": "final",
+          "expected_set": [
+            "QUOTE1:v1"
+          ]
+        },
+        {
+          "id": "S14-B02",
+          "event_id": "S14-U02",
+          "expression": "최소화한 PDF",
+          "revision": "final",
+          "expected_set": [
+            "PDF1:v1:conclusion"
+          ]
+        },
+        {
+          "id": "S14-B03",
+          "event_id": "S14-U03",
+          "expression": "M02 메일",
+          "revision": "final",
+          "expected_set": [
+            "M02:v1"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S15",
+      "title": "직접 설명을 채널 전환 후 업무로 연결",
+      "uc_ids": [
+        "UC-07.2",
+        "UC-07.4",
+        "UC-07.5"
+      ],
+      "selection_reason": "Task 없이 전달한 답변을 새 업무의 근거로 사용",
+      "initial_state": "선택 DOC-A P1 설명 후 관계없는 질문을 하고 Voice OFF. 이후 Text로 파일 요청",
+      "affected_dps": [
+        45,
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S15-U01",
+          "kind": "user",
+          "input": "이 문단의 핵심을 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S15-G01",
+          "response": {
+            "id": "S15-RU01",
+            "required_content": "DOC-A P1의 핵심 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "screen",
+            "text_input_tokens": 4000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S15-U02",
+          "kind": "user",
+          "input": "잠깐 다른 질문이야. TCP가 뭐야?",
+          "trigger": "S15-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S15-G02",
+          "response": {
+            "id": "S15-RU02",
+            "required_content": "TCP 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S15-U03",
+          "kind": "user",
+          "input": "아까 문단 설명으로 발표자료 파일을 만들어줘.",
+          "trigger": "S15-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "text",
+          "input_audio_seconds": 0,
+          "goal_id": "S15-G03",
+          "response": {
+            "id": "S15-RU03",
+            "required_content": "S15 첫 설명을 근거로 새 Task를 만든다는 안내",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "이 입력과 응답 동안 Voice OFF. Text만 제공"
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S15-A01",
+          "kind": "agent",
+          "input": "발표자료 파일 R15 작성 완료.",
+          "trigger": "S15-U03 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S15-G03",
+          "response": {
+            "id": "S15-RA01",
+            "required_content": "새 Task 결과 R15 링크",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "이 입력과 응답 동안 Voice OFF. Text만 제공"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S15-G01",
+          "start_event": "S15-U01",
+          "member_events": [
+            "S15-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S15-G02",
+          "start_event": "S15-U02",
+          "member_events": [
+            "S15-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S15-G03",
+          "start_event": "S15-U03",
+          "member_events": [
+            "S15-U03",
+            "S15-A01"
+          ],
+          "completion": "새 Task의 Agent 결과 파일 참조를 Text에 표시. Voice OFF이므로 음성 생성 불필요"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S15-B01",
+          "event_id": "S15-U01",
+          "expression": "이 문단",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1"
+          ]
+        },
+        {
+          "id": "S15-B02",
+          "event_id": "S15-U03",
+          "expression": "아까 문단 설명",
+          "revision": "final",
+          "expected_set": [
+            "S15:answer01:delivered"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S16",
+      "title": "조사와 파일 및 외부 동작 위임",
+      "uc_ids": [
+        "UC-08.1",
+        "UC-08.2",
+        "UC-08.3",
+        "UC-08.4"
+      ],
+      "selection_reason": "실제 업무를 VIA 직접 처리와 구별",
+      "initial_state": "조사 Agent AG1과 문서 및 메일 Agent AG2 및 앱 Agent AG3. 승인 필요 동작은 이 시나리오에서 사전 허용",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S16-U01",
+          "kind": "user",
+          "input": "공개 자료를 조사해 제품을 비교해줘. 유료 자료는 제외해.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S16-G01",
+          "response": {
+            "id": "S16-RU01",
+            "required_content": "공개 자료만 쓰는 조사 위임",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-A01",
+          "kind": "agent",
+          "input": "T16-1 요청의 실제 수행 완료",
+          "trigger": "S16-U01 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S16-G01",
+          "response": {
+            "id": "S16-RA01",
+            "required_content": "T16-1 완료 상태와 결과 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-U02",
+          "kind": "user",
+          "input": "F01을 요약한 파일을 만들어줘.",
+          "trigger": "S16-A01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S16-G02",
+          "response": {
+            "id": "S16-RU02",
+            "required_content": "F01 요약 파일 작성 위임",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-A02",
+          "kind": "agent",
+          "input": "T16-2 요청의 실제 수행 완료",
+          "trigger": "S16-U02 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S16-G02",
+          "response": {
+            "id": "S16-RA02",
+            "required_content": "T16-2 완료 상태와 결과 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-U03",
+          "kind": "user",
+          "input": "승인해 둔 M03 메일을 민수에게 보내줘.",
+          "trigger": "S16-A02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S16-G03",
+          "response": {
+            "id": "S16-RU03",
+            "required_content": "민수에게 M03 발송 위임",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-A03",
+          "kind": "agent",
+          "input": "T16-3 요청의 실제 수행 완료",
+          "trigger": "S16-U03 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S16-G03",
+          "response": {
+            "id": "S16-RA03",
+            "required_content": "T16-3 완료 상태와 결과 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-U04",
+          "kind": "user",
+          "input": "PDF1을 앞으로 띄워줘.",
+          "trigger": "S16-A03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S16-G04",
+          "response": {
+            "id": "S16-RU04",
+            "required_content": "PDF1 활성화 앱 동작 위임",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S16-A04",
+          "kind": "agent",
+          "input": "T16-4 요청의 실제 수행 완료",
+          "trigger": "S16-U04 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S16-G04",
+          "response": {
+            "id": "S16-RA04",
+            "required_content": "T16-4 완료 상태와 결과 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S16-G01",
+          "start_event": "S16-U01",
+          "member_events": [
+            "S16-U01",
+            "S16-A01"
+          ],
+          "completion": "해당 Agent의 실제 결과 확인과 Task 연결 및 최종 상세 표시와 음성 준비"
+        },
+        {
+          "id": "S16-G02",
+          "start_event": "S16-U02",
+          "member_events": [
+            "S16-U02",
+            "S16-A02"
+          ],
+          "completion": "해당 Agent의 실제 결과 확인과 Task 연결 및 최종 상세 표시와 음성 준비"
+        },
+        {
+          "id": "S16-G03",
+          "start_event": "S16-U03",
+          "member_events": [
+            "S16-U03",
+            "S16-A03"
+          ],
+          "completion": "해당 Agent의 실제 결과 확인과 Task 연결 및 최종 상세 표시와 음성 준비"
+        },
+        {
+          "id": "S16-G04",
+          "start_event": "S16-U04",
+          "member_events": [
+            "S16-U04",
+            "S16-A04"
+          ],
+          "completion": "해당 Agent의 실제 결과 확인과 Task 연결 및 최종 상세 표시와 음성 준비"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S17",
+      "title": "복합 요청의 독립과 의존 및 조건",
+      "uc_ids": [
+        "UC-09.1",
+        "UC-09.2",
+        "UC-09.3",
+        "UC-09.4",
+        "UC-09.5"
+      ],
+      "selection_reason": "요청을 하나씩 처리해도 보존해야 하는 사용자 지정 관계",
+      "initial_state": "외부 결과는 순서와 데이터 의존 및 조건 참/거짓을 검증할 고정 값. 각 복합 입력은 별도 goal 다섯 번째 입력 전에 기존 보고서 TR 실행 중과 메일 TM 승인 대기 및 DOC-A P1 선택을 제공",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S17-U01",
+          "kind": "user",
+          "input": "보고서를 만들고 별도로 메일도 찾아줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 8,
+          "goal_id": "S17-G01",
+          "response": {
+            "id": "S17-RU01",
+            "required_content": "두 독립 Task 시작 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A01",
+          "kind": "agent",
+          "input": "독립 보고서 R17-1 작성 완료",
+          "trigger": "S17-U01의 report 논리 작업 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G01",
+          "response": {
+            "id": "S17-RA01",
+            "required_content": "R17-1 완료와 자료 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A02",
+          "kind": "agent",
+          "input": "독립 메일 검색 M17-1 완료",
+          "trigger": "S17-U01의 mail-search 논리 작업 ingress 후 8초. report 결과와 무관하게 제공",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G01",
+          "response": {
+            "id": "S17-RA02",
+            "required_content": "M17-1 결과와 자료 참조",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-U02",
+          "kind": "user",
+          "input": "파일을 만든 다음 그 파일 이름을 바꿔줘.",
+          "trigger": "S17-A02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 8,
+          "goal_id": "S17-G02",
+          "response": {
+            "id": "S17-RU02",
+            "required_content": "작성 후 이름 변경 순서 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A03",
+          "kind": "agent",
+          "input": "F17-2 파일 작성 완료",
+          "trigger": "S17-U02의 create 논리 작업 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G02",
+          "response": {
+            "id": "S17-RA03",
+            "required_content": "F17-2 생성과 다음 이름 변경 대기",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A04",
+          "kind": "agent",
+          "input": "F17-2 이름 변경 완료",
+          "trigger": "S17-U02의 rename 논리 작업 ingress와 S17-A03 source 중 늦은 시각 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G02",
+          "response": {
+            "id": "S17-RA04",
+            "required_content": "F17-2 최종 파일명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-U03",
+          "kind": "user",
+          "input": "메일 검색 결과로 요약 파일을 만들어줘.",
+          "trigger": "S17-A04의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 8,
+          "goal_id": "S17-G03",
+          "response": {
+            "id": "S17-RU03",
+            "required_content": "메일 결과를 다음 업무 입력으로 전달 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A05",
+          "kind": "agent",
+          "input": "M17-3 메일 검색 결과 제공",
+          "trigger": "S17-U03의 search 논리 작업 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G03",
+          "response": {
+            "id": "S17-RA05",
+            "required_content": "M17-3 결과 수신과 요약 파일 생성 단계 안내",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A06",
+          "kind": "agent",
+          "input": "M17-3으로 만든 F17-3 요약 파일 완료",
+          "trigger": "S17-U03의 summarize 논리 작업 ingress와 S17-A05 source 중 늦은 시각 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G03",
+          "response": {
+            "id": "S17-RA06",
+            "required_content": "F17-3 결과와 M17-3 자료 연결",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-U04",
+          "kind": "user",
+          "input": "검색 결과에 계약서가 있으면 요약 파일을 만들어줘.",
+          "trigger": "S17-A06의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 8,
+          "goal_id": "S17-G04",
+          "response": {
+            "id": "S17-RU04",
+            "required_content": "조건 확인 뒤 필요한 경우에만 다음 업무 시작 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A07",
+          "kind": "agent",
+          "input": "계약서 M17-4를 찾음. 조건 참",
+          "trigger": "S17-U04의 search 논리 작업 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G04",
+          "response": {
+            "id": "S17-RA07",
+            "required_content": "조건 참 확인과 요약 파일 단계 안내",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A08",
+          "kind": "agent",
+          "input": "계약서 M17-4의 F17-4 요약 파일 완료",
+          "trigger": "S17-U04의 summarize 논리 작업 ingress와 S17-A07 source 중 늦은 시각 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G04",
+          "response": {
+            "id": "S17-RA08",
+            "required_content": "F17-4와 조건 충족 사실",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-U05",
+          "kind": "user",
+          "input": "보고서는 계속 만들고 메일 보내는 건 취소하고 이 문단은 설명해줘.",
+          "trigger": "S17-A08의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 8,
+          "goal_id": "S17-G05",
+          "response": {
+            "id": "S17-RU05",
+            "required_content": "TR 유지와 TM 미발송 및 DOC-A P1 설명을 구분",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 1,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A09",
+          "kind": "agent",
+          "input": "TM의 미발송 취소 확인",
+          "trigger": "S17-U05의 TM cancel ingress 후 100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G05",
+          "response": {
+            "id": "S17-RA09",
+            "required_content": "TM 취소 완료와 TR 계속 진행 구분",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S17-A10",
+          "kind": "agent",
+          "input": "기존 TR 보고서 완료",
+          "trigger": "S17-U05 발화 종료 후 8초. TM 취소와 독립적인 source",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S17-G05",
+          "response": {
+            "id": "S17-RA10",
+            "required_content": "TR 완료 파일. TM 상태는 실제 확인된 범위로만 함께 표시",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S17-G01",
+          "start_event": "S17-U01",
+          "member_events": [
+            "S17-U01",
+            "S17-A01",
+            "S17-A02"
+          ],
+          "completion": "명시된 모든 하위 업무의 순서와 입력 및 조건을 만족한 최종 결과 표시와 음성 준비"
+        },
+        {
+          "id": "S17-G02",
+          "start_event": "S17-U02",
+          "member_events": [
+            "S17-U02",
+            "S17-A03",
+            "S17-A04"
+          ],
+          "completion": "명시된 모든 하위 업무의 순서와 입력 및 조건을 만족한 최종 결과 표시와 음성 준비"
+        },
+        {
+          "id": "S17-G03",
+          "start_event": "S17-U03",
+          "member_events": [
+            "S17-U03",
+            "S17-A05",
+            "S17-A06"
+          ],
+          "completion": "명시된 모든 하위 업무의 순서와 입력 및 조건을 만족한 최종 결과 표시와 음성 준비"
+        },
+        {
+          "id": "S17-G04",
+          "start_event": "S17-U04",
+          "member_events": [
+            "S17-U04",
+            "S17-A07",
+            "S17-A08"
+          ],
+          "completion": "명시된 모든 하위 업무의 순서와 입력 및 조건을 만족한 최종 결과 표시와 음성 준비"
+        },
+        {
+          "id": "S17-G05",
+          "start_event": "S17-U05",
+          "member_events": [
+            "S17-U05",
+            "S17-A09",
+            "S17-A10"
+          ],
+          "completion": "명시된 모든 하위 업무의 순서와 입력 및 조건을 만족한 최종 결과 표시와 음성 준비"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S17-B01",
+          "event_id": "S17-U05",
+          "expression": "이 문단",
+          "revision": "final",
+          "expected_set": [
+            "DOC-A:v1:P1"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S18",
+      "title": "기존 업무의 조회와 수정 및 새 업무 구별",
+      "uc_ids": [
+        "UC-10.1",
+        "UC-10.2",
+        "UC-10.3",
+        "UC-10.4",
+        "UC-10.5"
+      ],
+      "selection_reason": "기존 Task 제어와 별도 새 Task를 구분",
+      "initial_state": "TA의 보고서 2장 결과는 완료됨. 이후 TB 메일 검색 대화가 끼어듦. TA와 실행 중 TB는 같은 Agent의 서로 다른 실행. 현재 입력은 이전 TA를 재참조",
+      "affected_dps": [
+        42,
+        44,
+        45
+      ],
+      "events": [
+        {
+          "id": "S18-U01",
+          "kind": "user",
+          "input": "보고서 작업은 어디까지 됐어?",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S18-G01",
+          "response": {
+            "id": "S18-RU01",
+            "required_content": "TA의 확인된 현재 진행 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S18-U02",
+          "kind": "user",
+          "input": "그 보고서는 결론을 먼저 놓고 두 장으로 줄여줘.",
+          "trigger": "S18-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S18-G02",
+          "response": {
+            "id": "S18-RU02",
+            "required_content": "TA의 범위와 형식 수정 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S18-A01",
+          "kind": "agent",
+          "input": "TA 수정 요청 접수 후 두 장 결과 제공",
+          "trigger": "S18-U02 정정 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S18-G02",
+          "response": {
+            "id": "S18-RA01",
+            "required_content": "TA 수정본 결과",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S18-U03",
+          "kind": "user",
+          "input": "그 수정본을 자료로 별도의 발표자료 파일을 만들어줘.",
+          "trigger": "S18-A01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S18-G03",
+          "response": {
+            "id": "S18-RU03",
+            "required_content": "TA 수정본을 근거로 별도 목표와 결과물의 새 Task TC 생성 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S18-A02",
+          "kind": "agent",
+          "input": "TC 발표자료 파일 완료",
+          "trigger": "S18-U03 Agent ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S18-G03",
+          "response": {
+            "id": "S18-RA02",
+            "required_content": "TC 결과 파일",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S18-A03",
+          "kind": "agent",
+          "input": "다른 Task BG의 확인된 진행 50%",
+          "trigger": "S18-U01 발화 종료 -100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S18-RA03",
+            "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        },
+        {
+          "id": "S18-A04",
+          "kind": "agent",
+          "input": "다른 Task BG의 최종 파일 완료",
+          "trigger": "S18-U01 발화 종료 +100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S18-RA04",
+            "required_content": "다른 Task BG의 최종 파일 완료",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "S18-G01",
+          "start_event": "S18-U01",
+          "member_events": [
+            "S18-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S18-G02",
+          "start_event": "S18-U02",
+          "member_events": [
+            "S18-U02",
+            "S18-A01"
+          ],
+          "completion": "TA 정정 접수와 수정 결과 및 현재 revision 표시와 음성 준비"
+        },
+        {
+          "id": "S18-G03",
+          "start_event": "S18-U03",
+          "member_events": [
+            "S18-U03",
+            "S18-A02"
+          ],
+          "completion": "TC 결과 연결과 상세 표시 및 음성 준비"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S18-B01",
+          "event_id": "S18-U02",
+          "expression": "그 보고서",
+          "revision": "final",
+          "expected_set": [
+            "TA:current-request"
+          ]
+        },
+        {
+          "id": "S18-B02",
+          "event_id": "S18-U03",
+          "expression": "그 수정본",
+          "revision": "final",
+          "expected_set": [
+            "TA:revised-result"
+          ]
+        }
+      ],
+      "ambiguous_events": [],
+      "load_probe_event": "S18-U01"
+    },
+    {
+      "id": "S19",
+      "title": "사용자 요청 중 다른 업무 사건 도착",
+      "uc_ids": [
+        "UC-13.1",
+        "UC-13.3"
+      ],
+      "selection_reason": "현재 입력과 무관한 업무 결과 처리의 경합",
+      "initial_state": "TA/TB가 다른 Agent에서 실행 중. 현재 질문은 둘과 무관한 일반 지식",
+      "affected_dps": [
+        44,
+        42
+      ],
+      "events": [
+        {
+          "id": "S19-U01",
+          "kind": "user",
+          "input": "TCP와 UDP의 차이를 짧게 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S19-G01",
+          "response": {
+            "id": "S19-RU01",
+            "required_content": "현재 질문의 두 방식 차이",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S19-A01",
+          "kind": "agent",
+          "input": "다른 Task BG의 확인된 진행 50%",
+          "trigger": "S19-U01 발화 종료 -100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S19-RA01",
+            "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "진행은 해당 Task UI에 표시하고 같은 작업의 최종 결과만 음성으로 요약하는 공통 출력 규칙"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        },
+        {
+          "id": "S19-A02",
+          "kind": "agent",
+          "input": "다른 Task BG의 최종 파일 완료",
+          "trigger": "S19-U01 발화 종료 +100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S19-RA02",
+            "required_content": "다른 Task BG의 최종 파일 완료",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          },
+          "background_load": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "S19-G01",
+          "start_event": "S19-U01",
+          "member_events": [
+            "S19-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": [],
+      "load_probe_event": "S19-U01"
+    },
+    {
+      "id": "S20",
+      "title": "여러 Agent 질문과 짧은 답변 연결",
+      "uc_ids": [
+        "UC-06.4",
+        "UC-13.2",
+        "UC-14.3",
+        "UC-14.5"
+      ],
+      "selection_reason": "질문이 겹쳐도 짧은 답변을 임의 Task에 연결하지 않음",
+      "initial_state": "TA는 파일 형식, TB는 수신자 질문을 동시에 보낼 예정",
+      "affected_dps": [
+        44,
+        42
+      ],
+      "events": [
+        {
+          "id": "S20-A01",
+          "kind": "agent",
+          "input": "TA: PDF로 만들까요?",
+          "trigger": "입력 창 t=0",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S20-RA01",
+            "required_content": "TA의 PDF 형식 확인 질문",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S20-A02",
+          "kind": "agent",
+          "input": "TB: 민수에게 보낼까요?",
+          "trigger": "S20-A01 source 시각 +100ms",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S20-RA02",
+            "required_content": "TB의 수신자 확인 질문",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S20-U01",
+          "kind": "user",
+          "input": "응.",
+          "trigger": "S20-A02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 1,
+          "goal_id": "S20-G01",
+          "response": {
+            "id": "S20-RU01",
+            "required_content": "어느 질문에 대한 답인지 확인",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S20-U02",
+          "kind": "user",
+          "input": "보고서는 PDF로 만들어줘. 메일은 보내지 마.",
+          "trigger": "S20-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S20-G01",
+          "response": {
+            "id": "S20-RU02",
+            "required_content": "TA 형식 승인과 TB 발송 거부를 각각 연결",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S20-A03",
+          "kind": "agent",
+          "input": "TA PDF 생성 완료. TB 발송 안 함 확인.",
+          "trigger": "S20-U02 제어 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S20-G01",
+          "response": {
+            "id": "S20-RA03",
+            "required_content": "TA 결과와 TB 미발송 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S20-G01",
+          "start_event": "S20-U01",
+          "member_events": [
+            "S20-U01",
+            "S20-U02",
+            "S20-A03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": [
+        "S20-U01"
+      ]
+    },
+    {
+      "id": "S21",
+      "title": "음성 중단 후 정정과 이어 듣기",
+      "uc_ids": [
+        "UC-11.1"
+      ],
+      "selection_reason": "음성 중단과 업무 취소를 혼동하지 않음",
+      "initial_state": "고정 8초 이전 음성 클립을 t=0에 재생. 사용자는 1초에 끼어듦. TA 작업은 별도로 계속 실행 H30 고정 클립의 sample마다 내용 범위를 연결. 실제 마지막 출력 sample에 따라 undelivered-suffix 정답 범위를 산출하며 양안의 중단 위치가 다를 수 있음",
+      "affected_dps": [
+        44,
+        45
+      ],
+      "events": [
+        {
+          "id": "S21-U01",
+          "kind": "user",
+          "input": "잠깐. 방금 설명은 결론부터 다시 말해줘.",
+          "trigger": "고정 이전 음성의 재생 시작 후 1초에 발화 시작",
+          "input_mode": "voice",
+          "input_audio_seconds": 5,
+          "goal_id": "S21-G01",
+          "response": {
+            "id": "S21-RU01",
+            "required_content": "현재 설명 결론부터 다시 안내. TA는 취소하지 않음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S21-U02",
+          "kind": "user",
+          "input": "처음 끊었던 설명의 다음 부분을 이어줘.",
+          "trigger": "S21-U01의 요약 음성이 실제 재생 완료된 뒤 2초에 발화 시작",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S21-G02",
+          "response": {
+            "id": "S21-RU02",
+            "required_content": "실제 중단 위치 다음 내용부터 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S21-G01",
+          "start_event": "S21-U01",
+          "member_events": [
+            "S21-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S21-G02",
+          "start_event": "S21-U02",
+          "member_events": [
+            "S21-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S21-B01",
+          "event_id": "S21-U01",
+          "expression": "방금 설명",
+          "revision": "final",
+          "expected_set": [
+            "H30:v1:text:all"
+          ]
+        },
+        {
+          "id": "S21-B02",
+          "event_id": "S21-U02",
+          "expression": "처음 끊었던 설명의 다음 부분",
+          "revision": "final",
+          "expected_set": [
+            "H30:v1:undelivered-suffix"
+          ],
+          "oracle_rule": "H30의 실제 마지막 audible sample 뒤에 남은 원본 내용 범위. 동일 원본과 동일 산출 규칙을 적용하되 실제 중단 위치는 양안별 관측"
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S22",
+      "title": "특정 업무 취소와 완료 교차",
+      "uc_ids": [
+        "UC-12.1",
+        "UC-12.2",
+        "UC-12.3",
+        "UC-12.4",
+        "UC-12.5"
+      ],
+      "selection_reason": "취소 접수와 실제 종료 및 완료 사실의 구별",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S22-U01",
+          "kind": "user",
+          "input": "대기 중인 T1은 실행하지 마.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S22-G01",
+          "response": {
+            "id": "S22-RU01",
+            "required_content": "T1의 확인된 취소 처리 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-U02",
+          "kind": "user",
+          "input": "진행 중인 T2를 취소해줘.",
+          "trigger": "S22-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S22-G02",
+          "response": {
+            "id": "S22-RU02",
+            "required_content": "T2의 확인된 취소 처리 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-A01",
+          "kind": "agent",
+          "input": "T2: 취소 종료 확인",
+          "trigger": "S22-U02 제어 ingress 후 1초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S22-G02",
+          "response": {
+            "id": "S22-RA01",
+            "required_content": "T2의 취소 완료",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-U03",
+          "kind": "user",
+          "input": "T3를 취소해줘.",
+          "trigger": "S22-A01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S22-G03",
+          "response": {
+            "id": "S22-RU03",
+            "required_content": "T3의 확인된 취소 처리 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-A02",
+          "kind": "agent",
+          "input": "T3: 취소보다 먼저 완료 사실 제공",
+          "trigger": "S22-U03 실제 발화 종료 후 100ms. 취소 ingress 시점과 무관하게 완료 사실 제공",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S22-G03",
+          "response": {
+            "id": "S22-RA02",
+            "required_content": "T3의 이미 완료되어 취소되지 않음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-U04",
+          "kind": "user",
+          "input": "완료한 T4를 취소해줘.",
+          "trigger": "S22-A02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S22-G04",
+          "response": {
+            "id": "S22-RU04",
+            "required_content": "T4의 확인된 취소 처리 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S22-U05",
+          "kind": "user",
+          "input": "T5를 취소해줘.",
+          "trigger": "S22-U04의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S22-G05",
+          "response": {
+            "id": "S22-RU05",
+            "required_content": "T5의 확인된 취소 처리 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S22-G01",
+          "start_event": "S22-U01",
+          "member_events": [
+            "S22-U01"
+          ],
+          "completion": "T1 미전송 취소 확정 및 해당 상세 표시와 음성 준비. 다른 Task에는 이번 요청의 제어를 전파하지 않음"
+        },
+        {
+          "id": "S22-G02",
+          "start_event": "S22-U02",
+          "member_events": [
+            "S22-U02",
+            "S22-A01"
+          ],
+          "completion": "T2 외부 취소 종료 확인 및 해당 상세 표시와 음성 준비. 다른 Task에는 이번 요청의 제어를 전파하지 않음"
+        },
+        {
+          "id": "S22-G03",
+          "start_event": "S22-U03",
+          "member_events": [
+            "S22-U03",
+            "S22-A02"
+          ],
+          "completion": "T3 완료 사실을 확인하여 이미 완료되어 취소되지 않았다고 안내 및 해당 상세 표시와 음성 준비. 다른 Task에는 이번 요청의 제어를 전파하지 않음"
+        },
+        {
+          "id": "S22-G04",
+          "start_event": "S22-U04",
+          "member_events": [
+            "S22-U04"
+          ],
+          "completion": "T4의 기존 완료를 유지하고 되돌리지 않았다고 안내 및 해당 상세 표시와 음성 준비. 다른 Task에는 이번 요청의 제어를 전파하지 않음"
+        },
+        {
+          "id": "S22-G05",
+          "start_event": "S22-U05",
+          "member_events": [
+            "S22-U05"
+          ],
+          "completion": "T5 취소 미지원과 계속 실행 중 상태 안내 및 해당 상세 표시와 음성 준비. 다른 Task에는 이번 요청의 제어를 전파하지 않음"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S23",
+      "title": "다른 앱 사용 중 비동기 결과와 부분 실패",
+      "uc_ids": [
+        "UC-13.4",
+        "UC-13.5",
+        "UC-13.6",
+        "UC-14.1",
+        "UC-14.4"
+      ],
+      "selection_reason": "현재 화면과 음성 차례에 관계없이 올바른 업무에 결과 표시",
+      "initial_state": "TA는 AG1에서 먼저 시작했고 TB는 AG2에서 2초 뒤 시작했다. TB 결과가 먼저, TA 결과가 나중 도착한다. 사용자 foreground는 편집기",
+      "affected_dps": [
+        44,
+        42
+      ],
+      "events": [
+        {
+          "id": "S23-U01",
+          "kind": "user",
+          "input": "TA와 TB의 결과가 나오면 알려줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S23-G01",
+          "response": {
+            "id": "S23-RU01",
+            "required_content": "두 Task를 구별해 결과를 알린다는 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S23-A01",
+          "kind": "agent",
+          "input": "TB 부분 결과와 실패 이유 제공",
+          "trigger": "S23-U01 발화 종료 후 1초. 고정 이전 요약 클립은 종료 후 0.5~5.5초 재생",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S23-G01",
+          "response": {
+            "id": "S23-RA01",
+            "required_content": "TB 부분 완료와 실패 범위를 명확히 표시",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S23-A02",
+          "kind": "agent",
+          "input": "TA 최종 파일 완료",
+          "trigger": "S23-U01 발화 종료 후 1.1초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S23-G01",
+          "response": {
+            "id": "S23-RA02",
+            "required_content": "TA 최종 파일과 완료 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S23-G01",
+          "start_event": "S23-U01",
+          "member_events": [
+            "S23-U01",
+            "S23-A01",
+            "S23-A02"
+          ],
+          "completion": "TA 완료와 TB 부분 실패를 각 Task에 표시하고 음성 요약 준비"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S24",
+      "title": "Voice와 Text 전환 및 재연결",
+      "uc_ids": [
+        "UC-15.1",
+        "UC-15.2",
+        "UC-15.3",
+        "UC-15.4"
+      ],
+      "selection_reason": "음성 연결과 Task 수명 분리",
+      "initial_state": "새 Task 요청 후 Voice OFF 상태에서 Text 조회. Voice 재연결 후 기존 Task 정정",
+      "affected_dps": [
+        42,
+        44,
+        45
+      ],
+      "events": [
+        {
+          "id": "S24-U01",
+          "kind": "user",
+          "input": "F01로 보고서를 만들어줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S24-G01",
+          "response": {
+            "id": "S24-RU01",
+            "required_content": "TA 보고서 생성 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S24-U02",
+          "kind": "user",
+          "input": "보고서 진행 상태 알려줘.",
+          "trigger": "S24-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "text",
+          "input_audio_seconds": 0,
+          "goal_id": "S24-G02",
+          "response": {
+            "id": "S24-RU02",
+            "required_content": "같은 TA의 현재 상태",
+            "voice_required": false,
+            "generated_audio_seconds": 0,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 0,
+            "voice_exclusion_reason": "이 입력과 응답 동안 Voice OFF. Text만 제공"
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S24-U03",
+          "kind": "user",
+          "input": "다시 말할게. 그 보고서는 표를 먼저 보여줘.",
+          "trigger": "S24-U02 완료 후 Voice 연결을 끊고 2초 뒤 새 Voice 연결. 연결 2초 후 발화",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S24-G01",
+          "response": {
+            "id": "S24-RU03",
+            "required_content": "재연결 뒤 같은 TA의 형식 정정",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S24-A01",
+          "kind": "agent",
+          "input": "TA 표 우선 보고서 완료",
+          "trigger": "S24-U03 제어 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S24-G01",
+          "response": {
+            "id": "S24-RA01",
+            "required_content": "수정된 TA의 파일과 완료 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S24-G01",
+          "start_event": "S24-U01",
+          "member_events": [
+            "S24-U01",
+            "S24-U03",
+            "S24-A01"
+          ],
+          "completion": "마지막 수정이 반영된 TA 결과의 상세 표시와 음성 준비"
+        },
+        {
+          "id": "S24-G02",
+          "start_event": "S24-U02",
+          "member_events": [
+            "S24-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S24-B01",
+          "event_id": "S24-U03",
+          "expression": "그 보고서",
+          "revision": "final",
+          "expected_set": [
+            "S24:TA:current"
+          ]
+        }
+      ],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S25",
+      "title": "새 대화에서도 진행 업무 확인",
+      "uc_ids": [
+        "UC-15.5"
+      ],
+      "selection_reason": "새 Conversation 시작이 기존 업무 취소나 중복 시작이 아님",
+      "initial_state": "TA가 Conversation OLD에서 실행 중. NEW Conversation을 명시적으로 생성",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S25-U01",
+          "kind": "user",
+          "input": "새 대화로 시작할게. 무지개 원리를 설명해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S25-G01",
+          "response": {
+            "id": "S25-RU01",
+            "required_content": "새 Conversation에서 일반 지식 설명",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S25-U02",
+          "kind": "user",
+          "input": "이전 대화의 TA 작업 상태만 확인해줘.",
+          "trigger": "S25-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S25-G02",
+          "response": {
+            "id": "S25-RU02",
+            "required_content": "사용자가 명시한 TA 상태 확인. 중복 실행 없음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S25-G01",
+          "start_event": "S25-U01",
+          "member_events": [
+            "S25-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S25-G02",
+          "start_event": "S25-U02",
+          "member_events": [
+            "S25-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S26",
+      "title": "정보 접근 동의와 실행 승인 및 거부",
+      "uc_ids": [
+        "UC-16.1",
+        "UC-16.2",
+        "UC-16.3",
+        "UC-16.4",
+        "UC-16.5"
+      ],
+      "selection_reason": "동의와 Action 승인 및 답변의 적용 범위 구별",
+      "initial_state": "F-PRIVATE 접근 미허용. 외부 전달 범위 제한. Task TA/TB 승인 대기",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S26-U01",
+          "kind": "user",
+          "input": "F-PRIVATE를 읽고 요약해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S26-G01",
+          "response": {
+            "id": "S26-RU01",
+            "required_content": "파일 접근 목적과 범위를 설명하고 동의 요청",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-U02",
+          "kind": "user",
+          "input": "본문만 허용해. 첨부 파일은 읽지 마.",
+          "trigger": "S26-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S26-G01",
+          "response": {
+            "id": "S26-RU02",
+            "required_content": "본문만 읽어 요약하고 첨부는 제외",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-U03",
+          "kind": "user",
+          "input": "이 요약으로 Agent에게 파일을 만들어 달라고 해.",
+          "trigger": "S26-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S26-G02",
+          "response": {
+            "id": "S26-RU03",
+            "required_content": "외부 Agent에 보낼 요약 범위를 설명하고 동의 요청",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-U04",
+          "kind": "user",
+          "input": "외부 전달은 하지 마.",
+          "trigger": "S26-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S26-G02",
+          "response": {
+            "id": "S26-RU04",
+            "required_content": "외부 전달 거부와 미전송 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-A01",
+          "kind": "agent",
+          "input": "TA는 민수에게 발송 승인 대기. TB는 지연에게 발송 승인 대기.",
+          "trigger": "S26-U04 완료 후 2초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": null,
+          "response": {
+            "id": "S26-RA01",
+            "required_content": "서로 다른 Task의 두 승인 질문",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-U05",
+          "kind": "user",
+          "input": "응.",
+          "trigger": "S26-A01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 1,
+          "goal_id": "S26-G03",
+          "response": {
+            "id": "S26-RU05",
+            "required_content": "어느 발송을 승인하는지 확인",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-U06",
+          "kind": "user",
+          "input": "TA만 승인해. TB는 보내지 마.",
+          "trigger": "S26-U05의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S26-G03",
+          "response": {
+            "id": "S26-RU06",
+            "required_content": "TA 승인과 TB 거부를 각각 연결",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S26-A02",
+          "kind": "agent",
+          "input": "TA 발송 완료. TB 미발송 확인.",
+          "trigger": "S26-U06 제어 ingress 후 8초",
+          "input_mode": null,
+          "input_audio_seconds": 0,
+          "goal_id": "S26-G03",
+          "response": {
+            "id": "S26-RA02",
+            "required_content": "각각 실제 발송과 미발송 사실",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S26-G01",
+          "start_event": "S26-U01",
+          "member_events": [
+            "S26-U01",
+            "S26-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S26-G02",
+          "start_event": "S26-U03",
+          "member_events": [
+            "S26-U03",
+            "S26-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S26-G03",
+          "start_event": "S26-U05",
+          "member_events": [
+            "S26-U05",
+            "S26-U06",
+            "S26-A02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [
+        {
+          "id": "S26-B01",
+          "event_id": "S26-U03",
+          "expression": "이 요약",
+          "revision": "final",
+          "expected_set": [
+            "S26:summary:body-only"
+          ]
+        }
+      ],
+      "ambiguous_events": [
+        "S26-U05"
+      ]
+    },
+    {
+      "id": "S27",
+      "title": "저장된 선호의 사용과 확인 및 삭제",
+      "uc_ids": [
+        "UC-17.1",
+        "UC-17.2",
+        "UC-17.3",
+        "UC-17.4",
+        "UC-17.5"
+      ],
+      "selection_reason": "대화 이력과 사용자 승인 영속 선호를 구분",
+      "initial_state": "저장 허용한 선호 PREF1=표 우선. 다른 개인 정보는 없음",
+      "affected_dps": [
+        45,
+        44
+      ],
+      "events": [
+        {
+          "id": "S27-U01",
+          "kind": "user",
+          "input": "TCP와 UDP를 비교해줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S27-G01",
+          "response": {
+            "id": "S27-RU01",
+            "required_content": "PREF1에 따라 표 우선 응답",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "simple",
+            "text_input_tokens": 2000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 800
+          }
+        },
+        {
+          "id": "S27-U02",
+          "kind": "user",
+          "input": "내 답변 형식 선호로 저장한 내용을 보여줘.",
+          "trigger": "S27-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S27-G02",
+          "response": {
+            "id": "S27-RU02",
+            "required_content": "PREF1의 저장 내용과 허용 상태",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S27-U03",
+          "kind": "user",
+          "input": "앞으로 결론부터 쓰는 걸 선호한다고 바꿔줘.",
+          "trigger": "S27-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S27-G03",
+          "response": {
+            "id": "S27-RU03",
+            "required_content": "명시적 PREF1 변경과 결과 표시",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S27-U04",
+          "kind": "user",
+          "input": "이번 답은 표로만 보여줘.",
+          "trigger": "S27-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S27-G04",
+          "response": {
+            "id": "S27-RU04",
+            "required_content": "현재 지시를 우선 적용. 영속 선호를 임의 변경하지 않음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        },
+        {
+          "id": "S27-U05",
+          "kind": "user",
+          "input": "저장한 답변 형식 선호를 삭제해줘.",
+          "trigger": "S27-U04의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S27-G05",
+          "response": {
+            "id": "S27-RU05",
+            "required_content": "PREF1 삭제 확인. 이후 새 대화에 사용하지 않음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "history",
+            "text_input_tokens": 24000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1600
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S27-G01",
+          "start_event": "S27-U01",
+          "member_events": [
+            "S27-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S27-G02",
+          "start_event": "S27-U02",
+          "member_events": [
+            "S27-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S27-G03",
+          "start_event": "S27-U03",
+          "member_events": [
+            "S27-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S27-G04",
+          "start_event": "S27-U04",
+          "member_events": [
+            "S27-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S27-G05",
+          "start_event": "S27-U05",
+          "member_events": [
+            "S27-U05"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    },
+    {
+      "id": "S28",
+      "title": "접근 불가와 Agent 상태 미확인 안내",
+      "uc_ids": [
+        "UC-18.1",
+        "UC-18.3",
+        "UC-18.4",
+        "UC-18.5"
+      ],
+      "selection_reason": "관측되지 않은 업무 상태를 완료로 보고하지 않음",
+      "initial_state": "F404 없음. 읽기 금지 F403. AG-OFF 미접속. TA 외부 결과 미확인",
+      "affected_dps": [
+        42,
+        44
+      ],
+      "events": [
+        {
+          "id": "S28-U01",
+          "kind": "user",
+          "input": "F404 내용을 알려줘.",
+          "trigger": "입력 시작 t=0",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S28-G01",
+          "response": {
+            "id": "S28-RU01",
+            "required_content": "자료가 없다고 알리고 대체 경로 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S28-U02",
+          "kind": "user",
+          "input": "F403 내용을 알려줘.",
+          "trigger": "S28-U01의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S28-G02",
+          "response": {
+            "id": "S28-RU02",
+            "required_content": "접근 권한 없음과 동의 필요 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "lookup",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S28-U03",
+          "kind": "user",
+          "input": "AG-OFF에게 파일을 만들어 달라고 해.",
+          "trigger": "S28-U02의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S28-G03",
+          "response": {
+            "id": "S28-RU03",
+            "required_content": "Agent 사용 불가와 미전송 상태 안내",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        },
+        {
+          "id": "S28-U04",
+          "kind": "user",
+          "input": "TA 취소가 끝났는지 확인해줘.",
+          "trigger": "S28-U03의 지정 응답 상세 표시와 필수 음성 재생 완료 후 2초",
+          "input_mode": "voice",
+          "input_audio_seconds": 6,
+          "goal_id": "S28-G04",
+          "response": {
+            "id": "S28-RU04",
+            "required_content": "상태 미확인임을 명시. 종료나 복구를 단정하지 않음",
+            "voice_required": true,
+            "generated_audio_seconds": 5,
+            "reference_adopted_text_tokens": 500,
+            "reference_audio_text_tokens": 50
+          },
+          "reference_semantic_call": {
+            "profile": "task",
+            "text_input_tokens": 8000,
+            "image_count": 0,
+            "image_tokens_each_max": 3000,
+            "total_output_including_reasoning_tokens": 1200
+          }
+        }
+      ],
+      "goals": [
+        {
+          "id": "S28-G01",
+          "start_event": "S28-U01",
+          "member_events": [
+            "S28-U01"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S28-G02",
+          "start_event": "S28-U02",
+          "member_events": [
+            "S28-U02"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S28-G03",
+          "start_event": "S28-U03",
+          "member_events": [
+            "S28-U03"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        },
+        {
+          "id": "S28-G04",
+          "start_event": "S28-U04",
+          "member_events": [
+            "S28-U04"
+          ],
+          "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+        }
+      ],
+      "bindings": [],
+      "ambiguous_events": []
+    }
+  ],
+  "qualification_variants": [
+    {
+      "id": "F01",
+      "base_scenario": "S03",
+      "uc_ids": [
+        "UC-03.1",
+        "UC-03.2"
+      ],
+      "change_and_oracle": "선택 유지 중 같은 좌표의 다른 모니터 또는 창으로 focus 이동. 선택 owner가 바뀌지 않는지 확인"
+    },
+    {
+      "id": "F02",
+      "base_scenario": "S05",
+      "uc_ids": [
+        "UC-04.2"
+      ],
+      "change_and_oracle": "원본 객체가 이동 또는 사라지고 전사가 수정된 경우 당시 근거로 지칭하고 모르면 질문"
+    },
+    {
+      "id": "F03",
+      "base_scenario": "S09",
+      "uc_ids": [
+        "UC-06.5"
+      ],
+      "change_and_oracle": "확인 질문에 사용자가 요청을 철회. 위임하지 않고 철회를 확인"
+    },
+    {
+      "id": "F04",
+      "base_scenario": "S15",
+      "uc_ids": [
+        "UC-07.1"
+      ],
+      "change_and_oracle": "첫 응답을 S2S 일반 지식 답변으로 바꾸고 같은 후속 파일 요청 연결"
+    },
+    {
+      "id": "F05",
+      "base_scenario": "S15",
+      "uc_ids": [
+        "UC-07.3"
+      ],
+      "change_and_oracle": "직접 응답 3개 후 첫 답변을 명시적으로 지칭하여 위임"
+    },
+    {
+      "id": "F06",
+      "base_scenario": "S16",
+      "uc_ids": [
+        "UC-08.5"
+      ],
+      "change_and_oracle": "범위가 정해진 조회를 외부 Agent 처리로 설정해도 같은 정보와 결과 연결"
+    },
+    {
+      "id": "F07",
+      "base_scenario": "S17",
+      "uc_ids": [
+        "UC-09.4",
+        "UC-09.5"
+      ],
+      "change_and_oracle": "조건 거짓 결과를 제공. 조건부 후속 업무 미실행과 독립 업무 완료 확인"
+    },
+    {
+      "id": "F08",
+      "base_scenario": "S18",
+      "uc_ids": [
+        "UC-10.5"
+      ],
+      "change_and_oracle": "완료한 TA 결과를 자료로 별도 발표자료 생성을 명시. New Task와 이전 자료 참조를 함께 보존"
+    },
+    {
+      "id": "F09",
+      "base_scenario": "S21",
+      "uc_ids": [
+        "UC-11.2",
+        "UC-11.4",
+        "UC-11.5"
+      ],
+      "change_and_oracle": "고정 클립을 Core 설명 또는 Agent 결과로 바꾸어 중단을 확인. 위임 전이면 미전송 요청 정정, 위임 후이면 외부 정정 접수와 결과를 각각 확인"
+    },
+    {
+      "id": "F10",
+      "base_scenario": "S22",
+      "uc_ids": [
+        "UC-12.5"
+      ],
+      "change_and_oracle": "취소 기능은 지원하지만 응답이 없음. 확인 불가를 표시하고 취소 완료로 처리하지 않음"
+    },
+    {
+      "id": "F11",
+      "base_scenario": "S26",
+      "uc_ids": [
+        "UC-16.4"
+      ],
+      "change_and_oracle": "이미 허용한 원본 사용을 철회. 철회 이후 미전달 응답과 신규 제공을 중지"
+    },
+    {
+      "id": "F12",
+      "base_scenario": "S28",
+      "uc_ids": [
+        "UC-18.2"
+      ],
+      "change_and_oracle": "의미 모델 연결을 끊음. 확인된 실패와 재시도 선택지를 코드 경로로 표시"
+    },
+    {
+      "id": "F13",
+      "base_scenario": "S28",
+      "uc_ids": [
+        "UC-18.6"
+      ],
+      "change_and_oracle": "VIA 재시작 후 TA의 기록과 외부 상태를 재연결. 중복 실행 없이 확인 상태 안내"
+    },
+    {
+      "id": "F14",
+      "base_scenario": "S14",
+      "uc_ids": [
+        "UC-05.1",
+        "UC-05.2"
+      ],
+      "change_and_oracle": "동명이거나 읽을 수 없는 background 및 닫힌 자료. 임의 대체 없이 질문 또는 접근 불가"
+    },
+    {
+      "id": "F15",
+      "base_scenario": "S27",
+      "uc_ids": [
+        "UC-17.4"
+      ],
+      "change_and_oracle": "선호 삭제 후 새 Conversation에서 같은 비교 질문. 삭제된 선호를 재사용하지 않음"
+    },
+    {
+      "id": "F16",
+      "base_scenario": "S23",
+      "uc_ids": [
+        "UC-14.2"
+      ],
+      "change_and_oracle": "두 Task를 같은 Agent의 서로 다른 실행 X1/X2로 바꾼다. 나중 시작한 TB 결과가 먼저 와도 Task 연결을 유지"
+    },
+    {
+      "id": "F17",
+      "base_scenario": "S17",
+      "uc_ids": [
+        "UC-09.2",
+        "UC-09.3",
+        "UC-09.5"
+      ],
+      "change_and_oracle": "선행 작성 또는 검색을 실패로 바꾼다. 해당 데이터에 의존하는 후속 업무는 실행하지 않고 실패를 표시하며 무관한 독립 업무는 계속 처리"
+    },
+    {
+      "id": "F18",
+      "base_scenario": "S08",
+      "uc_ids": [
+        "UC-04.5",
+        "UC-04.6",
+        "UC-11.4",
+        "UC-11.3"
+      ],
+      "change_and_oracle": "공통 시험 출력 barrier로 U01 구버전 첫 음성을 보류한다. 첫 올바른 UI 표시 +200ms에 U02를 주입한 뒤 barrier를 해제한다. 구버전은 새로 재생하지 않고 최종 정정 응답만 전달해야 한다. 이 기능 변형은 QA09 정량 분모에 없으며 생성 후 폐기된 비용과 처리 기록은 보존"
+    }
+  ],
+  "execution_profile": {
+    "initial_history_turns": 200,
+    "completed_tasks": 20,
+    "active_tasks_max": 5,
+    "screen_width": 2880,
+    "screen_height": 1800,
+    "frame_evidence_limit": 15,
+    "scenario_reset": "각 S 시작마다 동일한 원본 이력과 Task 및 설정 snapshot에서 앱을 시작. 별도 파생 cache는 제공하지 않음. S 내부의 cache 유지. 다음 S와 다음 반복에는 원본으로 복원",
+    "scenario_order": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06",
+      "S07",
+      "S08",
+      "S09",
+      "S10",
+      "S11",
+      "S12",
+      "S13",
+      "S14",
+      "S15",
+      "S16",
+      "S17",
+      "S18",
+      "S19",
+      "S20",
+      "S21",
+      "S22",
+      "S23",
+      "S24",
+      "S25",
+      "S26",
+      "S27",
+      "S28"
+    ],
+    "response_timeout_seconds": 30,
+    "goal_timeout_after_last_required_source_seconds": 60,
+    "source_profiles": {
+      "code_receipt_ms": 100,
+      "agent_work_seconds": 8,
+      "user_followup_wait_seconds": 2
+    },
+    "load_pair_scenarios": [
+      "S05",
+      "S11",
+      "S18",
+      "S19"
+    ],
+    "voice_rule": "Voice ON의 요청과 질문 및 최종 결과는 음성 요약. 진행 사건은 UI에 표시하며 같은 작업의 최종 결과만 음성 요약. Voice OFF는 Text만 제공",
+    "model_profile": "이 후보 패키지의 클라우드 음성 및 의미 모델. Windows 11. 모델과 장비의 실제 버전은 실행 manifest에서 양안 공통으로 기록. 참조 Architecture on-device 수치로 전용 금지",
+    "tail_cancel_after_final_source_seconds": 60,
+    "tail_observe_until_after_final_source_seconds": 120
+  },
+  "reference_price_snapshot": {
+    "as_of": "2026-10-14",
+    "source": "qa05-model-cost.md의 이전 공식 출처 조사 snapshot. 새 조회나 실제 청구가 아님",
+    "realtime_model": "gpt-realtime",
+    "semantic_model": "GPT-5.6 Luna",
+    "rt_text_input_per_million": "4",
+    "rt_text_output_per_million": "16",
+    "rt_audio_input_per_million": "32",
+    "rt_audio_output_per_million": "64",
+    "luna_input_quote_per_million": "0.25",
+    "luna_output_per_million": "1.20",
+    "rt_control_tokens_per_call": 1000,
+    "rt_transcript_output_tokens_per_input": 100,
+    "rt_audio_input_tokens_per_second": 10,
+    "rt_audio_output_tokens_per_second": 20,
+    "luna_max_unscaled_input_tokens": 272000
+  }
+}

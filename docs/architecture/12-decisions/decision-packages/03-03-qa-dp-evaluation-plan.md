@@ -1,6 +1,6 @@
 # VIA 핵심 QA와 DP 평가 계획
 
-> **최신 논의: 공통 평가 시나리오로 통합.** [통합 구성 방안](./qa-candidate-package/common-evaluation-population-plan.md)을 먼저 읽는다. 기존 QA별 30 / 20+20 / 12 및 20요청+6사건은 통합 전 초안이다. 기능 요구에서 공통 S01~SN을 작성한 뒤 같은 실행에서 각 QA의 관측 대상을 추출한다. N과 반복 횟수는 확정 전이다.
+> **최신 논의: 공통 평가 입력 작성 완료.** [공통 28개 목록](./qa-candidate-package/common-scenarios.md)을 5회 반복하며 같은 실행에서 응답 120건과 목표 76개 및 지칭 44개와 음성 109건을 추출한다. [통합 기록](./qa-candidate-package/common-evaluation-population-plan.md)에 선정 근거와 변경 내역을 남긴다. 실제 자료 제작과 측정은 아직 하지 않았다.
 
 > 2026-10-14 / 사용자와 검토 중 / 현재 DP 44 47 45 42 기준
 
@@ -12,7 +12,7 @@
 
 **2026-10-14 발표용 표 정리:** 사용자가 요청한 [품질 요구사항 표와 발표용 요약](./qa-candidate-package/quality-requirements-table.md)에 대화의 상세 Scenario를 보존하고 중요도 / 난이도 판단 근거를 보완했다. 중요도 / 난이도는 `H(10) / H(9)`처럼 표시하며 1~4=L / 5~7=M / 8~10=H다. 중요도 근거에는 사용자가 지정한 stakeholder 8개 역할의 요구를 연결했다. 같은 파일의 [축약 표](./qa-candidate-package/quality-requirements-table.md#presentation-table)는 첨부 레퍼런스처럼 Scenario를 정의 한 줄 / 목표 한 줄 / ※ 측정 조건 한 줄 / ※ 목표 근거 한 줄로 구성한다. 1~10점은 사전 중요도 / 난이도 제안이며 PoC의 0~6점과 구별한다. 중요도는 기존 QA 순서에 맞춘 평가 우선도다. QA09의 기존 H는 M(5)로 조정했으며 필수 음성 검증 지위는 유지한다. 이때의 요청은 표 문서화와 GitHub 게시였다. 이후 사용자 피드백에 따른 QA06 개정은 다음 문단을 따른다.
 
-**2026-10-14 사용자 지적에 따른 수치 개정:** [목표 논리](./qa-candidate-package/target-rationale.md)의 현재 제안은 QA01 최대 1초 / QA02 ReALM 참조 93% / QA03 최대 5초 / QA04 ARGO 평균 5.4개 대비 40% 이상 개선한 평균 3개 / QA05 gpt-realtime과 Luna의 견적 $0.7067에 따른 $0.71이다. QA06은 부적합 기능 참조에서 정한 512MiB와 점수를 철회했다. 동종 제품의 유효한 RAM 수치를 확보하지 못해 **목표 근거와 계측이 미완료**다. QA06을 제외한 여덟 후보에 점수 구간 제안이 있으며 모두 미측정이다. [20요청 활동 명세](./qa-candidate-package/user-activity-20.md)와 [개정 전 기록](../../../archive/qa-targets-before-task-aligned-revision-20261014/README.md)을 연결한다.
+**2026-10-14 사용자 지적에 따른 수치 개정:** [목표 논리](./qa-candidate-package/target-rationale.md)의 현재 제안은 QA01 최대 1초 / QA02 ReALM 참조 93% / QA03 최대 5초 / QA04 ARGO 평균 5.4개 대비 40% 이상 개선한 평균 3개 / QA05 gpt-realtime과 Luna의 견적 $2.54604에 따른 $2.55이다. QA06은 부적합 기능 참조에서 정한 512MiB와 점수를 철회했다. 동종 제품의 유효한 RAM 수치를 확보하지 못해 **목표 근거와 계측이 미완료**다. QA06을 제외한 여덟 후보에 점수 구간 제안이 있으며 모두 미측정이다. [공통 시나리오 명세](./qa-candidate-package/common-scenarios.md)와 [개정 전 기록](../../../archive/qa-targets-before-task-aligned-revision-20261014/README.md)을 연결한다.
 
 핵심 결과는 **명확한 QA를 정의하는 것만으로 네 DP의 trade-off 요건이 충족되지는 않는다**는 점이다. 특히 강한 B의 보완 경로를 인정한 47의 정확도, 44의 짧은 비동기 조정과 직접 stage 연결의 실용적 속도 차이, 42의 정상 사용 B 이익은 근거가 부족하다. 추가 QA로 빈칸을 인위적으로 채우지 않는다. 아래 초기 제안에서 바뀐 예상은 상세안과 최신 대응표를 따른다. 기존 03-02와 과거 결과는 보존한다.
 
@@ -135,7 +135,7 @@ QA 이름은 사용자 동의를 받은 **첫 응답 지연시간**이며 대표
 | 지칭 대상 식별 정확도 | ReALM-3B 화면 지칭 집합 완전 일치율 93.0%를 관련 기술의 공통 최소 목표로 채택 |
 | VIA 처리시간 | Windows Long wait 상단 5초를 VIA 자체 완료 경로의 최대 시간으로 적용 |
 | 변경 범위 | 사용자 제공 ARGO PR 145건 평균 5.4개에서 40% 감소한 3.24개보다 엄격한 평균 3개 채택 |
-| 모델 사용 비용 | 20요청과 Agent 사건 6건의 gpt-realtime 및 Luna 참조 견적 $0.7067을 센트 단위로 올려 $0.71 제안 |
+| 모델 사용 비용 | 공통 28개 묶음의 gpt-realtime 및 Luna 참조 견적 $2.54604를 센트 단위로 올려 $2.55 제안 |
 | 최대 RAM 사용량 | 512MiB 철회. 동종 Windows Copilot의 비교 가능한 공식 RAM 수치를 확보하지 못했으며 목표와 점수 미완료 |
 
 연구로 도출할 수 있는 수치와 팀 / 제품이 정해야 하는 요구 예산을 구분한다. 평균, 개별 사건 상한과 성공률은 서로 다른 통계이므로 출처가 개별 지연을 설명한다면 평균 목표의 직접 검증 근거라고 주장하지 않는다.
@@ -148,7 +148,7 @@ QA 이름은 사용자 동의를 받은 **첫 응답 지연시간**이며 대표
 | [Miller 1968](https://doi.org/10.1145/1476589.1476628) | 응답 대상과 사용자 목적에 따라 적절한 응답시간을 구별해야 한다는 문제 제기 | 무엇이 첫 응답인지와 관측 경계를 먼저 정할 근거. 초록만으로 VIA의 특정 초 단위를 도출하지 않음 |
 | [Stivers 외 2009](https://pubmed.ncbi.nlm.nih.gov/19553212/) | 10개 언어의 자연 대화에서 발화 겹침과 턴 사이 침묵을 줄이는 경향을 관찰 | 음성 대기와 턴 조절의 중요성을 설명하는 근거. 인간 간 발화 간격을 텍스트 UI 표시의 합격선에 직접 대입하지 않음 |
 
-현재 상세안은 **대표 시험에서 최대 첫 내용 표시 1초 이내**를 제안한다. 평균으로 긴 대기를 가리지 않도록 90개 지정 사건의 최대값을 사용한다. [Microsoft Windows 응답성 지침](https://learn.microsoft.com/en-us/windows/apps/develop/performance/responsive)의 Pause 0.5~1초 구간도 적용 근거로 연결했다. 고정 시험의 최대값을 모든 실제 요청의 보장으로 확대하지 않는다. 최고 수준 0.2초와 중간 0.16초 간격의 구간은 [QA01 §6~7](./qa-candidate-package/qa01-first-response-latency.md#6-목표-1초의-근거)에 정의했으며 구체적 목표 제안과 실제 달성은 구별한다.
+현재 상세안은 **대표 시험에서 최대 첫 내용 표시 1초 이내**를 제안한다. 평균으로 긴 대기를 가리지 않도록 공통 응답 120건 × 5회의 600개 관측의 최대값을 사용한다. [Microsoft Windows 응답성 지침](https://learn.microsoft.com/en-us/windows/apps/develop/performance/responsive)의 Pause 0.5~1초 구간도 적용 근거로 연결했다. 고정 시험의 최대값을 모든 실제 요청의 보장으로 확대하지 않는다. 최고 수준 0.2초와 중간 0.16초 간격의 구간은 [QA01 §6~7](./qa-candidate-package/qa01-first-response-latency.md#6-목표-1초의-근거)에 정의했으며 구체적 목표 제안과 실제 달성은 구별한다.
 
 ## 원형 점수 체계
 

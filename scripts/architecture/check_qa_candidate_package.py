@@ -5,6 +5,7 @@ from fractions import Fraction
 from pathlib import Path
 import re
 from urllib.parse import unquote, urlsplit
+import qa_candidate_population as population
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / 'docs/architecture/12-decisions/decision-packages/qa-candidate-package'
@@ -88,7 +89,51 @@ def check_links(path):
     return count
 
 
+def check_common_population():
+    data = population.load()
+    counts = population.validate(data)
+    expected = dict(scenarios=28, user=84, agent=36, responses=120,
+                    goals=76, bindings=44, voices=109)
+    assert all(counts[key] == value for key, value in expected.items())
+    body = (PACKAGE / 'common-scenarios.md').read_text()
+    for label, render in [('COUNTS', population.counts_md),
+                          ('CATALOG', population.catalog_md),
+                          ('COVERAGE', population.coverage_md)]:
+        assert population.replace_block(body, label, render(data)) == body
+    assert (PACKAGE / 'common-model-cost-quote.md').read_text() == population.quote_md(data)
+    _, realtime, luna, total, budget = population.quote(data)
+    assert Fraction(realtime) == Fraction('2.04632')
+    assert Fraction(luna) == Fraction('.49972')
+    assert Fraction(total) == Fraction('2.54604')
+    assert Fraction(budget) == Fraction('2.55')
+    assert data['execution_profile']['response_timeout_seconds'] == 30
+    assert len(data['qualification_variants']) == 18
+    # Both requested tables must use the same population, even after prose edits.
+    table = (PACKAGE / 'quality-requirements-table.md').read_text()
+    projected = {}
+    for line in table.splitlines():
+        match = re.match(r'^\| (?:\*\*)?\[(QA\d\d)\]\(\./qa', line)
+        if match:
+            projected.setdefault(match[1], []).append(line)
+    expected_tokens = {
+        'QA01': ['28', '120', '5'], 'QA02': ['28', '44', '5'],
+        'QA03': ['28', '76', '5'], 'QA04': ['3', '28'],
+        'QA05': ['28', '5', '$2.55', '$2.54604'],
+        'QA06': ['28', '5'], 'QA07': ['S05/S11/S18/S19', '5'],
+        'QA08': ['6'], 'QA09': ['28', '109', '5'],
+    }
+    for qa, tokens in expected_tokens.items():
+        assert len(projected.get(qa, [])) == 2, qa
+        for row in projected[qa]:
+            for token in tokens:
+                assert token in row, f'{qa}: missing table projection {token}'
+    for qa, count in [('QA01', 600), ('QA02', 220), ('QA03', 380), ('QA09', 545)]:
+        assert str(count) in projected[qa][0], qa
+    print('PASS: common population, generated catalogs, cost arithmetic and both QA tables.')
+
+
 def main():
+    check_common_population()
     docs = sorted(PACKAGE.glob('qa[0-9][0-9]-*.md'))
     assert len(docs) == 9, f'Expected nine QA specs; found {len(docs)}'
     # The RAM target was withdrawn because its references did not support it.
@@ -103,11 +148,6 @@ def main():
     # Verify illustrative arithmetic independently of any future measured data.
     assert max(Fraction('.8'), Fraction('.6'), 1, Fraction('.8')) == 1
     assert Fraction('1.2') + max(0, 3) + Fraction('.6') == Fraction('4.8')
-    realtime = Fraction((46000 + 13000) * 4 + 1200 * 32 + (2000 + 1300) * 16 + 2600 * 64, 1000000)
-    luna = Fraction(26 * 20000 + 90 * 3000, 1000000) * Fraction('.25') + Fraction(26 * 500, 1000000) * Fraction('1.2')
-    assert realtime == Fraction('.4936')
-    assert luna == Fraction('.2131')
-    assert realtime + luna == Fraction('.7067')
     assert Fraction('5.4') * Fraction('.6') == Fraction('3.24')
     assert (Fraction('5.4') - 3) / Fraction('5.4') == Fraction(4, 9)
     assert Fraction(2 + 2 + 3 + 4 + 3 + 4, 6) == 3
@@ -118,7 +158,7 @@ def main():
     assert max(120, 110) + max(140, 180) + 30 + max(90, 80) == 420
     print(f'PASS: 9 QA specs, 8 score tables, {probes} score probes, {links} local file links.')
     print('Incomplete: QA06 absolute target evidence and measurement method; no active score bands.')
-    print('Scope: score intervals/glyphs/monotonicity, local file existence and examples only.')
+    print('Scope: documented population, projection arithmetic, score intervals/glyphs/monotonicity, local file existence and examples.')
     print('Not checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results.')
 
 

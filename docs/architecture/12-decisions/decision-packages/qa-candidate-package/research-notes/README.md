@@ -14,7 +14,7 @@
 | 02 | [대상 지정 정확도 조사](./qa02-accuracy-research.md) | [QA02](../qa02-referent-accuracy.md) | ReALM의 집합 완전 일치율 93%와 VIA 과제의 공통점 및 차이 |
 | 03 | [전체 처리시간 조사](./qa03-duration-research.md) | [QA03](../qa03-via-processing-time.md) | Windows 5초 경계와 병렬 처리의 귀속시간 계산 |
 | 04 | [변경 범위 조사](./qa04-change-research.md) | [QA04](../qa04-change-scope.md) | ARGO 145건 집계와 40% 개선 요구 및 Rust 모듈 집계 단위 |
-| 05 | [모델 비용 조사](./qa05-cost-research.md) | [QA05](../qa05-model-cost.md) | gpt-realtime 공개 단가와 20요청 활동의 상세 견적 |
+| 05 | [모델 비용 조사](./qa05-cost-research.md) | [QA05](../qa05-model-cost.md) | gpt-realtime 공개 단가와 공통 28개 묶음의 상세 견적 |
 | 06 | [RAM 사용량 조사](./qa06-memory-research.md) | [QA06](../qa06-local-memory.md) | 동종 제품 조사와 512MiB 철회 및 Windows 계측 한계 |
 | 07 | 새 외부 수치 조사 없음 | [QA07](../qa07-load-interference.md) | 부하 유무의 평균 차이와 기존 200ms 설계 예산 |
 | 08 | QA04의 Rust 정의와 팀 요구를 함께 참조 | [QA08](../qa08-parallel-change-overlap.md) | 변경 집합 교집합과 실제 Git 충돌의 차이 |
@@ -39,4 +39,4 @@ QA07~09의 목표는 이전 보조 후보의 제안이다. 이번 QA01~06 조사
 4. 연구와 다른 과제로 수치를 옮긴 판단 및 제품 상한의 선택을 발표자 노트에 남긴다.
 5. 실제 구현 및 계측과 사용자 검증은 문서 검토와 구별한다. 준비되지 않은 측정 방법을 완성된 절차로 표현하지 않는다.
 
-현재 QA04의 직접 수치 근거는 사용자 제공 ARGO 집계다. QA06은 동종 제품의 비교 가능한 RAM 수치를 확보하지 못하여 목표와 점수를 철회한 상태다. [공통 사용자 활동 20건](../user-activity-20.md)에서 비용과 RAM의 입력 조건을 확인한다.
+현재 QA04의 직접 수치 근거는 사용자 제공 ARGO 집계다. QA06은 동종 제품의 비교 가능한 RAM 수치를 확보하지 못하여 목표와 점수를 철회한 상태다. [공통 대표 시나리오 28개](../common-scenarios.md)에서 비용과 RAM의 입력 조건을 확인한다.
