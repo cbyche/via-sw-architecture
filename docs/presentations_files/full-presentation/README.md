@@ -1,33 +1,44 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v10.pptx](../VIA-architecture-presentation_v10.pptx). v9의 사용자 주석 10건을 반영한 2026-10-15 판본. **총 63장, 실제 수정 위치 1~2장**. [두 장 전용 PPTX](../VIA-project-introduction_v10.pptx), [미리보기와 출처](../project-introduction-v10/README.md), [v10 검수 기록](./review-v10-2026-10-15.md), [manifest-v10.json](./manifest-v10.json) 제공.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v11.pptx](../VIA-architecture-presentation_v11.pptx). v10을 기반으로 QA 상세 페이지를 교체한 2026-10-15 판본이다. **본문 24장과 QA Appendix 9장으로 총 33장**이다. [QA 미리보기와 편집 원본](../qa-metrics-v11/README.md), [v11 검수 기록](./review-v11-2026-10-15.md), [manifest-v11.json](./manifest-v11.json)을 제공한다.
 
-관련 동향의 사용자와 VIA 및 Agent 관계를 양방향으로 수정하고 OpenAI 공식 발표일 추가. 시장을 VIA 관련 상위 시장으로 명확화. 필요성의 세 개념 일러스트를 중첩 시간축과 관계도, 맥락 근거 결합도, 운영 부담의 원인 관계도로 교체하고 각 영역의 설명 세 항목 추가.
+기존 Appendix 25~63장 39개를 모두 제거하고 QA01~QA09를 한 장씩 작성했다. 각 장에는 정의, 목표, 측정 조건, 목표 근거, 산식과 예시, 0~6점 기준표 및 DP 관계를 넣었다. 본문 9~11장과 12/13/16/19/21/23/24장의 QA 인용도 최신 패키지와 맞췄다. QA01과 QA03은 산술평균이며 QA06의 목표는 사용자 지정 512 MB다.
 
-v9의 나머지 61장과 노트, 기존 GIF, 마스터 및 서식 보존. 기존 FR/QA/DP 상세 페이지의 최신 정의 반영은 이번 두 장 편집 범위 밖. [현재 FR 원문](../functional-requirements-and-constraints.md) 및 Architecture의 현재 논의와 기존 발표 내용을 구별할 필요. 아래 순서 표는 보존된 기존 내용을 포함한 실제 슬라이드 목록.
+본문의 기존 소개와 기능 표 및 DP 구조 그림은 유지한다. 기존 FR 분류와 화면/음성 주제의 구조 그림을 최신 Architecture 전체와 다시 맞추는 작업은 이번 QA 페이지 제작에 포함되지 않는다. [현재 QA 원문](../../architecture/12-decisions/decision-packages/qa-candidate-package/README.md)과 [Architecture 문서](../../architecture/README.md)를 함께 확인한다. DP 관계 문장은 가설이며 수치 예시는 실측 결과가 아니다.
 
-[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx), [v9](../VIA-architecture-presentation_v9.pptx) 보존. v8의 공통 요청 장면과 문제 소개 및 41의 Appendix 이동 이력은 [v8 검수 기록](./review-v8-2026-10-13.md)과 [manifest-v8.json](./manifest-v8.json) 참조.
+[최초 통합본](../VIA-architecture-presentation.pptx), [v2](../VIA-architecture-presentation_v2.pptx), [v3](../VIA-architecture-presentation_v3.pptx), [v4](../VIA-architecture-presentation_v4.pptx), [v5](../VIA-architecture-presentation_v5.pptx), [v6](../VIA-architecture-presentation_v6.pptx), [v7](../VIA-architecture-presentation_v7.pptx), [v8](../VIA-architecture-presentation_v8.pptx), [v9](../VIA-architecture-presentation_v9.pptx), [v10](../VIA-architecture-presentation_v10.pptx)은 이전 버전으로 보존한다.
 
 ## 현재 발표 순서
 
 | 실제 슬라이드 위치 | 구역 | 내용 |
 | --- | --- | --- |
-| 1~6 | 배경과 소개 | 관련 동향 → 필요성 → VIA 역할 → 도메인과 전체 흐름 → 대표 시나리오 → 업무 위임 책임 |
-| 7~11 | 요구사항과 QA | 요구의 근거 → 기능 6개와 제약 2개 → 고정된 여섯 QA → 두 시간 지표의 경계 |
-| 12~14 | 설계 도입 | 요구/품질/설계 질문 연결 → 설계 Overview → 화면·업무·정정을 섞은 공통 요청 |
-| 15~16 | DP44 | 정정·업무 질문·늦은 후보의 배경 → 기존 A/B 구조와 여섯 QA 평가표 |
-| 17~19 | DP45 | 과거 설명·결과·정정의 배경 → 기본 구조와 보완 택틱 → 기존 A/B 구조와 여섯 QA 평가표 |
-| 20~21 | DP42 | 보고서 요청·업무·실행·질문의 다른 수명 → 기존 A/B 구조와 여섯 QA 평가표 |
-| 22 | 새 화면·음성 주제 | 두 화면의 지칭, 늦은 전사와 정정의 문제 소개. 번호와 A/B 미정 |
-| 23~24 | 검토 요약 | 기능 적용 범위와 공통 계약 → 선택 전 확인할 사항 |
-| 25 | Appendix 안내 | 본문과 원본 상세 자료의 위치 안내 |
-| 26~35 | Appendix / QA 상세 | 원본 8~17장: P21, 21개 사례 대응, QA-01~06 목표 근거와 등급 |
-| 36~42 | Appendix / 원본 보존 | 원본 1~7장: 배경, 역할, 필요성, 시나리오, 요구사항과 QA |
-| 43~57 | Appendix / 원본 보존 | 원본 18~32장: Overview, 책임과 겹침 장면, 네 DP의 배경/비교/QA 상세 |
-| 58~61 | Appendix / v2 배경 보존 | v2의 15, 17, 19, 21장: DP41, DP44, DP45, DP42의 기존 배경 |
-| 62~63 | Appendix / 제외 주제 41 보존 | v7의 15~16장: 주요 DP에서 제외한 41의 기존 배경과 비교 |
+| 1~6 | 배경과 소개 | 관련 동향, 필요성, VIA 역할, 전체 흐름, 대표 시나리오, 업무 위임 책임 |
+| 7~8 | 기능 요구사항 | 기존 요구의 근거와 기능 및 제약 표 |
+| 9~10 | 품질 요구사항 | QA01~QA06의 정의, 목표, 공통 모집단, 목표 근거 및 중요도/난이도 |
+| 11 | 시간 지표 | 첫 UI 응답, VIA 처리 완료, 실제 음성 전달의 측정 경계 |
+| 12~14 | 설계 도입 | 품질 영향 경로, 설계 Overview, 공통 요청 장면 |
+| 15~16 | DP44 | 정정과 업무 알림 배경, 기존 A/B 구조와 갱신한 QA 표 |
+| 17~19 | DP45 | 과거 근거 배경, 기본 구조와 택틱, 기존 A/B 구조와 갱신한 QA 표 |
+| 20~21 | DP42 | 상태의 다른 수명, 기존 A/B 구조와 갱신한 QA 표 |
+| 22 | 화면과 음성 | v10의 화면 전환 및 정정 문제 소개 |
+| 23~24 | 검토 요약 | 기능 범위, 공통 조건, 평가 전 확인할 사항 |
+| 25 | Appendix / QA01 | 첫 응답 지연시간 |
+| 26 | Appendix / QA02 | 지칭 대상 식별 정확도 |
+| 27 | Appendix / QA03 | VIA 처리시간 |
+| 28 | Appendix / QA04 | 변경 범위 |
+| 29 | Appendix / QA05 | 모델 사용 비용 |
+| 30 | Appendix / QA06 | 최대 RAM 사용량 |
+| 31 | Appendix / QA07 | 부하 추가 지연 |
+| 32 | Appendix / QA08 | 병행 수정 중복 |
+| 33 | Appendix / QA09 | 음성 전달 지연 |
 
-44·45·42의 본문 비교는 **16, 19, 21장**이다. 설계 비교와 여섯 QA를 함께 배치한 기존 본문은 유지한다. 원본의 비교 페이지는 각각 50, 53, 56장에 보존했고, 41의 원본 비교는 47장에 있다. DP별 상세 QA와 지역 계산은 48, 51, 54, 57장에 있다. 부록 도면 안의 옛 번호와 버전은 당시 표기이며 현재 위치는 위 표를 따른다.
+44/45/42의 본문 비교는 16/19/21장이다. 삭제한 Appendix의 이전 페이지 번호와 key는 v11에서 유효하지 않다. 아래 버전별 설명은 해당 판본의 이력이며 당시 페이지 번호를 보존한다.
+
+## 이전 버전의 작성 이력
+
+### v10의 과제 소개
+
+v9의 사용자 주석 10건을 반영해 1~2장을 수정했다. 관련 동향의 양방향 관계와 공식 발표일, 관련 상위 시장의 범위를 명확히 했고 필요성 그림을 중첩 시간축과 관계도 및 원인 관계도로 교체했다. [두 장 전용 PPTX](../VIA-project-introduction_v10.pptx), [미리보기와 출처](../project-introduction-v10/README.md), [검수 기록](./review-v10-2026-10-15.md), [manifest-v10.json](./manifest-v10.json)을 보존한다. v10은 총 63장이며 v11은 그 1~2장의 본문과 자원을 유지한다.
 
 ### v8의 문제 소개와 편집 원본
 
@@ -109,18 +120,18 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v10.pptx`를 입력으로 `_v11.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v11.pptx`를 입력으로 `_v12.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
-요청에는 “최신본의 DP41 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
+요청에는 “최신본의 DP44 비교와 QA만 수정”, “최신본의 13장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v10.json](./manifest-v10.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v10의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v11.json](./manifest-v11.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v11의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
-[부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP41 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
+[부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP44 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
 ```json
-{"dp41-comparison-v2": 1}
+{"dp44-comparison-v2": 1}
 ```
 
 ```text
@@ -129,7 +140,7 @@ python3 scripts/presentations/full_presentation_package.py replace CURRENT.pptx 
 
 `CURRENT_SHA256`는 편집 시작 시 최신 파일의 SHA-256이다. 도구는 hash가 바뀌거나 candidate가 이미 있으면 중단한다. 선택한 장과 필요한 자원만 가져오고 비선택 슬라이드/노트 및 기존 media의 bytes 보존을 검사한다. 렌더링과 package/layout/font 검증 후 **새 버전 파일**로 발행한다.
 
-본문의 주요 key는 `overview-v2`, `via-common-request-background-v8`, `dp44-comparison-v2`, `dp45-basic-v8`, `dp45-comparison-v2`, `dp42-comparison-v2`, `screen-grounding-background-v8`, `quality-01-03-v2`, `quality-04-06-v2`다. 원본 보존 장은 최초 key를 유지한다. 예를 들어 `dp41-comparison`은 appendix 47장으로 본문 key와 다르다.
+본문의 주요 key는 `overview-v2`, `via-common-request-background-v8`, `dp44-comparison-v2`, `dp45-basic-v8`, `dp45-comparison-v2`, `dp42-comparison-v2`, `screen-grounding-background-v8`, `quality-01-03-v2`, `quality-04-06-v2`다. v11의 새 QA 상세 key는 `qa01-metric-v11`~`qa09-metric-v11`이다. 예전 Appendix의 `dp41-comparison` 등은 v11에서 삭제했다.
 
 새 배경 key는 `dp41-background-v3`, `dp44-background-v3`, `dp45-background-v3`, `dp42-background-v3`다. 기존 `*-background-v2`는 appendix 58~61장으로 이동했다. [v3 배경 작성 스크립트](../../../scripts/presentations/update_dp_backgrounds.mjs)와 [배경 보존 패키저](../../../scripts/presentations/package_background_revision.py)는 v2→v3 변경을 재현하며 v2의 57장과 기존 자원의 보존을 검사한다.
 
