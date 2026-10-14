@@ -10,9 +10,6 @@ ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / 'docs/architecture/12-decisions/decision-packages/qa-candidate-package'
 NUMBER = r'\d+(?:\.\d+)?(?:/\d+)?'
 GLYPHS = ['○○○', '◐○○', '●○○', '●◐○', '●●○', '●●◐', '●●●']
-# Explicitly withdrawn after the user's 2026-10-14 target-rationale review.
-# Pending is not a score of zero and must not silently skip other QA tables.
-PENDING_SCORES = {'qa04-change-scope.md', 'qa06-local-memory.md'}
 
 
 def interval(raw):
@@ -41,10 +38,6 @@ def contains(bounds, value):
 
 def check_scores(path):
     body = path.read_text()
-    if path.name in PENDING_SCORES:
-        assert body.count('`SCORE_BANDS_PENDING`') == 1, path.name
-        assert not re.search(r'^\|\s*[0-6]\s*\|', body, re.MULTILINE), path.name
-        return 0
     assert 'SCORE_BANDS_PENDING' not in body, path.name
     rows = {}
     for line in body.splitlines():
@@ -101,15 +94,17 @@ def main():
     probes = sum(check_scores(path) for path in docs)
     links = sum(check_links(path) for path in PACKAGE.rglob('*.md'))
     # Verify illustrative arithmetic independently of any future measured data.
-    assert (Fraction('.8') + Fraction('.6') + 1 + Fraction('.8')) / 4 == Fraction('.8')
+    assert max(Fraction('.8'), Fraction('.6'), 1, Fraction('.8')) == 1
     assert Fraction('1.2') + max(0, 3) + Fraction('.6') == Fraction('4.8')
-    assert Fraction(20, 20 * 40) * 20 == Fraction('.5')
+    assert Fraction(5, 100) * 5 + Fraction(26 * 20000 + 90 * 3000, 1000000) * Fraction('.25') + Fraction(26 * 500, 1000000) * Fraction('1.2') == Fraction('.4631')
+    assert Fraction(100) - Fraction('1.3') == Fraction('98.7')
+    assert Fraction(2 + 2 + 3 + 4 + 3 + 4, 6) == 3
     # MEM-v3: simultaneous RAM example, not a product-target derivation.
     assert 120 + 140 + 30 + 90 == 380
     assert 110 + 180 + 30 + 80 == 400
     assert max(380, 400) == 400
     assert max(120, 110) + max(140, 180) + 30 + max(90, 80) == 420
-    print(f'PASS: 9 QA specs, 7 score tables, 2 explicitly pending, {probes} score probes, {links} local file links.')
+    print(f'PASS: 9 QA specs, 9 score tables, {probes} score probes, {links} local file links.')
     print('Scope: score intervals/glyphs/monotonicity, local file existence and examples only.')
     print('Not checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results.')
 
