@@ -53,6 +53,7 @@ DP-44의 개별 그림은 모두 이 본문에 직접 표시한다. 상세 구�
 | A 구현 구조 | priority mailbox, Dispatcher, Job Index와 취소 및 반환 | §3.7.1 |
 | B 구현 구조 | Stage별 Pump/Done, typed port, Window와 Publication Join | §3.7.2 |
 | 구현 구조 한 장 비교 | 같은 사건에서 A/B의 Queue, 상태, 완료 반환과 폐기 위치 | §3.7.3 |
+| 레퍼런스 형식 구조 및 QA 비교 | A/B 구조, 장단점과 QA01~06 점수 동점 제외 결과 | [발표 페이지](#dp44-reference-comparison) |
 | 같은 사건의 실행 | 정정과 업무 질문에서 실제 참여자의 순서 | §4 |
 
 ## DP 배경 — VIA 특성과 SW 구조 선택의 가치
@@ -401,3 +402,13 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 
 2026-10-08 리뷰 전달 구성에 따라 Component 수준의 독립 Gate/Orchestrator/Runtime 박스를 실제 Module, 상태 소속 및 실행 조건으로 정리했다. 중앙 완료 회수 대 연결된 소비자 실행이라는 기존 비교와 품질 조건은 유지한다. 참조 Architecture 자체의 Component, 배치, scheduler 계약을 변경하거나 새 process, 모델을 채택한 것이 아니다.
+
+<a id="dp44-reference-comparison"></a>
+
+## 레퍼런스 형식의 구조와 QA 비교 발표
+
+2026-10-15에 커밋된 구현 구조와 QA 사고실험 v2를 사용자 레퍼런스의 설계안, 구조, 장점, 단점, Trade-off 형식으로 배치했다. QA01~06은 모두 점수가 같아 수치 비교 행을 제외하고 해당 사실을 표시했다. 수치와 점수는 작성자 예상치이며 실측이나 대안 선택 결과가 아니다. 그림 번호는 발표용 요약 순서이며 위 상세 실행 계약은 그대로 따른다.
+
+![DP-44 레퍼런스 형식 구조와 QA 비교](../../../presentations_files/dp-reference-comparison-v1/dp44-reference-comparison_v1.svg)
+
+[편집 가능한 draw.io](../../../presentations_files/dp-reference-comparison-v1/dp44-reference-comparison_v1.drawio) / [최종 PPTX 렌더 PNG](../../../presentations_files/dp-reference-comparison-v1/dp44-reference-comparison_v1.png) / [4장 PPTX](../../../presentations_files/VIA-DP-comparisons-reference_v1.pptx) / [출처와 동점 제외 기준](../../../presentations_files/dp-reference-comparison-v1/README.md) / [리뷰 및 보완 기록](../../../presentations_files/dp-reference-comparison-v1/review.md)

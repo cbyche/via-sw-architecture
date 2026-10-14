@@ -1,0 +1,7823 @@
+{
+  "version": "reference-comparison-v1",
+  "tieRule": "score",
+  "sources": {
+    "snapshot": "f9dd00802596d2e13c7fddfc6cda926e0938674a",
+    "qaVersion": "QA-DP-THOUGHT-v2-20261015",
+    "qaDocument": "docs/architecture/12-decisions/decision-packages/qa-candidate-package/qa-dp-thought-experiment.md",
+    "qaCommit": "f9f6684ee1f14e2aab802b7b1425c5e989a67e49",
+    "documents": {
+      "42": {
+        "path": "docs/architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md",
+        "commit": "c1b84b2e7a764a0deeea0284009ab0b012a7e9a0"
+      },
+      "44": {
+        "path": "docs/architecture/12-decisions/decision-packages/04-44-continuous-interaction.md",
+        "commit": "6901a1debeaa31b0f649569cc2b9a7726a53f8f6"
+      },
+      "45": {
+        "path": "docs/architecture/12-decisions/decision-packages/04-45-memory-and-context.md",
+        "commit": "fcd347a19f27a6133f5872aa9d5b71e85e742230"
+      },
+      "47": {
+        "path": "docs/architecture/12-decisions/decision-packages/04-47-screen-voice-grounding.md",
+        "commit": "a6a101a2cc44e87b2a4aabb325bdca72a14850cc"
+      }
+    }
+  },
+  "slides": [
+    {
+      "dp": 44,
+      "title": "연속 대화와 업무 사건의 실행 연결",
+      "functionalTag": "기능 요구: 사용자 입력과 업무 사건의 연속 처리",
+      "options": [
+        "(방안 A) 중앙 비동기 조정",
+        "(방안 B) 단계별 반응형 실행 연결"
+      ],
+      "pros": [
+        [
+          "▪ 실행과 완료를 한곳에서 연결해 정정 원인과 대기를 추적",
+          "▪ 긴 작업은 비동기 처리하며 입력과 즉시 중단을 계속 수용"
+        ],
+        [
+          "▪ 입력과 업무 알림의 큐 및 대기 상태를 단계별로 관리",
+          "▪ 후속 소비자가 준비 조건에 따라 실행을 이어감 (조건부 이점)"
+        ]
+      ],
+      "cons": [
+        [
+          "▪ 생산자와 정정 조건이 늘면 중앙의 전이 및 배정 규칙도 증가"
+        ],
+        [
+          "▪ 단계 간 계약, Publication Join과 각 Window를 함께 유지",
+          "▪ 늦은 완료와 제어 신호의 유효성을 각 연결에서 검사"
+        ]
+      ],
+      "qas": [],
+      "excluded": [
+        {
+          "id": "QA01",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA01",
+            "name": "첫 응답 지연시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 8909,
+              "denominator": 14000,
+              "decimal": 0.6363571428571428
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "A는 완료를 받아 다음 작업을 바로 배정하지만 B는 단계별 전달과 게시 조건 결합을 더 거친다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA01",
+            "name": "첫 응답 지연시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 3889,
+              "denominator": 6000,
+              "decimal": 0.6481666666666667
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "A는 완료를 받아 다음 작업을 바로 배정하지만 B는 단계별 전달과 게시 조건 결합을 더 거친다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA02",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 1466,
+              "denominator": 15,
+              "decimal": 97.73333333333333
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "실행을 연결하는 방식만 달라지고 지칭을 해석하는 입력과 의미 모델은 같으므로 정확도 차이를 두지 않는다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 1466,
+              "denominator": 15,
+              "decimal": 97.73333333333333
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "실행을 연결하는 방식만 달라지고 지칭을 해석하는 입력과 의미 모델은 같으므로 정확도 차이를 두지 않는다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA03",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 24523,
+              "denominator": 10000,
+              "decimal": 2.4523
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "B는 첫 응답뿐 아니라 후속 결과를 전달할 때도 단계 연결과 게시 결합을 다시 거친다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 4941,
+              "denominator": 2000,
+              "decimal": 2.4705
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "B는 첫 응답뿐 아니라 후속 결과를 전달할 때도 단계 연결과 게시 결합을 다시 거친다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA04",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA04",
+            "name": "변경 범위",
+            "unit": "modules/change",
+            "point_estimate": {
+              "numerator": 4,
+              "denominator": 1,
+              "decimal": 4
+            },
+            "score_0_to_6": 0,
+            "rating": "○○○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 우세 / 둘 다 0점",
+            "structural_reason": "B의 부분 정정과 부분 철회는 응답 작성부뿐 아니라 게시 결합부와 단계 간 계약도 함께 바꿔야 한다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA04",
+            "name": "변경 범위",
+            "unit": "modules/change",
+            "point_estimate": {
+              "numerator": 6,
+              "denominator": 1,
+              "decimal": 6
+            },
+            "score_0_to_6": 0,
+            "rating": "○○○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 우세 / 둘 다 0점",
+            "structural_reason": "B의 부분 정정과 부분 철회는 응답 작성부뿐 아니라 게시 결합부와 단계 간 계약도 함께 바꿔야 한다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA05",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 3027799,
+              "denominator": 1250000,
+              "decimal": 2.4222392
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "중앙 배정과 단계 연결은 코드 실행 방식의 차이여서 같은 내용에 필요한 모델 호출은 같다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 3027799,
+              "denominator": 1250000,
+              "decimal": 2.4222392
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "중앙 배정과 단계 연결은 코드 실행 방식의 차이여서 같은 내용에 필요한 모델 호출은 같다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA06",
+          "A": {
+            "dp": 44,
+            "option": "A",
+            "qa": "QA06",
+            "name": "최대 RAM 사용량",
+            "unit": "MB",
+            "point_estimate": {
+              "numerator": 386,
+              "denominator": 1,
+              "decimal": 386
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세",
+            "structural_reason": "B는 각 단계의 대기열과 아직 결합하지 못한 후보를 따로 보관하므로 상주 상태가 늘어난다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          },
+          "B": {
+            "dp": 44,
+            "option": "B",
+            "qa": "QA06",
+            "name": "최대 RAM 사용량",
+            "unit": "MB",
+            "point_estimate": {
+              "numerator": 394,
+              "denominator": 1,
+              "decimal": 394
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세",
+            "structural_reason": "B는 각 단계의 대기열과 아직 결합하지 못한 후보를 따로 보관하므로 상주 상태가 늘어난다.",
+            "comparison_population_id": "DP-44-RELATED-v2"
+          }
+        }
+      ],
+      "diagram": {
+        "nodes": [
+          {
+            "id": "Ascene",
+            "x": 118,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 사건: 응답 준비 중 사용자 정정 u2와 Agent 질문 Q1이 도착",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Aim",
+            "x": 120,
+            "y": 239,
+            "w": 250,
+            "h": 71,
+            "text": "Interaction Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Alocal",
+            "x": 132,
+            "y": 269,
+            "w": 226,
+            "h": 33,
+            "text": "계속 입력 / 즉시 출력 stop",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aagent",
+            "x": 816,
+            "y": 239,
+            "w": 172,
+            "h": 35,
+            "text": "Downstream Agent",
+            "pt": 11
+          },
+          {
+            "id": "Aag",
+            "x": 602,
+            "y": 239,
+            "w": 173,
+            "h": 35,
+            "text": "Agent Gateway",
+            "pt": 12
+          },
+          {
+            "id": "Atm",
+            "x": 394,
+            "y": 239,
+            "w": 170,
+            "h": 35,
+            "text": "Task Manager",
+            "pt": 12
+          },
+          {
+            "id": "Afacts",
+            "x": 394,
+            "y": 281,
+            "w": 594,
+            "h": 27,
+            "text": "업무 사실 확인과 저장 후 대화에 연결 (양안 공통)",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Arc",
+            "x": 120,
+            "y": 348,
+            "w": 396,
+            "h": 297,
+            "text": "Request Controller",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Arm",
+            "x": 559,
+            "y": 348,
+            "w": 429,
+            "h": 297,
+            "text": "Response Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Ari",
+            "x": 120,
+            "y": 679,
+            "w": 396,
+            "h": 52,
+            "text": "Request Interpreter",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Ainterpret",
+            "x": 132,
+            "y": 704,
+            "w": 372,
+            "h": 23,
+            "text": "비동기 의미 처리",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Amodel",
+            "x": 563,
+            "y": 689,
+            "w": 425,
+            "h": 42,
+            "text": "공통 Model Access: 긴 처리는 비동기\n입력과 제어는 계속 수용, 취소 후 늦은 완료도 검사",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Acontrol-q",
+            "x": 136,
+            "y": 390,
+            "w": 164,
+            "h": 39,
+            "text": "Control Lane",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Aevent-q",
+            "x": 326,
+            "y": 390,
+            "w": 174,
+            "h": 39,
+            "text": "Event Mailbox",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Adispatcher",
+            "x": 198,
+            "y": 472,
+            "w": 245,
+            "h": 47,
+            "text": "Dialogue Dispatcher",
+            "pt": 13,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Aprogress",
+            "x": 136,
+            "y": 578,
+            "w": 174,
+            "h": 45,
+            "text": "Dialogue Progress\nState / RAM",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Ajobs",
+            "x": 328,
+            "y": 578,
+            "w": 172,
+            "h": 45,
+            "text": "Job Index / RAM",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Acomposer",
+            "x": 581,
+            "y": 390,
+            "w": 384,
+            "h": 43,
+            "text": "Response Composer",
+            "pt": 13,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Acandidate",
+            "x": 581,
+            "y": 488,
+            "w": 180,
+            "h": 48,
+            "text": "Candidate / RAM",
+            "pt": 12,
+            "geometry": "can"
+          },
+          {
+            "id": "Apublish",
+            "x": 784,
+            "y": 488,
+            "w": 181,
+            "h": 48,
+            "text": "Publication\nControl",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aoutbox",
+            "x": 581,
+            "y": 579,
+            "w": 180,
+            "h": 44,
+            "text": "Publication Outbox",
+            "pt": 11,
+            "geometry": "can"
+          },
+          {
+            "id": "Areceipt",
+            "x": 784,
+            "y": 579,
+            "w": 181,
+            "h": 44,
+            "text": "ActualReceipt Ledger",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "As1-num",
+            "x": 126,
+            "y": 316,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As1-label",
+            "x": 148,
+            "y": 315,
+            "w": 270,
+            "h": 23,
+            "text": "입력 / 확인된 업무 사건",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As2-num",
+            "x": 136,
+            "y": 651,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As2-label",
+            "x": 158,
+            "y": 650,
+            "w": 210,
+            "h": 23,
+            "text": "해석 job 시작",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As3-num",
+            "x": 555,
+            "y": 446,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As3-label",
+            "x": 577,
+            "y": 445,
+            "w": 150,
+            "h": 23,
+            "text": "준비 요청",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As4-num",
+            "x": 713,
+            "y": 309,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As4-label",
+            "x": 735,
+            "y": 308,
+            "w": 250,
+            "h": 23,
+            "text": "완료는 Mailbox로 회수",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As5-num",
+            "x": 582,
+            "y": 550,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As5-label",
+            "x": 604,
+            "y": 549,
+            "w": 270,
+            "h": 23,
+            "text": "현재성 / 권한 검사 후 게시",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As6-num",
+            "x": 583,
+            "y": 650,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As6-label",
+            "x": 605,
+            "y": 649,
+            "w": 295,
+            "h": 23,
+            "text": "실제 전달 receipt → 진행 반영",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bscene",
+            "x": 1018,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 사건: 응답 준비 중 사용자 정정 u2와 Agent 질문 Q1이 도착",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bim",
+            "x": 1020,
+            "y": 239,
+            "w": 250,
+            "h": 71,
+            "text": "Interaction Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Blocal",
+            "x": 1032,
+            "y": 269,
+            "w": 226,
+            "h": 33,
+            "text": "계속 입력 / 즉시 출력 stop",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bagent",
+            "x": 1716,
+            "y": 239,
+            "w": 172,
+            "h": 35,
+            "text": "Downstream Agent",
+            "pt": 11
+          },
+          {
+            "id": "Bag",
+            "x": 1502,
+            "y": 239,
+            "w": 173,
+            "h": 35,
+            "text": "Agent Gateway",
+            "pt": 12
+          },
+          {
+            "id": "Btm",
+            "x": 1294,
+            "y": 239,
+            "w": 170,
+            "h": 35,
+            "text": "Task Manager",
+            "pt": 12
+          },
+          {
+            "id": "Bfacts",
+            "x": 1294,
+            "y": 281,
+            "w": 594,
+            "h": 27,
+            "text": "업무 사실 확인과 저장 후 대화에 연결 (양안 공통)",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Brc",
+            "x": 1020,
+            "y": 348,
+            "w": 396,
+            "h": 297,
+            "text": "Request Controller",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Brm",
+            "x": 1459,
+            "y": 348,
+            "w": 429,
+            "h": 297,
+            "text": "Response Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bri",
+            "x": 1020,
+            "y": 679,
+            "w": 396,
+            "h": 52,
+            "text": "Request Interpreter",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Binterpret",
+            "x": 1032,
+            "y": 704,
+            "w": 372,
+            "h": 23,
+            "text": "비동기 의미 처리",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bmodel",
+            "x": 1463,
+            "y": 689,
+            "w": 425,
+            "h": 42,
+            "text": "공통 Model Access: 긴 처리는 비동기\n입력과 제어는 계속 수용, 취소 후 늦은 완료도 검사",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Binput-stage",
+            "x": 1036,
+            "y": 391,
+            "w": 173,
+            "h": 225,
+            "text": "Input Resolution\nStage",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bnotice-stage",
+            "x": 1226,
+            "y": 391,
+            "w": 174,
+            "h": 225,
+            "text": "Task Notice\nStage",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bqueue0",
+            "x": 1043,
+            "y": 449,
+            "w": 159,
+            "h": 37,
+            "text": "입력 / 완료 / 제어 큐",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bpump0",
+            "x": 1043,
+            "y": 523,
+            "w": 159,
+            "h": 33,
+            "text": "Pump / Done",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bwindow0",
+            "x": 1043,
+            "y": 579,
+            "w": 159,
+            "h": 29,
+            "text": "Input Window",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bqueue1",
+            "x": 1233,
+            "y": 449,
+            "w": 159,
+            "h": 37,
+            "text": "입력 / 완료 / 제어 큐",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bpump1",
+            "x": 1233,
+            "y": 523,
+            "w": 159,
+            "h": 33,
+            "text": "Pump / Done",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bwindow1",
+            "x": 1233,
+            "y": 579,
+            "w": 159,
+            "h": 29,
+            "text": "Notice Window",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bcomposer",
+            "x": 1481,
+            "y": 391,
+            "w": 384,
+            "h": 102,
+            "text": "Response Composer",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bcomposer-queue",
+            "x": 1493,
+            "y": 432,
+            "w": 175,
+            "h": 43,
+            "text": "입력 / 완료 / 제어 큐",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bcomposer-pump",
+            "x": 1688,
+            "y": 432,
+            "w": 165,
+            "h": 43,
+            "text": "Pump / Done",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bjoin",
+            "x": 1481,
+            "y": 532,
+            "w": 180,
+            "h": 42,
+            "text": "Publication Join",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bpub",
+            "x": 1684,
+            "y": 532,
+            "w": 181,
+            "h": 42,
+            "text": "Publication Control",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bpublication-window",
+            "x": 1481,
+            "y": 600,
+            "w": 180,
+            "h": 30,
+            "text": "Publication Window",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bactual",
+            "x": 1684,
+            "y": 600,
+            "w": 181,
+            "h": 30,
+            "text": "실제 전달 원장",
+            "pt": 11,
+            "geometry": "can"
+          },
+          {
+            "id": "Bs1-num",
+            "x": 1036,
+            "y": 318,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs1-label",
+            "x": 1058,
+            "y": 317,
+            "w": 300,
+            "h": 23,
+            "text": "입력 / 업무 알림을 각 Stage로",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs2-num",
+            "x": 1036,
+            "y": 651,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs2-label",
+            "x": 1058,
+            "y": 650,
+            "w": 285,
+            "h": 23,
+            "text": "각 Stage가 작업과 완료 처리",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs3-num",
+            "x": 1455,
+            "y": 499,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs3-label",
+            "x": 1477,
+            "y": 498,
+            "w": 310,
+            "h": 23,
+            "text": "채택 의미 / Notice 직접 전달",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs4-num",
+            "x": 1218,
+            "y": 619,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs4-label",
+            "x": 1240,
+            "y": 618,
+            "w": 260,
+            "h": 23,
+            "text": "후보 + admission + 유효성",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs5-num",
+            "x": 1678,
+            "y": 505,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs5-label",
+            "x": 1700,
+            "y": 504,
+            "w": 145,
+            "h": 23,
+            "text": "게시 검사",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs6-num",
+            "x": 1483,
+            "y": 650,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs6-label",
+            "x": 1505,
+            "y": 649,
+            "w": 280,
+            "h": 23,
+            "text": "실제 전달과 다음 조건 갱신",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bcancel-label",
+            "x": 1528,
+            "y": 316,
+            "w": 350,
+            "h": 24,
+            "text": "정정 / 제어는 Stage별 큐로 전달",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left",
+            "color": "#C62525"
+          }
+        ],
+        "edges": [
+          {
+            "id": "Aagent-notice",
+            "points": [
+              [
+                816,
+                256
+              ],
+              [
+                775,
+                256
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Atask-fact",
+            "points": [
+              [
+                602,
+                256
+              ],
+              [
+                564,
+                256
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ainput",
+            "points": [
+              [
+                243,
+                310
+              ],
+              [
+                243,
+                330
+              ],
+              [
+                413,
+                330
+              ],
+              [
+                413,
+                390
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Afact-input",
+            "points": [
+              [
+                480,
+                274
+              ],
+              [
+                480,
+                317
+              ],
+              [
+                413,
+                317
+              ],
+              [
+                413,
+                390
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Acontrol",
+            "points": [
+              [
+                218,
+                429
+              ],
+              [
+                218,
+                449
+              ],
+              [
+                319,
+                449
+              ],
+              [
+                319,
+                472
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aevent",
+            "points": [
+              [
+                413,
+                429
+              ],
+              [
+                413,
+                449
+              ],
+              [
+                319,
+                449
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ajob",
+            "points": [
+              [
+                319,
+                519
+              ],
+              [
+                319,
+                663
+              ],
+              [
+                319,
+                679
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ainterpret-done",
+            "points": [
+              [
+                132,
+                715
+              ],
+              [
+                113,
+                715
+              ],
+              [
+                113,
+                444
+              ],
+              [
+                500,
+                444
+              ],
+              [
+                500,
+                410
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aprepare",
+            "points": [
+              [
+                443,
+                495
+              ],
+              [
+                535,
+                495
+              ],
+              [
+                535,
+                411
+              ],
+              [
+                581,
+                411
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aprepare-done",
+            "points": [
+              [
+                965,
+                411
+              ],
+              [
+                998,
+                411
+              ],
+              [
+                998,
+                326
+              ],
+              [
+                413,
+                326
+              ],
+              [
+                413,
+                390
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Acandidate-write",
+            "points": [
+              [
+                671,
+                433
+              ],
+              [
+                671,
+                488
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Astate1",
+            "points": [
+              [
+                265,
+                519
+              ],
+              [
+                265,
+                578
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Astate2",
+            "points": [
+              [
+                390,
+                519
+              ],
+              [
+                390,
+                578
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Apermit",
+            "points": [
+              [
+                443,
+                507
+              ],
+              [
+                542,
+                507
+              ],
+              [
+                542,
+                551
+              ],
+              [
+                875,
+                551
+              ],
+              [
+                875,
+                536
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ato-pub",
+            "points": [
+              [
+                761,
+                512
+              ],
+              [
+                784,
+                512
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ato-outbox",
+            "points": [
+              [
+                875,
+                536
+              ],
+              [
+                875,
+                568
+              ],
+              [
+                671,
+                568
+              ],
+              [
+                671,
+                579
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aoutput",
+            "points": [
+              [
+                671,
+                623
+              ],
+              [
+                671,
+                638
+              ],
+              [
+                993,
+                638
+              ],
+              [
+                993,
+                310
+              ],
+              [
+                358,
+                310
+              ],
+              [
+                358,
+                302
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Areceipt-flow",
+            "points": [
+              [
+                358,
+                302
+              ],
+              [
+                358,
+                342
+              ],
+              [
+                1002,
+                342
+              ],
+              [
+                1002,
+                600
+              ],
+              [
+                965,
+                600
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Areceipt-back",
+            "points": [
+              [
+                875,
+                623
+              ],
+              [
+                875,
+                636
+              ],
+              [
+                524,
+                636
+              ],
+              [
+                524,
+                460
+              ],
+              [
+                413,
+                460
+              ],
+              [
+                413,
+                429
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Ahold",
+            "points": [
+              [
+                218,
+                302
+              ],
+              [
+                218,
+                390
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Bagent-notice",
+            "points": [
+              [
+                1716,
+                256
+              ],
+              [
+                1675,
+                256
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Btask-fact",
+            "points": [
+              [
+                1502,
+                256
+              ],
+              [
+                1464,
+                256
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Binput",
+            "points": [
+              [
+                1143,
+                310
+              ],
+              [
+                1123,
+                310
+              ],
+              [
+                1123,
+                449
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bnotice",
+            "points": [
+              [
+                1380,
+                274
+              ],
+              [
+                1380,
+                320
+              ],
+              [
+                1312,
+                320
+              ],
+              [
+                1312,
+                449
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Binput-pump",
+            "points": [
+              [
+                1123,
+                486
+              ],
+              [
+                1123,
+                523
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bnotice-pump",
+            "points": [
+              [
+                1313,
+                486
+              ],
+              [
+                1313,
+                523
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Binterpret-job",
+            "points": [
+              [
+                1123,
+                556
+              ],
+              [
+                1026,
+                556
+              ],
+              [
+                1026,
+                663
+              ],
+              [
+                1218,
+                663
+              ],
+              [
+                1218,
+                679
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bmeaning-return",
+            "points": [
+              [
+                1032,
+                715
+              ],
+              [
+                1013,
+                715
+              ],
+              [
+                1013,
+                469
+              ],
+              [
+                1043,
+                469
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Badopted",
+            "points": [
+              [
+                1202,
+                540
+              ],
+              [
+                1218,
+                540
+              ],
+              [
+                1218,
+                504
+              ],
+              [
+                1429,
+                504
+              ],
+              [
+                1429,
+                454
+              ],
+              [
+                1493,
+                454
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bnotice-output",
+            "points": [
+              [
+                1393,
+                540
+              ],
+              [
+                1429,
+                540
+              ],
+              [
+                1429,
+                454
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bcompose-work",
+            "points": [
+              [
+                1668,
+                454
+              ],
+              [
+                1688,
+                454
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bcandidate",
+            "points": [
+              [
+                1770,
+                475
+              ],
+              [
+                1770,
+                516
+              ],
+              [
+                1571,
+                516
+              ],
+              [
+                1571,
+                532
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bconditions",
+            "points": [
+              [
+                1123,
+                608
+              ],
+              [
+                1123,
+                636
+              ],
+              [
+                1453,
+                636
+              ],
+              [
+                1453,
+                552
+              ],
+              [
+                1481,
+                552
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Beligible",
+            "points": [
+              [
+                1661,
+                552
+              ],
+              [
+                1684,
+                552
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bjoin-state",
+            "points": [
+              [
+                1571,
+                574
+              ],
+              [
+                1571,
+                600
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bpub-actual",
+            "points": [
+              [
+                1775,
+                574
+              ],
+              [
+                1775,
+                600
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Boutput",
+            "points": [
+              [
+                1865,
+                552
+              ],
+              [
+                1894,
+                552
+              ],
+              [
+                1894,
+                310
+              ],
+              [
+                1258,
+                310
+              ],
+              [
+                1258,
+                302
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Breceipt-flow",
+            "points": [
+              [
+                1258,
+                302
+              ],
+              [
+                1258,
+                342
+              ],
+              [
+                1902,
+                342
+              ],
+              [
+                1902,
+                615
+              ],
+              [
+                1865,
+                615
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bcancel",
+            "points": [
+              [
+                1143,
+                302
+              ],
+              [
+                1278,
+                302
+              ],
+              [
+                1278,
+                335
+              ],
+              [
+                1413,
+                335
+              ],
+              [
+                1413,
+                379
+              ],
+              [
+                1658,
+                379
+              ],
+              [
+                1658,
+                432
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          }
+        ]
+      },
+      "notes": "DP-44 구현 수준 비교를 레퍼런스의 5행 비교표에 맞춰 재배치한 발표 페이지.\n아키텍처와 예상치의 원천 문서는 커밋된 버전이다. 세부 구현 전체를 한 장에 복제하지 않고 비교의 실행 주체, 큐, 상태와 핵심 왕복을 펼쳤다. 생략한 공통 API와 예외 계약은 원문 그대로 유지한다.\n번호는 이 발표 그림의 요약 처리 순서이며 원문의 상세 호출 번호를 재번호한 계약이 아니다. 원본과 모델의 접근 조건, 비동기 작업과 최종 채택의 책임은 변하지 않는다.\nQA 값은 QA-DP-THOUGHT-v2-20261015 작성자 사고 실험 예상치다. 실측, 최종 QA 승인 또는 A/B 선택 결과가 아니다. QA04는 실제 코드 변경 실험 전의 예정 Rust 모듈 영향 분석이다.\nQA01/03은 관련 사례의 산술평균이며 오답도 실제 시간을 포함한다. QA05는 COMMON-28 전체 총비용 단위다. 원값과 0~6점 구간을 바꾸지 않았다.\n표시한 QA: 없음. 동점 제외: QA01, QA02, QA03, QA04, QA05, QA06.\n장점과 단점의 조건부 설명은 숫자로 확인한 이익과 구별한다. 특히 B44의 국소 실행, B47의 후보 관리, B42의 독립 운영은 해당 QA 점수 우세를 주장하지 않는다.\n출처 원문: docs/architecture/12-decisions/decision-packages/04-44-continuous-interaction.md"
+    },
+    {
+      "dp": 47,
+      "title": "화면과 음성의 지칭 해석",
+      "functionalTag": "기능 요구: 화면 조작과 발화의 지칭 대상 연결",
+      "options": [
+        "(방안 A) 원본 공동 해석",
+        "(방안 B) 생산자별 후보 교환과 결합"
+      ],
+      "pros": [
+        [
+          "▪ 원본의 교차 단서를 함께 판단해 순차 의존을 줄임 (QA01↑)",
+          "▪ 후보 생산 계약이 적어 변경 파급이 작음 (QA04↑)"
+        ],
+        [
+          "▪ 생산자별 후보와 원본 근거를 보존해 부분 재판단 범위를 명시",
+          "▪ 후보 재사용과 오류 추적에 유리한 조건이 있음 (미측정)"
+        ]
+      ],
+      "cons": [
+        [
+          "▪ 복잡한 원본을 함께 읽어야 하며 공동 해석의 재판단 부담이 남음"
+        ],
+        [
+          "▪ 후보 생산 후 결합하며 부족한 후보는 재생산 (QA01↓)",
+          "▪ 후보화 누락 위험과 생산자 / 결합부의 동반 변경 (QA02↓, QA04↓)"
+        ]
+      ],
+      "qas": [
+        {
+          "id": "QA01",
+          "name": "첫 응답 지연시간",
+          "reason": "A는 말과 화면에서 답을 직접 만들지만 B는 두 후보 생산을 마친 뒤 결합하며 부족한 후보는 다시 생산한다.",
+          "A": {
+            "score": 2,
+            "value": 0.7921111111111111,
+            "display": "0.7921 s",
+            "annotation": "원본 직접 해석"
+          },
+          "B": {
+            "score": 0,
+            "value": 1.1736666666666666,
+            "display": "1.1737 s",
+            "annotation": "생산 후 결합"
+          }
+        },
+        {
+          "id": "QA02",
+          "name": "지칭 대상 식별 정확도",
+          "reason": "A는 원본의 교차 단서를 함께 보지만 B는 후보화에서 빠진 단서를 재확장 뒤에도 놓칠 수 있다.",
+          "A": {
+            "score": 4,
+            "value": 97.85,
+            "display": "97.85%",
+            "annotation": "교차 단서 유지"
+          },
+          "B": {
+            "score": 3,
+            "value": 96.275,
+            "display": "96.275%",
+            "annotation": "후보 누락 위험"
+          }
+        },
+        {
+          "id": "QA04",
+          "name": "변경 범위",
+          "reason": "부분 사용권 철회를 B에 확장하려면 두 후보 생산자와 후보 저장소 및 결합부의 보존 범위를 함께 맞춰야 한다.",
+          "A": {
+            "score": 1,
+            "value": 3,
+            "display": "3 모듈 / 변경",
+            "annotation": "공동 해석부 중심"
+          },
+          "B": {
+            "score": 0,
+            "value": 4.5,
+            "display": "4.5 모듈 / 변경",
+            "annotation": "생산자와 결합부"
+          }
+        }
+      ],
+      "excluded": [
+        {
+          "id": "QA03",
+          "A": {
+            "dp": 47,
+            "option": "A",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 20131,
+              "denominator": 7500,
+              "decimal": 2.6841333333333335
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 우세",
+            "structural_reason": "B는 설명을 끝낼 때까지 후보 생산과 결합 및 필요한 재생산의 순차 의존이 남는다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          },
+          "B": {
+            "dp": 47,
+            "option": "B",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 1571,
+              "denominator": 500,
+              "decimal": 3.142
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 우세",
+            "structural_reason": "B는 설명을 끝낼 때까지 후보 생산과 결합 및 필요한 재생산의 순차 의존이 남는다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA05",
+          "A": {
+            "dp": 47,
+            "option": "A",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 3027799,
+              "denominator": 1250000,
+              "decimal": 2.4222392
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 / 같은 점수",
+            "structural_reason": "B는 작은 후보로 결합하더라도 후보를 만드는 별도 모델 호출과 원본 재확장 비용이 추가된다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          },
+          "B": {
+            "dp": 47,
+            "option": "B",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 6119599,
+              "denominator": 2500000,
+              "decimal": 2.4478396
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 / 같은 점수",
+            "structural_reason": "B는 작은 후보로 결합하더라도 후보를 만드는 별도 모델 호출과 원본 재확장 비용이 추가된다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA06",
+          "A": {
+            "dp": 47,
+            "option": "A",
+            "qa": "QA06",
+            "name": "최대 RAM 사용량",
+            "unit": "MB",
+            "point_estimate": {
+              "numerator": 386,
+              "denominator": 1,
+              "decimal": 386
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 / 같은 점수",
+            "structural_reason": "B는 공통 원본 외에도 생산자별 후보 revision과 병행 요청 버퍼를 동시에 보관한다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          },
+          "B": {
+            "dp": 47,
+            "option": "B",
+            "qa": "QA06",
+            "name": "최대 RAM 사용량",
+            "unit": "MB",
+            "point_estimate": {
+              "numerator": 409,
+              "denominator": 1,
+              "decimal": 409
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 / 같은 점수",
+            "structural_reason": "B는 공통 원본 외에도 생산자별 후보 revision과 병행 요청 버퍼를 동시에 보관한다.",
+            "comparison_population_id": "DP-47-RELATED-v2"
+          }
+        }
+      ],
+      "diagram": {
+        "nodes": [
+          {
+            "id": "Ascene",
+            "x": 118,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 입력: 두 그래프 지칭 후 “아래 것만, 처음 범위는 그대로”",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Aim",
+            "x": 118,
+            "y": 239,
+            "w": 270,
+            "h": 66,
+            "text": "Interaction Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Acapture",
+            "x": 128,
+            "y": 271,
+            "w": 250,
+            "h": 27,
+            "text": "R: Timeline & Buffer / Evidence Read Port",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arc",
+            "x": 428,
+            "y": 239,
+            "w": 260,
+            "h": 66,
+            "text": "Request Controller",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Arev",
+            "x": 438,
+            "y": 271,
+            "w": 240,
+            "h": 27,
+            "text": "Input Revision Control",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Ama",
+            "x": 728,
+            "y": 239,
+            "w": 260,
+            "h": 66,
+            "text": "Model Access",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Aapi",
+            "x": 738,
+            "y": 271,
+            "w": 240,
+            "h": 27,
+            "text": "M: Semantic API Client",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Ari",
+            "x": 118,
+            "y": 332,
+            "w": 870,
+            "h": 323,
+            "text": "Request Interpreter",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Aport",
+            "x": 130,
+            "y": 365,
+            "w": 260,
+            "h": 36,
+            "text": "Grounding Session Port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aregistry",
+            "x": 422,
+            "y": 366,
+            "w": 255,
+            "h": 35,
+            "text": "Grounding Attempt Registry\nRevisionGate / RAM",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Aadopt",
+            "x": 133,
+            "y": 710,
+            "w": 825,
+            "h": 27,
+            "text": "Request Controller / Adoption Control → State Store",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aports",
+            "x": 128,
+            "y": 683,
+            "w": 545,
+            "h": 23,
+            "text": "공동 해석기가 R / M 사용. 유효 부분 재사용과 원본 확대 지원",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "As1-num",
+            "x": 130,
+            "y": 309,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As1-label",
+            "x": 152,
+            "y": 308,
+            "w": 240,
+            "h": 23,
+            "text": "입력 revision 먼저 등록",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Araw",
+            "x": 434,
+            "y": 308,
+            "w": 550,
+            "h": 22,
+            "text": "원본: 음성 / 화면 / 포인터 경로 / native 선택 범위",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Areader-port",
+            "x": 132,
+            "y": 660,
+            "w": 425,
+            "h": 20,
+            "text": "R: Grounding Evidence Reader → Interaction Manager",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Amodel-port",
+            "x": 568,
+            "y": 660,
+            "w": 405,
+            "h": 20,
+            "text": "M: Grounding Model Port → Model Access",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "As6-num",
+            "x": 693,
+            "y": 685,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As6-label",
+            "x": 715,
+            "y": 684,
+            "w": 220,
+            "h": 23,
+            "text": "현재성 검사 후 채택",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Acontrol",
+            "x": 136,
+            "y": 430,
+            "w": 235,
+            "h": 49,
+            "text": "Grounding Attempt\nControl",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Ainbox",
+            "x": 708,
+            "y": 366,
+            "w": 255,
+            "h": 35,
+            "text": "Control / Completion Inbox",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Aqueue",
+            "x": 408,
+            "y": 433,
+            "w": 225,
+            "h": 41,
+            "text": "Joint Work Queue",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Aworker",
+            "x": 688,
+            "y": 425,
+            "w": 275,
+            "h": 57,
+            "text": "Joint Grounding\nInterpreter",
+            "pt": 13,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Astate",
+            "x": 688,
+            "y": 542,
+            "w": 275,
+            "h": 56,
+            "text": "Joint Grounding State\nRAM: binding + 원본 dependency",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Apatch",
+            "x": 143,
+            "y": 599,
+            "w": 500,
+            "h": 39,
+            "text": "원본에서 대상과 binding 직접 생산\n유효 범위 재사용, 일부만 patch",
+            "pt": 12,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "As2-num",
+            "x": 398,
+            "y": 405,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As2-label",
+            "x": 420,
+            "y": 404,
+            "w": 130,
+            "h": 23,
+            "text": "JointJob",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As3-num",
+            "x": 708,
+            "y": 495,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As3-label",
+            "x": 730,
+            "y": 494,
+            "w": 230,
+            "h": 23,
+            "text": "R / M 원본 공동 해석",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As4-num",
+            "x": 708,
+            "y": 518,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As4-label",
+            "x": 730,
+            "y": 517,
+            "w": 180,
+            "h": 23,
+            "text": "조건부 patch",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As5-num",
+            "x": 393,
+            "y": 492,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As5-label",
+            "x": 415,
+            "y": 491,
+            "w": 270,
+            "h": 23,
+            "text": "완료 회수, 필요 시 원본 확대",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bscene",
+            "x": 1018,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 입력: 두 그래프 지칭 후 “아래 것만, 처음 범위는 그대로”",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bim",
+            "x": 1018,
+            "y": 239,
+            "w": 270,
+            "h": 66,
+            "text": "Interaction Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bcapture",
+            "x": 1028,
+            "y": 271,
+            "w": 250,
+            "h": 27,
+            "text": "R: Timeline & Buffer / Evidence Read Port",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Brc",
+            "x": 1328,
+            "y": 239,
+            "w": 260,
+            "h": 66,
+            "text": "Request Controller",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Brev",
+            "x": 1338,
+            "y": 271,
+            "w": 240,
+            "h": 27,
+            "text": "Input Revision Control",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bma",
+            "x": 1628,
+            "y": 239,
+            "w": 260,
+            "h": 66,
+            "text": "Model Access",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bapi",
+            "x": 1638,
+            "y": 271,
+            "w": 240,
+            "h": 27,
+            "text": "M: Semantic API Client",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bri",
+            "x": 1018,
+            "y": 332,
+            "w": 870,
+            "h": 323,
+            "text": "Request Interpreter",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bport",
+            "x": 1030,
+            "y": 365,
+            "w": 260,
+            "h": 36,
+            "text": "Grounding Session Port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bregistry",
+            "x": 1322,
+            "y": 366,
+            "w": 255,
+            "h": 35,
+            "text": "Grounding Attempt Registry\nRevisionGate / RAM",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Badopt",
+            "x": 1033,
+            "y": 710,
+            "w": 825,
+            "h": 27,
+            "text": "Request Controller / Adoption Control → State Store",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bports",
+            "x": 1028,
+            "y": 683,
+            "w": 545,
+            "h": 23,
+            "text": "결합부는 게시 후보와 M 사용. 원본 재확장은 원 생산자가 수행",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bs1-num",
+            "x": 1030,
+            "y": 309,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs1-label",
+            "x": 1052,
+            "y": 308,
+            "w": 240,
+            "h": 23,
+            "text": "입력 revision 먼저 등록",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Braw",
+            "x": 1334,
+            "y": 308,
+            "w": 550,
+            "h": 22,
+            "text": "원본: 음성 / 화면 / 포인터 경로 / native 선택 범위",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Breader-port",
+            "x": 1032,
+            "y": 660,
+            "w": 425,
+            "h": 20,
+            "text": "R: Grounding Evidence Reader → Interaction Manager",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bmodel-port",
+            "x": 1468,
+            "y": 660,
+            "w": 405,
+            "h": 20,
+            "text": "M: Grounding Model Port → Model Access",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bs6-num",
+            "x": 1593,
+            "y": 685,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs6-label",
+            "x": 1615,
+            "y": 684,
+            "w": 220,
+            "h": 23,
+            "text": "현재성 검사 후 채택",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bcoord",
+            "x": 1036,
+            "y": 432,
+            "w": 230,
+            "h": 46,
+            "text": "Grounding Coordinator",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Binbox",
+            "x": 1608,
+            "y": 366,
+            "w": 255,
+            "h": 35,
+            "text": "Control / Completion Inbox",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Bspeech",
+            "x": 1300,
+            "y": 422,
+            "w": 250,
+            "h": 141,
+            "text": "Speech Reference Producer",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bsq",
+            "x": 1315,
+            "y": 458,
+            "w": 220,
+            "h": 29,
+            "text": "Speech Work Queue",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bsw",
+            "x": 1315,
+            "y": 515,
+            "w": 220,
+            "h": 30,
+            "text": "Speech Worker",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bscreen",
+            "x": 1597,
+            "y": 422,
+            "w": 266,
+            "h": 141,
+            "text": "Screen Target Producer",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bcq",
+            "x": 1612,
+            "y": 458,
+            "w": 236,
+            "h": 29,
+            "text": "Screen Work Queue",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bcw",
+            "x": 1612,
+            "y": 515,
+            "w": 236,
+            "h": 30,
+            "text": "Screen Worker",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bspeech-rev",
+            "x": 1300,
+            "y": 594,
+            "w": 250,
+            "h": 42,
+            "text": "Speech Candidate Revisions\nRAM",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bscreen-rev",
+            "x": 1597,
+            "y": 594,
+            "w": 266,
+            "h": 42,
+            "text": "Screen Candidate Revisions\nRAM",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bbq",
+            "x": 1036,
+            "y": 517,
+            "w": 230,
+            "h": 31,
+            "text": "Binding Work Queue",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bbinding",
+            "x": 1036,
+            "y": 563,
+            "w": 230,
+            "h": 42,
+            "text": "Multimodal Binding\nResolver",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bbinding-state",
+            "x": 1036,
+            "y": 617,
+            "w": 230,
+            "h": 25,
+            "text": "Binding Revision State / RAM",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bs2-num",
+            "x": 1298,
+            "y": 402,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs2-label",
+            "x": 1320,
+            "y": 401,
+            "w": 250,
+            "h": 23,
+            "text": "두 생산 경로에 job 배정",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Breads-speech",
+            "x": 1323,
+            "y": 491,
+            "w": 200,
+            "h": 20,
+            "text": "R / M 원본 읽기와 해석",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Breads-screen",
+            "x": 1620,
+            "y": 491,
+            "w": 225,
+            "h": 20,
+            "text": "R / M 원본 읽기와 해석",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bs3-num",
+            "x": 1302,
+            "y": 568,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs3-label",
+            "x": 1324,
+            "y": 567,
+            "w": 255,
+            "h": 23,
+            "text": "생산자가 자기 후보 게시",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs4-num",
+            "x": 1035,
+            "y": 484,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs4-label",
+            "x": 1057,
+            "y": 483,
+            "w": 215,
+            "h": 23,
+            "text": "후보 snapshot 확인",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs5-num",
+            "x": 1597,
+            "y": 568,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs5-label",
+            "x": 1619,
+            "y": 567,
+            "w": 240,
+            "h": 23,
+            "text": "부족 후보는 원 생산자로",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left",
+            "color": "#C62525"
+          }
+        ],
+        "edges": [
+          {
+            "id": "Ainput",
+            "points": [
+              [
+                558,
+                305
+              ],
+              [
+                558,
+                330
+              ],
+              [
+                258,
+                330
+              ],
+              [
+                258,
+                365
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aport-inbox",
+            "points": [
+              [
+                390,
+                383
+              ],
+              [
+                405,
+                383
+              ],
+              [
+                405,
+                412
+              ],
+              [
+                838,
+                412
+              ],
+              [
+                838,
+                401
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ainbox-control",
+            "points": [
+              [
+                708,
+                383
+              ],
+              [
+                698,
+                383
+              ],
+              [
+                698,
+                414
+              ],
+              [
+                253,
+                414
+              ],
+              [
+                253,
+                430
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ajob",
+            "points": [
+              [
+                371,
+                454
+              ],
+              [
+                408,
+                454
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Apop",
+            "points": [
+              [
+                633,
+                454
+              ],
+              [
+                688,
+                454
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aapply",
+            "points": [
+              [
+                826,
+                482
+              ],
+              [
+                826,
+                542
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Adone",
+            "points": [
+              [
+                958,
+                425
+              ],
+              [
+                973,
+                425
+              ],
+              [
+                973,
+                385
+              ],
+              [
+                963,
+                385
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Areturn",
+            "points": [
+              [
+                708,
+                397
+              ],
+              [
+                682,
+                397
+              ],
+              [
+                682,
+                522
+              ],
+              [
+                253,
+                522
+              ],
+              [
+                253,
+                479
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aproposal",
+            "points": [
+              [
+                253,
+                479
+              ],
+              [
+                253,
+                573
+              ],
+              [
+                673,
+                573
+              ],
+              [
+                673,
+                706
+              ],
+              [
+                543,
+                706
+              ],
+              [
+                543,
+                710
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Binput",
+            "points": [
+              [
+                1458,
+                305
+              ],
+              [
+                1458,
+                330
+              ],
+              [
+                1158,
+                330
+              ],
+              [
+                1158,
+                365
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bport-inbox",
+            "points": [
+              [
+                1290,
+                383
+              ],
+              [
+                1305,
+                383
+              ],
+              [
+                1305,
+                408
+              ],
+              [
+                1738,
+                408
+              ],
+              [
+                1738,
+                401
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bcontrol",
+            "points": [
+              [
+                1608,
+                389
+              ],
+              [
+                1589,
+                389
+              ],
+              [
+                1589,
+                417
+              ],
+              [
+                1158,
+                417
+              ],
+              [
+                1158,
+                432
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bfork",
+            "points": [
+              [
+                1266,
+                454
+              ],
+              [
+                1283,
+                454
+              ],
+              [
+                1283,
+                412
+              ],
+              [
+                1728,
+                412
+              ],
+              [
+                1728,
+                458
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bfork2",
+            "points": [
+              [
+                1425,
+                412
+              ],
+              [
+                1425,
+                458
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bsjob",
+            "points": [
+              [
+                1425,
+                487
+              ],
+              [
+                1425,
+                515
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bcjob",
+            "points": [
+              [
+                1730,
+                487
+              ],
+              [
+                1730,
+                515
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bpublish1",
+            "points": [
+              [
+                1425,
+                545
+              ],
+              [
+                1425,
+                594
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bpublish2",
+            "points": [
+              [
+                1730,
+                545
+              ],
+              [
+                1730,
+                594
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bspeech-done",
+            "points": [
+              [
+                1535,
+                530
+              ],
+              [
+                1566,
+                530
+              ],
+              [
+                1566,
+                408
+              ],
+              [
+                1738,
+                408
+              ],
+              [
+                1738,
+                401
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bscreen-done",
+            "points": [
+              [
+                1848,
+                530
+              ],
+              [
+                1875,
+                530
+              ],
+              [
+                1875,
+                383
+              ],
+              [
+                1863,
+                383
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bsnap",
+            "points": [
+              [
+                1300,
+                615
+              ],
+              [
+                1282,
+                615
+              ],
+              [
+                1282,
+                490
+              ],
+              [
+                1253,
+                490
+              ],
+              [
+                1253,
+                478
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bread2",
+            "points": [
+              [
+                1597,
+                615
+              ],
+              [
+                1578,
+                615
+              ],
+              [
+                1578,
+                640
+              ],
+              [
+                1282,
+                640
+              ],
+              [
+                1282,
+                615
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bbinding-job",
+            "points": [
+              [
+                1150,
+                478
+              ],
+              [
+                1150,
+                517
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bbind",
+            "points": [
+              [
+                1150,
+                548
+              ],
+              [
+                1150,
+                563
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bbinding-store",
+            "points": [
+              [
+                1150,
+                605
+              ],
+              [
+                1150,
+                617
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Brejudge",
+            "points": [
+              [
+                1036,
+                585
+              ],
+              [
+                1026,
+                585
+              ],
+              [
+                1026,
+                410
+              ],
+              [
+                1738,
+                410
+              ],
+              [
+                1738,
+                401
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Bproposal",
+            "points": [
+              [
+                1151,
+                642
+              ],
+              [
+                1151,
+                706
+              ],
+              [
+                1443,
+                706
+              ],
+              [
+                1443,
+                710
+              ]
+            ],
+            "arrow": true
+          }
+        ]
+      },
+      "notes": "DP-47 구현 수준 비교를 레퍼런스의 5행 비교표에 맞춰 재배치한 발표 페이지.\n아키텍처와 예상치의 원천 문서는 커밋된 버전이다. 세부 구현 전체를 한 장에 복제하지 않고 비교의 실행 주체, 큐, 상태와 핵심 왕복을 펼쳤다. 생략한 공통 API와 예외 계약은 원문 그대로 유지한다.\n번호는 이 발표 그림의 요약 처리 순서이며 원문의 상세 호출 번호를 재번호한 계약이 아니다. 원본과 모델의 접근 조건, 비동기 작업과 최종 채택의 책임은 변하지 않는다.\nQA 값은 QA-DP-THOUGHT-v2-20261015 작성자 사고 실험 예상치다. 실측, 최종 QA 승인 또는 A/B 선택 결과가 아니다. QA04는 실제 코드 변경 실험 전의 예정 Rust 모듈 영향 분석이다.\nQA01/03은 관련 사례의 산술평균이며 오답도 실제 시간을 포함한다. QA05는 COMMON-28 전체 총비용 단위다. 원값과 0~6점 구간을 바꾸지 않았다.\n표시한 QA: QA01, QA02, QA04. 동점 제외: QA03, QA05, QA06.\nQA01: A는 말과 화면에서 답을 직접 만들지만 B는 두 후보 생산을 마친 뒤 결합하며 부족한 후보는 다시 생산한다.\nQA02: A는 원본의 교차 단서를 함께 보지만 B는 후보화에서 빠진 단서를 재확장 뒤에도 놓칠 수 있다.\nQA04: 부분 사용권 철회를 B에 확장하려면 두 후보 생산자와 후보 저장소 및 결합부의 보존 범위를 함께 맞춰야 한다.\n장점과 단점의 조건부 설명은 숫자로 확인한 이익과 구별한다. 특히 B44의 국소 실행, B47의 후보 관리, B42의 독립 운영은 해당 QA 점수 우세를 주장하지 않는다.\n출처 원문: docs/architecture/12-decisions/decision-packages/04-47-screen-voice-grounding.md"
+    },
+    {
+      "dp": 45,
+      "title": "과거 이력의 근거 공급",
+      "functionalTag": "기능 요구: 과거 이력을 현재 요청의 근거로 제공",
+      "options": [
+        "(방안 A) 요청별 원본 조회와 조합",
+        "(방안 B) 관계 사전 생산과 게시본 조회"
+      ],
+      "pros": [
+        [
+          "▪ 미사용 관계의 선행 생산 비용을 피함 (QA05↑)",
+          "▪ 추가 게시 저장과 생산 버퍼가 적음 (QA04↑, QA06↑)"
+        ],
+        [
+          "▪ 준비된 과거 관계를 읽어 첫 응답을 앞당김 (QA01↑)",
+          "▪ 같은 관계가 반복되면 생산 결과를 여러 요청에서 재사용"
+        ]
+      ],
+      "cons": [
+        [
+          "▪ 새로운 의미 관계는 첫 조회에서 원본과 함께 해석 (QA01↓)"
+        ],
+        [
+          "▪ 사용하지 않는 관계도 생산 / 갱신 비용 발생 (QA05↓)",
+          "▪ 생산, 저장, 조회 계약과 추가 RAM을 유지 (QA04↓, QA06↓)"
+        ]
+      ],
+      "qas": [
+        {
+          "id": "QA01",
+          "name": "첫 응답 지연시간",
+          "reason": "B는 준비된 과거 설명과 원본의 관계를 읽지만 A는 관계가 필요한 첫 조회에서 원본 이력을 현재 요청과 함께 해석한다.",
+          "A": {
+            "score": 1,
+            "value": 0.9024117647058824,
+            "display": "0.9024 s",
+            "annotation": "첫 조회에서 관계 해석"
+          },
+          "B": {
+            "score": 3,
+            "value": 0.665235294117647,
+            "display": "0.6652 s",
+            "annotation": "준비된 관계 조회"
+          }
+        },
+        {
+          "id": "QA04",
+          "name": "변경 범위",
+          "reason": "B는 원본 조회 기능을 바꿀 때 게시한 관계의 생산, 저장, 조회 계약까지 함께 유지해야 한다.",
+          "A": {
+            "score": 1,
+            "value": 3,
+            "display": "3 모듈 / 변경",
+            "annotation": "원본 조회 계약"
+          },
+          "B": {
+            "score": 0,
+            "value": 4,
+            "display": "4 모듈 / 변경",
+            "annotation": "생산 / 저장 / 조회"
+          }
+        },
+        {
+          "id": "QA05",
+          "name": "모델 사용 비용",
+          "reason": "B는 조회 때 쓰지 않는 관계도 미리 만들고 갱신하므로 짧은 활동에서는 준비 비용이 조회 절약보다 크다.",
+          "A": {
+            "score": 1,
+            "value": 2.4222392,
+            "display": "$2.4222 / 공통 28개 묶음",
+            "annotation": "선행 생산 없음"
+          },
+          "B": {
+            "score": 0,
+            "value": 2.6382792,
+            "display": "$2.6383 / 공통 28개 묶음",
+            "annotation": "사전 생산 포함"
+          }
+        },
+        {
+          "id": "QA06",
+          "name": "최대 RAM 사용량",
+          "reason": "B는 공통 원본 cache에 더해 게시 관계의 저장 페이지와 생산 버퍼 및 유효 범위 색인을 유지한다.",
+          "A": {
+            "score": 4,
+            "value": 349,
+            "display": "349 MB",
+            "annotation": "조회 cache"
+          },
+          "B": {
+            "score": 3,
+            "value": 397,
+            "display": "397 MB",
+            "annotation": "게시 관계와 생산 버퍼"
+          }
+        }
+      ],
+      "excluded": [
+        {
+          "id": "QA02",
+          "A": {
+            "dp": 45,
+            "option": "A",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 492,
+              "denominator": 5,
+              "decimal": 98.4
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 가설 / 같은 점수",
+            "structural_reason": "A는 현재 요청에서 원본 관계를 직접 판단하지만 B는 과거에 잘못 게시된 의미 관계가 현재 해석에도 남을 수 있다.",
+            "comparison_population_id": "DP-45-RELATED-v2"
+          },
+          "B": {
+            "dp": 45,
+            "option": "B",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 491,
+              "denominator": 5,
+              "decimal": 98.2
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 소폭 우세 가설 / 같은 점수",
+            "structural_reason": "A는 현재 요청에서 원본 관계를 직접 판단하지만 B는 과거에 잘못 게시된 의미 관계가 현재 해석에도 남을 수 있다.",
+            "comparison_population_id": "DP-45-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA03",
+          "A": {
+            "dp": 45,
+            "option": "A",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 1021,
+              "denominator": 425,
+              "decimal": 2.4023529411764706
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "B 우세 가설 / 같은 점수",
+            "structural_reason": "B는 준비된 과거 관계를 재사용해 완료 경로를 줄이지만 새 비교의 내용 판단과 실제 결과 전달은 양안 모두 수행한다.",
+            "comparison_population_id": "DP-45-RELATED-v2"
+          },
+          "B": {
+            "dp": 45,
+            "option": "B",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 4603,
+              "denominator": 2125,
+              "decimal": 2.1661176470588237
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "B 우세 가설 / 같은 점수",
+            "structural_reason": "B는 준비된 과거 관계를 재사용해 완료 경로를 줄이지만 새 비교의 내용 판단과 실제 결과 전달은 양안 모두 수행한다.",
+            "comparison_population_id": "DP-45-RELATED-v2"
+          }
+        }
+      ],
+      "diagram": {
+        "nodes": [
+          {
+            "id": "Ascene",
+            "x": 118,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 요청: “지난번 설명한 기준에 제품 비교와 견적을 맞춰줘”",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Ari",
+            "x": 120,
+            "y": 240,
+            "w": 250,
+            "h": 63,
+            "text": "Request Interpreter",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Atool",
+            "x": 132,
+            "y": 271,
+            "w": 226,
+            "h": 26,
+            "text": "Read Tool Runner",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arm",
+            "x": 418,
+            "y": 240,
+            "w": 270,
+            "h": 63,
+            "text": "Response Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Adelivery",
+            "x": 430,
+            "y": 271,
+            "w": 246,
+            "h": 26,
+            "text": "원문 / 실제 전달 read port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Atm",
+            "x": 738,
+            "y": 240,
+            "w": 248,
+            "h": 63,
+            "text": "Task Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Atask",
+            "x": 750,
+            "y": 271,
+            "w": 224,
+            "h": 26,
+            "text": "Task / 결과 read port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Acm",
+            "x": 120,
+            "y": 330,
+            "w": 866,
+            "h": 349,
+            "text": "Context Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Acommon",
+            "x": 126,
+            "y": 689,
+            "w": 860,
+            "h": 43,
+            "text": "공통: Model Access / Policy Manager / Request Controller의 입력 이력과 채택\n긴 읽기는 비동기 실행. 원본의 실제 전달 범위, 버전과 현재 사용권을 확인",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Acomposer",
+            "x": 137,
+            "y": 364,
+            "w": 832,
+            "h": 190,
+            "text": "Context Composer",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Aplanner",
+            "x": 152,
+            "y": 405,
+            "w": 225,
+            "h": 46,
+            "text": "Read Pump / Planner",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Abroker",
+            "x": 436,
+            "y": 405,
+            "w": 225,
+            "h": 46,
+            "text": "Owner Read Broker",
+            "pt": 12,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Abuilder",
+            "x": 718,
+            "y": 405,
+            "w": 235,
+            "h": 46,
+            "text": "Bundle Builder / Use Guard",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Aevidence",
+            "x": 436,
+            "y": 503,
+            "w": 225,
+            "h": 39,
+            "text": "Request Evidence Set / RAM",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Ajobs",
+            "x": 718,
+            "y": 503,
+            "w": 235,
+            "h": 39,
+            "text": "Read Job Index / RAM",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Acache",
+            "x": 152,
+            "y": 604,
+            "w": 225,
+            "h": 50,
+            "text": "Source View Cache\n검증한 발췌와 관계",
+            "pt": 11,
+            "geometry": "can"
+          },
+          {
+            "id": "Ainvalid",
+            "x": 436,
+            "y": 604,
+            "w": 225,
+            "h": 50,
+            "text": "Invalidation Handler",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Achange",
+            "x": 718,
+            "y": 604,
+            "w": 235,
+            "h": 50,
+            "text": "Change Inbox",
+            "pt": 12,
+            "geometry": "can"
+          },
+          {
+            "id": "As1-num",
+            "x": 138,
+            "y": 307,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As1-label",
+            "x": 160,
+            "y": 306,
+            "w": 160,
+            "h": 23,
+            "text": "현재 Query",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As2-num",
+            "x": 395,
+            "y": 374,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As2-label",
+            "x": 417,
+            "y": 373,
+            "w": 150,
+            "h": 23,
+            "text": "원본 읽기",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As3-num",
+            "x": 436,
+            "y": 471,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As3-label",
+            "x": 458,
+            "y": 470,
+            "w": 210,
+            "h": 23,
+            "text": "완료를 read에 반영",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As4-num",
+            "x": 715,
+            "y": 471,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As4-label",
+            "x": 737,
+            "y": 470,
+            "w": 215,
+            "h": 23,
+            "text": "범위와 버전 조합",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As5-num",
+            "x": 683,
+            "y": 307,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As5-label",
+            "x": 705,
+            "y": 306,
+            "w": 280,
+            "h": 23,
+            "text": "Bundle + 읽은 범위 반환",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Acachelabel",
+            "x": 148,
+            "y": 568,
+            "w": 260,
+            "h": 25,
+            "text": "유효 cache 재사용 / 부분 갱신",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Astate-note",
+            "x": 703,
+            "y": 562,
+            "w": 250,
+            "h": 26,
+            "text": "변경 / 철회 시 사용 차단",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left",
+            "color": "#C62525"
+          },
+          {
+            "id": "Bscene",
+            "x": 1018,
+            "y": 207,
+            "w": 875,
+            "h": 25,
+            "text": "같은 요청: “지난번 설명한 기준에 제품 비교와 견적을 맞춰줘”",
+            "pt": 13,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bri",
+            "x": 1020,
+            "y": 240,
+            "w": 250,
+            "h": 63,
+            "text": "Request Interpreter",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Btool",
+            "x": 1032,
+            "y": 271,
+            "w": 226,
+            "h": 26,
+            "text": "Read Tool Runner",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Brm",
+            "x": 1318,
+            "y": 240,
+            "w": 270,
+            "h": 63,
+            "text": "Response Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bdelivery",
+            "x": 1330,
+            "y": 271,
+            "w": 246,
+            "h": 26,
+            "text": "원문 / 실제 전달 read port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Btm",
+            "x": 1638,
+            "y": 240,
+            "w": 248,
+            "h": 63,
+            "text": "Task Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Btask",
+            "x": 1650,
+            "y": 271,
+            "w": 224,
+            "h": 26,
+            "text": "Task / 결과 read port",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bcm",
+            "x": 1020,
+            "y": 330,
+            "w": 866,
+            "h": 349,
+            "text": "Context Manager",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bcommon",
+            "x": 1026,
+            "y": 689,
+            "w": 860,
+            "h": 43,
+            "text": "공통: Model Access / Policy Manager / Request Controller의 입력 이력과 채택\n긴 읽기는 비동기 실행. 원본의 실제 전달 범위, 버전과 현재 사용권을 확인",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bpublisher",
+            "x": 1036,
+            "y": 365,
+            "w": 833,
+            "h": 154,
+            "text": "Memory Publisher",
+            "pt": 13,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Badmit",
+            "x": 1051,
+            "y": 405,
+            "w": 205,
+            "h": 35,
+            "text": "Change Admission",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bread-worker",
+            "x": 1329,
+            "y": 405,
+            "w": 240,
+            "h": 35,
+            "text": "Source Read Worker",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bderive",
+            "x": 1628,
+            "y": 405,
+            "w": 225,
+            "h": 35,
+            "text": "Relation Builder",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bjournal",
+            "x": 1051,
+            "y": 472,
+            "w": 205,
+            "h": 35,
+            "text": "Production Journal / 내구",
+            "pt": 10,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bbatch",
+            "x": 1329,
+            "y": 472,
+            "w": 240,
+            "h": 35,
+            "text": "Candidate Batch / RAM",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bguard",
+            "x": 1628,
+            "y": 472,
+            "w": 225,
+            "h": 35,
+            "text": "Publish Guard",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brepo",
+            "x": 1329,
+            "y": 548,
+            "w": 524,
+            "h": 39,
+            "text": "Episodic Memory Repository / 관계 + Coverage / 내구",
+            "pt": 11,
+            "geometry": "can",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bwait",
+            "x": 1051,
+            "y": 548,
+            "w": 205,
+            "h": 39,
+            "text": "Read Wait Registry / RAM",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Breader",
+            "x": 1036,
+            "y": 609,
+            "w": 833,
+            "h": 57,
+            "text": "Evidence Reader",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bread-pump",
+            "x": 1051,
+            "y": 634,
+            "w": 246,
+            "h": 25,
+            "text": "Read Pump / Bundle Builder",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bcoverage",
+            "x": 1354,
+            "y": 634,
+            "w": 246,
+            "h": 25,
+            "text": "Index / Coverage Resolver",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bverify",
+            "x": 1656,
+            "y": 634,
+            "w": 197,
+            "h": 25,
+            "text": "Origin Verifier",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bs1-num",
+            "x": 1313,
+            "y": 307,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs1-label",
+            "x": 1335,
+            "y": 306,
+            "w": 270,
+            "h": 23,
+            "text": "확정 변경 / 지원 범위 생산",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs2-num",
+            "x": 1596,
+            "y": 377,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs2-label",
+            "x": 1618,
+            "y": 376,
+            "w": 170,
+            "h": 23,
+            "text": "관계 생산",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs3-num",
+            "x": 1596,
+            "y": 449,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs3-label",
+            "x": 1618,
+            "y": 448,
+            "w": 80,
+            "h": 23,
+            "text": "검증",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs4-num",
+            "x": 1593,
+            "y": 521,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs4-label",
+            "x": 1615,
+            "y": 520,
+            "w": 230,
+            "h": 23,
+            "text": "관계와 Coverage 게시",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs5-num",
+            "x": 1040,
+            "y": 588,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs5-label",
+            "x": 1062,
+            "y": 587,
+            "w": 160,
+            "h": 23,
+            "text": "현재 Query",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs6-num",
+            "x": 1613,
+            "y": 588,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs6-label",
+            "x": 1635,
+            "y": 587,
+            "w": 245,
+            "h": 23,
+            "text": "원본 확인 후 Bundle 반환",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bbackfill-label",
+            "x": 1043,
+            "y": 521,
+            "w": 270,
+            "h": 24,
+            "text": "미생산: 생산 대기 후 재조회",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left",
+            "color": "#C62525"
+          },
+          {
+            "id": "Bread-note",
+            "x": 1043,
+            "y": 674,
+            "w": 850,
+            "h": 18,
+            "text": "미지원 관계는 재시도로 해결하지 않음. 원본 직접 조합 우회는 별도 혼합안",
+            "pt": 10,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          }
+        ],
+        "edges": [
+          {
+            "id": "Aquery",
+            "points": [
+              [
+                244,
+                303
+              ],
+              [
+                244,
+                405
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aread",
+            "points": [
+              [
+                377,
+                428
+              ],
+              [
+                436,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aread-rm",
+            "points": [
+              [
+                518,
+                405
+              ],
+              [
+                518,
+                303
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Arm-return",
+            "points": [
+              [
+                578,
+                303
+              ],
+              [
+                578,
+                405
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aread-tm",
+            "points": [
+              [
+                628,
+                405
+              ],
+              [
+                628,
+                317
+              ],
+              [
+                838,
+                317
+              ],
+              [
+                838,
+                303
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Atm-return",
+            "points": [
+              [
+                908,
+                303
+              ],
+              [
+                908,
+                322
+              ],
+              [
+                658,
+                322
+              ],
+              [
+                658,
+                405
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aread-state",
+            "points": [
+              [
+                548,
+                451
+              ],
+              [
+                548,
+                503
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Abundle",
+            "points": [
+              [
+                661,
+                522
+              ],
+              [
+                688,
+                522
+              ],
+              [
+                688,
+                428
+              ],
+              [
+                718,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ajob-state",
+            "points": [
+              [
+                838,
+                451
+              ],
+              [
+                838,
+                503
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aresult",
+            "points": [
+              [
+                953,
+                428
+              ],
+              [
+                975,
+                428
+              ],
+              [
+                975,
+                350
+              ],
+              [
+                388,
+                350
+              ],
+              [
+                388,
+                285
+              ],
+              [
+                370,
+                285
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Acache-read",
+            "points": [
+              [
+                238,
+                451
+              ],
+              [
+                238,
+                604
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Acache-return",
+            "points": [
+              [
+                292,
+                604
+              ],
+              [
+                292,
+                451
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Ainvalidate",
+            "points": [
+              [
+                718,
+                628
+              ],
+              [
+                661,
+                628
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Ainvalidate-cache",
+            "points": [
+              [
+                436,
+                628
+              ],
+              [
+                377,
+                628
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Ainvalidate-job",
+            "points": [
+              [
+                548,
+                604
+              ],
+              [
+                548,
+                579
+              ],
+              [
+                838,
+                579
+              ],
+              [
+                838,
+                542
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Bchanged",
+            "points": [
+              [
+                1758,
+                303
+              ],
+              [
+                1758,
+                317
+              ],
+              [
+                1153,
+                317
+              ],
+              [
+                1153,
+                405
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bclaim",
+            "points": [
+              [
+                1256,
+                490
+              ],
+              [
+                1284,
+                490
+              ],
+              [
+                1284,
+                423
+              ],
+              [
+                1329,
+                423
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bdurable-job",
+            "points": [
+              [
+                1153,
+                440
+              ],
+              [
+                1153,
+                472
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bread-rm",
+            "points": [
+              [
+                1418,
+                405
+              ],
+              [
+                1418,
+                303
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bread-tm",
+            "points": [
+              [
+                1498,
+                405
+              ],
+              [
+                1498,
+                352
+              ],
+              [
+                1806,
+                352
+              ],
+              [
+                1806,
+                303
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bsource-return",
+            "points": [
+              [
+                1478,
+                303
+              ],
+              [
+                1478,
+                405
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bproduce",
+            "points": [
+              [
+                1569,
+                423
+              ],
+              [
+                1628,
+                423
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bbatch-result",
+            "points": [
+              [
+                1738,
+                440
+              ],
+              [
+                1738,
+                456
+              ],
+              [
+                1448,
+                456
+              ],
+              [
+                1448,
+                472
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bvalidate",
+            "points": [
+              [
+                1569,
+                490
+              ],
+              [
+                1628,
+                490
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bpublish",
+            "points": [
+              [
+                1738,
+                507
+              ],
+              [
+                1738,
+                548
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bquery",
+            "points": [
+              [
+                1143,
+                303
+              ],
+              [
+                1016,
+                303
+              ],
+              [
+                1016,
+                646
+              ],
+              [
+                1051,
+                646
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Blookup",
+            "points": [
+              [
+                1297,
+                646
+              ],
+              [
+                1354,
+                646
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Brepo-read",
+            "points": [
+              [
+                1478,
+                634
+              ],
+              [
+                1478,
+                587
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bread-verify",
+            "points": [
+              [
+                1600,
+                646
+              ],
+              [
+                1656,
+                646
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bverify-source",
+            "points": [
+              [
+                1853,
+                634
+              ],
+              [
+                1872,
+                634
+              ],
+              [
+                1872,
+                307
+              ],
+              [
+                1828,
+                307
+              ],
+              [
+                1828,
+                303
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bresult",
+            "points": [
+              [
+                1853,
+                646
+              ],
+              [
+                1881,
+                646
+              ],
+              [
+                1881,
+                320
+              ],
+              [
+                1288,
+                320
+              ],
+              [
+                1288,
+                283
+              ],
+              [
+                1270,
+                283
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bbackfill",
+            "points": [
+              [
+                1354,
+                646
+              ],
+              [
+                1316,
+                646
+              ],
+              [
+                1316,
+                568
+              ],
+              [
+                1256,
+                568
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          },
+          {
+            "id": "Bbackfill-request",
+            "points": [
+              [
+                1153,
+                548
+              ],
+              [
+                1153,
+                530
+              ],
+              [
+                1028,
+                530
+              ],
+              [
+                1028,
+                421
+              ],
+              [
+                1051,
+                421
+              ]
+            ],
+            "arrow": true,
+            "color": "#C62525",
+            "dash": true
+          }
+        ]
+      },
+      "notes": "DP-45 구현 수준 비교를 레퍼런스의 5행 비교표에 맞춰 재배치한 발표 페이지.\n아키텍처와 예상치의 원천 문서는 커밋된 버전이다. 세부 구현 전체를 한 장에 복제하지 않고 비교의 실행 주체, 큐, 상태와 핵심 왕복을 펼쳤다. 생략한 공통 API와 예외 계약은 원문 그대로 유지한다.\n번호는 이 발표 그림의 요약 처리 순서이며 원문의 상세 호출 번호를 재번호한 계약이 아니다. 원본과 모델의 접근 조건, 비동기 작업과 최종 채택의 책임은 변하지 않는다.\nQA 값은 QA-DP-THOUGHT-v2-20261015 작성자 사고 실험 예상치다. 실측, 최종 QA 승인 또는 A/B 선택 결과가 아니다. QA04는 실제 코드 변경 실험 전의 예정 Rust 모듈 영향 분석이다.\nQA01/03은 관련 사례의 산술평균이며 오답도 실제 시간을 포함한다. QA05는 COMMON-28 전체 총비용 단위다. 원값과 0~6점 구간을 바꾸지 않았다.\n표시한 QA: QA01, QA04, QA05, QA06. 동점 제외: QA02, QA03.\nQA01: B는 준비된 과거 설명과 원본의 관계를 읽지만 A는 관계가 필요한 첫 조회에서 원본 이력을 현재 요청과 함께 해석한다.\nQA04: B는 원본 조회 기능을 바꿀 때 게시한 관계의 생산, 저장, 조회 계약까지 함께 유지해야 한다.\nQA05: B는 조회 때 쓰지 않는 관계도 미리 만들고 갱신하므로 짧은 활동에서는 준비 비용이 조회 절약보다 크다.\nQA06: B는 공통 원본 cache에 더해 게시 관계의 저장 페이지와 생산 버퍼 및 유효 범위 색인을 유지한다.\n장점과 단점의 조건부 설명은 숫자로 확인한 이익과 구별한다. 특히 B44의 국소 실행, B47의 후보 관리, B42의 독립 운영은 해당 QA 점수 우세를 주장하지 않는다.\n출처 원문: docs/architecture/12-decisions/decision-packages/04-45-memory-and-context.md"
+    },
+    {
+      "dp": 42,
+      "title": "대화와 업무의 상태 관리 경계",
+      "functionalTag": "기능 요구: 수명이 다른 대화와 업무의 연속성 유지",
+      "options": [
+        "(방안 A) 모듈화된 통합 Core",
+        "(방안 B) 독립 대화 서비스와 업무 서비스"
+      ],
+      "pros": [
+        [
+          "▪ 관련 로컬 변경을 함께 확정해 계약 변경 지점 축소 (QA04↑)",
+          "▪ 별도 업무 프로세스와 저장소 cache가 없어 RAM 절감 (QA06↑)"
+        ],
+        [
+          "▪ 업무의 상태와 전송을 대화 서비스의 실행 수명과 독립 관리",
+          "▪ 독립 운영 요구가 있는 경우의 이점이며 정상 사용 우위는 미확인"
+        ]
+      ],
+      "cons": [
+        [
+          "▪ 독립 배포와 운영이 필요하면 Core 전체의 조정 부담이 남음"
+        ],
+        [
+          "▪ 접수 결과와 cursor로 두 상태를 다시 연결해야 함 (QA04↓)",
+          "▪ 별도 heap, 저장소 cache와 전달 버퍼가 필요 (QA06↓)"
+        ]
+      ],
+      "qas": [
+        {
+          "id": "QA04",
+          "name": "변경 범위",
+          "reason": "B의 부분 결과와 부분 사용권 확장은 업무 쪽 사실뿐 아니라 서비스 간 계약과 대화 쪽 반영 코드도 함께 바꾼다.",
+          "A": {
+            "score": 1,
+            "value": 3,
+            "display": "3 모듈 / 변경",
+            "annotation": "공동 확정 계약"
+          },
+          "B": {
+            "score": 0,
+            "value": 4.333333333333333,
+            "display": "4.3333 모듈 / 변경",
+            "annotation": "서비스 간 계약"
+          }
+        },
+        {
+          "id": "QA06",
+          "name": "최대 RAM 사용량",
+          "reason": "B는 별도 업무 프로세스의 private heap과 두 번째 저장소 cache 및 서비스 간 전달 버퍼가 더 필요하다.",
+          "A": {
+            "score": 3,
+            "value": 386,
+            "display": "386 MB",
+            "annotation": "통합 Core"
+          },
+          "B": {
+            "score": 2,
+            "value": 446,
+            "display": "446 MB",
+            "annotation": "별도 heap과 buffer"
+          }
+        }
+      ],
+      "excluded": [
+        {
+          "id": "QA01",
+          "A": {
+            "dp": 42,
+            "option": "A",
+            "qa": "QA01",
+            "name": "첫 응답 지연시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 12437,
+              "denominator": 23000,
+              "decimal": 0.5407391304347826
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "수행 의도는 양안 모두 바로 표시하지만 Agent 결과는 B에서 업무 서비스의 사실을 대화 서비스로 한 번 더 전달한다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          },
+          "B": {
+            "dp": 42,
+            "option": "B",
+            "qa": "QA01",
+            "name": "첫 응답 지연시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 37891,
+              "denominator": 69000,
+              "decimal": 0.5491449275362319
+            },
+            "score_0_to_6": 3,
+            "rating": "●◐○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "수행 의도는 양안 모두 바로 표시하지만 Agent 결과는 B에서 업무 서비스의 사실을 대화 서비스로 한 번 더 전달한다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA02",
+          "A": {
+            "dp": 42,
+            "option": "A",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 393,
+              "denominator": 4,
+              "decimal": 98.25
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "상태를 나눠 저장해도 지칭 의미를 판단하는 입력과 모델이 같으므로 정확도가 저절로 높아지지 않는다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          },
+          "B": {
+            "dp": 42,
+            "option": "B",
+            "qa": "QA02",
+            "name": "지칭 대상 식별 정확도",
+            "unit": "%",
+            "point_estimate": {
+              "numerator": 393,
+              "denominator": 4,
+              "decimal": 98.25
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "상태를 나눠 저장해도 지칭 의미를 판단하는 입력과 모델이 같으므로 정확도가 저절로 높아지지 않는다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA03",
+          "A": {
+            "dp": 42,
+            "option": "A",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 38991,
+              "denominator": 16000,
+              "decimal": 2.4369375
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "A는 관련 상태를 한 번에 확정하지만 B는 업무 접수와 대화 반영을 연결하는 메시지 및 저장 단계가 더 든다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          },
+          "B": {
+            "dp": 42,
+            "option": "B",
+            "qa": "QA03",
+            "name": "VIA 처리시간",
+            "unit": "s",
+            "point_estimate": {
+              "numerator": 19717,
+              "denominator": 8000,
+              "decimal": 2.464625
+            },
+            "score_0_to_6": 4,
+            "rating": "●●○",
+            "applicability": "STRUCTURAL_HYPOTHESIS",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "A 근소 우세",
+            "structural_reason": "A는 관련 상태를 한 번에 확정하지만 B는 업무 접수와 대화 반영을 연결하는 메시지 및 저장 단계가 더 든다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          }
+        },
+        {
+          "id": "QA05",
+          "A": {
+            "dp": 42,
+            "option": "A",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 3027799,
+              "denominator": 1250000,
+              "decimal": 2.4222392
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "대화와 업무의 프로세스를 나누어도 의미 판단과 음성 생성의 모델 호출 수는 달라지지 않는다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          },
+          "B": {
+            "dp": 42,
+            "option": "B",
+            "qa": "QA05",
+            "name": "모델 사용 비용",
+            "unit": "USD/COMMON-28 bundle",
+            "point_estimate": {
+              "numerator": 3027799,
+              "denominator": 1250000,
+              "decimal": 2.4222392
+            },
+            "score_0_to_6": 1,
+            "rating": "◐○○",
+            "applicability": "REGRESSION_ONLY",
+            "status": "THOUGHT_EXPERIMENT_NOT_MEASURED",
+            "timing_failure_penalty_applied": false,
+            "expected_order": "동점 / 공통 확인",
+            "structural_reason": "대화와 업무의 프로세스를 나누어도 의미 판단과 음성 생성의 모델 호출 수는 달라지지 않는다.",
+            "comparison_population_id": "DP-42-RELATED-v2"
+          }
+        }
+      ],
+      "diagram": {
+        "nodes": [
+          {
+            "id": "Alife",
+            "x": 118,
+            "y": 206,
+            "w": 875,
+            "h": 42,
+            "text": "C1 대화 / R1 위임 → Q1 질문 → P1 실제 제시 → R2 답변 / T1 업무와 X1 실행은 지속\nR3 정정 → X2 후속 실행. 같은 Q1 답변 명령 K1의 저장과 전송을 비교",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Aim",
+            "x": 118,
+            "y": 254,
+            "w": 870,
+            "h": 57,
+            "text": "Interaction Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Ainput",
+            "x": 130,
+            "y": 280,
+            "w": 200,
+            "h": 25,
+            "text": "입력 수집기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Astop",
+            "x": 411,
+            "y": 280,
+            "w": 200,
+            "h": 25,
+            "text": "로컬 출력 제어기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aout",
+            "x": 722,
+            "y": 280,
+            "w": 250,
+            "h": 25,
+            "text": "출력 실행 / 실제 전달 확인",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Adep0",
+            "x": 120,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Model Access",
+            "pt": 10
+          },
+          {
+            "id": "Adep1",
+            "x": 270,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Context Manager",
+            "pt": 10
+          },
+          {
+            "id": "Adep2",
+            "x": 420,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Policy Manager",
+            "pt": 10
+          },
+          {
+            "id": "Aagent",
+            "x": 642,
+            "y": 321,
+            "w": 342,
+            "h": 25,
+            "text": "Downstream Agent",
+            "pt": 12
+          },
+          {
+            "id": "Aprocess",
+            "x": 116,
+            "y": 355,
+            "w": 874,
+            "h": 381,
+            "text": "VIA Core process",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "stroke": "#9C7136"
+          },
+          {
+            "id": "Ari",
+            "x": 127,
+            "y": 384,
+            "w": 180,
+            "h": 125,
+            "text": "Request Interpreter",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Ainterpret",
+            "x": 137,
+            "y": 417,
+            "w": 160,
+            "h": 30,
+            "text": "요청 해석기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Ascratch",
+            "x": 137,
+            "y": 472,
+            "w": 160,
+            "h": 27,
+            "text": "해석 작업 / RAM",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Arc",
+            "x": 326,
+            "y": 384,
+            "w": 238,
+            "h": 242,
+            "text": "Request Controller",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Arc0",
+            "x": 340,
+            "y": 416,
+            "w": 210,
+            "h": 29,
+            "text": "요청 채택기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arc1",
+            "x": 340,
+            "y": 457,
+            "w": 210,
+            "h": 29,
+            "text": "관계 변경 준비기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Arc2",
+            "x": 340,
+            "y": 498,
+            "w": 210,
+            "h": 29,
+            "text": "현재 입력 제어기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arc3",
+            "x": 340,
+            "y": 539,
+            "w": 210,
+            "h": 29,
+            "text": "진행 사실 반영기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arc4",
+            "x": 340,
+            "y": 580,
+            "w": 210,
+            "h": 29,
+            "text": "재개 조정기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arm",
+            "x": 127,
+            "y": 540,
+            "w": 180,
+            "h": 86,
+            "text": "Response Manager",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Apublish",
+            "x": 137,
+            "y": 566,
+            "w": 160,
+            "h": 23,
+            "text": "게시 제어기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aledger",
+            "x": 137,
+            "y": 597,
+            "w": 160,
+            "h": 23,
+            "text": "실제 전달 기록기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Atm",
+            "x": 618,
+            "y": 384,
+            "w": 354,
+            "h": 142,
+            "text": "Task Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Aquery",
+            "x": 629,
+            "y": 416,
+            "w": 151,
+            "h": 29,
+            "text": "업무 조회기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aaccept",
+            "x": 809,
+            "y": 416,
+            "w": 151,
+            "h": 29,
+            "text": "답변 접수기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Agate",
+            "x": 629,
+            "y": 459,
+            "w": 331,
+            "h": 28,
+            "text": "업무 접수 및 전송 게이트",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aapply",
+            "x": 629,
+            "y": 497,
+            "w": 331,
+            "h": 23,
+            "text": "업무 사건 적용기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aag",
+            "x": 618,
+            "y": 550,
+            "w": 354,
+            "h": 76,
+            "text": "Agent Gateway",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Asend",
+            "x": 629,
+            "y": 577,
+            "w": 156,
+            "h": 24,
+            "text": "명령 전송 및 확인",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Aingress",
+            "x": 808,
+            "y": 577,
+            "w": 152,
+            "h": 24,
+            "text": "외부 사건 수신기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Arecovery",
+            "x": 629,
+            "y": 605,
+            "w": 156,
+            "h": 17,
+            "text": "전송 복구기 / 상태 조회",
+            "pt": 9,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Ass",
+            "x": 127,
+            "y": 650,
+            "w": 845,
+            "h": 77,
+            "text": "State Store",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Atx",
+            "x": 138,
+            "y": 676,
+            "w": 822,
+            "h": 22,
+            "text": "트랜잭션 관리자",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Adialogue-db",
+            "x": 138,
+            "y": 706,
+            "w": 250,
+            "h": 18,
+            "text": "요청 C1/R1~R3 / 실제 전달 P1",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Atask-db",
+            "x": 418,
+            "y": 706,
+            "w": 250,
+            "h": 18,
+            "text": "업무 T1 / 실행 X1,X2 / 질문 Q1",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Acommands-db",
+            "x": 698,
+            "y": 706,
+            "w": 262,
+            "h": 18,
+            "text": "명령 K1 / gate / 외부 inbox",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "As4-num",
+            "x": 488,
+            "y": 632,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As4-label",
+            "x": 510,
+            "y": 631,
+            "w": 260,
+            "h": 23,
+            "text": "A1 관련 변경 공동 확정",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As1-num",
+            "x": 388,
+            "y": 357,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As1-label",
+            "x": 410,
+            "y": 356,
+            "w": 150,
+            "h": 23,
+            "text": "입력 / hold",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As2-num",
+            "x": 127,
+            "y": 515,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As2-label",
+            "x": 149,
+            "y": 514,
+            "w": 185,
+            "h": 23,
+            "text": "의미 제안 / 채택",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As3-num",
+            "x": 138,
+            "y": 630,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As3-label",
+            "x": 160,
+            "y": 629,
+            "w": 290,
+            "h": 23,
+            "text": "변경 준비 K1",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As5-num",
+            "x": 636,
+            "y": 526,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As5-label",
+            "x": 658,
+            "y": 525,
+            "w": 240,
+            "h": 23,
+            "text": "gate / CAS 후 전송",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As6-num",
+            "x": 811,
+            "y": 526,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As6-label",
+            "x": 833,
+            "y": 525,
+            "w": 150,
+            "h": 23,
+            "text": "외부 사실",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As7-num",
+            "x": 318,
+            "y": 608,
+            "w": 19,
+            "h": 20,
+            "text": "7",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As7-label",
+            "x": 340,
+            "y": 607,
+            "w": 115,
+            "h": 23,
+            "text": "게시 허용",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "As8-num",
+            "x": 815,
+            "y": 611,
+            "w": 19,
+            "h": 20,
+            "text": "8",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "As8-label",
+            "x": 837,
+            "y": 610,
+            "w": 170,
+            "h": 23,
+            "text": "실제 전달 기록",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Blife",
+            "x": 1018,
+            "y": 206,
+            "w": 875,
+            "h": 42,
+            "text": "C1 대화 / R1 위임 → Q1 질문 → P1 실제 제시 → R2 답변 / T1 업무와 X1 실행은 지속\nR3 정정 → X2 후속 실행. 같은 Q1 답변 명령 K1의 저장과 전송을 비교",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "none",
+            "align": "left"
+          },
+          {
+            "id": "Bim",
+            "x": 1018,
+            "y": 254,
+            "w": 870,
+            "h": 57,
+            "text": "Interaction Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Binput",
+            "x": 1030,
+            "y": 280,
+            "w": 200,
+            "h": 25,
+            "text": "입력 수집기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bstop",
+            "x": 1311,
+            "y": 280,
+            "w": 200,
+            "h": 25,
+            "text": "로컬 출력 제어기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bout",
+            "x": 1622,
+            "y": 280,
+            "w": 250,
+            "h": 25,
+            "text": "출력 실행 / 실제 전달 확인",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bdep0",
+            "x": 1020,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Model Access",
+            "pt": 10
+          },
+          {
+            "id": "Bdep1",
+            "x": 1170,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Context Manager",
+            "pt": 10
+          },
+          {
+            "id": "Bdep2",
+            "x": 1320,
+            "y": 321,
+            "w": 142,
+            "h": 25,
+            "text": "Policy Manager",
+            "pt": 10
+          },
+          {
+            "id": "Bagent",
+            "x": 1542,
+            "y": 321,
+            "w": 342,
+            "h": 25,
+            "text": "Downstream Agent",
+            "pt": 12
+          },
+          {
+            "id": "Bdialogue-process",
+            "x": 1016,
+            "y": 355,
+            "w": 464,
+            "h": 381,
+            "text": "대화 서비스 process",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "stroke": "#9C7136",
+            "dash": true
+          },
+          {
+            "id": "Bwork-process",
+            "x": 1498,
+            "y": 355,
+            "w": 392,
+            "h": 381,
+            "text": "업무 서비스 process",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            },
+            "stroke": "#9C7136",
+            "dash": true
+          },
+          {
+            "id": "Bri",
+            "x": 1027,
+            "y": 384,
+            "w": 180,
+            "h": 125,
+            "text": "Request Interpreter",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Binterpret",
+            "x": 1037,
+            "y": 417,
+            "w": 160,
+            "h": 30,
+            "text": "요청 해석기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bscratch",
+            "x": 1037,
+            "y": 472,
+            "w": 160,
+            "h": 27,
+            "text": "해석 작업 / RAM",
+            "pt": 10,
+            "geometry": "can"
+          },
+          {
+            "id": "Brc",
+            "x": 1226,
+            "y": 384,
+            "w": 238,
+            "h": 242,
+            "text": "Request Controller",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Brc0",
+            "x": 1240,
+            "y": 416,
+            "w": 210,
+            "h": 29,
+            "text": "요청 채택기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brc1",
+            "x": 1240,
+            "y": 457,
+            "w": 210,
+            "h": 29,
+            "text": "명령 의도 기록기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brc2",
+            "x": 1240,
+            "y": 498,
+            "w": 210,
+            "h": 29,
+            "text": "현재 입력 제어기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brc3",
+            "x": 1240,
+            "y": 539,
+            "w": 210,
+            "h": 29,
+            "text": "진행 사실 반영기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brc4",
+            "x": 1240,
+            "y": 580,
+            "w": 210,
+            "h": 29,
+            "text": "재연결 조정기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Brm",
+            "x": 1027,
+            "y": 540,
+            "w": 180,
+            "h": 86,
+            "text": "Response Manager",
+            "pt": 11,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bpublish",
+            "x": 1037,
+            "y": 566,
+            "w": 160,
+            "h": 23,
+            "text": "게시 제어기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bledger",
+            "x": 1037,
+            "y": 597,
+            "w": 160,
+            "h": 23,
+            "text": "실제 전달 기록기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Btm",
+            "x": 1518,
+            "y": 384,
+            "w": 354,
+            "h": 142,
+            "text": "Task Manager",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bquery",
+            "x": 1529,
+            "y": 416,
+            "w": 151,
+            "h": 29,
+            "text": "업무 조회기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Baccept",
+            "x": 1709,
+            "y": 416,
+            "w": 151,
+            "h": 29,
+            "text": "답변 접수기",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bgate",
+            "x": 1529,
+            "y": 459,
+            "w": 331,
+            "h": 28,
+            "text": "업무 접수 및 전송 게이트",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFF4D7"
+          },
+          {
+            "id": "Bapply",
+            "x": 1529,
+            "y": 497,
+            "w": 331,
+            "h": 23,
+            "text": "업무 사건 적용기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bag",
+            "x": 1518,
+            "y": 550,
+            "w": 354,
+            "h": 76,
+            "text": "Agent Gateway",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bsend",
+            "x": 1529,
+            "y": 577,
+            "w": 156,
+            "h": 24,
+            "text": "명령 전송 및 확인",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bingress",
+            "x": 1708,
+            "y": 577,
+            "w": 152,
+            "h": 24,
+            "text": "외부 사건 수신기",
+            "pt": 10,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Brecovery",
+            "x": 1529,
+            "y": 605,
+            "w": 156,
+            "h": 17,
+            "text": "전송 복구기 / 상태 조회",
+            "pt": 9,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bdss",
+            "x": 1027,
+            "y": 650,
+            "w": 437,
+            "h": 77,
+            "text": "State Store / 대화",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bwss",
+            "x": 1518,
+            "y": 650,
+            "w": 354,
+            "h": 77,
+            "text": "State Store / 업무",
+            "pt": 12,
+            "layer": "back",
+            "bold": true,
+            "align": "left",
+            "valign": "top",
+            "insets": {
+              "left": 8,
+              "right": 2,
+              "top": 4,
+              "bottom": 0
+            }
+          },
+          {
+            "id": "Bdtx",
+            "x": 1038,
+            "y": 676,
+            "w": 412,
+            "h": 22,
+            "text": "트랜잭션 관리자",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bwtx",
+            "x": 1529,
+            "y": 676,
+            "w": 331,
+            "h": 22,
+            "text": "트랜잭션 관리자",
+            "pt": 11,
+            "geometry": "roundRect",
+            "fill": "#FFFFFF"
+          },
+          {
+            "id": "Bdd",
+            "x": 1038,
+            "y": 706,
+            "w": 200,
+            "h": 18,
+            "text": "C1 / R1~R3 / P1",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Bdo",
+            "x": 1253,
+            "y": 706,
+            "w": 197,
+            "h": 18,
+            "text": "K1 의도 outbox / cursor",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Bwd",
+            "x": 1529,
+            "y": 706,
+            "w": 158,
+            "h": 18,
+            "text": "T1 / X1,X2 / Q1",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Bwo",
+            "x": 1703,
+            "y": 706,
+            "w": 157,
+            "h": 18,
+            "text": "K1 / gate / inbox",
+            "pt": 9,
+            "geometry": "can"
+          },
+          {
+            "id": "Bs4-num",
+            "x": 1385,
+            "y": 630,
+            "w": 19,
+            "h": 20,
+            "text": "4",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs4-label",
+            "x": 1407,
+            "y": 629,
+            "w": 450,
+            "h": 23,
+            "text": "W1 접수 → D2 반영 / 로컬 확정",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs1-num",
+            "x": 1288,
+            "y": 357,
+            "w": 19,
+            "h": 20,
+            "text": "1",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs1-label",
+            "x": 1310,
+            "y": 356,
+            "w": 150,
+            "h": 23,
+            "text": "입력 / hold",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs2-num",
+            "x": 1027,
+            "y": 515,
+            "w": 19,
+            "h": 20,
+            "text": "2",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs2-label",
+            "x": 1049,
+            "y": 514,
+            "w": 185,
+            "h": 23,
+            "text": "의미 제안 / 채택",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs3-num",
+            "x": 1038,
+            "y": 630,
+            "w": 19,
+            "h": 20,
+            "text": "3",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs3-label",
+            "x": 1060,
+            "y": 629,
+            "w": 290,
+            "h": 23,
+            "text": "D1 의도 기록 후 K1 전달",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs5-num",
+            "x": 1536,
+            "y": 526,
+            "w": 19,
+            "h": 20,
+            "text": "5",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs5-label",
+            "x": 1558,
+            "y": 525,
+            "w": 240,
+            "h": 23,
+            "text": "gate / CAS 후 전송",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs6-num",
+            "x": 1711,
+            "y": 526,
+            "w": 19,
+            "h": 20,
+            "text": "6",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs6-label",
+            "x": 1733,
+            "y": 525,
+            "w": 150,
+            "h": 23,
+            "text": "외부 사실",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs7-num",
+            "x": 1218,
+            "y": 608,
+            "w": 19,
+            "h": 20,
+            "text": "7",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs7-label",
+            "x": 1240,
+            "y": 607,
+            "w": 115,
+            "h": 23,
+            "text": "게시 허용",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          },
+          {
+            "id": "Bs8-num",
+            "x": 1715,
+            "y": 611,
+            "w": 19,
+            "h": 20,
+            "text": "8",
+            "pt": 11,
+            "bold": true,
+            "geometry": "roundRect",
+            "fill": "#C6E0B4",
+            "stroke": "#72AD49"
+          },
+          {
+            "id": "Bs8-label",
+            "x": 1737,
+            "y": 610,
+            "w": 170,
+            "h": 23,
+            "text": "실제 전달 기록",
+            "pt": 11,
+            "geometry": "textbox",
+            "stroke": "none",
+            "fill": "#FFFFFF",
+            "align": "left"
+          }
+        ],
+        "edges": [
+          {
+            "id": "Acommit",
+            "points": [
+              [
+                445,
+                626
+              ],
+              [
+                445,
+                676
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Ainput-route",
+            "points": [
+              [
+                230,
+                305
+              ],
+              [
+                230,
+                316
+              ],
+              [
+                588,
+                316
+              ],
+              [
+                588,
+                373
+              ],
+              [
+                444,
+                373
+              ],
+              [
+                444,
+                416
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Asem",
+            "points": [
+              [
+                340,
+                428
+              ],
+              [
+                297,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Asem-return",
+            "points": [
+              [
+                297,
+                440
+              ],
+              [
+                340,
+                440
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Atask-read",
+            "points": [
+              [
+                550,
+                428
+              ],
+              [
+                629,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Atask-return",
+            "points": [
+              [
+                629,
+                440
+              ],
+              [
+                550,
+                440
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aprepare",
+            "points": [
+              [
+                550,
+                471
+              ],
+              [
+                591,
+                471
+              ],
+              [
+                591,
+                451
+              ],
+              [
+                883,
+                451
+              ],
+              [
+                883,
+                445
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Areceipt",
+            "points": [
+              [
+                809,
+                437
+              ],
+              [
+                796,
+                437
+              ],
+              [
+                796,
+                534
+              ],
+              [
+                577,
+                534
+              ],
+              [
+                577,
+                552
+              ],
+              [
+                550,
+                552
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aclaim",
+            "points": [
+              [
+                706,
+                580
+              ],
+              [
+                706,
+                487
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Asend-agent",
+            "points": [
+              [
+                785,
+                589
+              ],
+              [
+                988,
+                589
+              ],
+              [
+                988,
+                334
+              ],
+              [
+                984,
+                334
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aevent",
+            "points": [
+              [
+                966,
+                346
+              ],
+              [
+                995,
+                346
+              ],
+              [
+                995,
+                615
+              ],
+              [
+                958,
+                615
+              ],
+              [
+                958,
+                601
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Aunknown",
+            "points": [
+              [
+                708,
+                601
+              ],
+              [
+                708,
+                605
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Afact",
+            "points": [
+              [
+                883,
+                580
+              ],
+              [
+                883,
+                520
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Apublish-permit",
+            "points": [
+              [
+                340,
+                552
+              ],
+              [
+                318,
+                552
+              ],
+              [
+                318,
+                578
+              ],
+              [
+                297,
+                578
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Adisplay",
+            "points": [
+              [
+                137,
+                578
+              ],
+              [
+                122,
+                578
+              ],
+              [
+                122,
+                313
+              ],
+              [
+                847,
+                313
+              ],
+              [
+                847,
+                305
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Aactual",
+            "points": [
+              [
+                972,
+                294
+              ],
+              [
+                1001,
+                294
+              ],
+              [
+                1001,
+                642
+              ],
+              [
+                217,
+                642
+              ],
+              [
+                217,
+                620
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bdcommit",
+            "points": [
+              [
+                1345,
+                626
+              ],
+              [
+                1345,
+                676
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bwcommit",
+            "points": [
+              [
+                1529,
+                473
+              ],
+              [
+                1508,
+                473
+              ],
+              [
+                1508,
+                644
+              ],
+              [
+                1693,
+                644
+              ],
+              [
+                1693,
+                676
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Binput-route",
+            "points": [
+              [
+                1130,
+                305
+              ],
+              [
+                1130,
+                316
+              ],
+              [
+                1488,
+                316
+              ],
+              [
+                1488,
+                373
+              ],
+              [
+                1344,
+                373
+              ],
+              [
+                1344,
+                416
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bsem",
+            "points": [
+              [
+                1240,
+                428
+              ],
+              [
+                1197,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bsem-return",
+            "points": [
+              [
+                1197,
+                440
+              ],
+              [
+                1240,
+                440
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Btask-read",
+            "points": [
+              [
+                1450,
+                428
+              ],
+              [
+                1529,
+                428
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Btask-return",
+            "points": [
+              [
+                1529,
+                440
+              ],
+              [
+                1450,
+                440
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bprepare",
+            "points": [
+              [
+                1450,
+                471
+              ],
+              [
+                1491,
+                471
+              ],
+              [
+                1491,
+                451
+              ],
+              [
+                1783,
+                451
+              ],
+              [
+                1783,
+                445
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Breceipt",
+            "points": [
+              [
+                1709,
+                437
+              ],
+              [
+                1696,
+                437
+              ],
+              [
+                1696,
+                534
+              ],
+              [
+                1477,
+                534
+              ],
+              [
+                1477,
+                552
+              ],
+              [
+                1450,
+                552
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bclaim",
+            "points": [
+              [
+                1606,
+                580
+              ],
+              [
+                1606,
+                487
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bsend-agent",
+            "points": [
+              [
+                1685,
+                589
+              ],
+              [
+                1888,
+                589
+              ],
+              [
+                1888,
+                334
+              ],
+              [
+                1884,
+                334
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bevent",
+            "points": [
+              [
+                1866,
+                346
+              ],
+              [
+                1895,
+                346
+              ],
+              [
+                1895,
+                615
+              ],
+              [
+                1858,
+                615
+              ],
+              [
+                1858,
+                601
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bunknown",
+            "points": [
+              [
+                1608,
+                601
+              ],
+              [
+                1608,
+                605
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bfact",
+            "points": [
+              [
+                1783,
+                580
+              ],
+              [
+                1783,
+                520
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          },
+          {
+            "id": "Bpublish-permit",
+            "points": [
+              [
+                1240,
+                552
+              ],
+              [
+                1218,
+                552
+              ],
+              [
+                1218,
+                578
+              ],
+              [
+                1197,
+                578
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bdisplay",
+            "points": [
+              [
+                1037,
+                578
+              ],
+              [
+                1022,
+                578
+              ],
+              [
+                1022,
+                313
+              ],
+              [
+                1747,
+                313
+              ],
+              [
+                1747,
+                305
+              ]
+            ],
+            "arrow": true
+          },
+          {
+            "id": "Bactual",
+            "points": [
+              [
+                1872,
+                294
+              ],
+              [
+                1901,
+                294
+              ],
+              [
+                1901,
+                642
+              ],
+              [
+                1117,
+                642
+              ],
+              [
+                1117,
+                620
+              ]
+            ],
+            "arrow": true,
+            "dash": true
+          }
+        ]
+      },
+      "notes": "DP-42 구현 수준 비교를 레퍼런스의 5행 비교표에 맞춰 재배치한 발표 페이지.\n아키텍처와 예상치의 원천 문서는 커밋된 버전이다. 세부 구현 전체를 한 장에 복제하지 않고 비교의 실행 주체, 큐, 상태와 핵심 왕복을 펼쳤다. 생략한 공통 API와 예외 계약은 원문 그대로 유지한다.\n번호는 이 발표 그림의 요약 처리 순서이며 원문의 상세 호출 번호를 재번호한 계약이 아니다. 원본과 모델의 접근 조건, 비동기 작업과 최종 채택의 책임은 변하지 않는다.\nQA 값은 QA-DP-THOUGHT-v2-20261015 작성자 사고 실험 예상치다. 실측, 최종 QA 승인 또는 A/B 선택 결과가 아니다. QA04는 실제 코드 변경 실험 전의 예정 Rust 모듈 영향 분석이다.\nQA01/03은 관련 사례의 산술평균이며 오답도 실제 시간을 포함한다. QA05는 COMMON-28 전체 총비용 단위다. 원값과 0~6점 구간을 바꾸지 않았다.\n표시한 QA: QA04, QA06. 동점 제외: QA01, QA02, QA03, QA05.\nQA04: B의 부분 결과와 부분 사용권 확장은 업무 쪽 사실뿐 아니라 서비스 간 계약과 대화 쪽 반영 코드도 함께 바꾼다.\nQA06: B는 별도 업무 프로세스의 private heap과 두 번째 저장소 cache 및 서비스 간 전달 버퍼가 더 필요하다.\n장점과 단점의 조건부 설명은 숫자로 확인한 이익과 구별한다. 특히 B44의 국소 실행, B47의 후보 관리, B42의 독립 운영은 해당 QA 점수 우세를 주장하지 않는다.\n출처 원문: docs/architecture/12-decisions/decision-packages/04-42-lifecycle-ownership.md"
+    }
+  ]
+}

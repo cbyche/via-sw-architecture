@@ -5,7 +5,7 @@
 
 ## 그림을 읽는 순서
 
-DP-45의 현행 설명 그림은 아래 열 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다. 앞으로 추가하거나 개정하는 DP-45 그림도 이 표에 등록하고 본문의 해당 설명 옆에 SVG를 직접 표시한다.
+DP-45의 현행 설명 그림은 아래 열한 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다. 앞으로 추가하거나 개정하는 DP-45 그림도 이 표에 등록하고 본문의 해당 설명 옆에 SVG를 직접 표시한다.
 
 | 그림 | 이 본문에서 볼 위치 |
 | --- | --- |
@@ -16,6 +16,7 @@ DP-45의 현행 설명 그림은 아래 열 장이며 모두 이 본문에 직�
 | 상세 구조 비교 | [§3 메인 비교](#dp45-fig-main-structure) |
 | 생산과 조회의 확대 경로 | [§3.9 확대 비교](#dp45-fig-comparison) |
 | 구현 구조 한 페이지 비교 | [§3.10.7 A/B 한 페이지](#dp45-fig-implementation-comparison) |
+| 레퍼런스 형식 구조 및 QA 비교 | [발표 페이지](#dp45-reference-comparison) |
 | A의 코드, 상태와 호출 경로 | [§3.10.2 A 구현 설계](#dp45-fig-implementation-a) |
 | B의 생산, 게시와 조회 경로 | [§3.10.3 B 구현 설계](#dp45-fig-implementation-b) |
 | 정정과 삭제의 처리 | [§4.5 수명 그림](#dp45-fig-lifecycle) |
@@ -848,3 +849,13 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 ![이전 비교 발표 v5의 DP-45 QA 상세](../../../presentations_files/dp-comparison/v5/dp45-qa-detail_v5.png)
 
 [v5 판본과 계산 범위](../../../presentations_files/dp-comparison/v5/README.md).
+
+<a id="dp45-reference-comparison"></a>
+
+## 레퍼런스 형식의 구조와 QA 비교 발표
+
+2026-10-15에 커밋된 구현 구조와 QA 사고실험 v2를 사용자 레퍼런스의 설계안, 구조, 장점, 단점, Trade-off 형식으로 배치했다. QA01~06 중 A/B 점수 차이가 있는 항목만 수치 비교에 포함했다. 수치와 점수는 작성자 예상치이며 실측이나 대안 선택 결과가 아니다. 그림 번호는 발표용 요약 순서이며 위 상세 실행 계약은 그대로 따른다.
+
+![DP-45 레퍼런스 형식 구조와 QA 비교](../../../presentations_files/dp-reference-comparison-v1/dp45-reference-comparison_v1.svg)
+
+[편집 가능한 draw.io](../../../presentations_files/dp-reference-comparison-v1/dp45-reference-comparison_v1.drawio) / [최종 PPTX 렌더 PNG](../../../presentations_files/dp-reference-comparison-v1/dp45-reference-comparison_v1.png) / [4장 PPTX](../../../presentations_files/VIA-DP-comparisons-reference_v1.pptx) / [출처와 동점 제외 기준](../../../presentations_files/dp-reference-comparison-v1/README.md) / [리뷰 및 보완 기록](../../../presentations_files/dp-reference-comparison-v1/review.md)

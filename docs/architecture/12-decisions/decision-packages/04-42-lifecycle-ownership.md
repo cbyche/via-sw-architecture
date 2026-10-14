@@ -14,6 +14,7 @@
 | --- | --- |
 | DP 배경 / 구현 구조를 나란히 펼친 한 페이지 A/B 비교 / 서로 다른 수명 | 아래 배경 / §1 / §2 |
 | 수명과 소유를 확대한 발표 그림 | §3.6 |
+| 레퍼런스 형식 구조 및 QA 비교 | [발표 페이지](#dp42-reference-comparison) |
 | A 상세 SW Architecture와 27단계 전체 흐름 | [§3.7.1](#dp42-detail-a) |
 | B 상세 SW Architecture와 29단계 전체 흐름 | [§3.7.2](#dp42-detail-b) |
 | 저장 레코드와 확정 계약 / 정정과 실패 비교 | §3.7.3 / §3.7.4 |
@@ -586,3 +587,13 @@ RM의 내구 실제 전달 원장은 대화 서비스에 남는다. 업무 접�
 ![구현 수준 재배치 전 DP-42 메인 비교도](./diagrams/dp42-comparison-before-implementation.svg)
 
 [이전 편집 원본 draw.io](./diagrams/dp42-comparison-before-implementation.drawio) / [이전 PNG](./diagrams/dp42-comparison-before-implementation.png)
+
+<a id="dp42-reference-comparison"></a>
+
+## 레퍼런스 형식의 구조와 QA 비교 발표
+
+2026-10-15에 커밋된 구현 구조와 QA 사고실험 v2를 사용자 레퍼런스의 설계안, 구조, 장점, 단점, Trade-off 형식으로 배치했다. QA01~06 중 A/B 점수 차이가 있는 항목만 수치 비교에 포함했다. 수치와 점수는 작성자 예상치이며 실측이나 대안 선택 결과가 아니다. 그림 번호는 발표용 요약 순서이며 위 상세 실행 계약은 그대로 따른다.
+
+![DP-42 레퍼런스 형식 구조와 QA 비교](../../../presentations_files/dp-reference-comparison-v1/dp42-reference-comparison_v1.svg)
+
+[편집 가능한 draw.io](../../../presentations_files/dp-reference-comparison-v1/dp42-reference-comparison_v1.drawio) / [최종 PPTX 렌더 PNG](../../../presentations_files/dp-reference-comparison-v1/dp42-reference-comparison_v1.png) / [4장 PPTX](../../../presentations_files/VIA-DP-comparisons-reference_v1.pptx) / [출처와 동점 제외 기준](../../../presentations_files/dp-reference-comparison-v1/README.md) / [리뷰 및 보완 기록](../../../presentations_files/dp-reference-comparison-v1/review.md)

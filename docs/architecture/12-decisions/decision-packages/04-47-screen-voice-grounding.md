@@ -18,6 +18,7 @@ DP-47의 모든 그림은 아래 본문에 직접 표시한다. 편집용 draw.i
 | 초기 문제 설명 | [§1 문제 배경](#1-via에서-왜-중요한가) | 화면이 바뀐 뒤 전사가 도착하고 지칭을 정정하는 상황 |
 | 두 설계의 전체 비교 | [§6 MAIN](#6-main-같은-관측에서-다른-해석-구조) | 공통 입력 취득, A/B 내부 판단과 공통 채택 및 위임 |
 | 구현 구조 1페이지 비교 v1 | [§6.2](#62-구현-구조를-한-페이지에서-비교) | 코드, queue, 후보와 binding 저장소, 완료 반환 및 재판단을 같은 페이지에서 비교 |
+| 레퍼런스 형식 구조 및 QA 비교 | [발표 페이지](#dp47-reference-comparison) | A/B 구조, 장단점과 QA01, QA02, QA04 예상 원값 및 점수 |
 | A 구현 수준 구조 | [§8.5.2](#852-a-원본에서-binding을-생산하는-실행-구조) | 원본 read, 공동 의미 호출과 반환, 상태 patch와 채택 |
 | B 구현 수준 구조 | [§8.5.3](#853-b-후보-생산과-결합을-분리한-실행-구조) | 생산자별 후보 게시, 결합의 준비 조건, 원 생산자 재판단 |
 | A 정상 생성과 정정 사건도 | [§8.5.4](#854-같은-정정의-실행-순서와-늦은-결과) | 원본에서 직접 만든 binding의 부분 patch와 옛 결과 폐기 |
@@ -477,3 +478,13 @@ producer의 후보가 peer 정보를 사용해 바뀐 경우에도 원본 source
 - [리뷰 기록](./dp47-design-review.md)에 작성자 반론과 보완 및 문서와 그림 검사 결과를 구별해 기록한다.
 
 **완료의 의미는 사용자 검토가 가능한 두 SW 설계와 설명 자료의 완성이다.** 실제 Windows/앱/API capability, 모델 grounding 품질, 성능/비용 우위와 선택 결과는 검증하지 않았다. 참조 Architecture, 다른 DP의 설계/측정과 기존 PPTX를 변경하지 않는다.
+
+<a id="dp47-reference-comparison"></a>
+
+## 레퍼런스 형식의 구조와 QA 비교 발표
+
+2026-10-15에 커밋된 구현 구조와 QA 사고실험 v2를 사용자 레퍼런스의 설계안, 구조, 장점, 단점, Trade-off 형식으로 배치했다. QA01~06 중 A/B 점수 차이가 있는 항목만 수치 비교에 포함했다. 수치와 점수는 작성자 예상치이며 실측이나 대안 선택 결과가 아니다. 그림 번호는 발표용 요약 순서이며 위 상세 실행 계약은 그대로 따른다.
+
+![DP-47 레퍼런스 형식 구조와 QA 비교](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.svg)
+
+[편집 가능한 draw.io](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.drawio) / [최종 PPTX 렌더 PNG](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.png) / [4장 PPTX](../../../presentations_files/VIA-DP-comparisons-reference_v1.pptx) / [출처와 동점 제외 기준](../../../presentations_files/dp-reference-comparison-v1/README.md) / [리뷰 및 보완 기록](../../../presentations_files/dp-reference-comparison-v1/review.md)
