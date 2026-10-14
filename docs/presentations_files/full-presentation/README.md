@@ -8,6 +8,8 @@ v11의 나머지 32장은 페이지 번호를 제외한 본문과 노트 보존.
 
 v1~v11의 통합본과 v12의 별도 비교본은 이력으로 보존.
 
+[v13 Windows Open XML 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/38607452044) 및 [통합본 commit의 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38607428134) 통과. Windows에서 37장 열기와 스키마 오류 0건 확인. PowerPoint 자체 렌더링과 GIF 재생은 미검증.
+
 ## 현재 발표 순서
 
 | 실제 슬라이드 위치 | 구역 | 내용 |

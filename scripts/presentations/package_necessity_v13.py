@@ -168,6 +168,8 @@ def package(repo, b):
     parts['docProps/app.xml'] = F.xml(app)
     for row in rows:
         part = row['part']
+        row['content_group'] = row.get('section')
+        row['section'] = '본 발표' if row['page'] <= 28 else 'Appendix / QA 지표'
         row.update(native_tables=len(E.fromstring(parts[part]).findall('.//a:tbl', F.NS)),
                    slide_sha256=F.digest(parts[part]), notes_sha256=F.digest(parts[F.related(parts, part, 'notesSlide')]))
     preserved_resources = [n for n in src if n.startswith(('ppt/media/','ppt/embeddings/','ppt/charts/','ppt/slideMasters/','ppt/slideLayouts/','ppt/notesMasters/','ppt/theme/'))]
