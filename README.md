@@ -1,5 +1,7 @@
 # VIA Software Architecture
 
+> **현재 QA·DP 논의 (2026-10-14):** [VIA 핵심 QA와 DP 평가 계획](docs/architecture/12-decisions/decision-packages/03-03-qa-dp-evaluation-plan.md)을 먼저 읽는다. **[기존 6개 QA와 추가 3개 상세안](docs/architecture/12-decisions/decision-packages/qa-candidate-package/README.md)**에 정의·목표 근거·0~6점·예시·DP 예상·PoC 범위와 독립 리뷰를 모았다. 수치는 사용자 검토용 제안이며 미측정이다. 현재 네 DP가 양성과정의 차별화 조건을 충족했다고 해석하지 않는다. 최신 합의와 다음 검토는 중심 문서 및 [작업 계획](docs/architecture/12-decisions/decision-packages/00-workplan.md)을 따른다. 아래 이전 작업 기록과 구별한다.
+
 > **현재 작업 (2026-10-03):** 기존 `target-architecture/`는 기능 전반을 검토한 [Reference Architecture](docs/architecture/12-decisions/target-architecture/README.md)다. 최종 목표 구조로 선택한 상태가 아니다.
 > **Decision Reconstruction / Stage 4**에서 중요한 기능 문제를 서로 다른 두 구조로 비교한다. 두 안 모두 참조 구조와 달라도 된다.
 > 최신 결과는 [여섯 구조 비교 가이드](docs/architecture/12-decisions/decision-packages/04-30-comparison-guide.md)다. 구현, 측정 및 최종 DP 선정은 하지 않았다.
