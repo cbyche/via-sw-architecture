@@ -1,8 +1,8 @@
 # VIA Software Architecture
 
-> **QA 조사 자료와 발표 준비:** [QA별 조사 상세 기록](docs/architecture/12-decisions/decision-packages/qa-candidate-package/research-notes/README.md)에 출처의 수치와 조건 및 적용 논리와 한계를 보존했다. [QA01~09 한 장 설명 페이지 구성안](docs/architecture/12-decisions/decision-packages/qa-candidate-package/slide-page-plan.md)에서 발표 문안과 예시 및 발표자 노트를 확인한다. 현재 QA 정의와 목표 제안은 기존 상세안을 따른다.
+> **QA 조사 자료와 발표 준비:** [QA별 조사 상세 기록](docs/architecture/12-decisions/decision-packages/qa-candidate-package/research-notes/README.md)에 출처의 수치와 조건 및 적용 논리와 한계를 보존했다. [QA01~09 한 장 설명 페이지 구성안](docs/architecture/12-decisions/decision-packages/qa-candidate-package/slide-page-plan.md)에서 발표 문안과 예시 및 발표자 노트를 확인한다. 현재 QA 정의와 목표 제안은 기존 상세안을 따른다. **후속 정정: QA02는 ReALM 참조 93% / QA04는 ARGO 근거 3개 / QA05는 gpt-realtime 견적 $0.71이며 QA06은 목표 수치와 점수가 미완료다.**
 
-> **현재 QA·DP 논의 (2026-10-14):** [VIA 핵심 QA와 DP 평가 계획](docs/architecture/12-decisions/decision-packages/03-03-qa-dp-evaluation-plan.md)을 먼저 읽는다. **[기존 6개 QA와 추가 3개 상세안](docs/architecture/12-decisions/decision-packages/qa-candidate-package/README.md)**에 정의·목표 근거·0~6점·예시·DP 예상·PoC 범위와 독립 리뷰를 모았다. 수치는 사용자 검토용 제안이며 미측정이다. 현재 네 DP가 양성과정의 차별화 조건을 충족했다고 해석하지 않는다. 최신 합의와 다음 검토는 중심 문서 및 [작업 계획](docs/architecture/12-decisions/decision-packages/00-workplan.md)을 따른다. 아래 이전 작업 기록과 구별한다.
+> **현재 QA와 DP 논의 (2026-10-14):** [VIA 핵심 QA와 DP 평가 계획](docs/architecture/12-decisions/decision-packages/03-03-qa-dp-evaluation-plan.md)을 먼저 읽는다. **[기존 6개 QA와 추가 3개 상세안](docs/architecture/12-decisions/decision-packages/qa-candidate-package/README.md)**에 정의와 목표 근거 및 0~6점과 예시 및 DP 예상과 PoC 범위와 독립 리뷰를 모았다. 수치는 사용자 검토용 제안이며 미측정이다. 현재 네 DP가 양성과정의 차별화 조건을 충족했다고 해석하지 않는다. 최신 합의와 다음 검토는 중심 문서 및 [작업 계획](docs/architecture/12-decisions/decision-packages/00-workplan.md)을 따른다. 아래 이전 작업 기록과 구별한다.
 
 > **현재 작업 (2026-10-03):** 기존 `target-architecture/`는 기능 전반을 검토한 [Reference Architecture](docs/architecture/12-decisions/target-architecture/README.md)다. 최종 목표 구조로 선택한 상태가 아니다.
 > **Decision Reconstruction / Stage 4**에서 중요한 기능 문제를 서로 다른 두 구조로 비교한다. 두 안 모두 참조 구조와 달라도 된다.
