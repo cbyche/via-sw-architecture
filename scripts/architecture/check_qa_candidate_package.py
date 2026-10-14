@@ -10,6 +10,9 @@ ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = ROOT / 'docs/architecture/12-decisions/decision-packages/qa-candidate-package'
 NUMBER = r'\d+(?:\.\d+)?(?:/\d+)?'
 GLYPHS = ['○○○', '◐○○', '●○○', '●◐○', '●●○', '●●◐', '●●●']
+# Explicitly withdrawn after the user's 2026-10-14 target-rationale review.
+# Pending is not a score of zero and must not silently skip other QA tables.
+PENDING_SCORES = {'qa04-change-scope.md', 'qa06-local-memory.md'}
 
 
 def interval(raw):
@@ -37,8 +40,14 @@ def contains(bounds, value):
 
 
 def check_scores(path):
+    body = path.read_text()
+    if path.name in PENDING_SCORES:
+        assert body.count('`SCORE_BANDS_PENDING`') == 1, path.name
+        assert not re.search(r'^\|\s*[0-6]\s*\|', body, re.MULTILINE), path.name
+        return 0
+    assert 'SCORE_BANDS_PENDING' not in body, path.name
     rows = {}
-    for line in path.read_text().splitlines():
+    for line in body.splitlines():
         if not re.match(r'^\|\s*[0-6]\s*\|', line):
             continue
         cells = [part.strip() for part in line.split('|')[1:-1]]
@@ -94,16 +103,13 @@ def main():
     # Verify illustrative arithmetic independently of any future measured data.
     assert (Fraction('.8') + Fraction('.6') + 1 + Fraction('.8')) / 4 == Fraction('.8')
     assert Fraction('1.2') + max(0, 3) + Fraction('.6') == Fraction('4.8')
-    assert (3 * 1 + 3 * 5) / 6 == 3
     assert Fraction(20, 20 * 40) * 20 == Fraction('.5')
-    # MEM-v2: specified Samsung screen payload and explicit VIA capacity budgets.
-    frame_pool = Fraction(2880 * 1800 * 4 * 15, 2**20)
-    audio_pool = Fraction(48000 * 2 * 60 * 2, 2**20)
-    assert 296 < frame_pool < 297 and frame_pool < 320
-    assert 10 < audio_pool < 11 and audio_pool < 16
-    assert sum((320, 128, 256, 64, 32, 16, 32, 64)) == 912
-    assert 912 + 112 == 1024
-    print(f'PASS: 9 QA specs, {probes} score probes, {links} local file links, illustrative arithmetic.')
+    # MEM-v3: simultaneous RAM example, not a product-target derivation.
+    assert 120 + 140 + 30 + 90 == 380
+    assert 110 + 180 + 30 + 80 == 400
+    assert max(380, 400) == 400
+    assert max(120, 110) + max(140, 180) + 30 + max(90, 80) == 420
+    print(f'PASS: 9 QA specs, 7 score tables, 2 explicitly pending, {probes} score probes, {links} local file links.')
     print('Scope: score intervals/glyphs/monotonicity, local file existence and examples only.')
     print('Not checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results.')
 
