@@ -21,6 +21,8 @@
 | 내용 | 관리 위치와 역할 |
 | --- | --- |
 | 사용자 가치, QA 정의, 목표 수치 / 근거, 0~6점 구간, QA와 DP 대응, 예상 우열 | 이 문서의 현재 검토 상태 |
+| 조사 원값과 연구 조건 및 계산과 적용 한계 | [QA별 조사 상세 기록](./qa-candidate-package/research-notes/README.md). QA01~06의 조사 근거와 채택하지 않은 논리도 보존 |
+| QA별 설명 페이지 원고와 발표자 노트 | [QA01~09 한 장 페이지 구성안](./qa-candidate-package/slide-page-plan.md). 기존 상세 명세와 점수표 및 예시를 연결 |
 | 설계 대안과 실행 계약 | 기존 [44](./04-44-continuous-interaction.md), [47](./04-47-screen-voice-grounding.md), [45](./04-45-memory-and-context.md), [42](./04-42-lifecycle-ownership.md) 문서를 연결 |
 | 평가 확정본 | 평가 승인 후 합의한 지표, 목표 / 근거, 점수 구간, 사례, 시작 / 종료점, 실패 처리와 PoC 범위의 버전을 고정 |
 | 실행 입력과 평가기 | `benchmark/architecture/`의 해당 확정본과 연결된 자료 |

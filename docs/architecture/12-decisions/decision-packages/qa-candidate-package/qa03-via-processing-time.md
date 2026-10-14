@@ -1,5 +1,7 @@
 # 후보 QA 3 — VIA 처리시간
 
+> 발표 준비: [QA03 한 장 설명 페이지](./slide-page-plan.md#qa03) / [출처별 조사 상세 기록](./research-notes/qa03-duration-research.md)
+
 > 상태: **사용자 검토용 제안 / 미측정**  /  2026-10-14  /  판본 `QA-C03-v2`
 >
 > `QA-C03`는 이번 후보 문서의 식별자다. 기존 `ASR-QA-03` 결과를 이 새 정의의 결과로 바꾸지 않는다. 현재 논의의 출발점은 [QA와 DP 평가 계획](../03-03-qa-dp-evaluation-plan.md)이다.

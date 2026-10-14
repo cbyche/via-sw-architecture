@@ -1,5 +1,7 @@
 # 후보 QA06 최대 RAM 사용량
 
+> 발표 준비: [QA06 한 장 설명 페이지](./slide-page-plan.md#qa06) / [출처별 조사 상세 기록](./research-notes/qa06-memory-research.md)
+
 > 개정일: 2026-10-14 / RAM-v1 검토안 / 공개 기능 참조에 따른 제품 상한 / 계측 방법 미확정 / Windows 측정 없음
 > [중심 문서](../03-03-qa-dp-evaluation-plan.md)의 후보 번호이며 기존 ASR 번호를 바꾸지 않는다.
 

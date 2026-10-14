@@ -1,5 +1,7 @@
 # 후보 QA-04 — 변경 범위
 
+> 발표 준비: [QA04 한 장 설명 페이지](./slide-page-plan.md#qa04) / [출처별 조사 상세 기록](./research-notes/qa04-change-research.md)
+
 > 개정일: 2026-10-14 / 실제 Rust 변경 선례를 반영한 목표 제안 / `CHG-v2` / 후보 구현과 PoC 측정 없음
 > 이 문서의 `후보 QA-04`는 새 검토 순서이며 기존 `ASR-QA-05 변경 용이성`의 번호를 바꾸지 않는다. [중심 문서](../03-03-qa-dp-evaluation-plan.md)와 함께 읽는다.
 
