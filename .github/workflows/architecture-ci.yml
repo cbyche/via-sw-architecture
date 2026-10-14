@@ -72,7 +72,9 @@ jobs:
       - name: Check 04-45 memory and context comparison and lifecycle
         run: python3 scripts/architecture/generate_memory_context_diagrams.py --check
       - name: Check 04-45 implementation designs and embedded previews
-        run: python3 scripts/architecture/generate_dp45_implementation_diagrams.py --check
+        run: |
+          python3 scripts/architecture/generate_dp45_implementation_diagrams.py --check
+          python3 scripts/architecture/generate_dp45_implementation_comparison.py --check
       - name: Check 04-46 evidence structures and synthetic temporal examples
         run: |
           python3 scripts/architecture/generate_evidence_context_diagrams.py --check

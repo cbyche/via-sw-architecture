@@ -5,7 +5,7 @@
 
 ## 그림을 읽는 순서
 
-DP-45의 현행 설명 그림은 아래 아홉 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다. 앞으로 추가하거나 개정하는 DP-45 그림도 이 표에 등록하고 본문의 해당 설명 옆에 SVG를 직접 표시한다.
+DP-45의 현행 설명 그림은 아래 열 장이며 모두 이 본문에 직접 표시한다. 각 그림 옆에서 편집 원본과 PNG도 열 수 있다. 다른 발표 파일에만 있는 이전 시안은 §12에서 판본과 한계를 밝히고 볼 수 있다. 같은 그림의 SVG와 PNG는 중복해서 표시하지 않는다. 앞으로 추가하거나 개정하는 DP-45 그림도 이 표에 등록하고 본문의 해당 설명 옆에 SVG를 직접 표시한다.
 
 | 그림 | 이 본문에서 볼 위치 |
 | --- | --- |
@@ -15,6 +15,7 @@ DP-45의 현행 설명 그림은 아래 아홉 장이며 모두 이 본문에 �
 | A/B 기본 구조와 보완 방법 | [§1.3 기본 구조](#dp45-fig-basic-structures) |
 | 상세 구조 비교 | [§3 메인 비교](#dp45-fig-main-structure) |
 | 생산과 조회의 확대 경로 | [§3.9 확대 비교](#dp45-fig-comparison) |
+| 구현 구조 한 페이지 비교 | [§3.10.7 A/B 한 페이지](#dp45-fig-implementation-comparison) |
 | A의 코드, 상태와 호출 경로 | [§3.10.2 A 구현 설계](#dp45-fig-implementation-a) |
 | B의 생산, 게시와 조회 경로 | [§3.10.3 B 구현 설계](#dp45-fig-implementation-b) |
 | 정정과 삭제의 처리 | [§4.5 수명 그림](#dp45-fig-lifecycle) |
@@ -504,6 +505,24 @@ read의 정상 내부 상태는 `ADMITTED → READING → CHECKING → REPLIED`,
 
 [전용 생성기](../../../../scripts/architecture/generate_dp45_implementation_diagrams.py)는 같은 scene에서 SVG/draw.io를 만들고, [렌더 검사](../../../../scripts/architecture/render_dp45_implementation_diagrams.cjs)는 PNG를 생성한다. `--check`는 소유 관계, 직교 경로, 무관 노드 관통, 생성물 일치, 본문 삽입과 SVG/PNG 해시를 검사한다. 문서 그림 검수와 제품/모델 검증은 [검수 기록](./04-45-memory-and-context-review.md)에서 구분한다.
 
+#### 3.10.7 구현 구조를 펼친 한 페이지 비교
+
+<a id="dp45-fig-implementation-comparison"></a>
+
+![DP-45 구현 구조 한 페이지 비교: 요청별 조합과 별도 생산 및 게시 조회](./diagrams/dp45-implementation-comparison.svg)
+
+[확대 SVG](./diagrams/dp45-implementation-comparison.svg) / [편집 가능한 draw.io](./diagrams/dp45-implementation-comparison.drawio) / [PNG](./diagrams/dp45-implementation-comparison.png) / [편집 가능한 PPTX 1장](../../../presentations_files/dp45-implementation-comparison/VIA-DP45-implementation-comparison.pptx)
+
+2026-10-15 추가본이다. 위 A/B 상세 구현 설계에서 차이가 나는 내부 코드와 상태를 한 페이지에 펼쳤다. 이전 §3.9 비교 페이지와 §3.10.2/3의 상세 그림, 기존 통합 발표자료는 그대로 보존한다. 같은 공통 Component를 같은 위치에 두고 아래 흐름과 도형을 새로 구성했다.
+
+A의 1~5는 현재 Query 접수, 필요한 원본 읽기, read별 완료 반영, 조합과 Bundle 반환이다. Source View Cache는 별도 재사용 수명이고 Request Evidence Set과 Read Job Index는 현재 read의 임시 상태다. 선행 index/summary, 관계 cache와 병렬 읽기 및 부분 갱신을 허용한다.
+
+B의 1~4는 확정 원본 변경 또는 지원 범위 생산 요청, job claim/원본 읽기/관계 생산, 후보 검증과 조건부 게시다. 5~8은 현재 Query의 게시본 조회, 원본 확인과 Bundle 반환이다. 9는 미생산 범위의 read 대기와 backfill 접수다. 게시 알림 후 6으로 돌아가 저장소를 다시 읽는다. Memory Publisher의 임시 Candidate Batch, 지속 Production Journal과 Repository, Evidence Reader의 현재 read 대기를 구별한다. relations, Coverage, cursor와 게시 통지의 함께 확정 및 경합/복원 조건은 §3.10.3/4를 따른다.
+
+하단 S는 Request Controller의 입력 이력 읽기 port다. A의 Owner Read Broker와 B의 Source Read Worker/Origin Verifier가 같은 원본 계약을 사용하며, B의 보조 S 호출은 이름이 같은 port 참조로 표시한다. M은 Model Access의 조건부 의미 모델 연동, U는 Policy Manager의 사용 검사다. 큰 상자는 논리 소유이며 process 분리를 뜻하지 않는다. 현재 의미 판단과 채택은 근거 반환 뒤 양안 공통으로 남는다. 그림에는 품질 수치나 우위 판정을 넣지 않았다.
+
+생성은 [한 페이지 생성기](../../../../scripts/architecture/generate_dp45_implementation_comparison.py), PPTX 작성은 [native 도형 작성기](../../../../scripts/presentations/build_dp45_implementation_comparison.mjs)를 사용한다. [자료 안내](../../../presentations_files/dp45-implementation-comparison/README.md)에 재생성과 검수 범위를 기록한다.
+
 ## 4. 자료와 계약: 무엇을 기억하며 무엇을 잃는가
 
 ### 4.1 같은 자료, 다른 사용 수명
@@ -804,7 +823,7 @@ LangMem의 구조화된 생산 API에서 참고할 부분은 **개발자가 지�
 
 <a id="dp45-fig-previous"></a>
 
-아래 여섯 미리보기는 DP-45를 설명하면서 만든 이전 발표 판본이다. 현재 설계의 아홉 그림과 구별해 보존한다. 특히 v4의 QA 숫자와 점수는 당시 사고 실험의 가정이며 측정 결과가 아니다. v5의 지역 예산도 전체 QA 판정이나 A/B 선택 결과가 아니다. 현재 설명에는 위 §0부터 §4까지의 그림과 계약을 사용한다.
+아래 여섯 미리보기는 DP-45를 설명하면서 만든 이전 발표 판본이다. 현재 설계의 열 그림과 구별해 보존한다. 특히 v4의 QA 숫자와 점수는 당시 사고 실험의 가정이며 측정 결과가 아니다. v5의 지역 예산도 전체 QA 판정이나 A/B 선택 결과가 아니다. 현재 설명에는 위 §0부터 §4까지의 그림과 계약을 사용한다.
 
 ### 12.1 배경 발표 v2
 
