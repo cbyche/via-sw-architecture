@@ -42,7 +42,7 @@ class GroundingScene:
         points = [self.port(source, sp, sd), *via, self.port(target, tp, td)]
         self.edges.append(dict(id='wire'+str(len(self.edges)+1), source=source, target=target,
                                points=points, kind=kind))
-        if label: self.text(*at, label, 21, color={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK}[kind], mask=True)
+        if label: self.text(*at, label, 21, color={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK,'rpc':INK}[kind], mask=True)
 
     def ancestors(self, key):
         result = set()
@@ -75,10 +75,11 @@ class GroundingScene:
     def texts(self, n):
         x,y,w,h=(n[k] for k in ('x','y','w','h')); k=n['kind']
         if k=='life': return []
+        if k=='port': return [(x+w/2,y+h/2+9,n['title'],26,True,'center')]
         if k in ('component','group'):
             return [(x+18,y+34,n['title'],30 if k=='component' else 27,True,'left')]
         title_size=25 if w<480 else 27
-        top=y+(42 if k=='store' else 32)
+        top=y+(42 if k in ('store','db') else 32)
         result=[(x+w/2,top,n['title'],title_size,True,'center')]
         for j,line in enumerate(n['lines']): result.append((x+18,top+35+j*29,line,23,False,'left'))
         return result
@@ -88,6 +89,7 @@ class GroundingScene:
         out=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img"><title>{esc(self.title)}</title><defs>']
         for c in (INK,BLUE,RED,GRAY):
             out.append(f'<marker id="a{c[1:]}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="{c}" stroke-width="1.6"/></marker>')
+        out.append(f'<marker id="reply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L9 5L1 9" fill="none" stroke="{INK}" stroke-width="1.6"/></marker>')
         out += ['</defs>',f'<rect width="{W}" height="{H}" fill="white"/>',f'<g font-family="{FONT}">']
         for key,n in self.nodes.items():
             x,y,w,h=(n[k] for k in ('x','y','w','h'));kind=n['kind']
@@ -98,9 +100,11 @@ class GroundingScene:
             out.append('<g '+attrs+'>')
             if kind=='life':
                 out.append(f'<path d="M{x+w/2} {y}V{y+h}" fill="none" stroke="{GRAY}" stroke-dasharray="6 6"/>')
+            elif kind=='port':
+                out.append(f'<circle cx="{x+w/2}" cy="{y+h/2}" r="{w/2}" fill="white" stroke="{BLUE}" stroke-width="2"/>')
             elif kind=='external':
                 out.append(f'<polygon points="{x+20},{y} {x+w-20},{y} {x+w},{y+h/2} {x+w-20},{y+h} {x+20},{y+h} {x},{y+h/2}" fill="white" stroke="{stroke}" stroke-width="2"/>')
-            elif kind=='store':
+            elif kind in ('store','db'):
                 out.append(f'<path d="M{x} {y+13}C{x} {y-3} {x+w} {y-3} {x+w} {y+13}V{y+h-13}C{x+w} {y+h+3} {x} {y+h+3} {x} {y+h-13}Z M{x} {y+13}C{x} {y+29} {x+w} {y+29} {x+w} {y+13}" fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
             elif kind in ('data','trace'):
                 out.append(f'<path d="M{x} {y}H{x+w-20}L{x+w} {y+20}V{y+h}H{x}Z M{x+w-20} {y}V{y+20}H{x+w}" fill="{fill}" stroke="{stroke}" stroke-width="2"/>')
@@ -112,12 +116,15 @@ class GroundingScene:
                     start=x+w-190
                     out.append(f'<path d="M{start-20} {y+h-22}H{start+165}" stroke="{BLUE}" marker-end="url(#a{BLUE[1:]})"/>')
                     for j in range(4): out.append(f'<rect x="{start+j*38}" y="{y+h-38}" width="30" height="30" fill="white" stroke="{stroke}"/>')
+                if kind=='memory':
+                    out.append(f'<path d="M{x+8} {y+h+6}H{x+w+6}V{y+8}" fill="none" stroke="{stroke}" stroke-width="2"/>')
             for xx,yy,t,size,bold,align in self.texts(n):
-                out.append(f'<text x="{xx}" y="{yy}" data-width="{w-36}" font-size="{size}" font-weight="{700 if bold else 400}" text-anchor="{"middle" if align=="center" else "start"}" fill="{INK}">{esc(t)}</text>')
+                out.append(f'<text x="{xx}" y="{yy}" data-width="{w-(8 if kind=="port" else 36)}" font-size="{size}" font-weight="{700 if bold else 400}" text-anchor="{"middle" if align=="center" else "start"}" fill="{INK}">{esc(t)}</text>')
             out.append('</g>')
         for e in self.edges:
-            c={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK}[e['kind']]
+            c={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK,'rpc':INK}[e['kind']]
             dash=' stroke-dasharray="9 6"' if e['kind'] in ('done','cancel','state') else ''
+            if e['kind']=='rpc': dash+=' marker-start="url(#reply)"'
             pts=' '.join(f'{x},{y}' for x,y in e['points'])
             out.append(f'<polyline id="{e["id"]}" data-flow="{e["kind"]}" data-source="{e["source"]}" data-target="{e["target"]}" points="{pts}" fill="none" stroke="{c}" stroke-width="2" marker-end="url(#a{c[1:]})"{dash}/>')
         for i,n in enumerate(self.notes):
@@ -142,18 +149,23 @@ class GroundingScene:
             if parent!='1':x-=self.nodes[parent]['x'];y-=self.nodes[parent]['y']
             kind=n['kind'];fill=PALE if n['different'] else 'white';stroke=ORANGE if n['different'] else INK
             shape={'component':'swimlane;startSize=48;collapsible=0;', 'group':'swimlane;startSize=48;collapsible=0;',
-                   'store':'shape=cylinder;size=13;', 'data':'shape=note;size=20;', 'trace':'shape=note;size=20;',
-                   'life':'shape=line;direction=south;dashed=1;', 'external':'shape=hexagon;', 'queue':'rounded=0;', 'code':'rounded=1;arcSize=10;'}[kind]
+                   'store':'shape=cylinder;size=13;', 'db':'shape=cylinder;size=13;', 'memory':'rounded=0;', 'data':'shape=note;size=20;', 'trace':'shape=note;size=20;',
+                   'life':'shape=line;direction=south;dashed=1;', 'port':'ellipse;', 'external':'shape=hexagon;', 'queue':'rounded=0;', 'code':'rounded=1;arcSize=10;'}[kind]
             value=html.escape(n['title']) if kind in ('component','group') else ''
             vertex(key,x,y,w,h,value,shape+f'html=1;whiteSpace=wrap;fillColor={fill};swimlaneFillColor={fill};strokeColor={stroke};fontColor={INK};fontFamily=Arial;fontSize={30 if kind=="component" else 27};fontStyle=1;align=left;spacingLeft=18;',parent)
             if kind not in ('component','group'):
                 for j,(xx,yy,t,size,bold,align) in enumerate(self.texts(n)):
-                    vertex(key+f'-text{j}',18,yy-n['y']-size,w-36,size*1.3,html.escape(t),f'text;html=1;whiteSpace=nowrap;overflow=visible;fillColor=none;strokeColor=none;fontColor={INK};fontSize={size};fontStyle={int(bold)};align={align};spacing=0;',key)
+                    pad=4 if kind=='port' else 18
+                    vertex(key+f'-text{j}',pad,yy-n['y']-size,w-2*pad,size*1.3,html.escape(t),f'text;html=1;whiteSpace=nowrap;overflow=visible;fillColor=none;strokeColor=none;fontColor={INK};fontSize={size};fontStyle={int(bold)};align={align};spacing=0;',key)
             if kind=='queue':
                 for j in range(4):vertex(key+f'-slot{j}',w-190+j*38,h-38,30,30,'',f'fillColor=white;strokeColor={stroke};',key)
+            if kind=='memory':
+                vertex(key+'-stack-bottom',8,h+5,w-2,1,'',f'fillColor={stroke};strokeColor=none;',key)
+                vertex(key+'-stack-right',w+5,8,1,h-2,'',f'fillColor={stroke};strokeColor=none;',key)
         for e in self.edges:
-            c={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK}[e['kind']]
+            c={'post':BLUE,'done':BLUE,'cancel':RED,'state':GRAY,'call':INK,'rpc':INK}[e['kind']]
             st=f'edgeStyle=none;rounded=0;strokeColor={c};strokeWidth=2;endArrow=open;endFill=0;'+('dashed=1;' if e['kind'] in ('done','cancel','state') else '')
+            if e['kind']=='rpc':st+='startArrow=open;startFill=0;'
             for role,p,prefix in (('source',e['points'][0],'exit'),('target',e['points'][-1],'entry')):
                 n=self.nodes[e[role]];st+=f'{prefix}X={(p[0]-n["x"])/n["w"]};{prefix}Y={(p[1]-n["y"])/n["h"]};{prefix}Perimeter=0;'
             cell=ET.SubElement(root,'mxCell',id=e['id'],source=e['source'],target=e['target'],edge='1',parent='1',style=st)

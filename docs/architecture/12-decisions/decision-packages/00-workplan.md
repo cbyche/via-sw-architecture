@@ -138,6 +138,14 @@ Rust의 `mod`와 crate root가 만드는 모듈 경로를 식별 단위로 삼�
 
 미응답·오답을 평균에서 삭제하지 않는다. 사전 공통 평가 상한까지 유효 응답이 없으면 상한값과 실패를 함께 기록하는 방식으로 구체화한다. 응답 유형별 사례 비율, 필수 내용, 상한값, 합격선과 차이 판정값은 평가 전 합의할 항목이며 아직 수치를 정하지 않았다. 기존 [사건 경계 원칙](../../11-measurement/event-boundary-contract.md)의 실제 사건·실제 재생 관측 원칙을 따르되 이전 QA ID와 집계 계약을 소급 변경하지 않는다.
 
+## 2026-10-14 DP-47 reference를 반영한 실제 구현 요소와 pattern 구체화
+
+사용자는 §8.5의 그림만으로 실행 흐름, SW 구성요소의 실체와 architectural style/pattern을 이해할 수 있도록 구체화해 달라고 요청했다. [47 §8.5](./04-47-screen-voice-grounding.md#85-구현을-가정한-상세-구조와-실행-계약)의 A/B 구조도와 두 사건도를 갱신했다. A는 비동기 workflow와 하나의 binding aggregate, B는 coordinator가 제어하는 Fork–Join/feedback dataflow와 생산자별 candidate repository다. 공통 30개 요소는 같은 좌표에 두었다.
+
+로컬 bounded FIFO, 단일 consumer 제어 loop, 역할별 async worker, immutable job/outcome DTO, 원본 ring 및 RAM Map, State Store의 영속 채택을 서로 다른 기호와 이름으로 표시했다. 공통 read/model adapter는 R/M 명명 port로 연결했다. BeginRevision과 TryPublish의 요청별 RevisionGate, queue 포화와 완료 통지, B의 snapshot 준비 조건 및 producer 재판단을 본문과 사건도에 맞췄다. 외부 message bus/pub-sub는 선택하지 않았으며 이유를 명시한다. 공개 reference의 확인 사실과 이 구현 가정을 구별한다.
+
+네 SVG/draw.io와 PNG 및 렌더 해시를 동기화했고 실제 PNG를 열어 확인했다. [작성자 검수 §9](./dp47-design-review.md#9-reference를-반영한-queue-data-model과-pattern-검수--2026-10-14)에 검사와 한계를 기록했다. 생성물, 본문 그림 포함, 링크, 용어, QA registry 및 가운데 점 검사가 통과했다. 제품 코드 구현, Windows/API/모델 실행, 측정 또는 A/B 선택을 수행한 기록은 아니다.
+
 ## 2026-10-13 DP-47 안별 구현 수준 구조와 정정 사건도
 
 사용자는 DP-44 §3.7을 참고하여 DP-47도 실제 구현을 가정한 안별 SW Architecture와 주요 flow를 더 상세히 설명하고 commit/push하도록 요청했다. [47 §8.5](./04-47-screen-voice-grounding.md#85-구현을-가정한-상세-구조와-실행-계약)에 A/B 구조도 두 장과 정상 생성/후보 부족/부분 정정/늦은 결과 사건도 두 장을 추가했다. 공통 27개 요소의 위치와 크기를 고정하고 A의 원본 기반 직접 binding/patch와 B의 생산자별 후보 게시, version 결합과 원 생산자 재판단을 실제 호출/반환 및 상태로 구별한다.

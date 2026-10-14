@@ -5,7 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from dp47_implementation_views import scenes
+from dp47_implementation_views import scenes, SHARED
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'docs/architecture/12-decisions/decision-packages/diagrams'
 
@@ -24,7 +24,7 @@ def generate(check=False):
             for ext in ('svg','png'):
                 digest=hashlib.sha256((OUT/(scene.slug+'.'+ext)).read_bytes()).hexdigest()
                 assert digest==manifest[ext+'_sha256'],f'Stale render: {scene.slug}.{ext}'
-    print('PASS: 27 shared nodes have identical A/B coordinates and sizes')
+    print(f'PASS: {len(SHARED)} shared nodes have identical A/B coordinates and sizes')
     if check:print('PASS: four PNG render manifests match current SVG/PNG bytes')
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--check',action='store_true');args=parser.parse_args()

@@ -96,3 +96,22 @@ DP-47 본문, 다섯 보조 문서, 그림과 생성 원본의 가운데 점을 
 기존 `generate_screen_voice_grounding_diagram.py --check`에서 상세도 검사를 함께 실행한다. 여섯 관련 그림의 본문 삽입, draw.io 및 PNG 링크, 본문 가운데 점 금지도 검사한다. 이 검사를 architecture CI에 추가했다. active Markdown 링크, 용어, QA registry 검사를 통과했다. whitespace 검사는 DP-47 commit 대상으로 범위를 제한하며 다른 세션의 미완료 변경은 포함하지 않는다.
 
 이 기록은 작성자의 문서/도식 검수다. 새 독립 리뷰, Windows/앱/API 실험, 제품 구현, 모델 실행, 비용 측정이나 A/B 선택을 수행하지 않았다. 42/45의 동시 작업, 44 원본과 기존 PPTX, 참조 Architecture와 QA/ADR은 이번 commit 범위에서 제외한다.
+
+## 9. reference를 반영한 queue, data model과 pattern 검수 / 2026-10-14
+
+사용자는 실제 SW 구현 요소와 architectural style/pattern까지 드러나도록 §8.5의 도식을 구체화하도록 요청했다. 기존 원본 공동 해석과 후보 생산/결합의 의미 경계를 유지하면서 네 그림과 해당 본문을 갱신했다. 이 절은 작성자의 설계 및 도식 검수 기록이다.
+
+| 발견한 문제 | 반영한 구체화 |
+| --- | --- |
+| Module과 원통만으로는 실행 함수, queue, RAM 상태와 DB를 구별하기 어려움 | 코드 사각형, FIFO 기호, RAM Map 카드, 영속 DB 원통과 immutable DTO를 구별. 각 queue의 자료/수신자와 RAM model의 의미 writer를 표기 |
+| A/B 차이가 모델 호출 개수나 상자 개수로 읽힐 위험 | A의 async workflow와 직접 binding aggregate, B의 producer별 queue/repository와 Fork–Join 및 feedback을 스타일과 실제 필수 경로로 표시 |
+| 모든 worker의 긴 read/model 배선이 B의 중심 흐름을 가림 | 동일 adapter를 가리키는 R/M 명명 port와 async 요청/반환 범례를 사용. queue, candidate 게시, 결합과 재판단 경로를 중앙에 남김 |
+| Coordinator가 언제 결합을 시작할지 추상적임 | 생산 경로별 응답 상태 또는 deadline, 호환 snapshot과 남은 예산으로 dispatch. 의미상 충분 여부는 Resolver에 남김 |
+| 정정 검사와 상태 쓰기가 별개이면 옛 callback이 새 상태를 덮을 수 있음 | BeginRevision과 TryApply/TryPublish가 요청별 RevisionGate의 같은 짧은 lock을 사용. lock 안에서 I/O, queue와 모델을 await하지 않음 |
+| 작업 queue가 가득 찬 동안 제어 loop가 완료를 못 읽으면 순환 대기 가능 | 제어 loop의 TryWrite와 유한 pending, 별도 Completion Inbox 및 두 inbox 처리 계약을 명시. capture callback은 의미 작업 대기를 기다리지 않음 |
+| 후보 게시만 보여주면 Coordinator의 다음 실행이 저절로 시작되는 것처럼 보임 | 생산자별 RAM 게시 이후 Completion Inbox 통지와 Binding Work Queue 실행을 사건도에 표시 |
+| reference가 해당 queue와 lock을 그대로 검증한 것처럼 확대될 위험 | QuickSet/Google/OmniParser에서 확인한 구조와 VIA 구현 가정을 분리. Channels와 Point-to-Point Channel은 구현 수단 참고로 연결 |
+
+`generate_screen_voice_grounding_diagram.py --check`가 네 상세도의 SVG/draw.io 및 렌더 해시, 공통 30개 요소의 같은 배치, owner/직교 배선과 여섯 그림의 본문 등록을 통과했다. Chrome으로 네 3840×2160 PNG를 렌더링하여 text width/overlap/bounds 오류 0을 확인하고 각각 열어 읽었다. active Markdown 397개 local link, 용어와 QA registry 검사도 통과했다. DP-47 관련 원본과 editable figure 13개에서 가운데 점이 없음을 확인했고 대상 diff의 whitespace 검사도 통과했다.
+
+구현 가능한 실행 계약을 설명하는 문서 작업이다. queue 용량, worker 수와 실제 provider capability를 측정하거나 SDK/DB engine을 최종 선정하지 않았다. local in-process task 가정은 Request Interpreter 내부에 적용하며 DP-42의 주변 서비스 수명을 결정하지 않는다. 제품 코드, Windows 연동, 모델 실행, 독립 리뷰나 품질 우위의 실증은 없다.
