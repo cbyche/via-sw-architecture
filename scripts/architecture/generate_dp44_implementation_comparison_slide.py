@@ -134,9 +134,10 @@ def slide():
           ('Control', 'Candidate', 'Condition'), 'Pump / match ID and revision', 'Publication Window (RAM)')
     # The Join's eligible output enters the common publication path below.
     edge([(1216, 522), (1216, 588)], 'data')
-    edge([(1646, 522), (1646, 539), (1310, 539), (1310, 588)], 'data')
-    edge([(1420, 656), (1442, 656)], 'data')
-    edge([(1646, 522), (1646, 588)], 'data')
+    edge([(1646, 522), (1646, 539), (1240, 539), (1240, 588)], 'data')
+    edge([(1420, 656), (1438, 656), (1438, 613), (1646, 613), (1646, 630)], 'data')
+    edge([(1646, 522), (1646, 547), (1782, 547), (1782, 630)], 'data')
+    edge([(1360, 522), (1360, 532), (1857, 532), (1857, 655), (1840, 655)], 'data')
     edge([(1646, 770), (1646, 791)], 'data')
     label(1330, 783, 300, 'eligible → Publication Control', 16, BLUE)
     label(1015, 824, 835, 'J1 늦은 완료: Composer Done Queue에서 자기 Job 무효 검사 후 폐기', 18, INK, True)
