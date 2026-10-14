@@ -1,5 +1,7 @@
 # 후보 QA06 최대 RAM 사용량
 
+> **공통 평가 구성 수정:** 이 문서의 개별 사례 수와 반복 수는 통합 전 초안이다. [공통 시나리오 구성 방안](./common-evaluation-population-plan.md)에 따라 하나의 목록에서 QA별 관측 대상을 지정한다. 공통 N과 관측 건수 및 반복 횟수는 아직 확정 전이다. 절대 RAM 목표와 계측 미완료 상태는 유지한다.
+
 > 발표 준비: [QA06 한 장 설명 페이지](./slide-page-plan.md#qa06) / [출처별 조사 상세 기록](./research-notes/qa06-memory-research.md)
 
 > 개정일: 2026-10-14 / RAM-v2 정의안 / TARGET_EVIDENCE_UNRESOLVED / MEASUREMENT_METHOD_PENDING / Windows 측정 없음

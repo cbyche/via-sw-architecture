@@ -1,5 +1,7 @@
 # 후보 QA 3 — VIA 처리시간
 
+> **공통 평가 구성 수정:** 이 문서의 개별 사례 수와 반복 수는 통합 전 초안이다. [공통 시나리오 구성 방안](./common-evaluation-population-plan.md)에 따라 하나의 목록에서 QA별 관측 대상을 지정한다. 공통 N과 관측 건수 및 반복 횟수는 아직 확정 전이다.
+
 > 발표 준비: [QA03 한 장 설명 페이지](./slide-page-plan.md#qa03) / [출처별 조사 상세 기록](./research-notes/qa03-duration-research.md)
 
 > 상태: **사용자 검토용 제안 / 미측정**  /  2026-10-14  /  판본 `QA-C03-v2`
