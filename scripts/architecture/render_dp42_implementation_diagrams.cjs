@@ -4,7 +4,8 @@ const path = require('path');
 const crypto = require('crypto');
 const { chromium } = require('playwright');
 const dir = path.resolve(__dirname, '../../docs/architecture/12-decisions/decision-packages/diagrams');
-const stems = ['dp42-implementation-a', 'dp42-implementation-b', 'dp42-flow-a', 'dp42-flow-b'];
+const comparison = process.argv.includes('--comparison');
+const stems = comparison ? ['choice42-structure'] : ['dp42-implementation-a', 'dp42-implementation-b', 'dp42-flow-a', 'dp42-flow-b'];
 const digest = b => crypto.createHash('sha256').update(b).digest('hex');
 (async () => {
   const browser = await chromium.launch({ headless: true,
@@ -55,7 +56,7 @@ const digest = b => crypto.createHash('sha256').update(b).digest('hex');
       records.push({stem,width:3840,height:2160,text_geometry_issues:0,svg_sha256:digest(svg),png_sha256:digest(fs.readFileSync(png))});
       process.stdout.write('PASS: '+stem+'\n');
     }
-    fs.writeFileSync(path.join(dir,'dp42-implementation-render.json'),JSON.stringify({
+    fs.writeFileSync(path.join(dir,comparison ? 'dp42-comparison-render.json' : 'dp42-implementation-render.json'),JSON.stringify({
       scope:'Author documentation rendering review; not product implementation, independent review or QA measurement',records
     },null,2)+'\n');
   } finally {await browser.close();}

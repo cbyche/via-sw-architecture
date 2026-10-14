@@ -12,13 +12,13 @@
 
 | 볼 내용 | 본문 위치 |
 | --- | --- |
-| DP 배경 / 전체 A/B 비교 / 서로 다른 수명 | 아래 배경 / §1 / §2 |
+| DP 배경 / 구현 구조를 나란히 펼친 한 페이지 A/B 비교 / 서로 다른 수명 | 아래 배경 / §1 / §2 |
 | 수명과 소유를 확대한 발표 그림 | §3.6 |
 | A 상세 SW Architecture와 27단계 전체 흐름 | [§3.7.1](#dp42-detail-a) |
 | B 상세 SW Architecture와 29단계 전체 흐름 | [§3.7.2](#dp42-detail-b) |
 | 저장 레코드와 확정 계약 / 정정과 실패 비교 | §3.7.3 / §3.7.4 |
 | 기존 A/B 사건도 / 변경 영향 비교 | §4 / §5 |
-| 이전 발표 판본 여섯 그림 | §11 |
+| 이전 발표 판본 여섯 그림 / 교체 전 메인 비교도 | §11.1~11.3 / §11.4 |
 
 ## DP 배경 — VIA 특성과 SW 구조 선택의 가치
 
@@ -48,9 +48,24 @@
 
 [편집 가능한 draw.io](./diagrams/choice42-structure.drawio) / [발표 삽입용 PNG](./diagrams/choice42-structure.png)
 
-메인 그림은 **같은 수명 → 같은 정식 Component → 다른 실행·확정 경계 → 예시 데이터와 실제 전달**을 한 장에서 읽는다. A/B는 같은 Interaction Manager, Request Controller, Request Interpreter, Response Manager, Task Manager, Agent Gateway와 Model Access를 사용한다. `대화 처리기`·`업무 관리기`라는 별도 Component를 추가하지 않는다. 공통 Component는 흰 바탕과 검정 테두리다. 다른 서비스에 배치된 공통 Component도 흰색으로 유지한다. 큰 Core/서비스 경계는 채우지 않고 A는 실선, B는 점선인 짙은 살구색 계열의 굵은 테두리로 실행과 상태 확정 범위를 구분한다. 책임과 동작이 다른 작은 내부 Module만 살구색으로 표시한다. 41과 같은 Legend를 사용하며 직각 박스는 논리 Component, 둥근 박스는 내부 Module, 원통은 저장 상태다. 실선 화살표는 요청과 전달, 점선 화살표는 응답과 반환이다. Component 포함 관계와 process 배치는 같은 개념이 아니다.
+**2026-10-15 구현 구조 비교 페이지:** §3.7의 상세 설계를 한 페이지에서 대조할 수 있도록 다시 배치했다. 왼쪽 A와 오른쪽 B에 같은 정식 Component와 대응되는 내부 Module을 놓고, 각 Module의 호출과 반환, 원본 저장 경로를 그렸다. 두 상세 그림을 축소해 붙인 것이 아니라 입력/출력 영역, 요청 해석과 채택, 업무 접수와 외부 전송, 저장 영역을 세로로 정렬한 별도 비교도다. [교체 전 메인 비교도](#dp42-previous-main)는 §11.4에서 SVG, draw.io, PNG 그대로 보존한다. §3.7의 네 상세 그림도 유지한다.
 
-위쪽은 대화 C1·세 요청 R1/R2/R3·보고서 업무 T1·외부 실행 X1/X2·질문 Q1의 서로 다른 수명을 나타낸다. R1은 최초 위임, R2는 Q1 답변, R3는 결과 수정이다. 수명 선은 개념적 사건 순서이며 측정 시간이나 기록 삭제 시점이 아니다. 상세 수명과 C2 전환은 §2의 보충 그림을 따른다.
+상단은 C1/R1/R2/R3/Q1/P1/T1/X1/X2의 서로 다른 수명을 설명한다. 가운데는 내부 Module과 협력, 하단은 State Store의 transaction과 상태를 펼친다. A는 한 VIA Core process와 공동 트랜잭션 관리자, B는 대화/업무 process와 각각의 트랜잭션 관리자를 가진다. 원통에 같은 기술적 저장 영역으로 묶인 요청 관계와 실제 전달도 의미 owner는 각각 Request Controller와 Response Manager다. A1이 물리 출력과 actual receipt 저장까지 한 번에 확정한다는 뜻이 아니다.
+
+그림의 **1~8은 양안에서 대응되는 처리 단계**이며 §3.7의 27/29개 세부 호출 번호와 구별한다. A1/A2/A3/A4와 B의 D1/D2/D3/D4/W1/W2/W3는 기존 상세 설계의 local commit 이름을 유지한다.
+
+| 단계 | 공통 동작 | A에서 보는 구조 | B에서 보는 구조 |
+| --- | --- | --- | --- |
+| 1 | u2 입력, 로컬 stop과 업무 hold 요청 | Core 안 현재 입력 제어와 업무 gate 협력 | 대화의 hold 의도와 업무 gate 적용/ACK 구별 |
+| 2 | 현재 질문 Q1/T1, P1 실제 제시, 근거와 권한을 읽고 의미 제안/채택 | 같은 owner의 내부 조회와 의미 제안 | 업무 조회는 서비스 경계를 넘지만 의미 채택 책임은 동일 |
+| 3 | K1 답변 변경 준비 | 관계 변경 준비기 → 답변 접수기, 아직 공동 확정 전 | D1에 의도/outbox 저장 후 K1과 ReleaseAndReconcile 전달 |
+| 4 | 업무 답변 접수 | TaskWriteSet을 받아 A1에서 R2 관계/Q1/K1/gate 공동 확정 | W1이 업무 원본/receipt/event를 확정한 뒤 D2로 대화에 반영 |
+| 5 | 현재 gate/권한 검사와 transmission CAS 후 외부 전송 | A2가 허용한 K1을 Agent Gateway가 전송 | W2는 D2 완료와 독립. 대화 반영 지연이 재실행 이유가 아님 |
+| 6 | 외부 receipt/event의 내구 수신과 원본 사실 반영 | 외부 inbox에서 A3 적용, 확인 사실 반환 | 업무 inbox에서 W3 적용, 내구 event를 D3와 cursor에 반영 |
+| 7 | 확인된 사실로 P2 게시 허용과 출력 release | Response Manager → Interaction Manager | 같은 사용자 전달 경로 |
+| 8 | 실제 표시/재생 범위 확인과 내구 원장 | A4에 actual receipt 저장 | D4에 actual receipt 저장 |
+
+직각 상자는 Component, 둥근 상자는 내부 Module, 원통은 상태다. 공통 구조는 흰색이며 달라지는 내부 기능과 확정/인계 경로를 살구색으로 표시한다. A process 경계는 실선, B의 독립 process 경계는 점선이다. 실선 화살표는 호출/저장, 점선은 반환 사실이며 `↔` 표시는 한 경로에 조회와 응답을 축약했다는 뜻이다. 상단 Model Access, Context Manager, Policy Manager는 공통 API 의존성으로 펼침을 생략한 정식 Component다. 실제 모델 제공자는 클라우드 조건을 따르며 신규 process 배치를 제안하지 않는다.
 
 **그림의 정상 사례는 E4 답변이다.** 질문 Q1 “상반기로 할까요?”는 publication P1로 실제 제시된 상태다. 사용자가 C1으로 돌아와 u2 “응, 상반기로”라고 답하면 Request Controller는 Request Interpreter의 제안을 현재 Q1/T1/X1·P1·권한과 결합해 R2의 연결을 확정한다. Task Manager는 조회 시 `Q1=OPEN,v7`을 반환하고 답변 접수 시 `Q1=ANSWERED,v8`과 전달 명령 K1을 생성한다. 조회 전·접수 후의 예시 값이며 저장 schema를 동결한 것이 아니다.
 
@@ -529,7 +544,7 @@ RM의 내구 실제 전달 원장은 대화 서비스에 남는다. 업무 접�
 
 여섯 작성 작업은 동일 사례와 범위 정의, owner/확정/실행 설계, 싼 전환·혼합 반론, V-01~13 인과 검토, 실제 코드 근거 고정, 발표 도식·본문 작성이다. 이는 프로젝트 전체의 Stage 5/6 진행이나 구현·측정 승인이 아니다.
 
-도식은 [전용 생성기](../../../../scripts/architecture/generate_lifecycle_ownership_diagrams.py)에서 같은 좌표·문자·연결 모델로 SVG/draw.io를 만든다. 메인 비교도는 16:9 2560×1440, 나머지도 발표에 옮기기 쉬운 16:9로 작성한다. [작성자 검수 기록](./04-42-lifecycle-review.md)에 실제 발견한 문제, 수정, 검증 한계와 완료 결과를 남긴다. 사용자 수용·독립 심사·측정된 우위는 별개다.
+도식은 [전용 생성기](../../../../scripts/architecture/generate_lifecycle_ownership_diagrams.py)에서 같은 좌표·문자·연결 모델로 SVG/draw.io를 만든다. 메인 비교도는 16:9 3840×2160이며 [구현 비교 scene](../../../../scripts/architecture/dp42_implementation_comparison.py)에서 생성한다. 나머지도 발표에 옮기기 쉬운 16:9로 작성한다. 메인은 `render_dp42_implementation_diagrams.cjs --comparison`으로 PNG와 [렌더 기록](./diagrams/dp42-comparison-render.json)을 갱신한다. [작성자 검수 기록](./04-42-lifecycle-review.md)에 실제 발견한 문제, 수정, 검증 한계와 완료 결과를 남긴다. 사용자 수용·독립 심사·측정된 우위는 별개다.
 
 §3.7의 상세 네 장은 [상세 도식 생성기](../../../../scripts/architecture/generate_dp42_implementation_diagrams.py)가 같은 scene에서 편집 가능한 SVG/draw.io를 생성한다. [PNG 렌더와 글자 검사](../../../../scripts/architecture/render_dp42_implementation_diagrams.cjs)는 별도 실행하며 [렌더 기록](./diagrams/dp42-implementation-render.json)으로 최종 SVG/PNG hash를 연결한다. `--check`는 본문 미리보기와 원본/PNG 링크, XML 연결, Module 포함, 직교 경로와 생성물/렌더 일치를 확인한다.
 
@@ -560,3 +575,14 @@ RM의 내구 실제 전달 원장은 대화 서비스에 남는다. 업무 접�
 ![이전 v5 발표의 DP-42 QA 평가 전 가정](../../../presentations_files/dp-comparison/v5/dp42-qa-detail_v5.png)
 
 [v5 발표 설명](../../../presentations_files/dp-comparison/v5/README.md)
+
+
+<a id="dp42-previous-main"></a>
+
+### 11.4 구현 수준 재배치 전 메인 비교도
+
+2026-10-15 한 페이지 재배치 직전의 메인 비교도를 원본 그대로 보존한다. 현행 한 페이지는 §1, 방안별 확대 구조와 전체 흐름은 §3.7을 따른다. 아래는 이전 표현 판본이며 별도 설계 대안이나 품질 평가 결과가 아니다.
+
+![구현 수준 재배치 전 DP-42 메인 비교도](./diagrams/dp42-comparison-before-implementation.svg)
+
+[이전 편집 원본 draw.io](./diagrams/dp42-comparison-before-implementation.drawio) / [이전 PNG](./diagrams/dp42-comparison-before-implementation.png)

@@ -9,7 +9,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from stage4_diagram_design import Plate, INK, MUTED, BLUE, GREEN
-from lifecycle_ownership_presentation import structure
+from dp42_implementation_comparison import structure, check_render
 from dp_comparison_structures import COMMON, APRICOT, DIFFERENCE_STROKE, DIFFERENCE_WIDTH, BOUNDARY_WIDTH, append_plate_legend
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -222,7 +222,7 @@ def main():
     generated = {}
     for p in plates:
         p.validate()
-        for n in p.items:
+        for n in getattr(p, 'items', []):
             if n['kind'] == 'component':
                 assert not n['role'], 'Names only in component rectangles'
         for ext, value in [('svg', p.svg()), ('drawio', p.drawio())]:
@@ -250,6 +250,7 @@ def main():
     if args.check:
         from generate_dp42_implementation_diagrams import main as check_implementation_views
         check_implementation_views(['--check'])
+        check_render()
 
 
 if __name__ == '__main__':

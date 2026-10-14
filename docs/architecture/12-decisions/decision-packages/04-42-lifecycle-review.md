@@ -1,5 +1,16 @@
 # 04-42 작성자 설계·발표 검수 기록
 
+## 2026-10-15 상세 구현 구조를 사용한 한 페이지 설계 비교
+
+사용자는 A/B 구현 수준 상세를 한 페이지에 나란히 재구성하고 commit/push하도록 요청했으며 이전 그림을 삭제하지 말라고 명시했다. 현행 메인 `choice42-structure`를 새 SVG/draw.io/PNG로 갱신하고 교체 직전 세 파일은 `dp42-comparison-before-implementation` 이름으로 byte 단위 그대로 보존했다. 본문 §1은 새 페이지, §11.4는 이전 페이지이며 §3.7의 네 상세 그림과 나머지 기존 그림도 유지한다.
+
+새 페이지는 3840×2160의 16:9다. 같은 수명과 사례를 양쪽 상단에 반복하고 Interaction Manager의 입력/stop/실제 출력, Request Interpreter의 해석과 RAM, Request Controller의 채택/의도/입력 제어/사실 반영/재결합, Task Manager의 조회/접수/gate/사실 적용, Agent Gateway의 전송/수신/복구, Response Manager의 게시/actual 원장과 State Store의 내부 transaction을 펼쳤다. Model Access, Context Manager, Policy Manager는 공통 API 의존성으로 남긴다. 새 의미 owner나 제품 기술 선택을 추가하지 않는다.
+
+1~8 번호는 같은 사건의 대응 단계다. A의 변경 집합 반환과 공동 A1, B의 D1 의도 저장 이후 전달/W1 접수/D2 반영, 별도 전송 CAS, 외부 fact와 실제 출력의 확인을 구조 화살표와 저장소에서 읽도록 했다. W2와 D2의 독립, 같은 K1 결과 조회와 내구 event 재결합을 유지한다. 메인 번호는 상세 흐름도의 27/29개 메시지 번호와 구별한다.
+
+작성 중 게시 release 선이 외부 Agent 상자를 관통한 문제를 경로 검사에서 찾아 수정했다. 재연결 Module의 실제 조회 경로와 업무 receipt/event outbox 저장 설명도 보강했다. 최종 Chrome 렌더에서 글자 겹침, 상자/canvas 이탈과 선의 글자 관통 0건을 확인하고 PNG를 직접 검토했다. 보존본 세 파일은 교체 전 Git 파일과 byte 일치를 검사한다. 원본 생성/직교 경로/Module 포함/XML 연결, 렌더 hash와 본문 링크 검사 범위이며 draw.io native 편집기의 round-trip, 제품 구현, 모델 실행, QA 측정이나 독립 심사는 아니다. A/B 및 품질 우열을 선정하지 않는다. 통합 PPTX 파일은 이 Markdown/SVG 한 페이지 갱신 범위에 포함하지 않는다.
+
+
 ## 2026-10-13 A/B 구현 수준 구조와 전체 흐름 상세화
 
 사용자는 44 §3.7을 참고해 42의 각 방안을 구현 단위까지 펼친 상세 SW Architecture와 주요 flow를 요청하고 commit/push를 승인했다. 본문 §3.7에 A/B 구조도 두 장과 같은 Q1 답변을 추적하는 전체 흐름도 두 장을 추가했다. 각 그림은 3840×2160 SVG, 편집 가능한 draw.io와 PNG를 갖고 주 문서에 직접 표시한다. 기존 본문 그림도 유지하며 맨 앞 그림 차례에서 현행 상세와 이전 판본을 구분한다.
