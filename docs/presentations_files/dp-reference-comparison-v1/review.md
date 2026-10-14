@@ -34,4 +34,8 @@
 - QA 원값과 점수는 고정한 `predictions.json`에서 가져왔고 포함 및 제외 집합과 표시 반올림을 대조했다. [콘텐츠 검사 결과](./content-validation.json)에 최종 파일 해시, QA 목록, 네이티브 객체 수와 이미지 객체 0건을 기록했다.
 - 활성 Markdown 447개 파일의 로컬 링크, 활성 용어와 정식 Component 이름, DP-47 원본 생성기 `--check`, Git 공백 검사와 두 JS 생성기의 문법 검사에 통과했다.
 - 배치 검사기의 `native_table_overflow` 경고 네 건은 Trade-off 셀 안의 수치 텍스트를 footer로 추정한 것이다. 표의 실제 끝은 y=1048이고 footer는 y=1052 이후다. 네 장 렌더에서 표 밖으로 넘친 셀이나 가려진 footer가 없는 것을 확인했다. 경고 원문은 `validation.json`에 보존한다.
-- 로컬 렌더는 네이티브 Windows PowerPoint 검증이 아니다. Windows Open XML SDK 검사는 게시 후 별도 CI로 실행한다. SDK 성공도 실제 PowerPoint의 글꼴 대체, 화면 배치와 실행을 보증하지 않는다.
+- [Windows CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38613600456)에서 최종 파일을 Microsoft Open XML SDK 3.3.0으로 열었고 4장, 스키마 오류 0건을 확인했다. [환경 및 검사 결과](./windows-validation.json)의 파일 해시는 로컬 최종 PPTX와 일치한다. Windows에 Calibri는 설치되어 있으나 PowerPoint는 설치되어 있지 않아 실제 PowerPoint 렌더는 검증하지 않았다.
+
+## 게시 후 CI 보완
+
+첫 저장소 CI의 DP-44 그림 목록 검사가 기존 구현 비교도와 이번 레퍼런스 비교도를 예상 목록에 포함하지 않아 실패했다. 두 그림의 SVG, draw.io와 PNG를 목록에 추가하고 렌더 해시도 등록했다. 기존 일곱 그림 검사와 해시는 그대로 유지했다. 수정 후 DP-44 문서 검사와 DP-45 기본 및 구현 그림 검사를 로컬에서 통과했으며 저장소 CI를 다시 실행한다. PPTX 바이트는 이 보완에서 바뀌지 않았다.

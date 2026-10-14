@@ -15,13 +15,16 @@ BASE = ROOT / 'docs/architecture/12-decisions/decision-packages'
 DIAGRAMS = BASE / 'diagrams'
 FOCUS = ROOT / 'docs/presentations_files/dp-comparison'
 BACKGROUND = ROOT / 'docs/presentations_files/dp-background'
+REFERENCE = ROOT / 'docs/presentations_files/dp-reference-comparison-v1'
 FIGURES = {
     name: (DIAGRAMS, DIAGRAMS) for name in (
         'dp44-common-path', 'choice44-structure', 'choice44-event',
         'dp44-implementation-a', 'dp44-implementation-b')
 }
 FIGURES.update({'dp44-background': (DIAGRAMS, BACKGROUND),
-                'dp44-comparison': (FOCUS, FOCUS)})
+                'dp44-comparison': (FOCUS, FOCUS),
+                'dp44-implementation-comparison': (FOCUS, FOCUS),
+                'dp44-reference-comparison_v1': (REFERENCE, REFERENCE)})
 DOTS = {chr(code) for code in (0x00B7, 0x318D, 0x2022, 0x2027, 0x30FB, 0x22C5, 0x2219)}
 
 
@@ -57,7 +60,7 @@ def main():
         for extension, parent in (('svg', directory), ('png', png_directory)):
             digest = hashlib.sha256((parent / (row['stem'] + '.' + extension)).read_bytes()).hexdigest()
             assert digest == row[extension + '_sha256'], f'Stale {extension} render: {row["stem"]}'
-    print('PASS: all seven DP44 figures embedded; no middle-dot punctuation; paired source and render consistency')
+    print(f'PASS: all {len(FIGURES)} DP44 figures embedded; no middle-dot punctuation; paired source and render consistency')
 
 
 if __name__ == '__main__':
