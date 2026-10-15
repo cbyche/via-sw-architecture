@@ -1,6 +1,10 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v15.pptx](../VIA-architecture-presentation_v15.pptx)다. DP44의 복잡한 종합 그림을 참고 자료로 보존하고, 그 앞에 상황별 비교 네 장을 넣었다. **본문 33장과 QA Appendix 9장으로 총 42장**이다. [v15 검수 기록](./review-v15-2026-10-15.md)과 [manifest-v15.json](./manifest-v15.json)을 제공한다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v16.pptx](../VIA-architecture-presentation_v16.pptx)다. 설계 Overview 17장 바로 뒤의 **18장에 DP-44 / DP-47 / DP-45 / DP-42 요약 표**를 추가했다. VIA 문제, 설계 주제, A/B 차이와 평가를 편집 가능한 표로 정리한다. 평가는 구조 기반 예상이며 실측이나 최종 선정이 아니다. 본문 34장과 QA Appendix 9장으로 **총 43장**이다. [요약 표 미리보기](./dp-summary-v16.png), [manifest-v16.json](./manifest-v16.json), [검수 기록](./review-v16-2026-10-15.md)을 제공한다.
+
+기존 42장의 본문과 노트, 자원 및 순서를 유지하고 페이지 번호만 갱신했다. 공통 요청 장면은 19장, DP44 시작은 20장이다. 요약 표의 순서는 사용자 지정 44 / 47 / 45 / 42이며 기존 본문 재배치는 이번 수정에 포함하지 않는다.
+
+이전 [v15 통합본](../VIA-architecture-presentation_v15.pptx)은 보존한다. DP44의 복잡한 종합 그림을 참고 자료로 보존하고, 그 앞에 상황별 비교 네 장을 넣었다. **본문 33장과 QA Appendix 9장으로 총 42장**이다. [v15 검수 기록](./review-v15-2026-10-15.md)과 [manifest-v15.json](./manifest-v15.json)을 제공한다.
 
 DP44의 21~24장은 [일반 사용자 발화](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-input.png), [Agent 질문](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-agent.png), [새 발화 시작](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-onset.png), [정정과 늦은 완료](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-correction.png)를 각각 한 경로씩 비교한다. 모든 SVG와 draw.io 원본은 [04-44 §3.7.4](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md#374-상황별-실행-경로)에 직접 표시했다. 기존 DP44 비교 20장과 종합 구현 그림 25장도 남아 있다. [상황별 4장 PPTX](../dp-comparison/VIA-DP44-scenario-comparisons_v1.pptx)는 별도로 편집할 수 있다.
 
@@ -28,25 +32,27 @@ v1~v14의 통합본과 v12의 별도 비교본은 이력으로 보존.
 | 11~12 | 기능 요구사항 | 기존 요구의 근거와 기능 및 제약 표 |
 | 13~14 | 품질 요구사항 | QA01~QA06의 정의, 목표, 공통 모집단, 목표 근거 및 중요도/난이도 |
 | 15 | 시간 지표 | 첫 UI 응답, VIA 처리 완료, 실제 음성 전달의 측정 경계 |
-| 16~18 | 설계 도입 | 품질 영향 경로, 설계 Overview, 공통 요청 장면 |
-| 19~20 | DP44 | 정정과 업무 알림 배경, 기존 A/B 구조와 QA 표 |
-| 21~24 | DP44 상황별 실행 | 일반 발화, Agent 질문, 새 발화 시작, 정정과 늦은 완료 |
-| 25 | DP44 종합 그림 | v14의 구현 구조 한 장 비교를 참고 자료로 보존 |
-| 26~28 | DP45 | 과거 근거 배경, 기본 구조와 택틱, 기존 A/B 구조와 QA 표 |
-| 29~30 | DP42 | 상태의 다른 수명, 기존 A/B 구조와 QA 표 |
-| 31 | 화면과 음성 | 화면 전환 및 정정 문제 소개 |
-| 32~33 | 검토 요약 | 기능 범위, 공통 조건, 평가 전 확인할 사항 |
-| 34 | Appendix / QA01 | 첫 응답 지연시간 |
-| 35 | Appendix / QA02 | 지칭 대상 식별 정확도 |
-| 36 | Appendix / QA03 | VIA 처리시간 |
-| 37 | Appendix / QA04 | 변경 범위 |
-| 38 | Appendix / QA05 | 모델 사용 비용 |
-| 39 | Appendix / QA06 | 최대 RAM 사용량 |
-| 40 | Appendix / QA07 | 부하 추가 지연 |
-| 41 | Appendix / QA08 | 병행 수정 중복 |
-| 42 | Appendix / QA09 | 음성 전달 지연 |
+| 16~17 | 설계 도입 | 품질 영향 경로와 설계 Overview |
+| 18 | DP 요약 | 44 / 47 / 45 / 42의 문제, 주제, A/B 차이와 평가 |
+| 19 | 공통 요청 장면 | 기존 공통 요청 배경 |
+| 20~21 | DP44 | 정정과 업무 알림 배경, 기존 A/B 구조와 QA 표 |
+| 22~25 | DP44 상황별 실행 | 일반 발화, Agent 질문, 새 발화 시작, 정정과 늦은 완료 |
+| 26 | DP44 종합 그림 | v14의 구현 구조 한 장 비교를 참고 자료로 보존 |
+| 27~29 | DP45 | 과거 근거 배경, 기본 구조와 택틱, 기존 A/B 구조와 QA 표 |
+| 30~31 | DP42 | 상태의 다른 수명, 기존 A/B 구조와 QA 표 |
+| 32 | 화면과 음성 | 화면 전환 및 정정 문제 소개 |
+| 33~34 | 검토 요약 | 기능 범위, 공통 조건, 평가 전 확인할 사항 |
+| 35 | Appendix / QA01 | 첫 응답 지연시간 |
+| 36 | Appendix / QA02 | 지칭 대상 식별 정확도 |
+| 37 | Appendix / QA03 | VIA 처리시간 |
+| 38 | Appendix / QA04 | 변경 범위 |
+| 39 | Appendix / QA05 | 모델 사용 비용 |
+| 40 | Appendix / QA06 | 최대 RAM 사용량 |
+| 41 | Appendix / QA07 | 부하 추가 지연 |
+| 42 | Appendix / QA08 | 병행 수정 중복 |
+| 43 | Appendix / QA09 | 음성 전달 지연 |
 
-44/45/42의 기존 본문 비교는 20/28/30장이다. 44의 상황별 비교는 21~24장, 이전 종합 그림은 25장이다. 아래 버전별 설명의 페이지 번호는 해당 판본 기준.
+44/45/42의 기존 본문 비교는 21/29/31장이다. 44의 상황별 비교는 22~25장, 이전 종합 그림은 26장이다. 아래 버전별 설명의 페이지 번호는 해당 판본 기준.
 
 ## 이전 버전의 작성 이력
 
@@ -140,13 +146,13 @@ v5의 package, native 표, geometry, 글꼴 및 언어 검사와 61장 렌더링
 
 ## 앞으로 수정하는 방법
 
-항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v13.pptx`를 입력으로 `_v14.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
+항상 **최신 버전의 사본에서 시작해 새 버전으로 저장**한다. 다음 수정은 `_v16.pptx`를 입력으로 `_v17.pptx`를 만들고, 기존 버전은 유지한다. 최초 통합본이나 일곱 개별 파일을 수정한 뒤 다시 전체 병합하면 후속 편집이 사라질 수 있으므로 사용하지 않는다. 이후 버전에서도 Calibri, 정수 pt와 한국어, 검정색 본문 및 도형 자체의 텍스트 기준을 적용한다.
 
 요청에는 “최신본의 DP44 비교와 QA만 수정”, “최신본의 17장 설계 Overview 수정”처럼 대상과 변경 내용을 지정하면 된다. 비대상 슬라이드, 노트와 자원은 보존한다. QA 개정은 별도 명시적 요청이 있을 때만 한다. 발표 문구와 배치 편집으로 Architecture 계약을 자동 개정하지 않는다. 구조의 근거는 [활성 Architecture 문서](../../architecture/README.md)이며, 원본 draw.io와 SVG의 수정은 해당 문서 작업으로 함께 관리한다.
 
 ### 자동화로 특정 장만 교체
 
-[manifest-v13.json](./manifest-v13.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v13의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
+[manifest-v16.json](./manifest-v16.json)에 현재 위치, Section, 의미별 slide key, 원본 대응과 hash, 서식 정책 및 v16의 변경 범위와 보존 검증을 남겼다. key는 각 슬라이드의 `p:cSld/@name`에도 저장되어 페이지가 이동해도 대상을 식별한다. 새 버전에서는 비대상 key를 유지하고 새 위치와 hash를 기록한다. [manifest-v6.json](./manifest-v6.json)은 서식, 도형 텍스트와 마스터 등록 수정 내역을 기록하며 [manifest-v5.json](./manifest-v5.json), [manifest-v4.json](./manifest-v4.json), [manifest-v3.json](./manifest-v3.json), [manifest-v2.json](./manifest-v2.json)과 [manifest.json](./manifest.json)은 이전 버전의 이력이다.
 
 [부분 교체 도구](../../../scripts/presentations/full_presentation_package.py)는 현재 버전, 수정한 PPTX와 명시한 key만 받아 새 candidate를 만든다. 예를 들어 수정 PPTX의 1장으로 현재 DP44 비교를 교체하려면 매핑 JSON을 다음과 같이 만든다.
 
