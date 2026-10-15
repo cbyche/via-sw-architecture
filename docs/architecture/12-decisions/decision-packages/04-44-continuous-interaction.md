@@ -53,6 +53,10 @@ DP-44의 개별 그림은 모두 이 본문에 직접 표시한다. 상세 구�
 | A 구현 구조 | priority mailbox, Dispatcher, Job Index와 취소 및 반환 | §3.7.1 |
 | B 구현 구조 | Stage별 Pump/Done, typed port, Window와 Publication Join | §3.7.2 |
 | 구현 구조 한 장 비교 | 같은 사건에서 A/B의 Queue, 상태, 완료 반환과 폐기 위치 | §3.7.3 |
+| 일반 사용자 발화 | InputReady와 이해 Job 완료의 정확한 Queue 도착점 | §3.7.4 |
+| Agent 질문 | 확인된 Task 사건과 응답 준비의 정확한 Queue 도착점 | §3.7.4 |
+| 새 발화 시작 | 즉시 재생 중단과 관련 게시 hold의 제어 경로 | §3.7.4 |
+| 정정과 늦은 완료 | 무효화, 취소 요청과 늦은 J1 결과의 폐기 위치 | §3.7.4 |
 | 레퍼런스 형식 구조 및 QA 비교 | A/B 구조, 장단점과 QA01~06 점수 동점 제외 결과 | [발표 페이지](#dp44-reference-comparison) |
 | 같은 사건의 실행 | 정정과 업무 질문에서 실제 참여자의 순서 | §4 |
 
@@ -293,6 +297,8 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 [B draw.io](./diagrams/dp44-implementation-b.drawio) / [PNG](./diagrams/dp44-implementation-b.png)
 
+긴 작업의 완료는 시작한 Stage의 Done port로 돌아온다. 유효한 산출물이 고정 port를 통해 연결된 소비자에게 전달되고, Publication Join이 candidate별 참조와 revision으로 게시 조건을 결합한다. 각 Stage는 자기 Job과 Window를 관리하며 전체 완료를 회수해 다음 Job을 지시하는 Dispatcher를 두지 않는다.
+
 #### 3.7.3 구현 구조 한 장 비교
 
 기존 §1과 §3.6의 비교 그림은 그대로 둔다. 아래 한 장은 §3.7.1과 §3.7.2의 실행 책임을 같은 사건에서 나란히 보여 준다. A는 완료가 Event Mailbox로 반환되어 Dialogue Dispatcher가 다음 실행을 결정한다. B는 생산 Stage의 Done Queue에서 완료를 처리하고, 후보와 조건이 Publication Join의 별도 Queue에 도착한다. Queue는 칸이 있는 대기열로, 일시 상태는 원통으로 구분했다. 붉은 점선은 새 입력 감지에 따른 hold, 채택된 정정의 invalidate, 실행 중 Job의 취소 요청이다. 일반 사용자 발화의 내용은 파란 입력 경로로 전달된다.
@@ -301,7 +307,33 @@ B의 credit/cancel은 실행망의 제어 feedback이며 Task 취소 의도가 �
 
 [draw.io](../../../presentations_files/dp-comparison/dp44-implementation-comparison.drawio) / [PNG](../../../presentations_files/dp-comparison/dp44-implementation-comparison.png) / [한 장 PPTX](../../../presentations_files/dp-comparison/VIA-DP44-implementation-comparison.pptx) / [통합 발표 v14](../../../presentations_files/VIA-architecture-presentation_v14.pptx)
 
-긴 작업의 완료는 시작한 Stage의 Done port로 돌아온다. 유효한 산출물이 고정 port를 통해 연결된 소비자에게 전달되고, Publication Join이 candidate별 참조와 revision으로 게시 조건을 결합한다. 각 Stage는 자기 Job과 Window를 관리하며 전체 완료를 회수해 다음 Job을 지시하는 Dispatcher를 두지 않는다.
+#### 3.7.4 상황별 실행 경로
+
+위의 한 장 비교는 전체 요소의 위치를 보는 참고 그림으로 남긴다. 다음 네 장은 각각 한 사건의 경로만 표시한다. 왼쪽에서 오른쪽으로 읽는 반복된 Event Mailbox와 Stage 이름은 시간에 따른 **같은 Queue와 같은 Module의 재표시**이며 새 인스턴스가 아니다. Queue의 작은 칸은 사건 수용 지점이고 원통은 실행 상태다. 화살표는 그 장에서 다루는 사건과 후속 처리만 표시한다.
+
+**일반 사용자 발화:** 확정 입력 `InputReady(u1)`와 이해 완료 `JobDone(J1)`의 반환 위치를 비교한다. 발화 시작의 로컬 재생 중단은 이 그림의 경로 밖에서 양안 공통으로 수행한다.
+
+![DP44 일반 사용자 발화의 A/B 경로](./diagrams/dp44-scenario-input.svg)
+
+[draw.io](./diagrams/dp44-scenario-input.drawio) / [PNG](./diagrams/dp44-scenario-input.png)
+
+**Agent 질문:** Agent Gateway와 Task Manager가 확인한 질문이 A의 Event Mailbox 또는 B의 Task Notice Stage에 들어간다. 외부 Agent의 원본과 사용자 실제 전달은 양안 공통으로 유지한다.
+
+![DP44 Agent 질문의 A/B 경로](./diagrams/dp44-scenario-agent.svg)
+
+[draw.io](./diagrams/dp44-scenario-agent.drawio) / [PNG](./diagrams/dp44-scenario-agent.png)
+
+**새 발화 시작:** Interaction Manager가 재생을 즉시 멈춘 뒤, `InputStarted(u2)`로 미전송 효과와 관련 게시를 hold한다. 아직 정정 의도가 채택되지 않았으므로 J1이나 Task의 취소를 확정하지 않는다. B의 제어는 이 사건에 관련된 Stage에 전달하며 모든 Control Queue에 무조건 복사하지 않는다.
+
+![DP44 새 발화 시작의 A/B 제어 경로](./diagrams/dp44-scenario-onset.svg)
+
+[draw.io](./diagrams/dp44-scenario-onset.drawio) / [PNG](./diagrams/dp44-scenario-onset.png)
+
+**정정 채택과 늦은 완료:** R1 rev2가 채택된 뒤 J1을 무효화하고 취소를 요청한다. provider가 J1을 늦게 끝내더라도 A는 Dispatcher에서, B는 Response Composer의 자기 Done 처리에서 결과를 폐기한다. 실행 취소 요청만으로 물리 종료를 선언하지 않는다.
+
+![DP44 정정 채택과 늦은 완료의 A/B 경로](./diagrams/dp44-scenario-correction.svg)
+
+[draw.io](./diagrams/dp44-scenario-correction.drawio) / [PNG](./diagrams/dp44-scenario-correction.png) / [상황별 4장 PPTX](../../../presentations_files/dp-comparison/VIA-DP44-scenario-comparisons_v1.pptx) / [통합 발표 v15](../../../presentations_files/VIA-architecture-presentation_v15.pptx)
 
 ## 4. 같은 정상, 정정, 교차 사건
 

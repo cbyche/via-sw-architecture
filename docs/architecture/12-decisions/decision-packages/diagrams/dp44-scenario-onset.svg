@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title">
+<title id="title">DP44 3/4. 새 발화 시작: 출력 중단과 미전송 hold — 설계 비교</title>
+<defs>
+<marker id="a18232E" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#18232E" stroke-width="1.6"/></marker>
+<marker id="a2858A5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#2858A5" stroke-width="1.6"/></marker>
+<marker id="aB63732" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B63732" stroke-width="1.6"/></marker>
+<marker id="a087E8B" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#087E8B" stroke-width="1.6"/></marker>
+<marker id="a5F6B77" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#5F6B77" stroke-width="1.6"/></marker>
+<marker id="a7155A4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#7155A4" stroke-width="1.6"/></marker><marker id="a000000" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#000000" stroke-width="1.2"/></marker><marker id="aB8753F" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9" fill="none" stroke="#B8753F" stroke-width="1.2"/></marker></defs><g font-family="Apple SD Gothic Neo, Arial, sans-serif">
+<rect id="n1" fill="white" stroke="none" stroke-width="1.7" x="0" y="0" width="1920" height="1080"/>
+<text id="n2-0" data-width="1790" x="54" y="66.8" text-anchor="start" font-size="40" font-weight="700" fill="#18232E">DP44 3/4. 새 발화 시작: 출력 중단과 미전송 hold</text>
+<polyline id="n3" points="54,103 1866,103" fill="none" stroke="#CDD6DE" stroke-width="2"/>
+<rect id="n4" fill="#F4F7FA" stroke="#CDD6DE" stroke-width="1.7" x="54" y="129" width="1812" height="103"/>
+<text id="n5-0" data-width="170" x="72" y="159.4" text-anchor="start" font-size="20" font-weight="700" fill="#18232E">같은 사건</text>
+<text id="n6-0" data-width="1600" x="241" y="161.16" text-anchor="start" font-size="23" font-weight="700" fill="#18232E">Interaction Manager가 InputStarted(u2)를 감지하고 현재 재생을 즉시 멈춘다.</text>
+<text id="n7-0" data-width="1600" x="241" y="194.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">R1 응답 J1이 준비 중이다. u2의 뜻은 아직 모르므로 J1과 Task 취소를 확정하지 않는다.</text>
+<rect id="n8" fill="#EAF2FB" stroke="#CDD6DE" stroke-width="1.7" x="54" y="263" width="1812" height="54"/>
+<text id="n9-0" data-width="1740" x="75" y="298.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">A  Control Lane에서 Dispatcher가 hold를 연결</text>
+<text id="n10-0" data-width="345" x="90" y="338.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n11" fill="white" stroke="#B8753F" stroke-width="1.7" x="90" y="350" width="345" height="120"/>
+<text id="n12-0" data-width="321" x="102" y="382.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Control Lane</text>
+<text id="n13-0" data-width="321" x="102" y="412.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">InputStarted(u2)</text>
+<rect id="n14" fill="white" stroke="#5F6B77" stroke-width="1.7" x="102" y="436" width="20" height="20"/>
+<rect id="n15" fill="white" stroke="#5F6B77" stroke-width="1.7" x="129" y="436" width="20" height="20"/>
+<rect id="n16" fill="white" stroke="#5F6B77" stroke-width="1.7" x="156" y="436" width="20" height="20"/>
+<rect id="n17" fill="white" stroke="#5F6B77" stroke-width="1.7" x="183" y="436" width="20" height="20"/>
+<text id="n18-0" data-width="345" x="90" y="507.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">일반 사건 backlog와 분리</text>
+<polyline id="n19" points="441,415 547,415" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n20-0" data-width="345" x="555" y="338.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n21" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="555" y="350" width="345" height="120"/>
+<text id="n22-0" data-width="321" x="567" y="385.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Dialogue Dispatcher</text>
+<text id="n23-0" data-width="321" x="567" y="425.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">우선 Handle(onset)</text>
+<text id="n24-0" data-width="345" x="555" y="507.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">미전송 효과 hold 요청</text>
+<polyline id="n25" points="906,415 1012,415" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n26-0" data-width="345" x="1020" y="338.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n27" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1020" y="350" width="345" height="120"/>
+<text id="n28-0" data-width="321" x="1032" y="385.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Admission hold</text>
+<text id="n29-0" data-width="321" x="1032" y="425.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">미전송 효과 차단</text>
+<text id="n30-0" data-width="345" x="1020" y="507.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">진행 중 J1은 추적 유지</text>
+<polyline id="n31" points="1371,415 1477,415" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n32-0" data-width="345" x="1485" y="338.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n33" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="1485" y="350" width="345" height="120"/>
+<text id="n34-0" data-width="321" x="1497" y="385.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Publication Control</text>
+<text id="n35-0" data-width="321" x="1497" y="425.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">관련 release 보류</text>
+<text id="n36-0" data-width="345" x="1485" y="507.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">게시 직전 다시 확인</text>
+<rect id="n37" fill="#FFF5DB" stroke="#CDD6DE" stroke-width="1.7" x="54" y="610" width="1812" height="54"/>
+<text id="n38-0" data-width="1740" x="75" y="645.08" text-anchor="start" font-size="24" font-weight="700" fill="#18232E">B  관련 Stage의 Control Queue에 hold를 전달</text>
+<text id="n39-0" data-width="345" x="90" y="685.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n40" fill="white" stroke="#B8753F" stroke-width="1.7" x="90" y="697" width="345" height="120"/>
+<text id="n41-0" data-width="321" x="102" y="729.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Input Resolution Stage</text>
+<text id="n42-0" data-width="321" x="102" y="759.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">Control Queue: u2</text>
+<rect id="n43" fill="white" stroke="#5F6B77" stroke-width="1.7" x="102" y="783" width="20" height="20"/>
+<rect id="n44" fill="white" stroke="#5F6B77" stroke-width="1.7" x="129" y="783" width="20" height="20"/>
+<rect id="n45" fill="white" stroke="#5F6B77" stroke-width="1.7" x="156" y="783" width="20" height="20"/>
+<rect id="n46" fill="white" stroke="#5F6B77" stroke-width="1.7" x="183" y="783" width="20" height="20"/>
+<text id="n47-0" data-width="345" x="90" y="854.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">입력 제어를 우선 수용</text>
+<polyline id="n48" points="441,762 547,762" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n49-0" data-width="345" x="555" y="685.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Request Controller</text>
+<rect id="n50" fill="#FFF3E5" stroke="#B8753F" stroke-width="1.7" x="555" y="697" width="345" height="120"/>
+<text id="n51-0" data-width="321" x="567" y="732.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Input Resolution Stage Pump</text>
+<text id="n52-0" data-width="321" x="567" y="772.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">미전송 효과 hold</text>
+<text id="n53-0" data-width="345" x="555" y="854.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">관련 소비자에 제어 전달</text>
+<polyline id="n54" points="906,762 1012,762" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n55-0" data-width="345" x="1020" y="685.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n56" fill="white" stroke="#B8753F" stroke-width="1.7" x="1020" y="697" width="345" height="120"/>
+<text id="n57-0" data-width="321" x="1032" y="729.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Response Composer</text>
+<text id="n58-0" data-width="321" x="1032" y="759.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">Control Queue: hold</text>
+<rect id="n59" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1032" y="783" width="20" height="20"/>
+<rect id="n60" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1059" y="783" width="20" height="20"/>
+<rect id="n61" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1086" y="783" width="20" height="20"/>
+<rect id="n62" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1113" y="783" width="20" height="20"/>
+<text id="n63-0" data-width="345" x="1020" y="854.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">J1의 후보 배출 보류</text>
+<polyline id="n64" points="1371,762 1477,762" fill="none" stroke="#B63732" stroke-width="3" stroke-dasharray="7 6" marker-end="url(#aB63732)"/>
+<text id="n65-0" data-width="345" x="1485" y="685.56" text-anchor="start" font-size="18" font-weight="700" fill="#18232E">Response Manager</text>
+<rect id="n66" fill="white" stroke="#B8753F" stroke-width="1.7" x="1485" y="697" width="345" height="120"/>
+<text id="n67-0" data-width="321" x="1497" y="729.32" text-anchor="start" font-size="21" font-weight="700" fill="#18232E">Publication Join</text>
+<text id="n68-0" data-width="321" x="1497" y="759.56" text-anchor="start" font-size="18" font-weight="400" fill="#18232E">Control Queue: hold</text>
+<rect id="n69" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1497" y="783" width="20" height="20"/>
+<rect id="n70" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1524" y="783" width="20" height="20"/>
+<rect id="n71" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1551" y="783" width="20" height="20"/>
+<rect id="n72" fill="white" stroke="#5F6B77" stroke-width="1.7" x="1578" y="783" width="20" height="20"/>
+<text id="n73-0" data-width="345" x="1485" y="854.56" text-anchor="start" font-size="18" font-weight="400" fill="#5F6B77">관련 후보 게시 보류</text>
+<rect id="n74" fill="#F4F7FA" stroke="#CDD6DE" stroke-width="1.7" x="54" y="966" width="1812" height="64"/>
+<text id="n75-0" data-width="1760" x="72" y="1001.24" text-anchor="start" font-size="22" font-weight="700" fill="#18232E">A는 Control Lane 뒤 Dispatcher가 hold를 연결한다. B는 관련 Stage의 Control Queue에 제어를 전달한다.</text>
+<text id="n76-0" data-width="1812" x="54" y="1057.64" text-anchor="start" font-size="17" font-weight="400" fill="#5F6B77">파란선: 일반 사건과 다음 처리    파란 점선: 비동기 완료    붉은 점선: 제어와 무효화    A/B 미선정, 미구현, 미측정</text>
+</g></svg>

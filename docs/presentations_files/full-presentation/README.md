@@ -1,6 +1,10 @@
 # VIA 통합 발표자료와 버전별 편집
 
-현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v14.pptx](../VIA-architecture-presentation_v14.pptx)다. 기존 DP44 설계 비교 20장을 보존하고 바로 뒤인 21장에 [구현 구조 비교](../dp-comparison/dp44-implementation-comparison.png)를 추가했다. **본문 29장과 QA Appendix 9장으로 총 38장**이다. [v14 검수 기록](./review-v14-2026-10-15.md)과 [manifest-v14.json](./manifest-v14.json)을 제공한다.
+현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v15.pptx](../VIA-architecture-presentation_v15.pptx)다. DP44의 복잡한 종합 그림을 참고 자료로 보존하고, 그 앞에 상황별 비교 네 장을 넣었다. **본문 33장과 QA Appendix 9장으로 총 42장**이다. [v15 검수 기록](./review-v15-2026-10-15.md)과 [manifest-v15.json](./manifest-v15.json)을 제공한다.
+
+DP44의 21~24장은 [일반 사용자 발화](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-input.png), [Agent 질문](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-agent.png), [새 발화 시작](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-onset.png), [정정과 늦은 완료](../../architecture/12-decisions/decision-packages/diagrams/dp44-scenario-correction.png)를 각각 한 경로씩 비교한다. 모든 SVG와 draw.io 원본은 [04-44 §3.7.4](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md#374-상황별-실행-경로)에 직접 표시했다. 기존 DP44 비교 20장과 종합 구현 그림 25장도 남아 있다. [상황별 4장 PPTX](../dp-comparison/VIA-DP44-scenario-comparisons_v1.pptx)는 별도로 편집할 수 있다.
+
+[v14 통합본](../VIA-architecture-presentation_v14.pptx)은 이전 판본으로 보존한다. v14는 기존 DP44 설계 비교 20장을 보존하고 바로 뒤인 21장에 [구현 구조 종합 그림](../dp-comparison/dp44-implementation-comparison.png)을 추가한 판본이다. 본문 29장과 QA Appendix 9장으로 총 38장이었다. [v14 검수 기록](./review-v14-2026-10-15.md)과 [manifest-v14.json](./manifest-v14.json)을 유지한다.
 
 새 21장은 A의 중앙 Event Mailbox와 Dialogue Dispatcher, B의 Stage별 Control, Input 또는 Task, Done Queue와 Publication Join을 같은 사건으로 비교한다. Queue와 상태 원통, 일반 입력과 제어 신호, 비동기 완료와 늦은 Job 폐기 위치를 구별한다. [편집 가능한 draw.io](../dp-comparison/dp44-implementation-comparison.drawio), [SVG](../dp-comparison/dp44-implementation-comparison.svg), [한 장 PPTX](../dp-comparison/VIA-DP44-implementation-comparison.pptx)를 별도로 제공한다. 구현, 품질 측정, A/B 선정은 아직 하지 않았다.
 
@@ -8,9 +12,9 @@
 
 **필요성 2~6장:** 3열 장면형, PC 중심 통합형, 가로 3단형, 확대 장면형, 정보 레이어형 순서. 다섯 안의 그림과 문구 및 노트를 보존하고 전체 페이지 번호와 안 이름을 표시. [5장 비교 PPTX v12](../VIA-necessity-options_v12.pptx)와 [확대 미리보기](../necessity-options-v12/index.html)도 유지.
 
-v14에서도 v13의 37장은 페이지 번호를 제외한 본문과 노트를 보존했다. QA 정의와 목표, 표 및 기존 구조 그림의 내용 변경 없음. [현재 QA 원문](../../architecture/12-decisions/decision-packages/qa-candidate-package/README.md)과 [Architecture 문서](../../architecture/README.md) 참조. 기존 FR 분류와 화면/음성 구조 그림의 최신 Architecture 동기화는 별도 작업. DP 관계 문장은 가설이며 수치 예시는 실측 결과가 아님.
+v15에서도 v14의 38장은 페이지 번호를 제외한 본문과 노트를 보존했다. QA 정의와 목표, 표 및 기존 구조 그림의 내용 변경 없음. [현재 QA 원문](../../architecture/12-decisions/decision-packages/qa-candidate-package/README.md)과 [Architecture 문서](../../architecture/README.md) 참조. 기존 FR 분류와 화면/음성 구조 그림의 최신 Architecture 동기화는 별도 작업. DP 관계 문장은 가설이며 수치 예시는 실측 결과가 아님.
 
-v1~v13의 통합본과 v12의 별도 비교본은 이력으로 보존.
+v1~v14의 통합본과 v12의 별도 비교본은 이력으로 보존.
 
 [v13 Windows Open XML 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/38607452044) 및 [통합본 commit의 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/38607428134) 통과. Windows에서 37장 열기와 스키마 오류 0건 확인. PowerPoint 자체 렌더링과 GIF 재생은 미검증.
 
@@ -26,22 +30,23 @@ v1~v13의 통합본과 v12의 별도 비교본은 이력으로 보존.
 | 15 | 시간 지표 | 첫 UI 응답, VIA 처리 완료, 실제 음성 전달의 측정 경계 |
 | 16~18 | 설계 도입 | 품질 영향 경로, 설계 Overview, 공통 요청 장면 |
 | 19~20 | DP44 | 정정과 업무 알림 배경, 기존 A/B 구조와 QA 표 |
-| 21 | DP44 구현 구조 비교 | 중앙 완료 회수와 단계별 완료 처리의 Queue, 상태, 후속 실행 비교 |
-| 22~24 | DP45 | 과거 근거 배경, 기본 구조와 택틱, 기존 A/B 구조와 QA 표 |
-| 25~26 | DP42 | 상태의 다른 수명, 기존 A/B 구조와 QA 표 |
-| 27 | 화면과 음성 | 화면 전환 및 정정 문제 소개 |
-| 28~29 | 검토 요약 | 기능 범위, 공통 조건, 평가 전 확인할 사항 |
-| 30 | Appendix / QA01 | 첫 응답 지연시간 |
-| 31 | Appendix / QA02 | 지칭 대상 식별 정확도 |
-| 32 | Appendix / QA03 | VIA 처리시간 |
-| 33 | Appendix / QA04 | 변경 범위 |
-| 34 | Appendix / QA05 | 모델 사용 비용 |
-| 35 | Appendix / QA06 | 최대 RAM 사용량 |
-| 36 | Appendix / QA07 | 부하 추가 지연 |
-| 37 | Appendix / QA08 | 병행 수정 중복 |
-| 38 | Appendix / QA09 | 음성 전달 지연 |
+| 21~24 | DP44 상황별 실행 | 일반 발화, Agent 질문, 새 발화 시작, 정정과 늦은 완료 |
+| 25 | DP44 종합 그림 | v14의 구현 구조 한 장 비교를 참고 자료로 보존 |
+| 26~28 | DP45 | 과거 근거 배경, 기본 구조와 택틱, 기존 A/B 구조와 QA 표 |
+| 29~30 | DP42 | 상태의 다른 수명, 기존 A/B 구조와 QA 표 |
+| 31 | 화면과 음성 | 화면 전환 및 정정 문제 소개 |
+| 32~33 | 검토 요약 | 기능 범위, 공통 조건, 평가 전 확인할 사항 |
+| 34 | Appendix / QA01 | 첫 응답 지연시간 |
+| 35 | Appendix / QA02 | 지칭 대상 식별 정확도 |
+| 36 | Appendix / QA03 | VIA 처리시간 |
+| 37 | Appendix / QA04 | 변경 범위 |
+| 38 | Appendix / QA05 | 모델 사용 비용 |
+| 39 | Appendix / QA06 | 최대 RAM 사용량 |
+| 40 | Appendix / QA07 | 부하 추가 지연 |
+| 41 | Appendix / QA08 | 병행 수정 중복 |
+| 42 | Appendix / QA09 | 음성 전달 지연 |
 
-44/45/42의 기존 본문 비교는 20/24/26장이고 새 44 구현 확대 비교는 21장이다. 아래 버전별 설명의 페이지 번호는 해당 판본 기준.
+44/45/42의 기존 본문 비교는 20/28/30장이다. 44의 상황별 비교는 21~24장, 이전 종합 그림은 25장이다. 아래 버전별 설명의 페이지 번호는 해당 판본 기준.
 
 ## 이전 버전의 작성 이력
 

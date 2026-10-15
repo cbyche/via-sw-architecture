@@ -25,6 +25,8 @@ FIGURES.update({'dp44-background': (DIAGRAMS, BACKGROUND),
                 'dp44-comparison': (FOCUS, FOCUS),
                 'dp44-implementation-comparison': (FOCUS, FOCUS),
                 'dp44-reference-comparison_v1': (REFERENCE, REFERENCE)})
+SCENARIOS = tuple('dp44-scenario-' + name for name in ('input', 'agent', 'onset', 'correction'))
+FIGURES.update({stem: (DIAGRAMS, DIAGRAMS) for stem in SCENARIOS})
 DOTS = {chr(code) for code in (0x00B7, 0x318D, 0x2022, 0x2027, 0x30FB, 0x22C5, 0x2219)}
 
 
@@ -53,6 +55,7 @@ def main():
     assert ET.tostring(page) == ET.tostring(ET.fromstring(scene.drawio())[0]), 'Background bundle page drift'
 
     records = json.loads((DIAGRAMS / 'dp44-document-render.json').read_text())['records']
+    records += [json.loads((DIAGRAMS / (stem + '-render.json')).read_text()) for stem in SCENARIOS]
     assert {row['stem'] for row in records} == set(FIGURES), 'Incomplete render record'
     for row in records:
         assert row['text_geometry_issues'] == 0, row

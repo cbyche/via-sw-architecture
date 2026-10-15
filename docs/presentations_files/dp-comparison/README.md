@@ -1,5 +1,7 @@
 # VIA DP 설계 비교 발표 틀 — 41~45
 
+**DP44 상황별 경로 비교, 2026-10-15:** [통합 발표 v15](../VIA-architecture-presentation_v15.pptx)의 21~24장에서 일반 사용자 발화, 확인된 Agent 질문, 새 발화 시작, 채택된 정정과 늦은 완료를 각각 한 경로로 나눴다. 기존 20장과 종합 구현 그림 25장은 그대로 둔다. 네 그림의 SVG, draw.io와 PNG는 [04-44 §3.7.4](../../architecture/12-decisions/decision-packages/04-44-continuous-interaction.md#374-상황별-실행-경로)에 모두 삽입했다. [상황별 4장 PPTX](./VIA-DP44-scenario-comparisons_v1.pptx)와 [검수 기록](../full-presentation/review-v15-2026-10-15.md)을 제공한다.
+
 **레퍼런스 형식 4장, 2026-10-15:** 사용자 요청 순서인 44 → 47 → 45 → 42로 [새 PPTX](../VIA-DP-comparisons-reference_v1.pptx)를 작성했다. 커밋된 구현 구조와 QA 사고실험 v2를 사용하고 QA01~06 중 점수 동점은 제외했다. [미리보기, 출처와 검토 기록](../dp-reference-comparison-v1/README.md)을 함께 제공한다. 아래 기존 통합 및 비교 발표는 보존한다.
 
 **DP44 구현 구조 확대 비교, 2026-10-15:** [통합 발표 v14의 21장](../VIA-architecture-presentation_v14.pptx)에 새 1페이지를 추가했다. 기존 DP44 비교 20장과 아래 [기존 그림](./dp44-comparison.svg)은 유지한다. 새 [PNG](./dp44-implementation-comparison.png), [SVG](./dp44-implementation-comparison.svg), [draw.io 편집 원본](./dp44-implementation-comparison.drawio), [한 장 PPTX](./VIA-DP44-implementation-comparison.pptx)를 제공한다. A의 중앙 Dispatcher와 Event Mailbox, B의 Stage별 Queue, Done 처리와 Publication Join을 같은 사건에서 비교한다. [생성 스크립트](../../../scripts/architecture/generate_dp44_implementation_comparison_slide.py)와 [통합 패키지 스크립트](../../../scripts/presentations/package_dp44_implementation_v14.py)로 재생성할 수 있다. 구현이나 품질 측정 결과는 아니다.
