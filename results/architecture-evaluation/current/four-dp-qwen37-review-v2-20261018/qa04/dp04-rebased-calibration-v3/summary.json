@@ -1,0 +1,87 @@
+{
+  "baseline": "calibration-v3",
+  "baseline_freeze_sha256": "bc3c1bca1e218832c216dc4952cb3165605a847e0f7ba9cdf2caf19faf49fa2d",
+  "baseline_binary_sha256": "8229089b04b66231f58cbb44b35c12950735cfbbad83dfe03993d5d34cd773e9",
+  "status": "PASS",
+  "rows": [
+    {
+      "task": "C05",
+      "variant": "A",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/explanation.rs"
+      ],
+      "module_count": 2,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 11,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v3/C05/A/source-changes.json",
+      "patch_sha256": "c02ba3a83b5ab8ac283a6bb3176200c0993f7f865f155fecba2bb950722baffc"
+    },
+    {
+      "task": "C05",
+      "variant": "B",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/explanation.rs"
+      ],
+      "module_count": 2,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 11,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v3/C05/B/source-changes.json",
+      "patch_sha256": "538d20e74a4340a0bc2f130a1cda2fbb6cc1d212ae28609f7c6a34c4cbcc9408"
+    },
+    {
+      "task": "C06",
+      "variant": "A",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/gate.rs",
+        "src/dp04/geometry.rs",
+        "src/dp04/observations.rs",
+        "src/dp04/region_policy.rs"
+      ],
+      "module_count": 5,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 12,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v3/C06/A/source-changes.json",
+      "patch_sha256": "f628294dcc18cfe9c5ce657a7c00cf62d04ff0c20dae5d5e5aa3653d957ffcec"
+    },
+    {
+      "task": "C06",
+      "variant": "B",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/gate.rs",
+        "src/dp04/geometry.rs",
+        "src/dp04/observations.rs",
+        "src/dp04/region_policy.rs"
+      ],
+      "module_count": 5,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 12,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v3/C06/B/source-changes.json",
+      "patch_sha256": "e95296cf78dd765ffd74dc6be7ebb729dc40076ea544ff31a90b2c1f9d71d3ff"
+    }
+  ],
+  "new_function_pair_means": {
+    "A": 3.5,
+    "B": 3.5
+  },
+  "main_qa04_mean": {
+    "A": null,
+    "B": null
+  },
+  "main_qa04_pending": "Runtime must combine verified final-baseline C01/C03 controls with C05/C06, four tasks equal weight. If controls1/2 then main2.5; do not use pair3.5 as main.",
+  "provider_calls": 0,
+  "scope": "Actual independently rebased Rust functionality, mock semantic/vision service and actual PNG redaction/pixel checks. Not provider quality or latency.",
+  "earlier_evidence_preserved": [
+    "qa04/dp04/",
+    "qa04/dp04-rebased-calibration-v2/"
+  ],
+  "basic_candidate_mutated": false,
+  "compile_and_execution_finished_before_basic": true
+}

@@ -1,0 +1,114 @@
+{
+  "baseline": "calibration-v2",
+  "baseline_freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+  "baseline_binary_sha256": "e20c2f3575dbca3ec5082363a32fec942a19860d26bc5ebaa798f6f6e816c216",
+  "status": "PASS",
+  "rows": [
+    {
+      "task": "C05",
+      "variant": "A",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/explanation.rs"
+      ],
+      "module_count": 2,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 11,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v2/C05/A/source-changes.json",
+      "patch_sha256": "c02ba3a83b5ab8ac283a6bb3176200c0993f7f865f155fecba2bb950722baffc"
+    },
+    {
+      "task": "C05",
+      "variant": "B",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/explanation.rs"
+      ],
+      "module_count": 2,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 11,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v2/C05/B/source-changes.json",
+      "patch_sha256": "538d20e74a4340a0bc2f130a1cda2fbb6cc1d212ae28609f7c6a34c4cbcc9408"
+    },
+    {
+      "task": "C06",
+      "variant": "A",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/gate.rs",
+        "src/dp04/geometry.rs",
+        "src/dp04/observations.rs",
+        "src/dp04/region_policy.rs"
+      ],
+      "module_count": 5,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 12,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v2/C06/A/source-changes.json",
+      "patch_sha256": "32c2cb18fbee8645e0b9304e8d7b0132df3e26b27c32a3b1f60072d6383ac635"
+    },
+    {
+      "task": "C06",
+      "variant": "B",
+      "status": "PASS",
+      "operating_modules": [
+        "src/dp04.rs",
+        "src/dp04/gate.rs",
+        "src/dp04/geometry.rs",
+        "src/dp04/observations.rs",
+        "src/dp04/region_policy.rs"
+      ],
+      "module_count": 5,
+      "acceptance_checks": 2,
+      "rust_regressions_passed": 12,
+      "source_hashes_file": "qa04/dp04-rebased-calibration-v2/C06/B/source-changes.json",
+      "patch_sha256": "a2791aa11551b3981040b27926ed7b5fba94423f7367f2ebf1673581b350c8ad"
+    }
+  ],
+  "options": [
+    {
+      "dp": "04",
+      "variant": "A",
+      "mean_changed_operational_modules": 3.5,
+      "tasks": [
+        {
+          "id": "C05",
+          "changed_operating_module_count": 2,
+          "status": "PASS"
+        },
+        {
+          "id": "C06",
+          "changed_operating_module_count": 5,
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "dp": "04",
+      "variant": "B",
+      "mean_changed_operational_modules": 3.5,
+      "tasks": [
+        {
+          "id": "C05",
+          "changed_operating_module_count": 2,
+          "status": "PASS"
+        },
+        {
+          "id": "C06",
+          "changed_operating_module_count": 5,
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "provider_calls": 0,
+  "limitations": [
+    "C05/C06 functionality-only scratch changes, external semantic/vision doubles; not semantic model performance.",
+    "Pixel redaction is actual code/PNG/pixel evidence.",
+    "Mean3.5 applies only to this newly requested C05/C06 pair. Common C01/C03 controls must be reported separately or included explicitly in a frozen full superset.",
+    "Formal freeze adoption still requires identical source contract or another rebase."
+  ],
+  "old_provisional_evidence_preserved": "qa04/dp04/"
+}

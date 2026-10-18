@@ -1,0 +1,3911 @@
+{
+  "report_generated_utc": "2026-10-18T15:30:47.309739+00:00",
+  "report_generated_kst": "2026-10-19T00:30:47.309739+09:00",
+  "version": "FINAL_PUBLICATION_EFFECTIVE120_AND_ACTUAL229_V2",
+  "selected_episode_trials": 120,
+  "actual_all_episode_trials": 229,
+  "qa01_expected": 261,
+  "qa01_observed": 255,
+  "qa03_expected": 243,
+  "qa03_observed": 233,
+  "effective120_cost": {
+    "via_usd": 0.8746112,
+    "receiver_usd": 0.2118672,
+    "total_usd": 1.0864784,
+    "calls": 625,
+    "unknown_usage_calls": 0
+  },
+  "options": [
+    {
+      "dp": "01",
+      "variant": "A",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "COMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 36,
+        "planned": 36,
+        "conditional_mean_ms": 6609.115270944445,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": true,
+        "correct": 36,
+        "planned": 36,
+        "percent": 100.0
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 36,
+        "planned": 36,
+        "conditional_via_mean_ms": 13617.334648277778,
+        "conditional_full_wall_mean_ms": 13617.334648277778,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 0
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 1.75,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 1,
+            "modules": [
+              "src/dp01.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C05/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 3,
+            "modules": [
+              "src/dp01.rs",
+              "src/dp01_evidence.rs",
+              "src/dp01_request.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C06/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+          }
+        ],
+        "functional_tasks_mean": 2.0,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.0674956,
+        "receiver_usd": 0,
+        "total_usd": 0.0674956,
+        "actual_calls": 63,
+        "input_tokens": 68251,
+        "output_tokens": 25122,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp01_select_adopt_or_complete",
+            "calls": 36,
+            "input_tokens": 39182,
+            "output_tokens": 11713,
+            "known_usage_usd": 0.03441360000000001,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp01_source_backed_answer",
+            "calls": 27,
+            "input_tokens": 29069,
+            "output_tokens": 13409,
+            "known_usage_usd": 0.033082,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "01",
+        "variant": "A",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-dp01-e4-A-r3-b47f0a",
+        "peak_sample_start_ns": 1901350860758083,
+        "peak_sample_end_ns": 1901350875310416,
+        "peak_stage": "MODEL:dp01_select_adopt_or_complete",
+        "concurrent_peak_mb": 44.253184,
+        "python_at_same_peak_mb": 41.074688,
+        "rust_at_same_peak_mb": 3.178496,
+        "same_run_initial_sum_mb": 34.668544,
+        "same_run_initial_python_mb": 32.980992,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 9.58464,
+        "role_delta_bytes": {
+          "python_runner_bridge": 8093696,
+          "rust_candidate": 1490944
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 2374,
+          "retained_evidence": 30326,
+          "rust_serialized": 5526,
+          "model_input": 1123,
+          "image": 0,
+          "http_serialization_including_base64": 3435
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 2374,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 24229,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp01_sources": {
+            "bytes": 1109,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_working_view": {
+            "bytes": 778,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_published": {
+            "bytes": 4,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_recent": {
+            "bytes": 765,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "retained_call_records": {
+            "bytes": 6097,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:model_request_56": {
+            "bytes": 2870,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "66993695-d175-41de-b3fc-3c74f90b1d4e:input_text": {
+            "bytes": 1123,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "66993695-d175-41de-b3fc-3c74f90b1d4e:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "66993695-d175-41de-b3fc-3c74f90b1d4e:http_request": {
+            "bytes": 3435,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 30326,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 2374,
+          "retained_evidence": 80230,
+          "rust_serialized": 8950,
+          "model_input": 4575,
+          "image": 0,
+          "http_serialization_including_base64": 8695,
+          "http_response": 2593
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 5526,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 32231,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 41074688
+          },
+          {
+            "pid": 32237,
+            "ppid": 32231,
+            "role": "rust_candidate",
+            "rss_bytes": 3178496
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 651,
+        "peak_trial_both_process_samples": 650,
+        "peak_trial_max_actual_gap_ms": 78.370292,
+        "option_max_actual_sample_gap_ms": 85.007291,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e4-A-r3-b47f0a/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e4-A-r3-b47f0a/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 30,
+        "defined_conditions": 36,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 0,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "01",
+      "variant": "B",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 36,
+        "planned": 36,
+        "conditional_mean_ms": 6266.886761583333,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": true,
+        "correct": 36,
+        "planned": 36,
+        "percent": 100.0
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 35,
+        "planned": 36,
+        "conditional_via_mean_ms": 14241.594004742858,
+        "conditional_full_wall_mean_ms": 14241.594004742858,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 1
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 1.75,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 1,
+            "modules": [
+              "src/dp01.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C05/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 3,
+            "modules": [
+              "src/dp01.rs",
+              "src/dp01_evidence.rs",
+              "src/dp01_request.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C06/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+          }
+        ],
+        "functional_tasks_mean": 2.0,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.069916,
+        "receiver_usd": 0,
+        "total_usd": 0.069916,
+        "actual_calls": 70,
+        "input_tokens": 68598,
+        "output_tokens": 26548,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp01_select_adopt_or_complete",
+            "calls": 36,
+            "input_tokens": 34603,
+            "output_tokens": 11045,
+            "known_usage_usd": 0.031513200000000005,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp01_source_backed_answer",
+            "calls": 33,
+            "input_tokens": 32893,
+            "output_tokens": 15131,
+            "known_usage_usd": 0.037366800000000006,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp01_repair_source_backed_answer",
+            "calls": 1,
+            "input_tokens": 1102,
+            "output_tokens": 372,
+            "known_usage_usd": 0.001036,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "01",
+        "variant": "B",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-dp01-e1-B-r3-f3f60c",
+        "peak_sample_start_ns": 1900826595458208,
+        "peak_sample_end_ns": 1900826610598083,
+        "peak_stage": "MODEL:dp01_source_backed_answer",
+        "concurrent_peak_mb": 45.318144,
+        "python_at_same_peak_mb": 42.02496,
+        "rust_at_same_peak_mb": 3.293184,
+        "same_run_initial_sum_mb": 34.455552,
+        "same_run_initial_python_mb": 32.768,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 10.862592,
+        "role_delta_bytes": {
+          "python_runner_bridge": 9256960,
+          "rust_candidate": 1605632
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 1360,
+          "retained_evidence": 51157,
+          "rust_serialized": 5832,
+          "model_input": 3472,
+          "image": 0,
+          "http_serialization_including_base64": 6128
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 1360,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 37781,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp01_sources": {
+            "bytes": 385,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_working_view": {
+            "bytes": 2,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_published": {
+            "bytes": 4,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_recent": {
+            "bytes": 876,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "retained_call_records": {
+            "bytes": 13376,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:model_request_84": {
+            "bytes": 4565,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "9667cb84-22b8-4e07-b6c5-3a712629be67:input_text": {
+            "bytes": 3472,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "9667cb84-22b8-4e07-b6c5-3a712629be67:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "9667cb84-22b8-4e07-b6c5-3a712629be67:http_request": {
+            "bytes": 6128,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 51157,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 1360,
+          "retained_evidence": 62669,
+          "rust_serialized": 5832,
+          "model_input": 3472,
+          "image": 0,
+          "http_serialization_including_base64": 6128,
+          "http_response": 1703
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 5832,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 23515,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 42024960
+          },
+          {
+            "pid": 23521,
+            "ppid": 23515,
+            "role": "rust_candidate",
+            "rss_bytes": 3293184
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 519,
+        "peak_trial_both_process_samples": 519,
+        "peak_trial_max_actual_gap_ms": 109.324792,
+        "option_max_actual_sample_gap_ms": 109.324792,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-B-r3-f3f60c/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-B-r3-f3f60c/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 29,
+        "defined_conditions": 36,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 1,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "01",
+      "variant": "C",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "COMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 36,
+        "planned": 36,
+        "conditional_mean_ms": 11995.458227916666,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": true,
+        "correct": 34,
+        "planned": 36,
+        "percent": 94.44444444444444
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 36,
+        "planned": 36,
+        "conditional_via_mean_ms": 12364.438348222224,
+        "conditional_full_wall_mean_ms": 12364.438348222224,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 0
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 2.0,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 1,
+            "modules": [
+              "src/dp01.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C05/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 4,
+            "modules": [
+              "src/dp01.rs",
+              "src/dp01_evidence.rs",
+              "src/dp01_producer.rs",
+              "src/dp01_request.rs"
+            ],
+            "status": "PASS",
+            "evidence": "baseline-v2/dp01-C06/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+          }
+        ],
+        "functional_tasks_mean": 2.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.16307880000000002,
+        "receiver_usd": 0,
+        "total_usd": 0.16307880000000002,
+        "actual_calls": 71,
+        "input_tokens": 154785,
+        "output_tokens": 63228,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp01_publish_relations",
+            "calls": 33,
+            "input_tokens": 24837,
+            "output_tokens": 39375,
+            "known_usage_usd": 0.07293480000000004,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp01_select_adopt_or_complete",
+            "calls": 36,
+            "input_tokens": 127180,
+            "output_tokens": 23189,
+            "known_usage_usd": 0.0879744,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp01_source_backed_answer",
+            "calls": 2,
+            "input_tokens": 2768,
+            "output_tokens": 664,
+            "known_usage_usd": 0.0021696000000000003,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "01",
+        "variant": "C",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-dp01-e2-C-r2-1c6a08",
+        "peak_sample_start_ns": 1900283964643083,
+        "peak_sample_end_ns": 1900283970578916,
+        "peak_stage": "MODEL:dp01_select_adopt_or_complete",
+        "concurrent_peak_mb": 50.364416,
+        "python_at_same_peak_mb": 46.661632,
+        "rust_at_same_peak_mb": 3.702784,
+        "same_run_initial_sum_mb": 34.57024,
+        "same_run_initial_python_mb": 32.882688,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 15.794176,
+        "role_delta_bytes": {
+          "python_runner_bridge": 13778944,
+          "rust_candidate": 2015232
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 2829,
+          "retained_evidence": 129475,
+          "rust_serialized": 23867,
+          "model_input": 13179,
+          "image": 0,
+          "http_serialization_including_base64": 18954
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 2829,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 96527,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "retained_call_records": {
+            "bytes": 32948,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp01_sources": {
+            "bytes": 1405,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_working_view": {
+            "bytes": 2,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_published": {
+            "bytes": 7030,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp01_recent": {
+            "bytes": 1185,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:model_request_174": {
+            "bytes": 14245,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "0956a054-dfb5-423f-b545-a7f8a30cca6d:input_text": {
+            "bytes": 13179,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "0956a054-dfb5-423f-b545-a7f8a30cca6d:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "0956a054-dfb5-423f-b545-a7f8a30cca6d:http_request": {
+            "bytes": 18954,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 129475,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 2829,
+          "retained_evidence": 157015,
+          "rust_serialized": 23867,
+          "model_input": 13179,
+          "image": 0,
+          "http_serialization_including_base64": 18954,
+          "http_response": 6264
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 23867,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 13258,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 46661632
+          },
+          {
+            "pid": 13264,
+            "ppid": 13258,
+            "role": "rust_candidate",
+            "rss_bytes": 3702784
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 1932,
+        "peak_trial_both_process_samples": 1932,
+        "peak_trial_max_actual_gap_ms": 84.69975,
+        "option_max_actual_sample_gap_ms": 132.153291,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r2-1c6a08/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r2-1c6a08/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 27,
+        "defined_conditions": 36,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 0,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "02",
+      "variant": "A",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 30,
+        "planned": 30,
+        "conditional_mean_ms": 8677.264933433333,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": false,
+        "correct": 0,
+        "planned": 0,
+        "percent": null
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 23,
+        "planned": 24,
+        "conditional_via_mean_ms": 24091.785878695653,
+        "conditional_full_wall_mean_ms": 24091.785878695653,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 1
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 2.0,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C04",
+            "count": 2,
+            "modules": [
+              "src/dp02/execution.rs",
+              "src/dp02/state.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp02/C04-v2/manifest.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C04-v2/manifest.json"
+          },
+          {
+            "id": "C06",
+            "count": 3,
+            "modules": [
+              "src/dp02/execution.rs",
+              "src/dp02/response.rs",
+              "src/dp02/state.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp02/C06-v2/manifest.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C06-v2/manifest.json"
+          }
+        ],
+        "functional_tasks_mean": 2.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.12245600000000001,
+        "receiver_usd": 0,
+        "total_usd": 0.12245600000000001,
+        "actual_calls": 53,
+        "input_tokens": 206428,
+        "output_tokens": 24928,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp02_adopt_intents",
+            "calls": 27,
+            "input_tokens": 96109,
+            "output_tokens": 8129,
+            "known_usage_usd": 0.051449999999999996,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp02_complete_response",
+            "calls": 14,
+            "input_tokens": 55445,
+            "output_tokens": 8589,
+            "known_usage_usd": 0.035920400000000005,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp02_repair_response",
+            "calls": 12,
+            "input_tokens": 54874,
+            "output_tokens": 8210,
+            "known_usage_usd": 0.0350856,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "02",
+        "variant": "A",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-02-E1-A-r2-c9495e",
+        "peak_sample_start_ns": 1901798116610791,
+        "peak_sample_end_ns": 1901798131551083,
+        "peak_stage": "MODEL:dp02_adopt_intents",
+        "concurrent_peak_mb": 45.350912,
+        "python_at_same_peak_mb": 42.090496,
+        "rust_at_same_peak_mb": 3.260416,
+        "same_run_initial_sum_mb": 34.553856,
+        "same_run_initial_python_mb": 32.866304,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 10.797055999999998,
+        "role_delta_bytes": {
+          "python_runner_bridge": 9224192,
+          "rust_candidate": 1572864
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 8220,
+          "retained_evidence": 40043,
+          "rust_serialized": 29077,
+          "model_input": 14270,
+          "image": 0,
+          "http_serialization_including_base64": 16683
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 8220,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 27653,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "retained_call_records": {
+            "bytes": 12390,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp02_public_adopted_view": {
+            "bytes": 6364,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp02_request_owned_semantic_states": {
+            "bytes": 6531,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:model_request_33": {
+            "bytes": 16182,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "e956d9c5-5227-496b-9786-6c3042cd4883:input_text": {
+            "bytes": 14270,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "e956d9c5-5227-496b-9786-6c3042cd4883:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "e956d9c5-5227-496b-9786-6c3042cd4883:http_request": {
+            "bytes": 16683,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 40043,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 8220,
+          "retained_evidence": 71432,
+          "rust_serialized": 32783,
+          "model_input": 17321,
+          "image": 0,
+          "http_serialization_including_base64": 18961,
+          "http_response": 3712
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 29077,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 39274,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 42090496
+          },
+          {
+            "pid": 39278,
+            "ppid": 39274,
+            "role": "rust_candidate",
+            "rss_bytes": 3260416
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 791,
+        "peak_trial_both_process_samples": 791,
+        "peak_trial_max_actual_gap_ms": 77.296875,
+        "option_max_actual_sample_gap_ms": 82.212209,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-02-E1-A-r2-c9495e/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-02-E1-A-r2-c9495e/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 27,
+        "planned": 27,
+        "percent": 100.0,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 20,
+        "defined_conditions": 21,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 1,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "02",
+      "variant": "B",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "COMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 30,
+        "planned": 30,
+        "conditional_mean_ms": 6698.498830500001,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": false,
+        "correct": 0,
+        "planned": 0,
+        "percent": null
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 24,
+        "planned": 24,
+        "conditional_via_mean_ms": 20982.020991291665,
+        "conditional_full_wall_mean_ms": 20982.020991291665,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 0
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 2.0,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C04",
+            "count": 2,
+            "modules": [
+              "src/dp02/execution.rs",
+              "src/dp02/state.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp02/C04-v2/manifest.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C04-v2/manifest.json"
+          },
+          {
+            "id": "C06",
+            "count": 3,
+            "modules": [
+              "src/dp02/execution.rs",
+              "src/dp02/response.rs",
+              "src/dp02/state.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp02/C06-v2/manifest.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C06-v2/manifest.json"
+          }
+        ],
+        "functional_tasks_mean": 2.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.11251560000000001,
+        "receiver_usd": 0,
+        "total_usd": 0.11251560000000001,
+        "actual_calls": 49,
+        "input_tokens": 182773,
+        "output_tokens": 24629,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp02_adopt_intents",
+            "calls": 27,
+            "input_tokens": 93252,
+            "output_tokens": 8315,
+            "known_usage_usd": 0.05060480000000001,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp02_complete_response",
+            "calls": 13,
+            "input_tokens": 48251,
+            "output_tokens": 8480,
+            "known_usage_usd": 0.0328684,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp02_repair_response",
+            "calls": 9,
+            "input_tokens": 41270,
+            "output_tokens": 7834,
+            "known_usage_usd": 0.0290424,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "02",
+        "variant": "B",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-02-E1-B-r1-8f71d6",
+        "peak_sample_start_ns": 1901508920423958,
+        "peak_sample_end_ns": 1901508935830208,
+        "peak_stage": "MODEL:dp02_adopt_intents",
+        "concurrent_peak_mb": 46.170112,
+        "python_at_same_peak_mb": 42.778624,
+        "rust_at_same_peak_mb": 3.391488,
+        "same_run_initial_sum_mb": 34.783232,
+        "same_run_initial_python_mb": 33.09568,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 11.386880000000005,
+        "role_delta_bytes": {
+          "python_runner_bridge": 9682944,
+          "rust_candidate": 1703936
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 8220,
+          "retained_evidence": 41148,
+          "rust_serialized": 29222,
+          "model_input": 14291,
+          "image": 0,
+          "http_serialization_including_base64": 16718
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 8220,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 28308,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "retained_call_records": {
+            "bytes": 12840,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp02_public_adopted_view": {
+            "bytes": 6373,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp02_request_owned_semantic_states": {
+            "bytes": 6658,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:model_request_33": {
+            "bytes": 16191,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "f8c64201-d568-4c0d-9c06-4db10d1c268d:input_text": {
+            "bytes": 14291,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "f8c64201-d568-4c0d-9c06-4db10d1c268d:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "f8c64201-d568-4c0d-9c06-4db10d1c268d:http_request": {
+            "bytes": 16718,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 41148,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 8220,
+          "retained_evidence": 62921,
+          "rust_serialized": 29222,
+          "model_input": 14291,
+          "image": 0,
+          "http_serialization_including_base64": 16718,
+          "http_response": 4022
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 29222,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 34351,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 42778624
+          },
+          {
+            "pid": 34357,
+            "ppid": 34351,
+            "role": "rust_candidate",
+            "rss_bytes": 3391488
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 640,
+        "peak_trial_both_process_samples": 640,
+        "peak_trial_max_actual_gap_ms": 81.155959,
+        "option_max_actual_sample_gap_ms": 82.171458,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-02-E1-B-r1-8f71d6/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-02-E1-B-r1-8f71d6/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 26,
+        "planned": 27,
+        "percent": 96.29629629629629,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 21,
+        "defined_conditions": 21,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 0,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "04",
+      "variant": "A",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 10,
+        "planned": 15,
+        "conditional_mean_ms": 11175.8016542,
+        "missing": 5
+      },
+      "qa02": {
+        "applicable": true,
+        "correct": 17,
+        "planned": 24,
+        "percent": 70.83333333333333
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 9,
+        "planned": 12,
+        "conditional_via_mean_ms": 15623.849259111112,
+        "conditional_full_wall_mean_ms": 15623.849259111112,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 3
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 2.5,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 2,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/explanation.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 5,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/gate.rs",
+              "src/dp04/geometry.rs",
+              "src/dp04/observations.rs",
+              "src/dp04/region_policy.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          }
+        ],
+        "functional_tasks_mean": 3.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.0415828,
+        "receiver_usd": 0,
+        "total_usd": 0.0415828,
+        "actual_calls": 26,
+        "input_tokens": 66633,
+        "output_tokens": 9331,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp04.joint_grounding",
+            "calls": 15,
+            "input_tokens": 34886,
+            "output_tokens": 5344,
+            "known_usage_usd": 0.022504800000000005,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp04.joint_source_reread",
+            "calls": 11,
+            "input_tokens": 31747,
+            "output_tokens": 3987,
+            "known_usage_usd": 0.019078,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "04",
+        "variant": "A",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-dp04-dense-A-r2-962c0a",
+        "peak_sample_start_ns": 1902511486213500,
+        "peak_sample_end_ns": 1902511500096416,
+        "peak_stage": "MODEL:dp04.joint_source_reread",
+        "concurrent_peak_mb": 45.21984,
+        "python_at_same_peak_mb": 42.041344,
+        "rust_at_same_peak_mb": 3.178496,
+        "same_run_initial_sum_mb": 34.65216,
+        "same_run_initial_python_mb": 32.964608,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 10.567679999999996,
+        "role_delta_bytes": {
+          "python_runner_bridge": 9076736,
+          "rust_candidate": 1490944
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 1878,
+          "retained_evidence": 11168,
+          "rust_serialized": 7685,
+          "model_input": 3100,
+          "image": 132149,
+          "http_serialization_including_base64": 183007
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 1878,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 8378,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp04_observations": {
+            "bytes": 1373,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "retained_call_records": {
+            "bytes": 2790,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:model_request_22": {
+            "bytes": 6312,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "e92ec5e2-ceda-49df-aa6f-81bc09ced051:input_text": {
+            "bytes": 3100,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "e92ec5e2-ceda-49df-aa6f-81bc09ced051:image_binary": {
+            "bytes": 132149,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "e92ec5e2-ceda-49df-aa6f-81bc09ced051:http_request": {
+            "bytes": 183007,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 11168,
+        "logical_image_bytes": 132149,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 1878,
+          "retained_evidence": 28217,
+          "rust_serialized": 67615,
+          "model_input": 3100,
+          "image": 132149,
+          "http_serialization_including_base64": 183007,
+          "http_response": 1988
+        },
+        "option_any_trial_logical_image_max_bytes": 161824,
+        "peak_trial_logical_image_max_bytes": 132149,
+        "logical_rust_serialized_bytes": 7685,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 52024,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 42041344
+          },
+          {
+            "pid": 52030,
+            "ppid": 52024,
+            "role": "rust_candidate",
+            "rss_bytes": 3178496
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 254,
+        "peak_trial_both_process_samples": 254,
+        "peak_trial_max_actual_gap_ms": 311.923667,
+        "option_max_actual_sample_gap_ms": 311.923667,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp04-dense-A-r2-962c0a/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp04-dense-A-r2-962c0a/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 0,
+        "defined_conditions": 0,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 5,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "04",
+      "variant": "B",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "episode_trials": 12,
+      "comparison_status": "COMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 15,
+        "planned": 15,
+        "conditional_mean_ms": 18344.0548556,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": true,
+        "correct": 24,
+        "planned": 24,
+        "percent": 100.0
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 12,
+        "planned": 12,
+        "conditional_via_mean_ms": 22930.460854166668,
+        "conditional_full_wall_mean_ms": 22930.460854166668,
+        "conditional_receiver_union_excluded_mean_ms": 0.0,
+        "missing": 0
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 2.5,
+        "tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 2,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/explanation.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 5,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/gate.rs",
+              "src/dp04/geometry.rs",
+              "src/dp04/observations.rs",
+              "src/dp04/region_policy.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          }
+        ],
+        "functional_tasks_mean": 3.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.0431172,
+        "receiver_usd": 0,
+        "total_usd": 0.0431172,
+        "actual_calls": 38,
+        "input_tokens": 50225,
+        "output_tokens": 14392,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp04.screen_producer",
+            "calls": 15,
+            "input_tokens": 29829,
+            "output_tokens": 10383,
+            "known_usage_usd": 0.0285444,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp04.speech_producer",
+            "calls": 15,
+            "input_tokens": 10646,
+            "output_tokens": 2977,
+            "known_usage_usd": 0.0090216,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp04.candidate_binding",
+            "calls": 8,
+            "input_tokens": 9750,
+            "output_tokens": 1032,
+            "known_usage_usd": 0.0055512,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-v1",
+        "phase": "BASIC",
+        "dp": "04",
+        "variant": "B",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic-dp04-partial-correction-B-r2-a7e625",
+        "peak_sample_start_ns": 1902595783521291,
+        "peak_sample_end_ns": 1902595797306750,
+        "peak_stage": "MODEL:dp04.candidate_binding",
+        "concurrent_peak_mb": 45.350912,
+        "python_at_same_peak_mb": 42.074112,
+        "rust_at_same_peak_mb": 3.2768,
+        "same_run_initial_sum_mb": 34.471936,
+        "same_run_initial_python_mb": 32.784384,
+        "same_run_initial_rust_mb": 1.687552,
+        "sum_peak_minus_initial_mb": 10.878976000000002,
+        "role_delta_bytes": {
+          "python_runner_bridge": 9289728,
+          "rust_candidate": 1589248
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 2276,
+          "retained_evidence": 47087,
+          "rust_serialized": 12711,
+          "model_input": 2650,
+          "image": 0,
+          "http_serialization_including_base64": 5612
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 2276,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 34459,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "retained_call_records": {
+            "bytes": 12628,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp04_screen_candidates_r1": {
+            "bytes": 942,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_speech_candidates_r1": {
+            "bytes": 602,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_prior_binding": {
+            "bytes": 824,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_retained_proposal_trace": {
+            "bytes": 2835,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_observations": {
+            "bytes": 903,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_screen_candidates_r2": {
+            "bytes": 942,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp04_speech_candidates_r2": {
+            "bytes": 656,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:model_request_66": {
+            "bytes": 5007,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "8d97f6a4-15cd-4c4e-b3d7-247a907ead95:input_text": {
+            "bytes": 2650,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "8d97f6a4-15cd-4c4e-b3d7-247a907ead95:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "8d97f6a4-15cd-4c4e-b3d7-247a907ead95:http_request": {
+            "bytes": 5612,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 47087,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 2276,
+          "retained_evidence": 70626,
+          "rust_serialized": 32506,
+          "model_input": 2650,
+          "image": 27303,
+          "http_serialization_including_base64": 39530,
+          "http_response": 1739
+        },
+        "option_any_trial_logical_image_max_bytes": 161824,
+        "peak_trial_logical_image_max_bytes": 27303,
+        "logical_rust_serialized_bytes": 12711,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 53328,
+            "ppid": 98807,
+            "role": "python_runner_bridge",
+            "rss_bytes": 42074112
+          },
+          {
+            "pid": 53334,
+            "ppid": 53328,
+            "role": "rust_candidate",
+            "rss_bytes": 3276800
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 469,
+        "peak_trial_both_process_samples": 469,
+        "peak_trial_max_actual_gap_ms": 93.202666,
+        "option_max_actual_sample_gap_ms": 93.202666,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp04-partial-correction-B-r2-a7e625/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp04-partial-correction-B-r2-a7e625/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 0,
+        "planned_authorized_handoffs": 0,
+        "purpose_contract_correct": 0,
+        "combined_contract_correct": 0,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 0,
+        "defined_conditions": 0,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 0,
+      "functional_qualification": "FINITE_CHECKS_PASSED"
+    },
+    {
+      "dp": "05",
+      "variant": "A",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 20,
+        "planned": 21,
+        "conditional_mean_ms": 4306.803141599999,
+        "missing": 1
+      },
+      "qa02": {
+        "applicable": false,
+        "correct": 0,
+        "planned": 0,
+        "percent": null
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 20,
+        "planned": 21,
+        "conditional_via_mean_ms": 11018.835575000001,
+        "conditional_full_wall_mean_ms": 33025.17034165,
+        "conditional_receiver_union_excluded_mean_ms": 22006.334766649998,
+        "missing": 1
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 1.5,
+        "tasks": [
+          {
+            "id": "C01",
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C03",
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "count": 2,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C04",
+            "modules": [
+              "src/dp05.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+            "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+          },
+          {
+            "id": "C06",
+            "modules": [
+              "src/dp05.rs",
+              "src/dp05_sources.rs"
+            ],
+            "count": 2,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+            "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+          }
+        ],
+        "functional_tasks_mean": 1.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.0338936,
+        "receiver_usd": 0.0679472,
+        "total_usd": 0.10184080000000001,
+        "actual_calls": 80,
+        "input_tokens": 117770,
+        "output_tokens": 34208,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp05_interpret_user_request",
+            "calls": 21,
+            "input_tokens": 15318,
+            "output_tokens": 3720,
+            "known_usage_usd": 0.0120792,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp05_select_handoff_details",
+            "calls": 17,
+            "input_tokens": 14563,
+            "output_tokens": 3504,
+            "known_usage_usd": 0.0114316,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp05_compose_capsule",
+            "calls": 12,
+            "input_tokens": 15521,
+            "output_tokens": 2136,
+            "known_usage_usd": 0.009626000000000001,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_select_or_complete",
+            "calls": 17,
+            "input_tokens": 32906,
+            "output_tokens": 17347,
+            "known_usage_usd": 0.040917600000000005,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_result",
+            "calls": 7,
+            "input_tokens": 23912,
+            "output_tokens": 6544,
+            "known_usage_usd": 0.0200352,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_recover_read_selection",
+            "calls": 5,
+            "input_tokens": 14410,
+            "output_tokens": 769,
+            "known_usage_usd": 0.0069944,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp05_repair_user_interpretation",
+            "calls": 1,
+            "input_tokens": 1140,
+            "output_tokens": 188,
+            "known_usage_usd": 0.0007568,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-dp05-reuse-union-corrected-v2",
+        "phase": "BASIC_CORRECTED",
+        "dp": "05",
+        "variant": "A",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+        "peak_sample_start_ns": 1910444333742333,
+        "peak_sample_end_ns": 1910444347851083,
+        "peak_stage": "MODEL:dp05_receiver_result",
+        "concurrent_peak_mb": 49.119232,
+        "python_at_same_peak_mb": 45.350912,
+        "rust_at_same_peak_mb": 3.76832,
+        "same_run_initial_sum_mb": 34.832384,
+        "same_run_initial_python_mb": 33.161216,
+        "same_run_initial_rust_mb": 1.671168,
+        "sum_peak_minus_initial_mb": 14.286847999999999,
+        "role_delta_bytes": {
+          "python_runner_bridge": 12189696,
+          "rust_candidate": 2097152
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 3216,
+          "retained_evidence": 133207,
+          "rust_serialized": 7861,
+          "model_input": 4803,
+          "image": 0,
+          "http_serialization_including_base64": 7632
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 3216,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 99792,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp05_source_registry": {
+            "bytes": 1070,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_common_acquired": {
+            "bytes": 1000,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_work_record": {
+            "bytes": 4,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "retained_call_records": {
+            "bytes": 33415,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:model_request_145": {
+            "bytes": 5787,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "1154940b-040e-4cfa-b3aa-2746abb189fc:input_text": {
+            "bytes": 4803,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "1154940b-040e-4cfa-b3aa-2746abb189fc:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "1154940b-040e-4cfa-b3aa-2746abb189fc:http_request": {
+            "bytes": 7632,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 133207,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 3216,
+          "retained_evidence": 190617,
+          "rust_serialized": 8218,
+          "model_input": 4803,
+          "image": 0,
+          "http_serialization_including_base64": 8296,
+          "http_response": 6054
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 7861,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 73880,
+            "ppid": 37470,
+            "role": "python_runner_bridge",
+            "rss_bytes": 45350912
+          },
+          {
+            "pid": 73884,
+            "ppid": 73880,
+            "role": "rust_candidate",
+            "rss_bytes": 3768320
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 1511,
+        "peak_trial_both_process_samples": 1511,
+        "peak_trial_max_actual_gap_ms": 77.1885,
+        "option_max_actual_sample_gap_ms": 84.169583,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e3-A-r3-0028b1/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e3-A-r3-0028b1/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 17,
+        "planned_authorized_handoffs": 18,
+        "purpose_contract_correct": 17,
+        "combined_contract_correct": 17,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 7,
+        "defined_conditions": 18,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 1,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "05",
+      "variant": "B",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 21,
+        "planned": 21,
+        "conditional_mean_ms": 4421.472990142857,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": false,
+        "correct": 0,
+        "planned": 0,
+        "percent": null
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 19,
+        "planned": 21,
+        "conditional_via_mean_ms": 12438.587794052632,
+        "conditional_full_wall_mean_ms": 31106.112914526315,
+        "conditional_receiver_union_excluded_mean_ms": 18667.525120473685,
+        "missing": 2
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 1.75,
+        "tasks": [
+          {
+            "id": "C01",
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C03",
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "count": 2,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C04",
+            "modules": [
+              "src/dp05.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+            "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+          },
+          {
+            "id": "C06",
+            "modules": [
+              "src/dp05.rs",
+              "src/dp05_record.rs",
+              "src/dp05_sources.rs"
+            ],
+            "count": 3,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+            "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+          }
+        ],
+        "functional_tasks_mean": 2.0,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.2091628,
+        "receiver_usd": 0.07952000000000001,
+        "total_usd": 0.2886828,
+        "actual_calls": 116,
+        "input_tokens": 376587,
+        "output_tokens": 86280,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp05_produce_work_record",
+            "calls": 51,
+            "input_tokens": 189001,
+            "output_tokens": 46072,
+            "known_usage_usd": 0.1493156,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp05_interpret_user_request",
+            "calls": 21,
+            "input_tokens": 41002,
+            "output_tokens": 3828,
+            "known_usage_usd": 0.022525599999999996,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "VIA",
+            "stage": "dp05_extract_record",
+            "calls": 18,
+            "input_tokens": 57336,
+            "output_tokens": 8992,
+            "known_usage_usd": 0.0373216,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_select_or_complete",
+            "calls": 18,
+            "input_tokens": 43253,
+            "output_tokens": 20365,
+            "known_usage_usd": 0.049885200000000005,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_result",
+            "calls": 4,
+            "input_tokens": 22665,
+            "output_tokens": 4295,
+            "known_usage_usd": 0.015938,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_repair_result",
+            "calls": 2,
+            "input_tokens": 14747,
+            "output_tokens": 2294,
+            "known_usage_usd": 0.0095692,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_recover_read_selection",
+            "calls": 2,
+            "input_tokens": 8583,
+            "output_tokens": 434,
+            "known_usage_usd": 0.0041276,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-dp05-reuse-union-corrected-v2",
+        "phase": "BASIC_CORRECTED",
+        "dp": "05",
+        "variant": "B",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic_corrected-dp05-e4-B-r2-8c2cfd",
+        "peak_sample_start_ns": 1909871523396875,
+        "peak_sample_end_ns": 1909871539060041,
+        "peak_stage": "MODEL:dp05_receiver_repair_result",
+        "concurrent_peak_mb": 57.229312,
+        "python_at_same_peak_mb": 52.527104,
+        "rust_at_same_peak_mb": 4.702208,
+        "same_run_initial_sum_mb": 34.619392,
+        "same_run_initial_python_mb": 32.948224,
+        "same_run_initial_rust_mb": 1.671168,
+        "sum_peak_minus_initial_mb": 22.609920000000002,
+        "role_delta_bytes": {
+          "python_runner_bridge": 19578880,
+          "rust_candidate": 3031040
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 3935,
+          "retained_evidence": 466369,
+          "rust_serialized": 54071,
+          "model_input": 33589,
+          "image": 0,
+          "http_serialization_including_base64": 55618
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 3935,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 407594,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "retained_call_records": {
+            "bytes": 58775,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp05_source_registry": {
+            "bytes": 877,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_common_acquired": {
+            "bytes": 2,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_work_record": {
+            "bytes": 19085,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:model_request_220": {
+            "bytes": 34107,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "cb51c3f6-a510-434e-a3c2-679ebadb61fc:input_text": {
+            "bytes": 33589,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "cb51c3f6-a510-434e-a3c2-679ebadb61fc:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "cb51c3f6-a510-434e-a3c2-679ebadb61fc:http_request": {
+            "bytes": 55618,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 466369,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 3935,
+          "retained_evidence": 552521,
+          "rust_serialized": 114996,
+          "model_input": 65107,
+          "image": 0,
+          "http_serialization_including_base64": 115407,
+          "http_response": 5001
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 54071,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 62749,
+            "ppid": 37470,
+            "role": "python_runner_bridge",
+            "rss_bytes": 52527104
+          },
+          {
+            "pid": 62754,
+            "ppid": 62749,
+            "role": "rust_candidate",
+            "rss_bytes": 4702208
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 3034,
+        "peak_trial_both_process_samples": 3034,
+        "peak_trial_max_actual_gap_ms": 86.369917,
+        "option_max_actual_sample_gap_ms": 121.462958,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e4-B-r2-8c2cfd/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e4-B-r2-8c2cfd/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 18,
+        "planned_authorized_handoffs": 18,
+        "purpose_contract_correct": 18,
+        "combined_contract_correct": 18,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 9,
+        "defined_conditions": 18,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 2,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    },
+    {
+      "dp": "05",
+      "variant": "C",
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2",
+      "episode_trials": 12,
+      "comparison_status": "INCOMPLETE",
+      "qa01": {
+        "metric": "actual substantive first callback latency proxy, semantic correctness separately bounded",
+        "observed": 21,
+        "planned": 21,
+        "conditional_mean_ms": 4320.51430352381,
+        "missing": 0
+      },
+      "qa02": {
+        "applicable": false,
+        "correct": 0,
+        "planned": 0,
+        "percent": null
+      },
+      "qa03": {
+        "metric": "frozen host completion; DP05 API-boundary receiver-shim proxy",
+        "observed": 19,
+        "planned": 21,
+        "conditional_via_mean_ms": 4329.101182052632,
+        "conditional_full_wall_mean_ms": 24073.13861405263,
+        "conditional_receiver_union_excluded_mean_ms": 19744.037432,
+        "missing": 2
+      },
+      "qa04": {
+        "mean_changed_operational_modules": 1.5,
+        "tasks": [
+          {
+            "id": "C01",
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C03",
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "count": 2,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+            "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+          },
+          {
+            "id": "C04",
+            "modules": [
+              "src/dp05.rs"
+            ],
+            "count": 1,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+            "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+          },
+          {
+            "id": "C06",
+            "modules": [
+              "src/dp05.rs",
+              "src/dp05_sources.rs"
+            ],
+            "count": 2,
+            "status": "PASS",
+            "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+            "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+          }
+        ],
+        "functional_tasks_mean": 1.5,
+        "scope": "four predeclared tasks equal weighted; controls and functional pair shown individually"
+      },
+      "qa05": {
+        "via_usd": 0.0113928,
+        "receiver_usd": 0.0644,
+        "total_usd": 0.0757928,
+        "actual_calls": 59,
+        "input_tokens": 76178,
+        "output_tokens": 28326,
+        "unknown_usage_calls": 0,
+        "stages": [
+          {
+            "role": "VIA",
+            "stage": "dp05_interpret_user_request",
+            "calls": 21,
+            "input_tokens": 13722,
+            "output_tokens": 3690,
+            "known_usage_usd": 0.011392800000000002,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_select_or_complete",
+            "calls": 18,
+            "input_tokens": 19486,
+            "output_tokens": 2566,
+            "known_usage_usd": 0.0119,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_result",
+            "calls": 18,
+            "input_tokens": 34622,
+            "output_tokens": 20307,
+            "known_usage_usd": 0.046340000000000006,
+            "unknown_usage_calls": 0
+          },
+          {
+            "role": "RECEIVER",
+            "stage": "dp05_receiver_repair_result",
+            "calls": 2,
+            "input_tokens": 8348,
+            "output_tokens": 1763,
+            "known_usage_usd": 0.0061600000000000005,
+            "unknown_usage_calls": 0
+          }
+        ]
+      },
+      "qa06_same_peak": {
+        "phase_folder": "basic-dp05-reuse-union-corrected-v2",
+        "phase": "BASIC_CORRECTED",
+        "dp": "05",
+        "variant": "C",
+        "tactic": null,
+        "trials": 12,
+        "incomplete_trials": 0,
+        "incomplete_definition": "No same-sample observation of both registered Python/Rust roles in this trial. Separate from GOAL_FAILED/functional failures; zero does not prove every sample or true peak was fully observed.",
+        "peak_run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+        "peak_sample_start_ns": 1909579595718458,
+        "peak_sample_end_ns": 1909579609823250,
+        "peak_stage": "MODEL:dp05_receiver_result",
+        "concurrent_peak_mb": 48.152576,
+        "python_at_same_peak_mb": 44.48256,
+        "rust_at_same_peak_mb": 3.670016,
+        "same_run_initial_sum_mb": 34.799616,
+        "same_run_initial_python_mb": 33.128448,
+        "same_run_initial_rust_mb": 1.671168,
+        "sum_peak_minus_initial_mb": 13.352960000000003,
+        "role_delta_bytes": {
+          "python_runner_bridge": 11354112,
+          "rust_candidate": 1998848
+        },
+        "logical_categories_at_same_peak_bytes": {
+          "input": 3216,
+          "retained_evidence": 124530,
+          "rust_serialized": 5967,
+          "model_input": 3864,
+          "image": 0,
+          "http_serialization_including_base64": 6399
+        },
+        "logical_buffers_at_same_peak": {
+          "input_json": {
+            "bytes": 3216,
+            "category": "input",
+            "owner": "python_runner_bridge"
+          },
+          "retained_events": {
+            "bytes": 97717,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:dp05_source_registry": {
+            "bytes": 1070,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_common_acquired": {
+            "bytes": 2,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "rust:dp05_work_record": {
+            "bytes": 4,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "retained_call_records": {
+            "bytes": 26813,
+            "category": "retained_evidence",
+            "owner": "python_runner_bridge"
+          },
+          "rust:model_request_146": {
+            "bytes": 4891,
+            "category": "rust_serialized",
+            "owner": "rust_candidate"
+          },
+          "47cd77f9-18d9-4db9-9133-0c0940505aaf:input_text": {
+            "bytes": 3864,
+            "category": "model_input",
+            "owner": "python_runner_bridge"
+          },
+          "47cd77f9-18d9-4db9-9133-0c0940505aaf:image_binary": {
+            "bytes": 0,
+            "category": "image",
+            "owner": "python_runner_bridge"
+          },
+          "47cd77f9-18d9-4db9-9133-0c0940505aaf:http_request": {
+            "bytes": 6399,
+            "category": "http_serialization_including_base64",
+            "owner": "python_runner_bridge"
+          }
+        },
+        "experiment_retained_evidence_bytes": 124530,
+        "logical_image_bytes": 0,
+        "peak_trial_category_lifecycle_max_bytes": {
+          "input": 3216,
+          "retained_evidence": 185473,
+          "rust_serialized": 5967,
+          "model_input": 3864,
+          "image": 0,
+          "http_serialization_including_base64": 6399,
+          "http_response": 5659
+        },
+        "option_any_trial_logical_image_max_bytes": 0,
+        "peak_trial_logical_image_max_bytes": 0,
+        "logical_rust_serialized_bytes": 5967,
+        "pid_ppid_role_contributions": [
+          {
+            "pid": 59982,
+            "ppid": 37470,
+            "role": "python_runner_bridge",
+            "rss_bytes": 44482560
+          },
+          {
+            "pid": 59988,
+            "ppid": 59982,
+            "role": "rust_candidate",
+            "rss_bytes": 3670016
+          }
+        ],
+        "peak_all_registered_observed": true,
+        "peak_trial_samples": 1331,
+        "peak_trial_both_process_samples": 1330,
+        "peak_trial_max_actual_gap_ms": 78.068084,
+        "option_max_actual_sample_gap_ms": 143.820709,
+        "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e3-C-r2-788e21/trace.json",
+        "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e3-C-r2-788e21/input.json",
+        "all_trial_breakdown": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/memory-breakdown.json",
+        "scope": "One actual max concurrent sample across trials; initial sample is fresh-run startup, not steady baseline. Logical serialized bytes overlap and do not partition RSS. Experiment events/calls are evidence overhead. Nominal 50ms ps RSS, shared-page dedup unverified; excludes UI, outer orchestrator, cloud weights.",
+        "architecture_ram_comparable": true,
+        "startup_scope_warning": null
+      },
+      "nr": {
+        "correct": 0,
+        "planned": 0,
+        "percent": null,
+        "not_qa02": true
+      },
+      "nh": {
+        "structure_correct": 18,
+        "planned_authorized_handoffs": 18,
+        "purpose_contract_correct": 18,
+        "combined_contract_correct": 18,
+        "not_qa02": true
+      },
+      "content_literal_diagnostic": {
+        "correct": 8,
+        "defined_conditions": 18,
+        "not_semantic_proof": true
+      },
+      "failed_contract_or_completion_episodes": 2,
+      "functional_qualification": "FAILED_FINITE_CHECKS"
+    }
+  ],
+  "actual_campaign": {
+    "scope": "Authorized actual Qwen phases only; all calibration, BASIC, tactics and diagnostics retained. Development assistant inference and offline test doubles are outside runtime-model price accounting. Standard-price usage comparison, not invoice.",
+    "phases": [
+      {
+        "phase": "BASIC_CORRECTED",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1",
+        "planned_episode_trials": 36,
+        "recorded_episode_trials": 11,
+        "actual_call_count": 78,
+        "input_tokens": 190469,
+        "output_tokens": 46357,
+        "known_usage_via_usd": 0.0931928,
+        "known_usage_receiver_usd": 0.057166,
+        "known_usage_total_usd": 0.15035880000000001,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 1,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 855.337285668,
+        "continuous_phase_record_window_s": 856.550753,
+        "provider_call_wall_sum_s": 853.475336664,
+        "provider_occupied_union_s": 853.475336664,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "a050b89bc629be170d28278c797525cba4dfbe21c92b1d1aa4d60db7fee73450",
+        "explicit_boundary_stop": {
+          "version": "EXPLICIT_PARENT_AUTHORIZED_BOUNDARY_STOP",
+          "stopped_utc": "2026-10-18T14:10:48.665328+00:00",
+          "reason": "Confirmed host false-negative: aggregate source span supported by gapless adjacent/overlapping actually supplied same-source/revision ranges was rejected because containment only accepted one passage. Root instructed finish current episode, stop next job, preserve history, then new common minimal guard freeze ABC36 plus numbered9.",
+          "completed_trials": 11,
+          "planned_trials": 36,
+          "unexecuted_trials": 25,
+          "completed_run_ids": [
+            "basic_corrected-dp05-e1-A-r1-882645",
+            "basic_corrected-dp05-e1-B-r1-e36220",
+            "basic_corrected-dp05-e1-C-r1-56ceca",
+            "basic_corrected-dp05-e2-A-r1-a5fd69",
+            "basic_corrected-dp05-e2-B-r1-3bca2f",
+            "basic_corrected-dp05-e2-C-r1-9b6366",
+            "basic_corrected-dp05-e3-A-r1-f6a5a1",
+            "basic_corrected-dp05-e3-B-r1-a19d4b",
+            "basic_corrected-dp05-e3-C-r1-0d9fdc",
+            "basic_corrected-dp05-e4-A-r1-b5694f",
+            "basic_corrected-dp05-e4-B-r1-5807dc"
+          ],
+          "completed_jobs": [
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "A",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "B",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "C",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "A",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "B",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "C",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "A",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "B",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "C",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "A",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "B",
+              "repetition": 1
+            }
+          ],
+          "unexecuted_jobs": [
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "C",
+              "repetition": 1
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "B",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "C",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "A",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "B",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "C",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "A",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "B",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "C",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "A",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "B",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "C",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "A",
+              "repetition": 2
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "C",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "A",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e1",
+              "variant": "B",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "C",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "A",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e2",
+              "variant": "B",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "C",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "A",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e3",
+              "variant": "B",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "C",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "A",
+              "repetition": 3
+            },
+            {
+              "dp": "05",
+              "episode": "dp05-e4",
+              "variant": "B",
+              "repetition": 3
+            }
+          ],
+          "current_api_cancelled": false,
+          "inflight_at_stop": 0,
+          "orchestration_action": "SIGSTOP parent only while current worker continued; after worker exited and durable record+usage confirmed, SIGKILL stopped orchestrator parent only. Current worker stdout need not appear in orchestration.log; durable runs.jsonl/trace and ledger are canonical.",
+          "preserved_freeze_sha256": "a050b89bc629be170d28278c797525cba4dfbe21c92b1d1aa4d60db7fee73450",
+          "runs_sha256": "f4327456b723fa0f69bf05b1398a279f9ceb529e7e77f0ec26ec9bde3a1f815c",
+          "replacement_phase": "basic-dp05-reuse-union-corrected-v2",
+          "used_in_final_effective120": false,
+          "global_confirmed_usage_usd_at_stop": 1.6487404
+        },
+        "unexecuted_jobs_cancelled_before_start": 25,
+        "not_final_effective_comparison": true,
+        "qa01_expected": 19,
+        "qa01_observed": 19,
+        "qa03_expected": 19,
+        "qa03_observed": 18
+      },
+      {
+        "phase": "BASIC_CORRECTED",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2",
+        "planned_episode_trials": 36,
+        "recorded_episode_trials": 36,
+        "actual_call_count": 255,
+        "input_tokens": 570535,
+        "output_tokens": 148814,
+        "known_usage_via_usd": 0.25444920000000004,
+        "known_usage_receiver_usd": 0.2118672,
+        "known_usage_total_usd": 0.4663164,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 5,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 2757.118055705,
+        "continuous_phase_record_window_s": 2761.296378333,
+        "provider_call_wall_sum_s": 2750.772587245,
+        "provider_occupied_union_s": 2750.772587245,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "ed3fb4ad408541ab1acc7522ec036cf1541ac3d8e4a65ec7f34ab65a29d10981",
+        "qa01_expected": 63,
+        "qa01_observed": 62,
+        "qa03_expected": 63,
+        "qa03_observed": 58
+      },
+      {
+        "phase": "BASIC",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+        "planned_episode_trials": 120,
+        "recorded_episode_trials": 120,
+        "actual_call_count": 635,
+        "input_tokens": 1428280,
+        "output_tokens": 349718,
+        "known_usage_via_usd": 0.8917328000000001,
+        "known_usage_receiver_usd": 0.239128,
+        "known_usage_total_usd": 1.1308608,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 13,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 6483.798467503,
+        "continuous_phase_record_window_s": 6497.736641042,
+        "provider_call_wall_sum_s": 6513.370758383,
+        "provider_occupied_union_s": 6472.414165464,
+        "provider_dependency_overlap_s": 40.956592919,
+        "freeze_sha256": "50e4116e1fa86807c19abecac6586110e88968087542eececcfc4e379a7cecf2",
+        "qa01_expected": 261,
+        "qa01_observed": 256,
+        "qa03_expected": 243,
+        "qa03_observed": 232
+      },
+      {
+        "phase": "CALIBRATION",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v1",
+        "planned_episode_trials": 12,
+        "recorded_episode_trials": 12,
+        "actual_call_count": 77,
+        "input_tokens": 138652,
+        "output_tokens": 51941,
+        "known_usage_via_usd": 0.0877748,
+        "known_usage_receiver_usd": 0.0507916,
+        "known_usage_total_usd": 0.1385664,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 6,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 922.138423458,
+        "continuous_phase_record_window_s": 923.49942175,
+        "provider_call_wall_sum_s": 927.929986669,
+        "provider_occupied_union_s": 920.993064294,
+        "provider_dependency_overlap_s": 6.936922375,
+        "freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+        "qa01_expected": 27,
+        "qa01_observed": 27,
+        "qa03_expected": 23,
+        "qa03_observed": 18
+      },
+      {
+        "phase": "CALIBRATION_V2",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2",
+        "planned_episode_trials": 12,
+        "recorded_episode_trials": 12,
+        "actual_call_count": 66,
+        "input_tokens": 110470,
+        "output_tokens": 40352,
+        "known_usage_via_usd": 0.07440440000000001,
+        "known_usage_receiver_usd": 0.034346800000000004,
+        "known_usage_total_usd": 0.1087512,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 2,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 725.3181852069999,
+        "continuous_phase_record_window_s": 726.63114025,
+        "provider_call_wall_sum_s": 731.24164708,
+        "provider_occupied_union_s": 724.039664414,
+        "provider_dependency_overlap_s": 7.201982666,
+        "freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+        "qa01_expected": 27,
+        "qa01_observed": 25,
+        "qa03_expected": 23,
+        "qa03_observed": 21
+      },
+      {
+        "phase": "CALIBRATION_V3",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v3",
+        "planned_episode_trials": 2,
+        "recorded_episode_trials": 2,
+        "actual_call_count": 4,
+        "input_tokens": 8043,
+        "output_tokens": 1660,
+        "known_usage_via_usd": 0.0058732,
+        "known_usage_receiver_usd": 0,
+        "known_usage_total_usd": 0.0058732,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 1,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 32.823395917,
+        "continuous_phase_record_window_s": 32.922266375,
+        "provider_call_wall_sum_s": 32.540601416,
+        "provider_occupied_union_s": 32.540601416,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "bc3c1bca1e218832c216dc4952cb3165605a847e0f7ba9cdf2caf19faf49fa2d",
+        "qa01_expected": 2,
+        "qa01_observed": 1,
+        "qa03_expected": 2,
+        "qa03_observed": 1
+      },
+      {
+        "phase": "DIAGNOSTIC",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines",
+        "planned_episode_trials": 9,
+        "recorded_episode_trials": 9,
+        "actual_call_count": 80,
+        "input_tokens": 296638,
+        "output_tokens": 54054,
+        "known_usage_via_usd": 0.1372412,
+        "known_usage_receiver_usd": 0.0679004,
+        "known_usage_total_usd": 0.2051416,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 0,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 984.127816833,
+        "continuous_phase_record_window_s": 1000.515170875,
+        "provider_call_wall_sum_s": 981.275209128,
+        "provider_occupied_union_s": 981.275209128,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "8e81efbd7688cbaea94d9bb73d828a210b67b90177035020ded80ca471a3fda1",
+        "qa01_expected": 18,
+        "qa01_observed": 18,
+        "qa03_expected": 18,
+        "qa03_observed": 18
+      },
+      {
+        "phase": "TACTIC",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2",
+        "planned_episode_trials": 3,
+        "recorded_episode_trials": 3,
+        "actual_call_count": 12,
+        "input_tokens": 8433,
+        "output_tokens": 7008,
+        "known_usage_via_usd": 0.014586,
+        "known_usage_receiver_usd": 0,
+        "known_usage_total_usd": 0.014586,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 0,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 128.643158417,
+        "continuous_phase_record_window_s": 128.891148792,
+        "provider_call_wall_sum_s": 128.40597025,
+        "provider_occupied_union_s": 128.40597025,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "d6e0c444030f8435d1cf494ee4af5c24dc0399a093b36bab80ce8aaa86b13985",
+        "qa01_expected": 6,
+        "qa01_observed": 6,
+        "qa03_expected": 6,
+        "qa03_observed": 6
+      },
+      {
+        "phase": "TACTIC",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4",
+        "planned_episode_trials": 12,
+        "recorded_episode_trials": 12,
+        "actual_call_count": 30,
+        "input_tokens": 74448,
+        "output_tokens": 16491,
+        "known_usage_via_usd": 0.0561648,
+        "known_usage_receiver_usd": 0,
+        "known_usage_total_usd": 0.0561648,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 0,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 297.542743043,
+        "continuous_phase_record_window_s": 298.777534125,
+        "provider_call_wall_sum_s": 296.507060495,
+        "provider_occupied_union_s": 296.507060495,
+        "provider_dependency_overlap_s": 0.0,
+        "freeze_sha256": "67b28d254d7a56f4079dfdd6ca8fb4b588160ac77abe7a5d7a2c0ce729aa22d5",
+        "qa01_expected": 15,
+        "qa01_observed": 15,
+        "qa03_expected": 12,
+        "qa03_observed": 12
+      },
+      {
+        "phase": "DIAGNOSTIC",
+        "directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-B4",
+        "planned_episode_trials": 12,
+        "recorded_episode_trials": 12,
+        "actual_call_count": 37,
+        "input_tokens": 49256,
+        "output_tokens": 14923,
+        "known_usage_via_usd": 0.043579200000000005,
+        "known_usage_receiver_usd": 0,
+        "known_usage_total_usd": 0.043579200000000005,
+        "unknown_usage_calls": 0,
+        "model_failed_calls": 0,
+        "nonzero_process_exit_episodes": 0,
+        "goal_failed_events": 0,
+        "episode_error_events": 0,
+        "trial_harness_elapsed_sum_s": 217.595314125,
+        "continuous_phase_record_window_s": 218.810425167,
+        "provider_call_wall_sum_s": 283.41390396,
+        "provider_occupied_union_s": 216.668646501,
+        "provider_dependency_overlap_s": 66.745257459,
+        "freeze_sha256": "d8f9faa3d560c462b522909f90fdb4df176fd6a544b5d0d4b5c15515dbe60dae",
+        "qa01_expected": 15,
+        "qa01_observed": 15,
+        "qa03_expected": 12,
+        "qa03_observed": 12
+      }
+    ],
+    "recorded_actual_episode_trials": 229,
+    "authorized_unexecuted_jobs_stopped_before_start": 25,
+    "recorded_actual_calls": 1274,
+    "ledger_call_count": 1274,
+    "duplicate_call_uuids": [],
+    "ledger_not_yet_in_completed_episode_traces": [],
+    "episode_call_not_in_ledger": [],
+    "usage_confirmed_usd": 2.3201984,
+    "inflight_reserved_usd": 0,
+    "unknown_usage_reservation_usd": 0,
+    "management_bound_including_unknown_and_pending_usd": 2.3201984,
+    "global_cap_usd": 4,
+    "input_tokens": 2875224,
+    "output_tokens": 731318,
+    "trial_harness_elapsed_sum_s": 13404.442845876001,
+    "continuous_phase_record_windows_sum_s": 13445.630879709,
+    "campaign_first_to_latest_record_window_s": 15171.564931625,
+    "elapsed_scope": "All durations use actual monotonic timestamps. Trial sum includes Rust/process startup observation and source preparation within each trial. Phase record windows include between-trial setup. Campaign window additionally includes implementation/review/interphase gaps, so it is not model execution time. Provider call wall sum double-counts parallel calls; union/overlap are reported separately.",
+    "generated_utc": "2026-10-18T15:30:43Z",
+    "code_sha256": "1fa7cdbf183f4a39239c49eb3f028eacc95770f0e838a1b13e90c792b96b6f1f"
+  },
+  "dp05_all_three_observed_goal_intersection": {
+    "fixed_goal_rep_keys": 21,
+    "all_three_observed": 16,
+    "aggregate": {
+      "A": {
+        "n": 16,
+        "via_ms": 10565.1692500625,
+        "full_wall_ms": 31372.4490573125,
+        "receiver_union_ms": 20807.27980725
+      },
+      "B": {
+        "n": 16,
+        "via_ms": 12298.54651575,
+        "full_wall_ms": 31405.8936640625,
+        "receiver_union_ms": 19107.3471483125
+      },
+      "C": {
+        "n": 16,
+        "via_ms": 4212.8061640625,
+        "full_wall_ms": 23532.0255781875,
+        "receiver_union_ms": 19319.219414125
+      }
+    },
+    "cases": [
+      {
+        "episode": "dp05-e1",
+        "fixed_keys": 3,
+        "common_observed": 3,
+        "variants": {
+          "A": {
+            "n": 3,
+            "via_ms": 2787.8992083333337,
+            "full_wall_ms": 2787.8992083333337,
+            "receiver_union_ms": 0.0
+          },
+          "B": {
+            "n": 3,
+            "via_ms": 3008.6796529999997,
+            "full_wall_ms": 3008.6796529999997,
+            "receiver_union_ms": 0.0
+          },
+          "C": {
+            "n": 3,
+            "via_ms": 3127.1888613333335,
+            "full_wall_ms": 3127.1888613333335,
+            "receiver_union_ms": 0.0
+          }
+        }
+      },
+      {
+        "episode": "dp05-e2",
+        "fixed_keys": 3,
+        "common_observed": 3,
+        "variants": {
+          "A": {
+            "n": 3,
+            "via_ms": 12884.524583333334,
+            "full_wall_ms": 46397.470792,
+            "receiver_union_ms": 33512.94620866667
+          },
+          "B": {
+            "n": 3,
+            "via_ms": 14836.424056333335,
+            "full_wall_ms": 32576.097000333335,
+            "receiver_union_ms": 17739.672944
+          },
+          "C": {
+            "n": 3,
+            "via_ms": 4470.086125333333,
+            "full_wall_ms": 25930.254388999998,
+            "receiver_union_ms": 21460.168263666666
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "fixed_keys": 9,
+        "common_observed": 8,
+        "variants": {
+          "A": {
+            "n": 8,
+            "via_ms": 11465.412656375,
+            "full_wall_ms": 34683.419541625,
+            "receiver_union_ms": 23218.00688525
+          },
+          "B": {
+            "n": 8,
+            "via_ms": 14741.724624875,
+            "full_wall_ms": 39969.61670825,
+            "receiver_union_ms": 25227.892083375
+          },
+          "C": {
+            "n": 8,
+            "via_ms": 4310.168947625,
+            "full_wall_ms": 30343.293869625,
+            "receiver_union_ms": 26033.124922
+          }
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "fixed_keys": 6,
+        "common_observed": 2,
+        "variants": {
+          "A": {
+            "n": 2,
+            "via_ms": 15151.067687499999,
+            "full_wall_ms": 38467.859291500004,
+            "receiver_union_ms": 23316.791604000002
+          },
+          "B": {
+            "n": 2,
+            "via_ms": 12653.818062499999,
+            "full_wall_ms": 37991.5174995,
+            "receiver_union_ms": 25337.699437000003
+          },
+          "C": {
+            "n": 2,
+            "via_ms": 5065.861042,
+            "full_wall_ms": 23296.864271500002,
+            "receiver_union_ms": 18231.0032295
+          }
+        }
+      }
+    ],
+    "individual_common_goals": [
+      {
+        "episode": "dp05-e1",
+        "rep": 1,
+        "goal_id": "h1-close",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e1-A-r1-8e78f8",
+            "qa03_ms": 3104.739541,
+            "elapsed_ms": 3104.739541,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e1-B-r1-3fea21",
+            "qa03_ms": 2683.936042,
+            "elapsed_ms": 2683.936042,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e1-C-r1-5c0613",
+            "qa03_ms": 3225.857542,
+            "elapsed_ms": 3225.857542,
+            "receiver_shim_internal_excluded_ms": 0.0
+          }
+        }
+      },
+      {
+        "episode": "dp05-e1",
+        "rep": 2,
+        "goal_id": "h1-close",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e1-A-r2-c8a27c",
+            "qa03_ms": 2877.284292,
+            "elapsed_ms": 2877.284292,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e1-B-r2-ce285b",
+            "qa03_ms": 2967.344,
+            "elapsed_ms": 2967.344,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e1-C-r2-f9c633",
+            "qa03_ms": 2940.07275,
+            "elapsed_ms": 2940.07275,
+            "receiver_shim_internal_excluded_ms": 0.0
+          }
+        }
+      },
+      {
+        "episode": "dp05-e1",
+        "rep": 3,
+        "goal_id": "h1-close",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e1-A-r3-d91cd5",
+            "qa03_ms": 2381.673792,
+            "elapsed_ms": 2381.673792,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e1-B-r3-a99a24",
+            "qa03_ms": 3374.758917,
+            "elapsed_ms": 3374.758917,
+            "receiver_shim_internal_excluded_ms": 0.0
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e1-C-r3-4e8eb3",
+            "qa03_ms": 3215.636292,
+            "elapsed_ms": 3215.636292,
+            "receiver_shim_internal_excluded_ms": 0.0
+          }
+        }
+      },
+      {
+        "episode": "dp05-e2",
+        "rep": 1,
+        "goal_id": "h2-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e2-A-r1-462049",
+            "qa03_ms": 13455.026083,
+            "elapsed_ms": 30604.338542,
+            "receiver_shim_internal_excluded_ms": 17149.312459
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e2-B-r1-8655ef",
+            "qa03_ms": 14831.571418,
+            "elapsed_ms": 31485.413459,
+            "receiver_shim_internal_excluded_ms": 16653.842041
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e2-C-r1-084da4",
+            "qa03_ms": 4419.963834,
+            "elapsed_ms": 24591.336375,
+            "receiver_shim_internal_excluded_ms": 20171.372541
+          }
+        }
+      },
+      {
+        "episode": "dp05-e2",
+        "rep": 2,
+        "goal_id": "h2-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e2-A-r2-03071d",
+            "qa03_ms": 12966.498292,
+            "elapsed_ms": 54345.318792,
+            "receiver_shim_internal_excluded_ms": 41378.8205
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e2-B-r2-b8bd03",
+            "qa03_ms": 14812.733375,
+            "elapsed_ms": 34154.749708,
+            "receiver_shim_internal_excluded_ms": 19342.016333
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e2-C-r2-a03698",
+            "qa03_ms": 3860.918542,
+            "elapsed_ms": 25940.528209,
+            "receiver_shim_internal_excluded_ms": 22079.609667
+          }
+        }
+      },
+      {
+        "episode": "dp05-e2",
+        "rep": 3,
+        "goal_id": "h2-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e2-A-r3-6c97d3",
+            "qa03_ms": 12232.049375,
+            "elapsed_ms": 54242.755042,
+            "receiver_shim_internal_excluded_ms": 42010.705667
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e2-B-r3-590d54",
+            "qa03_ms": 14864.967376,
+            "elapsed_ms": 32088.127834,
+            "receiver_shim_internal_excluded_ms": 17223.160458
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e2-C-r3-714612",
+            "qa03_ms": 5129.376,
+            "elapsed_ms": 27258.898583,
+            "receiver_shim_internal_excluded_ms": 22129.522583
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 1,
+        "goal_id": "h3-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+            "qa03_ms": 13392.175166,
+            "elapsed_ms": 39203.199916,
+            "receiver_shim_internal_excluded_ms": 25811.02475
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+            "qa03_ms": 17309.429709,
+            "elapsed_ms": 48535.341917,
+            "receiver_shim_internal_excluded_ms": 31225.912208
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+            "qa03_ms": 4758.568959,
+            "elapsed_ms": 32579.511625,
+            "receiver_shim_internal_excluded_ms": 27820.942666
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 1,
+        "goal_id": "h3-mail",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+            "qa03_ms": 10979.018626,
+            "elapsed_ms": 33578.838584,
+            "receiver_shim_internal_excluded_ms": 22599.819958
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+            "qa03_ms": 14494.731792,
+            "elapsed_ms": 37048.123125,
+            "receiver_shim_internal_excluded_ms": 22553.391333
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+            "qa03_ms": 4348.962916,
+            "elapsed_ms": 31739.693,
+            "receiver_shim_internal_excluded_ms": 27390.730084
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 1,
+        "goal_id": "h3-meeting",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+            "qa03_ms": 9759.734292,
+            "elapsed_ms": 32983.974458,
+            "receiver_shim_internal_excluded_ms": 23224.240166
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+            "qa03_ms": 14860.409,
+            "elapsed_ms": 30579.286708,
+            "receiver_shim_internal_excluded_ms": 15718.877708
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+            "qa03_ms": 4412.97129,
+            "elapsed_ms": 26371.211041,
+            "receiver_shim_internal_excluded_ms": 21958.239751
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 2,
+        "goal_id": "h3-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r2-a33c38",
+            "qa03_ms": 13692.139375,
+            "elapsed_ms": 38605.296208,
+            "receiver_shim_internal_excluded_ms": 24913.156833
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r2-6cc27c",
+            "qa03_ms": 16601.555042,
+            "elapsed_ms": 44818.305917,
+            "receiver_shim_internal_excluded_ms": 28216.750875
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+            "qa03_ms": 4169.728167,
+            "elapsed_ms": 31368.811917,
+            "receiver_shim_internal_excluded_ms": 27199.08375
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 2,
+        "goal_id": "h3-meeting",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r2-a33c38",
+            "qa03_ms": 10786.888375,
+            "elapsed_ms": 32422.250458,
+            "receiver_shim_internal_excluded_ms": 21635.362083
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r2-6cc27c",
+            "qa03_ms": 10830.12,
+            "elapsed_ms": 35330.782625,
+            "receiver_shim_internal_excluded_ms": 24500.662625
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+            "qa03_ms": 4004.87725,
+            "elapsed_ms": 31771.243625,
+            "receiver_shim_internal_excluded_ms": 27766.366375
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 3,
+        "goal_id": "h3-deck",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+            "qa03_ms": 12831.034959,
+            "elapsed_ms": 37389.564417,
+            "receiver_shim_internal_excluded_ms": 24558.529458
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+            "qa03_ms": 13945.114999,
+            "elapsed_ms": 40183.052041,
+            "receiver_shim_internal_excluded_ms": 26237.937042
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+            "qa03_ms": 4046.847583,
+            "elapsed_ms": 33398.9375,
+            "receiver_shim_internal_excluded_ms": 29352.089917
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 3,
+        "goal_id": "h3-mail",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+            "qa03_ms": 11003.483042,
+            "elapsed_ms": 31644.211292,
+            "receiver_shim_internal_excluded_ms": 20640.72825
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+            "qa03_ms": 15346.296291,
+            "elapsed_ms": 46243.294958,
+            "receiver_shim_internal_excluded_ms": 30896.998667
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+            "qa03_ms": 4676.112208,
+            "elapsed_ms": 29020.615333,
+            "receiver_shim_internal_excluded_ms": 24344.503125
+          }
+        }
+      },
+      {
+        "episode": "dp05-e3",
+        "rep": 3,
+        "goal_id": "h3-meeting",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+            "qa03_ms": 9278.827416,
+            "elapsed_ms": 31640.021,
+            "receiver_shim_internal_excluded_ms": 22361.193584
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+            "qa03_ms": 14546.140166,
+            "elapsed_ms": 37018.746375,
+            "receiver_shim_internal_excluded_ms": 22472.606209
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+            "qa03_ms": 4063.283208,
+            "elapsed_ms": 26496.326916,
+            "receiver_shim_internal_excluded_ms": 22433.043708
+          }
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 3,
+        "goal_id": "h4-corrected",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e4-A-r3-2ae48d",
+            "qa03_ms": 16847.924666,
+            "elapsed_ms": 47993.679333,
+            "receiver_shim_internal_excluded_ms": 31145.754667
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e4-B-r3-934bac",
+            "qa03_ms": 11838.305541,
+            "elapsed_ms": 24698.535541,
+            "receiver_shim_internal_excluded_ms": 12860.23
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e4-C-r3-48f5ab",
+            "qa03_ms": 5234.206458,
+            "elapsed_ms": 21626.925334,
+            "receiver_shim_internal_excluded_ms": 16392.718876
+          }
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 3,
+        "goal_id": "h4-initial",
+        "variants": {
+          "A": {
+            "run_id": "basic_corrected-dp05-e4-A-r3-2ae48d",
+            "qa03_ms": 13454.210709,
+            "elapsed_ms": 28942.03925,
+            "receiver_shim_internal_excluded_ms": 15487.828541
+          },
+          "B": {
+            "run_id": "basic_corrected-dp05-e4-B-r3-934bac",
+            "qa03_ms": 13469.330584,
+            "elapsed_ms": 51284.499458,
+            "receiver_shim_internal_excluded_ms": 37815.168874
+          },
+          "C": {
+            "run_id": "basic_corrected-dp05-e4-C-r3-48f5ab",
+            "qa03_ms": 4897.515626,
+            "elapsed_ms": 24966.803209,
+            "receiver_shim_internal_excluded_ms": 20069.287583
+          }
+        }
+      }
+    ],
+    "excluded_keys": [
+      {
+        "episode": "dp05-e3",
+        "rep": 2,
+        "goal_id": "h3-mail",
+        "observed_by_variant": {
+          "A": "NOT_OBSERVED",
+          "B": "OBSERVED",
+          "C": "OBSERVED"
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 1,
+        "goal_id": "h4-corrected",
+        "observed_by_variant": {
+          "A": "OBSERVED",
+          "B": "NOT_OBSERVED",
+          "C": "OBSERVED"
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 1,
+        "goal_id": "h4-initial",
+        "observed_by_variant": {
+          "A": "OBSERVED",
+          "B": "OBSERVED",
+          "C": "NOT_OBSERVED"
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 2,
+        "goal_id": "h4-corrected",
+        "observed_by_variant": {
+          "A": "OBSERVED",
+          "B": "NOT_OBSERVED",
+          "C": "OBSERVED"
+        }
+      },
+      {
+        "episode": "dp05-e4",
+        "rep": 2,
+        "goal_id": "h4-initial",
+        "observed_by_variant": {
+          "A": "OBSERVED",
+          "B": "OBSERVED",
+          "C": "NOT_OBSERVED"
+        }
+      }
+    ],
+    "scope": "Post hoc same-goal×repetition observed intersection only; does not replace fixed21 denominators or prove whole-population superiority."
+  },
+  "explicit_selection": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-selection.json",
+  "correction_comparison": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/dp05-correction-comparison.json",
+  "input_representation_comparison": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/input-representation-comparison.json",
+  "tactic_comparison": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-comparison.json",
+  "raw_tables": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-comparison",
+  "failure_cause_files": [
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/failure-causes.json",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/failure-causes.json"
+  ],
+  "qa04_final_evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/final-effective-cross-review.md",
+  "first_callback_scope_review": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/qa01-callback-proxy-review.md",
+  "dp05_first_handling_author_review": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/dp05-reuse-union-corrected-v2-prefix-review.json",
+  "content_manual_and_equivalence": "Independent bounded literal/equivalence and author source reviews remain separate; host completion does not establish all requested facts or every first callback meaning.",
+  "limits": [
+    "Authored finite four-case inputs repeated three times; descriptive observations only",
+    "First callback proxy is not a fully semantically verified correct-content endpoint",
+    "Missing/failed endpoints are retained; observed-only means are conditional and do not establish unconditional winners",
+    "DP05 receiver HTTP spans are excluded only in the explicit bounded shim profile; full wall is adjacent",
+    "RSS Python+Rust same-sample estimate only; initial is startup, logical bytes are not RSS; retained audit records are experimental overhead",
+    "Numbered-input diagnostic RAM is not comparable as architecture RAM: eager pretrial prior-record parsing already inflated initial Python RSS to about694MB; exact allocator attribution unprofiled",
+    "Original BASIC120 and all failures preserved; whole corrected DP0536 replaces the whole original DP05 population only for explicit effective120 presentation"
+  ],
+  "input_sha256": {
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-selection.json": "1f9dc5d43be3597c1f1e557a12fe0e71cd9a70aa58db2b8414b870683e537688",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-comparison/summary.json": "99ed8aa4d213d7d437b8fe33aa3d19e006904eee5b0627ec96ef2c54a5011a2a",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-comparison/stage-calls.csv": "698fa6667cbf3f3f4531e44d5c9913fcbf50e1fc0e0b91cc9d7b5c7ada7cbd8a",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-comparison/memory-option-peaks.json": "3a1be473bd780dfd55a60a1c40c33c5aadf3ca239a3e33d03ccbcceb9272ac8c",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/campaign-totals.json": "935bd45d5ac9d36cc4bb0c06ae6bfb1721cb90d1500a1be887f7697c57aac971",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/dp05-correction-comparison.json": "ace5a52116a8ec6afb031e1fade19ac7f93627573422f082159b9b700e7f444e",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/input-representation-comparison.json": "b964df2d2cb185fb970b70e0af82b6b766e40c1e266139228c4660c3b5e27c6c",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-comparison.json": "617fe385b743d3e5eea6792b7a18bcec92acc7521004e184bfd08711ddde22de",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/final-effective-cross-review.json": "8fb0e4b00c416e080cb6c4795de3302b9c06adf7b9aa6aa336d800d48d97a763",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/failure-causes.json": "29c18ce37e998dd15b052a075614532ffcf3dbc03cc69e894445a904e9f48451",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/failure-causes.json": "32a43d04fd0e444807fc05a4dccfe216458daecf1279fda05183b7ae3b5e4669",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/dp05-final-numerical-summary.json": "b44d411505bc6dfa763c62d47fbf127a755fb7a60d1fea391cdb9cb1ef9200be",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/qa01-callback-proxy-review.md": "55d43b26b7b5c42890627e9dfc6076885372963bbd4c29a8718f5efce81d921e",
+    "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/dp05-reuse-union-corrected-v2-prefix-review.json": "1bf3024e5867b767e38c24a291de38d1036aed81972842d0dbafb08dad90bc2f"
+  },
+  "analysis_source_manifest": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/final-analysis-source-manifest.json",
+  "analysis_source_manifest_sha256": "f8441d0c0095530e5df3c74900454788325a0e21ace7c039fe89c37aac2fa443",
+  "code_sha256": "8d3cb5bf11c4cb4aa8298cce369f3158d7f8cd80c3fcc25b4bfbe6a589d7b875"
+}

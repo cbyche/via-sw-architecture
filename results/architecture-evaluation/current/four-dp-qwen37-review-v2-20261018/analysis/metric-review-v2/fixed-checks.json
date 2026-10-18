@@ -1,0 +1,102 @@
+{
+  "scope": "Synthetic review against preserved analyzer source; no model calls or candidate execution. Fixed cases assert the desired corrected behavior.",
+  "checks": [
+    {
+      "name": "fixed_manifest_missing_stimulus_and_goal",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "first_callback_not_corrected_oracle_endpoint",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "old_revision_completion_does_not_complete_final_revision",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "late_goal_start_does_not_reset_origin",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "same_goal_receiver_union_only",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "no_external_uses_full_wall",
+      "status": "PASS",
+      "evidence": {}
+    },
+    {
+      "name": "FIXED_late_failure_preserves_actual_completed_content",
+      "status": "PASS",
+      "evidence": {
+        "actual_complete_events": 1,
+        "scored_outputs": [
+          {
+            "goal_id": "R1",
+            "revision": 1,
+            "text": "120 75",
+            "content_contract_checked": true
+          }
+        ],
+        "content_correct": 1
+      }
+    },
+    {
+      "name": "FIXED_stale_revision_does_not_pass_current_content",
+      "status": "PASS",
+      "evidence": {
+        "required_revision": 2,
+        "actual_revision": 1,
+        "diagnostic": {
+          "correct": 0,
+          "total": 1,
+          "details": [
+            {
+              "goal_id": "R1",
+              "correct": false,
+              "actual_text": "",
+              "missing_required_groups": [
+                [
+                  "120"
+                ],
+                [
+                  "75"
+                ]
+              ],
+              "required_receipt_satisfied": true,
+              "required_revision": 2,
+              "actual_revision": null
+            }
+          ],
+          "scope": "Finite literal groups with numeric/word boundaries. Not full semantic correctness or QA02."
+        }
+      }
+    },
+    {
+      "name": "rss_peak_is_same_sample_not_independent_peak_sum",
+      "status": "PASS",
+      "evidence": {
+        "peak": {
+          "at_ns": 1,
+          "concurrent_sum_bytes": 110,
+          "rss_bytes_by_pid": {
+            "a": 100,
+            "b": 10
+          },
+          "rss_bytes_by_role": {
+            "bridge": 100,
+            "rust": 10
+          }
+        }
+      }
+    }
+  ],
+  "checks_passed": 9,
+  "checks_total": 9
+}

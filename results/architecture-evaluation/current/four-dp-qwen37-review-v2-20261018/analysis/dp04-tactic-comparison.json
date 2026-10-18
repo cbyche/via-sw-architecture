@@ -1,0 +1,3450 @@
+{
+  "scope": "Same four cases ×3 each, phase-separated. Provider send→terminal sums are service spans, not QA01/03 or independently identified structural causality. Actual same helper requests do not force identical remote outputs.",
+  "canonical_source": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/reports/compare_dp04_tactics.py",
+  "canonical_source_sha256": "2bb276bc600aece064d372ca0b22d513f8bcc0d4ebea66a761f645550f3c3271",
+  "phases": {
+    "A": {
+      "status": "COMPLETE",
+      "phase_directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "recorded_episodes": 12,
+      "summary": {
+        "phase": "BASIC",
+        "dp": "04",
+        "variant": "A",
+        "tactic": null,
+        "episodes": 12,
+        "qa01_ms": 11175.8016542,
+        "qa01_n": 10,
+        "qa01_expected": 15,
+        "comparison_status": "INCOMPLETE",
+        "qa01_noresponse": 5,
+        "qa02_percent": 70.83333333333333,
+        "qa02_correct": 17,
+        "qa02_total": 24,
+        "qa03_ms": 15623.849259111112,
+        "qa03_full_elapsed_ms": 15623.849259111112,
+        "receiver_shim_excluded_ms": 0.0,
+        "qa03_n": 9,
+        "qa03_expected": 12,
+        "qa03_incomplete": 3,
+        "qa04_modules_mean": 2.5,
+        "qa05_via_usd": 0.0415828,
+        "qa05_receiver_usd": 0,
+        "qa06_incomplete_memory_runs": 0,
+        "qa06_peak_rss_mb": 45.21984,
+        "nr_correct": 0,
+        "nr_total": 0,
+        "nr_percent": null,
+        "nh_correct": 0,
+        "nh_total": 0,
+        "nh_purpose_contract_correct": 0,
+        "nh_combined_contract_correct": 0,
+        "content_correct": 0,
+        "content_total": 0,
+        "nh_percent": null,
+        "wrong_referent_judgments": 7,
+        "wrong_association_judgments": 0,
+        "wrong_handoff_contracts": 0,
+        "errors": 5,
+        "unknown_usage_calls": 0,
+        "model_calls": 26,
+        "functional_qualification": "FAILED_FINITE_CHECKS",
+        "qa04_tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 2,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/explanation.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 5,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/gate.rs",
+              "src/dp04/geometry.rs",
+              "src/dp04/observations.rs",
+              "src/dp04/region_policy.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          }
+        ]
+      },
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 15,
+          "input_tokens": 34886,
+          "output_tokens": 5344,
+          "usd": 0.022504800000000005,
+          "service_ms": [
+            8790.030209,
+            7165.700875,
+            5074.412959,
+            7083.868416,
+            7062.256458,
+            8633.62275,
+            7288.069958,
+            4994.063625,
+            7106.149333,
+            7056.235042,
+            8643.393042,
+            2835.122292,
+            4947.008,
+            7145.503667,
+            7096.991333
+          ],
+          "queue_ms": [
+            2.636541,
+            2.420917,
+            2.739166,
+            1.965584,
+            7.055292,
+            2.61725,
+            2.354875,
+            2.90875,
+            1.938209,
+            4.310416,
+            2.745125,
+            2.271333,
+            2.91825,
+            2.159375,
+            4.483208
+          ],
+          "transmitted_image_occurrences": 27,
+          "service_sum_ms": 100922.42795900001,
+          "service_mean_ms": 6728.161863933334
+        },
+        "dp04.joint_source_reread": {
+          "calls": 11,
+          "input_tokens": 31747,
+          "output_tokens": 3987,
+          "usd": 0.019078,
+          "service_ms": [
+            8795.757541,
+            6459.521083,
+            4964.805667,
+            8665.940875,
+            6281.018583,
+            5116.604916,
+            7124.176958,
+            9766.865541,
+            7186.995584,
+            4873.479083,
+            7433.279125
+          ],
+          "queue_ms": [
+            5.586834,
+            4.528,
+            6.276792,
+            5.70475,
+            2.920583,
+            3.029584,
+            4.434667,
+            6.036417,
+            4.807541,
+            5.088417,
+            4.230167
+          ],
+          "transmitted_image_occurrences": 23,
+          "service_sum_ms": 76668.444956,
+          "service_mean_ms": 6969.858632363636
+        }
+      },
+      "cases": [
+        {
+          "dp": "04",
+          "variant": "A",
+          "episode": "dp04-dense",
+          "reps": 3,
+          "qa01_ms": 17788.669027333333,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 17788.925902333332,
+          "qa03_full_elapsed_ms": 17788.925902333332,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 6,
+          "qa02_expected": 6,
+          "model_calls": 6,
+          "input_tokens": 16251,
+          "output_tokens": 2820,
+          "via_usd": 0.0110124,
+          "receiver_usd": 0,
+          "rss_max_mb": 45.21984,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-dense-A-r1-ca5202",
+              "rep": 1,
+              "qa01_mean_ms": 17608.336666,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 17608.598458,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036708,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.711936,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-dense-A-r2-962c0a",
+              "rep": 2,
+              "qa01_mean_ms": 17324.8935,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 17325.136708,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036708,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.21984,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-dense-A-r3-e788aa",
+              "rep": 3,
+              "qa01_mean_ms": 18432.776916,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 18433.042541,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036708,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.449792,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 17788.669027333333,
+              "median": 17608.336666,
+              "min": 17324.8935,
+              "max": 18432.776916,
+              "values": [
+                17608.336666,
+                17324.8935,
+                18432.776916
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 17788.925902333332,
+              "median": 17608.598458,
+              "min": 17325.136708,
+              "max": 18433.042541,
+              "values": [
+                17608.598458,
+                17325.136708,
+                18433.042541
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 17788.669027333333,
+              "median": 17608.336666,
+              "min": 17324.8935,
+              "max": 18432.776916,
+              "values": [
+                17608.336666,
+                17324.8935,
+                18432.776916
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 17788.925902333332,
+              "median": 17608.598458,
+              "min": 17325.136708,
+              "max": 18433.042541,
+              "values": [
+                17608.598458,
+                17325.136708,
+                18433.042541
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A",
+          "episode": "dp04-free-region",
+          "reps": 3,
+          "qa01_ms": null,
+          "qa01_observed": 0,
+          "qa01_expected": 3,
+          "qa03_ms": null,
+          "qa03_full_elapsed_ms": null,
+          "receiver_excluded_ms": null,
+          "qa03_observed": 0,
+          "qa03_expected": 3,
+          "comparison_status": "INCOMPLETE",
+          "qa02_correct": 0,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 15467,
+          "output_tokens": 1915,
+          "via_usd": 0.0092508,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.089344,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 3,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-free-region-A-r1-4a3fae",
+              "rep": 1,
+              "qa01_mean_ms": null,
+              "qa01_n": 0,
+              "qa01_expected": 1,
+              "qa03_mean_ms": null,
+              "qa03_n": 0,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0032528,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.089344,
+              "functional_error": true
+            },
+            {
+              "run_id": "basic-dp04-free-region-A-r2-1edfa6",
+              "rep": 2,
+              "qa01_mean_ms": null,
+              "qa01_n": 0,
+              "qa01_expected": 1,
+              "qa03_mean_ms": null,
+              "qa03_n": 0,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0032548000000000004,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.614208,
+              "functional_error": true
+            },
+            {
+              "run_id": "basic-dp04-free-region-A-r3-449511",
+              "rep": 3,
+              "qa01_mean_ms": null,
+              "qa01_n": 0,
+              "qa01_expected": 1,
+              "qa03_mean_ms": null,
+              "qa03_n": 0,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0027432000000000003,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.450368,
+              "functional_error": true
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 0,
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null,
+              "values": []
+            },
+            "qa03_mean_ms": {
+              "observed_n": 0,
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null,
+              "values": []
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 0,
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null,
+              "values": []
+            },
+            "qa03_ms": {
+              "observed_n": 0,
+              "mean": null,
+              "median": null,
+              "min": null,
+              "max": null,
+              "values": []
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 3,
+            "mean": 12426.016333333333,
+            "median": 13586.56275,
+            "min": 10040.296542,
+            "max": 13651.189708,
+            "values": [
+              13651.189708,
+              13586.56275,
+              10040.296542
+            ]
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A",
+          "episode": "dp04-page-change",
+          "reps": 3,
+          "qa01_ms": 10011.639986333334,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 10011.849819333334,
+          "qa03_full_elapsed_ms": 10011.849819333334,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 20540,
+          "output_tokens": 1453,
+          "via_usd": 0.010540800000000001,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.859392,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-page-change-A-r1-74dd55",
+              "rep": 1,
+              "qa01_mean_ms": 10064.008917,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 10064.22925,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0035148,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.859392,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-page-change-A-r2-5827f2",
+              "rep": 2,
+              "qa01_mean_ms": 10128.368833,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 10128.586791,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0035148,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.925504,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-page-change-A-r3-20beaf",
+              "rep": 3,
+              "qa01_mean_ms": 9842.542209,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 9842.733417,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0035112000000000003,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.498944,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 10011.639986333334,
+              "median": 10064.008917,
+              "min": 9842.542209,
+              "max": 10128.368833,
+              "values": [
+                10064.008917,
+                10128.368833,
+                9842.542209
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 10011.849819333333,
+              "median": 10064.22925,
+              "min": 9842.733417,
+              "max": 10128.586791,
+              "values": [
+                10064.22925,
+                10128.586791,
+                9842.733417
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 10011.639986333334,
+              "median": 10064.008917,
+              "min": 9842.542209,
+              "max": 10128.368833,
+              "values": [
+                10064.008917,
+                10128.368833,
+                9842.542209
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 10011.849819333333,
+              "median": 10064.22925,
+              "min": 9842.733417,
+              "max": 10128.586791,
+              "values": [
+                10064.22925,
+                10128.586791,
+                9842.733417
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A",
+          "episode": "dp04-partial-correction",
+          "reps": 3,
+          "qa01_ms": 7089.272375250001,
+          "qa01_observed": 4,
+          "qa01_expected": 6,
+          "qa03_ms": 19070.772055666665,
+          "qa03_full_elapsed_ms": 19070.772055666665,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "INCOMPLETE",
+          "qa02_correct": 8,
+          "qa02_expected": 12,
+          "model_calls": 8,
+          "input_tokens": 14375,
+          "output_tokens": 3143,
+          "via_usd": 0.010778800000000002,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.253184,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 2,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-partial-correction-A-r1-24e4a1",
+              "rep": 1,
+              "qa01_mean_ms": 7086.7797295,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 14174.45025,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0026680000000000002,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.07296,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-partial-correction-A-r2-fd1aa8",
+              "rep": 2,
+              "qa01_mean_ms": 7070.837083,
+              "qa01_n": 1,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 21326.172625,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.004057600000000001,
+              "receiver_cost_usd": 0,
+              "model_calls": 3,
+              "rss_concurrent_peak_mb": 44.253184,
+              "functional_error": true
+            },
+            {
+              "run_id": "basic-dp04-partial-correction-A-r3-8cc650",
+              "rep": 3,
+              "qa01_mean_ms": 7112.692959,
+              "qa01_n": 1,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 21711.693292,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.004053200000000001,
+              "receiver_cost_usd": 0,
+              "model_calls": 3,
+              "rss_concurrent_peak_mb": 44.122112,
+              "functional_error": true
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 7090.1032571666665,
+              "median": 7086.7797295,
+              "min": 7070.837083,
+              "max": 7112.692959,
+              "values": [
+                7086.7797295,
+                7070.837083,
+                7112.692959
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 19070.772055666668,
+              "median": 21326.172625,
+              "min": 14174.45025,
+              "max": 21711.693292,
+              "values": [
+                14174.45025,
+                21326.172625,
+                21711.693292
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 4,
+              "mean": 7089.272375250001,
+              "median": 7086.7797295,
+              "min": 7070.837083,
+              "max": 7112.692959,
+              "values": [
+                7093.465167,
+                7080.094292,
+                7070.837083,
+                7112.692959
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 19070.772055666668,
+              "median": 21326.172625,
+              "min": 14174.45025,
+              "max": 21711.693292,
+              "values": [
+                14174.45025,
+                21326.172625,
+                21711.693292
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 2,
+            "mean": 14426.6709375,
+            "median": 14426.6709375,
+            "min": 14254.866458,
+            "max": 14598.475417,
+            "values": [
+              14254.866458,
+              14598.475417
+            ]
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        }
+      ],
+      "event_counts": {
+        "EPISODE_START": 12,
+        "INPUT_CAPTURED": 15,
+        "STIMULUS": 15,
+        "LOCAL_OPERATION_START": 18,
+        "RAW_EVENT_OVERLAY_READ": 9,
+        "LOGICAL_BUFFER": 166,
+        "SOURCE_READ": 18,
+        "LOCAL_OPERATION_END": 18,
+        "CAUSAL_JOIN": 18,
+        "REVISION_REGISTERED": 15,
+        "OPERATION_START": 26,
+        "OPERATION_END": 26,
+        "GROUNDING_CONSISTENCY_REJECTED": 16,
+        "BOUNDED_SOURCE_REREAD": 11,
+        "ADOPTION": 24,
+        "GOAL_START": 9,
+        "ADOPTION_COMMITTED": 10,
+        "DISPLAY_PROXY": 20,
+        "GOAL_COMPLETE": 10,
+        "EPISODE_RESULT": 12,
+        "GOAL_FAILED": 5,
+        "REPLAYED_CONTROL_EVENT": 3,
+        "GOAL_LINK": 1
+      },
+      "raw_sha256": {
+        "basic-dp04-dense-A-r1-ca5202": "9064d34eed8b8f3560c744db6b91199dac0dc1c8aeb9a61e4e378d8288a747e9",
+        "basic-dp04-free-region-A-r1-4a3fae": "169e60ced160b6d39a9c00539e0da78ddaaa2db9eef44e8899a0961f84b56846",
+        "basic-dp04-page-change-A-r1-74dd55": "8a7a0d21711fab268d2b7ec30530eb6948ad4659f6fc2991b729449da326bbba",
+        "basic-dp04-partial-correction-A-r1-24e4a1": "8b58fb6f315e72f172e9e91b4efbc6213f8945f12762c5fbf265f8714af4b61e",
+        "basic-dp04-dense-A-r2-962c0a": "ed2e510f2048954702fe045b4ed70ee72c0bb648a17a90fc0d30df13b0dd1d40",
+        "basic-dp04-free-region-A-r2-1edfa6": "2afb17bebf4dbf140489c9b2b2d1ef373049a6ed3cfd63c4fc6e7782b0cae8a8",
+        "basic-dp04-page-change-A-r2-5827f2": "5b3179f4706fade7130d62ba7222e335d3ffdde42d48d83d673d0710dab8f111",
+        "basic-dp04-partial-correction-A-r2-fd1aa8": "88b501d9546fba2de9eabedc01660067b95c522e5e67a1dd8cabc09ad70d3ec8",
+        "basic-dp04-dense-A-r3-e788aa": "5ea1846a2556066aecc1b680ad9e72c7cb422f70f5de99d185a37a4473ef26b8",
+        "basic-dp04-free-region-A-r3-449511": "4e2819e902116ead7b16328a310d2704cd3946dfc208e79c6bf4f988c71285a9",
+        "basic-dp04-page-change-A-r3-20beaf": "509fe7c578690c25210d6480a4fd82381175a748e4e5adb0ef0dbca0c2fad7c3",
+        "basic-dp04-partial-correction-A-r3-8cc650": "3b3f51d5329603198340ef0a77114e57b436080326cc0d7e92cbbb808e9ee07f"
+      }
+    },
+    "B": {
+      "status": "COMPLETE",
+      "phase_directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1",
+      "recorded_episodes": 12,
+      "summary": {
+        "phase": "BASIC",
+        "dp": "04",
+        "variant": "B",
+        "tactic": null,
+        "episodes": 12,
+        "qa01_ms": 18344.0548556,
+        "qa01_n": 15,
+        "qa01_expected": 15,
+        "comparison_status": "COMPLETE",
+        "qa01_noresponse": 0,
+        "qa02_percent": 100.0,
+        "qa02_correct": 24,
+        "qa02_total": 24,
+        "qa03_ms": 22930.460854166668,
+        "qa03_full_elapsed_ms": 22930.460854166668,
+        "receiver_shim_excluded_ms": 0.0,
+        "qa03_n": 12,
+        "qa03_expected": 12,
+        "qa03_incomplete": 0,
+        "qa04_modules_mean": 2.5,
+        "qa05_via_usd": 0.0431172,
+        "qa05_receiver_usd": 0,
+        "qa06_incomplete_memory_runs": 0,
+        "qa06_peak_rss_mb": 45.350912,
+        "nr_correct": 0,
+        "nr_total": 0,
+        "nr_percent": null,
+        "nh_correct": 0,
+        "nh_total": 0,
+        "nh_purpose_contract_correct": 0,
+        "nh_combined_contract_correct": 0,
+        "content_correct": 0,
+        "content_total": 0,
+        "nh_percent": null,
+        "wrong_referent_judgments": 0,
+        "wrong_association_judgments": 0,
+        "wrong_handoff_contracts": 0,
+        "errors": 0,
+        "unknown_usage_calls": 0,
+        "model_calls": 38,
+        "functional_qualification": "FINITE_CHECKS_PASSED",
+        "qa04_tasks": [
+          {
+            "id": "C01",
+            "count": 1,
+            "modules": [
+              "src/model_wire.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C03",
+            "count": 2,
+            "modules": [
+              "src/main.rs",
+              "src/source_contract.rs"
+            ],
+            "status": "PASS",
+            "evidence": "controls/acceptance-summary.json",
+            "class": "ADAPTER_CONTROL",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+          },
+          {
+            "id": "C05",
+            "count": 2,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/explanation.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          },
+          {
+            "id": "C06",
+            "count": 5,
+            "modules": [
+              "src/dp04.rs",
+              "src/dp04/gate.rs",
+              "src/dp04/geometry.rs",
+              "src/dp04/observations.rs",
+              "src/dp04/region_policy.rs"
+            ],
+            "status": "PASS",
+            "evidence": "dp04-rebased-calibration-v3/summary.json",
+            "class": "FUNCTIONAL_CHANGE",
+            "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+          }
+        ]
+      },
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 15,
+          "input_tokens": 29829,
+          "output_tokens": 10383,
+          "usd": 0.0285444,
+          "service_ms": [
+            22289.685958,
+            13282.411625,
+            11204.7845,
+            5797.548459,
+            7150.256375,
+            22282.610041,
+            13491.091375,
+            10904.613708,
+            7074.026292,
+            7210.08875,
+            23209.075375,
+            13233.061917,
+            11213.550042,
+            5979.849792,
+            7104.156666
+          ],
+          "queue_ms": [
+            2.456792,
+            2.156959,
+            2.670167,
+            1.95875,
+            4.543417,
+            2.492459,
+            1.999208,
+            2.753958,
+            2.072208,
+            3.81825,
+            2.69575,
+            2.280917,
+            2.8515,
+            2.067583,
+            3.793042
+          ],
+          "transmitted_image_occurrences": 27,
+          "service_sum_ms": 181426.810875,
+          "service_mean_ms": 12095.120725
+        },
+        "dp04.speech_producer": {
+          "calls": 15,
+          "input_tokens": 10646,
+          "output_tokens": 2977,
+          "usd": 0.0090216,
+          "service_ms": [
+            5061.750875,
+            3490.053625,
+            3510.912292,
+            4815.787583,
+            4902.290875,
+            4714.231125,
+            3572.2245,
+            3756.278833,
+            5311.514125,
+            4776.249167,
+            5124.906125,
+            3403.792667,
+            3886.09025,
+            5135.596291,
+            5166.380916
+          ],
+          "queue_ms": [
+            3.760375,
+            3.517542,
+            3.574958,
+            3.8795,
+            3.430375,
+            3.740375,
+            3.235583,
+            3.533042,
+            3.801625,
+            3.582667,
+            2.594208,
+            3.099708,
+            2.087334,
+            4.213792,
+            2.331459
+          ],
+          "transmitted_image_occurrences": 0,
+          "service_sum_ms": 66628.059249,
+          "service_mean_ms": 4441.8706166
+        },
+        "dp04.candidate_binding": {
+          "calls": 8,
+          "input_tokens": 9750,
+          "output_tokens": 1032,
+          "usd": 0.0055512,
+          "service_ms": [
+            2649.344792,
+            3438.199,
+            3805.064667,
+            3265.235125,
+            3466.32075,
+            2220.29825,
+            3976.871667,
+            3869.910625
+          ],
+          "queue_ms": [
+            5.614125,
+            3.672833,
+            3.56875,
+            4.326958,
+            3.989709,
+            4.837916,
+            4.614083,
+            4.114042
+          ],
+          "transmitted_image_occurrences": 0,
+          "service_sum_ms": 26691.244876,
+          "service_mean_ms": 3336.4056095
+        }
+      },
+      "cases": [
+        {
+          "dp": "04",
+          "variant": "B",
+          "episode": "dp04-dense",
+          "reps": 3,
+          "qa01_ms": 27580.467097,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 27580.712333333333,
+          "qa03_full_elapsed_ms": 27580.712333333333,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 6,
+          "qa02_expected": 6,
+          "model_calls": 6,
+          "input_tokens": 8571,
+          "output_tokens": 4650,
+          "via_usd": 0.010868400000000002,
+          "receiver_usd": 0,
+          "rss_max_mb": 43.843584,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-dense-B-r1-d58fd4",
+              "rep": 1,
+              "qa01_mean_ms": 27372.122458,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 27372.394792,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036228000000000007,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.843584,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-dense-B-r2-b9ae76",
+              "rep": 2,
+              "qa01_mean_ms": 27017.660958,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 27017.935125,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036228000000000007,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.548672,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-dense-B-r3-beeedd",
+              "rep": 3,
+              "qa01_mean_ms": 28351.617875,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 28351.807083,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036228000000000007,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.712512,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 27580.467097,
+              "median": 27372.122458,
+              "min": 27017.660958,
+              "max": 28351.617875,
+              "values": [
+                27372.122458,
+                27017.660958,
+                28351.617875
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 27580.712333333333,
+              "median": 27372.394792,
+              "min": 27017.935125,
+              "max": 28351.807083,
+              "values": [
+                27372.394792,
+                27017.935125,
+                28351.807083
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 27580.467097,
+              "median": 27372.122458,
+              "min": 27017.660958,
+              "max": 28351.617875,
+              "values": [
+                27372.122458,
+                27017.660958,
+                28351.617875
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 27580.712333333333,
+              "median": 27372.394792,
+              "min": 27017.935125,
+              "max": 28351.807083,
+              "values": [
+                27372.394792,
+                27017.935125,
+                28351.807083
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B",
+          "episode": "dp04-free-region",
+          "reps": 3,
+          "qa01_ms": 16842.570097666667,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 16842.796875,
+          "qa03_full_elapsed_ms": 16842.796875,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 8430,
+          "output_tokens": 2731,
+          "via_usd": 0.0077416,
+          "receiver_usd": 0,
+          "rss_max_mb": 43.66336,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-free-region-B-r1-4e0794",
+              "rep": 1,
+              "qa01_mean_ms": 16790.446709,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 16790.652625,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025784000000000002,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.66336,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-free-region-B-r2-3c521f",
+              "rep": 2,
+              "qa01_mean_ms": 17081.922334,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 17082.15225,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025784000000000002,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.25376,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-free-region-B-r3-815fac",
+              "rep": 3,
+              "qa01_mean_ms": 16655.34125,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 16655.58575,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025848,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.433984,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 16842.570097666667,
+              "median": 16790.446709,
+              "min": 16655.34125,
+              "max": 17081.922334,
+              "values": [
+                16790.446709,
+                17081.922334,
+                16655.34125
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 16842.796875,
+              "median": 16790.652625,
+              "min": 16655.58575,
+              "max": 17082.15225,
+              "values": [
+                16790.652625,
+                17082.15225,
+                16655.58575
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 16842.570097666667,
+              "median": 16790.446709,
+              "min": 16655.34125,
+              "max": 17081.922334,
+              "values": [
+                16790.446709,
+                17081.922334,
+                16655.34125
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 16842.796875,
+              "median": 16790.652625,
+              "min": 16655.58575,
+              "max": 17082.15225,
+              "values": [
+                16790.652625,
+                17082.15225,
+                16655.58575
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B",
+          "episode": "dp04-page-change",
+          "reps": 3,
+          "qa01_ms": 16475.281291666666,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 16475.478833333334,
+          "qa03_full_elapsed_ms": 16475.478833333334,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 8,
+          "input_tokens": 13721,
+          "output_tokens": 2489,
+          "via_usd": 0.0094708,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.744704,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-page-change-B-r1-d8bbab",
+              "rep": 1,
+              "qa01_mean_ms": 17398.475875,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 17398.69225,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0033867999999999997,
+              "receiver_cost_usd": 0,
+              "model_calls": 3,
+              "rss_concurrent_peak_mb": 44.56448,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-page-change-B-r2-14cc73",
+              "rep": 2,
+              "qa01_mean_ms": 14680.321,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 14680.511708,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0026972,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.384256,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-page-change-B-r3-8345aa",
+              "rep": 3,
+              "qa01_mean_ms": 17347.047,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 17347.232542,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0033868,
+              "receiver_cost_usd": 0,
+              "model_calls": 3,
+              "rss_concurrent_peak_mb": 44.744704,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 16475.281291666666,
+              "median": 17347.047,
+              "min": 14680.321,
+              "max": 17398.475875,
+              "values": [
+                17398.475875,
+                14680.321,
+                17347.047
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 16475.478833333334,
+              "median": 17347.232542,
+              "min": 14680.511708,
+              "max": 17398.69225,
+              "values": [
+                17398.69225,
+                14680.511708,
+                17347.232542
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 16475.281291666666,
+              "median": 17347.047,
+              "min": 14680.321,
+              "max": 17398.475875,
+              "values": [
+                17398.475875,
+                14680.321,
+                17347.047
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 16475.478833333334,
+              "median": 17347.232542,
+              "min": 14680.511708,
+              "max": 17398.69225,
+              "values": [
+                17398.69225,
+                14680.511708,
+                17347.232542
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B",
+          "episode": "dp04-partial-correction",
+          "reps": 3,
+          "qa01_ms": 15410.977895833334,
+          "qa01_observed": 6,
+          "qa01_expected": 6,
+          "qa03_ms": 30822.855375,
+          "qa03_full_elapsed_ms": 30822.855375,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 12,
+          "qa02_expected": 12,
+          "model_calls": 18,
+          "input_tokens": 19503,
+          "output_tokens": 4522,
+          "via_usd": 0.015036400000000002,
+          "receiver_usd": 0,
+          "rss_max_mb": 45.350912,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "basic-dp04-partial-correction-B-r1-6053f3",
+              "rep": 1,
+              "qa01_mean_ms": 14990.107416499999,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 29981.230375,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0049632,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 44.384256,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-partial-correction-B-r2-a7e625",
+              "rep": 2,
+              "qa01_mean_ms": 15588.8732915,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 31178.68625,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0050968,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 45.350912,
+              "functional_error": false
+            },
+            {
+              "run_id": "basic-dp04-partial-correction-B-r3-205ebb",
+              "rep": 3,
+              "qa01_mean_ms": 15653.9529795,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 31308.6495,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.004976400000000001,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 45.285376,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 15410.977895833334,
+              "median": 15588.8732915,
+              "min": 14990.107416499999,
+              "max": 15653.9529795,
+              "values": [
+                14990.107416499999,
+                15588.8732915,
+                15653.9529795
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 30822.855375,
+              "median": 31178.68625,
+              "min": 29981.230375,
+              "max": 31308.6495,
+              "values": [
+                29981.230375,
+                31178.68625,
+                31308.6495
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 6,
+              "mean": 15410.977895833334,
+              "median": 15588.8732915,
+              "min": 14081.342666,
+              "max": 16179.845959,
+              "values": [
+                14081.342666,
+                15898.872167,
+                15680.971208,
+                15496.775375,
+                15128.06,
+                16179.845959
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 30822.855375,
+              "median": 31178.68625,
+              "min": 29981.230375,
+              "max": 31308.6495,
+              "values": [
+                29981.230375,
+                31178.68625,
+                31308.6495
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        }
+      ],
+      "event_counts": {
+        "EPISODE_START": 12,
+        "INPUT_CAPTURED": 15,
+        "STIMULUS": 15,
+        "LOCAL_OPERATION_START": 18,
+        "RAW_EVENT_OVERLAY_READ": 9,
+        "LOGICAL_BUFFER": 220,
+        "SOURCE_READ": 18,
+        "LOCAL_OPERATION_END": 18,
+        "CAUSAL_JOIN": 18,
+        "REVISION_REGISTERED": 15,
+        "OPERATION_START": 38,
+        "OPERATION_END": 38,
+        "SCREEN_CANDIDATES_PUBLISHED": 15,
+        "SPEECH_CANDIDATES_PUBLISHED": 15,
+        "TYPED_CODE_BIND": 7,
+        "ADOPTION": 24,
+        "GOAL_START": 12,
+        "ADOPTION_COMMITTED": 15,
+        "DISPLAY_PROXY": 30,
+        "GOAL_COMPLETE": 15,
+        "EPISODE_RESULT": 12,
+        "REPLAYED_CONTROL_EVENT": 3,
+        "GOAL_LINK": 3
+      },
+      "raw_sha256": {
+        "basic-dp04-dense-B-r1-d58fd4": "83923e8a813fd14f55694538fd7afa350d3cbcb27b0f0e84dfdd56581d001a82",
+        "basic-dp04-free-region-B-r1-4e0794": "1d9197b9968aae55488997ae7c8be68ce2172ba208181c8789086678709f3e08",
+        "basic-dp04-page-change-B-r1-d8bbab": "e6f45aede2c48cedc246ff292f373683da9dc198ff300c793d3be382f452bb68",
+        "basic-dp04-partial-correction-B-r1-6053f3": "f83867e2c6774c4e6e9cb1b9024607a21fb34838d525a7071f1ed087e8a9fd2f",
+        "basic-dp04-dense-B-r2-b9ae76": "8d2d881e19c44155cfa36236b82de6d0d145d03e03f3069eb54607c4006fbfbc",
+        "basic-dp04-free-region-B-r2-3c521f": "b7af450cf3841bc9cf7bf2a3082717aa2c1534a060a193efb5811226bc505ac0",
+        "basic-dp04-page-change-B-r2-14cc73": "497f8fe95b735dfd9cd15c6bbcc08e7a5012046e4d653b941dffe35658107721",
+        "basic-dp04-partial-correction-B-r2-a7e625": "4d4090f8794690eaf03eb01a5b54430c416fbdf37c53f18cecf2467a5dedc371",
+        "basic-dp04-dense-B-r3-beeedd": "24403b1ef1636cf158ee25d226c776445a6762414c0e12aa51a2718d3e352eb3",
+        "basic-dp04-free-region-B-r3-815fac": "ee06671df990e4870db19a891cdf1b60e14934a76442df4ae464a79c77889b71",
+        "basic-dp04-page-change-B-r3-8345aa": "961a4df09a9fe9dbb163253f04b21c90a6cde438ec525361eb35741d51db5b09",
+        "basic-dp04-partial-correction-B-r3-205ebb": "0745f9f274a299468338afd05506f1093896892fad5758d725449810589e58ca"
+      }
+    },
+    "A4": {
+      "status": "COMPLETE",
+      "phase_directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4",
+      "recorded_episodes": 12,
+      "summary": {
+        "phase": "TACTIC",
+        "dp": "04",
+        "variant": "A4",
+        "tactic": "A4",
+        "episodes": 12,
+        "qa01_ms": 19797.154036133332,
+        "qa01_n": 15,
+        "qa01_expected": 15,
+        "comparison_status": "COMPLETE",
+        "qa01_noresponse": 0,
+        "qa02_percent": 100.0,
+        "qa02_correct": 24,
+        "qa02_total": 24,
+        "qa03_ms": 24746.810236166668,
+        "qa03_full_elapsed_ms": 24746.810236166668,
+        "receiver_shim_excluded_ms": 0.0,
+        "qa03_n": 12,
+        "qa03_expected": 12,
+        "qa03_incomplete": 0,
+        "qa04_modules_mean": null,
+        "qa05_via_usd": 0.0561648,
+        "qa05_receiver_usd": 0,
+        "qa06_incomplete_memory_runs": 0,
+        "qa06_peak_rss_mb": 45.121536,
+        "nr_correct": 0,
+        "nr_total": 0,
+        "nr_percent": null,
+        "nh_correct": 0,
+        "nh_total": 0,
+        "nh_purpose_contract_correct": 0,
+        "nh_combined_contract_correct": 0,
+        "content_correct": 0,
+        "content_total": 0,
+        "nh_percent": null,
+        "wrong_referent_judgments": 0,
+        "wrong_association_judgments": 0,
+        "wrong_handoff_contracts": 0,
+        "errors": 0,
+        "unknown_usage_calls": 0,
+        "model_calls": 30,
+        "functional_qualification": "FINITE_CHECKS_PASSED"
+      },
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 15,
+          "input_tokens": 29829,
+          "output_tokens": 10951,
+          "usd": 0.029453200000000006,
+          "service_ms": [
+            22587.02575,
+            13150.095125,
+            14753.956125,
+            5823.332083,
+            7516.792708,
+            22324.398166,
+            13228.936792,
+            15237.627708,
+            7276.444375,
+            7161.994042,
+            22395.045583,
+            13991.362417,
+            11301.230583,
+            7152.487875,
+            7535.820958
+          ],
+          "queue_ms": [
+            6.561125,
+            3.070834,
+            3.300417,
+            2.731084,
+            7.982625,
+            3.233959,
+            2.888875,
+            3.605833,
+            2.67375,
+            3.668291,
+            3.165417,
+            2.985833,
+            3.438,
+            2.746125,
+            5.209959
+          ],
+          "transmitted_image_occurrences": 27,
+          "service_sum_ms": 191436.55029,
+          "service_mean_ms": 12762.436686000001
+        },
+        "dp04.joint_grounding": {
+          "calls": 15,
+          "input_tokens": 44619,
+          "output_tokens": 5540,
+          "usd": 0.0267116,
+          "service_ms": [
+            9543.433833,
+            7142.260583,
+            4944.884583,
+            7093.460791,
+            6995.589375,
+            8599.864375,
+            6991.747416,
+            5095.476208,
+            6905.92125,
+            7144.986583,
+            8583.595042,
+            6870.745583,
+            4992.5195,
+            6915.889333,
+            7250.13575
+          ],
+          "queue_ms": [
+            4.738042,
+            4.449833,
+            7.869667,
+            6.453,
+            9.039875,
+            3.905375,
+            6.734334,
+            8.739334,
+            9.987667,
+            5.077417,
+            6.917917,
+            7.089292,
+            10.982417,
+            6.2865,
+            5.348334
+          ],
+          "transmitted_image_occurrences": 27,
+          "service_sum_ms": 105070.510205,
+          "service_mean_ms": 7004.700680333333
+        }
+      },
+      "cases": [
+        {
+          "dp": "04",
+          "variant": "A4",
+          "episode": "dp04-dense",
+          "reps": 3,
+          "qa01_ms": 31372.112527666668,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 31372.396541666665,
+          "qa03_full_elapsed_ms": 31372.396541666665,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 6,
+          "qa02_expected": 6,
+          "model_calls": 6,
+          "input_tokens": 17046,
+          "output_tokens": 5368,
+          "via_usd": 0.015407200000000001,
+          "receiver_usd": 0,
+          "rss_max_mb": 43.859968,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "tactic-dp04-dense-A4-r1-a024a6",
+              "rep": 1,
+              "qa01_mean_ms": 32162.9525,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 32163.287292,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0051368,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.794432,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-dense-A4-r2-d1e00a",
+              "rep": 2,
+              "qa01_mean_ms": 30945.574291,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 30945.832541,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0051336,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.679744,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-dense-A4-r3-12de75",
+              "rep": 3,
+              "qa01_mean_ms": 31007.810792,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 31008.069792,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0051368,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.859968,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 31372.112527666668,
+              "median": 31007.810792,
+              "min": 30945.574291,
+              "max": 32162.9525,
+              "values": [
+                32162.9525,
+                30945.574291,
+                31007.810792
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 31372.396541666665,
+              "median": 31008.069792,
+              "min": 30945.832541,
+              "max": 32163.287292,
+              "values": [
+                32163.287292,
+                30945.832541,
+                31008.069792
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 31372.112527666668,
+              "median": 31007.810792,
+              "min": 30945.574291,
+              "max": 32162.9525,
+              "values": [
+                32162.9525,
+                30945.574291,
+                31007.810792
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 31372.396541666665,
+              "median": 31008.069792,
+              "min": 30945.832541,
+              "max": 32163.287292,
+              "values": [
+                32163.287292,
+                30945.832541,
+                31008.069792
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A4",
+          "episode": "dp04-free-region",
+          "reps": 3,
+          "qa01_ms": 20483.485569666667,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 20483.679375000003,
+          "qa03_full_elapsed_ms": 20483.679375000003,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 15648,
+          "output_tokens": 3426,
+          "via_usd": 0.0117408,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.253184,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "tactic-dp04-free-region-A4-r1-d3d75a",
+              "rep": 1,
+              "qa01_mean_ms": 20313.285,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 20313.440083,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0039136,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 43.548672,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-free-region-A4-r2-46ca2c",
+              "rep": 2,
+              "qa01_mean_ms": 20245.803375,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 20246.008833,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0039136,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.253184,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-free-region-A4-r3-8b6119",
+              "rep": 3,
+              "qa01_mean_ms": 20891.368334,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 20891.589209,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0039136,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.220416,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 20483.485569666667,
+              "median": 20313.285,
+              "min": 20245.803375,
+              "max": 20891.368334,
+              "values": [
+                20313.285,
+                20245.803375,
+                20891.368334
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 20483.679375,
+              "median": 20313.440083,
+              "min": 20246.008833,
+              "max": 20891.589209,
+              "values": [
+                20313.440083,
+                20246.008833,
+                20891.589209
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 20483.485569666667,
+              "median": 20313.285,
+              "min": 20245.803375,
+              "max": 20891.368334,
+              "values": [
+                20313.285,
+                20245.803375,
+                20891.368334
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 20483.679375,
+              "median": 20313.440083,
+              "min": 20246.008833,
+              "max": 20891.589209,
+              "values": [
+                20313.440083,
+                20246.008833,
+                20891.589209
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A4",
+          "episode": "dp04-page-change",
+          "reps": 3,
+          "qa01_ms": 18808.004694333333,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 18808.174902666666,
+          "qa03_full_elapsed_ms": 18808.174902666666,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 21073,
+          "output_tokens": 3072,
+          "via_usd": 0.0133444,
+          "receiver_usd": 0,
+          "rss_max_mb": 45.121536,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "tactic-dp04-page-change-A4-r1-97f253",
+              "rep": 1,
+              "qa01_mean_ms": 19724.963833,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 19725.110041,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0045652,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.056,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-page-change-A4-r2-356f2a",
+              "rep": 2,
+              "qa01_mean_ms": 20365.903625,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 20366.0885,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.004624,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.056,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-page-change-A4-r3-3d6fd5",
+              "rep": 3,
+              "qa01_mean_ms": 16333.146625,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 16333.326167,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0041552,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.121536,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 18808.004694333333,
+              "median": 19724.963833,
+              "min": 16333.146625,
+              "max": 20365.903625,
+              "values": [
+                19724.963833,
+                20365.903625,
+                16333.146625
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 18808.174902666666,
+              "median": 19725.110041,
+              "min": 16333.326167,
+              "max": 20366.0885,
+              "values": [
+                19725.110041,
+                20366.0885,
+                16333.326167
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 18808.004694333333,
+              "median": 19724.963833,
+              "min": 16333.146625,
+              "max": 20365.903625,
+              "values": [
+                19724.963833,
+                20365.903625,
+                16333.146625
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 18808.174902666666,
+              "median": 19725.110041,
+              "min": 16333.326167,
+              "max": 20366.0885,
+              "values": [
+                19725.110041,
+                20366.0885,
+                16333.326167
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "A4",
+          "episode": "dp04-partial-correction",
+          "reps": 3,
+          "qa01_ms": 14161.0836945,
+          "qa01_observed": 6,
+          "qa01_expected": 6,
+          "qa03_ms": 28322.990125333334,
+          "qa03_full_elapsed_ms": 28322.990125333334,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 12,
+          "qa02_expected": 12,
+          "model_calls": 12,
+          "input_tokens": 20681,
+          "output_tokens": 4625,
+          "via_usd": 0.015672400000000003,
+          "receiver_usd": 0,
+          "rss_max_mb": 44.466176,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "tactic-dp04-partial-correction-A4-r1-15ab6a",
+              "rep": 1,
+              "qa01_mean_ms": 13749.59425,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 27500.089542,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0051396,
+              "receiver_cost_usd": 0,
+              "model_calls": 4,
+              "rss_concurrent_peak_mb": 44.138496,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-partial-correction-A4-r2-f21712",
+              "rep": 2,
+              "qa01_mean_ms": 14275.9874375,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 28552.69125,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0052652,
+              "receiver_cost_usd": 0,
+              "model_calls": 4,
+              "rss_concurrent_peak_mb": 44.466176,
+              "functional_error": false
+            },
+            {
+              "run_id": "tactic-dp04-partial-correction-A4-r3-bdd885",
+              "rep": 3,
+              "qa01_mean_ms": 14457.669396000001,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 28916.189584,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.005267600000000001,
+              "receiver_cost_usd": 0,
+              "model_calls": 4,
+              "rss_concurrent_peak_mb": 44.384256,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 14161.083694500001,
+              "median": 14275.9874375,
+              "min": 13749.59425,
+              "max": 14457.669396000001,
+              "values": [
+                13749.59425,
+                14275.9874375,
+                14457.669396000001
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 28322.990125333334,
+              "median": 28552.69125,
+              "min": 27500.089542,
+              "max": 28916.189584,
+              "values": [
+                27500.089542,
+                28552.69125,
+                28916.189584
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 6,
+              "mean": 14161.083694500001,
+              "median": 14275.9874375,
+              "min": 12944.240792,
+              "max": 14816.359125,
+              "values": [
+                12944.240792,
+                14554.947708,
+                14209.4765,
+                14342.498375,
+                14098.979667,
+                14816.359125
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 28322.990125333334,
+              "median": 28552.69125,
+              "min": 27500.089542,
+              "max": 28916.189584,
+              "values": [
+                27500.089542,
+                28552.69125,
+                28916.189584
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        }
+      ],
+      "event_counts": {
+        "EPISODE_START": 12,
+        "INPUT_CAPTURED": 15,
+        "STIMULUS": 15,
+        "LOCAL_OPERATION_START": 18,
+        "RAW_EVENT_OVERLAY_READ": 9,
+        "LOGICAL_BUFFER": 189,
+        "SOURCE_READ": 18,
+        "LOCAL_OPERATION_END": 18,
+        "CAUSAL_JOIN": 18,
+        "REVISION_REGISTERED": 15,
+        "OPERATION_START": 30,
+        "OPERATION_END": 30,
+        "SCREEN_CANDIDATES_PUBLISHED": 15,
+        "ADOPTION": 24,
+        "GOAL_START": 12,
+        "ADOPTION_COMMITTED": 15,
+        "DISPLAY_PROXY": 30,
+        "GOAL_COMPLETE": 15,
+        "EPISODE_RESULT": 12,
+        "REPLAYED_CONTROL_EVENT": 3,
+        "GOAL_LINK": 3
+      },
+      "raw_sha256": {
+        "tactic-dp04-dense-A4-r1-a024a6": "959aa9f630679777b7d77dd60f73db53b67aebacbee7c6f6a7f23a82d3ff0cd8",
+        "tactic-dp04-free-region-A4-r1-d3d75a": "f577b320659d8a661bff12e818bea0ee851359225bdee6971038ca6d97e4c213",
+        "tactic-dp04-page-change-A4-r1-97f253": "9a82b5996b6d3671d20d90fe41ee003488215a3b463d563ed269e3e9cd8e4855",
+        "tactic-dp04-partial-correction-A4-r1-15ab6a": "170762a66c6f6a14054dac693c3fa540615ed134055280ba54a09ad8607b2ac6",
+        "tactic-dp04-dense-A4-r2-d1e00a": "9dfac974fc2b7c95fab07bf9c44d13271943749ef8453c98ad5e37e25d813bc8",
+        "tactic-dp04-free-region-A4-r2-46ca2c": "a18b0b9b27eae553a2c7d4e46d4c1c5f2383e35395c85bfd8097111f80e6b2f5",
+        "tactic-dp04-page-change-A4-r2-356f2a": "9a9f63ed5690be87e75aac17fbf021fc9088bd3140eac0229d3e6b28e1760a8d",
+        "tactic-dp04-partial-correction-A4-r2-f21712": "b268012a8ca08979f4bf8c35eeb78240abcb6df787c4191749d32a218ba4e069",
+        "tactic-dp04-dense-A4-r3-12de75": "ae78dadfad8fe8968ea7aa242b5c413e9c026167303c5b2203a7a8df951ffc4c",
+        "tactic-dp04-free-region-A4-r3-8b6119": "5819764f551b69467034a662c9bb930e263eb2218e6e4580399ead7ceb119bb7",
+        "tactic-dp04-page-change-A4-r3-3d6fd5": "286b2c857514f2e7ee629b67f8c182079a311040612b693a9d5abaff35977cab",
+        "tactic-dp04-partial-correction-A4-r3-bdd885": "4fb8dd2e985a3a4992a065ef8ba01a8151d3ceef4277c0c7a2d2a573ace8daca"
+      }
+    },
+    "B4": {
+      "status": "COMPLETE",
+      "phase_directory": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-B4",
+      "recorded_episodes": 12,
+      "summary": {
+        "phase": "DIAGNOSTIC",
+        "dp": "04",
+        "variant": "B4",
+        "tactic": "B4",
+        "episodes": 12,
+        "qa01_ms": 14467.846655733332,
+        "qa01_n": 15,
+        "qa01_expected": 15,
+        "comparison_status": "COMPLETE",
+        "qa01_noresponse": 0,
+        "qa02_percent": 100.0,
+        "qa02_correct": 24,
+        "qa02_total": 24,
+        "qa03_ms": 18085.19391675,
+        "qa03_full_elapsed_ms": 18085.19391675,
+        "receiver_shim_excluded_ms": 0.0,
+        "qa03_n": 12,
+        "qa03_expected": 12,
+        "qa03_incomplete": 0,
+        "qa04_modules_mean": null,
+        "qa05_via_usd": 0.043579200000000005,
+        "qa05_receiver_usd": 0,
+        "qa06_incomplete_memory_runs": 0,
+        "qa06_peak_rss_mb": 46.972928,
+        "nr_correct": 0,
+        "nr_total": 0,
+        "nr_percent": null,
+        "nh_correct": 0,
+        "nh_total": 0,
+        "nh_purpose_contract_correct": 0,
+        "nh_combined_contract_correct": 0,
+        "content_correct": 0,
+        "content_total": 0,
+        "nh_percent": null,
+        "wrong_referent_judgments": 0,
+        "wrong_association_judgments": 0,
+        "wrong_handoff_contracts": 0,
+        "errors": 0,
+        "unknown_usage_calls": 0,
+        "model_calls": 37,
+        "functional_qualification": "FINITE_CHECKS_PASSED"
+      },
+      "stages": {
+        "dp04.speech_producer": {
+          "calls": 15,
+          "input_tokens": 10635,
+          "output_tokens": 2982,
+          "usd": 0.0090252,
+          "service_ms": [
+            5220.131,
+            3766.655542,
+            3467.9555,
+            4889.758667,
+            4740.581375,
+            5167.739,
+            3492.795084,
+            3950.155625,
+            4920.043791,
+            4411.105292,
+            4972.004541,
+            3561.42925,
+            3935.971542,
+            5455.137,
+            4804.112458
+          ],
+          "queue_ms": [
+            7.605667,
+            4.930208,
+            5.161292,
+            5.158917,
+            8.849666,
+            5.298083,
+            5.044166,
+            5.115,
+            4.859959,
+            9.457083,
+            5.235292,
+            5.001542,
+            5.191542,
+            5.014166,
+            8.289042
+          ],
+          "transmitted_image_occurrences": 0,
+          "service_sum_ms": 66755.575667,
+          "service_mean_ms": 4450.3717111333335
+        },
+        "dp04.screen_producer": {
+          "calls": 15,
+          "input_tokens": 29829,
+          "output_tokens": 10989,
+          "usd": 0.029514000000000002,
+          "service_ms": [
+            22423.872875,
+            13290.6185,
+            17290.467333,
+            7241.000667,
+            7093.129709,
+            22219.489834,
+            13155.953958,
+            13450.173208,
+            7164.825583,
+            7068.597125,
+            22337.334209,
+            13611.768875,
+            12689.824875,
+            5889.7385,
+            7088.05775
+          ],
+          "queue_ms": [
+            8.828,
+            5.371542,
+            5.861042,
+            5.524458,
+            9.884541,
+            5.969583,
+            5.580959,
+            5.928667,
+            5.410875,
+            10.471125,
+            6.024458,
+            5.491667,
+            6.038,
+            5.579125,
+            9.05525
+          ],
+          "transmitted_image_occurrences": 27,
+          "service_sum_ms": 192014.853001,
+          "service_mean_ms": 12800.990200066666
+        },
+        "dp04.candidate_binding": {
+          "calls": 7,
+          "input_tokens": 8792,
+          "output_tokens": 952,
+          "usd": 0.005039999999999999,
+          "service_ms": [
+            3331.194166,
+            3572.246417,
+            3518.738708,
+            3650.846792,
+            3438.16775,
+            3482.165084,
+            3650.116375
+          ],
+          "queue_ms": [
+            5.861334,
+            6.416208,
+            5.6225,
+            6.996833,
+            6.500625,
+            4.736583,
+            3.953208
+          ],
+          "transmitted_image_occurrences": 0,
+          "service_sum_ms": 24643.475292,
+          "service_mean_ms": 3520.496470285714
+        }
+      },
+      "cases": [
+        {
+          "dp": "04",
+          "variant": "B4",
+          "episode": "dp04-dense",
+          "reps": 3,
+          "qa01_ms": 22341.768444666668,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 22341.958722333336,
+          "qa03_full_elapsed_ms": 22341.958722333336,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 6,
+          "qa02_expected": 6,
+          "model_calls": 6,
+          "input_tokens": 8571,
+          "output_tokens": 4656,
+          "via_usd": 0.010878000000000002,
+          "receiver_usd": 0,
+          "rss_max_mb": 46.071808,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "diagnostic-dp04-dense-B4-r1-273f94",
+              "rep": 1,
+              "qa01_mean_ms": 22439.683084,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 22439.883084,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036292000000000004,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 46.071808,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-dense-B4-r2-d7444f",
+              "rep": 2,
+              "qa01_mean_ms": 22232.242791,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 22232.427583,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036228000000000007,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.54752,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-dense-B4-r3-eb330b",
+              "rep": 3,
+              "qa01_mean_ms": 22353.379459,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 22353.5655,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0036260000000000008,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.924352,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 22341.768444666668,
+              "median": 22353.379459,
+              "min": 22232.242791,
+              "max": 22439.683084,
+              "values": [
+                22439.683084,
+                22232.242791,
+                22353.379459
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 22341.958722333333,
+              "median": 22353.5655,
+              "min": 22232.427583,
+              "max": 22439.883084,
+              "values": [
+                22439.883084,
+                22232.427583,
+                22353.5655
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 22341.768444666668,
+              "median": 22353.379459,
+              "min": 22232.242791,
+              "max": 22439.683084,
+              "values": [
+                22439.683084,
+                22232.242791,
+                22353.379459
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 22341.958722333333,
+              "median": 22353.5655,
+              "min": 22232.427583,
+              "max": 22439.883084,
+              "values": [
+                22439.883084,
+                22232.427583,
+                22353.5655
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B4",
+          "episode": "dp04-free-region",
+          "reps": 3,
+          "qa01_ms": 13367.002514,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 13367.301986333332,
+          "qa03_full_elapsed_ms": 13367.301986333332,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 6,
+          "input_tokens": 8430,
+          "output_tokens": 2729,
+          "via_usd": 0.007738400000000001,
+          "receiver_usd": 0,
+          "rss_max_mb": 45.350912,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "diagnostic-dp04-free-region-B4-r1-a26ef2",
+              "rep": 1,
+              "qa01_mean_ms": 13304.5855,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 13304.800459,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025800000000000003,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.826624,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-free-region-B4-r2-cbfc11",
+              "rep": 2,
+              "qa01_mean_ms": 13167.42975,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 13167.627,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025800000000000003,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.350912,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-free-region-B4-r3-008a36",
+              "rep": 3,
+              "qa01_mean_ms": 13628.992292,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 13629.4785,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0025784000000000002,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 44.875776,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 13367.002514,
+              "median": 13304.5855,
+              "min": 13167.42975,
+              "max": 13628.992292,
+              "values": [
+                13304.5855,
+                13167.42975,
+                13628.992292
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 13367.301986333334,
+              "median": 13304.800459,
+              "min": 13167.627,
+              "max": 13629.4785,
+              "values": [
+                13304.800459,
+                13167.627,
+                13629.4785
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 13367.002514,
+              "median": 13304.5855,
+              "min": 13167.42975,
+              "max": 13628.992292,
+              "values": [
+                13304.5855,
+                13167.42975,
+                13628.992292
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 13367.301986333334,
+              "median": 13304.800459,
+              "min": 13167.627,
+              "max": 13629.4785,
+              "values": [
+                13304.800459,
+                13167.627,
+                13629.4785
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B4",
+          "episode": "dp04-page-change",
+          "reps": 3,
+          "qa01_ms": 15607.886499999999,
+          "qa01_observed": 3,
+          "qa01_expected": 3,
+          "qa03_ms": 15608.081208333335,
+          "qa03_full_elapsed_ms": 15608.081208333335,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 3,
+          "qa02_expected": 3,
+          "model_calls": 7,
+          "input_tokens": 12713,
+          "output_tokens": 2936,
+          "via_usd": 0.009782800000000001,
+          "receiver_usd": 0,
+          "rss_max_mb": 46.20288,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "diagnostic-dp04-page-change-B4-r1-4d98b7",
+              "rep": 1,
+              "qa01_mean_ms": 20652.2145,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 20652.411333,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0040924,
+              "receiver_cost_usd": 0,
+              "model_calls": 3,
+              "rss_concurrent_peak_mb": 46.20288,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-page-change-B4-r2-509168",
+              "rep": 2,
+              "qa01_mean_ms": 13465.780375,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 13465.972292,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0029660000000000003,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.481984,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-page-change-B4-r3-6f0fe3",
+              "rep": 3,
+              "qa01_mean_ms": 12705.664625,
+              "qa01_n": 1,
+              "qa01_expected": 1,
+              "qa03_mean_ms": 12705.86,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0027244,
+              "receiver_cost_usd": 0,
+              "model_calls": 2,
+              "rss_concurrent_peak_mb": 45.907968,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 15607.886499999999,
+              "median": 13465.780375,
+              "min": 12705.664625,
+              "max": 20652.2145,
+              "values": [
+                20652.2145,
+                13465.780375,
+                12705.664625
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 15608.081208333333,
+              "median": 13465.972292,
+              "min": 12705.86,
+              "max": 20652.411333,
+              "values": [
+                20652.411333,
+                13465.972292,
+                12705.86
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 3,
+              "mean": 15607.886499999999,
+              "median": 13465.780375,
+              "min": 12705.664625,
+              "max": 20652.2145,
+              "values": [
+                20652.2145,
+                13465.780375,
+                12705.664625
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 15608.081208333333,
+              "median": 13465.972292,
+              "min": 12705.86,
+              "max": 20652.411333,
+              "values": [
+                20652.411333,
+                13465.972292,
+                12705.86
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        },
+        {
+          "dp": "04",
+          "variant": "B4",
+          "episode": "dp04-partial-correction",
+          "reps": 3,
+          "qa01_ms": 10511.28791,
+          "qa01_observed": 6,
+          "qa01_expected": 6,
+          "qa03_ms": 21023.43375,
+          "qa03_full_elapsed_ms": 21023.43375,
+          "receiver_excluded_ms": 0.0,
+          "qa03_observed": 3,
+          "qa03_expected": 3,
+          "comparison_status": "COMPLETE",
+          "qa02_correct": 12,
+          "qa02_expected": 12,
+          "model_calls": 18,
+          "input_tokens": 19542,
+          "output_tokens": 4602,
+          "via_usd": 0.01518,
+          "receiver_usd": 0,
+          "rss_max_mb": 46.972928,
+          "rss_incomplete_trials": 0,
+          "host_failed_trials": 0,
+          "literal_content_correct": 0,
+          "literal_content_expected": 0,
+          "individual_runs": [
+            {
+              "run_id": "diagnostic-dp04-partial-correction-B4-r1-5cf39d",
+              "rep": 1,
+              "qa01_mean_ms": 10750.019188,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 21500.930209,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0050848,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 46.891008,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-partial-correction-B4-r2-7becde",
+              "rep": 2,
+              "qa01_mean_ms": 10698.719104,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 21398.379833,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.005112,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 46.61248,
+              "functional_error": false
+            },
+            {
+              "run_id": "diagnostic-dp04-partial-correction-B4-r3-7c4df7",
+              "rep": 3,
+              "qa01_mean_ms": 10085.125438,
+              "qa01_n": 2,
+              "qa01_expected": 2,
+              "qa03_mean_ms": 20170.991208,
+              "qa03_n": 1,
+              "qa03_expected": 1,
+              "via_cost_usd": 0.0049832,
+              "receiver_cost_usd": 0,
+              "model_calls": 6,
+              "rss_concurrent_peak_mb": 46.972928,
+              "functional_error": false
+            }
+          ],
+          "individual_trial_mean_descriptive": {
+            "qa01_mean_ms": {
+              "observed_n": 3,
+              "mean": 10511.28791,
+              "median": 10698.719104,
+              "min": 10085.125438,
+              "max": 10750.019188,
+              "values": [
+                10750.019188,
+                10698.719104,
+                10085.125438
+              ]
+            },
+            "qa03_mean_ms": {
+              "observed_n": 3,
+              "mean": 21023.43375,
+              "median": 21398.379833,
+              "min": 20170.991208,
+              "max": 21500.930209,
+              "values": [
+                21500.930209,
+                21398.379833,
+                20170.991208
+              ]
+            }
+          },
+          "all_observed_endpoint_descriptive": {
+            "qa01_ms": {
+              "observed_n": 6,
+              "mean": 10511.28791,
+              "median": 10714.4933755,
+              "min": 9397.632667,
+              "max": 10846.815958,
+              "values": [
+                10843.669834,
+                10656.368542,
+                10846.815958,
+                10550.62225,
+                9397.632667,
+                10772.618209
+              ]
+            },
+            "qa03_ms": {
+              "observed_n": 3,
+              "mean": 21023.43375,
+              "median": 21398.379833,
+              "min": 20170.991208,
+              "max": 21500.930209,
+              "values": [
+                21500.930209,
+                21398.379833,
+                20170.991208
+              ]
+            }
+          },
+          "failure_input_to_terminal_ms": {
+            "observed_n": 0,
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "values": []
+          },
+          "descriptive_scope": "3 recorded finite trials (final plan: three repetitions). Observed conditional means and endpoint distributions; missing values stay missing. No significance test or population claim."
+        }
+      ],
+      "event_counts": {
+        "EPISODE_START": 12,
+        "INPUT_CAPTURED": 15,
+        "STIMULUS": 15,
+        "LOCAL_OPERATION_START": 18,
+        "RAW_EVENT_OVERLAY_READ": 9,
+        "LOGICAL_BUFFER": 218,
+        "SOURCE_READ": 18,
+        "LOCAL_OPERATION_END": 18,
+        "CAUSAL_JOIN": 33,
+        "REVISION_REGISTERED": 15,
+        "OPERATION_START": 37,
+        "OPERATION_END": 37,
+        "SPEECH_CANDIDATES_PUBLISHED": 15,
+        "SCREEN_CANDIDATES_PUBLISHED": 15,
+        "TYPED_CODE_BIND": 8,
+        "ADOPTION": 24,
+        "GOAL_START": 12,
+        "ADOPTION_COMMITTED": 15,
+        "DISPLAY_PROXY": 30,
+        "GOAL_COMPLETE": 15,
+        "EPISODE_RESULT": 12,
+        "REPLAYED_CONTROL_EVENT": 3,
+        "GOAL_LINK": 3
+      },
+      "raw_sha256": {
+        "diagnostic-dp04-dense-B4-r1-273f94": "d578e6dab880c075063e4c13e008f7f0243564d9bb07466a291ee0c9c763cfe7",
+        "diagnostic-dp04-free-region-B4-r1-a26ef2": "e6e63d9bffa90fbe456436521701367ce468d8dcb24f26591ef287749ff078d7",
+        "diagnostic-dp04-page-change-B4-r1-4d98b7": "f5fb3143633d861b2ae628a4642cb6d04a4aad7251399814a0dfd45c3b337cb1",
+        "diagnostic-dp04-partial-correction-B4-r1-5cf39d": "f68a4cb65b59b8f15176774f1aec6b825e79397d160a36e08de0fa71fb83bcdd",
+        "diagnostic-dp04-dense-B4-r2-d7444f": "60206f765a7b9f617e0f308d47c4fbb12a565762590f06eaee54635231f0a056",
+        "diagnostic-dp04-free-region-B4-r2-cbfc11": "dd55e1eda250debb06dcc39814c38c7c09632535ec8582e0ee24dcce0d0f942e",
+        "diagnostic-dp04-page-change-B4-r2-509168": "81236c570198fc0c61b7096b43c26c4fb3ea994aa7d44aee10988b20ea7f12bf",
+        "diagnostic-dp04-partial-correction-B4-r2-7becde": "39739b3610b40d71a2f971d87648d602151f9dd1fad87ef55ed7866e051b4c43",
+        "diagnostic-dp04-dense-B4-r3-eb330b": "ae225d3aba4eb9650c3f43ea5205aaad2fe3759b9f056d4447c81fb722040b6a",
+        "diagnostic-dp04-free-region-B4-r3-008a36": "fa587a253108656e46fa2efc77b4dd9b3681f2e56b76f173421cb672d3a9b5fb",
+        "diagnostic-dp04-page-change-B4-r3-6f0fe3": "e5c2718f7cc58081d21648b23ac556f2144e5f91aae4d396cfb515fa4e464165",
+        "diagnostic-dp04-partial-correction-B4-r3-7c4df7": "c31da99bae8968d229a53f76fc54d5dacb05430bc43433a5fb24c4d77ea4988e"
+      }
+    }
+  },
+  "A4_vs_B_screen_pairs": [
+    {
+      "episode": "dp04-dense",
+      "rep": 1,
+      "revision_index": 1,
+      "A4_call_uuid": "97aeb8c6-6fc0-4e9d-9476-75fe692f9eca",
+      "B_call_uuid": "61a57abc-05cd-4518-b2f9-9428f06f17e9",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/97aeb8c6-6fc0-4e9d-9476-75fe692f9eca-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/61a57abc-05cd-4518-b2f9-9428f06f17e9-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/97aeb8c6-6fc0-4e9d-9476-75fe692f9eca-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/61a57abc-05cd-4518-b2f9-9428f06f17e9-response.json"
+    },
+    {
+      "episode": "dp04-free-region",
+      "rep": 1,
+      "revision_index": 1,
+      "A4_call_uuid": "53564fa4-6deb-4cc5-a4b9-f01eba4705ba",
+      "B_call_uuid": "c3ca2d75-de9c-421f-940f-3624bce4fa5d",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/53564fa4-6deb-4cc5-a4b9-f01eba4705ba-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/c3ca2d75-de9c-421f-940f-3624bce4fa5d-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/53564fa4-6deb-4cc5-a4b9-f01eba4705ba-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/c3ca2d75-de9c-421f-940f-3624bce4fa5d-response.json"
+    },
+    {
+      "episode": "dp04-page-change",
+      "rep": 1,
+      "revision_index": 1,
+      "A4_call_uuid": "76313b58-569d-4dac-b474-28173e3facc6",
+      "B_call_uuid": "759fcb31-98f7-41dd-ba5b-c00d0761e532",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/76313b58-569d-4dac-b474-28173e3facc6-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/759fcb31-98f7-41dd-ba5b-c00d0761e532-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/76313b58-569d-4dac-b474-28173e3facc6-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/759fcb31-98f7-41dd-ba5b-c00d0761e532-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 1,
+      "revision_index": 1,
+      "A4_call_uuid": "5d42a425-08fc-40bd-b4f3-e00616c8133e",
+      "B_call_uuid": "97e69bad-f777-4cac-958f-c24a0a800e9c",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/5d42a425-08fc-40bd-b4f3-e00616c8133e-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/97e69bad-f777-4cac-958f-c24a0a800e9c-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/5d42a425-08fc-40bd-b4f3-e00616c8133e-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/97e69bad-f777-4cac-958f-c24a0a800e9c-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 1,
+      "revision_index": 2,
+      "A4_call_uuid": "9970c222-1661-4f92-9f48-121de13450db",
+      "B_call_uuid": "6fff308a-c0dd-4ed6-a396-967d919044c8",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/9970c222-1661-4f92-9f48-121de13450db-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/6fff308a-c0dd-4ed6-a396-967d919044c8-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/9970c222-1661-4f92-9f48-121de13450db-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/6fff308a-c0dd-4ed6-a396-967d919044c8-response.json"
+    },
+    {
+      "episode": "dp04-dense",
+      "rep": 2,
+      "revision_index": 1,
+      "A4_call_uuid": "ff55136a-1186-4273-b82c-83fdeff3b524",
+      "B_call_uuid": "b4ffd3c4-5720-4c3d-bd3f-cd457d0704ec",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/ff55136a-1186-4273-b82c-83fdeff3b524-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/b4ffd3c4-5720-4c3d-bd3f-cd457d0704ec-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/ff55136a-1186-4273-b82c-83fdeff3b524-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/b4ffd3c4-5720-4c3d-bd3f-cd457d0704ec-response.json"
+    },
+    {
+      "episode": "dp04-free-region",
+      "rep": 2,
+      "revision_index": 1,
+      "A4_call_uuid": "105af4e7-d944-48d1-9591-8589a5b690fd",
+      "B_call_uuid": "05a8ddb9-86a7-459b-9422-100bd6c5d4f9",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/105af4e7-d944-48d1-9591-8589a5b690fd-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/05a8ddb9-86a7-459b-9422-100bd6c5d4f9-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/105af4e7-d944-48d1-9591-8589a5b690fd-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/05a8ddb9-86a7-459b-9422-100bd6c5d4f9-response.json"
+    },
+    {
+      "episode": "dp04-page-change",
+      "rep": 2,
+      "revision_index": 1,
+      "A4_call_uuid": "3ab980ce-585a-4fc7-a8e9-e53c38ceaa84",
+      "B_call_uuid": "32e57411-837f-497f-bb8f-8209e4e13328",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/3ab980ce-585a-4fc7-a8e9-e53c38ceaa84-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/32e57411-837f-497f-bb8f-8209e4e13328-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/3ab980ce-585a-4fc7-a8e9-e53c38ceaa84-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/32e57411-837f-497f-bb8f-8209e4e13328-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 2,
+      "revision_index": 1,
+      "A4_call_uuid": "b572d9c0-5761-4e8e-b0ef-05156c4eb3f8",
+      "B_call_uuid": "f299c724-0763-4689-bffc-8f0f2d3333e2",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/b572d9c0-5761-4e8e-b0ef-05156c4eb3f8-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/f299c724-0763-4689-bffc-8f0f2d3333e2-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/b572d9c0-5761-4e8e-b0ef-05156c4eb3f8-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/f299c724-0763-4689-bffc-8f0f2d3333e2-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 2,
+      "revision_index": 2,
+      "A4_call_uuid": "c9d801d0-b159-4821-bb84-49797bda8f89",
+      "B_call_uuid": "d926ecaf-61ed-4ecc-9440-1e2578be1555",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/c9d801d0-b159-4821-bb84-49797bda8f89-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/d926ecaf-61ed-4ecc-9440-1e2578be1555-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/c9d801d0-b159-4821-bb84-49797bda8f89-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/d926ecaf-61ed-4ecc-9440-1e2578be1555-response.json"
+    },
+    {
+      "episode": "dp04-dense",
+      "rep": 3,
+      "revision_index": 1,
+      "A4_call_uuid": "ab0dcf14-f0ab-4e80-a6eb-ad0201d357d6",
+      "B_call_uuid": "bd85371c-b9a2-4ad2-8fe5-c23180d40d41",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/ab0dcf14-f0ab-4e80-a6eb-ad0201d357d6-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/bd85371c-b9a2-4ad2-8fe5-c23180d40d41-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/ab0dcf14-f0ab-4e80-a6eb-ad0201d357d6-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/bd85371c-b9a2-4ad2-8fe5-c23180d40d41-response.json"
+    },
+    {
+      "episode": "dp04-free-region",
+      "rep": 3,
+      "revision_index": 1,
+      "A4_call_uuid": "3e321b3d-b7a7-4b74-8b01-b882d91c3d4d",
+      "B_call_uuid": "8d0314f8-7adc-4dad-8ec6-5696c7c98594",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": true,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/3e321b3d-b7a7-4b74-8b01-b882d91c3d4d-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/8d0314f8-7adc-4dad-8ec6-5696c7c98594-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/3e321b3d-b7a7-4b74-8b01-b882d91c3d4d-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/8d0314f8-7adc-4dad-8ec6-5696c7c98594-response.json"
+    },
+    {
+      "episode": "dp04-page-change",
+      "rep": 3,
+      "revision_index": 1,
+      "A4_call_uuid": "93de2578-27a0-4771-9307-38107758d010",
+      "B_call_uuid": "1da34d82-5e83-4611-9779-5559b5347ff5",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/93de2578-27a0-4771-9307-38107758d010-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/1da34d82-5e83-4611-9779-5559b5347ff5-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/93de2578-27a0-4771-9307-38107758d010-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/1da34d82-5e83-4611-9779-5559b5347ff5-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 3,
+      "revision_index": 1,
+      "A4_call_uuid": "9456f463-58b5-424b-88b1-8f423e687219",
+      "B_call_uuid": "2e11fca9-40af-46fa-b8d0-21b9b2ffe9c1",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/9456f463-58b5-424b-88b1-8f423e687219-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/2e11fca9-40af-46fa-b8d0-21b9b2ffe9c1-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/9456f463-58b5-424b-88b1-8f423e687219-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/2e11fca9-40af-46fa-b8d0-21b9b2ffe9c1-response.json"
+    },
+    {
+      "episode": "dp04-partial-correction",
+      "rep": 3,
+      "revision_index": 2,
+      "A4_call_uuid": "7829e61e-e296-4d26-b4bb-db879ba2cc87",
+      "B_call_uuid": "03708ac1-1e39-4c7b-beaa-bda398fe994d",
+      "actual_screen_request_json_equal": true,
+      "actual_screen_response_json_equal": false,
+      "A4_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/7829e61e-e296-4d26-b4bb-db879ba2cc87-request.json",
+      "B_request": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/03708ac1-1e39-4c7b-beaa-bda398fe994d-request.json",
+      "A4_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp04-A4/raw/model/7829e61e-e296-4d26-b4bb-db879ba2cc87-response.json",
+      "B_response": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/model/03708ac1-1e39-4c7b-beaa-bda398fe994d-response.json"
+    }
+  ],
+  "screen_pair_counts": {
+    "pairs": 15,
+    "equal_actual_requests": 15,
+    "equal_actual_responses": 8
+  },
+  "A4_actual_joint_auxiliary_and_pixels": [
+    {
+      "run_id": "tactic-dp04-dense-A4-r1-a024a6",
+      "call_uuid": "73a6d3b2-9993-46f7-ad6d-98dddeb3cf63",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-free-region-A4-r1-d3d75a",
+      "call_uuid": "b7ef1565-e52b-40e9-848c-38d89a8d3e6d",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-page-change-A4-r1-97f253",
+      "call_uuid": "89bbaf91-ef52-4139-b8aa-efc3979fde0c",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 3
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r1-15ab6a",
+      "call_uuid": "3e4ab3ca-dfb1-4e32-81a7-08c88db830ba",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r1-15ab6a",
+      "call_uuid": "688abe55-33f7-4533-9fee-9ff0ab578c5a",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    },
+    {
+      "run_id": "tactic-dp04-dense-A4-r2-d1e00a",
+      "call_uuid": "31e0e7bc-560b-427f-af3c-d93ffc5bb2c5",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-free-region-A4-r2-46ca2c",
+      "call_uuid": "873d3b64-f56d-4943-a2ea-ec66bbf0009a",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-page-change-A4-r2-356f2a",
+      "call_uuid": "d11ba0c5-d7a3-402e-8f55-8a46a0905b4c",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 3
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r2-f21712",
+      "call_uuid": "f5530105-3eaf-4b73-b94a-cbf0ea010a81",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r2-f21712",
+      "call_uuid": "6432616a-27f4-43e9-aa93-2deea1503815",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    },
+    {
+      "run_id": "tactic-dp04-dense-A4-r3-12de75",
+      "call_uuid": "c65fee5e-634b-416c-953a-7fc2f6cbd462",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-free-region-A4-r3-8b6119",
+      "call_uuid": "6069e59c-6c48-4623-986c-f1eca60b2825",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 2
+    },
+    {
+      "run_id": "tactic-dp04-page-change-A4-r3-3d6fd5",
+      "call_uuid": "c48844a8-e279-4bf2-9ca5-5d9b6498e757",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 3
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r3-bdd885",
+      "call_uuid": "eeee542c-636c-426b-bc7d-c667dc7b296e",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    },
+    {
+      "run_id": "tactic-dp04-partial-correction-A4-r3-bdd885",
+      "call_uuid": "4ad21941-ebc7-4319-b77b-71174078a31b",
+      "actual_joint_input_has_screen_state": true,
+      "actual_joint_input_has_original_observations": true,
+      "transmitted_original_images": 1
+    }
+  ],
+  "B4_actual_producer_overlap": [
+    {
+      "run_id": "diagnostic-dp04-dense-B4-r1-273f94",
+      "revision": 1,
+      "screen_call_uuid": "d21f72f6-49ae-427f-b2ad-c5205cb6ae7d",
+      "speech_call_uuid": "aeb6b47d-84a8-4a5d-bdab-77c53b783cd6",
+      "actual_send_terminal_overlap_ms": 5219.120542
+    },
+    {
+      "run_id": "diagnostic-dp04-free-region-B4-r1-a26ef2",
+      "revision": 1,
+      "screen_call_uuid": "acec8243-368c-4501-ae1a-dc8354118d9d",
+      "speech_call_uuid": "9898233d-8e50-4717-bb30-b7b99c144d1f",
+      "actual_send_terminal_overlap_ms": 3766.071458
+    },
+    {
+      "run_id": "diagnostic-dp04-page-change-B4-r1-4d98b7",
+      "revision": 1,
+      "screen_call_uuid": "78db5823-8cca-48a9-b3cd-bb9a4020cd90",
+      "speech_call_uuid": "0ad31235-a391-4c60-b5a5-bb8768215118",
+      "actual_send_terminal_overlap_ms": 3467.025625
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r1-5cf39d",
+      "revision": 1,
+      "screen_call_uuid": "a4e9af8b-6e16-4869-944f-fc394bf56f16",
+      "speech_call_uuid": "8b0d327e-bba8-4e0f-81db-8246ac4071bb",
+      "actual_send_terminal_overlap_ms": 4889.507959
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r1-5cf39d",
+      "revision": 2,
+      "screen_call_uuid": "e6c4921f-55a6-4d6f-92f1-f65e1feb32a2",
+      "speech_call_uuid": "504b6240-0caa-421e-bba9-d0725e776d83",
+      "actual_send_terminal_overlap_ms": 4739.91675
+    },
+    {
+      "run_id": "diagnostic-dp04-dense-B4-r2-d7444f",
+      "revision": 1,
+      "screen_call_uuid": "40683428-758b-41d8-9196-bd5b66c2a6c8",
+      "speech_call_uuid": "3a5efae4-38c9-4973-bf93-5aa333f20036",
+      "actual_send_terminal_overlap_ms": 5166.908542
+    },
+    {
+      "run_id": "diagnostic-dp04-free-region-B4-r2-cbfc11",
+      "revision": 1,
+      "screen_call_uuid": "99ae588f-5955-4a35-b760-5be24766363a",
+      "speech_call_uuid": "c61bc259-a0aa-4a71-a7c9-0c951daab56d",
+      "actual_send_terminal_overlap_ms": 3492.150625
+    },
+    {
+      "run_id": "diagnostic-dp04-page-change-B4-r2-509168",
+      "revision": 1,
+      "screen_call_uuid": "a7825113-d946-48bf-92cc-55b9e798a3ed",
+      "speech_call_uuid": "1f0d3fd8-1c3e-48c0-96ff-4be06be7ff9d",
+      "actual_send_terminal_overlap_ms": 3949.238667
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r2-7becde",
+      "revision": 1,
+      "screen_call_uuid": "a0d3b6b8-31d1-422a-bd22-b3ecffd4b26d",
+      "speech_call_uuid": "ce0f16bb-fdc8-4c19-bcf1-091eef1c8eba",
+      "actual_send_terminal_overlap_ms": 4919.598666
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r2-7becde",
+      "revision": 2,
+      "screen_call_uuid": "da83d52f-8e9f-40df-bc3b-86756f7778c9",
+      "speech_call_uuid": "b9c9a9d0-3adf-430e-bd5e-f4b2d8a14926",
+      "actual_send_terminal_overlap_ms": 4410.460417
+    },
+    {
+      "run_id": "diagnostic-dp04-dense-B4-r3-eb330b",
+      "revision": 1,
+      "screen_call_uuid": "41591e92-7f72-4ce7-ab1c-fd469a563119",
+      "speech_call_uuid": "f5ad2c64-db76-477f-b408-0ad3bb8183a6",
+      "actual_send_terminal_overlap_ms": 4971.103125
+    },
+    {
+      "run_id": "diagnostic-dp04-free-region-B4-r3-008a36",
+      "revision": 1,
+      "screen_call_uuid": "532e956c-594f-49a9-89e9-b00a698f1c11",
+      "speech_call_uuid": "01b26434-b575-4e94-8862-9d721144f65c",
+      "actual_send_terminal_overlap_ms": 3560.778708
+    },
+    {
+      "run_id": "diagnostic-dp04-page-change-B4-r3-6f0fe3",
+      "revision": 1,
+      "screen_call_uuid": "3ffd354f-a4f2-4820-90ab-7d8825dec213",
+      "speech_call_uuid": "45326afc-5d56-4149-80e3-588ef5d3df7f",
+      "actual_send_terminal_overlap_ms": 3935.012875
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r3-7c4df7",
+      "revision": 1,
+      "screen_call_uuid": "a9ace8ca-0ffc-455c-a3e0-ebfbe237cf58",
+      "speech_call_uuid": "6bf2ee5b-fa4d-4f00-8767-6761f02cabd7",
+      "actual_send_terminal_overlap_ms": 5454.678625
+    },
+    {
+      "run_id": "diagnostic-dp04-partial-correction-B4-r3-7c4df7",
+      "revision": 2,
+      "screen_call_uuid": "7ee3540f-9834-4d38-b286-858cfb3340bb",
+      "speech_call_uuid": "f0f0fa18-f652-4d5e-8c9a-91535b895e34",
+      "actual_send_terminal_overlap_ms": 4803.684875
+    }
+  ],
+  "B4_overlap_summary": {
+    "pairs": 15,
+    "positive_pairs": 15,
+    "sum_ms": 66745.257459,
+    "mean_ms": 4449.6838306
+  },
+  "provider_calls_created": 0,
+  "candidate_runs_created": 0
+}

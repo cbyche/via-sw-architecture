@@ -1,0 +1,15 @@
+{
+  "task": "C06 source range revocation during pending draft",
+  "baseline_freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+  "changed_operational_modules": [
+    "src/dp02/execution.rs",
+    "src/dp02/response.rs",
+    "src/dp02/state.rs"
+  ],
+  "module_count": 3,
+  "alternatives": [
+    "A",
+    "B"
+  ],
+  "scope": "Actual versioned byte-range masking before rejudgment; actual draft quote invalidation before publication; deterministic event at FIRST_DRAFT_READY, not model latency."
+}

@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-corrected/acceptance-driver.py", line 70, in <module>
+    for r in execute(dp,'C06',fixture):
+             ~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-corrected/acceptance-driver.py", line 46, in execute
+    client=MetadataProbeClient(folder);record=run.execute(client,fixture,variant,rep,'QA04_OFFLINE');records.append(record)
+                                              ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/run.py", line 51, in execute
+    baseline=sample_processes({os.getpid():'python_runner_bridge'},'BEFORE_RUST_START',buffers)
+  File "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/memory.py", line 18, in sample_processes
+    query=subprocess.run(['ps','-o','pid=,ppid=,rss=','-p',','.join(str(p) for p in roles)],capture_output=True,text=True)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 555, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 1990, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+PermissionError: [Errno 1] Operation not permitted: 'ps'

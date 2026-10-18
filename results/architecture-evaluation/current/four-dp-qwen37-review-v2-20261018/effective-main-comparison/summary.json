@@ -1,0 +1,931 @@
+{
+  "derived_not_measured_phase": true,
+  "selection": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/effective-main-comparison/selection.json",
+  "rows": [
+    {
+      "phase": "BASIC",
+      "dp": "01",
+      "variant": "A",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 6609.115270944445,
+      "qa01_n": 36,
+      "qa01_expected": 36,
+      "comparison_status": "COMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": 100.0,
+      "qa02_correct": 36,
+      "qa02_total": 36,
+      "qa03_ms": 13617.334648277778,
+      "qa03_full_elapsed_ms": 13617.334648277778,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 36,
+      "qa03_expected": 36,
+      "qa03_incomplete": 0,
+      "qa04_modules_mean": 1.75,
+      "qa05_via_usd": 0.0674956,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 44.253184,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 30,
+      "content_total": 36,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 0,
+      "unknown_usage_calls": 0,
+      "model_calls": 63,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C05",
+          "count": 1,
+          "modules": [
+            "src/dp01.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C05/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+        },
+        {
+          "id": "C06",
+          "count": 3,
+          "modules": [
+            "src/dp01.rs",
+            "src/dp01_evidence.rs",
+            "src/dp01_request.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C06/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "01",
+      "variant": "B",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 6266.886761583333,
+      "qa01_n": 36,
+      "qa01_expected": 36,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": 100.0,
+      "qa02_correct": 36,
+      "qa02_total": 36,
+      "qa03_ms": 14241.594004742858,
+      "qa03_full_elapsed_ms": 14241.594004742858,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 35,
+      "qa03_expected": 36,
+      "qa03_incomplete": 1,
+      "qa04_modules_mean": 1.75,
+      "qa05_via_usd": 0.069916,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 45.318144,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 29,
+      "content_total": 36,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 1,
+      "unknown_usage_calls": 0,
+      "model_calls": 70,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C05",
+          "count": 1,
+          "modules": [
+            "src/dp01.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C05/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+        },
+        {
+          "id": "C06",
+          "count": 3,
+          "modules": [
+            "src/dp01.rs",
+            "src/dp01_evidence.rs",
+            "src/dp01_request.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C06/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "01",
+      "variant": "C",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 11995.458227916666,
+      "qa01_n": 36,
+      "qa01_expected": 36,
+      "comparison_status": "COMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": 94.44444444444444,
+      "qa02_correct": 34,
+      "qa02_total": 36,
+      "qa03_ms": 12364.438348222224,
+      "qa03_full_elapsed_ms": 12364.438348222224,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 36,
+      "qa03_expected": 36,
+      "qa03_incomplete": 0,
+      "qa04_modules_mean": 2.0,
+      "qa05_via_usd": 0.16307880000000002,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 50.364416,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 27,
+      "content_total": 36,
+      "nh_percent": null,
+      "wrong_referent_judgments": 2,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 0,
+      "unknown_usage_calls": 0,
+      "model_calls": 71,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C05",
+          "count": 1,
+          "modules": [
+            "src/dp01.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C05/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C05/summary.json"
+        },
+        {
+          "id": "C06",
+          "count": 4,
+          "modules": [
+            "src/dp01.rs",
+            "src/dp01_evidence.rs",
+            "src/dp01_producer.rs",
+            "src/dp01_request.rs"
+          ],
+          "status": "PASS",
+          "evidence": "baseline-v2/dp01-C06/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-v2/dp01-C06/summary.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "02",
+      "variant": "A",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 8677.264933433333,
+      "qa01_n": 30,
+      "qa01_expected": 30,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": null,
+      "qa02_correct": 0,
+      "qa02_total": 0,
+      "qa03_ms": 24091.785878695653,
+      "qa03_full_elapsed_ms": 24091.785878695653,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 23,
+      "qa03_expected": 24,
+      "qa03_incomplete": 1,
+      "qa04_modules_mean": 2.0,
+      "qa05_via_usd": 0.12245600000000001,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 45.350912,
+      "nr_correct": 27,
+      "nr_total": 27,
+      "nr_percent": 100.0,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 20,
+      "content_total": 21,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 1,
+      "unknown_usage_calls": 0,
+      "model_calls": 53,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C04",
+          "count": 2,
+          "modules": [
+            "src/dp02/execution.rs",
+            "src/dp02/state.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp02/C04-v2/manifest.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C04-v2/manifest.json"
+        },
+        {
+          "id": "C06",
+          "count": 3,
+          "modules": [
+            "src/dp02/execution.rs",
+            "src/dp02/response.rs",
+            "src/dp02/state.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp02/C06-v2/manifest.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C06-v2/manifest.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "02",
+      "variant": "B",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 6698.498830500001,
+      "qa01_n": 30,
+      "qa01_expected": 30,
+      "comparison_status": "COMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": null,
+      "qa02_correct": 0,
+      "qa02_total": 0,
+      "qa03_ms": 20982.020991291665,
+      "qa03_full_elapsed_ms": 20982.020991291665,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 24,
+      "qa03_expected": 24,
+      "qa03_incomplete": 0,
+      "qa04_modules_mean": 2.0,
+      "qa05_via_usd": 0.11251560000000001,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 46.170112,
+      "nr_correct": 26,
+      "nr_total": 27,
+      "nr_percent": 96.29629629629629,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 21,
+      "content_total": 21,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 1,
+      "wrong_handoff_contracts": 0,
+      "errors": 0,
+      "unknown_usage_calls": 0,
+      "model_calls": 49,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C04",
+          "count": 2,
+          "modules": [
+            "src/dp02/execution.rs",
+            "src/dp02/state.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp02/C04-v2/manifest.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C04-v2/manifest.json"
+        },
+        {
+          "id": "C06",
+          "count": 3,
+          "modules": [
+            "src/dp02/execution.rs",
+            "src/dp02/response.rs",
+            "src/dp02/state.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp02/C06-v2/manifest.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp02/C06-v2/manifest.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "04",
+      "variant": "A",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 11175.8016542,
+      "qa01_n": 10,
+      "qa01_expected": 15,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 5,
+      "qa02_percent": 70.83333333333333,
+      "qa02_correct": 17,
+      "qa02_total": 24,
+      "qa03_ms": 15623.849259111112,
+      "qa03_full_elapsed_ms": 15623.849259111112,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 9,
+      "qa03_expected": 12,
+      "qa03_incomplete": 3,
+      "qa04_modules_mean": 2.5,
+      "qa05_via_usd": 0.0415828,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 45.21984,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 0,
+      "content_total": 0,
+      "nh_percent": null,
+      "wrong_referent_judgments": 7,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 5,
+      "unknown_usage_calls": 0,
+      "model_calls": 26,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C05",
+          "count": 2,
+          "modules": [
+            "src/dp04.rs",
+            "src/dp04/explanation.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp04-rebased-calibration-v3/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+        },
+        {
+          "id": "C06",
+          "count": 5,
+          "modules": [
+            "src/dp04.rs",
+            "src/dp04/gate.rs",
+            "src/dp04/geometry.rs",
+            "src/dp04/observations.rs",
+            "src/dp04/region_policy.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp04-rebased-calibration-v3/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC",
+      "dp": "04",
+      "variant": "B",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 18344.0548556,
+      "qa01_n": 15,
+      "qa01_expected": 15,
+      "comparison_status": "COMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": 100.0,
+      "qa02_correct": 24,
+      "qa02_total": 24,
+      "qa03_ms": 22930.460854166668,
+      "qa03_full_elapsed_ms": 22930.460854166668,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 12,
+      "qa03_expected": 12,
+      "qa03_incomplete": 0,
+      "qa04_modules_mean": 2.5,
+      "qa05_via_usd": 0.0431172,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 45.350912,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 0,
+      "content_total": 0,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 0,
+      "unknown_usage_calls": 0,
+      "model_calls": 38,
+      "functional_qualification": "FINITE_CHECKS_PASSED",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "count": 1,
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C03",
+          "count": 2,
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "status": "PASS",
+          "evidence": "controls/acceptance-summary.json",
+          "class": "ADAPTER_CONTROL",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls/acceptance-summary.json"
+        },
+        {
+          "id": "C05",
+          "count": 2,
+          "modules": [
+            "src/dp04.rs",
+            "src/dp04/explanation.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp04-rebased-calibration-v3/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+        },
+        {
+          "id": "C06",
+          "count": 5,
+          "modules": [
+            "src/dp04.rs",
+            "src/dp04/gate.rs",
+            "src/dp04/geometry.rs",
+            "src/dp04/observations.rs",
+            "src/dp04/region_policy.rs"
+          ],
+          "status": "PASS",
+          "evidence": "dp04-rebased-calibration-v3/summary.json",
+          "class": "FUNCTIONAL_CHANGE",
+          "evidence_absolute": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/dp04-rebased-calibration-v3/summary.json"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1"
+    },
+    {
+      "phase": "BASIC_CORRECTED",
+      "dp": "05",
+      "variant": "A",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 4306.803141599999,
+      "qa01_n": 20,
+      "qa01_expected": 21,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 1,
+      "qa02_percent": null,
+      "qa02_correct": 0,
+      "qa02_total": 0,
+      "qa03_ms": 11018.835575000001,
+      "qa03_full_elapsed_ms": 33025.17034165,
+      "receiver_shim_excluded_ms": 22006.334766649998,
+      "qa03_n": 20,
+      "qa03_expected": 21,
+      "qa03_incomplete": 1,
+      "qa04_modules_mean": 1.5,
+      "qa05_via_usd": 0.0338936,
+      "qa05_receiver_usd": 0.0679472,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 49.119232,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 17,
+      "nh_total": 18,
+      "nh_purpose_contract_correct": 17,
+      "nh_combined_contract_correct": 17,
+      "content_correct": 7,
+      "content_total": 18,
+      "nh_percent": 94.44444444444444,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 1,
+      "errors": 1,
+      "unknown_usage_calls": 0,
+      "model_calls": 80,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C03",
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "count": 2,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C04",
+          "modules": [
+            "src/dp05.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+          "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+        },
+        {
+          "id": "C06",
+          "modules": [
+            "src/dp05.rs",
+            "src/dp05_sources.rs"
+          ],
+          "count": 2,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+          "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2"
+    },
+    {
+      "phase": "BASIC_CORRECTED",
+      "dp": "05",
+      "variant": "B",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 4421.472990142857,
+      "qa01_n": 21,
+      "qa01_expected": 21,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": null,
+      "qa02_correct": 0,
+      "qa02_total": 0,
+      "qa03_ms": 12438.587794052632,
+      "qa03_full_elapsed_ms": 31106.112914526315,
+      "receiver_shim_excluded_ms": 18667.525120473685,
+      "qa03_n": 19,
+      "qa03_expected": 21,
+      "qa03_incomplete": 2,
+      "qa04_modules_mean": 1.75,
+      "qa05_via_usd": 0.2091628,
+      "qa05_receiver_usd": 0.07952000000000001,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 57.229312,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 18,
+      "nh_total": 18,
+      "nh_purpose_contract_correct": 18,
+      "nh_combined_contract_correct": 18,
+      "content_correct": 9,
+      "content_total": 18,
+      "nh_percent": 100.0,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 2,
+      "unknown_usage_calls": 0,
+      "model_calls": 116,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C03",
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "count": 2,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C04",
+          "modules": [
+            "src/dp05.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+          "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+        },
+        {
+          "id": "C06",
+          "modules": [
+            "src/dp05.rs",
+            "src/dp05_record.rs",
+            "src/dp05_sources.rs"
+          ],
+          "count": 3,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+          "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2"
+    },
+    {
+      "phase": "BASIC_CORRECTED",
+      "dp": "05",
+      "variant": "C",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 4320.51430352381,
+      "qa01_n": 21,
+      "qa01_expected": 21,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": null,
+      "qa02_correct": 0,
+      "qa02_total": 0,
+      "qa03_ms": 4329.101182052632,
+      "qa03_full_elapsed_ms": 24073.13861405263,
+      "receiver_shim_excluded_ms": 19744.037432,
+      "qa03_n": 19,
+      "qa03_expected": 21,
+      "qa03_incomplete": 2,
+      "qa04_modules_mean": 1.5,
+      "qa05_via_usd": 0.0113928,
+      "qa05_receiver_usd": 0.0644,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 48.152576,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 18,
+      "nh_total": 18,
+      "nh_purpose_contract_correct": 18,
+      "nh_combined_contract_correct": 18,
+      "content_correct": 8,
+      "content_total": 18,
+      "nh_percent": 100.0,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 2,
+      "unknown_usage_calls": 0,
+      "model_calls": 59,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "qa04_tasks": [
+        {
+          "id": "C01",
+          "modules": [
+            "src/model_wire.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C03",
+          "modules": [
+            "src/main.rs",
+            "src/source_contract.rs"
+          ],
+          "count": 2,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/controls-reuse-union-corrected-v2/acceptance-summary.json",
+          "evidence_sha256": "22518f2251f937cfc102671277128b954a6150eac7064885971006acf134cbc4"
+        },
+        {
+          "id": "C04",
+          "modules": [
+            "src/dp05.rs"
+          ],
+          "count": 1,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C04/summary.json",
+          "evidence_sha256": "4c8d7941009b084af618a8866b3acba20fdeb7332017782b4e06bddd3e8d04f4"
+        },
+        {
+          "id": "C06",
+          "modules": [
+            "src/dp05.rs",
+            "src/dp05_sources.rs"
+          ],
+          "count": 2,
+          "status": "PASS",
+          "evidence": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/qa04/baseline-dp05-reuse-union-corrected-v2/dp05-C06/summary.json",
+          "evidence_sha256": "739e81982fb664bde785dfe6b8b0ec9052d5a91ec0e124bca94cd1419ad71469"
+        }
+      ],
+      "source_phase_root": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+[
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp04-dense-B-r1-e51cbc",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "04",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "repetition": 1,
+      "stage": "dp04.screen_producer",
+      "rust_call_id": 15
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "dp04-dense:grounding"
+        ],
+        "node_id": "operation-15",
+        "parent_ids": [
+          "dp04-source-r1-\"dense\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "images": [
+        "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/dense.png",
+        "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/dp04-dense-r1-dense-events.png"
+      ],
+      "input": {
+        "capture_gaps": [],
+        "events": [
+          {
+            "button": "none",
+            "event_id": "pointer-1",
+            "frame_id": "dense",
+            "t_ms": 300,
+            "type": "pointer_move",
+            "x": 375,
+            "y": 315
+          },
+          {
+            "button": "none",
+            "event_id": "pointer-2",
+            "frame_id": "dense",
+            "t_ms": 1100,
+            "type": "pointer_move",
+            "x": 630,
+            "y": 480
+          }
+        ],
+        "expansion_request": null,
+        "frames": [
+          {
+            "coordinate_space": "frame_pixels",
+            "frame_id": "dense",
+            "height": 650,
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/dense.png",
+            "observed_at_ms": 0,
+            "overlay_encoding": "RAW_EVENT_OVERLAY_V1; crosses/path and labels are original events, no semantic region/target annotations",
+            "overlay_image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/dp04-dense-r1-dense-events.png",
+            "overlay_sha256": "58fad4f0d5dc1616b8eecbc2bd3aa5f89460751f4d14e346b2b8524249ac5d89",
+            "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+            "source_id": "document",
+            "source_revision": 1,
+            "width": 1000
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported"
+        },
+        "producer_generation": 1,
+        "revision": 1
+      },
+      "instruction": "Screen Target Producer and Qwen vision parser, not final binder. Parse original PNGs plus raw-event overlay PNGs and actual event coordinates WITHOUT speech/intended answers. Overlay cross/path and event IDs are raw coordinates, not inferred targets. Use original frame pixel space with supplied width/height. Return ONLY compact JSON {candidates:[{target_id,frame_id,kind,label,bbox:[x1,y1,x2,y2]}],cue_relations:[{cue_id,target_ids,relation:'point_inside'|'within_region',complete:bool,unique:bool,navigation_alternative:bool}],coverage:{complete:bool,unknown:[strings],competing:[strings]},source_refs:[frame_ids]}. Use visible IDs, short visible header labels max60characters, accurate bboxes inside frame. Point-inside claims must actually contain the coordinate. A loop geometric sample set contains bbox centers within its polygon; inspect actual plotted samples. Preserve unknown/competing candidates/navigation alternatives; geometry alone is not designation. All relevant named alternatives, max30candidates. Expansion asks YOU to reread same pixels and repair missing/invalid extents. Never produce expression bindings. No prose or chain-of-thought.",
+      "max_tokens": 3000
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp04-dense-B-r1-e51cbc",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "04",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "repetition": 1,
+      "stage": "dp04.speech_producer",
+      "rust_call_id": 22
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "dp04-dense:grounding"
+        ],
+        "node_id": "operation-22",
+        "parent_ids": [
+          "operation-15"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "input": {
+        "contract_errors": [],
+        "original": {
+          "events": [
+            {
+              "button": "none",
+              "event_id": "pointer-1",
+              "frame_id": "dense",
+              "t_ms": 300,
+              "type": "pointer_move",
+              "x": 375,
+              "y": 315
+            },
+            {
+              "button": "none",
+              "event_id": "pointer-2",
+              "frame_id": "dense",
+              "t_ms": 1100,
+              "type": "pointer_move",
+              "x": 630,
+              "y": 480
+            }
+          ],
+          "expressions": [
+            {
+              "end_ms": 500,
+              "expression_id": "dense-first",
+              "start_ms": 100,
+              "text": "이 항목",
+              "time_uncertainty_ms": 20
+            },
+            {
+              "end_ms": 1300,
+              "expression_id": "dense-second",
+              "start_ms": 900,
+              "text": "이 항목",
+              "time_uncertainty_ms": 20
+            }
+          ],
+          "prior": null,
+          "revision": 1,
+          "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+        },
+        "previous_attempt": null
+      },
+      "instruction": "Speech Reference Producer. Interpret full transcript, expression spans, actual event timestamps and prior binding without pixels. Return ONLY compact JSON {intent:string,expressions:[{expression_id,kind,count:integer|null,relation:'designated_by_cue'|'within_region'|'explicit_ids'|'relative_position'|'correction'|'retain_prior'|'other',cue_ids:[event_id],explicit_target_ids:[IDs literally stated in speech],unresolved:[strings],meaning:string}],coverage:{complete:bool,unknown:[strings]}}. Every expression exactly once. Intent MUST describe the user requested action/topic/scope from the full transcript, never your internal reference detection or binding operation. Preserve any explicit speech count for mandatory final checking; singular designated item has count1. Connect cues using wording and time interval, not time alone; distinguish later navigation. For partial correction preserve retained/replaced scope. Intent max120characters, meaning max100characters; no final targets, invented visible IDs or chain-of-thought.",
+      "max_tokens": 1400
+    }
+  }
+]

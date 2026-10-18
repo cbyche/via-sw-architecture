@@ -1,0 +1,175 @@
+--- baseline/src/dp04.rs
++++ scratch/src/dp04.rs
+@@ -2,6 +2,7 @@
+ mod binding;
+ mod gate;
+ mod geometry;
++mod region_policy;
+ mod joint;
+ mod observations;
+ mod producers;
+@@ -21,6 +22,8 @@
+     let mut revision_gate = gate::RevisionGate::new();
+     let goal = format!("{}:grounding",input["id"].as_str().unwrap_or("dp04"));
+     let mut started = false;
++    let mut region_policy=region_policy::RegionPolicy::default();
++    let mut region_reports=Vec::new();
+     let mut prior_nodes = Vec::new();
+     let initial_revision=input["revisions"].as_array().and_then(|x|x.first()).ok_or("revisions empty")?;
+     let initial_stimulus=format!("{}:r{}",input["id"].as_str().unwrap_or("dp04"),initial_revision["revision"]);
+@@ -30,7 +33,9 @@
+         ctx.capture(&stimulus,&json!({"goal_id":goal,"revision":rev,"raw_text":revision["transcript"],"kind":"user_grounding_input"}));
+         let mut scoped=ctx.scoped(&[goal.clone()],&prior_nodes);
+         let ctx=&mut scoped;
+-        let observed = observations::read(revision, ctx)?;
++        let mut permitted_revision=revision.clone();permitted_revision["region_withdrawals"]=region_policy.regions();permitted_revision["policy_generation"]=json!(region_policy.epoch());
++        let observed = observations::read(&permitted_revision, ctx)?;
++        revision_gate.set_policy_epoch(region_policy.epoch());
+         revision_gate.begin(rev, &observed["revision"]);
+         ctx.event(
+             "REVISION_REGISTERED",
+@@ -68,6 +73,7 @@
+         };
+         // Host stamps the actual source snapshot and job revision, never evaluator values.
+         proposal["revision"] = json!(rev);
++        proposal["policy_generation"]=json!(region_policy.epoch());
+         proposal["source_snapshot"] = observed["source_snapshot"].clone();
+         old_proposal = proposal.clone();
+         match revision_gate.accept(&proposal) {
+@@ -104,11 +110,21 @@
+         }
+         ctx.logical_buffer("dp04_observations",0,"RELEASE");
+         ctx.logical_buffer("dp04_prior_binding",prior.to_string().len(),"RETAIN");
++        for external_event in input["region_withdrawals"].as_array().into_iter().flatten().filter(|e|e["after_revision"].as_u64()==Some(rev)) {
++            region_policy.withdraw(external_event)?;revision_gate.set_policy_epoch(region_policy.epoch());
++            let old_attempt=revision_gate.accept(&old_proposal);
++            let prior_report=region_policy.revoke_prior(&mut prior);
++            let candidate_report=region_policy.mark_candidate_eligibility(&mut proposal);
++            let mut reread_revision=revision.clone();reread_revision["region_withdrawals"]=region_policy.regions();reread_revision["policy_generation"]=json!(region_policy.epoch());
++            let permitted_view=observations::read(&reread_revision,ctx)?;
++            let report=json!({"external_authorization_event":external_event,"policy_generation":region_policy.epoch(),"held_old_proposal_accepted":old_attempt.is_ok(),"held_old_proposal_rejection":old_attempt.err(),"prior_binding_admission":prior_report,"candidate_admission":candidate_report,"permitted_reread":permitted_view["revision"],"current_prior":prior});
++            ctx.event("REGION_WITHDRAWAL_APPLIED",&report);region_reports.push(report);
++        }
+         prior_nodes=ctx.last_node().into_iter().collect();
+         trace.push(proposal);
+         ctx.logical_buffer("dp04_retained_proposal_trace",serde_json::to_vec(&trace).map(|x|x.len()).unwrap_or(0),"ALLOCATE_OR_REPLACE");
+     }
+     Ok(
+-        json!({"adoptions":all,"outputs":outputs,"proposals":trace,"screen_parser_variant":"Qwen vision screen producer; no external OmniParser dependency deployed","tactic":if variant=="B4" {"parallel independent producers"} else if variant=="A4" {"same screen parser auxiliary input"} else {"none"}}),
++        json!({"region_reports":region_reports,"adoptions":all,"outputs":outputs,"proposals":trace,"screen_parser_variant":"Qwen vision screen producer; no external OmniParser dependency deployed","tactic":if variant=="B4" {"parallel independent producers"} else if variant=="A4" {"same screen parser auxiliary input"} else {"none"}}),
+     )
+ }
+--- baseline/src/dp04/gate.rs
++++ scratch/src/dp04/gate.rs
+@@ -1,12 +1,14 @@
+ use serde_json::{json, Value};
+ pub struct RevisionGate {
+     revision: u64,
++    policy_epoch:u64,
+     snapshot: Value,
+ }
+ impl RevisionGate {
+     pub fn new() -> Self {
+         Self {
+             revision: 0,
++            policy_epoch:0,
+             snapshot: Value::Null,
+         }
+     }
+@@ -14,7 +16,9 @@
+         self.revision = revision;
+         self.snapshot=json!(source["frames"].as_array().unwrap_or(&Vec::new()).iter().map(|f|json!({"frame_id":f["frame_id"],"source_id":f["source_id"],"source_revision":f["source_revision"],"sha256":f["sha256"]})).collect::<Vec<_>>());
+     }
++    pub fn set_policy_epoch(&mut self,epoch:u64){self.policy_epoch=epoch;}
+     pub fn accept(&self, proposal: &Value) -> Result<(), String> {
++        if proposal["policy_generation"].as_u64().unwrap_or(0)!=self.policy_epoch{return Err("STALE_REGION_POLICY".into());}
+         if proposal["revision"].as_u64() != Some(self.revision) {
+             return Err("STALE_INPUT_REVISION".into());
+         }
+--- baseline/src/dp04/geometry.rs
++++ scratch/src/dp04/geometry.rs
+@@ -18,6 +18,7 @@
+     let mut ids = std::collections::HashSet::new();
+     for c in cs {
+         if c["target_id"].as_str().is_none() || !ids.insert(c["target_id"].to_string()) { errors.push("CANDIDATE_ID_MISSING_OR_DUPLICATE".into()); }
++        if super::region_policy::region_conflict(&obs["revision"],c){errors.push(format!("SOURCE_REGION_WITHDRAWN:{}",c["target_id"]));}
+         if bbox(c, obs).is_none() { errors.push(format!("INVALID_FRAME_OR_BBOX:{}", c["target_id"])); }
+     }
+     errors
+@@ -82,6 +83,7 @@
+             let matches: Vec<_> = extents.into_iter().flatten().filter(|c|c["target_id"]==*target).collect();
+             if matches.len()!=1 { errors.push(format!("EXTENT_MISSING_OR_DUPLICATE:{}",target)); continue; }
+             let c=matches[0];
++            if super::region_policy::region_conflict(&obs["revision"],c){errors.push(format!("SOURCE_REGION_WITHDRAWN:{}",target));}
+             let Some(b)=bbox(c,obs) else { errors.push(format!("INVALID_FRAME_OR_BBOX:{}",target)); continue; };
+             for cue in semantic["cue_ids"].as_array().into_iter().flatten() {
+                 let event=obs["revision"]["events"].as_array().and_then(|xs|xs.iter().find(|x|x["event_id"]==*cue));
+--- baseline/src/dp04/observations.rs
++++ scratch/src/dp04/observations.rs
+@@ -4,8 +4,8 @@
+ 
+ /// Reads only the authorized preserved observation window; never the SVG authoring source.
+ pub fn read(revision: &Value, ctx: &Context) -> Result<Value, String> {
+-    let mut normalized_revision = revision.clone();
+-    normalized_revision["frames"] = json!(revision["frames"]
++    let mut normalized_revision = super::region_policy::redact_revision(revision)?;
++    normalized_revision["frames"] = json!(normalized_revision["frames"]
+         .as_array()
+         .ok_or("frames missing")?
+         .iter()
+--- baseline/src/dp04/region_policy.rs
++++ scratch/src/dp04/region_policy.rs
+@@ -0,0 +1,53 @@
++//! C06 actual source-region authorization and permitted pixel-view construction.
++use serde_json::{json,Value};
++use std::process::Command;
++#[derive(Default)]pub struct RegionPolicy{epoch:u64,regions:Vec<Value>}
++fn overlaps(a:&Value,b:&Value)->bool{
++    let get=|v:&Value,i:usize|v[i].as_f64().unwrap_or(f64::NAN);
++    get(a,0)<get(b,2) && get(b,0)<get(a,2) && get(a,1)<get(b,3) && get(b,1)<get(a,3)
++}
++impl RegionPolicy{
++    pub fn epoch(&self)->u64{self.epoch}
++    pub fn regions(&self)->Value{json!(self.regions)}
++    pub fn withdraw(&mut self,event:&Value)->Result<(),String>{
++        let rect=event["rect"].as_array().filter(|r|r.len()==4).ok_or("withdrawal rectangle malformed")?;
++        if rect.iter().any(|v|v.as_f64().is_none_or(|n|!n.is_finite())) || rect[0].as_f64().unwrap()>=rect[2].as_f64().unwrap() || rect[1].as_f64().unwrap()>=rect[3].as_f64().unwrap(){return Err("withdrawal rectangle invalid".into());}
++        let region=json!({"frame_id":event["frame_id"],"rect":event["rect"]});
++        if !self.regions.contains(&region){self.regions.push(region);self.epoch+=1;}
++        Ok(())
++    }
++    pub fn allowed(&self,extent:&Value)->bool{!self.regions.iter().any(|r|r["frame_id"]==extent["frame_id"] && overlaps(&r["rect"],&extent["bbox"]))}
++    pub fn revoke_prior(&self,prior:&mut Value)->Value{
++        let mut denied=Vec::new();let mut retained=Vec::new();
++        if let Some(adoptions)=prior["adoptions"].as_array_mut(){for a in adoptions{
++            let invalid=a["extents"].as_array().is_some_and(|xs|xs.iter().any(|e|!self.allowed(e)));
++            if invalid{denied.push(a["expression_id"].clone());a["targets"]=json!([]);a["extents"]=json!([]);a["status"]=json!("need_evidence");a["evidence"]=json!("Source region withdrawn; new use prohibited");}
++            else{retained.extend(a["targets"].as_array().cloned().unwrap_or_default());}
++        }}json!({"denied_expression_ids":denied,"retained_targets":retained,"policy_generation":self.epoch})
++    }
++    pub fn mark_candidate_eligibility(&self,proposal:&mut Value)->Value{
++        let mut denied=Vec::new();let mut retained=Vec::new();
++        if let Some(cs)=proposal["screen_state"]["candidates"].as_array_mut(){for c in cs{let allowed=self.allowed(c);c["current_use_allowed"]=json!(allowed);if allowed{retained.push(c["target_id"].clone())}else{denied.push(c["target_id"].clone())}}}
++        json!({"ineligible_candidate_ids":denied,"eligible_candidate_ids":retained,"eligibility_policy_generation":self.epoch})
++    }
++}
++pub fn region_conflict(revision:&Value,extent:&Value)->bool{revision["region_withdrawals"].as_array().is_some_and(|rs|rs.iter().any(|r|r["frame_id"]==extent["frame_id"] && overlaps(&r["rect"],&extent["bbox"])))}
++pub fn redact_revision(revision:&Value)->Result<Value,String>{
++    let mut r=revision.clone();let denied=r["region_withdrawals"].as_array().cloned().unwrap_or_default();if denied.is_empty(){return Ok(r);}
++    let epoch=r["policy_generation"].as_u64().unwrap_or(0);
++    for frame in r["frames"].as_array_mut().ok_or("frames missing")?{
++        let masks:Vec<Value>=denied.iter().filter(|d|d["frame_id"]==frame["frame_id"]).map(|d|d["rect"].clone()).collect();if masks.is_empty(){continue;}
++        for (field,hash_field) in [("image_path","sha256"),("overlay_image_path","overlay_sha256")]{
++            let Some(path)=frame[field].as_str().map(String::from) else{continue;};
++            let dir=std::env::temp_dir().join("via-qa04-region-views");std::fs::create_dir_all(&dir).map_err(|e|e.to_string())?;
++            let id=frame["frame_id"].as_str().unwrap_or("frame").chars().filter(|c|c.is_ascii_alphanumeric()).collect::<String>();
++            let out=dir.join(format!("{}-{}-{}-{}.png",std::process::id(),epoch,id,field));
++            let script=r##"const sharp=require(process.argv[1]),fs=require('fs'),crypto=require('crypto');const masks=JSON.parse(process.argv[4]);let svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+process.argv[5]+'" height="'+process.argv[6]+'">'+masks.map(b=>'<rect x="'+b[0]+'" y="'+b[1]+'" width="'+(b[2]-b[0])+'" height="'+(b[3]-b[1])+'" fill="black"/>').join('')+'</svg>';sharp(process.argv[2]).composite([{input:Buffer.from(svg),left:0,top:0}]).png().toFile(process.argv[3]).then(()=>{const b=fs.readFileSync(process.argv[3]);process.stdout.write(JSON.stringify({sha256:crypto.createHash('sha256').update(b).digest('hex'),bytes:b.length}));}).catch(e=>{process.stderr.write(String(e));process.exit(1)});"##;
++            let output=Command::new("/Users/changbae/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node").arg("-e").arg(script).arg("/Users/changbae/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp").arg(&path).arg(&out).arg(json!(masks).to_string()).arg(frame["width"].to_string()).arg(frame["height"].to_string()).output().map_err(|e|e.to_string())?;
++            if !output.status.success(){return Err(format!("source view redaction failed: {}",String::from_utf8_lossy(&output.stderr)));}
++            let meta:Value=serde_json::from_slice(&output.stdout).map_err(|e|e.to_string())?;
++            frame[field]=json!(out);frame[hash_field]=meta["sha256"].clone();frame["region_redaction_applied"]=json!(true);
++        }
++    }Ok(r)
++}
++#[cfg(test)]mod tests{use super::*;#[test]fn withdrawal_is_idempotent_and_preserves_disjoint(){let mut p=RegionPolicy::default();let e=json!({"frame_id":"f","rect":[0,0,30,30]});p.withdraw(&e).unwrap();p.withdraw(&e).unwrap();assert_eq!(p.epoch(),1);assert!(!p.allowed(&json!({"frame_id":"f","bbox":[10,10,20,20]})));assert!(p.allowed(&json!({"frame_id":"f","bbox":[40,40,60,60]})));}}

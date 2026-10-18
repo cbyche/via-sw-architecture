@@ -1,0 +1,262 @@
+{
+  "check": {
+    "change": "C01",
+    "dp": "04",
+    "variant": "A",
+    "calls": 1,
+    "exit": 0,
+    "result": "PASS",
+    "model": "NO_MODEL; deterministic contract responder only",
+    "semantics_claimed": false
+  },
+  "calls": [
+    {
+      "call_id": 1,
+      "request": {
+        "context": {
+          "images": [
+            "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/assets/screen/dense.png"
+          ],
+          "input": {
+            "auxiliary_screen_parser": null,
+            "observations": {
+              "capture_gaps": [],
+              "events": [
+                {
+                  "button": "none",
+                  "event_id": "pointer-1",
+                  "frame_id": "dense",
+                  "t_ms": 300,
+                  "type": "pointer_move",
+                  "x": 375,
+                  "y": 315
+                },
+                {
+                  "button": "none",
+                  "event_id": "pointer-2",
+                  "frame_id": "dense",
+                  "t_ms": 1100,
+                  "type": "pointer_move",
+                  "x": 630,
+                  "y": 480
+                }
+              ],
+              "expressions": [
+                {
+                  "end_ms": 500,
+                  "expression_id": "dense-first",
+                  "start_ms": 100,
+                  "text": "이 항목",
+                  "time_uncertainty_ms": 20
+                },
+                {
+                  "end_ms": 1300,
+                  "expression_id": "dense-second",
+                  "start_ms": 900,
+                  "text": "이 항목",
+                  "time_uncertainty_ms": 20
+                }
+              ],
+              "frames": [
+                {
+                  "coordinate_space": "frame_pixels",
+                  "frame_id": "dense",
+                  "height": 650,
+                  "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/assets/screen/dense.png",
+                  "observed_at_ms": 0,
+                  "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                  "source_id": "document",
+                  "source_revision": 1,
+                  "width": 1000
+                }
+              ],
+              "native_selection": {
+                "status": "unsupported"
+              },
+              "permission": "allowed",
+              "revision": 1,
+              "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘.",
+              "transcript_ready_ms": 1400
+            },
+            "prior": null
+          },
+          "instruction": "You are the joint screen/speech grounding interpreter. Read the actual PNG pixels together with authored transcript spans, pointer/selection events, frame times and prior accepted bindings. Produce the exact target set for EACH expression_id of this input revision. Visible item/sample IDs identify source extents. Preserve the first expression if a later correction explicitly retains it; revise only what the complete new instruction changes, while rechecking the entire binding set. Pointer timing alone is not intent. A later page change does not erase a previously pointed frame. A free loop can denote a set of plotted samples. Do not answer the requested business task. Return JSON {adoptions:[{expression_id:string,targets:[visible_id strings],status:'ready'|'ambiguous'|'need_evidence',evidence:string}],need_evidence:false|{scope:string},reasoning_summary:string}. Do not invent a missing source or identifier. You may request one bounded reread of the preserved original source if needed; do not turn an unresolved target into a confident adoption.",
+          "max_tokens": 1700
+        }
+      },
+      "stage": "dp04.joint_grounding",
+      "type": "model_call",
+      "wire_version": 2
+    }
+  ],
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-dense",
+        "variant": "A"
+      },
+      "elapsed_ns": 18125,
+      "kind": "EPISODE_START",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-dense:r1",
+        "revision": 1,
+        "stimulus_id": "dp04-dense:r1",
+        "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+      },
+      "elapsed_ns": 59750,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 64534,
+        "identity": {
+          "frame_id": "dense",
+          "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/assets/screen/dense.png"
+      },
+      "elapsed_ns": 354708,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "held_previous": false,
+        "revision": 1
+      },
+      "elapsed_ns": 401125,
+      "kind": "REVISION_REGISTERED",
+      "type": "event"
+    },
+    {
+      "data": {
+        "evidence": null,
+        "expression_id": "dense-first",
+        "revision": 1,
+        "status": "missing",
+        "targets": []
+      },
+      "elapsed_ns": 640583,
+      "kind": "ADOPTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "evidence": null,
+        "expression_id": "dense-second",
+        "revision": 1,
+        "status": "missing",
+        "targets": []
+      },
+      "elapsed_ns": 652583,
+      "kind": "ADOPTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-dense:r1",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "stimulus_id": "dp04-dense:r1",
+        "text": "화면 지칭 r1: [{\"evidence\":null,\"expression_id\":\"dense-first\",\"revision\":1,\"status\":\"missing\",\"targets\":[]},{\"evidence\":null,\"expression_id\":\"dense-second\",\"revision\":1,\"status\":\"missing\",\"targets\":[]}]"
+      },
+      "elapsed_ns": 678000,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-dense:r1",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "stimulus_id": "dp04-dense:r1",
+        "text": "화면 지칭 r1: [{\"evidence\":null,\"expression_id\":\"dense-first\",\"revision\":1,\"status\":\"missing\",\"targets\":[]},{\"evidence\":null,\"expression_id\":\"dense-second\",\"revision\":1,\"status\":\"missing\",\"targets\":[]}]"
+      },
+      "elapsed_ns": 695250,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoptions": [
+          {
+            "evidence": null,
+            "expression_id": "dense-first",
+            "revision": 1,
+            "status": "missing",
+            "targets": []
+          },
+          {
+            "evidence": null,
+            "expression_id": "dense-second",
+            "revision": 1,
+            "status": "missing",
+            "targets": []
+          }
+        ],
+        "outputs": [
+          {
+            "goal_id": "dp04-dense:r1",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "stimulus_id": "dp04-dense:r1",
+            "text": "화면 지칭 r1: [{\"evidence\":null,\"expression_id\":\"dense-first\",\"revision\":1,\"status\":\"missing\",\"targets\":[]},{\"evidence\":null,\"expression_id\":\"dense-second\",\"revision\":1,\"status\":\"missing\",\"targets\":[]}]"
+          }
+        ],
+        "proposals": [
+          {
+            "_provider_usage": {
+              "input_tokens": 17,
+              "output_tokens": 9
+            },
+            "adoptions": [],
+            "answer": "CONTRACT_PROBE_ONLY",
+            "blocks": [],
+            "candidates": [],
+            "conditions": [],
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "expressions": [],
+            "need_evidence": false,
+            "need_expansion": false,
+            "question_id": null,
+            "reads": [],
+            "records": [],
+            "relation": "NEW",
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "dense",
+                "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "target_request_id": null,
+            "targets": [],
+            "text": "CONTRACT_PROBE_ONLY",
+            "unknowns": []
+          }
+        ],
+        "screen_parser_variant": "Qwen vision screen producer; no external OmniParser dependency deployed",
+        "tactic": "none"
+      },
+      "elapsed_ns": 744542,
+      "kind": "EPISODE_RESULT",
+      "type": "event"
+    }
+  ],
+  "stderr": ""
+}

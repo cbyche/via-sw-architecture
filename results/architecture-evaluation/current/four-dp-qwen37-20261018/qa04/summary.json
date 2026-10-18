@@ -1,0 +1,395 @@
+{
+  "mean_changed_operational_modules": 1.5,
+  "changes": [
+    {
+      "id": "C01",
+      "operational_modules": [
+        "src/model_wire.rs"
+      ],
+      "count": 1,
+      "contract": "Provider wire request.context + provider_response.json + renamed usage input/output tokens",
+      "baseline_negative_probe": "expected failure; new wire absent",
+      "checks": 10
+    },
+    {
+      "id": "C03",
+      "operational_modules": [
+        "src/main.rs",
+        "src/source_contract.rs"
+      ],
+      "count": 2,
+      "contract": "Source version object; frame pixel dimensions and microseconds timestamp envelope normalized at common admission",
+      "checks": 10
+    }
+  ],
+  "by_alternative": [
+    {
+      "dp": "01",
+      "variant": "A",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "01",
+      "variant": "B",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "01",
+      "variant": "C",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "02",
+      "variant": "A",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "02",
+      "variant": "B",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "04",
+      "variant": "A",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "04",
+      "variant": "B",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "05",
+      "variant": "A",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "05",
+      "variant": "B",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    },
+    {
+      "dp": "05",
+      "variant": "C",
+      "C01": 1,
+      "C03": 2,
+      "mean": 1.5
+    }
+  ],
+  "checks": [
+    {
+      "change": "C01",
+      "dp": "01",
+      "variant": "A",
+      "calls": 6,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "01",
+      "variant": "A",
+      "calls": 6,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "01",
+      "variant": "B",
+      "calls": 6,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "01",
+      "variant": "B",
+      "calls": 6,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "01",
+      "variant": "C",
+      "calls": 7,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "01",
+      "variant": "C",
+      "calls": 7,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "02",
+      "variant": "A",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "02",
+      "variant": "A",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "02",
+      "variant": "B",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "02",
+      "variant": "B",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "04",
+      "variant": "A",
+      "calls": 1,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "04",
+      "variant": "A",
+      "calls": 1,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "04",
+      "variant": "B",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "04",
+      "variant": "B",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "A",
+      "calls": 0,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "A",
+      "calls": 0,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "B",
+      "calls": 3,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "B",
+      "calls": 3,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "C",
+      "calls": 0,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "C",
+      "calls": 0,
+      "exit": 0,
+      "result": "PASS",
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    }
+  ],
+  "claim_scope": "Actual two Rust compatibility migrations in independent scratch copies; finite PoC scope only. All10 alternatives tie. Coordinates/time applicable to DP04; source revisions exercised for inline DP02 and DP01/05 descriptors. Not full product change population. Test-only bin and harness excluded from module count. No model calls or cost.",
+  "live_baseline_unchanged": true,
+  "scratch_root": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14",
+  "supplemental_checks": [
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "A",
+      "fixture": "dp05-e2",
+      "calls": 4,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 3,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "B",
+      "fixture": "dp05-e2",
+      "calls": 7,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 10,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C01",
+      "dp": "05",
+      "variant": "C",
+      "fixture": "dp05-e2",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 1,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "A",
+      "fixture": "dp05-e2",
+      "calls": 4,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 3,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "B",
+      "fixture": "dp05-e2",
+      "calls": 7,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 10,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    },
+    {
+      "change": "C03",
+      "dp": "05",
+      "variant": "C",
+      "fixture": "dp05-e2",
+      "calls": 2,
+      "exit": 0,
+      "result": "PASS",
+      "source_reads": 1,
+      "wire_actual_traversal": true,
+      "receiver_actual_traversal": true,
+      "model": "NO_MODEL; deterministic contract responder only",
+      "semantics_claimed": false
+    }
+  ],
+  "total_contract_checks": 26,
+  "supplement_note": "Original20 probes preserved. Six DP05E2 actualdelegation scratchprobes exercise source reads + modelwire + commonreceiver for ABC under bothmigrations.",
+  "dp05_v2_supplement": {
+    "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/dp05-v2-supplement/summary.json",
+    "checks_passed": 6,
+    "mean": 1.5
+  }
+}

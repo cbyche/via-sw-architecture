@@ -1,5 +1,7 @@
 # 04-47. 화면과 음성 동기화 — 연속 조작 중 지칭 해석
 
+> **2026-10-18 현재 통합 분석:** 문제3과 이 DP는 [화면과 발화의 지칭 결합](./seven-problem-review/04-screen-speech-grounding.md)에 통합했다. 주요 DP에 포함하며 초기 기본 A를 추천한다. B의 typed code 결합과 구체 cloud parser 의존/비용, OmniParser 정확도 근거의 범위, A4 교차 구성을 보강했다. 아래 이전 본문과 그림은 보존하며 새 비교/상세 그림은 이 문서 하단에도 등록했다. 기존 예상 수치는 새 구성의 결과가 아니다.
+
 > 상태: **사용자 지정 DP-47 / 두 설계 대안 구체화와 작성자 반복 검토 / 사용자 검토에 제시 / 승자 미선정 / 미구현 / 미측정** / 2026-10-15
 > [현재 작업 기록](./00-workplan.md)과 [중요 문제 원장 P-02](./01-00-problem-coverage.md#p-02)를 따른다. 기존 46의 A/B나 45의 확장 구조에서 출발하지 않는다.
 
@@ -15,6 +17,7 @@ DP-47의 모든 그림은 아래 본문에 직접 표시한다. 편집용 draw.i
 
 | 그림 | 본문 위치 | 설명 |
 | --- | --- | --- |
+| 2026-10-18 통합 비교와 A/B 상세 | [현재 통합 그림](#dp47-seven-current) | 기본과 tactic 분리, 조건부 모델/typed 결합, parser 의존과 정정/실패 경로 |
 | 초기 문제 설명 | [§1 문제 배경](#1-via에서-왜-중요한가) | 화면이 바뀐 뒤 전사가 도착하고 지칭을 정정하는 상황 |
 | 두 설계의 전체 비교 | [§6 MAIN](#6-main-같은-관측에서-다른-해석-구조) | 공통 입력 취득, A/B 내부 판단과 공통 채택 및 위임 |
 | 구현 구조 1페이지 비교 v1 | [§6.2](#62-구현-구조를-한-페이지에서-비교) | 코드, queue, 후보와 binding 저장소, 완료 반환 및 재판단을 같은 페이지에서 비교 |
@@ -488,3 +491,27 @@ producer의 후보가 peer 정보를 사용해 바뀐 경우에도 원본 source
 ![DP-47 레퍼런스 형식 구조와 QA 비교](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.svg)
 
 [편집 가능한 draw.io](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.drawio) / [최종 PPTX 렌더 PNG](../../../presentations_files/dp-reference-comparison-v1/dp47-reference-comparison_v1.png) / [4장 PPTX](../../../presentations_files/VIA-DP-comparisons-reference_v1.pptx) / [출처와 동점 제외 기준](../../../presentations_files/dp-reference-comparison-v1/README.md) / [리뷰 및 보완 기록](../../../presentations_files/dp-reference-comparison-v1/review.md)
+
+<a id="dp47-seven-current"></a>
+
+## 2026-10-18 통합 분석의 현재 설계 그림
+
+[현재 통합 본문](./seven-problem-review/04-screen-speech-grounding.md)의 기본안과 보완 분리, B의 typed code 결합과 명시적 parser 의존을 표현한다. 위 이전 그림은 해당 판본의 설계 이력이며 새 구성에 과거 예상 수치를 적용하지 않는다.
+
+### 전체 비교
+
+![DP-47 통합 분석 전체 비교](./seven-problem-review/diagrams/dp47-seven-comparison.svg)
+
+[편집 원본](./seven-problem-review/diagrams/dp47-seven-comparison.drawio) / [PNG](./seven-problem-review/diagrams/dp47-seven-comparison.png)
+
+### 기본 A 상세
+
+![DP-47 통합 분석 기본 A 상세](./seven-problem-review/diagrams/dp47-seven-A-detail.svg)
+
+[편집 원본](./seven-problem-review/diagrams/dp47-seven-A-detail.drawio) / [PNG](./seven-problem-review/diagrams/dp47-seven-A-detail.png)
+
+### 기본 B 상세
+
+![DP-47 통합 분석 기본 B 상세](./seven-problem-review/diagrams/dp47-seven-B-detail.svg)
+
+[편집 원본](./seven-problem-review/diagrams/dp47-seven-B-detail.drawio) / [PNG](./seven-problem-review/diagrams/dp47-seven-B-detail.png)

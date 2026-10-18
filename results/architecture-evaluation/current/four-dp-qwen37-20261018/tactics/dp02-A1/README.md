@@ -1,0 +1,11 @@
+# DP02 A1 bounded separate-question follow-up
+
+The selected BASIC design is A. Existing tactic A1 uses one short, tool-free side answer while the original semantic step continues. The actual model decides whether the new utterance contains a short independent question and answers only if suitable. No fixture ID, event ID or evaluator answer determines independence. The side call gets the actual user text and conversation capture/delivery state, not the current long request's source files or unfinished draft. Its answer is limited to 1,200 characters and 800 output tokens. The same runtime enforces the unchanged total K=2.
+
+A model result is admissible only when it declares a new independent question, no source reads/tools or pending-result dependency, no correction/cancellation, and no target/request/question link. Unsuitable or malformed decisions and side-call errors fall back to the existing A step-boundary path. Original work retains its existing thread, lifetime and checkpoint; no new durable worker/Task structure is introduced. The original result and any displayed Agent question answer follow the same existing completion/correction path. The delivered side answer is stored in actual outputs and an explicit `A1_ACTUAL_CONVERSATION_DELIVERY` event.
+
+Only 02-E2, repeated three times, is authorized after all 120 BASIC episodes. Compare the same BASIC A E2 repetitions. This does not establish full four-episode tactic coverage or fix the BASIC mixed-utterance single-label limit. Ties, fallback costs, regressions and original-goal delays remain visible without tuning.
+
+The persisted production variant is `prototypes/candidates/four_dp_poc/variants/dp02-A1-bounded-side-question.rs`; build it as `src/dp02.rs` in a separate candidate copy. `freeze.json` gives the prepared scratch binary/source hashes and fixed input/oracle. `candidate.diff` shows all production differences. The seven test-only contract guard checks and actual logs in `review/` contain no live model calls and are not semantic/model accuracy results.
+
+Baseline sources/binary/results and the DP01 A2 artifact were preserved. Actual API execution belongs to the runtime agent under the existing single $5 ledger.

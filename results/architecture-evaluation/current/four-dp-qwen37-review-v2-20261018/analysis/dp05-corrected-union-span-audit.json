@@ -1,0 +1,304 @@
+{
+  "classification": "FROZEN_HOST_SINGLE_PASSAGE_COVERAGE_LIMITATION_NOT_MISSING_ORIGINAL_OR_SEMANTIC_WRONGNESS",
+  "unchanged_failure": "NOT_DISPLAYED; no rerun/source/guard edit",
+  "run_id": "basic_corrected-dp05-e3-B-r1-a19d4b",
+  "goal_id": "h3-meeting",
+  "actual_input_to_failure_ms": 55011.701625,
+  "prompt_contract_finding": "실제3개 수신자 시스템 prompt에는 facts quote가 supplied evidence의 현재span에 정확히 존재해야 한다는 요구만 있다. 집계 source_spans 각각이 단일 supplied passage 안에 들어가야 한다거나, 인접한 같은원본/같은revision spans를 합치면 안 된다는 제한은 명시돼 있지 않다.",
+  "actually_supplied_comparison_ranges": [
+    [
+      2,
+      3
+    ],
+    [
+      4,
+      4
+    ]
+  ],
+  "declared_aggregate_comparison_span": [
+    2,
+    4
+  ],
+  "facts_quotes_current_and_supplied": true,
+  "missing_or_revoked_lines_in_union": false,
+  "host_limitation": {
+    "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/effective-candidate-source/src/dp05_sources.rs",
+    "sha256": "d908c116faf16c74e875284306944673f2fa3f2515f14f4d1c52fefc14c0852c",
+    "lines": {
+      "8": "pub fn contained(span:&Value,p:&Value)->bool{span[\"source_id\"]==p[\"source_id\"]&&span[\"revision\"]==p[\"revision\"]&&p[\"start_line\"].as_u64().unwrap_or(u64::MAX)<=span[\"start_line\"].as_u64().unwrap_or(0)&&p[\"end_line\"].as_u64().unwrap_or(0)>=span[\"end_line\"].as_u64().unwrap_or(u64::MAX)}",
+      "57": " if !spans.iter().all(|p|valid_span(p,s)&&available.iter().any(|given|contained(p,given))){e.push(\"result_span_not_actually_supplied_or_current\".into());}e"
+    }
+  },
+  "actual_calls": [
+    {
+      "stage": "dp05_receiver_select_or_complete",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/04684338-b454-4a2a-88ee-778833626d56-request.json",
+      "system_prompt": "You are the minimal downstream draft receiver. Honor the authorized contract. Return JSON {mode:'COMPLETE'|'READ',result:{text:string,used_source_ids:[string],source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}],facts:[{statement:string,quote:string,source_id:string,revision:number,start_line:number,end_line:number}],constraints_respected:[string],actions_performed:[string],uncertainties:[string]}|null,reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. COMPLETE now is legal only if ACTUAL supplied passages or source-backed record evidence suffice. References, manifest titles, outlines and capsule summary without supporting text are NOT source facts. Each fact claim needs an EXACT copied quote from actual supplied evidence.text at the current cited span; displayed result text may paraphrase those claims. Provide the bounded requested draft and at least one sourced fact per required source; not a restatement of the user's request. Otherwise READ original bounded one-based inclusive ranges. Honor exclusions, current revisions, revoked sources and allowed actions. Preserve conditional scope: never turn a conditional preference or tie-break into an unconditional recommendation; use it only when its antecedent is established by the actual evidence. Do no actual external action or duplicate unknown action. All alternatives have the same receiver capabilities. Return valid JSON only.",
+      "actual_evidence": null,
+      "result": {
+        "mode": "READ",
+        "result": null,
+        "reads": [
+          {
+            "source_id": "public-quote",
+            "start_line": 1,
+            "end_line": 3
+          }
+        ],
+        "reason": "The mandatory required_source_ids includes 'public-quote', but its text content is not provided in the input passages. I must read this source to satisfy the requirement of providing at least one sourced fact per required source and to include relevant context (price/quantity) in the memo draft."
+      }
+    },
+    {
+      "stage": "dp05_receiver_result",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/a5931f67-6ad2-4e32-b448-3b715b91034a-request.json",
+      "system_prompt": "Produce the requested small bounded draft from the authorized mandatory contract and ACTUAL supplied source evidence ONLY. Return JSON {text:string,used_source_ids:[string],source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}],facts:[{statement:string,quote:string,source_id:string,revision:number,start_line:number,end_line:number}],constraints_respected:[string],actions_performed:[string],uncertainties:[string]}. Each fact claim needs an EXACT copied quote substring in supplied evidence.text with current original source span. Display text may paraphrase those claims. Include requested substantive content and supported caveats/unknowns. At least one sourced fact per required source. Do not echo request as a result or guess unseen content. Respect all exclusions and allowed/unknown actions. Preserve necessity and sufficiency of conditional rules: apply a tie-break only if its stated antecedent holds in actual evidence; otherwise keep it conditional or omit a recommendation. No real external action occurs. Return valid JSON only.",
+      "actual_evidence": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        },
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "public-comparison",
+          "start_line": 2,
+          "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다."
+        },
+        {
+          "end_line": 4,
+          "revision": 1,
+          "source_id": "public-comparison",
+          "start_line": 4,
+          "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다."
+        },
+        {
+          "consumer": "RECEIVER",
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "public-quote",
+          "start_line": 1,
+          "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+          "unit": "one_based_line_inclusive"
+        }
+      ],
+      "result": {
+        "text": "회의 메모 초안: 공개 비교 결과에 기반한 미검증 보안 항목 논의\n\n1. 가격 및 기준 현황\n공급업체 공개 견적에 따르면 Aster A는 1,180,000원, Boreal B는 1,150,000원이며 부가세가 포함된다. 12대 구매를 가정하며 배송비는 포함되지만 설치 지원은 별도이다. 사용자에게 표시된 선정 기준은 부가세 포함 가격과 유지보수 기간이며, 가격이 동일할 경우 유지보수 기간이 긴 제품을 우선한다고 안내했다. 설치 편의성은 준비 원고에는 존재했으나 사용자에게는 표시되지 않았다.\n\n2. 기능 및 보안 검증 상태\n동일한 사무 작업 환경에서 두 제품 모두 기존 필수 앱을 실행하였다. 보안 검토 과정에서 두 제품의 디스크 암호화 기능은 확인되었으나, 원격 관리 정책은 아직 검토되지 않았다. 또한 고부하 설계 앱에 대한 시험은 수행되지 않았다.\n\n3. 결론 및 후속 조치\n연구팀은 현재 제품 추천을 확정하지 않았으며, 구매 승인은 별도의 절차이다. 견적서는 계약 완료의 증거가 아니다.",
+        "used_source_ids": [
+          "delivered-guidance",
+          "public-comparison",
+          "public-quote"
+        ],
+        "source_spans": [
+          {
+            "source_id": "delivered-guidance",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          },
+          {
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 2,
+            "end_line": 4
+          },
+          {
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          }
+        ],
+        "facts": [
+          {
+            "statement": "사용자에게 표시된 기준은 부가세 포함 가격과 유지보수 기간이며, 설치 편의는 표시되지 않았다.",
+            "quote": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "source_id": "delivered-guidance",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          },
+          {
+            "statement": "두 제품 모두 기존 필수 앱을 실행했고 디스크 암호화는 확인되었으나, 고부하 설계 앱 시험과 원격 관리 정책 검토는 이루어지지 않았다.",
+            "quote": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 2,
+            "end_line": 3
+          },
+          {
+            "statement": "연구팀은 제품 추천을 확정하지 않았으며 구매 승인은 별도이다.",
+            "quote": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 4,
+            "end_line": 4
+          },
+          {
+            "statement": "Aster A는 1,180,000원, Boreal B는 1,150,000원이며 부가세 포함이고 12대 구매 가정 시 배송비 포함, 설치 지원은 별도이다.",
+            "quote": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 2
+          },
+          {
+            "statement": "견적은 계약 완료 증거가 아니다.",
+            "quote": "견적은 계약 완료 증거가 아니다.",
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 3,
+            "end_line": 3
+          }
+        ],
+        "constraints_respected": [
+          "draft_only",
+          "exclusion_installation_convenience_from_criteria_display",
+          "exclusion_unverified_total_operating_cost",
+          "currency_KRW",
+          "tax_included",
+          "quantity_12",
+          "price_tie_break_longer_maintenance_conditional"
+        ],
+        "actions_performed": [
+          "draft_meeting_memo"
+        ],
+        "uncertainties": [
+          "Remote management policy details remain unreviewed.",
+          "High-load design app performance is untested.",
+          "Final product recommendation is not determined.",
+          "Purchase approval status is separate and pending."
+        ]
+      }
+    },
+    {
+      "stage": "dp05_receiver_repair_result",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/7379ac25-8e7f-40db-b24d-20aa19535fa7-request.json",
+      "system_prompt": "Repair the rejected bounded draft from ONLY actual supplied evidence and mandatory conditions. Return JSON {text:string,used_source_ids:[string],source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}],facts:[{statement:string,quote:string,source_id:string,revision:number,start_line:number,end_line:number}],constraints_respected:[string],actions_performed:[string],uncertainties:[string]}. Display text may paraphrase fact claims; each quote must be EXACTLY present in actual evidence.text at the current cited source span. Include substantive requested facts, not request echo. No forbidden or duplicate actions. Do not strengthen or weaken a condition or apply its preference when its antecedent does not hold. If impossible return text:null and uncertainties. Return valid JSON only.",
+      "actual_evidence": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        },
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "public-comparison",
+          "start_line": 2,
+          "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다."
+        },
+        {
+          "end_line": 4,
+          "revision": 1,
+          "source_id": "public-comparison",
+          "start_line": 4,
+          "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다."
+        },
+        {
+          "consumer": "RECEIVER",
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "public-quote",
+          "start_line": 1,
+          "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+          "unit": "one_based_line_inclusive"
+        }
+      ],
+      "result": {
+        "text": "회의 메모 초안: 공개 비교 결과 기반 미검증 보안 항목 논의\n\n1. 가격 및 선정 기준 현황\n공급업체 공개 견적에 따르면 Aster A는 1,180,000원, Boreal B는 1,150,000원이며 부가세가 포함된다. 12대 구매를 가정하며 배송비는 포함되지만 설치 지원은 별도이다. 사용자에게 표시된 선정 기준은 부가세 포함 가격과 유지보수 기간이며, 가격이 동일할 경우 유지보수 기간이 긴 제품을 우선한다고 안내했다. 설치 편의성은 준비 원고에는 존재했으나 사용자에게는 표시되지 않았다.\n\n2. 기능 및 보안 검증 상태\n동일한 사무 작업 환경에서 두 제품 모두 기존 필수 앱을 실행하였다. 보안 검토 과정에서 두 제품의 디스크 암호화 기능은 확인되었으나, 원격 관리 정책은 아직 검토되지 않았다. 또한 고부하 설계 앱에 대한 시험은 수행되지 않았다.\n\n3. 결론 및 후속 조치\n연구팀은 현재 제품 추천을 확정하지 않았으며, 구매 승인은 별도의 절차이다. 견적서는 계약 완료의 증거가 아니다.",
+        "used_source_ids": [
+          "public-quote",
+          "delivered-guidance",
+          "public-comparison"
+        ],
+        "source_spans": [
+          {
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          },
+          {
+            "source_id": "delivered-guidance",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          },
+          {
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 2,
+            "end_line": 4
+          }
+        ],
+        "facts": [
+          {
+            "statement": "Aster A는 1,180,000원, Boreal B는 1,150,000원이며 부가세 포함이고 12대 구매 가정 시 배송비 포함, 설치 지원은 별도이다.",
+            "quote": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 2
+          },
+          {
+            "statement": "견적은 계약 완료 증거가 아니다.",
+            "quote": "견적은 계약 완료 증거가 아니다.",
+            "source_id": "public-quote",
+            "revision": 1,
+            "start_line": 3,
+            "end_line": 3
+          },
+          {
+            "statement": "사용자에게 표시된 기준은 부가세 포함 가격과 유지보수 기간이며, 설치 편의는 표시되지 않았다.",
+            "quote": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "source_id": "delivered-guidance",
+            "revision": 1,
+            "start_line": 1,
+            "end_line": 3
+          },
+          {
+            "statement": "두 제품 모두 기존 필수 앱을 실행했고 디스크 암호화는 확인되었으나, 고부하 설계 앱 시험과 원격 관리 정책 검토는 이루어지지 않았다.",
+            "quote": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 2,
+            "end_line": 3
+          },
+          {
+            "statement": "연구팀은 제품 추천을 확정하지 않았으며 구매 승인은 별도이다.",
+            "quote": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "source_id": "public-comparison",
+            "revision": 1,
+            "start_line": 4,
+            "end_line": 4
+          }
+        ],
+        "constraints_respected": [
+          "draft_only",
+          "exclusion_installation_convenience_from_criteria_display",
+          "exclusion_unverified_total_operating_cost",
+          "currency_KRW",
+          "tax_included",
+          "quantity_12",
+          "price_tie_break_longer_maintenance_conditional"
+        ],
+        "actions_performed": [
+          "draft_meeting_memo"
+        ],
+        "uncertainties": [
+          "Remote management policy details remain unreviewed.",
+          "High-load design app performance is untested.",
+          "Final product recommendation is not determined.",
+          "Purchase approval status is separate and pending."
+        ]
+      }
+    }
+  ],
+  "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e3-B-r1-a19d4b/trace.json",
+  "actual_provider_calls_by_audit": 0
+}

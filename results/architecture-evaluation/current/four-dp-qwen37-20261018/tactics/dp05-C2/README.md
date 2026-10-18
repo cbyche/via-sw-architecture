@@ -1,0 +1,11 @@
+# DP05 C2 candidate — execution conditional on selecting C
+
+This scratch candidate is prepared before selection. Execute dp05-e3 three times only if the root selects C after all 36 DP05 BASIC results, and only after all 120 BASIC episodes finish. If A/B is selected, retain this as an unexecuted candidate. The baseline is the separately frozen DP05 receiver v2.
+
+C2 caches only results of actual receiver-selected exact source reads. Keys include source ID, revision, exact inclusive line range, access epoch and recipient. Every lookup checks the current revoked flag and allowed range; correction and revocation evict source entries, and access-epoch changes clear entries. Read selection and every model instruction/input/output/max-token/role/call dependency are unchanged. Cached passage values are identical to originally read values and the cache cannot choose a different source or range.
+
+Counters are emitted as `C2_READ_SERVICE` and `C2_CACHE_STATS`: hit/miss, current-access denials, successful source-file reads, evictions, resident entries and servicing nanoseconds. 'Disk read' here means a successful source-file `read_to_string` path; physical storage I/O is not observed and the operating system may already cache pages. Compare BOTH baseline and C2 common receiver-selection-to-read-receipt event intervals for serving time; C2's finer internal elapsed values have no equivalent baseline probe. Use the same sampled RSS and actual model-usage ledgers. Model cost does not become free or lower by definition; variation, no millisecond effect, cache misses and regressions remain visible.
+
+The persisted production variant is `prototypes/candidates/four_dp_poc/variants/dp05-C2-exact-read-cache.rs`; the scratch crate is `/tmp/four_dp_dp05_C2`. `freeze.json` records hashes, exact E3 input/oracle and conditions. `candidate.diff` records all changes relative to v2. `review/` preserves three passing key/access/actual-file-cache checks. The actual-file check proves one repeated exact read hits, revision/epoch changes miss, and revocation blocks a would-be hit. No model or API call was used.
+
+BASIC source, binary, model contracts and results remain unchanged. This cache is bounded by one finite episode/process lifetime; no cross-process durable cache or external-agent capability is claimed.

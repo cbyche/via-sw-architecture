@@ -1,0 +1,2447 @@
+{
+  "scope": "실제 요청 payload와 host read/retention/분기 원장을 연결한 파생 근거. 숫자 before/after는 runtime 정본과 대조.",
+  "read_scope_note": "HANDOFF_SOURCE_READ는 실제 공급한 범위이며 source file read 호출은 전체파일 read_to_string일 수 있다. 물리 디스크 I/O/OS cache miss를 측정한 값이 아니다.",
+  "rows_complete": 8,
+  "actual_provider_calls_by_review": 0,
+  "rows": [
+    {
+      "run_id": "basic_corrected-dp05-e1-A-r1-882645",
+      "variant": "A",
+      "episode": "dp05-e1",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h1-close"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/c2439611-db29-4a4c-ae20-6e1de286637f-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "CLOSE",
+            "purpose": "User explicitly terminates the session after reviewing comparison materials, stating no further delegation is needed.",
+            "completion_condition": "Session closed by user request with no pending downstream tasks.",
+            "recipient": null,
+            "targets": [],
+            "handling": "Acknowledge the completion of the review and close the current task context without generating any new drafts or delegating work.",
+            "artifact_type": null
+          },
+          "input_tokens": 561,
+          "output_tokens": 101,
+          "cost_usd": 0.000386
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [],
+      "reads": [],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e1-A-r1-882645/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e1-B-r1-e36220",
+      "variant": "B",
+      "episode": "dp05-e1",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h1-close"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/8dcf3897-ac81-4067-a05e-7194408405cc-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 2,
+              "text": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 3,
+              "text": "납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 2,
+              "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 3,
+              "text": "보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 4,
+              "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "CLOSE",
+            "purpose": "User explicitly terminates the session without requesting further agent work.",
+            "completion_condition": "User confirmed review completion and stated no delegation intent.",
+            "recipient": null,
+            "targets": [],
+            "handling": "Acknowledge user's confirmation that the review is complete and close the current task context without generating any new drafts or delegating tasks.",
+            "artifact_type": null
+          },
+          "input_tokens": 1035,
+          "output_tokens": 97,
+          "cost_usd": 0.0005692000000000001
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [],
+      "reads": [
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 208875,
+          "event_id": "event-8",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-4"
+          ],
+          "type": "event",
+          "observed_ns": 1907070014261250
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 13189731667,
+          "event_id": "event-25",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-21"
+          ],
+          "type": "event",
+          "observed_ns": 1907083204393541
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 13189932584,
+          "event_id": "event-30",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-26"
+          ],
+          "type": "event",
+          "observed_ns": 1907083204930166
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 29677515917,
+          "event_id": "event-47",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-43"
+          ],
+          "type": "event",
+          "observed_ns": 1907099693301833
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 29677706584,
+          "event_id": "event-52",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-48"
+          ],
+          "type": "event",
+          "observed_ns": 1907099694434583
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e1-B-r1-e36220/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e1-C-r1-56ceca",
+      "variant": "C",
+      "episode": "dp05-e1",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h1-close"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/ba7bfa92-08b5-45a2-9d18-b565b7198043-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "CLOSE",
+            "purpose": "User explicitly requests to end the session without delegating further tasks.",
+            "completion_condition": "No new downstream draft or agent work is required; session closure requested.",
+            "recipient": null,
+            "targets": [],
+            "handling": "Acknowledge user's completion of review and close the current task context without generating any new artifacts.",
+            "artifact_type": null
+          },
+          "input_tokens": 561,
+          "output_tokens": 96,
+          "cost_usd": 0.000378
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [],
+      "reads": [],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e1-C-r1-56ceca/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-A-r1-a5fd69",
+      "variant": "A",
+      "episode": "dp05-e2",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/21457b6b-a258-42c9-b5b9-b682e21810cb-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Create a 4-sentence presentation outline based on public comparison and quote sources, adhering to prior constraints (KRW, tax-included, qty 12, longer maintenance tie-break) and exclusions (installation convenience, unverified total operating cost).",
+            "completion_condition": "A draft text containing exactly 4 sentences covering price, maintenance, and unverified items, without performing external actions.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate the requested 4-sentence outline draft using only the specified source lines and applying the adopted public state constraints.",
+            "artifact_type": "text_draft"
+          },
+          "input_tokens": 671,
+          "output_tokens": 174,
+          "cost_usd": 0.0005468000000000001
+        },
+        {
+          "stage": "dp05_select_handoff_details",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/c5f7f66b-a61f-4def-ab43-866d2ed5d518-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "mode": "READ",
+            "summary": "Initiating READ to acquire semantic details from 'public-comparison' and 'public-quote' sources required to draft the 4-sentence outline covering price, maintenance, and unverified items per constraints.",
+            "references": [],
+            "selected_evidence_spans": [],
+            "selected_record_blocks": [],
+            "reads": [
+              {
+                "source_id": "public-comparison",
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "unknowns": []
+          },
+          "input_tokens": 777,
+          "output_tokens": 164,
+          "cost_usd": 0.0005732000000000001
+        },
+        {
+          "stage": "dp05_compose_capsule",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/1a858fed-800d-4ba2-a177-9f2f38b376ef-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "summary": "Aster A는 1,180,000원이고 Boreal B는 1,150,000원으로, 두 가격 모두 부가세를 포함하며 12대 구매 기준이다. 유지보수 기간은 Aster A가 36개월, Boreal B가 24개월이므로 더 긴 유지보수를 제공하는 Aster A를 우선시한다. 보안 검토에서 디스크 암호화는 확인되었으나 원격 관리 정책은 아직 검토되지 않았으며 고부하 설계 앱 시험도 수행하지 않았다. 설치 지원은 별도이며 견적은 계약 완료 증거가 아니고 연구팀의 제품 추천은 확정되지 않았다.",
+            "unknowns": [
+              "원격 관리 정책 검토 결과",
+              "고부하 설계 앱 성능 시험 결과",
+              "설치 지원 비용 및 내용",
+              "연구팀의 최종 제품 추천",
+              "구매 승인 여부"
+            ]
+          },
+          "input_tokens": 682,
+          "output_tokens": 205,
+          "cost_usd": 0.0006008
+        }
+      ],
+      "retention_events": [
+        {
+          "data": {
+            "actual_via_read_spans": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1
+              },
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1
+              }
+            ],
+            "after_passages": 2,
+            "before_passages": 0,
+            "rejected": [],
+            "scope": "current_authorized_originals_only",
+            "semantic_record_or_capsule_cache": false
+          },
+          "elapsed_ns": 8288141083,
+          "event_id": "event-45",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "COMMON_ORIGINAL_EVIDENCE_RETAINED",
+          "parent_ids": [
+            "source-40"
+          ],
+          "type": "event",
+          "observed_ns": 1907130596058041
+        }
+      ],
+      "build_branches": [
+        {
+          "data": {
+            "branch": "READ_AND_PURPOSE_COMPOSE",
+            "denials": [],
+            "variant": "A"
+          },
+          "elapsed_ns": 13045757083,
+          "event_id": "event-52",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-47"
+          ],
+          "type": "event",
+          "observed_ns": 1907135352627333
+        }
+      ],
+      "reads": [
+        {
+          "data": {
+            "consumer": "VIA_COMPOSER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 8287871375,
+          "event_id": "event-39",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-35"
+          ],
+          "type": "event",
+          "observed_ns": 1907130594978041
+        },
+        {
+          "data": {
+            "consumer": "VIA_COMPOSER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 8288069125,
+          "event_id": "event-44",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-40"
+          ],
+          "type": "event",
+          "observed_ns": 1907130595830375
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e2-A-r1-a5fd69/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-B-r1-3bca2f",
+      "variant": "B",
+      "episode": "dp05-e2",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/837addbb-7052-443a-81d6-71f51f15c40c-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 1,
+              "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 3,
+              "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 3,
+              "text": "납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 2,
+              "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 3,
+              "text": "보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 4,
+              "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Create a 4-sentence presentation outline based on public comparison and quote sources, covering price, maintenance, and unverified items while adhering to prior constraints (tax-included, longer maintenance tie-break) and exclusions (installation convenience).",
+            "completion_condition": "A draft text consisting of exactly four sentences summarizing the key points from the specified sources without performing external actions or sending.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate a bounded text draft of the 4-sentence overview using only the provided source content and prior state constraints.",
+            "artifact_type": "text_draft"
+          },
+          "input_tokens": 1242,
+          "output_tokens": 171,
+          "cost_usd": 0.0007704000000000001
+        },
+        {
+          "stage": "dp05_extract_record",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/509b1321-75b3-4b31-babc-1f13ea1e792a-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 2
+            },
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 3,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 2
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 3,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 2
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 3,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 4,
+              "end_line": 4
+            }
+          ],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "The draft outlines a PC procurement comparison for 12 units, prioritizing price (tax-included) and maintenance duration. Aster A costs 1,180,000 KRW with 36-month maintenance, while Boreal B costs 1,150,000 KRW with 24-month maintenance. Although Boreal B is cheaper, the tie-break rule favors longer maintenance if prices were equal, but here the price difference exists; installation convenience is excluded from user display. Key unverified items include remote management policies and final purchase approval.",
+            "references": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 3,
+                "end_line": 4
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 3,
+                "end_line": 4
+              }
+            ],
+            "selected_record_blocks": [
+              "quote_pricing_shipping",
+              "maintenance_comparison",
+              "displayed_criteria",
+              "security_review_status",
+              "recommendation_and_approval_status"
+            ],
+            "reads": [],
+            "unknowns": [
+              "Status of remote management policies.",
+              "Final product recommendation.",
+              "Purchase approval outcome."
+            ]
+          },
+          "input_tokens": 2356,
+          "output_tokens": 580,
+          "cost_usd": 0.0018704000000000001
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [
+              "quote_pricing_shipping",
+              "maintenance_comparison",
+              "displayed_criteria",
+              "security_review_status",
+              "recommendation_and_approval_status"
+            ],
+            "variant": "B"
+          },
+          "elapsed_ns": 78532094875,
+          "event_id": "event-112",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-107"
+          ],
+          "type": "event",
+          "observed_ns": 1907231341132250
+        }
+      ],
+      "reads": [
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 197834,
+          "event_id": "event-8",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-4"
+          ],
+          "type": "event",
+          "observed_ns": 1907152808304416
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 13156192584,
+          "event_id": "event-25",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-21"
+          ],
+          "type": "event",
+          "observed_ns": 1907165964829500
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 13156393000,
+          "event_id": "event-30",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-26"
+          ],
+          "type": "event",
+          "observed_ns": 1907165965381750
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "delivered-guidance",
+            "start_line": 1,
+            "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 28841666292,
+          "event_id": "event-47",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-43"
+          ],
+          "type": "event",
+          "observed_ns": 1907181651300458
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 28841911000,
+          "event_id": "event-52",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-48"
+          ],
+          "type": "event",
+          "observed_ns": 1907181652357375
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 28842142792,
+          "event_id": "event-57",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-53"
+          ],
+          "type": "event",
+          "observed_ns": 1907181653378250
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "delivered-guidance",
+            "start_line": 1,
+            "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 46398246250,
+          "event_id": "event-74",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-70"
+          ],
+          "type": "event",
+          "observed_ns": 1907199208682041
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 46398427292,
+          "event_id": "event-79",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-75"
+          ],
+          "type": "event",
+          "observed_ns": 1907199209714208
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 46398608042,
+          "event_id": "event-84",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-80"
+          ],
+          "type": "event",
+          "observed_ns": 1907199211037833
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 99914262000,
+          "event_id": "event-134",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-130"
+          ],
+          "type": "event",
+          "observed_ns": 1907252725521333
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 99914363292,
+          "event_id": "event-139",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-135"
+          ],
+          "type": "event",
+          "observed_ns": 1907252727095666
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 3,
+            "text": "보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 99914456125,
+          "event_id": "event-144",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-140"
+          ],
+          "type": "event",
+          "observed_ns": 1907252729024291
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e2-B-r1-3bca2f/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-C-r1-9b6366",
+      "variant": "C",
+      "episode": "dp05-e2",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/8d24f1ef-1b95-4f84-b516-addecadbdc9c-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Create a 4-sentence presentation outline based on public comparison and quote sources, adhering to prior constraints (KRW, tax-included, qty 12, longer maintenance tie-break) and exclusions (installation convenience, unverified total operating cost).",
+            "completion_condition": "A draft text containing exactly 4 sentences covering price, maintenance, and unverified items, without performing external actions.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate the requested 4-sentence outline draft using only the specified source lines and constraints.",
+            "artifact_type": "text_draft"
+          },
+          "input_tokens": 671,
+          "output_tokens": 169,
+          "cost_usd": 0.0005388000000000001
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [],
+      "reads": [
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 7845836166,
+          "event_id": "event-45",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-41"
+          ],
+          "type": "event",
+          "observed_ns": 1907280076669375
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 7846054000,
+          "event_id": "event-50",
+          "goal_ids": [
+            "h2-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-46"
+          ],
+          "type": "event",
+          "observed_ns": 1907280078034833
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e2-C-r1-9b6366/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r1-f6a5a1",
+      "variant": "A",
+      "episode": "dp05-e3",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/41c8aba4-6681-4e0d-a4ee-8d0101a0389d-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Create a presentation outline based on public comparison and quote sources, incorporating price, maintenance, and unverified review sections while adhering to prior constraints (KRW, tax-included, qty 12, longer maintenance tie-break) and exclusions.",
+            "completion_condition": "A structured text draft of the presentation outline is generated, referencing specific lines from the required sources, without performing any external actions or sending communications.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate a bounded text draft of the presentation outline using only the allowed lines from 'public-comparison' and 'public-quote', ensuring all prior constraints and exclusions are respected.",
+            "artifact_type": "text_draft"
+          },
+          "input_tokens": 668,
+          "output_tokens": 188,
+          "cost_usd": 0.000568
+        },
+        {
+          "stage": "dp05_select_handoff_details",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/0514b9e3-4289-4a12-a6dd-c0d6d7f98036-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "mode": "READ",
+            "summary": "Initiating READ to acquire specific line content from 'public-comparison' and 'public-quote' sources required to construct the presentation outline draft, as no current evidence spans are available.",
+            "references": [],
+            "selected_evidence_spans": [],
+            "selected_record_blocks": [],
+            "reads": [
+              {
+                "source_id": "public-comparison",
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "unknowns": []
+          },
+          "input_tokens": 779,
+          "output_tokens": 160,
+          "cost_usd": 0.0005676
+        },
+        {
+          "stage": "dp05_compose_capsule",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/5ce66142-dd35-4269-9ad0-5b1f4e7e70ba-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "summary": "공개 비교 결과 Aster A는 유지보수 36개월, Boreal B는 24개월이며, 같은 사무 작업에서 기존 필수 앱을 실행했으나 고부하 설계 앱은 시험하지 않았다. 보안 검토에서는 디스크 암호화만 확인했고 원격 관리 정책은 미검토다. 연구팀은 제품 추천을 확정하지 않았으며 구매 승인은 별도다. 공개 견적에 따르면 Aster A는 1,180,000원, Boreal B는 1,150,000원(부가세 포함)이며, 12대 구매 가정 시 배송비는 포함되고 설치 지원은 별도다. 납기는 각각 11월 1일과 11월 3일이며 견적은 계약 완료 증거가 아니다.",
+            "unknowns": [
+              "고부하 설계 앱 성능",
+              "원격 관리 정책 검토 결과",
+              "제품 추천 확정 여부",
+              "설치 지원 비용 및 내용",
+              "견적의 계약 효력"
+            ]
+          },
+          "input_tokens": 684,
+          "output_tokens": 233,
+          "cost_usd": 0.0006464000000000001
+        },
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/9ef5c250-34ee-4f7a-b35d-3c947bd7dc22-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, including price and delivery dates, while adhering to prior constraints (KRW currency, 12 units, tax included, price tie-break by longer maintenance) and exclusions (installation convenience, unverified total operating cost).",
+            "completion_condition": "A text draft of the email is generated using only the provided source evidence, without any external sending or real-world execution.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate a bounded text draft for the email body that synthesizes the maintenance periods, application compatibility status, security review limits, prices, quantities, and delivery dates from the sources, explicitly noting that installation support is separate and the quote is not proof of contract, while respecting the 'draft only' constraint.",
+            "artifact_type": "email_draft"
+          },
+          "input_tokens": 935,
+          "output_tokens": 218,
+          "cost_usd": 0.0007228
+        },
+        {
+          "stage": "dp05_select_handoff_details",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/d3d58078-face-490e-8a0e-46f91de3b6c1-request.json",
+          "actual_common_raw": [
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "Draft email to purchasing manager comparing Aster A and Boreal B based on public evidence. Aster A (1,180,000 KRW) has longer maintenance (36 months) vs Boreal B (1,150,000 KRW, 24 months). Per tie-break rule, Aster A is preferred despite higher price. Delivery: Nov 1 (A), Nov 3 (B). Excludes installation and unverified costs.",
+            "references": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 3,
+                "end_line": 3
+              }
+            ],
+            "selected_record_blocks": [],
+            "reads": [],
+            "unknowns": []
+          },
+          "input_tokens": 1068,
+          "output_tokens": 364,
+          "cost_usd": 0.0010096
+        },
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/5e8cbf30-3860-4d67-bb9b-ba4995d22fc3-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Draft a meeting memo discussing unverified security items from the public comparison results, distinguishing between verified and unverified security scopes.",
+            "completion_condition": "A text draft of the meeting memo is generated, strictly adhering to prior constraints (KRW currency, price tie-break by longer maintenance, quantity 12, tax included) and exclusions (installation_convenience, unverified_total_operating_cost), without performing any external actions.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "handling": "Generate a bounded text draft of a meeting memo that highlights the verified disk encryption and the unverified remote management policy based on 'public-comparison', while respecting the pricing and maintenance context from 'public-quote' and prior state constraints.",
+            "artifact_type": "meeting_memo_draft"
+          },
+          "input_tokens": 935,
+          "output_tokens": 204,
+          "cost_usd": 0.0007004000000000001
+        },
+        {
+          "stage": "dp05_select_handoff_details",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/a7351f12-492c-411d-a5bc-900d30f317df-request.json",
+          "actual_common_raw": [
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "Draft meeting memo focusing on unverified security items (remote management policy) from public comparison, distinguishing from verified disk encryption. Adhere to constraints: KRW currency, price tie-break by longer maintenance (Aster A), quantity 12, tax included. Exclude installation convenience and unverified total operating cost.",
+            "references": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 3,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              }
+            ],
+            "selected_record_blocks": [],
+            "reads": [],
+            "unknowns": []
+          },
+          "input_tokens": 1070,
+          "output_tokens": 330,
+          "cost_usd": 0.000956
+        }
+      ],
+      "retention_events": [
+        {
+          "data": {
+            "actual_via_read_spans": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1
+              },
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1
+              }
+            ],
+            "after_passages": 2,
+            "before_passages": 0,
+            "rejected": [],
+            "scope": "current_authorized_originals_only",
+            "semantic_record_or_capsule_cache": false
+          },
+          "elapsed_ns": 8158645833,
+          "event_id": "event-45",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "COMMON_ORIGINAL_EVIDENCE_RETAINED",
+          "parent_ids": [
+            "source-40"
+          ],
+          "type": "event",
+          "observed_ns": 1907301681377583
+        }
+      ],
+      "build_branches": [
+        {
+          "data": {
+            "branch": "READ_AND_PURPOSE_COMPOSE",
+            "denials": [],
+            "variant": "A"
+          },
+          "elapsed_ns": 12916785708,
+          "event_id": "event-52",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-47"
+          ],
+          "type": "event",
+          "observed_ns": 1907306438366583
+        },
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [],
+            "variant": "A"
+          },
+          "elapsed_ns": 49029030458,
+          "event_id": "event-87",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-82"
+          ],
+          "type": "event",
+          "observed_ns": 1907342551019708
+        },
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [],
+            "variant": "A"
+          },
+          "elapsed_ns": 75482243958,
+          "event_id": "event-122",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-117"
+          ],
+          "type": "event",
+          "observed_ns": 1907369004991375
+        }
+      ],
+      "reads": [
+        {
+          "data": {
+            "consumer": "VIA_COMPOSER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 8158377333,
+          "event_id": "event-39",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-35"
+          ],
+          "type": "event",
+          "observed_ns": 1907301679957208
+        },
+        {
+          "data": {
+            "consumer": "VIA_COMPOSER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 8158569750,
+          "event_id": "event-44",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-40"
+          ],
+          "type": "event",
+          "observed_ns": 1907301681132208
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e3-A-r1-f6a5a1/trace.json"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r1-a19d4b",
+      "variant": "B",
+      "episode": "dp05-e3",
+      "rep": 1,
+      "actual_calls": [
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/d756c377-3354-43c3-a5f9-b460723c1622-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 1,
+              "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 2,
+              "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 2,
+              "text": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 2,
+              "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 4,
+              "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Create a presentation outline explaining public comparison and quotes, covering price, maintenance, and unverified reviews.",
+            "completion_condition": "A text draft of the presentation outline is generated, adhering to prior constraints (KRW, tax-included, quantity 12, tie-break by longer maintenance) and exclusions (installation convenience, unverified total operating cost).",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-quote",
+              "public-comparison"
+            ],
+            "handling": "Generate a structured outline for a presentation based on the provided public sources, ensuring installation convenience is excluded and price/maintenance logic follows the adopted state.",
+            "artifact_type": "presentation_outline_draft"
+          },
+          "input_tokens": 1213,
+          "output_tokens": 173,
+          "cost_usd": 0.000762
+        },
+        {
+          "stage": "dp05_extract_record",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/4f26e222-50cd-4b1b-9c52-521b43c22b6f-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 3
+            },
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 2
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 4,
+              "end_line": 4
+            }
+          ],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "Presentation outline draft generated based on public comparison and quote data. Covers displayed criteria (price with VAT, maintenance period), selection rule (longer maintenance tie-break), specific pricing (Aster A: 1,180,000 KRW, Boreal B: 1,150,000 KRW), maintenance terms (36 vs 24 months), logistics (12 units, shipping included, installation separate), and unverified aspects (high-load apps, remote management). Excludes installation convenience and unverified total operating costs as per constraints.",
+            "references": [
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 4
+              }
+            ],
+            "selected_record_blocks": [
+              "displayed_criteria",
+              "selection_rule",
+              "quote_pricing_vat",
+              "maintenance_terms",
+              "quote_logistics_status",
+              "app_security_status",
+              "recommendation_status"
+            ],
+            "reads": [],
+            "unknowns": [
+              "Remote management policy details.",
+              "Final product recommendation.",
+              "Purchase approval status.",
+              "Installation support costs and terms."
+            ]
+          },
+          "input_tokens": 2323,
+          "output_tokens": 600,
+          "cost_usd": 0.0018892
+        },
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/a4f3fead-5832-4df3-8f22-c8bc0831114f-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 1,
+              "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 2,
+              "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 2,
+              "text": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 2,
+              "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 4,
+              "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, including price and delivery dates, while adhering to prior constraints (tax-included prices, maintenance tie-breaker) and exclusions (installation convenience).",
+            "completion_condition": "A text draft of the email is generated for review, without any external sending action.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-quote",
+              "public-comparison"
+            ],
+            "handling": "Generate a bounded text draft of the email based on the specified sources and constraints.",
+            "artifact_type": "email_draft"
+          },
+          "input_tokens": 1214,
+          "output_tokens": 152,
+          "cost_usd": 0.0007288
+        },
+        {
+          "stage": "dp05_extract_record",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/0870c284-2f60-421b-b0db-fe5cac7b5bbc-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 3
+            },
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 2
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 4,
+              "end_line": 4
+            }
+          ],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "Draft email to purchasing manager detailing public comparison results for Aster A and Boreal B. Key points: Prices are tax-included (Aster A: 1,180,000 KRW, Boreal B: 1,150,000 KRW). Delivery dates are Nov 1 (A) and Nov 3 (B). Maintenance terms are 36 months (A) and 24 months (B). Selection criteria prioritized price and maintenance length; installation convenience was excluded from displayed criteria. High-load app performance and remote management policies remain unverified. No final recommendation or purchase approval has been made.",
+            "references": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 1
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 3
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              }
+            ],
+            "selected_record_blocks": [
+              "quote_pricing_vat",
+              "quote_logistics_status",
+              "maintenance_terms",
+              "app_security_status",
+              "displayed_criteria",
+              "selection_rule"
+            ],
+            "reads": [],
+            "unknowns": [
+              "Remote management policy details.",
+              "Final product recommendation.",
+              "Purchase approval status.",
+              "Installation support costs and terms."
+            ]
+          },
+          "input_tokens": 2313,
+          "output_tokens": 608,
+          "cost_usd": 0.001898
+        },
+        {
+          "stage": "dp05_interpret_user_request",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/6fd7f981-5286-42be-abe7-6e6c5ecf6f1d-request.json",
+          "actual_common_raw": [
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 1,
+              "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "delivered-guidance",
+              "start_line": 2,
+              "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 1,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 2,
+              "text": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 2,
+              "text": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 4,
+              "text": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "work_record_supporting_raw_spans": [],
+          "model_response": {
+            "action": "DELEGATE",
+            "purpose": "Draft a meeting memo discussing unverified security items from the public comparison results, distinguishing between verified and unverified security scopes.",
+            "completion_condition": "A text draft of the meeting memo is generated, strictly adhering to prior constraints (draft only, no sending) and exclusions (installation_convenience, unverified_total_operating_cost), using only the specified source IDs.",
+            "recipient": "minimal-draft-agent",
+            "targets": [
+              "public-comparison"
+            ],
+            "handling": "Generate a bounded text draft of the meeting memo focusing on the security review status (disk encryption verified vs. remote management policy unverified) as found in public-comparison, while respecting the exclusion of installation convenience and avoiding any external actions.",
+            "artifact_type": "meeting_memo_draft"
+          },
+          "input_tokens": 1214,
+          "output_tokens": 187,
+          "cost_usd": 0.0007848
+        },
+        {
+          "stage": "dp05_extract_record",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/model/dc3ba6d9-0e5a-43cd-a55f-2c14cd8ae46d-request.json",
+          "actual_common_raw": [],
+          "work_record_supporting_raw_spans": [
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 3
+            },
+            {
+              "source_id": "delivered-guidance",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 2
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 1,
+              "end_line": 1
+            },
+            {
+              "source_id": "public-quote",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 2,
+              "end_line": 3
+            },
+            {
+              "source_id": "public-comparison",
+              "revision": 1,
+              "start_line": 4,
+              "end_line": 4
+            }
+          ],
+          "model_response": {
+            "mode": "DIRECT",
+            "summary": "Draft meeting memo focusing on unverified security items from public comparison results, distinguishing verified (disk encryption, essential apps) from unverified scopes (high-load apps, remote management policies), while adhering to constraints (KRW, tax-included, quantity 12, longer maintenance tie-break) and exclusions (installation convenience, unverified total operating cost).",
+            "references": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 4,
+                "end_line": 4
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 2,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 4,
+                "end_line": 4
+              }
+            ],
+            "selected_record_blocks": [
+              "app_security_status",
+              "recommendation_status",
+              "displayed_criteria"
+            ],
+            "reads": [],
+            "unknowns": [
+              "Remote management policy details.",
+              "Final product recommendation.",
+              "Purchase approval status."
+            ]
+          },
+          "input_tokens": 2321,
+          "output_tokens": 393,
+          "cost_usd": 0.0015572000000000003
+        }
+      ],
+      "retention_events": [],
+      "build_branches": [
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [
+              "displayed_criteria",
+              "selection_rule",
+              "quote_pricing_vat",
+              "maintenance_terms",
+              "quote_logistics_status",
+              "app_security_status",
+              "recommendation_status"
+            ],
+            "variant": "B"
+          },
+          "elapsed_ns": 75506732000,
+          "event_id": "event-112",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-107"
+          ],
+          "type": "event",
+          "observed_ns": 1907460149419125
+        },
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [
+              "quote_pricing_vat",
+              "quote_logistics_status",
+              "maintenance_terms",
+              "app_security_status",
+              "displayed_criteria",
+              "selection_rule"
+            ],
+            "variant": "B"
+          },
+          "elapsed_ns": 140214953500,
+          "event_id": "event-176",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-171"
+          ],
+          "type": "event",
+          "observed_ns": 1907524858521416
+        },
+        {
+          "data": {
+            "branch": "DIRECT_VALID_REFERENCES_OR_AVAILABLE_EVIDENCE_OR_RECORD",
+            "selected_record_blocks": [
+              "app_security_status",
+              "recommendation_status",
+              "displayed_criteria"
+            ],
+            "variant": "B"
+          },
+          "elapsed_ns": 176824444334,
+          "event_id": "event-211",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "kind": "HANDOFF_BUILD_BRANCH",
+          "parent_ids": [
+            "operation-206"
+          ],
+          "type": "event",
+          "observed_ns": 1907561469922333
+        }
+      ],
+      "reads": [
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 184917,
+          "event_id": "event-8",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-4"
+          ],
+          "type": "event",
+          "observed_ns": 1907384642060291
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 9287013334,
+          "event_id": "event-25",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-21"
+          ],
+          "type": "event",
+          "observed_ns": 1907393929470833
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 9287205709,
+          "event_id": "event-30",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-26"
+          ],
+          "type": "event",
+          "observed_ns": 1907393930041875
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "delivered-guidance",
+            "start_line": 1,
+            "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 26104297542,
+          "event_id": "event-47",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-43"
+          ],
+          "type": "event",
+          "observed_ns": 1907410748208875
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 26104506000,
+          "event_id": "event-52",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-48"
+          ],
+          "type": "event",
+          "observed_ns": 1907410749156791
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 26104703417,
+          "event_id": "event-57",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-53"
+          ],
+          "type": "event",
+          "observed_ns": 1907410750482666
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "delivered-guidance",
+            "start_line": 1,
+            "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 43221292417,
+          "event_id": "event-74",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-70"
+          ],
+          "type": "event",
+          "observed_ns": 1907427864815458
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 43221409459,
+          "event_id": "event-79",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-75"
+          ],
+          "type": "event",
+          "observed_ns": 1907427865746791
+        },
+        {
+          "data": {
+            "consumer": "VIA_RECORD_PRODUCER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 43221526042,
+          "event_id": "event-84",
+          "goal_ids": [],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-80"
+          ],
+          "type": "event",
+          "observed_ns": 1907427866640000
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "delivered-guidance",
+            "start_line": 1,
+            "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 100533639209,
+          "event_id": "event-134",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-130"
+          ],
+          "type": "event",
+          "observed_ns": 1907485181914750
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 100533826375,
+          "event_id": "event-139",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-135"
+          ],
+          "type": "event",
+          "observed_ns": 1907485185084125
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 4,
+            "revision": 1,
+            "source_id": "public-comparison",
+            "start_line": 1,
+            "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 100534014375,
+          "event_id": "event-144",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-140"
+          ],
+          "type": "event",
+          "observed_ns": 1907485188012708
+        },
+        {
+          "data": {
+            "consumer": "RECEIVER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          "elapsed_ns": 179946093125,
+          "event_id": "event-227",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "kind": "HANDOFF_SOURCE_READ",
+          "parent_ids": [
+            "source-223"
+          ],
+          "type": "event",
+          "observed_ns": 1907564599141958
+        }
+      ],
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-corrected-v1/raw/runs/basic_corrected-dp05-e3-B-r1-a19d4b/trace.json"
+    }
+  ],
+  "phase_status": "STOPPED_INTERMEDIATE_11_COMPLETE_25_NOT_EXECUTED",
+  "final_comparison_eligible": false,
+  "superseded_for_final_comparison_by": "basic-dp05-reuse-union-corrected-v2",
+  "preservation_note": "기존 판정/실제본문/원시연결을 유지한다. union-span host 계약 교정 후 새36/54/63검토는 별도파일이며 이중간결과를 최종성공률로 합치지 않는다."
+}

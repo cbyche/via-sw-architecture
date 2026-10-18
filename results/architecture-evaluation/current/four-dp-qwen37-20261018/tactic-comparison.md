@@ -1,0 +1,742 @@
+# Same-case basic and tactic comparison
+
+DISPLAY_PROXY, Voice OFF. Three repetitions of the same affected authored episode; B4 is a scheduling diagnostic. QA04 was not remeasured for tactics.
+
+|DP / tactic / case|Stage|Runs|QA01 ms / missing|QA02 exact|QA03 ms / missing|VIA $|Receiver $|RSS max MB|Runtime errors|
+|---|---|---:|---|---|---|---:|---:|---:|---:|
+|01 A2 dp01-e3 (TACTIC)|before|3|8385.309 / 0|6/6|8385.361 / 0|0.0060360|0.0000000|38.748|0|
+|01 A2 dp01-e3 (TACTIC)|after|3|7800.453 / 0|6/6|7800.503 / 0|0.0061700|0.0000000|38.371|0|
+|02 A1 02-E2 (TACTIC)|before|3|11738.600 / 0|0/0|11738.708 / 0|0.0104500|0.0000000|38.732|0|
+|02 A1 02-E2 (TACTIC)|after|3|7553.355 / 0|0/0|7553.523 / 0|0.0078872|0.0000000|38.240|0|
+|04 A4 dp04-dense (TACTIC)|before|3|6854.310 / 0|0/6|6854.360 / 0|0.0032388|0.0000000|38.748|0|
+|04 A4 dp04-dense (TACTIC)|after|3|35066.846 / 2|0/6|35066.884 / 2|0.0173976|0.0000000|38.765|2|
+|05 C2 dp05-e3 (TACTIC)|before|3|0.024 / 0|0/0|20.729 / 0|0.0000000|0.0182260|39.092|0|
+|05 C2 dp05-e3 (TACTIC)|after|3|0.022 / 0|0/0|24.372 / 0|0.0000000|0.0181268|39.207|0|
+|04 B4 dp04-dense (DIAGNOSTIC)|before|3|27812.927 / 0|0/6|27812.962 / 0|0.0096588|0.0000000|39.174|0|
+|04 B4 dp04-dense (DIAGNOSTIC)|after|3|22965.194 / 0|2/6|22965.227 / 0|0.0096588|0.0000000|39.944|0|
+
+## 01 A2 individual repetitions
+
+```json
+{
+  "before": [
+    {
+      "rep": 1,
+      "run_id": "basic-dp01-e3-A-r1-e83530",
+      "qa01_ms": 8229.67425,
+      "qa03_ms": 8229.7342085,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0019960000000000004,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.387712,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 7596.918208,
+          "qa03_ms": 7596.978417
+        },
+        "e3-q2": {
+          "qa01_ms": 8862.430292,
+          "qa03_ms": 8862.49
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "basic-dp01-e3-A-r2-8529aa",
+      "qa01_ms": 8196.500083,
+      "qa03_ms": 8196.544375000001,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0020152,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.518784,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 7971.114208,
+          "qa03_ms": 7971.158625
+        },
+        "e3-q2": {
+          "qa01_ms": 8421.885958,
+          "qa03_ms": 8421.930125
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "basic-dp01-e3-A-r3-55a0f5",
+      "qa01_ms": 8729.7531875,
+      "qa03_ms": 8729.804063,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0020248,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.74816,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 9057.857625,
+          "qa03_ms": 9057.910417
+        },
+        "e3-q2": {
+          "qa01_ms": 8401.64875,
+          "qa03_ms": 8401.697709
+        }
+      }
+    }
+  ],
+  "after": [
+    {
+      "rep": 1,
+      "run_id": "tactic-dp01-e3-A-r1-cd959a",
+      "qa01_ms": 8005.1741250000005,
+      "qa03_ms": 8005.226875,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0020508,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.060032,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 8427.891916,
+          "qa03_ms": 8427.949083
+        },
+        "e3-q2": {
+          "qa01_ms": 7582.456334,
+          "qa03_ms": 7582.504667
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "tactic-dp01-e3-A-r2-a18cef",
+      "qa01_ms": 7814.665583,
+      "qa03_ms": 7814.716646,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0020636,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.371328,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 8146.146666,
+          "qa03_ms": 8146.198875
+        },
+        "e3-q2": {
+          "qa01_ms": 7483.1845,
+          "qa03_ms": 7483.234417
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "tactic-dp01-e3-A-r3-6a5e82",
+      "qa01_ms": 7581.5189585,
+      "qa03_ms": 7581.5655415,
+      "qa02": [
+        2,
+        2
+      ],
+      "via_cost_usd": 0.0020556000000000003,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.17472,
+      "per_stimulus": {
+        "e3-q1": {
+          "qa01_ms": 7491.925292,
+          "qa03_ms": 7491.975625
+        },
+        "e3-q2": {
+          "qa01_ms": 7671.112625,
+          "qa03_ms": 7671.155458
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## 02 A1 individual repetitions
+
+```json
+{
+  "before": [
+    {
+      "rep": 1,
+      "run_id": "basic-02-E2-A-r1-4705fa",
+      "qa01_ms": 9534.398291,
+      "qa03_ms": 9534.4817705,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.003098,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.551552,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 9599.576791,
+          "qa03_ms": 9599.711375
+        },
+        "U2": {
+          "qa01_ms": 9469.219791,
+          "qa03_ms": 9469.252166
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "basic-02-E2-A-r2-3b4239",
+      "qa01_ms": 17006.746895999997,
+      "qa03_ms": 17006.906396,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.0041964,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.731776,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 17071.999417,
+          "qa03_ms": 17072.292667
+        },
+        "U2": {
+          "qa01_ms": 16941.494375,
+          "qa03_ms": 16941.520125
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "basic-02-E2-A-r3-4d1357",
+      "qa01_ms": 8674.6537705,
+      "qa03_ms": 8674.7361035,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.0031555999999999997,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.5024,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 8739.828375,
+          "qa03_ms": 8739.963291
+        },
+        "U2": {
+          "qa01_ms": 8609.479166,
+          "qa03_ms": 8609.508916
+        }
+      }
+    }
+  ],
+  "after": [
+    {
+      "rep": 1,
+      "run_id": "tactic-02-E2-A-r1-4b48e9",
+      "qa01_ms": 5503.159771000001,
+      "qa03_ms": 5503.2697915,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.002164,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.109184,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 6335.7875,
+          "qa03_ms": 6335.921875
+        },
+        "U2": {
+          "qa01_ms": 4670.532042,
+          "qa03_ms": 4670.617708
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "tactic-02-E2-A-r2-d9f3d5",
+      "qa01_ms": 8063.5895625,
+      "qa03_ms": 8063.7833125,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.0027480000000000004,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.191104,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 12227.258125,
+          "qa03_ms": 12227.572
+        },
+        "U2": {
+          "qa01_ms": 3899.921,
+          "qa03_ms": 3899.994625
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "tactic-02-E2-A-r3-6fbd14",
+      "qa01_ms": 9093.316125,
+      "qa03_ms": 9093.5162085,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0.0029752,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.240256,
+      "per_stimulus": {
+        "R1": {
+          "qa01_ms": 14513.167667,
+          "qa03_ms": 14513.478834
+        },
+        "U2": {
+          "qa01_ms": 3673.464583,
+          "qa03_ms": 3673.553583
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## 04 A4 individual repetitions
+
+```json
+{
+  "before": [
+    {
+      "rep": 1,
+      "run_id": "basic-dp04-dense-A-r1-f6c431",
+      "qa01_ms": 6450.659917,
+      "qa03_ms": 6450.725209,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.001062,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.74816,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 6450.659917,
+          "qa03_ms": 6450.725209
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "basic-dp04-dense-A-r2-5948ce",
+      "qa01_ms": 6610.482125,
+      "qa03_ms": 6610.517167,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0010796,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.617088,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 6610.482125,
+          "qa03_ms": 6610.517167
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "basic-dp04-dense-A-r3-2b9a3f",
+      "qa01_ms": 7501.787458,
+      "qa03_ms": 7501.837542,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0010972,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.567936,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 7501.787458,
+          "qa03_ms": 7501.837542
+        }
+      }
+    }
+  ],
+  "after": [
+    {
+      "rep": 1,
+      "run_id": "tactic-dp04-dense-A4-r1-eab22d",
+      "qa01_ms": null,
+      "qa03_ms": null,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0063336,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.436864,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": null,
+          "qa03_ms": null
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "tactic-dp04-dense-A4-r2-36471d",
+      "qa01_ms": 35066.846208,
+      "qa03_ms": 35066.883875,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0047304,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.649856,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 35066.846208,
+          "qa03_ms": 35066.883875
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "tactic-dp04-dense-A4-r3-8160b9",
+      "qa01_ms": null,
+      "qa03_ms": null,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0063336,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.764544,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": null,
+          "qa03_ms": null
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## 05 C2 individual repetitions
+
+```json
+{
+  "before": [
+    {
+      "rep": 1,
+      "run_id": "basic-dp05-e3-C-r1-b13464",
+      "qa01_ms": 0.027903,
+      "qa03_ms": 19.386972,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.0061084,
+      "rss_peak_mb": 38.600704,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.006584,
+          "qa03_ms": 18.40625
+        },
+        "h3-mail": {
+          "qa01_ms": 0.050583,
+          "qa03_ms": 18.4495
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.026542,
+          "qa03_ms": 21.305166
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "basic-dp05-e3-C-r2-697dbd",
+      "qa01_ms": 0.022639,
+      "qa03_ms": 18.843708,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.0061484,
+      "rss_peak_mb": 38.944768,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.013958,
+          "qa03_ms": 18.829958
+        },
+        "h3-mail": {
+          "qa01_ms": 0.0295,
+          "qa03_ms": 19.196791
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.024459,
+          "qa03_ms": 18.504375
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "basic-dp05-e3-C-r3-96503c",
+      "qa01_ms": 0.022708333333333334,
+      "qa03_ms": 23.955471666666668,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.0059692,
+      "rss_peak_mb": 39.092224,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.011625,
+          "qa03_ms": 22.136083
+        },
+        "h3-mail": {
+          "qa01_ms": 0.028792,
+          "qa03_ms": 26.90825
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.027708,
+          "qa03_ms": 22.822082
+        }
+      }
+    }
+  ],
+  "after": [
+    {
+      "rep": 1,
+      "run_id": "tactic-dp05-e3-C-r1-807ef7",
+      "qa01_ms": 0.021541666666666667,
+      "qa03_ms": 25.510000333333334,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.006002800000000001,
+      "rss_peak_mb": 38.928384,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.0135,
+          "qa03_ms": 27.72625
+        },
+        "h3-mail": {
+          "qa01_ms": 0.026417,
+          "qa03_ms": 25.718667
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.024708,
+          "qa03_ms": 23.085084
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "tactic-dp05-e3-C-r2-7cb3e0",
+      "qa01_ms": 0.023930333333333335,
+      "qa03_ms": 23.275639,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.0055964000000000005,
+      "rss_peak_mb": 39.043072,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.0205,
+          "qa03_ms": 22.136708
+        },
+        "h3-mail": {
+          "qa01_ms": 0.024583,
+          "qa03_ms": 21.695333
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.026708,
+          "qa03_ms": 25.994876
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "tactic-dp05-e3-C-r3-10ae38",
+      "qa01_ms": 0.021277666666666667,
+      "qa03_ms": 24.331568666666666,
+      "qa02": [
+        0,
+        0
+      ],
+      "via_cost_usd": 0,
+      "receiver_cost_usd": 0.0065276,
+      "rss_peak_mb": 39.206912,
+      "per_stimulus": {
+        "h3-deck": {
+          "qa01_ms": 0.012583,
+          "qa03_ms": 19.838499
+        },
+        "h3-mail": {
+          "qa01_ms": 0.023792,
+          "qa03_ms": 22.793707
+        },
+        "h3-meeting": {
+          "qa01_ms": 0.027458,
+          "qa03_ms": 30.3625
+        }
+      }
+    }
+  ]
+}
+```
+
+
+## 04 B4 individual repetitions
+
+```json
+{
+  "before": [
+    {
+      "rep": 1,
+      "run_id": "basic-dp04-dense-B-r1-eed867",
+      "qa01_ms": 28086.062917,
+      "qa03_ms": 28086.102667,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 38.715392,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 28086.062917,
+          "qa03_ms": 28086.102667
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "basic-dp04-dense-B-r2-d07234",
+      "qa01_ms": 27627.554417,
+      "qa03_ms": 27627.589,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 39.043072,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 27627.554417,
+          "qa03_ms": 27627.589
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "basic-dp04-dense-B-r3-e81f99",
+      "qa01_ms": 27725.162833,
+      "qa03_ms": 27725.194417,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 39.174144,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 27725.162833,
+          "qa03_ms": 27725.194417
+        }
+      }
+    }
+  ],
+  "after": [
+    {
+      "rep": 1,
+      "run_id": "diagnostic-dp04-dense-B4-r1-c8cbc6",
+      "qa01_ms": 23046.126416,
+      "qa03_ms": 23046.157791,
+      "qa02": [
+        1,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 39.469056,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 23046.126416,
+          "qa03_ms": 23046.157791
+        }
+      }
+    },
+    {
+      "rep": 2,
+      "run_id": "diagnostic-dp04-dense-B4-r2-fbee36",
+      "qa01_ms": 22948.85575,
+      "qa03_ms": 22948.887625,
+      "qa02": [
+        0,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 39.682048,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 22948.85575,
+          "qa03_ms": 22948.887625
+        }
+      }
+    },
+    {
+      "rep": 3,
+      "run_id": "diagnostic-dp04-dense-B4-r3-d3050e",
+      "qa01_ms": 22900.600333,
+      "qa03_ms": 22900.637041,
+      "qa02": [
+        1,
+        2
+      ],
+      "via_cost_usd": 0.0032196,
+      "receiver_cost_usd": 0,
+      "rss_peak_mb": 39.944192,
+      "per_stimulus": {
+        "dp04-dense:r1": {
+          "qa01_ms": 22900.600333,
+          "qa03_ms": 22900.637041
+        }
+      }
+    }
+  ]
+}
+```
+

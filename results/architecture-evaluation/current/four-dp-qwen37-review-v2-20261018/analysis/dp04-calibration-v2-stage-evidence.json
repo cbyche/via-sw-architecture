@@ -1,0 +1,811 @@
+{
+  "source_runs_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2/runs.jsonl",
+  "source_runs_sha256": "644510447955dcd7df924785c611015dc46b50513b657b6352d50893134409f0",
+  "rows": [
+    {
+      "run_id": "calibration_v2-dp04-dense-A-r1-cae917",
+      "phase": "CALIBRATION_V2",
+      "episode": "dp04-dense",
+      "variant": "A",
+      "repetition": 1,
+      "freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+      "binary_sha256": "e20c2f3575dbca3ec5082363a32fec942a19860d26bc5ebaa798f6f6e816c216",
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 1,
+          "input_tokens": 2247,
+          "output_tokens": 472,
+          "cost_usd": 0.001654,
+          "provider_elapsed_ms": [
+            8575.935958
+          ],
+          "queue_ms": [
+            1.532417
+          ],
+          "call_uuids": [
+            "bfe9afda-9623-44c6-bbc9-a28a6fe557ef"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.joint_source_reread": {
+          "calls": 1,
+          "input_tokens": 2635,
+          "output_tokens": 472,
+          "cost_usd": 0.0018092,
+          "provider_elapsed_ms": [
+            8621.241625
+          ],
+          "queue_ms": [
+            3.195584
+          ],
+          "call_uuids": [
+            "caf2bea2-fa78-4118-9303-4d9757e946a4"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 4882,
+      "total_output_tokens": 944,
+      "total_cost_usd": 0.0034632,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 12,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "GROUNDING_CONSISTENCY_REJECTED": 2,
+        "BOUNDED_SOURCE_REREAD": 1,
+        "ADOPTION": 2,
+        "GOAL_FAILED": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [
+        {
+          "attempt": 0,
+          "issues": [
+            "POINT_OUTSIDE_CLAIMED_EXTENT:\"D06 / Orion\"",
+            "INVALID_FRAME_OR_BBOX:\"D11 / Orion\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2247,
+              "output_tokens": 472
+            },
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-1"
+                ],
+                "evidence": "Pointer-1 (375,315) falls inside D06 card bbox [275,380,475,580]",
+                "expression_id": "dense-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      275,
+                      380,
+                      475,
+                      580
+                    ],
+                    "frame_id": "dense",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D06 / Orion"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-2"
+                ],
+                "evidence": "Pointer-2 (630,480) falls inside D11 card bbox [525,630,725,830]",
+                "expression_id": "dense-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      525,
+                      630,
+                      725,
+                      830
+                    ],
+                    "frame_id": "dense",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D11 / Orion"
+                ]
+              }
+            ],
+            "intent": "Compare branch performance of the two pointed project cards",
+            "need_evidence": false
+          }
+        },
+        {
+          "attempt": 1,
+          "issues": [
+            "POINT_OUTSIDE_CLAIMED_EXTENT:\"D06 / Orion\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2635,
+              "output_tokens": 472
+            },
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-1"
+                ],
+                "evidence": "Pointer-1 (375,315) falls inside D06 card bbox [275,380,475,580]",
+                "expression_id": "dense-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      275,
+                      380,
+                      475,
+                      580
+                    ],
+                    "frame_id": "dense",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D06 / Orion"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-2"
+                ],
+                "evidence": "Pointer-2 (630,480) falls inside D11 card bbox [525,380,725,580]",
+                "expression_id": "dense-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      525,
+                      380,
+                      725,
+                      580
+                    ],
+                    "frame_id": "dense",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D11 / Orion"
+                ]
+              }
+            ],
+            "intent": "Compare branch performance of the two pointed project cards",
+            "need_evidence": false
+          }
+        }
+      ],
+      "failures": [
+        {
+          "goal_id": "dp04-dense:grounding",
+          "proposal": {
+            "adoptions": [
+              {
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "dense-first",
+                "status": "need_evidence",
+                "targets": []
+              },
+              {
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "dense-second",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "contract_failures": [
+              "POINT_OUTSIDE_CLAIMED_EXTENT:\"D06 / Orion\""
+            ],
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "dense",
+                "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+          "revision": 1,
+          "stimulus_id": "dp04-dense:r1"
+        }
+      ],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Consistency validation failed after bounded source rejudgment",
+          "expression_id": "dense-first",
+          "extents": null,
+          "relation": null,
+          "revision": 1,
+          "status": "need_evidence",
+          "targets": []
+        },
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Consistency validation failed after bounded source rejudgment",
+          "expression_id": "dense-second",
+          "extents": null,
+          "relation": null,
+          "revision": 1,
+          "status": "need_evidence",
+          "targets": []
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration_v2-dp04-dense-B-r1-b96b45",
+      "phase": "CALIBRATION_V2",
+      "episode": "dp04-dense",
+      "variant": "B",
+      "repetition": 1,
+      "freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+      "binary_sha256": "e20c2f3575dbca3ec5082363a32fec942a19860d26bc5ebaa798f6f6e816c216",
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 1,
+          "input_tokens": 1943,
+          "output_tokens": 1327,
+          "cost_usd": 0.0029004000000000005,
+          "provider_elapsed_ms": [
+            22348.939792
+          ],
+          "queue_ms": [
+            1.411917
+          ],
+          "call_uuids": [
+            "7c7b0d2f-00a5-4e06-b069-65e236aded2d"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.speech_producer": {
+          "calls": 1,
+          "input_tokens": 478,
+          "output_tokens": 223,
+          "cost_usd": 0.000548,
+          "provider_elapsed_ms": [
+            4799.478333
+          ],
+          "queue_ms": [
+            1.596584
+          ],
+          "call_uuids": [
+            "7e8a5c71-f940-4597-9168-62c25f2c88b5"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 2421,
+      "total_output_tokens": 1550,
+      "total_cost_usd": 0.0034484000000000003,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 14,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "SCREEN_CANDIDATES_PUBLISHED": 1,
+        "SPEECH_CANDIDATES_PUBLISHED": 1,
+        "TYPED_CODE_BIND": 1,
+        "ADOPTION": 2,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": 1,
+          "cue_ids": [
+            "pointer-1"
+          ],
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "dense-first",
+          "extents": [
+            {
+              "bbox": [
+                270,
+                290,
+                480,
+                430
+              ],
+              "frame_id": "dense",
+              "kind": "card",
+              "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+              "target_id": "D06"
+            }
+          ],
+          "relation": "designated_by_cue",
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D06"
+          ]
+        },
+        {
+          "count": 1,
+          "cue_ids": [
+            "pointer-2"
+          ],
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "dense-second",
+          "extents": [
+            {
+              "bbox": [
+                510,
+                460,
+                720,
+                600
+              ],
+              "frame_id": "dense",
+              "kind": "card",
+              "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+              "target_id": "D11"
+            }
+          ],
+          "relation": "designated_by_cue",
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D11"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration_v2-dp04-free-region-A-r1-a459cb",
+      "phase": "CALIBRATION_V2",
+      "episode": "dp04-free-region",
+      "variant": "A",
+      "repetition": 1,
+      "freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+      "binary_sha256": "e20c2f3575dbca3ec5082363a32fec942a19860d26bc5ebaa798f6f6e816c216",
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 1,
+          "input_tokens": 2207,
+          "output_tokens": 374,
+          "cost_usd": 0.0014812,
+          "provider_elapsed_ms": [
+            6859.424792
+          ],
+          "queue_ms": [
+            1.189791
+          ],
+          "call_uuids": [
+            "dc2ee073-5b14-4d21-81ad-01374492e68e"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.joint_source_reread": {
+          "calls": 1,
+          "input_tokens": 2520,
+          "output_tokens": 374,
+          "cost_usd": 0.0016064,
+          "provider_elapsed_ms": [
+            6946.32875
+          ],
+          "queue_ms": [
+            2.171916
+          ],
+          "call_uuids": [
+            "05cf0de2-40e1-4715-8cff-ab9b838a7b1e"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 4727,
+      "total_output_tokens": 748,
+      "total_cost_usd": 0.0030876000000000002,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 12,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "GROUNDING_CONSISTENCY_REJECTED": 2,
+        "BOUNDED_SOURCE_REREAD": 1,
+        "ADOPTION": 1,
+        "GOAL_FAILED": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [
+        {
+          "attempt": 0,
+          "issues": [
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2207,
+              "output_tokens": 374
+            },
+            "adoptions": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Loop-1 polygon encloses P3, P4, P5; transcript requests average of these three points.",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      330,
+                      210,
+                      370,
+                      250
+                    ],
+                    "frame_id": "graph",
+                    "label": "P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      480,
+                      310,
+                      520,
+                      350
+                    ],
+                    "frame_id": "graph",
+                    "label": "P4",
+                    "target_id": "P4"
+                  },
+                  {
+                    "bbox": [
+                      390,
+                      390,
+                      430,
+                      430
+                    ],
+                    "frame_id": "graph",
+                    "label": "P5",
+                    "target_id": "P5"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4",
+                  "P5"
+                ]
+              }
+            ],
+            "intent": "Calculate average of three points enclosed by the loop path",
+            "need_evidence": false
+          }
+        },
+        {
+          "attempt": 1,
+          "issues": [
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+            "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2520,
+              "output_tokens": 374
+            },
+            "adoptions": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Loop-1 polygon encloses P3, P4, P5; transcript requests average of these three points.",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      330,
+                      210,
+                      370,
+                      250
+                    ],
+                    "frame_id": "graph",
+                    "label": "P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      480,
+                      310,
+                      520,
+                      350
+                    ],
+                    "frame_id": "graph",
+                    "label": "P4",
+                    "target_id": "P4"
+                  },
+                  {
+                    "bbox": [
+                      390,
+                      390,
+                      430,
+                      430
+                    ],
+                    "frame_id": "graph",
+                    "label": "P5",
+                    "target_id": "P5"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4",
+                  "P5"
+                ]
+              }
+            ],
+            "intent": "Calculate average of three points enclosed by the loop path",
+            "need_evidence": false
+          }
+        }
+      ],
+      "failures": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "proposal": {
+            "adoptions": [
+              {
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "graph-region",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "contract_failures": [
+              "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+              "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+              "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\""
+            ],
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "graph",
+                "sha256": "8d0350fe2d0d77db768d465ec413a8f1c8949537f9c8ef80f47fb0e2e68293e4",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+          "revision": 1,
+          "stimulus_id": "dp04-free-region:r1"
+        }
+      ],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Consistency validation failed after bounded source rejudgment",
+          "expression_id": "graph-region",
+          "extents": null,
+          "relation": null,
+          "revision": 1,
+          "status": "need_evidence",
+          "targets": []
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration_v2-dp04-free-region-B-r1-b085db",
+      "phase": "CALIBRATION_V2",
+      "episode": "dp04-free-region",
+      "variant": "B",
+      "repetition": 1,
+      "freeze_sha256": "2e2da0eb88895cd02036f2e4219ac80373425202a810cb63b639e908c0a0f0e1",
+      "binary_sha256": "e20c2f3575dbca3ec5082363a32fec942a19860d26bc5ebaa798f6f6e816c216",
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 1,
+          "input_tokens": 1944,
+          "output_tokens": 847,
+          "cost_usd": 0.0021328000000000002,
+          "provider_elapsed_ms": [
+            14441.89125
+          ],
+          "queue_ms": [
+            1.206375
+          ],
+          "call_uuids": [
+            "2f512b84-5bf2-4f54-97b7-874c7d6522bf"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.speech_producer": {
+          "calls": 1,
+          "input_tokens": 430,
+          "output_tokens": 145,
+          "cost_usd": 0.000404,
+          "provider_elapsed_ms": [
+            3502.504625
+          ],
+          "queue_ms": [
+            1.725292
+          ],
+          "call_uuids": [
+            "1e7a62fb-1918-4f46-877a-876dda0a95f8"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 2374,
+      "total_output_tokens": 992,
+      "total_cost_usd": 0.0025368,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 14,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "SCREEN_CANDIDATES_PUBLISHED": 1,
+        "SPEECH_CANDIDATES_PUBLISHED": 1,
+        "TYPED_CODE_BIND": 1,
+        "ADOPTION": 1,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": 3,
+          "cue_ids": [
+            "loop-1"
+          ],
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "graph-region",
+          "extents": [
+            {
+              "bbox": [
+                335,
+                225,
+                355,
+                245
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P3",
+              "target_id": "P3"
+            },
+            {
+              "bbox": [
+                490,
+                315,
+                510,
+                335
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P4",
+              "target_id": "P4"
+            },
+            {
+              "bbox": [
+                390,
+                395,
+                410,
+                415
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P5",
+              "target_id": "P5"
+            }
+          ],
+          "relation": "designated_by_cue",
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "P3",
+            "P4",
+            "P5"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    }
+  ],
+  "provider_calls_created": 0
+}

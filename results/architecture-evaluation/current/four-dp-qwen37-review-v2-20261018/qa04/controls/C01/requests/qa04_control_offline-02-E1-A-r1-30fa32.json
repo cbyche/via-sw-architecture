@@ -1,0 +1,453 @@
+[
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-02-E1-A-r1-30fa32",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "02",
+      "variant": "A",
+      "episode": "02-E1",
+      "repetition": 1,
+      "stage": "dp02_adopt_intents",
+      "rust_call_id": 4
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "input:R1"
+        ],
+        "node_id": "operation-4",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp02_adopt_intents"
+      },
+      "input": {
+        "conversation": {
+          "actually_displayed_questions": [],
+          "captured_inputs": [
+            {
+              "id": "R1",
+              "revision": 1,
+              "text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer."
+            }
+          ],
+          "pending_uninterpreted_inputs": [
+            "R1"
+          ],
+          "requests": []
+        },
+        "event": {
+          "id": "R1",
+          "revision": 1,
+          "text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer."
+        },
+        "repair_reason": null,
+        "retained_conversation_step": null,
+        "sources": [
+          {
+            "id": "D1",
+            "revision": 1,
+            "text": "VIA Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM. Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB. Authored stress observation ledger (synthetic fixture, not actual VIA measurements):\nTrial 01: 9 active requests; Plan A p95 296 ms, peak RSS 713 MB, completed 360 requests; Plan B p95 336 ms, peak RSS 442 MB, completed 360 requests. Both remained within declared capacity.\nTrial 02: 10 active requests; Plan A p95 312 ms, peak RSS 716 MB, completed 400 requests; Plan B p95 357 ms, peak RSS 444 MB, completed 400 requests. Both remained within declared capacity.\nTrial 03: 11 active requests; Plan A p95 328 ms, peak RSS 719 MB, completed 440 requests; Plan B p95 378 ms, peak RSS 446 MB, completed 440 requests. Both remained within declared capacity.\nTrial 04: 12 active requests; Plan A p95 308 ms, peak RSS 722 MB, completed 480 requests; Plan B p95 399 ms, peak RSS 448 MB, completed 480 requests. Both remained within declared capacity.\nTrial 05: 13 active requests; Plan A p95 324 ms, peak RSS 725 MB, completed 520 requests; Plan B p95 365 ms, peak RSS 450 MB, completed 520 requests. Both remained within declared capacity.\nTrial 06: 14 active requests; Plan A p95 340 ms, peak RSS 728 MB, completed 560 requests; Plan B p95 386 ms, peak RSS 452 MB, completed 560 requests. Both remained within declared capacity.\nTrial 07: 15 active requests; Plan A p95 356 ms, peak RSS 731 MB, completed 600 requests; Plan B p95 407 ms, peak RSS 454 MB, completed 600 requests. Both remained within declared capacity.\nTrial 08: 16 active requests; Plan A p95 336 ms, peak RSS 734 MB, completed 640 requests; Plan B p95 428 ms, peak RSS 456 MB, completed 640 requests. Both remained within declared capacity.\nTrial 09: 17 active requests; Plan A p95 352 ms, peak RSS 737 MB, completed 680 requests; Plan B p95 449 ms, peak RSS 458 MB, completed 680 requests. Both remained within declared capacity.\nTrial 10: 18 active requests; Plan A p95 368 ms, peak RSS 740 MB, completed 720 requests; Plan B p95 415 ms, peak RSS 460 MB, completed 720 requests. Both remained within declared capacity.\nTrial 11: 19 active requests; Plan A p95 384 ms, peak RSS 743 MB, completed 760 requests; Plan B p95 436 ms, peak RSS 462 MB, completed 760 requests. Both remained within declared capacity.\nTrial 12: 20 active requests; Plan A p95 364 ms, peak RSS 746 MB, completed 800 requests; Plan B p95 457 ms, peak RSS 464 MB, completed 800 requests. Both remained within declared capacity.\nTrial 13: 21 active requests; Plan A p95 380 ms, peak RSS 749 MB, completed 840 requests; Plan B p95 478 ms, peak RSS 466 MB, completed 840 requests. Both remained within declared capacity.\nTrial 14: 22 active requests; Plan A p95 396 ms, peak RSS 752 MB, completed 880 requests; Plan B p95 499 ms, peak RSS 468 MB, completed 880 requests. Both remained within declared capacity.\nTrial 15: 23 active requests; Plan A p95 412 ms, peak RSS 755 MB, completed 920 requests; Plan B p95 465 ms, peak RSS 470 MB, completed 920 requests. Both remained within declared capacity.\nTrial 16: 24 active requests; Plan A p95 392 ms, peak RSS 758 MB, completed 960 requests; Plan B p95 486 ms, peak RSS 472 MB, completed 960 requests. Both remained within declared capacity.\nTrial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 18: 26 active requests; Plan A p95 424 ms, peak RSS 764 MB, completed 1040 requests; Plan B p95 528 ms, peak RSS 476 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 19: 27 active requests; Plan A p95 440 ms, peak RSS 767 MB, completed 1080 requests; Plan B p95 549 ms, peak RSS 478 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 20: 28 active requests; Plan A p95 420 ms, peak RSS 770 MB, completed 1120 requests; Plan B p95 515 ms, peak RSS 480 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 21: 29 active requests; Plan A p95 436 ms, peak RSS 773 MB, completed 1160 requests; Plan B p95 536 ms, peak RSS 482 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 22: 30 active requests; Plan A p95 452 ms, peak RSS 776 MB, completed 1200 requests; Plan B p95 557 ms, peak RSS 484 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 23: 31 active requests; Plan A p95 468 ms, peak RSS 779 MB, completed 1240 requests; Plan B p95 578 ms, peak RSS 486 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 24: 32 active requests; Plan A p95 448 ms, peak RSS 782 MB, completed 1280 requests; Plan B p95 599 ms, peak RSS 488 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 25: 33 active requests; Plan A p95 464 ms, peak RSS 785 MB, completed 1320 requests; Plan B p95 565 ms, peak RSS 490 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 26: 34 active requests; Plan A p95 480 ms, peak RSS 788 MB, completed 1360 requests; Plan B p95 586 ms, peak RSS 492 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 27: 35 active requests; Plan A p95 496 ms, peak RSS 791 MB, completed 1400 requests; Plan B p95 607 ms, peak RSS 494 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 28: 36 active requests; Plan A p95 476 ms, peak RSS 794 MB, completed 1440 requests; Plan B p95 628 ms, peak RSS 496 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 29: 37 active requests; Plan A p95 492 ms, peak RSS 797 MB, completed 1480 requests; Plan B p95 649 ms, peak RSS 498 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 30: 38 active requests; Plan A p95 508 ms, peak RSS 800 MB, completed 1520 requests; Plan B p95 615 ms, peak RSS 500 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 31: 39 active requests; Plan A p95 524 ms, peak RSS 803 MB, completed 1560 requests; Plan B p95 636 ms, peak RSS 502 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 32: 40 active requests; Plan A p95 504 ms, peak RSS 806 MB, completed 1600 requests; Plan B p95 657 ms, peak RSS 504 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 33: 41 active requests; Plan A p95 520 ms, peak RSS 809 MB, completed 1640 requests; Plan B p95 678 ms, peak RSS 506 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 34: 42 active requests; Plan A p95 536 ms, peak RSS 812 MB, completed 1680 requests; Plan B p95 699 ms, peak RSS 508 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 35: 43 active requests; Plan A p95 552 ms, peak RSS 815 MB, completed 1720 requests; Plan B p95 665 ms, peak RSS 510 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 36: 44 active requests; Plan A p95 532 ms, peak RSS 818 MB, completed 1760 requests; Plan B p95 686 ms, peak RSS 512 MB, completed 960 requests. Plan B saturated above declared capacity."
+          },
+          {
+            "id": "D2",
+            "revision": 1,
+            "text": "Product trial conclusion: stable source revisions and bounded queueing are required; lower monthly cost alone does not establish superior user response latency."
+          }
+        ]
+      },
+      "instruction": "Interpret ONLY input.event, the CURRENT user input in VIA. Other captured or adopted inputs are context for association, not additional intents to attribute to this event. Every returned intent must be expressed by the current event text; never treat a later captured reply as part of this event. Return JSON {intents:[{relation:'NEW'|'FOLLOWUP'|'CONTINUE'|'CORRECTION'|'ANSWER',target_request_id:string|null,question_id:string|null,task_id:string|null,scope:string,targets:[string],handling_text:string,source_revisions:{source_id:revision},complete_answer:string|null,source_claims:[{source_id,revision,quote:exact supplied substring}]}]}. One utterance may contain multiple intents: preserving an earlier job and separately asking a new question are separate intents. Do not collapse them to one label. Captured-but-uninterpreted input is not an already adopted request. A correction changes only its stated scope and targets the actual earlier request; preserve remaining conditions. An answer associates with the actually displayed question and its Task, even when another request is active. handling_text must concretely name the adopted objects/topic and intended action; resolve pronouns, never simply echo unresolved 'it/that'. This stage first adopts the objects, relation and handling intention. complete_answer is a useful fast path ONLY when the requested answer naturally completes in one or two sentences; for a detailed multi-part comparison or analysis return null and let the real detailed-response stage continue. Never truncate the requested answer to force the fast path. An instruction to continue is not a new independent goal. A correction acknowledgement is not completion of the revised original goal. For a complete_answer using source facts, include actual quote claims for its source_revisions. Do not invent source facts or claim external execution.",
+      "max_tokens": 2000
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-02-E1-A-r1-30fa32",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "02",
+      "variant": "A",
+      "episode": "02-E1",
+      "repetition": 1,
+      "stage": "dp02_complete_response",
+      "rust_call_id": 16
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "R1"
+        ],
+        "node_id": "operation-16",
+        "parent_ids": [
+          "operation-4"
+        ],
+        "role": "VIA",
+        "stage": "dp02_complete_response"
+      },
+      "input": {
+        "actual_state": {
+          "actually_displayed_questions": [],
+          "captured_inputs": [
+            {
+              "id": "R1",
+              "revision": 1,
+              "text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer."
+            }
+          ],
+          "pending_uninterpreted_inputs": [],
+          "requests": [
+            {
+              "adopted": {
+                "handling_text": "I will compare Plan A and Plan B on cost, recovery and capacity using D1 revision 1.",
+                "question_id": null,
+                "relation": "NEW",
+                "scope": "Compare Plan A and Plan B cost, recovery and capacity",
+                "source_revisions": {
+                  "D1": 1
+                },
+                "target_request_id": null,
+                "targets": [
+                  "Plan A",
+                  "Plan B"
+                ],
+                "task_id": null
+              },
+              "correction": null,
+              "delivered": null,
+              "original_text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+              "request_id": "R1",
+              "revision": 1,
+              "scope": "Compare Plan A and Plan B cost, recovery and capacity"
+            }
+          ]
+        },
+        "adopted_intent": {
+          "complete_answer": null,
+          "handling_text": "I will compare Plan A and Plan B on cost, recovery and capacity using D1 revision 1.",
+          "question_id": null,
+          "relation": "NEW",
+          "scope": "Compare Plan A and Plan B cost, recovery and capacity",
+          "source_revisions": {
+            "D1": 1
+          },
+          "target_request_id": null,
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "current_revision": 1,
+        "current_scope": "Compare Plan A and Plan B cost, recovery and capacity",
+        "goal_id": "R1",
+        "later_correction": null,
+        "original_request": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+        "previous_rejected_proposal": null,
+        "repair_reason": null,
+        "sources": [
+          {
+            "id": "D1",
+            "revision": 1,
+            "text": "VIA Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM. Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB. Authored stress observation ledger (synthetic fixture, not actual VIA measurements):\nTrial 01: 9 active requests; Plan A p95 296 ms, peak RSS 713 MB, completed 360 requests; Plan B p95 336 ms, peak RSS 442 MB, completed 360 requests. Both remained within declared capacity.\nTrial 02: 10 active requests; Plan A p95 312 ms, peak RSS 716 MB, completed 400 requests; Plan B p95 357 ms, peak RSS 444 MB, completed 400 requests. Both remained within declared capacity.\nTrial 03: 11 active requests; Plan A p95 328 ms, peak RSS 719 MB, completed 440 requests; Plan B p95 378 ms, peak RSS 446 MB, completed 440 requests. Both remained within declared capacity.\nTrial 04: 12 active requests; Plan A p95 308 ms, peak RSS 722 MB, completed 480 requests; Plan B p95 399 ms, peak RSS 448 MB, completed 480 requests. Both remained within declared capacity.\nTrial 05: 13 active requests; Plan A p95 324 ms, peak RSS 725 MB, completed 520 requests; Plan B p95 365 ms, peak RSS 450 MB, completed 520 requests. Both remained within declared capacity.\nTrial 06: 14 active requests; Plan A p95 340 ms, peak RSS 728 MB, completed 560 requests; Plan B p95 386 ms, peak RSS 452 MB, completed 560 requests. Both remained within declared capacity.\nTrial 07: 15 active requests; Plan A p95 356 ms, peak RSS 731 MB, completed 600 requests; Plan B p95 407 ms, peak RSS 454 MB, completed 600 requests. Both remained within declared capacity.\nTrial 08: 16 active requests; Plan A p95 336 ms, peak RSS 734 MB, completed 640 requests; Plan B p95 428 ms, peak RSS 456 MB, completed 640 requests. Both remained within declared capacity.\nTrial 09: 17 active requests; Plan A p95 352 ms, peak RSS 737 MB, completed 680 requests; Plan B p95 449 ms, peak RSS 458 MB, completed 680 requests. Both remained within declared capacity.\nTrial 10: 18 active requests; Plan A p95 368 ms, peak RSS 740 MB, completed 720 requests; Plan B p95 415 ms, peak RSS 460 MB, completed 720 requests. Both remained within declared capacity.\nTrial 11: 19 active requests; Plan A p95 384 ms, peak RSS 743 MB, completed 760 requests; Plan B p95 436 ms, peak RSS 462 MB, completed 760 requests. Both remained within declared capacity.\nTrial 12: 20 active requests; Plan A p95 364 ms, peak RSS 746 MB, completed 800 requests; Plan B p95 457 ms, peak RSS 464 MB, completed 800 requests. Both remained within declared capacity.\nTrial 13: 21 active requests; Plan A p95 380 ms, peak RSS 749 MB, completed 840 requests; Plan B p95 478 ms, peak RSS 466 MB, completed 840 requests. Both remained within declared capacity.\nTrial 14: 22 active requests; Plan A p95 396 ms, peak RSS 752 MB, completed 880 requests; Plan B p95 499 ms, peak RSS 468 MB, completed 880 requests. Both remained within declared capacity.\nTrial 15: 23 active requests; Plan A p95 412 ms, peak RSS 755 MB, completed 920 requests; Plan B p95 465 ms, peak RSS 470 MB, completed 920 requests. Both remained within declared capacity.\nTrial 16: 24 active requests; Plan A p95 392 ms, peak RSS 758 MB, completed 960 requests; Plan B p95 486 ms, peak RSS 472 MB, completed 960 requests. Both remained within declared capacity.\nTrial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 18: 26 active requests; Plan A p95 424 ms, peak RSS 764 MB, completed 1040 requests; Plan B p95 528 ms, peak RSS 476 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 19: 27 active requests; Plan A p95 440 ms, peak RSS 767 MB, completed 1080 requests; Plan B p95 549 ms, peak RSS 478 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 20: 28 active requests; Plan A p95 420 ms, peak RSS 770 MB, completed 1120 requests; Plan B p95 515 ms, peak RSS 480 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 21: 29 active requests; Plan A p95 436 ms, peak RSS 773 MB, completed 1160 requests; Plan B p95 536 ms, peak RSS 482 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 22: 30 active requests; Plan A p95 452 ms, peak RSS 776 MB, completed 1200 requests; Plan B p95 557 ms, peak RSS 484 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 23: 31 active requests; Plan A p95 468 ms, peak RSS 779 MB, completed 1240 requests; Plan B p95 578 ms, peak RSS 486 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 24: 32 active requests; Plan A p95 448 ms, peak RSS 782 MB, completed 1280 requests; Plan B p95 599 ms, peak RSS 488 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 25: 33 active requests; Plan A p95 464 ms, peak RSS 785 MB, completed 1320 requests; Plan B p95 565 ms, peak RSS 490 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 26: 34 active requests; Plan A p95 480 ms, peak RSS 788 MB, completed 1360 requests; Plan B p95 586 ms, peak RSS 492 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 27: 35 active requests; Plan A p95 496 ms, peak RSS 791 MB, completed 1400 requests; Plan B p95 607 ms, peak RSS 494 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 28: 36 active requests; Plan A p95 476 ms, peak RSS 794 MB, completed 1440 requests; Plan B p95 628 ms, peak RSS 496 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 29: 37 active requests; Plan A p95 492 ms, peak RSS 797 MB, completed 1480 requests; Plan B p95 649 ms, peak RSS 498 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 30: 38 active requests; Plan A p95 508 ms, peak RSS 800 MB, completed 1520 requests; Plan B p95 615 ms, peak RSS 500 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 31: 39 active requests; Plan A p95 524 ms, peak RSS 803 MB, completed 1560 requests; Plan B p95 636 ms, peak RSS 502 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 32: 40 active requests; Plan A p95 504 ms, peak RSS 806 MB, completed 1600 requests; Plan B p95 657 ms, peak RSS 504 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 33: 41 active requests; Plan A p95 520 ms, peak RSS 809 MB, completed 1640 requests; Plan B p95 678 ms, peak RSS 506 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 34: 42 active requests; Plan A p95 536 ms, peak RSS 812 MB, completed 1680 requests; Plan B p95 699 ms, peak RSS 508 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 35: 43 active requests; Plan A p95 552 ms, peak RSS 815 MB, completed 1720 requests; Plan B p95 665 ms, peak RSS 510 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 36: 44 active requests; Plan A p95 532 ms, peak RSS 818 MB, completed 1760 requests; Plan B p95 686 ms, peak RSS 512 MB, completed 960 requests. Plan B saturated above declared capacity."
+          },
+          {
+            "id": "D2",
+            "revision": 1,
+            "text": "Product trial conclusion: stable source revisions and bounded queueing are required; lower monthly cost alone does not establish superior user response latency."
+          }
+        ]
+      },
+      "instruction": "Complete this VIA user goal from its actual original request, adopted intent and latest revision/correction. Preserve all non-corrected conditions; obey the latest scope. Return JSON {answer:nonempty detailed string,sections:[{id:string,text:nonempty string}],applied_revision:number,source_claims:[{source_id,revision,quote:exact supplied substring}]}. Cover the adopted goal, not an unrelated pending goal. Include the requested comparison values/tradeoffs or protocol explanation in the answer itself. Never return null, echo the instruction, or replace the answer with a plan. source_claims.quote must be a single EXACT CONTIGUOUS substring from the supplied sources text: never insert ellipses, summarize a quote, join separated passages, or cite a user event as a source ID. Use separate claims for separate actual passages. For an answer to an Agent question, identify the resolved recipient/choice for actual forwarding; do not claim it was already sent.",
+      "max_tokens": 2600
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-02-E1-A-r1-30fa32",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "02",
+      "variant": "A",
+      "episode": "02-E1",
+      "repetition": 1,
+      "stage": "dp02_adopt_intents",
+      "rust_call_id": 27
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "input:U2"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp02_adopt_intents"
+      },
+      "input": {
+        "conversation": {
+          "actually_displayed_questions": [],
+          "captured_inputs": [
+            {
+              "id": "R1",
+              "revision": 1,
+              "text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer."
+            },
+            {
+              "id": "U2",
+              "revision": 1,
+              "text": "Summarize the conclusion of that comparison in one sentence."
+            }
+          ],
+          "pending_uninterpreted_inputs": [
+            "U2"
+          ],
+          "requests": [
+            {
+              "adopted": {
+                "handling_text": "I will compare Plan A and Plan B on cost, recovery and capacity using D1 revision 1.",
+                "question_id": null,
+                "relation": "NEW",
+                "scope": "Compare Plan A and Plan B cost, recovery and capacity",
+                "source_revisions": {
+                  "D1": 1
+                },
+                "target_request_id": null,
+                "targets": [
+                  "Plan A",
+                  "Plan B"
+                ],
+                "task_id": null
+              },
+              "correction": null,
+              "delivered": {
+                "checks": [
+                  "nonempty detailed sections",
+                  "current goal revision",
+                  "actual supplied quote checks"
+                ],
+                "content_contract_checked": true,
+                "goal_id": "R1",
+                "goal_scope": "USER_REQUEST",
+                "result": {
+                  "_provider_usage": {
+                    "input_tokens": 0,
+                    "output_tokens": 0
+                  },
+                  "answer": "Plan A costs $120 per month and Plan B $75; Plan B saves $45 per month. Plan A checkpoints every 10 seconds and supports 40 concurrent requests, versus 30 seconds and 24 for Plan B. Plan A uses 800 MB versus 500 MB, so capacity/recovery trade off against price and RAM.",
+                  "applied_revision": 1,
+                  "sections": [
+                    {
+                      "id": "cost",
+                      "text": "Plan A $120; Plan B $75."
+                    },
+                    {
+                      "id": "recovery-capacity",
+                      "text": "Plan A 10 seconds/40 requests; Plan B 30 seconds/24 requests."
+                    }
+                  ],
+                  "source_claims": [
+                    {
+                      "quote": "cost 120 dollars per month",
+                      "revision": 1,
+                      "source_id": "D1"
+                    }
+                  ]
+                },
+                "revision": 1,
+                "stimulus_id": "R1",
+                "text": "Plan A costs $120 per month and Plan B $75; Plan B saves $45 per month. Plan A checkpoints every 10 seconds and supports 40 concurrent requests, versus 30 seconds and 24 for Plan B. Plan A uses 800 MB versus 500 MB, so capacity/recovery trade off against price and RAM."
+              },
+              "original_text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+              "request_id": "R1",
+              "revision": 1,
+              "scope": "Compare Plan A and Plan B cost, recovery and capacity"
+            }
+          ]
+        },
+        "event": {
+          "id": "U2",
+          "revision": 1,
+          "text": "Summarize the conclusion of that comparison in one sentence."
+        },
+        "repair_reason": null,
+        "retained_conversation_step": null,
+        "sources": [
+          {
+            "id": "D1",
+            "revision": 1,
+            "text": "VIA Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM. Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB. Authored stress observation ledger (synthetic fixture, not actual VIA measurements):\nTrial 01: 9 active requests; Plan A p95 296 ms, peak RSS 713 MB, completed 360 requests; Plan B p95 336 ms, peak RSS 442 MB, completed 360 requests. Both remained within declared capacity.\nTrial 02: 10 active requests; Plan A p95 312 ms, peak RSS 716 MB, completed 400 requests; Plan B p95 357 ms, peak RSS 444 MB, completed 400 requests. Both remained within declared capacity.\nTrial 03: 11 active requests; Plan A p95 328 ms, peak RSS 719 MB, completed 440 requests; Plan B p95 378 ms, peak RSS 446 MB, completed 440 requests. Both remained within declared capacity.\nTrial 04: 12 active requests; Plan A p95 308 ms, peak RSS 722 MB, completed 480 requests; Plan B p95 399 ms, peak RSS 448 MB, completed 480 requests. Both remained within declared capacity.\nTrial 05: 13 active requests; Plan A p95 324 ms, peak RSS 725 MB, completed 520 requests; Plan B p95 365 ms, peak RSS 450 MB, completed 520 requests. Both remained within declared capacity.\nTrial 06: 14 active requests; Plan A p95 340 ms, peak RSS 728 MB, completed 560 requests; Plan B p95 386 ms, peak RSS 452 MB, completed 560 requests. Both remained within declared capacity.\nTrial 07: 15 active requests; Plan A p95 356 ms, peak RSS 731 MB, completed 600 requests; Plan B p95 407 ms, peak RSS 454 MB, completed 600 requests. Both remained within declared capacity.\nTrial 08: 16 active requests; Plan A p95 336 ms, peak RSS 734 MB, completed 640 requests; Plan B p95 428 ms, peak RSS 456 MB, completed 640 requests. Both remained within declared capacity.\nTrial 09: 17 active requests; Plan A p95 352 ms, peak RSS 737 MB, completed 680 requests; Plan B p95 449 ms, peak RSS 458 MB, completed 680 requests. Both remained within declared capacity.\nTrial 10: 18 active requests; Plan A p95 368 ms, peak RSS 740 MB, completed 720 requests; Plan B p95 415 ms, peak RSS 460 MB, completed 720 requests. Both remained within declared capacity.\nTrial 11: 19 active requests; Plan A p95 384 ms, peak RSS 743 MB, completed 760 requests; Plan B p95 436 ms, peak RSS 462 MB, completed 760 requests. Both remained within declared capacity.\nTrial 12: 20 active requests; Plan A p95 364 ms, peak RSS 746 MB, completed 800 requests; Plan B p95 457 ms, peak RSS 464 MB, completed 800 requests. Both remained within declared capacity.\nTrial 13: 21 active requests; Plan A p95 380 ms, peak RSS 749 MB, completed 840 requests; Plan B p95 478 ms, peak RSS 466 MB, completed 840 requests. Both remained within declared capacity.\nTrial 14: 22 active requests; Plan A p95 396 ms, peak RSS 752 MB, completed 880 requests; Plan B p95 499 ms, peak RSS 468 MB, completed 880 requests. Both remained within declared capacity.\nTrial 15: 23 active requests; Plan A p95 412 ms, peak RSS 755 MB, completed 920 requests; Plan B p95 465 ms, peak RSS 470 MB, completed 920 requests. Both remained within declared capacity.\nTrial 16: 24 active requests; Plan A p95 392 ms, peak RSS 758 MB, completed 960 requests; Plan B p95 486 ms, peak RSS 472 MB, completed 960 requests. Both remained within declared capacity.\nTrial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 18: 26 active requests; Plan A p95 424 ms, peak RSS 764 MB, completed 1040 requests; Plan B p95 528 ms, peak RSS 476 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 19: 27 active requests; Plan A p95 440 ms, peak RSS 767 MB, completed 1080 requests; Plan B p95 549 ms, peak RSS 478 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 20: 28 active requests; Plan A p95 420 ms, peak RSS 770 MB, completed 1120 requests; Plan B p95 515 ms, peak RSS 480 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 21: 29 active requests; Plan A p95 436 ms, peak RSS 773 MB, completed 1160 requests; Plan B p95 536 ms, peak RSS 482 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 22: 30 active requests; Plan A p95 452 ms, peak RSS 776 MB, completed 1200 requests; Plan B p95 557 ms, peak RSS 484 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 23: 31 active requests; Plan A p95 468 ms, peak RSS 779 MB, completed 1240 requests; Plan B p95 578 ms, peak RSS 486 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 24: 32 active requests; Plan A p95 448 ms, peak RSS 782 MB, completed 1280 requests; Plan B p95 599 ms, peak RSS 488 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 25: 33 active requests; Plan A p95 464 ms, peak RSS 785 MB, completed 1320 requests; Plan B p95 565 ms, peak RSS 490 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 26: 34 active requests; Plan A p95 480 ms, peak RSS 788 MB, completed 1360 requests; Plan B p95 586 ms, peak RSS 492 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 27: 35 active requests; Plan A p95 496 ms, peak RSS 791 MB, completed 1400 requests; Plan B p95 607 ms, peak RSS 494 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 28: 36 active requests; Plan A p95 476 ms, peak RSS 794 MB, completed 1440 requests; Plan B p95 628 ms, peak RSS 496 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 29: 37 active requests; Plan A p95 492 ms, peak RSS 797 MB, completed 1480 requests; Plan B p95 649 ms, peak RSS 498 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 30: 38 active requests; Plan A p95 508 ms, peak RSS 800 MB, completed 1520 requests; Plan B p95 615 ms, peak RSS 500 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 31: 39 active requests; Plan A p95 524 ms, peak RSS 803 MB, completed 1560 requests; Plan B p95 636 ms, peak RSS 502 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 32: 40 active requests; Plan A p95 504 ms, peak RSS 806 MB, completed 1600 requests; Plan B p95 657 ms, peak RSS 504 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 33: 41 active requests; Plan A p95 520 ms, peak RSS 809 MB, completed 1640 requests; Plan B p95 678 ms, peak RSS 506 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 34: 42 active requests; Plan A p95 536 ms, peak RSS 812 MB, completed 1680 requests; Plan B p95 699 ms, peak RSS 508 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 35: 43 active requests; Plan A p95 552 ms, peak RSS 815 MB, completed 1720 requests; Plan B p95 665 ms, peak RSS 510 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 36: 44 active requests; Plan A p95 532 ms, peak RSS 818 MB, completed 1760 requests; Plan B p95 686 ms, peak RSS 512 MB, completed 960 requests. Plan B saturated above declared capacity."
+          },
+          {
+            "id": "D2",
+            "revision": 1,
+            "text": "Product trial conclusion: stable source revisions and bounded queueing are required; lower monthly cost alone does not establish superior user response latency."
+          }
+        ]
+      },
+      "instruction": "Interpret ONLY input.event, the CURRENT user input in VIA. Other captured or adopted inputs are context for association, not additional intents to attribute to this event. Every returned intent must be expressed by the current event text; never treat a later captured reply as part of this event. Return JSON {intents:[{relation:'NEW'|'FOLLOWUP'|'CONTINUE'|'CORRECTION'|'ANSWER',target_request_id:string|null,question_id:string|null,task_id:string|null,scope:string,targets:[string],handling_text:string,source_revisions:{source_id:revision},complete_answer:string|null,source_claims:[{source_id,revision,quote:exact supplied substring}]}]}. One utterance may contain multiple intents: preserving an earlier job and separately asking a new question are separate intents. Do not collapse them to one label. Captured-but-uninterpreted input is not an already adopted request. A correction changes only its stated scope and targets the actual earlier request; preserve remaining conditions. An answer associates with the actually displayed question and its Task, even when another request is active. handling_text must concretely name the adopted objects/topic and intended action; resolve pronouns, never simply echo unresolved 'it/that'. This stage first adopts the objects, relation and handling intention. complete_answer is a useful fast path ONLY when the requested answer naturally completes in one or two sentences; for a detailed multi-part comparison or analysis return null and let the real detailed-response stage continue. Never truncate the requested answer to force the fast path. An instruction to continue is not a new independent goal. A correction acknowledgement is not completion of the revised original goal. For a complete_answer using source facts, include actual quote claims for its source_revisions. Do not invent source facts or claim external execution.",
+      "max_tokens": 2000
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-02-E1-A-r1-30fa32",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "02",
+      "variant": "A",
+      "episode": "02-E1",
+      "repetition": 1,
+      "stage": "dp02_complete_response",
+      "rust_call_id": 39
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "U2"
+        ],
+        "node_id": "operation-39",
+        "parent_ids": [
+          "operation-27"
+        ],
+        "role": "VIA",
+        "stage": "dp02_complete_response"
+      },
+      "input": {
+        "actual_state": {
+          "actually_displayed_questions": [],
+          "captured_inputs": [
+            {
+              "id": "R1",
+              "revision": 1,
+              "text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer."
+            },
+            {
+              "id": "U2",
+              "revision": 1,
+              "text": "Summarize the conclusion of that comparison in one sentence."
+            }
+          ],
+          "pending_uninterpreted_inputs": [],
+          "requests": [
+            {
+              "adopted": {
+                "handling_text": "I will compare Plan A and Plan B on cost, recovery and capacity using D1 revision 1.",
+                "question_id": null,
+                "relation": "NEW",
+                "scope": "Compare Plan A and Plan B cost, recovery and capacity",
+                "source_revisions": {
+                  "D1": 1
+                },
+                "target_request_id": null,
+                "targets": [
+                  "Plan A",
+                  "Plan B"
+                ],
+                "task_id": null
+              },
+              "correction": null,
+              "delivered": {
+                "checks": [
+                  "nonempty detailed sections",
+                  "current goal revision",
+                  "actual supplied quote checks"
+                ],
+                "content_contract_checked": true,
+                "goal_id": "R1",
+                "goal_scope": "USER_REQUEST",
+                "result": {
+                  "_provider_usage": {
+                    "input_tokens": 0,
+                    "output_tokens": 0
+                  },
+                  "answer": "Plan A costs $120 per month and Plan B $75; Plan B saves $45 per month. Plan A checkpoints every 10 seconds and supports 40 concurrent requests, versus 30 seconds and 24 for Plan B. Plan A uses 800 MB versus 500 MB, so capacity/recovery trade off against price and RAM.",
+                  "applied_revision": 1,
+                  "sections": [
+                    {
+                      "id": "cost",
+                      "text": "Plan A $120; Plan B $75."
+                    },
+                    {
+                      "id": "recovery-capacity",
+                      "text": "Plan A 10 seconds/40 requests; Plan B 30 seconds/24 requests."
+                    }
+                  ],
+                  "source_claims": [
+                    {
+                      "quote": "cost 120 dollars per month",
+                      "revision": 1,
+                      "source_id": "D1"
+                    }
+                  ]
+                },
+                "revision": 1,
+                "stimulus_id": "R1",
+                "text": "Plan A costs $120 per month and Plan B $75; Plan B saves $45 per month. Plan A checkpoints every 10 seconds and supports 40 concurrent requests, versus 30 seconds and 24 for Plan B. Plan A uses 800 MB versus 500 MB, so capacity/recovery trade off against price and RAM."
+              },
+              "original_text": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+              "request_id": "R1",
+              "revision": 1,
+              "scope": "Compare Plan A and Plan B cost, recovery and capacity"
+            },
+            {
+              "adopted": {
+                "handling_text": "I will summarize the Plan A and Plan B comparison conclusion.",
+                "question_id": null,
+                "relation": "FOLLOWUP",
+                "scope": "Summarize the comparison conclusion",
+                "source_revisions": {
+                  "D1": 1
+                },
+                "target_request_id": "R1",
+                "targets": [
+                  "Plan A",
+                  "Plan B"
+                ],
+                "task_id": null
+              },
+              "correction": null,
+              "delivered": null,
+              "original_text": "Summarize the conclusion of that comparison in one sentence.",
+              "request_id": "U2",
+              "revision": 1,
+              "scope": "Summarize the comparison conclusion"
+            }
+          ]
+        },
+        "adopted_intent": {
+          "complete_answer": "Plan A costs more but supports faster recovery and greater capacity, while Plan B reduces cost and RAM.",
+          "handling_text": "I will summarize the Plan A and Plan B comparison conclusion.",
+          "question_id": null,
+          "relation": "FOLLOWUP",
+          "scope": "Summarize the comparison conclusion",
+          "source_revisions": {
+            "D1": 1
+          },
+          "target_request_id": "R1",
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "current_revision": 1,
+        "current_scope": "Summarize the comparison conclusion",
+        "goal_id": "U2",
+        "later_correction": null,
+        "original_request": "Summarize the conclusion of that comparison in one sentence.",
+        "previous_rejected_proposal": null,
+        "repair_reason": null,
+        "sources": [
+          {
+            "id": "D1",
+            "revision": 1,
+            "text": "VIA Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM. Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB. Authored stress observation ledger (synthetic fixture, not actual VIA measurements):\nTrial 01: 9 active requests; Plan A p95 296 ms, peak RSS 713 MB, completed 360 requests; Plan B p95 336 ms, peak RSS 442 MB, completed 360 requests. Both remained within declared capacity.\nTrial 02: 10 active requests; Plan A p95 312 ms, peak RSS 716 MB, completed 400 requests; Plan B p95 357 ms, peak RSS 444 MB, completed 400 requests. Both remained within declared capacity.\nTrial 03: 11 active requests; Plan A p95 328 ms, peak RSS 719 MB, completed 440 requests; Plan B p95 378 ms, peak RSS 446 MB, completed 440 requests. Both remained within declared capacity.\nTrial 04: 12 active requests; Plan A p95 308 ms, peak RSS 722 MB, completed 480 requests; Plan B p95 399 ms, peak RSS 448 MB, completed 480 requests. Both remained within declared capacity.\nTrial 05: 13 active requests; Plan A p95 324 ms, peak RSS 725 MB, completed 520 requests; Plan B p95 365 ms, peak RSS 450 MB, completed 520 requests. Both remained within declared capacity.\nTrial 06: 14 active requests; Plan A p95 340 ms, peak RSS 728 MB, completed 560 requests; Plan B p95 386 ms, peak RSS 452 MB, completed 560 requests. Both remained within declared capacity.\nTrial 07: 15 active requests; Plan A p95 356 ms, peak RSS 731 MB, completed 600 requests; Plan B p95 407 ms, peak RSS 454 MB, completed 600 requests. Both remained within declared capacity.\nTrial 08: 16 active requests; Plan A p95 336 ms, peak RSS 734 MB, completed 640 requests; Plan B p95 428 ms, peak RSS 456 MB, completed 640 requests. Both remained within declared capacity.\nTrial 09: 17 active requests; Plan A p95 352 ms, peak RSS 737 MB, completed 680 requests; Plan B p95 449 ms, peak RSS 458 MB, completed 680 requests. Both remained within declared capacity.\nTrial 10: 18 active requests; Plan A p95 368 ms, peak RSS 740 MB, completed 720 requests; Plan B p95 415 ms, peak RSS 460 MB, completed 720 requests. Both remained within declared capacity.\nTrial 11: 19 active requests; Plan A p95 384 ms, peak RSS 743 MB, completed 760 requests; Plan B p95 436 ms, peak RSS 462 MB, completed 760 requests. Both remained within declared capacity.\nTrial 12: 20 active requests; Plan A p95 364 ms, peak RSS 746 MB, completed 800 requests; Plan B p95 457 ms, peak RSS 464 MB, completed 800 requests. Both remained within declared capacity.\nTrial 13: 21 active requests; Plan A p95 380 ms, peak RSS 749 MB, completed 840 requests; Plan B p95 478 ms, peak RSS 466 MB, completed 840 requests. Both remained within declared capacity.\nTrial 14: 22 active requests; Plan A p95 396 ms, peak RSS 752 MB, completed 880 requests; Plan B p95 499 ms, peak RSS 468 MB, completed 880 requests. Both remained within declared capacity.\nTrial 15: 23 active requests; Plan A p95 412 ms, peak RSS 755 MB, completed 920 requests; Plan B p95 465 ms, peak RSS 470 MB, completed 920 requests. Both remained within declared capacity.\nTrial 16: 24 active requests; Plan A p95 392 ms, peak RSS 758 MB, completed 960 requests; Plan B p95 486 ms, peak RSS 472 MB, completed 960 requests. Both remained within declared capacity.\nTrial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 18: 26 active requests; Plan A p95 424 ms, peak RSS 764 MB, completed 1040 requests; Plan B p95 528 ms, peak RSS 476 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 19: 27 active requests; Plan A p95 440 ms, peak RSS 767 MB, completed 1080 requests; Plan B p95 549 ms, peak RSS 478 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 20: 28 active requests; Plan A p95 420 ms, peak RSS 770 MB, completed 1120 requests; Plan B p95 515 ms, peak RSS 480 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 21: 29 active requests; Plan A p95 436 ms, peak RSS 773 MB, completed 1160 requests; Plan B p95 536 ms, peak RSS 482 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 22: 30 active requests; Plan A p95 452 ms, peak RSS 776 MB, completed 1200 requests; Plan B p95 557 ms, peak RSS 484 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 23: 31 active requests; Plan A p95 468 ms, peak RSS 779 MB, completed 1240 requests; Plan B p95 578 ms, peak RSS 486 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 24: 32 active requests; Plan A p95 448 ms, peak RSS 782 MB, completed 1280 requests; Plan B p95 599 ms, peak RSS 488 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 25: 33 active requests; Plan A p95 464 ms, peak RSS 785 MB, completed 1320 requests; Plan B p95 565 ms, peak RSS 490 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 26: 34 active requests; Plan A p95 480 ms, peak RSS 788 MB, completed 1360 requests; Plan B p95 586 ms, peak RSS 492 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 27: 35 active requests; Plan A p95 496 ms, peak RSS 791 MB, completed 1400 requests; Plan B p95 607 ms, peak RSS 494 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 28: 36 active requests; Plan A p95 476 ms, peak RSS 794 MB, completed 1440 requests; Plan B p95 628 ms, peak RSS 496 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 29: 37 active requests; Plan A p95 492 ms, peak RSS 797 MB, completed 1480 requests; Plan B p95 649 ms, peak RSS 498 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 30: 38 active requests; Plan A p95 508 ms, peak RSS 800 MB, completed 1520 requests; Plan B p95 615 ms, peak RSS 500 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 31: 39 active requests; Plan A p95 524 ms, peak RSS 803 MB, completed 1560 requests; Plan B p95 636 ms, peak RSS 502 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 32: 40 active requests; Plan A p95 504 ms, peak RSS 806 MB, completed 1600 requests; Plan B p95 657 ms, peak RSS 504 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 33: 41 active requests; Plan A p95 520 ms, peak RSS 809 MB, completed 1640 requests; Plan B p95 678 ms, peak RSS 506 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 34: 42 active requests; Plan A p95 536 ms, peak RSS 812 MB, completed 1680 requests; Plan B p95 699 ms, peak RSS 508 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 35: 43 active requests; Plan A p95 552 ms, peak RSS 815 MB, completed 1720 requests; Plan B p95 665 ms, peak RSS 510 MB, completed 960 requests. Plan B saturated above declared capacity.\nTrial 36: 44 active requests; Plan A p95 532 ms, peak RSS 818 MB, completed 1760 requests; Plan B p95 686 ms, peak RSS 512 MB, completed 960 requests. Plan B saturated above declared capacity."
+          },
+          {
+            "id": "D2",
+            "revision": 1,
+            "text": "Product trial conclusion: stable source revisions and bounded queueing are required; lower monthly cost alone does not establish superior user response latency."
+          }
+        ]
+      },
+      "instruction": "Complete this VIA user goal from its actual original request, adopted intent and latest revision/correction. Preserve all non-corrected conditions; obey the latest scope. Return JSON {answer:nonempty detailed string,sections:[{id:string,text:nonempty string}],applied_revision:number,source_claims:[{source_id,revision,quote:exact supplied substring}]}. Cover the adopted goal, not an unrelated pending goal. Include the requested comparison values/tradeoffs or protocol explanation in the answer itself. Never return null, echo the instruction, or replace the answer with a plan. source_claims.quote must be a single EXACT CONTIGUOUS substring from the supplied sources text: never insert ellipses, summarize a quote, join separated passages, or cite a user event as a source ID. Use separate claims for separate actual passages. For an answer to an Agent question, identify the resolved recipient/choice for actual forwarding; do not claim it was already sent.",
+      "max_tokens": 2600
+    }
+  }
+]

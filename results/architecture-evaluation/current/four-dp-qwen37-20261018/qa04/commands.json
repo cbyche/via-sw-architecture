@@ -1,0 +1,188 @@
+[
+  {
+    "cmd": [
+      "cargo",
+      "run",
+      "--offline",
+      "--bin",
+      "contract_probe"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01",
+    "returncode": 101,
+    "stdout": "",
+    "stderr": "   Compiling serde_core v1.0.229\n   Compiling zmij v1.0.23\n   Compiling serde_json v1.0.151\n   Compiling memchr v2.8.3\n   Compiling itoa v1.0.18\n   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.48s\n     Running `target/debug/contract_probe`\n\nthread 'main' (20256033) panicked at src/bin/contract_probe.rs:6:5:\nassertion `left == right` failed\n  left: Number(1)\n right: 2\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "cmd": [
+      "cargo",
+      "test",
+      "--offline",
+      "--bin",
+      "four_dp_poc"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01",
+    "returncode": 0,
+    "stdout": "\nrunning 4 tests\ntest dp04::gate::tests::source_snapshot_mismatch_is_not_published ... ok\ntest dp04::gate::tests::unresolved_proposal_is_not_counted_as_adopted_targets ... ok\ntest dp04::gate::tests::rejects_previously_valid_proposal_after_revision_registration ... ok\ntest dp04::binding::tests::typed_binding_requires_completeness_and_unique_non_navigation_relation ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "stderr": "   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s\n     Running unittests src/main.rs (target/debug/deps/four_dp_poc-25f315d3ce208b00)\n"
+  },
+  {
+    "cmd": [
+      "cargo",
+      "run",
+      "--offline",
+      "--bin",
+      "contract_probe"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01",
+    "returncode": 0,
+    "stdout": "PASS C01 request/context + provider JSON + usage + error propagation\n",
+    "stderr": "   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.10s\n     Running `target/debug/contract_probe`\n"
+  },
+  {
+    "cmd": [
+      "cargo",
+      "build",
+      "--offline",
+      "--bins"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C01)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.43s\n"
+  },
+  {
+    "cmd": [
+      "cargo",
+      "test",
+      "--offline",
+      "--bin",
+      "four_dp_poc"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "\nrunning 4 tests\ntest dp04::gate::tests::source_snapshot_mismatch_is_not_published ... ok\ntest dp04::gate::tests::unresolved_proposal_is_not_counted_as_adopted_targets ... ok\ntest dp04::gate::tests::rejects_previously_valid_proposal_after_revision_registration ... ok\ntest dp04::binding::tests::typed_binding_requires_completeness_and_unique_non_navigation_relation ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+    "stderr": "   Compiling zmij v1.0.23\n   Compiling serde_core v1.0.229\n   Compiling serde_json v1.0.151\n   Compiling itoa v1.0.18\n   Compiling memchr v2.8.3\n   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.74s\n     Running unittests src/main.rs (target/debug/deps/four_dp_poc-25f315d3ce208b00)\n"
+  },
+  {
+    "cmd": [
+      "cargo",
+      "build",
+      "--offline",
+      "--bins"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "   Compiling four_dp_poc v0.1.0 (/private/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.45s\n"
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-A-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-A-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-B-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-B-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-C-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp01-C-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp02-A-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp02-A-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp02-B-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp02-B-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp04-A-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp04-A-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp04-B-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp04-B-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-A-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-A-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-B-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-B-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  },
+  {
+    "cmd": [
+      "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03/target/debug/contract_probe",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-C-input.json",
+      "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/probes/C03-dp05-C-canonical.json"
+    ],
+    "cwd": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-vbo90k14/C03",
+    "returncode": 0,
+    "stdout": "PASS C03 exact whole-fixture canonical equality + pixel/time/revision conversion + revoke guard\n",
+    "stderr": ""
+  }
+]

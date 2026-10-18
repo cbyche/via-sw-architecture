@@ -29,6 +29,12 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
+      - name: Restore published four-DP evidence for existing checks
+        if: ${{ hashFiles('results/architecture-evaluation/current/four-dp-poc-evidence-20261019/manifest.json') != '' }}
+        run: >-
+          python3 benchmark/architecture/four_dp_poc_v2/reports/evidence_bundle.py restore
+          --package results/architecture-evaluation/current/four-dp-poc-evidence-20261019
+          --destination .
       - name: Check active terminology and links
         run: |
           python3 scripts/architecture/check_active_terminology.py

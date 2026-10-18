@@ -1,0 +1,780 @@
+{
+  "scope": "PARTIAL BASIC: first9 DP01 episode rows, E1/E2/E3 ABC repetition1 only; not final36-row comparison or winner selection",
+  "created_at": "2026-10-18T11:56:50.450363+00:00",
+  "reviewer": "poc_evidence_handoff_sol, GPT-6.1 Sol High; author review, not independent semantic adjudication",
+  "method": "Read actual final displayed text against the frozen original files and utterance. Preserve frozen lexical/equivalence values. NOT_DISPLAYED remains in denominator. Added false assertions count as failure even if required markers pass. No candidate/oracle/evaluator edits.",
+  "total": 27,
+  "literal_correct": 22,
+  "equivalent_correct": 24,
+  "manual_pass": 23,
+  "by_variant": {
+    "A": {
+      "total": 9,
+      "manual_pass": 7
+    },
+    "B": {
+      "total": 9,
+      "manual_pass": 7
+    },
+    "C": {
+      "total": 9,
+      "manual_pass": 9
+    }
+  },
+  "actual_provider_calls": 0,
+  "details": [
+    {
+      "run_id": "basic-dp01-e1-A-r1-fa7d4c",
+      "variant": "A",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q1",
+      "actual_detailed_text": "Aster A의 가격은 1,250,000원이며, Boreal B의 가격은 1,190,000원입니다. 두 가격 모두 부가세 포함 원화 기준입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-A-r1-fa7d4c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "2caaabd8a18c50992fb1f463d388e1db7f4c1d5722ae9bf94e017128bd5f431b"
+    },
+    {
+      "run_id": "basic-dp01-e1-A-r1-fa7d4c",
+      "variant": "A",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q2",
+      "actual_detailed_text": "Aster A의 유지보수 기간은 36개월이며 납기는 10월 29일입니다. Boreal B의 유지보수 기간은 24개월이며 납기는 11월 3일입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-A-r1-fa7d4c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "77017fdaf16f8e534a6f7c0357bc3d35de9785f2790a6348ae9c09231753a218"
+    },
+    {
+      "run_id": "basic-dp01-e1-A-r1-fa7d4c",
+      "variant": "A",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q3",
+      "actual_detailed_text": "가격이 동일한 경우, 유지보수 기간이 더 긴 제품을 우선적으로 선택합니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-A-r1-fa7d4c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "5c0a4df81e8835c4d68d5e1133e04147cbb4436ecd0219dba4e5bf9b2fbd106b"
+    },
+    {
+      "run_id": "basic-dp01-e1-B-r1-f16625",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q1",
+      "actual_detailed_text": "Aster A는 1,250,000원, Boreal B는 1,190,000원입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-B-r1-f16625/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "ef2d509407a1b6d2a7c6a3982174eb26ac7e9c296457090939870a76158f258c"
+    },
+    {
+      "run_id": "basic-dp01-e1-B-r1-f16625",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q2",
+      "actual_detailed_text": null,
+      "literal_correct": false,
+      "equivalent_correct": false,
+      "author_manual_status": "NOT_DISPLAYED",
+      "reason": "원문 행2/3의 내용을 행3/4로 잘못 인용한 제안이 repair 후에도 current supplied span quote 검사에 실패했다. 미표시 draft의 정답 같은 본문을 성공으로 세지 않는다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-B-r1-f16625/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "run_id": "basic-dp01-e1-B-r1-f16625",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q3",
+      "actual_detailed_text": "가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선적으로 선택합니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-B-r1-f16625/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "63061652683a987c2ca895a452809807b0ab088b24185f55230ab1e13c309aa5"
+    },
+    {
+      "run_id": "basic-dp01-e1-C-r1-a29c36",
+      "variant": "C",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q1",
+      "actual_detailed_text": "Aster A의 가격은 1,250,000원이며, Boreal B의 가격은 1,190,000원입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-C-r1-a29c36/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "d5934c9b737bf83ca1e8965b854682f92260f9efa19587ccb7ca09650df927a9"
+    },
+    {
+      "run_id": "basic-dp01-e1-C-r1-a29c36",
+      "variant": "C",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q2",
+      "actual_detailed_text": "Aster A의 납기는 10월 29일이며 유지보수 기간은 36개월입니다. Boreal B의 납기는 11월 3일이며 유지보수 기간은 24개월입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-C-r1-a29c36/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "88d4e5afde5ca5043cd4f1eb466a6d4ee8cbf15ff8aad31a1453d58d85d81644"
+    },
+    {
+      "run_id": "basic-dp01-e1-C-r1-a29c36",
+      "variant": "C",
+      "episode": "dp01-e1",
+      "goal_id": "e1-q3",
+      "actual_detailed_text": "가격이 동일한 경우, 유지보수 기간이 더 긴 제품을 우선적으로 선택하는 기준이 적용됩니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e1-C-r1-a29c36/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "e8664311addb6b04dc295a7bcc9ec4d478a445d95d411e673ad26754db7c601e"
+    },
+    {
+      "run_id": "basic-dp01-e2-A-r1-ce936c",
+      "variant": "A",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q1",
+      "actual_detailed_text": "PC 비교표에서 가장 싼 제품은 Boreal B로, 가격은 1,190,000원입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-A-r1-ce936c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "8b99fad98e9d3dd451249f632645f165265f5ec5e5c366530b42eba5af2a6182"
+    },
+    {
+      "run_id": "basic-dp01-e2-A-r1-ce936c",
+      "variant": "A",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q2",
+      "actual_detailed_text": "북부 고객이 보낸 회의 메일에서 제안된 시간은 10월 30일 오후 2시입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-A-r1-ce936c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        }
+      ],
+      "actual_text_sha256": "c60e86a739b56db68caf2ae25d5cf9d71a3483d2653ebf3e3cf43e278cd7f476"
+    },
+    {
+      "run_id": "basic-dp01-e2-A-r1-ce936c",
+      "variant": "A",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q3",
+      "actual_detailed_text": "개발팀 일정에서 북부 고객이 제안한 시간인 10월 30일 오후 2시는 내부 보안 점검으로 인해 충돌이 발생합니다. 해당 날짜의 오전 10시는 비어 있습니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "FAIL",
+      "reason": "충돌은 맞으나, 덧붙인 “해당 날짜의 오전10시는 비어”는 앞서 지칭한10월30일을 뜻한다. 실제 원문 team-calendar-v1 line2는10월31일 오전10시이다. 고정 marker 검사는 충돌만 검사하므로 이 추가 허위 주장까지 검증하지 못한다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-A-r1-ce936c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/team-calendar-v1.txt",
+          "sha256": "7096a3992553d2dbeeb173c2cdba09205e084d66d61469a50fc3774b605e9afc",
+          "lines": {
+            "1": "개발팀 일정: 10월 30일 오후 2시는 내부 보안 점검이다.",
+            "2": "10월 31일 오전 10시는 비어 있다. 일정 생성 권한은 아직 부여하지 않았다.",
+            "3": "이 조회는 개발팀 일정에 한정하며 영업팀 일정은 확인하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "93dec3a848447add9a75c338fd08d3151f38fe104ac596f9eeb528fba9654576"
+    },
+    {
+      "run_id": "basic-dp01-e2-A-r1-ce936c",
+      "variant": "A",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q4",
+      "actual_detailed_text": "서울 특별 승인 지역에서는 영수증과 사전 승인에 한해 숙박비 상한이 150,000원까지 가능합니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-A-r1-ce936c/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/travel-rule-v1.txt",
+          "sha256": "262964b0972e178fa83dd3e676e0172287495a53b44250862d5ad63f75b0f034",
+          "lines": {
+            "1": "국내 출장 숙박비 상한은 1박 120,000원이다.",
+            "2": "서울 특별 승인 지역에서는 영수증과 사전 승인에 한해 150,000원까지 가능하다.",
+            "3": "식비는 1일 30,000원이며 숙박비와 별도다. 해외 출장은 이 규정 범위가 아니다."
+          }
+        }
+      ],
+      "actual_text_sha256": "5d69c6c376c644a88eb251f66d31e2fd04d97fcb89370986cc827fb33b9756b5"
+    },
+    {
+      "run_id": "basic-dp01-e2-B-r1-862d85",
+      "variant": "B",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q1",
+      "actual_detailed_text": "PC 비교표에서 가장 싼 제품은 Boreal B로, 가격은 1,190,000원입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-B-r1-862d85/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "8b99fad98e9d3dd451249f632645f165265f5ec5e5c366530b42eba5af2a6182"
+    },
+    {
+      "run_id": "basic-dp01-e2-B-r1-862d85",
+      "variant": "B",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q2",
+      "actual_detailed_text": "북부 고객이 보낸 회의 메일에서 요청된 시간은 10월 30일 오후 2시입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-B-r1-862d85/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        }
+      ],
+      "actual_text_sha256": "6bde71d1cdcb199607cc40db8ba61e19ff04d4a21ec63e68883281efa4073049"
+    },
+    {
+      "run_id": "basic-dp01-e2-B-r1-862d85",
+      "variant": "B",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q3",
+      "actual_detailed_text": "개발팀 일정에 따르면, 북부 고객 회의 요청 시간인 10월 30일 오후 2시는 내부 보안 점검으로 인해 충돌이 발생합니다. 대신 10월 31일 오전 10시는 비어 있습니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-B-r1-862d85/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/team-calendar-v1.txt",
+          "sha256": "7096a3992553d2dbeeb173c2cdba09205e084d66d61469a50fc3774b605e9afc",
+          "lines": {
+            "1": "개발팀 일정: 10월 30일 오후 2시는 내부 보안 점검이다.",
+            "2": "10월 31일 오전 10시는 비어 있다. 일정 생성 권한은 아직 부여하지 않았다.",
+            "3": "이 조회는 개발팀 일정에 한정하며 영업팀 일정은 확인하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "1ce826cf16e09f1b9eedebc7bb9b74596745e36d7d4588978a8e11d155b5d055"
+    },
+    {
+      "run_id": "basic-dp01-e2-B-r1-862d85",
+      "variant": "B",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q4",
+      "actual_detailed_text": "서울 특별 승인 지역에서는 영수증과 사전 승인에 한해 숙박비 상한이 150,000원까지 가능합니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-B-r1-862d85/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/travel-rule-v1.txt",
+          "sha256": "262964b0972e178fa83dd3e676e0172287495a53b44250862d5ad63f75b0f034",
+          "lines": {
+            "1": "국내 출장 숙박비 상한은 1박 120,000원이다.",
+            "2": "서울 특별 승인 지역에서는 영수증과 사전 승인에 한해 150,000원까지 가능하다.",
+            "3": "식비는 1일 30,000원이며 숙박비와 별도다. 해외 출장은 이 규정 범위가 아니다."
+          }
+        }
+      ],
+      "actual_text_sha256": "5d69c6c376c644a88eb251f66d31e2fd04d97fcb89370986cc827fb33b9756b5"
+    },
+    {
+      "run_id": "basic-dp01-e2-C-r1-1f1019",
+      "variant": "C",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q1",
+      "actual_detailed_text": "Boreal B is the cheapest product at 1,190,000 KRW.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r1-1f1019/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "sha256": "c743c063098bf0356c98ed19179c727493c8fcd1074960ecab3eee777da629b7",
+          "lines": {
+            "1": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "2": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.",
+            "3": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.",
+            "4": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+            "5": "배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다."
+          }
+        }
+      ],
+      "actual_text_sha256": "a9ff5000cfb4308fca412d0fc7f345d6268d27f22210cc5e97f00650fdaee037"
+    },
+    {
+      "run_id": "basic-dp01-e2-C-r1-1f1019",
+      "variant": "C",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q2",
+      "actual_detailed_text": "북부 고객이 요청한 제품 검토 회의 시간은 10월 30일 오후 2시입니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r1-1f1019/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        }
+      ],
+      "actual_text_sha256": "04350c4a6b08e30645324b5fe2bc081f6b1e0228ffadee2d0967fbd8f6355080"
+    },
+    {
+      "run_id": "basic-dp01-e2-C-r1-1f1019",
+      "variant": "C",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q3",
+      "actual_detailed_text": "The requested meeting time of October 30 at 2 PM conflicts with an internal security check scheduled for the development team.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r1-1f1019/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "sha256": "7a53c65e35e8caceda99bfb3d365fbec7ce00a555aad9d42191d9a8fabc6b08a",
+          "lines": {
+            "1": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.",
+            "2": "참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.",
+            "3": "메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/team-calendar-v1.txt",
+          "sha256": "7096a3992553d2dbeeb173c2cdba09205e084d66d61469a50fc3774b605e9afc",
+          "lines": {
+            "1": "개발팀 일정: 10월 30일 오후 2시는 내부 보안 점검이다.",
+            "2": "10월 31일 오전 10시는 비어 있다. 일정 생성 권한은 아직 부여하지 않았다.",
+            "3": "이 조회는 개발팀 일정에 한정하며 영업팀 일정은 확인하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "dc13a3e476c1da555766670489eea4b9d14ba994518c5c78866fc0a3045d025b"
+    },
+    {
+      "run_id": "basic-dp01-e2-C-r1-1f1019",
+      "variant": "C",
+      "episode": "dp01-e2",
+      "goal_id": "e2-q4",
+      "actual_detailed_text": "In the Seoul special approval zone, accommodation expenses up to 150,000 KRW per night are permitted, conditional on providing a receipt and obtaining prior approval.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e2-C-r1-1f1019/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/travel-rule-v1.txt",
+          "sha256": "262964b0972e178fa83dd3e676e0172287495a53b44250862d5ad63f75b0f034",
+          "lines": {
+            "1": "국내 출장 숙박비 상한은 1박 120,000원이다.",
+            "2": "서울 특별 승인 지역에서는 영수증과 사전 승인에 한해 150,000원까지 가능하다.",
+            "3": "식비는 1일 30,000원이며 숙박비와 별도다. 해외 출장은 이 규정 범위가 아니다."
+          }
+        }
+      ],
+      "actual_text_sha256": "d7c03d4230dc94a42a7bd26d2598ca6a756d1b71ffdf37e66b0bae0b2f85fc78"
+    },
+    {
+      "run_id": "basic-dp01-e3-A-r1-1f39fd",
+      "variant": "A",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-A-r1-1f39fd/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "48f643a21a4a2f8c065f092665e113035fd0462f4bcfb08c9a3e433758a6a359"
+    },
+    {
+      "run_id": "basic-dp01-e3-A-r1-1f39fd",
+      "variant": "A",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "literal_correct": false,
+      "equivalent_correct": false,
+      "author_manual_status": "FAIL",
+      "reason": "현재 견적v2의 가격과 유지보수는 실제 본문에 있지만, 납기 11월1일이 실제 본문에서 빠졌다. 원문 vendor-quote-v2 line2의 필수 정정 내용 누락이다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-A-r1-1f39fd/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "66e999e5531c02dd9c9e7badd74fe90e06a4f854d5958bf57b1c37986ad188de"
+    },
+    {
+      "run_id": "basic-dp01-e3-B-r1-1599b2",
+      "variant": "B",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 밝혔습니다.\n\n받아둔 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "literal_correct": true,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 질문의 요구 사실과 원문을 대조했으며 조건의 범위를 보존했다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-B-r1-1599b2/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "deabe59c6c61b18e15b5336464f292508fd4f7b638254308d0fdbe4fb9bc62ec"
+    },
+    {
+      "run_id": "basic-dp01-e3-B-r1-1599b2",
+      "variant": "B",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(v2)에 따르면 Aster A의 가격은 대당 1,180,000원(부가세 포함)이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "literal_correct": false,
+      "equivalent_correct": false,
+      "author_manual_status": "FAIL",
+      "reason": "현재 견적v2의 가격과 유지보수는 실제 본문에 있지만, 납기 11월1일이 실제 본문에서 빠졌다. 원문 vendor-quote-v2 line2의 필수 정정 내용 누락이다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-B-r1-1599b2/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "a72d95cb50018bf2dcfab85f0c516fb1b43b7e0945029a6e25664ec1164b980b"
+    },
+    {
+      "run_id": "basic-dp01-e3-C-r1-fa7160",
+      "variant": "C",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "The actually explained criteria involve comparing VAT-inclusive prices and maintenance periods, prioritizing longer maintenance if prices are equal, while noting that no purchase decision has been made yet. The received quote for Aster A (v1) lists a price of 1,250,000 KRW per unit (VAT included) with a 36-month maintenance period, a delivery date of October 29th, and separate installation fees, for a quantity of 12 units.",
+      "literal_correct": false,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 영어 본문에36-month가 있으며 q2에November1st가 있다. 실제 의미는 맞고 old literal만 duration 표기를 놓친다. 단위/날짜 병렬 진단과 수동 판정을 구분한다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-C-r1-fa7160/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "465f7cb8b40645512f8fa30fcf87a3c173c522e1cdfb5ef7766e8411f9a15907"
+    },
+    {
+      "run_id": "basic-dp01-e3-C-r1-fa7160",
+      "variant": "C",
+      "episode": "dp01-e3",
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "The evaluation criteria specify comparing VAT-included prices and maintenance periods, prioritizing longer maintenance if prices are equal, and verifying the latest quote version since the purchase is undecided. The latest corrected quote (v2) for Aster A sets the unit price at 1,180,000 KRW (VAT included), maintains a 36-month maintenance period and quantity of 12 units, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW. No contract has been concluded yet.",
+      "literal_correct": false,
+      "equivalent_correct": true,
+      "author_manual_status": "PASS",
+      "reason": "실제 영어 본문에36-month가 있으며 q2에November1st가 있다. 실제 의미는 맞고 old literal만 duration 표기를 놓친다. 단위/날짜 병렬 진단과 수동 판정을 구분한다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/raw/runs/basic-dp01-e3-C-r1-fa7160/trace.json",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "actual_text_sha256": "db16aac6fa0e225cedd20672e8620c9d008f0f8f68b5617359fb64b46d0599f4"
+    }
+  ]
+}

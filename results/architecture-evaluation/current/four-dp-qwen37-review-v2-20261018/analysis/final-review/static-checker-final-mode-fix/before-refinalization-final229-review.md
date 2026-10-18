@@ -1,0 +1,162 @@
+# FINAL independent campaign audit
+
+{"PASS": 153, "LIMITED": 1}
+
+- PASS — BASIC planned120 unique and independent manifest key agreement
+- PASS — Fixed QA01/QA03 population independently totals261/243
+- PASS — basic-dp05-reuse-corrected-v1: freeze/source/external/binary pins
+- PASS — basic-dp05-reuse-corrected-v1: explicit effective candidate source and separately pinned binary
+- PASS — basic-dp05-reuse-corrected-v1: explicit derived-analysis/scorer provenance
+- PASS — basic-dp05-reuse-corrected-v1: explicit boundary stop preserves completed and unexecuted jobs
+- PASS — basic-dp05-reuse-corrected-v1: actual raw input/trace
+- PASS — basic-dp05-reuse-corrected-v1: pertrial pin/job identity
+- PASS — basic-dp05-reuse-corrected-v1: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — basic-dp05-reuse-corrected-v1: first exact referent sets/current revision
+- PASS — basic-dp05-reuse-corrected-v1: failure events preserved
+- PASS — basic-dp05-reuse-corrected-v1: same-sample RSS sums/peak/coverage
+- PASS — basic-dp05-reuse-corrected-v1: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — basic-dp05-reuse-corrected-v1: actual requests/model/usage/price/DP04caps
+- PASS — basic-dp05-reuse-corrected-v1: actual call log equals episode ownership
+- PASS — basic-dp05-reuse-corrected-v1: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — basic-dp05-reuse-union-corrected-v2: freeze/source/external/binary pins
+- PASS — basic-dp05-reuse-union-corrected-v2: explicit effective candidate source and separately pinned binary
+- PASS — basic-dp05-reuse-union-corrected-v2: explicit derived-analysis/scorer provenance
+- PASS — basic-dp05-reuse-union-corrected-v2: every authorized job once
+- PASS — basic-dp05-reuse-union-corrected-v2: actual raw input/trace
+- PASS — basic-dp05-reuse-union-corrected-v2: pertrial pin/job identity
+- PASS — basic-dp05-reuse-union-corrected-v2: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — basic-dp05-reuse-union-corrected-v2: first exact referent sets/current revision
+- PASS — basic-dp05-reuse-union-corrected-v2: failure events preserved
+- PASS — basic-dp05-reuse-union-corrected-v2: same-sample RSS sums/peak/coverage
+- PASS — basic-dp05-reuse-union-corrected-v2: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — basic-dp05-reuse-union-corrected-v2: actual requests/model/usage/price/DP04caps
+- PASS — basic-dp05-reuse-union-corrected-v2: actual call log equals episode ownership
+- PASS — basic-dp05-reuse-union-corrected-v2: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — basic-v1: freeze/source/external/binary pins
+- PASS — basic-v1: explicit derived-analysis/scorer provenance
+- PASS — basic-v1: every authorized job once
+- PASS — basic-v1: actual raw input/trace
+- PASS — basic-v1: pertrial pin/job identity
+- PASS — basic-v1: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — basic-v1: first exact referent sets/current revision
+- PASS — basic-v1: failure events preserved
+- PASS — basic-v1: same-sample RSS sums/peak/coverage
+- PASS — basic-v1: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — basic-v1: actual requests/model/usage/price/DP04caps
+- PASS — basic-v1: actual call log equals episode ownership
+- PASS — basic-v1: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — calibration-v1: freeze/source/external/binary pins
+- PASS — calibration-v1: explicit derived-analysis/scorer provenance
+- PASS — calibration-v1: every authorized job once
+- PASS — calibration-v1: actual raw input/trace
+- PASS — calibration-v1: pertrial pin/job identity
+- PASS — calibration-v1: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — calibration-v1: first exact referent sets/current revision
+- PASS — calibration-v1: failure events preserved
+- PASS — calibration-v1: same-sample RSS sums/peak/coverage
+- PASS — calibration-v1: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — calibration-v1: actual requests/model/usage/price/DP04caps
+- PASS — calibration-v1: actual call log equals episode ownership
+- PASS — calibration-v1: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — calibration-v2: freeze/source/external/binary pins
+- PASS — calibration-v2: explicit derived-analysis/scorer provenance
+- PASS — calibration-v2: every authorized job once
+- PASS — calibration-v2: actual raw input/trace
+- PASS — calibration-v2: pertrial pin/job identity
+- PASS — calibration-v2: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — calibration-v2: first exact referent sets/current revision
+- PASS — calibration-v2: failure events preserved
+- PASS — calibration-v2: same-sample RSS sums/peak/coverage
+- PASS — calibration-v2: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — calibration-v2: actual requests/model/usage/price/DP04caps
+- PASS — calibration-v2: actual call log equals episode ownership
+- PASS — calibration-v2: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — calibration-v3: freeze/source/external/binary pins
+- PASS — calibration-v3: explicit derived-analysis/scorer provenance
+- PASS — calibration-v3: every authorized job once
+- PASS — calibration-v3: actual raw input/trace
+- PASS — calibration-v3: pertrial pin/job identity
+- PASS — calibration-v3: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — calibration-v3: first exact referent sets/current revision
+- PASS — calibration-v3: failure events preserved
+- PASS — calibration-v3: same-sample RSS sums/peak/coverage
+- PASS — calibration-v3: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — calibration-v3: actual requests/model/usage/price/DP04caps
+- PASS — calibration-v3: actual call log equals episode ownership
+- PASS — calibration-v3: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — diagnostic-dp05-numbered-lines: freeze/source/external/binary pins
+- PASS — diagnostic-dp05-numbered-lines: explicit effective candidate source and separately pinned binary
+- PASS — diagnostic-dp05-numbered-lines: explicitly pinned line-number-only diagnostic harness
+- PASS — diagnostic-dp05-numbered-lines: explicit derived-analysis/scorer provenance
+- PASS — diagnostic-dp05-numbered-lines: every authorized job once
+- PASS — diagnostic-dp05-numbered-lines: actual raw input/trace
+- PASS — diagnostic-dp05-numbered-lines: pertrial pin/job identity
+- PASS — diagnostic-dp05-numbered-lines: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — diagnostic-dp05-numbered-lines: first exact referent sets/current revision
+- PASS — diagnostic-dp05-numbered-lines: failure events preserved
+- PASS — diagnostic-dp05-numbered-lines: same-sample RSS sums/peak/coverage
+- PASS — diagnostic-dp05-numbered-lines: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — diagnostic-dp05-numbered-lines: actual requests/model/usage/price/DP04caps
+- PASS — diagnostic-dp05-numbered-lines: actual call log equals episode ownership
+- PASS — diagnostic-dp05-numbered-lines: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — tactic-dp01-A2: freeze/source/external/binary pins
+- PASS — tactic-dp01-A2: explicit effective candidate source and separately pinned binary
+- PASS — tactic-dp01-A2: explicit derived-analysis/scorer provenance
+- PASS — tactic-dp01-A2: every authorized job once
+- PASS — tactic-dp01-A2: actual raw input/trace
+- PASS — tactic-dp01-A2: pertrial pin/job identity
+- PASS — tactic-dp01-A2: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — tactic-dp01-A2: first exact referent sets/current revision
+- PASS — tactic-dp01-A2: failure events preserved
+- PASS — tactic-dp01-A2: same-sample RSS sums/peak/coverage
+- PASS — tactic-dp01-A2: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — tactic-dp01-A2: actual requests/model/usage/price/DP04caps
+- PASS — tactic-dp01-A2: actual call log equals episode ownership
+- PASS — tactic-dp01-A2: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — tactic-dp04-A4: freeze/source/external/binary pins
+- PASS — tactic-dp04-A4: explicit derived-analysis/scorer provenance
+- PASS — tactic-dp04-A4: every authorized job once
+- PASS — tactic-dp04-A4: actual raw input/trace
+- PASS — tactic-dp04-A4: pertrial pin/job identity
+- PASS — tactic-dp04-A4: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — tactic-dp04-A4: first exact referent sets/current revision
+- PASS — tactic-dp04-A4: failure events preserved
+- PASS — tactic-dp04-A4: same-sample RSS sums/peak/coverage
+- PASS — tactic-dp04-A4: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — tactic-dp04-A4: actual requests/model/usage/price/DP04caps
+- PASS — tactic-dp04-A4: actual call log equals episode ownership
+- PASS — tactic-dp04-A4: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — tactic-dp04-B4: freeze/source/external/binary pins
+- PASS — tactic-dp04-B4: explicit derived-analysis/scorer provenance
+- PASS — tactic-dp04-B4: every authorized job once
+- PASS — tactic-dp04-B4: actual raw input/trace
+- PASS — tactic-dp04-B4: pertrial pin/job identity
+- PASS — tactic-dp04-B4: independent callback/finalrevision/receiver timing and fixed coverage
+- PASS — tactic-dp04-B4: first exact referent sets/current revision
+- PASS — tactic-dp04-B4: failure events preserved
+- PASS — tactic-dp04-B4: same-sample RSS sums/peak/coverage
+- PASS — tactic-dp04-B4: exact N-R/fixed N-H/content event recovery diagnostics
+- PASS — tactic-dp04-B4: actual requests/model/usage/price/DP04caps
+- PASS — tactic-dp04-B4: actual call log equals episode ownership
+- PASS — tactic-dp04-B4: summary weighted time/set totals/cost/peak/failure aggregation
+- PASS — Final BASIC120 keys/no episode loss
+- PASS — All26 calibration episodes separately preserved
+- PASS — Only the explicitly authorized intermediate correction stop is counted
+- PASS — Final all-phase records: fixed218 plus explicitly stopped historical trial count
+- PASS — Presentation effective120: original01/02/04 84 + corrected05 36, fixed261/243
+- PASS — Publication selection manifest is the exact effective120 with source hashes
+- PASS — Publication headline10 rows use selected120 observed coverage/time/sets/cost/same-peak
+- PASS — Final publication120 endpoints and raw stage call/token/cost accounting
+- PASS — Final publication role RSS uses the actual same run and sample peak
+- PASS — Final fixed261/243 coverage including missing
+- PASS — Every scoped actual call UUID ↔ one global ledger entry
+- PASS — Global $4 cap / known vs unknown reservations
+- PASS — Final publication separates selected120 cost from all229 actual calls and ledger cost
+- PASS — No persisted secret/header/environment patterns (presence only)
+- PASS — Old raw/source invariance from captured baseline
+- PASS — QA04 DP04 final baseline applicability and four-task mean
+- LIMITED — Historical calibration-v1 analysis execution version remains UNKNOWN
+
+Raw check details: /Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/final-review/final229-review.json
+
+No model calls, candidate execution or source changes.

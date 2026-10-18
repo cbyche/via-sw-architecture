@@ -1,0 +1,584 @@
+{
+  "scope": "번호입력 진단의 최초 채택 payload 추출 보조자료. 별도 의미 전수판정 완료를 주장하지 않으며 진단18본문 판정과 구분한다.",
+  "fixed_expected_prefixes": 18,
+  "details": [
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r1-5782bb",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r1-5782bb/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft of the proposal memo is generated using only the specified source lines, respecting the 'draft_only' constraint and excluding installation convenience and unverified total operating cost.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report' to construct the memo draft.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report' to construct the memo draft."
+      }
+    },
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r1-5782bb",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r1-5782bb/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A text draft of the email is generated, citing specific lines from the source for price and delivery details, without including private contact information or claiming external sending.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Read lines 17-32 for price basis and lines 33-48 for delivery/introduction schedule from 'large-public-report', then compose a draft email incorporating these facts along with the prior constraints (12 units, 14,000,000 KRW budget, tax included). Ensure no private contact details are used and explicitly state this is a draft only.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Read lines 17-32 for price basis and lines 33-48 for delivery/introduction schedule from 'large-public-report', then compose a draft email incorporating these facts along with the prior constraints (12 units, 14,000,000 KRW budget, tax included). Ensure no private contact details are used and explicitly state this is a draft only."
+      }
+    },
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r2-f822bf",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r2-f822bf/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft of the proposal memo is generated, citing specific lines from the 'large-public-report' for price basis and support/operation limits, without performing any external actions or sending emails.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support and operation limits from 'large-public-report', then compose a concise draft memo in Korean that states the tax-included price for 12 units, highlights maintenance terms using the longer maintenance tie-break rule, and notes the review limitations, explicitly excluding installation convenience and unverified total operating costs.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support and operation limits from 'large-public-report', then compose a concise draft memo in Korean that states the tax-included price for 12 units, highlights maintenance terms using the longer maintenance tie-break rule, and notes the review limitations, explicitly excluding installation convenience and unverified total operating costs."
+      }
+    },
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r2-f822bf",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r2-f822bf/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text is generated that includes corrected unit prices, delivery schedules, and budget conditions (12 units, max 14,000,000 KRW, tax included), strictly excluding installation convenience, unverified operating costs, and private contact details, with no external sending actions performed.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Read lines 17-32 for price basis and lines 33-48 for delivery/introduction schedule from 'large-public-report', then compose a draft email incorporating these details along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included) and exclusions.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Read lines 17-32 for price basis and lines 33-48 for delivery/introduction schedule from 'large-public-report', then compose a draft email incorporating these details along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included) and exclusions."
+      }
+    },
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r3-ed39eb",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r3-ed39eb/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A draft text of the proposal memo is generated, citing specific lines from the 'large-public-report' for price basis and support/operation limits, without performing any external actions.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise draft memo in Korean that integrates these facts with the mandated constraints (tax-included, 12 units, KRW) and exclusions.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise draft memo in Korean that integrates these facts with the mandated constraints (tax-included, 12 units, KRW) and exclusions."
+      }
+    },
+    {
+      "variant": "A",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-A-r3-ed39eb",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-A-r3-ed39eb/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text containing unit price, delivery schedule, and budget conditions (12 units, <=14,000,000 KRW, tax included), excluding installation convenience, unverified operating costs, and private contact details. No sending action performed.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Generate a draft email body citing specific lines from the 'Price Basis' and 'Delivery and Introduction Schedule' sections of the large-public-report, ensuring all stated constraints and exclusions are met.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Generate a draft email body citing specific lines from the 'Price Basis' and 'Delivery and Introduction Schedule' sections of the large-public-report, ensuring all stated constraints and exclusions are met."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r1-c38950",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r1-c38950/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft containing Aster A's tax-included price (1,180,000 KRW), maintenance period (36 months), and stated review limitations (e.g., remote management policy needs security team review, night visit support not verified), without performing any external actions or sending.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Generate a bounded text draft citing specific lines from 'large-public-report' for price (lines 17-32) and support/maintenance limits (lines 65-80), ensuring no private annex data is included and no external actions are taken.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, adhering to prior constraints (KRW, tax-included, 12 units) and exclusions (no installation convenience, no unverified operating costs).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, adhering to prior constraints (KRW, tax-included, 12 units) and exclusions (no installation convenience, no unverified operating costs).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Generate a bounded text draft citing specific lines from 'large-public-report' for price (lines 17-32) and support/maintenance limits (lines 65-80), ensuring no private annex data is included and no external actions are taken."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r1-c38950",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r1-c38950/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text containing Aster A's unit price (1,160,000 KRW), expected delivery date (Nov 4), and adherence to the 14,000,000 KRW budget ceiling for 12 units, explicitly stating no external actions were taken and excluding private contact details.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Generate a draft email body citing the specific unit price from lines 17-27 and delivery schedule from lines 33-48 of the large-public-report, ensuring the tone reflects that this is a review draft without confirmed contract or external execution.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Generate a draft email body citing the specific unit price from lines 17-27 and delivery schedule from lines 33-48 of the large-public-report, ensuring the tone reflects that this is a review draft without confirmed contract or external execution."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r2-0af110",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r2-0af110/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A draft text of the proposal memo is generated, citing specific lines from the large-public-report for price (1,180,000 KRW), maintenance (36 months), and limitations (no night support, no high-load app verification), without performing any external actions or sending emails.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Generate a draft memo using only the 'large-public-report' source. Extract Aster A's VAT-included unit price (1,180,000 KRW) from lines 17-32, maintenance period (36 months) and support limitations (no night visit, no high-load app check) from lines 65-80. Explicitly state that this is a draft only, no purchase or external action is approved, and contract signing is unconfirmed. Exclude installation convenience and unverified operating costs as per prior constraints.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance, including VAT-included price, maintenance terms, and review limitations, while adhering to prior constraints and exclusions.",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance, including VAT-included price, maintenance terms, and review limitations, while adhering to prior constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Generate a draft memo using only the 'large-public-report' source. Extract Aster A's VAT-included unit price (1,180,000 KRW) from lines 17-32, maintenance period (36 months) and support limitations (no night visit, no high-load app check) from lines 65-80. Explicitly state that this is a draft only, no purchase or external action is approved, and contract signing is unconfirmed. Exclude installation convenience and unverified operating costs as per prior constraints."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r2-0af110",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r2-0af110/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text containing Aster A's tax-included unit price (1,160,000 KRW), expected delivery date (November 4th), and adherence to the budget ceiling (14,000,000 KRW) for 12 units. The draft must explicitly exclude unverified operating costs, installation convenience, and private contact details, and must not include any sending actions.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Generate a bounded text draft of an email for internal purchase review. Extract the unit price from lines 17-20 and delivery date from line 33 of 'large-public-report'. Apply the quantity (12) and budget ceiling (14,000,000 KRW) from prior state. Ensure the draft states it is for review only, excludes private contacts, and does not claim external execution.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to prior constraints.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to prior constraints.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Generate a bounded text draft of an email for internal purchase review. Extract the unit price from lines 17-20 and delivery date from line 33 of 'large-public-report'. Apply the quantity (12) and budget ceiling (14,000,000 KRW) from prior state. Ensure the draft states it is for review only, excludes private contacts, and does not claim external execution."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r3-180a4e",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r3-180a4e/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A draft text containing Aster A's tax-included price (1,180,000 KRW), maintenance period (36 months), and stated review limitations (e.g., remote management policy needs security team review, high-load app support not verified), without performing external actions or including excluded items.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Generate a concise draft memo citing specific lines for price (lines 17-32) and support/maintenance limits (lines 65-80), ensuring no external actions are taken and excluding unverified operating costs.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, adhering to prior constraints (KRW, tax-included, 12 units) and exclusions (no unverified operating costs, no installation convenience).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, adhering to prior constraints (KRW, tax-included, 12 units) and exclusions (no unverified operating costs, no installation convenience).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Generate a concise draft memo citing specific lines for price (lines 17-32) and support/maintenance limits (lines 65-80), ensuring no external actions are taken and excluding unverified operating costs."
+      }
+    },
+    {
+      "variant": "B",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-B-r3-180a4e",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-B-r3-180a4e/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text containing Aster A's unit price (1,160,000 KRW), expected delivery date (Nov 4), and adherence to the 14,000,000 KRW budget ceiling for 12 units, explicitly excluding private contact details and unverified operating costs.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Generate a draft email body citing lines 17-32 for price and lines 33-48 for delivery, ensuring no private data from revoked sources is included and no external actions are taken.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Generate a draft email body citing lines 17-32 for price and lines 33-48 for delivery, ensuring no private data from revoked sources is included and no external actions are taken."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r1-57e2ba",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r1-57e2ba/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft of the proposal memo is generated, citing specific lines from the 'large-public-report' for price grounds and support/operation limits, without performing any external actions.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise memo draft in Korean that integrates these facts with the mandated constraints (tax-included, 12 units, KRW) and exclusions.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise memo draft in Korean that integrates these facts with the mandated constraints (tax-included, 12 units, KRW) and exclusions."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 1,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r1-57e2ba",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r1-57e2ba/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text is generated that includes corrected unit prices, delivery schedules, and budget conditions (12 units, KRW 14,000,000 ceiling, tax included), strictly excluding installation convenience, unverified total operating costs, and private contact details. No external sending actions are performed.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Read lines 17-32 (Price Basis) and 33-48 (Delivery and Introduction Schedule) from 'large-public-report' to extract corrected unit prices and delivery timelines. Compose a draft email incorporating these facts along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included). Ensure the draft explicitly omits any mention of installation convenience, unverified total operating costs, or private contact details. Return the draft text only without executing any send commands.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Read lines 17-32 (Price Basis) and 33-48 (Delivery and Introduction Schedule) from 'large-public-report' to extract corrected unit prices and delivery timelines. Compose a draft email incorporating these facts along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included). Ensure the draft explicitly omits any mention of installation convenience, unverified total operating costs, or private contact details. Return the draft text only without executing any send commands."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r2-771370",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r2-771370/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft of the proposal memo is generated, citing specific lines from the 'large-public-report' for price basis and support/operation limits, without performing any external actions.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise memo draft in Korean reflecting the required financial and operational details under the specified constraints.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance, incorporating tax-included pricing, maintenance details, and review limitations from the public report, while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance, incorporating tax-included pricing, maintenance details, and review limitations from the public report, while adhering to prior constraints (KRW currency, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report', then compose a concise memo draft in Korean reflecting the required financial and operational details under the specified constraints."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 2,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r2-771370",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r2-771370/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text is generated that includes corrected unit prices, delivery schedules, and budget conditions (12 units, <=14,000,000 KRW, tax included), strictly excluding installation convenience, unverified total operating costs, and private contact details. No external sending or real-world actions are performed.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Read lines 17-32 (Price Basis) and 33-48 (Delivery and Introduction Schedule) from 'large-public-report' to extract corrected unit prices and delivery timelines. Compose a draft email incorporating these facts along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included, tie-break: longer maintenance). Ensure the draft explicitly omits any mention of installation convenience, unverified total operating costs, or private contact details as per exclusions. Present the result as a text draft only.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Read lines 17-32 (Price Basis) and 33-48 (Delivery and Introduction Schedule) from 'large-public-report' to extract corrected unit prices and delivery timelines. Compose a draft email incorporating these facts along with the prior adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included, tie-break: longer maintenance). Ensure the draft explicitly omits any mention of installation convenience, unverified total operating costs, or private contact details as per exclusions. Present the result as a text draft only."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-initial",
+      "goal_id": "h4-initial",
+      "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r3-dc39c3",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r3-dc39c3/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-initial-intent",
+        "completion_condition": "A text draft of the proposal memo is generated using only the specified source lines, respecting the 'draft_only' constraint and excluding installation convenience and unverified total operating cost.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-initial",
+        "handling": "Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report' to construct the memo draft.",
+        "purpose": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW, quantity 12, exclusions).",
+        "raw_utterance": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성해줘. 부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a short proposal memo focusing on price and maintenance based on the public report, incorporating tax-included pricing, maintenance details, and review limitations while adhering to prior constraints (KRW, quantity 12, exclusions).",
+        "source_revisions": {
+          "large-public-report": 1
+        },
+        "stimulus_id": "h4-initial",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서: Read lines 17-32 for price basis and lines 65-80 for support/operation limits from 'large-public-report' to construct the memo draft."
+      }
+    },
+    {
+      "variant": "C",
+      "episode": "dp05-e4",
+      "repetition": 3,
+      "stimulus_id": "h4-corrected",
+      "goal_id": "h4-corrected",
+      "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+      "author_manual_status": "UNREVIEWED",
+      "reason": "",
+      "run_id": "diagnostic-dp05-e4-C-r3-dc39c3",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/diagnostic-dp05-numbered-lines/raw/runs/diagnostic-dp05-e4-C-r3-dc39c3/trace.json",
+      "actual_adoption": {
+        "adoption_id": "h4-corrected-intent",
+        "completion_condition": "A draft email text is generated that includes unit price, delivery schedule, and budget conditions (12 units, max 14,000,000 KRW, tax included), strictly excludes installation convenience, unverified total operating cost, and private contact details, and does not perform any external sending actions.",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "h4-corrected",
+        "handling": "Read lines 17-32 for price basis and lines 33-48 for delivery schedule from 'large-public-report', then compose a draft email incorporating these facts along with the adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included) and exclusions.",
+        "purpose": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "raw_utterance": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성해줘. 정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안로 부탁해. 기존에 채택한 조건과 제외 범위를 지키고, 초안만 만들어줘. 실제 외부 실행은 하지 마.",
+        "recipient": "minimal-draft-agent",
+        "resolved": true,
+        "scope": "Draft a purchase review email based on the corrected public report, focusing on price and delivery schedule while adhering to budget constraints and exclusions.",
+        "source_revisions": {
+          "large-public-report": 2
+        },
+        "stimulus_id": "h4-corrected",
+        "targets": [
+          "large-public-report"
+        ],
+        "text": "12대 PC 도입 공개 검토 상세 보고서 정정판: Read lines 17-32 for price basis and lines 33-48 for delivery schedule from 'large-public-report', then compose a draft email incorporating these facts along with the adopted constraints (quantity: 12, budget ceiling: 14,000,000 KRW, tax included) and exclusions."
+      }
+    }
+  ],
+  "input_disclosure": "후보는 evaluator-only 정답값/라벨을 받지 않았다. 허용 원문에 적힌 가격·날짜·조건 등은 정상 모델 입력으로 제공됐다. 동결 rubric의 source values 표현은 evaluator-only 정답 자료를 뜻하며 실제 원문 사실 미제공을 뜻하지 않는다.",
+  "actual_provider_calls_by_review": 0
+}

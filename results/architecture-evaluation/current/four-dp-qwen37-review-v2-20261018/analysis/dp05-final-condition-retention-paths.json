@@ -1,0 +1,1208 @@
+{
+  "scope": "동일 E3 r3 사용자 목적·원문·권한의 실제 record/raw→선택→capsule→수신자 메일 경로. 원인 분리 실험이 아니며 모델 출력 변동/추론은 남는다.",
+  "candidate_semantic_summary_guarantee": false,
+  "no_new_model_calls": true,
+  "rows": [
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+      "variant": "A",
+      "calls": [
+        {
+          "stage": "dp05_select_handoff_details",
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/eb732e56-0c43-49bc-a33f-4523e2185dc7-request.json",
+          "request_sha256": "7fbd4cb070dc75bf4803f831414df9006e4573eaa5169bf0f5803cbba24a2715",
+          "mandatory": {
+            "access_epoch": 1,
+            "allowed_actions": [
+              "draft_only"
+            ],
+            "already_completed_actions": [],
+            "artifact_type": "email_draft",
+            "completion_condition": "A text draft of the email is generated using only the provided source evidence, without sending or external execution.",
+            "condition_revision": 1,
+            "constraints": {
+              "currency": "KRW",
+              "price_tie_break": "longer_maintenance",
+              "quantity": 12,
+              "tax_included": true
+            },
+            "delegation_id": "h3-mail-delegation",
+            "delegation_revision": 1,
+            "disposition": "AUTHORIZED",
+            "exclusions": [
+              "installation_convenience",
+              "unverified_total_operating_cost"
+            ],
+            "goal_id": "h3-mail",
+            "missing_required_sources": [],
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, including price and delivery dates, while adhering to prior constraints (KRW, tax-included, quantity 12, tie-break by longer maintenance) and exclusions (installation convenience, unverified total operating cost).",
+            "recipient": "minimal-draft-agent",
+            "request_revision": 1,
+            "required_source_ids": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "revoked_sources": [],
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "task_id": "T-PC",
+            "unknown_actions": []
+          },
+          "available_common_originals": [
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "consumer": "VIA_COMPOSER",
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "record_guidance_blocks": [],
+          "actual_capsule": {},
+          "actual_response": {
+            "mode": "DIRECT",
+            "summary": "Draft email to purchasing manager comparing Aster A and Boreal B based on public evidence. Aster A (1,180,000 KRW) has longer maintenance (36 months) vs Boreal B (1,150,000 KRW, 24 months). Per tie-break rule, Aster A is preferred despite higher price. Both support essential apps; high-load apps untested. Disk encryption confirmed; remote management unreviewed. Delivery: Nov 1 (A), Nov 3 (B). Installation support excluded from quote.",
+            "references": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_record_blocks": [],
+            "reads": [],
+            "unknowns": []
+          }
+        },
+        {
+          "stage": "dp05_receiver_select_or_complete",
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/842ced2a-d237-429c-b7d0-d6d49e16a91a-request.json",
+          "request_sha256": "5d55449bc34cdd5bc8cebf859420f8a8886c47fd29f607fa8d569f5e38599405",
+          "mandatory": {
+            "access_epoch": 1,
+            "allowed_actions": [
+              "draft_only"
+            ],
+            "already_completed_actions": [],
+            "artifact_type": "email_draft",
+            "completion_condition": "A text draft of the email is generated using only the provided source evidence, without sending or external execution.",
+            "condition_revision": 1,
+            "constraints": {
+              "currency": "KRW",
+              "price_tie_break": "longer_maintenance",
+              "quantity": 12,
+              "tax_included": true
+            },
+            "delegation_id": "h3-mail-delegation",
+            "delegation_revision": 1,
+            "disposition": "AUTHORIZED",
+            "exclusions": [
+              "installation_convenience",
+              "unverified_total_operating_cost"
+            ],
+            "goal_id": "h3-mail",
+            "missing_required_sources": [],
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, including price and delivery dates, while adhering to prior constraints (KRW, tax-included, quantity 12, tie-break by longer maintenance) and exclusions (installation convenience, unverified total operating cost).",
+            "recipient": "minimal-draft-agent",
+            "request_revision": 1,
+            "required_source_ids": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "revoked_sources": [],
+            "targets": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "task_id": "T-PC",
+            "unknown_actions": []
+          },
+          "available_common_originals": null,
+          "record_guidance_blocks": [],
+          "actual_capsule": {
+            "passages": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1,
+                "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다."
+              },
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1,
+                "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다."
+              }
+            ],
+            "record_blocks": [],
+            "references": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1
+              },
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1
+              }
+            ],
+            "summary": "Draft email to purchasing manager comparing Aster A and Boreal B based on public evidence. Aster A (1,180,000 KRW) has longer maintenance (36 months) vs Boreal B (1,150,000 KRW, 24 months). Per tie-break rule, Aster A is preferred despite higher price. Both support essential apps; high-load apps untested. Disk encryption confirmed; remote management unreviewed. Delivery: Nov 1 (A), Nov 3 (B). Installation support excluded from quote.",
+            "unknowns": []
+          },
+          "actual_response": {
+            "mode": "COMPLETE",
+            "result": {
+              "text": "구매 담당자님께,\n\n공개된 비교 자료와 견적 정보를 바탕으로 신규 PC 도입 건을 검토한 결과를 공유합니다.\n\n1. 가격 및 납기: Aster A는 1,180,000원(부가세 포함), Boreal B는 1,150,000원(부가세 포함)입니다. 12대 구매 기준이며 배송비는 포함되나 설치 지원은 별도입니다. 납기는 Aster A가 11월 1일, Boreal B가 11월 3일입니다.\n2. 유지보수 및 기능: Aster A는 유지보수 기간이 36개월이고 Boreal B는 24개월입니다. 두 제품 모두 기존 필수 앱 실행이 확인되었으나 고부하 설계 앱은 시험되지 않았습니다. 디스크 암호화는 확인되었으나 원격 관리 정책은 아직 검토되지 않았습니다.\n3. 권장 사항: 앞서 정해진 기준에 따라 가격 차이가 있을 경우 유지보수 기간이 긴 제품을 우선하도록 되어 있으므로, Aster A를 추천합니다. 단, 연구팀은 제품 추천을 확정하지 않았으며 구매 승인은 별도의 절차가 필요합니다.\n\n감사합니다.",
+              "used_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "source_spans": [
+                {
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 4
+                },
+                {
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 3
+                }
+              ],
+              "facts": [
+                {
+                  "statement": "Aster A의 유지보수 기간은 36개월이고 Boreal B는 24개월이다.",
+                  "quote": "Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "두 제품 모두 기존 필수 앱을 실행했으나 고부하 설계 앱은 시험하지 않았다.",
+                  "quote": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 2
+                },
+                {
+                  "statement": "디스크 암호화는 확인되었으나 원격 관리 정책은 검토되지 않았다.",
+                  "quote": "보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 3,
+                  "end_line": 3
+                },
+                {
+                  "statement": "연구팀은 제품 추천을 확정하지 않았고 구매 승인은 별도다.",
+                  "quote": "연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 4,
+                  "end_line": 4
+                },
+                {
+                  "statement": "Aster A 가격은 1,180,000원, Boreal B는 1,150,000원이며 부가세를 포함한다.",
+                  "quote": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "12대 구매 가정 시 배송비는 포함되고 설치 지원은 별도이며, 납기는 각각 11월 1일과 11월 3일이다.",
+                  "quote": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 3
+                }
+              ],
+              "constraints_respected": [
+                "currency: KRW",
+                "price_tie_break: longer_maintenance",
+                "quantity: 12",
+                "tax_included: true",
+                "exclusions: installation_convenience, unverified_total_operating_cost"
+              ],
+              "actions_performed": [
+                "draft_only"
+              ],
+              "uncertainties": [
+                "고부하 설계 앱 성능 미시험",
+                "원격 관리 정책 미검토",
+                "연구팀 추천 미확정"
+              ]
+            },
+            "reads": [],
+            "reason": "Provided passages contain sufficient evidence to draft the email comparing prices, maintenance, features, and delivery dates while adhering to constraints and exclusions."
+          }
+        }
+      ]
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+      "variant": "B",
+      "calls": [
+        {
+          "stage": "dp05_extract_record",
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/8312085b-9387-459c-b435-1e7419abda9d-request.json",
+          "request_sha256": "285dd1062dfac3aae9b9eb7c7ffbd4b402b52682093dc8f6cc49e037480fa8a7",
+          "mandatory": {
+            "access_epoch": 1,
+            "allowed_actions": [
+              "draft_only"
+            ],
+            "already_completed_actions": [],
+            "artifact_type": "email_draft",
+            "completion_condition": "A text draft of the email is generated for review, with no external sending actions performed.",
+            "condition_revision": 1,
+            "constraints": {
+              "currency": "KRW",
+              "price_tie_break": "longer_maintenance",
+              "quantity": 12,
+              "tax_included": true
+            },
+            "delegation_id": "h3-mail-delegation",
+            "delegation_revision": 1,
+            "disposition": "AUTHORIZED",
+            "exclusions": [
+              "installation_convenience",
+              "unverified_total_operating_cost"
+            ],
+            "goal_id": "h3-mail",
+            "missing_required_sources": [],
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, specifically including price and delivery dates, while adhering to prior constraints (tax-included prices, maintenance tie-breaker) and exclusions (installation convenience).",
+            "recipient": "minimal-draft-agent",
+            "request_revision": 1,
+            "required_source_ids": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "revoked_sources": [],
+            "targets": [
+              "public-quote",
+              "public-comparison"
+            ],
+            "task_id": "T-PC",
+            "unknown_actions": []
+          },
+          "available_common_originals": [],
+          "record_guidance_blocks": [
+            {
+              "block_id": "guidance_criteria_and_omission",
+              "explanation": "User-facing criteria were limited to VAT-inclusive price and maintenance period with a tie-breaker for longer maintenance; installation convenience was prepared but omitted from display.",
+              "source_spans": [
+                {
+                  "end_line": 3,
+                  "revision": 1,
+                  "source_id": "delivered-guidance",
+                  "start_line": 1
+                }
+              ],
+              "supporting_passages": [
+                {
+                  "end_line": 3,
+                  "revision": 1,
+                  "source_id": "delivered-guidance",
+                  "start_line": 1,
+                  "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+                }
+              ]
+            }
+          ],
+          "actual_capsule": {},
+          "actual_response": {
+            "mode": "DIRECT",
+            "summary": "Draft email to purchasing manager detailing public comparison results: Aster A (1,180,000 KRW, 36mo maintenance, Nov 1 delivery) vs Boreal B (1,150,000 KRW, 24mo maintenance, Nov 3 delivery). Prices are VAT-included for 12 units with shipping; installation excluded. Tie-breaker favors longer maintenance (Aster A). High-load apps and remote management policies unverified; no final recommendation made.",
+            "references": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 4
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_evidence_spans": [
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "public-quote",
+                "revision": 1,
+                "start_line": 3,
+                "end_line": 3
+              },
+              {
+                "source_id": "public-comparison",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 2
+              },
+              {
+                "source_id": "delivered-guidance",
+                "revision": 1,
+                "start_line": 1,
+                "end_line": 3
+              }
+            ],
+            "selected_record_blocks": [
+              "guidance_criteria_and_omission",
+              "quote_pricing_volume_exclusions",
+              "quote_delivery_non_binding",
+              "comparison_maintenance_functionality"
+            ],
+            "reads": [],
+            "unknowns": [
+              "Performance on high-load design applications",
+              "Status of remote management policies",
+              "Final product recommendation",
+              "Purchase approval decision"
+            ]
+          }
+        },
+        {
+          "stage": "dp05_receiver_select_or_complete",
+          "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/a6b1af58-3332-4278-aeae-0bf6236fd1d0-request.json",
+          "request_sha256": "9f8871f258cbd7ae8dfc3c55324418452471dfccd766c44a51e23d4e799375b6",
+          "mandatory": {
+            "access_epoch": 1,
+            "allowed_actions": [
+              "draft_only"
+            ],
+            "already_completed_actions": [],
+            "artifact_type": "email_draft",
+            "completion_condition": "A text draft of the email is generated for review, with no external sending actions performed.",
+            "condition_revision": 1,
+            "constraints": {
+              "currency": "KRW",
+              "price_tie_break": "longer_maintenance",
+              "quantity": 12,
+              "tax_included": true
+            },
+            "delegation_id": "h3-mail-delegation",
+            "delegation_revision": 1,
+            "disposition": "AUTHORIZED",
+            "exclusions": [
+              "installation_convenience",
+              "unverified_total_operating_cost"
+            ],
+            "goal_id": "h3-mail",
+            "missing_required_sources": [],
+            "purpose": "Draft an email to the purchasing manager explaining the public comparison results, specifically including price and delivery dates, while adhering to prior constraints (tax-included prices, maintenance tie-breaker) and exclusions (installation convenience).",
+            "recipient": "minimal-draft-agent",
+            "request_revision": 1,
+            "required_source_ids": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "revoked_sources": [],
+            "targets": [
+              "public-quote",
+              "public-comparison"
+            ],
+            "task_id": "T-PC",
+            "unknown_actions": []
+          },
+          "available_common_originals": null,
+          "record_guidance_blocks": [],
+          "actual_capsule": {
+            "passages": [],
+            "record_blocks": [
+              {
+                "block_id": "guidance_criteria_and_omission",
+                "explanation": "User-facing criteria were limited to VAT-inclusive price and maintenance period with a tie-breaker for longer maintenance; installation convenience was prepared but omitted from display.",
+                "source_spans": [
+                  {
+                    "end_line": 3,
+                    "revision": 1,
+                    "source_id": "delivered-guidance",
+                    "start_line": 1
+                  }
+                ],
+                "supporting_passages": [
+                  {
+                    "end_line": 3,
+                    "revision": 1,
+                    "source_id": "delivered-guidance",
+                    "start_line": 1,
+                    "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+                  }
+                ]
+              },
+              {
+                "block_id": "quote_pricing_volume_exclusions",
+                "explanation": "Public quotes list Aster A at 1,180,000 KRW and Boreal B at 1,150,000 KRW (VAT included) for 12 units with shipping included, but explicitly exclude installation support.",
+                "source_spans": [
+                  {
+                    "end_line": 2,
+                    "revision": 1,
+                    "source_id": "public-quote",
+                    "start_line": 1
+                  }
+                ],
+                "supporting_passages": [
+                  {
+                    "end_line": 2,
+                    "revision": 1,
+                    "source_id": "public-quote",
+                    "start_line": 1,
+                    "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다."
+                  }
+                ]
+              },
+              {
+                "block_id": "quote_delivery_non_binding",
+                "explanation": "Delivery dates are November 1st for Aster A and November 3rd for Boreal B; the quote document is not evidence of contract completion.",
+                "source_spans": [
+                  {
+                    "end_line": 3,
+                    "revision": 1,
+                    "source_id": "public-quote",
+                    "start_line": 3
+                  }
+                ],
+                "supporting_passages": [
+                  {
+                    "end_line": 3,
+                    "revision": 1,
+                    "source_id": "public-quote",
+                    "start_line": 3,
+                    "text": "납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다."
+                  }
+                ]
+              },
+              {
+                "block_id": "comparison_maintenance_functionality",
+                "explanation": "Aster A offers 36 months maintenance versus 24 months for Boreal B; both executed existing essential apps in standard office tasks, but high-load design apps were not tested.",
+                "source_spans": [
+                  {
+                    "end_line": 2,
+                    "revision": 1,
+                    "source_id": "public-comparison",
+                    "start_line": 1
+                  }
+                ],
+                "supporting_passages": [
+                  {
+                    "end_line": 2,
+                    "revision": 1,
+                    "source_id": "public-comparison",
+                    "start_line": 1,
+                    "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다."
+                  }
+                ]
+              }
+            ],
+            "references": [
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1
+              },
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1
+              },
+              {
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "delivered-guidance",
+                "start_line": 1
+              }
+            ],
+            "summary": "Draft email to purchasing manager detailing public comparison results: Aster A (1,180,000 KRW, 36mo maintenance, Nov 1 delivery) vs Boreal B (1,150,000 KRW, 24mo maintenance, Nov 3 delivery). Prices are VAT-included for 12 units with shipping; installation excluded. Tie-breaker favors longer maintenance (Aster A). High-load apps and remote management policies unverified; no final recommendation made.",
+            "unknowns": [
+              "Performance on high-load design applications",
+              "Status of remote management policies",
+              "Final product recommendation",
+              "Purchase approval decision"
+            ]
+          },
+          "actual_response": {
+            "mode": "COMPLETE",
+            "result": {
+              "text": "구매 담당자님께,\n\n공개 비교 결과 및 견적 내용을 다음과 같이 보고드립니다.\n\n1. 가격 및 조건 (12대 기준, 부가세 포함, 배송비 포함)\n- Aster A: 1,180,000원\n- Boreal B: 1,150,000원\n※ 설치 지원은 별도이며 견적서에 포함되어 있지 않습니다.\n\n2. 유지보수 기간\n- Aster A: 36개월\n- Boreal B: 24개월\n\n3. 납기 일정\n- Aster A: 11월 1일\n- Boreal B: 11월 3일\n\n4. 검토 기준 및 참고 사항\n- 이전 안내에 따라 사용자에게 표시된 기준은 부가세 포함 가격과 유지보수 기간입니다. 가격이 동일할 경우 유지보수 기간이 긴 제품을 우선하는 원칙을 적용합니다. 현재 가격 차이는 있으나, 유지보수 기간에서 Aster A가 더 깁니다.\n- 두 제품 모두 일반 사무 작업에서 기존 필수 앱 실행에는 문제가 없었으나, 고부하 설계 앱에 대한 성능은 시험되지 않았습니다.\n- 본 견적서는 계약 완료를 증명하는 문서가 아닙니다.\n\n검토 부탁드립니다.",
+              "used_source_ids": [
+                "public-quote",
+                "public-comparison",
+                "delivered-guidance"
+              ],
+              "source_spans": [
+                {
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 2
+                },
+                {
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 2
+                },
+                {
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 3,
+                  "end_line": 3
+                },
+                {
+                  "source_id": "delivered-guidance",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 3
+                }
+              ],
+              "facts": [
+                {
+                  "statement": "Aster A의 공개 견적가는 부가세 포함 1,180,000원이다.",
+                  "quote": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "Boreal B의 공개 견적가는 부가세 포함 1,150,000원이다.",
+                  "quote": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "견적은 12대 구매를 가정하며 배송비는 포함되지만 설치 지원은 별도다.",
+                  "quote": "12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 2
+                },
+                {
+                  "statement": "Aster A의 유지보수 기간은 36개월이다.",
+                  "quote": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "Boreal B의 유지보수 기간은 24개월이다.",
+                  "quote": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "두 제품 모두 같은 사무 작업에서 기존 필수 앱을 실행했다.",
+                  "quote": "같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 2
+                },
+                {
+                  "statement": "고부하 설계 앱은 시험하지 않았다.",
+                  "quote": "고부하 설계 앱은 시험하지 않았다.",
+                  "source_id": "public-comparison",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 2
+                },
+                {
+                  "statement": "Aster A의 납기는 11월 1일이고 Boreal B의 납기는 11월 3일이다.",
+                  "quote": "납기는 각각 11월 1일과 11월 3일이다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 3,
+                  "end_line": 3
+                },
+                {
+                  "statement": "견적은 계약 완료 증거가 아니다.",
+                  "quote": "견적은 계약 완료 증거가 아니다.",
+                  "source_id": "public-quote",
+                  "revision": 1,
+                  "start_line": 3,
+                  "end_line": 3
+                },
+                {
+                  "statement": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.",
+                  "quote": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.",
+                  "source_id": "delivered-guidance",
+                  "revision": 1,
+                  "start_line": 1,
+                  "end_line": 1
+                },
+                {
+                  "statement": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+                  "quote": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+                  "source_id": "delivered-guidance",
+                  "revision": 1,
+                  "start_line": 2,
+                  "end_line": 2
+                },
+                {
+                  "statement": "설치 편의는 사용자에게 표시하지 않았다.",
+                  "quote": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다.",
+                  "source_id": "delivered-guidance",
+                  "revision": 1,
+                  "start_line": 3,
+                  "end_line": 3
+                }
+              ],
+              "constraints_respected": [
+                "currency: KRW",
+                "price_tie_break: longer_maintenance",
+                "quantity: 12",
+                "tax_included: true",
+                "exclusions: installation_convenience",
+                "exclusions: unverified_total_operating_cost"
+              ],
+              "actions_performed": [
+                "draft_only"
+              ],
+              "uncertainties": [
+                "Performance on high-load design applications",
+                "Status of remote management policies",
+                "Final product recommendation",
+                "Purchase approval decision"
+              ]
+            },
+            "reads": [],
+            "reason": "Draft email generated using all required sources (public-quote, public-comparison) and adhering to constraints (VAT-inclusive prices, maintenance tie-breaker logic explained, installation convenience excluded). All facts are backed by exact quotes from the provided source spans."
+          }
+        }
+      ]
+    }
+  ],
+  "all_e2_e3_initial_receiver_raw_guidance_check": [
+    {
+      "run_id": "basic_corrected-dp05-e2-A-r1-462049",
+      "variant": "A",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/3afee6e5-0696-4427-9083-c0e5926c58a1-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-A-r2-03071d",
+      "variant": "A",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/f76a34a9-3a4c-4bed-aa8f-7ff3bb6f2da6-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-A-r3-6c97d3",
+      "variant": "A",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/ca7e6193-953b-46b7-83e5-b09937737e46-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-B-r1-8655ef",
+      "variant": "B",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/b28facd7-d19b-467c-89aa-a0707b6a856b-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-B-r2-b8bd03",
+      "variant": "B",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 2,
+          "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/89eb99c2-0b8a-4140-9f93-e4ef8ca21006-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-B-r3-590d54",
+      "variant": "B",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 3,
+          "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/1829166a-0ca8-4882-880f-403dd071374c-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-C-r1-084da4",
+      "variant": "C",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/f7b72912-8f9b-41d8-b548-04dfe4e24821-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-C-r2-a03698",
+      "variant": "C",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/f2edbdea-52a7-4040-9395-1ed65cedcb1d-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e2-C-r3-714612",
+      "variant": "C",
+      "goal_id": "h2-deck",
+      "episode": "dp05-e2",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/373e202c-bbdf-467f-83b5-1c53e1611b43-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+      "variant": "A",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/50e699e9-5708-45eb-addc-488c6e7f11c7-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+      "variant": "A",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/0f76f067-76b2-4907-88fe-a8db670bd072-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r1-4ba071",
+      "variant": "A",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/7238e190-656f-4c15-bc6d-b8309013ce2f-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r2-a33c38",
+      "variant": "A",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/2004180e-aeb6-41f3-8ad9-2646574266cf-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r2-a33c38",
+      "variant": "A",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/98ffb657-ddc0-48b6-bb52-060a815ae4a0-request.json",
+      "author_body_status": "UNRESOLVED"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+      "variant": "A",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/7dfb0655-b14a-406a-b6d6-a09bfb89125e-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+      "variant": "A",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/842ced2a-d237-429c-b7d0-d6d49e16a91a-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-A-r3-0028b1",
+      "variant": "A",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/5bba28ae-0284-49ce-abde-87e092a28969-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+      "variant": "B",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        },
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 3,
+          "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/bf92e136-a532-42b5-b63b-81989b65d39a-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+      "variant": "B",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        },
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 3,
+          "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/01d77484-878c-42fa-83ee-c89a28ca5f0f-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r1-211c9c",
+      "variant": "B",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/a8a6a70e-4dbf-4c1b-a3b4-5ea368159464-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r2-6cc27c",
+      "variant": "B",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 1,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다."
+        },
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 2,
+          "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        },
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 3,
+          "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/6e74ece5-e7d7-4034-abaa-bbad8e4f82e0-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r2-6cc27c",
+      "variant": "B",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 2,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 2,
+          "text": "가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/3cfaa62b-7837-4981-938c-0e9c9c191abd-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r2-6cc27c",
+      "variant": "B",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 3,
+          "text": "설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/2506816c-eed7-45df-87e3-33ee4f16a27b-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+      "variant": "B",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/a3aa5459-b4eb-42be-8370-1a1773ee4101-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+      "variant": "B",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/a6b1af58-3332-4278-aeae-0bf6236fd1d0-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-B-r3-15540f",
+      "variant": "B",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": true,
+      "guidance": [
+        {
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.\n설치 편의는 준비 원고에는 있었지만 사용자에게 표시하지 않았다."
+        }
+      ],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/241b29e4-2981-48c8-9e12-46292f88c751-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+      "variant": "C",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/e04c1e0d-50c0-49ff-8641-b72067227c3f-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+      "variant": "C",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/681450a6-a754-4bca-8e54-331e203af42b-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r1-1b13b7",
+      "variant": "C",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/b2b8c344-7296-481f-97d9-0d19d492ca40-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+      "variant": "C",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/069d6809-5421-4143-9a3b-fe8fc5d6855a-request.json",
+      "author_body_status": "UNRESOLVED"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+      "variant": "C",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/621f1147-77a5-4a53-a0e2-46dcfb1cc14a-request.json",
+      "author_body_status": "FAIL"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r2-788e21",
+      "variant": "C",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/643665a6-d11b-4564-ab14-56a18b48a1ea-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+      "variant": "C",
+      "goal_id": "h3-deck",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/6fb82206-0bc3-4cf0-a18a-ef82559596c6-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+      "variant": "C",
+      "goal_id": "h3-mail",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/3452c9aa-f352-420e-9d63-0923527c0043-request.json",
+      "author_body_status": "PASS"
+    },
+    {
+      "run_id": "basic_corrected-dp05-e3-C-r3-791797",
+      "variant": "C",
+      "goal_id": "h3-meeting",
+      "episode": "dp05-e3",
+      "initial_receiver_has_actual_guidance_raw": false,
+      "guidance": [],
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/743d6e47-6a79-46de-a269-10acab522143-request.json",
+      "author_body_status": "PASS"
+    }
+  ]
+}

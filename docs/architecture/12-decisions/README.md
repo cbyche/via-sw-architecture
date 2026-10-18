@@ -1,5 +1,7 @@
 # 12. Reference Architecture and Structural Choices
 
+> **2026-10-19 현재 결과:** [일곱 문제의 통합 분석](./decision-packages/seven-problem-review/README.md), [15 보완 PoC 결과](./decision-packages/seven-problem-review/15-corrected-poc-results.md), [10 발표 원고](./decision-packages/seven-problem-review/10-presentation-outline.md)를 읽는다. 주요 DP 네 개의 10개 기본안 최종 비교 120회와 보완 27회·공통 표현 진단 9회를 완료했다. 구조별 QA 예상과 실제 수치·사례·실패를 연결했다. 독립 상세 설계 세 개는 별도이며 이번 성능 결과로 검증했다고 하지 않는다. QA 정의/점수/COMMON-28과 reference Architecture 및 ADR은 보존한다. 아래 Stage 4와 target 유래 설명은 이전 작업 이력이다.
+
 > 상태: **Reference Architecture를 활용한 Decision Reconstruction / Stage 4 핵심 기능 대안 탐색** / 2026-10-03
 > [최신 결과: 여섯 구조 비교](./decision-packages/04-30-comparison-guide.md). 기존 target은 참조 구조이며 두 비교안 중 하나로 고정하지 않는다.
 

@@ -1,0 +1,388 @@
+{
+  "source_runs_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v3/runs.jsonl",
+  "source_runs_sha256": "99ecbbdc01e2e5b4e1a94dea96929d2a9a01424deafbafd496285a0db60d3153",
+  "rows": [
+    {
+      "run_id": "calibration_v3-dp04-free-region-A-r1-25c0b8",
+      "phase": "CALIBRATION_V3",
+      "episode": "dp04-free-region",
+      "variant": "A",
+      "repetition": 1,
+      "freeze_sha256": "bc3c1bca1e218832c216dc4952cb3165605a847e0f7ba9cdf2caf19faf49fa2d",
+      "binary_sha256": "8229089b04b66231f58cbb44b35c12950735cfbbad83dfe03993d5d34cd773e9",
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 1,
+          "input_tokens": 2431,
+          "output_tokens": 393,
+          "cost_usd": 0.0016012000000000003,
+          "provider_elapsed_ms": [
+            7417.815875
+          ],
+          "queue_ms": [
+            2.1865
+          ],
+          "call_uuids": [
+            "d2cd42c3-b786-4b1f-a11f-625a0353afea"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.joint_source_reread": {
+          "calls": 1,
+          "input_tokens": 2802,
+          "output_tokens": 351,
+          "cost_usd": 0.0016824000000000001,
+          "provider_elapsed_ms": [
+            6997.762
+          ],
+          "queue_ms": [
+            1.200375
+          ],
+          "call_uuids": [
+            "68bfc94e-ab48-4e1d-bc9b-688946f1c35f"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 5233,
+      "total_output_tokens": 744,
+      "total_cost_usd": 0.0032836000000000002,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 12,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "GROUNDING_CONSISTENCY_REJECTED": 2,
+        "BOUNDED_SOURCE_REREAD": 1,
+        "ADOPTION": 1,
+        "GOAL_FAILED": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [
+        {
+          "attempt": 0,
+          "issues": [
+            "CENTER_OUTSIDE_CLAIMED_REGION:\"P5\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2431,
+              "output_tokens": 393
+            },
+            "adoptions": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Loop-1 polygon encloses centers of P3, P4, P5; transcript specifies 'three points'.",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      320,
+                      260,
+                      360,
+                      300
+                    ],
+                    "frame_id": "graph",
+                    "label": "Sensor readings / irregular plot - P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      480,
+                      370,
+                      520,
+                      410
+                    ],
+                    "frame_id": "graph",
+                    "label": "Sensor readings / irregular plot - P4",
+                    "target_id": "P4"
+                  },
+                  {
+                    "bbox": [
+                      380,
+                      450,
+                      420,
+                      490
+                    ],
+                    "frame_id": "graph",
+                    "label": "Sensor readings / irregular plot - P5",
+                    "target_id": "P5"
+                  }
+                ],
+                "relation": "within_region",
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4",
+                  "P5"
+                ]
+              }
+            ],
+            "intent": "Calculate average of three points enclosed by the drawn loop",
+            "need_evidence": false
+          }
+        },
+        {
+          "attempt": 1,
+          "issues": [
+            "RAW_EXPLICIT_COUNT_CONTRADICTION:\"graph-region\":3:2",
+            "COUNT_CONTRADICTION:\"graph-region\":3:2",
+            "MODEL_REQUESTED_SOURCE_REREAD"
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2802,
+              "output_tokens": 351
+            },
+            "adoptions": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Loop-1 encloses P3, P4. P5 center (400,460) is outside loop bottom edge y=420.",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      320,
+                      260,
+                      360,
+                      300
+                    ],
+                    "frame_id": "graph",
+                    "label": "Sensor readings / irregular plot - P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      480,
+                      370,
+                      520,
+                      410
+                    ],
+                    "frame_id": "graph",
+                    "label": "Sensor readings / irregular plot - P4",
+                    "target_id": "P4"
+                  }
+                ],
+                "relation": "within_region",
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4"
+                ]
+              }
+            ],
+            "intent": "Calculate average of three points enclosed by the drawn loop",
+            "need_evidence": {
+              "scope": "Identify third point for 'three points' as P5 is geometrically excluded by loop-1."
+            }
+          }
+        }
+      ],
+      "failures": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "proposal": {
+            "adoptions": [
+              {
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "graph-region",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "contract_failures": [
+              "RAW_EXPLICIT_COUNT_CONTRADICTION:\"graph-region\":3:2",
+              "COUNT_CONTRADICTION:\"graph-region\":3:2",
+              "MODEL_REQUESTED_SOURCE_REREAD"
+            ],
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "graph",
+                "sha256": "8d0350fe2d0d77db768d465ec413a8f1c8949537f9c8ef80f47fb0e2e68293e4",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+          "revision": 1,
+          "stimulus_id": "dp04-free-region:r1"
+        }
+      ],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Consistency validation failed after bounded source rejudgment",
+          "expression_id": "graph-region",
+          "extents": null,
+          "relation": null,
+          "revision": 1,
+          "status": "need_evidence",
+          "targets": []
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration_v3-dp04-free-region-B-r1-f0906a",
+      "phase": "CALIBRATION_V3",
+      "episode": "dp04-free-region",
+      "variant": "B",
+      "repetition": 1,
+      "freeze_sha256": "bc3c1bca1e218832c216dc4952cb3165605a847e0f7ba9cdf2caf19faf49fa2d",
+      "binary_sha256": "8229089b04b66231f58cbb44b35c12950735cfbbad83dfe03993d5d34cd773e9",
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 1,
+          "input_tokens": 2162,
+          "output_tokens": 767,
+          "cost_usd": 0.002092,
+          "provider_elapsed_ms": [
+            13430.873291
+          ],
+          "queue_ms": [
+            1.148334
+          ],
+          "call_uuids": [
+            "6f6ffa85-97a7-46de-bee2-fe6ddf500a2b"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.speech_producer": {
+          "calls": 1,
+          "input_tokens": 648,
+          "output_tokens": 149,
+          "cost_usd": 0.0004976000000000001,
+          "provider_elapsed_ms": [
+            4694.15025
+          ],
+          "queue_ms": [
+            2.549
+          ],
+          "call_uuids": [
+            "770934c4-6f35-4cb7-9be0-0f0422d003d4"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 2810,
+      "total_output_tokens": 916,
+      "total_cost_usd": 0.0025896,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 14,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "SCREEN_CANDIDATES_PUBLISHED": 1,
+        "SPEECH_CANDIDATES_PUBLISHED": 1,
+        "TYPED_CODE_BIND": 1,
+        "ADOPTION": 1,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": 3,
+          "cue_ids": [
+            "loop-1"
+          ],
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "graph-region",
+          "extents": [
+            {
+              "bbox": [
+                335,
+                235,
+                355,
+                255
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P3",
+              "target_id": "P3"
+            },
+            {
+              "bbox": [
+                495,
+                315,
+                515,
+                335
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P4",
+              "target_id": "P4"
+            },
+            {
+              "bbox": [
+                385,
+                395,
+                405,
+                415
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P5",
+              "target_id": "P5"
+            }
+          ],
+          "relation": "designated_by_cue",
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "P3",
+            "P4",
+            "P5"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    }
+  ],
+  "provider_calls_created": 0
+}

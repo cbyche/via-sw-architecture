@@ -1,0 +1,879 @@
+{
+  "check": {
+    "change": "C03",
+    "dp": "05",
+    "variant": "B",
+    "calls": 3,
+    "exit": 0,
+    "result": "PASS",
+    "model": "NO_MODEL; deterministic contract responder only",
+    "semantics_claimed": false
+  },
+  "calls": [
+    {
+      "call_id": 1,
+      "payload": {
+        "input": {
+          "current_adopted_state": {},
+          "observed_trigger": {
+            "kind": "source",
+            "source": {
+              "allowed_lines": [
+                1,
+                4
+              ],
+              "id": "public-comparison",
+              "line_count": 4,
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    1
+                  ],
+                  "section": "유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    4
+                  ],
+                  "section": "기능 검토와 미확인"
+                }
+              ],
+              "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+              "revision": 1,
+              "revoked": false,
+              "title": "신규 PC 비교 공개 보고서"
+            }
+          },
+          "previous_record": null,
+          "public_evidence": [
+            {
+              "consumer": "VIA_RECORD_PRODUCER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ]
+        },
+        "instruction": "Maintain a source-backed, purpose-neutral handoff work record from observed public activities and adopted state. No future delegation purpose is known. Produce reusable explanation of what each public result established, how results qualify or replace each other, conditions/exclusions and unresolved scope. Copying Task IDs alone is insufficient. Do not invent domain plans or future requests. Rebuild all dependent explanation on corrections. Return JSON {blocks:[{block_id:string,explanation:string,source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}]}],conditions:[string],unknowns:[string],coverage:[string]}. Every explanation needs original source spans. Preserve current revisions and access revocations; old state is not authority.",
+        "max_tokens": 1800
+      },
+      "stage": "dp05_produce_work_record",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 2,
+      "payload": {
+        "input": {
+          "current_adopted_state": {},
+          "observed_trigger": {
+            "kind": "source",
+            "source": {
+              "allowed_lines": [
+                1,
+                3
+              ],
+              "id": "public-quote",
+              "line_count": 3,
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    2
+                  ],
+                  "section": "가격과 수량"
+                },
+                {
+                  "lines": [
+                    3,
+                    3
+                  ],
+                  "section": "납기와 계약 상태"
+                }
+              ],
+              "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+              "revision": 1,
+              "revoked": false,
+              "title": "공급업체 공개 견적"
+            }
+          },
+          "previous_record": {
+            "blocks": [],
+            "conditions": [],
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "record_revision": 1,
+            "rejected_block_count": 0,
+            "source_vector": [
+              {
+                "allowed_lines": [
+                  1,
+                  4
+                ],
+                "id": "public-comparison",
+                "line_count": 4,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      1
+                    ],
+                    "section": "유지보수"
+                  },
+                  {
+                    "lines": [
+                      2,
+                      4
+                    ],
+                    "section": "기능 검토와 미확인"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "신규 PC 비교 공개 보고서"
+              }
+            ],
+            "status": "PUBLISHED",
+            "unknowns": []
+          },
+          "public_evidence": [
+            {
+              "consumer": "VIA_RECORD_PRODUCER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "consumer": "VIA_RECORD_PRODUCER",
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ]
+        },
+        "instruction": "Maintain a source-backed, purpose-neutral handoff work record from observed public activities and adopted state. No future delegation purpose is known. Produce reusable explanation of what each public result established, how results qualify or replace each other, conditions/exclusions and unresolved scope. Copying Task IDs alone is insufficient. Do not invent domain plans or future requests. Rebuild all dependent explanation on corrections. Return JSON {blocks:[{block_id:string,explanation:string,source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}]}],conditions:[string],unknowns:[string],coverage:[string]}. Every explanation needs original source spans. Preserve current revisions and access revocations; old state is not authority.",
+        "max_tokens": 1800
+      },
+      "stage": "dp05_produce_work_record",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 3,
+      "payload": {
+        "input": {
+          "current_adopted_state": {
+            "access_epoch": 1,
+            "allowed_actions": [
+              "draft_only"
+            ],
+            "already_completed_actions": [],
+            "condition_revision": 1,
+            "constraints": {
+              "currency": "KRW",
+              "price_tie_break": "longer_maintenance",
+              "quantity": 12,
+              "tax_included": true
+            },
+            "exclusions": [
+              "installation_convenience",
+              "unverified_total_operating_cost"
+            ],
+            "request_revision": 1,
+            "required_source_ids": [
+              "public-comparison",
+              "public-quote"
+            ],
+            "task_id": "T-PC",
+            "unknown_actions": []
+          },
+          "observed_trigger": {
+            "kind": "adopt",
+            "state": {
+              "access_epoch": 1,
+              "allowed_actions": [
+                "draft_only"
+              ],
+              "already_completed_actions": [],
+              "condition_revision": 1,
+              "constraints": {
+                "currency": "KRW",
+                "price_tie_break": "longer_maintenance",
+                "quantity": 12,
+                "tax_included": true
+              },
+              "exclusions": [
+                "installation_convenience",
+                "unverified_total_operating_cost"
+              ],
+              "request_revision": 1,
+              "required_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "task_id": "T-PC",
+              "unknown_actions": []
+            }
+          },
+          "previous_record": {
+            "blocks": [],
+            "conditions": [],
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "record_revision": 2,
+            "rejected_block_count": 0,
+            "source_vector": [
+              {
+                "allowed_lines": [
+                  1,
+                  4
+                ],
+                "id": "public-comparison",
+                "line_count": 4,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      1
+                    ],
+                    "section": "유지보수"
+                  },
+                  {
+                    "lines": [
+                      2,
+                      4
+                    ],
+                    "section": "기능 검토와 미확인"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "신규 PC 비교 공개 보고서"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "public-quote",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      2
+                    ],
+                    "section": "가격과 수량"
+                  },
+                  {
+                    "lines": [
+                      3,
+                      3
+                    ],
+                    "section": "납기와 계약 상태"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "공급업체 공개 견적"
+              }
+            ],
+            "status": "PUBLISHED",
+            "unknowns": []
+          },
+          "public_evidence": [
+            {
+              "consumer": "VIA_RECORD_PRODUCER",
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1,
+              "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+              "unit": "one_based_line_inclusive"
+            },
+            {
+              "consumer": "VIA_RECORD_PRODUCER",
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1,
+              "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ]
+        },
+        "instruction": "Maintain a source-backed, purpose-neutral handoff work record from observed public activities and adopted state. No future delegation purpose is known. Produce reusable explanation of what each public result established, how results qualify or replace each other, conditions/exclusions and unresolved scope. Copying Task IDs alone is insufficient. Do not invent domain plans or future requests. Rebuild all dependent explanation on corrections. Return JSON {blocks:[{block_id:string,explanation:string,source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}]}],conditions:[string],unknowns:[string],coverage:[string]}. Every explanation needs original source spans. Preserve current revisions and access revocations; old state is not authority.",
+        "max_tokens": 1800
+      },
+      "stage": "dp05_produce_work_record",
+      "type": "model_call",
+      "wire_version": 1
+    }
+  ],
+  "events": [
+    {
+      "data": {
+        "dp": "05",
+        "id": "dp05-e1",
+        "variant": "B"
+      },
+      "elapsed_ns": 12083,
+      "kind": "EPISODE_START",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "allowed_lines": [
+            1,
+            4
+          ],
+          "id": "public-comparison",
+          "line_count": 4,
+          "outline": [
+            {
+              "lines": [
+                1,
+                1
+              ],
+              "section": "유지보수"
+            },
+            {
+              "lines": [
+                2,
+                4
+              ],
+              "section": "기능 검토와 미확인"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "신규 PC 비교 공개 보고서"
+        }
+      },
+      "elapsed_ns": 30042,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 811,
+        "id": "public-comparison",
+        "revision": 1
+      },
+      "elapsed_ns": 103333,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_RECORD_PRODUCER",
+        "end_line": 4,
+        "revision": 1,
+        "source_id": "public-comparison",
+        "start_line": 1,
+        "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 118292,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "blocks": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "record_revision": 1,
+        "rejected_block_count": 0,
+        "source_vector": [
+          {
+            "allowed_lines": [
+              1,
+              4
+            ],
+            "id": "public-comparison",
+            "line_count": 4,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  4
+                ],
+                "section": "기능 검토와 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "신규 PC 비교 공개 보고서"
+          }
+        ],
+        "status": "PUBLISHED",
+        "unknowns": []
+      },
+      "elapsed_ns": 308708,
+      "kind": "WORK_RECORD_PUBLICATION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "allowed_lines": [
+            1,
+            3
+          ],
+          "id": "public-quote",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                2
+              ],
+              "section": "가격과 수량"
+            },
+            {
+              "lines": [
+                3,
+                3
+              ],
+              "section": "납기와 계약 상태"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "공급업체 공개 견적"
+        }
+      },
+      "elapsed_ns": 341292,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 811,
+        "id": "public-comparison",
+        "revision": 1
+      },
+      "elapsed_ns": 408833,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_RECORD_PRODUCER",
+        "end_line": 4,
+        "revision": 1,
+        "source_id": "public-comparison",
+        "start_line": 1,
+        "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 421167,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 655,
+        "id": "public-quote",
+        "revision": 1
+      },
+      "elapsed_ns": 491583,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_RECORD_PRODUCER",
+        "end_line": 3,
+        "revision": 1,
+        "source_id": "public-quote",
+        "start_line": 1,
+        "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 501250,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "blocks": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "record_revision": 2,
+        "rejected_block_count": 0,
+        "source_vector": [
+          {
+            "allowed_lines": [
+              1,
+              4
+            ],
+            "id": "public-comparison",
+            "line_count": 4,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  4
+                ],
+                "section": "기능 검토와 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "신규 PC 비교 공개 보고서"
+          },
+          {
+            "allowed_lines": [
+              1,
+              3
+            ],
+            "id": "public-quote",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  2
+                ],
+                "section": "가격과 수량"
+              },
+              {
+                "lines": [
+                  3,
+                  3
+                ],
+                "section": "납기와 계약 상태"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "공급업체 공개 견적"
+          }
+        ],
+        "status": "PUBLISHED",
+        "unknowns": []
+      },
+      "elapsed_ns": 717500,
+      "kind": "WORK_RECORD_PUBLICATION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "adopt",
+        "state": {
+          "access_epoch": 1,
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "condition_revision": 1,
+          "constraints": {
+            "currency": "KRW",
+            "price_tie_break": "longer_maintenance",
+            "quantity": 12,
+            "tax_included": true
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "request_revision": 1,
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ],
+          "task_id": "T-PC",
+          "unknown_actions": []
+        }
+      },
+      "elapsed_ns": 760708,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 811,
+        "id": "public-comparison",
+        "revision": 1
+      },
+      "elapsed_ns": 828042,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_RECORD_PRODUCER",
+        "end_line": 4,
+        "revision": 1,
+        "source_id": "public-comparison",
+        "start_line": 1,
+        "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 838458,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 655,
+        "id": "public-quote",
+        "revision": 1
+      },
+      "elapsed_ns": 892750,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_RECORD_PRODUCER",
+        "end_line": 3,
+        "revision": 1,
+        "source_id": "public-quote",
+        "start_line": 1,
+        "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 902208,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "blocks": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "record_revision": 3,
+        "rejected_block_count": 0,
+        "source_vector": [
+          {
+            "allowed_lines": [
+              1,
+              4
+            ],
+            "id": "public-comparison",
+            "line_count": 4,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  4
+                ],
+                "section": "기능 검토와 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "신규 PC 비교 공개 보고서"
+          },
+          {
+            "allowed_lines": [
+              1,
+              3
+            ],
+            "id": "public-quote",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  2
+                ],
+                "section": "가격과 수량"
+              },
+              {
+                "lines": [
+                  3,
+                  3
+                ],
+                "section": "납기와 계약 상태"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "공급업체 공개 견적"
+          }
+        ],
+        "status": "PUBLISHED",
+        "unknowns": []
+      },
+      "elapsed_ns": 1146542,
+      "kind": "WORK_RECORD_PUBLICATION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h1-close",
+        "stimulus_id": "h1-close"
+      },
+      "elapsed_ns": 1190083,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h1-close",
+        "stimulus_id": "h1-close",
+        "text": "비교 자료 확인을 마쳤습니다. 지금은 다른 Agent에 맡길 업무가 없습니다."
+      },
+      "elapsed_ns": 1196500,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h1-close",
+        "stimulus_id": "h1-close",
+        "text": "비교 자료 확인을 마쳤습니다. 지금은 다른 Agent에 맡길 업무가 없습니다."
+      },
+      "elapsed_ns": 1204750,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoptions": [],
+        "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+        "handoffs": [],
+        "outputs": [
+          {
+            "goal_id": "h1-close",
+            "stimulus_id": "h1-close",
+            "text": "비교 자료 확인을 마쳤습니다. 지금은 다른 Agent에 맡길 업무가 없습니다."
+          }
+        ],
+        "production_state": {
+          "blocks": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "record_revision": 3,
+          "rejected_block_count": 0,
+          "source_vector": [
+            {
+              "allowed_lines": [
+                1,
+                4
+              ],
+              "id": "public-comparison",
+              "line_count": 4,
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    1
+                  ],
+                  "section": "유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    4
+                  ],
+                  "section": "기능 검토와 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "신규 PC 비교 공개 보고서"
+            },
+            {
+              "allowed_lines": [
+                1,
+                3
+              ],
+              "id": "public-quote",
+              "line_count": 3,
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    2
+                  ],
+                  "section": "가격과 수량"
+                },
+                {
+                  "lines": [
+                    3,
+                    3
+                  ],
+                  "section": "납기와 계약 상태"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "공급업체 공개 견적"
+            }
+          ],
+          "status": "PUBLISHED",
+          "unknowns": []
+        },
+        "receiver_receipts": []
+      },
+      "elapsed_ns": 1231542,
+      "kind": "EPISODE_RESULT",
+      "type": "event"
+    }
+  ],
+  "stderr": ""
+}

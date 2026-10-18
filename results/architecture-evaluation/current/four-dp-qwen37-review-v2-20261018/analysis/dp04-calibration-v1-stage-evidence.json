@@ -1,0 +1,582 @@
+{
+  "source_runs_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v1/runs.jsonl",
+  "source_runs_sha256": "0104c540994d129260717567d2b4acd65122fa7e97f6acc9e96037aaf99e59f0",
+  "rows": [
+    {
+      "run_id": "calibration-dp04-dense-A-r1-3fc9ee",
+      "phase": "CALIBRATION",
+      "episode": "dp04-dense",
+      "variant": "A",
+      "repetition": 1,
+      "freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+      "binary_sha256": "4299af65cd9a8c3eefd615f2e9c927cef8ccca255fa118180123e3cad75dd2de",
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 1,
+          "input_tokens": 2188,
+          "output_tokens": 451,
+          "cost_usd": 0.0015968000000000002,
+          "provider_elapsed_ms": [
+            8327.386125
+          ],
+          "queue_ms": [
+            1.178167
+          ],
+          "call_uuids": [
+            "a8dae434-150c-45d4-9c4a-9e50cdd5d1de"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.joint_source_reread": {
+          "calls": 1,
+          "input_tokens": 2555,
+          "output_tokens": 473,
+          "cost_usd": 0.0017788,
+          "provider_elapsed_ms": [
+            8657.457375
+          ],
+          "queue_ms": [
+            2.665458
+          ],
+          "call_uuids": [
+            "d9e0be81-547d-443c-b1fb-ac460d190a06"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 4743,
+      "total_output_tokens": 924,
+      "total_cost_usd": 0.0033756000000000003,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 12,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "GROUNDING_CONSISTENCY_REJECTED": 1,
+        "BOUNDED_SOURCE_REREAD": 1,
+        "ADOPTION": 2,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [
+        {
+          "attempt": 0,
+          "issues": [
+            "POINT_OUTSIDE_CLAIMED_EXTENT:\"D06 / Orion\"",
+            "INVALID_FRAME_OR_BBOX:\"D11 / Orion\""
+          ],
+          "owner": "joint",
+          "proposal": {
+            "_provider_usage": {
+              "input_tokens": 2188,
+              "output_tokens": 451
+            },
+            "adoptions": [
+              {
+                "count": null,
+                "cue_ids": [
+                  "pointer-1"
+                ],
+                "evidence": "Pointer-1 (375,315) falls inside D06 card bounds.",
+                "expression_id": "dense-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      275,
+                      380,
+                      475,
+                      580
+                    ],
+                    "frame_id": "dense",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D06 / Orion"
+                ]
+              },
+              {
+                "count": null,
+                "cue_ids": [
+                  "pointer-2"
+                ],
+                "evidence": "Pointer-2 (630,480) falls inside D11 card bounds.",
+                "expression_id": "dense-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      525,
+                      630,
+                      725,
+                      830
+                    ],
+                    "frame_id": "dense",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion"
+                  }
+                ],
+                "relation": "point_inside",
+                "status": "ready",
+                "targets": [
+                  "D11 / Orion"
+                ]
+              }
+            ],
+            "intent": "Bind 'dense-first' to D06 and 'dense-second' to D11 based on pointer coordinates.",
+            "need_evidence": false
+          }
+        }
+      ],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": [
+            "pointer-1"
+          ],
+          "evidence": "Pointer-1 (375,315) is inside D06 card (y-range 280-430).",
+          "expression_id": "dense-first",
+          "extents": [
+            {
+              "bbox": [
+                275,
+                280,
+                475,
+                430
+              ],
+              "frame_id": "dense",
+              "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+              "target_id": "D06 / Orion"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D06 / Orion"
+          ]
+        },
+        {
+          "count": null,
+          "cue_ids": [
+            "pointer-2"
+          ],
+          "evidence": "Pointer-2 (630,480) is inside D11 card (y-range 480-630).",
+          "expression_id": "dense-second",
+          "extents": [
+            {
+              "bbox": [
+                525,
+                480,
+                725,
+                630
+              ],
+              "frame_id": "dense",
+              "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+              "target_id": "D11 / Orion"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D11 / Orion"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration-dp04-dense-B-r1-84387e",
+      "phase": "CALIBRATION",
+      "episode": "dp04-dense",
+      "variant": "B",
+      "repetition": 1,
+      "freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+      "binary_sha256": "4299af65cd9a8c3eefd615f2e9c927cef8ccca255fa118180123e3cad75dd2de",
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 1,
+          "input_tokens": 1943,
+          "output_tokens": 1327,
+          "cost_usd": 0.0029004000000000005,
+          "provider_elapsed_ms": [
+            22209.53575
+          ],
+          "queue_ms": [
+            1.2225
+          ],
+          "call_uuids": [
+            "b2f60665-5923-46f4-93c8-6401bd18f60f"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.speech_producer": {
+          "calls": 1,
+          "input_tokens": 454,
+          "output_tokens": 238,
+          "cost_usd": 0.0005624000000000001,
+          "provider_elapsed_ms": [
+            4583.29525
+          ],
+          "queue_ms": [
+            0.948542
+          ],
+          "call_uuids": [
+            "f5337f07-1587-4822-92a7-b821f071c34d"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 2397,
+      "total_output_tokens": 1565,
+      "total_cost_usd": 0.0034628000000000007,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 14,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "SCREEN_CANDIDATES_PUBLISHED": 1,
+        "SPEECH_CANDIDATES_PUBLISHED": 1,
+        "TYPED_CODE_BIND": 1,
+        "ADOPTION": 2,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "dense-first",
+          "extents": [
+            {
+              "bbox": [
+                270,
+                290,
+                480,
+                430
+              ],
+              "frame_id": "dense",
+              "kind": "card",
+              "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+              "target_id": "D06"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D06"
+          ]
+        },
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "dense-second",
+          "extents": [
+            {
+              "bbox": [
+                510,
+                460,
+                720,
+                600
+              ],
+              "frame_id": "dense",
+              "kind": "card",
+              "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+              "target_id": "D11"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "D11"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration-dp04-free-region-A-r1-2578f0",
+      "phase": "CALIBRATION",
+      "episode": "dp04-free-region",
+      "variant": "A",
+      "repetition": 1,
+      "freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+      "binary_sha256": "4299af65cd9a8c3eefd615f2e9c927cef8ccca255fa118180123e3cad75dd2de",
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 1,
+          "input_tokens": 2148,
+          "output_tokens": 385,
+          "cost_usd": 0.0014752,
+          "provider_elapsed_ms": [
+            6986.727166
+          ],
+          "queue_ms": [
+            1.185125
+          ],
+          "call_uuids": [
+            "4a94a1e7-d0ca-4a7b-9f07-cf206831f3a0"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 1,
+      "total_input_tokens": 2148,
+      "total_output_tokens": 385,
+      "total_cost_usd": 0.0014752,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 10,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 1,
+        "OPERATION_END": 1,
+        "ADOPTION": 1,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": 3,
+          "cue_ids": [
+            "loop-1"
+          ],
+          "evidence": "Loop-1 polygon encloses P3, P4, P5; transcript specifies 'three surrounded points'.",
+          "expression_id": "graph-region",
+          "extents": [
+            {
+              "bbox": [
+                335,
+                215,
+                365,
+                245
+              ],
+              "frame_id": "graph",
+              "label": "P3",
+              "target_id": "P3"
+            },
+            {
+              "bbox": [
+                485,
+                305,
+                515,
+                335
+              ],
+              "frame_id": "graph",
+              "label": "P4",
+              "target_id": "P4"
+            },
+            {
+              "bbox": [
+                395,
+                365,
+                425,
+                395
+              ],
+              "frame_id": "graph",
+              "label": "P5",
+              "target_id": "P5"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "P3",
+            "P4",
+            "P5"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    },
+    {
+      "run_id": "calibration-dp04-free-region-B-r1-a7f91e",
+      "phase": "CALIBRATION",
+      "episode": "dp04-free-region",
+      "variant": "B",
+      "repetition": 1,
+      "freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+      "binary_sha256": "4299af65cd9a8c3eefd615f2e9c927cef8ccca255fa118180123e3cad75dd2de",
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 1,
+          "input_tokens": 1944,
+          "output_tokens": 847,
+          "cost_usd": 0.0021328000000000002,
+          "provider_elapsed_ms": [
+            14605.265375
+          ],
+          "queue_ms": [
+            0.85475
+          ],
+          "call_uuids": [
+            "99a8bfad-5097-47db-ad66-a026822d68e5"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        },
+        "dp04.speech_producer": {
+          "calls": 1,
+          "input_tokens": 406,
+          "output_tokens": 142,
+          "cost_usd": 0.00038960000000000004,
+          "provider_elapsed_ms": [
+            3390.655417
+          ],
+          "queue_ms": [
+            0.7195
+          ],
+          "call_uuids": [
+            "0f3dfdff-5fc8-441f-8556-8864751aa861"
+          ],
+          "unknown_usage": 0,
+          "statuses": [
+            "COMPLETED"
+          ]
+        }
+      },
+      "total_calls": 2,
+      "total_input_tokens": 2350,
+      "total_output_tokens": 989,
+      "total_cost_usd": 0.0025224,
+      "event_counts": {
+        "EPISODE_START": 1,
+        "INPUT_CAPTURED": 1,
+        "STIMULUS": 1,
+        "LOCAL_OPERATION_START": 1,
+        "RAW_EVENT_OVERLAY_READ": 1,
+        "LOGICAL_BUFFER": 14,
+        "SOURCE_READ": 1,
+        "LOCAL_OPERATION_END": 1,
+        "CAUSAL_JOIN": 1,
+        "REVISION_REGISTERED": 1,
+        "OPERATION_START": 2,
+        "OPERATION_END": 2,
+        "SCREEN_CANDIDATES_PUBLISHED": 1,
+        "SPEECH_CANDIDATES_PUBLISHED": 1,
+        "TYPED_CODE_BIND": 1,
+        "ADOPTION": 1,
+        "GOAL_START": 1,
+        "ADOPTION_COMMITTED": 1,
+        "DISPLAY_PROXY": 2,
+        "GOAL_COMPLETE": 1,
+        "EPISODE_RESULT": 1
+      },
+      "rejected_proposals": [],
+      "failures": [],
+      "raw_first_adoptions": [
+        {
+          "count": null,
+          "cue_ids": null,
+          "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+          "expression_id": "graph-region",
+          "extents": [
+            {
+              "bbox": [
+                345,
+                225,
+                365,
+                245
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P3",
+              "target_id": "P3"
+            },
+            {
+              "bbox": [
+                495,
+                315,
+                515,
+                335
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P4",
+              "target_id": "P4"
+            },
+            {
+              "bbox": [
+                405,
+                395,
+                425,
+                415
+              ],
+              "frame_id": "graph",
+              "kind": "point",
+              "label": "P5",
+              "target_id": "P5"
+            }
+          ],
+          "revision": 1,
+          "status": "ready",
+          "targets": [
+            "P3",
+            "P4",
+            "P5"
+          ]
+        }
+      ],
+      "scope": "Raw stage extraction only. Provider span sums are not QA01/03 or a parallel critical path. Token/cost nulls remain explicit unknown_usage; no semantic accuracy claim."
+    }
+  ],
+  "provider_calls_created": 0
+}

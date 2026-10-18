@@ -1,0 +1,47 @@
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -5,6 +5,7 @@
+ fn main(){
+     let mut line=String::new(); io::stdin().lock().read_line(&mut line).unwrap();
+     let input:Value=serde_json::from_str(&line).unwrap();
++    let input=source_contract::normalize_input(&input);
+     let mut ctx=context::Context::new();
+     ctx.event("EPISODE_START",&json!({"id":input["id"],"dp":input["dp"],"variant":input["variant"]}));
+     let result=match input["dp"].as_str().unwrap_or("") {"01"=>dp01::run(&input,&mut ctx),"02"=>dp02::run(&input,&mut ctx),"04"=>dp04::run(&input,&mut ctx),"05"=>dp05::run(&input,&mut ctx),_=>Err("Unknown DP".into())};
+--- a/src/source_contract.rs
++++ b/src/source_contract.rs
+@@ -7,4 +7,33 @@
+ }
+ /// Frame-source contract normalization, shared by joint and producer-owned grounding.
+ /// Version 1 already carries canonical pixel space, milliseconds, and source_revision.
+-pub fn normalize(value:&Value)->Value { value.clone() }
++/// V2 provider source metadata becomes the stable canonical source/frame contract.
++pub fn normalize(value:&Value)->Value {
++    let mut v=value.clone();
++    if let Some(version)=value.get("version") {
++        let revision=version["number"].clone();
++        if value.get("frame_id").is_some() {v["source_revision"]=revision;} else {v["revision"]=revision;}
++        v.as_object_mut().unwrap().remove("version");
++    }
++    if let Some(space)=value.get("coordinate") {
++        v["width"]=space["dimensions"][0].clone();v["height"]=space["dimensions"][1].clone();
++        v["coordinate_space"]=json!("frame_pixels");v.as_object_mut().unwrap().remove("coordinate");
++    }
++    if let Some(t)=value.get("captured_at") {
++        if t["unit"]=="microseconds" {v["observed_at_ms"]=json!(t["value"].as_u64().unwrap()/1000);}
++        v.as_object_mut().unwrap().remove("captured_at");
++    }
++    v
++}
++/// One input-admission compatibility pass, including inline source evidence.
++pub fn normalize_input(value:&Value)->Value {
++    match value {
++        Value::Array(xs)=>Value::Array(xs.iter().map(normalize_input).collect()),
++        Value::Object(xs)=>{
++            let mapped:serde_json::Map<String,Value>=xs.iter().map(|(k,v)|(k.clone(),normalize_input(v))).collect();
++            let v=Value::Object(mapped);
++            if v.get("version").is_some() && (v.get("frame_id").is_some() || (v.get("id").is_some() && (v.get("path").is_some() || v.get("text").is_some()))) {normalize(&v)} else {v}
++        },
++        _=>value.clone()
++    }
++}

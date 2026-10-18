@@ -1,0 +1,2547 @@
+[
+  {
+    "run_id": "smoke-dp04-dense-A-r1-c17814",
+    "phase": "SMOKE",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-1 at t=300ms (x=375, y=315) falls directly within the bounding box of the card labeled 'D01 / Orion' (top-left card). The transcript '이 항목' (this item) aligns with this specific pointing action.",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D01"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D01"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/smoke-dp04-dense-A-r1-c17814/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "smoke-dp04-dense-A-r1-c17814",
+    "phase": "SMOKE",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-2 at t=1100ms (x=630, y=480) falls directly within the bounding box of the card labeled 'D06 / Orion' (middle row, second column). The transcript '이 항목' (this item) aligns with this second pointing action.",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D06"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D06"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/smoke-dp04-dense-A-r1-c17814/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp01-e4-C-r1-f090b5",
+    "phase": "BASIC",
+    "dp": "01",
+    "variant": "C",
+    "episode": "dp01-e4",
+    "rep": 1,
+    "expression_id": "e4-q1-ref",
+    "revision": 1,
+    "expected": {
+      "expression_id": "e4-q1-ref",
+      "revision": 1,
+      "targets": [
+        "old-research",
+        "old-price"
+      ]
+    },
+    "actual_first_adoption": {
+      "conditions": [],
+      "expression_id": "e4-q1-ref",
+      "first_adoption": true,
+      "revision": 1,
+      "source_revisions": [
+        {
+          "revision": 1,
+          "source_id": "old-explanation"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-price"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-research"
+        }
+      ],
+      "targets": [
+        "old-explanation",
+        "old-price",
+        "old-research"
+      ]
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "old-explanation"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "e4-q1",
+      "input": {
+        "conversation": "history-c",
+        "expression": "연구한 전력 결과와 받아둔 구매 견적",
+        "expression_id": "e4-q1-ref",
+        "goal_id": "e4-q1",
+        "kind": "request",
+        "revision": 1,
+        "stimulus_id": "e4-q1",
+        "utterance": "9월에 연구한 전력 결과와 받아둔 구매 견적을 같이 설명해줘."
+      },
+      "stimulus_id": "e4-q1"
+    },
+    "evidence_branch": {
+      "available_source_ids": [
+        "old-explanation",
+        "old-price",
+        "old-price",
+        "old-price",
+        "old-research",
+        "old-research",
+        "old-research",
+        "old-explanation",
+        "old-price",
+        "old-research"
+      ],
+      "branch": "ANSWER_FROM_AVAILABLE_EVIDENCE",
+      "model_requested_mode": "ANSWER",
+      "provenance_verified": true
+    },
+    "evidence_query": {
+      "_provider_usage": {
+        "input_tokens": 1667,
+        "output_tokens": 629
+      },
+      "answer": {
+        "conditions": [],
+        "source_revisions": [
+          {
+            "revision": 1,
+            "source_id": "old-explanation"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-price"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-research"
+          }
+        ],
+        "targets": [
+          "old-explanation",
+          "old-price",
+          "old-research"
+        ],
+        "text": "9월 공개된 자료에 따르면, Aster A와 Boreal B의 비교 결과는 다음과 같습니다.\n\n1. **구매 견적 (old-price)**:\n   - Aster A: 1,220,000원\n   - Boreal B: 1,160,000원\n   - 조건: 세금 및 배송비 포함, 8대 기준. 단, 이는 당시 예산 검토용 견적이므로 현재 구매 계약으로 유효하지 않습니다.\n\n2. **전력 실측 결과 (old-research)**:\n   - Aster A 대기 전력: 8W\n   - Boreal B 대기 전력: 11W\n   - 조건: 모니터 및 절전 설정 등 동일한 환경에서 측정되었으나, 고부하 작업 전력이나 장기적인 전력 비용은 측정되지 않았습니다.\n\n3. **종합 설명 및 한계 (old-explanation)**:\n   - 두 제품은 위와 같이 가격과 대기 전력에서 차이를 보이지만, 대기 전력과 구매 가격만으로 총 운영 비용을 확정할 수는 없습니다.",
+        "uncertainties": []
+      },
+      "mode": "ANSWER",
+      "reads": [],
+      "reason": "The user's request asks for an explanation of the 'researched power results' and 'received purchase quotes' from September. The provided context contains three sources: 'old-explanation' (delivered response), 'old-price' (public result for quotes), and 'old-research' (public result for power). The 'published_relations' section provides detailed records (rec_001 to rec_010) extracting specific facts from these sources, such as quote amounts, power consumption values, conditions, and limitations. Since all necessary factual evidence is present in the supplied records and source metadata, and the sources are explicitly linked to the expression via 'coverage.source_ids', I can construct the answer directly without further reads.",
+      "record_ids": [
+        "rec_001",
+        "rec_002",
+        "rec_003",
+        "rec_004",
+        "rec_005",
+        "rec_006",
+        "rec_007",
+        "rec_008",
+        "rec_009",
+        "rec_010"
+      ]
+    },
+    "actual_original_reads": [],
+    "published_source_vector": [
+      {
+        "id": "old-explanation",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-price",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-research",
+        "revision": 1,
+        "revoked": false
+      }
+    ],
+    "relevant_published_records": [
+      {
+        "explanation": "The delivered response states that both the idle power research results and the purchase quotes compare Aster A and Boreal B.",
+        "object": "Aster A and Boreal B",
+        "predicate": "compares_products",
+        "record_id": "rec_001",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The public result source lists the quote for Aster A as 1,220,000 won.",
+        "object": "Aster A: 1,220,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_002",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The public result source lists the quote for Boreal B as 1,160,000 won.",
+        "object": "Boreal B: 1,160,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_003",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The quote specifies that taxes and shipping fees are included for a quantity of 8 units.",
+        "object": "taxes and shipping fees",
+        "predicate": "includes_in_quote",
+        "record_id": "rec_004",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result states that Aster A's idle power consumption is 8W.",
+        "object": "Aster A: 8W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_005",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The research result states that Boreal B's idle power consumption is 11W.",
+        "object": "Boreal B: 11W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_006",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "All idle power measurements were performed under identical conditions regarding the monitor and power-saving settings.",
+        "object": "same monitor and power saving settings",
+        "predicate": "measurement_condition",
+        "record_id": "rec_007",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The delivered response explicitly notes that total operating costs cannot be determined solely from idle power measurements and purchase prices.",
+        "object": "idle power and purchase price alone cannot determine total operating cost",
+        "predicate": "states_limitation",
+        "record_id": "rec_008",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The source clarifies that the quote was used for September budget review and does not constitute a current purchase contract.",
+        "object": "not a current purchase contract",
+        "predicate": "is_status",
+        "record_id": "rec_009",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result explicitly states that high-load work power and long-term power costs were not measured.",
+        "object": "high-load power and long-term power costs",
+        "predicate": "excludes_measurement",
+        "record_id": "rec_010",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-research"
+      }
+    ],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp01-e4-C-r1-f090b5/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp01-e4-C-r1-f090b5",
+    "phase": "BASIC",
+    "dp": "01",
+    "variant": "C",
+    "episode": "dp01-e4",
+    "rep": 1,
+    "expression_id": "e4-q3-ref",
+    "revision": 1,
+    "expected": {
+      "expression_id": "e4-q3-ref",
+      "revision": 1,
+      "targets": [
+        "old-research",
+        "old-price"
+      ]
+    },
+    "actual_first_adoption": {
+      "conditions": [
+        "expression '같은 두 원본' refers to the two sources discussed in the recent conversation: old-research and old-price, but the question asks for unconfirmed items *in this new conversation* relative to the full context or original explanation which links them.",
+        "The recent answer covers details of old-research and old-price individually but omits the synthesis/limitation found in old-explanation."
+      ],
+      "expression_id": "e4-q3-ref",
+      "first_adoption": true,
+      "revision": 1,
+      "source_revisions": [
+        {
+          "revision": 1,
+          "source_id": "old-explanation"
+        }
+      ],
+      "targets": [
+        "old-explanation"
+      ]
+    },
+    "missing_targets": [
+      "old-price",
+      "old-research"
+    ],
+    "extra_targets": [
+      "old-explanation"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "e4-q3",
+      "input": {
+        "conversation": "fresh-c",
+        "expression": "같은 두 원본",
+        "expression_id": "e4-q3-ref",
+        "goal_id": "e4-q3",
+        "kind": "request",
+        "revision": 1,
+        "stimulus_id": "e4-q3",
+        "utterance": "이 새 대화에서 같은 두 원본의 미확인 사항만 다시 알려줘."
+      },
+      "stimulus_id": "e4-q3"
+    },
+    "evidence_branch": {
+      "available_source_ids": [
+        "old-explanation",
+        "old-price",
+        "old-price",
+        "old-price",
+        "old-research",
+        "old-research",
+        "old-research",
+        "old-explanation",
+        "old-price",
+        "old-research",
+        "old-research",
+        "old-price"
+      ],
+      "branch": "ANSWER_FROM_AVAILABLE_EVIDENCE",
+      "model_requested_mode": "ANSWER",
+      "provenance_verified": true
+    },
+    "evidence_query": {
+      "_provider_usage": {
+        "input_tokens": 1993,
+        "output_tokens": 507
+      },
+      "answer": {
+        "conditions": [
+          "expression '같은 두 원본' refers to the two sources discussed in the recent conversation: old-research and old-price, but the question asks for unconfirmed items *in this new conversation* relative to the full context or original explanation which links them.",
+          "The recent answer covers details of old-research and old-price individually but omits the synthesis/limitation found in old-explanation."
+        ],
+        "source_revisions": [
+          {
+            "revision": 1,
+            "source_id": "old-explanation"
+          }
+        ],
+        "targets": [
+          "old-explanation"
+        ],
+        "text": "제공된 최근 응답(새 대화)에서는 '전력 실측 결과(old-research)'와 '구매 견적(old-price)'의 조건과 한계를 명확히 설명했으나, **'두 결과 간의 관계와 전체 운영 비용 산정의 한계'**에 대한 내용은 포함되어 있지 않습니다.\n\n따라서 이 새 대화에서 확인되지 않은 사항(미확인 사항)은 다음과 같습니다:\n1. **전력 측정치와 구매 가격만으로 총 운영 비용을 확정할 수 없다는 점** (유휴 전력만으로는 실제 사용 환경의 비용을 대표할 수 없음).\n2. **두 제품(Aster A, Boreal B)의 비교 맥락에서 위 두 데이터가 갖는 상호 보완적 또는 제한적 관계**에 대한 명시적 서술.\n\n이 내용들은 원본 소스인 `old-explanation`에 포함되어 있으나, 최근 응답에서는 다루지 않았습니다.",
+        "uncertainties": []
+      },
+      "mode": "ANSWER",
+      "reads": [],
+      "reason": "The user asks for 'unconfirmed items' regarding 'the same two sources' (referring to the subjects of the previous turn: old-research and old-price) within the context of the 'new conversation'. The recent conversation explicitly details the conditions of old-research and old-price but does not mention the limitation stated in old-explanation (that idle power and price alone cannot determine total operating cost). Therefore, the missing/unconfirmed information is the relationship/limitation described in old-explanation. I can answer this by identifying the gap between the recent response and the available source old-explanation.",
+      "record_ids": [
+        "rec_008"
+      ]
+    },
+    "actual_original_reads": [],
+    "published_source_vector": [
+      {
+        "id": "old-explanation",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-price",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-research",
+        "revision": 1,
+        "revoked": false
+      }
+    ],
+    "relevant_published_records": [
+      {
+        "explanation": "The delivered response states that both the idle power research results and the purchase quotes compare Aster A and Boreal B.",
+        "object": "Aster A and Boreal B",
+        "predicate": "compares_products",
+        "record_id": "rec_001",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The public result source lists the quote for Aster A as 1,220,000 won.",
+        "object": "Aster A: 1,220,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_002",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The public result source lists the quote for Boreal B as 1,160,000 won.",
+        "object": "Boreal B: 1,160,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_003",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The quote specifies that taxes and shipping fees are included for a quantity of 8 units.",
+        "object": "taxes and shipping fees",
+        "predicate": "includes_in_quote",
+        "record_id": "rec_004",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result states that Aster A's idle power consumption is 8W.",
+        "object": "Aster A: 8W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_005",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The research result states that Boreal B's idle power consumption is 11W.",
+        "object": "Boreal B: 11W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_006",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "All idle power measurements were performed under identical conditions regarding the monitor and power-saving settings.",
+        "object": "same monitor and power saving settings",
+        "predicate": "measurement_condition",
+        "record_id": "rec_007",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The delivered response explicitly notes that total operating costs cannot be determined solely from idle power measurements and purchase prices.",
+        "object": "idle power and purchase price alone cannot determine total operating cost",
+        "predicate": "states_limitation",
+        "record_id": "rec_008",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The source clarifies that the quote was used for September budget review and does not constitute a current purchase contract.",
+        "object": "not a current purchase contract",
+        "predicate": "is_status",
+        "record_id": "rec_009",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result explicitly states that high-load work power and long-term power costs were not measured.",
+        "object": "high-load power and long-term power costs",
+        "predicate": "excludes_measurement",
+        "record_id": "rec_010",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-research"
+      }
+    ],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp01-e4-C-r1-f090b5/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp01-e4-C-r2-62a4bb",
+    "phase": "BASIC",
+    "dp": "01",
+    "variant": "C",
+    "episode": "dp01-e4",
+    "rep": 2,
+    "expression_id": "e4-q1-ref",
+    "revision": 1,
+    "expected": {
+      "expression_id": "e4-q1-ref",
+      "revision": 1,
+      "targets": [
+        "old-research",
+        "old-price"
+      ]
+    },
+    "actual_first_adoption": {
+      "conditions": [],
+      "expression_id": "e4-q1-ref",
+      "first_adoption": true,
+      "revision": 1,
+      "source_revisions": [
+        {
+          "revision": 1,
+          "source_id": "old-explanation"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-price"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-research"
+        }
+      ],
+      "targets": [
+        "old-explanation",
+        "old-price",
+        "old-research"
+      ]
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "old-explanation"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "e4-q1",
+      "input": {
+        "conversation": "history-c",
+        "expression": "연구한 전력 결과와 받아둔 구매 견적",
+        "expression_id": "e4-q1-ref",
+        "goal_id": "e4-q1",
+        "kind": "request",
+        "revision": 1,
+        "stimulus_id": "e4-q1",
+        "utterance": "9월에 연구한 전력 결과와 받아둔 구매 견적을 같이 설명해줘."
+      },
+      "stimulus_id": "e4-q1"
+    },
+    "evidence_branch": {
+      "available_source_ids": [
+        "old-explanation",
+        "old-price",
+        "old-price",
+        "old-price",
+        "old-research",
+        "old-research",
+        "old-research",
+        "old-explanation",
+        "old-research",
+        "old-price"
+      ],
+      "branch": "ANSWER_FROM_AVAILABLE_EVIDENCE",
+      "model_requested_mode": "ANSWER",
+      "provenance_verified": true
+    },
+    "evidence_query": {
+      "_provider_usage": {
+        "input_tokens": 1665,
+        "output_tokens": 570
+      },
+      "answer": {
+        "conditions": [],
+        "source_revisions": [
+          {
+            "revision": 1,
+            "source_id": "old-explanation"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-price"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-research"
+          }
+        ],
+        "targets": [
+          "old-explanation",
+          "old-price",
+          "old-research"
+        ],
+        "text": "9월 공개된 자료에 따르면, Aster A와 Boreal B의 비교 결과는 다음과 같습니다.\n\n구매 견적(구입 예산)은 Aster A가 122만 원, Boreal B가 116만 원이며, 이는 세금과 배송비가 포함된 8대 분량입니다. 다만 이 견적은 당시 예산 검토용이었으며 현재 구매 계약으로 유효하지 않습니다.\n\n전력 실측 결과에서는 동일한 모니터 및 절전 설정 조건에서 측정했을 때, Aster A의 유휴 전력은 8W, Boreal B는 11W로 나타났습니다. 그러나 고부하 작업 시 전력이나 장기적인 전력 비용은 측정되지 않았습니다.\n\n따라서 측정된 유휴 전력과 구매 가격만으로 총 운영 비용을 단정할 수는 없다는 한계가 있습니다.",
+        "uncertainties": []
+      },
+      "mode": "ANSWER",
+      "reads": [],
+      "reason": "The user's request asks for an explanation of the 'researched power results' and 'received purchase quotes' from September. The provided context contains three sources: 'old-explanation' (delivered response), 'old-price' (public result/quote), and 'old-research' (public result/power). The 'published_relations' section explicitly links these sources to specific facts via records rec_001 through rec_010. Since all necessary factual evidence (prices, power consumption values, conditions, and limitations) is present in the supplied metadata and records associated with the delivered/public sources, no further reading is required. The answer synthesizes this information directly.",
+      "record_ids": [
+        "rec_001",
+        "rec_002",
+        "rec_003",
+        "rec_004",
+        "rec_005",
+        "rec_006",
+        "rec_007",
+        "rec_008",
+        "rec_009",
+        "rec_010"
+      ]
+    },
+    "actual_original_reads": [],
+    "published_source_vector": [
+      {
+        "id": "old-explanation",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-price",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-research",
+        "revision": 1,
+        "revoked": false
+      }
+    ],
+    "relevant_published_records": [
+      {
+        "explanation": "The delivered response states that both the idle power research results and the purchase quotes compare Aster A and Boreal B.",
+        "object": "Aster A and Boreal B",
+        "predicate": "compares_products",
+        "record_id": "rec_001",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The public result source lists the quote for Aster A as 1,220,000 won.",
+        "object": "Aster A: 1,220,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_002",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The public result source lists the quote for Boreal B as 1,160,000 won.",
+        "object": "Boreal B: 1,160,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_003",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The quote specifies that taxes and shipping fees are included for a quantity of 8 units.",
+        "object": "taxes and shipping fees",
+        "predicate": "includes_in_quote",
+        "record_id": "rec_004",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result states that Aster A's idle power consumption is 8W.",
+        "object": "Aster A: 8W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_005",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The research result states that Boreal B's idle power consumption is 11W.",
+        "object": "Boreal B: 11W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_006",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "All idle power measurements were performed under identical conditions regarding the monitor and power-saving settings.",
+        "object": "same monitor and power saving settings",
+        "predicate": "measurement_condition",
+        "record_id": "rec_007",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The delivered response explicitly notes that total operating costs cannot be determined solely by measured idle power and purchase prices.",
+        "object": "idle power and purchase price alone cannot determine total operating cost",
+        "predicate": "states_limitation",
+        "record_id": "rec_008",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The research result clarifies that high-load work power and long-term power costs were not measured.",
+        "object": "high-load power and long-term power costs",
+        "predicate": "excludes_measurement",
+        "record_id": "rec_009",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The source indicates that the quote was used for September budget review and does not constitute a current purchase contract.",
+        "object": "not a current purchase contract",
+        "predicate": "status",
+        "record_id": "rec_010",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-price"
+      }
+    ],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp01-e4-C-r2-62a4bb/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp01-e4-C-r3-b3350c",
+    "phase": "BASIC",
+    "dp": "01",
+    "variant": "C",
+    "episode": "dp01-e4",
+    "rep": 3,
+    "expression_id": "e4-q1-ref",
+    "revision": 1,
+    "expected": {
+      "expression_id": "e4-q1-ref",
+      "revision": 1,
+      "targets": [
+        "old-research",
+        "old-price"
+      ]
+    },
+    "actual_first_adoption": {
+      "conditions": [],
+      "expression_id": "e4-q1-ref",
+      "first_adoption": true,
+      "revision": 1,
+      "source_revisions": [
+        {
+          "revision": 1,
+          "source_id": "old-explanation"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-price"
+        },
+        {
+          "revision": 1,
+          "source_id": "old-research"
+        }
+      ],
+      "targets": [
+        "old-explanation",
+        "old-price",
+        "old-research"
+      ]
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "old-explanation"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "e4-q1",
+      "input": {
+        "conversation": "history-c",
+        "expression": "연구한 전력 결과와 받아둔 구매 견적",
+        "expression_id": "e4-q1-ref",
+        "goal_id": "e4-q1",
+        "kind": "request",
+        "revision": 1,
+        "stimulus_id": "e4-q1",
+        "utterance": "9월에 연구한 전력 결과와 받아둔 구매 견적을 같이 설명해줘."
+      },
+      "stimulus_id": "e4-q1"
+    },
+    "evidence_branch": {
+      "available_source_ids": [
+        "old-explanation",
+        "old-price",
+        "old-price",
+        "old-price",
+        "old-research",
+        "old-research",
+        "old-research",
+        "old-explanation",
+        "old-research",
+        "old-price"
+      ],
+      "branch": "ANSWER_FROM_AVAILABLE_EVIDENCE",
+      "model_requested_mode": "ANSWER",
+      "provenance_verified": true
+    },
+    "evidence_query": {
+      "_provider_usage": {
+        "input_tokens": 1667,
+        "output_tokens": 645
+      },
+      "answer": {
+        "conditions": [],
+        "source_revisions": [
+          {
+            "revision": 1,
+            "source_id": "old-explanation"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-price"
+          },
+          {
+            "revision": 1,
+            "source_id": "old-research"
+          }
+        ],
+        "targets": [
+          "old-explanation",
+          "old-price",
+          "old-research"
+        ],
+        "text": "9월 공개된 자료에 따르면, Aster A와 Boreal B의 비교 결과는 다음과 같습니다.\n\n1. **구매 견적 (old-price)**:\n   - Aster A: 1,220,000원\n   - Boreal B: 1,160,000원\n   - 조건: 각 제품 8대 기준, 세금 및 배송비 포함.\n   - 상태: 9월 예산 검토용 견적이며, 현재 구매 계약은 아닙니다.\n\n2. **전력 실측 결과 (old-research)**:\n   - Aster A 유휴 전력: 8W\n   - Boreal B 유휴 전력: 11W\n   - 조건: 모니터 및 절전 설정 등 동일한 환경에서 측정됨.\n   - 한계: 고부하 작업 전력 및 장기 전력 비용은 측정되지 않았습니다.\n\n3. **종합 설명 및 한계 (old-explanation)**:\n   - 위 두 결과를 비교하였으나, 측정된 유휴 전력과 구매 가격만으로 총 운영 비용을 확정할 수는 없습니다.",
+        "uncertainties": []
+      },
+      "mode": "ANSWER",
+      "reads": [],
+      "reason": "The user's request asks for an explanation of the 'researched power results' and 'received purchase quotes' from September. The provided context contains three sources: 'old-explanation' (delivered response), 'old-price' (public result/quote), and 'old-research' (public result/power). The 'published_relations' section explicitly links these sources with detailed records (rec_001 to rec_010) covering the specific data points requested (prices, idle power, conditions, limitations). Since all necessary factual evidence is present in the supplied metadata and records without needing to read raw lines (as the records fully describe the content needed for the summary), an ANSWER mode is appropriate. The targets are the three source IDs involved.",
+      "record_ids": [
+        "rec_001",
+        "rec_002",
+        "rec_003",
+        "rec_004",
+        "rec_005",
+        "rec_006",
+        "rec_007",
+        "rec_008",
+        "rec_009",
+        "rec_010"
+      ]
+    },
+    "actual_original_reads": [],
+    "published_source_vector": [
+      {
+        "id": "old-explanation",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-price",
+        "revision": 1,
+        "revoked": false
+      },
+      {
+        "id": "old-research",
+        "revision": 1,
+        "revoked": false
+      }
+    ],
+    "relevant_published_records": [
+      {
+        "explanation": "The delivered response states that both the idle power research results and the purchase quotes compare Aster A and Boreal B.",
+        "object": "Aster A and Boreal B",
+        "predicate": "compares_models",
+        "record_id": "rec_001",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The public result source lists the quote for Aster A as 1,220,000 won.",
+        "object": "Aster A: 1,220,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_002",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The public result source lists the quote for Boreal B as 1,160,000 won.",
+        "object": "Boreal B: 1,160,000 KRW",
+        "predicate": "has_quote_amount",
+        "record_id": "rec_003",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The quote specifies that it includes taxes and shipping fees for 8 units of each product.",
+        "object": "tax and shipping fees",
+        "predicate": "includes_in_quote",
+        "record_id": "rec_004",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-price"
+      },
+      {
+        "explanation": "The research result states that Aster A's idle power consumption is 8W.",
+        "object": "Aster A: 8W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_005",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The research result states that Boreal B's idle power consumption is 11W.",
+        "object": "Boreal B: 11W",
+        "predicate": "has_idle_power",
+        "record_id": "rec_006",
+        "source_spans": [
+          {
+            "end_line": 1,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 1
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "All idle power measurements were performed under identical conditions regarding the monitor and power-saving settings.",
+        "object": "same monitor and power saving settings",
+        "predicate": "measurement_condition",
+        "record_id": "rec_007",
+        "source_spans": [
+          {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 2
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The delivered response explicitly notes that total operating costs cannot be confirmed solely based on measured idle power and purchase prices.",
+        "object": "cannot determine total operating cost from idle power and price alone",
+        "predicate": "states_limitation",
+        "record_id": "rec_008",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-explanation",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-explanation"
+      },
+      {
+        "explanation": "The research result clarifies that high-load work power and long-term power costs were not measured.",
+        "object": "high-load power and long-term power costs",
+        "predicate": "excludes_measurement",
+        "record_id": "rec_009",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-research",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-research"
+      },
+      {
+        "explanation": "The source clarifies that the quote was used for September budget review and does not constitute a current purchase contract.",
+        "object": "not a current purchase contract",
+        "predicate": "is_status",
+        "record_id": "rec_010",
+        "source_spans": [
+          {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "old-price",
+            "start_line": 3
+          }
+        ],
+        "subject": "old-price"
+      }
+    ],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp01-e4-C-r3-b3350c/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r1-f6c431",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-1 at t=300ms (within expression window 100-500ms) is located at (375, 315). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D01 / Orion' (top-left card in the grid).",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D01"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D01"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r1-f6c431/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r1-f6c431",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-2 at t=1100ms (within expression window 900-1300ms) is located at (630, 480). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D06 / Orion' (second card in the second row).",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D06"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D06"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r1-f6c431/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r1-eed867",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D03"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D03"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r1-eed867/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r1-eed867",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D07"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D07"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r1-eed867/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-A-r1-20c071",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-free-region",
+    "rep": 1,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The pointer path (loop-1) traces a closed polygon enclosing exactly three labeled points: P2, P3, and P5. The transcript '이렇게 둘러싼 세 점' (these three enclosed points) explicitly references the set defined by this spatial enclosure.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P5"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "P4"
+    ],
+    "extra_targets": [
+      "P2"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-A-r1-20c071/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-B-r1-4dc1da",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-free-region",
+    "rep": 1,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The expression 'graph-region' with meaning 'The three points enclosed or defined by the pointer path loop' is linked to cue 'loop-1'. The screen provider explicitly maps 'loop-1' to the target_ids ['P2', 'P3', 'P4', 'P5', 'P6', 'P7'] via the cue_relations field. Although the speech mentions 'three points', the cue relation provided by the screen producer defines the specific set of candidates associated with that loop gesture. We adopt the candidates defined by the cue relation as the intended targets for this region selection.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "P2",
+      "P6",
+      "P7"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-B-r1-4dc1da/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r2-d07234",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D03"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D03"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r2-d07234/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r2-d07234",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r2-d07234/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r2-5948ce",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-1 at t=300ms (within expression window 100-500ms) is located at (375, 315). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D01 / Orion' (top-left card in the grid).",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D01"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D01"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r2-5948ce/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r2-5948ce",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-2 at t=1100ms (within expression window 900-1300ms) is located at (630, 480). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D06 / Orion' (second card in the second row).",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D06"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D06"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r2-5948ce/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-B-r2-735b07",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-free-region",
+    "rep": 2,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The expression 'graph-region' with meaning 'The three points enclosed or defined by the pointer path loop' is linked to cue_id 'loop-1'. The screen provider's cue_relations explicitly map 'loop-1' to the target_ids ['P2', 'P3', 'P4', 'P5', 'P6', 'P7'] via a 'within_region' relation. Although the speech mentions 'three points', the cue relation provided by the screen producer defines the specific set of candidates associated with that loop gesture. We adopt the candidates defined by the structural cue relation as the most accurate resolution of the pointing intent.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "P2",
+      "P6",
+      "P7"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-B-r2-735b07/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-A-r2-b5d6b5",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-free-region",
+    "rep": 2,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The pointer path (loop-1) traces a closed polygon enclosing exactly three data points: P2, P3, and P5. The transcript '이렇게 둘러싼 세 점' (these three enclosed points) explicitly refers to the items inside this gesture.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P5"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "P4"
+    ],
+    "extra_targets": [
+      "P2"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-A-r2-b5d6b5/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r3-2b9a3f",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-1 at t=300ms (within expression window 100-500ms) is located at (375, 315). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D01 / Orion' (top-left card in the grid).",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D01"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D01"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r3-2b9a3f/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-A-r3-2b9a3f",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event pointer-2 at t=1100ms (within expression window 900-1300ms) is located at (630, 480). Visual inspection of frame 'dense' confirms this coordinate falls squarely within the bounding box of the card labeled 'D06 / Orion' (second card in the second row).",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D06"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D06"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-A-r3-2b9a3f/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r3-e81f99",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D05"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D05"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r3-e81f99/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-dense-B-r3-e81f99",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-dense-B-r3-e81f99/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-A-r3-502307",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "A",
+    "episode": "dp04-free-region",
+    "rep": 3,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The pointer path (loop-1) traces a triangular region enclosing exactly three data points. Visually, the loop starts near P2, moves right to encompass P3, drops down to encompass P5, and returns to the start. The transcript '이렇게 둘러싼 세 점' (these three enclosed points) confirms the intent to select the points inside this specific gesture.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P5"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "P4"
+    ],
+    "extra_targets": [
+      "P2"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-A-r3-502307/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "basic-dp04-free-region-B-r3-616b00",
+    "phase": "BASIC",
+    "dp": "04",
+    "variant": "B",
+    "episode": "dp04-free-region",
+    "rep": 3,
+    "expression_id": "graph-region",
+    "revision": 1,
+    "expected": {
+      "expression_id": "graph-region",
+      "revision": 1,
+      "targets": [
+        "P3",
+        "P4",
+        "P5"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "The expression 'graph-region' with meaning 'The three points enclosed or defined by the pointer path loop' is explicitly linked to cue_id 'loop-1'. The screen provider's cue_relations map 'loop-1' directly to the target_ids ['P2', 'P3', 'P4', 'P5', 'P6', 'P7'] via a 'within_region' relation. Although the speech mentions 'three points', the cue relation provided by the screen producer defines the specific set of candidates associated with that loop gesture. I adopt the targets defined by the cue relation as they represent the system's interpretation of the pointer path.",
+      "expression_id": "graph-region",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "P2",
+        "P3",
+        "P4",
+        "P5",
+        "P6",
+        "P7"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [],
+    "extra_targets": [
+      "P2",
+      "P6",
+      "P7"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-free-region:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-free-region:r1",
+      "transcript": "이렇게 둘러싼 세 점만 평균을 내줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "results/architecture-evaluation/current/four-dp-qwen37-20261018/raw/runs/basic-dp04-free-region-B-r3-616b00/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r1-eab22d",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": null,
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [],
+    "classification": "MISSING_ADOPTION",
+    "actual_stimulus": null,
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r1-eab22d/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r1-eab22d",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": null,
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [],
+    "classification": "MISSING_ADOPTION",
+    "actual_stimulus": null,
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r1-eab22d/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r2-36471d",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event 'pointer-1' at t=300ms (within expression window 100-500ms) is located at (375, 315). This coordinate falls inside the bounding box of card D05 ([275, 330, 505, 490]). Although the auxiliary parser suggested D01, the pixel coordinates definitively place the pointer on D05. The transcript '이 항목' (this item) combined with the pointing gesture confirms D05 as the target.",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D01"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D01"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r2-36471d/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r2-36471d",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Pointer event 'pointer-2' at t=1100ms (within expression window 900-1300ms) is located at (630, 480). This coordinate falls inside the bounding box of card D08 ([765, 330, 995, 490] - wait, checking X: 630 is between 520 and 750? No. D07 is [520, 750]. D08 is [765, 995]. Let's re-evaluate X=630. 520 < 630 < 750. So X=630 is in column 3 (D03/D07/D11). Y=480 is in row 2 (330-490). Intersection is D07. \n\nCorrection on D08 analysis:\nPointer-2: x=630, y=480.\nRow 2 Y-range: 330 to 490. (480 is inside).\nCol 1 X: 30-260.\nCol 2 X: 275-505.\nCol 3 X: 520-750. (630 is inside).\nCol 4 X: 765-995.\nIntersection is D07 (Orion South / Q3).\nThe auxiliary parser claimed D08, but x=630 is clearly left of the D08 start x=765. The target is D07.",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r2-36471d/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r3-8160b9",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": null,
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [],
+    "classification": "MISSING_ADOPTION",
+    "actual_stimulus": null,
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r3-8160b9/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "tactic-dp04-dense-A4-r3-8160b9",
+    "phase": "TACTIC",
+    "dp": "04",
+    "variant": "A4",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": null,
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [],
+    "classification": "MISSING_ADOPTION",
+    "actual_stimulus": null,
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-A4/raw/runs/tactic-dp04-dense-A4-r3-8160b9/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "diagnostic-dp04-dense-B4-r1-c8cbc6",
+    "phase": "DIAGNOSTIC",
+    "dp": "04",
+    "variant": "B4",
+    "episode": "dp04-dense",
+    "rep": 1,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-B4/raw/runs/diagnostic-dp04-dense-B4-r1-c8cbc6/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "diagnostic-dp04-dense-B4-r2-fbee36",
+    "phase": "DIAGNOSTIC",
+    "dp": "04",
+    "variant": "B4",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-first",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-first",
+      "revision": 1,
+      "targets": [
+        "D06"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-first",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D03"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D06"
+    ],
+    "extra_targets": [
+      "D03"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-B4/raw/runs/diagnostic-dp04-dense-B4-r2-fbee36/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "diagnostic-dp04-dense-B4-r2-fbee36",
+    "phase": "DIAGNOSTIC",
+    "dp": "04",
+    "variant": "B4",
+    "episode": "dp04-dense",
+    "rep": 2,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-B4/raw/runs/diagnostic-dp04-dense-B4-r2-fbee36/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  },
+  {
+    "run_id": "diagnostic-dp04-dense-B4-r3-d3050e",
+    "phase": "DIAGNOSTIC",
+    "dp": "04",
+    "variant": "B4",
+    "episode": "dp04-dense",
+    "rep": 3,
+    "expression_id": "dense-second",
+    "revision": 1,
+    "expected": {
+      "expression_id": "dense-second",
+      "revision": 1,
+      "targets": [
+        "D11"
+      ]
+    },
+    "actual_first_adoption": {
+      "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+      "expression_id": "dense-second",
+      "revision": 1,
+      "status": "ready",
+      "targets": [
+        "D08"
+      ],
+      "_target_identity_unresolved": false
+    },
+    "missing_targets": [
+      "D11"
+    ],
+    "extra_targets": [
+      "D08"
+    ],
+    "classification": "TARGET_SET_MISMATCH",
+    "actual_stimulus": {
+      "goal_id": "dp04-dense:r1",
+      "revision": 1,
+      "stimulus_id": "dp04-dense:r1",
+      "transcript": "이 항목과 이 항목의 분기 실적을 비교해줘."
+    },
+    "evidence_branch": null,
+    "evidence_query": null,
+    "actual_original_reads": [],
+    "published_source_vector": null,
+    "relevant_published_records": [],
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/tactics/dp04-B4/raw/runs/diagnostic-dp04-dense-B4-r3-d3050e/trace.json",
+    "inference_limit": "Trace facts only; this does not establish intrinsic architectural cause or producer omission."
+  }
+]

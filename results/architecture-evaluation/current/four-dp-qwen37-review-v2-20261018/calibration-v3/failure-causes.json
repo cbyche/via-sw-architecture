@@ -1,0 +1,74 @@
+[
+  {
+    "run_id": "calibration_v3-dp04-free-region-A-r1-25c0b8",
+    "phase": "CALIBRATION_V3",
+    "dp": "04",
+    "episode": "dp04-free-region",
+    "variant": "A",
+    "rep": 1,
+    "tactic": null,
+    "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v3/raw/runs/calibration_v3-dp04-free-region-A-r1-25c0b8/trace.json",
+    "raw_input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v3/raw/runs/calibration_v3-dp04-free-region-A-r1-25c0b8/input.json",
+    "returncode": 0,
+    "stderr": "",
+    "tags_are_raw_reason_keyword_diagnostics_not_semantic_judgments": [
+      "BOUNDED_GOAL_CONTRACT_OR_COMPLETION_FAILURE",
+      "SOURCE_SPAN_OR_CURRENTNESS_CONTRACT",
+      "GEOMETRY_COUNT_OR_RELATION_CONTRACT"
+    ],
+    "actual_failure_events": [
+      {
+        "data": {
+          "goal_id": "dp04-free-region:grounding",
+          "proposal": {
+            "adoptions": [
+              {
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "graph-region",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "contract_failures": [
+              "RAW_EXPLICIT_COUNT_CONTRADICTION:\"graph-region\":3:2",
+              "COUNT_CONTRADICTION:\"graph-region\":3:2",
+              "MODEL_REQUESTED_SOURCE_REREAD"
+            ],
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "graph",
+                "sha256": "8d0350fe2d0d77db768d465ec413a8f1c8949537f9c8ef80f47fb0e2e68293e4",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+          "revision": 1,
+          "stimulus_id": "dp04-free-region:r1"
+        },
+        "elapsed_ns": 14427727583,
+        "event_id": "event-29",
+        "goal_ids": [
+          "dp04-free-region:grounding"
+        ],
+        "kind": "GOAL_FAILED",
+        "parent_ids": [
+          "operation-22"
+        ],
+        "type": "event",
+        "observed_ns": 1899196818650541
+      }
+    ],
+    "provider_or_bridge_call_errors": [],
+    "completed_goals": 0,
+    "expected_goals": 1,
+    "meaning_diagnostics_separate": {
+      "qa02_wrong": 1,
+      "nr_wrong": 0,
+      "nh_wrong": 0,
+      "literal_content_wrong": 0
+    }
+  }
+]

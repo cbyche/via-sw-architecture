@@ -1,0 +1,327 @@
+{
+  "phase": "CALIBRATION_V3_NOT_FORMAL",
+  "rows": [
+    {
+      "run_id": "calibration_v3-dp04-free-region-A-r1-25c0b8",
+      "variant": "A",
+      "episode": "dp04-free-region",
+      "qa01_mean_ms": null,
+      "qa01_expected": 1,
+      "qa01_noresponse": 1,
+      "qa03_mean_ms": null,
+      "qa03_expected": 1,
+      "qa03_incomplete": 1,
+      "qa02_correct": 0,
+      "qa02_total": 1,
+      "model_calls": 2,
+      "via_cost_usd": 0.0032836000000000002,
+      "rss_concurrent_peak_mb": 43.352064,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "graph-region",
+            "revision": 1,
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": null,
+            "cue_ids": null,
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "graph-region",
+            "extents": null,
+            "relation": null,
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": [],
+            "_target_identity_unresolved": false
+          },
+          "correct": false,
+          "failure_reason": "TARGET_SET_MISMATCH"
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "origin_stimulus_id": "dp04-free-region:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 469416,
+          "complete_elapsed_ns": null,
+          "elapsed_ms": null,
+          "qa03_ms": null,
+          "receiver_shim_internal_excluded_ms": null,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": null,
+          "status": "NOT_OBSERVED",
+          "failed_attempts": [
+            {
+              "elapsed_ns": 14427727583,
+              "input_to_failure_ms": 14427.258167,
+              "reason": {
+                "goal_id": "dp04-free-region:grounding",
+                "proposal": {
+                  "adoptions": [
+                    {
+                      "evidence": "Consistency validation failed after bounded source rejudgment",
+                      "expression_id": "graph-region",
+                      "status": "need_evidence",
+                      "targets": []
+                    }
+                  ],
+                  "contract_failures": [
+                    "RAW_EXPLICIT_COUNT_CONTRADICTION:\"graph-region\":3:2",
+                    "COUNT_CONTRADICTION:\"graph-region\":3:2",
+                    "MODEL_REQUESTED_SOURCE_REREAD"
+                  ],
+                  "revision": 1,
+                  "source_snapshot": [
+                    {
+                      "frame_id": "graph",
+                      "sha256": "8d0350fe2d0d77db768d465ec413a8f1c8949537f9c8ef80f47fb0e2e68293e4",
+                      "source_id": "document",
+                      "source_revision": 1
+                    }
+                  ]
+                },
+                "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+                "revision": 1,
+                "stimulus_id": "dp04-free-region:r1"
+              }
+            }
+          ],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    },
+    {
+      "run_id": "calibration_v3-dp04-free-region-B-r1-f0906a",
+      "variant": "B",
+      "episode": "dp04-free-region",
+      "qa01_mean_ms": 18134.286584,
+      "qa01_expected": 1,
+      "qa01_noresponse": 0,
+      "qa03_mean_ms": 18134.431584,
+      "qa03_expected": 1,
+      "qa03_incomplete": 0,
+      "qa02_correct": 1,
+      "qa02_total": 1,
+      "model_calls": 2,
+      "via_cost_usd": 0.0025896,
+      "rss_concurrent_peak_mb": 43.237376,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "graph-region",
+            "revision": 1,
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": 3,
+            "cue_ids": [
+              "loop-1"
+            ],
+            "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+            "expression_id": "graph-region",
+            "extents": [
+              {
+                "bbox": [
+                  335,
+                  235,
+                  355,
+                  255
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P3",
+                "target_id": "P3"
+              },
+              {
+                "bbox": [
+                  495,
+                  315,
+                  515,
+                  335
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P4",
+                "target_id": "P4"
+              },
+              {
+                "bbox": [
+                  385,
+                  395,
+                  405,
+                  415
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P5",
+                "target_id": "P5"
+              }
+            ],
+            "relation": "designated_by_cue",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "_target_identity_unresolved": false
+          },
+          "correct": true,
+          "failure_reason": null
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "origin_stimulus_id": "dp04-free-region:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 62958,
+          "complete_elapsed_ns": 18134494542,
+          "elapsed_ms": 18134.431584,
+          "qa03_ms": 18134.431584,
+          "receiver_shim_internal_excluded_ms": 0.0,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "content_type": "DETAILED_RESULT",
+            "goal_id": "dp04-free-region:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      335,
+                      235,
+                      355,
+                      255
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      495,
+                      315,
+                      515,
+                      335
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P4",
+                    "target_id": "P4"
+                  },
+                  {
+                    "bbox": [
+                      385,
+                      395,
+                      405,
+                      415
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P5",
+                    "target_id": "P5"
+                  }
+                ],
+                "relation": "designated_by_cue",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4",
+                  "P5"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@graph": 1
+            },
+            "stimulus_id": "dp04-free-region:r1",
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "text": "지칭 대상 P3, P4, P5을(를) 채택했습니다. 수행 의도: Calculate the average of the three points enclosed by the drawn loop."
+          },
+          "status": "OBSERVED",
+          "failed_attempts": [],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    }
+  ],
+  "classification_A": "Raw relation schema now followed. Wrong model-produced P5 extent center outside actual loop, then target2/count3 incomplete proposal after real reread. Not length/schema naming failure.",
+  "source_reference_geometry_evaluator_only": {
+    "P5_center": [
+      410,
+      380
+    ],
+    "raw_loop": [
+      [
+        300,
+        180
+      ],
+      [
+        580,
+        180
+      ],
+      [
+        600,
+        410
+      ],
+      [
+        300,
+        420
+      ],
+      [
+        300,
+        180
+      ]
+    ],
+    "first_A_P5_model_bbox": [
+      380,
+      450,
+      420,
+      490
+    ]
+  },
+  "provider_calls_created": 0
+}

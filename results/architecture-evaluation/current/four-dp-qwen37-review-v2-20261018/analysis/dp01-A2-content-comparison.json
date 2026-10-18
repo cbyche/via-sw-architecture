@@ -1,0 +1,259 @@
+{
+  "scope": "실행 후 파생 수동 의미검토. 동일 E3 3회×2본문, 원래 BASIC와 A2 별도 분모6씩. 기본 실패를 보완 성공으로 치환하지 않음.",
+  "rubric": "기존 DP01 실제 표시 본문/원문 대조 기준 동일 적용; literal와 full meaning 별도.",
+  "actual_provider_calls_by_review": 0,
+  "raw_or_candidate_modified": false,
+  "summary": {
+    "basic": {
+      "runs": 3,
+      "calls": 12,
+      "cost_usd": 0.0148424,
+      "input_tokens": 8118,
+      "output_tokens": 7247,
+      "stages": {
+        "dp01_select_adopt_or_complete": 6,
+        "dp01_source_backed_answer": 6
+      },
+      "original_reads": 12,
+      "manual_pass": 3,
+      "manual_fail": 3,
+      "missing_corrected_delivery_date": 3
+    },
+    "A2": {
+      "runs": 3,
+      "calls": 12,
+      "cost_usd": 0.014586,
+      "input_tokens": 8433,
+      "output_tokens": 7008,
+      "stages": {
+        "dp01_select_adopt_or_complete": 6,
+        "dp01_source_backed_answer": 6
+      },
+      "original_reads": 9,
+      "manual_pass": 3,
+      "manual_fail": 3,
+      "missing_corrected_delivery_date": 3
+    }
+  },
+  "details": [
+    {
+      "run_id": "tactic-dp01-e3-A-r1-f6e6e0",
+      "repetition": 1,
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 같을 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요합니다.\n\n받아둔 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "actual_text_sha256": "d943306b1be368e9150cb78f2b338b33250f078648604c0387ec7629b13eb68a",
+      "manual_status": "PASS",
+      "reason": "원문 v1 가격/기간/납기 및 가격 동률일 때만 적용하는 기준을 보존한다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r1-1f39fd",
+      "basic_manual_status": "PASS",
+      "basic_actual_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r1-f6e6e0/trace.json"
+    },
+    {
+      "run_id": "tactic-dp01-e3-A-r1-f6e6e0",
+      "repetition": 1,
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 정해지지 않았습니다.",
+      "actual_text_sha256": "102bef586a6e153eeb5e28cc5f0430c6a34c58b6fe77d5a58417ca206bda2569",
+      "manual_status": "FAIL",
+      "reason": "가격 1,180,000원과 유지보수 36개월 및 조건은 맞지만 최신 정정 견적의 납기 11월 1일을 실제 표시 본문에서 누락했다. 기본 A의 같은 누락 3건이 A2에서도 유지된다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r1-1f39fd",
+      "basic_manual_status": "FAIL",
+      "basic_actual_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r1-f6e6e0/trace.json"
+    },
+    {
+      "run_id": "tactic-dp01-e3-A-r2-743ec3",
+      "repetition": 2,
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "실제로 설명한 비교 기준은 부가세 포함 가격과 유지보수 기간을 함께 보는 것이며, 두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선합니다. 구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\n\n받아둔 Aster A 견적(v1)은 1대당 1,250,000원(부가세 포함)이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결하지 않았습니다.",
+      "actual_text_sha256": "12a3f316f24ae642c7618bb82a2fa6428ff2665000ccf2839e83c8a0b478c958",
+      "manual_status": "PASS",
+      "reason": "원문 v1 가격/기간/납기 및 가격 동률일 때만 적용하는 기준을 보존한다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r2-3d7648",
+      "basic_manual_status": "PASS",
+      "basic_actual_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r2-743ec3/trace.json"
+    },
+    {
+      "run_id": "tactic-dp01-e3-A-r2-743ec3",
+      "repetition": 2,
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)은 1대당 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "actual_text_sha256": "2c56cf7f47377b76b50708cfc1b0fd1e4a4546715b9824a50997a371b90f8da2",
+      "manual_status": "FAIL",
+      "reason": "가격 1,180,000원과 유지보수 36개월 및 조건은 맞지만 최신 정정 견적의 납기 11월 1일을 실제 표시 본문에서 누락했다. 기본 A의 같은 누락 3건이 A2에서도 유지된다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r2-3d7648",
+      "basic_manual_status": "FAIL",
+      "basic_actual_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r2-743ec3/trace.json"
+    },
+    {
+      "run_id": "tactic-dp01-e3-A-r3-ecc5c9",
+      "repetition": 3,
+      "goal_id": "e3-q1",
+      "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "actual_text_sha256": "48f643a21a4a2f8c065f092665e113035fd0462f4bcfb08c9a3e433758a6a359",
+      "manual_status": "PASS",
+      "reason": "원문 v1 가격/기간/납기 및 가격 동률일 때만 적용하는 기준을 보존한다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "sha256": "aee345a9850ac770c0d89376cbf9e066bc69385725a7fc2cae006e9723b54a32",
+          "lines": {
+            "1": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.",
+            "2": "납기 10월 29일. 설치비는 80,000원 별도다.",
+            "3": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r3-ff0b17",
+      "basic_manual_status": "PASS",
+      "basic_actual_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r3-ecc5c9/trace.json"
+    },
+    {
+      "run_id": "tactic-dp01-e3-A-r3-ecc5c9",
+      "repetition": 3,
+      "goal_id": "e3-q2",
+      "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "actual_text_sha256": "b84d96a526015b935400946a76ccdddde7671d486e6ccbe36a8854c89a117259",
+      "manual_status": "FAIL",
+      "reason": "가격 1,180,000원과 유지보수 36개월 및 조건은 맞지만 최신 정정 견적의 납기 11월 1일을 실제 표시 본문에서 누락했다. 기본 A의 같은 누락 3건이 A2에서도 유지된다.",
+      "source_evidence": [
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "sha256": "af797d8e8194cfc3fb194c70b61192303d0765357ce55670f0dc484e1f9709a7",
+          "lines": {
+            "1": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.",
+            "2": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.",
+            "3": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+          }
+        },
+        {
+          "file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "sha256": "1b371ec0085707c4be646503475ee0a9c383d2177ecc076af14e61b9949d2981",
+          "lines": {
+            "1": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.",
+            "2": "유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.",
+            "3": "설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다."
+          }
+        }
+      ],
+      "basic_run_id": "basic-dp01-e3-A-r3-ff0b17",
+      "basic_manual_status": "FAIL",
+      "basic_actual_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+      "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-dp01-A2/raw/runs/tactic-dp01-e3-A-r3-ecc5c9/trace.json"
+    }
+  ],
+  "official_timing_same_case_comparison": {
+    "before": {
+      "qa01_ms": 6888.312166666667,
+      "qa01_observed": 6,
+      "qa01_expected": 6,
+      "qa03_ms": 21822.022243166666,
+      "qa03_observed": 6,
+      "qa03_expected": 6,
+      "max_rss_mb": 43.66336
+    },
+    "after": {
+      "qa01_ms": 6394.130118166667,
+      "qa01_observed": 6,
+      "qa01_expected": 6,
+      "qa03_ms": 21432.66028466667,
+      "qa03_observed": 6,
+      "qa03_expected": 6,
+      "max_rss_mb": 43.925504
+    }
+  },
+  "official_comparison_source": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/tactic-comparison.json"
+}

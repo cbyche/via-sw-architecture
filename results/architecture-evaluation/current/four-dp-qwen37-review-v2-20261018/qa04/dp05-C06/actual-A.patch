@@ -1,0 +1,53 @@
+--- frozen/src/dp05.rs
++++ A/src/dp05.rs
+@@ -13,13 +13,14 @@
+  for event in input["events"].as_array().ok_or("events missing")?{match event["kind"].as_str().unwrap_or(""){
+   "source"|"adopt"|"revoke"=>{
+    match event["kind"].as_str().unwrap(){
+-    "source"=>{let s=event["source"].clone();let sid=s["id"].as_str().ok_or("source id")?.to_owned();if sources.get(&sid).map(|old|old["revision"]!=s["revision"]||old["revoked"]!=s["revoked"]).unwrap_or(false){record=Value::Null;ctx.event("DERIVED_STATE_INVALIDATED",&json!({"source_id":sid,"reason":"current_source_or_access_change","before_model_input":true}));}sources.insert(sid,s);common_evidence.retain(|p|valid_span(p,&sources));}
++    "source"=>{let mut s=event["source"].clone();let sid=s["id"].as_str().ok_or("source id")?.to_owned();if sources.get(&sid).map(|old|old["revision"]!=s["revision"]||old["revoked"]!=s["revoked"]).unwrap_or(false){record=Value::Null;ctx.event("DERIVED_STATE_INVALIDATED",&json!({"source_id":sid,"reason":"current_source_or_access_change","before_model_input":true}));}if let Some(old)=sources.get(&sid){for field in ["withdrawn_ranges","access_epoch"]{if old.get(field).is_some(){s[field]=old[field].clone();}}}sources.insert(sid,s);common_evidence.retain(|p|valid_span(p,&sources));}
+     "adopt"=>{state=event["state"].clone();}
+     "revoke"=>{if let Some(s)=sources.get_mut(event["source_id"].as_str().ok_or("revoke id")?){s["revoked"]=json!(true);}record=Value::Null;common_evidence.retain(|p|valid_span(p,&sources));ctx.event("LEASE_REVOKED",event);}
+     _=>unreachable!(),
+    }ctx.event("PUBLIC_ACTIVITY",event);
+    if variant=="B"{revision+=1;let mut prep=ctx.scoped(&[],&[]);prep.event("PREPARATION_START",&json!({"preparation_id":format!("dp05-record-{}",revision),"future_purpose_available":false}));record=record::produce(&mut prep,&sources,&state,&record,event,revision)?;prep.event("PREPARATION_COMPLETE",&json!({"preparation_id":format!("dp05-record-{}",revision)}));}
+   }
++  "withdraw_range"=>{let sid=event["source_id"].as_str().ok_or("withdraw source")?;let applied=sources.get_mut(sid).map(|s|withdraw(s,event)).unwrap_or(false);ctx.event(if applied{"RANGE_WITHDRAWAL_APPLIED"}else{"RANGE_WITHDRAWAL_REJECTED"},event);if applied{state["access_epoch"]=event["access_epoch"].clone();common_evidence=safe_raw_passages(&common_evidence,&sources);if record.is_object(){record["blocks"]=json!(array(&record["blocks"]).into_iter().filter(|b|valid_block(b,&sources)).collect::<Vec<_>>());record["conditions"]=json!([]);record["unknowns"]=json!([]);record["coverage"]=json!([]);record["source_vector"]=json!(catalog(&sources));record["permission_filter_epoch"]=event["access_epoch"].clone();}ctx.event("RANGE_DEPENDENCIES_FILTERED",&json!({"common_evidence":common_evidence,"work_record":record}));}}
+   "acquire"=>{let(p,d)=selected_reads(ctx,&event["reads"],&sources,"COMMON_ACTUALLY_ACQUIRED");common_evidence.extend(p);ctx.event("COMMON_EVIDENCE_ACQUIRED",&json!({"trigger":event,"denials":d}));}
+   "delegate"|"observe"=>{
+    let goal=event["goal_id"].as_str().ok_or("goal_id")?;let stimulus=event["stimulus_id"].as_str().ok_or("stimulus_id")?;let raw=event["utterance"].as_str().ok_or("DP05 requires actual user utterance")?;
+--- frozen/src/dp05_sources.rs
++++ A/src/dp05_sources.rs
+@@ -3,8 +3,8 @@
+ pub type Sources=BTreeMap<String,Value>;
+ pub fn array(v:&Value)->Vec<Value>{v.as_array().cloned().unwrap_or_default()}
+ pub fn bounds(s:&Value)->(u64,u64){(s["allowed_lines"][0].as_u64().unwrap_or(1),s["allowed_lines"][1].as_u64().unwrap_or(s["line_count"].as_u64().unwrap_or(0)))}
+-pub fn catalog(s:&Sources)->Vec<Value>{s.values().map(|v|json!({"id":v["id"],"title":v["title"],"revision":v["revision"],"outline":v["outline"],"line_count":v["line_count"],"revoked":v["revoked"],"allowed_lines":v["allowed_lines"]})).collect()}
+-pub fn valid_span(p:&Value,sources:&Sources)->bool{let Some(s)=p["source_id"].as_str().and_then(|id|sources.get(id))else{return false;};let(Some(lo),Some(hi))=(p["start_line"].as_u64(),p["end_line"].as_u64())else{return false;};let(a,b)=bounds(s);s["revoked"].as_bool()!=Some(true)&&s["revision"]==p["revision"]&&lo>=a&&lo<=hi&&hi<=b}
++pub fn catalog(s:&Sources)->Vec<Value>{s.values().map(|v|json!({"id":v["id"],"title":v["title"],"revision":v["revision"],"outline":v["outline"],"line_count":v["line_count"],"revoked":v["revoked"],"allowed_lines":v["allowed_lines"],"withdrawn_ranges":v["withdrawn_ranges"],"allowed_segments":allowed_segments(v),"access_epoch":v["access_epoch"]})).collect()}
++pub fn valid_span(p:&Value,sources:&Sources)->bool{let Some(s)=p["source_id"].as_str().and_then(|id|sources.get(id))else{return false;};let(Some(lo),Some(hi))=(p["start_line"].as_u64(),p["end_line"].as_u64())else{return false;};let(a,b)=bounds(s);s["revoked"].as_bool()!=Some(true)&&s["revision"]==p["revision"]&&lo>=a&&lo<=hi&&hi<=b&&!ranges_overlap(s,lo,hi)}
+ pub fn contained(span:&Value,p:&Value)->bool{span["source_id"]==p["source_id"]&&span["revision"]==p["revision"]&&p["start_line"].as_u64().unwrap_or(u64::MAX)<=span["start_line"].as_u64().unwrap_or(0)&&p["end_line"].as_u64().unwrap_or(0)>=span["end_line"].as_u64().unwrap_or(u64::MAX)}
+ pub fn quote_in_span(span:&Value,p:&Value,quote:&str)->bool{
+  if !contained(span,p){return false;}let Some(text)=p["text"].as_str()else{return false;};
+@@ -13,7 +13,7 @@
+  if lo<base||hi<lo{return false;}text.lines().skip((lo-base)as usize).take((hi-lo+1)as usize).collect::<Vec<_>>().join("\n").contains(quote)
+ }
+ pub fn read(ctx:&Context,s:&Value,lo:u64,hi:u64,consumer:&str)->Result<Value,String>{
+- let(a,b)=bounds(s);if s["revoked"].as_bool()==Some(true)||lo<a||hi>b||lo==0||lo>hi{return Err("DENIED_CURRENT_ACCESS_OR_RANGE".into());}
++ let(a,b)=bounds(s);if s["revoked"].as_bool()==Some(true)||lo<a||hi>b||lo==0||lo>hi||ranges_overlap(s,lo,hi){return Err("DENIED_CURRENT_ACCESS_OR_RANGE".into());}
+  let raw=ctx.source(s)?;let lines:Vec<&str>=raw["text"].as_str().ok_or("source text")?.lines().collect();if hi as usize>lines.len(){return Err("SOURCE_RANGE_UNAVAILABLE".into());}
+  let p=json!({"source_id":s["id"],"revision":s["revision"],"start_line":lo,"end_line":hi,"unit":"one_based_line_inclusive","text":lines[lo as usize-1..hi as usize].join("\n"),"consumer":consumer});ctx.event("HANDOFF_SOURCE_READ",&p);Ok(p)
+ }
+@@ -37,3 +37,12 @@
+  #[test]fn quote_must_be_actually_supplied(){let(s,p,mut r)=setup();r["facts"][0]["quote"]=json!("fabricated original");assert!(!result_errors(&r,"make draft",&s,&[p],&json!(["s"])).is_empty());}
+  #[test]fn quote_must_be_inside_cited_lines(){let(s,mut p,mut r)=setup();p["text"]=json!("Amount is 750.\nShipping is pending.");r["facts"][0]["quote"]=json!("Shipping is pending.");assert!(!result_errors(&r,"draft",&s,&[p],&json!(["s"])).is_empty());}
+ }
++
++// QA04 C06: source authority partitions, independent of semantic targets/fixtures.
++pub fn ranges_overlap(source:&Value,lo:u64,hi:u64)->bool{array(&source["withdrawn_ranges"]).iter().any(|r|r[0].as_u64().unwrap_or(u64::MAX)<=hi&&r[1].as_u64().unwrap_or(0)>=lo)}
++pub fn allowed_segments(source:&Value)->Vec<[u64;2]>{let(a,b)=bounds(source);if a==0||a>b||source["revoked"]==true{return Vec::new();}let mut segments=vec![[a,b]];for r in array(&source["withdrawn_ranges"]){let lo=r[0].as_u64().unwrap_or(u64::MAX);let hi=r[1].as_u64().unwrap_or(0);let mut next=Vec::new();for [a,b] in segments{if hi<a||lo>b{next.push([a,b]);}else{if a<lo{next.push([a,lo-1]);}if hi<b{next.push([hi+1,b]);}}}segments=next;}segments}
++pub fn safe_raw_passages(passages:&[Value],sources:&Sources)->Vec<Value>{let mut safe=Vec::new();for p in passages{let Some(s)=p["source_id"].as_str().and_then(|id|sources.get(id))else{continue;};if s["revision"]!=p["revision"]{continue;}let base=p["start_line"].as_u64().unwrap_or(0);let end=p["end_line"].as_u64().unwrap_or(0);if base==0{continue;}for [a,b] in allowed_segments(s){let lo=a.max(base);let hi=b.min(end);if lo>hi{continue;}let mut q=p.clone();q["start_line"]=json!(lo);q["end_line"]=json!(hi);q["text"]=json!(p["text"].as_str().unwrap_or("").lines().skip((lo-base)as usize).take((hi-lo+1)as usize).collect::<Vec<_>>().join("\n"));safe.push(q);}}safe}
++pub fn withdraw(source:&mut Value,event:&Value)->bool{let lo=event["start_line"].as_u64().unwrap_or(0);let hi=event["end_line"].as_u64().unwrap_or(0);let epoch=event["access_epoch"].as_u64().unwrap_or(0);let(a,b)=bounds(source);if source["revision"]!=event["revision"]||epoch<=source["access_epoch"].as_u64().unwrap_or(0)||lo<a||hi>b||lo>hi{return false;}let mut ranges=array(&source["withdrawn_ranges"]);ranges.push(json!([lo,hi]));source["withdrawn_ranges"]=json!(ranges);source["access_epoch"]=json!(epoch);true}
++#[cfg(test)]mod qa04_c06_tests{use super::*;
++ #[test]fn range_authority_preserves_unaffected_segments(){for _variant in ["A","B","C"]{let mut s=json!({"id":"s","revision":1,"line_count":3,"allowed_lines":[1,3],"delivered_lines":[1,3]});assert!(withdraw(&mut s,&json!({"revision":1,"start_line":2,"end_line":2,"access_epoch":2})));assert!(!withdraw(&mut s,&json!({"revision":1,"start_line":2,"end_line":2,"access_epoch":1})));assert_eq!(allowed_segments(&s),vec![[1,1],[3,3]]);let mut sources=Sources::new();sources.insert("s".into(),s);let mut p=json!({"source_id":"s","revision":1,"start_line":1,"end_line":3,"text":"left allowed\nwithdrawn private\nright allowed"});assert!(!valid_span(&p,&sources));let safe=safe_raw_passages(&[p.clone()],&sources);assert_eq!(safe.len(),2);assert!(!serde_json::to_string(&safe).unwrap().contains("withdrawn private"));assert!(safe.iter().all(|p|valid_span(p,&sources)));p["revision"]=json!(2);assert!(safe_raw_passages(&[p],&sources).is_empty());sources.get_mut("s").unwrap()["revoked"]=json!(true);assert!(allowed_segments(&sources["s"]).is_empty());}}
++}

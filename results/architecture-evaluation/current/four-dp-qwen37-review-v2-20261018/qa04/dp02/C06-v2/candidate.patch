@@ -1,0 +1,62 @@
+--- a/src/dp02/execution.rs
++++ b/src/dp02/execution.rs
+@@ -46,6 +46,9 @@
+         let request=state::request(state,goal_id).ok_or("goal request state absent")?;state::mark_response_attempt(state,goal_id,request.revision);
+         let result=if request.correction.is_none(){response::fast_answer(&request.adoption,&request,&input["sources"])}else{None};
+         let value=if let Some(v)=result{ctx.event("RESPONSE_BRANCH",&json!({"goal_id":goal_id,"path":"valid_complete_answer_from_adoption"}));v}else{response::detailed(ctx,input,&request,state)?};
++        ctx.event("RESPONSE_DRAFT_READY",&json!({"goal_id":goal_id,"draft":value}));
++        state::revoke_ranges(state,input,ctx);
++        if !state::draft_allowed(state,input,&value){ctx.event("REVOKED_DRAFT_REJECTED",&json!({"goal_id":goal_id,"draft":value,"action":"bounded source-policy rejudgment"}));if revision_attempt==1{return Err("revoked draft after bounded rejudgment".into())}continue;}
+         state::wait_relations(state,ctx,goal_id);
+         let current=state::request(state,goal_id).ok_or("goal disappeared")?;
+         if current.revision!=request.revision{
+--- a/src/dp02/response.rs
++++ b/src/dp02/response.rs
+@@ -20,10 +20,10 @@
+     source_claims(v,sources)
+ }
+ pub fn detailed(ctx:&mut Context,input:&Value,request:&Request,state:&Shared)->Result<Value,String>{
+-    let mut reason=Value::Null;let mut previous=Value::Null;
++    let mut reason=Value::Null;let allowed=state::allowed_sources(state,input);let mut previous=Value::Null;
+     for attempt in 0..=1{
+-        let p=json!({"instruction":"Complete this VIA user goal from its actual original request, adopted intent and latest revision/correction. Preserve all non-corrected conditions; obey the latest scope. Return JSON {answer:nonempty detailed string,sections:[{id:string,text:nonempty string}],applied_revision:number,source_claims:[{source_id,revision,quote:exact supplied substring}]}. Cover the adopted goal, not an unrelated pending goal. Include the requested comparison values/tradeoffs or protocol explanation in the answer itself. Never return null, echo the instruction, or replace the answer with a plan. source_claims.quote must be a single EXACT CONTIGUOUS substring from the supplied sources text: never insert ellipses, summarize a quote, join separated passages, or cite a user event as a source ID. Use separate claims for separate actual passages. For an answer to an Agent question, identify the resolved recipient/choice for actual forwarding; do not claim it was already sent.","input":{"original_request":request.raw,"goal_id":request.goal_id,"current_revision":request.revision,"current_scope":request.scope,"adopted_intent":request.adoption,"later_correction":request.correction,"sources":input["sources"],"actual_state":state::snapshot(state),"repair_reason":reason,"previous_rejected_proposal":previous},"max_tokens":2600});
+-        match ctx.call(if attempt==0{"dp02_complete_response"}else{"dp02_repair_response"},&p){Ok(v)=>match validate(&v,request,&input["sources"]){Ok(())=>return Ok(v),Err(e)=>{reason=json!(e);previous=v.clone();ctx.event("SEMANTIC_STAGE_REJECTED",&json!({"stage":"response","attempt":attempt,"reason":e,"proposal":v,"goal_id":request.goal_id}));}},Err(e)=>{reason=json!(e);ctx.event("SEMANTIC_STAGE_REJECTED",&json!({"stage":"response","attempt":attempt,"reason":e,"goal_id":request.goal_id}));}}
++        let p=json!({"instruction":"Complete this VIA user goal from its actual original request, adopted intent and latest revision/correction. Preserve all non-corrected conditions; obey the latest scope. Return JSON {answer:nonempty detailed string,sections:[{id:string,text:nonempty string}],applied_revision:number,source_claims:[{source_id,revision,quote:exact supplied substring}]}. Cover the adopted goal, not an unrelated pending goal. Include the requested comparison values/tradeoffs or protocol explanation in the answer itself. Never return null, echo the instruction, or replace the answer with a plan. source_claims.quote must be a single EXACT CONTIGUOUS substring from the supplied sources text: never insert ellipses, summarize a quote, join separated passages, or cite a user event as a source ID. Use separate claims for separate actual passages. For an answer to an Agent question, identify the resolved recipient/choice for actual forwarding; do not claim it was already sent.","input":{"original_request":request.raw,"goal_id":request.goal_id,"current_revision":request.revision,"current_scope":request.scope,"adopted_intent":request.adoption,"later_correction":request.correction,"sources":allowed,"actual_state":state::snapshot(state),"repair_reason":reason,"previous_rejected_proposal":previous},"max_tokens":2600});
++        match ctx.call(if attempt==0{"dp02_complete_response"}else{"dp02_repair_response"},&p){Ok(v)=>match validate(&v,request,&allowed){Ok(())=>return Ok(v),Err(e)=>{reason=json!(e);previous=v.clone();ctx.event("SEMANTIC_STAGE_REJECTED",&json!({"stage":"response","attempt":attempt,"reason":e,"proposal":v,"goal_id":request.goal_id}));}},Err(e)=>{reason=json!(e);ctx.event("SEMANTIC_STAGE_REJECTED",&json!({"stage":"response","attempt":attempt,"reason":e,"goal_id":request.goal_id}));}}
+     }Err(format!("response recovery exhausted: {}",reason))
+ }
+ pub fn fast_answer(intent:&Value,r:&Request,sources:&Value)->Option<Value>{
+--- a/src/dp02/state.rs
++++ b/src/dp02/state.rs
+@@ -4,7 +4,7 @@
+ use std::sync::{Arc,Mutex,Condvar};
+ use crate::context::Context;
+ #[derive(Clone,Debug)]pub struct Request{pub goal_id:String,pub stimulus_id:String,pub raw:String,pub revision:u64,pub scope:String,pub adoption:Value,pub correction:Option<Value>,pub delivered:Option<Value>}
+-#[derive(Default)]pub struct Conversation{pub requests:HashMap<String,Request>,pub pending:HashSet<String>,pub captured:Vec<Value>,pub questions:Vec<Value>,pub associations:Vec<Value>,pub outputs:Vec<Value>,pub attempted_response_revision:HashMap<String,u64>,pub last_relation_node:Option<String>}
++#[derive(Default)]pub struct Conversation{pub requests:HashMap<String,Request>,pub pending:HashSet<String>,pub captured:Vec<Value>,pub questions:Vec<Value>,pub associations:Vec<Value>,pub outputs:Vec<Value>,pub attempted_response_revision:HashMap<String,u64>,pub range_revocations:Vec<Value>,pub last_relation_node:Option<String>}
+ pub type Shared=Arc<(Mutex<Conversation>,Condvar)>;
+ pub fn new()->Shared{Arc::new((Mutex::new(Conversation::default()),Condvar::new()))}
+ pub fn capture(state:&Shared,ctx:&Context,event:&Value){let id=event["id"].as_str().unwrap_or("");ctx.capture(id,&json!({"text":event["text"],"revision":event["revision"],"input_class":"USER_TEXT"}));let mut s=state.0.lock().unwrap();s.pending.insert(id.into());s.captured.push(event.clone());}
+@@ -21,3 +21,22 @@
+ #[cfg(test)]mod reopen_tests{use super::*;fn corrected()->Request{Request{goal_id:"r".into(),stimulus_id:"r".into(),raw:"compare".into(),revision:2,scope:"cost".into(),adoption:json!({}),correction:Some(json!({})),delivered:None}}#[test]fn failed_same_revision_cannot_create_third_attempt(){assert!(!needs_reopen(&corrected(),Some(2)));}#[test]fn actually_new_revision_can_resume_after_old_terminal(){assert!(needs_reopen(&corrected(),Some(1)));assert!(needs_reopen(&corrected(),None));}}
+ 
+ #[cfg(test)]mod privacy_tests{use super::*;#[test]fn private_complete_answer_not_in_public_view(){let state=new();state.0.lock().unwrap().requests.insert("r".into(),Request{goal_id:"r".into(),stimulus_id:"r".into(),raw:"compare".into(),revision:1,scope:"cost".into(),adoption:json!({"relation":"NEW","complete_answer":"PRIVATE_UNSHOWN_DRAFT","source_claims":[{"quote":"PRIVATE_QUOTE"}]}),correction:None,delivered:None});let public=snapshot(&state).to_string();assert!(!public.contains("PRIVATE_UNSHOWN_DRAFT"));assert!(!public.contains("PRIVATE_QUOTE"));assert!(state.0.lock().unwrap().requests["r"].adoption["complete_answer"]=="PRIVATE_UNSHOWN_DRAFT");}}
++
++/// Future C06 range policy: versioned byte extents on actual supplied sources.
++pub fn revoke_ranges(state:&Shared,input:&Value,ctx:&Context){
++ let mut s=state.0.lock().unwrap();if !s.range_revocations.is_empty(){return}
++ for event in input["source_range_revocations"].as_array().into_iter().flatten(){
++  let Some(src)=input["sources"].as_array().and_then(|a|a.iter().find(|x|x["id"]==event["source_id"]&&x["revision"]==event["revision"]))else{continue};
++  let text=src["text"].as_str().unwrap_or("");let a=event["start_byte"].as_u64().unwrap_or(u64::MAX)as usize;let b=event["end_byte"].as_u64().unwrap_or(0)as usize;
++  if a<b&&b<=text.len()&&text.is_char_boundary(a)&&text.is_char_boundary(b){s.range_revocations.push(event.clone());ctx.event("SOURCE_RANGE_REVOKED",event);}
++ }
++}
++pub fn allowed_sources(state:&Shared,input:&Value)->Value{
++ let revoked=state.0.lock().unwrap().range_revocations.clone();let mut sources=input["sources"].clone();
++ for src in sources.as_array_mut().into_iter().flatten(){let text=src["text"].as_str().unwrap_or("").to_string();let mut ranges=revoked.iter().filter(|r|r["source_id"]==src["id"]&&r["revision"]==src["revision"]).map(|r|(r["start_byte"].as_u64().unwrap()as usize,r["end_byte"].as_u64().unwrap()as usize)).collect::<Vec<_>>();ranges.sort();let mut cursor=0;let mut filtered=String::new();for(a,b)in ranges{if a>=cursor{filtered.push_str(&text[cursor..a]);filtered.push_str("[WITHDRAWN RANGE]");cursor=b;}else{cursor=cursor.max(b);}}filtered.push_str(&text[cursor..]);src["text"]=json!(filtered);}
++ sources
++}
++pub fn draft_allowed(state:&Shared,input:&Value,draft:&Value)->bool{
++ let allowed=allowed_sources(state,input);
++ draft["source_claims"].as_array().into_iter().flatten().all(|c|allowed.as_array().is_some_and(|a|a.iter().any(|s|s["id"]==c["source_id"]&&s["revision"]==c["revision"]&&c["quote"].as_str().is_some_and(|q|s["text"].as_str().unwrap_or("").contains(q)))))
++}

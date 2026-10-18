@@ -1,0 +1,624 @@
+{
+  "phase": "CALIBRATION_V2_NOT_FORMAL",
+  "provider_calls_by_analysis": 0,
+  "rows": [
+    {
+      "run_id": "calibration_v2-dp04-dense-A-r1-cae917",
+      "variant": "A",
+      "episode": "dp04-dense",
+      "qa01_mean_ms": null,
+      "qa01_n": 0,
+      "qa01_expected": 1,
+      "qa01_noresponse": 1,
+      "qa03_mean_ms": null,
+      "qa03_n": 0,
+      "qa03_expected": 1,
+      "qa03_incomplete": 1,
+      "qa02_correct": 0,
+      "qa02_total": 2,
+      "model_calls": 2,
+      "via_cost_usd": 0.0034632,
+      "rss_concurrent_peak_mb": 44.744704,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "dense-first",
+            "revision": 1,
+            "targets": [
+              "D06"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": null,
+            "cue_ids": null,
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "dense-first",
+            "extents": null,
+            "relation": null,
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": [],
+            "_target_identity_unresolved": false
+          },
+          "correct": false,
+          "failure_reason": "TARGET_SET_MISMATCH"
+        },
+        {
+          "expected": {
+            "expression_id": "dense-second",
+            "revision": 1,
+            "targets": [
+              "D11"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": null,
+            "cue_ids": null,
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "dense-second",
+            "extents": null,
+            "relation": null,
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": [],
+            "_target_identity_unresolved": false
+          },
+          "correct": false,
+          "failure_reason": "TARGET_SET_MISMATCH"
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-dense:grounding",
+          "origin_stimulus_id": "dp04-dense:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 62625,
+          "complete_elapsed_ns": null,
+          "elapsed_ms": null,
+          "qa03_ms": null,
+          "receiver_shim_internal_excluded_ms": null,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": null,
+          "status": "NOT_OBSERVED",
+          "failed_attempts": [
+            {
+              "elapsed_ns": 17214956083,
+              "input_to_failure_ms": 17214.893458,
+              "reason": {
+                "goal_id": "dp04-dense:grounding",
+                "proposal": {
+                  "adoptions": [
+                    {
+                      "evidence": "Consistency validation failed after bounded source rejudgment",
+                      "expression_id": "dense-first",
+                      "status": "need_evidence",
+                      "targets": []
+                    },
+                    {
+                      "evidence": "Consistency validation failed after bounded source rejudgment",
+                      "expression_id": "dense-second",
+                      "status": "need_evidence",
+                      "targets": []
+                    }
+                  ],
+                  "contract_failures": [
+                    "POINT_OUTSIDE_CLAIMED_EXTENT:\"D06 / Orion\""
+                  ],
+                  "revision": 1,
+                  "source_snapshot": [
+                    {
+                      "frame_id": "dense",
+                      "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                      "source_id": "document",
+                      "source_revision": 1
+                    }
+                  ]
+                },
+                "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+                "revision": 1,
+                "stimulus_id": "dp04-dense:r1"
+              }
+            }
+          ],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    },
+    {
+      "run_id": "calibration_v2-dp04-dense-B-r1-b96b45",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "qa01_mean_ms": 27165.225917,
+      "qa01_n": 1,
+      "qa01_expected": 1,
+      "qa01_noresponse": 0,
+      "qa03_mean_ms": 27165.567334,
+      "qa03_n": 1,
+      "qa03_expected": 1,
+      "qa03_incomplete": 0,
+      "qa02_correct": 2,
+      "qa02_total": 2,
+      "model_calls": 2,
+      "via_cost_usd": 0.0034484000000000003,
+      "rss_concurrent_peak_mb": 44.171264,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "dense-first",
+            "revision": 1,
+            "targets": [
+              "D06"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": 1,
+            "cue_ids": [
+              "pointer-1"
+            ],
+            "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+            "expression_id": "dense-first",
+            "extents": [
+              {
+                "bbox": [
+                  270,
+                  290,
+                  480,
+                  430
+                ],
+                "frame_id": "dense",
+                "kind": "card",
+                "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                "target_id": "D06"
+              }
+            ],
+            "relation": "designated_by_cue",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "D06"
+            ],
+            "_target_identity_unresolved": false
+          },
+          "correct": true,
+          "failure_reason": null
+        },
+        {
+          "expected": {
+            "expression_id": "dense-second",
+            "revision": 1,
+            "targets": [
+              "D11"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": 1,
+            "cue_ids": [
+              "pointer-2"
+            ],
+            "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+            "expression_id": "dense-second",
+            "extents": [
+              {
+                "bbox": [
+                  510,
+                  460,
+                  720,
+                  600
+                ],
+                "frame_id": "dense",
+                "kind": "card",
+                "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                "target_id": "D11"
+              }
+            ],
+            "relation": "designated_by_cue",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "D11"
+            ],
+            "_target_identity_unresolved": false
+          },
+          "correct": true,
+          "failure_reason": null
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-dense:grounding",
+          "origin_stimulus_id": "dp04-dense:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 55625,
+          "complete_elapsed_ns": 27165622959,
+          "elapsed_ms": 27165.567334,
+          "qa03_ms": 27165.567334,
+          "receiver_shim_internal_excluded_ms": 0.0,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "content_type": "DETAILED_RESULT",
+            "goal_id": "dp04-dense:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-1"
+                ],
+                "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+                "expression_id": "dense-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      270,
+                      290,
+                      480,
+                      430
+                    ],
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06"
+                  }
+                ],
+                "relation": "designated_by_cue",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "D06"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [
+                  "pointer-2"
+                ],
+                "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+                "expression_id": "dense-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      510,
+                      460,
+                      720,
+                      600
+                    ],
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11"
+                  }
+                ],
+                "relation": "designated_by_cue",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "D11"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@dense": 1
+            },
+            "stimulus_id": "dp04-dense:r1",
+            "targets": [
+              "D06",
+              "D11"
+            ],
+            "text": "지칭 대상 D06 / Orion South / Q2 Revenue 91 / active Forecast review, D11 / Orion East / Q3 Revenue 97 / active Forecast review을(를) 채택했습니다. 수행 의도: Compare branch performance of two designated items"
+          },
+          "status": "OBSERVED",
+          "failed_attempts": [],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    },
+    {
+      "run_id": "calibration_v2-dp04-free-region-A-r1-a459cb",
+      "variant": "A",
+      "episode": "dp04-free-region",
+      "qa01_mean_ms": null,
+      "qa01_n": 0,
+      "qa01_expected": 1,
+      "qa01_noresponse": 1,
+      "qa03_mean_ms": null,
+      "qa03_n": 0,
+      "qa03_expected": 1,
+      "qa03_incomplete": 1,
+      "qa02_correct": 0,
+      "qa02_total": 1,
+      "model_calls": 2,
+      "via_cost_usd": 0.0030876000000000002,
+      "rss_concurrent_peak_mb": 43.712512,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "graph-region",
+            "revision": 1,
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": null,
+            "cue_ids": null,
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "graph-region",
+            "extents": null,
+            "relation": null,
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": [],
+            "_target_identity_unresolved": false
+          },
+          "correct": false,
+          "failure_reason": "TARGET_SET_MISMATCH"
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "origin_stimulus_id": "dp04-free-region:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 56709,
+          "complete_elapsed_ns": null,
+          "elapsed_ms": null,
+          "qa03_ms": null,
+          "receiver_shim_internal_excluded_ms": null,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": null,
+          "status": "NOT_OBSERVED",
+          "failed_attempts": [
+            {
+              "elapsed_ns": 13820966875,
+              "input_to_failure_ms": 13820.910166,
+              "reason": {
+                "goal_id": "dp04-free-region:grounding",
+                "proposal": {
+                  "adoptions": [
+                    {
+                      "evidence": "Consistency validation failed after bounded source rejudgment",
+                      "expression_id": "graph-region",
+                      "status": "need_evidence",
+                      "targets": []
+                    }
+                  ],
+                  "contract_failures": [
+                    "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+                    "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\"",
+                    "CUE_RELATION_TYPE_CONTRADICTION:\"loop-1\""
+                  ],
+                  "revision": 1,
+                  "source_snapshot": [
+                    {
+                      "frame_id": "graph",
+                      "sha256": "8d0350fe2d0d77db768d465ec413a8f1c8949537f9c8ef80f47fb0e2e68293e4",
+                      "source_id": "document",
+                      "source_revision": 1
+                    }
+                  ]
+                },
+                "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+                "revision": 1,
+                "stimulus_id": "dp04-free-region:r1"
+              }
+            }
+          ],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    },
+    {
+      "run_id": "calibration_v2-dp04-free-region-B-r1-b085db",
+      "variant": "B",
+      "episode": "dp04-free-region",
+      "qa01_mean_ms": 17959.305333,
+      "qa01_n": 1,
+      "qa01_expected": 1,
+      "qa01_noresponse": 0,
+      "qa03_mean_ms": 17959.621083,
+      "qa03_n": 1,
+      "qa03_expected": 1,
+      "qa03_incomplete": 0,
+      "qa02_correct": 1,
+      "qa02_total": 1,
+      "model_calls": 2,
+      "via_cost_usd": 0.0025368,
+      "rss_concurrent_peak_mb": 43.139072,
+      "memory_state": "SAMPLED_RSS_ESTIMATE",
+      "qa02_details": [
+        {
+          "expected": {
+            "expression_id": "graph-region",
+            "revision": 1,
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ]
+          },
+          "actual_first_adoption": {
+            "count": 3,
+            "cue_ids": [
+              "loop-1"
+            ],
+            "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+            "expression_id": "graph-region",
+            "extents": [
+              {
+                "bbox": [
+                  335,
+                  225,
+                  355,
+                  245
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P3",
+                "target_id": "P3"
+              },
+              {
+                "bbox": [
+                  490,
+                  315,
+                  510,
+                  335
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P4",
+                "target_id": "P4"
+              },
+              {
+                "bbox": [
+                  390,
+                  395,
+                  410,
+                  415
+                ],
+                "frame_id": "graph",
+                "kind": "point",
+                "label": "P5",
+                "target_id": "P5"
+              }
+            ],
+            "relation": "designated_by_cue",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "_target_identity_unresolved": false
+          },
+          "correct": true,
+          "failure_reason": null
+        }
+      ],
+      "timing_details_by_goal": [
+        {
+          "goal_id": "dp04-free-region:grounding",
+          "origin_stimulus_id": "dp04-free-region:r1",
+          "final_revision": 1,
+          "scope": "GROUNDING_ADOPTION",
+          "start_elapsed_ns": 56458,
+          "complete_elapsed_ns": 17959677541,
+          "elapsed_ms": 17959.621083,
+          "qa03_ms": 17959.621083,
+          "receiver_shim_internal_excluded_ms": 0.0,
+          "receiver_internal_intervals_elapsed_ns": [],
+          "terminal": {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "content_type": "DETAILED_RESULT",
+            "goal_id": "dp04-free-region:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 3,
+                "cue_ids": [
+                  "loop-1"
+                ],
+                "evidence": "Unique complete typed candidate relation; unresolved/competition/navigation alternatives absent",
+                "expression_id": "graph-region",
+                "extents": [
+                  {
+                    "bbox": [
+                      335,
+                      225,
+                      355,
+                      245
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P3",
+                    "target_id": "P3"
+                  },
+                  {
+                    "bbox": [
+                      490,
+                      315,
+                      510,
+                      335
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P4",
+                    "target_id": "P4"
+                  },
+                  {
+                    "bbox": [
+                      390,
+                      395,
+                      410,
+                      415
+                    ],
+                    "frame_id": "graph",
+                    "kind": "point",
+                    "label": "P5",
+                    "target_id": "P5"
+                  }
+                ],
+                "relation": "designated_by_cue",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "P3",
+                  "P4",
+                  "P5"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@graph": 1
+            },
+            "stimulus_id": "dp04-free-region:r1",
+            "targets": [
+              "P3",
+              "P4",
+              "P5"
+            ],
+            "text": "지칭 대상 P3, P4, P5을(를) 채택했습니다. 수행 의도: Calculate the average of the three points enclosed by the pointer path."
+          },
+          "status": "OBSERVED",
+          "failed_attempts": [],
+          "attribution_profile": "ACTUAL_ELAPSED_NO_EXTERNAL",
+          "unassigned_receiver_calls": [],
+          "causal_graph_claim": "Actual scoped sequential external spans; no sparse-parent full-DAG claim. Model queues, step waits and local serving remain included."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "version": "DP05_BASIC_V2_RECEIVER_SELECT_OR_COMPLETE",
+  "reason": {
+    "reason": "Pre-DP05 fairness correction: allow common receiver to finish from actual valid supplied capsule instead of imposing two model calls for A/B; applies equally to ABC; no DP05 BASIC data yet; no oracle-based branch.",
+    "preserve": "Original frozen crate/binary, freeze and smoke evidence; ongoing original 01/02/04 untouched",
+    "execution": "Original campaign stops with explicit code75 before DP05 client/model dispatch, then36uniqueDP05 BASIC trials use scratch-v2 and separate freeze with global ledger.",
+    "root_authorized": true
+  },
+  "base_freeze_sha256": "369bd3eebf3e4e13310a6b6085500e96ec06353a75c732432f01639c1f4313de",
+  "source": {
+    "Cargo.lock": "a564f6c26d56b6d236945b7ccc20b317649d4304c903e4ce4020bfabcffe58b0",
+    "Cargo.toml": "4f4b5c34d65ef17d852d7adbe271766d1b2c696fe0ef7bc60653d7443f91fff1",
+    "src/context.rs": "cf8f9ed56ab00f238c7c9508dc8b0d83617df9be533d213e46d88e5f09f1e079",
+    "src/dp01.rs": "487959d87897987bfcd90d786ee2d238205b803ebadbe440270a500ffe3b35a9",
+    "src/dp02.rs": "1135666b6da3b803fc8053d76c002d19a5a6ce853e0924ed6eaa7abbfa7b27d3",
+    "src/dp04/binding.rs": "a5103f1f7493ee4b9803daaee900de28dc4ccce0d60570facc38e955c7c35aa7",
+    "src/dp04/gate.rs": "3859049d739760500f6782a766948a26c6ac246a8dfa324048d13d5246edcd5b",
+    "src/dp04/joint.rs": "bed75d2295af3cf9ecc0eb592b18269bb279f962758e9f89f751500452b3ae70",
+    "src/dp04/observations.rs": "c272ee808fb63694d8aab112617f6c8d969a2497254b79005644f4691628b716",
+    "src/dp04/producers.rs": "e1cb25498b98d185b8c87c5b9f7bc7cd398615cf966ba7a5c5a46befe0d85156",
+    "src/dp04.rs": "e6fc0bfbd8a2e5422722dda2b5c042d143164a93452fed4e9659c692e3dc26ac",
+    "src/dp05.rs": "6be52581bd04a4b8c975b5cc30df29ca9b625d01bbf67821fda3c563398254b3",
+    "src/main.rs": "cc06465e83e181611de6ab883987c7267600f6d95c7b486566113ad87bd93b7e",
+    "src/model_wire.rs": "35ff2899ac53ced6123b72ceb18469800ef6c10f0b6631b5d05eadd0299ccf89",
+    "src/source_contract.rs": "623039d85f9553cb92d850c89bdad4835b18930980ef9963fa897d2baf381b52"
+  },
+  "candidate_binary_sha256": "6b1407eb690c64aa8d8878ca0b06889106cb115ca0a3d2fbe422728d3a102655",
+  "fixture_sha256": "3aac70e9d61f30f1857be545c327cc2a1cb6d26d2faa0ccd72863ee8b4939cf4",
+  "oracle_sha256": "4da6affc3e326fb31b1d591de21fa184aa0640bbe323e01fd71d7f154171e307",
+  "model": "qwen3.7-plus-2026-05-26",
+  "thinking": false,
+  "price": {
+    "input_per_million": 0.4,
+    "output_per_million": 1.6,
+    "currency": "USD",
+    "region": "Singapore/International",
+    "input_bracket": "<=256K",
+    "source": "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
+    "date": "2026-10-18"
+  },
+  "episode_ids": [
+    "dp05-e1",
+    "dp05-e2",
+    "dp05-e3",
+    "dp05-e4"
+  ],
+  "variants": [
+    "A",
+    "B",
+    "C"
+  ],
+  "repetitions": 3,
+  "phase": "BASIC",
+  "global_budget": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/budget.json",
+  "receiver_protocol": "Same select-or-complete for ABC; completion needs supplied source-backed evidence, not manifest metadata; every repair/read call retained"
+}

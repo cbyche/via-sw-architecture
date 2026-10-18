@@ -1,0 +1,100 @@
+{
+  "baseline_crate": "/private/tmp/four-dp-review-v2-dp05-common-retention-union",
+  "baseline_source_inventory_sha256": "cc73b4173e09470472e7bef84916a76569e4fc93cb7abf994143e19f6d27d7a4",
+  "original_baseline_freeze_sha256": "50e4116e1fa86807c19abecac6586110e88968087542eececcfc4e379a7cecf2",
+  "baseline_relation": "Original BASIC fixture/freeze plus separately pinned corrected candidate source inventory; not a claim that the original freeze already contained the retention fix.",
+  "fixture_source": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-v1/frozen/source/benchmark/architecture/four_dp_poc_v2/fixtures/dp05.json",
+  "fixture_sha256": "bbc06d64573b19fd880b42232d594d94f08fa77aa2f5221c348902afe8eed20a",
+  "control_constant_source": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-20261018/qa04/exercise.py",
+  "control_constant_source_sha256": "f9f9ba2ed3484117331548b894692d8b64595f3e897867a18da97452229f0b55",
+  "adapter_sha256": "75722077c1b0840bff2146592773083e06ee7ddbbee047881b85fbe0a648faa6",
+  "changes": [
+    {
+      "task": "C01",
+      "changed_operational_modules": [
+        "src/model_wire.rs"
+      ],
+      "count": 1,
+      "new_test_only_probe_excluded": "src/bin/contract_probe.rs"
+    },
+    {
+      "task": "C03",
+      "changed_operational_modules": [
+        "src/main.rs",
+        "src/source_contract.rs"
+      ],
+      "count": 2,
+      "new_test_only_probe_excluded": "src/bin/contract_probe.rs"
+    }
+  ],
+  "checks": [
+    {
+      "task": "C01",
+      "dp": "05",
+      "variant": "A",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-A-r1-d54547",
+      "deterministic_calls": 4,
+      "actual_source_reads": 2,
+      "common_retention_events": 1,
+      "provider_calls": 0
+    },
+    {
+      "task": "C01",
+      "dp": "05",
+      "variant": "B",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-B-r1-9b1a98",
+      "deterministic_calls": 8,
+      "actual_source_reads": 11,
+      "common_retention_events": 1,
+      "provider_calls": 0
+    },
+    {
+      "task": "C01",
+      "dp": "05",
+      "variant": "C",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-C-r1-842cdd",
+      "deterministic_calls": 3,
+      "actual_source_reads": 2,
+      "common_retention_events": 0,
+      "provider_calls": 0
+    },
+    {
+      "task": "C03",
+      "dp": "05",
+      "variant": "A",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-A-r1-8c6945",
+      "deterministic_calls": 4,
+      "actual_source_reads": 2,
+      "common_retention_events": 1,
+      "provider_calls": 0
+    },
+    {
+      "task": "C03",
+      "dp": "05",
+      "variant": "B",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-B-r1-ae588e",
+      "deterministic_calls": 8,
+      "actual_source_reads": 11,
+      "common_retention_events": 1,
+      "provider_calls": 0
+    },
+    {
+      "task": "C03",
+      "dp": "05",
+      "variant": "C",
+      "pass": true,
+      "run_id": "qa04_control_offline-dp05-e2-C-r1-481f2f",
+      "deterministic_calls": 3,
+      "actual_source_reads": 2,
+      "common_retention_events": 0,
+      "provider_calls": 0
+    }
+  ],
+  "provider_calls": 0,
+  "scope": "Six actual patched Rust executions with deterministic offline responses, plus actual compatibility probes. C01=Rust/Python model wire and usage; C03=input-admission source/frame metadata. Source original-read retention path exercised for A/B, receiver-read path for C. No semantic quality/latency/cost inference. Other options were not rerun here."
+}

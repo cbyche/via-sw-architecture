@@ -1,0 +1,1302 @@
+{
+  "check": {
+    "change": "C01",
+    "dp": "05",
+    "variant": "A",
+    "fixture": "dp05-e2",
+    "calls": 4,
+    "exit": 0,
+    "result": "PASS",
+    "source_reads": 3,
+    "wire_actual_traversal": true,
+    "receiver_actual_traversal": true,
+    "model": "NO_MODEL; deterministic contract responder only",
+    "semantics_claimed": false
+  },
+  "calls": [
+    {
+      "call_id": 1,
+      "request": {
+        "context": {
+          "input": {
+            "basic_variant": "A",
+            "mandatory": {
+              "access_epoch": 1,
+              "allowed_actions": [
+                "draft_only"
+              ],
+              "already_completed_actions": [],
+              "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+              "condition_revision": 1,
+              "constraints": {
+                "currency": "KRW",
+                "price_tie_break": "longer_maintenance",
+                "quantity": 12,
+                "tax_included": true
+              },
+              "delegation_id": "h2-deck-delegation",
+              "delegation_revision": 1,
+              "disposition": "AUTHORIZED",
+              "exclusions": [
+                "installation_convenience",
+                "unverified_total_operating_cost"
+              ],
+              "goal_id": "h2-deck",
+              "missing_required_sources": [],
+              "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+              "recipient": "minimal-draft-agent",
+              "request_revision": 1,
+              "required_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "revoked_sources": [],
+              "task_id": "T-PC",
+              "unknown_actions": []
+            },
+            "manifest": [
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "delivered-guidance",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      3
+                    ],
+                    "section": "실제 전달과 미전달"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "실제로 표시한 기준 설명"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  4
+                ],
+                "id": "public-comparison",
+                "line_count": 4,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      1
+                    ],
+                    "section": "유지보수"
+                  },
+                  {
+                    "lines": [
+                      2,
+                      4
+                    ],
+                    "section": "기능 검토와 미확인"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "신규 PC 비교 공개 보고서"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "public-quote",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      2
+                    ],
+                    "section": "가격과 수량"
+                  },
+                  {
+                    "lines": [
+                      3,
+                      3
+                    ],
+                    "section": "납기와 계약 상태"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "공급업체 공개 견적"
+              }
+            ],
+            "work_record": null
+          },
+          "instruction": "Select details needed for the CURRENT adopted handoff purpose. Metadata/outline is not source content. Return JSON {reads:[{source_id:string,start_line:number,end_line:number}],summary:string,selected_record_blocks:[string]}. For A, request only necessary original source ranges and do not summarize unseen facts. For B, extract actual source-backed work-record blocks; request original spans only for missing/uncertain detail. Artifact references and receiver read tools are legal in both designs. Mandatory conditions are supplied separately and cannot be altered. Do not add domain plans or broaden actions.",
+          "max_tokens": 900
+        }
+      },
+      "stage": "dp05_select_handoff_details",
+      "type": "model_call",
+      "wire_version": 2
+    },
+    {
+      "call_id": 2,
+      "request": {
+        "context": {
+          "input": {
+            "actual_passages": [
+              {
+                "consumer": "VIA_COMPOSER",
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "public-comparison",
+                "start_line": 1,
+                "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+                "unit": "one_based_line_inclusive"
+              },
+              {
+                "consumer": "VIA_COMPOSER",
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1,
+                "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ],
+            "denials": [],
+            "mandatory": {
+              "access_epoch": 1,
+              "allowed_actions": [
+                "draft_only"
+              ],
+              "already_completed_actions": [],
+              "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+              "condition_revision": 1,
+              "constraints": {
+                "currency": "KRW",
+                "price_tie_break": "longer_maintenance",
+                "quantity": 12,
+                "tax_included": true
+              },
+              "delegation_id": "h2-deck-delegation",
+              "delegation_revision": 1,
+              "disposition": "AUTHORIZED",
+              "exclusions": [
+                "installation_convenience",
+                "unverified_total_operating_cost"
+              ],
+              "goal_id": "h2-deck",
+              "missing_required_sources": [],
+              "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+              "recipient": "minimal-draft-agent",
+              "request_revision": 1,
+              "required_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "revoked_sources": [],
+              "task_id": "T-PC",
+              "unknown_actions": []
+            },
+            "selected_record_blocks": []
+          },
+          "instruction": "Compose a compact purpose-specific handoff explanation using only actual passages and selected valid record blocks. Preserve caveats and source spans. Mandatory contract is authoritative and separate. Return JSON {summary:string,passages:[{source_id:string,revision:number,start_line:number,end_line:number,explanation:string}],unknowns:[string]}. References may carry large documents; do not copy the whole artifact or guess missing facts.",
+          "max_tokens": 1100
+        }
+      },
+      "stage": "dp05_compose_capsule",
+      "type": "model_call",
+      "wire_version": 2
+    },
+    {
+      "call_id": 3,
+      "request": {
+        "context": {
+          "input": {
+            "capsule": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "passages": [
+                {
+                  "end_line": 4,
+                  "revision": 1,
+                  "source_id": "public-comparison",
+                  "start_line": 1
+                },
+                {
+                  "end_line": 3,
+                  "revision": 1,
+                  "source_id": "public-quote",
+                  "start_line": 1
+                }
+              ],
+              "summary": "CONTRACT_PROBE_ONLY",
+              "unknowns": []
+            },
+            "detail_selection_authority": "VIA_WITH_RECEIVER_FOLLOWUP_READS",
+            "mandatory": {
+              "access_epoch": 1,
+              "allowed_actions": [
+                "draft_only"
+              ],
+              "already_completed_actions": [],
+              "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+              "condition_revision": 1,
+              "constraints": {
+                "currency": "KRW",
+                "price_tie_break": "longer_maintenance",
+                "quantity": 12,
+                "tax_included": true
+              },
+              "delegation_id": "h2-deck-delegation",
+              "delegation_revision": 1,
+              "disposition": "AUTHORIZED",
+              "exclusions": [
+                "installation_convenience",
+                "unverified_total_operating_cost"
+              ],
+              "goal_id": "h2-deck",
+              "missing_required_sources": [],
+              "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+              "recipient": "minimal-draft-agent",
+              "request_revision": 1,
+              "required_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "revoked_sources": [],
+              "task_id": "T-PC",
+              "unknown_actions": []
+            },
+            "manifest": [
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "delivered-guidance",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      3
+                    ],
+                    "section": "실제 전달과 미전달"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "실제로 표시한 기준 설명"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  4
+                ],
+                "id": "public-comparison",
+                "line_count": 4,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      1
+                    ],
+                    "section": "유지보수"
+                  },
+                  {
+                    "lines": [
+                      2,
+                      4
+                    ],
+                    "section": "기능 검토와 미확인"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "신규 PC 비교 공개 보고서"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "public-quote",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      2
+                    ],
+                    "section": "가격과 수량"
+                  },
+                  {
+                    "lines": [
+                      3,
+                      3
+                    ],
+                    "section": "납기와 계약 상태"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "공급업체 공개 견적"
+              }
+            ],
+            "source_vector": [
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "delivered-guidance"
+              },
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "public-comparison"
+              },
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "public-quote"
+              }
+            ]
+          },
+          "instruction": "You are the minimal downstream receiver. Use this authorized contract to prepare the requested small result. Choose necessary original source ranges using the common read tool. A supplied capsule may already contain adequate detail, but you may request extra reads; a manifest alone is metadata. Return JSON {reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. Select only needed inclusive one-based line ranges within allowed_lines; never read revoked or out-of-scope material. Do not perform prohibited actions or repeat unknown actions. You decide which details the task requires; no expected-read list is supplied.",
+          "max_tokens": 700,
+          "role": "RECEIVER"
+        }
+      },
+      "stage": "dp05_receiver_select_reads",
+      "type": "model_call",
+      "wire_version": 2
+    },
+    {
+      "call_id": 4,
+      "request": {
+        "context": {
+          "input": {
+            "contract": {
+              "capsule": {
+                "_provider_usage": {
+                  "input_tokens": 17,
+                  "output_tokens": 9
+                },
+                "passages": [
+                  {
+                    "end_line": 4,
+                    "revision": 1,
+                    "source_id": "public-comparison",
+                    "start_line": 1
+                  },
+                  {
+                    "end_line": 3,
+                    "revision": 1,
+                    "source_id": "public-quote",
+                    "start_line": 1
+                  }
+                ],
+                "summary": "CONTRACT_PROBE_ONLY",
+                "unknowns": []
+              },
+              "detail_selection_authority": "VIA_WITH_RECEIVER_FOLLOWUP_READS",
+              "mandatory": {
+                "access_epoch": 1,
+                "allowed_actions": [
+                  "draft_only"
+                ],
+                "already_completed_actions": [],
+                "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+                "condition_revision": 1,
+                "constraints": {
+                  "currency": "KRW",
+                  "price_tie_break": "longer_maintenance",
+                  "quantity": 12,
+                  "tax_included": true
+                },
+                "delegation_id": "h2-deck-delegation",
+                "delegation_revision": 1,
+                "disposition": "AUTHORIZED",
+                "exclusions": [
+                  "installation_convenience",
+                  "unverified_total_operating_cost"
+                ],
+                "goal_id": "h2-deck",
+                "missing_required_sources": [],
+                "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+                "recipient": "minimal-draft-agent",
+                "request_revision": 1,
+                "required_source_ids": [
+                  "public-comparison",
+                  "public-quote"
+                ],
+                "revoked_sources": [],
+                "task_id": "T-PC",
+                "unknown_actions": []
+              },
+              "manifest": [
+                {
+                  "allowed_lines": [
+                    1,
+                    3
+                  ],
+                  "id": "delivered-guidance",
+                  "line_count": 3,
+                  "outline": [
+                    {
+                      "lines": [
+                        1,
+                        3
+                      ],
+                      "section": "실제 전달과 미전달"
+                    }
+                  ],
+                  "revision": 1,
+                  "revoked": false,
+                  "title": "실제로 표시한 기준 설명"
+                },
+                {
+                  "allowed_lines": [
+                    1,
+                    4
+                  ],
+                  "id": "public-comparison",
+                  "line_count": 4,
+                  "outline": [
+                    {
+                      "lines": [
+                        1,
+                        1
+                      ],
+                      "section": "유지보수"
+                    },
+                    {
+                      "lines": [
+                        2,
+                        4
+                      ],
+                      "section": "기능 검토와 미확인"
+                    }
+                  ],
+                  "revision": 1,
+                  "revoked": false,
+                  "title": "신규 PC 비교 공개 보고서"
+                },
+                {
+                  "allowed_lines": [
+                    1,
+                    3
+                  ],
+                  "id": "public-quote",
+                  "line_count": 3,
+                  "outline": [
+                    {
+                      "lines": [
+                        1,
+                        2
+                      ],
+                      "section": "가격과 수량"
+                    },
+                    {
+                      "lines": [
+                        3,
+                        3
+                      ],
+                      "section": "납기와 계약 상태"
+                    }
+                  ],
+                  "revision": 1,
+                  "revoked": false,
+                  "title": "공급업체 공개 견적"
+                }
+              ],
+              "source_vector": [
+                {
+                  "revision": 1,
+                  "revoked": false,
+                  "source_id": "delivered-guidance"
+                },
+                {
+                  "revision": 1,
+                  "revoked": false,
+                  "source_id": "public-comparison"
+                },
+                {
+                  "revision": 1,
+                  "revoked": false,
+                  "source_id": "public-quote"
+                }
+              ]
+            },
+            "tool_denials": [],
+            "tool_passages": [
+              {
+                "consumer": "RECEIVER",
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1,
+                "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ]
+          },
+          "instruction": "Return the requested bounded demonstration result from the authorized handoff and actually supplied source passages. Return JSON {text:string,used_source_ids:[string],facts:[string],constraints_respected:[string],actions_performed:[string],uncertainties:[string]}. Produce only a small draft or structured check, not a full product. Honor all current conditions and exclusions; do not use withdrawn sources or obsolete revisions. No actual external action is performed. Do not invent source content; report missing material. You may rely on source-backed capsule explanation as well as actual read passages.",
+          "max_tokens": 1000,
+          "role": "RECEIVER"
+        }
+      },
+      "stage": "dp05_receiver_result",
+      "type": "model_call",
+      "wire_version": 2
+    }
+  ],
+  "events": [
+    {
+      "data": {
+        "dp": "05",
+        "id": "dp05-e2",
+        "variant": "A"
+      },
+      "elapsed_ns": 21875,
+      "kind": "EPISODE_START",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "allowed_lines": [
+            1,
+            4
+          ],
+          "id": "public-comparison",
+          "line_count": 4,
+          "outline": [
+            {
+              "lines": [
+                1,
+                1
+              ],
+              "section": "유지보수"
+            },
+            {
+              "lines": [
+                2,
+                4
+              ],
+              "section": "기능 검토와 미확인"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "신규 PC 비교 공개 보고서"
+        }
+      },
+      "elapsed_ns": 45833,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "allowed_lines": [
+            1,
+            3
+          ],
+          "id": "public-quote",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                2
+              ],
+              "section": "가격과 수량"
+            },
+            {
+              "lines": [
+                3,
+                3
+              ],
+              "section": "납기와 계약 상태"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "공급업체 공개 견적"
+        }
+      },
+      "elapsed_ns": 74166,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "allowed_lines": [
+            1,
+            3
+          ],
+          "id": "delivered-guidance",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "실제 전달과 미전달"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/delivered-guidance-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "실제로 표시한 기준 설명"
+        }
+      },
+      "elapsed_ns": 97500,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "adopt",
+        "state": {
+          "access_epoch": 1,
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "condition_revision": 1,
+          "constraints": {
+            "currency": "KRW",
+            "price_tie_break": "longer_maintenance",
+            "quantity": 12,
+            "tax_included": true
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "request_revision": 1,
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ],
+          "task_id": "T-PC",
+          "unknown_actions": []
+        }
+      },
+      "elapsed_ns": 118166,
+      "kind": "PUBLIC_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h2-deck",
+        "input": {
+          "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+          "delegation_id": "h2-deck-delegation",
+          "delegation_revision": 1,
+          "goal_id": "h2-deck",
+          "kind": "delegate",
+          "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+          "recipient": "minimal-draft-agent",
+          "stimulus_id": "h2-deck"
+        },
+        "stimulus_id": "h2-deck"
+      },
+      "elapsed_ns": 146250,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h2-deck",
+        "phase": "HANDLING_INTENTION",
+        "stimulus_id": "h2-deck",
+        "text": "현재 채택한 조건으로 공개 비교와 견적을 바탕으로 발표자료 개요를 작성 작업을 준비합니다."
+      },
+      "elapsed_ns": 168666,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 811,
+        "id": "public-comparison",
+        "revision": 1
+      },
+      "elapsed_ns": 464208,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_COMPOSER",
+        "end_line": 4,
+        "revision": 1,
+        "source_id": "public-comparison",
+        "start_line": 1,
+        "text": "공개 비교 결과: Aster A는 유지보수 36개월, Boreal B는 24개월이다.\n같은 사무 작업에서 두 제품 모두 기존 필수 앱을 실행했다. 고부하 설계 앱은 시험하지 않았다.\n보안 검토에서는 두 제품의 디스크 암호화를 확인했지만 원격 관리 정책은 아직 검토하지 않았다.\n연구팀은 제품 추천을 확정하지 않았다. 구매 승인은 별도다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 477750,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 655,
+        "id": "public-quote",
+        "revision": 1
+      },
+      "elapsed_ns": 541958,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "VIA_COMPOSER",
+        "end_line": 3,
+        "revision": 1,
+        "source_id": "public-quote",
+        "start_line": 1,
+        "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 551791,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "capsule": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "passages": [
+            {
+              "end_line": 4,
+              "revision": 1,
+              "source_id": "public-comparison",
+              "start_line": 1
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "public-quote",
+              "start_line": 1
+            }
+          ],
+          "summary": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "detail_selection_authority": "VIA_WITH_RECEIVER_FOLLOWUP_READS",
+        "mandatory": {
+          "access_epoch": 1,
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+          "condition_revision": 1,
+          "constraints": {
+            "currency": "KRW",
+            "price_tie_break": "longer_maintenance",
+            "quantity": 12,
+            "tax_included": true
+          },
+          "delegation_id": "h2-deck-delegation",
+          "delegation_revision": 1,
+          "disposition": "AUTHORIZED",
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "goal_id": "h2-deck",
+          "missing_required_sources": [],
+          "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+          "recipient": "minimal-draft-agent",
+          "request_revision": 1,
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ],
+          "revoked_sources": [],
+          "task_id": "T-PC",
+          "unknown_actions": []
+        },
+        "manifest": [
+          {
+            "allowed_lines": [
+              1,
+              3
+            ],
+            "id": "delivered-guidance",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 전달과 미전달"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "실제로 표시한 기준 설명"
+          },
+          {
+            "allowed_lines": [
+              1,
+              4
+            ],
+            "id": "public-comparison",
+            "line_count": 4,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  4
+                ],
+                "section": "기능 검토와 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "신규 PC 비교 공개 보고서"
+          },
+          {
+            "allowed_lines": [
+              1,
+              3
+            ],
+            "id": "public-quote",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  2
+                ],
+                "section": "가격과 수량"
+              },
+              {
+                "lines": [
+                  3,
+                  3
+                ],
+                "section": "납기와 계약 상태"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "공급업체 공개 견적"
+          }
+        ],
+        "source_vector": [
+          {
+            "revision": 1,
+            "revoked": false,
+            "source_id": "delivered-guidance"
+          },
+          {
+            "revision": 1,
+            "revoked": false,
+            "source_id": "public-comparison"
+          },
+          {
+            "revision": 1,
+            "revoked": false,
+            "source_id": "public-quote"
+          }
+        ]
+      },
+      "elapsed_ns": 792458,
+      "kind": "HANDOFF_ADMISSION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "delegation_id": "h2-deck-delegation",
+        "goal_id": "h2-deck",
+        "stimulus_id": "h2-deck"
+      },
+      "elapsed_ns": 900750,
+      "kind": "AGENT_INGRESS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "_provider_usage": {
+          "input_tokens": 17,
+          "output_tokens": 9
+        },
+        "reads": [
+          {
+            "end_line": 3,
+            "source_id": "public-quote",
+            "start_line": 1
+          }
+        ],
+        "reason": "contract source read exercise"
+      },
+      "elapsed_ns": 1109791,
+      "kind": "RECEIVER_READ_SELECTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 655,
+        "id": "public-quote",
+        "revision": 1
+      },
+      "elapsed_ns": 1169000,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "consumer": "RECEIVER",
+        "end_line": 3,
+        "revision": 1,
+        "source_id": "public-quote",
+        "start_line": 1,
+        "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 1180458,
+      "kind": "HANDOFF_SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "delegation_id": "h2-deck-delegation",
+        "denied": [],
+        "selected_reads": [
+          {
+            "end_line": 3,
+            "source_id": "public-quote",
+            "start_line": 1
+          }
+        ],
+        "served": [
+          {
+            "consumer": "RECEIVER",
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "public-quote",
+            "start_line": 1,
+            "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+            "unit": "one_based_line_inclusive"
+          }
+        ]
+      },
+      "elapsed_ns": 1204041,
+      "kind": "RECEIVER_READ_RECEIPT",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h2-deck",
+        "result": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "actions_performed": [],
+          "constraints_respected": [],
+          "facts": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "uncertainties": [],
+          "used_source_ids": [
+            "public-quote"
+          ]
+        }
+      },
+      "elapsed_ns": 1460041,
+      "kind": "AGENT_RESULT_AVAILABLE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h2-deck",
+        "phase": "RESULT",
+        "receiver": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "actions_performed": [],
+          "constraints_respected": [],
+          "facts": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "uncertainties": [],
+          "used_source_ids": [
+            "public-quote"
+          ]
+        },
+        "stimulus_id": "h2-deck",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1481666,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "h2-deck",
+        "phase": "RESULT",
+        "receiver": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "actions_performed": [],
+          "constraints_respected": [],
+          "facts": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "uncertainties": [],
+          "used_source_ids": [
+            "public-quote"
+          ]
+        },
+        "stimulus_id": "h2-deck",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1499916,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoptions": [],
+        "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+        "handoffs": [
+          {
+            "capsule": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "passages": [
+                {
+                  "end_line": 4,
+                  "revision": 1,
+                  "source_id": "public-comparison",
+                  "start_line": 1
+                },
+                {
+                  "end_line": 3,
+                  "revision": 1,
+                  "source_id": "public-quote",
+                  "start_line": 1
+                }
+              ],
+              "summary": "CONTRACT_PROBE_ONLY",
+              "unknowns": []
+            },
+            "detail_selection_authority": "VIA_WITH_RECEIVER_FOLLOWUP_READS",
+            "mandatory": {
+              "access_epoch": 1,
+              "allowed_actions": [
+                "draft_only"
+              ],
+              "already_completed_actions": [],
+              "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요",
+              "condition_revision": 1,
+              "constraints": {
+                "currency": "KRW",
+                "price_tie_break": "longer_maintenance",
+                "quantity": 12,
+                "tax_included": true
+              },
+              "delegation_id": "h2-deck-delegation",
+              "delegation_revision": 1,
+              "disposition": "AUTHORIZED",
+              "exclusions": [
+                "installation_convenience",
+                "unverified_total_operating_cost"
+              ],
+              "goal_id": "h2-deck",
+              "missing_required_sources": [],
+              "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+              "recipient": "minimal-draft-agent",
+              "request_revision": 1,
+              "required_source_ids": [
+                "public-comparison",
+                "public-quote"
+              ],
+              "revoked_sources": [],
+              "task_id": "T-PC",
+              "unknown_actions": []
+            },
+            "manifest": [
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "delivered-guidance",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      3
+                    ],
+                    "section": "실제 전달과 미전달"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "실제로 표시한 기준 설명"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  4
+                ],
+                "id": "public-comparison",
+                "line_count": 4,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      1
+                    ],
+                    "section": "유지보수"
+                  },
+                  {
+                    "lines": [
+                      2,
+                      4
+                    ],
+                    "section": "기능 검토와 미확인"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "신규 PC 비교 공개 보고서"
+              },
+              {
+                "allowed_lines": [
+                  1,
+                  3
+                ],
+                "id": "public-quote",
+                "line_count": 3,
+                "outline": [
+                  {
+                    "lines": [
+                      1,
+                      2
+                    ],
+                    "section": "가격과 수량"
+                  },
+                  {
+                    "lines": [
+                      3,
+                      3
+                    ],
+                    "section": "납기와 계약 상태"
+                  }
+                ],
+                "revision": 1,
+                "revoked": false,
+                "title": "공급업체 공개 견적"
+              }
+            ],
+            "source_vector": [
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "delivered-guidance"
+              },
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "public-comparison"
+              },
+              {
+                "revision": 1,
+                "revoked": false,
+                "source_id": "public-quote"
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "goal_id": "h2-deck",
+            "phase": "RESULT",
+            "receiver": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "actions_performed": [],
+              "constraints_respected": [],
+              "facts": [],
+              "text": "CONTRACT_PROBE_ONLY",
+              "uncertainties": [],
+              "used_source_ids": [
+                "public-quote"
+              ]
+            },
+            "stimulus_id": "h2-deck",
+            "text": "CONTRACT_PROBE_ONLY"
+          }
+        ],
+        "production_state": null,
+        "receiver_receipts": [
+          {
+            "delegation_id": "h2-deck-delegation",
+            "denied": [],
+            "selected_reads": [
+              {
+                "end_line": 3,
+                "source_id": "public-quote",
+                "start_line": 1
+              }
+            ],
+            "served": [
+              {
+                "consumer": "RECEIVER",
+                "end_line": 3,
+                "revision": 1,
+                "source_id": "public-quote",
+                "start_line": 1,
+                "text": "공급업체의 공개 견적: Aster A 1,180,000원, Boreal B 1,150,000원이다. 부가세를 포함한다.\n12대 구매를 가정하며 배송비는 포함되고 설치 지원은 별도다.\n납기는 각각 11월 1일과 11월 3일이다. 견적은 계약 완료 증거가 아니다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ]
+          }
+        ]
+      },
+      "elapsed_ns": 1588208,
+      "kind": "EPISODE_RESULT",
+      "type": "event"
+    }
+  ],
+  "stderr": ""
+}

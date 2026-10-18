@@ -1,0 +1,363 @@
+[
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp01-e1-B-r1-7d9f08",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "01",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "repetition": 1,
+      "stage": "dp01_select_adopt_or_complete",
+      "rust_call_id": 10
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e1-q1"
+        ],
+        "node_id": "operation-10",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp01_select_adopt_or_complete"
+      },
+      "input": {
+        "available_evidence": [],
+        "catalog": [
+          {
+            "conversation": "c1",
+            "delivered_lines": null,
+            "id": "desk-compare",
+            "kind": "public_result",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  4
+                ],
+                "section": "가격과 유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  5
+                ],
+                "section": "일정과 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "업무용 PC 교체 비교표"
+          }
+        ],
+        "expression": "이 비교표",
+        "published_relations": null,
+        "recent_conversation": [],
+        "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp01-e1-B-r1-7d9f08",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "01",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "repetition": 1,
+      "stage": "dp01_source_backed_answer",
+      "rust_call_id": 27
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e1-q1"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [
+          "source-22"
+        ],
+        "role": "VIA",
+        "stage": "dp01_source_backed_answer"
+      },
+      "input": {
+        "actual_evidence": [
+          {
+            "actual_delivery_only": false,
+            "end_line": 5,
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 1,
+            "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.\n배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다.",
+            "unit": "one_based_line_inclusive"
+          }
+        ],
+        "catalog": [
+          {
+            "conversation": "c1",
+            "delivered_lines": null,
+            "id": "desk-compare",
+            "kind": "public_result",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  4
+                ],
+                "section": "가격과 유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  5
+                ],
+                "section": "일정과 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "업무용 PC 교체 비교표"
+          }
+        ],
+        "denied": [],
+        "expression": "이 비교표",
+        "recent_conversation": [],
+        "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+      },
+      "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp01-e1-B-r1-7d9f08",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "01",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "repetition": 1,
+      "stage": "dp01_select_adopt_or_complete",
+      "rust_call_id": 40
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e1-q2"
+        ],
+        "node_id": "operation-40",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp01_select_adopt_or_complete"
+      },
+      "input": {
+        "available_evidence": [
+          {
+            "end_line": 5,
+            "kind": "ACTUALLY_DELIVERED_ANSWER",
+            "original_source_provenance": {
+              "end_line": 5,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 1
+            },
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 1,
+            "text": "desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다."
+          }
+        ],
+        "catalog": [
+          {
+            "conversation": "c1",
+            "delivered_lines": null,
+            "id": "desk-compare",
+            "kind": "public_result",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  4
+                ],
+                "section": "가격과 유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  5
+                ],
+                "section": "일정과 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "업무용 PC 교체 비교표"
+          }
+        ],
+        "expression": "그 표",
+        "published_relations": null,
+        "recent_conversation": [
+          {
+            "adopted_targets": [
+              "desk-compare"
+            ],
+            "facts": [
+              {
+                "end_line": 5,
+                "revision": 1,
+                "source_id": "desk-compare",
+                "start_line": 1
+              }
+            ],
+            "source_revisions": [
+              {
+                "revision": 1,
+                "source_id": "desk-compare"
+              }
+            ],
+            "text": "desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+          }
+        ],
+        "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "meta": {
+      "run_id": "qa04_control_offline-dp01-e1-B-r1-7d9f08",
+      "phase": "QA04_CONTROL_OFFLINE",
+      "dp": "01",
+      "variant": "B",
+      "episode": "dp01-e1",
+      "repetition": 1,
+      "stage": "dp01_select_adopt_or_complete",
+      "rust_call_id": 59
+    },
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e1-q3"
+        ],
+        "node_id": "operation-59",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp01_select_adopt_or_complete"
+      },
+      "input": {
+        "available_evidence": [
+          {
+            "end_line": 5,
+            "kind": "ACTUALLY_DELIVERED_ANSWER",
+            "original_source_provenance": {
+              "end_line": 5,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 1
+            },
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 1,
+            "text": "desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다."
+          },
+          {
+            "end_line": 5,
+            "kind": "ACTUALLY_DELIVERED_ANSWER",
+            "original_source_provenance": {
+              "end_line": 5,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 1
+            },
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 1,
+            "text": "desk-compare: desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다."
+          }
+        ],
+        "catalog": [
+          {
+            "conversation": "c1",
+            "delivered_lines": null,
+            "id": "desk-compare",
+            "kind": "public_result",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  4
+                ],
+                "section": "가격과 유지보수"
+              },
+              {
+                "lines": [
+                  2,
+                  5
+                ],
+                "section": "일정과 미확인"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "업무용 PC 교체 비교표"
+          }
+        ],
+        "expression": "같은 자료",
+        "published_relations": null,
+        "recent_conversation": [
+          {
+            "adopted_targets": [
+              "desk-compare"
+            ],
+            "facts": [
+              {
+                "end_line": 5,
+                "revision": 1,
+                "source_id": "desk-compare",
+                "start_line": 1
+              }
+            ],
+            "source_revisions": [
+              {
+                "revision": 1,
+                "source_id": "desk-compare"
+              }
+            ],
+            "text": "desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+          },
+          {
+            "adopted_targets": [
+              "desk-compare"
+            ],
+            "facts": [
+              {
+                "end_line": 5,
+                "revision": 1,
+                "source_id": "desk-compare",
+                "start_line": 1
+              }
+            ],
+            "source_revisions": [
+              {
+                "revision": 1,
+                "source_id": "desk-compare"
+              }
+            ],
+            "text": "desk-compare: desk-compare: 업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.",
+            "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+          }
+        ],
+        "utterance": "같은 자료에서 가격이 같을 때 기준을 다시 설명해줘."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+      "max_tokens": 2200
+    }
+  }
+]

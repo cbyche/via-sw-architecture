@@ -1,0 +1,71 @@
+{
+  "task": "C06",
+  "baseline_calibration_freeze_sha256": "1ee6c0517894d1f69a080dd37b55341f21b3f3087a35ada31fcf4709a0144ba0",
+  "status": "PASS",
+  "checks": [
+    {
+      "variant": "B",
+      "probe": "actual-redaction-admission-and-permitted-regrounding",
+      "passed": true,
+      "black_pixel_verified": true,
+      "disjoint_pixel_equal_original": true,
+      "held_old_proposal_rejected": true,
+      "disjoint_binding_retained": true,
+      "producer_candidates_policy_eligible": true,
+      "new_model_messages_use_redacted_paths": 1,
+      "permitted_regrounding_targets": [
+        "C2"
+      ],
+      "idempotent_epoch": true
+    },
+    {
+      "variant": "B",
+      "probe": "new-policy-denied-region-proposal-blocked-after-owner-recovery",
+      "passed": true,
+      "actual_region_guard_rejections": 1,
+      "provider_calls": 0
+    }
+  ],
+  "changed_operating_rust_modules": [
+    "src/dp04.rs",
+    "src/dp04/gate.rs",
+    "src/dp04/geometry.rs",
+    "src/dp04/observations.rs",
+    "src/dp04/region_policy.rs"
+  ],
+  "changed_operating_module_count": 5,
+  "counts_by_alternative": {
+    "B": 5
+  },
+  "scratch_source_sha256": {
+    "src/dp01_request.rs": "de5fc802ac27ef2205c8421ac0d46ea295589bfa5da13375eed53064874fe893",
+    "src/dp01_producer.rs": "45d8cfcec174ddb3b3b58cfd7664504602e73654f58f66e84422b457468f101b",
+    "src/source_contract.rs": "623039d85f9553cb92d850c89bdad4835b18930980ef9963fa897d2baf381b52",
+    "src/dp02.rs": "b2287c993245a5716365c1ba4da291534972f36f6889383e2784cf2cd4b33edd",
+    "src/dp05_sources.rs": "f33a00d0db75e13e1d7efbe89c6f45e8a648bba04d1f0c8dfd11bf3221f534bd",
+    "src/dp05_receiver.rs": "dce537dca2584d73e6b52347d6baf5b8db8aa7f172fe7dd236715544531d8407",
+    "src/dp01_evidence.rs": "45b7ce13c4608a03b182175b354e2af95730dbc8bc5d9abae552ef9d7985d9eb",
+    "src/model_wire.rs": "35ff2899ac53ced6123b72ceb18469800ef6c10f0b6631b5d05eadd0299ccf89",
+    "src/dp05_record.rs": "653118f49474d5d24346e861944281a7b09cc317ce8d0d1161906408709b97a2",
+    "src/main.rs": "cc06465e83e181611de6ab883987c7267600f6d95c7b486566113ad87bd93b7e",
+    "src/dp05_handoff.rs": "86bd51c11b3f272f95f1bd30fea1a4d6d6fcac0dc71b3119fb26648b1f61c84e",
+    "src/dp01.rs": "1a13cc9bd66994b1fea06eaa3ad46121cfa76a2f883fff76deb4917469e0bd75",
+    "src/dp05.rs": "c3a41467825aa0ff92af394befc48fc39736de08cf56661674d80225ff8a3638",
+    "src/dp04.rs": "c6601bdeb0216f9948c71444a652e09b49a7fe7ad64c9498a080a614234a6481",
+    "src/context.rs": "8d42a018e99d0371f289e7487c974091c3707707e76bdb6ed74b88051a07ce70",
+    "src/dp02/response.rs": "8647e9063f22aafbaabd7f1592b928fde3b01ff9c5ca69fcd09180f358a582b8",
+    "src/dp02/execution.rs": "48a8b72e50b81a1d514e0f930c692328f7d340842aede5c5f778c905f286f2f2",
+    "src/dp02/state.rs": "c705d7e5d275010140ead0b51c8bf7ea0ebef74118549ef952aa9fa7eb9373d6",
+    "src/dp02/interpretation.rs": "b1385da31c8bb60b03d82a3ba4de7f7068de96421bc36b7bcda85286c6cc3375",
+    "src/dp04/observations.rs": "fa11da63a0b0fc732fcece8a7ade3589f68fcc7d6097c032fb5df3ee5fb8cc3d",
+    "src/dp04/producers.rs": "6915671f4074e3195a77f85514dde544e1fa80aa5c4f5a5e3df51721e09d6060",
+    "src/dp04/binding.rs": "aa62b05e2cb03a664b9d3d9b6442c71f7089892d226dfb54a98d7dfcb932b1a3",
+    "src/dp04/geometry.rs": "fdbdaac3806e8d547e3185db0c26e59f60df656bd3d902b88ab48b5bd7c18037",
+    "src/dp04/gate.rs": "5d2e43e4c018ee70eb599283f87329d5b2e888ff2bd2bcd3574e5e5d3aa17de8",
+    "src/dp04/joint.rs": "f36411d4bd67b34019accdec13da07e6fd576c5d5890bb92e08674203a7aab88",
+    "src/dp04/region_policy.rs": "b6f5f7d8428adfaac8b7ded01f20d3ef9b70ae00260e168c10bc01e74a45a80b"
+  },
+  "provider_calls": 0,
+  "not_model_quality_or_latency_measurement": true,
+  "scope": "Actual scratch Rust functionality and original regressions; external vision semantic double plus actual PNG redaction/pixel checks."
+}

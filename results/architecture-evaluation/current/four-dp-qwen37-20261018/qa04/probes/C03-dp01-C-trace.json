@@ -1,0 +1,1168 @@
+{
+  "check": {
+    "change": "C03",
+    "dp": "01",
+    "variant": "C",
+    "calls": 7,
+    "exit": 0,
+    "result": "PASS",
+    "model": "NO_MODEL; deterministic contract responder only",
+    "semantics_claimed": false
+  },
+  "calls": [
+    {
+      "call_id": 1,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "observed_evidence": [
+            {
+              "actual_delivery_only": false,
+              "end_line": 5,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 1,
+              "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.\n배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다.",
+              "unit": "one_based_line_inclusive"
+            }
+          ],
+          "source_activity": {
+            "kind": "source",
+            "source": {
+              "conversation": "c1",
+              "id": "desk-compare",
+              "kind": "public_result",
+              "line_count": 5,
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp01/desk-compare-v1.txt",
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          }
+        },
+        "instruction": "You are an independent evidence producer. Process only the observed source activity, never predict future requests. Publish source-backed relationships and explanation items from the sources. Distinguish actually delivered response lines from prepared undisplayed content. Return JSON {records:[{record_id:string,subject:string,predicate:string,object:string,explanation:string,source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}]}],coverage:{source_ids:[string],gaps:[string]}}. Include facts and relations useful across conversations; mark uncertainty, do not invent selected targets or future tasks. Every semantic assertion needs source spans. Limit 10 compact records.",
+        "max_tokens": 1800
+      },
+      "stage": "dp01_publish_relations",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 2,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "이 비교표",
+          "published_relations": {
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "publication_revision": 1,
+            "records": [],
+            "rejected_record_ids": [],
+            "source_vector": [
+              {
+                "id": "desk-compare",
+                "revision": 1,
+                "revoked": false
+              }
+            ],
+            "state": "PUBLISHED"
+          },
+          "recent_conversation": [],
+          "retained_working_view": null,
+          "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+        },
+        "instruction": "Interpret this CURRENT utterance using the ACTUAL valid evidence supplied. If retained passages, source-backed published records, or an actually delivered recent answer fully suffice, answer now without an extra call. Metadata/outline alone is NEVER evidence for facts. Return JSON {mode:'ANSWER'|'READ',answer:{targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}|null,reads:[{source_id:string,start_line:number,end_line:number}],record_ids:[string],reason:string}. ANSWER requires the exact set of original source IDs referred to by the specified expression and their current source revisions. Resolve section references to the original source ID. Only actually delivered response lines count as explained, never prepared undisplayed content. If actual evidence is missing, choose READ and bounded inclusive one-based source passages; choose useful published record IDs too if applicable. Later detail or corrected facts may require a read even if an earlier answer concerns the same source. Do not invent source IDs or facts, or infer unseen values from titles. Recent answers are common to all designs and may suffice in any design.",
+        "max_tokens": 1100
+      },
+      "stage": "dp01_select_evidence_or_answer",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 3,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "이 비교표",
+          "published_records": [],
+          "read_bundle": [],
+          "recent_conversation": [],
+          "retained_working_view": null,
+          "unavailable": [],
+          "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+        },
+        "instruction": "Interpret the user's referent expression and answer only from supplied evidence. Return JSON {targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}. targets is the exact set of original source IDs referred to by the specified expression, excluding unrelated sources. For a section of one source target that original source ID. Use current source revisions and actual delivery only: prepared but undisplayed response text was never explained to the user. A correction supersedes old source facts only within its scope. Published semantic records are derived interpretations and may need original evidence; do not assume they are independent source facts. Say evidence missing if needed. Do not describe target metadata as successful reading.",
+        "max_tokens": 1000
+      },
+      "stage": "dp01_interpret_and_answer",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 4,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "그 표",
+          "published_relations": {
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "publication_revision": 1,
+            "records": [],
+            "rejected_record_ids": [],
+            "source_vector": [
+              {
+                "id": "desk-compare",
+                "revision": 1,
+                "revoked": false
+              }
+            ],
+            "state": "PUBLISHED"
+          },
+          "recent_conversation": [
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+            }
+          ],
+          "retained_working_view": null,
+          "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+        },
+        "instruction": "Interpret this CURRENT utterance using the ACTUAL valid evidence supplied. If retained passages, source-backed published records, or an actually delivered recent answer fully suffice, answer now without an extra call. Metadata/outline alone is NEVER evidence for facts. Return JSON {mode:'ANSWER'|'READ',answer:{targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}|null,reads:[{source_id:string,start_line:number,end_line:number}],record_ids:[string],reason:string}. ANSWER requires the exact set of original source IDs referred to by the specified expression and their current source revisions. Resolve section references to the original source ID. Only actually delivered response lines count as explained, never prepared undisplayed content. If actual evidence is missing, choose READ and bounded inclusive one-based source passages; choose useful published record IDs too if applicable. Later detail or corrected facts may require a read even if an earlier answer concerns the same source. Do not invent source IDs or facts, or infer unseen values from titles. Recent answers are common to all designs and may suffice in any design.",
+        "max_tokens": 1100
+      },
+      "stage": "dp01_select_evidence_or_answer",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 5,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "그 표",
+          "published_records": [],
+          "read_bundle": [],
+          "recent_conversation": [
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+            }
+          ],
+          "retained_working_view": null,
+          "unavailable": [],
+          "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+        },
+        "instruction": "Interpret the user's referent expression and answer only from supplied evidence. Return JSON {targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}. targets is the exact set of original source IDs referred to by the specified expression, excluding unrelated sources. For a section of one source target that original source ID. Use current source revisions and actual delivery only: prepared but undisplayed response text was never explained to the user. A correction supersedes old source facts only within its scope. Published semantic records are derived interpretations and may need original evidence; do not assume they are independent source facts. Say evidence missing if needed. Do not describe target metadata as successful reading.",
+        "max_tokens": 1000
+      },
+      "stage": "dp01_interpret_and_answer",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 6,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "같은 자료",
+          "published_relations": {
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "publication_revision": 1,
+            "records": [],
+            "rejected_record_ids": [],
+            "source_vector": [
+              {
+                "id": "desk-compare",
+                "revision": 1,
+                "revoked": false
+              }
+            ],
+            "state": "PUBLISHED"
+          },
+          "recent_conversation": [
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+            },
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+            }
+          ],
+          "retained_working_view": null,
+          "utterance": "같은 자료에서 가격이 같을 때 기준을 다시 설명해줘."
+        },
+        "instruction": "Interpret this CURRENT utterance using the ACTUAL valid evidence supplied. If retained passages, source-backed published records, or an actually delivered recent answer fully suffice, answer now without an extra call. Metadata/outline alone is NEVER evidence for facts. Return JSON {mode:'ANSWER'|'READ',answer:{targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}|null,reads:[{source_id:string,start_line:number,end_line:number}],record_ids:[string],reason:string}. ANSWER requires the exact set of original source IDs referred to by the specified expression and their current source revisions. Resolve section references to the original source ID. Only actually delivered response lines count as explained, never prepared undisplayed content. If actual evidence is missing, choose READ and bounded inclusive one-based source passages; choose useful published record IDs too if applicable. Later detail or corrected facts may require a read even if an earlier answer concerns the same source. Do not invent source IDs or facts, or infer unseen values from titles. Recent answers are common to all designs and may suffice in any design.",
+        "max_tokens": 1100
+      },
+      "stage": "dp01_select_evidence_or_answer",
+      "type": "model_call",
+      "wire_version": 1
+    },
+    {
+      "call_id": 7,
+      "payload": {
+        "input": {
+          "catalog": [
+            {
+              "conversation": "c1",
+              "delivered_lines": null,
+              "id": "desk-compare",
+              "kind": "public_result",
+              "outline": [
+                {
+                  "lines": [
+                    1,
+                    4
+                  ],
+                  "section": "가격과 유지보수"
+                },
+                {
+                  "lines": [
+                    2,
+                    5
+                  ],
+                  "section": "일정과 미확인"
+                }
+              ],
+              "revision": 1,
+              "revoked": false,
+              "title": "업무용 PC 교체 비교표"
+            }
+          ],
+          "expression": "같은 자료",
+          "published_records": [],
+          "read_bundle": [],
+          "recent_conversation": [
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+            },
+            {
+              "adopted_targets": [],
+              "source_revisions": null,
+              "text": "CONTRACT_PROBE_ONLY",
+              "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+            }
+          ],
+          "retained_working_view": null,
+          "unavailable": [],
+          "utterance": "같은 자료에서 가격이 같을 때 기준을 다시 설명해줘."
+        },
+        "instruction": "Interpret the user's referent expression and answer only from supplied evidence. Return JSON {targets:[source ID strings],text:string,conditions:[string],source_revisions:[{source_id:string,revision:number}],uncertainties:[string]}. targets is the exact set of original source IDs referred to by the specified expression, excluding unrelated sources. For a section of one source target that original source ID. Use current source revisions and actual delivery only: prepared but undisplayed response text was never explained to the user. A correction supersedes old source facts only within its scope. Published semantic records are derived interpretations and may need original evidence; do not assume they are independent source facts. Say evidence missing if needed. Do not describe target metadata as successful reading.",
+        "max_tokens": 1000
+      },
+      "stage": "dp01_interpret_and_answer",
+      "type": "model_call",
+      "wire_version": 1
+    }
+  ],
+  "events": [
+    {
+      "data": {
+        "dp": "01",
+        "id": "dp01-e1",
+        "variant": "C"
+      },
+      "elapsed_ns": 14625,
+      "kind": "EPISODE_START",
+      "type": "event"
+    },
+    {
+      "data": {
+        "kind": "source",
+        "source": {
+          "conversation": "c1",
+          "id": "desk-compare",
+          "kind": "public_result",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                4
+              ],
+              "section": "가격과 유지보수"
+            },
+            {
+              "lines": [
+                2,
+                5
+              ],
+              "section": "일정과 미확인"
+            }
+          ],
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp01/desk-compare-v1.txt",
+          "revision": 1,
+          "revoked": false,
+          "title": "업무용 PC 교체 비교표"
+        }
+      },
+      "elapsed_ns": 35084,
+      "kind": "SOURCE_ACTIVITY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 896,
+        "id": "desk-compare",
+        "revision": 1
+      },
+      "elapsed_ns": 129167,
+      "kind": "SOURCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "actual_delivery_only": false,
+        "end_line": 5,
+        "revision": 1,
+        "source_id": "desk-compare",
+        "start_line": 1,
+        "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.\n배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다.",
+        "unit": "one_based_line_inclusive"
+      },
+      "elapsed_ns": 150292,
+      "kind": "EVIDENCE_READ",
+      "type": "event"
+    },
+    {
+      "data": {
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "publication_revision": 1,
+        "records": [],
+        "rejected_record_ids": [],
+        "source_vector": [
+          {
+            "id": "desk-compare",
+            "revision": 1,
+            "revoked": false
+          }
+        ],
+        "state": "PUBLISHED"
+      },
+      "elapsed_ns": 456000,
+      "kind": "RELATION_PUBLICATION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "conversation": "c1",
+        "working_view_reset": true
+      },
+      "elapsed_ns": 488500,
+      "kind": "CONVERSATION_BOUNDARY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "e1-q1",
+        "input": {
+          "conversation": "c1",
+          "expression": "이 비교표",
+          "expression_id": "e1-q1-ref",
+          "goal_id": "e1-q1",
+          "kind": "request",
+          "revision": 1,
+          "stimulus_id": "e1-q1",
+          "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+        },
+        "stimulus_id": "e1-q1"
+      },
+      "elapsed_ns": 505584,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "_provider_usage": {
+          "input_tokens": 17,
+          "output_tokens": 9
+        },
+        "adoptions": [],
+        "answer": "CONTRACT_PROBE_ONLY",
+        "blocks": [],
+        "candidates": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "cue_relations": [],
+        "expressions": [],
+        "need_evidence": false,
+        "need_expansion": false,
+        "question_id": null,
+        "reads": [],
+        "records": [],
+        "relation": "NEW",
+        "target_request_id": null,
+        "targets": [],
+        "text": "CONTRACT_PROBE_ONLY",
+        "unknowns": []
+      },
+      "elapsed_ns": 768750,
+      "kind": "EVIDENCE_QUERY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "available_source_ids": [],
+        "branch": "BOUNDED_SOURCE_COMPLETION",
+        "model_requested_mode": null,
+        "provenance_verified": false
+      },
+      "elapsed_ns": 818625,
+      "kind": "EVIDENCE_BRANCH",
+      "type": "event"
+    },
+    {
+      "data": {
+        "conditions": [],
+        "expression_id": "e1-q1-ref",
+        "first_adoption": true,
+        "revision": 1,
+        "source_revisions": null,
+        "targets": []
+      },
+      "elapsed_ns": 1049000,
+      "kind": "SEMANTIC_ADOPTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q1",
+        "stimulus_id": "e1-q1",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1082250,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q1",
+        "stimulus_id": "e1-q1",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1119334,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "e1-q2",
+        "input": {
+          "conversation": "c1",
+          "expression": "그 표",
+          "expression_id": "e1-q2-ref",
+          "goal_id": "e1-q2",
+          "kind": "request",
+          "revision": 1,
+          "stimulus_id": "e1-q2",
+          "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+        },
+        "stimulus_id": "e1-q2"
+      },
+      "elapsed_ns": 1165792,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "_provider_usage": {
+          "input_tokens": 17,
+          "output_tokens": 9
+        },
+        "adoptions": [],
+        "answer": "CONTRACT_PROBE_ONLY",
+        "blocks": [],
+        "candidates": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "cue_relations": [],
+        "expressions": [],
+        "need_evidence": false,
+        "need_expansion": false,
+        "question_id": null,
+        "reads": [],
+        "records": [],
+        "relation": "NEW",
+        "target_request_id": null,
+        "targets": [],
+        "text": "CONTRACT_PROBE_ONLY",
+        "unknowns": []
+      },
+      "elapsed_ns": 1361667,
+      "kind": "EVIDENCE_QUERY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "available_source_ids": [],
+        "branch": "BOUNDED_SOURCE_COMPLETION",
+        "model_requested_mode": null,
+        "provenance_verified": false
+      },
+      "elapsed_ns": 1394709,
+      "kind": "EVIDENCE_BRANCH",
+      "type": "event"
+    },
+    {
+      "data": {
+        "conditions": [],
+        "expression_id": "e1-q2-ref",
+        "first_adoption": true,
+        "revision": 1,
+        "source_revisions": null,
+        "targets": []
+      },
+      "elapsed_ns": 1537584,
+      "kind": "SEMANTIC_ADOPTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q2",
+        "stimulus_id": "e1-q2",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1559750,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q2",
+        "stimulus_id": "e1-q2",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 1592375,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "e1-q3",
+        "input": {
+          "conversation": "c1",
+          "expression": "같은 자료",
+          "expression_id": "e1-q3-ref",
+          "goal_id": "e1-q3",
+          "kind": "request",
+          "revision": 1,
+          "stimulus_id": "e1-q3",
+          "utterance": "같은 자료에서 가격이 같을 때 기준을 다시 설명해줘."
+        },
+        "stimulus_id": "e1-q3"
+      },
+      "elapsed_ns": 1643292,
+      "kind": "STIMULUS",
+      "type": "event"
+    },
+    {
+      "data": {
+        "_provider_usage": {
+          "input_tokens": 17,
+          "output_tokens": 9
+        },
+        "adoptions": [],
+        "answer": "CONTRACT_PROBE_ONLY",
+        "blocks": [],
+        "candidates": [],
+        "conditions": [],
+        "coverage": {
+          "competing": [],
+          "complete": true,
+          "unknown": []
+        },
+        "cue_relations": [],
+        "expressions": [],
+        "need_evidence": false,
+        "need_expansion": false,
+        "question_id": null,
+        "reads": [],
+        "records": [],
+        "relation": "NEW",
+        "target_request_id": null,
+        "targets": [],
+        "text": "CONTRACT_PROBE_ONLY",
+        "unknowns": []
+      },
+      "elapsed_ns": 1872417,
+      "kind": "EVIDENCE_QUERY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "available_source_ids": [],
+        "branch": "BOUNDED_SOURCE_COMPLETION",
+        "model_requested_mode": null,
+        "provenance_verified": false
+      },
+      "elapsed_ns": 1913875,
+      "kind": "EVIDENCE_BRANCH",
+      "type": "event"
+    },
+    {
+      "data": {
+        "conditions": [],
+        "expression_id": "e1-q3-ref",
+        "first_adoption": true,
+        "revision": 1,
+        "source_revisions": null,
+        "targets": []
+      },
+      "elapsed_ns": 2097625,
+      "kind": "SEMANTIC_ADOPTION",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q3",
+        "stimulus_id": "e1-q3",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 2124042,
+      "kind": "DISPLAY_PROXY",
+      "type": "event"
+    },
+    {
+      "data": {
+        "details": {
+          "_provider_usage": {
+            "input_tokens": 17,
+            "output_tokens": 9
+          },
+          "adoptions": [],
+          "answer": "CONTRACT_PROBE_ONLY",
+          "blocks": [],
+          "candidates": [],
+          "conditions": [],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "expressions": [],
+          "need_evidence": false,
+          "need_expansion": false,
+          "question_id": null,
+          "reads": [],
+          "records": [],
+          "relation": "NEW",
+          "target_request_id": null,
+          "targets": [],
+          "text": "CONTRACT_PROBE_ONLY",
+          "unknowns": []
+        },
+        "goal_id": "e1-q3",
+        "stimulus_id": "e1-q3",
+        "text": "CONTRACT_PROBE_ONLY"
+      },
+      "elapsed_ns": 2164250,
+      "kind": "GOAL_COMPLETE",
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoptions": [
+          {
+            "conditions": [],
+            "expression_id": "e1-q1-ref",
+            "first_adoption": true,
+            "revision": 1,
+            "source_revisions": null,
+            "targets": []
+          },
+          {
+            "conditions": [],
+            "expression_id": "e1-q2-ref",
+            "first_adoption": true,
+            "revision": 1,
+            "source_revisions": null,
+            "targets": []
+          },
+          {
+            "conditions": [],
+            "expression_id": "e1-q3-ref",
+            "first_adoption": true,
+            "revision": 1,
+            "source_revisions": null,
+            "targets": []
+          }
+        ],
+        "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+        "handoffs": [],
+        "outputs": [
+          {
+            "details": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "adoptions": [],
+              "answer": "CONTRACT_PROBE_ONLY",
+              "blocks": [],
+              "candidates": [],
+              "conditions": [],
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "expressions": [],
+              "need_evidence": false,
+              "need_expansion": false,
+              "question_id": null,
+              "reads": [],
+              "records": [],
+              "relation": "NEW",
+              "target_request_id": null,
+              "targets": [],
+              "text": "CONTRACT_PROBE_ONLY",
+              "unknowns": []
+            },
+            "goal_id": "e1-q1",
+            "stimulus_id": "e1-q1",
+            "text": "CONTRACT_PROBE_ONLY"
+          },
+          {
+            "details": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "adoptions": [],
+              "answer": "CONTRACT_PROBE_ONLY",
+              "blocks": [],
+              "candidates": [],
+              "conditions": [],
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "expressions": [],
+              "need_evidence": false,
+              "need_expansion": false,
+              "question_id": null,
+              "reads": [],
+              "records": [],
+              "relation": "NEW",
+              "target_request_id": null,
+              "targets": [],
+              "text": "CONTRACT_PROBE_ONLY",
+              "unknowns": []
+            },
+            "goal_id": "e1-q2",
+            "stimulus_id": "e1-q2",
+            "text": "CONTRACT_PROBE_ONLY"
+          },
+          {
+            "details": {
+              "_provider_usage": {
+                "input_tokens": 17,
+                "output_tokens": 9
+              },
+              "adoptions": [],
+              "answer": "CONTRACT_PROBE_ONLY",
+              "blocks": [],
+              "candidates": [],
+              "conditions": [],
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "expressions": [],
+              "need_evidence": false,
+              "need_expansion": false,
+              "question_id": null,
+              "reads": [],
+              "records": [],
+              "relation": "NEW",
+              "target_request_id": null,
+              "targets": [],
+              "text": "CONTRACT_PROBE_ONLY",
+              "unknowns": []
+            },
+            "goal_id": "e1-q3",
+            "stimulus_id": "e1-q3",
+            "text": "CONTRACT_PROBE_ONLY"
+          }
+        ],
+        "production_state": {
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "publication_revision": 1,
+          "records": [],
+          "rejected_record_ids": [],
+          "source_vector": [
+            {
+              "id": "desk-compare",
+              "revision": 1,
+              "revoked": false
+            }
+          ],
+          "state": "PUBLISHED"
+        },
+        "working_view": []
+      },
+      "elapsed_ns": 2279834,
+      "kind": "EPISODE_RESULT",
+      "type": "event"
+    }
+  ],
+  "stderr": ""
+}

@@ -1,0 +1,27 @@
+--- frozen/src/dp01.rs
++++ A/src/dp01.rs
+@@ -16,6 +16,11 @@
+    if changed{rolling.clear();published=Value::Null;recent.retain(|r:&Value|!array(&r["source_revisions"]).iter().any(|p|p["source_id"].as_str()==Some(&sid)));ctx.event("DERIVED_STATE_INVALIDATED",&json!({"source_id":sid,"scope":"whole_view_or_publication"}));}
+    if variant=="C"{publication_revision+=1;let mut prep=ctx.scoped(&[],&[]);prep.event("PREPARATION_START",&json!({"preparation_id":format!("dp01-publication-{}",publication_revision),"future_query_available":false}));published=producer::produce(&mut prep,&sources,event,publication_revision)?;prep.event("PREPARATION_COMPLETE",&json!({"preparation_id":format!("dp01-publication-{}",publication_revision)}));}
+   }
++  "query_delivered_provenance"=>{
++   let answer=delivered_provenance(&outputs,&sources,event["response_goal_id"].as_str().unwrap_or(""));
++   let out=json!({"goal_id":event["goal_id"],"stimulus_id":event["stimulus_id"],"text":format!("실제 표시한 응답의 출처: {}",answer),"provenance":answer});
++   ctx.event("DELIVERED_PROVENANCE_LOOKUP",&out);ctx.present(&out);
++  }
+   "request"=>{let conv=event["conversation"].as_str().unwrap_or("default");
+    if conversation!=conv{rolling.clear();recent.clear();conversation=conv.to_owned();ctx.event("CONVERSATION_BOUNDARY",&json!({"conversation":conv,"working_view_reset":true}));}
+    let r=request::execute(ctx,event,variant,&sources,&rolling,&recent,&published)?;
+@@ -31,3 +36,12 @@
+  }ctx.logical_buffer("dp01_sources",sources.values().map(|v|v.to_string().len()).sum(),"STATE");ctx.logical_buffer("dp01_working_view",serde_json::to_vec(&rolling).unwrap().len(),"STATE");ctx.logical_buffer("dp01_published",published.to_string().len(),"STATE");ctx.logical_buffer("dp01_recent",serde_json::to_vec(&recent).unwrap().len(),"STATE");}
+  Ok(json!({"adoptions":adoptions,"outputs":outputs,"handoffs":[],"production_state":published,"working_view":rolling,"fixture_class":"CONSTRUCTED_SYNTHETIC_POC"}))
+ }
++
++fn delivered_provenance(outputs:&[Value],sources:&Sources,response:&str)->Value{
++ let Some(out)=outputs.iter().find(|o|o["goal_id"].as_str()==Some(response)&&o["content_contract_checked"]==true&&o["text"].as_str().map(|t|!t.is_empty()).unwrap_or(false))else{return json!({"status":"NO_MATCH","response_goal_id":response});};
++ let mut spans=Vec::new();for fact in array(&out["details"]["facts"]){let source=fact["source_id"].as_str().and_then(|id|sources.get(id));let status=match source{None=>"UNAVAILABLE",Some(s)if s["revoked"]==true=>"REVOKED",Some(s)if s["revision"]!=fact["revision"]=>"STALE",Some(_)=>"CURRENT"};let p=json!({"source_id":fact["source_id"],"revision":fact["revision"],"start_line":fact["start_line"],"end_line":fact["end_line"],"unit":"one_based_line_inclusive","current_use_status":status});if !spans.contains(&p){spans.push(p);}}
++ json!({"status":"DELIVERED","response_goal_id":response,"source_spans":spans,"historical_delivery_not_claimed_current":true})
++}
++#[cfg(test)]mod qa04_c05_tests{use super::*;
++ #[test]fn delivered_only_and_currentness(){let mut sources=Sources::new();sources.insert("s".into(),json!({"revision":2}));let delivered=json!({"goal_id":"g","content_contract_checked":true,"text":"Displayed actual answer","details":{"facts":[{"source_id":"s","revision":1,"start_line":2,"end_line":3}]}});let failed=json!({"goal_id":"failed","text":null,"status":"FAILED_CONTRACT"});let outputs=vec![delivered,failed];for _variant in ["A","B","C"]{let d=delivered_provenance(&outputs,&sources,"g");assert_eq!(d["status"],"DELIVERED");assert_eq!(d["source_spans"][0]["current_use_status"],"STALE");assert_eq!(delivered_provenance(&outputs,&sources,"failed")["status"],"NO_MATCH");assert_eq!(delivered_provenance(&outputs,&sources,"unpresented")["status"],"NO_MATCH");assert_eq!(d,delivered_provenance(&outputs,&sources,"g"));}}
++}

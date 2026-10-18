@@ -1,0 +1,313 @@
+{
+  "run_id": "basic_corrected-dp05-e4-C-r1-12f21f",
+  "goal_id": "h4-initial",
+  "scope": "실제 공급된 텍스트와 모델이 선언한 fact line을 비교한 파생 감사. 후보/guard/원시변경·API0.",
+  "classification": "MODEL_QUOTE_LINE_MISMATCH_NOT_AGGREGATE_UNION_FAILURE",
+  "actual_input_to_failure_ms": [
+    38173.402875
+  ],
+  "final_mismatch": "최종제품추천아님 quote는 실제공급된 현재v1의5/21/37/53/69행에 있다. 모델은4행을인용했고4행은추정운영비미포함 문장이다. finalrepair도4행유지.",
+  "rows": [
+    {
+      "stage": "dp05_receiver_select_or_complete",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/5ebc0a53-f6d4-41e6-a27b-941eed67aff4-request.json",
+      "actual_available_ranges": [],
+      "fact_checks": []
+    },
+    {
+      "stage": "dp05_receiver_result",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/d753b6a6-5fbd-46a6-89f1-6c96c0124666-request.json",
+      "actual_available_ranges": [
+        {
+          "source_id": "large-public-report",
+          "revision": 1,
+          "start_line": 1,
+          "end_line": 80
+        }
+      ],
+      "fact_checks": [
+        {
+          "claimed_fact": {
+            "statement": "Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+            "quote": "Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 17,
+            "end_line": 17
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[가격 근거] Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "유지보수 기간은 36개월이다.",
+            "quote": "유지보수 기간은 36개월이며 야간 방문 지원과 고부하 설계 앱은 확인하지 않았다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 65,
+            "end_line": 65
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[지원과 운영 한계] 유지보수 기간은 36개월이며 야간 방문 지원과 고부하 설계 앱은 확인하지 않았다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+            "quote": "Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 33,
+            "end_line": 33
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[납기와 도입 일정] Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "이 검토 결과는 최종 제품 추천을 의미하지 않는다.",
+            "quote": "최종 제품 추천을 의미하지 않는다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 4,
+            "end_line": 4
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "범위와 비교 개요 검토 메모 3: 지정된 12대 사무용 PC만 검토한다. 구매와 외부 발송은 승인하지 않았다. 추정 운영비는 이 자료에 포함하지 않았다.",
+              "exact_quote_present": false
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            5,
+            21,
+            37,
+            53,
+            69
+          ]
+        }
+      ]
+    },
+    {
+      "stage": "dp05_receiver_repair_result",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/model/b8d22494-5885-4ff5-a594-94e39d55cf5d-request.json",
+      "actual_available_ranges": [
+        {
+          "source_id": "large-public-report",
+          "revision": 1,
+          "start_line": 1,
+          "end_line": 80
+        }
+      ],
+      "fact_checks": [
+        {
+          "claimed_fact": {
+            "statement": "Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+            "quote": "Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 17,
+            "end_line": 17
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[가격 근거] Aster A의 부가세 포함 단가는 1,180,000원이며 배송비를 포함한다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "유지보수 기간은 36개월이다.",
+            "quote": "유지보수 기간은 36개월이며 야간 방문 지원과 고부하 설계 앱은 확인하지 않았다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 65,
+            "end_line": 65
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[지원과 운영 한계] 유지보수 기간은 36개월이며 야간 방문 지원과 고부하 설계 앱은 확인하지 않았다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "이 검토 결과는 최종 제품 추천을 의미하지 않는다.",
+            "quote": "최종 제품 추천을 의미하지 않는다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 4,
+            "end_line": 4
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "범위와 비교 개요 검토 메모 3: 지정된 12대 사무용 PC만 검토한다. 구매와 외부 발송은 승인하지 않았다. 추정 운영비는 이 자료에 포함하지 않았다.",
+              "exact_quote_present": false
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            5,
+            21,
+            37,
+            53,
+            69
+          ]
+        },
+        {
+          "claimed_fact": {
+            "statement": "Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+            "quote": "Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+            "source_id": "large-public-report",
+            "revision": 1,
+            "start_line": 33,
+            "end_line": 33
+          },
+          "supplied_span_checks": [
+            {
+              "supplied_start": 1,
+              "supplied_end": 80,
+              "actual_text_at_claimed_span": "[납기와 도입 일정] Aster A의 예상 납기는 11월 1일이며 실제 설치 일정은 미확정이다.",
+              "exact_quote_present": true
+            }
+          ],
+          "quote_actual_matching_supplied_line_numbers": [
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48
+          ]
+        }
+      ]
+    }
+  ],
+  "raw_trace": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/basic-dp05-reuse-union-corrected-v2/raw/runs/basic_corrected-dp05-e4-C-r1-12f21f/trace.json"
+}

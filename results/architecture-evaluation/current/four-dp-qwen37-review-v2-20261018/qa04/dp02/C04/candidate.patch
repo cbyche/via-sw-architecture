@@ -1,0 +1,42 @@
+--- a/src/dp02/execution.rs
++++ b/src/dp02/execution.rs
+@@ -57,7 +57,7 @@
+             ctx.event("DOWNSTREAM_SHIM_RECEIPT",&receipt);if !accepted{return Err("answer delivery rejected".into())}
+             terminal["delivery_receipt"]=receipt;terminal["goal_scope"]=json!("ANSWER_DELIVERY_TO_EXISTING_TASK");
+         }
+-        ctx.complete(goal_id,&terminal)?;
++        ctx.complete(goal_id,&terminal)?;state::queue_sections(state,goal_id,&value);
+         let mut s=state.0.lock().unwrap();if let Some(r)=s.requests.get_mut(goal_id){r.delivered=Some(terminal.clone());}s.outputs.push(terminal);drop(s);state::record_size(state,ctx);return Ok(())
+     }Err("bounded revision recovery exhausted".into())
+ }
+@@ -121,5 +121,6 @@
+             for g in reopened{let mut c=ctx.scoped(&[g.clone()],&second_ctx.last_node().into_iter().collect::<Vec<_>>());if let Err(e)=finish(&mut c,input,&g,&shared){fail(&c,&g,e)}}
+         }
+     }
+-    let s=shared.0.lock().unwrap();Ok(json!({"outputs":s.outputs,"associations":s.associations,"requests":s.requests.values().map(|r|json!({"goal_id":r.goal_id,"revision":r.revision,"scope":r.scope,"delivered":r.delivered.is_some()})).collect::<Vec<_>>(),"variant":input["variant"]}))
++    for patch in input["incremental_updates"].as_array().into_iter().flatten(){match state::patch_section(&shared,patch){Ok(value)=>ctx.event("CONTENT_SECTION_PATCH",&value),Err(reason)=>ctx.event("SECTION_PATCH_REJECTED",&json!({"patch":patch,"reason":reason}))}}
++    let s=shared.0.lock().unwrap();Ok(json!({"outputs":s.outputs,"associations":s.associations,"requests":s.requests.values().map(|r|json!({"goal_id":r.goal_id,"revision":r.revision,"scope":r.scope,"delivered":r.delivered.is_some()})).collect::<Vec<_>>(),"section_history":s.section_history,"pending_voice":s.pending_voice,"variant":input["variant"]}))
+ }
+--- a/src/dp02/state.rs
++++ b/src/dp02/state.rs
+@@ -4,7 +4,7 @@
+ use std::sync::{Arc,Mutex,Condvar};
+ use crate::context::Context;
+ #[derive(Clone,Debug)]pub struct Request{pub goal_id:String,pub stimulus_id:String,pub raw:String,pub revision:u64,pub scope:String,pub adoption:Value,pub correction:Option<Value>,pub delivered:Option<Value>}
+-#[derive(Default)]pub struct Conversation{pub requests:HashMap<String,Request>,pub pending:HashSet<String>,pub captured:Vec<Value>,pub questions:Vec<Value>,pub associations:Vec<Value>,pub outputs:Vec<Value>,pub last_relation_node:Option<String>}
++#[derive(Default)]pub struct Conversation{pub requests:HashMap<String,Request>,pub pending:HashSet<String>,pub captured:Vec<Value>,pub questions:Vec<Value>,pub associations:Vec<Value>,pub outputs:Vec<Value>,pub pending_voice:Vec<Value>,pub section_history:Vec<Value>,pub last_relation_node:Option<String>}
+ pub type Shared=Arc<(Mutex<Conversation>,Condvar)>;
+ pub fn new()->Shared{Arc::new((Mutex::new(Conversation::default()),Condvar::new()))}
+ pub fn capture(state:&Shared,ctx:&Context,event:&Value){let id=event["id"].as_str().unwrap_or("");ctx.capture(id,&json!({"text":event["text"],"revision":event["revision"],"input_class":"USER_TEXT"}));let mut s=state.0.lock().unwrap();s.pending.insert(id.into());s.captured.push(event.clone());}
+@@ -14,3 +14,11 @@
+ pub fn wait_relations(state:&Shared,ctx:&Context,goal_id:&str){let mut s=state.0.lock().unwrap();if !s.pending.is_empty(){ctx.event("POLICY_WAIT_START",&json!({"goal_id":goal_id,"reason":"unresolved captured input may revise draft","pending":s.pending}));while !s.pending.is_empty(){s=state.1.wait(s).unwrap();}ctx.event("POLICY_WAIT_END",&json!({"goal_id":goal_id,"reason":"pending relations adopted","parent_node":s.last_relation_node}));}}
+ pub fn record_size(state:&Shared,ctx:&Context){ctx.logical_buffer("dp02_adopted_and_pending_state",snapshot(state).to_string().len(),"ALLOCATE_OR_REPLACE");}
+ #[cfg(test)]mod tests{use super::*;#[test]fn captured_registry_is_not_adopted_goal(){let s=new();s.0.lock().unwrap().captured.push(json!({"id":"r","text":"x"}));assert!(s.0.lock().unwrap().requests.is_empty());}#[test]fn revision_scope_preserves_raw_request(){let r=Request{goal_id:"r".into(),stimulus_id:"r".into(),raw:"compare all".into(),revision:2,scope:"cost only".into(),adoption:json!({}),correction:Some(json!({"text":"cost only"})),delivered:None};assert_eq!(r.raw,"compare all");assert_eq!(r.scope,"cost only");}}
++
++/// Future C04: revise a delivered section while preserving goal and unrelated section state.
++pub fn queue_sections(state:&Shared,goal:&str,value:&Value){let mut s=state.0.lock().unwrap();for section in value["sections"].as_array().into_iter().flatten(){s.pending_voice.push(json!({"goal_id":goal,"section_id":section["id"],"section_revision":1,"voice_prepared":false}));}}
++pub fn patch_section(state:&Shared,patch:&Value)->Result<Value,String>{
++ let mut s=state.0.lock().unwrap();let id=patch["goal_id"].as_str().ok_or("patch goal missing")?;let section_id=patch["section_id"].as_str().ok_or("patch section missing")?;let new_revision=patch["section_revision"].as_u64().ok_or("patch revision missing")?;let replacement=patch["text"].as_str().filter(|s|!s.is_empty()).ok_or("patch text missing")?;
++ let r=s.requests.get_mut(id).ok_or("patch goal unavailable")?;let delivered=r.delivered.as_mut().ok_or("no actual delivered answer to patch")?;let sections=delivered["result"]["sections"].as_array_mut().ok_or("delivered sections missing")?;let target=sections.iter_mut().find(|x|x["id"]==section_id).ok_or("section not delivered")?;let old=target["section_revision"].as_u64().unwrap_or(1);if new_revision<=old{return Err("stale section patch".into())}let before=target.clone();target["text"]=json!(replacement);target["section_revision"]=json!(new_revision);let rendered=sections.iter().filter_map(|s|s["text"].as_str()).collect::<Vec<_>>().join("\n");delivered["text"]=json!(rendered);delivered["result"]["answer"]=delivered["text"].clone();let updated=delivered.clone();let request_revision=r.revision;
++ s.pending_voice.retain(|v|!(v["goal_id"]==id&&v["section_id"]==section_id));s.pending_voice.push(json!({"goal_id":id,"section_id":section_id,"section_revision":new_revision,"voice_prepared":false}));let history=json!({"goal_id":id,"goal_revision":request_revision,"section_id":section_id,"before":before,"after_revision":new_revision,"text":replacement,"full_current_delivery":updated,"pending_voice":s.pending_voice});s.section_history.push(history.clone());for output in &mut s.outputs{if output["goal_id"]==id{*output=updated.clone();}}Ok(history)
++}

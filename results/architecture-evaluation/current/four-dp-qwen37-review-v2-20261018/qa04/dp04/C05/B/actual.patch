@@ -1,0 +1,65 @@
+--- baseline/src/dp04.rs
++++ scratch/src/dp04.rs
+@@ -2,6 +2,7 @@
+ mod binding;
+ mod gate;
+ mod geometry;
++mod explanation;
+ mod joint;
+ mod observations;
+ mod producers;
+@@ -21,6 +22,7 @@
+     let mut revision_gate = gate::RevisionGate::new();
+     let goal = format!("{}:grounding",input["id"].as_str().unwrap_or("dp04"));
+     let mut started = false;
++    let mut explanation_store=explanation::ExplanationStore::default();
+     let mut prior_nodes = Vec::new();
+     let initial_revision=input["revisions"].as_array().and_then(|x|x.first()).ok_or("revisions empty")?;
+     let initial_stimulus=format!("{}:r{}",input["id"].as_str().unwrap_or("dp04"),initial_revision["revision"]);
+@@ -93,6 +95,7 @@
+                     ctx.progress(&goal,&stimulus,&adoption)?;
+                     let output=json!({"goal_id":goal,"stimulus_id":stimulus,"text":text,"targets":target_ids,"revision":rev,"content_contract_checked":true,"checks":["current_revision","frame_snapshot","nonempty_target_extents","explicit_count","claimed_event_geometry"],"scope":adopted,"source_revisions":source_revisions,"observation_class":"DISPLAY_PROXY","same_endpoint_reason":"Grounding/adoption/display is the complete VIA scope; no artificial business work added"});
+                     ctx.complete(&goal,&output)?;
++                    explanation_store.delivered(adoption["adoption_id"].as_str().unwrap(),&adopted,&observed,&proposal);
+                     outputs.push(output);
+                 } else {ctx.fail(&goal,&json!({"stimulus_id":stimulus,"revision":rev,"reason":"UNRESOLVED_GROUNDING_OR_INTENT","proposal":proposal}));}
+ 
+@@ -108,7 +111,9 @@
+         trace.push(proposal);
+         ctx.logical_buffer("dp04_retained_proposal_trace",serde_json::to_vec(&trace).map(|x|x.len()).unwrap_or(0),"ALLOCATE_OR_REPLACE");
+     }
++    let mut explanations=Vec::new();
++    for query in input["explanation_queries"].as_array().into_iter().flatten(){let response=explanation_store.query(query);ctx.event("EXPLANATION_QUERY_RESULT",&json!({"query":query,"response":response}));explanations.push(json!({"query":query,"response":response}));}
+     Ok(
+-        json!({"adoptions":all,"outputs":outputs,"proposals":trace,"screen_parser_variant":"Qwen vision screen producer; no external OmniParser dependency deployed","tactic":if variant=="B4" {"parallel independent producers"} else if variant=="A4" {"same screen parser auxiliary input"} else {"none"}}),
++        json!({"explanations":explanations,"adoptions":all,"outputs":outputs,"proposals":trace,"screen_parser_variant":"Qwen vision screen producer; no external OmniParser dependency deployed","tactic":if variant=="B4" {"parallel independent producers"} else if variant=="A4" {"same screen parser auxiliary input"} else {"none"}}),
+     )
+ }
+--- baseline/src/dp04/explanation.rs
++++ scratch/src/dp04/explanation.rs
+@@ -0,0 +1,25 @@
++//! Added C05 user-facing query operation over actual displayed adoptions only.
++use serde_json::{json,Value};
++#[derive(Default)]
++pub struct ExplanationStore{records:Vec<Value>}
++impl ExplanationStore{
++    pub fn delivered(&mut self,adoption_id:&str,adoptions:&[Value],observed:&Value,proposal:&Value){
++        for a in adoptions {
++            if a["status"]!="ready" || a["targets"].as_array().is_none_or(|x|x.is_empty()){continue;}
++            let expression=&a["expression_id"];
++            let speech=proposal["speech_state"]["expressions"].as_array().and_then(|xs|xs.iter().find(|x|x["expression_id"]==*expression));
++            let Some(semantic)=speech else{continue;};
++            let cues=&semantic["cue_ids"];
++            let source_extents:Vec<Value>=a["extents"].as_array().into_iter().flatten().filter_map(|extent|{
++                let frame=observed["revision"]["frames"].as_array()?.iter().find(|f|f["frame_id"]==extent["frame_id"])?;
++                Some(json!({"target_id":extent["target_id"],"source_id":frame["source_id"],"source_revision":frame["source_revision"],"frame_id":frame["frame_id"],"bbox":extent["bbox"],"source_sha256":frame["sha256"]}))
++            }).collect();
++            let actual_cues:Vec<Value>=observed["revision"]["events"].as_array().into_iter().flatten().filter(|e|cues.as_array().is_some_and(|xs|xs.contains(&e["event_id"]))).cloned().collect();
++            self.records.push(json!({"adoption_id":adoption_id,"expression_id":expression,"input_revision":a["revision"],"targets":a["targets"],"source_extents":source_extents,"observed_cues":actual_cues,"candidate_read_set":proposal["candidate_read_set"],"basis":"ACTUALLY_DISPLAYED_ADOPTION"}));
++        }
++    }
++    pub fn query(&self,q:&Value)->Value{
++        let matches=self.records.iter().filter(|r|r["adoption_id"]==q["adoption_id"] && r["expression_id"]==q["expression_id"] && r["input_revision"]==q["revision"]).collect::<Vec<_>>();
++        if matches.len()==1{json!({"status":"FOUND","record":matches[0]})}else{json!({"status":"NOT_FOUND"})}
++    }
++}

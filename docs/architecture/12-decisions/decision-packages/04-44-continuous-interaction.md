@@ -1,5 +1,7 @@
 # 04-44. 자연스러운 대화를 위한 VIA의 청취와 발화 실행 구조
 
+> **2026-10-18 현재 분석:** [비동기 처리 단계의 실행 연결](./seven-problem-review/03-execution-coordination.md)에서 독립 상세 설계로 유지하고 중앙 비동기 Dispatcher A를 추천했다. [의미 판단 실행 문제2](./seven-problem-review/02-interpretation-execution.md)와 별개 축이다. 사용자 위임에 따른 일곱 문제 선정의 결과이며 기능 삭제나 기존 자료 폐기가 아니다. 아래는 이전 상세 설계와 분석 이력이다.
+
 > 상태: **STAGE_4_REFINED_CANDIDATE_REVIEW / A/B 미선정 / 구현과 측정 없음** / 2026-10-13
 > [탐색 지도 영역 6](./04-50-agent-architecture-decision-map.md#area-06) / [비교 기준](./04-30-comparison-guide.md#4-sw-구조적으로-다른-대안의-정확한-의미) / [독립 리뷰 기록](./04-44-interaction-review.md)
 

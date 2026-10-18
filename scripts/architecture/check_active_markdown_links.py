@@ -2,6 +2,8 @@
 """Check repository-local links in current, non-archived Markdown documents."""
 
 from pathlib import Path
+import hashlib
+import json
 import re
 from urllib.parse import unquote
 
@@ -28,6 +30,54 @@ ACTIVE_INPUTS = (
     ROOT / "scripts" / "archive" / "README.md",
 )
 LINK = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+FOUR_DP_BUNDLE = ROOT / "results/architecture-evaluation/current/four-dp-poc-evidence-20261019/manifest.json"
+FOUR_DP_CAMPAIGNS = (
+    CURRENT_EVIDENCE / "four-dp-qwen37-20261018",
+    CURRENT_EVIDENCE / "four-dp-qwen37-review-v2-20261018",
+)
+
+
+def restored_markdown_contexts() -> tuple[dict[Path, dict], list[str]]:
+    """Read link context only for exact, SHA-pinned restored four-DP Markdown.
+
+    The bundle preserves measured bytes, including historical absolute links and
+    copied source documents. This changes neither those bytes nor normal source
+    document validation; every mapped target must still exist inside this repo.
+    """
+    if not FOUR_DP_BUNDLE.is_file():
+        return {}, []
+    try:
+        manifest = json.loads(FOUR_DP_BUNDLE.read_text(encoding="utf-8"))
+        original = Path(manifest["original_repo_root"])
+        if not original.is_absolute() or len(original.parts) < 3:
+            raise ValueError("invalid recorded repository root")
+        contexts = {}
+        for item in manifest["files"]:
+            relative = Path(item["path"])
+            if relative.is_absolute() or ".." in relative.parts:
+                raise ValueError("non-local manifest path")
+            source = (ROOT / relative).resolve()
+            if source.suffix != ".md" or not any(
+                source.is_relative_to(campaign) for campaign in FOUR_DP_CAMPAIGNS
+            ):
+                continue
+            digest = item["sha256"]
+            if not re.fullmatch(r"[0-9a-f]{64}", digest):
+                raise ValueError("invalid Markdown SHA256")
+            context = item.get("markdown_link_context")
+            if context is not None:
+                relative_context = Path(context)
+                if relative_context.is_absolute() or ".." in relative_context.parts:
+                    raise ValueError("non-local Markdown link context")
+                context = (ROOT / relative_context).resolve()
+                if not context.is_relative_to(ROOT.resolve()):
+                    raise ValueError("Markdown context escapes repository")
+            if source in contexts:
+                raise ValueError("duplicate restored Markdown entry")
+            contexts[source] = {"sha256": digest, "original_root": original, "context": context}
+        return contexts, []
+    except (KeyError, TypeError, ValueError, OSError) as exc:
+        return {}, [f"{FOUR_DP_BUNDLE.relative_to(ROOT)}: invalid link metadata: {type(exc).__name__}"]
 
 
 def preserved_measurement_snapshot(path: Path) -> bool:
@@ -76,15 +126,28 @@ def local_target(raw: str) -> str | None:
 
 
 def main() -> int:
-    violations: list[str] = []
+    contexts, violations = restored_markdown_contexts()
     for source in markdown_files():
+        preserved = contexts.get(source.resolve())
+        if preserved is not None:
+            if hashlib.sha256(source.read_bytes()).hexdigest() != preserved["sha256"]:
+                violations.append(f"{source.relative_to(ROOT)}: restored Markdown SHA256 mismatch")
+                preserved = None
+            elif preserved["context"] is not None and not preserved["context"].is_file():
+                violations.append(f"{source.relative_to(ROOT)}: recorded Markdown context is missing")
+                preserved = None
         text = source.read_text(encoding="utf-8")
         for line_number, line in enumerate(text.splitlines(), 1):
             for match in LINK.finditer(line):
                 target = local_target(match.group(1))
                 if target is None:
                     continue
-                resolved = (source.parent / target).resolve()
+                target_path = Path(target)
+                if preserved is not None and target_path.is_absolute() and target_path.is_relative_to(preserved["original_root"]):
+                    resolved = (ROOT / target_path.relative_to(preserved["original_root"])).resolve()
+                else:
+                    context = preserved["context"] if preserved is not None else None
+                    resolved = ((context or source).parent / target).resolve()
                 try:
                     resolved.relative_to(ROOT.resolve())
                 except ValueError:

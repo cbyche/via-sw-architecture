@@ -1,0 +1,4776 @@
+{
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-partial-correction",
+        "variant": "B"
+      },
+      "elapsed_ns": 41333,
+      "event_id": "event-1",
+      "goal_ids": [],
+      "kind": "EPISODE_START",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 72500,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 81708,
+      "event_id": "event-2",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 72500,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 97250,
+      "event_id": "event-3",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 133292,
+      "event_id": "event-4",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 177458,
+      "event_id": "event-5",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 196500,
+      "event_id": "event-6",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 208583,
+      "event_id": "event-7",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 219792,
+      "event_id": "event-8",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 230833,
+      "event_id": "event-9",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 862,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 265875,
+      "event_id": "event-10",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "held_previous": false,
+        "revision": 1
+      },
+      "elapsed_ns": 296042,
+      "event_id": "event-11",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "elapsed_ns": 318708,
+      "event_id": "event-13",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 2007,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 383417,
+      "event_id": "event-14",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 658792,
+      "event_id": "event-15",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "response_logical_bytes": 487,
+        "role": "VIA",
+        "stage": "dp04.screen_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 701083,
+      "event_id": "event-16",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 686,
+        "name": "dp04_screen_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 760958,
+      "event_id": "event-17",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "generation": 1,
+        "revision": 1,
+        "state": {
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [],
+          "producer_generation": 1,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 786458,
+      "event_id": "event-18",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-19",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "elapsed_ns": 842333,
+      "event_id": "event-20",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 1501,
+        "name": "model_request_19",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 894625,
+      "event_id": "event-21",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_19",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1020667,
+      "event_id": "event-22",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-19",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "response_logical_bytes": 520,
+        "role": "VIA",
+        "stage": "dp04.speech_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1055875,
+      "event_id": "event-23",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 509,
+        "name": "dp04_speech_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1100542,
+      "event_id": "event-24",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "revision": 1,
+        "state": {
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "왼쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1
+        }
+      },
+      "elapsed_ns": 1123625,
+      "event_id": "event-25",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SPEECH_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-26",
+        "parent_ids": [
+          "operation-19"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 1174625,
+      "event_id": "event-27",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 2744,
+        "name": "model_request_26",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1264417,
+      "event_id": "event-28",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_26",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1451375,
+      "event_id": "event-29",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-26",
+        "parent_ids": [
+          "operation-19"
+        ],
+        "response_logical_bytes": 826,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1498750,
+      "event_id": "event-30",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-19"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "keep-first",
+        "extents": [
+          {
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "target_id": "C1"
+          }
+        ],
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C1"
+        ]
+      },
+      "elapsed_ns": 1585000,
+      "event_id": "event-31",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "change-second",
+        "extents": [
+          {
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "target_id": "C2"
+          }
+        ],
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C2"
+        ]
+      },
+      "elapsed_ns": 1605458,
+      "event_id": "event-32",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adopted_at_stimulus": "dp04-partial-correction:r1",
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 72500,
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "origin": "user_grounding_goal",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 1643250,
+      "event_id": "event-33",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_START",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r1",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "resolved": true,
+        "revision": 1,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 1700333,
+      "event_id": "event-34",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION_COMMITTED",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r1",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "resolved": true,
+        "revision": 1,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 1755000,
+      "event_id": "event-35",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 1825667,
+      "event_id": "event-36",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 1877917,
+      "event_id": "event-37",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_COMPLETE",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1938042,
+      "event_id": "event-38",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 722,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1973792,
+      "event_id": "event-39",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [
+          "operation-26"
+        ],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 43445083,
+      "event_id": "event-40",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 27414,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png"
+      },
+      "elapsed_ns": 43485000,
+      "event_id": "event-41",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27414,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 43503375,
+      "event_id": "event-42",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 43515458,
+      "event_id": "event-43",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 43526917,
+      "event_id": "event-44",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [
+        "operation-26"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 43537000,
+      "event_id": "event-45",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 935,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 43572875,
+      "event_id": "event-46",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "candidate_admission": {
+          "eligibility_policy_generation": 1,
+          "eligible_candidate_ids": [
+            "C2",
+            "C3"
+          ],
+          "ineligible_candidate_ids": [
+            "C1"
+          ]
+        },
+        "current_prior": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Source region withdrawn; new use prohibited",
+              "expression_id": "keep-first",
+              "extents": [],
+              "revision": 1,
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "revision": 1,
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "revision": 1
+        },
+        "external_authorization_event": {
+          "after_revision": 1,
+          "frame_id": "correction",
+          "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+          "rect": [
+            40,
+            110,
+            335,
+            530
+          ]
+        },
+        "held_old_proposal_accepted": false,
+        "held_old_proposal_rejection": "STALE_REGION_POLICY",
+        "permitted_reread": {
+          "capture_gaps": [],
+          "events": [],
+          "expressions": [
+            {
+              "end_ms": 500,
+              "expression_id": "keep-first",
+              "start_ms": 100,
+              "text": "왼쪽 그래프",
+              "time_uncertainty_ms": 20
+            },
+            {
+              "end_ms": 1200,
+              "expression_id": "change-second",
+              "start_ms": 700,
+              "text": "가운데 그래프",
+              "time_uncertainty_ms": 20
+            }
+          ],
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+              "observed_at_ms": 0,
+              "region_redaction_applied": true,
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "permission": "allowed",
+          "policy_generation": 1,
+          "region_withdrawals": [
+            {
+              "frame_id": "correction",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            }
+          ],
+          "revision": 1,
+          "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "transcript_ready_ms": 1300
+        },
+        "policy_generation": 1,
+        "prior_binding_admission": {
+          "denied_expression_ids": [
+            "keep-first"
+          ],
+          "policy_generation": 1,
+          "retained_targets": [
+            "C2"
+          ]
+        }
+      },
+      "elapsed_ns": 43621292,
+      "event_id": "event-47",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REGION_WITHDRAWAL_APPLIED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 83817625,
+      "event_id": "event-48",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 27414,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png"
+      },
+      "elapsed_ns": 83858250,
+      "event_id": "event-49",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27414,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 83877292,
+      "event_id": "event-50",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 83890833,
+      "event_id": "event-51",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 83902958,
+      "event_id": "event-52",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 83913417,
+      "event_id": "event-53",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 935,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 83950667,
+      "event_id": "event-54",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "candidate_admission": {
+          "eligibility_policy_generation": 1,
+          "eligible_candidate_ids": [
+            "C2",
+            "C3"
+          ],
+          "ineligible_candidate_ids": [
+            "C1"
+          ]
+        },
+        "current_prior": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Source region withdrawn; new use prohibited",
+              "expression_id": "keep-first",
+              "extents": [],
+              "revision": 1,
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "revision": 1,
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "revision": 1
+        },
+        "external_authorization_event": {
+          "after_revision": 1,
+          "frame_id": "correction",
+          "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+          "rect": [
+            40,
+            110,
+            335,
+            530
+          ]
+        },
+        "held_old_proposal_accepted": false,
+        "held_old_proposal_rejection": "STALE_REGION_POLICY",
+        "permitted_reread": {
+          "capture_gaps": [],
+          "events": [],
+          "expressions": [
+            {
+              "end_ms": 500,
+              "expression_id": "keep-first",
+              "start_ms": 100,
+              "text": "왼쪽 그래프",
+              "time_uncertainty_ms": 20
+            },
+            {
+              "end_ms": 1200,
+              "expression_id": "change-second",
+              "start_ms": 700,
+              "text": "가운데 그래프",
+              "time_uncertainty_ms": 20
+            }
+          ],
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+              "observed_at_ms": 0,
+              "region_redaction_applied": true,
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "permission": "allowed",
+          "policy_generation": 1,
+          "region_withdrawals": [
+            {
+              "frame_id": "correction",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            }
+          ],
+          "revision": 1,
+          "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "transcript_ready_ms": 1300
+        },
+        "policy_generation": 1,
+        "prior_binding_admission": {
+          "denied_expression_ids": [],
+          "policy_generation": 1,
+          "retained_targets": [
+            "C2"
+          ]
+        }
+      },
+      "elapsed_ns": 83999375,
+      "event_id": "event-55",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REGION_WITHDRAWAL_APPLIED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 2550,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 84164667,
+      "event_id": "event-56",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 84186042,
+        "kind": "user_grounding_input",
+        "raw_text": "가운데 그래프만 새 작업의 자료로 써줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 84190125,
+      "event_id": "event-57",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 84186042,
+        "kind": "user_grounding_input",
+        "raw_text": "가운데 그래프만 새 작업의 자료로 써줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 84203375,
+      "event_id": "event-58",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 124017000,
+      "event_id": "event-59",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "bytes": 27414,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png"
+      },
+      "elapsed_ns": 124062375,
+      "event_id": "event-60",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27414,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124083417,
+      "event_id": "event-61",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124099792,
+      "event_id": "event-62",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 124112583,
+      "event_id": "event-63",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r2-\"correction\""
+        ]
+      },
+      "elapsed_ns": 124123500,
+      "event_id": "event-64",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 827,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124157750,
+      "event_id": "event-65",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "held_previous": true,
+        "revision": 2
+      },
+      "elapsed_ns": 124191500,
+      "event_id": "event-66",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-67",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "elapsed_ns": 124218208,
+      "event_id": "event-68",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 2023,
+        "name": "model_request_67",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124289125,
+      "event_id": "event-69",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_67",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124601833,
+      "event_id": "event-70",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-67",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "response_logical_bytes": 374,
+        "role": "VIA",
+        "stage": "dp04.screen_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 124645500,
+      "event_id": "event-71",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 573,
+        "name": "dp04_screen_candidates_r2",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124701875,
+      "event_id": "event-72",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "generation": 1,
+        "revision": 2,
+        "state": {
+          "candidates": [
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [],
+          "producer_generation": 1,
+          "revision": 2,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 124724625,
+      "event_id": "event-73",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-74",
+        "parent_ids": [
+          "operation-67"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "elapsed_ns": 124791958,
+      "event_id": "event-75",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 1982,
+        "name": "model_request_74",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 124865167,
+      "event_id": "event-76",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_74",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125025583,
+      "event_id": "event-77",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-74",
+        "parent_ids": [
+          "operation-67"
+        ],
+        "response_logical_bytes": 354,
+        "role": "VIA",
+        "stage": "dp04.speech_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 125057875,
+      "event_id": "event-78",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-67"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 343,
+        "name": "dp04_speech_candidates_r2",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125102000,
+      "event_id": "event-79",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "revision": 2,
+        "state": {
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "permitted-middle",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 2
+        }
+      },
+      "elapsed_ns": 125119625,
+      "event_id": "event-80",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SPEECH_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-81",
+        "parent_ids": [
+          "operation-74"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 125174417,
+      "event_id": "event-82",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 3054,
+        "name": "model_request_81",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125278167,
+      "event_id": "event-83",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_81",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125514125,
+      "event_id": "event-84",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-81",
+        "parent_ids": [
+          "operation-74"
+        ],
+        "response_logical_bytes": 507,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 125559792,
+      "event_id": "event-85",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-74"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "permitted-middle",
+        "extents": [
+          {
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "target_id": "C2"
+          }
+        ],
+        "revision": 2,
+        "status": "ready",
+        "targets": [
+          "C2"
+        ]
+      },
+      "elapsed_ns": 125650042,
+      "event_id": "event-86",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "relation": "CORRECTION_SAME_GROUNDING_GOAL",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 125685042,
+      "event_id": "event-87",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_LINK",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r2",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "가운데 그래프만 새 작업의 자료로 써줘.",
+        "resolved": true,
+        "revision": 2,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C2"
+        ],
+        "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 125735708,
+      "event_id": "event-88",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION_COMMITTED",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r2",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "가운데 그래프만 새 작업의 자료로 써줘.",
+        "resolved": true,
+        "revision": 2,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C2"
+        ],
+        "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 125776667,
+      "event_id": "event-89",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 2,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C2"
+        ],
+        "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 125833750,
+      "event_id": "event-90",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 2,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C2"
+        ],
+        "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 125875125,
+      "event_id": "event-91",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_COMPLETE",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125924125,
+      "event_id": "event-92",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 419,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 125955958,
+      "event_id": "event-93",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 4419,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 126095708,
+      "event_id": "event-94",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-81"
+      ],
+      "type": "event"
+    },
+    {
+      "data": {
+        "adoptions": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "goal_id": "dp04-partial-correction:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1"
+                  }
+                ],
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2"
+                  }
+                ],
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@correction": 1
+            },
+            "stimulus_id": "dp04-partial-correction:r1",
+            "targets": [
+              "C1",
+              "C2"
+            ],
+            "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+          },
+          {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "goal_id": "dp04-partial-correction:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 2,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "permitted-middle",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2"
+                  }
+                ],
+                "revision": 2,
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@correction": 1
+            },
+            "stimulus_id": "dp04-partial-correction:r2",
+            "targets": [
+              "C2"
+            ],
+            "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+          }
+        ],
+        "proposals": [
+          {
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "candidate_read_set": {
+              "screen_generation": 1,
+              "screen_source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_revision": 1
+            },
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "need_evidence": false,
+            "need_expansion": false,
+            "policy_generation": 0,
+            "revision": 1,
+            "screen_state": {
+              "candidates": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "current_use_allowed": false,
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                },
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "current_use_allowed": true,
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                },
+                {
+                  "bbox": [
+                    680.0,
+                    110.0,
+                    975.0,
+                    530.0
+                  ],
+                  "current_use_allowed": true,
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "geometry_issues": [],
+              "producer_generation": 1,
+              "revision": 1,
+              "source_refs": [
+                "correction"
+              ],
+              "source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ]
+            },
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_state": {
+              "coverage": {
+                "complete": true,
+                "unknown": []
+              },
+              "expressions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "keep-first",
+                  "kind": "item",
+                  "meaning": "왼쪽 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "change-second",
+                  "kind": "item",
+                  "meaning": "가운데 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                }
+              ],
+              "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+              "revision": 1
+            }
+          },
+          {
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "permitted-middle",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "candidate_read_set": {
+              "screen_generation": 1,
+              "screen_source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_revision": 2
+            },
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "need_evidence": false,
+            "need_expansion": false,
+            "policy_generation": 1,
+            "revision": 2,
+            "screen_state": {
+              "candidates": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                },
+                {
+                  "bbox": [
+                    680.0,
+                    110.0,
+                    975.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "geometry_issues": [],
+              "producer_generation": 1,
+              "revision": 2,
+              "source_refs": [
+                "correction"
+              ],
+              "source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ]
+            },
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_state": {
+              "coverage": {
+                "complete": true,
+                "unknown": []
+              },
+              "expressions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "permitted-middle",
+                  "kind": "item",
+                  "meaning": "가운데 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                }
+              ],
+              "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+              "revision": 2
+            }
+          }
+        ],
+        "region_reports": [
+          {
+            "candidate_admission": {
+              "eligibility_policy_generation": 1,
+              "eligible_candidate_ids": [
+                "C2",
+                "C3"
+              ],
+              "ineligible_candidate_ids": [
+                "C1"
+              ]
+            },
+            "current_prior": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Source region withdrawn; new use prohibited",
+                  "expression_id": "keep-first",
+                  "extents": [],
+                  "revision": 1,
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Offline structural source geometry; not a model inference result",
+                  "expression_id": "change-second",
+                  "extents": [
+                    {
+                      "bbox": [
+                        360.0,
+                        110.0,
+                        655.0,
+                        530.0
+                      ],
+                      "frame_id": "correction",
+                      "kind": "card",
+                      "label": "C2 / Expansion",
+                      "target_id": "C2"
+                    }
+                  ],
+                  "revision": 1,
+                  "status": "ready",
+                  "targets": [
+                    "C2"
+                  ]
+                }
+              ],
+              "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+              "revision": 1
+            },
+            "external_authorization_event": {
+              "after_revision": 1,
+              "frame_id": "correction",
+              "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            },
+            "held_old_proposal_accepted": false,
+            "held_old_proposal_rejection": "STALE_REGION_POLICY",
+            "permitted_reread": {
+              "capture_gaps": [],
+              "events": [],
+              "expressions": [
+                {
+                  "end_ms": 500,
+                  "expression_id": "keep-first",
+                  "start_ms": 100,
+                  "text": "왼쪽 그래프",
+                  "time_uncertainty_ms": 20
+                },
+                {
+                  "end_ms": 1200,
+                  "expression_id": "change-second",
+                  "start_ms": 700,
+                  "text": "가운데 그래프",
+                  "time_uncertainty_ms": 20
+                }
+              ],
+              "frames": [
+                {
+                  "coordinate_space": "frame_pixels",
+                  "frame_id": "correction",
+                  "height": 650,
+                  "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+                  "observed_at_ms": 0,
+                  "region_redaction_applied": true,
+                  "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                  "source_id": "document",
+                  "source_revision": 1,
+                  "width": 1000
+                }
+              ],
+              "native_selection": {
+                "status": "unsupported"
+              },
+              "permission": "allowed",
+              "policy_generation": 1,
+              "region_withdrawals": [
+                {
+                  "frame_id": "correction",
+                  "rect": [
+                    40,
+                    110,
+                    335,
+                    530
+                  ]
+                }
+              ],
+              "revision": 1,
+              "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+              "transcript_ready_ms": 1300
+            },
+            "policy_generation": 1,
+            "prior_binding_admission": {
+              "denied_expression_ids": [
+                "keep-first"
+              ],
+              "policy_generation": 1,
+              "retained_targets": [
+                "C2"
+              ]
+            }
+          },
+          {
+            "candidate_admission": {
+              "eligibility_policy_generation": 1,
+              "eligible_candidate_ids": [
+                "C2",
+                "C3"
+              ],
+              "ineligible_candidate_ids": [
+                "C1"
+              ]
+            },
+            "current_prior": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Source region withdrawn; new use prohibited",
+                  "expression_id": "keep-first",
+                  "extents": [],
+                  "revision": 1,
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Offline structural source geometry; not a model inference result",
+                  "expression_id": "change-second",
+                  "extents": [
+                    {
+                      "bbox": [
+                        360.0,
+                        110.0,
+                        655.0,
+                        530.0
+                      ],
+                      "frame_id": "correction",
+                      "kind": "card",
+                      "label": "C2 / Expansion",
+                      "target_id": "C2"
+                    }
+                  ],
+                  "revision": 1,
+                  "status": "ready",
+                  "targets": [
+                    "C2"
+                  ]
+                }
+              ],
+              "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+              "revision": 1
+            },
+            "external_authorization_event": {
+              "after_revision": 1,
+              "frame_id": "correction",
+              "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            },
+            "held_old_proposal_accepted": false,
+            "held_old_proposal_rejection": "STALE_REGION_POLICY",
+            "permitted_reread": {
+              "capture_gaps": [],
+              "events": [],
+              "expressions": [
+                {
+                  "end_ms": 500,
+                  "expression_id": "keep-first",
+                  "start_ms": 100,
+                  "text": "왼쪽 그래프",
+                  "time_uncertainty_ms": 20
+                },
+                {
+                  "end_ms": 1200,
+                  "expression_id": "change-second",
+                  "start_ms": 700,
+                  "text": "가운데 그래프",
+                  "time_uncertainty_ms": 20
+                }
+              ],
+              "frames": [
+                {
+                  "coordinate_space": "frame_pixels",
+                  "frame_id": "correction",
+                  "height": 650,
+                  "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+                  "observed_at_ms": 0,
+                  "region_redaction_applied": true,
+                  "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                  "source_id": "document",
+                  "source_revision": 1,
+                  "width": 1000
+                }
+              ],
+              "native_selection": {
+                "status": "unsupported"
+              },
+              "permission": "allowed",
+              "policy_generation": 1,
+              "region_withdrawals": [
+                {
+                  "frame_id": "correction",
+                  "rect": [
+                    40,
+                    110,
+                    335,
+                    530
+                  ]
+                }
+              ],
+              "revision": 1,
+              "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+              "transcript_ready_ms": 1300
+            },
+            "policy_generation": 1,
+            "prior_binding_admission": {
+              "denied_expression_ids": [],
+              "policy_generation": 1,
+              "retained_targets": [
+                "C2"
+              ]
+            }
+          }
+        ],
+        "screen_parser_variant": "Qwen vision screen producer; no external OmniParser dependency deployed",
+        "tactic": "none"
+      },
+      "elapsed_ns": 126279208,
+      "event_id": "event-95",
+      "goal_ids": [],
+      "kind": "EPISODE_RESULT",
+      "parent_ids": [],
+      "type": "event"
+    }
+  ],
+  "calls": [
+    {
+      "stage": "dp04.screen_producer",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-12",
+          "parent_ids": [
+            "dp04-source-r1-\"correction\""
+          ],
+          "role": "VIA",
+          "stage": "dp04.screen_producer"
+        },
+        "images": [
+          "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+        ],
+        "input": {
+          "capture_gaps": [],
+          "events": [],
+          "expansion_request": null,
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png",
+              "observed_at_ms": 0,
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "producer_generation": 1,
+          "revision": 1
+        },
+        "instruction": "Screen Target Producer and Qwen vision parser, not final binder. Parse original PNGs plus raw-event overlay PNGs and actual event coordinates WITHOUT speech/intended answers. Overlay cross/path and event IDs are raw coordinates, not inferred targets. Use original frame pixel space with supplied width/height. Return ONLY compact JSON {candidates:[{target_id,frame_id,kind,label,bbox:[x1,y1,x2,y2]}],cue_relations:[{cue_id,target_ids,relation:'point_inside'|'within_region',complete:bool,unique:bool,navigation_alternative:bool}],coverage:{complete:bool,unknown:[strings],competing:[strings]},source_refs:[frame_ids]}. Use visible IDs, short visible header labels max60characters, accurate bboxes inside frame. Point-inside claims must actually contain the coordinate. A loop geometric sample set contains bbox centers within its polygon; inspect actual plotted samples. Preserve unknown/competing candidates/navigation alternatives; geometry alone is not designation. All relevant named alternatives, max30candidates. Expansion asks YOU to reread same pixels and repair missing/invalid extents. Never produce expression bindings. No prose or chain-of-thought.",
+        "max_tokens": 3000
+      },
+      "response": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      },
+      "external_mock": true
+    },
+    {
+      "stage": "dp04.speech_producer",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-19",
+          "parent_ids": [
+            "operation-12"
+          ],
+          "role": "VIA",
+          "stage": "dp04.speech_producer"
+        },
+        "input": {
+          "contract_errors": [],
+          "original": {
+            "events": [],
+            "expressions": [
+              {
+                "end_ms": 500,
+                "expression_id": "keep-first",
+                "start_ms": 100,
+                "text": "왼쪽 그래프",
+                "time_uncertainty_ms": 20
+              },
+              {
+                "end_ms": 1200,
+                "expression_id": "change-second",
+                "start_ms": 700,
+                "text": "가운데 그래프",
+                "time_uncertainty_ms": 20
+              }
+            ],
+            "prior": null,
+            "revision": 1,
+            "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘."
+          },
+          "previous_attempt": null
+        },
+        "instruction": "Speech Reference Producer. Interpret full transcript, expression spans, actual event timestamps and prior binding without pixels. Return ONLY compact JSON {intent:string,expressions:[{expression_id,kind,count:integer|null,relation:'designated_by_cue'|'within_region'|'explicit_ids'|'relative_position'|'correction'|'retain_prior'|'other',cue_ids:[event_id],explicit_target_ids:[IDs literally stated in speech],unresolved:[strings],meaning:string}],coverage:{complete:bool,unknown:[strings]}}. Every expression exactly once. Preserve any explicit speech count for mandatory final checking; singular designated item has count1. Connect cues using wording and time interval, not time alone; distinguish later navigation. For partial correction preserve retained/replaced scope. Intent max120characters, meaning max100characters; no final targets, invented visible IDs or chain-of-thought.",
+        "max_tokens": 1400
+      },
+      "response": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "expressions": [
+          {
+            "expression_id": "keep-first",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "왼쪽 그래프"
+          },
+          {
+            "expression_id": "change-second",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "가운데 그래프"
+          }
+        ],
+        "coverage": {
+          "complete": true,
+          "unknown": []
+        }
+      },
+      "external_mock": true
+    },
+    {
+      "stage": "dp04.candidate_binding",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-26",
+          "parent_ids": [
+            "operation-19"
+          ],
+          "role": "VIA",
+          "stage": "dp04.candidate_binding"
+        },
+        "input": {
+          "prior": null,
+          "screen": {
+            "candidates": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              },
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              },
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "geometry_issues": [],
+            "producer_generation": 1,
+            "revision": 1,
+            "source_refs": [
+              "correction"
+            ],
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "speech": {
+            "coverage": {
+              "complete": true,
+              "unknown": []
+            },
+            "expressions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "keep-first",
+                "kind": "item",
+                "meaning": "왼쪽 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "change-second",
+                "kind": "item",
+                "meaning": "가운데 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 1
+          }
+        },
+        "instruction": "You are the Multimodal Binding Resolver. Combine Speech Reference Producer expressions and Screen Target Producer candidates with prior accepted bindings. You do NOT have pixels and may NOT create new targets or extents. Output final targets only from candidate target_id values. Preserve source revisions and use expression timing/cue relations to distinguish historical pointing from later page navigation. If candidates lack a required target/extent, return need_expansion {producer:'screen',scope:string,expression_ids:[...]}; the screen owner will read its original pixels. You may reason semantically about existing candidates. Return ONLY compact JSON {adoptions:[{expression_id,targets:[existing candidate IDs],status:'ready'|'ambiguous'|'need_evidence',evidence:string}],need_expansion:false|{producer,scope,expression_ids}}. Preserve speech count exactly; never adopt six targets when three were requested. Evidence max100 characters, no reasoning_summary or chain-of-thought. Screen geometry_issues are actual consistency failures, not harmless hints. For every expression of the current speech revision produce a result. Do not convert navigation into designation merely by temporal proximity. In a correction retain or replace bindings according to speech meaning; never blindly keep old targets.",
+        "max_tokens": 2000
+      },
+      "response": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      },
+      "external_mock": true
+    },
+    {
+      "stage": "dp04.screen_producer",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-67",
+          "parent_ids": [
+            "dp04-source-r2-\"correction\""
+          ],
+          "role": "VIA",
+          "stage": "dp04.screen_producer"
+        },
+        "images": [
+          "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png"
+        ],
+        "input": {
+          "capture_gaps": [],
+          "events": [],
+          "expansion_request": null,
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+              "observed_at_ms": 0,
+              "region_redaction_applied": true,
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "producer_generation": 1,
+          "revision": 2
+        },
+        "instruction": "Screen Target Producer and Qwen vision parser, not final binder. Parse original PNGs plus raw-event overlay PNGs and actual event coordinates WITHOUT speech/intended answers. Overlay cross/path and event IDs are raw coordinates, not inferred targets. Use original frame pixel space with supplied width/height. Return ONLY compact JSON {candidates:[{target_id,frame_id,kind,label,bbox:[x1,y1,x2,y2]}],cue_relations:[{cue_id,target_ids,relation:'point_inside'|'within_region',complete:bool,unique:bool,navigation_alternative:bool}],coverage:{complete:bool,unknown:[strings],competing:[strings]},source_refs:[frame_ids]}. Use visible IDs, short visible header labels max60characters, accurate bboxes inside frame. Point-inside claims must actually contain the coordinate. A loop geometric sample set contains bbox centers within its polygon; inspect actual plotted samples. Preserve unknown/competing candidates/navigation alternatives; geometry alone is not designation. All relevant named alternatives, max30candidates. Expansion asks YOU to reread same pixels and repair missing/invalid extents. Never produce expression bindings. No prose or chain-of-thought.",
+        "max_tokens": 3000
+      },
+      "response": {
+        "candidates": [
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      },
+      "external_mock": true
+    },
+    {
+      "stage": "dp04.speech_producer",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-74",
+          "parent_ids": [
+            "operation-67"
+          ],
+          "role": "VIA",
+          "stage": "dp04.speech_producer"
+        },
+        "input": {
+          "contract_errors": [],
+          "original": {
+            "events": [],
+            "expressions": [
+              {
+                "end_ms": 2500,
+                "expression_id": "permitted-middle",
+                "start_ms": 2000,
+                "text": "가운데 그래프",
+                "time_uncertainty_ms": 20
+              }
+            ],
+            "prior": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Source region withdrawn; new use prohibited",
+                  "expression_id": "keep-first",
+                  "extents": [],
+                  "revision": 1,
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "evidence": "Offline structural source geometry; not a model inference result",
+                  "expression_id": "change-second",
+                  "extents": [
+                    {
+                      "bbox": [
+                        360.0,
+                        110.0,
+                        655.0,
+                        530.0
+                      ],
+                      "frame_id": "correction",
+                      "kind": "card",
+                      "label": "C2 / Expansion",
+                      "target_id": "C2"
+                    }
+                  ],
+                  "revision": 1,
+                  "status": "ready",
+                  "targets": [
+                    "C2"
+                  ]
+                }
+              ],
+              "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+              "revision": 1
+            },
+            "revision": 2,
+            "transcript": "가운데 그래프만 새 작업의 자료로 써줘."
+          },
+          "previous_attempt": null
+        },
+        "instruction": "Speech Reference Producer. Interpret full transcript, expression spans, actual event timestamps and prior binding without pixels. Return ONLY compact JSON {intent:string,expressions:[{expression_id,kind,count:integer|null,relation:'designated_by_cue'|'within_region'|'explicit_ids'|'relative_position'|'correction'|'retain_prior'|'other',cue_ids:[event_id],explicit_target_ids:[IDs literally stated in speech],unresolved:[strings],meaning:string}],coverage:{complete:bool,unknown:[strings]}}. Every expression exactly once. Preserve any explicit speech count for mandatory final checking; singular designated item has count1. Connect cues using wording and time interval, not time alone; distinguish later navigation. For partial correction preserve retained/replaced scope. Intent max120characters, meaning max100characters; no final targets, invented visible IDs or chain-of-thought.",
+        "max_tokens": 1400
+      },
+      "response": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "expressions": [
+          {
+            "expression_id": "permitted-middle",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "가운데 그래프"
+          }
+        ],
+        "coverage": {
+          "complete": true,
+          "unknown": []
+        }
+      },
+      "external_mock": true
+    },
+    {
+      "stage": "dp04.candidate_binding",
+      "payload": {
+        "_trace": {
+          "goal_ids": [
+            "dp04-partial-correction:grounding"
+          ],
+          "node_id": "operation-81",
+          "parent_ids": [
+            "operation-74"
+          ],
+          "role": "VIA",
+          "stage": "dp04.candidate_binding"
+        },
+        "input": {
+          "prior": {
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Source region withdrawn; new use prohibited",
+                "expression_id": "keep-first",
+                "extents": [],
+                "revision": 1,
+                "status": "need_evidence",
+                "targets": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2"
+                  }
+                ],
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+            "revision": 1
+          },
+          "screen": {
+            "candidates": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              },
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "geometry_issues": [],
+            "producer_generation": 1,
+            "revision": 2,
+            "source_refs": [
+              "correction"
+            ],
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "speech": {
+            "coverage": {
+              "complete": true,
+              "unknown": []
+            },
+            "expressions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "permitted-middle",
+                "kind": "item",
+                "meaning": "가운데 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 2
+          }
+        },
+        "instruction": "You are the Multimodal Binding Resolver. Combine Speech Reference Producer expressions and Screen Target Producer candidates with prior accepted bindings. You do NOT have pixels and may NOT create new targets or extents. Output final targets only from candidate target_id values. Preserve source revisions and use expression timing/cue relations to distinguish historical pointing from later page navigation. If candidates lack a required target/extent, return need_expansion {producer:'screen',scope:string,expression_ids:[...]}; the screen owner will read its original pixels. You may reason semantically about existing candidates. Return ONLY compact JSON {adoptions:[{expression_id,targets:[existing candidate IDs],status:'ready'|'ambiguous'|'need_evidence',evidence:string}],need_expansion:false|{producer,scope,expression_ids}}. Preserve speech count exactly; never adopt six targets when three were requested. Evidence max100 characters, no reasoning_summary or chain-of-thought. Screen geometry_issues are actual consistency failures, not harmless hints. For every expression of the current speech revision produce a result. Do not convert navigation into designation merely by temporal proximity. In a correction retain or replace bindings according to speech meaning; never blindly keep old targets.",
+        "max_tokens": 2000
+      },
+      "response": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "permitted-middle",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      },
+      "external_mock": true
+    }
+  ],
+  "result": {
+    "adoptions": [
+      {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "keep-first",
+        "extents": [
+          {
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "target_id": "C1"
+          }
+        ],
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C1"
+        ]
+      },
+      {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "change-second",
+        "extents": [
+          {
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "target_id": "C2"
+          }
+        ],
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C2"
+        ]
+      },
+      {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "permitted-middle",
+        "extents": [
+          {
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "target_id": "C2"
+          }
+        ],
+        "revision": 2,
+        "status": "ready",
+        "targets": [
+          "C2"
+        ]
+      }
+    ],
+    "outputs": [
+      {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 2,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C2"
+        ],
+        "text": "지칭 대상 C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      }
+    ],
+    "proposals": [
+      {
+        "adoptions": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "relation": "relative_position",
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "relation": "relative_position",
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "candidate_read_set": {
+          "screen_generation": 1,
+          "screen_source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "speech_revision": 1
+        },
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "need_evidence": false,
+        "need_expansion": false,
+        "policy_generation": 0,
+        "revision": 1,
+        "screen_state": {
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "current_use_allowed": false,
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "current_use_allowed": true,
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "current_use_allowed": true,
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [],
+          "producer_generation": 1,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        },
+        "source_snapshot": [
+          {
+            "frame_id": "correction",
+            "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+            "source_id": "document",
+            "source_revision": 1
+          }
+        ],
+        "speech_state": {
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "왼쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1
+        }
+      },
+      {
+        "adoptions": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "permitted-middle",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "relation": "relative_position",
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "candidate_read_set": {
+          "screen_generation": 1,
+          "screen_source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "speech_revision": 2
+        },
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "need_evidence": false,
+        "need_expansion": false,
+        "policy_generation": 1,
+        "revision": 2,
+        "screen_state": {
+          "candidates": [
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [],
+          "producer_generation": 1,
+          "revision": 2,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        },
+        "source_snapshot": [
+          {
+            "frame_id": "correction",
+            "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+            "source_id": "document",
+            "source_revision": 1
+          }
+        ],
+        "speech_state": {
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "permitted-middle",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 2
+        }
+      }
+    ],
+    "region_reports": [
+      {
+        "candidate_admission": {
+          "eligibility_policy_generation": 1,
+          "eligible_candidate_ids": [
+            "C2",
+            "C3"
+          ],
+          "ineligible_candidate_ids": [
+            "C1"
+          ]
+        },
+        "current_prior": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Source region withdrawn; new use prohibited",
+              "expression_id": "keep-first",
+              "extents": [],
+              "revision": 1,
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "revision": 1,
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "revision": 1
+        },
+        "external_authorization_event": {
+          "after_revision": 1,
+          "frame_id": "correction",
+          "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+          "rect": [
+            40,
+            110,
+            335,
+            530
+          ]
+        },
+        "held_old_proposal_accepted": false,
+        "held_old_proposal_rejection": "STALE_REGION_POLICY",
+        "permitted_reread": {
+          "capture_gaps": [],
+          "events": [],
+          "expressions": [
+            {
+              "end_ms": 500,
+              "expression_id": "keep-first",
+              "start_ms": 100,
+              "text": "왼쪽 그래프",
+              "time_uncertainty_ms": 20
+            },
+            {
+              "end_ms": 1200,
+              "expression_id": "change-second",
+              "start_ms": 700,
+              "text": "가운데 그래프",
+              "time_uncertainty_ms": 20
+            }
+          ],
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+              "observed_at_ms": 0,
+              "region_redaction_applied": true,
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "permission": "allowed",
+          "policy_generation": 1,
+          "region_withdrawals": [
+            {
+              "frame_id": "correction",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            }
+          ],
+          "revision": 1,
+          "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "transcript_ready_ms": 1300
+        },
+        "policy_generation": 1,
+        "prior_binding_admission": {
+          "denied_expression_ids": [
+            "keep-first"
+          ],
+          "policy_generation": 1,
+          "retained_targets": [
+            "C2"
+          ]
+        }
+      },
+      {
+        "candidate_admission": {
+          "eligibility_policy_generation": 1,
+          "eligible_candidate_ids": [
+            "C2",
+            "C3"
+          ],
+          "ineligible_candidate_ids": [
+            "C1"
+          ]
+        },
+        "current_prior": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Source region withdrawn; new use prohibited",
+              "expression_id": "keep-first",
+              "extents": [],
+              "revision": 1,
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "revision": 1,
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "original_transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "revision": 1
+        },
+        "external_authorization_event": {
+          "after_revision": 1,
+          "frame_id": "correction",
+          "origin": "EXTERNAL_AUTHORIZATION_REGION_WITHDRAWAL",
+          "rect": [
+            40,
+            110,
+            335,
+            530
+          ]
+        },
+        "held_old_proposal_accepted": false,
+        "held_old_proposal_rejection": "STALE_REGION_POLICY",
+        "permitted_reread": {
+          "capture_gaps": [],
+          "events": [],
+          "expressions": [
+            {
+              "end_ms": 500,
+              "expression_id": "keep-first",
+              "start_ms": 100,
+              "text": "왼쪽 그래프",
+              "time_uncertainty_ms": 20
+            },
+            {
+              "end_ms": 1200,
+              "expression_id": "change-second",
+              "start_ms": 700,
+              "text": "가운데 그래프",
+              "time_uncertainty_ms": 20
+            }
+          ],
+          "frames": [
+            {
+              "coordinate_space": "frame_pixels",
+              "frame_id": "correction",
+              "height": 650,
+              "image_path": "/var/folders/p2/kvh525v529158px834krq6880000gn/T/via-qa04-region-views/69691-1-correction-image_path.png",
+              "observed_at_ms": 0,
+              "region_redaction_applied": true,
+              "sha256": "d7bef841b1a208e61bbf779879dccc4feb8a3cbfaed01ffe5cb3ffd1f627ac12",
+              "source_id": "document",
+              "source_revision": 1,
+              "width": 1000
+            }
+          ],
+          "native_selection": {
+            "status": "unsupported"
+          },
+          "permission": "allowed",
+          "policy_generation": 1,
+          "region_withdrawals": [
+            {
+              "frame_id": "correction",
+              "rect": [
+                40,
+                110,
+                335,
+                530
+              ]
+            }
+          ],
+          "revision": 1,
+          "transcript": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+          "transcript_ready_ms": 1300
+        },
+        "policy_generation": 1,
+        "prior_binding_admission": {
+          "denied_expression_ids": [],
+          "policy_generation": 1,
+          "retained_targets": [
+            "C2"
+          ]
+        }
+      }
+    ],
+    "screen_parser_variant": "Qwen vision screen producer; no external OmniParser dependency deployed",
+    "tactic": "none"
+  },
+  "provider_calls": 0,
+  "stderr": ""
+}

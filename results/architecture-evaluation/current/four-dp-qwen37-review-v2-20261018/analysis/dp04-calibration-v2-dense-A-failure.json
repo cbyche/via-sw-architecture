@@ -1,0 +1,114 @@
+{
+  "run_id": "calibration_v2-dp04-dense-A-r1-cae917",
+  "classification": "ACTUAL_MODEL_GEOMETRIC_SELF_CONTRADICTION_AFTER_ONE_REAL_OWNER_REREAD_NOT_NEW_CONTRACT_BUG",
+  "returncode": 0,
+  "provider_calls": 2,
+  "http_statuses": [
+    200,
+    200
+  ],
+  "input_tokens": 4882,
+  "output_tokens": 944,
+  "cost_usd": 0.0034632,
+  "qa02_correct": 0,
+  "qa02_total": 2,
+  "qa01_expected": 1,
+  "qa01_missing": 1,
+  "qa03_expected": 1,
+  "qa03_missing": 1,
+  "comparison_status": "INCOMPLETE",
+  "requests_metadata_only": [
+    {
+      "stage": "dp04.joint_grounding",
+      "max_tokens": 2600,
+      "enable_thinking": false,
+      "model": "qwen3.7-plus-2026-05-26",
+      "images": [
+        {
+          "dimensions": [
+            1000,
+            650
+          ],
+          "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077"
+        },
+        {
+          "dimensions": [
+            1000,
+            650
+          ],
+          "sha256": "58fad4f0d5dc1616b8eecbc2bd3aa5f89460751f4d14e346b2b8524249ac5d89"
+        }
+      ],
+      "input_top_keys": [
+        "consistency_errors",
+        "original",
+        "previous_attempt",
+        "remaining_source_rejudgments"
+      ]
+    },
+    {
+      "stage": "dp04.joint_source_reread",
+      "max_tokens": 2600,
+      "enable_thinking": false,
+      "model": "qwen3.7-plus-2026-05-26",
+      "images": [
+        {
+          "dimensions": [
+            1000,
+            650
+          ],
+          "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077"
+        },
+        {
+          "dimensions": [
+            1000,
+            650
+          ],
+          "sha256": "58fad4f0d5dc1616b8eecbc2bd3aa5f89460751f4d14e346b2b8524249ac5d89"
+        }
+      ],
+      "input_top_keys": [
+        "consistency_errors",
+        "original",
+        "previous_attempt",
+        "remaining_source_rejudgments"
+      ]
+    }
+  ],
+  "failure_reason": "Both joint outputs assert point(375,315) inside bbox[275,380,475,580]; y=315 is strictly less than380. Initial D11 bbox bottom830 exceeds650px frame. Reread fixes D11 but preserves D06 contradiction.",
+  "actual_reference_geometry_evaluator_only": {
+    "D06": [
+      277,
+      255,
+      502,
+      395
+    ],
+    "D11": [
+      519,
+      420,
+      744,
+      560
+    ]
+  },
+  "all_or_nothing_revision_gate_note": "Both expression targets become unresolved after the complete revision proposal fails common consistency. D11 repaired coordinates do not create a partial successful callback. No target-oracle IDs were supplied to the candidate.",
+  "calls": [
+    {
+      "stage": "dp04.joint_grounding",
+      "call_uuid": "bfe9afda-9623-44c6-bbc9-a28a6fe557ef",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2/raw/model/bfe9afda-9623-44c6-bbc9-a28a6fe557ef-request.json",
+      "response_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2/raw/model/bfe9afda-9623-44c6-bbc9-a28a6fe557ef-response.json",
+      "input_tokens": 2247,
+      "output_tokens": 472,
+      "cost_usd": 0.001654
+    },
+    {
+      "stage": "dp04.joint_source_reread",
+      "call_uuid": "caf2bea2-fa78-4118-9303-4d9757e946a4",
+      "request_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2/raw/model/caf2bea2-fa78-4118-9303-4d9757e946a4-request.json",
+      "response_file": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/calibration-v2/raw/model/caf2bea2-fa78-4118-9303-4d9757e946a4-response.json",
+      "input_tokens": 2635,
+      "output_tokens": 472,
+      "cost_usd": 0.0018092
+    }
+  ]
+}
