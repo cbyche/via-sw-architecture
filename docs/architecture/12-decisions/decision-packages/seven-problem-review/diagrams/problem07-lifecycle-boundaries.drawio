@@ -1,0 +1,101 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="problem07-lifecycle-boundaries">
+    <mxGraphModel page="1" pageWidth="1800" pageHeight="1180">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A" value="A  모듈화한 통합 Core" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="55" y="235" width="820" height="745" as="geometry" />
+        </mxCell>
+        <mxCell id="Ain" value="C1 / R1은 대화 상태, T1 / X1은 업무 상태&lt;br&gt;별도 논리 수명과 owner를 두 안 모두 유지" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="B" value="B  독립 대화 / 업무 서비스" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="925" y="235" width="820" height="745" as="geometry" />
+        </mxCell>
+        <mxCell id="Bin" value="C1 / R1은 대화 상태, T1 / X1은 업무 상태&lt;br&gt;별도 논리 수명과 owner를 두 안 모두 유지" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="ac" value="Request Controller + Task Manager&lt;br&gt;같은 Core 안의 별도 기능 Module&lt;br&gt;트랜잭션 관리자가 관련 변경을 공동 확정&lt;br&gt;짧은 transaction. 외부 I/O는 commit 밖에서 수행" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="470" width="750" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="as" value="관련 Request / Task / command 상태 저장&lt;br&gt;R1↔T1 연결과 X1 의도 / outbox를 함께 확정" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="685" width="750" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ao" value="Agent Gateway → 외부 수신 / 수행 사실 별도 확인" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="865" width="750" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bd" value="대화 서비스&lt;br&gt;R1과 pending 의도 저장&lt;br&gt;inbox / outbox / receipt&lt;br&gt;대화 저장소와 writer&lt;br&gt;업무 접수 사실 반영" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="460" width="355" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="bw" value="업무 서비스&lt;br&gt;T1 / X1 접수와 상태&lt;br&gt;inbox / outbox / receipt&lt;br&gt;독립 업무 저장소 / writer&lt;br&gt;외부 업무 사실 보존" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1355" y="460" width="355" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="bg" value="업무 accepted + dispatch 현재성 검사. 대화 반영과 분리" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="765" width="750" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bo" value="Agent Gateway → 외부 수신 / 수행 사실 별도 확인" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="875" width="750" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="edge0" value="" edge="1" parent="1" source="Ain" target="ac" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="" edge="1" parent="1" source="ac" target="as" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" edge="1" parent="1" source="as" target="ao" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" edge="1" parent="1" source="Bin" target="bd" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" edge="1" parent="1" source="bd" target="bw" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" edge="1" parent="1" source="bw" target="bd" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="" edge="1" parent="1" source="bw" target="bg" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="" edge="1" parent="1" source="bg" target="bo" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label0" value="DP-42: 대화와 업무 상태를 어디서 확정하는가" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=42;fontColor=#182B40;fontStyle=1;">
+          <mxGeometry x="55" y="47" width="1705" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="label1" value="대화 C1의 요청 R1을 Task T1에 연결하고 실행 X1을 위임한다. 두 안 모두 대화와 업무의 수명이 다르다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="112" width="1705" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label2" value="기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=22;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="55" y="170" width="1705" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="label3" value="설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=21;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="1125" width="1705" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="label4" value="B의 독립 writer / 장애 경계 가능성 ↔ 서비스 간 접수와 반영의 복구 비용. 정상 이익은 조건부." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="70" y="1015" width="1690" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="label5" value="선택 A 이후 A1 저장 작업의 짧은 단위와 우선순위 / A2 읽기용 Task snapshot" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#A45A18;fontStyle=0;">
+          <mxGeometry x="70" y="1060" width="1690" height="36" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

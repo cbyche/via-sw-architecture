@@ -1,0 +1,125 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="problem03-execution-coordination">
+    <mxGraphModel page="1" pageWidth="1800" pageHeight="1180">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A" value="A  중앙 비동기 Dispatcher" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="55" y="235" width="820" height="745" as="geometry" />
+        </mxCell>
+        <mxCell id="Ain" value="사용자 입력 / 확정 업무 사실 / 실제 전달 receipt" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Agate" value="원본 owner의 채택 / 현재성 검사 → 실제 표시" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="875" width="750" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="B" value="B  Stage 연결과 Publication Join" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="925" y="235" width="820" height="745" as="geometry" />
+        </mxCell>
+        <mxCell id="Bin" value="사용자 입력 / 확정 업무 사실 / 실제 전달 receipt" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Bgate" value="원본 owner의 채택 / 현재성 검사 → 실제 표시" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="875" width="750" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ad" value="Dispatcher: 짧은 상태 전이와 후속 job 시작&lt;br&gt;긴 모델 호출 완료를 기다리지 않고 다음 사건 수신&lt;br&gt;완료 회수 뒤 다음 단계와 게시 조건 연결" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="460" width="750" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="aw" value="공통 bounded worker&lt;br&gt;자료 읽기 / 의미 판단&lt;br&gt;응답 준비 작업" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="650" width="400" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="ast" value="중앙 실행 상태&lt;br&gt;job / continuation&lt;br&gt;revision / candidate" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="520" y="650" width="320" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="bi" value="Input Resolution Stage&lt;br&gt;입력과 해석 결과 소비&lt;br&gt;job / revision window" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="465" width="355" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="bn" value="Task Notice Stage&lt;br&gt;확인된 업무 사실 소비&lt;br&gt;job / revision window" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1355" y="465" width="355" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="bc" value="Response Composer: 해당 응답에 필요한 입력만 결합" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="675" width="750" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bj" value="Publication Join: 후보 / 허가 / source / 전달 참조" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="790" width="750" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="edge0" value="" edge="1" parent="1" source="Ain" target="ad" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="" edge="1" parent="1" source="ad" target="aw" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" edge="1" parent="1" source="aw" target="ad" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="72" y="720" />
+              <mxPoint x="72" y="515" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" edge="1" parent="1" source="ad" target="ast" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" edge="1" parent="1" source="ast" target="Agate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" edge="1" parent="1" source="Bin" target="bi" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="" edge="1" parent="1" source="Bin" target="bn" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="" edge="1" parent="1" source="bi" target="bc" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge8" value="" edge="1" parent="1" source="bn" target="bc" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge9" value="" edge="1" parent="1" source="bc" target="bj" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge10" value="" edge="1" parent="1" source="bj" target="Bgate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label0" value="DP-44: 비동기 작업의 다음 단계를 누가 시작하는가" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=42;fontColor=#182B40;fontStyle=1;">
+          <mxGeometry x="55" y="47" width="1705" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="label1" value="설명 준비 중 사용자 수정과 Agent 질문이 들어온다. 의미 판단 기능과 총 실행 예산은 두 안이 같다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="112" width="1705" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label2" value="기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=22;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="55" y="170" width="1705" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="label3" value="설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=21;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="1125" width="1705" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="label4" value="B가 줄이는 것은 중앙 완료 회수와 활성화 비용. 같은 의미 계산과 외부 Agent 대기는 남는다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="70" y="1015" width="1690" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="label5" value="선택 A 이후 A1 단순 진행 통지 준비 합치기 / A2 변경된 근거에 의존하는 작업 인덱스" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#A45A18;fontStyle=0;">
+          <mxGeometry x="70" y="1060" width="1690" height="36" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

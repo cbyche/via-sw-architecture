@@ -1,0 +1,189 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="problem01-A-detail">
+    <mxGraphModel page="1" pageWidth="2200" pageHeight="1700">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="raw" value="원본의 권위는 각 owner에 있음&lt;br&gt;입력 / 정정: Request Controller&lt;br&gt;실제 전달: Response Manager&lt;br&gt;결과 / 현재 업무: Task Manager" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="270" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="in" value="1 Interaction Manager가 입력 수신&lt;br&gt;Request Controller: 입력 revision&lt;br&gt;최근 대화 / 관측 참조 / 허용 범위&lt;br&gt;정답 Task 연결은 아직 주어지지 않음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="270" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="scope" value="기본 A의 고유 선택&lt;br&gt;대화 수명의 source-backed 작업 문맥&lt;br&gt;다음 발화가 앞서 읽은 근거를 재사용&lt;br&gt;원본 소유권 / 현재 의미 권위는 공통" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="270" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="view" value="지속 상태: Context Manager의 view&lt;br&gt;근거 발췌 / 조건 / 미해결 사항&lt;br&gt;source ID / revision / 적용 범위&lt;br&gt;6에서 갱신하고 다음 요청의 2에서 읽음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="455" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="context" value="2 유효 작업 문맥을 읽어 준비&lt;br&gt;Context Manager: 대화별 view revision&lt;br&gt;현재 source / 권한을 확인&lt;br&gt;예산 초과 / 영향 변경이면 재구성" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="455" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="condense" value="2 압축 / 재구성 필요 때만 호출&lt;br&gt;Model Access → cloud 의미 모델&lt;br&gt;출처와 실제 전달 범위를 함께 보존&lt;br&gt;기본 재사용은 prefix cache와 다름" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="455" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="bundle" value="요청 수명: EvidenceBundle / Receipt&lt;br&gt;발췌 / 참조 / 별도 source vector&lt;br&gt;실제 읽은 범위와 누락 / 실패 상태&lt;br&gt;전역 atomic snapshot을 주장하지 않음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="640" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="read" value="3 부족 / 변경된 근거만 원본 보완&lt;br&gt;Context Manager: owner 범위 읽기&lt;br&gt;충분하면 유지 근거를 그대로 통과&lt;br&gt;필수 원문 / 정확한 인용은 원문 확인" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="640" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="dispute" value="원본이 같은 파생 오류도 신고 가능&lt;br&gt;Request Controller: 오류와 view 판본&lt;br&gt;Context Manager가 EvidenceDispute 수신&lt;br&gt;해당 판본 차단 후 원본으로 재검증" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="640" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="receipt" value="원본 / 실제 전달의 구별&lt;br&gt;준비한 설명과 표시 / 재생 구간 별도&lt;br&gt;참조 보관이 원본 전체 보관은 아님&lt;br&gt;과거 동의가 현재 권한을 대신하지 않음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="825" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="interpret" value="4 근거를 사용해 현재 의미 제안&lt;br&gt;Request Interpreter&lt;br&gt;부족 범위는 보존하고 필요하면 재조회&lt;br&gt;같은 충분 근거이면 정확도 우위 미정" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="825" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="cloud" value="4 자연어 해석이 필요할 때 호출&lt;br&gt;Model Access → cloud 의미 모델&lt;br&gt;지칭 / 조건 / Task 관계를 제안&lt;br&gt;최종 채택 권위는 VIA에 남음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="825" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="used" value="확정 상태: 채택 의미와 사용 근거&lt;br&gt;Request Controller: 입력 / 요청 판본&lt;br&gt;원본 source spans와 실제 사용 참조&lt;br&gt;잠정 제안은 확정 조건과 분리" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="1010" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="adopt" value="5 현재성 검사 뒤 의미 채택&lt;br&gt;Request Controller / Policy Manager&lt;br&gt;입력 / source / 권한 epoch 재확인&lt;br&gt;UseCheck와 사용 등록을 철회와 직렬화" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="1010" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="change" value="정정 / 삭제 / 권한 철회 사건&lt;br&gt;현재 revision / epoch를 먼저 변경&lt;br&gt;의존 자료와 미전송 효과 즉시 차단&lt;br&gt;늦은 완료로 이전 조건을 되살리지 않음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="1010" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="recovery" value="재시작: 삭제 원장을 먼저 확인&lt;br&gt;유효 view 복원 또는 원본 재구성&lt;br&gt;재사용 불명 자료는 최신으로 표시 안 함&lt;br&gt;외부 Action을 자동 재실행하지 않음" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="1195" width="630" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="out" value="6 근거 참조와 view revision을 보존&lt;br&gt;실제 응답 준비 또는 업무 인계로 전달&lt;br&gt;Response Manager의 실제 전달은 별도&lt;br&gt;다음 발화가 유효 작업 문맥을 재사용" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="780" y="1195" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="failure" value="실패: read 거절 / hard 압축 실패&lt;br&gt;bounded 원본 재구성 또는 PARTIAL&lt;br&gt;필수 근거 없으면 보류 / 확인&lt;br&gt;취소 / 재시도 / 늦은 cloud 청구 보존" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1510" y="1195" width="650" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="tactic1" value="A1 입력 prefix cache&lt;br&gt;같은 유효 prefix를 provider 지원 아래 재사용&lt;br&gt;추가: cache 수명 / 권한 재확인 / 요금&lt;br&gt;A1+A2는 patch 뒤 prefix 적중 변화도 확인" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="70" y="1450" width="1010" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="tactic2" value="A2 변경 조각 갱신&lt;br&gt;확인된 dependency의 부분만 재구성&lt;br&gt;추가: index / patch 정합성 검사 비용&lt;br&gt;영향 범위가 불명이면 기본 전체 재구성" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="1150" y="1450" width="1010" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="edge0" value="" edge="1" parent="1" source="in" target="context" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="" edge="1" parent="1" source="context" target="read" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" edge="1" parent="1" source="read" target="interpret" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" edge="1" parent="1" source="interpret" target="adopt" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" edge="1" parent="1" source="adopt" target="out" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" edge="1" parent="1" source="view" target="context" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="" edge="1" parent="1" source="raw" target="read" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="740" y="345" />
+              <mxPoint x="740" y="705" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="" edge="1" parent="1" source="read" target="bundle" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge8" value="" edge="1" parent="1" source="adopt" target="used" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge9" value="" edge="1" parent="1" source="context" target="condense" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge10" value="" edge="1" parent="1" source="condense" target="context" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge11" value="" edge="1" parent="1" source="interpret" target="cloud" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge12" value="" edge="1" parent="1" source="cloud" target="interpret" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge13" value="" edge="1" parent="1" source="dispute" target="read" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge14" value="" edge="1" parent="1" source="change" target="adopt" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge15" value="" edge="1" parent="1" source="failure" target="out" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge16" value="" edge="1" parent="1" source="out" target="view" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1105" y="1355" />
+              <mxPoint x="35" y="1355" />
+              <mxPoint x="35" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label0" value="근거 공급 A: 대화 작업 문맥을 유지하고 부족한 원본을 보완한다" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=42;fontColor=#182B40;fontStyle=1;">
+          <mxGeometry x="55" y="47" width="2105" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="label1" value="같은 입력: “아까 실제로 설명한 기준과 비교 결과를 이번 요청에 써줘.” 실제 전달 범위와 source 판본은 공통이다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="112" width="2105" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label2" value="기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=22;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="55" y="170" width="2105" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="label3" value="설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=21;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="1645" width="2105" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="label4" value="원본과 상태: 각 owner가 보존" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#176EAD;fontStyle=1;">
+          <mxGeometry x="70" y="220" width="2090" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label5" value="VIA 기본 처리: 번호 순서" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#176EAD;fontStyle=1;">
+          <mxGeometry x="780" y="220" width="1380" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label6" value="Cloud 호출과 변경 / 실패" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#176EAD;fontStyle=1;">
+          <mxGeometry x="1510" y="220" width="650" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label7" value="기본의 이익과 비용: 반복 발견 / 조회 감소 가능 ↔ 유지 입력, 압축과 정정 뒤 재구성 비용." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=25;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="70" y="1370" width="2090" height="37" as="geometry" />
+        </mxCell>
+        <mxCell id="label8" value="선택 후 보완: 두 기법은 독립 적용. 기본 동작과 추가 비용을 구별하고 결합은 별도로 비교한다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=25;fontColor=#A45A18;fontStyle=0;">
+          <mxGeometry x="70" y="1410" width="2090" height="37" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

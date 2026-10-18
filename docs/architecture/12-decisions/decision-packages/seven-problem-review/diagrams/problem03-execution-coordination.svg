@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1180" viewBox="0 0 1800 1180">
+<title>problem03-execution-coordination</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#516275"/></marker></defs>
+<rect width="1800" height="1180" fill="white"/>
+<rect x="55" y="235" width="820" height="745" rx="10" fill="#F8FAFC" stroke="#C6D1DE" stroke-width="2"/>
+<text x="73" y="279" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="28" font-weight="700" fill="#182B40">A  중앙 비동기 Dispatcher</text>
+<rect x="90" y="315" width="750" height="90" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="356" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">사용자 입력 / 확정 업무 사실 / 실제 전달 receipt</text>
+<rect x="90" y="875" width="750" height="80" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="916" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">원본 owner의 채택 / 현재성 검사 → 실제 표시</text>
+<rect x="925" y="235" width="820" height="745" rx="10" fill="#F8FAFC" stroke="#C6D1DE" stroke-width="2"/>
+<text x="943" y="279" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="28" font-weight="700" fill="#182B40">B  Stage 연결과 Publication Join</text>
+<rect x="960" y="315" width="750" height="90" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="356" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">사용자 입력 / 확정 업무 사실 / 실제 전달 receipt</text>
+<rect x="960" y="875" width="750" height="80" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="916" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">원본 owner의 채택 / 현재성 검사 → 실제 표시</text>
+<rect x="90" y="460" width="750" height="125" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="501" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Dispatcher: 짧은 상태 전이와 후속 job 시작</text>
+<text x="108" y="536" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">긴 모델 호출 완료를 기다리지 않고 다음 사건 수신</text>
+<text x="108" y="571" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">완료 회수 뒤 다음 단계와 게시 조건 연결</text>
+<rect x="90" y="650" width="400" height="145" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="691" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">공통 bounded worker</text>
+<text x="108" y="726" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">자료 읽기 / 의미 판단</text>
+<text x="108" y="761" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">응답 준비 작업</text>
+<rect x="520" y="650" width="320" height="145" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="538" y="691" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">중앙 실행 상태</text>
+<text x="538" y="726" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">job / continuation</text>
+<text x="538" y="761" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">revision / candidate</text>
+<rect x="960" y="465" width="355" height="145" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="978" y="506" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Input Resolution Stage</text>
+<text x="978" y="541" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">입력과 해석 결과 소비</text>
+<text x="978" y="576" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">job / revision window</text>
+<rect x="1355" y="465" width="355" height="145" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="1373" y="506" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Task Notice Stage</text>
+<text x="1373" y="541" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">확인된 업무 사실 소비</text>
+<text x="1373" y="576" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">job / revision window</text>
+<rect x="960" y="675" width="750" height="80" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="716" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Response Composer: 해당 응답에 필요한 입력만 결합</text>
+<rect x="960" y="790" width="750" height="60" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="978" y="831" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Publication Join: 후보 / 허가 / source / 전달 참조</text>
+<polyline points="465,405 465,460" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="290,585 290,650" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="90,720 72,720 72,515 90,515" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="680,585 680,650" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="680,795 680,875" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1140,405 1140,465" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1530,405 1530,465" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1140,610 1140,675" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1530,610 1530,675" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1335,755 1335,790" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1335,850 1335,875" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<text x="55" y="89" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="42" font-weight="700" fill="#182B40">DP-44: 비동기 작업의 다음 단계를 누가 시작하는가</text>
+<text x="55" y="139" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="27" font-weight="400" fill="#516275">설명 준비 중 사용자 수정과 Agent 질문이 들어온다. 의미 판단 기능과 총 실행 예산은 두 안이 같다.</text>
+<text x="55" y="192" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="22" font-weight="400" fill="#176EAD">기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법</text>
+<text x="55" y="1146" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="21" font-weight="400" fill="#516275">설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록.</text>
+<text x="70" y="1039" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="24" font-weight="400" fill="#176EAD">B가 줄이는 것은 중앙 완료 회수와 활성화 비용. 같은 의미 계산과 외부 Agent 대기는 남는다.</text>
+<text x="70" y="1084" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="24" font-weight="400" fill="#A45A18">선택 A 이후 A1 단순 진행 통지 준비 합치기 / A2 변경된 근거에 의존하는 작업 인덱스</text>
+</svg>

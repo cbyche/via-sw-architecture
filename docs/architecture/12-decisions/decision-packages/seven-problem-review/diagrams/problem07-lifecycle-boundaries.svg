@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1180" viewBox="0 0 1800 1180">
+<title>problem07-lifecycle-boundaries</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#516275"/></marker></defs>
+<rect width="1800" height="1180" fill="white"/>
+<rect x="55" y="235" width="820" height="745" rx="10" fill="#F8FAFC" stroke="#C6D1DE" stroke-width="2"/>
+<text x="73" y="279" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="28" font-weight="700" fill="#182B40">A  모듈화한 통합 Core</text>
+<rect x="90" y="315" width="750" height="90" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="356" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">C1 / R1은 대화 상태, T1 / X1은 업무 상태</text>
+<text x="108" y="391" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">별도 논리 수명과 owner를 두 안 모두 유지</text>
+<rect x="925" y="235" width="820" height="745" rx="10" fill="#F8FAFC" stroke="#C6D1DE" stroke-width="2"/>
+<text x="943" y="279" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="28" font-weight="700" fill="#182B40">B  독립 대화 / 업무 서비스</text>
+<rect x="960" y="315" width="750" height="90" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="356" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">C1 / R1은 대화 상태, T1 / X1은 업무 상태</text>
+<text x="978" y="391" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">별도 논리 수명과 owner를 두 안 모두 유지</text>
+<rect x="90" y="470" width="750" height="150" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="511" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Request Controller + Task Manager</text>
+<text x="108" y="546" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">같은 Core 안의 별도 기능 Module</text>
+<text x="108" y="581" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">트랜잭션 관리자가 관련 변경을 공동 확정</text>
+<text x="108" y="616" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">짧은 transaction. 외부 I/O는 commit 밖에서 수행</text>
+<rect x="90" y="685" width="750" height="110" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="108" y="726" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">관련 Request / Task / command 상태 저장</text>
+<text x="108" y="761" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">R1↔T1 연결과 X1 의도 / outbox를 함께 확정</text>
+<rect x="90" y="865" width="750" height="80" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="108" y="906" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Agent Gateway → 외부 수신 / 수행 사실 별도 확인</text>
+<rect x="960" y="460" width="355" height="245" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="978" y="501" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">대화 서비스</text>
+<text x="978" y="536" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">R1과 pending 의도 저장</text>
+<text x="978" y="571" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">inbox / outbox / receipt</text>
+<text x="978" y="606" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">대화 저장소와 writer</text>
+<text x="978" y="641" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">업무 접수 사실 반영</text>
+<rect x="1355" y="460" width="355" height="245" rx="10" fill="#FFF4E7" stroke="#A45A18" stroke-width="2"/>
+<text x="1373" y="501" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">업무 서비스</text>
+<text x="1373" y="536" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">T1 / X1 접수와 상태</text>
+<text x="1373" y="571" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">inbox / outbox / receipt</text>
+<text x="1373" y="606" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">독립 업무 저장소 / writer</text>
+<text x="1373" y="641" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="400" fill="#182B40">외부 업무 사실 보존</text>
+<rect x="960" y="765" width="750" height="80" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="806" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">업무 accepted + dispatch 현재성 검사. 대화 반영과 분리</text>
+<rect x="960" y="875" width="750" height="70" rx="10" fill="#E9F4FB" stroke="#176EAD" stroke-width="2"/>
+<text x="978" y="916" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="25" font-weight="700" fill="#182B40">Agent Gateway → 외부 수신 / 수행 사실 별도 확인</text>
+<polyline points="465,405 465,470" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="465,620 465,685" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="465,795 465,865" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1140,405 1140,460" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1315,525 1355,525" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1355,650 1315,650" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1530,705 1530,765" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<polyline points="1335,845 1335,875" fill="none" stroke="#516275" stroke-width="3"  marker-end="url(#arrow)"/>
+<text x="55" y="89" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="42" font-weight="700" fill="#182B40">DP-42: 대화와 업무 상태를 어디서 확정하는가</text>
+<text x="55" y="139" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="27" font-weight="400" fill="#516275">대화 C1의 요청 R1을 Task T1에 연결하고 실행 X1을 위임한다. 두 안 모두 대화와 업무의 수명이 다르다.</text>
+<text x="55" y="192" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="22" font-weight="400" fill="#176EAD">기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법</text>
+<text x="55" y="1146" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="21" font-weight="400" fill="#516275">설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록.</text>
+<text x="70" y="1039" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="24" font-weight="400" fill="#176EAD">B의 독립 writer / 장애 경계 가능성 ↔ 서비스 간 접수와 반영의 복구 비용. 정상 이익은 조건부.</text>
+<text x="70" y="1084" font-family="Apple SD Gothic Neo,Arial,sans-serif" font-size="24" font-weight="400" fill="#A45A18">선택 A 이후 A1 저장 작업의 짧은 단위와 우선순위 / A2 읽기용 Task snapshot</text>
+</svg>

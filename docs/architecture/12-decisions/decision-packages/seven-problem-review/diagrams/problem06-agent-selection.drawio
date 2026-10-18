@@ -1,0 +1,104 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="problem06-agent-selection">
+    <mxGraphModel page="1" pageWidth="1800" pageHeight="1180">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="A" value="A  요청 해석과 선택 결합" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="55" y="235" width="820" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="Ain" value="사용자 입력과 허용 근거&lt;br&gt;같은 후보 정보 및 독립 성과 근거" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Astate" value="유지 상태&lt;br&gt;요청 문맥과 후보 판본" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="760" width="750" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Agate" value="현재 요청 및 적격성 확인 → 업무 인계" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="890" width="750" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="B" value="B  요청 계약 뒤 별도 선택" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#C6D1DE;fontColor=#182B40;fontFamily=Arial;fontSize=28;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="925" y="235" width="820" height="760" as="geometry" />
+        </mxCell>
+        <mxCell id="Bin" value="사용자 입력과 허용 근거&lt;br&gt;요청의 의미를 해석할 원본과 최근 문맥" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="315" width="750" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="Bstate" value="유지 상태&lt;br&gt;요청 계약과 별도 선택 문맥 / 후보 판본" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E7;strokeColor=#A45A18;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="760" width="750" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Bgate" value="현재 요청 및 적격성 확인 → 업무 인계" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="890" width="750" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="aj" value="Request Interpreter&lt;br&gt;요청의 목적과 대상을 해석하면서 Agent도 제안&lt;br&gt;후보 변경 시 결합 판단 재실행" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="90" y="460" width="750" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="bi" value="Request Interpreter&lt;br&gt;목적 / 대상 / 조건과 원본 참조를 계약으로 생산" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="440" width="750" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="bs" value="선택 전용 판단: 같은 후보 및 성과 근거 공급&lt;br&gt;계약과 후보를 비교. 후보만 바뀌면 선택만 반복" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9F4FB;strokeColor=#176EAD;fontColor=#182B40;fontFamily=Arial;fontSize=25;align=left;verticalAlign=top;spacing=16;">
+          <mxGeometry x="960" y="600" width="750" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="edge0" value="" edge="1" parent="1" source="Ain" target="aj" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge1" value="" edge="1" parent="1" source="aj" target="Astate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge2" value="" edge="1" parent="1" source="Astate" target="Agate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge3" value="" edge="1" parent="1" source="Bin" target="bi" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" value="" edge="1" parent="1" source="bi" target="bs" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge5" value="" edge="1" parent="1" source="bs" target="Bstate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge6" value="" edge="1" parent="1" source="Bstate" target="Bgate" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge7" value="" edge="1" parent="1" source="bs" target="bi" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;html=1;strokeColor=#516275;strokeWidth=2;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1730" y="650" />
+              <mxPoint x="1730" y="490" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label0" value="Agent 선택: 요청 판단에 결합할 것인가, 선택 실행을 분리할 것인가" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=42;fontColor=#182B40;fontStyle=1;">
+          <mxGeometry x="55" y="47" width="1705" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="label1" value="같은 업무: 수정한 비교 결과로 편집 가능한 발표자료를 만들고, 이번에는 다른 Agent에게 맡긴다." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=27;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="112" width="1705" height="39" as="geometry" />
+        </mxCell>
+        <mxCell id="label2" value="기본 구조의 선택   |   파랑: 처리 경로   |   주황: 유지 상태   |   하단: 선택 후 보완 기법" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=22;fontColor=#176EAD;fontStyle=0;">
+          <mxGeometry x="55" y="170" width="1705" height="34" as="geometry" />
+        </mxCell>
+        <mxCell id="label3" value="설계 분석 그림. 성능 수치와 측정 결과가 아니며 실패 및 복구 계약은 연결된 본문에 수록." vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=21;fontColor=#516275;fontStyle=0;">
+          <mxGeometry x="55" y="1125" width="1705" height="33" as="geometry" />
+        </mxCell>
+        <mxCell id="label4" value="A1 후보 설명 조회 / A2 선택만 갱신" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#A45A18;fontStyle=0;">
+          <mxGeometry x="75" y="1025" width="1685" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="label5" value="B1 선택 결과 재사용 / B2 부족한 계약만 보완" vertex="1" parent="1" style="text;html=1;whiteSpace=wrap;align=left;fontFamily=Arial;fontSize=24;fontColor=#A45A18;fontStyle=0;">
+          <mxGeometry x="945" y="1025" width="815" height="36" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
