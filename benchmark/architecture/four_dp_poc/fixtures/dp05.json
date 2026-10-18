@@ -1,0 +1,607 @@
+[
+  {
+    "id": "dp05-e1",
+    "description": "공개 활동 뒤 후속 위임 없이 종료, 지속 생산의 미사용 비용",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-comparison",
+          "revision": 1,
+          "title": "신규 PC 비교 공개 보고서",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+          "line_count": 4,
+          "outline": [
+            {
+              "section": "유지보수",
+              "lines": [
+                1,
+                1
+              ]
+            },
+            {
+              "section": "기능 검토와 미확인",
+              "lines": [
+                2,
+                4
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            4
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-quote",
+          "revision": 1,
+          "title": "공급업체 공개 견적",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "가격과 수량",
+              "lines": [
+                1,
+                2
+              ]
+            },
+            {
+              "section": "납기와 계약 상태",
+              "lines": [
+                3,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-PC",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 12,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [],
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ]
+        }
+      },
+      {
+        "kind": "observe",
+        "stimulus_id": "h1-close",
+        "goal_id": "h1-close",
+        "text": "비교 자료 확인을 마쳤습니다. 지금은 다른 Agent에 맡길 업무가 없습니다."
+      }
+    ],
+    "dp": "05"
+  },
+  {
+    "id": "dp05-e2",
+    "description": "한 번 목적별 발표자료 위임",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-comparison",
+          "revision": 1,
+          "title": "신규 PC 비교 공개 보고서",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+          "line_count": 4,
+          "outline": [
+            {
+              "section": "유지보수",
+              "lines": [
+                1,
+                1
+              ]
+            },
+            {
+              "section": "기능 검토와 미확인",
+              "lines": [
+                2,
+                4
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            4
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-quote",
+          "revision": 1,
+          "title": "공급업체 공개 견적",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "가격과 수량",
+              "lines": [
+                1,
+                2
+              ]
+            },
+            {
+              "section": "납기와 계약 상태",
+              "lines": [
+                3,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "delivered-guidance",
+          "revision": 1,
+          "title": "실제로 표시한 기준 설명",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/delivered-guidance-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "실제 전달과 미전달",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-PC",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 12,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [],
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h2-deck",
+        "goal_id": "h2-deck",
+        "delegation_id": "h2-deck-delegation",
+        "delegation_revision": 1,
+        "recipient": "minimal-draft-agent",
+        "purpose": "공개 비교와 견적을 바탕으로 발표자료 개요를 작성",
+        "completion_condition": "가격과 유지보수 및 미확인 사항을 포함한 4문장 개요"
+      }
+    ],
+    "dp": "05"
+  },
+  {
+    "id": "dp05-e3",
+    "description": "같은 결과를 발표자료, 메일, 회의 메모 목적에 세 번 위임",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-comparison",
+          "revision": 1,
+          "title": "신규 PC 비교 공개 보고서",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-comparison-v1.txt",
+          "line_count": 4,
+          "outline": [
+            {
+              "section": "유지보수",
+              "lines": [
+                1,
+                1
+              ]
+            },
+            {
+              "section": "기능 검토와 미확인",
+              "lines": [
+                2,
+                4
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            4
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "public-quote",
+          "revision": 1,
+          "title": "공급업체 공개 견적",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/public-quote-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "가격과 수량",
+              "lines": [
+                1,
+                2
+              ]
+            },
+            {
+              "section": "납기와 계약 상태",
+              "lines": [
+                3,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "delivered-guidance",
+          "revision": 1,
+          "title": "실제로 표시한 기준 설명",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/delivered-guidance-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "실제 전달과 미전달",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-PC",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 12,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [],
+          "required_source_ids": [
+            "public-comparison",
+            "public-quote"
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h3-deck",
+        "goal_id": "h3-deck",
+        "delegation_id": "h3-deck-delegation",
+        "delegation_revision": 1,
+        "recipient": "minimal-draft-agent",
+        "purpose": "공개 비교와 견적을 설명하는 발표자료 개요 작성",
+        "completion_condition": "가격, 유지보수, 미확인 검토를 포함한 개요"
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h3-mail",
+        "goal_id": "h3-mail",
+        "delegation_id": "h3-mail-delegation",
+        "delegation_revision": 1,
+        "recipient": "minimal-draft-agent",
+        "purpose": "같은 공개 결과를 구매 담당자에게 설명할 메일 초안 작성",
+        "completion_condition": "가격과 납기를 포함한 초안, 실제 발송 금지"
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h3-meeting",
+        "goal_id": "h3-meeting",
+        "delegation_id": "h3-meeting-delegation",
+        "delegation_revision": 1,
+        "recipient": "minimal-draft-agent",
+        "purpose": "같은 공개 결과의 보안 미확인 사항을 논의할 회의 메모 작성",
+        "completion_condition": "확인 및 미확인 보안 범위를 구분한 회의 메모"
+      }
+    ],
+    "dp": "05"
+  },
+  {
+    "id": "dp05-e4",
+    "description": "큰 자료 일부 읽기, 가격/납기와 조건 정정, 별도 부록 접근 철회",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "large-public-report",
+          "revision": 1,
+          "title": "12대 PC 도입 공개 검토 상세 보고서",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/large-public-report-v1.txt",
+          "line_count": 80,
+          "outline": [
+            {
+              "section": "범위와 비교 개요",
+              "lines": [
+                1,
+                16
+              ]
+            },
+            {
+              "section": "가격 근거",
+              "lines": [
+                17,
+                32
+              ]
+            },
+            {
+              "section": "납기와 도입 일정",
+              "lines": [
+                33,
+                48
+              ]
+            },
+            {
+              "section": "보안 검토",
+              "lines": [
+                49,
+                64
+              ]
+            },
+            {
+              "section": "지원과 운영 한계",
+              "lines": [
+                65,
+                80
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            80
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "private-annex",
+          "revision": 1,
+          "title": "접근 허용 중인 내부 연락 부록",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/private-annex-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "내부 연락",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-PC",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 12,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_email"
+          ],
+          "required_source_ids": [
+            "large-public-report"
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h4-initial",
+        "goal_id": "h4-initial",
+        "delegation_id": "h4-initial-delegation",
+        "delegation_revision": 1,
+        "recipient": "minimal-draft-agent",
+        "purpose": "공개 보고서에서 가격과 유지보수만 쓰는 짧은 제안 메모 작성",
+        "completion_condition": "부가세 포함 가격, 유지보수 및 검토 한계를 담은 초안"
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "large-public-report",
+          "revision": 2,
+          "title": "12대 PC 도입 공개 검토 상세 보고서 정정판",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc/sources/dp05/large-public-report-v2.txt",
+          "line_count": 80,
+          "outline": [
+            {
+              "section": "범위와 비교 개요",
+              "lines": [
+                1,
+                16
+              ]
+            },
+            {
+              "section": "가격 근거",
+              "lines": [
+                17,
+                32
+              ]
+            },
+            {
+              "section": "납기와 도입 일정",
+              "lines": [
+                33,
+                48
+              ]
+            },
+            {
+              "section": "보안 검토",
+              "lines": [
+                49,
+                64
+              ]
+            },
+            {
+              "section": "지원과 운영 한계",
+              "lines": [
+                65,
+                80
+              ]
+            }
+          ],
+          "revoked": false,
+          "allowed_lines": [
+            1,
+            80
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-PC",
+          "request_revision": 2,
+          "condition_revision": 2,
+          "access_epoch": 2,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 12,
+            "price_tie_break": "longer_maintenance",
+            "budget_ceiling": 14000000
+          },
+          "exclusions": [
+            "installation_convenience",
+            "unverified_total_operating_cost",
+            "private_contact_details"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_email"
+          ],
+          "required_source_ids": [
+            "large-public-report"
+          ]
+        }
+      },
+      {
+        "kind": "revoke",
+        "source_id": "private-annex",
+        "reason": "사용자가 내부 연락 자료 접근을 철회"
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "h4-corrected",
+        "goal_id": "h4-corrected",
+        "delegation_id": "h4-corrected-delegation",
+        "delegation_revision": 2,
+        "recipient": "minimal-draft-agent",
+        "purpose": "정정 공개 보고서의 가격과 납기로 구매 검토 메일 초안 작성",
+        "completion_condition": "정정 단가와 납기, 예산 조건을 포함하고 실제 발송과 비공개 연락처 사용을 하지 않은 초안"
+      }
+    ],
+    "dp": "05"
+  }
+]
